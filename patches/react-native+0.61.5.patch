@@ -1,0 +1,14 @@
+diff --git a/node_modules/react-native/Libraries/react-native/react-native-implementation.js b/node_modules/react-native/Libraries/react-native/react-native-implementation.js
+index 8c6f23b..360d029 100644
+--- a/node_modules/react-native/Libraries/react-native/react-native-implementation.js
++++ b/node_modules/react-native/Libraries/react-native/react-native-implementation.js
+@@ -238,6 +238,9 @@ module.exports = {
+   get NativeEventEmitter() {
+     return require('../EventEmitter/NativeEventEmitter');
+   },
++  get Networking() {
++    return require('../Network/RCTNetworking');
++  },
+   get PanResponder() {
+     return require('../Interaction/PanResponder');
+   },
