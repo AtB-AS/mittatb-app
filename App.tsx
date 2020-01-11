@@ -58,7 +58,7 @@ const App = () => {
       'https://atb-entur.herokuapp.com/sse?stream=siri-vm',
     );
     const listener = (m: any) => {
-      const journey = JSON.parse(m.data).MonitoredVehicleJourney;
+      const journey = JSON.parse(m.data).monitoredVehicleJourney;
       const {latitude, longitude} = journey.vehicleLocation;
       if (!latitude || !longitude) return;
       dispatch({
