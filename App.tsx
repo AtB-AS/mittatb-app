@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Platform,
   SafeAreaView,
   StyleSheet,
   ScrollView,
@@ -7,7 +8,7 @@ import {
   StatusBar,
   View,
 } from 'react-native';
-import MapView, {Marker, Callout} from 'react-native-maps';
+import MapView, {Marker, Callout} from 'react-native-maps-osmdroid';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import EventSource from './EventSource';
 
@@ -91,6 +92,7 @@ const App = () => {
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
           <MapView
+            provider={Platform.OS === 'android' ? 'osmdroid' : null}
             style={{height: 800}}
             initialRegion={{
               latitude: 63.4305,

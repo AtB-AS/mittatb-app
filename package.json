@@ -13,7 +13,7 @@
   "dependencies": {
     "react": "16.9.0",
     "react-native": "0.61.5",
-    "react-native-maps": "^0.26.1"
+    "react-native-maps-osmdroid": "^0.23.0-rc4"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
