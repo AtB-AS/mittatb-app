@@ -14,7 +14,6 @@
     "@react-native-community/geolocation": "^2.0.2",
     "react": "16.9.0",
     "react-native": "0.61.5",
-    "react-native-autocomplete-input": "^4.1.0",
     "react-native-svg": "^10.1.0"
   },
   "devDependencies": {
