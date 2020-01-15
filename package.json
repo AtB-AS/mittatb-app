@@ -11,9 +11,11 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@react-native-community/geolocation": "^2.0.2",
     "react": "16.9.0",
     "react-native": "0.61.5",
-    "react-native-maps-osmdroid": "^0.23.0-rc4"
+    "react-native-autocomplete-input": "^4.1.0",
+    "react-native-svg": "^10.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
