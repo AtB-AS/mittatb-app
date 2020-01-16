@@ -12,7 +12,9 @@ import Suggestions from './Suggestions';
 
 const Form = () => {
   const [homeAddress, setHomeAddress] = useState<string>('');
-  const [workAddress, setWorkAddress] = useState<string>('');
+  const [workAddress, setWorkAddress] = useState<string>('Prinsens gate 39');
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
@@ -22,28 +24,36 @@ const Form = () => {
           value={homeAddress}
           onChangeText={setHomeAddress}
           placeholder="Legg til hjemmeadresse"
+          onFocus={() => setFocusedInput('home')}
         />
-        <View>
-          <Suggestions
-            style={{backgroundColor: 'white'}}
-            suggestions={
-              homeAddress.length > 2
-                ? [
-                    'Prinsens gate 39',
-                    'Sirkus shopping',
-                    'Rush trampolinepark',
-                    'Munkholmen',
-                  ]
-                : []
-            }
-            renderItem={({item}: {item: string}) => (
-              <TouchableOpacity key={item} onPress={() => setHomeAddress(item)}>
-                <Text>{item}</Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
-        <Text style={[styles.label, {opacity: homeAddress ? 1 : 0.4}]}>
+        {focusedInput === 'home' ? (
+          <View style={{zIndex: 10}}>
+            <Suggestions
+              style={{backgroundColor: 'white'}}
+              suggestions={
+                homeAddress.length > 2
+                  ? ['Prinsens gate 39', 'Sirkus shopping']
+                  : []
+              }
+              renderItem={({item}: {item: string}) => (
+                <TouchableOpacity
+                  style={{padding: 12}}
+                  key={item}
+                  onPress={() => {
+                    setHomeAddress(item);
+                    setFocusedInput(null);
+                  }}>
+                  <Text style={{fontSize: 20}}>{item}</Text>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        ) : null}
+        <Text
+          style={[
+            styles.label,
+            {marginTop: 24, opacity: homeAddress ? 1 : 0.4},
+          ]}>
           2. Jobbadresse
         </Text>
         <TextInput
@@ -51,27 +61,27 @@ const Form = () => {
           value={workAddress}
           onChangeText={setWorkAddress}
           placeholder="Legg til jobbadresse"
+          onFocus={() => setFocusedInput('work')}
         />
-        <View>
-          <Suggestions
-            style={{backgroundColor: 'white'}}
-            suggestions={
-              workAddress.length > 2
-                ? [
-                    'Prinsens gate 39',
-                    'Sirkus shopping',
-                    'Rush trampolinepark',
-                    'Munkholmen',
-                  ]
-                : []
-            }
-            renderItem={({item}: {item: string}) => (
-              <TouchableOpacity key={item} onPress={() => setWorkAddress(item)}>
-                <Text>{item}</Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
+        {focusedInput === 'work' ? (
+          <View style={{zIndex: 10}}>
+            <Suggestions
+              style={{backgroundColor: 'white'}}
+              suggestions={workAddress.length > 2 ? ['Prinsens gate 39'] : []}
+              renderItem={({item}: {item: string}) => (
+                <TouchableOpacity
+                  style={{padding: 12}}
+                  key={item}
+                  onPress={() => {
+                    setWorkAddress(item);
+                    setFocusedInput(null);
+                  }}>
+                  <Text style={{fontSize: 20}}>{item}</Text>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        ) : null}
       </View>
     </SafeAreaView>
   );
@@ -97,6 +107,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingLeft: 12,
     backgroundColor: 'white',
+    borderBottomColor: colors.blue,
+    borderBottomWidth: 2,
   },
 });
 

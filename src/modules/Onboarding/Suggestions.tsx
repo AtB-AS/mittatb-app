@@ -17,6 +17,7 @@ const Suggestions: React.FC<Props> = ({suggestions, renderItem, style}) => {
     <FlatList<string>
       data={suggestions}
       renderItem={renderItem}
+      keyboardShouldPersistTaps="always"
       style={[styles.list, style]}
     />
   ) : null;
