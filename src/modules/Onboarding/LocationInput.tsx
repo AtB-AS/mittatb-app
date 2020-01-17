@@ -12,6 +12,7 @@ import Suggestions from './Suggestions';
 import {GeolocationResponse} from '@react-native-community/geolocation';
 import {useGeocoder, useReverseGeocoder} from './useGeocoder';
 import useDebounce from './useDebounce';
+import LocationArrow from '../../assets/LocationArrow';
 
 export type Location = {
   coordinates: [number, number];
@@ -72,7 +73,7 @@ const LocationInput: React.FC<Props> = ({
         autoCompleteType="off"
       />
       {isFocused ? (
-        <View>
+        <View style={styles.suggestionsContainer}>
           <Suggestions<Suggestion>
             style={styles.suggestions}
             keyExtractor={suggestion => suggestion.location.id}
@@ -139,7 +140,17 @@ const LocationSuggestion: React.FC<LocationSuggestionProps> = ({
       key={location.id}
       onPress={() => onSelectLocation(location)}
     >
-      <Text style={styles.suggestionText}>{location.label}</Text>
+      {type === 'autocomplete' ? (
+        <Text style={styles.suggestionText}>{location.label}</Text>
+      ) : (
+        <View style={styles.reverseSuggestionContainer}>
+          <View>
+            <Text style={styles.suggestionText}>Min posisjon</Text>
+            <Text style={styles.suggestionMinText}>{location.label}</Text>
+          </View>
+          <LocationArrow />
+        </View>
+      )}
     </TouchableOpacity>
   );
 };
@@ -155,9 +166,16 @@ const styles = StyleSheet.create({
     height: 46,
     fontSize: 20,
     paddingLeft: 12,
-    backgroundColor: 'white',
+    backgroundColor: colors.general.white,
     borderBottomColor: colors.secondary.blue,
     borderBottomWidth: 2,
+  },
+  suggestionsContainer: {
+    elevation: 4,
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 0.75,
+    shadowRadius: 10,
+    shadowColor: colors.general.black,
   },
   suggestions: {
     backgroundColor: colors.general.white,
@@ -165,8 +183,16 @@ const styles = StyleSheet.create({
   suggestion: {
     padding: 12,
   },
+  reverseSuggestionContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   suggestionText: {
     fontSize: 20,
+  },
+  suggestionMinText: {
+    marginTop: 4,
+    fontSize: 12,
   },
 });
 

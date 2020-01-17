@@ -14,7 +14,7 @@ export function useGeocoder(
         setFeatures(null);
       } else {
         const url =
-          'https://geocoder-7fqsxwljoa-ew.a.run.app/autocomplete?text=' +
+          'https://bff-oneclick-journey-planner-zmj3kfvboa-ew.a.run.app/geocoder/v1/autocomplete?text=' +
           text +
           (location
             ? '&focus.point.lat=' +
