@@ -1,35 +1,50 @@
 import React from 'react';
-import {
-  FlatList,
-  ListRenderItemInfo,
-  ViewStyle,
-  StyleSheet,
-} from 'react-native';
+import {FlatList, ViewStyle, StyleSheet, Platform} from 'react-native';
 
-type Props = {
-  suggestions: string[];
-  renderItem: (info: ListRenderItemInfo<string>) => React.ReactElement | null;
+type Props<T> = {
+  suggestions: T[];
+  keyExtractor: (suggestion: T, index: number) => string;
+  renderSuggestion: (suggestion: T) => React.ReactElement | null;
+  noSuggestionsContent?: React.ReactElement;
   style: ViewStyle;
 };
 
-const Suggestions: React.FC<Props> = ({suggestions, renderItem, style}) => {
-  return suggestions.length > 0 ? (
-    <FlatList<string>
+function Suggestions<T>({
+  suggestions,
+  keyExtractor,
+  renderSuggestion,
+  noSuggestionsContent,
+  style,
+}: Props<T>) {
+  return (
+    <FlatList<T>
       data={suggestions}
-      renderItem={renderItem}
-      keyboardShouldPersistTaps="always"
+      keyExtractor={keyExtractor}
+      renderItem={({item}) => renderSuggestion(item)}
+      keyboardShouldPersistTaps="handled"
       style={[styles.list, style]}
+      ListEmptyComponent={noSuggestionsContent}
     />
-  ) : null;
-};
+  );
+}
 
-const styles = StyleSheet.create({
+const iosStyle = {
   list: {
     left: 0,
     position: 'absolute',
     right: 0,
-    zIndex: 1,
   },
+};
+
+const androidStyle = {
+  list: {},
+};
+
+const styles = StyleSheet.create<Partial<{list: ViewStyle}>>({
+  ...Platform.select({
+    ios: iosStyle,
+    android: androidStyle,
+  }),
 });
 
 export default Suggestions;

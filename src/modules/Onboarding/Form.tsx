@@ -1,114 +1,85 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   TextInput,
 } from 'react-native';
 import colors from '../../assets/colors';
 import Suggestions from './Suggestions';
+import LocationInput, {Location} from './LocationInput';
+import {useGeolocation} from './useGeolocation';
 
 const Form = () => {
   const [homeAddress, setHomeAddress] = useState<string>('');
+  const [homeLocation, setHomeLocation] = useState<Location | null>(null);
   const [workAddress, setWorkAddress] = useState<string>('Prinsens gate 39');
-  const [focusedInput, setFocusedInput] = useState<string | null>(null);
+  const [workLocation, setWorkLocation] = useState<Location | null>(null);
+  const location = useGeolocation();
+
+  const homeTextInputRef = useRef<TextInput>(null);
+  const workTextInputRef = useRef<TextInput>(null);
+  const blurInputs = () => {
+    homeTextInputRef.current?.blur();
+    workTextInputRef.current?.blur();
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.innerContainer}>
-        <Text style={styles.label}>1. Hjemmeadresse</Text>
-        <TextInput
-          style={styles.textInput}
-          value={homeAddress}
-          onChangeText={setHomeAddress}
-          placeholder="Legg til hjemmeadresse"
-          onFocus={() => setFocusedInput('home')}
-        />
-        {focusedInput === 'home' ? (
-          <View style={{zIndex: 10}}>
-            <Suggestions
-              style={{backgroundColor: 'white'}}
-              suggestions={
-                homeAddress.length > 2
-                  ? ['Prinsens gate 39', 'Sirkus shopping']
-                  : []
-              }
-              renderItem={({item}: {item: string}) => (
-                <TouchableOpacity
-                  style={{padding: 12}}
-                  key={item}
-                  onPress={() => {
-                    setHomeAddress(item);
-                    setFocusedInput(null);
-                  }}>
-                  <Text style={{fontSize: 20}}>{item}</Text>
-                </TouchableOpacity>
-              )}
-            />
-          </View>
-        ) : null}
-        <Text
-          style={[
-            styles.label,
-            {marginTop: 24, opacity: homeAddress ? 1 : 0.4},
-          ]}>
-          2. Jobbadresse
-        </Text>
-        <TextInput
-          style={styles.textInput}
-          value={workAddress}
-          onChangeText={setWorkAddress}
-          placeholder="Legg til jobbadresse"
-          onFocus={() => setFocusedInput('work')}
-        />
-        {focusedInput === 'work' ? (
-          <View style={{zIndex: 10}}>
-            <Suggestions
-              style={{backgroundColor: 'white'}}
-              suggestions={workAddress.length > 2 ? ['Prinsens gate 39'] : []}
-              renderItem={({item}: {item: string}) => (
-                <TouchableOpacity
-                  style={{padding: 12}}
-                  key={item}
-                  onPress={() => {
-                    setWorkAddress(item);
-                    setFocusedInput(null);
-                  }}>
-                  <Text style={{fontSize: 20}}>{item}</Text>
-                </TouchableOpacity>
-              )}
-            />
-          </View>
-        ) : null}
-      </View>
+      <TouchableWithoutFeedback onPress={blurInputs}>
+        <View style={styles.innerContainer}>
+          <LocationInput
+            location={location}
+            text={homeAddress}
+            onChangeText={text => {
+              setHomeLocation(null);
+              setHomeAddress(text);
+            }}
+            onSelectLocation={location => {
+              setHomeLocation(location);
+              setHomeAddress(location.name);
+            }}
+            textInputRef={homeTextInputRef}
+            label="1. Hjemmeadresse"
+            placeholder="Legg til hjemmeadresse"
+            style={styles.textInput}
+          />
+          <LocationInput
+            location={location}
+            text={workAddress}
+            onChangeText={text => {
+              setWorkLocation(null);
+              setWorkAddress(text);
+            }}
+            onSelectLocation={location => {
+              setWorkLocation(location);
+              setWorkAddress(location.name);
+            }}
+            textInputRef={workTextInputRef}
+            label="2. Jobbadresse"
+            placeholder="Legg til jobbeadresse"
+          />
+        </View>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.gray,
+    backgroundColor: colors.primary.green,
     flex: 1,
   },
   innerContainer: {
     flex: 1,
     padding: 24,
-  },
-  label: {
-    color: 'white',
-    fontSize: 20,
-    marginBottom: 12,
+    paddingTop: 96,
   },
   textInput: {
-    width: '100%',
-    height: 46,
-    fontSize: 20,
-    paddingLeft: 12,
-    backgroundColor: 'white',
-    borderBottomColor: colors.blue,
-    borderBottomWidth: 2,
+    paddingBottom: 24,
   },
 });
 

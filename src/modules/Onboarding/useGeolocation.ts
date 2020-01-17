@@ -1,8 +1,24 @@
 import {useState, useEffect} from 'react';
 import {PermissionsAndroid, PermissionStatus, Platform} from 'react-native';
-import Geolocation from '@react-native-community/geolocation';
+import Geolocation, {
+  GeolocationResponse,
+} from '@react-native-community/geolocation';
 
-export default function useGeolocationPermission() {
+export function useGeolocation() {
+  const [location, setLocation] = useState<GeolocationResponse | null>(null);
+  useEffect(() => {
+    const watchId = Geolocation.watchPosition(
+      position => setLocation(position),
+      () => setLocation(null),
+      {enableHighAccuracy: true},
+    );
+
+    return () => Geolocation.clearWatch(watchId);
+  }, []);
+  return location;
+}
+
+export function useGeolocationPermission() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
 
   useEffect(() => {

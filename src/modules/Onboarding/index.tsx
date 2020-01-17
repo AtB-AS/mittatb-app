@@ -2,8 +2,8 @@ import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import Logo from '../../assets/Logo';
 import colors from '../../assets/colors';
-import useGeolocationPermission from './useGeolocationPermission';
 import Form from './Form';
+import {useGeolocationPermission} from './useGeolocation';
 
 const App = () => {
   const hasPermission = useGeolocationPermission();
@@ -21,7 +21,7 @@ const App = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.green,
+    backgroundColor: colors.primary.green,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

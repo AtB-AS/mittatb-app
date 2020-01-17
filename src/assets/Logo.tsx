@@ -1,7 +1,7 @@
 import React from 'react';
 import Svg, {Path, SvgProps} from 'react-native-svg';
 
-function SvgComponent(props: SvgProps) {
+function Logo(props: SvgProps) {
   return (
     <Svg width={97} height={96} viewBox="0 0 97 96" fill="none" {...props}>
       <Path
@@ -14,4 +14,4 @@ function SvgComponent(props: SvgProps) {
   );
 }
 
-export default SvgComponent;
+export default Logo;
