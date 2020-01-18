@@ -2,19 +2,9 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import Logo from '../../assets/Logo';
 import colors from '../../assets/colors';
-import Form from './Form';
-import {useGeolocationPermission} from '../../useGeolocation';
-import {createStackNavigator} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
-const Stack = createStackNavigator();
 
-const App = () => {
-  const hasPermission = useGeolocationPermission();
-
-  if (hasPermission) {
-    return <Form />;
-  }
-
+const Splash = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Logo />
@@ -31,4 +21,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default Splash;

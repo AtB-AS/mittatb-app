@@ -11,7 +11,7 @@ import {
 import colors from '../../assets/colors';
 import Suggestions from './Suggestions';
 import LocationInput, {Location} from './LocationInput';
-import {useGeolocation} from './useGeolocation';
+import {useGeolocation} from '../../useGeolocation';
 
 const Form = () => {
   const [homeAddress, setHomeAddress] = useState<string>('');
@@ -40,7 +40,7 @@ const Form = () => {
             }}
             onSelectLocation={location => {
               setHomeLocation(location);
-              setHomeAddress(location.name);
+              setHomeAddress(location.label);
             }}
             textInputRef={homeTextInputRef}
             label="1. Hjemmeadresse"
@@ -56,7 +56,7 @@ const Form = () => {
             }}
             onSelectLocation={location => {
               setWorkLocation(location);
-              setWorkAddress(location.name);
+              setWorkAddress(location.label);
             }}
             textInputRef={workTextInputRef}
             label="2. Jobbadresse"

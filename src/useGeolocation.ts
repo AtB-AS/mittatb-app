@@ -19,7 +19,7 @@ export function useGeolocation() {
 }
 
 export function useGeolocationPermission() {
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [hasPermission, setHasPermission] = useState<boolean>(false);
 
   useEffect(() => {
     async function requestGeolocation() {
@@ -28,7 +28,11 @@ export function useGeolocationPermission() {
       } else {
         Geolocation.requestAuthorization();
       }
-      setHasPermission(true);
+
+      Geolocation.getCurrentPosition(
+        () => setHasPermission(true),
+        () => setHasPermission(false),
+      );
     }
 
     requestGeolocation();
