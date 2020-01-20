@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo, useReducer} from 'react';
 import {NavigationNativeContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Onboarding from './modules/Onboarding';
@@ -7,7 +7,12 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-community/async-storage';
 import AppContext, {UserLocations} from './appContext';
 
-const Stack = createStackNavigator();
+export type RootStackParamList = {
+  Splash: undefined;
+  Onboarding: {completeOnboarding: (userLocations: UserLocations) => void};
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
 
 type AppState = {
   isLoading: boolean;
@@ -22,7 +27,7 @@ type AppReducerAction = {
 type AppReducer = (prevState: AppState, action: AppReducerAction) => AppState;
 
 const App = () => {
-  const [state, dispatch] = React.useReducer<AppReducer>(
+  const [state, dispatch] = useReducer<AppReducer>(
     (prevState, action) => {
       switch (action.type) {
         case 'LOADED_USER_LOCATIONS':
@@ -57,7 +62,7 @@ const App = () => {
     checkOnboarded();
   }, []);
 
-  const onboardingParams = React.useMemo(
+  const onboardingParams = useMemo(
     () => ({
       completeOnboarding: async (userLocations: UserLocations) => {
         await AsyncStorage.setItem(

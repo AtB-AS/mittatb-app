@@ -12,7 +12,7 @@ import Suggestions from './Suggestions';
 import {GeolocationResponse} from '@react-native-community/geolocation';
 import {useGeocoder, useReverseGeocoder} from './useGeocoder';
 import useDebounce from './useDebounce';
-import LocationArrow from '../../assets/LocationArrow';
+import LocationArrow from '../../assets/svg/LocationArrow';
 
 export type Location = {
   coordinates: [number, number];
@@ -78,7 +78,7 @@ const LocationInput: React.FC<Props> = ({
             style={styles.suggestions}
             keyExtractor={suggestion => suggestion.location.id}
             suggestions={
-              text && text.length > 2
+              text && text.length > 3
                 ? autoCompleteFeatures
                     .map<Location>(feature => ({
                       coordinates: feature.geometry.coordinates,

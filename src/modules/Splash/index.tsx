@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
-import Logo from '../../assets/Logo';
+import Logo from '../../assets/svg/Logo';
 import colors from '../../assets/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 

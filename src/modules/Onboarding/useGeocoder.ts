@@ -10,7 +10,7 @@ export function useGeocoder(
 
   useEffect(() => {
     async function textLookup() {
-      if (!text || text.length < 3) {
+      if (!text || text.length < 4) {
         setFeatures(null);
       } else {
         const url =

@@ -1,34 +1,90 @@
-import React from 'react';
-import {StyleSheet} from 'react-native';
-import Logo from '../../assets/Logo';
-import colors from '../../assets/colors';
-import Form from './Form';
-import {useGeolocationPermission} from '../../useGeolocation';
-import {createStackNavigator} from '@react-navigation/stack';
-import {SafeAreaView} from 'react-native-safe-area-context';
-const Stack = createStackNavigator();
+import React, {createContext} from 'react';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from '@react-navigation/stack';
+import LocationForm from './LocationForm';
+import GeoPermission from './GeoPermission';
+import {useCheckGeolocationPermission} from '../../geolocation';
+import {RouteProp} from '@react-navigation/native';
+import {RootStackParamList} from '../../';
+import Splash from '../Splash';
+import {Location} from './LocationInput';
 
-const App = () => {
-  const hasPermission = useGeolocationPermission();
+type OnboardingContextValue = {
+  setHomeLocation: (location: Location) => void;
+  setWorkLocation: (location: Location) => void;
+};
 
-  if (hasPermission) {
-    return <Form />;
+export const OnboardingContext = createContext<
+  OnboardingContextValue | undefined
+>(undefined);
+
+export type OnboardingStackParamList = {
+  GeoPermission: undefined;
+  HomeLocation: undefined;
+  WorkLocation: undefined;
+};
+
+const Stack = createStackNavigator<OnboardingStackParamList>();
+
+type OnboardingScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'Onboarding'
+>;
+
+type OnboardingScreenRouteProp = RouteProp<RootStackParamList, 'Onboarding'>;
+
+type Props = {
+  navigation: OnboardingScreenNavigationProp;
+  route: OnboardingScreenRouteProp;
+};
+
+const HomeLocation: React.FC<{
+  navigation: StackNavigationProp<OnboardingStackParamList>;
+}> = ({navigation}) => (
+  <LocationForm
+    question="Hvor bor du?"
+    label="Hjemmeadresse"
+    placeholder="Legg til hjemmeadresse"
+    buttonText="Neste"
+    onLocationSelect={(location: Location) => {}}
+  />
+);
+
+const WorkLocation: React.FC<{
+  navigation: StackNavigationProp<OnboardingStackParamList>;
+}> = () => (
+  <LocationForm
+    question="Hvor jobber du?"
+    label="Jobbadresse"
+    placeholder="Legg til jobbadresse"
+    buttonText="Neste"
+    onLocationSelect={(location: Location) => {}}
+  />
+);
+
+const OnboardingRoot: React.FC<Props> = ({navigation, route}) => {
+  const permissionStatus = useCheckGeolocationPermission();
+
+  if (!permissionStatus) {
+    return <Splash />;
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Logo />
-    </SafeAreaView>
+    <OnboardingContext.Provider value={{}}>
+      <Stack.Navigator
+        initialRouteName={
+          permissionStatus !== 'granted' ? 'GeoPermission' : 'HomeLocation'
+        }
+        headerMode="none"
+      >
+        <Stack.Screen name="GeoPermission" component={GeoPermission} />
+        <Stack.Screen name="HomeLocation" component={HomeLocation} />
+        <Stack.Screen name="WorkLocation" component={WorkLocation} />
+      </Stack.Navigator>
+    </OnboardingContext.Provider>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.secondary.blue,
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
-
-export default App;
+export default OnboardingRoot;
