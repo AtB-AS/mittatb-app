@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import WaitingForBus from '../../assets/svg/WaitingForBus';
 import colors from '../../assets/colors';

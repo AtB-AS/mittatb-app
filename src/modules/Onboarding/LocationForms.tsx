@@ -61,7 +61,6 @@ export const WorkLocation: React.FC<{
       onLocationSelect={(location: Location) => {
         if (context) {
           context.setWorkLocation(location);
-          context.completeOnboarding();
         }
       }}
     />

@@ -1,4 +1,4 @@
-import React, {createContext, useState} from 'react';
+import React, {createContext, useState, useEffect} from 'react';
 import {
   createStackNavigator,
   StackNavigationProp,
@@ -10,14 +10,13 @@ import {RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../';
 import Splash from '../Splash';
 import {Location} from './LocationInput';
-import {UserLocations} from 'src/appContext';
 import {GeolocationResponse} from '@react-native-community/geolocation';
+import Final from './Final';
 
 type OnboardingContextValue = {
   location: GeolocationResponse | null;
   setHomeLocation: (location: Location) => void;
   setWorkLocation: (location: Location) => void;
-  completeOnboarding: () => void;
 };
 
 export const OnboardingContext = createContext<
@@ -28,6 +27,7 @@ export type OnboardingStackParamList = {
   GeoPermission: undefined;
   HomeLocation: undefined;
   WorkLocation: undefined;
+  Final: undefined;
 };
 
 const Stack = createStackNavigator<OnboardingStackParamList>();
@@ -44,6 +44,13 @@ const OnboardingRoot: React.FC<Props> = ({route}) => {
 
   const [home, setHomeLocation] = useState<Location | null>(null);
   const [work, setWorkLocation] = useState<Location | null>(null);
+
+  useEffect(() => {
+    if (home && work) {
+      completeOnboarding({home, work});
+    }
+  }, [home, work]);
+
   if (!permissionStatus) {
     return <Splash />;
   }
@@ -56,11 +63,6 @@ const OnboardingRoot: React.FC<Props> = ({route}) => {
         location,
         setHomeLocation,
         setWorkLocation,
-        completeOnboarding: () => {
-          if (home && work) {
-            completeOnboarding({home, work});
-          }
-        },
       }}
     >
       <Stack.Navigator
@@ -72,6 +74,7 @@ const OnboardingRoot: React.FC<Props> = ({route}) => {
         <Stack.Screen name="GeoPermission" component={GeoPermission} />
         <Stack.Screen name="HomeLocation" component={HomeLocation} />
         <Stack.Screen name="WorkLocation" component={WorkLocation} />
+        <Stack.Screen name="Final" component={Final} />
       </Stack.Navigator>
     </OnboardingContext.Provider>
   );
