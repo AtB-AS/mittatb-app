@@ -1,31 +1,76 @@
-import React from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
-import Logo from '../../assets/Logo';
-import colors from '../../assets/colors';
-import Form from './Form';
-import {useGeolocationPermission} from './useGeolocation';
+import React, {createContext, useState} from 'react';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from '@react-navigation/stack';
+import {HomeLocation, WorkLocation} from './LocationForms';
+import GeoPermission from './GeoPermission';
+import {useCheckGeolocationPermission} from '../../geolocation';
+import {RouteProp} from '@react-navigation/native';
+import {RootStackParamList} from '../../';
+import Splash from '../Splash';
+import {Location} from './LocationInput';
+import {UserLocations} from 'src/appContext';
 
-const App = () => {
-  const hasPermission = useGeolocationPermission();
+type OnboardingContextValue = {
+  setHomeLocation: (location: Location) => void;
+  setWorkLocation: (location: Location) => void;
+  completeOnboarding: () => void;
+};
 
-  if (hasPermission) {
-    return <Form />;
+export const OnboardingContext = createContext<
+  OnboardingContextValue | undefined
+>(undefined);
+
+export type OnboardingStackParamList = {
+  GeoPermission: undefined;
+  HomeLocation: undefined;
+  WorkLocation: undefined;
+};
+
+const Stack = createStackNavigator<OnboardingStackParamList>();
+
+type OnboardingScreenRouteProp = RouteProp<RootStackParamList, 'Onboarding'>;
+
+type Props = {
+  route: OnboardingScreenRouteProp;
+};
+
+const OnboardingRoot: React.FC<Props> = ({route}) => {
+  const permissionStatus = useCheckGeolocationPermission();
+  const [home, setHomeLocation] = useState<Location | null>(null);
+  const [work, setWorkLocation] = useState<Location | null>(null);
+
+  if (!permissionStatus) {
+    return <Splash />;
   }
 
+  const {completeOnboarding} = route.params;
+
   return (
-    <SafeAreaView style={styles.container}>
-      <Logo />
-    </SafeAreaView>
+    <OnboardingContext.Provider
+      value={{
+        setHomeLocation,
+        setWorkLocation,
+        completeOnboarding: () => {
+          if (home && work) {
+            completeOnboarding({home, work});
+          }
+        },
+      }}
+    >
+      <Stack.Navigator
+        initialRouteName={
+          permissionStatus !== 'granted' ? 'GeoPermission' : 'HomeLocation'
+        }
+        headerMode="none"
+      >
+        <Stack.Screen name="GeoPermission" component={GeoPermission} />
+        <Stack.Screen name="HomeLocation" component={HomeLocation} />
+        <Stack.Screen name="WorkLocation" component={WorkLocation} />
+      </Stack.Navigator>
+    </OnboardingContext.Provider>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.primary.green,
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
-
-export default App;
+export default OnboardingRoot;
