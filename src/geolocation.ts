@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react';
 import {Platform, Rationale} from 'react-native';
 import Geolocation, {
   GeolocationResponse,
+  GeolocationOptions,
 } from '@react-native-community/geolocation';
 import {
   request,
@@ -13,10 +14,18 @@ import {
 export function useGeolocation() {
   const [location, setLocation] = useState<GeolocationResponse | null>(null);
   useEffect(() => {
+    const config: GeolocationOptions = {enableHighAccuracy: true};
+
+    Geolocation.getCurrentPosition(
+      position => setLocation(position),
+      () => setLocation(null),
+      {...config, maximumAge: 0},
+    );
+
     const watchId = Geolocation.watchPosition(
       position => setLocation(position),
       () => setLocation(null),
-      {enableHighAccuracy: true},
+      config,
     );
 
     return () => Geolocation.clearWatch(watchId);

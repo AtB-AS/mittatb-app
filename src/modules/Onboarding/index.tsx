@@ -5,14 +5,16 @@ import {
 } from '@react-navigation/stack';
 import {HomeLocation, WorkLocation} from './LocationForms';
 import GeoPermission from './GeoPermission';
-import {useCheckGeolocationPermission} from '../../geolocation';
+import {useCheckGeolocationPermission, useGeolocation} from '../../geolocation';
 import {RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../';
 import Splash from '../Splash';
 import {Location} from './LocationInput';
 import {UserLocations} from 'src/appContext';
+import {GeolocationResponse} from '@react-native-community/geolocation';
 
 type OnboardingContextValue = {
+  location: GeolocationResponse | null;
   setHomeLocation: (location: Location) => void;
   setWorkLocation: (location: Location) => void;
   completeOnboarding: () => void;
@@ -38,9 +40,10 @@ type Props = {
 
 const OnboardingRoot: React.FC<Props> = ({route}) => {
   const permissionStatus = useCheckGeolocationPermission();
+  const location = useGeolocation();
+
   const [home, setHomeLocation] = useState<Location | null>(null);
   const [work, setWorkLocation] = useState<Location | null>(null);
-
   if (!permissionStatus) {
     return <Splash />;
   }
@@ -50,6 +53,7 @@ const OnboardingRoot: React.FC<Props> = ({route}) => {
   return (
     <OnboardingContext.Provider
       value={{
+        location,
         setHomeLocation,
         setWorkLocation,
         completeOnboarding: () => {

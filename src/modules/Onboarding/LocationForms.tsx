@@ -13,8 +13,10 @@ import {useGeolocation} from '../../geolocation';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {OnboardingStackParamList, OnboardingContext} from './';
+import {GeolocationResponse} from '@react-native-community/geolocation';
 
 type Props = {
+  location: GeolocationResponse | null;
   question: string;
   label: string;
   placeholder: string;
@@ -28,6 +30,8 @@ export const HomeLocation: React.FC<{
   const context = useContext(OnboardingContext);
   return (
     <LocationForm
+      key="homeForm"
+      location={context?.location ?? null}
       question="Hvor bor du?"
       label="Hjemmeadresse"
       placeholder="Legg til hjemmeadresse"
@@ -48,6 +52,8 @@ export const WorkLocation: React.FC<{
   const context = useContext(OnboardingContext);
   return (
     <LocationForm
+      key="workForm"
+      location={context?.location ?? null}
       question="Hvor jobber du?"
       label="Jobbadresse"
       placeholder="Legg til jobbadresse"
@@ -63,6 +69,7 @@ export const WorkLocation: React.FC<{
 };
 
 const LocationForm: React.FC<Props> = ({
+  location,
   question,
   label,
   placeholder,
@@ -71,11 +78,10 @@ const LocationForm: React.FC<Props> = ({
 }) => {
   const [address, setAddress] = useState<string>('');
   const [addressLocation, setAddressLocation] = useState<Location | null>(null);
-  const location = useGeolocation();
 
-  const homeTextInputRef = useRef<TextInput>(null);
+  const textInputRef = useRef<TextInput>(null);
   const blurInput = () => {
-    homeTextInputRef.current?.blur();
+    textInputRef.current?.blur();
   };
 
   return (
@@ -94,7 +100,7 @@ const LocationForm: React.FC<Props> = ({
               setAddressLocation(location);
               setAddress(location.label);
             }}
-            textInputRef={homeTextInputRef}
+            textInputRef={textInputRef}
             label={label}
             placeholder={placeholder}
             style={styles.textInput}
