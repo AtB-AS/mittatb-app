@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useContext} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,6 +11,8 @@ import colors from '../../assets/colors';
 import LocationInput, {Location} from './LocationInput';
 import {useGeolocation} from '../../geolocation';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {OnboardingStackParamList, OnboardingContext} from './';
 
 type Props = {
   question: string;
@@ -20,7 +22,47 @@ type Props = {
   onLocationSelect: (location: Location) => void;
 };
 
-const Form: React.FC<Props> = ({
+export const HomeLocation: React.FC<{
+  navigation: StackNavigationProp<OnboardingStackParamList>;
+}> = ({navigation}) => {
+  const context = useContext(OnboardingContext);
+  return (
+    <LocationForm
+      question="Hvor bor du?"
+      label="Hjemmeadresse"
+      placeholder="Legg til hjemmeadresse"
+      buttonText="Neste"
+      onLocationSelect={(location: Location) => {
+        if (context) {
+          context.setHomeLocation(location);
+          navigation.push('WorkLocation');
+        }
+      }}
+    />
+  );
+};
+
+export const WorkLocation: React.FC<{
+  navigation: StackNavigationProp<OnboardingStackParamList>;
+}> = () => {
+  const context = useContext(OnboardingContext);
+  return (
+    <LocationForm
+      question="Hvor jobber du?"
+      label="Jobbadresse"
+      placeholder="Legg til jobbadresse"
+      buttonText="Neste"
+      onLocationSelect={(location: Location) => {
+        if (context) {
+          context.setWorkLocation(location);
+          context.completeOnboarding();
+        }
+      }}
+    />
+  );
+};
+
+const LocationForm: React.FC<Props> = ({
   question,
   label,
   placeholder,
@@ -58,26 +100,26 @@ const Form: React.FC<Props> = ({
             style={styles.textInput}
           />
         </View>
-        <View
-          style={{
-            width: '100%',
-            position: 'absolute',
-            bottom: 0,
-            padding: 24,
-            shadowOffset: {width: 5, height: 5},
-            shadowOpacity: 0.75,
-            shadowRadius: 10,
-            shadowColor: colors.general.black,
-          }}
-        >
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => addressLocation && onLocationSelect(addressLocation)}
-          >
-            <Text style={styles.buttonText}>{buttonText}</Text>
-          </TouchableOpacity>
-        </View>
       </TouchableWithoutFeedback>
+      <View
+        style={{
+          width: '100%',
+          position: 'absolute',
+          bottom: 0,
+          padding: 24,
+          shadowOffset: {width: 5, height: 5},
+          shadowOpacity: 0.75,
+          shadowRadius: 10,
+          shadowColor: colors.general.black,
+        }}
+      >
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => addressLocation && onLocationSelect(addressLocation)}
+        >
+          <Text style={styles.buttonText}>{buttonText}</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -96,7 +138,7 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
   },
   button: {
-    backgroundColor: colors.primary.green,
+    backgroundColor: colors.primary.gray,
     width: '100%',
     height: 46,
     borderRadius: 8,
@@ -105,7 +147,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 17,
+    color: colors.general.white,
   },
 });
-
-export default Form;

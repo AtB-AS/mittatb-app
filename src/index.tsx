@@ -6,10 +6,12 @@ import Splash from './modules/Splash';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-community/async-storage';
 import AppContext, {UserLocations} from './appContext';
+import Planner from './modules/Planner';
 
 export type RootStackParamList = {
   Splash: undefined;
   Onboarding: {completeOnboarding: (userLocations: UserLocations) => void};
+  Planner: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -88,7 +90,9 @@ const App = () => {
                 component={Onboarding}
                 initialParams={onboardingParams}
               />
-            ) : null}
+            ) : (
+              <Stack.Screen name="Planner" component={Planner} />
+            )}
           </Stack.Navigator>
         </NavigationNativeContainer>
       </SafeAreaProvider>

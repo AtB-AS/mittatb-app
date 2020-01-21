@@ -1,19 +1,21 @@
-import React, {createContext} from 'react';
+import React, {createContext, useState} from 'react';
 import {
   createStackNavigator,
   StackNavigationProp,
 } from '@react-navigation/stack';
-import LocationForm from './LocationForm';
+import {HomeLocation, WorkLocation} from './LocationForms';
 import GeoPermission from './GeoPermission';
 import {useCheckGeolocationPermission} from '../../geolocation';
 import {RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../';
 import Splash from '../Splash';
 import {Location} from './LocationInput';
+import {UserLocations} from 'src/appContext';
 
 type OnboardingContextValue = {
   setHomeLocation: (location: Location) => void;
   setWorkLocation: (location: Location) => void;
+  completeOnboarding: () => void;
 };
 
 export const OnboardingContext = createContext<
@@ -28,51 +30,35 @@ export type OnboardingStackParamList = {
 
 const Stack = createStackNavigator<OnboardingStackParamList>();
 
-type OnboardingScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'Onboarding'
->;
-
 type OnboardingScreenRouteProp = RouteProp<RootStackParamList, 'Onboarding'>;
 
 type Props = {
-  navigation: OnboardingScreenNavigationProp;
   route: OnboardingScreenRouteProp;
 };
 
-const HomeLocation: React.FC<{
-  navigation: StackNavigationProp<OnboardingStackParamList>;
-}> = ({navigation}) => (
-  <LocationForm
-    question="Hvor bor du?"
-    label="Hjemmeadresse"
-    placeholder="Legg til hjemmeadresse"
-    buttonText="Neste"
-    onLocationSelect={(location: Location) => {}}
-  />
-);
-
-const WorkLocation: React.FC<{
-  navigation: StackNavigationProp<OnboardingStackParamList>;
-}> = () => (
-  <LocationForm
-    question="Hvor jobber du?"
-    label="Jobbadresse"
-    placeholder="Legg til jobbadresse"
-    buttonText="Neste"
-    onLocationSelect={(location: Location) => {}}
-  />
-);
-
-const OnboardingRoot: React.FC<Props> = ({navigation, route}) => {
+const OnboardingRoot: React.FC<Props> = ({route}) => {
   const permissionStatus = useCheckGeolocationPermission();
+  const [home, setHomeLocation] = useState<Location | null>(null);
+  const [work, setWorkLocation] = useState<Location | null>(null);
 
   if (!permissionStatus) {
     return <Splash />;
   }
 
+  const {completeOnboarding} = route.params;
+
   return (
-    <OnboardingContext.Provider value={{}}>
+    <OnboardingContext.Provider
+      value={{
+        setHomeLocation,
+        setWorkLocation,
+        completeOnboarding: () => {
+          if (home && work) {
+            completeOnboarding({home, work});
+          }
+        },
+      }}
+    >
       <Stack.Navigator
         initialRouteName={
           permissionStatus !== 'granted' ? 'GeoPermission' : 'HomeLocation'
