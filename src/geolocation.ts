@@ -11,25 +11,29 @@ import {
   PermissionStatus,
 } from 'react-native-permissions';
 
-export function useGeolocation() {
+export function useGeolocation(hasPermission: boolean = true) {
   const [location, setLocation] = useState<GeolocationResponse | null>(null);
   useEffect(() => {
-    const config: GeolocationOptions = {enableHighAccuracy: true};
+    if (!hasPermission) {
+      setLocation(null);
+    } else {
+      const config: GeolocationOptions = {enableHighAccuracy: true};
 
-    Geolocation.getCurrentPosition(
-      position => setLocation(position),
-      () => setLocation(null),
-      {...config, maximumAge: 0},
-    );
+      Geolocation.getCurrentPosition(
+        position => setLocation(position),
+        () => setLocation(null),
+        {...config, maximumAge: 0},
+      );
 
-    const watchId = Geolocation.watchPosition(
-      position => setLocation(position),
-      () => setLocation(null),
-      config,
-    );
+      const watchId = Geolocation.watchPosition(
+        position => setLocation(position),
+        () => setLocation(null),
+        config,
+      );
 
-    return () => Geolocation.clearWatch(watchId);
-  }, []);
+      return () => Geolocation.clearWatch(watchId);
+    }
+  }, [hasPermission]);
   return location;
 }
 

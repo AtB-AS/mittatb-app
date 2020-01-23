@@ -60,7 +60,6 @@ const LocationInput: React.FC<Props> = ({
 
   return (
     <View style={[style, {zIndex: isFocused ? 1 : undefined}]}>
-      <Text style={styles.label}>{label}</Text>
       <TextInput
         ref={ref}
         style={styles.textInput}
@@ -156,11 +155,6 @@ const LocationSuggestion: React.FC<LocationSuggestionProps> = ({
 };
 
 const styles = StyleSheet.create({
-  label: {
-    color: colors.general.black,
-    fontSize: 20,
-    marginBottom: 12,
-  },
   textInput: {
     width: '100%',
     height: 46,

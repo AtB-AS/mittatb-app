@@ -6,6 +6,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   TextInput,
+  TextStyle,
 } from 'react-native';
 import colors from '../../assets/colors';
 import LocationInput, {Location} from './LocationInput';
@@ -22,6 +23,8 @@ type Props = {
   placeholder: string;
   buttonText: string;
   onLocationSelect: (location: Location) => void;
+  currentStep: number;
+  totalSteps: number;
 };
 
 export const HomeLocation: React.FC<{
@@ -42,6 +45,8 @@ export const HomeLocation: React.FC<{
           navigation.push('WorkLocation');
         }
       }}
+      currentStep={1}
+      totalSteps={2}
     />
   );
 };
@@ -63,6 +68,8 @@ export const WorkLocation: React.FC<{
           context.setWorkLocation(location);
         }
       }}
+      currentStep={2}
+      totalSteps={2}
     />
   );
 };
@@ -74,6 +81,8 @@ const LocationForm: React.FC<Props> = ({
   placeholder,
   buttonText,
   onLocationSelect,
+  totalSteps,
+  currentStep,
 }) => {
   const [address, setAddress] = useState<string>('');
   const [addressLocation, setAddressLocation] = useState<Location | null>(null);
@@ -87,7 +96,8 @@ const LocationForm: React.FC<Props> = ({
     <SafeAreaView style={styles.container}>
       <TouchableWithoutFeedback onPress={blurInput}>
         <View style={styles.innerContainer}>
-          <Text>{question}</Text>
+          <Text style={styles.question}>{question}</Text>
+          <Text style={styles.label}>{label}</Text>
           <LocationInput
             location={location}
             text={address}
@@ -118,6 +128,13 @@ const LocationForm: React.FC<Props> = ({
           shadowColor: colors.general.black,
         }}
       >
+        <View style={styles.stepContainer}>
+          {[...Array(totalSteps).keys()].map(step => (
+            <Text key={step} style={stepStyle(step, currentStep)}>
+              ∙
+            </Text>
+          ))}
+        </View>
         <TouchableOpacity
           style={styles.button}
           onPress={() => addressLocation && onLocationSelect(addressLocation)}
@@ -129,6 +146,14 @@ const LocationForm: React.FC<Props> = ({
   );
 };
 
+const stepStyle = (step: number, currentStep: number): TextStyle => ({
+  fontSize: step === currentStep - 1 ? 52 : 42,
+  opacity: step === currentStep - 1 ? 1 : 0.5,
+  textAlign: 'center',
+  textAlignVertical: 'center',
+  paddingTop: step === currentStep - 1 ? 0 : 4,
+});
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.primary.green,
@@ -139,8 +164,23 @@ const styles = StyleSheet.create({
     padding: 24,
     paddingTop: 96,
   },
+  question: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 24,
+  },
+  label: {
+    color: colors.general.black,
+    fontSize: 16,
+    marginBottom: 12,
+  },
   textInput: {
     paddingBottom: 24,
+  },
+  stepContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   button: {
     backgroundColor: colors.primary.gray,

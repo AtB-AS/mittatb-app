@@ -40,7 +40,7 @@ type Props = {
 
 const OnboardingRoot: React.FC<Props> = ({route}) => {
   const permissionStatus = useCheckGeolocationPermission();
-  const location = useGeolocation();
+  const location = useGeolocation(permissionStatus === 'granted');
 
   const [home, setHomeLocation] = useState<Location | null>(null);
   const [work, setWorkLocation] = useState<Location | null>(null);
