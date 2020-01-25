@@ -17,6 +17,7 @@
     "@react-navigation/native": "^5.0.0-alpha.27",
     "@react-navigation/stack": "^5.0.0-alpha.61",
     "axios": "^0.19.1",
+    "date-fns": "^2.9.0",
     "react": "16.9.0",
     "react-native": "0.61.5",
     "react-native-gesture-handler": "^1.5.3",
