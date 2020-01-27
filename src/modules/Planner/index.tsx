@@ -7,13 +7,14 @@ import HomeBanner from '../../assets/svg/HomeBanner';
 import WorkBanner from '../../assets/svg/WorkBanner';
 import colors from '../../assets/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import AppContext from '../../appContext';
+import AppContext, {UserLocations, Location} from '../../appContext';
 import {useJourneyPlanner} from './useJourneyPlanner';
 import {TripPattern, Leg} from '../../sdk';
 import {format, parseISO} from 'date-fns';
 import TramFront from '../../assets/svg/TramFront';
 import useSortNearest from './useSortNearest';
 import {useGeolocation} from '../../geolocation';
+import Splash from '../Splash';
 
 type LegIconProps = {
   leg: Leg;
@@ -94,30 +95,46 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
   );
 };
 
-const Planner = () => {
+const PlannerRoot = () => {
   const {userLocations} = useContext(AppContext);
   const currentLocation = useGeolocation();
 
+  if (!userLocations || !currentLocation) {
+    return <Splash />;
+  }
+
+  return (
+    <Planner
+      userLocations={userLocations}
+      currentLocation={{
+        id: 'current',
+        name: 'current',
+        label: 'current',
+        coordinates: {
+          latitude: currentLocation.coords.latitude,
+          longitude: currentLocation.coords.longitude,
+        },
+      }}
+    />
+  );
+};
+
+type PlannerProps = {
+  userLocations: UserLocations;
+  currentLocation: Location;
+};
+
+const Planner: React.FC<PlannerProps> = ({userLocations, currentLocation}) => {
   const sortedLocations = useSortNearest(
-    currentLocation
-      ? {
-          id: 'current',
-          name: 'current',
-          label: 'current',
-          coordinates: {
-            latitude: currentLocation.coords.latitude,
-            longitude: currentLocation.coords.longitude,
-          },
-        }
-      : undefined,
-    userLocations?.home,
-    userLocations?.work,
+    currentLocation,
+    userLocations.home,
+    userLocations.work,
   );
 
-  const [nearest, furthest] = sortedLocations ?? [];
+  const [nearest, furthest] = sortedLocations;
 
   const tripPatterns =
-    useJourneyPlanner(nearest?.location, furthest?.location) ?? [];
+    useJourneyPlanner(nearest.location, furthest.location) ?? [];
 
   if (tripPatterns.length === 0)
     return (
@@ -178,4 +195,4 @@ const styles = StyleSheet.create({
   spinner: {padding: 72},
 });
 
-export default Planner;
+export default PlannerRoot;
