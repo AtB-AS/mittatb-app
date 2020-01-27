@@ -1,7 +1,10 @@
 import {createContext} from 'react';
 
 export type Location = {
-  coordinates: [number, number];
+  id: string;
+  name: string;
+  label: string;
+  coordinates: {longitude: number; latitude: number};
 };
 
 export type UserLocations = {

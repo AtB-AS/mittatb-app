@@ -11,8 +11,9 @@ export function useJourneyPlanner(from?: Location, to?: Location) {
       if (!from || !to) {
         setResults(null);
       } else {
-        const [from_long, from_lat] = from.coordinates;
-        const [to_long, to_lat] = to.coordinates;
+        const {latitude: from_lat, longitude: from_long} = from.coordinates;
+        const {latitude: to_lat, longitude: to_long} = to.coordinates;
+
         const url =
           'https://bff-oneclick-journey-planner-zmj3kfvboa-ew.a.run.app/journey/v1/trips?from=' +
           from_lat +

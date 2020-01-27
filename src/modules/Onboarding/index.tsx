@@ -1,17 +1,14 @@
 import React, {createContext, useState, useEffect} from 'react';
-import {
-  createStackNavigator,
-  StackNavigationProp,
-} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import {HomeLocation, WorkLocation} from './LocationForms';
 import GeoPermission from './GeoPermission';
 import {useCheckGeolocationPermission, useGeolocation} from '../../geolocation';
 import {RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../';
 import Splash from '../Splash';
-import {Location} from './LocationInput';
 import {GeolocationResponse} from '@react-native-community/geolocation';
 import Final from './Final';
+import {Location} from '../../appContext';
 
 type OnboardingContextValue = {
   location: GeolocationResponse | null;

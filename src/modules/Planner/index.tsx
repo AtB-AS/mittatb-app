@@ -11,6 +11,8 @@ import {useJourneyPlanner} from './useJourneyPlanner';
 import {TripPattern, Leg} from '../../sdk';
 import {format, parseISO} from 'date-fns';
 import TramFront from '../../assets/svg/TramFront';
+import useSortNearest from './useSortNearest';
+import {useGeolocation} from '../../geolocation';
 
 type LegIconProps = {
   leg: Leg;
@@ -93,9 +95,28 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
 
 const Planner = () => {
   const {userLocations} = useContext(AppContext);
+  const currentLocation = useGeolocation();
+
+  const sortedLocations = useSortNearest(
+    currentLocation
+      ? {
+          id: 'current',
+          name: 'current',
+          label: 'current',
+          coordinates: {
+            latitude: currentLocation.coords.latitude,
+            longitude: currentLocation.coords.longitude,
+          },
+        }
+      : undefined,
+    userLocations?.home,
+    userLocations?.work,
+  );
+
+  const [nearest, furthest] = sortedLocations ?? [];
 
   const tripPatterns =
-    useJourneyPlanner(userLocations?.home, userLocations?.work) ?? [];
+    useJourneyPlanner(nearest?.location, furthest?.location) ?? [];
 
   if (tripPatterns.length === 0)
     return (
@@ -125,8 +146,10 @@ const Planner = () => {
         >
           2 minutter
         </Text>
-        <Text style={{fontSize: 16, color: colors.general.white}}>
-          Hjem til Jobb
+        <Text
+          style={{fontSize: 16, color: colors.general.white, marginBottom: 48}}
+        >
+          {nearest?.location.name} til {furthest?.location.name}
         </Text>
         {tripPatterns.map((pattern, i) => (
           <ResultItem key={i} tripPattern={pattern} />
