@@ -90,7 +90,7 @@ const LocationForm: React.FC<Props> = ({
 
   const textInputRef = useRef<TextInput>(null);
   const blurInput = () => {
-    textInputRef.current?.blur();
+    textInputRef.current?.isFocused && textInputRef.current?.blur();
   };
 
   return (
@@ -119,9 +119,6 @@ const LocationForm: React.FC<Props> = ({
       </TouchableWithoutFeedback>
       <View
         style={{
-          width: '100%',
-          position: 'absolute',
-          bottom: 0,
           padding: 24,
           shadowOffset: {width: 5, height: 5},
           shadowOpacity: 0.75,
@@ -159,6 +156,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.primary.green,
     flex: 1,
+    justifyContent: 'space-between',
   },
   innerContainer: {
     flex: 1,

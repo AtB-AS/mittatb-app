@@ -15,7 +15,6 @@ import useDebounce from './useDebounce';
 import LocationArrow from '../../assets/svg/LocationArrow';
 import {Location} from '../../appContext';
 
-
 type Props = {
   location: GeolocationResponse | null;
   text: string;
