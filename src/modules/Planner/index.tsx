@@ -4,6 +4,7 @@ import WalkingPerson from '../../assets/svg/WalkingPerson';
 import BusFront from '../../assets/svg/BusFront';
 import ArrowRight from '../../assets/svg/ArrowRight';
 import HomeBanner from '../../assets/svg/HomeBanner';
+import WorkBanner from '../../assets/svg/WorkBanner';
 import colors from '../../assets/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import AppContext from '../../appContext';
@@ -125,7 +126,11 @@ const Planner = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <HomeBanner width="100%" style={styles.banner} />
+      {userLocations?.home?.id === nearest?.location?.id ? (
+        <HomeBanner width="100%" style={styles.banner} />
+      ) : (
+        <WorkBanner width="100%" style={styles.banner} />
+      )}
 
       <View style={styles.textContainer}>
         <Text
