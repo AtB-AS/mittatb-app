@@ -17,7 +17,7 @@ import useSortNearest from './useSortNearest';
 import Splash from '../Splash';
 import {useGeolocationState} from '../../GeolocationContext';
 import {secondsToDuration} from '../../utils/date';
-import {formatDistanceStrict} from 'date-fns/esm';
+import {formatDistanceStrict} from 'date-fns';
 
 type LegIconProps = {
   leg: Leg;
@@ -192,7 +192,7 @@ const Planner: React.FC<PlannerProps> = ({
               {formatDistanceStrict(
                 Date.now(),
                 parseISO(tripPatterns[0].startTime),
-                {locale: nb},
+                {locale: nb, onlyNumeric: true},
               )}
             </Text>
           </>
