@@ -19,11 +19,9 @@ const LegIcon: React.FC<LegIconProps> = ({leg}) => {
       return <WalkingPerson />;
     case 'bus':
       return (
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={styles.busIconContainer}>
           <BusFront />
-          <Text style={{fontSize: 12, color: colors.general.white}}>
-            {leg.line?.publicCode}
-          </Text>
+          <Text style={styles.busText}>{leg.line?.publicCode}</Text>
         </View>
       );
     case 'tram':
@@ -42,7 +40,7 @@ const LegIcons: React.FC<LegIconsProps> = ({legs}) => (
     {legs.map((leg, index) => (
       <React.Fragment key={leg.mode + index}>
         <LegIcon leg={leg} />
-        {index < legs.length - 1 ? <ArrowRight /> : null}
+        {index < legs.length - 1 ? <ArrowRight style={styles.arrow} /> : null}
       </React.Fragment>
     ))}
   </View>
@@ -53,6 +51,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  busIconContainer: {flexDirection: 'row', alignItems: 'center'},
+  busText: {fontSize: 12, color: colors.general.white, marginLeft: 4.5},
+  arrow: {marginHorizontal: 4.5},
 });
 
 export default LegIcons;
