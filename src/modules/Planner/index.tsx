@@ -1,9 +1,6 @@
 import React from 'react';
 import {ActivityIndicator, StyleSheet, View, Text} from 'react-native';
 import nb from 'date-fns/locale/nb';
-import WalkingPerson from '../../assets/svg/WalkingPerson';
-import BusFront from '../../assets/svg/BusFront';
-import ArrowRight from '../../assets/svg/ArrowRight';
 import HomeBanner from '../../assets/svg/HomeBanner';
 import WorkBanner from '../../assets/svg/WorkBanner';
 import colors from '../../assets/colors';
@@ -12,36 +9,12 @@ import {UserLocations, Location, useAppState} from '../../AppContext';
 import {useJourneyPlanner} from './useJourneyPlanner';
 import {TripPattern, Leg} from '../../sdk';
 import {format, parseISO} from 'date-fns';
-import TramFront from '../../assets/svg/TramFront';
 import useSortNearest from './useSortNearest';
 import Splash from '../Splash';
 import {useGeolocationState} from '../../GeolocationContext';
 import {secondsToDuration} from '../../utils/date';
 import {formatDistanceStrict} from 'date-fns';
-
-type LegIconProps = {
-  leg: Leg;
-};
-
-const LegIcon: React.FC<LegIconProps> = ({leg}) => {
-  switch (leg.mode) {
-    case 'foot':
-      return <WalkingPerson />;
-    case 'bus':
-      return (
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <BusFront />
-          <Text style={{fontSize: 12, color: colors.general.white}}>
-            {leg.line?.publicCode}
-          </Text>
-        </View>
-      );
-    case 'tram':
-      return <TramFront />;
-    default:
-      return <View />;
-  }
-};
+import LegIcons from './LegIcons';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -76,23 +49,8 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
           Fra {tripPattern.legs[0].toPlace.name} (
           {tripPattern.walkDistance.toFixed(0)} m)
         </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
-          {tripPattern.legs
-            .map((leg, i) => <LegIcon key={i} leg={leg} />)
-            .reduce(
-              (prev: JSX.Element[], curr: JSX.Element, index, {length}) => {
-                return index < length - 1
-                  ? prev.concat(curr, <ArrowRight />)
-                  : prev.concat(curr);
-              },
-              [],
-            )}
-        </View>
+
+        <LegIcons legs={tripPattern.legs} />
       </View>
     </View>
   );
