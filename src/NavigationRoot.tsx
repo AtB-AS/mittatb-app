@@ -3,9 +3,9 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationNativeContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useAppState} from './AppContext';
-import Splash from './modules/Splash';
-import Onboarding from './modules/Onboarding';
-import Planner from './modules/Planner';
+import Splash from './screens/Splash';
+import Onboarding from './screens/Onboarding';
+import Planner from './screens/Planner';
 
 export type RootStackParamList = {
   Splash: undefined;
