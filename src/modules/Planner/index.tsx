@@ -1,5 +1,6 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {ActivityIndicator, StyleSheet, View, Text} from 'react-native';
+import nb from 'date-fns/locale/nb';
 import WalkingPerson from '../../assets/svg/WalkingPerson';
 import BusFront from '../../assets/svg/BusFront';
 import ArrowRight from '../../assets/svg/ArrowRight';
@@ -15,6 +16,8 @@ import TramFront from '../../assets/svg/TramFront';
 import useSortNearest from './useSortNearest';
 import Splash from '../Splash';
 import {useGeolocationState} from '../../GeolocationContext';
+import {secondsToDuration} from '../../utils/date';
+import {formatDistanceStrict} from 'date-fns/esm';
 
 type LegIconProps = {
   leg: Leg;
@@ -59,7 +62,7 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
           {format(parseISO(tripPattern.endTime), 'HH:mm')}
         </Text>
         <Text style={{fontSize: 20, color: colors.general.white}}>
-          {tripPattern.duration} sekunder
+          {secondsToDuration(tripPattern.duration, nb)}
         </Text>
       </View>
       <View
@@ -168,24 +171,32 @@ const Planner: React.FC<PlannerProps> = ({
       )}
 
       <View style={styles.textContainer}>
-        <Text
-          style={{
-            fontSize: 20,
-            fontWeight: 'bold',
-            color: colors.general.white,
-          }}
-        >
-          Du må gå innen
-        </Text>
-        <Text
-          style={{
-            fontSize: 40,
-            fontWeight: 'bold',
-            color: colors.general.white,
-          }}
-        >
-          2 minutter
-        </Text>
+        {tripPatterns.length > 0 ? (
+          <>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: 'bold',
+                color: colors.general.white,
+              }}
+            >
+              Du må gå innen
+            </Text>
+            <Text
+              style={{
+                fontSize: 40,
+                fontWeight: 'bold',
+                color: colors.general.white,
+              }}
+            >
+              {formatDistanceStrict(
+                Date.now(),
+                parseISO(tripPatterns[0].startTime),
+                {locale: nb},
+              )}
+            </Text>
+          </>
+        ) : null}
         <Text
           style={{fontSize: 16, color: colors.general.white, marginBottom: 48}}
         >
