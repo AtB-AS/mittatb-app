@@ -15,9 +15,12 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {OnboardingStackParamList, OnboardingContext} from './';
 import {GeolocationResponse} from '@react-native-community/geolocation';
 import {Location} from '../../AppContext';
+import HomeIcon from '../../assets/svg/HomeIcon';
+import WorkIcon from '../../assets/svg/WorkIcon';
 
 type Props = {
   location: GeolocationResponse | null;
+  icon: JSX.Element;
   question: string;
   label: string;
   placeholder: string;
@@ -35,6 +38,7 @@ export const HomeLocation: React.FC<{
     <LocationForm
       key="homeForm"
       location={context?.location ?? null}
+      icon={<HomeIcon width={30} height={30} style={styles.icon} />}
       question="Hvor bor du?"
       label="Hjemmeadresse"
       placeholder="Legg til hjemmeadresse"
@@ -59,6 +63,7 @@ export const WorkLocation: React.FC<{
     <LocationForm
       key="workForm"
       location={context?.location ?? null}
+      icon={<WorkIcon width={28} height={28} style={styles.icon} />}
       question="Hvor jobber du?"
       label="Jobbadresse"
       placeholder="Legg til jobbadresse"
@@ -76,6 +81,7 @@ export const WorkLocation: React.FC<{
 
 const LocationForm: React.FC<Props> = ({
   location,
+  icon,
   question,
   label,
   placeholder,
@@ -96,7 +102,10 @@ const LocationForm: React.FC<Props> = ({
     <SafeAreaView style={styles.container}>
       <TouchableWithoutFeedback onPress={blurInput}>
         <View style={styles.innerContainer}>
-          <Text style={styles.question}>{question}</Text>
+          <View style={styles.iconQuestionContainer}>
+            {icon}
+            <Text style={styles.question}>{question}</Text>
+          </View>
           <Text style={styles.label}>{label}</Text>
           <LocationInput
             location={location}
@@ -132,25 +141,25 @@ const LocationForm: React.FC<Props> = ({
             </Text>
           ))}
         </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => addressLocation && onLocationSelect(addressLocation)}
-        >
-          <Text style={styles.buttonText}>{buttonText}</Text>
-        </TouchableOpacity>
+        <View style={{opacity: addressLocation !== null ? 1 : 0.2}}>
+          <TouchableOpacity
+            style={[styles.button]}
+            onPress={() => addressLocation && onLocationSelect(addressLocation)}
+          >
+            <Text style={styles.buttonText}>{buttonText}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
 };
 
 const stepStyle = (step: number, currentStep: number): TextStyle => ({
-  fontSize: step === currentStep - 1 ? 52 : 42,
+  fontSize: 52,
   opacity: step === currentStep - 1 ? 1 : 0.5,
   textAlign: 'center',
   textAlignVertical: 'center',
-  paddingTop: step === currentStep - 1 ? 0 : 4,
 });
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.primary.green,
@@ -162,14 +171,25 @@ const styles = StyleSheet.create({
     padding: 24,
     paddingTop: 96,
   },
+  iconQuestionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  icon: {
+    height: 30,
+    marginRight: 12,
+  },
   question: {
+    height: 30,
     fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 24,
+    padding: 0,
+    margin: 0,
   },
   label: {
     color: colors.general.black,
-    fontSize: 16,
+    fontSize: 12,
     marginBottom: 12,
   },
   textInput: {

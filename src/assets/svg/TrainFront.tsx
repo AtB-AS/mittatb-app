@@ -1,7 +1,7 @@
 import React from 'react';
 import Svg, {Path, SvgProps} from 'react-native-svg';
 
-function Train(props: SvgProps) {
+function TrainFront(props: SvgProps) {
   return (
     <Svg width={24} height={24} viewBox="0 0 24 24" fill="none" {...props}>
       <Path
@@ -12,4 +12,4 @@ function Train(props: SvgProps) {
   );
 }
 
-export default Train;
+export default TrainFront;

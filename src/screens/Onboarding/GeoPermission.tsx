@@ -70,7 +70,7 @@ const GeoPermission: React.FC<Props> = ({navigation}) => {
             zIndex: -1,
           }}
         >
-          <WaitingForBus width="100%" height="100%" />
+          <WaitingForBus width="100%" height="100%" style={{opacity: 0.2}} />
         </View>
         <View
           style={{
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     color: colors.general.white,
   },
   button: {
-    backgroundColor: colors.primary.green,
+    backgroundColor: colors.primary.gray,
     width: '100%',
     height: 46,
     borderRadius: 8,
@@ -127,6 +127,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 17,
+    fontWeight: '600',
+    color: colors.general.white,
   },
 });
 
