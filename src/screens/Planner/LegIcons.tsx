@@ -5,6 +5,7 @@ import WalkingPerson from '../../assets/svg/WalkingPerson';
 import BusFront from '../../assets/svg/BusFront';
 import ArrowRight from '../../assets/svg/ArrowRight';
 import TramFront from '../../assets/svg/TramFront';
+import TrainFront from '../../assets/svg/TrainFront';
 
 import colors from '../../assets/colors';
 import {Leg} from '../../sdk';
@@ -26,6 +27,8 @@ const LegIcon: React.FC<LegIconProps> = ({leg}) => {
       );
     case 'tram':
       return <TramFront />;
+    case 'rail':
+      return <TrainFront />;
     default:
       return <View />;
   }

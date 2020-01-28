@@ -112,6 +112,7 @@ const Overview: React.FC<Props> = ({
             {tripPatterns.map((pattern, i) => (
               <ResultItem key={i} tripPattern={pattern} />
             ))}
+            <View></View>
           </ScrollView>
         </>
       )}
