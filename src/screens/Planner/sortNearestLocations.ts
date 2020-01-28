@@ -8,7 +8,7 @@ type SortedLocation = {
   distance: number;
 };
 
-export default function useSortNearest(
+export default function sortNearestLocations(
   current: Location,
   ...rest: Location[]
 ): SortedLocation[] {
