@@ -1,17 +1,12 @@
 import React, {createContext, useState, useEffect} from 'react';
-import {
-  createStackNavigator,
-  StackNavigationProp,
-} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import {HomeLocation, WorkLocation} from './LocationForms';
 import GeoPermission from './GeoPermission';
-import {useCheckGeolocationPermission, useGeolocation} from '../../geolocation';
-import {RouteProp} from '@react-navigation/native';
-import {RootStackParamList} from '../../';
 import Splash from '../Splash';
-import {Location} from './LocationInput';
 import {GeolocationResponse} from '@react-native-community/geolocation';
 import Final from './Final';
+import {Location, useAppState} from '../../AppContext';
+import {useGeolocationState} from '../../GeolocationContext';
 
 type OnboardingContextValue = {
   location: GeolocationResponse | null;
@@ -32,16 +27,9 @@ export type OnboardingStackParamList = {
 
 const Stack = createStackNavigator<OnboardingStackParamList>();
 
-type OnboardingScreenRouteProp = RouteProp<RootStackParamList, 'Onboarding'>;
-
-type Props = {
-  route: OnboardingScreenRouteProp;
-};
-
-const OnboardingRoot: React.FC<Props> = ({route}) => {
-  const permissionStatus = useCheckGeolocationPermission();
-  const location = useGeolocation(permissionStatus === 'granted');
-
+const OnboardingRoot: React.FC = () => {
+  const {completeOnboarding} = useAppState();
+  const {status: permissionStatus, location} = useGeolocationState();
   const [home, setHomeLocation] = useState<Location | null>(null);
   const [work, setWorkLocation] = useState<Location | null>(null);
 
@@ -54,8 +42,6 @@ const OnboardingRoot: React.FC<Props> = ({route}) => {
   if (!permissionStatus) {
     return <Splash />;
   }
-
-  const {completeOnboarding} = route.params;
 
   return (
     <OnboardingContext.Provider

@@ -13,13 +13,7 @@ import {GeolocationResponse} from '@react-native-community/geolocation';
 import {useGeocoder, useReverseGeocoder} from './useGeocoder';
 import useDebounce from './useDebounce';
 import LocationArrow from '../../assets/svg/LocationArrow';
-
-export type Location = {
-  coordinates: [number, number];
-  id: string;
-  label: string;
-  name: string;
-};
+import {Location} from '../../AppContext';
 
 type Props = {
   location: GeolocationResponse | null;
@@ -48,8 +42,8 @@ const LocationInput: React.FC<Props> = ({
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const debouncedLocation = useDebounce(location, 200);
   const debouncedText = useDebounce(text, 200);
-  const reverseLookupFeatures = useReverseGeocoder(debouncedLocation) ?? [];
-  const autoCompleteFeatures =
+  const reverseLookupLocations = useReverseGeocoder(debouncedLocation) ?? [];
+  const autoCompleteLocations =
     useGeocoder(debouncedText, debouncedLocation) ?? [];
 
   type Suggestion = Omit<LocationSuggestionProps, 'onSelectLocation'>;
@@ -78,18 +72,13 @@ const LocationInput: React.FC<Props> = ({
             keyExtractor={suggestion => suggestion.location.id}
             suggestions={
               text && text.length > 3
-                ? autoCompleteFeatures
-                    .map<Location>(feature => ({
-                      coordinates: feature.geometry.coordinates,
-                      ...feature.properties,
-                    }))
-                    .map(location => ({location, type: 'autocomplete'}))
-                : reverseLookupFeatures
+                ? autoCompleteLocations.map(location => ({
+                    location,
+                    type: 'autocomplete',
+                  }))
+                : reverseLookupLocations
                     .slice(0, reverseLookupCount ?? 1)
-                    .map<Location>(feature => ({
-                      coordinates: feature.geometry.coordinates,
-                      ...feature.properties,
-                    }))
+
                     .map(location => ({location, type: 'reverse'}))
             }
             renderSuggestion={({location, type}) => (
