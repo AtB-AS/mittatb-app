@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 
 import WalkingPerson from '../../assets/svg/WalkingPerson';
 import BusFront from '../../assets/svg/BusFront';
@@ -38,19 +38,21 @@ type LegIconsProps = {
 };
 
 const LegIcons: React.FC<LegIconsProps> = ({legs}) => (
-  <View
-    style={{
-      flexDirection: 'row',
-      alignItems: 'center',
-    }}
-  >
+  <View style={styles.iconContainer}>
     {legs.map((leg, index) => (
-      <>
+      <React.Fragment key={leg.mode + index}>
         <LegIcon leg={leg} />
         {index < legs.length - 1 ? <ArrowRight /> : null}
-      </>
+      </React.Fragment>
     ))}
   </View>
 );
+
+const styles = StyleSheet.create({
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+});
 
 export default LegIcons;
