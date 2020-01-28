@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 import axios from 'axios';
-import {Location} from '../../appContext';
+import {Location} from '../../AppContext';
 import {TripPattern} from '../../sdk';
 
 export function useJourneyPlanner(from: Location, to: Location) {

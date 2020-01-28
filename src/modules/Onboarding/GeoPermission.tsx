@@ -1,12 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import WaitingForBus from '../../assets/svg/WaitingForBus';
 import colors from '../../assets/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Logo from '../../assets/svg/Logo';
-import {requestGeolocationPermission} from '../../geolocation';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {OnboardingStackParamList} from './';
+import {useGeolocationState} from '../../GeolocationContext';
 
 const ListItem: React.FC<{text: string}> = ({text}) => (
   <View style={styles.bulletListItem}>
@@ -25,12 +25,14 @@ type Props = {
 };
 
 const GeoPermission: React.FC<Props> = ({navigation}) => {
-  const requestPermission = async function() {
-    const status = await requestGeolocationPermission();
+  const {status, requestPermission} = useGeolocationState();
+
+  useEffect(() => {
     if (status === 'granted') {
       navigation.replace('HomeLocation');
     }
-  };
+  }, [status]);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>

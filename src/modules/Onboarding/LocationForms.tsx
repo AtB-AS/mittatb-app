@@ -10,12 +10,11 @@ import {
 } from 'react-native';
 import colors from '../../assets/colors';
 import LocationInput from './LocationInput';
-import {useGeolocation} from '../../geolocation';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {OnboardingStackParamList, OnboardingContext} from './';
 import {GeolocationResponse} from '@react-native-community/geolocation';
-import {Location} from '../../appContext';
+import {Location} from '../../AppContext';
 
 type Props = {
   location: GeolocationResponse | null;

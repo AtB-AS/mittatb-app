@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import {GeolocationResponse} from '@react-native-community/geolocation';
 import axios from 'axios';
-import {Location} from '../../appContext';
+import {Location} from '../../AppContext';
 
 export function useGeocoder(
   text: string | null,

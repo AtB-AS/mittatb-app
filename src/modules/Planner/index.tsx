@@ -7,14 +7,14 @@ import HomeBanner from '../../assets/svg/HomeBanner';
 import WorkBanner from '../../assets/svg/WorkBanner';
 import colors from '../../assets/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import AppContext, {UserLocations, Location} from '../../appContext';
+import {UserLocations, Location, useAppState} from '../../AppContext';
 import {useJourneyPlanner} from './useJourneyPlanner';
 import {TripPattern, Leg} from '../../sdk';
 import {format, parseISO} from 'date-fns';
 import TramFront from '../../assets/svg/TramFront';
 import useSortNearest from './useSortNearest';
-import {useGeolocation} from '../../geolocation';
 import Splash from '../Splash';
+import {useGeolocationState} from '../../GeolocationContext';
 
 type LegIconProps = {
   leg: Leg;
@@ -96,16 +96,17 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
 };
 
 const PlannerRoot = () => {
-  const {userLocations} = useContext(AppContext);
-  const currentLocation = useGeolocation();
+  const {userLocations, resetOnboarding} = useAppState();
+  const {location: currentLocation} = useGeolocationState();
 
-  if (!userLocations || !currentLocation) {
+  if (!userLocations || !currentLocation || !resetOnboarding) {
     return <Splash />;
   }
 
   return (
     <Planner
       userLocations={userLocations}
+      resetOnboarding={resetOnboarding}
       currentLocation={{
         id: 'current',
         name: 'current',
@@ -122,9 +123,14 @@ const PlannerRoot = () => {
 type PlannerProps = {
   userLocations: UserLocations;
   currentLocation: Location;
+  resetOnboarding: () => void;
 };
 
-const Planner: React.FC<PlannerProps> = ({userLocations, currentLocation}) => {
+const Planner: React.FC<PlannerProps> = ({
+  userLocations,
+  currentLocation,
+  resetOnboarding,
+}) => {
   const sortedLocations = useSortNearest(
     currentLocation,
     userLocations.home,
@@ -141,12 +147,24 @@ const Planner: React.FC<PlannerProps> = ({userLocations, currentLocation}) => {
       <ActivityIndicator animating={true} size="large" style={styles.spinner} />
     );
 
+  const bannerLongPress = () => {
+    __DEV__ && resetOnboarding();
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {userLocations?.home?.id === nearest?.location?.id ? (
-        <HomeBanner width="100%" style={styles.banner} />
+        <HomeBanner
+          width="100%"
+          style={styles.banner}
+          onLongPress={bannerLongPress}
+        />
       ) : (
-        <WorkBanner width="100%" style={styles.banner} />
+        <WorkBanner
+          width="100%"
+          style={styles.banner}
+          onLongPress={bannerLongPress}
+        />
       )}
 
       <View style={styles.textContainer}>
