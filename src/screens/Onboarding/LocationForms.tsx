@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import colors from '../../assets/colors';
 import LocationInput from './LocationInput';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableHighlight} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {OnboardingStackParamList, OnboardingContext} from './';
 import {GeolocationResponse} from '@react-native-community/geolocation';
@@ -142,12 +142,12 @@ const LocationForm: React.FC<Props> = ({
           ))}
         </View>
         <View style={{opacity: addressLocation !== null ? 1 : 0.2}}>
-          <TouchableOpacity
+          <TouchableHighlight
             style={[styles.button]}
             onPress={() => addressLocation && onLocationSelect(addressLocation)}
           >
             <Text style={styles.buttonText}>{buttonText}</Text>
-          </TouchableOpacity>
+          </TouchableHighlight>
         </View>
       </View>
     </SafeAreaView>

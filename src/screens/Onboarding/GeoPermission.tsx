@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import WaitingForBus from '../../assets/svg/WaitingForBus';
 import colors from '../../assets/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -55,9 +55,9 @@ const GeoPermission: React.FC<Props> = ({navigation}) => {
           <WaitingForBus width="100%" height="100%" style={styles.svg} />
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={requestPermission}>
+          <TouchableHighlight style={styles.button} onPress={requestPermission}>
             <Text style={styles.buttonText}>Kom i gang</Text>
-          </TouchableOpacity>
+          </TouchableHighlight>
         </View>
       </View>
     </SafeAreaView>
