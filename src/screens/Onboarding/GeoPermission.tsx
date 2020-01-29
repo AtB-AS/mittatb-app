@@ -38,22 +38,10 @@ const GeoPermission: React.FC<Props> = ({navigation}) => {
       <View style={styles.innerContainer}>
         <View style={styles.textContainer}>
           <Logo width={48} style={{alignSelf: 'center'}} />
-          <Text
-            style={{
-              fontSize: 28,
-              textAlign: 'center',
-              color: colors.general.white,
-            }}
-          >
+          <Text style={styles.title}>
             Velkommen til en enklere reisehverdag!
           </Text>
-          <Text
-            style={{
-              fontSize: 15,
-              textAlign: 'center',
-              color: colors.general.white,
-            }}
-          >
+          <Text style={styles.description}>
             Reiseopplevelsen blir bedre med smidig samhandling. Derfor ber vi
             deg dele posisjon slik at du kan:
           </Text>
@@ -63,27 +51,10 @@ const GeoPermission: React.FC<Props> = ({navigation}) => {
             <ListItem text="Få varsel om når du må reise for å komme dit du ønsker i tide." />
           </View>
         </View>
-        <View
-          style={{
-            width: '100%',
-            maxHeight: 300,
-            zIndex: -1,
-          }}
-        >
-          <WaitingForBus width="100%" height="100%" style={{opacity: 0.2}} />
+        <View style={styles.svgContainer}>
+          <WaitingForBus width="100%" height="100%" style={styles.svg} />
         </View>
-        <View
-          style={{
-            width: '100%',
-            position: 'absolute',
-            bottom: 0,
-            padding: 24,
-            shadowOffset: {width: 5, height: 5},
-            shadowOpacity: 0.75,
-            shadowRadius: 10,
-            shadowColor: colors.general.black,
-          }}
-        >
+        <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={requestPermission}>
             <Text style={styles.buttonText}>Kom i gang</Text>
           </TouchableOpacity>
@@ -108,6 +79,24 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 48,
   },
+  title: {
+    fontSize: 28,
+    textAlign: 'center',
+    color: colors.general.white,
+  },
+  description: {
+    fontSize: 15,
+    textAlign: 'center',
+    color: colors.general.white,
+  },
+  svgContainer: {
+    width: '100%',
+    maxHeight: 300,
+    zIndex: -1,
+  },
+  svg: {
+    opacity: 0.2,
+  },
   bulletList: {},
   bulletListItem: {
     flexDirection: 'row',
@@ -116,6 +105,16 @@ const styles = StyleSheet.create({
   bulletListText: {
     fontSize: 17,
     color: colors.general.white,
+  },
+  buttonContainer: {
+    width: '100%',
+    position: 'absolute',
+    bottom: 0,
+    padding: 24,
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 0.75,
+    shadowRadius: 10,
+    shadowColor: colors.general.black,
   },
   button: {
     backgroundColor: colors.primary.gray,

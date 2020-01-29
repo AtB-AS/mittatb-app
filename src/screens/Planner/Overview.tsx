@@ -69,20 +69,8 @@ const Overview: React.FC<Props> = ({
           <View style={styles.textContainer}>
             {tripPatterns.length > 0 ? (
               <>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    color: colors.general.white,
-                  }}
-                >
-                  Du må gå innen
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 28,
-                    color: colors.general.white,
-                  }}
-                >
+                <Text style={styles.callToActionText}>Du må gå innen</Text>
+                <Text style={styles.timeText}>
                   {formatDistanceStrict(
                     Date.now(),
                     parseISO(tripPatterns[0].startTime),
@@ -91,13 +79,7 @@ const Overview: React.FC<Props> = ({
                 </Text>
               </>
             ) : null}
-            <Text
-              style={{
-                fontSize: 12,
-                color: colors.general.white,
-                marginTop: 8,
-              }}
-            >
+            <Text style={styles.locationText}>
               {nearest?.location.name} til {furthest?.location.name}
             </Text>
           </View>
@@ -131,6 +113,19 @@ const styles = StyleSheet.create({
     marginVertical: 48,
   },
   spinner: {padding: 72},
+  callToActionText: {
+    fontSize: 16,
+    color: colors.general.white,
+  },
+  timeText: {
+    fontSize: 28,
+    color: colors.general.white,
+  },
+  locationText: {
+    fontSize: 12,
+    color: colors.general.white,
+    marginTop: 8,
+  },
 });
 
 export default Overview;
