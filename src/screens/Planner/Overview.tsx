@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useReducer, useRef} from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -6,13 +6,18 @@ import {
   Text,
   RefreshControl,
 } from 'react-native';
-import {ScrollView, Switch} from 'react-native-gesture-handler';
+import {
+  ScrollView,
+  Switch,
+  TouchableWithoutFeedback,
+} from 'react-native-gesture-handler';
 import nb from 'date-fns/locale/nb';
 import HomeBanner from '../../assets/svg/HomeBanner';
 import WorkBanner from '../../assets/svg/WorkBanner';
+import ProfileIcon from '../../assets/svg/ProfileIcon';
 import colors from '../../assets/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {UserLocations, Location} from '../../AppContext';
+import {UserLocations, Location, useAppState} from '../../AppContext';
 import {parseISO} from 'date-fns';
 import sortNearestLocations from './sortNearestLocations';
 import {formatDistanceStrict} from 'date-fns';
@@ -34,6 +39,40 @@ const stringifyLocation = (location: Location) =>
   '|' +
   location.coordinates.longitude;
 
+type Direction = 'home' | 'work';
+type Origin = 'current' | 'static';
+
+type OverviewState = {
+  from: Location;
+  to: Location;
+  direction: Direction;
+  origin: Origin;
+};
+
+type OverviewReducerAction =
+  | {type: 'TOGGLE_ORIGIN'}
+  | {type: 'SET_DIRECTION'; direction: Direction}
+  | {type: 'SET_LOCATIONS'; from: Location; to: Location};
+
+type OverviewReducer = (
+  prevState: OverviewState,
+  action: OverviewReducerAction,
+) => OverviewState;
+
+const overviewReducer: OverviewReducer = (prevState, action) => {
+  switch (action.type) {
+    case 'TOGGLE_ORIGIN':
+      return {
+        ...prevState,
+        origin: prevState.origin === 'static' ? 'current' : 'static',
+      };
+    case 'SET_DIRECTION':
+      return {...prevState, direction: action.direction};
+    case 'SET_LOCATIONS':
+      return {...prevState, from: action.from, to: action.to};
+  }
+};
+
 const Overview: React.FC<Props> = ({
   userLocations,
   currentLocation,
@@ -41,8 +80,7 @@ const Overview: React.FC<Props> = ({
   isSearching,
   search,
 }) => {
-  const [searchFromLocation, setSearchFromLocation] = useState(false);
-
+  const {resetOnboarding} = useAppState();
   const sortedWorkHomeLocations = sortNearestLocations(
     currentLocation,
     userLocations.home,
@@ -51,40 +89,84 @@ const Overview: React.FC<Props> = ({
 
   const [nearest, furthest] = sortedWorkHomeLocations;
 
-  const [fromLocation, setFromLocation] = useState<Location>(nearest.location);
-  const [toLocation, setToLocation] = useState<Location>(furthest.location);
-
-  const direction = userLocations.home.id === toLocation.id ? 'home' : 'work';
+  const [{from, to, direction, origin}, dispatch] = useReducer<OverviewReducer>(
+    overviewReducer,
+    {
+      from: nearest.location,
+      to: furthest.location,
+      direction:
+        userLocations.home.id === furthest.location.id ? 'home' : 'work',
+      origin: 'static',
+    },
+  );
 
   async function searchFromToLocation() {
-    await search(fromLocation, toLocation);
+    await search(from, to);
   }
 
   useEffect(() => {
     searchFromToLocation();
-  }, [fromLocation, toLocation]);
+  }, [from, to]);
 
   useEffect(() => {
-    if (!searchFromLocation) {
-      setFromLocation(nearest.location);
-      setToLocation(furthest.location);
-    } else {
-      setFromLocation(currentLocation);
-      setToLocation(furthest.location);
-    }
+    const from =
+      origin === 'current'
+        ? currentLocation
+        : direction === 'home'
+        ? userLocations.work
+        : userLocations.home;
+    const to = direction === 'home' ? userLocations.home : userLocations.work;
+    dispatch({type: 'SET_LOCATIONS', from, to});
   }, [
     stringifyLocation(nearest.location),
     stringifyLocation(furthest.location),
     stringifyLocation(currentLocation),
-    searchFromLocation,
+    origin,
+    direction,
   ]);
+
+  const setDirection = (direction: Direction) =>
+    dispatch({type: 'SET_DIRECTION', direction});
+
+  const switchRef = useRef<Switch>(null);
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.headerContainer}>
+        <TouchableWithoutFeedback
+          style={styles.headerButtonContainer}
+          onPress={resetOnboarding}
+        >
+          <ProfileIcon />
+          <Text style={styles.headerButtonText}>Endre {'\n'}adresser</Text>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+          style={styles.headerButtonContainer}
+          onPress={() => dispatch({type: 'TOGGLE_ORIGIN'})}
+        >
+          <Text style={[styles.headerButtonText, {textAlign: 'right'}]}>
+            Søk fra min {'\n'}posisjon
+          </Text>
+          <Switch
+            ref={switchRef}
+            ios_backgroundColor={colors.general.white}
+            trackColor={{
+              false: colors.general.white,
+              true: colors.primary.green,
+            }}
+            value={origin === 'current'}
+            onValueChange={() => dispatch({type: 'TOGGLE_ORIGIN'})}
+          />
+        </TouchableWithoutFeedback>
+      </View>
       {direction === 'work' ? (
-        <WorkBanner width="100%" />
+        <TouchableWithoutFeedback onPress={() => setDirection('home')}>
+          <WorkBanner width="100%" />
+        </TouchableWithoutFeedback>
       ) : (
-        <HomeBanner width="100%" />
+        <TouchableWithoutFeedback onPress={() => setDirection('work')}>
+          <HomeBanner width="100%" />
+        </TouchableWithoutFeedback>
       )}
 
       {!tripPatterns ? (
@@ -109,17 +191,8 @@ const Overview: React.FC<Props> = ({
               </>
             ) : null}
             <Text style={styles.locationText}>
-              {fromLocation.name} til {toLocation.name}
+              Fra {from.name} til {to.name}
             </Text>
-            <View style={styles.locationSwitchContainer}>
-              <Text style={styles.searchFromLocationText}>
-                Søk fra din posisjon:
-              </Text>
-              <Switch
-                value={searchFromLocation}
-                onValueChange={setSearchFromLocation}
-              />
-            </View>
           </View>
           <ScrollView
             refreshControl={
@@ -145,6 +218,21 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary.gray,
     flex: 1,
   },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  headerButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  headerButtonText: {
+    fontSize: 12,
+    color: colors.general.white,
+    marginHorizontal: 10,
+  },
   textContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -163,16 +251,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.general.white,
     marginTop: 8,
-  },
-  locationSwitchContainer: {
-    marginTop: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  searchFromLocationText: {
-    fontSize: 12,
-    color: colors.general.white,
-    marginRight: 5,
   },
 });
 
