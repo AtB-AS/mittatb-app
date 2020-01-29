@@ -53,7 +53,7 @@ const LocationInput: React.FC<Props> = ({
   const blurInput = () => ref.current?.blur();
 
   return (
-    <View style={[style, {zIndex: isFocused ? 1 : undefined}]}>
+    <View style={style}>
       <TextInput
         ref={ref}
         style={styles.textInput}
