@@ -177,13 +177,10 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   icon: {
-    height: 30,
     marginRight: 12,
   },
   question: {
-    height: 30,
     fontSize: 28,
-    fontWeight: 'bold',
     padding: 0,
     margin: 0,
   },
