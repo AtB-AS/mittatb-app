@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -6,7 +6,7 @@ import {
   Text,
   RefreshControl,
 } from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView, Switch} from 'react-native-gesture-handler';
 import nb from 'date-fns/locale/nb';
 import HomeBanner from '../../assets/svg/HomeBanner';
 import WorkBanner from '../../assets/svg/WorkBanner';
@@ -27,6 +27,13 @@ type Props = {
   search: (from: Location, to: Location) => void;
 };
 
+const stringifyLocation = (location: Location) =>
+  location.id +
+  '|' +
+  location.coordinates.latitude +
+  '|' +
+  location.coordinates.longitude;
+
 const Overview: React.FC<Props> = ({
   userLocations,
   currentLocation,
@@ -34,28 +41,50 @@ const Overview: React.FC<Props> = ({
   isSearching,
   search,
 }) => {
-  const sortedLocations = sortNearestLocations(
+  const [searchFromLocation, setSearchFromLocation] = useState(false);
+
+  const sortedWorkHomeLocations = sortNearestLocations(
     currentLocation,
     userLocations.home,
     userLocations.work,
   );
 
-  const [nearest, furthest] = sortedLocations;
+  const [nearest, furthest] = sortedWorkHomeLocations;
 
-  async function searchNearestToFurthest() {
-    await search(nearest.location, furthest.location);
+  const [fromLocation, setFromLocation] = useState<Location>(nearest.location);
+  const [toLocation, setToLocation] = useState<Location>(furthest.location);
+
+  const direction = userLocations.home.id === toLocation.id ? 'home' : 'work';
+
+  async function searchFromToLocation() {
+    await search(fromLocation, toLocation);
   }
 
   useEffect(() => {
-    searchNearestToFurthest();
-  }, [nearest.location.id, furthest.location.id]);
+    searchFromToLocation();
+  }, [fromLocation, toLocation]);
+
+  useEffect(() => {
+    if (!searchFromLocation) {
+      setFromLocation(nearest.location);
+      setToLocation(furthest.location);
+    } else {
+      setFromLocation(currentLocation);
+      setToLocation(furthest.location);
+    }
+  }, [
+    stringifyLocation(nearest.location),
+    stringifyLocation(furthest.location),
+    stringifyLocation(currentLocation),
+    searchFromLocation,
+  ]);
 
   return (
     <SafeAreaView style={styles.container}>
-      {userLocations?.home?.id === nearest?.location?.id ? (
-        <HomeBanner width="100%" />
-      ) : (
+      {direction === 'work' ? (
         <WorkBanner width="100%" />
+      ) : (
+        <HomeBanner width="100%" />
       )}
 
       {!tripPatterns ? (
@@ -80,14 +109,23 @@ const Overview: React.FC<Props> = ({
               </>
             ) : null}
             <Text style={styles.locationText}>
-              {nearest?.location.name} til {furthest?.location.name}
+              {fromLocation.name} til {toLocation.name}
             </Text>
+            <View style={styles.locationSwitchContainer}>
+              <Text style={styles.searchFromLocationText}>
+                Søk fra din posisjon:
+              </Text>
+              <Switch
+                value={searchFromLocation}
+                onValueChange={setSearchFromLocation}
+              />
+            </View>
           </View>
           <ScrollView
             refreshControl={
               <RefreshControl
                 refreshing={isSearching}
-                onRefresh={() => searchNearestToFurthest()}
+                onRefresh={() => searchFromToLocation()}
               />
             }
           >
@@ -125,6 +163,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.general.white,
     marginTop: 8,
+  },
+  locationSwitchContainer: {
+    marginTop: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  searchFromLocationText: {
+    fontSize: 12,
+    color: colors.general.white,
+    marginRight: 5,
   },
 });
 
