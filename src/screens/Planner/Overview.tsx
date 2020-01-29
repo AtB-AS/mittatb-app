@@ -221,6 +221,9 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderBottomColor: '#F9F9FA0D',
+    marginBottom: 8,
   },
   headerButtonContainer: {
     flexDirection: 'row',
