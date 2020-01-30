@@ -74,6 +74,7 @@ const LocationInput: React.FC<Props> = ({
           placeholder={placeholder}
           autoCorrect={false}
           autoCompleteType="off"
+          placeholderTextColor="#2C353B"
         />
         {hintText ? <Text style={styles.hintText}>{hintText}</Text> : null}
       </View>
@@ -126,6 +127,7 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
     backgroundColor: colors.general.white,
     borderBottomWidth: 2,
+    color: colors.general.black,
   },
   hintText: {
     position: 'absolute',
