@@ -6,6 +6,7 @@ export default {
   secondary: {
     blue: '#008DA8',
     orange: '#C75B12',
+    red: '#A51140',
   },
   general: {
     white: '#ffffff',

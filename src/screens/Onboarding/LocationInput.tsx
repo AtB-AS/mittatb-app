@@ -20,6 +20,7 @@ type Props = {
   text: string;
   onChangeText: (text: string) => void;
   hintText?: string;
+  error?: string | null;
   onSelectLocation: (location: Location) => void;
   placeholder: string;
   reverseLookupCount?: number;
@@ -32,6 +33,7 @@ const LocationInput: React.FC<Props> = ({
   text,
   onChangeText,
   hintText,
+  error,
   onSelectLocation,
   textInputRef,
   placeholder,
@@ -57,7 +59,14 @@ const LocationInput: React.FC<Props> = ({
       <View style={styles.textInputContainer}>
         <TextInput
           ref={ref}
-          style={styles.textInput}
+          style={[
+            styles.textInput,
+            {
+              borderBottomColor: !error
+                ? colors.secondary.blue
+                : colors.secondary.red,
+            },
+          ]}
           value={text}
           onChangeText={onChangeText}
           onFocus={() => setIsFocused(true)}
@@ -95,50 +104,13 @@ const LocationInput: React.FC<Props> = ({
                 }}
               />
             )}
-            noSuggestionsContent={
-              <View style={[styles.suggestion]}>
-                <Text
-                  style={[
-                    styles.suggestionText,
-                    {color: colors.secondary.orange},
-                  ]}
-                >
-                  Fant ikke adresse.
-                </Text>
-              </View>
-            }
+            noSuggestionsContent={<NoSuggestion />}
           />
         </View>
+      ) : error ? (
+        <Error message={error} />
       ) : null}
     </View>
-  );
-};
-
-type LocationSuggestionProps = {
-  location: Location;
-  type: 'autocomplete' | 'reverse';
-  onSelectLocation: (location: Location) => void;
-};
-
-const LocationSuggestion: React.FC<LocationSuggestionProps> = ({
-  location,
-  type,
-  onSelectLocation,
-}) => {
-  return (
-    <TouchableOpacity
-      style={styles.suggestion}
-      key={location.id}
-      onPress={() => onSelectLocation(location)}
-    >
-      {type === 'reverse' ? (
-        <LocationArrow style={styles.locationArrow} />
-      ) : null}
-      <View>
-        <Text style={styles.suggestionText}>{location.name}</Text>
-        <Text style={styles.suggestionMinText}>{location.locality}</Text>
-      </View>
-    </TouchableOpacity>
   );
 };
 
@@ -153,7 +125,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingLeft: 12,
     backgroundColor: colors.general.white,
-    borderBottomColor: colors.secondary.blue,
     borderBottomWidth: 2,
   },
   hintText: {
@@ -172,6 +143,86 @@ const styles = StyleSheet.create({
   suggestions: {
     backgroundColor: colors.general.white,
   },
+});
+
+export default LocationInput;
+
+const Error: React.FC<{message: string}> = ({message}) => {
+  return (
+    <>
+      <View style={errorStyles.arrow} />
+      <View style={errorStyles.box}>
+        <Text style={errorStyles.message}>{message}</Text>
+      </View>
+    </>
+  );
+};
+
+const errorStyles = StyleSheet.create({
+  arrow: {
+    width: 0,
+    height: 0,
+    backgroundColor: 'transparent',
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: colors.secondary.red,
+    borderLeftWidth: 10,
+    borderRightWidth: 10,
+    borderBottomWidth: 10,
+    marginTop: 4,
+    marginLeft: 12,
+    marginBottom: -1,
+  },
+  box: {backgroundColor: colors.secondary.red, padding: 12},
+  message: {color: colors.general.white, fontSize: 17},
+});
+
+type LocationSuggestionProps = {
+  location: Location;
+  type: 'autocomplete' | 'reverse';
+  onSelectLocation: (location: Location) => void;
+};
+
+const LocationSuggestion: React.FC<LocationSuggestionProps> = ({
+  location,
+  type,
+  onSelectLocation,
+}) => {
+  return (
+    <TouchableOpacity
+      style={suggestionStyles.suggestion}
+      key={location.id}
+      onPress={() => onSelectLocation(location)}
+    >
+      {type === 'reverse' ? (
+        <LocationArrow style={suggestionStyles.locationArrow} />
+      ) : null}
+      <View>
+        <Text style={suggestionStyles.suggestionText}>{location.name}</Text>
+        <Text style={suggestionStyles.suggestionMinText}>
+          {location.locality}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+const NoSuggestion: React.FC = () => {
+  return (
+    <View style={[suggestionStyles.suggestion]}>
+      <Text
+        style={[
+          suggestionStyles.suggestionText,
+          {color: colors.secondary.orange},
+        ]}
+      >
+        Fant ikke adresse.
+      </Text>
+    </View>
+  );
+};
+
+const suggestionStyles = StyleSheet.create({
   suggestion: {
     padding: 12,
     flexDirection: 'row',
@@ -189,5 +240,3 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
 });
-
-export default LocationInput;

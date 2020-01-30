@@ -92,6 +92,7 @@ const LocationForm: React.FC<Props> = ({
 }) => {
   const [address, setAddress] = useState<string>('');
   const [addressLocation, setAddressLocation] = useState<Location | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const textInputRef = useRef<TextInput>(null);
   const blurInput = () => {
@@ -110,12 +111,15 @@ const LocationForm: React.FC<Props> = ({
           <LocationInput
             location={location}
             text={address}
+            error={error}
             onChangeText={text => {
+              setError(null);
               setAddressLocation(null);
               setAddress(text);
             }}
             hintText={addressLocation ? addressLocation.locality : undefined}
             onSelectLocation={location => {
+              setError(null);
               setAddressLocation(location);
               setAddress(location.name ?? '');
             }}
@@ -137,7 +141,13 @@ const LocationForm: React.FC<Props> = ({
           <TouchableHighlight
             style={[styles.button]}
             onPress={() => {
-              addressLocation && onLocationSelect(addressLocation);
+              if (addressLocation) {
+                onLocationSelect(addressLocation);
+              } else {
+                setError(
+                  'Vennligst søk opp og velg en gyldig adresse fra listen.',
+                );
+              }
             }}
           >
             <Text style={styles.buttonText}>{buttonText}</Text>
