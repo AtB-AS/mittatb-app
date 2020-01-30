@@ -52,6 +52,7 @@ const PlannerRoot = () => {
             id: 'current',
             name: 'min posisjon',
             label: 'current',
+            locality: 'current',
             coordinates: {
               longitude: location.coords.longitude,
               latitude: location.coords.latitude,

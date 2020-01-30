@@ -19,8 +19,8 @@ type Props = {
   location: GeolocationResponse | null;
   text: string;
   onChangeText: (text: string) => void;
+  hintText?: string;
   onSelectLocation: (location: Location) => void;
-  label: string;
   placeholder: string;
   reverseLookupCount?: number;
   textInputRef?: RefObject<TextInput>;
@@ -31,9 +31,9 @@ const LocationInput: React.FC<Props> = ({
   location,
   text,
   onChangeText,
+  hintText,
   onSelectLocation,
   textInputRef,
-  label,
   placeholder,
   reverseLookupCount,
   style,
@@ -54,17 +54,20 @@ const LocationInput: React.FC<Props> = ({
 
   return (
     <View style={style}>
-      <TextInput
-        ref={ref}
-        style={styles.textInput}
-        value={text}
-        onChangeText={onChangeText}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        placeholder={placeholder}
-        autoCorrect={false}
-        autoCompleteType="off"
-      />
+      <View style={styles.textInputContainer}>
+        <TextInput
+          ref={ref}
+          style={styles.textInput}
+          value={text}
+          onChangeText={onChangeText}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          placeholder={placeholder}
+          autoCorrect={false}
+          autoCompleteType="off"
+        />
+        {hintText ? <Text style={styles.hintText}>{hintText}</Text> : null}
+      </View>
       {isFocused ? (
         <View style={styles.suggestionsContainer}>
           <Suggestions<Suggestion>
@@ -128,30 +131,36 @@ const LocationSuggestion: React.FC<LocationSuggestionProps> = ({
       key={location.id}
       onPress={() => onSelectLocation(location)}
     >
-      {type === 'autocomplete' ? (
-        <Text style={styles.suggestionText}>{location.label}</Text>
-      ) : (
-        <View style={styles.reverseSuggestionContainer}>
-          <View>
-            <Text style={styles.suggestionText}>Min posisjon</Text>
-            <Text style={styles.suggestionMinText}>{location.label}</Text>
-          </View>
-          <LocationArrow />
-        </View>
-      )}
+      {type === 'reverse' ? (
+        <LocationArrow style={styles.locationArrow} />
+      ) : null}
+      <View>
+        <Text style={styles.suggestionText}>{location.name}</Text>
+        <Text style={styles.suggestionMinText}>{location.locality}</Text>
+      </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  textInput: {
+  textInputContainer: {
     width: '100%',
     height: 46,
+    flexDirection: 'row',
+  },
+  textInput: {
+    flex: 1,
     fontSize: 20,
     paddingLeft: 12,
     backgroundColor: colors.general.white,
     borderBottomColor: colors.secondary.blue,
     borderBottomWidth: 2,
+  },
+  hintText: {
+    position: 'absolute',
+    right: 5,
+    alignSelf: 'center',
+    opacity: 0.4,
   },
   suggestionsContainer: {
     elevation: 4,
@@ -165,15 +174,17 @@ const styles = StyleSheet.create({
   },
   suggestion: {
     padding: 12,
-  },
-  reverseSuggestionContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+  },
+  locationArrow: {
+    marginTop: 3,
+    marginRight: 5,
   },
   suggestionText: {
-    fontSize: 20,
+    fontSize: 17,
   },
   suggestionMinText: {
+    opacity: 0.4,
     marginTop: 4,
     fontSize: 12,
   },

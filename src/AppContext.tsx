@@ -11,7 +11,8 @@ import {getSetting, saveSetting, removeSetting} from './settings';
 export type Location = {
   id: string;
   name: string;
-  label: string;
+  locality: string;
+  label?: string;
   coordinates: {longitude: number; latitude: number};
 };
 

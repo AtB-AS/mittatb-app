@@ -41,7 +41,7 @@ export const HomeLocation: React.FC<{
       icon={<HomeIcon width={30} height={30} style={styles.icon} />}
       question="Hvor bor du?"
       label="Hjemmeadresse"
-      placeholder="Legg til hjemmeadresse"
+      placeholder="Søk etter adresse"
       buttonText="Neste"
       onLocationSelect={(location: Location) => {
         if (context) {
@@ -66,7 +66,7 @@ export const WorkLocation: React.FC<{
       icon={<WorkIcon width={28} height={28} style={styles.icon} />}
       question="Hvor jobber du?"
       label="Jobbadresse"
-      placeholder="Legg til jobbadresse"
+      placeholder="Søk etter adresse"
       buttonText="Neste"
       onLocationSelect={(location: Location) => {
         if (context) {
@@ -114,26 +114,18 @@ const LocationForm: React.FC<Props> = ({
               setAddressLocation(null);
               setAddress(text);
             }}
+            hintText={addressLocation ? addressLocation.locality : undefined}
             onSelectLocation={location => {
               setAddressLocation(location);
-              setAddress(location.label);
+              setAddress(location.name ?? '');
             }}
             textInputRef={textInputRef}
-            label={label}
             placeholder={placeholder}
             style={styles.textInput}
           />
         </View>
       </TouchableWithoutFeedback>
-      <View
-        style={{
-          padding: 24,
-          shadowOffset: {width: 5, height: 5},
-          shadowOpacity: 0.75,
-          shadowRadius: 10,
-          shadowColor: colors.general.black,
-        }}
-      >
+      <View style={styles.bottomContainer}>
         <View style={styles.stepContainer}>
           {[...Array(totalSteps).keys()].map(step => (
             <Text key={step} style={stepStyle(step, currentStep)}>
@@ -144,7 +136,9 @@ const LocationForm: React.FC<Props> = ({
         <View style={{opacity: addressLocation !== null ? 1 : 0.2}}>
           <TouchableHighlight
             style={[styles.button]}
-            onPress={() => addressLocation && onLocationSelect(addressLocation)}
+            onPress={() => {
+              addressLocation && onLocationSelect(addressLocation);
+            }}
           >
             <Text style={styles.buttonText}>{buttonText}</Text>
           </TouchableHighlight>
@@ -191,6 +185,9 @@ const styles = StyleSheet.create({
   },
   textInput: {
     paddingBottom: 24,
+  },
+  bottomContainer: {
+    padding: 24,
   },
   stepContainer: {
     flexDirection: 'row',

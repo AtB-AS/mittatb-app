@@ -8,13 +8,6 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {OnboardingStackParamList} from './';
 import {useGeolocationState} from '../../GeolocationContext';
 
-const ListItem: React.FC<{text: string}> = ({text}) => (
-  <View style={styles.bulletListItem}>
-    <Text style={styles.bulletListText}>{'\u2022'}</Text>
-    <Text style={[styles.bulletListText, {paddingLeft: 12}]}>{text}</Text>
-  </View>
-);
-
 type GeoPermissionScreenNavigationProp = StackNavigationProp<
   OnboardingStackParamList,
   'GeoPermission'
@@ -45,11 +38,15 @@ const GeoPermission: React.FC<Props> = ({navigation}) => {
             Reiseopplevelsen blir bedre med smidig samhandling. Derfor ber vi
             deg dele posisjon slik at du kan:
           </Text>
-          <View>
-            <ListItem text="Se hvor nærmeste transport befinner seg." />
-            <ListItem text="Se fullstendige reiseforslag til jobb eller hjem fra der du er." />
-            <ListItem text="Få varsel om når du må reise for å komme dit du ønsker i tide." />
-          </View>
+          <Text style={styles.description}>
+            Se hvor nærmeste transport befinner seg.
+          </Text>
+          <Text style={styles.description}>
+            Se fullstendige reiseforslag til jobb eller hjem fra der du er.
+          </Text>
+          <Text style={styles.description}>
+            Få varsel om når du må reise for å komme dit du ønsker i tide.
+          </Text>
         </View>
         <View style={styles.svgContainer}>
           <WaitingForBus width="100%" height="100%" style={styles.svg} />
@@ -78,6 +75,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     paddingHorizontal: 48,
+    maxHeight: 460,
   },
   title: {
     fontSize: 28,
@@ -111,10 +109,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     padding: 24,
-    shadowOffset: {width: 5, height: 5},
-    shadowOpacity: 0.75,
-    shadowRadius: 10,
-    shadowColor: colors.general.black,
   },
   button: {
     backgroundColor: colors.primary.gray,

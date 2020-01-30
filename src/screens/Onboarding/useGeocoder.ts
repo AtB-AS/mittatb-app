@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react';
 import {GeolocationResponse} from '@react-native-community/geolocation';
 import axios from 'axios';
 import {Location} from '../../AppContext';
+import {Feature} from '../../sdk';
 
 export function useGeocoder(
   text: string | null,
@@ -45,7 +46,7 @@ export function useReverseGeocoder(location: GeolocationResponse | null) {
       if (location && location.coords) {
         try {
           const response = await axios.get<GeocodeResponse>(
-            'https://geocoder-7fqsxwljoa-ew.a.run.app/reverse?point.lat=' +
+            'https://bff-oneclick-journey-planner-zmj3kfvboa-ew.a.run.app/geocoder/v1/reverse?point.lat=' +
               location?.coords.latitude +
               '&point.lon=' +
               location?.coords.longitude +
@@ -71,13 +72,6 @@ export function useReverseGeocoder(location: GeolocationResponse | null) {
 type GeocodeResponse = {
   features: Feature[];
 };
-
-type Feature = {
-  geometry: {coordinates: [number, number]}; // [long, lat] :/
-  properties: {distance: number; id: string; label: string; name: string};
-  type: string;
-};
-
 // IMPORTANT: Feature coordinate-array is [long, lat] :sadface:. Mapping to lat/long object for less bugs downstream.
 const mapFeatureToLocation = ({
   geometry: {
@@ -86,5 +80,8 @@ const mapFeatureToLocation = ({
   properties,
 }: Feature): Location => ({
   coordinates: {latitude, longitude},
-  ...properties,
+  id: properties.id,
+  name: properties.name,
+  label: properties.label,
+  locality: properties.locality,
 });
