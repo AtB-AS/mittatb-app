@@ -4,7 +4,7 @@ import nb from 'date-fns/locale/nb';
 import colors from '../../assets/colors';
 import {TripPattern} from '../../sdk';
 import {format, parseISO} from 'date-fns';
-import {secondsToDuration} from '../../utils/date';
+import {secondsToDuration, formatToClock} from '../../utils/date';
 import LegIcons from './LegIcons';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 
@@ -35,8 +35,8 @@ const ResultItem: React.FC<Omit<ResultItemProps, 'onPress'>> = ({
     <View style={styles.container}>
       <View style={styles.legContainer}>
         <Text style={styles.timeText}>
-          {format(parseISO(tripPattern.startTime), 'HH:mm')} -{' '}
-          {format(parseISO(tripPattern.endTime), 'HH:mm')}
+          {formatToClock(tripPattern.startTime)} -{' '}
+          {formatToClock(tripPattern.endTime)}
         </Text>
         <Text style={styles.timeText}>
           {secondsToDuration(tripPattern.duration, nb)}
