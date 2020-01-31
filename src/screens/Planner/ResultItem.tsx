@@ -6,12 +6,31 @@ import {TripPattern} from '../../sdk';
 import {format, parseISO} from 'date-fns';
 import {secondsToDuration} from '../../utils/date';
 import LegIcons from './LegIcons';
+import {TouchableHighlight} from 'react-native-gesture-handler';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
+  onPress?: (tripPattern: TripPattern) => void;
 };
 
-const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
+const ResultItemParent: React.FC<ResultItemProps> = ({
+  tripPattern,
+  onPress,
+}) => {
+  return onPress ? (
+    <TouchableHighlight onPress={() => onPress(tripPattern)}>
+      <ResultItem tripPattern={tripPattern} />
+    </TouchableHighlight>
+  ) : (
+    <View>
+      <ResultItem tripPattern={tripPattern} />
+    </View>
+  );
+};
+
+const ResultItem: React.FC<Omit<ResultItemProps, 'onPress'>> = ({
+  tripPattern,
+}) => {
   return (
     <View style={styles.container}>
       <View style={styles.legContainer}>
@@ -52,4 +71,4 @@ const styles = StyleSheet.create({
   distanceText: {fontSize: 12, color: colors.general.white},
 });
 
-export default ResultItem;
+export default ResultItemParent;
