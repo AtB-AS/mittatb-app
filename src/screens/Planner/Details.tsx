@@ -72,10 +72,10 @@ const BusDetail: React.FC<LegDetailProps> = ({leg, isLast}) => {
         }}
       >
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{width: 18, alignItems: 'center'}}>
+            <DotIcon fill={colors.primary.green} />
+          </View>
           <Text style={{color: colors.general.white}}>
-            <View style={{width: 18, alignItems: 'center'}}>
-              <DotIcon fill={colors.primary.green} />
-            </View>
             {leg.fromPlace.name}
           </Text>
         </View>
@@ -118,10 +118,10 @@ const WalkDetail: React.FC<LegDetailProps> = ({leg, isLast}) => {
         }}
       >
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{width: 18, alignItems: 'center'}}>
+            <DotIcon />
+          </View>
           <Text style={{color: colors.general.white}}>
-            <View style={{width: 18, alignItems: 'center'}}>
-              <DotIcon />
-            </View>
             {leg.fromPlace.name}
           </Text>
         </View>
@@ -163,12 +163,10 @@ const EndDetail: React.FC<{leg: Leg}> = ({leg}) => {
       }}
     >
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Text style={{color: colors.general.white}}>
-          <View style={{width: 18, alignItems: 'center'}}>
-            <DotIcon />
-          </View>
-          {leg.toPlace.name}
-        </Text>
+        <View style={{width: 18, alignItems: 'center'}}>
+          <DotIcon />
+        </View>
+        <Text style={{color: colors.general.white}}>{leg.toPlace.name}</Text>
       </View>
       <Text style={{color: colors.general.white}}>
         {formatToClock(leg.aimedEndTime)}
