@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useMemo,
 } from 'react';
-import {getSetting, saveSetting, removeSetting} from './settings';
+import storage from './storage';
 
 export type Location = {
   id: string;
@@ -73,12 +73,10 @@ const AppContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     async function checkOnboarded() {
-      const userLocations = await getSetting<UserLocations>(
-        'stored_user_locations',
-      );
+      const userLocations = await storage.get('stored_user_locations');
       dispatch({
         type: 'LOAD_APP_SETTINGS',
-        userLocations,
+        userLocations: userLocations ? JSON.parse(userLocations) : null,
       });
     }
     checkOnboarded();
@@ -87,11 +85,15 @@ const AppContextProvider: React.FC = ({children}) => {
   const {completeOnboarding, resetOnboarding} = useMemo(
     () => ({
       completeOnboarding: async (userLocations: UserLocations) => {
-        await saveSetting('stored_user_locations', userLocations);
+        await storage.set(
+          'stored_user_locations',
+          JSON.stringify(userLocations),
+        );
+
         dispatch({type: 'SET_USER_LOCATIONS', userLocations});
       },
       resetOnboarding: async () => {
-        await removeSetting('stored_user_locations');
+        await storage.remove('stored_user_locations');
         dispatch({type: 'RESET_APP'});
       },
     }),
