@@ -59,6 +59,7 @@ const PlannerRoot = () => {
           headerTitle: '',
           headerStyle: {
             backgroundColor: colors.primary.gray,
+            shadowOpacity: 0,
             borderWidth: 0,
           },
         }}
