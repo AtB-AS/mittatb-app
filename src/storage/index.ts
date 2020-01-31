@@ -3,7 +3,7 @@ import AsyncStorageFactory from '@react-native-community/async-storage';
 import {UserLocations} from '../AppContext';
 
 type StorageModel = {
-  stored_user_locations: UserLocations;
+  stored_user_locations: string;
 };
 
 const legacyStorage = new LegacyStorage();

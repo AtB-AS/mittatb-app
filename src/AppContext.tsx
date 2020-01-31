@@ -76,7 +76,7 @@ const AppContextProvider: React.FC = ({children}) => {
       const userLocations = await storage.get('stored_user_locations');
       dispatch({
         type: 'LOAD_APP_SETTINGS',
-        userLocations,
+        userLocations: userLocations ? JSON.parse(userLocations) : null,
       });
     }
     checkOnboarded();
@@ -85,7 +85,11 @@ const AppContextProvider: React.FC = ({children}) => {
   const {completeOnboarding, resetOnboarding} = useMemo(
     () => ({
       completeOnboarding: async (userLocations: UserLocations) => {
-        await storage.set('stored_user_locations', userLocations);
+        await storage.set(
+          'stored_user_locations',
+          JSON.stringify(userLocations),
+        );
+
         dispatch({type: 'SET_USER_LOCATIONS', userLocations});
       },
       resetOnboarding: async () => {
