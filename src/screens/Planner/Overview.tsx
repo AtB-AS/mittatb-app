@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useReducer, useRef} from 'react';
+import React, {useEffect, useReducer, useRef, useMemo} from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -11,6 +11,7 @@ import {
   Switch,
   TouchableWithoutFeedback,
 } from 'react-native-gesture-handler';
+import {StackNavigationProp} from '@react-navigation/stack';
 import nb from 'date-fns/locale/nb';
 import HomeBanner from '../../assets/svg/HomeBanner';
 import WorkBanner from '../../assets/svg/WorkBanner';
@@ -23,14 +24,10 @@ import sortNearestLocations from './sortNearestLocations';
 import {formatDistanceStrict} from 'date-fns';
 import ResultItem from './ResultItem';
 import {TripPattern} from 'src/sdk';
-
-type Props = {
-  userLocations: UserLocations;
-  currentLocation: Location;
-  tripPatterns: TripPattern[] | null;
-  isSearching: boolean;
-  search: (from: Location, to: Location) => void;
-};
+import searchJournies from './searchJournies';
+import Splash from '../Splash';
+import {useGeolocationState} from '../../GeolocationContext';
+import {PlannerStackParams} from './';
 
 const stringifyLocation = (location: Location) =>
   location.id +
@@ -47,12 +44,16 @@ type OverviewState = {
   to: Location;
   direction: Direction;
   origin: Origin;
+  isSearching: boolean;
+  tripPatterns: TripPattern[] | null;
 };
 
 type OverviewReducerAction =
   | {type: 'TOGGLE_ORIGIN'}
   | {type: 'SET_DIRECTION'; direction: Direction}
-  | {type: 'SET_LOCATIONS'; from: Location; to: Location};
+  | {type: 'SET_LOCATIONS'; from: Location; to: Location}
+  | {type: 'SET_TRIP_PATTERNS'; tripPatterns: TripPattern[] | null}
+  | {type: 'SET_IS_SEARCHING'};
 
 type OverviewReducer = (
   prevState: OverviewState,
@@ -70,17 +71,77 @@ const overviewReducer: OverviewReducer = (prevState, action) => {
       return {...prevState, direction: action.direction};
     case 'SET_LOCATIONS':
       return {...prevState, from: action.from, to: action.to};
+    case 'SET_TRIP_PATTERNS':
+      return {
+        ...prevState,
+        tripPatterns: action.tripPatterns,
+        isSearching: false,
+      };
+    case 'SET_IS_SEARCHING':
+      return {
+        ...prevState,
+        isSearching: true,
+      };
   }
+};
+
+type OverviewScreenNavigationProp = StackNavigationProp<
+  PlannerStackParams,
+  'Overview'
+>;
+
+type RootProps = {
+  navigation: OverviewScreenNavigationProp;
+};
+
+const OverviewRoot: React.FC<RootProps> = ({navigation}) => {
+  const {userLocations, resetOnboarding} = useAppState();
+  const {location} = useGeolocationState();
+
+  const currentLocation = useMemo<Location | null>(
+    () =>
+      location
+        ? {
+            id: 'current',
+            name: 'min posisjon',
+            label: 'current',
+            locality: 'current',
+            coordinates: {
+              longitude: location.coords.longitude,
+              latitude: location.coords.latitude,
+            },
+          }
+        : null,
+    [location?.coords?.latitude, location?.coords?.longitude],
+  );
+
+  if (!userLocations || !currentLocation) {
+    return <Splash />;
+  }
+
+  return (
+    <Overview
+      userLocations={userLocations}
+      currentLocation={currentLocation}
+      resetOnboarding={resetOnboarding}
+      navigation={navigation}
+    />
+  );
+};
+
+type Props = {
+  userLocations: UserLocations;
+  currentLocation: Location;
+  resetOnboarding: () => void;
+  navigation: OverviewScreenNavigationProp;
 };
 
 const Overview: React.FC<Props> = ({
   userLocations,
   currentLocation,
-  tripPatterns,
-  isSearching,
-  search,
+  resetOnboarding,
+  navigation,
 }) => {
-  const {resetOnboarding} = useAppState();
   const sortedWorkHomeLocations = sortNearestLocations(
     currentLocation,
     userLocations.home,
@@ -89,19 +150,22 @@ const Overview: React.FC<Props> = ({
 
   const [nearest, furthest] = sortedWorkHomeLocations;
 
-  const [{from, to, direction, origin}, dispatch] = useReducer<OverviewReducer>(
-    overviewReducer,
-    {
-      from: nearest.location,
-      to: furthest.location,
-      direction:
-        userLocations.home.id === furthest.location.id ? 'home' : 'work',
-      origin: 'static',
-    },
-  );
+  const [
+    {from, to, direction, origin, tripPatterns, isSearching},
+    dispatch,
+  ] = useReducer<OverviewReducer>(overviewReducer, {
+    from: nearest.location,
+    to: furthest.location,
+    direction: userLocations.home.id === furthest.location.id ? 'home' : 'work',
+    origin: 'static',
+    tripPatterns: null,
+    isSearching: false,
+  });
 
   async function searchFromToLocation() {
-    await search(from, to);
+    dispatch({type: 'SET_IS_SEARCHING'});
+    const tripPatterns = await searchJournies(from, to);
+    dispatch({type: 'SET_TRIP_PATTERNS', tripPatterns});
   }
 
   useEffect(() => {
@@ -203,7 +267,13 @@ const Overview: React.FC<Props> = ({
             }
           >
             {tripPatterns.map((pattern, i) => (
-              <ResultItem key={i} tripPattern={pattern} />
+              <ResultItem
+                key={i}
+                tripPattern={pattern}
+                onPress={tripPattern =>
+                  navigation.push('Detail', {tripPattern})
+                }
+              />
             ))}
             <View></View>
           </ScrollView>
@@ -257,4 +327,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Overview;
+export default OverviewRoot;

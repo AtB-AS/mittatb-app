@@ -3,47 +3,22 @@ import {Location, useAppState} from '../../AppContext';
 import searchJournies from './searchJournies';
 import Splash from '../Splash';
 import {useGeolocationState} from '../../GeolocationContext';
-import {TripPattern} from 'src/sdk';
+import {TripPattern} from '../../sdk';
 import Overview from './Overview';
+import {createStackNavigator} from '@react-navigation/stack';
+import Detail from './Details';
+import colors from '../../assets/colors';
 
-type PlannerState = {
-  isSearching: boolean;
-  tripPatterns: TripPattern[] | null;
+export type PlannerStackParams = {
+  Overview: undefined;
+  Detail: {tripPattern: TripPattern};
 };
 
-type PlannerReducerAction =
-  | {type: 'SET_TRIP_PATTERNS'; tripPatterns: TripPattern[] | null}
-  | {type: 'SET_IS_SEARCHING'};
-
-type PlannerReducer = (
-  prevState: PlannerState,
-  action: PlannerReducerAction,
-) => PlannerState;
-
-const plannerReducer: PlannerReducer = (prevState, action) => {
-  switch (action.type) {
-    case 'SET_TRIP_PATTERNS':
-      return {
-        tripPatterns: action.tripPatterns,
-        isSearching: false,
-      };
-    case 'SET_IS_SEARCHING':
-      return {
-        ...prevState,
-        isSearching: true,
-      };
-  }
-};
-
-const defaultState: PlannerState = {
-  tripPatterns: null,
-  isSearching: true,
-};
+const Stack = createStackNavigator<PlannerStackParams>();
 
 const PlannerRoot = () => {
   const {userLocations} = useAppState();
   const {location} = useGeolocationState();
-  const [state, dispatch] = useReducer(plannerReducer, defaultState);
 
   const currentLocation = useMemo<Location | null>(
     () =>
@@ -66,19 +41,29 @@ const PlannerRoot = () => {
     return <Splash />;
   }
 
-  async function search(from: Location, to: Location) {
-    dispatch({type: 'SET_IS_SEARCHING'});
-    const tripPatterns = await searchJournies(from, to);
-    dispatch({type: 'SET_TRIP_PATTERNS', tripPatterns});
-  }
-
   return (
-    <Overview
-      userLocations={userLocations}
-      currentLocation={currentLocation}
-      {...state}
-      search={search}
-    />
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Overview"
+        component={Overview}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Detail"
+        component={Detail}
+        options={{
+          headerTintColor: colors.general.white,
+          headerBackTitleVisible: false,
+          headerTitle: '',
+          headerStyle: {
+            backgroundColor: colors.primary.gray,
+            borderWidth: 0,
+          },
+        }}
+      />
+    </Stack.Navigator>
   );
 };
 
