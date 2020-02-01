@@ -16,15 +16,15 @@ export type RootStackParamList = {
 const Stack = createStackNavigator<RootStackParamList>();
 
 const NavigationRoot = () => {
-  const appState = useAppState();
+  const {isLoading, onboarded} = useAppState();
 
   return (
     <SafeAreaProvider>
       <NavigationNativeContainer>
         <Stack.Navigator headerMode="none">
-          {appState.isLoading ? (
+          {isLoading ? (
             <Stack.Screen name="Splash" component={Splash} />
-          ) : !appState.userLocations ? (
+          ) : !onboarded ? (
             <Stack.Screen name="Onboarding" component={Onboarding} />
           ) : (
             <Stack.Screen name="Planner" component={Planner} />

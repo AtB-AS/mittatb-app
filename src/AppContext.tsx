@@ -23,17 +23,18 @@ export type UserLocations = {
 
 type AppState = {
   isLoading: boolean;
+  onboarded: boolean;
   userLocations: UserLocations | null;
 };
 
 type AppReducerAction =
   | {type: 'LOAD_APP_SETTINGS'; userLocations: UserLocations | null}
   | {type: 'SET_USER_LOCATIONS'; userLocations: UserLocations}
-  | {type: 'RESET_APP'};
+  | {type: 'RESTART_ONBOARDING'};
 
 type AppContextState = AppState & {
   completeOnboarding: (userlocations: UserLocations) => void;
-  resetOnboarding: () => void;
+  restartOnboarding: () => void;
 };
 const AppContext = createContext<AppContextState | undefined>(undefined);
 const AppDispatch = createContext<Dispatch<AppReducerAction> | undefined>(
@@ -48,17 +49,19 @@ const appReducer: AppReducer = (prevState, action) => {
       return {
         ...prevState,
         userLocations: action.userLocations,
+        onboarded: action.userLocations != null,
         isLoading: false,
       };
     case 'SET_USER_LOCATIONS':
       return {
         ...prevState,
         userLocations: action.userLocations,
+        onboarded: true,
       };
-    case 'RESET_APP':
+    case 'RESTART_ONBOARDING':
       return {
-        userLocations: null,
-        isLoading: false,
+        ...prevState,
+        onboarded: false,
       };
   }
 };
@@ -66,6 +69,7 @@ const appReducer: AppReducer = (prevState, action) => {
 const defaultAppState: AppState = {
   isLoading: true,
   userLocations: null,
+  onboarded: false,
 };
 
 const AppContextProvider: React.FC = ({children}) => {
@@ -82,7 +86,7 @@ const AppContextProvider: React.FC = ({children}) => {
     checkOnboarded();
   }, []);
 
-  const {completeOnboarding, resetOnboarding} = useMemo(
+  const {completeOnboarding, restartOnboarding} = useMemo(
     () => ({
       completeOnboarding: async (userLocations: UserLocations) => {
         await storage.set(
@@ -92,9 +96,8 @@ const AppContextProvider: React.FC = ({children}) => {
 
         dispatch({type: 'SET_USER_LOCATIONS', userLocations});
       },
-      resetOnboarding: async () => {
-        await storage.remove('stored_user_locations');
-        dispatch({type: 'RESET_APP'});
+      restartOnboarding: async () => {
+        dispatch({type: 'RESTART_ONBOARDING'});
       },
     }),
     [],
@@ -102,7 +105,7 @@ const AppContextProvider: React.FC = ({children}) => {
 
   return (
     <AppContext.Provider
-      value={{...state, completeOnboarding, resetOnboarding}}
+      value={{...state, completeOnboarding, restartOnboarding}}
     >
       <AppDispatch.Provider value={dispatch}>{children}</AppDispatch.Provider>
     </AppContext.Provider>

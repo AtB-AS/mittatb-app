@@ -95,7 +95,7 @@ type RootProps = {
 };
 
 const OverviewRoot: React.FC<RootProps> = ({navigation}) => {
-  const {userLocations, resetOnboarding} = useAppState();
+  const {userLocations, restartOnboarding} = useAppState();
   const {location} = useGeolocationState();
 
   const currentLocation = useMemo<Location | null>(
@@ -123,7 +123,7 @@ const OverviewRoot: React.FC<RootProps> = ({navigation}) => {
     <Overview
       userLocations={userLocations}
       currentLocation={currentLocation}
-      resetOnboarding={resetOnboarding}
+      restartOnboarding={restartOnboarding}
       navigation={navigation}
     />
   );
@@ -132,14 +132,14 @@ const OverviewRoot: React.FC<RootProps> = ({navigation}) => {
 type Props = {
   userLocations: UserLocations;
   currentLocation: Location;
-  resetOnboarding: () => void;
+  restartOnboarding: () => void;
   navigation: OverviewScreenNavigationProp;
 };
 
 const Overview: React.FC<Props> = ({
   userLocations,
   currentLocation,
-  resetOnboarding,
+  restartOnboarding,
   navigation,
 }) => {
   const sortedWorkHomeLocations = sortNearestLocations(
@@ -199,7 +199,7 @@ const Overview: React.FC<Props> = ({
       <View style={styles.headerContainer}>
         <TouchableWithoutFeedback
           style={styles.headerButtonContainer}
-          onPress={resetOnboarding}
+          onPress={restartOnboarding}
         >
           <ProfileIcon />
           <Text style={styles.headerButtonText}>Endre {'\n'}adresser</Text>

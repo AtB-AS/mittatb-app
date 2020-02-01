@@ -12,14 +12,16 @@ import colors from '../../assets/colors';
 import LocationInput from './LocationInput';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {OnboardingStackParamList, OnboardingContext} from './';
+import {OnboardingStackParamList} from './';
 import {GeolocationResponse} from '@react-native-community/geolocation';
 import {Location} from '../../AppContext';
 import HomeIcon from '../../assets/svg/HomeIcon';
 import WorkIcon from '../../assets/svg/WorkIcon';
+import {useOnboardingState} from './OnboardingContext';
 
 type Props = {
   location: GeolocationResponse | null;
+  prefilledLocation: Location | null;
   icon: JSX.Element;
   question: string;
   label: string;
@@ -33,19 +35,20 @@ type Props = {
 export const HomeLocation: React.FC<{
   navigation: StackNavigationProp<OnboardingStackParamList>;
 }> = ({navigation}) => {
-  const context = useContext(OnboardingContext);
+  const context = useOnboardingState();
   return (
     <LocationForm
       key="homeForm"
+      prefilledLocation={context?.home ?? null}
       location={context?.location ?? null}
       icon={<HomeIcon width={30} height={30} style={styles.icon} />}
       question="Hvor bor du?"
       label="Hjemmeadresse"
       placeholder="Søk etter adresse"
       buttonText="Neste"
-      onLocationSelect={(location: Location) => {
+      onLocationSelect={(home: Location) => {
         if (context) {
-          context.setHomeLocation(location);
+          context.dispatch({type: 'SET_HOME', home});
           navigation.push('WorkLocation');
         }
       }}
@@ -58,19 +61,20 @@ export const HomeLocation: React.FC<{
 export const WorkLocation: React.FC<{
   navigation: StackNavigationProp<OnboardingStackParamList>;
 }> = () => {
-  const context = useContext(OnboardingContext);
+  const context = useOnboardingState();
   return (
     <LocationForm
       key="workForm"
+      prefilledLocation={context?.work ?? null}
       location={context?.location ?? null}
       icon={<WorkIcon width={28} height={28} style={styles.icon} />}
       question="Hvor jobber du?"
       label="Jobbadresse"
       placeholder="Søk etter adresse"
       buttonText="Neste"
-      onLocationSelect={(location: Location) => {
+      onLocationSelect={(work: Location) => {
         if (context) {
-          context.setWorkLocation(location);
+          context.dispatch({type: 'SET_WORK', work});
         }
       }}
       currentStep={2}
@@ -81,6 +85,7 @@ export const WorkLocation: React.FC<{
 
 const LocationForm: React.FC<Props> = ({
   location,
+  prefilledLocation,
   icon,
   question,
   label,
@@ -90,8 +95,10 @@ const LocationForm: React.FC<Props> = ({
   totalSteps,
   currentStep,
 }) => {
-  const [address, setAddress] = useState<string>('');
-  const [addressLocation, setAddressLocation] = useState<Location | null>(null);
+  const [address, setAddress] = useState<string>(prefilledLocation?.name ?? '');
+  const [addressLocation, setAddressLocation] = useState<Location | null>(
+    prefilledLocation,
+  );
   const [error, setError] = useState<string | null>(null);
 
   const textInputRef = useRef<TextInput>(null);
