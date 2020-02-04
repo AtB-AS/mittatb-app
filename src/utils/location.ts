@@ -1,5 +1,5 @@
 import haversine, {Options} from 'haversine';
-import {Location} from '../../AppContext';
+import {Location} from '../AppContext';
 
 const options: Options = {unit: 'meter'};
 
@@ -8,7 +8,7 @@ type SortedLocation = {
   distance: number;
 };
 
-export default function sortNearestLocations(
+export function sortNearestLocations(
   current: Location,
   ...rest: Location[]
 ): SortedLocation[] {

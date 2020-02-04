@@ -1,8 +1,8 @@
 import axios from 'axios';
-import {Location} from '../../AppContext';
-import {TripPattern} from '../../sdk';
+import {Location} from '../../../AppContext';
+import {TripPattern} from '../../../sdk';
 
-export default async function searchJournies(
+export default async function searchTrip(
   from: Location,
   to: Location,
 ): Promise<TripPattern[] | null> {

@@ -5,7 +5,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {RouteProp} from '@react-navigation/native';
 import {PlannerStackParams} from './';
 import colors from '../../assets/colors';
-import ResultItem from './ResultItem';
+import ResultItem from './Overview/ResultItem';
 import {formatToClock, secondsToDuration} from '../../utils/date';
 import nb from 'date-fns/locale/nb';
 import WalkingPerson from '../../assets/svg/WalkingPerson';

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import WaitingForBus from '../../assets/svg/WaitingForBus';
 import colors from '../../assets/colors';
@@ -19,9 +19,15 @@ type Props = {
 
 const GeoPermission: React.FC<Props> = ({navigation}) => {
   const {status, requestPermission} = useGeolocationState();
+  const [requestedOnce, setRequestedOnce] = useState(false);
 
   useEffect(() => {
-    if (status === 'granted') {
+    if (
+      status === 'granted' ||
+      status === 'blocked' ||
+      status === 'unavailable' ||
+      (requestedOnce && status === 'denied')
+    ) {
       navigation.replace('HomeLocation');
     }
   }, [status]);
@@ -52,7 +58,13 @@ const GeoPermission: React.FC<Props> = ({navigation}) => {
           <WaitingForBus width="100%" height="100%" style={styles.svg} />
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableHighlight style={styles.button} onPress={requestPermission}>
+          <TouchableHighlight
+            style={styles.button}
+            onPress={() => {
+              setRequestedOnce(true);
+              requestPermission();
+            }}
+          >
             <Text style={styles.buttonText}>Kom i gang</Text>
           </TouchableHighlight>
         </View>
