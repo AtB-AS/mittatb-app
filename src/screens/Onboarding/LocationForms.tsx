@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   TextInput,
   TextStyle,
+  KeyboardAvoidingView,
 } from 'react-native';
 import colors from '../../assets/colors';
 import LocationInput from './LocationInput';

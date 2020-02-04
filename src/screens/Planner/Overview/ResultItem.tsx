@@ -1,11 +1,10 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import nb from 'date-fns/locale/nb';
-import colors from '../../assets/colors';
-import {TripPattern} from '../../sdk';
-import {format, parseISO} from 'date-fns';
-import {secondsToDuration, formatToClock} from '../../utils/date';
-import LegIcons from './LegIcons';
+import colors from '../../../assets/colors';
+import {TripPattern} from '../../../sdk';
+import {secondsToDuration, formatToClock} from '../../../utils/date';
+import LegIcons from '../LegIcons';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 
 type ResultItemProps = {
@@ -22,9 +21,7 @@ const ResultItemParent: React.FC<ResultItemProps> = ({
       <ResultItem tripPattern={tripPattern} />
     </TouchableHighlight>
   ) : (
-    <View>
-      <ResultItem tripPattern={tripPattern} />
-    </View>
+    <ResultItem tripPattern={tripPattern} />
   );
 };
 
