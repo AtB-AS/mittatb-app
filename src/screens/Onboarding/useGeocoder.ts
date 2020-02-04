@@ -23,7 +23,7 @@ export function useGeocoder(
               location.coords.latitude +
               '&focus.point.lon=' +
               location.coords.longitude
-            : 'boundary.county_ids=50') +
+            : '&boundary.county_ids=50') +
           '&size=10&layers=address,locality&refreshkey=opn';
 
         const response = await axios.get<GeocodeResponse>(url);
