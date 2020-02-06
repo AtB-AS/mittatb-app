@@ -4,6 +4,18 @@ import axios from 'axios';
 import {Location} from '../../AppContext';
 import {Feature} from '../../sdk';
 
+const BOUNDARY_FILTER = () => {
+  const filter = {
+    min_lat: 62.5815885,
+    max_lat: 64.082649,
+    min_lon: 8.745761,
+    max_lon: 11.92081,
+  };
+  return Object.entries(filter)
+    .map(([k, v]) => `${k}=${v}`)
+    .join('&');
+};
+
 export function useGeocoder(
   text: string | null,
   location: GeolocationResponse | null,
@@ -16,19 +28,18 @@ export function useGeocoder(
         setLocations(null);
       } else {
         const url =
-          'https://bff-oneclick-journey-planner-zmj3kfvboa-ew.a.run.app/geocoder/v1/autocomplete?text=' +
+          'https://atb-bff.dev.mittatb.no/v1/geocoder/features?query=' +
           text +
           (location
-            ? '&focus.point.lat=' +
+            ? '&lat=' +
               location.coords.latitude +
-              '&focus.point.lon=' +
+              '&lon=' +
               location.coords.longitude
-            : '&boundary.county_ids=50') +
-          '&size=10&layers=address,locality&refreshkey=opn';
+            : `&${BOUNDARY_FILTER()}`) +
+          '&limit=10';
 
         const response = await axios.get<GeocodeResponse>(url);
-
-        setLocations(response?.data?.features?.map(mapFeatureToLocation));
+        setLocations(response?.data?.map(mapFeatureToLocation));
       }
     }
 
@@ -46,14 +57,14 @@ export function useReverseGeocoder(location: GeolocationResponse | null) {
       if (location && location.coords) {
         try {
           const response = await axios.get<GeocodeResponse>(
-            'https://bff-oneclick-journey-planner-zmj3kfvboa-ew.a.run.app/geocoder/v1/reverse?point.lat=' +
+            'https://atb-bff.dev.mittatb.no/v1/geocoder/reverse?lat=' +
               location?.coords.latitude +
-              '&point.lon=' +
+              '&lon=' +
               location?.coords.longitude +
-              '&size=10&boundary.circle.radius=0.2&refreshkey=opn',
+              '&limit=10&radius=0.2',
           );
 
-          setLocations(response?.data?.features?.map(mapFeatureToLocation));
+          setLocations(response?.data?.map(mapFeatureToLocation));
         } catch (err) {
           console.warn(err);
           setLocations(null);
@@ -69,9 +80,7 @@ export function useReverseGeocoder(location: GeolocationResponse | null) {
   return locations;
 }
 
-type GeocodeResponse = {
-  features: Feature[];
-};
+type GeocodeResponse = Feature[];
 // IMPORTANT: Feature coordinate-array is [long, lat] :sadface:. Mapping to lat/long object for less bugs downstream.
 const mapFeatureToLocation = ({
   geometry: {
