@@ -31,7 +31,7 @@ const BusDetail: React.FC<LegDetailProps> = ({leg}) => {
         time={
           secondsToDuration(leg.duration ?? 0, nb) +
           ' / ' +
-          leg.intermediateQuays.length +
+          leg.intermediateEstimatedCalls.length +
           ' stopp'
         }
         textColor={colors.primary.green}
