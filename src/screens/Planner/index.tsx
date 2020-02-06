@@ -4,10 +4,11 @@ import Overview from './Overview';
 import {createStackNavigator} from '@react-navigation/stack';
 import Detail from './Details';
 import colors from '../../assets/colors';
+import {Location} from '../../AppContext';
 
 export type PlannerStackParams = {
   Overview: undefined;
-  Detail: {tripPattern: TripPattern};
+  Detail: {tripPattern: TripPattern; from: Location; to: Location};
 };
 
 const Stack = createStackNavigator<PlannerStackParams>();

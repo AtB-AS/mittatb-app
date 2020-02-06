@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useMemo, Dispatch} from 'react';
+import React, {useEffect, useReducer, useMemo} from 'react';
 import {StyleSheet} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -79,7 +79,7 @@ const OverviewRoot: React.FC<RootProps> = ({navigation}) => {
       location
         ? {
             id: 'current',
-            name: 'min posisjon',
+            name: 'Min posisjon',
             label: 'current',
             locality: 'current',
             coordinates: {

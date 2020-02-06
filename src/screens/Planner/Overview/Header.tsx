@@ -14,7 +14,6 @@ type Props = {
 
 const Header: React.FC<Props> = ({dispatch, origin, geolocationDisabled}) => {
   const {restartOnboarding} = useAppState();
-  console.log(geolocationDisabled);
   return (
     <View style={styles.headerContainer}>
       <TouchableWithoutFeedback

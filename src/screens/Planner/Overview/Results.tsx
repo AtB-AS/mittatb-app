@@ -50,7 +50,8 @@ const Results: React.FC<Props> = ({
           </>
         ) : null}
         <Text style={styles.locationText}>
-          Fra {from.name} til {to.name}
+          Fra {from.id === 'current' ? from.name.toLowerCase() : from.name} til{' '}
+          {to.name}
         </Text>
       </View>
       <ScrollView
@@ -62,7 +63,9 @@ const Results: React.FC<Props> = ({
           <ResultItem
             key={i}
             tripPattern={pattern}
-            onPress={tripPattern => navigation.push('Detail', {tripPattern})}
+            onPress={tripPattern =>
+              navigation.push('Detail', {tripPattern, from, to})
+            }
           />
         ))}
         <View></View>
