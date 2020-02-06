@@ -1,29 +1,35 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TextStyle} from 'react-native';
 import colors from '../../../assets/colors';
 
 const LocationRow: React.FC<{
   icon: JSX.Element;
   location: string;
   time: string;
-  textColor?: string;
-}> = ({icon, location, time, textColor}) => {
+  textStyle?: TextStyle;
+  dashThroughIcon?: boolean;
+}> = ({icon, location, time, textStyle, dashThroughIcon}) => {
   return (
     <View style={styles.row}>
       <View style={styles.iconLocationContainer}>
-        <View style={styles.iconContainer}>{icon}</View>
+        <View
+          style={[
+            styles.iconContainer,
+            {
+              backgroundColor: !dashThroughIcon
+                ? colors.primary.gray
+                : 'transparent',
+            },
+          ]}
+        >
+          {icon}
+        </View>
         <View style={styles.locationContainer}>
-          <Text
-            style={[styles.location, textColor ? {color: textColor} : null]}
-          >
-            {location}
-          </Text>
+          <Text style={[styles.location, textStyle]}>{location}</Text>
         </View>
       </View>
       <View style={styles.timeContainer}>
-        <Text style={[styles.time, textColor ? {color: textColor} : null]}>
-          {time}
-        </Text>
+        <Text style={[styles.time, textStyle]}>{time}</Text>
       </View>
     </View>
   );
@@ -45,7 +51,6 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: 18,
     alignItems: 'center',
-    backgroundColor: colors.primary.gray,
     paddingVertical: 6,
     marginRight: 12,
   },
@@ -57,7 +62,7 @@ const styles = StyleSheet.create({
   location: {
     color: colors.general.white,
   },
-  timeContainer: {flexGrow: 1, alignItems: 'flex-end'},
+  timeContainer: {flexGrow: 1, alignItems: 'flex-end', marginLeft: 10},
   time: {
     color: colors.general.white,
     fontSize: 12,

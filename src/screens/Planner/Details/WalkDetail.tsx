@@ -35,6 +35,7 @@ const WalkDetail: React.FC<LegDetailProps> = ({leg, isFirst}) => {
         icon={<WalkingPerson />}
         location={'Gå ' + Math.floor(leg.distance ?? 0) + ' m'}
         time={secondsToDuration(leg.duration ?? 0, nb)}
+        textStyle={styles.walkTextStyle}
       />
 
       <View />
@@ -55,6 +56,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     height: '100%',
   },
+  walkTextStyle: {opacity: 0.6, fontSize: 12},
 });
 
 export default WalkDetail;
