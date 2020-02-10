@@ -2,7 +2,7 @@ if [ "$AGENT_JOBSTATUS" == "Succeeded" ]; then
     if [ "$APPCENTER_BRANCH" == "master" ];
      then
         if [ "$APPCENTER_ANDROID_VARIANT" == "release" ]; then
-            bugsnag-sourcemaps upload \
+            npx bugsnag-sourcemaps upload \
                 --api-key=61fa3faa9328f37c95c019dde6c95ba5 \
                 --app-version=1.0 \
                 --minifiedFile=android/app/build/generated/assets/react/release/index.android.bundle \
