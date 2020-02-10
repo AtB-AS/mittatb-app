@@ -2,6 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationNativeContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import trackNavigation from './diagnostics/trackNavigation';
 import {useAppState} from './AppContext';
 import Splash from './screens/Splash';
 import Onboarding from './screens/Onboarding';
@@ -20,7 +21,7 @@ const NavigationRoot = () => {
 
   return (
     <SafeAreaProvider>
-      <NavigationNativeContainer>
+      <NavigationNativeContainer onStateChange={trackNavigation}>
         <Stack.Navigator headerMode="none">
           {isLoading ? (
             <Stack.Screen name="Splash" component={Splash} />
