@@ -10,6 +10,7 @@ import {
   PERMISSIONS,
   PermissionStatus,
 } from 'react-native-permissions';
+import bugsnag from './diagnostics/bugsnag';
 
 type GeolocationState = {
   status: PermissionStatus | null;
@@ -81,7 +82,14 @@ const GeolocationContextProvider: React.FC = ({children}) => {
       const watchId = Geolocation.watchPosition(
         location => dispatch({type: 'LOCATION_CHANGED', location}),
         async err => {
-          console.log('Geolocation error: ', err);
+          bugsnag.notify(
+            new Error('Geolocation error: ' + err.message),
+            report => {
+              report.metadata = {
+                geolocation: err,
+              };
+            },
+          );
           const status = await checkGeolocationPermission();
           if (status !== 'granted') {
             dispatch({type: 'PERMISSION_CHANGED', status});

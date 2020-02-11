@@ -19,6 +19,7 @@
     "@react-navigation/stack": "^5.0.0-alpha.61",
     "@types/haversine": "^1.1.4",
     "axios": "^0.19.1",
+    "bugsnag-react-native": "^2.23.6",
     "date-fns": "^2.9.0",
     "haversine": "^1.1.1",
     "react": "16.9.0",
