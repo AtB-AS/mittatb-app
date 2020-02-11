@@ -28,7 +28,7 @@ export function useGeocoder(
         setLocations(null);
       } else {
         const url =
-          'https://atb-bff.dev.mittatb.no/v1/geocoder/features?query=' +
+          'https://mittatb-bff.dev.mittatb.no/v1/geocoder/features?query=' +
           text +
           (location
             ? '&lat=' +
@@ -57,7 +57,7 @@ export function useReverseGeocoder(location: GeolocationResponse | null) {
       if (location && location.coords) {
         try {
           const response = await axios.get<GeocodeResponse>(
-            'https://atb-bff.dev.mittatb.no/v1/geocoder/reverse?lat=' +
+            'https://mittatb-bff.dev.mittatb.no/v1/geocoder/reverse?lat=' +
               location?.coords.latitude +
               '&lon=' +
               location?.coords.longitude +

@@ -6,7 +6,7 @@ export default async function searchTrip(
   from: Location,
   to: Location,
 ): Promise<TripPattern[] | null> {
-  const url = 'https://atb-bff.dev.mittatb.no/v1/journey/trip';
+  const url = 'https://mittatb-bff.dev.mittatb.no/v1/journey/trip';
   const {coordinates: fromCoordinates} = from;
   const {coordinates: toCoordinates} = to;
   const response = await axios.post<TripPattern[]>(url, {
