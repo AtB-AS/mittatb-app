@@ -1,8 +1,8 @@
 import {useState, useEffect} from 'react';
 import {GeolocationResponse} from '@react-native-community/geolocation';
-import axios from 'axios';
 import {Location} from '../../AppContext';
 import {Feature} from '../../sdk';
+import {autocomplete, reverse} from '../../api';
 
 const BOUNDARY_FILTER = () => {
   const filter = {
@@ -27,19 +27,12 @@ export function useGeocoder(
       if (!text || text.length < 4) {
         setLocations(null);
       } else {
-        const url =
-          'https://atb-bff.dev.mittatb.no/v1/geocoder/features?query=' +
-          text +
-          (location
-            ? '&lat=' +
-              location.coords.latitude +
-              '&lon=' +
-              location.coords.longitude
-            : `&${BOUNDARY_FILTER()}`) +
-          '&limit=10';
-
-        const response = await axios.get<GeocodeResponse>(url);
-        setLocations(response?.data?.map(mapFeatureToLocation));
+        try {
+          const response = await autocomplete(text, location);
+          setLocations(response?.data?.map(mapFeatureToLocation));
+        } catch {
+          setLocations(null);
+        }
       }
     }
 
@@ -56,17 +49,10 @@ export function useReverseGeocoder(location: GeolocationResponse | null) {
     async function reverseCoordLookup() {
       if (location && location.coords) {
         try {
-          const response = await axios.get<GeocodeResponse>(
-            'https://atb-bff.dev.mittatb.no/v1/geocoder/reverse?lat=' +
-              location?.coords.latitude +
-              '&lon=' +
-              location?.coords.longitude +
-              '&limit=10&radius=0.2',
-          );
+          const response = await reverse(location);
 
           setLocations(response?.data?.map(mapFeatureToLocation));
-        } catch (err) {
-          console.warn(err);
+        } catch {
           setLocations(null);
         }
       } else {
@@ -80,7 +66,6 @@ export function useReverseGeocoder(location: GeolocationResponse | null) {
   return locations;
 }
 
-type GeocodeResponse = Feature[];
 // IMPORTANT: Feature coordinate-array is [long, lat] :sadface:. Mapping to lat/long object for less bugs downstream.
 const mapFeatureToLocation = ({
   geometry: {

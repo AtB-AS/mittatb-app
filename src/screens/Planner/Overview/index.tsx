@@ -15,7 +15,7 @@ import HomeBanner from '../../../assets/svg/HomeBanner';
 import colors from '../../../assets/colors';
 import useCalculateTrip from './useCalculateTrip';
 import useSortedLocations from './useSortedLocations';
-import searchTrip from './searchTrip';
+import {searchTrip} from '../../../api';
 
 export type Direction = 'home' | 'work';
 export type Origin = 'current' | 'static';
@@ -138,8 +138,12 @@ const Overview: React.FC<Props> = ({
 
   async function search() {
     dispatch({type: 'SET_IS_SEARCHING'});
-    const tripPatterns = await searchTrip(from, to);
-    dispatch({type: 'SET_TRIP_PATTERNS', tripPatterns});
+    try {
+      const response = await searchTrip(from, to);
+      dispatch({type: 'SET_TRIP_PATTERNS', tripPatterns: response.data});
+    } catch (err) {
+      dispatch({type: 'SET_TRIP_PATTERNS', tripPatterns: null});
+    }
   }
 
   useEffect(() => {
