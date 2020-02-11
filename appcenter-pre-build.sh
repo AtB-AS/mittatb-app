@@ -5,7 +5,7 @@ brew update
 brew install applesimutils
 
 echo "Building the project for Detox tests..."
-npx detox build --configuration ios.sim.release
+npx detox build 
 
 echo "Executing Detox tests..."
-npx detox test --configuration ios.sim.release --cleanup
+npx detox test --cleanup
