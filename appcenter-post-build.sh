@@ -1,3 +1,5 @@
+echo "Running appcenter-post-build with: Jobstatus: $AGENT_JOBSTATUS, branch: $APPCENTER_BRANCH, Variant: $APPCENTER_ANDROID_VARIANT"
+
 if [ "$AGENT_JOBSTATUS" == "Succeeded" ]; then
     if [ "$APPCENTER_BRANCH" == "master" ];
      then
