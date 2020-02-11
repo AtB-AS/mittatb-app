@@ -86,6 +86,7 @@ const GeolocationContextProvider: React.FC = ({children}) => {
             new Error('Geolocation error: ' + err.message),
             report => {
               report.metadata = {
+                ...report.metadata,
                 geolocation: err,
               };
             },
