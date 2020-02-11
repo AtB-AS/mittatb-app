@@ -26,6 +26,7 @@ type Props = {
   reverseLookupCount?: number;
   textInputRef?: RefObject<TextInput>;
   style?: ViewStyle;
+  testID: string;
 };
 
 const LocationInput: React.FC<Props> = ({
@@ -39,6 +40,7 @@ const LocationInput: React.FC<Props> = ({
   placeholder,
   reverseLookupCount,
   style,
+  testID,
 }) => {
   const internalRef = useRef<TextInput>(null);
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -75,6 +77,7 @@ const LocationInput: React.FC<Props> = ({
           autoCorrect={false}
           autoCompleteType="off"
           placeholderTextColor="#2C353B"
+          testID={testID + 'Input'}
         />
         {hintText ? <Text style={styles.hintText}>{hintText}</Text> : null}
       </View>
@@ -200,7 +203,9 @@ const LocationSuggestion: React.FC<LocationSuggestionProps> = ({
         <LocationArrow style={suggestionStyles.locationArrow} />
       ) : null}
       <View>
-        <Text style={suggestionStyles.suggestionText}>{location.name}</Text>
+        <Text testID="suggestionText" style={suggestionStyles.suggestionText}>
+          {location.name}
+        </Text>
         <Text style={suggestionStyles.suggestionMinText}>
           {location.locality}
         </Text>
