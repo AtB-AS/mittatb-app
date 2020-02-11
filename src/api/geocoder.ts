@@ -4,10 +4,10 @@ import client from './client';
 
 const BOUNDARY_FILTER = () => {
   const filter = {
-    min_lat: 62.5815885,
-    max_lat: 64.082649,
-    min_lon: 8.745761,
-    max_lon: 11.92081,
+    'boundary.rect.min_lat': 62.5815885,
+    'boundary.rect.max_lat': 64.082649,
+    'boundary.rect.min_lon': 8.745761,
+    'boundary.rect.max_lon': 11.92081,
   };
   return Object.entries(filter)
     .map(([k, v]) => `${k}=${v}`)

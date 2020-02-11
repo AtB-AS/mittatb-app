@@ -31,6 +31,7 @@ type Props = {
   onLocationSelect: (location: Location) => void;
   currentStep: number;
   totalSteps: number;
+  testID: string;
 };
 
 export const HomeLocation: React.FC<{
@@ -55,6 +56,7 @@ export const HomeLocation: React.FC<{
       }}
       currentStep={1}
       totalSteps={2}
+      testID="homeForm"
     />
   );
 };
@@ -80,6 +82,7 @@ export const WorkLocation: React.FC<{
       }}
       currentStep={2}
       totalSteps={2}
+      testID="workForm"
     />
   );
 };
@@ -95,6 +98,7 @@ const LocationForm: React.FC<Props> = ({
   onLocationSelect,
   totalSteps,
   currentStep,
+  testID,
 }) => {
   const [address, setAddress] = useState<string>(prefilledLocation?.name ?? '');
   const [addressLocation, setAddressLocation] = useState<Location | null>(
@@ -134,6 +138,7 @@ const LocationForm: React.FC<Props> = ({
             textInputRef={textInputRef}
             placeholder={placeholder}
             style={styles.textInput}
+            testID={testID}
           />
         </View>
       </TouchableWithoutFeedback>
@@ -157,6 +162,7 @@ const LocationForm: React.FC<Props> = ({
                 );
               }
             }}
+            testID={testID + 'Button'}
           >
             <Text style={styles.buttonText}>{buttonText}</Text>
           </TouchableHighlight>

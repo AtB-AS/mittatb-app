@@ -30,7 +30,8 @@ export function useGeocoder(
         try {
           const response = await autocomplete(text, location);
           setLocations(response?.data?.map(mapFeatureToLocation));
-        } catch {
+        } catch (err) {
+          console.warn(err);
           setLocations(null);
         }
       }
@@ -52,7 +53,8 @@ export function useReverseGeocoder(location: GeolocationResponse | null) {
           const response = await reverse(location);
 
           setLocations(response?.data?.map(mapFeatureToLocation));
-        } catch {
+        } catch (err) {
+          console.warn(err);
           setLocations(null);
         }
       } else {

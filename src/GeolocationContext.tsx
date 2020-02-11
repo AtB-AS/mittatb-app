@@ -60,6 +60,19 @@ const defaultState: GeolocationState = {
   location: null,
 };
 
+const translateErrorCode = (code: number) => {
+  switch (code) {
+    case 1:
+      return 'PERMISSION_DENIED';
+    case 2:
+      return 'POSITION_UNAVAILABLE';
+    case 3:
+      return 'TIMEOUT';
+    default:
+      return 'UNKNOWN';
+  }
+};
+
 const GeolocationContextProvider: React.FC = ({children}) => {
   const [state, dispatch] = useReducer<GeolocationReducer>(
     geolocationReducer,
@@ -87,7 +100,10 @@ const GeolocationContextProvider: React.FC = ({children}) => {
             report => {
               report.metadata = {
                 ...report.metadata,
-                geolocation: err,
+                geolocation: {
+                  code: translateErrorCode(err.code),
+                  message: err.message,
+                },
               };
             },
           );
