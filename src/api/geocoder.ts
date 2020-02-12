@@ -1,6 +1,6 @@
 import {GeolocationResponse} from '@react-native-community/geolocation';
 import {Feature} from '../sdk';
-import client from './client';
+import {getClient} from './client';
 
 const BOUNDARY_FILTER = () => {
   const filter = {
@@ -26,10 +26,12 @@ export async function autocomplete(
       : `&${BOUNDARY_FILTER()}`) +
     '&limit=10';
 
+  const client = await getClient();
   return await client.get<Feature[]>(url);
 }
 
 export async function reverse(location: GeolocationResponse | null) {
+  const client = await getClient();
   return await client.get<Feature[]>(
     'v1/geocoder/reverse?lat=' +
       location?.coords.latitude +

@@ -17,6 +17,7 @@
     "@react-navigation/native": "^5.0.0-alpha.27",
     "@react-navigation/stack": "^5.0.0-alpha.61",
     "@types/haversine": "^1.1.4",
+    "@types/uuid": "^3.4.7",
     "axios": "^0.19.1",
     "bugsnag-react-native": "^2.23.6",
     "date-fns": "^2.9.0",
@@ -30,7 +31,8 @@
     "react-native-reanimated": "^1.7.0",
     "react-native-safe-area-context": "^0.6.2",
     "react-native-screens": "^2.0.0-alpha.25",
-    "react-native-svg": "^10.1.0"
+    "react-native-svg": "^10.1.0",
+    "uuid": "^3.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
