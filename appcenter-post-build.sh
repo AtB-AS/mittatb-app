@@ -29,7 +29,8 @@ if [ "$AGENT_JOBSTATUS" == "Succeeded" ]; then
                 --minifiedFile=android/app/build/generated/assets/react/release/index.android.bundle \
                 --source-map=android/app/build/generated/sourcemaps/react/release/index.android.bundle.map \
                 --minified-url=index.android.bundle \
-                --upload-sources
+                --upload-sources \
+                --overwrite
         fi
     else
         echo "Current branch is $APPCENTER_BRANCH"
