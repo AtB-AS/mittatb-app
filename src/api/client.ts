@@ -1,13 +1,26 @@
-import axios, {AxiosError} from 'axios';
+import axios, {AxiosError, AxiosInstance} from 'axios';
 import {getAxiosErrorType, ErrorType, getAxiosErrorMetadata} from './utils';
 import bugsnag from '../diagnostics/bugsnag';
+import {getInstallId} from '../utils/installId';
+import {InstallIdHeaderName} from './headers';
+
 const API_BASE_URL = 'https://mittatb-bff.dev.mittatb.no/';
 
-const client = axios.create({
-  baseURL: API_BASE_URL,
-});
+let axiosInstance: AxiosInstance | null = null;
 
-client.interceptors.response.use(undefined, responseErrorHandler);
+export async function getClient() {
+  if (!axiosInstance) {
+    const installid = await getInstallId();
+    axiosInstance = axios.create({
+      baseURL: API_BASE_URL,
+      headers: {
+        [InstallIdHeaderName]: installid,
+      },
+    });
+    axiosInstance.interceptors.response.use(undefined, responseErrorHandler);
+  }
+  return axiosInstance;
+}
 
 function responseErrorHandler(error: AxiosError) {
   const errorType = getAxiosErrorType(error);
@@ -33,5 +46,3 @@ function responseErrorHandler(error: AxiosError) {
 
   return Promise.reject(error);
 }
-
-export default client;
