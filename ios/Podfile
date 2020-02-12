@@ -37,6 +37,8 @@ target 'atb' do
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse.podspec"
 
+  pod 'react-native-geolocation', path: '../node_modules/@react-native-community/geolocation'
+
   target 'atbTests' do
     inherit! :search_paths
     # Pods for testing

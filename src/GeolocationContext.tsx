@@ -1,6 +1,7 @@
 import React, {useEffect, useReducer, createContext, useContext} from 'react';
 import {Platform, Rationale} from 'react-native';
-import Geolocation, {
+import Geolocation from 'react-native-geolocation-service';
+import {
   GeolocationResponse,
   GeolocationOptions,
 } from '@react-native-community/geolocation';
