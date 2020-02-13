@@ -50,6 +50,7 @@
     "metro-react-native-babel-preset": "^0.56.0",
     "patch-package": "^6.2.0",
     "postinstall-postinstall": "^2.0.0",
+    "react-native-dotenv": "^0.2.0",
     "react-test-renderer": "16.9.0",
     "typescript": "^3.7.3"
   },

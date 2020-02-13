@@ -63,5 +63,8 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 
-#Certs
+# Certs
 keystore
+
+# Env
+.env

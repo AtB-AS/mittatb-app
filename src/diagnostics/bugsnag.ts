@@ -1,7 +1,8 @@
 import {Client} from 'bugsnag-react-native';
 import {getInstallId} from '../utils/installId';
+import {BUGSNAG_API_KEY} from 'react-native-dotenv';
 
-const client = new Client('61fa3faa9328f37c95c019dde6c95ba5');
+const client = new Client(BUGSNAG_API_KEY);
 
 async function setInstallId() {
   try {

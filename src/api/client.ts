@@ -1,10 +1,9 @@
 import axios, {AxiosError, AxiosInstance} from 'axios';
+import {API_BASE_URL} from 'react-native-dotenv';
 import {getAxiosErrorType, ErrorType, getAxiosErrorMetadata} from './utils';
 import bugsnag from '../diagnostics/bugsnag';
 import {getInstallId} from '../utils/installId';
 import {InstallIdHeaderName} from './headers';
-
-const API_BASE_URL = 'https://mittatb-bff.dev.mittatb.no/';
 
 let axiosInstance: AxiosInstance | null = null;
 
