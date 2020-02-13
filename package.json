@@ -22,6 +22,7 @@
     "bugsnag-react-native": "^2.23.6",
     "date-fns": "^2.9.0",
     "haversine": "^1.1.1",
+    "query-string": "^6.10.1",
     "react": "16.9.0",
     "react-native": "0.61.5",
     "react-native-dash": "^0.0.11",

@@ -40,3 +40,5 @@ export const getAxiosErrorMetadata = (error: AxiosError): ErrorMetadata => ({
   responseStatusText: error?.response?.statusText,
   responseData: JSON.stringify(error?.response?.data || 'No response data'),
 });
+
+export const stringifyUrl = (url: string, query: string) => `${url}?${query}`;
