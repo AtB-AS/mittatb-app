@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {formatDistanceStrict, parseISO} from 'date-fns';
+import {differenceInSeconds, formatDistanceStrict, parseISO} from 'date-fns';
 import {nb} from 'date-fns/locale';
 import {TripPattern} from '../../../sdk';
 import {Location} from '../../../AppContext';
@@ -32,22 +32,30 @@ const Results: React.FC<Props> = ({
   search,
   navigation,
 }) => {
-  return !tripPatterns ? (
-    <ActivityIndicator animating={true} size="large" style={styles.spinner} />
-  ) : (
+  if (!tripPatterns) {
+    return (
+      <ActivityIndicator animating={true} size="large" style={styles.spinner} />
+    );
+  }
+  return (
     <>
       <View style={styles.textContainer}>
         {tripPatterns.length > 0 ? (
-          <>
-            <Text style={styles.callToActionText}>Du må gå innen</Text>
-            <Text style={styles.timeText}>
-              {formatDistanceStrict(
-                Date.now(),
-                parseISO(tripPatterns[0].startTime),
-                {locale: nb, onlyNumeric: true},
-              )}
-            </Text>
-          </>
+          differenceInSeconds(Date.now(), parseISO(tripPatterns[0].startTime)) >
+          60 ? (
+            <>
+              <Text style={styles.callToActionText}>Du må gå innen</Text>
+              <Text style={styles.timeText}>
+                {formatDistanceStrict(
+                  Date.now(),
+                  parseISO(tripPatterns[0].startTime),
+                  {locale: nb, onlyNumeric: true},
+                )}
+              </Text>
+            </>
+          ) : (
+            <Text style={styles.callToActionText}>Du bør gå nå</Text>
+          )
         ) : null}
         <Text style={styles.locationText}>
           Fra {from.id === 'current' ? from.name.toLowerCase() : from.name} til{' '}
