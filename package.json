@@ -44,7 +44,7 @@
     "@typescript-eslint/eslint-plugin": "^2.16.0",
     "@typescript-eslint/parser": "^2.16.0",
     "babel-jest": "^24.9.0",
-    "detox": "^15.1.4",
+    "detox": "^15.2.2",
     "eslint": "^6.8.0",
     "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.56.0",
