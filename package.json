@@ -69,11 +69,17 @@
     "configurations": {
       "ios.sim.debug": {
         "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/AtB.app",
-        "build": "set -o pipefail && xcodebuild -workspace ios/atb.xcworkspace -UseNewBuildSystem=NO -scheme atb -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build | xcpretty",
+        "build": "xcodebuild -workspace ios/atb.xcworkspace -scheme atb -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
         "type": "ios.simulator",
         "device": {
           "type": "iPhone 7 Plus"
         }
+      },
+      "ios.sim.release": {
+        "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/atb.app",
+        "build": "set -o pipefail && export CODE_SIGNING_REQUIRED=NO && export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/atb.xcworkspace -UseNewBuildSystem=NO -scheme atb -configuration Release -sdk iphonesimulator -derivedDataPath ios/build | xcpretty",
+        "type": "ios.simulator",
+        "name": "iPhone 7 Plus"
       }
     },
     "test-runner": "jest"

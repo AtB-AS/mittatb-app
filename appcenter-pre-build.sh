@@ -10,6 +10,6 @@ brew install applesimutils
 echo "Install pods "
 cd ios; pod install; cd ..
 
-npx detox build
+npx detox build --configuration ios.sim.release
 
-npx detox test --cleanup
+npx detox test --configuration ios.sim.release --cleanup
