@@ -72,7 +72,7 @@
         "build": "xcodebuild -workspace ios/atb.xcworkspace -scheme atb -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
         "type": "ios.simulator",
         "device": {
-          "type": "iPhone 11 Pro"
+          "type": "iPhone 7 Plus"
         }
       }
     },
