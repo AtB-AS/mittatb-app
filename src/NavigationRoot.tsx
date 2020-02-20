@@ -1,6 +1,6 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {NavigationNativeContainer} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import trackNavigation from './diagnostics/trackNavigation';
 import {useAppState} from './AppContext';
@@ -21,7 +21,7 @@ const NavigationRoot = () => {
 
   return (
     <SafeAreaProvider>
-      <NavigationNativeContainer onStateChange={trackNavigation}>
+      <NavigationContainer onStateChange={trackNavigation}>
         <Stack.Navigator headerMode="none">
           {isLoading ? (
             <Stack.Screen name="Splash" component={Splash} />
@@ -31,7 +31,7 @@ const NavigationRoot = () => {
             <Stack.Screen name="Planner" component={Planner} />
           )}
         </Stack.Navigator>
-      </NavigationNativeContainer>
+      </NavigationContainer>
     </SafeAreaProvider>
   );
 };

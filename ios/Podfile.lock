@@ -191,7 +191,7 @@ PODS:
   - React-jsinspector (0.61.5)
   - react-native-geolocation (1.4.2):
     - React
-  - react-native-safe-area-context (0.6.2):
+  - react-native-safe-area-context (0.7.3):
     - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
@@ -232,16 +232,17 @@ PODS:
     - React
   - RNCMaskedView (0.1.6):
     - React
-  - RNGestureHandler (1.5.3):
+  - RNGestureHandler (1.6.0):
     - React
   - RNPermissions (2.0.9):
     - React
   - RNReanimated (1.7.0):
     - React
-  - RNScreens (2.0.0-alpha.25):
+  - RNScreens (2.0.0-beta.8):
     - React
   - RNSVG (10.1.0):
     - React
+  - SocketRocket (0.5.1)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -283,6 +284,7 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
+  - SocketRocket (from `../node_modules/detox/ios_src/SocketRocket`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -360,6 +362,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
+  SocketRocket:
+    :path: "../node_modules/detox/ios_src/SocketRocket"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -382,7 +386,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
   react-native-geolocation: a7b94614afbd5fd8350e0233a2025c8228fc8041
-  react-native-safe-area-context: 25260c5d0b9c53fd7aa88e569e2edae72af1f6a3
+  react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -395,11 +399,12 @@ SPEC CHECKSUMS:
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
   RNCAsyncStorage: b5de28ebf07f83fc83fe718cb17793c5cfe55181
   RNCMaskedView: a88953beefbd347a29072d9eba90e42945fe291e
-  RNGestureHandler: 02905abe54e1f6e59c081a10b4bd689721e17aa6
+  RNGestureHandler: dde546180bf24af0b5f737c8ad04b6f3fa51609a
   RNPermissions: 2f74237e97b08beda01e914301e12524ddddf5b8
   RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
-  RNScreens: 031d10e2b648afc9546f16b6a786d2efc6870310
+  RNScreens: d56b2da8367a56bbc9840e16d968339eb0ec7e7f
   RNSVG: 069864be08c9fe065a2cf7e63656a34c78653c99
+  SocketRocket: dbb1554b8fc288ef8ef370d6285aeca7361be31e
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
 PODFILE CHECKSUM: a25588984b1b375ce19f4f19f6ce2e45cf3e0493
