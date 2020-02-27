@@ -1,5 +1,6 @@
 import {NavigationState} from '@react-navigation/native';
 import bugsnag from './bugsnag';
+import analytics from '@react-native-firebase/analytics';
 
 const getActiveRouteName = (state: NavigationState): string => {
   try {
@@ -24,6 +25,7 @@ export default function trackNavigation(state: NavigationState | undefined) {
 
   if (previousRouteName !== currentRouteName) {
     bugsnag.leaveBreadcrumb('navigate', {route: currentRouteName});
+    analytics().setCurrentScreen(currentRouteName, currentRouteName);
   }
 
   previousRouteName = currentRouteName;
