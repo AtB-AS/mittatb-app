@@ -15,6 +15,16 @@ APP_VERSION=1.0
 APP_BUILD_NUMBER=$APPCENTER_BUILD_ID
 EOT
 
+echo "Adding badge to icons"
+gem install badge --no-document
+brew install librsvg
+brew unlink pango  
+brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/7cf3b63be191cb2ce4cd86f4406915128ec97432/Formula/pango.rb
+brew switch pango 1.42.4_1 
+
+export CURRENT_COMMIT_HASH=$(git rev-parse --short HEAD)
+badge --shield "beta-$CURRENT_COMMIT_HASH-orange" --no_badge
+
 if [ "$ENABLE_E2E" = true ]; then
     echo "Install E2E tools"
     brew tap wix/brew

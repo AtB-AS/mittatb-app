@@ -8,7 +8,8 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "icons": "app-icon generate"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^2.0.0-rc.1",
@@ -46,6 +47,7 @@
     "@types/react-test-renderer": "16.9.1",
     "@typescript-eslint/eslint-plugin": "^2.16.0",
     "@typescript-eslint/parser": "^2.16.0",
+    "app-icon": "^0.13.1",
     "babel-jest": "^24.9.0",
     "detox": "^15.2.2",
     "eslint": "^6.8.0",
