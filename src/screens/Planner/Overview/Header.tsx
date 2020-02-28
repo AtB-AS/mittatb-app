@@ -2,7 +2,7 @@ import React, {Dispatch} from 'react';
 import {View, Text, StyleSheet, Switch, Alert} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import ProfileIcon from '../../../assets/svg/ProfileIcon';
-import colors from '../../../assets/colors';
+import colors from '../../../theme/colors';
 import {useAppState} from '../../../AppContext';
 import {OverviewReducerAction, Origin} from './';
 

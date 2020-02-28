@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Dash from 'react-native-dash';
-import colors from '../../../assets/colors';
+import colors from '../../../theme/colors';
 import {formatToClock, secondsToDuration} from '../../../utils/date';
 import nb from 'date-fns/locale/nb';
 import BusFront from '../../../assets/svg/BusFront';

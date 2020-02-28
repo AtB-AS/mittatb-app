@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import nb from 'date-fns/locale/nb';
-import colors from '../../../assets/colors';
+import colors from '../../../theme/colors';
 import {TripPattern} from '../../../sdk';
 import {secondsToDuration, formatToClock} from '../../../utils/date';
 import LegIcons from '../LegIcons';

@@ -7,7 +7,7 @@ import {
   TextInput,
   ViewStyle,
 } from 'react-native';
-import colors from '../../assets/colors';
+import colors from '../../theme/colors';
 import Suggestions from './Suggestions';
 import {GeolocationResponse} from '@react-native-community/geolocation';
 import {useGeocoder, useReverseGeocoder} from './useGeocoder';

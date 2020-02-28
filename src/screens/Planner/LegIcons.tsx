@@ -7,7 +7,7 @@ import ArrowRight from '../../assets/svg/ArrowRight';
 import TramFront from '../../assets/svg/TramFront';
 import TrainFront from '../../assets/svg/TrainFront';
 
-import colors from '../../assets/colors';
+import colors from '../../theme/colors';
 import {Leg} from '../../sdk';
 
 type LegIconProps = {

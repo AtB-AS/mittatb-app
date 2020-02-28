@@ -3,7 +3,7 @@ import {TripPattern} from '../../sdk';
 import Overview from './Overview';
 import {createStackNavigator} from '@react-navigation/stack';
 import Detail from './Details';
-import colors from '../../assets/colors';
+import colors from '../../theme/colors';
 import {Location} from '../../AppContext';
 
 export type PlannerStackParams = {

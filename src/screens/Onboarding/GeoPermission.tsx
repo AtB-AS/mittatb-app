@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import WaitingForBus from '../../assets/svg/WaitingForBus';
-import colors from '../../assets/colors';
+import colors from '../../theme/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Logo from '../../assets/svg/Logo';
 import {StackNavigationProp} from '@react-navigation/stack';

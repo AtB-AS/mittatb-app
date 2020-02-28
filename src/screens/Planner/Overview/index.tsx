@@ -12,7 +12,7 @@ import {useGeolocationState} from '../../../GeolocationContext';
 import Splash from '../../Splash';
 import WorkBanner from '../../../assets/svg/WorkBanner';
 import HomeBanner from '../../../assets/svg/HomeBanner';
-import colors from '../../../assets/colors';
+import colors from '../../../theme/colors';
 import useCalculateTrip from './useCalculateTrip';
 import useSortedLocations from './useSortedLocations';
 import {searchTrip} from '../../../api';

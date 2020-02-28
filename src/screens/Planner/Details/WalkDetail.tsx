@@ -2,7 +2,7 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import Dash from 'react-native-dash';
 
-import colors from '../../../assets/colors';
+import colors from '../../../theme/colors';
 import {formatToClock, secondsToDuration} from '../../../utils/date';
 import nb from 'date-fns/locale/nb';
 import WalkingPerson from '../../../assets/svg/WalkingPerson';

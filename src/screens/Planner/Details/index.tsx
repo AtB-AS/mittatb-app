@@ -4,7 +4,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {RouteProp} from '@react-navigation/native';
 import {Leg} from '../../../sdk';
 import {PlannerStackParams} from '../';
-import colors from '../../../assets/colors';
+import colors from '../../../theme/colors';
 import ResultItem from '../Overview/ResultItem';
 import WalkDetail from './WalkDetail';
 import BusDetail from './BusDetail';

@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text} from 'react-native';
 import Check from '../../assets/svg/Check';
-import colors from '../../assets/colors';
+import colors from '../../theme/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const Final = () => {

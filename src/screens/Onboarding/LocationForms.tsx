@@ -9,7 +9,7 @@ import {
   TextStyle,
   KeyboardAvoidingView,
 } from 'react-native';
-import colors from '../../assets/colors';
+import colors from '../../theme/colors';
 import LocationInput from './LocationInput';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';

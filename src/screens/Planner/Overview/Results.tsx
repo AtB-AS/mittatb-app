@@ -11,7 +11,7 @@ import {differenceInSeconds, formatDistanceStrict, parseISO} from 'date-fns';
 import {nb} from 'date-fns/locale';
 import {TripPattern} from '../../../sdk';
 import {Location} from '../../../AppContext';
-import colors from '../../../assets/colors';
+import colors from '../../../theme/colors';
 import ResultItem from './ResultItem';
 import {OverviewScreenNavigationProp} from './';
 
