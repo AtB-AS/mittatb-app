@@ -1,0 +1,16 @@
+diff --git a/node_modules/detox/react-native.config.js b/node_modules/detox/react-native.config.js
+new file mode 100644
+index 0000000..d70664d
+--- /dev/null
++++ b/node_modules/detox/react-native.config.js
+@@ -0,0 +1,9 @@
++module.exports = {
++    detox: {
++      // do not autolink detox
++      platforms: {
++        ios: null,
++        android: null,
++      },
++    },
++};
+\ No newline at end of file
