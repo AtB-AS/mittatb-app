@@ -11,20 +11,21 @@ export type NamedStyles<T> = {
 };
 export type ThemedStyles<T> = (theme: Theme) => T;
 
-function createTheme<T extends NamedStyles<T>>(
-  input: ThemedStyles<T>,
-): ThemedStyles<T> {
-  return (theme: Theme) => StyleSheetNative.create<T>(input(theme));
-}
-
 type StyleSheetType = typeof StyleSheetNative;
 interface StyleSheet extends StyleSheetType {
-  createTheme: typeof createTheme;
+  createTheme<T>(
+    input: ThemedStyles<NamedStyles<T>>,
+  ): ThemedStyles<NamedStyles<T>>;
 }
 
 const StyleSheetImpl: StyleSheet = {
   ...StyleSheetNative,
-  createTheme,
+  createTheme<T>(
+    input: ThemedStyles<NamedStyles<T>>,
+  ): ThemedStyles<NamedStyles<T>> {
+    return (theme: Theme) =>
+      StyleSheetNative.create<NamedStyles<T>>(input(theme));
+  },
 };
 
 export default StyleSheetImpl;
