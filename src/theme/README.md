@@ -12,7 +12,9 @@ useTheme(): {
 }
 
 StyleSheet.create(Object): Object; // Same as React Native StyleSheet.create
-StyleSheet.create((theme:Theme) => Object): Object; // Same as React Native StyleSheet.create but with access to theme
+
+// Must be used with `useStyle`
+StyleSheet.createTheme((theme:Theme) => Object): (theme:Theme) => Object; // Same as React Native StyleSheet.create but with access to theme
 
 // Add theme data to StyleSheet.create generated style form above. See example
 useStyle(StyleSheet): StyleSheet
@@ -52,7 +54,7 @@ export default function MyComponent() {
   );
 }
 
-const style = StyleSheet.create((theme: Theme) => ({
+const style = StyleSheet.createTheme((theme: Theme) => ({
   container: {
     backgroundColor: theme.background.primary,
     flex: 1,
