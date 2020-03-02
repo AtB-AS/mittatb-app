@@ -2,16 +2,16 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import trackNavigation from './diagnostics/trackNavigation';
-import {useAppState} from './AppContext';
-import Splash from './screens/Splash';
-import Onboarding from './screens/Onboarding';
-import Planner from './screens/Planner';
+import trackNavigation from '../diagnostics/trackNavigation';
+import {useAppState} from '../AppContext';
+import Splash from '../screens/Splash';
+import Onboarding from '../screens/Onboarding';
+import TabNavigator from './TabNavigator';
 
 export type RootStackParamList = {
   Splash: undefined;
   Onboarding: undefined;
-  Planner: undefined;
+  TabNavigator: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -28,7 +28,7 @@ const NavigationRoot = () => {
           ) : !onboarded ? (
             <Stack.Screen name="Onboarding" component={Onboarding} />
           ) : (
-            <Stack.Screen name="Planner" component={Planner} />
+            <Stack.Screen name="TabNavigator" component={TabNavigator} />
           )}
         </Stack.Navigator>
       </NavigationContainer>
