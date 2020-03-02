@@ -25,14 +25,6 @@ const NavigationRoot = () => {
         }}
       />
       <Tab.Screen
-        name="Nearest"
-        component={EmptyScreen}
-        options={{
-          tabBarLabel: 'Avganger i nærheten',
-          tabBarIcon: ({color}) => <NearestIcon fill={color} />,
-        }}
-      />
-      <Tab.Screen
         name="Profile"
         component={EmptyScreen}
         options={{
