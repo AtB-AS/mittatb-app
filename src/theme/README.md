@@ -66,3 +66,31 @@ const style = StyleSheet.createTheme((theme: Theme) => ({
   },
 }));
 ```
+
+Optionally shorthand API for using the `useStyle` is if you use `StyleSheet.createThemeHook` function:
+
+```tsx
+import {StyleSheet} from './theme';
+
+export default function MyComponent() {
+  const styles = useThemeStyles();
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>Hello</Text>
+    </View>
+  );
+}
+
+const useThemeStyles = StyleSheet.createThemeHook((theme: Theme) => ({
+  container: {
+    backgroundColor: theme.background.primary,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    color: theme.text.primary,
+  },
+}));
+```
