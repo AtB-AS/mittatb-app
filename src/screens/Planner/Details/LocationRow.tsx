@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet, TextStyle} from 'react-native';
-import colors from '../../../assets/colors';
+import colors from '../../../theme/colors';
 
 const LocationRow: React.FC<{
   icon: JSX.Element;

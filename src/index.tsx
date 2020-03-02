@@ -3,15 +3,18 @@ import AppContextProvider from './AppContext';
 import GeolocationContextProvider from './GeolocationContext';
 import NavigationRoot from './NavigationRoot';
 import trackAppState from './diagnostics/trackAppState';
+import ThemeContextProvider from './theme/ThemeContext';
 
 trackAppState();
 
 const App = () => {
   return (
     <AppContextProvider>
-      <GeolocationContextProvider>
-        <NavigationRoot />
-      </GeolocationContextProvider>
+      <ThemeContextProvider>
+        <GeolocationContextProvider>
+          <NavigationRoot />
+        </GeolocationContextProvider>
+      </ThemeContextProvider>
     </AppContextProvider>
   );
 };
