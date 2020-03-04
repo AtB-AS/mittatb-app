@@ -2,6 +2,7 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {PlannerIcon, NearestIcon, ProfileIcon} from './TabBarIcons';
 import Planner from '../screens/Planner';
+import ProfileScreen from '../screens/Profile';
 
 export type TabNavigatorParams = {
   Planner: undefined;
@@ -10,8 +11,6 @@ export type TabNavigatorParams = {
 };
 
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
-
-const EmptyScreen = () => null;
 
 const NavigationRoot = () => {
   return (
@@ -26,7 +25,7 @@ const NavigationRoot = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={EmptyScreen}
+        component={ProfileScreen}
         options={{
           tabBarLabel: 'Mitt AtB',
           tabBarIcon: ({color}) => <ProfileIcon fill={color} />,
