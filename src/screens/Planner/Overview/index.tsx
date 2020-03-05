@@ -96,6 +96,8 @@ const OverviewRoot: React.FC<RootProps> = ({navigation}) => {
     return <Splash />;
   }
 
+  console.log(userLocations);
+
   return (
     <Overview
       userLocations={userLocations}
