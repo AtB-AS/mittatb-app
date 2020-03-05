@@ -17,7 +17,12 @@ const colors = {
 
 export default colors;
 
+const sizes = {
+  pagePadding: 20,
+};
+
 export interface Theme {
+  sizes: typeof sizes;
   background: {
     primary: string;
   };
@@ -33,6 +38,7 @@ export type Themes = {
 
 export const themes: Themes = {
   light: {
+    sizes,
     background: {
       primary: colors.general.white,
     },
@@ -41,6 +47,7 @@ export const themes: Themes = {
     },
   },
   dark: {
+    sizes,
     background: {
       primary: colors.general.offblack,
     },
