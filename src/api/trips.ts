@@ -1,6 +1,6 @@
 import {TripPattern} from '../sdk';
-import {Location} from '../AppContext';
 import {getClient} from './client';
+import {Location} from '../favorites/types';
 
 export default async function search(from: Location, to: Location) {
   const url = 'v1/journey/trip';

@@ -10,10 +10,10 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {differenceInSeconds, formatDistanceStrict, parseISO} from 'date-fns';
 import {nb} from 'date-fns/locale';
 import {TripPattern} from '../../../sdk';
-import {Location} from '../../../AppContext';
 import colors from '../../../theme/colors';
 import ResultItem from './ResultItem';
 import {OverviewScreenNavigationProp} from './';
+import {Location} from '../../../favorites/types';
 
 type Props = {
   tripPatterns: TripPattern[] | null;

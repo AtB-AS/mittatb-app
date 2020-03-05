@@ -6,34 +6,22 @@ import React, {
   useEffect,
   useMemo,
 } from 'react';
-import storage from './storage';
-
-export type Location = {
-  id: string;
-  name: string;
-  locality: string;
-  label?: string;
-  coordinates: {longitude: number; latitude: number};
-};
-
-export type UserLocations = {
-  home: Location;
-  work: Location;
-};
+import {getFavorites, setFavorites__legacy} from './favorites/storage';
+import {UserFavorites, UserLocations} from './favorites/types';
 
 type AppState = {
   isLoading: boolean;
   onboarded: boolean;
-  userLocations: UserLocations | null;
+  userLocations: UserFavorites | null;
 };
 
 type AppReducerAction =
-  | {type: 'LOAD_APP_SETTINGS'; userLocations: UserLocations | null}
-  | {type: 'SET_USER_LOCATIONS'; userLocations: UserLocations}
+  | {type: 'LOAD_APP_SETTINGS'; userLocations: UserFavorites | null}
+  | {type: 'SET_USER_LOCATIONS'; userLocations: UserFavorites}
   | {type: 'RESTART_ONBOARDING'};
 
 type AppContextState = AppState & {
-  completeOnboarding: (userlocations: UserLocations) => void;
+  completeOnboarding__legacy: (userlocations: UserLocations) => void;
   restartOnboarding: () => void;
 };
 const AppContext = createContext<AppContextState | undefined>(undefined);
@@ -77,23 +65,19 @@ const AppContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     async function checkOnboarded() {
-      const userLocations = await storage.get('stored_user_locations');
+      const userLocations = await getFavorites();
       dispatch({
         type: 'LOAD_APP_SETTINGS',
-        userLocations: userLocations ? JSON.parse(userLocations) : null,
+        userLocations: userLocations,
       });
     }
     checkOnboarded();
   }, []);
 
-  const {completeOnboarding, restartOnboarding} = useMemo(
+  const {completeOnboarding__legacy, restartOnboarding} = useMemo(
     () => ({
-      completeOnboarding: async (userLocations: UserLocations) => {
-        await storage.set(
-          'stored_user_locations',
-          JSON.stringify(userLocations),
-        );
-
+      completeOnboarding__legacy: async (input: UserLocations) => {
+        const userLocations = await setFavorites__legacy(input);
         dispatch({type: 'SET_USER_LOCATIONS', userLocations});
       },
       restartOnboarding: async () => {
@@ -105,7 +89,7 @@ const AppContextProvider: React.FC = ({children}) => {
 
   return (
     <AppContext.Provider
-      value={{...state, completeOnboarding, restartOnboarding}}
+      value={{...state, completeOnboarding__legacy, restartOnboarding}}
     >
       <AppDispatch.Provider value={dispatch}>{children}</AppDispatch.Provider>
     </AppContext.Provider>
