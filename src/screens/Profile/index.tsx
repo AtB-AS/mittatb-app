@@ -35,29 +35,7 @@ type FavoriteItem = {
   emoji?: string;
   name?: string;
 };
-function useLocationList(): FavoriteItem[] {
-  const {userLocations} = useAppState();
-  const items = userLocations ? Object.entries(userLocations) : [];
 
-  return items.map(([key, item]) => ({
-    emoji: key === 'home' ? '🏠' : '🏢',
-    name: key === 'home' ? 'Hjem' : 'Jobb',
-    location: item,
-  }));
-}
-
-const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
-  container: {
-    backgroundColor: theme.background.primary,
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'stretch',
-  },
-  text: {
-    color: theme.text.primary,
-  },
-}));
 function Profile() {
   const css = useProfileStyle();
   const items = useLocationList();
@@ -77,23 +55,19 @@ function Profile() {
     </SafeAreaView>
   );
 }
-
-const useItemStyle = StyleSheet.createThemeHook((theme: Theme) => ({
-  item: {
-    flexDirection: 'row',
-    padding: 12,
-    marginBottom: 10,
-    marginTop: 10,
-    alignItems: 'center',
+const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+  container: {
+    backgroundColor: theme.background.primary,
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
   },
   text: {
-    flex: 1,
-    marginStart: 10,
-    marginEnd: 10,
-    fontSize: 16,
-    fontWeight: '600',
+    color: theme.text.primary,
   },
 }));
+
 type ItemProps = {
   item: FavoriteItem;
   onEdit?(): void;
@@ -113,7 +87,34 @@ const Item: React.FC<ItemProps> = ({item, onEdit}) => {
     </View>
   );
 };
+const useItemStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+  item: {
+    flexDirection: 'row',
+    padding: 12,
+    marginBottom: 10,
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  text: {
+    flex: 1,
+    marginStart: 10,
+    marginEnd: 10,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+}));
 
+const Header: React.FC = ({children}) => {
+  const css = useHeaderStyle();
+  return (
+    <View style={css.container}>
+      <LogoOutline />
+      <View style={css.textContainer}>
+        <Text style={css.text}>{children}</Text>
+      </View>
+    </View>
+  );
+};
 const useHeaderStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     flexDirection: 'row',
@@ -131,14 +132,14 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     fontWeight: '600',
   },
 }));
-const Header: React.FC = ({children}) => {
-  const css = useHeaderStyle();
-  return (
-    <View style={css.container}>
-      <LogoOutline />
-      <View style={css.textContainer}>
-        <Text style={css.text}>{children}</Text>
-      </View>
-    </View>
-  );
-};
+
+function useLocationList(): FavoriteItem[] {
+  const {userLocations} = useAppState();
+  const items = userLocations ? Object.entries(userLocations) : [];
+
+  return items.map(([key, item]) => ({
+    emoji: key === 'home' ? '🏠' : '🏢',
+    name: key === 'home' ? 'Hjem' : 'Jobb',
+    location: item,
+  }));
+}
