@@ -5,10 +5,11 @@ import {StyleSheet, Theme} from '../../theme';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
 import LogoOutline from '../../assets/svg/LogoOutline';
 import {createStackNavigator} from '@react-navigation/stack';
-import {useAppState, Location} from '../../AppContext';
+import {useAppState} from '../../AppContext';
 import EditIcon from '../../assets/svg/EditIcon';
 import EditableListGroup from './EditableListGroup';
 import MapPointIcon from '../../assets/svg/MapPointIcon';
+import {Location} from '../../favorites/types';
 
 export type PlannerStackParams = {
   Profile: undefined;
@@ -38,7 +39,8 @@ type FavoriteItem = {
 
 function Profile() {
   const css = useProfileStyle();
-  const items = useLocationList();
+  const {userLocations} = useAppState();
+  const items = userLocations ?? [];
 
   return (
     <SafeAreaView style={css.container}>
@@ -132,14 +134,3 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     fontWeight: '600',
   },
 }));
-
-function useLocationList(): FavoriteItem[] {
-  const {userLocations} = useAppState();
-  const items = userLocations ? Object.entries(userLocations) : [];
-
-  return items.map(([key, item]) => ({
-    emoji: key === 'home' ? '🏠' : '🏢',
-    name: key === 'home' ? 'Hjem' : 'Jobb',
-    location: item,
-  }));
-}
