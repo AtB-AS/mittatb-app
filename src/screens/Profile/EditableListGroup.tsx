@@ -36,14 +36,14 @@ type EditableListGroupProps<ItemT> = {
   data?: ReadonlyArray<ItemT>;
   renderItem: ListRenderItem<ItemT>;
   keyExtractor?: (item: ItemT, index: number) => string;
-  renderAddButton?(): void;
+  renderAddButtonComponent?: () => React.ReactElement | null;
 };
 export default function EditableListGroup<T>({
   data,
   title,
   renderItem,
   keyExtractor = (_: T, i: number) => String(i),
-  renderAddButton,
+  renderAddButtonComponent,
 }: EditableListGroupProps<T>): React.ReactElement<
   EditableListGroupProps<T>
 > | null {
@@ -62,7 +62,7 @@ export default function EditableListGroup<T>({
           <View key={keyExtractor(item, index)}>{renderItem(item)}</View>
         ))}
       </View>
-      {renderAddButton && renderAddButton()}
+      {renderAddButtonComponent && renderAddButtonComponent()}
     </View>
   );
 }

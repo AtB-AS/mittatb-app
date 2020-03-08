@@ -1,21 +1,27 @@
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {View, Text} from 'react-native';
+import {View, Text, TouchableHighlight} from 'react-native';
 import React from 'react';
 import {StyleSheet, Theme} from '../../theme';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
 import LogoOutline from '../../assets/svg/LogoOutline';
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from '@react-navigation/stack';
 import {useAppState} from '../../AppContext';
 import EditIcon from '../../assets/svg/EditIcon';
 import EditableListGroup from './EditableListGroup';
 import MapPointIcon from '../../assets/svg/MapPointIcon';
 import {Location} from '../../favorites/types';
+import PlusIcon from '../../assets/svg/PlusIcon';
+import AddEditFavorite from './AddEditFavorite';
 
-export type PlannerStackParams = {
+export type ProfileStackParams = {
   Profile: undefined;
+  AddEditFavorite: undefined;
 };
 
-const Stack = createStackNavigator<PlannerStackParams>();
+const Stack = createStackNavigator<ProfileStackParams>();
 
 export default function ProfileScreen() {
   return (
@@ -27,6 +33,7 @@ export default function ProfileScreen() {
           headerShown: false,
         }}
       />
+      <Stack.Screen name="AddEditFavorite" component={AddEditFavorite} />
     </Stack.Navigator>
   );
 }
@@ -37,7 +44,15 @@ type FavoriteItem = {
   name?: string;
 };
 
-function Profile() {
+export type ProfileScreenNavigationProp = StackNavigationProp<
+  ProfileStackParams,
+  'Profile'
+>;
+type ProfileScreenProps = {
+  navigation: ProfileScreenNavigationProp;
+};
+
+function Profile({navigation}: ProfileScreenProps) {
   const css = useProfileStyle();
   const {userLocations} = useAppState();
   const items = userLocations ?? [];
@@ -52,6 +67,9 @@ function Profile() {
           data={items}
           renderItem={item => <Item item={item} />}
           keyExtractor={item => item.location.id}
+          renderAddButtonComponent={() => (
+            <AddFavoriteButton navigation={navigation} />
+          )}
         />
       </ScrollView>
     </SafeAreaView>
@@ -69,6 +87,20 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     color: theme.text.primary,
   },
 }));
+
+function AddFavoriteButton({navigation}: ProfileScreenProps) {
+  const css = useItemStyle();
+  const onPress = () => navigation.push('AddEditFavorite');
+
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <View style={css.item}>
+        <PlusIcon />
+        <Text style={css.text}>Legg til favorittsted</Text>
+      </View>
+    </TouchableOpacity>
+  );
+}
 
 type ItemProps = {
   item: FavoriteItem;
