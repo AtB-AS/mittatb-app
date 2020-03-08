@@ -1,10 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text} from 'react-native';
-import {
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native-gesture-handler';
+import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {StyleSheet, Theme, useTheme} from '../../../theme';
 import LocationInput from '../../Onboarding/LocationInput';
 import {Location} from '../../../favorites/types';
@@ -13,6 +9,7 @@ import SaveDisketteIcon from '../../../assets/svg/SaveDisketteIcon';
 import CancelCrossIcon from '../../../assets/svg/CancelCrossIcon';
 import {ProfileStackParams} from '..';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {useFavorites} from '../../../favorites/FavoritesContext';
 
 type AddFavoriteScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -25,19 +22,27 @@ type ScreenProps = {
 
 export default function AddEditFavorite({navigation}: ScreenProps) {
   const css = useScreenStyle();
+  const {addFavorite} = useFavorites();
+
   const {theme} = useTheme();
 
   const [name, setName] = useState<string>('');
-  const [_, setLocation] = useState<Location | undefined>();
+  const [location, setLocation] = useState<Location | undefined>();
 
-  const save = () => {
-    console.log('Saving');
+  const save = async () => {
+    if (!location) {
+      return;
+    }
+    await addFavorite({
+      name,
+      location,
+    });
     navigation.goBack();
   };
   const cancel = () => navigation.goBack();
 
   return (
-    <ScrollView style={css.container}>
+    <View style={css.container}>
       <InputGroup title="Name">
         <TextInput
           style={css.input}
@@ -76,7 +81,7 @@ export default function AddEditFavorite({navigation}: ScreenProps) {
           Avbryt
         </Text>
       </Button>
-    </ScrollView>
+    </View>
   );
 }
 const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({

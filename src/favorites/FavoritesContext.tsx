@@ -2,119 +2,89 @@ import React, {
   createContext,
   useReducer,
   useContext,
-  Dispatch,
   useEffect,
-  useMemo,
+  useCallback,
 } from 'react';
-import storage from '../storage';
-import {UserLocations, Location} from './types';
+import {getFavorites, addFavorite} from './storage';
+import {UserFavorites, LocationFavorite} from './types';
 
 type AppState = {
   isLoading: boolean;
-  onboarded: boolean;
-  userLocations: UserLocations | null;
+  favorites: UserFavorites | null;
 };
 
-type AppReducerAction =
-  | {type: 'LOAD_APP_SETTINGS'; userLocations: UserLocations | null}
-  | {type: 'SET_USER_LOCATIONS'; userLocations: UserLocations}
-  | {type: 'RESTART_ONBOARDING'};
+type FavoriteReducerAction =
+  | {type: 'LOAD_FAVORITES'; favorites: UserFavorites | null}
+  | {type: 'SET_FAVORITES'; favorites: UserFavorites};
 
-type AppContextState = AppState & {
-  completeOnboarding: (userlocations: UserLocations) => void;
-  restartOnboarding: () => void;
+type FavoriteContextState = AppState & {
+  addFavorite(location: LocationFavorite): void;
 };
-const AppContext = createContext<AppContextState | undefined>(undefined);
-const AppDispatch = createContext<Dispatch<AppReducerAction> | undefined>(
-  undefined,
-);
+const AppContext = createContext<FavoriteContextState | undefined>(undefined);
 
-type AppReducer = (prevState: AppState, action: AppReducerAction) => AppState;
+type AppReducer = (
+  prevState: AppState,
+  action: FavoriteReducerAction,
+) => AppState;
 
 const appReducer: AppReducer = (prevState, action) => {
   switch (action.type) {
-    case 'LOAD_APP_SETTINGS':
+    case 'LOAD_FAVORITES':
       return {
         ...prevState,
-        userLocations: action.userLocations,
-        onboarded: action.userLocations != null,
+        favorites: action.favorites,
         isLoading: false,
       };
-    case 'SET_USER_LOCATIONS':
+    case 'SET_FAVORITES':
       return {
         ...prevState,
-        userLocations: action.userLocations,
-        onboarded: true,
-      };
-    case 'RESTART_ONBOARDING':
-      return {
-        ...prevState,
-        onboarded: false,
+        favorites: action.favorites,
       };
   }
 };
 
 const defaultAppState: AppState = {
   isLoading: true,
-  userLocations: null,
-  onboarded: false,
+  favorites: null,
 };
 
-const AppContextProvider: React.FC = ({children}) => {
+const FavoritesContextProvider: React.FC = ({children}) => {
   const [state, dispatch] = useReducer<AppReducer>(appReducer, defaultAppState);
+  async function populateFavorites() {
+    const favorites = await getFavorites();
+    dispatch({
+      type: 'LOAD_FAVORITES',
+      favorites: favorites ?? null,
+    });
+  }
 
   useEffect(() => {
-    async function checkOnboarded() {
-      const userLocations = await storage.get('stored_user_locations');
-      dispatch({
-        type: 'LOAD_APP_SETTINGS',
-        userLocations: userLocations ? JSON.parse(userLocations) : null,
-      });
-    }
-    checkOnboarded();
+    populateFavorites();
   }, []);
 
-  const {completeOnboarding, restartOnboarding} = useMemo(
-    () => ({
-      async addFavorite(location: Location) {},
-      completeOnboarding: async (userLocations: UserLocations) => {
-        await storage.set(
-          'stored_user_locations',
-          JSON.stringify(userLocations),
-        );
-
-        dispatch({type: 'SET_USER_LOCATIONS', userLocations});
-      },
-      restartOnboarding: async () => {
-        dispatch({type: 'RESTART_ONBOARDING'});
-      },
-    }),
+  const addFavoriteInternal = useCallback(
+    async (location: LocationFavorite) => {
+      await addFavorite(location);
+      await populateFavorites();
+    },
     [],
   );
 
   return (
-    <AppContext.Provider
-      value={{...state, completeOnboarding, restartOnboarding}}
-    >
-      <AppDispatch.Provider value={dispatch}>{children}</AppDispatch.Provider>
+    <AppContext.Provider value={{...state, addFavorite: addFavoriteInternal}}>
+      {children}
     </AppContext.Provider>
   );
 };
 
-export function useAppState() {
+export function useFavorites() {
   const context = useContext(AppContext);
   if (context === undefined) {
-    throw new Error('useAppState must be used within a AppContextProvider');
+    throw new Error(
+      'useFavorites must be used within a FavoritesContextProvider',
+    );
   }
   return context;
 }
 
-export function useAppDispatch() {
-  const context = useContext(AppDispatch);
-  if (context === undefined) {
-    throw new Error('useAppDispatch must be used within a AppContextProvider');
-  }
-  return context;
-}
-
-export default AppContextProvider;
+export default FavoritesContextProvider;

@@ -12,6 +12,7 @@ import {Location} from '../../../favorites/types';
 import PlusIcon from '../../../assets/svg/PlusIcon';
 import {ProfileStackParams} from '..';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {useFavorites} from '../../../favorites/FavoritesContext';
 
 type FavoriteItem = {
   location: Location;
@@ -30,8 +31,8 @@ type ProfileScreenProps = {
 
 export default function Profile({navigation}: ProfileScreenProps) {
   const css = useProfileStyle();
-  const {userLocations} = useAppState();
-  const items = userLocations ?? [];
+  const {favorites} = useFavorites();
+  const items = favorites ?? [];
 
   return (
     <SafeAreaView style={css.container}>
@@ -42,7 +43,7 @@ export default function Profile({navigation}: ProfileScreenProps) {
           title="Mine favorittsteder"
           data={items}
           renderItem={item => <Item item={item} />}
-          keyExtractor={item => item.location.id}
+          keyExtractor={item => item.name + item.location.id}
           renderAddButtonComponent={() => (
             <AddFavoriteButton navigation={navigation} />
           )}
