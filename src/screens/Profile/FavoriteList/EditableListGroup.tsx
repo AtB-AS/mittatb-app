@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, View} from 'react-native';
-import {StyleSheet, Theme} from '../../theme';
+import {StyleSheet, Theme} from '../../../theme';
 
 const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   textGroup: {
