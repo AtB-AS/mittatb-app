@@ -17,10 +17,17 @@ export default function ProfileScreen() {
         name="Profile"
         component={Profile}
         options={{
+          title: 'Mitt AtB',
           headerShown: false,
         }}
       />
-      <Stack.Screen name="AddEditFavorite" component={AddEditFavorite} />
+      <Stack.Screen
+        name="AddEditFavorite"
+        component={AddEditFavorite}
+        options={{
+          title: 'Legg til favorittsted',
+        }}
+      />
     </Stack.Navigator>
   );
 }

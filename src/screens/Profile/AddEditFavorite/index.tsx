@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, TouchableOpacityProperties} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {StyleSheet, Theme, useTheme} from '../../../theme';
 import LocationInput from '../../Onboarding/LocationInput';
@@ -61,25 +61,11 @@ export default function AddEditFavorite({navigation}: ScreenProps) {
       <View style={[css.line, css.lineNoMarginTop]} />
 
       <Button onPress={save} IconComponent={SaveDisketteIcon}>
-        <Text
-          style={{
-            fontSize: 16,
-            fontWeight: '600',
-          }}
-        >
-          Save
-        </Text>
+        Lagre favorittsted
       </Button>
 
-      <Button onPress={cancel} cancel IconComponent={CancelCrossIcon}>
-        <Text
-          style={{
-            fontSize: 16,
-            fontWeight: '600',
-          }}
-        >
-          Avbryt
-        </Text>
+      <Button onPress={cancel} secondary IconComponent={CancelCrossIcon}>
+        Avbryt
       </Button>
     </View>
   );
@@ -109,21 +95,24 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
 
 type ButtonProps = {
   onPress(): void;
-  cancel?: boolean;
+  secondary?: boolean;
   IconComponent?: React.ElementType;
-};
+} & TouchableOpacityProperties;
 const Button: React.FC<ButtonProps> = ({
   onPress,
-  cancel = false,
+  secondary = false,
   IconComponent,
   children,
+  ...props
 }) => {
   const css = useButtonStyle();
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={[css.button, cancel ? css.buttonCancel : undefined]}>
+    <TouchableOpacity onPress={onPress} {...props}>
+      <View style={[css.button, secondary ? css.buttonSecondary : undefined]}>
         {IconComponent && <IconComponent />}
-        <View style={css.text}>{children}</View>
+        <View style={css.textContainer}>
+          <Text style={css.text}>{children}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -138,16 +127,20 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     backgroundColor: theme.background.accent,
     marginBottom: 24,
   },
-  buttonCancel: {
+  buttonSecondary: {
     backgroundColor: 'transparent',
     borderWidth: 2,
     borderColor: theme.border.primary,
   },
-  text: {
+  textContainer: {
     flex: 1,
-    marginStart: 10,
-    marginEnd: 10,
+    marginEnd: 20,
     alignItems: 'center',
+  },
+  text: {
+    fontSize: 16,
+    lineHeight: 20,
+    fontWeight: '600',
   },
 }));
 

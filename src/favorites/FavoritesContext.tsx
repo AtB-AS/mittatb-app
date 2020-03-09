@@ -18,7 +18,7 @@ type FavoriteReducerAction =
   | {type: 'SET_FAVORITES'; favorites: UserFavorites};
 
 type FavoriteContextState = AppState & {
-  addFavorite(location: LocationFavorite): void;
+  addFavorite(location: LocationFavorite): Promise<void>;
 };
 const AppContext = createContext<FavoriteContextState | undefined>(undefined);
 
