@@ -1,71 +1,90 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, Animated} from 'react-native';
 import nb from 'date-fns/locale/nb';
-import colors from '../../../theme/colors';
-import {TripPattern} from '../../../sdk';
+import colors, {
+  Themes,
+  themes,
+  createExtendedTheme,
+} from '../../../theme/colors';
+import {StyleSheet, Theme, useTheme} from '../../../theme';
+import {TripPattern, Leg} from '../../../sdk';
 import {secondsToDuration, formatToClock} from '../../../utils/date';
 import LegIcons from '../LegIcons';
 import {TouchableHighlight} from 'react-native-gesture-handler';
+import {
+  StackCardInterpolationProps,
+  StackCardInterpolatedStyle,
+} from '@react-navigation/stack';
+import {RouteProp} from '@react-navigation/native';
+import {ResultTabParams} from './Results';
+import Dash from 'react-native-dash';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
-  onPress?: (tripPattern: TripPattern) => void;
 };
 
-const ResultItemParent: React.FC<ResultItemProps> = ({
-  tripPattern,
-  onPress,
-}) => {
-  return onPress ? (
-    <TouchableHighlight onPress={() => onPress(tripPattern)}>
-      <ResultItem tripPattern={tripPattern} />
-    </TouchableHighlight>
-  ) : (
-    <ResultItem tripPattern={tripPattern} />
-  );
-};
+const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
+  const styles = useThemeStyles();
 
-const ResultItem: React.FC<Omit<ResultItemProps, 'onPress'>> = ({
-  tripPattern,
-}) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.legContainer}>
-        <Text style={styles.timeText}>
-          {formatToClock(tripPattern.startTime)} -{' '}
-          {formatToClock(tripPattern.endTime)}
-        </Text>
-        <Text style={styles.timeText}>
-          {secondsToDuration(tripPattern.duration, nb)}
-        </Text>
-      </View>
-      <View style={styles.legContainer}>
-        <Text style={styles.distanceText}>
-          Fra {tripPattern.legs[0].toPlace.name} (
-          {tripPattern.walkDistance.toFixed(0)} m)
-        </Text>
-
-        <LegIcons legs={tripPattern.legs} />
-      </View>
+    <View style={styles.legContainer}>
+      <Dash
+        dashCount={4}
+        dashGap={3}
+        dashThickness={8}
+        dashLength={8}
+        dashColor={colors.primary.green}
+        style={styles.dash}
+        dashStyle={styles.dashItem}
+      />
+      <Text style={styles.stopName}>{tripPattern.legs[1].fromPlace.name}</Text>
+      <Text style={styles.time}>
+        {formatToClock(tripPattern.legs[1].aimedStartTime)}
+      </Text>
+      <Text style={styles.lineName}>
+        {getLineDisplayName(tripPattern.legs[1])}
+      </Text>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    borderTopWidth: 1,
-    borderTopColor: '#F9F9FA0D',
-    width: '100%',
-    padding: 12,
-  },
-  timeContainer: {flexDirection: 'row', justifyContent: 'space-between'},
-  legContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 8,
-  },
-  timeText: {fontSize: 20, color: colors.general.white},
-  distanceText: {fontSize: 12, color: colors.general.white},
-});
+function getLineDisplayName(leg: Leg) {
+  const name =
+    leg.intermediateEstimatedCalls[0]?.destinationDisplay?.frontText ??
+    leg.line?.name;
+  return leg.line?.publicCode + ' ' + name;
+}
 
-export default ResultItemParent;
+const useThemeStyles = StyleSheet.createThemeHook(theme => ({
+  legContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: 50,
+    width: '100%',
+  },
+  dash: {
+    height: 50,
+    flexDirection: 'column',
+  },
+  dashItem: {
+    borderRadius: 8,
+  },
+  stopName: {
+    fontSize: 16,
+    color: theme.text.primary,
+    flexShrink: 1,
+  },
+  lineContainer: {
+    flexShrink: 1,
+    flexWrap: 'wrap',
+  },
+  time: {fontSize: 32, color: theme.text.primary, marginVertical: 8},
+  lineName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: theme.text.primary,
+    textAlign: 'center',
+  },
+}));
+
+export default ResultItem;

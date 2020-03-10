@@ -1,5 +1,4 @@
 import React, {useEffect, useReducer, useMemo} from 'react';
-import {StyleSheet} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -10,8 +9,7 @@ import {TripPattern} from '../../../sdk';
 import {PlannerStackParams} from '../';
 import {useGeolocationState} from '../../../GeolocationContext';
 import Splash from '../../Splash';
-import WorkBanner from '../../../assets/svg/WorkBanner';
-import HomeBanner from '../../../assets/svg/HomeBanner';
+import {StyleSheet, useStyle} from '../../../theme';
 import colors from '../../../theme/colors';
 import useCalculateTrip from './useCalculateTrip';
 import useSortedLocations from './useSortedLocations';
@@ -158,14 +156,16 @@ const Overview: React.FC<Props> = ({
     search();
   }, [from, to]);
 
+  const styles = useThemeStyles();
+
   return (
     <SafeAreaView style={styles.container}>
-      <Header
+      {/* <Header
         dispatch={dispatch}
         origin={origin}
         geolocationDisabled={!currentLocation}
-      />
-      {direction === 'work' ? (
+      /> */}
+      {/* {direction === 'work' ? (
         <TouchableWithoutFeedback
           onPress={() => dispatch({type: 'SET_DIRECTION', direction: 'home'})}
         >
@@ -177,7 +177,7 @@ const Overview: React.FC<Props> = ({
         >
           <HomeBanner width="100%" />
         </TouchableWithoutFeedback>
-      )}
+      )} */}
 
       <Results
         tripPatterns={tripPatterns}
@@ -191,11 +191,11 @@ const Overview: React.FC<Props> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const useThemeStyles = StyleSheet.createThemeHook(theme => ({
   container: {
-    backgroundColor: colors.primary.gray,
+    backgroundColor: theme.background.primary,
     flex: 1,
   },
-});
+}));
 
 export default OverviewRoot;

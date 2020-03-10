@@ -104,6 +104,7 @@ export interface IntermediateEstimatedCall {
   aimedDepartureTime: string;
   expectedDepartureTime?: string; // Only available BEFORE departure has taken place
   actualDepartureTime?: string; // Only available AFTER departure has taken place
+  destinationDisplay?: {frontText?: string};
 }
 
 export interface JourneyPattern {

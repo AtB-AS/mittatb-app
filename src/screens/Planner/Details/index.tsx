@@ -5,7 +5,6 @@ import {RouteProp} from '@react-navigation/native';
 import {Leg} from '../../../sdk';
 import {PlannerStackParams} from '../';
 import colors from '../../../theme/colors';
-import ResultItem from '../Overview/ResultItem';
 import WalkDetail from './WalkDetail';
 import BusDetail from './BusDetail';
 import {formatToClock} from '../../../utils/date';
@@ -25,7 +24,7 @@ const Detail: React.FC<Props> = ({
 }) => {
   return (
     <View style={{flex: 1, backgroundColor: colors.primary.gray}}>
-      <ResultItem tripPattern={tripPattern} />
+      {/* <ResultItem tripPattern={tripPattern} /> */}
       <ScrollView style={styles.scrollView}>
         <LocationRow
           icon={<DotIcon />}
