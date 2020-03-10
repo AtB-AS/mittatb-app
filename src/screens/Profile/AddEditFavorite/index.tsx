@@ -29,6 +29,8 @@ export default function AddEditFavorite({navigation}: ScreenProps) {
   const [name, setName] = useState<string>('');
   const [location, setLocation] = useState<Location | undefined>();
 
+  const hasSelectedValues = Boolean(name) && Boolean(location);
+
   const save = async () => {
     if (!location) {
       return;
@@ -60,7 +62,11 @@ export default function AddEditFavorite({navigation}: ScreenProps) {
 
       <View style={[css.line, css.lineNoMarginTop]} />
 
-      <Button onPress={save} IconComponent={SaveDisketteIcon}>
+      <Button
+        onPress={save}
+        IconComponent={SaveDisketteIcon}
+        disabled={!hasSelectedValues}
+      >
         Lagre favorittsted
       </Button>
 
