@@ -30,6 +30,7 @@
     "react": "16.9.0",
     "react-native": "0.61.5",
     "react-native-dash": "^0.0.11",
+    "react-native-emoji-selector": "^0.1.8",
     "react-native-geolocation-service": "^4.0.0",
     "react-native-gesture-handler": "^1.6.0",
     "react-native-permissions": "^2.0.9",

@@ -7,20 +7,17 @@ import {Location} from '../../../favorites/types';
 import {useGeolocationState} from '../../../GeolocationContext';
 import SaveDisketteIcon from '../../../assets/svg/SaveDisketteIcon';
 import CancelCrossIcon from '../../../assets/svg/CancelCrossIcon';
-import {ProfileStackParams} from '..';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useFavorites} from '../../../favorites/FavoritesContext';
+import {RootStackParams} from '../../../navigation';
 
-type AddFavoriteScreenNavigationProp = StackNavigationProp<
-  ProfileStackParams,
-  'Profile'
->;
+type ModalScreenNavigationProp = StackNavigationProp<RootStackParams, 'Main'>;
 
-type ScreenProps = {
-  navigation: AddFavoriteScreenNavigationProp;
+type ModalScreenProps = {
+  navigation: ModalScreenNavigationProp;
 };
 
-export default function AddEditFavorite({navigation}: ScreenProps) {
+export default function AddEditFavorite({navigation}: ModalScreenProps) {
   const css = useScreenStyle();
   const {addFavorite} = useFavorites();
 
@@ -60,6 +57,16 @@ export default function AddEditFavorite({navigation}: ScreenProps) {
 
       <LocationInputGroup onChange={setLocation} />
 
+      <InputGroup title="Symbol">
+        <Button
+          onPress={() =>
+            navigation.navigate('EmojiModal', {onEmojiSelected: console.log})
+          }
+        >
+          Symbol
+        </Button>
+      </InputGroup>
+
       <View style={[css.line, css.lineNoMarginTop]} />
 
       <Button
@@ -97,6 +104,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   lineNoMarginTop: {
     marginTop: 0,
   },
+  emojiContainer: {},
 }));
 
 type ButtonProps = {
