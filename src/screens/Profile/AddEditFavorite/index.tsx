@@ -48,39 +48,6 @@ export default function AddEditFavorite({navigation}: ModalScreenProps) {
 
   return (
     <View style={css.container}>
-      <InputGroup title="Name">
-        <TextInput
-          style={css.input}
-          onChangeText={setName}
-          value={name}
-          editable
-          autoCapitalize="sentences"
-          accessibilityHint="Navn for favoritten"
-          placeholder="Legg til navn"
-          placeholderTextColor={theme.text.faded}
-        />
-      </InputGroup>
-
-      <LocationInputGroup onChange={setLocation} />
-
-      <InputGroup title="Symbol">
-        <Button onPress={() => setEmojiVisible(true)}>{emoji} Symbol</Button>
-      </InputGroup>
-
-      <View style={[css.line, css.lineNoMarginTop]} />
-
-      <Button
-        onPress={save}
-        IconComponent={SaveDisketteIcon}
-        disabled={!hasSelectedValues}
-      >
-        Lagre favorittsted
-      </Button>
-
-      <Button onPress={cancel} secondary IconComponent={CancelCrossIcon}>
-        Avbryt
-      </Button>
-
       <EmojiPopup
         onClose={() => setEmojiVisible(false)}
         open={isEmojiVisible}
@@ -89,11 +56,51 @@ export default function AddEditFavorite({navigation}: ModalScreenProps) {
           setEmojiVisible(false);
         }}
       />
+      <View style={css.innerContainer}>
+        <InputGroup title="Name">
+          <TextInput
+            style={css.input}
+            onChangeText={setName}
+            value={name}
+            editable
+            autoCapitalize="sentences"
+            accessibilityHint="Navn for favoritten"
+            placeholder="Legg til navn"
+            placeholderTextColor={theme.text.faded}
+          />
+        </InputGroup>
+
+        <LocationInputGroup onChange={setLocation} />
+
+        <InputGroup title="Symbol">
+          <Button onPress={() => setEmojiVisible(true)}>{emoji} Symbol</Button>
+        </InputGroup>
+
+        <View style={[css.line, css.lineNoMarginTop]} />
+
+        <Button
+          onPress={save}
+          IconComponent={SaveDisketteIcon}
+          disabled={!hasSelectedValues}
+        >
+          Lagre favorittsted
+        </Button>
+
+        <Button onPress={cancel} secondary IconComponent={CancelCrossIcon}>
+          Avbryt
+        </Button>
+      </View>
     </View>
   );
 }
 const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
+    flex: 1,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+  },
+  innerContainer: {
+    flex: 1,
     padding: theme.sizes.pagePadding,
   },
   input: {

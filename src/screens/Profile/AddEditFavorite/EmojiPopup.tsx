@@ -1,6 +1,8 @@
-import React, {useRef, useEffect} from 'react';
+import React from 'react';
 import EmojiSelector, {Categories} from 'react-native-emoji-selector';
-import RBSheet from 'react-native-raw-bottom-sheet';
+import {StyleSheet, Theme} from '../../../theme';
+import {View} from 'react-native';
+import Modal from 'react-native-modal';
 
 type EmojiPopupProps = {
   open: boolean;
@@ -12,33 +14,42 @@ export default function EmojiPopup({
   onEmojiSelected,
   onClose,
 }: EmojiPopupProps) {
-  const refRBSheet = useRef<RBSheet>(null);
-
-  useEffect(() => {
-    if (!refRBSheet.current) return;
-    if (open) {
-      refRBSheet.current.open();
-    } else {
-      refRBSheet.current.close();
-    }
-  }, [open]);
+  const css = useModalStyle();
 
   return (
-    <RBSheet
-      ref={refRBSheet}
-      closeOnDragDown={true}
-      onClose={onClose}
-      height={500}
+    <Modal
+      isVisible={open}
+      onBackdropPress={onClose}
+      onSwipeComplete={onClose}
+      hideModalContentWhileAnimating={true}
+      swipeDirection="down"
+      propagateSwipe
+      useNativeDriver
+      style={{margin: 0, justifyContent: 'flex-end'}}
     >
-      <EmojiSelector
-        showSearchBar={true}
-        showTabs={false}
-        showHistory={true}
-        showSectionTitles={false}
-        category={Categories.all}
-        onEmojiSelected={onEmojiSelected}
-        placeholder="Søk etter symbol"
-      />
-    </RBSheet>
+      <View style={css.content}>
+        <EmojiSelector
+          showSearchBar={true}
+          showTabs={false}
+          showHistory={true}
+          showSectionTitles={false}
+          category={Categories.all}
+          onEmojiSelected={onEmojiSelected}
+          placeholder="Søk etter symbol"
+        />
+      </View>
+    </Modal>
   );
 }
+
+const useModalStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+  content: {
+    height: '50%',
+    backgroundColor: theme.background.primary,
+    padding: theme.sizes.pagePadding,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+  },
+}));
