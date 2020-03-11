@@ -13,7 +13,7 @@ import {GeolocationResponse} from '@react-native-community/geolocation';
 import {useGeocoder, useReverseGeocoder} from './useGeocoder';
 import useDebounce from './useDebounce';
 import LocationArrow from '../../assets/svg/LocationArrow';
-import {Location} from '../../AppContext';
+import {Location} from '../../favorites/types';
 
 type Props = {
   location: GeolocationResponse | null;

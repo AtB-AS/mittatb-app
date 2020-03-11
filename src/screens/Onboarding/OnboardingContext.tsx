@@ -7,8 +7,9 @@ import React, {
 } from 'react';
 import Splash from '../Splash';
 import {GeolocationResponse} from '@react-native-community/geolocation';
-import {Location, useAppState} from '../../AppContext';
+import {useAppState} from '../../AppContext';
 import {useGeolocationState} from '../../GeolocationContext';
+import {UserFavorites, Location} from '../../favorites/types';
 
 type OnboardingContextValue = {
   location: GeolocationResponse | null;
@@ -52,21 +53,28 @@ const onboardingReducer: OnboardingReducer = (prevState, action) => {
   }
 };
 
+function getLegacyUserLocation(
+  userLocations: UserFavorites | null,
+  type: 'home' | 'work',
+) {
+  return userLocations?.find(i => i.name === type) ?? null;
+}
+
 const OnboardingContextProvider: React.FC = ({children}) => {
-  const {userLocations, completeOnboarding} = useAppState();
+  const {userLocations, completeOnboarding__legacy} = useAppState();
   const {status: permissionStatus, location} = useGeolocationState();
   const [{home, work, completed}, dispatch] = useReducer<OnboardingReducer>(
     onboardingReducer,
     {
-      home: userLocations?.home ?? null,
-      work: userLocations?.work ?? null,
+      home: getLegacyUserLocation(userLocations, 'home')?.location ?? null,
+      work: getLegacyUserLocation(userLocations, 'work')?.location ?? null,
       completed: false,
     },
   );
 
   useEffect(() => {
     if (completed && home && work) {
-      completeOnboarding({home, work});
+      completeOnboarding__legacy({home, work});
     }
   }, [completed]);
 

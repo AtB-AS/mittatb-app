@@ -5,7 +5,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from './Header';
 import Results from './Results';
-import {Location, useAppState, UserLocations} from '../../../AppContext';
+import {useAppState} from '../../../AppContext';
 import {TripPattern} from '../../../sdk';
 import {PlannerStackParams} from '../';
 import {useGeolocationState} from '../../../GeolocationContext';
@@ -16,6 +16,7 @@ import colors from '../../../theme/colors';
 import useCalculateTrip from './useCalculateTrip';
 import useSortedLocations from './useSortedLocations';
 import {searchTrip} from '../../../api';
+import {UserFavorites, Location} from '../../../favorites/types';
 
 export type Direction = 'home' | 'work';
 export type Origin = 'current' | 'static';
@@ -106,10 +107,16 @@ const OverviewRoot: React.FC<RootProps> = ({navigation}) => {
 
 type Props = {
   currentLocation: Location | null;
-  userLocations: UserLocations;
+  userLocations: UserFavorites;
   navigation: OverviewScreenNavigationProp;
 };
 
+function getLegacyUserLocation(
+  userLocations: UserFavorites | null,
+  type: 'home' | 'work',
+) {
+  return userLocations?.find(i => i.name === type) ?? null;
+}
 const Overview: React.FC<Props> = ({
   currentLocation,
   userLocations,
@@ -120,7 +127,8 @@ const Overview: React.FC<Props> = ({
     OverviewReducer
   >(overviewReducer, {
     direction: furthest
-      ? userLocations.home.id === furthest?.id
+      ? getLegacyUserLocation(userLocations, 'home')?.location.id ===
+        furthest?.id
         ? 'home'
         : 'work'
       : 'work',

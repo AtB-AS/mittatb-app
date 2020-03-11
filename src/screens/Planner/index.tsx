@@ -4,7 +4,7 @@ import Overview from './Overview';
 import {createStackNavigator} from '@react-navigation/stack';
 import Detail from './Details';
 import colors from '../../theme/colors';
-import {Location} from '../../AppContext';
+import {Location} from '../../favorites/types';
 
 export type PlannerStackParams = {
   Overview: undefined;

@@ -15,10 +15,10 @@ import {TouchableHighlight} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {OnboardingStackParamList} from './';
 import {GeolocationResponse} from '@react-native-community/geolocation';
-import {Location} from '../../AppContext';
 import HomeIcon from '../../assets/svg/HomeIcon';
 import WorkIcon from '../../assets/svg/WorkIcon';
 import {useOnboardingState} from './OnboardingContext';
+import {Location} from '../../favorites/types';
 
 type Props = {
   location: GeolocationResponse | null;

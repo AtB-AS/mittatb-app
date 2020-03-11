@@ -1,5 +1,5 @@
 import haversine, {Options} from 'haversine';
-import {Location} from '../AppContext';
+import {Location} from '../favorites/types';
 
 const options: Options = {unit: 'meter'};
 
