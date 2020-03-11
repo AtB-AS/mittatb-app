@@ -1,5 +1,5 @@
 import React from 'react';
-import EmojiSelector, {Categories} from 'react-native-emoji-selector';
+import EmojiSelector from './Emojis';
 import {StyleSheet, Theme} from '../../../theme';
 import {View} from 'react-native';
 import Modal from 'react-native-modal';
@@ -29,11 +29,6 @@ export default function EmojiPopup({
     >
       <View style={css.content}>
         <EmojiSelector
-          showSearchBar={true}
-          showTabs={false}
-          showHistory={true}
-          showSectionTitles={false}
-          category={Categories.all}
           onEmojiSelected={onEmojiSelected}
           placeholder="Søk etter symbol"
         />
