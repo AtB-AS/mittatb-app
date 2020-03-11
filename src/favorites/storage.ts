@@ -7,7 +7,7 @@ function isLegacyUserLocations(
   return 'home' in obj;
 }
 
-function convertLegacyToNewStore(userLocations?: UserLocations) {
+function convertLegacyToNewStore(userLocations?: UserLocations): UserFavorites {
   return Object.entries(userLocations ?? {}).map(([key, item]) => ({
     emoji: key === 'home' ? '🏠' : '🏢',
     name: key,
@@ -19,12 +19,18 @@ export async function getFavorites(): Promise<UserFavorites | null> {
   const userLocations = await storage.get('stored_user_locations');
   if (!userLocations) return null;
 
-  const data = (userLocations ? JSON.parse(userLocations) : []) as
+  let data = (userLocations ? JSON.parse(userLocations) : []) as
     | UserLocations
     | UserFavorites;
 
-  return isLegacyUserLocations(data) ? convertLegacyToNewStore(data) : data;
+  if (isLegacyUserLocations(data)) {
+    data = convertLegacyToNewStore(data);
+    await setFavorites(data);
+  }
+
+  return data;
 }
+
 export function setFavorites(favorites: UserFavorites): Promise<void> {
   return storage.set('stored_user_locations', JSON.stringify(favorites));
 }
