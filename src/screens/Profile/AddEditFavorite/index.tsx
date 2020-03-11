@@ -9,9 +9,13 @@ import SaveDisketteIcon from '../../../assets/svg/SaveDisketteIcon';
 import CancelCrossIcon from '../../../assets/svg/CancelCrossIcon';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useFavorites} from '../../../favorites/FavoritesContext';
-import {RootStackParams} from '../../../navigation';
+import EmojiPopup from './EmojiPopup';
+import {ProfileStackParams} from '..';
 
-type ModalScreenNavigationProp = StackNavigationProp<RootStackParams, 'Main'>;
+type ModalScreenNavigationProp = StackNavigationProp<
+  ProfileStackParams,
+  'AddEditFavorite'
+>;
 
 type ModalScreenProps = {
   navigation: ModalScreenNavigationProp;
@@ -20,9 +24,10 @@ type ModalScreenProps = {
 export default function AddEditFavorite({navigation}: ModalScreenProps) {
   const css = useScreenStyle();
   const {addFavorite} = useFavorites();
-
   const {theme} = useTheme();
 
+  const [isEmojiVisible, setEmojiVisible] = useState<boolean>(false);
+  const [emoji, setEmoji] = useState<string | undefined>(undefined);
   const [name, setName] = useState<string>('');
   const [location, setLocation] = useState<Location | undefined>();
 
@@ -35,6 +40,7 @@ export default function AddEditFavorite({navigation}: ModalScreenProps) {
     await addFavorite({
       name,
       location,
+      emoji,
     });
     navigation.goBack();
   };
@@ -58,13 +64,7 @@ export default function AddEditFavorite({navigation}: ModalScreenProps) {
       <LocationInputGroup onChange={setLocation} />
 
       <InputGroup title="Symbol">
-        <Button
-          onPress={() =>
-            navigation.navigate('EmojiModal', {onEmojiSelected: console.log})
-          }
-        >
-          Symbol
-        </Button>
+        <Button onPress={() => setEmojiVisible(true)}>{emoji} Symbol</Button>
       </InputGroup>
 
       <View style={[css.line, css.lineNoMarginTop]} />
@@ -80,6 +80,15 @@ export default function AddEditFavorite({navigation}: ModalScreenProps) {
       <Button onPress={cancel} secondary IconComponent={CancelCrossIcon}>
         Avbryt
       </Button>
+
+      <EmojiPopup
+        onClose={() => setEmojiVisible(false)}
+        open={isEmojiVisible}
+        onEmojiSelected={(emoji: string) => {
+          setEmoji(emoji);
+          setEmojiVisible(false);
+        }}
+      />
     </View>
   );
 }
