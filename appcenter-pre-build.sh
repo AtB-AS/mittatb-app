@@ -1,6 +1,9 @@
-echo "Installing git-crypt dependencies"
-brew install openssl
-brew install git-crypt
+#!/bin/bash
+
+echo "Installing pre-build dependencies"
+brew install openssl # for git-crypt
+brew install git-crypt # ditto
+brew install findutils # for gxargs which is used to load environment variables from .env file
 
 echo "Decoding git-crypt key"
 echo $GIT_CRYPT_KEY | openssl base64 -d -A -out mittatb.key
@@ -8,12 +11,14 @@ echo $GIT_CRYPT_KEY | openssl base64 -d -A -out mittatb.key
 echo "Unlocking repository sensitive files"
 git-crypt unlock mittatb.key
 
-cat <<EOT >> .env
-BUGSNAG_API_KEY=$BUGSNAG_API_KEY
-API_BASE_URL=$API_BASE_URL
-APP_VERSION=1.0
-APP_BUILD_NUMBER=$APPCENTER_BUILD_ID
-EOT
+echo "Attempting to override environment: $APP_ENVIRONMENT"
+sh ./override-environment.sh $APP_ENVIRONMENT
+
+echo "Loading all env variables from .env file"
+export $(grep -v '^#' .env | gxargs -d '\n')
+
+echo "Setting BundleIdentifier in Info.plist to $IOS_BUNDLE_IDENTIFIER"
+/usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $IOS_BUNDLE_IDENTIFIER" ./ios/atb/Info.plist
 
 echo "Install icon dependencies"
 brew install imagemagick

@@ -1,3 +1,7 @@
 *.pbxproj -text
+
+# encrypted files/folders
+env/** filter=git-crypt diff=git-crypt
+.env filter=git-crypt diff=git-crypt
 android/app/google-services.json filter=git-crypt diff=git-crypt
 ios/atb/GoogleService-Info.plist filter=git-crypt diff=git-crypt
