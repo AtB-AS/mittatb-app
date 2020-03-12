@@ -31,6 +31,7 @@ export default function EmojiPopup({
         <EmojiSelector
           onEmojiSelected={onEmojiSelected}
           placeholder="Søk etter symbol"
+          maxEmojiVersion="2"
         />
       </View>
     </Modal>

@@ -29,14 +29,19 @@ const Categories: {[key: string]: string} = {
 };
 
 const charFromUtf16 = (utf16: string) =>
-  String.fromCodePoint(...utf16.split('-').map(u => parseInt(u, 16)));
+  String.fromCodePoint(...(utf16.split('-').map(u => '0x' + u) as any));
 export const charFromEmojiObject = (obj: Emoji) => charFromUtf16(obj.unified);
-const filteredRawEmojis = emojiRawData.filter(e => !e.obsoleted_by);
+// const filteredRawEmojis = emojiRawData.filter(e => !e.obsoleted_by);
 const sortEmoji = (list: Emojis) =>
   list.sort((a, b) => a.sort_order - b.sort_order);
+const filterEmojiOnVersion = (src: Emojis, version?: string) => {
+  if (!version) return src;
+  const versionNumber = parseInt(version, 10);
+  return src.filter(emoji => parseInt(emoji.added_in, 10) <= versionNumber);
+};
 
 const emojiByCategory = (category: string) =>
-  filteredRawEmojis.filter(e => e.category === category);
+  emojiRawData.filter(e => e.category === category);
 const categoryKeys = Object.keys(Categories);
 
 type EmojiCellProps = {
@@ -55,7 +60,7 @@ const EmojiCell = ({emoji, colSize, ...other}: EmojiCellProps) => (
     }}
     {...other}
   >
-    <Text style={{color: '#FFFFFF', fontSize: colSize - 12}}>
+    <Text style={{color: '#000000', fontSize: colSize - 12}}>
       {charFromEmojiObject(emoji)}
     </Text>
   </TouchableOpacity>
@@ -136,10 +141,14 @@ export default class EmojiSelector extends Component<
   prerenderEmojis(callback: () => void) {
     let emojiList: Emojis = categoryKeys
       .map((category: string) =>
-        sortEmoji(emojiByCategory(Categories[category])),
+        sortEmoji(
+          filterEmojiOnVersion(
+            emojiByCategory(Categories[category]),
+            this.props.maxEmojiVersion,
+          ),
+        ),
       )
       .reduce((acc, item) => acc.concat(item), []);
-    console.log(emojiByCategory('people'));
 
     this.setState(
       {
