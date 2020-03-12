@@ -1,7 +1,7 @@
 // Based on https://github.com/arronhunt/react-native-emoji-selector
 // MIT License - Copyright © 2019 Arron Hunt <arronjhunt@gmail.com>
 
-import React, {Component} from 'react';
+import React, {Component, ReactNode, ReactElement} from 'react';
 import {
   View,
   Text,
@@ -28,6 +28,13 @@ const Categories: {[key: string]: string} = {
   flags: 'Flags',
 };
 
+export type RenderedEmoji = Emoji & {
+  renderedText: string;
+};
+
+type ClearItem = {clearItem: true};
+const __CLEAR_ITEM: ClearItem = {clearItem: true};
+
 const charFromUtf16 = (utf16: string) =>
   String.fromCodePoint(...(utf16.split('-').map(u => '0x' + u) as any));
 export const charFromEmojiObject = (obj: Emoji) => charFromUtf16(obj.unified);
@@ -45,11 +52,36 @@ const emojiByCategory = (category: string) =>
 const categoryKeys = Object.keys(Categories);
 
 type EmojiCellProps = {
-  emoji: Emoji;
+  emoji: RenderedEmoji;
+  isSelected: boolean;
   colSize: number;
 } & TouchableOpacityProps;
 
-const EmojiCell = ({emoji, colSize, ...other}: EmojiCellProps) => (
+const EmojiCell = ({emoji, colSize, isSelected, ...other}: EmojiCellProps) => (
+  <TouchableOpacity
+    activeOpacity={0.5}
+    style={{
+      width: colSize,
+      height: colSize,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: isSelected ? 'rgba(0,0,0,0.1)' : undefined,
+      borderRadius: 4,
+    }}
+    {...other}
+  >
+    <Text style={{color: '#000000', fontSize: colSize - 12}}>
+      {emoji.renderedText}
+    </Text>
+  </TouchableOpacity>
+);
+
+type ClearCellProps = {
+  clearText: ReactElement;
+  colSize: number;
+} & TouchableOpacityProps;
+
+const ClearCell = ({clearText, colSize, ...other}: ClearCellProps) => (
   <TouchableOpacity
     activeOpacity={0.5}
     style={{
@@ -60,32 +92,33 @@ const EmojiCell = ({emoji, colSize, ...other}: EmojiCellProps) => (
     }}
     {...other}
   >
-    <Text style={{color: '#000000', fontSize: colSize - 12}}>
-      {charFromEmojiObject(emoji)}
-    </Text>
+    <Text style={{color: '#000000', fontSize: colSize - 12}}>{clearText}</Text>
   </TouchableOpacity>
 );
 
 type EmojiSelectorState = {
   searchQuery: string;
   isReady: boolean;
-  emojiList: Emojis;
+  emojiList: RenderedEmoji[];
   colSize: number;
   width: number;
 };
 
 type EmojiSelectorProps = {
-  onEmojiSelected?(emoji: string): void;
+  onEmojiSelected?(emoji?: RenderedEmoji): void;
   theme?: string;
   columns?: number;
   placeholder?: string;
+  clearText?: ReactElement;
+  value?: RenderedEmoji;
   maxEmojiVersion?: string;
 };
 
 type DefaultProps = {
-  onEmojiSelected(emoji: string): void;
+  onEmojiSelected(emoji?: RenderedEmoji): void;
   columns: number;
   placeholder: string;
+  clearText: ReactElement;
 };
 
 export default class EmojiSelector extends Component<
@@ -95,7 +128,7 @@ export default class EmojiSelector extends Component<
   state = {
     searchQuery: '',
     isReady: false,
-    emojiList: [] as Emojis,
+    emojiList: [] as RenderedEmoji[],
     colSize: 0,
     width: 0,
   };
@@ -104,29 +137,44 @@ export default class EmojiSelector extends Component<
     onEmojiSelected: () => {},
     columns: 6,
     placeholder: 'Search',
+    clearText: <Text>✖︎</Text>,
   };
 
   handleSearch = (searchQuery: string) => {
     this.setState({searchQuery});
   };
 
-  handleEmojiSelect = (emoji: Emoji) => {
-    this.props.onEmojiSelected!(charFromEmojiObject(emoji));
+  handleEmojiSelect = (emoji?: RenderedEmoji) => {
+    this.props.onEmojiSelected!(emoji);
   };
 
-  renderEmojiCell = ({item}: {item: Emoji}) => (
-    <EmojiCell
-      key={item.unified}
-      emoji={item}
-      onPress={() => this.handleEmojiSelect(item)}
-      colSize={this.state.colSize}
-    />
-  );
+  renderEmojiCell = ({item}: {item: ClearItem | RenderedEmoji}) => {
+    if (isClearItem(item)) {
+      return (
+        <ClearCell
+          key={'clear-emoji'}
+          clearText={this.props.clearText!}
+          onPress={() => this.handleEmojiSelect(undefined)}
+          colSize={this.state.colSize}
+        />
+      );
+    }
+    return (
+      <EmojiCell
+        key={item.unified}
+        emoji={item}
+        isSelected={item.unified === this.props.value?.unified}
+        onPress={() => this.handleEmojiSelect(item)}
+        colSize={this.state.colSize}
+      />
+    );
+  };
 
-  returnSectionData(): Emojis {
+  returnSectionData(): (ClearItem | RenderedEmoji)[] {
     const {emojiList, searchQuery} = this.state;
+
     if (searchQuery === '') {
-      return emojiList;
+      return [__CLEAR_ITEM, ...emojiList];
     }
 
     return emojiList.filter(e => {
@@ -139,7 +187,7 @@ export default class EmojiSelector extends Component<
   }
 
   prerenderEmojis(callback: () => void) {
-    let emojiList: Emojis = categoryKeys
+    let emojiList: RenderedEmoji[] = categoryKeys
       .map((category: string) =>
         sortEmoji(
           filterEmojiOnVersion(
@@ -148,7 +196,11 @@ export default class EmojiSelector extends Component<
           ),
         ),
       )
-      .reduce((acc, item) => acc.concat(item), []);
+      .reduce((acc, item) => acc.concat(item), [])
+      .map(item => ({
+        ...item,
+        renderedText: charFromEmojiObject(item),
+      }));
 
     this.setState(
       {
@@ -168,7 +220,15 @@ export default class EmojiSelector extends Component<
   };
 
   render() {
-    const {theme, columns = 6, placeholder = 'Search', ...other} = this.props;
+    const {
+      theme,
+      columns,
+      placeholder,
+      clearText,
+      onEmojiSelected,
+      value,
+      ...other
+    } = this.props;
     const {colSize, isReady, searchQuery} = this.state;
 
     return (
@@ -198,7 +258,9 @@ export default class EmojiSelector extends Component<
                   horizontal={false}
                   numColumns={columns}
                   keyboardShouldPersistTaps={'always'}
-                  keyExtractor={(item: Emoji) => item.unified}
+                  keyExtractor={(item: ClearItem | RenderedEmoji) =>
+                    isClearItem(item) ? 'clear' : item.unified
+                  }
                   removeClippedSubviews
                 />
               </View>
@@ -227,9 +289,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  tabBar: {
-    flexDirection: 'row',
-  },
   scrollview: {
     flex: 1,
   },
@@ -255,10 +314,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
   },
-  sectionHeader: {
-    margin: 8,
-    fontSize: 17,
-    width: '100%',
-    color: '#8F8F8F',
-  },
 });
+
+function isClearItem(item: any): item is ClearItem {
+  return item === __CLEAR_ITEM;
+}

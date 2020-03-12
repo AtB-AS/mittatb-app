@@ -1,16 +1,19 @@
 import React from 'react';
-import EmojiSelector from './Emojis';
+import EmojiSelector, {RenderedEmoji} from './Emojis';
 import {StyleSheet, Theme} from '../../../theme';
 import {View} from 'react-native';
 import Modal from 'react-native-modal';
+import MapPointIcon from '../../../assets/svg/MapPointIcon';
 
 type EmojiPopupProps = {
+  value?: RenderedEmoji;
   open: boolean;
-  onEmojiSelected(emoji: string): void;
+  onEmojiSelected(emoji: RenderedEmoji): void;
   onClose?(): void;
 };
 export default function EmojiPopup({
   open,
+  value,
   onEmojiSelected,
   onClose,
 }: EmojiPopupProps) {
@@ -29,9 +32,11 @@ export default function EmojiPopup({
     >
       <View style={css.content}>
         <EmojiSelector
+          value={value}
           onEmojiSelected={onEmojiSelected}
           placeholder="Søk etter symbol"
           maxEmojiVersion="2"
+          clearText={<MapPointIcon height={30} width={30} />}
         />
       </View>
     </Modal>
@@ -40,7 +45,7 @@ export default function EmojiPopup({
 
 const useModalStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   content: {
-    height: '50%',
+    height: '70%',
     backgroundColor: theme.background.primary,
     padding: theme.sizes.pagePadding,
     justifyContent: 'center',

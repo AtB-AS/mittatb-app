@@ -13,6 +13,7 @@ import EmojiPopup from './EmojiPopup';
 import {ProfileStackParams} from '..';
 import ChevronDownIcon from '../../../assets/svg/ChevronDownIcon';
 import MapPointIcon from '../../../assets/svg/MapPointIcon';
+import {RenderedEmoji} from './Emojis';
 
 type ModalScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -29,7 +30,7 @@ export default function AddEditFavorite({navigation}: ModalScreenProps) {
   const {theme} = useTheme();
 
   const [isEmojiVisible, setEmojiVisible] = useState<boolean>(false);
-  const [emoji, setEmoji] = useState<string | undefined>(undefined);
+  const [emoji, setEmoji] = useState<RenderedEmoji | undefined>(undefined);
   const [name, setName] = useState<string>('');
   const [location, setLocation] = useState<Location | undefined>();
 
@@ -42,7 +43,7 @@ export default function AddEditFavorite({navigation}: ModalScreenProps) {
     await addFavorite({
       name,
       location,
-      emoji,
+      emoji: emoji?.renderedText,
     });
     navigation.goBack();
   };
@@ -53,7 +54,8 @@ export default function AddEditFavorite({navigation}: ModalScreenProps) {
       <EmojiPopup
         onClose={() => setEmojiVisible(false)}
         open={isEmojiVisible}
-        onEmojiSelected={(emoji: string) => {
+        value={emoji}
+        onEmojiSelected={(emoji: RenderedEmoji) => {
           setEmoji(emoji);
           setEmojiVisible(false);
         }}
@@ -76,7 +78,10 @@ export default function AddEditFavorite({navigation}: ModalScreenProps) {
         <LocationInputGroup onChange={setLocation} />
 
         <InputGroup title="Symbol">
-          <SymbolPicker onPress={() => setEmojiVisible(true)} value={emoji} />
+          <SymbolPicker
+            onPress={() => setEmojiVisible(true)}
+            value={emoji?.renderedText}
+          />
         </InputGroup>
 
         <View style={[css.line, css.lineNoMarginTop]} />
