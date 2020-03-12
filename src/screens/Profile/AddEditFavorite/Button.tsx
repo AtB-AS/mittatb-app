@@ -5,23 +5,32 @@ import {StyleSheet, Theme} from '../../../theme';
 
 type ButtonProps = {
   onPress(): void;
-  secondary?: boolean;
+  mode?: 'primary' | 'destructive' | 'secondary';
   IconComponent?: React.ElementType;
 } & TouchableOpacityProperties;
 const Button: React.FC<ButtonProps> = ({
   onPress,
-  secondary = false,
+  mode = 'primary',
   IconComponent,
   children,
   ...props
 }) => {
   const css = useButtonStyle();
+  const styleContainer = [
+    css.button,
+    mode === 'secondary' ? css.buttonSecondary : undefined,
+    mode === 'destructive' ? css.buttonDestructive : undefined,
+  ];
+  const styleText = [
+    css.text,
+    mode === 'destructive' ? css.textDestructive : undefined,
+  ];
   return (
     <TouchableOpacity onPress={onPress} {...props}>
-      <View style={[css.button, secondary ? css.buttonSecondary : undefined]}>
+      <View style={styleContainer}>
         {IconComponent && <IconComponent />}
         <View style={css.textContainer}>
-          <Text style={css.text}>{children}</Text>
+          <Text style={styleText}>{children}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -44,6 +53,10 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     borderWidth: 2,
     borderColor: theme.border.primary,
   },
+  buttonDestructive: {
+    backgroundColor: theme.background.destructive,
+    color: theme.text.destructive,
+  },
   textContainer: {
     flex: 1,
     marginEnd: 20,
@@ -53,5 +66,9 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     fontSize: 16,
     lineHeight: 20,
     fontWeight: '600',
+    color: theme.text.primary,
+  },
+  textDestructive: {
+    color: theme.text.destructive,
   },
 }));

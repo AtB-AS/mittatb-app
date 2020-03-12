@@ -2,10 +2,11 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import AddEditFavorite from './AddEditFavorite';
 import Profile from './FavoriteList';
+import {LocationFavorite} from '../../favorites/types';
 
 export type ProfileStackParams = {
   Profile: undefined;
-  AddEditFavorite: undefined;
+  AddEditFavorite: {editItem?: LocationFavorite} | undefined;
 };
 
 const Stack = createStackNavigator<ProfileStackParams>();

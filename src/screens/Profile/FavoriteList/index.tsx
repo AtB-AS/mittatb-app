@@ -8,7 +8,7 @@ import {useAppState} from '../../../AppContext';
 import EditIcon from '../../../assets/svg/EditIcon';
 import EditableListGroup from './EditableListGroup';
 import MapPointIcon from '../../../assets/svg/MapPointIcon';
-import {Location} from '../../../favorites/types';
+import {Location, LocationFavorite} from '../../../favorites/types';
 import PlusIcon from '../../../assets/svg/PlusIcon';
 import {ProfileStackParams} from '..';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -34,6 +34,12 @@ export default function Profile({navigation}: ProfileScreenProps) {
   const {favorites} = useFavorites();
   const items = favorites ?? [];
 
+  const navigateToEdit = (item: LocationFavorite) => {
+    navigation.navigate('AddEditFavorite', {editItem: item});
+  };
+
+  const onAddButtonClick = () => navigation.push('AddEditFavorite', {});
+
   return (
     <SafeAreaView style={css.container}>
       <Header>Mitt AtB</Header>
@@ -42,10 +48,12 @@ export default function Profile({navigation}: ProfileScreenProps) {
         <EditableListGroup
           title="Mine favorittsteder"
           data={items}
-          renderItem={item => <Item item={item} />}
+          renderItem={item => (
+            <Item item={item} onEdit={() => navigateToEdit(item)} />
+          )}
           keyExtractor={item => item.name + item.location.id}
           renderAddButtonComponent={() => (
-            <AddFavoriteButton navigation={navigation} />
+            <AddFavoriteButton onPress={onAddButtonClick} />
           )}
         />
       </ScrollView>
@@ -66,9 +74,8 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
 }));
 
-function AddFavoriteButton({navigation}: ProfileScreenProps) {
+function AddFavoriteButton({onPress}: {onPress(): void}) {
   const css = useItemStyle();
-  const onPress = () => navigation.push('AddEditFavorite');
 
   return (
     <TouchableOpacity onPress={onPress}>
@@ -92,7 +99,7 @@ const Item: React.FC<ItemProps> = ({item, onEdit}) => {
       {item.emoji ? <Text>{item.emoji}</Text> : <MapPointIcon />}
       <Text style={css.text}>{item.name ?? item.location.name}</Text>
       {onEdit && (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onEdit}>
           <EditIcon />
         </TouchableOpacity>
       )}

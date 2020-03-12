@@ -15,27 +15,41 @@ import ChevronDownIcon from '../../../assets/svg/ChevronDownIcon';
 import MapPointIcon from '../../../assets/svg/MapPointIcon';
 import {RenderedEmoji} from './Emojis';
 import Button from './Button';
+import {RouteProp} from '@react-navigation/native';
+import DeleteTrashCanIcon from '../../../assets/svg/DeleteTrashCanIcon';
 
 type ModalScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
   'AddEditFavorite'
 >;
 
+type ProfileScreenRouteProp = RouteProp<ProfileStackParams, 'AddEditFavorite'>;
+
 type ModalScreenProps = {
   navigation: ModalScreenNavigationProp;
+  route: ProfileScreenRouteProp;
 };
 
-export default function AddEditFavorite({navigation}: ModalScreenProps) {
+export default function AddEditFavorite({navigation, route}: ModalScreenProps) {
   const css = useScreenStyle();
   const {addFavorite} = useFavorites();
   const {theme} = useTheme();
 
+  const editItem = route?.params?.editItem;
+
   const [isEmojiVisible, setEmojiVisible] = useState<boolean>(false);
   const [emoji, setEmoji] = useState<RenderedEmoji | undefined>(undefined);
-  const [name, setName] = useState<string>('');
-  const [location, setLocation] = useState<Location | undefined>();
+  const [name, setName] = useState<string>(editItem?.name ?? '');
+  const [location, setLocation] = useState<Location | undefined>(
+    editItem?.location,
+  );
 
-  const hasSelectedValues = Boolean(location);
+  const hasSelectedValues = typeof location !== undefined;
+  const isEditMode = typeof editItem !== undefined;
+
+  // @TODO This must be fixed so that the emoji item it self is stored
+  // in favorites, or some lookup to set selected item inside emoji panel.
+  const renderedEmoji = editItem?.emoji ?? emoji?.renderedText ?? '';
 
   const save = async () => {
     if (!location) {
@@ -46,6 +60,9 @@ export default function AddEditFavorite({navigation}: ModalScreenProps) {
       location,
       emoji: emoji?.renderedText,
     });
+    navigation.goBack();
+  };
+  const deleteItem = async () => {
     navigation.goBack();
   };
   const cancel = () => navigation.goBack();
@@ -63,7 +80,7 @@ export default function AddEditFavorite({navigation}: ModalScreenProps) {
       />
 
       <View style={css.innerContainer}>
-        <LocationInputGroup onChange={setLocation} />
+        <LocationInputGroup onChange={setLocation} value={location} />
 
         <InputGroup title="Name">
           <TextInput
@@ -81,7 +98,7 @@ export default function AddEditFavorite({navigation}: ModalScreenProps) {
         <InputGroup title="Symbol">
           <SymbolPicker
             onPress={() => setEmojiVisible(true)}
-            value={emoji?.renderedText}
+            value={renderedEmoji}
           />
         </InputGroup>
 
@@ -95,7 +112,21 @@ export default function AddEditFavorite({navigation}: ModalScreenProps) {
           Lagre favorittsted
         </Button>
 
-        <Button onPress={cancel} secondary IconComponent={CancelCrossIcon}>
+        {isEditMode && (
+          <Button
+            onPress={deleteItem}
+            mode="destructive"
+            IconComponent={DeleteTrashCanIcon}
+          >
+            Slett favorittsted
+          </Button>
+        )}
+
+        <Button
+          onPress={cancel}
+          mode="secondary"
+          IconComponent={CancelCrossIcon}
+        >
           Avbryt
         </Button>
       </View>
@@ -198,10 +229,14 @@ const useGroupStyle = StyleSheet.createThemeHook((theme: Theme) => ({
 
 type LocationInputGroupProps = {
   onChange(location: Location): void;
+  value?: Location;
 };
-const LocationInputGroup: React.FC<LocationInputGroupProps> = ({onChange}) => {
+const LocationInputGroup: React.FC<LocationInputGroupProps> = ({
+  onChange,
+  value,
+}) => {
   const {location} = useGeolocationState();
-  const [address, setAddress] = useState<string>('');
+  const [address, setAddress] = useState<string>(value?.name ?? '');
   const onSelected = (location: Location) => {
     setAddress(location.name);
     onChange(location);

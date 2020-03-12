@@ -28,10 +28,12 @@ export interface Theme {
   background: {
     primary: string;
     secondary: string;
+    destructive: string;
     accent: string;
   };
   text: {
     primary: string;
+    destructive: string;
     faded: string;
   };
   border: {
@@ -50,10 +52,12 @@ export const themes: Themes = {
     background: {
       primary: colors.general.white,
       secondary: colors.general.gray,
+      destructive: colors.secondary.red,
       accent: colors.primary.green,
     },
     text: {
       primary: colors.general.black,
+      destructive: colors.general.white,
       faded: colors.general.lightGray,
     },
     border: {
@@ -65,10 +69,12 @@ export const themes: Themes = {
     background: {
       primary: colors.general.offblack,
       secondary: colors.general.gray,
+      destructive: colors.secondary.red,
       accent: colors.primary.green,
     },
     text: {
       primary: colors.general.white,
+      destructive: colors.general.white,
       faded: colors.general.lightGray,
     },
     border: {
