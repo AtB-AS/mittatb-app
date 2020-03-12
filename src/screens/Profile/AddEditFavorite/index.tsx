@@ -34,14 +34,14 @@ export default function AddEditFavorite({navigation}: ModalScreenProps) {
   const [name, setName] = useState<string>('');
   const [location, setLocation] = useState<Location | undefined>();
 
-  const hasSelectedValues = Boolean(name) && Boolean(location);
+  const hasSelectedValues = Boolean(location);
 
   const save = async () => {
     if (!location) {
       return;
     }
     await addFavorite({
-      name,
+      name: name ?? location?.label,
       location,
       emoji: emoji?.renderedText,
     });
@@ -62,6 +62,8 @@ export default function AddEditFavorite({navigation}: ModalScreenProps) {
       />
 
       <View style={css.innerContainer}>
+        <LocationInputGroup onChange={setLocation} />
+
         <InputGroup title="Name">
           <TextInput
             style={css.input}
@@ -74,8 +76,6 @@ export default function AddEditFavorite({navigation}: ModalScreenProps) {
             placeholderTextColor={theme.text.faded}
           />
         </InputGroup>
-
-        <LocationInputGroup onChange={setLocation} />
 
         <InputGroup title="Symbol">
           <SymbolPicker
