@@ -14,6 +14,7 @@ import {ProfileStackParams} from '..';
 import ChevronDownIcon from '../../../assets/svg/ChevronDownIcon';
 import MapPointIcon from '../../../assets/svg/MapPointIcon';
 import {RenderedEmoji} from './Emojis';
+import Button from './Button';
 
 type ModalScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -129,57 +130,6 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     marginTop: 0,
   },
   emojiContainer: {},
-}));
-
-type ButtonProps = {
-  onPress(): void;
-  secondary?: boolean;
-  IconComponent?: React.ElementType;
-} & TouchableOpacityProperties;
-const Button: React.FC<ButtonProps> = ({
-  onPress,
-  secondary = false,
-  IconComponent,
-  children,
-  ...props
-}) => {
-  const css = useButtonStyle();
-  return (
-    <TouchableOpacity onPress={onPress} {...props}>
-      <View style={[css.button, secondary ? css.buttonSecondary : undefined]}>
-        {IconComponent && <IconComponent />}
-        <View style={css.textContainer}>
-          <Text style={css.text}>{children}</Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
-const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
-  button: {
-    flexDirection: 'row',
-    padding: 12,
-    alignItems: 'center',
-    borderRadius: 4,
-    borderTopLeftRadius: 16,
-    backgroundColor: theme.background.accent,
-    marginBottom: 24,
-  },
-  buttonSecondary: {
-    backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: theme.border.primary,
-  },
-  textContainer: {
-    flex: 1,
-    marginEnd: 20,
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 16,
-    lineHeight: 20,
-    fontWeight: '600',
-  },
 }));
 
 type SymbolPickerProps = {
