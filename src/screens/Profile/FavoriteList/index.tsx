@@ -59,6 +59,7 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
+    paddingBottom: 0,
   },
   text: {
     color: theme.text.primary,
