@@ -1,79 +1,55 @@
-import React, {
-  createContext,
-  useReducer,
-  useContext,
-  useEffect,
-  useCallback,
-} from 'react';
-import {getFavorites, addFavorite} from './storage';
+import React, {createContext, useContext, useEffect, useState} from 'react';
+import {
+  getFavorites,
+  addFavorite,
+  removeFavorite,
+  updateFavorite,
+} from './storage';
 import {UserFavorites, LocationFavorite} from './types';
 
-type AppState = {
-  isLoading: boolean;
-  favorites: UserFavorites | null;
-};
-
-type FavoriteReducerAction =
-  | {type: 'LOAD_FAVORITES'; favorites: UserFavorites | null}
-  | {type: 'SET_FAVORITES'; favorites: UserFavorites};
-
-type FavoriteContextState = AppState & {
+type FavoriteContextState = {
+  favorites: UserFavorites;
   addFavorite(location: LocationFavorite): Promise<void>;
+  removeFavorite(location: LocationFavorite): Promise<void>;
+  updateFavorite(
+    newLocation: LocationFavorite,
+    existingLocation: LocationFavorite,
+  ): Promise<void>;
 };
 const AppContext = createContext<FavoriteContextState | undefined>(undefined);
 
-type AppReducer = (
-  prevState: AppState,
-  action: FavoriteReducerAction,
-) => AppState;
-
-const appReducer: AppReducer = (prevState, action) => {
-  switch (action.type) {
-    case 'LOAD_FAVORITES':
-      return {
-        ...prevState,
-        favorites: action.favorites,
-        isLoading: false,
-      };
-    case 'SET_FAVORITES':
-      return {
-        ...prevState,
-        favorites: action.favorites,
-      };
-  }
-};
-
-const defaultAppState: AppState = {
-  isLoading: true,
-  favorites: null,
-};
-
 const FavoritesContextProvider: React.FC = ({children}) => {
-  const [state, dispatch] = useReducer<AppReducer>(appReducer, defaultAppState);
+  const [favorites, setFavorites] = useState<UserFavorites>([]);
   async function populateFavorites() {
     const favorites = await getFavorites();
-    dispatch({
-      type: 'LOAD_FAVORITES',
-      favorites: favorites ?? null,
-    });
+    setFavorites(favorites ?? []);
   }
 
   useEffect(() => {
     populateFavorites();
   }, []);
 
-  const addFavoriteInternal = useCallback(
-    async (location: LocationFavorite) => {
-      await addFavorite(location);
-      await populateFavorites();
+  const contextValue: FavoriteContextState = {
+    favorites,
+    async addFavorite(location: LocationFavorite) {
+      const favorites = await addFavorite(location);
+      setFavorites(favorites);
     },
-    [],
-  );
+    async removeFavorite(location: LocationFavorite) {
+      const favorites = await removeFavorite(location);
+      setFavorites(favorites);
+    },
+    async updateFavorite(
+      newLocation: LocationFavorite,
+      existingLocation: LocationFavorite,
+    ) {
+      const favorites = await updateFavorite(newLocation, existingLocation);
+      setFavorites(favorites);
+    },
+  };
 
   return (
-    <AppContext.Provider value={{...state, addFavorite: addFavoriteInternal}}>
-      {children}
-    </AppContext.Provider>
+    <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>
   );
 };
 

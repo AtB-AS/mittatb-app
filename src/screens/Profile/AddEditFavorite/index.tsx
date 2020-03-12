@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacityProperties} from 'react-native';
+import {View, Text, TouchableOpacityProperties, Alert} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {StyleSheet, Theme, useTheme} from '../../../theme';
 import LocationInput from '../../Onboarding/LocationInput';
@@ -32,7 +32,7 @@ type ModalScreenProps = {
 
 export default function AddEditFavorite({navigation, route}: ModalScreenProps) {
   const css = useScreenStyle();
-  const {addFavorite} = useFavorites();
+  const {addFavorite, removeFavorite, updateFavorite} = useFavorites();
   const {theme} = useTheme();
 
   const editItem = route?.params?.editItem;
@@ -44,8 +44,7 @@ export default function AddEditFavorite({navigation, route}: ModalScreenProps) {
     editItem?.location,
   );
 
-  const hasSelectedValues = typeof location !== undefined;
-  const isEditMode = typeof editItem !== undefined;
+  const hasSelectedValues = Boolean(location);
 
   // @TODO This must be fixed so that the emoji item it self is stored
   // in favorites, or some lookup to set selected item inside emoji panel.
@@ -55,15 +54,40 @@ export default function AddEditFavorite({navigation, route}: ModalScreenProps) {
     if (!location) {
       return;
     }
-    await addFavorite({
-      name: name ?? location?.label,
+    const newFavorite = {
+      name: !name ? location?.name : name,
       location,
-      emoji: emoji?.renderedText,
-    });
-    navigation.goBack();
+      emoji: renderedEmoji,
+    };
+    if (editItem) {
+      // Update existing
+      await updateFavorite(newFavorite, editItem);
+    } else {
+      // Add new
+      await addFavorite(newFavorite);
+    }
+    navigation.navigate('Profile');
   };
   const deleteItem = async () => {
-    navigation.goBack();
+    Alert.alert(
+      'Slett favorittsted?',
+      'Sikker på at du vil fjerne favorittstedet ditt?',
+      [
+        {
+          text: 'Avbryt',
+          style: 'cancel',
+        },
+        {
+          text: 'Slett',
+          style: 'destructive',
+          onPress: async () => {
+            if (!editItem) return;
+            await removeFavorite(editItem);
+            navigation.navigate('Profile');
+          },
+        },
+      ],
+    );
   };
   const cancel = () => navigation.goBack();
 
@@ -112,7 +136,7 @@ export default function AddEditFavorite({navigation, route}: ModalScreenProps) {
           Lagre favorittsted
         </Button>
 
-        {isEditMode && (
+        {editItem && (
           <Button
             onPress={deleteItem}
             mode="destructive"
