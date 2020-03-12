@@ -10,6 +10,7 @@ const colors = {
   },
   general: {
     white: '#ffffff',
+    gray: '#D7D9DB',
     black: '#000000',
     offblack: '#111416',
     lightGray: 'rgba(0, 0, 0, 0.6)',
@@ -26,6 +27,7 @@ export interface Theme {
   sizes: typeof sizes;
   background: {
     primary: string;
+    secondary: string;
     accent: string;
   };
   text: {
@@ -47,6 +49,7 @@ export const themes: Themes = {
     sizes,
     background: {
       primary: colors.general.white,
+      secondary: colors.general.gray,
       accent: colors.primary.green,
     },
     text: {
@@ -61,6 +64,7 @@ export const themes: Themes = {
     sizes,
     background: {
       primary: colors.general.offblack,
+      secondary: colors.general.gray,
       accent: colors.primary.green,
     },
     text: {

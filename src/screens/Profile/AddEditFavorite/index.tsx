@@ -11,6 +11,8 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import EmojiPopup from './EmojiPopup';
 import {ProfileStackParams} from '..';
+import ChevronDownIcon from '../../../assets/svg/ChevronDownIcon';
+import MapPointIcon from '../../../assets/svg/MapPointIcon';
 
 type ModalScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -56,6 +58,7 @@ export default function AddEditFavorite({navigation}: ModalScreenProps) {
           setEmojiVisible(false);
         }}
       />
+
       <View style={css.innerContainer}>
         <InputGroup title="Name">
           <TextInput
@@ -73,7 +76,7 @@ export default function AddEditFavorite({navigation}: ModalScreenProps) {
         <LocationInputGroup onChange={setLocation} />
 
         <InputGroup title="Symbol">
-          <Button onPress={() => setEmojiVisible(true)}>{emoji} Symbol</Button>
+          <SymbolPicker onPress={() => setEmojiVisible(true)} value={emoji} />
         </InputGroup>
 
         <View style={[css.line, css.lineNoMarginTop]} />
@@ -171,6 +174,46 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     fontSize: 16,
     lineHeight: 20,
     fontWeight: '600',
+  },
+}));
+
+type SymbolPickerProps = {
+  onPress(): void;
+  value?: string;
+};
+const SymbolPicker: React.FC<SymbolPickerProps> = ({onPress, value}) => {
+  const css = useSymbolPickerStyle();
+  return (
+    <TouchableOpacity onPress={onPress} style={css.container}>
+      <View style={css.emoji}>
+        {!value ? (
+          <MapPointIcon style={css.emojiIcon} />
+        ) : (
+          <Text style={css.emojiText}>{value}</Text>
+        )}
+      </View>
+      <ChevronDownIcon />
+    </TouchableOpacity>
+  );
+};
+const useSymbolPickerStyle = StyleSheet.createThemeHook(theme => ({
+  container: {
+    padding: 12,
+    flexDirection: 'row',
+    backgroundColor: theme.background.secondary,
+    alignSelf: 'flex-start',
+    borderRadius: 4,
+  },
+  emoji: {
+    marginLeft: 5,
+    marginRight: 5,
+  },
+  emojiIcon: {
+    paddingTop: 3,
+    paddingBottom: 3,
+  },
+  emojiText: {
+    fontSize: 16,
   },
 }));
 
