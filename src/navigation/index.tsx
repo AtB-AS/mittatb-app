@@ -9,7 +9,7 @@ import Splash from '../screens/Splash';
 import Onboarding from '../screens/Onboarding';
 import LocationSearch from '../location-search';
 import TabNavigator from './TabNavigator';
-import CloseIcon from './svg/CloseIcon';
+import CloseModalCrossIcon from './svg/CloseModalCrossIcon';
 import {useTheme} from '../theme';
 
 export type RootStackParamList = {
@@ -56,7 +56,7 @@ const NavigationRoot = () => {
                   headerBackTitleVisible: false,
                   headerTintColor: theme.text.primary,
                   headerStyle: {
-                    backgroundColor: theme.background.primary,
+                    backgroundColor: theme.background.secondary,
                     shadowColor: 'transparent',
                   },
                   headerBackImage: ({tintColor}) => (
@@ -69,7 +69,7 @@ const NavigationRoot = () => {
                         marginLeft: 24,
                       }}
                     >
-                      <CloseIcon fill={tintColor} />
+                      <CloseModalCrossIcon fill={tintColor} />
                     </View>
                   ),
                 }}

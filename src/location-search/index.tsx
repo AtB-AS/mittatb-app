@@ -1,35 +1,26 @@
-import React from 'react';
-import {Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {Text, View, TextStyle} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {StyleSheet} from '../theme';
+import InputSearchIcon from './svg/InputSearchIcon';
 
 const LocationSearch: React.FC = () => {
   const styles = useThemeStyles();
+  const [text, setText] = useState<string>('');
   return (
     <View style={styles.container}>
-      <Text>Adresse eller stoppested</Text>
+      <Text style={styles.label}>Adresse eller stoppested</Text>
       <View style={styles.textInputContainer}>
         <TextInput
-          ref={ref}
-          style={[
-            styles.textInput,
-            {
-              borderBottomColor: !error
-                ? colors.secondary.blue
-                : colors.secondary.red,
-            },
-          ]}
+          style={styles.textInput}
           value={text}
-          onChangeText={onChangeText}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          placeholder={placeholder}
+          onChangeText={setText}
+          placeholder="Søk etter adresse eller stoppested"
           autoCorrect={false}
           autoCompleteType="off"
-          placeholderTextColor="#2C353B"
-          testID={testID + 'Input'}
+          placeholderTextColor={(styles.placeholder as TextStyle).color}
         />
-        {hintText ? <Text style={styles.hintText}>{hintText}</Text> : null}
+        <InputSearchIcon style={styles.searchIcon} />
       </View>
     </View>
   );
@@ -37,9 +28,16 @@ const LocationSearch: React.FC = () => {
 
 const useThemeStyles = StyleSheet.createThemeHook(theme => ({
   container: {
-    backgroundColor: theme.background.primary,
+    backgroundColor: theme.background.secondary,
     flex: 1,
     padding: 24,
+  },
+  label: {
+    fontSize: 12,
+    marginBottom: 8,
+  },
+  placeholder: {
+    color: theme.text.faded,
   },
   textInputContainer: {
     width: '100%',
@@ -47,26 +45,27 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
     flexDirection: 'row',
   },
   textInput: {
-    backgroundColor: theme.background.primary,
-    borderBottomColor: theme.border.primary,
-    color: theme.text.primary,
-    borderBottomWidth: 2,
-    borderRadius: 4,
-    padding: 12,
-    fontSize: 16,
+    // backgroundColor: theme.background.primary,
+    // borderBottomColor: theme.border.primary,
+    // color: theme.text.primary,
+    // borderBottomWidth: 2,
+    // borderRadius: 4,
+    // padding: 12,
+    // fontSize: 16,
 
     flex: 1,
-    fontSize: 20,
-    paddingLeft: 12,
-    backgroundColor: colors.general.white,
+    fontSize: 16,
+    paddingLeft: 44,
+    backgroundColor: theme.background.primary,
     borderBottomWidth: 2,
-    color: colors.general.black,
+    borderRadius: 4,
+    borderBottomColor: theme.border.primary,
+    color: theme.text.primary,
   },
-  hintText: {
+  searchIcon: {
     position: 'absolute',
-    right: 5,
+    left: 14,
     alignSelf: 'center',
-    opacity: 0.4,
   },
 }));
 
