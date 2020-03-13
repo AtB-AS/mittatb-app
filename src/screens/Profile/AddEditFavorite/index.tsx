@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacityProperties, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacityProperties,
+  Alert,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {StyleSheet, Theme, useTheme} from '../../../theme';
 import LocationInput from '../../Onboarding/LocationInput';
@@ -119,14 +126,14 @@ export default function AddEditFavorite({navigation, route}: ModalScreenProps) {
           />
         </InputGroup>
 
-        <InputGroup title="Symbol">
+        <InputGroup title="Symbol" boxStyle={{marginBottom: 0}}>
           <SymbolPicker
             onPress={() => setEmojiVisible(true)}
             value={renderedEmoji}
           />
         </InputGroup>
 
-        <View style={[css.line, css.lineNoMarginTop]} />
+        <View style={css.line} />
 
         <Button
           onPress={save}
@@ -177,7 +184,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     fontSize: 16,
   },
   line: {
-    marginVertical: 24,
+    marginVertical: 36,
     borderBottomWidth: 1,
     borderBottomColor: theme.border.primary,
   },
@@ -229,12 +236,13 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook(theme => ({
 
 type InputGroupProps = {
   title: string;
+  boxStyle?: StyleProp<ViewStyle>;
 };
-const InputGroup: React.FC<InputGroupProps> = ({title, children}) => {
+const InputGroup: React.FC<InputGroupProps> = ({title, boxStyle, children}) => {
   const css = useGroupStyle();
 
   return (
-    <View style={css.container}>
+    <View style={[css.container, boxStyle]}>
       <Text style={css.label}>{title}</Text>
       {children}
     </View>
