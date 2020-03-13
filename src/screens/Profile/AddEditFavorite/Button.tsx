@@ -13,6 +13,7 @@ const Button: React.FC<ButtonProps> = ({
   mode = 'primary',
   IconComponent,
   children,
+  disabled,
   ...props
 }) => {
   const css = useButtonStyle();
@@ -20,13 +21,14 @@ const Button: React.FC<ButtonProps> = ({
     css.button,
     mode === 'secondary' ? css.buttonSecondary : undefined,
     mode === 'destructive' ? css.buttonDestructive : undefined,
+    disabled ? css.buttonDisabled : undefined,
   ];
   const styleText = [
     css.text,
     mode === 'destructive' ? css.textDestructive : undefined,
   ];
   return (
-    <TouchableOpacity onPress={onPress} {...props}>
+    <TouchableOpacity onPress={onPress} {...props} disabled={disabled}>
       <View style={styleContainer}>
         {IconComponent && <IconComponent />}
         <View style={css.textContainer}>
@@ -56,6 +58,9 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   buttonDestructive: {
     backgroundColor: theme.background.destructive,
     color: theme.text.destructive,
+  },
+  buttonDisabled: {
+    opacity: 0.2,
   },
   textContainer: {
     flex: 1,
