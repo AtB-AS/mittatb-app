@@ -17,6 +17,8 @@ import useCalculateTrip from './useCalculateTrip';
 import useSortedLocations from './useSortedLocations';
 import {searchTrip} from '../../../api';
 import {UserFavorites, Location} from '../../../favorites/types';
+import {RootStackParamList} from '../../../navigation';
+import {CompositeNavigationProp} from '@react-navigation/native';
 
 export type Direction = 'home' | 'work';
 export type Origin = 'current' | 'static';
@@ -62,9 +64,9 @@ const overviewReducer: OverviewReducer = (prevState, action) => {
   }
 };
 
-export type OverviewScreenNavigationProp = StackNavigationProp<
-  PlannerStackParams,
-  'Overview'
+export type OverviewScreenNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<PlannerStackParams, 'Overview'>,
+  StackNavigationProp<RootStackParamList>
 >;
 
 type RootProps = {
@@ -167,13 +169,13 @@ const Overview: React.FC<Props> = ({
       />
       {direction === 'work' ? (
         <TouchableWithoutFeedback
-          onPress={() => dispatch({type: 'SET_DIRECTION', direction: 'home'})}
+          onPress={() => navigation.navigate('LocationSearch')}
         >
           <WorkBanner width="100%" />
         </TouchableWithoutFeedback>
       ) : (
         <TouchableWithoutFeedback
-          onPress={() => dispatch({type: 'SET_DIRECTION', direction: 'work'})}
+          onPress={() => navigation.navigate('LocationSearch')}
         >
           <HomeBanner width="100%" />
         </TouchableWithoutFeedback>
