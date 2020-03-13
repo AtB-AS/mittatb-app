@@ -55,7 +55,7 @@ export default function AddEditFavorite({navigation, route}: ModalScreenProps) {
 
   // @TODO This must be fixed so that the emoji item it self is stored
   // in favorites, or some lookup to set selected item inside emoji panel.
-  const renderedEmoji = editItem?.emoji ?? emoji?.renderedText ?? '';
+  const renderedEmoji = emoji?.renderedText ?? editItem?.emoji ?? '';
 
   const save = async () => {
     if (!location) {

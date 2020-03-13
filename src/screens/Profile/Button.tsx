@@ -26,28 +26,30 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const css = useButtonStyle();
+  console.log(disabled);
   const styleContainer = [
     css.button,
     mode === 'secondary' ? css.buttonSecondary : undefined,
     mode === 'destructive' ? css.buttonDestructive : undefined,
-    disabled ? css.buttonDisabled : undefined,
   ];
   const styleText = [
     css.text,
     mode === 'destructive' ? css.textDestructive : undefined,
   ];
   return (
-    <TouchableOpacity
-      style={[styleContainer, style]}
-      onPress={onPress}
-      disabled={disabled}
-      {...props}
-    >
-      {IconComponent && <IconComponent />}
-      <View style={[css.textContainer, textContainerStyle]}>
-        <Text style={styleText}>{children}</Text>
-      </View>
-    </TouchableOpacity>
+    <View style={disabled ? css.buttonDisabled : undefined}>
+      <TouchableOpacity
+        style={[styleContainer, style]}
+        onPress={onPress}
+        disabled={disabled}
+        {...props}
+      >
+        {IconComponent && <IconComponent />}
+        <View style={[css.textContainer, textContainerStyle]}>
+          <Text style={styleText}>{children}</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
   );
 };
 export default Button;
