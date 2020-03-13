@@ -1,29 +1,22 @@
+import {RouteProp} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacityProperties,
-  Alert,
-  StyleProp,
-  ViewStyle,
-} from 'react-native';
+import {Alert, StyleProp, Text, View, ViewStyle} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
-import {StyleSheet, Theme, useTheme} from '../../../theme';
-import LocationInput from '../../Onboarding/LocationInput';
+import {ProfileStackParams} from '..';
+import CancelCrossIcon from '../../../assets/svg/CancelCrossIcon';
+import ChevronDownIcon from '../../../assets/svg/ChevronDownIcon';
+import DeleteTrashCanIcon from '../../../assets/svg/DeleteTrashCanIcon';
+import MapPointIcon from '../../../assets/svg/MapPointIcon';
+import SaveDisketteIcon from '../../../assets/svg/SaveDisketteIcon';
+import {useFavorites} from '../../../favorites/FavoritesContext';
 import {Location} from '../../../favorites/types';
 import {useGeolocationState} from '../../../GeolocationContext';
-import SaveDisketteIcon from '../../../assets/svg/SaveDisketteIcon';
-import CancelCrossIcon from '../../../assets/svg/CancelCrossIcon';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {useFavorites} from '../../../favorites/FavoritesContext';
-import EmojiPopup from './EmojiPopup';
-import {ProfileStackParams} from '..';
-import ChevronDownIcon from '../../../assets/svg/ChevronDownIcon';
-import MapPointIcon from '../../../assets/svg/MapPointIcon';
-import {RenderedEmoji} from './Emojis';
+import {StyleSheet, Theme, useTheme} from '../../../theme';
+import LocationInput from '../../Onboarding/LocationInput';
 import Button from '../Button';
-import {RouteProp} from '@react-navigation/native';
-import DeleteTrashCanIcon from '../../../assets/svg/DeleteTrashCanIcon';
+import EmojiPopup from './EmojiPopup';
+import {RenderedEmoji} from './Emojis';
 
 type ModalScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
