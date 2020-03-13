@@ -1,11 +1,18 @@
-import {TouchableOpacityProperties, View, Text} from 'react-native';
+import {
+  TouchableOpacityProperties,
+  View,
+  Text,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import React from 'react';
-import {StyleSheet, Theme} from '../../../theme';
+import {StyleSheet, Theme} from '../../theme';
 
 type ButtonProps = {
   onPress(): void;
   mode?: 'primary' | 'destructive' | 'secondary';
+  textContainerStyle?: StyleProp<ViewStyle>;
   IconComponent?: React.ElementType;
 } & TouchableOpacityProperties;
 const Button: React.FC<ButtonProps> = ({
@@ -14,6 +21,8 @@ const Button: React.FC<ButtonProps> = ({
   IconComponent,
   children,
   disabled,
+  style,
+  textContainerStyle,
   ...props
 }) => {
   const css = useButtonStyle();
@@ -28,12 +37,15 @@ const Button: React.FC<ButtonProps> = ({
     mode === 'destructive' ? css.textDestructive : undefined,
   ];
   return (
-    <TouchableOpacity onPress={onPress} {...props} disabled={disabled}>
-      <View style={styleContainer}>
-        {IconComponent && <IconComponent />}
-        <View style={css.textContainer}>
-          <Text style={styleText}>{children}</Text>
-        </View>
+    <TouchableOpacity
+      style={[styleContainer, style]}
+      onPress={onPress}
+      disabled={disabled}
+      {...props}
+    >
+      {IconComponent && <IconComponent />}
+      <View style={[css.textContainer, textContainerStyle]}>
+        <Text style={styleText}>{children}</Text>
       </View>
     </TouchableOpacity>
   );

@@ -21,7 +21,7 @@ import {ProfileStackParams} from '..';
 import ChevronDownIcon from '../../../assets/svg/ChevronDownIcon';
 import MapPointIcon from '../../../assets/svg/MapPointIcon';
 import {RenderedEmoji} from './Emojis';
-import Button from './Button';
+import Button from '../Button';
 import {RouteProp} from '@react-navigation/native';
 import DeleteTrashCanIcon from '../../../assets/svg/DeleteTrashCanIcon';
 

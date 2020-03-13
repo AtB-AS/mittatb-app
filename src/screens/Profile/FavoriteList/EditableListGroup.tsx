@@ -27,6 +27,7 @@ export default function EditableListGroup<T>({
         <Text style={css.headerText}>{title}</Text>
         <View style={css.headerDecorator}></View>
       </View>
+      {renderAddButtonComponent && renderAddButtonComponent()}
       <View style={css.listSection}>
         {!data?.length ? (
           <Text style={css.empty}>
@@ -38,7 +39,6 @@ export default function EditableListGroup<T>({
           ))
         )}
       </View>
-      {renderAddButtonComponent && renderAddButtonComponent()}
     </View>
   );
 }
