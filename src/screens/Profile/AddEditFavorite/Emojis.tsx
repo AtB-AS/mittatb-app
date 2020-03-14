@@ -38,7 +38,6 @@ const __CLEAR_ITEM: ClearItem = {clearItem: true};
 const charFromUtf16 = (utf16: string) =>
   String.fromCodePoint(...(utf16.split('-').map(u => '0x' + u) as any));
 export const charFromEmojiObject = (obj: Emoji) => charFromUtf16(obj.unified);
-// const filteredRawEmojis = emojiRawData.filter(e => !e.obsoleted_by);
 const sortEmoji = (list: Emojis) =>
   list.sort((a, b) => a.sort_order - b.sort_order);
 const filterEmojiOnVersion = (src: Emojis, version?: string) => {

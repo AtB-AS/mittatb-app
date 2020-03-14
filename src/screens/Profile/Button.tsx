@@ -26,7 +26,6 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const css = useButtonStyle();
-  console.log(disabled);
   const styleContainer = [
     css.button,
     mode === 'secondary' ? css.buttonSecondary : undefined,

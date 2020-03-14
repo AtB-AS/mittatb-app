@@ -34,7 +34,6 @@ export default function Profile({navigation}: ProfileScreenProps) {
   const {favorites} = useFavorites();
   const items = favorites ?? [];
 
-  console.log('Rendering', favorites);
 
   const navigateToEdit = (item: LocationFavorite) => {
     navigation.navigate('AddEditFavorite', {editItem: item});
