@@ -296,7 +296,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = WF6RLTP4TP;
+						DevelopmentTeam = CSV447Q97L;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -646,7 +646,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = WF6RLTP4TP;
+				DEVELOPMENT_TEAM = CSV447Q97L;
 				INFOPLIST_FILE = atb/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -654,7 +654,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = no.mittatb.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = no.mittatb.debug;
 				PRODUCT_NAME = AtB;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -666,7 +666,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = WF6RLTP4TP;
+				DEVELOPMENT_TEAM = CSV447Q97L;
 				INFOPLIST_FILE = atb/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -674,7 +674,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = no.mittatb.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = no.mittatb.debug;
 				PRODUCT_NAME = AtB;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

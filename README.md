@@ -17,11 +17,12 @@ React Native POC.
 
 #### First time setup
 
-1. Copy the `.env.example` file to `.env` and fill in variables.
 1. Install dependencies:
    1. React Native: `yarn start`
    1. iOS specific: `cd ios/` and `pod install`
 1. Decrypt sensitive files `git-crypt unlock <path/to/key>` (Key given to internal members)
+
+For external contributors, we need to fix [#35](https://github.com/AtB-AS/mittatb-app/issues/35) before they are able to run the app.
 
 #### Starting projects
 
