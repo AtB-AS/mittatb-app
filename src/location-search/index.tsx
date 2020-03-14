@@ -39,13 +39,15 @@ const LocationSearch: React.FC<Props> = ({onSelectLocation, navigation}) => {
         />
         <InputSearchIcon style={styles.searchIcon} />
       </View>
-      <View style={styles.chipContainer}>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <FavoriteChip text="Min posisjon" icon={<Text>🚀</Text>} />
-          <FavoriteChip text="Hjem" icon={<Text>🏠</Text>} />
-          <FavoriteChip text="Jobb" icon={<Text>👩🏻‍💻</Text>} />
-        </ScrollView>
-      </View>
+      {!locations && (
+        <View style={styles.chipContainer}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            <FavoriteChip text="Min posisjon" icon={<Text>🚀</Text>} />
+            <FavoriteChip text="Hjem" icon={<Text>🏠</Text>} />
+            <FavoriteChip text="Jobb" icon={<Text>👩🏻‍💻</Text>} />
+          </ScrollView>
+        </View>
+      )}
       {!!locations && (
         <>
           <View style={styles.subHeader}>
@@ -92,6 +94,7 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
     width: '100%',
     height: 46,
     flexDirection: 'row',
+    marginBottom: 24,
   },
   input: {
     flex: 1,
@@ -109,7 +112,7 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
     alignSelf: 'center',
   },
   chipContainer: {
-    marginVertical: 24,
+    marginBottom: 24,
     height: 44,
   },
   subHeader: {
