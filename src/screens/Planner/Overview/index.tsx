@@ -18,7 +18,7 @@ import useSortedLocations from './useSortedLocations';
 import {searchTrip} from '../../../api';
 import {UserFavorites, Location} from '../../../favorites/types';
 import {RootStackParamList} from '../../../navigation';
-import {CompositeNavigationProp} from '@react-navigation/native';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 
 export type Direction = 'home' | 'work';
 export type Origin = 'current' | 'static';
@@ -64,18 +64,24 @@ const overviewReducer: OverviewReducer = (prevState, action) => {
   }
 };
 
+type OverviewRouteName = 'Overview';
+const OverviewRouteNameStatic: OverviewRouteName = 'Overview';
+
 export type OverviewScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<PlannerStackParams, 'Overview'>,
+  StackNavigationProp<PlannerStackParams, OverviewRouteName>,
   StackNavigationProp<RootStackParamList>
 >;
 
 type RootProps = {
   navigation: OverviewScreenNavigationProp;
+  route: RouteProp<PlannerStackParams, OverviewRouteName>;
 };
 
-const OverviewRoot: React.FC<RootProps> = ({navigation}) => {
+const OverviewRoot: React.FC<RootProps> = ({navigation, route}) => {
   const {userLocations} = useAppState();
   const {status, location} = useGeolocationState();
+
+  console.log(route?.params?.searchedLocation);
 
   const currentLocation = useMemo<Location | null>(
     () =>
@@ -169,7 +175,11 @@ const Overview: React.FC<Props> = ({
       />
       {direction === 'work' ? (
         <TouchableWithoutFeedback
-          onPress={() => navigation.navigate('LocationSearch')}
+          onPress={() =>
+            navigation.navigate('LocationSearch', {
+              callerRoute: OverviewRouteNameStatic,
+            })
+          }
         >
           <WorkBanner width="100%" />
         </TouchableWithoutFeedback>

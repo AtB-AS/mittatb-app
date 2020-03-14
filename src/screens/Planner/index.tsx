@@ -7,7 +7,7 @@ import colors from '../../theme/colors';
 import {Location} from '../../favorites/types';
 
 export type PlannerStackParams = {
-  Overview: undefined;
+  Overview: {searchedLocation?: string};
   Detail: {tripPattern: TripPattern; from: Location; to: Location};
 };
 

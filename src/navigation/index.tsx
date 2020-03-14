@@ -7,7 +7,9 @@ import trackNavigation from '../diagnostics/trackNavigation';
 import {useAppState} from '../AppContext';
 import Splash from '../screens/Splash';
 import Onboarding from '../screens/Onboarding';
-import LocationSearch from '../location-search';
+import LocationSearch, {
+  RouteParams as LocationSearchParams,
+} from '../location-search';
 import TabNavigator from './TabNavigator';
 import CloseModalCrossIcon from './svg/CloseModalCrossIcon';
 import {useTheme} from '../theme';
@@ -16,7 +18,7 @@ export type RootStackParamList = {
   Splash: undefined;
   Onboarding: undefined;
   TabNavigator: undefined;
-  LocationSearch: undefined;
+  LocationSearch: LocationSearchParams;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();

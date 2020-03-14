@@ -1,22 +1,37 @@
 import React, {useState} from 'react';
 import {Text, View, TextStyle} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+} from '@react-navigation/native';
 import {StyleSheet} from '../theme';
+import {Location} from '../favorites/types';
 import InputSearchIcon from './svg/InputSearchIcon';
 import useDebounce from './useDebounce';
 import {useGeocoder} from './useGeocoder';
-import {Location} from '../favorites/types';
-import {NavigationProp} from '@react-navigation/native';
 import LocationResults from './LocationResults';
 import FavoriteChips from './FavoriteChips';
+import {RootStackParamList} from '../navigation';
 
 type Props = {
-  onSelectLocation: (location: Location) => void;
   navigation: NavigationProp<any>;
+  route: RouteProp<RootStackParamList, 'LocationSearch'>;
 };
 
-const LocationSearch: React.FC<Props> = ({onSelectLocation, navigation}) => {
+export type RouteParams = {
+  callerRoute: string;
+};
+
+const LocationSearch: React.FC<Props> = ({
+  navigation,
+  route: {
+    params: {callerRoute},
+  },
+}) => {
   const styles = useThemeStyles();
+
   const [text, setText] = useState<string>('');
   const debouncedText = useDebounce(text, 200);
   const locations = useGeocoder(debouncedText, null);
@@ -40,10 +55,9 @@ const LocationSearch: React.FC<Props> = ({onSelectLocation, navigation}) => {
         <LocationResults
           title="Søkeresultat"
           locations={locations}
-          onSelect={location => {
-            onSelectLocation(location);
-            navigation.goBack();
-          }}
+          onSelect={searchLocation =>
+            navigation.navigate(callerRoute, {searchLocation})
+          }
         />
       )}
     </View>
