@@ -12,6 +12,7 @@ import CloseModalCrossIcon from './svg/CloseModalCrossIcon';
 import {useTheme} from '../theme';
 import createModalStackNavigator from './modal/createModalStackNavigator';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
+import transitionSpec from './transitionSpec';
 
 export type RootStackParamList = {
   TabNavigator: undefined;
@@ -68,18 +69,8 @@ const Root = () => {
             </View>
           ),
           transitionSpec: {
-            open: {
-              animation: 'timing',
-              config: {
-                duration: 350,
-              },
-            },
-            close: {
-              animation: 'timing',
-              config: {
-                duration: 350,
-              },
-            },
+            open: transitionSpec,
+            close: transitionSpec,
           },
         }}
       />

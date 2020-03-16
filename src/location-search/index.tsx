@@ -38,13 +38,18 @@ const LocationSearch: React.FC<Props> = ({navigation, onSelectLocation}) => {
 
   const {location: geolocation} = useGeolocationState();
 
-  const locations = useGeocoder(debouncedText, geolocation);
-  const filteredLocations = filterCurrentLocation(locations, previousLocations);
+  const locations = useGeocoder(debouncedText, geolocation) ?? [];
+  const filteredLocations =
+    filterCurrentLocation(locations, previousLocations) ?? [];
 
   const onSelect = (location: Location) => {
     onSelectLocation(location);
     navigation.goBack();
   };
+
+  const hasPreviousResults = !!previousLocations.length;
+  const hasResults = !!filteredLocations.length;
+  const hasAnyResult = hasResults || hasPreviousResults;
 
   return (
     <View style={styles.container}>
@@ -64,25 +69,31 @@ const LocationSearch: React.FC<Props> = ({navigation, onSelectLocation}) => {
           <InputSearchIcon style={styles.searchIcon} />
         </View>
       </SharedElement>
-      {!locations && (
+      {!hasResults && (
         <FavoriteChips onSelectLocation={onSelect} geolocation={geolocation} />
       )}
-      <ScrollView>
-        {!!previousLocations && (
-          <LocationResults
-            title="Tidligere søk"
-            locations={previousLocations}
-            onSelect={onSelect}
-          />
-        )}
-        {!!filteredLocations && (
-          <LocationResults
-            title="Søkeresultat"
-            locations={filteredLocations}
-            onSelect={onSelect}
-          />
-        )}
-      </ScrollView>
+      {hasAnyResult ? (
+        <ScrollView>
+          {hasPreviousResults && (
+            <LocationResults
+              title="Tidligere søk"
+              locations={previousLocations}
+              onSelect={onSelect}
+            />
+          )}
+          {hasResults && (
+            <LocationResults
+              title="Søkeresultat"
+              locations={filteredLocations}
+              onSelect={onSelect}
+            />
+          )}
+        </ScrollView>
+      ) : (
+        <View>
+          <Text>Fant ingen søkeresultat</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -102,7 +113,8 @@ const filterCurrentLocation = (
   previousLocations: Location[] | null,
 ) => {
   if (!previousLocations?.length) return locations;
-  return locations?.filter(l => !previousLocations.some(pl => pl.id === l.id));
+  if (!locations) return null;
+  return locations.filter(l => !previousLocations.some(pl => pl.id === l.id));
 };
 
 const useThemeStyles = StyleSheet.createThemeHook(theme => ({
