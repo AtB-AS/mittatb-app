@@ -50,13 +50,11 @@ const modalReducer: ModalReducer = (prevState, action) => {
 
 const defaultModalState: ModalState = {};
 
-const ModalContext = React.createContext<ModalContext | undefined>(undefined);
-
-// At the moment, only supposed to be used once at the top navigation root
-// Not built to be used in nested Navigators
 export default function createModalStackNavigator<
   ParamList extends Record<string, object | undefined>
 >() {
+  const ModalContext = React.createContext<ModalContext | undefined>(undefined);
+
   type Props = DefaultNavigatorOptions<StackNavigationOptions> &
     StackRouterOptions &
     StackNavigationConfig;
@@ -121,31 +119,33 @@ export default function createModalStackNavigator<
 
   const {Navigator, Screen} = navigatorFactory<ParamList>();
 
+  function useUniqueModal(uniqueModalId: string) {
+    const context = React.useContext(ModalContext);
+    if (context === undefined) {
+      throw new Error(
+        'useUniqueModalState must be used within a ModalContextProvider',
+      );
+    }
+    return {
+      state: context.modalState[uniqueModalId],
+      onCloseModal: context.onCloseModal,
+    };
+  }
+
+  function useOpenModal() {
+    const context = React.useContext(ModalContext);
+    if (context === undefined) {
+      throw new Error(
+        'useModalActions must be used within a ModalContextProvider',
+      );
+    }
+    return context.openModal;
+  }
+
   return {
     Navigator,
     Screen,
+    useUniqueModal,
+    useOpenModal,
   };
-}
-
-export function useUniqueModal(uniqueModalId: string) {
-  const context = React.useContext(ModalContext);
-  if (context === undefined) {
-    throw new Error(
-      'useUniqueModalState must be used within a ModalContextProvider',
-    );
-  }
-  return {
-    state: context.modalState[uniqueModalId],
-    onCloseModal: context.onCloseModal,
-  };
-}
-
-export function useOpenModal() {
-  const context = React.useContext(ModalContext);
-  if (context === undefined) {
-    throw new Error(
-      'useModalActions must be used within a ModalContextProvider',
-    );
-  }
-  return context.openModal;
 }

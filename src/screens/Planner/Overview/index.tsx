@@ -19,7 +19,7 @@ import {searchTrip} from '../../../api';
 import {UserFavorites, Location} from '../../../favorites/types';
 import {RootStackParamList} from '../../../navigation';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
-import {useOpenModal} from '../../../navigation/modal/createModalStackNavigator';
+import {useOpenModal} from '../../../navigation/';
 
 export type Direction = 'home' | 'work';
 export type Origin = 'current' | 'static';

@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, NavigationProp} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import trackNavigation from '../diagnostics/trackNavigation';
 import {useAppState} from '../AppContext';
@@ -11,7 +11,6 @@ import TabNavigator from './TabNavigator';
 import CloseModalCrossIcon from './svg/CloseModalCrossIcon';
 import {useTheme} from '../theme';
 import createModalStackNavigator from './modal/createModalStackNavigator';
-import wrapModalScreen from './modal/wrapModalScreen';
 
 export type RootStackParamList = {
   Onboarding: undefined;
@@ -19,10 +18,16 @@ export type RootStackParamList = {
   LocationSearch: undefined;
 };
 
-const {Navigator: ModalNavigator, Screen} = createModalStackNavigator<
-  RootStackParamList
->();
+const {
+  Navigator: ModalNavigator,
+  Screen,
+  useUniqueModal,
+  useOpenModal: useOpenModalInternal,
+} = createModalStackNavigator<RootStackParamList>();
+
 const LocationSearchModal = wrapModalScreen(LocationSearch);
+
+export const useOpenModal = useOpenModalInternal;
 
 const NavigationRoot = () => {
   const {isLoading, onboarded} = useAppState();
@@ -82,5 +87,22 @@ const NavigationRoot = () => {
     </SafeAreaProvider>
   );
 };
+
+type ModalScreenProps = {
+  route: any;
+  navigation: NavigationProp<any, any>;
+};
+
+function wrapModalScreen(Component: React.ComponentType<any>) {
+  const ModalScreen: React.FC<ModalScreenProps> = ({route, navigation}) => {
+    const {uniqueModalId} = route.params;
+    const {state, onCloseModal} = useUniqueModal(uniqueModalId);
+    React.useEffect(() => {
+      return () => onCloseModal(uniqueModalId);
+    }, []);
+    return <Component {...state} navigation={navigation} />;
+  };
+  return ModalScreen;
+}
 
 export default NavigationRoot;
