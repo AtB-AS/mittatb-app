@@ -9,6 +9,7 @@ import useDebounce from './useDebounce';
 import {useGeocoder} from './useGeocoder';
 import LocationResults from './LocationResults';
 import FavoriteChips from './FavoriteChips';
+import {useGeolocationState} from '../GeolocationContext';
 
 export type Props = {
   navigation: NavigationProp<any>;
@@ -34,7 +35,9 @@ const LocationSearch: React.FC<Props> = ({navigation, onSelectLocation}) => {
     } as Location,
   ]);
 
-  const locations = useGeocoder(debouncedText, null);
+  const {location: geolocation} = useGeolocationState();
+
+  const locations = useGeocoder(debouncedText, geolocation);
   const filteredLocations = filterCurrentLocation(locations, previousLocations);
 
   const onSelect = (location: Location) => {
@@ -57,7 +60,9 @@ const LocationSearch: React.FC<Props> = ({navigation, onSelectLocation}) => {
         />
         <InputSearchIcon style={styles.searchIcon} />
       </View>
-      {!locations && <FavoriteChips onSelectLocation={onSelect} />}
+      {!locations && (
+        <FavoriteChips onSelectLocation={onSelect} geolocation={geolocation} />
+      )}
       <ScrollView>
         {!!previousLocations && (
           <LocationResults

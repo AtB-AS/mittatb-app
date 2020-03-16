@@ -4,18 +4,18 @@ import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import colors from '../theme/colors';
 import {useFavorites} from '../favorites/FavoritesContext';
 import {Location} from '../favorites/types';
-import {useGeolocationState} from '../GeolocationContext';
 import {useReverseGeocoder} from './useGeocoder';
 import LocationArrow from '../assets/svg/LocationArrow';
+import {GeolocationResponse} from '@react-native-community/geolocation';
 
 type Props = {
+  geolocation: GeolocationResponse | null;
   onSelectLocation: (location: Location) => void;
 };
 
-const FavoriteChips: React.FC<Props> = ({onSelectLocation}) => {
+const FavoriteChips: React.FC<Props> = ({onSelectLocation, geolocation}) => {
   const {favorites} = useFavorites();
-  const {location} = useGeolocationState();
-  const reverseLookupLocations = useReverseGeocoder(location) ?? [];
+  const reverseLookupLocations = useReverseGeocoder(geolocation) ?? [];
   const currentLocation = reverseLookupLocations.length
     ? reverseLookupLocations[1]
     : null;
