@@ -19,6 +19,7 @@ import {searchTrip} from '../../../api';
 import {UserFavorites, Location} from '../../../favorites/types';
 import {RootStackParamList} from '../../../navigation';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
+import {useOpenModal} from '../../../navigation/modal/createModalStackNavigator';
 
 export type Direction = 'home' | 'work';
 export type Origin = 'current' | 'static';
@@ -80,8 +81,6 @@ type RootProps = {
 const OverviewRoot: React.FC<RootProps> = ({navigation, route}) => {
   const {userLocations} = useAppState();
   const {status, location} = useGeolocationState();
-
-  console.log(route?.params?.searchedLocation);
 
   const currentLocation = useMemo<Location | null>(
     () =>
@@ -166,6 +165,8 @@ const Overview: React.FC<Props> = ({
     search();
   }, [from, to]);
 
+  const openModal = useOpenModal();
+
   return (
     <SafeAreaView style={styles.container}>
       <Header
@@ -176,8 +177,9 @@ const Overview: React.FC<Props> = ({
       {direction === 'work' ? (
         <TouchableWithoutFeedback
           onPress={() =>
-            navigation.navigate('LocationSearch', {
-              callerRoute: OverviewRouteNameStatic,
+            openModal('LocationSearch', {
+              onSelectLocation: (location: Location) =>
+                console.log('[MODAL CALLBACK]: ', location),
             })
           }
         >

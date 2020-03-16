@@ -1,58 +1,57 @@
 import React from 'react';
 import {View} from 'react-native';
-import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import trackNavigation from '../diagnostics/trackNavigation';
 import {useAppState} from '../AppContext';
 import Splash from '../screens/Splash';
 import Onboarding from '../screens/Onboarding';
-import LocationSearch, {
-  RouteParams as LocationSearchParams,
-} from '../location-search';
+import LocationSearch from '../location-search';
 import TabNavigator from './TabNavigator';
 import CloseModalCrossIcon from './svg/CloseModalCrossIcon';
 import {useTheme} from '../theme';
+import createModalStackNavigator from './modal/createModalStackNavigator';
+import wrapModalScreen from './modal/wrapModalScreen';
 
 export type RootStackParamList = {
-  Splash: undefined;
   Onboarding: undefined;
   TabNavigator: undefined;
-  LocationSearch: LocationSearchParams;
+  LocationSearch: undefined;
 };
 
-const Stack = createStackNavigator<RootStackParamList>();
+const {Navigator: ModalNavigator, Screen} = createModalStackNavigator<
+  RootStackParamList
+>();
+const LocationSearchModal = wrapModalScreen(LocationSearch);
 
 const NavigationRoot = () => {
   const {isLoading, onboarded} = useAppState();
   const {theme} = useTheme();
 
+  if (isLoading) {
+    return <Splash />;
+  }
+
   return (
     <SafeAreaProvider>
       <NavigationContainer onStateChange={trackNavigation}>
-        <Stack.Navigator mode={isLoading || !onboarded ? 'card' : 'modal'}>
-          {isLoading ? (
-            <Stack.Screen
-              name="Splash"
-              component={Splash}
-              options={{headerShown: false}}
-            />
-          ) : !onboarded ? (
-            <Stack.Screen
+        <ModalNavigator mode={!onboarded ? 'card' : 'modal'}>
+          {!onboarded ? (
+            <Screen
               name="Onboarding"
               component={Onboarding}
               options={{headerShown: false}}
             />
           ) : (
             <>
-              <Stack.Screen
+              <Screen
                 name="TabNavigator"
                 component={TabNavigator}
                 options={{headerShown: false}}
               />
-              <Stack.Screen
+              <Screen
                 name="LocationSearch"
-                component={LocationSearch}
+                component={LocationSearchModal}
                 options={{
                   title: 'Søk',
                   headerBackTitleVisible: false,
@@ -78,7 +77,7 @@ const NavigationRoot = () => {
               />
             </>
           )}
-        </Stack.Navigator>
+        </ModalNavigator>
       </NavigationContainer>
     </SafeAreaProvider>
   );
