@@ -57,7 +57,7 @@ const LocationSearch: React.FC<Props> = ({navigation, onSelectLocation}) => {
         />
         <InputSearchIcon style={styles.searchIcon} />
       </View>
-      {!locations && <FavoriteChips />}
+      {!locations && <FavoriteChips onSelectLocation={onSelect} />}
       <ScrollView>
         {!!previousLocations && (
           <LocationResults

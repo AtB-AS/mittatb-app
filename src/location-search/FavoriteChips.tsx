@@ -1,9 +1,25 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import colors from '../theme/colors';
+import {useFavorites} from '../favorites/FavoritesContext';
+import {Location} from '../favorites/types';
+import {useGeolocationState} from '../GeolocationContext';
+import {useReverseGeocoder} from './useGeocoder';
+import LocationArrow from '../assets/svg/LocationArrow';
 
-const FavoriteChips: React.FC = () => {
+type Props = {
+  onSelectLocation: (location: Location) => void;
+};
+
+const FavoriteChips: React.FC<Props> = ({onSelectLocation}) => {
+  const {favorites} = useFavorites();
+  const {location} = useGeolocationState();
+  const reverseLookupLocations = useReverseGeocoder(location) ?? [];
+  const currentLocation = reverseLookupLocations.length
+    ? reverseLookupLocations[1]
+    : null;
+
   return (
     <View
       style={{
@@ -12,9 +28,21 @@ const FavoriteChips: React.FC = () => {
       }}
     >
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        <FavoriteChip text="Min posisjon" icon={<Text>🚀</Text>} />
-        <FavoriteChip text="Hjem" icon={<Text>🏠</Text>} />
-        <FavoriteChip text="Jobb" icon={<Text>👩🏻‍💻</Text>} />
+        {currentLocation && (
+          <FavoriteChip
+            text="Min posisjon"
+            icon={<LocationArrow />}
+            onPress={() => onSelectLocation(currentLocation)}
+          />
+        )}
+        {favorites.map(fav => (
+          <FavoriteChip
+            key={fav.name}
+            text={fav.name}
+            icon={<Text>{fav.emoji}</Text>}
+            onPress={() => onSelectLocation(fav.location)}
+          />
+        ))}
       </ScrollView>
     </View>
   );
@@ -23,16 +51,17 @@ const FavoriteChips: React.FC = () => {
 export default FavoriteChips;
 
 type ChipProps = {
-  text: string;
+  text?: string;
   icon: JSX.Element;
+  onPress: () => void;
 };
 
-const FavoriteChip: React.FC<ChipProps> = ({text, icon}) => {
+const FavoriteChip: React.FC<ChipProps> = ({text, icon, onPress}) => {
   return (
-    <View style={chipStyles.container}>
+    <TouchableOpacity style={chipStyles.container} onPress={onPress}>
       {icon}
       <Text style={chipStyles.text}>{text}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

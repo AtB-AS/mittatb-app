@@ -209,7 +209,6 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     width: '100%',
     height: 46,
     flexDirection: 'row',
-    marginBottom: 24,
   },
   searchInput: {
     flex: 1,
