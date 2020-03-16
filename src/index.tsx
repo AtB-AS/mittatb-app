@@ -5,6 +5,7 @@ import GeolocationContextProvider from './GeolocationContext';
 import NavigationRoot from './navigation';
 import trackAppState from './diagnostics/trackAppState';
 import ThemeContextProvider from './theme/ThemeContext';
+import FavoritesContextProvider from './favorites/FavoritesContext';
 
 trackAppState();
 enableScreens();
@@ -13,9 +14,11 @@ const App = () => {
   return (
     <AppContextProvider>
       <ThemeContextProvider>
-        <GeolocationContextProvider>
-          <NavigationRoot />
-        </GeolocationContextProvider>
+        <FavoritesContextProvider>
+          <GeolocationContextProvider>
+            <NavigationRoot />
+          </GeolocationContextProvider>
+        </FavoritesContextProvider>
       </ThemeContextProvider>
     </AppContextProvider>
   );

@@ -31,14 +31,47 @@ export async function getFavorites(): Promise<UserFavorites | null> {
   return data;
 }
 
-export function setFavorites(favorites: UserFavorites): Promise<void> {
-  return storage.set('stored_user_locations', JSON.stringify(favorites));
+export async function setFavorites(
+  favorites: UserFavorites,
+): Promise<UserFavorites> {
+  await storage.set('stored_user_locations', JSON.stringify(favorites));
+  return favorites;
 }
 
-export async function addFavorite(favorite: LocationFavorite): Promise<void> {
+export async function addFavorite(
+  favorite: LocationFavorite,
+): Promise<UserFavorites> {
   let favorites = (await getFavorites()) ?? [];
   favorites = favorites.concat(favorite);
-  return setFavorites(favorites);
+  return await setFavorites(favorites);
+}
+
+export async function removeFavorite(
+  favorite: LocationFavorite,
+): Promise<UserFavorites> {
+  let favorites = (await getFavorites()) ?? [];
+  favorites = favorites.filter(
+    item =>
+      item.name !== favorite.name || item.location.id !== favorite.location.id,
+  );
+  return await setFavorites(favorites);
+}
+
+export async function updateFavorite(
+  newLocation: LocationFavorite,
+  existingLocation: LocationFavorite,
+): Promise<UserFavorites> {
+  let favorites = (await getFavorites()) ?? [];
+  favorites = favorites.map(item => {
+    if (
+      item.name !== existingLocation.name ||
+      item.location.id !== existingLocation.location.id
+    ) {
+      return item;
+    }
+    return newLocation;
+  });
+  return await setFavorites(favorites);
 }
 
 /**
