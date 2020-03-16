@@ -1,7 +1,7 @@
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
-import {Alert, StyleProp, Text, View, ViewStyle} from 'react-native';
+import {Alert, StyleProp, Text, View, ViewStyle, TextStyle} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
 import CancelCrossIcon from '../../../assets/svg/CancelCrossIcon';
@@ -17,6 +17,8 @@ import LocationInput from '../../Onboarding/LocationInput';
 import Button from '../Button';
 import EmojiPopup from './EmojiPopup';
 import {RenderedEmoji} from './Emojis';
+import InputSearchIcon from '../../../location-search/svg/InputSearchIcon';
+import {useOpenModal} from '../../../navigation';
 
 type ModalScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -34,7 +36,7 @@ export default function AddEditFavorite({navigation, route}: ModalScreenProps) {
   const css = useScreenStyle();
   const {addFavorite, removeFavorite, updateFavorite} = useFavorites();
   const {theme} = useTheme();
-
+  const openModal = useOpenModal();
   const editItem = route?.params?.editItem;
 
   const [isEmojiVisible, setEmojiVisible] = useState<boolean>(false);
@@ -104,9 +106,24 @@ export default function AddEditFavorite({navigation, route}: ModalScreenProps) {
       />
 
       <View style={css.innerContainer}>
-        <LocationInputGroup onChange={setLocation} value={location} />
+        <InputGroup title="Adresse eller stoppested">
+          <View style={css.inputContainer}>
+            <TextInput
+              style={css.searchInput}
+              value={location?.label}
+              placeholder="Søk etter adresse eller stoppested"
+              onFocus={() =>
+                openModal('LocationSearch', {onSelectLocation: setLocation})
+              }
+              autoCorrect={false}
+              autoCompleteType="off"
+              placeholderTextColor={(css.placeholder as TextStyle).color}
+            />
+            <InputSearchIcon style={css.searchIcon} />
+          </View>
+        </InputGroup>
 
-        <InputGroup title="Name">
+        <InputGroup title="Navn">
           <TextInput
             style={css.input}
             onChangeText={setName}
@@ -185,6 +202,31 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     marginTop: 0,
   },
   emojiContainer: {},
+  placeholder: {
+    color: theme.text.faded,
+  },
+  inputContainer: {
+    width: '100%',
+    height: 46,
+    flexDirection: 'row',
+    marginBottom: 24,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    paddingLeft: 44,
+    backgroundColor: theme.background.primary,
+    borderBottomWidth: 2,
+    borderRadius: 4,
+    borderBottomColor: theme.border.primary,
+    color: theme.text.primary,
+    zIndex: -1,
+  },
+  searchIcon: {
+    position: 'absolute',
+    left: 14,
+    alignSelf: 'center',
+  },
 }));
 
 type SymbolPickerProps = {
