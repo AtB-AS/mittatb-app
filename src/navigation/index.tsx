@@ -44,7 +44,7 @@ const Root = () => {
         name="LocationSearch"
         component={LocationSearchModal}
         sharedElementsConfig={() => [
-          {id: 'locationSearchInput', animation: 'fade'},
+          {id: 'locationSearchInput', animation: 'move'},
         ]}
         options={{
           title: 'Søk',
@@ -67,6 +67,20 @@ const Root = () => {
               <CloseModalCrossIcon fill={tintColor} />
             </View>
           ),
+          transitionSpec: {
+            open: {
+              animation: 'timing',
+              config: {
+                duration: 350,
+              },
+            },
+            close: {
+              animation: 'timing',
+              config: {
+                duration: 350,
+              },
+            },
+          },
         }}
       />
     </SharedStack.Navigator>

@@ -54,6 +54,7 @@ const LocationSearch: React.FC<Props> = ({navigation, onSelectLocation}) => {
           <TextInput
             style={styles.input}
             value={text}
+            autoFocus={true}
             onChangeText={setText}
             placeholder="Søk etter adresse eller stoppested"
             autoCorrect={false}
@@ -108,7 +109,7 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
   container: {
     backgroundColor: theme.background.secondary,
     flex: 1,
-    padding: 24,
+    padding: theme.sizes.pagePadding,
   },
   label: {
     fontSize: 12,

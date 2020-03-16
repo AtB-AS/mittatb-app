@@ -21,7 +21,7 @@ const colors = {
 export default colors;
 
 const sizes = {
-  pagePadding: 20,
+  pagePadding: 24,
 };
 
 export interface Theme {
