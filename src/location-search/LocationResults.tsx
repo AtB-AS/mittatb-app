@@ -1,8 +1,10 @@
 import React from 'react';
 import {View, Text} from 'react-native';
-import {FlatList, TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import {StyleSheet} from '../theme';
 import {Location} from '../favorites/types';
+import MapPointIcon from '../assets/svg/MapPointIcon';
+import BusFront from '../assets/svg/BusFront';
 
 type Props = {
   title: string;
@@ -18,22 +20,46 @@ const LocationResults: React.FC<Props> = ({title, locations, onSelect}) => {
         <Text style={styles.subLabel}>{title}</Text>
         <View style={styles.subBar} />
       </View>
-      <FlatList
-        data={locations}
-        renderItem={({item: location}) => (
-          <TouchableWithoutFeedback
+      <View style={styles.list}>
+        {locations.map(location => (
+          <TouchableOpacity
+            key={location.id}
             onPress={() => onSelect?.(location)}
-            style={{padding: 12, marginVertical: 12}}
+            style={styles.button}
           >
-            <Text>
-              <Text style={{fontWeight: 'bold'}}>{location.name}</Text>
-              <Text>, {location.locality}</Text>
+            <LocationIcon
+              location={location}
+              fill={styles.locationIcon.backgroundColor}
+            />
+            <Text style={styles.buttonText}>
+              {location.name}, {location.locality}
             </Text>
-          </TouchableWithoutFeedback>
-        )}
-      />
+          </TouchableOpacity>
+        ))}
+      </View>
     </>
   );
+};
+
+const LocationIcon = ({
+  location,
+  fill,
+}: {
+  location: Location;
+  fill?: string;
+}) => {
+  const svgProps = {
+    fill,
+    width: 10,
+  };
+  switch (location.layer) {
+    case 'address':
+      return <MapPointIcon {...svgProps} />;
+    case 'venue':
+      return <BusFront {...svgProps} />;
+    default:
+      return <MapPointIcon {...svgProps} />;
+  }
 };
 
 export default LocationResults;
@@ -41,7 +67,6 @@ export default LocationResults;
 const useThemeStyles = StyleSheet.createThemeHook(theme => ({
   subHeader: {
     flexDirection: 'row',
-    marginBottom: 24,
   },
   subLabel: {
     color: theme.text.faded,
@@ -53,5 +78,22 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
     flexGrow: 1,
     borderBottomColor: theme.text.faded,
     borderBottomWidth: 1,
+  },
+  list: {
+    marginVertical: 24,
+  },
+  button: {
+    padding: 12,
+    marginVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: '500',
+    marginLeft: 16,
+  },
+  locationIcon: {
+    backgroundColor: theme.text.primary,
   },
 }));

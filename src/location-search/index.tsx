@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Text, View, TextStyle} from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
+import {TextInput, ScrollView} from 'react-native-gesture-handler';
 import {NavigationProp} from '@react-navigation/native';
 import {StyleSheet} from '../theme';
 import {Location} from '../favorites/types';
@@ -20,7 +20,28 @@ const LocationSearch: React.FC<Props> = ({navigation, onSelectLocation}) => {
 
   const [text, setText] = useState<string>('');
   const debouncedText = useDebounce(text, 200);
+
+  const previousLocations = filterPreviousLocations(debouncedText, [
+    {
+      coordinates: {
+        latitude: 63.279993,
+        longitude: 9.836737,
+      },
+      id: 'NSR:StopPlace:43150',
+      name: 'Sorenskrivergården',
+      label: 'Sorenskrivergården, Orkland',
+      locality: 'Orkland',
+    } as Location,
+  ]);
+
   const locations = useGeocoder(debouncedText, null);
+  const filteredLocations = filterCurrentLocation(locations, previousLocations);
+
+  const onSelect = (location: Location) => {
+    onSelectLocation(location);
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Adresse eller stoppested</Text>
@@ -37,18 +58,42 @@ const LocationSearch: React.FC<Props> = ({navigation, onSelectLocation}) => {
         <InputSearchIcon style={styles.searchIcon} />
       </View>
       {!locations && <FavoriteChips />}
-      {!!locations && (
-        <LocationResults
-          title="Søkeresultat"
-          locations={locations}
-          onSelect={searchLocation => {
-            onSelectLocation(searchLocation);
-            navigation.goBack();
-          }}
-        />
-      )}
+      <ScrollView>
+        {!!previousLocations && (
+          <LocationResults
+            title="Tidligere søk"
+            locations={previousLocations}
+            onSelect={onSelect}
+          />
+        )}
+        {!!filteredLocations && (
+          <LocationResults
+            title="Søkeresultat"
+            locations={filteredLocations}
+            onSelect={onSelect}
+          />
+        )}
+      </ScrollView>
     </View>
   );
+};
+
+const filterPreviousLocations = (
+  searchText: string,
+  previousLocations: Location[],
+): Location[] =>
+  searchText
+    ? previousLocations.filter(l =>
+        l.name?.toLowerCase()?.startsWith(searchText.toLowerCase()),
+      )
+    : previousLocations;
+
+const filterCurrentLocation = (
+  locations: Location[] | null,
+  previousLocations: Location[] | null,
+) => {
+  if (!previousLocations?.length) return locations;
+  return locations?.filter(l => !previousLocations.some(pl => pl.id === l.id));
 };
 
 const useThemeStyles = StyleSheet.createThemeHook(theme => ({

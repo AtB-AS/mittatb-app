@@ -75,9 +75,6 @@ const mapFeatureToLocation = ({
   },
   properties,
 }: Feature): Location => ({
+  ...properties,
   coordinates: {latitude, longitude},
-  id: properties.id,
-  name: properties.name,
-  label: properties.label,
-  locality: properties.locality,
 });
