@@ -11,9 +11,9 @@ import TabNavigator from './TabNavigator';
 import CloseModalCrossIcon from './svg/CloseModalCrossIcon';
 import {useTheme} from '../theme';
 import createModalStackNavigator from './modal/createModalStackNavigator';
+import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 
 export type RootStackParamList = {
-  Onboarding: undefined;
   TabNavigator: undefined;
   LocationSearch: undefined;
 };
@@ -23,16 +23,58 @@ const {
   Screen,
   useUniqueModal,
   useOpenModal: useOpenModalInternal,
-} = createModalStackNavigator<RootStackParamList>();
+} = createModalStackNavigator();
 
 const LocationSearchModal = wrapModalScreen(LocationSearch);
 
 export const useOpenModal = useOpenModalInternal;
 
+const SharedStack = createSharedElementStackNavigator<RootStackParamList>();
+
+const Root = () => {
+  const {theme} = useTheme();
+  return (
+    <SharedStack.Navigator mode="modal">
+      <SharedStack.Screen
+        name="TabNavigator"
+        component={TabNavigator}
+        options={{headerShown: false}}
+      />
+      <SharedStack.Screen
+        name="LocationSearch"
+        component={LocationSearchModal}
+        sharedElementsConfig={() => [
+          {id: 'locationSearchInput', animation: 'fade'},
+        ]}
+        options={{
+          title: 'Søk',
+          headerBackTitleVisible: false,
+          headerTintColor: theme.text.primary,
+          headerStyle: {
+            backgroundColor: theme.background.secondary,
+            shadowColor: 'transparent',
+          },
+          headerBackImage: ({tintColor}) => (
+            <View
+              style={{
+                width: 24,
+                height: 24,
+                alignContent: 'center',
+                justifyContent: 'center',
+                marginLeft: 24,
+              }}
+            >
+              <CloseModalCrossIcon fill={tintColor} />
+            </View>
+          ),
+        }}
+      />
+    </SharedStack.Navigator>
+  );
+};
+
 const NavigationRoot = () => {
   const {isLoading, onboarded} = useAppState();
-  const {theme} = useTheme();
-
   if (isLoading) {
     return <Splash />;
   }
@@ -40,47 +82,11 @@ const NavigationRoot = () => {
   return (
     <SafeAreaProvider>
       <NavigationContainer onStateChange={trackNavigation}>
-        <ModalNavigator mode={!onboarded ? 'card' : 'modal'}>
+        <ModalNavigator mode="card" headerMode="none">
           {!onboarded ? (
-            <Screen
-              name="Onboarding"
-              component={Onboarding}
-              options={{headerShown: false}}
-            />
+            <Screen name="Onboarding" component={Onboarding} />
           ) : (
-            <>
-              <Screen
-                name="TabNavigator"
-                component={TabNavigator}
-                options={{headerShown: false}}
-              />
-              <Screen
-                name="LocationSearch"
-                component={LocationSearchModal}
-                options={{
-                  title: 'Søk',
-                  headerBackTitleVisible: false,
-                  headerTintColor: theme.text.primary,
-                  headerStyle: {
-                    backgroundColor: theme.background.secondary,
-                    shadowColor: 'transparent',
-                  },
-                  headerBackImage: ({tintColor}) => (
-                    <View
-                      style={{
-                        width: 24,
-                        height: 24,
-                        alignContent: 'center',
-                        justifyContent: 'center',
-                        marginLeft: 24,
-                      }}
-                    >
-                      <CloseModalCrossIcon fill={tintColor} />
-                    </View>
-                  ),
-                }}
-              />
-            </>
+            <Screen name="Root" component={Root} />
           )}
         </ModalNavigator>
       </NavigationContainer>

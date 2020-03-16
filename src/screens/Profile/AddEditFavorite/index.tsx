@@ -19,6 +19,7 @@ import EmojiPopup from './EmojiPopup';
 import {RenderedEmoji} from './Emojis';
 import InputSearchIcon from '../../../location-search/svg/InputSearchIcon';
 import {useOpenModal} from '../../../navigation';
+import {SharedElement} from 'react-navigation-shared-element';
 
 type ModalScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -107,20 +108,22 @@ export default function AddEditFavorite({navigation, route}: ModalScreenProps) {
 
       <View style={css.innerContainer}>
         <InputGroup title="Adresse eller stoppested">
-          <View style={css.inputContainer}>
-            <TextInput
-              style={css.searchInput}
-              value={location?.label}
-              placeholder="Søk etter adresse eller stoppested"
-              onFocus={() =>
-                openModal('LocationSearch', {onSelectLocation: setLocation})
-              }
-              autoCorrect={false}
-              autoCompleteType="off"
-              placeholderTextColor={(css.placeholder as TextStyle).color}
-            />
-            <InputSearchIcon style={css.searchIcon} />
-          </View>
+          <SharedElement id="locationSearchInput">
+            <View style={css.inputContainer}>
+              <TextInput
+                style={css.searchInput}
+                value={location?.label}
+                placeholder="Søk etter adresse eller stoppested"
+                onFocus={() =>
+                  openModal('LocationSearch', {onSelectLocation: setLocation})
+                }
+                autoCorrect={false}
+                autoCompleteType="off"
+                placeholderTextColor={(css.placeholder as TextStyle).color}
+              />
+              <InputSearchIcon style={css.searchIcon} />
+            </View>
+          </SharedElement>
         </InputGroup>
 
         <InputGroup title="Navn">

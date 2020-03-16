@@ -10,6 +10,7 @@ import {useGeocoder} from './useGeocoder';
 import LocationResults from './LocationResults';
 import FavoriteChips from './FavoriteChips';
 import {useGeolocationState} from '../GeolocationContext';
+import {SharedElement} from 'react-navigation-shared-element';
 
 export type Props = {
   navigation: NavigationProp<any>;
@@ -48,18 +49,20 @@ const LocationSearch: React.FC<Props> = ({navigation, onSelectLocation}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Adresse eller stoppested</Text>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={text}
-          onChangeText={setText}
-          placeholder="Søk etter adresse eller stoppested"
-          autoCorrect={false}
-          autoCompleteType="off"
-          placeholderTextColor={(styles.placeholder as TextStyle).color}
-        />
-        <InputSearchIcon style={styles.searchIcon} />
-      </View>
+      <SharedElement id="locationSearchInput">
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            value={text}
+            onChangeText={setText}
+            placeholder="Søk etter adresse eller stoppested"
+            autoCorrect={false}
+            autoCompleteType="off"
+            placeholderTextColor={(styles.placeholder as TextStyle).color}
+          />
+          <InputSearchIcon style={styles.searchIcon} />
+        </View>
+      </SharedElement>
       {!locations && (
         <FavoriteChips onSelectLocation={onSelect} geolocation={geolocation} />
       )}

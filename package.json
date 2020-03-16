@@ -18,8 +18,9 @@
     "@react-native-firebase/analytics": "^6.3.4",
     "@react-native-firebase/app": "^6.3.4",
     "@react-navigation/bottom-tabs": "^5.1.0",
-    "@react-navigation/native": "^5.0.8",
-    "@react-navigation/stack": "^5.1.0",
+    "@react-navigation/core": "^5.2.1",
+    "@react-navigation/native": "^5.0.9",
+    "@react-navigation/stack": "^5.1.1",
     "@types/haversine": "^1.1.4",
     "@types/uuid": "^3.4.7",
     "axios": "^0.19.1",
@@ -38,7 +39,9 @@
     "react-native-reanimated": "^1.7.0",
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.2.0",
+    "react-native-shared-element": "^0.5.6",
     "react-native-svg": "^10.1.0",
+    "react-navigation-shared-element": "git+https://github.com/IjzerenHein/react-navigation-shared-element.git#32fa46bd55b6a01003e6e99f8c4d1c0eb07ec813",
     "uuid": "^3.4.0"
   },
   "devDependencies": {
