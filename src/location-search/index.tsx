@@ -55,8 +55,7 @@ const LocationSearch: React.FC<Props> = ({
   const {location: geolocation} = useGeolocationState();
 
   const locations = useGeocoder(debouncedText, geolocation) ?? [];
-  const filteredLocations =
-    filterCurrentLocation(locations, previousLocations) ?? [];
+  const filteredLocations = filterCurrentLocation(locations, previousLocations);
 
   const onSelect = (searchedLocation: Location) => {
     setText(searchedLocation.label ?? searchedLocation.name);
@@ -127,9 +126,9 @@ const filterPreviousLocations = (
 const filterCurrentLocation = (
   locations: Location[] | null,
   previousLocations: Location[] | null,
-) => {
-  if (!previousLocations?.length) return locations;
-  if (!locations) return null;
+): Location[] => {
+  if (!previousLocations?.length) return locations ?? [];
+  if (!locations) return [];
   return locations.filter(l => !previousLocations.some(pl => pl.id === l.id));
 };
 
