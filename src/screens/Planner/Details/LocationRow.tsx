@@ -1,6 +1,7 @@
 import React from 'react';
-import {View, Text, StyleSheet, TextStyle} from 'react-native';
+import {View, Text, TextStyle} from 'react-native';
 import colors from '../../../theme/colors';
+import {StyleSheet} from '../../../theme';
 
 const LocationRow: React.FC<{
   icon: JSX.Element;
@@ -9,6 +10,8 @@ const LocationRow: React.FC<{
   textStyle?: TextStyle;
   dashThroughIcon?: boolean;
 }> = ({icon, location, time, textStyle, dashThroughIcon}) => {
+  const styles = useLocationRowStyle();
+
   return (
     <View style={styles.row}>
       <View style={styles.iconLocationContainer}>
@@ -17,7 +20,7 @@ const LocationRow: React.FC<{
             styles.iconContainer,
             {
               backgroundColor: !dashThroughIcon
-                ? colors.primary.gray
+                ? colors.general.white
                 : 'transparent',
             },
           ]}
@@ -27,15 +30,15 @@ const LocationRow: React.FC<{
         <View style={styles.locationContainer}>
           <Text style={[styles.location, textStyle]}>{location}</Text>
         </View>
-      </View>
-      <View style={styles.timeContainer}>
-        <Text style={[styles.time, textStyle]}>{time}</Text>
+        <View style={styles.timeContainer}>
+          <Text style={[styles.time, textStyle]}>{time}</Text>
+        </View>
       </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const useLocationRowStyle = StyleSheet.createThemeHook(theme => ({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -60,13 +63,13 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   location: {
-    color: colors.general.white,
+    color: theme.text.primary,
   },
   timeContainer: {flexGrow: 1, alignItems: 'flex-end', marginLeft: 10},
   time: {
-    color: colors.general.white,
+    color: theme.text.primary,
     fontSize: 12,
   },
-});
+}));
 
 export default LocationRow;

@@ -17,13 +17,13 @@ const WalkDetail: React.FC<LegDetailProps> = ({leg, isFirst}) => {
         dashGap={4}
         dashLength={4}
         dashThickness={4}
-        dashColor={colors.general.white}
+        dashColor={colors.general.black}
         style={styles.dash}
       />
 
       {!isFirst ? (
         <LocationRow
-          icon={<DotIcon />}
+          icon={<DotIcon fill="black" />}
           location={leg.fromPlace.name}
           time={formatToClock(leg.aimedStartTime)}
         />
@@ -32,7 +32,7 @@ const WalkDetail: React.FC<LegDetailProps> = ({leg, isFirst}) => {
       )}
 
       <LocationRow
-        icon={<WalkingPerson />}
+        icon={<WalkingPerson fill="black" />}
         location={'Gå ' + Math.floor(leg.distance ?? 0) + ' m'}
         time={secondsToDuration(leg.duration ?? 0, nb)}
         textStyle={styles.walkTextStyle}

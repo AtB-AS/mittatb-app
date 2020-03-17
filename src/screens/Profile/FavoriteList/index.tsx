@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 import React from 'react';
 import {StyleSheet, Theme} from '../../../theme';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
-import LogoOutline from '../../../assets/svg/LogoOutline';
+import LogoOutline from '../../../ScreenHeader/LogoOutline';
 import EditIcon from '../../../assets/svg/EditIcon';
 import EditableListGroup from './EditableListGroup';
 import MapPointIcon from '../../../assets/svg/MapPointIcon';
@@ -13,6 +13,7 @@ import {ProfileStackParams} from '..';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import Button from '../Button';
+import Header from '../../../ScreenHeader';
 
 type FavoriteItem = {
   location: Location;
@@ -33,7 +34,6 @@ export default function Profile({navigation}: ProfileScreenProps) {
   const css = useProfileStyle();
   const {favorites} = useFavorites();
   const items = favorites ?? [];
-
 
   const navigateToEdit = (item: LocationFavorite) => {
     navigation.navigate('AddEditFavorite', {editItem: item});
@@ -128,35 +128,6 @@ const useItemStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flex: 1,
     marginStart: 10,
     marginEnd: 10,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-}));
-
-const Header: React.FC = ({children}) => {
-  const css = useHeaderStyle();
-  return (
-    <View style={css.container}>
-      <LogoOutline />
-      <View style={css.textContainer}>
-        <Text style={css.text}>{children}</Text>
-      </View>
-    </View>
-  );
-};
-const useHeaderStyle = StyleSheet.createThemeHook((theme: Theme) => ({
-  container: {
-    flexDirection: 'row',
-    padding: theme.sizes.pagePadding,
-  },
-  textContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginEnd: 20,
-  },
-  text: {
-    color: theme.text.primary,
     fontSize: 16,
     fontWeight: '600',
   },

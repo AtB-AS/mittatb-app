@@ -2,10 +2,10 @@ import React from 'react';
 import {TripPattern} from '../../sdk';
 import Assistant from './Overview';
 import Detail from './Details';
-import colors from '../../theme/colors';
 import {Location} from '../../favorites/types';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import {LocationWithSearchMetadata} from '../../location-search';
+import {TransitionPresets} from '@react-navigation/stack';
 
 export type PlannerStackParams = {
   Assistant: {
@@ -19,7 +19,16 @@ const Stack = createSharedElementStackNavigator<PlannerStackParams>();
 
 const PlannerRoot = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      mode="modal"
+      headerMode="none"
+      screenOptions={{
+        gestureEnabled: true,
+        cardOverlayEnabled: true,
+        cardShadowEnabled: true,
+        ...TransitionPresets.ModalPresentationIOS,
+      }}
+    >
       <Stack.Screen
         name="Assistant"
         component={Assistant}
@@ -31,14 +40,7 @@ const PlannerRoot = () => {
         name="Detail"
         component={Detail}
         options={{
-          headerTintColor: colors.general.white,
-          headerBackTitleVisible: false,
-          headerTitle: '',
-          headerStyle: {
-            backgroundColor: colors.primary.gray,
-            shadowOpacity: 0,
-            borderWidth: 0,
-          },
+          headerShown: false,
         }}
       />
     </Stack.Navigator>
