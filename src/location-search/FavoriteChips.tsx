@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ViewStyle} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import colors from '../theme/colors';
 import {useFavorites} from '../favorites/FavoritesContext';
@@ -35,12 +35,13 @@ const FavoriteChips: React.FC<Props> = ({onSelectLocation, geolocation}) => {
             onPress={() => onSelectLocation(currentLocation)}
           />
         )}
-        {favorites.map(fav => (
+        {favorites.map((fav, i) => (
           <FavoriteChip
             key={fav.name}
             text={fav.name}
             icon={<Text>{fav.emoji}</Text>}
             onPress={() => onSelectLocation(fav.location)}
+            style={i === favorites.length - 1 ? {marginRight: 0} : undefined}
           />
         ))}
       </ScrollView>
@@ -54,11 +55,12 @@ type ChipProps = {
   text?: string;
   icon: JSX.Element;
   onPress: () => void;
+  style?: ViewStyle;
 };
 
-const FavoriteChip: React.FC<ChipProps> = ({text, icon, onPress}) => {
+const FavoriteChip: React.FC<ChipProps> = ({text, icon, onPress, style}) => {
   return (
-    <TouchableOpacity style={chipStyles.container} onPress={onPress}>
+    <TouchableOpacity style={[chipStyles.container, style]} onPress={onPress}>
       {icon}
       <Text style={chipStyles.text}>{text}</Text>
     </TouchableOpacity>
