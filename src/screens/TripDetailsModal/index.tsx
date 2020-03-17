@@ -2,25 +2,31 @@ import React from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {RouteProp, NavigationProp} from '@react-navigation/native';
-import {Leg} from '../sdk';
-import {PlannerStackParams} from '../screens/Planner';
+import {Leg, TripPattern, Location} from '../../sdk';
 import WalkDetail from './WalkDetail';
 import BusDetail from './BusDetail';
-import {formatToClock} from '../utils/date';
+import {formatToClock} from '../../utils/date';
 import LocationRow from './LocationRow';
-import DotIcon from '../assets/svg/DotIcon';
-import {StyleSheet} from '../theme';
-import Header from '../ScreenHeader';
+import DotIcon from '../../assets/svg/DotIcon';
+import {StyleSheet} from '../../theme';
+import Header from '../../ScreenHeader';
+import {RootStackParamList} from '../../navigation';
 
-type DetailScreenNavigationProp = NavigationProp<PlannerStackParams, 'Detail'>;
-type DetailScreenRouteProp = RouteProp<PlannerStackParams, 'Detail'>;
+export type RouteParams = {
+  tripPattern: TripPattern;
+  from: Location;
+  to: Location;
+};
+
+type DetailScreenNavigationProp = NavigationProp<RootStackParamList>;
+type DetailScreenRouteProp = RouteProp<RootStackParamList, 'TripDetailsModal'>;
 
 type Props = {
   route: DetailScreenRouteProp;
   navigation: DetailScreenNavigationProp;
 };
 
-const Detail: React.FC<Props> = ({navigation, route}) => {
+const TripDetailsModal: React.FC<Props> = ({navigation, route}) => {
   const {
     params: {tripPattern, from, to},
   } = route;
@@ -80,4 +86,4 @@ const useDetailsStyle = StyleSheet.createThemeHook(theme => ({
   },
 }));
 
-export default Detail;
+export default TripDetailsModal;

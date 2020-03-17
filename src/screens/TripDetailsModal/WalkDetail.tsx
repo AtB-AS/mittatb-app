@@ -2,11 +2,11 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import Dash from 'react-native-dash';
 
-import colors from '../theme/colors';
-import {formatToClock, secondsToDuration} from '../utils/date';
+import colors from '../../theme/colors';
+import {formatToClock, secondsToDuration} from '../../utils/date';
 import nb from 'date-fns/locale/nb';
-import WalkingPerson from '../assets/svg/WalkingPerson';
-import DotIcon from '../assets/svg/DotIcon';
+import WalkingPerson from '../../assets/svg/WalkingPerson';
+import DotIcon from '../../assets/svg/DotIcon';
 import {LegDetailProps} from '.';
 import LocationRow from './LocationRow';
 

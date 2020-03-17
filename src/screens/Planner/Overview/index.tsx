@@ -4,7 +4,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import Results from './Results';
 import {useAppState} from '../../../AppContext';
 import {TripPattern} from '../../../sdk';
-import {PlannerStackParams} from '../';
 import {useGeolocationState} from '../../../GeolocationContext';
 import Splash from '../../Splash';
 import {StyleSheet, useStyle} from '../../../theme';
