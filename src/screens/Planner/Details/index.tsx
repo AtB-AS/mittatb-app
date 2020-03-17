@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {RouteProp, NavigationProp} from '@react-navigation/native';
 import {Leg} from '../../../sdk';
@@ -20,13 +20,12 @@ type Props = {
   navigation: DetailScreenNavigationProp;
 };
 
-const Detail: React.FC<Props> = ({
-  navigation,
-  route: {
+const Detail: React.FC<Props> = ({navigation, route}) => {
+  const {
     params: {tripPattern, from, to},
-  },
-}) => {
+  } = route;
   const styles = useDetailsStyle();
+
   return (
     <View style={styles.container}>
       <Header onClose={() => navigation.goBack()}>Reisedetaljer</Header>
