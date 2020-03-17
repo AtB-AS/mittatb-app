@@ -3,8 +3,7 @@ import {View, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {StyleSheet} from '../theme';
 import {Location} from '../favorites/types';
-import MapPointIcon from '../assets/svg/MapPointIcon';
-import BusFront from '../assets/svg/BusFront';
+import LocationIcon from './LocationIcon';
 
 type Props = {
   title: string;
@@ -39,27 +38,6 @@ const LocationResults: React.FC<Props> = ({title, locations, onSelect}) => {
       </View>
     </>
   );
-};
-
-const LocationIcon = ({
-  location,
-  fill,
-}: {
-  location: Location;
-  fill?: string;
-}) => {
-  const svgProps = {
-    fill,
-    width: 10,
-  };
-  switch (location.layer) {
-    case 'address':
-      return <MapPointIcon {...svgProps} />;
-    case 'venue':
-      return <BusFront {...svgProps} />;
-    default:
-      return <MapPointIcon {...svgProps} />;
-  }
 };
 
 export default LocationResults;
