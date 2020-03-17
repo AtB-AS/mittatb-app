@@ -2,7 +2,6 @@ import React, {useEffect, useReducer, useMemo} from 'react';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Header from './Header';
 import Results from './Results';
 import {useAppState} from '../../../AppContext';
 import {TripPattern} from '../../../sdk';
@@ -160,25 +159,6 @@ const Overview: React.FC<Props> = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <Header
-        dispatch={dispatch}
-        origin={origin}
-        geolocationDisabled={!currentLocation}
-      /> */}
-      {/* {direction === 'work' ? (
-        <TouchableWithoutFeedback
-          onPress={() => dispatch({type: 'SET_DIRECTION', direction: 'home'})}
-        >
-          <WorkBanner width="100%" />
-        </TouchableWithoutFeedback>
-      ) : (
-        <TouchableWithoutFeedback
-          onPress={() => dispatch({type: 'SET_DIRECTION', direction: 'work'})}
-        >
-          <HomeBanner width="100%" />
-        </TouchableWithoutFeedback>
-      )} */}
-
       <Results
         tripPatterns={tripPatterns}
         from={from}

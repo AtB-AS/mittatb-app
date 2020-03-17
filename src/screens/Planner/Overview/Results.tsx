@@ -1,10 +1,4 @@
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  MutableRefObject,
-  useMemo,
-} from 'react';
+import React from 'react';
 import {ActivityIndicator, View, Text} from 'react-native';
 import {TripPattern} from '../../../sdk';
 import {StyleSheet, Theme, useTheme} from '../../../theme';
@@ -12,7 +6,7 @@ import ResultItem from './ResultItem';
 import {OverviewScreenNavigationProp} from './';
 import {Location} from '../../../favorites/types';
 import ViewPager from '@react-native-community/viewpager';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import useViewPagerIndexController from './useViewPagerIndexController';
 import LeftArrow from './svg/LeftArrow';
 import RightArrow from './svg/RightArrow';
@@ -39,7 +33,7 @@ const Results: React.FC<Props> = ({
   search,
   navigation,
 }) => {
-  const {theme, toggleTheme} = useTheme();
+  const {theme} = useTheme();
   const styles = useThemeStyles(theme);
   const arrowFill = useArrowFill(theme);
 
@@ -63,7 +57,7 @@ const Results: React.FC<Props> = ({
     <View style={styles.container}>
       <View style={styles.detailContainer}>
         <View style={[styles.buttonContainer, {left: 10}]}>
-          <TouchableWithoutFeedback
+          <TouchableOpacity
             style={styles.button}
             onPress={previousPage}
             hitSlop={{bottom: 8, top: 8, right: 8, left: 8}}
@@ -72,7 +66,7 @@ const Results: React.FC<Props> = ({
             <LeftArrow
               fill={isFirstPage ? arrowFill.disabled : arrowFill.enabled}
             />
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
         </View>
         <ViewPager
           ref={viewPagerRef}
@@ -96,7 +90,7 @@ const Results: React.FC<Props> = ({
           ))}
         </ViewPager>
         <View style={[styles.buttonContainer, {right: 10}]}>
-          <TouchableWithoutFeedback
+          <TouchableOpacity
             style={styles.button}
             onPress={nextPage}
             hitSlop={{bottom: 8, top: 8, right: 8, left: 8}}
@@ -105,7 +99,7 @@ const Results: React.FC<Props> = ({
             <RightArrow
               fill={isLastPage ? arrowFill.disabled : arrowFill.enabled}
             />
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -142,7 +136,7 @@ const useThemeStyles = StyleSheet.createTheme(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  viewPager: {height: 240, width: '100%'},
+  viewPager: {height: 276, width: '100%'},
   timeText: {
     fontSize: 28,
     color: theme.text.primary,

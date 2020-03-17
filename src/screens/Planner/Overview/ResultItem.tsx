@@ -18,7 +18,11 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
   return (
     <View style={styles.legContainer}>
       <View
-        style={{flexDirection: 'column', alignItems: 'center', padding: 12}}
+        style={{
+          flexDirection: 'column',
+          alignItems: 'center',
+          paddingBottom: 12,
+        }}
       >
         <DetailDash count={2} />
         <View style={{flexDirection: 'row', paddingVertical: 4}}>
@@ -36,6 +40,15 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
       <Text style={styles.lineName}>
         {getLineDisplayName(tripPattern.legs[1])}
       </Text>
+      <View
+        style={{flexDirection: 'column', alignItems: 'center', paddingTop: 12}}
+      >
+        <DetailDash count={4} />
+        <View style={{paddingVertical: 4}}>
+          <Text style={{fontSize: 12}}>Vis detaljer</Text>
+        </View>
+        <DetailDash count={2} />
+      </View>
     </View>
   );
 };
@@ -75,7 +88,7 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
   legContainer: {
     flexDirection: 'column',
     alignItems: 'center',
-    padding: 50,
+    paddingHorizontal: 50,
     width: '100%',
   },
   stopName: {
