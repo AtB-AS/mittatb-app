@@ -1,23 +1,12 @@
 import React from 'react';
-import {View, Text, Animated} from 'react-native';
-import nb from 'date-fns/locale/nb';
-import colors, {
-  Themes,
-  themes,
-  createExtendedTheme,
-} from '../../../theme/colors';
-import {StyleSheet, Theme, useTheme} from '../../../theme';
+import {View, Text} from 'react-native';
+import colors from '../../../theme/colors';
+import {StyleSheet} from '../../../theme';
 import {TripPattern, Leg} from '../../../sdk';
 import {secondsToDuration, formatToClock} from '../../../utils/date';
-import LegIcons from '../LegIcons';
-import {TouchableHighlight} from 'react-native-gesture-handler';
-import {
-  StackCardInterpolationProps,
-  StackCardInterpolatedStyle,
-} from '@react-navigation/stack';
-import {RouteProp} from '@react-navigation/native';
-import {ResultTabParams} from './Results';
+import nb from 'date-fns/locale/nb';
 import Dash from 'react-native-dash';
+import WalkingPerson from '../../../assets/svg/WalkingPerson';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -28,15 +17,18 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
 
   return (
     <View style={styles.legContainer}>
-      <Dash
-        dashCount={4}
-        dashGap={3}
-        dashThickness={8}
-        dashLength={8}
-        dashColor={colors.primary.green}
-        style={styles.dash}
-        dashStyle={styles.dashItem}
-      />
+      <View
+        style={{flexDirection: 'column', alignItems: 'center', padding: 12}}
+      >
+        <DetailDash count={2} />
+        <View style={{flexDirection: 'row', paddingVertical: 4}}>
+          <WalkingPerson fill={styles.walkingPerson.backgroundColor} />
+          <Text style={{fontSize: 16}}>
+            Gå i {secondsToDuration(tripPattern.legs[0].duration ?? 0, nb)}
+          </Text>
+        </View>
+        <DetailDash count={2} />
+      </View>
       <Text style={styles.stopName}>{tripPattern.legs[1].fromPlace.name}</Text>
       <Text style={styles.time}>
         {formatToClock(tripPattern.legs[1].aimedStartTime)}
@@ -48,6 +40,27 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
   );
 };
 
+const DetailDash = ({count}: {count: number}) => (
+  <Dash
+    dashCount={count}
+    dashGap={3}
+    dashThickness={8}
+    dashLength={8}
+    dashColor={colors.general.gray}
+    style={dashStyles.dash}
+    dashStyle={dashStyles.dashItem}
+  />
+);
+
+const dashStyles = StyleSheet.create({
+  dash: {
+    flexDirection: 'column',
+  },
+  dashItem: {
+    borderRadius: 8,
+  },
+});
+
 function getLineDisplayName(leg: Leg) {
   const name =
     leg.intermediateEstimatedCalls[0]?.destinationDisplay?.frontText ??
@@ -56,18 +69,14 @@ function getLineDisplayName(leg: Leg) {
 }
 
 const useThemeStyles = StyleSheet.createThemeHook(theme => ({
+  walkingPerson: {
+    backgroundColor: theme.text.primary,
+  },
   legContainer: {
     flexDirection: 'column',
     alignItems: 'center',
     padding: 50,
     width: '100%',
-  },
-  dash: {
-    height: 50,
-    flexDirection: 'column',
-  },
-  dashItem: {
-    borderRadius: 8,
   },
   stopName: {
     fontSize: 16,

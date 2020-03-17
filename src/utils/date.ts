@@ -4,7 +4,7 @@ export function secondsToDuration(seconds: number, locale?: Locale): string {
   return formatDistanceStrict(Date.now() + seconds * 1000, Date.now(), {
     locale,
     onlyNumeric: true,
-  }).replace(/minutter/, 'min');
+  });
 }
 
 export function formatToClock(isoDate: string) {
