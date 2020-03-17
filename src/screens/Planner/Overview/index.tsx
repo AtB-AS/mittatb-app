@@ -19,10 +19,7 @@ import {searchTrip} from '../../../api';
 import {UserFavorites, Location} from '../../../favorites/types';
 import {RootStackParamList} from '../../../navigation';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
-import {
-  useLocationSearchValue,
-  openLocationSearchModal,
-} from '../../../location-search';
+import {useLocationSearchValue} from '../../../location-search';
 
 export type Direction = 'home' | 'work';
 export type Origin = 'current' | 'static';
@@ -184,7 +181,9 @@ const Overview: React.FC<Props> = ({
       {direction === 'work' ? (
         <TouchableWithoutFeedback
           onPress={() =>
-            navigation.navigate('LocationSearch', {callerRouteName: 'Overview'})
+            navigation.navigate('LocationSearch', {
+              callerRouteName: OverviewRouteNameStatic,
+            })
           }
         >
           <WorkBanner width="100%" />

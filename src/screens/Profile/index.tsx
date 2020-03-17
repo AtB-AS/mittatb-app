@@ -3,10 +3,13 @@ import {createSharedElementStackNavigator} from 'react-navigation-shared-element
 import AddEditFavorite from './AddEditFavorite';
 import Profile from './FavoriteList';
 import {LocationFavorite} from '../../favorites/types';
+import {LocationSearchCallerRouteParams} from '../../location-search';
 
 export type ProfileStackParams = {
   Profile: undefined;
-  AddEditFavorite: {editItem?: LocationFavorite} | undefined;
+  AddEditFavorite: {
+    editItem?: LocationFavorite;
+  } & LocationSearchCallerRouteParams;
 };
 
 const Stack = createSharedElementStackNavigator<ProfileStackParams>();

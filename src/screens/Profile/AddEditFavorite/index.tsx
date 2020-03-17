@@ -1,6 +1,6 @@
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Alert, StyleProp, Text, View, ViewStyle, TextStyle} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
@@ -18,26 +18,29 @@ import Button from '../Button';
 import EmojiPopup from './EmojiPopup';
 import {RenderedEmoji} from './Emojis';
 import InputSearchIcon from '../../../location-search/svg/InputSearchIcon';
-import {useOpenModal} from '../../../navigation';
 import {SharedElement} from 'react-navigation-shared-element';
+import {RootStackParamList} from '../../../navigation';
+import {useLocationSearchValue} from '../../../location-search';
 
-type ModalScreenNavigationProp = StackNavigationProp<
-  ProfileStackParams,
-  'AddEditFavorite'
+type AddEditRouteName = 'AddEditFavorite';
+const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
+
+export type AddEditNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<ProfileStackParams, AddEditRouteName>,
+  StackNavigationProp<RootStackParamList>
 >;
 
-type ProfileScreenRouteProp = RouteProp<ProfileStackParams, 'AddEditFavorite'>;
+type AddEditScreenRouteProp = RouteProp<ProfileStackParams, AddEditRouteName>;
 
-type ModalScreenProps = {
-  navigation: ModalScreenNavigationProp;
-  route: ProfileScreenRouteProp;
+type AddEditProps = {
+  navigation: AddEditNavigationProp;
+  route: AddEditScreenRouteProp;
 };
 
-export default function AddEditFavorite({navigation, route}: ModalScreenProps) {
+export default function AddEditFavorite({navigation, route}: AddEditProps) {
   const css = useScreenStyle();
   const {addFavorite, removeFavorite, updateFavorite} = useFavorites();
   const {theme} = useTheme();
-  const openModal = useOpenModal();
   const editItem = route?.params?.editItem;
 
   const [isEmojiVisible, setEmojiVisible] = useState<boolean>(false);
@@ -46,6 +49,10 @@ export default function AddEditFavorite({navigation, route}: ModalScreenProps) {
   const [location, setLocation] = useState<Location | undefined>(
     editItem?.location,
   );
+  const searchedLocation = useLocationSearchValue<AddEditScreenRouteProp>();
+  useEffect(() => {
+    setLocation(searchedLocation);
+  }, [searchedLocation]);
 
   const hasSelectedValues = Boolean(location);
 
@@ -115,7 +122,9 @@ export default function AddEditFavorite({navigation, route}: ModalScreenProps) {
                 value={location?.label}
                 placeholder="Søk etter adresse eller stoppested"
                 onFocus={() =>
-                  openModal('LocationSearch', {onSelectLocation: setLocation})
+                  navigation.navigate('LocationSearch', {
+                    callerRouteName: AddEditRouteNameStatic,
+                  })
                 }
                 autoCorrect={false}
                 autoCompleteType="off"

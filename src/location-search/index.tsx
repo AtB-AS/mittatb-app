@@ -170,7 +170,7 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
 }));
 
 export type LocationSearchCallerRouteParams = {
-  searchedLocation: Location;
+  searchedLocation?: Location;
 };
 
 export function useLocationSearchValue<
