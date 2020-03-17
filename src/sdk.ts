@@ -121,6 +121,7 @@ export interface Leg {
   distance?: number;
   duration?: number;
   fromPlace: Place;
+  fromEstimatedCall: EstimatedCall;
   toPlace: Place;
   fromEstimatedCall: IntermediateEstimatedCall;
   intermediateEstimatedCalls: Array<IntermediateEstimatedCall>;

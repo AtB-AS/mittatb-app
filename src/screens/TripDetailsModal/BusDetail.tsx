@@ -36,7 +36,12 @@ const BusDetail: React.FC<LegDetailProps> = ({leg}) => {
         <LocationRow
           icon={<BusFront fill={colors.primary.green} />}
           location={
-            leg.line ? leg.line.publicCode + ' ' + leg.line.name : 'Ukjent'
+            leg.line
+              ? leg.line.publicCode +
+                  ' ' +
+                  leg.fromEstimatedCall?.destinationDisplay?.frontText ??
+                leg.line.name
+              : 'Ukjent'
           }
           time={
             secondsToDuration(leg.duration ?? 0, nb) +
