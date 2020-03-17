@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Dash from 'react-native-dash';
-import colors from '../../../theme/colors';
-import {formatToClock, secondsToDuration} from '../../../utils/date';
+import colors from '../theme/colors';
+import {formatToClock, secondsToDuration} from '../utils/date';
 import nb from 'date-fns/locale/nb';
-import BusFront from '../../../assets/svg/BusFront';
-import DotIcon from '../../../assets/svg/DotIcon';
-import {LegDetailProps} from './';
+import BusFront from '../assets/svg/BusFront';
+import DotIcon from '../assets/svg/DotIcon';
+import {LegDetailProps} from '.';
 import LocationRow from './LocationRow';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
