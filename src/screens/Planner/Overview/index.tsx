@@ -19,7 +19,10 @@ import {searchTrip} from '../../../api';
 import {UserFavorites, Location} from '../../../favorites/types';
 import {RootStackParamList} from '../../../navigation';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
-import {useOpenModal} from '../../../navigation/';
+import {
+  useLocationSearchValue,
+  openLocationSearchModal,
+} from '../../../location-search';
 
 export type Direction = 'home' | 'work';
 export type Origin = 'current' | 'static';
@@ -73,19 +76,20 @@ export type OverviewScreenNavigationProp = CompositeNavigationProp<
   StackNavigationProp<RootStackParamList>
 >;
 
+type OverviewRouteProp = RouteProp<PlannerStackParams, OverviewRouteName>;
+
 type RootProps = {
   navigation: OverviewScreenNavigationProp;
-  route: RouteProp<PlannerStackParams, OverviewRouteName>;
 };
 
-const OverviewRoot: React.FC<RootProps> = ({navigation, route}) => {
+const OverviewRoot: React.FC<RootProps> = ({navigation}) => {
   const {userLocations} = useAppState();
   const {status, location} = useGeolocationState();
 
   const currentLocation = useMemo<Location | null>(
     () =>
       location
-        ? {
+        ? ({
             id: 'current',
             name: 'Min posisjon',
             label: 'current',
@@ -94,7 +98,7 @@ const OverviewRoot: React.FC<RootProps> = ({navigation, route}) => {
               longitude: location.coords.longitude,
               latitude: location.coords.latitude,
             },
-          }
+          } as Location)
         : null,
     [location?.coords?.latitude, location?.coords?.longitude],
   );
@@ -165,7 +169,10 @@ const Overview: React.FC<Props> = ({
     search();
   }, [from, to]);
 
-  const openModal = useOpenModal();
+  const searchedLocation = useLocationSearchValue<OverviewRouteProp>();
+  useEffect(() => console.log('[MODAL CALLBACKS]: ', searchedLocation), [
+    searchedLocation,
+  ]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -177,10 +184,7 @@ const Overview: React.FC<Props> = ({
       {direction === 'work' ? (
         <TouchableWithoutFeedback
           onPress={() =>
-            openModal('LocationSearch', {
-              onSelectLocation: (location: Location) =>
-                console.log('[MODAL CALLBACK]: ', location),
-            })
+            navigation.navigate('LocationSearch', {callerRouteName: 'Overview'})
           }
         >
           <WorkBanner width="100%" />

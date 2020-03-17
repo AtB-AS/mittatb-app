@@ -5,9 +5,10 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Detail from './Details';
 import colors from '../../theme/colors';
 import {Location} from '../../favorites/types';
+import {LocationSearchCallerRouteParams} from '../../location-search';
 
 export type PlannerStackParams = {
-  Overview: {searchedLocation?: string};
+  Overview: LocationSearchCallerRouteParams;
   Detail: {tripPattern: TripPattern; from: Location; to: Location};
 };
 

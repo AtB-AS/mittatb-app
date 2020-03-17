@@ -1,7 +1,13 @@
 import React, {useState} from 'react';
 import {Text, View, TextStyle} from 'react-native';
 import {TextInput, ScrollView} from 'react-native-gesture-handler';
-import {NavigationProp} from '@react-navigation/native';
+import {
+  NavigationProp,
+  RouteProp,
+  useRoute,
+  useNavigation,
+  Route,
+} from '@react-navigation/native';
 import {StyleSheet} from '../theme';
 import {Location} from '../favorites/types';
 import InputSearchIcon from './svg/InputSearchIcon';
@@ -11,13 +17,23 @@ import LocationResults from './LocationResults';
 import FavoriteChips from './FavoriteChips';
 import {useGeolocationState} from '../GeolocationContext';
 import {SharedElement} from 'react-navigation-shared-element';
+import {RootStackParamList} from '../navigation';
 
 export type Props = {
   navigation: NavigationProp<any>;
-  onSelectLocation: (location: Location) => void;
+  route: RouteProp<RootStackParamList, 'LocationSearch'>;
 };
 
-const LocationSearch: React.FC<Props> = ({navigation, onSelectLocation}) => {
+export type RouteParams = {
+  callerRouteName: string;
+};
+
+const LocationSearch: React.FC<Props> = ({
+  navigation,
+  route: {
+    params: {callerRouteName},
+  },
+}) => {
   const styles = useThemeStyles();
 
   const [text, setText] = useState<string>('');
@@ -42,10 +58,9 @@ const LocationSearch: React.FC<Props> = ({navigation, onSelectLocation}) => {
   const filteredLocations =
     filterCurrentLocation(locations, previousLocations) ?? [];
 
-  const onSelect = (location: Location) => {
-    setText(location.label ?? location.name);
-    onSelectLocation(location);
-    navigation.goBack();
+  const onSelect = (searchedLocation: Location) => {
+    setText(searchedLocation.label ?? searchedLocation.name);
+    navigation.navigate(callerRouteName, {searchedLocation});
   };
 
   const hasPreviousResults = !!previousLocations.length;
@@ -153,5 +168,26 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
     alignSelf: 'center',
   },
 }));
+
+export type LocationSearchCallerRouteParams = {
+  searchedLocation: Location;
+};
+
+export function useLocationSearchValue<
+  T extends RouteProp<any, any> & {params: LocationSearchCallerRouteParams}
+>() {
+  const route = useRoute<T>();
+  const [location, setLocation] = React.useState<Location | undefined>(
+    undefined,
+  );
+
+  React.useEffect(() => {
+    if (route.params?.searchedLocation) {
+      setLocation(route.params?.searchedLocation);
+    }
+  }, [route.params?.searchedLocation]);
+
+  return location;
+}
 
 export default LocationSearch;
