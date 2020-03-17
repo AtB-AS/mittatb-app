@@ -43,6 +43,7 @@ const LocationSearch: React.FC<Props> = ({navigation, onSelectLocation}) => {
     filterCurrentLocation(locations, previousLocations) ?? [];
 
   const onSelect = (location: Location) => {
+    setText(location.label ?? location.name);
     onSelectLocation(location);
     navigation.goBack();
   };
