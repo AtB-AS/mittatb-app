@@ -2,7 +2,6 @@ import React from 'react';
 import MapPointIcon from '../assets/svg/MapPointIcon';
 import BusFront from '../assets/svg/BusFront';
 import {Location} from '../favorites/types';
-import {Category} from '../sdk';
 import TramFront from '../assets/svg/TramFront';
 import TrainFront from '../assets/svg/TrainFront';
 import BoatFront from '../assets/svg/BoatFront';
@@ -34,7 +33,7 @@ const LocationIcon = ({
           return <TramFront {...svgProps} height={16} />;
         case 'railStation':
         case 'metroStation':
-          return <TrainFront {...svgProps} height={16} />;
+          return <TrainFront {...svgProps} height={20} />;
         case 'airport':
           return <Plane {...svgProps} height={16} />;
         case 'harbourPort':
