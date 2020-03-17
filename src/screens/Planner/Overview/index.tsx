@@ -17,9 +17,6 @@ import useCalculateTrip from './useCalculateTrip';
 import useSortedLocations from './useSortedLocations';
 import {searchTrip} from '../../../api';
 import {UserFavorites, Location} from '../../../favorites/types';
-import {RootStackParamList} from '../../../navigation';
-import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
-import {useLocationSearchValue} from '../../../location-search';
 
 export type Direction = 'home' | 'work';
 export type Origin = 'current' | 'static';
@@ -65,15 +62,10 @@ const overviewReducer: OverviewReducer = (prevState, action) => {
   }
 };
 
-type OverviewRouteName = 'Overview';
-const OverviewRouteNameStatic: OverviewRouteName = 'Overview';
-
-export type OverviewScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<PlannerStackParams, OverviewRouteName>,
-  StackNavigationProp<RootStackParamList>
+export type OverviewScreenNavigationProp = StackNavigationProp<
+  PlannerStackParams,
+  'Overview'
 >;
-
-type OverviewRouteProp = RouteProp<PlannerStackParams, OverviewRouteName>;
 
 type RootProps = {
   navigation: OverviewScreenNavigationProp;
@@ -166,11 +158,6 @@ const Overview: React.FC<Props> = ({
     search();
   }, [from, to]);
 
-  const searchedLocation = useLocationSearchValue<OverviewRouteProp>();
-  useEffect(() => console.log('[MODAL CALLBACKS]: ', searchedLocation), [
-    searchedLocation,
-  ]);
-
   return (
     <SafeAreaView style={styles.container}>
       <Header
@@ -180,17 +167,13 @@ const Overview: React.FC<Props> = ({
       />
       {direction === 'work' ? (
         <TouchableWithoutFeedback
-          onPress={() =>
-            navigation.navigate('LocationSearch', {
-              callerRouteName: OverviewRouteNameStatic,
-            })
-          }
+          onPress={() => dispatch({type: 'SET_DIRECTION', direction: 'home'})}
         >
           <WorkBanner width="100%" />
         </TouchableWithoutFeedback>
       ) : (
         <TouchableWithoutFeedback
-          onPress={() => navigation.navigate('LocationSearch')}
+          onPress={() => dispatch({type: 'SET_DIRECTION', direction: 'work'})}
         >
           <HomeBanner width="100%" />
         </TouchableWithoutFeedback>
