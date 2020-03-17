@@ -14,25 +14,27 @@ const WalkDetail: React.FC<LegDetailProps> = ({leg, isFirst}) => {
   return (
     <View style={styles.container}>
       <Dash
-        dashGap={4}
+        dashGap={8}
         dashLength={4}
         dashThickness={4}
-        dashColor={colors.general.black}
+        dashColor={colors.general.gray200}
         style={styles.dash}
+        dashStyle={{borderRadius: 50}}
       />
 
       {!isFirst ? (
         <LocationRow
-          icon={<DotIcon fill="black" />}
+          icon={<DotIcon fill={colors.primary.green} />}
           location={leg.fromPlace.name}
           time={formatToClock(leg.aimedStartTime)}
+          textStyle={{fontSize: 16}}
         />
       ) : (
         <View />
       )}
 
       <LocationRow
-        icon={<WalkingPerson fill="black" />}
+        icon={<WalkingPerson fill={colors.general.gray200} />}
         location={'Gå ' + Math.floor(leg.distance ?? 0) + ' m'}
         time={secondsToDuration(leg.duration ?? 0, nb)}
         textStyle={styles.walkTextStyle}
@@ -45,13 +47,12 @@ const WalkDetail: React.FC<LegDetailProps> = ({leg, isFirst}) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 100,
+    height: 68,
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
   dash: {
     marginLeft: 7,
-    opacity: 0.6,
     flexDirection: 'column',
     position: 'absolute',
     height: '100%',

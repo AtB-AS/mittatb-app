@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, TextStyle} from 'react-native';
 import colors from '../../theme/colors';
-import {StyleSheet} from '../../theme';
+import {StyleSheet, useTheme} from '../../theme';
 
 const LocationRow: React.FC<{
   icon: JSX.Element;
@@ -11,6 +11,7 @@ const LocationRow: React.FC<{
   dashThroughIcon?: boolean;
 }> = ({icon, location, time, textStyle, dashThroughIcon}) => {
   const styles = useLocationRowStyle();
+  const {theme} = useTheme();
 
   return (
     <View style={styles.row}>
@@ -20,7 +21,7 @@ const LocationRow: React.FC<{
             styles.iconContainer,
             {
               backgroundColor: !dashThroughIcon
-                ? colors.general.white
+                ? theme.background.modal_Level2
                 : 'transparent',
             },
           ]}
@@ -68,7 +69,7 @@ const useLocationRowStyle = StyleSheet.createThemeHook(theme => ({
   timeContainer: {flexGrow: 1, alignItems: 'flex-end', marginLeft: 10},
   time: {
     color: theme.text.primary,
-    fontSize: 12,
+    fontWeight: 'bold',
   },
 }));
 

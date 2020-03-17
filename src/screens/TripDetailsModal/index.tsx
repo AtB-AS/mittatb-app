@@ -11,6 +11,8 @@ import DotIcon from '../../assets/svg/DotIcon';
 import {StyleSheet} from '../../theme';
 import Header from '../../ScreenHeader';
 import {RootStackParamList} from '../../navigation';
+import MapPointIcon from '../../assets/svg/MapPointIcon';
+import colors from '../../theme/colors';
 
 export type RouteParams = {
   tripPattern: TripPattern;
@@ -37,7 +39,7 @@ const TripDetailsModal: React.FC<Props> = ({navigation, route}) => {
       <Header onClose={() => navigation.goBack()}>Reisedetaljer</Header>
       <ScrollView style={styles.scrollView}>
         <LocationRow
-          icon={<DotIcon fill="black" />}
+          icon={<DotIcon fill={colors.general.black} />}
           location={from.name}
           time={formatToClock(tripPattern.startTime)}
         />
@@ -45,7 +47,7 @@ const TripDetailsModal: React.FC<Props> = ({navigation, route}) => {
           <LegDetail key={i} leg={leg} isFirst={i === 0} />
         ))}
         <LocationRow
-          icon={<DotIcon fill="black" />}
+          icon={<MapPointIcon fill={colors.general.black} />}
           location={to.name}
           time={formatToClock(tripPattern.endTime)}
         />
@@ -76,7 +78,7 @@ const LegDetail: React.FC<LegDetailProps> = props => {
 const useDetailsStyle = StyleSheet.createThemeHook(theme => ({
   container: {
     flex: 1,
-    backgroundColor: theme.background.primary,
+    backgroundColor: theme.background.modal_Level2,
   },
   scrollView: {
     flex: 1,

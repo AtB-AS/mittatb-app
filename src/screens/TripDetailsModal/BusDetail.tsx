@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import Dash from 'react-native-dash';
 import colors from '../../theme/colors';
 import {formatToClock, secondsToDuration} from '../../utils/date';
@@ -12,23 +12,26 @@ import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 const BusDetail: React.FC<LegDetailProps> = ({leg}) => {
   const [showStops, setShowStops] = useState(false);
+  console.log(leg);
   return (
     <TouchableWithoutFeedback
       style={styles.pressable}
       onPress={() => setShowStops(!showStops)}
     >
       <Dash
-        dashGap={0}
-        dashThickness={4}
-        dashLength={10}
+        dashGap={4}
+        dashThickness={8}
+        dashLength={8}
         dashColor={colors.primary.green}
         style={styles.dash}
+        dashStyle={{borderRadius: 50}}
       />
       <View style={styles.container}>
         <LocationRow
           icon={<DotIcon fill={colors.primary.green} />}
           location={leg.fromPlace.name}
           time={formatToClock(leg.aimedStartTime)}
+          textStyle={styles.textStyle}
         />
         <LocationRow
           icon={<BusFront fill={colors.primary.green} />}
@@ -41,7 +44,7 @@ const BusDetail: React.FC<LegDetailProps> = ({leg}) => {
             leg.intermediateEstimatedCalls.length +
             ' stopp'
           }
-          textStyle={{color: colors.primary.green}}
+          textStyle={styles.textStyle}
         />
 
         <View />
@@ -56,7 +59,6 @@ const BusDetail: React.FC<LegDetailProps> = ({leg}) => {
               time={formatToClock(
                 call.expectedDepartureTime ?? call.aimedDepartureTime,
               )}
-              dashThroughIcon={true}
               textStyle={styles.stopTextStyle}
             />
           ))}
@@ -73,15 +75,16 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
+  textStyle: {fontSize: 16},
   dash: {
-    marginLeft: 7,
+    marginLeft: 5,
     opacity: 0.6,
     flexDirection: 'column',
     position: 'absolute',
     height: '100%',
   },
-  stopContainer: {marginBottom: 30},
-  stopTextStyle: {opacity: 0.6, fontSize: 12},
+  stopContainer: {marginBottom: 28},
+  stopTextStyle: {opacity: 0.6, fontSize: 16},
 });
 
 export default BusDetail;
