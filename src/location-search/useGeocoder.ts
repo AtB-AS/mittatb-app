@@ -1,8 +1,8 @@
 import {useState, useEffect} from 'react';
 import {GeolocationResponse} from '@react-native-community/geolocation';
-import {Feature} from '../../sdk';
-import {autocomplete, reverse} from '../../api';
-import {Location} from '../../favorites/types';
+import {Feature} from '../sdk';
+import {autocomplete, reverse} from '../api';
+import {Location} from '../favorites/types';
 
 const BOUNDARY_FILTER = () => {
   const filter = {

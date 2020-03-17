@@ -1,8 +1,6 @@
-export type Location = {
-  id: string;
-  name: string;
-  locality: string;
-  label?: string;
+import {Feature} from '../sdk';
+
+export type Location = Feature['properties'] & {
   coordinates: {longitude: number; latitude: number};
 };
 

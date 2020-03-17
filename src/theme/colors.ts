@@ -7,6 +7,7 @@ const colors = {
     blue: '#008DA8',
     orange: '#C75B12',
     red: '#A51140',
+    cyan: '#71D6E0',
   },
   general: {
     white: '#ffffff',
@@ -20,7 +21,7 @@ const colors = {
 export default colors;
 
 const sizes = {
-  pagePadding: 20,
+  pagePadding: 24,
 };
 
 export interface Theme {

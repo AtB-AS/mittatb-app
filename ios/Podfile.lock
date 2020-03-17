@@ -310,6 +310,8 @@ PODS:
     - React
   - RNScreens (2.2.0):
     - React
+  - RNSharedElement (0.5.6):
+    - React
   - RNSVG (10.1.0):
     - React
   - Yoga (1.14.0)
@@ -354,6 +356,7 @@ DEPENDENCIES:
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSharedElement (from `../node_modules/react-native-shared-element`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -445,6 +448,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSharedElement:
+    :path: "../node_modules/react-native-shared-element"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   Yoga:
@@ -499,6 +504,7 @@ SPEC CHECKSUMS:
   RNPermissions: 2f74237e97b08beda01e914301e12524ddddf5b8
   RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
   RNScreens: 812b79d384e2bea7eebc4ec981469160d4948fd5
+  RNSharedElement: 83dc1bd2e0e04e4cc54af825382976a797106d19
   RNSVG: 069864be08c9fe065a2cf7e63656a34c78653c99
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 

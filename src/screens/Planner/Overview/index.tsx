@@ -78,7 +78,7 @@ const OverviewRoot: React.FC<RootProps> = ({navigation}) => {
   const currentLocation = useMemo<Location | null>(
     () =>
       location
-        ? {
+        ? ({
             id: 'current',
             name: 'Min posisjon',
             label: 'current',
@@ -87,7 +87,7 @@ const OverviewRoot: React.FC<RootProps> = ({navigation}) => {
               longitude: location.coords.longitude,
               latitude: location.coords.latitude,
             },
-          }
+          } as Location)
         : null,
     [location?.coords?.latitude, location?.coords?.longitude],
   );

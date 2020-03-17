@@ -1,7 +1,7 @@
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useState} from 'react';
-import {Alert, StyleProp, Text, View, ViewStyle} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Alert, StyleProp, Text, View, ViewStyle, TextStyle} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
 import CancelCrossIcon from '../../../assets/svg/CancelCrossIcon';
@@ -17,24 +17,30 @@ import LocationInput from '../../Onboarding/LocationInput';
 import Button from '../Button';
 import EmojiPopup from './EmojiPopup';
 import {RenderedEmoji} from './Emojis';
+import InputSearchIcon from '../../../location-search/svg/InputSearchIcon';
+import {SharedElement} from 'react-navigation-shared-element';
+import {RootStackParamList} from '../../../navigation';
+import {useLocationSearchValue} from '../../../location-search';
 
-type ModalScreenNavigationProp = StackNavigationProp<
-  ProfileStackParams,
-  'AddEditFavorite'
+type AddEditRouteName = 'AddEditFavorite';
+const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
+
+export type AddEditNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<ProfileStackParams, AddEditRouteName>,
+  StackNavigationProp<RootStackParamList>
 >;
 
-type ProfileScreenRouteProp = RouteProp<ProfileStackParams, 'AddEditFavorite'>;
+type AddEditScreenRouteProp = RouteProp<ProfileStackParams, AddEditRouteName>;
 
-type ModalScreenProps = {
-  navigation: ModalScreenNavigationProp;
-  route: ProfileScreenRouteProp;
+type AddEditProps = {
+  navigation: AddEditNavigationProp;
+  route: AddEditScreenRouteProp;
 };
 
-export default function AddEditFavorite({navigation, route}: ModalScreenProps) {
+export default function AddEditFavorite({navigation, route}: AddEditProps) {
   const css = useScreenStyle();
   const {addFavorite, removeFavorite, updateFavorite} = useFavorites();
   const {theme} = useTheme();
-
   const editItem = route?.params?.editItem;
 
   const [isEmojiVisible, setEmojiVisible] = useState<boolean>(false);
@@ -43,6 +49,10 @@ export default function AddEditFavorite({navigation, route}: ModalScreenProps) {
   const [location, setLocation] = useState<Location | undefined>(
     editItem?.location,
   );
+  const searchedLocation = useLocationSearchValue<AddEditScreenRouteProp>();
+  useEffect(() => {
+    setLocation(searchedLocation);
+  }, [searchedLocation]);
 
   const hasSelectedValues = Boolean(location);
 
@@ -104,9 +114,28 @@ export default function AddEditFavorite({navigation, route}: ModalScreenProps) {
       />
 
       <View style={css.innerContainer}>
-        <LocationInputGroup onChange={setLocation} value={location} />
+        <InputGroup title="Adresse eller stoppested">
+          <SharedElement id="locationSearchInput">
+            <View style={css.inputContainer}>
+              <TextInput
+                style={css.searchInput}
+                value={location?.label}
+                placeholder="Søk etter adresse eller stoppested"
+                onFocus={() =>
+                  navigation.navigate('LocationSearch', {
+                    callerRouteName: AddEditRouteNameStatic,
+                  })
+                }
+                autoCorrect={false}
+                autoCompleteType="off"
+                placeholderTextColor={(css.placeholder as TextStyle).color}
+              />
+              <InputSearchIcon style={css.searchIcon} />
+            </View>
+          </SharedElement>
+        </InputGroup>
 
-        <InputGroup title="Name">
+        <InputGroup title="Navn">
           <TextInput
             style={css.input}
             onChangeText={setName}
@@ -185,6 +214,30 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     marginTop: 0,
   },
   emojiContainer: {},
+  placeholder: {
+    color: theme.text.faded,
+  },
+  inputContainer: {
+    width: '100%',
+    height: 46,
+    flexDirection: 'row',
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    paddingLeft: 44,
+    backgroundColor: theme.background.primary,
+    borderBottomWidth: 2,
+    borderRadius: 4,
+    borderBottomColor: theme.border.primary,
+    color: theme.text.primary,
+    zIndex: -1,
+  },
+  searchIcon: {
+    position: 'absolute',
+    left: 14,
+    alignSelf: 'center',
+  },
 }));
 
 type SymbolPickerProps = {

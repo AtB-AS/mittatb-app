@@ -1,14 +1,13 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import Logo from '../../assets/svg/Logo';
 import colors from '../../theme/colors';
-import {SafeAreaView} from 'react-native-safe-area-context';
 
 const Splash = () => {
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Logo />
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -16,7 +16,9 @@ type FavoriteContextState = {
     existingLocation: LocationFavorite,
   ): Promise<void>;
 };
-const AppContext = createContext<FavoriteContextState | undefined>(undefined);
+const FavoritesContext = createContext<FavoriteContextState | undefined>(
+  undefined,
+);
 
 const FavoritesContextProvider: React.FC = ({children}) => {
   const [favorites, setFavorites] = useState<UserFavorites>([]);
@@ -49,12 +51,14 @@ const FavoritesContextProvider: React.FC = ({children}) => {
   };
 
   return (
-    <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>
+    <FavoritesContext.Provider value={contextValue}>
+      {children}
+    </FavoritesContext.Provider>
   );
 };
 
 export function useFavorites() {
-  const context = useContext(AppContext);
+  const context = useContext(FavoritesContext);
   if (context === undefined) {
     throw new Error(
       'useFavorites must be used within a FavoritesContextProvider',
