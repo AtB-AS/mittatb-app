@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   dash: {
-    marginLeft: 7,
+    marginLeft: 89,
     flexDirection: 'column',
     position: 'absolute',
     height: '100%',

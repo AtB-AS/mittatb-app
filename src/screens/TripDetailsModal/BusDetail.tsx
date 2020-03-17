@@ -4,15 +4,15 @@ import Dash from 'react-native-dash';
 import colors from '../../theme/colors';
 import {formatToClock, secondsToDuration} from '../../utils/date';
 import nb from 'date-fns/locale/nb';
-import BusFront from '../../assets/svg/BusFront';
 import DotIcon from '../../assets/svg/DotIcon';
 import {LegDetailProps} from '.';
 import LocationRow from './LocationRow';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import BusLegIcon from './svg/BusLegIcon';
+import {Leg} from '../../sdk';
 
 const BusDetail: React.FC<LegDetailProps> = ({leg}) => {
   const [showStops, setShowStops] = useState(false);
-  console.log(leg);
   return (
     <TouchableWithoutFeedback
       style={styles.pressable}
@@ -34,22 +34,10 @@ const BusDetail: React.FC<LegDetailProps> = ({leg}) => {
           textStyle={styles.textStyle}
         />
         <LocationRow
-          icon={<BusFront fill={colors.primary.green} />}
-          location={
-            leg.line
-              ? leg.line.publicCode +
-                  ' ' +
-                  leg.fromEstimatedCall?.destinationDisplay?.frontText ??
-                leg.line.name
-              : 'Ukjent'
-          }
-          time={
-            secondsToDuration(leg.duration ?? 0, nb) +
-            ' / ' +
-            leg.intermediateEstimatedCalls.length +
-            ' stopp'
-          }
-          textStyle={styles.textStyle}
+          icon={<BusLegIcon />}
+          location={lineName(leg)}
+          time={secondsToDuration(leg.duration ?? 0, nb)}
+          textStyle={[styles.textStyle, styles.activeTextStyle]}
         />
 
         <View />
@@ -81,8 +69,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   textStyle: {fontSize: 16},
+  activeTextStyle: {fontWeight: '600'},
   dash: {
-    marginLeft: 5,
+    marginLeft: 87,
     opacity: 0.6,
     flexDirection: 'column',
     position: 'absolute',
@@ -93,3 +82,10 @@ const styles = StyleSheet.create({
 });
 
 export default BusDetail;
+
+const lineName = (leg: Leg) =>
+  leg.line
+    ? leg.line.publicCode +
+        ' ' +
+        leg.fromEstimatedCall?.destinationDisplay?.frontText ?? leg.line.name
+    : 'Ukjent';

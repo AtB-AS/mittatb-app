@@ -42,6 +42,7 @@ const TripDetailsModal: React.FC<Props> = ({navigation, route}) => {
           icon={<DotIcon fill={colors.general.black} />}
           location={from.name}
           time={formatToClock(tripPattern.startTime)}
+          textStyle={styles.textStyle}
         />
         {tripPattern.legs.map((leg, i) => (
           <LegDetail key={i} leg={leg} isFirst={i === 0} />
@@ -50,6 +51,7 @@ const TripDetailsModal: React.FC<Props> = ({navigation, route}) => {
           icon={<MapPointIcon fill={colors.general.black} />}
           location={to.name}
           time={formatToClock(tripPattern.endTime)}
+          textStyle={styles.textStyle}
         />
       </ScrollView>
     </View>
@@ -85,6 +87,9 @@ const useDetailsStyle = StyleSheet.createThemeHook(theme => ({
     borderTopWidth: 1,
     borderTopColor: '#F9F9FA0D',
     padding: 12,
+  },
+  textStyle: {
+    fontSize: 16,
   },
 }));
 

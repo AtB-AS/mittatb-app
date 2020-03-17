@@ -1,13 +1,12 @@
 import React from 'react';
-import {View, Text, TextStyle} from 'react-native';
-import colors from '../../theme/colors';
+import {View, Text, TextStyle, StyleProp} from 'react-native';
 import {StyleSheet, useTheme} from '../../theme';
 
 const LocationRow: React.FC<{
   icon: JSX.Element;
   location: string;
   time: string;
-  textStyle?: TextStyle;
+  textStyle?: StyleProp<TextStyle>;
   dashThroughIcon?: boolean;
 }> = ({icon, location, time, textStyle, dashThroughIcon}) => {
   const styles = useLocationRowStyle();
@@ -16,6 +15,9 @@ const LocationRow: React.FC<{
   return (
     <View style={styles.row}>
       <View style={styles.iconLocationContainer}>
+        <View style={styles.timeContainer}>
+          <Text style={[styles.time, textStyle]}>{time}</Text>
+        </View>
         <View
           style={[
             styles.iconContainer,
@@ -30,9 +32,6 @@ const LocationRow: React.FC<{
         </View>
         <View style={styles.locationContainer}>
           <Text style={[styles.location, textStyle]}>{location}</Text>
-        </View>
-        <View style={styles.timeContainer}>
-          <Text style={[styles.time, textStyle]}>{time}</Text>
         </View>
       </View>
     </View>
@@ -66,7 +65,7 @@ const useLocationRowStyle = StyleSheet.createThemeHook(theme => ({
   location: {
     color: theme.text.primary,
   },
-  timeContainer: {flexGrow: 1, alignItems: 'flex-end', marginLeft: 10},
+  timeContainer: {width: 70, alignItems: 'flex-end', marginRight: 12},
   time: {
     color: theme.text.primary,
     fontWeight: 'bold',
