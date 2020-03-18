@@ -42,15 +42,16 @@ export default function Stops({navigation, route}: Props) {
       <ScreenHeader onClose={() => navigation.goBack()}>
         {getLineName(leg)}
       </ScreenHeader>
-
       <ScrollView style={styles.scrollView}>
-        {mapGroup(callGroups, (name, group) => (
-          <CallGroup
-            key={group[0]?.quay.id ?? name}
-            calls={group}
-            type={name}
-          />
-        ))}
+        <View style={styles.allGroups}>
+          {mapGroup(callGroups, (name, group) => (
+            <CallGroup
+              key={group[0]?.quay.id ?? name}
+              calls={group}
+              type={name}
+            />
+          ))}
+        </View>
       </ScrollView>
     </View>
   );
@@ -71,16 +72,20 @@ type CallGroupProps = {
 function CallGroup({type, calls}: CallGroupProps) {
   const isOnRoute = type === 'trip';
   const isBefore = type === 'passed';
+  const showCollapsable = isBefore && calls.length > 1;
   const dashColor = isOnRoute ? colors.primary.green : colors.general.gray200;
+  const isStartPlace = (i: number) => isOnRoute && i === 0;
+  const shouldDropMarginBottom = (i: number) =>
+    (type === 'after' || isOnRoute) && i == calls.length - 1;
+  const shouldHaveMarginTop = (i: number) => type === 'after' && i == 0;
+
   const [collapsed, setCollapsed] = useState(isBefore);
   const styles = useStopsStyle();
   if (!calls?.length) {
     return null;
   }
-  const isStartPlace = (i: number) => isOnRoute && i === 0;
 
   const items = collapsed ? [calls[0]] : calls;
-  const showCollapsable = type === 'passed' && calls.length > 1;
   const collapseButton = showCollapsable ? (
     <CollapseButtonRow
       collapsed={collapsed}
@@ -110,13 +115,20 @@ function CallGroup({type, calls}: CallGroupProps) {
                 <DotIcon fill={dashColor} />
               )
             }
-            rowStyle={[styles.item]}
+            rowStyle={[
+              styles.item,
+              shouldDropMarginBottom(i) ? {marginBottom: 0} : undefined,
+              shouldHaveMarginTop(i) ? {marginTop: 24} : undefined,
+            ]}
             key={call.quay.id}
             location={call.quay.name}
             time={formatToClock(
               call.aimedDepartureTime ?? call.expectedDepartureTime,
             )}
-            textStyle={styles.textStyle}
+            textStyle={[
+              styles.textStyle,
+              !isOnRoute ? styles.textStyleFaded : undefined,
+            ]}
           />
           {i === 0 && collapseButton}
         </>
@@ -171,6 +183,9 @@ const useStopsStyle = StyleSheet.createThemeHook(theme => ({
     flex: 1,
     backgroundColor: theme.background.modal_Level2,
   },
+  allGroups: {
+    marginBottom: 250,
+  },
   dash: {
     marginLeft: 87,
     flexDirection: 'column',
@@ -189,6 +204,9 @@ const useStopsStyle = StyleSheet.createThemeHook(theme => ({
   },
   textStyle: {
     fontSize: 16,
+  },
+  textStyleFaded: {
+    opacity: 0.6,
   },
 }));
 
