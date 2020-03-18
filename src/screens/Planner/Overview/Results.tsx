@@ -79,7 +79,9 @@ const Results: React.FC<Props> = ({tripPatterns, from, to, isSearching}) => {
           }}
         >
           {tripPatterns.map((tripPattern, i) => (
-            <ResultItem key={i} tripPattern={tripPattern} />
+            <View key={i}>
+              <ResultItem tripPattern={tripPattern} />
+            </View>
           ))}
         </ViewPager>
         <View style={[styles.buttonContainer, {right: 10}]}>
@@ -112,7 +114,7 @@ const useThemeStyles = StyleSheet.createTheme(theme => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  spinner: {height: 276},
+  spinner: {height: 280},
   detailContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -129,7 +131,7 @@ const useThemeStyles = StyleSheet.createTheme(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  viewPager: {height: 276, width: '100%'},
+  viewPager: {height: 280, width: '100%'},
   timeText: {
     fontSize: 28,
     color: theme.text.primary,

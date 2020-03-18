@@ -1,4 +1,4 @@
-{
+E{
   "name": "atb",
   "version": "0.0.1",
   "private": true,
@@ -44,6 +44,7 @@
     "react-native-shared-element": "^0.5.6",
     "react-native-svg": "^10.1.0",
     "react-navigation-shared-element": "^5.0.0-alpha1",
+    "react-native-viewpager": "^0.2.13",
     "uuid": "^3.4.0"
   },
   "devDependencies": {

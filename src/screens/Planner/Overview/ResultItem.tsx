@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, ViewStyle} from 'react-native';
 import colors from '../../../theme/colors';
 import {StyleSheet} from '../../../theme';
 import {TripPattern, Leg} from '../../../sdk';
@@ -14,7 +14,7 @@ type ResultItemProps = {
 
 const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
   const styles = useThemeStyles();
-
+  console.log(tripPattern);
   return (
     <View style={styles.legContainer}>
       <View
@@ -41,9 +41,15 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
         {getLineDisplayName(tripPattern.legs[1])}
       </Text>
       <View
-        style={{flexDirection: 'column', alignItems: 'center', paddingTop: 12}}
+        style={{
+          flexDirection: 'column',
+          alignItems: 'center',
+          paddingTop: 12,
+          height: 88,
+        }}
       >
         <DetailDash count={4} />
+        {/* <Text style={{fontSize: 16}}>1 bytte</Text> */}
         <View style={{paddingVertical: 4}}>
           <Text style={{fontSize: 12}}>Vis detaljer</Text>
         </View>
@@ -53,7 +59,7 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
   );
 };
 
-const DetailDash = ({count}: {count: number}) => (
+const DetailDash = ({count}: {count?: number}) => (
   <Dash
     dashCount={count}
     dashGap={3}
