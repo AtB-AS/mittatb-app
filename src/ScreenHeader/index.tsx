@@ -7,17 +7,22 @@ import CancelCrossIcon from '../assets/svg/CancelCrossIcon';
 
 type ScreenHeaderProps = {
   onClose?(): void;
+  iconElement?: React.ReactNode;
 };
 
-const ScreenHeader: React.FC<ScreenHeaderProps> = ({onClose, children}) => {
+const ScreenHeader: React.FC<ScreenHeaderProps> = ({
+  onClose,
+  iconElement,
+  children,
+}) => {
   const css = useHeaderStyle();
+  const defaultIcon = onClose ? <CancelCrossIcon /> : <LogoOutline />;
+  const iconEl = iconElement ?? defaultIcon;
 
   const icon = onClose ? (
-    <TouchableOpacity onPress={onClose}>
-      <CancelCrossIcon />
-    </TouchableOpacity>
+    <TouchableOpacity onPress={onClose}>{iconEl}</TouchableOpacity>
   ) : (
-    <LogoOutline />
+    iconEl
   );
 
   return (

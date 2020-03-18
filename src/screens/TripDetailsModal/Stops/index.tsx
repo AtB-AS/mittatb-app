@@ -9,6 +9,10 @@ import {formatToClock} from '../../../utils/date';
 import colors from '../../../theme/colors';
 import LocationRow from '../LocationRow';
 import {StyleSheet} from '../../../theme';
+import ScreenHeader from '../../../ScreenHeader';
+import {getLineName} from '../utils';
+import {ScrollView} from 'react-native-gesture-handler';
+import Dash from 'react-native-dash';
 
 export type StopRouteParams = {
   leg: Leg;
@@ -23,41 +27,69 @@ type Props = {
   navigation: DetailScreenNavigationProp;
 };
 
-export default function Stops({route}: Props) {
+export default function Stops({navigation, route}: Props) {
   const {leg} = route.params;
+  const styles = useStopsStyle();
+
+  const numElements = leg.intermediateEstimatedCalls.length;
   return (
-    <View style={styles.stopContainer}>
-      {leg.intermediateEstimatedCalls.map(call => (
-        <LocationRow
-          key={call.quay.id}
-          icon={<DotIcon fill={colors.primary.green} width={8} />}
-          location={call.quay.name}
-          time={formatToClock(
-            call.expectedDepartureTime ?? call.aimedDepartureTime,
-          )}
-          textStyle={styles.stopTextStyle}
+    <View style={styles.container}>
+      <ScreenHeader onClose={() => navigation.goBack()}>
+        {getLineName(leg)}
+      </ScreenHeader>
+
+      <ScrollView style={styles.scrollView}>
+        <Dash
+          dashGap={4}
+          dashThickness={8}
+          dashLength={8}
+          dashColor={colors.primary.green}
+          style={styles.dash}
+          dashStyle={{borderRadius: 50}}
         />
-      ))}
+
+        {leg.intermediateEstimatedCalls.map((call, i) => (
+          <LocationRow
+            icon={<DotIcon fill={colors.primary.green} />}
+            rowStyle={[
+              styles.item,
+              i === numElements - 1 ? styles.itemNoMargin : undefined,
+            ]}
+            key={call.quay.id}
+            location={call.quay.name}
+            time={formatToClock(
+              call.expectedDepartureTime ?? call.aimedDepartureTime,
+            )}
+            textStyle={styles.textStyle}
+          />
+        ))}
+      </ScrollView>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  pressable: {flexDirection: 'column'},
+const useStopsStyle = StyleSheet.createThemeHook(theme => ({
   container: {
-    minHeight: 100,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    flex: 1,
+    backgroundColor: theme.background.modal_Level2,
   },
-  textStyle: {fontSize: 16},
-  activeTextStyle: {fontWeight: '600'},
   dash: {
     marginLeft: 87,
-    opacity: 0.6,
     flexDirection: 'column',
     position: 'absolute',
     height: '100%',
   },
-  stopContainer: {marginBottom: 28},
-  stopTextStyle: {opacity: 0.6, fontSize: 16},
-});
+  item: {
+    marginBottom: 28,
+  },
+  itemNoMargin: {
+    marginBottom: 0,
+  },
+  scrollView: {
+    flex: 1,
+    padding: 12,
+  },
+  textStyle: {
+    fontSize: 16,
+  },
+}));

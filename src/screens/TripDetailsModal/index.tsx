@@ -2,6 +2,7 @@ import React from 'react';
 import Details, {DetailsRouteParams, DetailScreenRouteProp} from './Details';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import Stops, {StopRouteParams} from './Stops';
+import {TransitionPresets} from '@react-navigation/stack';
 
 export type DetailsModalStackParams = {
   Details: DetailsRouteParams;
@@ -18,18 +19,13 @@ type TripDetailsRootProps = {
 
 const TripDetailsRoot = ({route}: TripDetailsRootProps) => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator mode="modal" screenOptions={{headerShown: false}}>
       <Stack.Screen
         name="Details"
         component={Details}
         initialParams={route.params}
-        options={{headerShown: false}}
       />
-      <Stack.Screen
-        name="Stops"
-        component={Stops}
-        options={{headerShown: false}}
-      />
+      <Stack.Screen name="Stops" component={Stops} />
     </Stack.Navigator>
   );
 };

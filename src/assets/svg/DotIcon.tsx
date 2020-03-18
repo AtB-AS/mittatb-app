@@ -3,8 +3,8 @@ import Svg, {Circle, SvgProps} from 'react-native-svg';
 
 function DotIcon(props: SvgProps) {
   return (
-    <Svg width={12} height={12} viewBox="0 0 12 12" fill="#fff" {...props}>
-      <Circle cx={6} cy={6} r={6} />
+    <Svg width={20} height={20} viewBox="0 0 20 20" fill="#fff" {...props}>
+      <Circle cx={10} cy={10} r={10} />
     </Svg>
   );
 }
