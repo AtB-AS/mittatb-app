@@ -3,7 +3,7 @@ import {Leg, EstimatedCall} from '../../../sdk';
 import {DetailsModalStackParams} from '..';
 import {RouteProp, NavigationProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../../navigation';
-import {View} from 'react-native';
+import {View, Text, ViewStyle} from 'react-native';
 import DotIcon from '../../../assets/svg/DotIcon';
 import {formatToClock} from '../../../utils/date';
 import colors from '../../../theme/colors';
@@ -11,10 +11,12 @@ import LocationRow from '../LocationRow';
 import {StyleSheet} from '../../../theme';
 import ScreenHeader from '../../../ScreenHeader';
 import {getLineName} from '../utils';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Dash from 'react-native-dash';
 import {getDepartures} from '../../../api/serviceJourney';
 import BusLegIcon from '../svg/BusLegIcon';
+import UnfoldLess from './svg/UnfoldLess';
+import UnfoldMore from './svg/UnfoldMore';
 
 export type StopRouteParams = {
   leg: Leg;
@@ -67,13 +69,26 @@ type CallGroupProps = {
   type: keyof CallListGroup;
 };
 function CallGroup({type, calls}: CallGroupProps) {
+  const isOnRoute = type === 'trip';
+  const isBefore = type === 'passed';
+  const dashColor = isOnRoute ? colors.primary.green : colors.general.gray200;
+  const [collapsed, setCollapsed] = useState(isBefore);
   const styles = useStopsStyle();
-  if (!calls) {
+  if (!calls?.length) {
     return null;
   }
-  const isOnRoute = type === 'trip';
-  const dashColor = isOnRoute ? colors.primary.green : colors.general.gray200;
   const isStartPlace = (i: number) => isOnRoute && i === 0;
+
+  const items = collapsed ? [calls[0]] : calls;
+  const showCollapsable = type === 'passed' && calls.length > 1;
+  const collapseButton = showCollapsable ? (
+    <CollapseButtonRow
+      collapsed={collapsed}
+      setCollapsed={setCollapsed}
+      numberOfStops={calls.length - 1}
+    />
+  ) : null;
+
   return (
     <View>
       <Dash
@@ -85,27 +100,71 @@ function CallGroup({type, calls}: CallGroupProps) {
         dashStyle={{borderRadius: 50}}
       />
 
-      {calls.map((call, i) => (
-        <LocationRow
-          icon={
-            isStartPlace(i) ? (
-              <BusLegIcon height={20} />
-            ) : (
-              <DotIcon fill={dashColor} />
-            )
-          }
-          rowStyle={[styles.item]}
-          key={call.quay.id}
-          location={call.quay.name}
-          time={formatToClock(
-            call.aimedDepartureTime ?? call.expectedDepartureTime,
-          )}
-          textStyle={styles.textStyle}
-        />
+      {items.map((call, i) => (
+        <>
+          <LocationRow
+            icon={
+              isStartPlace(i) ? (
+                <BusLegIcon height={20} />
+              ) : (
+                <DotIcon fill={dashColor} />
+              )
+            }
+            rowStyle={[styles.item]}
+            key={call.quay.id}
+            location={call.quay.name}
+            time={formatToClock(
+              call.aimedDepartureTime ?? call.expectedDepartureTime,
+            )}
+            textStyle={styles.textStyle}
+          />
+          {i === 0 && collapseButton}
+        </>
       ))}
     </View>
   );
 }
+
+type CollapseButtonRowProps = {
+  numberOfStops: number;
+  collapsed: boolean;
+  setCollapsed(collapsed: boolean): void;
+};
+function CollapseButtonRow({
+  numberOfStops,
+  collapsed,
+  setCollapsed,
+}: CollapseButtonRowProps) {
+  const styles = useCollapseButtonStyle();
+  const text = <Text style={styles.text}>{numberOfStops} Mellomstopp</Text>;
+  const child = collapsed ? (
+    <>
+      <UnfoldMore />
+      {text}
+    </>
+  ) : (
+    <>
+      <UnfoldLess />
+      {text}
+    </>
+  );
+  return (
+    <TouchableOpacity onPress={() => setCollapsed(!collapsed)}>
+      <View style={styles.container}>{child}</View>
+    </TouchableOpacity>
+  );
+}
+const useCollapseButtonStyle = StyleSheet.createThemeHook(theme => ({
+  container: {
+    backgroundColor: theme.background.modal_Level2,
+    flexDirection: 'row',
+    marginBottom: 28,
+    marginLeft: 81,
+  },
+  text: {
+    marginLeft: 12,
+  },
+}));
 
 const useStopsStyle = StyleSheet.createThemeHook(theme => ({
   container: {
