@@ -139,20 +139,6 @@ const Overview: React.FC<Props> = ({
     isSearching: false,
   });
 
-  async function search() {
-    dispatch({type: 'SET_IS_SEARCHING'});
-    try {
-      const response = await searchTrip(from, to);
-      dispatch({type: 'SET_TRIP_PATTERNS', tripPatterns: response.data});
-    } catch (err) {
-      dispatch({type: 'SET_TRIP_PATTERNS', tripPatterns: null});
-    }
-  }
-
-  useEffect(() => {
-    search();
-  }, [from, to]);
-
   const styles = useThemeStyles();
 
   const [fromLocation, setFromLocation] = useState<Location | undefined>(from);
@@ -174,6 +160,21 @@ const Overview: React.FC<Props> = ({
       setToLocation(searchedToLocation);
     }
   }, [searchedToLocation]);
+
+  async function search() {
+    if (!fromLocation || !toLocation) return;
+    dispatch({type: 'SET_IS_SEARCHING'});
+    try {
+      const response = await searchTrip(fromLocation, toLocation);
+      dispatch({type: 'SET_TRIP_PATTERNS', tripPatterns: response.data});
+    } catch (err) {
+      dispatch({type: 'SET_TRIP_PATTERNS', tripPatterns: null});
+    }
+  }
+
+  useEffect(() => {
+    search();
+  }, [fromLocation, toLocation]);
 
   const openLocationSearch = (
     callerRouteParam: keyof OverviewRouteProp['params'],

@@ -22,9 +22,6 @@ const PlannerRoot = () => {
         options={{
           headerShown: false,
         }}
-        sharedElementsConfig={() => [
-          {id: 'locationSearchInput', animation: 'fade-in'},
-        ]}
       />
       <Stack.Screen
         name="Detail"

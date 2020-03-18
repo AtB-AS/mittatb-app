@@ -50,7 +50,12 @@ const NavigationRoot = () => {
                 name="LocationSearch"
                 component={LocationSearch}
                 sharedElementsConfig={() => [
-                  {id: 'locationSearchInput', animation: 'move'},
+                  {
+                    id: 'locationSearchInput',
+                    animation: 'fade',
+                    resize: 'clip',
+                    align: 'center-bottom',
+                  },
                 ]}
                 options={{
                   title: 'Søk',

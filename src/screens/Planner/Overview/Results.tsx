@@ -112,7 +112,7 @@ const useThemeStyles = StyleSheet.createTheme(theme => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  spinner: {padding: 72},
+  spinner: {height: 276},
   detailContainer: {
     justifyContent: 'center',
     alignItems: 'center',
