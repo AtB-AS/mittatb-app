@@ -7,7 +7,7 @@ import nb from 'date-fns/locale/nb';
 import DotIcon from '../../../assets/svg/DotIcon';
 import LocationRow from '../LocationRow';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import BusLegIcon from './svg/BusLegIcon';
+import BusLegIcon from '../svg/BusLegIcon';
 import {LegDetailProps, DetailScreenNavigationProp} from '.';
 import {useNavigation} from '@react-navigation/core';
 import {getLineName} from '../utils';

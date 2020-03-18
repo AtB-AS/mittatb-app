@@ -1,5 +1,5 @@
-import React from 'react';
-import {Leg} from '../../../sdk';
+import React, {useEffect, useState} from 'react';
+import {Leg, EstimatedCall} from '../../../sdk';
 import {DetailsModalStackParams} from '..';
 import {RouteProp, NavigationProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../../navigation';
@@ -13,6 +13,8 @@ import ScreenHeader from '../../../ScreenHeader';
 import {getLineName} from '../utils';
 import {ScrollView} from 'react-native-gesture-handler';
 import Dash from 'react-native-dash';
+import {getDepartures} from '../../../api/serviceJourney';
+import BusLegIcon from '../svg/BusLegIcon';
 
 export type StopRouteParams = {
   leg: Leg;
@@ -31,7 +33,8 @@ export default function Stops({navigation, route}: Props) {
   const {leg} = route.params;
   const styles = useStopsStyle();
 
-  const numElements = leg.intermediateEstimatedCalls.length;
+  const [callGroups] = useGroupedCallList(leg);
+
   return (
     <View style={styles.container}>
       <ScreenHeader onClose={() => navigation.goBack()}>
@@ -39,31 +42,67 @@ export default function Stops({navigation, route}: Props) {
       </ScreenHeader>
 
       <ScrollView style={styles.scrollView}>
-        <Dash
-          dashGap={4}
-          dashThickness={8}
-          dashLength={8}
-          dashColor={colors.primary.green}
-          style={styles.dash}
-          dashStyle={{borderRadius: 50}}
-        />
-
-        {leg.intermediateEstimatedCalls.map((call, i) => (
-          <LocationRow
-            icon={<DotIcon fill={colors.primary.green} />}
-            rowStyle={[
-              styles.item,
-              i === numElements - 1 ? styles.itemNoMargin : undefined,
-            ]}
-            key={call.quay.id}
-            location={call.quay.name}
-            time={formatToClock(
-              call.expectedDepartureTime ?? call.aimedDepartureTime,
-            )}
-            textStyle={styles.textStyle}
+        {mapGroup(callGroups, (name, group) => (
+          <CallGroup
+            key={group[0]?.quay.id ?? name}
+            calls={group}
+            type={name}
           />
         ))}
       </ScrollView>
+    </View>
+  );
+}
+function mapGroup<T>(
+  groups: CallListGroup,
+  map: (group: keyof CallListGroup, calls: EstimatedCall[]) => T,
+) {
+  return Object.entries(groups).map(([name, group]) =>
+    map(name as keyof CallListGroup, group),
+  );
+}
+
+type CallGroupProps = {
+  calls: EstimatedCall[];
+  type: keyof CallListGroup;
+};
+function CallGroup({type, calls}: CallGroupProps) {
+  const styles = useStopsStyle();
+  if (!calls) {
+    return null;
+  }
+  const isOnRoute = type === 'trip';
+  const dashColor = isOnRoute ? colors.primary.green : colors.general.gray200;
+  const isStartPlace = (i: number) => isOnRoute && i === 0;
+  return (
+    <View>
+      <Dash
+        dashGap={4}
+        dashThickness={8}
+        dashLength={8}
+        dashColor={dashColor}
+        style={styles.dash}
+        dashStyle={{borderRadius: 50}}
+      />
+
+      {calls.map((call, i) => (
+        <LocationRow
+          icon={
+            isStartPlace(i) ? (
+              <BusLegIcon height={20} />
+            ) : (
+              <DotIcon fill={dashColor} />
+            )
+          }
+          rowStyle={[styles.item]}
+          key={call.quay.id}
+          location={call.quay.name}
+          time={formatToClock(
+            call.aimedDepartureTime ?? call.expectedDepartureTime,
+          )}
+          textStyle={styles.textStyle}
+        />
+      ))}
     </View>
   );
 }
@@ -93,3 +132,78 @@ const useStopsStyle = StyleSheet.createThemeHook(theme => ({
     fontSize: 16,
   },
 }));
+
+type CallListGroup = {
+  passed: EstimatedCall[];
+  trip: EstimatedCall[];
+  after: EstimatedCall[];
+};
+
+function useGroupedCallList(leg: Leg): [CallListGroup, boolean] {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [serviceJourney, setJourney] = useState<CallListGroup>({
+    passed: [],
+    trip: [],
+    after: [],
+  });
+  const id = leg.serviceJourney.id;
+  useEffect(() => {
+    async function getServiceJourneyDepartures() {
+      setIsLoading(true);
+      const deps = await getDepartures(id);
+      setJourney(groupAllCallsByQuaysInLeg(deps, leg));
+      setIsLoading(false);
+    }
+    getServiceJourneyDepartures();
+  }, [id]);
+
+  return [serviceJourney, isLoading];
+}
+
+const onType = (
+  obj: CallListGroup,
+  key: keyof CallListGroup,
+  call: EstimatedCall,
+): CallListGroup => ({
+  ...obj,
+  [key]: obj[key].concat(call),
+});
+function groupAllCallsByQuaysInLeg(
+  calls: EstimatedCall[],
+  leg: Leg,
+): CallListGroup {
+  let isAfterStart = false;
+  let isAfterStop = false;
+
+  return calls.reduce(
+    (obj, call) => {
+      // We are at start quay, update flag
+      if (call.quay.id === leg.fromPlace.quay.id) {
+        isAfterStart = true;
+      }
+
+      if (!isAfterStart && !isAfterStop) {
+        // is the first group
+        obj = onType(obj, 'passed', call);
+      } else if (isAfterStart && !isAfterStop) {
+        // is the current route (between start/stop)
+        obj = onType(obj, 'trip', call);
+      } else {
+        // is quays after stop
+        obj = onType(obj, 'after', call);
+      }
+
+      // We are at stop, update flag
+      if (call.quay.id === leg.toPlace.quay.id) {
+        isAfterStop = true;
+      }
+
+      return obj;
+    },
+    {
+      passed: [],
+      trip: [],
+      after: [],
+    } as CallListGroup,
+  );
+}
