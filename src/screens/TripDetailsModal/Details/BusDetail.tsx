@@ -1,22 +1,24 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import Dash from 'react-native-dash';
 import colors from '../../../theme/colors';
 import {formatToClock, secondsToDuration} from '../../../utils/date';
 import nb from 'date-fns/locale/nb';
 import DotIcon from '../../../assets/svg/DotIcon';
-import LocationRow from './LocationRow';
+import LocationRow from '../LocationRow';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import BusLegIcon from './svg/BusLegIcon';
 import {Leg} from '../../../sdk';
-import {LegDetailProps} from '.';
+import {LegDetailProps, DetailScreenNavigationProp} from '.';
+import {useNavigation} from '@react-navigation/core';
 
 const BusDetail: React.FC<LegDetailProps> = ({leg}) => {
-  const [showStops, setShowStops] = useState(false);
+  const navigation = useNavigation<DetailScreenNavigationProp>();
+
   return (
     <TouchableWithoutFeedback
       style={styles.pressable}
-      onPress={() => setShowStops(!showStops)}
+      onPress={() => navigation.navigate('Stops', {leg})}
     >
       <Dash
         dashGap={4}
@@ -42,21 +44,6 @@ const BusDetail: React.FC<LegDetailProps> = ({leg}) => {
 
         <View />
       </View>
-      {showStops ? (
-        <View style={styles.stopContainer}>
-          {leg.intermediateEstimatedCalls.map(call => (
-            <LocationRow
-              key={call.quay.id}
-              icon={<DotIcon fill={colors.primary.green} width={8} />}
-              location={call.quay.name}
-              time={formatToClock(
-                call.expectedDepartureTime ?? call.aimedDepartureTime,
-              )}
-              textStyle={styles.stopTextStyle}
-            />
-          ))}
-        </View>
-      ) : null}
     </TouchableWithoutFeedback>
   );
 };

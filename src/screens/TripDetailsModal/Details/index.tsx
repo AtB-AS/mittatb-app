@@ -1,21 +1,34 @@
 import React from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {RouteProp, NavigationProp, useRoute} from '@react-navigation/native';
+import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {Leg, TripPattern, Location} from '../../../sdk';
 import WalkDetail from './WalkDetail';
 import BusDetail from './BusDetail';
 import {formatToClock} from '../../../utils/date';
-import LocationRow from './LocationRow';
+import LocationRow from '../LocationRow';
 import DotIcon from '../../../assets/svg/DotIcon';
 import {StyleSheet} from '../../../theme';
 import Header from '../../../ScreenHeader';
 import {RootStackParamList} from '../../../navigation';
 import MapPointIcon from '../../../assets/svg/MapPointIcon';
 import colors from '../../../theme/colors';
-import {DetailScreenRouteProp} from '..';
+import {DetailsModalStackParams} from '..';
 
-type DetailScreenNavigationProp = NavigationProp<RootStackParamList>;
+export type DetailsRouteParams = {
+  tripPattern: TripPattern;
+  from: Location;
+  to: Location;
+};
+
+export type DetailScreenRouteProp = RouteProp<
+  DetailsModalStackParams,
+  'Details'
+>;
+
+export type DetailScreenNavigationProp = NavigationProp<
+  DetailsModalStackParams
+>;
 
 type Props = {
   route: DetailScreenRouteProp;

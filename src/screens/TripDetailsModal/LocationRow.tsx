@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, TextStyle, StyleProp} from 'react-native';
-import {StyleSheet, useTheme} from '../../../theme';
+import {StyleSheet, useTheme} from '../../theme';
 
 const LocationRow: React.FC<{
   icon: JSX.Element;

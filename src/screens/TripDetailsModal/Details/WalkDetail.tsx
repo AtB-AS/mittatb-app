@@ -7,7 +7,7 @@ import {formatToClock, secondsToDuration} from '../../../utils/date';
 import nb from 'date-fns/locale/nb';
 import WalkingPerson from '../../../assets/svg/WalkingPerson';
 import DotIcon from '../../../assets/svg/DotIcon';
-import LocationRow from './LocationRow';
+import LocationRow from '../LocationRow';
 import {LegDetailProps} from '.';
 
 const WalkDetail: React.FC<LegDetailProps> = ({leg, isFirst}) => {

@@ -1,33 +1,33 @@
 import React from 'react';
-import Details from './Details';
+import Details, {DetailsRouteParams, DetailScreenRouteProp} from './Details';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
-import {TripPattern, Location} from '../../sdk';
-import {RouteProp} from '@react-navigation/native';
-
-export type DetailsRouteParams = {
-  tripPattern: TripPattern;
-  from: Location;
-  to: Location;
-};
+import Stops, {StopRouteParams} from './Stops';
 
 export type DetailsModalStackParams = {
   Details: DetailsRouteParams;
+  Stops: StopRouteParams;
 };
 
-export type DetailScreenRouteProp = RouteProp<
-  DetailsModalStackParams,
-  'Details'
->;
+export type RouteParams = DetailsRouteParams;
 
 const Stack = createSharedElementStackNavigator<DetailsModalStackParams>();
 
-const TripDetailsRoot = ({route}: {route: DetailScreenRouteProp}) => {
+type TripDetailsRootProps = {
+  route: DetailScreenRouteProp;
+};
+
+const TripDetailsRoot = ({route}: TripDetailsRootProps) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Details"
         component={Details}
         initialParams={route.params}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Stops"
+        component={Stops}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
