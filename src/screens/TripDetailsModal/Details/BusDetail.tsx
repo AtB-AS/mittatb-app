@@ -1,15 +1,15 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import Dash from 'react-native-dash';
-import colors from '../../theme/colors';
-import {formatToClock, secondsToDuration} from '../../utils/date';
+import colors from '../../../theme/colors';
+import {formatToClock, secondsToDuration} from '../../../utils/date';
 import nb from 'date-fns/locale/nb';
-import DotIcon from '../../assets/svg/DotIcon';
-import {LegDetailProps} from '.';
+import DotIcon from '../../../assets/svg/DotIcon';
 import LocationRow from './LocationRow';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import BusLegIcon from './svg/BusLegIcon';
-import {Leg} from '../../sdk';
+import {Leg} from '../../../sdk';
+import {LegDetailProps} from '.';
 
 const BusDetail: React.FC<LegDetailProps> = ({leg}) => {
   const [showStops, setShowStops] = useState(false);
