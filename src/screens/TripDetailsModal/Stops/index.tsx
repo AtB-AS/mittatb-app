@@ -10,7 +10,7 @@ import colors from '../../../theme/colors';
 import LocationRow from '../LocationRow';
 import {StyleSheet} from '../../../theme';
 import ScreenHeader from '../../../ScreenHeader';
-import {getLineName} from '../utils';
+import {getLineName, getQuayName} from '../utils';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Dash from 'react-native-dash';
 import {getDepartures} from '../../../api/serviceJourney';
@@ -121,7 +121,7 @@ function CallGroup({type, calls}: CallGroupProps) {
               shouldHaveMarginTop(i) ? {marginTop: 24} : undefined,
             ]}
             key={call.quay.id}
-            location={call.quay.name}
+            location={getQuayName(call.quay)}
             time={formatToClock(
               call.aimedDepartureTime ?? call.expectedDepartureTime,
             )}

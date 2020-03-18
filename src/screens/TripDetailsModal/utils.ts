@@ -1,4 +1,4 @@
-import {Leg} from '../../sdk';
+import {Leg, Quay} from '../../sdk';
 
 export function getLineName(leg: Leg) {
   return leg.line
@@ -6,4 +6,8 @@ export function getLineName(leg: Leg) {
         ' ' +
         leg.fromEstimatedCall?.destinationDisplay?.frontText ?? leg.line.name
     : 'Ukjent';
+}
+
+export function getQuayName(quay: Quay) {
+  return `${quay.name} ${quay.publicCode}`;
 }

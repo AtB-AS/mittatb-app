@@ -10,7 +10,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import BusLegIcon from '../svg/BusLegIcon';
 import {LegDetailProps, DetailScreenNavigationProp} from '.';
 import {useNavigation} from '@react-navigation/core';
-import {getLineName} from '../utils';
+import {getLineName, getQuayName} from '../utils';
 
 const BusDetail: React.FC<LegDetailProps> = ({leg}) => {
   const navigation = useNavigation<DetailScreenNavigationProp>();
@@ -31,7 +31,7 @@ const BusDetail: React.FC<LegDetailProps> = ({leg}) => {
       <View style={styles.container}>
         <LocationRow
           icon={<DotIcon fill={colors.primary.green} />}
-          location={leg.fromPlace.name}
+          location={getQuayName(leg.fromPlace.quay)}
           time={formatToClock(leg.aimedStartTime)}
           textStyle={styles.textStyle}
           rowStyle={styles.rowStyle}
