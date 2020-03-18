@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useMemo} from 'react';
+import React, {useEffect, useReducer, useMemo, useState} from 'react';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -9,11 +9,14 @@ import {PlannerStackParams} from '../';
 import {useGeolocationState} from '../../../GeolocationContext';
 import Splash from '../../Splash';
 import {StyleSheet, useStyle} from '../../../theme';
-import colors from '../../../theme/colors';
-import useCalculateTrip from './useCalculateTrip';
-import useSortedLocations from './useSortedLocations';
 import {searchTrip} from '../../../api';
 import {UserFavorites, Location} from '../../../favorites/types';
+import {useLocationSearchValue} from '../../../location-search';
+import {RouteProp, CompositeNavigationProp} from '@react-navigation/core';
+import SearchButton from './SearchButton';
+import {RootStackParamList} from '../../../navigation';
+import {SharedElement} from 'react-navigation-shared-element';
+import Header from './Header';
 
 export type Direction = 'home' | 'work';
 export type Origin = 'current' | 'static';
@@ -59,13 +62,16 @@ const overviewReducer: OverviewReducer = (prevState, action) => {
   }
 };
 
-export type OverviewScreenNavigationProp = StackNavigationProp<
-  PlannerStackParams,
-  'Overview'
+export type OverviewScreenNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<PlannerStackParams, 'Overview'>,
+  StackNavigationProp<RootStackParamList>
 >;
+
+type OverviewRouteProp = RouteProp<PlannerStackParams, 'Overview'>;
 
 type RootProps = {
   navigation: OverviewScreenNavigationProp;
+  route: OverviewRouteProp;
 };
 
 const OverviewRoot: React.FC<RootProps> = ({navigation}) => {
@@ -119,27 +125,19 @@ const Overview: React.FC<Props> = ({
   userLocations,
   navigation,
 }) => {
-  const {furthest} = useSortedLocations(currentLocation, userLocations);
+  // @ts-ignore
+  const from = getLegacyUserLocation(userLocations, 'home').location;
+  // @ts-ignore
+  const to = getLegacyUserLocation(userLocations, 'work').location;
+
   const [{direction, origin, tripPatterns, isSearching}, dispatch] = useReducer<
     OverviewReducer
   >(overviewReducer, {
-    direction: furthest
-      ? getLegacyUserLocation(userLocations, 'home')?.location.id ===
-        furthest?.id
-        ? 'home'
-        : 'work'
-      : 'work',
+    direction: 'work',
     origin: 'static',
     tripPatterns: null,
     isSearching: false,
   });
-
-  const {from, to} = useCalculateTrip(
-    currentLocation,
-    userLocations,
-    origin,
-    direction,
-  );
 
   async function search() {
     dispatch({type: 'SET_IS_SEARCHING'});
@@ -157,8 +155,44 @@ const Overview: React.FC<Props> = ({
 
   const styles = useThemeStyles();
 
+  const [fromLocation, setFromLocation] = useState<Location | undefined>(from);
+  const searchedFromLocation = useLocationSearchValue<OverviewRouteProp>(
+    'fromLocation',
+  );
+  useEffect(() => {
+    if (searchedFromLocation) {
+      setFromLocation(searchedFromLocation);
+    }
+  }, [searchedFromLocation]);
+
+  const [toLocation, setToLocation] = useState<Location | undefined>(to);
+  const searchedToLocation = useLocationSearchValue<OverviewRouteProp>(
+    'toLocation',
+  );
+  useEffect(() => {
+    if (searchedToLocation) {
+      setToLocation(searchedToLocation);
+    }
+  }, [searchedToLocation]);
+
+  const openLocationSearch = (
+    callerRouteParam: keyof OverviewRouteProp['params'],
+  ) =>
+    navigation.navigate('LocationSearch', {
+      callerRouteName: 'Overview',
+      callerRouteParam,
+    });
+
   return (
     <SafeAreaView style={styles.container}>
+      <Header>Reiseassistent</Header>
+      <SharedElement id="locationSearchInput">
+        <SearchButton
+          title="Fra"
+          location={fromLocation}
+          onPress={() => openLocationSearch('fromLocation')}
+        />
+      </SharedElement>
       <Results
         tripPatterns={tripPatterns}
         from={from}
@@ -167,6 +201,13 @@ const Overview: React.FC<Props> = ({
         search={search}
         navigation={navigation}
       />
+      <SharedElement id="locationSearchInput">
+        <SearchButton
+          title="Til"
+          location={toLocation}
+          onPress={() => openLocationSearch('toLocation')}
+        />
+      </SharedElement>
     </SafeAreaView>
   );
 };

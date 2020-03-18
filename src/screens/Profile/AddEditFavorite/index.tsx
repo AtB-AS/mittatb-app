@@ -49,10 +49,12 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   const [location, setLocation] = useState<Location | undefined>(
     editItem?.location,
   );
-  const searchedLocation = useLocationSearchValue<AddEditScreenRouteProp>();
+  const searchLocation = useLocationSearchValue<AddEditScreenRouteProp>(
+    'searchLocation',
+  );
   useEffect(() => {
-    setLocation(searchedLocation);
-  }, [searchedLocation]);
+    setLocation(searchLocation);
+  }, [searchLocation]);
 
   const hasSelectedValues = Boolean(location);
 
@@ -124,6 +126,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
                 onFocus={() =>
                   navigation.navigate('LocationSearch', {
                     callerRouteName: AddEditRouteNameStatic,
+                    callerRouteParam: 'searchLocation',
                   })
                 }
                 autoCorrect={false}

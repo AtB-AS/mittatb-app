@@ -5,8 +5,7 @@ import {
   NavigationProp,
   RouteProp,
   useRoute,
-  useNavigation,
-  Route,
+  ParamListBase,
 } from '@react-navigation/native';
 import {StyleSheet} from '../theme';
 import {Location} from '../favorites/types';
@@ -26,12 +25,13 @@ export type Props = {
 
 export type RouteParams = {
   callerRouteName: string;
+  callerRouteParam: string;
 };
 
 const LocationSearch: React.FC<Props> = ({
   navigation,
   route: {
-    params: {callerRouteName},
+    params: {callerRouteName, callerRouteParam},
   },
 }) => {
   const styles = useThemeStyles();
@@ -57,9 +57,11 @@ const LocationSearch: React.FC<Props> = ({
   const locations = useGeocoder(debouncedText, geolocation) ?? [];
   const filteredLocations = filterCurrentLocation(locations, previousLocations);
 
-  const onSelect = (searchedLocation: Location) => {
-    setText(searchedLocation.label ?? searchedLocation.name);
-    navigation.navigate(callerRouteName, {searchedLocation});
+  const onSelect = (location: Location) => {
+    setText(location.label ?? location.name);
+    navigation.navigate(callerRouteName, {
+      [callerRouteParam]: location,
+    });
   };
 
   const hasPreviousResults = !!previousLocations.length;
@@ -168,23 +170,19 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
   },
 }));
 
-export type LocationSearchCallerRouteParams = {
-  searchedLocation?: Location;
-};
-
 export function useLocationSearchValue<
-  T extends RouteProp<any, any> & {params: LocationSearchCallerRouteParams}
->() {
+  T extends RouteProp<any, any> & {params: ParamListBase}
+>(callerRouteParam: keyof T['params']) {
   const route = useRoute<T>();
   const [location, setLocation] = React.useState<Location | undefined>(
     undefined,
   );
 
   React.useEffect(() => {
-    if (route.params?.searchedLocation) {
-      setLocation(route.params?.searchedLocation);
+    if (route.params?.[callerRouteParam]) {
+      setLocation(route.params?.[callerRouteParam]);
     }
-  }, [route.params?.searchedLocation]);
+  }, [route.params?.[callerRouteParam]]);
 
   return location;
 }

@@ -25,14 +25,7 @@ export type ResultTabParams = {
   [key: string]: {tripPattern: TripPattern};
 };
 
-const Results: React.FC<Props> = ({
-  tripPatterns,
-  from,
-  to,
-  isSearching,
-  search,
-  navigation,
-}) => {
+const Results: React.FC<Props> = ({tripPatterns, from, to, isSearching}) => {
   const {theme} = useTheme();
   const styles = useThemeStyles(theme);
   const arrowFill = useArrowFill(theme);
