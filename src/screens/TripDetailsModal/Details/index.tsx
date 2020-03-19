@@ -51,8 +51,13 @@ const TripDetailsModal: React.FC<Props> = ({navigation, route}) => {
           time={formatToClock(tripPattern.startTime)}
           textStyle={styles.textStyle}
         />
-        {tripPattern.legs.map((leg, i) => (
-          <LegDetail key={i} leg={leg} isFirst={i === 0} />
+        {tripPattern.legs.map((leg, i, legs) => (
+          <LegDetail
+            key={i}
+            leg={leg}
+            nextLeg={nextLeg(i, legs)}
+            isIntermediateTravelLeg={isIntermediateTravelLeg(i, legs)}
+          />
         ))}
         <LocationRow
           icon={<MapPointIcon fill={colors.general.black} />}
@@ -65,9 +70,21 @@ const TripDetailsModal: React.FC<Props> = ({navigation, route}) => {
   );
 };
 
+function nextLeg(curent: number, legs: Leg[]): Leg | undefined {
+  return legs[curent + 1];
+}
+
+function isIntermediateTravelLeg(index: number, legs: Leg[]) {
+  const next = nextLeg(index, legs);
+  if (!next) return false;
+  if (next.mode === 'foot') return false;
+  return true;
+}
+
 export type LegDetailProps = {
   leg: Leg;
-  isFirst: boolean;
+  nextLeg?: Leg;
+  isIntermediateTravelLeg: boolean;
 };
 
 const LegDetail: React.FC<LegDetailProps> = props => {

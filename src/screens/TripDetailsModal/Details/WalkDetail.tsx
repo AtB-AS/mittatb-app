@@ -10,7 +10,7 @@ import DotIcon from '../../../assets/svg/DotIcon';
 import LocationRow from '../LocationRow';
 import {LegDetailProps} from '.';
 
-const WalkDetail: React.FC<LegDetailProps> = ({leg, isFirst}) => {
+const WalkDetail: React.FC<LegDetailProps> = ({leg}) => {
   return (
     <View style={styles.container}>
       <Dash
@@ -21,36 +21,19 @@ const WalkDetail: React.FC<LegDetailProps> = ({leg, isFirst}) => {
         style={styles.dash}
         dashStyle={{borderRadius: 50}}
       />
-
-      {!isFirst ? (
-        <LocationRow
-          icon={<DotIcon fill={colors.primary.green} />}
-          location={leg.fromPlace.name}
-          time={formatToClock(leg.aimedStartTime)}
-          textStyle={{fontSize: 16}}
-        />
-      ) : (
-        <View />
-      )}
-
       <LocationRow
         icon={<WalkingPerson fill={colors.general.gray200} />}
         location={'Gå ' + Math.floor(leg.distance ?? 0) + ' m'}
         time={secondsToDuration(leg.duration ?? 0, nb)}
         textStyle={styles.walkTextStyle}
+        rowStyle={styles.walkRowStyle}
       />
-
-      <View />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    height: 68,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
+  container: {},
   dash: {
     marginLeft: 89,
     flexDirection: 'column',
@@ -58,6 +41,10 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   walkTextStyle: {opacity: 0.6, fontSize: 12},
+  walkRowStyle: {
+    marginBottom: 24,
+    marginTop: 20,
+  },
 });
 
 export default WalkDetail;

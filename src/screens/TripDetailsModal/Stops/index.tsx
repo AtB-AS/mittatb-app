@@ -88,6 +88,7 @@ function CallGroup({type, calls}: CallGroupProps) {
   const items = collapsed ? [calls[0]] : calls;
   const collapseButton = showCollapsable ? (
     <CollapseButtonRow
+      key="collapse-button"
       collapsed={collapsed}
       setCollapsed={setCollapsed}
       numberOfStops={calls.length - 1}
@@ -120,7 +121,6 @@ function CallGroup({type, calls}: CallGroupProps) {
               shouldDropMarginBottom(i) ? {marginBottom: 0} : undefined,
               shouldHaveMarginTop(i) ? {marginTop: 24} : undefined,
             ]}
-            key={call.quay.id}
             location={getQuayName(call.quay)}
             time={formatToClock(
               call.aimedDepartureTime ?? call.expectedDepartureTime,

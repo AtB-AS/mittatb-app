@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import Dash from 'react-native-dash';
 import colors from '../../../theme/colors';
 import {formatToClock, secondsToDuration} from '../../../utils/date';
@@ -11,40 +11,57 @@ import BusLegIcon from '../svg/BusLegIcon';
 import {LegDetailProps, DetailScreenNavigationProp} from '.';
 import {useNavigation} from '@react-navigation/core';
 import {getLineName, getQuayName} from '../utils';
+import WaitClockIcon from './svg/WaitClockIcon';
+import {Leg} from '../../../sdk';
 
-const BusDetail: React.FC<LegDetailProps> = ({leg}) => {
+const BusDetail: React.FC<LegDetailProps> = ({
+  leg,
+  nextLeg,
+  isIntermediateTravelLeg,
+}) => {
   const navigation = useNavigation<DetailScreenNavigationProp>();
+  const showWaitTime = isIntermediateTravelLeg && Boolean(nextLeg);
 
   return (
-    <TouchableOpacity
-      style={styles.pressable}
-      onPress={() => navigation.navigate('Stops', {leg})}
-    >
-      <Dash
-        dashGap={4}
-        dashThickness={8}
-        dashLength={8}
-        dashColor={colors.primary.green}
-        style={styles.dash}
-        dashStyle={{borderRadius: 50}}
-      />
-      <View style={styles.container}>
-        <LocationRow
-          icon={<DotIcon fill={colors.primary.green} />}
-          location={getQuayName(leg.fromPlace.quay)}
-          time={formatToClock(leg.aimedStartTime)}
-          textStyle={styles.textStyle}
-          rowStyle={styles.rowStyle}
-        />
-        <LocationRow
-          icon={<BusLegIcon />}
-          location={getLineName(leg)}
-          time={secondsToDuration(leg.duration ?? 0, nb)}
-          textStyle={[styles.textStyle, styles.activeTextStyle]}
-          rowStyle={styles.rowStyle}
-        />
-      </View>
-    </TouchableOpacity>
+    <View>
+      <TouchableOpacity
+        style={styles.pressable}
+        onPress={() => navigation.navigate('Stops', {leg})}
+      >
+        <View style={styles.container}>
+          <Dash
+            dashGap={4}
+            dashThickness={8}
+            dashLength={8}
+            dashColor={colors.primary.green}
+            style={styles.dash}
+            dashStyle={{borderRadius: 50}}
+          />
+
+          <LocationRow
+            icon={<DotIcon fill={colors.primary.green} />}
+            location={getQuayName(leg.fromPlace.quay)}
+            time={formatToClock(leg.aimedStartTime)}
+            textStyle={styles.textStyle}
+            rowStyle={styles.rowStyle}
+          />
+          <LocationRow
+            icon={<BusLegIcon />}
+            location={getLineName(leg)}
+            time={secondsToDuration(leg.duration ?? 0, nb)}
+            textStyle={[styles.textStyle, styles.activeTextStyle]}
+            rowStyle={styles.rowStyle}
+          />
+          <LocationRow
+            icon={<DotIcon fill={colors.primary.green} />}
+            location={getQuayName(leg.toPlace.quay)}
+            time={formatToClock(leg.aimedEndTime)}
+            textStyle={styles.textStyle}
+          />
+        </View>
+      </TouchableOpacity>
+      <WaitRow visible={showWaitTime} currentLeg={leg} nextLeg={nextLeg!} />
+    </View>
   );
 };
 
@@ -66,3 +83,45 @@ const styles = StyleSheet.create({
 });
 
 export default BusDetail;
+
+type WaitRowProps = {
+  currentLeg: Leg;
+  nextLeg: Leg;
+  visible?: boolean;
+};
+function WaitRow({visible, currentLeg, nextLeg}: WaitRowProps) {
+  if (!visible) {
+    return null;
+  }
+  const time = secondsBetween(currentLeg.aimedEndTime, nextLeg.aimedStartTime);
+
+  return (
+    <View style={waitStyles.container}>
+      <View style={waitStyles.textContainer}>
+        <Text style={waitStyles.text}>{secondsToDuration(time, nb)}</Text>
+      </View>
+      <WaitClockIcon fill={colors.general.gray200} />
+    </View>
+  );
+}
+const waitStyles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    marginTop: 12,
+    marginBottom: 12,
+  },
+  textContainer: {
+    width: 70,
+    marginRight: 12,
+    alignItems: 'flex-end',
+  },
+  text: {
+    fontSize: 12,
+    opacity: 0.6,
+  },
+});
+function secondsBetween(start: string, end: string): number {
+  const a = new Date(start);
+  const b = new Date(end);
+  return (b.getTime() - a.getTime()) / 1000;
+}
