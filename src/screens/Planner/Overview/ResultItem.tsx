@@ -35,18 +35,11 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
 
       {(secondLeg || firstLeg) && <SecondLeg leg={secondLeg ?? firstLeg} />}
 
-      <View
-        style={{
-          flexDirection: 'column',
-          alignItems: 'center',
-          paddingTop: 12,
-          height: 88,
-        }}
-      >
+      <View style={styles.detailsContainer}>
         {transferCount ? (
           <>
             <DetailDash count={2} />
-            <Text style={{fontSize: 16}}>
+            <Text style={styles.transferText}>
               {transferCount} bytte{transferCount > 1 ? 'r' : ''}
             </Text>
           </>
@@ -54,9 +47,7 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
           <DetailDash count={4} />
         )}
         <View style={{paddingVertical: 4}}>
-          <Text style={{fontSize: 12, textDecorationLine: 'underline'}}>
-            Vis detaljer
-          </Text>
+          <Text style={styles.detailsText}>Vis detaljer</Text>
         </View>
         <DetailDash count={2} />
       </View>
@@ -64,26 +55,54 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
   );
 };
 
+const useThemeStyles = StyleSheet.createThemeHook(theme => ({
+  legContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingHorizontal: 50,
+    width: '100%',
+  },
+  stopName: {
+    fontSize: 16,
+    color: theme.text.primary,
+    flexShrink: 1,
+  },
+  lineContainer: {
+    flexShrink: 1,
+    flexWrap: 'wrap',
+  },
+  time: {fontSize: 32, color: theme.text.primary, marginVertical: 8},
+  lineName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: theme.text.primary,
+    textAlign: 'center',
+    marginLeft: 8,
+  },
+  detailsContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingTop: 12,
+    height: 88,
+  },
+  transferText: {fontSize: 16},
+  detailsText: {fontSize: 12, textDecorationLine: 'underline'},
+}));
+
 const FirstWalkLeg = ({leg}: {leg: Leg}) => {
   const styles = useFirstLegStyles();
   return (
-    <View
-      style={{
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
-      <View style={{flexDirection: 'row', paddingVertical: 4}}>
-        <WalkingPerson fill={styles.walkingPerson.backgroundColor} />
-        <Text style={{fontSize: 16}}>
-          Gå i {secondsToDuration(leg.duration ?? 0, nb)}
-        </Text>
-      </View>
+    <View style={styles.legContainer}>
+      <WalkingPerson fill={styles.walkingPerson.backgroundColor} />
+      <Text style={{fontSize: 16}}>
+        Gå i {secondsToDuration(leg.duration ?? 0, nb)}
+      </Text>
     </View>
   );
 };
 
 const useFirstLegStyles = StyleSheet.createThemeHook(theme => ({
+  legContainer: {flexDirection: 'row', paddingVertical: 4},
   walkingPerson: {
     backgroundColor: theme.text.primary,
   },
@@ -177,31 +196,5 @@ function LegModeIcon({mode}: {mode: LegMode}) {
       return <JourneyBusIcon pathFill="#fff" />;
   }
 }
-
-const useThemeStyles = StyleSheet.createThemeHook(theme => ({
-  legContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    paddingHorizontal: 50,
-    width: '100%',
-  },
-  stopName: {
-    fontSize: 16,
-    color: theme.text.primary,
-    flexShrink: 1,
-  },
-  lineContainer: {
-    flexShrink: 1,
-    flexWrap: 'wrap',
-  },
-  time: {fontSize: 32, color: theme.text.primary, marginVertical: 8},
-  lineName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: theme.text.primary,
-    textAlign: 'center',
-    marginLeft: 8,
-  },
-}));
 
 export default ResultItem;

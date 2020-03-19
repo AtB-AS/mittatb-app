@@ -24,7 +24,7 @@ const SearchButton: React.FC<ResultItemProps> = ({
 
   return (
     <View style={styles.buttonContainer}>
-      <Text style={{marginVertical: 4}}>{title}</Text>
+      <Text style={styles.title}>{title}</Text>
       <TouchableOpacity style={styles.button} onPress={onPress}>
         {icon}
         <Text style={styles.buttonText}>{location?.label ?? placeholder}</Text>
@@ -42,6 +42,7 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
     width: '100%',
     marginVertical: 20,
   },
+  title: {marginVertical: 4},
   button: {
     height: 44,
     borderRadius: 4,

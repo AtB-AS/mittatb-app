@@ -52,10 +52,10 @@ const Results: React.FC<Props> = ({tripPatterns, isSearching}) => {
     return (
       <View style={styles.container}>
         <View style={styles.infoBox}>
-          <View style={{padding: 12}}>
+          <View style={styles.infoBoxIcon}>
             <InfoIcon />
           </View>
-          <Text style={{fontSize: 16, flex: 1, flexWrap: 'wrap'}}>
+          <Text style={styles.infoBoxText}>
             Vi fant dessverre ingen reiseruter som passer til ditt søk. {'\n'}
             Vennligst prøv et annet avreisested eller destinasjon.
           </Text>
@@ -141,6 +141,8 @@ const useThemeStyles = StyleSheet.createTheme(theme => ({
     paddingVertical: 8,
     paddingRight: 12,
   },
+  infoBoxIcon: {padding: 12},
+  infoBoxText: {fontSize: 16, flex: 1, flexWrap: 'wrap'},
   spinner: {height: 280},
   detailContainer: {
     justifyContent: 'center',
