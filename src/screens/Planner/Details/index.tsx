@@ -24,7 +24,6 @@ const Detail: React.FC<Props> = ({
 }) => {
   return (
     <View style={{flex: 1, backgroundColor: colors.primary.gray}}>
-      {/* <ResultItem tripPattern={tripPattern} /> */}
       <ScrollView style={styles.scrollView}>
         <LocationRow
           icon={<DotIcon />}
