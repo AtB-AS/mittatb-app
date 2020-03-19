@@ -16,7 +16,7 @@ import {DetailsModalStackParams} from '..';
 import MessageBox from '../../../message-box';
 
 // @TODO Firebase config?
-const TIME_LIMIT_IN_MINUTES = 4;
+const TIME_LIMIT_IN_MINUTES = 3;
 
 export type DetailsRouteParams = {
   tripPattern: TripPattern;

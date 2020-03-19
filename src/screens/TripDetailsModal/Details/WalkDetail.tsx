@@ -3,10 +3,9 @@ import {View, StyleSheet} from 'react-native';
 import Dash from 'react-native-dash';
 
 import colors from '../../../theme/colors';
-import {formatToClock, secondsToDuration} from '../../../utils/date';
+import {secondsToDuration} from '../../../utils/date';
 import nb from 'date-fns/locale/nb';
 import WalkingPerson from '../../../assets/svg/WalkingPerson';
-import DotIcon from '../../../assets/svg/DotIcon';
 import LocationRow from '../LocationRow';
 import {LegDetailProps} from '.';
 
