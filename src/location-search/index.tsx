@@ -57,12 +57,23 @@ const LocationSearch: React.FC<Props> = ({
   const locations = useGeocoder(debouncedText, geolocation) ?? [];
   const filteredLocations = filterCurrentLocation(locations, previousLocations);
 
-  const onSelect = (location: Location) => {
+  const onSelect = (
+    location: Location,
+    resultType: LocationResultType,
+    favoriteName?: string,
+  ) => {
     setText(location.label ?? location.name);
+    const param: LocationWithSearchMetadata = {
+      ...location,
+      resultType,
+      favoriteName,
+    };
     navigation.navigate(callerRouteName, {
-      [callerRouteParam]: location,
+      [callerRouteParam]: param,
     });
   };
+
+  const onSearchSelect = (location: Location) => onSelect(location, 'search');
 
   const hasPreviousResults = !!previousLocations.length;
   const hasResults = !!filteredLocations.length;
@@ -95,14 +106,14 @@ const LocationSearch: React.FC<Props> = ({
             <LocationResults
               title="Tidligere søk"
               locations={previousLocations}
-              onSelect={onSelect}
+              onSelect={onSearchSelect}
             />
           )}
           {hasResults && (
             <LocationResults
               title="Søkeresultat"
               locations={filteredLocations}
-              onSelect={onSelect}
+              onSelect={onSearchSelect}
             />
           )}
         </ScrollView>
@@ -170,13 +181,20 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
   },
 }));
 
+export type LocationResultType = 'search' | 'geolocation' | 'favorite';
+
+export type LocationWithSearchMetadata = Location & {
+  resultType: LocationResultType;
+  favoriteName?: string;
+};
+
 export function useLocationSearchValue<
   T extends RouteProp<any, any> & {params: ParamListBase}
 >(callerRouteParam: keyof T['params']) {
   const route = useRoute<T>();
-  const [location, setLocation] = React.useState<Location | undefined>(
-    undefined,
-  );
+  const [location, setLocation] = React.useState<
+    LocationWithSearchMetadata | undefined
+  >(undefined);
 
   React.useEffect(() => {
     if (route.params?.[callerRouteParam]) {

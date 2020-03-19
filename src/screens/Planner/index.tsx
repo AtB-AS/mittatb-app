@@ -5,9 +5,13 @@ import Detail from './Details';
 import colors from '../../theme/colors';
 import {Location} from '../../favorites/types';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
+import {LocationWithSearchMetadata} from '../../location-search';
 
 export type PlannerStackParams = {
-  Assistant: {fromLocation: Location; toLocation: Location};
+  Assistant: {
+    fromLocation: LocationWithSearchMetadata;
+    toLocation: LocationWithSearchMetadata;
+  };
   Detail: {tripPattern: TripPattern; from: Location; to: Location};
 };
 

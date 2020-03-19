@@ -7,10 +7,15 @@ import {Location} from '../favorites/types';
 import {useReverseGeocoder} from './useGeocoder';
 import LocationArrow from '../assets/svg/LocationArrow';
 import {GeolocationResponse} from '@react-native-community/geolocation';
+import {LocationResultType} from './';
 
 type Props = {
   geolocation: GeolocationResponse | null;
-  onSelectLocation: (location: Location) => void;
+  onSelectLocation: (
+    location: Location,
+    resultType: LocationResultType,
+    favoriteName?: string,
+  ) => void;
 };
 
 const FavoriteChips: React.FC<Props> = ({onSelectLocation, geolocation}) => {
@@ -32,7 +37,7 @@ const FavoriteChips: React.FC<Props> = ({onSelectLocation, geolocation}) => {
           <FavoriteChip
             text="Min posisjon"
             icon={<LocationArrow />}
-            onPress={() => onSelectLocation(currentLocation)}
+            onPress={() => onSelectLocation(currentLocation, 'geolocation')}
           />
         )}
         {favorites.map((fav, i) => (
@@ -40,7 +45,7 @@ const FavoriteChips: React.FC<Props> = ({onSelectLocation, geolocation}) => {
             key={fav.name}
             text={fav.name}
             icon={<Text>{fav.emoji}</Text>}
-            onPress={() => onSelectLocation(fav.location)}
+            onPress={() => onSelectLocation(fav.location, 'favorite', fav.name)}
             style={i === favorites.length - 1 ? {marginRight: 0} : undefined}
           />
         ))}

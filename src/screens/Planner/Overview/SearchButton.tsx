@@ -10,7 +10,7 @@ type ResultItemProps = {
   placeholder: string;
   onPress: () => void;
   location?: Location;
-  icon?: JSX.Element;
+  icon: JSX.Element;
 };
 
 const SearchButton: React.FC<ResultItemProps> = ({
