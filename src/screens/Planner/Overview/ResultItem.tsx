@@ -14,7 +14,12 @@ type ResultItemProps = {
 
 const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
   const styles = useThemeStyles();
-  console.log(tripPattern);
+
+  const [firstLeg, secondLeg, ...restLegs] = tripPattern.legs;
+  const transferCount = restLegs.filter(l => l.mode !== 'foot').length;
+  console.log('First ', firstLeg);
+  console.log('Second ', secondLeg);
+  console.log('Rest ', restLegs);
   return (
     <View style={styles.legContainer}>
       <View
@@ -25,21 +30,28 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
         }}
       >
         <DetailDash count={2} />
-        <View style={{flexDirection: 'row', paddingVertical: 4}}>
-          <WalkingPerson fill={styles.walkingPerson.backgroundColor} />
-          <Text style={{fontSize: 16}}>
-            Gå i {secondsToDuration(tripPattern.legs[0].duration ?? 0, nb)}
-          </Text>
-        </View>
-        <DetailDash count={2} />
+        {firstLeg && firstLeg.mode === 'foot' ? (
+          <>
+            <View style={{flexDirection: 'row', paddingVertical: 4}}>
+              <WalkingPerson fill={styles.walkingPerson.backgroundColor} />
+              <Text style={{fontSize: 16}}>
+                Gå i {secondsToDuration(firstLeg.duration ?? 0, nb)}
+              </Text>
+            </View>
+            <DetailDash count={2} />
+          </>
+        ) : null}
       </View>
-      <Text style={styles.stopName}>{tripPattern.legs[1].fromPlace.name}</Text>
-      <Text style={styles.time}>
-        {formatToClock(tripPattern.legs[1].aimedStartTime)}
-      </Text>
-      <Text style={styles.lineName}>
-        {getLineDisplayName(tripPattern.legs[1])}
-      </Text>
+      {secondLeg ? (
+        <>
+          <Text style={styles.stopName}>{secondLeg?.fromPlace.name}</Text>
+          <Text style={styles.time}>
+            {formatToClock(secondLeg?.aimedStartTime)}
+          </Text>
+          <Text style={styles.lineName}>{getLineDisplayName(secondLeg)}</Text>
+        </>
+      ) : null}
+
       <View
         style={{
           flexDirection: 'column',
@@ -48,8 +60,16 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
           height: 88,
         }}
       >
-        <DetailDash count={4} />
-        {/* <Text style={{fontSize: 16}}>1 bytte</Text> */}
+        {transferCount ? (
+          <>
+            <DetailDash count={2} />
+            <Text style={{fontSize: 16}}>
+              {transferCount} bytte{transferCount > 1 ? 'r' : ''}
+            </Text>
+          </>
+        ) : (
+          <DetailDash count={4} />
+        )}
         <View style={{paddingVertical: 4}}>
           <Text style={{fontSize: 12}}>Vis detaljer</Text>
         </View>
@@ -59,7 +79,7 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
   );
 };
 
-const DetailDash = ({count}: {count?: number}) => (
+const DetailDash = ({count}: {count: number}) => (
   <Dash
     dashCount={count}
     dashGap={3}
@@ -82,8 +102,7 @@ const dashStyles = StyleSheet.create({
 
 function getLineDisplayName(leg: Leg) {
   const name =
-    leg.intermediateEstimatedCalls[0]?.destinationDisplay?.frontText ??
-    leg.line?.name;
+    leg.fromEstimatedCall?.destinationDisplay?.frontText ?? leg.line?.name;
   return leg.line?.publicCode + ' ' + name;
 }
 

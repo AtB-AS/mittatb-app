@@ -7,6 +7,7 @@ import {StyleSheet} from '../../../theme';
 
 type ResultItemProps = {
   title: string;
+  placeholder: string;
   onPress: () => void;
   location?: Location;
   icon?: JSX.Element;
@@ -14,6 +15,7 @@ type ResultItemProps = {
 
 const SearchButton: React.FC<ResultItemProps> = ({
   title,
+  placeholder,
   location,
   icon,
   onPress,
@@ -25,7 +27,7 @@ const SearchButton: React.FC<ResultItemProps> = ({
       <Text style={{marginVertical: 4}}>{title}</Text>
       <TouchableOpacity style={styles.button} onPress={onPress}>
         {icon}
-        <Text style={styles.buttonText}>{location?.label}</Text>
+        <Text style={styles.buttonText}>{location?.label ?? placeholder}</Text>
       </TouchableOpacity>
     </View>
   );

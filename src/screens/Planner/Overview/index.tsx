@@ -17,20 +17,15 @@ import SearchButton from './SearchButton';
 import {RootStackParamList} from '../../../navigation';
 import {SharedElement} from 'react-navigation-shared-element';
 import Header from './Header';
-
-export type Direction = 'home' | 'work';
-export type Origin = 'current' | 'static';
+import {sortNearestLocations} from '../../../utils/location';
+import {useReverseGeocoder} from '../../../location-search/useGeocoder';
 
 type OverviewState = {
-  direction: Direction;
-  origin: Origin;
   isSearching: boolean;
   tripPatterns: TripPattern[] | null;
 };
 
 export type OverviewReducerAction =
-  | {type: 'TOGGLE_ORIGIN'}
-  | {type: 'SET_DIRECTION'; direction: Direction}
   | {type: 'SET_TRIP_PATTERNS'; tripPatterns: TripPattern[] | null}
   | {type: 'SET_IS_SEARCHING'};
 
@@ -41,13 +36,6 @@ type OverviewReducer = (
 
 const overviewReducer: OverviewReducer = (prevState, action) => {
   switch (action.type) {
-    case 'TOGGLE_ORIGIN':
-      return {
-        ...prevState,
-        origin: prevState.origin === 'static' ? 'current' : 'static',
-      };
-    case 'SET_DIRECTION':
-      return {...prevState, direction: action.direction};
     case 'SET_TRIP_PATTERNS':
       return {
         ...prevState,
@@ -78,22 +66,10 @@ const OverviewRoot: React.FC<RootProps> = ({navigation}) => {
   const {userLocations} = useAppState();
   const {status, location} = useGeolocationState();
 
-  const currentLocation = useMemo<Location | null>(
-    () =>
-      location
-        ? ({
-            id: 'current',
-            name: 'Min posisjon',
-            label: 'current',
-            locality: 'current',
-            coordinates: {
-              longitude: location.coords.longitude,
-              latitude: location.coords.latitude,
-            },
-          } as Location)
-        : null,
-    [location?.coords?.latitude, location?.coords?.longitude],
-  );
+  const reverseLookupLocations = useReverseGeocoder(location) ?? [];
+  const currentLocation = reverseLookupLocations.length
+    ? reverseLookupLocations[1]
+    : null;
 
   if (!userLocations || !status) {
     return <Splash />;
@@ -125,23 +101,19 @@ const Overview: React.FC<Props> = ({
   userLocations,
   navigation,
 }) => {
-  // @ts-ignore
-  const from = getLegacyUserLocation(userLocations, 'home').location;
-  // @ts-ignore
-  const to = getLegacyUserLocation(userLocations, 'work').location;
-
-  const [{direction, origin, tripPatterns, isSearching}, dispatch] = useReducer<
-    OverviewReducer
-  >(overviewReducer, {
-    direction: 'work',
-    origin: 'static',
-    tripPatterns: null,
-    isSearching: false,
-  });
+  const [{tripPatterns, isSearching}, dispatch] = useReducer<OverviewReducer>(
+    overviewReducer,
+    {
+      tripPatterns: null,
+      isSearching: false,
+    },
+  );
 
   const styles = useThemeStyles();
 
-  const [fromLocation, setFromLocation] = useState<Location | undefined>(from);
+  const [fromLocation, setFromLocation] = useState<Location | undefined>(
+    currentLocation ?? undefined,
+  );
   const searchedFromLocation = useLocationSearchValue<OverviewRouteProp>(
     'fromLocation',
   );
@@ -150,8 +122,13 @@ const Overview: React.FC<Props> = ({
       setFromLocation(searchedFromLocation);
     }
   }, [searchedFromLocation]);
+  useEffect(() => {
+    if (currentLocation && !fromLocation) {
+      setFromLocation(currentLocation);
+    }
+  }, [currentLocation]);
 
-  const [toLocation, setToLocation] = useState<Location | undefined>(to);
+  const [toLocation, setToLocation] = useState<Location | undefined>();
   const searchedToLocation = useLocationSearchValue<OverviewRouteProp>(
     'toLocation',
   );
@@ -190,21 +167,20 @@ const Overview: React.FC<Props> = ({
       <SharedElement id="locationSearchInput">
         <SearchButton
           title="Fra"
+          placeholder="Velg fra"
           location={fromLocation}
           onPress={() => openLocationSearch('fromLocation')}
         />
       </SharedElement>
       <Results
         tripPatterns={tripPatterns}
-        from={from}
-        to={to}
         isSearching={isSearching}
-        search={search}
         navigation={navigation}
       />
       <SharedElement id="locationSearchInput">
         <SearchButton
           title="Til"
+          placeholder="Velg til"
           location={toLocation}
           onPress={() => openLocationSearch('toLocation')}
         />

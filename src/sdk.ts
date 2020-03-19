@@ -122,6 +122,7 @@ export interface Leg {
   duration?: number;
   fromPlace: Place;
   toPlace: Place;
+  fromEstimatedCall: IntermediateEstimatedCall;
   intermediateEstimatedCalls: Array<IntermediateEstimatedCall>;
   intermediateQuays: Array<Quay>;
   line?: Line;

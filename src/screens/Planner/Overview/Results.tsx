@@ -4,7 +4,6 @@ import {TripPattern} from '../../../sdk';
 import {StyleSheet, Theme, useTheme} from '../../../theme';
 import ResultItem from './ResultItem';
 import {OverviewScreenNavigationProp} from './';
-import {Location} from '../../../favorites/types';
 import ViewPager from '@react-native-community/viewpager';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import useViewPagerIndexController from './useViewPagerIndexController';
@@ -14,10 +13,7 @@ import hexToRgba from 'hex-to-rgba';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
-  from: Location;
-  to: Location;
   isSearching: boolean;
-  search: () => void;
   navigation: OverviewScreenNavigationProp;
 };
 
@@ -25,7 +21,7 @@ export type ResultTabParams = {
   [key: string]: {tripPattern: TripPattern};
 };
 
-const Results: React.FC<Props> = ({tripPatterns, from, to, isSearching}) => {
+const Results: React.FC<Props> = ({tripPatterns, isSearching}) => {
   const {theme} = useTheme();
   const styles = useThemeStyles(theme);
   const arrowFill = useArrowFill(theme);
@@ -40,9 +36,17 @@ const Results: React.FC<Props> = ({tripPatterns, from, to, isSearching}) => {
     isLastPage,
   } = useViewPagerIndexController(0, tripPatterns?.length ?? 0);
 
-  if (!tripPatterns) {
+  if (isSearching) {
     return (
       <ActivityIndicator animating={true} size="large" style={styles.spinner} />
+    );
+  }
+
+  if (!tripPatterns?.length) {
+    return (
+      <View style={styles.container}>
+        <Text>Ingen reiser funnet</Text>
+      </View>
     );
   }
 
@@ -61,6 +65,7 @@ const Results: React.FC<Props> = ({tripPatterns, from, to, isSearching}) => {
             />
           </TouchableOpacity>
         </View>
+
         <ViewPager
           ref={viewPagerRef}
           style={styles.viewPager}
