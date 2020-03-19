@@ -54,7 +54,9 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
           <DetailDash count={4} />
         )}
         <View style={{paddingVertical: 4}}>
-          <Text style={{fontSize: 12}}>Vis detaljer</Text>
+          <Text style={{fontSize: 12, textDecorationLine: 'underline'}}>
+            Vis detaljer
+          </Text>
         </View>
         <DetailDash count={2} />
       </View>
