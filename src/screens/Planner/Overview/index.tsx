@@ -1,5 +1,4 @@
 import React, {useEffect, useReducer, useMemo, useState} from 'react';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Results from './Results';
@@ -17,24 +16,23 @@ import SearchButton from './SearchButton';
 import {RootStackParamList} from '../../../navigation';
 import {SharedElement} from 'react-navigation-shared-element';
 import Header from './Header';
-import {sortNearestLocations} from '../../../utils/location';
 import {useReverseGeocoder} from '../../../location-search/useGeocoder';
 
-type OverviewState = {
+type AssistantState = {
   isSearching: boolean;
   tripPatterns: TripPattern[] | null;
 };
 
-export type OverviewReducerAction =
+export type AssistantReducerAction =
   | {type: 'SET_TRIP_PATTERNS'; tripPatterns: TripPattern[] | null}
   | {type: 'SET_IS_SEARCHING'};
 
-type OverviewReducer = (
-  prevState: OverviewState,
-  action: OverviewReducerAction,
-) => OverviewState;
+type AssistantReducer = (
+  prevState: AssistantState,
+  action: AssistantReducerAction,
+) => AssistantState;
 
-const overviewReducer: OverviewReducer = (prevState, action) => {
+const AssistantReducer: AssistantReducer = (prevState, action) => {
   switch (action.type) {
     case 'SET_TRIP_PATTERNS':
       return {
@@ -50,19 +48,22 @@ const overviewReducer: OverviewReducer = (prevState, action) => {
   }
 };
 
-export type OverviewScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<PlannerStackParams, 'Overview'>,
+type AssistantRouteName = 'Assistant';
+const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
+
+export type AssistantScreenNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<PlannerStackParams, AssistantRouteName>,
   StackNavigationProp<RootStackParamList>
 >;
 
-type OverviewRouteProp = RouteProp<PlannerStackParams, 'Overview'>;
+type AssistantRouteProp = RouteProp<PlannerStackParams, AssistantRouteName>;
 
 type RootProps = {
-  navigation: OverviewScreenNavigationProp;
-  route: OverviewRouteProp;
+  navigation: AssistantScreenNavigationProp;
+  route: AssistantRouteProp;
 };
 
-const OverviewRoot: React.FC<RootProps> = ({navigation}) => {
+const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
   const {userLocations} = useAppState();
   const {status, location} = useGeolocationState();
 
@@ -76,7 +77,7 @@ const OverviewRoot: React.FC<RootProps> = ({navigation}) => {
   }
 
   return (
-    <Overview
+    <Assistant
       userLocations={userLocations}
       currentLocation={currentLocation}
       navigation={navigation}
@@ -87,7 +88,7 @@ const OverviewRoot: React.FC<RootProps> = ({navigation}) => {
 type Props = {
   currentLocation: Location | null;
   userLocations: UserFavorites;
-  navigation: OverviewScreenNavigationProp;
+  navigation: AssistantScreenNavigationProp;
 };
 
 function getLegacyUserLocation(
@@ -96,13 +97,13 @@ function getLegacyUserLocation(
 ) {
   return userLocations?.find(i => i.name === type) ?? null;
 }
-const Overview: React.FC<Props> = ({
+const Assistant: React.FC<Props> = ({
   currentLocation,
   userLocations,
   navigation,
 }) => {
-  const [{tripPatterns, isSearching}, dispatch] = useReducer<OverviewReducer>(
-    overviewReducer,
+  const [{tripPatterns, isSearching}, dispatch] = useReducer<AssistantReducer>(
+    AssistantReducer,
     {
       tripPatterns: null,
       isSearching: false,
@@ -114,7 +115,7 @@ const Overview: React.FC<Props> = ({
   const [fromLocation, setFromLocation] = useState<Location | undefined>(
     currentLocation ?? undefined,
   );
-  const searchedFromLocation = useLocationSearchValue<OverviewRouteProp>(
+  const searchedFromLocation = useLocationSearchValue<AssistantRouteProp>(
     'fromLocation',
   );
   useEffect(() => {
@@ -129,7 +130,7 @@ const Overview: React.FC<Props> = ({
   }, [currentLocation]);
 
   const [toLocation, setToLocation] = useState<Location | undefined>();
-  const searchedToLocation = useLocationSearchValue<OverviewRouteProp>(
+  const searchedToLocation = useLocationSearchValue<AssistantRouteProp>(
     'toLocation',
   );
   useEffect(() => {
@@ -154,10 +155,10 @@ const Overview: React.FC<Props> = ({
   }, [fromLocation, toLocation]);
 
   const openLocationSearch = (
-    callerRouteParam: keyof OverviewRouteProp['params'],
+    callerRouteParam: keyof AssistantRouteProp['params'],
   ) =>
     navigation.navigate('LocationSearch', {
-      callerRouteName: 'Overview',
+      callerRouteName: AssistantRouteNameStatic,
       callerRouteParam,
     });
 
@@ -196,4 +197,4 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
   },
 }));
 
-export default OverviewRoot;
+export default AssistantRoot;

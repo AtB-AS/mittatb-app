@@ -3,7 +3,7 @@ import {ActivityIndicator, View, Text} from 'react-native';
 import {TripPattern} from '../../../sdk';
 import {StyleSheet, Theme, useTheme} from '../../../theme';
 import ResultItem from './ResultItem';
-import {OverviewScreenNavigationProp} from './';
+import {AssistantScreenNavigationProp} from './';
 import ViewPager from '@react-native-community/viewpager';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import useViewPagerIndexController from './useViewPagerIndexController';
@@ -16,7 +16,7 @@ import colors from '../../../theme/colors';
 type Props = {
   tripPatterns: TripPattern[] | null;
   isSearching: boolean;
-  navigation: OverviewScreenNavigationProp;
+  navigation: AssistantScreenNavigationProp;
 };
 
 export type ResultTabParams = {
@@ -44,7 +44,11 @@ const Results: React.FC<Props> = ({tripPatterns, isSearching}) => {
     );
   }
 
-  if (!tripPatterns?.length) {
+  if (!tripPatterns) {
+    return null;
+  }
+
+  if (!tripPatterns.length) {
     return (
       <View style={styles.container}>
         <View style={styles.infoBox}>
