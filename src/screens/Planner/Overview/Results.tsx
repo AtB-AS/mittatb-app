@@ -9,7 +9,9 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import useViewPagerIndexController from './useViewPagerIndexController';
 import LeftArrow from './svg/LeftArrow';
 import RightArrow from './svg/RightArrow';
+import InfoIcon from '../../../assets/svg/InfoIcon';
 import hexToRgba from 'hex-to-rgba';
+import colors from '../../../theme/colors';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
@@ -45,7 +47,15 @@ const Results: React.FC<Props> = ({tripPatterns, isSearching}) => {
   if (!tripPatterns?.length) {
     return (
       <View style={styles.container}>
-        <Text>Ingen reiser funnet</Text>
+        <View style={styles.infoBox}>
+          <View style={{padding: 12}}>
+            <InfoIcon />
+          </View>
+          <Text style={{fontSize: 16, flex: 1, flexWrap: 'wrap'}}>
+            Vi fant dessverre ingen reiseruter som passer til ditt søk. {'\n'}
+            Vennligst prøv et annet avreisested eller destinasjon.
+          </Text>
+        </View>
       </View>
     );
   }
@@ -118,6 +128,14 @@ const useThemeStyles = StyleSheet.createTheme(theme => ({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  infoBox: {
+    backgroundColor: colors.secondary.cyan,
+    flexDirection: 'row',
+    alignItems: 'center',
+    maxWidth: 327,
+    paddingVertical: 8,
+    paddingRight: 12,
   },
   spinner: {height: 280},
   detailContainer: {
