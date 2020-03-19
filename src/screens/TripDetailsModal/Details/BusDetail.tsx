@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Dash from 'react-native-dash';
 import colors from '../../../theme/colors';
@@ -18,6 +18,7 @@ const BusDetail: React.FC<LegDetailProps> = ({
   leg,
   nextLeg,
   isIntermediateTravelLeg,
+  onCalculateTime,
 }) => {
   const navigation = useNavigation<DetailScreenNavigationProp>();
   const showWaitTime = isIntermediateTravelLeg && Boolean(nextLeg);
@@ -60,7 +61,12 @@ const BusDetail: React.FC<LegDetailProps> = ({
           />
         </View>
       </TouchableOpacity>
-      <WaitRow visible={showWaitTime} currentLeg={leg} nextLeg={nextLeg!} />
+      <WaitRow
+        onCalculateTime={onCalculateTime}
+        visible={showWaitTime}
+        currentLeg={leg}
+        nextLeg={nextLeg!}
+      />
     </View>
   );
 };
@@ -85,15 +91,27 @@ const styles = StyleSheet.create({
 export default BusDetail;
 
 type WaitRowProps = {
+  onCalculateTime(seconds: number): void;
   currentLeg: Leg;
   nextLeg: Leg;
   visible?: boolean;
 };
-function WaitRow({visible, currentLeg, nextLeg}: WaitRowProps) {
+function WaitRow({
+  onCalculateTime,
+  visible,
+  currentLeg,
+  nextLeg,
+}: WaitRowProps) {
+  const time = secondsBetween(currentLeg.aimedEndTime, nextLeg.aimedStartTime);
+  useEffect(() => {
+    if (!visible) return;
+    console.log(time);
+    onCalculateTime(time);
+  }, [visible, time]);
+
   if (!visible) {
     return null;
   }
-  const time = secondsBetween(currentLeg.aimedEndTime, nextLeg.aimedStartTime);
 
   return (
     <View style={waitStyles.container}>

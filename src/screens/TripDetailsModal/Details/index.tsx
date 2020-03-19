@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
@@ -10,10 +10,13 @@ import LocationRow from '../LocationRow';
 import DotIcon from '../../../assets/svg/DotIcon';
 import {StyleSheet} from '../../../theme';
 import Header from '../../../ScreenHeader';
-import {RootStackParamList} from '../../../navigation';
 import MapPointIcon from '../../../assets/svg/MapPointIcon';
 import colors from '../../../theme/colors';
 import {DetailsModalStackParams} from '..';
+import MessageBox from '../../../message-box';
+
+// @TODO Firebase config?
+const TIME_LIMIT_IN_MINUTES = 4;
 
 export type DetailsRouteParams = {
   tripPattern: TripPattern;
@@ -41,10 +44,22 @@ const TripDetailsModal: React.FC<Props> = ({navigation, route}) => {
     params: {tripPattern, from, to},
   } = route;
 
+  const [shortTime, setShortTime] = useState(false);
+  const flagShortTime = (secondsBetween: number) => {
+    if (secondsBetween / 60 <= TIME_LIMIT_IN_MINUTES) {
+      setShortTime(true);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Header onClose={() => navigation.goBack()}>Reisedetaljer</Header>
       <ScrollView style={styles.scrollView}>
+        {shortTime && (
+          <MessageBox containerStyle={styles.messageContainer}>
+            Vær oppmerksom på kort byttetid.
+          </MessageBox>
+        )}
         <LocationRow
           icon={<DotIcon fill={colors.general.black} />}
           location={from.name}
@@ -55,6 +70,7 @@ const TripDetailsModal: React.FC<Props> = ({navigation, route}) => {
           <LegDetail
             key={i}
             leg={leg}
+            onCalculateTime={flagShortTime}
             nextLeg={nextLeg(i, legs)}
             isIntermediateTravelLeg={isIntermediateTravelLeg(i, legs)}
           />
@@ -83,6 +99,7 @@ function isIntermediateTravelLeg(index: number, legs: Leg[]) {
 
 export type LegDetailProps = {
   leg: Leg;
+  onCalculateTime(timeInSeconds: number): void;
   nextLeg?: Leg;
   isIntermediateTravelLeg: boolean;
 };
@@ -105,6 +122,10 @@ const useDetailsStyle = StyleSheet.createThemeHook(theme => ({
   container: {
     flex: 1,
     backgroundColor: theme.background.modal_Level2,
+  },
+  messageContainer: {
+    margin: 24,
+    marginTop: 0,
   },
   scrollView: {
     flex: 1,
