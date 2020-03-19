@@ -1,24 +1,28 @@
 import React from 'react';
 import {TripPattern} from '../../sdk';
-import Overview from './Overview';
-import {createStackNavigator} from '@react-navigation/stack';
+import Assistant from './Overview';
 import Detail from './Details';
 import colors from '../../theme/colors';
 import {Location} from '../../favorites/types';
+import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
+import {LocationWithSearchMetadata} from '../../location-search';
 
 export type PlannerStackParams = {
-  Overview: undefined;
+  Assistant: {
+    fromLocation: LocationWithSearchMetadata;
+    toLocation: LocationWithSearchMetadata;
+  };
   Detail: {tripPattern: TripPattern; from: Location; to: Location};
 };
 
-const Stack = createStackNavigator<PlannerStackParams>();
+const Stack = createSharedElementStackNavigator<PlannerStackParams>();
 
 const PlannerRoot = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Overview"
-        component={Overview}
+        name="Assistant"
+        component={Assistant}
         options={{
           headerShown: false,
         }}

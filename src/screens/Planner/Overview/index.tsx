@@ -1,53 +1,80 @@
-import React, {useEffect, useReducer, useMemo} from 'react';
-import {StyleSheet} from 'react-native';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import React, {useEffect, useReducer, useMemo, useState} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Header from './Header';
 import Results from './Results';
 import {useAppState} from '../../../AppContext';
 import {TripPattern} from '../../../sdk';
 import {PlannerStackParams} from '../';
 import {useGeolocationState} from '../../../GeolocationContext';
 import Splash from '../../Splash';
-import WorkBanner from '../../../assets/svg/WorkBanner';
-import HomeBanner from '../../../assets/svg/HomeBanner';
-import colors from '../../../theme/colors';
-import useCalculateTrip from './useCalculateTrip';
-import useSortedLocations from './useSortedLocations';
+import {StyleSheet, useStyle} from '../../../theme';
 import {searchTrip} from '../../../api';
 import {UserFavorites, Location} from '../../../favorites/types';
+import {
+  useLocationSearchValue,
+  LocationWithSearchMetadata,
+} from '../../../location-search';
+import {RouteProp, CompositeNavigationProp} from '@react-navigation/core';
+import SearchButton from './SearchButton';
+import {RootStackParamList} from '../../../navigation';
+import {SharedElement} from 'react-navigation-shared-element';
+import Header from './Header';
+import {useReverseGeocoder} from '../../../location-search/useGeocoder';
+import {useFavorites} from '../../../favorites/FavoritesContext';
+import LocationArrow from '../../../assets/svg/LocationArrow';
+import {SvgProps} from 'react-native-svg';
+import {Text} from 'react-native';
+import LocationIcon from '../../../assets/svg/LocationIcon';
+import InputSearchIcon from '../../../location-search/svg/InputSearchIcon';
 
-export type Direction = 'home' | 'work';
-export type Origin = 'current' | 'static';
-
-type OverviewState = {
-  direction: Direction;
-  origin: Origin;
+type AssistantState = {
   isSearching: boolean;
   tripPatterns: TripPattern[] | null;
+  fromLocation?: Location;
+  fromIcon: JSX.Element;
+  toLocation?: Location;
+  toIcon: JSX.Element;
 };
 
-export type OverviewReducerAction =
-  | {type: 'TOGGLE_ORIGIN'}
-  | {type: 'SET_DIRECTION'; direction: Direction}
+export type AssistantReducerAction =
   | {type: 'SET_TRIP_PATTERNS'; tripPatterns: TripPattern[] | null}
-  | {type: 'SET_IS_SEARCHING'};
+  | {type: 'SET_IS_SEARCHING'}
+  | {
+      type: 'SET_FROM_LOCATION';
+      location: Location;
+      icon: JSX.Element;
+    }
+  | {
+      type: 'SET_TO_LOCATION';
+      location: Location;
+      icon: JSX.Element;
+    };
 
-type OverviewReducer = (
-  prevState: OverviewState,
-  action: OverviewReducerAction,
-) => OverviewState;
+type AssistantReducer = (
+  prevState: AssistantState,
+  action: AssistantReducerAction,
+) => AssistantState;
 
-const overviewReducer: OverviewReducer = (prevState, action) => {
+const getSearchedLocationIcon = (
+  location: LocationWithSearchMetadata,
+  favorites: UserFavorites,
+): JSX.Element => {
+  switch (location.resultType) {
+    case 'geolocation':
+      return <LocationArrow />;
+    case 'favorite':
+      return (
+        <Text>
+          {favorites.find(f => f.name === location.favoriteName)?.emoji}
+        </Text>
+      );
+    case 'search':
+      return <LocationIcon location={location} />;
+  }
+};
+
+const AssistantReducer: AssistantReducer = (prevState, action) => {
   switch (action.type) {
-    case 'TOGGLE_ORIGIN':
-      return {
-        ...prevState,
-        origin: prevState.origin === 'static' ? 'current' : 'static',
-      };
-    case 'SET_DIRECTION':
-      return {...prevState, direction: action.direction};
     case 'SET_TRIP_PATTERNS':
       return {
         ...prevState,
@@ -59,45 +86,51 @@ const overviewReducer: OverviewReducer = (prevState, action) => {
         ...prevState,
         isSearching: true,
       };
+    case 'SET_FROM_LOCATION':
+      return {
+        ...prevState,
+        fromLocation: action.location,
+        fromIcon: action.icon,
+      };
+    case 'SET_TO_LOCATION':
+      return {
+        ...prevState,
+        toLocation: action.location,
+        toIcon: action.icon,
+      };
   }
 };
 
-export type OverviewScreenNavigationProp = StackNavigationProp<
-  PlannerStackParams,
-  'Overview'
+type AssistantRouteName = 'Assistant';
+const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
+
+export type AssistantScreenNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<PlannerStackParams, AssistantRouteName>,
+  StackNavigationProp<RootStackParamList>
 >;
 
+type AssistantRouteProp = RouteProp<PlannerStackParams, AssistantRouteName>;
+
 type RootProps = {
-  navigation: OverviewScreenNavigationProp;
+  navigation: AssistantScreenNavigationProp;
+  route: AssistantRouteProp;
 };
 
-const OverviewRoot: React.FC<RootProps> = ({navigation}) => {
+const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
   const {userLocations} = useAppState();
   const {status, location} = useGeolocationState();
 
-  const currentLocation = useMemo<Location | null>(
-    () =>
-      location
-        ? ({
-            id: 'current',
-            name: 'Min posisjon',
-            label: 'current',
-            locality: 'current',
-            coordinates: {
-              longitude: location.coords.longitude,
-              latitude: location.coords.latitude,
-            },
-          } as Location)
-        : null,
-    [location?.coords?.latitude, location?.coords?.longitude],
-  );
+  const reverseLookupLocations = useReverseGeocoder(location) ?? [];
+  const currentLocation = reverseLookupLocations.length
+    ? reverseLookupLocations[1]
+    : null;
 
   if (!userLocations || !status) {
     return <Splash />;
   }
 
   return (
-    <Overview
+    <Assistant
       userLocations={userLocations}
       currentLocation={currentLocation}
       navigation={navigation}
@@ -108,46 +141,68 @@ const OverviewRoot: React.FC<RootProps> = ({navigation}) => {
 type Props = {
   currentLocation: Location | null;
   userLocations: UserFavorites;
-  navigation: OverviewScreenNavigationProp;
+  navigation: AssistantScreenNavigationProp;
 };
 
-function getLegacyUserLocation(
-  userLocations: UserFavorites | null,
-  type: 'home' | 'work',
-) {
-  return userLocations?.find(i => i.name === type) ?? null;
-}
-const Overview: React.FC<Props> = ({
+const Assistant: React.FC<Props> = ({
   currentLocation,
   userLocations,
   navigation,
 }) => {
-  const {furthest} = useSortedLocations(currentLocation, userLocations);
-  const [{direction, origin, tripPatterns, isSearching}, dispatch] = useReducer<
-    OverviewReducer
-  >(overviewReducer, {
-    direction: furthest
-      ? getLegacyUserLocation(userLocations, 'home')?.location.id ===
-        furthest?.id
-        ? 'home'
-        : 'work'
-      : 'work',
-    origin: 'static',
+  const [
+    {tripPatterns, isSearching, fromLocation, fromIcon, toLocation, toIcon},
+    dispatch,
+  ] = useReducer<AssistantReducer>(AssistantReducer, {
     tripPatterns: null,
     isSearching: false,
+    fromLocation: currentLocation ?? undefined,
+    fromIcon: currentLocation ? <LocationArrow /> : <InputSearchIcon />,
+    toLocation: undefined,
+    toIcon: <InputSearchIcon />,
   });
 
-  const {from, to} = useCalculateTrip(
-    currentLocation,
-    userLocations,
-    origin,
-    direction,
+  const {favorites} = useFavorites();
+
+  const styles = useThemeStyles();
+
+  const searchedFromLocation = useLocationSearchValue<AssistantRouteProp>(
+    'fromLocation',
   );
+  useEffect(() => {
+    if (searchedFromLocation) {
+      const icon = getSearchedLocationIcon(searchedFromLocation, favorites);
+      dispatch({
+        type: 'SET_FROM_LOCATION',
+        location: searchedFromLocation,
+        icon,
+      });
+    }
+  }, [searchedFromLocation]);
+  useEffect(() => {
+    if (currentLocation && !fromLocation) {
+      dispatch({
+        type: 'SET_FROM_LOCATION',
+        location: currentLocation,
+        icon: <LocationArrow />,
+      });
+    }
+  }, [currentLocation]);
+
+  const searchedToLocation = useLocationSearchValue<AssistantRouteProp>(
+    'toLocation',
+  );
+  useEffect(() => {
+    if (searchedToLocation) {
+      const icon = getSearchedLocationIcon(searchedToLocation, favorites);
+      dispatch({type: 'SET_TO_LOCATION', location: searchedToLocation, icon});
+    }
+  }, [searchedToLocation]);
 
   async function search() {
+    if (!fromLocation || !toLocation) return;
     dispatch({type: 'SET_IS_SEARCHING'});
     try {
-      const response = await searchTrip(from, to);
+      const response = await searchTrip(fromLocation, toLocation);
       dispatch({type: 'SET_TRIP_PATTERNS', tripPatterns: response.data});
     } catch (err) {
       dispatch({type: 'SET_TRIP_PATTERNS', tripPatterns: null});
@@ -156,46 +211,51 @@ const Overview: React.FC<Props> = ({
 
   useEffect(() => {
     search();
-  }, [from, to]);
+  }, [fromLocation, toLocation]);
+
+  const openLocationSearch = (
+    callerRouteParam: keyof AssistantRouteProp['params'],
+  ) =>
+    navigation.navigate('LocationSearch', {
+      callerRouteName: AssistantRouteNameStatic,
+      callerRouteParam,
+    });
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header
-        dispatch={dispatch}
-        origin={origin}
-        geolocationDisabled={!currentLocation}
-      />
-      {direction === 'work' ? (
-        <TouchableWithoutFeedback
-          onPress={() => dispatch({type: 'SET_DIRECTION', direction: 'home'})}
-        >
-          <WorkBanner width="100%" />
-        </TouchableWithoutFeedback>
-      ) : (
-        <TouchableWithoutFeedback
-          onPress={() => dispatch({type: 'SET_DIRECTION', direction: 'work'})}
-        >
-          <HomeBanner width="100%" />
-        </TouchableWithoutFeedback>
-      )}
-
+      <Header>Reiseassistent</Header>
+      <SharedElement id="locationSearchInput">
+        <SearchButton
+          title="Fra"
+          placeholder="Søk etter adresse eller sted"
+          location={fromLocation}
+          icon={fromIcon}
+          onPress={() => openLocationSearch('fromLocation')}
+        />
+      </SharedElement>
       <Results
         tripPatterns={tripPatterns}
-        from={from}
-        to={to}
         isSearching={isSearching}
-        search={search}
         navigation={navigation}
       />
+      <SharedElement id="locationSearchInput">
+        <SearchButton
+          title="Til"
+          placeholder="Søk etter adresse eller sted"
+          location={toLocation}
+          icon={toIcon}
+          onPress={() => openLocationSearch('toLocation')}
+        />
+      </SharedElement>
     </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
+const useThemeStyles = StyleSheet.createThemeHook(theme => ({
   container: {
-    backgroundColor: colors.primary.gray,
+    backgroundColor: theme.background.primary,
     flex: 1,
   },
-});
+}));
 
-export default OverviewRoot;
+export default AssistantRoot;

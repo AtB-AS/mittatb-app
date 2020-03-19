@@ -1,11 +1,11 @@
 import React from 'react';
-import MapPointIcon from '../assets/svg/MapPointIcon';
-import BusFront from '../assets/svg/BusFront';
-import {Location} from '../favorites/types';
-import TramFront from '../assets/svg/TramFront';
-import TrainFront from '../assets/svg/TrainFront';
-import BoatFront from '../assets/svg/BoatFront';
-import Plane from '../assets/svg/Plane';
+import MapPointIcon from './MapPointIcon';
+import BusFront from './BusFront';
+import {Location} from '../../favorites/types';
+import TramFront from './TramFront';
+import TrainFront from './TrainFront';
+import BoatFront from './BoatFront';
+import Plane from './Plane';
 
 const LocationIcon = ({
   location,

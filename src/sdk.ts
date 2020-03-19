@@ -104,6 +104,7 @@ export interface IntermediateEstimatedCall {
   aimedDepartureTime: string;
   expectedDepartureTime?: string; // Only available BEFORE departure has taken place
   actualDepartureTime?: string; // Only available AFTER departure has taken place
+  destinationDisplay?: {frontText?: string};
 }
 
 export interface JourneyPattern {
@@ -121,6 +122,7 @@ export interface Leg {
   duration?: number;
   fromPlace: Place;
   toPlace: Place;
+  fromEstimatedCall: IntermediateEstimatedCall;
   intermediateEstimatedCalls: Array<IntermediateEstimatedCall>;
   intermediateQuays: Array<Quay>;
   line?: Line;

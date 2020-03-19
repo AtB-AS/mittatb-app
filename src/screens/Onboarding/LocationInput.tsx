@@ -11,7 +11,7 @@ import colors from '../../theme/colors';
 import Suggestions from './Suggestions';
 import {GeolocationResponse} from '@react-native-community/geolocation';
 import {useGeocoder, useReverseGeocoder} from './useGeocoder';
-import useDebounce from './useDebounce';
+import useDebounce from '../../utils/useDebounce';
 import LocationArrow from '../../assets/svg/LocationArrow';
 import {Location} from '../../favorites/types';
 
