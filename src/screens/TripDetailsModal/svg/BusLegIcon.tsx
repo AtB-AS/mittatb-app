@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {Path} from 'react-native-svg';
+import {Path, Color} from 'react-native-svg';
 import LegTransportMethodIcon, {
   LegTransportMethodIconProps,
 } from './LegTransportMethodIcon';
 
-type BusLegIconProps = LegTransportMethodIconProps & {iconColor?: string};
+type BusLegIconProps = LegTransportMethodIconProps & {iconColor?: Color};
 
 function BusLegIcon(props: BusLegIconProps) {
   const {borderColor = '#A2AD00', iconColor = '#000000'} = props;

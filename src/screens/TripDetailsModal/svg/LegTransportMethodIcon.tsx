@@ -1,10 +1,10 @@
 import * as React from 'react';
-import Svg, {Ellipse, SvgProps, EllipseProps} from 'react-native-svg';
+import Svg, {Ellipse, SvgProps, Color} from 'react-native-svg';
 import {Animated, NativeMethodsMixinStatic} from 'react-native';
-import {useEffect, useRef, Ref} from 'react';
+import {useEffect, useRef} from 'react';
 
 export type LegTransportMethodIconProps = SvgProps & {
-  borderColor?: string;
+  borderColor?: Color;
   isLive?: boolean;
 };
 
