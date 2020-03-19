@@ -167,7 +167,7 @@ const Overview: React.FC<Props> = ({
       <SharedElement id="locationSearchInput">
         <SearchButton
           title="Fra"
-          placeholder="Velg fra"
+          placeholder="Søk etter adresse eller sted"
           location={fromLocation}
           onPress={() => openLocationSearch('fromLocation')}
         />
@@ -180,7 +180,7 @@ const Overview: React.FC<Props> = ({
       <SharedElement id="locationSearchInput">
         <SearchButton
           title="Til"
-          placeholder="Velg til"
+          placeholder="Søk etter adresse eller sted"
           location={toLocation}
           onPress={() => openLocationSearch('toLocation')}
         />
