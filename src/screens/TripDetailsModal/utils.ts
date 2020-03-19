@@ -9,5 +9,6 @@ export function getLineName(leg: Leg) {
 }
 
 export function getQuayName(quay: Quay) {
+  if (!quay.publicCode) return quay.name;
   return `${quay.name} ${quay.publicCode}`;
 }
