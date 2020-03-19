@@ -5,7 +5,7 @@ import {StyleSheet, useTheme} from '../../theme';
 const LocationRow: React.FC<{
   icon: JSX.Element;
   location: string;
-  time: string;
+  time?: string;
   textStyle?: StyleProp<TextStyle>;
   rowStyle?: StyleProp<ViewStyle>;
   dashThroughIcon?: boolean;

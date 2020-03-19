@@ -23,8 +23,7 @@ const WalkDetail: React.FC<LegDetailProps> = ({leg}) => {
       />
       <LocationRow
         icon={<WalkingPerson fill={colors.general.gray200} />}
-        location={'Gå ' + Math.floor(leg.distance ?? 0) + ' m'}
-        time={secondsToDuration(leg.duration ?? 0, nb)}
+        location={'Gå ' + secondsToDuration(leg.duration ?? 0, nb)}
         textStyle={styles.walkTextStyle}
         rowStyle={styles.walkRowStyle}
       />
