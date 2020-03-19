@@ -2,11 +2,14 @@ import React from 'react';
 import {View, Text, ViewStyle} from 'react-native';
 import colors from '../../../theme/colors';
 import {StyleSheet} from '../../../theme';
-import {TripPattern, Leg} from '../../../sdk';
+import {TripPattern, Leg, LegMode} from '../../../sdk';
 import {secondsToDuration, formatToClock} from '../../../utils/date';
 import nb from 'date-fns/locale/nb';
 import Dash from 'react-native-dash';
 import WalkingPerson from '../../../assets/svg/WalkingPerson';
+import JourneyBusIcon from './svg/JourneyBusIcon';
+import JourneyTramIcon from './svg/JourneyTramIcon';
+import JourneyTrainIcon from './svg/JourneyTrainIcon';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -16,10 +19,10 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
   const styles = useThemeStyles();
 
   const [firstLeg, secondLeg, ...restLegs] = tripPattern.legs;
-  const transferCount = restLegs.filter(l => l.mode !== 'foot').length;
-  console.log('First ', firstLeg);
-  console.log('Second ', secondLeg);
-  console.log('Rest ', restLegs);
+  const transferCount = restLegs.filter(
+    l => l.mode !== 'foot' && l.mode !== 'bicycle',
+  ).length;
+
   return (
     <View style={styles.legContainer}>
       <View
@@ -48,7 +51,10 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
           <Text style={styles.time}>
             {formatToClock(secondLeg?.aimedStartTime)}
           </Text>
-          <Text style={styles.lineName}>{getLineDisplayName(secondLeg)}</Text>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <LegModeIcon mode={secondLeg.mode} />
+            <Text style={styles.lineName}>{getLineDisplayName(secondLeg)}</Text>
+          </View>
         </>
       ) : null}
 
@@ -106,6 +112,25 @@ function getLineDisplayName(leg: Leg) {
   return leg.line?.publicCode + ' ' + name;
 }
 
+function LegModeIcon({mode}: {mode: LegMode}) {
+  switch (mode) {
+    case 'bus':
+    case 'coach':
+      return <JourneyBusIcon pathFill="#fff" />;
+    case 'rail':
+    case 'metro':
+      return <JourneyTrainIcon pathFill="#fff" />;
+    case 'tram':
+      return <JourneyTramIcon pathFill="#fff" />;
+    case 'car':
+    case 'water':
+    case 'air':
+    case 'bicycle':
+    default:
+      return <JourneyBusIcon pathFill="#fff" />;
+  }
+}
+
 const useThemeStyles = StyleSheet.createThemeHook(theme => ({
   walkingPerson: {
     backgroundColor: theme.text.primary,
@@ -131,6 +156,7 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
     fontWeight: '600',
     color: theme.text.primary,
     textAlign: 'center',
+    marginLeft: 8,
   },
 }));
 
