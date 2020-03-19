@@ -41,7 +41,7 @@
     "react-native-screens": "^2.2.0",
     "react-native-shared-element": "^0.5.6",
     "react-native-svg": "^10.1.0",
-    "react-navigation-shared-element": "git+https://github.com/IjzerenHein/react-navigation-shared-element.git#32fa46bd55b6a01003e6e99f8c4d1c0eb07ec813",
+    "react-navigation-shared-element": "^5.0.0-alpha1",
     "uuid": "^3.4.0"
   },
   "devDependencies": {
