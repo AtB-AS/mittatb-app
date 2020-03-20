@@ -47,7 +47,7 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
   const reverseLookupLocations = useReverseGeocoder(location) ?? [];
   const currentLocation = reverseLookupLocations.length
     ? reverseLookupLocations[1]
-    : null;
+    : undefined;
 
   if (!userLocations || !status) {
     return <Splash />;
@@ -63,7 +63,7 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
 };
 
 type Props = {
-  currentLocation: Location | null;
+  currentLocation?: Location;
   userLocations: UserFavorites;
   navigation: AssistantScreenNavigationProp;
 };
@@ -142,8 +142,8 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
 export default AssistantRoot;
 
 function useTripPatterns(
-  fromLocation: Location,
-  toLocation: Location,
+  fromLocation: Location | undefined,
+  toLocation: Location | undefined,
 ): [TripPattern[] | null, boolean] {
   const [isSearching, setIsSearching] = useState(false);
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
