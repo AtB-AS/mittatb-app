@@ -159,6 +159,7 @@ android {
         store {
             initWith buildTypes.release
             applicationIdSuffix ".store"
+            matchingFallbacks = ['release']
         }
         release {
             minifyEnabled enableProguardInReleaseBuilds
