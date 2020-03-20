@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Dash from 'react-native-dash';
 import colors from '../../../theme/colors';
-import {formatToClock, secondsToDuration} from '../../../utils/date';
+import {formatToClock} from '../../../utils/date';
 import nb from 'date-fns/locale/nb';
 import DotIcon from '../../../assets/svg/DotIcon';
 import LocationRow from '../LocationRow';
@@ -49,7 +49,6 @@ const BusDetail: React.FC<LegDetailProps> = ({
           <LocationRow
             icon={<BusLegIcon isLive={leg.realtime} />}
             location={getLineName(leg)}
-            time={secondsToDuration(leg.duration ?? 0, nb)}
             textStyle={[styles.textStyle, styles.activeTextStyle]}
             rowStyle={styles.rowStyle}
           />
