@@ -26,8 +26,8 @@ if [ "$AGENT_JOBSTATUS" == "Succeeded" ]; then
             npx bugsnag-sourcemaps upload \
                 --api-key=$BUGSNAG_API_KEY \
                 --app-version=1.0 \
-                --minifiedFile=android/app/build/generated/assets/react/release/index.android.bundle \
-                --source-map=android/app/build/generated/sourcemaps/react/release/index.android.bundle.map \
+                --minifiedFile=android/app/build/generated/assets/react/$APP_ENVIRONMENT/index.android.bundle \
+                --source-map=android/app/build/generated/sourcemaps/react/$APP_ENVIRONMENT/index.android.bundle.map \
                 --minified-url=index.android.bundle \
                 --upload-sources \
                 --overwrite
