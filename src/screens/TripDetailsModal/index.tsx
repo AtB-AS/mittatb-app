@@ -2,7 +2,6 @@ import React from 'react';
 import Details, {DetailsRouteParams, DetailScreenRouteProp} from './Details';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import Stops, {StopRouteParams} from './Stops';
-import {TransitionPresets} from '@react-navigation/stack';
 
 export type DetailsModalStackParams = {
   Details: DetailsRouteParams;
