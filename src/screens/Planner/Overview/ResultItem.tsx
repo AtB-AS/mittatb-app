@@ -10,12 +10,17 @@ import {formatToClock, secondsToDuration} from '../../../utils/date';
 import JourneyBusIcon from './svg/JourneyBusIcon';
 import JourneyTrainIcon from './svg/JourneyTrainIcon';
 import JourneyTramIcon from './svg/JourneyTramIcon';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
+  onDetailsPressed?(tripPattern: TripPattern): void;
 };
 
-const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
+const ResultItem: React.FC<ResultItemProps> = ({
+  tripPattern,
+  onDetailsPressed,
+}) => {
   const styles = useThemeStyles();
 
   let [firstLeg, secondLeg, ...restLegs] = tripPattern.legs;
@@ -46,9 +51,15 @@ const ResultItem: React.FC<ResultItemProps> = ({tripPattern}) => {
         ) : (
           <DetailDash count={4} />
         )}
-        <View style={{paddingVertical: 4}}>
-          <Text style={styles.detailsText}>Vis detaljer</Text>
-        </View>
+        {onDetailsPressed && (
+          <TouchableOpacity
+            style={{paddingVertical: 4}}
+            onPress={() => onDetailsPressed(tripPattern)}
+            hitSlop={{bottom: 8, top: 8, right: 16, left: 16}}
+          >
+            <Text style={styles.detailsText}>Vis detaljer</Text>
+          </TouchableOpacity>
+        )}
         <DetailDash count={2} />
       </View>
     </View>

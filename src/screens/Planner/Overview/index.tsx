@@ -6,7 +6,7 @@ import {useAppState} from '../../../AppContext';
 import {TripPattern} from '../../../sdk';
 import {useGeolocationState} from '../../../GeolocationContext';
 import Splash from '../../Splash';
-import {StyleSheet, useStyle} from '../../../theme';
+import {StyleSheet} from '../../../theme';
 import {searchTrip} from '../../../api';
 import {UserFavorites, Location} from '../../../favorites/types';
 import {
@@ -17,12 +17,91 @@ import {RouteProp, CompositeNavigationProp} from '@react-navigation/core';
 import SearchButton from './SearchButton';
 import {RootStackParamList} from '../../../navigation';
 import {SharedElement} from 'react-navigation-shared-element';
-import Header from './Header';
+import Header from '../../../ScreenHeader';
 import {useReverseGeocoder} from '../../../location-search/useGeocoder';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import LocationArrow from '../../../assets/svg/LocationArrow';
 import {Text} from 'react-native';
 import LocationIcon from '../../../assets/svg/LocationIcon';
+<<<<<<< HEAD
+=======
+import InputSearchIcon from '../../../location-search/svg/InputSearchIcon';
+import {PlannerStackParams} from '..';
+
+type AssistantState = {
+  isSearching: boolean;
+  tripPatterns: TripPattern[] | null;
+  fromLocation?: Location;
+  fromIcon: JSX.Element;
+  toLocation?: Location;
+  toIcon: JSX.Element;
+};
+
+export type AssistantReducerAction =
+  | {type: 'SET_TRIP_PATTERNS'; tripPatterns: TripPattern[] | null}
+  | {type: 'SET_IS_SEARCHING'}
+  | {
+      type: 'SET_FROM_LOCATION';
+      location: Location;
+      icon: JSX.Element;
+    }
+  | {
+      type: 'SET_TO_LOCATION';
+      location: Location;
+      icon: JSX.Element;
+    };
+
+type AssistantReducer = (
+  prevState: AssistantState,
+  action: AssistantReducerAction,
+) => AssistantState;
+
+const getSearchedLocationIcon = (
+  location: LocationWithSearchMetadata,
+  favorites: UserFavorites,
+): JSX.Element => {
+  switch (location.resultType) {
+    case 'geolocation':
+      return <LocationArrow />;
+    case 'favorite':
+      return (
+        <Text>
+          {favorites.find(f => f.name === location.favoriteName)?.emoji}
+        </Text>
+      );
+    case 'search':
+      return <LocationIcon location={location} />;
+  }
+};
+
+const AssistantReducer: AssistantReducer = (prevState, action) => {
+  switch (action.type) {
+    case 'SET_TRIP_PATTERNS':
+      return {
+        ...prevState,
+        tripPatterns: action.tripPatterns,
+        isSearching: false,
+      };
+    case 'SET_IS_SEARCHING':
+      return {
+        ...prevState,
+        isSearching: true,
+      };
+    case 'SET_FROM_LOCATION':
+      return {
+        ...prevState,
+        fromLocation: action.location,
+        fromIcon: action.icon,
+      };
+    case 'SET_TO_LOCATION':
+      return {
+        ...prevState,
+        toLocation: action.location,
+        toIcon: action.icon,
+      };
+  }
+};
+>>>>>>> Adds press listener for details pressable in assistant result item
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -117,6 +196,13 @@ const Assistant: React.FC<Props> = ({
         tripPatterns={tripPatterns}
         isSearching={isSearching}
         navigation={navigation}
+        onDetailsPressed={tripPattern =>
+          navigation.navigate('TripDetailsModal', {
+            from: fromLocation!,
+            to: toLocation!,
+            tripPattern,
+          })
+        }
       />
       <SharedElement id="locationSearchInput">
         <SearchButton
