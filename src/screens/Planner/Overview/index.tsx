@@ -22,84 +22,8 @@ import Header from './Header';
 import {useReverseGeocoder} from '../../../location-search/useGeocoder';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import LocationArrow from '../../../assets/svg/LocationArrow';
-import {SvgProps} from 'react-native-svg';
 import {Text} from 'react-native';
 import LocationIcon from '../../../assets/svg/LocationIcon';
-import InputSearchIcon from '../../../location-search/svg/InputSearchIcon';
-
-type AssistantState = {
-  isSearching: boolean;
-  tripPatterns: TripPattern[] | null;
-  fromLocation?: Location;
-  fromIcon: JSX.Element;
-  toLocation?: Location;
-  toIcon: JSX.Element;
-};
-
-export type AssistantReducerAction =
-  | {type: 'SET_TRIP_PATTERNS'; tripPatterns: TripPattern[] | null}
-  | {type: 'SET_IS_SEARCHING'}
-  | {
-      type: 'SET_FROM_LOCATION';
-      location: Location;
-      icon: JSX.Element;
-    }
-  | {
-      type: 'SET_TO_LOCATION';
-      location: Location;
-      icon: JSX.Element;
-    };
-
-type AssistantReducer = (
-  prevState: AssistantState,
-  action: AssistantReducerAction,
-) => AssistantState;
-
-const getSearchedLocationIcon = (
-  location: LocationWithSearchMetadata,
-  favorites: UserFavorites,
-): JSX.Element => {
-  switch (location.resultType) {
-    case 'geolocation':
-      return <LocationArrow />;
-    case 'favorite':
-      return (
-        <Text>
-          {favorites.find(f => f.name === location.favoriteName)?.emoji}
-        </Text>
-      );
-    case 'search':
-      return <LocationIcon location={location} />;
-  }
-};
-
-const AssistantReducer: AssistantReducer = (prevState, action) => {
-  switch (action.type) {
-    case 'SET_TRIP_PATTERNS':
-      return {
-        ...prevState,
-        tripPatterns: action.tripPatterns,
-        isSearching: false,
-      };
-    case 'SET_IS_SEARCHING':
-      return {
-        ...prevState,
-        isSearching: true,
-      };
-    case 'SET_FROM_LOCATION':
-      return {
-        ...prevState,
-        fromLocation: action.location,
-        fromIcon: action.icon,
-      };
-    case 'SET_TO_LOCATION':
-      return {
-        ...prevState,
-        toLocation: action.location,
-        toIcon: action.icon,
-      };
-  }
-};
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -149,69 +73,26 @@ const Assistant: React.FC<Props> = ({
   userLocations,
   navigation,
 }) => {
-  const [
-    {tripPatterns, isSearching, fromLocation, fromIcon, toLocation, toIcon},
-    dispatch,
-  ] = useReducer<AssistantReducer>(AssistantReducer, {
-    tripPatterns: null,
-    isSearching: false,
-    fromLocation: currentLocation ?? undefined,
-    fromIcon: currentLocation ? <LocationArrow /> : <InputSearchIcon />,
-    toLocation: undefined,
-    toIcon: <InputSearchIcon />,
-  });
+  const styles = useThemeStyles();
 
   const {favorites} = useFavorites();
-
-  const styles = useThemeStyles();
 
   const searchedFromLocation = useLocationSearchValue<AssistantRouteProp>(
     'fromLocation',
   );
-  useEffect(() => {
-    if (searchedFromLocation) {
-      const icon = getSearchedLocationIcon(searchedFromLocation, favorites);
-      dispatch({
-        type: 'SET_FROM_LOCATION',
-        location: searchedFromLocation,
-        icon,
-      });
-    }
-  }, [searchedFromLocation]);
-  useEffect(() => {
-    if (currentLocation && !fromLocation) {
-      dispatch({
-        type: 'SET_FROM_LOCATION',
-        location: currentLocation,
-        icon: <LocationArrow />,
-      });
-    }
-  }, [currentLocation]);
-
   const searchedToLocation = useLocationSearchValue<AssistantRouteProp>(
     'toLocation',
   );
-  useEffect(() => {
-    if (searchedToLocation) {
-      const icon = getSearchedLocationIcon(searchedToLocation, favorites);
-      dispatch({type: 'SET_TO_LOCATION', location: searchedToLocation, icon});
-    }
-  }, [searchedToLocation]);
 
-  async function search() {
-    if (!fromLocation || !toLocation) return;
-    dispatch({type: 'SET_IS_SEARCHING'});
-    try {
-      const response = await searchTrip(fromLocation, toLocation);
-      dispatch({type: 'SET_TRIP_PATTERNS', tripPatterns: response.data});
-    } catch (err) {
-      dispatch({type: 'SET_TRIP_PATTERNS', tripPatterns: null});
-    }
-  }
+  const fromLocation =
+    searchedFromLocation ??
+    (currentLocation && {...currentLocation, resultType: 'search'});
+  const fromIcon =
+    fromLocation && getSearchedLocationIcon(fromLocation, favorites);
+  const toLocation = searchedToLocation;
+  const toIcon = toLocation && getSearchedLocationIcon(toLocation, favorites);
 
-  useEffect(() => {
-    search();
-  }, [fromLocation, toLocation]);
+  const [tripPatterns, isSearching] = useTripPatterns(fromLocation, toLocation);
 
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
@@ -259,3 +140,46 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
 }));
 
 export default AssistantRoot;
+
+function useTripPatterns(
+  fromLocation: Location,
+  toLocation: Location,
+): [TripPattern[] | null, boolean] {
+  const [isSearching, setIsSearching] = useState(false);
+  const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
+
+  async function search() {
+    if (!fromLocation || !toLocation) return;
+    setIsSearching(true);
+    try {
+      const response = await searchTrip(fromLocation, toLocation);
+      setTripPatterns(response.data);
+    } finally {
+      setIsSearching(false);
+    }
+  }
+
+  useEffect(() => {
+    search();
+  }, [fromLocation, toLocation]);
+
+  return [tripPatterns, isSearching];
+}
+
+const getSearchedLocationIcon = (
+  location: LocationWithSearchMetadata,
+  favorites: UserFavorites,
+): JSX.Element => {
+  switch (location.resultType) {
+    case 'geolocation':
+      return <LocationArrow />;
+    case 'favorite':
+      return (
+        <Text>
+          {favorites.find(f => f.name === location.favoriteName)?.emoji}
+        </Text>
+      );
+    case 'search':
+      return <LocationIcon location={location} />;
+  }
+};
