@@ -47,7 +47,7 @@ const BusDetail: React.FC<LegDetailProps> = ({
             rowStyle={styles.rowStyle}
           />
           <LocationRow
-            icon={<BusLegIcon />}
+            icon={<BusLegIcon isLive={leg.realtime} />}
             location={getLineName(leg)}
             time={secondsToDuration(leg.duration ?? 0, nb)}
             textStyle={[styles.textStyle, styles.activeTextStyle]}
