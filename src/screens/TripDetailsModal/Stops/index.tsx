@@ -24,7 +24,7 @@ export type StopRouteParams = {
 
 export type DetailScreenRouteProp = RouteProp<DetailsModalStackParams, 'Stops'>;
 
-type DetailScreenNavigationProp = NavigationProp<RootStackParamList>;
+type DetailScreenNavigationProp = NavigationProp<DetailsModalStackParams>;
 
 type Props = {
   route: DetailScreenRouteProp;
