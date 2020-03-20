@@ -46,15 +46,10 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   const [isEmojiVisible, setEmojiVisible] = useState<boolean>(false);
   const [emoji, setEmoji] = useState<RenderedEmoji | undefined>(undefined);
   const [name, setName] = useState<string>(editItem?.name ?? '');
-  const [location, setLocation] = useState<Location | undefined>(
+  const location = useLocationSearchValue<AddEditScreenRouteProp>(
+    'searchLocation',
     editItem?.location,
   );
-  const searchLocation = useLocationSearchValue<AddEditScreenRouteProp>(
-    'searchLocation',
-  );
-  useEffect(() => {
-    setLocation(searchLocation);
-  }, [searchLocation]);
 
   const hasSelectedValues = Boolean(location);
 

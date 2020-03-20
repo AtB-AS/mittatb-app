@@ -190,11 +190,11 @@ export type LocationWithSearchMetadata = Location & {
 
 export function useLocationSearchValue<
   T extends RouteProp<any, any> & {params: ParamListBase}
->(callerRouteParam: keyof T['params']) {
+>(callerRouteParam: keyof T['params'], defaultLocation?: Location) {
   const route = useRoute<T>();
   const [location, setLocation] = React.useState<
     LocationWithSearchMetadata | undefined
-  >(undefined);
+  >(defaultLocation && {...defaultLocation, resultType: 'search'});
 
   React.useEffect(() => {
     if (route.params?.[callerRouteParam]) {
