@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
-import {Leg, TripPattern, Location} from '../../../sdk';
+import {Leg, TripPattern} from '../../../sdk';
 import WalkDetail from './WalkDetail';
 import BusDetail from './BusDetail';
 import {formatToClock} from '../../../utils/date';
@@ -14,14 +14,18 @@ import MapPointIcon from '../../../assets/svg/MapPointIcon';
 import colors from '../../../theme/colors';
 import {DetailsModalStackParams} from '..';
 import MessageBox from '../../../message-box';
+import {LocationWithSearchMetadata} from '../../../location-search';
+import {UserFavorites} from '../../../favorites/types';
+import LocationArrow from '../../../assets/svg/LocationArrow';
+import {useFavorites} from '../../../favorites/FavoritesContext';
 
 // @TODO Firebase config?
 const TIME_LIMIT_IN_MINUTES = 3;
 
 export type DetailsRouteParams = {
   tripPattern: TripPattern;
-  from: Location;
-  to: Location;
+  from: LocationWithSearchMetadata;
+  to: LocationWithSearchMetadata;
 };
 
 export type DetailScreenRouteProp = RouteProp<
@@ -39,6 +43,7 @@ type Props = {
 };
 
 const TripDetailsModal: React.FC<Props> = ({navigation, route}) => {
+  const {favorites} = useFavorites();
   const styles = useDetailsStyle();
   const {
     params: {tripPattern, from, to},
@@ -61,7 +66,11 @@ const TripDetailsModal: React.FC<Props> = ({navigation, route}) => {
           </MessageBox>
         )}
         <LocationRow
-          icon={<DotIcon fill={colors.general.black} />}
+          icon={
+            getLocationIcon(from, favorites) ?? (
+              <DotIcon fill={colors.general.black} />
+            )
+          }
           location={from.name}
           time={formatToClock(tripPattern.startTime)}
           textStyle={styles.textStyle}
@@ -76,7 +85,11 @@ const TripDetailsModal: React.FC<Props> = ({navigation, route}) => {
           />
         ))}
         <LocationRow
-          icon={<MapPointIcon fill={colors.general.black} />}
+          icon={
+            getLocationIcon(to, favorites) ?? (
+              <MapPointIcon fill={colors.general.black} />
+            )
+          }
           location={to.name}
           time={formatToClock(tripPattern.endTime)}
           textStyle={styles.textStyle}
@@ -85,6 +98,22 @@ const TripDetailsModal: React.FC<Props> = ({navigation, route}) => {
     </View>
   );
 };
+
+function getLocationIcon(
+  location: LocationWithSearchMetadata,
+  favorites: UserFavorites,
+) {
+  switch (location.resultType) {
+    case 'geolocation':
+      return <LocationArrow />;
+    case 'favorite':
+      return (
+        <Text>
+          {favorites.find(f => f.name === location.favoriteName)?.emoji}
+        </Text>
+      );
+  }
+}
 
 function nextLeg(curent: number, legs: Leg[]): Leg | undefined {
   return legs[curent + 1];
