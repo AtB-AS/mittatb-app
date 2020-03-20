@@ -12,12 +12,14 @@ import {StyleSheet, Theme} from '../../theme';
 type ButtonProps = {
   onPress(): void;
   mode?: 'primary' | 'destructive' | 'secondary';
+  border?: boolean;
   textContainerStyle?: StyleProp<ViewStyle>;
   IconComponent?: React.ElementType;
 } & TouchableOpacityProperties;
 const Button: React.FC<ButtonProps> = ({
   onPress,
   mode = 'primary',
+  border = true,
   IconComponent,
   children,
   disabled,
@@ -31,6 +33,7 @@ const Button: React.FC<ButtonProps> = ({
     mode === 'secondary' ? css.buttonSecondary : undefined,
     mode === 'destructive' ? css.buttonDestructive : undefined,
   ];
+  if (!border) styleContainer.push({borderWidth: 0});
   const styleText = [
     css.text,
     mode === 'destructive' ? css.textDestructive : undefined,

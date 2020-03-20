@@ -34,7 +34,6 @@ export default function Profile({navigation}: ProfileScreenProps) {
   const {favorites} = useFavorites();
   const items = favorites ?? [];
 
-
   const navigateToEdit = (item: LocationFavorite) => {
     navigation.navigate('AddEditFavorite', {editItem: item});
   };
@@ -90,6 +89,7 @@ function AddFavoriteButton({onPress}: {onPress(): void}) {
         marginLeft: 12,
       }}
       mode="secondary"
+      border={false}
       IconComponent={PlusIcon}
     >
       Legg til favorittsted
