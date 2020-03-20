@@ -38,7 +38,11 @@ const NavigationRoot = () => {
           mode={isLoading || !onboarded ? 'card' : 'modal'}
         >
           {!onboarded ? (
-            <SharedStack.Screen name="Onboarding" component={Onboarding} />
+            <SharedStack.Screen
+              name="Onboarding"
+              component={Onboarding}
+              options={{headerShown: false}}
+            />
           ) : (
             <>
               <SharedStack.Screen

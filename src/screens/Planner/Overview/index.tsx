@@ -49,7 +49,7 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
     ? reverseLookupLocations[1]
     : undefined;
 
-  if (!userLocations || !status) {
+  if (!status) {
     return <Splash />;
   }
 
@@ -64,7 +64,7 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
 
 type Props = {
   currentLocation?: Location;
-  userLocations: UserFavorites;
+  userLocations: UserFavorites | null;
   navigation: AssistantScreenNavigationProp;
 };
 
@@ -84,9 +84,12 @@ const Assistant: React.FC<Props> = ({
     'toLocation',
   );
 
-  const fromLocation =
-    searchedFromLocation ??
-    (currentLocation && {...currentLocation, resultType: 'search'});
+  const currentSearchLocation = useMemo<LocationWithSearchMetadata | undefined>(
+    () => currentLocation && {...currentLocation, resultType: 'geolocation'},
+    [currentLocation],
+  );
+
+  const fromLocation = searchedFromLocation ?? currentSearchLocation;
   const fromIcon =
     fromLocation && getSearchedLocationIcon(fromLocation, favorites);
   const toLocation = searchedToLocation;
