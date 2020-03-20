@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Dash from 'react-native-dash';
 import colors from '../../../theme/colors';
-import {formatToClock} from '../../../utils/date';
+import {formatToClock, secondsToDuration} from '../../../utils/date';
 import nb from 'date-fns/locale/nb';
 import DotIcon from '../../../assets/svg/DotIcon';
 import LocationRow from '../LocationRow';
