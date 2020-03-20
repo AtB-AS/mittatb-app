@@ -105,7 +105,6 @@ function WaitRow({
   const time = secondsBetween(currentLeg.aimedEndTime, nextLeg.aimedStartTime);
   useEffect(() => {
     if (!visible) return;
-    console.log(time);
     onCalculateTime(time);
   }, [visible, time]);
 
