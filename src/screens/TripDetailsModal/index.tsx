@@ -1,6 +1,6 @@
 import React from 'react';
 import Details, {DetailsRouteParams, DetailScreenRouteProp} from './Details';
-import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
+import {createStackNavigator} from '@react-navigation/stack';
 import Stops, {StopRouteParams} from './Stops';
 
 export type DetailsModalStackParams = {
@@ -10,7 +10,7 @@ export type DetailsModalStackParams = {
 
 export type RouteParams = DetailsRouteParams;
 
-const Stack = createSharedElementStackNavigator<DetailsModalStackParams>();
+const Stack = createStackNavigator<DetailsModalStackParams>();
 
 type TripDetailsRootProps = {
   route: DetailScreenRouteProp;
