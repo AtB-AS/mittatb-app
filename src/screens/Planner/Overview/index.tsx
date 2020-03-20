@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Results from './Results';
@@ -23,85 +23,7 @@ import {useFavorites} from '../../../favorites/FavoritesContext';
 import LocationArrow from '../../../assets/svg/LocationArrow';
 import {Text} from 'react-native';
 import LocationIcon from '../../../assets/svg/LocationIcon';
-<<<<<<< HEAD
-=======
-import InputSearchIcon from '../../../location-search/svg/InputSearchIcon';
 import {PlannerStackParams} from '..';
-
-type AssistantState = {
-  isSearching: boolean;
-  tripPatterns: TripPattern[] | null;
-  fromLocation?: Location;
-  fromIcon: JSX.Element;
-  toLocation?: Location;
-  toIcon: JSX.Element;
-};
-
-export type AssistantReducerAction =
-  | {type: 'SET_TRIP_PATTERNS'; tripPatterns: TripPattern[] | null}
-  | {type: 'SET_IS_SEARCHING'}
-  | {
-      type: 'SET_FROM_LOCATION';
-      location: Location;
-      icon: JSX.Element;
-    }
-  | {
-      type: 'SET_TO_LOCATION';
-      location: Location;
-      icon: JSX.Element;
-    };
-
-type AssistantReducer = (
-  prevState: AssistantState,
-  action: AssistantReducerAction,
-) => AssistantState;
-
-const getSearchedLocationIcon = (
-  location: LocationWithSearchMetadata,
-  favorites: UserFavorites,
-): JSX.Element => {
-  switch (location.resultType) {
-    case 'geolocation':
-      return <LocationArrow />;
-    case 'favorite':
-      return (
-        <Text>
-          {favorites.find(f => f.name === location.favoriteName)?.emoji}
-        </Text>
-      );
-    case 'search':
-      return <LocationIcon location={location} />;
-  }
-};
-
-const AssistantReducer: AssistantReducer = (prevState, action) => {
-  switch (action.type) {
-    case 'SET_TRIP_PATTERNS':
-      return {
-        ...prevState,
-        tripPatterns: action.tripPatterns,
-        isSearching: false,
-      };
-    case 'SET_IS_SEARCHING':
-      return {
-        ...prevState,
-        isSearching: true,
-      };
-    case 'SET_FROM_LOCATION':
-      return {
-        ...prevState,
-        fromLocation: action.location,
-        fromIcon: action.icon,
-      };
-    case 'SET_TO_LOCATION':
-      return {
-        ...prevState,
-        toLocation: action.location,
-        toIcon: action.icon,
-      };
-  }
-};
->>>>>>> Adds press listener for details pressable in assistant result item
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
