@@ -1,24 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {StackNavigationProp} from '@react-navigation/stack';
 import WaitingForBus from '../../assets/svg/WaitingForBus';
 import Logo from '../../assets/svg/Logo';
 import colors from '../../theme/colors';
 import {useGeolocationState} from '../../GeolocationContext';
-import {RootStackParamList} from '../../navigation';
 import {useAppState} from '../../AppContext';
 
-type GeoPermissionScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'Onboarding'
->;
-
-type Props = {
-  navigation: GeoPermissionScreenNavigationProp;
-};
-
-const GeoPermission: React.FC<Props> = ({navigation}) => {
+const GeoPermission: React.FC = () => {
   const {completeOnboarding} = useAppState();
   const {status, requestPermission} = useGeolocationState();
   const [requestedOnce, setRequestedOnce] = useState(false);
