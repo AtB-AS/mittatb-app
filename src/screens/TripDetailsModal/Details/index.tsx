@@ -71,7 +71,7 @@ const TripDetailsModal: React.FC<Props> = ({navigation, route}) => {
               <DotIcon fill={colors.general.black} />
             )
           }
-          location={from.name}
+          location={from.favoriteName ?? from.name}
           time={formatToClock(tripPattern.startTime)}
           textStyle={styles.textStyle}
         />
@@ -90,7 +90,7 @@ const TripDetailsModal: React.FC<Props> = ({navigation, route}) => {
               <MapPointIcon fill={colors.general.black} />
             )
           }
-          location={to.name}
+          location={to.favoriteName ?? to.name}
           time={formatToClock(tripPattern.endTime)}
           textStyle={styles.textStyle}
         />
