@@ -3,7 +3,7 @@ import {Leg, EstimatedCall} from '../../../sdk';
 import {DetailsModalStackParams} from '..';
 import {RouteProp, NavigationProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../../navigation';
-import {View, Text, ViewStyle} from 'react-native';
+import {View, Text, ViewStyle, ActivityIndicator} from 'react-native';
 import DotIcon from '../../../assets/svg/DotIcon';
 import {formatToClock} from '../../../utils/date';
 import colors from '../../../theme/colors';
@@ -35,24 +35,30 @@ export default function Stops({navigation, route}: Props) {
   const {leg} = route.params;
   const styles = useStopsStyle();
 
-  const [callGroups] = useGroupedCallList(leg);
+  const [callGroups, isLoading] = useGroupedCallList(leg);
+
+  const content = isLoading ? (
+    <ActivityIndicator animating={true} size="large" style={styles.spinner} />
+  ) : (
+    <ScrollView style={styles.scrollView}>
+      <View style={styles.allGroups}>
+        {mapGroup(callGroups, (name, group) => (
+          <CallGroup
+            key={group[0]?.quay.id ?? name}
+            calls={group}
+            type={name}
+          />
+        ))}
+      </View>
+    </ScrollView>
+  );
 
   return (
     <View style={styles.container}>
       <ScreenHeader onClose={() => navigation.goBack()}>
         {getLineName(leg)}
       </ScreenHeader>
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.allGroups}>
-          {mapGroup(callGroups, (name, group) => (
-            <CallGroup
-              key={group[0]?.quay.id ?? name}
-              calls={group}
-              type={name}
-            />
-          ))}
-        </View>
-      </ScrollView>
+      {content}
     </View>
   );
 }
@@ -186,6 +192,7 @@ const useStopsStyle = StyleSheet.createThemeHook(theme => ({
   allGroups: {
     marginBottom: 250,
   },
+  spinner: {height: 280},
   dash: {
     marginLeft: 87,
     flexDirection: 'column',
