@@ -65,7 +65,7 @@ const TripDetailsModal: React.FC<Props> = props => {
   );
 };
 
-const DetailsContent: React.FC<Props> = ({navigation, route}) => {
+const DetailsContent: React.FC<Props> = ({route}) => {
   const {favorites} = useFavorites();
   const styles = useDetailsStyle();
   const {
