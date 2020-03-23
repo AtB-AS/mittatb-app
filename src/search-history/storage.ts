@@ -8,9 +8,9 @@ const HISTORY_LIMIT = 10;
 const STORAGE_KEY = '@ATB_search-history';
 
 export async function getSearchHistory(): Promise<SearchHistory> {
-  const userLocations = await storage.get(STORAGE_KEY);
-  if (!userLocations) return [];
-  let data = (userLocations ? JSON.parse(userLocations) : []) as SearchHistory;
+  const searchHistory = await storage.get(STORAGE_KEY);
+  if (!searchHistory) return [];
+  let data = (searchHistory ? JSON.parse(searchHistory) : []) as SearchHistory;
   return data;
 }
 
