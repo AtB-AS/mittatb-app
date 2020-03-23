@@ -12,3 +12,17 @@ index 8c6f23b..360d029 100644
    get PanResponder() {
      return require('../Interaction/PanResponder');
    },
+diff --git a/node_modules/react-native/react.gradle b/node_modules/react-native/react.gradle
+index a84417b..8e581c5 100644
+--- a/node_modules/react-native/react.gradle
++++ b/node_modules/react-native/react.gradle
+@@ -149,7 +149,8 @@ afterEvaluate {
+                     def hermesFlags;
+                     def hbcTempFile = file("${jsBundleFile}.hbc")
+                     exec {
+-                        if (targetName.toLowerCase().contains("release")) {
++                        if (targetName.toLowerCase().contains("release") ||
++                            targetName.toLowerCase().contains("store")) {
+                             // Can't use ?: since that will also substitute valid empty lists
+                             hermesFlags = config.hermesFlagsRelease
+                             if (hermesFlags == null) hermesFlags = ["-O", "-output-source-map"]
