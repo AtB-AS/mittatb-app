@@ -18,6 +18,7 @@ import {LocationWithSearchMetadata} from '../../../location-search';
 import {UserFavorites} from '../../../favorites/types';
 import LocationArrow from '../../../assets/svg/LocationArrow';
 import {useFavorites} from '../../../favorites/FavoritesContext';
+import LocationIcon from '../../../assets/svg/LocationIcon';
 
 // @TODO Firebase config?
 const TIME_LIMIT_IN_MINUTES = 3;
@@ -112,6 +113,8 @@ function getLocationIcon(
           {favorites.find(f => f.name === location.favoriteName)?.emoji}
         </Text>
       );
+    case 'search':
+      return <LocationIcon location={location} />;
   }
 }
 
