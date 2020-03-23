@@ -14,7 +14,7 @@ import {getLineName, getQuayName} from '../utils';
 import WaitClockIcon from './svg/WaitClockIcon';
 import {Leg} from '../../../sdk';
 
-const BusDetail: React.FC<LegDetailProps> = ({
+const TransportDetail: React.FC<LegDetailProps> = ({
   leg,
   nextLeg,
   isIntermediateTravelLeg,
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BusDetail;
+export default TransportDetail;
 
 type WaitRowProps = {
   onCalculateTime(seconds: number): void;

@@ -4,7 +4,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {Leg, TripPattern} from '../../../sdk';
 import WalkDetail from './WalkDetail';
-import BusDetail from './BusDetail';
+import TransportDetail from './TransportDetail';
 import {formatToClock} from '../../../utils/date';
 import LocationRow from '../LocationRow';
 import DotIcon from '../../../assets/svg/DotIcon';
@@ -161,9 +161,9 @@ const LegDetail: React.FC<LegDetailProps> = props => {
     case 'foot':
       return <WalkDetail {...props} />;
     case 'bus':
-      return <BusDetail {...props} />;
+      return <TransportDetail {...props} />;
     case 'tram':
-      return <BusDetail {...props} />;
+      return <TransportDetail {...props} />;
     default:
       return <WalkDetail {...props} />;
   }
