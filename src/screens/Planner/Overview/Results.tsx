@@ -17,13 +17,18 @@ type Props = {
   tripPatterns: TripPattern[] | null;
   isSearching: boolean;
   navigation: AssistantScreenNavigationProp;
+  onDetailsPressed(tripPattern: TripPattern): void;
 };
 
 export type ResultTabParams = {
   [key: string]: {tripPattern: TripPattern};
 };
 
-const Results: React.FC<Props> = ({tripPatterns, isSearching}) => {
+const Results: React.FC<Props> = ({
+  tripPatterns,
+  isSearching,
+  onDetailsPressed,
+}) => {
   const {theme} = useTheme();
   const styles = useThemeStyles(theme);
   const arrowFill = useArrowFill(theme);
@@ -99,7 +104,10 @@ const Results: React.FC<Props> = ({tripPatterns, isSearching}) => {
         >
           {tripPatterns.map((tripPattern, i) => (
             <View key={i}>
-              <ResultItem tripPattern={tripPattern} />
+              <ResultItem
+                tripPattern={tripPattern}
+                onDetailsPressed={onDetailsPressed}
+              />
             </View>
           ))}
         </ViewPager>

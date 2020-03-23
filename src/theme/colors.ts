@@ -8,10 +8,12 @@ const colors = {
     orange: '#C75B12',
     red: '#A51140',
     cyan: '#71D6E0',
+    gray_Level2: '#EBECED',
   },
   general: {
     white: '#ffffff',
     gray: '#D7D9DB',
+    gray200: '#AFB3B7',
     black: '#000000',
     offblack: '#111416',
     lightGray: 'rgba(0, 0, 0, 0.6)',
@@ -29,6 +31,7 @@ export interface Theme {
   background: {
     primary: string;
     secondary: string;
+    modal_Level2: string;
     destructive: string;
     accent: string;
   };
@@ -53,6 +56,7 @@ export const themes: Themes = {
     background: {
       primary: colors.general.white,
       secondary: colors.general.gray,
+      modal_Level2: colors.secondary.gray_Level2,
       destructive: colors.secondary.red,
       accent: colors.primary.green,
     },
@@ -70,6 +74,7 @@ export const themes: Themes = {
     background: {
       primary: colors.general.offblack,
       secondary: colors.general.gray,
+      modal_Level2: colors.secondary.gray_Level2,
       destructive: colors.secondary.red,
       accent: colors.primary.green,
     },

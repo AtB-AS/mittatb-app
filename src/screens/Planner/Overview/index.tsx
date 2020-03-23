@@ -1,13 +1,12 @@
-import React, {useEffect, useReducer, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Results from './Results';
 import {useAppState} from '../../../AppContext';
 import {TripPattern} from '../../../sdk';
-import {PlannerStackParams} from '../';
 import {useGeolocationState} from '../../../GeolocationContext';
 import Splash from '../../Splash';
-import {StyleSheet, useStyle} from '../../../theme';
+import {StyleSheet} from '../../../theme';
 import {searchTrip} from '../../../api';
 import {UserFavorites, Location} from '../../../favorites/types';
 import {
@@ -18,12 +17,13 @@ import {RouteProp, CompositeNavigationProp} from '@react-navigation/core';
 import SearchButton from './SearchButton';
 import {RootStackParamList} from '../../../navigation';
 import {SharedElement} from 'react-navigation-shared-element';
-import Header from './Header';
+import Header from '../../../ScreenHeader';
 import {useReverseGeocoder} from '../../../location-search/useGeocoder';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import LocationArrow from '../../../assets/svg/LocationArrow';
 import {Text} from 'react-native';
 import LocationIcon from '../../../assets/svg/LocationIcon';
+import {PlannerStackParams} from '..';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -111,6 +111,13 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
         tripPatterns={tripPatterns}
         isSearching={isSearching}
         navigation={navigation}
+        onDetailsPressed={tripPattern =>
+          navigation.navigate('TripDetailsModal', {
+            from: fromLocation!,
+            to: toLocation!,
+            tripPattern,
+          })
+        }
       />
       <SharedElement id="locationSearchInput">
         <SearchButton

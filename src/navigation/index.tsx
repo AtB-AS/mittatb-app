@@ -14,11 +14,16 @@ import CloseModalCrossIcon from './svg/CloseModalCrossIcon';
 import {useTheme} from '../theme';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import transitionSpec from './transitionSpec';
+import TripDetailsModal, {
+  RouteParams as TripDetailsModalParams,
+} from '../screens/TripDetailsModal';
+import {TransitionPresets} from '@react-navigation/stack';
 
 export type RootStackParamList = {
   Onboarding: undefined;
   TabNavigator: undefined;
   LocationSearch: LocationSearchParams;
+  TripDetailsModal: TripDetailsModalParams;
 };
 
 const SharedStack = createSharedElementStackNavigator<RootStackParamList>();
@@ -49,6 +54,16 @@ const NavigationRoot = () => {
                 name="TabNavigator"
                 component={TabNavigator}
                 options={{headerShown: false}}
+              />
+              <SharedStack.Screen
+                name="TripDetailsModal"
+                component={TripDetailsModal}
+                options={{
+                  headerShown: false,
+                  cardOverlayEnabled: true,
+                  cardShadowEnabled: true,
+                  ...TransitionPresets.ModalPresentationIOS,
+                }}
               />
               <SharedStack.Screen
                 name="LocationSearch"

@@ -1,23 +1,30 @@
 import React from 'react';
-import {View, Text, StyleSheet, TextStyle} from 'react-native';
-import colors from '../../../theme/colors';
+import {View, Text, TextStyle, StyleProp, ViewStyle} from 'react-native';
+import {StyleSheet, useTheme} from '../../theme';
 
 const LocationRow: React.FC<{
   icon: JSX.Element;
   location: string;
-  time: string;
-  textStyle?: TextStyle;
+  time?: string;
+  textStyle?: StyleProp<TextStyle>;
+  rowStyle?: StyleProp<ViewStyle>;
   dashThroughIcon?: boolean;
-}> = ({icon, location, time, textStyle, dashThroughIcon}) => {
+}> = ({icon, location, time, rowStyle, textStyle, dashThroughIcon}) => {
+  const styles = useLocationRowStyle();
+  const {theme} = useTheme();
+
   return (
-    <View style={styles.row}>
+    <View style={[styles.row, rowStyle]}>
       <View style={styles.iconLocationContainer}>
+        <View style={styles.timeContainer}>
+          <Text style={[styles.time, textStyle]}>{time}</Text>
+        </View>
         <View
           style={[
             styles.iconContainer,
             {
               backgroundColor: !dashThroughIcon
-                ? colors.primary.gray
+                ? theme.background.modal_Level2
                 : 'transparent',
             },
           ]}
@@ -28,14 +35,11 @@ const LocationRow: React.FC<{
           <Text style={[styles.location, textStyle]}>{location}</Text>
         </View>
       </View>
-      <View style={styles.timeContainer}>
-        <Text style={[styles.time, textStyle]}>{time}</Text>
-      </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const useLocationRowStyle = StyleSheet.createThemeHook(theme => ({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -60,13 +64,13 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   location: {
-    color: colors.general.white,
+    color: theme.text.primary,
   },
-  timeContainer: {flexGrow: 1, alignItems: 'flex-end', marginLeft: 10},
+  timeContainer: {width: 70, alignItems: 'flex-end', marginRight: 12},
   time: {
-    color: colors.general.white,
-    fontSize: 12,
+    color: theme.text.primary,
+    fontWeight: 'bold',
   },
-});
+}));
 
 export default LocationRow;
