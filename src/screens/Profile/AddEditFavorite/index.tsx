@@ -10,10 +10,7 @@ import DeleteTrashCanIcon from '../../../assets/svg/DeleteTrashCanIcon';
 import MapPointIcon from '../../../assets/svg/MapPointIcon';
 import SaveDisketteIcon from '../../../assets/svg/SaveDisketteIcon';
 import {useFavorites} from '../../../favorites/FavoritesContext';
-import {Location} from '../../../favorites/types';
-import {useGeolocationState} from '../../../GeolocationContext';
 import {StyleSheet, Theme, useTheme} from '../../../theme';
-import LocationInput from '../../Onboarding/LocationInput';
 import Button from '../Button';
 import EmojiPopup from './EmojiPopup';
 import {RenderedEmoji} from './Emojis';
@@ -302,32 +299,3 @@ const useGroupStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     marginBottom: 8,
   },
 }));
-
-type LocationInputGroupProps = {
-  onChange(location: Location): void;
-  value?: Location;
-};
-const LocationInputGroup: React.FC<LocationInputGroupProps> = ({
-  onChange,
-  value,
-}) => {
-  const {location} = useGeolocationState();
-  const [address, setAddress] = useState<string>(value?.name ?? '');
-  const onSelected = (location: Location) => {
-    setAddress(location.name);
-    onChange(location);
-  };
-
-  return (
-    <InputGroup title="Adresse eller stoppested">
-      <LocationInput
-        location={location}
-        placeholder="Skriv inn adresse eller stoppested"
-        text={address}
-        onChangeText={setAddress}
-        onSelectLocation={onSelected}
-        testID="profileLocation"
-      />
-    </InputGroup>
-  );
-};

@@ -6,22 +6,23 @@ import React, {
   useEffect,
   useMemo,
 } from 'react';
-import {getFavorites, setFavorites__legacy} from './favorites/storage';
-import {UserFavorites, UserLocations} from './favorites/types';
+import storage from './storage';
 
 type AppState = {
   isLoading: boolean;
   onboarded: boolean;
-  userLocations: UserFavorites | null;
 };
 
 type AppReducerAction =
-  | {type: 'LOAD_APP_SETTINGS'; userLocations: UserFavorites | null}
-  | {type: 'SET_USER_LOCATIONS'; userLocations: UserFavorites}
+  | {
+      type: 'LOAD_APP_SETTINGS';
+      onboarded: boolean;
+    }
+  | {type: 'COMPLETE_ONBOARDING'}
   | {type: 'RESTART_ONBOARDING'};
 
 type AppContextState = AppState & {
-  completeOnboarding__legacy: (userlocations: UserLocations) => void;
+  completeOnboarding: () => void;
   restartOnboarding: () => void;
 };
 const AppContext = createContext<AppContextState | undefined>(undefined);
@@ -36,14 +37,12 @@ const appReducer: AppReducer = (prevState, action) => {
     case 'LOAD_APP_SETTINGS':
       return {
         ...prevState,
-        userLocations: action.userLocations,
-        onboarded: action.userLocations != null,
+        onboarded: action.onboarded,
         isLoading: false,
       };
-    case 'SET_USER_LOCATIONS':
+    case 'COMPLETE_ONBOARDING':
       return {
         ...prevState,
-        userLocations: action.userLocations,
         onboarded: true,
       };
     case 'RESTART_ONBOARDING':
@@ -56,7 +55,6 @@ const appReducer: AppReducer = (prevState, action) => {
 
 const defaultAppState: AppState = {
   isLoading: true,
-  userLocations: null,
   onboarded: false,
 };
 
@@ -64,21 +62,22 @@ const AppContextProvider: React.FC = ({children}) => {
   const [state, dispatch] = useReducer<AppReducer>(appReducer, defaultAppState);
 
   useEffect(() => {
-    async function checkOnboarded() {
-      const userLocations = await getFavorites();
+    async function loadAppSettings() {
+      const savedOnboarded = await storage.get('onboarded');
+      const onboarded = !savedOnboarded ? false : JSON.parse(savedOnboarded);
       dispatch({
         type: 'LOAD_APP_SETTINGS',
-        userLocations: userLocations,
+        onboarded,
       });
     }
-    checkOnboarded();
+    loadAppSettings();
   }, []);
 
-  const {completeOnboarding__legacy, restartOnboarding} = useMemo(
+  const {completeOnboarding, restartOnboarding} = useMemo(
     () => ({
-      completeOnboarding__legacy: async (input: UserLocations) => {
-        const userLocations = await setFavorites__legacy(input);
-        dispatch({type: 'SET_USER_LOCATIONS', userLocations});
+      completeOnboarding: async () => {
+        await storage.set('onboarded', JSON.stringify(true));
+        dispatch({type: 'COMPLETE_ONBOARDING'});
       },
       restartOnboarding: async () => {
         dispatch({type: 'RESTART_ONBOARDING'});
@@ -89,7 +88,7 @@ const AppContextProvider: React.FC = ({children}) => {
 
   return (
     <AppContext.Provider
-      value={{...state, completeOnboarding__legacy, restartOnboarding}}
+      value={{...state, completeOnboarding, restartOnboarding}}
     >
       <AppDispatch.Provider value={dispatch}>{children}</AppDispatch.Provider>
     </AppContext.Provider>
