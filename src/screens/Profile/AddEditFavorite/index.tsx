@@ -143,7 +143,10 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           />
         </InputGroup>
 
-        <InputGroup title="Symbol" boxStyle={{marginBottom: 0}}>
+        <InputGroup
+          title="Symbol"
+          boxStyle={{marginBottom: 0, alignItems: 'flex-start'}}
+        >
           <SymbolPicker
             onPress={() => setEmojiVisible(true)}
             value={renderedEmoji}

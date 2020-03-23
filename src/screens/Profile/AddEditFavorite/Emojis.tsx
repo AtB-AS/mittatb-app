@@ -5,7 +5,6 @@ import React, {Component, ReactNode, ReactElement} from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
   TextInput,
   Platform,
@@ -15,6 +14,7 @@ import {
   LayoutChangeEvent,
 } from 'react-native';
 import emojiRawData, {Emojis, Emoji} from 'emoji-datasource';
+import {StyleSheet, useTheme} from '../../../theme';
 
 const Categories: {[key: string]: string} = {
   emotion: 'Smileys & Emotion',
@@ -106,6 +106,7 @@ type EmojiSelectorState = {
 type EmojiSelectorProps = {
   onEmojiSelected?(emoji?: RenderedEmoji): void;
   theme?: string;
+  placeholderColor?: string;
   columns?: number;
   placeholder?: string;
   clearText?: ReactElement;
@@ -120,8 +121,10 @@ type DefaultProps = {
   clearText: ReactElement;
 };
 
-export default class EmojiSelector extends Component<
-  EmojiSelectorProps,
+type StylesProps = ReturnType<typeof useEmojiPopupStyle>;
+
+class EmojiSelector extends Component<
+  EmojiSelectorProps & {styles: StylesProps},
   EmojiSelectorState
 > {
   state = {
@@ -225,7 +228,9 @@ export default class EmojiSelector extends Component<
       placeholder,
       clearText,
       onEmojiSelected,
+      placeholderColor,
       value,
+      styles,
       ...other
     } = this.props;
     const {colSize, isReady, searchQuery} = this.state;
@@ -241,6 +246,7 @@ export default class EmojiSelector extends Component<
               returnKeyType="done"
               autoCorrect={false}
               underlineColorAndroid={theme}
+              placeholderTextColor={placeholderColor}
               value={searchQuery}
               onChangeText={this.handleSearch}
             />
@@ -278,7 +284,21 @@ export default class EmojiSelector extends Component<
   }
 }
 
-const styles = StyleSheet.create({
+function EmojiSelectorWrapper(props: EmojiSelectorProps) {
+  const styles = useEmojiPopupStyle();
+  const {theme} = useTheme();
+  return (
+    <EmojiSelector
+      placeholderColor={theme.text.faded}
+      styles={styles}
+      {...props}
+    />
+  );
+}
+
+export default EmojiSelectorWrapper;
+
+const useEmojiPopupStyle = StyleSheet.createThemeHook(theme => ({
   frame: {
     flex: 1,
     width: '100%',
@@ -294,17 +314,15 @@ const styles = StyleSheet.create({
   searchbar_container: {
     width: '100%',
     zIndex: 1,
-    backgroundColor: 'rgba(255,255,255,0.75)',
   },
   search: {
-    ...Platform.select({
-      ios: {
-        height: 36,
-        paddingLeft: 8,
-        borderRadius: 10,
-        backgroundColor: '#E5E8E9',
-      },
-    }),
+    backgroundColor: theme.background.primary,
+    borderBottomColor: theme.border.primary,
+    color: theme.text.primary,
+    borderBottomWidth: 2,
+    borderRadius: 4,
+    padding: 12,
+    fontSize: 16,
     margin: 8,
   },
   container: {
@@ -313,7 +331,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
   },
-});
+}));
 
 function isClearItem(item: any): item is ClearItem {
   return item === __CLEAR_ITEM;

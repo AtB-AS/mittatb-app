@@ -46,7 +46,7 @@ export default function EmojiPopup({
 const useModalStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   content: {
     height: '70%',
-    backgroundColor: theme.background.primary,
+    backgroundColor: theme.background.modal_Level2,
     padding: theme.sizes.pagePadding,
     justifyContent: 'center',
     alignItems: 'center',
