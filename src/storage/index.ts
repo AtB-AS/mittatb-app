@@ -6,6 +6,7 @@ type StorageModel = {
   stored_user_locations: string;
   install_id: string;
   onboarded: string;
+  '@ATB_search-history': string;
 };
 
 const legacyStorage = new LegacyStorage();
