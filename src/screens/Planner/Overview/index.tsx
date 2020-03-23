@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Results from './Results';
-import {useAppState} from '../../../AppContext';
 import {TripPattern} from '../../../sdk';
 import {useGeolocationState} from '../../../GeolocationContext';
 import Splash from '../../Splash';
