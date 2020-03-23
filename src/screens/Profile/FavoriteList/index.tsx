@@ -95,7 +95,10 @@ const Item: React.FC<ItemProps> = ({item, onEdit}) => {
       {item.emoji ? <Text>{item.emoji}</Text> : <MapPointIcon />}
       <Text style={css.text}>{item.name ?? item.location.name}</Text>
       {onEdit && (
-        <TouchableOpacity onPress={onEdit}>
+        <TouchableOpacity
+          onPress={onEdit}
+          hitSlop={{top: 12, right: 12, left: 12, bottom: 12}}
+        >
           <EditIcon />
         </TouchableOpacity>
       )}
