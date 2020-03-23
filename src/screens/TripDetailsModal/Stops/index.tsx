@@ -17,6 +17,7 @@ import {getDepartures} from '../../../api/serviceJourney';
 import BusLegIcon from '../svg/BusLegIcon';
 import UnfoldLess from './svg/UnfoldLess';
 import UnfoldMore from './svg/UnfoldMore';
+import ChevronLeftIcon from '../../../assets/svg/ChevronLeftIcon';
 
 export type StopRouteParams = {
   leg: Leg;
@@ -55,7 +56,10 @@ export default function Stops({navigation, route}: Props) {
 
   return (
     <View style={styles.container}>
-      <ScreenHeader onClose={() => navigation.goBack()}>
+      <ScreenHeader
+        onClose={() => navigation.goBack()}
+        iconElement={<ChevronLeftIcon />}
+      >
         {getLineName(leg)}
       </ScreenHeader>
       {content}
@@ -94,7 +98,7 @@ function CallGroup({type, calls}: CallGroupProps) {
   const items = collapsed ? [calls[0]] : calls;
   const collapseButton = showCollapsable ? (
     <CollapseButtonRow
-      key="collapse-button"
+      key={`collapse-button-${type}`}
       collapsed={collapsed}
       setCollapsed={setCollapsed}
       numberOfStops={calls.length - 1}

@@ -18,7 +18,7 @@ type TripDetailsRootProps = {
 
 const TripDetailsRoot = ({route}: TripDetailsRootProps) => {
   return (
-    <Stack.Navigator mode="modal" screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen
         name="Details"
         component={Details}
