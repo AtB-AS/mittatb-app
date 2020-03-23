@@ -17,6 +17,7 @@ import FavoriteChips from './FavoriteChips';
 import {useGeolocationState} from '../GeolocationContext';
 import {SharedElement} from 'react-navigation-shared-element';
 import {RootStackParamList} from '../navigation';
+import {useSearchHistory} from '../search-history';
 
 export type Props = {
   navigation: NavigationProp<any>;
@@ -35,22 +36,12 @@ const LocationSearch: React.FC<Props> = ({
   },
 }) => {
   const styles = useThemeStyles();
+  const {history, addSearchEntry} = useSearchHistory();
 
   const [text, setText] = useState<string>('');
   const debouncedText = useDebounce(text, 200);
 
-  const previousLocations = filterPreviousLocations(debouncedText, [
-    {
-      coordinates: {
-        latitude: 63.279993,
-        longitude: 9.836737,
-      },
-      id: 'NSR:StopPlace:43150',
-      name: 'Sorenskrivergården',
-      label: 'Sorenskrivergården, Orkland',
-      locality: 'Orkland',
-    } as Location,
-  ]);
+  const previousLocations = filterPreviousLocations(debouncedText, history);
 
   const {location: geolocation} = useGeolocationState();
 
@@ -62,6 +53,9 @@ const LocationSearch: React.FC<Props> = ({
     resultType: LocationResultType,
     favoriteName?: string,
   ) => {
+    if (resultType === 'search') {
+      addSearchEntry(location);
+    }
     setText(location.label ?? location.name);
     const param: LocationWithSearchMetadata = {
       ...location,

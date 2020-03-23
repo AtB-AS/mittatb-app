@@ -6,6 +6,7 @@ import NavigationRoot from './navigation';
 import trackAppState from './diagnostics/trackAppState';
 import ThemeContextProvider from './theme/ThemeContext';
 import FavoritesContextProvider from './favorites/FavoritesContext';
+import SearchHistoryContextProvider from './search-history';
 
 trackAppState();
 enableScreens();
@@ -15,9 +16,11 @@ const App = () => {
     <AppContextProvider>
       <ThemeContextProvider>
         <FavoritesContextProvider>
-          <GeolocationContextProvider>
-            <NavigationRoot />
-          </GeolocationContextProvider>
+          <SearchHistoryContextProvider>
+            <GeolocationContextProvider>
+              <NavigationRoot />
+            </GeolocationContextProvider>
+          </SearchHistoryContextProvider>
         </FavoritesContextProvider>
       </ThemeContextProvider>
     </AppContextProvider>
