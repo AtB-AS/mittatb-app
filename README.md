@@ -18,7 +18,7 @@ React Native POC.
 #### First time setup
 
 1. Install dependencies:
-   1. React Native: `yarn start`
+   1. React Native: `yarn`
    1. iOS specific: `cd ios/` and `pod install`
 1. Decrypt sensitive files `git-crypt unlock <path/to/key>` (Key given to internal members)
 
