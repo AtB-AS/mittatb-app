@@ -14,7 +14,7 @@ export default async function search(from: Location, to: Location) {
     to: {
       coordinates: toCoordinates,
     },
-    modes: ['foot', 'bus', 'tram', 'rail', 'metro', 'water', 'air'],
   });
+
   return response;
 }
