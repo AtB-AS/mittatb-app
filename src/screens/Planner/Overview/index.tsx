@@ -41,7 +41,6 @@ type RootProps = {
 };
 
 const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
-  const {userLocations} = useAppState();
   const {status, location} = useGeolocationState();
 
   const reverseLookupLocations = useReverseGeocoder(location) ?? [];
@@ -54,25 +53,16 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
   }
 
   return (
-    <Assistant
-      userLocations={userLocations}
-      currentLocation={currentLocation}
-      navigation={navigation}
-    />
+    <Assistant currentLocation={currentLocation} navigation={navigation} />
   );
 };
 
 type Props = {
   currentLocation?: Location;
-  userLocations: UserFavorites | null;
   navigation: AssistantScreenNavigationProp;
 };
 
-const Assistant: React.FC<Props> = ({
-  currentLocation,
-  userLocations,
-  navigation,
-}) => {
+const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
   const styles = useThemeStyles();
 
   const {favorites} = useFavorites();

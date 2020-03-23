@@ -6,20 +6,16 @@ import React, {
   useEffect,
   useMemo,
 } from 'react';
-import {getFavorites} from './favorites/storage';
-import {UserFavorites} from './favorites/types';
 import storage from './storage';
 
 type AppState = {
   isLoading: boolean;
   onboarded: boolean;
-  userLocations: UserFavorites | null;
 };
 
 type AppReducerAction =
   | {
       type: 'LOAD_APP_SETTINGS';
-      userLocations: UserFavorites | null;
       onboarded: boolean;
     }
   | {type: 'COMPLETE_ONBOARDING'}
@@ -41,7 +37,6 @@ const appReducer: AppReducer = (prevState, action) => {
     case 'LOAD_APP_SETTINGS':
       return {
         ...prevState,
-        userLocations: action.userLocations,
         onboarded: action.onboarded,
         isLoading: false,
       };
@@ -60,7 +55,6 @@ const appReducer: AppReducer = (prevState, action) => {
 
 const defaultAppState: AppState = {
   isLoading: true,
-  userLocations: null,
   onboarded: false,
 };
 
@@ -69,12 +63,10 @@ const AppContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     async function loadAppSettings() {
-      const userLocations = await getFavorites();
       const savedOnboarded = await storage.get('onboarded');
       const onboarded = !savedOnboarded ? false : JSON.parse(savedOnboarded);
       dispatch({
         type: 'LOAD_APP_SETTINGS',
-        userLocations,
         onboarded,
       });
     }
