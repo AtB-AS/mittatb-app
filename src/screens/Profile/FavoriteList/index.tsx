@@ -3,7 +3,6 @@ import {View, Text} from 'react-native';
 import React from 'react';
 import {StyleSheet, Theme} from '../../../theme';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
-import LogoOutline from '../../../ScreenHeader/LogoOutline';
 import EditIcon from '../../../assets/svg/EditIcon';
 import EditableListGroup from './EditableListGroup';
 import MapPointIcon from '../../../assets/svg/MapPointIcon';
@@ -12,7 +11,6 @@ import PlusIcon from '../../../assets/svg/PlusIcon';
 import {ProfileStackParams} from '..';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useFavorites} from '../../../favorites/FavoritesContext';
-import Button from '../Button';
 import Header from '../../../ScreenHeader';
 
 type FavoriteItem = {
@@ -77,23 +75,11 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
 
 function AddFavoriteButton({onPress}: {onPress(): void}) {
   const css = useItemStyle();
-
   return (
-    <Button
-      onPress={onPress}
-      style={{
-        marginTop: 24,
-        alignSelf: 'flex-start',
-      }}
-      textContainerStyle={{
-        flex: 0,
-        marginLeft: 12,
-      }}
-      mode="secondary"
-      IconComponent={PlusIcon}
-    >
-      Legg til favorittsted
-    </Button>
+    <TouchableOpacity style={css.item} onPress={onPress}>
+      <PlusIcon />
+      <Text style={css.text}>Legg til favorittsted</Text>
+    </TouchableOpacity>
   );
 }
 
