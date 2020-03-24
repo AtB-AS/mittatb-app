@@ -19,6 +19,7 @@ import {UserFavorites} from '../../../favorites/types';
 import LocationArrow from '../../../assets/svg/LocationArrow';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import LocationIcon from '../../../assets/svg/LocationIcon';
+import {FavoriteIcon} from '../../../favorites';
 
 // @TODO Firebase config?
 const TIME_LIMIT_IN_MINUTES = 3;
@@ -106,11 +107,7 @@ const DetailsContent: React.FC<Props> = ({route}) => {
         />
       ))}
       <LocationRow
-        icon={
-          getLocationIcon(to, favorites) ?? (
-            <MapPointIcon fill={colors.general.black} />
-          )
-        }
+        icon={getLocationIcon(to, favorites)}
         location={to.favoriteName ?? to.name}
         time={formatToClock(tripPattern.endTime)}
         textStyle={styles.textStyle}
@@ -128,12 +125,14 @@ function getLocationIcon(
       return <LocationArrow />;
     case 'favorite':
       return (
-        <Text>
-          {favorites.find(f => f.name === location.favoriteName)?.emoji}
-        </Text>
+        <FavoriteIcon
+          favorite={favorites.find(f => f.name === location.favoriteName)}
+        />
       );
     case 'search':
       return <LocationIcon location={location} />;
+    default:
+      return <MapPointIcon fill={colors.general.black} />;
   }
 }
 

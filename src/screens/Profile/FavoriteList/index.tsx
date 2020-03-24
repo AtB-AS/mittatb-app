@@ -5,13 +5,13 @@ import {StyleSheet, Theme} from '../../../theme';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
 import EditIcon from '../../../assets/svg/EditIcon';
 import EditableListGroup from './EditableListGroup';
-import MapPointIcon from '../../../assets/svg/MapPointIcon';
 import {Location, LocationFavorite} from '../../../favorites/types';
 import PlusIcon from '../../../assets/svg/PlusIcon';
 import {ProfileStackParams} from '..';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import Header from '../../../ScreenHeader';
+import {FavoriteIcon} from '../../../favorites';
 
 type FavoriteItem = {
   location: Location;
@@ -92,7 +92,7 @@ const Item: React.FC<ItemProps> = ({item, onEdit}) => {
 
   return (
     <View style={css.item}>
-      {item.emoji ? <Text>{item.emoji}</Text> : <MapPointIcon />}
+      <FavoriteIcon favorite={item} />
       <Text style={css.text}>{item.name ?? item.location.name}</Text>
       {onEdit && (
         <TouchableOpacity
