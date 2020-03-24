@@ -1,4 +1,4 @@
-import React, {useMemo, useState, useEffect} from 'react';
+import React, {useMemo, useState, useEffect, useCallback} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useGeolocationState} from '../../../GeolocationContext';
@@ -73,7 +73,7 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
     [currentLocation],
   );
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
-  const [departures, isLoading] = useNearestDepartures(
+  const [departures, refresh, isLoading] = useNearestDepartures(
     fromLocation?.coordinates,
   );
 
@@ -83,11 +83,10 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
       callerRouteParam: 'location',
     });
 
-  const content = isLoading ? (
-    <ActivityIndicator animating={true} size="large" style={styles.spinner} />
-  ) : (
-    <NearbyResults departures={departures} />
-  );
+  // const content = isLoading ? (
+  //   <ActivityIndicator animating={true} size="large" style={styles.spinner} />
+  // ) : (
+  // );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -106,7 +105,11 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
         Avganger i nærheten
       </SectionHeader>
 
-      <ScrollView>{content}</ScrollView>
+      <NearbyResults
+        departures={departures}
+        onRefresh={refresh}
+        isRefreshing={isLoading}
+      />
     </SafeAreaView>
   );
 };
@@ -131,25 +134,29 @@ export default NearbyScreen;
 
 function useNearestDepartures(
   location?: Coordinates,
-): [EstimatedCall[], boolean] {
+): [EstimatedCall[], () => Promise<void>, boolean] {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [departures, setDepartures] = useState<EstimatedCall[]>([]);
-  useEffect(() => {
-    async function fetchAndSetLoading() {
-      if (!location) {
-        return;
-      }
-      setIsLoading(true);
 
-      try {
-        const deps = await getNearestDepartures(location);
-        setDepartures(deps);
-      } finally {
-        setIsLoading(false);
-      }
+  const dep = [JSON.stringify(location)];
+
+  const reload = useCallback(async function reload() {
+    if (!location) {
+      return;
     }
-    fetchAndSetLoading();
-  }, [JSON.stringify(location)]);
+    setIsLoading(true);
 
-  return [departures, isLoading];
+    try {
+      const deps = await getNearestDepartures(location);
+      setDepartures(deps);
+    } finally {
+      setIsLoading(false);
+    }
+  }, dep);
+
+  useEffect(() => {
+    reload();
+  }, dep);
+
+  return [departures, reload, isLoading];
 }

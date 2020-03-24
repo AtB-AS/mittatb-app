@@ -1,5 +1,5 @@
 import {EstimatedCall} from '../../../sdk';
-import {View, Text} from 'react-native';
+import {View, Text, RefreshControl} from 'react-native';
 import React from 'react';
 import {formatToClock} from '../../../utils/date';
 import {
@@ -7,22 +7,33 @@ import {
   getLineNameFromEstimatedCall,
 } from '../../TripDetailsModal/utils';
 import {StyleSheet} from '../../../theme';
+import {FlatList} from 'react-native-gesture-handler';
 
 type NearbyResultsProps = {
   departures: EstimatedCall[];
+  onRefresh?(): void;
+  isRefreshing?: boolean;
 };
 
-const NearbyResults: React.FC<NearbyResultsProps> = ({departures}) => {
+const NearbyResults: React.FC<NearbyResultsProps> = ({
+  departures,
+  onRefresh,
+  isRefreshing = false,
+}) => {
   const styles = useResultsStyle();
+
   return (
-    <View style={styles.container}>
-      {departures.map(departure => (
-        <NearbyResultItem
-          key={departure.quay.id + departure.serviceJourney.id}
-          departure={departure}
-        />
-      ))}
-    </View>
+    <FlatList
+      style={styles.container}
+      data={departures}
+      renderItem={({item}) => <NearbyResultItem departure={item} />}
+      keyExtractor={departure =>
+        departure.quay.id + departure.serviceJourney.id
+      }
+      refreshControl={
+        <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+      }
+    />
   );
 };
 const useResultsStyle = StyleSheet.createThemeHook(theme => ({
