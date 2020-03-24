@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useState, useEffect} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useGeolocationState} from '../../../GeolocationContext';
@@ -16,6 +16,12 @@ import {SharedElement} from 'react-navigation-shared-element';
 import Header from '../../../ScreenHeader';
 import {useReverseGeocoder} from '../../../location-search/useGeocoder';
 import {NearbyStackParams} from '..';
+import SectionHeader from '../../../components/section-header';
+import {ScrollView} from 'react-native-gesture-handler';
+import {ActivityIndicator, Text, View} from 'react-native';
+import {Coordinates, EstimatedCall} from '../../../sdk';
+import {getNearestDepartures} from '../../../api/departures';
+import NearbyResults from './NearbyResults';
 
 type NearbyRouteName = 'Nearby';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearby';
@@ -66,14 +72,22 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
     [currentLocation],
   );
-
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
+  const [departures, isLoading] = useNearestDepartures(
+    fromLocation?.coordinates,
+  );
 
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {
       callerRouteName: NearbyRouteNameStatic,
       callerRouteParam: 'location',
     });
+
+  const content = isLoading ? (
+    <ActivityIndicator animating={true} size="large" style={styles.spinner} />
+  ) : (
+    <NearbyResults departures={departures} />
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -87,6 +101,12 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
           onPress={() => openLocationSearch()}
         />
       </SharedElement>
+
+      <SectionHeader styles={styles.sectionHeader}>
+        Avganger i nærheten
+      </SectionHeader>
+
+      <ScrollView>{content}</ScrollView>
     </SafeAreaView>
   );
 };
@@ -94,8 +114,42 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
 const useThemeStyles = StyleSheet.createThemeHook(theme => ({
   container: {
     backgroundColor: theme.background.primary,
+    paddingBottom: 0,
     flex: 1,
+  },
+  spinner: {
+    height: 100,
+  },
+  sectionHeader: {
+    marginLeft: theme.sizes.pagePadding,
+    marginRight: theme.sizes.pagePadding,
+    marginTop: 12,
   },
 }));
 
 export default NearbyScreen;
+
+function useNearestDepartures(
+  location?: Coordinates,
+): [EstimatedCall[], boolean] {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [departures, setDepartures] = useState<EstimatedCall[]>([]);
+  useEffect(() => {
+    async function fetchAndSetLoading() {
+      if (!location) {
+        return;
+      }
+      setIsLoading(true);
+
+      try {
+        const deps = await getNearestDepartures(location);
+        setDepartures(deps);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchAndSetLoading();
+  }, [JSON.stringify(location)]);
+
+  return [departures, isLoading];
+}

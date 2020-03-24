@@ -238,9 +238,12 @@ function useGroupedCallList(leg: Leg): [CallListGroup, boolean] {
   useEffect(() => {
     async function getServiceJourneyDepartures() {
       setIsLoading(true);
-      const deps = await getDepartures(id);
-      setJourney(groupAllCallsByQuaysInLeg(deps, leg));
-      setIsLoading(false);
+      try {
+        const deps = await getDepartures(id);
+        setJourney(groupAllCallsByQuaysInLeg(deps, leg));
+      } finally {
+        setIsLoading(false);
+      }
     }
     getServiceJourneyDepartures();
   }, [id]);
