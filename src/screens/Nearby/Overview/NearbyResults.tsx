@@ -8,6 +8,7 @@ import {
 } from '../../TripDetailsModal/utils';
 import {StyleSheet} from '../../../theme';
 import {FlatList} from 'react-native-gesture-handler';
+import TransportationIcon from '../../../components/transportation-icon';
 
 type NearbyResultsProps = {
   departures: EstimatedCall[];
@@ -54,9 +55,17 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = ({departure}) => {
       <Text style={styles.time}>
         {formatToClock(departure.aimedDepartureTime)}
       </Text>
-      <View>
-        <Text>{getLineNameFromEstimatedCall(departure)}</Text>
-        <Text>Fra {getQuayName(departure.quay)}</Text>
+      <TransportationIcon
+        mode={departure.serviceJourney.journeyPattern.line.transportMode}
+        isLive={departure.realtime}
+      />
+      <View style={styles.textWrapper}>
+        <Text style={styles.textContent}>
+          {getLineNameFromEstimatedCall(departure)}
+        </Text>
+        <Text style={[styles.textContent, styles.label]}>
+          Fra {getQuayName(departure.quay)}
+        </Text>
       </View>
     </View>
   );
@@ -65,8 +74,26 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = ({departure}) => {
 const useResultItemStyles = StyleSheet.createThemeHook(theme => ({
   container: {
     flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 24,
   },
   time: {
-    marginRight: 24,
+    width: 55,
+    fontSize: 16,
+    fontWeight: '600',
+    color: theme.text.primary,
+    paddingVertical: 4,
+  },
+  textContent: {
+    fontSize: 16,
+  },
+  textWrapper: {
+    fontSize: 16,
+    color: theme.text.primary,
+    paddingVertical: 4,
+    marginLeft: 10,
+  },
+  label: {
+    fontSize: 12,
   },
 }));
