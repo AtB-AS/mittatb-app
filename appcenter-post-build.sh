@@ -18,6 +18,7 @@ if [ "$AGENT_JOBSTATUS" == "Succeeded" ]; then
             echo "Uploading iOS source maps"
             curl --http1.1 https://upload.bugsnag.com/react-native-source-map \
                 -F apiKey=$BUGSNAG_API_KEY \
+                -F appVersion=1.0 \
                 -F appBundleVersion=$APPCENTER_BUILD_ID \
                 -F dev=false \
                 -F platform=ios \
@@ -28,7 +29,8 @@ if [ "$AGENT_JOBSTATUS" == "Succeeded" ]; then
             echo "Generating and uploading Android source maps"
             npx bugsnag-sourcemaps upload \
                 --api-key=$BUGSNAG_API_KEY \
-                --app-version=$APPCENTER_BUILD_ID \
+                --app-version=1.0 \
+                --code-bundle-id=$APPCENTER_BUILD_ID \
                 --minifiedFile=android/app/build/generated/assets/react/$APP_ENVIRONMENT/index.android.bundle \
                 --source-map=android/app/build/generated/sourcemaps/react/$APP_ENVIRONMENT/index.android.bundle.map \
                 --minified-url=index.android.bundle \
