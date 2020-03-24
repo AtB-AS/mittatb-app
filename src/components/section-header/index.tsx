@@ -3,11 +3,11 @@ import {Text, View} from 'react-native';
 import {StyleSheet} from '../../theme';
 
 const SectionHeader: React.FC = ({children}) => {
-  const css = useProfileStyle();
+  const styles = useProfileStyle();
   return (
-    <View style={css.header}>
-      <Text style={css.headerText}>{children}</Text>
-      <View style={css.headerDecorator}></View>
+    <View style={styles.header}>
+      <Text style={styles.headerText}>{children}</Text>
+      <View style={styles.headerDecorator}></View>
     </View>
   );
 };
