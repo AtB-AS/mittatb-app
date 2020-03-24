@@ -1,7 +1,15 @@
 import {RouteProp, CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState, useEffect} from 'react';
-import {Alert, StyleProp, Text, View, ViewStyle, TextStyle} from 'react-native';
+import {
+  Alert,
+  StyleProp,
+  Text,
+  View,
+  ViewStyle,
+  TextStyle,
+  SafeAreaView,
+} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
 import CancelCrossIcon from '../../../assets/svg/CancelCrossIcon';
@@ -18,6 +26,8 @@ import InputSearchIcon from '../../../location-search/svg/InputSearchIcon';
 import {SharedElement} from 'react-navigation-shared-element';
 import {RootStackParamList} from '../../../navigation';
 import {useLocationSearchValue} from '../../../location-search';
+import ScreenHeader from '../../../ScreenHeader';
+import ChevronLeftIcon from '../../../assets/svg/ChevronLeftIcon';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
@@ -96,7 +106,10 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   const cancel = () => navigation.goBack();
 
   return (
-    <View style={css.container}>
+    <SafeAreaView style={css.container}>
+      <ScreenHeader onClose={cancel} iconElement={<ChevronLeftIcon />}>
+        Legg til favorittsted
+      </ScreenHeader>
       <EmojiPopup
         onClose={() => setEmojiVisible(false)}
         open={isEmojiVisible}
@@ -181,7 +194,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           Avbryt
         </Button>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({

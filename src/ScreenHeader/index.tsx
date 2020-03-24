@@ -20,7 +20,17 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   const iconEl = iconElement ?? defaultIcon;
 
   const icon = onClose ? (
-    <TouchableOpacity onPress={onClose}>{iconEl}</TouchableOpacity>
+    <TouchableOpacity
+      onPress={onClose}
+      hitSlop={{
+        top: 8,
+        left: 8,
+        right: 8,
+        bottom: 8,
+      }}
+    >
+      {iconEl}
+    </TouchableOpacity>
   ) : (
     iconEl
   );
