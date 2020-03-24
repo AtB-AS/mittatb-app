@@ -14,10 +14,10 @@ import {getLineName, getQuayName} from '../utils';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Dash from 'react-native-dash';
 import {getDepartures} from '../../../api/serviceJourney';
-import BusLegIcon from '../svg/BusLegIcon';
 import UnfoldLess from './svg/UnfoldLess';
 import UnfoldMore from './svg/UnfoldMore';
 import ChevronLeftIcon from '../../../assets/svg/ChevronLeftIcon';
+import TransportationIcon from '../../../components/transportation-icon';
 
 export type StopRouteParams = {
   leg: Leg;
@@ -121,7 +121,11 @@ function CallGroup({type, calls}: CallGroupProps) {
           <LocationRow
             icon={
               isStartPlace(i) ? (
-                <BusLegIcon height={20} />
+                <TransportationIcon
+                  mode={call.serviceJourney.journeyPattern.line.transportMode}
+                  isLive={call.realtime}
+                  height={20}
+                />
               ) : (
                 <DotIcon fill={dashColor} />
               )

@@ -7,13 +7,12 @@ import nb from 'date-fns/locale/nb';
 import DotIcon from '../../../assets/svg/DotIcon';
 import LocationRow from '../LocationRow';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import BusLegIcon from '../svg/BusLegIcon';
 import {LegDetailProps, DetailScreenNavigationProp} from '.';
 import {useNavigation} from '@react-navigation/core';
 import {getLineName, getQuayName} from '../utils';
 import WaitClockIcon from './svg/WaitClockIcon';
 import {Leg} from '../../../sdk';
-import TramLegIcon from '../svg/TramLegIcon';
+import TransportationIcon from '../../../components/transportation-icon';
 
 const TransportDetail: React.FC<LegDetailProps> = ({
   leg,
@@ -23,7 +22,6 @@ const TransportDetail: React.FC<LegDetailProps> = ({
 }) => {
   const navigation = useNavigation<DetailScreenNavigationProp>();
   const showWaitTime = isIntermediateTravelLeg && Boolean(nextLeg);
-  const Icon = getModeIcon(leg);
 
   return (
     <View>
@@ -49,7 +47,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
             rowStyle={styles.rowStyle}
           />
           <LocationRow
-            icon={<Icon isLive={leg.realtime} />}
+            icon={<TransportationIcon mode={leg.mode} isLive={leg.realtime} />}
             location={getLineName(leg)}
             textStyle={[styles.textStyle, styles.activeTextStyle]}
             rowStyle={styles.rowStyle}
@@ -90,15 +88,6 @@ const styles = StyleSheet.create({
 });
 
 export default TransportDetail;
-
-function getModeIcon(leg: Leg) {
-  switch (leg.mode) {
-    case 'tram':
-      return TramLegIcon;
-    default:
-      return BusLegIcon;
-  }
-}
 
 type WaitRowProps = {
   onCalculateTime(seconds: number): void;
