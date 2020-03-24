@@ -29,7 +29,7 @@ export default function ProfileScreen() {
         name="AddEditFavorite"
         component={AddEditFavorite}
         options={{
-          title: 'Legg til favorittsted',
+          headerShown: false,
         }}
       />
     </Stack.Navigator>
