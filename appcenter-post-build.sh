@@ -1,5 +1,8 @@
 echo "Running appcenter-post-build with: Jobstatus: $AGENT_JOBSTATUS, branch: $APPCENTER_BRANCH, Variant: $APPCENTER_ANDROID_VARIANT"
 
+echo "Loading all env variables from .env file"
+export $(grep -v '^#' .env | gxargs -d '\n')
+
 if [ "$AGENT_JOBSTATUS" == "Succeeded" ]; then
     if [ "$APPCENTER_BRANCH" == "master" ];
      then
