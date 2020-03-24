@@ -123,7 +123,6 @@ export interface Leg {
   fromPlace: Place;
   fromEstimatedCall: EstimatedCall;
   toPlace: Place;
-  fromEstimatedCall: IntermediateEstimatedCall;
   intermediateEstimatedCalls: Array<IntermediateEstimatedCall>;
   intermediateQuays: Array<Quay>;
   line?: Line;

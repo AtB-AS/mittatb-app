@@ -2,8 +2,8 @@ import React from 'react';
 import {View, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
-import {Location} from '../../../favorites/types';
-import {StyleSheet} from '../../../theme';
+import {Location} from '../../favorites/types';
+import {StyleSheet} from '../../theme';
 
 type ResultItemProps = {
   title: string;

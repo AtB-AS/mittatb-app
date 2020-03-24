@@ -1,11 +1,15 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {PlannerIcon, NearestIcon, ProfileIcon} from './TabBarIcons';
-import Planner from '../screens/Planner';
+import Assistant from '../screens/Assistant';
 import ProfileScreen from '../screens/Profile';
+import {LocationWithSearchMetadata} from '../location-search';
 
 export type TabNavigatorParams = {
-  Planner: undefined;
+  Assistant: {
+    fromLocation: LocationWithSearchMetadata;
+    toLocation: LocationWithSearchMetadata;
+  };
   Nearest: undefined;
   Profile: undefined;
 };
@@ -16,8 +20,8 @@ const NavigationRoot = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Planner"
-        component={Planner}
+        name="Assistant"
+        component={Assistant}
         options={{
           tabBarLabel: 'Reiseassistent',
           tabBarIcon: ({color}) => <PlannerIcon fill={color} />,

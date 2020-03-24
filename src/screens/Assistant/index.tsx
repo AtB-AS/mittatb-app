@@ -2,37 +2,37 @@ import React, {useEffect, useState, useMemo} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Results from './Results';
-import {TripPattern} from '../../../sdk';
-import {useGeolocationState} from '../../../GeolocationContext';
-import Splash from '../../Splash';
-import {StyleSheet} from '../../../theme';
-import {searchTrip} from '../../../api';
-import {UserFavorites, Location} from '../../../favorites/types';
+import {TripPattern} from '../../sdk';
+import {useGeolocationState} from '../../GeolocationContext';
+import Splash from '../Splash';
+import {StyleSheet} from '../../theme';
+import {searchTrip} from '../../api';
+import {UserFavorites, Location} from '../../favorites/types';
 import {
   useLocationSearchValue,
   LocationWithSearchMetadata,
-} from '../../../location-search';
+} from '../../location-search';
 import {RouteProp, CompositeNavigationProp} from '@react-navigation/core';
 import SearchButton from './SearchButton';
-import {RootStackParamList} from '../../../navigation';
+import {RootStackParamList} from '../../navigation';
 import {SharedElement} from 'react-navigation-shared-element';
-import Header from '../../../ScreenHeader';
-import {useReverseGeocoder} from '../../../location-search/useGeocoder';
-import {useFavorites} from '../../../favorites/FavoritesContext';
-import LocationArrow from '../../../assets/svg/LocationArrow';
-import LocationIcon from '../../../assets/svg/LocationIcon';
-import {PlannerStackParams} from '..';
-import {FavoriteIcon} from '../../../favorites';
+import Header from '../../ScreenHeader';
+import {useReverseGeocoder} from '../../location-search/useGeocoder';
+import {useFavorites} from '../../favorites/FavoritesContext';
+import LocationArrow from '../../assets/svg/LocationArrow';
+import LocationIcon from '../../assets/svg/LocationIcon';
+import {FavoriteIcon} from '../../favorites';
+import {TabNavigatorParams} from '../../navigation/TabNavigator';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
 
 export type AssistantScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<PlannerStackParams, AssistantRouteName>,
+  StackNavigationProp<TabNavigatorParams, AssistantRouteName>,
   StackNavigationProp<RootStackParamList>
 >;
 
-type AssistantRouteProp = RouteProp<PlannerStackParams, AssistantRouteName>;
+type AssistantRouteProp = RouteProp<TabNavigatorParams, AssistantRouteName>;
 
 type RootProps = {
   navigation: AssistantScreenNavigationProp;

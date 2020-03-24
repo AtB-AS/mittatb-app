@@ -1,7 +1,7 @@
 import React from 'react';
 import {ActivityIndicator, View, Text} from 'react-native';
-import {TripPattern} from '../../../sdk';
-import {StyleSheet, Theme, useTheme} from '../../../theme';
+import {TripPattern} from '../../sdk';
+import {StyleSheet, Theme, useTheme} from '../../theme';
 import ResultItem from './ResultItem';
 import {AssistantScreenNavigationProp} from './';
 import ViewPager from '@react-native-community/viewpager';
@@ -9,9 +9,9 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import useViewPagerIndexController from './useViewPagerIndexController';
 import LeftArrow from './svg/LeftArrow';
 import RightArrow from './svg/RightArrow';
-import InfoIcon from '../../../assets/svg/InfoIcon';
+import InfoIcon from '../../assets/svg/InfoIcon';
 import hexToRgba from 'hex-to-rgba';
-import colors from '../../../theme/colors';
+import colors from '../../theme/colors';
 
 type Props = {
   tripPatterns: TripPattern[] | null;

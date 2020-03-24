@@ -1,6 +1,6 @@
 import {MutableRefObject, useRef, useMemo, useState} from 'react';
 import ViewPager from '@react-native-community/viewpager';
-import useDebounce from '../../../utils/useDebounce';
+import useDebounce from '../../utils/useDebounce';
 
 type ViewPagerIndexController = {
   viewPagerRef: MutableRefObject<ViewPager | null>;
