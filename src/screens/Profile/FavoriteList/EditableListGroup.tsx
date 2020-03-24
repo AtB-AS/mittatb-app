@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 import {StyleSheet, Theme} from '../../../theme';
+import SectionHeader from '../../../components/section-header';
 
 export type ListRenderItem<ItemT> = (item: ItemT) => React.ReactElement | null;
 
@@ -23,10 +24,7 @@ export default function EditableListGroup<T>({
   const css = useProfileStyle();
   return (
     <View style={css.textGroup}>
-      <View style={css.header}>
-        <Text style={css.headerText}>{title}</Text>
-        <View style={css.headerDecorator}></View>
-      </View>
+      <SectionHeader>{title}</SectionHeader>
       <View style={css.listSection}>
         {!data?.length ? (
           <Text style={css.empty}>
@@ -46,21 +44,6 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   textGroup: {
     padding: theme.sizes.pagePadding,
     flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-  },
-  headerDecorator: {
-    borderBottomWidth: 1,
-    borderBottomColor: theme.text.primary,
-    flex: 1,
-    marginBottom: 3,
-  },
-  headerText: {
-    backgroundColor: theme.background.primary,
-    paddingEnd: 10,
-    fontSize: 12,
-    lineHeight: 16,
   },
   listSection: {
     flex: 1,
