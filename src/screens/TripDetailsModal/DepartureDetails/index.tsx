@@ -21,8 +21,8 @@ import {getQuayName} from '../../../utils/transportation-names';
 export type DepartureDetailsRouteParams = {
   title: string;
   serviceJourneyId: string;
-  fromQuayId: string;
-  toQuayId: string;
+  fromQuayId?: string;
+  toQuayId?: string;
 };
 
 export type DetailScreenRouteProp = RouteProp<
@@ -240,8 +240,8 @@ type CallListGroup = {
 
 function useGroupedCallList(
   serviceJourneyId: string,
-  fromQuayId: string,
-  toQuayId: string,
+  fromQuayId?: string,
+  toQuayId?: string,
 ): [CallListGroup, boolean] {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [serviceJourney, setJourney] = useState<CallListGroup>({
@@ -276,11 +276,19 @@ const onType = (
 });
 function groupAllCallsByQuaysInLeg(
   calls: EstimatedCall[],
-  fromQuayId: string,
-  toQuayId: string,
+  fromQuayId?: string,
+  toQuayId?: string,
 ): CallListGroup {
   let isAfterStart = false;
   let isAfterStop = false;
+
+  if (!fromQuayId && !toQuayId) {
+    return {
+      passed: [],
+      trip: calls,
+      after: [],
+    };
+  }
 
   return calls.reduce(
     (obj, call) => {
