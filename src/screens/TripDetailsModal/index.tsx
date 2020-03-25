@@ -1,14 +1,24 @@
 import React from 'react';
 import Details, {DetailsRouteParams, DetailScreenRouteProp} from './Details';
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from '@react-navigation/stack';
 import DepartureDetails, {
   DepartureDetailsRouteParams,
 } from './DepartureDetails';
+import {CompositeNavigationProp} from '@react-navigation/core';
+import {RootStackParamList} from '../../navigation';
 
 export type DetailsModalStackParams = {
   Details: DetailsRouteParams;
   DepartureDetails: DepartureDetailsRouteParams;
 };
+
+export type DetailsModalNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<DetailsModalStackParams>,
+  StackNavigationProp<RootStackParamList>
+>;
 
 export type RouteParams = DetailsRouteParams;
 

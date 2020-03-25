@@ -18,12 +18,16 @@ import TripDetailsModal, {
   RouteParams as TripDetailsModalParams,
 } from '../screens/TripDetailsModal';
 import {TransitionPresets} from '@react-navigation/stack';
+import DepartureDetails, {
+  DepartureDetailsRouteParams,
+} from '../screens/TripDetailsModal/DepartureDetails';
 
 export type RootStackParamList = {
   Onboarding: undefined;
   TabNavigator: undefined;
   LocationSearch: LocationSearchParams;
   TripDetailsModal: TripDetailsModalParams;
+  DepartureDetailsModal: DepartureDetailsRouteParams;
 };
 
 const SharedStack = createSharedElementStackNavigator<RootStackParamList>();
@@ -58,6 +62,16 @@ const NavigationRoot = () => {
               <SharedStack.Screen
                 name="TripDetailsModal"
                 component={TripDetailsModal}
+                options={{
+                  headerShown: false,
+                  cardOverlayEnabled: true,
+                  cardShadowEnabled: true,
+                  ...TransitionPresets.ModalPresentationIOS,
+                }}
+              />
+              <SharedStack.Screen
+                name="DepartureDetailsModal"
+                component={DepartureDetails}
                 options={{
                   headerShown: false,
                   cardOverlayEnabled: true,
