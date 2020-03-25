@@ -9,11 +9,13 @@ import TramFront from '../../assets/svg/TramFront';
 export type TransportationIconProps = {
   mode: LegMode;
   isLive?: boolean;
+  height?: number;
 };
 
 export default function TransportationIcon({
   mode,
   isLive,
+  height,
 }: TransportationIconProps) {
   const styles = useStyle();
   if (!isLive) {
@@ -21,7 +23,9 @@ export default function TransportationIcon({
   }
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[styles.container, height ? {height, width: height} : undefined]}
+    >
       <LottieView source={require('./realtime-animation.json')} autoPlay loop />
       <InnerIcon mode={mode} />
     </View>
