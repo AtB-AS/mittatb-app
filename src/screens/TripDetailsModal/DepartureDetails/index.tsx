@@ -2,8 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Leg, EstimatedCall} from '../../../sdk';
 import {DetailsModalStackParams} from '..';
 import {RouteProp, NavigationProp} from '@react-navigation/native';
-import {RootStackParamList} from '../../../navigation';
-import {View, Text, ViewStyle, ActivityIndicator} from 'react-native';
+import {View, Text, ActivityIndicator} from 'react-native';
 import DotIcon from '../../../assets/svg/DotIcon';
 import {formatToClock} from '../../../utils/date';
 import colors from '../../../theme/colors';
@@ -19,11 +18,14 @@ import ChevronLeftIcon from '../../../assets/svg/ChevronLeftIcon';
 import TransportationIcon from '../../../components/transportation-icon';
 import {getLineName, getQuayName} from '../../../utils/transportation-names';
 
-export type StopRouteParams = {
+export type DepartureDetailsRouteParams = {
   leg: Leg;
 };
 
-export type DetailScreenRouteProp = RouteProp<DetailsModalStackParams, 'Stops'>;
+export type DetailScreenRouteProp = RouteProp<
+  DetailsModalStackParams,
+  'DepartureDetails'
+>;
 
 type DetailScreenNavigationProp = NavigationProp<DetailsModalStackParams>;
 
@@ -32,7 +34,7 @@ type Props = {
   navigation: DetailScreenNavigationProp;
 };
 
-export default function Stops({navigation, route}: Props) {
+export default function DepartureDetails({navigation, route}: Props) {
   const {leg} = route.params;
   const styles = useStopsStyle();
 

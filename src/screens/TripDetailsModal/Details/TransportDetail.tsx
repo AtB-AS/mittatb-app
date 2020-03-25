@@ -27,7 +27,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
     <View>
       <TouchableOpacity
         style={styles.pressable}
-        onPress={() => navigation.navigate('Stops', {leg})}
+        onPress={() => navigation.navigate('DepartureDetails', {leg})}
       >
         <View style={styles.container}>
           <Dash
