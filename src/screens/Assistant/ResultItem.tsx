@@ -23,22 +23,29 @@ const ResultItem: React.FC<ResultItemProps> = ({
 }) => {
   const styles = useThemeStyles();
 
+  if (!tripPattern?.legs?.length) return null;
+
   let [firstLeg, secondLeg, ...restLegs] = tripPattern.legs;
   const transferCount = restLegs.filter(
     l => l.mode !== 'foot' && l.mode !== 'bicycle',
   ).length;
 
+  const firstLegIsOnFoot = firstLeg && firstLeg.mode === 'foot';
+  const hasSecondLeg = !!secondLeg;
+
   return (
     <View style={styles.legContainer}>
       <DetailDash count={2} />
-      {secondLeg && firstLeg && firstLeg.mode === 'foot' ? (
-        <FirstWalkLeg leg={firstLeg} />
+      {firstLegIsOnFoot && hasSecondLeg ? (
+        <FootLeg leg={firstLeg} />
       ) : (
         <DetailDash count={2} />
       )}
       <DetailDash count={2} style={{marginBottom: 12}} />
 
-      {(secondLeg || firstLeg) && <SecondLeg leg={secondLeg ?? firstLeg} />}
+      <HighlightedLeg
+        leg={firstLegIsOnFoot && hasSecondLeg ? secondLeg : firstLeg}
+      />
 
       <View style={styles.detailsContainer}>
         {transferCount ? (
@@ -100,8 +107,8 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
   detailsText: {fontSize: 12, textDecorationLine: 'underline'},
 }));
 
-const FirstWalkLeg = ({leg}: {leg: Leg}) => {
-  const styles = useFirstLegStyles();
+const FootLeg = ({leg}: {leg: Leg}) => {
+  const styles = useFootLegStyles();
   return (
     <View style={styles.legContainer}>
       <WalkingPerson fill={styles.walkingPerson.backgroundColor} />
@@ -112,15 +119,15 @@ const FirstWalkLeg = ({leg}: {leg: Leg}) => {
   );
 };
 
-const useFirstLegStyles = StyleSheet.createThemeHook(theme => ({
+const useFootLegStyles = StyleSheet.createThemeHook(theme => ({
   legContainer: {flexDirection: 'row', paddingVertical: 4},
   walkingPerson: {
     backgroundColor: theme.text.primary,
   },
 }));
 
-const SecondLeg = ({leg}: {leg: Leg}) => {
-  const styles = useSecondLegStyles();
+const HighlightedLeg = ({leg}: {leg: Leg}) => {
+  const styles = useHighlighetedLegStyles();
   if (leg.mode === 'foot') {
     return (
       <>
@@ -134,7 +141,7 @@ const SecondLeg = ({leg}: {leg: Leg}) => {
   } else {
     return (
       <>
-        <Text style={styles.stopName}>{leg?.fromPlace.name}</Text>
+        <Text style={styles.stopName}>{leg?.fromEstimatedCall.quay.name}</Text>
         <Text style={styles.time}>{formatToClock(leg?.aimedStartTime)}</Text>
         <View style={styles.lineContainer}>
           <LegModeIcon mode={leg.mode} />
@@ -145,7 +152,7 @@ const SecondLeg = ({leg}: {leg: Leg}) => {
   }
 };
 
-const useSecondLegStyles = StyleSheet.createThemeHook(theme => ({
+const useHighlighetedLegStyles = StyleSheet.createThemeHook(theme => ({
   stopName: {
     fontSize: 16,
     color: theme.text.primary,
