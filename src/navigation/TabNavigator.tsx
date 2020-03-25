@@ -11,7 +11,9 @@ export type TabNavigatorParams = {
     fromLocation: LocationWithSearchMetadata;
     toLocation: LocationWithSearchMetadata;
   };
-  Nearest: undefined;
+  Nearest: {
+    location: LocationWithSearchMetadata;
+  };
   Profile: undefined;
 };
 

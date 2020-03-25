@@ -1,14 +1,14 @@
 import React from 'react';
 import {RefreshControl, Text, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
-import TransportationIcon from '../../../components/transportation-icon';
-import {EstimatedCall} from '../../../sdk';
-import {StyleSheet} from '../../../theme';
-import {formatToClock} from '../../../utils/date';
+import TransportationIcon from '../../components/transportation-icon';
+import {EstimatedCall} from '../../sdk';
+import {StyleSheet} from '../../theme';
+import {formatToClock} from '../../utils/date';
 import {
   getLineNameFromEstimatedCall,
   getQuayName,
-} from '../../../utils/transportation-names';
+} from '../../utils/transportation-names';
 
 type NearbyResultsProps = {
   departures: EstimatedCall[];
