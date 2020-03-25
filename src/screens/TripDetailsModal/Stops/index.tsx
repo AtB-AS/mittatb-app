@@ -10,14 +10,14 @@ import colors from '../../../theme/colors';
 import LocationRow from '../LocationRow';
 import {StyleSheet} from '../../../theme';
 import ScreenHeader from '../../../ScreenHeader';
-import {getLineName, getQuayName} from '../utils';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Dash from 'react-native-dash';
 import {getDepartures} from '../../../api/serviceJourney';
-import BusLegIcon from '../svg/BusLegIcon';
 import UnfoldLess from './svg/UnfoldLess';
 import UnfoldMore from './svg/UnfoldMore';
 import ChevronLeftIcon from '../../../assets/svg/ChevronLeftIcon';
+import TransportationIcon from '../../../components/transportation-icon';
+import {getLineName, getQuayName} from '../../../utils/transportation-names';
 
 export type StopRouteParams = {
   leg: Leg;
@@ -121,7 +121,11 @@ function CallGroup({type, calls}: CallGroupProps) {
           <LocationRow
             icon={
               isStartPlace(i) ? (
-                <BusLegIcon height={20} />
+                <TransportationIcon
+                  mode={call.serviceJourney.journeyPattern.line.transportMode}
+                  isLive={call.realtime}
+                  height={20}
+                />
               ) : (
                 <DotIcon fill={dashColor} />
               )
@@ -238,9 +242,12 @@ function useGroupedCallList(leg: Leg): [CallListGroup, boolean] {
   useEffect(() => {
     async function getServiceJourneyDepartures() {
       setIsLoading(true);
-      const deps = await getDepartures(id);
-      setJourney(groupAllCallsByQuaysInLeg(deps, leg));
-      setIsLoading(false);
+      try {
+        const deps = await getDepartures(id);
+        setJourney(groupAllCallsByQuaysInLeg(deps, leg));
+      } finally {
+        setIsLoading(false);
+      }
     }
     getServiceJourneyDepartures();
   }, [id]);
