@@ -19,6 +19,8 @@ import {NearbyStackParams} from '..';
 import {Coordinates, EstimatedCall} from '../../../sdk';
 import {getNearestDepartures} from '../../../api/departures';
 import NearbyResults from './NearbyResults';
+import {useFavorites} from '../../../favorites/FavoritesContext';
+import SearchLocationIcon from '../../../components/search-location-icon';
 
 type NearbyRouteName = 'Nearby';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearby';
@@ -59,8 +61,6 @@ type Props = {
 
 const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
   const styles = useThemeStyles();
-  // const {favorites} = useFavorites();
-
   const searchedFromLocation = useLocationSearchValue<NearbyScreenProp>(
     'location',
   );
@@ -88,7 +88,7 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
           title="Fra"
           placeholder="Søk etter adresse eller sted"
           location={fromLocation}
-          // icon={fromIcon}
+          icon={<SearchLocationIcon location={fromLocation} />}
           onPress={() => openLocationSearch()}
         />
       </SharedElement>

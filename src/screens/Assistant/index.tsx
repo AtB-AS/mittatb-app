@@ -7,7 +7,7 @@ import {useGeolocationState} from '../../GeolocationContext';
 import Splash from '../Splash';
 import {StyleSheet} from '../../theme';
 import {searchTrip} from '../../api';
-import {UserFavorites, Location} from '../../favorites/types';
+import {Location} from '../../favorites/types';
 import {
   useLocationSearchValue,
   LocationWithSearchMetadata,
@@ -18,10 +18,6 @@ import {RootStackParamList} from '../../navigation';
 import {SharedElement} from 'react-navigation-shared-element';
 import Header from '../../ScreenHeader';
 import {useReverseGeocoder} from '../../location-search/useGeocoder';
-import {useFavorites} from '../../favorites/FavoritesContext';
-import LocationArrow from '../../assets/svg/LocationArrow';
-import LocationIcon from '../../assets/svg/LocationIcon';
-import {FavoriteIcon} from '../../favorites';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 
 type AssistantRouteName = 'Assistant';
@@ -64,8 +60,6 @@ type Props = {
 const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
   const styles = useThemeStyles();
 
-  const {favorites} = useFavorites();
-
   const searchedFromLocation = useLocationSearchValue<AssistantRouteProp>(
     'fromLocation',
   );
@@ -79,10 +73,9 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
   );
 
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
-  const fromIcon =
-    fromLocation && getSearchedLocationIcon(fromLocation, favorites);
+  const fromIcon = <SearchLocationIcon location={fromLocation} />;
   const toLocation = searchedToLocation;
-  const toIcon = toLocation && getSearchedLocationIcon(toLocation, favorites);
+  const toIcon = <SearchLocationIcon location={toLocation} />;
 
   const [tripPatterns, isSearching] = useTripPatterns(fromLocation, toLocation);
 
@@ -164,21 +157,3 @@ function useTripPatterns(
 
   return [tripPatterns, isSearching];
 }
-
-const getSearchedLocationIcon = (
-  location: LocationWithSearchMetadata,
-  favorites: UserFavorites,
-): JSX.Element => {
-  switch (location.resultType) {
-    case 'geolocation':
-      return <LocationArrow />;
-    case 'favorite':
-      return (
-        <FavoriteIcon
-          favorite={favorites.find(f => f.name === location.favoriteName)}
-        />
-      );
-    case 'search':
-      return <LocationIcon location={location} />;
-  }
-};
