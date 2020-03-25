@@ -20,6 +20,7 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* atbTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* atbTests.m */; };
+		385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */; };
 		760F020F5EF28EA872E85D1E /* libPods-atb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F4A8BBB63B094DA5F9B2BA8 /* libPods-atb.a */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +59,8 @@
 		26BD06F963956110E38EAE67 /* Pods-atb-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atb-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-atb-tvOSTests/Pods-atb-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* atb-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "atb-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* atb-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "atb-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "enforce-bridge.swift"; sourceTree = "<group>"; };
+		38E33D0D242C0838003D56ED /* atb-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "atb-Bridging-Header.h"; sourceTree = "<group>"; };
 		39BBF66B9FD0BAD989E6DB44 /* Pods-atb-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atb-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-atb-tvOS/Pods-atb-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		5688FA526DA9D40F2D561C2D /* libPods-atb-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atb-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		56DFFF6CAD05217182173988 /* Pods-atbTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atbTests.debug.xcconfig"; path = "Target Support Files/Pods-atbTests/Pods-atbTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -150,6 +153,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				38E33D0D242C0838003D56ED /* atb-Bridging-Header.h */,
+				385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */,
 			);
 			name = atb;
 			sourceTree = "<group>";
@@ -297,6 +302,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = CSV447Q97L;
+						LastSwiftMigration = 1140;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -546,6 +552,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
@@ -600,6 +607,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 56DFFF6CAD05217182173988 /* Pods-atbTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -623,6 +631,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2253ABED0907DC07AED75E3A /* Pods-atbTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = atbTests/Info.plist;
@@ -644,6 +653,7 @@
 			baseConfigurationReference = 65FFB1B23D1DEAD92DA2EAA9 /* Pods-atb.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = CSV447Q97L;
@@ -656,6 +666,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = no.mittatb.debug;
 				PRODUCT_NAME = AtB;
+				SWIFT_OBJC_BRIDGING_HEADER = "atb-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -665,6 +678,7 @@
 			baseConfigurationReference = 086E2C1471780051C8BCBAB4 /* Pods-atb.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = CSV447Q97L;
 				INFOPLIST_FILE = atb/Info.plist;
@@ -676,6 +690,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = no.mittatb.debug;
 				PRODUCT_NAME = AtB;
+				SWIFT_OBJC_BRIDGING_HEADER = "atb-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
