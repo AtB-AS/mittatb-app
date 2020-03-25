@@ -1,14 +1,14 @@
-import {EstimatedCall} from '../../../sdk';
-import {View, Text, RefreshControl} from 'react-native';
 import React from 'react';
-import {formatToClock} from '../../../utils/date';
-import {
-  getQuayName,
-  getLineNameFromEstimatedCall,
-} from '../../TripDetailsModal/utils';
-import {StyleSheet} from '../../../theme';
+import {RefreshControl, Text, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import TransportationIcon from '../../../components/transportation-icon';
+import {EstimatedCall} from '../../../sdk';
+import {StyleSheet} from '../../../theme';
+import {formatToClock} from '../../../utils/date';
+import {
+  getLineNameFromEstimatedCall,
+  getQuayName,
+} from '../../TripDetailsModal/utils';
 
 type NearbyResultsProps = {
   departures: EstimatedCall[];

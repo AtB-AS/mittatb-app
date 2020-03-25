@@ -1,25 +1,25 @@
-import React, {useMemo, useState, useEffect, useCallback} from 'react';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useGeolocationState} from '../../../GeolocationContext';
-import Splash from '../../Splash';
-import {StyleSheet} from '../../../theme';
-import {Location} from '../../../favorites/types';
-import {
-  useLocationSearchValue,
-  LocationWithSearchMetadata,
-} from '../../../location-search';
-import {RouteProp, CompositeNavigationProp} from '@react-navigation/core';
-import {RootStackParamList} from '../../../navigation';
 import {SharedElement} from 'react-navigation-shared-element';
-import Header from '../../../ScreenHeader';
-import {useReverseGeocoder} from '../../../location-search/useGeocoder';
 import {NearbyStackParams} from '..';
-import {Coordinates, EstimatedCall} from '../../../sdk';
 import {getNearestDepartures} from '../../../api/departures';
-import NearbyResults from './NearbyResults';
-import SearchLocationIcon from '../../../components/search-location-icon';
 import SearchButton from '../../../components/search-button';
+import SearchLocationIcon from '../../../components/search-location-icon';
+import {Location} from '../../../favorites/types';
+import {useGeolocationState} from '../../../GeolocationContext';
+import {
+  LocationWithSearchMetadata,
+  useLocationSearchValue,
+} from '../../../location-search';
+import {useReverseGeocoder} from '../../../location-search/useGeocoder';
+import {RootStackParamList} from '../../../navigation';
+import Header from '../../../ScreenHeader';
+import {Coordinates, EstimatedCall} from '../../../sdk';
+import {StyleSheet} from '../../../theme';
+import Splash from '../../Splash';
+import NearbyResults from './NearbyResults';
 
 type NearbyRouteName = 'Nearby';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearby';
