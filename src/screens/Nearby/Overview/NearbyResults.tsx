@@ -8,7 +8,7 @@ import {formatToClock} from '../../../utils/date';
 import {
   getLineNameFromEstimatedCall,
   getQuayName,
-} from '../../TripDetailsModal/utils';
+} from '../../../utils/transportation-names';
 
 type NearbyResultsProps = {
   departures: EstimatedCall[];

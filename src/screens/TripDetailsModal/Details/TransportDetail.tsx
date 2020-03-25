@@ -9,10 +9,10 @@ import LocationRow from '../LocationRow';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {LegDetailProps, DetailScreenNavigationProp} from '.';
 import {useNavigation} from '@react-navigation/core';
-import {getLineName, getQuayName} from '../utils';
 import WaitClockIcon from './svg/WaitClockIcon';
 import {Leg} from '../../../sdk';
 import TransportationIcon from '../../../components/transportation-icon';
+import {getQuayName, getLineName} from '../../../utils/transportation-names';
 
 const TransportDetail: React.FC<LegDetailProps> = ({
   leg,

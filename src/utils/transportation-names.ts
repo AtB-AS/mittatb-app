@@ -1,4 +1,4 @@
-import {Leg, Quay, EstimatedCall} from '../../sdk';
+import {Leg, EstimatedCall, Quay} from '../sdk';
 
 export function getLineName(leg: Leg) {
   return leg.line

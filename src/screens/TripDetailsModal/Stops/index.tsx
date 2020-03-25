@@ -10,7 +10,6 @@ import colors from '../../../theme/colors';
 import LocationRow from '../LocationRow';
 import {StyleSheet} from '../../../theme';
 import ScreenHeader from '../../../ScreenHeader';
-import {getLineName, getQuayName} from '../utils';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Dash from 'react-native-dash';
 import {getDepartures} from '../../../api/serviceJourney';
@@ -18,6 +17,7 @@ import UnfoldLess from './svg/UnfoldLess';
 import UnfoldMore from './svg/UnfoldMore';
 import ChevronLeftIcon from '../../../assets/svg/ChevronLeftIcon';
 import TransportationIcon from '../../../components/transportation-icon';
+import {getLineName, getQuayName} from '../../../utils/transportation-names';
 
 export type StopRouteParams = {
   leg: Leg;
