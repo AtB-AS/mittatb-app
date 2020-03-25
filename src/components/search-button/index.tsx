@@ -53,7 +53,6 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
     alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 24,
-    marginRight: 12,
   },
   buttonText: {
     marginLeft: 12,

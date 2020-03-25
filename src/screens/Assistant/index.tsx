@@ -13,12 +13,22 @@ import {
   LocationWithSearchMetadata,
 } from '../../location-search';
 import {RouteProp, CompositeNavigationProp} from '@react-navigation/core';
+<<<<<<< HEAD:src/screens/Assistant/index.tsx
 import SearchButton from './SearchButton';
 import {RootStackParamList} from '../../navigation';
 import {SharedElement} from 'react-navigation-shared-element';
 import Header from '../../ScreenHeader';
 import {useReverseGeocoder} from '../../location-search/useGeocoder';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
+=======
+import {RootStackParamList} from '../../../navigation';
+import {SharedElement} from 'react-navigation-shared-element';
+import Header from '../../../ScreenHeader';
+import {useReverseGeocoder} from '../../../location-search/useGeocoder';
+import {PlannerStackParams} from '..';
+import SearchLocationIcon from '../../../components/search-location-icon';
+import SearchButton from '../../../components/search-button';
+>>>>>>> Extract search button to reusable component:src/screens/Planner/Overview/index.tsx
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';

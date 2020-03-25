@@ -10,7 +10,6 @@ import {
   LocationWithSearchMetadata,
 } from '../../../location-search';
 import {RouteProp, CompositeNavigationProp} from '@react-navigation/core';
-import SearchButton from './SearchButton';
 import {RootStackParamList} from '../../../navigation';
 import {SharedElement} from 'react-navigation-shared-element';
 import Header from '../../../ScreenHeader';
@@ -19,8 +18,8 @@ import {NearbyStackParams} from '..';
 import {Coordinates, EstimatedCall} from '../../../sdk';
 import {getNearestDepartures} from '../../../api/departures';
 import NearbyResults from './NearbyResults';
-import {useFavorites} from '../../../favorites/FavoritesContext';
 import SearchLocationIcon from '../../../components/search-location-icon';
+import SearchButton from '../../../components/search-button';
 
 type NearbyRouteName = 'Nearby';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearby';
