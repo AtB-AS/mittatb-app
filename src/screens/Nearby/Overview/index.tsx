@@ -16,9 +16,6 @@ import {SharedElement} from 'react-navigation-shared-element';
 import Header from '../../../ScreenHeader';
 import {useReverseGeocoder} from '../../../location-search/useGeocoder';
 import {NearbyStackParams} from '..';
-import SectionHeader from '../../../components/section-header';
-import {ScrollView} from 'react-native-gesture-handler';
-import {ActivityIndicator, Text, View} from 'react-native';
 import {Coordinates, EstimatedCall} from '../../../sdk';
 import {getNearestDepartures} from '../../../api/departures';
 import NearbyResults from './NearbyResults';
@@ -83,11 +80,6 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
       callerRouteParam: 'location',
     });
 
-  // const content = isLoading ? (
-  //   <ActivityIndicator animating={true} size="large" style={styles.spinner} />
-  // ) : (
-  // );
-
   return (
     <SafeAreaView style={styles.container}>
       <Header>I nærheten</Header>
@@ -100,10 +92,6 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
           onPress={() => openLocationSearch()}
         />
       </SharedElement>
-
-      <SectionHeader styles={styles.sectionHeader}>
-        Avganger i nærheten
-      </SectionHeader>
 
       <NearbyResults
         departures={departures}
