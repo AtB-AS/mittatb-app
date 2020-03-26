@@ -61,3 +61,6 @@ buck-out/
 
 # Certs
 keystore
+
+# vscode-react-native work folder
+.vscode/.react
