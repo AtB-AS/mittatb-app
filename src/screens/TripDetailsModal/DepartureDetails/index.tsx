@@ -23,6 +23,7 @@ export type DepartureDetailsRouteParams = {
   serviceJourneyId: string;
   fromQuayId?: string;
   toQuayId?: string;
+  isBack?: boolean;
 };
 
 export type DetailScreenRouteProp = RouteProp<
@@ -36,7 +37,13 @@ type Props = {
 };
 
 export default function DepartureDetails({navigation, route}: Props) {
-  const {title, serviceJourneyId, fromQuayId, toQuayId} = route.params;
+  const {
+    title,
+    serviceJourneyId,
+    fromQuayId,
+    toQuayId,
+    isBack = false,
+  } = route.params;
   const styles = useStopsStyle();
 
   const [callGroups, isLoading] = useGroupedCallList(
@@ -65,7 +72,7 @@ export default function DepartureDetails({navigation, route}: Props) {
     <View style={styles.container}>
       <ScreenHeader
         onClose={() => navigation.goBack()}
-        iconElement={<ChevronLeftIcon />}
+        iconElement={isBack ? <ChevronLeftIcon /> : undefined}
       >
         {title}
       </ScreenHeader>

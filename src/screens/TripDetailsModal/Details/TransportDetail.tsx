@@ -33,6 +33,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
             serviceJourneyId: leg.serviceJourney.id,
             fromQuayId: leg.fromPlace.quay.id,
             toQuayId: leg.toPlace.quay.id,
+            isBack: true,
           })
         }
       >
