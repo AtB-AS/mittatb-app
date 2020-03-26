@@ -3,7 +3,10 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {SharedElement} from 'react-navigation-shared-element';
-import {getNearestDepartures} from '../../api/departures';
+import {
+  getNearestDepartures,
+  getDeparturesFromStop,
+} from '../../api/departures';
 import SearchButton from '../../components/search-button';
 import SearchLocationIcon from '../../components/search-location-icon';
 import {Location} from '../../favorites/types';
@@ -15,7 +18,7 @@ import {
 import {useReverseGeocoder} from '../../location-search/useGeocoder';
 import {RootStackParamList} from '../../navigation';
 import Header from '../../ScreenHeader';
-import {Coordinates, EstimatedCall} from '../../sdk';
+import {EstimatedCall} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import Splash from '../Splash';
 import NearbyResults from './NearbyResults';
@@ -69,9 +72,7 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
     [currentLocation],
   );
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
-  const [departures, refresh, isLoading] = useNearestDepartures(
-    fromLocation?.coordinates,
-  );
+  const [departures, refresh, isLoading] = useNearestDepartures(fromLocation);
 
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {
@@ -120,30 +121,34 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
 export default NearbyScreen;
 
 function useNearestDepartures(
-  location?: Coordinates,
+  location?: Location,
 ): [EstimatedCall[], () => Promise<void>, boolean] {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [departures, setDepartures] = useState<EstimatedCall[]>([]);
 
-  const dep = [JSON.stringify(location)];
+  const reload = useCallback(
+    async function reload() {
+      if (!location) {
+        return;
+      }
+      setIsLoading(true);
 
-  const reload = useCallback(async function reload() {
-    if (!location) {
-      return;
-    }
-    setIsLoading(true);
-
-    try {
-      const deps = await getNearestDepartures(location);
-      setDepartures(deps);
-    } finally {
-      setIsLoading(false);
-    }
-  }, dep);
+      try {
+        const deps =
+          location.layer === 'venue'
+            ? await getDeparturesFromStop(location.id)
+            : await getNearestDepartures(location.coordinates);
+        setDepartures(deps);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [location?.id],
+  );
 
   useEffect(() => {
     reload();
-  }, dep);
+  }, [location?.id]);
 
   return [departures, reload, isLoading];
 }

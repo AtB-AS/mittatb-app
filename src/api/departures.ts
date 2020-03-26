@@ -9,3 +9,12 @@ export async function getNearestDepartures(
   const response = await client.get<EstimatedCall[]>(url);
   return response.data ?? [];
 }
+
+export async function getDeparturesFromStop(
+  stopId: string,
+): Promise<EstimatedCall[]> {
+  let url = `/v1/stop/${stopId}/departures`;
+  const client = await getClient();
+  const response = await client.get<EstimatedCall[]>(url);
+  return response.data ?? [];
+}
