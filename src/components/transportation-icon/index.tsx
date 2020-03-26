@@ -5,6 +5,7 @@ import {View} from 'react-native';
 import {StyleSheet} from '../../theme';
 import BusFront from '../../assets/svg/BusFront';
 import TramFront from '../../assets/svg/TramFront';
+import colors from '../../theme/colors';
 
 export type TransportationIconProps = {
   mode: LegMode;
@@ -19,7 +20,11 @@ export default function TransportationIcon({
 }: TransportationIconProps) {
   const styles = useStyle();
   if (!isLive) {
-    return <InnerIcon mode={mode} />;
+    return (
+      <EmptyCircle>
+        <InnerIcon mode={mode} />
+      </EmptyCircle>
+    );
   }
 
   return (
@@ -31,6 +36,11 @@ export default function TransportationIcon({
     </View>
   );
 }
+
+const EmptyCircle: React.FC = ({children}) => {
+  const styles = useStyle();
+  return <View style={styles.emptyCircle}>{children}</View>;
+};
 
 function InnerIcon({mode}: TransportationIconProps) {
   switch (mode) {
@@ -49,5 +59,14 @@ const useStyle = StyleSheet.createThemeHook(theme => ({
     height: 28,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  emptyCircle: {
+    margin: 6,
+    width: 17,
+    height: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 50,
+    backgroundColor: colors.primary.green,
   },
 }));
