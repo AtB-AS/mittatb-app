@@ -3,28 +3,30 @@ import {View, Text, StyleSheet, ViewStyle} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import colors from '../theme/colors';
 import {useFavorites} from '../favorites/FavoritesContext';
-import {Location} from '../favorites/types';
 import {useReverseGeocoder} from './useGeocoder';
 import LocationArrow from '../assets/svg/LocationArrow';
 import {GeolocationResponse} from '@react-native-community/geolocation';
-import {LocationResultType} from './';
+import {LocationWithSearchMetadata} from './';
 import {FavoriteIcon} from '../favorites';
 
 type Props = {
   geolocation: GeolocationResponse | null;
-  onSelectLocation: (
-    location: Location,
-    resultType: LocationResultType,
-    favoriteName?: string,
-  ) => void;
+  onSelectLocation: (location: LocationWithSearchMetadata) => void;
+  hideFavorites: boolean;
 };
 
-const FavoriteChips: React.FC<Props> = ({onSelectLocation, geolocation}) => {
+const FavoriteChips: React.FC<Props> = ({
+  onSelectLocation,
+  geolocation,
+  hideFavorites,
+}) => {
   const {favorites} = useFavorites();
   const reverseLookupLocations = useReverseGeocoder(geolocation) ?? [];
   const currentLocation = reverseLookupLocations.length
     ? reverseLookupLocations[1]
     : null;
+
+  if (!currentLocation && (hideFavorites || !favorites.length)) return null;
 
   return (
     <View
@@ -38,18 +40,27 @@ const FavoriteChips: React.FC<Props> = ({onSelectLocation, geolocation}) => {
           <FavoriteChip
             text="Min posisjon"
             icon={<LocationArrow />}
-            onPress={() => onSelectLocation(currentLocation, 'geolocation')}
+            onPress={() =>
+              onSelectLocation({...currentLocation, resultType: 'geolocation'})
+            }
           />
         )}
-        {favorites.map((fav, i) => (
-          <FavoriteChip
-            key={fav.name}
-            text={fav.name}
-            icon={<FavoriteIcon favorite={fav} />}
-            onPress={() => onSelectLocation(fav.location, 'favorite', fav.name)}
-            style={i === favorites.length - 1 ? {marginRight: 0} : undefined}
-          />
-        ))}
+        {!hideFavorites &&
+          favorites.map((fav, i) => (
+            <FavoriteChip
+              key={fav.name}
+              text={fav.name}
+              icon={<FavoriteIcon favorite={fav} />}
+              onPress={() =>
+                onSelectLocation({
+                  ...fav.location,
+                  resultType: 'favorite',
+                  favoriteId: fav.id,
+                })
+              }
+              style={i === favorites.length - 1 ? {marginRight: 0} : undefined}
+            />
+          ))}
       </ScrollView>
     </View>
   );

@@ -7,6 +7,7 @@ export type Location = Feature['properties'] & {
 export type UserFavorites = LocationFavorite[];
 
 export type LocationFavorite = {
+  id: string;
   location: Location;
   emoji?: string;
   name?: string;

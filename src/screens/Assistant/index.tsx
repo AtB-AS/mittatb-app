@@ -7,7 +7,7 @@ import {useGeolocationState} from '../../GeolocationContext';
 import Splash from '../Splash';
 import {StyleSheet} from '../../theme';
 import {searchTrip} from '../../api';
-import {Location} from '../../favorites/types';
+import {Location, UserFavorites} from '../../favorites/types';
 import {
   useLocationSearchValue,
   LocationWithSearchMetadata,
@@ -20,6 +20,7 @@ import {useReverseGeocoder} from '../../location-search/useGeocoder';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import SearchButton from '../../components/search-button';
 import SearchLocationIcon from '../../components/search-location-icon';
+import {useFavorites} from '../../favorites/FavoritesContext';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -61,24 +62,12 @@ type Props = {
 const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
   const styles = useThemeStyles();
 
-  const searchedFromLocation = useLocationSearchValue<AssistantRouteProp>(
-    'fromLocation',
-  );
-  const searchedToLocation = useLocationSearchValue<AssistantRouteProp>(
-    'toLocation',
-  );
+  const {from, to} = useLocations(currentLocation);
 
-  const currentSearchLocation = useMemo<LocationWithSearchMetadata | undefined>(
-    () => currentLocation && {...currentLocation, resultType: 'geolocation'},
-    [currentLocation],
-  );
+  const fromIcon = <SearchLocationIcon location={from} />;
+  const toIcon = <SearchLocationIcon location={to} />;
 
-  const fromLocation = searchedFromLocation ?? currentSearchLocation;
-  const fromIcon = <SearchLocationIcon location={fromLocation} />;
-  const toLocation = searchedToLocation;
-  const toIcon = <SearchLocationIcon location={toLocation} />;
-
-  const [tripPatterns, isSearching] = useTripPatterns(fromLocation, toLocation);
+  const [tripPatterns, isSearching] = useTripPatterns(from, to);
 
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
@@ -95,7 +84,7 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
         <SearchButton
           title="Fra"
           placeholder="Søk etter adresse eller sted"
-          location={fromLocation}
+          location={from}
           icon={fromIcon}
           onPress={() => openLocationSearch('fromLocation')}
         />
@@ -106,8 +95,8 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
         navigation={navigation}
         onDetailsPressed={tripPattern =>
           navigation.navigate('TripDetailsModal', {
-            from: fromLocation!,
-            to: toLocation!,
+            from: from!,
+            to: to!,
             tripPattern,
           })
         }
@@ -116,7 +105,7 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
         <SearchButton
           title="Til"
           placeholder="Søk etter adresse eller sted"
-          location={toLocation}
+          location={to}
           icon={toIcon}
           onPress={() => openLocationSearch('toLocation')}
         />
@@ -124,6 +113,78 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
     </SafeAreaView>
   );
 };
+
+type Locations = {
+  from: LocationWithSearchMetadata | undefined;
+  to: LocationWithSearchMetadata | undefined;
+};
+
+function useLocations(currentLocation: Location | undefined): Locations {
+  const {favorites} = useFavorites();
+
+  const memoedCurrentLocation = useMemo<LocationWithSearchMetadata | undefined>(
+    () => currentLocation && {...currentLocation, resultType: 'geolocation'},
+    [
+      currentLocation?.coordinates.latitude,
+      currentLocation?.coordinates.longitude,
+    ],
+  );
+
+  const searchedFromLocation = useLocationSearchValue<AssistantRouteProp>(
+    'fromLocation',
+  );
+  const searchedToLocation = useLocationSearchValue<AssistantRouteProp>(
+    'toLocation',
+  );
+
+  const from = useUpdatedLocation(
+    searchedFromLocation,
+    memoedCurrentLocation,
+    favorites,
+  );
+
+  const to = useUpdatedLocation(
+    searchedToLocation,
+    memoedCurrentLocation,
+    favorites,
+  );
+
+  return {
+    from: from ?? memoedCurrentLocation,
+    to,
+  };
+}
+
+function useUpdatedLocation(
+  searchedLocation: LocationWithSearchMetadata | undefined,
+  currentLocation: LocationWithSearchMetadata | undefined,
+  favorites: UserFavorites,
+): LocationWithSearchMetadata | undefined {
+  return useMemo(() => {
+    if (!searchedLocation) return undefined;
+
+    switch (searchedLocation.resultType) {
+      case 'search':
+        return searchedLocation;
+      case 'geolocation':
+        return currentLocation ?? searchedLocation;
+      case 'favorite':
+        const favorite = favorites.find(
+          f => f.id === searchedLocation.favoriteId,
+        );
+
+        if (favorite) {
+          return {
+            ...favorite.location,
+            resultType: 'favorite',
+            favoriteId: favorite.id,
+          };
+        }
+    }
+
+    return undefined;
+  }, [searchedLocation, currentLocation, favorites]);
+}
 
 const useThemeStyles = StyleSheet.createThemeHook(theme => ({
   container: {

@@ -5,19 +5,13 @@ import {StyleSheet, Theme} from '../../../theme';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
 import EditIcon from '../../../assets/svg/EditIcon';
 import EditableListGroup from './EditableListGroup';
-import {Location, LocationFavorite} from '../../../favorites/types';
+import {LocationFavorite} from '../../../favorites/types';
 import PlusIcon from '../../../assets/svg/PlusIcon';
 import {ProfileStackParams} from '..';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import Header from '../../../ScreenHeader';
 import {FavoriteIcon} from '../../../favorites';
-
-type FavoriteItem = {
-  location: Location;
-  emoji?: string;
-  name?: string;
-};
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -84,7 +78,7 @@ function AddFavoriteButton({onPress}: {onPress(): void}) {
 }
 
 type ItemProps = {
-  item: FavoriteItem;
+  item: LocationFavorite;
   onEdit?(): void;
 };
 const Item: React.FC<ItemProps> = ({item, onEdit}) => {
