@@ -75,7 +75,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
     };
     if (editItem) {
       // Update existing
-      await updateFavorite(newFavorite, editItem);
+      await updateFavorite({...newFavorite, id: editItem.id});
     } else {
       // Add new
       await addFavorite(newFavorite);
@@ -96,7 +96,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           style: 'destructive',
           onPress: async () => {
             if (!editItem) return;
-            await removeFavorite(editItem);
+            await removeFavorite(editItem.id);
             navigation.navigate('Profile');
           },
         },
@@ -132,6 +132,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
                   navigation.navigate('LocationSearch', {
                     callerRouteName: AddEditRouteNameStatic,
                     callerRouteParam: 'searchLocation',
+                    hideFavorites: true,
                   })
                 }
                 autoCorrect={false}

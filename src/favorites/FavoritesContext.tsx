@@ -4,17 +4,15 @@ import {
   addFavorite,
   removeFavorite,
   updateFavorite,
+  deprecated__ensureFavoritesHasIds,
 } from './storage';
 import {UserFavorites, LocationFavorite} from './types';
 
 type FavoriteContextState = {
   favorites: UserFavorites;
-  addFavorite(location: LocationFavorite): Promise<void>;
-  removeFavorite(location: LocationFavorite): Promise<void>;
-  updateFavorite(
-    newLocation: LocationFavorite,
-    existingLocation: LocationFavorite,
-  ): Promise<void>;
+  addFavorite(location: Omit<LocationFavorite, 'id'>): Promise<void>;
+  removeFavorite(id: string): Promise<void>;
+  updateFavorite(favorite: LocationFavorite): Promise<void>;
 };
 const FavoritesContext = createContext<FavoriteContextState | undefined>(
   undefined,
@@ -23,7 +21,8 @@ const FavoritesContext = createContext<FavoriteContextState | undefined>(
 const FavoritesContextProvider: React.FC = ({children}) => {
   const [favorites, setFavorites] = useState<UserFavorites>([]);
   async function populateFavorites() {
-    const favorites = await getFavorites();
+    let favorites = await getFavorites();
+    favorites = await deprecated__ensureFavoritesHasIds(favorites);
     setFavorites(favorites ?? []);
   }
 
@@ -33,19 +32,16 @@ const FavoritesContextProvider: React.FC = ({children}) => {
 
   const contextValue: FavoriteContextState = {
     favorites,
-    async addFavorite(location: LocationFavorite) {
-      const favorites = await addFavorite(location);
+    async addFavorite(favorite: Omit<LocationFavorite, 'id'>) {
+      const favorites = await addFavorite(favorite);
       setFavorites(favorites);
     },
-    async removeFavorite(location: LocationFavorite) {
-      const favorites = await removeFavorite(location);
+    async removeFavorite(id: string) {
+      const favorites = await removeFavorite(id);
       setFavorites(favorites);
     },
-    async updateFavorite(
-      newLocation: LocationFavorite,
-      existingLocation: LocationFavorite,
-    ) {
-      const favorites = await updateFavorite(newLocation, existingLocation);
+    async updateFavorite(favorite: LocationFavorite) {
+      const favorites = await updateFavorite(favorite);
       setFavorites(favorites);
     },
   };

@@ -93,7 +93,7 @@ const DetailsContent: React.FC<Props> = ({route}) => {
             <DotIcon fill={colors.general.black} />
           )
         }
-        location={from.favoriteName ?? from.name}
+        location={from.name}
         time={formatToClock(tripPattern.startTime)}
         textStyle={styles.textStyle}
       />
@@ -108,7 +108,7 @@ const DetailsContent: React.FC<Props> = ({route}) => {
       ))}
       <LocationRow
         icon={getLocationIcon(to, favorites)}
-        location={to.favoriteName ?? to.name}
+        location={to.name}
         time={formatToClock(tripPattern.endTime)}
         textStyle={styles.textStyle}
       />
@@ -126,7 +126,7 @@ function getLocationIcon(
     case 'favorite':
       return (
         <FavoriteIcon
-          favorite={favorites.find(f => f.name === location.favoriteName)}
+          favorite={favorites.find(f => f.id === location.favoriteId)}
         />
       );
     case 'search':

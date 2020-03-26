@@ -1,5 +1,6 @@
 import storage from '../storage';
 import {LocationFavorite, UserFavorites} from './types';
+import uuid from 'uuid/v4';
 
 export async function getFavorites(): Promise<UserFavorites | null> {
   const userLocations = await storage.get('stored_user_locations');
@@ -18,37 +19,41 @@ export async function setFavorites(
 }
 
 export async function addFavorite(
-  favorite: LocationFavorite,
+  favorite: Omit<LocationFavorite, 'id'>,
 ): Promise<UserFavorites> {
   let favorites = (await getFavorites()) ?? [];
-  favorites = favorites.concat(favorite);
+  favorites = favorites.concat({...favorite, id: uuid()});
   return await setFavorites(favorites);
 }
 
-export async function removeFavorite(
-  favorite: LocationFavorite,
-): Promise<UserFavorites> {
+export async function removeFavorite(id: string): Promise<UserFavorites> {
   let favorites = (await getFavorites()) ?? [];
-  favorites = favorites.filter(
-    item =>
-      item.name !== favorite.name || item.location.id !== favorite.location.id,
-  );
+  favorites = favorites.filter(item => item.id !== id);
   return await setFavorites(favorites);
 }
 
 export async function updateFavorite(
-  newLocation: LocationFavorite,
-  existingLocation: LocationFavorite,
+  favorite: LocationFavorite,
 ): Promise<UserFavorites> {
   let favorites = (await getFavorites()) ?? [];
   favorites = favorites.map(item => {
-    if (
-      item.name !== existingLocation.name ||
-      item.location.id !== existingLocation.location.id
-    ) {
+    if (item.id !== favorite.id) {
       return item;
     }
-    return newLocation;
+    return favorite;
   });
   return await setFavorites(favorites);
+}
+
+/*
+* @TODO: Function to migrate old favorites to new favorites - remove when reasonable
+* @deprecated
+*/
+export async function deprecated__ensureFavoritesHasIds(
+  favorites: UserFavorites | null,
+): Promise<UserFavorites | null> {
+  if (!favorites?.some(f => !f.id)) return favorites; // just return if there are no favorites missing id's
+  const favoritesWithIds = favorites?.map(f => (f.id ? f : {...f, id: uuid()}));
+  await setFavorites(favoritesWithIds);
+  return favoritesWithIds;
 }
