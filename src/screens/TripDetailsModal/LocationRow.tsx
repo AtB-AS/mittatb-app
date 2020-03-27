@@ -8,8 +8,17 @@ const LocationRow: React.FC<{
   time?: string;
   textStyle?: StyleProp<TextStyle>;
   rowStyle?: StyleProp<ViewStyle>;
+  iconContainerStyle?: StyleProp<ViewStyle>;
   dashThroughIcon?: boolean;
-}> = ({icon, location, time, rowStyle, textStyle, dashThroughIcon}) => {
+}> = ({
+  icon,
+  location,
+  time,
+  rowStyle,
+  textStyle,
+  iconContainerStyle,
+  dashThroughIcon,
+}) => {
   const styles = useLocationRowStyle();
   const {theme} = useTheme();
 
@@ -22,6 +31,7 @@ const LocationRow: React.FC<{
         <View
           style={[
             styles.iconContainer,
+            iconContainerStyle,
             {
               backgroundColor: !dashThroughIcon
                 ? theme.background.modal_Level2

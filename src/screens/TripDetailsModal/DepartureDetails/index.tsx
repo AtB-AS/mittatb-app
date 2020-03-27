@@ -139,12 +139,12 @@ function CallGroup({type, calls}: CallGroupProps) {
                 <TransportationIcon
                   mode={call.serviceJourney.journeyPattern.line.transportMode}
                   isLive={call.realtime}
-                  height={20}
                 />
               ) : (
-                <DotIcon fill={dashColor} />
+                <DotIcon fill={dashColor} style={{margin: 4}} />
               )
             }
+            iconContainerStyle={{paddingVertical: 2}}
             rowStyle={[
               styles.item,
               shouldDropMarginBottom(i) ? {marginBottom: 0} : undefined,
