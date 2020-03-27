@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, ActivityIndicator} from 'react-native';
+import {View, ActivityIndicator} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {Leg, TripPattern} from '../../../sdk';

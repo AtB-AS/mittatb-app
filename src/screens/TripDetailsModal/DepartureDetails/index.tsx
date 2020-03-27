@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Leg, EstimatedCall} from '../../../sdk';
+import React, {useEffect, useState, Fragment} from 'react';
+import {EstimatedCall} from '../../../sdk';
 import {DetailsModalStackParams, DetailsModalNavigationProp} from '..';
 import {RouteProp} from '@react-navigation/native';
 import {View, Text, ActivityIndicator} from 'react-native';
@@ -131,8 +131,9 @@ function CallGroup({type, calls}: CallGroupProps) {
       />
 
       {items.map((call, i) => (
-        <>
+        <Fragment key={call.quay.id + call.serviceJourney.id}>
           <LocationRow
+            key={call.quay.id + call.serviceJourney.id}
             icon={
               isStartPlace(i) ? (
                 <TransportationIcon
@@ -159,7 +160,7 @@ function CallGroup({type, calls}: CallGroupProps) {
             ]}
           />
           {i === 0 && collapseButton}
-        </>
+        </Fragment>
       ))}
     </View>
   );
