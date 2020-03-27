@@ -1,15 +1,12 @@
-import React, {useState} from 'react';
-import {Text, View, TextStyle} from 'react-native';
-import {
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native-gesture-handler';
+import React, {useState, useRef, useEffect} from 'react';
+import {Text, TextInput, View, TextStyle} from 'react-native';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {
   NavigationProp,
   RouteProp,
   useRoute,
   ParamListBase,
+  useIsFocused,
 } from '@react-navigation/native';
 import {StyleSheet} from '../theme';
 import {Location} from '../favorites/types';
@@ -68,6 +65,23 @@ const LocationSearch: React.FC<Props> = ({
   const onSearchSelect = (location: Location) =>
     onSelect({...location, resultType: 'search'});
 
+  const inputRef = useRef<TextInput>(null);
+
+  const isFocused = useIsFocused();
+
+  // using setTimeout to counteract issue of other elements
+  // capturing focus on mount and on press
+  const focusInput = () => setTimeout(() => inputRef.current?.focus(), 0);
+
+  useEffect(() => {
+    if (isFocused) focusInput();
+  }, [isFocused]);
+
+  const onPrefillText = (text: string) => {
+    setText(text);
+    focusInput();
+  };
+
   const hasPreviousResults = !!previousLocations.length;
   const hasResults = !!filteredLocations.length;
   const hasAnyResult = hasResults || hasPreviousResults;
@@ -78,9 +92,9 @@ const LocationSearch: React.FC<Props> = ({
       <SharedElement id="locationSearchInput">
         <View style={styles.inputContainer}>
           <TextInput
+            ref={inputRef}
             style={styles.input}
             value={text}
-            autoFocus={true}
             onChangeText={setText}
             placeholder="Søk etter adresse eller stoppested"
             autoCorrect={false}
@@ -114,6 +128,7 @@ const LocationSearch: React.FC<Props> = ({
               title="Tidligere søk"
               locations={previousLocations}
               onSelect={onSearchSelect}
+              onPrefillText={onPrefillText}
             />
           )}
           {hasResults && (
@@ -121,6 +136,7 @@ const LocationSearch: React.FC<Props> = ({
               title="Søkeresultat"
               locations={filteredLocations}
               onSelect={onSearchSelect}
+              onPrefillText={onPrefillText}
             />
           )}
         </ScrollView>
