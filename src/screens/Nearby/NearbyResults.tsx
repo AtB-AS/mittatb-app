@@ -1,6 +1,6 @@
 import React from 'react';
 import {RefreshControl, Text, View} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
+import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import TransportationIcon from '../../components/transportation-icon';
 import {EstimatedCall} from '../../sdk';
 import {StyleSheet} from '../../theme';
@@ -9,6 +9,8 @@ import {
   getLineNameFromEstimatedCall,
   getQuayName,
 } from '../../utils/transportation-names';
+import {useNavigation} from '@react-navigation/native';
+import {NearbyScreenNavigationProp} from '.';
 
 type NearbyResultsProps = {
   departures: EstimatedCall[];
@@ -22,12 +24,22 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
   isRefreshing = false,
 }) => {
   const styles = useResultsStyle();
+  const navigation = useNavigation<NearbyScreenNavigationProp>();
+  const onPress = (departure: EstimatedCall) => {
+    navigation.navigate('DepartureDetailsModal', {
+      title: getLineNameFromEstimatedCall(departure),
+      serviceJourneyId: departure.serviceJourney.id,
+      fromQuayId: departure.quay.id,
+    });
+  };
 
   return (
     <FlatList
       style={styles.container}
       data={departures}
-      renderItem={({item}) => <NearbyResultItem departure={item} />}
+      renderItem={({item}) => (
+        <NearbyResultItem departure={item} onPress={onPress} />
+      )}
       keyExtractor={departure =>
         departure.quay.id + departure.serviceJourney.id
       }
@@ -47,11 +59,19 @@ export default NearbyResults;
 
 type NearbyResultItemProps = {
   departure: EstimatedCall;
+  onPress?(departure: EstimatedCall): void;
 };
-const NearbyResultItem: React.FC<NearbyResultItemProps> = ({departure}) => {
+const NearbyResultItem: React.FC<NearbyResultItemProps> = ({
+  departure,
+  onPress,
+}) => {
   const styles = useResultItemStyles();
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => onPress?.(departure)}
+    >
       <Text style={styles.time}>
         {formatToClock(departure.aimedDepartureTime)}
       </Text>
@@ -67,7 +87,7 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = ({departure}) => {
           Fra {getQuayName(departure.quay)}
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

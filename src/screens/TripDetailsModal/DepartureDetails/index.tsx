@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Leg, EstimatedCall} from '../../../sdk';
-import {DetailsModalStackParams} from '..';
-import {RouteProp, NavigationProp} from '@react-navigation/native';
-import {RootStackParamList} from '../../../navigation';
-import {View, Text, ViewStyle, ActivityIndicator} from 'react-native';
+import {DetailsModalStackParams, DetailsModalNavigationProp} from '..';
+import {RouteProp} from '@react-navigation/native';
+import {View, Text, ActivityIndicator} from 'react-native';
 import DotIcon from '../../../assets/svg/DotIcon';
 import {formatToClock} from '../../../utils/date';
 import colors from '../../../theme/colors';
@@ -17,26 +16,41 @@ import UnfoldLess from './svg/UnfoldLess';
 import UnfoldMore from './svg/UnfoldMore';
 import ChevronLeftIcon from '../../../assets/svg/ChevronLeftIcon';
 import TransportationIcon from '../../../components/transportation-icon';
-import {getLineName, getQuayName} from '../../../utils/transportation-names';
+import {getQuayName} from '../../../utils/transportation-names';
 
-export type StopRouteParams = {
-  leg: Leg;
+export type DepartureDetailsRouteParams = {
+  title: string;
+  serviceJourneyId: string;
+  fromQuayId?: string;
+  toQuayId?: string;
+  isBack?: boolean;
 };
 
-export type DetailScreenRouteProp = RouteProp<DetailsModalStackParams, 'Stops'>;
-
-type DetailScreenNavigationProp = NavigationProp<DetailsModalStackParams>;
+export type DetailScreenRouteProp = RouteProp<
+  DetailsModalStackParams,
+  'DepartureDetails'
+>;
 
 type Props = {
   route: DetailScreenRouteProp;
-  navigation: DetailScreenNavigationProp;
+  navigation: DetailsModalNavigationProp;
 };
 
-export default function Stops({navigation, route}: Props) {
-  const {leg} = route.params;
+export default function DepartureDetails({navigation, route}: Props) {
+  const {
+    title,
+    serviceJourneyId,
+    fromQuayId,
+    toQuayId,
+    isBack = false,
+  } = route.params;
   const styles = useStopsStyle();
 
-  const [callGroups, isLoading] = useGroupedCallList(leg);
+  const [callGroups, isLoading] = useGroupedCallList(
+    serviceJourneyId,
+    fromQuayId,
+    toQuayId,
+  );
 
   const content = isLoading ? (
     <ActivityIndicator animating={true} size="large" style={styles.spinner} />
@@ -58,9 +72,9 @@ export default function Stops({navigation, route}: Props) {
     <View style={styles.container}>
       <ScreenHeader
         onClose={() => navigation.goBack()}
-        iconElement={<ChevronLeftIcon />}
+        iconElement={isBack ? <ChevronLeftIcon /> : undefined}
       >
-        {getLineName(leg)}
+        {title}
       </ScreenHeader>
       {content}
     </View>
@@ -231,26 +245,30 @@ type CallListGroup = {
   after: EstimatedCall[];
 };
 
-function useGroupedCallList(leg: Leg): [CallListGroup, boolean] {
+function useGroupedCallList(
+  serviceJourneyId: string,
+  fromQuayId?: string,
+  toQuayId?: string,
+): [CallListGroup, boolean] {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [serviceJourney, setJourney] = useState<CallListGroup>({
     passed: [],
     trip: [],
     after: [],
   });
-  const id = leg.serviceJourney.id;
+
   useEffect(() => {
     async function getServiceJourneyDepartures() {
       setIsLoading(true);
       try {
-        const deps = await getDepartures(id);
-        setJourney(groupAllCallsByQuaysInLeg(deps, leg));
+        const deps = await getDepartures(serviceJourneyId);
+        setJourney(groupAllCallsByQuaysInLeg(deps, fromQuayId, toQuayId));
       } finally {
         setIsLoading(false);
       }
     }
     getServiceJourneyDepartures();
-  }, [id]);
+  }, [serviceJourneyId]);
 
   return [serviceJourney, isLoading];
 }
@@ -265,15 +283,24 @@ const onType = (
 });
 function groupAllCallsByQuaysInLeg(
   calls: EstimatedCall[],
-  leg: Leg,
+  fromQuayId?: string,
+  toQuayId?: string,
 ): CallListGroup {
   let isAfterStart = false;
   let isAfterStop = false;
 
+  if (!fromQuayId && !toQuayId) {
+    return {
+      passed: [],
+      trip: calls,
+      after: [],
+    };
+  }
+
   return calls.reduce(
     (obj, call) => {
       // We are at start quay, update flag
-      if (call.quay.id === leg.fromPlace.quay.id) {
+      if (call.quay.id === fromQuayId) {
         isAfterStart = true;
       }
 
@@ -289,7 +316,7 @@ function groupAllCallsByQuaysInLeg(
       }
 
       // We are at stop, update flag
-      if (call.quay.id === leg.toPlace.quay.id) {
+      if (call.quay.id === toQuayId) {
         isAfterStop = true;
       }
 

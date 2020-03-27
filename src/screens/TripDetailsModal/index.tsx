@@ -1,12 +1,24 @@
 import React from 'react';
 import Details, {DetailsRouteParams, DetailScreenRouteProp} from './Details';
-import {createStackNavigator} from '@react-navigation/stack';
-import Stops, {StopRouteParams} from './Stops';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from '@react-navigation/stack';
+import DepartureDetails, {
+  DepartureDetailsRouteParams,
+} from './DepartureDetails';
+import {CompositeNavigationProp} from '@react-navigation/native';
+import {RootStackParamList} from '../../navigation';
 
 export type DetailsModalStackParams = {
   Details: DetailsRouteParams;
-  Stops: StopRouteParams;
+  DepartureDetails: DepartureDetailsRouteParams;
 };
+
+export type DetailsModalNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<DetailsModalStackParams>,
+  StackNavigationProp<RootStackParamList>
+>;
 
 export type RouteParams = DetailsRouteParams;
 
@@ -24,7 +36,7 @@ const TripDetailsRoot = ({route}: TripDetailsRootProps) => {
         component={Details}
         initialParams={route.params}
       />
-      <Stack.Screen name="Stops" component={Stops} />
+      <Stack.Screen name="DepartureDetails" component={DepartureDetails} />
     </Stack.Navigator>
   );
 };

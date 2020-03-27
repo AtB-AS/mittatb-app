@@ -27,7 +27,15 @@ const TransportDetail: React.FC<LegDetailProps> = ({
     <View>
       <TouchableOpacity
         style={styles.pressable}
-        onPress={() => navigation.navigate('Stops', {leg})}
+        onPress={() =>
+          navigation.navigate('DepartureDetails', {
+            title: getLineName(leg),
+            serviceJourneyId: leg.serviceJourney.id,
+            fromQuayId: leg.fromPlace.quay.id,
+            toQuayId: leg.toPlace.quay.id,
+            isBack: true,
+          })
+        }
       >
         <View style={styles.container}>
           <Dash
