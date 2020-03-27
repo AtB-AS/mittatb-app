@@ -1,6 +1,10 @@
 import React, {useState} from 'react';
 import {Text, View, TextStyle} from 'react-native';
-import {TextInput, ScrollView} from 'react-native-gesture-handler';
+import {
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
 import {
   NavigationProp,
   RouteProp,
@@ -18,6 +22,7 @@ import {useGeolocationState} from '../GeolocationContext';
 import {SharedElement} from 'react-navigation-shared-element';
 import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
+import CancelCrossIcon from '../assets/svg/CancelCrossIcon';
 
 export type Props = {
   navigation: NavigationProp<any>;
@@ -82,6 +87,16 @@ const LocationSearch: React.FC<Props> = ({
             placeholderTextColor={(styles.placeholder as TextStyle).color}
           />
           <InputSearchIcon style={styles.searchIcon} />
+          {text?.length ? (
+            <View style={styles.searchClear}>
+              <TouchableOpacity
+                hitSlop={{right: 8, left: 8, top: 8, bottom: 8}}
+                onPress={() => setText('')}
+              >
+                <CancelCrossIcon />
+              </TouchableOpacity>
+            </View>
+          ) : null}
         </View>
       </SharedElement>
       {!hasResults && (
@@ -168,6 +183,11 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
   searchIcon: {
     position: 'absolute',
     left: 14,
+    alignSelf: 'center',
+  },
+  searchClear: {
+    position: 'absolute',
+    right: 14,
     alignSelf: 'center',
   },
 }));
