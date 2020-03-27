@@ -71,10 +71,12 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
 
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
+    initialText: string | undefined,
   ) =>
     navigation.navigate('LocationSearch', {
       callerRouteName: AssistantRouteNameStatic,
       callerRouteParam,
+      initialText,
     });
 
   return (
@@ -86,7 +88,7 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
           placeholder="Søk etter adresse eller sted"
           location={from}
           icon={fromIcon}
-          onPress={() => openLocationSearch('fromLocation')}
+          onPress={() => openLocationSearch('fromLocation', from?.name)}
         />
       </SharedElement>
       <Results
@@ -107,7 +109,7 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
           placeholder="Søk etter adresse eller sted"
           location={to}
           icon={toIcon}
-          onPress={() => openLocationSearch('toLocation')}
+          onPress={() => openLocationSearch('toLocation', to?.name)}
         />
       </SharedElement>
     </SafeAreaView>

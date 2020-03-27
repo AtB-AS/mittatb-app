@@ -133,6 +133,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
                     callerRouteName: AddEditRouteNameStatic,
                     callerRouteParam: 'searchLocation',
                     hideFavorites: true,
+                    initialText: location?.name,
                   })
                 }
                 autoCorrect={false}

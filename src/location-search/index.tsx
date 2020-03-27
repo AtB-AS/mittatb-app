@@ -33,18 +33,19 @@ export type RouteParams = {
   callerRouteName: string;
   callerRouteParam: string;
   hideFavorites?: boolean;
+  initialText?: string;
 };
 
 const LocationSearch: React.FC<Props> = ({
   navigation,
   route: {
-    params: {callerRouteName, callerRouteParam, hideFavorites},
+    params: {callerRouteName, callerRouteParam, hideFavorites, initialText},
   },
 }) => {
   const styles = useThemeStyles();
   const {history, addSearchEntry} = useSearchHistory();
 
-  const [text, setText] = useState<string>('');
+  const [text, setText] = useState<string>(initialText ?? '');
   const debouncedText = useDebounce(text, 200);
 
   const previousLocations = filterPreviousLocations(debouncedText, history);
