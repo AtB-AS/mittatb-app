@@ -1,28 +1,33 @@
 import {LegMode} from '../../sdk';
 import React from 'react';
 import LottieView from 'lottie-react-native';
-import {View} from 'react-native';
+import {View, StyleProp, ViewStyle} from 'react-native';
 import {StyleSheet} from '../../theme';
 import BusFront from '../../assets/svg/BusFront';
 import TramFront from '../../assets/svg/TramFront';
 import colors from '../../theme/colors';
 
 export type TransportationIconProps = {
-  mode: LegMode;
+  mode?: LegMode;
   isLive?: boolean;
   height?: number;
+  emptyStyle?: StyleProp<ViewStyle>;
 };
 
-export default function TransportationIcon({
+const TransportationIcon: React.FC<TransportationIconProps> = ({
   mode,
   isLive,
   height,
-}: TransportationIconProps) {
+  emptyStyle,
+  children,
+}) => {
   const styles = useStyle();
   if (!isLive) {
     return (
-      <EmptyCircle>
-        <InnerIcon mode={mode} />
+      <EmptyCircle
+        style={[emptyStyle, height ? {height, width: height} : undefined]}
+      >
+        {children ? children : <InnerIcon mode={mode} />}
       </EmptyCircle>
     );
   }
@@ -32,14 +37,19 @@ export default function TransportationIcon({
       style={[styles.container, height ? {height, width: height} : undefined]}
     >
       <LottieView source={require('./realtime-animation.json')} autoPlay loop />
-      <InnerIcon mode={mode} />
+      {children ? children : <InnerIcon mode={mode} />}
     </View>
   );
-}
+};
 
-const EmptyCircle: React.FC = ({children}) => {
+export default TransportationIcon;
+
+type EmptyCircleProps = {
+  style?: StyleProp<ViewStyle>;
+};
+const EmptyCircle: React.FC<EmptyCircleProps> = ({style, children}) => {
   const styles = useStyle();
-  return <View style={styles.emptyCircle}>{children}</View>;
+  return <View style={[styles.emptyCircle, style]}>{children}</View>;
 };
 
 function InnerIcon({mode}: TransportationIconProps) {
@@ -57,13 +67,14 @@ const useStyle = StyleSheet.createThemeHook(theme => ({
   container: {
     width: 28,
     height: 28,
+    padding: 4,
     alignItems: 'center',
     justifyContent: 'center',
   },
   emptyCircle: {
-    margin: 6,
-    width: 17,
-    height: 17,
+    width: 18,
+    height: 18,
+    margin: 5,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 50,
