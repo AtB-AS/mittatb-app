@@ -9,7 +9,7 @@ import {
   getLineNameFromEstimatedCall,
   getQuayName,
 } from '../../utils/transportation-names';
-import {useNavigation} from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/native';
 import {NearbyScreenNavigationProp} from '.';
 
 type NearbyResultsProps = {
