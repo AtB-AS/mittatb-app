@@ -1,11 +1,12 @@
-import React, {useState} from 'react';
-import {Text, View, TextStyle} from 'react-native';
-import {TextInput, ScrollView} from 'react-native-gesture-handler';
+import React, {useState, useRef, useEffect} from 'react';
+import {Text, TextInput, View, TextStyle} from 'react-native';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {
   NavigationProp,
   RouteProp,
   useRoute,
   ParamListBase,
+  useIsFocused,
 } from '@react-navigation/native';
 import {StyleSheet} from '../theme';
 import {Location} from '../favorites/types';
@@ -18,6 +19,7 @@ import {useGeolocationState} from '../GeolocationContext';
 import {SharedElement} from 'react-navigation-shared-element';
 import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
+import CancelCrossIcon from '../assets/svg/CancelCrossIcon';
 
 export type Props = {
   navigation: NavigationProp<any>;
@@ -28,18 +30,19 @@ export type RouteParams = {
   callerRouteName: string;
   callerRouteParam: string;
   hideFavorites?: boolean;
+  initialText?: string;
 };
 
 const LocationSearch: React.FC<Props> = ({
   navigation,
   route: {
-    params: {callerRouteName, callerRouteParam, hideFavorites},
+    params: {callerRouteName, callerRouteParam, hideFavorites, initialText},
   },
 }) => {
   const styles = useThemeStyles();
   const {history, addSearchEntry} = useSearchHistory();
 
-  const [text, setText] = useState<string>('');
+  const [text, setText] = useState<string>(initialText ?? '');
   const debouncedText = useDebounce(text, 200);
 
   const previousLocations = filterPreviousLocations(debouncedText, history);
@@ -62,6 +65,23 @@ const LocationSearch: React.FC<Props> = ({
   const onSearchSelect = (location: Location) =>
     onSelect({...location, resultType: 'search'});
 
+  const inputRef = useRef<TextInput>(null);
+
+  const isFocused = useIsFocused();
+
+  // using setTimeout to counteract issue of other elements
+  // capturing focus on mount and on press
+  const focusInput = () => setTimeout(() => inputRef.current?.focus(), 0);
+
+  useEffect(() => {
+    if (isFocused) focusInput();
+  }, [isFocused]);
+
+  const onPrefillText = (text: string) => {
+    setText(text);
+    focusInput();
+  };
+
   const hasPreviousResults = !!previousLocations.length;
   const hasResults = !!filteredLocations.length;
   const hasAnyResult = hasResults || hasPreviousResults;
@@ -72,9 +92,9 @@ const LocationSearch: React.FC<Props> = ({
       <SharedElement id="locationSearchInput">
         <View style={styles.inputContainer}>
           <TextInput
+            ref={inputRef}
             style={styles.input}
             value={text}
-            autoFocus={true}
             onChangeText={setText}
             placeholder="Søk etter adresse eller stoppested"
             autoCorrect={false}
@@ -82,6 +102,16 @@ const LocationSearch: React.FC<Props> = ({
             placeholderTextColor={(styles.placeholder as TextStyle).color}
           />
           <InputSearchIcon style={styles.searchIcon} />
+          {text?.length ? (
+            <View style={styles.searchClear}>
+              <TouchableOpacity
+                hitSlop={{right: 8, left: 8, top: 8, bottom: 8}}
+                onPress={() => setText('')}
+              >
+                <CancelCrossIcon />
+              </TouchableOpacity>
+            </View>
+          ) : null}
         </View>
       </SharedElement>
       {!hasResults && (
@@ -98,6 +128,7 @@ const LocationSearch: React.FC<Props> = ({
               title="Tidligere søk"
               locations={previousLocations}
               onSelect={onSearchSelect}
+              onPrefillText={onPrefillText}
             />
           )}
           {hasResults && (
@@ -105,6 +136,7 @@ const LocationSearch: React.FC<Props> = ({
               title="Søkeresultat"
               locations={filteredLocations}
               onSelect={onSearchSelect}
+              onPrefillText={onPrefillText}
             />
           )}
         </ScrollView>
@@ -168,6 +200,11 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
   searchIcon: {
     position: 'absolute',
     left: 14,
+    alignSelf: 'center',
+  },
+  searchClear: {
+    position: 'absolute',
+    right: 14,
     alignSelf: 'center',
   },
 }));
