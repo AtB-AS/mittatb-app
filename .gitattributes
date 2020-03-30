@@ -1,4 +1,6 @@
 *.pbxproj -text
+# specific for windows script files
+*.bat text eol=crlf
 
 # encrypted files/folders
 env/** filter=git-crypt diff=git-crypt

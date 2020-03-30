@@ -1,10 +1,10 @@
 #!/bin/bash
 
 echo "Installing pre-build dependencies"
-brew install openssl # for git-crypt
-brew install git-crypt # ditto
-brew install findutils # for gxargs which is used to load environment variables from .env file
-brew install xmlstarlet # to edit androidmanifest
+brew install openssl git-crypt findutils xmlstarlet # for git-crypt
+# git-crypt + openssl for decryption
+# findutils for gxargs which is used to load environment variables from .env file
+# xmlstarlet to edit androidmanifest
 
 echo "Decoding git-crypt key"
 echo $GIT_CRYPT_KEY | openssl base64 -d -A -out mittatb.key
