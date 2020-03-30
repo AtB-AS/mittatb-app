@@ -22,7 +22,7 @@ echo "Setting BundleIdentifier in Info.plist to $IOS_BUNDLE_IDENTIFIER"
 /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $IOS_BUNDLE_IDENTIFIER" ./ios/atb/Info.plist
 echo "Adding Bugsnag API key to Info.plist"
 /usr/libexec/PlistBuddy -c "Add :BugsnagAPIKey string $BUGSNAG_API_KEY" ./ios/atb/Info.plist
-eecho "Adding Bugsnag API key to AndroidManifest.xml"
+echo "Adding Bugsnag API key to AndroidManifest.xml"
 xmlstarlet edit --inplace --omit-decl -s //manifest/application -t elem -n "bugsnagkey" \
   -i //manifest/application/bugsnagkey -t attr -n "android:name" -v "com.bugsnag.android.API_KEY" \
   -i //manifest/application/bugsnagkey -t attr -n "android:value" -v "$BUGSNAG_API_KEY" \
