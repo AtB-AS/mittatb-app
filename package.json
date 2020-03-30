@@ -12,6 +12,7 @@
     "icons": "app-icon generate --platforms=android,ios --rounded none && app-icon generate --platforms=android --rounded only"
   },
   "dependencies": {
+    "@entur/sdk": "^1.4.3",
     "@react-native-community/async-storage": "^2.0.0-rc.1",
     "@react-native-community/async-storage-backend-legacy": "^2.0.0-rc.1",
     "@react-native-community/masked-view": "^0.1.6",
