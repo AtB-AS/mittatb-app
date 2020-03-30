@@ -11,12 +11,18 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
+#import <BugsnagReactNative.h>
 #import <Firebase.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  NSString* bugsnagApiKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"BugsnagAPIKey"];
+  if (bugsnagApiKey != nil) {
+      [BugsnagReactNative start];
+  }
+  
   if ([FIRApp defaultApp] == nil) {
     [FIRApp configure];
   }
