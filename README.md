@@ -9,7 +9,7 @@ React Native POC.
 
 ### Requirements
 
-1. See [React Native requirements](https://reactnative.dev/docs/getting-started). (Click the `React Native CLI Quickstart` tab)
+1. See [React Native: setting up the development environment](https://reactnative.dev/docs/environment-setup). (Click the `React Native CLI Quickstart` tab)
 1. yarn (https://yarnpkg.com/getting-started/install)
 1. git-crypt: `brew install git-crypt`
 
