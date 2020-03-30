@@ -10,7 +10,7 @@ React Native POC.
 ### Requirements
 
 1. See [React Native: setting up the development environment](https://reactnative.dev/docs/environment-setup). (Click the `React Native CLI Quickstart` tab)
-1. yarn (https://yarnpkg.com/getting-started/install)
+1. yarn (https://yarnpkg.com/getting-started/install). Currently yarn 2.0 not supported, install `v1.22.0` or similar
 1. git-crypt: `brew install git-crypt`
 
 ### Starting locally
@@ -18,7 +18,7 @@ React Native POC.
 #### First time setup
 
 1. Install dependencies:
-   1. React Native: `yarn` (currently yarn 2.0 not supported, install `v1.22.0` or similar)
+   1. React Native: `yarn`
    1. iOS specific: `cd ios/` and `pod install`
 1. Decrypt sensitive files `git-crypt unlock <path/to/key>` (Key given to internal members)
 
