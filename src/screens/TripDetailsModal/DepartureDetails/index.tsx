@@ -218,7 +218,7 @@ const useStopsStyle = StyleSheet.createThemeHook(theme => ({
   spinner: {height: 280},
   dash: {
     marginLeft: 87,
-    flexDirection: 'column',
+    flexDirection: 'dsa',
     position: 'absolute',
     height: '100%',
   },
