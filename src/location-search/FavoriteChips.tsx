@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, ViewStyle} from 'react-native';
+import {View, Text, StyleSheet, ViewStyle, StyleProp} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import colors from '../theme/colors';
 import {useFavorites} from '../favorites/FavoritesContext';
@@ -13,11 +13,13 @@ type Props = {
   geolocation: GeolocationResponse | null;
   onSelectLocation: (location: LocationWithSearchMetadata) => void;
   hideFavorites: boolean;
+  containerStyle?: StyleProp<ViewStyle>;
 };
 
 const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
   geolocation,
+  containerStyle,
   hideFavorites,
 }) => {
   const {favorites} = useFavorites();
@@ -35,7 +37,11 @@ const FavoriteChips: React.FC<Props> = ({
         height: 44,
       }}
     >
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+      <ScrollView
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={containerStyle}
+      >
         {currentLocation && (
           <FavoriteChip
             text="Min posisjon"
