@@ -88,41 +88,45 @@ const LocationSearch: React.FC<Props> = ({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Adresse eller stoppested</Text>
-      <SharedElement id="locationSearchInput">
-        <View style={styles.inputContainer}>
-          <TextInput
-            ref={inputRef}
-            style={styles.input}
-            value={text}
-            onChangeText={setText}
-            placeholder="Søk etter adresse eller stoppested"
-            autoCorrect={false}
-            autoCompleteType="off"
-            placeholderTextColor={(styles.placeholder as TextStyle).color}
-          />
-          <InputSearchIcon style={styles.searchIcon} />
-          {text?.length ? (
-            <View style={styles.searchClear}>
-              <TouchableOpacity
-                hitSlop={{right: 8, left: 8, top: 8, bottom: 8}}
-                onPress={() => setText('')}
-              >
-                <CancelCrossIcon />
-              </TouchableOpacity>
-            </View>
-          ) : null}
-        </View>
-      </SharedElement>
+      <View style={styles.contentBlock}>
+        <Text style={styles.label}>Adresse eller stoppested</Text>
+        <SharedElement id="locationSearchInput">
+          <View style={styles.inputContainer}>
+            <TextInput
+              ref={inputRef}
+              style={styles.input}
+              value={text}
+              onChangeText={setText}
+              placeholder="Søk etter adresse eller stoppested"
+              autoCorrect={false}
+              autoCompleteType="off"
+              placeholderTextColor={(styles.placeholder as TextStyle).color}
+            />
+            <InputSearchIcon style={styles.searchIcon} />
+            {text?.length ? (
+              <View style={styles.searchClear}>
+                <TouchableOpacity
+                  hitSlop={{right: 8, left: 8, top: 8, bottom: 8}}
+                  onPress={() => setText('')}
+                >
+                  <CancelCrossIcon />
+                </TouchableOpacity>
+              </View>
+            ) : null}
+          </View>
+        </SharedElement>
+      </View>
+
       {!hasResults && (
         <FavoriteChips
           onSelectLocation={onSelect}
           geolocation={geolocation}
           hideFavorites={!!hideFavorites}
+          containerStyle={styles.contentBlock}
         />
       )}
       {hasAnyResult ? (
-        <ScrollView>
+        <ScrollView style={styles.contentBlock}>
           {hasPreviousResults && (
             <LocationResults
               title="Tidligere søk"
@@ -141,7 +145,7 @@ const LocationSearch: React.FC<Props> = ({
           )}
         </ScrollView>
       ) : (
-        <View>
+        <View style={styles.contentBlock}>
           <Text>Fant ingen søkeresultat</Text>
         </View>
       )}
@@ -172,7 +176,10 @@ const useThemeStyles = StyleSheet.createThemeHook(theme => ({
   container: {
     backgroundColor: theme.background.secondary,
     flex: 1,
-    padding: theme.sizes.pagePadding,
+    paddingTop: 12,
+  },
+  contentBlock: {
+    paddingHorizontal: theme.sizes.pagePadding,
   },
   label: {
     fontSize: 12,
