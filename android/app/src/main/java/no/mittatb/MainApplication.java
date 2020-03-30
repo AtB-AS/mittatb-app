@@ -2,7 +2,11 @@ package no.mittatb;
 
 import androidx.multidex.MultiDexApplication;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
 
+import com.bugsnag.BugsnagReactNative;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
@@ -43,8 +47,21 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
   @Override
   public void onCreate() {
     super.onCreate();
+    tryInitializeBugsnag();
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this); // Remove this line if you don't want Flipper enabled
+  }
+
+  private void tryInitializeBugsnag() {
+    try {
+      ApplicationInfo ai = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+      Bundle bundle = ai.metaData;
+      if (bundle.containsKey("com.bugsnag.android.API_KEY")) {
+          BugsnagReactNative.start(this);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   /**

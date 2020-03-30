@@ -4,6 +4,7 @@ echo "Installing pre-build dependencies"
 brew install openssl # for git-crypt
 brew install git-crypt # ditto
 brew install findutils # for gxargs which is used to load environment variables from .env file
+brew install xmlstarlet # to edit androidmanifest
 
 echo "Decoding git-crypt key"
 echo $GIT_CRYPT_KEY | openssl base64 -d -A -out mittatb.key
@@ -19,6 +20,14 @@ export $(grep -v '^#' .env | gxargs -d '\n')
 
 echo "Setting BundleIdentifier in Info.plist to $IOS_BUNDLE_IDENTIFIER"
 /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $IOS_BUNDLE_IDENTIFIER" ./ios/atb/Info.plist
+echo "Adding Bugsnag API key to Info.plist"
+/usr/libexec/PlistBuddy -c "Add :BugsnagAPIKey string $BUGSNAG_API_KEY" ./ios/atb/Info.plist
+echo "Adding Bugsnag API key to AndroidManifest.xml"
+xmlstarlet edit --inplace --omit-decl -s //manifest/application -t elem -n "bugsnagkey" \
+  -i //manifest/application/bugsnagkey -t attr -n "android:name" -v "com.bugsnag.android.API_KEY" \
+  -i //manifest/application/bugsnagkey -t attr -n "android:value" -v "$BUGSNAG_API_KEY" \
+  -r //manifest/application/bugsnagkey -v meta-data \
+   android/app/src/main/AndroidManifest.xml
 
 echo "Install icon dependencies"
 brew install imagemagick
