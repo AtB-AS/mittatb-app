@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import trackNavigation from '../diagnostics/trackNavigation';
@@ -42,6 +42,7 @@ const NavigationRoot = () => {
 
   return (
     <SafeAreaProvider>
+      <StatusBar barStyle="dark-content"/>
       <NavigationContainer onStateChange={trackNavigation}>
         <SharedStack.Navigator
           mode={isLoading || !onboarded ? 'card' : 'modal'}
