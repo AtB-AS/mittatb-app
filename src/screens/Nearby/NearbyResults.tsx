@@ -29,7 +29,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
     navigation.navigate('DepartureDetailsModal', {
       title: getLineNameFromEstimatedCall(departure),
       serviceJourneyId: departure.serviceJourney.id,
-      fromQuayId: departure.quay.id,
+      fromQuayId: departure.quay?.id,
     });
   };
 
@@ -41,7 +41,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
         <NearbyResultItem departure={item} onPress={onPress} />
       )}
       keyExtractor={departure =>
-        departure.quay.id + departure.serviceJourney.id
+        departure.quay?.id + departure.serviceJourney.id
       }
       refreshControl={
         <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
@@ -76,7 +76,7 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = ({
         {formatToClock(departure.aimedDepartureTime)}
       </Text>
       <TransportationIcon
-        mode={departure.serviceJourney.journeyPattern.line.transportMode}
+        mode={departure.serviceJourney.journeyPattern?.line.transportMode}
         isLive={departure.realtime}
       />
       <View style={styles.textWrapper}>

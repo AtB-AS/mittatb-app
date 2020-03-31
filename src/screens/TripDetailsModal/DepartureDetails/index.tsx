@@ -59,7 +59,7 @@ export default function DepartureDetails({navigation, route}: Props) {
       <View style={styles.allGroups}>
         {mapGroup(callGroups, (name, group) => (
           <CallGroup
-            key={group[0]?.quay.id ?? name}
+            key={group[0]?.quay?.id ?? name}
             calls={group}
             type={name}
           />
@@ -131,13 +131,13 @@ function CallGroup({type, calls}: CallGroupProps) {
       />
 
       {items.map((call, i) => (
-        <Fragment key={call.quay.id + call.serviceJourney.id}>
+        <Fragment key={call.quay?.id + call.serviceJourney.id}>
           <LocationRow
-            key={call.quay.id + call.serviceJourney.id}
+            key={call.quay?.id + call.serviceJourney.id}
             icon={
               isStartPlace(i) ? (
                 <TransportationIcon
-                  mode={call.serviceJourney.journeyPattern.line.transportMode}
+                  mode={call.serviceJourney.journeyPattern?.line.transportMode}
                   isLive={call.realtime}
                 />
               ) : (
@@ -301,7 +301,7 @@ function groupAllCallsByQuaysInLeg(
   return calls.reduce(
     (obj, call) => {
       // We are at start quay, update flag
-      if (call.quay.id === fromQuayId) {
+      if (call.quay?.id === fromQuayId) {
         isAfterStart = true;
       }
 
@@ -317,7 +317,7 @@ function groupAllCallsByQuaysInLeg(
       }
 
       // We are at stop, update flag
-      if (call.quay.id === toQuayId) {
+      if (call.quay?.id === toQuayId) {
         isAfterStop = true;
       }
 

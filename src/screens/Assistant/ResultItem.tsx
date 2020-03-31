@@ -141,7 +141,9 @@ const HighlightedLeg = ({leg}: {leg: Leg}) => {
   } else {
     return (
       <>
-        <Text style={styles.stopName}>{leg?.fromEstimatedCall.quay.name}</Text>
+        <Text style={styles.stopName}>
+          {leg?.fromEstimatedCall?.quay?.name}
+        </Text>
         <Text style={styles.time}>{formatToClock(leg?.aimedStartTime)}</Text>
         <View style={styles.lineContainer}>
           <LegModeIcon mode={leg.mode} />

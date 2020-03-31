@@ -31,8 +31,8 @@ const TransportDetail: React.FC<LegDetailProps> = ({
           navigation.navigate('DepartureDetails', {
             title: getLineName(leg),
             serviceJourneyId: leg.serviceJourney.id,
-            fromQuayId: leg.fromPlace.quay.id,
-            toQuayId: leg.toPlace.quay.id,
+            fromQuayId: leg.fromPlace.quay?.id,
+            toQuayId: leg.toPlace.quay?.id,
             isBack: true,
           })
         }
@@ -68,12 +68,13 @@ const TransportDetail: React.FC<LegDetailProps> = ({
           />
         </View>
       </TouchableOpacity>
-      <WaitRow
-        onCalculateTime={onCalculateTime}
-        visible={showWaitTime}
-        currentLeg={leg}
-        nextLeg={nextLeg!}
-      />
+      {showWaitTime && (
+        <WaitRow
+          onCalculateTime={onCalculateTime}
+          currentLeg={leg}
+          nextLeg={nextLeg!}
+        />
+      )}
     </View>
   );
 };
@@ -101,26 +102,16 @@ type WaitRowProps = {
   onCalculateTime(seconds: number): void;
   currentLeg: Leg;
   nextLeg: Leg;
-  visible?: boolean;
 };
-function WaitRow({
-  onCalculateTime,
-  visible,
-  currentLeg,
-  nextLeg,
-}: WaitRowProps) {
+function WaitRow({onCalculateTime, currentLeg, nextLeg}: WaitRowProps) {
   const time = secondsBetween(
-    currentLeg.aimedEndTime ?? currentLeg.expectedEndTime ?? 0,
-    nextLeg.aimedStartTime ?? currentLeg.expectedStartTime ?? 0,
+    currentLeg.aimedEndTime ?? currentLeg.expectedEndTime,
+    nextLeg.aimedStartTime ?? nextLeg.expectedStartTime,
   );
-  useEffect(() => {
-    if (!visible) return;
-    onCalculateTime(time);
-  }, [visible, time]);
 
-  if (!visible) {
-    return null;
-  }
+  useEffect(() => {
+    onCalculateTime(time);
+  }, [time]);
 
   return (
     <View style={waitStyles.container}>
