@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StatusBar} from 'react-native';
+import {View, StatusBar, Platform} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import trackNavigation from '../diagnostics/trackNavigation';
@@ -32,6 +32,13 @@ export type RootStackParamList = {
 
 const SharedStack = createSharedElementStackNavigator<RootStackParamList>();
 
+const detailsModalTransition = Platform.select<
+  typeof TransitionPresets.ModalPresentationIOS
+>({
+  ios: TransitionPresets.ModalPresentationIOS,
+  android: undefined,
+});
+
 const NavigationRoot = () => {
   const {isLoading, onboarded} = useAppState();
   const {theme} = useTheme();
@@ -42,10 +49,14 @@ const NavigationRoot = () => {
 
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle="dark-content"/>
+      <StatusBar barStyle="dark-content" />
       <NavigationContainer onStateChange={trackNavigation}>
         <SharedStack.Navigator
-          mode={isLoading || !onboarded ? 'card' : 'modal'}
+          mode={
+            !onboarded
+              ? 'card'
+              : Platform.select({ios: 'modal', android: 'card'})
+          }
         >
           {!onboarded ? (
             <SharedStack.Screen
@@ -67,7 +78,7 @@ const NavigationRoot = () => {
                   headerShown: false,
                   cardOverlayEnabled: true,
                   cardShadowEnabled: true,
-                  ...TransitionPresets.ModalPresentationIOS,
+                  ...detailsModalTransition,
                 }}
               />
               <SharedStack.Screen
@@ -77,7 +88,7 @@ const NavigationRoot = () => {
                   headerShown: false,
                   cardOverlayEnabled: true,
                   cardShadowEnabled: true,
-                  ...TransitionPresets.ModalPresentationIOS,
+                  ...detailsModalTransition,
                 }}
               />
               <SharedStack.Screen
