@@ -56,7 +56,6 @@ const LocationSearch: React.FC<Props> = ({
     if (location.resultType === 'search') {
       addSearchEntry(location);
     }
-    setText(location.label ?? location.name);
     navigation.navigate(callerRouteName, {
       [callerRouteParam]: location,
     });
