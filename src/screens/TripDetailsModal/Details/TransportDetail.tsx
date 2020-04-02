@@ -108,7 +108,7 @@ type WaitRowProps = {
   nextLeg: Leg;
 };
 function WaitRow({onCalculateTime, currentLeg, nextLeg}: WaitRowProps) {
-  let time = secondsBetween(
+  const time = secondsBetween(
     currentLeg.aimedEndTime ?? currentLeg.expectedEndTime,
     nextLeg.aimedStartTime ?? nextLeg.expectedStartTime,
   );
