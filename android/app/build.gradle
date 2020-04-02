@@ -81,7 +81,9 @@ project.ext.react = [
     entryFile: "index.js",
     enableHermes: true,  // clean and rebuild if changing
     devDisabledInStore: true,
-    bundleInStore: true
+    bundleInStore: true,
+    devDisabledInStaging: true,
+    bundleInStaging: true
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
