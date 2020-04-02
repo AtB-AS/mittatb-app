@@ -2,7 +2,11 @@ import React, {useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Dash from 'react-native-dash';
 import colors from '../../../theme/colors';
-import {formatToClock, secondsToDuration} from '../../../utils/date';
+import {
+  formatToClock,
+  secondsToDuration,
+  secondsBetween,
+} from '../../../utils/date';
 import nb from 'date-fns/locale/nb';
 import DotIcon from '../../../assets/svg/DotIcon';
 import LocationRow from '../LocationRow';
@@ -104,7 +108,7 @@ type WaitRowProps = {
   nextLeg: Leg;
 };
 function WaitRow({onCalculateTime, currentLeg, nextLeg}: WaitRowProps) {
-  const time = secondsBetween(
+  let time = secondsBetween(
     currentLeg.aimedEndTime ?? currentLeg.expectedEndTime,
     nextLeg.aimedStartTime ?? nextLeg.expectedStartTime,
   );
@@ -138,8 +142,3 @@ const waitStyles = StyleSheet.create({
     opacity: 0.6,
   },
 });
-function secondsBetween(start: string, end: string): number {
-  const a = new Date(start);
-  const b = new Date(end);
-  return (b.getTime() - a.getTime()) / 1000;
-}
