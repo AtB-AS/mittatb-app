@@ -1104,9 +1104,9 @@
     serve-static "^1.13.1"
 
 "@react-native-community/cli-platform-android@^4.2.0":
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/@react-native-community/cli-platform-android/-/cli-platform-android-4.5.0.tgz#115657424b44bc75211505a21dbe58bf101cf019"
-  integrity sha512-l0NQPYUH9MphM6EmPZBmWcqZxP0G7prwIxChEnkCHSJI6KfKuq23sgCkOQUorllPnSD4uoP8wew+kTSt7MDYVQ==
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/@react-native-community/cli-platform-android/-/cli-platform-android-4.5.1.tgz#51e1eb0e90d38d52a25ff1f7702f86fe0971a793"
+  integrity sha512-JVGBhuHx7NBITJZYaYJkgVoWQXlZ/71eCRbxYcG8OdhdXpkqlJxYrCubOdswj2tJBzXe3pin+nvRZAanDPY2Rw==
   dependencies:
     "@react-native-community/cli-tools" "^4.4.0"
     chalk "^3.0.0"
@@ -1148,9 +1148,9 @@
   integrity sha512-H1XsjQ6imMZKK+IsehDnhVhxP0FyUKX6UMWMeUkSk6Ox5M7HZ2q8kvlxVqdgZM9ry8yb6RJtCIjgBT7w8eiSug==
 
 "@react-native-community/cli@^4.2.0":
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/@react-native-community/cli/-/cli-4.5.0.tgz#32b7e527cc0da4a8c7ae7fd80956cef195e6930f"
-  integrity sha512-ImLGCKHxoNaAuAmg8wu/T1CqzkO6RDvM6KOYWGeI9kVwsNTyTpwSetOPUzNDvWCWaAHIkeS++AKa/H62RHxqvg==
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/@react-native-community/cli/-/cli-4.5.1.tgz#f48dfd2244b6b40248732dd1cb9234770d43d950"
+  integrity sha512-cWTLNCSmTa32wi5+idP6S14p34Pz9V8wBAj2yJ97EhcM6ztETRY5rWAkUtcU9AKnL49sYkP2TfmaMMNw2qRG+g==
   dependencies:
     "@hapi/joi" "^15.0.3"
     "@react-native-community/cli-debugger-ui" "^4.2.1"
@@ -1181,7 +1181,7 @@
     mkdirp "^0.5.1"
     open "^6.2.0"
     ora "^3.4.0"
-    pretty-format "^25.1.0"
+    pretty-format "^25.2.0"
     semver "^6.3.0"
     serve-static "^1.13.1"
     shell-quote "1.6.1"
@@ -6079,7 +6079,7 @@ pretty-format@^24.7.0, pretty-format@^24.9.0:
     ansi-styles "^3.2.0"
     react-is "^16.8.4"
 
-pretty-format@^25.1.0:
+pretty-format@^25.2.0:
   version "25.2.3"
   resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-25.2.3.tgz#ba6e9603a0d80fa2e470b1fed55de1f9bfd81421"
   integrity sha512-IP4+5UOAVGoyqC/DiomOeHBUKN6q00gfyT2qpAsRH64tgOKB2yF7FHJXC18OCiU0/YFierACup/zdCOWw0F/0w==
