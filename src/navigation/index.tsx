@@ -49,7 +49,12 @@ const NavigationRoot = () => {
 
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar
+        barStyle={Platform.select({
+          ios: 'dark-content',
+          android: 'light-content',
+        })}
+      />
       <NavigationContainer onStateChange={trackNavigation}>
         <SharedStack.Navigator
           mode={
