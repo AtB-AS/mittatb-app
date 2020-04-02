@@ -55,7 +55,10 @@ const TripDetailsModal: React.FC<Props> = props => {
   return (
     <View style={styles.container}>
       <Header onClose={() => props.navigation.goBack()}>Reisedetaljer</Header>
-      <ScrollView style={styles.scrollView}>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollViewContent}
+      >
         {hasValues ? (
           <DetailsContent {...props} />
         ) : (
@@ -179,9 +182,10 @@ const useDetailsStyle = StyleSheet.createThemeHook(theme => ({
   },
   scrollView: {
     flex: 1,
-    borderTopWidth: 1,
-    borderTopColor: '#F9F9FA0D',
+  },
+  scrollViewContent: {
     padding: 12,
+    paddingBottom: 100,
   },
   textStyle: {
     fontSize: 16,
