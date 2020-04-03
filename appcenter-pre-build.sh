@@ -41,10 +41,16 @@ brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/7cf3b63be1
 brew switch pango 1.42.4_1 
 
 export CURRENT_COMMIT_HASH=$(git rev-parse --short HEAD)
-echo "Adding badge to Android icons"
-badge --shield "beta-$CURRENT_COMMIT_HASH-orange" --no_badge  --glob "/android/app/src/main/res/*/*.{png,PNG}"
-echo "Adding badge to iOS icons"
-badge --shield "beta-$CURRENT_COMMIT_HASH-orange" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
+
+echo "Adding app badges to icons"
+if [ "$APP_ENVIRONMENT" = "staging" ]; then
+  badge --shield "1.0-QA-orange" --no_badge  --glob "/android/app/src/staging/res/*/*.{png,PNG}"
+  badge --shield "1.0-QA-orange" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
+fi 
+if [ "$APP_ENVIRONMENT" = "store" ]; then
+  badge --shield "1.0-Alpha-blue" --no_badge  --glob "/android/app/src/store/res/*/*.{png,PNG}"
+  badge --shield "1.0-Alpha-blue" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
+fi
 
 if [ "$ENABLE_E2E" = true ]; then
     echo "Install E2E tools"
