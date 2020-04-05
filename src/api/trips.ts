@@ -9,11 +9,11 @@ export default async function search(from: Location, to: Location) {
   const client = await getClient();
   return await client.post<TripPattern[]>(url, {
     from: {
-      name: from.name || 'UNKNOWN',
+      name: from.name,
       coordinates: fromCoordinates,
     },
     to: {
-      name: to.name || 'UNKNOWN',
+      name: to.name,
       coordinates: toCoordinates,
     },
   });
