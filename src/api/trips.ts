@@ -9,10 +9,12 @@ export default async function search(from: Location, to: Location) {
   const client = await getClient();
   return await client.post<TripPattern[]>(url, {
     from: {
+      place: from.id,
       name: from.name,
       coordinates: fromCoordinates,
     },
     to: {
+      place: to.id,
       name: to.name,
       coordinates: toCoordinates,
     },
