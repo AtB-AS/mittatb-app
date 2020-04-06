@@ -47,6 +47,10 @@ fi
 
 if [ "$AGENT_JOBSTATUS" != "Succeeded" ]; then
     github_set_status_fail
+
+    if [ "$APPCENTER_BRANCH" == "alpha-release" ]; then
+        github_set_tag
+    fi
 else
     github_set_status_success
 fi
