@@ -50,12 +50,13 @@ github_set_tag() {
   fi
 
   message=$(git show -s --format=%B $BUILD_SOURCEVERSION | cat)
+  sha=$(git rev-parse $BUILD_SOURCEVERSION^)
 
   curl -X POST https://api.github.com/repos/$USER/$BUILD_REPOSITORY_NAME/git/tags -d \
         "{
             \"tag\": \"$tag_name\",
             \"message\": \"### Release: [$tag_name]($build_url)\n\n$message\n\",
-            \"object\": \"$BUILD_SOURCEVERSION\",
+            \"object\": \"$sha\",
             \"type\": \"commit\",
             \"tagger\": {
               \"name\": \"atb-bot\",
@@ -69,7 +70,7 @@ github_set_tag() {
   curl -X POST https://api.github.com/repos/$USER/$BUILD_REPOSITORY_NAME/git/refs -d \
         "{
             \"ref\": \"refs/tags/$tag_name\",
-            \"sha\": \"$BUILD_SOURCEVERSION\",
+            \"sha\": \"$sha\",
         }" \
         -H "Authorization: token $GITHUB_TOKEN" \
         -H "Accept: application/vnd.github.v3.raw+json"
