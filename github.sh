@@ -65,4 +65,12 @@ github_set_tag() {
         }" \
         -H "Authorization: token $GITHUB_TOKEN" \
         -H "Accept: application/vnd.github.v3.raw+json"
+
+  curl -X POST https://api.github.com/repos/$USER/$BUILD_REPOSITORY_NAME/git/refs -d \
+        "{
+            \"ref\": \"refs/tags/$tag_name\",
+            \"sha\": \"$BUILD_SOURCEVERSION\",
+        }" \
+        -H "Authorization: token $GITHUB_TOKEN" \
+        -H "Accept: application/vnd.github.v3.raw+json"
 }
