@@ -175,6 +175,20 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            packagingOptions {
+                exclude "lib/arm64-v8a/libhermes-executor-debug.so"
+                exclude "lib/arm64-v8a/libhermes-inspector.so"
+                exclude "lib/arm64-v8a/libjscexecutor.so"
+                exclude "lib/armeabi-v7a/libhermes-executor-debug.so"
+                exclude "lib/armeabi-v7a/libhermes-inspector.so"
+                exclude "lib/armeabi-v7a/libjscexecutor.so"
+                exclude "lib/x86/libhermes-executor-debug.so"
+                exclude "lib/x86/libhermes-inspector.so"
+                exclude "lib/x86/libjscexecutor.so"
+                exclude "lib/x86_64/libhermes-executor-debug.so"
+                exclude "lib/x86_64/libhermes-inspector.so"
+                exclude "lib/x86_64/libjscexecutor.so"
+            }
         }
     }
 
