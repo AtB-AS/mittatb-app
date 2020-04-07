@@ -83,8 +83,6 @@ const DetailsContent: React.FC<Props> = ({route}) => {
     }
   };
 
-  console.log(tripPattern.legs);
-
   return (
     <>
       {shortTime && (
