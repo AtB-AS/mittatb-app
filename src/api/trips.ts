@@ -7,14 +7,16 @@ export default async function search(from: Location, to: Location) {
   const {coordinates: fromCoordinates} = from;
   const {coordinates: toCoordinates} = to;
   const client = await getClient();
-  const response = await client.post<TripPattern[]>(url, {
+  return await client.post<TripPattern[]>(url, {
     from: {
+      place: from.id,
+      name: from.name,
       coordinates: fromCoordinates,
     },
     to: {
+      place: to.id,
+      name: to.name,
       coordinates: toCoordinates,
     },
   });
-
-  return response;
 }

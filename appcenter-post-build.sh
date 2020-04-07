@@ -3,9 +3,12 @@ echo "Running appcenter-post-build with: Jobstatus: $AGENT_JOBSTATUS, branch: $A
 echo "Loading all env variables from .env file"
 export $(grep -v '^#' .env | gxargs -d '\n')
 
+# Include github tools
+source github.sh
+
 if [ "$AGENT_JOBSTATUS" == "Succeeded" ]; then
-    if [ "$APPCENTER_BRANCH" == "master" ];
-     then
+	if [ "$APPCENTER_BRANCH" == "master" || "$APPCENTER_BRANCH" == "alpha-release" ];
+    then
         if [ -z "$APPCENTER_ANDROID_VARIANT" ]; then
             echo "Generating iOS source maps"
             npx react-native bundle \
@@ -39,4 +42,15 @@ if [ "$AGENT_JOBSTATUS" == "Succeeded" ]; then
     else
         echo "Current branch is $APPCENTER_BRANCH"
     fi
+fi
+
+
+if [ "$AGENT_JOBSTATUS" != "Succeeded" ]; then
+    github_set_status_fail
+
+    if [ "$APPCENTER_BRANCH" == "alpha-release" ]; then
+        github_set_tag
+    fi
+else
+    github_set_status_success
 fi
