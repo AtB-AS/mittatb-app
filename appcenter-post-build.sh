@@ -7,7 +7,7 @@ export $(grep -v '^#' .env | gxargs -d '\n')
 source github.sh
 
 if [ "$AGENT_JOBSTATUS" == "Succeeded" ]; then
-	if [ "$APPCENTER_BRANCH" == "master" || "$APPCENTER_BRANCH" == "alpha-release" ];
+	if [ "$APPCENTER_BRANCH" == "master" ] || [ "$APPCENTER_BRANCH" == "alpha-release" ];
     then
         if [ -z "$APPCENTER_ANDROID_VARIANT" ]; then
             echo "Generating iOS source maps"
