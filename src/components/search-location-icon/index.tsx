@@ -2,7 +2,7 @@ import React from 'react';
 import {LocationWithSearchMetadata} from '../../location-search';
 import LocationArrow from '../../assets/svg/LocationArrow';
 import {FavoriteIcon} from '../../favorites';
-import LocationIcon from '../../assets/svg/LocationIcon';
+import LocationIcon from '../location-icon';
 import {useFavorites} from '../../favorites/FavoritesContext';
 
 type SearchLocationIconProps = {

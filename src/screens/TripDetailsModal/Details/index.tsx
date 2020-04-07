@@ -18,7 +18,7 @@ import {LocationWithSearchMetadata} from '../../../location-search';
 import {UserFavorites} from '../../../favorites/types';
 import LocationArrow from '../../../assets/svg/LocationArrow';
 import {useFavorites} from '../../../favorites/FavoritesContext';
-import LocationIcon from '../../../assets/svg/LocationIcon';
+import LocationIcon from '../../../components/location-icon';
 import {FavoriteIcon} from '../../../favorites';
 
 // @TODO Firebase config?
@@ -162,12 +162,8 @@ const LegDetail: React.FC<LegDetailProps> = props => {
   switch (leg.mode) {
     case 'foot':
       return <WalkDetail {...props} />;
-    case 'bus':
-      return <TransportDetail {...props} />;
-    case 'tram':
-      return <TransportDetail {...props} />;
     default:
-      return <WalkDetail {...props} />;
+      return <TransportDetail {...props} />;
   }
 };
 

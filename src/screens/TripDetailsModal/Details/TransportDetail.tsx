@@ -15,7 +15,7 @@ import {LegDetailProps, DetailScreenNavigationProp} from '.';
 import {useNavigation} from '@react-navigation/core';
 import WaitClockIcon from './svg/WaitClockIcon';
 import {Leg} from '../../../sdk';
-import TransportationIcon from '../../../components/transportation-icon';
+import RealTimeLocationIcon from '../../../components/location-icon/real-time';
 import {getQuayName, getLineName} from '../../../utils/transportation-names';
 
 const TransportDetail: React.FC<LegDetailProps> = ({
@@ -59,7 +59,9 @@ const TransportDetail: React.FC<LegDetailProps> = ({
             rowStyle={styles.rowStyle}
           />
           <LocationRow
-            icon={<TransportationIcon mode={leg.mode} isLive={leg.realtime} />}
+            icon={
+              <RealTimeLocationIcon mode={leg.mode} isLive={leg.realtime} />
+            }
             location={getLineName(leg)}
             textStyle={[styles.textStyle, styles.activeTextStyle]}
             rowStyle={styles.rowStyle}

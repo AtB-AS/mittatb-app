@@ -1,11 +1,14 @@
-import {LegMode} from '../../sdk';
+import {LegMode} from '../../../sdk';
 import React from 'react';
 import LottieView from 'lottie-react-native';
 import {View, StyleProp, ViewStyle} from 'react-native';
-import {StyleSheet} from '../../theme';
-import BusFront from '../../assets/svg/BusFront';
-import TramFront from '../../assets/svg/TramFront';
-import colors from '../../theme/colors';
+import {StyleSheet} from '../../../theme';
+import BusFront from '../svg/BusFront';
+import TramFront from '../svg/TramFront';
+import colors from '../../../theme/colors';
+import TrainFront from '../svg/TrainFront';
+import PlaneFront from '../svg/PlaneFront';
+import BoatFront from '../svg/BoatFront';
 
 export type TransportationIconProps = {
   mode?: LegMode;
@@ -14,7 +17,7 @@ export type TransportationIconProps = {
   emptyStyle?: StyleProp<ViewStyle>;
 };
 
-const TransportationIcon: React.FC<TransportationIconProps> = ({
+const RealTimeLocationIcon: React.FC<TransportationIconProps> = ({
   mode,
   isLive,
   height,
@@ -42,7 +45,7 @@ const TransportationIcon: React.FC<TransportationIconProps> = ({
   );
 };
 
-export default TransportationIcon;
+export default RealTimeLocationIcon;
 
 type EmptyCircleProps = {
   style?: StyleProp<ViewStyle>;
@@ -55,9 +58,16 @@ const EmptyCircle: React.FC<EmptyCircleProps> = ({style, children}) => {
 function InnerIcon({mode}: TransportationIconProps) {
   switch (mode) {
     case 'bus':
-      return <BusFront fill="black" />;
+      return <BusFront key="bus" fill="black" width={20} />;
     case 'tram':
-      return <TramFront fill="black" />;
+      return <TramFront key="tram" fill="black" width={20} />;
+    case 'rail':
+      return <TrainFront key="rail" fill="black" width={20} />;
+    case 'air':
+      return <PlaneFront key="airport" fill="black" width={20} />;
+    case 'water':
+      return <BoatFront key="boat" fill="black" width={12} />;
+    case 'unknown':
     default:
       return null;
   }

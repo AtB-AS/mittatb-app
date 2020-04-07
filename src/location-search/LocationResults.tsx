@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {StyleSheet} from '../theme';
 import {Location} from '../favorites/types';
-import LocationIcon from '../assets/svg/LocationIcon';
+import LocationIcon from '../components/location-icon';
 import ArrowUpLeft from '../assets/svg/ArrowUpLeft';
 
 type Props = {
