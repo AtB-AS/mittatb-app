@@ -83,6 +83,8 @@ const DetailsContent: React.FC<Props> = ({route}) => {
     }
   };
 
+  console.log(tripPattern.legs);
+
   return (
     <>
       {shortTime && (
@@ -107,6 +109,8 @@ const DetailsContent: React.FC<Props> = ({route}) => {
           onCalculateTime={flagShortTime}
           nextLeg={nextLeg(i, legs)}
           isIntermediateTravelLeg={isIntermediateTravelLeg(i, legs)}
+          showFrom={showFrom(i, legs)}
+          showTo={showTo(i, legs)}
         />
       ))}
       <LocationRow
@@ -150,11 +154,20 @@ function isIntermediateTravelLeg(index: number, legs: Leg[]) {
   return true;
 }
 
+function showFrom(index: number, legs: Leg[]) {
+  return index > 0;
+}
+function showTo(index: number, legs: Leg[]) {
+  return index !== legs.length - 1;
+}
+
 export type LegDetailProps = {
   leg: Leg;
   onCalculateTime(timeInSeconds: number): void;
   nextLeg?: Leg;
   isIntermediateTravelLeg: boolean;
+  showFrom: boolean;
+  showTo: boolean;
 };
 
 const LegDetail: React.FC<LegDetailProps> = props => {
