@@ -44,13 +44,11 @@ if [ "$AGENT_JOBSTATUS" == "Succeeded" ]; then
     fi
 fi
 
-
-if [ "$AGENT_JOBSTATUS" != "Succeeded" ]; then
-    github_set_status_fail
-
+if [ "$AGENT_JOBSTATUS" == "Succeeded" ]; then
+    github_set_status_success
     if [ "$APPCENTER_BRANCH" == "alpha-release" ]; then
         github_set_tag
     fi
 else
-    github_set_status_success
+    github_set_status_fail
 fi
