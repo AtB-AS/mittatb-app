@@ -18,12 +18,18 @@ github_set_status() {
     local status job_status
     local "${@}"
 
+    if [ -z "$APPCENTER_ANDROID_VARIANT" ]; then
+      tag_name="ios"
+    else
+      tag_name="android"
+    fi
+
     curl -X POST https://api.github.com/repos/$USER/$BUILD_REPOSITORY_NAME/statuses/$BUILD_SOURCEVERSION -d \
         "{
             \"state\": \"$status\", 
             \"target_url\": \"$build_url\",
             \"description\": \"[BuildID: $APPCENTER_BUILD_ID] The build status is: $job_status!\",
-            \"context\": \"continuous-integration/appcenter\"
+            \"context\": \"ci/app-$tag_name\"
         }" \
         -H "Authorization: token $GITHUB_TOKEN" \
         -H "Accept: application/vnd.github.v3.raw+json"
