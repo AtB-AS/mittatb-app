@@ -15,7 +15,7 @@ import {LegDetailProps, DetailScreenNavigationProp} from '.';
 import {useNavigation} from '@react-navigation/core';
 import WaitClockIcon from './svg/WaitClockIcon';
 import {Leg} from '../../../sdk';
-import TransportationIcon from '../../../components/transportation-icon';
+import RealTimeLocationIcon from '../../../components/location-icon/real-time';
 import {getQuayName, getLineName} from '../../../utils/transportation-names';
 
 const TransportDetail: React.FC<LegDetailProps> = ({
@@ -23,6 +23,8 @@ const TransportDetail: React.FC<LegDetailProps> = ({
   nextLeg,
   isIntermediateTravelLeg,
   onCalculateTime,
+  showFrom,
+  showTo,
 }) => {
   const navigation = useNavigation<DetailScreenNavigationProp>();
   const showWaitTime = isIntermediateTravelLeg && Boolean(nextLeg);
@@ -41,6 +43,14 @@ const TransportDetail: React.FC<LegDetailProps> = ({
           })
         }
       >
+        {showFrom && (
+          <LocationRow
+            icon={<DotIcon fill={colors.primary.green} />}
+            location={getQuayName(leg.fromPlace.quay)}
+            time={formatToClock(leg.aimedStartTime)}
+            textStyle={styles.textStyle}
+          />
+        )}
         <View style={styles.container}>
           <Dash
             dashGap={4}
@@ -50,27 +60,23 @@ const TransportDetail: React.FC<LegDetailProps> = ({
             style={styles.dash}
             dashStyle={{borderRadius: 50}}
           />
-
           <LocationRow
-            icon={<DotIcon fill={colors.primary.green} />}
-            location={getQuayName(leg.fromPlace.quay)}
-            time={formatToClock(leg.aimedStartTime)}
-            textStyle={styles.textStyle}
-            rowStyle={styles.rowStyle}
-          />
-          <LocationRow
-            icon={<TransportationIcon mode={leg.mode} isLive={leg.realtime} />}
+            icon={
+              <RealTimeLocationIcon mode={leg.mode} isLive={leg.realtime} />
+            }
             location={getLineName(leg)}
             textStyle={[styles.textStyle, styles.activeTextStyle]}
-            rowStyle={styles.rowStyle}
+            rowStyle={styles.midRowStyle}
           />
+        </View>
+        {showTo && (
           <LocationRow
             icon={<DotIcon fill={colors.primary.green} />}
             location={getQuayName(leg.toPlace.quay)}
             time={formatToClock(leg.aimedEndTime)}
             textStyle={styles.textStyle}
           />
-        </View>
+        )}
       </TouchableOpacity>
       {showWaitTime && (
         <WaitRow
@@ -88,8 +94,9 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     justifyContent: 'space-between',
+    marginVertical: 2,
   },
-  rowStyle: {marginBottom: 24},
+  midRowStyle: {marginVertical: 20},
   textStyle: {fontSize: 16},
   activeTextStyle: {fontWeight: '600'},
   dash: {

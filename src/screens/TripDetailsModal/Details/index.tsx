@@ -18,7 +18,7 @@ import {LocationWithSearchMetadata} from '../../../location-search';
 import {UserFavorites} from '../../../favorites/types';
 import LocationArrow from '../../../assets/svg/LocationArrow';
 import {useFavorites} from '../../../favorites/FavoritesContext';
-import LocationIcon from '../../../assets/svg/LocationIcon';
+import LocationIcon from '../../../components/location-icon';
 import {FavoriteIcon} from '../../../favorites';
 
 // @TODO Firebase config?
@@ -107,6 +107,8 @@ const DetailsContent: React.FC<Props> = ({route}) => {
           onCalculateTime={flagShortTime}
           nextLeg={nextLeg(i, legs)}
           isIntermediateTravelLeg={isIntermediateTravelLeg(i, legs)}
+          showFrom={showFrom(i, legs)}
+          showTo={showTo(i, legs)}
         />
       ))}
       <LocationRow
@@ -150,11 +152,20 @@ function isIntermediateTravelLeg(index: number, legs: Leg[]) {
   return true;
 }
 
+function showFrom(index: number, legs: Leg[]) {
+  return index > 0;
+}
+function showTo(index: number, legs: Leg[]) {
+  return index !== legs.length - 1;
+}
+
 export type LegDetailProps = {
   leg: Leg;
   onCalculateTime(timeInSeconds: number): void;
   nextLeg?: Leg;
   isIntermediateTravelLeg: boolean;
+  showFrom: boolean;
+  showTo: boolean;
 };
 
 const LegDetail: React.FC<LegDetailProps> = props => {
@@ -162,12 +173,8 @@ const LegDetail: React.FC<LegDetailProps> = props => {
   switch (leg.mode) {
     case 'foot':
       return <WalkDetail {...props} />;
-    case 'bus':
-      return <TransportDetail {...props} />;
-    case 'tram':
-      return <TransportDetail {...props} />;
     default:
-      return <WalkDetail {...props} />;
+      return <TransportDetail {...props} />;
   }
 };
 
