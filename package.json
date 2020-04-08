@@ -9,7 +9,8 @@
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "postinstall": "patch-package",
-    "icons": "app-icon generate --platforms=android,ios --rounded none && app-icon generate --platforms=android --rounded only"
+    "icons": "app-icon generate --platforms=android,ios --rounded none && app-icon generate --platforms=android --rounded only",
+    "release-draft": "sh tools/release/release-draft.sh"
   },
   "dependencies": {
     "@entur/sdk": "^1.4.3",
@@ -61,6 +62,7 @@
     "@typescript-eslint/parser": "^2.16.0",
     "app-icon": "^0.13.1",
     "babel-jest": "^24.9.0",
+    "conventional-changelog-cli": "^2.0.31",
     "detox": "^15.2.2",
     "eslint": "^6.8.0",
     "jest": "^24.9.0",
