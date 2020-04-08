@@ -116,14 +116,13 @@ const LocationSearch: React.FC<Props> = ({
         </SharedElement>
       </View>
 
-      {!hasResults && (
-        <FavoriteChips
-          onSelectLocation={onSelect}
-          geolocation={geolocation}
-          hideFavorites={!!hideFavorites}
-          containerStyle={styles.contentBlock}
-        />
-      )}
+      <FavoriteChips
+        onSelectLocation={onSelect}
+        geolocation={geolocation}
+        hideFavorites={!!hideFavorites}
+        containerStyle={styles.contentBlock}
+      />
+
       {hasAnyResult ? (
         <ScrollView style={styles.contentBlock}>
           {hasPreviousResults && (
