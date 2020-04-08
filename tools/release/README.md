@@ -15,7 +15,7 @@ For `master` we just merge new changes through Pull Requests and feature branche
 ## Normal flow
 
 1. Do continuous changes on master through PR
-1. On alpha release (from project root): `yarn release-draft`
+1. When you want to do an alpha release, run the following on the `master` branch (from project root): `yarn release-draft`
 1. Revise and review PR on Github, making sure all checks pass.
 
 Running this script does the following:
