@@ -2,7 +2,7 @@
 
 Currently we setup deploy through AppCenter directly and build on two branches:
 
-- `master` - Continous integrated and distributed to test devices and development team. Also we can do some [QA](https://github.com/AtB-AS/org/blob/master/guides/workflow-and-qa-progress-apps.md).
+- `master` - Continous integrated and distributed to test devices and development team. Also where we do most of our [QA](https://github.com/AtB-AS/org/blob/master/guides/workflow-and-qa-progress-apps.md).
 - `alpha-release` - Periodic manually built and distributed to internal people on the "alpha" release plan (Test Flight for iOS and alpha store on Google Play Store).
 
 For `master` we just merge new changes through Pull Requests and feature branches with squash and rebase. But if we really want to test larger concepts and features, we should distribute to the internal testing team through the alpha channel. For this we make changes as a "sync pull request" to `alpha-release`. This is what this script solves.
