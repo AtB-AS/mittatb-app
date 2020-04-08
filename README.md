@@ -61,7 +61,7 @@ You might be missing iOS dependencies (Cocopods). See dependency step in [Starti
 
 ## Distributing new app versions (deploy)
 
-For test devices and developer devices we do continuous distribution through direct groups and internal test flight. For internal alpha version release we do periodic deploy through syncing the `alpha-release` branch.
+For test devices and developer devices we do continuous distribution through direct groups on AppCenter. For an internal alpha version release we do periodic deploy through syncing the `alpha-release` branch which distributes the build to TestFlight/Google Play Alpha-channel.
 
 ### Requirements
 
