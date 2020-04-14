@@ -9,7 +9,7 @@
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "postinstall": "patch-package",
-    "icons": "app-icon generate --platforms=android,ios --rounded none && app-icon generate --platforms=android --rounded only",
+    "icons": "app-icon generate --platforms=android,ios --rounded none && app-icon generate -i icon.round.png --platforms=android --rounded only",
     "release-draft": "sh tools/release/release-draft.sh"
   },
   "dependencies": {
