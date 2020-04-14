@@ -73,9 +73,8 @@ export default function DepartureDetails({navigation, route}: Props) {
       <ScreenHeader
         onClose={() => navigation.goBack()}
         iconElement={isBack ? <ChevronLeftIcon /> : undefined}
-      >
-        {title}
-      </ScreenHeader>
+        title={title}
+      />
       {content}
     </View>
   );
