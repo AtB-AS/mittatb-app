@@ -4,7 +4,6 @@ import {
   addFavorite,
   removeFavorite,
   updateFavorite,
-  deprecated__ensureFavoritesHasIds,
 } from './storage';
 import {UserFavorites, LocationFavorite} from './types';
 
@@ -22,7 +21,6 @@ const FavoritesContextProvider: React.FC = ({children}) => {
   const [favorites, setFavorites] = useState<UserFavorites>([]);
   async function populateFavorites() {
     let favorites = await getFavorites();
-    favorites = await deprecated__ensureFavoritesHasIds(favorites);
     setFavorites(favorites ?? []);
   }
 

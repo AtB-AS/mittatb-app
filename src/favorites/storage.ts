@@ -44,16 +44,3 @@ export async function updateFavorite(
   });
   return await setFavorites(favorites);
 }
-
-/*
-* @TODO: Function to migrate old favorites to new favorites - remove when reasonable
-* @deprecated
-*/
-export async function deprecated__ensureFavoritesHasIds(
-  favorites: UserFavorites | null,
-): Promise<UserFavorites | null> {
-  if (!favorites?.some(f => !f.id)) return favorites; // just return if there are no favorites missing id's
-  const favoritesWithIds = favorites?.map(f => (f.id ? f : {...f, id: uuid()}));
-  await setFavorites(favoritesWithIds);
-  return favoritesWithIds;
-}
