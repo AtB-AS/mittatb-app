@@ -20,13 +20,19 @@ export $(grep -v '^#' .env | gxargs -d '\n')
 
 echo "Setting BundleIdentifier in Info.plist to $IOS_BUNDLE_IDENTIFIER"
 /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $IOS_BUNDLE_IDENTIFIER" ./ios/atb/Info.plist
-echo "Adding Bugsnag API key to Info.plist"
+echo "Adding Bugsnag API key and release stage to Info.plist"
 /usr/libexec/PlistBuddy -c "Add :BugsnagAPIKey string $BUGSNAG_API_KEY" ./ios/atb/Info.plist
-echo "Adding Bugsnag API key to AndroidManifest.xml"
-xmlstarlet edit --inplace --omit-decl -s //manifest/application -t elem -n "bugsnagkey" \
+/usr/libexec/PlistBuddy -c "Add :BugsnagReleaseStage string $BUGSNAG_RELEASE_STAGE" ./ios/atb/Info.plist
+echo "Adding Bugsnag API key and release stage to AndroidManifest.xml"
+xmlstarlet edit --inplace --omit-decl \
+  -s //manifest/application -t elem -n "bugsnagkey" \
   -i //manifest/application/bugsnagkey -t attr -n "android:name" -v "com.bugsnag.android.API_KEY" \
   -i //manifest/application/bugsnagkey -t attr -n "android:value" -v "$BUGSNAG_API_KEY" \
   -r //manifest/application/bugsnagkey -v meta-data \
+  -s //manifest/application -t elem -n "bugsnagreleasestage" \
+  -i //manifest/application/bugsnagreleasestage -t attr -n "android:name" -v "com.bugsnag.android.RELEASE_STAGE" \
+  -i //manifest/application/bugsnagreleasestage -t attr -n "android:value" -v "$BUGSNAG_RELEASE_STAGE" \
+  -r //manifest/application/bugsnagreleasestage -v meta-data \
    android/app/src/main/AndroidManifest.xml
 
 echo "Install icon dependencies"

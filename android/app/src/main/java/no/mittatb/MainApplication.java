@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.bugsnag.BugsnagReactNative;
+import com.bugsnag.android.Configuration;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
@@ -57,8 +59,14 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
     try {
       ApplicationInfo ai = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
       Bundle bundle = ai.metaData;
-      if (bundle.containsKey("com.bugsnag.android.API_KEY")) {
-          BugsnagReactNative.start(this);
+      String bugsnagKey = bundle.getString("com.bugsnag.android.API_KEY");
+      if (!TextUtils.isEmpty(bugsnagKey)) {
+          Configuration config = new Configuration(bugsnagKey);
+          String bugsnagReleaseStage = bundle.getString("com.bugsnag.android.RELEASE_STAGE");
+          if (!TextUtils.isEmpty(bugsnagKey)) {
+              config.setReleaseStage(bugsnagReleaseStage);
+          }
+          BugsnagReactNative.startWithConfiguration(this, config);
       }
     } catch (Exception e) {
       e.printStackTrace();
