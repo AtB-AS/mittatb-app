@@ -36,18 +36,18 @@ type ClearItem = {clearItem: true};
 const __CLEAR_ITEM: ClearItem = {clearItem: true};
 
 const charFromUtf16 = (utf16: string) =>
-  String.fromCodePoint(...(utf16.split('-').map(u => '0x' + u) as any));
+  String.fromCodePoint(...(utf16.split('-').map((u) => '0x' + u) as any));
 export const charFromEmojiObject = (obj: Emoji) => charFromUtf16(obj.unified);
 const sortEmoji = (list: Emojis) =>
   list.sort((a, b) => a.sort_order - b.sort_order);
 const filterEmojiOnVersion = (src: Emojis, version?: string) => {
   if (!version) return src;
   const versionNumber = parseInt(version, 10);
-  return src.filter(emoji => parseInt(emoji.added_in, 10) <= versionNumber);
+  return src.filter((emoji) => parseInt(emoji.added_in, 10) <= versionNumber);
 };
 
 const emojiByCategory = (category: string) =>
-  emojiRawData.filter(e => e.category === category);
+  emojiRawData.filter((e) => e.category === category);
 const categoryKeys = Object.keys(Categories);
 
 type EmojiCellProps = {
@@ -179,9 +179,9 @@ class EmojiSelector extends Component<
       return [__CLEAR_ITEM, ...emojiList];
     }
 
-    return emojiList.filter(e => {
+    return emojiList.filter((e) => {
       let display = false;
-      e.short_names.forEach(name => {
+      e.short_names.forEach((name) => {
         if (name.includes(searchQuery.toLowerCase())) display = true;
       });
       return display;
@@ -199,7 +199,7 @@ class EmojiSelector extends Component<
         ),
       )
       .reduce((acc, item) => acc.concat(item), [])
-      .map(item => ({
+      .map((item) => ({
         ...item,
         renderedText: charFromEmojiObject(item),
       }));
@@ -298,7 +298,7 @@ function EmojiSelectorWrapper(props: EmojiSelectorProps) {
 
 export default EmojiSelectorWrapper;
 
-const useEmojiPopupStyle = StyleSheet.createThemeHook(theme => ({
+const useEmojiPopupStyle = StyleSheet.createThemeHook((theme) => ({
   frame: {
     flex: 1,
     width: '100%',

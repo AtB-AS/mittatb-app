@@ -35,16 +35,16 @@ export default function Profile({navigation}: ProfileScreenProps) {
 
   return (
     <SafeAreaView style={css.container}>
-      <Header>Mitt AtB</Header>
+      <Header title="Mitt AtB" />
 
       <ScrollView>
         <EditableListGroup
           title="Mine favorittsteder"
           data={items}
-          renderItem={item => (
+          renderItem={(item) => (
             <Item item={item} onEdit={() => navigateToEdit(item)} />
           )}
-          keyExtractor={item => item.name + item.location.id}
+          keyExtractor={(item) => item.name + item.location.id}
           renderAddButtonComponent={() => (
             <AddFavoriteButton onPress={onAddButtonClick} />
           )}

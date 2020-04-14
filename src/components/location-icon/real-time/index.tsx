@@ -73,7 +73,7 @@ function InnerIcon({mode}: TransportationIconProps) {
   }
 }
 
-const useStyle = StyleSheet.createThemeHook(theme => ({
+const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     width: 28,
     height: 28,

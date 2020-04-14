@@ -33,7 +33,7 @@ const LocationIcon = ({
       if (!venueIconTypes.length) return <MapPointIcon {...svgProps} />;
 
       return multiple ? (
-        <>{venueIconTypes.map(it => mapTypeToIconComponent(it, svgProps))}</>
+        <>{venueIconTypes.map((it) => mapTypeToIconComponent(it, svgProps))}</>
       ) : (
         mapTypeToIconComponent(venueIconTypes[0], svgProps)
       );

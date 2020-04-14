@@ -49,7 +49,7 @@ const LocationRow: React.FC<{
   );
 };
 
-const useLocationRowStyle = StyleSheet.createThemeHook(theme => ({
+const useLocationRowStyle = StyleSheet.createThemeHook((theme) => ({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',

@@ -8,23 +8,20 @@ import colors from '../theme/colors';
 export type MessageBoxProps = {
   icon?: React.ReactNode;
   type?: 'info' | 'warning';
+  message?: string;
   containerStyle: StyleProp<ViewStyle>;
 };
 
 const MessageBox: React.FC<MessageBoxProps> = ({
   icon,
   type = 'info',
+  message,
   children,
   containerStyle,
 }) => {
   const styles = useBoxStyle();
   const iconElement = icon ?? type === 'info' ? <InfoIcon /> : <WarningIcon />;
-  const child =
-    typeof children === 'string' ? (
-      <Text style={styles.text}>{children}</Text>
-    ) : (
-      children
-    );
+  const child = message ? <Text style={styles.text}>{message}</Text> : children;
   const backgroundColor = typeToColor(type);
 
   return (
@@ -37,7 +34,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({
 
 export default MessageBox;
 
-const useBoxStyle = StyleSheet.createThemeHook(theme => ({
+const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     paddingVertical: 8,
