@@ -44,7 +44,7 @@ type Props = {
   navigation: DetailScreenNavigationProp;
 };
 
-const TripDetailsModal: React.FC<Props> = props => {
+const TripDetailsModal: React.FC<Props> = (props) => {
   const styles = useDetailsStyle();
   const {
     params: {tripPattern},
@@ -54,7 +54,7 @@ const TripDetailsModal: React.FC<Props> = props => {
 
   return (
     <View style={styles.container}>
-      <Header onClose={() => props.navigation.goBack()}>Reisedetaljer</Header>
+      <Header onClose={() => props.navigation.goBack()} title="Reisedetaljer" />
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
@@ -86,9 +86,10 @@ const DetailsContent: React.FC<Props> = ({route}) => {
   return (
     <>
       {shortTime && (
-        <MessageBox containerStyle={styles.messageContainer}>
-          Vær oppmerksom på kort byttetid.
-        </MessageBox>
+        <MessageBox
+          containerStyle={styles.messageContainer}
+          message="Vær oppmerksom på kort byttetid."
+        />
       )}
       <LocationRow
         icon={
@@ -131,7 +132,7 @@ function getLocationIcon(
     case 'favorite':
       return (
         <FavoriteIcon
-          favorite={favorites.find(f => f.id === location.favoriteId)}
+          favorite={favorites.find((f) => f.id === location.favoriteId)}
         />
       );
     case 'search':
@@ -168,7 +169,7 @@ export type LegDetailProps = {
   showTo: boolean;
 };
 
-const LegDetail: React.FC<LegDetailProps> = props => {
+const LegDetail: React.FC<LegDetailProps> = (props) => {
   const {leg} = props;
   switch (leg.mode) {
     case 'foot':
@@ -178,7 +179,7 @@ const LegDetail: React.FC<LegDetailProps> = props => {
   }
 };
 
-const useDetailsStyle = StyleSheet.createThemeHook(theme => ({
+const useDetailsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.background.modal_Level2,

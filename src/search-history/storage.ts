@@ -45,5 +45,5 @@ function removeExistingEntry(
   history: SearchHistory,
   entry: SearchHistoryEntry,
 ) {
-  return history.filter(item => item.id !== entry.id);
+  return history.filter((item) => item.id !== entry.id);
 }

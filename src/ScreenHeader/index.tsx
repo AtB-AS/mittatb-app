@@ -8,12 +8,13 @@ import CancelCrossIcon from '../assets/svg/CancelCrossIcon';
 type ScreenHeaderProps = {
   onClose?(): void;
   iconElement?: React.ReactNode;
+  title: string;
 };
 
 const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   onClose,
   iconElement,
-  children,
+  title,
 }) => {
   const css = useHeaderStyle();
   const defaultIcon = onClose ? <CancelCrossIcon /> : <LogoOutline />;
@@ -39,14 +40,14 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
     <View style={css.container}>
       {icon}
       <View style={css.textContainer}>
-        <Text style={css.text}>{children}</Text>
+        <Text style={css.text}>{title}</Text>
       </View>
     </View>
   );
 };
 export default ScreenHeader;
 
-const useHeaderStyle = StyleSheet.createThemeHook(theme => ({
+const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     padding: theme.sizes.pagePadding,

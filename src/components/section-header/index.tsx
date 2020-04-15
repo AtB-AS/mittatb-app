@@ -18,7 +18,7 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
     </View>
   );
 };
-const useProfileStyle = StyleSheet.createThemeHook(theme => ({
+const useProfileStyle = StyleSheet.createThemeHook((theme) => ({
   header: {
     flexDirection: 'row',
   },

@@ -35,7 +35,7 @@ const SearchButton: React.FC<ResultItemProps> = ({
 
 export default SearchButton;
 
-const useThemeStyles = StyleSheet.createThemeHook(theme => ({
+const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   buttonContainer: {
     flexDirection: 'column',
     alignItems: 'center',

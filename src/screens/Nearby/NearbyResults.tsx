@@ -40,7 +40,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
       renderItem={({item}) => (
         <NearbyResultItem departure={item} onPress={onPress} />
       )}
-      keyExtractor={departure =>
+      keyExtractor={(departure) =>
         departure.quay?.id + departure.serviceJourney.id
       }
       refreshControl={
@@ -49,7 +49,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
     />
   );
 };
-const useResultsStyle = StyleSheet.createThemeHook(theme => ({
+const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     padding: theme.sizes.pagePadding,
   },
@@ -91,7 +91,7 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = ({
   );
 };
 
-const useResultItemStyles = StyleSheet.createThemeHook(theme => ({
+const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'flex-start',

@@ -14,12 +14,13 @@ type ButtonProps = {
   mode?: 'primary' | 'destructive' | 'secondary';
   textContainerStyle?: StyleProp<ViewStyle>;
   IconComponent?: React.ElementType;
+  text: string;
 } & TouchableOpacityProperties;
 const Button: React.FC<ButtonProps> = ({
   onPress,
   mode = 'primary',
   IconComponent,
-  children,
+  text,
   disabled,
   style,
   textContainerStyle,
@@ -45,7 +46,7 @@ const Button: React.FC<ButtonProps> = ({
       >
         {IconComponent && <IconComponent />}
         <View style={[css.textContainer, textContainerStyle]}>
-          <Text style={styleText}>{children}</Text>
+          <Text style={styleText}>{text}</Text>
         </View>
       </TouchableOpacity>
     </View>

@@ -12,9 +12,9 @@ type StorageModel = {
 const legacyStorage = new LegacyStorage();
 
 const storage = AsyncStorageFactory.create<StorageModel>(legacyStorage, {
-  errorHandler: error =>
+  errorHandler: (error) =>
     bugsnag.notify(typeof error === 'string' ? new Error(error) : error),
-  logger: action =>
+  logger: (action) =>
     bugsnag.leaveBreadcrumb('storage_action', {
       action: action.action,
       key: Array.isArray(action.key) ? action.key.join(',') : action.key,

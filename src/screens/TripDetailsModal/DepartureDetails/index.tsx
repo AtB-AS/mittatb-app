@@ -73,9 +73,8 @@ export default function DepartureDetails({navigation, route}: Props) {
       <ScreenHeader
         onClose={() => navigation.goBack()}
         iconElement={isBack ? <ChevronLeftIcon /> : undefined}
-      >
-        {title}
-      </ScreenHeader>
+        title={title}
+      />
       {content}
     </View>
   );
@@ -195,7 +194,7 @@ function CollapseButtonRow({
     </TouchableOpacity>
   );
 }
-const useCollapseButtonStyle = StyleSheet.createThemeHook(theme => ({
+const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.background.modal_Level2,
     flexDirection: 'row',
@@ -207,7 +206,7 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook(theme => ({
   },
 }));
 
-const useStopsStyle = StyleSheet.createThemeHook(theme => ({
+const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.background.modal_Level2,

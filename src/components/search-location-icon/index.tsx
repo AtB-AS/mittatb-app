@@ -19,7 +19,7 @@ export default function SearchLocationIcon({
     case 'favorite':
       return (
         <FavoriteIcon
-          favorite={favorites.find(f => f.id === location.favoriteId)}
+          favorite={favorites.find((f) => f.id === location.favoriteId)}
         />
       );
     case 'search':

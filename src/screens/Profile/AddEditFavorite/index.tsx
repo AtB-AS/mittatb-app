@@ -107,9 +107,11 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
   return (
     <SafeAreaView style={css.container}>
-      <ScreenHeader onClose={cancel} iconElement={<ChevronLeftIcon />}>
-        Legg til favorittsted
-      </ScreenHeader>
+      <ScreenHeader
+        onClose={cancel}
+        iconElement={<ChevronLeftIcon />}
+        title="Legg til favorittsted"
+      />
       <EmojiPopup
         onClose={() => setEmojiVisible(false)}
         open={isEmojiVisible}
@@ -174,27 +176,24 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           onPress={save}
           IconComponent={SaveDisketteIcon}
           disabled={!hasSelectedValues}
-        >
-          Lagre favorittsted
-        </Button>
+          text="Lagre favorittsted"
+        />
 
         {editItem && (
           <Button
             onPress={deleteItem}
             mode="destructive"
             IconComponent={DeleteTrashCanIcon}
-          >
-            Slett favorittsted
-          </Button>
+            text="Slett favorittsted"
+          />
         )}
 
         <Button
           onPress={cancel}
           mode="secondary"
           IconComponent={CancelCrossIcon}
-        >
-          Avbryt
-        </Button>
+          text="Avbryt"
+        />
       </View>
     </SafeAreaView>
   );
@@ -272,7 +271,7 @@ const SymbolPicker: React.FC<SymbolPickerProps> = ({onPress, value}) => {
     </TouchableOpacity>
   );
 };
-const useSymbolPickerStyle = StyleSheet.createThemeHook(theme => ({
+const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     padding: 12,
     flexDirection: 'row',

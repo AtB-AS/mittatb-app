@@ -28,7 +28,7 @@ export async function addFavorite(
 
 export async function removeFavorite(id: string): Promise<UserFavorites> {
   let favorites = (await getFavorites()) ?? [];
-  favorites = favorites.filter(item => item.id !== id);
+  favorites = favorites.filter((item) => item.id !== id);
   return await setFavorites(favorites);
 }
 
@@ -36,7 +36,7 @@ export async function updateFavorite(
   favorite: LocationFavorite,
 ): Promise<UserFavorites> {
   let favorites = (await getFavorites()) ?? [];
-  favorites = favorites.map(item => {
+  favorites = favorites.map((item) => {
     if (item.id !== favorite.id) {
       return item;
     }

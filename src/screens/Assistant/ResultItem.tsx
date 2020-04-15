@@ -27,7 +27,7 @@ const ResultItem: React.FC<ResultItemProps> = ({
 
   let [firstLeg, secondLeg, ...restLegs] = tripPattern.legs;
   const transferCount = restLegs.filter(
-    l => l.mode !== 'foot' && l.mode !== 'bicycle',
+    (l) => l.mode !== 'foot' && l.mode !== 'bicycle',
   ).length;
 
   const firstLegIsOnFoot = firstLeg && firstLeg.mode === 'foot';
@@ -73,7 +73,7 @@ const ResultItem: React.FC<ResultItemProps> = ({
   );
 };
 
-const useThemeStyles = StyleSheet.createThemeHook(theme => ({
+const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   legContainer: {
     flexDirection: 'column',
     alignItems: 'center',
@@ -119,7 +119,7 @@ const FootLeg = ({leg}: {leg: Leg}) => {
   );
 };
 
-const useFootLegStyles = StyleSheet.createThemeHook(theme => ({
+const useFootLegStyles = StyleSheet.createThemeHook((theme) => ({
   legContainer: {flexDirection: 'row', paddingVertical: 4},
   walkingPerson: {
     backgroundColor: theme.text.primary,
@@ -154,7 +154,7 @@ const HighlightedLeg = ({leg}: {leg: Leg}) => {
   }
 };
 
-const useHighlighetedLegStyles = StyleSheet.createThemeHook(theme => ({
+const useHighlighetedLegStyles = StyleSheet.createThemeHook((theme) => ({
   stopName: {
     fontSize: 16,
     color: theme.text.primary,
