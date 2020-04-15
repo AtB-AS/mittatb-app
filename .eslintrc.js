@@ -11,7 +11,7 @@ module.exports = {
   plugins: ['@typescript-eslint', 'react-hooks', 'react-native'],
   rules: {
     // eslint
-    'no-console': 1,
+    'no-console': [1, {allow: ['warn', 'error']}],
     'no-fallthrough': 2,
 
     // React-Hooks Plugin

@@ -42,7 +42,6 @@ function responseErrorHandler(error: AxiosError) {
     case ErrorType.Timeout:
       // This happens all the time in mobile apps,
       // so will be a lot of noise if we choose to report these
-      // eslint-disable-next-line
       console.warn(errorType, error);
       break;
   }

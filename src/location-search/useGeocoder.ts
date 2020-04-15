@@ -31,7 +31,6 @@ export function useGeocoder(
           const response = await autocomplete(text, location);
           setLocations(response?.data?.map(mapFeatureToLocation));
         } catch (err) {
-          // eslint-disable-next-line
           console.warn(err);
           setLocations(null);
         }
@@ -55,7 +54,6 @@ export function useReverseGeocoder(location: GeolocationResponse | null) {
 
           setLocations(response?.data?.map(mapFeatureToLocation));
         } catch (err) {
-          // eslint-disable-next-line
           console.warn(err);
           setLocations(null);
         }
