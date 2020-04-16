@@ -12,7 +12,7 @@
 
 USER=AtB-AS
 
-build_url=https://appcenter.ms/users/$USER/apps/$APP_NAME/build/branches/$APPCENTER_BRANCH/builds/$BUILD_BUILDNUMBER
+build_url=https://appcenter.ms/users/$USER/apps/$APP_NAME/build/branches/$APPCENTER_BRANCH/builds/$BUILD_BUILDID
 
 github_set_status() {
     local status job_status
