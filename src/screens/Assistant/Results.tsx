@@ -89,7 +89,7 @@ const Results: React.FC<Props> = ({
           ref={viewPagerRef}
           style={styles.viewPager}
           initialPage={0}
-          onPageScrollStateChanged={ev => {
+          onPageScrollStateChanged={(ev) => {
             switch (ev.nativeEvent.pageScrollState) {
               case 'dragging':
                 disablePaging(true);
@@ -135,7 +135,7 @@ const useArrowFill = (theme: Theme) => ({
   disabled: hexToRgba(theme.text.primary, 0.2),
 });
 
-const useThemeStyles = StyleSheet.createTheme(theme => ({
+const useThemeStyles = StyleSheet.createTheme((theme) => ({
   container: {
     flexDirection: 'row',
     justifyContent: 'center',

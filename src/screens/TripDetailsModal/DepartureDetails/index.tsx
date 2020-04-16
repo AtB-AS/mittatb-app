@@ -15,7 +15,7 @@ import {getDepartures} from '../../../api/serviceJourney';
 import UnfoldLess from './svg/UnfoldLess';
 import UnfoldMore from './svg/UnfoldMore';
 import ChevronLeftIcon from '../../../assets/svg/ChevronLeftIcon';
-import TransportationIcon from '../../../components/transportation-icon';
+import RealTimeLocationIcon from '../../../components/location-icon/real-time';
 import {getQuayName} from '../../../utils/transportation-names';
 
 export type DepartureDetailsRouteParams = {
@@ -73,9 +73,8 @@ export default function DepartureDetails({navigation, route}: Props) {
       <ScreenHeader
         onClose={() => navigation.goBack()}
         iconElement={isBack ? <ChevronLeftIcon /> : undefined}
-      >
-        {title}
-      </ScreenHeader>
+        title={title}
+      />
       {content}
     </View>
   );
@@ -136,7 +135,7 @@ function CallGroup({type, calls}: CallGroupProps) {
             key={call.quay?.id + call.serviceJourney.id}
             icon={
               isStartPlace(i) ? (
-                <TransportationIcon
+                <RealTimeLocationIcon
                   mode={call.serviceJourney.journeyPattern?.line.transportMode}
                   isLive={call.realtime}
                 />
@@ -195,7 +194,7 @@ function CollapseButtonRow({
     </TouchableOpacity>
   );
 }
-const useCollapseButtonStyle = StyleSheet.createThemeHook(theme => ({
+const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.background.modal_Level2,
     flexDirection: 'row',
@@ -207,7 +206,7 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook(theme => ({
   },
 }));
 
-const useStopsStyle = StyleSheet.createThemeHook(theme => ({
+const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.background.modal_Level2,

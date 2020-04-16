@@ -28,7 +28,7 @@ export async function addFavorite(
 
 export async function removeFavorite(id: string): Promise<UserFavorites> {
   let favorites = (await getFavorites()) ?? [];
-  favorites = favorites.filter(item => item.id !== id);
+  favorites = favorites.filter((item) => item.id !== id);
   return await setFavorites(favorites);
 }
 
@@ -36,24 +36,11 @@ export async function updateFavorite(
   favorite: LocationFavorite,
 ): Promise<UserFavorites> {
   let favorites = (await getFavorites()) ?? [];
-  favorites = favorites.map(item => {
+  favorites = favorites.map((item) => {
     if (item.id !== favorite.id) {
       return item;
     }
     return favorite;
   });
   return await setFavorites(favorites);
-}
-
-/*
-* @TODO: Function to migrate old favorites to new favorites - remove when reasonable
-* @deprecated
-*/
-export async function deprecated__ensureFavoritesHasIds(
-  favorites: UserFavorites | null,
-): Promise<UserFavorites | null> {
-  if (!favorites?.some(f => !f.id)) return favorites; // just return if there are no favorites missing id's
-  const favoritesWithIds = favorites?.map(f => (f.id ? f : {...f, id: uuid()}));
-  await setFavorites(favoritesWithIds);
-  return favoritesWithIds;
 }

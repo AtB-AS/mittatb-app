@@ -13,7 +13,7 @@ export function sortNearestLocations(
   ...rest: Location[]
 ): SortedLocation[] {
   return rest
-    .map(location => ({
+    .map((location) => ({
       location,
       distance: haversine(current.coordinates, location.coordinates, options),
     }))

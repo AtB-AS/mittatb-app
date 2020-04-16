@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {StyleSheet} from '../theme';
 import {Location} from '../favorites/types';
-import LocationIcon from '../assets/svg/LocationIcon';
+import LocationIcon from '../components/location-icon';
 import ArrowUpLeft from '../assets/svg/ArrowUpLeft';
 
 type Props = {
@@ -27,7 +27,7 @@ const LocationResults: React.FC<Props> = ({
         <View style={styles.subBar} />
       </View>
       <View style={styles.list}>
-        {locations.map(location => (
+        {locations.map((location) => (
           <View style={styles.rowContainer} key={location.id}>
             <TouchableOpacity
               onPress={() => onSelect(location)}
@@ -60,7 +60,7 @@ const LocationResults: React.FC<Props> = ({
 
 export default LocationResults;
 
-const useThemeStyles = StyleSheet.createThemeHook(theme => ({
+const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   subHeader: {
     flexDirection: 'row',
   },

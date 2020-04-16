@@ -83,7 +83,7 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header>I nærheten</Header>
+      <Header title="I nærheten" />
       <SharedElement id="locationSearchInput">
         <SearchButton
           title="Fra"
@@ -103,7 +103,7 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
   );
 };
 
-const useThemeStyles = StyleSheet.createThemeHook(theme => ({
+const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.background.primary,
     paddingBottom: 0,

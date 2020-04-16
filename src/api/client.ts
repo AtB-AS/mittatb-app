@@ -26,7 +26,7 @@ function responseErrorHandler(error: AxiosError) {
   switch (errorType) {
     case ErrorType.Normal:
       const errorMetadata = getAxiosErrorMetadata(error);
-      bugsnag.notify(error, report => {
+      bugsnag.notify(error, (report) => {
         report.metadata = {
           ...report.metadata,
           api: {
@@ -34,13 +34,16 @@ function responseErrorHandler(error: AxiosError) {
           },
         };
       });
+      break;
     case ErrorType.Unknown:
       bugsnag.notify(error);
+      break;
     case ErrorType.NetworkError:
     case ErrorType.Timeout:
       // This happens all the time in mobile apps,
       // so will be a lot of noise if we choose to report these
       console.warn(errorType, error);
+      break;
   }
 
   return Promise.reject(error);

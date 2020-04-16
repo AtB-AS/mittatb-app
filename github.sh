@@ -12,18 +12,24 @@
 
 USER=AtB-AS
 
-build_url=https://appcenter.ms/users/$USER/apps/$APP_NAME/build/branches/$APPCENTER_BRANCH/builds/$APPCENTER_BUILD_ID
+build_url=https://appcenter.ms/users/$USER/apps/$APP_NAME/build/branches/$APPCENTER_BRANCH/builds/$BUILD_BUILDNUMBER
 
 github_set_status() {
     local status job_status
     local "${@}"
+
+    if [ -z "$APPCENTER_ANDROID_VARIANT" ]; then
+      tag_name="ios"
+    else
+      tag_name="android"
+    fi
 
     curl -X POST https://api.github.com/repos/$USER/$BUILD_REPOSITORY_NAME/statuses/$BUILD_SOURCEVERSION -d \
         "{
             \"state\": \"$status\", 
             \"target_url\": \"$build_url\",
             \"description\": \"[BuildID: $APPCENTER_BUILD_ID] The build status is: $job_status!\",
-            \"context\": \"continuous-integration/appcenter\"
+            \"context\": \"ci/app-$tag_name\"
         }" \
         -H "Authorization: token $GITHUB_TOKEN" \
         -H "Accept: application/vnd.github.v3.raw+json"
@@ -44,34 +50,19 @@ github_set_status_fail() {
 github_set_tag() {
 
   if [ -z "$APPCENTER_ANDROID_VARIANT" ]; then
-    tag_name="ios-$APPCENTER_BUILD_ID"
+    tag_name="alpha-ios-$APPCENTER_BUILD_ID"
   else
-    tag_name="android-$APPCENTER_BUILD_ID"
+    tag_name="alpha-android-$APPCENTER_BUILD_ID"
   fi
 
-  message=$(git show -s --format=%B $BUILD_SOURCEVERSION | cat)
-  sha=$(git rev-parse $BUILD_SOURCEVERSION^)
-
-  curl -X POST https://api.github.com/repos/$USER/$BUILD_REPOSITORY_NAME/git/tags -d \
-        "{
-            \"tag\": \"$tag_name\",
-            \"message\": \"### Release: [$tag_name]($build_url)\n\n$message\n\",
-            \"object\": \"$sha\",
-            \"type\": \"commit\",
-            \"tagger\": {
-              \"name\": \"atb-bot\",
-              \"email\": \"utviklere@mittatb.no\",
-              \"date\": \"$(date --utc +%FT%TZ)\",
-            }
-        }" \
-        -H "Authorization: token $GITHUB_TOKEN" \
-        -H "Accept: application/vnd.github.v3.raw+json"
-
+  sha=$(git rev-parse $BUILD_SOURCEVERSION^2)
+  
   curl -X POST https://api.github.com/repos/$USER/$BUILD_REPOSITORY_NAME/git/refs -d \
         "{
             \"ref\": \"refs/tags/$tag_name\",
-            \"sha\": \"$sha\",
+            \"sha\": \"$sha\"
         }" \
+        -H "Content-Type: application/json" \
         -H "Authorization: token $GITHUB_TOKEN" \
         -H "Accept: application/vnd.github.v3.raw+json"
 }

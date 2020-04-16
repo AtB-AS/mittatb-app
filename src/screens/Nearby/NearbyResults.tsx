@@ -1,7 +1,7 @@
 import React from 'react';
 import {RefreshControl, Text, View} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
-import TransportationIcon from '../../components/transportation-icon';
+import RealTimeLocationIcon from '../../components/location-icon/real-time';
 import {EstimatedCall} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {formatToClock} from '../../utils/date';
@@ -40,7 +40,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
       renderItem={({item}) => (
         <NearbyResultItem departure={item} onPress={onPress} />
       )}
-      keyExtractor={departure =>
+      keyExtractor={(departure) =>
         departure.quay?.id + departure.serviceJourney.id
       }
       refreshControl={
@@ -49,7 +49,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
     />
   );
 };
-const useResultsStyle = StyleSheet.createThemeHook(theme => ({
+const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     padding: theme.sizes.pagePadding,
   },
@@ -75,7 +75,7 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = ({
       <Text style={styles.time}>
         {formatToClock(departure.aimedDepartureTime)}
       </Text>
-      <TransportationIcon
+      <RealTimeLocationIcon
         mode={departure.serviceJourney.journeyPattern?.line.transportMode}
         isLive={departure.realtime}
       />
@@ -91,7 +91,7 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = ({
   );
 };
 
-const useResultItemStyles = StyleSheet.createThemeHook(theme => ({
+const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'flex-start',

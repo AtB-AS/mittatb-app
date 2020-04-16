@@ -98,15 +98,6 @@ const styles = StyleSheet.create({
   svg: {
     opacity: 0.2,
   },
-  bulletList: {},
-  bulletListItem: {
-    flexDirection: 'row',
-    marginBottom: 24,
-  },
-  bulletListText: {
-    fontSize: 17,
-    color: colors.general.white,
-  },
   buttonContainer: {
     width: '100%',
     position: 'absolute',

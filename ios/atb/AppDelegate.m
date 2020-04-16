@@ -5,6 +5,7 @@
 #import <React/RCTRootView.h>
 
 #import <BugsnagReactNative.h>
+#import <BugsnagConfiguration.h>
 #import <Firebase.h>
 
 #if DEBUG
@@ -34,7 +35,12 @@ static void InitializeFlipper(UIApplication *application) {
   #endif
   NSString* bugsnagApiKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"BugsnagAPIKey"];
   if (bugsnagApiKey != nil) {
-      [BugsnagReactNative start];
+    BugsnagConfiguration *config = [BugsnagConfiguration new];
+    config.apiKey = bugsnagApiKey;
+    NSString* bugsnagReleaseStage = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"BugsnagReleaseStage"];
+    if (bugsnagReleaseStage != nil)
+      config.releaseStage = bugsnagReleaseStage;
+    [BugsnagReactNative startWithConfiguration:config];
   }
   
   if ([FIRApp defaultApp] == nil) {

@@ -1,11 +1,11 @@
 import React from 'react';
-import MapPointIcon from './MapPointIcon';
-import BusFront from './BusFront';
+import MapPointIcon from '../../assets/svg/MapPointIcon';
+import BusFront from './svg/BusFront';
 import {Location} from '../../favorites/types';
-import TramFront from './TramFront';
-import TrainFront from './TrainFront';
-import BoatFront from './BoatFront';
-import Plane from './Plane';
+import TramFront from './svg/TramFront';
+import TrainFront from './svg/TrainFront';
+import BoatFront from './svg/BoatFront';
+import PlaneFront from './svg/PlaneFront';
 import {Category} from '../../sdk';
 import {SvgProps} from 'react-native-svg';
 
@@ -33,7 +33,7 @@ const LocationIcon = ({
       if (!venueIconTypes.length) return <MapPointIcon {...svgProps} />;
 
       return multiple ? (
-        <>{venueIconTypes.map(it => mapTypeToIconComponent(it, svgProps))}</>
+        <>{venueIconTypes.map((it) => mapTypeToIconComponent(it, svgProps))}</>
       ) : (
         mapTypeToIconComponent(venueIconTypes[0], svgProps)
       );
@@ -55,7 +55,7 @@ const mapTypeToIconComponent = (
     case 'rail':
       return <TrainFront key="rail" {...svgProps} height={20} />;
     case 'airport':
-      return <Plane key="airport" {...svgProps} height={16} />;
+      return <PlaneFront key="airport" {...svgProps} height={16} />;
     case 'boat':
       return <BoatFront key="boat" {...svgProps} height={16} />;
     case 'unknown':

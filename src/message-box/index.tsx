@@ -5,26 +5,28 @@ import WarningIcon from './svg/WarningIcon';
 import {StyleSheet} from '../theme';
 import colors from '../theme/colors';
 
+type WithMessage = {message: string; children?: never};
+type WithChildren = {
+  message?: never;
+  children: React.ReactNode;
+};
+
 export type MessageBoxProps = {
   icon?: React.ReactNode;
   type?: 'info' | 'warning';
   containerStyle: StyleProp<ViewStyle>;
-};
+} & (WithMessage | WithChildren);
 
 const MessageBox: React.FC<MessageBoxProps> = ({
   icon,
   type = 'info',
-  children,
   containerStyle,
+  message,
+  children,
 }) => {
   const styles = useBoxStyle();
   const iconElement = icon ?? type === 'info' ? <InfoIcon /> : <WarningIcon />;
-  const child =
-    typeof children === 'string' ? (
-      <Text style={styles.text}>{children}</Text>
-    ) : (
-      children
-    );
+  const child = message ? <Text style={styles.text}>{message}</Text> : children;
   const backgroundColor = typeToColor(type);
 
   return (
@@ -37,7 +39,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({
 
 export default MessageBox;
 
-const useBoxStyle = StyleSheet.createThemeHook(theme => ({
+const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     paddingVertical: 8,

@@ -81,7 +81,7 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header>Reiseassistent</Header>
+      <Header title="Reiseassistent" />
       <SharedElement id="locationSearchInput">
         <SearchButton
           title="Fra"
@@ -95,7 +95,7 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
         tripPatterns={tripPatterns}
         isSearching={isSearching}
         navigation={navigation}
-        onDetailsPressed={tripPattern =>
+        onDetailsPressed={(tripPattern) =>
           navigation.navigate('TripDetailsModal', {
             from: from!,
             to: to!,
@@ -172,7 +172,7 @@ function useUpdatedLocation(
         return currentLocation ?? searchedLocation;
       case 'favorite':
         const favorite = favorites.find(
-          f => f.id === searchedLocation.favoriteId,
+          (f) => f.id === searchedLocation.favoriteId,
         );
 
         if (favorite) {
@@ -188,7 +188,7 @@ function useUpdatedLocation(
   }, [searchedLocation, currentLocation, favorites]);
 }
 
-const useThemeStyles = StyleSheet.createThemeHook(theme => ({
+const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.background.primary,
     flex: 1,

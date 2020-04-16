@@ -94,11 +94,11 @@ const GeolocationContextProvider: React.FC = ({children}) => {
       const config: GeolocationOptions = {enableHighAccuracy: true};
 
       const watchId = Geolocation.watchPosition(
-        location => dispatch({type: 'LOCATION_CHANGED', location}),
-        async err => {
+        (location) => dispatch({type: 'LOCATION_CHANGED', location}),
+        async (err) => {
           bugsnag.notify(
             new Error('Geolocation error: ' + err.message),
-            report => {
+            (report) => {
               report.metadata = {
                 ...report.metadata,
                 geolocation: {

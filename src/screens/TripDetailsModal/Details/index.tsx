@@ -18,7 +18,7 @@ import {LocationWithSearchMetadata} from '../../../location-search';
 import {UserFavorites} from '../../../favorites/types';
 import LocationArrow from '../../../assets/svg/LocationArrow';
 import {useFavorites} from '../../../favorites/FavoritesContext';
-import LocationIcon from '../../../assets/svg/LocationIcon';
+import LocationIcon from '../../../components/location-icon';
 import {FavoriteIcon} from '../../../favorites';
 
 // @TODO Firebase config?
@@ -44,7 +44,7 @@ type Props = {
   navigation: DetailScreenNavigationProp;
 };
 
-const TripDetailsModal: React.FC<Props> = props => {
+const TripDetailsModal: React.FC<Props> = (props) => {
   const styles = useDetailsStyle();
   const {
     params: {tripPattern},
@@ -54,7 +54,7 @@ const TripDetailsModal: React.FC<Props> = props => {
 
   return (
     <View style={styles.container}>
-      <Header onClose={() => props.navigation.goBack()}>Reisedetaljer</Header>
+      <Header onClose={() => props.navigation.goBack()} title="Reisedetaljer" />
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
@@ -86,9 +86,10 @@ const DetailsContent: React.FC<Props> = ({route}) => {
   return (
     <>
       {shortTime && (
-        <MessageBox containerStyle={styles.messageContainer}>
-          Vær oppmerksom på kort byttetid.
-        </MessageBox>
+        <MessageBox
+          containerStyle={styles.messageContainer}
+          message="Vær oppmerksom på kort byttetid."
+        />
       )}
       <LocationRow
         icon={
@@ -107,6 +108,8 @@ const DetailsContent: React.FC<Props> = ({route}) => {
           onCalculateTime={flagShortTime}
           nextLeg={nextLeg(i, legs)}
           isIntermediateTravelLeg={isIntermediateTravelLeg(i, legs)}
+          showFrom={showFrom(i, legs)}
+          showTo={showTo(i, legs)}
         />
       ))}
       <LocationRow
@@ -129,7 +132,7 @@ function getLocationIcon(
     case 'favorite':
       return (
         <FavoriteIcon
-          favorite={favorites.find(f => f.id === location.favoriteId)}
+          favorite={favorites.find((f) => f.id === location.favoriteId)}
         />
       );
     case 'search':
@@ -150,28 +153,33 @@ function isIntermediateTravelLeg(index: number, legs: Leg[]) {
   return true;
 }
 
+function showFrom(index: number, legs: Leg[]) {
+  return index > 0;
+}
+function showTo(index: number, legs: Leg[]) {
+  return index !== legs.length - 1;
+}
+
 export type LegDetailProps = {
   leg: Leg;
   onCalculateTime(timeInSeconds: number): void;
   nextLeg?: Leg;
   isIntermediateTravelLeg: boolean;
+  showFrom: boolean;
+  showTo: boolean;
 };
 
-const LegDetail: React.FC<LegDetailProps> = props => {
+const LegDetail: React.FC<LegDetailProps> = (props) => {
   const {leg} = props;
   switch (leg.mode) {
     case 'foot':
       return <WalkDetail {...props} />;
-    case 'bus':
-      return <TransportDetail {...props} />;
-    case 'tram':
-      return <TransportDetail {...props} />;
     default:
-      return <WalkDetail {...props} />;
+      return <TransportDetail {...props} />;
   }
 };
 
-const useDetailsStyle = StyleSheet.createThemeHook(theme => ({
+const useDetailsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.background.modal_Level2,

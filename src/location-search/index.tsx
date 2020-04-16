@@ -116,14 +116,13 @@ const LocationSearch: React.FC<Props> = ({
         </SharedElement>
       </View>
 
-      {!hasResults && (
-        <FavoriteChips
-          onSelectLocation={onSelect}
-          geolocation={geolocation}
-          hideFavorites={!!hideFavorites}
-          containerStyle={styles.contentBlock}
-        />
-      )}
+      <FavoriteChips
+        onSelectLocation={onSelect}
+        geolocation={geolocation}
+        hideFavorites={!!hideFavorites}
+        containerStyle={styles.contentBlock}
+      />
+
       {hasAnyResult ? (
         <ScrollView style={styles.contentBlock}>
           {hasPreviousResults && (
@@ -157,7 +156,7 @@ const filterPreviousLocations = (
   previousLocations: Location[],
 ): Location[] =>
   searchText
-    ? previousLocations.filter(l =>
+    ? previousLocations.filter((l) =>
         l.name?.toLowerCase()?.startsWith(searchText.toLowerCase()),
       )
     : previousLocations;
@@ -168,10 +167,12 @@ const filterCurrentLocation = (
 ): Location[] => {
   if (!previousLocations?.length) return locations ?? [];
   if (!locations) return [];
-  return locations.filter(l => !previousLocations.some(pl => pl.id === l.id));
+  return locations.filter(
+    (l) => !previousLocations.some((pl) => pl.id === l.id),
+  );
 };
 
-const useThemeStyles = StyleSheet.createThemeHook(theme => ({
+const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.background.secondary,
     flex: 1,
