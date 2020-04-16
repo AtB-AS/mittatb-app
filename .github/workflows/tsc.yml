@@ -1,5 +1,10 @@
 name: TypeScript Check
-on: push
+on:
+  push:
+    paths:
+      - '**.js'
+      - '**.ts'
+      - '**.tsx'
 
 jobs:
   tsc:
