@@ -48,16 +48,15 @@ const ResultItem: React.FC<ResultItemProps> = ({
       />
 
       <View style={styles.detailsContainer}>
-        {transferCount ? (
-          <>
-            <DetailDash count={2} />
-            <Text style={styles.transferText}>
-              {transferCount} bytte{transferCount > 1 ? 'r' : ''}
+        <DetailDash count={2} />
+        <Text style={styles.transferText}>
+          {transferCount ? (
+            <Text>
+              {transferCount} bytte{transferCount > 1 ? 'r' : ''} -{' '}
             </Text>
-          </>
-        ) : (
-          <DetailDash count={4} />
-        )}
+          ) : null}
+          <Text>Ankomst {formatToClock(tripPattern.endTime)}</Text>
+        </Text>
         {onDetailsPressed && (
           <TouchableOpacity
             style={{paddingVertical: 4}}
