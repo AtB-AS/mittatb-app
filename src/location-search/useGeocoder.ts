@@ -62,6 +62,7 @@ export function useReverseGeocoder(location: GeolocationResponse | null) {
           const response = await reverse(location, {
             cancelToken: source.token,
           });
+          source.token.throwIfRequested();
 
           setLocations(response?.data?.map(mapFeatureToLocation));
         } catch (err) {
