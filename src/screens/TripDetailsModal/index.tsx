@@ -3,14 +3,12 @@ import Details, {DetailsRouteParams, DetailScreenRouteProp} from './Details';
 import {
   createStackNavigator,
   StackNavigationProp,
-  TransitionPresets,
 } from '@react-navigation/stack';
 import DepartureDetails, {
   DepartureDetailsRouteParams,
 } from './DepartureDetails';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../navigation';
-import {Platform} from 'react-native';
 
 export type DetailsModalStackParams = {
   Details: DetailsRouteParams;
@@ -38,13 +36,7 @@ const TripDetailsRoot = ({route}: TripDetailsRootProps) => {
         component={Details}
         initialParams={route.params}
       />
-      <Stack.Screen
-        name="DepartureDetails"
-        component={DepartureDetails}
-        options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}
-      />
+      <Stack.Screen name="DepartureDetails" component={DepartureDetails} />
     </Stack.Navigator>
   );
 };
