@@ -216,13 +216,14 @@ function useTripPatterns(
         const response = await searchTrip(fromLocation, toLocation, {
           cancelToken: source.token,
         });
+        source.token.throwIfRequested();
         setTripPatterns(response.data);
         setIsSearching(false);
       } catch (e) {
         if (!isCancel(e)) {
+          console.warn(e);
           setTripPatterns(null);
           setIsSearching(false);
-          throw e;
         }
       }
     }
