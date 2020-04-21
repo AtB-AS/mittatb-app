@@ -3,6 +3,7 @@ import {GeolocationResponse} from '@react-native-community/geolocation';
 import {Feature} from '../sdk';
 import {autocomplete, reverse} from '../api';
 import {Location} from '../favorites/types';
+import {CancelToken, isCancel} from '../api/client';
 
 const BOUNDARY_FILTER = () => {
   const filter = {
@@ -23,21 +24,27 @@ export function useGeocoder(
   const [locations, setLocations] = useState<Location[] | null>(null);
 
   useEffect(() => {
+    const source = CancelToken.source();
     async function textLookup() {
       if (!text || text.length < 4) {
         setLocations(null);
       } else {
         try {
-          const response = await autocomplete(text, location);
+          const response = await autocomplete(text, location, {
+            cancelToken: source.token,
+          });
           setLocations(response?.data?.map(mapFeatureToLocation));
         } catch (err) {
-          console.warn(err);
+          if (!isCancel(err)) {
+            console.warn(err);
+          }
           setLocations(null);
         }
       }
     }
 
     textLookup();
+    return () => source.cancel('Cancelling previous autocomplete');
   }, [location, text]);
 
   return locations;
@@ -47,14 +54,19 @@ export function useReverseGeocoder(location: GeolocationResponse | null) {
   const [locations, setLocations] = useState<Location[] | null>(null);
 
   useEffect(() => {
+    const source = CancelToken.source();
     async function reverseCoordLookup() {
       if (location && location.coords) {
         try {
-          const response = await reverse(location);
+          const response = await reverse(location, {
+            cancelToken: source.token,
+          });
 
           setLocations(response?.data?.map(mapFeatureToLocation));
         } catch (err) {
-          console.warn(err);
+          if (!isCancel(err)) {
+            console.warn(err);
+          }
           setLocations(null);
         }
       } else {
@@ -63,6 +75,7 @@ export function useReverseGeocoder(location: GeolocationResponse | null) {
     }
 
     reverseCoordLookup();
+    return () => source.cancel('Cancelling previous reverse');
   }, [location]);
 
   return locations;

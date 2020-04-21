@@ -21,6 +21,7 @@ import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import SearchButton from '../../components/search-button';
 import SearchLocationIcon from '../../components/search-location-icon';
 import {useFavorites} from '../../favorites/FavoritesContext';
+import {CancelToken, isCancel} from '../../api/client';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -204,19 +205,33 @@ function useTripPatterns(
   const [isSearching, setIsSearching] = useState(false);
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
 
-  async function search() {
-    if (!fromLocation || !toLocation) return;
-    setIsSearching(true);
-    try {
-      const response = await searchTrip(fromLocation, toLocation);
-      setTripPatterns(response.data);
-    } finally {
-      setIsSearching(false);
-    }
-  }
-
   useEffect(() => {
+    const source = CancelToken.source();
+
+    async function search() {
+      if (!fromLocation || !toLocation) return;
+
+      setIsSearching(true);
+      try {
+        const response = await searchTrip(fromLocation, toLocation, {
+          cancelToken: source.token,
+        });
+        setTripPatterns(response.data);
+        setIsSearching(false);
+      } catch (e) {
+        if (!isCancel(e)) {
+          setTripPatterns(null);
+          setIsSearching(false);
+          throw e;
+        }
+      }
+    }
+
     search();
+    return () => {
+      if (!fromLocation || !toLocation) return;
+      source.cancel('New search to replace previous search');
+    };
   }, [fromLocation, toLocation]);
 
   return [tripPatterns, isSearching];
