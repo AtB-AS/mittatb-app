@@ -10,7 +10,6 @@ import DepartureDetails, {
 } from './DepartureDetails';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../navigation';
-import {Platform} from 'react-native';
 
 export type DetailsModalStackParams = {
   Details: DetailsRouteParams;
