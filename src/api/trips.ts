@@ -9,8 +9,6 @@ export default async function search(
   opts?: AxiosRequestConfig,
 ) {
   const url = 'v1/journey/trip';
-  const {coordinates: fromCoordinates} = from;
-  const {coordinates: toCoordinates} = to;
   const client = await getClient();
   return await client.post<TripPattern[]>(
     url,
@@ -18,12 +16,12 @@ export default async function search(
       from: {
         place: from.id,
         name: from.name,
-        coordinates: fromCoordinates,
+        coordinates: from.coordinates,
       },
       to: {
         place: to.id,
         name: to.name,
-        coordinates: toCoordinates,
+        coordinates: to.coordinates,
       },
     },
     opts,
