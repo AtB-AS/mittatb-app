@@ -33,6 +33,7 @@ export function useGeocoder(
           const response = await autocomplete(text, location, {
             cancelToken: source.token,
           });
+          source.token.throwIfRequested();
           setLocations(response?.data?.map(mapFeatureToLocation));
         } catch (err) {
           if (!isCancel(err)) {
