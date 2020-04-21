@@ -1,0 +1,24 @@
+diff --git a/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenContainer.java b/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenContainer.java
+index 73a6dbd..c1c05bd 100644
+--- a/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenContainer.java
++++ b/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenContainer.java
+@@ -237,7 +237,7 @@ public class ScreenContainer<T extends ScreenFragment> extends ViewGroup {
+     FragmentTransaction transaction = mFragmentManager.beginTransaction();
+     boolean hasFragments = false;
+     for (Fragment fragment : mFragmentManager.getFragments()) {
+-      if (fragment instanceof ScreenFragment) {
++      if (fragment instanceof ScreenFragment && ((ScreenFragment) fragment).mScreenView.getContainer() == this) {
+         transaction.remove(fragment);
+         hasFragments = true;
+       }
+@@ -293,7 +293,9 @@ public class ScreenContainer<T extends ScreenFragment> extends ViewGroup {
+       Object[] orphanedAry = orphaned.toArray();
+       for (int i = 0; i < orphanedAry.length; i++) {
+         if (orphanedAry[i] instanceof ScreenFragment) {
+-          detachScreen((ScreenFragment) orphanedAry[i]);
++          if (((ScreenFragment) orphanedAry[i]).getScreen().getContainer() == null) {
++            detachScreen((ScreenFragment) orphanedAry[i]);
++          }
+         }
+       }
+     }
