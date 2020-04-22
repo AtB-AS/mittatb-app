@@ -127,11 +127,15 @@ function WaitRow({onCalculateTime, currentLeg, nextLeg}: WaitRowProps) {
   return (
     <View style={waitStyles.container}>
       <View style={waitStyles.textContainer}>
-        <Text style={waitStyles.text}>{secondsToDuration(time, nb)}</Text>
+        <Text style={waitStyles.text}>{formatTime(time)}</Text>
       </View>
       <WaitClockIcon fill={colors.general.gray200} />
     </View>
   );
+}
+function formatTime(time: number) {
+  // Show 'minutter' -> 'min'. Found no way to do this through date-fns.
+  return secondsToDuration(time, nb).replace('utter', '').replace('utt', '');
 }
 const waitStyles = StyleSheet.create({
   container: {
