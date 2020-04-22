@@ -13,7 +13,7 @@ import {useNavigation} from '@react-navigation/native';
 import {NearbyScreenNavigationProp} from '.';
 
 type NearbyResultsProps = {
-  departures: EstimatedCall[];
+  departures: EstimatedCall[] | null;
   onRefresh?(): void;
   isRefreshing?: boolean;
 };
@@ -32,6 +32,14 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
       fromQuayId: departure.quay?.id,
     });
   };
+
+  if (departures !== null && departures.length == 0) {
+    return (
+      <View style={[styles.container, styles.noDepartures]}>
+        <Text>Fant ingen avganger i nærheten</Text>
+      </View>
+    );
+  }
 
   return (
     <FlatList
@@ -52,6 +60,9 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
 const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     padding: theme.sizes.pagePadding,
+  },
+  noDepartures: {
+    alignItems: 'center',
   },
 }));
 
