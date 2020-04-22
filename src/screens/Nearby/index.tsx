@@ -123,9 +123,9 @@ export default NearbyScreen;
 
 function useNearestDepartures(
   location?: Location,
-): [EstimatedCall[], () => Promise<void>, boolean] {
+): [EstimatedCall[] | null, () => Promise<void>, boolean] {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [departures, setDepartures] = useState<EstimatedCall[]>([]);
+  const [departures, setDepartures] = useState<EstimatedCall[] | null>(null);
 
   const reload = useCallback(
     async function reload() {
