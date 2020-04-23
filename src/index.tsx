@@ -7,6 +7,7 @@ import trackAppState from './diagnostics/trackAppState';
 import ThemeContextProvider from './theme/ThemeContext';
 import FavoritesContextProvider from './favorites/FavoritesContext';
 import SearchHistoryContextProvider from './search-history';
+import RemoteConfigContextProvider from './RemoteConfigContext';
 
 trackAppState();
 enableScreens();
@@ -18,7 +19,9 @@ const App = () => {
         <FavoritesContextProvider>
           <SearchHistoryContextProvider>
             <GeolocationContextProvider>
-              <NavigationRoot />
+              <RemoteConfigContextProvider>
+                <NavigationRoot />
+              </RemoteConfigContextProvider>
             </GeolocationContextProvider>
           </SearchHistoryContextProvider>
         </FavoritesContextProvider>

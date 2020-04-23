@@ -1,10 +1,16 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {PlannerIcon, NearestIcon, ProfileIcon} from './TabBarIcons';
+import {
+  PlannerIcon,
+  NearestIcon,
+  ProfileIcon,
+  TicketingIcon,
+} from './TabBarIcons';
 import Assistant from '../screens/Assistant';
 import ProfileScreen from '../screens/Profile';
 import {LocationWithSearchMetadata} from '../location-search';
 import NearbyScreen from '../screens/Nearby';
+import {useRemoteConfig} from '../RemoteConfigContext';
 
 export type TabNavigatorParams = {
   Assistant: {
@@ -14,12 +20,17 @@ export type TabNavigatorParams = {
   Nearest: {
     location: LocationWithSearchMetadata;
   };
+  Ticketing: undefined;
   Profile: undefined;
 };
 
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
+const Blank = () => null;
+
 const NavigationRoot = () => {
+  const {enable_ticketing} = useRemoteConfig();
+
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -38,6 +49,16 @@ const NavigationRoot = () => {
           tabBarIcon: ({color}) => <NearestIcon fill={color} />,
         }}
       />
+      {enable_ticketing ? (
+        <Tab.Screen
+          name="Ticketing"
+          component={Blank}
+          options={{
+            tabBarLabel: 'Reisebevis',
+            tabBarIcon: ({color}) => <TicketingIcon fill={color} />,
+          }}
+        />
+      ) : null}
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
