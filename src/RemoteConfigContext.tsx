@@ -1,12 +1,8 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import remoteConfig from '@react-native-firebase/remote-config';
-import bugsnag from './diagnostics/bugsnag';
+import {RemoteConfig, defaultRemoteConfig} from './remote-config';
 
-export type RemoteConfigState = {
-  enable_ticketing: boolean;
-};
-
-export type RemoteConfigContextState = RemoteConfigState & {
+export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;
 };
 
@@ -14,36 +10,30 @@ const RemoteConfigContext = createContext<RemoteConfigContextState | undefined>(
   undefined,
 );
 
-const defaultRemoteConfigState: RemoteConfigState = {
-  enable_ticketing: false,
-};
-
-async function getCurrentConfig(): Promise<RemoteConfigState> {
+async function getCurrentConfig(): Promise<RemoteConfig> {
   const values = remoteConfig().getAll();
   const enable_ticketing = !!(values['enable_ticketing']?.value ?? false);
   return {enable_ticketing};
 }
 
 const RemoteConfigContextProvider: React.FC = ({children}) => {
-  const [state, setState] = useState<RemoteConfigState>(
-    defaultRemoteConfigState,
-  );
+  const [config, setConfig] = useState<RemoteConfig>(defaultRemoteConfig);
 
   useEffect(() => {
     async function setupRemoteConfig() {
-      const config = remoteConfig();
+      const configApi = remoteConfig();
 
       if (__DEV__) {
-        config.setConfigSettings({
+        configApi.setConfigSettings({
           isDeveloperModeEnabled: true,
         });
       }
 
-      await config.setDefaults(defaultRemoteConfigState);
+      await configApi.setDefaults(defaultRemoteConfig);
 
-      await config.fetchAndActivate();
+      await configApi.fetchAndActivate();
       const currentConfig = await getCurrentConfig();
-      setState(currentConfig);
+      setConfig(currentConfig);
     }
 
     setupRemoteConfig();
@@ -52,11 +42,11 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
   async function refresh() {
     await remoteConfig().fetchAndActivate();
     const currentConfig = await getCurrentConfig();
-    setState(currentConfig);
+    setConfig(currentConfig);
   }
 
   return (
-    <RemoteConfigContext.Provider value={{...state, refresh}}>
+    <RemoteConfigContext.Provider value={{...config, refresh}}>
       {children}
     </RemoteConfigContext.Provider>
   );
