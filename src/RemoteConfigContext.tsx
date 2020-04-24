@@ -1,6 +1,6 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import remoteConfig from '@react-native-firebase/remote-config';
-import {RemoteConfig, defaultRemoteConfig} from './remote-config';
+import {RemoteConfig, defaultRemoteConfig, getConfig} from './remote-config';
 
 export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;
@@ -9,12 +9,6 @@ export type RemoteConfigContextState = RemoteConfig & {
 const RemoteConfigContext = createContext<RemoteConfigContextState | undefined>(
   undefined,
 );
-
-async function getCurrentConfig(): Promise<RemoteConfig> {
-  const values = remoteConfig().getAll();
-  const enable_ticketing = !!(values['enable_ticketing']?.value ?? false);
-  return {enable_ticketing};
-}
 
 const RemoteConfigContextProvider: React.FC = ({children}) => {
   const [config, setConfig] = useState<RemoteConfig>(defaultRemoteConfig);
@@ -32,7 +26,7 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
       await configApi.setDefaults(defaultRemoteConfig);
 
       await configApi.fetchAndActivate();
-      const currentConfig = await getCurrentConfig();
+      const currentConfig = await getConfig();
       setConfig(currentConfig);
     }
 
@@ -41,7 +35,7 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
 
   async function refresh() {
     await remoteConfig().fetchAndActivate();
-    const currentConfig = await getCurrentConfig();
+    const currentConfig = await getConfig();
     setConfig(currentConfig);
   }
 
