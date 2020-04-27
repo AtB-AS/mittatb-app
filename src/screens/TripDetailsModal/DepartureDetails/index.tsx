@@ -150,9 +150,7 @@ function CallGroup({type, calls}: CallGroupProps) {
               shouldHaveMarginTop(i) ? {marginTop: 24} : undefined,
             ]}
             location={getQuayName(call.quay)}
-            time={formatToClock(
-              call.aimedDepartureTime ?? call.expectedDepartureTime,
-            )}
+            time={formatToClock(call.expectedDepartureTime)}
             textStyle={[
               styles.textStyle,
               !isOnRoute ? styles.textStyleFaded : undefined,

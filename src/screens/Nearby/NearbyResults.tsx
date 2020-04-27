@@ -84,7 +84,7 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = ({
       onPress={() => onPress?.(departure)}
     >
       <Text style={styles.time}>
-        {formatToClock(departure.aimedDepartureTime)}
+        {formatToClock(departure.expectedDepartureTime)}
       </Text>
       <RealTimeLocationIcon
         mode={departure.serviceJourney.journeyPattern?.line.transportMode}
