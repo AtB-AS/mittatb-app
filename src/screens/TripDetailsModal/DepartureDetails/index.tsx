@@ -4,7 +4,7 @@ import {DetailsModalStackParams, DetailsModalNavigationProp} from '..';
 import {RouteProp} from '@react-navigation/native';
 import {View, Text, ActivityIndicator} from 'react-native';
 import DotIcon from '../../../assets/svg/DotIcon';
-import {formatToClock} from '../../../utils/date';
+import {formatToClock, secondsBetween} from '../../../utils/date';
 import colors from '../../../theme/colors';
 import LocationRow from '../LocationRow';
 import {StyleSheet} from '../../../theme';
@@ -17,6 +17,9 @@ import UnfoldMore from './svg/UnfoldMore';
 import ChevronLeftIcon from '../../../assets/svg/ChevronLeftIcon';
 import RealTimeLocationIcon from '../../../components/location-icon/real-time';
 import {getQuayName} from '../../../utils/transportation-names';
+
+// @TODO should be in external configuration at some point, or at least estimeted better.
+const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 2;
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -151,6 +154,11 @@ function CallGroup({type, calls}: CallGroupProps) {
             ]}
             location={getQuayName(call.quay)}
             time={formatToClock(call.expectedDepartureTime)}
+            aimedTime={
+              isStartPlace(i) && call.realtime
+                ? getAimedTimeIfLargeDifference(call)
+                : undefined
+            }
             textStyle={[
               styles.textStyle,
               !isOnRoute ? styles.textStyleFaded : undefined,
@@ -161,6 +169,19 @@ function CallGroup({type, calls}: CallGroupProps) {
       ))}
     </View>
   );
+}
+
+function getAimedTimeIfLargeDifference(
+  call: EstimatedCall,
+  differenceInMinutes: number = DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES,
+) {
+  if (
+    secondsBetween(call.aimedDepartureTime, call.expectedDepartureTime) <=
+    differenceInMinutes * 60
+  ) {
+    return undefined;
+  }
+  return formatToClock(call.aimedDepartureTime);
 }
 
 type CollapseButtonRowProps = {
