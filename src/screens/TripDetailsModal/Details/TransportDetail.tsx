@@ -47,7 +47,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
           <LocationRow
             icon={<DotIcon fill={colors.primary.green} />}
             location={getQuayName(leg.fromPlace.quay)}
-            time={formatToClock(leg.aimedStartTime)}
+            time={formatToClock(leg.expectedStartTime)}
             textStyle={styles.textStyle}
           />
         )}
@@ -73,7 +73,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
           <LocationRow
             icon={<DotIcon fill={colors.primary.green} />}
             location={getQuayName(leg.toPlace.quay)}
-            time={formatToClock(leg.aimedEndTime)}
+            time={formatToClock(leg.expectedEndTime)}
             textStyle={styles.textStyle}
           />
         )}
@@ -116,8 +116,8 @@ type WaitRowProps = {
 };
 function WaitRow({onCalculateTime, currentLeg, nextLeg}: WaitRowProps) {
   const time = secondsBetween(
-    currentLeg.aimedEndTime ?? currentLeg.expectedEndTime,
-    nextLeg.aimedStartTime ?? nextLeg.expectedStartTime,
+    currentLeg.expectedEndTime,
+    nextLeg.expectedStartTime,
   );
 
   useEffect(() => {

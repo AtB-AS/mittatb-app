@@ -11,6 +11,7 @@ import JourneyBusIcon from './svg/JourneyBusIcon';
 import JourneyTrainIcon from './svg/JourneyTrainIcon';
 import JourneyTramIcon from './svg/JourneyTramIcon';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import RealTimeLocationIcon from '../../components/location-icon/real-time';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -143,9 +144,13 @@ const HighlightedLeg = ({leg}: {leg: Leg}) => {
         <Text style={styles.stopName}>
           {leg?.fromEstimatedCall?.quay?.name}
         </Text>
-        <Text style={styles.time}>{formatToClock(leg?.aimedStartTime)}</Text>
+        <Text style={styles.time}>{formatToClock(leg?.expectedStartTime)}</Text>
         <View style={styles.lineContainer}>
-          <LegModeIcon mode={leg.mode} />
+          <RealTimeLocationIcon
+            mode={leg.mode}
+            isLive={leg.realtime}
+            height={35}
+          />
           <Text style={styles.lineName}>{getLineDisplayName(leg)}</Text>
         </View>
       </>
@@ -195,25 +200,6 @@ function getLineDisplayName(leg: Leg) {
   const name =
     leg.fromEstimatedCall?.destinationDisplay?.frontText ?? leg.line?.name;
   return leg.line?.publicCode + ' ' + name;
-}
-
-function LegModeIcon({mode}: {mode: LegMode}) {
-  switch (mode) {
-    case 'bus':
-    case 'coach':
-      return <JourneyBusIcon pathFill="#fff" />;
-    case 'rail':
-    case 'metro':
-      return <JourneyTrainIcon pathFill="#fff" />;
-    case 'tram':
-      return <JourneyTramIcon pathFill="#fff" />;
-    case 'car':
-    case 'water':
-    case 'air':
-    case 'bicycle':
-    default:
-      return <JourneyBusIcon pathFill="#fff" />;
-  }
 }
 
 export default ResultItem;

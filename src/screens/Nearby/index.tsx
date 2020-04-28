@@ -1,6 +1,6 @@
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState, useRef} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {SharedElement} from 'react-navigation-shared-element';
 import {
@@ -72,7 +72,14 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
     [currentLocation],
   );
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
-  const [departures, refresh, isLoading] = useNearestDepartures(fromLocation);
+  const [departures, refresh, isLoading] = useNearestDepartures(
+    fromLocation,
+
+    // Searching nearest is a really heavy operation,
+    // so polling every 30 seconds is costly. Might
+    // be a better way to do this and having subscription model for real time data.
+    fromLocation?.layer === 'venue' ? 30 : 120 ?? 0,
+  );
 
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {
@@ -123,17 +130,22 @@ export default NearbyScreen;
 
 function useNearestDepartures(
   location?: Location,
+  pollingTimeInSeconds: number = 0,
 ): [EstimatedCall[] | null, () => Promise<void>, boolean] {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [departures, setDepartures] = useState<EstimatedCall[] | null>(null);
+  const pollTime = pollingTimeInSeconds * 1000;
 
   const reload = useCallback(
-    async function reload() {
+    async function reload(
+      loading: 'NO_LOADING' | 'WITH_LOADING' = 'WITH_LOADING',
+    ) {
       if (!location) {
         return;
       }
-      setIsLoading(true);
-
+      if (loading === 'WITH_LOADING') {
+        setIsLoading(true);
+      }
       try {
         const deps =
           location.layer === 'venue'
@@ -141,15 +153,42 @@ function useNearestDepartures(
             : await getNearestDepartures(location.coordinates);
         setDepartures(deps);
       } finally {
-        setIsLoading(false);
+        if (loading === 'WITH_LOADING') {
+          setIsLoading(false);
+        }
       }
     },
     [location?.id],
   );
 
   useEffect(() => {
-    reload();
+    reload('WITH_LOADING');
   }, [location?.id]);
 
+  useInterval(
+    () => reload('NO_LOADING'),
+    pollTime === 0 ? Number.MAX_VALUE : pollTime,
+  );
+
   return [departures, reload, isLoading];
+}
+
+function useInterval(callback: Function, delay: number) {
+  const savedCallback = useRef<Function>(() => {});
+
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
 }

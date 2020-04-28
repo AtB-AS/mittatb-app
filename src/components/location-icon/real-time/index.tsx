@@ -28,7 +28,10 @@ const RealTimeLocationIcon: React.FC<TransportationIconProps> = ({
   if (!isLive) {
     return (
       <EmptyCircle
-        style={[emptyStyle, height ? {height, width: height} : undefined]}
+        style={[
+          emptyStyle,
+          height ? {height: height - 12, width: height - 12} : undefined,
+        ]}
       >
         {children ? children : <InnerIcon mode={mode} />}
       </EmptyCircle>
@@ -58,13 +61,13 @@ const EmptyCircle: React.FC<EmptyCircleProps> = ({style, children}) => {
 function InnerIcon({mode}: TransportationIconProps) {
   switch (mode) {
     case 'bus':
-      return <BusFront key="bus" fill="black" width={20} />;
+      return <BusFront key="bus" fill="black" />;
     case 'tram':
-      return <TramFront key="tram" fill="black" width={20} />;
+      return <TramFront key="tram" fill="black" />;
     case 'rail':
-      return <TrainFront key="rail" fill="black" width={20} />;
+      return <TrainFront key="rail" fill="black" />;
     case 'air':
-      return <PlaneFront key="airport" fill="black" width={20} />;
+      return <PlaneFront key="airport" fill="black" />;
     case 'water':
       return <BoatFront key="boat" fill="black" width={12} />;
     case 'unknown':
