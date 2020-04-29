@@ -6,12 +6,13 @@ import {
   CreditCard as CreditCardScreen,
 } from './Payment';
 import {createStackNavigator} from '@react-navigation/stack';
+import {ReserveTicketResponse} from '../../api/fareContracts';
 
 export type TicketingStackParams = {
-  Tickets: undefined;
+  Tickets: {hasPurchased?: boolean};
   Offer: undefined;
   PaymentMethod: undefined;
-  PaymentCreditCard: undefined;
+  PaymentCreditCard: ReserveTicketResponse;
 };
 
 const Stack = createStackNavigator<TicketingStackParams>();
