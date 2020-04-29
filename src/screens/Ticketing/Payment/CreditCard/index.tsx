@@ -9,6 +9,7 @@ import {
   WebViewErrorEvent,
 } from 'react-native-webview/lib/WebViewTypes';
 import {capturePayment} from '../../../../api';
+import {TICKET_SERVICE_BASE_URL} from '../../../../api/fareContracts';
 
 function log(event: WebViewNavigationEvent | WebViewErrorEvent) {
   const {nativeEvent} = event;
@@ -52,7 +53,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     <WebView
       style={{opacity: isLoading ? 0 : 1}}
       source={{
-        uri: url.startsWith('http') ? url : 'http://127.0.0.1:8080' + url,
+        uri: url.startsWith('http') ? url : TICKET_SERVICE_BASE_URL + url,
       }}
       onLoadStart={onLoadStart}
       onLoadEnd={onLoadEnd}

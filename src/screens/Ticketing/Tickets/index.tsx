@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
@@ -8,6 +8,8 @@ import {TicketingStackParams} from '../';
 import {FareContract} from '../../../api/fareContracts';
 import {listFareContracts} from '../../../api';
 import {secondsToDuration} from '../../../utils/date';
+import ArrowRight from '../../../assets/svg/ArrowRight';
+import ChevronDownIcon from '../../../assets/svg/ChevronDownIcon';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'Tickets'>;
@@ -32,29 +34,63 @@ const Tickets: React.FC<Props> = ({navigation, route}) => {
   }, []);
 
   return (
-    <View>
-      <Text>Reiserettigheter</Text>
+    <View style={styles.container}>
+      <Text style={styles.heading}>Reiserettigheter</Text>
       {fareContracts ? (
         fareContracts.map((fc, i) => (
-          <View key={i}>
-            <Text>
-              {secondsToDuration(fc.duration, nb)} - {fc.product_name}
-            </Text>
-            <Text>1 voksen</Text>
-            <Text>Sone 1</Text>
+          <View key={i} style={styles.ticketContainer}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginRight: 3,
+              }}
+            >
+              <Text style={styles.textItem}>
+                {secondsToDuration(fc.duration, nb)} - {fc.product_name}
+              </Text>
+              <ChevronDownIcon />
+            </View>
+            <Text style={styles.textItem}>1 voksen</Text>
+            <Text style={styles.textItem}>Sone A</Text>
           </View>
         ))
       ) : (
-        <Text>Du har ingen aktive reiserettigheter</Text>
+        <Text style={styles.body}>Du har ingen aktive reiserettigheter</Text>
       )}
       <TouchableHighlight
         onPress={() => navigation.push('Offer')}
-        style={{padding: 10, backgroundColor: 'black'}}
+        style={styles.button}
       >
-        <Text style={{color: 'white'}}>Kjøp reiserett</Text>
+        <View style={styles.buttonContentContainer}>
+          <Text style={styles.buttonText}>Kjøp reiserett</Text>
+          <ArrowRight fill="white" width={14} height={14} />
+        </View>
       </TouchableHighlight>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  body: {fontSize: 16, paddingVertical: 24},
+  button: {padding: 12, backgroundColor: 'black'},
+  buttonContentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginRight: 3,
+  },
+  buttonText: {color: 'white', fontSize: 16},
+  container: {padding: 24, backgroundColor: 'white', flex: 1},
+  heading: {fontSize: 26, color: 'black', letterSpacing: 0.35},
+  textItem: {fontSize: 16, paddingVertical: 4},
+  ticketContainer: {
+    marginVertical: 12,
+    padding: 8,
+    borderColor: 'black',
+    borderWidth: 1,
+  },
+});
 
 export default Tickets;
