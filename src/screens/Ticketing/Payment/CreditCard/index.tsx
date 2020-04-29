@@ -47,7 +47,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
       }
     }
   };
-  // /ticket/v1/paymentredirect?transactionid=transactionId&responseCode=OK
+
   return (
     <WebView
       style={{opacity: isLoading ? 0 : 1}}

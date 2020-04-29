@@ -38,7 +38,7 @@ const Tickets: React.FC<Props> = ({navigation, route}) => {
         fareContracts.map((fc, i) => (
           <View key={i}>
             <Text>
-              {secondsToDuration(fc.duration, nb, false)} - {fc.product_name}
+              {secondsToDuration(fc.duration, nb)} - {fc.product_name}
             </Text>
             <Text>1 voksen</Text>
             <Text>Sone 1</Text>
