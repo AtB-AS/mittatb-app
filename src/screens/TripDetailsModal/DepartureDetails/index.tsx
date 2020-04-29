@@ -17,6 +17,8 @@ import UnfoldMore from './svg/UnfoldMore';
 import ChevronLeftIcon from '../../../assets/svg/ChevronLeftIcon';
 import RealTimeLocationIcon from '../../../components/location-icon/real-time';
 import {getQuayName} from '../../../utils/transportation-names';
+import {useCallback} from 'react';
+import useInterval from '../../../utils/use-interval';
 
 // @TODO should be in external configuration at some point, or at least estimeted better.
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 2;
@@ -53,6 +55,7 @@ export default function DepartureDetails({navigation, route}: Props) {
     serviceJourneyId,
     fromQuayId,
     toQuayId,
+    30,
   );
 
   const content = isLoading ? (
@@ -268,28 +271,45 @@ function useGroupedCallList(
   serviceJourneyId: string,
   fromQuayId?: string,
   toQuayId?: string,
-): [CallListGroup, boolean] {
+  pollingTimeInSeconds: number = 0,
+): [CallListGroup, boolean, () => void] {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [serviceJourney, setJourney] = useState<CallListGroup>({
     passed: [],
     trip: [],
     after: [],
   });
+  const pollTime = pollingTimeInSeconds * 1000;
 
-  useEffect(() => {
-    async function getServiceJourneyDepartures() {
-      setIsLoading(true);
+  const getService = useCallback(
+    async function getServiceJourneyDepartures(
+      useIsLoading: 'NO_LOADING' | 'WITH_LOADING' = 'WITH_LOADING',
+    ) {
+      if (useIsLoading === 'WITH_LOADING') {
+        setIsLoading(true);
+      }
       try {
         const deps = await getDepartures(serviceJourneyId);
         setJourney(groupAllCallsByQuaysInLeg(deps, fromQuayId, toQuayId));
       } finally {
-        setIsLoading(false);
+        if (useIsLoading === 'WITH_LOADING') {
+          setIsLoading(false);
+        }
       }
-    }
-    getServiceJourneyDepartures();
+    },
+    [serviceJourneyId, fromQuayId, toQuayId],
+  );
+
+  useEffect(() => {
+    getService();
   }, [serviceJourneyId]);
 
-  return [serviceJourney, isLoading];
+  useInterval(
+    () => getService('NO_LOADING'),
+    pollTime === 0 ? Number.MAX_VALUE : pollTime,
+  );
+
+  return [serviceJourney, isLoading, getService];
 }
 
 const onType = (

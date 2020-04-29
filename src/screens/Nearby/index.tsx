@@ -23,6 +23,7 @@ import {StyleSheet} from '../../theme';
 import Splash from '../Splash';
 import NearbyResults from './NearbyResults';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
+import useInterval from '../../utils/use-interval';
 
 type NearbyRouteName = 'Nearest';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearest';
@@ -171,24 +172,4 @@ function useNearestDepartures(
   );
 
   return [departures, reload, isLoading];
-}
-
-function useInterval(callback: Function, delay: number) {
-  const savedCallback = useRef<Function>(() => {});
-
-  // Remember the latest callback.
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
-
-  // Set up the interval.
-  useEffect(() => {
-    function tick() {
-      savedCallback.current();
-    }
-    if (delay !== null) {
-      let id = setInterval(tick, delay);
-      return () => clearInterval(id);
-    }
-  }, [delay]);
 }
