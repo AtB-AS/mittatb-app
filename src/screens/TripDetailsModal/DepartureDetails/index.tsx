@@ -20,6 +20,7 @@ import {getQuayName} from '../../../utils/transportation-names';
 import {useCallback} from 'react';
 import useInterval from '../../../utils/use-interval';
 import {getAimedTimeIfLargeDifference} from '../utils';
+import usePollableResource from '../../../utils/use-pollable-resource';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -49,7 +50,7 @@ export default function DepartureDetails({navigation, route}: Props) {
   } = route.params;
   const styles = useStopsStyle();
 
-  const [callGroups, isLoading] = useGroupedCallList(
+  const [callGroups, _, isLoading] = useGroupedCallList(
     serviceJourneyId,
     fromQuayId,
     toQuayId,
@@ -257,49 +258,24 @@ function useGroupedCallList(
   fromQuayId?: string,
   toQuayId?: string,
   pollingTimeInSeconds: number = 0,
-): [CallListGroup, boolean, () => void] {
-  const isFocused = useIsFocused();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [serviceJourney, setJourney] = useState<CallListGroup>({
-    passed: [],
-    trip: [],
-    after: [],
-  });
-  const pollTime = pollingTimeInSeconds * 1000;
-
+): [CallListGroup, () => void, boolean] {
   const getService = useCallback(
-    async function getServiceJourneyDepartures(
-      useIsLoading: 'NO_LOADING' | 'WITH_LOADING' = 'WITH_LOADING',
-    ) {
-      // Only update data and refetch data if the screen is in focus.
-      if (!isFocused) {
-        return;
-      }
-      if (useIsLoading === 'WITH_LOADING') {
-        setIsLoading(true);
-      }
-      try {
-        const deps = await getDepartures(serviceJourneyId);
-        setJourney(groupAllCallsByQuaysInLeg(deps, fromQuayId, toQuayId));
-      } finally {
-        if (useIsLoading === 'WITH_LOADING') {
-          setIsLoading(false);
-        }
-      }
+    async function getServiceJourneyDepartures() {
+      console.log('refetching', serviceJourneyId);
+      const deps = await getDepartures(serviceJourneyId);
+      return groupAllCallsByQuaysInLeg(deps, fromQuayId, toQuayId);
     },
-    [isFocused, serviceJourneyId, fromQuayId, toQuayId],
+    [serviceJourneyId, fromQuayId, toQuayId],
   );
 
-  useEffect(() => {
-    getService();
-  }, [isFocused, serviceJourneyId, fromQuayId, toQuayId]);
-
-  useInterval(
-    () => getService('NO_LOADING'),
-    pollTime === 0 ? Number.MAX_VALUE : pollTime,
-  );
-
-  return [serviceJourney, isLoading, getService];
+  return usePollableResource<CallListGroup>(getService, {
+    initialValue: {
+      passed: [],
+      trip: [],
+      after: [],
+    },
+    pollingTimeInSeconds,
+  });
 }
 
 const onType = (
