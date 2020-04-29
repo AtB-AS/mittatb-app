@@ -1,6 +1,10 @@
 import {useRef, useEffect} from 'react';
 
-export default function useInterval(callback: Function, delay: number) {
+export default function useInFocusInterval(
+  callback: Function,
+  delay: number,
+  deps: React.DependencyList = [],
+) {
   const savedCallback = useRef<Function>(() => {});
 
   // Remember the latest callback.
@@ -17,5 +21,5 @@ export default function useInterval(callback: Function, delay: number) {
       let id = setInterval(tick, delay);
       return () => clearInterval(id);
     }
-  }, [delay]);
+  }, [delay].concat(deps));
 }

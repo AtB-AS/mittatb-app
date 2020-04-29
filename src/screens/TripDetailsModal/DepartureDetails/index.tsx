@@ -1,7 +1,7 @@
 import React, {useEffect, useState, Fragment} from 'react';
 import {EstimatedCall} from '../../../sdk';
 import {DetailsModalStackParams, DetailsModalNavigationProp} from '..';
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, useIsFocused} from '@react-navigation/native';
 import {View, Text, ActivityIndicator} from 'react-native';
 import DotIcon from '../../../assets/svg/DotIcon';
 import {formatToClock, secondsBetween} from '../../../utils/date';
@@ -258,6 +258,7 @@ function useGroupedCallList(
   toQuayId?: string,
   pollingTimeInSeconds: number = 0,
 ): [CallListGroup, boolean, () => void] {
+  const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [serviceJourney, setJourney] = useState<CallListGroup>({
     passed: [],
@@ -270,6 +271,10 @@ function useGroupedCallList(
     async function getServiceJourneyDepartures(
       useIsLoading: 'NO_LOADING' | 'WITH_LOADING' = 'WITH_LOADING',
     ) {
+      // Only update data and refetch data if the screen is in focus.
+      if (!isFocused) {
+        return;
+      }
       if (useIsLoading === 'WITH_LOADING') {
         setIsLoading(true);
       }
@@ -282,12 +287,12 @@ function useGroupedCallList(
         }
       }
     },
-    [serviceJourneyId, fromQuayId, toQuayId],
+    [isFocused, serviceJourneyId, fromQuayId, toQuayId],
   );
 
   useEffect(() => {
     getService();
-  }, [serviceJourneyId]);
+  }, [isFocused, serviceJourneyId, fromQuayId, toQuayId]);
 
   useInterval(
     () => getService('NO_LOADING'),
