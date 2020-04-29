@@ -19,9 +19,7 @@ import RealTimeLocationIcon from '../../../components/location-icon/real-time';
 import {getQuayName} from '../../../utils/transportation-names';
 import {useCallback} from 'react';
 import useInterval from '../../../utils/use-interval';
-
-// @TODO should be in external configuration at some point, or at least estimeted better.
-const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 2;
+import {getAimedTimeIfLargeDifference} from '../utils';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -172,19 +170,6 @@ function CallGroup({type, calls}: CallGroupProps) {
       ))}
     </View>
   );
-}
-
-function getAimedTimeIfLargeDifference(
-  call: EstimatedCall,
-  differenceInMinutes: number = DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES,
-) {
-  if (
-    secondsBetween(call.aimedDepartureTime, call.expectedDepartureTime) <=
-    differenceInMinutes * 60
-  ) {
-    return undefined;
-  }
-  return formatToClock(call.aimedDepartureTime);
 }
 
 type CollapseButtonRowProps = {
