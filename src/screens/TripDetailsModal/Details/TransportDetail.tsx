@@ -101,7 +101,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
 };
 
 const styles = StyleSheet.create({
-  pressable: {flexDirection: 'column'},
+  pressable: {flexDirection: 'column', paddingVertical: 5},
   container: {
     flexDirection: 'column',
     justifyContent: 'space-between',
