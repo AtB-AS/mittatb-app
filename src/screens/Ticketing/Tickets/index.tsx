@@ -39,14 +39,7 @@ const Tickets: React.FC<Props> = ({navigation, route}) => {
       {fareContracts ? (
         fareContracts.map((fc, i) => (
           <View key={i} style={styles.ticketContainer}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginRight: 3,
-              }}
-            >
+            <View style={styles.ticketLineContainer}>
               <Text style={styles.textItem}>
                 {secondsToDuration(fc.duration, nb)} - {fc.product_name}
               </Text>
@@ -90,6 +83,12 @@ const styles = StyleSheet.create({
     padding: 8,
     borderColor: 'black',
     borderWidth: 1,
+  },
+  ticketLineContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginRight: 3,
   },
 });
 

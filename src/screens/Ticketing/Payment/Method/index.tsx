@@ -35,8 +35,6 @@ const PaymentMethod: React.FC<Props> = ({navigation}) => (
 );
 
 const styles = StyleSheet.create({
-  container: {padding: 24, backgroundColor: 'white', flex: 1},
-  heading: {fontSize: 26, color: 'black', letterSpacing: 0.35},
   button: {padding: 12, marginTop: 10, backgroundColor: 'black'},
   buttonContentContainer: {
     flexDirection: 'row',
@@ -45,6 +43,8 @@ const styles = StyleSheet.create({
     marginRight: 3,
   },
   buttonText: {color: 'white', fontSize: 16},
+  container: {padding: 24, backgroundColor: 'white', flex: 1},
+  heading: {fontSize: 26, color: 'black', letterSpacing: 0.35},
 });
 
 export default PaymentMethod;
