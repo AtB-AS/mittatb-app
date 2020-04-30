@@ -12,6 +12,8 @@ type PollableResourceOptions<T> = {
  * Pattern for creating a pollable resource as a hook. Pass data reciever function as first argument.
  * NOTE: callback should be cached as it is used as dependency in useEffect. Remember to use `useCallback`.
  *
+ * Polling time of 0 equals no polling.
+ *
  * @param callback: () => Promise<T>
  * @param opts: PollableResourceOptions<T>
  * @returns [T, () => Promise<void>, boolean]
