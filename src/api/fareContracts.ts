@@ -26,17 +26,17 @@ export async function reserve() {
   return response.data;
 }
 
-export async function capture(transaction_id: string) {
-  const customer_id = await getCustomerId();
-
+export async function capture(payment_id: number, transaction_id: number) {
   const url = 'capture';
-  await client.put(url, {customer_id, transaction_id});
+  await client.put(url, {payment_id, transaction_id});
 }
 
 export type FareContract = {
   product_name: string;
   duration: number;
-  user_profile: 'adult';
+  usage_valid_from: number;
+  usage_valid_to: number;
+  user_profile: string;
 };
 
 export type ListTicketsResponse = {
@@ -44,6 +44,7 @@ export type ListTicketsResponse = {
 };
 
 export type ReserveTicketResponse = {
-  transaction_id: string;
+  payment_id: number;
+  transaction_id: number;
   url: string;
 };

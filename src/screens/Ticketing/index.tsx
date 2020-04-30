@@ -9,7 +9,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {ReserveTicketResponse} from '../../api/fareContracts';
 
 export type TicketingStackParams = {
-  Tickets: {hasPurchased?: boolean};
+  Tickets: undefined;
   Offer: undefined;
   PaymentMethod: undefined;
   PaymentCreditCard: ReserveTicketResponse;
