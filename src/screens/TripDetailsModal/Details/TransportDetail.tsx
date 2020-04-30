@@ -17,6 +17,7 @@ import WaitClockIcon from './svg/WaitClockIcon';
 import {Leg} from '../../../sdk';
 import RealTimeLocationIcon from '../../../components/location-icon/real-time';
 import {getQuayName, getLineName} from '../../../utils/transportation-names';
+import {getAimedTimeIfLargeDifference} from '../utils';
 
 const TransportDetail: React.FC<LegDetailProps> = ({
   leg,
@@ -48,6 +49,11 @@ const TransportDetail: React.FC<LegDetailProps> = ({
             icon={<DotIcon fill={colors.primary.green} />}
             location={getQuayName(leg.fromPlace.quay)}
             time={formatToClock(leg.expectedStartTime)}
+            aimedTime={
+              leg.realtime
+                ? getAimedTimeIfLargeDifference(leg.fromEstimatedCall)
+                : undefined
+            }
             textStyle={styles.textStyle}
           />
         )}
@@ -74,6 +80,11 @@ const TransportDetail: React.FC<LegDetailProps> = ({
             icon={<DotIcon fill={colors.primary.green} />}
             location={getQuayName(leg.toPlace.quay)}
             time={formatToClock(leg.expectedEndTime)}
+            aimedTime={
+              leg.realtime
+                ? getAimedTimeIfLargeDifference(leg.toEstimatedCall)
+                : undefined
+            }
             textStyle={styles.textStyle}
           />
         )}
@@ -90,7 +101,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
 };
 
 const styles = StyleSheet.create({
-  pressable: {flexDirection: 'column'},
+  pressable: {flexDirection: 'column', paddingVertical: 5},
   container: {
     flexDirection: 'column',
     justifyContent: 'space-between',

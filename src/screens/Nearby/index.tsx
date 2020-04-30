@@ -1,6 +1,6 @@
-import {CompositeNavigationProp, RouteProp} from '@react-navigation/core';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useEffect, useMemo, useState, useRef} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {SharedElement} from 'react-navigation-shared-element';
 import {
@@ -23,6 +23,7 @@ import {StyleSheet} from '../../theme';
 import Splash from '../Splash';
 import NearbyResults from './NearbyResults';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
+import usePollableResource from '../../utils/use-pollable-resource';
 
 type NearbyRouteName = 'Nearest';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearest';
@@ -132,63 +133,17 @@ function useNearestDepartures(
   location?: Location,
   pollingTimeInSeconds: number = 0,
 ): [EstimatedCall[] | null, () => Promise<void>, boolean] {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [departures, setDepartures] = useState<EstimatedCall[] | null>(null);
-  const pollTime = pollingTimeInSeconds * 1000;
-
-  const reload = useCallback(
-    async function reload(
-      loading: 'NO_LOADING' | 'WITH_LOADING' = 'WITH_LOADING',
-    ) {
-      if (!location) {
-        return;
-      }
-      if (loading === 'WITH_LOADING') {
-        setIsLoading(true);
-      }
-      try {
-        const deps =
-          location.layer === 'venue'
-            ? await getDeparturesFromStop(location.id)
-            : await getNearestDepartures(location.coordinates);
-        setDepartures(deps);
-      } finally {
-        if (loading === 'WITH_LOADING') {
-          setIsLoading(false);
-        }
-      }
+  const fetchDepartures = useCallback(
+    async function reload() {
+      if (!location) return [];
+      return location.layer === 'venue'
+        ? await getDeparturesFromStop(location.id)
+        : await getNearestDepartures(location.coordinates);
     },
     [location?.id],
   );
-
-  useEffect(() => {
-    reload('WITH_LOADING');
-  }, [location?.id]);
-
-  useInterval(
-    () => reload('NO_LOADING'),
-    pollTime === 0 ? Number.MAX_VALUE : pollTime,
-  );
-
-  return [departures, reload, isLoading];
-}
-
-function useInterval(callback: Function, delay: number) {
-  const savedCallback = useRef<Function>(() => {});
-
-  // Remember the latest callback.
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
-
-  // Set up the interval.
-  useEffect(() => {
-    function tick() {
-      savedCallback.current();
-    }
-    if (delay !== null) {
-      let id = setInterval(tick, delay);
-      return () => clearInterval(id);
-    }
-  }, [delay]);
+  return usePollableResource<EstimatedCall[] | null>(fetchDepartures, {
+    initialValue: null,
+    pollingTimeInSeconds,
+  });
 }

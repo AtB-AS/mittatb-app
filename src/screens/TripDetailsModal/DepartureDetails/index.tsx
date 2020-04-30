@@ -1,4 +1,4 @@
-import React, {useEffect, useState, Fragment} from 'react';
+import React, {useState, Fragment} from 'react';
 import {EstimatedCall} from '../../../sdk';
 import {DetailsModalStackParams, DetailsModalNavigationProp} from '..';
 import {RouteProp} from '@react-navigation/native';
@@ -17,6 +17,9 @@ import UnfoldMore from './svg/UnfoldMore';
 import ChevronLeftIcon from '../../../assets/svg/ChevronLeftIcon';
 import RealTimeLocationIcon from '../../../components/location-icon/real-time';
 import {getQuayName} from '../../../utils/transportation-names';
+import {useCallback} from 'react';
+import {getAimedTimeIfLargeDifference} from '../utils';
+import usePollableResource from '../../../utils/use-pollable-resource';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -46,10 +49,11 @@ export default function DepartureDetails({navigation, route}: Props) {
   } = route.params;
   const styles = useStopsStyle();
 
-  const [callGroups, isLoading] = useGroupedCallList(
+  const [callGroups, _, isLoading] = useGroupedCallList(
     serviceJourneyId,
     fromQuayId,
     toQuayId,
+    30,
   );
 
   const content = isLoading ? (
@@ -151,6 +155,11 @@ function CallGroup({type, calls}: CallGroupProps) {
             ]}
             location={getQuayName(call.quay)}
             time={formatToClock(call.expectedDepartureTime)}
+            aimedTime={
+              isStartPlace(i) && call.realtime
+                ? getAimedTimeIfLargeDifference(call)
+                : undefined
+            }
             textStyle={[
               styles.textStyle,
               !isOnRoute ? styles.textStyleFaded : undefined,
@@ -247,28 +256,24 @@ function useGroupedCallList(
   serviceJourneyId: string,
   fromQuayId?: string,
   toQuayId?: string,
-): [CallListGroup, boolean] {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [serviceJourney, setJourney] = useState<CallListGroup>({
-    passed: [],
-    trip: [],
-    after: [],
-  });
-
-  useEffect(() => {
+  pollingTimeInSeconds: number = 0,
+): [CallListGroup, () => void, boolean] {
+  const getService = useCallback(
     async function getServiceJourneyDepartures() {
-      setIsLoading(true);
-      try {
-        const deps = await getDepartures(serviceJourneyId);
-        setJourney(groupAllCallsByQuaysInLeg(deps, fromQuayId, toQuayId));
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    getServiceJourneyDepartures();
-  }, [serviceJourneyId]);
+      const deps = await getDepartures(serviceJourneyId);
+      return groupAllCallsByQuaysInLeg(deps, fromQuayId, toQuayId);
+    },
+    [serviceJourneyId, fromQuayId, toQuayId],
+  );
 
-  return [serviceJourney, isLoading];
+  return usePollableResource<CallListGroup>(getService, {
+    initialValue: {
+      passed: [],
+      trip: [],
+      after: [],
+    },
+    pollingTimeInSeconds,
+  });
 }
 
 const onType = (
