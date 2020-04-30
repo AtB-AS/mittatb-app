@@ -11,11 +11,6 @@ import {
 import {capturePayment} from '../../../../api';
 import {TICKET_SERVICE_BASE_URL} from '../../../../api/fareContracts';
 
-function log(event: WebViewNavigationEvent | WebViewErrorEvent) {
-  const {nativeEvent} = event;
-  console.log(nativeEvent);
-}
-
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'PaymentCreditCard'>;
   route: RouteProp<TicketingStackParams, 'PaymentCreditCard'>;
