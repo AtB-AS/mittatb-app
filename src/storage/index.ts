@@ -5,6 +5,7 @@ import bugsnag from '../diagnostics/bugsnag';
 type StorageModel = {
   stored_user_locations: string;
   install_id: string;
+  customer_id: string;
   onboarded: string;
   '@ATB_search-history': string;
 };

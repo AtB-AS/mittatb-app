@@ -7,9 +7,10 @@ import {
   TicketingIcon,
 } from './TabBarIcons';
 import Assistant from '../screens/Assistant';
+import NearbyScreen from '../screens/Nearby';
+import TicketingScreen from '../screens/Ticketing';
 import ProfileScreen from '../screens/Profile';
 import {LocationWithSearchMetadata} from '../location-search';
-import NearbyScreen from '../screens/Nearby';
 import {useRemoteConfig} from '../RemoteConfigContext';
 
 export type TabNavigatorParams = {
@@ -25,8 +26,6 @@ export type TabNavigatorParams = {
 };
 
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
-
-const Blank = () => null;
 
 const NavigationRoot = () => {
   const {enable_ticketing} = useRemoteConfig();
@@ -52,7 +51,7 @@ const NavigationRoot = () => {
       {enable_ticketing ? (
         <Tab.Screen
           name="Ticketing"
-          component={Blank}
+          component={TicketingScreen}
           options={{
             tabBarLabel: 'Reisebevis',
             tabBarIcon: ({color}) => <TicketingIcon fill={color} />,
