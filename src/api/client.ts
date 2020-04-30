@@ -21,6 +21,9 @@ export async function getClient() {
   return axiosInstance;
 }
 
+export const CancelToken = axios.CancelToken;
+export const isCancel = axios.isCancel;
+
 function responseErrorHandler(error: AxiosError) {
   const errorType = getAxiosErrorType(error);
   switch (errorType) {
@@ -40,9 +43,11 @@ function responseErrorHandler(error: AxiosError) {
       break;
     case ErrorType.NetworkError:
     case ErrorType.Timeout:
-      // This happens all the time in mobile apps,
-      // so will be a lot of noise if we choose to report these
-      console.warn(errorType, error);
+      if (!isCancel(error)) {
+        // This happens all the time in mobile apps,
+        // so will be a lot of noise if we choose to report these
+        console.warn(errorType, error);
+      }
       break;
   }
 

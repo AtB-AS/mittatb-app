@@ -1,5 +1,10 @@
 name: Lint
-on: push
+on:
+  push:
+    paths:
+      - '**.js'
+      - '**.ts'
+      - '**.tsx'
 
 jobs:
   lint:

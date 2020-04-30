@@ -32,13 +32,6 @@ export type RootStackParamList = {
 
 const SharedStack = createSharedElementStackNavigator<RootStackParamList>();
 
-const detailsModalTransition = Platform.select<
-  typeof TransitionPresets.ModalPresentationIOS
->({
-  ios: TransitionPresets.ModalPresentationIOS,
-  android: undefined,
-});
-
 const NavigationRoot = () => {
   const {isLoading, onboarded} = useAppState();
   const {theme} = useTheme();
@@ -57,11 +50,7 @@ const NavigationRoot = () => {
       />
       <NavigationContainer onStateChange={trackNavigation}>
         <SharedStack.Navigator
-          mode={
-            !onboarded
-              ? 'card'
-              : Platform.select({ios: 'modal', android: 'card'})
-          }
+          mode={isLoading || !onboarded ? 'card' : 'modal'}
         >
           {!onboarded ? (
             <SharedStack.Screen
@@ -83,7 +72,7 @@ const NavigationRoot = () => {
                   headerShown: false,
                   cardOverlayEnabled: true,
                   cardShadowEnabled: true,
-                  ...detailsModalTransition,
+                  ...TransitionPresets.ModalPresentationIOS,
                 }}
               />
               <SharedStack.Screen
@@ -93,7 +82,7 @@ const NavigationRoot = () => {
                   headerShown: false,
                   cardOverlayEnabled: true,
                   cardShadowEnabled: true,
-                  ...detailsModalTransition,
+                  ...TransitionPresets.ModalPresentationIOS,
                 }}
               />
               <SharedStack.Screen

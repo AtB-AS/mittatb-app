@@ -17,6 +17,7 @@ import WaitClockIcon from './svg/WaitClockIcon';
 import {Leg} from '../../../sdk';
 import RealTimeLocationIcon from '../../../components/location-icon/real-time';
 import {getQuayName, getLineName} from '../../../utils/transportation-names';
+import {getAimedTimeIfLargeDifference} from '../utils';
 
 const TransportDetail: React.FC<LegDetailProps> = ({
   leg,
@@ -47,7 +48,12 @@ const TransportDetail: React.FC<LegDetailProps> = ({
           <LocationRow
             icon={<DotIcon fill={colors.primary.green} />}
             location={getQuayName(leg.fromPlace.quay)}
-            time={formatToClock(leg.aimedStartTime)}
+            time={formatToClock(leg.expectedStartTime)}
+            aimedTime={
+              leg.realtime
+                ? getAimedTimeIfLargeDifference(leg.fromEstimatedCall)
+                : undefined
+            }
             textStyle={styles.textStyle}
           />
         )}
@@ -73,7 +79,12 @@ const TransportDetail: React.FC<LegDetailProps> = ({
           <LocationRow
             icon={<DotIcon fill={colors.primary.green} />}
             location={getQuayName(leg.toPlace.quay)}
-            time={formatToClock(leg.aimedEndTime)}
+            time={formatToClock(leg.expectedEndTime)}
+            aimedTime={
+              leg.realtime
+                ? getAimedTimeIfLargeDifference(leg.toEstimatedCall)
+                : undefined
+            }
             textStyle={styles.textStyle}
           />
         )}
@@ -90,7 +101,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
 };
 
 const styles = StyleSheet.create({
-  pressable: {flexDirection: 'column'},
+  pressable: {flexDirection: 'column', paddingVertical: 5},
   container: {
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -116,8 +127,8 @@ type WaitRowProps = {
 };
 function WaitRow({onCalculateTime, currentLeg, nextLeg}: WaitRowProps) {
   const time = secondsBetween(
-    currentLeg.aimedEndTime ?? currentLeg.expectedEndTime,
-    nextLeg.aimedStartTime ?? nextLeg.expectedStartTime,
+    currentLeg.expectedEndTime,
+    nextLeg.expectedStartTime,
   );
 
   useEffect(() => {
@@ -127,11 +138,15 @@ function WaitRow({onCalculateTime, currentLeg, nextLeg}: WaitRowProps) {
   return (
     <View style={waitStyles.container}>
       <View style={waitStyles.textContainer}>
-        <Text style={waitStyles.text}>{secondsToDuration(time, nb)}</Text>
+        <Text style={waitStyles.text}>{formatTime(time)}</Text>
       </View>
       <WaitClockIcon fill={colors.general.gray200} />
     </View>
   );
+}
+function formatTime(time: number) {
+  // Show 'minutter' -> 'min'. Found no way to do this through date-fns.
+  return secondsToDuration(time, nb).replace('utter', '').replace('utt', '');
 }
 const waitStyles = StyleSheet.create({
   container: {

@@ -3,10 +3,12 @@ import {Feature} from '../sdk';
 import {getClient} from './client';
 import qs from 'query-string';
 import {stringifyUrl} from './utils';
+import {AxiosRequestConfig} from 'axios';
 
 export async function autocomplete(
   text: string | null,
   location: GeolocationResponse | null,
+  config?: AxiosRequestConfig,
 ) {
   const client = await getClient();
   const defaultFilter = location
@@ -26,10 +28,13 @@ export async function autocomplete(
     ...defaultFilter,
   });
 
-  return await client.get<Feature[]>(stringifyUrl(url, query));
+  return await client.get<Feature[]>(stringifyUrl(url, query), config);
 }
 
-export async function reverse(location: GeolocationResponse | null) {
+export async function reverse(
+  location: GeolocationResponse | null,
+  config?: AxiosRequestConfig,
+) {
   const client = await getClient();
   const url = 'v1/geocoder/reverse';
   const query = qs.stringify({
@@ -37,5 +42,5 @@ export async function reverse(location: GeolocationResponse | null) {
     lon: location?.coords.longitude,
   });
 
-  return await client.get<Feature[]>(stringifyUrl(url, query));
+  return await client.get<Feature[]>(stringifyUrl(url, query), config);
 }

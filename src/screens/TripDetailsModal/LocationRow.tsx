@@ -6,6 +6,7 @@ const LocationRow: React.FC<{
   icon: JSX.Element;
   location: string;
   time?: string;
+  aimedTime?: string;
   textStyle?: StyleProp<TextStyle>;
   rowStyle?: StyleProp<ViewStyle>;
   iconContainerStyle?: StyleProp<ViewStyle>;
@@ -14,6 +15,7 @@ const LocationRow: React.FC<{
   icon,
   location,
   time,
+  aimedTime,
   rowStyle,
   textStyle,
   iconContainerStyle,
@@ -27,6 +29,7 @@ const LocationRow: React.FC<{
       <View style={styles.iconLocationContainer}>
         <View style={styles.timeContainer}>
           <Text style={[styles.time, textStyle]}>{time}</Text>
+          {aimedTime && <Text style={styles.aimedTime}>{aimedTime}</Text>}
         </View>
         <View
           style={[
@@ -76,10 +79,27 @@ const useLocationRowStyle = StyleSheet.createThemeHook((theme) => ({
   location: {
     color: theme.text.primary,
   },
-  timeContainer: {width: 70, alignItems: 'flex-end', marginRight: 12},
+  timeContainer: {
+    width: 70,
+    alignItems: 'flex-end',
+    marginRight: 12,
+    justifyContent: 'flex-end',
+  },
   time: {
     color: theme.text.primary,
     fontWeight: 'bold',
+    fontVariant: ['tabular-nums'],
+  },
+  aimedTime: {
+    position: 'absolute',
+    top: '50%',
+    color: theme.text.primary,
+    fontSize: 12,
+    lineHeight: 16,
+    fontWeight: 'normal',
+    textDecorationLine: 'line-through',
+    textDecorationStyle: 'solid',
+    fontVariant: ['tabular-nums'],
   },
 }));
 

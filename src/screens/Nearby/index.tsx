@@ -1,6 +1,6 @@
-import {CompositeNavigationProp, RouteProp} from '@react-navigation/core';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {SharedElement} from 'react-navigation-shared-element';
 import {
@@ -23,6 +23,7 @@ import {StyleSheet} from '../../theme';
 import Splash from '../Splash';
 import NearbyResults from './NearbyResults';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
+import usePollableResource from '../../utils/use-pollable-resource';
 
 type NearbyRouteName = 'Nearest';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearest';
@@ -72,7 +73,14 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
     [currentLocation],
   );
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
-  const [departures, refresh, isLoading] = useNearestDepartures(fromLocation);
+  const [departures, refresh, isLoading] = useNearestDepartures(
+    fromLocation,
+
+    // Searching nearest is a really heavy operation,
+    // so polling every 30 seconds is costly. Might
+    // be a better way to do this and having subscription model for real time data.
+    fromLocation?.layer === 'venue' ? 30 : 120 ?? 0,
+  );
 
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {
@@ -123,33 +131,19 @@ export default NearbyScreen;
 
 function useNearestDepartures(
   location?: Location,
-): [EstimatedCall[], () => Promise<void>, boolean] {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [departures, setDepartures] = useState<EstimatedCall[]>([]);
-
-  const reload = useCallback(
+  pollingTimeInSeconds: number = 0,
+): [EstimatedCall[] | null, () => Promise<void>, boolean] {
+  const fetchDepartures = useCallback(
     async function reload() {
-      if (!location) {
-        return;
-      }
-      setIsLoading(true);
-
-      try {
-        const deps =
-          location.layer === 'venue'
-            ? await getDeparturesFromStop(location.id)
-            : await getNearestDepartures(location.coordinates);
-        setDepartures(deps);
-      } finally {
-        setIsLoading(false);
-      }
+      if (!location) return [];
+      return location.layer === 'venue'
+        ? await getDeparturesFromStop(location.id)
+        : await getNearestDepartures(location.coordinates);
     },
     [location?.id],
   );
-
-  useEffect(() => {
-    reload();
-  }, [location?.id]);
-
-  return [departures, reload, isLoading];
+  return usePollableResource<EstimatedCall[] | null>(fetchDepartures, {
+    initialValue: null,
+    pollingTimeInSeconds,
+  });
 }
