@@ -20,7 +20,7 @@ export default function usePollableResource<T>(
   callback: () => Promise<T>,
   opts: PollableResourceOptions<T>,
 ): [T, () => Promise<void>, boolean] {
-  const {initialValue, pollingTimeInSeconds = 2, skipRun} = opts;
+  const {initialValue, pollingTimeInSeconds = 30, skipRun} = opts;
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [state, setState] = useState<T>(initialValue);
