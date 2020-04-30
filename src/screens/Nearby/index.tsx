@@ -1,10 +1,6 @@
-import {
-  CompositeNavigationProp,
-  RouteProp,
-  useIsFocused,
-} from '@react-navigation/native';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {SharedElement} from 'react-navigation-shared-element';
 import {
@@ -27,7 +23,6 @@ import {StyleSheet} from '../../theme';
 import Splash from '../Splash';
 import NearbyResults from './NearbyResults';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
-import useInterval from '../../utils/use-interval';
 import usePollableResource from '../../utils/use-pollable-resource';
 
 type NearbyRouteName = 'Nearest';

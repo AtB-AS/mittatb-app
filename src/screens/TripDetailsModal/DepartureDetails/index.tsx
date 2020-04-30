@@ -1,10 +1,10 @@
-import React, {useEffect, useState, Fragment} from 'react';
+import React, {useState, Fragment} from 'react';
 import {EstimatedCall} from '../../../sdk';
 import {DetailsModalStackParams, DetailsModalNavigationProp} from '..';
-import {RouteProp, useIsFocused} from '@react-navigation/native';
+import {RouteProp} from '@react-navigation/native';
 import {View, Text, ActivityIndicator} from 'react-native';
 import DotIcon from '../../../assets/svg/DotIcon';
-import {formatToClock, secondsBetween} from '../../../utils/date';
+import {formatToClock} from '../../../utils/date';
 import colors from '../../../theme/colors';
 import LocationRow from '../LocationRow';
 import {StyleSheet} from '../../../theme';
@@ -18,7 +18,6 @@ import ChevronLeftIcon from '../../../assets/svg/ChevronLeftIcon';
 import RealTimeLocationIcon from '../../../components/location-icon/real-time';
 import {getQuayName} from '../../../utils/transportation-names';
 import {useCallback} from 'react';
-import useInterval from '../../../utils/use-interval';
 import {getAimedTimeIfLargeDifference} from '../utils';
 import usePollableResource from '../../../utils/use-pollable-resource';
 
@@ -261,7 +260,6 @@ function useGroupedCallList(
 ): [CallListGroup, () => void, boolean] {
   const getService = useCallback(
     async function getServiceJourneyDepartures() {
-      console.log('refetching', serviceJourneyId);
       const deps = await getDepartures(serviceJourneyId);
       return groupAllCallsByQuaysInLeg(deps, fromQuayId, toQuayId);
     },
