@@ -328,6 +328,8 @@ PODS:
   - React-jsinspector (0.62.1)
   - react-native-geolocation (1.4.2):
     - React
+  - react-native-get-random-values (1.4.0):
+    - React
   - react-native-safe-area-context (0.7.3):
     - React
   - react-native-viewpager (4.0.0):
@@ -453,6 +455,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
+  - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-viewpager (from `../node_modules/@react-native-community/viewpager`)"
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -549,6 +552,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
+  react-native-get-random-values:
+    :path: "../node_modules/react-native-get-random-values"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-viewpager:
@@ -646,6 +651,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: e9698dee4fd43ceb44832baf15d5745f455b0157
   React-jsinspector: f74a62727e5604119abd4a1eda52c0a12144bcd5
   react-native-geolocation: a7b94614afbd5fd8350e0233a2025c8228fc8041
+  react-native-get-random-values: 2b7500cdb68066aba87cdccd97067c29e16ffe95
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   react-native-viewpager: 859f14262726819ab9bc993838511289edec46f2
   react-native-webview: cf5527893252b3b036eea024a1da6996f7344c74
