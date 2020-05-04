@@ -1,4 +1,4 @@
-import uuid from 'uuid/v4';
+import {v4 as uuid} from 'uuid';
 import storage from '../storage';
 
 let cached_id: string | null = null;

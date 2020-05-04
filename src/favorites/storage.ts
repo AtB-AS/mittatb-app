@@ -1,6 +1,6 @@
 import storage from '../storage';
 import {LocationFavorite, UserFavorites} from './types';
-import uuid from 'uuid/v4';
+import {v4 as uuid} from 'uuid';
 
 export async function getFavorites(): Promise<UserFavorites | null> {
   const userLocations = await storage.get('stored_user_locations');
