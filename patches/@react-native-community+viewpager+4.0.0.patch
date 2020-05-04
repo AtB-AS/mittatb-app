@@ -1,0 +1,13 @@
+diff --git a/node_modules/@react-native-community/viewpager/typings/index.d.ts b/node_modules/@react-native-community/viewpager/typings/index.d.ts
+index 1510d7a..02ba7d8 100644
+--- a/node_modules/@react-native-community/viewpager/typings/index.d.ts
++++ b/node_modules/@react-native-community/viewpager/typings/index.d.ts
+@@ -71,7 +71,7 @@ export interface ViewPagerProps {
+ 
+     style?: ReactNative.StyleProp<ReactNative.ViewStyle>
+ 
+-    children?: React.ReactChildren
++    children: React.ReactNode
+ 
+     /**
+      * If a parent `View` wants to prevent a child `View` from becoming responder
