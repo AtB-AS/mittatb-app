@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RouteProp} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import {nb} from 'date-fns/locale';
 import {TicketingStackParams} from '../';
 import {FareContract} from '../../../api/fareContracts';
@@ -13,14 +13,14 @@ import ChevronDownIcon from '../../../assets/svg/ChevronDownIcon';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'Tickets'>;
-  route: RouteProp<TicketingStackParams, 'Tickets'>;
 };
 
-const Tickets: React.FC<Props> = ({navigation, route}) => {
-  const hasPurchased = route?.params?.hasPurchased;
+const Tickets: React.FC<Props> = ({navigation}) => {
   const [fareContracts, setFareContracts] = useState<
     FareContract[] | undefined
   >(undefined);
+
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     async function getFareContracts() {
@@ -28,15 +28,13 @@ const Tickets: React.FC<Props> = ({navigation, route}) => {
       setFareContracts(response.fare_contracts);
     }
 
-    if (hasPurchased) {
-      getFareContracts();
-    }
-  }, []);
+    if (isFocused) getFareContracts();
+  }, [isFocused]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Reiserettigheter</Text>
-      {fareContracts ? (
+      {fareContracts && fareContracts.length ? (
         fareContracts.map((fc, i) => (
           <View key={i} style={styles.ticketContainer}>
             <View style={styles.ticketLineContainer}>

@@ -18,7 +18,7 @@ type Props = {
 
 const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const {url, transaction_id} = route.params;
+  const {url, transaction_id, payment_id} = route.params;
 
   const onLoadEnd = () => {
     if (isLoading) {
@@ -32,14 +32,12 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     const {
       nativeEvent: {url},
     } = event;
-    if (url.includes('/paymentredirect')) {
+    if (url.includes('/EnturPaymentRedirect')) {
       const params = parseURL(url);
       const responseCode = params['responseCode'];
       if (responseCode === 'OK') {
-        await capturePayment(transaction_id);
-        navigation.reset({
-          routes: [{name: 'Tickets', params: {hasPurchased: true}}],
-        });
+        await capturePayment(payment_id, transaction_id);
+        navigation.popToTop();
       }
     }
   };
