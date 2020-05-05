@@ -1,3 +1,5 @@
+import 'react-native-get-random-values';
+
 import React from 'react';
 import {enableScreens} from 'react-native-screens';
 import AppContextProvider from './AppContext';

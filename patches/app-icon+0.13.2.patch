@@ -27,10 +27,10 @@ index 8e65574..97b1758 100755
      } catch (err) {
        console.error(chalk.red(`An error occurred generating the icons: ${err.message}`));
 diff --git a/node_modules/app-icon/src/android/generate-manifest-icons.js b/node_modules/app-icon/src/android/generate-manifest-icons.js
-index 65fb9b9..6da8a9b 100644
+index a11e70b..4406a1f 100644
 --- a/node_modules/app-icon/src/android/generate-manifest-icons.js
 +++ b/node_modules/app-icon/src/android/generate-manifest-icons.js
-@@ -8,7 +8,7 @@ const androidManifestIcons = require('./AndroidManifest.icons.json');
+@@ -5,7 +5,7 @@ const androidManifestIcons = require('./AndroidManifest.icons.json');
  const resizeImage = require('../resize/resize-image');
  
  //  Generate Android Manifest icons given a manifest file.
@@ -39,7 +39,7 @@ index 65fb9b9..6da8a9b 100644
    //  Create the object we will return.
    const results = {
      icons: [],
-@@ -17,8 +17,21 @@ module.exports = async function generateManifestIcons(sourceIcon, manifest) {
+@@ -14,8 +14,21 @@ module.exports = async function generateManifestIcons(sourceIcon, manifest) {
    //  We've got the manifest file, get the parent folder.
    const manifestFolder = path.dirname(manifest);
  
