@@ -6,6 +6,7 @@ type PollableResourceOptions<T> = {
   initialValue: T;
   pollingTimeInSeconds?: number;
   skipRun?(): boolean;
+  disabled?: boolean;
 };
 
 /**
@@ -63,8 +64,9 @@ export default function usePollableResource<T>(
 
   useInterval(
     () => reload('NO_LOADING'),
-    pollTime === 0 ? Number.MAX_VALUE : pollTime,
-    [reload, isFocused],
+    pollTime,
+    [reload],
+    opts.disabled || !isFocused,
   );
 
   return [state, reload, isLoading];
