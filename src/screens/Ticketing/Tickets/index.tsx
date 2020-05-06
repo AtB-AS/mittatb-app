@@ -1,38 +1,45 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {TouchableHighlight} from 'react-native-gesture-handler';
+import React, {useCallback} from 'react';
+import {View, Text, StyleSheet, RefreshControl} from 'react-native';
+import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {useIsFocused} from '@react-navigation/native';
 import {nb} from 'date-fns/locale';
 import {TicketingStackParams} from '../';
-import {FareContract} from '../../../api/fareContracts';
 import {listFareContracts} from '../../../api';
 import {secondsToDuration} from '../../../utils/date';
 import ArrowRight from '../../../assets/svg/ArrowRight';
 import ChevronDownIcon from '../../../assets/svg/ChevronDownIcon';
+import usePollableResource from '../../../utils/use-pollable-resource';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'Tickets'>;
 };
 
 const Tickets: React.FC<Props> = ({navigation}) => {
-  const [fareContracts, setFareContracts] = useState<
-    FareContract[] | undefined
-  >(undefined);
-
-  const isFocused = useIsFocused();
-
-  useEffect(() => {
-    async function getFareContracts() {
+  const getFareContracts = useCallback(async function () {
+    try {
       const response = await listFareContracts();
-      setFareContracts(response.fare_contracts);
+      return response.fare_contracts;
+    } catch (err) {
+      console.warn(err);
     }
+  }, []);
 
-    if (isFocused) getFareContracts();
-  }, [isFocused]);
+  const [fareContracts, reload, isRefreshing] = usePollableResource(
+    getFareContracts,
+    {
+      initialValue: [],
+      pollingTimeInSeconds: 5,
+      disabled: true,
+    },
+  );
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={isRefreshing} onRefresh={reload} />
+      }
+    >
       <Text style={styles.heading}>Reiserettigheter</Text>
       {fareContracts && fareContracts.length ? (
         fareContracts.map((fc, i) => (
@@ -59,7 +66,7 @@ const Tickets: React.FC<Props> = ({navigation}) => {
           <ArrowRight fill="white" width={14} height={14} />
         </View>
       </TouchableHighlight>
-    </View>
+    </ScrollView>
   );
 };
 
