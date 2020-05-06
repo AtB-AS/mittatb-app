@@ -1,5 +1,5 @@
-import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
+import {Text, View, StyleSheet, ActivityIndicator} from 'react-native';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {TicketingStackParams} from '../..';
@@ -10,29 +10,45 @@ type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'PaymentMethod'>;
 };
 
-const PaymentMethod: React.FC<Props> = ({navigation}) => (
-  <View style={styles.container}>
-    <Text style={styles.heading}>Velg betalingsmiddel</Text>
-    <TouchableHighlight
-      onPress={async () => {
-        const response = await reserveFareContracts();
-        navigation.push('PaymentCreditCard', response);
-      }}
-      style={styles.button}
-    >
-      <View style={styles.buttonContentContainer}>
-        <Text style={styles.buttonText}>Betal med bankkort</Text>
-        <ArrowRight fill="white" width={14} height={14} />
-      </View>
-    </TouchableHighlight>
-    <TouchableHighlight style={styles.button}>
-      <View style={styles.buttonContentContainer}>
-        <Text style={styles.buttonText}>Betal med Vipps</Text>
-        <ArrowRight fill="white" width={14} height={14} />
-      </View>
-    </TouchableHighlight>
-  </View>
-);
+const PaymentMethod: React.FC<Props> = ({navigation}) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onCreditCard = async () => {
+    setIsLoading(true);
+    try {
+      const response = await reserveFareContracts();
+      navigation.push('PaymentCreditCard', response);
+    } catch (err) {
+      console.warn(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      {!isLoading ? (
+        <>
+          <Text style={styles.heading}>Velg betalingsmiddel</Text>
+          <TouchableHighlight onPress={onCreditCard} style={styles.button}>
+            <View style={styles.buttonContentContainer}>
+              <Text style={styles.buttonText}>Betal med bankkort</Text>
+              <ArrowRight fill="white" width={14} height={14} />
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight style={styles.button}>
+            <View style={styles.buttonContentContainer}>
+              <Text style={styles.buttonText}>Betal med Vipps</Text>
+              <ArrowRight fill="white" width={14} height={14} />
+            </View>
+          </TouchableHighlight>
+        </>
+      ) : (
+        <ActivityIndicator />
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   button: {padding: 12, marginTop: 10, backgroundColor: 'black'},
