@@ -1,43 +1,28 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import {View, Text, StyleSheet, RefreshControl} from 'react-native';
 import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {nb} from 'date-fns/locale';
-import {TicketingStackParams} from '../';
-import {listFareContracts} from '../../../api';
+import {TicketingStackParams, useTicketState} from '../';
 import {secondsToDuration} from '../../../utils/date';
 import ArrowRight from '../../../assets/svg/ArrowRight';
 import ChevronDownIcon from '../../../assets/svg/ChevronDownIcon';
-import usePollableResource from '../../../utils/use-pollable-resource';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'Tickets'>;
 };
 
 const Tickets: React.FC<Props> = ({navigation}) => {
-  const getFareContracts = useCallback(async function () {
-    try {
-      const response = await listFareContracts();
-      return response.fare_contracts;
-    } catch (err) {
-      console.warn(err);
-    }
-  }, []);
-
-  const [fareContracts, reload, isRefreshing] = usePollableResource(
-    getFareContracts,
-    {
-      initialValue: [],
-      pollingTimeInSeconds: 5,
-      disabled: true,
-    },
-  );
+  const {fareContracts, isRefreshingTickets, refreshTickets} = useTicketState();
 
   return (
     <ScrollView
       style={styles.container}
       refreshControl={
-        <RefreshControl refreshing={isRefreshing} onRefresh={reload} />
+        <RefreshControl
+          refreshing={isRefreshingTickets}
+          onRefresh={refreshTickets}
+        />
       }
     >
       <Text style={styles.heading}>Reiserettigheter</Text>
