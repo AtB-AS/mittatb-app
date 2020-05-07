@@ -27,7 +27,7 @@ type TicketState = {
   fareContracts: FareContract[] | undefined;
   isRefreshingTickets: boolean;
   refreshTickets: () => void;
-  pollUntilNewTickets: () => void;
+  activatePollingForNewTickets: () => void;
 };
 
 const Stack = createStackNavigator<TicketingStackParams>();
@@ -63,7 +63,7 @@ export default function Ticketing() {
         fareContracts,
         refreshTickets,
         isRefreshingTickets,
-        pollUntilNewTickets: () => setPoll(true),
+        activatePollingForNewTickets: () => setPoll(true),
       }}
     >
       <Stack.Navigator>
