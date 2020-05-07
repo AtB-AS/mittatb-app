@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import WebView, {WebViewNavigation} from 'react-native-webview';
+import WebView from 'react-native-webview';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {parse as parseURL} from 'search-params';
@@ -10,6 +10,7 @@ import {
 } from 'react-native-webview/lib/WebViewTypes';
 import {capturePayment} from '../../../../api';
 import {TICKET_SERVICE_BASE_URL} from '../../../../api/fareContracts';
+import {useTicketState} from '../../TicketContext';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'PaymentCreditCard'>;
@@ -18,6 +19,7 @@ type Props = {
 
 const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const {activatePollingForNewTickets} = useTicketState();
   const {url, transaction_id, payment_id} = route.params;
 
   const onLoadEnd = () => {
@@ -37,6 +39,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
       const responseCode = params['responseCode'];
       if (responseCode === 'OK') {
         await capturePayment(payment_id, transaction_id);
+        activatePollingForNewTickets();
         navigation.popToTop();
       }
     }

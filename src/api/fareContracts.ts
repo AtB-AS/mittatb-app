@@ -1,8 +1,7 @@
 import axios from 'axios';
 import {getCustomerId} from '../utils/customerId';
 
-export const TICKET_SERVICE_BASE_URL =
-  'https://atb-ticket-jlmnrncfba-ew.a.run.app';
+export const TICKET_SERVICE_BASE_URL = 'https://atb-ticket.dev.mittatb.no';
 
 let client = axios.create({
   baseURL: TICKET_SERVICE_BASE_URL + '/ticket/v1/',
