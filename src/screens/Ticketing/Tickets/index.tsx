@@ -3,10 +3,11 @@ import {View, Text, StyleSheet, RefreshControl} from 'react-native';
 import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {nb} from 'date-fns/locale';
-import {TicketingStackParams, useTicketState} from '../';
+import {TicketingStackParams} from '../';
 import {secondsToDuration} from '../../../utils/date';
 import ArrowRight from '../../../assets/svg/ArrowRight';
 import ChevronDownIcon from '../../../assets/svg/ChevronDownIcon';
+import {useTicketState} from '../TicketContext';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'Tickets'>;

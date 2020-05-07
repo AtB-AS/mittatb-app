@@ -3,13 +3,14 @@ import WebView from 'react-native-webview';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {parse as parseURL} from 'search-params';
-import {TicketingStackParams, useTicketState} from '../..';
+import {TicketingStackParams} from '../..';
 import {
   WebViewNavigationEvent,
   WebViewErrorEvent,
 } from 'react-native-webview/lib/WebViewTypes';
 import {capturePayment} from '../../../../api';
 import {TICKET_SERVICE_BASE_URL} from '../../../../api/fareContracts';
+import {useTicketState} from '../../TicketContext';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'PaymentCreditCard'>;
