@@ -9,6 +9,7 @@ import colors from '../../theme/colors';
 import {formatToClock, secondsToDuration} from '../../utils/date';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import RealTimeLocationIcon from '../../components/location-icon/real-time';
+import insets from '../../utils/insets';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -59,7 +60,7 @@ const ResultItem: React.FC<ResultItemProps> = ({
           <TouchableOpacity
             style={{paddingVertical: 4}}
             onPress={() => onDetailsPressed(tripPattern)}
-            hitSlop={{bottom: 8, top: 8, right: 16, left: 16}}
+            hitSlop={insets.symmetric(8, 16)}
           >
             <Text style={styles.detailsText}>Vis detaljer</Text>
           </TouchableOpacity>

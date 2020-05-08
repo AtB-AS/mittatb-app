@@ -12,6 +12,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import Header from '../../../ScreenHeader';
 import {FavoriteIcon} from '../../../favorites';
+import insets from '../../../utils/insets';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -89,10 +90,7 @@ const Item: React.FC<ItemProps> = ({item, onEdit}) => {
       <FavoriteIcon favorite={item} />
       <Text style={css.text}>{item.name ?? item.location.name}</Text>
       {onEdit && (
-        <TouchableOpacity
-          onPress={onEdit}
-          hitSlop={{top: 12, right: 12, left: 12, bottom: 12}}
-        >
+        <TouchableOpacity onPress={onEdit} hitSlop={insets.all(12)}>
           <EditIcon />
         </TouchableOpacity>
       )}

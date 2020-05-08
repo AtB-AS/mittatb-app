@@ -20,6 +20,7 @@ import {SharedElement} from 'react-navigation-shared-element';
 import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
 import CancelCrossIcon from '../assets/svg/CancelCrossIcon';
+import insets from '../utils/insets';
 
 export type Props = {
   navigation: NavigationProp<any>;
@@ -105,7 +106,7 @@ const LocationSearch: React.FC<Props> = ({
             {text?.length ? (
               <View style={styles.searchClear}>
                 <TouchableOpacity
-                  hitSlop={{right: 8, left: 8, top: 8, bottom: 8}}
+                  hitSlop={insets.all(8)}
                   onPress={() => setText('')}
                 >
                   <CancelCrossIcon />

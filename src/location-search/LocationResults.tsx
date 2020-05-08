@@ -5,6 +5,7 @@ import {StyleSheet} from '../theme';
 import {Location} from '../favorites/types';
 import LocationIcon from '../components/location-icon';
 import ArrowUpLeft from '../assets/svg/ArrowUpLeft';
+import insets from '../utils/insets';
 
 type Props = {
   title: string;
@@ -46,7 +47,7 @@ const LocationResults: React.FC<Props> = ({
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-              hitSlop={{top: 8, right: 8, bottom: 8, left: 8}}
+              hitSlop={insets.all(8)}
               onPressOut={() => onPrefillText(location.name + ' ')}
             >
               <ArrowUpLeft />
