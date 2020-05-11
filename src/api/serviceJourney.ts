@@ -1,5 +1,5 @@
 import {EstimatedCall} from '../sdk';
-import {getClient} from './client';
+import client from './client';
 
 type ServiceJourneDepartures = {
   value: EstimatedCall[];
@@ -13,7 +13,6 @@ export async function getDepartures(
   if (date) {
     url = url + `?date=${date.toISOString()}`;
   }
-  const client = await getClient();
   const response = await client.get<ServiceJourneDepartures>(url);
   return response.data?.value ?? [];
 }

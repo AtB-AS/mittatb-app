@@ -1,6 +1,6 @@
 import 'react-native-get-random-values';
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {enableScreens} from 'react-native-screens';
 import AppContextProvider from './AppContext';
 import GeolocationContextProvider from './GeolocationContext';
@@ -10,11 +10,28 @@ import ThemeContextProvider from './theme/ThemeContext';
 import FavoritesContextProvider from './favorites/FavoritesContext';
 import SearchHistoryContextProvider from './search-history';
 import RemoteConfigContextProvider from './RemoteConfigContext';
+import {loadLocalConfig} from './local-config';
+import Splash from './screens/Splash';
 
 trackAppState();
 enableScreens();
 
 const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function run() {
+      await loadLocalConfig();
+      setIsLoading(false);
+    }
+
+    run();
+  }, []);
+
+  if (isLoading) {
+    return <Splash />;
+  }
+
   return (
     <AppContextProvider>
       <ThemeContextProvider>

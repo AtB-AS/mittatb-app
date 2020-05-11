@@ -1,5 +1,5 @@
 import {TripPattern} from '../sdk';
-import {getClient} from './client';
+import client from './client';
 import {Location} from '../favorites/types';
 import {AxiosRequestConfig} from 'axios';
 
@@ -9,7 +9,6 @@ export default async function search(
   opts?: AxiosRequestConfig,
 ) {
   const url = 'v1/journey/trip';
-  const client = await getClient();
   return await client.post<TripPattern[]>(
     url,
     {

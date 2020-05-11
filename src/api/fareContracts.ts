@@ -1,11 +1,10 @@
 import axios from 'axios';
 import {getCustomerId} from '../utils/customerId';
+import {createClient} from './client';
 
 export const TICKET_SERVICE_BASE_URL = 'https://atb-ticket.dev.mittatb.no';
 
-let client = axios.create({
-  baseURL: TICKET_SERVICE_BASE_URL + '/ticket/v1/',
-});
+const client = createClient(TICKET_SERVICE_BASE_URL + '/ticket/v1/');
 
 export async function list(): Promise<ListTicketsResponse> {
   const customerId = await getCustomerId();

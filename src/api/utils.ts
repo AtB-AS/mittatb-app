@@ -1,4 +1,5 @@
 import {AxiosError} from 'axios';
+import {RequestIdHeaderName} from './headers';
 
 export enum ErrorType {
   Unknown,
@@ -30,9 +31,11 @@ export interface ErrorMetadata {
   requestUrl?: string;
   requestMessage?: string;
   requestCode?: string;
+  requestId?: string;
 }
 
 export const getAxiosErrorMetadata = (error: AxiosError): ErrorMetadata => ({
+  requestId: error?.config?.headers[RequestIdHeaderName],
   requestCode: error?.code,
   requestUrl: error?.config?.url,
   requestMessage: error?.message,
