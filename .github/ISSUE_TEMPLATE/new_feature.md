@@ -8,13 +8,21 @@ assignees: ''
 ---
 
 ## Origin
-Links to received feedback, user research or other findings.
+_Links to received feedback, user research or other findings._
+
+
 
 ## Motivation
-A short description of what user needs or business goals this feature will solve.
+_A short description of what user needs or business goals this feature will solve._
+
+
 
 ## Hypotheses and assumptions
-A list of hypotheses and assumptions we have made about the user or the proposed solution.
+_A list of hypotheses and assumptions we have made about the user or the proposed solution._
+
+
 
 ## Proposed solution
-A coarse description of a proposed solution, that may include wireframes and graphic design.
+_A coarse description of a proposed solution, that may include wireframes and graphic design._
+
+
