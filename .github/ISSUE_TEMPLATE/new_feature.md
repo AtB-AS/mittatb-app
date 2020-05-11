@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 ## Origin
-Links to recieved feedback, user research or other findings.
+Links to received feedback, user research or other findings.
 
 ## Motivation
 A short description of what user needs or business goals this feature will solve.
