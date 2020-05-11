@@ -1,28 +1,35 @@
-import axios, {AxiosError, AxiosInstance} from 'axios';
+import axios, {AxiosError, AxiosRequestConfig} from 'axios';
+import {v4 as uuid} from 'uuid';
 import {API_BASE_URL} from 'react-native-dotenv';
 import {getAxiosErrorType, ErrorType, getAxiosErrorMetadata} from './utils';
 import bugsnag from '../diagnostics/bugsnag';
-import {getInstallId} from '../utils/installId';
-import {InstallIdHeaderName} from './headers';
+import {InstallIdHeaderName, RequestIdHeaderName} from './headers';
 
-let axiosInstance: AxiosInstance | null = null;
+export default createClient(API_BASE_URL);
 
-export async function getClient() {
-  if (!axiosInstance) {
-    const installid = await getInstallId();
-    axiosInstance = axios.create({
-      baseURL: API_BASE_URL,
-      headers: {
-        [InstallIdHeaderName]: installid,
-      },
-    });
-    axiosInstance.interceptors.response.use(undefined, responseErrorHandler);
-  }
-  return axiosInstance;
+export function createClient(baseUrl: string) {
+  const client = axios.create({
+    baseURL: baseUrl,
+  });
+  client.interceptors.request.use(requestHandler, undefined);
+  client.interceptors.response.use(undefined, responseErrorHandler);
+  return client;
+}
+
+let installIdHeaderValue: string | null = null;
+
+export function setInstallId(installId: string) {
+  installIdHeaderValue = installId;
 }
 
 export const CancelToken = axios.CancelToken;
 export const isCancel = axios.isCancel;
+
+function requestHandler(config: AxiosRequestConfig): AxiosRequestConfig {
+  config.headers[InstallIdHeaderName] = installIdHeaderValue;
+  config.headers[RequestIdHeaderName] = uuid();
+  return config;
+}
 
 function responseErrorHandler(error: AxiosError) {
   const errorType = getAxiosErrorType(error);
