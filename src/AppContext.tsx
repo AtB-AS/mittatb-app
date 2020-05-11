@@ -7,7 +7,6 @@ import React, {
   useMemo,
 } from 'react';
 import storage from './storage';
-import {loadLocalConfig} from './local-config';
 
 type AppState = {
   isLoading: boolean;
@@ -59,18 +58,13 @@ const defaultAppState: AppState = {
   onboarded: false,
 };
 
-export let installId: string | null = null;
-
 const AppContextProvider: React.FC = ({children}) => {
   const [state, dispatch] = useReducer<AppReducer>(appReducer, defaultAppState);
 
   useEffect(() => {
     async function loadAppSettings() {
-      await loadLocalConfig();
-
       const savedOnboarded = await storage.get('onboarded');
       const onboarded = !savedOnboarded ? false : JSON.parse(savedOnboarded);
-
       dispatch({
         type: 'LOAD_APP_SETTINGS',
         onboarded,
