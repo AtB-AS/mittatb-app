@@ -23,19 +23,19 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const {url, transaction_id, payment_id} = route.params;
   const isCaptureInProgressRef = useRef(false);
 
-  const onLoadEnd = () => {
-    if (isLoading) {
+  const onLoadEnd = ({
+    nativeEvent: {url},
+  }: WebViewNavigationEvent | WebViewErrorEvent) => {
+    if (isLoading && !url.includes('/EnturPaymentRedirect')) {
       setIsLoading(false);
     }
   };
 
-  const onLoadStart = async (
-    event: WebViewNavigationEvent | WebViewErrorEvent,
-  ) => {
-    const {
-      nativeEvent: {url},
-    } = event;
+  const onLoadStart = async ({
+    nativeEvent: {url},
+  }: WebViewNavigationEvent | WebViewErrorEvent) => {
     if (url.includes('/EnturPaymentRedirect')) {
+      setIsLoading(true);
       const params = parseURL(url);
       const responseCode = params['responseCode'];
       if (responseCode === 'OK') {
