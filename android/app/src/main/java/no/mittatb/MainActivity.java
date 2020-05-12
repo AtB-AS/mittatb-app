@@ -1,5 +1,7 @@
 package no.mittatb;
 
+import android.os.Bundle;
+
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
@@ -15,7 +17,12 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "atb";
   }
-  
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(null);
+  }
+
   @Override
   protected ReactActivityDelegate createReactActivityDelegate() {
     return new ReactActivityDelegate(this, getMainComponentName()) {
