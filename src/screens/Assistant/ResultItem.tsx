@@ -7,9 +7,6 @@ import {Leg, LegMode, TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import colors from '../../theme/colors';
 import {formatToClock, secondsToDuration} from '../../utils/date';
-import JourneyBusIcon from './svg/JourneyBusIcon';
-import JourneyTrainIcon from './svg/JourneyTrainIcon';
-import JourneyTramIcon from './svg/JourneyTramIcon';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import RealTimeLocationIcon from '../../components/location-icon/real-time';
 

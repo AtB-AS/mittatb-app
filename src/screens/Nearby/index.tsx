@@ -79,7 +79,7 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
     // Searching nearest is a really heavy operation,
     // so polling every 30 seconds is costly. Might
     // be a better way to do this and having subscription model for real time data.
-    fromLocation?.layer === 'venue' ? 30 : 120 ?? 0,
+    fromLocation?.layer === 'venue' ? 30 : 60 ?? 0,
   );
 
   const openLocationSearch = () =>
