@@ -22,10 +22,11 @@ type PollableResourceOptions<T> = {
 export default function usePollableResource<T>(
   callback: () => Promise<T>,
   opts: PollableResourceOptions<T>,
-): [T, () => Promise<void>, boolean] {
+): [T, () => Promise<void>, boolean, Error?] {
   const {initialValue, pollingTimeInSeconds = 30, skipRun} = opts;
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | undefined>(undefined);
   const [state, setState] = useState<T>(initialValue);
   const pollTime = pollingTimeInSeconds * 1000;
   const isFocused = useIsFocused();
@@ -47,8 +48,11 @@ export default function usePollableResource<T>(
         setIsLoading(true);
       }
       try {
+        setError(undefined);
         const newState = await callback();
         setState(newState);
+      } catch (e) {
+        setError(e);
       } finally {
         if (loading === 'WITH_LOADING') {
           setIsLoading(false);
@@ -69,5 +73,5 @@ export default function usePollableResource<T>(
     opts.disabled || !isFocused,
   );
 
-  return [state, reload, isLoading];
+  return [state, reload, isLoading, error];
 }
