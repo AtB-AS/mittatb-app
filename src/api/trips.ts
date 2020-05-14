@@ -26,3 +26,12 @@ export default async function search(
     opts,
   );
 }
+
+export async function getSingleTripPattern(
+  tripPatternId: string,
+  opts?: AxiosRequestConfig,
+) {
+  const url = `v1/journey/single-trip?id=${tripPatternId}`;
+  const result = await client.get<TripPattern>(url, opts);
+  return result.data;
+}
