@@ -18,9 +18,10 @@ type Group = {
   user_type: UserType;
 };
 
-const groups = new Map<string, Group>();
-groups.set('adult_group', {name: 'voksen', user_type: 'ADULT'});
-const groupArr = Array.from(groups.entries()).map(([id, {user_type}]) => ({
+const groups: {[key: string]: Group} = {
+  ['adult_group']: {name: 'voksen', user_type: 'ADULT'},
+};
+const groupArr = Object.entries(groups).map(([id, {user_type}]) => ({
   id,
   user_type,
 }));
@@ -61,7 +62,7 @@ const offerReducer: OfferReducer = (prevState, action) => {
           {
             offer_id: o.offer_id,
             price: getCurrencyAsFloat(o.prices, 'NOK'),
-            name: groups.get(o.traveller_id)?.name ?? 'unknown',
+            name: groups[o.traveller_id]?.name ?? 'unknown',
             count: 1,
           },
         ])
