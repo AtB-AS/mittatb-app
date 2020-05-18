@@ -12,6 +12,7 @@ import RightArrow from './svg/RightArrow';
 import InfoIcon from '../../assets/svg/InfoIcon';
 import hexToRgba from 'hex-to-rgba';
 import colors from '../../theme/colors';
+import insets from '../../utils/insets';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
@@ -76,7 +77,7 @@ const Results: React.FC<Props> = ({
           <TouchableOpacity
             style={styles.button}
             onPress={previousPage}
-            hitSlop={{bottom: 8, top: 8, right: 8, left: 8}}
+            hitSlop={insets.all(8)}
             disabled={isFirstPage}
           >
             <LeftArrow
@@ -115,7 +116,7 @@ const Results: React.FC<Props> = ({
           <TouchableOpacity
             style={styles.button}
             onPress={nextPage}
-            hitSlop={{bottom: 8, top: 8, right: 8, left: 8}}
+            hitSlop={insets.all(8)}
             disabled={isLastPage}
           >
             <RightArrow

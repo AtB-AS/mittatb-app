@@ -4,6 +4,7 @@ import React from 'react';
 import {StyleSheet} from '../theme';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import CancelCrossIcon from '../assets/svg/CancelCrossIcon';
+import insets from '../utils/insets';
 
 type ScreenHeaderProps = {
   onClose?(): void;
@@ -21,15 +22,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   const iconEl = iconElement ?? defaultIcon;
 
   const icon = onClose ? (
-    <TouchableOpacity
-      onPress={onClose}
-      hitSlop={{
-        top: 8,
-        left: 8,
-        right: 8,
-        bottom: 8,
-      }}
-    >
+    <TouchableOpacity onPress={onClose} hitSlop={insets.all(8)}>
       {iconEl}
     </TouchableOpacity>
   ) : (
