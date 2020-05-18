@@ -12,7 +12,7 @@ import {
 export type TicketingStackParams = {
   Tickets: undefined;
   Offer: undefined;
-  PaymentMethod: {offers: string[]};
+  PaymentMethod: {offers: {offer_id: string; count: number}[]};
   PaymentCreditCard: ReserveTicketResponse;
 };
 

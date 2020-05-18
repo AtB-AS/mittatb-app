@@ -3,6 +3,7 @@ export {autocomplete, reverse} from './geocoder';
 export {default as searchTrip} from './trips';
 export {
   list as listFareContracts,
-  reserve as reserveFareContracts,
+  search as searchOffers,
+  reserve as reserveOffers,
   capture as capturePayment,
 } from './fareContracts';

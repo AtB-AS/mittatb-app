@@ -2,21 +2,24 @@ import React, {useState} from 'react';
 import {Text, View, StyleSheet, ActivityIndicator} from 'react-native';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../..';
-import {reserveFareContracts} from '../../../../api';
+import {reserveOffers} from '../../../../api';
 import ArrowRight from '../../../../assets/svg/ArrowRight';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'PaymentMethod'>;
+  route: RouteProp<TicketingStackParams, 'PaymentMethod'>;
 };
 
-const PaymentMethod: React.FC<Props> = ({navigation}) => {
+const PaymentMethod: React.FC<Props> = ({navigation, route}) => {
   const [isLoading, setIsLoading] = useState(false);
+  const {offers} = route.params;
 
   const onCreditCard = async () => {
     setIsLoading(true);
     try {
-      const response = await reserveFareContracts();
+      const response = await reserveOffers(offers);
       navigation.push('PaymentCreditCard', response);
     } catch (err) {
       console.warn(err);
