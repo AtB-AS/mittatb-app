@@ -132,7 +132,7 @@ export default NearbyScreen;
 function useNearestDepartures(
   location?: Location,
   pollingTimeInSeconds: number = 0,
-): [EstimatedCall[] | null, () => Promise<void>, boolean] {
+): [EstimatedCall[] | null, () => Promise<void>, boolean, Error?] {
   const fetchDepartures = useCallback(
     async function reload() {
       if (!location) return [];

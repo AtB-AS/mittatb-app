@@ -257,7 +257,7 @@ function useGroupedCallList(
   fromQuayId?: string,
   toQuayId?: string,
   pollingTimeInSeconds: number = 0,
-): [CallListGroup, () => void, boolean] {
+): [CallListGroup, () => void, boolean, Error?] {
   const getService = useCallback(
     async function getServiceJourneyDepartures() {
       const deps = await getDepartures(serviceJourneyId);

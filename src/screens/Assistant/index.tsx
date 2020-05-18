@@ -100,7 +100,7 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
           navigation.navigate('TripDetailsModal', {
             from: from!,
             to: to!,
-            tripPattern,
+            tripPatternId: tripPattern.id!,
           })
         }
       />
