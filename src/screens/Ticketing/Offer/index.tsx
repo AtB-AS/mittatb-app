@@ -6,7 +6,7 @@ import {TicketingStackParams} from '../';
 import ArrowRight from '../../../assets/svg/ArrowRight';
 import ChevronDownIcon from '../../../assets/svg/ChevronDownIcon';
 import {searchOffers} from '../../../api/';
-import {UserType, Offer} from '../../../api/fareContracts';
+import {UserType, Offer, OfferPrice} from '../../../api/fareContracts';
 import OfferGroup from './Group';
 
 type Props = {
@@ -49,6 +49,9 @@ type OfferReducer = (
   action: OfferReducerAction,
 ) => OfferState;
 
+const getCurrencyAsFloat = (prices: OfferPrice[], currency: string) =>
+  prices.find((p) => p.currency === 'NOK')?.amount_float ?? 0;
+
 const offerReducer: OfferReducer = (prevState, action) => {
   switch (action.type) {
     case 'SET_OFFERS':
@@ -57,8 +60,7 @@ const offerReducer: OfferReducer = (prevState, action) => {
           o.traveller_id,
           {
             offer_id: o.offer_id,
-            price:
-              o.prices.find((p) => p.currency === 'NOK')?.amount_float ?? 0,
+            price: getCurrencyAsFloat(o.prices, 'NOK'),
             name: groups.get(o.traveller_id)?.name ?? 'unknown',
             count: 1,
           },
