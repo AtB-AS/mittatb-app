@@ -113,7 +113,7 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.primary,
+    backgroundColor: theme.background.level1,
     paddingBottom: 0,
     flex: 1,
   },

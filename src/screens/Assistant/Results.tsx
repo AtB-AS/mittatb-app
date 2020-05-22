@@ -1,18 +1,12 @@
 import React from 'react';
 import {ActivityIndicator, View, Text} from 'react-native';
 import {TripPattern} from '../../sdk';
-import {StyleSheet, Theme, useTheme} from '../../theme';
+import {StyleSheet, useTheme} from '../../theme';
 import ResultItem from './ResultItem';
 import {AssistantScreenNavigationProp} from './';
-import ViewPager from '@react-native-community/viewpager';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import useViewPagerIndexController from './useViewPagerIndexController';
-import LeftArrow from './svg/LeftArrow';
-import RightArrow from './svg/RightArrow';
+import {ScrollView} from 'react-native-gesture-handler';
 import InfoIcon from '../../assets/svg/InfoIcon';
-import hexToRgba from 'hex-to-rgba';
 import colors from '../../theme/colors';
-import insets from '../../utils/insets';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
@@ -32,17 +26,6 @@ const Results: React.FC<Props> = ({
 }) => {
   const {theme} = useTheme();
   const styles = useThemeStyles(theme);
-  const arrowFill = useArrowFill(theme);
-
-  const {
-    viewPagerRef,
-    nextPage,
-    previousPage,
-    onPageSelected,
-    disablePaging,
-    isFirstPage,
-    isLastPage,
-  } = useViewPagerIndexController(0, tripPatterns?.length ?? 0);
 
   if (isSearching) {
     return (
@@ -71,76 +54,25 @@ const Results: React.FC<Props> = ({
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.detailContainer}>
-        <View style={[styles.buttonContainer, {left: 10}]}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={previousPage}
-            hitSlop={insets.all(8)}
-            disabled={isFirstPage}
-          >
-            <LeftArrow
-              fill={isFirstPage ? arrowFill.disabled : arrowFill.enabled}
-            />
-          </TouchableOpacity>
+    <ScrollView contentContainerStyle={styles.container}>
+      {tripPatterns.map((tripPattern, i) => (
+        <View key={i}>
+          <ResultItem
+            tripPattern={tripPattern}
+            onDetailsPressed={onDetailsPressed}
+          />
         </View>
-
-        <ViewPager
-          ref={viewPagerRef}
-          style={styles.viewPager}
-          initialPage={0}
-          onPageScrollStateChanged={(ev) => {
-            switch (ev.nativeEvent.pageScrollState) {
-              case 'dragging':
-                disablePaging(true);
-                break;
-              case 'idle':
-                disablePaging(false);
-            }
-          }}
-          onPageSelected={({nativeEvent}) => {
-            onPageSelected(nativeEvent.position);
-          }}
-        >
-          {tripPatterns.map((tripPattern, i) => (
-            <View key={i}>
-              <ResultItem
-                tripPattern={tripPattern}
-                onDetailsPressed={onDetailsPressed}
-              />
-            </View>
-          ))}
-        </ViewPager>
-        <View style={[styles.buttonContainer, {right: 10}]}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={nextPage}
-            hitSlop={insets.all(8)}
-            disabled={isLastPage}
-          >
-            <RightArrow
-              fill={isLastPage ? arrowFill.disabled : arrowFill.enabled}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
+      ))}
+    </ScrollView>
   );
 };
 
 export default Results;
 
-const useArrowFill = (theme: Theme) => ({
-  enabled: theme.text.primary,
-  disabled: hexToRgba(theme.text.primary, 0.2),
-});
-
 const useThemeStyles = StyleSheet.createTheme((theme) => ({
   container: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginTop: 12,
+    marginBottom: 0,
   },
   infoBox: {
     backgroundColor: colors.secondary.cyan,

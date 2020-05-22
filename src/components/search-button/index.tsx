@@ -23,40 +23,31 @@ const SearchButton: React.FC<ResultItemProps> = ({
   const styles = useThemeStyles();
 
   return (
-    <View style={styles.buttonContainer}>
+    <TouchableOpacity style={styles.button} onPress={onPress}>
       <Text style={styles.title}>{title}</Text>
-      <TouchableOpacity style={styles.button} onPress={onPress}>
-        {icon}
-        <Text style={styles.buttonText}>{location?.label ?? placeholder}</Text>
-      </TouchableOpacity>
-    </View>
+      <Text style={styles.buttonText}>{location?.label ?? placeholder}</Text>
+      <View style={styles.icon}>{icon}</View>
+    </TouchableOpacity>
   );
 };
 
 export default SearchButton;
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  buttonContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    width: '100%',
-    marginVertical: 20,
-  },
-  title: {marginVertical: 4},
   button: {
-    height: 44,
-    borderRadius: 4,
-    borderTopLeftRadius: 16,
-    backgroundColor: theme.background.secondary,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
+    paddingVertical: 8,
   },
+  buttonContainer: {
+    flexDirection: 'row',
+  },
+  title: {width: 30},
   buttonText: {
     marginLeft: 12,
     fontSize: 16,
-    fontWeight: '600',
+    flex: 1,
   },
+  icon: {},
 }));

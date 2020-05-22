@@ -22,6 +22,7 @@ import SearchButton from '../../components/search-button';
 import SearchLocationIcon from '../../components/search-location-icon';
 import {useFavorites} from '../../favorites/FavoritesContext';
 import {CancelToken, isCancel} from '../../api/client';
+import SearchGroup from '../../components/search-button/search-group';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -83,15 +84,27 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Reiseassistent" />
-      <SharedElement id="locationSearchInput">
-        <SearchButton
-          title="Fra"
-          placeholder="Søk etter adresse eller sted"
-          location={from}
-          icon={fromIcon}
-          onPress={() => openLocationSearch('fromLocation', from?.name)}
-        />
-      </SharedElement>
+      <SearchGroup>
+        <SharedElement id="locationSearchInput">
+          <SearchButton
+            title="Fra"
+            placeholder="Søk etter adresse eller sted"
+            location={from}
+            icon={fromIcon}
+            onPress={() => openLocationSearch('fromLocation', from?.name)}
+          />
+        </SharedElement>
+        <SharedElement id="locationSearchInput">
+          <SearchButton
+            title="Til"
+            placeholder="Søk etter adresse eller sted"
+            location={to}
+            icon={toIcon}
+            onPress={() => openLocationSearch('toLocation', to?.name)}
+          />
+        </SharedElement>
+      </SearchGroup>
+
       <Results
         tripPatterns={tripPatterns}
         isSearching={isSearching}
@@ -104,15 +117,6 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
           })
         }
       />
-      <SharedElement id="locationSearchInput">
-        <SearchButton
-          title="Til"
-          placeholder="Søk etter adresse eller sted"
-          location={to}
-          icon={toIcon}
-          onPress={() => openLocationSearch('toLocation', to?.name)}
-        />
-      </SharedElement>
     </SafeAreaView>
   );
 };
@@ -191,8 +195,9 @@ function useUpdatedLocation(
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.primary,
+    backgroundColor: theme.background.level1,
     flex: 1,
+    paddingBottom: 0,
   },
 }));
 

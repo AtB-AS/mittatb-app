@@ -209,7 +209,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     padding: theme.sizes.pagePadding,
   },
   input: {
-    backgroundColor: theme.background.primary,
+    backgroundColor: theme.background.level1,
     borderBottomColor: theme.border.primary,
     color: theme.text.primary,
     borderBottomWidth: 2,
@@ -238,7 +238,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flex: 1,
     fontSize: 16,
     paddingLeft: 44,
-    backgroundColor: theme.background.primary,
+    backgroundColor: theme.background.level1,
     borderBottomWidth: 2,
     borderRadius: 4,
     borderBottomColor: theme.border.primary,
@@ -275,7 +275,7 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     padding: 12,
     flexDirection: 'row',
-    backgroundColor: theme.background.secondary,
+    backgroundColor: theme.background.level2,
     alignSelf: 'flex-start',
     borderRadius: 4,
   },

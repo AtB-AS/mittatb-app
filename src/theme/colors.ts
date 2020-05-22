@@ -1,3 +1,15 @@
+const backgrounds = {
+  light__level0: '#FFFFFF',
+  light__level1: '#F5F5F6',
+  light__level2: '#EBECED',
+  light__level3: '#E1E3E4',
+
+  dark__level0: '#000000',
+  dark__level1: '#111416',
+  dark__level2: '#13171A',
+  dark__level3: '#161A1E',
+};
+
 const colors = {
   primary: {
     green: '#A2AD00',
@@ -23,14 +35,14 @@ const colors = {
 export default colors;
 
 const sizes = {
-  pagePadding: 24,
+  pagePadding: 12,
 };
 
 export interface Theme {
   sizes: typeof sizes;
   background: {
-    primary: string;
-    secondary: string;
+    level1: string;
+    level2: string;
     modal_Level2: string;
     destructive: string;
     accent: string;
@@ -54,8 +66,8 @@ export const themes: Themes = {
   light: {
     sizes,
     background: {
-      primary: colors.general.white,
-      secondary: colors.general.gray,
+      level1: backgrounds.light__level1,
+      level2: backgrounds.light__level2,
       modal_Level2: colors.secondary.gray_Level2,
       destructive: colors.secondary.red,
       accent: colors.primary.green,
@@ -72,8 +84,8 @@ export const themes: Themes = {
   dark: {
     sizes,
     background: {
-      primary: colors.general.offblack,
-      secondary: colors.general.gray,
+      level1: colors.general.offblack,
+      level2: colors.general.gray,
       modal_Level2: colors.secondary.gray_Level2,
       destructive: colors.secondary.red,
       accent: colors.primary.green,
