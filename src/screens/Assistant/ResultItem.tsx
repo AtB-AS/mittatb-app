@@ -9,6 +9,8 @@ import {formatToClock, secondsToDuration} from '../../utils/date';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import RealTimeLocationIcon from '../../components/location-icon/real-time';
 import insets from '../../utils/insets';
+import WalkIcon from './svg/WalkIcon';
+import DestinationIcon from './svg/Destination';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -19,9 +21,10 @@ const ResultItemHeader: React.FC<{
   tripPattern: TripPattern;
 }> = ({tripPattern}) => {
   const firstWithQuay = tripPattern.legs.find((leg) => leg.fromPlace.quay);
+  const styles = useThemeStyles();
 
   return (
-    <View>
+    <View style={styles.resultHeader}>
       <Text>Fra {firstWithQuay?.fromPlace.quay?.name}</Text>
       <Text>{secondsToDuration(tripPattern.duration, nb)}</Text>
     </View>
@@ -42,7 +45,7 @@ const ResultItem: React.FC<ResultItemProps> = ({
       onPress={() => onDetailsPressed(tripPattern)}
       hitSlop={insets.symmetric(8, 16)}
     >
-      <View style={styles.legContainer}>
+      <View style={styles.result}>
         <ResultItemHeader tripPattern={tripPattern} />
 
         <View style={styles.detailsContainer}>
@@ -60,10 +63,11 @@ const ResultItem: React.FC<ResultItemProps> = ({
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  legContainer: {
-    flexDirection: 'column',
-    paddingHorizontal: 50,
-    width: '100%',
+  result: {
+    padding: 12,
+    marginHorizontal: 12,
+    backgroundColor: theme.background.level0,
+    borderRadius: 8,
   },
   stopName: {
     fontSize: 16,
@@ -84,53 +88,89 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   detailsContainer: {
     flexDirection: 'column',
-    paddingTop: 12,
-    height: 88,
   },
   transferText: {fontSize: 16},
   detailsText: {fontSize: 12, textDecorationLine: 'underline'},
+  resultHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingBottom: 8,
+    marginBottom: 8,
+    borderBottomColor: theme.background.level1,
+    borderBottomWidth: 1,
+  },
 }));
 
 const FootLeg = ({leg}: {leg: Leg}) => {
-  const styles = useFootLegStyles();
+  const styles = useLegStyles();
   return (
     <View style={styles.legContainer}>
-      <Text style={{fontSize: 16}}>{formatToClock(leg.expectedStartTime)}</Text>
-      <WalkingPerson fill={styles.walkingPerson.backgroundColor} />
-      <Text style={{fontSize: 16}}>
+      <Text style={[styles.text, styles.time]}>
+        {formatToClock(leg.expectedStartTime)}
+      </Text>
+      <WalkIcon
+        fill={styles.walkingPerson.backgroundColor}
+        style={{marginRight: 12}}
+      />
+      <Text style={styles.text}>
         {secondsToDuration(leg.duration ?? 0, nb)}
       </Text>
     </View>
   );
 };
 
-const useFootLegStyles = StyleSheet.createThemeHook((theme) => ({
-  legContainer: {flexDirection: 'row', paddingVertical: 4},
+const useLegStyles = StyleSheet.createThemeHook((theme) => ({
+  legContainer: {
+    flexDirection: 'row',
+    paddingVertical: 4,
+    alignItems: 'center',
+  },
+  time: {
+    width: 50,
+  },
+  text: {
+    fontSize: 16,
+  },
+  textBold: {
+    fontWeight: 'bold',
+  },
   walkingPerson: {
     backgroundColor: theme.text.primary,
   },
 }));
 
 const TransportationLeg = ({leg}: {leg: Leg}) => {
-  const styles = useFootLegStyles();
+  const styles = useLegStyles();
   return (
     <View style={styles.legContainer}>
-      <Text>{formatToClock(leg.expectedStartTime)}</Text>
-      <RealTimeLocationIcon mode={leg.mode} isLive={leg.realtime} />
-      <Text>{getLineDisplayName(leg)}</Text>
+      <Text style={[styles.text, styles.time]}>
+        {formatToClock(leg.expectedStartTime)}
+      </Text>
+      <RealTimeLocationIcon
+        mode={leg.mode}
+        isLive={leg.realtime}
+        style={{marginRight: 3}}
+      />
+      <Text style={styles.text}>{getLineDisplayName(leg)}</Text>
     </View>
   );
 };
 
 const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
-  const styles = useFootLegStyles();
+  const styles = useLegStyles();
   const lastLeg = tripPattern.legs[tripPattern.legs.length - 1];
   if (!lastLeg) return null;
 
   return (
     <View style={styles.legContainer}>
-      <Text>{formatToClock(lastLeg.expectedEndTime)}</Text>
-      <Text>{lastLeg.toPlace.name}</Text>
+      <Text style={[styles.text, styles.time]}>
+        {formatToClock(lastLeg.expectedEndTime)}
+      </Text>
+      <DestinationIcon
+        fill={styles.walkingPerson.backgroundColor}
+        style={{marginRight: 12}}
+      />
+      <Text style={styles.text}>{lastLeg.toPlace.name}</Text>
     </View>
   );
 };

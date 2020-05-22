@@ -33,7 +33,7 @@ export default SearchGroup;
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    background: '#FFFFFF',
+    backgroundColor: theme.background.level0,
     padding: 12,
     borderWidth: 1,
     borderColor: '#C3C6C9',

@@ -15,6 +15,7 @@ export type TransportationIconProps = {
   isLive?: boolean;
   height?: number;
   emptyStyle?: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
 };
 
 const RealTimeLocationIcon: React.FC<TransportationIconProps> = ({
@@ -23,6 +24,7 @@ const RealTimeLocationIcon: React.FC<TransportationIconProps> = ({
   height,
   emptyStyle,
   children,
+  style,
 }) => {
   const styles = useStyle();
   if (!isLive) {
@@ -31,6 +33,7 @@ const RealTimeLocationIcon: React.FC<TransportationIconProps> = ({
         style={[
           emptyStyle,
           height ? {height: height - 12, width: height - 12} : undefined,
+          style,
         ]}
       >
         {children ? children : <InnerIcon mode={mode} />}
@@ -40,7 +43,11 @@ const RealTimeLocationIcon: React.FC<TransportationIconProps> = ({
 
   return (
     <View
-      style={[styles.container, height ? {height, width: height} : undefined]}
+      style={[
+        styles.container,
+        height ? {height, width: height} : undefined,
+        style,
+      ]}
     >
       <LottieView source={require('./realtime-animation.json')} autoPlay loop />
       {children ? children : <InnerIcon mode={mode} />}
