@@ -7,6 +7,7 @@ import {AssistantScreenNavigationProp} from './';
 import {ScrollView} from 'react-native-gesture-handler';
 import InfoIcon from '../../assets/svg/InfoIcon';
 import colors from '../../theme/colors';
+import MessageBox from '../../message-box';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
@@ -40,15 +41,12 @@ const Results: React.FC<Props> = ({
   if (!tripPatterns.length) {
     return (
       <View style={styles.container}>
-        <View style={styles.infoBox}>
-          <View style={styles.infoBoxIcon}>
-            <InfoIcon />
-          </View>
+        <MessageBox>
           <Text style={styles.infoBoxText}>
-            Vi fant dessverre ingen reiseruter som passer til ditt søk. {'\n'}
+            Vi fant dessverre ingen reiseruter som passer til ditt søk.
             Vennligst prøv et annet avreisested eller destinasjon.
           </Text>
-        </View>
+        </MessageBox>
       </View>
     );
   }
@@ -56,12 +54,11 @@ const Results: React.FC<Props> = ({
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {tripPatterns.map((tripPattern, i) => (
-        <View key={i}>
-          <ResultItem
-            tripPattern={tripPattern}
-            onDetailsPressed={onDetailsPressed}
-          />
-        </View>
+        <ResultItem
+          key={i}
+          tripPattern={tripPattern}
+          onDetailsPressed={onDetailsPressed}
+        />
       ))}
     </ScrollView>
   );
@@ -73,17 +70,9 @@ const useThemeStyles = StyleSheet.createTheme((theme) => ({
   container: {
     marginTop: 12,
     marginBottom: 0,
+    padding: 12,
   },
-  infoBox: {
-    backgroundColor: colors.secondary.cyan,
-    flexDirection: 'row',
-    alignItems: 'center',
-    maxWidth: 327,
-    paddingVertical: 8,
-    paddingRight: 12,
-  },
-  infoBoxIcon: {padding: 12},
-  infoBoxText: {fontSize: 16, flex: 1, flexWrap: 'wrap'},
+  infoBoxText: {fontSize: 16},
   spinner: {height: 280},
   detailContainer: {
     justifyContent: 'center',

@@ -65,7 +65,6 @@ const ResultItem: React.FC<ResultItemProps> = ({
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   result: {
     padding: 12,
-    marginHorizontal: 12,
     backgroundColor: theme.background.level0,
     borderRadius: 8,
   },
@@ -108,10 +107,9 @@ const FootLeg = ({leg}: {leg: Leg}) => {
       <Text style={[styles.text, styles.time]}>
         {formatToClock(leg.expectedStartTime)}
       </Text>
-      <WalkIcon
-        fill={styles.walkingPerson.backgroundColor}
-        style={{marginRight: 12}}
-      />
+      <View style={styles.iconContainer}>
+        <WalkIcon fill={styles.walkingPerson.backgroundColor} />
+      </View>
       <Text style={styles.text}>
         {secondsToDuration(leg.duration ?? 0, nb)}
       </Text>
@@ -137,6 +135,10 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
   walkingPerson: {
     backgroundColor: theme.text.primary,
   },
+  iconContainer: {
+    width: 30,
+    alignItems: 'center',
+  },
 }));
 
 const TransportationLeg = ({leg}: {leg: Leg}) => {
@@ -146,11 +148,9 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
       <Text style={[styles.text, styles.time]}>
         {formatToClock(leg.expectedStartTime)}
       </Text>
-      <RealTimeLocationIcon
-        mode={leg.mode}
-        isLive={leg.realtime}
-        style={{marginRight: 3}}
-      />
+      <View style={styles.iconContainer}>
+        <RealTimeLocationIcon mode={leg.mode} isLive={leg.realtime} />
+      </View>
       <Text style={styles.text}>{getLineDisplayName(leg)}</Text>
     </View>
   );
@@ -166,10 +166,9 @@ const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
       <Text style={[styles.text, styles.time]}>
         {formatToClock(lastLeg.expectedEndTime)}
       </Text>
-      <DestinationIcon
-        fill={styles.walkingPerson.backgroundColor}
-        style={{marginRight: 12}}
-      />
+      <View style={styles.iconContainer}>
+        <DestinationIcon fill={styles.walkingPerson.backgroundColor} />
+      </View>
       <Text style={styles.text}>{lastLeg.toPlace.name}</Text>
     </View>
   );
