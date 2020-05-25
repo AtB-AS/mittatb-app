@@ -7,6 +7,7 @@
 #import <BugsnagReactNative.h>
 #import <BugsnagConfiguration.h>
 #import <Firebase.h>
+@import Intercom;
 
 #import "RNBootSplash.h"
 
@@ -35,6 +36,16 @@ static void InitializeFlipper(UIApplication *application) {
   #if DEBUG
     InitializeFlipper(application);
   #endif
+  NSString *intercomPath = [[NSBundle mainBundle] pathForResource:@"Intercom" ofType:@"plist"];
+  NSDictionary *intercomDict = [[NSDictionary alloc] initWithContentsOfFile:intercomPath];
+  NSString* intercomApiKey = [intercomDict objectForKey:@"IntercomApiKey"];
+  NSString* intercomAppId = [intercomDict objectForKey:@"IntercomAppId"];
+  if (intercomApiKey != nil && intercomAppId != nil) {
+    [Intercom setApiKey:intercomApiKey forAppId:intercomAppId];
+    [Intercom registerUnidentifiedUser];
+    [Intercom setLauncherVisible:YES];
+  }
+  
   NSString* bugsnagApiKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"BugsnagAPIKey"];
   if (bugsnagApiKey != nil) {
     BugsnagConfiguration *config = [BugsnagConfiguration new];

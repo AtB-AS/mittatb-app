@@ -18,6 +18,8 @@ import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import io.intercom.android.sdk.Intercom;
+
 public class MainApplication extends MultiDexApplication implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
@@ -51,6 +53,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
   public void onCreate() {
     super.onCreate();
     tryInitializeBugsnag();
+    tryInitializeIntercom();
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
   }
@@ -70,6 +73,20 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
       }
     } catch (Exception e) {
       e.printStackTrace();
+    }
+  }
+
+  private void tryInitializeIntercom() {
+    try {
+        String intercomApiKey = getString(R.string.IntercomApiKey);
+        String intercomAppId = getString(R.string.IntercomAppId);
+        if (!TextUtils.isEmpty(intercomApiKey) && !TextUtils.isEmpty(intercomAppId)) {
+            Intercom.initialize(this, intercomApiKey, intercomAppId);
+            Intercom.client().registerUnidentifiedUser();
+            Intercom.client().setLauncherVisibility(Intercom.Visibility.VISIBLE);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
     }
   }
 

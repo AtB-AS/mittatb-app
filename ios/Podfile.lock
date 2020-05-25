@@ -148,6 +148,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (6.5.1):
     - GoogleUtilities/Logger
+  - Intercom (5.5.2)
   - lottie-ios (3.1.8)
   - lottie-react-native (3.3.2):
     - lottie-ios (~> 3.1.3)
@@ -442,6 +443,7 @@ DEPENDENCIES:
   - FlipperKit/SKIOSNetworkPlugin (~> 0.33.1)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - Intercom
   - lottie-ios (from `../node_modules/lottie-ios`)
   - lottie-react-native (from `../node_modules/lottie-react-native`)
   - Permission-LocationWhenInUse (from `../node_modules/react-native-permissions/ios/LocationWhenInUse.podspec`)
@@ -511,6 +513,7 @@ SPEC REPOS:
     - GoogleDataTransport
     - GoogleDataTransportCCTSupport
     - GoogleUtilities
+    - Intercom
     - nanopb
     - OpenSSL-Universal
     - Protobuf
@@ -640,6 +643,7 @@ SPEC CHECKSUMS:
   GoogleDataTransport: 653963cf5be60fb59cf051e070f0836fdc305f81
   GoogleDataTransportCCTSupport: 84e4d4bbab642f2e9d83ee65d78aca2b5527d314
   GoogleUtilities: 06eb53bb579efe7099152735900dd04bf09e7275
+  Intercom: 1151a15e5e7931d8e401671a4357239d44325159
   lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
   lottie-react-native: 2a1a82bb326ae51331a5520de0cf706733c6db69
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
@@ -685,6 +689,6 @@ SPEC CHECKSUMS:
   Yoga: 50fb6eb13d2152e7363293ff603385db380815b1
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 695e6d21658fba6e89beee66fb830ea1f666621a
+PODFILE CHECKSUM: 321613075306e453d78339af5d98c70e708c1738
 
 COCOAPODS: 1.9.1
