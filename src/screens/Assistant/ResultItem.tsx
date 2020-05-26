@@ -1,10 +1,8 @@
 import nb from 'date-fns/locale/nb';
 import React from 'react';
-import {Text, View, ViewStyle} from 'react-native';
-import WalkingPerson from '../../assets/svg/WalkingPerson';
+import {Text, View} from 'react-native';
 import {Leg, TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
-import colors from '../../theme/colors';
 import {formatToClock, secondsToDuration} from '../../utils/date';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import RealTimeLocationIcon from '../../components/location-icon/real-time';

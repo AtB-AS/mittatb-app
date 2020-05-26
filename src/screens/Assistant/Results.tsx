@@ -1,17 +1,16 @@
 import React from 'react';
-import {ActivityIndicator, View, Text} from 'react-native';
+import {ActivityIndicator, View, Text, RefreshControl} from 'react-native';
 import {TripPattern} from '../../sdk';
 import {StyleSheet, useTheme} from '../../theme';
 import ResultItem from './ResultItem';
 import {AssistantScreenNavigationProp} from './';
-import {ScrollView} from 'react-native-gesture-handler';
-import InfoIcon from '../../assets/svg/InfoIcon';
-import colors from '../../theme/colors';
+import {FlatList} from 'react-native-gesture-handler';
 import MessageBox from '../../message-box';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
   isSearching: boolean;
+  onRefresh: () => void;
   navigation: AssistantScreenNavigationProp;
   onDetailsPressed(tripPattern: TripPattern): void;
 };
@@ -23,22 +22,17 @@ export type ResultTabParams = {
 const Results: React.FC<Props> = ({
   tripPatterns,
   isSearching,
+  onRefresh,
   onDetailsPressed,
 }) => {
   const {theme} = useTheme();
   const styles = useThemeStyles(theme);
 
-  if (isSearching) {
-    return (
-      <ActivityIndicator animating={true} size="large" style={styles.spinner} />
-    );
-  }
-
-  if (!tripPatterns) {
+  if (!tripPatterns && !isSearching) {
     return null;
   }
 
-  if (!tripPatterns.length) {
+  if (!isSearching && !tripPatterns?.length) {
     return (
       <View style={styles.container}>
         <MessageBox>
@@ -52,15 +46,17 @@ const Results: React.FC<Props> = ({
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {tripPatterns.map((tripPattern, i) => (
-        <ResultItem
-          key={i}
-          tripPattern={tripPattern}
-          onDetailsPressed={onDetailsPressed}
-        />
-      ))}
-    </ScrollView>
+    <FlatList
+      contentContainerStyle={styles.container}
+      data={tripPatterns}
+      refreshControl={
+        <RefreshControl refreshing={isSearching} onRefresh={onRefresh} />
+      }
+      keyExtractor={(item, i) => String(item.id ?? i)}
+      renderItem={({item}) => (
+        <ResultItem tripPattern={item} onDetailsPressed={onDetailsPressed} />
+      )}
+    />
   );
 };
 

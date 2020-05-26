@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useMemo} from 'react';
+import React, {useEffect, useState, useMemo, useCallback} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Results from './Results';
@@ -69,7 +69,7 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
   const fromIcon = <SearchLocationIcon location={from} />;
   const toIcon = <SearchLocationIcon location={to} />;
 
-  const [tripPatterns, isSearching] = useTripPatterns(from, to);
+  const [tripPatterns, isSearching, reload] = useTripPatterns(from, to);
 
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
@@ -109,6 +109,7 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
         tripPatterns={tripPatterns}
         isSearching={isSearching}
         navigation={navigation}
+        onRefresh={reload}
         onDetailsPressed={(tripPattern) =>
           navigation.navigate('TripDetailsModal', {
             from: from!,
@@ -206,11 +207,11 @@ export default AssistantRoot;
 function useTripPatterns(
   fromLocation: Location | undefined,
   toLocation: Location | undefined,
-): [TripPattern[] | null, boolean] {
+): [TripPattern[] | null, boolean, () => {}] {
   const [isSearching, setIsSearching] = useState(false);
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
 
-  useEffect(() => {
+  const reload = useCallback(() => {
     const source = CancelToken.source();
 
     async function search() {
@@ -240,5 +241,7 @@ function useTripPatterns(
     };
   }, [fromLocation, toLocation]);
 
-  return [tripPatterns, isSearching];
+  useEffect(reload, [reload]);
+
+  return [tripPatterns, isSearching, reload];
 }
