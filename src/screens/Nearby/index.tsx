@@ -24,6 +24,7 @@ import Splash from '../Splash';
 import NearbyResults from './NearbyResults';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import usePollableResource from '../../utils/use-pollable-resource';
+import SearchGroup from '../../components/search-button/search-group';
 
 type NearbyRouteName = 'Nearest';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearest';
@@ -92,15 +93,17 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header title="I nærheten" />
-      <SharedElement id="locationSearchInput">
-        <SearchButton
-          title="Fra"
-          placeholder="Søk etter adresse eller sted"
-          location={fromLocation}
-          icon={<SearchLocationIcon location={fromLocation} />}
-          onPress={() => openLocationSearch()}
-        />
-      </SharedElement>
+      <SearchGroup>
+        <SharedElement id="locationSearchInput">
+          <SearchButton
+            title="Fra"
+            placeholder="Søk etter adresse eller sted"
+            location={fromLocation}
+            icon={<SearchLocationIcon location={fromLocation} />}
+            onPress={() => openLocationSearch()}
+          />
+        </SharedElement>
+      </SearchGroup>
 
       <NearbyResults
         departures={departures}
