@@ -2,7 +2,11 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {View, Text} from 'react-native';
 import React from 'react';
 import {StyleSheet, Theme} from '../../../theme';
-import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
+import {
+  TouchableOpacity,
+  ScrollView,
+  TouchableHighlight,
+} from 'react-native-gesture-handler';
 import EditIcon from '../../../assets/svg/EditIcon';
 import EditableListGroup from './EditableListGroup';
 import {LocationFavorite} from '../../../favorites/types';
@@ -13,6 +17,7 @@ import {useFavorites} from '../../../favorites/FavoritesContext';
 import Header from '../../../ScreenHeader';
 import {FavoriteIcon} from '../../../favorites';
 import insets from '../../../utils/insets';
+import Intercom from 'react-native-intercom';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -50,6 +55,14 @@ export default function Profile({navigation}: ProfileScreenProps) {
             <AddFavoriteButton onPress={onAddButtonClick} />
           )}
         />
+        <View style={{alignItems: 'center'}}>
+          <TouchableHighlight
+            style={{padding: 20}}
+            onPress={() => Intercom.displayMessageComposer()}
+          >
+            <Text>Send oss en tilbakemelding!</Text>
+          </TouchableHighlight>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

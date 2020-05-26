@@ -82,8 +82,6 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
         String intercomAppId = getString(R.string.IntercomAppId);
         if (!TextUtils.isEmpty(intercomApiKey) && !TextUtils.isEmpty(intercomAppId)) {
             Intercom.initialize(this, intercomApiKey, intercomAppId);
-            Intercom.client().registerUnidentifiedUser();
-            Intercom.client().setLauncherVisibility(Intercom.Visibility.VISIBLE);
         }
     } catch (Exception e) {
         e.printStackTrace();

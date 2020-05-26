@@ -42,8 +42,6 @@ static void InitializeFlipper(UIApplication *application) {
   NSString* intercomAppId = [intercomDict objectForKey:@"IntercomAppId"];
   if (intercomApiKey != nil && intercomAppId != nil) {
     [Intercom setApiKey:intercomApiKey forAppId:intercomAppId];
-    [Intercom registerUnidentifiedUser];
-    [Intercom setLauncherVisible:YES];
   }
   
   NSString* bugsnagApiKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"BugsnagAPIKey"];
