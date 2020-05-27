@@ -216,8 +216,8 @@ function useLocations(currentLocation: Location | undefined): LocationHookData {
   useEffect(
     function () {
       updateFromTo({
-        from: from ?? memoedCurrentLocation,
-        to,
+        from: from ?? stored.from ?? memoedCurrentLocation,
+        to: to ?? stored.to,
       });
     },
     [from, to, memoedCurrentLocation],
