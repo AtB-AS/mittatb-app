@@ -23,6 +23,14 @@ import SearchLocationIcon from '../../components/search-location-icon';
 import {useFavorites} from '../../favorites/FavoritesContext';
 import {CancelToken, isCancel} from '../../api/client';
 import SearchGroup from '../../components/search-button/search-group';
+import {View} from 'react-native';
+import {
+  TouchableHighlight,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
+import LocationArrow from '../../assets/svg/LocationArrow';
+import insets from '../../utils/insets';
+import SwapLocationsArrowIcon from '../../assets/svg/SwapLocationsArrowsIcon';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -64,10 +72,12 @@ type Props = {
 const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
   const styles = useThemeStyles();
 
-  const {from, to} = useLocations(currentLocation);
+  const {from, to, swap, setCurrentLocationAsFrom} = useLocations(
+    currentLocation,
+  );
 
-  const fromIcon = <SearchLocationIcon location={from} />;
-  const toIcon = <SearchLocationIcon location={to} />;
+  // const fromIcon = <SearchLocationIcon location={from} />;
+  // const toIcon = <SearchLocationIcon location={to} />;
 
   const [tripPatterns, isSearching, reload] = useTripPatterns(from, to);
 
@@ -85,24 +95,45 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
     <SafeAreaView style={styles.container}>
       <Header title="Reiseassistent" />
       <SearchGroup>
-        <SharedElement id="locationSearchInput">
-          <SearchButton
-            title="Fra"
-            placeholder="Søk etter adresse eller sted"
-            location={from}
-            icon={fromIcon}
-            onPress={() => openLocationSearch('fromLocation', from?.name)}
-          />
-        </SharedElement>
-        <SharedElement id="locationSearchInput">
-          <SearchButton
-            title="Til"
-            placeholder="Søk etter adresse eller sted"
-            location={to}
-            icon={toIcon}
-            onPress={() => openLocationSearch('toLocation', to?.name)}
-          />
-        </SharedElement>
+        <View style={styles.searchButtonContainer}>
+          <SharedElement style={styles.styleButton} id="locationSearchInput">
+            <SearchButton
+              title="Fra"
+              placeholder="Søk etter adresse eller sted"
+              location={from}
+              // icon={fromIcon}
+              onPress={() => openLocationSearch('fromLocation', from?.name)}
+            />
+          </SharedElement>
+
+          <TouchableOpacity
+            style={styles.clickableIcon}
+            hitSlop={insets.all(12)}
+            onPress={setCurrentLocationAsFrom}
+          >
+            <LocationArrow />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.searchButtonContainer}>
+          <SharedElement id="locationSearchInput" style={styles.styleButton}>
+            <SearchButton
+              title="Til"
+              placeholder="Søk etter adresse eller sted"
+              location={to}
+              // icon={toIcon}
+              onPress={() => openLocationSearch('toLocation', to?.name)}
+            />
+          </SharedElement>
+
+          <TouchableOpacity
+            style={styles.clickableIcon}
+            hitSlop={insets.all(12)}
+            onPress={swap}
+          >
+            <SwapLocationsArrowIcon />
+          </TouchableOpacity>
+        </View>
       </SearchGroup>
 
       <Results
@@ -121,13 +152,33 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
     </SafeAreaView>
   );
 };
+const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    backgroundColor: theme.background.level1,
+    paddingBottom: 0,
+    flexGrow: 1,
+  },
+  searchButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  styleButton: {
+    flexGrow: 1,
+  },
+  clickableIcon: {},
+}));
 
 type Locations = {
   from: LocationWithSearchMetadata | undefined;
   to: LocationWithSearchMetadata | undefined;
 };
 
-function useLocations(currentLocation: Location | undefined): Locations {
+type LocationHookData = Locations & {
+  swap(): void;
+  setCurrentLocationAsFrom(): void;
+};
+
+function useLocations(currentLocation: Location | undefined): LocationHookData {
   const {favorites} = useFavorites();
 
   const memoedCurrentLocation = useMemo<LocationWithSearchMetadata | undefined>(
@@ -137,6 +188,11 @@ function useLocations(currentLocation: Location | undefined): Locations {
       currentLocation?.coordinates.longitude,
     ],
   );
+
+  const [stored, updateFromTo] = useState<Locations>({
+    from: memoedCurrentLocation,
+    to: undefined,
+  });
 
   const searchedFromLocation = useLocationSearchValue<AssistantRouteProp>(
     'fromLocation',
@@ -157,9 +213,33 @@ function useLocations(currentLocation: Location | undefined): Locations {
     favorites,
   );
 
+  useEffect(
+    function () {
+      updateFromTo({
+        from: from ?? memoedCurrentLocation,
+        to,
+      });
+    },
+    [from, to, memoedCurrentLocation],
+  );
+
+  const swap = () =>
+    updateFromTo({
+      to: stored.from,
+      from: stored.to,
+    });
+
+  const setCurrentLocationAsFrom = () =>
+    updateFromTo({
+      from: memoedCurrentLocation,
+      to: stored.to,
+    });
+
   return {
-    from: from ?? memoedCurrentLocation,
-    to,
+    from: stored.from,
+    to: stored.to,
+    swap,
+    setCurrentLocationAsFrom,
   };
 }
 
@@ -193,14 +273,6 @@ function useUpdatedLocation(
     return undefined;
   }, [searchedLocation, currentLocation, favorites]);
 }
-
-const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    backgroundColor: theme.background.level1,
-    flex: 1,
-    paddingBottom: 0,
-  },
-}));
 
 export default AssistantRoot;
 

@@ -34,7 +34,7 @@ const Results: React.FC<Props> = ({
 
   if (!isSearching && !tripPatterns?.length) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.scrollContainer, styles.container]}>
         <MessageBox>
           <Text style={styles.infoBoxText}>
             Vi fant dessverre ingen reiseruter som passer til ditt søk.
@@ -47,6 +47,7 @@ const Results: React.FC<Props> = ({
 
   return (
     <FlatList
+      style={styles.scrollContainer}
       contentContainerStyle={styles.container}
       data={tripPatterns}
       refreshControl={
@@ -63,10 +64,14 @@ const Results: React.FC<Props> = ({
 export default Results;
 
 const useThemeStyles = StyleSheet.createTheme((theme) => ({
-  container: {
+  scrollContainer: {
     marginTop: 12,
-    marginBottom: 0,
-    padding: 12,
+    flex: 1,
+  },
+  container: {
+    paddingHorizontal: 12,
+    paddingBottom: 12,
+    // flexGrow: 1,
   },
   infoBoxText: {fontSize: 16},
   spinner: {height: 280},

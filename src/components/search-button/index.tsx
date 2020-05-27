@@ -1,9 +1,10 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, ViewStyle, StyleProp} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import {Location} from '../../favorites/types';
 import {StyleSheet} from '../../theme';
+import insets from '../../utils/insets';
 
 type ResultItemProps = {
   title: string;
@@ -11,6 +12,7 @@ type ResultItemProps = {
   onPress: () => void;
   location?: Location;
   icon?: JSX.Element;
+  style?: StyleProp<ViewStyle>;
 };
 
 const SearchButton: React.FC<ResultItemProps> = ({
@@ -19,15 +21,22 @@ const SearchButton: React.FC<ResultItemProps> = ({
   location,
   icon,
   onPress,
+  style,
 }) => {
   const styles = useThemeStyles();
 
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.buttonText}>{location?.label ?? placeholder}</Text>
-      <View style={styles.icon}>{icon}</View>
-    </TouchableOpacity>
+    <View style={style}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={onPress}
+        hitSlop={insets.symmetric(8, 12)}
+      >
+        <Text style={styles.title}>{title}</Text>
+        <View style={styles.icon}>{icon}</View>
+        <Text style={styles.buttonText}>{location?.label ?? placeholder}</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -38,16 +47,17 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 8,
   },
   buttonContainer: {
     flexDirection: 'row',
   },
-  title: {width: 30},
+  title: {width: 40},
   buttonText: {
-    marginLeft: 12,
     fontSize: 16,
+    lineHeight: 20,
     flex: 1,
   },
-  icon: {},
+  icon: {
+    marginLeft: 12,
+  },
 }));

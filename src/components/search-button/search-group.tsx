@@ -45,5 +45,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     height: 1,
     width: '100%',
     backgroundColor: '#F5F5F6',
+    marginVertical: 8,
   },
 }));
