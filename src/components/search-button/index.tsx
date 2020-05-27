@@ -1,16 +1,15 @@
 import React from 'react';
 import {View, Text, ViewStyle, StyleProp} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-
-import {Location} from '../../favorites/types';
 import {StyleSheet} from '../../theme';
 import insets from '../../utils/insets';
+import {LocationWithSearchMetadata} from '../../location-search';
 
 type ResultItemProps = {
   title: string;
   placeholder: string;
   onPress: () => void;
-  location?: Location;
+  location?: LocationWithSearchMetadata;
   icon?: JSX.Element;
   style?: StyleProp<ViewStyle>;
 };
@@ -25,6 +24,9 @@ const SearchButton: React.FC<ResultItemProps> = ({
 }) => {
   const styles = useThemeStyles();
 
+  const text =
+    location?.resultType == 'geolocation' ? 'Min posisjon' : location?.label;
+
   return (
     <View style={style}>
       <TouchableOpacity
@@ -34,7 +36,7 @@ const SearchButton: React.FC<ResultItemProps> = ({
       >
         <Text style={styles.title}>{title}</Text>
         <View style={styles.icon}>{icon}</View>
-        <Text style={styles.buttonText}>{location?.label ?? placeholder}</Text>
+        <Text style={styles.buttonText}>{text ?? placeholder}</Text>
       </TouchableOpacity>
     </View>
   );
