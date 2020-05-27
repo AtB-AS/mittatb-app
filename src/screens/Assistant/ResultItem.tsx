@@ -1,6 +1,6 @@
 import nb from 'date-fns/locale/nb';
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, TextStyle} from 'react-native';
 import {Leg, TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {formatToClock, secondsToDuration} from '../../utils/date';
@@ -102,13 +102,13 @@ const FootLeg = ({leg}: {leg: Leg}) => {
   const styles = useLegStyles();
   return (
     <View style={styles.legContainer}>
-      <Text style={[styles.text, styles.time]}>
+      <Text style={[styles.textDeprioritized, styles.time]}>
         {formatToClock(leg.expectedStartTime)}
       </Text>
       <View style={styles.iconContainer}>
-        <WalkIcon fill={styles.walkingPerson.backgroundColor} />
+        <WalkIcon fill={(styles.textDeprioritized as TextStyle).color} />
       </View>
-      <Text style={styles.text}>
+      <Text style={styles.textDeprioritized}>
         {secondsToDuration(leg.duration ?? 0, nb)}
       </Text>
     </View>
@@ -126,6 +126,11 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
   },
   text: {
     fontSize: 16,
+  },
+  textDeprioritized: {
+    fontWeight: 'normal',
+    fontSize: 14,
+    color: theme.text.faded,
   },
   textBold: {
     fontWeight: 'bold',
@@ -149,7 +154,9 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
       <View style={styles.iconContainer}>
         <RealTimeLocationIcon mode={leg.mode} isLive={leg.realtime} />
       </View>
-      <Text style={styles.text}>{getLineDisplayName(leg)}</Text>
+      <Text style={styles.text}>
+        <LineDisplayName leg={leg} />
+      </Text>
     </View>
   );
 };
@@ -161,21 +168,28 @@ const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
 
   return (
     <View style={styles.legContainer}>
-      <Text style={[styles.text, styles.time]}>
+      <Text style={[styles.time, styles.textDeprioritized]}>
         {formatToClock(lastLeg.expectedEndTime)}
       </Text>
       <View style={styles.iconContainer}>
-        <DestinationIcon fill={styles.walkingPerson.backgroundColor} />
+        <DestinationIcon fill={(styles.textDeprioritized as TextStyle).color} />
       </View>
-      <Text style={styles.text}>{lastLeg.toPlace.name}</Text>
+      <Text style={styles.textDeprioritized}>{lastLeg.toPlace.name}</Text>
     </View>
   );
 };
 
-function getLineDisplayName(leg: Leg) {
+function LineDisplayName({leg}: {leg: Leg}) {
   const name =
     leg.fromEstimatedCall?.destinationDisplay?.frontText ?? leg.line?.name;
-  return leg.line?.publicCode + ' ' + name;
+  return (
+    <Text>
+      <Text style={{marginRight: 12, fontWeight: 'bold'}}>
+        {leg.line?.publicCode}
+      </Text>{' '}
+      <Text>{name}</Text>
+    </Text>
+  );
 }
 
 export default ResultItem;
