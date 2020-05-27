@@ -123,6 +123,7 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
   },
   time: {
     width: 50,
+    fontVariant: ['tabular-nums'],
   },
   text: {
     fontSize: 16,
@@ -148,7 +149,7 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
   const styles = useLegStyles();
   return (
     <View style={styles.legContainer}>
-      <Text style={[styles.text, styles.time]}>
+      <Text style={[styles.text, styles.time, styles.textBold]}>
         {formatToClock(leg.expectedStartTime)}
       </Text>
       <View style={styles.iconContainer}>
