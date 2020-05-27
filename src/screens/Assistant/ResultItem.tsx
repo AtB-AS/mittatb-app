@@ -3,7 +3,11 @@ import React from 'react';
 import {Text, View, TextStyle} from 'react-native';
 import {Leg, TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
-import {formatToClock, secondsToDuration} from '../../utils/date';
+import {
+  formatToClock,
+  secondsToDuration,
+  secondsToDurationExact,
+} from '../../utils/date';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import RealTimeLocationIcon from '../../components/location-icon/real-time';
 import insets from '../../utils/insets';
@@ -24,7 +28,7 @@ const ResultItemHeader: React.FC<{
   return (
     <View style={styles.resultHeader}>
       <Text>Fra {firstWithQuay?.fromPlace.quay?.name}</Text>
-      <Text>{secondsToDuration(tripPattern.duration, nb)}</Text>
+      <Text>{secondsToDurationExact(tripPattern.duration)}</Text>
     </View>
   );
 };
