@@ -8,6 +8,8 @@
 #import <BugsnagConfiguration.h>
 #import <Firebase.h>
 
+#import "RNBootSplash.h"
+
 #if DEBUG
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -59,6 +61,9 @@ static void InitializeFlipper(UIApplication *application) {
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  
+  [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView];
+  
   return YES;
 }
 
