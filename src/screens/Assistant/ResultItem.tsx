@@ -179,7 +179,9 @@ const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
       <View style={styles.iconContainer}>
         <DestinationIcon fill={(styles.textDeprioritized as TextStyle).color} />
       </View>
-      <Text style={styles.textDeprioritized}>{lastLeg.toPlace.name}</Text>
+      <Text style={styles.textDeprioritized} numberOfLines={1}>
+        {lastLeg.toPlace.name}
+      </Text>
     </View>
   );
 };
@@ -192,7 +194,7 @@ function LineDisplayName({leg}: {leg: Leg}) {
       <Text style={{marginRight: 12, fontWeight: 'bold'}}>
         {leg.line?.publicCode}
       </Text>{' '}
-      <Text>{name}</Text>
+      <Text numberOfLines={1}>{name}</Text>
     </Text>
   );
 }

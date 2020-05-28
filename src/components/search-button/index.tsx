@@ -25,7 +25,9 @@ const SearchButton: React.FC<ResultItemProps> = ({
   const styles = useThemeStyles();
 
   const text =
-    location?.resultType == 'geolocation' ? 'Min posisjon' : location?.label;
+    location?.resultType == 'geolocation'
+      ? 'Min posisjonMin posisjonMin posisjonMin posisjon'
+      : location?.label;
 
   return (
     <View style={style}>
@@ -36,7 +38,9 @@ const SearchButton: React.FC<ResultItemProps> = ({
       >
         <Text style={styles.title}>{title}</Text>
         <View style={styles.icon}>{icon}</View>
-        <Text style={styles.buttonText}>{text ?? placeholder}</Text>
+        <Text style={styles.buttonText} numberOfLines={1}>
+          {text ?? placeholder}
+        </Text>
       </TouchableOpacity>
     </View>
   );
