@@ -72,9 +72,6 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
     currentLocation,
   );
 
-  // const fromIcon = <SearchLocationIcon location={from} />;
-  // const toIcon = <SearchLocationIcon location={to} />;
-
   const [tripPatterns, isSearching, reload] = useTripPatterns(from, to);
 
   const openLocationSearch = (
@@ -97,7 +94,6 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
               title="Fra"
               placeholder="Søk etter adresse eller sted"
               location={from}
-              // icon={fromIcon}
               onPress={() => openLocationSearch('fromLocation', from?.name)}
             />
           </SharedElement>
@@ -117,7 +113,6 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
               title="Til"
               placeholder="Søk etter adresse eller sted"
               location={to}
-              // icon={toIcon}
               onPress={() => openLocationSearch('toLocation', to?.name)}
             />
           </SharedElement>
