@@ -55,7 +55,7 @@ const ResultItem: React.FC<ResultItemProps> = ({
             if (leg.mode === 'foot') {
               return <FootLeg key={leg.fromPlace.latitude} leg={leg} />;
             }
-            return <TransportationLeg key={leg.fromPlace.latitude} leg={leg} />;
+            return <TransportationLeg key={leg.serviceJourney.id} leg={leg} />;
           })}
           <DestinationLeg tripPattern={tripPattern} />
         </View>
