@@ -1,19 +1,36 @@
 import nb from 'date-fns/locale/nb';
 import React from 'react';
-import {Text, View, ViewStyle} from 'react-native';
-import Dash from 'react-native-dash';
-import WalkingPerson from '../../assets/svg/WalkingPerson';
-import {Leg, LegMode, TripPattern} from '../../sdk';
+import {Text, View, TextStyle} from 'react-native';
+import {Leg, TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
-import colors from '../../theme/colors';
-import {formatToClock, secondsToDuration} from '../../utils/date';
+import {
+  formatToClock,
+  secondsToDuration,
+  secondsToDurationExact,
+} from '../../utils/date';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import RealTimeLocationIcon from '../../components/location-icon/real-time';
 import insets from '../../utils/insets';
+import WalkIcon from './svg/WalkIcon';
+import DestinationIcon from './svg/Destination';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
-  onDetailsPressed?(tripPattern: TripPattern): void;
+  onDetailsPressed(tripPattern: TripPattern): void;
+};
+
+const ResultItemHeader: React.FC<{
+  tripPattern: TripPattern;
+}> = ({tripPattern}) => {
+  const firstWithQuay = tripPattern.legs.find((leg) => leg.fromPlace.quay);
+  const styles = useThemeStyles();
+
+  return (
+    <View style={styles.resultHeader}>
+      <Text>Fra {firstWithQuay?.fromPlace.quay?.name}</Text>
+      <Text>{secondsToDurationExact(tripPattern.duration)}</Text>
+    </View>
+  );
 };
 
 const ResultItem: React.FC<ResultItemProps> = ({
@@ -24,59 +41,34 @@ const ResultItem: React.FC<ResultItemProps> = ({
 
   if (!tripPattern?.legs?.length) return null;
 
-  let [firstLeg, secondLeg, ...restLegs] = tripPattern.legs;
-  const transferCount = restLegs.filter(
-    (l) => l.mode !== 'foot' && l.mode !== 'bicycle',
-  ).length;
-
-  const firstLegIsOnFoot = firstLeg && firstLeg.mode === 'foot';
-  const hasSecondLeg = !!secondLeg;
-
   return (
-    <View style={styles.legContainer}>
-      <DetailDash count={2} />
-      {firstLegIsOnFoot && hasSecondLeg ? (
-        <FootLeg leg={firstLeg} />
-      ) : (
-        <DetailDash count={2} />
-      )}
-      <DetailDash count={2} style={{marginBottom: 12}} />
+    <TouchableOpacity
+      style={{paddingVertical: 4}}
+      onPress={() => onDetailsPressed(tripPattern)}
+      hitSlop={insets.symmetric(8, 16)}
+    >
+      <View style={styles.result}>
+        <ResultItemHeader tripPattern={tripPattern} />
 
-      <HighlightedLeg
-        leg={firstLegIsOnFoot && hasSecondLeg ? secondLeg : firstLeg}
-      />
-
-      <View style={styles.detailsContainer}>
-        <DetailDash count={2} />
-        <Text style={styles.transferText}>
-          {transferCount ? (
-            <Text>
-              {transferCount} bytte{transferCount > 1 ? 'r' : ''} -{' '}
-            </Text>
-          ) : null}
-          <Text>Ankomst {formatToClock(tripPattern.endTime)}</Text>
-        </Text>
-        {onDetailsPressed && (
-          <TouchableOpacity
-            style={{paddingVertical: 4}}
-            onPress={() => onDetailsPressed(tripPattern)}
-            hitSlop={insets.symmetric(8, 16)}
-          >
-            <Text style={styles.detailsText}>Vis detaljer</Text>
-          </TouchableOpacity>
-        )}
-        <DetailDash count={2} />
+        <View style={styles.detailsContainer}>
+          {tripPattern.legs.map(function (leg) {
+            if (leg.mode === 'foot') {
+              return <FootLeg key={leg.fromPlace.latitude} leg={leg} />;
+            }
+            return <TransportationLeg key={leg.serviceJourney.id} leg={leg} />;
+          })}
+          <DestinationLeg tripPattern={tripPattern} />
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  legContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    paddingHorizontal: 50,
-    width: '100%',
+  result: {
+    padding: 12,
+    backgroundColor: theme.background.level0,
+    borderRadius: 8,
   },
   stopName: {
     fontSize: 16,
@@ -97,107 +89,114 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   detailsContainer: {
     flexDirection: 'column',
-    alignItems: 'center',
-    paddingTop: 12,
-    height: 88,
   },
   transferText: {fontSize: 16},
   detailsText: {fontSize: 12, textDecorationLine: 'underline'},
+  resultHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingBottom: 8,
+    marginBottom: 8,
+    borderBottomColor: theme.background.level1,
+    borderBottomWidth: 1,
+  },
 }));
 
 const FootLeg = ({leg}: {leg: Leg}) => {
-  const styles = useFootLegStyles();
+  const styles = useLegStyles();
   return (
     <View style={styles.legContainer}>
-      <WalkingPerson fill={styles.walkingPerson.backgroundColor} />
-      <Text style={{fontSize: 16}}>
-        Gå i {secondsToDuration(leg.duration ?? 0, nb)}
+      <Text style={[styles.textDeprioritized, styles.time]}>
+        {formatToClock(leg.expectedStartTime)}
+      </Text>
+      <View style={styles.iconContainer}>
+        <WalkIcon fill={(styles.textDeprioritized as TextStyle).color} />
+      </View>
+      <Text style={styles.textDeprioritized}>
+        {secondsToDuration(leg.duration ?? 0, nb)}
       </Text>
     </View>
   );
 };
 
-const useFootLegStyles = StyleSheet.createThemeHook((theme) => ({
-  legContainer: {flexDirection: 'row', paddingVertical: 4},
+const useLegStyles = StyleSheet.createThemeHook((theme) => ({
+  legContainer: {
+    flexDirection: 'row',
+    paddingVertical: 4,
+    alignItems: 'center',
+  },
+  time: {
+    width: 50,
+    fontVariant: ['tabular-nums'],
+  },
+  text: {
+    fontSize: 16,
+  },
+  textDeprioritized: {
+    fontWeight: 'normal',
+    fontSize: 14,
+    color: theme.text.faded,
+  },
+  textBold: {
+    fontWeight: 'bold',
+  },
   walkingPerson: {
     backgroundColor: theme.text.primary,
   },
+  iconContainer: {
+    width: 30,
+    alignItems: 'center',
+  },
 }));
 
-const HighlightedLeg = ({leg}: {leg: Leg}) => {
-  const styles = useHighlighetedLegStyles();
-  if (leg.mode === 'foot') {
-    return (
-      <>
-        <DetailDash count={2} />
-        <Text style={styles.time}>
-          Gå i {secondsToDuration(leg.duration ?? 0, nb)}
-        </Text>
-        <DetailDash count={2} />
-      </>
-    );
-  } else {
-    return (
-      <>
-        <Text style={styles.stopName}>
-          {leg?.fromEstimatedCall?.quay?.name}
-        </Text>
-        <Text style={styles.time}>{formatToClock(leg?.expectedStartTime)}</Text>
-        <View style={styles.lineContainer}>
-          <RealTimeLocationIcon
-            mode={leg.mode}
-            isLive={leg.realtime}
-            height={35}
-          />
-          <Text style={styles.lineName}>{getLineDisplayName(leg)}</Text>
-        </View>
-      </>
-    );
-  }
+const TransportationLeg = ({leg}: {leg: Leg}) => {
+  const styles = useLegStyles();
+  return (
+    <View style={styles.legContainer}>
+      <Text style={[styles.text, styles.time, styles.textBold]}>
+        {formatToClock(leg.expectedStartTime)}
+      </Text>
+      <View style={styles.iconContainer}>
+        <RealTimeLocationIcon mode={leg.mode} isLive={leg.realtime} />
+      </View>
+      <Text style={styles.text}>
+        <LineDisplayName leg={leg} />
+      </Text>
+    </View>
+  );
 };
 
-const useHighlighetedLegStyles = StyleSheet.createThemeHook((theme) => ({
-  stopName: {
-    fontSize: 16,
-    color: theme.text.primary,
-    flexShrink: 1,
-  },
-  lineContainer: {flexDirection: 'row', alignItems: 'center'},
-  time: {fontSize: 32, color: theme.text.primary, marginVertical: 8},
-  lineName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: theme.text.primary,
-    textAlign: 'center',
-    marginLeft: 8,
-  },
-}));
+const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
+  const styles = useLegStyles();
+  const lastLeg = tripPattern.legs[tripPattern.legs.length - 1];
+  if (!lastLeg) return null;
 
-const DetailDash = ({count, style}: {count: number; style?: ViewStyle}) => (
-  <Dash
-    dashCount={count}
-    dashGap={3}
-    dashThickness={8}
-    dashLength={8}
-    dashColor={colors.general.gray}
-    style={[dashStyles.dash, style]}
-    dashStyle={dashStyles.dashItem}
-  />
-);
+  return (
+    <View style={styles.legContainer}>
+      <Text style={[styles.time, styles.textDeprioritized]}>
+        {formatToClock(lastLeg.expectedEndTime)}
+      </Text>
+      <View style={styles.iconContainer}>
+        <DestinationIcon fill={(styles.textDeprioritized as TextStyle).color} />
+      </View>
+      <Text style={styles.textDeprioritized} numberOfLines={1}>
+        {lastLeg.toPlace.name}
+      </Text>
+    </View>
+  );
+};
 
-const dashStyles = StyleSheet.create({
-  dash: {
-    flexDirection: 'column',
-  },
-  dashItem: {
-    borderRadius: 8,
-  },
-});
-
-function getLineDisplayName(leg: Leg) {
+function LineDisplayName({leg}: {leg: Leg}) {
   const name =
     leg.fromEstimatedCall?.destinationDisplay?.frontText ?? leg.line?.name;
-  return leg.line?.publicCode + ' ' + name;
+  return (
+    <Text>
+      <Text style={{marginRight: 12, fontWeight: 'bold'}}>
+        {leg.line?.publicCode}
+      </Text>{' '}
+      <Text numberOfLines={1}>{name}</Text>
+    </Text>
+  );
 }
 
 export default ResultItem;

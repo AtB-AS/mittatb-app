@@ -175,7 +175,7 @@ const filterCurrentLocation = (
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.secondary,
+    backgroundColor: theme.background.level2,
     flex: 1,
     paddingTop: 12,
   },
@@ -199,7 +199,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     fontSize: 16,
     paddingLeft: 44,
-    backgroundColor: theme.background.primary,
+    backgroundColor: theme.background.level1,
     borderBottomWidth: 2,
     borderRadius: 4,
     borderBottomColor: theme.border.primary,

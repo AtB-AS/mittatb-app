@@ -29,7 +29,7 @@ const useProfileStyle = StyleSheet.createThemeHook((theme) => ({
     marginBottom: 3,
   },
   headerText: {
-    backgroundColor: theme.background.primary,
+    backgroundColor: theme.background.level1,
     paddingEnd: 10,
     fontSize: 12,
     lineHeight: 16,

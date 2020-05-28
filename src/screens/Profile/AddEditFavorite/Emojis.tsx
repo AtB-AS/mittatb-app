@@ -316,7 +316,7 @@ const useEmojiPopupStyle = StyleSheet.createThemeHook((theme) => ({
     zIndex: 1,
   },
   search: {
-    backgroundColor: theme.background.primary,
+    backgroundColor: theme.background.level1,
     borderBottomColor: theme.border.primary,
     color: theme.text.primary,
     borderBottomWidth: 2,

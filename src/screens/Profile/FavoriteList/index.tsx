@@ -56,7 +56,7 @@ export default function Profile({navigation}: ProfileScreenProps) {
 }
 const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.background.primary,
+    backgroundColor: theme.background.level1,
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-start',

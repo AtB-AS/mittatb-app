@@ -47,6 +47,7 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
   },
   childContainer: {
     marginLeft: 12,
+    flex: 1,
   },
   text: {
     fontSize: 16,

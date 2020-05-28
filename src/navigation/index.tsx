@@ -101,7 +101,7 @@ const NavigationRoot = () => {
                   headerBackTitleVisible: false,
                   headerTintColor: theme.text.primary,
                   headerStyle: {
-                    backgroundColor: theme.background.secondary,
+                    backgroundColor: theme.background.level2,
                     shadowColor: 'transparent',
                   },
                   headerBackImage: ({tintColor}) => (

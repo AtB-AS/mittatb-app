@@ -1,16 +1,17 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, ViewStyle, StyleProp} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-
-import {Location} from '../../favorites/types';
 import {StyleSheet} from '../../theme';
+import insets from '../../utils/insets';
+import {LocationWithSearchMetadata} from '../../location-search';
 
 type ResultItemProps = {
   title: string;
   placeholder: string;
   onPress: () => void;
-  location?: Location;
+  location?: LocationWithSearchMetadata;
   icon?: JSX.Element;
+  style?: StyleProp<ViewStyle>;
 };
 
 const SearchButton: React.FC<ResultItemProps> = ({
@@ -19,15 +20,25 @@ const SearchButton: React.FC<ResultItemProps> = ({
   location,
   icon,
   onPress,
+  style,
 }) => {
   const styles = useThemeStyles();
 
+  const text =
+    location?.resultType == 'geolocation' ? 'Min posisjon' : location?.label;
+
   return (
-    <View style={styles.buttonContainer}>
-      <Text style={styles.title}>{title}</Text>
-      <TouchableOpacity style={styles.button} onPress={onPress}>
-        {icon}
-        <Text style={styles.buttonText}>{location?.label ?? placeholder}</Text>
+    <View style={style}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={onPress}
+        hitSlop={insets.symmetric(8, 12)}
+      >
+        <Text style={styles.title}>{title}</Text>
+        <View style={styles.icon}>{icon}</View>
+        <Text style={styles.buttonText} numberOfLines={1}>
+          {text ?? placeholder}
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -36,27 +47,21 @@ const SearchButton: React.FC<ResultItemProps> = ({
 export default SearchButton;
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  buttonContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    width: '100%',
-    marginVertical: 20,
-  },
-  title: {marginVertical: 4},
   button: {
-    height: 44,
-    borderRadius: 4,
-    borderTopLeftRadius: 16,
-    backgroundColor: theme.background.secondary,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
   },
+  buttonContainer: {
+    flexDirection: 'row',
+  },
+  title: {width: 40},
   buttonText: {
-    marginLeft: 12,
     fontSize: 16,
-    fontWeight: '600',
+    lineHeight: 20,
+    flex: 1,
+  },
+  icon: {
+    marginLeft: 12,
   },
 }));

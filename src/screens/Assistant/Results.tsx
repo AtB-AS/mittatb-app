@@ -1,22 +1,16 @@
 import React from 'react';
-import {ActivityIndicator, View, Text} from 'react-native';
+import {RefreshControl, Text, View} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
+import MessageBox from '../../message-box';
 import {TripPattern} from '../../sdk';
-import {StyleSheet, Theme, useTheme} from '../../theme';
-import ResultItem from './ResultItem';
+import {StyleSheet, useTheme} from '../../theme';
 import {AssistantScreenNavigationProp} from './';
-import ViewPager from '@react-native-community/viewpager';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import useViewPagerIndexController from './useViewPagerIndexController';
-import LeftArrow from './svg/LeftArrow';
-import RightArrow from './svg/RightArrow';
-import InfoIcon from '../../assets/svg/InfoIcon';
-import hexToRgba from 'hex-to-rgba';
-import colors from '../../theme/colors';
-import insets from '../../utils/insets';
+import ResultItem from './ResultItem';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
   isSearching: boolean;
+  onRefresh: () => void;
   navigation: AssistantScreenNavigationProp;
   onDetailsPressed(tripPattern: TripPattern): void;
 };
@@ -28,130 +22,58 @@ export type ResultTabParams = {
 const Results: React.FC<Props> = ({
   tripPatterns,
   isSearching,
+  onRefresh,
   onDetailsPressed,
 }) => {
   const {theme} = useTheme();
   const styles = useThemeStyles(theme);
-  const arrowFill = useArrowFill(theme);
 
-  const {
-    viewPagerRef,
-    nextPage,
-    previousPage,
-    onPageSelected,
-    disablePaging,
-    isFirstPage,
-    isLastPage,
-  } = useViewPagerIndexController(0, tripPatterns?.length ?? 0);
-
-  if (isSearching) {
-    return (
-      <ActivityIndicator animating={true} size="large" style={styles.spinner} />
-    );
-  }
-
-  if (!tripPatterns) {
+  if (!tripPatterns && !isSearching) {
     return null;
   }
 
-  if (!tripPatterns.length) {
+  if (!isSearching && !tripPatterns?.length) {
     return (
-      <View style={styles.container}>
-        <View style={styles.infoBox}>
-          <View style={styles.infoBoxIcon}>
-            <InfoIcon />
-          </View>
+      <View style={[styles.scrollContainer, styles.container]}>
+        <MessageBox>
           <Text style={styles.infoBoxText}>
-            Vi fant dessverre ingen reiseruter som passer til ditt søk. {'\n'}
+            Vi fant dessverre ingen reiseruter som passer til ditt søk.
             Vennligst prøv et annet avreisested eller destinasjon.
           </Text>
-        </View>
+        </MessageBox>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.detailContainer}>
-        <View style={[styles.buttonContainer, {left: 10}]}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={previousPage}
-            hitSlop={insets.all(8)}
-            disabled={isFirstPage}
-          >
-            <LeftArrow
-              fill={isFirstPage ? arrowFill.disabled : arrowFill.enabled}
-            />
-          </TouchableOpacity>
-        </View>
-
-        <ViewPager
-          ref={viewPagerRef}
-          style={styles.viewPager}
-          initialPage={0}
-          onPageScrollStateChanged={(ev) => {
-            switch (ev.nativeEvent.pageScrollState) {
-              case 'dragging':
-                disablePaging(true);
-                break;
-              case 'idle':
-                disablePaging(false);
-            }
-          }}
-          onPageSelected={({nativeEvent}) => {
-            onPageSelected(nativeEvent.position);
-          }}
-        >
-          {tripPatterns.map((tripPattern, i) => (
-            <View key={i}>
-              <ResultItem
-                tripPattern={tripPattern}
-                onDetailsPressed={onDetailsPressed}
-              />
-            </View>
-          ))}
-        </ViewPager>
-        <View style={[styles.buttonContainer, {right: 10}]}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={nextPage}
-            hitSlop={insets.all(8)}
-            disabled={isLastPage}
-          >
-            <RightArrow
-              fill={isLastPage ? arrowFill.disabled : arrowFill.enabled}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
+    <FlatList
+      style={styles.scrollContainer}
+      contentContainerStyle={styles.container}
+      data={tripPatterns}
+      refreshControl={
+        <RefreshControl refreshing={isSearching} onRefresh={onRefresh} />
+      }
+      keyExtractor={(item, i) => String(item.id ?? i)}
+      renderItem={({item}) => (
+        <ResultItem tripPattern={item} onDetailsPressed={onDetailsPressed} />
+      )}
+    />
   );
 };
 
 export default Results;
 
-const useArrowFill = (theme: Theme) => ({
-  enabled: theme.text.primary,
-  disabled: hexToRgba(theme.text.primary, 0.2),
-});
-
 const useThemeStyles = StyleSheet.createTheme((theme) => ({
+  scrollContainer: {
+    marginTop: 12,
+    flex: 1,
+  },
   container: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingBottom: 12,
+    // flexGrow: 1,
   },
-  infoBox: {
-    backgroundColor: colors.secondary.cyan,
-    flexDirection: 'row',
-    alignItems: 'center',
-    maxWidth: 327,
-    paddingVertical: 8,
-    paddingRight: 12,
-  },
-  infoBoxIcon: {padding: 12},
-  infoBoxText: {fontSize: 16, flex: 1, flexWrap: 'wrap'},
+  infoBoxText: {fontSize: 16},
   spinner: {height: 280},
   detailContainer: {
     justifyContent: 'center',
