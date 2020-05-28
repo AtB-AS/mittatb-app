@@ -1,36 +1,32 @@
-import React, {useEffect, useState, useMemo, useCallback} from 'react';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import Results from './Results';
-import {TripPattern} from '../../sdk';
-import {useGeolocationState} from '../../GeolocationContext';
-import Splash from '../Splash';
-import {StyleSheet} from '../../theme';
-import {searchTrip} from '../../api';
-import {Location, UserFavorites} from '../../favorites/types';
-import {
-  useLocationSearchValue,
-  LocationWithSearchMetadata,
-} from '../../location-search';
-import {RouteProp, CompositeNavigationProp} from '@react-navigation/core';
-import {RootStackParamList} from '../../navigation';
-import {SharedElement} from 'react-navigation-shared-element';
-import Header from '../../ScreenHeader';
-import {useReverseGeocoder} from '../../location-search/useGeocoder';
-import {TabNavigatorParams} from '../../navigation/TabNavigator';
-import SearchButton from '../../components/search-button';
-import SearchLocationIcon from '../../components/search-location-icon';
-import {useFavorites} from '../../favorites/FavoritesContext';
-import {CancelToken, isCancel} from '../../api/client';
-import SearchGroup from '../../components/search-button/search-group';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
-import {
-  TouchableHighlight,
-  TouchableOpacity,
-} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {SharedElement} from 'react-navigation-shared-element';
+import {searchTrip} from '../../api';
+import {CancelToken, isCancel} from '../../api/client';
 import LocationArrow from '../../assets/svg/LocationArrow';
-import insets from '../../utils/insets';
 import SwapLocationsArrowIcon from '../../assets/svg/SwapLocationsArrowsIcon';
+import SearchButton from '../../components/search-button';
+import SearchGroup from '../../components/search-button/search-group';
+import {useFavorites} from '../../favorites/FavoritesContext';
+import {Location, UserFavorites} from '../../favorites/types';
+import {useGeolocationState} from '../../GeolocationContext';
+import {
+  LocationWithSearchMetadata,
+  useLocationSearchValue,
+} from '../../location-search';
+import {useReverseGeocoder} from '../../location-search/useGeocoder';
+import {RootStackParamList} from '../../navigation';
+import {TabNavigatorParams} from '../../navigation/TabNavigator';
+import Header from '../../ScreenHeader';
+import {TripPattern} from '../../sdk';
+import {StyleSheet} from '../../theme';
+import insets from '../../utils/insets';
+import Splash from '../Splash';
+import Results from './Results';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';

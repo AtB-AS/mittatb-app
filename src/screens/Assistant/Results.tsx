@@ -1,11 +1,11 @@
 import React from 'react';
-import {ActivityIndicator, View, Text, RefreshControl} from 'react-native';
-import {TripPattern} from '../../sdk';
-import {StyleSheet, useTheme} from '../../theme';
-import ResultItem from './ResultItem';
-import {AssistantScreenNavigationProp} from './';
+import {RefreshControl, Text, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import MessageBox from '../../message-box';
+import {TripPattern} from '../../sdk';
+import {StyleSheet, useTheme} from '../../theme';
+import {AssistantScreenNavigationProp} from './';
+import ResultItem from './ResultItem';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
