@@ -86,8 +86,8 @@ const AppContextProvider: React.FC = ({children}) => {
       completeOnboarding: async () => {
         await storage.set('onboarded', JSON.stringify(true));
         dispatch({type: 'COMPLETE_ONBOARDING'});
-	
-	Intercom.registerUnidentifiedUser();
+
+        Intercom.registerUnidentifiedUser();
       },
       restartOnboarding: async () => {
         dispatch({type: 'RESTART_ONBOARDING'});
