@@ -9,13 +9,21 @@ export default function useChatUnreadCount() {
   }, []);
 
   useEffect(() => {
+    async function getInitialUnreadCount() {
+      const initialCount = await Intercom.getUnreadConversationCount();
+      setCount(initialCount);
+    }
+
+    getInitialUnreadCount();
+
     Intercom.addEventListener(Intercom.Notifications.UNREAD_COUNT, callback);
+
     return () =>
       Intercom.removeEventListener(
         Intercom.Notifications.UNREAD_COUNT,
         callback,
       );
-  });
+  }, []);
 
   return count;
 }
