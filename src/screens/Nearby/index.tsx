@@ -25,6 +25,7 @@ import NearbyResults from './NearbyResults';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import usePollableResource from '../../utils/use-pollable-resource';
 import SearchGroup from '../../components/search-button/search-group';
+import useChatIcon from '../../utils/use-chat-icon';
 
 type NearbyRouteName = 'Nearest';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearest';
@@ -83,6 +84,8 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
     fromLocation?.layer === 'venue' ? 30 : 60 ?? 0,
   );
 
+  const {icon: chatIcon, openChat} = useChatIcon();
+
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {
       callerRouteName: NearbyRouteNameStatic,
@@ -92,7 +95,10 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="I nærheten" />
+      <Header
+        title="I nærheten"
+        rightButton={{icon: chatIcon, onPress: openChat}}
+      />
       <SearchGroup>
         <SharedElement id="locationSearchInput">
           <SearchButton

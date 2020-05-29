@@ -108,8 +108,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   return (
     <SafeAreaView style={css.container}>
       <ScreenHeader
-        onClose={cancel}
-        iconElement={<ChevronLeftIcon />}
+        leftButton={{onPress: cancel, icon: <ChevronLeftIcon />}}
         title="Legg til favorittsted"
       />
       <EmojiPopup
