@@ -7,6 +7,7 @@ import React, {
   useMemo,
 } from 'react';
 import RNBootSplash from 'react-native-bootsplash';
+import Intercom from 'react-native-intercom';
 
 import storage from './storage';
 
@@ -67,10 +68,14 @@ const AppContextProvider: React.FC = ({children}) => {
     async function loadAppSettings() {
       const savedOnboarded = await storage.get('onboarded');
       const onboarded = !savedOnboarded ? false : JSON.parse(savedOnboarded);
+      if (onboarded) {
+        Intercom.registerUnidentifiedUser();
+      }
       dispatch({
         type: 'LOAD_APP_SETTINGS',
         onboarded,
       });
+
       RNBootSplash.hide({duration: 100});
     }
     loadAppSettings();
@@ -81,6 +86,8 @@ const AppContextProvider: React.FC = ({children}) => {
       completeOnboarding: async () => {
         await storage.set('onboarded', JSON.stringify(true));
         dispatch({type: 'COMPLETE_ONBOARDING'});
+	
+	Intercom.registerUnidentifiedUser();
       },
       restartOnboarding: async () => {
         dispatch({type: 'RESTART_ONBOARDING'});
