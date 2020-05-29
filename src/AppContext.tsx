@@ -6,6 +6,8 @@ import React, {
   useEffect,
   useMemo,
 } from 'react';
+import RNBootSplash from 'react-native-bootsplash';
+
 import storage from './storage';
 
 type AppState = {
@@ -69,6 +71,7 @@ const AppContextProvider: React.FC = ({children}) => {
         type: 'LOAD_APP_SETTINGS',
         onboarded,
       });
+      RNBootSplash.hide({duration: 100});
     }
     loadAppSettings();
   }, []);
