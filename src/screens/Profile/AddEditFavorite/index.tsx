@@ -19,7 +19,7 @@ import MapPointIcon from '../../../assets/svg/MapPointIcon';
 import SaveDisketteIcon from '../../../assets/svg/SaveDisketteIcon';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import {StyleSheet, Theme, useTheme} from '../../../theme';
-import Button from '../Button';
+import Button from '../../../components/button';
 import EmojiPopup from './EmojiPopup';
 import {RenderedEmoji} from './Emojis';
 import InputSearchIcon from '../../../location-search/svg/InputSearchIcon';

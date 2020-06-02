@@ -6,6 +6,8 @@ import {AxiosRequestConfig} from 'axios';
 export default async function search(
   from: Location,
   to: Location,
+  searchDate?: Date,
+  arriveBy: boolean = false,
   opts?: AxiosRequestConfig,
 ) {
   const url = 'v1/journey/trip';
@@ -22,6 +24,8 @@ export default async function search(
         name: to.name,
         coordinates: to.coordinates,
       },
+      searchDate,
+      arriveBy,
     },
     opts,
   );

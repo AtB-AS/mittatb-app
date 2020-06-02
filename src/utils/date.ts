@@ -4,6 +4,7 @@ import {
   parseISO,
   format,
   differenceInSeconds,
+  isSameDay,
 } from 'date-fns';
 
 import humanizeDuration from 'humanize-duration';
@@ -40,6 +41,15 @@ export function secondsBetween(start: string, end: string): number {
   return differenceInSeconds(parseISO(end), parseISO(start));
 }
 
-export function formatToClock(isoDate: string) {
-  return format(parseISO(isoDate), 'HH:mm');
+export function formatToClock(isoDate: string | Date) {
+  const parsed = isoDate instanceof Date ? isoDate : parseISO(isoDate);
+  return format(parsed, 'HH:mm');
+}
+
+export function formatToLongDateTime(isoDate: string | Date, locale?: Locale) {
+  const parsed = isoDate instanceof Date ? isoDate : parseISO(isoDate);
+  if (isSameDay(parsed, new Date())) {
+    return formatToClock(parsed);
+  }
+  return format(parsed, 'PPp', {locale});
 }

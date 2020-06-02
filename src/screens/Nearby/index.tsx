@@ -7,7 +7,7 @@ import {
   getNearestDepartures,
   getDeparturesFromStop,
 } from '../../api/departures';
-import SearchButton from '../../components/search-button';
+import {LocationButton} from '../../components/search-button';
 import SearchLocationIcon from '../../components/search-location-icon';
 import {Location} from '../../favorites/types';
 import {useGeolocationState} from '../../GeolocationContext';
@@ -101,7 +101,7 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
       />
       <SearchGroup>
         <SharedElement id="locationSearchInput">
-          <SearchButton
+          <LocationButton
             title="Fra"
             placeholder="Søk etter adresse eller sted"
             location={fromLocation}

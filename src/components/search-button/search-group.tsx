@@ -1,8 +1,10 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, StyleProp, ViewStyle} from 'react-native';
 import {StyleSheet} from '../../theme';
 
-type ResultItemProps = {};
+type ResultItemProps = {
+  containerStyle?: StyleProp<ViewStyle>;
+};
 
 function Line() {
   const styles = useThemeStyles();
@@ -10,12 +12,12 @@ function Line() {
   return <View style={styles.line} />;
 }
 
-const SearchGroup: React.FC<ResultItemProps> = ({children}) => {
+const SearchGroup: React.FC<ResultItemProps> = ({children, containerStyle}) => {
   const styles = useThemeStyles();
   const numChildren = React.Children.count(children);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyle]}>
       {React.Children.map(children, function (item, index) {
         if (index === numChildren - 1) return item;
         return (

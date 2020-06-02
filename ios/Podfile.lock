@@ -329,6 +329,8 @@ PODS:
     - React-cxxreact (= 0.62.1)
     - React-jsi (= 0.62.1)
   - React-jsinspector (0.62.1)
+  - react-native-date-picker (2.7.10):
+    - React
   - react-native-geolocation (1.4.2):
     - React
   - react-native-get-random-values (1.4.0):
@@ -336,8 +338,11 @@ PODS:
   - react-native-intercom (16.0.0):
     - Intercom (~> 6.1.0)
     - React
+<<<<<<< HEAD
   - react-native-safe-area-context (0.7.3):
     - React
+=======
+>>>>>>> 57de59e... feat(assistant): Adds ability to input date time (arrival and departure)
   - react-native-webview (9.4.0):
     - React
   - React-RCTActionSheet (0.62.1):
@@ -461,6 +466,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-intercom (from `../node_modules/react-native-intercom`)
@@ -560,6 +566,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-date-picker:
+    :path: "../node_modules/react-native-date-picker"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-get-random-values:
@@ -664,6 +672,7 @@ SPEC CHECKSUMS:
   React-jsi: 600d8e42510c3254fd2abd702f4b9d3f598d8f52
   React-jsiexecutor: e9698dee4fd43ceb44832baf15d5745f455b0157
   React-jsinspector: f74a62727e5604119abd4a1eda52c0a12144bcd5
+  react-native-date-picker: 74c129e693b43483d5a870e239bc6e70dceb1cb0
   react-native-geolocation: a7b94614afbd5fd8350e0233a2025c8228fc8041
   react-native-get-random-values: 2b7500cdb68066aba87cdccd97067c29e16ffe95
   react-native-intercom: 4916f5d0fee8b73535a6284721ccf7f9cc664fac
@@ -696,4 +705,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 34a6d67e0e572f595b85dded38500f9b5443f934
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.9.2
