@@ -7119,6 +7119,11 @@ react-native-get-random-values@^1.4.0:
   dependencies:
     fast-base64-decode "^1.0.0"
 
+react-native-intercom@^16.0.0:
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-intercom/-/react-native-intercom-16.0.0.tgz#8eae6cc6e833e581d5da66dda8f54a18bcc346d1"
+  integrity sha512-wbKt5O6thA1v1QwNvFcC02n0MrFYxSATfOamaW705lEJVi6lAmI5+K/16SxS5uxm6BolSqlQLOBqogrduPDctQ==
+
 react-native-iphone-x-helper@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"

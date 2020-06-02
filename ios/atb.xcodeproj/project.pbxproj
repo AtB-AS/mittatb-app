@@ -11,6 +11,7 @@
 		0882CBE739E29EB58350AF47 /* libPods-atb-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5688FA526DA9D40F2D561C2D /* libPods-atb-tvOSTests.a */; };
 		0FAAF32724069EFC00267583 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0FAAF32624069EFC00267583 /* GoogleService-Info.plist */; };
 		0FF6825F247FE01600FB80EE /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FF6825E247FE01600FB80EE /* BootSplash.storyboard */; };
+		0FF6825D247C33BC00FB80EE /* Intercom.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0FF6825C247C33BC00FB80EE /* Intercom.plist */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -50,6 +51,7 @@
 		086E2C1471780051C8BCBAB4 /* Pods-atb.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atb.release.xcconfig"; path = "Target Support Files/Pods-atb/Pods-atb.release.xcconfig"; sourceTree = "<group>"; };
 		0FAAF32624069EFC00267583 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "atb/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0FF6825E247FE01600FB80EE /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = atb/BootSplash.storyboard; sourceTree = "<group>"; };
+		0FF6825C247C33BC00FB80EE /* Intercom.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Intercom.plist; path = atb/Intercom.plist; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* AtB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AtB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = atb/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = atb/AppDelegate.m; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				0FF6825E247FE01600FB80EE /* BootSplash.storyboard */,
+				0FF6825C247C33BC00FB80EE /* Intercom.plist */,
 				0FAAF32624069EFC00267583 /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -241,6 +244,7 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				CBBFB3DCAB4AE8CC0F703597 /* [CP-User] [RNFB] Core Configuration */,
+				037A869B7CBE3D94FF07C4C4 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -352,6 +356,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				0FF6825D247C33BC00FB80EE /* Intercom.plist in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				0FAAF32724069EFC00267583 /* GoogleService-Info.plist in Resources */,
 				0FF6825F247FE01600FB80EE /* BootSplash.storyboard in Resources */,
@@ -389,6 +394,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+		};
+		037A869B7CBE3D94FF07C4C4 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-atb/Pods-atb-resources.sh",
+				"${PODS_ROOT}/Intercom/Intercom/Intercom.framework/Versions/A/Resources/Intercom.bundle",
+				"${PODS_ROOT}/Intercom/Intercom/Intercom.framework/Versions/A/Resources/IntercomTranslations.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Intercom.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/IntercomTranslations.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-atb/Pods-atb-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		1FBEB5FEA0783AEF0276D2B2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -860,7 +885,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
@@ -913,7 +938,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",

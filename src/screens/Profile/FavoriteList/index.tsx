@@ -13,6 +13,7 @@ import {useFavorites} from '../../../favorites/FavoritesContext';
 import Header from '../../../ScreenHeader';
 import {FavoriteIcon} from '../../../favorites';
 import insets from '../../../utils/insets';
+import useChatIcon from '../../../utils/use-chat-icon';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -34,9 +35,14 @@ export default function Profile({navigation}: ProfileScreenProps) {
 
   const onAddButtonClick = () => navigation.push('AddEditFavorite', {});
 
+  const {icon: chatIcon, openChat} = useChatIcon();
+
   return (
     <SafeAreaView style={css.container}>
-      <Header title="Mitt AtB" />
+      <Header
+        title="Mitt AtB"
+        rightButton={{icon: chatIcon, onPress: openChat}}
+      />
 
       <ScrollView>
         <EditableListGroup

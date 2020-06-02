@@ -22,6 +22,7 @@ import LocationIcon from '../../../components/location-icon';
 import {FavoriteIcon} from '../../../favorites';
 import {getSingleTripPattern} from '../../../api/trips';
 import usePollableResource from '../../../utils/use-pollable-resource';
+import CancelCrossIcon from '../../../assets/svg/CancelCrossIcon';
 
 // @TODO Firebase config?
 const TIME_LIMIT_IN_MINUTES = 3;
@@ -55,7 +56,13 @@ const TripDetailsModal: React.FC<Props> = (props) => {
 
   return (
     <View style={styles.container}>
-      <Header onClose={() => props.navigation.goBack()} title="Reisedetaljer" />
+      <Header
+        leftButton={{
+          onPress: () => props.navigation.goBack(),
+          icon: <CancelCrossIcon />,
+        }}
+        title="Reisedetaljer"
+      />
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}

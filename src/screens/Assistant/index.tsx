@@ -27,6 +27,7 @@ import {StyleSheet} from '../../theme';
 import insets from '../../utils/insets';
 import Splash from '../Splash';
 import Results from './Results';
+import useChatIcon from '../../utils/use-chat-icon';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -74,6 +75,7 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
 
   const [tripPatterns, isSearching, reload] = useTripPatterns(from, to);
 
+  const {icon: chatIcon, openChat} = useChatIcon();
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
     initialText: string | undefined,
@@ -86,7 +88,10 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Reiseassistent" />
+      <Header
+        title="Reiseassistent"
+        rightButton={{onPress: openChat, icon: chatIcon}}
+      />
       <SearchGroup>
         <View style={styles.searchButtonContainer}>
           <SharedElement style={styles.styleButton} id="locationSearchInput">
