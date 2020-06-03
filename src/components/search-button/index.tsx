@@ -9,7 +9,7 @@ type ResultItemProps = {
   title: string;
   placeholder: string;
   onPress: () => void;
-  location?: LocationWithSearchMetadata;
+  text?: string;
   icon?: JSX.Element;
   style?: StyleProp<ViewStyle>;
 };
@@ -17,15 +17,12 @@ type ResultItemProps = {
 const SearchButton: React.FC<ResultItemProps> = ({
   title,
   placeholder,
-  location,
+  text,
   icon,
   onPress,
   style,
 }) => {
   const styles = useThemeStyles();
-
-  const text =
-    location?.resultType == 'geolocation' ? 'Min posisjon' : location?.label;
 
   return (
     <View style={style}>
@@ -45,6 +42,19 @@ const SearchButton: React.FC<ResultItemProps> = ({
 };
 
 export default SearchButton;
+
+type ResultItemLocationProps = Omit<ResultItemProps, 'text'> & {
+  location?: LocationWithSearchMetadata;
+};
+
+export const LocationButton: React.FC<ResultItemLocationProps> = ({
+  location,
+  ...props
+}) => {
+  const text =
+    location?.resultType == 'geolocation' ? 'Min posisjon' : location?.label;
+  return <SearchButton text={text} {...props} />;
+};
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   button: {

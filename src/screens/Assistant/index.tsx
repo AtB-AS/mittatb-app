@@ -1,7 +1,7 @@
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {View} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useState, useRef} from 'react';
+import {View, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {SharedElement} from 'react-navigation-shared-element';
@@ -9,7 +9,7 @@ import {searchTrip} from '../../api';
 import {CancelToken, isCancel} from '../../api/client';
 import LocationArrow from '../../assets/svg/LocationArrow';
 import SwapLocationsArrowIcon from '../../assets/svg/SwapLocationsArrowsIcon';
-import SearchButton from '../../components/search-button';
+import {LocationButton} from '../../components/search-button';
 import SearchGroup from '../../components/search-button/search-group';
 import {useFavorites} from '../../favorites/FavoritesContext';
 import {Location, UserFavorites} from '../../favorites/types';
@@ -28,6 +28,7 @@ import insets from '../../utils/insets';
 import Splash from '../Splash';
 import Results from './Results';
 import useChatIcon from '../../utils/use-chat-icon';
+import DateInput, {DateOutput} from './DateInput';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -72,8 +73,8 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
   const {from, to, swap, setCurrentLocationAsFrom} = useLocations(
     currentLocation,
   );
-
-  const [tripPatterns, isSearching, reload] = useTripPatterns(from, to);
+  const [date, setDate] = useState<DateOutput | undefined>();
+  const [tripPatterns, isSearching, reload] = useTripPatterns(from, to, date);
 
   const {icon: chatIcon, openChat} = useChatIcon();
   const openLocationSearch = (
@@ -95,7 +96,7 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
       <SearchGroup>
         <View style={styles.searchButtonContainer}>
           <SharedElement style={styles.styleButton} id="locationSearchInput">
-            <SearchButton
+            <LocationButton
               title="Fra"
               placeholder="Søk etter adresse eller sted"
               location={from}
@@ -114,7 +115,7 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
 
         <View style={styles.searchButtonContainer}>
           <SharedElement id="locationSearchInput" style={styles.styleButton}>
-            <SearchButton
+            <LocationButton
               title="Til"
               placeholder="Søk etter adresse eller sted"
               location={to}
@@ -130,6 +131,10 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
             <SwapLocationsArrowIcon />
           </TouchableOpacity>
         </View>
+      </SearchGroup>
+
+      <SearchGroup containerStyle={{marginTop: 12}}>
+        <DateInput onDateSelected={setDate} value={date} />
       </SearchGroup>
 
       <Results
@@ -275,6 +280,7 @@ export default AssistantRoot;
 function useTripPatterns(
   fromLocation: Location | undefined,
   toLocation: Location | undefined,
+  date: DateOutput | undefined,
 ): [TripPattern[] | null, boolean, () => {}] {
   const [isSearching, setIsSearching] = useState(false);
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
@@ -287,9 +293,18 @@ function useTripPatterns(
 
       setIsSearching(true);
       try {
-        const response = await searchTrip(fromLocation, toLocation, {
-          cancelToken: source.token,
-        });
+        const arriveBy = date?.type === 'arrival';
+        const searchDate =
+          date && date?.type !== 'now' ? date.date : new Date();
+        const response = await searchTrip(
+          fromLocation,
+          toLocation,
+          searchDate,
+          arriveBy,
+          {
+            cancelToken: source.token,
+          },
+        );
         source.token.throwIfRequested();
         setTripPatterns(response.data);
         setIsSearching(false);
@@ -307,7 +322,7 @@ function useTripPatterns(
       if (!fromLocation || !toLocation) return;
       source.cancel('New search to replace previous search');
     };
-  }, [fromLocation, toLocation]);
+  }, [fromLocation, toLocation, date]);
 
   useEffect(reload, [reload]);
 

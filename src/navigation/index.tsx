@@ -21,6 +21,7 @@ import {TransitionPresets} from '@react-navigation/stack';
 import DepartureDetails, {
   DepartureDetailsRouteParams,
 } from '../screens/TripDetailsModal/DepartureDetails';
+import {Host} from 'react-native-portalize';
 
 export type RootStackParamList = {
   Onboarding: undefined;
@@ -49,83 +50,85 @@ const NavigationRoot = () => {
         })}
       />
       <NavigationContainer onStateChange={trackNavigation}>
-        <SharedStack.Navigator
-          mode={isLoading || !onboarded ? 'card' : 'modal'}
-        >
-          {!onboarded ? (
-            <SharedStack.Screen
-              name="Onboarding"
-              component={Onboarding}
-              options={{headerShown: false}}
-            />
-          ) : (
-            <>
+        <Host>
+          <SharedStack.Navigator
+            mode={isLoading || !onboarded ? 'card' : 'modal'}
+          >
+            {!onboarded ? (
               <SharedStack.Screen
-                name="TabNavigator"
-                component={TabNavigator}
+                name="Onboarding"
+                component={Onboarding}
                 options={{headerShown: false}}
               />
-              <SharedStack.Screen
-                name="TripDetailsModal"
-                component={TripDetailsModal}
-                options={{
-                  headerShown: false,
-                  cardOverlayEnabled: true,
-                  cardShadowEnabled: true,
-                  ...TransitionPresets.ModalPresentationIOS,
-                }}
-              />
-              <SharedStack.Screen
-                name="DepartureDetailsModal"
-                component={DepartureDetails}
-                options={{
-                  headerShown: false,
-                  cardOverlayEnabled: true,
-                  cardShadowEnabled: true,
-                  ...TransitionPresets.ModalPresentationIOS,
-                }}
-              />
-              <SharedStack.Screen
-                name="LocationSearch"
-                component={LocationSearch}
-                sharedElementsConfig={() => [
-                  {
-                    id: 'locationSearchInput',
-                    animation: 'fade',
-                    resize: 'clip',
-                    align: 'center-bottom',
-                  },
-                ]}
-                options={{
-                  title: 'Søk',
-                  headerBackTitleVisible: false,
-                  headerTintColor: theme.text.primary,
-                  headerStyle: {
-                    backgroundColor: theme.background.level2,
-                    shadowColor: 'transparent',
-                  },
-                  headerBackImage: ({tintColor}) => (
-                    <View
-                      style={{
-                        width: 24,
-                        height: 24,
-                        alignContent: 'center',
-                        justifyContent: 'center',
-                        marginLeft: 24,
-                      }}
-                    >
-                      <CloseModalCrossIcon fill={tintColor} />
-                    </View>
-                  ),
-                  transitionSpec: {
-                    open: transitionSpec,
-                    close: transitionSpec,
-                  },
-                }}
-              />
-            </>
-          )}
-        </SharedStack.Navigator>
+            ) : (
+              <>
+                <SharedStack.Screen
+                  name="TabNavigator"
+                  component={TabNavigator}
+                  options={{headerShown: false}}
+                />
+                <SharedStack.Screen
+                  name="TripDetailsModal"
+                  component={TripDetailsModal}
+                  options={{
+                    headerShown: false,
+                    cardOverlayEnabled: true,
+                    cardShadowEnabled: true,
+                    ...TransitionPresets.ModalPresentationIOS,
+                  }}
+                />
+                <SharedStack.Screen
+                  name="DepartureDetailsModal"
+                  component={DepartureDetails}
+                  options={{
+                    headerShown: false,
+                    cardOverlayEnabled: true,
+                    cardShadowEnabled: true,
+                    ...TransitionPresets.ModalPresentationIOS,
+                  }}
+                />
+                <SharedStack.Screen
+                  name="LocationSearch"
+                  component={LocationSearch}
+                  sharedElementsConfig={() => [
+                    {
+                      id: 'locationSearchInput',
+                      animation: 'fade',
+                      resize: 'clip',
+                      align: 'center-bottom',
+                    },
+                  ]}
+                  options={{
+                    title: 'Søk',
+                    headerBackTitleVisible: false,
+                    headerTintColor: theme.text.primary,
+                    headerStyle: {
+                      backgroundColor: theme.background.level2,
+                      shadowColor: 'transparent',
+                    },
+                    headerBackImage: ({tintColor}) => (
+                      <View
+                        style={{
+                          width: 24,
+                          height: 24,
+                          alignContent: 'center',
+                          justifyContent: 'center',
+                          marginLeft: 24,
+                        }}
+                      >
+                        <CloseModalCrossIcon fill={tintColor} />
+                      </View>
+                    ),
+                    transitionSpec: {
+                      open: transitionSpec,
+                      close: transitionSpec,
+                    },
+                  }}
+                />
+              </>
+            )}
+          </SharedStack.Navigator>
+        </Host>
       </NavigationContainer>
     </SafeAreaProvider>
   );

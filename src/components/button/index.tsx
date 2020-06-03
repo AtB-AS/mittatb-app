@@ -59,8 +59,7 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flexDirection: 'row',
     padding: 12,
     alignItems: 'center',
-    borderRadius: 4,
-    borderTopLeftRadius: 16,
+    borderRadius: 8,
     backgroundColor: theme.background.accent,
     marginBottom: 24,
   },
@@ -78,7 +77,6 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   textContainer: {
     flex: 1,
-    marginEnd: 20,
     alignItems: 'center',
   },
   text: {
