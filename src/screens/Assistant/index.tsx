@@ -27,11 +27,8 @@ import {StyleSheet} from '../../theme';
 import insets from '../../utils/insets';
 import Splash from '../Splash';
 import Results from './Results';
-<<<<<<< HEAD
 import useChatIcon from '../../utils/use-chat-icon';
-=======
 import DateInput, {DateOutput} from './DateInput';
->>>>>>> 57de59e... feat(assistant): Adds ability to input date time (arrival and departure)
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
