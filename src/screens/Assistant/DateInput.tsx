@@ -174,7 +174,7 @@ const DateInput: React.FC<DateInputProps> = ({onDateSelected, value}) => {
               <DatePicker
                 date={dateObjectInternal.date}
                 onDateChange={onChange}
-                locale="no"
+                locale="nb"
               />
             </View>
 
