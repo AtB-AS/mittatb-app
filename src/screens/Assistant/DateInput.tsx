@@ -12,18 +12,22 @@ import {formatToClock, formatToLongDateTime} from '../../utils/date';
 import nb from 'date-fns/locale/nb';
 import insets from '../../utils/insets';
 
-type DateTypes = 'now' | 'departure' | 'arrival';
-export type DateOutput = {
-  date: Date;
-  type: DateTypes;
-};
+type DateTypesWithoutNow = 'departure' | 'arrival';
+type DateTypes = DateTypesWithoutNow | 'now';
+export type DateOutput =
+  | {
+      date: Date;
+      type: DateTypesWithoutNow;
+    }
+  | {
+      type: 'now';
+    };
 
 type DateInputProps = {
   onDateSelected(value: DateOutput): void;
   value?: DateOutput;
 };
 const now = (): DateOutput => ({
-  date: new Date(),
   type: 'now',
 });
 
@@ -117,11 +121,12 @@ const DateInput: React.FC<DateInputProps> = ({onDateSelected, value}) => {
     setDateObjectInternal(now());
   };
 
-  const setType = (type: DateTypes) =>
+  const setType = (type: DateTypesWithoutNow) => {
     setDateObjectInternal({
-      date: dateObjectInternal.date,
+      date: dateOrDefault(dateObjectInternal),
       type,
     });
+  };
 
   const onSave = () => {
     onDateSelected(dateObjectInternal);
@@ -172,7 +177,7 @@ const DateInput: React.FC<DateInputProps> = ({onDateSelected, value}) => {
 
             <View style={style.dateContainer}>
               <DatePicker
-                date={dateObjectInternal.date}
+                date={dateOrDefault(dateObjectInternal)}
                 onDateChange={onChange}
                 locale="nb"
               />
@@ -224,5 +229,12 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     borderBottomWidth: 2,
   },
 }));
+
+function dateOrDefault(dateObject: DateOutput) {
+  if (dateObject.type === 'now') {
+    return new Date();
+  }
+  return dateObject.date;
+}
 
 export default DateInput;

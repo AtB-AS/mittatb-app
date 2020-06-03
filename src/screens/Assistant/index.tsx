@@ -294,7 +294,8 @@ function useTripPatterns(
       setIsSearching(true);
       try {
         const arriveBy = date?.type === 'arrival';
-        const searchDate = date?.type === 'now' ? new Date() : date?.date;
+        const searchDate =
+          date && date?.type !== 'now' ? date.date : new Date();
         const response = await searchTrip(
           fromLocation,
           toLocation,
