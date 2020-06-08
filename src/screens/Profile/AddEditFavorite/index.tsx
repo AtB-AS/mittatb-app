@@ -1,6 +1,12 @@
+/**
+ * Implementation based on https://github.com/staltz/react-native-emoji-picker-staltz
+ * Copyright (c) 2016 Yonah Forst
+ * Modifications: Copyright (c) 2020 Andre 'Staltz' Medeiros
+ * MIT
+ */
 import {RouteProp, CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   Alert,
   StyleProp,
@@ -21,13 +27,13 @@ import {useFavorites} from '../../../favorites/FavoritesContext';
 import {StyleSheet, Theme, useTheme} from '../../../theme';
 import Button from '../../../components/button';
 import EmojiPopup from './EmojiPopup';
-import {RenderedEmoji} from './Emojis';
 import InputSearchIcon from '../../../location-search/svg/InputSearchIcon';
 import {SharedElement} from 'react-navigation-shared-element';
 import {RootStackParamList} from '../../../navigation';
 import {useLocationSearchValue} from '../../../location-search';
 import ScreenHeader from '../../../ScreenHeader';
 import ChevronLeftIcon from '../../../assets/svg/ChevronLeftIcon';
+import {Modalize} from 'react-native-modalize';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
@@ -50,19 +56,23 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   const {theme} = useTheme();
   const editItem = route?.params?.editItem;
 
-  const [isEmojiVisible, setEmojiVisible] = useState<boolean>(false);
-  const [emoji, setEmoji] = useState<RenderedEmoji | undefined>(undefined);
+  const [emoji, setEmoji] = useState<string | undefined>(editItem?.emoji);
   const [name, setName] = useState<string>(editItem?.name ?? '');
   const location = useLocationSearchValue<AddEditScreenRouteProp>(
     'searchLocation',
     editItem?.location,
   );
 
+  const emojiRef = useRef<Modalize>(null);
+  const openEmojiPopup = () => {
+    emojiRef.current?.open();
+  };
+
   const hasSelectedValues = Boolean(location);
+  useEffect(() => setEmoji(editItem?.emoji), [editItem?.emoji]);
 
   // @TODO This must be fixed so that the emoji item it self is stored
   // in favorites, or some lookup to set selected item inside emoji panel.
-  const renderedEmoji = emoji?.renderedText ?? editItem?.emoji ?? '';
 
   const save = async () => {
     if (!location) {
@@ -71,7 +81,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
     const newFavorite = {
       name: !name ? location?.name : name,
       location,
-      emoji: renderedEmoji,
+      emoji,
     };
     if (editItem) {
       // Update existing
@@ -112,12 +122,25 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         title="Legg til favorittsted"
       />
       <EmojiPopup
-        onClose={() => setEmojiVisible(false)}
-        open={isEmojiVisible}
-        value={emoji}
-        onEmojiSelected={(emoji: RenderedEmoji) => {
-          setEmoji(emoji);
-          setEmojiVisible(false);
+        localizedCategories={[
+          'Smilefjes',
+          'Personer',
+          'Dyr og natur',
+          'Mat og drikke',
+          'Aktivitet',
+          'Reise og steder',
+          'Objekter',
+          'Symboler',
+        ]}
+        ref={emojiRef}
+        value={emoji ?? null}
+        closeOnSelect={true}
+        onEmojiSelected={(emoji) => {
+          if (emoji == null) {
+            setEmoji(undefined);
+          } else {
+            setEmoji(emoji);
+          }
         }}
       />
 
@@ -163,10 +186,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           title="Symbol"
           boxStyle={{marginBottom: 0, alignItems: 'flex-start'}}
         >
-          <SymbolPicker
-            onPress={() => setEmojiVisible(true)}
-            value={renderedEmoji}
-          />
+          <SymbolPicker onPress={openEmojiPopup} value={emoji} />
         </InputGroup>
 
         <View style={css.line} />
