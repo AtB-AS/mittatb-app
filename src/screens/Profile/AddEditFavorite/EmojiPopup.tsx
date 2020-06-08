@@ -1,3 +1,9 @@
+/**
+ * Based on https://github.com/staltz/react-native-emoji-picker-staltz
+ * Copyright (c) 2016 Yonah Forst
+ * Modifications: Copyright (c) 2020 Andre 'Staltz' Medeiros
+ * MIT
+ */
 import React, {useRef, useEffect, forwardRef, useState} from 'react';
 import {
   StyleSheet,
