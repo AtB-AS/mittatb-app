@@ -1,13 +1,4 @@
-import React, {
-  useRef,
-  useEffect,
-  forwardRef,
-  useState,
-  RefAttributes,
-  Ref,
-  MutableRefObject,
-  useCallback,
-} from 'react';
+import React, {useRef, useEffect, forwardRef, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -16,8 +7,6 @@ import {
   Platform,
   ViewStyle,
   TextStyle,
-  TouchableWithoutFeedback,
-  FlatList,
   Dimensions,
   ScaledSize,
 } from 'react-native';
