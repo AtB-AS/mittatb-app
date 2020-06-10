@@ -1,7 +1,6 @@
 declare module 'date-fns' {
-  function formatDistanceStrict(
+  function formatDistanceToNowStrict(
     date: Date | number,
-    baseDate: Date | number,
     options?: {
       addSuffix?: boolean;
       unit?: 'second' | 'minute' | 'hour' | 'day' | 'month' | 'year';
@@ -10,5 +9,5 @@ declare module 'date-fns' {
       onlyNumeric?: boolean;
     },
   ): string;
-  namespace formatDistanceStrict {}
+  namespace formatDistanceToNowStrict {}
 }

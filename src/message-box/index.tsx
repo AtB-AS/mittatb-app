@@ -14,7 +14,7 @@ type WithChildren = {
 export type MessageBoxProps = {
   icon?: React.ReactNode;
   type?: 'info' | 'warning';
-  containerStyle: StyleProp<ViewStyle>;
+  containerStyle?: StyleProp<ViewStyle>;
 } & (WithMessage | WithChildren);
 
 const MessageBox: React.FC<MessageBoxProps> = ({
@@ -47,6 +47,7 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
   },
   childContainer: {
     marginLeft: 12,
+    flex: 1,
   },
   text: {
     fontSize: 16,

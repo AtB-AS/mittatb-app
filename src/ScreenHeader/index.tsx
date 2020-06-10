@@ -4,44 +4,47 @@ import React from 'react';
 import {StyleSheet} from '../theme';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import CancelCrossIcon from '../assets/svg/CancelCrossIcon';
+import insets from '../utils/insets';
+
+type IconButton = {
+  icon: React.ReactNode;
+  onPress(): void;
+};
 
 type ScreenHeaderProps = {
-  onClose?(): void;
-  iconElement?: React.ReactNode;
+  leftButton?: IconButton;
+  rightButton?: IconButton;
   title: string;
 };
 
 const ScreenHeader: React.FC<ScreenHeaderProps> = ({
-  onClose,
-  iconElement,
+  leftButton,
+  rightButton,
   title,
 }) => {
   const css = useHeaderStyle();
-  const defaultIcon = onClose ? <CancelCrossIcon /> : <LogoOutline />;
-  const iconEl = iconElement ?? defaultIcon;
 
-  const icon = onClose ? (
-    <TouchableOpacity
-      onPress={onClose}
-      hitSlop={{
-        top: 8,
-        left: 8,
-        right: 8,
-        bottom: 8,
-      }}
-    >
-      {iconEl}
+  const leftIcon = leftButton ? (
+    <TouchableOpacity onPress={leftButton.onPress} hitSlop={insets.all(8)}>
+      {leftButton.icon}
     </TouchableOpacity>
   ) : (
-    iconEl
+    <LogoOutline />
+  );
+
+  const rightIcon = rightButton ? (
+    <TouchableOpacity onPress={rightButton.onPress} hitSlop={insets.all(8)}>
+      {rightButton.icon}
+    </TouchableOpacity>
+  ) : (
+    <View />
   );
 
   return (
     <View style={css.container}>
-      {icon}
-      <View style={css.textContainer}>
-        <Text style={css.text}>{title}</Text>
-      </View>
+      <View style={css.iconContainerLeft}>{leftIcon}</View>
+      <Text style={css.text}>{title}</Text>
+      <View style={css.iconContainerRight}>{rightIcon}</View>
     </View>
   );
 };
@@ -50,13 +53,17 @@ export default ScreenHeader;
 const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
-    padding: theme.sizes.pagePadding,
-  },
-  textContainer: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginEnd: 20,
+    padding: theme.sizes.pagePadding,
+  },
+  iconContainerLeft: {
+    position: 'absolute',
+    left: 12,
+  },
+  iconContainerRight: {
+    position: 'absolute',
+    right: 12,
   },
   text: {
     color: theme.text.primary,

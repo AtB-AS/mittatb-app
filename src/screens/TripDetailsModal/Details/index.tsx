@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, ActivityIndicator} from 'react-native';
+import React, {useState, useCallback} from 'react';
+import {View, ActivityIndicator, Text} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {Leg, TripPattern} from '../../../sdk';
@@ -20,12 +20,15 @@ import LocationArrow from '../../../assets/svg/LocationArrow';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import LocationIcon from '../../../components/location-icon';
 import {FavoriteIcon} from '../../../favorites';
+import {getSingleTripPattern} from '../../../api/trips';
+import usePollableResource from '../../../utils/use-pollable-resource';
+import CancelCrossIcon from '../../../assets/svg/CancelCrossIcon';
 
 // @TODO Firebase config?
 const TIME_LIMIT_IN_MINUTES = 3;
 
 export type DetailsRouteParams = {
-  tripPattern: TripPattern;
+  tripPatternId: string;
   from: LocationWithSearchMetadata;
   to: LocationWithSearchMetadata;
 };
@@ -47,34 +50,47 @@ type Props = {
 const TripDetailsModal: React.FC<Props> = (props) => {
   const styles = useDetailsStyle();
   const {
-    params: {tripPattern},
+    params: {tripPatternId, ...passingProps},
   } = props.route;
-
-  const hasValues = Boolean(tripPattern);
+  const [tripPattern, , isLoading, error] = useTripPattern(tripPatternId);
 
   return (
     <View style={styles.container}>
-      <Header onClose={() => props.navigation.goBack()} title="Reisedetaljer" />
+      <Header
+        leftButton={{
+          onPress: () => props.navigation.goBack(),
+          icon: <CancelCrossIcon />,
+        }}
+        title="Reisedetaljer"
+      />
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
       >
-        {hasValues ? (
-          <DetailsContent {...props} />
-        ) : (
+        {error ? (
+          <MessageBox type="warning">
+            <Text>
+              Kunne ikke hente ut reiseforslag. Det kan være at reisen har
+              endret seg eller ikke lengre er tilgjengelig.
+            </Text>
+          </MessageBox>
+        ) : !tripPattern ? (
           <ActivityIndicator animating={true} size="large" />
+        ) : (
+          <DetailsContent {...passingProps} tripPattern={tripPattern} />
         )}
       </ScrollView>
     </View>
   );
 };
 
-const DetailsContent: React.FC<Props> = ({route}) => {
+const DetailsContent: React.FC<{
+  tripPattern: TripPattern;
+  from: LocationWithSearchMetadata;
+  to: LocationWithSearchMetadata;
+}> = ({tripPattern, from, to}) => {
   const {favorites} = useFavorites();
   const styles = useDetailsStyle();
-  const {
-    params: {tripPattern, from, to},
-  } = route;
 
   const [shortTime, setShortTime] = useState(false);
   const flagShortTime = (secondsBetween: number) => {
@@ -201,3 +217,16 @@ const useDetailsStyle = StyleSheet.createThemeHook((theme) => ({
 }));
 
 export default TripDetailsModal;
+
+function useTripPattern(tripPatternId: string) {
+  const fetchTripPattern = useCallback(
+    async function reload() {
+      return await getSingleTripPattern(tripPatternId);
+    },
+    [tripPatternId],
+  );
+  return usePollableResource<TripPattern | null>(fetchTripPattern, {
+    initialValue: null,
+    pollingTimeInSeconds: 60,
+  });
+}

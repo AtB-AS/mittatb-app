@@ -11,7 +11,7 @@ import {SvgProps} from 'react-native-svg';
 
 const LocationIcon = ({
   location,
-  fill,
+  fill = 'black',
   multiple,
 }: {
   location: Location;

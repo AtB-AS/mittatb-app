@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, ViewStyle, StyleProp} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import colors from '../theme/colors';
@@ -8,9 +8,13 @@ import LocationArrow from '../assets/svg/LocationArrow';
 import {GeolocationResponse} from '@react-native-community/geolocation';
 import {LocationWithSearchMetadata} from './';
 import {FavoriteIcon} from '../favorites';
+import {PermissionStatus} from 'react-native-permissions';
+import {RequestPermissionFn} from '../GeolocationContext';
 
 type Props = {
   geolocation: GeolocationResponse | null;
+  geostatus: PermissionStatus | null;
+  requestGeoPermission: RequestPermissionFn;
   onSelectLocation: (location: LocationWithSearchMetadata) => void;
   hideFavorites: boolean;
   containerStyle?: StyleProp<ViewStyle>;
@@ -19,6 +23,8 @@ type Props = {
 const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
   geolocation,
+  geostatus,
+  requestGeoPermission,
   containerStyle,
   hideFavorites,
 }) => {
@@ -28,7 +34,35 @@ const FavoriteChips: React.FC<Props> = ({
     ? reverseLookupLocations[1]
     : null;
 
-  if (!currentLocation && (hideFavorites || !favorites.length)) return null;
+  const [recentlyAllowedGeo, setsetRecentlyAllowedGeo] = useState(false);
+
+  const hasDeniedGeoPermission = geostatus && geostatus !== 'granted';
+  const hideLocationChip = !currentLocation && !hasDeniedGeoPermission;
+
+  async function onCurrentLocation() {
+    if (currentLocation) {
+      onSelectLocation({
+        ...currentLocation,
+        resultType: 'geolocation',
+      });
+    } else {
+      const status = await requestGeoPermission({useSettingsFallback: true});
+      if (status === 'granted') {
+        setsetRecentlyAllowedGeo(true);
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (recentlyAllowedGeo && currentLocation) {
+      onSelectLocation({
+        ...currentLocation,
+        resultType: 'geolocation',
+      });
+    }
+  }, [recentlyAllowedGeo, currentLocation]);
+
+  if (hideLocationChip && (hideFavorites || !favorites.length)) return null;
 
   return (
     <View
@@ -42,13 +76,11 @@ const FavoriteChips: React.FC<Props> = ({
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={containerStyle}
       >
-        {currentLocation && (
+        {!hideLocationChip && (
           <FavoriteChip
             text="Min posisjon"
             icon={<LocationArrow />}
-            onPress={() =>
-              onSelectLocation({...currentLocation, resultType: 'geolocation'})
-            }
+            onPress={onCurrentLocation}
           />
         )}
         {!hideFavorites &&

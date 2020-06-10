@@ -20,6 +20,7 @@ import {getQuayName} from '../../../utils/transportation-names';
 import {useCallback} from 'react';
 import {getAimedTimeIfLargeDifference} from '../utils';
 import usePollableResource from '../../../utils/use-pollable-resource';
+import CancelCrossIcon from '../../../assets/svg/CancelCrossIcon';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -75,8 +76,10 @@ export default function DepartureDetails({navigation, route}: Props) {
   return (
     <View style={styles.container}>
       <ScreenHeader
-        onClose={() => navigation.goBack()}
-        iconElement={isBack ? <ChevronLeftIcon /> : undefined}
+        leftButton={{
+          onPress: () => navigation.goBack(),
+          icon: isBack ? <ChevronLeftIcon /> : <CancelCrossIcon />,
+        }}
         title={title}
       />
       {content}
@@ -257,7 +260,7 @@ function useGroupedCallList(
   fromQuayId?: string,
   toQuayId?: string,
   pollingTimeInSeconds: number = 0,
-): [CallListGroup, () => void, boolean] {
+): [CallListGroup, () => void, boolean, Error?] {
   const getService = useCallback(
     async function getServiceJourneyDepartures() {
       const deps = await getDepartures(serviceJourneyId);

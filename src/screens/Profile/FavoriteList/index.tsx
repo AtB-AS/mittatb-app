@@ -12,6 +12,8 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import Header from '../../../ScreenHeader';
 import {FavoriteIcon} from '../../../favorites';
+import insets from '../../../utils/insets';
+import useChatIcon from '../../../utils/use-chat-icon';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -33,9 +35,14 @@ export default function Profile({navigation}: ProfileScreenProps) {
 
   const onAddButtonClick = () => navigation.push('AddEditFavorite', {});
 
+  const {icon: chatIcon, openChat} = useChatIcon();
+
   return (
     <SafeAreaView style={css.container}>
-      <Header title="Mitt AtB" />
+      <Header
+        title="Mitt AtB"
+        rightButton={{icon: chatIcon, onPress: openChat}}
+      />
 
       <ScrollView>
         <EditableListGroup
@@ -55,7 +62,7 @@ export default function Profile({navigation}: ProfileScreenProps) {
 }
 const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.background.primary,
+    backgroundColor: theme.background.level1,
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -89,10 +96,7 @@ const Item: React.FC<ItemProps> = ({item, onEdit}) => {
       <FavoriteIcon favorite={item} />
       <Text style={css.text}>{item.name ?? item.location.name}</Text>
       {onEdit && (
-        <TouchableOpacity
-          onPress={onEdit}
-          hitSlop={{top: 12, right: 12, left: 12, bottom: 12}}
-        >
+        <TouchableOpacity onPress={onEdit} hitSlop={insets.all(12)}>
           <EditIcon />
         </TouchableOpacity>
       )}

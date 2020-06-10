@@ -20,9 +20,11 @@ export $(grep -v '^#' .env | gxargs -d '\n')
 
 echo "Setting BundleIdentifier in Info.plist to $IOS_BUNDLE_IDENTIFIER"
 /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $IOS_BUNDLE_IDENTIFIER" ./ios/atb/Info.plist
+
 echo "Adding Bugsnag API key and release stage to Info.plist"
 /usr/libexec/PlistBuddy -c "Add :BugsnagAPIKey string $BUGSNAG_API_KEY" ./ios/atb/Info.plist
 /usr/libexec/PlistBuddy -c "Add :BugsnagReleaseStage string $BUGSNAG_RELEASE_STAGE" ./ios/atb/Info.plist
+
 echo "Adding Bugsnag API key and release stage to AndroidManifest.xml"
 xmlstarlet edit --inplace --omit-decl \
   -s //manifest/application -t elem -n "bugsnagkey" \
@@ -35,28 +37,33 @@ xmlstarlet edit --inplace --omit-decl \
   -r //manifest/application/bugsnagreleasestage -v meta-data \
    android/app/src/main/AndroidManifest.xml
 
+echo "Set Intercom API key and App ID in Intercom.plist"
+/usr/libexec/PlistBuddy -c "Set :IntercomApiKey $INTERCOM_IOS_API_KEY" ./ios/atb/Intercom.plist
+/usr/libexec/PlistBuddy -c "Set :IntercomAppId $INTERCOM_APP_ID" ./ios/atb/Intercom.plist
+
+echo "Set Intercom API key and App ID in Intercom.xml"
+xmlstarlet edit --inplace --omit-decl \
+  -u "//resources/string[@name='IntercomApiKey']" -v "$INTERCOM_ANDROID_API_KEY" \
+  -u "//resources/string[@name='IntercomAppId']" -v "$INTERCOM_APP_ID" \
+   android/app/src/main/res/values/Intercom.xml
+
 echo "Install icon dependencies"
 brew install imagemagick
 yarn icons
-
-echo "Adding badge to icons"
-gem install badge --no-document
-brew install librsvg
-brew unlink pango  
-brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/7cf3b63be191cb2ce4cd86f4406915128ec97432/Formula/pango.rb
-brew switch pango 1.42.4_1 
 
 export CURRENT_COMMIT_HASH=$(git rev-parse --short HEAD)
 
 echo "Adding app badges to icons"
 if [ "$APP_ENVIRONMENT" = "staging" ]; then
+  gem install badge --no-document
+  brew install librsvg
+  brew unlink pango  
+  brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/7cf3b63be191cb2ce4cd86f4406915128ec97432/Formula/pango.rb
+  brew switch pango 1.42.4_1 
+
   badge --shield "1.0-QA-orange" --no_badge  --glob "/android/app/src/staging/res/*/*.{png,PNG}"
   badge --shield "1.0-QA-orange" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
 fi 
-if [ "$APP_ENVIRONMENT" = "store" ]; then
-  badge --shield "1.0-Alpha-blue" --no_badge  --glob "/android/app/src/store/res/*/*.{png,PNG}"
-  badge --shield "1.0-Alpha-blue" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
-fi
 
 if [ "$ENABLE_E2E" = true ]; then
     echo "Install E2E tools"

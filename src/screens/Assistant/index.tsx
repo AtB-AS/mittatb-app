@@ -1,27 +1,34 @@
-import React, {useEffect, useState, useMemo} from 'react';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
+import React, {useCallback, useEffect, useMemo, useState, useRef} from 'react';
+import {View, Text} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Results from './Results';
-import {TripPattern} from '../../sdk';
-import {useGeolocationState} from '../../GeolocationContext';
-import Splash from '../Splash';
-import {StyleSheet} from '../../theme';
-import {searchTrip} from '../../api';
-import {Location, UserFavorites} from '../../favorites/types';
-import {
-  useLocationSearchValue,
-  LocationWithSearchMetadata,
-} from '../../location-search';
-import {RouteProp, CompositeNavigationProp} from '@react-navigation/core';
-import {RootStackParamList} from '../../navigation';
 import {SharedElement} from 'react-navigation-shared-element';
-import Header from '../../ScreenHeader';
-import {useReverseGeocoder} from '../../location-search/useGeocoder';
-import {TabNavigatorParams} from '../../navigation/TabNavigator';
-import SearchButton from '../../components/search-button';
-import SearchLocationIcon from '../../components/search-location-icon';
-import {useFavorites} from '../../favorites/FavoritesContext';
+import {searchTrip} from '../../api';
 import {CancelToken, isCancel} from '../../api/client';
+import LocationArrow from '../../assets/svg/LocationArrow';
+import SwapLocationsArrowIcon from '../../assets/svg/SwapLocationsArrowsIcon';
+import {LocationButton} from '../../components/search-button';
+import SearchGroup from '../../components/search-button/search-group';
+import {useFavorites} from '../../favorites/FavoritesContext';
+import {Location, UserFavorites} from '../../favorites/types';
+import {useGeolocationState} from '../../GeolocationContext';
+import {
+  LocationWithSearchMetadata,
+  useLocationSearchValue,
+} from '../../location-search';
+import {useReverseGeocoder} from '../../location-search/useGeocoder';
+import {RootStackParamList} from '../../navigation';
+import {TabNavigatorParams} from '../../navigation/TabNavigator';
+import Header from '../../ScreenHeader';
+import {TripPattern} from '../../sdk';
+import {StyleSheet} from '../../theme';
+import insets from '../../utils/insets';
+import Loading from '../Loading';
+import Results from './Results';
+import useChatIcon from '../../utils/use-chat-icon';
+import DateInput, {DateOutput} from './DateInput';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -47,7 +54,7 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
     : undefined;
 
   if (!status) {
-    return <Splash />;
+    return <Loading />;
   }
 
   return (
@@ -63,13 +70,17 @@ type Props = {
 const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
   const styles = useThemeStyles();
 
-  const {from, to} = useLocations(currentLocation);
+  const {from, to, swap, setCurrentLocationAsFrom} = useLocations(
+    currentLocation,
+  );
+  const [date, setDate] = useState<DateOutput | undefined>();
+  const [tripPatterns, isSearching, timeOfLastSearch, reload] = useTripPatterns(
+    from,
+    to,
+    date,
+  );
 
-  const fromIcon = <SearchLocationIcon location={from} />;
-  const toIcon = <SearchLocationIcon location={to} />;
-
-  const [tripPatterns, isSearching] = useTripPatterns(from, to);
-
+  const {icon: chatIcon, openChat} = useChatIcon();
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
     initialText: string | undefined,
@@ -82,47 +93,101 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Reiseassistent" />
-      <SharedElement id="locationSearchInput">
-        <SearchButton
-          title="Fra"
-          placeholder="Søk etter adresse eller sted"
-          location={from}
-          icon={fromIcon}
-          onPress={() => openLocationSearch('fromLocation', from?.name)}
+      <Header
+        title="Reiseassistent"
+        rightButton={{onPress: openChat, icon: chatIcon}}
+      />
+      <SearchGroup>
+        <View style={styles.searchButtonContainer}>
+          <SharedElement style={styles.styleButton} id="locationSearchInput">
+            <LocationButton
+              title="Fra"
+              placeholder="Søk etter adresse eller sted"
+              location={from}
+              onPress={() => openLocationSearch('fromLocation', from?.name)}
+            />
+          </SharedElement>
+
+          <TouchableOpacity
+            style={styles.clickableIcon}
+            hitSlop={insets.all(12)}
+            onPress={setCurrentLocationAsFrom}
+          >
+            <LocationArrow />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.searchButtonContainer}>
+          <SharedElement id="locationSearchInput" style={styles.styleButton}>
+            <LocationButton
+              title="Til"
+              placeholder="Søk etter adresse eller sted"
+              location={to}
+              onPress={() => openLocationSearch('toLocation', to?.name)}
+            />
+          </SharedElement>
+
+          <TouchableOpacity
+            style={styles.clickableIcon}
+            hitSlop={insets.all(12)}
+            onPress={swap}
+          >
+            <SwapLocationsArrowIcon />
+          </TouchableOpacity>
+        </View>
+      </SearchGroup>
+
+      <SearchGroup containerStyle={{marginTop: 12}}>
+        <DateInput
+          onDateSelected={setDate}
+          value={date}
+          timeOfLastSearch={timeOfLastSearch}
         />
-      </SharedElement>
+      </SearchGroup>
+
       <Results
         tripPatterns={tripPatterns}
         isSearching={isSearching}
         navigation={navigation}
+        onRefresh={reload}
         onDetailsPressed={(tripPattern) =>
           navigation.navigate('TripDetailsModal', {
             from: from!,
             to: to!,
-            tripPattern,
+            tripPatternId: tripPattern.id!,
           })
         }
       />
-      <SharedElement id="locationSearchInput">
-        <SearchButton
-          title="Til"
-          placeholder="Søk etter adresse eller sted"
-          location={to}
-          icon={toIcon}
-          onPress={() => openLocationSearch('toLocation', to?.name)}
-        />
-      </SharedElement>
     </SafeAreaView>
   );
 };
+const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    backgroundColor: theme.background.level1,
+    paddingBottom: 0,
+    flexGrow: 1,
+  },
+  searchButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  styleButton: {
+    flexGrow: 1,
+  },
+  clickableIcon: {},
+}));
 
 type Locations = {
   from: LocationWithSearchMetadata | undefined;
   to: LocationWithSearchMetadata | undefined;
 };
 
-function useLocations(currentLocation: Location | undefined): Locations {
+type LocationHookData = Locations & {
+  swap(): void;
+  setCurrentLocationAsFrom(): void;
+};
+
+function useLocations(currentLocation: Location | undefined): LocationHookData {
   const {favorites} = useFavorites();
 
   const memoedCurrentLocation = useMemo<LocationWithSearchMetadata | undefined>(
@@ -132,6 +197,11 @@ function useLocations(currentLocation: Location | undefined): Locations {
       currentLocation?.coordinates.longitude,
     ],
   );
+
+  const [stored, updateFromTo] = useState<Locations>({
+    from: memoedCurrentLocation,
+    to: undefined,
+  });
 
   const searchedFromLocation = useLocationSearchValue<AssistantRouteProp>(
     'fromLocation',
@@ -152,9 +222,33 @@ function useLocations(currentLocation: Location | undefined): Locations {
     favorites,
   );
 
+  useEffect(
+    function () {
+      updateFromTo({
+        from: from ?? stored.from ?? memoedCurrentLocation,
+        to: to ?? stored.to,
+      });
+    },
+    [from, to, memoedCurrentLocation],
+  );
+
+  const swap = () =>
+    updateFromTo({
+      to: stored.from,
+      from: stored.to,
+    });
+
+  const setCurrentLocationAsFrom = () =>
+    updateFromTo({
+      from: memoedCurrentLocation,
+      to: stored.to,
+    });
+
   return {
-    from: from ?? memoedCurrentLocation,
-    to,
+    from: stored.from,
+    to: stored.to,
+    swap,
+    setCurrentLocationAsFrom,
   };
 }
 
@@ -189,23 +283,18 @@ function useUpdatedLocation(
   }, [searchedLocation, currentLocation, favorites]);
 }
 
-const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    backgroundColor: theme.background.primary,
-    flex: 1,
-  },
-}));
-
 export default AssistantRoot;
 
 function useTripPatterns(
   fromLocation: Location | undefined,
   toLocation: Location | undefined,
-): [TripPattern[] | null, boolean] {
+  date: DateOutput | undefined,
+): [TripPattern[] | null, boolean, Date, () => {}] {
   const [isSearching, setIsSearching] = useState(false);
+  const [timeOfSearch, setTimeOfSearch] = useState<Date>(new Date());
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
 
-  useEffect(() => {
+  const reload = useCallback(() => {
     const source = CancelToken.source();
 
     async function search() {
@@ -213,12 +302,22 @@ function useTripPatterns(
 
       setIsSearching(true);
       try {
-        const response = await searchTrip(fromLocation, toLocation, {
-          cancelToken: source.token,
-        });
+        const arriveBy = date?.type === 'arrival';
+        const searchDate =
+          date && date?.type !== 'now' ? date.date : new Date();
+        const response = await searchTrip(
+          fromLocation,
+          toLocation,
+          searchDate,
+          arriveBy,
+          {
+            cancelToken: source.token,
+          },
+        );
         source.token.throwIfRequested();
         setTripPatterns(response.data);
         setIsSearching(false);
+        setTimeOfSearch(searchDate);
       } catch (e) {
         if (!isCancel(e)) {
           console.warn(e);
@@ -233,7 +332,9 @@ function useTripPatterns(
       if (!fromLocation || !toLocation) return;
       source.cancel('New search to replace previous search');
     };
-  }, [fromLocation, toLocation]);
+  }, [fromLocation, toLocation, date]);
 
-  return [tripPatterns, isSearching];
+  useEffect(reload, [reload]);
+
+  return [tripPatterns, isSearching, timeOfSearch, reload];
 }

@@ -7,7 +7,7 @@ import {
   getNearestDepartures,
   getDeparturesFromStop,
 } from '../../api/departures';
-import SearchButton from '../../components/search-button';
+import {LocationButton} from '../../components/search-button';
 import SearchLocationIcon from '../../components/search-location-icon';
 import {Location} from '../../favorites/types';
 import {useGeolocationState} from '../../GeolocationContext';
@@ -20,10 +20,12 @@ import {RootStackParamList} from '../../navigation';
 import Header from '../../ScreenHeader';
 import {EstimatedCall} from '../../sdk';
 import {StyleSheet} from '../../theme';
-import Splash from '../Splash';
+import Loading from '../Loading';
 import NearbyResults from './NearbyResults';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import usePollableResource from '../../utils/use-pollable-resource';
+import SearchGroup from '../../components/search-button/search-group';
+import useChatIcon from '../../utils/use-chat-icon';
 
 type NearbyRouteName = 'Nearest';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearest';
@@ -49,7 +51,7 @@ const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
     : undefined;
 
   if (!status) {
-    return <Splash />;
+    return <Loading />;
   }
 
   return (
@@ -79,8 +81,10 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
     // Searching nearest is a really heavy operation,
     // so polling every 30 seconds is costly. Might
     // be a better way to do this and having subscription model for real time data.
-    fromLocation?.layer === 'venue' ? 30 : 120 ?? 0,
+    fromLocation?.layer === 'venue' ? 30 : 60 ?? 0,
   );
+
+  const {icon: chatIcon, openChat} = useChatIcon();
 
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {
@@ -91,16 +95,21 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="I nærheten" />
-      <SharedElement id="locationSearchInput">
-        <SearchButton
-          title="Fra"
-          placeholder="Søk etter adresse eller sted"
-          location={fromLocation}
-          icon={<SearchLocationIcon location={fromLocation} />}
-          onPress={() => openLocationSearch()}
-        />
-      </SharedElement>
+      <Header
+        title="I nærheten"
+        rightButton={{icon: chatIcon, onPress: openChat}}
+      />
+      <SearchGroup>
+        <SharedElement id="locationSearchInput">
+          <LocationButton
+            title="Fra"
+            placeholder="Søk etter adresse eller sted"
+            location={fromLocation}
+            icon={<SearchLocationIcon location={fromLocation} />}
+            onPress={() => openLocationSearch()}
+          />
+        </SharedElement>
+      </SearchGroup>
 
       <NearbyResults
         departures={departures}
@@ -113,7 +122,7 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.primary,
+    backgroundColor: theme.background.level1,
     paddingBottom: 0,
     flex: 1,
   },
@@ -132,7 +141,7 @@ export default NearbyScreen;
 function useNearestDepartures(
   location?: Location,
   pollingTimeInSeconds: number = 0,
-): [EstimatedCall[] | null, () => Promise<void>, boolean] {
+): [EstimatedCall[] | null, () => Promise<void>, boolean, Error?] {
   const fetchDepartures = useCallback(
     async function reload() {
       if (!location) return [];

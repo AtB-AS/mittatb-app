@@ -1,15 +1,16 @@
 import {TripPattern} from '../sdk';
-import {getClient} from './client';
+import client from './client';
 import {Location} from '../favorites/types';
 import {AxiosRequestConfig} from 'axios';
 
 export default async function search(
   from: Location,
   to: Location,
+  searchDate?: Date,
+  arriveBy: boolean = false,
   opts?: AxiosRequestConfig,
 ) {
   const url = 'v1/journey/trip';
-  const client = await getClient();
   return await client.post<TripPattern[]>(
     url,
     {
@@ -23,7 +24,18 @@ export default async function search(
         name: to.name,
         coordinates: to.coordinates,
       },
+      searchDate,
+      arriveBy,
     },
     opts,
   );
+}
+
+export async function getSingleTripPattern(
+  tripPatternId: string,
+  opts?: AxiosRequestConfig,
+) {
+  const url = `v1/journey/single-trip?id=${tripPatternId}`;
+  const result = await client.get<TripPattern>(url, opts);
+  return result.data;
 }

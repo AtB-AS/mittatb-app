@@ -1,72 +1,73 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
+import {Text, TouchableOpacity, View, Linking} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import WaitingForBus from '../../assets/svg/WaitingForBus';
-import Logo from '../../assets/svg/Logo';
+import {PRIVACY_POLICY_URL} from 'react-native-dotenv';
 import colors from '../../theme/colors';
 import {useGeolocationState} from '../../GeolocationContext';
 import {useAppState} from '../../AppContext';
+import {StyleSheet} from '../../theme';
+import TestPilotFigure from '../../assets/svg/TestPilotFigure';
 
-const GeoPermission: React.FC = () => {
+const Onboarding: React.FC = () => {
   const {completeOnboarding} = useAppState();
   const {status, requestPermission} = useGeolocationState();
   const [requestedOnce, setRequestedOnce] = useState(false);
 
+  const styles = useStyles();
+
   useEffect(() => {
-    if (
-      status === 'granted' ||
-      status === 'blocked' ||
-      status === 'unavailable' ||
-      (requestedOnce && status === 'denied')
-    ) {
+    if (requestedOnce && status) {
       completeOnboarding();
     }
-  }, [status]);
+  }, [status, requestedOnce]);
+
+  async function onRequestPermission() {
+    if (status !== 'granted')
+      await requestPermission({useSettingsFallback: true});
+    setRequestedOnce(true);
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
         <View style={styles.textContainer}>
-          <Logo width={48} style={{alignSelf: 'center'}} />
-          <Text style={styles.title}>
-            Velkommen til en enklere reisehverdag!
+          <Text style={styles.title}>Velkommen som testpilot! </Text>
+          <TestPilotFigure width={48} style={styles.figure} />
+          <Text style={styles.description}>
+            Nå kan du begynne å teste appen for å finne reiser og se busstrafikk
+            i sanntid fra telefonen din!
+          </Text>
+          <Text style={styles.subtitle}>
+            Bedre opplevelse med posisjonsdeling
           </Text>
           <Text style={styles.description}>
-            Reiseopplevelsen blir bedre med smidig samhandling. Derfor ber vi
-            deg dele posisjon slik at du kan:
+            Deling av posisjon mens du bruker appen vil gi en mye bedre
+            opplevelse og enklere bruk. Vi anbefaler derfor at du tillater
+            dette. Du kan når som helst slutte å dele posisjon.
           </Text>
-          <Text style={styles.description}>
-            Se hvor nærmeste transport befinner seg.
-          </Text>
-          <Text style={styles.description}>
-            Se fullstendige reiseforslag til jobb eller hjem fra der du er.
-          </Text>
-          <Text style={styles.description}>
-            Få varsel om når du må reise for å komme dit du ønsker i tide.
-          </Text>
-        </View>
-        <View style={styles.svgContainer}>
-          <WaitingForBus width="100%" height="100%" style={styles.svg} />
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableHighlight
-            style={styles.button}
-            onPress={() => {
-              setRequestedOnce(true);
-              requestPermission();
-            }}
+          <TouchableOpacity style={styles.button} onPress={onRequestPermission}>
+            <Text style={styles.buttonText}>Fortsett</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
+            }
           >
-            <Text style={styles.buttonText}>Kom i gang</Text>
-          </TouchableHighlight>
+            <Text style={styles.privacyPolicy}>
+              Les vår personvernerklæring
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: colors.secondary.blue,
+    backgroundColor: theme.background.level1,
     flex: 1,
   },
   innerContainer: {
@@ -76,19 +77,37 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
-    justifyContent: 'space-between',
-    paddingHorizontal: 48,
-    maxHeight: 460,
+    padding: 24,
   },
   title: {
-    fontSize: 28,
+    fontSize: 26,
     textAlign: 'center',
-    color: colors.general.white,
+    color: theme.text.primary,
+    marginTop: 24,
+  },
+  figure: {
+    alignSelf: 'center',
+    marginVertical: 12,
+  },
+  subtitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: theme.text.primary,
+    marginTop: 12,
   },
   description: {
-    fontSize: 15,
+    fontSize: 16,
     textAlign: 'center',
-    color: colors.general.white,
+    color: theme.text.primary,
+    marginVertical: 12,
+  },
+  privacyPolicy: {
+    fontSize: 16,
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+    color: theme.text.primary,
+    marginTop: 24,
   },
   svgContainer: {
     width: '100%',
@@ -105,7 +124,7 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   button: {
-    backgroundColor: colors.primary.gray,
+    backgroundColor: colors.secondary.cyan,
     width: '100%',
     height: 46,
     borderRadius: 8,
@@ -115,8 +134,8 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 17,
     fontWeight: '600',
-    color: colors.general.white,
+    color: theme.text.primary,
   },
-});
+}));
 
-export default GeoPermission;
+export default Onboarding;

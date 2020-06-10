@@ -1,6 +1,6 @@
 import {GeolocationResponse} from '@react-native-community/geolocation';
 import {Feature} from '../sdk';
-import {getClient} from './client';
+import client from './client';
 import qs from 'query-string';
 import {stringifyUrl} from './utils';
 import {AxiosRequestConfig} from 'axios';
@@ -10,7 +10,6 @@ export async function autocomplete(
   location: GeolocationResponse | null,
   config?: AxiosRequestConfig,
 ) {
-  const client = await getClient();
   const defaultFilter = location
     ? undefined
     : {
@@ -35,7 +34,6 @@ export async function reverse(
   location: GeolocationResponse | null,
   config?: AxiosRequestConfig,
 ) {
-  const client = await getClient();
   const url = 'v1/geocoder/reverse';
   const query = qs.stringify({
     lat: location?.coords.latitude,

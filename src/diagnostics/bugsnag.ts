@@ -1,5 +1,4 @@
 import {Client} from 'bugsnag-react-native';
-import {getInstallId} from '../utils/installId';
 import {
   BUGSNAG_API_KEY,
   BUGSNAG_RELEASE_STAGE,
@@ -15,14 +14,5 @@ if (__DEV__) {
     return false;
   });
 }
-
-async function setInstallId() {
-  try {
-    const installid = await getInstallId();
-    client.setUser(installid);
-  } catch {}
-}
-
-setInstallId();
 
 export default client;

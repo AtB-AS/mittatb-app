@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:opacity="opaque">
+    <item android:drawable="@color/bootsplash_background" />
+
+    <item android:bottom="100dp">
+        <bitmap android:src="@mipmap/bootsplash_logo" android:gravity="center" />
+    </item>
+    <item android:top="400dp">
+        <bitmap android:src="@mipmap/bootsplash_banner" android:gravity="fill_horizontal" />
+    </item>
+</layer-list>

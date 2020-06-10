@@ -20,6 +20,7 @@ import {SharedElement} from 'react-navigation-shared-element';
 import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
 import CancelCrossIcon from '../assets/svg/CancelCrossIcon';
+import insets from '../utils/insets';
 
 export type Props = {
   navigation: NavigationProp<any>;
@@ -47,7 +48,11 @@ const LocationSearch: React.FC<Props> = ({
 
   const previousLocations = filterPreviousLocations(debouncedText, history);
 
-  const {location: geolocation} = useGeolocationState();
+  const {
+    location: geolocation,
+    status: geostatus,
+    requestPermission: requestGeoPermission,
+  } = useGeolocationState();
 
   const locations = useGeocoder(debouncedText, geolocation) ?? [];
   const filteredLocations = filterCurrentLocation(locations, previousLocations);
@@ -105,7 +110,7 @@ const LocationSearch: React.FC<Props> = ({
             {text?.length ? (
               <View style={styles.searchClear}>
                 <TouchableOpacity
-                  hitSlop={{right: 8, left: 8, top: 8, bottom: 8}}
+                  hitSlop={insets.all(8)}
                   onPress={() => setText('')}
                 >
                   <CancelCrossIcon />
@@ -119,6 +124,8 @@ const LocationSearch: React.FC<Props> = ({
       <FavoriteChips
         onSelectLocation={onSelect}
         geolocation={geolocation}
+        geostatus={geostatus}
+        requestGeoPermission={requestGeoPermission}
         hideFavorites={!!hideFavorites}
         containerStyle={styles.contentBlock}
       />
@@ -174,7 +181,7 @@ const filterCurrentLocation = (
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.secondary,
+    backgroundColor: theme.background.level2,
     flex: 1,
     paddingTop: 12,
   },
@@ -198,7 +205,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     fontSize: 16,
     paddingLeft: 44,
-    backgroundColor: theme.background.primary,
+    backgroundColor: theme.background.level1,
     borderBottomWidth: 2,
     borderRadius: 4,
     borderBottomColor: theme.border.primary,
