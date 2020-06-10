@@ -65,10 +65,6 @@ if [ "$APP_ENVIRONMENT" = "staging" ]; then
   badge --shield "1.0-QA-orange" --no_badge  --glob "/android/app/src/staging/res/*/*.{png,PNG}"
   badge --shield "1.0-QA-orange" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
 fi 
-if [ "$APP_ENVIRONMENT" = "store" ]; then
-  badge --shield "1.0-Alpha-blue" --no_badge  --glob "/android/app/src/store/res/*/*.{png,PNG}"
-  badge --shield "1.0-Alpha-blue" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
-fi
 
 if [ "$ENABLE_E2E" = true ]; then
     echo "Install E2E tools"
