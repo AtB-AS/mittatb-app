@@ -11,7 +11,6 @@ import FavoritesContextProvider from './favorites/FavoritesContext';
 import SearchHistoryContextProvider from './search-history';
 import RemoteConfigContextProvider from './RemoteConfigContext';
 import {loadLocalConfig} from './local-config';
-import Splash from './screens/Splash';
 import Intercom from 'react-native-intercom';
 import {Platform} from 'react-native';
 
@@ -32,7 +31,7 @@ const App = () => {
   }, []);
 
   if (isLoading) {
-    return <Splash />;
+    return null;
   }
 
   return (

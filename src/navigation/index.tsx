@@ -4,7 +4,6 @@ import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import trackNavigation from '../diagnostics/trackNavigation';
 import {useAppState} from '../AppContext';
-import Splash from '../screens/Splash';
 import Onboarding from '../screens/Onboarding';
 import LocationSearch, {
   RouteParams as LocationSearchParams,
@@ -38,7 +37,7 @@ const NavigationRoot = () => {
   const {theme} = useTheme();
 
   if (isLoading) {
-    return <Splash />;
+    return null;
   }
 
   return (
