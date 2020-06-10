@@ -48,7 +48,11 @@ const LocationSearch: React.FC<Props> = ({
 
   const previousLocations = filterPreviousLocations(debouncedText, history);
 
-  const {location: geolocation} = useGeolocationState();
+  const {
+    location: geolocation,
+    status: geostatus,
+    requestPermission: requestGeoPermission,
+  } = useGeolocationState();
 
   const locations = useGeocoder(debouncedText, geolocation) ?? [];
   const filteredLocations = filterCurrentLocation(locations, previousLocations);
@@ -120,6 +124,8 @@ const LocationSearch: React.FC<Props> = ({
       <FavoriteChips
         onSelectLocation={onSelect}
         geolocation={geolocation}
+        geostatus={geostatus}
+        requestGeoPermission={requestGeoPermission}
         hideFavorites={!!hideFavorites}
         containerStyle={styles.contentBlock}
       />

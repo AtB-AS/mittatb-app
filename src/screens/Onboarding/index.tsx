@@ -16,15 +16,16 @@ const Onboarding: React.FC = () => {
   const styles = useStyles();
 
   useEffect(() => {
-    if (
-      status === 'granted' ||
-      status === 'blocked' ||
-      status === 'unavailable' ||
-      (requestedOnce && status === 'denied')
-    ) {
+    if (requestedOnce && status) {
       completeOnboarding();
     }
-  }, [status]);
+  }, [status, requestedOnce]);
+
+  async function onRequestPermission() {
+    if (status !== 'granted')
+      await requestPermission({useSettingsFallback: true});
+    setRequestedOnce(true);
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -46,13 +47,7 @@ const Onboarding: React.FC = () => {
           </Text>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              setRequestedOnce(true);
-              requestPermission();
-            }}
-          >
+          <TouchableOpacity style={styles.button} onPress={onRequestPermission}>
             <Text style={styles.buttonText}>Fortsett</Text>
           </TouchableOpacity>
           <TouchableOpacity
