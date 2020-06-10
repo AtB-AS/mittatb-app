@@ -74,7 +74,11 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
     currentLocation,
   );
   const [date, setDate] = useState<DateOutput | undefined>();
-  const [tripPatterns, isSearching, reload] = useTripPatterns(from, to, date);
+  const [tripPatterns, isSearching, timeOfLastSearch, reload] = useTripPatterns(
+    from,
+    to,
+    date,
+  );
 
   const {icon: chatIcon, openChat} = useChatIcon();
   const openLocationSearch = (
@@ -134,7 +138,11 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
       </SearchGroup>
 
       <SearchGroup containerStyle={{marginTop: 12}}>
-        <DateInput onDateSelected={setDate} value={date} />
+        <DateInput
+          onDateSelected={setDate}
+          value={date}
+          timeOfLastSearch={timeOfLastSearch}
+        />
       </SearchGroup>
 
       <Results
@@ -281,8 +289,9 @@ function useTripPatterns(
   fromLocation: Location | undefined,
   toLocation: Location | undefined,
   date: DateOutput | undefined,
-): [TripPattern[] | null, boolean, () => {}] {
+): [TripPattern[] | null, boolean, Date, () => {}] {
   const [isSearching, setIsSearching] = useState(false);
+  const [timeOfSearch, setTimeOfSearch] = useState<Date>(new Date());
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
 
   const reload = useCallback(() => {
@@ -308,6 +317,7 @@ function useTripPatterns(
         source.token.throwIfRequested();
         setTripPatterns(response.data);
         setIsSearching(false);
+        setTimeOfSearch(searchDate);
       } catch (e) {
         if (!isCancel(e)) {
           console.warn(e);
@@ -326,5 +336,5 @@ function useTripPatterns(
 
   useEffect(reload, [reload]);
 
-  return [tripPatterns, isSearching, reload];
+  return [tripPatterns, isSearching, timeOfSearch, reload];
 }
