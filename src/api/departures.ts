@@ -1,5 +1,7 @@
-import {Coordinates, EstimatedCall} from '../sdk';
+import {Coordinates, EstimatedCall, DeparturesWithStop} from '../sdk';
 import client from './client';
+import {Location} from '../favorites/types';
+import {AxiosRequestConfig} from 'axios';
 
 export async function getNearestDepartures(
   coords: Coordinates,
@@ -14,5 +16,15 @@ export async function getDeparturesFromStop(
 ): Promise<EstimatedCall[]> {
   let url = `/v1/stop/${stopId}/departures`;
   const response = await client.get<EstimatedCall[]>(url);
+  return response.data ?? [];
+}
+
+export async function getDepartures(
+  location: Location,
+  limit: number = 5,
+  opts?: AxiosRequestConfig,
+): Promise<DeparturesWithStop[]> {
+  let url = `/v1/departures?limit=${limit}`;
+  const response = await client.post<DeparturesWithStop[]>(url, location, opts);
   return response.data ?? [];
 }

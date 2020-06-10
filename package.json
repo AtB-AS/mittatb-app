@@ -30,7 +30,7 @@
     "bugsnag-react-native": "^2.23.7",
     "date-fns": "^2.14.0",
     "emoji-datasource": "^5.0.1",
-    "haversine": "^1.1.1",
+    "haversine-distance": "^1.2.1",
     "hex-to-rgba": "^2.0.1",
     "humanize-duration": "^3.23.0",
     "lodash.groupby": "^4.6.0",
