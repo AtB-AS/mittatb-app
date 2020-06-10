@@ -26,6 +26,7 @@ export type DateOutput =
 type DateInputProps = {
   onDateSelected(value: DateOutput): void;
   value?: DateOutput;
+  timeOfLastSearch?: Date;
 };
 const now = (): DateOutput => ({
   type: 'now',
@@ -43,9 +44,9 @@ function dateTypeToText(type: DateTypes): string {
   }
 }
 
-function dateToText(date: DateOutput): string {
+function dateToText(date: DateOutput, timeOfSearch: Date): string {
   if (date.type === 'now') {
-    return `Avreise nå`;
+    return `Avreise nå (${formatToClock(timeOfSearch)})`;
   }
 
   if (date.type === 'arrival') {
@@ -80,7 +81,11 @@ const DateTypeButton: React.FC<{
   );
 };
 
-const DateInput: React.FC<DateInputProps> = ({onDateSelected, value}) => {
+const DateInput: React.FC<DateInputProps> = ({
+  onDateSelected,
+  value,
+  timeOfLastSearch = new Date(),
+}) => {
   const style = useStyle();
   const valueOrDefault = value ?? now();
   const [dateObjectInternal, setDateObjectInternal] = useState<DateOutput>(
@@ -137,7 +142,7 @@ const DateInput: React.FC<DateInputProps> = ({onDateSelected, value}) => {
     <>
       <SearchButton
         title="Når"
-        placeholder={dateToText(valueOrDefault)}
+        placeholder={dateToText(valueOrDefault, timeOfLastSearch)}
         onPress={onOpen}
       />
 
