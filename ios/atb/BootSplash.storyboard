@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Dtp-p8-LvN">
-    <device id="retina5_5" orientation="portrait" appearance="light"/>
+    <device id="ipad12_9" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
@@ -13,17 +13,17 @@
             <objects>
                 <viewController id="Dtp-p8-LvN" sceneMemberID="viewController">
                     <view key="view" autoresizesSubviews="NO" userInteractionEnabled="NO" contentMode="scaleToFill" id="guO-oA-Nhw">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <imageView autoresizesSubviews="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="BootSplashLogo" translatesAutoresizingMaskIntoConstraints="NO" id="3lX-Ut-9ad">
-                                <rect key="frame" x="132" y="147.33333333333334" width="150" height="294.33333333333326"/>
+                                <rect key="frame" x="437" y="273" width="150" height="546.5"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
                                 </accessibility>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BootSplashBanner" translatesAutoresizingMaskIntoConstraints="NO" id="fUq-i8-bKq">
-                                <rect key="frame" x="0.0" y="441.66666666666674" width="414" height="294.33333333333326"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BootSplashBanner" translatesAutoresizingMaskIntoConstraints="NO" id="fUq-i8-bKq">
+                                <rect key="frame" x="0.0" y="819.5" width="1024" height="546.5"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.44313725490196099" green="0.83921568627451004" blue="0.87843137254902004" alpha="1" colorSpace="calibratedRGB"/>
@@ -49,6 +49,6 @@
     </scenes>
     <resources>
         <image name="BootSplashBanner" width="300" height="150"/>
-        <image name="BootSplashLogo" width="150" height="176.66667175292969"/>
+        <image name="BootSplashLogo" width="150" height="177"/>
     </resources>
 </document>
