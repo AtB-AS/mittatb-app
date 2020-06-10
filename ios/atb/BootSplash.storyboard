@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Dtp-p8-LvN">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Dtp-p8-LvN">
+    <device id="retina5_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,23 +13,31 @@
             <objects>
                 <viewController id="Dtp-p8-LvN" sceneMemberID="viewController">
                     <view key="view" autoresizesSubviews="NO" userInteractionEnabled="NO" contentMode="scaleToFill" id="guO-oA-Nhw">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <imageView autoresizesSubviews="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="BootSplashLogo" translatesAutoresizingMaskIntoConstraints="NO" id="3lX-Ut-9ad">
-                                <rect key="frame" x="132" y="359.5" width="150" height="177"/>
+                                <rect key="frame" x="132" y="147.33333333333334" width="150" height="294.33333333333326"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
                                 </accessibility>
                             </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BootSplashBanner" translatesAutoresizingMaskIntoConstraints="NO" id="fUq-i8-bKq">
+                                <rect key="frame" x="0.0" y="441.66666666666674" width="414" height="294.33333333333326"/>
+                            </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="0.443137254901961" green="0.839215686274510" blue="0.878431372549020" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.44313725490196099" green="0.83921568627451004" blue="0.87843137254902004" alpha="1" colorSpace="calibratedRGB"/>
                         <accessibility key="accessibilityConfiguration">
                             <accessibilityTraits key="traits" notEnabled="YES"/>
                         </accessibility>
                         <constraints>
+                            <constraint firstItem="fUq-i8-bKq" firstAttribute="leading" secondItem="eg9-kz-Dhh" secondAttribute="leading" id="5Fq-fs-aQW"/>
                             <constraint firstItem="3lX-Ut-9ad" firstAttribute="centerX" secondItem="eg9-kz-Dhh" secondAttribute="centerX" id="Fh9-Fy-1nT"/>
-                            <constraint firstItem="3lX-Ut-9ad" firstAttribute="centerY" secondItem="guO-oA-Nhw" secondAttribute="centerY" id="nvB-Ic-PnI"/>
+                            <constraint firstItem="fUq-i8-bKq" firstAttribute="centerY" secondItem="guO-oA-Nhw" secondAttribute="centerY" multiplier="1.6" id="KPv-XB-XY9"/>
+                            <constraint firstItem="eg9-kz-Dhh" firstAttribute="bottom" secondItem="fUq-i8-bKq" secondAttribute="bottom" id="dMY-cs-SP7"/>
+                            <constraint firstItem="eg9-kz-Dhh" firstAttribute="trailing" secondItem="fUq-i8-bKq" secondAttribute="trailing" id="eC4-fc-7Mq"/>
+                            <constraint firstItem="3lX-Ut-9ad" firstAttribute="centerY" secondItem="guO-oA-Nhw" secondAttribute="centerY" multiplier="0.8" id="nvB-Ic-PnI"/>
+                            <constraint firstItem="fUq-i8-bKq" firstAttribute="top" secondItem="3lX-Ut-9ad" secondAttribute="bottom" id="qKa-rr-luI"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="eg9-kz-Dhh"/>
                     </view>
@@ -40,6 +48,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="BootSplashLogo" width="150" height="177"/>
+        <image name="BootSplashBanner" width="300" height="150"/>
+        <image name="BootSplashLogo" width="150" height="176.66667175292969"/>
     </resources>
 </document>
