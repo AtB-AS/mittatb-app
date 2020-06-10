@@ -25,7 +25,7 @@ import Header from '../../ScreenHeader';
 import {TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import insets from '../../utils/insets';
-import Splash from '../Splash';
+import Loading from '../Loading';
 import Results from './Results';
 import useChatIcon from '../../utils/use-chat-icon';
 import DateInput, {DateOutput} from './DateInput';
@@ -54,7 +54,7 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
     : undefined;
 
   if (!status) {
-    return <Splash />;
+    return <Loading />;
   }
 
   return (

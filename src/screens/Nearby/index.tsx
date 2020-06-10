@@ -20,7 +20,7 @@ import {RootStackParamList} from '../../navigation';
 import Header from '../../ScreenHeader';
 import {EstimatedCall} from '../../sdk';
 import {StyleSheet} from '../../theme';
-import Splash from '../Splash';
+import Loading from '../Loading';
 import NearbyResults from './NearbyResults';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import usePollableResource from '../../utils/use-pollable-resource';
@@ -51,7 +51,7 @@ const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
     : undefined;
 
   if (!status) {
-    return <Splash />;
+    return <Loading />;
   }
 
   return (
