@@ -51,17 +51,16 @@ echo "Install icon dependencies"
 brew install imagemagick
 yarn icons
 
-echo "Adding badge to icons"
-gem install badge --no-document
-brew install librsvg
-brew unlink pango  
-brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/7cf3b63be191cb2ce4cd86f4406915128ec97432/Formula/pango.rb
-brew switch pango 1.42.4_1 
-
 export CURRENT_COMMIT_HASH=$(git rev-parse --short HEAD)
 
 echo "Adding app badges to icons"
 if [ "$APP_ENVIRONMENT" = "staging" ]; then
+  gem install badge --no-document
+  brew install librsvg
+  brew unlink pango  
+  brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/7cf3b63be191cb2ce4cd86f4406915128ec97432/Formula/pango.rb
+  brew switch pango 1.42.4_1 
+
   badge --shield "1.0-QA-orange" --no_badge  --glob "/android/app/src/staging/res/*/*.{png,PNG}"
   badge --shield "1.0-QA-orange" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
 fi 
