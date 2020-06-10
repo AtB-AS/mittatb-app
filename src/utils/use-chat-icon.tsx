@@ -11,6 +11,6 @@ export default function useChatIcon() {
     openChat: () =>
       unreadCount
         ? Intercom.displayMessenger()
-        : Intercom.displayMessageComposer(),
+        : Intercom.displayConversationsList(),
   };
 }

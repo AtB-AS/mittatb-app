@@ -1,5 +1,5 @@
 import React, {useEffect, useReducer, createContext, useContext} from 'react';
-import {Platform, Rationale} from 'react-native';
+import {Platform, Rationale, Alert} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {
   GeolocationResponse,
@@ -10,6 +10,7 @@ import {
   check,
   PERMISSIONS,
   PermissionStatus,
+  openSettings,
 } from 'react-native-permissions';
 import bugsnag from './diagnostics/bugsnag';
 
@@ -48,8 +49,13 @@ const geolocationReducer: GeolocationReducer = (prevState, action) => {
   }
 };
 
+export type PermissionOpts = {useSettingsFallback: boolean};
+export type RequestPermissionFn = (
+  opts?: PermissionOpts,
+) => Promise<PermissionStatus | undefined>;
+
 type GeolocationContextState = GeolocationState & {
-  requestPermission: () => void;
+  requestPermission: RequestPermissionFn;
 };
 
 const GeolocationContext = createContext<GeolocationContextState | undefined>(
@@ -80,9 +86,18 @@ const GeolocationContextProvider: React.FC = ({children}) => {
     defaultState,
   );
 
-  async function requestPermission() {
-    const status = await requestGeolocationPermission();
-    dispatch({type: 'PERMISSION_CHANGED', status});
+  async function requestPermission(opts?: PermissionOpts) {
+    if (state.status === 'blocked' && opts?.useSettingsFallback) {
+      Alert.alert(
+        'Du har blokkert posisjonsdeling',
+        'For å kunne skru på posisjonsdeling, må du gå til innstillinger for å tillate dette for AtB-appen. Du må starte appen på nytt etter du har tillatt posisjonsdeling. Vil du gjøre dette?',
+        [{text: 'Ja', onPress: () => openSettings()}, {text: 'Nei'}],
+      );
+    } else {
+      const status = await requestGeolocationPermission();
+      dispatch({type: 'PERMISSION_CHANGED', status});
+      return status;
+    }
   }
 
   const hasPermission = state.status === 'granted';
