@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View, Linking} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import WaitingForBus from '../../assets/svg/WaitingForBus';
+import {PRIVACY_POLICY_URL} from 'react-native-dotenv';
 import colors from '../../theme/colors';
 import {useGeolocationState} from '../../GeolocationContext';
 import {useAppState} from '../../AppContext';
@@ -45,9 +45,6 @@ const Onboarding: React.FC = () => {
             dette. Du kan når som helst slutte å dele posisjon.
           </Text>
         </View>
-        <View style={styles.svgContainer}>
-          <WaitingForBus width="100%" height="100%" style={styles.svg} />
-        </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
@@ -59,7 +56,9 @@ const Onboarding: React.FC = () => {
             <Text style={styles.buttonText}>Fortsett</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => Linking.openURL('https://www.atb.no')}
+            onPress={() =>
+              Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
+            }
           >
             <Text style={styles.privacyPolicy}>
               Les vår personvernerklæring
