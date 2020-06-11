@@ -14,6 +14,7 @@ import insets from '../../utils/insets';
 import WalkIcon from './svg/WalkIcon';
 import DestinationIcon from './svg/Destination';
 import {LegMode} from '@entur/sdk';
+import colors from '../../theme/colors';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -123,7 +124,7 @@ const FootLeg = ({leg}: {leg: Leg}) => {
         {formatToClock(leg.expectedStartTime)}
       </Text>
       <View style={styles.iconContainer}>
-        <WalkIcon fill={(styles.textDeprioritized as TextStyle).color} />
+        <WalkIcon fill={colors.general.black} opacity={0.6} />
       </View>
       <Text style={styles.textDeprioritized}>
         {secondsToDuration(leg.duration ?? 0, nb)}
@@ -190,7 +191,7 @@ const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
         {formatToClock(lastLeg.expectedEndTime)}
       </Text>
       <View style={styles.iconContainer}>
-        <DestinationIcon fill={(styles.textDeprioritized as TextStyle).color} />
+        <DestinationIcon fill={colors.general.black} opacity={0.6} />
       </View>
       <Text style={styles.textDeprioritized} numberOfLines={1}>
         {lastLeg.toPlace.name}

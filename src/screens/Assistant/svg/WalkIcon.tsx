@@ -2,10 +2,8 @@ import * as React from 'react';
 import Svg, {Path, Circle, SvgProps} from 'react-native-svg';
 
 function WalkIcon(props: SvgProps) {
-  const {fill = '#5F686E', ...rest} = props;
-
   return (
-    <Svg width={20} height={20} viewBox="0 0 40 40" fill={fill} {...rest}>
+    <Svg width={20} height={20} viewBox="0 0 40 40" fill="#000" {...props}>
       <Path
         fillRule="evenodd"
         clipRule="evenodd"

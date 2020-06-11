@@ -2,12 +2,10 @@ import * as React from 'react';
 import Svg, {Path, Rect, SvgProps} from 'react-native-svg';
 
 function DestinationIcon(props: SvgProps) {
-  const {fill = '#5F686E', ...rest} = props;
-
   return (
-    <Svg width="20" height="20" viewBox="0 0 20 20" fill={fill} {...rest}>
-      <Path d="M4.5 5.00067C4.5 4.44839 4.94772 4.00067 5.5 4.00067H14.0858C14.9767 4.00067 15.4229 5.07781 14.7929 5.70778L13.2071 7.29357C12.8166 7.68409 12.8166 8.31725 13.2071 8.70778L14.7929 10.2936C15.4229 10.9235 14.9767 12.0007 14.0858 12.0007H5.5C4.94772 12.0007 4.5 11.553 4.5 11.0007V5.00067Z" />
-      <Rect x="4.5" y="10.0007" width="2" height="6" rx="1" />
+    <Svg width={20} height={20} viewBox="0 0 40 40" fill="#000" {...props}>
+      <Path d="M9 9a1 1 0 011-1h20.586c.89 0 1.337 1.077.707 1.707l-5.586 5.586a1 1 0 000 1.414l5.586 5.586c.63.63.184 1.707-.707 1.707H10a1 1 0 01-1-1V9z" />
+      <Rect x={9} y={20} width={4} height={12} rx={1} />
     </Svg>
   );
 }
