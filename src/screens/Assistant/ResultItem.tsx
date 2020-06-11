@@ -13,21 +13,34 @@ import RealTimeLocationIcon from '../../components/location-icon/real-time';
 import insets from '../../utils/insets';
 import WalkIcon from './svg/WalkIcon';
 import DestinationIcon from './svg/Destination';
+import {LegMode} from '@entur/sdk';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
   onDetailsPressed(tripPattern: TripPattern): void;
 };
 
+function legWithQuay(leg: Leg) {
+  // Manually find name of from place based on mode as in some cases
+  // (from adresses that are also quays) you won't have quay information in from place.
+  const modesWithoutQuay: LegMode[] = ['bicycle', 'foot'];
+  return !modesWithoutQuay.includes(leg.mode);
+}
+
 const ResultItemHeader: React.FC<{
   tripPattern: TripPattern;
 }> = ({tripPattern}) => {
-  const firstWithQuay = tripPattern.legs.find((leg) => leg.fromPlace.quay);
+  const firstWithQuay = tripPattern.legs.find(legWithQuay);
   const styles = useThemeStyles();
 
   return (
     <View style={styles.resultHeader}>
-      <Text>Fra {firstWithQuay?.fromPlace.quay?.name}</Text>
+      <Text>
+        Fra{' '}
+        {firstWithQuay?.fromPlace.name ??
+          tripPattern.legs[0]?.fromPlace.name ??
+          'Ukjent holdeplass'}
+      </Text>
       <Text>{secondsToDurationExact(tripPattern.duration)}</Text>
     </View>
   );
