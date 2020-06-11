@@ -46,7 +46,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
       >
         {showFrom && (
           <LocationRow
-            icon={<DotIcon fill={colors.primary.green} />}
+            icon={<DotIcon fill={colors.secondary.cyan} />}
             location={getQuayName(leg.fromPlace.quay)}
             time={formatToClock(leg.expectedStartTime)}
             aimedTime={
@@ -62,7 +62,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
             dashGap={4}
             dashThickness={8}
             dashLength={8}
-            dashColor={colors.primary.green}
+            dashColor={colors.secondary.cyan}
             style={styles.dash}
             dashStyle={{borderRadius: 50}}
           />
@@ -77,7 +77,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
         </View>
         {showTo && (
           <LocationRow
-            icon={<DotIcon fill={colors.primary.green} />}
+            icon={<DotIcon fill={colors.secondary.cyan} />}
             location={getQuayName(leg.toPlace.quay)}
             time={formatToClock(leg.expectedEndTime)}
             aimedTime={

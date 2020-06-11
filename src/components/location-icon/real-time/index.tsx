@@ -98,6 +98,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 50,
-    backgroundColor: colors.primary.green,
+    backgroundColor: colors.secondary.cyan,
   },
 }));

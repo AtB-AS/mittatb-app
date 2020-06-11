@@ -103,7 +103,7 @@ function CallGroup({type, calls}: CallGroupProps) {
   const isOnRoute = type === 'trip';
   const isBefore = type === 'passed';
   const showCollapsable = isBefore && calls.length > 1;
-  const dashColor = isOnRoute ? colors.primary.green : colors.general.gray200;
+  const dashColor = isOnRoute ? colors.secondary.cyan : colors.general.gray200;
   const isStartPlace = (i: number) => isOnRoute && i === 0;
   const shouldDropMarginBottom = (i: number) =>
     (type === 'after' || isOnRoute) && i == calls.length - 1;
