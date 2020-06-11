@@ -49,15 +49,15 @@ const mapTypeToIconComponent = (
 ) => {
   switch (iconType) {
     case 'bus':
-      return <BusSide key="bus" {...svgProps} height={16} />;
+      return <BusSide key="bus" {...svgProps} />;
     case 'tram':
-      return <TramSide key="tram" {...svgProps} height={16} />;
+      return <TramSide key="tram" {...svgProps} />;
     case 'rail':
-      return <TrainSide key="rail" {...svgProps} height={20} />;
+      return <TrainSide key="rail" {...svgProps} />;
     case 'airport':
-      return <PlaneAbove key="airport" {...svgProps} height={16} />;
+      return <PlaneAbove key="airport" {...svgProps} />;
     case 'boat':
-      return <FerrySide key="boat" {...svgProps} height={16} />;
+      return <FerrySide key="boat" {...svgProps} />;
     case 'unknown':
     default:
       return <MapPointIcon key="unknown" {...svgProps} />;
