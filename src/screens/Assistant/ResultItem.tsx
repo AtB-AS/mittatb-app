@@ -11,8 +11,8 @@ import {
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import RealTimeLocationIcon from '../../components/location-icon/real-time';
 import insets from '../../utils/insets';
-import WalkIcon from './svg/WalkIcon';
-import DestinationIcon from './svg/Destination';
+import {WalkingPerson} from '../../assets/svg/icons/transportation';
+import {DestinationFlag} from '../../assets/svg/icons/places';
 import {LegMode} from '@entur/sdk';
 import colors from '../../theme/colors';
 
@@ -124,7 +124,7 @@ const FootLeg = ({leg}: {leg: Leg}) => {
         {formatToClock(leg.expectedStartTime)}
       </Text>
       <View style={styles.iconContainer}>
-        <WalkIcon fill={colors.general.black} opacity={0.6} />
+        <WalkingPerson fill={colors.general.black} opacity={0.6} />
       </View>
       <Text style={styles.textDeprioritized}>
         {secondsToDuration(leg.duration ?? 0, nb)}
@@ -191,7 +191,7 @@ const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
         {formatToClock(lastLeg.expectedEndTime)}
       </Text>
       <View style={styles.iconContainer}>
-        <DestinationIcon fill={colors.general.black} opacity={0.6} />
+        <DestinationFlag fill={colors.general.black} opacity={0.6} />
       </View>
       <Text style={styles.textDeprioritized} numberOfLines={1}>
         {lastLeg.toPlace.name}

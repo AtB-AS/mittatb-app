@@ -25,7 +25,7 @@ import {useFavorites} from '../../../favorites/FavoritesContext';
 import {StyleSheet, Theme, useTheme} from '../../../theme';
 import Button from '../../../components/button';
 import EmojiPopup from './EmojiPopup';
-import InputSearchIcon from '../../../location-search/svg/InputSearchIcon';
+import {Search} from '../../../assets/svg/icons/actions';
 import {SharedElement} from 'react-navigation-shared-element';
 import {RootStackParamList} from '../../../navigation';
 import {useLocationSearchValue} from '../../../location-search';
@@ -161,7 +161,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
                 autoCompleteType="off"
                 placeholderTextColor={(css.placeholder as TextStyle).color}
               />
-              <InputSearchIcon style={css.searchIcon} />
+              <Search style={css.searchIcon} />
             </View>
           </SharedElement>
         </InputGroup>
