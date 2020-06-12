@@ -18,11 +18,9 @@ import {
 } from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
-import {Close} from '../../../assets/svg/icons/actions/';
+import {Close, Add, Remove} from '../../../assets/svg/icons/actions/';
 import {ArrowLeft, Expand} from '../../../assets/svg/icons/navigation/';
 import {MapPointPin} from '../../../assets/svg/icons/places';
-import DeleteTrashCanIcon from '../../../assets/svg/DeleteTrashCanIcon';
-import SaveDisketteIcon from '../../../assets/svg/SaveDisketteIcon';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import {StyleSheet, Theme, useTheme} from '../../../theme';
 import Button from '../../../components/button';
@@ -192,7 +190,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
         <Button
           onPress={save}
-          IconComponent={SaveDisketteIcon}
+          IconComponent={Add}
           disabled={!hasSelectedValues}
           text="Lagre favorittsted"
         />
@@ -201,7 +199,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           <Button
             onPress={deleteItem}
             mode="destructive"
-            IconComponent={DeleteTrashCanIcon}
+            IconComponent={Remove}
             text="Slett favorittsted"
           />
         )}

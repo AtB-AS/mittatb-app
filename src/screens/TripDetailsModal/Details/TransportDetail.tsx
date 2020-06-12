@@ -8,7 +8,7 @@ import {
   secondsBetween,
 } from '../../../utils/date';
 import nb from 'date-fns/locale/nb';
-import DotIcon from '../../../assets/svg/DotIcon';
+import {Dot} from '../../../assets/svg/icons/other';
 import LocationRow from '../LocationRow';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {LegDetailProps, DetailScreenNavigationProp} from '.';
@@ -46,7 +46,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
       >
         {showFrom && (
           <LocationRow
-            icon={<DotIcon fill={colors.secondary.cyan} />}
+            icon={<Dot fill={colors.secondary.cyan} />}
             location={getQuayName(leg.fromPlace.quay)}
             time={formatToClock(leg.expectedStartTime)}
             aimedTime={
@@ -77,7 +77,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
         </View>
         {showTo && (
           <LocationRow
-            icon={<DotIcon fill={colors.secondary.cyan} />}
+            icon={<Dot fill={colors.secondary.cyan} />}
             location={getQuayName(leg.toPlace.quay)}
             time={formatToClock(leg.expectedEndTime)}
             aimedTime={

@@ -3,7 +3,7 @@ import Svg, {Path, SvgProps} from 'react-native-svg';
 
 function SvgTestPilotFigure(props: SvgProps) {
   return (
-    <Svg width={48} height={48} fill="none" {...props}>
+    <Svg width={48} height={48} fill="none" viewBox="0 0 48 48" {...props}>
       <Path
         fill="#224043"
         d="M25.408 34.86h-3.31l-2.857 6.766 2.857 6.351h3.31l3.536-7.418-3.536-5.7z"

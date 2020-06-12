@@ -3,7 +3,7 @@ import {EstimatedCall} from '../../../sdk';
 import {DetailsModalStackParams, DetailsModalNavigationProp} from '..';
 import {RouteProp} from '@react-navigation/native';
 import {View, Text, ActivityIndicator} from 'react-native';
-import DotIcon from '../../../assets/svg/DotIcon';
+import {Dot} from '../../../assets/svg/icons/other';
 import {formatToClock} from '../../../utils/date';
 import colors from '../../../theme/colors';
 import LocationRow from '../LocationRow';
@@ -147,7 +147,7 @@ function CallGroup({type, calls}: CallGroupProps) {
                   isLive={call.realtime}
                 />
               ) : (
-                <DotIcon fill={dashColor} style={{margin: 4}} />
+                <Dot fill={dashColor} style={{margin: 4}} />
               )
             }
             iconContainerStyle={{paddingVertical: 2}}

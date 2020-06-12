@@ -4,8 +4,8 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {StyleSheet} from '../theme';
 import {Location} from '../favorites/types';
 import LocationIcon from '../components/location-icon';
-import ArrowUpLeft from '../assets/svg/ArrowUpLeft';
 import insets from '../utils/insets';
+import {ArrowLeft} from '../assets/svg/icons/navigation';
 
 type Props = {
   title: string;
@@ -50,7 +50,7 @@ const LocationResults: React.FC<Props> = ({
               hitSlop={insets.all(8)}
               onPressOut={() => onPrefillText(location.name + ' ')}
             >
-              <ArrowUpLeft />
+              <ArrowLeft />
             </TouchableOpacity>
           </View>
         ))}

@@ -9,7 +9,7 @@ import {formatToClock} from '../../../utils/date';
 import LocationRow from '../LocationRow';
 import {StyleSheet} from '../../../theme';
 import Header from '../../../ScreenHeader';
-import DotIcon from '../../../assets/svg/DotIcon';
+import {Dot} from '../../../assets/svg/icons/other/';
 import {
   CurrentLocationArrow,
   MapPointPin,
@@ -112,7 +112,7 @@ const DetailsContent: React.FC<{
       <LocationRow
         icon={
           getLocationIcon(from, favorites) ?? (
-            <DotIcon fill={colors.general.black} />
+            <Dot fill={colors.general.black} />
           )
         }
         location={from.name}

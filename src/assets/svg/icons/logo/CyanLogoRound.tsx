@@ -3,7 +3,7 @@ import Svg, {Path, SvgProps} from 'react-native-svg';
 
 function SvgCyanLogoRound(props: SvgProps) {
   return (
-    <Svg width={20} height={20} fill="none" {...props}>
+    <Svg width={20} height={20} fill="none" viewBox="0 0 40 40" {...props}>
       <Path
         fill="#71D6E0"
         fillRule="evenodd"
