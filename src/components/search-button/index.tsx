@@ -72,6 +72,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   icon: {
-    marginLeft: 12,
+    marginLeft: 6,
+    marginRight: 14,
   },
 }));
