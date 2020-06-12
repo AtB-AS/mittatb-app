@@ -1,0 +1,13 @@
+diff --git a/node_modules/@svgr/babel-plugin-transform-svg-component/lib/util.js b/node_modules/@svgr/babel-plugin-transform-svg-component/lib/util.js
+index 4d95ea2..faa005e 100644
+--- a/node_modules/@svgr/babel-plugin-transform-svg-component/lib/util.js
++++ b/node_modules/@svgr/babel-plugin-transform-svg-component/lib/util.js
+@@ -83,7 +83,7 @@ function addTypeAnotation(obj, typeAnnotation, opts) {
+ }
+ 
+ function getSvgPropsTypeAnnotation(t) {
+-  return genericTypeAnnotation(qualifiedTypeIdentifier(t.identifier('React'), t.identifier('SVGProps')), typeParameters([genericTypeAnnotation(t.identifier('SVGSVGElement'))]));
++  return t.identifier('SvgProps');
+ }
+ 
+ const getProps = ({
