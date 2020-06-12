@@ -18,7 +18,7 @@ import {
 } from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
-import {Close, Add, Remove} from '../../../assets/svg/icons/actions/';
+import {Close, Add, Remove, Confirm} from '../../../assets/svg/icons/actions/';
 import {ArrowLeft, Expand} from '../../../assets/svg/icons/navigation/';
 import {MapPointPin} from '../../../assets/svg/icons/places';
 import {useFavorites} from '../../../favorites/FavoritesContext';
@@ -190,7 +190,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
         <Button
           onPress={save}
-          IconComponent={Add}
+          IconComponent={editItem ? Confirm : Add}
           disabled={!hasSelectedValues}
           text="Lagre favorittsted"
         />

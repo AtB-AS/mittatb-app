@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 import React from 'react';
 import {StyleSheet, Theme} from '../../../theme';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
-import {Add, Adjust} from '../../../assets/svg/icons/actions';
+import {Add, Edit} from '../../../assets/svg/icons/actions';
 import EditableListGroup from './EditableListGroup';
 import {LocationFavorite} from '../../../favorites/types';
 import {ProfileStackParams} from '..';
@@ -96,7 +96,7 @@ const Item: React.FC<ItemProps> = ({item, onEdit}) => {
       <Text style={css.text}>{item.name ?? item.location.name}</Text>
       {onEdit && (
         <TouchableOpacity onPress={onEdit} hitSlop={insets.all(12)}>
-          <Adjust />
+          <Edit />
         </TouchableOpacity>
       )}
     </View>
