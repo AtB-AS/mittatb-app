@@ -18,10 +18,10 @@ import {
 } from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
-import CancelCrossIcon from '../../../assets/svg/CancelCrossIcon';
-import ChevronDownIcon from '../../../assets/svg/ChevronDownIcon';
+import {Close} from '../../../assets/svg/icons/actions/';
+import {ArrowLeft, Expand} from '../../../assets/svg/icons/navigation/';
+import {MapPointPin} from '../../../assets/svg/icons/places';
 import DeleteTrashCanIcon from '../../../assets/svg/DeleteTrashCanIcon';
-import MapPointIcon from '../../../assets/svg/MapPointIcon';
 import SaveDisketteIcon from '../../../assets/svg/SaveDisketteIcon';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import {StyleSheet, Theme, useTheme} from '../../../theme';
@@ -32,7 +32,6 @@ import {SharedElement} from 'react-navigation-shared-element';
 import {RootStackParamList} from '../../../navigation';
 import {useLocationSearchValue} from '../../../location-search';
 import ScreenHeader from '../../../ScreenHeader';
-import ChevronLeftIcon from '../../../assets/svg/ChevronLeftIcon';
 import {Modalize} from 'react-native-modalize';
 
 type AddEditRouteName = 'AddEditFavorite';
@@ -118,7 +117,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   return (
     <SafeAreaView style={css.container}>
       <ScreenHeader
-        leftButton={{onPress: cancel, icon: <ChevronLeftIcon />}}
+        leftButton={{onPress: cancel, icon: <ArrowLeft />}}
         title="Legg til favorittsted"
       />
       <EmojiPopup
@@ -210,7 +209,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         <Button
           onPress={cancel}
           mode="secondary"
-          IconComponent={CancelCrossIcon}
+          IconComponent={Close}
           text="Avbryt"
         />
       </View>
@@ -281,12 +280,12 @@ const SymbolPicker: React.FC<SymbolPickerProps> = ({onPress, value}) => {
     <TouchableOpacity onPress={onPress} style={css.container}>
       <View style={css.emoji}>
         {!value ? (
-          <MapPointIcon style={css.emojiIcon} />
+          <MapPointPin style={css.emojiIcon} />
         ) : (
           <Text style={css.emojiText}>{value}</Text>
         )}
       </View>
-      <ChevronDownIcon />
+      <Expand />
     </TouchableOpacity>
   );
 };

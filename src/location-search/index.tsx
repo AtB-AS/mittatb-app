@@ -19,7 +19,7 @@ import {useGeolocationState} from '../GeolocationContext';
 import {SharedElement} from 'react-navigation-shared-element';
 import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
-import CancelCrossIcon from '../assets/svg/CancelCrossIcon';
+import {Close} from '../assets/svg/icons/actions';
 import insets from '../utils/insets';
 
 export type Props = {
@@ -113,7 +113,7 @@ const LocationSearch: React.FC<Props> = ({
                   hitSlop={insets.all(8)}
                   onPress={() => setText('')}
                 >
-                  <CancelCrossIcon />
+                  <Close />
                 </TouchableOpacity>
               </View>
             ) : null}

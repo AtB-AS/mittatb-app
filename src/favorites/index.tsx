@@ -1,7 +1,7 @@
 import {LocationFavorite} from './types';
 import React from 'react';
 import {Text} from 'react-native';
-import MapPointIcon from '../assets/svg/MapPointIcon';
+import {MapPointPin} from '../assets/svg/icons/places';
 
 export type FavoriteIconProps = {
   favorite?: LocationFavorite;
@@ -9,7 +9,7 @@ export type FavoriteIconProps = {
 
 export function FavoriteIcon({favorite}: FavoriteIconProps) {
   if (!favorite || !favorite.emoji) {
-    return <MapPointIcon />;
+    return <MapPointPin />;
   }
   return <Text>{favorite.emoji}</Text>;
 }

@@ -1,8 +1,7 @@
 import React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import PlusIcon from '../../../assets/svg/PlusIcon';
-import MinusIcon from '../../../assets/svg/MinusIcon';
+import {Add, Remove} from '../../../assets/svg/icons/actions';
 import insets from '../../../utils/insets';
 import {OfferPrice} from '../../../api/fareContracts';
 
@@ -24,13 +23,13 @@ const Offer: React.FC<Props> = ({name, price, count, increment, decrement}) => {
         <View style={styles.iconContainerWithPadding}>
           <TouchableOpacity onPress={decrement} hitSlop={insets.all(8)}>
             <View style={styles.iconContainer}>
-              <MinusIcon />
+              <Add />
             </View>
           </TouchableOpacity>
         </View>
         <TouchableOpacity onPress={increment} hitSlop={insets.all(8)}>
           <View style={styles.iconContainer}>
-            <PlusIcon />
+            <Remove />
           </View>
         </TouchableOpacity>
       </View>

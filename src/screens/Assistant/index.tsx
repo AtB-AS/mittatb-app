@@ -7,8 +7,8 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {SharedElement} from 'react-navigation-shared-element';
 import {searchTrip} from '../../api';
 import {CancelToken, isCancel} from '../../api/client';
-import LocationArrow from '../../assets/svg/LocationArrow';
-import SwapLocationsArrowIcon from '../../assets/svg/SwapLocationsArrowsIcon';
+import {CurrentLocationArrow} from '../../assets/svg/icons/places';
+import {Swap} from '../../assets/svg/icons/actions';
 import {LocationButton} from '../../components/search-button';
 import SearchGroup from '../../components/search-button/search-group';
 import {useFavorites} from '../../favorites/FavoritesContext';
@@ -113,7 +113,7 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
             hitSlop={insets.all(12)}
             onPress={setCurrentLocationAsFrom}
           >
-            <LocationArrow />
+            <CurrentLocationArrow />
           </TouchableOpacity>
         </View>
 
@@ -132,7 +132,7 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
             hitSlop={insets.all(12)}
             onPress={swap}
           >
-            <SwapLocationsArrowIcon />
+            <Swap />
           </TouchableOpacity>
         </View>
       </SearchGroup>

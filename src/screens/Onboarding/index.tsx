@@ -6,7 +6,7 @@ import colors from '../../theme/colors';
 import {useGeolocationState} from '../../GeolocationContext';
 import {useAppState} from '../../AppContext';
 import {StyleSheet} from '../../theme';
-import TestPilotFigure from '../../assets/svg/TestPilotFigure';
+import {TestPilotFigure} from '../../assets/svg/illustrations';
 
 const Onboarding: React.FC = () => {
   const {completeOnboarding} = useAppState();

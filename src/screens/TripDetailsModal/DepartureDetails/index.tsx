@@ -14,13 +14,13 @@ import Dash from 'react-native-dash';
 import {getDepartures} from '../../../api/serviceJourney';
 import UnfoldLess from './svg/UnfoldLess';
 import UnfoldMore from './svg/UnfoldMore';
-import ChevronLeftIcon from '../../../assets/svg/ChevronLeftIcon';
+import {ArrowLeft} from '../../../assets/svg/icons/navigation';
+import {Close} from '../../../assets/svg/icons/actions';
 import RealTimeLocationIcon from '../../../components/location-icon/real-time';
 import {getQuayName} from '../../../utils/transportation-names';
 import {useCallback} from 'react';
 import {getAimedTimeIfLargeDifference} from '../utils';
 import usePollableResource from '../../../utils/use-pollable-resource';
-import CancelCrossIcon from '../../../assets/svg/CancelCrossIcon';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -78,7 +78,7 @@ export default function DepartureDetails({navigation, route}: Props) {
       <ScreenHeader
         leftButton={{
           onPress: () => navigation.goBack(),
-          icon: isBack ? <ChevronLeftIcon /> : <CancelCrossIcon />,
+          icon: isBack ? <ArrowLeft /> : <Close />,
         }}
         title={title}
       />
