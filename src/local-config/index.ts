@@ -4,6 +4,7 @@ import bugsnag from '../diagnostics/bugsnag';
 import Intercom from 'react-native-intercom';
 import DeviceInfo from 'react-native-device-info';
 import {setInstallId as setApiInstallId} from '../api/client';
+import {Platform} from 'react-native';
 
 type Config = {
   installId: string;
@@ -38,10 +39,11 @@ async function configIntercom(installId: string) {
 
   Intercom.updateUser({
     custom_attributes: {
-      'AtB-InstallId': installId,
-      'AtB-BuildNumber': buildNumber,
-      'AtB-DeviceId': deviceId,
-      'AtB-LocationEnabled': isLocationEnabled ? 'Yes' : 'No',
+      'AtB-Install-Id': installId,
+      'AtB-Build-Number': buildNumber,
+      'AtB-Device-Id': deviceId,
+      'AtB-Location-Enabled': isLocationEnabled ? 'Yes' : 'No',
+      'Atb-Platform-OS': Platform.OS,
     },
   });
 }
