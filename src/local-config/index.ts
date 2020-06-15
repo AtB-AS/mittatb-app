@@ -1,6 +1,8 @@
 import storage from '../storage';
 import {v4 as uuid} from 'uuid';
 import bugsnag from '../diagnostics/bugsnag';
+import Intercom from 'react-native-intercom';
+import DeviceInfo from 'react-native-device-info';
 import {setInstallId as setApiInstallId} from '../api/client';
 
 type Config = {
@@ -16,6 +18,7 @@ export async function loadLocalConfig(): Promise<Config> {
 
   configBugsnagUser(installId);
   configApi(installId);
+  await configIntercom(installId);
 
   return {installId};
 }
@@ -26,4 +29,19 @@ function configBugsnagUser(installId: string) {
 
 function configApi(installId: string) {
   setApiInstallId(installId);
+}
+
+async function configIntercom(installId: string) {
+  const buildNumber = DeviceInfo.getBuildNumber();
+  const deviceId = DeviceInfo.getDeviceId();
+  const isLocationEnabled = await DeviceInfo.isLocationEnabled();
+
+  Intercom.updateUser({
+    custom_attributes: {
+      'AtB-InstallId': installId,
+      'AtB-BuildNumber': buildNumber,
+      'AtB-DeviceId': deviceId,
+      'AtB-LocationEnabled': isLocationEnabled ? 'Yes' : 'No',
+    },
+  });
 }
