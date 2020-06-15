@@ -45,5 +45,4 @@ plugins:
   - sortAttrs: true
 
 js2svg:
-  pretty: true
   indent: '  '
