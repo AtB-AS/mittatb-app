@@ -41,7 +41,7 @@ async function configIntercom(installId: string) {
     custom_attributes: {
       'AtB-Install-Id': installId,
       'AtB-Build-Number': buildNumber,
-      'AtB-Device-Id': deviceId,
+      'AtB-Device-Type': deviceId,
       'AtB-Location-Enabled': isLocationEnabled ? 'Yes' : 'No',
       'Atb-Platform-OS': Platform.OS,
     },
