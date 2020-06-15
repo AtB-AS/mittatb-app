@@ -3,8 +3,7 @@ import {Text, View, StyleSheet, ActivityIndicator} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import {TicketingStackParams} from '../';
-import ArrowRight from '../../../assets/svg/ArrowRight';
-import ChevronDownIcon from '../../../assets/svg/ChevronDownIcon';
+import {ArrowRight, Expand} from '../../../assets/svg/icons/navigation';
 import {searchOffers} from '../../../api/';
 import {UserType, Offer, OfferPrice} from '../../../api/fareContracts';
 import OfferGroup from './Group';
@@ -134,11 +133,11 @@ const OfferRoot: React.FC<Props> = ({navigation}) => {
           <Text style={styles.heading}>Kjøp reise</Text>
           <View style={[styles.borderedTextContainer, styles.grayBorder]}>
             <Text style={styles.text}>Bussreise</Text>
-            <ChevronDownIcon opacity="0.2" />
+            <Expand opacity="0.2" />
           </View>
           <View style={[styles.borderedTextContainer, styles.grayBorder]}>
             <Text style={styles.text}>Sone A - Stor Trondheim</Text>
-            <ChevronDownIcon opacity="0.2" />
+            <Expand opacity="0.2" />
           </View>
           {offerGroups.map(([group_id, group]) => (
             <OfferGroup

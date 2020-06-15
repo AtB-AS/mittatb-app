@@ -3,7 +3,6 @@ import {View, Text} from 'react-native';
 import React from 'react';
 import {StyleSheet} from '../theme';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import CancelCrossIcon from '../assets/svg/CancelCrossIcon';
 import insets from '../utils/insets';
 
 type IconButton = {

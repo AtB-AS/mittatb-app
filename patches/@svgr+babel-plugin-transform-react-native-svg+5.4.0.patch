@@ -1,0 +1,12 @@
+diff --git a/node_modules/@svgr/babel-plugin-transform-react-native-svg/lib/index.js b/node_modules/@svgr/babel-plugin-transform-react-native-svg/lib/index.js
+index fb23971..6893ffe 100644
+--- a/node_modules/@svgr/babel-plugin-transform-react-native-svg/lib/index.js
++++ b/node_modules/@svgr/babel-plugin-transform-react-native-svg/lib/index.js
+@@ -101,6 +101,7 @@ const plugin = ({
+ 
+           path.pushContainer('specifiers', t.importSpecifier(t.identifier(component), t.identifier(component)));
+         });
++        path.pushContainer('specifiers', t.importSpecifier(t.identifier('SvgProps'), t.identifier('SvgProps')));
+       } else if (path.get('source').isStringLiteral({
+         value: 'expo'
+       })) {

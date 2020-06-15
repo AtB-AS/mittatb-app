@@ -1,11 +1,13 @@
 import React from 'react';
-import MapPointIcon from '../../assets/svg/MapPointIcon';
-import BusSide from './svg/BusSide';
+import {MapPointPin} from '../../assets/svg/icons/places';
+import {
+  BusSide,
+  TramSide,
+  TrainSide,
+  FerrySide,
+  PlaneSide,
+} from '../../assets/svg/icons/transportation';
 import {Location} from '../../favorites/types';
-import TramSide from './svg/TramSide';
-import TrainSide from './svg/TrainSide';
-import FerrySide from './svg/FerrySide';
-import PlaneAbove from './svg/PlaneAbove';
 import {Category} from '../../sdk';
 import {SvgProps} from 'react-native-svg';
 
@@ -24,13 +26,13 @@ const LocationIcon = ({
   };
   switch (location.layer) {
     case 'address':
-      return <MapPointIcon {...svgProps} />;
+      return <MapPointPin {...svgProps} />;
     case 'venue':
       const venueIconTypes = location.category
         .map(mapCategoryToVenueIconType)
         .filter((v, i, arr) => arr.indexOf(v) === i); // get distinct values
 
-      if (!venueIconTypes.length) return <MapPointIcon {...svgProps} />;
+      if (!venueIconTypes.length) return <MapPointPin {...svgProps} />;
 
       return multiple ? (
         <>{venueIconTypes.map((it) => mapTypeToIconComponent(it, svgProps))}</>
@@ -39,7 +41,7 @@ const LocationIcon = ({
       );
 
     default:
-      return <MapPointIcon {...svgProps} />;
+      return <MapPointPin {...svgProps} />;
   }
 };
 
@@ -55,12 +57,12 @@ const mapTypeToIconComponent = (
     case 'rail':
       return <TrainSide key="rail" {...svgProps} />;
     case 'airport':
-      return <PlaneAbove key="airport" {...svgProps} />;
+      return <PlaneSide key="airport" {...svgProps} />;
     case 'boat':
       return <FerrySide key="boat" {...svgProps} />;
     case 'unknown':
     default:
-      return <MapPointIcon key="unknown" {...svgProps} />;
+      return <MapPointPin key="unknown" {...svgProps} />;
   }
 };
 

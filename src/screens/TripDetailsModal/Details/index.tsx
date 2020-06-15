@@ -7,22 +7,24 @@ import WalkDetail from './WalkDetail';
 import TransportDetail from './TransportDetail';
 import {formatToClock} from '../../../utils/date';
 import LocationRow from '../LocationRow';
-import DotIcon from '../../../assets/svg/DotIcon';
 import {StyleSheet} from '../../../theme';
 import Header from '../../../ScreenHeader';
-import MapPointIcon from '../../../assets/svg/MapPointIcon';
+import {Dot} from '../../../assets/svg/icons/other/';
+import {
+  CurrentLocationArrow,
+  MapPointPin,
+} from '../../../assets/svg/icons/places';
+import {Close} from '../../../assets/svg/icons/actions';
 import colors from '../../../theme/colors';
 import {DetailsModalStackParams} from '..';
 import MessageBox from '../../../message-box';
 import {LocationWithSearchMetadata} from '../../../location-search';
 import {UserFavorites} from '../../../favorites/types';
-import LocationArrow from '../../../assets/svg/LocationArrow';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import LocationIcon from '../../../components/location-icon';
 import {FavoriteIcon} from '../../../favorites';
 import {getSingleTripPattern} from '../../../api/trips';
 import usePollableResource from '../../../utils/use-pollable-resource';
-import CancelCrossIcon from '../../../assets/svg/CancelCrossIcon';
 
 // @TODO Firebase config?
 const TIME_LIMIT_IN_MINUTES = 3;
@@ -59,7 +61,7 @@ const TripDetailsModal: React.FC<Props> = (props) => {
       <Header
         leftButton={{
           onPress: () => props.navigation.goBack(),
-          icon: <CancelCrossIcon />,
+          icon: <Close />,
         }}
         title="Reisedetaljer"
       />
@@ -110,7 +112,7 @@ const DetailsContent: React.FC<{
       <LocationRow
         icon={
           getLocationIcon(from, favorites) ?? (
-            <DotIcon fill={colors.general.black} />
+            <Dot fill={colors.general.black} />
           )
         }
         location={from.name}
@@ -144,7 +146,7 @@ function getLocationIcon(
 ) {
   switch (location.resultType) {
     case 'geolocation':
-      return <LocationArrow />;
+      return <CurrentLocationArrow />;
     case 'favorite':
       return (
         <FavoriteIcon
@@ -154,7 +156,7 @@ function getLocationIcon(
     case 'search':
       return <LocationIcon location={location} />;
     default:
-      return <MapPointIcon fill={colors.general.black} />;
+      return <MapPointPin fill={colors.general.black} />;
   }
 }
 

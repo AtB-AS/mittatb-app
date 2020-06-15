@@ -8,12 +8,12 @@ import {
   secondsBetween,
 } from '../../../utils/date';
 import nb from 'date-fns/locale/nb';
-import DotIcon from '../../../assets/svg/DotIcon';
+import {Dot} from '../../../assets/svg/icons/other';
 import LocationRow from '../LocationRow';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {LegDetailProps, DetailScreenNavigationProp} from '.';
 import {useNavigation} from '@react-navigation/core';
-import WaitClockIcon from './svg/WaitClockIcon';
+import {Duration} from '../../../assets/svg/icons/transportation';
 import {Leg} from '../../../sdk';
 import RealTimeLocationIcon from '../../../components/location-icon/real-time';
 import {getQuayName, getLineName} from '../../../utils/transportation-names';
@@ -46,7 +46,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
       >
         {showFrom && (
           <LocationRow
-            icon={<DotIcon fill={colors.secondary.cyan} />}
+            icon={<Dot fill={colors.secondary.cyan} />}
             location={getQuayName(leg.fromPlace.quay)}
             time={formatToClock(leg.expectedStartTime)}
             aimedTime={
@@ -77,7 +77,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
         </View>
         {showTo && (
           <LocationRow
-            icon={<DotIcon fill={colors.secondary.cyan} />}
+            icon={<Dot fill={colors.secondary.cyan} />}
             location={getQuayName(leg.toPlace.quay)}
             time={formatToClock(leg.expectedEndTime)}
             aimedTime={
@@ -140,7 +140,7 @@ function WaitRow({onCalculateTime, currentLeg, nextLeg}: WaitRowProps) {
       <View style={waitStyles.textContainer}>
         <Text style={waitStyles.text}>{formatTime(time)}</Text>
       </View>
-      <WaitClockIcon fill={colors.general.gray200} />
+      <Duration fill={colors.general.gray200} />
     </View>
   );
 }

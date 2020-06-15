@@ -10,7 +10,8 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "postinstall": "patch-package",
     "icons": "app-icon generate --platforms=android,ios --rounded none && app-icon generate -i icon.round.png --platforms=android --rounded only",
-    "release-draft": "sh tools/release/release-draft.sh"
+    "release-draft": "sh tools/release/release-draft.sh",
+    "generate-svgs": "svgr --svg-props width={20} --svg-props height={20} -d ./src/assets/svg/icons ./assets/svgs/icons && svgr -d ./src/assets/svg/illustrations ./assets/svgs/illustrations && prettier --write ./src/assets/svg/"
   },
   "dependencies": {
     "@entur/sdk": "^1.5.0",
@@ -68,6 +69,7 @@
   "devDependencies": {
     "@babel/core": "^7.9.6",
     "@babel/runtime": "^7.9.6",
+    "@svgr/cli": "^5.4.0",
     "@types/humanize-duration": "^3.18.0",
     "@types/jest": "^25.2.1",
     "@types/lodash.groupby": "^4.6.6",

@@ -3,12 +3,14 @@ import React from 'react';
 import LottieView from 'lottie-react-native';
 import {View, StyleProp, ViewStyle} from 'react-native';
 import {StyleSheet} from '../../../theme';
-import BusSide from '../svg/BusSide';
-import TramSide from '../svg/TramSide';
+import {
+  BusSide,
+  TramSide,
+  TrainSide,
+  PlaneSide,
+  FerrySide,
+} from '../../../assets/svg/icons/transportation';
 import colors from '../../../theme/colors';
-import TrainSide from '../svg/TrainSide';
-import PlaneAbove from '../svg/PlaneAbove';
-import FerrySide from '../svg/FerrySide';
 
 export type TransportationIconProps = {
   mode?: LegMode;
@@ -74,7 +76,7 @@ function InnerIcon({mode}: TransportationIconProps) {
     case 'rail':
       return <TrainSide key="rail" fill="black" />;
     case 'air':
-      return <PlaneAbove key="airport" fill="black" />;
+      return <PlaneSide key="airport" fill="black" />;
     case 'water':
       return <FerrySide key="boat" fill="black" />;
     case 'unknown':

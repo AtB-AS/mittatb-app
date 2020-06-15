@@ -9,7 +9,7 @@ import LocationSearch, {
   RouteParams as LocationSearchParams,
 } from '../location-search';
 import TabNavigator from './TabNavigator';
-import CloseModalCrossIcon from './svg/CloseModalCrossIcon';
+import {Close} from '../assets/svg/icons/actions';
 import {useTheme} from '../theme';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import transitionSpec from './transitionSpec';
@@ -115,7 +115,7 @@ const NavigationRoot = () => {
                           marginLeft: 24,
                         }}
                       >
-                        <CloseModalCrossIcon fill={tintColor} />
+                        <Close fill={tintColor} />
                       </View>
                     ),
                     transitionSpec: {

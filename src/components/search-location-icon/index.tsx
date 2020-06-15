@@ -1,6 +1,6 @@
 import React from 'react';
 import {LocationWithSearchMetadata} from '../../location-search';
-import LocationArrow from '../../assets/svg/LocationArrow';
+import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import {FavoriteIcon} from '../../favorites';
 import LocationIcon from '../location-icon';
 import {useFavorites} from '../../favorites/FavoritesContext';
@@ -15,7 +15,7 @@ export default function SearchLocationIcon({
   const {favorites} = useFavorites();
   switch (location?.resultType) {
     case 'geolocation':
-      return <LocationArrow />;
+      return <CurrentLocationArrow />;
     case 'favorite':
       return (
         <FavoriteIcon
