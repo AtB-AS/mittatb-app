@@ -10,6 +10,7 @@ import {Close} from '../../assets/svg/icons/actions';
 import SearchButton from '../../components/search-button';
 import {formatToClock, formatToLongDateTime} from '../../utils/date';
 import nb from 'date-fns/locale/nb';
+import subDays from 'date-fns/subDays';
 import insets from '../../utils/insets';
 
 type DateTypesWithoutNow = 'departure' | 'arrival';
@@ -182,6 +183,7 @@ const DateInput: React.FC<DateInputProps> = ({
 
             <View style={style.dateContainer}>
               <DatePicker
+                minimumDate={yesterday()}
                 date={dateOrDefault(dateObjectInternal)}
                 onDateChange={onChange}
                 locale="nb"
@@ -240,6 +242,10 @@ function dateOrDefault(dateObject: DateOutput) {
     return new Date();
   }
   return dateObject.date;
+}
+
+function yesterday() {
+  return subDays(new Date(), 1);
 }
 
 export default DateInput;
