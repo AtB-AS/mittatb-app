@@ -72,7 +72,7 @@ export const themes: Themes = {
       level2: backgrounds.light__level2,
       modal_Level2: colors.secondary.gray_Level2,
       destructive: colors.secondary.red,
-      accent: colors.primary.green,
+      accent: colors.secondary.cyan,
     },
     text: {
       primary: colors.general.black,
@@ -91,7 +91,7 @@ export const themes: Themes = {
       level2: colors.general.gray,
       modal_Level2: colors.secondary.gray_Level2,
       destructive: colors.secondary.red,
-      accent: colors.primary.green,
+      accent: colors.secondary.cyan,
     },
     text: {
       primary: colors.general.white,

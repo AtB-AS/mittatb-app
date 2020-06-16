@@ -10,7 +10,7 @@ import {
 } from '@react-navigation/native';
 import {StyleSheet} from '../theme';
 import {Location} from '../favorites/types';
-import InputSearchIcon from './svg/InputSearchIcon';
+import {Search} from '../assets/svg/icons/actions';
 import useDebounce from './useDebounce';
 import {useGeocoder} from './useGeocoder';
 import LocationResults from './LocationResults';
@@ -19,7 +19,7 @@ import {useGeolocationState} from '../GeolocationContext';
 import {SharedElement} from 'react-navigation-shared-element';
 import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
-import CancelCrossIcon from '../assets/svg/CancelCrossIcon';
+import {Close} from '../assets/svg/icons/actions';
 import insets from '../utils/insets';
 
 export type Props = {
@@ -106,14 +106,14 @@ const LocationSearch: React.FC<Props> = ({
               autoCompleteType="off"
               placeholderTextColor={(styles.placeholder as TextStyle).color}
             />
-            <InputSearchIcon style={styles.searchIcon} />
+            <Search style={styles.searchIcon} />
             {text?.length ? (
               <View style={styles.searchClear}>
                 <TouchableOpacity
                   hitSlop={insets.all(8)}
                   onPress={() => setText('')}
                 >
-                  <CancelCrossIcon />
+                  <Close />
                 </TouchableOpacity>
               </View>
             ) : null}

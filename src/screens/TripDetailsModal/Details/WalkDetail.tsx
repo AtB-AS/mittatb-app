@@ -5,7 +5,7 @@ import Dash from 'react-native-dash';
 import colors from '../../../theme/colors';
 import {secondsToDuration} from '../../../utils/date';
 import nb from 'date-fns/locale/nb';
-import WalkingPerson from '../../../assets/svg/WalkingPerson';
+import {WalkingPerson} from '../../../assets/svg/icons/transportation';
 import LocationRow from '../LocationRow';
 import {LegDetailProps} from '.';
 

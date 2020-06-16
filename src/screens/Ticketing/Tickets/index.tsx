@@ -5,8 +5,8 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {nb} from 'date-fns/locale';
 import {TicketingStackParams} from '../';
 import {secondsToDuration} from '../../../utils/date';
-import ArrowRight from '../../../assets/svg/ArrowRight';
-import ChevronDownIcon from '../../../assets/svg/ChevronDownIcon';
+import {ArrowRight} from '../../../assets/svg/icons/navigation';
+import {Expand} from '../../../assets/svg/icons/navigation';
 import {useTicketState} from '../TicketContext';
 
 type Props = {
@@ -34,7 +34,7 @@ const Tickets: React.FC<Props> = ({navigation}) => {
               <Text style={styles.textItem}>
                 {secondsToDuration(fc.duration, nb)} - {fc.product_name}
               </Text>
-              <ChevronDownIcon />
+              <Expand />
             </View>
             <Text style={styles.textItem}>1 voksen</Text>
             <Text style={styles.textItem}>Sone A</Text>

@@ -3,17 +3,16 @@ import {View, Text} from 'react-native';
 import React from 'react';
 import {StyleSheet, Theme} from '../../../theme';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
-import EditIcon from '../../../assets/svg/EditIcon';
+import {Add, Edit} from '../../../assets/svg/icons/actions';
 import EditableListGroup from './EditableListGroup';
 import {LocationFavorite} from '../../../favorites/types';
-import PlusIcon from '../../../assets/svg/PlusIcon';
 import {ProfileStackParams} from '..';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import Header from '../../../ScreenHeader';
 import {FavoriteIcon} from '../../../favorites';
 import insets from '../../../utils/insets';
-import useChatIcon from '../../../utils/use-chat-icon';
+import useChatIcon from '../../../chat/use-chat-icon';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -78,7 +77,7 @@ function AddFavoriteButton({onPress}: {onPress(): void}) {
   const css = useItemStyle();
   return (
     <TouchableOpacity style={css.item} onPress={onPress}>
-      <PlusIcon />
+      <Add />
       <Text style={css.text}>Legg til favorittsted</Text>
     </TouchableOpacity>
   );
@@ -97,7 +96,7 @@ const Item: React.FC<ItemProps> = ({item, onEdit}) => {
       <Text style={css.text}>{item.name ?? item.location.name}</Text>
       {onEdit && (
         <TouchableOpacity onPress={onEdit} hitSlop={insets.all(12)}>
-          <EditIcon />
+          <Edit />
         </TouchableOpacity>
       )}
     </View>

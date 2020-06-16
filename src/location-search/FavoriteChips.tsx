@@ -4,7 +4,7 @@ import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import colors from '../theme/colors';
 import {useFavorites} from '../favorites/FavoritesContext';
 import {useReverseGeocoder} from './useGeocoder';
-import LocationArrow from '../assets/svg/LocationArrow';
+import {CurrentLocationArrow} from '../assets/svg/icons/places';
 import {GeolocationResponse} from '@react-native-community/geolocation';
 import {LocationWithSearchMetadata} from './';
 import {FavoriteIcon} from '../favorites';
@@ -79,7 +79,7 @@ const FavoriteChips: React.FC<Props> = ({
         {!hideLocationChip && (
           <FavoriteChip
             text="Min posisjon"
-            icon={<LocationArrow />}
+            icon={<CurrentLocationArrow />}
             onPress={onCurrentLocation}
           />
         )}

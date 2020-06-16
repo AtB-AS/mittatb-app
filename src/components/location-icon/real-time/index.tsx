@@ -3,12 +3,14 @@ import React from 'react';
 import LottieView from 'lottie-react-native';
 import {View, StyleProp, ViewStyle} from 'react-native';
 import {StyleSheet} from '../../../theme';
-import BusFront from '../svg/BusFront';
-import TramFront from '../svg/TramFront';
+import {
+  BusSide,
+  TramSide,
+  TrainSide,
+  PlaneSide,
+  FerrySide,
+} from '../../../assets/svg/icons/transportation';
 import colors from '../../../theme/colors';
-import TrainFront from '../svg/TrainFront';
-import PlaneFront from '../svg/PlaneFront';
-import BoatFront from '../svg/BoatFront';
 
 export type TransportationIconProps = {
   mode?: LegMode;
@@ -68,15 +70,15 @@ const EmptyCircle: React.FC<EmptyCircleProps> = ({style, children}) => {
 function InnerIcon({mode}: TransportationIconProps) {
   switch (mode) {
     case 'bus':
-      return <BusFront key="bus" fill="black" />;
+      return <BusSide key="bus" fill="black" />;
     case 'tram':
-      return <TramFront key="tram" fill="black" />;
+      return <TramSide key="tram" fill="black" />;
     case 'rail':
-      return <TrainFront key="rail" fill="black" />;
+      return <TrainSide key="rail" fill="black" />;
     case 'air':
-      return <PlaneFront key="airport" fill="black" />;
+      return <PlaneSide key="airport" fill="black" />;
     case 'water':
-      return <BoatFront key="boat" fill="black" width={12} />;
+      return <FerrySide key="boat" fill="black" />;
     case 'unknown':
     default:
       return null;
@@ -98,6 +100,5 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 50,
-    backgroundColor: colors.primary.green,
   },
 }));

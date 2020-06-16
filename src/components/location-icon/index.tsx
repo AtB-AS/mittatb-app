@@ -1,11 +1,13 @@
 import React from 'react';
-import MapPointIcon from '../../assets/svg/MapPointIcon';
-import BusFront from './svg/BusFront';
+import {MapPointPin} from '../../assets/svg/icons/places';
+import {
+  BusSide,
+  TramSide,
+  TrainSide,
+  FerrySide,
+  PlaneSide,
+} from '../../assets/svg/icons/transportation';
 import {Location} from '../../favorites/types';
-import TramFront from './svg/TramFront';
-import TrainFront from './svg/TrainFront';
-import BoatFront from './svg/BoatFront';
-import PlaneFront from './svg/PlaneFront';
 import {Category} from '../../sdk';
 import {SvgProps} from 'react-native-svg';
 
@@ -24,13 +26,13 @@ const LocationIcon = ({
   };
   switch (location.layer) {
     case 'address':
-      return <MapPointIcon {...svgProps} />;
+      return <MapPointPin {...svgProps} />;
     case 'venue':
       const venueIconTypes = location.category
         .map(mapCategoryToVenueIconType)
         .filter((v, i, arr) => arr.indexOf(v) === i); // get distinct values
 
-      if (!venueIconTypes.length) return <MapPointIcon {...svgProps} />;
+      if (!venueIconTypes.length) return <MapPointPin {...svgProps} />;
 
       return multiple ? (
         <>{venueIconTypes.map((it) => mapTypeToIconComponent(it, svgProps))}</>
@@ -39,7 +41,7 @@ const LocationIcon = ({
       );
 
     default:
-      return <MapPointIcon {...svgProps} />;
+      return <MapPointPin {...svgProps} />;
   }
 };
 
@@ -49,18 +51,18 @@ const mapTypeToIconComponent = (
 ) => {
   switch (iconType) {
     case 'bus':
-      return <BusFront key="bus" {...svgProps} height={16} />;
+      return <BusSide key="bus" {...svgProps} />;
     case 'tram':
-      return <TramFront key="tram" {...svgProps} height={16} />;
+      return <TramSide key="tram" {...svgProps} />;
     case 'rail':
-      return <TrainFront key="rail" {...svgProps} height={20} />;
+      return <TrainSide key="rail" {...svgProps} />;
     case 'airport':
-      return <PlaneFront key="airport" {...svgProps} height={16} />;
+      return <PlaneSide key="airport" {...svgProps} />;
     case 'boat':
-      return <BoatFront key="boat" {...svgProps} height={16} />;
+      return <FerrySide key="boat" {...svgProps} />;
     case 'unknown':
     default:
-      return <MapPointIcon key="unknown" {...svgProps} />;
+      return <MapPointPin key="unknown" {...svgProps} />;
   }
 };
 
