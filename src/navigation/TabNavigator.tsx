@@ -1,11 +1,11 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
-  PlannerIcon,
-  NearestIcon,
-  ProfileIcon,
-  TicketingIcon,
-} from './TabBarIcons';
+  Assistant as AssistantIcon,
+  Nearby,
+  Profile,
+  Tickets,
+} from '../assets/svg/icons/tab-bar';
 import Assistant from '../screens/Assistant';
 import NearbyScreen from '../screens/Nearby';
 import TicketingScreen from '../screens/Ticketing';
@@ -37,7 +37,7 @@ const NavigationRoot = () => {
         component={Assistant}
         options={{
           tabBarLabel: 'Reisesøk',
-          tabBarIcon: ({color}) => <PlannerIcon fill={color} />,
+          tabBarIcon: ({color}) => <AssistantIcon fill={color} />,
         }}
       />
       <Tab.Screen
@@ -45,7 +45,7 @@ const NavigationRoot = () => {
         component={NearbyScreen}
         options={{
           tabBarLabel: 'Avganger',
-          tabBarIcon: ({color}) => <NearestIcon fill={color} />,
+          tabBarIcon: ({color}) => <Nearby fill={color} />,
         }}
       />
       {enable_ticketing ? (
@@ -54,7 +54,7 @@ const NavigationRoot = () => {
           component={TicketingScreen}
           options={{
             tabBarLabel: 'Billetter',
-            tabBarIcon: ({color}) => <TicketingIcon fill={color} />,
+            tabBarIcon: ({color}) => <Tickets fill={color} />,
           }}
         />
       ) : null}
@@ -63,7 +63,7 @@ const NavigationRoot = () => {
         component={ProfileScreen}
         options={{
           tabBarLabel: 'Mitt AtB',
-          tabBarIcon: ({color}) => <ProfileIcon fill={color} />,
+          tabBarIcon: ({color}) => <Profile fill={color} />,
         }}
       />
     </Tab.Navigator>
