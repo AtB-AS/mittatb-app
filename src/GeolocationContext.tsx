@@ -13,6 +13,8 @@ import {
   openSettings,
 } from 'react-native-permissions';
 import bugsnag from './diagnostics/bugsnag';
+import {useAppStateStatus} from './utils/use-app-state-status';
+import {updateMetadata as updateChatUserMetadata} from './chat/user';
 
 type GeolocationState = {
   status: PermissionStatus | null;
@@ -90,7 +92,7 @@ const GeolocationContextProvider: React.FC = ({children}) => {
     if (state.status === 'blocked' && opts?.useSettingsFallback) {
       Alert.alert(
         'Du har blokkert posisjonsdeling',
-        'For å kunne skru på posisjonsdeling, må du gå til innstillinger for å tillate dette for AtB-appen. Du må starte appen på nytt etter du har tillatt posisjonsdeling. Vil du gjøre dette?',
+        'For å kunne skru på posisjonsdeling, må du gå til innstillinger for å tillate dette for AtB-appen. Vil du gjøre dette?',
         [{text: 'Ja', onPress: () => openSettings()}, {text: 'Nei'}],
       );
     } else {
@@ -136,13 +138,20 @@ const GeolocationContextProvider: React.FC = ({children}) => {
     }
   }, [hasPermission]);
 
+  const appStatus = useAppStateStatus();
+
   useEffect(() => {
     async function checkPermission() {
-      const status = await checkGeolocationPermission();
-      dispatch({type: 'PERMISSION_CHANGED', status});
+      if (appStatus === 'active') {
+        const status = await checkGeolocationPermission();
+        if (state.status != status) {
+          dispatch({type: 'PERMISSION_CHANGED', status});
+          await updateChatUserMetadata({'AtB-App-Location-Status': status});
+        }
+      }
     }
     checkPermission();
-  }, []);
+  }, [appStatus]);
 
   return (
     <GeolocationContext.Provider value={{...state, requestPermission}}>
@@ -163,7 +172,7 @@ export function useGeolocationState() {
   return context;
 }
 
-async function checkGeolocationPermission(): Promise<PermissionStatus> {
+export async function checkGeolocationPermission(): Promise<PermissionStatus> {
   if (Platform.OS === 'ios') {
     return await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
   } else {

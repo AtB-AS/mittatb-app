@@ -25,7 +25,7 @@ import NearbyResults from './NearbyResults';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import usePollableResource from '../../utils/use-pollable-resource';
 import SearchGroup from '../../components/search-button/search-group';
-import useChatIcon from '../../utils/use-chat-icon';
+import useChatIcon from '../../chat/use-chat-icon';
 
 type NearbyRouteName = 'Nearest';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearest';
