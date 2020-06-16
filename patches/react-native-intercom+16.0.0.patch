@@ -1,0 +1,63 @@
+diff --git a/node_modules/react-native-intercom/iOS/IntercomWrapper.m b/node_modules/react-native-intercom/iOS/IntercomWrapper.m
+index 35e49b6..0184a52 100644
+--- a/node_modules/react-native-intercom/iOS/IntercomWrapper.m
++++ b/node_modules/react-native-intercom/iOS/IntercomWrapper.m
+@@ -9,6 +9,8 @@
+ #import "IntercomWrapper.h"
+ #import "IntercomUserAttributesBuilder.h"
+ #import <Intercom/Intercom.h>
++#import <React/RCTUtils.h>
++#import <React/RCTUtilsUIOverride.h>
+ 
+ @implementation IntercomWrapper
+ 
+@@ -104,6 +106,9 @@ @implementation IntercomWrapper
+ RCT_EXPORT_METHOD(displayMessenger :(RCTPromiseResolveBlock)resolve :(RCTPromiseRejectBlock)reject) {
+     NSLog(@"displayMessenger");
+ 
++    UIViewController *controller = RCTPresentedViewController();
++    [RCTUtilsUIOverride setPresentedViewController:controller];
++    
+     dispatch_async(dispatch_get_main_queue(), ^{
+         [Intercom presentMessenger];
+     });
+@@ -126,6 +131,9 @@ @implementation IntercomWrapper
+ RCT_EXPORT_METHOD(displayMessageComposer :(RCTPromiseResolveBlock)resolve :(RCTPromiseRejectBlock)reject) {
+     NSLog(@"displayMessageComposer");
+     
++    UIViewController *controller = RCTPresentedViewController();
++    [RCTUtilsUIOverride setPresentedViewController:controller];
++
+     dispatch_async(dispatch_get_main_queue(), ^{
+         [Intercom presentMessageComposer];
+     });
+@@ -136,6 +144,9 @@ @implementation IntercomWrapper
+ RCT_EXPORT_METHOD(displayMessageComposerWithInitialMessage:(NSString*)message resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+     NSLog(@"displayMessageComposerWithInitialMessage");
+ 
++    UIViewController *controller = RCTPresentedViewController();
++    [RCTUtilsUIOverride setPresentedViewController:controller];
++    
+     dispatch_async(dispatch_get_main_queue(), ^{
+         [Intercom presentMessageComposerWithInitialMessage:message];
+     });
+@@ -147,6 +158,9 @@ @implementation IntercomWrapper
+ RCT_EXPORT_METHOD(displayConversationsList :(RCTPromiseResolveBlock)resolve :(RCTPromiseRejectBlock)reject) {
+     NSLog(@"displayConversationsList");
+     
++    UIViewController *controller = RCTPresentedViewController();
++    [RCTUtilsUIOverride setPresentedViewController:controller];
++
+     dispatch_async(dispatch_get_main_queue(), ^{
+         [Intercom presentConversationList];
+     });
+@@ -167,6 +181,9 @@ @implementation IntercomWrapper
+ RCT_EXPORT_METHOD(displayHelpCenter :(RCTPromiseResolveBlock)resolve :(RCTPromiseRejectBlock)reject) {
+     NSLog(@"displayHelpCenter");
+     
++    UIViewController *controller = RCTPresentedViewController();
++    [RCTUtilsUIOverride setPresentedViewController:controller];
++
+     dispatch_async(dispatch_get_main_queue(), ^{
+         [Intercom presentHelpCenter];
+     });
