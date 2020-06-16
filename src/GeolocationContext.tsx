@@ -142,9 +142,12 @@ const GeolocationContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     async function checkPermission() {
-      const status = await checkGeolocationPermission();
-      dispatch({type: 'PERMISSION_CHANGED', status});
-      await updateChatUserMetadata({'AtB-App-Location-Status': status});
+      if (appStatus === 'active') {
+        const status = await checkGeolocationPermission();
+        dispatch({type: 'PERMISSION_CHANGED', status});
+        if (state.status != status)
+          await updateChatUserMetadata({'AtB-App-Location-Status': status});
+      }
     }
     checkPermission();
   }, [appStatus]);
