@@ -7,12 +7,12 @@ import storage from '../storage';
 import {checkGeolocationPermission} from '../GeolocationContext';
 
 type Metadata = {
-  ['AtB-Install-Id']: string;
-  ['AtB-Build-Number']: string;
-  ['AtB-Device-Type']: string;
-  ['AtB-Device-Location-Enabled']: boolean;
-  ['AtB-App-Location-Status']: PermissionStatus;
-  ['Atb-Platform-OS']: PlatformOSType;
+  'AtB-Install-Id': string;
+  'AtB-Build-Number': string;
+  'AtB-Device-Type': string;
+  'AtB-Device-Location-Enabled': boolean;
+  'AtB-App-Location-Status': PermissionStatus;
+  'Atb-Platform-OS': PlatformOSType;
 };
 
 export async function register() {
@@ -26,12 +26,12 @@ export async function register() {
   const appLocationStatus = await checkGeolocationPermission();
 
   await updateMetadata({
-    ['AtB-Install-Id']: installId ?? 'unknown',
-    ['AtB-Build-Number']: buildNumber,
-    ['AtB-Device-Type']: deviceId,
-    ['AtB-Device-Location-Enabled']: isLocationEnabled,
-    ['AtB-App-Location-Status']: appLocationStatus,
-    ['Atb-Platform-OS']: Platform.OS,
+    'AtB-Install-Id': installId ?? 'unknown',
+    'AtB-Build-Number': buildNumber,
+    'AtB-Device-Type': deviceId,
+    'AtB-Device-Location-Enabled': isLocationEnabled,
+    'AtB-App-Location-Status': appLocationStatus,
+    'Atb-Platform-OS': Platform.OS,
   });
 }
 

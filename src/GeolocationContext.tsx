@@ -92,7 +92,7 @@ const GeolocationContextProvider: React.FC = ({children}) => {
     if (state.status === 'blocked' && opts?.useSettingsFallback) {
       Alert.alert(
         'Du har blokkert posisjonsdeling',
-        'For å kunne skru på posisjonsdeling, må du gå til innstillinger for å tillate dette for AtB-appen. Du må starte appen på nytt etter du har tillatt posisjonsdeling. Vil du gjøre dette?',
+        'For å kunne skru på posisjonsdeling, må du gå til innstillinger for å tillate dette for AtB-appen. Vil du gjøre dette?',
         [{text: 'Ja', onPress: () => openSettings()}, {text: 'Nei'}],
       );
     } else {
@@ -144,9 +144,10 @@ const GeolocationContextProvider: React.FC = ({children}) => {
     async function checkPermission() {
       if (appStatus === 'active') {
         const status = await checkGeolocationPermission();
-        dispatch({type: 'PERMISSION_CHANGED', status});
-        if (state.status != status)
+        if (state.status != status) {
+          dispatch({type: 'PERMISSION_CHANGED', status});
           await updateChatUserMetadata({'AtB-App-Location-Status': status});
+        }
       }
     }
     checkPermission();
