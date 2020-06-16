@@ -36,7 +36,7 @@ const NavigationRoot = () => {
         name="Assistant"
         component={Assistant}
         options={{
-          tabBarLabel: 'Reiseassistent',
+          tabBarLabel: 'Reisesøk',
           tabBarIcon: ({color}) => <PlannerIcon fill={color} />,
         }}
       />
@@ -44,7 +44,7 @@ const NavigationRoot = () => {
         name="Nearest"
         component={NearbyScreen}
         options={{
-          tabBarLabel: 'Avganger i nærheten',
+          tabBarLabel: 'Avganger',
           tabBarIcon: ({color}) => <NearestIcon fill={color} />,
         }}
       />
@@ -53,7 +53,7 @@ const NavigationRoot = () => {
           name="Ticketing"
           component={TicketingScreen}
           options={{
-            tabBarLabel: 'Reisebevis',
+            tabBarLabel: 'Billetter',
             tabBarIcon: ({color}) => <TicketingIcon fill={color} />,
           }}
         />
