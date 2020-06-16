@@ -13,6 +13,8 @@ import {
   openSettings,
 } from 'react-native-permissions';
 import bugsnag from './diagnostics/bugsnag';
+import {useAppStateStatus} from './utils/use-app-state-status';
+import {updateMetadata as updateChatUserMetadata} from './chat/user';
 
 type GeolocationState = {
   status: PermissionStatus | null;
@@ -136,13 +138,16 @@ const GeolocationContextProvider: React.FC = ({children}) => {
     }
   }, [hasPermission]);
 
+  const appStatus = useAppStateStatus();
+
   useEffect(() => {
     async function checkPermission() {
       const status = await checkGeolocationPermission();
       dispatch({type: 'PERMISSION_CHANGED', status});
+      await updateChatUserMetadata({'AtB-App-Location-Status': status});
     }
     checkPermission();
-  }, []);
+  }, [appStatus]);
 
   return (
     <GeolocationContext.Provider value={{...state, requestPermission}}>
@@ -163,7 +168,7 @@ export function useGeolocationState() {
   return context;
 }
 
-async function checkGeolocationPermission(): Promise<PermissionStatus> {
+export async function checkGeolocationPermission(): Promise<PermissionStatus> {
   if (Platform.OS === 'ios') {
     return await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
   } else {

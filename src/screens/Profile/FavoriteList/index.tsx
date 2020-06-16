@@ -12,7 +12,7 @@ import {useFavorites} from '../../../favorites/FavoritesContext';
 import Header from '../../../ScreenHeader';
 import {FavoriteIcon} from '../../../favorites';
 import insets from '../../../utils/insets';
-import useChatIcon from '../../../utils/use-chat-icon';
+import useChatIcon from '../../../chat/use-chat-icon';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,

@@ -7,8 +7,7 @@ import React, {
   useMemo,
 } from 'react';
 import RNBootSplash from 'react-native-bootsplash';
-import Intercom from 'react-native-intercom';
-
+import {register as registerChatUser} from './chat/user';
 import storage from './storage';
 
 type AppState = {
@@ -69,7 +68,7 @@ const AppContextProvider: React.FC = ({children}) => {
       const savedOnboarded = await storage.get('onboarded');
       const onboarded = !savedOnboarded ? false : JSON.parse(savedOnboarded);
       if (onboarded) {
-        Intercom.registerUnidentifiedUser();
+        registerChatUser();
       }
       dispatch({
         type: 'LOAD_APP_SETTINGS',
@@ -87,7 +86,7 @@ const AppContextProvider: React.FC = ({children}) => {
         await storage.set('onboarded', JSON.stringify(true));
         dispatch({type: 'COMPLETE_ONBOARDING'});
 
-        Intercom.registerUnidentifiedUser();
+        registerChatUser();
       },
       restartOnboarding: async () => {
         dispatch({type: 'RESTART_ONBOARDING'});

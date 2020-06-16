@@ -27,7 +27,7 @@ import {StyleSheet} from '../../theme';
 import insets from '../../utils/insets';
 import Loading from '../Loading';
 import Results from './Results';
-import useChatIcon from '../../utils/use-chat-icon';
+import useChatIcon from '../../chat/use-chat-icon';
 import DateInput, {DateOutput} from './DateInput';
 
 type AssistantRouteName = 'Assistant';
