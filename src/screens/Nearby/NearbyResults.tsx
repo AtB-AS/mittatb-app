@@ -135,7 +135,7 @@ const ItemHeader: React.FC<{
 
 type NearbyResultItemProps = {
   departure: EstimatedCall;
-  style: StyleProp<ViewStyle | TextStyle | ImageStyle>;
+  style?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
   onPress?(departure: EstimatedCall): void;
 };
 const NearbyResultItem: React.FC<NearbyResultItemProps> = ({
