@@ -23,6 +23,7 @@ import usePollableResource from '../../utils/use-pollable-resource';
 import SearchGroup from '../../components/search-button/search-group';
 import {DeparturesWithStop} from '../../sdk';
 import useChatIcon from '../../chat/use-chat-icon';
+import {View} from 'react-native';
 
 type NearbyRouteName = 'Nearest';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearest';
@@ -102,7 +103,11 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
             title="Fra"
             placeholder="Søk etter adresse eller sted"
             location={fromLocation}
-            icon={<SearchLocationIcon location={fromLocation} />}
+            icon={
+              <View style={{marginLeft: 2}}>
+                <SearchLocationIcon location={fromLocation} />
+              </View>
+            }
             onPress={() => openLocationSearch()}
           />
         </SharedElement>

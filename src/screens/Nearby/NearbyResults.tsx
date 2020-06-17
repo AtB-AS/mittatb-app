@@ -1,5 +1,13 @@
 import React from 'react';
-import {RefreshControl, Text, View} from 'react-native';
+import {
+  RefreshControl,
+  Text,
+  View,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
+  ImageStyle,
+} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import RealTimeLocationIcon from '../../components/location-icon/real-time';
 import {EstimatedCall, DeparturesWithStop, StopPlaceDetails} from '../../sdk';
@@ -93,13 +101,15 @@ const StopDepartures: React.FC<StopDeparturesProps> = ({
             <View style={styles.platformHeader}>
               <Text>Plattform {quay.quay.publicCode}</Text>
             </View>
-            {quay.departures.map((departure) => (
-              <NearbyResultItem
-                departure={departure}
-                onPress={onPress}
-                key={departure.serviceJourney.id}
-              />
-            ))}
+            <LastElement last={styles.itemContainer__withoutBorder}>
+              {quay.departures.map((departure) => (
+                <NearbyResultItem
+                  departure={departure}
+                  onPress={onPress}
+                  key={departure.serviceJourney.id}
+                />
+              ))}
+            </LastElement>
           </View>
         ))}
       </View>
@@ -125,17 +135,19 @@ const ItemHeader: React.FC<{
 
 type NearbyResultItemProps = {
   departure: EstimatedCall;
+  style: StyleProp<ViewStyle | TextStyle | ImageStyle>;
   onPress?(departure: EstimatedCall): void;
 };
 const NearbyResultItem: React.FC<NearbyResultItemProps> = ({
   departure,
   onPress,
+  style,
 }) => {
   const styles = useResultItemStyles();
 
   return (
     <TouchableOpacity
-      style={styles.itemContainer}
+      style={[styles.itemContainer, style]}
       onPress={() => onPress?.(departure)}
     >
       <Text style={styles.time}>
@@ -168,6 +180,11 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     borderBottomColor: theme.background.level1,
     borderBottomWidth: 1,
   },
+  itemContainer__withoutBorder: {
+    marginBottom: 0,
+    borderBottomWidth: 0,
+    paddingBottom: 0,
+  },
   item: {
     padding: 12,
     backgroundColor: theme.background.level0,
@@ -180,11 +197,12 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     color: theme.text.faded,
   },
   time: {
-    width: 55,
+    width: 50,
     fontSize: 16,
     fontWeight: '600',
     color: theme.text.primary,
     paddingVertical: 4,
+    fontVariant: ['tabular-nums'],
   },
   textContent: {
     flex: 1,
@@ -208,3 +226,34 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     borderBottomWidth: 1,
   },
 }));
+
+type LastElementProps = {
+  last?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
+};
+const LastElement: React.FC<LastElementProps> = ({children, last}) => {
+  const num = React.Children.count(children) - 1;
+  return (
+    <>
+      {React.Children.map(children, (child, i) => {
+        if (React.isValidElement(child) && i == num) {
+          let previous: StyleProp<ViewStyle | TextStyle | ImageStyle> = [];
+          if (hasStyle(child)) {
+            previous = Array.isArray(child.style) ? child.style : [child.style];
+          }
+          return React.cloneElement(child, {
+            style: previous.concat(last),
+          });
+        } else {
+          return child;
+        }
+      })}
+    </>
+  );
+};
+
+type WithStyle = {
+  style?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
+};
+function hasStyle(a: any): a is Required<WithStyle> {
+  return 'style' in a;
+}
