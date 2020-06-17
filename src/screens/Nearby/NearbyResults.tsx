@@ -89,7 +89,7 @@ const StopDepartures: React.FC<StopDeparturesProps> = ({
 
       <View>
         {Object.values(departures.quays).map((quay) => (
-          <View>
+          <View key={quay.quay.id}>
             <View style={styles.platformHeader}>
               <Text>Plattform {quay.quay.publicCode}</Text>
             </View>
@@ -146,7 +146,7 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = ({
         isLive={departure.realtime}
       />
       <View style={styles.textWrapper}>
-        <Text style={styles.textContent}>
+        <Text style={styles.textContent} numberOfLines={1}>
           {getLineNameFromEstimatedCall(departure)}
         </Text>
       </View>
@@ -187,9 +187,11 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     paddingVertical: 4,
   },
   textContent: {
+    flex: 1,
     fontSize: 16,
   },
   textWrapper: {
+    flex: 1,
     color: theme.text.primary,
     marginLeft: 10,
     paddingVertical: 4,
