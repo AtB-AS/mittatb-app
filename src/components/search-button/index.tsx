@@ -7,7 +7,7 @@ import {LocationWithSearchMetadata} from '../../location-search';
 
 type ResultItemProps = {
   title: string;
-  placeholder: string;
+  placeholder?: string;
   onPress: () => void;
   text?: string;
   icon?: JSX.Element;
@@ -34,7 +34,7 @@ const SearchButton: React.FC<ResultItemProps> = ({
         <Text style={styles.title}>{title}</Text>
         <View style={styles.icon}>{icon}</View>
         <Text style={styles.buttonText} numberOfLines={1}>
-          {text ?? placeholder}
+          {text ?? <Text style={{opacity: 0.6}}>{placeholder}</Text>}
         </Text>
       </TouchableOpacity>
     </View>
