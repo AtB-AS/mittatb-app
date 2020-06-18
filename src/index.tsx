@@ -2,6 +2,7 @@ import 'react-native-get-random-values';
 
 import React, {useEffect, useState} from 'react';
 import {enableScreens} from 'react-native-screens';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AppContextProvider from './AppContext';
 import GeolocationContextProvider from './GeolocationContext';
 import NavigationRoot from './navigation';
@@ -41,21 +42,23 @@ const App = () => {
   }
 
   return (
-    <ErrorBoundary>
-      <AppContextProvider>
-        <ThemeContextProvider>
-          <FavoritesContextProvider>
-            <SearchHistoryContextProvider>
-              <GeolocationContextProvider>
-                <RemoteConfigContextProvider>
-                  <NavigationRoot />
-                </RemoteConfigContextProvider>
-              </GeolocationContextProvider>
-            </SearchHistoryContextProvider>
-          </FavoritesContextProvider>
-        </ThemeContextProvider>
-      </AppContextProvider>
-    </ErrorBoundary>
+    <SafeAreaProvider>
+      <ErrorBoundary>
+        <AppContextProvider>
+          <ThemeContextProvider>
+            <FavoritesContextProvider>
+              <SearchHistoryContextProvider>
+                <GeolocationContextProvider>
+                  <RemoteConfigContextProvider>
+                    <NavigationRoot />
+                  </RemoteConfigContextProvider>
+                </GeolocationContextProvider>
+              </SearchHistoryContextProvider>
+            </FavoritesContextProvider>
+          </ThemeContextProvider>
+        </AppContextProvider>
+      </ErrorBoundary>
+    </SafeAreaProvider>
   );
 };
 

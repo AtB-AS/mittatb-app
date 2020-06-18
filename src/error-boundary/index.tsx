@@ -1,29 +1,49 @@
-import React from 'react';
-import {Text, View} from 'react-native';
+import React, {ErrorInfo} from 'react';
 import bugsnag from '../diagnostics/bugsnag';
+import ErrorView from './ErrorView';
 
-export default class ErrorBoundary extends React.Component {
-  state = {
+type State = {
+  hasError: boolean;
+  errorCode?: string;
+  errorCount: number;
+};
+
+export default class ErrorBoundary extends React.Component<{}, State> {
+  state: State = {
     hasError: false,
+    errorCount: 0,
   };
 
-  static getDerivedStateFromError(error: any) {
-    // Update state so the next render will show the fallback UI.
-    return {hasError: true};
+  static getDerivedStateFromError(error: any): State {
+    return {hasError: true, errorCount: 0, errorCode: '1'};
   }
-  componentDidCatch(error: any, errorInfo: any) {
-    // You can also log the error to an error reporting service
-    bugsnag.notify(error);
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    bugsnag.notify(error, function (report) {
+      report.metadata = {
+        ...report.metadata,
+        component: {
+          stack: errorInfo.componentStack,
+        },
+      };
+    });
   }
   render() {
-    if (this.state.hasError) {
-      // You can render any custom fallback UI
+    const {hasError, errorCount, errorCode} = this.state;
+
+    const resetChildrenTree = () =>
+      this.setState((old) => ({
+        hasError: false,
+        errorCount: old.errorCount + 1,
+      }));
+
+    if (hasError) {
       return (
-        <View>
-          <Text>Ooops</Text>
-        </View>
+        <ErrorView onRestartApp={resetChildrenTree} errorCode={errorCode} />
       );
     }
-    return this.props.children;
+    return (
+      <React.Fragment key={errorCount}>{this.props.children}</React.Fragment>
+    );
   }
 }

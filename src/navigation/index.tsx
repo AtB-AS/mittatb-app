@@ -1,7 +1,6 @@
 import React from 'react';
 import {View, StatusBar, Platform} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
 import trackNavigation from '../diagnostics/trackNavigation';
 import {useAppState} from '../AppContext';
 import Onboarding from '../screens/Onboarding';
@@ -41,7 +40,7 @@ const NavigationRoot = () => {
   }
 
   return (
-    <SafeAreaProvider>
+    <>
       <StatusBar
         barStyle={Platform.select({
           ios: 'dark-content',
@@ -129,7 +128,7 @@ const NavigationRoot = () => {
           </SharedStack.Navigator>
         </Host>
       </NavigationContainer>
-    </SafeAreaProvider>
+    </>
   );
 };
 
