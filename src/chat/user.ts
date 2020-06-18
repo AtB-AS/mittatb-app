@@ -1,19 +1,9 @@
 import Intercom from 'react-native-intercom';
-import {Platform, PlatformOSType} from 'react-native';
-import {PermissionStatus} from 'react-native-permissions';
+import {Platform} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import pickBy from 'lodash.pickby';
 import storage from '../storage';
 import {checkGeolocationPermission} from '../GeolocationContext';
-
-type Metadata = {
-  'AtB-Install-Id': string;
-  'AtB-Build-Number': string;
-  'AtB-Device-Type': string;
-  'AtB-Device-Location-Enabled': boolean;
-  'AtB-App-Location-Status': PermissionStatus;
-  'Atb-Platform-OS': PlatformOSType;
-};
+import {updateMetadata} from './metadata';
 
 export async function register() {
   await Intercom.registerUnidentifiedUser();
@@ -32,15 +22,5 @@ export async function register() {
     'AtB-Device-Location-Enabled': isLocationEnabled,
     'AtB-App-Location-Status': appLocationStatus,
     'Atb-Platform-OS': Platform.OS,
-  });
-}
-
-export async function updateMetadata(metadata: Partial<Metadata>) {
-  const custom_attributes = pickBy(metadata, (v) => v !== undefined) as {
-    [key: string]: string;
-  };
-
-  await Intercom.updateUser({
-    custom_attributes,
   });
 }
