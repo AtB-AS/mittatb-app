@@ -5,6 +5,11 @@ import qs from 'query-string';
 import {stringifyUrl} from './utils';
 import {AxiosRequestConfig} from 'axios';
 
+const TRONDHEIM_CENTRAL_STATION = {
+  latitude: 63.43457,
+  longitide: 10.39844,
+};
+
 export async function autocomplete(
   text: string | null,
   location: GeolocationResponse | null,
@@ -13,8 +18,8 @@ export async function autocomplete(
   const url = 'v1/geocoder/features';
   const query = qs.stringify({
     query: text,
-    lat: location?.coords.latitude ?? 63.43457,
-    lon: location?.coords.longitude ?? 10.39844,
+    lat: location?.coords.latitude ?? TRONDHEIM_CENTRAL_STATION.latitude,
+    lon: location?.coords.longitude ?? TRONDHEIM_CENTRAL_STATION.longitide,
     limit: 10,
   });
 
