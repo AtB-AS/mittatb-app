@@ -245,9 +245,7 @@ export function useLocationSearchValue<
   >(defaultLocation && {...defaultLocation, resultType: 'search'});
 
   React.useEffect(() => {
-    if (route.params?.[callerRouteParam]) {
-      setLocation(route.params?.[callerRouteParam]);
-    }
+    setLocation(route.params?.[callerRouteParam]);
   }, [route.params?.[callerRouteParam]]);
 
   return location;
