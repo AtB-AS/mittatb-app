@@ -102,6 +102,14 @@ const Assistant: React.FC<Props> = ({
     });
   }
 
+  const [firstTime, setFirstTime] = useState(true);
+  useEffect(() => {
+    if (firstTime && currentLocation) {
+      setCurrentLocationAsFrom();
+      setFirstTime(false);
+    }
+  }, [currentLocation]);
+
   async function setCurrentLocationOrRequest() {
     if (currentLocation) {
       setCurrentLocationAsFrom();
