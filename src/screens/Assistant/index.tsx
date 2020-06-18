@@ -1,6 +1,6 @@
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState, useRef} from 'react';
 import {View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -102,13 +102,7 @@ const Assistant: React.FC<Props> = ({
     });
   }
 
-  const [firstTime, setFirstTime] = useState(true);
-  useEffect(() => {
-    if (firstTime && currentLocation) {
-      setCurrentLocationAsFrom();
-      setFirstTime(false);
-    }
-  }, [currentLocation]);
+  useDoOnceWhen(setCurrentLocationAsFrom, Boolean(currentLocation));
 
   async function setCurrentLocationOrRequest() {
     if (currentLocation) {
@@ -351,4 +345,14 @@ function useTripPatterns(
   useEffect(reload, [reload]);
 
   return [tripPatterns, isSearching, timeOfSearch, reload];
+}
+
+function useDoOnceWhen(fn: () => void, condition: boolean) {
+  const firstTimeRef = useRef(true);
+  useEffect(() => {
+    if (firstTimeRef.current && condition) {
+      firstTimeRef.current = false;
+      fn();
+    }
+  }, [condition]);
 }
