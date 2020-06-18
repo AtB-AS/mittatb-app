@@ -1,6 +1,6 @@
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useEffect, useMemo, useState, useRef} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -13,7 +13,10 @@ import {LocationButton} from '../../components/search-button';
 import SearchGroup from '../../components/search-button/search-group';
 import {useFavorites} from '../../favorites/FavoritesContext';
 import {Location, UserFavorites} from '../../favorites/types';
-import {useGeolocationState} from '../../GeolocationContext';
+import {
+  useGeolocationState,
+  RequestPermissionFn,
+} from '../../GeolocationContext';
 import {
   LocationWithSearchMetadata,
   useLocationSearchValue,
@@ -46,7 +49,11 @@ type RootProps = {
 };
 
 const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
-  const {status, location} = useGeolocationState();
+  const {
+    status,
+    location,
+    requestPermission: requestGeoPermission,
+  } = useGeolocationState();
 
   const reverseLookupLocations = useReverseGeocoder(location) ?? [];
   const currentLocation = reverseLookupLocations.length
@@ -58,21 +65,42 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
   }
 
   return (
-    <Assistant currentLocation={currentLocation} navigation={navigation} />
+    <Assistant
+      currentLocation={currentLocation}
+      navigation={navigation}
+      requestGeoPermission={requestGeoPermission}
+    />
   );
 };
 
 type Props = {
   currentLocation?: Location;
+  requestGeoPermission: RequestPermissionFn;
   navigation: AssistantScreenNavigationProp;
 };
 
-const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
+const Assistant: React.FC<Props> = ({
+  currentLocation,
+  requestGeoPermission,
+  navigation,
+}) => {
   const styles = useThemeStyles();
 
   const {from, to, swap, setCurrentLocationAsFrom} = useLocations(
     currentLocation,
   );
+
+  async function setCurrentLocationOrRequest() {
+    if (currentLocation) {
+      setCurrentLocationAsFrom();
+    } else {
+      const status = await requestGeoPermission({useSettingsFallback: true});
+      if (status === 'granted') {
+        setCurrentLocationAsFrom();
+      }
+    }
+  }
+
   const [date, setDate] = useState<DateOutput | undefined>();
   const [tripPatterns, isSearching, timeOfLastSearch, reload] = useTripPatterns(
     from,
@@ -111,7 +139,7 @@ const Assistant: React.FC<Props> = ({currentLocation, navigation}) => {
           <TouchableOpacity
             style={styles.clickableIcon}
             hitSlop={insets.all(12)}
-            onPress={setCurrentLocationAsFrom}
+            onPress={setCurrentLocationOrRequest}
           >
             <CurrentLocationArrow />
           </TouchableOpacity>
