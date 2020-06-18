@@ -3,10 +3,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useMemo} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {SharedElement} from 'react-navigation-shared-element';
-import {
-  getNearestDepartures,
-  getDeparturesFromStop,
-} from '../../api/departures';
+import {getDepartures} from '../../api/departures';
 import {LocationButton} from '../../components/search-button';
 import SearchLocationIcon from '../../components/search-location-icon';
 import {Location} from '../../favorites/types';
@@ -18,14 +15,15 @@ import {
 import {useReverseGeocoder} from '../../location-search/useGeocoder';
 import {RootStackParamList} from '../../navigation';
 import Header from '../../ScreenHeader';
-import {EstimatedCall} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import Loading from '../Loading';
 import NearbyResults from './NearbyResults';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import usePollableResource from '../../utils/use-pollable-resource';
 import SearchGroup from '../../components/search-button/search-group';
+import {DeparturesWithStop} from '../../sdk';
 import useChatIcon from '../../chat/use-chat-icon';
+import {View} from 'react-native';
 
 type NearbyRouteName = 'Nearest';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearest';
@@ -105,7 +103,11 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
             title="Fra"
             placeholder="Søk etter adresse eller sted"
             location={fromLocation}
-            icon={<SearchLocationIcon location={fromLocation} />}
+            icon={
+              <View style={{marginLeft: 2}}>
+                <SearchLocationIcon location={fromLocation} />
+              </View>
+            }
             onPress={() => openLocationSearch()}
           />
         </SharedElement>
@@ -141,17 +143,15 @@ export default NearbyScreen;
 function useNearestDepartures(
   location?: Location,
   pollingTimeInSeconds: number = 0,
-): [EstimatedCall[] | null, () => Promise<void>, boolean, Error?] {
+): [DeparturesWithStop[] | null, () => Promise<void>, boolean, Error?] {
   const fetchDepartures = useCallback(
     async function reload() {
       if (!location) return [];
-      return location.layer === 'venue'
-        ? await getDeparturesFromStop(location.id)
-        : await getNearestDepartures(location.coordinates);
+      return getDepartures(location);
     },
     [location?.id],
   );
-  return usePollableResource<EstimatedCall[] | null>(fetchDepartures, {
+  return usePollableResource<DeparturesWithStop[] | null>(fetchDepartures, {
     initialValue: null,
     pollingTimeInSeconds,
   });

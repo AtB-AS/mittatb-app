@@ -1,19 +1,26 @@
 import React from 'react';
-import {RefreshControl, Text, View} from 'react-native';
+import {
+  RefreshControl,
+  Text,
+  View,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
+  ImageStyle,
+} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import RealTimeLocationIcon from '../../components/location-icon/real-time';
-import {EstimatedCall} from '../../sdk';
+import {EstimatedCall, DeparturesWithStop, StopPlaceDetails} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {formatToClock} from '../../utils/date';
-import {
-  getLineNameFromEstimatedCall,
-  getQuayName,
-} from '../../utils/transportation-names';
+import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
 import {useNavigation} from '@react-navigation/native';
 import {NearbyScreenNavigationProp} from '.';
+import {useGeolocationState} from '../../GeolocationContext';
+import haversine from 'haversine-distance';
 
 type NearbyResultsProps = {
-  departures: EstimatedCall[] | null;
+  departures: DeparturesWithStop[] | null;
   onRefresh?(): void;
   isRefreshing?: boolean;
 };
@@ -33,7 +40,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
     });
   };
 
-  if (departures !== null && departures.length == 0) {
+  if (departures !== null && Object.keys(departures).length == 0) {
     return (
       <View style={[styles.container, styles.noDepartures]}>
         <Text>Fant ingen avganger i nærheten</Text>
@@ -41,16 +48,18 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
     );
   }
 
+  if (departures === null) {
+    return null;
+  }
+
   return (
     <FlatList
       style={styles.container}
       data={departures}
       renderItem={({item}) => (
-        <NearbyResultItem departure={item} onPress={onPress} />
+        <StopDepartures departures={item} onPress={onPress} />
       )}
-      keyExtractor={(departure) =>
-        departure.quay?.id + departure.serviceJourney.id
-      }
+      keyExtractor={(departure) => departure.stop.id}
       refreshControl={
         <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
       }
@@ -68,19 +77,77 @@ const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
 
 export default NearbyResults;
 
+type StopDeparturesProps = {
+  departures: DeparturesWithStop;
+  onPress?(departure: EstimatedCall): void;
+};
+const StopDepartures: React.FC<StopDeparturesProps> = ({
+  departures,
+  onPress,
+}) => {
+  const styles = useResultItemStyles();
+
+  if (!Object.keys(departures.quays).length) {
+    return null;
+  }
+
+  return (
+    <View style={styles.item}>
+      <ItemHeader stop={departures.stop} />
+
+      <View>
+        {Object.values(departures.quays).map((quay) => (
+          <View key={quay.quay.id}>
+            <View style={styles.platformHeader}>
+              <Text>Plattform {quay.quay.publicCode}</Text>
+            </View>
+            <LastElement last={styles.itemContainer__withoutBorder}>
+              {quay.departures.map((departure) => (
+                <NearbyResultItem
+                  departure={departure}
+                  onPress={onPress}
+                  key={departure.serviceJourney.id}
+                />
+              ))}
+            </LastElement>
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+};
+
+const ItemHeader: React.FC<{
+  stop: StopPlaceDetails;
+}> = ({stop}) => {
+  const {location} = useGeolocationState();
+  const styles = useResultItemStyles();
+
+  return (
+    <View style={styles.resultHeader}>
+      <Text>{stop.name}</Text>
+      <Text>
+        {location ? humanizeDistance(haversine(location.coords, stop)) : ''}
+      </Text>
+    </View>
+  );
+};
+
 type NearbyResultItemProps = {
   departure: EstimatedCall;
+  style?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
   onPress?(departure: EstimatedCall): void;
 };
 const NearbyResultItem: React.FC<NearbyResultItemProps> = ({
   departure,
   onPress,
+  style,
 }) => {
   const styles = useResultItemStyles();
 
   return (
     <TouchableOpacity
-      style={styles.container}
+      style={[styles.itemContainer, style]}
       onPress={() => onPress?.(departure)}
     >
       <Text style={styles.time}>
@@ -91,11 +158,8 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = ({
         isLive={departure.realtime}
       />
       <View style={styles.textWrapper}>
-        <Text style={styles.textContent}>
+        <Text style={styles.textContent} numberOfLines={1}>
           {getLineNameFromEstimatedCall(departure)}
-        </Text>
-        <Text style={[styles.textContent, styles.label]}>
-          Fra {getQuayName(departure.quay)}
         </Text>
       </View>
     </TouchableOpacity>
@@ -108,23 +172,95 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'flex-start',
     marginBottom: 24,
   },
+  itemContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    paddingBottom: 12,
+    marginBottom: 12,
+    borderBottomColor: theme.background.level1,
+    borderBottomWidth: 1,
+  },
+  itemContainer__withoutBorder: {
+    marginBottom: 0,
+    borderBottomWidth: 0,
+    paddingBottom: 0,
+  },
+  item: {
+    padding: 12,
+    backgroundColor: theme.background.level0,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  platformHeader: {
+    marginTop: 8,
+    marginBottom: 12,
+    color: theme.text.faded,
+  },
   time: {
-    width: 55,
+    width: 50,
     fontSize: 16,
     fontWeight: '600',
     color: theme.text.primary,
     paddingVertical: 4,
+    fontVariant: ['tabular-nums'],
   },
   textContent: {
+    flex: 1,
     fontSize: 16,
   },
   textWrapper: {
-    fontSize: 16,
+    flex: 1,
     color: theme.text.primary,
-    paddingVertical: 4,
     marginLeft: 10,
+    paddingVertical: 4,
   },
   label: {
     fontSize: 12,
   },
+  resultHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingBottom: 9,
+    marginBottom: 9,
+    borderBottomColor: theme.background.level1,
+    borderBottomWidth: 1,
+  },
 }));
+
+type LastElementProps = {
+  last?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
+};
+const LastElement: React.FC<LastElementProps> = ({children, last}) => {
+  const num = React.Children.count(children) - 1;
+  return (
+    <>
+      {React.Children.map(children, (child, i) => {
+        if (React.isValidElement(child) && i == num) {
+          let previous: StyleProp<ViewStyle | TextStyle | ImageStyle> = [];
+          if (hasStyle(child)) {
+            previous = Array.isArray(child.style) ? child.style : [child.style];
+          }
+          return React.cloneElement(child, {
+            style: previous.concat(last),
+          });
+        } else {
+          return child;
+        }
+      })}
+    </>
+  );
+};
+
+type WithStyle = {
+  style?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
+};
+function hasStyle(a: any): a is Required<WithStyle> {
+  return 'style' in a;
+}
+
+function humanizeDistance(distanceInMeters: number): string {
+  if (distanceInMeters >= 1000) {
+    return Math.round(distanceInMeters / 1000) + ' km';
+  }
+  return Math.ceil(distanceInMeters) + 'm';
+}
