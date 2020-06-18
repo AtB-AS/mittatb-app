@@ -8,6 +8,7 @@ import useChatIcon from '../chat/use-chat-icon';
 import colors from '../theme/colors';
 import {CrashParachute} from '../assets/svg/illustrations';
 import Button from '../components/button';
+import useLocalConfig from '../utils/use-local-config';
 
 type ErrorProps = {
   onRestartApp: () => void;
@@ -17,6 +18,7 @@ type ErrorProps = {
 const ErrorView: React.FC<ErrorProps> = ({onRestartApp, errorCode}) => {
   const {icon: chatIcon, openChat} = useChatIcon();
   const buildNumber = getBuildNumber();
+  const config = useLocalConfig();
 
   return (
     <SafeAreaView style={styles.safearea}>
@@ -49,6 +51,7 @@ const ErrorView: React.FC<ErrorProps> = ({onRestartApp, errorCode}) => {
         <View style={{alignItems: 'center'}}>
           {errorCode && <Text>Feilkode: {errorCode}</Text>}
           <Text>Build-id: {buildNumber}</Text>
+          {config?.installId && <Text>Id: {config.installId}</Text>}
         </View>
       </View>
     </SafeAreaView>
