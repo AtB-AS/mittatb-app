@@ -1,14 +1,15 @@
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {View, Text} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useState, useRef} from 'react';
+import {View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {SharedElement} from 'react-navigation-shared-element';
 import {searchTrip} from '../../api';
 import {CancelToken, isCancel} from '../../api/client';
-import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import {Swap} from '../../assets/svg/icons/actions';
+import {CurrentLocationArrow} from '../../assets/svg/icons/places';
+import useChatIcon from '../../chat/use-chat-icon';
 import {LocationButton} from '../../components/search-button';
 import SearchGroup from '../../components/search-button/search-group';
 import {useFavorites} from '../../favorites/FavoritesContext';
@@ -29,9 +30,8 @@ import {TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import insets from '../../utils/insets';
 import Loading from '../Loading';
-import Results from './Results';
-import useChatIcon from '../../chat/use-chat-icon';
 import DateInput, {DateOutput} from './DateInput';
+import Results from './Results';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -86,9 +86,23 @@ const Assistant: React.FC<Props> = ({
 }) => {
   const styles = useThemeStyles();
 
-  const {from, to, swap, setCurrentLocationAsFrom} = useLocations(
-    currentLocation,
-  );
+  const {from, to} = useLocations(currentLocation);
+
+  function swap() {
+    navigation.setParams({fromLocation: to, toLocation: from});
+  }
+
+  function setCurrentLocationAsFrom() {
+    navigation.setParams({
+      fromLocation: currentLocation && {
+        ...currentLocation,
+        resultType: 'geolocation',
+      },
+      toLocation: to,
+    });
+  }
+
+  useDoOnceWhen(setCurrentLocationAsFrom, Boolean(currentLocation));
 
   async function setCurrentLocationOrRequest() {
     if (currentLocation) {
@@ -210,12 +224,7 @@ type Locations = {
   to: LocationWithSearchMetadata | undefined;
 };
 
-type LocationHookData = Locations & {
-  swap(): void;
-  setCurrentLocationAsFrom(): void;
-};
-
-function useLocations(currentLocation: Location | undefined): LocationHookData {
+function useLocations(currentLocation: Location | undefined): Locations {
   const {favorites} = useFavorites();
 
   const memoedCurrentLocation = useMemo<LocationWithSearchMetadata | undefined>(
@@ -225,11 +234,6 @@ function useLocations(currentLocation: Location | undefined): LocationHookData {
       currentLocation?.coordinates.longitude,
     ],
   );
-
-  const [stored, updateFromTo] = useState<Locations>({
-    from: memoedCurrentLocation,
-    to: undefined,
-  });
 
   const searchedFromLocation = useLocationSearchValue<AssistantRouteProp>(
     'fromLocation',
@@ -250,33 +254,9 @@ function useLocations(currentLocation: Location | undefined): LocationHookData {
     favorites,
   );
 
-  useEffect(
-    function () {
-      updateFromTo({
-        from: from ?? stored.from ?? memoedCurrentLocation,
-        to: to ?? stored.to,
-      });
-    },
-    [from, to, memoedCurrentLocation],
-  );
-
-  const swap = () =>
-    updateFromTo({
-      to: stored.from,
-      from: stored.to,
-    });
-
-  const setCurrentLocationAsFrom = () =>
-    updateFromTo({
-      from: memoedCurrentLocation,
-      to: stored.to,
-    });
-
   return {
-    from: stored.from,
-    to: stored.to,
-    swap,
-    setCurrentLocationAsFrom,
+    from,
+    to,
   };
 }
 
@@ -365,4 +345,14 @@ function useTripPatterns(
   useEffect(reload, [reload]);
 
   return [tripPatterns, isSearching, timeOfSearch, reload];
+}
+
+function useDoOnceWhen(fn: () => void, condition: boolean) {
+  const firstTimeRef = useRef(true);
+  useEffect(() => {
+    if (firstTimeRef.current && condition) {
+      firstTimeRef.current = false;
+      fn();
+    }
+  }, [condition]);
 }
