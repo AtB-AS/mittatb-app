@@ -14,7 +14,7 @@ import {
 } from 'react-native-permissions';
 import bugsnag from './diagnostics/bugsnag';
 import {useAppStateStatus} from './utils/use-app-state-status';
-import {updateMetadata as updateChatUserMetadata} from './chat/user';
+import {updateMetadata as updateChatUserMetadata} from './chat/metadata';
 
 type GeolocationState = {
   status: PermissionStatus | null;
