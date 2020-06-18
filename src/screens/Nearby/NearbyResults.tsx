@@ -96,22 +96,24 @@ const StopDepartures: React.FC<StopDeparturesProps> = ({
       <ItemHeader stop={departures.stop} />
 
       <View>
-        {Object.values(departures.quays).map((quay) => (
-          <View key={quay.quay.id}>
-            <View style={styles.platformHeader}>
-              <Text>Plattform {quay.quay.publicCode}</Text>
+        <LastElement last={styles.stopContainer__withoutBorder}>
+          {Object.values(departures.quays).map((quay) => (
+            <View key={quay.quay.id} style={styles.stopContainer}>
+              <View style={styles.platformHeader}>
+                <Text>Plattform {quay.quay.publicCode}</Text>
+              </View>
+              <LastElement last={styles.itemContainer__withoutBorder}>
+                {quay.departures.map((departure) => (
+                  <NearbyResultItem
+                    departure={departure}
+                    onPress={onPress}
+                    key={departure.serviceJourney.id}
+                  />
+                ))}
+              </LastElement>
             </View>
-            <LastElement last={styles.itemContainer__withoutBorder}>
-              {quay.departures.map((departure) => (
-                <NearbyResultItem
-                  departure={departure}
-                  onPress={onPress}
-                  key={departure.serviceJourney.id}
-                />
-              ))}
-            </LastElement>
-          </View>
-        ))}
+          ))}
+        </LastElement>
       </View>
     </View>
   );
@@ -192,9 +194,9 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: 12,
   },
   platformHeader: {
-    marginTop: 8,
     marginBottom: 12,
     color: theme.text.faded,
+    fontSize: 12,
   },
   time: {
     width: 50,
@@ -221,9 +223,15 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingBottom: 9,
-    marginBottom: 9,
     borderBottomColor: theme.background.level1,
     borderBottomWidth: 1,
+  },
+
+  stopContainer__withoutBorder: {
+    marginBottom: 0,
+  },
+  stopContainer: {
+    marginVertical: 20,
   },
 }));
 
