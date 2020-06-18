@@ -8,20 +8,22 @@ export function getLineName(leg: Leg) {
     : 'Ukjent';
 }
 
-export function getLineNameFromEstimatedCall(call: EstimatedCall) {
-  const suffix =
+export function getLineNameFromEstimatedCall(
+  call: EstimatedCall,
+): {publicCode?: string; name: string} {
+  const name =
     call.destinationDisplay?.frontText ??
     call.serviceJourney.journeyPattern?.line.name;
 
   const publicCode = call.serviceJourney.journeyPattern?.line.publicCode;
 
-  if (!publicCode && !suffix) {
-    return 'Ukjent';
+  if (!publicCode && !name) {
+    return {name: 'Ukjent'};
   }
   if (!publicCode) {
-    return suffix;
+    return {name};
   }
-  return `${publicCode} ${suffix}`;
+  return {publicCode, name};
 }
 
 export function getQuayName(quay?: Quay, defaultName: string = 'Ukjent') {
