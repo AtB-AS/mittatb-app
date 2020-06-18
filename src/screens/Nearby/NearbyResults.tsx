@@ -127,7 +127,7 @@ const ItemHeader: React.FC<{
     <View style={styles.resultHeader}>
       <Text>{stop.name}</Text>
       <Text>
-        {location ? Math.ceil(haversine(location.coords, stop)) + ' m' : ''}
+        {location ? humanizeDistance(haversine(location.coords, stop)) : ''}
       </Text>
     </View>
   );
@@ -256,4 +256,11 @@ type WithStyle = {
 };
 function hasStyle(a: any): a is Required<WithStyle> {
   return 'style' in a;
+}
+
+function humanizeDistance(distanceInMeters: number): string {
+  if (distanceInMeters >= 1000) {
+    return Math.round(distanceInMeters / 1000) + ' km';
+  }
+  return Math.ceil(distanceInMeters) + 'm';
 }
