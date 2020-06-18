@@ -6,7 +6,7 @@ import {AxiosRequestConfig} from 'axios';
 export async function getNearestDepartures(
   coords: Coordinates,
 ): Promise<EstimatedCall[]> {
-  let url = `v1/departures/nearest?lat=${coords.latitude}&lon=${coords.longitude}`;
+  let url = `/v1/departures/nearest?lat=${coords.latitude}&lon=${coords.longitude}`;
   const response = await client.get<EstimatedCall[]>(url);
   return response.data ?? [];
 }
@@ -24,7 +24,7 @@ export async function getDepartures(
   limit: number = 5,
   opts?: AxiosRequestConfig,
 ): Promise<DeparturesWithStop[]> {
-  let url = `/v1/departures?limit=${limit}`;
+  let url = `/v1/departures-from-location?limit=${limit}`;
   const response = await client.post<DeparturesWithStop[]>(url, location, opts);
   return response.data ?? [];
 }
