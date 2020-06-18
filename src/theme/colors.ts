@@ -26,9 +26,9 @@ const colors = {
     white: '#ffffff',
     gray: '#D7D9DB',
     gray200: '#AFB3B7',
+    gray400: '#5F686E',
     black: '#000000',
     offblack: '#111416',
-    lightGray: 'rgba(0, 0, 0, 0.6)',
   },
 };
 
@@ -77,7 +77,7 @@ export const themes: Themes = {
     text: {
       primary: colors.general.black,
       destructive: colors.general.white,
-      faded: colors.general.lightGray,
+      faded: colors.general.gray400,
     },
     border: {
       primary: colors.primary.gray,
@@ -96,7 +96,7 @@ export const themes: Themes = {
     text: {
       primary: colors.general.white,
       destructive: colors.general.white,
-      faded: colors.general.lightGray,
+      faded: colors.general.gray400,
     },
     border: {
       primary: colors.primary.gray,
