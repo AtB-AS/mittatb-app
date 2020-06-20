@@ -226,9 +226,9 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     fontSize: 16,
   },
   line: {
-    marginVertical: 36,
+    marginBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: theme.border.primary,
+    borderBottomColor: colors.general.gray,
   },
   lineNoMarginTop: {
     marginTop: 0,
