@@ -10,7 +10,6 @@ import {
 } from '@react-navigation/native';
 import {StyleSheet} from '../theme';
 import {Location} from '../favorites/types';
-import {Search} from '../assets/svg/icons/actions';
 import useDebounce from './useDebounce';
 import {useGeocoder} from './useGeocoder';
 import LocationResults from './LocationResults';
@@ -21,6 +20,8 @@ import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
 import {Close} from '../assets/svg/icons/actions';
 import insets from '../utils/insets';
+import colors from '../theme/colors';
+import Input from '../components/input';
 
 export type Props = {
   navigation: NavigationProp<any>;
@@ -30,6 +31,7 @@ export type Props = {
 export type RouteParams = {
   callerRouteName: string;
   callerRouteParam: string;
+  label: string;
   hideFavorites?: boolean;
   initialText?: string;
 };
@@ -37,7 +39,13 @@ export type RouteParams = {
 const LocationSearch: React.FC<Props> = ({
   navigation,
   route: {
-    params: {callerRouteName, callerRouteParam, hideFavorites, initialText},
+    params: {
+      callerRouteName,
+      callerRouteParam,
+      label,
+      hideFavorites,
+      initialText,
+    },
   },
 }) => {
   const styles = useThemeStyles();
@@ -92,34 +100,21 @@ const LocationSearch: React.FC<Props> = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.contentBlock}>
-        <Text style={styles.label}>Adresse eller stoppested</Text>
-        <SharedElement id="locationSearchInput">
-          <View style={styles.inputContainer}>
-            <TextInput
-              ref={inputRef}
-              style={styles.input}
-              value={text}
-              onChangeText={setText}
-              placeholder="Søk etter adresse eller stoppested"
-              autoCorrect={false}
-              autoCompleteType="off"
-              placeholderTextColor={(styles.placeholder as TextStyle).color}
-            />
-            <Search style={styles.searchIcon} />
-            {text?.length ? (
-              <View style={styles.searchClear}>
-                <TouchableOpacity
-                  hitSlop={insets.all(8)}
-                  onPress={() => setText('')}
-                >
-                  <Close />
-                </TouchableOpacity>
-              </View>
-            ) : null}
-          </View>
-        </SharedElement>
-      </View>
+      <SharedElement id="locationSearchInput">
+        <View style={styles.contentBlock}>
+          <Input
+            ref={inputRef}
+            label={label}
+            value={text}
+            onChangeText={setText}
+            showClear={Boolean(text?.length)}
+            onClear={() => setText('')}
+            placeholder="Søk etter adresse eller stoppested"
+            autoCorrect={false}
+            autoCompleteType="off"
+          />
+        </View>
+      </SharedElement>
 
       <FavoriteChips
         onSelectLocation={onSelect}
@@ -189,8 +184,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.sizes.pagePadding,
   },
   label: {
-    fontSize: 12,
-    marginBottom: 8,
+    fontSize: 14,
+    lineHeight: 20,
+    position: 'absolute',
+    left: 12,
   },
   placeholder: {
     color: theme.text.faded,
@@ -198,27 +195,23 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   inputContainer: {
     width: '100%',
     height: 46,
-    flexDirection: 'row',
+    flexDirection: 'column',
     marginBottom: 24,
+    justifyContent: 'center',
   },
   input: {
     flex: 1,
     fontSize: 16,
-    paddingLeft: 44,
+    paddingLeft: 60,
     backgroundColor: theme.background.level1,
-    borderBottomWidth: 2,
+    borderWidth: 1,
+    borderColor: colors.general.gray,
     borderRadius: 4,
-    borderBottomColor: theme.border.primary,
     color: theme.text.primary,
   },
   searchIcon: {
     position: 'absolute',
     left: 14,
-    alignSelf: 'center',
-  },
-  searchClear: {
-    position: 'absolute',
-    right: 14,
     alignSelf: 'center',
   },
 }));

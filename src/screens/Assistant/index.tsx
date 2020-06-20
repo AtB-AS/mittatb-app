@@ -128,6 +128,7 @@ const Assistant: React.FC<Props> = ({
     initialText: string | undefined,
   ) =>
     navigation.navigate('LocationSearch', {
+      label: callerRouteParam === 'fromLocation' ? 'Fra' : 'Til',
       callerRouteName: AssistantRouteNameStatic,
       callerRouteParam,
       initialText,
