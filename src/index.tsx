@@ -2,6 +2,7 @@ import 'react-native-get-random-values';
 
 import React, {useEffect, useState} from 'react';
 import {enableScreens} from 'react-native-screens';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AppContextProvider from './AppContext';
 import GeolocationContextProvider from './GeolocationContext';
 import NavigationRoot from './navigation';
@@ -11,6 +12,15 @@ import FavoritesContextProvider from './favorites/FavoritesContext';
 import SearchHistoryContextProvider from './search-history';
 import RemoteConfigContextProvider from './RemoteConfigContext';
 import {loadLocalConfig} from './local-config';
+import bugsnag from './diagnostics/bugsnag';
+import {setInstallId as setApiInstallId} from './api/client';
+import ErrorBoundary from './error-boundary';
+
+async function setupConfig() {
+  const {installId} = await loadLocalConfig();
+  bugsnag.setUser(installId);
+  setApiInstallId(installId);
+}
 
 trackAppState();
 enableScreens();
@@ -19,12 +29,12 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function run() {
-      await loadLocalConfig();
+    async function config() {
+      await setupConfig();
       setIsLoading(false);
     }
 
-    run();
+    config();
   }, []);
 
   if (isLoading) {
@@ -32,19 +42,23 @@ const App = () => {
   }
 
   return (
-    <AppContextProvider>
-      <ThemeContextProvider>
-        <FavoritesContextProvider>
-          <SearchHistoryContextProvider>
-            <GeolocationContextProvider>
-              <RemoteConfigContextProvider>
-                <NavigationRoot />
-              </RemoteConfigContextProvider>
-            </GeolocationContextProvider>
-          </SearchHistoryContextProvider>
-        </FavoritesContextProvider>
-      </ThemeContextProvider>
-    </AppContextProvider>
+    <SafeAreaProvider>
+      <ErrorBoundary>
+        <AppContextProvider>
+          <ThemeContextProvider>
+            <FavoritesContextProvider>
+              <SearchHistoryContextProvider>
+                <GeolocationContextProvider>
+                  <RemoteConfigContextProvider>
+                    <NavigationRoot />
+                  </RemoteConfigContextProvider>
+                </GeolocationContextProvider>
+              </SearchHistoryContextProvider>
+            </FavoritesContextProvider>
+          </ThemeContextProvider>
+        </AppContextProvider>
+      </ErrorBoundary>
+    </SafeAreaProvider>
   );
 };
 
