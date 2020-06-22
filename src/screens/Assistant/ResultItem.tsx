@@ -1,4 +1,3 @@
-import nb from 'date-fns/locale/nb';
 import React from 'react';
 import {Text, View} from 'react-native';
 import {Leg, TripPattern} from '../../sdk';
@@ -6,7 +5,9 @@ import {StyleSheet} from '../../theme';
 import {
   formatToClock,
   secondsToDuration,
-  secondsToDurationExact,
+  secondsToDurationShort,
+  secondsBetween,
+  secondsToMinutesShort,
 } from '../../utils/date';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import RealTimeLocationIcon from '../../components/location-icon/real-time';
@@ -15,6 +16,7 @@ import {WalkingPerson} from '../../assets/svg/icons/transportation';
 import {DestinationFlag} from '../../assets/svg/icons/places';
 import {LegMode} from '@entur/sdk';
 import colors from '../../theme/colors';
+import {Duration} from '../../assets/svg/icons/transportation';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -42,7 +44,7 @@ const ResultItemHeader: React.FC<{
           tripPattern.legs[0]?.fromPlace.name ??
           'Ukjent holdeplass'}
       </Text>
-      <Text>{secondsToDurationExact(tripPattern.duration)}</Text>
+      <Text>{secondsToDurationShort(tripPattern.duration)}</Text>
     </View>
   );
 };
@@ -65,9 +67,15 @@ const ResultItem: React.FC<ResultItemProps> = ({
         <ResultItemHeader tripPattern={tripPattern} />
 
         <View style={styles.detailsContainer}>
-          {tripPattern.legs.map(function (leg) {
+          {tripPattern.legs.map(function (leg, i) {
             if (leg.mode === 'foot') {
-              return <FootLeg key={leg.fromPlace.latitude} leg={leg} />;
+              return (
+                <FootLeg
+                  key={leg.fromPlace.latitude}
+                  leg={leg}
+                  nextLeg={tripPattern.legs[i + 1]}
+                />
+              );
             }
             return <TransportationLeg key={leg.serviceJourney.id} leg={leg} />;
           })}
@@ -116,8 +124,35 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-const FootLeg = ({leg}: {leg: Leg}) => {
+const MINIMUM_WAIT_IN_SECONDS = 30;
+
+const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   const styles = useLegStyles();
+  const showWaitTime = Boolean(nextLeg);
+  const waitTimeInSeconds = !nextLeg
+    ? 0
+    : secondsBetween(leg.expectedEndTime, nextLeg?.expectedStartTime);
+  const isWalkTimeOfSignificance = leg.duration > MINIMUM_WAIT_IN_SECONDS;
+  const isWaitTimeOfSignificance =
+    showWaitTime && waitTimeInSeconds > MINIMUM_WAIT_IN_SECONDS;
+
+  if (!isWalkTimeOfSignificance && !isWaitTimeOfSignificance) {
+    return null;
+  }
+
+  if (!isWalkTimeOfSignificance && isWaitTimeOfSignificance) {
+    return (
+      <View style={styles.legContainer}>
+        <WaitRow time={waitTimeInSeconds} />
+      </View>
+    );
+  }
+
+  const walkTime = secondsToDuration(leg.duration ?? 0);
+  const text = !isWaitTimeOfSignificance
+    ? `Gå ${walkTime}`
+    : `Gå ${walkTime}. Vent ${secondsToDuration(waitTimeInSeconds)}`;
+
   return (
     <View style={styles.legContainer}>
       <Text style={[styles.textDeprioritized, styles.time]}>
@@ -126,12 +161,43 @@ const FootLeg = ({leg}: {leg: Leg}) => {
       <View style={styles.iconContainer}>
         <WalkingPerson fill={colors.general.black} opacity={0.6} />
       </View>
-      <Text style={styles.textDeprioritized}>
-        {secondsToDuration(leg.duration ?? 0, nb)}
-      </Text>
+      <Text style={styles.textDeprioritized}>{text}</Text>
     </View>
   );
 };
+
+function WaitRow({time}: {time: number}) {
+  const styles = useWaitStyles();
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.textContainer}>
+        <Text style={styles.text}>{secondsToMinutesShort(time)}</Text>
+      </View>
+      <View style={styles.iconContainer}>
+        <Duration fill={colors.general.black} opacity={0.6} />
+      </View>
+    </View>
+  );
+}
+
+const useWaitStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textContainer: {
+    width: 50,
+  },
+  text: {
+    fontSize: 12,
+    opacity: 0.6,
+  },
+  iconContainer: {
+    width: 30,
+    alignItems: 'center',
+  },
+}));
 
 const useLegStyles = StyleSheet.createThemeHook((theme) => ({
   legContainer: {

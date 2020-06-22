@@ -2,7 +2,6 @@ import React from 'react';
 import {View, Text, StyleSheet, RefreshControl} from 'react-native';
 import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {nb} from 'date-fns/locale';
 import {TicketingStackParams} from '../';
 import {secondsToDuration} from '../../../utils/date';
 import {ArrowRight} from '../../../assets/svg/icons/navigation';
@@ -32,7 +31,7 @@ const Tickets: React.FC<Props> = ({navigation}) => {
           <View key={i} style={styles.ticketContainer}>
             <View style={styles.ticketLineContainer}>
               <Text style={styles.textItem}>
-                {secondsToDuration(fc.duration, nb)} - {fc.product_name}
+                {secondsToDuration(fc.duration)} - {fc.product_name}
               </Text>
               <Expand />
             </View>

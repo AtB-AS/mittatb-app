@@ -1,5 +1,4 @@
 import {
-  formatDistanceToNowStrict,
   Locale,
   parseISO,
   format,
@@ -23,17 +22,29 @@ const shortHumanizer = humanizeDuration.humanizer({
     },
   },
 });
-export function secondsToDurationExact(seconds: number): string {
+
+export function secondsToDurationShort(seconds: number): string {
   return shortHumanizer(seconds * 1000, {
     units: ['d', 'h', 'm'],
     round: true,
   });
 }
 
-export function secondsToDuration(seconds: number, locale?: Locale): string {
-  return formatDistanceToNowStrict(Date.now() + seconds * 1000, {
-    locale,
-    onlyNumeric: true,
+export function secondsToMinutesShort(seconds: number): string {
+  return shortHumanizer(seconds * 1000, {
+    units: ['m'],
+    round: true,
+  });
+}
+
+export function secondsToDuration(
+  seconds: number,
+  language: string = 'no',
+): string {
+  return humanizeDuration(seconds * 1000, {
+    units: ['d', 'h', 'm'],
+    round: true,
+    language,
   });
 }
 

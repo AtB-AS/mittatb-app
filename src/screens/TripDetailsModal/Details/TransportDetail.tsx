@@ -1,23 +1,17 @@
-import React, {useEffect} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React from 'react';
+import {View, StyleSheet} from 'react-native';
 import Dash from 'react-native-dash';
 import colors from '../../../theme/colors';
-import {
-  formatToClock,
-  secondsToDuration,
-  secondsBetween,
-} from '../../../utils/date';
-import nb from 'date-fns/locale/nb';
+import {formatToClock} from '../../../utils/date';
 import {Dot} from '../../../assets/svg/icons/other';
 import LocationRow from '../LocationRow';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {LegDetailProps, DetailScreenNavigationProp} from '.';
 import {useNavigation} from '@react-navigation/core';
-import {Duration} from '../../../assets/svg/icons/transportation';
-import {Leg} from '../../../sdk';
 import RealTimeLocationIcon from '../../../components/location-icon/real-time';
 import {getQuayName, getLineName} from '../../../utils/transportation-names';
 import {getAimedTimeIfLargeDifference} from '../utils';
+import WaitRow from './WaitRow';
 
 const TransportDetail: React.FC<LegDetailProps> = ({
   leg,
@@ -119,48 +113,3 @@ const styles = StyleSheet.create({
 });
 
 export default TransportDetail;
-
-type WaitRowProps = {
-  onCalculateTime(seconds: number): void;
-  currentLeg: Leg;
-  nextLeg: Leg;
-};
-function WaitRow({onCalculateTime, currentLeg, nextLeg}: WaitRowProps) {
-  const time = secondsBetween(
-    currentLeg.expectedEndTime,
-    nextLeg.expectedStartTime,
-  );
-
-  useEffect(() => {
-    onCalculateTime(time);
-  }, [time]);
-
-  return (
-    <View style={waitStyles.container}>
-      <View style={waitStyles.textContainer}>
-        <Text style={waitStyles.text}>{formatTime(time)}</Text>
-      </View>
-      <Duration fill={colors.general.gray200} />
-    </View>
-  );
-}
-function formatTime(time: number) {
-  // Show 'minutter' -> 'min'. Found no way to do this through date-fns.
-  return secondsToDuration(time, nb).replace('utter', '').replace('utt', '');
-}
-const waitStyles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    marginTop: 12,
-    marginBottom: 12,
-  },
-  textContainer: {
-    width: 70,
-    marginRight: 12,
-    alignItems: 'flex-end',
-  },
-  text: {
-    fontSize: 12,
-    opacity: 0.6,
-  },
-});
