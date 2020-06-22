@@ -136,6 +136,10 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   const isWaitTimeOfSignificance =
     showWaitTime && waitTimeInSeconds > MINIMUM_WAIT_IN_SECONDS;
 
+  if (!isWalkTimeOfSignificance && !isWaitTimeOfSignificance) {
+    return null;
+  }
+
   if (!isWalkTimeOfSignificance && isWaitTimeOfSignificance) {
     return (
       <View style={styles.legContainer}>
