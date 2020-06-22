@@ -198,6 +198,7 @@ const Assistant: React.FC<Props> = ({
             from: from!,
             to: to!,
             tripPatternId: tripPattern.id!,
+            tripPattern: tripPattern,
           })
         }
       />
