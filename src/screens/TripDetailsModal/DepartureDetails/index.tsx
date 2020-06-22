@@ -12,7 +12,7 @@ import ScreenHeader from '../../../ScreenHeader';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Dash from 'react-native-dash';
 import {getDepartures} from '../../../api/serviceJourney';
-import {UnfoldLess, UnfoldMore} from '../../../assets/svg/icons/navigation';
+import {Expand, ExpandLess} from '../../../assets/svg/icons/navigation';
 import {ArrowLeft} from '../../../assets/svg/icons/navigation';
 import {Close} from '../../../assets/svg/icons/actions';
 import RealTimeLocationIcon from '../../../components/location-icon/real-time';
@@ -126,14 +126,15 @@ function CallGroup({type, calls}: CallGroupProps) {
 
   return (
     <View>
-      <Dash
-        dashGap={4}
-        dashThickness={8}
-        dashLength={8}
-        dashColor={dashColor}
-        style={styles.dash}
-        dashStyle={{borderRadius: 50}}
-      />
+      <View style={styles.dashContainer}>
+        <Dash
+          dashGap={0}
+          dashThickness={8}
+          dashLength={8}
+          dashColor={dashColor}
+          style={styles.dash}
+        />
+      </View>
 
       {items.map((call, i) => (
         <Fragment key={call.quay?.id + call.serviceJourney.id}>
@@ -146,7 +147,7 @@ function CallGroup({type, calls}: CallGroupProps) {
                   isLive={call.realtime}
                 />
               ) : (
-                <Dot fill={dashColor} style={{margin: 4}} />
+                <Dot fill={dashColor} style={{marginHorizontal: 4}} />
               )
             }
             iconContainerStyle={{paddingVertical: 2}}
@@ -166,6 +167,7 @@ function CallGroup({type, calls}: CallGroupProps) {
               styles.textStyle,
               !isOnRoute ? styles.textStyleFaded : undefined,
             ]}
+            dashThroughIcon={true}
           />
           {i === 0 && collapseButton}
         </Fragment>
@@ -188,12 +190,12 @@ function CollapseButtonRow({
   const text = <Text style={styles.text}>{numberOfStops} Mellomstopp</Text>;
   const child = collapsed ? (
     <>
-      <UnfoldMore />
+      <Expand />
       {text}
     </>
   ) : (
     <>
-      <UnfoldLess />
+      <ExpandLess />
       {text}
     </>
   );
@@ -224,14 +226,18 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     marginBottom: 250,
   },
   spinner: {height: 280},
-  dash: {
+  dashContainer: {
     marginLeft: 87,
-    flexDirection: 'column',
     position: 'absolute',
+    height: '100%',
+    paddingVertical: 4,
+  },
+  dash: {
+    flexDirection: 'column',
     height: '100%',
   },
   item: {
-    marginBottom: 28,
+    marginBottom: 12,
   },
   itemNoMargin: {
     marginBottom: 0,

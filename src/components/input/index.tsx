@@ -21,7 +21,6 @@ type InputProps = TextInputProperties & {
   label: string;
   showClear?: boolean;
   onClear?: () => void;
-  inputRef?: React.Ref<TextInput>;
   containerStyle?: StyleProp<ViewStyle>;
 };
 
