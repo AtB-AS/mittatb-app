@@ -31,6 +31,7 @@ const TIME_LIMIT_IN_MINUTES = 3;
 
 export type DetailsRouteParams = {
   tripPatternId: string;
+  tripPattern?: TripPattern;
   from: LocationWithSearchMetadata;
   to: LocationWithSearchMetadata;
 };
@@ -52,9 +53,12 @@ type Props = {
 const TripDetailsModal: React.FC<Props> = (props) => {
   const styles = useDetailsStyle();
   const {
-    params: {tripPatternId, ...passingProps},
+    params: {tripPatternId, tripPattern: initialTripPattern, ...passingProps},
   } = props.route;
-  const [tripPattern, , isLoading, error] = useTripPattern(tripPatternId);
+  const [tripPattern, , isLoading, error] = useTripPattern(
+    tripPatternId,
+    initialTripPattern,
+  );
 
   return (
     <View style={styles.container}>
@@ -220,7 +224,10 @@ const useDetailsStyle = StyleSheet.createThemeHook((theme) => ({
 
 export default TripDetailsModal;
 
-function useTripPattern(tripPatternId: string) {
+function useTripPattern(
+  tripPatternId: string,
+  initialTripPattern?: TripPattern,
+) {
   const fetchTripPattern = useCallback(
     async function reload() {
       return await getSingleTripPattern(tripPatternId);
@@ -228,7 +235,7 @@ function useTripPattern(tripPatternId: string) {
     [tripPatternId],
   );
   return usePollableResource<TripPattern | null>(fetchTripPattern, {
-    initialValue: null,
+    initialValue: initialTripPattern ?? null,
     pollingTimeInSeconds: 60,
   });
 }
