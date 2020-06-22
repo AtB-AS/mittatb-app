@@ -1,4 +1,3 @@
-import nb from 'date-fns/locale/nb';
 import React from 'react';
 import {Text, View} from 'react-native';
 import {Leg, TripPattern} from '../../sdk';
@@ -6,7 +5,7 @@ import {StyleSheet} from '../../theme';
 import {
   formatToClock,
   secondsToDuration,
-  secondsToDurationExact,
+  secondsToDurationShort,
 } from '../../utils/date';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import RealTimeLocationIcon from '../../components/location-icon/real-time';
@@ -42,7 +41,7 @@ const ResultItemHeader: React.FC<{
           tripPattern.legs[0]?.fromPlace.name ??
           'Ukjent holdeplass'}
       </Text>
-      <Text>{secondsToDurationExact(tripPattern.duration)}</Text>
+      <Text>{secondsToDurationShort(tripPattern.duration)}</Text>
     </View>
   );
 };
@@ -127,7 +126,7 @@ const FootLeg = ({leg}: {leg: Leg}) => {
         <WalkingPerson fill={colors.general.black} opacity={0.6} />
       </View>
       <Text style={styles.textDeprioritized}>
-        {secondsToDuration(leg.duration ?? 0, nb)}
+        {secondsToDuration(leg.duration ?? 0)}
       </Text>
     </View>
   );
