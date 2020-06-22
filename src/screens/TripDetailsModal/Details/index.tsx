@@ -154,7 +154,7 @@ function getLocationIcon(
         />
       );
     case 'search':
-      return <LocationIcon location={location} />;
+      return <LocationIcon location={location} multiple />;
     default:
       return <MapPointPin fill={colors.general.black} />;
   }
