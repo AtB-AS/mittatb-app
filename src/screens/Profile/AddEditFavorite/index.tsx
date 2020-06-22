@@ -31,6 +31,8 @@ import {RootStackParamList} from '../../../navigation';
 import {useLocationSearchValue} from '../../../location-search';
 import ScreenHeader from '../../../ScreenHeader';
 import {Modalize} from 'react-native-modalize';
+import colors from '../../../theme/colors';
+import Input from '../../../components/input';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
@@ -142,47 +144,36 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
       />
 
       <View style={css.innerContainer}>
-        <InputGroup title="Adresse eller stoppested">
-          <SharedElement id="locationSearchInput">
-            <View style={css.inputContainer}>
-              <TextInput
-                style={css.searchInput}
-                value={location?.label}
-                placeholder="Søk etter adresse eller stoppested"
-                onFocus={() =>
-                  navigation.navigate('LocationSearch', {
-                    callerRouteName: AddEditRouteNameStatic,
-                    callerRouteParam: 'searchLocation',
-                    hideFavorites: true,
-                    initialText: location?.name,
-                  })
-                }
-                autoCorrect={false}
-                autoCompleteType="off"
-                placeholderTextColor={(css.placeholder as TextStyle).color}
-              />
-              <Search style={css.searchIcon} />
-            </View>
-          </SharedElement>
-        </InputGroup>
-
-        <InputGroup title="Navn">
-          <TextInput
-            style={css.input}
-            onChangeText={setName}
-            value={name}
-            editable
-            autoCapitalize="sentences"
-            accessibilityHint="Navn for favoritten"
-            placeholder="Legg til navn"
-            placeholderTextColor={theme.text.faded}
+        <SharedElement id="locationSearchInput">
+          <Input
+            label="Sted"
+            value={location?.label}
+            placeholder="Søk etter adresse eller stoppested"
+            onFocus={() =>
+              navigation.navigate('LocationSearch', {
+                callerRouteName: AddEditRouteNameStatic,
+                callerRouteParam: 'searchLocation',
+                label: 'Sted',
+                hideFavorites: true,
+                initialText: location?.name,
+              })
+            }
+            autoCorrect={false}
+            autoCompleteType="off"
           />
-        </InputGroup>
+        </SharedElement>
 
-        <InputGroup
-          title="Symbol"
-          boxStyle={{marginBottom: 0, alignItems: 'flex-start'}}
-        >
+        <Input
+          label="Navn"
+          onChangeText={setName}
+          value={name}
+          editable
+          autoCapitalize="sentences"
+          accessibilityHint="Navn for favoritten"
+          placeholder="Legg til navn"
+        />
+
+        <InputGroup title="Ikon" boxStyle={{width: 124}}>
           <SymbolPicker onPress={openEmojiPopup} value={emoji} />
         </InputGroup>
 
@@ -226,17 +217,18 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   input: {
     backgroundColor: theme.background.level1,
-    borderBottomColor: theme.border.primary,
+    borderColor: colors.general.gray,
     color: theme.text.primary,
-    borderBottomWidth: 2,
+    borderWidth: 1,
     borderRadius: 4,
+    paddingLeft: 60,
     padding: 12,
     fontSize: 16,
   },
   line: {
-    marginVertical: 36,
+    marginBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: theme.border.primary,
+    borderBottomColor: colors.general.gray,
   },
   lineNoMarginTop: {
     marginTop: 0,
@@ -253,11 +245,11 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    paddingLeft: 44,
+    paddingLeft: 60,
     backgroundColor: theme.background.level1,
-    borderBottomWidth: 2,
     borderRadius: 4,
-    borderBottomColor: theme.border.primary,
+    borderWidth: 1,
+    borderColor: colors.general.gray,
     color: theme.text.primary,
     zIndex: -1,
   },
@@ -289,15 +281,16 @@ const SymbolPicker: React.FC<SymbolPickerProps> = ({onPress, value}) => {
 };
 const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    padding: 12,
+    paddingVertical: 12,
+    paddingLeft: 64,
     flexDirection: 'row',
-    backgroundColor: theme.background.level2,
-    alignSelf: 'flex-start',
+    backgroundColor: theme.background.level1,
+    borderWidth: 1,
+    borderColor: colors.general.gray,
     borderRadius: 4,
   },
   emoji: {
-    marginLeft: 5,
-    marginRight: 5,
+    marginRight: 12,
   },
   emojiIcon: {
     paddingTop: 3,
@@ -317,18 +310,21 @@ const InputGroup: React.FC<InputGroupProps> = ({title, boxStyle, children}) => {
 
   return (
     <View style={[css.container, boxStyle]}>
-      <Text style={css.label}>{title}</Text>
       {children}
+      <Text style={css.label}>{title}</Text>
     </View>
   );
 };
 const useGroupStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    marginBottom: 24,
+    marginBottom: 12,
+    flexDirection: 'column',
+    justifyContent: 'center',
   },
   label: {
-    fontSize: 12,
-    lineHeight: 16,
-    marginBottom: 8,
+    position: 'absolute',
+    left: 12,
+    fontSize: 14,
+    lineHeight: 20,
   },
 }));

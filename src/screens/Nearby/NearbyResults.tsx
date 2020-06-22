@@ -33,8 +33,9 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
   const styles = useResultsStyle();
   const navigation = useNavigation<NearbyScreenNavigationProp>();
   const onPress = (departure: EstimatedCall) => {
+    const {publicCode, name} = getLineNameFromEstimatedCall(departure);
     navigation.navigate('DepartureDetailsModal', {
-      title: getLineNameFromEstimatedCall(departure),
+      title: publicCode ? `${publicCode} ${name}` : name,
       serviceJourneyId: departure.serviceJourney.id,
       fromQuayId: departure.quay?.id,
     });
@@ -146,7 +147,7 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = ({
   style,
 }) => {
   const styles = useResultItemStyles();
-
+  const {publicCode, name} = getLineNameFromEstimatedCall(departure);
   return (
     <TouchableOpacity
       style={[styles.itemContainer, style]}
@@ -161,7 +162,10 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = ({
       />
       <View style={styles.textWrapper}>
         <Text style={styles.textContent} numberOfLines={1}>
-          {getLineNameFromEstimatedCall(departure)}
+          {publicCode && (
+            <Text style={{fontWeight: 'bold'}}>{publicCode} </Text>
+          )}
+          {name}
         </Text>
       </View>
     </TouchableOpacity>
@@ -201,7 +205,6 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
   time: {
     width: 50,
     fontSize: 16,
-    fontWeight: '600',
     color: theme.text.primary,
     paddingVertical: 4,
     fontVariant: ['tabular-nums'],

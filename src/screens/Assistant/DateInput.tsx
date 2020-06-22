@@ -143,7 +143,7 @@ const DateInput: React.FC<DateInputProps> = ({
     <>
       <SearchButton
         title="Når"
-        placeholder={dateToText(valueOrDefault, timeOfLastSearch)}
+        text={dateToText(valueOrDefault, timeOfLastSearch)}
         onPress={onOpen}
       />
 

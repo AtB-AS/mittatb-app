@@ -44,7 +44,11 @@ const Button: React.FC<ButtonProps> = ({
         disabled={disabled}
         {...props}
       >
-        {IconComponent && <IconComponent />}
+        {IconComponent && (
+          <View style={css.icon}>
+            <IconComponent />
+          </View>
+        )}
         <View style={[css.textContainer, textContainerStyle]}>
           <Text style={styleText}>{text}</Text>
         </View>
@@ -61,7 +65,11 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
     borderRadius: 8,
     backgroundColor: theme.background.accent,
-    marginBottom: 24,
+    marginBottom: 8,
+  },
+  icon: {
+    position: 'absolute',
+    left: 12,
   },
   buttonSecondary: {
     backgroundColor: 'transparent',

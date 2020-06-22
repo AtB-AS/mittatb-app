@@ -1,6 +1,6 @@
 import nb from 'date-fns/locale/nb';
 import React from 'react';
-import {Text, View, TextStyle} from 'react-native';
+import {Text, View} from 'react-native';
 import {Leg, TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {
@@ -167,7 +167,7 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
   const styles = useLegStyles();
   return (
     <View style={styles.legContainer}>
-      <Text style={[styles.text, styles.time, styles.textBold]}>
+      <Text style={[styles.text, styles.time]}>
         {formatToClock(leg.expectedStartTime)}
       </Text>
       <View style={styles.iconContainer}>
