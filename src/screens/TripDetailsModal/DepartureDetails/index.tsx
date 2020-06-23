@@ -15,11 +15,13 @@ import {getDepartures} from '../../../api/serviceJourney';
 import {Expand, ExpandLess} from '../../../assets/svg/icons/navigation';
 import {ArrowLeft} from '../../../assets/svg/icons/navigation';
 import {Close} from '../../../assets/svg/icons/actions';
-import RealTimeLocationIcon from '../../../components/location-icon/real-time';
+import TransportationIcon from '../../../components/transportation-icon';
 import {getQuayName} from '../../../utils/transportation-names';
 import {useCallback} from 'react';
 import {getAimedTimeIfLargeDifference} from '../utils';
 import usePollableResource from '../../../utils/use-pollable-resource';
+import lineColor from '../../../utils/line-color';
+import {LegMode} from '@entur/sdk';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -55,7 +57,6 @@ export default function DepartureDetails({navigation, route}: Props) {
     toQuayId,
     30,
   );
-
   const content = isLoading ? (
     <ActivityIndicator animating={true} size="large" style={styles.spinner} />
   ) : (
@@ -97,12 +98,13 @@ function mapGroup<T>(
 type CallGroupProps = {
   calls: EstimatedCall[];
   type: keyof CallListGroup;
+  mode: LegMode;
+  publicCode?: string;
 };
-function CallGroup({type, calls}: CallGroupProps) {
+function CallGroup({type, calls, mode, publicCode}: CallGroupProps) {
   const isOnRoute = type === 'trip';
   const isBefore = type === 'passed';
   const showCollapsable = isBefore && calls.length > 1;
-  const dashColor = isOnRoute ? colors.secondary.cyan : colors.general.gray200;
   const isStartPlace = (i: number) => isOnRoute && i === 0;
   const shouldDropMarginBottom = (i: number) =>
     (type === 'after' || isOnRoute) && i == calls.length - 1;
@@ -123,18 +125,21 @@ function CallGroup({type, calls}: CallGroupProps) {
       numberOfStops={calls.length - 1}
     />
   ) : null;
+  const dashColor = lineColor(mode, publicCode);
 
   return (
     <View>
-      <View style={styles.dashContainer}>
-        <Dash
-          dashGap={0}
-          dashThickness={8}
-          dashLength={8}
-          dashColor={dashColor}
-          style={styles.dash}
-        />
-      </View>
+      {isOnRoute && (
+        <View style={styles.dashContainer}>
+          <Dash
+            dashGap={0}
+            dashThickness={8}
+            dashLength={8}
+            dashColor={dashColor}
+            style={styles.dash}
+          />
+        </View>
+      )}
 
       {items.map((call, i) => (
         <Fragment key={call.quay?.id + call.serviceJourney.id}>
@@ -142,9 +147,11 @@ function CallGroup({type, calls}: CallGroupProps) {
             key={call.quay?.id + call.serviceJourney.id}
             icon={
               isStartPlace(i) ? (
-                <RealTimeLocationIcon
+                <TransportationIcon
                   mode={call.serviceJourney.journeyPattern?.line.transportMode}
-                  isLive={call.realtime}
+                  publicCode={
+                    call.serviceJourney.journeyPattern?.line.publicCode
+                  }
                 />
               ) : (
                 <Dot fill={dashColor} style={{marginHorizontal: 4}} />
@@ -230,7 +237,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     marginLeft: 87,
     position: 'absolute',
     height: '100%',
-    paddingVertical: 4,
+    paddingVertical: 10,
   },
   dash: {
     flexDirection: 'column',

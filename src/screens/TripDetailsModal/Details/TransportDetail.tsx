@@ -8,7 +8,7 @@ import LocationRow from '../LocationRow';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {LegDetailProps, DetailScreenNavigationProp} from '.';
 import {useNavigation} from '@react-navigation/core';
-import RealTimeLocationIcon from '../../../components/location-icon/real-time';
+import TransportationIcon from '../../../components/transportation-icon';
 import {getQuayName, getLineName} from '../../../utils/transportation-names';
 import {getAimedTimeIfLargeDifference} from '../utils';
 import WaitRow from './WaitRow';
@@ -62,7 +62,10 @@ const TransportDetail: React.FC<LegDetailProps> = ({
           />
           <LocationRow
             icon={
-              <RealTimeLocationIcon mode={leg.mode} isLive={leg.realtime} />
+              <TransportationIcon
+                mode={leg.mode}
+                publicCode={leg.line?.publicCode}
+              />
             }
             location={getLineName(leg)}
             textStyle={[styles.textStyle, styles.activeTextStyle]}

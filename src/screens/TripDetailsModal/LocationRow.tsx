@@ -87,7 +87,6 @@ const useLocationRowStyle = StyleSheet.createThemeHook((theme) => ({
   },
   time: {
     color: theme.text.primary,
-    fontWeight: 'bold',
     fontVariant: ['tabular-nums'],
   },
   aimedTime: {
