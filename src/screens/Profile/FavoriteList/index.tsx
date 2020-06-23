@@ -13,14 +13,21 @@ import Header from '../../../ScreenHeader';
 import {FavoriteIcon} from '../../../favorites';
 import insets from '../../../utils/insets';
 import useChatIcon from '../../../chat/use-chat-icon';
+import {CompositeNavigationProp} from '@react-navigation/native';
+import {TabNavigatorParams} from '../../../navigation/TabNavigator';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
   'Profile'
 >;
 
+type ProfileNearbyScreenNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<TabNavigatorParams, 'Nearest'>,
+  StackNavigationProp<ProfileStackParams, 'Profile'>
+>;
+
 type ProfileScreenProps = {
-  navigation: ProfileScreenNavigationProp;
+  navigation: ProfileNearbyScreenNavigationProp;
 };
 
 export default function Profile({navigation}: ProfileScreenProps) {
@@ -30,6 +37,15 @@ export default function Profile({navigation}: ProfileScreenProps) {
 
   const navigateToEdit = (item: LocationFavorite) => {
     navigation.navigate('AddEditFavorite', {editItem: item});
+  };
+  const navigateToNearby = (item: LocationFavorite) => {
+    navigation.navigate('Nearest', {
+      location: {
+        ...item.location,
+        resultType: 'favorite',
+        favoriteId: item.id,
+      },
+    });
   };
 
   const onAddButtonClick = () => navigation.push('AddEditFavorite', {});
@@ -48,7 +64,11 @@ export default function Profile({navigation}: ProfileScreenProps) {
           title="Favoritter"
           data={items}
           renderItem={(item) => (
-            <Item item={item} onEdit={() => navigateToEdit(item)} />
+            <Item
+              item={item}
+              onEdit={() => navigateToEdit(item)}
+              onClick={navigateToNearby}
+            />
           )}
           keyExtractor={(item) => item.name + item.location.id}
           renderAddButtonComponent={() => (
@@ -88,8 +108,9 @@ function AddFavoriteButton({onPress}: {onPress(): void}) {
 type ItemProps = {
   item: LocationFavorite;
   onEdit?(): void;
+  onClick?(item: LocationFavorite): void;
 };
-const Item: React.FC<ItemProps> = ({item, onEdit}) => {
+const Item: React.FC<ItemProps> = ({item, onEdit, onClick}) => {
   const css = useItemStyle();
 
   const content = item.name ? (
@@ -100,10 +121,27 @@ const Item: React.FC<ItemProps> = ({item, onEdit}) => {
   ) : (
     <Text>{item.location.label}</Text>
   );
-  return (
-    <View style={css.item}>
+
+  const clickable = onClick ? (
+    <TouchableOpacity
+      containerStyle={css.touchableContainer}
+      onPress={() => onClick(item)}
+      hitSlop={insets.all(12)}
+    >
+      <View style={css.innerTouchable}>
+        <FavoriteIcon favorite={item} />
+        <View style={css.textContainer}>{content}</View>
+      </View>
+    </TouchableOpacity>
+  ) : (
+    <View style={css.innerTouchable}>
       <FavoriteIcon favorite={item} />
       <View style={css.textContainer}>{content}</View>
+    </View>
+  );
+  return (
+    <View style={css.item}>
+      {clickable}
       {onEdit && (
         <TouchableOpacity onPress={onEdit} hitSlop={insets.all(12)}>
           <Edit />
@@ -118,6 +156,14 @@ const useItemStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     padding: 12,
     marginBottom: 10,
     marginTop: 10,
+    alignItems: 'center',
+  },
+  touchableContainer: {
+    flex: 1,
+  },
+  innerTouchable: {
+    flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
   },
   textContainer: {
