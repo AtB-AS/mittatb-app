@@ -73,8 +73,7 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   buttonSecondary: {
     backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: theme.border.primary,
+    padding: 14,
   },
   buttonDestructive: {
     backgroundColor: theme.background.destructive,
