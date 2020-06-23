@@ -45,7 +45,7 @@ export default function Profile({navigation}: ProfileScreenProps) {
 
       <ScrollView>
         <EditableListGroup
-          title="Mine favorittsteder"
+          title="Favoritter"
           data={items}
           renderItem={(item) => (
             <Item item={item} onEdit={() => navigateToEdit(item)} />
@@ -78,7 +78,9 @@ function AddFavoriteButton({onPress}: {onPress(): void}) {
   return (
     <TouchableOpacity style={css.item} onPress={onPress}>
       <Add />
-      <Text style={css.text}>Legg til favorittsted</Text>
+      <View style={css.textContainer}>
+        <Text style={css.text}>Legg til favorittsted</Text>
+      </View>
     </TouchableOpacity>
   );
 }
@@ -90,10 +92,18 @@ type ItemProps = {
 const Item: React.FC<ItemProps> = ({item, onEdit}) => {
   const css = useItemStyle();
 
+  const content = item.name ? (
+    <>
+      <Text style={css.text}>{item.name ?? item.location.name}</Text>
+      <Text>{item.location.label}</Text>
+    </>
+  ) : (
+    <Text>{item.location.label}</Text>
+  );
   return (
     <View style={css.item}>
       <FavoriteIcon favorite={item} />
-      <Text style={css.text}>{item.name ?? item.location.name}</Text>
+      <View style={css.textContainer}>{content}</View>
       {onEdit && (
         <TouchableOpacity onPress={onEdit} hitSlop={insets.all(12)}>
           <Edit />
@@ -110,10 +120,12 @@ const useItemStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     marginTop: 10,
     alignItems: 'center',
   },
-  text: {
+  textContainer: {
     flex: 1,
     marginStart: 10,
     marginEnd: 10,
+  },
+  text: {
     fontSize: 16,
     fontWeight: '600',
   },
