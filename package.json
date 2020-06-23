@@ -11,8 +11,8 @@
     "postinstall": "patch-package",
     "icons": "app-icon generate --platforms=android,ios --rounded none && app-icon generate -i icon.round.png --platforms=android --rounded only",
     "release-draft": "sh tools/release/release-draft.sh",
-    "generate-svg-mono-icons": "svgr --config-file .svgrrc.icons.yml -d ./src/assets/svg/icons ./assets/svgs/mono-icons && prettier --write ./src/assets/svg/icons",
-    "generate-svg-color": "svgr --config-file .svgrrc.illustrations.yml -d ./src/assets/svg/ ./assets/svgs/color && prettier --write ./src/assets/svg/",
+    "generate-svg-mono-icons": "svgr --config-file .svgrrc.mono-icons.yml -d ./src/assets/svg/icons ./assets/svgs/mono-icons && prettier --write ./src/assets/svg/icons",
+    "generate-svg-color": "svgr --config-file .svgrrc.color.yml -d ./src/assets/svg/ ./assets/svgs/color && prettier --write ./src/assets/svg/",
     "generate-svgs": "yarn generate-svg-mono-icons && yarn generate-svg-color"
   },
   "dependencies": {
