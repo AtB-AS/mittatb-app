@@ -51,12 +51,13 @@ export default function DepartureDetails({navigation, route}: Props) {
   } = route.params;
   const styles = useStopsStyle();
 
-  const [callGroups, _, isLoading] = useGroupedCallList(
+  const [{callGroups, mode, publicCode}, _, isLoading] = useDepartureData(
     serviceJourneyId,
     fromQuayId,
     toQuayId,
     30,
   );
+
   const content = isLoading ? (
     <ActivityIndicator animating={true} size="large" style={styles.spinner} />
   ) : (
@@ -67,6 +68,8 @@ export default function DepartureDetails({navigation, route}: Props) {
             key={group[0]?.quay?.id ?? name}
             calls={group}
             type={name}
+            mode={mode}
+            publicCode={publicCode}
           />
         ))}
       </View>
@@ -98,7 +101,7 @@ function mapGroup<T>(
 type CallGroupProps = {
   calls: EstimatedCall[];
   type: keyof CallListGroup;
-  mode: LegMode;
+  mode?: LegMode;
   publicCode?: string;
 };
 function CallGroup({type, calls, mode, publicCode}: CallGroupProps) {
@@ -125,7 +128,10 @@ function CallGroup({type, calls, mode, publicCode}: CallGroupProps) {
       numberOfStops={calls.length - 1}
     />
   ) : null;
-  const dashColor = lineColor(mode, publicCode);
+
+  const dashColor = isOnRoute
+    ? lineColor(mode, publicCode)
+    : colors.general.gray;
 
   return (
     <View>
@@ -216,7 +222,7 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.background.modal_Level2,
     flexDirection: 'row',
-    marginBottom: 28,
+    marginBottom: 12,
     marginLeft: 81,
   },
   text: {
@@ -261,31 +267,45 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
+type DepartureData = {
+  callGroups: CallListGroup;
+  mode?: LegMode;
+  publicCode?: string;
+};
+
 type CallListGroup = {
   passed: EstimatedCall[];
   trip: EstimatedCall[];
   after: EstimatedCall[];
 };
 
-function useGroupedCallList(
+function useDepartureData(
   serviceJourneyId: string,
   fromQuayId?: string,
   toQuayId?: string,
   pollingTimeInSeconds: number = 0,
-): [CallListGroup, () => void, boolean, Error?] {
+): [DepartureData, () => void, boolean, Error?] {
   const getService = useCallback(
-    async function getServiceJourneyDepartures() {
+    async function getServiceJourneyDepartures(): Promise<DepartureData> {
       const deps = await getDepartures(serviceJourneyId);
-      return groupAllCallsByQuaysInLeg(deps, fromQuayId, toQuayId);
+      const callGroups = groupAllCallsByQuaysInLeg(deps, fromQuayId, toQuayId);
+      const line = deps[0]?.serviceJourney?.journeyPattern?.line;
+      return {
+        mode: line?.transportMode,
+        publicCode: line?.publicCode,
+        callGroups,
+      };
     },
     [serviceJourneyId, fromQuayId, toQuayId],
   );
 
-  return usePollableResource<CallListGroup>(getService, {
+  return usePollableResource<DepartureData>(getService, {
     initialValue: {
-      passed: [],
-      trip: [],
-      after: [],
+      callGroups: {
+        passed: [],
+        trip: [],
+        after: [],
+      },
     },
     pollingTimeInSeconds,
   });
