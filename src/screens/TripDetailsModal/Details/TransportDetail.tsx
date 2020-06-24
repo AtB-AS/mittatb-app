@@ -48,6 +48,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
                 ? getAimedTimeIfLargeDifference(leg.fromEstimatedCall)
                 : undefined
             }
+            timeStyle={{fontWeight: 'bold', fontSize: 16}}
             textStyle={styles.textStyle}
           />
         )}
