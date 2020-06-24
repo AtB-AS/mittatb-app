@@ -10,7 +10,7 @@ import {
   secondsToMinutesShort,
 } from '../../utils/date';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import RealTimeLocationIcon from '../../components/location-icon/real-time';
+import TransportationIcon from '../../components/transportation-icon';
 import insets from '../../utils/insets';
 import {WalkingPerson} from '../../assets/svg/icons/transportation';
 import {DestinationFlag} from '../../assets/svg/icons/places';
@@ -237,7 +237,7 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
         {formatToClock(leg.expectedStartTime)}
       </Text>
       <View style={styles.iconContainer}>
-        <RealTimeLocationIcon mode={leg.mode} isLive={leg.realtime} />
+        <TransportationIcon mode={leg.mode} publicCode={leg.line?.publicCode} />
       </View>
       <Text style={styles.text}>
         <LineDisplayName leg={leg} />

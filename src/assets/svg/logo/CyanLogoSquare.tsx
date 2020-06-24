@@ -3,7 +3,7 @@ import Svg, {G, Path, Defs, ClipPath, SvgProps} from 'react-native-svg';
 
 function SvgCyanLogoSquare(props: SvgProps) {
   return (
-    <Svg width={20} height={20} fill="none" viewBox="0 0 40 40" {...props}>
+    <Svg width={40} height={40} fill="none" viewBox="0 0 40 40" {...props}>
       <G clipPath="url(#CyanLogoSquare_svg__CyanLogoSquare_svg__clip0)">
         <Path fill="#71D6E0" d="M0 0h40v40H0V0z" />
         <Path

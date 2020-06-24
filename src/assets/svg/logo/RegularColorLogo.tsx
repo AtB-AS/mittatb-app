@@ -3,7 +3,7 @@ import Svg, {Path, SvgProps} from 'react-native-svg';
 
 function SvgRegularColorLogo(props: SvgProps) {
   return (
-    <Svg width={20} height={20} fill="none" viewBox="0 0 40 40" {...props}>
+    <Svg width={40} height={40} fill="none" viewBox="0 0 40 40" {...props}>
       <Path
         fill="#fff"
         d="M36 5.935C36 4.865 35.133 4 34.065 4l-21.4.01A8.665 8.665 0 004 12.673l.009 21.392c0 1.07.869 1.934 1.935 1.934h28.12A1.935 1.935 0 0036 34.066V5.936z"

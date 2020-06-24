@@ -9,7 +9,7 @@ import {
   ImageStyle,
 } from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
-import RealTimeLocationIcon from '../../components/location-icon/real-time';
+import TransportationIcon from '../../components/transportation-icon';
 import {EstimatedCall, DeparturesWithStop, StopPlaceDetails} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {formatToClock} from '../../utils/date';
@@ -156,9 +156,9 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = ({
       <Text style={styles.time}>
         {formatToClock(departure.expectedDepartureTime)}
       </Text>
-      <RealTimeLocationIcon
+      <TransportationIcon
         mode={departure.serviceJourney.journeyPattern?.line.transportMode}
-        isLive={departure.realtime}
+        publicCode={departure.serviceJourney.journeyPattern?.line.publicCode}
       />
       <View style={styles.textWrapper}>
         <Text style={styles.textContent} numberOfLines={1}>

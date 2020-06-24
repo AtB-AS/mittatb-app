@@ -12,14 +12,16 @@ import ScreenHeader from '../../../ScreenHeader';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Dash from 'react-native-dash';
 import {getDepartures} from '../../../api/serviceJourney';
-import {UnfoldLess, UnfoldMore} from '../../../assets/svg/icons/navigation';
+import {Expand, ExpandLess} from '../../../assets/svg/icons/navigation';
 import {ArrowLeft} from '../../../assets/svg/icons/navigation';
 import {Close} from '../../../assets/svg/icons/actions';
-import RealTimeLocationIcon from '../../../components/location-icon/real-time';
+import TransportationIcon from '../../../components/transportation-icon';
 import {getQuayName} from '../../../utils/transportation-names';
 import {useCallback} from 'react';
 import {getAimedTimeIfLargeDifference} from '../utils';
 import usePollableResource from '../../../utils/use-pollable-resource';
+import lineColor from '../../../utils/line-color';
+import {LegMode} from '@entur/sdk';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -49,7 +51,7 @@ export default function DepartureDetails({navigation, route}: Props) {
   } = route.params;
   const styles = useStopsStyle();
 
-  const [callGroups, _, isLoading] = useGroupedCallList(
+  const [{callGroups, mode, publicCode}, _, isLoading] = useDepartureData(
     serviceJourneyId,
     fromQuayId,
     toQuayId,
@@ -66,6 +68,8 @@ export default function DepartureDetails({navigation, route}: Props) {
             key={group[0]?.quay?.id ?? name}
             calls={group}
             type={name}
+            mode={mode}
+            publicCode={publicCode}
           />
         ))}
       </View>
@@ -97,12 +101,13 @@ function mapGroup<T>(
 type CallGroupProps = {
   calls: EstimatedCall[];
   type: keyof CallListGroup;
+  mode?: LegMode;
+  publicCode?: string;
 };
-function CallGroup({type, calls}: CallGroupProps) {
+function CallGroup({type, calls, mode, publicCode}: CallGroupProps) {
   const isOnRoute = type === 'trip';
   const isBefore = type === 'passed';
   const showCollapsable = isBefore && calls.length > 1;
-  const dashColor = isOnRoute ? colors.secondary.cyan : colors.general.gray200;
   const isStartPlace = (i: number) => isOnRoute && i === 0;
   const shouldDropMarginBottom = (i: number) =>
     (type === 'after' || isOnRoute) && i == calls.length - 1;
@@ -124,16 +129,23 @@ function CallGroup({type, calls}: CallGroupProps) {
     />
   ) : null;
 
+  const dashColor = isOnRoute
+    ? lineColor(mode, publicCode)
+    : colors.general.gray;
+
   return (
     <View>
-      <Dash
-        dashGap={4}
-        dashThickness={8}
-        dashLength={8}
-        dashColor={dashColor}
-        style={styles.dash}
-        dashStyle={{borderRadius: 50}}
-      />
+      {isOnRoute && (
+        <View style={styles.dashContainer}>
+          <Dash
+            dashGap={0}
+            dashThickness={8}
+            dashLength={8}
+            dashColor={dashColor}
+            style={styles.dash}
+          />
+        </View>
+      )}
 
       {items.map((call, i) => (
         <Fragment key={call.quay?.id + call.serviceJourney.id}>
@@ -141,12 +153,14 @@ function CallGroup({type, calls}: CallGroupProps) {
             key={call.quay?.id + call.serviceJourney.id}
             icon={
               isStartPlace(i) ? (
-                <RealTimeLocationIcon
+                <TransportationIcon
                   mode={call.serviceJourney.journeyPattern?.line.transportMode}
-                  isLive={call.realtime}
+                  publicCode={
+                    call.serviceJourney.journeyPattern?.line.publicCode
+                  }
                 />
               ) : (
-                <Dot fill={dashColor} style={{margin: 4}} />
+                <Dot fill={dashColor} style={{marginHorizontal: 4}} />
               )
             }
             iconContainerStyle={{paddingVertical: 2}}
@@ -157,6 +171,11 @@ function CallGroup({type, calls}: CallGroupProps) {
             ]}
             location={getQuayName(call.quay)}
             time={formatToClock(call.expectedDepartureTime)}
+            timeStyle={
+              isOnRoute && i === 0
+                ? {fontWeight: 'bold', fontSize: 16}
+                : undefined
+            }
             aimedTime={
               isStartPlace(i) && call.realtime
                 ? getAimedTimeIfLargeDifference(call)
@@ -166,6 +185,7 @@ function CallGroup({type, calls}: CallGroupProps) {
               styles.textStyle,
               !isOnRoute ? styles.textStyleFaded : undefined,
             ]}
+            dashThroughIcon={true}
           />
           {i === 0 && collapseButton}
         </Fragment>
@@ -188,12 +208,12 @@ function CollapseButtonRow({
   const text = <Text style={styles.text}>{numberOfStops} Mellomstopp</Text>;
   const child = collapsed ? (
     <>
-      <UnfoldMore />
+      <Expand />
       {text}
     </>
   ) : (
     <>
-      <UnfoldLess />
+      <ExpandLess />
       {text}
     </>
   );
@@ -205,13 +225,13 @@ function CollapseButtonRow({
 }
 const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.modal_Level2,
     flexDirection: 'row',
-    marginBottom: 28,
+    marginBottom: 12,
     marginLeft: 81,
   },
   text: {
     marginLeft: 12,
+    color: theme.text.faded,
   },
 }));
 
@@ -222,16 +242,23 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
   allGroups: {
     marginBottom: 250,
+    backgroundColor: theme.background.level1,
+    borderRadius: 10,
+    paddingVertical: 12,
   },
   spinner: {height: 280},
-  dash: {
+  dashContainer: {
     marginLeft: 87,
-    flexDirection: 'column',
     position: 'absolute',
+    height: '100%',
+    paddingVertical: 10,
+  },
+  dash: {
+    flexDirection: 'column',
     height: '100%',
   },
   item: {
-    marginBottom: 28,
+    marginBottom: 12,
   },
   itemNoMargin: {
     marginBottom: 0,
@@ -248,31 +275,45 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
+type DepartureData = {
+  callGroups: CallListGroup;
+  mode?: LegMode;
+  publicCode?: string;
+};
+
 type CallListGroup = {
   passed: EstimatedCall[];
   trip: EstimatedCall[];
   after: EstimatedCall[];
 };
 
-function useGroupedCallList(
+function useDepartureData(
   serviceJourneyId: string,
   fromQuayId?: string,
   toQuayId?: string,
   pollingTimeInSeconds: number = 0,
-): [CallListGroup, () => void, boolean, Error?] {
+): [DepartureData, () => void, boolean, Error?] {
   const getService = useCallback(
-    async function getServiceJourneyDepartures() {
+    async function getServiceJourneyDepartures(): Promise<DepartureData> {
       const deps = await getDepartures(serviceJourneyId);
-      return groupAllCallsByQuaysInLeg(deps, fromQuayId, toQuayId);
+      const callGroups = groupAllCallsByQuaysInLeg(deps, fromQuayId, toQuayId);
+      const line = deps[0]?.serviceJourney?.journeyPattern?.line;
+      return {
+        mode: line?.transportMode,
+        publicCode: line?.publicCode,
+        callGroups,
+      };
     },
     [serviceJourneyId, fromQuayId, toQuayId],
   );
 
-  return usePollableResource<CallListGroup>(getService, {
+  return usePollableResource<DepartureData>(getService, {
     initialValue: {
-      passed: [],
-      trip: [],
-      after: [],
+      callGroups: {
+        passed: [],
+        trip: [],
+        after: [],
+      },
     },
     pollingTimeInSeconds,
   });
