@@ -38,15 +38,15 @@ export default function Profile({navigation}: ProfileScreenProps) {
   const navigateToEdit = (item: LocationFavorite) => {
     navigation.navigate('AddEditFavorite', {editItem: item});
   };
-  const navigateToNearby = (item: LocationFavorite) => {
-    navigation.navigate('Nearest', {
-      location: {
-        ...item.location,
-        resultType: 'favorite',
-        favoriteId: item.id,
-      },
-    });
-  };
+  // const navigateToNearby = (item: LocationFavorite) => {
+  //   navigation.navigate('Nearest', {
+  //     location: {
+  //       ...item.location,
+  //       resultType: 'favorite',
+  //       favoriteId: item.id,
+  //     },
+  //   });
+  // };
 
   const onAddButtonClick = () => navigation.push('AddEditFavorite', {});
 
@@ -64,11 +64,7 @@ export default function Profile({navigation}: ProfileScreenProps) {
           title="Favoritter"
           data={items}
           renderItem={(item) => (
-            <Item
-              item={item}
-              onEdit={() => navigateToEdit(item)}
-              onClick={navigateToNearby}
-            />
+            <Item item={item} onEdit={() => navigateToEdit(item)} />
           )}
           keyExtractor={(item) => item.name + item.location.id}
           renderAddButtonComponent={() => (
