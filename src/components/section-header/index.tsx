@@ -23,8 +23,6 @@ const useProfileStyle = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
   },
   headerDecorator: {
-    borderBottomWidth: 1,
-    borderBottomColor: theme.text.primary,
     flex: 1,
     marginBottom: 3,
   },
