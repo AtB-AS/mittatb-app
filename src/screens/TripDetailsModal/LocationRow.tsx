@@ -8,6 +8,7 @@ const LocationRow: React.FC<{
   time?: string;
   aimedTime?: string;
   textStyle?: StyleProp<TextStyle>;
+  timeStyle?: StyleProp<TextStyle>;
   rowStyle?: StyleProp<ViewStyle>;
   iconContainerStyle?: StyleProp<ViewStyle>;
   dashThroughIcon?: boolean;
@@ -18,6 +19,7 @@ const LocationRow: React.FC<{
   aimedTime,
   rowStyle,
   textStyle,
+  timeStyle,
   iconContainerStyle,
   dashThroughIcon,
 }) => {
@@ -28,7 +30,7 @@ const LocationRow: React.FC<{
     <View style={[styles.row, rowStyle]}>
       <View style={styles.iconLocationContainer}>
         <View style={styles.timeContainer}>
-          <Text style={[styles.time, textStyle]}>{time}</Text>
+          <Text style={[styles.time, textStyle, timeStyle]}>{time}</Text>
           {aimedTime && <Text style={styles.aimedTime}>{aimedTime}</Text>}
         </View>
         <View

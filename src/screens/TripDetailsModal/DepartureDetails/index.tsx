@@ -171,6 +171,11 @@ function CallGroup({type, calls, mode, publicCode}: CallGroupProps) {
             ]}
             location={getQuayName(call.quay)}
             time={formatToClock(call.expectedDepartureTime)}
+            timeStyle={
+              isOnRoute && i === 0
+                ? {fontWeight: 'bold', fontSize: 16}
+                : undefined
+            }
             aimedTime={
               isStartPlace(i) && call.realtime
                 ? getAimedTimeIfLargeDifference(call)
@@ -220,13 +225,13 @@ function CollapseButtonRow({
 }
 const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.modal_Level2,
     flexDirection: 'row',
     marginBottom: 12,
     marginLeft: 81,
   },
   text: {
     marginLeft: 12,
+    color: theme.text.faded,
   },
 }));
 
@@ -237,6 +242,9 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
   allGroups: {
     marginBottom: 250,
+    backgroundColor: theme.background.level1,
+    borderRadius: 10,
+    paddingVertical: 12,
   },
   spinner: {height: 280},
   dashContainer: {
