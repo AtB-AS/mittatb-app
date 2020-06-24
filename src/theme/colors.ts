@@ -26,9 +26,9 @@ const colors = {
     white: '#ffffff',
     gray: '#D7D9DB',
     gray200: '#AFB3B7',
+    gray400: '#5F686E',
     black: '#000000',
     offblack: '#111416',
-    lightGray: 'rgba(0, 0, 0, 0.6)',
   },
 };
 
@@ -44,6 +44,7 @@ export interface Theme {
     level0: string;
     level1: string;
     level2: string;
+    level3: string;
     modal_Level2: string;
     destructive: string;
     accent: string;
@@ -70,6 +71,7 @@ export const themes: Themes = {
       level0: backgrounds.light__level0,
       level1: backgrounds.light__level1,
       level2: backgrounds.light__level2,
+      level3: backgrounds.light__level3,
       modal_Level2: colors.secondary.gray_Level2,
       destructive: colors.secondary.red,
       accent: colors.secondary.cyan,
@@ -77,7 +79,7 @@ export const themes: Themes = {
     text: {
       primary: colors.general.black,
       destructive: colors.general.white,
-      faded: colors.general.lightGray,
+      faded: colors.general.gray400,
     },
     border: {
       primary: colors.primary.gray,
@@ -89,6 +91,7 @@ export const themes: Themes = {
       level0: colors.general.black,
       level1: colors.general.offblack,
       level2: colors.general.gray,
+      level3: colors.general.gray,
       modal_Level2: colors.secondary.gray_Level2,
       destructive: colors.secondary.red,
       accent: colors.secondary.cyan,
@@ -96,7 +99,7 @@ export const themes: Themes = {
     text: {
       primary: colors.general.white,
       destructive: colors.general.white,
-      faded: colors.general.lightGray,
+      faded: colors.general.gray400,
     },
     border: {
       primary: colors.primary.gray,

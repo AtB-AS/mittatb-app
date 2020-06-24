@@ -5,18 +5,6 @@ import {autocomplete, reverse} from '../api';
 import {Location} from '../favorites/types';
 import {CancelToken, isCancel} from '../api/client';
 
-const BOUNDARY_FILTER = () => {
-  const filter = {
-    min_lat: 62.5815885,
-    max_lat: 64.082649,
-    min_lon: 8.745761,
-    max_lon: 11.92081,
-  };
-  return Object.entries(filter)
-    .map(([k, v]) => `${k}=${v}`)
-    .join('&');
-};
-
 export function useGeocoder(
   text: string | null,
   location: GeolocationResponse | null,
@@ -26,7 +14,7 @@ export function useGeocoder(
   useEffect(() => {
     const source = CancelToken.source();
     async function textLookup() {
-      if (!text || text.length < 4) {
+      if (!text) {
         setLocations(null);
       } else {
         try {

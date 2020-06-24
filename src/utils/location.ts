@@ -1,7 +1,5 @@
-import haversine, {Options} from 'haversine';
+import haversine from 'haversine-distance';
 import {Location} from '../favorites/types';
-
-const options: Options = {unit: 'meter'};
 
 type SortedLocation = {
   location: Location;
@@ -15,7 +13,7 @@ export function sortNearestLocations(
   return rest
     .map((location) => ({
       location,
-      distance: haversine(current.coordinates, location.coordinates, options),
+      distance: haversine(current.coordinates, location.coordinates),
     }))
     .sort((a, b) => a.distance - b.distance);
 }

@@ -30,22 +30,25 @@ const LocationResults: React.FC<Props> = ({
       <View style={styles.list}>
         {locations.map((location) => (
           <View style={styles.rowContainer} key={location.id}>
-            <TouchableOpacity
-              onPress={() => onSelect(location)}
-              style={styles.locationButton}
-            >
-              <View style={{flexDirection: 'column'}}>
-                <LocationIcon
-                  location={location}
-                  fill={styles.locationIcon.backgroundColor}
-                  multiple={true}
-                />
-              </View>
-              <View style={styles.locationTextContainer}>
-                <Text style={styles.locationName}>{location.name}</Text>
-                <Text style={styles.locality}>{location.locality}</Text>
-              </View>
-            </TouchableOpacity>
+            <View style={styles.locationButtonContainer}>
+              <TouchableOpacity
+                hitSlop={insets.symmetric(8, 1)}
+                onPress={() => onSelect(location)}
+                style={styles.locationButton}
+              >
+                <View style={{flexDirection: 'column'}}>
+                  <LocationIcon
+                    location={location}
+                    fill={styles.locationIcon.backgroundColor}
+                    multiple={true}
+                  />
+                </View>
+                <View style={styles.locationTextContainer}>
+                  <Text style={styles.locationName}>{location.name}</Text>
+                  <Text style={styles.locality}>{location.locality}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity
               hitSlop={insets.all(8)}
               onPressOut={() => onPrefillText(location.name + ' ')}
@@ -82,11 +85,14 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    width: '100%',
   },
-  locationButton: {
+  locationButtonContainer: {
     padding: 12,
     marginVertical: 12,
+    flex: 1,
+  },
+  locationButton: {
     flexDirection: 'row',
     alignItems: 'center',
   },

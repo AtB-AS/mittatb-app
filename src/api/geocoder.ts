@@ -5,26 +5,22 @@ import qs from 'query-string';
 import {stringifyUrl} from './utils';
 import {AxiosRequestConfig} from 'axios';
 
+const TRONDHEIM_CENTRAL_STATION = {
+  latitude: 63.43457,
+  longitide: 10.39844,
+};
+
 export async function autocomplete(
   text: string | null,
   location: GeolocationResponse | null,
   config?: AxiosRequestConfig,
 ) {
-  const defaultFilter = location
-    ? undefined
-    : {
-        'boundary.rect.min_lat': 62.5815885,
-        'boundary.rect.max_lat': 64.082649,
-        'boundary.rect.min_lon': 8.745761,
-        'boundary.rect.max_lon': 11.92081,
-      };
   const url = 'v1/geocoder/features';
   const query = qs.stringify({
     query: text,
-    lat: location?.coords.latitude,
-    lon: location?.coords.longitude,
+    lat: location?.coords.latitude ?? TRONDHEIM_CENTRAL_STATION.latitude,
+    lon: location?.coords.longitude ?? TRONDHEIM_CENTRAL_STATION.longitide,
     limit: 10,
-    ...defaultFilter,
   });
 
   return await client.get<Feature[]>(stringifyUrl(url, query), config);
