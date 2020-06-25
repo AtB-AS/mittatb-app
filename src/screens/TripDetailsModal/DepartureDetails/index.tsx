@@ -20,7 +20,7 @@ import {getQuayName} from '../../../utils/transportation-names';
 import {useCallback} from 'react';
 import {getAimedTimeIfLargeDifference} from '../utils';
 import usePollableResource from '../../../utils/use-pollable-resource';
-import lineColor from '../../../utils/line-color';
+import transportationColor from '../../../utils/transportation-color';
 import {LegMode} from '@entur/sdk';
 
 export type DepartureDetailsRouteParams = {
@@ -130,7 +130,7 @@ function CallGroup({type, calls, mode, publicCode}: CallGroupProps) {
   ) : null;
 
   const dashColor = isOnRoute
-    ? lineColor(mode, publicCode)
+    ? transportationColor(mode, publicCode).fill
     : colors.general.gray;
 
   return (
