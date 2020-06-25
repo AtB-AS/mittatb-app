@@ -21,6 +21,7 @@ let previousRouteName: string | null = null;
 export default function trackNavigation(state: NavigationState | undefined) {
   if (!state) return;
   const currentRouteName = getActiveRouteName(state);
+  console.log(currentRouteName)
 
   if (previousRouteName !== currentRouteName) {
     bugsnag.leaveBreadcrumb('navigate', {route: currentRouteName});
