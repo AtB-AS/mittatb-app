@@ -10,7 +10,7 @@ import {
 import {LegMode} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {SvgProps} from 'react-native-svg';
-import lineColor from '../../utils/line-color';
+import transportationColor from '../../utils/transportation-color';
 
 export type TransportationIconProps = {
   mode?: LegMode;
@@ -27,15 +27,14 @@ const TransportationIcon: React.FC<TransportationIconProps> = ({
   children,
 }) => {
   const styles = useStyle();
+  const {fill, icon} = transportationColor(mode, publicCode);
   return (
-    <View
-      style={[
-        styles.circle,
-        {backgroundColor: lineColor(mode, publicCode)},
-        circleStyle,
-      ]}
-    >
-      {children ? children : <InnerIcon style={style} mode={mode} />}
+    <View style={[styles.circle, {backgroundColor: fill}, circleStyle]}>
+      {children ? (
+        children
+      ) : (
+        <InnerIcon fill={icon} style={style} mode={mode} />
+      )}
     </View>
   );
 };
@@ -44,15 +43,17 @@ export default TransportationIcon;
 
 function InnerIcon({
   mode,
+  fill,
   style,
 }: {
+  fill: string;
   style?: StyleProp<ViewStyle>;
   mode?: LegMode;
 }) {
   const innerIconProps: SvgProps = {
     width: '100%',
     height: '100%',
-    fill: 'black',
+    fill,
     style,
   };
 
