@@ -15,6 +15,7 @@ import {
   ViewStyle,
   TextStyle,
   SafeAreaView,
+  Keyboard,
 } from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
@@ -63,6 +64,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
   const emojiRef = useRef<Modalize>(null);
   const openEmojiPopup = () => {
+    Keyboard.dismiss();
     emojiRef.current?.open();
   };
 
