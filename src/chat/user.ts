@@ -1,5 +1,5 @@
 import Intercom from 'react-native-intercom';
-import {Platform} from 'react-native';
+import {PixelRatio, Platform} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import storage from '../storage';
 import {checkGeolocationPermission} from '../GeolocationContext';
@@ -22,5 +22,6 @@ export async function register() {
     'AtB-Device-Location-Enabled': isLocationEnabled,
     'AtB-App-Location-Status': appLocationStatus,
     'Atb-Platform-OS': Platform.OS,
+    'Atb-OS-Font-Scale': PixelRatio.getFontScale(),
   });
 }

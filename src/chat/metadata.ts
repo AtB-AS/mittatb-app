@@ -10,6 +10,7 @@ type Metadata = {
   'AtB-Device-Location-Enabled': boolean;
   'AtB-App-Location-Status': PermissionStatus;
   'Atb-Platform-OS': PlatformOSType;
+  'Atb-OS-Font-Scale': number;
 };
 
 export async function updateMetadata(metadata: Partial<Metadata>) {
