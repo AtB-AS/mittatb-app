@@ -239,7 +239,10 @@ export function useLocationSearchValue<
   >(defaultLocation && {...defaultLocation, resultType: 'search'});
 
   React.useEffect(() => {
-    if (firstTimeRef.current && !route.params?.[callerRouteParam]) {
+    if (
+      firstTimeRef.current &&
+      route.params?.[callerRouteParam] === undefined
+    ) {
       firstTimeRef.current = false;
       return;
     }
