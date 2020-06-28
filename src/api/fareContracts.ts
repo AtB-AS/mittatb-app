@@ -44,10 +44,10 @@ export async function sendReceipt(fc: FareContract, email: string) {
   const response = await client.post<SendReceiptResponse>(url, {
     order_id: fc.order_id,
     order_version: parseInt(fc.order_version, 10),
-    email_address: email
-  })
+    email_address: email,
+  });
 
-  return response.data
+  return response.data;
 }
 
 export async function reserve(offers: ReserveOffer[]) {
