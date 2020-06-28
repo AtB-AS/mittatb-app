@@ -1,5 +1,13 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, RefreshControl, TouchableOpacity, Modal, Button, SafeAreaView} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  RefreshControl,
+  TouchableOpacity,
+  Modal,
+  TextInput,
+} from 'react-native';
 import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {TicketingStackParams} from '../';
@@ -7,7 +15,6 @@ import {secondsToDuration} from '../../../utils/date';
 import {ArrowRight} from '../../../assets/svg/icons/navigation';
 import {Expand} from '../../../assets/svg/icons/navigation';
 import {useTicketState} from '../TicketContext';
-import Input from '../../../components/input';
 import {FareContract, sendReceipt} from '../../../api/fareContracts';
 
 type Props = {
@@ -29,27 +36,48 @@ const ReceiptModal: React.FC<ModalProps> = (props) => {
     props.close();
   };
   return (
-    <Modal visible={props.show} presentationStyle={'pageSheet'} animationType={'slide'}
+    <Modal
+      visible={props.show}
+      presentationStyle={'pageSheet'}
+      animationType={'slide'}
     >
-      <SafeAreaView style={styles.modalRoot}>
+      <View style={styles.modalRoot}>
         <View style={styles.modalHeaderContainer}>
           <Text style={styles.heading}>Kvittering</Text>
         </View>
-        <View>
-          <Input onChangeText={email => setEmail(email)} keyboardType={'email-address'} label={'E-post'}/>
+        <View style={{marginVertical: 8}}>
+          <TextInput
+            style={styles.modalInput}
+            onChangeText={(email) => setEmail(email)}
+            keyboardType={'email-address'}
+            placeholder={'E-post'}
+          />
         </View>
         <View style={styles.modalButtonsContainer}>
-          <Button title={'Send'} onPress={() => submit()}></Button>
-          <Button title={'Avbryt'} onPress={() => props.close()}></Button>
+          <TouchableHighlight onPress={() => submit()} style={styles.button}>
+            <View style={styles.buttonContentContainer}>
+              <Text style={styles.buttonText}>Send</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => props.close()}
+            style={styles.button}
+          >
+            <View style={styles.buttonContentContainer}>
+              <Text style={styles.buttonText}>Avbryt</Text>
+            </View>
+          </TouchableHighlight>
         </View>
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 };
 
 const Tickets: React.FC<Props> = ({navigation}) => {
   const {fareContracts, isRefreshingTickets, refreshTickets} = useTicketState();
-  const [selectedFareContract, setSelectedFareContract] = useState<FareContract | undefined>(undefined);
+  const [selectedFareContract, setSelectedFareContract] = useState<
+    FareContract | undefined
+  >(undefined);
   const showReceiptModal = (f: FareContract) => {
     setSelectedFareContract(f);
   };
@@ -71,29 +99,33 @@ const Tickets: React.FC<Props> = ({navigation}) => {
               <Text style={styles.textItem}>
                 {secondsToDuration(fc.duration)} - {fc.product_name}
               </Text>
-              <Expand/>
+              <Expand />
             </View>
             <Text style={styles.textItem}>1 voksen</Text>
             <Text style={styles.textItem}>Sone A</Text>
-            <TouchableOpacity onPress={() => showReceiptModal(fc)}>
-              <View style={styles.receiptContainer}>
+            <View style={styles.receiptContainer}>
+              <Text style={styles.textItem}>Ordre-ID: {fc.order_id}</Text>
+              <TouchableOpacity onPress={() => showReceiptModal(fc)}>
                 <Text style={styles.textItem}>Kvittering</Text>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
           </View>
         ))
       ) : (
         <Text style={styles.body}>Du har ingen aktive reiserettigheter</Text>
       )}
-      <ReceiptModal fareContract={selectedFareContract} show={!!selectedFareContract}
-                    close={() => setSelectedFareContract(undefined)}></ReceiptModal>
+      <ReceiptModal
+        fareContract={selectedFareContract}
+        show={!!selectedFareContract}
+        close={() => setSelectedFareContract(undefined)}
+      />
       <TouchableHighlight
         onPress={() => navigation.push('Offer')}
         style={styles.button}
       >
         <View style={styles.buttonContentContainer}>
           <Text style={styles.buttonText}>Kjøp reiserett</Text>
-          <ArrowRight fill="white" width={14} height={14}/>
+          <ArrowRight fill="white" width={14} height={14} />
         </View>
       </TouchableHighlight>
     </ScrollView>
@@ -102,7 +134,7 @@ const Tickets: React.FC<Props> = ({navigation}) => {
 
 const styles = StyleSheet.create({
   body: {fontSize: 16, paddingVertical: 24},
-  button: {padding: 12, backgroundColor: 'black'},
+  button: {padding: 12, backgroundColor: 'black', marginRight: 8},
   buttonContentContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -127,7 +159,7 @@ const styles = StyleSheet.create({
   },
   receiptContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-end'
+    justifyContent: 'space-between',
   },
   modalRoot: {
     margin: 8,
@@ -135,12 +167,16 @@ const styles = StyleSheet.create({
   modalHeaderContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginVertical: 12
+    marginVertical: 12,
   },
   modalButtonsContainer: {
     flexDirection: 'row',
-    justifyContent: 'center'
-  }
+  },
+  modalInput: {
+    borderColor: 'black',
+    borderWidth: 1,
+    padding: 8,
+  },
 });
 
 export default Tickets;
