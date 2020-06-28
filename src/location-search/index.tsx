@@ -233,11 +233,19 @@ export function useLocationSearchValue<
   defaultLocation?: Location,
 ): LocationWithSearchMetadata | undefined {
   const route = useRoute<T>();
+  const firstTimeRef = useRef(true);
   const [location, setLocation] = React.useState<
     LocationWithSearchMetadata | undefined
   >(defaultLocation && {...defaultLocation, resultType: 'search'});
 
   React.useEffect(() => {
+    if (
+      firstTimeRef.current &&
+      route.params?.[callerRouteParam] === undefined
+    ) {
+      firstTimeRef.current = false;
+      return;
+    }
     setLocation(route.params?.[callerRouteParam]);
   }, [route.params?.[callerRouteParam]]);
 
