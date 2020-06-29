@@ -50,7 +50,6 @@ export async function sendReceipt(fc: FareContract, email: string) {
   return response.data;
 }
 
-export async function reserve(offers: ReserveOffer[]) {
 export enum PaymentType {
   CreditCard = 1,
   Vipps
