@@ -19,7 +19,6 @@ plugins:
   - minifyStyles: true
   - moveElemsAttrsToGroup: true
   - moveGroupAttrsToElems: true
-  - removeAttrs: true
   - removeComments: true
   - removeDesc: true
   - removeDimensions: false
@@ -38,7 +37,7 @@ plugins:
   - removeUnknownsAndDefaults: true
   - removeUnusedNS: true
   - removeUselessDefs: true
-  - removeUselessStrokeAndFill: true
+  - removeUselessStrokeAndFill: false
   - removeViewBox: false
   - removeXMLNS: false
   - removeXMLProcInst: true

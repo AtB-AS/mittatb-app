@@ -1,0 +1,11 @@
+native: true
+typescript: true
+ext: 'tsx'
+svgProps:
+  width: '{20}'
+  height: '{20}'
+  fill: 'black'
+svgoConfig:
+  plugins:
+    - removeAttrs:
+        attrs: '.*:(fill|stroke):(black|#000)'

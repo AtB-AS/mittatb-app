@@ -35,6 +35,22 @@ export async function search(
   return response.data;
 }
 
+interface SendReceiptResponse {
+  reference: string;
+}
+
+export async function sendReceipt(fc: FareContract, email: string) {
+  const url = 'receipt';
+  const response = await client.post<SendReceiptResponse>(url, {
+    order_id: fc.order_id,
+    order_version: parseInt(fc.order_version, 10),
+    email_address: email,
+  });
+
+  return response.data;
+}
+
+export async function reserve(offers: ReserveOffer[]) {
 export enum PaymentType {
   CreditCard = 1,
   Vipps
@@ -77,6 +93,8 @@ export type Offer = {
 export type OfferSearchResponse = Offer[];
 
 export type FareContract = {
+  order_id: string;
+  order_version: string;
   product_name: string;
   duration: number;
   usage_valid_from: number;

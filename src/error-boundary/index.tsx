@@ -1,5 +1,6 @@
 import React, {ErrorInfo} from 'react';
 import bugsnag from '../diagnostics/bugsnag';
+import Intercom from 'react-native-intercom';
 import ErrorView from './ErrorView';
 
 type State = {
@@ -26,6 +27,11 @@ export default class ErrorBoundary extends React.Component<{}, State> {
           stack: errorInfo.componentStack,
         },
       };
+    });
+    Intercom.logEvent('error-boundary', {
+      error: error.message,
+      stack: error.stack || 'empty',
+      componentStack: errorInfo.componentStack,
     });
   }
   render() {

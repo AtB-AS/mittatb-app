@@ -15,6 +15,7 @@ import {
   ViewStyle,
   TextStyle,
   SafeAreaView,
+  Keyboard,
 } from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
@@ -52,7 +53,6 @@ type AddEditProps = {
 export default function AddEditFavorite({navigation, route}: AddEditProps) {
   const css = useScreenStyle();
   const {addFavorite, removeFavorite, updateFavorite} = useFavorites();
-  const {theme} = useTheme();
   const editItem = route?.params?.editItem;
 
   const [emoji, setEmoji] = useState<string | undefined>(editItem?.emoji);
@@ -64,6 +64,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
   const emojiRef = useRef<Modalize>(null);
   const openEmojiPopup = () => {
+    Keyboard.dismiss();
     emojiRef.current?.open();
   };
 
@@ -190,7 +191,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           <Button
             onPress={deleteItem}
             mode="destructive"
-            IconComponent={Remove}
+            IconComponent={RemoveIconWhite}
             text="Slett favorittsted"
           />
         )}
@@ -210,6 +211,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center',
+    backgroundColor: theme.background.level3,
   },
   innerContainer: {
     flex: 1,
@@ -259,6 +261,10 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignSelf: 'center',
   },
 }));
+
+function RemoveIconWhite() {
+  return <Remove fill="#ffffff" />;
+}
 
 type SymbolPickerProps = {
   onPress(): void;
