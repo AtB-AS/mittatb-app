@@ -61,7 +61,9 @@ export async function reserve(offers: ReserveOffer[], paymentType: PaymentType) 
   const url = 'reserve';
   const response = await client.post<ReserveTicketResponse>(url, {
     payment_type: paymentType,
-    payment_redirect_url: paymentType == PaymentType.Vipps ? 'atb://payment' : undefined,
+    payment_redirect_url: paymentType == PaymentType.Vipps
+      ? 'atb://payment?transaction_id={transaction_id}&payment_id={payment_id}'
+      : undefined,
     customer_id,
     offers,
   });
