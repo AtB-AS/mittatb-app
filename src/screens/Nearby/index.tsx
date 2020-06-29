@@ -2,7 +2,6 @@ import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useMemo} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {SharedElement} from 'react-navigation-shared-element';
 import {getDepartures} from '../../api/departures';
 import {LocationButton} from '../../components/search-button';
 import SearchLocationIcon from '../../components/search-location-icon';
@@ -99,19 +98,17 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
         rightButton={{icon: chatIcon, onPress: openChat}}
       />
       <SearchGroup>
-        <SharedElement id="locationSearchInput">
-          <LocationButton
-            title="Fra"
-            placeholder="Søk etter adresse eller sted"
-            location={fromLocation}
-            icon={
-              <View style={{marginLeft: 2}}>
-                <SearchLocationIcon location={fromLocation} />
-              </View>
-            }
-            onPress={() => openLocationSearch()}
-          />
-        </SharedElement>
+        <LocationButton
+          title="Fra"
+          placeholder="Søk etter adresse eller sted"
+          location={fromLocation}
+          icon={
+            <View style={{marginLeft: 2}}>
+              <SearchLocationIcon location={fromLocation} />
+            </View>
+          }
+          onPress={() => openLocationSearch()}
+        />
       </SearchGroup>
 
       <NearbyResults
