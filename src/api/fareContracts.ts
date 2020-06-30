@@ -72,7 +72,13 @@ export async function reserve(offers: ReserveOffer[], paymentType: PaymentType) 
 
 export async function capture(payment_id: number, transaction_id: number) {
   const url = 'capture';
-  await client.put(url, {payment_id, transaction_id});
+  await client.put(url, {
+    //@ts-ignore
+    payment_id: parseInt(payment_id, 10),
+    //@ts-ignore
+
+    transaction_id: parseInt(transaction_id, 10)
+  });
 }
 
 export type UserType = 'ADULT';
