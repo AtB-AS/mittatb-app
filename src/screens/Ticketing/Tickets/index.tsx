@@ -54,19 +54,16 @@ const ReceiptModal: React.FC<ModalProps> = (props) => {
           />
         </View>
         <View style={styles.modalButtonsContainer}>
-          <TouchableHighlight onPress={() => submit()} style={styles.button}>
+          <TouchableOpacity onPress={() => submit()} style={styles.button}>
             <View style={styles.buttonContentContainer}>
               <Text style={styles.buttonText}>Send</Text>
             </View>
-          </TouchableHighlight>
-          <TouchableHighlight
-            onPress={() => props.close()}
-            style={styles.button}
-          >
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => props.close()} style={styles.button}>
             <View style={styles.buttonContentContainer}>
               <Text style={styles.buttonText}>Avbryt</Text>
             </View>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
       </View>
     </Modal>
@@ -97,11 +94,16 @@ const Tickets: React.FC<Props> = ({navigation}) => {
           <View key={i} style={styles.ticketContainer}>
             <View style={styles.ticketLineContainer}>
               <Text style={styles.textItem}>
-                {secondsToDuration(fc.duration)} - {fc.product_name}
+                {secondsToDuration(fc.usage_valid_to - fc.usage_valid_from)} -{' '}
+                {fc.product_name}
               </Text>
               <Expand />
             </View>
-            <Text style={styles.textItem}>1 voksen</Text>
+            <Text style={styles.textItem}>
+              {fc.user_profiles.length > 1
+                ? `${fc.user_profiles.length} Voksne`
+                : `1 Voksen`}
+            </Text>
             <Text style={styles.textItem}>Sone A</Text>
             <View style={styles.receiptContainer}>
               <Text style={styles.textItem}>Ordre-ID: {fc.order_id}</Text>
@@ -119,21 +121,27 @@ const Tickets: React.FC<Props> = ({navigation}) => {
         show={!!selectedFareContract}
         close={() => setSelectedFareContract(undefined)}
       />
-      <TouchableHighlight
+      <TouchableOpacity
         onPress={() => navigation.push('Offer')}
-        style={styles.button}
+        style={styles.offerBtn}
       >
         <View style={styles.buttonContentContainer}>
           <Text style={styles.buttonText}>Kjøp reiserett</Text>
           <ArrowRight fill="white" width={14} height={14} />
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   body: {fontSize: 16, paddingVertical: 24},
+  offerBtn: {
+    padding: 12,
+    backgroundColor: 'black',
+    marginRight: 8,
+    marginBottom: 36,
+  },
   button: {padding: 12, backgroundColor: 'black', marginRight: 8},
   buttonContentContainer: {
     flexDirection: 'row',

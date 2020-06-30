@@ -106,7 +106,7 @@ export type FareContract = {
   duration: number;
   usage_valid_from: number;
   usage_valid_to: number;
-  user_profile: string;
+  user_profiles: string[];
 };
 
 export type ListTicketsResponse = {

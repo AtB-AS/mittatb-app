@@ -15,7 +15,6 @@ import {useGeocoder} from './useGeocoder';
 import LocationResults from './LocationResults';
 import FavoriteChips from './FavoriteChips';
 import {useGeolocationState} from '../GeolocationContext';
-import {SharedElement} from 'react-navigation-shared-element';
 import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
 import {Close} from '../assets/svg/icons/actions';
@@ -100,21 +99,19 @@ const LocationSearch: React.FC<Props> = ({
 
   return (
     <View style={styles.container}>
-      <SharedElement id="locationSearchInput">
-        <View style={styles.contentBlock}>
-          <Input
-            ref={inputRef}
-            label={label}
-            value={text}
-            onChangeText={setText}
-            showClear={Boolean(text?.length)}
-            onClear={() => setText('')}
-            placeholder="Søk etter adresse eller stoppested"
-            autoCorrect={false}
-            autoCompleteType="off"
-          />
-        </View>
-      </SharedElement>
+      <View style={styles.contentBlock}>
+        <Input
+          ref={inputRef}
+          label={label}
+          value={text}
+          onChangeText={setText}
+          showClear={Boolean(text?.length)}
+          onClear={() => setText('')}
+          placeholder="Søk etter adresse eller stoppested"
+          autoCorrect={false}
+          autoCompleteType="off"
+        />
+      </View>
 
       <FavoriteChips
         onSelectLocation={onSelect}

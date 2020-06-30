@@ -1,8 +1,8 @@
 import React from 'react';
-import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import AddEditFavorite from './AddEditFavorite';
 import Profile from './FavoriteList';
 import {LocationFavorite, Location} from '../../favorites/types';
+import {createStackNavigator} from '@react-navigation/stack';
 
 export type ProfileStackParams = {
   Profile: undefined;
@@ -12,7 +12,7 @@ export type ProfileStackParams = {
   };
 };
 
-const Stack = createSharedElementStackNavigator<ProfileStackParams>();
+const Stack = createStackNavigator<ProfileStackParams>();
 
 export default function ProfileScreen() {
   return (
