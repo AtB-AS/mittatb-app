@@ -10,12 +10,11 @@ import LocationSearch, {
 import TabNavigator from './TabNavigator';
 import {Close} from '../assets/svg/icons/actions';
 import {useTheme} from '../theme';
-import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import transitionSpec from './transitionSpec';
 import TripDetailsModal, {
   RouteParams as TripDetailsModalParams,
 } from '../screens/TripDetailsModal';
-import {TransitionPresets} from '@react-navigation/stack';
+import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 import DepartureDetails, {
   DepartureDetailsRouteParams,
 } from '../screens/TripDetailsModal/DepartureDetails';
@@ -29,7 +28,7 @@ export type RootStackParamList = {
   DepartureDetailsModal: DepartureDetailsRouteParams;
 };
 
-const SharedStack = createSharedElementStackNavigator<RootStackParamList>();
+const Stack = createStackNavigator<RootStackParamList>();
 
 const NavigationRoot = () => {
   const {isLoading, onboarded} = useAppState();
@@ -49,23 +48,21 @@ const NavigationRoot = () => {
       />
       <NavigationContainer onStateChange={trackNavigation}>
         <Host>
-          <SharedStack.Navigator
-            mode={isLoading || !onboarded ? 'card' : 'modal'}
-          >
+          <Stack.Navigator mode={isLoading || !onboarded ? 'card' : 'modal'}>
             {!onboarded ? (
-              <SharedStack.Screen
+              <Stack.Screen
                 name="Onboarding"
                 component={Onboarding}
                 options={{headerShown: false}}
               />
             ) : (
               <>
-                <SharedStack.Screen
+                <Stack.Screen
                   name="TabNavigator"
                   component={TabNavigator}
                   options={{headerShown: false}}
                 />
-                <SharedStack.Screen
+                <Stack.Screen
                   name="TripDetailsModal"
                   component={TripDetailsModal}
                   options={{
@@ -75,7 +72,7 @@ const NavigationRoot = () => {
                     ...TransitionPresets.ModalPresentationIOS,
                   }}
                 />
-                <SharedStack.Screen
+                <Stack.Screen
                   name="DepartureDetailsModal"
                   component={DepartureDetails}
                   options={{
@@ -85,17 +82,9 @@ const NavigationRoot = () => {
                     ...TransitionPresets.ModalPresentationIOS,
                   }}
                 />
-                <SharedStack.Screen
+                <Stack.Screen
                   name="LocationSearch"
                   component={LocationSearch}
-                  sharedElementsConfig={() => [
-                    {
-                      id: 'locationSearchInput',
-                      animation: 'fade',
-                      resize: 'clip',
-                      align: 'center-bottom',
-                    },
-                  ]}
                   options={{
                     title: 'Søk',
                     headerBackTitleVisible: false,
@@ -125,7 +114,7 @@ const NavigationRoot = () => {
                 />
               </>
             )}
-          </SharedStack.Navigator>
+          </Stack.Navigator>
         </Host>
       </NavigationContainer>
     </>
