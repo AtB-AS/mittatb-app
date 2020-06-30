@@ -1,6 +1,10 @@
 import React, {useEffect, useRef} from 'react';
 import {View, StatusBar, Platform, Text} from 'react-native';
-import {NavigationContainer, NavigationContainerRef, useLinking} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+  useLinking,
+} from '@react-navigation/native';
 import trackNavigation from '../diagnostics/trackNavigation';
 import {useAppState} from '../AppContext';
 import Onboarding from '../screens/Onboarding';
@@ -36,20 +40,17 @@ const NavigationRoot = () => {
   const {isLoading, onboarded} = useAppState();
   const {theme} = useTheme();
 
-  const ref = useRef<NavigationContainerRef>(null)
-  const { getInitialState } = useLinking(ref, {
+  const ref = useRef<NavigationContainerRef>(null);
+  const {getInitialState} = useLinking(ref, {
     prefixes: ['atb://'],
-    config: { Profile: 'profile', 'PaymentVipps': 'payment' }
-  })
+    config: {Profile: 'profile', PaymentVipps: 'payment'},
+  });
 
   useEffect(() => {
     getInitialState()
-      .then(state => {
-        console.log(state)
-      })
-      .catch(() => {})
-  }, [getInitialState])
-
+      .then((state) => {})
+      .catch(() => {});
+  }, [getInitialState]);
 
   if (isLoading) {
     return null;
@@ -120,7 +121,7 @@ const NavigationRoot = () => {
                           marginLeft: 24,
                         }}
                       >
-                        <Close fill={tintColor}/>
+                        <Close fill={tintColor} />
                       </View>
                     ),
                     transitionSpec: {

@@ -16,7 +16,7 @@ export async function list(): Promise<ListTicketsResponse> {
 
 export async function search(
   zones: string[],
-  userTypes: { id: string; user_type: UserType }[],
+  userTypes: {id: string; user_type: UserType}[],
   products: string[],
 ): Promise<Offer[]> {
   const body = {
@@ -52,18 +52,22 @@ export async function sendReceipt(fc: FareContract, email: string) {
 
 export enum PaymentType {
   CreditCard = 1,
-  Vipps
+  Vipps,
 }
 
-export async function reserve(offers: ReserveOffer[], paymentType: PaymentType) {
+export async function reserve(
+  offers: ReserveOffer[],
+  paymentType: PaymentType,
+) {
   const customer_id = await getCustomerId();
 
   const url = 'reserve';
   const response = await client.post<ReserveTicketResponse>(url, {
     payment_type: paymentType,
-    payment_redirect_url: paymentType == PaymentType.Vipps
-      ? 'atb://payment?transaction_id={transaction_id}&payment_id={payment_id}'
-      : undefined,
+    payment_redirect_url:
+      paymentType == PaymentType.Vipps
+        ? 'atb://payment?transaction_id={transaction_id}&payment_id={payment_id}'
+        : undefined,
     customer_id,
     offers,
   });
@@ -77,7 +81,7 @@ export async function capture(payment_id: number, transaction_id: number) {
     payment_id: parseInt(payment_id, 10),
     //@ts-ignore
 
-    transaction_id: parseInt(transaction_id, 10)
+    transaction_id: parseInt(transaction_id, 10),
   });
 }
 

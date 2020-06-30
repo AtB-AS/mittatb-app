@@ -7,12 +7,10 @@ import OfferScreen from './Offer';
 import {
   Method as PaymentMethodScreen,
   CreditCard as CreditCardScreen,
-  Vipps as VippsScreen
+  Vipps as VippsScreen,
 } from './Payment';
 
-
-interface VippsPaymentResponse {
-}
+interface VippsPaymentResponse {}
 
 export type TicketingStackParams = {
   Tickets: undefined;

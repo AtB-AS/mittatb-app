@@ -28,7 +28,7 @@ const PaymentMethod: React.FC<Props> = ({navigation, route}) => {
           break;
         case PaymentType.Vipps:
           if (await Linking.canOpenURL(response.url)) {
-            Linking.openURL(response.url)
+            Linking.openURL(response.url);
           }
           break;
       }
@@ -46,21 +46,27 @@ const PaymentMethod: React.FC<Props> = ({navigation, route}) => {
       {!isLoading ? (
         <>
           <Text style={styles.heading}>Velg betalingsmiddel</Text>
-          <TouchableHighlight onPress={() => handlePress(PaymentType.CreditCard)} style={styles.button}>
+          <TouchableHighlight
+            onPress={() => handlePress(PaymentType.CreditCard)}
+            style={styles.button}
+          >
             <View style={styles.buttonContentContainer}>
               <Text style={styles.buttonText}>Betal med bankkort</Text>
-              <ArrowRight fill="white" width={14} height={14}/>
+              <ArrowRight fill="white" width={14} height={14} />
             </View>
           </TouchableHighlight>
-          <TouchableHighlight onPress={() => handlePress(PaymentType.Vipps)} style={styles.button}>
+          <TouchableHighlight
+            onPress={() => handlePress(PaymentType.Vipps)}
+            style={styles.button}
+          >
             <View style={styles.buttonContentContainer}>
               <Text style={styles.buttonText}>Betal med Vipps</Text>
-              <ArrowRight fill="white" width={14} height={14}/>
+              <ArrowRight fill="white" width={14} height={14} />
             </View>
           </TouchableHighlight>
         </>
       ) : (
-        <ActivityIndicator/>
+        <ActivityIndicator />
       )}
     </View>
   );
