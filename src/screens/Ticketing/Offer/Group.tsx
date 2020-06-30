@@ -22,13 +22,13 @@ const Offer: React.FC<Props> = ({name, price, count, increment, decrement}) => {
         <View style={styles.iconContainerWithPadding}>
           <TouchableOpacity onPress={increment} hitSlop={insets.all(8)}>
             <View style={styles.iconContainer}>
-              <Add/>
+              <Add />
             </View>
           </TouchableOpacity>
         </View>
         <TouchableOpacity onPress={decrement} hitSlop={insets.all(8)}>
           <View style={styles.iconContainer}>
-            <Remove/>
+            <Remove />
           </View>
         </TouchableOpacity>
       </View>
