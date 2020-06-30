@@ -51,6 +51,7 @@ const ReceiptModal: React.FC<ModalProps> = (props) => {
             onChangeText={(email) => setEmail(email)}
             keyboardType={'email-address'}
             placeholder={'E-post'}
+            placeholderTextColor="#aaa"
           />
         </View>
         <View style={styles.modalButtonsContainer}>
@@ -187,6 +188,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   modalInput: {
+    color: 'black',
     borderColor: 'black',
     borderWidth: 1,
     padding: 8,
