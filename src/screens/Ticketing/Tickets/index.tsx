@@ -102,7 +102,11 @@ const Tickets: React.FC<Props> = ({navigation}) => {
               </Text>
               <Expand />
             </View>
-            <Text style={styles.textItem}>1 voksen</Text>
+            <Text style={styles.textItem}>
+              {fc.user_profiles.length > 1
+                ? `${fc.user_profiles.length} Voksne`
+                : `1 Voksen`}
+            </Text>
             <Text style={styles.textItem}>Sone A</Text>
             <View style={styles.receiptContainer}>
               <Text style={styles.textItem}>Ordre-ID: {fc.order_id}</Text>
