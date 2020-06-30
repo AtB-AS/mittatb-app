@@ -78,6 +78,8 @@ const Tickets: React.FC<Props> = ({navigation}) => {
   const showReceiptModal = (f: FareContract) => {
     setSelectedFareContract(f);
   };
+  const nowSecs = Date.now() / 1000;
+  const valid = (f: FareContract): boolean => f.usage_valid_to > nowSecs;
   return (
     <ScrollView
       style={styles.container}
@@ -90,29 +92,33 @@ const Tickets: React.FC<Props> = ({navigation}) => {
     >
       <Text style={styles.heading}>Reiserettigheter</Text>
       {fareContracts && fareContracts.length ? (
-        fareContracts.map((fc, i) => (
-          <View key={i} style={styles.ticketContainer}>
-            <View style={styles.ticketLineContainer}>
-              <Text style={styles.textItem}>
-                {secondsToDuration(fc.usage_valid_to - fc.usage_valid_from)} -{' '}
-                {fc.product_name}
-              </Text>
-              <Expand />
-            </View>
-            <Text style={styles.textItem}>
-              {fc.user_profiles.length > 1
-                ? `${fc.user_profiles.length} Voksne`
-                : `1 Voksen`}
-            </Text>
-            <Text style={styles.textItem}>Sone A</Text>
-            <View style={styles.receiptContainer}>
-              <Text style={styles.textItem}>Ordre-ID: {fc.order_id}</Text>
-              <TouchableOpacity onPress={() => showReceiptModal(fc)}>
-                <Text style={styles.textItem}>Kvittering</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ))
+        fareContracts
+          .filter((fc) => valid(fc))
+          .map((fc, i) => {
+            return (
+              <View key={i} style={styles.ticketContainer}>
+                <View style={styles.ticketLineContainer}>
+                  <Text style={styles.textItem}>
+                    {secondsToDuration(Date.now() / 1000 - fc.usage_valid_to)} -{' '}
+                    {fc.product_name}
+                  </Text>
+                  <Expand />
+                </View>
+                <Text style={styles.textItem}>
+                  {fc.user_profiles.length > 1
+                    ? `${fc.user_profiles.length} Voksne`
+                    : `1 Voksen`}
+                </Text>
+                <Text style={styles.textItem}>Sone A</Text>
+                <View style={styles.receiptContainer}>
+                  <Text style={styles.textItem}>Ordre-ID: {fc.order_id}</Text>
+                  <TouchableOpacity onPress={() => showReceiptModal(fc)}>
+                    <Text style={styles.textItem}>Kvittering</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            );
+          })
       ) : (
         <Text style={styles.body}>Du har ingen aktive reiserettigheter</Text>
       )}
