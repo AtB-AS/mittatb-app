@@ -123,7 +123,7 @@ const Tickets: React.FC<Props> = ({navigation}) => {
       />
       <TouchableOpacity
         onPress={() => navigation.push('Offer')}
-        style={styles.button}
+        style={styles.offerBtn}
       >
         <View style={styles.buttonContentContainer}>
           <Text style={styles.buttonText}>Kjøp reiserett</Text>
@@ -136,6 +136,12 @@ const Tickets: React.FC<Props> = ({navigation}) => {
 
 const styles = StyleSheet.create({
   body: {fontSize: 16, paddingVertical: 24},
+  offerBtn: {
+    padding: 12,
+    backgroundColor: 'black',
+    marginRight: 8,
+    marginBottom: 36,
+  },
   button: {padding: 12, backgroundColor: 'black', marginRight: 8},
   buttonContentContainer: {
     flexDirection: 'row',
