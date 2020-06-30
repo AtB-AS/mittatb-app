@@ -97,7 +97,8 @@ const Tickets: React.FC<Props> = ({navigation}) => {
           <View key={i} style={styles.ticketContainer}>
             <View style={styles.ticketLineContainer}>
               <Text style={styles.textItem}>
-                {secondsToDuration(fc.duration)} - {fc.product_name}
+                {secondsToDuration(fc.usage_valid_to - fc.usage_valid_from)} -{' '}
+                {fc.product_name}
               </Text>
               <Expand />
             </View>
