@@ -11,20 +11,13 @@ type Props = {
 };
 
 const Vipps: React.FC<Props> = ({navigation, route}) => {
-  const {url, transaction_id, payment_id} = route.params;
   const {activatePollingForNewTickets} = useTicketState();
   useEffect(() => {
-    const capture = async () => {
-      await capturePayment(payment_id, transaction_id);
-      activatePollingForNewTickets();
-      navigation.popToTop();
-    };
-    capture();
-  });
+    activatePollingForNewTickets();
+    navigation.popToTop();
+  }, []);
 
-  return (
-    <></>
-  );
+  return <></>;
 };
 
 export default Vipps;
