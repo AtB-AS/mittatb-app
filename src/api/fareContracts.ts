@@ -1,14 +1,10 @@
 import {getCustomerId} from '../utils/customerId';
-import {createClient} from './client';
-
-export const TICKET_SERVICE_BASE_URL = 'https://atb-ticket.dev.mittatb.no';
-
-const client = createClient(TICKET_SERVICE_BASE_URL + '/ticket/v1/');
+import client from './client';
 
 export async function list(): Promise<ListTicketsResponse> {
   const customerId = await getCustomerId();
 
-  const url = 'ticket/' + customerId;
+  const url = 'ticket/v1/ticket/' + customerId;
   const response = await client.get<ListTicketsResponse>(url);
 
   return response.data;
@@ -29,7 +25,7 @@ export async function search(
     products,
   };
 
-  const url = 'search';
+  const url = 'ticket/v1/search';
   const response = await client.post<Offer[]>(url, body);
 
   return response.data;
@@ -40,7 +36,7 @@ interface SendReceiptResponse {
 }
 
 export async function sendReceipt(fc: FareContract, email: string) {
-  const url = 'receipt';
+  const url = 'ticket/v1/receipt';
   const response = await client.post<SendReceiptResponse>(url, {
     order_id: fc.order_id,
     order_version: parseInt(fc.order_version, 10),
@@ -53,7 +49,7 @@ export async function sendReceipt(fc: FareContract, email: string) {
 export async function reserve(offers: ReserveOffer[]) {
   const customer_id = await getCustomerId();
 
-  const url = 'reserve';
+  const url = 'ticket/v1/reserve';
   const response = await client.post<ReserveTicketResponse>(url, {
     payment_type: 1,
     customer_id,
@@ -64,7 +60,7 @@ export async function reserve(offers: ReserveOffer[]) {
 }
 
 export async function capture(payment_id: number, transaction_id: number) {
-  const url = 'capture';
+  const url = 'ticket/v1/capture';
   await client.put(url, {payment_id, transaction_id});
 }
 
