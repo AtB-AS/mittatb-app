@@ -56,7 +56,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     <WebView
       style={{opacity: isLoading ? 0 : 1}}
       source={{
-        uri: url
+        uri: url,
       }}
       onLoadStart={onLoadStart}
       onLoadEnd={onLoadEnd}
