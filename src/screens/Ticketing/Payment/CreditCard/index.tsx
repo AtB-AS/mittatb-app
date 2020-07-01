@@ -56,7 +56,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     <WebView
       style={{opacity: isLoading ? 0 : 1}}
       source={{
-        uri: url.startsWith('http') ? url : API_BASE_URL + 'ticket/v1/' + url,
+        uri: url
       }}
       onLoadStart={onLoadStart}
       onLoadEnd={onLoadEnd}
