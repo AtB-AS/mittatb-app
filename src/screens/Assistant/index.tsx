@@ -141,6 +141,9 @@ const Assistant: React.FC<Props> = ({
         <View style={styles.searchButtonContainer}>
           <View style={styles.styleButton}>
             <LocationButton
+              accessible={true}
+              accessibilityLabel="Søk på avreisested"
+              accessibilityRole="button"
               title="Fra"
               placeholder="Søk etter adresse eller sted"
               location={from}
@@ -149,6 +152,9 @@ const Assistant: React.FC<Props> = ({
           </View>
 
           <TouchableOpacity
+            accessible={true}
+            accessibilityLabel="Velg nåværende plassering som avreisested"
+            accessibilityRole="button"
             hitSlop={insets.all(12)}
             onPress={setCurrentLocationOrRequest}
           >
@@ -159,6 +165,9 @@ const Assistant: React.FC<Props> = ({
         <View style={styles.searchButtonContainer}>
           <View style={styles.styleButton}>
             <LocationButton
+              accessible={true}
+              accessibilityLabel="Søk på ankomststed"
+              accessibilityRole="button"
               title="Til"
               placeholder="Søk etter adresse eller sted"
               location={to}
@@ -166,7 +175,13 @@ const Assistant: React.FC<Props> = ({
             />
           </View>
 
-          <TouchableOpacity hitSlop={insets.all(12)} onPress={swap}>
+          <TouchableOpacity
+            hitSlop={insets.all(12)}
+            onPress={swap}
+            accessible={true}
+            accessibilityLabel="Bytt om på avreisested og ankomststed"
+            accessibilityRole="button"
+          >
             <Swap />
           </TouchableOpacity>
         </View>

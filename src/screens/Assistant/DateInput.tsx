@@ -2,7 +2,12 @@ import * as React from 'react';
 import {StyleSheet} from '../../theme';
 import {Portal} from 'react-native-portalize';
 import {Modalize} from 'react-native-modalize';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  AccessibilityProperties,
+} from 'react-native';
 import {useState, useRef, useEffect} from 'react';
 import DatePicker from 'react-native-date-picker';
 import Button from '../../components/button';
@@ -57,11 +62,13 @@ function dateToText(date: DateOutput, timeOfSearch: Date): string {
   return `Avreise ${formatToLongDateTime(date.date, nb)}`;
 }
 
-const DateTypeButton: React.FC<{
-  type: DateTypes;
-  selected: DateTypes;
-  onPress(type: DateTypes): void;
-}> = ({type, selected, onPress}) => {
+const DateTypeButton: React.FC<
+  {
+    type: DateTypes;
+    selected: DateTypes;
+    onPress(type: DateTypes): void;
+  } & AccessibilityProperties
+> = ({type, selected, onPress, ...props}) => {
   const style = useStyle();
   const isSelected = type === selected;
 
@@ -75,6 +82,7 @@ const DateTypeButton: React.FC<{
       <TouchableOpacity
         onPress={() => onPress(type)}
         hitSlop={insets.symmetric(12, 8)}
+        {...props}
       >
         <Text style={style.dateTypeButtonText}>{dateTypeToText(type)}</Text>
       </TouchableOpacity>
@@ -142,6 +150,9 @@ const DateInput: React.FC<DateInputProps> = ({
   return (
     <>
       <SearchButton
+        accessible={true}
+        accessibilityLabel="Sett tidspunkt for avreise eller ankomst"
+        accessibilityRole="button"
         title="Når"
         text={dateToText(valueOrDefault, timeOfLastSearch)}
         onPress={onOpen}
@@ -168,16 +179,25 @@ const DateInput: React.FC<DateInputProps> = ({
                 onPress={setNow}
                 type="now"
                 selected={dateObjectInternal.type}
+                accessible={true}
+                accessibilityLabel="Sett avreisetidspunkt til nå"
+                accessibilityRole="button"
               />
               <DateTypeButton
                 onPress={setType}
                 type="departure"
                 selected={dateObjectInternal.type}
+                accessible={true}
+                accessibilityLabel="Velg avreisetidspunkt"
+                accessibilityRole="button"
               />
               <DateTypeButton
                 onPress={setType}
                 type="arrival"
                 selected={dateObjectInternal.type}
+                accessible={true}
+                accessibilityLabel="Velg ankomststidspunkt"
+                accessibilityRole="button"
               />
             </View>
 
@@ -190,7 +210,13 @@ const DateInput: React.FC<DateInputProps> = ({
               />
             </View>
 
-            <Button onPress={onSave} text="Søk etter reiser" />
+            <Button
+              accessible={true}
+              accessibilityLabel="Søk etter reiser med nåværende valgte tidspunkt"
+              accessibilityRole="search"
+              onPress={onSave}
+              text="Søk etter reiser"
+            />
           </View>
         </Modalize>
       </Portal>
