@@ -15,7 +15,7 @@ export async function autocomplete(
   location: GeolocationResponse | null,
   config?: AxiosRequestConfig,
 ) {
-  const url = 'v1/geocoder/features';
+  const url = 'bff/v1/geocoder/features';
   const query = qs.stringify({
     query: text,
     lat: location?.coords.latitude ?? TRONDHEIM_CENTRAL_STATION.latitude,
@@ -30,7 +30,7 @@ export async function reverse(
   location: GeolocationResponse | null,
   config?: AxiosRequestConfig,
 ) {
-  const url = 'v1/geocoder/reverse';
+  const url = 'bff/v1/geocoder/reverse';
   const query = qs.stringify({
     lat: location?.coords.latitude,
     lon: location?.coords.longitude,

@@ -10,7 +10,7 @@ export default async function search(
   arriveBy: boolean = false,
   opts?: AxiosRequestConfig,
 ) {
-  const url = 'v1/journey/trip';
+  const url = 'bff/v1/journey/trip';
   return await client.post<TripPattern[]>(
     url,
     {
