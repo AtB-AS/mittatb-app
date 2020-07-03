@@ -9,8 +9,8 @@ import {
   WebViewErrorEvent,
 } from 'react-native-webview/lib/WebViewTypes';
 import {capturePayment} from '../../../../api';
-import {TICKET_SERVICE_BASE_URL} from '../../../../api/fareContracts';
 import {useTicketState} from '../../TicketContext';
+import {API_BASE_URL} from 'react-native-dotenv';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'PaymentCreditCard'>;
@@ -56,7 +56,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     <WebView
       style={{opacity: isLoading ? 0 : 1}}
       source={{
-        uri: url.startsWith('http') ? url : TICKET_SERVICE_BASE_URL + url,
+        uri: url,
       }}
       onLoadStart={onLoadStart}
       onLoadEnd={onLoadEnd}

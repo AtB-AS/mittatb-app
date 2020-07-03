@@ -54,15 +54,21 @@ yarn icons
 export CURRENT_COMMIT_HASH=$(git rev-parse --short HEAD)
 
 echo "Adding app badges to icons"
-if [ "$APP_ENVIRONMENT" = "staging" ]; then
+if [[ "$APP_ENVIRONMENT" = "staging" || "$APP_ENVIRONMENT" = "prodstaging" ]]; then
   gem install badge --no-document
   brew install librsvg
   brew unlink pango  
   brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/7cf3b63be191cb2ce4cd86f4406915128ec97432/Formula/pango.rb
   brew switch pango 1.42.4_1 
 
-  badge --shield "1.0-QA-orange" --no_badge  --glob "/android/app/src/staging/res/*/*.{png,PNG}"
-  badge --shield "1.0-QA-orange" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
+  if [ "$APP_ENVIRONMENT" = "staging" ]; then
+    badge --shield "1.0-QA-orange" --no_badge  --glob "/android/app/src/staging/res/*/*.{png,PNG}"
+    badge --shield "1.0-QA-orange" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
+  fi
+  if [ "$APP_ENVIRONMENT" = "prodstaging" ]; then
+    badge --shield "1.0-Prod-blue" --no_badge  --glob "/android/app/src/staging/res/*/*.{png,PNG}"
+    badge --shield "1.0-Prod-blue" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
+  fi
 fi 
 
 if [ "$ENABLE_E2E" = true ]; then

@@ -27,7 +27,6 @@ import {StyleSheet, Theme, useTheme} from '../../../theme';
 import Button from '../../../components/button';
 import EmojiPopup from './EmojiPopup';
 import {Search} from '../../../assets/svg/icons/actions';
-import {SharedElement} from 'react-navigation-shared-element';
 import {RootStackParamList} from '../../../navigation';
 import {useLocationSearchValue} from '../../../location-search';
 import ScreenHeader from '../../../ScreenHeader';
@@ -145,24 +144,22 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
       />
 
       <View style={css.innerContainer}>
-        <SharedElement id="locationSearchInput">
-          <Input
-            label="Sted"
-            value={location?.label}
-            placeholder="Søk etter adresse eller stoppested"
-            onFocus={() =>
-              navigation.navigate('LocationSearch', {
-                callerRouteName: AddEditRouteNameStatic,
-                callerRouteParam: 'searchLocation',
-                label: 'Sted',
-                hideFavorites: true,
-                initialText: location?.name,
-              })
-            }
-            autoCorrect={false}
-            autoCompleteType="off"
-          />
-        </SharedElement>
+        <Input
+          label="Sted"
+          value={location?.label}
+          placeholder="Søk etter adresse eller stoppested"
+          onFocus={() =>
+            navigation.navigate('LocationSearch', {
+              callerRouteName: AddEditRouteNameStatic,
+              callerRouteParam: 'searchLocation',
+              label: 'Sted',
+              hideFavorites: true,
+              initialText: location?.name,
+            })
+          }
+          autoCorrect={false}
+          autoCompleteType="off"
+        />
 
         <Input
           label="Navn"

@@ -4,7 +4,6 @@ import React, {useCallback, useEffect, useMemo, useState, useRef} from 'react';
 import {View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {SharedElement} from 'react-navigation-shared-element';
 import {searchTrip} from '../../api';
 import {CancelToken, isCancel} from '../../api/client';
 import {Swap} from '../../assets/svg/icons/actions';
@@ -142,14 +141,14 @@ const Assistant: React.FC<Props> = ({
       />
       <SearchGroup>
         <View style={styles.searchButtonContainer}>
-          <SharedElement style={styles.styleButton} id="locationSearchInput">
+          <View style={styles.styleButton}>
             <LocationButton
               title="Fra"
               placeholder="Søk etter adresse eller sted"
               location={from}
               onPress={() => openLocationSearch('fromLocation', from?.name)}
             />
-          </SharedElement>
+          </View>
 
           <TouchableOpacity
             style={styles.clickableIcon}
@@ -161,14 +160,14 @@ const Assistant: React.FC<Props> = ({
         </View>
 
         <View style={styles.searchButtonContainer}>
-          <SharedElement id="locationSearchInput" style={styles.styleButton}>
+          <View style={styles.styleButton}>
             <LocationButton
               title="Til"
               placeholder="Søk etter adresse eller sted"
               location={to}
               onPress={() => openLocationSearch('toLocation', to?.name)}
             />
-          </SharedElement>
+          </View>
 
           <TouchableOpacity
             style={styles.clickableIcon}

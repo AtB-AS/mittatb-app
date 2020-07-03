@@ -9,7 +9,7 @@ export async function getDepartures(
   id: string,
   date?: Date,
 ): Promise<EstimatedCall[]> {
-  let url = `v1/servicejourney/${encodeURIComponent(id)}/departures`;
+  let url = `bff/v1/servicejourney/${encodeURIComponent(id)}/departures`;
   if (date) {
     url = url + `?date=${date.toISOString()}`;
   }

@@ -1,14 +1,10 @@
 import {getCustomerId} from '../utils/customerId';
-import {createClient} from './client';
-
-export const TICKET_SERVICE_BASE_URL = 'https://atb-ticket.dev.mittatb.no';
-
-const client = createClient(TICKET_SERVICE_BASE_URL + '/ticket/v1/');
+import client from './client';
 
 export async function list(): Promise<ListTicketsResponse> {
   const customerId = await getCustomerId();
 
-  const url = 'ticket/' + customerId;
+  const url = 'ticket/v1/ticket/' + customerId;
   const response = await client.get<ListTicketsResponse>(url);
 
   return response.data;
@@ -29,28 +25,59 @@ export async function search(
     products,
   };
 
-  const url = 'search';
+  const url = 'ticket/v1/search';
   const response = await client.post<Offer[]>(url, body);
 
   return response.data;
 }
 
-export async function reserve(offers: ReserveOffer[]) {
-  const customer_id = await getCustomerId();
+interface SendReceiptResponse {
+  reference: string;
+}
 
-  const url = 'reserve';
-  const response = await client.post<ReserveTicketResponse>(url, {
-    payment_type: 1,
-    customer_id,
-    offers,
+export async function sendReceipt(fc: FareContract, email: string) {
+  const url = 'ticket/v1/receipt';
+  const response = await client.post<SendReceiptResponse>(url, {
+    order_id: fc.order_id,
+    order_version: parseInt(fc.order_version, 10),
+    email_address: email,
   });
 
   return response.data;
 }
 
+export enum PaymentType {
+  CreditCard = 1,
+  Vipps,
+}
+
+export async function reserve(
+  offers: ReserveOffer[],
+  paymentType: PaymentType,
+) {
+  const customer_id = await getCustomerId();
+
+  const url = 'ticket/v1/reserve';
+  const response = await client.post<ReserveTicketResponse>(url, {
+    payment_type: paymentType,
+    payment_redirect_url:
+      paymentType == PaymentType.Vipps
+        ? 'atb://payment?transaction_id={transaction_id}&payment_id={payment_id}'
+        : undefined,
+    customer_id,
+    offers,
+  });
+  return response.data;
+}
+
 export async function capture(payment_id: number, transaction_id: number) {
   const url = 'capture';
-  await client.put(url, {payment_id, transaction_id});
+  await client.put(url, {
+    //@ts-ignore
+    payment_id: parseInt(payment_id, 10),
+    //@ts-ignore
+    transaction_id: parseInt(transaction_id, 10),
+  });
 }
 
 export type UserType = 'ADULT';
@@ -72,11 +99,13 @@ export type Offer = {
 export type OfferSearchResponse = Offer[];
 
 export type FareContract = {
+  order_id: string;
+  order_version: string;
   product_name: string;
   duration: number;
   usage_valid_from: number;
   usage_valid_to: number;
-  user_profile: string;
+  user_profiles: string[];
 };
 
 export type ListTicketsResponse = {

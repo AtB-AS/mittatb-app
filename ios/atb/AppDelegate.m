@@ -3,6 +3,8 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import <React/RCTLinkingManager.h>
+
 
 #import <BugsnagReactNative.h>
 #import <BugsnagConfiguration.h>
@@ -43,7 +45,7 @@ static void InitializeFlipper(UIApplication *application) {
   if (intercomApiKey != nil && intercomAppId != nil) {
     [Intercom setApiKey:intercomApiKey forAppId:intercomAppId];
   }
-  
+
   NSString* bugsnagApiKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"BugsnagAPIKey"];
   if (bugsnagApiKey != nil) {
     BugsnagConfiguration *config = [BugsnagConfiguration new];
@@ -53,11 +55,11 @@ static void InitializeFlipper(UIApplication *application) {
       config.releaseStage = bugsnagReleaseStage;
     [BugsnagReactNative startWithConfiguration:config];
   }
-  
+
   if ([FIRApp defaultApp] == nil) {
     [FIRApp configure];
   }
-  
+
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"atb"
@@ -70,9 +72,9 @@ static void InitializeFlipper(UIApplication *application) {
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  
+
   [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView];
-  
+
   return YES;
 }
 
@@ -83,6 +85,13 @@ static void InitializeFlipper(UIApplication *application) {
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
+}
+
+- (BOOL)application:(UIApplication *)application
+   openURL:(NSURL *)url
+   options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  return [RCTLinkingManager application:application openURL:url options:options];
 }
 
 @end

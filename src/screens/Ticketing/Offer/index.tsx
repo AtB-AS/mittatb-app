@@ -7,6 +7,7 @@ import {ArrowRight, Expand} from '../../../assets/svg/icons/navigation';
 import {searchOffers} from '../../../api/';
 import {UserType, Offer, OfferPrice} from '../../../api/fareContracts';
 import OfferGroup from './Group';
+import {SINGLE_TICKET_PRODUCT_ID} from 'react-native-dotenv';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'Offer'>;
@@ -110,7 +111,7 @@ const OfferRoot: React.FC<Props> = ({navigation}) => {
     async function getBaseOffers() {
       try {
         const offers = await searchOffers(['ATB:TariffZone:1'], groupArr, [
-          'ATB:PreassignedFareProduct:61be5f93',
+          SINGLE_TICKET_PRODUCT_ID,
         ]);
 
         dispatch({
