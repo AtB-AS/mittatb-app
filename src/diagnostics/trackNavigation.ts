@@ -2,18 +2,16 @@ import {NavigationState} from '@react-navigation/native';
 import bugsnag from './bugsnag';
 import analytics from '@react-native-firebase/analytics';
 
-const getActiveRouteName = (
-  state: NavigationState,
-  parents: string[] = [],
-): string => {
+const getActiveRouteName = (state: NavigationState): string => {
   try {
     const route = state.routes[state.index];
-    parents = [...parents, route.name];
+
     if (route.state) {
       // Dive into nested navigators
-      return getActiveRouteName(route.state as NavigationState, parents);
+      return getActiveRouteName(route.state as NavigationState);
     }
-    return parents.join('.');
+
+    return route.name;
   } catch (err) {
     return 'Unknown';
   }
