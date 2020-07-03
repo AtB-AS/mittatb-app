@@ -33,8 +33,7 @@ const PaymentMethod: React.FC<Props> = ({navigation, route}) => {
           break;
       }
     } catch (err) {
-      // @ts-ignore
-      console.log(err.response);
+      console.warn(err.response);
       console.warn(err);
     } finally {
       setIsLoading(false);
