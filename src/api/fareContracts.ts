@@ -46,22 +46,38 @@ export async function sendReceipt(fc: FareContract, email: string) {
   return response.data;
 }
 
-export async function reserve(offers: ReserveOffer[]) {
+export enum PaymentType {
+  CreditCard = 1,
+  Vipps,
+}
+
+export async function reserve(
+  offers: ReserveOffer[],
+  paymentType: PaymentType,
+) {
   const customer_id = await getCustomerId();
 
   const url = 'ticket/v1/reserve';
   const response = await client.post<ReserveTicketResponse>(url, {
-    payment_type: 1,
+    payment_type: paymentType,
+    payment_redirect_url:
+      paymentType == PaymentType.Vipps
+        ? 'atb://payment?transaction_id={transaction_id}&payment_id={payment_id}'
+        : undefined,
     customer_id,
     offers,
   });
-
   return response.data;
 }
 
 export async function capture(payment_id: number, transaction_id: number) {
-  const url = 'ticket/v1/capture';
-  await client.put(url, {payment_id, transaction_id});
+  const url = 'capture';
+  await client.put(url, {
+    //@ts-ignore
+    payment_id: parseInt(payment_id, 10),
+    //@ts-ignore
+    transaction_id: parseInt(transaction_id, 10),
+  });
 }
 
 export type UserType = 'ADULT';

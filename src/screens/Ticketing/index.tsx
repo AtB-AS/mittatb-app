@@ -7,13 +7,17 @@ import OfferScreen from './Offer';
 import {
   Method as PaymentMethodScreen,
   CreditCard as CreditCardScreen,
+  Vipps as VippsScreen,
 } from './Payment';
+
+interface VippsPaymentResponse {}
 
 export type TicketingStackParams = {
   Tickets: undefined;
   Offer: undefined;
   PaymentMethod: {offers: {offer_id: string; count: number}[]};
   PaymentCreditCard: ReserveTicketResponse;
+  PaymentVipps: ReserveTicketResponse;
 };
 
 const Stack = createStackNavigator<TicketingStackParams>();
@@ -26,6 +30,7 @@ export default function Ticketing() {
         <Stack.Screen name="Offer" component={OfferScreen} />
         <Stack.Screen name="PaymentMethod" component={PaymentMethodScreen} />
         <Stack.Screen name="PaymentCreditCard" component={CreditCardScreen} />
+        <Stack.Screen name="PaymentVipps" component={VippsScreen} />
       </Stack.Navigator>
     </TicketContextProvider>
   );
