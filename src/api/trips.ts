@@ -10,7 +10,7 @@ export default async function search(
   arriveBy: boolean = false,
   opts?: AxiosRequestConfig,
 ) {
-  const url = 'v1/journey/trip';
+  const url = 'bff/v1/journey/trip';
   return await client.post<TripPattern[]>(
     url,
     {
@@ -35,7 +35,7 @@ export async function getSingleTripPattern(
   tripPatternId: string,
   opts?: AxiosRequestConfig,
 ) {
-  const url = `v1/journey/single-trip?id=${tripPatternId}`;
+  const url = `bff/v1/journey/single-trip?id=${tripPatternId}`;
   const result = await client.get<TripPattern>(url, opts);
   return result.data;
 }
