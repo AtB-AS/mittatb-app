@@ -243,6 +243,9 @@ type LastElementProps = {
 };
 const LastElement: React.FC<LastElementProps> = ({children, last}) => {
   const num = React.Children.count(children) - 1;
+  if (num === 0 && children) {
+    return <>{children}</>;
+  }
   return (
     <>
       {React.Children.map(children, (child, i) => {
