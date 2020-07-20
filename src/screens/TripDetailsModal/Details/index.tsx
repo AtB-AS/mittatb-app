@@ -25,6 +25,7 @@ import LocationIcon from '../../../components/location-icon';
 import {FavoriteIcon} from '../../../favorites';
 import {getSingleTripPattern} from '../../../api/trips';
 import usePollableResource from '../../../utils/use-pollable-resource';
+import {getQuayNameFromStartLeg} from '../../../utils/transportation-names';
 
 // @TODO Firebase config?
 const TIME_LIMIT_IN_MINUTES = 3;
@@ -105,6 +106,8 @@ const DetailsContent: React.FC<{
     }
   };
 
+  console.log(JSON.stringify(tripPattern));
+
   return (
     <>
       {shortTime && (
@@ -119,7 +122,7 @@ const DetailsContent: React.FC<{
             <Dot fill={colors.general.black} />
           )
         }
-        location={from.name}
+        location={getQuayNameFromStartLeg(tripPattern.legs[0], from.name)}
         time={formatToClock(tripPattern.startTime)}
         textStyle={styles.textStyle}
       />

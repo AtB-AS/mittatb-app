@@ -9,7 +9,12 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {LegDetailProps, DetailScreenNavigationProp} from '.';
 import {useNavigation} from '@react-navigation/core';
 import TransportationIcon from '../../../components/transportation-icon';
-import {getQuayName, getLineName} from '../../../utils/transportation-names';
+import {
+  getQuayName,
+  getLineName,
+  getQuayNameFromStartLeg,
+  getQuayNameFromStopLeg,
+} from '../../../utils/transportation-names';
 import {getAimedTimeIfLargeDifference} from '../utils';
 import WaitRow from './WaitRow';
 
@@ -41,7 +46,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
         {showFrom && (
           <LocationRow
             icon={<Dot fill={colors.secondary.cyan} />}
-            location={getQuayName(leg.fromPlace.quay)}
+            location={getQuayNameFromStartLeg(leg)}
             time={formatToClock(leg.expectedStartTime)}
             aimedTime={
               leg.realtime
@@ -76,7 +81,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
         {showTo && (
           <LocationRow
             icon={<Dot fill={colors.secondary.cyan} />}
-            location={getQuayName(leg.toPlace.quay)}
+            location={getQuayNameFromStopLeg(leg)}
             time={formatToClock(leg.expectedEndTime)}
             aimedTime={
               leg.realtime
