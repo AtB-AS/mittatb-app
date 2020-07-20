@@ -1,18 +1,29 @@
 import React from 'react';
-import {RefreshControl, Text, View} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
+import {
+  RefreshControl,
+  Text,
+  View,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+  Animated,
+  ScrollViewProps,
+} from 'react-native';
 import MessageBox from '../../message-box';
 import {TripPattern} from '../../sdk';
 import {StyleSheet, useTheme} from '../../theme';
 import {AssistantScreenNavigationProp} from './';
 import ResultItem from './ResultItem';
 
-type Props = {
+type Props = Animated.AnimatedProps<ScrollViewProps> & {
   tripPatterns: TripPattern[] | null;
   isSearching: boolean;
   onRefresh: () => void;
   navigation: AssistantScreenNavigationProp;
   onDetailsPressed(tripPattern: TripPattern): void;
+  onScroll?:
+    | ((event: NativeSyntheticEvent<NativeScrollEvent>) => void)
+    | undefined;
+  offsetTop?: number;
 };
 
 export type ResultTabParams = {
@@ -24,6 +35,10 @@ const Results: React.FC<Props> = ({
   isSearching,
   onRefresh,
   onDetailsPressed,
+  onScroll,
+  offsetTop,
+  style,
+  ...rest
 }) => {
   const {theme} = useTheme();
   const styles = useThemeStyles(theme);
@@ -34,7 +49,7 @@ const Results: React.FC<Props> = ({
 
   if (!isSearching && !tripPatterns?.length) {
     return (
-      <View style={[styles.scrollContainer, styles.container]}>
+      <View style={[styles.container, {marginTop: offsetTop}]}>
         <MessageBox>
           <Text style={styles.infoBoxText}>
             Vi fant dessverre ingen reiseruter som passer til ditt søk.
@@ -46,32 +61,41 @@ const Results: React.FC<Props> = ({
   }
 
   return (
-    <FlatList
-      style={styles.scrollContainer}
-      contentContainerStyle={styles.container}
-      data={tripPatterns}
+    <Animated.ScrollView
+      {...rest}
+      contentContainerStyle={[styles.container, style]}
       refreshControl={
-        <RefreshControl refreshing={isSearching} onRefresh={onRefresh} />
+        <RefreshControl
+          refreshing={isSearching}
+          onRefresh={onRefresh}
+          progressViewOffset={300}
+        />
       }
-      keyExtractor={(item, i) => String(item.id ?? i)}
-      renderItem={({item}) => (
-        <ResultItem tripPattern={item} onDetailsPressed={onDetailsPressed} />
-      )}
-    />
+      onScroll={onScroll}
+      contentInset={{
+        top: offsetTop,
+      }}
+    >
+      {tripPatterns?.map((item, i) => (
+        <ResultItem
+          key={String(item.id ?? i)}
+          tripPattern={item}
+          onDetailsPressed={onDetailsPressed}
+        />
+      ))}
+    </Animated.ScrollView>
   );
 };
 
 export default Results;
 
 const useThemeStyles = StyleSheet.createTheme((theme) => ({
-  scrollContainer: {
-    marginTop: 12,
+  scrollContainerOuter: {
     flex: 1,
   },
   container: {
     paddingHorizontal: 12,
     paddingBottom: 12,
-    // flexGrow: 1,
   },
   infoBoxText: {fontSize: 16},
   spinner: {height: 280},

@@ -1,7 +1,7 @@
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useState, useRef} from 'react';
-import {View} from 'react-native';
+import {View, Animated, Platform} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {searchTrip} from '../../api';
@@ -78,6 +78,8 @@ type Props = {
   navigation: AssistantScreenNavigationProp;
 };
 
+const HEADER_HEIGHT = 157;
+
 const Assistant: React.FC<Props> = ({
   currentLocation,
   requestGeoPermission,
@@ -86,6 +88,20 @@ const Assistant: React.FC<Props> = ({
   const styles = useThemeStyles();
 
   const {from, to} = useLocations(currentLocation);
+
+  const scrollYRef = useRef(
+    new Animated.Value(Platform.OS === 'ios' ? -HEADER_HEIGHT : 0),
+  ).current;
+
+  const scrollY = Animated.add(
+    scrollYRef,
+    Platform.OS === 'ios' ? HEADER_HEIGHT : 0,
+  );
+  const headerTranslate = scrollY.interpolate({
+    inputRange: [0, HEADER_HEIGHT],
+    outputRange: [0, -HEADER_HEIGHT],
+    extrapolate: 'clamp',
+  });
 
   function swap() {
     navigation.setParams({fromLocation: to, toLocation: from});
@@ -139,72 +155,100 @@ const Assistant: React.FC<Props> = ({
         title="Reiseassistent"
         rightButton={{onPress: openChat, icon: chatIcon}}
       />
-      <SearchGroup>
-        <View style={styles.searchButtonContainer}>
-          <View style={styles.styleButton}>
-            <LocationButton
-              title="Fra"
-              placeholder="Søk etter adresse eller sted"
-              location={from}
-              onPress={() => openLocationSearch('fromLocation', from?.name)}
+
+      <View style={styles.content}>
+        <Animated.View
+          style={[styles.header, {transform: [{translateY: headerTranslate}]}]}
+        >
+          <SearchGroup>
+            <View style={styles.searchButtonContainer}>
+              <View style={styles.styleButton}>
+                <LocationButton
+                  title="Fra"
+                  placeholder="Søk etter adresse eller sted"
+                  location={from}
+                  onPress={() => openLocationSearch('fromLocation', from?.name)}
+                />
+              </View>
+
+              <TouchableOpacity
+                style={styles.clickableIcon}
+                hitSlop={insets.all(12)}
+                onPress={setCurrentLocationOrRequest}
+              >
+                <CurrentLocationArrow />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.searchButtonContainer}>
+              <View style={styles.styleButton}>
+                <LocationButton
+                  title="Til"
+                  placeholder="Søk etter adresse eller sted"
+                  location={to}
+                  onPress={() => openLocationSearch('toLocation', to?.name)}
+                />
+              </View>
+
+              <TouchableOpacity
+                style={styles.clickableIcon}
+                hitSlop={insets.all(12)}
+                onPress={swap}
+              >
+                <Swap />
+              </TouchableOpacity>
+            </View>
+          </SearchGroup>
+
+          <SearchGroup containerStyle={{marginTop: 12}}>
+            <DateInput
+              onDateSelected={setDate}
+              value={date}
+              timeOfLastSearch={timeOfLastSearch}
             />
-          </View>
+          </SearchGroup>
+        </Animated.View>
 
-          <TouchableOpacity
-            style={styles.clickableIcon}
-            hitSlop={insets.all(12)}
-            onPress={setCurrentLocationOrRequest}
-          >
-            <CurrentLocationArrow />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.searchButtonContainer}>
-          <View style={styles.styleButton}>
-            <LocationButton
-              title="Til"
-              placeholder="Søk etter adresse eller sted"
-              location={to}
-              onPress={() => openLocationSearch('toLocation', to?.name)}
-            />
-          </View>
-
-          <TouchableOpacity
-            style={styles.clickableIcon}
-            hitSlop={insets.all(12)}
-            onPress={swap}
-          >
-            <Swap />
-          </TouchableOpacity>
-        </View>
-      </SearchGroup>
-
-      <SearchGroup containerStyle={{marginTop: 12}}>
-        <DateInput
-          onDateSelected={setDate}
-          value={date}
-          timeOfLastSearch={timeOfLastSearch}
+        <Results
+          tripPatterns={tripPatterns}
+          isSearching={isSearching}
+          navigation={navigation}
+          onRefresh={reload}
+          onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {y: scrollYRef}}}],
+            {useNativeDriver: true},
+          )}
+          style={{paddingTop: Platform.OS !== 'ios' ? HEADER_HEIGHT : 0}}
+          offsetTop={HEADER_HEIGHT}
+          onDetailsPressed={(tripPattern) =>
+            navigation.navigate('TripDetailsModal', {
+              from: from!,
+              to: to!,
+              tripPatternId: tripPattern.id!,
+              tripPattern: tripPattern,
+            })
+          }
         />
-      </SearchGroup>
-
-      <Results
-        tripPatterns={tripPatterns}
-        isSearching={isSearching}
-        navigation={navigation}
-        onRefresh={reload}
-        onDetailsPressed={(tripPattern) =>
-          navigation.navigate('TripDetailsModal', {
-            from: from!,
-            to: to!,
-            tripPatternId: tripPattern.id!,
-            tripPattern: tripPattern,
-          })
-        }
-      />
+      </View>
     </SafeAreaView>
   );
 };
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
+  content: {
+    flex: 1,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  header: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    overflow: 'hidden',
+    height: HEADER_HEIGHT,
+    zIndex: 2,
+    elevated: 1,
+  },
   container: {
     backgroundColor: theme.background.level1,
     paddingBottom: 0,
