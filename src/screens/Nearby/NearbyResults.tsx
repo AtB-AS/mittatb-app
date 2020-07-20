@@ -18,6 +18,8 @@ import {useNavigation} from '@react-navigation/native';
 import {NearbyScreenNavigationProp} from '.';
 import {useGeolocationState} from '../../GeolocationContext';
 import haversine from 'haversine-distance';
+import {Location} from '../../favorites/types';
+import PressableVenue from '../../components/pressable-venue';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStop[] | null;
@@ -40,6 +42,14 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
       fromQuayId: departure.quay?.id,
     });
   };
+  const onHeaderPress = async (location: Location) => {
+    navigation.navigate('Nearest', {
+      location: {
+        ...location,
+        resultType: 'search',
+      },
+    });
+  };
 
   if (departures !== null && Object.keys(departures).length == 0) {
     return (
@@ -58,7 +68,11 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
       style={styles.container}
       data={departures}
       renderItem={({item}) => (
-        <StopDepartures departures={item} onPress={onPress} />
+        <StopDepartures
+          departures={item}
+          onPress={onPress}
+          onHeaderPress={onHeaderPress}
+        />
       )}
       keyExtractor={(departure) => departure.stop.id}
       refreshControl={
@@ -81,10 +95,12 @@ export default NearbyResults;
 type StopDeparturesProps = {
   departures: DeparturesWithStop;
   onPress?(departure: EstimatedCall): void;
+  onHeaderPress?(departure: Location): void;
 };
 const StopDepartures: React.FC<StopDeparturesProps> = ({
   departures,
   onPress,
+  onHeaderPress,
 }) => {
   const styles = useResultItemStyles();
 
@@ -94,7 +110,7 @@ const StopDepartures: React.FC<StopDeparturesProps> = ({
 
   return (
     <View style={styles.item}>
-      <ItemHeader stop={departures.stop} />
+      <ItemHeader stop={departures.stop} onPress={onHeaderPress} />
 
       <View>
         <LastElement last={styles.stopContainer__withoutBorder}>
@@ -122,17 +138,24 @@ const StopDepartures: React.FC<StopDeparturesProps> = ({
 
 const ItemHeader: React.FC<{
   stop: StopPlaceDetails;
-}> = ({stop}) => {
+  onPress?(stop: Location): void;
+}> = ({stop, onPress}) => {
   const {location} = useGeolocationState();
   const styles = useResultItemStyles();
+  const coords = {
+    latitude: stop.latitude,
+    longitude: stop.longitude,
+  };
 
   return (
-    <View style={styles.resultHeader}>
-      <Text>{stop.name}</Text>
-      <Text>
-        {location ? humanizeDistance(haversine(location.coords, stop)) : ''}
-      </Text>
-    </View>
+    <PressableVenue onPress={onPress} coordinates={coords}>
+      <View style={styles.resultHeader}>
+        <Text>{stop.name}</Text>
+        <Text>
+          {location ? humanizeDistance(haversine(location.coords, stop)) : ''}
+        </Text>
+      </View>
+    </PressableVenue>
   );
 };
 

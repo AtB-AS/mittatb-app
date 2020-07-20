@@ -4,6 +4,7 @@ import {Feature} from '../sdk';
 import {autocomplete, reverse} from '../api';
 import {Location} from '../favorites/types';
 import {CancelToken, isCancel} from '../api/client';
+import {mapFeatureToLocation} from '../utils/location';
 
 export function useGeocoder(
   text: string | null,
@@ -70,14 +71,3 @@ export function useReverseGeocoder(location: GeolocationResponse | null) {
 
   return locations;
 }
-
-// IMPORTANT: Feature coordinate-array is [long, lat] :sadface:. Mapping to lat/long object for less bugs downstream.
-const mapFeatureToLocation = ({
-  geometry: {
-    coordinates: [longitude, latitude],
-  },
-  properties,
-}: Feature): Location => ({
-  ...properties,
-  coordinates: {latitude, longitude},
-});

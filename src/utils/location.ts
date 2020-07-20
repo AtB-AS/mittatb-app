@@ -1,5 +1,6 @@
 import haversine from 'haversine-distance';
 import {Location} from '../favorites/types';
+import {Feature} from '../sdk';
 
 type SortedLocation = {
   location: Location;
@@ -17,3 +18,14 @@ export function sortNearestLocations(
     }))
     .sort((a, b) => a.distance - b.distance);
 }
+
+// IMPORTANT: Feature coordinate-array is [long, lat] :sadface:. Mapping to lat/long object for less bugs downstream.
+export const mapFeatureToLocation = ({
+  geometry: {
+    coordinates: [longitude, latitude],
+  },
+  properties,
+}: Feature): Location => ({
+  ...properties,
+  coordinates: {latitude, longitude},
+});

@@ -4,6 +4,7 @@ import client from './client';
 import qs from 'query-string';
 import {stringifyUrl} from './utils';
 import {AxiosRequestConfig} from 'axios';
+import {StopPlace, StopPlaceDetails, Coordinates} from '@entur/sdk';
 
 const TRONDHEIM_CENTRAL_STATION = {
   latitude: 63.43457,
@@ -37,4 +38,22 @@ export async function reverse(
   });
 
   return await client.get<Feature[]>(stringifyUrl(url, query), config);
+}
+
+export async function venueToFeature(
+  loc: Coordinates,
+  config?: AxiosRequestConfig,
+): Promise<Feature | undefined> {
+  const url = 'bff/v1/geocoder/reverse';
+  const query = qs.stringify({
+    lat: loc.latitude,
+    lon: loc.longitude,
+    limit: 1,
+    radius: 1,
+    layers: ['venue'],
+  });
+
+  const result = await client.get<Feature[]>(stringifyUrl(url, query), config);
+  if (!result?.data?.length) return;
+  return result?.data[0];
 }
