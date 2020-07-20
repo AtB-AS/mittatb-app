@@ -23,6 +23,7 @@ import SearchGroup from '../../components/search-button/search-group';
 import {DeparturesWithStop} from '../../sdk';
 import useChatIcon from '../../chat/use-chat-icon';
 import {View} from 'react-native';
+import DisappearingHeader from '../../components/disappearing-header/index ';
 
 type NearbyRouteName = 'Nearest';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearest';
@@ -91,31 +92,37 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
       initialText: fromLocation?.name,
     });
 
+  const renderHeader = () => (
+    <SearchGroup>
+      <LocationButton
+        title="Fra"
+        placeholder="Søk etter adresse eller sted"
+        location={fromLocation}
+        icon={
+          <View style={{marginLeft: 2}}>
+            <SearchLocationIcon location={fromLocation} />
+          </View>
+        }
+        onPress={() => openLocationSearch()}
+      />
+    </SearchGroup>
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <Header
         title="I nærheten"
         rightButton={{icon: chatIcon, onPress: openChat}}
       />
-      <SearchGroup>
-        <LocationButton
-          title="Fra"
-          placeholder="Søk etter adresse eller sted"
-          location={fromLocation}
-          icon={
-            <View style={{marginLeft: 2}}>
-              <SearchLocationIcon location={fromLocation} />
-            </View>
-          }
-          onPress={() => openLocationSearch()}
-        />
-      </SearchGroup>
 
-      <NearbyResults
-        departures={departures}
+      <DisappearingHeader
         onRefresh={refresh}
         isRefreshing={isLoading}
-      />
+        headerHeight={59}
+        renderHeader={renderHeader}
+      >
+        <NearbyResults departures={departures} />
+      </DisappearingHeader>
     </SafeAreaView>
   );
 };
