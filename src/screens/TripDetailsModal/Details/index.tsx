@@ -106,8 +106,6 @@ const DetailsContent: React.FC<{
     }
   };
 
-  console.log(JSON.stringify(tripPattern));
-
   return (
     <>
       {shortTime && (
