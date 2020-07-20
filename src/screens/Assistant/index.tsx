@@ -31,6 +31,7 @@ import insets from '../../utils/insets';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
 import Results from './Results';
+import DisappearingHeader from '../../components/disappearing-header/index ';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -149,6 +150,58 @@ const Assistant: React.FC<Props> = ({
       initialText,
     });
 
+  const renderHeader = () => (
+    <View>
+      <SearchGroup>
+        <View style={styles.searchButtonContainer}>
+          <View style={styles.styleButton}>
+            <LocationButton
+              title="Fra"
+              placeholder="Søk etter adresse eller sted"
+              location={from}
+              onPress={() => openLocationSearch('fromLocation', from?.name)}
+            />
+          </View>
+
+          <TouchableOpacity
+            style={styles.clickableIcon}
+            hitSlop={insets.all(12)}
+            onPress={setCurrentLocationOrRequest}
+          >
+            <CurrentLocationArrow />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.searchButtonContainer}>
+          <View style={styles.styleButton}>
+            <LocationButton
+              title="Til"
+              placeholder="Søk etter adresse eller sted"
+              location={to}
+              onPress={() => openLocationSearch('toLocation', to?.name)}
+            />
+          </View>
+
+          <TouchableOpacity
+            style={styles.clickableIcon}
+            hitSlop={insets.all(12)}
+            onPress={swap}
+          >
+            <Swap />
+          </TouchableOpacity>
+        </View>
+      </SearchGroup>
+
+      <SearchGroup containerStyle={{marginTop: 12}}>
+        <DateInput
+          onDateSelected={setDate}
+          value={date}
+          timeOfLastSearch={timeOfLastSearch}
+        />
+      </SearchGroup>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <Header
@@ -156,70 +209,15 @@ const Assistant: React.FC<Props> = ({
         rightButton={{onPress: openChat, icon: chatIcon}}
       />
 
-      <View style={styles.content}>
-        <Animated.View
-          style={[styles.header, {transform: [{translateY: headerTranslate}]}]}
-        >
-          <SearchGroup>
-            <View style={styles.searchButtonContainer}>
-              <View style={styles.styleButton}>
-                <LocationButton
-                  title="Fra"
-                  placeholder="Søk etter adresse eller sted"
-                  location={from}
-                  onPress={() => openLocationSearch('fromLocation', from?.name)}
-                />
-              </View>
-
-              <TouchableOpacity
-                style={styles.clickableIcon}
-                hitSlop={insets.all(12)}
-                onPress={setCurrentLocationOrRequest}
-              >
-                <CurrentLocationArrow />
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.searchButtonContainer}>
-              <View style={styles.styleButton}>
-                <LocationButton
-                  title="Til"
-                  placeholder="Søk etter adresse eller sted"
-                  location={to}
-                  onPress={() => openLocationSearch('toLocation', to?.name)}
-                />
-              </View>
-
-              <TouchableOpacity
-                style={styles.clickableIcon}
-                hitSlop={insets.all(12)}
-                onPress={swap}
-              >
-                <Swap />
-              </TouchableOpacity>
-            </View>
-          </SearchGroup>
-
-          <SearchGroup containerStyle={{marginTop: 12}}>
-            <DateInput
-              onDateSelected={setDate}
-              value={date}
-              timeOfLastSearch={timeOfLastSearch}
-            />
-          </SearchGroup>
-        </Animated.View>
-
+      <DisappearingHeader
+        renderHeader={renderHeader}
+        onRefresh={reload}
+        isRefreshing={isSearching}
+        headerHeight={HEADER_HEIGHT}
+      >
         <Results
           tripPatterns={tripPatterns}
           isSearching={isSearching}
-          navigation={navigation}
-          onRefresh={reload}
-          onScroll={Animated.event(
-            [{nativeEvent: {contentOffset: {y: scrollYRef}}}],
-            {useNativeDriver: true},
-          )}
-          style={{paddingTop: Platform.OS !== 'ios' ? HEADER_HEIGHT : 0}}
-          offsetTop={HEADER_HEIGHT}
           onDetailsPressed={(tripPattern) =>
             navigation.navigate('TripDetailsModal', {
               from: from!,
@@ -229,26 +227,11 @@ const Assistant: React.FC<Props> = ({
             })
           }
         />
-      </View>
+      </DisappearingHeader>
     </SafeAreaView>
   );
 };
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  content: {
-    flex: 1,
-    overflow: 'hidden',
-    position: 'relative',
-  },
-  header: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    overflow: 'hidden',
-    height: HEADER_HEIGHT,
-    zIndex: 2,
-    elevated: 1,
-  },
   container: {
     backgroundColor: theme.background.level1,
     paddingBottom: 0,
