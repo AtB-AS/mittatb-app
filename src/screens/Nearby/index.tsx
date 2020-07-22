@@ -36,7 +36,14 @@ import useReducerWithSideEffects, {
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
 import useInterval from '../../utils/use-interval';
-import {updateStopsWithRealtime} from './utils';
+import {
+  updateStopsWithRealtime,
+  DeparturesWithStopLocal,
+  mapQuayDeparturesToShowlimits,
+  showMoreItemsOnQuay,
+} from './utils';
+
+const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
 type NearbyRouteName = 'Nearest';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearest';
@@ -87,7 +94,9 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
   );
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
 
-  const {state, refresh, loadMore} = useDepartureData(fromLocation);
+  const {state, refresh, loadMore, showMoreOnQuay} = useDepartureData(
+    fromLocation,
+  );
   const {departures, isLoading} = state;
 
   const openLocationSearch = () =>
@@ -125,7 +134,10 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
         <Text style={styles.altTitleHeader}>{fromLocation?.name}</Text>
       }
     >
-      <NearbyResults departures={departures} />
+      <NearbyResults
+        departures={departures}
+        onShowMoreOnQuay={showMoreOnQuay}
+      />
     </DisappearingHeader>
   );
 };
@@ -140,7 +152,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
 export default NearbyScreen;
 
 type DepartureDataState = {
-  departures: DeparturesWithStop[];
+  departures: DeparturesWithStopLocal[];
   isLoading: boolean;
   paging: DepartureQuery & {
     hasNext: boolean;
@@ -160,6 +172,10 @@ const initialState: DepartureDataState = {
 };
 
 type DepartureDataActions =
+  | {
+      type: 'SHOW_MORE_ON_QUAY';
+      quayId: string;
+    }
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
       location: Location | undefined;
@@ -237,13 +253,32 @@ const reducer: ReducerWithSideEffects<
       );
     }
 
+    case 'SHOW_MORE_ON_QUAY': {
+      return Update({
+        ...state,
+        departures: showMoreItemsOnQuay(
+          state.departures,
+          action.quayId,
+          DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW,
+        ),
+      });
+    }
+
     case 'UPDATE_DEPARTURES': {
       return Update({
         ...state,
         isLoading: false,
         departures: action.reset
-          ? action.paginationData.data
-          : state.departures.concat(action.paginationData.data),
+          ? mapQuayDeparturesToShowlimits(
+              action.paginationData.data,
+              DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW,
+            )
+          : state.departures.concat(
+              mapQuayDeparturesToShowlimits(
+                action.paginationData.data,
+                DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW,
+              ),
+            ),
         paging: {
           ...state.paging,
           hasNext: action.paginationData.hasNext,
@@ -286,6 +321,11 @@ function useDepartureData(
     [location?.id],
   );
 
+  const showMoreOnQuay = useCallback(
+    (quayId: string) => dispatch({type: 'SHOW_MORE_ON_QUAY', quayId}),
+    [],
+  );
+
   useEffect(refresh, [location?.id]);
   useInterval(
     () => dispatch({type: 'LOAD_REALTIME_DATA'}),
@@ -298,5 +338,6 @@ function useDepartureData(
     state,
     refresh,
     loadMore,
+    showMoreOnQuay,
   };
 }

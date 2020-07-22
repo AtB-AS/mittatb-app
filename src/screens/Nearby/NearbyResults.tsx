@@ -17,11 +17,13 @@ import {useNavigation} from '@react-navigation/native';
 import {NearbyScreenNavigationProp} from '.';
 import {useGeolocationState} from '../../GeolocationContext';
 import haversine from 'haversine-distance';
+import {DeparturesWithStopLocal, QuayWithDeparturesAndLimits} from './utils';
 
 type NearbyResultsProps = {
-  departures: DeparturesWithStop[] | null;
+  departures: DeparturesWithStopLocal[] | null;
   onRefresh?(): void;
   onLoadMore?(): void;
+  onShowMoreOnQuay?(quayId: string): void;
   isRefreshing?: boolean;
 };
 
@@ -29,6 +31,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
   departures,
   onRefresh,
   onLoadMore,
+  onShowMoreOnQuay,
   isRefreshing = false,
 }) => {
   const styles = useResultsStyle();
@@ -61,6 +64,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
           key={item.stop.id}
           departures={item}
           onPress={onPress}
+          onShowMoreOnQuay={onShowMoreOnQuay}
         />
       ))}
     </View>
@@ -78,46 +82,97 @@ const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
 export default NearbyResults;
 
 type StopDeparturesProps = {
-  departures: DeparturesWithStop;
+  departures: DeparturesWithStopLocal;
   onPress?(departure: EstimatedCall): void;
+  onShowMoreOnQuay?(quayId: string): void;
 };
-const StopDepartures: React.FC<StopDeparturesProps> = ({
-  departures,
-  onPress,
-}) => {
-  const styles = useResultItemStyles();
+const StopDepartures: React.FC<StopDeparturesProps> = React.memo(
+  ({departures, onPress, onShowMoreOnQuay}) => {
+    const styles = useResultItemStyles();
 
-  if (!Object.keys(departures.quays).length) {
-    return null;
-  }
+    if (!Object.keys(departures.quays).length) {
+      return null;
+    }
 
-  return (
-    <View style={styles.item}>
-      <ItemHeader stop={departures.stop} />
+    return (
+      <View style={styles.item}>
+        <ItemHeader stop={departures.stop} />
 
-      <View>
-        <LastElement last={styles.stopContainer__withoutBorder}>
-          {Object.values(departures.quays).map((quay) => (
-            <View key={quay.quay.id} style={styles.stopContainer}>
-              <View style={styles.platformHeader}>
-                <Text>Plattform {quay.quay.publicCode}</Text>
-              </View>
-              <LastElement last={styles.itemContainer__withoutBorder}>
-                {quay.departures.map((departure) => (
-                  <NearbyResultItem
-                    departure={departure}
-                    onPress={onPress}
-                    key={departure.serviceJourney.id}
-                  />
-                ))}
-              </LastElement>
-            </View>
+        <View>
+          <LastElement last={styles.stopContainer__withoutBorder}>
+            {Object.values(departures.quays).map((quay) => (
+              <QuayResult
+                key={quay.quay.id}
+                quay={quay}
+                onPress={onPress}
+                onShowMoreOnQuay={onShowMoreOnQuay}
+              />
+            ))}
+          </LastElement>
+        </View>
+      </View>
+    );
+  },
+);
+
+type QuayProps = {
+  quay: QuayWithDeparturesAndLimits;
+  onPress?(departure: EstimatedCall): void;
+  onShowMoreOnQuay?(quayId: string): void;
+};
+const QuayResult: React.FC<QuayProps> = React.memo(
+  ({quay, onPress, onShowMoreOnQuay}) => {
+    const styles = useResultItemStyles();
+
+    const items = quay.departures.slice(0, quay.showLimit);
+    const showShowMoreButton =
+      onShowMoreOnQuay && quay.departures.length > quay.showLimit;
+
+    return (
+      <View key={quay.quay.id} style={styles.stopContainer}>
+        <View style={styles.platformHeader}>
+          <Text>Plattform {quay.quay.publicCode}</Text>
+        </View>
+        <LastElement last={styles.itemContainer__withoutBorder}>
+          {items.map((departure) => (
+            <NearbyResultItem
+              departure={departure}
+              onPress={onPress}
+              key={departure.serviceJourney.id}
+            />
           ))}
         </LastElement>
+        {showShowMoreButton && (
+          <ShowMoreButton onPress={() => onShowMoreOnQuay!(quay.quay.id)} />
+        )}
       </View>
-    </View>
+    );
+  },
+);
+
+type ShowMoreButtonProps = {
+  onPress(): void;
+};
+const ShowMoreButton: React.FC<ShowMoreButtonProps> = ({onPress}) => {
+  const style = useShowMoreButtonStyle();
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <View style={style.button}>
+        <Text style={style.text}>Vis flere avganger</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
+const useShowMoreButtonStyle = StyleSheet.createThemeHook((theme) => ({
+  button: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  text: {
+    fontSize: 12,
+    textDecorationLine: 'underline',
+  },
+}));
 
 const ItemHeader: React.FC<{
   stop: StopPlaceDetails;
@@ -140,36 +195,34 @@ type NearbyResultItemProps = {
   style?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
   onPress?(departure: EstimatedCall): void;
 };
-const NearbyResultItem: React.FC<NearbyResultItemProps> = ({
-  departure,
-  onPress,
-  style,
-}) => {
-  const styles = useResultItemStyles();
-  const {publicCode, name} = getLineNameFromEstimatedCall(departure);
-  return (
-    <TouchableOpacity
-      style={[styles.itemContainer, style]}
-      onPress={() => onPress?.(departure)}
-    >
-      <Text style={styles.time}>
-        {formatToClock(departure.expectedDepartureTime)}
-      </Text>
-      <TransportationIcon
-        mode={departure.serviceJourney.journeyPattern?.line.transportMode}
-        publicCode={departure.serviceJourney.journeyPattern?.line.publicCode}
-      />
-      <View style={styles.textWrapper}>
-        <Text style={styles.textContent} numberOfLines={1}>
-          {publicCode && (
-            <Text style={{fontWeight: 'bold'}}>{publicCode} </Text>
-          )}
-          {name}
+const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
+  ({departure, onPress, style}) => {
+    const styles = useResultItemStyles();
+    const {publicCode, name} = getLineNameFromEstimatedCall(departure);
+    return (
+      <TouchableOpacity
+        style={[styles.itemContainer, style]}
+        onPress={() => onPress?.(departure)}
+      >
+        <Text style={styles.time}>
+          {formatToClock(departure.expectedDepartureTime)}
         </Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
+        <TransportationIcon
+          mode={departure.serviceJourney.journeyPattern?.line.transportMode}
+          publicCode={departure.serviceJourney.journeyPattern?.line.publicCode}
+        />
+        <View style={styles.textWrapper}>
+          <Text style={styles.textContent} numberOfLines={1}>
+            {publicCode && (
+              <Text style={{fontWeight: 'bold'}}>{publicCode} </Text>
+            )}
+            {name}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  },
+);
 
 const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
