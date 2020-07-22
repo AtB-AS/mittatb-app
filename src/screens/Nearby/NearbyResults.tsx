@@ -20,9 +20,17 @@ import haversine from 'haversine-distance';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStop[] | null;
+  onRefresh?(): void;
+  onLoadMore?(): void;
+  isRefreshing?: boolean;
 };
 
-const NearbyResults: React.FC<NearbyResultsProps> = ({departures}) => {
+const NearbyResults: React.FC<NearbyResultsProps> = ({
+  departures,
+  onRefresh,
+  onLoadMore,
+  isRefreshing = false,
+}) => {
   const styles = useResultsStyle();
   const navigation = useNavigation<NearbyScreenNavigationProp>();
   const onPress = (departure: EstimatedCall) => {

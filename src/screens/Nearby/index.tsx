@@ -1,7 +1,15 @@
-import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
+import {
+  CompositeNavigationProp,
+  RouteProp,
+  useIsFocused,
+} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useMemo} from 'react';
-import {getDepartures} from '../../api/departures';
+import React, {useCallback, useMemo, useEffect} from 'react';
+import {
+  getDepartures,
+  getRealtimeDeparture,
+  DepartureQuery,
+} from '../../api/departures';
 import {LocationButton} from '../../components/search-button';
 import SearchLocationIcon from '../../components/search-location-icon';
 import {Location} from '../../favorites/types';
@@ -16,11 +24,18 @@ import {StyleSheet} from '../../theme';
 import Loading from '../Loading';
 import NearbyResults from './NearbyResults';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
-import usePollableResource from '../../utils/use-pollable-resource';
 import SearchGroup from '../../components/search-button/search-group';
-import {DeparturesWithStop} from '../../sdk';
-import {View, Text} from 'react-native';
 import DisappearingHeader from '../../components/disappearing-header/index ';
+import {DeparturesWithStop, Paginated, DeparturesRealtimeData} from '../../sdk';
+import {View, Text} from 'react-native';
+import useReducerWithSideEffects, {
+  Update,
+  ReducerWithSideEffects,
+  SideEffect,
+  NoUpdate,
+} from 'use-reducer-with-side-effects';
+import useInterval from '../../utils/use-interval';
+import {updateStopsWithRealtime} from './utils';
 
 type NearbyRouteName = 'Nearest';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearest';
@@ -70,13 +85,9 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
     [currentLocation],
   );
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
-  const [departures, refresh, isLoading] = useNearestDepartures(
-    fromLocation,
 
-    // Searching nearest is a really heavy operation,
-    // so polling every 30 seconds is costly. Might
-    // be a better way to do this and having subscription model for real time data.
-    fromLocation?.layer === 'venue' ? 30 : 60 ?? 0,
+  const {departures, refresh, loadMore, isLoading} = useDepartureData(
+    fromLocation,
   );
 
   const openLocationSearch = () =>
@@ -128,19 +139,156 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
 
 export default NearbyScreen;
 
-function useNearestDepartures(
+type DepartureDataState = {
+  list: DeparturesWithStop[];
+  paging: DepartureQuery & {
+    hasNext: boolean;
+  };
+};
+
+const initialPaging = {
+  limit: 10,
+  pageOffset: 0,
+  pageSize: 2,
+  hasNext: true,
+};
+const initialState: DepartureDataState = {
+  list: [],
+  paging: initialPaging,
+};
+
+type DepartureDataActions =
+  | {
+      type: 'LOAD_INITIAL_DEPARTURES';
+      location: Location | undefined;
+    }
+  | {
+      type: 'LOAD_MORE_DEPARTURES';
+      location: Location | undefined;
+    }
+  | {
+      type: 'LOAD_REALTIME_DATA';
+    }
+  | {
+      type: 'UPDATE_DEPARTURES';
+      reset?: boolean;
+      paginationData: Paginated<DeparturesWithStop[]>;
+    }
+  | {
+      type: 'UPDATE_REALTIME';
+      realtimeData: DeparturesRealtimeData;
+    };
+
+const reducer: ReducerWithSideEffects<
+  DepartureDataState,
+  DepartureDataActions
+> = (state, action) => {
+  switch (action.type) {
+    case 'LOAD_INITIAL_DEPARTURES': {
+      return SideEffect<DepartureDataState, DepartureDataActions>(
+        async (_, dispatch) => {
+          if (!action.location) return;
+          const paginationData = await getDepartures(
+            action.location,
+            initialPaging,
+          );
+          dispatch({
+            type: 'UPDATE_DEPARTURES',
+            reset: true,
+            paginationData,
+          });
+        },
+      );
+    }
+
+    case 'LOAD_MORE_DEPARTURES': {
+      return SideEffect<DepartureDataState, DepartureDataActions>(
+        async (state, dispatch) => {
+          if (!action.location) return;
+          if (!state.paging.hasNext) return;
+
+          const paginationData = await getDepartures(
+            action.location,
+            state.paging,
+          );
+
+          dispatch({
+            type: 'UPDATE_DEPARTURES',
+            paginationData,
+          });
+        },
+      );
+    }
+
+    case 'LOAD_REALTIME_DATA': {
+      return SideEffect<DepartureDataState, DepartureDataActions>(
+        async (state, dispatch) => {
+          const realtimeData = await getRealtimeDeparture(state.list);
+          dispatch({
+            type: 'UPDATE_REALTIME',
+            realtimeData,
+          });
+        },
+      );
+    }
+
+    case 'UPDATE_DEPARTURES': {
+      return Update({
+        ...state,
+        list: action.reset
+          ? action.paginationData.data
+          : state.list.concat(action.paginationData.data),
+        paging: {
+          ...state.paging,
+          hasNext: action.paginationData.hasNext,
+          pageOffset: action.paginationData.hasNext
+            ? action.paginationData.nextPageOffset
+            : state.paging.pageOffset,
+        },
+      });
+    }
+
+    case 'UPDATE_REALTIME': {
+      return Update({
+        ...state,
+        list: updateStopsWithRealtime(state.list, action.realtimeData),
+      });
+    }
+
+    default:
+      return NoUpdate();
+  }
+};
+
+function useDepartureData(
   location?: Location,
-  pollingTimeInSeconds: number = 0,
-): [DeparturesWithStop[] | null, () => Promise<void>, boolean, Error?] {
-  const fetchDepartures = useCallback(
-    async function reload() {
-      if (!location) return [];
-      return getDepartures(location);
-    },
+  updateFrequencyInSeconds: number = 30,
+) {
+  const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
+  const isFocused = useIsFocused();
+
+  const refresh = useCallback(
+    () => dispatch({type: 'LOAD_INITIAL_DEPARTURES', location}),
     [location?.id],
   );
-  return usePollableResource<DeparturesWithStop[] | null>(fetchDepartures, {
-    initialValue: null,
-    pollingTimeInSeconds,
-  });
+
+  const loadMore = useCallback(
+    () => dispatch({type: 'LOAD_MORE_DEPARTURES', location}),
+    [location?.id],
+  );
+
+  useEffect(refresh, [location?.id]);
+  useInterval(
+    () => dispatch({type: 'LOAD_REALTIME_DATA'}),
+    updateFrequencyInSeconds * 1000,
+    [location?.id],
+    !isFocused,
+  );
+
+  return {
+    departures: state.list,
+    refresh,
+    loadMore,
+    isLoading: false,
+  };
 }
