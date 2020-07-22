@@ -9,10 +9,11 @@ import {
 
 export * from '@entur/sdk';
 
+export type QuayWithDepartures = {quay: Quay; departures: Array<Departure>};
 export type DeparturesWithStop = {
   stop: StopPlaceDetails;
   quays: {
-    [quayId: string]: {quay: Quay; departures: Array<Departure>};
+    [quayId: string]: QuayWithDepartures;
   };
 };
 

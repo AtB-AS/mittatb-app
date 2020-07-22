@@ -33,6 +33,7 @@ import useReducerWithSideEffects, {
   ReducerWithSideEffects,
   SideEffect,
   NoUpdate,
+  UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
 import useInterval from '../../utils/use-interval';
 import {updateStopsWithRealtime} from './utils';
@@ -86,9 +87,8 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
   );
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
 
-  const {departures, refresh, loadMore, isLoading} = useDepartureData(
-    fromLocation,
-  );
+  const {state, refresh, loadMore} = useDepartureData(fromLocation);
+  const {departures, isLoading} = state;
 
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {
@@ -140,20 +140,22 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
 export default NearbyScreen;
 
 type DepartureDataState = {
-  list: DeparturesWithStop[];
+  departures: DeparturesWithStop[];
+  isLoading: boolean;
   paging: DepartureQuery & {
     hasNext: boolean;
   };
 };
 
 const initialPaging = {
-  limit: 10,
+  limit: 15,
   pageOffset: 0,
   pageSize: 2,
   hasNext: true,
 };
 const initialState: DepartureDataState = {
-  list: [],
+  departures: [],
+  isLoading: false,
   paging: initialPaging,
 };
 
@@ -185,13 +187,15 @@ const reducer: ReducerWithSideEffects<
 > = (state, action) => {
   switch (action.type) {
     case 'LOAD_INITIAL_DEPARTURES': {
-      return SideEffect<DepartureDataState, DepartureDataActions>(
+      return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
+        {...state, isLoading: true},
         async (_, dispatch) => {
           if (!action.location) return;
           const paginationData = await getDepartures(
             action.location,
             initialPaging,
           );
+
           dispatch({
             type: 'UPDATE_DEPARTURES',
             reset: true,
@@ -202,7 +206,8 @@ const reducer: ReducerWithSideEffects<
     }
 
     case 'LOAD_MORE_DEPARTURES': {
-      return SideEffect<DepartureDataState, DepartureDataActions>(
+      return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
+        {...state, isLoading: true},
         async (state, dispatch) => {
           if (!action.location) return;
           if (!state.paging.hasNext) return;
@@ -223,7 +228,7 @@ const reducer: ReducerWithSideEffects<
     case 'LOAD_REALTIME_DATA': {
       return SideEffect<DepartureDataState, DepartureDataActions>(
         async (state, dispatch) => {
-          const realtimeData = await getRealtimeDeparture(state.list);
+          const realtimeData = await getRealtimeDeparture(state.departures);
           dispatch({
             type: 'UPDATE_REALTIME',
             realtimeData,
@@ -235,9 +240,10 @@ const reducer: ReducerWithSideEffects<
     case 'UPDATE_DEPARTURES': {
       return Update({
         ...state,
-        list: action.reset
+        isLoading: false,
+        departures: action.reset
           ? action.paginationData.data
-          : state.list.concat(action.paginationData.data),
+          : state.departures.concat(action.paginationData.data),
         paging: {
           ...state.paging,
           hasNext: action.paginationData.hasNext,
@@ -251,7 +257,10 @@ const reducer: ReducerWithSideEffects<
     case 'UPDATE_REALTIME': {
       return Update({
         ...state,
-        list: updateStopsWithRealtime(state.list, action.realtimeData),
+        departures: updateStopsWithRealtime(
+          state.departures,
+          action.realtimeData,
+        ),
       });
     }
 
@@ -286,9 +295,8 @@ function useDepartureData(
   );
 
   return {
-    departures: state.list,
+    state,
     refresh,
     loadMore,
-    isLoading: false,
   };
 }
