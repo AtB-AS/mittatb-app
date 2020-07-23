@@ -8,7 +8,7 @@ import React, {useCallback, useMemo, useEffect} from 'react';
 import {
   getDepartures,
   getRealtimeDeparture,
-  DepartureQuery,
+  DeparturesInputQuery,
 } from '../../api/departures';
 import {LocationButton} from '../../components/search-button';
 import SearchLocationIcon from '../../components/search-location-icon';
@@ -44,6 +44,9 @@ import {
 } from './utils';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
+
+// Should be a multiplum of the number we are showing.
+const DEFAULT_NUMBER_OF_DEPARTURES_TO_FETCH = 15;
 
 type NearbyRouteName = 'Nearest';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearest';
@@ -154,13 +157,15 @@ export default NearbyScreen;
 type DepartureDataState = {
   departures: DeparturesWithStopLocal[];
   isLoading: boolean;
-  paging: DepartureQuery & {
-    hasNext: boolean;
-  };
+  queryInput: DeparturesInputQuery;
+  paging: Partial<Paginated<DeparturesWithStop[]>>;
 };
 
+const initialQueryInput: DeparturesInputQuery = {
+  numberOfDepartures: DEFAULT_NUMBER_OF_DEPARTURES_TO_FETCH,
+  startTime: new Date(),
+};
 const initialPaging = {
-  limit: 15,
   pageOffset: 0,
   pageSize: 2,
   hasNext: true,
@@ -169,6 +174,7 @@ const initialState: DepartureDataState = {
   departures: [],
   isLoading: false,
   paging: initialPaging,
+  queryInput: initialQueryInput,
 };
 
 type DepartureDataActions =
@@ -188,6 +194,9 @@ type DepartureDataActions =
       type: 'LOAD_REALTIME_DATA';
     }
   | {
+      type: 'STOP_LOADER';
+    }
+  | {
       type: 'UPDATE_DEPARTURES';
       reset?: boolean;
       paginationData: Paginated<DeparturesWithStop[]>;
@@ -203,40 +212,58 @@ const reducer: ReducerWithSideEffects<
 > = (state, action) => {
   switch (action.type) {
     case 'LOAD_INITIAL_DEPARTURES': {
-      return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
-        {...state, isLoading: true},
-        async (_, dispatch) => {
-          if (!action.location) return;
-          const paginationData = await getDepartures(
-            action.location,
-            initialPaging,
-          );
+      if (!action.location) return NoUpdate();
 
-          dispatch({
-            type: 'UPDATE_DEPARTURES',
-            reset: true,
-            paginationData,
-          });
+      // Update input data with new date as this
+      // is a fresh fetch. We should fetch tha latest information.
+      const queryInput: DeparturesInputQuery = {
+        ...state.queryInput,
+        startTime: new Date(),
+      };
+
+      return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
+        {...state, isLoading: true, queryInput},
+        async (_, dispatch) => {
+          try {
+            // Fresh fetch, reset paging and use new query input with new startTime
+            const paginationData = await getDepartures(action.location!, {
+              ...initialPaging,
+              ...queryInput,
+            });
+
+            dispatch({
+              type: 'UPDATE_DEPARTURES',
+              reset: true,
+              paginationData,
+            });
+          } finally {
+            dispatch({type: 'STOP_LOADER'});
+          }
         },
       );
     }
 
     case 'LOAD_MORE_DEPARTURES': {
+      if (!action.location || !state.paging.hasNext) return NoUpdate();
+
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
         {...state, isLoading: true},
         async (state, dispatch) => {
-          if (!action.location) return;
-          if (!state.paging.hasNext) return;
+          try {
+            // Use previously stored queryInput with stored startTime
+            // to ensure that we get the same departures.
+            const paginationData = await getDepartures(action.location!, {
+              ...state.paging,
+              ...state.queryInput,
+            });
 
-          const paginationData = await getDepartures(
-            action.location,
-            state.paging,
-          );
-
-          dispatch({
-            type: 'UPDATE_DEPARTURES',
-            paginationData,
-          });
+            dispatch({
+              type: 'UPDATE_DEPARTURES',
+              paginationData,
+            });
+          } finally {
+            dispatch({type: 'STOP_LOADER'});
+          }
         },
       );
     }
@@ -244,7 +271,12 @@ const reducer: ReducerWithSideEffects<
     case 'LOAD_REALTIME_DATA': {
       return SideEffect<DepartureDataState, DepartureDataActions>(
         async (state, dispatch) => {
-          const realtimeData = await getRealtimeDeparture(state.departures);
+          // Use same query input with same startTime to ensure that
+          // we get the same result.
+          const realtimeData = await getRealtimeDeparture(
+            state.departures,
+            state.queryInput,
+          );
           dispatch({
             type: 'UPDATE_REALTIME',
             realtimeData,
@@ -264,6 +296,13 @@ const reducer: ReducerWithSideEffects<
       });
     }
 
+    case 'STOP_LOADER': {
+      return Update({
+        ...state,
+        isLoading: false,
+      });
+    }
+
     case 'UPDATE_DEPARTURES': {
       return Update({
         ...state,
@@ -279,9 +318,12 @@ const reducer: ReducerWithSideEffects<
                 DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW,
               ),
             ),
+
+        // Update paging with new offset to fetch new page later.
         paging: {
           ...state.paging,
           hasNext: action.paginationData.hasNext,
+          totalResults: action.paginationData.totalResults,
           pageOffset: action.paginationData.hasNext
             ? action.paginationData.nextPageOffset
             : state.paging.pageOffset,
