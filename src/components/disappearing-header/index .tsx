@@ -47,7 +47,8 @@ const DisappearingHeader: React.FC<Props> = ({
 
   const osOffset = Platform.OS === 'ios' ? headerHeight : 0;
   const scrollY = Animated.add(scrollYRef, osOffset);
-  const showAltTitle = scrollYValue + osOffset > SCROLL_OFFSET_HEADER_ANIMATION;
+  const showAltTitle =
+    useScroll && scrollYValue + osOffset > SCROLL_OFFSET_HEADER_ANIMATION;
 
   const headerTranslate = scrollY.interpolate({
     inputRange: [0, headerHeight],
