@@ -150,6 +150,10 @@ const Assistant: React.FC<Props> = ({
       initialText,
     });
 
+  const showEmptyScreen = !tripPatterns && !isSearching;
+  const isEmptyResult = !tripPatterns?.length;
+  const useScroll = !showEmptyScreen && !isEmptyResult;
+
   const renderHeader = () => (
     <View>
       <SearchGroup>
@@ -214,10 +218,13 @@ const Assistant: React.FC<Props> = ({
         onRefresh={reload}
         isRefreshing={isSearching}
         headerHeight={HEADER_HEIGHT}
+        useScroll={useScroll}
       >
         <Results
           tripPatterns={tripPatterns}
           isSearching={isSearching}
+          showEmptyScreen={showEmptyScreen}
+          isEmptyResult={isEmptyResult}
           onDetailsPressed={(tripPattern) =>
             navigation.navigate('TripDetailsModal', {
               from: from!,

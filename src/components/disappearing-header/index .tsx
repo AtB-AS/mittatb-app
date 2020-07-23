@@ -6,16 +6,17 @@ const HEADER_HEIGHT = 157;
 
 type Props = {
   renderHeader(): React.ReactNode;
-  isRefreshing?: boolean;
-  showScroll?: boolean;
   onRefresh?(): void;
   headerHeight?: number;
+  isRefreshing?: boolean;
+  useScroll?: boolean;
 };
 
 const DisappearingHeader: React.FC<Props> = ({
   renderHeader,
   children,
   isRefreshing = false,
+  useScroll = true,
   onRefresh,
   headerHeight = HEADER_HEIGHT,
 }) => {
@@ -46,34 +47,39 @@ const DisappearingHeader: React.FC<Props> = ({
         {renderHeader()}
       </Animated.View>
 
-      <Animated.ScrollView
-        contentContainerStyle={[
-          {paddingTop: Platform.OS !== 'ios' ? headerHeight : 0},
-        ]}
-        scrollEventThrottle={1}
-        style={{flex: 1}}
-        refreshControl={
-          onRefresh ? (
-            <RefreshControl
-              refreshing={isRefreshing}
-              onRefresh={onRefresh}
-              progressViewOffset={headerHeight}
-            />
-          ) : undefined
-        }
-        onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {y: scrollYRef}}}],
-          {useNativeDriver: true},
-        )}
-        contentInset={{
-          top: headerHeight,
-        }}
-        contentOffset={{
-          y: -headerHeight,
-        }}
-      >
-        {children}
-      </Animated.ScrollView>
+      {useScroll ? (
+        <Animated.ScrollView
+          contentContainerStyle={[
+            {paddingTop: Platform.OS !== 'ios' ? headerHeight : 0},
+          ]}
+          scrollEventThrottle={1}
+          style={{flex: 1}}
+          bouncesZoom={true}
+          refreshControl={
+            onRefresh ? (
+              <RefreshControl
+                refreshing={isRefreshing}
+                onRefresh={onRefresh}
+                progressViewOffset={headerHeight}
+              />
+            ) : undefined
+          }
+          onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {y: scrollYRef}}}],
+            {useNativeDriver: true},
+          )}
+          contentInset={{
+            top: headerHeight,
+          }}
+          contentOffset={{
+            y: -headerHeight,
+          }}
+        >
+          {children}
+        </Animated.ScrollView>
+      ) : (
+        <View style={{paddingTop: headerHeight}}>{children}</View>
+      )}
     </View>
   );
 };

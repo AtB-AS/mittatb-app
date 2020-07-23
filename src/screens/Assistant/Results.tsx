@@ -7,6 +7,8 @@ import ResultItem from './ResultItem';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
+  showEmptyScreen: boolean;
+  isEmptyResult: boolean;
   isSearching: boolean;
   onDetailsPressed(tripPattern: TripPattern): void;
 };
@@ -17,17 +19,18 @@ export type ResultTabParams = {
 
 const Results: React.FC<Props> = ({
   tripPatterns,
-  isSearching,
+  showEmptyScreen,
+  isEmptyResult,
   onDetailsPressed,
 }) => {
   const {theme} = useTheme();
   const styles = useThemeStyles(theme);
 
-  if (!tripPatterns && !isSearching) {
+  if (showEmptyScreen) {
     return null;
   }
 
-  if (!isSearching && !tripPatterns?.length) {
+  if (isEmptyResult) {
     return (
       <View style={styles.container}>
         <MessageBox>
