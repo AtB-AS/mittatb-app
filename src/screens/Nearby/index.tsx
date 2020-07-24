@@ -136,10 +136,12 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
       alternativeTitleComponent={
         <Text style={styles.altTitleHeader}>{fromLocation?.name}</Text>
       }
+      onEndReached={loadMore}
     >
       <NearbyResults
         departures={departures}
         onShowMoreOnQuay={showMoreOnQuay}
+        isFetchingMore={isFetchingMore && !isLoading}
       />
     </DisappearingHeader>
   );

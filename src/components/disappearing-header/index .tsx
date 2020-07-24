@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect} from 'react';
+import React, {useRef, useState, useCallback} from 'react';
 import {
   View,
   Animated,
@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import {StyleSheet} from '../../theme';
 import useChatIcon from '../../chat/use-chat-icon';
-import ScreenHeader from '../../ScreenHeader';
 import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
 
 const HEADER_HEIGHT = 157;
@@ -23,6 +22,9 @@ type Props = {
   useScroll?: boolean;
   headerTitle: string;
   alternativeTitleComponent?: React.ReactNode;
+
+  onEndReached?(e: NativeScrollEvent): void;
+  onEndReachedThreshold?: number;
 };
 
 const SCROLL_OFFSET_HEADER_ANIMATION = 80;
@@ -37,6 +39,9 @@ const DisappearingHeader: React.FC<Props> = ({
 
   headerTitle,
   alternativeTitleComponent,
+
+  onEndReached,
+  onEndReachedThreshold = 10,
 }) => {
   const {icon: chatIcon, openChat} = useChatIcon();
   const [scrollYValue, setScrollY] = useState<number>(0);
@@ -55,6 +60,24 @@ const DisappearingHeader: React.FC<Props> = ({
     outputRange: [0, -headerHeight],
     extrapolate: 'clamp',
   });
+
+  const endReachListener = useCallback(
+    throttle((e: NativeScrollEvent) => {
+      if (!onEndReached) return;
+      if (!isRefreshing && hasReachedEnd(e, onEndReachedThreshold)) {
+        onEndReached(e);
+      }
+    }, 400),
+    [isRefreshing, onEndReached, onEndReachedThreshold],
+  );
+  const onScrolling = useCallback(
+    (e: NativeScrollEvent) => {
+      const scrollPos = e.contentOffset.y;
+      setScrollY(scrollPos);
+      endReachListener(e);
+    },
+    [endReachListener],
+  );
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -81,7 +104,7 @@ const DisappearingHeader: React.FC<Props> = ({
             contentContainerStyle={[
               {paddingTop: Platform.OS !== 'ios' ? headerHeight : 0},
             ]}
-            scrollEventThrottle={1}
+            scrollEventThrottle={10}
             style={{flex: 1}}
             refreshControl={
               onRefresh ? (
@@ -97,7 +120,7 @@ const DisappearingHeader: React.FC<Props> = ({
               {
                 useNativeDriver: true,
                 listener: (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-                  setScrollY(e.nativeEvent.contentOffset.y);
+                  onScrolling(e.nativeEvent);
                 },
               },
             )}
@@ -118,6 +141,16 @@ const DisappearingHeader: React.FC<Props> = ({
   );
 };
 export default DisappearingHeader;
+
+const hasReachedEnd = (
+  {layoutMeasurement, contentOffset, contentSize}: NativeScrollEvent,
+  paddingThreshold: number,
+) => {
+  return (
+    layoutMeasurement.height + contentOffset.y >=
+    contentSize.height - paddingThreshold
+  );
+};
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   screen: {
@@ -146,3 +179,30 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
 }));
+
+const throttle = <F extends (...args: any[]) => any>(
+  func: F,
+  waitFor: number,
+) => {
+  const now = () => new Date().getTime();
+  const resetStartTime = () => (startTime = now());
+  let timeout: NodeJS.Timeout;
+  let startTime: number = now() - waitFor;
+
+  return (...args: Parameters<F>): Promise<ReturnType<F>> =>
+    new Promise((resolve) => {
+      const timeLeft = startTime + waitFor - now();
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+      if (startTime + waitFor <= now()) {
+        resetStartTime();
+        resolve(func(...args));
+      } else {
+        timeout = setTimeout(() => {
+          resetStartTime();
+          resolve(func(...args));
+        }, timeLeft);
+      }
+    });
+};
