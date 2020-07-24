@@ -12,7 +12,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import TransportationIcon from '../../components/transportation-icon';
 import {EstimatedCall, DeparturesWithStop, StopPlaceDetails} from '../../sdk';
 import {StyleSheet} from '../../theme';
-import {formatToClock} from '../../utils/date';
+import {formatToClock, formatToClockOrRelativeMinutes} from '../../utils/date';
 import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
 import {useNavigation} from '@react-navigation/native';
 import {NearbyScreenNavigationProp} from '.';
@@ -230,7 +230,7 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
         onPress={() => onPress?.(departure)}
       >
         <Text style={styles.time}>
-          {formatToClock(departure.expectedDepartureTime)}
+          {formatToClockOrRelativeMinutes(departure.expectedDepartureTime)}
         </Text>
         <TransportationIcon
           mode={departure.serviceJourney.journeyPattern?.line.transportMode}
