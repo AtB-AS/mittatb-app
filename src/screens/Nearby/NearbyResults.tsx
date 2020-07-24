@@ -25,6 +25,7 @@ import haversine from 'haversine-distance';
 import {DeparturesWithStopLocal, QuayWithDeparturesAndLimits} from './utils';
 import MessageBox from '../../message-box';
 import insets from '../../utils/insets';
+import {WalkingPerson} from '../../assets/svg/icons/transportation';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
@@ -213,9 +214,12 @@ const ItemHeader: React.FC<{
   return (
     <View style={styles.resultHeader}>
       <Text>{stop.name}</Text>
-      <Text>
-        {location ? humanizeDistance(haversine(location.coords, stop)) : ''}
-      </Text>
+      {location && (
+        <View style={styles.distance}>
+          <Text>{humanizeDistance(haversine(location.coords, stop))}</Text>
+          <WalkingPerson width={16} style={styles.distanceIcon} />
+        </View>
+      )}
     </View>
   );
 };
@@ -280,6 +284,13 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     borderBottomWidth: 0,
     paddingBottom: 0,
   },
+  distance: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  distanceIcon: {
+    marginLeft: 4,
+  },
   stopContainer: {
     padding: 12,
     paddingBottom: 0,
@@ -312,6 +323,7 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
   resultHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     paddingBottom: 8,
     marginBottom: 20,
     borderBottomColor: theme.background.level1,
