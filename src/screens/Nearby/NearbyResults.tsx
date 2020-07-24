@@ -120,21 +120,19 @@ const StopDepartures: React.FC<StopDeparturesProps> = React.memo(
     }
 
     return (
-      <View style={styles.item}>
+      <View style={styles.stopContainer}>
         <ItemHeader stop={departures.stop} />
 
-        <View>
-          <LastElement last={styles.stopContainer__withoutBorder}>
-            {Object.values(departures.quays).map((quay) => (
-              <QuayResult
-                key={quay.quay.id}
-                quay={quay}
-                onPress={onPress}
-                onShowMoreOnQuay={onShowMoreOnQuay}
-              />
-            ))}
-          </LastElement>
-        </View>
+        <LastElement last={styles.quayContainer__withoutBorder}>
+          {Object.values(departures.quays).map((quay) => (
+            <QuayResult
+              key={quay.quay.id}
+              quay={quay}
+              onPress={onPress}
+              onShowMoreOnQuay={onShowMoreOnQuay}
+            />
+          ))}
+        </LastElement>
       </View>
     );
   },
@@ -153,8 +151,10 @@ const QuayResult: React.FC<QuayProps> = React.memo(
     const showShowMoreButton =
       onShowMoreOnQuay && quay.departures.length > quay.showLimit;
 
+    if (!items.length) return null;
+
     return (
-      <View key={quay.quay.id} style={styles.stopContainer}>
+      <View key={quay.quay.id} style={styles.quayContainer}>
         <View style={styles.platformHeader}>
           <Text>Plattform {quay.quay.publicCode}</Text>
         </View>
@@ -263,8 +263,9 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     borderBottomWidth: 0,
     paddingBottom: 0,
   },
-  item: {
+  stopContainer: {
     padding: 12,
+    paddingBottom: 0,
     backgroundColor: theme.background.level0,
     borderRadius: 8,
     marginBottom: 12,
@@ -294,25 +295,32 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
   resultHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingBottom: 9,
+    paddingBottom: 8,
+    marginBottom: 20,
     borderBottomColor: theme.background.level1,
     borderBottomWidth: 1,
   },
 
-  stopContainer__withoutBorder: {
+  quayContainer__withoutBorder: {
     marginBottom: 0,
+    paddingBottom: 12,
   },
-  stopContainer: {
-    marginVertical: 20,
+  quayContainer: {
+    marginBottom: 20,
   },
 }));
 
 type LastElementProps = {
   last?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
+  exceptSingleItems?: boolean;
 };
-const LastElement: React.FC<LastElementProps> = ({children, last}) => {
+const LastElement: React.FC<LastElementProps> = ({
+  children,
+  last,
+  exceptSingleItems = false,
+}) => {
   const num = React.Children.count(children) - 1;
-  if (num === 0 && children) {
+  if (exceptSingleItems && num === 0 && children) {
     return <>{children}</>;
   }
   return (
