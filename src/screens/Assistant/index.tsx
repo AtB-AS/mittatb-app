@@ -186,7 +186,10 @@ const Assistant: React.FC<Props> = ({
   const altHeaderComp = (
     <View style={styles.altTitle}>
       <View style={styles.altTitlePart}>
-        <Text style={styles.altTitleText} numberOfLines={1}>
+        <Text
+          style={[styles.altTitleText, styles.altTitleText__right]}
+          numberOfLines={1}
+        >
           {from?.name}
         </Text>
       </View>
@@ -247,6 +250,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     overflow: 'hidden',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  altTitleText__right: {
+    textAlign: 'right',
   },
 }));
 
