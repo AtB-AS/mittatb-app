@@ -19,23 +19,22 @@ import {NearbyScreenNavigationProp} from '.';
 import {useGeolocationState} from '../../GeolocationContext';
 import haversine from 'haversine-distance';
 import {DeparturesWithStopLocal, QuayWithDeparturesAndLimits} from './utils';
+import MessageBox from '../../message-box';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
-  onRefresh?(): void;
-  onLoadMore?(): void;
   onShowMoreOnQuay?(quayId: string): void;
-  isRefreshing?: boolean;
   isFetchingMore?: boolean;
+
+  isInitialScreen: boolean;
 };
 
 const NearbyResults: React.FC<NearbyResultsProps> = ({
   departures,
-  onRefresh,
-  onLoadMore,
   onShowMoreOnQuay,
-  isRefreshing = false,
   isFetchingMore = false,
+
+  isInitialScreen,
 }) => {
   const styles = useResultsStyle();
   const navigation = useNavigation<NearbyScreenNavigationProp>();
@@ -48,10 +47,22 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
     });
   };
 
+  if (isInitialScreen) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.centerText}>
+          Søk etter avganger fra holdeplasser eller i nærheten av steder.
+        </Text>
+      </View>
+    );
+  }
+
   if (departures !== null && Object.keys(departures).length == 0) {
     return (
-      <View style={[styles.container, styles.noDepartures]}>
-        <Text>Fant ingen avganger i nærheten</Text>
+      <View style={styles.container}>
+        <MessageBox type="info">
+          <Text>Fant ingen avganger i nærheten</Text>
+        </MessageBox>
       </View>
     );
   }
@@ -78,8 +89,8 @@ const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.sizes.pagePadding,
   },
-  noDepartures: {
-    alignItems: 'center',
+  centerText: {
+    textAlign: 'center',
   },
 }));
 
@@ -239,11 +250,6 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
 );
 
 const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 24,
-  },
   itemContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -284,9 +290,6 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     color: theme.text.primary,
     marginLeft: 10,
     paddingVertical: 4,
-  },
-  label: {
-    fontSize: 12,
   },
   resultHeader: {
     flexDirection: 'row',

@@ -101,6 +101,9 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
   );
   const {departures, isLoading, isFetchingMore} = state;
 
+  const isInitialScreen = departures == null && !isLoading;
+  const activateScroll = !isInitialScreen;
+
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {
       label: 'Fra',
@@ -127,6 +130,7 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
       headerHeight={59}
       renderHeader={renderHeader}
       headerTitle="Avganger"
+      useScroll={activateScroll}
       alternativeTitleComponent={
         <Text style={styles.altTitleHeader}>{fromLocation?.name}</Text>
       }
@@ -136,6 +140,7 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
         departures={departures}
         onShowMoreOnQuay={showMoreOnQuay}
         isFetchingMore={isFetchingMore && !isLoading}
+        isInitialScreen={isInitialScreen}
       />
     </DisappearingHeader>
   );
@@ -151,7 +156,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
 export default NearbyScreen;
 
 type DepartureDataState = {
-  departures: DeparturesWithStopLocal[];
+  departures: DeparturesWithStopLocal[] | null;
   isLoading: boolean;
   isFetchingMore: boolean;
   queryInput: DeparturesInputQuery;
@@ -168,7 +173,7 @@ const initialPaging = {
   hasNext: true,
 };
 const initialState: DepartureDataState = {
-  departures: [],
+  departures: null,
   isLoading: false,
   isFetchingMore: false,
   paging: initialPaging,
@@ -275,7 +280,7 @@ const reducer: ReducerWithSideEffects<
           // Use same query input with same startTime to ensure that
           // we get the same result.
           const realtimeData = await getRealtimeDeparture(
-            state.departures,
+            state.departures ?? [],
             state.queryInput,
           );
           dispatch({
@@ -290,7 +295,7 @@ const reducer: ReducerWithSideEffects<
       return Update({
         ...state,
         departures: showMoreItemsOnQuay(
-          state.departures,
+          state.departures ?? [],
           action.quayId,
           DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW,
         ),
@@ -314,7 +319,7 @@ const reducer: ReducerWithSideEffects<
               action.paginationData.data,
               DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW,
             )
-          : state.departures.concat(
+          : (state.departures ?? []).concat(
               mapQuayDeparturesToShowlimits(
                 action.paginationData.data,
                 DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW,
@@ -337,7 +342,7 @@ const reducer: ReducerWithSideEffects<
       return Update({
         ...state,
         departures: updateStopsWithRealtime(
-          state.departures,
+          state.departures ?? [],
           action.realtimeData,
         ),
       });
