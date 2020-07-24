@@ -12,7 +12,11 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import TransportationIcon from '../../components/transportation-icon';
 import {EstimatedCall, DeparturesWithStop, StopPlaceDetails} from '../../sdk';
 import {StyleSheet} from '../../theme';
-import {formatToClock, formatToClockOrRelativeMinutes} from '../../utils/date';
+import {
+  formatToClock,
+  formatToClockOrRelativeMinutes,
+  isInThePast,
+} from '../../utils/date';
 import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
 import {useNavigation} from '@react-navigation/native';
 import {NearbyScreenNavigationProp} from '.';
@@ -224,27 +228,36 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
   ({departure, onPress, style}) => {
     const styles = useResultItemStyles();
     const {publicCode, name} = getLineNameFromEstimatedCall(departure);
+
+    const pastStyle = isInThePast(departure.expectedDepartureTime)
+      ? styles.itemContainer__isInPast
+      : undefined;
+
     return (
-      <TouchableOpacity
-        style={[styles.itemContainer, style]}
-        onPress={() => onPress?.(departure)}
-      >
-        <Text style={styles.time}>
-          {formatToClockOrRelativeMinutes(departure.expectedDepartureTime)}
-        </Text>
-        <TransportationIcon
-          mode={departure.serviceJourney.journeyPattern?.line.transportMode}
-          publicCode={departure.serviceJourney.journeyPattern?.line.publicCode}
-        />
-        <View style={styles.textWrapper}>
-          <Text style={styles.textContent} numberOfLines={1}>
-            {publicCode && (
-              <Text style={{fontWeight: 'bold'}}>{publicCode} </Text>
-            )}
-            {name}
+      <View style={pastStyle}>
+        <TouchableOpacity
+          style={[styles.itemContainer, style]}
+          onPress={() => onPress?.(departure)}
+        >
+          <Text style={styles.time}>
+            {formatToClockOrRelativeMinutes(departure.expectedDepartureTime)}
           </Text>
-        </View>
-      </TouchableOpacity>
+          <TransportationIcon
+            mode={departure.serviceJourney.journeyPattern?.line.transportMode}
+            publicCode={
+              departure.serviceJourney.journeyPattern?.line.publicCode
+            }
+          />
+          <View style={styles.textWrapper}>
+            <Text style={styles.textContent} numberOfLines={1}>
+              {publicCode && (
+                <Text style={{fontWeight: 'bold'}}>{publicCode} </Text>
+              )}
+              {name}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     );
   },
 );
@@ -257,6 +270,9 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: 12,
     borderBottomColor: theme.background.level1,
     borderBottomWidth: 1,
+  },
+  itemContainer__isInPast: {
+    opacity: 0.5,
   },
   itemContainer__withoutBorder: {
     marginBottom: 0,

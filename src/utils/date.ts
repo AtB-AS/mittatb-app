@@ -4,6 +4,7 @@ import {
   format,
   differenceInSeconds,
   isSameDay,
+  isPast,
 } from 'date-fns';
 
 import humanizeDuration from 'humanize-duration';
@@ -75,7 +76,7 @@ export function formatToClockOrRelativeMinutes(
   const parsed = isoDate instanceof Date ? isoDate : parseISO(isoDate);
   const diff = secondsBetween(new Date(), parsed);
 
-  if (diff <= 0 || diff / 60 >= minuteThreshold) {
+  if (isInThePast(parsed) || diff / 60 >= minuteThreshold) {
     return format(parsed, 'HH:mm');
   }
 
@@ -84,6 +85,10 @@ export function formatToClockOrRelativeMinutes(
   }
 
   return secondsToMinutesShort(diff);
+}
+
+export function isInThePast(isoDate: string | Date) {
+  return isPast(isoDate instanceof Date ? isoDate : parseISO(isoDate));
 }
 
 export function formatToLongDateTime(isoDate: string | Date, locale?: Locale) {
