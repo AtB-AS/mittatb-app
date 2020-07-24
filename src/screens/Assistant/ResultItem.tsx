@@ -39,7 +39,7 @@ function getFromLeg(legs: Leg[]) {
   if (!fromQuay) {
     return legs[0].fromPlace.name ?? 'ukjent holdeplass';
   }
-  return `${fromQuay.name} ${fromQuay.publicCode}`;
+  return `${fromQuay.name} ${fromQuay.publicCode ?? ''}`;
 }
 
 const ResultItemHeader: React.FC<{
