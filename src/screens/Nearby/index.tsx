@@ -11,7 +11,6 @@ import {
   DeparturesInputQuery,
 } from '../../api/departures';
 import {LocationButton} from '../../components/search-button';
-import SearchLocationIcon from '../../components/search-location-icon';
 import {Location} from '../../favorites/types';
 import {useGeolocationState} from '../../GeolocationContext';
 import {
@@ -116,12 +115,7 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
         title="Fra"
         placeholder="Søk etter adresse eller sted"
         location={fromLocation}
-        icon={
-          <View style={{marginLeft: 2}}>
-            <SearchLocationIcon location={fromLocation} />
-          </View>
-        }
-        onPress={() => openLocationSearch()}
+        onPress={openLocationSearch}
       />
     </SearchGroup>
   );
