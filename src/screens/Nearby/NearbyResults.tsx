@@ -69,20 +69,9 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
           onPress={onPress}
           onShowMoreOnQuay={onShowMoreOnQuay}
         />
-<<<<<<< HEAD
       ))}
+      <FooterLoader isFetchingMore={isFetchingMore} />
     </View>
-=======
-      )}
-      ListFooterComponent={<FooterLoader isFetchingMore={isFetchingMore} />}
-      keyExtractor={(departure) => departure.stop.id}
-      refreshControl={
-        <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
-      }
-      onEndReached={onLoadMore}
-      onEndReachedThreshold={0.5}
-    />
->>>>>>> 231d120... Show activity indicator when loading more
   );
 };
 const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
