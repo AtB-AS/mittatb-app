@@ -24,26 +24,33 @@ type ResultItemProps = {
 };
 
 function legWithQuay(leg: Leg) {
+  if (leg.fromEstimatedCall?.quay) {
+    return true;
+  }
   // Manually find name of from place based on mode as in some cases
   // (from adresses that are also quays) you won't have quay information in from place.
   const modesWithoutQuay: LegMode[] = ['bicycle', 'foot'];
   return !modesWithoutQuay.includes(leg.mode);
 }
 
+function getFromLeg(legs: Leg[]) {
+  const found = legs.find(legWithQuay);
+  const fromQuay = (found?.fromEstimatedCall ?? found?.fromPlace)?.quay;
+  if (!fromQuay) {
+    return legs[0].fromPlace.name ?? 'ukjent holdeplass';
+  }
+  return `${fromQuay.name} ${fromQuay.publicCode}`;
+}
+
 const ResultItemHeader: React.FC<{
   tripPattern: TripPattern;
 }> = ({tripPattern}) => {
-  const firstWithQuay = tripPattern.legs.find(legWithQuay);
+  const quayName = getFromLeg(tripPattern.legs);
   const styles = useThemeStyles();
 
   return (
     <View style={styles.resultHeader}>
-      <Text>
-        Fra{' '}
-        {firstWithQuay?.fromPlace.name ??
-          tripPattern.legs[0]?.fromPlace.name ??
-          'Ukjent holdeplass'}
-      </Text>
+      <Text>Fra {quayName}</Text>
       <Text>{secondsToDurationShort(tripPattern.duration)}</Text>
     </View>
   );
