@@ -1,7 +1,6 @@
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useMemo} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {getDepartures} from '../../api/departures';
 import {LocationButton} from '../../components/search-button';
 import SearchLocationIcon from '../../components/search-location-icon';
@@ -13,7 +12,6 @@ import {
 } from '../../location-search';
 import {useReverseGeocoder} from '../../location-search/useGeocoder';
 import {RootStackParamList} from '../../navigation';
-import Header from '../../ScreenHeader';
 import {StyleSheet} from '../../theme';
 import Loading from '../Loading';
 import NearbyResults from './NearbyResults';
@@ -21,8 +19,8 @@ import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import usePollableResource from '../../utils/use-pollable-resource';
 import SearchGroup from '../../components/search-button/search-group';
 import {DeparturesWithStop} from '../../sdk';
-import useChatIcon from '../../chat/use-chat-icon';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
+import DisappearingHeader from '../../components/disappearing-header/index ';
 
 type NearbyRouteName = 'Nearest';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearest';
@@ -81,8 +79,6 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
     fromLocation?.layer === 'venue' ? 30 : 60 ?? 0,
   );
 
-  const {icon: chatIcon, openChat} = useChatIcon();
-
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {
       label: 'Fra',
@@ -91,48 +87,42 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
       initialText: fromLocation?.name,
     });
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <Header
-        title="I nærheten"
-        rightButton={{icon: chatIcon, onPress: openChat}}
+  const renderHeader = () => (
+    <SearchGroup>
+      <LocationButton
+        title="Fra"
+        placeholder="Søk etter adresse eller sted"
+        location={fromLocation}
+        icon={
+          <View style={{marginLeft: 2}}>
+            <SearchLocationIcon location={fromLocation} />
+          </View>
+        }
+        onPress={() => openLocationSearch()}
       />
-      <SearchGroup>
-        <LocationButton
-          title="Fra"
-          placeholder="Søk etter adresse eller sted"
-          location={fromLocation}
-          icon={
-            <View style={{marginLeft: 2}}>
-              <SearchLocationIcon location={fromLocation} />
-            </View>
-          }
-          onPress={() => openLocationSearch()}
-        />
-      </SearchGroup>
+    </SearchGroup>
+  );
 
-      <NearbyResults
-        departures={departures}
-        onRefresh={refresh}
-        isRefreshing={isLoading}
-      />
-    </SafeAreaView>
+  return (
+    <DisappearingHeader
+      onRefresh={refresh}
+      isRefreshing={isLoading}
+      headerHeight={59}
+      renderHeader={renderHeader}
+      headerTitle="Avganger"
+      alternativeTitleComponent={
+        <Text style={styles.altTitleHeader}>{fromLocation?.name}</Text>
+      }
+    >
+      <NearbyResults departures={departures} />
+    </DisappearingHeader>
   );
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    backgroundColor: theme.background.level1,
-    paddingBottom: 0,
-    flex: 1,
-  },
-  spinner: {
-    height: 100,
-  },
-  sectionHeader: {
-    marginLeft: theme.sizes.pagePadding,
-    marginRight: theme.sizes.pagePadding,
-    marginTop: 12,
+  altTitleHeader: {
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 }));
 

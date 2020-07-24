@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  RefreshControl,
   Text,
   View,
   StyleProp,
@@ -8,7 +7,7 @@ import {
   TextStyle,
   ImageStyle,
 } from 'react-native';
-import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import TransportationIcon from '../../components/transportation-icon';
 import {EstimatedCall, DeparturesWithStop, StopPlaceDetails} from '../../sdk';
 import {StyleSheet} from '../../theme';
@@ -21,15 +20,9 @@ import haversine from 'haversine-distance';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStop[] | null;
-  onRefresh?(): void;
-  isRefreshing?: boolean;
 };
 
-const NearbyResults: React.FC<NearbyResultsProps> = ({
-  departures,
-  onRefresh,
-  isRefreshing = false,
-}) => {
+const NearbyResults: React.FC<NearbyResultsProps> = ({departures}) => {
   const styles = useResultsStyle();
   const navigation = useNavigation<NearbyScreenNavigationProp>();
   const onPress = (departure: EstimatedCall) => {
@@ -54,22 +47,20 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
   }
 
   return (
-    <FlatList
-      style={styles.container}
-      data={departures}
-      renderItem={({item}) => (
-        <StopDepartures departures={item} onPress={onPress} />
-      )}
-      keyExtractor={(departure) => departure.stop.id}
-      refreshControl={
-        <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
-      }
-    />
+    <View style={styles.container}>
+      {departures.map((item) => (
+        <StopDepartures
+          key={item.stop.id}
+          departures={item}
+          onPress={onPress}
+        />
+      ))}
+    </View>
   );
 };
 const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    padding: theme.sizes.pagePadding,
+    paddingHorizontal: theme.sizes.pagePadding,
   },
   noDepartures: {
     alignItems: 'center',

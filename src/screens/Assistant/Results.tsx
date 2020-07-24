@@ -1,17 +1,15 @@
 import React from 'react';
-import {RefreshControl, Text, View} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
+import {Text, View} from 'react-native';
 import MessageBox from '../../message-box';
 import {TripPattern} from '../../sdk';
 import {StyleSheet, useTheme} from '../../theme';
-import {AssistantScreenNavigationProp} from './';
 import ResultItem from './ResultItem';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
+  showEmptyScreen: boolean;
+  isEmptyResult: boolean;
   isSearching: boolean;
-  onRefresh: () => void;
-  navigation: AssistantScreenNavigationProp;
   onDetailsPressed(tripPattern: TripPattern): void;
 };
 
@@ -21,20 +19,20 @@ export type ResultTabParams = {
 
 const Results: React.FC<Props> = ({
   tripPatterns,
-  isSearching,
-  onRefresh,
+  showEmptyScreen,
+  isEmptyResult,
   onDetailsPressed,
 }) => {
   const {theme} = useTheme();
   const styles = useThemeStyles(theme);
 
-  if (!tripPatterns && !isSearching) {
+  if (showEmptyScreen) {
     return null;
   }
 
-  if (!isSearching && !tripPatterns?.length) {
+  if (isEmptyResult) {
     return (
-      <View style={[styles.scrollContainer, styles.container]}>
+      <View style={styles.container}>
         <MessageBox>
           <Text style={styles.infoBoxText}>
             Vi fant dessverre ingen reiseruter som passer til ditt søk.
@@ -46,59 +44,24 @@ const Results: React.FC<Props> = ({
   }
 
   return (
-    <FlatList
-      style={styles.scrollContainer}
-      contentContainerStyle={styles.container}
-      data={tripPatterns}
-      refreshControl={
-        <RefreshControl refreshing={isSearching} onRefresh={onRefresh} />
-      }
-      keyExtractor={(item, i) => String(item.id ?? i)}
-      renderItem={({item}) => (
-        <ResultItem tripPattern={item} onDetailsPressed={onDetailsPressed} />
-      )}
-    />
+    <View style={styles.container}>
+      {tripPatterns?.map((item, i) => (
+        <ResultItem
+          key={String(item.id ?? i)}
+          tripPattern={item}
+          onDetailsPressed={onDetailsPressed}
+        />
+      ))}
+    </View>
   );
 };
 
 export default Results;
 
-const useThemeStyles = StyleSheet.createTheme((theme) => ({
-  scrollContainer: {
-    marginTop: 12,
-    flex: 1,
-  },
+const useThemeStyles = StyleSheet.createTheme(() => ({
   container: {
     paddingHorizontal: 12,
     paddingBottom: 12,
-    // flexGrow: 1,
   },
   infoBoxText: {fontSize: 16},
-  spinner: {height: 280},
-  detailContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  },
-  buttonContainer: {
-    zIndex: 1,
-    position: 'absolute',
-  },
-  button: {
-    zIndex: 1,
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  viewPager: {height: 280, width: '100%'},
-  timeText: {
-    fontSize: 28,
-    color: theme.text.primary,
-  },
-  locationText: {
-    fontSize: 12,
-    color: theme.text.primary,
-    marginTop: 8,
-  },
 }));
