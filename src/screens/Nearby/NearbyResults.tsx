@@ -6,6 +6,7 @@ import {
   ViewStyle,
   TextStyle,
   ImageStyle,
+  ActivityIndicator,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import TransportationIcon from '../../components/transportation-icon';
@@ -25,6 +26,7 @@ type NearbyResultsProps = {
   onLoadMore?(): void;
   onShowMoreOnQuay?(quayId: string): void;
   isRefreshing?: boolean;
+  isFetchingMore?: boolean;
 };
 
 const NearbyResults: React.FC<NearbyResultsProps> = ({
@@ -33,6 +35,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
   onLoadMore,
   onShowMoreOnQuay,
   isRefreshing = false,
+  isFetchingMore = false,
 }) => {
   const styles = useResultsStyle();
   const navigation = useNavigation<NearbyScreenNavigationProp>();
@@ -66,8 +69,20 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
           onPress={onPress}
           onShowMoreOnQuay={onShowMoreOnQuay}
         />
+<<<<<<< HEAD
       ))}
     </View>
+=======
+      )}
+      ListFooterComponent={<FooterLoader isFetchingMore={isFetchingMore} />}
+      keyExtractor={(departure) => departure.stop.id}
+      refreshControl={
+        <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+      }
+      onEndReached={onLoadMore}
+      onEndReachedThreshold={0.5}
+    />
+>>>>>>> 231d120... Show activity indicator when loading more
   );
 };
 const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
@@ -78,6 +93,16 @@ const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
 }));
+
+type FooterLoaderProps = {
+  isFetchingMore: boolean;
+};
+function FooterLoader({isFetchingMore}) {
+  if (!isFetchingMore) {
+    return null;
+  }
+  return <ActivityIndicator style={{marginVertical: 20}} />;
+}
 
 export default NearbyResults;
 

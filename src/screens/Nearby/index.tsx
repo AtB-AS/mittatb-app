@@ -100,7 +100,7 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
   const {state, refresh, loadMore, showMoreOnQuay} = useDepartureData(
     fromLocation,
   );
-  const {departures, isLoading} = state;
+  const {departures, isLoading, isFetchingMore} = state;
 
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {
@@ -272,6 +272,8 @@ const reducer: ReducerWithSideEffects<
     }
 
     case 'LOAD_REALTIME_DATA': {
+      if (!state.departures?.length) return NoUpdate();
+
       return SideEffect<DepartureDataState, DepartureDataActions>(
         async (state, dispatch) => {
           // Use same query input with same startTime to ensure that
