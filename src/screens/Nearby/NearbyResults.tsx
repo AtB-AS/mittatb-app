@@ -24,6 +24,7 @@ import {useGeolocationState} from '../../GeolocationContext';
 import haversine from 'haversine-distance';
 import {DeparturesWithStopLocal, QuayWithDeparturesAndLimits} from './utils';
 import MessageBox from '../../message-box';
+import insets from '../../utils/insets';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
@@ -185,7 +186,7 @@ type ShowMoreButtonProps = {
 const ShowMoreButton: React.FC<ShowMoreButtonProps> = ({onPress}) => {
   const style = useShowMoreButtonStyle();
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} hitSlop={insets.symmetric(8, 12)}>
       <View style={style.button}>
         <Text style={style.text}>Vis flere avganger</Text>
       </View>
