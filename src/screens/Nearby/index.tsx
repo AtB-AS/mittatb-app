@@ -157,6 +157,7 @@ export default NearbyScreen;
 type DepartureDataState = {
   departures: DeparturesWithStopLocal[];
   isLoading: boolean;
+  isFetchingMore: boolean;
   queryInput: DeparturesInputQuery;
   paging: Partial<Paginated<DeparturesWithStop[]>>;
 };
@@ -173,6 +174,7 @@ const initialPaging = {
 const initialState: DepartureDataState = {
   departures: [],
   isLoading: false,
+  isFetchingMore: false,
   paging: initialPaging,
   queryInput: initialQueryInput,
 };
@@ -222,7 +224,7 @@ const reducer: ReducerWithSideEffects<
       };
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
-        {...state, isLoading: true, queryInput},
+        {...state, isLoading: true, isFetchingMore: true, queryInput},
         async (_, dispatch) => {
           try {
             // Fresh fetch, reset paging and use new query input with new startTime
@@ -245,9 +247,10 @@ const reducer: ReducerWithSideEffects<
 
     case 'LOAD_MORE_DEPARTURES': {
       if (!action.location || !state.paging.hasNext) return NoUpdate();
+      if (state.isFetchingMore) return NoUpdate();
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
-        {...state, isLoading: true},
+        {...state, isFetchingMore: true},
         async (state, dispatch) => {
           try {
             // Use previously stored queryInput with stored startTime
@@ -300,6 +303,7 @@ const reducer: ReducerWithSideEffects<
       return Update({
         ...state,
         isLoading: false,
+        isFetchingMore: false,
       });
     }
 
