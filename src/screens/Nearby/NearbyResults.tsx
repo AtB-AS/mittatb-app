@@ -97,7 +97,7 @@ const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
 type FooterLoaderProps = {
   isFetchingMore: boolean;
 };
-function FooterLoader({isFetchingMore}) {
+function FooterLoader({isFetchingMore}: FooterLoaderProps) {
   if (!isFetchingMore) {
     return null;
   }
