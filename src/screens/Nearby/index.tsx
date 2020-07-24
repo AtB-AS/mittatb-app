@@ -12,7 +12,10 @@ import {
 } from '../../api/departures';
 import {LocationButton} from '../../components/search-button';
 import {Location} from '../../favorites/types';
-import {useGeolocationState} from '../../GeolocationContext';
+import {
+  useGeolocationState,
+  RequestPermissionFn,
+} from '../../GeolocationContext';
 import {
   LocationWithSearchMetadata,
   useLocationSearchValue,
@@ -41,6 +44,9 @@ import {
   mapQuayDeparturesToShowlimits,
   showMoreItemsOnQuay,
 } from './utils';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import insets from '../../utils/insets';
+import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
@@ -63,7 +69,7 @@ type RootProps = {
 };
 
 const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
-  const {status, location} = useGeolocationState();
+  const {status, location, requestPermission} = useGeolocationState();
 
   const reverseLookupLocations = useReverseGeocoder(location) ?? [];
   const currentLocation = reverseLookupLocations.length
@@ -75,16 +81,25 @@ const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
   }
 
   return (
-    <NearbyOverview currentLocation={currentLocation} navigation={navigation} />
+    <NearbyOverview
+      requestGeoPermission={requestPermission}
+      currentLocation={currentLocation}
+      navigation={navigation}
+    />
   );
 };
 
 type Props = {
   currentLocation?: Location;
+  requestGeoPermission: RequestPermissionFn;
   navigation: NearbyScreenNavigationProp;
 };
 
-const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
+const NearbyOverview: React.FC<Props> = ({
+  requestGeoPermission,
+  currentLocation,
+  navigation,
+}) => {
   const styles = useThemeStyles();
   const searchedFromLocation = useLocationSearchValue<NearbyScreenProp>(
     'location',
@@ -112,14 +127,45 @@ const NearbyOverview: React.FC<Props> = ({currentLocation, navigation}) => {
       initialText: fromLocation?.name,
     });
 
+  function setCurrentLocationAsFrom() {
+    navigation.setParams({
+      location: currentLocation && {
+        ...currentLocation,
+        resultType: 'geolocation',
+      },
+    });
+  }
+
+  async function setCurrentLocationOrRequest() {
+    if (currentLocation) {
+      setCurrentLocationAsFrom();
+    } else {
+      const status = await requestGeoPermission({useSettingsFallback: true});
+      if (status === 'granted') {
+        setCurrentLocationAsFrom();
+      }
+    }
+  }
+
   const renderHeader = () => (
     <SearchGroup>
-      <LocationButton
-        title="Fra"
-        placeholder="Søk etter adresse eller sted"
-        location={fromLocation}
-        onPress={openLocationSearch}
-      />
+      <View style={styles.searchButtonContainer}>
+        <View style={styles.styleButton}>
+          <LocationButton
+            title="Fra"
+            placeholder="Søk etter adresse eller sted"
+            location={fromLocation}
+            onPress={openLocationSearch}
+          />
+        </View>
+
+        <TouchableOpacity
+          hitSlop={insets.all(12)}
+          onPress={setCurrentLocationOrRequest}
+        >
+          <CurrentLocationArrow />
+        </TouchableOpacity>
+      </View>
     </SearchGroup>
   );
 
@@ -150,6 +196,13 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   altTitleHeader: {
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  searchButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  styleButton: {
+    flexGrow: 1,
   },
 }));
 
