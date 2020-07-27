@@ -1,0 +1,50 @@
+diff --git a/node_modules/@react-navigation/native/lib/typescript/src/useScrollToTop.d.ts b/node_modules/@react-navigation/native/lib/typescript/src/useScrollToTop.d.ts
+index 6420936..03ec8f8 100644
+--- a/node_modules/@react-navigation/native/lib/typescript/src/useScrollToTop.d.ts
++++ b/node_modules/@react-navigation/native/lib/typescript/src/useScrollToTop.d.ts
+@@ -20,5 +20,5 @@ declare type ScrollableWrapper = {
+ } | {
+     getNode(): ScrollableView;
+ } | ScrollableView;
+-export default function useScrollToTop(ref: React.RefObject<ScrollableWrapper>): void;
++export default function useScrollToTop(ref: React.RefObject<ScrollableWrapper>, options?: ScrollOptions): void;
+ export {};
+diff --git a/node_modules/@react-navigation/native/src/useScrollToTop.tsx b/node_modules/@react-navigation/native/src/useScrollToTop.tsx
+index 34b8fef..943cff3 100644
+--- a/node_modules/@react-navigation/native/src/useScrollToTop.tsx
++++ b/node_modules/@react-navigation/native/src/useScrollToTop.tsx
+@@ -42,8 +42,11 @@ function getScrollableNode(ref: React.RefObject<ScrollableWrapper>) {
+   }
+ }
+ 
++const defaultScrollOptions = { y: 0, animated: true }
++
+ export default function useScrollToTop(
+-  ref: React.RefObject<ScrollableWrapper>
++  ref: React.RefObject<ScrollableWrapper>,
++  options?: ScrollOptions
+ ) {
+   const navigation = useNavigation();
+   const route = useRoute();
+@@ -80,16 +83,17 @@ export default function useScrollToTop(
+         // This is necessary to know if preventDefault() has been called
+         requestAnimationFrame(() => {
+           const scrollable = getScrollableNode(ref) as ScrollableWrapper;
++          const actualOptions = { ...defaultScrollOptions, ...options };
+ 
+           if (isFocused && isFirst && scrollable && !e.defaultPrevented) {
+-            if ('scrollToTop' in scrollable) {
++            if ('scrollToTop' in scrollable && !options) {
+               scrollable.scrollToTop();
+             } else if ('scrollTo' in scrollable) {
+-              scrollable.scrollTo({ y: 0, animated: true });
++              scrollable.scrollTo(actualOptions);
+             } else if ('scrollToOffset' in scrollable) {
+-              scrollable.scrollToOffset({ offset: 0, animated: true });
++              scrollable.scrollToOffset({ offset: actualOptions.y, animated: actualOptions.animated });
+             } else if ('scrollResponderScrollTo' in scrollable) {
+-              scrollable.scrollResponderScrollTo({ y: 0, animated: true });
++              scrollable.scrollResponderScrollTo(actualOptions);
+             }
+           }
+         });
