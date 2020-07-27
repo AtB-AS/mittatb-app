@@ -26,11 +26,11 @@ const MessageBox: React.FC<MessageBoxProps> = ({
   const styles = useBoxStyle();
   const iconElement = icon ?? type === 'info' ? <Info /> : <Warning />;
   const child = message ? <Text style={styles.text}>{message}</Text> : children;
-  const backgroundColor = typeToColor(type);
+  const backgroundColor = styles[typeToColorClass(type)];
 
   return (
-    <View style={[styles.container, {backgroundColor}, containerStyle]}>
-      {iconElement}
+    <View style={[styles.container, backgroundColor, containerStyle]}>
+      <View>{iconElement}</View>
       <View style={styles.childContainer}>{child}</View>
     </View>
   );
@@ -40,24 +40,33 @@ export default MessageBox;
 
 const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    flexDirection: 'row',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
   },
   childContainer: {
-    marginLeft: 12,
-    flex: 1,
+    marginTop: 8,
   },
   text: {
     fontSize: 16,
   },
+  container__info: {
+    backgroundColor: colors.secondary.cyan_100,
+    borderColor: colors.secondary.cyan_500,
+  },
+  container__warning: {
+    backgroundColor: colors.secondary.yellow_100,
+    borderColor: colors.secondary.yellow_500,
+  },
 }));
 
-function typeToColor(type: MessageBoxProps['type']) {
+function typeToColorClass(
+  type: MessageBoxProps['type'],
+): 'container__info' | 'container__warning' {
   switch (type) {
     case 'warning':
-      return colors.secondary.orange;
+      return 'container__warning';
     default:
-      return colors.secondary.cyan;
+      return 'container__info';
   }
 }
