@@ -270,7 +270,7 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
 const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
   itemContainer: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     paddingBottom: 12,
     marginBottom: 12,
     borderBottomColor: theme.background.level1,
@@ -304,7 +304,7 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     fontSize: 12,
   },
   time: {
-    width: 50,
+    minWidth: 50,
     fontSize: 16,
     color: theme.text.primary,
     paddingVertical: 4,
