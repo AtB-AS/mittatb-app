@@ -62,6 +62,7 @@
     "react-native-webview": "^9.4.0",
     "search-params": "^3.0.0",
     "string.fromcodepoint": "^1.0.0",
+    "use-reducer-with-side-effects": "^2.2.0",
     "uuid": "^8.0.0"
   },
   "devDependencies": {
