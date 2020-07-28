@@ -31,6 +31,10 @@ type Props = {
 
 const SCROLL_OFFSET_HEADER_ANIMATION = 80;
 
+type Scrollable = {
+  scrollTo(opts: {y: number}): void;
+};
+
 const DisappearingHeader: React.FC<Props> = ({
   renderHeader,
   children,
@@ -46,9 +50,11 @@ const DisappearingHeader: React.FC<Props> = ({
   onEndReachedThreshold = 10,
 }) => {
   const ref = React.useRef<ScrollView>(null);
-  useScrollToTop(ref, {
-    y: -headerHeight,
-  });
+  useScrollToTop(
+    React.useRef<Scrollable>({
+      scrollTo: () => ref.current?.scrollTo({y: -headerHeight}),
+    }),
+  );
 
   const {icon: chatIcon, openChat} = useChatIcon();
   const [scrollYValue, setScrollY] = useState<number>(0);
