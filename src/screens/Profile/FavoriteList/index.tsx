@@ -1,5 +1,5 @@
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {View, Text} from 'react-native';
+import {View, Text, Linking} from 'react-native';
 import React from 'react';
 import {StyleSheet, Theme} from '../../../theme';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
@@ -15,6 +15,7 @@ import insets from '../../../utils/insets';
 import useChatIcon from '../../../chat/use-chat-icon';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {TabNavigatorParams} from '../../../navigation/TabNavigator';
+import {PRIVACY_POLICY_URL} from 'react-native-dotenv';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -76,6 +77,13 @@ export default function Profile({navigation}: ProfileScreenProps) {
           )}
         />
       </ScrollView>
+      <TouchableOpacity
+        onPress={() =>
+          Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
+        }
+      >
+        <Text style={css.privacyPolicy}>Les vår personvernerklæring</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -90,6 +98,13 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   text: {
     color: theme.text.primary,
+  },
+  privacyPolicy: {
+    fontSize: 16,
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+    color: theme.text.primary,
+    marginBottom: 24,
   },
 }));
 
