@@ -1,4 +1,4 @@
-import React, {useRef, useState, useCallback} from 'react';
+import React, {useRef, useState, useCallback, useEffect} from 'react';
 import {
   View,
   Animated,
@@ -7,10 +7,12 @@ import {
   SafeAreaView,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  ScrollView,
 } from 'react-native';
 import {StyleSheet} from '../../theme';
 import useChatIcon from '../../chat/use-chat-icon';
 import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
+import {useScrollToTop} from '@react-navigation/native';
 
 const HEADER_HEIGHT = 157;
 
@@ -29,6 +31,10 @@ type Props = {
 
 const SCROLL_OFFSET_HEADER_ANIMATION = 80;
 
+type Scrollable = {
+  scrollTo(opts: {y: number}): void;
+};
+
 const DisappearingHeader: React.FC<Props> = ({
   renderHeader,
   children,
@@ -43,6 +49,13 @@ const DisappearingHeader: React.FC<Props> = ({
   onEndReached,
   onEndReachedThreshold = 10,
 }) => {
+  const ref = React.useRef<ScrollView>(null);
+  useScrollToTop(
+    React.useRef<Scrollable>({
+      scrollTo: () => ref.current?.scrollTo({y: -headerHeight}),
+    }),
+  );
+
   const {icon: chatIcon, openChat} = useChatIcon();
   const [scrollYValue, setScrollY] = useState<number>(0);
   const styles = useThemeStyles();
@@ -101,6 +114,7 @@ const DisappearingHeader: React.FC<Props> = ({
 
         {useScroll ? (
           <Animated.ScrollView
+            ref={ref}
             contentContainerStyle={[
               {paddingTop: Platform.OS !== 'ios' ? headerHeight : 0},
             ]}
