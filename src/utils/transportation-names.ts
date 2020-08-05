@@ -31,3 +31,29 @@ export function getQuayName(quay?: Quay, defaultName: string = 'Ukjent') {
   if (!quay.publicCode) return quay.name;
   return `${quay.name} ${quay.publicCode}`;
 }
+
+export function getQuayNameFromStartLeg(
+  leg?: Leg,
+  defaultName: string = 'Ukjent',
+) {
+  if (leg?.fromEstimatedCall?.quay) {
+    return getQuayName(leg?.fromEstimatedCall?.quay);
+  }
+  if (leg?.fromPlace.quay) {
+    return getQuayName(leg?.fromPlace.quay);
+  }
+  return leg?.fromPlace.name ?? defaultName;
+}
+
+export function getQuayNameFromStopLeg(
+  leg?: Leg,
+  defaultName: string = 'Ukjent',
+) {
+  if (leg?.fromEstimatedCall?.quay) {
+    return getQuayName(leg?.toEstimatedCall?.quay);
+  }
+  if (leg?.fromPlace.quay) {
+    return getQuayName(leg?.toPlace.quay);
+  }
+  return leg?.fromPlace.name ?? defaultName;
+}

@@ -1,34 +1,46 @@
 import React from 'react';
 import {
-  RefreshControl,
   Text,
   View,
   StyleProp,
   ViewStyle,
   TextStyle,
   ImageStyle,
+  ActivityIndicator,
 } from 'react-native';
-import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import TransportationIcon from '../../components/transportation-icon';
 import {EstimatedCall, DeparturesWithStop, StopPlaceDetails} from '../../sdk';
 import {StyleSheet} from '../../theme';
-import {formatToClock} from '../../utils/date';
+import {
+  formatToClock,
+  formatToClockOrRelativeMinutes,
+  isInThePast,
+} from '../../utils/date';
 import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
 import {useNavigation} from '@react-navigation/native';
 import {NearbyScreenNavigationProp} from '.';
 import {useGeolocationState} from '../../GeolocationContext';
 import haversine from 'haversine-distance';
+import {DeparturesWithStopLocal, QuayWithDeparturesAndLimits} from './utils';
+import MessageBox from '../../message-box';
+import insets from '../../utils/insets';
+import {WalkingPerson} from '../../assets/svg/icons/transportation';
 
 type NearbyResultsProps = {
-  departures: DeparturesWithStop[] | null;
-  onRefresh?(): void;
-  isRefreshing?: boolean;
+  departures: DeparturesWithStopLocal[] | null;
+  onShowMoreOnQuay?(quayId: string): void;
+  isFetchingMore?: boolean;
+
+  isInitialScreen: boolean;
 };
 
 const NearbyResults: React.FC<NearbyResultsProps> = ({
   departures,
-  onRefresh,
-  isRefreshing = false,
+  onShowMoreOnQuay,
+  isFetchingMore = false,
+
+  isInitialScreen,
 }) => {
   const styles = useResultsStyle();
   const navigation = useNavigation<NearbyScreenNavigationProp>();
@@ -41,10 +53,22 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
     });
   };
 
+  if (isInitialScreen) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.centerText}>
+          Søk etter avganger fra holdeplasser eller i nærheten av steder.
+        </Text>
+      </View>
+    );
+  }
+
   if (departures !== null && Object.keys(departures).length == 0) {
     return (
-      <View style={[styles.container, styles.noDepartures]}>
-        <Text>Fant ingen avganger i nærheten</Text>
+      <View style={styles.container}>
+        <MessageBox type="info">
+          <Text>Fant ingen avganger i nærheten</Text>
+        </MessageBox>
       </View>
     );
   }
@@ -54,71 +78,132 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
   }
 
   return (
-    <FlatList
-      style={styles.container}
-      data={departures}
-      renderItem={({item}) => (
-        <StopDepartures departures={item} onPress={onPress} />
-      )}
-      keyExtractor={(departure) => departure.stop.id}
-      refreshControl={
-        <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
-      }
-    />
+    <View style={styles.container}>
+      {departures.map((item) => (
+        <StopDepartures
+          key={item.stop.id}
+          departures={item}
+          onPress={onPress}
+          onShowMoreOnQuay={onShowMoreOnQuay}
+        />
+      ))}
+      <FooterLoader isFetchingMore={isFetchingMore} />
+    </View>
   );
 };
 const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    padding: theme.sizes.pagePadding,
+    paddingHorizontal: theme.sizes.pagePadding,
   },
-  noDepartures: {
-    alignItems: 'center',
+  centerText: {
+    textAlign: 'center',
   },
 }));
+
+type FooterLoaderProps = {
+  isFetchingMore: boolean;
+};
+function FooterLoader({isFetchingMore}: FooterLoaderProps) {
+  if (!isFetchingMore) {
+    return null;
+  }
+  return <ActivityIndicator style={{marginVertical: 20}} />;
+}
 
 export default NearbyResults;
 
 type StopDeparturesProps = {
-  departures: DeparturesWithStop;
+  departures: DeparturesWithStopLocal;
   onPress?(departure: EstimatedCall): void;
+  onShowMoreOnQuay?(quayId: string): void;
 };
-const StopDepartures: React.FC<StopDeparturesProps> = ({
-  departures,
-  onPress,
-}) => {
-  const styles = useResultItemStyles();
+const StopDepartures: React.FC<StopDeparturesProps> = React.memo(
+  ({departures, onPress, onShowMoreOnQuay}) => {
+    const styles = useResultItemStyles();
 
-  if (!Object.keys(departures.quays).length) {
-    return null;
-  }
+    if (!Object.keys(departures.quays).length) {
+      return null;
+    }
 
-  return (
-    <View style={styles.item}>
-      <ItemHeader stop={departures.stop} />
+    return (
+      <View style={styles.stopContainer}>
+        <ItemHeader stop={departures.stop} />
 
-      <View>
-        <LastElement last={styles.stopContainer__withoutBorder}>
+        <LastElement last={styles.quayContainer__withoutBorder}>
           {Object.values(departures.quays).map((quay) => (
-            <View key={quay.quay.id} style={styles.stopContainer}>
-              <View style={styles.platformHeader}>
-                <Text>Plattform {quay.quay.publicCode}</Text>
-              </View>
-              <LastElement last={styles.itemContainer__withoutBorder}>
-                {quay.departures.map((departure) => (
-                  <NearbyResultItem
-                    departure={departure}
-                    onPress={onPress}
-                    key={departure.serviceJourney.id}
-                  />
-                ))}
-              </LastElement>
-            </View>
+            <QuayResult
+              key={quay.quay.id}
+              quay={quay}
+              onPress={onPress}
+              onShowMoreOnQuay={onShowMoreOnQuay}
+            />
           ))}
         </LastElement>
       </View>
-    </View>
+    );
+  },
+);
+
+type QuayProps = {
+  quay: QuayWithDeparturesAndLimits;
+  onPress?(departure: EstimatedCall): void;
+  onShowMoreOnQuay?(quayId: string): void;
+};
+const QuayResult: React.FC<QuayProps> = React.memo(
+  ({quay, onPress, onShowMoreOnQuay}) => {
+    const styles = useResultItemStyles();
+
+    const items = quay.departures.slice(0, quay.showLimit);
+    const showShowMoreButton =
+      onShowMoreOnQuay && quay.departures.length > quay.showLimit;
+
+    if (!items.length) return null;
+
+    return (
+      <View key={quay.quay.id} style={styles.quayContainer}>
+        <View style={styles.platformHeader}>
+          <Text>Plattform {quay.quay.publicCode}</Text>
+        </View>
+        <LastElement last={styles.itemContainer__withoutBorder}>
+          {items.map((departure) => (
+            <NearbyResultItem
+              departure={departure}
+              onPress={onPress}
+              key={departure.serviceJourney.id}
+            />
+          ))}
+        </LastElement>
+        {showShowMoreButton && (
+          <ShowMoreButton onPress={() => onShowMoreOnQuay!(quay.quay.id)} />
+        )}
+      </View>
+    );
+  },
+);
+
+type ShowMoreButtonProps = {
+  onPress(): void;
+};
+const ShowMoreButton: React.FC<ShowMoreButtonProps> = ({onPress}) => {
+  const style = useShowMoreButtonStyle();
+  return (
+    <TouchableOpacity onPress={onPress} hitSlop={insets.symmetric(8, 12)}>
+      <View style={style.button}>
+        <Text style={style.text}>Vis flere avganger</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
+const useShowMoreButtonStyle = StyleSheet.createThemeHook((theme) => ({
+  button: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  text: {
+    fontSize: 12,
+    textDecorationLine: 'underline',
+  },
+}));
 
 const ItemHeader: React.FC<{
   stop: StopPlaceDetails;
@@ -129,9 +214,12 @@ const ItemHeader: React.FC<{
   return (
     <View style={styles.resultHeader}>
       <Text>{stop.name}</Text>
-      <Text>
-        {location ? humanizeDistance(haversine(location.coords, stop)) : ''}
-      </Text>
+      {location && (
+        <View style={styles.distance}>
+          <Text>{humanizeDistance(haversine(location.coords, stop))}</Text>
+          <WalkingPerson width={16} style={styles.distanceIcon} />
+        </View>
+      )}
     </View>
   );
 };
@@ -141,58 +229,71 @@ type NearbyResultItemProps = {
   style?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
   onPress?(departure: EstimatedCall): void;
 };
-const NearbyResultItem: React.FC<NearbyResultItemProps> = ({
-  departure,
-  onPress,
-  style,
-}) => {
-  const styles = useResultItemStyles();
-  const {publicCode, name} = getLineNameFromEstimatedCall(departure);
-  return (
-    <TouchableOpacity
-      style={[styles.itemContainer, style]}
-      onPress={() => onPress?.(departure)}
-    >
-      <Text style={styles.time}>
-        {formatToClock(departure.expectedDepartureTime)}
-      </Text>
-      <TransportationIcon
-        mode={departure.serviceJourney.journeyPattern?.line.transportMode}
-        publicCode={departure.serviceJourney.journeyPattern?.line.publicCode}
-      />
-      <View style={styles.textWrapper}>
-        <Text style={styles.textContent} numberOfLines={1}>
-          {publicCode && (
-            <Text style={{fontWeight: 'bold'}}>{publicCode} </Text>
-          )}
-          {name}
-        </Text>
+const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
+  ({departure, onPress, style}) => {
+    const styles = useResultItemStyles();
+    const {publicCode, name} = getLineNameFromEstimatedCall(departure);
+
+    const pastStyle = isInThePast(departure.expectedDepartureTime)
+      ? styles.itemContainer__isInPast
+      : undefined;
+
+    return (
+      <View style={pastStyle}>
+        <TouchableOpacity
+          style={[styles.itemContainer, style]}
+          onPress={() => onPress?.(departure)}
+        >
+          <Text style={styles.time}>
+            {formatToClockOrRelativeMinutes(departure.expectedDepartureTime)}
+          </Text>
+          <TransportationIcon
+            mode={departure.serviceJourney.journeyPattern?.line.transportMode}
+            publicCode={
+              departure.serviceJourney.journeyPattern?.line.publicCode
+            }
+          />
+          <View style={styles.textWrapper}>
+            <Text style={styles.textContent} numberOfLines={1}>
+              {publicCode && (
+                <Text style={{fontWeight: 'bold'}}>{publicCode} </Text>
+              )}
+              {name}
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
-    </TouchableOpacity>
-  );
-};
+    );
+  },
+);
 
 const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 24,
-  },
   itemContainer: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     paddingBottom: 12,
     marginBottom: 12,
     borderBottomColor: theme.background.level1,
     borderBottomWidth: 1,
+  },
+  itemContainer__isInPast: {
+    opacity: 0.5,
   },
   itemContainer__withoutBorder: {
     marginBottom: 0,
     borderBottomWidth: 0,
     paddingBottom: 0,
   },
-  item: {
+  distance: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  distanceIcon: {
+    marginLeft: 4,
+  },
+  stopContainer: {
     padding: 12,
+    paddingBottom: 0,
     backgroundColor: theme.background.level0,
     borderRadius: 8,
     marginBottom: 12,
@@ -203,7 +304,7 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     fontSize: 12,
   },
   time: {
-    width: 50,
+    minWidth: 50,
     fontSize: 16,
     color: theme.text.primary,
     paddingVertical: 4,
@@ -219,30 +320,38 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     marginLeft: 10,
     paddingVertical: 4,
   },
-  label: {
-    fontSize: 12,
-  },
   resultHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingBottom: 9,
+    alignItems: 'center',
+    paddingBottom: 8,
+    marginBottom: 20,
     borderBottomColor: theme.background.level1,
     borderBottomWidth: 1,
   },
 
-  stopContainer__withoutBorder: {
+  quayContainer__withoutBorder: {
     marginBottom: 0,
+    paddingBottom: 12,
   },
-  stopContainer: {
-    marginVertical: 20,
+  quayContainer: {
+    marginBottom: 20,
   },
 }));
 
 type LastElementProps = {
   last?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
+  exceptSingleItems?: boolean;
 };
-const LastElement: React.FC<LastElementProps> = ({children, last}) => {
+const LastElement: React.FC<LastElementProps> = ({
+  children,
+  last,
+  exceptSingleItems = false,
+}) => {
   const num = React.Children.count(children) - 1;
+  if (exceptSingleItems && num === 0 && children) {
+    return <>{children}</>;
+  }
   return (
     <>
       {React.Children.map(children, (child, i) => {

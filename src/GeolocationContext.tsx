@@ -1,9 +1,10 @@
 import React, {useEffect, useReducer, createContext, useContext} from 'react';
 import {Platform, Rationale, Alert} from 'react-native';
-import Geolocation from 'react-native-geolocation-service';
+import Geolocation, {PositionError} from 'react-native-geolocation-service';
 import {
   GeolocationResponse,
   GeolocationOptions,
+  GeolocationError,
 } from '@react-native-community/geolocation';
 import {
   request,
@@ -113,18 +114,22 @@ const GeolocationContextProvider: React.FC = ({children}) => {
       const watchId = Geolocation.watchPosition(
         (location) => dispatch({type: 'LOCATION_CHANGED', location}),
         async (err) => {
-          bugsnag.notify(
-            new Error('Geolocation error: ' + err.message),
-            (report) => {
-              report.metadata = {
-                ...report.metadata,
-                geolocation: {
-                  code: translateErrorCode(err.code),
-                  message: err.message,
-                },
-              };
-            },
-          );
+          // Location service is not enabled or location mode is not appropriate for the current request (android only)
+          // Not satisifed seem to be the same as permission not granted. Avoid sending bugreport every time.
+          if (err.code !== PositionError.SETTINGS_NOT_SATISFIED) {
+            bugsnag.notify(
+              new Error('Geolocation error: ' + err.message),
+              (report) => {
+                report.metadata = {
+                  ...report.metadata,
+                  geolocation: {
+                    code: translateErrorCode(err.code),
+                    message: err.message,
+                  },
+                };
+              },
+            );
+          }
           const status = await checkGeolocationPermission();
           if (status !== 'granted') {
             dispatch({type: 'PERMISSION_CHANGED', status});

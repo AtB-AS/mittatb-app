@@ -18,8 +18,12 @@ const colors = {
   secondary: {
     blue: '#008DA8',
     orange: '#C75B12',
+    yellow_100: '#F7F3B2',
+    yellow_500: '#E4D700',
     red: '#A51140',
     cyan: '#71D6E0',
+    cyan_100: '#D4F3F6',
+    cyan_500: '#71D6E0',
     gray_Level2: '#EBECED',
   },
   general: {

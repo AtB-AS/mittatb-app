@@ -1,21 +1,20 @@
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useEffect, useMemo, useState, useRef} from 'react';
-import {View} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {searchTrip} from '../../api';
 import {CancelToken, isCancel} from '../../api/client';
 import {Swap} from '../../assets/svg/icons/actions';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
-import useChatIcon from '../../chat/use-chat-icon';
+import DisappearingHeader from '../../components/disappearing-header/index ';
 import {LocationButton} from '../../components/search-button';
 import SearchGroup from '../../components/search-button/search-group';
 import {useFavorites} from '../../favorites/FavoritesContext';
 import {Location, UserFavorites} from '../../favorites/types';
 import {
-  useGeolocationState,
   RequestPermissionFn,
+  useGeolocationState,
 } from '../../GeolocationContext';
 import {
   LocationWithSearchMetadata,
@@ -24,13 +23,13 @@ import {
 import {useReverseGeocoder} from '../../location-search/useGeocoder';
 import {RootStackParamList} from '../../navigation';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
-import Header from '../../ScreenHeader';
 import {TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import insets from '../../utils/insets';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
 import Results from './Results';
+import {useLayout} from '../../utils/use-layout';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -78,13 +77,13 @@ type Props = {
   navigation: AssistantScreenNavigationProp;
 };
 
+const HEADER_HEIGHT = 157;
+
 const Assistant: React.FC<Props> = ({
   currentLocation,
   requestGeoPermission,
   navigation,
 }) => {
-  const styles = useThemeStyles();
-
   const {from, to} = useLocations(currentLocation);
 
   function swap() {
@@ -121,7 +120,6 @@ const Assistant: React.FC<Props> = ({
     date,
   );
 
-  const {icon: chatIcon, openChat} = useChatIcon();
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
     initialText: string | undefined,
@@ -133,12 +131,12 @@ const Assistant: React.FC<Props> = ({
       initialText,
     });
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <Header
-        title="Reiseassistent"
-        rightButton={{onPress: openChat, icon: chatIcon}}
-      />
+  const showEmptyScreen = !tripPatterns && !isSearching;
+  const isEmptyResult = !isSearching && !tripPatterns?.length;
+  const useScroll = !showEmptyScreen && !isEmptyResult;
+
+  const renderHeader = () => (
+    <View>
       <SearchGroup>
         <View style={styles.searchButtonContainer}>
           <View style={styles.styleButton}>
@@ -151,7 +149,6 @@ const Assistant: React.FC<Props> = ({
           </View>
 
           <TouchableOpacity
-            style={styles.clickableIcon}
             hitSlop={insets.all(12)}
             onPress={setCurrentLocationOrRequest}
           >
@@ -169,11 +166,7 @@ const Assistant: React.FC<Props> = ({
             />
           </View>
 
-          <TouchableOpacity
-            style={styles.clickableIcon}
-            hitSlop={insets.all(12)}
-            onPress={swap}
-          >
+          <TouchableOpacity hitSlop={insets.all(12)} onPress={swap}>
             <Swap />
           </TouchableOpacity>
         </View>
@@ -186,12 +179,48 @@ const Assistant: React.FC<Props> = ({
           timeOfLastSearch={timeOfLastSearch}
         />
       </SearchGroup>
+    </View>
+  );
 
+  const {onLayout: onAltLayout, width: altWidth} = useLayout();
+
+  const altHeaderComp = (
+    <View onLayout={onAltLayout} style={styles.altTitle}>
+      <Text
+        style={[
+          styles.altTitleText,
+          styles.altTitleText__right,
+          {maxWidth: altWidth / 2},
+        ]}
+        numberOfLines={1}
+      >
+        {from?.name}
+      </Text>
+      <Text style={styles.altTitleText}> – </Text>
+      <Text
+        style={[styles.altTitleText, {maxWidth: altWidth / 2}]}
+        numberOfLines={1}
+      >
+        {to?.name}
+      </Text>
+    </View>
+  );
+
+  return (
+    <DisappearingHeader
+      renderHeader={renderHeader}
+      onRefresh={reload}
+      isRefreshing={isSearching}
+      headerHeight={HEADER_HEIGHT}
+      useScroll={useScroll}
+      headerTitle="Reiseassistent"
+      alternativeTitleComponent={altHeaderComp}
+    >
       <Results
         tripPatterns={tripPatterns}
         isSearching={isSearching}
-        navigation={navigation}
-        onRefresh={reload}
+        showEmptyScreen={showEmptyScreen}
+        isEmptyResult={isEmptyResult}
         onDetailsPressed={(tripPattern) =>
           navigation.navigate('TripDetailsModal', {
             from: from!,
@@ -201,15 +230,10 @@ const Assistant: React.FC<Props> = ({
           })
         }
       />
-    </SafeAreaView>
+    </DisappearingHeader>
   );
 };
-const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    backgroundColor: theme.background.level1,
-    paddingBottom: 0,
-    flexGrow: 1,
-  },
+const styles = StyleSheet.create({
   searchButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -217,8 +241,22 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   styleButton: {
     flexGrow: 1,
   },
-  clickableIcon: {},
-}));
+  altTitle: {
+    flex: 1,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  altTitleText: {
+    overflow: 'hidden',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  altTitleText__right: {
+    textAlign: 'right',
+  },
+});
 
 type Locations = {
   from: LocationWithSearchMetadata | undefined;
