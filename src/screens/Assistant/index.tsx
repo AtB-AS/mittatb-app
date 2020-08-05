@@ -29,6 +29,7 @@ import insets from '../../utils/insets';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
 import Results from './Results';
+import {useLayout} from '../../utils/use-layout';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -83,8 +84,6 @@ const Assistant: React.FC<Props> = ({
   requestGeoPermission,
   navigation,
 }) => {
-  const styles = useThemeStyles();
-
   const {from, to} = useLocations(currentLocation);
 
   function swap() {
@@ -183,22 +182,27 @@ const Assistant: React.FC<Props> = ({
     </View>
   );
 
+  const {onLayout: onAltLayout, width: altWidth} = useLayout();
+
   const altHeaderComp = (
-    <View style={styles.altTitle}>
-      <View style={styles.altTitlePart}>
-        <Text
-          style={[styles.altTitleText, styles.altTitleText__right]}
-          numberOfLines={1}
-        >
-          {from?.name}
-        </Text>
-      </View>
+    <View onLayout={onAltLayout} style={styles.altTitle}>
+      <Text
+        style={[
+          styles.altTitleText,
+          styles.altTitleText__right,
+          {maxWidth: altWidth / 2},
+        ]}
+        numberOfLines={1}
+      >
+        {from?.name}
+      </Text>
       <Text style={styles.altTitleText}> – </Text>
-      <View style={styles.altTitlePart}>
-        <Text style={styles.altTitleText} numberOfLines={1}>
-          {to?.name}
-        </Text>
-      </View>
+      <Text
+        style={[styles.altTitleText, {maxWidth: altWidth / 2}]}
+        numberOfLines={1}
+      >
+        {to?.name}
+      </Text>
     </View>
   );
 
@@ -229,7 +233,7 @@ const Assistant: React.FC<Props> = ({
     </DisappearingHeader>
   );
 };
-const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
+const styles = StyleSheet.create({
   searchButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -239,12 +243,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   altTitle: {
     flex: 1,
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  altTitlePart: {
-    flex: 1,
   },
   altTitleText: {
     overflow: 'hidden',
@@ -254,7 +256,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   altTitleText__right: {
     textAlign: 'right',
   },
-}));
+});
 
 type Locations = {
   from: LocationWithSearchMetadata | undefined;
