@@ -31,6 +31,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
   return (
     <View>
       <TouchableOpacity
+        containerStyle={{overflow: 'visible'}}
         onPress={() =>
           navigation.navigate('DepartureDetails', {
             title: getLineName(leg),

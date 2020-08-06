@@ -41,7 +41,6 @@ const useWaitStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.background.modal_Level2,
   },
   text: {
     fontSize: 14,
