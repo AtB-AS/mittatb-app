@@ -105,6 +105,9 @@ const DetailsContent: React.FC<{
       setShortTime(true);
     }
   };
+  const lastLegIsFoot =
+    tripPattern.legs?.length > 0 &&
+    tripPattern.legs[tripPattern.legs.length - 1].mode === 'foot';
 
   return (
     <>
@@ -135,12 +138,14 @@ const DetailsContent: React.FC<{
           showTo={showTo(i, legs)}
         />
       ))}
-      <LocationRow
-        icon={getLocationIcon(to, favorites)}
-        location={to.name}
-        time={formatToClock(tripPattern.endTime)}
-        textStyle={styles.textStyle}
-      />
+      {lastLegIsFoot && (
+        <LocationRow
+          icon={getLocationIcon(to, favorites)}
+          location={to.name}
+          time={formatToClock(tripPattern.endTime)}
+          textStyle={styles.textStyle}
+        />
+      )}
     </>
   );
 };

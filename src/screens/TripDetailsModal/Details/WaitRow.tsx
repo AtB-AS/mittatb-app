@@ -5,6 +5,7 @@ import {View, Text} from 'react-native';
 import colors from '../../../theme/colors';
 import {Duration} from '../../../assets/svg/icons/transportation';
 import {StyleSheet} from '../../../theme';
+import Dash from 'react-native-dash';
 
 type WaitRowProps = {
   onCalculateTime(seconds: number): void;
@@ -30,10 +31,8 @@ export default function WaitRow({
 
   return (
     <View style={styles.container}>
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>{secondsToMinutesShort(time)}</Text>
-      </View>
       <Duration fill={colors.general.gray200} />
+      <Text style={styles.text}>Vent i {secondsToMinutesShort(time)}</Text>
     </View>
   );
 }
@@ -41,18 +40,12 @@ export default function WaitRow({
 const useWaitStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
-    marginTop: 10,
-    marginBottom: 10,
     alignItems: 'center',
     backgroundColor: theme.background.modal_Level2,
   },
-  textContainer: {
-    width: 70,
-    marginRight: 12,
-    alignItems: 'flex-end',
-  },
   text: {
-    fontSize: 12,
+    fontSize: 14,
     opacity: 0.6,
+    marginLeft: 8,
   },
 }));
