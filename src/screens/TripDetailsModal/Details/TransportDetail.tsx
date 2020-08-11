@@ -29,7 +29,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
   const {fill} = transportationColor(leg.mode, leg.line?.publicCode);
 
   return (
-    <View>
+    <View style={{marginTop: -6}}>
       <TouchableOpacity
         containerStyle={{overflow: 'visible'}}
         onPress={() =>
