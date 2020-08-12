@@ -1,0 +1,20 @@
+fastlane_version '2.142.0'
+
+before_all do
+  # ensure_git_branch
+  # ensure_git_status_clean
+  # git_pull
+end
+
+platform :ios do
+    # iOS Lanes
+    desc 'Build the iOS application.'
+    lane :build do
+      cocoapods(podfile: './ios/Podfile')
+      build_app(scheme: 'atb', configuration: 'Debug', workspace: './ios/atb.xcworkspace', export_xcargs: "-allowProvisioningUpdates")
+    end
+end
+
+platform :android do
+  # Android Lanes
+end

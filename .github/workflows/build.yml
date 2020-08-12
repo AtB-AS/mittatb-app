@@ -1,0 +1,19 @@
+name: Build iOS project
+on: [push]
+
+jobs:
+  build-ios:
+    name: build-ios
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: install node v12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: yarn install
+        run: yarn install
+      - name: Bundle Install
+        run: bundle install
+      - name: Run fastlane build
+        run: yarn build:ios
