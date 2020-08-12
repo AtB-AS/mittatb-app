@@ -10,13 +10,9 @@ import {
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import TransportationIcon from '../../components/transportation-icon';
-import {EstimatedCall, DeparturesWithStop, StopPlaceDetails} from '../../sdk';
+import {EstimatedCall, StopPlaceDetails} from '../../sdk';
 import {StyleSheet} from '../../theme';
-import {
-  formatToClock,
-  formatToClockOrRelativeMinutes,
-  isInThePast,
-} from '../../utils/date';
+import {formatToClockOrRelativeMinutes, isInThePast} from '../../utils/date';
 import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
 import {useNavigation} from '@react-navigation/native';
 import {NearbyScreenNavigationProp} from '.';

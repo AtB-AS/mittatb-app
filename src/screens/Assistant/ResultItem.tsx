@@ -3,11 +3,11 @@ import {Text, View} from 'react-native';
 import {Leg, TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {
-  formatToClock,
   secondsToDuration,
   secondsToDurationShort,
   secondsBetween,
   secondsToMinutesShort,
+  formatToClockOrRelativeMinutes,
 } from '../../utils/date';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import TransportationIcon from '../../components/transportation-icon';
@@ -163,7 +163,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   return (
     <View style={styles.legContainer}>
       <Text style={[styles.textDeprioritized, styles.time]}>
-        {formatToClock(leg.expectedStartTime)}
+        {formatToClockOrRelativeMinutes(leg.expectedStartTime)}
       </Text>
       <View style={styles.iconContainer}>
         <WalkingPerson fill={colors.general.black} opacity={0.6} />
@@ -241,7 +241,7 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
   return (
     <View style={styles.legContainer}>
       <Text style={[styles.text, styles.time]}>
-        {formatToClock(leg.expectedStartTime)}
+        {formatToClockOrRelativeMinutes(leg.expectedStartTime)}
       </Text>
       <View style={styles.iconContainer}>
         <TransportationIcon mode={leg.mode} publicCode={leg.line?.publicCode} />
@@ -261,7 +261,7 @@ const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
   return (
     <View style={styles.legContainer}>
       <Text style={[styles.time, styles.textDeprioritized]}>
-        {formatToClock(lastLeg.expectedEndTime)}
+        {formatToClockOrRelativeMinutes(lastLeg.expectedEndTime)}
       </Text>
       <View style={styles.iconContainer}>
         <DestinationFlag fill={colors.general.black} opacity={0.6} />
