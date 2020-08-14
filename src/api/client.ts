@@ -1,6 +1,6 @@
 import axios, {AxiosError, AxiosRequestConfig} from 'axios';
 import {v4 as uuid} from 'uuid';
-import {API_BASE_URL} from 'react-native-dotenv';
+import {API_BASE_URL} from '@env';
 import {getAxiosErrorType, ErrorType, getAxiosErrorMetadata} from './utils';
 import bugsnag from '../diagnostics/bugsnag';
 import {InstallIdHeaderName, RequestIdHeaderName} from './headers';

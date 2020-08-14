@@ -15,7 +15,7 @@ import insets from '../../../utils/insets';
 import useChatIcon from '../../../chat/use-chat-icon';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {TabNavigatorParams} from '../../../navigation/TabNavigator';
-import {PRIVACY_POLICY_URL} from 'react-native-dotenv';
+import {PRIVACY_POLICY_URL} from '@env';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,

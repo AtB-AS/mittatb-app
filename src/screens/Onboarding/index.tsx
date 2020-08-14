@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View, Linking} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {PRIVACY_POLICY_URL} from 'react-native-dotenv';
+import {PRIVACY_POLICY_URL} from '@env';
 import colors from '../../theme/colors';
 import {useGeolocationState} from '../../GeolocationContext';
 import {useAppState} from '../../AppContext';
