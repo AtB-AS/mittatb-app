@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Linking, Text, TouchableOpacity, View} from 'react-native';
-import {PRIVACY_POLICY_URL} from 'react-native-dotenv';
+import {PRIVACY_POLICY_URL} from '@env';
 import {useAppState} from '../../AppContext';
 import {
   Onboarding2,
