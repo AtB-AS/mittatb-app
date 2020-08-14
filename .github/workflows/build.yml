@@ -3,7 +3,7 @@ on: [push]
 
 jobs:
   build-ios:
-    name: build-ios
+    name: Build iOS
     runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v1
