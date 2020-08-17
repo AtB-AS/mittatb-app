@@ -1,16 +1,9 @@
 #!/bin/bash
 
 echo "Installing pre-build dependencies"
-brew install openssl git-crypt findutils xmlstarlet # for git-crypt
-# git-crypt + openssl for decryption
+brew installfindutils xmlstarlet # for git-crypt
 # findutils for gxargs which is used to load environment variables from .env file
 # xmlstarlet to edit androidmanifest
-
-echo "Decoding git-crypt key"
-echo $GIT_CRYPT_KEY | openssl base64 -d -A -out mittatb.key
-
-echo "Unlocking repository sensitive files"
-git-crypt unlock mittatb.key
 
 echo "Attempting to override environment: $APP_ENVIRONMENT"
 sh ./override-environment.sh $APP_ENVIRONMENT
@@ -71,18 +64,18 @@ if [[ "$APP_ENVIRONMENT" = "staging" || "$APP_ENVIRONMENT" = "prodstaging" ]]; t
   fi
 fi 
 
-if [ "$ENABLE_E2E" = true ]; then
-    echo "Install E2E tools"
-    brew tap wix/brew
-    brew update
-    brew install applesimutils
+# if [ "$ENABLE_E2E" = true ]; then
+#     echo "Install E2E tools"
+#     brew tap wix/brew
+#     brew update
+#     brew install applesimutils
 
-    echo "Install pods"
-    cd ios; pod install; cd ..
+#     echo "Install pods"
+#     cd ios; pod install; cd ..
 
-    echo "Build detox E2E tests"
-    npx detox build --configuration ios.sim.release
+#     echo "Build detox E2E tests"
+#     npx detox build --configuration ios.sim.release
 
-    echo "Run detox E2E tests"
-    npx detox test --configuration ios.sim.release --cleanup
-fi
+#     echo "Run detox E2E tests"
+#     npx detox test --configuration ios.sim.release --cleanup
+# fi
