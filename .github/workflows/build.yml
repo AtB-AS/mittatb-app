@@ -23,6 +23,9 @@ jobs:
         run: yarn install
       - name: Bundle Install
         run: bundle install
+      - uses: webfactory/ssh-agent@v0.4.0
+        with:
+          ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
       - name: Run fastlane build
         run: yarn build:ios
         env:
