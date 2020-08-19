@@ -29,12 +29,12 @@ platform :ios do
       end
       update_info_plist( 
         xcodeproj: "./ios/atb.xcodeproj",
-        plist_path: "../atb/Info.plist",
+        plist_path: "atb/Info.plist",
         app_identifier: ENV["IOS_BUNDLE_IDENTIFIER"]
       )
       update_app_identifier(
         xcodeproj: "./ios/atb.xcodeproj",
-        plist_path: "../atb/Info.plist", 
+        plist_path: "atb/Info.plist", 
         app_identifier: ENV["IOS_BUNDLE_IDENTIFIER"]
       )
       cocoapods(podfile: './ios/Podfile')
