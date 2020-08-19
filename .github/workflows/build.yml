@@ -30,3 +30,4 @@ jobs:
         run: yarn build:ios
         env:
           FASTLANE_MATCH_URL: ${{ secrets.FASTLANE_MATCH_URL }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
