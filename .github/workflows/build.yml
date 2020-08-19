@@ -25,3 +25,5 @@ jobs:
         run: bundle install
       - name: Run fastlane build
         run: yarn build:ios
+        env:
+          FASTLANE_MATCH_URL: ${{ secrets.FASTLANE_MATCH_URL }}
