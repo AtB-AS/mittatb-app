@@ -1,12 +1,12 @@
 #!/bin/bash
 
 echo "Installing pre-build dependencies"
-brew installfindutils xmlstarlet # for git-crypt
+brew install findutils xmlstarlet # for git-crypt
 # findutils for gxargs which is used to load environment variables from .env file
 # xmlstarlet to edit androidmanifest
 
 echo "Loading all env variables from .env file"
-export $(grep -v '^#' .env | gxargs -d '\n')
+export $(grep -v '^#' .env | gxargs -d '\n') > /dev/null 2>&1
 
 echo "Setting BundleIdentifier in Info.plist to $IOS_BUNDLE_IDENTIFIER"
 /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $IOS_BUNDLE_IDENTIFIER" ./ios/atb/Info.plist
