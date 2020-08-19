@@ -27,6 +27,10 @@ platform :ios do
       else
         match(type: 'adhoc', readonly: true)
       end
+      update_info_plist( 
+        plist_path: "./ios/atb/Info.plist",
+        app_identifier: ENV["IOS_BUNDLE_IDENTIFIER"]
+      )
       update_app_identifier(
         xcodeproj: "./ios/atb.xcodeproj",
         plist_path: "atb/Info.plist", 
@@ -37,7 +41,6 @@ platform :ios do
         scheme: 'atb', 
         configuration: 'Release', 
         workspace: './ios/atb.xcworkspace', 
-        export_xcargs: "-allowProvisioningUpdates",
         export_options: {
           provisioningProfiles: { 
             "no.mittatb.staging" => "match AdHoc no.mittatb.staging",
