@@ -28,6 +28,7 @@ platform :ios do
         match(type: 'adhoc', readonly: true)
       end
       update_info_plist( 
+        xcodeproj: "./ios/atb.xcodeproj",
         plist_path: "./ios/atb/Info.plist",
         app_identifier: ENV["IOS_BUNDLE_IDENTIFIER"]
       )
