@@ -166,8 +166,8 @@ const NearbyOverview: React.FC<Props> = ({
         <TouchableOpacity
           hitSlop={insets.all(12)}
           accessible={true}
-            accessibilityLabel="Bruk min posisjon."
-            accessibilityRole="button"
+          accessibilityLabel="Bruk min posisjon."
+          accessibilityRole="button"
           onPress={setCurrentLocationOrRequest}
         >
           <CurrentLocationArrow />
@@ -186,7 +186,7 @@ const NearbyOverview: React.FC<Props> = ({
       useScroll={activateScroll}
       alternativeTitleComponent={
         <Text style={styles.altTitleHeader}>
-          <NonVisualSupportLabel>Avganger fra: </NonVisualSupportLabel>
+          <NonVisualSupportLabel text="Avganger fra: " />
           {fromLocation?.name}
         </Text>
       }

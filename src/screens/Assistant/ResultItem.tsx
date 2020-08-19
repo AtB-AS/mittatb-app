@@ -53,7 +53,7 @@ const ResultItemHeader: React.FC<{
     <View style={styles.resultHeader}>
       <Text>Fra {quayName}</Text>
       <Text>
-        <NonVisualSupportLabel>Reisetid: </NonVisualSupportLabel>
+        <NonVisualSupportLabel text="Reisetid: " />
         {durationText}
       </Text>
     </View>

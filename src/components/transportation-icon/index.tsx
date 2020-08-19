@@ -59,15 +59,25 @@ function InnerIcon({
 
   switch (mode) {
     case 'bus':
-      return <BusSide accessibilityLabel="Buss" key="bus" {...innerIconProps} />;
+      return (
+        <BusSide accessibilityLabel="Buss" key="bus" {...innerIconProps} />
+      );
     case 'tram':
-      return <TramSide accessibilityLabel="Trikk" key="tram" {...innerIconProps} />;
+      return (
+        <TramSide accessibilityLabel="Trikk" key="tram" {...innerIconProps} />
+      );
     case 'rail':
-      return <TrainSide accessibilityLabel="Tog" key="rail" {...innerIconProps} />;
+      return (
+        <TrainSide accessibilityLabel="Tog" key="rail" {...innerIconProps} />
+      );
     case 'air':
-      return <PlaneSide accessibilityLabel="Fly" key="airport" {...innerIconProps} />;
+      return (
+        <PlaneSide accessibilityLabel="Fly" key="airport" {...innerIconProps} />
+      );
     case 'water':
-      return <FerrySide accessibilityLabel="Ferge" key="boat" {...innerIconProps} />;
+      return (
+        <FerrySide accessibilityLabel="Ferge" key="boat" {...innerIconProps} />
+      );
     case 'unknown':
     default:
       return null;

@@ -1,18 +1,15 @@
-import React from 'react';
-import { AccessibilityProps, Text, StyleSheet as StyleSheetNative } from "react-native";
+import React, {Props} from 'react';
+import {Text} from 'react-native';
 import {StyleSheet} from '../../theme';
 
-type LabelProps = {
-} & AccessibilityProps;
+type LabelProps = {text?: string};
 
-const NonVisualSupportLabel:  React.FC<LabelProps> = ({...props}) => {
-    return(
-        <Text style={styles.accessibleLabel}>{props.children}</Text>
-    );
+const NonVisualSupportLabel: React.FC<LabelProps> = (text) => {
+  return <Text style={styles.accessibleLabel}>{text}</Text>;
 };
 const styles = StyleSheet.create({
-    accessibleLabel: {
-        fontSize: 0
-    }
-})
+  accessibleLabel: {
+    fontSize: 0,
+  },
+});
 export default NonVisualSupportLabel;

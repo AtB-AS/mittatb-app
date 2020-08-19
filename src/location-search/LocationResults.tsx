@@ -53,7 +53,7 @@ const LocationResults: React.FC<Props> = ({
             </View>
             <TouchableOpacity
               accessible={true}
-              accessibilityLabel={"Legg " + location.name + " i søkefelt"}
+              accessibilityLabel={'Legg ' + location.name + ' i søkefelt'}
               accessibilityRole="button"
               hitSlop={insets.all(8)}
               onPressOut={() => onPrefillText(location.name + ' ')}

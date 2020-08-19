@@ -212,7 +212,10 @@ const Assistant: React.FC<Props> = ({
       >
         {from?.name}
       </Text>
-      <Text accessibilityLabel="til" style={styles.altTitleText}> – </Text>
+      <Text accessibilityLabel="til" style={styles.altTitleText}>
+        {' '}
+        –{' '}
+      </Text>
       <Text
         style={[styles.altTitleText, {maxWidth: altWidth / 2}]}
         numberOfLines={1}
@@ -232,7 +235,7 @@ const Assistant: React.FC<Props> = ({
       headerTitle="Reiseassistent"
       alternativeTitleComponent={altHeaderComp}
     >
-        <Results
+      <Results
         tripPatterns={tripPatterns}
         isSearching={isSearching}
         showEmptyScreen={showEmptyScreen}

@@ -184,7 +184,11 @@ type ShowMoreButtonProps = {
 const ShowMoreButton: React.FC<ShowMoreButtonProps> = ({onPress}) => {
   const style = useShowMoreButtonStyle();
   return (
-    <TouchableOpacity accessibilityRole="button" onPress={onPress} hitSlop={insets.symmetric(8, 12)}>
+    <TouchableOpacity
+      accessibilityRole="button"
+      onPress={onPress}
+      hitSlop={insets.symmetric(8, 12)}
+    >
       <View style={style.button}>
         <Text style={style.text}>Vis flere avganger</Text>
       </View>
@@ -214,9 +218,9 @@ const ItemHeader: React.FC<{
       {location && (
         <View style={styles.distance}>
           <Text>
-            <NonVisualSupportLabel>Distanse: </NonVisualSupportLabel>
+            <NonVisualSupportLabel text="Distanse: " />
             {humanizeDistance(haversine(location.coords, stop))}
-            </Text>
+          </Text>
           <WalkingPerson width={16} style={styles.distanceIcon} />
         </View>
       )}
@@ -245,7 +249,7 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
           onPress={() => onPress?.(departure)}
         >
           <Text style={styles.time}>
-            <NonVisualSupportLabel>Avgang: </NonVisualSupportLabel>
+            <NonVisualSupportLabel text="Avgang: " />
             {formatToClockOrRelativeMinutes(departure.expectedDepartureTime)}
           </Text>
           <TransportationIcon

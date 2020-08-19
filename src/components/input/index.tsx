@@ -59,11 +59,13 @@ const Input = forwardRef<TextInput, InputProps>(
         />
         {showClear ? (
           <View style={style.inputClear}>
-            <TouchableOpacity 
-            accessible={true}
-            accessibilityRole="button"
-            accessibilityLabel="Tøm redigeringsfelt"
-            hitSlop={insets.all(8)} onPress={onClear}>
+            <TouchableOpacity
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityLabel="Tøm redigeringsfelt"
+              hitSlop={insets.all(8)}
+              onPress={onClear}
+            >
               <Close />
             </TouchableOpacity>
           </View>

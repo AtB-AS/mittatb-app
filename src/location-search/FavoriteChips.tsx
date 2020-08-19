@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, ViewStyle, StyleProp, AccessibilityProps} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  StyleProp,
+  AccessibilityProps,
+} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import colors from '../theme/colors';
 import {useFavorites} from '../favorites/FavoritesContext';
@@ -118,9 +125,19 @@ type ChipProps = {
   style?: ViewStyle;
 } & AccessibilityProps;
 
-const FavoriteChip: React.FC<ChipProps> = ({text, icon, onPress, style, ...accessibilityProps}) => {
+const FavoriteChip: React.FC<ChipProps> = ({
+  text,
+  icon,
+  onPress,
+  style,
+  ...accessibilityProps
+}) => {
   return (
-    <TouchableOpacity style={[chipStyles.container, style]} onPress={onPress} {...accessibilityProps}>
+    <TouchableOpacity
+      style={[chipStyles.container, style]}
+      onPress={onPress}
+      {...accessibilityProps}
+    >
       {icon}
       <Text style={chipStyles.text}>{text}</Text>
     </TouchableOpacity>

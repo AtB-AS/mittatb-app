@@ -83,8 +83,8 @@ export default function DepartureDetails({navigation, route}: Props) {
           onPress: () => navigation.goBack(),
           icon: isBack ? <ArrowLeft /> : <Close />,
           accessible: true,
-          accessibilityRole: "button",
-          accessibilityLabel: "Gå tilbake"
+          accessibilityRole: 'button',
+          accessibilityLabel: 'Gå tilbake',
         }}
         title={title}
       />
