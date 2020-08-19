@@ -10,8 +10,13 @@ platform :ios do
   desc 'Build the iOS application.'
   lane :build do
       match(type: 'adhoc', readonly: true)
+      update_app_identifier(
+        xcodeproj: "./ios/atb.xcodeproj",
+        plist_path: "atb/Info.plist", 
+        app_identifier: ENV["IOS_BUNDLE_IDENTIFIER"]
+      )
       cocoapods(podfile: './ios/Podfile')
-      build_app(scheme: 'atb', configuration: 'Debug', workspace: './ios/atb.xcworkspace', export_xcargs: "-allowProvisioningUpdates")
+      build_app(scheme: 'atb', configuration: 'Release', workspace: './ios/atb.xcworkspace', export_xcargs: "-allowProvisioningUpdates")
     end
 end
 

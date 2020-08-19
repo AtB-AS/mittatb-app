@@ -8,9 +8,6 @@ brew install findutils xmlstarlet # for git-crypt
 echo "Loading all env variables from .env file"
 export $(grep -v '^#' .env | gxargs -d '\n') > /dev/null 2>&1
 
-echo "Setting BundleIdentifier in Info.plist to $IOS_BUNDLE_IDENTIFIER"
-/usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $IOS_BUNDLE_IDENTIFIER" ./ios/atb/Info.plist
-
 echo "Adding Bugsnag API key and release stage to Info.plist"
 /usr/libexec/PlistBuddy -c "Add :BugsnagAPIKey string $BUGSNAG_API_KEY" ./ios/atb/Info.plist
 /usr/libexec/PlistBuddy -c "Add :BugsnagReleaseStage string $BUGSNAG_RELEASE_STAGE" ./ios/atb/Info.plist
