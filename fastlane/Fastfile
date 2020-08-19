@@ -9,7 +9,24 @@ platform :ios do
   # iOS Lanes
   desc 'Build the iOS application.'
   lane :build do
-      match(type: 'adhoc', readonly: true)
+      if is_ci
+        create_keychain(
+          name: "CI",
+          password: ENV["MATCH_PASSWORD"],
+          default_keychain: true,
+          unlock: true,
+          timeout: 3600,
+          lock_when_sleeps: false
+        )
+        match(
+          type: "adhoc",
+          readonly: true,
+          keychain_name: "CI",
+          keychain_password: ENV["MATCH_PASSWORD"]
+        )
+      else
+        match(type: 'adhoc', readonly: true)
+      end
       update_app_identifier(
         xcodeproj: "./ios/atb.xcodeproj",
         plist_path: "atb/Info.plist", 
