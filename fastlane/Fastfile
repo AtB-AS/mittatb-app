@@ -27,26 +27,18 @@ platform :ios do
       else
         match(type: 'adhoc', readonly: true)
       end
-      update_info_plist( 
-        xcodeproj: "./ios/atb.xcodeproj",
-        plist_path: "atb/Info.plist",
-        app_identifier: ENV["IOS_BUNDLE_IDENTIFIER"]
-      )
-      update_app_identifier(
-        xcodeproj: "./ios/atb.xcodeproj",
-        plist_path: "atb/Info.plist", 
-        app_identifier: ENV["IOS_BUNDLE_IDENTIFIER"]
+      update_code_signing_settings(
+        use_automatic_signing: false,
+        bundle_identifier:"no.mittatb.staging",
+        code_sign_identity:"iPhone Distribution",
+        profile_name: "match AdHoc no.mittatb.staging",
+        path: "./ios/atb.xcodeproj"
       )
       cocoapods(podfile: './ios/Podfile')
       build_app(
         scheme: 'atb', 
         configuration: 'Release', 
         workspace: './ios/atb.xcworkspace', 
-        export_options: {
-          provisioningProfiles: { 
-            "no.mittatb.staging" => "match AdHoc no.mittatb.staging",
-          }
-        })
     end
 end
 
