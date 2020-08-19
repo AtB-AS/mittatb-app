@@ -38,7 +38,8 @@ platform :ios do
       build_app(
         scheme: 'atb', 
         configuration: 'Release', 
-        workspace: './ios/atb.xcworkspace', 
+        workspace: './ios/atb.xcworkspace' 
+      )
     end
 end
 
