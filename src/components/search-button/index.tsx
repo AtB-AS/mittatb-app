@@ -4,7 +4,7 @@ import {
   Text,
   ViewStyle,
   StyleProp,
-  AccessibilityProps,
+  AccessibilityProps
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {StyleSheet} from '../../theme';
@@ -31,6 +31,9 @@ const SearchButton: React.FC<SearchButtonProps> = ({
 }) => {
   const styles = useThemeStyles();
 
+  if(text){
+    accessiblityProps.accessibilityValue = {text: text};
+  }
   return (
     <View style={style}>
       <TouchableOpacity

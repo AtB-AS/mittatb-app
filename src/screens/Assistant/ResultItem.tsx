@@ -17,6 +17,7 @@ import {DestinationFlag} from '../../assets/svg/icons/places';
 import {LegMode} from '@entur/sdk';
 import colors from '../../theme/colors';
 import {Duration} from '../../assets/svg/icons/transportation';
+import NonVisualSupportLabel from '../../components/non-visual-support';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -47,11 +48,14 @@ const ResultItemHeader: React.FC<{
 }> = ({tripPattern}) => {
   const quayName = getFromLeg(tripPattern.legs);
   const styles = useThemeStyles();
-
+  const durationText = secondsToDurationShort(tripPattern.duration);
   return (
     <View style={styles.resultHeader}>
       <Text>Fra {quayName}</Text>
-      <Text>{secondsToDurationShort(tripPattern.duration)}</Text>
+      <Text>
+        <NonVisualSupportLabel>Reisetid: </NonVisualSupportLabel>
+        {durationText}
+      </Text>
     </View>
   );
 };
@@ -263,7 +267,7 @@ const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
       <Text style={[styles.time, styles.textDeprioritized]}>
         {formatToClockOrRelativeMinutes(lastLeg.expectedEndTime)}
       </Text>
-      <View style={styles.iconContainer}>
+      <View accessibilityLabel="Destinasjon" style={styles.iconContainer}>
         <DestinationFlag fill={colors.general.black} opacity={0.6} />
       </View>
       <Text style={styles.textDeprioritized} numberOfLines={1}>

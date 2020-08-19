@@ -30,6 +30,7 @@ import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
 import Results from './Results';
 import {useLayout} from '../../utils/use-layout';
+import NonVisualSupportLabel from '../../components/non-visual-support';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -142,7 +143,7 @@ const Assistant: React.FC<Props> = ({
           <View style={styles.styleButton}>
             <LocationButton
               accessible={true}
-              accessibilityLabel="Søk på avreisested"
+              accessibilityLabel="Velg avreisested."
               accessibilityRole="button"
               title="Fra"
               placeholder="Søk etter adresse eller sted"
@@ -153,7 +154,7 @@ const Assistant: React.FC<Props> = ({
 
           <TouchableOpacity
             accessible={true}
-            accessibilityLabel="Velg nåværende plassering som avreisested"
+            accessibilityLabel="Bruk min posisjon som avreisested."
             accessibilityRole="button"
             hitSlop={insets.all(12)}
             onPress={setCurrentLocationOrRequest}
@@ -166,7 +167,7 @@ const Assistant: React.FC<Props> = ({
           <View style={styles.styleButton}>
             <LocationButton
               accessible={true}
-              accessibilityLabel="Søk på ankomststed"
+              accessibilityLabel="Velg ankomststed."
               accessibilityRole="button"
               title="Til"
               placeholder="Søk etter adresse eller sted"
@@ -200,7 +201,7 @@ const Assistant: React.FC<Props> = ({
   const {onLayout: onAltLayout, width: altWidth} = useLayout();
 
   const altHeaderComp = (
-    <View onLayout={onAltLayout} style={styles.altTitle}>
+    <View accessible={true} onLayout={onAltLayout} style={styles.altTitle}>
       <Text
         style={[
           styles.altTitleText,
@@ -211,7 +212,7 @@ const Assistant: React.FC<Props> = ({
       >
         {from?.name}
       </Text>
-      <Text style={styles.altTitleText}> – </Text>
+      <Text accessibilityLabel="til" style={styles.altTitleText}> – </Text>
       <Text
         style={[styles.altTitleText, {maxWidth: altWidth / 2}]}
         numberOfLines={1}
@@ -231,7 +232,7 @@ const Assistant: React.FC<Props> = ({
       headerTitle="Reiseassistent"
       alternativeTitleComponent={altHeaderComp}
     >
-      <Results
+        <Results
         tripPatterns={tripPatterns}
         isSearching={isSearching}
         showEmptyScreen={showEmptyScreen}

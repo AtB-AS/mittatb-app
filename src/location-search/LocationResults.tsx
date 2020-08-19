@@ -23,7 +23,7 @@ const LocationResults: React.FC<Props> = ({
   const styles = useThemeStyles();
   return (
     <>
-      <View style={styles.subHeader}>
+      <View accessibilityRole="header" style={styles.subHeader}>
         <Text style={styles.subLabel}>{title}</Text>
         <View style={styles.subBar} />
       </View>
@@ -32,6 +32,8 @@ const LocationResults: React.FC<Props> = ({
           <View style={styles.rowContainer} key={location.id}>
             <View style={styles.locationButtonContainer}>
               <TouchableOpacity
+                accessible={true}
+                accessibilityRole="menuitem"
                 hitSlop={insets.symmetric(8, 1)}
                 onPress={() => onSelect(location)}
                 style={styles.locationButton}
@@ -50,6 +52,9 @@ const LocationResults: React.FC<Props> = ({
               </TouchableOpacity>
             </View>
             <TouchableOpacity
+              accessible={true}
+              accessibilityLabel={"Legg " + location.name + " i søkefelt"}
+              accessibilityRole="button"
               hitSlop={insets.all(8)}
               onPressOut={() => onPrefillText(location.name + ' ')}
             >

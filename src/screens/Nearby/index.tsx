@@ -47,6 +47,7 @@ import {
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import insets from '../../utils/insets';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
+import NonVisualSupportLabel from '../../components/non-visual-support';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
@@ -156,11 +157,17 @@ const NearbyOverview: React.FC<Props> = ({
             placeholder="Søk etter adresse eller sted"
             location={fromLocation}
             onPress={openLocationSearch}
+            accessible={true}
+            accessibilityLabel="Søk på avreisested."
+            accessibilityRole="button"
           />
         </View>
 
         <TouchableOpacity
           hitSlop={insets.all(12)}
+          accessible={true}
+            accessibilityLabel="Bruk min posisjon."
+            accessibilityRole="button"
           onPress={setCurrentLocationOrRequest}
         >
           <CurrentLocationArrow />
@@ -178,7 +185,10 @@ const NearbyOverview: React.FC<Props> = ({
       headerTitle="Avganger"
       useScroll={activateScroll}
       alternativeTitleComponent={
-        <Text style={styles.altTitleHeader}>{fromLocation?.name}</Text>
+        <Text style={styles.altTitleHeader}>
+          <NonVisualSupportLabel>Avganger fra: </NonVisualSupportLabel>
+          {fromLocation?.name}
+        </Text>
       }
       onEndReached={loadMore}
     >

@@ -151,7 +151,7 @@ const DateInput: React.FC<DateInputProps> = ({
     <>
       <SearchButton
         accessible={true}
-        accessibilityLabel="Sett tidspunkt for avreise eller ankomst"
+        accessibilityLabel="Sett tidspunkt for avreise eller ankomst. "
         accessibilityRole="button"
         title="Når"
         text={dateToText(valueOrDefault, timeOfLastSearch)}

@@ -22,6 +22,7 @@ import {DeparturesWithStopLocal, QuayWithDeparturesAndLimits} from './utils';
 import MessageBox from '../../message-box';
 import insets from '../../utils/insets';
 import {WalkingPerson} from '../../assets/svg/icons/transportation';
+import NonVisualSupportLabel from '../../components/non-visual-support';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
@@ -183,7 +184,7 @@ type ShowMoreButtonProps = {
 const ShowMoreButton: React.FC<ShowMoreButtonProps> = ({onPress}) => {
   const style = useShowMoreButtonStyle();
   return (
-    <TouchableOpacity onPress={onPress} hitSlop={insets.symmetric(8, 12)}>
+    <TouchableOpacity accessibilityRole="button" onPress={onPress} hitSlop={insets.symmetric(8, 12)}>
       <View style={style.button}>
         <Text style={style.text}>Vis flere avganger</Text>
       </View>
@@ -212,7 +213,10 @@ const ItemHeader: React.FC<{
       <Text>{stop.name}</Text>
       {location && (
         <View style={styles.distance}>
-          <Text>{humanizeDistance(haversine(location.coords, stop))}</Text>
+          <Text>
+            <NonVisualSupportLabel>Distanse: </NonVisualSupportLabel>
+            {humanizeDistance(haversine(location.coords, stop))}
+            </Text>
           <WalkingPerson width={16} style={styles.distanceIcon} />
         </View>
       )}
@@ -241,6 +245,7 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
           onPress={() => onPress?.(departure)}
         >
           <Text style={styles.time}>
+            <NonVisualSupportLabel>Avgang: </NonVisualSupportLabel>
             {formatToClockOrRelativeMinutes(departure.expectedDepartureTime)}
           </Text>
           <TransportationIcon

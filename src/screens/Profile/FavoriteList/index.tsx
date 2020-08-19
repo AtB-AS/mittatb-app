@@ -158,7 +158,11 @@ const Item: React.FC<ItemProps> = ({item, onEdit, onClick}) => {
     <View style={css.item}>
       {clickable}
       {onEdit && (
-        <TouchableOpacity onPress={onEdit} hitSlop={insets.all(12)}>
+        <TouchableOpacity 
+        accessibilityLabel={"Rediger favoritt:" + item.name}
+        accessibilityRole="button"
+        onPress={onEdit} 
+        hitSlop={insets.all(12)}>
           <Edit />
         </TouchableOpacity>
       )}
