@@ -16,7 +16,16 @@ platform :ios do
         app_identifier: ENV["IOS_BUNDLE_IDENTIFIER"]
       )
       cocoapods(podfile: './ios/Podfile')
-      build_app(scheme: 'atb', configuration: 'Release', workspace: './ios/atb.xcworkspace', export_xcargs: "-allowProvisioningUpdates")
+      build_app(
+        scheme: 'atb', 
+        configuration: 'Release', 
+        workspace: './ios/atb.xcworkspace', 
+        export_xcargs: "-allowProvisioningUpdates",
+        export_options: {
+          provisioningProfiles: { 
+            "no.mittatb.staging" => "match AdHoc no.mittatb.staging",
+          }
+        })
     end
 end
 
