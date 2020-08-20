@@ -311,7 +311,7 @@ function useUpdatedLocation(
       case 'search':
         return searchedLocation;
       case 'geolocation':
-        return currentLocation ?? searchedLocation;
+        return currentLocation;
       case 'favorite':
         const favorite = favorites.find(
           (f) => f.id === searchedLocation.favoriteId,

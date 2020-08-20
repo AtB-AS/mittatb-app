@@ -334,7 +334,7 @@ PODS:
   - React-jsinspector (0.63.2)
   - react-native-date-picker (2.7.10):
     - React
-  - react-native-geolocation (1.4.2):
+  - react-native-geolocation-service (5.0.0):
     - React
   - react-native-get-random-values (1.4.0):
     - React
@@ -483,7 +483,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
-  - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
+  - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-intercom (from `../node_modules/react-native-intercom`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -585,8 +585,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-date-picker:
     :path: "../node_modules/react-native-date-picker"
-  react-native-geolocation:
-    :path: "../node_modules/@react-native-community/geolocation"
+  react-native-geolocation-service:
+    :path: "../node_modules/react-native-geolocation-service"
   react-native-get-random-values:
     :path: "../node_modules/react-native-get-random-values"
   react-native-intercom:
@@ -691,7 +691,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 8ca588cc921e70590820ce72b8789b02c67cce38
   React-jsinspector: b14e62ebe7a66e9231e9581279909f2fc3db6606
   react-native-date-picker: 74c129e693b43483d5a870e239bc6e70dceb1cb0
-  react-native-geolocation: a7b94614afbd5fd8350e0233a2025c8228fc8041
+  react-native-geolocation-service: 141e33bdb179bcba10b216ee13962611e21f2be4
   react-native-get-random-values: 2b7500cdb68066aba87cdccd97067c29e16ffe95
   react-native-intercom: 4916f5d0fee8b73535a6284721ccf7f9cc664fac
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
@@ -721,6 +721,6 @@ SPEC CHECKSUMS:
   Yoga: 7740b94929bbacbddda59bf115b5317e9a161598
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 7f8879e8095182fbf305a9a1202b9a15edc16d24
+PODFILE CHECKSUM: 62e6d8fc85ac6b63b6370c161340ec610b2d688a
 
 COCOAPODS: 1.9.3

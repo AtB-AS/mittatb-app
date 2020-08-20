@@ -5,15 +5,14 @@ import colors from '../theme/colors';
 import {useFavorites} from '../favorites/FavoritesContext';
 import {useReverseGeocoder} from './useGeocoder';
 import {CurrentLocationArrow} from '../assets/svg/icons/places';
-import {GeolocationResponse} from '@react-native-community/geolocation';
 import {LocationWithSearchMetadata} from './';
 import {FavoriteIcon} from '../favorites';
 import {PermissionStatus} from 'react-native-permissions';
 import {RequestPermissionFn} from '../GeolocationContext';
+import {GeoPosition} from 'react-native-geolocation-service';
 
 type Props = {
-  geolocation: GeolocationResponse | null;
-  geostatus: PermissionStatus | null;
+  geolocation: GeoPosition | null;
   requestGeoPermission: RequestPermissionFn;
   onSelectLocation: (location: LocationWithSearchMetadata) => void;
   hideFavorites: boolean;
@@ -23,7 +22,6 @@ type Props = {
 const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
   geolocation,
-  geostatus,
   requestGeoPermission,
   containerStyle,
   hideFavorites,
@@ -35,9 +33,6 @@ const FavoriteChips: React.FC<Props> = ({
     : null;
 
   const [recentlyAllowedGeo, setsetRecentlyAllowedGeo] = useState(false);
-
-  const hasDeniedGeoPermission = geostatus && geostatus !== 'granted';
-  const hideLocationChip = !currentLocation && !hasDeniedGeoPermission;
 
   async function onCurrentLocation() {
     if (currentLocation) {
@@ -62,7 +57,7 @@ const FavoriteChips: React.FC<Props> = ({
     }
   }, [recentlyAllowedGeo, currentLocation]);
 
-  if (hideLocationChip && (hideFavorites || !favorites.length)) return null;
+  if (hideFavorites || !favorites.length) return null;
 
   return (
     <View
@@ -76,13 +71,11 @@ const FavoriteChips: React.FC<Props> = ({
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={containerStyle}
       >
-        {!hideLocationChip && (
-          <FavoriteChip
-            text="Min posisjon"
-            icon={<CurrentLocationArrow />}
-            onPress={onCurrentLocation}
-          />
-        )}
+        <FavoriteChip
+          text="Min posisjon"
+          icon={<CurrentLocationArrow />}
+          onPress={onCurrentLocation}
+        />
         {!hideFavorites &&
           favorites.map((fav, i) => (
             <FavoriteChip
