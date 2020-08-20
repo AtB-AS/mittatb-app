@@ -1,14 +1,11 @@
 import {useState, useEffect} from 'react';
-import {GeolocationResponse} from '@react-native-community/geolocation';
 import {Feature} from '../sdk';
 import {autocomplete, reverse} from '../api';
 import {Location} from '../favorites/types';
 import {CancelToken, isCancel} from '../api/client';
+import {GeoPosition} from 'react-native-geolocation-service';
 
-export function useGeocoder(
-  text: string | null,
-  location: GeolocationResponse | null,
-) {
+export function useGeocoder(text: string | null, location: GeoPosition | null) {
   const [locations, setLocations] = useState<Location[] | null>(null);
 
   useEffect(() => {
@@ -39,7 +36,7 @@ export function useGeocoder(
   return locations;
 }
 
-export function useReverseGeocoder(location: GeolocationResponse | null) {
+export function useReverseGeocoder(location: GeoPosition | null) {
   const [locations, setLocations] = useState<Location[] | null>(null);
 
   useEffect(() => {

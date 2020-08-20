@@ -6,7 +6,9 @@ export function useAppStateStatus() {
   const [appState, setAppState] = useState(currentState);
 
   function onChange(newState: AppStateStatus) {
-    setAppState(newState);
+    if (appState !== newState) {
+      setAppState(newState);
+    }
   }
 
   useEffect(() => {
