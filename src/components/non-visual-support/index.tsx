@@ -4,7 +4,7 @@ import {StyleSheet} from '../../theme';
 
 type LabelProps = {text?: string};
 
-const NonVisualSupportLabel: React.FC<LabelProps> = (text) => {
+const NonVisualSupportLabel: React.FC<LabelProps> = ({ text }) => {
   return <Text style={styles.accessibleLabel}>{text}</Text>;
 };
 const styles = StyleSheet.create({
