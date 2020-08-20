@@ -1,21 +1,20 @@
-import React, {useEffect, useReducer, createContext, useContext} from 'react';
-import {Platform, Rationale, Alert} from 'react-native';
+import React, {createContext, useContext, useEffect, useReducer} from 'react';
+import {Alert, Platform, Rationale} from 'react-native';
+import {isLocationEnabled} from 'react-native-device-info';
 import Geolocation, {
-  PositionError,
-  GeoPosition,
   GeoOptions,
+  GeoPosition,
+  PositionError,
 } from 'react-native-geolocation-service';
 import {
-  request,
   check,
   PERMISSIONS,
   PermissionStatus,
-  openSettings,
+  request,
 } from 'react-native-permissions';
+import {updateMetadata as updateChatUserMetadata} from './chat/metadata';
 import bugsnag from './diagnostics/bugsnag';
 import {useAppStateStatus} from './utils/use-app-state-status';
-import {updateMetadata as updateChatUserMetadata} from './chat/metadata';
-import {isLocationEnabled} from 'react-native-device-info';
 
 type GeolocationState = {
   status: PermissionStatus | null;
@@ -212,7 +211,6 @@ async function requestGeolocationPermission(): Promise<PermissionStatus> {
   if (Platform.OS === 'ios') {
     return await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE, rationale);
   } else {
-    await checkGeolocationPermission();
     return await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION, rationale);
   }
 }
