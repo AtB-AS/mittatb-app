@@ -1,26 +1,24 @@
-import React, {useState, useRef, useEffect} from 'react';
-import {Text, TextInput, View, TextStyle} from 'react-native';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {
   NavigationProp,
-  RouteProp,
-  useRoute,
   ParamListBase,
+  RouteProp,
   useIsFocused,
+  useRoute,
 } from '@react-navigation/native';
-import {StyleSheet} from '../theme';
+import React, {useEffect, useRef, useState} from 'react';
+import {Text, TextInput, View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import Input from '../components/input';
 import {Location} from '../favorites/types';
-import useDebounce from './useDebounce';
-import {useGeocoder} from './useGeocoder';
-import LocationResults from './LocationResults';
-import FavoriteChips from './FavoriteChips';
 import {useGeolocationState} from '../GeolocationContext';
 import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
-import {Close} from '../assets/svg/icons/actions';
-import insets from '../utils/insets';
+import {StyleSheet} from '../theme';
 import colors from '../theme/colors';
-import Input from '../components/input';
+import FavoriteChips from './FavoriteChips';
+import LocationResults from './LocationResults';
+import useDebounce from './useDebounce';
+import {useGeocoder} from './useGeocoder';
 
 export type Props = {
   navigation: NavigationProp<any>;
@@ -116,7 +114,6 @@ const LocationSearch: React.FC<Props> = ({
       <FavoriteChips
         onSelectLocation={onSelect}
         geolocation={geolocation}
-        geostatus={geostatus}
         requestGeoPermission={requestGeoPermission}
         hideFavorites={!!hideFavorites}
         containerStyle={styles.contentBlock}

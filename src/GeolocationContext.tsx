@@ -56,9 +56,7 @@ const geolocationReducer: GeolocationReducer = (prevState, action) => {
 };
 
 export type PermissionOpts = {useSettingsFallback: boolean};
-export type RequestPermissionFn = (
-  opts?: PermissionOpts,
-) => Promise<PermissionStatus | undefined>;
+export type RequestPermissionFn = () => Promise<PermissionStatus | undefined>;
 
 type GeolocationContextState = GeolocationState & {
   requestPermission: RequestPermissionFn;
@@ -93,7 +91,7 @@ const GeolocationContextProvider: React.FC = ({children}) => {
     defaultState,
   );
 
-  async function requestPermission(opts?: PermissionOpts) {
+  async function requestPermission() {
     if (!(await isLocationEnabled())) {
       Alert.alert(
         'Du har blokkert posisjonsdeling',
@@ -104,12 +102,6 @@ const GeolocationContextProvider: React.FC = ({children}) => {
         status: state.status,
         locationEnabled: false,
       });
-    } else if (state.status === 'blocked' && opts?.useSettingsFallback) {
-      Alert.alert(
-        'Du har blokkert posisjonsdeling',
-        'For å kunne skru på posisjonsdeling, må du gå til innstillinger for å tillate dette for AtB-appen. Vil du gjøre dette?',
-        [{text: 'Ja', onPress: () => openSettings()}, {text: 'Nei'}],
-      );
     } else {
       const status = await requestGeolocationPermission();
       dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled: true});
