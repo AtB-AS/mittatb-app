@@ -30,7 +30,6 @@ import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
 import Results from './Results';
 import {useLayout} from '../../utils/use-layout';
-import NonVisualSupportLabel from '../../components/non-visual-support';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
