@@ -85,6 +85,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     borderWidth: 1,
     borderRadius: 4,
     paddingLeft: 60,
+    paddingRight: 40,
     padding: 12,
     fontSize: 16,
   },
