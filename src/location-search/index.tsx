@@ -179,38 +179,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   contentBlock: {
     paddingHorizontal: theme.sizes.pagePadding,
-  },
-  label: {
-    fontSize: 14,
-    lineHeight: 20,
-    position: 'absolute',
-    left: 12,
-  },
-  placeholder: {
-    color: theme.text.faded,
-  },
-  inputContainer: {
-    width: '100%',
-    height: 46,
-    flexDirection: 'column',
-    marginBottom: 24,
-    justifyContent: 'center',
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    paddingLeft: 60,
-    backgroundColor: theme.background.level1,
-    borderWidth: 1,
-    borderColor: colors.general.gray,
-    borderRadius: 4,
-    color: theme.text.primary,
-  },
-  searchIcon: {
-    position: 'absolute',
-    left: 14,
-    alignSelf: 'center',
-  },
+  }
 }));
 
 export type LocationResultType = 'search' | 'geolocation' | 'favorite';
