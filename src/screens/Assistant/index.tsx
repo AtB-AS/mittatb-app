@@ -26,7 +26,6 @@ import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import {TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import insets from '../../utils/insets';
-import {useLayout} from '../../utils/use-layout';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
 import Results from './Results';
