@@ -106,7 +106,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   stopName: {
     fontSize: 16,
     color: theme.text.primary,
-    flexShrink: 1,
+    flexShrink: 1
   },
   lineContainer: {
     flexShrink: 1,
@@ -172,7 +172,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       <View style={styles.iconContainer}>
         <WalkingPerson fill={colors.general.black} opacity={0.6} />
       </View>
-      <Text style={styles.textDeprioritized}>{text}</Text>
+      <Text style={[styles.textContent, styles.textDeprioritized]}>{text}</Text>
     </View>
   );
 };
@@ -195,7 +195,7 @@ function WaitRow({time}: {time: number}) {
 const useWaitStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   textContainer: {
     width: 50,
@@ -214,30 +214,36 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
   legContainer: {
     flexDirection: 'row',
     paddingVertical: 4,
-    alignItems: 'center',
+    alignItems: 'flex-start'
   },
   time: {
-    width: 50,
+    minWidth: 20,
+    flex: 1,
     fontVariant: ['tabular-nums'],
   },
+  iconContainer: {
+    width: 30,
+    flex: 1,
+    alignItems: 'center',
+  },
+  textContent: {
+    flex: 6,
+    flexWrap: 'wrap'
+  },
   text: {
-    fontSize: 16,
+    fontSize: 16
   },
   textDeprioritized: {
     fontWeight: 'normal',
     fontSize: 14,
-    color: theme.text.faded,
+    color: theme.text.faded
   },
   textBold: {
     fontWeight: 'bold',
   },
   walkingPerson: {
     backgroundColor: theme.text.primary,
-  },
-  iconContainer: {
-    width: 30,
-    alignItems: 'center',
-  },
+  }
 }));
 
 const TransportationLeg = ({leg}: {leg: Leg}) => {
@@ -250,7 +256,7 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
       <View style={styles.iconContainer}>
         <TransportationIcon mode={leg.mode} publicCode={leg.line?.publicCode} />
       </View>
-      <Text style={styles.text}>
+      <Text style={[styles.textContent, styles.text]} >
         <LineDisplayName leg={leg} />
       </Text>
     </View>
@@ -270,7 +276,7 @@ const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
       <View accessibilityLabel="Destinasjon" style={styles.iconContainer}>
         <DestinationFlag fill={colors.general.black} opacity={0.6} />
       </View>
-      <Text style={styles.textDeprioritized} numberOfLines={1}>
+      <Text style={[styles.textContent, styles.textDeprioritized]} numberOfLines={1}>
         {lastLeg.toPlace.name}
       </Text>
     </View>
