@@ -15,7 +15,8 @@
     "generate-svg-mono-icons": "svgr --config-file .svgrrc.mono-icons.yml -d ./src/assets/svg/icons ./assets/svgs/mono-icons && prettier --write ./src/assets/svg/icons",
     "generate-svg-color": "svgr --config-file .svgrrc.color.yml -d ./src/assets/svg/ ./assets/svgs/color && prettier --write ./src/assets/svg/",
     "generate-svgs": "yarn generate-svg-mono-icons && yarn generate-svg-color",
-    "build:ios": "fastlane ios build"
+    "build:ios": "fastlane ios build",
+    "appcenter:ios": "fastlane ios appcenter"
   },
   "dependencies": {
     "@bugsnag/react-native": "^7.3.5",
