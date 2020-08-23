@@ -4,7 +4,6 @@ import {isLocationEnabled} from 'react-native-device-info';
 import Geolocation, {
   GeoOptions,
   GeoPosition,
-  PositionError,
 } from 'react-native-geolocation-service';
 import {
   check,
@@ -13,7 +12,6 @@ import {
   request,
 } from 'react-native-permissions';
 import {updateMetadata as updateChatUserMetadata} from './chat/metadata';
-import bugsnag from './diagnostics/bugsnag';
 import {useAppStateStatus} from './utils/use-app-state-status';
 
 type GeolocationState = {
@@ -71,19 +69,6 @@ const defaultState: GeolocationState = {
   location: null,
 };
 
-const translateErrorCode = (code: number) => {
-  switch (code) {
-    case 1:
-      return 'PERMISSION_DENIED';
-    case 2:
-      return 'POSITION_UNAVAILABLE';
-    case 3:
-      return 'TIMEOUT';
-    default:
-      return 'UNKNOWN';
-  }
-};
-
 const GeolocationContextProvider: React.FC = ({children}) => {
   const [state, dispatch] = useReducer<GeolocationReducer>(
     geolocationReducer,
@@ -122,23 +107,7 @@ const GeolocationContextProvider: React.FC = ({children}) => {
           (location) => {
             dispatch({type: 'LOCATION_CHANGED', location});
           },
-          async (err) => {
-            // Location service is not enabled or location mode is not appropriate for the current request (android only)
-            // Not satisifed seem to be the same as permission not granted. Avoid sending bugreport every time.
-            if (err.code !== PositionError.SETTINGS_NOT_SATISFIED) {
-              bugsnag.notify(
-                new Error('Geolocation error: ' + err.message),
-                (report) => {
-                  report.metadata = {
-                    ...report.metadata,
-                    geolocation: {
-                      code: translateErrorCode(err.code),
-                      message: err.message,
-                    },
-                  };
-                },
-              );
-            }
+          async () => {
             const status = await checkGeolocationPermission();
             const locationEnabled = await isLocationEnabled();
             if (status !== 'granted' || !locationEnabled) {
