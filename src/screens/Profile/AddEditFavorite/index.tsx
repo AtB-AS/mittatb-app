@@ -117,7 +117,13 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   return (
     <SafeAreaView style={css.container}>
       <ScreenHeader
-        leftButton={{onPress: cancel, icon: <ArrowLeft />}}
+        leftButton={{
+          onPress: cancel,
+          icon: <ArrowLeft />,
+          accessible: true,
+          accessibilityRole: 'button',
+          accessibilityLabel: 'Gå tilbake',
+        }}
         title="Legg til favorittsted"
       />
       <EmojiPopup

@@ -1,5 +1,5 @@
 import LogoOutline from './LogoOutline';
-import {View, Text} from 'react-native';
+import {View, Text, AccessibilityProps} from 'react-native';
 import React from 'react';
 import {StyleSheet} from '../theme';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -8,7 +8,7 @@ import insets from '../utils/insets';
 type IconButton = {
   icon: React.ReactNode;
   onPress(): void;
-};
+} & AccessibilityProps;
 
 type ScreenHeaderProps = {
   leftButton?: IconButton;
@@ -24,7 +24,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   const css = useHeaderStyle();
 
   const leftIcon = leftButton ? (
-    <TouchableOpacity onPress={leftButton.onPress} hitSlop={insets.all(8)}>
+    <TouchableOpacity hitSlop={insets.all(8)} {...leftButton}>
       {leftButton.icon}
     </TouchableOpacity>
   ) : (
@@ -32,7 +32,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   );
 
   const rightIcon = rightButton ? (
-    <TouchableOpacity onPress={rightButton.onPress} hitSlop={insets.all(8)}>
+    <TouchableOpacity hitSlop={insets.all(8)} {...rightButton}>
       {rightButton.icon}
     </TouchableOpacity>
   ) : (

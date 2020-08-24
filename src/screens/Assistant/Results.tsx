@@ -25,7 +25,6 @@ const Results: React.FC<Props> = ({
 }) => {
   const {theme} = useTheme();
   const styles = useThemeStyles(theme);
-
   if (showEmptyScreen) {
     return null;
   }

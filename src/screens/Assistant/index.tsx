@@ -141,6 +141,9 @@ const Assistant: React.FC<Props> = ({
         <View style={styles.searchButtonContainer}>
           <View style={styles.styleButton}>
             <LocationButton
+              accessible={true}
+              accessibilityLabel="Velg avreisested."
+              accessibilityRole="button"
               title="Fra"
               placeholder="Søk etter adresse eller sted"
               location={from}
@@ -149,6 +152,9 @@ const Assistant: React.FC<Props> = ({
           </View>
 
           <TouchableOpacity
+            accessible={true}
+            accessibilityLabel="Bruk min posisjon som avreisested."
+            accessibilityRole="button"
             hitSlop={insets.all(12)}
             onPress={setCurrentLocationOrRequest}
           >
@@ -159,6 +165,9 @@ const Assistant: React.FC<Props> = ({
         <View style={styles.searchButtonContainer}>
           <View style={styles.styleButton}>
             <LocationButton
+              accessible={true}
+              accessibilityLabel="Velg ankomststed."
+              accessibilityRole="button"
               title="Til"
               placeholder="Søk etter adresse eller sted"
               location={to}
@@ -166,7 +175,13 @@ const Assistant: React.FC<Props> = ({
             />
           </View>
 
-          <TouchableOpacity hitSlop={insets.all(12)} onPress={swap}>
+          <TouchableOpacity
+            hitSlop={insets.all(12)}
+            onPress={swap}
+            accessible={true}
+            accessibilityLabel="Bytt om på avreisested og ankomststed"
+            accessibilityRole="button"
+          >
             <Swap />
           </TouchableOpacity>
         </View>
@@ -185,7 +200,7 @@ const Assistant: React.FC<Props> = ({
   const {onLayout: onAltLayout, width: altWidth} = useLayout();
 
   const altHeaderComp = (
-    <View onLayout={onAltLayout} style={styles.altTitle}>
+    <View accessible={true} onLayout={onAltLayout} style={styles.altTitle}>
       <Text
         style={[
           styles.altTitleText,
@@ -196,7 +211,10 @@ const Assistant: React.FC<Props> = ({
       >
         {from?.name}
       </Text>
-      <Text style={styles.altTitleText}> – </Text>
+      <Text accessibilityLabel="til" style={styles.altTitleText}>
+        {' '}
+        –{' '}
+      </Text>
       <Text
         style={[styles.altTitleText, {maxWidth: altWidth / 2}]}
         numberOfLines={1}

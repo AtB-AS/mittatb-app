@@ -1,5 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {StyleProp, StyleSheet, Text, View, ViewStyle} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  StyleProp,
+  AccessibilityProps,
+} from 'react-native';
 import {GeoPosition} from 'react-native-geolocation-service';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {CurrentLocationArrow} from '../assets/svg/icons/places';
@@ -66,20 +73,25 @@ const FavoriteChips: React.FC<Props> = ({
       }}
     >
       <ScrollView
+        accessibilityRole="menu"
+        accessible={true}
+        accessibilityLabel="Favorittsteder"
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={containerStyle}
       >
-        <FavoriteChip
-          text="Min posisjon"
-          icon={<CurrentLocationArrow />}
-          onPress={onCurrentLocation}
-        />
+         <FavoriteChip
+            text="Min posisjon"
+            accessibilityRole="menuitem"
+            icon={<CurrentLocationArrow />}
+            onPress={onCurrentLocation}
+         />
         {!hideFavorites &&
           favorites.map((fav, i) => (
             <FavoriteChip
               key={fav.name}
               text={fav.name}
+              accessibilityRole="menuitem"
               icon={<FavoriteIcon favorite={fav} />}
               onPress={() =>
                 onSelectLocation({
@@ -103,11 +115,21 @@ type ChipProps = {
   icon: JSX.Element;
   onPress: () => void;
   style?: ViewStyle;
-};
+} & AccessibilityProps;
 
-const FavoriteChip: React.FC<ChipProps> = ({text, icon, onPress, style}) => {
+const FavoriteChip: React.FC<ChipProps> = ({
+  text,
+  icon,
+  onPress,
+  style,
+  ...accessibilityProps
+}) => {
   return (
-    <TouchableOpacity style={[chipStyles.container, style]} onPress={onPress}>
+    <TouchableOpacity
+      style={[chipStyles.container, style]}
+      onPress={onPress}
+      {...accessibilityProps}
+    >
       {icon}
       <Text style={chipStyles.text}>{text}</Text>
     </TouchableOpacity>

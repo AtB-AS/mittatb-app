@@ -66,6 +66,9 @@ const TripDetailsModal: React.FC<Props> = (props) => {
       <Header
         leftButton={{
           onPress: () => props.navigation.goBack(),
+          accessible: true,
+          accessibilityRole: 'button',
+          accessibilityLabel: 'Gå tilbake',
           icon: <Close />,
         }}
         title="Reisedetaljer"

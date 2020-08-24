@@ -10,7 +10,13 @@ export default function useChatIcon() {
 
   return {
     icon: (
-      <View style={styles.chatContainer}>
+      <View
+        accessible={true}
+        accessibilityLabel="Brukerstøtte"
+        accessibilityHint="Åpner et meldingsvindu"
+        accessibilityRole="button"
+        style={styles.chatContainer}
+      >
         {unreadCount ? <ChatUnread /> : <Chat />}
       </View>
     ),

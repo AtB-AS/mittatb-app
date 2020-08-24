@@ -71,7 +71,11 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
   return (
     <View style={css.container}>
       <View style={css.iconContainerLeft}>{leftIcon}</View>
-      <View style={css.titleContainers}>
+      <View
+        accessible={true}
+        accessibilityRole="header"
+        style={css.titleContainers}
+      >
         <Animated.View
           style={[
             css.regularContainer,
