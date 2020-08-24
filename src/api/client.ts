@@ -54,9 +54,15 @@ function responseErrorHandler(error: AxiosError) {
         // This happens all the time in mobile apps,
         // so will be a lot of noise if we choose to report these
         console.warn(errorType, error);
+        warnConfig(error.config);
       }
       break;
   }
 
   return Promise.reject(error);
+}
+
+function warnConfig(config: AxiosRequestConfig) {
+  if (!config) return;
+  console.warn(`URL: ${config.baseURL}${config.url}`);
 }
