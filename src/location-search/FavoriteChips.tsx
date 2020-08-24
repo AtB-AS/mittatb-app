@@ -80,12 +80,12 @@ const FavoriteChips: React.FC<Props> = ({
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={containerStyle}
       >
-         <FavoriteChip
-            text="Min posisjon"
-            accessibilityRole="menuitem"
-            icon={<CurrentLocationArrow />}
-            onPress={onCurrentLocation}
-         />
+        <FavoriteChip
+          text="Min posisjon"
+          accessibilityRole="menuitem"
+          icon={<CurrentLocationArrow />}
+          onPress={onCurrentLocation}
+        />
         {!hideFavorites &&
           favorites.map((fav, i) => (
             <FavoriteChip
