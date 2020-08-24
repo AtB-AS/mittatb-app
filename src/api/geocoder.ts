@@ -1,9 +1,9 @@
-import {GeolocationResponse} from '@react-native-community/geolocation';
 import {Feature} from '../sdk';
 import client from './client';
 import qs from 'query-string';
 import {stringifyUrl} from './utils';
 import {AxiosRequestConfig} from 'axios';
+import {GeoPosition} from 'react-native-geolocation-service';
 
 const TRONDHEIM_CENTRAL_STATION = {
   latitude: 63.43457,
@@ -12,7 +12,7 @@ const TRONDHEIM_CENTRAL_STATION = {
 
 export async function autocomplete(
   text: string | null,
-  location: GeolocationResponse | null,
+  location: GeoPosition | null,
   config?: AxiosRequestConfig,
 ) {
   const url = 'bff/v1/geocoder/features';
@@ -27,7 +27,7 @@ export async function autocomplete(
 }
 
 export async function reverse(
-  location: GeolocationResponse | null,
+  location: GeoPosition | null,
   config?: AxiosRequestConfig,
 ) {
   const url = 'bff/v1/geocoder/reverse';

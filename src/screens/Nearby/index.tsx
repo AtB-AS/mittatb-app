@@ -141,7 +141,7 @@ const NearbyOverview: React.FC<Props> = ({
     if (currentLocation) {
       setCurrentLocationAsFrom();
     } else {
-      const status = await requestGeoPermission({useSettingsFallback: true});
+      const status = await requestGeoPermission();
       if (status === 'granted') {
         setCurrentLocationAsFrom();
       }

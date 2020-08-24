@@ -1,34 +1,33 @@
-import React, {useEffect, useReducer, createContext, useContext} from 'react';
-import {Platform, Rationale, Alert} from 'react-native';
-import Geolocation, {PositionError} from 'react-native-geolocation-service';
+import React, {createContext, useContext, useEffect, useReducer} from 'react';
+import {Alert, Platform, Rationale} from 'react-native';
+import {isLocationEnabled} from 'react-native-device-info';
+import Geolocation, {
+  GeoOptions,
+  GeoPosition,
+} from 'react-native-geolocation-service';
 import {
-  GeolocationResponse,
-  GeolocationOptions,
-  GeolocationError,
-} from '@react-native-community/geolocation';
-import {
-  request,
   check,
   PERMISSIONS,
   PermissionStatus,
-  openSettings,
+  request,
 } from 'react-native-permissions';
-import bugsnag from './diagnostics/bugsnag';
-import {useAppStateStatus} from './utils/use-app-state-status';
 import {updateMetadata as updateChatUserMetadata} from './chat/metadata';
+import {useAppStateStatus} from './utils/use-app-state-status';
 
 type GeolocationState = {
   status: PermissionStatus | null;
-  location: GeolocationResponse | null;
+  locationEnabled: boolean;
+  location: GeoPosition | null;
 };
 
 type GeolocationReducerAction =
   | {
       status: PermissionStatus | null;
+      locationEnabled: boolean;
       type: 'PERMISSION_CHANGED';
     }
   | {
-      location: GeolocationResponse | null;
+      location: GeoPosition | null;
       type: 'LOCATION_CHANGED';
     };
 
@@ -43,6 +42,7 @@ const geolocationReducer: GeolocationReducer = (prevState, action) => {
       return {
         ...prevState,
         status: action.status,
+        locationEnabled: action.locationEnabled,
       };
     case 'LOCATION_CHANGED':
       return {
@@ -53,9 +53,7 @@ const geolocationReducer: GeolocationReducer = (prevState, action) => {
 };
 
 export type PermissionOpts = {useSettingsFallback: boolean};
-export type RequestPermissionFn = (
-  opts?: PermissionOpts,
-) => Promise<PermissionStatus | undefined>;
+export type RequestPermissionFn = () => Promise<PermissionStatus | undefined>;
 
 type GeolocationContextState = GeolocationState & {
   requestPermission: RequestPermissionFn;
@@ -67,20 +65,8 @@ const GeolocationContext = createContext<GeolocationContextState | undefined>(
 
 const defaultState: GeolocationState = {
   status: null,
+  locationEnabled: false,
   location: null,
-};
-
-const translateErrorCode = (code: number) => {
-  switch (code) {
-    case 1:
-      return 'PERMISSION_DENIED';
-    case 2:
-      return 'POSITION_UNAVAILABLE';
-    case 3:
-      return 'TIMEOUT';
-    default:
-      return 'UNKNOWN';
-  }
 };
 
 const GeolocationContextProvider: React.FC = ({children}) => {
@@ -89,58 +75,53 @@ const GeolocationContextProvider: React.FC = ({children}) => {
     defaultState,
   );
 
-  async function requestPermission(opts?: PermissionOpts) {
-    if (state.status === 'blocked' && opts?.useSettingsFallback) {
+  async function requestPermission() {
+    if (!(await isLocationEnabled())) {
       Alert.alert(
         'Du har blokkert posisjonsdeling',
-        'For å kunne skru på posisjonsdeling, må du gå til innstillinger for å tillate dette for AtB-appen. Vil du gjøre dette?',
-        [{text: 'Ja', onPress: () => openSettings()}, {text: 'Nei'}],
+        'For å kunne bruke posisjonen din må du aktivere lokasjonstjenester på telefonen din.',
       );
+      dispatch({
+        type: 'PERMISSION_CHANGED',
+        status: state.status,
+        locationEnabled: false,
+      });
     } else {
       const status = await requestGeolocationPermission();
-      dispatch({type: 'PERMISSION_CHANGED', status});
+      dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled: true});
       return status;
     }
   }
 
-  const hasPermission = state.status === 'granted';
+  const hasPermission = state.status === 'granted' && state.locationEnabled;
 
   useEffect(() => {
-    if (!hasPermission) {
-      dispatch({type: 'LOCATION_CHANGED', location: null});
-    } else {
-      const config: GeolocationOptions = {enableHighAccuracy: true};
+    let watchId: number;
 
-      const watchId = Geolocation.watchPosition(
-        (location) => dispatch({type: 'LOCATION_CHANGED', location}),
-        async (err) => {
-          // Location service is not enabled or location mode is not appropriate for the current request (android only)
-          // Not satisifed seem to be the same as permission not granted. Avoid sending bugreport every time.
-          if (err.code !== PositionError.SETTINGS_NOT_SATISFIED) {
-            bugsnag.notify(
-              new Error('Geolocation error: ' + err.message),
-              (report) => {
-                report.metadata = {
-                  ...report.metadata,
-                  geolocation: {
-                    code: translateErrorCode(err.code),
-                    message: err.message,
-                  },
-                };
-              },
-            );
-          }
-          const status = await checkGeolocationPermission();
-          if (status !== 'granted') {
-            dispatch({type: 'PERMISSION_CHANGED', status});
-          }
-          dispatch({type: 'LOCATION_CHANGED', location: null});
-        },
-        config,
-      );
-
-      return () => Geolocation.clearWatch(watchId);
+    async function startLocationWatcher() {
+      if (!hasPermission) {
+        dispatch({type: 'LOCATION_CHANGED', location: null});
+      } else {
+        const config: GeoOptions = {enableHighAccuracy: true};
+        watchId = Geolocation.watchPosition(
+          (location) => {
+            dispatch({type: 'LOCATION_CHANGED', location});
+          },
+          async () => {
+            const status = await checkGeolocationPermission();
+            const locationEnabled = await isLocationEnabled();
+            if (status !== 'granted' || !locationEnabled) {
+              dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled});
+            }
+            dispatch({type: 'LOCATION_CHANGED', location: null});
+          },
+          config,
+        );
+      }
     }
+
+    startLocationWatcher();
+    return () => Geolocation.clearWatch(watchId);
   }, [hasPermission]);
 
   const appStatus = useAppStateStatus();
@@ -149,8 +130,10 @@ const GeolocationContextProvider: React.FC = ({children}) => {
     async function checkPermission() {
       if (appStatus === 'active') {
         const status = await checkGeolocationPermission();
+        const locationEnabled = await isLocationEnabled();
+
         if (state.status != status) {
-          dispatch({type: 'PERMISSION_CHANGED', status});
+          dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled});
           await updateChatUserMetadata({'AtB-App-Location-Status': status});
         }
       }
