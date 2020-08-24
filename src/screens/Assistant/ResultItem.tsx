@@ -17,7 +17,7 @@ import {DestinationFlag} from '../../assets/svg/icons/places';
 import {LegMode} from '@entur/sdk';
 import colors from '../../theme/colors';
 import {Duration} from '../../assets/svg/icons/transportation';
-import NonVisualSupportLabel from '../../components/non-visual-support';
+import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -52,10 +52,9 @@ const ResultItemHeader: React.FC<{
   return (
     <View style={styles.resultHeader}>
       <Text>Fra {quayName}</Text>
-      <Text>
-        <NonVisualSupportLabel text="Reisetid: " />
+      <TextHiddenSupportPrefix prefix="Reisetid">
         {durationText}
-      </Text>
+      </TextHiddenSupportPrefix>
     </View>
   );
 };
