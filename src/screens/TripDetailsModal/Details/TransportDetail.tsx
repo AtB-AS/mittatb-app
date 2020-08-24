@@ -1,10 +1,9 @@
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import Dash from 'react-native-dash';
 import {formatToClock} from '../../../utils/date';
 import {Dot} from '../../../assets/svg/icons/other';
 import LocationRow from '../LocationRow';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {LegDetailProps, DetailScreenNavigationProp} from '.';
 import {useNavigation} from '@react-navigation/core';
 import TransportationIcon from '../../../components/transportation-icon';
@@ -31,7 +30,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
   return (
     <View style={{marginTop: -6}}>
       <TouchableOpacity
-        containerStyle={{overflow: 'visible'}}
+        style={{overflow: 'visible'}}
         onPress={() =>
           navigation.navigate('DepartureDetails', {
             title: getLineName(leg),

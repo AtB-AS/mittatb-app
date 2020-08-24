@@ -13,11 +13,10 @@ import {
   Text,
   View,
   ViewStyle,
-  TextStyle,
   SafeAreaView,
   Keyboard,
+  TouchableOpacity,
 } from 'react-native';
-import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
 import {Close, Add, Remove, Confirm} from '../../../assets/svg/icons/actions/';
 import {ArrowLeft, Expand} from '../../../assets/svg/icons/navigation/';
@@ -26,7 +25,6 @@ import {useFavorites} from '../../../favorites/FavoritesContext';
 import {StyleSheet, Theme, useTheme} from '../../../theme';
 import Button from '../../../components/button';
 import EmojiPopup from './EmojiPopup';
-import {Search} from '../../../assets/svg/icons/actions';
 import {RootStackParamList} from '../../../navigation';
 import {useLocationSearchValue} from '../../../location-search';
 import ScreenHeader from '../../../ScreenHeader';

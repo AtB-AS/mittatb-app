@@ -6,8 +6,9 @@ import {
   ViewStyle,
   StyleProp,
   AccessibilityProps,
+  TouchableOpacity,
 } from 'react-native';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import colors from '../theme/colors';
 import {useFavorites} from '../favorites/FavoritesContext';
 import {useReverseGeocoder} from './useGeocoder';

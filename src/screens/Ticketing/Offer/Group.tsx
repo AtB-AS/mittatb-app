@@ -1,6 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {Add, Remove} from '../../../assets/svg/icons/actions';
 import insets from '../../../utils/insets';
 

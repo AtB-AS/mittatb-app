@@ -1,8 +1,7 @@
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Text, View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {Text, View, TouchableOpacity} from 'react-native';
 import {searchTrip} from '../../api';
 import {CancelToken, isCancel} from '../../api/client';
 import {Swap} from '../../assets/svg/icons/actions';

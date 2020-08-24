@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, TouchableOpacity} from 'react-native';
 import {Leg, TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {
@@ -9,7 +9,6 @@ import {
   secondsToMinutesShort,
   formatToClockOrRelativeMinutes,
 } from '../../utils/date';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import TransportationIcon from '../../components/transportation-icon';
 import insets from '../../utils/insets';
 import {WalkingPerson} from '../../assets/svg/icons/transportation';
@@ -106,7 +105,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   stopName: {
     fontSize: 16,
     color: theme.text.primary,
-    flexShrink: 1
+    flexShrink: 1,
   },
   lineContainer: {
     flexShrink: 1,
@@ -183,7 +182,8 @@ function WaitRow({time}: {time: number}) {
   return (
     <View style={styles.legContainer}>
       <Text style={[styles.textDeprioritized, styles.time]}>
-          {secondsToMinutesShort(time)}</Text>
+        {secondsToMinutesShort(time)}
+      </Text>
       <View style={styles.iconContainer}>
         <Duration fill={colors.general.black} opacity={0.6} />
       </View>
@@ -196,7 +196,7 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
   legContainer: {
     flexDirection: 'row',
     paddingVertical: 4,
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   time: {
     minWidth: 25,
@@ -210,22 +210,22 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
   },
   textContent: {
     flex: 6,
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   text: {
-    fontSize: 16
+    fontSize: 16,
   },
   textDeprioritized: {
     fontWeight: 'normal',
     fontSize: 14,
-    color: theme.text.faded
+    color: theme.text.faded,
   },
   textBold: {
     fontWeight: 'bold',
   },
   walkingPerson: {
     backgroundColor: theme.text.primary,
-  }
+  },
 }));
 
 const TransportationLeg = ({leg}: {leg: Leg}) => {
@@ -238,7 +238,7 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
       <View style={styles.iconContainer}>
         <TransportationIcon mode={leg.mode} publicCode={leg.line?.publicCode} />
       </View>
-      <Text style={[styles.textContent, styles.text]} >
+      <Text style={[styles.textContent, styles.text]}>
         <LineDisplayName leg={leg} />
       </Text>
     </View>
@@ -258,7 +258,10 @@ const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
       <View accessibilityLabel="Destinasjon" style={styles.iconContainer}>
         <DestinationFlag fill={colors.general.black} opacity={0.6} />
       </View>
-      <Text style={[styles.textContent, styles.textDeprioritized]} numberOfLines={1}>
+      <Text
+        style={[styles.textContent, styles.textDeprioritized]}
+        numberOfLines={1}
+      >
         {lastLeg.toPlace.name}
       </Text>
     </View>

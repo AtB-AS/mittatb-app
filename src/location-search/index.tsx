@@ -1,6 +1,6 @@
 import React, {useState, useRef, useEffect} from 'react';
-import {Text, TextInput, View, TextStyle} from 'react-native';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {Text, TextInput, View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 import {
   NavigationProp,
   RouteProp,
@@ -17,9 +17,6 @@ import FavoriteChips from './FavoriteChips';
 import {useGeolocationState} from '../GeolocationContext';
 import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
-import {Close} from '../assets/svg/icons/actions';
-import insets from '../utils/insets';
-import colors from '../theme/colors';
 import Input from '../components/input';
 
 export type Props = {
@@ -179,7 +176,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   contentBlock: {
     paddingHorizontal: theme.sizes.pagePadding,
-  }
+  },
 }));
 
 export type LocationResultType = 'search' | 'geolocation' | 'favorite';

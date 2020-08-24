@@ -7,8 +7,8 @@ import {
   TextStyle,
   ImageStyle,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import TransportationIcon from '../../components/transportation-icon';
 import {EstimatedCall, StopPlaceDetails} from '../../sdk';
 import {StyleSheet} from '../../theme';
