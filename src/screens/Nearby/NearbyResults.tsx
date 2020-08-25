@@ -18,6 +18,7 @@ import {
   isSameDay,
   formatToSimpleDate,
   daysBetween,
+  isSeveralDays,
 } from '../../utils/date';
 import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
 import {useNavigation} from '@react-navigation/native';
@@ -169,7 +170,10 @@ const QuayResult: React.FC<QuayProps> = React.memo(
     const items = quay.departures.slice(0, quay.showLimit);
     const showShowMoreButton =
       onShowMoreOnQuay && quay.departures.length > quay.showLimit;
-    const allSameDay = useMemo(() => isSeveralDays(items), [items]);
+    const allSameDay = useMemo(
+      () => isSeveralDays(items.map((i) => i.expectedDepartureTime)),
+      [items],
+    );
 
     if (!items.length) return null;
 
@@ -201,17 +205,6 @@ const QuayResult: React.FC<QuayProps> = React.memo(
     );
   },
 );
-
-function isSeveralDays(items: EstimatedCall[]) {
-  if (!items.length) return false;
-  let first = parseISO(items[0].expectedDepartureTime);
-  for (let item of items) {
-    if (!isSameDay(first, parseISO(item.expectedDepartureTime))) {
-      return false;
-    }
-  }
-  return true;
-}
 
 type ShowMoreButtonProps = {
   onPress(): void;

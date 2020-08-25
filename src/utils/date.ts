@@ -110,3 +110,14 @@ export function formatToSimpleDate(date: Date, locale: Locale = nb) {
 export function daysBetween(base: Date, target: Date) {
   return differenceInCalendarDays(target, base);
 }
+
+export function isSeveralDays(items: string[]) {
+  if (!items.length) return false;
+  let first = parseISO(items[0]);
+  for (let item of items) {
+    if (!isSameDay(first, parseISO(item))) {
+      return false;
+    }
+  }
+  return true;
+}
