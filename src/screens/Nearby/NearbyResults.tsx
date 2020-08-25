@@ -17,6 +17,7 @@ import {
   isInThePast,
   isSameDay,
   formatToSimpleDate,
+  daysBetween,
 } from '../../utils/date';
 import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
 import {useNavigation} from '@react-navigation/native';
@@ -223,25 +224,46 @@ function OptionalNextDayLabel({
 }: OptionalNextDayLabelProps) {
   const style = useDayTextStyle();
   const isFirst = !previousDeparture;
-  const thisDay = parseISO(departure.expectedDepartureTime);
+  const departureDate = parseISO(departure.expectedDepartureTime);
   const prevDate = isFirst
     ? new Date()
     : parseISO(previousDeparture.expectedDepartureTime);
 
-  if (isFirst && !allSameDay) {
-    return <Text style={style.title}>{formatToSimpleDate(thisDay)}</Text>;
+  if ((isFirst && !allSameDay) || !isSameDay(prevDate, departureDate)) {
+    return (
+      <Text style={style.title}>
+        {getHumanizedDepartureDatePrefixed(
+          departureDate,
+          formatToSimpleDate(departureDate),
+        )}
+      </Text>
+    );
   }
-  if (isSameDay(prevDate, thisDay)) {
-    return null;
-  }
-  return <Text style={style.title}>{formatToSimpleDate(thisDay)}</Text>;
+
+  return null;
 }
 const useDayTextStyle = StyleSheet.createThemeHook((theme) => ({
   title: {
     fontSize: 12,
-    marginBottom: 12,
+    marginBottom: 10,
   },
 }));
+function getHumanizedDepartureDatePrefixed(
+  departureDate: Date,
+  suffix: string,
+) {
+  const days = daysBetween(new Date(), departureDate);
+  if (days === 0) {
+    return 'I dag';
+  }
+  if (days == 1) {
+    return `I morgen - ${suffix}`;
+  }
+  if (days == 2) {
+    return `I overmorgen - ${suffix}`;
+  }
+  return suffix;
+}
 
 type ShowMoreButtonProps = {
   onPress(): void;
