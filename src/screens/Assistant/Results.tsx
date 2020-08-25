@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import {Text, View} from 'react-native';
 import MessageBox from '../../message-box';
 import {TripPattern} from '../../sdk';
 import {StyleSheet, useTheme} from '../../theme';
 import ResultItem from './ResultItem';
+import OptionalNextDayLabel from '../../components/optional-day-header';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
@@ -45,11 +46,14 @@ const Results: React.FC<Props> = ({
   return (
     <View style={styles.container}>
       {tripPatterns?.map((item, i) => (
-        <ResultItem
-          key={String(item.id ?? i)}
-          tripPattern={item}
-          onDetailsPressed={onDetailsPressed}
-        />
+        <React.Fragment key={String(item.id ?? i)}>
+          <OptionalNextDayLabel
+            departureTime={item.startTime}
+            previousDepartureTime={tripPatterns[i - 1]?.startTime}
+            allSameDay={false}
+          />
+          <ResultItem tripPattern={item} onDetailsPressed={onDetailsPressed} />
+        </React.Fragment>
       ))}
     </View>
   );

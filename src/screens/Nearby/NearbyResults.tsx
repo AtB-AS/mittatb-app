@@ -30,6 +30,7 @@ import insets from '../../utils/insets';
 import {WalkingPerson} from '../../assets/svg/icons/transportation';
 import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
 import {parseISO} from 'date-fns';
+import OptionalNextDayLabel from '../../components/optional-day-header';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
@@ -180,8 +181,8 @@ const QuayResult: React.FC<QuayProps> = React.memo(
         {items.map((departure, i) => (
           <React.Fragment key={departure.serviceJourney.id}>
             <OptionalNextDayLabel
-              departure={departure}
-              previousDeparture={items[i - 1]}
+              departureTime={departure.expectedDepartureTime}
+              previousDepartureTime={items[i - 1]?.expectedDepartureTime}
               allSameDay={allSameDay}
             />
             <NearbyResultItem
@@ -210,59 +211,6 @@ function isSeveralDays(items: EstimatedCall[]) {
     }
   }
   return true;
-}
-
-type OptionalNextDayLabelProps = {
-  departure: EstimatedCall;
-  previousDeparture: EstimatedCall;
-  allSameDay: boolean;
-};
-function OptionalNextDayLabel({
-  departure,
-  previousDeparture,
-  allSameDay,
-}: OptionalNextDayLabelProps) {
-  const style = useDayTextStyle();
-  const isFirst = !previousDeparture;
-  const departureDate = parseISO(departure.expectedDepartureTime);
-  const prevDate = isFirst
-    ? new Date()
-    : parseISO(previousDeparture.expectedDepartureTime);
-
-  if ((isFirst && !allSameDay) || !isSameDay(prevDate, departureDate)) {
-    return (
-      <Text style={style.title}>
-        {getHumanizedDepartureDatePrefixed(
-          departureDate,
-          formatToSimpleDate(departureDate),
-        )}
-      </Text>
-    );
-  }
-
-  return null;
-}
-const useDayTextStyle = StyleSheet.createThemeHook((theme) => ({
-  title: {
-    fontSize: 12,
-    marginBottom: 10,
-  },
-}));
-function getHumanizedDepartureDatePrefixed(
-  departureDate: Date,
-  suffix: string,
-) {
-  const days = daysBetween(new Date(), departureDate);
-  if (days === 0) {
-    return 'I dag';
-  }
-  if (days == 1) {
-    return `I morgen - ${suffix}`;
-  }
-  if (days == 2) {
-    return `I overmorgen - ${suffix}`;
-  }
-  return suffix;
 }
 
 type ShowMoreButtonProps = {
