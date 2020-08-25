@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {
   Text,
   View,
@@ -12,7 +12,12 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import TransportationIcon from '../../components/transportation-icon';
 import {EstimatedCall, StopPlaceDetails} from '../../sdk';
 import {StyleSheet} from '../../theme';
-import {formatToClockOrRelativeMinutes, isInThePast} from '../../utils/date';
+import {
+  formatToClockOrRelativeMinutes,
+  isInThePast,
+  isSameDay,
+  formatToSimpleDate,
+} from '../../utils/date';
 import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
 import {useNavigation} from '@react-navigation/native';
 import {NearbyScreenNavigationProp} from '.';
@@ -23,6 +28,7 @@ import MessageBox from '../../message-box';
 import insets from '../../utils/insets';
 import {WalkingPerson} from '../../assets/svg/icons/transportation';
 import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
+import {parseISO} from 'date-fns';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
@@ -60,7 +66,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
     );
   }
 
-  if (departures !== null && Object.keys(departures).length == 0) {
+  if (hasNoQuays(departures)) {
     return (
       <View style={styles.container}>
         <MessageBox type="info">
@@ -109,6 +115,14 @@ function FooterLoader({isFetchingMore}: FooterLoaderProps) {
 
 export default NearbyResults;
 
+function hasNoQuays(departures: DeparturesWithStopLocal[] | null) {
+  return (
+    departures !== null &&
+    (Object.keys(departures).length === 0 ||
+      departures.every((deps) => Object.keys(deps.quays).length === 0))
+  );
+}
+
 type StopDeparturesProps = {
   departures: DeparturesWithStopLocal;
   onPress?(departure: EstimatedCall): void;
@@ -153,6 +167,7 @@ const QuayResult: React.FC<QuayProps> = React.memo(
     const items = quay.departures.slice(0, quay.showLimit);
     const showShowMoreButton =
       onShowMoreOnQuay && quay.departures.length > quay.showLimit;
+    const allSameDay = useMemo(() => isSeveralDays(items), [items]);
 
     if (!items.length) return null;
 
@@ -161,15 +176,22 @@ const QuayResult: React.FC<QuayProps> = React.memo(
         <View style={styles.platformHeader}>
           <Text>Plattform {quay.quay.publicCode}</Text>
         </View>
-        <LastElement last={styles.itemContainer__withoutBorder}>
-          {items.map((departure) => (
+        {items.map((departure, i) => (
+          <React.Fragment key={departure.serviceJourney.id}>
+            <OptionalNextDayLabel
+              departure={departure}
+              previousDeparture={items[i - 1]}
+              allSameDay={allSameDay}
+            />
             <NearbyResultItem
               departure={departure}
               onPress={onPress}
-              key={departure.serviceJourney.id}
+              style={
+                i == items.length - 1 && styles.itemContainer__withoutBorder
+              }
             />
-          ))}
-        </LastElement>
+          </React.Fragment>
+        ))}
         {showShowMoreButton && (
           <ShowMoreButton onPress={() => onShowMoreOnQuay!(quay.quay.id)} />
         )}
@@ -177,6 +199,49 @@ const QuayResult: React.FC<QuayProps> = React.memo(
     );
   },
 );
+
+function isSeveralDays(items: EstimatedCall[]) {
+  if (!items.length) return false;
+  let first = parseISO(items[0].expectedDepartureTime);
+  for (let item of items) {
+    if (!isSameDay(first, parseISO(item.expectedDepartureTime))) {
+      return false;
+    }
+  }
+  return true;
+}
+
+type OptionalNextDayLabelProps = {
+  departure: EstimatedCall;
+  previousDeparture: EstimatedCall;
+  allSameDay: boolean;
+};
+function OptionalNextDayLabel({
+  departure,
+  previousDeparture,
+  allSameDay,
+}: OptionalNextDayLabelProps) {
+  const style = useDayTextStyle();
+  const isFirst = !previousDeparture;
+  const thisDay = parseISO(departure.expectedDepartureTime);
+  const prevDate = isFirst
+    ? new Date()
+    : parseISO(previousDeparture.expectedDepartureTime);
+
+  if (isFirst && !allSameDay) {
+    return <Text style={style.title}>{formatToSimpleDate(thisDay)}</Text>;
+  }
+  if (isSameDay(prevDate, thisDay)) {
+    return null;
+  }
+  return <Text style={style.title}>{formatToSimpleDate(thisDay)}</Text>;
+}
+const useDayTextStyle = StyleSheet.createThemeHook((theme) => ({
+  title: {
+    fontSize: 12,
+    marginBottom: 12,
+  },
+}));
 
 type ShowMoreButtonProps = {
   onPress(): void;

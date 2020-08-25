@@ -6,6 +6,7 @@ import {
   isSameDay,
   isPast,
 } from 'date-fns';
+import nb from 'date-fns/locale/nb';
 
 import humanizeDuration from 'humanize-duration';
 const shortHumanizer = humanizeDuration.humanizer({
@@ -97,4 +98,10 @@ export function formatToLongDateTime(isoDate: string | Date, locale?: Locale) {
     return formatToClock(parsed);
   }
   return format(parsed, 'PPp', {locale});
+}
+
+export {isSameDay};
+
+export function formatToSimpleDate(date: Date, locale: Locale = nb) {
+  return format(date, 'do MMMM', {locale});
 }
