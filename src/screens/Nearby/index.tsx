@@ -47,7 +47,7 @@ import {
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import insets from '../../utils/insets';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
-import NonVisualSupportLabel from '../../components/non-visual-support';
+import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
@@ -185,10 +185,12 @@ const NearbyOverview: React.FC<Props> = ({
       headerTitle="Avganger"
       useScroll={activateScroll}
       alternativeTitleComponent={
-        <Text style={styles.altTitleHeader}>
-          <NonVisualSupportLabel text="Avganger fra: " />
+        <TextHiddenSupportPrefix
+          prefix="Avganger fra"
+          style={styles.altTitleHeader}
+        >
           {fromLocation?.name}
-        </Text>
+        </TextHiddenSupportPrefix>
       }
       onEndReached={loadMore}
     >

@@ -22,7 +22,7 @@ import {DeparturesWithStopLocal, QuayWithDeparturesAndLimits} from './utils';
 import MessageBox from '../../message-box';
 import insets from '../../utils/insets';
 import {WalkingPerson} from '../../assets/svg/icons/transportation';
-import NonVisualSupportLabel from '../../components/non-visual-support';
+import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
@@ -217,10 +217,9 @@ const ItemHeader: React.FC<{
       <Text>{stop.name}</Text>
       {location && (
         <View style={styles.distance}>
-          <Text>
-            <NonVisualSupportLabel text="Distanse: " />
+          <TextHiddenSupportPrefix prefix="Distanse">
             {humanizeDistance(haversine(location.coords, stop))}
-          </Text>
+          </TextHiddenSupportPrefix>
           <WalkingPerson width={16} style={styles.distanceIcon} />
         </View>
       )}
@@ -248,10 +247,9 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
           style={[styles.itemContainer, style]}
           onPress={() => onPress?.(departure)}
         >
-          <Text style={styles.time}>
-            <NonVisualSupportLabel text="Avgang: " />
+          <TextHiddenSupportPrefix prefix="Avgang" style={styles.time}>
             {formatToClockOrRelativeMinutes(departure.expectedDepartureTime)}
-          </Text>
+          </TextHiddenSupportPrefix>
           <TransportationIcon
             mode={departure.serviceJourney.journeyPattern?.line.transportMode}
             publicCode={
