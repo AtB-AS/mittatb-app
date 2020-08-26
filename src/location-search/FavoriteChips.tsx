@@ -13,7 +13,6 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {useFavorites} from '../favorites/FavoritesContext';
 import {CurrentLocationArrow} from '../assets/svg/icons/places';
 import {FavoriteIcon} from '../favorites';
-import {useFavorites} from '../favorites/FavoritesContext';
 import {RequestPermissionFn} from '../GeolocationContext';
 import colors from '../theme/colors';
 import {LocationWithSearchMetadata} from './';
@@ -82,14 +81,13 @@ const FavoriteChips: React.FC<Props> = ({
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={containerStyle}
       >
-        {!hideLocationChip && (
-          <FavoriteChip
-            text="Min posisjon"
-            accessibilityRole="menuitem"
-            icon={<CurrentLocationArrow />}
-            onPress={onCurrentLocation}
-          />
-        )}
+        <FavoriteChip
+          text="Min posisjon"
+          accessibilityRole="menuitem"
+          icon={<CurrentLocationArrow />}
+          onPress={onCurrentLocation}
+        />
+
         <FavoriteChip
           text="Min posisjon"
           accessibilityRole="menuitem"
