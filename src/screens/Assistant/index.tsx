@@ -29,6 +29,7 @@ import {useLayout} from '../../utils/use-layout';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
 import Results from './Results';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -250,6 +251,7 @@ const Assistant: React.FC<Props> = ({
     </DisappearingHeader>
   );
 };
+
 const styles = StyleSheet.create({
   searchButtonContainer: {
     flexDirection: 'row',

@@ -82,7 +82,13 @@ const FavoriteChips: React.FC<Props> = ({
         contentContainerStyle={containerStyle}
       >
         <FavoriteChip
-          text="Min posisjon"
+          text="Posisjon"
+          accessibilityRole="menuitem"
+          icon={<CurrentLocationArrow />}
+          onPress={onCurrentLocation}
+        />
+        <FavoriteChip
+          text="Velg i kart"
           accessibilityRole="menuitem"
           icon={<CurrentLocationArrow />}
           onPress={onCurrentLocation}

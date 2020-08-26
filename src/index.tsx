@@ -16,6 +16,10 @@ import bugsnag from './diagnostics/bugsnag';
 import {setInstallId as setApiInstallId} from './api/client';
 import ErrorBoundary from './error-boundary';
 
+import {MAPBOX_API_TOKEN} from 'react-native-dotenv';
+import MapboxGL from '@react-native-mapbox-gl/maps';
+MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
+
 async function setupConfig() {
   const {installId} = await loadLocalConfig();
   bugsnag.setUser(installId);

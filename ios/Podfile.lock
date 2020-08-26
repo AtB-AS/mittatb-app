@@ -1,4 +1,5 @@
 PODS:
+  - "@react-native-mapbox-gl-mapbox-static (5.8.0)"
   - boost-for-react-native (1.63.0)
   - BugsnagReactNative (2.23.7):
     - BugsnagReactNative/Core (= 2.23.7)
@@ -154,6 +155,9 @@ PODS:
   - lottie-react-native (3.3.2):
     - lottie-ios (~> 3.1.3)
     - React
+  - Mapbox-iOS-SDK (5.9.0):
+    - MapboxMobileEvents (= 0.10.2)
+  - MapboxMobileEvents (0.10.2)
   - nanopb (0.3.9011):
     - nanopb/decode (= 0.3.9011)
     - nanopb/encode (= 0.3.9011)
@@ -341,6 +345,20 @@ PODS:
   - react-native-intercom (16.0.0):
     - Intercom (~> 6.1.0)
     - React
+  - react-native-mapbox-gl (8.1.0-rc.2):
+    - "@react-native-mapbox-gl-mapbox-static (~> 5.8)"
+    - Mapbox-iOS-SDK (~> 5.8)
+    - React
+    - react-native-mapbox-gl/DynamicLibrary (= 8.1.0-rc.2)
+    - react-native-mapbox-gl/StaticLibraryFixer (= 8.1.0-rc.2)
+  - react-native-mapbox-gl/DynamicLibrary (8.1.0-rc.2):
+    - "@react-native-mapbox-gl-mapbox-static (~> 5.8)"
+    - Mapbox-iOS-SDK (~> 5.8)
+    - React
+  - react-native-mapbox-gl/StaticLibraryFixer (8.1.0-rc.2):
+    - "@react-native-mapbox-gl-mapbox-static (~> 5.8)"
+    - Mapbox-iOS-SDK (~> 5.8)
+    - React
   - react-native-safe-area-context (0.7.3):
     - React
   - react-native-webview (9.4.0):
@@ -486,6 +504,7 @@ DEPENDENCIES:
   - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-intercom (from `../node_modules/react-native-intercom`)
+  - "react-native-mapbox-gl (from `../node_modules/@react-native-mapbox-gl/maps`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -514,6 +533,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - "@react-native-mapbox-gl-mapbox-static"
     - boost-for-react-native
     - CocoaAsyncSocket
     - CocoaLibEvent
@@ -538,6 +558,8 @@ SPEC REPOS:
     - GoogleDataTransportCCTSupport
     - GoogleUtilities
     - Intercom
+    - Mapbox-iOS-SDK
+    - MapboxMobileEvents
     - nanopb
     - OpenSSL-Universal
     - PromisesObjC
@@ -591,6 +613,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-get-random-values"
   react-native-intercom:
     :path: "../node_modules/react-native-intercom"
+  react-native-mapbox-gl:
+    :path: "../node_modules/@react-native-mapbox-gl/maps"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-webview:
@@ -643,6 +667,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  "@react-native-mapbox-gl-mapbox-static": e247172bc43f47757f47d6cec1b325b1ab3e9287
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BugsnagReactNative: 14c1b59cfbf34fd5591b734bfec65a277b677ef8
   CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
@@ -675,6 +700,8 @@ SPEC CHECKSUMS:
   Intercom: b168156c4eb1b51352974cdfa47d4f3241a3df8b
   lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
   lottie-react-native: 2a1a82bb326ae51331a5520de0cf706733c6db69
+  Mapbox-iOS-SDK: a5915700ec84bc1a7f8b3e746d474789e35b7956
+  MapboxMobileEvents: 2bc0ca2eedb627b73cf403258dce2b2fa98074a6
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   OpenSSL-Universal: 8b48cc0d10c1b2923617dfe5c178aa9ed2689355
   Permission-LocationWhenInUse: 7449010ca36a26dbe6b10e69e9d6ebcab0222c42
@@ -694,6 +721,7 @@ SPEC CHECKSUMS:
   react-native-geolocation-service: 141e33bdb179bcba10b216ee13962611e21f2be4
   react-native-get-random-values: 2b7500cdb68066aba87cdccd97067c29e16ffe95
   react-native-intercom: 4916f5d0fee8b73535a6284721ccf7f9cc664fac
+  react-native-mapbox-gl: 18785637738ca8b25c3633db431d6614ec7fc9bf
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   react-native-webview: cf5527893252b3b036eea024a1da6996f7344c74
   React-RCTActionSheet: 910163b6b09685a35c4ebbc52b66d1bfbbe39fc5
