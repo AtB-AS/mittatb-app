@@ -111,7 +111,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexShrink: 1,
     flexWrap: 'wrap',
   },
-  time: {fontSize: 32, color: theme.text.primary, marginVertical: 8},
+  time: {
+    fontSize: 32,
+    color: theme.text.primary,
+    marginVertical: 8,
+  },
   lineName: {
     fontSize: 16,
     fontWeight: '600',
@@ -196,7 +200,7 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
   legContainer: {
     flexDirection: 'row',
     paddingVertical: 4,
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   time: {
     minWidth: 25,
