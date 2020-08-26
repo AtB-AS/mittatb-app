@@ -25,11 +25,10 @@ import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import {TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import insets from '../../utils/insets';
+import {useLayout} from '../../utils/use-layout';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
 import Results from './Results';
-import {useLayout} from '../../utils/use-layout';
-import NonVisualSupportLabel from '../../components/non-visual-support';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -106,7 +105,7 @@ const Assistant: React.FC<Props> = ({
     if (currentLocation) {
       setCurrentLocationAsFrom();
     } else {
-      const status = await requestGeoPermission({useSettingsFallback: true});
+      const status = await requestGeoPermission();
       if (status === 'granted') {
         setCurrentLocationAsFrom();
       }
@@ -329,7 +328,7 @@ function useUpdatedLocation(
       case 'search':
         return searchedLocation;
       case 'geolocation':
-        return currentLocation ?? searchedLocation;
+        return currentLocation;
       case 'favorite':
         const favorite = favorites.find(
           (f) => f.id === searchedLocation.favoriteId,

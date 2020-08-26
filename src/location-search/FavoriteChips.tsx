@@ -8,20 +8,19 @@ import {
   AccessibilityProps,
   TouchableOpacity,
 } from 'react-native';
+import {GeoPosition} from 'react-native-geolocation-service';
 import {ScrollView} from 'react-native-gesture-handler';
-import colors from '../theme/colors';
 import {useFavorites} from '../favorites/FavoritesContext';
-import {useReverseGeocoder} from './useGeocoder';
 import {CurrentLocationArrow} from '../assets/svg/icons/places';
-import {GeolocationResponse} from '@react-native-community/geolocation';
-import {LocationWithSearchMetadata} from './';
 import {FavoriteIcon} from '../favorites';
-import {PermissionStatus} from 'react-native-permissions';
+import {useFavorites} from '../favorites/FavoritesContext';
 import {RequestPermissionFn} from '../GeolocationContext';
+import colors from '../theme/colors';
+import {LocationWithSearchMetadata} from './';
+import {useReverseGeocoder} from './useGeocoder';
 
 type Props = {
-  geolocation: GeolocationResponse | null;
-  geostatus: PermissionStatus | null;
+  geolocation: GeoPosition | null;
   requestGeoPermission: RequestPermissionFn;
   onSelectLocation: (location: LocationWithSearchMetadata) => void;
   hideFavorites: boolean;
@@ -31,7 +30,6 @@ type Props = {
 const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
   geolocation,
-  geostatus,
   requestGeoPermission,
   containerStyle,
   hideFavorites,
@@ -44,9 +42,6 @@ const FavoriteChips: React.FC<Props> = ({
 
   const [recentlyAllowedGeo, setsetRecentlyAllowedGeo] = useState(false);
 
-  const hasDeniedGeoPermission = geostatus && geostatus !== 'granted';
-  const hideLocationChip = !currentLocation && !hasDeniedGeoPermission;
-
   async function onCurrentLocation() {
     if (currentLocation) {
       onSelectLocation({
@@ -54,7 +49,7 @@ const FavoriteChips: React.FC<Props> = ({
         resultType: 'geolocation',
       });
     } else {
-      const status = await requestGeoPermission({useSettingsFallback: true});
+      const status = await requestGeoPermission();
       if (status === 'granted') {
         setsetRecentlyAllowedGeo(true);
       }
@@ -70,7 +65,7 @@ const FavoriteChips: React.FC<Props> = ({
     }
   }, [recentlyAllowedGeo, currentLocation]);
 
-  if (hideLocationChip && (hideFavorites || !favorites.length)) return null;
+  if (hideFavorites || !favorites.length) return null;
 
   return (
     <View
@@ -95,6 +90,12 @@ const FavoriteChips: React.FC<Props> = ({
             onPress={onCurrentLocation}
           />
         )}
+        <FavoriteChip
+          text="Min posisjon"
+          accessibilityRole="menuitem"
+          icon={<CurrentLocationArrow />}
+          onPress={onCurrentLocation}
+        />
         {!hideFavorites &&
           favorites.map((fav, i) => (
             <FavoriteChip

@@ -3,20 +3,22 @@ import {Text, TextInput, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
   NavigationProp,
-  RouteProp,
-  useRoute,
   ParamListBase,
+  RouteProp,
   useIsFocused,
+  useRoute,
 } from '@react-navigation/native';
 import {StyleSheet} from '../theme';
 import {Location} from '../favorites/types';
-import useDebounce from './useDebounce';
-import {useGeocoder} from './useGeocoder';
-import LocationResults from './LocationResults';
-import FavoriteChips from './FavoriteChips';
 import {useGeolocationState} from '../GeolocationContext';
 import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
+import {StyleSheet} from '../theme';
+import colors from '../theme/colors';
+import FavoriteChips from './FavoriteChips';
+import LocationResults from './LocationResults';
+import useDebounce from './useDebounce';
+import {useGeocoder} from './useGeocoder';
 import Input from '../components/input';
 
 export type Props = {
@@ -113,7 +115,6 @@ const LocationSearch: React.FC<Props> = ({
       <FavoriteChips
         onSelectLocation={onSelect}
         geolocation={geolocation}
-        geostatus={geostatus}
         requestGeoPermission={requestGeoPermission}
         hideFavorites={!!hideFavorites}
         containerStyle={styles.contentBlock}
