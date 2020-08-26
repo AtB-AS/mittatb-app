@@ -13,8 +13,6 @@ import {Location} from '../favorites/types';
 import {useGeolocationState} from '../GeolocationContext';
 import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
-import {StyleSheet} from '../theme';
-import colors from '../theme/colors';
 import FavoriteChips from './FavoriteChips';
 import LocationResults from './LocationResults';
 import useDebounce from './useDebounce';
