@@ -112,6 +112,13 @@ const Assistant: React.FC<Props> = ({
     }
   }
 
+  function resetView() {
+    setCurrentLocationOrRequest();
+    navigation.setParams({
+      toLocation: undefined,
+    });
+  }
+
   const [date, setDate] = useState<DateOutput | undefined>();
   const [tripPatterns, isSearching, timeOfLastSearch, reload] = useTripPatterns(
     from,
@@ -133,6 +140,7 @@ const Assistant: React.FC<Props> = ({
   const showEmptyScreen = !tripPatterns && !isSearching;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
   const useScroll = !showEmptyScreen && !isEmptyResult;
+  const isHeaderFullHeight = !from || !to;
 
   const renderHeader = () => (
     <View>
@@ -231,7 +239,9 @@ const Assistant: React.FC<Props> = ({
       headerHeight={HEADER_HEIGHT}
       useScroll={useScroll}
       headerTitle="Reiseassistent"
+      isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
+      onLogoClick={resetView}
     >
       <Results
         tripPatterns={tripPatterns}
