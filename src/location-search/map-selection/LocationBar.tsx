@@ -5,6 +5,7 @@ import {MapPointPin} from '../../assets/svg/icons/places';
 import {LocationWithSearchMetadata} from '..';
 import {ArrowRight} from '../../assets/svg/icons/navigation';
 import {Location} from '../../favorites/types';
+import LocationIcon from '../../components/location-icon';
 
 type Props = {
   location?: Location;
@@ -32,7 +33,9 @@ const LocationBar: React.FC<Props> = ({location, onSelect}) => {
         }}
       >
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <MapPointPin style={{marginHorizontal: 12}} />
+          <View style={{marginHorizontal: 12}}>
+            {location ? <LocationIcon location={location} /> : null}
+          </View>
           {location ? (
             <View>
               <Text style={{fontSize: 14, lineHeight: 20}}>
