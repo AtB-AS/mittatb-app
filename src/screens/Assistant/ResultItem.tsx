@@ -202,16 +202,15 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   time: {
-    width: 55,
+    width: 50,
     fontVariant: ['tabular-nums'],
   },
   iconContainer: {
     width: 30,
-    flex: 1,
     alignItems: 'center',
   },
   textContent: {
-    flex: 6,
+    flex: 1,
     flexWrap: 'wrap',
   },
   text: {
