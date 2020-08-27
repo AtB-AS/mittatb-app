@@ -1,5 +1,5 @@
 import {RouteProp} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   Text,
   View,
@@ -11,13 +11,16 @@ import {
 import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
 import {useReverseGeocoder} from '../useGeocoder';
 import colors from '../../theme/colors';
-import {ArrowRight} from '../../assets/svg/icons/navigation';
+import {ArrowRight, ArrowLeft} from '../../assets/svg/icons/navigation';
 import {MapPointPin} from '../../assets/svg/icons/places';
 import {
   LocationSearchNavigationProp,
   LocationSearchStackParams,
   LocationWithSearchMetadata,
 } from '../';
+import insets from '../../utils/insets';
+import MapControls from './MapControls';
+import {useGeolocationState} from '../../GeolocationContext';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -55,6 +58,8 @@ const MapSelection: React.FC<Props> = ({
       : null,
   );
 
+  const {location: geolocation} = useGeolocationState();
+
   const onSelect = (location: LocationWithSearchMetadata) => {
     navigation.navigate(callerRouteName as any, {
       [callerRouteParam]: location,
@@ -63,19 +68,63 @@ const MapSelection: React.FC<Props> = ({
 
   const location = locations?.[0];
 
+  const mapCameraRef = useRef<MapboxGL.Camera>(null);
+  const mapViewRef = useRef<MapboxGL.MapView>(null);
+
+  async function zoomIn() {
+    const currentZoom = await mapViewRef.current?.getZoom();
+    mapCameraRef.current?.zoomTo((currentZoom ?? 10) + 1, 200);
+  }
+
+  async function zoomOut() {
+    const currentZoom = await mapViewRef.current?.getZoom();
+    mapCameraRef.current?.zoomTo((currentZoom ?? 10) - 1, 200);
+  }
+
+  async function flyToCurrentLocation() {
+    geolocation &&
+      mapCameraRef.current?.flyTo(
+        [geolocation?.coords.longitude, geolocation?.coords.latitude],
+        750,
+      );
+  }
+
   return (
     <View style={{flex: 1}}>
       <MapboxGL.MapView
+        ref={mapViewRef}
         style={{
           flex: 1,
         }}
         onRegionDidChange={setRegion}
       >
         <MapboxGL.Camera
+          ref={mapCameraRef}
           zoomLevel={coordinates.zoomLevel}
           centerCoordinate={[coordinates.longitude, coordinates.latitude]}
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
+        <View style={{position: 'absolute', top: 80, left: 20}}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}
+            hitSlop={insets.symmetric(12, 20)}
+          >
+            <View
+              style={{
+                backgroundColor: colors.primary.gray,
+                borderRadius: 8,
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: 36,
+                height: 28,
+              }}
+            >
+              <ArrowLeft fill={colors.general.white} />
+            </View>
+          </TouchableOpacity>
+        </View>
         <View
           style={{
             position: 'absolute',
@@ -89,42 +138,11 @@ const MapSelection: React.FC<Props> = ({
             <Text>x</Text>
           </View>
         </View>
-        <View
-          style={{
-            backgroundColor: 'white',
-            borderRadius: 5,
-            height: 20,
-            width: 20,
-            position: 'absolute',
-            top: '10%',
-            right: '5%',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Text>+</Text>
-        </View>
-        <View
-          style={{
-            backgroundColor: 'white',
-            borderRadius: 5,
-            height: 20,
-            width: 20,
-            position: 'absolute',
-            top: '20%',
-            right: '5%',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <TouchableWithoutFeedback>
-            <Text>-</Text>
-          </TouchableWithoutFeedback>
-        </View>
+
         <View
           style={{
             position: 'absolute',
-            bottom: 50,
+            bottom: 80,
             paddingHorizontal: 12,
             width: '100%',
           }}
@@ -163,33 +181,36 @@ const MapSelection: React.FC<Props> = ({
                   </View>
                 ) : null}
               </View>
-              <View
-                style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: 8,
-                  marginLeft: 8,
-                  backgroundColor: colors.secondary.cyan,
-                  alignItems: 'center',
-                  justifyContent: 'center',
+              <TouchableOpacity
+                onPress={() => {
+                  location && onSelect({...location, resultType: 'search'});
                 }}
               >
-                {!location ? (
-                  <ActivityIndicator />
-                ) : (
-                  <TouchableOpacity
-                    onPress={() => {
-                      onSelect({...location, resultType: 'search'});
-                    }}
-                  >
-                    <ArrowRight />
-                  </TouchableOpacity>
-                )}
-              </View>
+                <View
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: 8,
+                    marginLeft: 8,
+                    backgroundColor: colors.secondary.cyan,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {!location ? <ActivityIndicator /> : <ArrowRight />}
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
       </MapboxGL.MapView>
+      <View style={{position: 'absolute', top: '10%', right: '10%'}}>
+        <MapControls
+          flyToCurrentLocation={flyToCurrentLocation}
+          zoomIn={zoomIn}
+          zoomOut={zoomOut}
+        />
+      </View>
     </View>
   );
 };

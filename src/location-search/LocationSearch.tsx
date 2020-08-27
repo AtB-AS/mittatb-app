@@ -119,16 +119,19 @@ const LocationSearch: React.FC<Props> = ({
   return (
     <SafeAreaView style={styles.container}>
       <View style={{paddingTop: 12}}>
-        <Header
-          leftButton={{
-            onPress: () => navigation.goBack(),
-            accessible: true,
-            accessibilityRole: 'button',
-            accessibilityLabel: 'Gå tilbake',
-            icon: <Close />,
-          }}
-          title="Søk"
-        />
+        <View style={{marginHorizontal: 20}}>
+          <Header
+            leftButton={{
+              onPress: () => navigation.goBack(),
+              accessible: true,
+              accessibilityRole: 'button',
+              accessibilityLabel: 'Gå tilbake',
+              icon: <Close />,
+            }}
+            title="Søk"
+          />
+        </View>
+
         <View style={[{marginTop: 12}, styles.contentBlock]}>
           <Input
             ref={inputRef}
