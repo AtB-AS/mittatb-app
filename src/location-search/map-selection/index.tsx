@@ -100,11 +100,6 @@ const MapSelection: React.FC<Props> = ({
           centerCoordinate={[coordinates.longitude, coordinates.latitude]}
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
-        <View style={styles.pinContainer}>
-          <View style={styles.pin}>
-            <SelectionPin width={40} height={48} />
-          </View>
-        </View>
       </MapboxGL.MapView>
       <View style={styles.backArrowContainer}>
         <BackArrow onBack={() => navigation.goBack()} />
@@ -115,6 +110,11 @@ const MapSelection: React.FC<Props> = ({
           zoomIn={zoomIn}
           zoomOut={zoomOut}
         />
+      </View>
+      <View style={styles.pinContainer}>
+        <View style={styles.pin}>
+          <SelectionPin width={40} height={48} />
+        </View>
       </View>
       <View style={styles.locationContainer}>
         <LocationBar location={location} onSelect={onSelect} />
