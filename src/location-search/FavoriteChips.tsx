@@ -22,12 +22,14 @@ type Props = {
   geolocation: GeoPosition | null;
   requestGeoPermission: RequestPermissionFn;
   onSelectLocation: (location: LocationWithSearchMetadata) => void;
+  onMapSelection: () => void;
   hideFavorites: boolean;
   containerStyle?: StyleProp<ViewStyle>;
 };
 
 const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
+  onMapSelection,
   geolocation,
   requestGeoPermission,
   containerStyle,
@@ -64,7 +66,7 @@ const FavoriteChips: React.FC<Props> = ({
     }
   }, [recentlyAllowedGeo, currentLocation]);
 
-  if (hideFavorites || !favorites.length) return null;
+  if (hideFavorites) return null;
 
   return (
     <View
@@ -91,7 +93,7 @@ const FavoriteChips: React.FC<Props> = ({
           text="Velg i kart"
           accessibilityRole="menuitem"
           icon={<CurrentLocationArrow />}
-          onPress={onCurrentLocation}
+          onPress={onMapSelection}
         />
         {!hideFavorites &&
           favorites.map((fav, i) => (

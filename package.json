@@ -70,6 +70,7 @@
     "@babel/core": "^7.9.6",
     "@babel/runtime": "^7.9.6",
     "@svgr/cli": "^5.4.0",
+    "@types/geojson": "^7946.0.7",
     "@types/humanize-duration": "^3.18.0",
     "@types/jest": "^25.2.1",
     "@types/lodash.groupby": "^4.6.6",

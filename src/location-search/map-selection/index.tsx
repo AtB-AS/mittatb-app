@@ -5,25 +5,81 @@ import {
   useIsFocused,
   useRoute,
 } from '@react-navigation/native';
-import React, {useEffect, useRef, useState} from 'react';
-import {Text, TextInput, View, TouchableWithoutFeedback} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Text,
+  View,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
+import {useReverseGeocoder} from '../useGeocoder';
+import colors from '../../theme/colors';
+import {ArrowRight} from '../../assets/svg/icons/navigation';
+import {MapPointPin} from '../../assets/svg/icons/places';
+import {
+  LocationSearchNavigationProp,
+  LocationSearchStackParams,
+  LocationWithSearchMetadata,
+} from '../';
 
-const MapSelection: React.FC<any> = ({}) => {
-  const [pos, setPos] = useState();
+export type RouteParams = {
+  callerRouteName: string;
+  callerRouteParam: string;
+  coordinates: {
+    longitude: number;
+    latitude: number;
+    zoomLevel: number;
+  };
+};
+
+export type Props = {
+  navigation: LocationSearchNavigationProp;
+  route: RouteProp<LocationSearchStackParams, 'MapSelection'>;
+};
+
+const MapSelection: React.FC<Props> = ({
+  navigation,
+  route: {
+    params: {callerRouteName, callerRouteParam, coordinates},
+  },
+}) => {
+  const [region, setRegion] = useState<
+    GeoJSON.Feature<GeoJSON.Point, RegionPayload>
+  >();
+
+  const locations = useReverseGeocoder(
+    region
+      ? ({
+          coords: {
+            latitude: region?.geometry?.coordinates[1],
+            longitude: region?.geometry?.coordinates[0],
+          },
+        } as any)
+      : null,
+  );
+
+  const onSelect = (location: LocationWithSearchMetadata) => {
+    navigation.navigate(callerRouteName as any, {
+      [callerRouteParam]: location,
+    });
+  };
+
+  const location = locations?.[0];
+
   return (
-    <View style={{}}>
+    <View style={{flex: 1}}>
       <MapboxGL.MapView
         style={{
           flex: 1,
-          height: 300,
         }}
-        onRegionDidChange={(some) => setPos(some)}
+        onRegionDidChange={setRegion}
       >
         <MapboxGL.Camera
-          zoomLevel={15}
-          centerCoordinate={[10.399331, 63.436657]}
+          zoomLevel={coordinates.zoomLevel}
+          centerCoordinate={[coordinates.longitude, coordinates.latitude]}
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
         <View
@@ -71,8 +127,75 @@ const MapSelection: React.FC<any> = ({}) => {
             <Text>-</Text>
           </TouchableWithoutFeedback>
         </View>
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 50,
+            paddingHorizontal: 12,
+            width: '100%',
+          }}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              flex: 1,
+            }}
+          >
+            <View
+              style={{
+                paddingRight: 8,
+                paddingVertical: 8,
+                borderRadius: 8,
+                backgroundColor: colors.general.white,
+                flexDirection: 'row',
+                flexGrow: 1,
+                justifyContent: 'space-between',
+              }}
+            >
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <MapPointPin style={{marginHorizontal: 12}} />
+                {location ? (
+                  <View>
+                    <Text style={{fontSize: 14, lineHeight: 20}}>
+                      {location.name}
+                    </Text>
+                    <Text style={{fontSize: 12, lineHeight: 16}}>
+                      {location.postalcode ? (
+                        <Text>{location.postalcode}, </Text>
+                      ) : null}
+                      {location.locality}
+                    </Text>
+                  </View>
+                ) : null}
+              </View>
+              <View
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 8,
+                  marginLeft: 8,
+                  backgroundColor: colors.secondary.cyan,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                {!location ? (
+                  <ActivityIndicator />
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => {
+                      onSelect({...location, resultType: 'search'});
+                    }}
+                  >
+                    <ArrowRight />
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+          </View>
+        </View>
       </MapboxGL.MapView>
-      <Text>{JSON.stringify(pos)}</Text>
     </View>
   );
 };

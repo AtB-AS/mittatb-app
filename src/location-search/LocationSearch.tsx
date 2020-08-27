@@ -1,9 +1,8 @@
 import {
   NavigationProp,
-  ParamListBase,
+  CompositeNavigationProp,
   RouteProp,
   useIsFocused,
-  useRoute,
 } from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
 import {Text, TextInput, View} from 'react-native';
@@ -19,10 +18,11 @@ import FavoriteChips from './FavoriteChips';
 import LocationResults from './LocationResults';
 import useDebounce from './useDebounce';
 import {useGeocoder} from './useGeocoder';
-import {LocationWithSearchMetadata} from './';
+import {LocationWithSearchMetadata, LocationSearchNavigationProp} from './';
+import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
 
 export type Props = {
-  navigation: NavigationProp<any>;
+  navigation: LocationSearchNavigationProp;
   route: RouteProp<RootStackParamList, 'LocationSearch'>;
 };
 
@@ -31,7 +31,7 @@ export type RouteParams = {
   callerRouteParam: string;
   label: string;
   hideFavorites?: boolean;
-  initialText?: string;
+  initialLocation?: LocationWithSearchMetadata;
 };
 
 const LocationSearch: React.FC<Props> = ({
@@ -42,21 +42,20 @@ const LocationSearch: React.FC<Props> = ({
       callerRouteParam,
       label,
       hideFavorites,
-      initialText,
+      initialLocation,
     },
   },
 }) => {
   const styles = useThemeStyles();
   const {history, addSearchEntry} = useSearchHistory();
 
-  const [text, setText] = useState<string>(initialText ?? '');
+  const [text, setText] = useState<string>(initialLocation?.name ?? '');
   const debouncedText = useDebounce(text, 200);
 
   const previousLocations = filterPreviousLocations(debouncedText, history);
 
   const {
     location: geolocation,
-    status: geostatus,
     requestPermission: requestGeoPermission,
   } = useGeolocationState();
 
@@ -67,8 +66,26 @@ const LocationSearch: React.FC<Props> = ({
     if (location.resultType === 'search') {
       addSearchEntry(location);
     }
-    navigation.navigate(callerRouteName, {
+    navigation.navigate(callerRouteName as any, {
       [callerRouteParam]: location,
+    });
+  };
+
+  const onMapSelection = () => {
+    const coordinates: {
+      latitude: number;
+      longitude: number;
+      zoomLevel: number;
+    } = initialLocation
+      ? {...initialLocation.coordinates, zoomLevel: 12}
+      : geolocation
+      ? {...geolocation.coords, zoomLevel: 12}
+      : {...TRONDHEIM_CENTRAL_STATION, zoomLevel: 6};
+
+    navigation.navigate('MapSelection', {
+      callerRouteName,
+      callerRouteParam,
+      coordinates: coordinates,
     });
   };
 
@@ -114,6 +131,7 @@ const LocationSearch: React.FC<Props> = ({
 
       <FavoriteChips
         onSelectLocation={onSelect}
+        onMapSelection={onMapSelection}
         geolocation={geolocation}
         requestGeoPermission={requestGeoPermission}
         hideFavorites={!!hideFavorites}

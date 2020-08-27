@@ -7,7 +7,9 @@ import {
 import LocationSearch, {
   RouteParams as LocationSearchRouteParams,
 } from './LocationSearch';
-import MapSelection from './map-selection';
+import MapSelection, {
+  RouteParams as MapSelectionRouteParams,
+} from './map-selection';
 import {
   CompositeNavigationProp,
   ParamListBase,
@@ -19,7 +21,7 @@ import {Location} from '../favorites/types';
 
 export type LocationSearchStackParams = {
   LocationSearch: LocationSearchRouteParams;
-  MapSelection: undefined;
+  MapSelection: MapSelectionRouteParams;
 };
 
 export type LocationSearchNavigationProp = CompositeNavigationProp<
@@ -48,6 +50,7 @@ const LocationSearchRoot = ({route}: LocationSearchRootProps) => {
         component={MapSelection}
         options={{
           ...TransitionPresets.SlideFromRightIOS,
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

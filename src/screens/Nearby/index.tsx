@@ -124,7 +124,7 @@ const NearbyOverview: React.FC<Props> = ({
       label: 'Fra',
       callerRouteName: NearbyRouteNameStatic,
       callerRouteParam: 'location',
-      initialText: fromLocation?.name,
+      initialLocation: fromLocation,
     });
 
   function setCurrentLocationAsFrom() {
