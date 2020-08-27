@@ -16,6 +16,7 @@ import {useGeolocationState} from '../../GeolocationContext';
 import LocationBar from './LocationBar';
 import {ArrowLeft} from '../../assets/svg/icons/navigation';
 import {SelectionPin} from '../../assets/svg/map';
+import {StyleSheet} from '../../theme';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -85,7 +86,7 @@ const MapSelection: React.FC<Props> = ({
   }
 
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.container}>
       <MapboxGL.MapView
         ref={mapViewRef}
         style={{
@@ -99,38 +100,23 @@ const MapSelection: React.FC<Props> = ({
           centerCoordinate={[coordinates.longitude, coordinates.latitude]}
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
-        <View
-          style={{
-            position: 'absolute',
-            top: '50%',
-            right: '50%',
-            width: 40,
-            height: 48,
-          }}
-        >
-          <View style={{position: 'absolute', top: -40, right: -20}}>
+        <View style={styles.pinContainer}>
+          <View style={styles.pin}>
             <SelectionPin width={40} height={48} />
           </View>
         </View>
       </MapboxGL.MapView>
-      <View style={{position: 'absolute', top: 80, left: 20}}>
+      <View style={styles.backArrowContainer}>
         <BackArrow onBack={() => navigation.goBack()} />
       </View>
-      <View style={{position: 'absolute', top: 80, right: 20}}>
+      <View style={styles.controlsContainer}>
         <MapControls
           flyToCurrentLocation={flyToCurrentLocation}
           zoomIn={zoomIn}
           zoomOut={zoomOut}
         />
       </View>
-      <View
-        style={{
-          position: 'absolute',
-          bottom: 80,
-          paddingHorizontal: 12,
-          width: '100%',
-        }}
-      >
+      <View style={styles.locationContainer}>
         <LocationBar location={location} onSelect={onSelect} />
       </View>
     </View>
@@ -140,20 +126,37 @@ const MapSelection: React.FC<Props> = ({
 const BackArrow: React.FC<{onBack(): void}> = ({onBack}) => {
   return (
     <TouchableOpacity onPress={onBack} hitSlop={insets.symmetric(12, 20)}>
-      <View
-        style={{
-          backgroundColor: colors.primary.gray,
-          borderRadius: 8,
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: 36,
-          height: 28,
-        }}
-      >
+      <View style={styles.backArrow}>
         <ArrowLeft fill={colors.general.white} />
       </View>
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {flex: 1},
+  pinContainer: {
+    position: 'absolute',
+    top: '50%',
+    right: '50%',
+  },
+  pin: {position: 'absolute', top: -40, right: -20},
+  backArrowContainer: {position: 'absolute', top: 80, left: 20},
+  controlsContainer: {position: 'absolute', top: 80, right: 20},
+  locationContainer: {
+    position: 'absolute',
+    bottom: 80,
+    paddingHorizontal: 12,
+    width: '100%',
+  },
+  backArrow: {
+    backgroundColor: colors.primary.gray,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 36,
+    height: 28,
+  },
+});
 
 export default MapSelection;

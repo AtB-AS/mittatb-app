@@ -6,6 +6,7 @@ import {LocationWithSearchMetadata} from '..';
 import {ArrowRight} from '../../assets/svg/icons/navigation';
 import {Location} from '../../favorites/types';
 import LocationIcon from '../../components/location-icon';
+import {StyleSheet} from '../../theme';
 
 type Props = {
   location?: Location;
@@ -14,34 +15,16 @@ type Props = {
 
 const LocationBar: React.FC<Props> = ({location, onSelect}) => {
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        flex: 1,
-      }}
-    >
-      <View
-        style={{
-          paddingRight: 8,
-          paddingVertical: 8,
-          borderRadius: 8,
-          backgroundColor: colors.general.white,
-          flexDirection: 'row',
-          flexGrow: 1,
-          justifyContent: 'space-between',
-        }}
-      >
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+    <View style={styles.container}>
+      <View style={styles.innerContainer}>
+        <View style={styles.locationContainer}>
           <View style={{marginHorizontal: 12}}>
             {location ? <LocationIcon location={location} /> : null}
           </View>
           {location ? (
             <View>
-              <Text style={{fontSize: 14, lineHeight: 20}}>
-                {location.name}
-              </Text>
-              <Text style={{fontSize: 12, lineHeight: 16}}>
+              <Text style={styles.name}>{location.name}</Text>
+              <Text style={styles.locality}>
                 {location.postalcode ? (
                   <Text>{location.postalcode}, </Text>
                 ) : null}
@@ -55,17 +38,7 @@ const LocationBar: React.FC<Props> = ({location, onSelect}) => {
             location && onSelect({...location, resultType: 'search'});
           }}
         >
-          <View
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: 8,
-              marginLeft: 8,
-              backgroundColor: colors.secondary.cyan,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+          <View style={styles.button}>
             {!location ? <ActivityIndicator /> : <ArrowRight />}
           </View>
         </TouchableOpacity>
@@ -73,5 +46,34 @@ const LocationBar: React.FC<Props> = ({location, onSelect}) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  innerContainer: {
+    paddingRight: 8,
+    paddingVertical: 8,
+    borderRadius: 8,
+    backgroundColor: colors.general.white,
+    flexDirection: 'row',
+    flexGrow: 1,
+    justifyContent: 'space-between',
+  },
+  locationContainer: {flexDirection: 'row', alignItems: 'center'},
+  name: {fontSize: 14, lineHeight: 20},
+  locality: {fontSize: 12, lineHeight: 16},
+  button: {
+    width: 44,
+    height: 44,
+    borderRadius: 8,
+    marginLeft: 8,
+    backgroundColor: colors.secondary.cyan,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 export default LocationBar;
