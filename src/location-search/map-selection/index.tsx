@@ -15,6 +15,7 @@ import MapControls from './MapControls';
 import {useGeolocationState} from '../../GeolocationContext';
 import LocationBar from './LocationBar';
 import {ArrowLeft} from '../../assets/svg/icons/navigation';
+import {SelectionPin} from '../../assets/svg/map';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -103,12 +104,12 @@ const MapSelection: React.FC<Props> = ({
             position: 'absolute',
             top: '50%',
             right: '50%',
-            width: 10,
-            height: 10,
+            width: 40,
+            height: 48,
           }}
         >
-          <View style={{position: 'absolute', top: -10, right: -4}}>
-            <Text>x</Text>
+          <View style={{position: 'absolute', top: -40, right: -20}}>
+            <SelectionPin width={40} height={48} />
           </View>
         </View>
       </MapboxGL.MapView>
