@@ -204,7 +204,7 @@ const MapSelection: React.FC<Props> = ({
           </View>
         </View>
       </MapboxGL.MapView>
-      <View style={{position: 'absolute', top: '10%', right: '10%'}}>
+      <View style={{position: 'absolute', top: 80, right: 20}}>
         <MapControls
           flyToCurrentLocation={flyToCurrentLocation}
           zoomIn={zoomIn}

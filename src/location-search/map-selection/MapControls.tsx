@@ -1,13 +1,8 @@
-import {RouteProp} from '@react-navigation/native';
-import React, {useState} from 'react';
-import {
-  Text,
-  View,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
+import React from 'react';
+import {Text, View, TouchableOpacity} from 'react-native';
 import insets from '../../utils/insets';
+import {CurrentLocationArrow} from '../../assets/svg/icons/places';
+import colors from '../../theme/colors';
 
 export type Props = {
   flyToCurrentLocation(): void;
@@ -27,23 +22,24 @@ const MapControls: React.FC<Props> = ({
           style={{
             backgroundColor: 'white',
             borderRadius: 5,
-            height: 20,
-            width: 20,
-
+            width: 36,
+            height: 28,
             justifyContent: 'center',
             alignItems: 'center',
+            marginBottom: 8,
           }}
         >
-          <Text>woop</Text>
+          <CurrentLocationArrow />
         </View>
       </TouchableOpacity>
       <TouchableOpacity onPress={zoomIn}>
         <View
           style={{
             backgroundColor: 'white',
-            borderRadius: 5,
-            height: 20,
-            width: 20,
+            borderTopLeftRadius: 5,
+            borderTopRightRadius: 5,
+            width: 36,
+            height: 28,
 
             justifyContent: 'center',
             alignItems: 'center',
@@ -56,9 +52,12 @@ const MapControls: React.FC<Props> = ({
         <View
           style={{
             backgroundColor: 'white',
-            borderRadius: 5,
-            height: 20,
-            width: 20,
+            borderBottomLeftRadius: 5,
+            borderBottomRightRadius: 5,
+            width: 36,
+            height: 28,
+            borderTopColor: colors.general.gray200,
+            borderTopWidth: 0.5,
 
             justifyContent: 'center',
             alignItems: 'center',
