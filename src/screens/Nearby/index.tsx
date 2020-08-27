@@ -29,7 +29,7 @@ import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import SearchGroup from '../../components/search-button/search-group';
 import DisappearingHeader from '../../components/disappearing-header/index ';
 import {DeparturesWithStop, Paginated, DeparturesRealtimeData} from '../../sdk';
-import {View, Text} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import useReducerWithSideEffects, {
   Update,
   ReducerWithSideEffects,
@@ -44,7 +44,6 @@ import {
   mapQuayDeparturesToShowlimits,
   showMoreItemsOnQuay,
 } from './utils';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import insets from '../../utils/insets';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';

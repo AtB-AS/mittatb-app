@@ -1,3 +1,6 @@
+import React, {useState, useRef, useEffect} from 'react';
+import {Text, TextInput, View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 import {
   NavigationProp,
   ParamListBase,
@@ -5,20 +8,16 @@ import {
   useIsFocused,
   useRoute,
 } from '@react-navigation/native';
-import React, {useEffect, useRef, useState} from 'react';
-import {Text, TextInput, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import Input from '../components/input';
+import {StyleSheet} from '../theme';
 import {Location} from '../favorites/types';
 import {useGeolocationState} from '../GeolocationContext';
 import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
-import {StyleSheet} from '../theme';
-import colors from '../theme/colors';
 import FavoriteChips from './FavoriteChips';
 import LocationResults from './LocationResults';
 import useDebounce from './useDebounce';
 import {useGeocoder} from './useGeocoder';
+import Input from '../components/input';
 
 export type Props = {
   navigation: NavigationProp<any>;
@@ -176,37 +175,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   contentBlock: {
     paddingHorizontal: theme.sizes.pagePadding,
-  },
-  label: {
-    fontSize: 14,
-    lineHeight: 20,
-    position: 'absolute',
-    left: 12,
-  },
-  placeholder: {
-    color: theme.text.faded,
-  },
-  inputContainer: {
-    width: '100%',
-    height: 46,
-    flexDirection: 'column',
-    marginBottom: 24,
-    justifyContent: 'center',
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    paddingLeft: 60,
-    backgroundColor: theme.background.level1,
-    borderWidth: 1,
-    borderColor: colors.general.gray,
-    borderRadius: 4,
-    color: theme.text.primary,
-  },
-  searchIcon: {
-    position: 'absolute',
-    left: 14,
-    alignSelf: 'center',
   },
 }));
 

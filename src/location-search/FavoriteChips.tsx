@@ -6,12 +6,13 @@ import {
   ViewStyle,
   StyleProp,
   AccessibilityProps,
+  TouchableOpacity,
 } from 'react-native';
 import {GeoPosition} from 'react-native-geolocation-service';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
+import {useFavorites} from '../favorites/FavoritesContext';
 import {CurrentLocationArrow} from '../assets/svg/icons/places';
 import {FavoriteIcon} from '../favorites';
-import {useFavorites} from '../favorites/FavoritesContext';
 import {RequestPermissionFn} from '../GeolocationContext';
 import colors from '../theme/colors';
 import {LocationWithSearchMetadata} from './';

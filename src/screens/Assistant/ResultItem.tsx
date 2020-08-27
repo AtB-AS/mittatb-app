@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, TouchableOpacity} from 'react-native';
 import {Leg, TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {
@@ -9,7 +9,6 @@ import {
   secondsToMinutesShort,
   formatToClockOrRelativeMinutes,
 } from '../../utils/date';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import TransportationIcon from '../../components/transportation-icon';
 import insets from '../../utils/insets';
 import {WalkingPerson} from '../../assets/svg/icons/transportation';
@@ -111,7 +110,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexShrink: 1,
     flexWrap: 'wrap',
   },
-  time: {fontSize: 32, color: theme.text.primary, marginVertical: 8},
+  time: {
+    fontSize: 32,
+    color: theme.text.primary,
+    marginVertical: 8,
+  },
   lineName: {
     fontSize: 16,
     fontWeight: '600',
@@ -171,43 +174,26 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       <View style={styles.iconContainer}>
         <WalkingPerson fill={colors.general.black} opacity={0.6} />
       </View>
-      <Text style={styles.textDeprioritized}>{text}</Text>
+      <Text style={[styles.textContent, styles.textDeprioritized]}>{text}</Text>
     </View>
   );
 };
 
 function WaitRow({time}: {time: number}) {
-  const styles = useWaitStyles();
+  const styles = useLegStyles();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>{secondsToMinutesShort(time)}</Text>
-      </View>
+    <View style={styles.legContainer}>
+      <Text style={[styles.textDeprioritized, styles.time]}>
+        {secondsToMinutesShort(time)}
+      </Text>
       <View style={styles.iconContainer}>
         <Duration fill={colors.general.black} opacity={0.6} />
       </View>
+      <Text style={[styles.textContent, styles.textDeprioritized]}>Vent</Text>
     </View>
   );
 }
-
-const useWaitStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  textContainer: {
-    width: 50,
-  },
-  text: {
-    fontSize: 12,
-    opacity: 0.6,
-  },
-  iconContainer: {
-    width: 30,
-    alignItems: 'center',
-  },
-}));
 
 const useLegStyles = StyleSheet.createThemeHook((theme) => ({
   legContainer: {
@@ -218,6 +204,14 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
   time: {
     width: 50,
     fontVariant: ['tabular-nums'],
+  },
+  iconContainer: {
+    width: 30,
+    alignItems: 'center',
+  },
+  textContent: {
+    flex: 1,
+    flexWrap: 'wrap',
   },
   text: {
     fontSize: 16,
@@ -233,10 +227,6 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
   walkingPerson: {
     backgroundColor: theme.text.primary,
   },
-  iconContainer: {
-    width: 30,
-    alignItems: 'center',
-  },
 }));
 
 const TransportationLeg = ({leg}: {leg: Leg}) => {
@@ -249,7 +239,7 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
       <View style={styles.iconContainer}>
         <TransportationIcon mode={leg.mode} publicCode={leg.line?.publicCode} />
       </View>
-      <Text style={styles.text}>
+      <Text style={[styles.textContent, styles.text]}>
         <LineDisplayName leg={leg} />
       </Text>
     </View>
@@ -269,7 +259,10 @@ const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
       <View accessibilityLabel="Destinasjon" style={styles.iconContainer}>
         <DestinationFlag fill={colors.general.black} opacity={0.6} />
       </View>
-      <Text style={styles.textDeprioritized} numberOfLines={1}>
+      <Text
+        style={[styles.textContent, styles.textDeprioritized]}
+        numberOfLines={1}
+      >
         {lastLeg.toPlace.name}
       </Text>
     </View>

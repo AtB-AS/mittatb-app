@@ -1,8 +1,7 @@
 import LogoOutline from './LogoOutline';
-import {View, Text, Animated} from 'react-native';
+import {View, Text, Animated, TouchableOpacity} from 'react-native';
 import React, {useRef, useEffect} from 'react';
 import {StyleSheet} from '../theme';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import insets from '../utils/insets';
 
 type IconButton = {

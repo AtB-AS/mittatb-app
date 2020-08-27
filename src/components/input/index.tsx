@@ -8,10 +8,10 @@ import {
   View,
   NativeSyntheticEvent,
   TextInputFocusEventData,
+  TouchableOpacity,
 } from 'react-native';
 import {StyleSheet, useTheme} from '../../theme';
 import colors from '../../theme/colors';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Close} from '../../assets/svg/icons/actions';
 import insets from '../../utils/insets';
 
@@ -85,6 +85,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     borderWidth: 1,
     borderRadius: 4,
     paddingLeft: 60,
+    paddingRight: 40,
     padding: 12,
     fontSize: 16,
   },
