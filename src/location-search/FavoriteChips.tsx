@@ -11,7 +11,7 @@ import {
 import {GeoPosition} from 'react-native-geolocation-service';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useFavorites} from '../favorites/FavoritesContext';
-import {CurrentLocationArrow} from '../assets/svg/icons/places';
+import {CurrentLocationArrow, MapPointPin} from '../assets/svg/icons/places';
 import {FavoriteIcon} from '../favorites';
 import {RequestPermissionFn} from '../GeolocationContext';
 import colors from '../theme/colors';
@@ -92,7 +92,7 @@ const FavoriteChips: React.FC<Props> = ({
         <FavoriteChip
           text="Velg i kart"
           accessibilityRole="menuitem"
-          icon={<CurrentLocationArrow />}
+          icon={<MapPointPin />}
           onPress={onMapSelection}
         />
         {!hideFavorites &&
