@@ -1,18 +1,10 @@
 import {RouteProp} from '@react-navigation/native';
 import React, {useState, useRef} from 'react';
-import {
-  Text,
-  View,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
+import {Text, View, TouchableOpacity} from 'react-native';
 
 import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
 import {useReverseGeocoder} from '../useGeocoder';
 import colors from '../../theme/colors';
-import {ArrowRight, ArrowLeft} from '../../assets/svg/icons/navigation';
-import {MapPointPin} from '../../assets/svg/icons/places';
 import {
   LocationSearchNavigationProp,
   LocationSearchStackParams,
@@ -21,6 +13,8 @@ import {
 import insets from '../../utils/insets';
 import MapControls from './MapControls';
 import {useGeolocationState} from '../../GeolocationContext';
+import LocationBar from './LocationBar';
+import {ArrowLeft} from '../../assets/svg/icons/navigation';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -104,27 +98,6 @@ const MapSelection: React.FC<Props> = ({
           centerCoordinate={[coordinates.longitude, coordinates.latitude]}
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
-        <View style={{position: 'absolute', top: 80, left: 20}}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.goBack();
-            }}
-            hitSlop={insets.symmetric(12, 20)}
-          >
-            <View
-              style={{
-                backgroundColor: colors.primary.gray,
-                borderRadius: 8,
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: 36,
-                height: 28,
-              }}
-            >
-              <ArrowLeft fill={colors.general.white} />
-            </View>
-          </TouchableOpacity>
-        </View>
         <View
           style={{
             position: 'absolute',
@@ -138,72 +111,10 @@ const MapSelection: React.FC<Props> = ({
             <Text>x</Text>
           </View>
         </View>
-
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 80,
-            paddingHorizontal: 12,
-            width: '100%',
-          }}
-        >
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              flex: 1,
-            }}
-          >
-            <View
-              style={{
-                paddingRight: 8,
-                paddingVertical: 8,
-                borderRadius: 8,
-                backgroundColor: colors.general.white,
-                flexDirection: 'row',
-                flexGrow: 1,
-                justifyContent: 'space-between',
-              }}
-            >
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <MapPointPin style={{marginHorizontal: 12}} />
-                {location ? (
-                  <View>
-                    <Text style={{fontSize: 14, lineHeight: 20}}>
-                      {location.name}
-                    </Text>
-                    <Text style={{fontSize: 12, lineHeight: 16}}>
-                      {location.postalcode ? (
-                        <Text>{location.postalcode}, </Text>
-                      ) : null}
-                      {location.locality}
-                    </Text>
-                  </View>
-                ) : null}
-              </View>
-              <TouchableOpacity
-                onPress={() => {
-                  location && onSelect({...location, resultType: 'search'});
-                }}
-              >
-                <View
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 8,
-                    marginLeft: 8,
-                    backgroundColor: colors.secondary.cyan,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {!location ? <ActivityIndicator /> : <ArrowRight />}
-                </View>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
       </MapboxGL.MapView>
+      <View style={{position: 'absolute', top: 80, left: 20}}>
+        <BackArrow onBack={() => navigation.goBack()} />
+      </View>
       <View style={{position: 'absolute', top: 80, right: 20}}>
         <MapControls
           flyToCurrentLocation={flyToCurrentLocation}
@@ -211,7 +122,36 @@ const MapSelection: React.FC<Props> = ({
           zoomOut={zoomOut}
         />
       </View>
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 80,
+          paddingHorizontal: 12,
+          width: '100%',
+        }}
+      >
+        <LocationBar location={location} onSelect={onSelect} />
+      </View>
     </View>
+  );
+};
+
+const BackArrow: React.FC<{onBack(): void}> = ({onBack}) => {
+  return (
+    <TouchableOpacity onPress={onBack} hitSlop={insets.symmetric(12, 20)}>
+      <View
+        style={{
+          backgroundColor: colors.primary.gray,
+          borderRadius: 8,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: 36,
+          height: 28,
+        }}
+      >
+        <ArrowLeft fill={colors.general.white} />
+      </View>
+    </TouchableOpacity>
   );
 };
 

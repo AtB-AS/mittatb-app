@@ -11,11 +11,12 @@ export type Props = {
 };
 
 const shadows: ViewStyle = {
-  shadowColor: colors.general.gray200,
+  shadowColor: colors.general.black,
   shadowOffset: {
     width: 0,
     height: 2,
   },
+  shadowOpacity: 0.25,
   shadowRadius: 8,
   elevation: 8,
 };
@@ -43,40 +44,40 @@ const MapControls: React.FC<Props> = ({
           <CurrentLocationArrow />
         </View>
       </TouchableOpacity>
-      <TouchableOpacity onPress={zoomIn}>
-        <View
-          style={{
-            backgroundColor: 'white',
-            borderTopLeftRadius: 5,
-            borderTopRightRadius: 5,
-            width: 36,
-            height: 36,
-            justifyContent: 'center',
-            alignItems: 'center',
-            ...shadows,
-          }}
-        >
-          <Add />
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={zoomOut}>
-        <View
-          style={{
-            backgroundColor: 'white',
-            borderBottomLeftRadius: 5,
-            borderBottomRightRadius: 5,
-            width: 36,
-            height: 36,
-            borderTopColor: colors.general.gray200,
-            borderTopWidth: 0.5,
-            justifyContent: 'center',
-            alignItems: 'center',
-            ...shadows,
-          }}
-        >
-          <Remove />
-        </View>
-      </TouchableOpacity>
+      <View
+        style={{
+          backgroundColor: 'white',
+          borderRadius: 5,
+          ...shadows,
+        }}
+      >
+        <TouchableOpacity onPress={zoomIn}>
+          <View
+            style={{
+              width: 36,
+              height: 36,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Add />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={zoomOut}>
+          <View
+            style={{
+              width: 36,
+              height: 36,
+              borderTopColor: colors.general.gray200,
+              borderTopWidth: 0.5,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Remove />
+          </View>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
