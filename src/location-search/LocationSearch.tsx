@@ -1,9 +1,4 @@
-import {
-  NavigationProp,
-  CompositeNavigationProp,
-  RouteProp,
-  useIsFocused,
-} from '@react-navigation/native';
+import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
 import {Text, TextInput, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
