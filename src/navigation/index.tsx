@@ -12,7 +12,6 @@ import LocationSearch, {
   RouteParams as LocationSearchParams,
 } from '../location-search';
 import TabNavigator from './TabNavigator';
-import {Close} from '../assets/svg/icons/actions';
 import {useTheme} from '../theme';
 import transitionSpec from './transitionSpec';
 import TripDetailsModal, {
@@ -23,7 +22,6 @@ import DepartureDetails, {
   DepartureDetailsRouteParams,
 } from '../screens/TripDetailsModal/DepartureDetails';
 import {Host} from 'react-native-portalize';
-import {LinkingOptions} from '@react-navigation/native/lib/typescript/src/types';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -38,7 +36,6 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 const NavigationRoot = () => {
   const {isLoading, onboarded} = useAppState();
-  const {theme} = useTheme();
 
   const ref = useRef<NavigationContainerRef>(null);
   const {getInitialState} = useLinking(ref, {
@@ -104,26 +101,7 @@ const NavigationRoot = () => {
                   name="LocationSearch"
                   component={LocationSearch}
                   options={{
-                    title: 'Søk',
-                    headerBackTitleVisible: false,
-                    headerTintColor: theme.text.primary,
-                    headerStyle: {
-                      backgroundColor: theme.background.level2,
-                      shadowColor: 'transparent',
-                    },
-                    headerBackImage: ({tintColor}) => (
-                      <View
-                        style={{
-                          width: 24,
-                          height: 24,
-                          alignContent: 'center',
-                          justifyContent: 'center',
-                          marginLeft: 24,
-                        }}
-                      >
-                        <Close fill={tintColor} />
-                      </View>
-                    ),
+                    headerShown: false,
                     transitionSpec: {
                       open: transitionSpec,
                       close: transitionSpec,

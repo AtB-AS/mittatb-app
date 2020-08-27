@@ -1,10 +1,4 @@
-import {
-  NavigationProp,
-  ParamListBase,
-  RouteProp,
-  useIsFocused,
-  useRoute,
-} from '@react-navigation/native';
+import {RouteProp} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {
   Text,

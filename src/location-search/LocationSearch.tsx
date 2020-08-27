@@ -7,6 +7,7 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import {Text, TextInput, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import Header from '../ScreenHeader';
 import Input from '../components/input';
 import {Location} from '../favorites/types';
 import {useGeolocationState} from '../GeolocationContext';
@@ -20,6 +21,8 @@ import useDebounce from './useDebounce';
 import {useGeocoder} from './useGeocoder';
 import {LocationWithSearchMetadata, LocationSearchNavigationProp} from './';
 import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
+import {Close} from '../assets/svg/icons/actions';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export type Props = {
   navigation: LocationSearchNavigationProp;
@@ -114,55 +117,67 @@ const LocationSearch: React.FC<Props> = ({
   const hasAnyResult = hasResults || hasPreviousResults;
 
   return (
-    <View style={styles.container}>
-      <View style={styles.contentBlock}>
-        <Input
-          ref={inputRef}
-          label={label}
-          value={text}
-          onChangeText={setText}
-          showClear={Boolean(text?.length)}
-          onClear={() => setText('')}
-          placeholder="Søk etter adresse eller stoppested"
-          autoCorrect={false}
-          autoCompleteType="off"
+    <SafeAreaView style={styles.container}>
+      <View style={{paddingTop: 12}}>
+        <Header
+          leftButton={{
+            onPress: () => navigation.goBack(),
+            accessible: true,
+            accessibilityRole: 'button',
+            accessibilityLabel: 'Gå tilbake',
+            icon: <Close />,
+          }}
+          title="Søk"
         />
-      </View>
-
-      <FavoriteChips
-        onSelectLocation={onSelect}
-        onMapSelection={onMapSelection}
-        geolocation={geolocation}
-        requestGeoPermission={requestGeoPermission}
-        hideFavorites={!!hideFavorites}
-        containerStyle={styles.contentBlock}
-      />
-
-      {hasAnyResult ? (
-        <ScrollView style={styles.contentBlock}>
-          {hasPreviousResults && (
-            <LocationResults
-              title="Tidligere søk"
-              locations={previousLocations}
-              onSelect={onSearchSelect}
-              onPrefillText={onPrefillText}
-            />
-          )}
-          {hasResults && (
-            <LocationResults
-              title="Søkeresultat"
-              locations={filteredLocations}
-              onSelect={onSearchSelect}
-              onPrefillText={onPrefillText}
-            />
-          )}
-        </ScrollView>
-      ) : (
-        <View style={styles.contentBlock}>
-          <Text>Fant ingen søkeresultat</Text>
+        <View style={[{marginTop: 12}, styles.contentBlock]}>
+          <Input
+            ref={inputRef}
+            label={label}
+            value={text}
+            onChangeText={setText}
+            showClear={Boolean(text?.length)}
+            onClear={() => setText('')}
+            placeholder="Søk etter adresse eller stoppested"
+            autoCorrect={false}
+            autoCompleteType="off"
+          />
         </View>
-      )}
-    </View>
+
+        <FavoriteChips
+          onSelectLocation={onSelect}
+          onMapSelection={onMapSelection}
+          geolocation={geolocation}
+          requestGeoPermission={requestGeoPermission}
+          hideFavorites={!!hideFavorites}
+          containerStyle={styles.contentBlock}
+        />
+
+        {hasAnyResult ? (
+          <ScrollView style={styles.contentBlock}>
+            {hasPreviousResults && (
+              <LocationResults
+                title="Tidligere søk"
+                locations={previousLocations}
+                onSelect={onSearchSelect}
+                onPrefillText={onPrefillText}
+              />
+            )}
+            {hasResults && (
+              <LocationResults
+                title="Søkeresultat"
+                locations={filteredLocations}
+                onSelect={onSearchSelect}
+                onPrefillText={onPrefillText}
+              />
+            )}
+          </ScrollView>
+        ) : (
+          <View style={styles.contentBlock}>
+            <Text>Fant ingen søkeresultat</Text>
+          </View>
+        )}
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -191,7 +206,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.background.level2,
     flex: 1,
-    paddingTop: 12,
   },
   contentBlock: {
     paddingHorizontal: theme.sizes.pagePadding,
