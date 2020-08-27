@@ -16,6 +16,7 @@ import useChatIcon from '../../chat/use-chat-icon';
 import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
 import {StyleSheet} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
+import SvgBanner from '../../assets/svg/icons/other/Banner';
 
 type Props = {
   renderHeader(): React.ReactNode;
@@ -68,6 +69,7 @@ const DisappearingHeader: React.FC<Props> = ({
     onHeaderContentLayout,
   } = useCalculateHeaderContentHeight();
 
+  const {width: windowWidth} = useWindowDimensions();
   const ref = React.useRef<ScrollView>(null);
   useScrollToTop(
     React.useRef<Scrollable>({
@@ -165,6 +167,10 @@ const DisappearingHeader: React.FC<Props> = ({
               {height: boxHeight},
             ]}
           >
+            <View style={styles.bannerContainer}>
+              <SvgBanner width={windowWidth} height={windowWidth / 2} />
+            </View>
+
             <View style={styles.header__inner} onLayout={onHeaderContentLayout}>
               {renderHeader()}
             </View>
@@ -235,6 +241,12 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   topBorder: {
     flex: 0,
     backgroundColor: theme.background.accent,
+  },
+  bannerContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
   },
 
   content: {
