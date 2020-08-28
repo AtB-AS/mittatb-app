@@ -112,7 +112,7 @@ const MapSelection: React.FC<Props> = ({
           zoomOut={zoomOut}
         />
       </View>
-      <View style={styles.pinContainer}>
+      <View style={styles.pinContainer} pointerEvents="none">
         <View style={styles.pin}>
           <SelectionPin width={40} height={48} />
         </View>
