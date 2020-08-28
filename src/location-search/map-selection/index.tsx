@@ -99,6 +99,7 @@ const MapSelection: React.FC<Props> = ({
           ref={mapCameraRef}
           zoomLevel={coordinates.zoomLevel}
           centerCoordinate={[coordinates.longitude, coordinates.latitude]}
+          animationMode="moveTo"
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
       </MapboxGL.MapView>
