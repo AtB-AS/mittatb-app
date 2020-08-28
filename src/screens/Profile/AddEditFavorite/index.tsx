@@ -7,16 +7,8 @@
 import {RouteProp, CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState, useEffect, useRef} from 'react';
-import {
-  Alert,
-  StyleProp,
-  Text,
-  View,
-  ViewStyle,
-  SafeAreaView,
-  Keyboard,
-  TouchableOpacity,
-} from 'react-native';
+import {Alert, StyleProp, Text, View, ViewStyle, Keyboard} from 'react-native';
+import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
 import {Close, Add, Remove, Confirm} from '../../../assets/svg/icons/actions/';
 import {ArrowLeft, Expand} from '../../../assets/svg/icons/navigation/';
@@ -31,6 +23,7 @@ import ScreenHeader from '../../../ScreenHeader';
 import {Modalize} from 'react-native-modalize';
 import colors from '../../../theme/colors';
 import Input from '../../../components/input';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
