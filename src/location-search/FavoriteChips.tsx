@@ -82,6 +82,7 @@ const FavoriteChips: React.FC<Props> = ({
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={containerStyle}
+        keyboardShouldPersistTaps="handled"
       >
         <FavoriteChip
           text="Posisjon"

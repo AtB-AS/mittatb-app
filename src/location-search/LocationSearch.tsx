@@ -151,7 +151,10 @@ const LocationSearch: React.FC<Props> = ({
         />
 
         {hasAnyResult ? (
-          <ScrollView style={styles.contentBlock}>
+          <ScrollView
+            style={styles.contentBlock}
+            keyboardShouldPersistTaps="handled"
+          >
             {hasPreviousResults && (
               <LocationResults
                 title="Tidligere søk"
