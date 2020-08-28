@@ -16,33 +16,34 @@ type Props = {
 const LocationBar: React.FC<Props> = ({location, onSelect}) => {
   return (
     <View style={styles.container}>
-      <View style={styles.innerContainer}>
-        <View style={styles.locationContainer}>
-          <View style={{marginHorizontal: 12}}>
-            {location ? <LocationIcon location={location} /> : null}
-          </View>
-          {location ? (
-            <View>
-              <Text style={styles.name}>{location.name}</Text>
-              <Text style={styles.locality}>
-                {location.postalcode ? (
-                  <Text>{location.postalcode}, </Text>
-                ) : null}
-                {location.locality}
-              </Text>
+      <TouchableOpacity
+        style={{flex: 1}}
+        onPress={() => {
+          location && onSelect({...location, resultType: 'search'});
+        }}
+      >
+        <View style={styles.innerContainer}>
+          <View style={styles.locationContainer}>
+            <View style={{marginHorizontal: 12}}>
+              {location ? <LocationIcon location={location} /> : null}
             </View>
-          ) : null}
-        </View>
-        <TouchableOpacity
-          onPress={() => {
-            location && onSelect({...location, resultType: 'search'});
-          }}
-        >
+            {location ? (
+              <View>
+                <Text style={styles.name}>{location.name}</Text>
+                <Text style={styles.locality}>
+                  {location.postalcode ? (
+                    <Text>{location.postalcode}, </Text>
+                  ) : null}
+                  {location.locality}
+                </Text>
+              </View>
+            ) : null}
+          </View>
           <View style={styles.button}>
             {!location ? <ActivityIndicator /> : <ArrowRight />}
           </View>
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
