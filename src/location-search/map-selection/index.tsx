@@ -114,7 +114,7 @@ const MapSelection: React.FC<Props> = ({
       </View>
       <View style={styles.pinContainer} pointerEvents="none">
         <View style={styles.pin}>
-          <SelectionPin width={40} height={48} />
+          <SelectionPin width={40} height={60} />
         </View>
       </View>
       <View style={styles.locationContainer}>
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     top: '50%',
     right: '50%',
   },
-  pin: {position: 'absolute', top: -40, right: -20, ...shadows},
+  pin: {position: 'absolute', top: -50, right: -20, ...shadows},
   backArrowContainer: {position: 'absolute', top: 80, left: 20},
   controlsContainer: {position: 'absolute', top: 80, right: 20},
   locationContainer: {
