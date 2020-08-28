@@ -5,9 +5,9 @@ import {stringifyUrl} from './utils';
 import {AxiosRequestConfig} from 'axios';
 import {GeoPosition} from 'react-native-geolocation-service';
 
-const TRONDHEIM_CENTRAL_STATION = {
+export const TRONDHEIM_CENTRAL_STATION = {
   latitude: 63.43457,
-  longitide: 10.39844,
+  longitude: 10.39844,
 };
 
 export async function autocomplete(
@@ -19,7 +19,7 @@ export async function autocomplete(
   const query = qs.stringify({
     query: text,
     lat: location?.coords.latitude ?? TRONDHEIM_CENTRAL_STATION.latitude,
-    lon: location?.coords.longitude ?? TRONDHEIM_CENTRAL_STATION.longitide,
+    lon: location?.coords.longitude ?? TRONDHEIM_CENTRAL_STATION.longitude,
     limit: 10,
   });
 

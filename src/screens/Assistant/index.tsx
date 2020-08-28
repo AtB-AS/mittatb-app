@@ -121,13 +121,13 @@ const Assistant: React.FC<Props> = ({
 
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
-    initialText: string | undefined,
+    initialLocation: LocationWithSearchMetadata | undefined,
   ) =>
     navigation.navigate('LocationSearch', {
       label: callerRouteParam === 'fromLocation' ? 'Fra' : 'Til',
       callerRouteName: AssistantRouteNameStatic,
       callerRouteParam,
-      initialText,
+      initialLocation,
     });
 
   const showEmptyScreen = !tripPatterns && !isSearching;
@@ -146,7 +146,7 @@ const Assistant: React.FC<Props> = ({
               title="Fra"
               placeholder="Søk etter adresse eller sted"
               location={from}
-              onPress={() => openLocationSearch('fromLocation', from?.name)}
+              onPress={() => openLocationSearch('fromLocation', from)}
             />
           </View>
 
@@ -170,7 +170,7 @@ const Assistant: React.FC<Props> = ({
               title="Til"
               placeholder="Søk etter adresse eller sted"
               location={to}
-              onPress={() => openLocationSearch('toLocation', to?.name)}
+              onPress={() => openLocationSearch('toLocation', to)}
             />
           </View>
 
@@ -250,6 +250,7 @@ const Assistant: React.FC<Props> = ({
     </DisappearingHeader>
   );
 };
+
 const styles = StyleSheet.create({
   searchButtonContainer: {
     flexDirection: 'row',

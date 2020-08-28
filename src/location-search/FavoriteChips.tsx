@@ -11,7 +11,7 @@ import {
 import {GeoPosition} from 'react-native-geolocation-service';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useFavorites} from '../favorites/FavoritesContext';
-import {CurrentLocationArrow} from '../assets/svg/icons/places';
+import {CurrentLocationArrow, MapPointPin} from '../assets/svg/icons/places';
 import {FavoriteIcon} from '../favorites';
 import {RequestPermissionFn} from '../GeolocationContext';
 import colors from '../theme/colors';
@@ -22,12 +22,14 @@ type Props = {
   geolocation: GeoPosition | null;
   requestGeoPermission: RequestPermissionFn;
   onSelectLocation: (location: LocationWithSearchMetadata) => void;
+  onMapSelection: () => void;
   hideFavorites: boolean;
   containerStyle?: StyleProp<ViewStyle>;
 };
 
 const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
+  onMapSelection,
   geolocation,
   requestGeoPermission,
   containerStyle,
@@ -64,7 +66,7 @@ const FavoriteChips: React.FC<Props> = ({
     }
   }, [recentlyAllowedGeo, currentLocation]);
 
-  if (hideFavorites || !favorites.length) return null;
+  if (hideFavorites) return null;
 
   return (
     <View
@@ -82,10 +84,16 @@ const FavoriteChips: React.FC<Props> = ({
         contentContainerStyle={containerStyle}
       >
         <FavoriteChip
-          text="Min posisjon"
+          text="Posisjon"
           accessibilityRole="menuitem"
           icon={<CurrentLocationArrow />}
           onPress={onCurrentLocation}
+        />
+        <FavoriteChip
+          text="Velg i kart"
+          accessibilityRole="menuitem"
+          icon={<MapPointPin />}
+          onPress={onMapSelection}
         />
         {!hideFavorites &&
           favorites.map((fav, i) => (
