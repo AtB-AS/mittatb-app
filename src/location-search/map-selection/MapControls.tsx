@@ -4,6 +4,7 @@ import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import colors from '../../theme/colors';
 import {Add, Remove} from '../../assets/svg/icons/actions';
 import {StyleSheet} from '../../theme';
+import shadows from './shadows';
 
 export type Props = {
   flyToCurrentLocation(): void;
@@ -37,17 +38,6 @@ const MapControls: React.FC<Props> = ({
       </View>
     </View>
   );
-};
-
-const shadows: ViewStyle = {
-  shadowColor: colors.general.black,
-  shadowOffset: {
-    width: 0,
-    height: 2,
-  },
-  shadowOpacity: 0.25,
-  shadowRadius: 8,
-  elevation: 8,
 };
 
 const styles = StyleSheet.create({

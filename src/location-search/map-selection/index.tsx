@@ -17,6 +17,7 @@ import LocationBar from './LocationBar';
 import {ArrowLeft} from '../../assets/svg/icons/navigation';
 import {SelectionPin} from '../../assets/svg/map';
 import {StyleSheet} from '../../theme';
+import shadows from './shadows';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -156,6 +157,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 36,
     height: 28,
+    ...shadows,
   },
 });
 
