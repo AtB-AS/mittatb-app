@@ -83,6 +83,7 @@ const Assistant: React.FC<Props> = ({
   requestGeoPermission,
   navigation,
 }) => {
+  const styles = useStyles();
   const {from, to} = useLocations(currentLocation);
 
   function swap() {
@@ -182,15 +183,17 @@ const Assistant: React.FC<Props> = ({
             />
           </View>
 
-          <TouchableOpacity
-            hitSlop={insets.all(12)}
-            onPress={swap}
-            accessible={true}
-            accessibilityLabel="Bytt om på avreisested og ankomststed"
-            accessibilityRole="button"
-          >
-            <Swap />
-          </TouchableOpacity>
+          <View style={styles.swapButton}>
+            <TouchableOpacity
+              onPress={swap}
+              hitSlop={insets.all(12)}
+              accessible={true}
+              accessibilityLabel="Bytt om på avreisested og ankomststed"
+              accessibilityRole="button"
+            >
+              <Swap />
+            </TouchableOpacity>
+          </View>
         </View>
       </SearchGroup>
 
@@ -261,10 +264,21 @@ const Assistant: React.FC<Props> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   searchButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingRight: 12,
+  },
+  swapButton: {
+    position: 'relative',
+    top: -23,
+    right: 23,
+    backgroundColor: theme.background.level0,
+    padding: 3,
+    borderColor: theme.background.accent,
+    borderWidth: 2,
+    borderRadius: 20,
   },
   styleButton: {
     flexGrow: 1,
@@ -284,7 +298,7 @@ const styles = StyleSheet.create({
   altTitleText__right: {
     textAlign: 'right',
   },
-});
+}));
 
 type Locations = {
   from: LocationWithSearchMetadata | undefined;

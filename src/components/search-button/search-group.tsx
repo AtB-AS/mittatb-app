@@ -36,17 +36,12 @@ export default SearchGroup;
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.background.level0,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#C3C6C9',
-    borderStyle: 'solid',
     borderRadius: 8,
     marginHorizontal: 12,
   },
   line: {
-    height: 1,
+    height: 2,
+    backgroundColor: theme.background.accent,
     width: '100%',
-    backgroundColor: '#F5F5F6',
-    marginVertical: 8,
   },
 }));

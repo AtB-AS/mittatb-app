@@ -45,7 +45,9 @@ const SearchButton: React.FC<SearchButtonProps> = ({
         <Text style={styles.title}>{title}</Text>
         <View style={styles.icon}>{icon}</View>
         <Text style={styles.buttonText} numberOfLines={1}>
-          {text ?? <Text style={{opacity: 0.6}}>{placeholder}</Text>}
+          {text ?? (
+            <Text style={{color: 'rgba(0, 0, 0, 0.6)'}}>{placeholder}</Text>
+          )}
         </Text>
       </TouchableOpacity>
     </View>
@@ -72,6 +74,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    padding: 12,
   },
   buttonContainer: {
     flexDirection: 'row',
