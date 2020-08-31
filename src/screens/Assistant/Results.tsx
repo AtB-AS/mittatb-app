@@ -52,7 +52,7 @@ const Results: React.FC<Props> = ({
               <Text>
                 &nbsp;Mulige årsaker:
                 {resultReasons.map((reason, i) => (
-                  <Text style={styles.listItem} key={i}>
+                  <Text key={i}>
                     {'\n'}- {reason}
                   </Text>
                 ))}
