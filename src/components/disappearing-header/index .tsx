@@ -103,10 +103,6 @@ const DisappearingHeader: React.FC<Props> = ({
       duration: 400,
       useNativeDriver: true,
     }).start();
-    // Animated.spring(fullscreenOffsetRef, {
-    //   toValue: isFullHeight ? contentOffset : 0,
-    //   useNativeDriver: true,
-    // }).start();
   }, [isFullHeight, contentOffset]);
   useEffect(
     () => fullscreenOffsetRef.setValue(isFullHeight ? 0 : contentOffset),
