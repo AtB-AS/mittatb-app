@@ -1,6 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {Animated, Text, View, ViewProps} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {Animated, Text, View, ViewProps, TouchableOpacity} from 'react-native';
 import {StyleSheet} from '../theme';
 import insets from '../utils/insets';
 import LogoOutline from './LogoOutline';
