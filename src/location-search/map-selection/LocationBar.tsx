@@ -3,6 +3,7 @@ import {Text, View, TouchableOpacity, ActivityIndicator} from 'react-native';
 import colors from '../../theme/colors';
 import {LocationWithSearchMetadata} from '..';
 import {ArrowRight} from '../../assets/svg/icons/navigation';
+import {Info} from '../../assets/svg/icons/status';
 import {Location} from '../../favorites/types';
 import LocationIcon from '../../components/location-icon';
 import {StyleSheet} from '../../theme';
@@ -11,9 +12,10 @@ import shadows from './shadows';
 type Props = {
   location?: Location;
   onSelect(location: LocationWithSearchMetadata): void;
+  isSearching: boolean;
 };
 
-const LocationBar: React.FC<Props> = ({location, onSelect}) => {
+const LocationBar: React.FC<Props> = ({location, onSelect, isSearching}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -24,27 +26,53 @@ const LocationBar: React.FC<Props> = ({location, onSelect}) => {
       >
         <View style={styles.innerContainer}>
           <View style={styles.locationContainer}>
-            <View style={{marginHorizontal: 12}}>
-              {location ? <LocationIcon location={location} /> : null}
+            <Icon isSearching={isSearching} location={location} />
+            <View style={{opacity: isSearching ? 0.6 : 1}}>
+              <LocationText location={location} />
             </View>
-            {location ? (
-              <View>
-                <Text style={styles.name}>{location.name}</Text>
-                <Text style={styles.locality}>
-                  {location.postalcode ? (
-                    <Text>{location.postalcode}, </Text>
-                  ) : null}
-                  {location.locality}
-                </Text>
-              </View>
-            ) : null}
           </View>
-          <View style={styles.button}>
-            {!location ? <ActivityIndicator /> : <ArrowRight />}
-          </View>
+          {!isSearching && !!location && (
+            <View style={styles.button}>
+              <ArrowRight />
+            </View>
+          )}
         </View>
       </TouchableOpacity>
     </View>
+  );
+};
+
+const Icon: React.FC<{isSearching: boolean; location?: Location}> = ({
+  isSearching,
+  location,
+}) => {
+  return (
+    <View style={{marginHorizontal: 12}}>
+      {isSearching ? (
+        <ActivityIndicator />
+      ) : location ? (
+        <LocationIcon location={location} />
+      ) : (
+        <Info />
+      )}
+    </View>
+  );
+};
+
+const LocationText: React.FC<{location?: Location}> = ({location}) => {
+  return location ? (
+    <>
+      <Text style={styles.name}>{location.name}</Text>
+      <Text style={styles.locality}>
+        {location.postalcode ? <Text>{location.postalcode}, </Text> : null}
+        {location.locality}
+      </Text>
+    </>
+  ) : (
+    <>
+      <Text style={styles.name}>Fant ikke noe her :(</Text>
+      <Text style={styles.locality}>Vennligst prøv et annet sted</Text>
+    </>
   );
 };
 
@@ -64,15 +92,11 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'space-between',
   },
-  locationContainer: {flexDirection: 'row', alignItems: 'center'},
+  locationContainer: {flexDirection: 'row', alignItems: 'center', height: 44},
   name: {fontSize: 14, lineHeight: 20},
   locality: {fontSize: 12, lineHeight: 16},
   button: {
     width: 44,
-    height: 44,
-    borderRadius: 8,
-    marginLeft: 8,
-    backgroundColor: colors.secondary.cyan,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -35,25 +35,30 @@ export type Props = {
   route: RouteProp<LocationSearchStackParams, 'MapSelection'>;
 };
 
+type RegionEvent = {
+  isChanging: boolean;
+  region?: GeoJSON.Feature<GeoJSON.Point, RegionPayload>;
+};
+
 const MapSelection: React.FC<Props> = ({
   navigation,
   route: {
     params: {callerRouteName, callerRouteParam, coordinates},
   },
 }) => {
-  const [region, setRegion] = useState<
-    GeoJSON.Feature<GeoJSON.Point, RegionPayload>
-  >();
+  const [regionEvent, setRegionEvent] = useState<RegionEvent>();
 
   const centeredCoordinates = useMemo<Coordinates | null>(
     () =>
-      (region &&
-        region.geometry && {
-          latitude: region?.geometry?.coordinates[1],
-          longitude: region?.geometry?.coordinates[0],
-        }) ??
+      (regionEvent?.region?.geometry && {
+        latitude: regionEvent.region.geometry.coordinates[1],
+        longitude: regionEvent.region?.geometry?.coordinates[0],
+      }) ??
       null,
-    [region?.geometry?.coordinates[0], region?.geometry?.coordinates[1]],
+    [
+      regionEvent?.region?.geometry?.coordinates[0],
+      regionEvent?.region?.geometry?.coordinates[1],
+    ],
   );
 
   const locations = useReverseGeocoder(centeredCoordinates);
@@ -96,7 +101,12 @@ const MapSelection: React.FC<Props> = ({
         style={{
           flex: 1,
         }}
-        onRegionDidChange={setRegion}
+        onRegionDidChange={(region) =>
+          setRegionEvent({isChanging: false, region})
+        }
+        onRegionWillChange={() =>
+          setRegionEvent({isChanging: true, region: regionEvent?.region})
+        }
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
@@ -122,7 +132,11 @@ const MapSelection: React.FC<Props> = ({
         </View>
       </View>
       <View style={styles.locationContainer}>
-        <LocationBar location={location} onSelect={onSelect} />
+        <LocationBar
+          location={location}
+          onSelect={onSelect}
+          isSearching={!!regionEvent?.isChanging}
+        />
       </View>
     </View>
   );
