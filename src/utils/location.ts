@@ -5,7 +5,7 @@ type SortedLocation = {
   location: Location;
   distance: number;
 };
-export const LOCATIONS_REALLY_CLOSE_THRESHOLD = 200; 
+export const LOCATIONS_REALLY_CLOSE_THRESHOLD = 200;
 
 export function sortNearestLocations(
   current: Location,
