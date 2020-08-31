@@ -319,7 +319,7 @@ function computeNoResultReasons(
       : NoResultReason.PastDepartureTime;
     reasons.push(dateReason);
   }
-  return [reasons];
+  return reasons;
 }
 
 function useLocations(currentLocation: Location | undefined): Locations {
