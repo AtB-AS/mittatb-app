@@ -6,7 +6,7 @@ import {StyleSheet, useTheme} from '../../theme';
 import ResultItem from './ResultItem';
 import OptionalNextDayLabel from '../../components/optional-day-header';
 import {isSeveralDays} from '../../utils/date';
-import {NoResultReason} from '../Assistant';
+import {NoResultReason} from '../Assistant/types';
 
 type Props = {
   tripPatterns: TripPattern[] | null;

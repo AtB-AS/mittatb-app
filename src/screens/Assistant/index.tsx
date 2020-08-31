@@ -35,6 +35,7 @@ import {
   locationDistanceInMetres as distanceInMetres,
   LOCATIONS_REALLY_CLOSE_THRESHOLD,
 } from '../../utils/location';
+import { NoResultReason } from './types';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -43,13 +44,6 @@ export type AssistantScreenNavigationProp = CompositeNavigationProp<
   StackNavigationProp<TabNavigatorParams, AssistantRouteName>,
   StackNavigationProp<RootStackParamList>
 >;
-export enum NoResultReason {
-  Unspecified,
-  IdenticalLocations = 'Fra- og til-sted er identiske',
-  CloseLocations = 'Det er veldig kort avstand mellom fra- og til-sted',
-  PastArrivalTime = 'Ankomsttid har passert',
-  PastDepartureTime = 'Avreisetid har passert',
-}
 
 type AssistantRouteProp = RouteProp<TabNavigatorParams, AssistantRouteName>;
 
