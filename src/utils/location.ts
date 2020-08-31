@@ -19,8 +19,10 @@ export function sortNearestLocations(
     .sort((a, b) => a.distance - b.distance);
 }
 export function locationsAreEqual(l1: Location, l2: Location) {
-  return  l1.coordinates.latitude === l2.coordinates.latitude 
-          && l1.coordinates.longitude === l2.coordinates.longitude;
+  return (
+    l1.coordinates.latitude === l2.coordinates.latitude &&
+    l1.coordinates.longitude === l2.coordinates.longitude
+  );
 }
 export function locationDistanceInMetres(l1: Location, l2: Location) {
   return haversine(l1.coordinates, l2.coordinates);

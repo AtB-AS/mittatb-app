@@ -50,7 +50,8 @@ const Results: React.FC<Props> = ({
             Vi fant dessverre ingen reiseruter som passer til ditt søk.
             {pluralResultReasons && (
               <Text>
-                {' '}Mulige årsaker:
+                {' '}
+                Mulige årsaker:
                 {resultReasons.map((reason, i) => (
                   <Text key={i}>
                     {'\n'}- {reason}
@@ -59,10 +60,10 @@ const Results: React.FC<Props> = ({
               </Text>
             )}
             {hasResultReasons && !pluralResultReasons && (
-              <Text>{' '}{resultReasons[0]}.</Text>
+              <Text> {resultReasons[0]}.</Text>
             )}
             {!hasResultReasons && (
-              <Text>{' '}Prøv å justere på sted eller tidspunkt. </Text>
+              <Text> Prøv å justere på sted eller tidspunkt. </Text>
             )}
           </Text>
         </MessageBox>
