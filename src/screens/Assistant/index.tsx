@@ -35,7 +35,7 @@ import {
   locationDistanceInMetres as distanceInMetres,
   LOCATIONS_REALLY_CLOSE_THRESHOLD,
 } from '../../utils/location';
-import { NoResultReason } from './types';
+import {NoResultReason} from './types';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
