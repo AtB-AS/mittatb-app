@@ -30,6 +30,7 @@ import {useLayout} from '../../utils/use-layout';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
 import Results from './Results';
+import { locationsAreEqual, locationDistanceInMetres } from '../../utils/location';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -38,6 +39,13 @@ export type AssistantScreenNavigationProp = CompositeNavigationProp<
   StackNavigationProp<TabNavigatorParams, AssistantRouteName>,
   StackNavigationProp<RootStackParamList>
 >;
+export enum NoResultReason {
+  Unspecified,
+  IdenticalLocations = 'Fra- og til-sted er identiske',
+  CloseLocations = 'Det er veldig kort avstand mellom fra- og til-sted',
+  PastArrivalTime = 'Avreisetid har passert',
+  PastDepartureTime = 'Ankomsttid har passert'
+}
 
 type AssistantRouteProp = RouteProp<TabNavigatorParams, AssistantRouteName>;
 
@@ -134,7 +142,7 @@ const Assistant: React.FC<Props> = ({
   const showEmptyScreen = !tripPatterns && !isSearching;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
   const useScroll = !showEmptyScreen && !isEmptyResult;
-
+  
   const renderHeader = () => (
     <View>
       <SearchGroup>
@@ -224,6 +232,8 @@ const Assistant: React.FC<Props> = ({
     </View>
   );
 
+  const [noResultReasons] = useResultReasons(date, from, to);
+
   return (
     <DisappearingHeader
       renderHeader={renderHeader}
@@ -239,6 +249,7 @@ const Assistant: React.FC<Props> = ({
         isSearching={isSearching}
         showEmptyScreen={showEmptyScreen}
         isEmptyResult={isEmptyResult}
+        resultReasons={noResultReasons}
         onDetailsPressed={(tripPattern) =>
           navigation.navigate('TripDetailsModal', {
             from: from!,
@@ -280,6 +291,31 @@ type Locations = {
   from: LocationWithSearchMetadata | undefined;
   to: LocationWithSearchMetadata | undefined;
 };
+
+function useResultReasons(date?: DateOutput, from?: Location, to?:Location) 
+: [NoResultReason[]] {
+    let reasons = []; 
+    
+    if(!!from && !!to){
+      if (locationsAreEqual(from, to)) {
+        reasons.push(NoResultReason.IdenticalLocations);
+      }
+      else if (locationDistanceInMetres(from, to) < 200) { 
+        reasons.push(NoResultReason.CloseLocations);
+      }
+    }
+    const isPastDate = date && date?.type !== 'now' 
+                            && date?.date < new Date();
+
+    if(isPastDate) {
+      const isArrival = date?.type === 'arrival';
+      const dateReason = isArrival 
+                          ? NoResultReason.PastArrivalTime 
+                          : NoResultReason.PastDepartureTime;
+      reasons.push(dateReason);
+    }
+    return [reasons];
+}
 
 function useLocations(currentLocation: Location | undefined): Locations {
   const {favorites} = useFavorites();
@@ -358,13 +394,11 @@ function useTripPatterns(
   const [isSearching, setIsSearching] = useState(false);
   const [timeOfSearch, setTimeOfSearch] = useState<Date>(new Date());
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
-
   const reload = useCallback(() => {
     const source = CancelToken.source();
 
     async function search() {
       if (!fromLocation || !toLocation) return;
-
       setIsSearching(true);
       try {
         const arriveBy = date?.type === 'arrival';
@@ -382,7 +416,7 @@ function useTripPatterns(
         source.token.throwIfRequested();
         setTripPatterns(response.data);
         setIsSearching(false);
-        setTimeOfSearch(searchDate);
+        setTimeOfSearch(searchDate);       
       } catch (e) {
         if (!isCancel(e)) {
           console.warn(e);
