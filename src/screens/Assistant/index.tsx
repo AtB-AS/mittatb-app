@@ -29,6 +29,12 @@ import {useLayout} from '../../utils/use-layout';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
 import Results from './Results';
+import {
+  locationsAreEqual,
+  locationDistanceInMetres as distanceInMetres,
+  LOCATIONS_REALLY_CLOSE_THRESHOLD,
+} from '../../utils/location';
+import {NoResultReason} from './types';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -223,6 +229,8 @@ const Assistant: React.FC<Props> = ({
     </View>
   );
 
+  const noResultReasons = computeNoResultReasons(date, from, to);
+
   return (
     <DisappearingHeader
       renderHeader={renderHeader}
@@ -238,6 +246,7 @@ const Assistant: React.FC<Props> = ({
         isSearching={isSearching}
         showEmptyScreen={showEmptyScreen}
         isEmptyResult={isEmptyResult}
+        resultReasons={noResultReasons}
         onDetailsPressed={(tripPattern) =>
           navigation.navigate('TripDetailsModal', {
             from: from!,
@@ -280,6 +289,32 @@ type Locations = {
   from: LocationWithSearchMetadata | undefined;
   to: LocationWithSearchMetadata | undefined;
 };
+
+function computeNoResultReasons(
+  date?: DateOutput,
+  from?: Location,
+  to?: Location,
+): NoResultReason[] {
+  let reasons = [];
+
+  if (!!from && !!to) {
+    if (locationsAreEqual(from, to)) {
+      reasons.push(NoResultReason.IdenticalLocations);
+    } else if (distanceInMetres(from, to) < LOCATIONS_REALLY_CLOSE_THRESHOLD) {
+      reasons.push(NoResultReason.CloseLocations);
+    }
+  }
+  const isPastDate = date && date?.type !== 'now' && date?.date < new Date();
+
+  if (isPastDate) {
+    const isArrival = date?.type === 'arrival';
+    const dateReason = isArrival
+      ? NoResultReason.PastArrivalTime
+      : NoResultReason.PastDepartureTime;
+    reasons.push(dateReason);
+  }
+  return reasons;
+}
 
 function useLocations(currentLocation: Location | undefined): Locations {
   const {favorites} = useFavorites();
@@ -358,13 +393,11 @@ function useTripPatterns(
   const [isSearching, setIsSearching] = useState(false);
   const [timeOfSearch, setTimeOfSearch] = useState<Date>(new Date());
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
-
   const reload = useCallback(() => {
     const source = CancelToken.source();
 
     async function search() {
       if (!fromLocation || !toLocation) return;
-
       setIsSearching(true);
       try {
         const arriveBy = date?.type === 'arrival';
