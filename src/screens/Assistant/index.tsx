@@ -52,7 +52,8 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
     requestPermission: requestGeoPermission,
   } = useGeolocationState();
 
-  const reverseLookupLocations = useReverseGeocoder(location) ?? [];
+  const reverseLookupLocations =
+    useReverseGeocoder(location?.coords ?? null) ?? [];
   const currentLocation = reverseLookupLocations.length
     ? reverseLookupLocations[1]
     : undefined;

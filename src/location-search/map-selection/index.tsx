@@ -1,5 +1,5 @@
 import {RouteProp} from '@react-navigation/native';
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useMemo} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 
 import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
@@ -18,6 +18,7 @@ import {ArrowLeft} from '../../assets/svg/icons/navigation';
 import {SelectionPin} from '../../assets/svg/map';
 import {StyleSheet} from '../../theme';
 import shadows from './shadows';
+import {Coordinates} from '@entur/sdk';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -44,16 +45,18 @@ const MapSelection: React.FC<Props> = ({
     GeoJSON.Feature<GeoJSON.Point, RegionPayload>
   >();
 
-  const locations = useReverseGeocoder(
-    region
-      ? ({
-          coords: {
-            latitude: region?.geometry?.coordinates[1],
-            longitude: region?.geometry?.coordinates[0],
-          },
-        } as any)
-      : null,
+  const centeredCoordinates = useMemo<Coordinates | null>(
+    () =>
+      (region &&
+        region.geometry && {
+          latitude: region?.geometry?.coordinates[1],
+          longitude: region?.geometry?.coordinates[0],
+        }) ??
+      null,
+    [region?.geometry?.coordinates[0], region?.geometry?.coordinates[1]],
   );
+
+  const locations = useReverseGeocoder(centeredCoordinates);
 
   const {location: geolocation} = useGeolocationState();
 

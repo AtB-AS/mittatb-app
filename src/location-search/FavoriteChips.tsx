@@ -36,7 +36,8 @@ const FavoriteChips: React.FC<Props> = ({
   hideFavorites,
 }) => {
   const {favorites} = useFavorites();
-  const reverseLookupLocations = useReverseGeocoder(geolocation) ?? [];
+  const reverseLookupLocations =
+    useReverseGeocoder(geolocation?.coords ?? null) ?? [];
   const currentLocation = reverseLookupLocations.length
     ? reverseLookupLocations[1]
     : null;
