@@ -94,6 +94,4 @@ const useThemeStyles = StyleSheet.createTheme(() => ({
     paddingBottom: 12,
   },
   infoBoxText: {fontSize: 16},
-  listItem: {marginTop: 10},
-  bold: {fontWeight: 'bold'},
 }));
