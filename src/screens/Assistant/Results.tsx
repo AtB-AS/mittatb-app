@@ -47,22 +47,23 @@ const Results: React.FC<Props> = ({
       <View style={styles.container}>
         <MessageBox>
           <Text style={styles.infoBoxText}>
-            Vi fant dessverre ingen reiseruter som passer til ditt søk. 
-            {pluralResultReasons &&  
+            Vi fant dessverre ingen reiseruter som passer til ditt søk.
+            {pluralResultReasons && (
               <Text>
-                 &nbsp;Mulige årsaker: 
-                 {resultReasons.map((reason, i) => (
-                  <Text style={styles.listItem} key={i}>{'\n'}- {reason}</Text>
-              ))}
+                &nbsp;Mulige årsaker:
+                {resultReasons.map((reason, i) => (
+                  <Text style={styles.listItem} key={i}>
+                    {'\n'}- {reason}
+                  </Text>
+                ))}
               </Text>
-            }
+            )}
             {hasResultReasons && !pluralResultReasons && (
-                <Text>&nbsp;{resultReasons[0]}.</Text>
+              <Text>&nbsp;{resultReasons[0]}.</Text>
             )}
             {!hasResultReasons && (
               <Text>&nbsp;Prøv å justere på sted eller tidspunkt. </Text>
             )}
-
           </Text>
         </MessageBox>
       </View>
@@ -94,5 +95,5 @@ const useThemeStyles = StyleSheet.createTheme(() => ({
   },
   infoBoxText: {fontSize: 16},
   listItem: {marginTop: 10},
-  bold: {fontWeight:"bold"}
+  bold: {fontWeight: 'bold'},
 }));

@@ -30,7 +30,11 @@ import {useLayout} from '../../utils/use-layout';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
 import Results from './Results';
-import { locationsAreEqual, locationDistanceInMetres } from '../../utils/location';
+import {
+  locationsAreEqual,
+  locationDistanceInMetres as distanceInMetres,
+  LOCATIONS_REALLY_CLOSE_THRESHOLD,
+} from '../../utils/location';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -44,7 +48,7 @@ export enum NoResultReason {
   IdenticalLocations = 'Fra- og til-sted er identiske',
   CloseLocations = 'Det er veldig kort avstand mellom fra- og til-sted',
   PastArrivalTime = 'Avreisetid har passert',
-  PastDepartureTime = 'Ankomsttid har passert'
+  PastDepartureTime = 'Ankomsttid har passert',
 }
 
 type AssistantRouteProp = RouteProp<TabNavigatorParams, AssistantRouteName>;
@@ -142,7 +146,7 @@ const Assistant: React.FC<Props> = ({
   const showEmptyScreen = !tripPatterns && !isSearching;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
   const useScroll = !showEmptyScreen && !isEmptyResult;
-  
+
   const renderHeader = () => (
     <View>
       <SearchGroup>
@@ -292,29 +296,30 @@ type Locations = {
   to: LocationWithSearchMetadata | undefined;
 };
 
-function useResultReasons(date?: DateOutput, from?: Location, to?:Location) 
-: [NoResultReason[]] {
-    let reasons = []; 
-    
-    if(!!from && !!to){
-      if (locationsAreEqual(from, to)) {
-        reasons.push(NoResultReason.IdenticalLocations);
-      }
-      else if (locationDistanceInMetres(from, to) < 200) { 
-        reasons.push(NoResultReason.CloseLocations);
-      }
-    }
-    const isPastDate = date && date?.type !== 'now' 
-                            && date?.date < new Date();
+function useResultReasons(
+  date?: DateOutput,
+  from?: Location,
+  to?: Location,
+): [NoResultReason[]] {
+  let reasons = [];
 
-    if(isPastDate) {
-      const isArrival = date?.type === 'arrival';
-      const dateReason = isArrival 
-                          ? NoResultReason.PastArrivalTime 
-                          : NoResultReason.PastDepartureTime;
-      reasons.push(dateReason);
+  if (!!from && !!to) {
+    if (locationsAreEqual(from, to)) {
+      reasons.push(NoResultReason.IdenticalLocations);
+    } else if (distanceInMetres(from, to) < LOCATIONS_REALLY_CLOSE_THRESHOLD) {
+      reasons.push(NoResultReason.CloseLocations);
     }
-    return [reasons];
+  }
+  const isPastDate = date && date?.type !== 'now' && date?.date < new Date();
+
+  if (isPastDate) {
+    const isArrival = date?.type === 'arrival';
+    const dateReason = isArrival
+      ? NoResultReason.PastArrivalTime
+      : NoResultReason.PastDepartureTime;
+    reasons.push(dateReason);
+  }
+  return [reasons];
 }
 
 function useLocations(currentLocation: Location | undefined): Locations {
@@ -416,7 +421,7 @@ function useTripPatterns(
         source.token.throwIfRequested();
         setTripPatterns(response.data);
         setIsSearching(false);
-        setTimeOfSearch(searchDate);       
+        setTimeOfSearch(searchDate);
       } catch (e) {
         if (!isCancel(e)) {
           console.warn(e);
