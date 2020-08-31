@@ -236,7 +236,7 @@ const Assistant: React.FC<Props> = ({
     </View>
   );
 
-  const [noResultReasons] = useResultReasons(date, from, to);
+  const noResultReasons = computeNoResultReasons(date, from, to);
 
   return (
     <DisappearingHeader
@@ -296,11 +296,11 @@ type Locations = {
   to: LocationWithSearchMetadata | undefined;
 };
 
-function useResultReasons(
+function computeNoResultReasons(
   date?: DateOutput,
   from?: Location,
   to?: Location,
-): [NoResultReason[]] {
+): NoResultReason[] {
   let reasons = [];
 
   if (!!from && !!to) {
