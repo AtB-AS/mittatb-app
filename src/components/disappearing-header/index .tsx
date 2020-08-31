@@ -43,6 +43,8 @@ type Scrollable = {
   scrollTo(opts: {y: number}): void;
 };
 
+const IS_IOS = Platform.OS === 'ios';
+
 const DisappearingHeader: React.FC<Props> = ({
   renderHeader,
   children,
@@ -80,9 +82,8 @@ const DisappearingHeader: React.FC<Props> = ({
   const {icon: chatIcon, openChat} = useChatIcon();
   const [scrollYValue, setScrollY] = useState<number>(0);
   const styles = useThemeStyles();
-  const scrollYRef = useRef(
-    new Animated.Value(Platform.OS === 'ios' ? -contentOffset : 0),
-  ).current;
+  const scrollYRef = useRef(new Animated.Value(IS_IOS ? -contentOffset : 0))
+    .current;
 
   const fullscreenOffsetRef = useRef(
     new Animated.Value(isFullHeight ? 0 : contentOffset),
@@ -90,7 +91,7 @@ const DisappearingHeader: React.FC<Props> = ({
 
   useEffect(
     function () {
-      if (Platform.OS === 'ios') {
+      if (IS_IOS) {
         scrollYRef.setValue(-contentHeight);
       }
     },
@@ -109,7 +110,7 @@ const DisappearingHeader: React.FC<Props> = ({
     [contentOffset],
   );
 
-  const osOffset = Platform.OS === 'ios' ? contentHeight : 0;
+  const osOffset = IS_IOS ? contentHeight : 0;
   const scrollY = Animated.add(scrollYRef, osOffset);
   const showAltTitle =
     useScroll && scrollYValue + osOffset > SCROLL_OFFSET_HEADER_ANIMATION;

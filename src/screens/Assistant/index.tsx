@@ -239,7 +239,6 @@ const Assistant: React.FC<Props> = ({
       renderHeader={renderHeader}
       onRefresh={reload}
       isRefreshing={isSearching}
-      headerHeight={HEADER_HEIGHT}
       useScroll={useScroll}
       headerTitle="Reiseassistent"
       isFullHeight={isHeaderFullHeight}
