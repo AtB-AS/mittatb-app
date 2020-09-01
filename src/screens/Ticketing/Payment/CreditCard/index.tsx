@@ -16,6 +16,11 @@ type Props = {
   route: RouteProp<TicketingStackParams, 'PaymentCreditCard'>;
 };
 
+enum NetsPaymentStatus {
+  UserCancelled = 'Cancel',
+  Succeeded = 'OK',
+}
+
 const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const {
@@ -41,7 +46,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
       const params = parseURL(url);
       const responseCode = params['responseCode'];
       switch (responseCode) {
-        case 'OK':
+        case NetsPaymentStatus.Succeeded:
           if (isCaptureInProgressRef.current) return;
           try {
             isCaptureInProgressRef.current = true;
@@ -54,8 +59,8 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
             navigation.popToTop();
           }
           break;
-        case 'Cancel':
-          paymentFailedForReason(PaymentFailedReason.Cancelled);
+        case NetsPaymentStatus.UserCancelled:
+          paymentFailedForReason(PaymentFailedReason.UserCancelled);
           navigation.popToTop();
           break;
       }

@@ -19,7 +19,7 @@ type TicketState = {
 };
 
 export enum PaymentFailedReason {
-  Cancelled = 'Betaling avbrutt',
+  UserCancelled = 'Betaling avbrutt',
   CaptureFailed = 'Betaling avvist av kortutsteder',
   Unknown = 'Vi kunne ikke behandle betalingen. Vi er på saken!',
 }

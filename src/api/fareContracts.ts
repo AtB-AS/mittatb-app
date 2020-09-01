@@ -122,3 +122,9 @@ export type ReserveTicketResponse = {
   transaction_id: number;
   url: string;
 };
+
+export type VippsRedirectParams = {
+  payment_id: string;
+  transaction_id: string;
+  status: string;
+};
