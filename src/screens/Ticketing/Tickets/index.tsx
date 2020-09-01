@@ -8,7 +8,7 @@ import {
   Modal,
   TextInput,
 } from 'react-native';
-import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {TicketingStackParams} from '../';
 import {secondsToDuration} from '../../../utils/date';
@@ -72,7 +72,13 @@ const ReceiptModal: React.FC<ModalProps> = (props) => {
 };
 
 const Tickets: React.FC<Props> = ({navigation}) => {
-  const {fareContracts, isRefreshingTickets, refreshTickets} = useTicketState();
+  const {
+    paymentFailedReason,
+    paymentFailedForReason,
+    fareContracts,
+    isRefreshingTickets,
+    refreshTickets,
+  } = useTicketState();
   const [selectedFareContract, setSelectedFareContract] = useState<
     FareContract | undefined
   >(undefined);
@@ -95,6 +101,12 @@ const Tickets: React.FC<Props> = ({navigation}) => {
       }
     >
       <Text style={styles.heading}>Reiserettigheter</Text>
+      {paymentFailedReason && (
+        <Text style={{color: 'red', ...styles.textItem}}>
+          {paymentFailedReason}
+        </Text>
+      )}
+
       {fareContracts && fareContracts.length ? (
         fareContracts
           .filter((fc) => valid(fc))
@@ -132,8 +144,12 @@ const Tickets: React.FC<Props> = ({navigation}) => {
         show={!!selectedFareContract}
         close={() => setSelectedFareContract(undefined)}
       />
+
       <TouchableOpacity
-        onPress={() => navigation.push('Offer')}
+        onPress={() => {
+          navigation.push('Offer');
+          paymentFailedForReason(undefined);
+        }}
         style={styles.offerBtn}
       >
         <View style={styles.buttonContentContainer}>
