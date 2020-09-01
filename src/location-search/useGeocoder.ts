@@ -1,11 +1,10 @@
 import {useState, useEffect} from 'react';
-import {Feature} from '../sdk';
+import {Feature, Coordinates} from '../sdk';
 import {autocomplete, reverse} from '../api';
 import {Location} from '../favorites/types';
 import {CancelToken, isCancel} from '../api/client';
-import {GeoPosition} from 'react-native-geolocation-service';
 
-export function useGeocoder(text: string | null, location: GeoPosition | null) {
+export function useGeocoder(text: string | null, coords: Coordinates | null) {
   const [locations, setLocations] = useState<Location[] | null>(null);
 
   useEffect(() => {
@@ -15,7 +14,7 @@ export function useGeocoder(text: string | null, location: GeoPosition | null) {
         setLocations(null);
       } else {
         try {
-          const response = await autocomplete(text, location, {
+          const response = await autocomplete(text, coords, {
             cancelToken: source.token,
           });
           source.token.throwIfRequested();
@@ -31,20 +30,20 @@ export function useGeocoder(text: string | null, location: GeoPosition | null) {
 
     textLookup();
     return () => source.cancel('Cancelling previous autocomplete');
-  }, [location, text]);
+  }, [coords?.latitude, coords?.longitude, text]);
 
   return locations;
 }
 
-export function useReverseGeocoder(location: GeoPosition | null) {
+export function useReverseGeocoder(coords: Coordinates | null) {
   const [locations, setLocations] = useState<Location[] | null>(null);
 
   useEffect(() => {
     const source = CancelToken.source();
     async function reverseCoordLookup() {
-      if (location && location.coords) {
+      if (coords) {
         try {
-          const response = await reverse(location, {
+          const response = await reverse(coords, {
             cancelToken: source.token,
           });
           source.token.throwIfRequested();
@@ -63,7 +62,7 @@ export function useReverseGeocoder(location: GeoPosition | null) {
 
     reverseCoordLookup();
     return () => source.cancel('Cancelling previous reverse');
-  }, [location]);
+  }, [coords?.latitude, coords?.longitude]);
 
   return locations;
 }

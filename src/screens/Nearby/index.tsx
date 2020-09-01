@@ -71,7 +71,8 @@ type RootProps = {
 const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
   const {status, location, requestPermission} = useGeolocationState();
 
-  const reverseLookupLocations = useReverseGeocoder(location) ?? [];
+  const reverseLookupLocations =
+    useReverseGeocoder(location?.coords ?? null) ?? [];
   const currentLocation = reverseLookupLocations.length
     ? reverseLookupLocations[1]
     : undefined;

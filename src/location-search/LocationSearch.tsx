@@ -57,7 +57,8 @@ const LocationSearch: React.FC<Props> = ({
     requestPermission: requestGeoPermission,
   } = useGeolocationState();
 
-  const locations = useGeocoder(debouncedText, geolocation) ?? [];
+  const locations =
+    useGeocoder(debouncedText, geolocation?.coords ?? null) ?? [];
   const filteredLocations = filterCurrentLocation(locations, previousLocations);
 
   const onSelect = (location: LocationWithSearchMetadata) => {
@@ -151,7 +152,10 @@ const LocationSearch: React.FC<Props> = ({
         />
 
         {hasAnyResult ? (
-          <ScrollView style={styles.contentBlock}>
+          <ScrollView
+            style={styles.contentBlock}
+            keyboardShouldPersistTaps="handled"
+          >
             {hasPreviousResults && (
               <LocationResults
                 title="Tidligere søk"

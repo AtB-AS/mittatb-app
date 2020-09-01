@@ -1,5 +1,5 @@
 import {RouteProp} from '@react-navigation/native';
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useMemo} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 
 import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
@@ -18,6 +18,7 @@ import {ArrowLeft} from '../../assets/svg/icons/navigation';
 import {SelectionPin} from '../../assets/svg/map';
 import {StyleSheet} from '../../theme';
 import shadows from './shadows';
+import {Coordinates} from '@entur/sdk';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -34,26 +35,33 @@ export type Props = {
   route: RouteProp<LocationSearchStackParams, 'MapSelection'>;
 };
 
+type RegionEvent = {
+  isChanging: boolean;
+  region?: GeoJSON.Feature<GeoJSON.Point, RegionPayload>;
+};
+
 const MapSelection: React.FC<Props> = ({
   navigation,
   route: {
     params: {callerRouteName, callerRouteParam, coordinates},
   },
 }) => {
-  const [region, setRegion] = useState<
-    GeoJSON.Feature<GeoJSON.Point, RegionPayload>
-  >();
+  const [regionEvent, setRegionEvent] = useState<RegionEvent>();
 
-  const locations = useReverseGeocoder(
-    region
-      ? ({
-          coords: {
-            latitude: region?.geometry?.coordinates[1],
-            longitude: region?.geometry?.coordinates[0],
-          },
-        } as any)
-      : null,
+  const centeredCoordinates = useMemo<Coordinates | null>(
+    () =>
+      (regionEvent?.region?.geometry && {
+        latitude: regionEvent.region.geometry.coordinates[1],
+        longitude: regionEvent.region?.geometry?.coordinates[0],
+      }) ??
+      null,
+    [
+      regionEvent?.region?.geometry?.coordinates[0],
+      regionEvent?.region?.geometry?.coordinates[1],
+    ],
   );
+
+  const locations = useReverseGeocoder(centeredCoordinates);
 
   const {location: geolocation} = useGeolocationState();
 
@@ -93,12 +101,18 @@ const MapSelection: React.FC<Props> = ({
         style={{
           flex: 1,
         }}
-        onRegionDidChange={setRegion}
+        onRegionDidChange={(region) =>
+          setRegionEvent({isChanging: false, region})
+        }
+        onRegionWillChange={() =>
+          setRegionEvent({isChanging: true, region: regionEvent?.region})
+        }
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
           zoomLevel={coordinates.zoomLevel}
           centerCoordinate={[coordinates.longitude, coordinates.latitude]}
+          animationMode="moveTo"
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
       </MapboxGL.MapView>
@@ -118,7 +132,11 @@ const MapSelection: React.FC<Props> = ({
         </View>
       </View>
       <View style={styles.locationContainer}>
-        <LocationBar location={location} onSelect={onSelect} />
+        <LocationBar
+          location={location}
+          onSelect={onSelect}
+          isSearching={!!regionEvent?.isChanging}
+        />
       </View>
     </View>
   );
