@@ -71,7 +71,7 @@ export async function reserve(
 }
 
 export async function capture(payment_id: number, transaction_id: number) {
-  const url = 'capture';
+  const url = 'ticket/v1/capture';
   await client.put(url, {
     //@ts-ignore
     payment_id: parseInt(payment_id, 10),
