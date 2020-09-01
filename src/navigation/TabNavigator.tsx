@@ -28,8 +28,6 @@ export type TabNavigatorParams = {
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
 const NavigationRoot = () => {
-  const {enable_ticketing} = useRemoteConfig();
-
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -48,16 +46,14 @@ const NavigationRoot = () => {
           tabBarIcon: ({color}) => <Nearby fill={color} />,
         }}
       />
-      {enable_ticketing ? (
-        <Tab.Screen
-          name="Ticketing"
-          component={TicketingScreen}
-          options={{
-            tabBarLabel: 'Billetter',
-            tabBarIcon: ({color}) => <Tickets fill={color} />,
-          }}
-        />
-      ) : null}
+      <Tab.Screen
+        name="Ticketing"
+        component={TicketingScreen}
+        options={{
+          tabBarLabel: 'Billetter',
+          tabBarIcon: ({color}) => <Tickets fill={color} />,
+        }}
+      />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
