@@ -81,6 +81,9 @@ const Tickets: React.FC<Props> = ({navigation}) => {
   };
   const nowSecs = Date.now() / 1000;
   const valid = (f: FareContract): boolean => f.usage_valid_to > nowSecs;
+  const byDate = (a: FareContract, b: FareContract): number => {
+    return b.usage_valid_to - a.usage_valid_to;
+  };
   return (
     <ScrollView
       style={styles.container}
@@ -95,6 +98,7 @@ const Tickets: React.FC<Props> = ({navigation}) => {
       {fareContracts && fareContracts.length ? (
         fareContracts
           .filter((fc) => valid(fc))
+          .sort(byDate)
           .map((fc, i) => {
             return (
               <View key={i} style={styles.ticketContainer}>

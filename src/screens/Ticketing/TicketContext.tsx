@@ -36,7 +36,7 @@ const TicketContextProvider: React.FC = ({children}) => {
     isRefreshingTickets,
   ] = usePollableResource(getFareContracts, {
     initialValue: [],
-    pollingTimeInSeconds: 3,
+    pollingTimeInSeconds: 1,
     disabled: !poll,
   });
 
