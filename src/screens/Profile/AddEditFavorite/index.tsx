@@ -4,33 +4,33 @@
  * Modifications: Copyright (c) 2020 Andre 'Staltz' Medeiros
  * MIT
  */
-import {RouteProp, CompositeNavigationProp} from '@react-navigation/native';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Alert,
+  Keyboard,
   StyleProp,
   Text,
+  TouchableOpacity,
   View,
   ViewStyle,
-  SafeAreaView,
-  Keyboard,
-  TouchableOpacity,
 } from 'react-native';
+import {Modalize} from 'react-native-modalize';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {ProfileStackParams} from '..';
-import {Close, Add, Remove, Confirm} from '../../../assets/svg/icons/actions/';
+import {Add, Close, Confirm, Remove} from '../../../assets/svg/icons/actions/';
 import {ArrowLeft, Expand} from '../../../assets/svg/icons/navigation/';
 import {MapPointPin} from '../../../assets/svg/icons/places';
-import {useFavorites} from '../../../favorites/FavoritesContext';
-import {StyleSheet, Theme, useTheme} from '../../../theme';
 import Button from '../../../components/button';
-import EmojiPopup from './EmojiPopup';
-import {RootStackParamList} from '../../../navigation';
-import {useLocationSearchValue} from '../../../location-search';
-import ScreenHeader from '../../../ScreenHeader';
-import {Modalize} from 'react-native-modalize';
-import colors from '../../../theme/colors';
 import Input from '../../../components/input';
+import {useFavorites} from '../../../favorites/FavoritesContext';
+import {useLocationSearchValue} from '../../../location-search';
+import {RootStackParamList} from '../../../navigation';
+import ScreenHeader from '../../../ScreenHeader';
+import {StyleSheet, Theme} from '../../../theme';
+import colors from '../../../theme/colors';
+import EmojiPopup from './EmojiPopup';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';

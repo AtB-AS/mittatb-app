@@ -90,6 +90,7 @@ const Assistant: React.FC<Props> = ({
   requestGeoPermission,
   navigation,
 }) => {
+  const styles = useStyles();
   const {from, to} = useLocations(currentLocation);
 
   function swap() {
@@ -119,6 +120,13 @@ const Assistant: React.FC<Props> = ({
     }
   }
 
+  function resetView() {
+    setCurrentLocationOrRequest();
+    navigation.setParams({
+      toLocation: undefined,
+    });
+  }
+
   const [date, setDate] = useState<DateOutput | undefined>();
   const [tripPatterns, isSearching, timeOfLastSearch, reload] = useTripPatterns(
     from,
@@ -140,6 +148,7 @@ const Assistant: React.FC<Props> = ({
   const showEmptyScreen = !tripPatterns && !isSearching;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
   const useScroll = !showEmptyScreen && !isEmptyResult;
+  const isHeaderFullHeight = !from || !to;
 
   const renderHeader = () => (
     <View>
@@ -181,15 +190,17 @@ const Assistant: React.FC<Props> = ({
             />
           </View>
 
-          <TouchableOpacity
-            hitSlop={insets.all(12)}
-            onPress={swap}
-            accessible={true}
-            accessibilityLabel="Bytt om på avreisested og ankomststed"
-            accessibilityRole="button"
-          >
-            <Swap />
-          </TouchableOpacity>
+          <View style={styles.swapButton}>
+            <TouchableOpacity
+              onPress={swap}
+              hitSlop={insets.all(12)}
+              accessible={true}
+              accessibilityLabel="Bytt om på avreisested og ankomststed"
+              accessibilityRole="button"
+            >
+              <Swap />
+            </TouchableOpacity>
+          </View>
         </View>
       </SearchGroup>
 
@@ -237,10 +248,11 @@ const Assistant: React.FC<Props> = ({
       renderHeader={renderHeader}
       onRefresh={reload}
       isRefreshing={isSearching}
-      headerHeight={HEADER_HEIGHT}
       useScroll={useScroll}
       headerTitle="Reiseassistent"
+      isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
+      onLogoClick={resetView}
     >
       <Results
         tripPatterns={tripPatterns}
@@ -261,10 +273,21 @@ const Assistant: React.FC<Props> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   searchButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingRight: 12,
+  },
+  swapButton: {
+    position: 'relative',
+    top: -23,
+    right: 23,
+    backgroundColor: theme.background.level0,
+    padding: 3,
+    borderColor: theme.background.accent,
+    borderWidth: 2,
+    borderRadius: 20,
   },
   styleButton: {
     flexGrow: 1,
@@ -284,7 +307,7 @@ const styles = StyleSheet.create({
   altTitleText__right: {
     textAlign: 'right',
   },
-});
+}));
 
 type Locations = {
   from: LocationWithSearchMetadata | undefined;

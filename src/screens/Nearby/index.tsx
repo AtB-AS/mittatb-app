@@ -212,6 +212,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   searchButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingRight: 12,
   },
   styleButton: {
     flexGrow: 1,
