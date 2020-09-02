@@ -75,7 +75,7 @@ const DisappearingHeader: React.FC<Props> = ({
   const ref = React.useRef<ScrollView>(null);
   useScrollToTop(
     React.useRef<Scrollable>({
-      scrollTo: () => ref.current?.scrollTo({y: -contentHeight}),
+      scrollTo: () => ref.current?.scrollTo({y: -contentOffset}),
     }),
   );
 
