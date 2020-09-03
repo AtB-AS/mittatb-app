@@ -72,10 +72,11 @@ const DisappearingHeader: React.FC<Props> = ({
   } = useCalculateHeaderContentHeight();
 
   const {width: windowWidth} = useWindowDimensions();
-  const ref = React.useRef<ScrollView>(null);
+  const scrollableContentRef = React.useRef<ScrollView>(null);
   useScrollToTop(
     React.useRef<Scrollable>({
-      scrollTo: () => ref.current?.scrollTo({y: -contentOffset}),
+      scrollTo: () =>
+        scrollableContentRef.current?.scrollTo({y: -contentOffset}),
     }),
   );
 
@@ -98,13 +99,16 @@ const DisappearingHeader: React.FC<Props> = ({
     [contentHeight, contentOffset],
   );
 
-  useEffect(() => {
-    Animated.timing(fullscreenOffsetRef, {
-      toValue: isFullHeight ? 0 : contentOffset,
-      duration: 400,
-      useNativeDriver: true,
-    }).start();
-  }, [isFullHeight, contentOffset]);
+  useEffect(
+    () =>
+      Animated.timing(fullscreenOffsetRef, {
+        toValue: isFullHeight ? 0 : contentOffset,
+        duration: 400,
+        useNativeDriver: true,
+      }).start(),
+    [isFullHeight],
+  );
+
   useEffect(
     () => fullscreenOffsetRef.setValue(isFullHeight ? 0 : contentOffset),
     [contentOffset],
@@ -175,25 +179,27 @@ const DisappearingHeader: React.FC<Props> = ({
 
           {useScroll ? (
             <Animated.ScrollView
-              ref={ref}
+              ref={scrollableContentRef}
               contentContainerStyle={[
-                {paddingTop: Platform.OS !== 'ios' ? contentHeight : 0},
+                {paddingTop: !IS_IOS ? contentHeight : 0},
               ]}
               scrollEventThrottle={10}
               style={{flex: 1}}
               refreshControl={
-                onRefresh ? (
-                  <RefreshControl
-                    refreshing={isRefreshing}
-                    onRefresh={onRefresh}
-                    progressViewOffset={contentHeight}
-                  />
-                ) : undefined
+                <RefreshControl
+                  refreshing={isRefreshing}
+                  onRefresh={onRefresh}
+                  progressViewOffset={contentHeight}
+                />
               }
               onScroll={Animated.event(
                 [{nativeEvent: {contentOffset: {y: scrollYRef}}}],
                 {
-                  useNativeDriver: true,
+                  // For some reason native driver true her (which is preffered)
+                  // causes the content animation to jump when refresh control
+                  // is triggered. Not ideal having native driver false
+                  // but for now this is the best I can do. -mb
+                  useNativeDriver: false,
                   listener: (e: NativeSyntheticEvent<NativeScrollEvent>) => {
                     onScrolling(e.nativeEvent);
                   },
