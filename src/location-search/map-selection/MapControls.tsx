@@ -19,18 +19,30 @@ const MapControls: React.FC<Props> = ({
 }) => {
   return (
     <View>
-      <TouchableOpacity onPress={flyToCurrentLocation}>
+      <TouchableOpacity
+        accessibilityLabel="Min posisjon"
+        accessibilityRole="button"
+        onPress={flyToCurrentLocation}
+      >
         <View style={styles.flyToButton}>
           <CurrentLocationArrow />
         </View>
       </TouchableOpacity>
       <View style={styles.zoomContainer}>
-        <TouchableOpacity onPress={zoomIn}>
+        <TouchableOpacity
+          onPress={zoomIn}
+          accessibilityLabel="Zoom inn"
+          accessibilityRole="button"
+        >
           <View style={styles.zoomInButton}>
             <Add />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={zoomOut}>
+        <TouchableOpacity
+          onPress={zoomOut}
+          accessibilityLabel="Zoom ut"
+          accessibilityRole="button"
+        >
           <View style={styles.zoomOutButton}>
             <Remove />
           </View>
