@@ -144,7 +144,12 @@ const MapSelection: React.FC<Props> = ({
 
 const BackArrow: React.FC<{onBack(): void}> = ({onBack}) => {
   return (
-    <TouchableOpacity onPress={onBack} hitSlop={insets.symmetric(12, 20)}>
+    <TouchableOpacity
+      accessibilityLabel="Gå tilbake"
+      accessibilityRole="button"
+      onPress={onBack}
+      hitSlop={insets.symmetric(12, 20)}
+    >
       <View style={styles.backArrow}>
         <ArrowLeft fill={colors.general.white} />
       </View>
