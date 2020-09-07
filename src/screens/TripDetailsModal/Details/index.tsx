@@ -26,6 +26,7 @@ import {FavoriteIcon} from '../../../favorites';
 import {getSingleTripPattern} from '../../../api/trips';
 import usePollableResource from '../../../utils/use-pollable-resource';
 import {getQuayNameFromStartLeg} from '../../../utils/transportation-names';
+import {TravelDetailsMap} from './DetailsMap';
 
 // @TODO Firebase config?
 const TIME_LIMIT_IN_MINUTES = 3;
@@ -114,41 +115,47 @@ const DetailsContent: React.FC<{
 
   return (
     <>
+      {tripPattern.legs?.length > 0 && (
+        <TravelDetailsMap legs={tripPattern.legs} />
+      )}
       {shortTime && (
         <MessageBox
           containerStyle={styles.messageContainer}
           message="Vær oppmerksom på kort byttetid."
         />
       )}
-      <LocationRow
-        icon={
-          getLocationIcon(from, favorites) ?? (
-            <Dot fill={colors.general.black} />
-          )
-        }
-        location={getQuayNameFromStartLeg(tripPattern.legs[0], from.name)}
-        time={formatToClock(tripPattern.startTime)}
-        textStyle={styles.textStyle}
-      />
-      {tripPattern.legs.map((leg, i, legs) => (
-        <LegDetail
-          key={i}
-          leg={leg}
-          onCalculateTime={flagShortTime}
-          nextLeg={nextLeg(i, legs)}
-          isIntermediateTravelLeg={isIntermediateTravelLeg(i, legs)}
-          showFrom={showFrom(i, legs)}
-          showTo={showTo(i, legs)}
-        />
-      ))}
-      {lastLegIsFoot && (
+
+      <View style={styles.stepContainer}>
         <LocationRow
-          icon={getLocationIcon(to, favorites)}
-          location={to.name}
-          time={formatToClock(tripPattern.endTime)}
+          icon={
+            getLocationIcon(from, favorites) ?? (
+              <Dot fill={colors.general.black} />
+            )
+          }
+          location={getQuayNameFromStartLeg(tripPattern.legs[0], from.name)}
+          time={formatToClock(tripPattern.startTime)}
           textStyle={styles.textStyle}
         />
-      )}
+        {tripPattern.legs.map((leg, i, legs) => (
+          <LegDetail
+            key={i}
+            leg={leg}
+            onCalculateTime={flagShortTime}
+            nextLeg={nextLeg(i, legs)}
+            isIntermediateTravelLeg={isIntermediateTravelLeg(i, legs)}
+            showFrom={showFrom(i, legs)}
+            showTo={showTo(i, legs)}
+          />
+        ))}
+        {lastLegIsFoot && (
+          <LocationRow
+            icon={getLocationIcon(to, favorites)}
+            location={to.name}
+            time={formatToClock(tripPattern.endTime)}
+            textStyle={styles.textStyle}
+          />
+        )}
+      </View>
     </>
   );
 };
@@ -223,9 +230,9 @@ const useDetailsStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   scrollViewContent: {
-    padding: 12,
     paddingBottom: 100,
   },
+  stepContainer: {},
   textStyle: {
     fontSize: 16,
   },
