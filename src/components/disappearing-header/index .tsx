@@ -199,7 +199,7 @@ const DisappearingHeader: React.FC<Props> = ({
                   // causes the content animation to jump when refresh control
                   // is triggered. Not ideal having native driver false
                   // but for now this is the best I can do. -mb
-                  useNativeDriver: false,
+                  useNativeDriver: !IS_IOS,
                   listener: (e: NativeSyntheticEvent<NativeScrollEvent>) => {
                     onScrolling(e.nativeEvent);
                   },
