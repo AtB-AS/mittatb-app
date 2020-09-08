@@ -77,14 +77,15 @@ const TripDetailsModal: React.FC<Props> = (props) => {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
       >
-        {error ? (
+        {error && (
           <MessageBox type="warning">
             <Text>
-              Kunne ikke hente ut reiseforslag. Det kan være at reisen har
-              endret seg eller ikke lengre er tilgjengelig.
+              Kunne ikke hente ut oppdatering forreiseforslaget. Det kan være
+              at reisen har endret seg eller ikke lengre er tilgjengelig.
             </Text>
           </MessageBox>
-        ) : !tripPattern ? (
+        )}
+        {!tripPattern ? (
           <ActivityIndicator animating={true} size="large" />
         ) : (
           <DetailsContent {...passingProps} tripPattern={tripPattern} />
