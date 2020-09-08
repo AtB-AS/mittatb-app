@@ -10,7 +10,7 @@ import {
   Vipps as VippsScreen,
 } from './Payment';
 import Splash from './Splash';
-import {useRemoteConfig} from '../../RemoteConfigContext';
+import {Features, useFeatureToggle} from '../../FeatureToggleContext';
 
 interface VippsPaymentResponse {}
 
@@ -25,9 +25,9 @@ export type TicketingStackParams = {
 const Stack = createStackNavigator<TicketingStackParams>();
 
 export default function Ticketing() {
-  const {enable_ticketing} = useRemoteConfig();
+  const ticketingEnabled = useFeatureToggle(Features.Ticketing);
 
-  return !enable_ticketing ? (
+  return !ticketingEnabled ? (
     <Splash />
   ) : (
     <TicketContextProvider>

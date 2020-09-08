@@ -15,7 +15,8 @@ import {loadLocalConfig} from './local-config';
 import bugsnag from './diagnostics/bugsnag';
 import {setInstallId as setApiInstallId} from './api/client';
 import ErrorBoundary from './error-boundary';
-
+import {AuthenticationContextProvider} from './AuthContext';
+import {FeatureToggleContextProvider} from './FeatureToggleContext';
 import {MAPBOX_API_TOKEN} from 'react-native-dotenv';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
@@ -25,7 +26,6 @@ async function setupConfig() {
   bugsnag.setUser(installId);
   setApiInstallId(installId);
 }
-
 trackAppState();
 enableScreens();
 
@@ -54,7 +54,11 @@ const App = () => {
               <SearchHistoryContextProvider>
                 <GeolocationContextProvider>
                   <RemoteConfigContextProvider>
-                    <NavigationRoot />
+                    <AuthenticationContextProvider>
+                      <FeatureToggleContextProvider>
+                        <NavigationRoot />
+                      </FeatureToggleContextProvider>
+                    </AuthenticationContextProvider>
                   </RemoteConfigContextProvider>
                 </GeolocationContextProvider>
               </SearchHistoryContextProvider>
