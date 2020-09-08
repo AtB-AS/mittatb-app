@@ -80,7 +80,7 @@ const TripDetailsModal: React.FC<Props> = (props) => {
         {error && (
           <MessageBox type="warning">
             <Text>
-              Kunne ikke hente ut oppdatering forreiseforslaget. Det kan være
+              Kunne ikke hente ut oppdatering for reiseforslaget. Det kan være
               at reisen har endret seg eller ikke lengre er tilgjengelig.
             </Text>
           </MessageBox>
