@@ -5,7 +5,7 @@ import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {Leg, TripPattern} from '../../../sdk';
 import WalkDetail from './WalkDetail';
 import TransportDetail from './TransportDetail';
-import {formatToClock} from '../../../utils/date';
+import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
 import LocationRow from '../LocationRow';
 import {StyleSheet} from '../../../theme';
 import Header from '../../../ScreenHeader';
@@ -112,6 +112,15 @@ const DetailsContent: React.FC<{
     tripPattern.legs?.length > 0 &&
     tripPattern.legs[tripPattern.legs.length - 1].mode === 'foot';
 
+  const startLeg = tripPattern.legs[0];
+  const timeString = (leg: Leg, time: string) => {
+    let timeString = formatToClock(time);
+    if (leg.mode !== 'foot' && !leg.realtime) {
+      timeString = missingRealtimePrefix + timeString;
+    }
+    return timeString;
+  };
+
   return (
     <>
       {shortTime && (
@@ -126,8 +135,8 @@ const DetailsContent: React.FC<{
             <Dot fill={colors.general.black} />
           )
         }
-        location={getQuayNameFromStartLeg(tripPattern.legs[0], from.name)}
-        time={formatToClock(tripPattern.startTime)}
+        location={getQuayNameFromStartLeg(startLeg, from.name)}
+        time={timeString(startLeg, tripPattern.startTime)}
         textStyle={styles.textStyle}
       />
       {tripPattern.legs.map((leg, i, legs) => (
