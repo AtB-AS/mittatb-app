@@ -145,9 +145,7 @@ const LocationSearch: React.FC<Props> = ({
         <FavoriteChips
           onSelectLocation={onSelect}
           onMapSelection={onMapSelection}
-          geolocation={geolocation}
-          requestGeoPermission={requestGeoPermission}
-          hideFavorites={!!hideFavorites}
+          hideChips={!!hideFavorites}
           containerStyle={styles.contentBlock}
         />
 

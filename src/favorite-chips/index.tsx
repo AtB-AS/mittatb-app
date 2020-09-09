@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   AccessibilityProps,
   StyleProp,
@@ -8,66 +8,37 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {GeoPosition} from 'react-native-geolocation-service';
 import {ScrollView} from 'react-native-gesture-handler';
 import {CurrentLocationArrow, MapPointPin} from '../assets/svg/icons/places';
 import {FavoriteIcon} from '../favorites';
 import {useFavorites} from '../favorites/FavoritesContext';
 import {LocationWithMetadata} from '../favorites/types';
-import {RequestPermissionFn} from '../GeolocationContext';
+import {useGeolocationState} from '../GeolocationContext';
 import colors from '../theme/colors';
 import {useReverseGeocoder} from '../utils/use-geocoder';
 
 type Props = {
-  geolocation: GeoPosition | null;
-  requestGeoPermission: RequestPermissionFn;
   onSelectLocation: (location: LocationWithMetadata) => void;
   onMapSelection: () => void;
-  hideFavorites: boolean;
   containerStyle?: StyleProp<ViewStyle>;
+  chipTypes?: ChipTypeGroup[];
+  hideChips?: boolean;
 };
+
+type ChipTypeGroup = 'location' | 'map' | 'favorites';
 
 const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
   onMapSelection,
-  geolocation,
-  requestGeoPermission,
   containerStyle,
-  hideFavorites,
+  chipTypes = ['favorites', 'location', 'map'],
+  hideChips = false,
 }) => {
   const {favorites} = useFavorites();
-  const reverseLookupLocations =
-    useReverseGeocoder(geolocation?.coords ?? null) ?? [];
-  const currentLocation = reverseLookupLocations.length
-    ? reverseLookupLocations[1]
-    : null;
+  const {onCurrentLocation} = useCurrentLocationChip(onSelectLocation);
+  const activeType = (type: ChipTypeGroup) => chipTypes.includes(type);
 
-  const [recentlyAllowedGeo, setsetRecentlyAllowedGeo] = useState(false);
-
-  async function onCurrentLocation() {
-    if (currentLocation) {
-      onSelectLocation({
-        ...currentLocation,
-        resultType: 'geolocation',
-      });
-    } else {
-      const status = await requestGeoPermission();
-      if (status === 'granted') {
-        setsetRecentlyAllowedGeo(true);
-      }
-    }
-  }
-
-  useEffect(() => {
-    if (recentlyAllowedGeo && currentLocation) {
-      onSelectLocation({
-        ...currentLocation,
-        resultType: 'geolocation',
-      });
-    }
-  }, [recentlyAllowedGeo, currentLocation]);
-
-  if (hideFavorites) return null;
+  if (hideChips) return null;
 
   return (
     <View
@@ -85,19 +56,23 @@ const FavoriteChips: React.FC<Props> = ({
         contentContainerStyle={containerStyle}
         keyboardShouldPersistTaps="handled"
       >
-        <FavoriteChip
-          text="Posisjon"
-          accessibilityRole="menuitem"
-          icon={<CurrentLocationArrow />}
-          onPress={onCurrentLocation}
-        />
-        <FavoriteChip
-          text="Velg i kart"
-          accessibilityRole="menuitem"
-          icon={<MapPointPin />}
-          onPress={onMapSelection}
-        />
-        {!hideFavorites &&
+        {activeType('location') && (
+          <FavoriteChip
+            text="Posisjon"
+            accessibilityRole="menuitem"
+            icon={<CurrentLocationArrow />}
+            onPress={onCurrentLocation}
+          />
+        )}
+        {activeType('map') && (
+          <FavoriteChip
+            text="Velg i kart"
+            accessibilityRole="menuitem"
+            icon={<MapPointPin />}
+            onPress={onMapSelection}
+          />
+        )}
+        {activeType('favorites') &&
           favorites.map((fav, i) => (
             <FavoriteChip
               key={fav.name}
@@ -166,3 +141,44 @@ const chipStyles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+function useCurrentLocationChip(
+  onSelectLocation: (location: LocationWithMetadata) => void,
+) {
+  const {location, requestPermission} = useGeolocationState();
+  const reverseLookupLocations =
+    useReverseGeocoder(location?.coords ?? null) ?? [];
+  const currentLocation = reverseLookupLocations.length
+    ? reverseLookupLocations[1]
+    : null;
+
+  const [recentlyAllowedGeo, setsetRecentlyAllowedGeo] = useState(false);
+
+  const onCurrentLocation = useCallback(
+    async function () {
+      if (currentLocation) {
+        onSelectLocation({
+          ...currentLocation,
+          resultType: 'geolocation',
+        });
+      } else {
+        const status = await requestPermission();
+        if (status === 'granted') {
+          setsetRecentlyAllowedGeo(true);
+        }
+      }
+    },
+    [currentLocation, onSelectLocation, requestPermission],
+  );
+
+  useEffect(() => {
+    if (recentlyAllowedGeo && currentLocation) {
+      onSelectLocation({
+        ...currentLocation,
+        resultType: 'geolocation',
+      });
+    }
+  }, [recentlyAllowedGeo, currentLocation]);
+
+  return {onCurrentLocation};
+}
