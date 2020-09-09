@@ -40,7 +40,6 @@ const SearchButton: React.FC<SearchButtonProps> = ({
         {...accessiblityProps}
         style={styles.button}
         onPress={onPress}
-        hitSlop={insets.symmetric(8, 12)}
       >
         <Text style={styles.title}>{title}</Text>
         <View style={styles.icon}>{icon}</View>
@@ -74,7 +73,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
   },
   buttonContainer: {
     flexDirection: 'row',

@@ -146,7 +146,7 @@ const LocationSearch: React.FC<Props> = ({
           onSelectLocation={onSelect}
           onMapSelection={onMapSelection}
           hideChips={!!hideFavorites}
-          containerStyle={styles.contentBlock}
+          containerStyle={[styles.contentBlock, styles.chipBox]}
         />
 
         {hasAnyResult ? (
@@ -209,6 +209,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   contentBlock: {
     paddingHorizontal: theme.sizes.pagePadding,
+  },
+  chipBox: {
+    marginBottom: 24,
   },
   label: {
     fontSize: 14,

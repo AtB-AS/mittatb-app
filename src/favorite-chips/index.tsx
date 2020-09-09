@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
   ViewStyle,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -19,7 +18,7 @@ import {useReverseGeocoder} from '../utils/use-geocoder';
 
 type Props = {
   onSelectLocation: (location: LocationWithMetadata) => void;
-  onMapSelection: () => void;
+  onMapSelection?: () => void;
   containerStyle?: StyleProp<ViewStyle>;
   chipTypes?: ChipTypeGroup[];
   hideChips?: boolean;
@@ -29,8 +28,8 @@ type ChipTypeGroup = 'location' | 'map' | 'favorites';
 
 const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
-  onMapSelection,
   containerStyle,
+  onMapSelection = () => {},
   chipTypes = ['favorites', 'location', 'map'],
   hideChips = false,
 }) => {
@@ -41,51 +40,51 @@ const FavoriteChips: React.FC<Props> = ({
   if (hideChips) return null;
 
   return (
-    <View style={{marginBottom: 24}}>
-      <ScrollView
-        accessibilityRole="menu"
-        accessible={true}
-        accessibilityLabel="Favorittsteder"
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={containerStyle}
-        keyboardShouldPersistTaps="handled"
-      >
-        {activeType('location') && (
+    <ScrollView
+      accessibilityRole="menu"
+      accessible={true}
+      accessibilityLabel="Favorittsteder"
+      horizontal={true}
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={containerStyle}
+      keyboardShouldPersistTaps="handled"
+    >
+      {activeType('location') && (
+        <FavoriteChip
+          text="Posisjon"
+          accessibilityRole="menuitem"
+          icon={<CurrentLocationArrow fill={colors.general.white} />}
+          onPress={onCurrentLocation}
+          mode="dark"
+        />
+      )}
+      {activeType('map') && (
+        <FavoriteChip
+          text="Velg i kart"
+          accessibilityRole="menuitem"
+          icon={<MapPointPin fill={colors.general.white} />}
+          onPress={onMapSelection}
+          mode="dark"
+        />
+      )}
+      {activeType('favorites') &&
+        favorites.map((fav, i) => (
           <FavoriteChip
-            text="Posisjon"
+            key={fav.name}
+            text={fav.name}
             accessibilityRole="menuitem"
-            icon={<CurrentLocationArrow fill={colors.general.white} />}
-            onPress={onCurrentLocation}
+            icon={<FavoriteIcon favorite={fav} />}
+            onPress={() =>
+              onSelectLocation({
+                ...fav.location,
+                resultType: 'favorite',
+                favoriteId: fav.id,
+              })
+            }
+            style={i === favorites.length - 1 ? {marginRight: 0} : undefined}
           />
-        )}
-        {activeType('map') && (
-          <FavoriteChip
-            text="Velg i kart"
-            accessibilityRole="menuitem"
-            icon={<MapPointPin fill={colors.general.white} />}
-            onPress={onMapSelection}
-          />
-        )}
-        {activeType('favorites') &&
-          favorites.map((fav, i) => (
-            <FavoriteChip
-              key={fav.name}
-              text={fav.name}
-              accessibilityRole="menuitem"
-              icon={<FavoriteIcon favorite={fav} />}
-              onPress={() =>
-                onSelectLocation({
-                  ...fav.location,
-                  resultType: 'favorite',
-                  favoriteId: fav.id,
-                })
-              }
-              style={i === favorites.length - 1 ? {marginRight: 0} : undefined}
-            />
-          ))}
-      </ScrollView>
-    </View>
+        ))}
+    </ScrollView>
   );
 };
 
@@ -96,6 +95,7 @@ type ChipProps = {
   icon: JSX.Element;
   onPress: () => void;
   style?: ViewStyle;
+  mode?: 'dark' | 'light';
 } & AccessibilityProps;
 
 const FavoriteChip: React.FC<ChipProps> = ({
@@ -103,11 +103,16 @@ const FavoriteChip: React.FC<ChipProps> = ({
   icon,
   onPress,
   style,
+  mode = 'light',
   ...accessibilityProps
 }) => {
   return (
     <TouchableOpacity
-      style={[chipStyles.container, style]}
+      style={[
+        chipStyles.container,
+        mode == 'dark' && chipStyles.container__dark,
+        style,
+      ]}
       onPress={onPress}
       {...accessibilityProps}
     >
@@ -128,6 +133,9 @@ const chipStyles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 8,
     marginRight: 8,
+  },
+  container__dark: {
+    backgroundColor: colors.secondary.gray_500,
   },
   text: {
     marginLeft: 4,
