@@ -145,11 +145,13 @@ const Assistant: React.FC<Props> = ({
   }
 
   const [date, setDate] = useState<DateOutput | undefined>();
-  const [tripPatterns, isSearching, timeOfLastSearch, reload] = useTripPatterns(
-    from,
-    to,
-    date,
-  );
+  const [
+    tripPatterns,
+    isSearching,
+    timeOfLastSearch,
+    reload,
+    clearPatterns,
+  ] = useTripPatterns(from, to, date);
 
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
@@ -298,6 +300,11 @@ const Assistant: React.FC<Props> = ({
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
       onLogoClick={resetView}
+      onFullscreenTransitionEnd={(fullHeight) => {
+        if (fullHeight) {
+          clearPatterns();
+        }
+      }}
     >
       <Results
         tripPatterns={tripPatterns}
@@ -462,10 +469,12 @@ function useTripPatterns(
   fromLocation: Location | undefined,
   toLocation: Location | undefined,
   date: DateOutput | undefined,
-): [TripPattern[] | null, boolean, Date, () => {}] {
+): [TripPattern[] | null, boolean, Date, () => {}, () => void] {
   const [isSearching, setIsSearching] = useState(false);
   const [timeOfSearch, setTimeOfSearch] = useState<Date>(new Date());
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
+
+  const clearPatterns = () => setTripPatterns(null);
   const reload = useCallback(() => {
     const source = CancelToken.source();
 
@@ -507,7 +516,7 @@ function useTripPatterns(
 
   useEffect(reload, [reload]);
 
-  return [tripPatterns, isSearching, timeOfSearch, reload];
+  return [tripPatterns, isSearching, timeOfSearch, reload, clearPatterns];
 }
 
 function useDoOnceWhen(fn: () => void, condition: boolean) {

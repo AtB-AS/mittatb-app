@@ -36,6 +36,8 @@ type Props = {
 
   onEndReached?(e: NativeScrollEvent): void;
   onEndReachedThreshold?: number;
+
+  onFullscreenTransitionEnd?(isFullscreen: boolean): void;
 };
 
 const SCROLL_OFFSET_HEADER_ANIMATION = 80;
@@ -63,6 +65,8 @@ const DisappearingHeader: React.FC<Props> = ({
   onEndReached,
   onEndReachedThreshold = 10,
   headerMargin = 12,
+
+  onFullscreenTransitionEnd,
 }) => {
   const {
     boxHeight,
@@ -110,6 +114,7 @@ const DisappearingHeader: React.FC<Props> = ({
         useNativeDriver: true,
       }).start(function () {
         setTransitioned(isFullHeight);
+        onFullscreenTransitionEnd?.(isFullHeight);
       }),
     [isFullHeight],
   );
