@@ -11,19 +11,14 @@ import shadows from './shadows';
 
 type Props = {
   location?: Location;
-  onSelect(location: LocationWithSearchMetadata): void;
+  onSelect(): void;
   isSearching: boolean;
 };
 
 const LocationBar: React.FC<Props> = ({location, onSelect, isSearching}) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={{flex: 1}}
-        onPress={() => {
-          location && onSelect({...location, resultType: 'search'});
-        }}
-      >
+      <TouchableOpacity style={{flex: 1}} onPress={onSelect}>
         <View style={styles.innerContainer}>
           <View style={styles.locationContainer}>
             <Icon isSearching={isSearching} location={location} />

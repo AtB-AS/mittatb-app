@@ -5,11 +5,7 @@ import {Text, View, TouchableOpacity} from 'react-native';
 import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
 import {useReverseGeocoder} from '../../geocoder';
 import colors from '../../theme/colors';
-import {
-  LocationSearchNavigationProp,
-  LocationSearchStackParams,
-  LocationWithSearchMetadata,
-} from '../';
+import {LocationSearchNavigationProp, LocationSearchStackParams} from '../';
 import insets from '../../utils/insets';
 import MapControls from './MapControls';
 import {useGeolocationState} from '../../GeolocationContext';
@@ -68,13 +64,14 @@ const MapSelection: React.FC<Props> = ({
 
   const {location: geolocation} = useGeolocationState();
 
-  const onSelect = (location: LocationWithSearchMetadata) => {
-    navigation.navigate(callerRouteName as any, {
-      [callerRouteParam]: location,
-    });
-  };
-
   const location = locations?.[0];
+
+  const onSelect = () => {
+    location &&
+      navigation.navigate(callerRouteName as any, {
+        [callerRouteParam]: {...location, resultType: 'search'},
+      });
+  };
 
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
@@ -99,6 +96,19 @@ const MapSelection: React.FC<Props> = ({
 
   return (
     <View style={styles.container}>
+      <View style={styles.pinContainer}>
+        <View style={styles.pin}>
+          <TouchableOpacity onPress={onSelect}>
+            <SelectionPin
+              mode={getPinMode(
+                !!regionEvent?.isMoving,
+                isSearching,
+                !!location,
+              )}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
       <MapboxGL.MapView
         ref={mapViewRef}
         style={{
@@ -134,13 +144,6 @@ const MapSelection: React.FC<Props> = ({
       </View>
       <View style={styles.controlsContainer}>
         <MapControls zoomIn={zoomIn} zoomOut={zoomOut} />
-      </View>
-      <View style={styles.pinContainer} pointerEvents="none">
-        <View style={styles.pin}>
-          <SelectionPin
-            mode={getPinMode(!!regionEvent?.isMoving, isSearching, !!location)}
-          />
-        </View>
       </View>
     </View>
   );
@@ -195,6 +198,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '50%',
     right: '50%',
+    zIndex: 1,
   },
   pin: {position: 'absolute', top: -50, right: -20, ...shadows},
   backArrowContainer: {position: 'absolute', top: 80, left: 20},

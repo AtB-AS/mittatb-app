@@ -10,36 +10,20 @@ import {
 export type PinMode = 'movestart' | 'moveend' | 'found' | 'nothing';
 
 const AnimatedSelectionPin: React.FC<{mode: PinMode}> = ({mode}) => {
-  const pinOffset = useRef(new Animated.Value(-6)).current;
+  const pinOffset = useRef(new Animated.Value(-4)).current;
   const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (mode === 'movestart') {
-      Animated.parallel([
-        Animated.timing(pinOffset, {
-          toValue: -12,
-          duration: 100,
-          useNativeDriver: true,
-        }),
-        Animated.timing(opacity, {
-          toValue: 1,
-          duration: 100,
-          useNativeDriver: true,
-        }),
-      ]).start();
+      animateMove(
+        {value: pinOffset, toValue: -12, duration: 100},
+        {value: opacity, toValue: 1, duration: 100},
+      );
     } else if (mode === 'moveend') {
-      Animated.parallel([
-        Animated.timing(pinOffset, {
-          toValue: -4,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(opacity, {
-          toValue: 0,
-          duration: 100,
-          useNativeDriver: true,
-        }),
-      ]).start();
+      animateMove(
+        {value: pinOffset, toValue: -4, duration: 200},
+        {value: opacity, toValue: 0, duration: 100},
+      );
     }
   }, [mode]);
 
@@ -61,6 +45,29 @@ const AnimatedSelectionPin: React.FC<{mode: PinMode}> = ({mode}) => {
     </View>
   );
 };
+
+type AnimationConfig = Pick<
+  Animated.TimingAnimationConfig,
+  'toValue' | 'duration'
+> & {value: Animated.Value};
+
+function animateMove(
+  offsetConfig: AnimationConfig,
+  opacityConfig: AnimationConfig,
+) {
+  const {value: offsetValue, ...restOffsetConfig} = offsetConfig;
+  const {value: opacityValue, ...restOpacityConfig} = opacityConfig;
+  Animated.parallel([
+    Animated.timing(offsetValue, {
+      ...restOffsetConfig,
+      useNativeDriver: true,
+    }),
+    Animated.timing(opacityValue, {
+      ...restOpacityConfig,
+      useNativeDriver: true,
+    }),
+  ]).start();
+}
 
 const SelectionPin: React.FC<{mode: PinMode}> = ({mode}) => {
   switch (mode) {
