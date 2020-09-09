@@ -10,18 +10,18 @@ import {
 export type PinMode = 'movestart' | 'moveend' | 'found' | 'nothing';
 
 const AnimatedSelectionPin: React.FC<{mode: PinMode}> = ({mode}) => {
-  const pinOffset = useRef(new Animated.Value(-4)).current;
+  const pinOffset = useRef(new Animated.Value(0)).current;
   const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (mode === 'movestart') {
       animateMove(
-        {value: pinOffset, toValue: -12, duration: 100},
+        {value: pinOffset, toValue: -6, duration: 100},
         {value: opacity, toValue: 1, duration: 100},
       );
     } else if (mode === 'moveend') {
       animateMove(
-        {value: pinOffset, toValue: -4, duration: 200},
+        {value: pinOffset, toValue: 0, duration: 200},
         {value: opacity, toValue: 0, duration: 100},
       );
     }
@@ -35,7 +35,7 @@ const AnimatedSelectionPin: React.FC<{mode: PinMode}> = ({mode}) => {
       <Animated.View
         style={{
           position: 'absolute',
-          bottom: 6,
+          bottom: 0,
           left: 16,
           opacity,
         }}
