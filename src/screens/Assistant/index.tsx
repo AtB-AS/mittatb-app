@@ -10,16 +10,16 @@ import DisappearingHeader from '../../components/disappearing-header/index ';
 import {LocationButton} from '../../components/search-button';
 import SearchGroup from '../../components/search-button/search-group';
 import {useFavorites} from '../../favorites/FavoritesContext';
-import {Location, UserFavorites} from '../../favorites/types';
+import {
+  Location,
+  UserFavorites,
+  LocationWithMetadata,
+} from '../../favorites/types';
 import {
   RequestPermissionFn,
   useGeolocationState,
 } from '../../GeolocationContext';
-import {
-  LocationWithSearchMetadata,
-  useLocationSearchValue,
-} from '../../location-search';
-import {useReverseGeocoder} from '../../location-search/useGeocoder';
+import {useLocationSearchValue} from '../../location-search';
 import {RootStackParamList} from '../../navigation';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import {TripPattern} from '../../sdk';
@@ -35,6 +35,7 @@ import {
   LOCATIONS_REALLY_CLOSE_THRESHOLD,
 } from '../../utils/location';
 import {NoResultReason} from './types';
+import {useReverseGeocoder} from '../../utils/use-geocoder';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -136,7 +137,7 @@ const Assistant: React.FC<Props> = ({
 
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
-    initialLocation: LocationWithSearchMetadata | undefined,
+    initialLocation: LocationWithMetadata | undefined,
   ) =>
     navigation.navigate('LocationSearch', {
       label: callerRouteParam === 'fromLocation' ? 'Fra' : 'Til',
@@ -310,8 +311,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 }));
 
 type Locations = {
-  from: LocationWithSearchMetadata | undefined;
-  to: LocationWithSearchMetadata | undefined;
+  from: LocationWithMetadata | undefined;
+  to: LocationWithMetadata | undefined;
 };
 
 function computeNoResultReasons(
@@ -343,7 +344,7 @@ function computeNoResultReasons(
 function useLocations(currentLocation: Location | undefined): Locations {
   const {favorites} = useFavorites();
 
-  const memoedCurrentLocation = useMemo<LocationWithSearchMetadata | undefined>(
+  const memoedCurrentLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
     [
       currentLocation?.coordinates.latitude,
@@ -377,10 +378,10 @@ function useLocations(currentLocation: Location | undefined): Locations {
 }
 
 function useUpdatedLocation(
-  searchedLocation: LocationWithSearchMetadata | undefined,
-  currentLocation: LocationWithSearchMetadata | undefined,
+  searchedLocation: LocationWithMetadata | undefined,
+  currentLocation: LocationWithMetadata | undefined,
   favorites: UserFavorites,
-): LocationWithSearchMetadata | undefined {
+): LocationWithMetadata | undefined {
   return useMemo(() => {
     if (!searchedLocation) return undefined;
 

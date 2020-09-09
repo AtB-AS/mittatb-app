@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {StyleSheet} from '../../theme';
 import insets from '../../utils/insets';
-import {LocationWithSearchMetadata} from '../../location-search';
+import {LocationWithMetadata} from '../../favorites/types';
 
 type SearchButtonProps = {
   title: string;
@@ -57,7 +57,7 @@ const SearchButton: React.FC<SearchButtonProps> = ({
 export default SearchButton;
 
 type LocationButtonProps = Omit<SearchButtonProps, 'text'> & {
-  location?: LocationWithSearchMetadata;
+  location?: LocationWithMetadata;
 } & AccessibilityProps;
 
 export const LocationButton: React.FC<LocationButtonProps> = ({

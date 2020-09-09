@@ -4,20 +4,20 @@ import {Text, TextInput, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Header from '../ScreenHeader';
 import Input from '../components/input';
-import {Location} from '../favorites/types';
+import {Location, LocationWithMetadata} from '../favorites/types';
 import {useGeolocationState} from '../GeolocationContext';
 import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
 import {StyleSheet} from '../theme';
 import colors from '../theme/colors';
-import FavoriteChips from './FavoriteChips';
+import FavoriteChips from '../favorite-chips';
 import LocationResults from './LocationResults';
 import useDebounce from './useDebounce';
-import {useGeocoder} from './useGeocoder';
-import {LocationWithSearchMetadata, LocationSearchNavigationProp} from './';
+import {LocationSearchNavigationProp} from './';
 import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
 import {Close} from '../assets/svg/icons/actions';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useGeocoder} from '../utils/use-geocoder';
 
 export type Props = {
   navigation: LocationSearchNavigationProp;
@@ -29,7 +29,7 @@ export type RouteParams = {
   callerRouteParam: string;
   label: string;
   hideFavorites?: boolean;
-  initialLocation?: LocationWithSearchMetadata;
+  initialLocation?: LocationWithMetadata;
 };
 
 const LocationSearch: React.FC<Props> = ({
@@ -61,7 +61,7 @@ const LocationSearch: React.FC<Props> = ({
     useGeocoder(debouncedText, geolocation?.coords ?? null) ?? [];
   const filteredLocations = filterCurrentLocation(locations, previousLocations);
 
-  const onSelect = (location: LocationWithSearchMetadata) => {
+  const onSelect = (location: LocationWithMetadata) => {
     if (location.resultType === 'search') {
       addSearchEntry(location);
     }

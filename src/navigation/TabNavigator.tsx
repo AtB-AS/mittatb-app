@@ -10,16 +10,15 @@ import Assistant from '../screens/Assistant';
 import NearbyScreen from '../screens/Nearby';
 import TicketingScreen from '../screens/Ticketing';
 import ProfileScreen from '../screens/Profile';
-import {LocationWithSearchMetadata} from '../location-search';
-import {useRemoteConfig} from '../RemoteConfigContext';
+import {LocationWithMetadata} from '../favorites/types';
 
 export type TabNavigatorParams = {
   Assistant: {
-    fromLocation: LocationWithSearchMetadata;
-    toLocation: LocationWithSearchMetadata;
+    fromLocation: LocationWithMetadata;
+    toLocation: LocationWithMetadata;
   };
   Nearest: {
-    location: LocationWithSearchMetadata;
+    location: LocationWithMetadata;
   };
   Ticketing: undefined;
   Profile: undefined;

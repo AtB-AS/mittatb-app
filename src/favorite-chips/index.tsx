@@ -1,27 +1,27 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  ViewStyle,
-  StyleProp,
   AccessibilityProps,
+  StyleProp,
+  StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 import {GeoPosition} from 'react-native-geolocation-service';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useFavorites} from '../favorites/FavoritesContext';
 import {CurrentLocationArrow, MapPointPin} from '../assets/svg/icons/places';
 import {FavoriteIcon} from '../favorites';
+import {useFavorites} from '../favorites/FavoritesContext';
+import {LocationWithMetadata} from '../favorites/types';
 import {RequestPermissionFn} from '../GeolocationContext';
 import colors from '../theme/colors';
-import {LocationWithSearchMetadata} from './';
-import {useReverseGeocoder} from './useGeocoder';
+import {useReverseGeocoder} from '../utils/use-geocoder';
 
 type Props = {
   geolocation: GeoPosition | null;
   requestGeoPermission: RequestPermissionFn;
-  onSelectLocation: (location: LocationWithSearchMetadata) => void;
+  onSelectLocation: (location: LocationWithMetadata) => void;
   onMapSelection: () => void;
   hideFavorites: boolean;
   containerStyle?: StyleProp<ViewStyle>;
