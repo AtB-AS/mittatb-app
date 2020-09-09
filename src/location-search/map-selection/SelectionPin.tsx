@@ -7,25 +7,28 @@ import {
   SelectionPinMoveCircle,
 } from '../../assets/svg/map';
 
-export type PinMode = 'movestart' | 'moveend' | 'found' | 'nothing';
+export type PinMode = 'searching' | 'found' | 'nothing';
 
-const AnimatedSelectionPin: React.FC<{mode: PinMode}> = ({mode}) => {
+const AnimatedSelectionPin: React.FC<{isMoving: boolean; mode: PinMode}> = ({
+  isMoving,
+  mode,
+}) => {
   const pinOffset = useRef(new Animated.Value(0)).current;
   const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    if (mode === 'movestart') {
+    if (isMoving) {
       animateMove(
         {value: pinOffset, toValue: -6, duration: 100},
         {value: opacity, toValue: 1, duration: 100},
       );
-    } else if (mode === 'moveend') {
+    } else {
       animateMove(
         {value: pinOffset, toValue: 0, duration: 200},
         {value: opacity, toValue: 0, duration: 100},
       );
     }
-  }, [mode]);
+  }, [isMoving]);
 
   return (
     <View>
@@ -71,8 +74,7 @@ function animateMove(
 
 const SelectionPin: React.FC<{mode: PinMode}> = ({mode}) => {
   switch (mode) {
-    case 'movestart':
-    case 'moveend':
+    case 'searching':
       return <SelectionPinMove width={40} height={60} />;
     case 'found':
       return <SelectionPinConfirm width={40} height={60} />;

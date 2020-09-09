@@ -100,9 +100,9 @@ const MapSelection: React.FC<Props> = ({
         <View style={styles.pin}>
           <TouchableOpacity onPress={onSelect}>
             <SelectionPin
+              isMoving={!!regionEvent?.isMoving}
               mode={getPinMode(
-                !!regionEvent?.isMoving,
-                isSearching,
+                !!regionEvent?.isMoving || isSearching,
                 !!location,
               )}
             />
@@ -149,13 +149,8 @@ const MapSelection: React.FC<Props> = ({
   );
 };
 
-function getPinMode(
-  isMoving: boolean,
-  isSearching: boolean,
-  hasLocation: boolean,
-): PinMode {
-  if (isMoving) return 'movestart';
-  if (isSearching) return 'moveend';
+function getPinMode(isSearching: boolean, hasLocation: boolean): PinMode {
+  if (isSearching) return 'searching';
   if (hasLocation) return 'found';
 
   return 'nothing';
