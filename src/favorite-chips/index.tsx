@@ -41,12 +41,7 @@ const FavoriteChips: React.FC<Props> = ({
   if (hideChips) return null;
 
   return (
-    <View
-      style={{
-        marginBottom: 24,
-        height: 44,
-      }}
-    >
+    <View style={{marginBottom: 24}}>
       <ScrollView
         accessibilityRole="menu"
         accessible={true}
@@ -60,7 +55,7 @@ const FavoriteChips: React.FC<Props> = ({
           <FavoriteChip
             text="Posisjon"
             accessibilityRole="menuitem"
-            icon={<CurrentLocationArrow />}
+            icon={<CurrentLocationArrow fill={colors.general.white} />}
             onPress={onCurrentLocation}
           />
         )}
@@ -68,7 +63,7 @@ const FavoriteChips: React.FC<Props> = ({
           <FavoriteChip
             text="Velg i kart"
             accessibilityRole="menuitem"
-            icon={<MapPointPin />}
+            icon={<MapPointPin fill={colors.general.white} />}
             onPress={onMapSelection}
           />
         )}
@@ -124,21 +119,23 @@ const FavoriteChip: React.FC<ChipProps> = ({
 
 const chipStyles = StyleSheet.create({
   container: {
-    height: 44,
-    borderRadius: 4,
-    borderTopLeftRadius: 16,
-    backgroundColor: colors.secondary.cyan,
+    height: 28,
+    borderRadius: 8,
+    backgroundColor: colors.secondary.blue_500,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    marginRight: 12,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    marginRight: 8,
   },
   text: {
-    marginLeft: 12,
+    marginLeft: 4,
+    marginRight: 4,
+    color: colors.general.white,
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: 'bold',
+    letterSpacing: -0.31,
   },
 });
 
