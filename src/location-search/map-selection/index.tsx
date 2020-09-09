@@ -3,7 +3,7 @@ import React, {useState, useRef, useMemo} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 
 import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
-import {useReverseGeocoder} from '../useGeocoder';
+import {useReverseGeocoder} from '../../geocoder';
 import colors from '../../theme/colors';
 import {
   LocationSearchNavigationProp,
@@ -15,11 +15,11 @@ import MapControls from './MapControls';
 import {useGeolocationState} from '../../GeolocationContext';
 import LocationBar from './LocationBar';
 import {ArrowLeft} from '../../assets/svg/icons/navigation';
-import {SelectionPin} from '../../assets/svg/map';
 import {StyleSheet} from '../../theme';
 import shadows from './shadows';
 import {Coordinates} from '@entur/sdk';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
+import SelectionPin, {PinMode} from './SelectionPin';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -37,7 +37,7 @@ export type Props = {
 };
 
 type RegionEvent = {
-  isChanging: boolean;
+  isMoving: boolean;
   region?: GeoJSON.Feature<GeoJSON.Point, RegionPayload>;
 };
 
@@ -62,7 +62,9 @@ const MapSelection: React.FC<Props> = ({
     ],
   );
 
-  const locations = useReverseGeocoder(centeredCoordinates);
+  const {locations, isSearching, hasError} = useReverseGeocoder(
+    centeredCoordinates,
+  );
 
   const {location: geolocation} = useGeolocationState();
 
@@ -103,10 +105,10 @@ const MapSelection: React.FC<Props> = ({
           flex: 1,
         }}
         onRegionDidChange={(region) =>
-          setRegionEvent({isChanging: false, region})
+          setRegionEvent({isMoving: false, region})
         }
         onRegionWillChange={() =>
-          setRegionEvent({isChanging: true, region: regionEvent?.region})
+          setRegionEvent({isMoving: true, region: regionEvent?.region})
         }
       >
         <MapboxGL.Camera
@@ -127,7 +129,7 @@ const MapSelection: React.FC<Props> = ({
         <LocationBar
           location={location}
           onSelect={onSelect}
-          isSearching={!!regionEvent?.isChanging}
+          isSearching={!!regionEvent?.isMoving || isSearching}
         />
       </View>
       <View style={styles.controlsContainer}>
@@ -135,12 +137,26 @@ const MapSelection: React.FC<Props> = ({
       </View>
       <View style={styles.pinContainer} pointerEvents="none">
         <View style={styles.pin}>
-          <SelectionPin width={40} height={60} />
+          <SelectionPin
+            mode={getPinMode(!!regionEvent?.isMoving, isSearching, !!location)}
+          />
         </View>
       </View>
     </View>
   );
 };
+
+function getPinMode(
+  isMoving: boolean,
+  isSearching: boolean,
+  hasLocation: boolean,
+): PinMode {
+  if (isMoving) return 'movestart';
+  if (isSearching) return 'moveend';
+  if (hasLocation) return 'found';
+
+  return 'nothing';
+}
 
 const BackArrow: React.FC<{onBack(): void}> = ({onBack}) => {
   return (

@@ -16,7 +16,7 @@ import {FavoriteIcon} from '../favorites';
 import {RequestPermissionFn} from '../GeolocationContext';
 import colors from '../theme/colors';
 import {LocationWithSearchMetadata} from './';
-import {useReverseGeocoder} from './useGeocoder';
+import {useReverseGeocoder} from '../geocoder';
 
 type Props = {
   geolocation: GeoPosition | null;
@@ -36,9 +36,9 @@ const FavoriteChips: React.FC<Props> = ({
   hideFavorites,
 }) => {
   const {favorites} = useFavorites();
-  const reverseLookupLocations =
+  const {locations: reverseLookupLocations} =
     useReverseGeocoder(geolocation?.coords ?? null) ?? [];
-  const currentLocation = reverseLookupLocations.length
+  const currentLocation = reverseLookupLocations?.length
     ? reverseLookupLocations[1]
     : null;
 

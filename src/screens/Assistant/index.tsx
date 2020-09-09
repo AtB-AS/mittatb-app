@@ -19,7 +19,7 @@ import {
   LocationWithSearchMetadata,
   useLocationSearchValue,
 } from '../../location-search';
-import {useReverseGeocoder} from '../../location-search/useGeocoder';
+import {useReverseGeocoder} from '../../geocoder';
 import {RootStackParamList} from '../../navigation';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import {TripPattern} from '../../sdk';
@@ -58,9 +58,9 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
     requestPermission: requestGeoPermission,
   } = useGeolocationState();
 
-  const reverseLookupLocations =
+  const {locations: reverseLookupLocations} =
     useReverseGeocoder(location?.coords ?? null) ?? [];
-  const currentLocation = reverseLookupLocations.length
+  const currentLocation = reverseLookupLocations?.length
     ? reverseLookupLocations[1]
     : undefined;
 
