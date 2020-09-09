@@ -8,6 +8,7 @@ import {
   secondsBetween,
   secondsToMinutesShort,
   formatToClockOrRelativeMinutes,
+  missingRealtimePrefix,
 } from '../../utils/date';
 import TransportationIcon from '../../components/transportation-icon';
 import insets from '../../utils/insets';
@@ -37,20 +38,29 @@ function getFromLeg(legs: Leg[]) {
   const found = legs.find(legWithQuay);
   const fromQuay = (found?.fromEstimatedCall ?? found?.fromPlace)?.quay;
   if (!fromQuay) {
-    return legs[0].fromPlace.name ?? 'ukjent holdeplass';
+    return (legs[0].fromPlace.name ?? 'ukjent holdeplass') + ' ';
   }
   return `${fromQuay.name} ${fromQuay.publicCode ?? ''}`;
 }
-
 const ResultItemHeader: React.FC<{
   tripPattern: TripPattern;
 }> = ({tripPattern}) => {
   const quayName = getFromLeg(tripPattern.legs);
   const styles = useThemeStyles();
   const durationText = secondsToDurationShort(tripPattern.duration);
+
+  const quayLeg = tripPattern.legs.find(legWithQuay);
+  const timePrefix =
+    !!quayLeg && !quayLeg.realtime ? missingRealtimePrefix : '';
+  const quayStartTime =
+    quayLeg?.expectedStartTime ?? tripPattern.legs[0].expectedStartTime;
   return (
     <View style={styles.resultHeader}>
-      <Text>Fra {quayName}</Text>
+      <Text>
+        Fra {quayName}
+        {timePrefix}
+        {formatToClockOrRelativeMinutes(quayStartTime)}
+      </Text>
       <TextHiddenSupportPrefix prefix="Reisetid">
         {durationText}
       </TextHiddenSupportPrefix>

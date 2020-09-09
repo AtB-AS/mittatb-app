@@ -15,10 +15,8 @@ import {StyleSheet} from '../../theme';
 import {
   formatToClockOrRelativeMinutes,
   isInThePast,
-  isSameDay,
-  formatToSimpleDate,
-  daysBetween,
   isSeveralDays,
+  missingRealtimePrefix,
 } from '../../utils/date';
 import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
 import {useNavigation} from '@react-navigation/native';
@@ -276,7 +274,8 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
           onPress={() => onPress?.(departure)}
         >
           <TextHiddenSupportPrefix prefix="Avgang" style={styles.time}>
-            {formatToClockOrRelativeMinutes(departure.expectedDepartureTime)}
+            {(!departure.realtime ? missingRealtimePrefix : '') +
+              formatToClockOrRelativeMinutes(departure.expectedDepartureTime)}
           </TextHiddenSupportPrefix>
           <TransportationIcon
             mode={departure.serviceJourney.journeyPattern?.line.transportMode}
