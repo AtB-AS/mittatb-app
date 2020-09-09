@@ -19,6 +19,7 @@ import {SelectionPin} from '../../assets/svg/map';
 import {StyleSheet} from '../../theme';
 import shadows from './shadows';
 import {Coordinates} from '@entur/sdk';
+import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -119,17 +120,8 @@ const MapSelection: React.FC<Props> = ({
       <View style={styles.backArrowContainer}>
         <BackArrow onBack={() => navigation.goBack()} />
       </View>
-      <View style={styles.controlsContainer}>
-        <MapControls
-          flyToCurrentLocation={flyToCurrentLocation}
-          zoomIn={zoomIn}
-          zoomOut={zoomOut}
-        />
-      </View>
-      <View style={styles.pinContainer} pointerEvents="none">
-        <View style={styles.pin}>
-          <SelectionPin width={40} height={60} />
-        </View>
+      <View style={styles.positionArrowContainer}>
+        <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
       </View>
       <View style={styles.locationContainer}>
         <LocationBar
@@ -137,6 +129,14 @@ const MapSelection: React.FC<Props> = ({
           onSelect={onSelect}
           isSearching={!!regionEvent?.isChanging}
         />
+      </View>
+      <View style={styles.controlsContainer}>
+        <MapControls zoomIn={zoomIn} zoomOut={zoomOut} />
+      </View>
+      <View style={styles.pinContainer} pointerEvents="none">
+        <View style={styles.pin}>
+          <SelectionPin width={40} height={60} />
+        </View>
       </View>
     </View>
   );
@@ -157,6 +157,22 @@ const BackArrow: React.FC<{onBack(): void}> = ({onBack}) => {
   );
 };
 
+const PositionArrow: React.FC<{flyToCurrentLocation(): void}> = ({
+  flyToCurrentLocation,
+}) => {
+  return (
+    <TouchableOpacity
+      accessibilityLabel="Min posisjon"
+      accessibilityRole="button"
+      onPress={flyToCurrentLocation}
+    >
+      <View style={styles.flyToButton}>
+        <CurrentLocationArrow />
+      </View>
+    </TouchableOpacity>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {flex: 1},
   pinContainer: {
@@ -166,11 +182,12 @@ const styles = StyleSheet.create({
   },
   pin: {position: 'absolute', top: -50, right: -20, ...shadows},
   backArrowContainer: {position: 'absolute', top: 80, left: 20},
-  controlsContainer: {position: 'absolute', top: 80, right: 20},
+  positionArrowContainer: {position: 'absolute', top: 80, right: 20},
+  controlsContainer: {position: 'absolute', bottom: 80, right: 20},
   locationContainer: {
     position: 'absolute',
-    bottom: 80,
-    paddingHorizontal: 12,
+    top: 120,
+    paddingHorizontal: 20,
     width: '100%',
   },
   backArrow: {
@@ -180,6 +197,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 36,
     height: 28,
+    ...shadows,
+  },
+  flyToButton: {
+    backgroundColor: 'white',
+    borderRadius: 5,
+    width: 36,
+    height: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
     ...shadows,
   },
 });
