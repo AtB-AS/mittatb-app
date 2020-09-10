@@ -1,6 +1,6 @@
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
-import {Text, TextInput, View} from 'react-native';
+import {Text, TextInput, View, Keyboard} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Header from '../ScreenHeader';
 import Input from '../components/input';
@@ -114,7 +114,7 @@ const LocationSearch: React.FC<Props> = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{paddingTop: 12}}>
+      <View style={{paddingTop: 12, flex: 1}}>
         <View style={{marginHorizontal: 20}}>
           <Header
             leftButton={{
@@ -142,17 +142,21 @@ const LocationSearch: React.FC<Props> = ({
           />
         </View>
 
-        <FavoriteChips
-          onSelectLocation={onSelect}
-          onMapSelection={onMapSelection}
-          hideChips={!!hideFavorites}
-          containerStyle={[styles.contentBlock, styles.chipBox]}
-        />
+        <View>
+          <FavoriteChips
+            onSelectLocation={onSelect}
+            onMapSelection={onMapSelection}
+            hideChips={!!hideFavorites}
+            containerStyle={[styles.contentBlock, styles.chipBox]}
+          />
+        </View>
 
         {hasAnyResult ? (
           <ScrollView
-            style={styles.contentBlock}
+            style={styles.scroll}
+            contentContainerStyle={styles.contentBlock}
             keyboardShouldPersistTaps="handled"
+            onScrollBeginDrag={() => Keyboard.dismiss()}
           >
             {hasPreviousResults && (
               <LocationResults
@@ -210,8 +214,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   contentBlock: {
     paddingHorizontal: theme.sizes.pagePadding,
   },
+  scroll: {
+    flex: 1,
+  },
   chipBox: {
-    marginBottom: 24,
+    marginBottom: 12,
   },
   label: {
     fontSize: 14,
