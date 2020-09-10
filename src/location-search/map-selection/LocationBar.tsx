@@ -1,7 +1,6 @@
 import React from 'react';
 import {Text, View, TouchableOpacity, ActivityIndicator} from 'react-native';
 import colors from '../../theme/colors';
-import {LocationWithSearchMetadata} from '..';
 import {ArrowRight} from '../../assets/svg/icons/navigation';
 import {Info} from '../../assets/svg/icons/status';
 import {Location} from '../../favorites/types';

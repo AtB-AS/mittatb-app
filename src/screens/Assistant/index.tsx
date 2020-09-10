@@ -1,7 +1,7 @@
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Text, View, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity, View, ViewStyle, StyleProp} from 'react-native';
 import {searchTrip} from '../../api';
 import {CancelToken, isCancel} from '../../api/client';
 import {Swap} from '../../assets/svg/icons/actions';
@@ -10,31 +10,35 @@ import DisappearingHeader from '../../components/disappearing-header/index ';
 import {LocationButton} from '../../components/search-button';
 import SearchGroup from '../../components/search-button/search-group';
 import {useFavorites} from '../../favorites/FavoritesContext';
-import {Location, UserFavorites} from '../../favorites/types';
+import {
+  Location,
+  LocationWithMetadata,
+  UserFavorites,
+} from '../../favorites/types';
 import {
   RequestPermissionFn,
   useGeolocationState,
 } from '../../GeolocationContext';
-import {
-  LocationWithSearchMetadata,
-  useLocationSearchValue,
-} from '../../location-search';
-import {useReverseGeocoder} from '../../geocoder';
+import {useLocationSearchValue} from '../../location-search';
 import {RootStackParamList} from '../../navigation';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import {TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import insets from '../../utils/insets';
+import {
+  locationDistanceInMetres as distanceInMetres,
+  locationsAreEqual,
+  LOCATIONS_REALLY_CLOSE_THRESHOLD,
+} from '../../utils/location';
+import {useReverseGeocoder} from '../../geocoder';
 import {useLayout} from '../../utils/use-layout';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
 import Results from './Results';
-import {
-  locationsAreEqual,
-  locationDistanceInMetres as distanceInMetres,
-  LOCATIONS_REALLY_CLOSE_THRESHOLD,
-} from '../../utils/location';
 import {NoResultReason} from './types';
+import FavoriteChips from '../../favorite-chips';
+
+import Animated, {Easing} from 'react-native-reanimated';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -83,8 +87,6 @@ type Props = {
   navigation: AssistantScreenNavigationProp;
 };
 
-const HEADER_HEIGHT = 157;
-
 const Assistant: React.FC<Props> = ({
   currentLocation,
   requestGeoPermission,
@@ -95,6 +97,20 @@ const Assistant: React.FC<Props> = ({
 
   function swap() {
     navigation.setParams({fromLocation: to, toLocation: from});
+  }
+
+  function fillNextAvailableLocation(selectedLocation: LocationWithMetadata) {
+    if (!from) {
+      navigation.setParams({
+        fromLocation: selectedLocation,
+        toLocation: to,
+      });
+    } else {
+      navigation.setParams({
+        fromLocation: from,
+        toLocation: selectedLocation,
+      });
+    }
   }
 
   function setCurrentLocationAsFrom() {
@@ -122,21 +138,24 @@ const Assistant: React.FC<Props> = ({
 
   function resetView() {
     setCurrentLocationOrRequest();
+
     navigation.setParams({
       toLocation: undefined,
     });
   }
 
   const [date, setDate] = useState<DateOutput | undefined>();
-  const [tripPatterns, isSearching, timeOfLastSearch, reload] = useTripPatterns(
-    from,
-    to,
-    date,
-  );
+  const [
+    tripPatterns,
+    isSearching,
+    timeOfLastSearch,
+    reload,
+    clearPatterns,
+  ] = useTripPatterns(from, to, date);
 
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
-    initialLocation: LocationWithSearchMetadata | undefined,
+    initialLocation: LocationWithMetadata | undefined,
   ) =>
     navigation.navigate('LocationSearch', {
       label: callerRouteParam === 'fromLocation' ? 'Fra' : 'Til',
@@ -150,68 +169,96 @@ const Assistant: React.FC<Props> = ({
   const useScroll = !showEmptyScreen && !isEmptyResult;
   const isHeaderFullHeight = !from || !to;
 
-  const renderHeader = () => (
-    <View>
-      <SearchGroup>
-        <View style={styles.searchButtonContainer}>
-          <View style={styles.styleButton}>
-            <LocationButton
-              accessible={true}
-              accessibilityLabel="Velg avreisested."
-              accessibilityRole="button"
-              title="Fra"
-              placeholder="Søk etter adresse eller sted"
-              location={from}
-              onPress={() => openLocationSearch('fromLocation', from)}
-            />
-          </View>
+  const renderHeader = useCallback(
+    () => (
+      <View>
+        <SearchGroup>
+          <View style={styles.searchButtonContainer}>
+            <View style={styles.styleButton}>
+              <LocationButton
+                accessible={true}
+                accessibilityLabel="Velg avreisested."
+                accessibilityRole="button"
+                title="Fra"
+                placeholder="Søk etter adresse eller sted"
+                location={from}
+                onPress={() => openLocationSearch('fromLocation', from)}
+              />
+            </View>
 
-          <TouchableOpacity
-            accessible={true}
-            accessibilityLabel="Bruk min posisjon som avreisested."
-            accessibilityRole="button"
-            hitSlop={insets.all(12)}
-            onPress={setCurrentLocationOrRequest}
-          >
-            <CurrentLocationArrow />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.searchButtonContainer}>
-          <View style={styles.styleButton}>
-            <LocationButton
-              accessible={true}
-              accessibilityLabel="Velg ankomststed."
-              accessibilityRole="button"
-              title="Til"
-              placeholder="Søk etter adresse eller sted"
-              location={to}
-              onPress={() => openLocationSearch('toLocation', to)}
-            />
-          </View>
-
-          <View style={styles.swapButton}>
             <TouchableOpacity
-              onPress={swap}
-              hitSlop={insets.all(12)}
               accessible={true}
-              accessibilityLabel="Bytt om på avreisested og ankomststed"
+              accessibilityLabel="Bruk min posisjon som avreisested."
               accessibilityRole="button"
+              hitSlop={insets.all(12)}
+              onPress={setCurrentLocationOrRequest}
             >
-              <Swap />
+              <CurrentLocationArrow />
             </TouchableOpacity>
           </View>
-        </View>
-      </SearchGroup>
 
-      <SearchGroup containerStyle={{marginTop: 12}}>
-        <DateInput
-          onDateSelected={setDate}
-          value={date}
-          timeOfLastSearch={timeOfLastSearch}
-        />
-      </SearchGroup>
-    </View>
+          <View style={styles.searchButtonContainer}>
+            <View style={styles.styleButton}>
+              <LocationButton
+                accessible={true}
+                accessibilityLabel="Velg ankomststed."
+                accessibilityRole="button"
+                title="Til"
+                placeholder="Søk etter adresse eller sted"
+                location={to}
+                onPress={() => openLocationSearch('toLocation', to)}
+              />
+            </View>
+
+            <View style={styles.swapButton}>
+              <TouchableOpacity
+                onPress={swap}
+                hitSlop={insets.all(12)}
+                accessible={true}
+                accessibilityLabel="Bytt om på avreisested og ankomststed"
+                accessibilityRole="button"
+              >
+                <Swap />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </SearchGroup>
+
+        <View style={{height: 40, position: 'relative'}}>
+          <Fade
+            visible={isHeaderFullHeight}
+            style={{position: 'absolute', width: '100%'}}
+          >
+            <FavoriteChips
+              chipTypes={['favorites']}
+              onSelectLocation={fillNextAvailableLocation}
+              containerStyle={styles.chipBox}
+            />
+          </Fade>
+
+          <Fade
+            visible={!isHeaderFullHeight}
+            style={{position: 'absolute', width: '100%'}}
+          >
+            <SearchGroup containerStyle={{marginTop: 2}}>
+              <DateInput
+                onDateSelected={setDate}
+                value={date}
+                timeOfLastSearch={timeOfLastSearch}
+              />
+            </SearchGroup>
+          </Fade>
+        </View>
+      </View>
+    ),
+    [
+      swap,
+      isHeaderFullHeight,
+      setCurrentLocationOrRequest,
+      from,
+      to,
+      fillNextAvailableLocation,
+    ],
   );
 
   const {onLayout: onAltLayout, width: altWidth} = useLayout();
@@ -253,6 +300,11 @@ const Assistant: React.FC<Props> = ({
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
       onLogoClick={resetView}
+      onFullscreenTransitionEnd={(fullHeight) => {
+        if (fullHeight) {
+          clearPatterns();
+        }
+      }}
     >
       <Results
         tripPatterns={tripPatterns}
@@ -292,6 +344,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   styleButton: {
     flexGrow: 1,
   },
+  chipBox: {
+    marginTop: 8,
+    paddingHorizontal: theme.sizes.pagePadding,
+  },
   altTitle: {
     flex: 1,
     width: '100%',
@@ -310,8 +366,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 }));
 
 type Locations = {
-  from: LocationWithSearchMetadata | undefined;
-  to: LocationWithSearchMetadata | undefined;
+  from: LocationWithMetadata | undefined;
+  to: LocationWithMetadata | undefined;
 };
 
 function computeNoResultReasons(
@@ -343,7 +399,7 @@ function computeNoResultReasons(
 function useLocations(currentLocation: Location | undefined): Locations {
   const {favorites} = useFavorites();
 
-  const memoedCurrentLocation = useMemo<LocationWithSearchMetadata | undefined>(
+  const memoedCurrentLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
     [
       currentLocation?.coordinates.latitude,
@@ -377,10 +433,10 @@ function useLocations(currentLocation: Location | undefined): Locations {
 }
 
 function useUpdatedLocation(
-  searchedLocation: LocationWithSearchMetadata | undefined,
-  currentLocation: LocationWithSearchMetadata | undefined,
+  searchedLocation: LocationWithMetadata | undefined,
+  currentLocation: LocationWithMetadata | undefined,
   favorites: UserFavorites,
-): LocationWithSearchMetadata | undefined {
+): LocationWithMetadata | undefined {
   return useMemo(() => {
     if (!searchedLocation) return undefined;
 
@@ -413,10 +469,12 @@ function useTripPatterns(
   fromLocation: Location | undefined,
   toLocation: Location | undefined,
   date: DateOutput | undefined,
-): [TripPattern[] | null, boolean, Date, () => {}] {
+): [TripPattern[] | null, boolean, Date, () => {}, () => void] {
   const [isSearching, setIsSearching] = useState(false);
   const [timeOfSearch, setTimeOfSearch] = useState<Date>(new Date());
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
+
+  const clearPatterns = () => setTripPatterns(null);
   const reload = useCallback(() => {
     const source = CancelToken.source();
 
@@ -458,7 +516,7 @@ function useTripPatterns(
 
   useEffect(reload, [reload]);
 
-  return [tripPatterns, isSearching, timeOfSearch, reload];
+  return [tripPatterns, isSearching, timeOfSearch, reload, clearPatterns];
 }
 
 function useDoOnceWhen(fn: () => void, condition: boolean) {
@@ -469,4 +527,37 @@ function useDoOnceWhen(fn: () => void, condition: boolean) {
       fn();
     }
   }, [condition]);
+}
+
+type FadeProps = {
+  visible?: boolean;
+  style?: StyleProp<Animated.AnimateStyle<ViewStyle>>;
+  children?: any;
+  duration?: number;
+};
+
+function Fade({style, children, visible, duration = 400}: FadeProps) {
+  const opacityValue = useRef(new Animated.Value<number>(0)).current;
+  const [init, setInit] = useState(false);
+  const [isDone, setIsDone] = useState(false);
+
+  useEffect(() => {
+    opacityValue.setValue(visible ? 1 : 0);
+    setInit(true);
+  }, []);
+
+  useEffect(() => {
+    if (!init) return;
+    return Animated.timing(opacityValue, {
+      toValue: visible ? 1 : 0,
+      duration: duration,
+      easing: Easing.linear,
+    }).start(({finished}) => setIsDone(finished));
+  }, [visible, init, duration]);
+
+  return (
+    <Animated.View style={[{opacity: opacityValue}, style]}>
+      {!isDone || visible ? children : null}
+    </Animated.View>
+  );
 }

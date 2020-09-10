@@ -11,16 +11,11 @@ import {
   DeparturesInputQuery,
 } from '../../api/departures';
 import {LocationButton} from '../../components/search-button';
-import {Location} from '../../favorites/types';
+import {Location, LocationWithMetadata} from '../../favorites/types';
 import {
   useGeolocationState,
   RequestPermissionFn,
 } from '../../GeolocationContext';
-import {
-  LocationWithSearchMetadata,
-  useLocationSearchValue,
-} from '../../location-search';
-import {useReverseGeocoder} from '../../geocoder';
 import {RootStackParamList} from '../../navigation';
 import {StyleSheet} from '../../theme';
 import Loading from '../Loading';
@@ -47,6 +42,8 @@ import {
 import insets from '../../utils/insets';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
+import {useReverseGeocoder} from '../../geocoder';
+import {useLocationSearchValue} from '../../location-search';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
@@ -106,7 +103,7 @@ const NearbyOverview: React.FC<Props> = ({
     'location',
   );
 
-  const currentSearchLocation = useMemo<LocationWithSearchMetadata | undefined>(
+  const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
     [currentLocation],
   );

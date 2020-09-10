@@ -26,6 +26,7 @@ const shortHumanizer = humanizeDuration.humanizer({
   },
 });
 
+export const missingRealtimePrefix = 'ca. ';
 export function secondsToDurationShort(seconds: number): string {
   return shortHumanizer(seconds * 1000, {
     units: ['d', 'h', 'm'],

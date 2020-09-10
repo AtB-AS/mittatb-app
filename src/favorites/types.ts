@@ -13,3 +13,11 @@ export type LocationFavorite = {
   emoji?: string;
   name?: string;
 };
+
+export type LocationWithMetadata = Location &
+  (
+    | {
+        resultType: 'search' | 'geolocation';
+      }
+    | {resultType: 'favorite'; favoriteId: string}
+  );

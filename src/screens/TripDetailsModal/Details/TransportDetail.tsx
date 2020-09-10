@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import Dash from 'react-native-dash';
-import {formatToClock} from '../../../utils/date';
+import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
 import {Dot} from '../../../assets/svg/icons/other';
 import LocationRow from '../LocationRow';
 import {LegDetailProps, DetailScreenNavigationProp} from '.';
@@ -27,6 +27,12 @@ const TransportDetail: React.FC<LegDetailProps> = ({
   const showWaitTime = isIntermediateTravelLeg && Boolean(nextLeg);
   const {fill} = transportationColor(leg.mode, leg.line?.publicCode);
 
+  const timeString = (time: string) => {
+    if (!leg.realtime) {
+      return missingRealtimePrefix + formatToClock(time);
+    }
+    return formatToClock(time);
+  };
   return (
     <View style={{marginTop: -6}}>
       <TouchableOpacity
@@ -59,7 +65,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
               />
             }
             location={getQuayNameFromStartLeg(leg)}
-            time={formatToClock(leg.expectedStartTime)}
+            time={timeString(leg.expectedStartTime)}
             aimedTime={
               leg.realtime
                 ? getAimedTimeIfLargeDifference(leg.fromEstimatedCall)
@@ -75,7 +81,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
         <LocationRow
           icon={<Dot fill={fill} />}
           location={getQuayNameFromStopLeg(leg)}
-          time={formatToClock(leg.expectedEndTime)}
+          time={timeString(leg.expectedEndTime)}
           aimedTime={
             leg.realtime
               ? getAimedTimeIfLargeDifference(leg.toEstimatedCall)
