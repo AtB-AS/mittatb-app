@@ -18,8 +18,7 @@ import {Close} from '../../../assets/svg/icons/actions';
 import colors from '../../../theme/colors';
 import {DetailsModalStackParams} from '..';
 import MessageBox from '../../../message-box';
-import {LocationWithSearchMetadata} from '../../../location-search';
-import {UserFavorites} from '../../../favorites/types';
+import {UserFavorites, LocationWithMetadata} from '../../../favorites/types';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import LocationIcon from '../../../components/location-icon';
 import {FavoriteIcon} from '../../../favorites';
@@ -33,8 +32,8 @@ const TIME_LIMIT_IN_MINUTES = 3;
 export type DetailsRouteParams = {
   tripPatternId: string;
   tripPattern?: TripPattern;
-  from: LocationWithSearchMetadata;
-  to: LocationWithSearchMetadata;
+  from: LocationWithMetadata;
+  to: LocationWithMetadata;
 };
 
 export type DetailScreenRouteProp = RouteProp<
@@ -97,8 +96,8 @@ const TripDetailsModal: React.FC<Props> = (props) => {
 
 const DetailsContent: React.FC<{
   tripPattern: TripPattern;
-  from: LocationWithSearchMetadata;
-  to: LocationWithSearchMetadata;
+  from: LocationWithMetadata;
+  to: LocationWithMetadata;
 }> = ({tripPattern, from, to}) => {
   const {favorites} = useFavorites();
   const styles = useDetailsStyle();
@@ -164,7 +163,7 @@ const DetailsContent: React.FC<{
 };
 
 function getLocationIcon(
-  location: LocationWithSearchMetadata,
+  location: LocationWithMetadata,
   favorites: UserFavorites,
 ) {
   switch (location.resultType) {

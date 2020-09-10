@@ -13,3 +13,8 @@ export function FavoriteIcon({favorite}: FavoriteIconProps) {
   }
   return <Text>{favorite.emoji}</Text>;
 }
+
+export {
+  useFavorites,
+  default as FavoritesContextProvider,
+} from './FavoritesContext';

@@ -3,13 +3,8 @@ import React, {useState, useRef, useMemo} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 
 import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
-import {useReverseGeocoder} from '../useGeocoder';
 import colors from '../../theme/colors';
-import {
-  LocationSearchNavigationProp,
-  LocationSearchStackParams,
-  LocationWithSearchMetadata,
-} from '../';
+import {LocationSearchNavigationProp, LocationSearchStackParams} from '../';
 import insets from '../../utils/insets';
 import MapControls from './MapControls';
 import {useGeolocationState} from '../../GeolocationContext';
@@ -19,6 +14,8 @@ import {SelectionPin} from '../../assets/svg/map';
 import {StyleSheet} from '../../theme';
 import shadows from './shadows';
 import {Coordinates} from '@entur/sdk';
+import {useReverseGeocoder} from '../useGeocoder';
+import {LocationWithMetadata} from '../../favorites/types';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -65,7 +62,7 @@ const MapSelection: React.FC<Props> = ({
 
   const {location: geolocation} = useGeolocationState();
 
-  const onSelect = (location: LocationWithSearchMetadata) => {
+  const onSelect = (location: LocationWithMetadata) => {
     navigation.navigate(callerRouteName as any, {
       [callerRouteParam]: location,
     });
