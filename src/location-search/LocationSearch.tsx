@@ -17,7 +17,7 @@ import {LocationSearchNavigationProp} from './';
 import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
 import {Close} from '../assets/svg/icons/actions';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useGeocoder} from '../utils/use-geocoder';
+import {useGeocoder} from './useGeocoder';
 
 export type Props = {
   navigation: LocationSearchNavigationProp;

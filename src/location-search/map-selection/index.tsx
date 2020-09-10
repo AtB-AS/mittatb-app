@@ -14,7 +14,7 @@ import {SelectionPin} from '../../assets/svg/map';
 import {StyleSheet} from '../../theme';
 import shadows from './shadows';
 import {Coordinates} from '@entur/sdk';
-import {useReverseGeocoder} from '../../utils/use-geocoder';
+import {useReverseGeocoder} from '../useGeocoder';
 import {LocationWithMetadata} from '../../favorites/types';
 
 export type RouteParams = {

@@ -30,7 +30,7 @@ import {
   locationsAreEqual,
   LOCATIONS_REALLY_CLOSE_THRESHOLD,
 } from '../../utils/location';
-import {useReverseGeocoder} from '../../utils/use-geocoder';
+import {useReverseGeocoder} from '../../location-search/useGeocoder';
 import {useLayout} from '../../utils/use-layout';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';

@@ -14,7 +14,7 @@ import {useFavorites} from '../favorites/FavoritesContext';
 import {LocationWithMetadata} from '../favorites/types';
 import {useGeolocationState} from '../GeolocationContext';
 import colors from '../theme/colors';
-import {useReverseGeocoder} from '../utils/use-geocoder';
+import {useReverseGeocoder} from '../location-search/useGeocoder';
 
 type Props = {
   onSelectLocation: (location: LocationWithMetadata) => void;

@@ -43,7 +43,7 @@ import {
 import insets from '../../utils/insets';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
-import {useReverseGeocoder} from '../../utils/use-geocoder';
+import {useReverseGeocoder} from '../../location-search/useGeocoder';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
