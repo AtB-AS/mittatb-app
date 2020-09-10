@@ -1,33 +1,18 @@
 import React from 'react';
-import {View, TouchableOpacity, ViewStyle} from 'react-native';
-import {CurrentLocationArrow} from '../../assets/svg/icons/places';
+import {View, TouchableOpacity} from 'react-native';
 import colors from '../../theme/colors';
 import {Add, Remove} from '../../assets/svg/icons/actions';
 import {StyleSheet} from '../../theme';
 import shadows from './shadows';
 
 export type Props = {
-  flyToCurrentLocation(): void;
   zoomIn(): void;
   zoomOut(): void;
 };
 
-const MapControls: React.FC<Props> = ({
-  flyToCurrentLocation,
-  zoomIn,
-  zoomOut,
-}) => {
+const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
   return (
     <View>
-      <TouchableOpacity
-        accessibilityLabel="Min posisjon"
-        accessibilityRole="button"
-        onPress={flyToCurrentLocation}
-      >
-        <View style={styles.flyToButton}>
-          <CurrentLocationArrow />
-        </View>
-      </TouchableOpacity>
       <View style={styles.zoomContainer}>
         <TouchableOpacity
           onPress={zoomIn}
@@ -53,16 +38,6 @@ const MapControls: React.FC<Props> = ({
 };
 
 const styles = StyleSheet.create({
-  flyToButton: {
-    backgroundColor: 'white',
-    borderRadius: 5,
-    width: 36,
-    height: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 8,
-    ...shadows,
-  },
   zoomContainer: {
     backgroundColor: 'white',
     borderRadius: 5,

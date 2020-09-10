@@ -1,7 +1,8 @@
 import {Feature} from '../sdk';
+import {Coordinates} from '@entur/sdk';
 
 export type Location = Feature['properties'] & {
-  coordinates: {longitude: number; latitude: number};
+  coordinates: Coordinates;
 };
 
 export type UserFavorites = LocationFavorite[];

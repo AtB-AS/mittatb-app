@@ -16,7 +16,6 @@ import {
   useGeolocationState,
   RequestPermissionFn,
 } from '../../GeolocationContext';
-import {useLocationSearchValue} from '../../location-search';
 import {RootStackParamList} from '../../navigation';
 import {StyleSheet} from '../../theme';
 import Loading from '../Loading';
@@ -43,7 +42,8 @@ import {
 import insets from '../../utils/insets';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
-import {useReverseGeocoder} from '../../location-search/useGeocoder';
+import {useReverseGeocoder} from '../../geocoder';
+import {useLocationSearchValue} from '../../location-search';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
@@ -68,9 +68,9 @@ type RootProps = {
 const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
   const {status, location, requestPermission} = useGeolocationState();
 
-  const reverseLookupLocations =
+  const {locations: reverseLookupLocations} =
     useReverseGeocoder(location?.coords ?? null) ?? [];
-  const currentLocation = reverseLookupLocations.length
+  const currentLocation = reverseLookupLocations?.length
     ? reverseLookupLocations[1]
     : undefined;
 

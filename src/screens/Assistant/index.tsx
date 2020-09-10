@@ -30,7 +30,7 @@ import {
   locationsAreEqual,
   LOCATIONS_REALLY_CLOSE_THRESHOLD,
 } from '../../utils/location';
-import {useReverseGeocoder} from '../../location-search/useGeocoder';
+import {useReverseGeocoder} from '../../geocoder';
 import {useLayout} from '../../utils/use-layout';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
@@ -62,9 +62,9 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
     requestPermission: requestGeoPermission,
   } = useGeolocationState();
 
-  const reverseLookupLocations =
+  const {locations: reverseLookupLocations} =
     useReverseGeocoder(location?.coords ?? null) ?? [];
-  const currentLocation = reverseLookupLocations.length
+  const currentLocation = reverseLookupLocations?.length
     ? reverseLookupLocations[1]
     : undefined;
 

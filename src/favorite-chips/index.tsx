@@ -14,7 +14,7 @@ import {useFavorites} from '../favorites/FavoritesContext';
 import {LocationWithMetadata} from '../favorites/types';
 import {useGeolocationState} from '../GeolocationContext';
 import colors from '../theme/colors';
-import {useReverseGeocoder} from '../location-search/useGeocoder';
+import {useReverseGeocoder} from '../geocoder';
 
 type Props = {
   onSelectLocation: (location: LocationWithMetadata) => void;
@@ -151,9 +151,9 @@ function useCurrentLocationChip(
   onSelectLocation: (location: LocationWithMetadata) => void,
 ) {
   const {location, requestPermission} = useGeolocationState();
-  const reverseLookupLocations =
+  const {locations: reverseLookupLocations} =
     useReverseGeocoder(location?.coords ?? null) ?? [];
-  const currentLocation = reverseLookupLocations.length
+  const currentLocation = reverseLookupLocations?.length
     ? reverseLookupLocations[1]
     : null;
 
