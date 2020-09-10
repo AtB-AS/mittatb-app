@@ -96,19 +96,6 @@ const MapSelection: React.FC<Props> = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.pinContainer}>
-        <View style={styles.pin}>
-          <TouchableOpacity onPress={onSelect}>
-            <SelectionPin
-              isMoving={!!regionEvent?.isMoving}
-              mode={getPinMode(
-                !!regionEvent?.isMoving || isSearching,
-                !!location,
-              )}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
       <MapboxGL.MapView
         ref={mapViewRef}
         style={{
@@ -129,6 +116,17 @@ const MapSelection: React.FC<Props> = ({
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
       </MapboxGL.MapView>
+      <View style={styles.pinContainer}>
+        <TouchableOpacity onPress={onSelect} style={styles.pin}>
+          <SelectionPin
+            isMoving={!!regionEvent?.isMoving}
+            mode={getPinMode(
+              !!regionEvent?.isMoving || isSearching,
+              !!location,
+            )}
+          />
+        </TouchableOpacity>
+      </View>
       <View style={styles.backArrowContainer}>
         <BackArrow onBack={() => navigation.goBack()} />
       </View>
@@ -193,7 +191,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '50%',
     right: '50%',
-    zIndex: 1,
   },
   pin: {position: 'absolute', top: -56, right: -20, ...shadows},
   backArrowContainer: {position: 'absolute', top: 80, left: 20},
