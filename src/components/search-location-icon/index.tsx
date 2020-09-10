@@ -1,12 +1,12 @@
 import React from 'react';
-import {LocationWithSearchMetadata} from '../../location-search';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import {FavoriteIcon} from '../../favorites';
 import LocationIcon from '../location-icon';
 import {useFavorites} from '../../favorites/FavoritesContext';
+import {LocationWithMetadata} from '../../favorites/types';
 
 type SearchLocationIconProps = {
-  location?: LocationWithSearchMetadata;
+  location?: LocationWithMetadata;
 };
 
 export default function SearchLocationIcon({

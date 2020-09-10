@@ -24,7 +24,9 @@ const colors = {
     cyan: '#71D6E0',
     cyan_100: '#D4F3F6',
     cyan_500: '#71D6E0',
+    blue_500: '#007C92',
     gray_Level2: '#EBECED',
+    gray_500: '#37424A',
   },
   general: {
     white: '#ffffff',

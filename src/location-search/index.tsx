@@ -17,7 +17,7 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import {RootStackParamList} from '../navigation';
-import {Location} from '../favorites/types';
+import {Location, LocationWithMetadata} from '../favorites/types';
 
 export type LocationSearchStackParams = {
   LocationSearch: LocationSearchRouteParams;
@@ -59,26 +59,16 @@ const LocationSearchRoot = ({route}: LocationSearchRootProps) => {
 
 export default LocationSearchRoot;
 
-export type LocationResultType = 'search' | 'geolocation' | 'favorite';
-
-export type LocationWithSearchMetadata = Location &
-  (
-    | {
-        resultType: 'search' | 'geolocation';
-      }
-    | {resultType: 'favorite'; favoriteId: string}
-  );
-
 export function useLocationSearchValue<
   T extends RouteProp<any, any> & {params: ParamListBase}
 >(
   callerRouteParam: keyof T['params'],
   defaultLocation?: Location,
-): LocationWithSearchMetadata | undefined {
+): LocationWithMetadata | undefined {
   const route = useRoute<T>();
   const firstTimeRef = useRef(true);
   const [location, setLocation] = React.useState<
-    LocationWithSearchMetadata | undefined
+    LocationWithMetadata | undefined
   >(defaultLocation && {...defaultLocation, resultType: 'search'});
 
   React.useEffect(() => {
