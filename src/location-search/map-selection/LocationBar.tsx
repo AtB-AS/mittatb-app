@@ -44,7 +44,7 @@ const Icon: React.FC<{isSearching: boolean; location?: Location}> = ({
   return (
     <View style={{marginHorizontal: 12}}>
       {isSearching ? (
-        <ActivityIndicator />
+        <ActivityIndicator animating={true} color={colors.general.gray200} />
       ) : location ? (
         <LocationIcon location={location} />
       ) : (
