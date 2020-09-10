@@ -333,7 +333,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   swapButton: {
     position: 'relative',
-    top: -23,
+    top: -19,
     right: 23,
     backgroundColor: theme.background.level0,
     padding: 3,
