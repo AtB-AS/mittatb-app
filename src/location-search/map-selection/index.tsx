@@ -16,6 +16,7 @@ import shadows from './shadows';
 import {Coordinates} from '@entur/sdk';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import SelectionPin, {PinMode} from './SelectionPin';
+import {Feature} from 'geojson';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -94,6 +95,12 @@ const MapSelection: React.FC<Props> = ({
       );
   }
 
+  const flyToFeature = (feature: Feature) => {
+    if (feature && feature.geometry.type === 'Point') {
+      mapCameraRef.current?.flyTo(feature.geometry.coordinates, 300);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <MapboxGL.MapView
@@ -107,6 +114,7 @@ const MapSelection: React.FC<Props> = ({
         onRegionWillChange={() =>
           setRegionEvent({isMoving: true, region: regionEvent?.region})
         }
+        onPress={flyToFeature}
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
