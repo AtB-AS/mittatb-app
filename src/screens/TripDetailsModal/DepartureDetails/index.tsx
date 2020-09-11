@@ -183,7 +183,7 @@ function CallGroup({type, calls, mode, publicCode}: CallGroupProps) {
               shouldDropMarginBottom(i) ? {marginBottom: 0} : undefined,
               shouldHaveMarginTop(i) ? {marginTop: 24} : undefined,
             ]}
-            location={getQuayName(call.quay)}
+            label={getQuayName(call.quay)}
             time={departureTimeString(call, isStartPlace(i))}
             timeStyle={
               isStartPlace(i) ? {fontWeight: 'bold', fontSize: 16} : undefined
