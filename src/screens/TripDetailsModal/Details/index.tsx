@@ -99,7 +99,6 @@ const DetailsContent: React.FC<{
   from: LocationWithSearchMetadata;
   to: LocationWithSearchMetadata;
 }> = ({tripPattern, from, to}) => {
-  const {favorites} = useFavorites();
   const styles = useDetailsStyle();
 
   const [shortTime, setShortTime] = useState(false);
@@ -121,12 +120,9 @@ const DetailsContent: React.FC<{
         />
       )}
       <LocationRow
-        icon={
-          getLocationIcon(from, favorites) ?? (
-            <Dot fill={colors.general.black} />
-          )
-        }
-        location={getQuayNameFromStartLeg(tripPattern.legs[0], from.name)}
+        icon={getLocationIcon(from) ?? <Dot fill={colors.general.black} />}
+        label={getQuayNameFromStartLeg(tripPattern.legs[0], from.name)}
+        labelIcon={getIconIfFavorite(from)}
         time={formatToClock(tripPattern.startTime)}
         textStyle={styles.textStyle}
       />
@@ -143,8 +139,9 @@ const DetailsContent: React.FC<{
       ))}
       {lastLegIsFoot && (
         <LocationRow
-          icon={getLocationIcon(to, favorites)}
-          location={to.name}
+          icon={getLocationIcon(to)}
+          label={to.name}
+          labelIcon={getIconIfFavorite(to)}
           time={formatToClock(tripPattern.endTime)}
           textStyle={styles.textStyle}
         />
@@ -153,26 +150,26 @@ const DetailsContent: React.FC<{
   );
 };
 
-function getLocationIcon(
-  location: LocationWithSearchMetadata,
-  favorites: UserFavorites,
-) {
+function getLocationIcon(location: LocationWithSearchMetadata) {
   switch (location.resultType) {
     case 'geolocation':
       return <CurrentLocationArrow />;
     case 'favorite':
-      return (
-        <FavoriteIcon
-          favorite={favorites.find((f) => f.id === location.favoriteId)}
-        />
-      );
     case 'search':
       return <LocationIcon location={location} multiple />;
     default:
       return <MapPointPin fill={colors.general.black} />;
   }
 }
-
+function getIconIfFavorite(loc: LocationWithSearchMetadata) {
+  if (loc.resultType !== 'favorite') {
+    return;
+  }
+  const {favorites} = useFavorites();
+  return (
+    <FavoriteIcon favorite={favorites.find((f) => f.id === loc.favoriteId)} />
+  );
+}
 function nextLeg(curent: number, legs: Leg[]): Leg | undefined {
   return legs[curent + 1];
 }

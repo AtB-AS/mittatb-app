@@ -4,7 +4,8 @@ import {StyleSheet, useTheme} from '../../theme';
 
 const LocationRow: React.FC<{
   icon: JSX.Element;
-  location: string;
+  labelIcon?: JSX.Element;
+  label: string;
   time?: string;
   aimedTime?: string;
   textStyle?: StyleProp<TextStyle>;
@@ -14,7 +15,8 @@ const LocationRow: React.FC<{
   dashThroughIcon?: boolean;
 }> = ({
   icon,
-  location,
+  labelIcon,
+  label,
   time,
   aimedTime,
   rowStyle,
@@ -46,8 +48,9 @@ const LocationRow: React.FC<{
         >
           {icon}
         </View>
-        <View style={styles.locationContainer}>
-          <Text style={[styles.location, textStyle]}>{location}</Text>
+        <View style={styles.labelContainer}>
+          {!!labelIcon && <Text style={styles.labelIcon}>{labelIcon}</Text>}
+          <Text style={[styles.label, textStyle]}>{label}</Text>
         </View>
       </View>
     </View>
@@ -73,12 +76,15 @@ const useLocationRowStyle = StyleSheet.createThemeHook((theme) => ({
     paddingVertical: 6,
     marginRight: 12,
   },
-  locationContainer: {
+  labelContainer: {
     flexDirection: 'row',
     flexShrink: 1,
     flexWrap: 'wrap',
   },
-  location: {
+  labelIcon: {
+    marginRight: 6,
+  },
+  label: {
     color: theme.text.primary,
   },
   timeContainer: {
