@@ -448,7 +448,7 @@ PODS:
     - React
   - RNPermissions (2.1.4):
     - React
-  - RNReanimated (1.8.0):
+  - RNReanimated (1.13.0):
     - React
   - RNScreens (2.7.0):
     - React
@@ -743,7 +743,7 @@ SPEC CHECKSUMS:
   RNFBRemoteConfig: 59818c5933149b5a6b7fe5159e3d4df09199e858
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNPermissions: 3635b407c15f2fe591bd2101c8f20aa0912caba8
-  RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
+  RNReanimated: 89f5e0a04d1dd52fbf27e7e7030d8f80a646a3fc
   RNScreens: cf198f915f8a2bf163de94ca9f5bfc8d326c3706
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   Yoga: 7740b94929bbacbddda59bf115b5317e9a161598

@@ -1935,10 +1935,10 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.4.tgz#15925414e0ad2cd765bfef58842f7e26a7accb24"
   integrity sha512-1HcDas8SEj4z1Wc696tH56G8OlRaH/sqZOynNNB+HF0WOeXPaxTtbYzJY2oEfiUxjSKjhCKr+MvR7dCHcEelug==
 
-"@types/react-native@^0.62.5":
-  version "0.62.5"
-  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.62.5.tgz#605c2d31485c515ee18b62e8b29ffdbba404a443"
-  integrity sha512-x6ZBbo752yAw5XUarOyh53oNgMuafL4EhWEbd4ARSMK6Y7nTRm2a1tBHy8Fp7h7ji0XXJrxNRTXGJRRP3+MWzg==
+"@types/react-native@^0.63.18":
+  version "0.63.18"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.63.18.tgz#748d82c6453befe97285393ad9530472d8de56af"
+  integrity sha512-WwEWqmHiqFn61M1FZR/+frj+E8e2o8i5cPqu9mjbjtZS/gBfCKVESF2ai/KAlaQECkkWkx/nMJeCc5eHMmLQgw==
   dependencies:
     "@types/react" "*"
 
@@ -7608,10 +7608,10 @@ react-native-portalize@^1.0.3:
   resolved "https://registry.yarnpkg.com/react-native-portalize/-/react-native-portalize-1.0.3.tgz#1db2f525f3d9e01b5ff9be4998ca9e957d891b63"
   integrity sha512-jxMduHfinr8RbN6uxeJEm4Pw35GwkSA/Kfh50jc6ElU41OewbAAApTBt62GG/Q+UGOHBzKN43fsPToaG6VhqWg==
 
-react-native-reanimated@^1.8.0:
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.8.0.tgz#0b5719b20c1fed9aaf8afd9a12e21c9bd46ee428"
-  integrity sha512-vGTt94lE5fsZmfMwERWFIsCr5LHsyllOESeNvlKryLgAg7h4cnJ5XSmVSy4L3qogdgFYCL6HEgY+s7tQmKXiiQ==
+react-native-reanimated@^1.13.0:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.13.0.tgz#1ee5d27d34bd2cee7dfad4ae9a3673300872c917"
+  integrity sha512-uadP/0QO+4TCsyPSvzRdl+76NPM7Bp8M25KQLB4Hg3tWBMjhrMrETnzNi33L/OPfmhU+7rceyi0QPe/DxKT5bQ==
   dependencies:
     fbjs "^1.0.0"
 

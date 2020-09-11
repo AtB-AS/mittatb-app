@@ -15,7 +15,7 @@ import {StyleSheet, useTheme} from '../../theme';
 import shadows from './shadows';
 import {Coordinates} from '@entur/sdk';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
-import SelectionPin, {PinMode} from './SelectionPin';
+import SelectionPin, {PinMode} from './WhatSelectionPin';
 import {Feature} from 'geojson';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
