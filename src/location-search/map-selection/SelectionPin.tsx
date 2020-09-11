@@ -1,10 +1,10 @@
 import React, {useRef, useEffect} from 'react';
-import {Animated, View} from 'react-native';
+import {Text, Animated, View} from 'react-native';
 import {
   SelectionPinConfirm,
   SelectionPinUnknown,
   SelectionPinMove,
-  SelectionPinMoveCircle,
+  SelectionPinShadow,
 } from '../../assets/svg/map';
 
 export type PinMode = 'searching' | 'found' | 'nothing';
@@ -14,36 +14,36 @@ const AnimatedSelectionPin: React.FC<{isMoving: boolean; mode: PinMode}> = ({
   mode,
 }) => {
   const pinOffset = useRef(new Animated.Value(0)).current;
-  const opacity = useRef(new Animated.Value(0)).current;
+  const scale = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     if (isMoving) {
       animateMove(
         {value: pinOffset, toValue: -6, duration: 100},
-        {value: opacity, toValue: 1, duration: 100},
+        {value: scale, toValue: 1, duration: 100},
       );
     } else {
       animateMove(
         {value: pinOffset, toValue: 0, duration: 200},
-        {value: opacity, toValue: 0, duration: 100},
+        {value: scale, toValue: 2, duration: 100},
       );
     }
   }, [isMoving]);
 
   return (
     <View>
-      <Animated.View style={{transform: [{translateY: pinOffset}]}}>
+      <Animated.View style={{transform: [{translateY: pinOffset}], zIndex: 1}}>
         <SelectionPin mode={mode} />
       </Animated.View>
       <Animated.View
         style={{
           position: 'absolute',
-          bottom: 0,
-          left: 16,
-          opacity,
+          bottom: -2,
+          left: 14,
+          transform: [{scaleX: scale}, {scaleY: scale}],
         }}
       >
-        <SelectionPinMoveCircle />
+        <SelectionPinShadow width={12} height={4} />
       </Animated.View>
     </View>
   );
@@ -75,12 +75,12 @@ function animateMove(
 const SelectionPin: React.FC<{mode: PinMode}> = ({mode}) => {
   switch (mode) {
     case 'searching':
-      return <SelectionPinMove width={40} height={60} />;
+      return <SelectionPinMove width={40} height={40} />;
     case 'found':
-      return <SelectionPinConfirm width={40} height={60} />;
+      return <SelectionPinConfirm width={40} height={40} />;
     case 'nothing':
     default:
-      return <SelectionPinUnknown width={40} height={60} />;
+      return <SelectionPinUnknown width={40} height={40} />;
   }
 };
 

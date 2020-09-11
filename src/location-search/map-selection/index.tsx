@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     top: '50%',
     right: '50%',
   },
-  pin: {position: 'absolute', top: -56, right: -20, ...shadows},
+  pin: {position: 'absolute', top: -40, right: -20, ...shadows},
   backArrowContainer: {position: 'absolute', top: 80, left: 20},
   positionArrowContainer: {position: 'absolute', top: 80, right: 20},
   controlsContainer: {position: 'absolute', bottom: 80, right: 20},
