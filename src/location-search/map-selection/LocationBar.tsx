@@ -1,7 +1,6 @@
 import React from 'react';
 import {Text, View, TouchableOpacity, ActivityIndicator} from 'react-native';
 import colors from '../../theme/colors';
-import {LocationWithSearchMetadata} from '..';
 import {ArrowRight} from '../../assets/svg/icons/navigation';
 import {Info} from '../../assets/svg/icons/status';
 import {Location} from '../../favorites/types';
@@ -11,19 +10,14 @@ import shadows from './shadows';
 
 type Props = {
   location?: Location;
-  onSelect(location: LocationWithSearchMetadata): void;
+  onSelect(): void;
   isSearching: boolean;
 };
 
 const LocationBar: React.FC<Props> = ({location, onSelect, isSearching}) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={{flex: 1}}
-        onPress={() => {
-          location && onSelect({...location, resultType: 'search'});
-        }}
-      >
+      <TouchableOpacity style={{flex: 1}} onPress={onSelect}>
         <View style={styles.innerContainer}>
           <View style={styles.locationContainer}>
             <Icon isSearching={isSearching} location={location} />
@@ -49,7 +43,7 @@ const Icon: React.FC<{isSearching: boolean; location?: Location}> = ({
   return (
     <View style={{marginHorizontal: 12}}>
       {isSearching ? (
-        <ActivityIndicator />
+        <ActivityIndicator animating={true} color={colors.general.gray200} />
       ) : location ? (
         <LocationIcon location={location} />
       ) : (

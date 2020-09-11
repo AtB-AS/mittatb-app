@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {StyleSheet} from '../../theme';
 import insets from '../../utils/insets';
-import {LocationWithSearchMetadata} from '../../location-search';
+import {LocationWithMetadata} from '../../favorites/types';
 
 type SearchButtonProps = {
   title: string;
@@ -40,7 +40,6 @@ const SearchButton: React.FC<SearchButtonProps> = ({
         {...accessiblityProps}
         style={styles.button}
         onPress={onPress}
-        hitSlop={insets.symmetric(8, 12)}
       >
         <Text style={styles.title}>{title}</Text>
         <View style={styles.icon}>{icon}</View>
@@ -57,7 +56,7 @@ const SearchButton: React.FC<SearchButtonProps> = ({
 export default SearchButton;
 
 type LocationButtonProps = Omit<SearchButtonProps, 'text'> & {
-  location?: LocationWithSearchMetadata;
+  location?: LocationWithMetadata;
 } & AccessibilityProps;
 
 export const LocationButton: React.FC<LocationButtonProps> = ({
@@ -74,7 +73,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
   },
   buttonContainer: {
     flexDirection: 'row',

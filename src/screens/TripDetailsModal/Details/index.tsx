@@ -5,7 +5,7 @@ import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {Leg, TripPattern} from '../../../sdk';
 import WalkDetail from './WalkDetail';
 import TransportDetail from './TransportDetail';
-import {formatToClock} from '../../../utils/date';
+import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
 import LocationRow from '../LocationRow';
 import {StyleSheet} from '../../../theme';
 import Header from '../../../ScreenHeader';
@@ -18,8 +18,7 @@ import {Close} from '../../../assets/svg/icons/actions';
 import colors from '../../../theme/colors';
 import {DetailsModalStackParams} from '..';
 import MessageBox from '../../../message-box';
-import {LocationWithSearchMetadata} from '../../../location-search';
-import {UserFavorites} from '../../../favorites/types';
+import {UserFavorites, LocationWithMetadata} from '../../../favorites/types';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import LocationIcon from '../../../components/location-icon';
 import {FavoriteIcon} from '../../../favorites';
@@ -33,8 +32,8 @@ const TIME_LIMIT_IN_MINUTES = 3;
 export type DetailsRouteParams = {
   tripPatternId: string;
   tripPattern?: TripPattern;
-  from: LocationWithSearchMetadata;
-  to: LocationWithSearchMetadata;
+  from: LocationWithMetadata;
+  to: LocationWithMetadata;
 };
 
 export type DetailScreenRouteProp = RouteProp<
@@ -77,14 +76,15 @@ const TripDetailsModal: React.FC<Props> = (props) => {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
       >
-        {error ? (
+        {error && (
           <MessageBox type="warning">
             <Text>
-              Kunne ikke hente ut reiseforslag. Det kan være at reisen har
-              endret seg eller ikke lengre er tilgjengelig.
+              Kunne ikke hente ut oppdatering for reiseforslaget. Det kan være
+              at reisen har endret seg eller ikke lengre er tilgjengelig.
             </Text>
           </MessageBox>
-        ) : !tripPattern ? (
+        )}
+        {!tripPattern ? (
           <ActivityIndicator animating={true} size="large" />
         ) : (
           <DetailsContent {...passingProps} tripPattern={tripPattern} />
@@ -96,9 +96,10 @@ const TripDetailsModal: React.FC<Props> = (props) => {
 
 const DetailsContent: React.FC<{
   tripPattern: TripPattern;
-  from: LocationWithSearchMetadata;
-  to: LocationWithSearchMetadata;
+  from: LocationWithMetadata;
+  to: LocationWithMetadata;
 }> = ({tripPattern, from, to}) => {
+  const {favorites} = useFavorites();
   const styles = useDetailsStyle();
 
   const [shortTime, setShortTime] = useState(false);
@@ -111,6 +112,15 @@ const DetailsContent: React.FC<{
     tripPattern.legs?.length > 0 &&
     tripPattern.legs[tripPattern.legs.length - 1].mode === 'foot';
 
+  const startLeg = tripPattern.legs[0];
+  const timeString = (leg: Leg, time: string) => {
+    let timeString = formatToClock(time);
+    if (leg.mode !== 'foot' && !leg.realtime) {
+      timeString = missingRealtimePrefix + timeString;
+    }
+    return timeString;
+  };
+
   return (
     <>
       {shortTime && (
@@ -120,10 +130,13 @@ const DetailsContent: React.FC<{
         />
       )}
       <LocationRow
-        icon={getLocationIcon(from) ?? <Dot fill={colors.general.black} />}
-        label={getQuayNameFromStartLeg(tripPattern.legs[0], from.name)}
-        labelIcon={getIconIfFavorite(from)}
-        time={formatToClock(tripPattern.startTime)}
+        icon={
+          getLocationIcon(from, favorites) ?? (
+            <Dot fill={colors.general.black} />
+          )
+        }
+        location={getQuayNameFromStartLeg(startLeg, from.name)}
+        time={timeString(startLeg, tripPattern.startTime)}
         textStyle={styles.textStyle}
       />
       {tripPattern.legs.map((leg, i, legs) => (

@@ -4,7 +4,7 @@ import {DetailsModalStackParams, DetailsModalNavigationProp} from '..';
 import {RouteProp} from '@react-navigation/native';
 import {View, Text, ActivityIndicator, TouchableOpacity} from 'react-native';
 import {Dot} from '../../../assets/svg/icons/other';
-import {formatToClock} from '../../../utils/date';
+import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
 import colors from '../../../theme/colors';
 import LocationRow from '../LocationRow';
 import {StyleSheet} from '../../../theme';
@@ -115,6 +115,17 @@ function CallGroup({type, calls, mode, publicCode}: CallGroupProps) {
   const shouldDropMarginBottom = (i: number) =>
     (type === 'after' || isOnRoute) && i == calls.length - 1;
   const shouldHaveMarginTop = (i: number) => type === 'after' && i == 0;
+  const departureTimeString = (
+    call: EstimatedCall,
+    indicateMissingRealtime: boolean = false,
+  ) => {
+    const timeString = formatToClock(call.expectedDepartureTime);
+    if (call.realtime || !indicateMissingRealtime) {
+      return timeString;
+    } else {
+      return missingRealtimePrefix + timeString;
+    }
+  };
 
   const [collapsed, setCollapsed] = useState(isBefore);
   const styles = useStopsStyle();
@@ -173,11 +184,9 @@ function CallGroup({type, calls, mode, publicCode}: CallGroupProps) {
               shouldHaveMarginTop(i) ? {marginTop: 24} : undefined,
             ]}
             location={getQuayName(call.quay)}
-            time={formatToClock(call.expectedDepartureTime)}
+            time={departureTimeString(call, isStartPlace(i))}
             timeStyle={
-              isOnRoute && i === 0
-                ? {fontWeight: 'bold', fontSize: 16}
-                : undefined
+              isStartPlace(i) ? {fontWeight: 'bold', fontSize: 16} : undefined
             }
             aimedTime={
               isStartPlace(i) && call.realtime

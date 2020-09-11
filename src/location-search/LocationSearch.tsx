@@ -1,23 +1,23 @@
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
-import {Text, TextInput, View} from 'react-native';
+import {Text, TextInput, View, Keyboard} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Header from '../ScreenHeader';
 import Input from '../components/input';
-import {Location} from '../favorites/types';
+import {Location, LocationWithMetadata} from '../favorites/types';
 import {useGeolocationState} from '../GeolocationContext';
 import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
 import {StyleSheet} from '../theme';
 import colors from '../theme/colors';
-import FavoriteChips from './FavoriteChips';
+import FavoriteChips from '../favorite-chips';
 import LocationResults from './LocationResults';
 import useDebounce from './useDebounce';
-import {useGeocoder} from './useGeocoder';
-import {LocationWithSearchMetadata, LocationSearchNavigationProp} from './';
+import {LocationSearchNavigationProp} from './';
 import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
 import {Close} from '../assets/svg/icons/actions';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useGeocoder} from '../geocoder';
 
 export type Props = {
   navigation: LocationSearchNavigationProp;
@@ -29,7 +29,7 @@ export type RouteParams = {
   callerRouteParam: string;
   label: string;
   hideFavorites?: boolean;
-  initialLocation?: LocationWithSearchMetadata;
+  initialLocation?: LocationWithMetadata;
 };
 
 const LocationSearch: React.FC<Props> = ({
@@ -57,11 +57,11 @@ const LocationSearch: React.FC<Props> = ({
     requestPermission: requestGeoPermission,
   } = useGeolocationState();
 
-  const locations =
+  const {locations} =
     useGeocoder(debouncedText, geolocation?.coords ?? null) ?? [];
   const filteredLocations = filterCurrentLocation(locations, previousLocations);
 
-  const onSelect = (location: LocationWithSearchMetadata) => {
+  const onSelect = (location: LocationWithMetadata) => {
     if (location.resultType === 'search') {
       addSearchEntry(location);
     }
@@ -114,7 +114,7 @@ const LocationSearch: React.FC<Props> = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{paddingTop: 12}}>
+      <View style={{paddingTop: 12, flex: 1}}>
         <View style={{marginHorizontal: 20}}>
           <Header
             leftButton={{
@@ -142,19 +142,21 @@ const LocationSearch: React.FC<Props> = ({
           />
         </View>
 
-        <FavoriteChips
-          onSelectLocation={onSelect}
-          onMapSelection={onMapSelection}
-          geolocation={geolocation}
-          requestGeoPermission={requestGeoPermission}
-          hideFavorites={!!hideFavorites}
-          containerStyle={styles.contentBlock}
-        />
+        <View>
+          <FavoriteChips
+            onSelectLocation={onSelect}
+            onMapSelection={onMapSelection}
+            hideChips={!!hideFavorites}
+            containerStyle={[styles.contentBlock, styles.chipBox]}
+          />
+        </View>
 
         {hasAnyResult ? (
           <ScrollView
-            style={styles.contentBlock}
+            style={styles.scroll}
+            contentContainerStyle={styles.contentBlock}
             keyboardShouldPersistTaps="handled"
+            onScrollBeginDrag={() => Keyboard.dismiss()}
           >
             {hasPreviousResults && (
               <LocationResults
@@ -211,6 +213,12 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   contentBlock: {
     paddingHorizontal: theme.sizes.pagePadding,
+  },
+  scroll: {
+    flex: 1,
+  },
+  chipBox: {
+    marginBottom: 12,
   },
   label: {
     fontSize: 14,
