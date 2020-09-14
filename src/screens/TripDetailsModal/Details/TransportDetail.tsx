@@ -64,7 +64,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
                 publicCode={leg.line?.publicCode}
               />
             }
-            location={getQuayNameFromStartLeg(leg)}
+            label={getQuayNameFromStartLeg(leg)}
             time={timeString(leg.expectedStartTime)}
             aimedTime={
               leg.realtime
@@ -80,7 +80,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
 
         <LocationRow
           icon={<Dot fill={fill} />}
-          location={getQuayNameFromStopLeg(leg)}
+          label={getQuayNameFromStopLeg(leg)}
           time={timeString(leg.expectedEndTime)}
           aimedTime={
             leg.realtime
