@@ -41,8 +41,9 @@ const Results: React.FC<Props> = ({
   }
 
   if (isEmptyResult) {
-    const hasResultReasons = !!resultReasons;
+    const hasResultReasons = !!resultReasons.length;
     const pluralResultReasons = hasResultReasons && resultReasons.length > 1;
+    console.log(resultReasons);
     return (
       <View style={styles.container}>
         <MessageBox>
@@ -60,7 +61,7 @@ const Results: React.FC<Props> = ({
               </Text>
             )}
             {hasResultReasons && !pluralResultReasons && (
-              <Text> {resultReasons[0]}.</Text>
+              <Text>{resultReasons[0]}.</Text>
             )}
             {!hasResultReasons && (
               <Text> Prøv å justere på sted eller tidspunkt. </Text>
