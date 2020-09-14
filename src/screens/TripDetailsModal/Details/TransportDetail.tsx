@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     marginVertical: 12,
   },
   dashContainer: {
-    marginLeft: 87,
+    marginLeft: 95,
     position: 'absolute',
     height: '100%',
     paddingVertical: 12,

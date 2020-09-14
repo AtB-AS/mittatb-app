@@ -84,7 +84,7 @@ const WalkDetail: React.FC<LegDetailProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginLeft: 82,
+    marginLeft: 90,
   },
   dash: {
     flexDirection: 'column',
