@@ -334,10 +334,12 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     fontSize: 12,
   },
   time: {
-    width: 72,
+    width: 78,
+    textAlign: 'right',
     fontSize: 16,
     color: theme.text.primary,
     paddingVertical: 4,
+    marginRight: 8,
     fontVariant: ['tabular-nums'],
   },
   textContent: {
