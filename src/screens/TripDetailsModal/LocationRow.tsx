@@ -88,7 +88,7 @@ const useLocationRowStyle = StyleSheet.createThemeHook((theme) => ({
     color: theme.text.primary,
   },
   timeContainer: {
-    width: 70,
+    width: 78,
     alignItems: 'flex-end',
     marginRight: 12,
     justifyContent: 'flex-end',

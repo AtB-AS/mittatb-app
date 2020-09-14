@@ -334,7 +334,7 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     fontSize: 12,
   },
   time: {
-    minWidth: 50,
+    width: 72,
     fontSize: 16,
     color: theme.text.primary,
     paddingVertical: 4,
