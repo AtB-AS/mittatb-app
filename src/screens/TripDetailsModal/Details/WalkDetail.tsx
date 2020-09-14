@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     height: 20,
   },
   walkContainer: {flexDirection: 'row', marginBottom: 5},
-  walkText: {marginLeft: 8, fontSize: 14, opacity: 0.6},
+  walkText: {marginLeft: 10, fontSize: 14, opacity: 0.6},
   waitContainer: {marginBottom: 4},
 });
 

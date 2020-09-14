@@ -105,7 +105,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
 const styles = StyleSheet.create({
   textStyle: {fontSize: 14, lineHeight: 20},
   lineName: {
-    marginLeft: 111,
+    marginLeft: 112,
     fontSize: 16,
     fontWeight: '600',
     marginVertical: 12,

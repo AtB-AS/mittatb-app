@@ -38,9 +38,10 @@ function getFromLeg(legs: Leg[]) {
   const found = legs.find(legWithQuay);
   const fromQuay = (found?.fromEstimatedCall ?? found?.fromPlace)?.quay;
   if (!fromQuay) {
-    return (legs[0].fromPlace.name ?? 'ukjent holdeplass') + ' ';
+    return legs[0].fromPlace.name ?? 'ukjent holdeplass';
   }
-  return `${fromQuay.name} ${fromQuay.publicCode ?? ''}`;
+  const publicCodeOutput = fromQuay.publicCode ? ' ' + fromQuay.publicCode : '';
+  return fromQuay.name + publicCodeOutput;
 }
 const ResultItemHeader: React.FC<{
   tripPattern: TripPattern;
@@ -54,10 +55,13 @@ const ResultItemHeader: React.FC<{
     !!quayLeg && !quayLeg.realtime ? missingRealtimePrefix : '';
   const quayStartTime =
     quayLeg?.expectedStartTime ?? tripPattern.legs[0].expectedStartTime;
+  const wordSpacing = ' ';
   return (
     <View style={styles.resultHeader}>
       <Text>
-        Fra {quayName}
+        Fra{wordSpacing}
+        {quayName}
+        {wordSpacing}
         {timePrefix}
         {formatToClockOrRelativeMinutes(quayStartTime)}
       </Text>
