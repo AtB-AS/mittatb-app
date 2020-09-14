@@ -43,7 +43,6 @@ const Results: React.FC<Props> = ({
   if (isEmptyResult) {
     const hasResultReasons = !!resultReasons.length;
     const pluralResultReasons = hasResultReasons && resultReasons.length > 1;
-    console.log(resultReasons);
     return (
       <View style={styles.container}>
         <MessageBox>
