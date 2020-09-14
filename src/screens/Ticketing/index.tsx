@@ -1,6 +1,9 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {ReserveTicketResponse} from '../../api/fareContracts';
+import {
+  ReserveTicketResponse,
+  VippsRedirectParams,
+} from '../../api/fareContracts';
 import TicketContextProvider from './TicketContext';
 import TicketsScreen from './Tickets';
 import OfferScreen from './Offer';
@@ -19,7 +22,7 @@ export type TicketingStackParams = {
   Offer: undefined;
   PaymentMethod: {offers: {offer_id: string; count: number}[]};
   PaymentCreditCard: ReserveTicketResponse;
-  PaymentVipps: ReserveTicketResponse;
+  PaymentVipps: VippsRedirectParams;
 };
 
 const Stack = createStackNavigator<TicketingStackParams>();

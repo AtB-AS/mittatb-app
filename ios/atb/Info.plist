@@ -73,6 +73,7 @@
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>vipps</string>
+		<string>vippsmt</string>
 	</array>
 </dict>
 </plist>
