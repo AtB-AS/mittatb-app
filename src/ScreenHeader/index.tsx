@@ -54,6 +54,7 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.sizes.pagePadding,
+    height: 64,
   },
   iconContainerLeft: {
     position: 'absolute',
@@ -66,6 +67,6 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
   text: {
     color: theme.text.primary,
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
 }));
