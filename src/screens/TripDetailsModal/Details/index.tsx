@@ -134,13 +134,15 @@ const DetailsContent: React.FC<{
           message="Vær oppmerksom på kort byttetid."
         />
       )}
-      <LocationRow
-        icon={getLocationIcon(from) ?? <Dot fill={colors.general.black} />}
-        label={getQuayNameFromStartLeg(startLeg, from.name)}
-        labelIcon={getIconIfFavorite(from)}
-        time={timeString(startLeg, tripPattern.startTime)}
-        textStyle={styles.textStyle}
-      />
+      {legIsWalk(startLeg) && (
+        <LocationRow
+          icon={getLocationIcon(from) ?? <Dot fill={colors.general.black} />}
+          label={getQuayNameFromStartLeg(startLeg, from.name)}
+          labelIcon={getIconIfFavorite(from)}
+          time={timeString(startLeg, tripPattern.startTime)}
+          textStyle={styles.textStyle}
+        />
+      )}
       {tripPattern.legs.map((leg, i, legs) => (
         <LegDetail
           key={i}
@@ -188,10 +190,13 @@ function isIntermediateTravelLeg(index: number, legs: Leg[]) {
 }
 
 function showFrom(index: number, legs: Leg[]) {
-  return index > 0;
+  return index > 0 || !legIsWalk(legs?.[0]);
 }
 function showTo(index: number, legs: Leg[]) {
   return index !== legs.length - 1;
+}
+function legIsWalk(leg: Leg) {
+  return leg?.mode === 'foot';
 }
 
 export type LegDetailProps = {
