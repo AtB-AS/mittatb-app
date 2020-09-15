@@ -239,7 +239,7 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     marginBottom: 12,
-    marginLeft: 81,
+    marginLeft: 89,
   },
   text: {
     marginLeft: 12,
@@ -260,7 +260,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
   spinner: {height: 280},
   dashContainer: {
-    marginLeft: 87,
+    marginLeft: 95,
     position: 'absolute',
     height: '100%',
     paddingVertical: 10,
