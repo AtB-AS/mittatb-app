@@ -1,25 +1,24 @@
-import {GeolocationResponse} from '@react-native-community/geolocation';
-import {Feature} from '../sdk';
+import {Feature, Coordinates} from '../sdk';
 import client from './client';
 import qs from 'query-string';
 import {stringifyUrl} from './utils';
 import {AxiosRequestConfig} from 'axios';
 
-const TRONDHEIM_CENTRAL_STATION = {
+export const TRONDHEIM_CENTRAL_STATION: Coordinates = {
   latitude: 63.43457,
-  longitide: 10.39844,
+  longitude: 10.39844,
 };
 
 export async function autocomplete(
   text: string | null,
-  location: GeolocationResponse | null,
+  coordinates: Coordinates | null,
   config?: AxiosRequestConfig,
 ) {
   const url = 'bff/v1/geocoder/features';
   const query = qs.stringify({
     query: text,
-    lat: location?.coords.latitude ?? TRONDHEIM_CENTRAL_STATION.latitude,
-    lon: location?.coords.longitude ?? TRONDHEIM_CENTRAL_STATION.longitide,
+    lat: coordinates?.latitude ?? TRONDHEIM_CENTRAL_STATION.latitude,
+    lon: coordinates?.longitude ?? TRONDHEIM_CENTRAL_STATION.longitude,
     limit: 10,
   });
 
@@ -27,13 +26,13 @@ export async function autocomplete(
 }
 
 export async function reverse(
-  location: GeolocationResponse | null,
+  coordinates: Coordinates | null,
   config?: AxiosRequestConfig,
 ) {
   const url = 'bff/v1/geocoder/reverse';
   const query = qs.stringify({
-    lat: location?.coords.latitude,
-    lon: location?.coords.longitude,
+    lat: coordinates?.latitude,
+    lon: coordinates?.longitude,
   });
 
   return await client.get<Feature[]>(stringifyUrl(url, query), config);

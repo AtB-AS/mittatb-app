@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Text, TouchableOpacity, View, Linking} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {Linking, Text, TouchableOpacity, View} from 'react-native';
 import {PRIVACY_POLICY_URL} from 'react-native-dotenv';
-import colors from '../../theme/colors';
-import {useGeolocationState} from '../../GeolocationContext';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAppState} from '../../AppContext';
-import {StyleSheet} from '../../theme';
 import {TestPilotFigure} from '../../assets/svg/illustrations';
+import {useGeolocationState} from '../../GeolocationContext';
+import {StyleSheet} from '../../theme';
+import colors from '../../theme/colors';
 
 const Onboarding: React.FC = () => {
   const {completeOnboarding} = useAppState();
@@ -22,8 +22,7 @@ const Onboarding: React.FC = () => {
   }, [status, requestedOnce]);
 
   async function onRequestPermission() {
-    if (status !== 'granted')
-      await requestPermission({useSettingsFallback: true});
+    if (status !== 'granted') await requestPermission();
     setRequestedOnce(true);
   }
 

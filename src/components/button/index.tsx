@@ -4,8 +4,8 @@ import {
   Text,
   StyleProp,
   ViewStyle,
+  TouchableOpacity,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import React from 'react';
 import {StyleSheet, Theme} from '../../theme';
 

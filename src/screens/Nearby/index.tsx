@@ -11,16 +11,11 @@ import {
   DeparturesInputQuery,
 } from '../../api/departures';
 import {LocationButton} from '../../components/search-button';
-import {Location} from '../../favorites/types';
+import {Location, LocationWithMetadata} from '../../favorites/types';
 import {
   useGeolocationState,
   RequestPermissionFn,
 } from '../../GeolocationContext';
-import {
-  LocationWithSearchMetadata,
-  useLocationSearchValue,
-} from '../../location-search';
-import {useReverseGeocoder} from '../../location-search/useGeocoder';
 import {RootStackParamList} from '../../navigation';
 import {StyleSheet} from '../../theme';
 import Loading from '../Loading';
@@ -29,7 +24,7 @@ import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import SearchGroup from '../../components/search-button/search-group';
 import DisappearingHeader from '../../components/disappearing-header/index ';
 import {DeparturesWithStop, Paginated, DeparturesRealtimeData} from '../../sdk';
-import {View, Text} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import useReducerWithSideEffects, {
   Update,
   ReducerWithSideEffects,
@@ -44,9 +39,11 @@ import {
   mapQuayDeparturesToShowlimits,
   showMoreItemsOnQuay,
 } from './utils';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import insets from '../../utils/insets';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
+import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
+import {useReverseGeocoder} from '../../geocoder';
+import {useLocationSearchValue} from '../../location-search';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
@@ -71,8 +68,9 @@ type RootProps = {
 const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
   const {status, location, requestPermission} = useGeolocationState();
 
-  const reverseLookupLocations = useReverseGeocoder(location) ?? [];
-  const currentLocation = reverseLookupLocations.length
+  const {locations: reverseLookupLocations} =
+    useReverseGeocoder(location?.coords ?? null) ?? [];
+  const currentLocation = reverseLookupLocations?.length
     ? reverseLookupLocations[1]
     : undefined;
 
@@ -105,7 +103,7 @@ const NearbyOverview: React.FC<Props> = ({
     'location',
   );
 
-  const currentSearchLocation = useMemo<LocationWithSearchMetadata | undefined>(
+  const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
     [currentLocation],
   );
@@ -124,7 +122,7 @@ const NearbyOverview: React.FC<Props> = ({
       label: 'Fra',
       callerRouteName: NearbyRouteNameStatic,
       callerRouteParam: 'location',
-      initialText: fromLocation?.name,
+      initialLocation: fromLocation,
     });
 
   function setCurrentLocationAsFrom() {
@@ -140,7 +138,7 @@ const NearbyOverview: React.FC<Props> = ({
     if (currentLocation) {
       setCurrentLocationAsFrom();
     } else {
-      const status = await requestGeoPermission({useSettingsFallback: true});
+      const status = await requestGeoPermission();
       if (status === 'granted') {
         setCurrentLocationAsFrom();
       }
@@ -156,11 +154,17 @@ const NearbyOverview: React.FC<Props> = ({
             placeholder="Søk etter adresse eller sted"
             location={fromLocation}
             onPress={openLocationSearch}
+            accessible={true}
+            accessibilityLabel="Søk på avreisested."
+            accessibilityRole="button"
           />
         </View>
 
         <TouchableOpacity
           hitSlop={insets.all(12)}
+          accessible={true}
+          accessibilityLabel="Bruk min posisjon."
+          accessibilityRole="button"
           onPress={setCurrentLocationOrRequest}
         >
           <CurrentLocationArrow />
@@ -178,7 +182,12 @@ const NearbyOverview: React.FC<Props> = ({
       headerTitle="Avganger"
       useScroll={activateScroll}
       alternativeTitleComponent={
-        <Text style={styles.altTitleHeader}>{fromLocation?.name}</Text>
+        <TextHiddenSupportPrefix
+          prefix="Avganger fra"
+          style={styles.altTitleHeader}
+        >
+          {fromLocation?.name}
+        </TextHiddenSupportPrefix>
       }
       onEndReached={loadMore}
     >
@@ -200,6 +209,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   searchButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingRight: 12,
   },
   styleButton: {
     flexGrow: 1,

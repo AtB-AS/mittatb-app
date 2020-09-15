@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {View, Text, TouchableOpacity} from 'react-native';
 import {StyleSheet} from '../theme';
 import {Location} from '../favorites/types';
 import LocationIcon from '../components/location-icon';
@@ -23,7 +22,7 @@ const LocationResults: React.FC<Props> = ({
   const styles = useThemeStyles();
   return (
     <>
-      <View style={styles.subHeader}>
+      <View accessibilityRole="header" style={styles.subHeader}>
         <Text style={styles.subLabel}>{title}</Text>
         <View style={styles.subBar} />
       </View>
@@ -32,6 +31,8 @@ const LocationResults: React.FC<Props> = ({
           <View style={styles.rowContainer} key={location.id}>
             <View style={styles.locationButtonContainer}>
               <TouchableOpacity
+                accessible={true}
+                accessibilityRole="menuitem"
                 hitSlop={insets.symmetric(8, 1)}
                 onPress={() => onSelect(location)}
                 style={styles.locationButton}
@@ -50,6 +51,9 @@ const LocationResults: React.FC<Props> = ({
               </TouchableOpacity>
             </View>
             <TouchableOpacity
+              accessible={true}
+              accessibilityLabel={'Legg ' + location.name + ' i søkefelt'}
+              accessibilityRole="button"
               hitSlop={insets.all(8)}
               onPressOut={() => onPrefillText(location.name + ' ')}
             >

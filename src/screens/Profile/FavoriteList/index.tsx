@@ -1,8 +1,8 @@
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {View, Text, Linking} from 'react-native';
+import {View, Text, Linking, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {StyleSheet, Theme} from '../../../theme';
-import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import {Add, Edit} from '../../../assets/svg/icons/actions';
 import EditableListGroup from './EditableListGroup';
 import {LocationFavorite} from '../../../favorites/types';
@@ -139,7 +139,7 @@ const Item: React.FC<ItemProps> = ({item, onEdit, onClick}) => {
 
   const clickable = onClick ? (
     <TouchableOpacity
-      containerStyle={css.touchableContainer}
+      style={css.touchableContainer}
       onPress={() => onClick(item)}
       hitSlop={insets.all(12)}
     >
@@ -158,7 +158,12 @@ const Item: React.FC<ItemProps> = ({item, onEdit, onClick}) => {
     <View style={css.item}>
       {clickable}
       {onEdit && (
-        <TouchableOpacity onPress={onEdit} hitSlop={insets.all(12)}>
+        <TouchableOpacity
+          accessibilityLabel={'Rediger favoritt:' + item.name}
+          accessibilityRole="button"
+          onPress={onEdit}
+          hitSlop={insets.all(12)}
+        >
           <Edit />
         </TouchableOpacity>
       )}

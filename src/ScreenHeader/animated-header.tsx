@@ -1,21 +1,21 @@
-import LogoOutline from './LogoOutline';
-import {View, Text, Animated} from 'react-native';
-import React, {useRef, useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
+import {Animated, Text, View, ViewProps, TouchableOpacity} from 'react-native';
 import {StyleSheet} from '../theme';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import insets from '../utils/insets';
+import LogoOutline from './LogoOutline';
 
 type IconButton = {
   icon: React.ReactNode;
   onPress(): void;
 };
 
-type ScreenHeaderProps = {
+type ScreenHeaderProps = ViewProps & {
   leftButton?: IconButton;
   rightButton?: IconButton;
   title: string;
   alternativeTitleComponent?: React.ReactNode;
   alternativeTitleVisible: boolean;
+  onLogoClick?(): void;
 };
 
 const HEADER_HEIGHT = 40;
@@ -26,8 +26,10 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
   title,
   alternativeTitleComponent,
   alternativeTitleVisible,
+  onLogoClick,
+  ...props
 }) => {
-  const css = useHeaderStyle();
+  const style = useHeaderStyle();
   const altTitleOffset = useRef(new Animated.Value(HEADER_HEIGHT)).current;
 
   useEffect(() => {
@@ -45,6 +47,10 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
     <TouchableOpacity onPress={leftButton.onPress} hitSlop={insets.all(8)}>
       {leftButton.icon}
     </TouchableOpacity>
+  ) : onLogoClick ? (
+    <TouchableOpacity onPress={onLogoClick}>
+      <LogoOutline />
+    </TouchableOpacity>
   ) : (
     <LogoOutline />
   );
@@ -59,8 +65,9 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
 
   const altTitle = alternativeTitleComponent && (
     <Animated.View
+      {...props}
       style={[
-        css.regularContainer,
+        style.regularContainer,
         {transform: [{translateY: altTitleOffset}]},
       ]}
     >
@@ -69,20 +76,24 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
   );
 
   return (
-    <View style={css.container}>
-      <View style={css.iconContainerLeft}>{leftIcon}</View>
-      <View style={css.titleContainers}>
+    <View style={style.container}>
+      <View style={style.iconContainerLeft}>{leftIcon}</View>
+      <View
+        accessible={true}
+        accessibilityRole="header"
+        style={style.titleContainers}
+      >
         <Animated.View
           style={[
-            css.regularContainer,
+            style.regularContainer,
             {transform: [{translateY: titleOffset}]},
           ]}
         >
-          <Text style={css.text}>{title}</Text>
+          <Text style={style.text}>{title}</Text>
         </Animated.View>
         {altTitle}
       </View>
-      <View style={css.iconContainerRight}>{rightIcon}</View>
+      <View style={style.iconContainerRight}>{rightIcon}</View>
     </View>
   );
 };
@@ -94,6 +105,7 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.sizes.pagePadding,
+    backgroundColor: theme.background.accent,
   },
   iconContainerLeft: {
     position: 'absolute',

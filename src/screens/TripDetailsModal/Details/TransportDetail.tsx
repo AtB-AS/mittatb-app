@@ -1,22 +1,20 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import Dash from 'react-native-dash';
-import colors from '../../../theme/colors';
-import {formatToClock} from '../../../utils/date';
+import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
 import {Dot} from '../../../assets/svg/icons/other';
 import LocationRow from '../LocationRow';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {LegDetailProps, DetailScreenNavigationProp} from '.';
 import {useNavigation} from '@react-navigation/core';
 import TransportationIcon from '../../../components/transportation-icon';
 import {
-  getQuayName,
   getLineName,
   getQuayNameFromStartLeg,
   getQuayNameFromStopLeg,
 } from '../../../utils/transportation-names';
 import {getAimedTimeIfLargeDifference} from '../utils';
 import WaitRow from './WaitRow';
+import transportationColor from '../../../utils/transportation-color';
 
 const TransportDetail: React.FC<LegDetailProps> = ({
   leg,
@@ -24,15 +22,21 @@ const TransportDetail: React.FC<LegDetailProps> = ({
   isIntermediateTravelLeg,
   onCalculateTime,
   showFrom,
-  showTo,
 }) => {
   const navigation = useNavigation<DetailScreenNavigationProp>();
   const showWaitTime = isIntermediateTravelLeg && Boolean(nextLeg);
+  const {fill} = transportationColor(leg.mode, leg.line?.publicCode);
 
+  const timeString = (time: string) => {
+    if (!leg.realtime) {
+      return missingRealtimePrefix + formatToClock(time);
+    }
+    return formatToClock(time);
+  };
   return (
-    <View>
+    <View style={{marginTop: -6}}>
       <TouchableOpacity
-        style={styles.pressable}
+        style={{overflow: 'visible'}}
         onPress={() =>
           navigation.navigate('DepartureDetails', {
             title: getLineName(leg),
@@ -43,29 +47,16 @@ const TransportDetail: React.FC<LegDetailProps> = ({
           })
         }
       >
-        {showFrom && (
-          <LocationRow
-            icon={<Dot fill={colors.secondary.cyan} />}
-            location={getQuayNameFromStartLeg(leg)}
-            time={formatToClock(leg.expectedStartTime)}
-            aimedTime={
-              leg.realtime
-                ? getAimedTimeIfLargeDifference(leg.fromEstimatedCall)
-                : undefined
-            }
-            timeStyle={{fontWeight: 'bold', fontSize: 16}}
-            textStyle={styles.textStyle}
-          />
-        )}
-        <View style={styles.container}>
+        <View style={styles.dashContainer}>
           <Dash
-            dashGap={4}
+            dashGap={0}
             dashThickness={8}
             dashLength={8}
-            dashColor={colors.secondary.cyan}
+            dashColor={fill}
             style={styles.dash}
-            dashStyle={{borderRadius: 50}}
           />
+        </View>
+        {showFrom && (
           <LocationRow
             icon={
               <TransportationIcon
@@ -73,24 +64,32 @@ const TransportDetail: React.FC<LegDetailProps> = ({
                 publicCode={leg.line?.publicCode}
               />
             }
-            location={getLineName(leg)}
-            textStyle={[styles.textStyle, styles.activeTextStyle]}
-            rowStyle={styles.midRowStyle}
-          />
-        </View>
-        {showTo && (
-          <LocationRow
-            icon={<Dot fill={colors.secondary.cyan} />}
-            location={getQuayNameFromStopLeg(leg)}
-            time={formatToClock(leg.expectedEndTime)}
+            label={getQuayNameFromStartLeg(leg)}
+            time={timeString(leg.expectedStartTime)}
             aimedTime={
               leg.realtime
-                ? getAimedTimeIfLargeDifference(leg.toEstimatedCall)
+                ? getAimedTimeIfLargeDifference(leg.fromEstimatedCall)
                 : undefined
             }
+            timeStyle={{fontWeight: 'bold', fontSize: 16}}
             textStyle={styles.textStyle}
+            dashThroughIcon={true}
           />
         )}
+        <Text style={styles.lineName}>{getLineName(leg)}</Text>
+
+        <LocationRow
+          icon={<Dot fill={fill} />}
+          label={getQuayNameFromStopLeg(leg)}
+          time={timeString(leg.expectedEndTime)}
+          aimedTime={
+            leg.realtime
+              ? getAimedTimeIfLargeDifference(leg.toEstimatedCall)
+              : undefined
+          }
+          textStyle={styles.textStyle}
+          dashThroughIcon={true}
+        />
       </TouchableOpacity>
       {showWaitTime && (
         <WaitRow
@@ -104,19 +103,21 @@ const TransportDetail: React.FC<LegDetailProps> = ({
 };
 
 const styles = StyleSheet.create({
-  pressable: {flexDirection: 'column', paddingVertical: 5},
-  container: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    marginVertical: 2,
+  textStyle: {fontSize: 14, lineHeight: 20},
+  lineName: {
+    marginLeft: 112,
+    fontSize: 16,
+    fontWeight: '600',
+    marginVertical: 12,
   },
-  midRowStyle: {marginVertical: 20},
-  textStyle: {fontSize: 16},
-  activeTextStyle: {fontWeight: '600'},
-  dash: {
-    marginLeft: 87,
-    flexDirection: 'column',
+  dashContainer: {
+    marginLeft: 95,
     position: 'absolute',
+    height: '100%',
+    paddingVertical: 12,
+  },
+  dash: {
+    flexDirection: 'column',
     height: '100%',
   },
 });

@@ -2,14 +2,14 @@ import React, {useState, Fragment} from 'react';
 import {EstimatedCall} from '../../../sdk';
 import {DetailsModalStackParams, DetailsModalNavigationProp} from '..';
 import {RouteProp} from '@react-navigation/native';
-import {View, Text, ActivityIndicator} from 'react-native';
+import {View, Text, ActivityIndicator, TouchableOpacity} from 'react-native';
 import {Dot} from '../../../assets/svg/icons/other';
-import {formatToClock} from '../../../utils/date';
+import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
 import colors from '../../../theme/colors';
 import LocationRow from '../LocationRow';
 import {StyleSheet} from '../../../theme';
 import ScreenHeader from '../../../ScreenHeader';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import Dash from 'react-native-dash';
 import {getDepartures} from '../../../api/serviceJourney';
 import {Expand, ExpandLess} from '../../../assets/svg/icons/navigation';
@@ -82,6 +82,9 @@ export default function DepartureDetails({navigation, route}: Props) {
         leftButton={{
           onPress: () => navigation.goBack(),
           icon: isBack ? <ArrowLeft /> : <Close />,
+          accessible: true,
+          accessibilityRole: 'button',
+          accessibilityLabel: 'Gå tilbake',
         }}
         title={title}
       />
@@ -112,6 +115,17 @@ function CallGroup({type, calls, mode, publicCode}: CallGroupProps) {
   const shouldDropMarginBottom = (i: number) =>
     (type === 'after' || isOnRoute) && i == calls.length - 1;
   const shouldHaveMarginTop = (i: number) => type === 'after' && i == 0;
+  const departureTimeString = (
+    call: EstimatedCall,
+    indicateMissingRealtime: boolean = false,
+  ) => {
+    const timeString = formatToClock(call.expectedDepartureTime);
+    if (call.realtime || !indicateMissingRealtime) {
+      return timeString;
+    } else {
+      return missingRealtimePrefix + timeString;
+    }
+  };
 
   const [collapsed, setCollapsed] = useState(isBefore);
   const styles = useStopsStyle();
@@ -169,12 +183,10 @@ function CallGroup({type, calls, mode, publicCode}: CallGroupProps) {
               shouldDropMarginBottom(i) ? {marginBottom: 0} : undefined,
               shouldHaveMarginTop(i) ? {marginTop: 24} : undefined,
             ]}
-            location={getQuayName(call.quay)}
-            time={formatToClock(call.expectedDepartureTime)}
+            label={getQuayName(call.quay)}
+            time={departureTimeString(call, isStartPlace(i))}
             timeStyle={
-              isOnRoute && i === 0
-                ? {fontWeight: 'bold', fontSize: 16}
-                : undefined
+              isStartPlace(i) ? {fontWeight: 'bold', fontSize: 16} : undefined
             }
             aimedTime={
               isStartPlace(i) && call.realtime
@@ -227,7 +239,7 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     marginBottom: 12,
-    marginLeft: 81,
+    marginLeft: 89,
   },
   text: {
     marginLeft: 12,
@@ -248,7 +260,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
   spinner: {height: 280},
   dashContainer: {
-    marginLeft: 87,
+    marginLeft: 95,
     position: 'absolute',
     height: '100%',
     paddingVertical: 10,

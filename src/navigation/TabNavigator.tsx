@@ -10,16 +10,15 @@ import Assistant from '../screens/Assistant';
 import NearbyScreen from '../screens/Nearby';
 import TicketingScreen from '../screens/Ticketing';
 import ProfileScreen from '../screens/Profile';
-import {LocationWithSearchMetadata} from '../location-search';
-import {useRemoteConfig} from '../RemoteConfigContext';
+import {LocationWithMetadata} from '../favorites/types';
 
 export type TabNavigatorParams = {
   Assistant: {
-    fromLocation: LocationWithSearchMetadata;
-    toLocation: LocationWithSearchMetadata;
+    fromLocation: LocationWithMetadata;
+    toLocation: LocationWithMetadata;
   };
   Nearest: {
-    location: LocationWithSearchMetadata;
+    location: LocationWithMetadata;
   };
   Ticketing: undefined;
   Profile: undefined;
@@ -28,8 +27,6 @@ export type TabNavigatorParams = {
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
 const NavigationRoot = () => {
-  const {enable_ticketing} = useRemoteConfig();
-
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -48,16 +45,14 @@ const NavigationRoot = () => {
           tabBarIcon: ({color}) => <Nearby fill={color} />,
         }}
       />
-      {enable_ticketing ? (
-        <Tab.Screen
-          name="Ticketing"
-          component={TicketingScreen}
-          options={{
-            tabBarLabel: 'Billetter',
-            tabBarIcon: ({color}) => <Tickets fill={color} />,
-          }}
-        />
-      ) : null}
+      <Tab.Screen
+        name="Ticketing"
+        component={TicketingScreen}
+        options={{
+          tabBarLabel: 'Billetter',
+          tabBarIcon: ({color}) => <Tickets fill={color} />,
+        }}
+      />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}

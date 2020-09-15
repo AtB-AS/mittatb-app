@@ -1,40 +1,52 @@
 import React from 'react';
-import {View, Text, ViewStyle, StyleProp} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  View,
+  Text,
+  ViewStyle,
+  StyleProp,
+  AccessibilityProps,
+  TouchableOpacity,
+} from 'react-native';
 import {StyleSheet} from '../../theme';
 import insets from '../../utils/insets';
-import {LocationWithSearchMetadata} from '../../location-search';
+import {LocationWithMetadata} from '../../favorites/types';
 
-type ResultItemProps = {
+type SearchButtonProps = {
   title: string;
   placeholder?: string;
   onPress: () => void;
   text?: string;
   icon?: JSX.Element;
   style?: StyleProp<ViewStyle>;
-};
+} & AccessibilityProps;
 
-const SearchButton: React.FC<ResultItemProps> = ({
+const SearchButton: React.FC<SearchButtonProps> = ({
   title,
   placeholder,
   text,
   icon,
   onPress,
   style,
+  ...accessiblityProps
 }) => {
   const styles = useThemeStyles();
 
+  if (text) {
+    accessiblityProps.accessibilityValue = {text: text};
+  }
   return (
     <View style={style}>
       <TouchableOpacity
+        {...accessiblityProps}
         style={styles.button}
         onPress={onPress}
-        hitSlop={insets.symmetric(8, 12)}
       >
         <Text style={styles.title}>{title}</Text>
         <View style={styles.icon}>{icon}</View>
         <Text style={styles.buttonText} numberOfLines={1}>
-          {text ?? <Text style={{opacity: 0.6}}>{placeholder}</Text>}
+          {text ?? (
+            <Text style={{color: 'rgba(0, 0, 0, 0.6)'}}>{placeholder}</Text>
+          )}
         </Text>
       </TouchableOpacity>
     </View>
@@ -43,11 +55,11 @@ const SearchButton: React.FC<ResultItemProps> = ({
 
 export default SearchButton;
 
-type ResultItemLocationProps = Omit<ResultItemProps, 'text'> & {
-  location?: LocationWithSearchMetadata;
-};
+type LocationButtonProps = Omit<SearchButtonProps, 'text'> & {
+  location?: LocationWithMetadata;
+} & AccessibilityProps;
 
-export const LocationButton: React.FC<ResultItemLocationProps> = ({
+export const LocationButton: React.FC<LocationButtonProps> = ({
   location,
   ...props
 }) => {
@@ -61,6 +73,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
   },
   buttonContainer: {
     flexDirection: 'row',

@@ -1,7 +1,8 @@
 import {Feature} from '../sdk';
+import {Coordinates} from '@entur/sdk';
 
 export type Location = Feature['properties'] & {
-  coordinates: {longitude: number; latitude: number};
+  coordinates: Coordinates;
 };
 
 export type UserFavorites = LocationFavorite[];
@@ -12,3 +13,11 @@ export type LocationFavorite = {
   emoji?: string;
   name?: string;
 };
+
+export type LocationWithMetadata = Location &
+  (
+    | {
+        resultType: 'search' | 'geolocation';
+      }
+    | {resultType: 'favorite'; favoriteId: string}
+  );

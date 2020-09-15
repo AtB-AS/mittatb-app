@@ -5,7 +5,9 @@ import {
   differenceInSeconds,
   isSameDay,
   isPast,
+  differenceInCalendarDays,
 } from 'date-fns';
+import nb from 'date-fns/locale/nb';
 
 import humanizeDuration from 'humanize-duration';
 const shortHumanizer = humanizeDuration.humanizer({
@@ -24,6 +26,7 @@ const shortHumanizer = humanizeDuration.humanizer({
   },
 });
 
+export const missingRealtimePrefix = 'ca. ';
 export function secondsToDurationShort(seconds: number): string {
   return shortHumanizer(seconds * 1000, {
     units: ['d', 'h', 'm'],
@@ -97,4 +100,25 @@ export function formatToLongDateTime(isoDate: string | Date, locale?: Locale) {
     return formatToClock(parsed);
   }
   return format(parsed, 'PPp', {locale});
+}
+
+export {isSameDay};
+
+export function formatToSimpleDate(date: Date, locale: Locale = nb) {
+  return format(date, 'do MMMM', {locale});
+}
+
+export function daysBetween(base: Date, target: Date) {
+  return differenceInCalendarDays(target, base);
+}
+
+export function isSeveralDays(items: string[]) {
+  if (!items.length) return false;
+  let first = parseISO(items[0]);
+  for (let item of items) {
+    if (!isSameDay(first, parseISO(item))) {
+      return false;
+    }
+  }
+  return true;
 }

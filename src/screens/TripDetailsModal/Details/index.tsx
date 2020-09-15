@@ -5,7 +5,7 @@ import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {Leg, TripPattern} from '../../../sdk';
 import WalkDetail from './WalkDetail';
 import TransportDetail from './TransportDetail';
-import {formatToClock} from '../../../utils/date';
+import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
 import LocationRow from '../LocationRow';
 import {StyleSheet} from '../../../theme';
 import Header from '../../../ScreenHeader';
@@ -18,11 +18,9 @@ import {Close} from '../../../assets/svg/icons/actions';
 import colors from '../../../theme/colors';
 import {DetailsModalStackParams} from '..';
 import MessageBox from '../../../message-box';
-import {LocationWithSearchMetadata} from '../../../location-search';
-import {UserFavorites} from '../../../favorites/types';
-import {useFavorites} from '../../../favorites/FavoritesContext';
+import {UserFavorites, LocationWithMetadata} from '../../../favorites/types';
 import LocationIcon from '../../../components/location-icon';
-import {FavoriteIcon} from '../../../favorites';
+import {FavoriteIcon, useFavorites} from '../../../favorites';
 import {getSingleTripPattern} from '../../../api/trips';
 import usePollableResource from '../../../utils/use-pollable-resource';
 import {getQuayNameFromStartLeg} from '../../../utils/transportation-names';
@@ -33,8 +31,8 @@ const TIME_LIMIT_IN_MINUTES = 3;
 export type DetailsRouteParams = {
   tripPatternId: string;
   tripPattern?: TripPattern;
-  from: LocationWithSearchMetadata;
-  to: LocationWithSearchMetadata;
+  from: LocationWithMetadata;
+  to: LocationWithMetadata;
 };
 
 export type DetailScreenRouteProp = RouteProp<
@@ -66,6 +64,9 @@ const TripDetailsModal: React.FC<Props> = (props) => {
       <Header
         leftButton={{
           onPress: () => props.navigation.goBack(),
+          accessible: true,
+          accessibilityRole: 'button',
+          accessibilityLabel: 'Gå tilbake',
           icon: <Close />,
         }}
         title="Reisedetaljer"
@@ -74,14 +75,15 @@ const TripDetailsModal: React.FC<Props> = (props) => {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
       >
-        {error ? (
+        {error && (
           <MessageBox type="warning">
             <Text>
-              Kunne ikke hente ut reiseforslag. Det kan være at reisen har
-              endret seg eller ikke lengre er tilgjengelig.
+              Kunne ikke hente ut oppdatering for reiseforslaget. Det kan være
+              at reisen har endret seg eller ikke lengre er tilgjengelig.
             </Text>
           </MessageBox>
-        ) : !tripPattern ? (
+        )}
+        {!tripPattern ? (
           <ActivityIndicator animating={true} size="large" />
         ) : (
           <DetailsContent {...passingProps} tripPattern={tripPattern} />
@@ -93,17 +95,35 @@ const TripDetailsModal: React.FC<Props> = (props) => {
 
 const DetailsContent: React.FC<{
   tripPattern: TripPattern;
-  from: LocationWithSearchMetadata;
-  to: LocationWithSearchMetadata;
+  from: LocationWithMetadata;
+  to: LocationWithMetadata;
 }> = ({tripPattern, from, to}) => {
-  const {favorites} = useFavorites();
   const styles = useDetailsStyle();
+  const {favorites} = useFavorites();
 
   const [shortTime, setShortTime] = useState(false);
   const flagShortTime = (secondsBetween: number) => {
     if (secondsBetween / 60 <= TIME_LIMIT_IN_MINUTES) {
       setShortTime(true);
     }
+  };
+  const lastLegIsFoot =
+    tripPattern.legs?.length > 0 &&
+    tripPattern.legs[tripPattern.legs.length - 1].mode === 'foot';
+
+  const startLeg = tripPattern.legs[0];
+  const timeString = (leg: Leg, time: string) => {
+    let timeString = formatToClock(time);
+    if (leg.mode !== 'foot' && !leg.realtime) {
+      timeString = missingRealtimePrefix + timeString;
+    }
+    return timeString;
+  };
+  const getIconIfFavorite = (loc: LocationWithMetadata) => {
+    if (loc.resultType !== 'favorite') return;
+    return (
+      <FavoriteIcon favorite={favorites.find((f) => f.id === loc.favoriteId)} />
+    );
   };
 
   return (
@@ -114,16 +134,15 @@ const DetailsContent: React.FC<{
           message="Vær oppmerksom på kort byttetid."
         />
       )}
-      <LocationRow
-        icon={
-          getLocationIcon(from, favorites) ?? (
-            <Dot fill={colors.general.black} />
-          )
-        }
-        location={getQuayNameFromStartLeg(tripPattern.legs[0], from.name)}
-        time={formatToClock(tripPattern.startTime)}
-        textStyle={styles.textStyle}
-      />
+      {legIsWalk(startLeg) && (
+        <LocationRow
+          icon={getLocationIcon(from) ?? <Dot fill={colors.general.black} />}
+          label={getQuayNameFromStartLeg(startLeg, from.name)}
+          labelIcon={getIconIfFavorite(from)}
+          time={timeString(startLeg, tripPattern.startTime)}
+          textStyle={styles.textStyle}
+        />
+      )}
       {tripPattern.legs.map((leg, i, legs) => (
         <LegDetail
           key={i}
@@ -135,36 +154,30 @@ const DetailsContent: React.FC<{
           showTo={showTo(i, legs)}
         />
       ))}
-      <LocationRow
-        icon={getLocationIcon(to, favorites)}
-        location={to.name}
-        time={formatToClock(tripPattern.endTime)}
-        textStyle={styles.textStyle}
-      />
+      {lastLegIsFoot && (
+        <LocationRow
+          icon={getLocationIcon(to)}
+          label={to.name}
+          labelIcon={getIconIfFavorite(to)}
+          time={formatToClock(tripPattern.endTime)}
+          textStyle={styles.textStyle}
+        />
+      )}
     </>
   );
 };
 
-function getLocationIcon(
-  location: LocationWithSearchMetadata,
-  favorites: UserFavorites,
-) {
+function getLocationIcon(location: LocationWithMetadata) {
   switch (location.resultType) {
     case 'geolocation':
       return <CurrentLocationArrow />;
     case 'favorite':
-      return (
-        <FavoriteIcon
-          favorite={favorites.find((f) => f.id === location.favoriteId)}
-        />
-      );
     case 'search':
       return <LocationIcon location={location} multiple />;
     default:
       return <MapPointPin fill={colors.general.black} />;
   }
 }
-
 function nextLeg(curent: number, legs: Leg[]): Leg | undefined {
   return legs[curent + 1];
 }
@@ -177,10 +190,13 @@ function isIntermediateTravelLeg(index: number, legs: Leg[]) {
 }
 
 function showFrom(index: number, legs: Leg[]) {
-  return index > 0;
+  return index > 0 || !legIsWalk(legs?.[0]);
 }
 function showTo(index: number, legs: Leg[]) {
   return index !== legs.length - 1;
+}
+function legIsWalk(leg: Leg) {
+  return leg?.mode === 'foot';
 }
 
 export type LegDetailProps = {
