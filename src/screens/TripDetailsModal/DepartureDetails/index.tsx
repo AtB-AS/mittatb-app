@@ -239,7 +239,7 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     marginBottom: 12,
-    marginLeft: 81,
+    marginLeft: 89,
   },
   text: {
     marginLeft: 12,
