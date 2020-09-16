@@ -23,6 +23,7 @@ export type TicketingStackParams = {
   PaymentMethod: {offers: {offer_id: string; count: number}[]};
   PaymentCreditCard: ReserveTicketResponse;
   PaymentVipps: VippsRedirectParams;
+  Splash: undefined;
 };
 
 const Stack = createStackNavigator<TicketingStackParams>();
@@ -31,7 +32,13 @@ export default function Ticketing() {
   const {enable_ticketing} = useRemoteConfig();
 
   return !enable_ticketing ? (
-    <Splash />
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Splash"
+        component={Splash}
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
   ) : (
     <TicketContextProvider>
       <Stack.Navigator>

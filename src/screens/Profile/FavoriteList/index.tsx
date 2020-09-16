@@ -17,6 +17,7 @@ import {CompositeNavigationProp} from '@react-navigation/native';
 import {TabNavigatorParams} from '../../../navigation/TabNavigator';
 import {PRIVACY_POLICY_URL} from 'react-native-dotenv';
 import LogoOutline from '../../../ScreenHeader/LogoOutline';
+import {HOME_TAB_NAME} from '../../../utils/navigation';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -50,7 +51,7 @@ export default function Profile({navigation}: ProfileScreenProps) {
     });
   };
 
-  const navigateHome = () => navigation.navigate('Assistant');
+  const navigateHome = () => navigation.navigate(HOME_TAB_NAME);
   const onAddButtonClick = () => navigation.push('AddEditFavorite', {});
 
   const {icon: chatIcon, openChat} = useChatIcon();

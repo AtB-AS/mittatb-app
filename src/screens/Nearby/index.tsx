@@ -44,6 +44,7 @@ import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
 import {useReverseGeocoder} from '../../geocoder';
 import {useLocationSearchValue} from '../../location-search';
+import {HOME_TAB_NAME} from '../../utils/navigation';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
@@ -145,7 +146,7 @@ const NearbyOverview: React.FC<Props> = ({
     }
   }
 
-  const navigateHome = () => navigation.navigate('Assistant');
+  const navigateHome = () => navigation.navigate(HOME_TAB_NAME);
 
   const renderHeader = () => (
     <SearchGroup>

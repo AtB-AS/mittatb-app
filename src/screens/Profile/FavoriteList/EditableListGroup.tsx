@@ -30,7 +30,7 @@ export default function EditableListGroup<T>({
       <View style={css.listSection}>
         {!data?.length ? (
           <Text style={css.empty}>
-            Du har ingen favorittsteder. Legg til en nå.
+            Du har ingen favorittsteder. Legg til et nå.
           </Text>
         ) : (
           data.map((item, index) => (
