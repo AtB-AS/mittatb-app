@@ -145,6 +145,8 @@ const NearbyOverview: React.FC<Props> = ({
     }
   }
 
+  const navigateHome = () => navigation.navigate('Assistant');
+
   const renderHeader = () => (
     <SearchGroup>
       <View style={styles.searchButtonContainer}>
@@ -181,6 +183,7 @@ const NearbyOverview: React.FC<Props> = ({
       renderHeader={renderHeader}
       headerTitle="Avganger"
       useScroll={activateScroll}
+      onLogoClick={navigateHome}
       alternativeTitleComponent={
         <TextHiddenSupportPrefix
           prefix="Avganger fra"

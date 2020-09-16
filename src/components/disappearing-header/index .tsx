@@ -1,4 +1,4 @@
-import {useScrollToTop} from '@react-navigation/native';
+import {NavigationContainer, useScrollToTop} from '@react-navigation/native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   Animated,
@@ -18,6 +18,7 @@ import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
 import {StyleSheet} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
 import SvgBanner from '../../assets/svg/icons/other/Banner';
+import LogoOutline from '../../ScreenHeader/LogoOutline';
 
 type Props = {
   renderHeader(isFullHeight: boolean): React.ReactNode;
@@ -76,7 +77,6 @@ const DisappearingHeader: React.FC<Props> = ({
     onHeaderContentLayout,
   } = useCalculateHeaderContentHeight();
   const [fullheightTransitioned, setTransitioned] = useState(isFullHeight);
-
   const {width: windowWidth} = useWindowDimensions();
   const scrollableContentRef = React.useRef<ScrollView>(null);
   useScrollToTop(
@@ -167,7 +167,7 @@ const DisappearingHeader: React.FC<Props> = ({
           rightButton={{onPress: openChat, icon: chatIcon}}
           alternativeTitleComponent={alternativeTitleComponent}
           alternativeTitleVisible={showAltTitle}
-          onLogoClick={onLogoClick}
+          leftButton={{onPress: onLogoClick, icon: <LogoOutline />}}
         />
 
         <View style={styles.content}>

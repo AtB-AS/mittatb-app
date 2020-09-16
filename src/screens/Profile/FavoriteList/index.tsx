@@ -16,6 +16,7 @@ import useChatIcon from '../../../chat/use-chat-icon';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {TabNavigatorParams} from '../../../navigation/TabNavigator';
 import {PRIVACY_POLICY_URL} from 'react-native-dotenv';
+import LogoOutline from '../../../ScreenHeader/LogoOutline';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -49,6 +50,7 @@ export default function Profile({navigation}: ProfileScreenProps) {
     });
   };
 
+  const navigateHome = () => navigation.navigate('Assistant');
   const onAddButtonClick = () => navigation.push('AddEditFavorite', {});
 
   const {icon: chatIcon, openChat} = useChatIcon();
@@ -57,6 +59,7 @@ export default function Profile({navigation}: ProfileScreenProps) {
     <SafeAreaView style={css.container}>
       <Header
         title="Mitt AtB"
+        leftButton={{icon: <LogoOutline />, onPress: navigateHome}}
         rightButton={{icon: chatIcon, onPress: openChat}}
       />
 
