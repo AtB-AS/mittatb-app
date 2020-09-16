@@ -12,8 +12,9 @@ import {
   View,
   Easing,
   AccessibilityProps,
+  StatusBar,
 } from 'react-native';
-import {useSafeArea} from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import useChatIcon from '../../chat/use-chat-icon';
 import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
 import {StyleSheet} from '../../theme';
@@ -331,14 +332,7 @@ function useCalculateHeaderContentHeight() {
     height: screenHeaderHeight,
   } = useLayout();
   const {onLayout: onHeaderContentLayout, height: contentHeight} = useLayout();
-  const {top, bottom} = useSafeArea();
-
-  // Calculate padding of tabbar. Adjusted code from react-navigation
-  // component.
-  const tabBarPadding = Math.max(
-    Platform.select({ios: bottom - 10, default: DEFAULT_TABBAR_HEIGHT}),
-    0,
-  );
+  const {top, bottom} = useSafeAreaInsets();
 
   const boxHeight =
     windowHeight -
@@ -346,7 +340,7 @@ function useCalculateHeaderContentHeight() {
     top -
     bottom -
     DEFAULT_TABBAR_HEIGHT -
-    tabBarPadding;
+    (StatusBar.currentHeight ?? 0);
 
   return {
     boxHeight,
