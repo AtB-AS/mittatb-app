@@ -1,6 +1,6 @@
 import {RouteProp} from '@react-navigation/native';
 import React, {useState, useRef, useMemo} from 'react';
-import {Text, View, TouchableOpacity} from 'react-native';
+import {Text, Platform, View, TouchableOpacity, ViewStyle} from 'react-native';
 
 import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
 import {useReverseGeocoder} from '../../geocoder';
@@ -11,12 +11,13 @@ import MapControls from './MapControls';
 import {useGeolocationState} from '../../GeolocationContext';
 import LocationBar from './LocationBar';
 import {ArrowLeft} from '../../assets/svg/icons/navigation';
-import {StyleSheet} from '../../theme';
+import {StyleSheet, useTheme} from '../../theme';
 import shadows from './shadows';
 import {Coordinates} from '@entur/sdk';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import SelectionPin, {PinMode} from './SelectionPin';
 import {Feature} from 'geojson';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -101,6 +102,8 @@ const MapSelection: React.FC<Props> = ({
     }
   };
 
+  const controlStyles = useControlPositionsStyle();
+
   return (
     <View style={styles.container}>
       <MapboxGL.MapView
@@ -115,6 +118,16 @@ const MapSelection: React.FC<Props> = ({
           setRegionEvent({isMoving: true, region: regionEvent?.region})
         }
         onPress={flyToFeature}
+        compassViewPosition={3}
+        compassEnabled={true}
+        compassViewMargins={{
+          x: Platform.select({default: 10, android: 6}),
+          y: 90,
+        }}
+        attributionPosition={Platform.select({
+          default: {bottom: 8, left: 95},
+          android: {bottom: 5, left: 90},
+        })}
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
@@ -135,20 +148,20 @@ const MapSelection: React.FC<Props> = ({
           />
         </TouchableOpacity>
       </View>
-      <View style={styles.backArrowContainer}>
+      <View style={controlStyles.backArrowContainer}>
         <BackArrow onBack={() => navigation.goBack()} />
       </View>
-      <View style={styles.positionArrowContainer}>
+      <View style={controlStyles.positionArrowContainer}>
         <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
       </View>
-      <View style={styles.locationContainer}>
+      <View style={controlStyles.locationContainer}>
         <LocationBar
           location={location}
           onSelect={onSelect}
           isSearching={!!regionEvent?.isMoving || isSearching}
         />
       </View>
-      <View style={styles.controlsContainer}>
+      <View style={controlStyles.controlsContainer}>
         <MapControls zoomIn={zoomIn} zoomOut={zoomOut} />
       </View>
     </View>
@@ -177,6 +190,38 @@ const BackArrow: React.FC<{onBack(): void}> = ({onBack}) => {
   );
 };
 
+function useControlPositionsStyle() {
+  const {top, bottom} = useSafeAreaInsets();
+  const {theme} = useTheme();
+
+  return useMemo<{[key: string]: ViewStyle}>(
+    () => ({
+      backArrowContainer: {
+        position: 'absolute',
+        top: top + theme.sizes.pagePadding,
+        left: theme.sizes.pagePadding,
+      },
+      positionArrowContainer: {
+        position: 'absolute',
+        top: top + theme.sizes.pagePadding,
+        right: theme.sizes.pagePadding,
+      },
+      controlsContainer: {
+        position: 'absolute',
+        bottom: bottom + theme.sizes.pagePadding,
+        right: theme.sizes.pagePadding,
+      },
+      locationContainer: {
+        position: 'absolute',
+        top: top + theme.sizes.pagePadding + 28 + theme.sizes.pagePadding,
+        paddingHorizontal: theme.sizes.pagePadding,
+        width: '100%',
+      },
+    }),
+    [bottom, top],
+  );
+}
+
 const PositionArrow: React.FC<{flyToCurrentLocation(): void}> = ({
   flyToCurrentLocation,
 }) => {
@@ -201,15 +246,6 @@ const styles = StyleSheet.create({
     right: '50%',
   },
   pin: {position: 'absolute', top: -40, right: -20, ...shadows},
-  backArrowContainer: {position: 'absolute', top: 80, left: 20},
-  positionArrowContainer: {position: 'absolute', top: 80, right: 20},
-  controlsContainer: {position: 'absolute', bottom: 80, right: 20},
-  locationContainer: {
-    position: 'absolute',
-    top: 120,
-    paddingHorizontal: 20,
-    width: '100%',
-  },
   backArrow: {
     backgroundColor: colors.primary.gray,
     borderRadius: 8,

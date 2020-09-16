@@ -359,7 +359,7 @@ PODS:
     - "@react-native-mapbox-gl-mapbox-static (~> 5.8)"
     - Mapbox-iOS-SDK (~> 5.8)
     - React
-  - react-native-safe-area-context (0.7.3):
+  - react-native-safe-area-context (3.1.7):
     - React
   - react-native-webview (9.4.0):
     - React
@@ -722,7 +722,7 @@ SPEC CHECKSUMS:
   react-native-get-random-values: 2b7500cdb68066aba87cdccd97067c29e16ffe95
   react-native-intercom: 4916f5d0fee8b73535a6284721ccf7f9cc664fac
   react-native-mapbox-gl: 18785637738ca8b25c3633db431d6614ec7fc9bf
-  react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
+  react-native-safe-area-context: 955ecfce672683b495d9294d2f154a9ad1d9796b
   react-native-webview: cf5527893252b3b036eea024a1da6996f7344c74
   React-RCTActionSheet: 910163b6b09685a35c4ebbc52b66d1bfbbe39fc5
   React-RCTAnimation: 9a883bbe1e9d2e158d4fb53765ed64c8dc2200c6
