@@ -59,7 +59,11 @@ export default function Profile({navigation}: ProfileScreenProps) {
     <SafeAreaView style={css.container}>
       <Header
         title="Mitt AtB"
-        leftButton={{icon: <LogoOutline />, onPress: navigateHome}}
+        leftButton={{
+          icon: <LogoOutline />,
+          onPress: navigateHome,
+          accessibilityLabel: 'Gå til startskjerm',
+        }}
         rightButton={{icon: chatIcon, onPress: openChat}}
       />
 

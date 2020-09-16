@@ -11,6 +11,7 @@ import {
   useWindowDimensions,
   View,
   Easing,
+  AccessibilityProps,
 } from 'react-native';
 import {useSafeArea} from 'react-native-safe-area-context';
 import useChatIcon from '../../chat/use-chat-icon';
@@ -33,7 +34,7 @@ type Props = {
 
   headerMargin?: number;
 
-  onLogoClick?(): void;
+  logoClick?: {callback(): void} & AccessibilityProps;
 
   onEndReached?(e: NativeScrollEvent): void;
   onEndReachedThreshold?: number;
@@ -58,7 +59,7 @@ const DisappearingHeader: React.FC<Props> = ({
 
   isFullHeight = false,
 
-  onLogoClick,
+  logoClick,
 
   headerTitle,
   alternativeTitleComponent,
@@ -167,7 +168,11 @@ const DisappearingHeader: React.FC<Props> = ({
           rightButton={{onPress: openChat, icon: chatIcon}}
           alternativeTitleComponent={alternativeTitleComponent}
           alternativeTitleVisible={showAltTitle}
-          leftButton={{onPress: onLogoClick, icon: <LogoOutline />}}
+          leftButton={{
+            onPress: logoClick?.callback,
+            icon: <LogoOutline />,
+            ...logoClick,
+          }}
         />
 
         <View style={styles.content}>

@@ -8,7 +8,12 @@ export type IconButton = {
 } & AccessibilityProps;
 const HeaderButton: React.FC<{iconButton: IconButton}> = ({iconButton}) => {
   return (
-    <TouchableOpacity onPress={iconButton.onPress} hitSlop={insets.all(8)}>
+    <TouchableOpacity
+      onPress={iconButton.onPress}
+      hitSlop={insets.all(8)}
+      accessibilityLabel={iconButton.accessibilityLabel}
+      accessibilityRole="button"
+    >
       {iconButton.icon}
     </TouchableOpacity>
   );

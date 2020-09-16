@@ -299,7 +299,10 @@ const Assistant: React.FC<Props> = ({
       headerTitle="Reiseassistent"
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
-      onLogoClick={resetView}
+      logoClick={{
+        callback: resetView,
+        accessibilityLabel: 'Nullstill reisesøk',
+      }}
       onFullscreenTransitionEnd={(fullHeight) => {
         if (fullHeight) {
           clearPatterns();

@@ -183,7 +183,10 @@ const NearbyOverview: React.FC<Props> = ({
       renderHeader={renderHeader}
       headerTitle="Avganger"
       useScroll={activateScroll}
-      onLogoClick={navigateHome}
+      logoClick={{
+        callback: navigateHome,
+        accessibilityLabel: 'Gå til startskjerm',
+      }}
       alternativeTitleComponent={
         <TextHiddenSupportPrefix
           prefix="Avganger fra"
