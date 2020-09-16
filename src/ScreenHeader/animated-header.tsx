@@ -48,7 +48,6 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
 
   const altTitle = alternativeTitleComponent && (
     <Animated.View
-      {...props}
       style={[
         style.regularContainer,
         {transform: [{translateY: altTitleOffset}]},
@@ -59,7 +58,7 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
   );
 
   return (
-    <View style={style.container}>
+    <View style={style.container} {...props}>
       <View style={style.iconContainerLeft}>{leftIcon}</View>
       <View
         accessible={true}
