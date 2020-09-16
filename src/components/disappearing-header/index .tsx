@@ -1,4 +1,4 @@
-import {useScrollToTop} from '@react-navigation/native';
+import {NavigationContainer, useScrollToTop} from '@react-navigation/native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   Animated,
@@ -11,6 +11,7 @@ import {
   useWindowDimensions,
   View,
   Easing,
+  AccessibilityProps,
 } from 'react-native';
 import {useSafeArea} from 'react-native-safe-area-context';
 import useChatIcon from '../../chat/use-chat-icon';
@@ -18,6 +19,7 @@ import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
 import {StyleSheet} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
 import SvgBanner from '../../assets/svg/icons/other/Banner';
+import LogoOutline from '../../ScreenHeader/LogoOutline';
 
 type Props = {
   renderHeader(isFullHeight: boolean): React.ReactNode;
@@ -32,7 +34,7 @@ type Props = {
 
   headerMargin?: number;
 
-  onLogoClick?(): void;
+  logoClick?: {callback(): void} & AccessibilityProps;
 
   onEndReached?(e: NativeScrollEvent): void;
   onEndReachedThreshold?: number;
@@ -57,7 +59,7 @@ const DisappearingHeader: React.FC<Props> = ({
 
   isFullHeight = false,
 
-  onLogoClick,
+  logoClick,
 
   headerTitle,
   alternativeTitleComponent,
@@ -76,7 +78,6 @@ const DisappearingHeader: React.FC<Props> = ({
     onHeaderContentLayout,
   } = useCalculateHeaderContentHeight();
   const [fullheightTransitioned, setTransitioned] = useState(isFullHeight);
-
   const {width: windowWidth} = useWindowDimensions();
   const scrollableContentRef = React.useRef<ScrollView>(null);
   useScrollToTop(
@@ -167,7 +168,11 @@ const DisappearingHeader: React.FC<Props> = ({
           rightButton={{onPress: openChat, icon: chatIcon}}
           alternativeTitleComponent={alternativeTitleComponent}
           alternativeTitleVisible={showAltTitle}
-          onLogoClick={onLogoClick}
+          leftButton={{
+            onPress: logoClick?.callback,
+            icon: <LogoOutline />,
+            ...logoClick,
+          }}
         />
 
         <View style={styles.content}>

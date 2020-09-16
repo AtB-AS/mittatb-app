@@ -2,20 +2,14 @@ import React, {useEffect, useRef} from 'react';
 import {Animated, Text, View, ViewProps, TouchableOpacity} from 'react-native';
 import {StyleSheet} from '../theme';
 import insets from '../utils/insets';
+import HeaderButton, {IconButton} from './HeaderButton';
 import LogoOutline from './LogoOutline';
-
-type IconButton = {
-  icon: React.ReactNode;
-  onPress(): void;
-};
-
 type ScreenHeaderProps = ViewProps & {
   leftButton?: IconButton;
   rightButton?: IconButton;
   title: string;
   alternativeTitleComponent?: React.ReactNode;
   alternativeTitleVisible: boolean;
-  onLogoClick?(): void;
 };
 
 const HEADER_HEIGHT = 40;
@@ -26,7 +20,6 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
   title,
   alternativeTitleComponent,
   alternativeTitleVisible,
-  onLogoClick,
   ...props
 }) => {
   const style = useHeaderStyle();
@@ -42,23 +35,13 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
   }, [alternativeTitleVisible, alternativeTitleComponent]);
 
   const titleOffset = Animated.subtract(altTitleOffset, HEADER_HEIGHT);
-
   const leftIcon = leftButton ? (
-    <TouchableOpacity onPress={leftButton.onPress} hitSlop={insets.all(8)}>
-      {leftButton.icon}
-    </TouchableOpacity>
-  ) : onLogoClick ? (
-    <TouchableOpacity onPress={onLogoClick}>
-      <LogoOutline />
-    </TouchableOpacity>
+    <HeaderButton iconButton={leftButton} />
   ) : (
-    <LogoOutline />
+    <View />
   );
-
   const rightIcon = rightButton ? (
-    <TouchableOpacity onPress={rightButton.onPress} hitSlop={insets.all(8)}>
-      {rightButton.icon}
-    </TouchableOpacity>
+    <HeaderButton iconButton={rightButton} />
   ) : (
     <View />
   );

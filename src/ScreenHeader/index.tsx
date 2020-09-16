@@ -2,12 +2,7 @@ import LogoOutline from './LogoOutline';
 import {View, Text, AccessibilityProps, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {StyleSheet} from '../theme';
-import insets from '../utils/insets';
-
-type IconButton = {
-  icon: React.ReactNode;
-  onPress(): void;
-} & AccessibilityProps;
+import HeaderButton, {IconButton} from './HeaderButton';
 
 type ScreenHeaderProps = {
   leftButton?: IconButton;
@@ -23,17 +18,12 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   const css = useHeaderStyle();
 
   const leftIcon = leftButton ? (
-    <TouchableOpacity hitSlop={insets.all(8)} {...leftButton}>
-      {leftButton.icon}
-    </TouchableOpacity>
+    <HeaderButton iconButton={leftButton} />
   ) : (
-    <LogoOutline />
+    <View />
   );
-
   const rightIcon = rightButton ? (
-    <TouchableOpacity hitSlop={insets.all(8)} {...rightButton}>
-      {rightButton.icon}
-    </TouchableOpacity>
+    <HeaderButton iconButton={rightButton} />
   ) : (
     <View />
   );
@@ -47,7 +37,6 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   );
 };
 export default ScreenHeader;
-
 const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
