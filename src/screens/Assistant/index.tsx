@@ -6,7 +6,7 @@ import {searchTrip} from '../../api';
 import {CancelToken, isCancel} from '../../api/client';
 import {Swap} from '../../assets/svg/icons/actions';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
-import DisappearingHeader from '../../components/disappearing-header/index ';
+import DisappearingHeader from '../../components/disappearing-header';
 import {LocationButton} from '../../components/search-button';
 import SearchGroup from '../../components/search-button/search-group';
 import {useFavorites} from '../../favorites/FavoritesContext';

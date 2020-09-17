@@ -132,11 +132,13 @@ const DisappearingHeader: React.FC<Props> = ({
     useScroll && scrollYValue + osOffset > SCROLL_OFFSET_HEADER_ANIMATION;
 
   const headerTranslate = Animated.subtract(
-    scrollY.interpolate({
-      inputRange: [0, contentHeight],
-      outputRange: [0, -contentHeight],
-      extrapolate: 'clamp',
-    }),
+    isFullHeight
+      ? 0
+      : scrollY.interpolate({
+          inputRange: [0, contentHeight],
+          outputRange: [0, -contentHeight],
+          extrapolate: 'clamp',
+        }),
     fullscreenOffsetRef,
   );
 
