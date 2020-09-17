@@ -1,4 +1,4 @@
-import {CompositeNavigationProp, RouteProp} from '@react-navigation/core';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Text, TouchableOpacity, View, ViewStyle, StyleProp} from 'react-native';
@@ -230,7 +230,7 @@ const Assistant: React.FC<Props> = ({
             style={{position: 'absolute', width: '100%'}}
           >
             <FavoriteChips
-              chipTypes={['favorites']}
+              chipTypes={['favorites', 'add-favorite']}
               onSelectLocation={fillNextAvailableLocation}
               containerStyle={styles.chipBox}
             />
