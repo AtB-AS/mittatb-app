@@ -87,7 +87,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
       // Add new
       await addFavorite(newFavorite);
     }
-    navigation.navigate('Profile');
+    navigation.navigate('ProfileHome');
   };
   const deleteItem = async () => {
     Alert.alert(
@@ -104,7 +104,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           onPress: async () => {
             if (!editItem) return;
             await removeFavorite(editItem.id);
-            navigation.navigate('Profile');
+            navigation.navigate('ProfileHome');
           },
         },
       ],

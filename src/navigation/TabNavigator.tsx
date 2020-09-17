@@ -1,20 +1,20 @@
-import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {ParamListBase} from '@react-navigation/native';
+import React from 'react';
 import {
   Assistant as AssistantIcon,
   Nearby,
   Profile,
   Tickets,
 } from '../assets/svg/icons/tab-bar';
+import {LocationWithMetadata} from '../favorites/types';
 import Assistant from '../screens/Assistant';
 import NearbyScreen from '../screens/Nearby';
-import TicketingScreen from '../screens/Ticketing';
 import ProfileScreen, {ProfileStackParams} from '../screens/Profile';
-import {LocationWithMetadata} from '../favorites/types';
-import {ParamListBase} from '@react-navigation/native';
+import TicketingScreen from '../screens/Ticketing';
 
 type SubNavigator<T extends ParamListBase> = {
-  [K in keyof T]: {screen: K; params?: T[K]};
+  [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
 }[keyof T];
 
 export type TabNavigatorParams = {

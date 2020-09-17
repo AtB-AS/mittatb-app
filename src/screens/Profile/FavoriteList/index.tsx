@@ -21,12 +21,12 @@ import {HOME_TAB_NAME} from '../../../utils/navigation';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
-  'Profile'
+  'ProfileHome'
 >;
 
 type ProfileNearbyScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<TabNavigatorParams, 'Nearest'>,
-  StackNavigationProp<ProfileStackParams, 'Profile'>
+  StackNavigationProp<TabNavigatorParams, 'Profile'>,
+  ProfileScreenNavigationProp
 >;
 
 type ProfileScreenProps = {

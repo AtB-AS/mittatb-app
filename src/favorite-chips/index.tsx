@@ -31,7 +31,8 @@ type Props = {
 type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
 
 type ProfileNearbyScreenNavigationProp = StackNavigationProp<
-  TabNavigatorParams
+  TabNavigatorParams,
+  'Assistant'
 >;
 const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
@@ -104,7 +105,10 @@ const FavoriteChips: React.FC<Props> = ({
           icon={<Add />}
           mode="light"
           onPress={() =>
-            navigation.navigate('Profile', {screen: 'AddEditFavorite'})
+            navigation.navigate('Profile', {
+              screen: 'AddEditFavorite',
+              initial: false,
+            })
           }
           style={{marginRight: 0}}
         />
