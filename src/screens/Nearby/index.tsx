@@ -22,7 +22,7 @@ import Loading from '../Loading';
 import NearbyResults from './NearbyResults';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import SearchGroup from '../../components/search-button/search-group';
-import DisappearingHeader from '../../components/disappearing-header/index ';
+import DisappearingHeader from '../../components/disappearing-header';
 import {DeparturesWithStop, Paginated, DeparturesRealtimeData} from '../../sdk';
 import {View, Text, TouchableOpacity} from 'react-native';
 import useReducerWithSideEffects, {
