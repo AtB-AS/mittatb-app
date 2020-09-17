@@ -1,12 +1,11 @@
-import {NavigationContainer, useScrollToTop} from '@react-navigation/native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {useScrollToTop} from '@react-navigation/native';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Animated,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Platform,
   RefreshControl,
-  SafeAreaView,
   ScrollView,
   useWindowDimensions,
   View,
@@ -142,6 +141,14 @@ const DisappearingHeader: React.FC<Props> = ({
     fullscreenOffsetRef,
   );
 
+  const {top} = useSafeAreaInsets();
+  const screenTopStyle = useMemo(
+    () => ({
+      paddingTop: top,
+    }),
+    [top],
+  );
+
   const endReachListener = useCallback(
     throttle((e: NativeScrollEvent) => {
       if (!onEndReached) return;
@@ -163,7 +170,7 @@ const DisappearingHeader: React.FC<Props> = ({
 
   return (
     <>
-      <SafeAreaView style={styles.topBorder} />
+      <View style={[styles.topBorder, screenTopStyle]} />
       <View style={styles.screen}>
         <AnimatedScreenHeader
           onLayout={onScreenHeaderLayout}
@@ -260,7 +267,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   topBorder: {
-    flex: 0,
     backgroundColor: theme.background.accent,
   },
   bannerContainer: {
