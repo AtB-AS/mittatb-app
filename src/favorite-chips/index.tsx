@@ -1,3 +1,5 @@
+import {useNavigation} from '@react-navigation/core';
+import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useState} from 'react';
 import {
   AccessibilityProps,
@@ -8,13 +10,15 @@ import {
   ViewStyle,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {Add} from '../assets/svg/icons/actions';
 import {CurrentLocationArrow, MapPointPin} from '../assets/svg/icons/places';
 import {FavoriteIcon} from '../favorites';
 import {useFavorites} from '../favorites/FavoritesContext';
 import {LocationWithMetadata} from '../favorites/types';
-import {useGeolocationState} from '../GeolocationContext';
-import colors from '../theme/colors';
 import {useReverseGeocoder} from '../geocoder';
+import {useGeolocationState} from '../GeolocationContext';
+import {TabNavigatorParams} from '../navigation/TabNavigator';
+import colors from '../theme/colors';
 
 type Props = {
   onSelectLocation: (location: LocationWithMetadata) => void;
@@ -24,8 +28,11 @@ type Props = {
   hideChips?: boolean;
 };
 
-type ChipTypeGroup = 'location' | 'map' | 'favorites';
+type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
 
+type ProfileNearbyScreenNavigationProp = StackNavigationProp<
+  TabNavigatorParams
+>;
 const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
   containerStyle,
@@ -33,7 +40,9 @@ const FavoriteChips: React.FC<Props> = ({
   chipTypes = ['favorites', 'location', 'map'],
   hideChips = false,
 }) => {
+  const navigation = useNavigation<ProfileNearbyScreenNavigationProp>();
   const {favorites} = useFavorites();
+
   const {onCurrentLocation} = useCurrentLocationChip(onSelectLocation);
   const activeType = (type: ChipTypeGroup) => chipTypes.includes(type);
 
@@ -81,9 +90,25 @@ const FavoriteChips: React.FC<Props> = ({
                 favoriteId: fav.id,
               })
             }
-            style={i === favorites.length - 1 ? {marginRight: 0} : undefined}
+            style={
+              !activeType('add-favorite') && i === favorites.length - 1
+                ? {marginRight: 0}
+                : undefined
+            }
           />
         ))}
+      {activeType('add-favorite') && (
+        <FavoriteChip
+          text={'Legg til favoritt'}
+          accessibilityRole="menuitem"
+          icon={<Add />}
+          mode="light"
+          onPress={() =>
+            navigation.navigate('Profile', {screen: 'AddEditFavorite'})
+          }
+          style={{marginRight: 0}}
+        />
+      )}
     </ScrollView>
   );
 };
@@ -95,7 +120,7 @@ type ChipProps = {
   icon: JSX.Element;
   onPress: () => void;
   style?: ViewStyle;
-  mode?: 'dark' | 'light';
+  mode?: 'dark' | 'normal' | 'light';
 } & AccessibilityProps;
 
 const FavoriteChip: React.FC<ChipProps> = ({
@@ -103,21 +128,26 @@ const FavoriteChip: React.FC<ChipProps> = ({
   icon,
   onPress,
   style,
-  mode = 'light',
+  mode = 'normal',
   ...accessibilityProps
 }) => {
   return (
     <TouchableOpacity
       style={[
         chipStyles.container,
-        mode == 'dark' && chipStyles.container__dark,
         style,
+        mode == 'dark' && chipStyles.container__dark,
+        mode == 'light' && chipStyles.container__light,
       ]}
       onPress={onPress}
       {...accessibilityProps}
     >
       {icon}
-      <Text style={chipStyles.text}>{text}</Text>
+      <Text
+        style={[chipStyles.text, mode == 'light' && chipStyles.text__light]}
+      >
+        {text}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -137,6 +167,9 @@ const chipStyles = StyleSheet.create({
   container__dark: {
     backgroundColor: colors.secondary.gray_500,
   },
+  container__light: {
+    backgroundColor: colors.secondary.cyan_300,
+  },
   text: {
     marginLeft: 4,
     marginRight: 4,
@@ -144,6 +177,9 @@ const chipStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     letterSpacing: -0.31,
+  },
+  text__light: {
+    color: colors.general.black,
   },
 });
 

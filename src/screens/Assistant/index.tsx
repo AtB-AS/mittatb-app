@@ -230,7 +230,7 @@ const Assistant: React.FC<Props> = ({
             style={{position: 'absolute', width: '100%'}}
           >
             <FavoriteChips
-              chipTypes={['favorites']}
+              chipTypes={['favorites', 'add-favorite']}
               onSelectLocation={fillNextAvailableLocation}
               containerStyle={styles.chipBox}
             />

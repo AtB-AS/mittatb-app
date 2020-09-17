@@ -9,8 +9,13 @@ import {
 import Assistant from '../screens/Assistant';
 import NearbyScreen from '../screens/Nearby';
 import TicketingScreen from '../screens/Ticketing';
-import ProfileScreen from '../screens/Profile';
+import ProfileScreen, {ProfileStackParams} from '../screens/Profile';
 import {LocationWithMetadata} from '../favorites/types';
+import {ParamListBase} from '@react-navigation/core';
+
+type SubNavigator<T extends ParamListBase> = {
+  [K in keyof T]: {screen: K; params?: T[K]};
+}[keyof T];
 
 export type TabNavigatorParams = {
   Assistant: {
@@ -21,7 +26,7 @@ export type TabNavigatorParams = {
     location: LocationWithMetadata;
   };
   Ticketing: undefined;
-  Profile: undefined;
+  Profile: SubNavigator<ProfileStackParams>;
 };
 
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
