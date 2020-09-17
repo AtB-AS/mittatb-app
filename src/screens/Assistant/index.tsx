@@ -1,4 +1,4 @@
-import {CompositeNavigationProp, RouteProp} from '@react-navigation/core';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Text, TouchableOpacity, View, ViewStyle, StyleProp} from 'react-native';

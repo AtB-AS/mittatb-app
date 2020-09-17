@@ -11,7 +11,7 @@ import NearbyScreen from '../screens/Nearby';
 import TicketingScreen from '../screens/Ticketing';
 import ProfileScreen, {ProfileStackParams} from '../screens/Profile';
 import {LocationWithMetadata} from '../favorites/types';
-import {ParamListBase} from '@react-navigation/core';
+import {ParamListBase} from '@react-navigation/native';
 
 type SubNavigator<T extends ParamListBase> = {
   [K in keyof T]: {screen: K; params?: T[K]};
