@@ -1,4 +1,4 @@
-import {NavigationContainer, useScrollToTop} from '@react-navigation/native';
+import {useScrollToTop} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Animated,
@@ -6,7 +6,6 @@ import {
   NativeSyntheticEvent,
   Platform,
   RefreshControl,
-  SafeAreaView,
   ScrollView,
   useWindowDimensions,
   View,
