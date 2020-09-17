@@ -170,79 +170,84 @@ const DisappearingHeader: React.FC<Props> = ({
   );
 
   return (
-    <View style={[styles.screen, screenTopStyle]}>
-      <AnimatedScreenHeader
-        onLayout={onScreenHeaderLayout}
-        title={headerTitle}
-        rightButton={{onPress: openChat, icon: chatIcon}}
-        alternativeTitleComponent={alternativeTitleComponent}
-        alternativeTitleVisible={showAltTitle}
-        leftButton={{
-          onPress: logoClick?.callback,
-          icon: <LogoOutline />,
-          ...logoClick,
-        }}
-      />
+    <>
+      <View style={[styles.topBorder, screenTopStyle]} />
+      <View style={styles.screen}>
+        <AnimatedScreenHeader
+          onLayout={onScreenHeaderLayout}
+          title={headerTitle}
+          rightButton={{onPress: openChat, icon: chatIcon}}
+          alternativeTitleComponent={alternativeTitleComponent}
+          alternativeTitleVisible={showAltTitle}
+          leftButton={{
+            onPress: logoClick?.callback,
+            icon: <LogoOutline />,
+            ...logoClick,
+          }}
+        />
 
-      <View style={styles.content}>
-        <Animated.View
-          style={[
-            styles.header,
-            {transform: [{translateY: headerTranslate}]},
-            {height: boxHeight},
-          ]}
-        >
-          <View style={styles.bannerContainer}>
-            <SvgBanner width={windowWidth} height={windowWidth / 2} />
-          </View>
-
-          <View style={styles.header__inner} onLayout={onHeaderContentLayout}>
-            {renderHeader(fullheightTransitioned)}
-          </View>
-        </Animated.View>
-
-        {useScroll ? (
-          <Animated.ScrollView
-            ref={scrollableContentRef}
-            contentContainerStyle={[{paddingTop: !IS_IOS ? contentHeight : 0}]}
-            scrollEventThrottle={10}
-            style={{flex: 1}}
-            refreshControl={
-              <RefreshControl
-                refreshing={isRefreshing}
-                onRefresh={onRefresh}
-                progressViewOffset={contentHeight}
-              />
-            }
-            onScroll={Animated.event(
-              [{nativeEvent: {contentOffset: {y: scrollYRef}}}],
-              {
-                // For some reason native driver true her (which is preffered)
-                // causes the content animation to jump when refresh control
-                // is triggered. Not ideal having native driver false
-                // but for now this is the best I can do. -mb
-                useNativeDriver: !IS_IOS,
-                listener: (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-                  onScrolling(e.nativeEvent);
-                },
-              },
-            )}
-            contentInset={{
-              top: contentHeight + headerMargin,
-            }}
-            contentOffset={{
-              y: -contentHeight - headerMargin,
-            }}
+        <View style={styles.content}>
+          <Animated.View
+            style={[
+              styles.header,
+              {transform: [{translateY: headerTranslate}]},
+              {height: boxHeight},
+            ]}
           >
-            {children}
-          </Animated.ScrollView>
-        ) : (
-          <View style={{paddingTop: contentHeight + headerMargin}}>
-            {children}
-          </View>
-        )}
+            <View style={styles.bannerContainer}>
+              <SvgBanner width={windowWidth} height={windowWidth / 2} />
+            </View>
+
+            <View style={styles.header__inner} onLayout={onHeaderContentLayout}>
+              {renderHeader(fullheightTransitioned)}
+            </View>
+          </Animated.View>
+
+          {useScroll ? (
+            <Animated.ScrollView
+              ref={scrollableContentRef}
+              contentContainerStyle={[
+                {paddingTop: !IS_IOS ? contentHeight : 0},
+              ]}
+              scrollEventThrottle={10}
+              style={{flex: 1}}
+              refreshControl={
+                <RefreshControl
+                  refreshing={isRefreshing}
+                  onRefresh={onRefresh}
+                  progressViewOffset={contentHeight}
+                />
+              }
+              onScroll={Animated.event(
+                [{nativeEvent: {contentOffset: {y: scrollYRef}}}],
+                {
+                  // For some reason native driver true her (which is preffered)
+                  // causes the content animation to jump when refresh control
+                  // is triggered. Not ideal having native driver false
+                  // but for now this is the best I can do. -mb
+                  useNativeDriver: !IS_IOS,
+                  listener: (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+                    onScrolling(e.nativeEvent);
+                  },
+                },
+              )}
+              contentInset={{
+                top: contentHeight + headerMargin,
+              }}
+              contentOffset={{
+                y: -contentHeight - headerMargin,
+              }}
+            >
+              {children}
+            </Animated.ScrollView>
+          ) : (
+            <View style={{paddingTop: contentHeight + headerMargin}}>
+              {children}
+            </View>
+          )}
+        </View>
       </View>
-    </View>
+    </>
   );
 };
 export default DisappearingHeader;
@@ -259,8 +264,11 @@ const hasReachedEnd = (
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   screen: {
-    backgroundColor: theme.background.accent,
+    backgroundColor: theme.background.level1,
     flexGrow: 1,
+  },
+  topBorder: {
+    backgroundColor: theme.background.accent,
   },
   bannerContainer: {
     position: 'absolute',
