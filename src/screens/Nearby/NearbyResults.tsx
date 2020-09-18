@@ -28,7 +28,6 @@ import MessageBox from '../../message-box';
 import insets from '../../utils/insets';
 import {WalkingPerson} from '../../assets/svg/icons/transportation';
 import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
-import {parseISO} from 'date-fns';
 import OptionalNextDayLabel from '../../components/optional-day-header';
 
 type NearbyResultsProps = {

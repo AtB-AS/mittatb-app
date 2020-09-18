@@ -6,6 +6,10 @@ import useChatIcon from '../../chat/use-chat-icon';
 import colors from '../../theme/colors';
 import {ShinyTicketBanner} from '../../assets/svg/illustrations';
 import {StyleSheet} from '../../theme';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {TabNavigatorParams} from '../../navigation/TabNavigator';
+import LogoOutline from '../../ScreenHeader/LogoOutline';
+import {HOME_TAB_NAME} from '../../utils/navigation';
 
 function openOtherTicketingApp() {
   const url =
@@ -16,16 +20,24 @@ function openOtherTicketingApp() {
     Linking.openURL(url);
   }
 }
-
-export default function Splash() {
+type Props = {
+  navigation: StackNavigationProp<TabNavigatorParams>;
+};
+export default function Splash({navigation}: Props) {
   const {icon: chatIcon, openChat} = useChatIcon();
   const {width: windowWidth} = useWindowDimensions();
+  const navigateHome = () => navigation.navigate(HOME_TAB_NAME);
 
   return (
     <SafeAreaView style={styles.container}>
       <Header
         title="Billetter"
         rightButton={{icon: chatIcon, onPress: openChat}}
+        leftButton={{
+          icon: <LogoOutline />,
+          onPress: navigateHome,
+          accessibilityLabel: 'Gå til startskjerm',
+        }}
       />
       <View style={styles.textContainer}>
         <Text style={[styles.text, styles.bold]}>

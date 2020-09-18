@@ -61,8 +61,8 @@ const NavigationRoot = () => {
           android: 'light-content',
         })}
       />
-      <NavigationContainer ref={ref} onStateChange={trackNavigation}>
-        <Host>
+      <Host>
+        <NavigationContainer ref={ref} onStateChange={trackNavigation}>
           <Stack.Navigator mode={isLoading || !onboarded ? 'card' : 'modal'}>
             {!onboarded ? (
               <Stack.Screen
@@ -111,8 +111,8 @@ const NavigationRoot = () => {
               </>
             )}
           </Stack.Navigator>
-        </Host>
-      </NavigationContainer>
+        </NavigationContainer>
+      </Host>
     </>
   );
 };

@@ -5,7 +5,7 @@ import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
 import {Dot} from '../../../assets/svg/icons/other';
 import LocationRow from '../LocationRow';
 import {LegDetailProps, DetailScreenNavigationProp} from '.';
-import {useNavigation} from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/native';
 import TransportationIcon from '../../../components/transportation-icon';
 import {
   getLineName,

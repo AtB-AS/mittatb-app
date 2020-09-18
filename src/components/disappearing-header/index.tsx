@@ -1,23 +1,25 @@
 import {useScrollToTop} from '@react-navigation/native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Animated,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Platform,
   RefreshControl,
-  SafeAreaView,
   ScrollView,
   useWindowDimensions,
   View,
   Easing,
+  AccessibilityProps,
+  StatusBar,
 } from 'react-native';
-import {useSafeArea} from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import useChatIcon from '../../chat/use-chat-icon';
 import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
 import {StyleSheet} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
 import SvgBanner from '../../assets/svg/icons/other/Banner';
+import LogoOutline from '../../ScreenHeader/LogoOutline';
 
 type Props = {
   renderHeader(isFullHeight: boolean): React.ReactNode;
@@ -32,7 +34,7 @@ type Props = {
 
   headerMargin?: number;
 
-  onLogoClick?(): void;
+  logoClick?: {callback(): void} & AccessibilityProps;
 
   onEndReached?(e: NativeScrollEvent): void;
   onEndReachedThreshold?: number;
@@ -57,7 +59,7 @@ const DisappearingHeader: React.FC<Props> = ({
 
   isFullHeight = false,
 
-  onLogoClick,
+  logoClick,
 
   headerTitle,
   alternativeTitleComponent,
@@ -76,7 +78,6 @@ const DisappearingHeader: React.FC<Props> = ({
     onHeaderContentLayout,
   } = useCalculateHeaderContentHeight();
   const [fullheightTransitioned, setTransitioned] = useState(isFullHeight);
-
   const {width: windowWidth} = useWindowDimensions();
   const scrollableContentRef = React.useRef<ScrollView>(null);
   useScrollToTop(
@@ -130,12 +131,22 @@ const DisappearingHeader: React.FC<Props> = ({
     useScroll && scrollYValue + osOffset > SCROLL_OFFSET_HEADER_ANIMATION;
 
   const headerTranslate = Animated.subtract(
-    scrollY.interpolate({
-      inputRange: [0, contentHeight],
-      outputRange: [0, -contentHeight],
-      extrapolate: 'clamp',
-    }),
+    isFullHeight
+      ? 0
+      : scrollY.interpolate({
+          inputRange: [0, contentHeight],
+          outputRange: [0, -contentHeight],
+          extrapolate: 'clamp',
+        }),
     fullscreenOffsetRef,
+  );
+
+  const {top} = useSafeAreaInsets();
+  const screenTopStyle = useMemo(
+    () => ({
+      paddingTop: top,
+    }),
+    [top],
   );
 
   const endReachListener = useCallback(
@@ -159,7 +170,7 @@ const DisappearingHeader: React.FC<Props> = ({
 
   return (
     <>
-      <SafeAreaView style={styles.topBorder} />
+      <View style={[styles.topBorder, screenTopStyle]} />
       <View style={styles.screen}>
         <AnimatedScreenHeader
           onLayout={onScreenHeaderLayout}
@@ -167,7 +178,11 @@ const DisappearingHeader: React.FC<Props> = ({
           rightButton={{onPress: openChat, icon: chatIcon}}
           alternativeTitleComponent={alternativeTitleComponent}
           alternativeTitleVisible={showAltTitle}
-          onLogoClick={onLogoClick}
+          leftButton={{
+            onPress: logoClick?.callback,
+            icon: <LogoOutline />,
+            ...logoClick,
+          }}
         />
 
         <View style={styles.content}>
@@ -252,7 +267,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   topBorder: {
-    flex: 0,
     backgroundColor: theme.background.accent,
   },
   bannerContainer: {
@@ -326,14 +340,7 @@ function useCalculateHeaderContentHeight() {
     height: screenHeaderHeight,
   } = useLayout();
   const {onLayout: onHeaderContentLayout, height: contentHeight} = useLayout();
-  const {top, bottom} = useSafeArea();
-
-  // Calculate padding of tabbar. Adjusted code from react-navigation
-  // component.
-  const tabBarPadding = Math.max(
-    Platform.select({ios: bottom - 10, default: DEFAULT_TABBAR_HEIGHT}),
-    0,
-  );
+  const {top, bottom} = useSafeAreaInsets();
 
   const boxHeight =
     windowHeight -
@@ -341,7 +348,7 @@ function useCalculateHeaderContentHeight() {
     top -
     bottom -
     DEFAULT_TABBAR_HEIGHT -
-    tabBarPadding;
+    (StatusBar.currentHeight ?? 0);
 
   return {
     boxHeight,

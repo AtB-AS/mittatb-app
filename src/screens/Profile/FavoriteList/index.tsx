@@ -16,15 +16,17 @@ import useChatIcon from '../../../chat/use-chat-icon';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {TabNavigatorParams} from '../../../navigation/TabNavigator';
 import {PRIVACY_POLICY_URL} from 'react-native-dotenv';
+import LogoOutline from '../../../ScreenHeader/LogoOutline';
+import {HOME_TAB_NAME} from '../../../utils/navigation';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
-  'Profile'
+  'ProfileHome'
 >;
 
 type ProfileNearbyScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<TabNavigatorParams, 'Nearest'>,
-  StackNavigationProp<ProfileStackParams, 'Profile'>
+  StackNavigationProp<TabNavigatorParams, 'Profile'>,
+  ProfileScreenNavigationProp
 >;
 
 type ProfileScreenProps = {
@@ -49,6 +51,7 @@ export default function Profile({navigation}: ProfileScreenProps) {
     });
   };
 
+  const navigateHome = () => navigation.navigate(HOME_TAB_NAME);
   const onAddButtonClick = () => navigation.push('AddEditFavorite', {});
 
   const {icon: chatIcon, openChat} = useChatIcon();
@@ -57,6 +60,11 @@ export default function Profile({navigation}: ProfileScreenProps) {
     <SafeAreaView style={css.container}>
       <Header
         title="Mitt AtB"
+        leftButton={{
+          icon: <LogoOutline />,
+          onPress: navigateHome,
+          accessibilityLabel: 'Gå til startskjerm',
+        }}
         rightButton={{icon: chatIcon, onPress: openChat}}
       />
 

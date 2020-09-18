@@ -1,5 +1,5 @@
 import {useState, useCallback, useEffect} from 'react';
-import {useIsFocused} from '@react-navigation/core';
+import {useIsFocused} from '@react-navigation/native';
 import useInterval from './use-interval';
 
 type PollableResourceOptions<T> = {

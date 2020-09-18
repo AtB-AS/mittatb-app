@@ -1,4 +1,4 @@
-import {CompositeNavigationProp, RouteProp} from '@react-navigation/core';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Text, TouchableOpacity, View, ViewStyle, StyleProp} from 'react-native';
@@ -6,7 +6,7 @@ import {searchTrip} from '../../api';
 import {CancelToken, isCancel} from '../../api/client';
 import {Swap} from '../../assets/svg/icons/actions';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
-import DisappearingHeader from '../../components/disappearing-header/index ';
+import DisappearingHeader from '../../components/disappearing-header';
 import {LocationButton} from '../../components/search-button';
 import SearchGroup from '../../components/search-button/search-group';
 import {useFavorites} from '../../favorites/FavoritesContext';
@@ -230,7 +230,7 @@ const Assistant: React.FC<Props> = ({
             style={{position: 'absolute', width: '100%'}}
           >
             <FavoriteChips
-              chipTypes={['favorites']}
+              chipTypes={['favorites', 'add-favorite']}
               onSelectLocation={fillNextAvailableLocation}
               containerStyle={styles.chipBox}
             />
@@ -299,7 +299,10 @@ const Assistant: React.FC<Props> = ({
       headerTitle="Reiseassistent"
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
-      onLogoClick={resetView}
+      logoClick={{
+        callback: resetView,
+        accessibilityLabel: 'Nullstill reisesøk',
+      }}
       onFullscreenTransitionEnd={(fullHeight) => {
         if (fullHeight) {
           clearPatterns();
