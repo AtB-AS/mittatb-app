@@ -10,7 +10,7 @@ import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
 import {StyleSheet} from '../theme';
 import colors from '../theme/colors';
-import FavoriteChips from '../favorite-chips';
+import FavoriteChips, {ChipTypeGroup} from '../favorite-chips';
 import LocationResults from './LocationResults';
 import useDebounce from './useDebounce';
 import {LocationSearchNavigationProp} from './';
@@ -28,7 +28,7 @@ export type RouteParams = {
   callerRouteName: string;
   callerRouteParam: string;
   label: string;
-  hideFavorites?: boolean;
+  favoriteChipTypes?: ChipTypeGroup[];
   initialLocation?: LocationWithMetadata;
 };
 
@@ -39,7 +39,7 @@ const LocationSearch: React.FC<Props> = ({
       callerRouteName,
       callerRouteParam,
       label,
-      hideFavorites,
+      favoriteChipTypes,
       initialLocation,
     },
   },
@@ -146,7 +146,7 @@ const LocationSearch: React.FC<Props> = ({
           <FavoriteChips
             onSelectLocation={onSelect}
             onMapSelection={onMapSelection}
-            hideChips={!!hideFavorites}
+            chipTypes={favoriteChipTypes}
             containerStyle={[styles.contentBlock, styles.chipBox]}
           />
         </View>
