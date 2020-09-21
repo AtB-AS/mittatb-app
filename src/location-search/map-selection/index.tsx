@@ -1,23 +1,22 @@
 import {RouteProp} from '@react-navigation/native';
 import React, {useState, useRef, useMemo} from 'react';
-import {Text, Platform, View, TouchableOpacity, ViewStyle} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 
 import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
 import {useReverseGeocoder} from '../../geocoder';
-import colors from '../../theme/colors';
 import {LocationSearchNavigationProp, LocationSearchStackParams} from '../';
-import insets from '../../utils/insets';
-import MapControls from './MapControls';
 import {useGeolocationState} from '../../GeolocationContext';
 import LocationBar from './LocationBar';
-import {ArrowLeft} from '../../assets/svg/icons/navigation';
-import {StyleSheet, useTheme} from '../../theme';
-import shadows from './shadows';
+import {StyleSheet} from '../../theme';
 import {Coordinates} from '@entur/sdk';
-import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import SelectionPin, {PinMode} from './SelectionPin';
 import {Feature} from 'geojson';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import BackArrow from '../../components/map/BackArrow';
+import {useControlPositionsStyle} from '../../components/map/control-styles';
+import MapControls from '../../components/map/MapControls';
+import shadows from '../../components/map/shadows';
+import PositionArrow from '../../components/map/PositionArrow';
+import {MapViewConfig} from '../../components/map/MapConfig';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -118,16 +117,7 @@ const MapSelection: React.FC<Props> = ({
           setRegionEvent({isMoving: true, region: regionEvent?.region})
         }
         onPress={flyToFeature}
-        compassViewPosition={3}
-        compassEnabled={true}
-        compassViewMargins={{
-          x: Platform.select({default: 10, android: 6}),
-          y: 90,
-        }}
-        attributionPosition={Platform.select({
-          default: {bottom: 8, left: 95},
-          android: {bottom: 5, left: 90},
-        })}
+        {...MapViewConfig}
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
@@ -175,69 +165,6 @@ function getPinMode(isSearching: boolean, hasLocation: boolean): PinMode {
   return 'nothing';
 }
 
-const BackArrow: React.FC<{onBack(): void}> = ({onBack}) => {
-  return (
-    <TouchableOpacity
-      accessibilityLabel="Gå tilbake"
-      accessibilityRole="button"
-      onPress={onBack}
-      hitSlop={insets.symmetric(12, 20)}
-    >
-      <View style={styles.backArrow}>
-        <ArrowLeft fill={colors.general.white} />
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-function useControlPositionsStyle() {
-  const {top, bottom} = useSafeAreaInsets();
-  const {theme} = useTheme();
-
-  return useMemo<{[key: string]: ViewStyle}>(
-    () => ({
-      backArrowContainer: {
-        position: 'absolute',
-        top: top + theme.sizes.pagePadding,
-        left: theme.sizes.pagePadding,
-      },
-      positionArrowContainer: {
-        position: 'absolute',
-        top: top + theme.sizes.pagePadding,
-        right: theme.sizes.pagePadding,
-      },
-      controlsContainer: {
-        position: 'absolute',
-        bottom: bottom + theme.sizes.pagePadding,
-        right: theme.sizes.pagePadding,
-      },
-      locationContainer: {
-        position: 'absolute',
-        top: top + theme.sizes.pagePadding + 28 + theme.sizes.pagePadding,
-        paddingHorizontal: theme.sizes.pagePadding,
-        width: '100%',
-      },
-    }),
-    [bottom, top],
-  );
-}
-
-const PositionArrow: React.FC<{flyToCurrentLocation(): void}> = ({
-  flyToCurrentLocation,
-}) => {
-  return (
-    <TouchableOpacity
-      accessibilityLabel="Min posisjon"
-      accessibilityRole="button"
-      onPress={flyToCurrentLocation}
-    >
-      <View style={styles.flyToButton}>
-        <CurrentLocationArrow />
-      </View>
-    </TouchableOpacity>
-  );
-};
-
 const styles = StyleSheet.create({
   container: {flex: 1},
   pinContainer: {
@@ -246,25 +173,6 @@ const styles = StyleSheet.create({
     right: '50%',
   },
   pin: {position: 'absolute', top: -40, right: -20, ...shadows},
-  backArrow: {
-    backgroundColor: colors.primary.gray,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 36,
-    height: 28,
-    ...shadows,
-  },
-  flyToButton: {
-    backgroundColor: 'white',
-    borderRadius: 5,
-    width: 36,
-    height: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 8,
-    ...shadows,
-  },
 });
 
 export default MapSelection;

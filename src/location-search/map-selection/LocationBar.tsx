@@ -6,7 +6,7 @@ import {Info} from '../../assets/svg/icons/status';
 import {Location} from '../../favorites/types';
 import LocationIcon from '../../components/location-icon';
 import {StyleSheet} from '../../theme';
-import shadows from './shadows';
+import shadows from '../../components/map/shadows';
 
 type Props = {
   location?: Location;
