@@ -1,4 +1,5 @@
 import {Platform} from 'react-native';
+import {MAPBOX_STOP_PLACES_STYLE_URL} from 'react-native-dotenv';
 
 export const MapViewConfig = {
   compassViewPosition: 3,
@@ -11,4 +12,5 @@ export const MapViewConfig = {
     default: {bottom: 8, left: 95},
     android: {bottom: 5, left: 125},
   }),
+  styleURL: MAPBOX_STOP_PLACES_STYLE_URL,
 };
