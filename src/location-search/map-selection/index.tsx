@@ -18,6 +18,7 @@ import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import SelectionPin, {PinMode} from './SelectionPin';
 import {Feature} from 'geojson';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {MAPBOX_STOP_PLACES_STYLE_URL} from 'react-native-dotenv';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -128,6 +129,7 @@ const MapSelection: React.FC<Props> = ({
           default: {bottom: 8, left: 95},
           android: {bottom: 5, left: 90},
         })}
+        styleURL={MAPBOX_STOP_PLACES_STYLE_URL}
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
