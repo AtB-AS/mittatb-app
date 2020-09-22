@@ -8,6 +8,7 @@ import {getMapBounds, legsToMapLines, pointOf} from './utils';
 import MapRoute from './MapRoute';
 import MapLabel from './MapLabel';
 import colors from '../../../theme/colors';
+import {MapViewConfig} from '../../../components/map/MapConfig';
 
 export type MapProps = {
   legs: Leg[];
@@ -18,50 +19,51 @@ export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const [snapshot, setSnapshot] = useState<string | undefined>();
-  const [transition, setTransition] = useState<boolean>(true);
+  const [inTransition, setInTransition] = useState<boolean>(true);
 
   const features = legsToMapLines(legs);
   const startPoint = pointOf(legs[0].fromPlace);
   const endPoint = pointOf(legs[legs.length - 1].toPlace);
-  const bounds = getMapBounds(features, 15);
+  const bounds = getMapBounds(features, 40);
 
-  async function finishedLoading() {
-    const snap = await mapViewRef.current?.takeSnap();
-    setSnapshot(snap);
-    setTimeout(() => setTransition(false), 2000);
+  function finishedLoading() {
+    setTimeout(async () => {
+      const snap = await mapViewRef.current?.takeSnap();
+      setSnapshot(snap);
+      setTimeout(() => setInTransition(false), 200);
+    }, 1000);
   }
 
-  const mapOutput = (
-    <MapboxGL.MapView
-      ref={mapViewRef}
-      style={styles.map}
-      scrollEnabled={false}
-      rotateEnabled={false}
-      zoomEnabled={false}
-      onDidFinishRenderingMapFully={finishedLoading}
-    >
-      <MapboxGL.Camera ref={mapCameraRef} bounds={bounds} />
-      <MapRoute lines={features}></MapRoute>
-      <MapLabel point={endPoint} id={'end'} text="Slutt"></MapLabel>
-      <MapLabel point={startPoint} id={'start'} text="Start"></MapLabel>
-    </MapboxGL.MapView>
-  );
-
-  if (!snapshot) {
-    return <View style={styles.mapView}>{mapOutput}</View>;
-  }
+  const renderMap = !snapshot || inTransition;
 
   return (
-    <>
-      <View style={styles.mapView}>
-        {transition && mapOutput}
-        <Image style={styles.map} source={{uri: snapshot}} />
-        <TouchableOpacity style={styles.toggler} onPress={onExpand}>
-          <Text style={styles.toggleText}>Utvid kart</Text>
-          <MapIcon style={styles.toggleIcon} />
-        </TouchableOpacity>
-      </View>
-    </>
+    <View style={styles.mapView}>
+      {renderMap && (
+        <MapboxGL.MapView
+          ref={mapViewRef}
+          style={styles.map}
+          scrollEnabled={false}
+          rotateEnabled={false}
+          zoomEnabled={false}
+          onDidFinishRenderingMapFully={finishedLoading}
+          {...MapViewConfig}
+        >
+          <MapboxGL.Camera
+            ref={mapCameraRef}
+            bounds={bounds}
+            animationDuration={0}
+          />
+          <MapRoute lines={features}></MapRoute>
+          <MapLabel point={endPoint} id={'end'} text="Slutt"></MapLabel>
+          <MapLabel point={startPoint} id={'start'} text="Start"></MapLabel>
+        </MapboxGL.MapView>
+      )}
+      {!!snapshot && <Image style={styles.map} source={{uri: snapshot}} />}
+      <TouchableOpacity style={styles.toggler} onPress={onExpand}>
+        <Text style={styles.toggleText}>Utvid kart</Text>
+        <MapIcon style={styles.toggleIcon} />
+      </TouchableOpacity>
+    </View>
   );
 };
 const styles = StyleSheet.create({
@@ -77,6 +79,7 @@ const styles = StyleSheet.create({
     bottom: 8,
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
   },
   toggleText: {
     fontSize: 14,

@@ -20,35 +20,36 @@ const MapRoute: React.FC<{lines: MapLine[]}> = ({lines}) => {
     <>
       {lines.map((line, index) => {
         const isFirst = index === 0;
+        const lineModeStyle = modeStyle(line.travelType, line.publicCode);
+
         return (
           <View key={'line-' + index}>
             <MapboxGL.ShapeSource id={'shape-' + index} shape={line.geometry}>
               <MapboxGL.LineLayer
                 id={'line-' + index}
                 style={{
-                  lineWidth: 5,
-                  lineJoin: 'round',
-                  ...modeStyle(line.travelType, line.publicCode),
+                  lineWidth: 8,
+                  lineOffset: -1,
+                  ...lineModeStyle,
                 }}
               ></MapboxGL.LineLayer>
             </MapboxGL.ShapeSource>
 
             {!isFirst && (
-              <MapboxGL.ShapeSource
-                id={'switch-' + index}
-                shape={getFirstPoint(line)}
-              >
-                <MapboxGL.CircleLayer
-                  id={'switch-circle-' + index}
-                  style={{
-                    circleRadius: 7,
-                    circleColor: transportationMapLineColor(
-                      line.travelType,
-                      line.publicCode,
-                    ),
-                  }}
-                ></MapboxGL.CircleLayer>
-              </MapboxGL.ShapeSource>
+              <>
+                <MapboxGL.ShapeSource
+                  id={'switch-' + index}
+                  shape={getFirstPoint(line)}
+                >
+                  <MapboxGL.CircleLayer
+                    id={'line-symbol-' + index}
+                    style={{
+                      circleRadius: 10,
+                      circleColor: lineModeStyle.lineColor,
+                    }}
+                  ></MapboxGL.CircleLayer>
+                </MapboxGL.ShapeSource>
+              </>
             )}
           </View>
         );

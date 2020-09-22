@@ -3,32 +3,38 @@ import MapboxGL, {SymbolLayerStyle} from '@react-native-mapbox-gl/maps';
 import {Point} from 'geojson';
 import colors from '../../../theme/colors';
 
-const MapLabel: React.FC<{text: string; point: Point; id: string}> = ({
-  text,
-  point,
-  id,
-}) => {
+const MapLabel: React.FC<{
+  text: string;
+  point: Point;
+  id: string;
+}> = ({text, point, id}) => {
+  const bg = require('../../../../assets/map/mapLabelBg.png');
+  const shape = {
+    type: 'Feature',
+    geometry: point,
+    properties: {
+      icon: 'background',
+    },
+  };
   return (
-    <MapboxGL.ShapeSource id={id + '-shape'} shape={point}>
-      <MapboxGL.SymbolLayer
-        id={id + '-text'}
-        sourceLayerID={id + '-shape'}
-        minZoomLevel={7}
-        style={{
-          ...mapLabelStyle,
-          textField: text,
-          textHaloWidth: 2,
-          textHaloColor: colors.general.white,
-        }}
-      />
-    </MapboxGL.ShapeSource>
+    <>
+      <MapboxGL.Images images={{background: bg}} />
+      <MapboxGL.ShapeSource id={id + '-shape'} shape={shape}>
+        <MapboxGL.SymbolLayer
+          id={id + '-label'}
+          style={{
+            textColor: colors.general.white,
+            textHaloColor: colors.primary.gray,
+            textHaloWidth: 1,
+            textField: text,
+            iconImage: ['get', 'icon'],
+            iconAllowOverlap: true,
+            iconOpacity: 1,
+            iconSize: 0.33,
+          }}
+        />
+      </MapboxGL.ShapeSource>
+    </>
   );
 };
-
-const mapLabelStyle: SymbolLayerStyle = {
-  textColor: colors.general.black,
-  textHaloColor: colors.general.white,
-  textHaloWidth: 2,
-};
-
 export default MapLabel;

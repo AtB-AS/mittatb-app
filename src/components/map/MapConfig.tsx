@@ -10,7 +10,7 @@ export const MapViewConfig = {
   },
   attributionPosition: Platform.select({
     default: {bottom: 8, left: 95},
-    android: {bottom: 5, left: 125},
+    android: {bottom: 5, left: 95},
   }),
   styleURL: MAPBOX_STOP_PLACES_STYLE_URL,
 };
