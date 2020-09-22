@@ -3,6 +3,7 @@ import {View, Text, AccessibilityProps, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {StyleSheet} from '../theme';
 import HeaderButton, {IconButton} from './HeaderButton';
+import colors from '../theme/colors';
 
 type ScreenHeaderProps = {
   leftButton?: IconButton;
@@ -44,6 +45,7 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
     padding: theme.sizes.pagePadding,
     height: 64,
+    backgroundColor: colors.secondary.cyan,
   },
   iconContainerLeft: {
     position: 'absolute',

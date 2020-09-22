@@ -30,6 +30,8 @@ import {getSingleTripPattern} from '../../../api/trips';
 import usePollableResource from '../../../utils/use-pollable-resource';
 import {getQuayNameFromStartLeg} from '../../../utils/transportation-names';
 import {CompactMap} from '../Map/CompactMap';
+import BackArrow from '../../../components/map/BackArrow';
+import {ArrowLeft, ArrowRight} from '../../../assets/svg/icons/navigation';
 
 // @TODO Firebase config?
 const TIME_LIMIT_IN_MINUTES = 3;
@@ -73,7 +75,7 @@ const TripDetailsModal: React.FC<Props> = (props) => {
           accessible: true,
           accessibilityRole: 'button',
           accessibilityLabel: 'Gå tilbake',
-          icon: <Close />,
+          icon: <ArrowLeft />,
         }}
         title="Reisedetaljer"
       />
@@ -252,7 +254,6 @@ const useDetailsStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   scrollViewContent: {
-    padding: 12,
     paddingBottom: 100,
   },
   textStyle: {
