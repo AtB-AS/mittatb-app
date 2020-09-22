@@ -157,7 +157,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
               callerRouteName: AddEditRouteNameStatic,
               callerRouteParam: 'searchLocation',
               label: 'Sted',
-              hideFavorites: true,
+              favoriteChipTypes: ['location', 'map'],
               initialLocation: location,
             })
           }
