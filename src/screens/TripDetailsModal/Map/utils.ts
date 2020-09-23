@@ -1,4 +1,5 @@
 import {Leg, LegMode, Place} from '@entur/sdk';
+import polyline from '@mapbox/polyline';
 import {Feature, LineString, Point, Position} from 'geojson';
 
 export interface MapLine extends Feature {
@@ -33,7 +34,6 @@ export function getMapBounds(features: MapLine[], padding: number) {
   };
 }
 export function legsToMapLines(legs: Leg[]): MapLine[] {
-  const polyline = require('@mapbox/polyline');
   return legs.map((leg) => {
     const line = polyline.toGeoJSON(leg.pointsOnLink?.points);
     return {
@@ -41,7 +41,7 @@ export function legsToMapLines(legs: Leg[]): MapLine[] {
       properties: {},
       travelType: leg.mode,
       publicCode: leg.line?.publicCode,
-      geometry: line as LineString,
+      geometry: line,
     };
   });
 }

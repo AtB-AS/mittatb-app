@@ -5,15 +5,17 @@ import {useGeolocationState} from '../../../GeolocationContext';
 import {Leg} from '@entur/sdk';
 import {RouteProp} from '@react-navigation/native';
 import {DetailsModalStackParams} from '..';
-import {useControlPositionsStyle} from '../../../components/map/control-styles';
-import BackArrow from '../../../components/map/BackArrow';
 import {DetailScreenNavigationProp} from '../Details';
-import MapControls from '../../../components/map/MapControls';
-import PositionArrow from '../../../components/map/PositionArrow';
 import {getMapBounds, legsToMapLines, pointOf} from './utils';
 import MapRoute from './MapRoute';
 import MapLabel from './MapLabel';
-import {MapViewConfig} from '../../../components/map/MapConfig';
+import {
+  MapViewConfig,
+  MapControls,
+  PositionArrow,
+  BackArrow,
+  useControlPositionsStyle,
+} from '../../../components/map/';
 
 export type MapDetailRouteParams = {
   legs: Leg[];

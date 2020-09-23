@@ -30,6 +30,7 @@
     "@react-navigation/native": "^5.2.3",
     "@react-navigation/stack": "^5.2.18",
     "@seznam/compose-react-refs": "^1.0.4",
+    "@types/mapbox__polyline": "^1.0.1",
     "axios": "^0.19.2",
     "bugsnag-react-native": "^2.23.7",
     "date-fns": "^2.14.0",

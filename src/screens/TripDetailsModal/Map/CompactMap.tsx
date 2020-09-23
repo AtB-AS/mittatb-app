@@ -8,7 +8,7 @@ import {getMapBounds, legsToMapLines, pointOf} from './utils';
 import MapRoute from './MapRoute';
 import MapLabel from './MapLabel';
 import colors from '../../../theme/colors';
-import {MapViewConfig} from '../../../components/map/MapConfig';
+import {MapViewConfig} from '../../../components/map/';
 
 export type MapProps = {
   legs: Leg[];

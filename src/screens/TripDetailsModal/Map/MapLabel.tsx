@@ -8,7 +8,7 @@ const MapLabel: React.FC<{
   point: Point;
   id: string;
 }> = ({text, point, id}) => {
-  const bg = require('../../../../assets/map/mapLabelBg.png');
+  const bg = require('../../../assets/images/map/mapLabelBg.png');
   const shape = {
     type: 'Feature',
     geometry: point,

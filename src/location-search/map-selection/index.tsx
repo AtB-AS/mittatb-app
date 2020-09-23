@@ -11,12 +11,14 @@ import {StyleSheet} from '../../theme';
 import {Coordinates} from '@entur/sdk';
 import SelectionPin, {PinMode} from './SelectionPin';
 import {Feature} from 'geojson';
-import BackArrow from '../../components/map/BackArrow';
-import {useControlPositionsStyle} from '../../components/map/control-styles';
-import MapControls from '../../components/map/MapControls';
-import shadows from '../../components/map/shadows';
-import PositionArrow from '../../components/map/PositionArrow';
-import {MapViewConfig} from '../../components/map/MapConfig';
+import {
+  MapViewConfig,
+  MapControls,
+  BackArrow,
+  shadows,
+  PositionArrow,
+  useControlPositionsStyle,
+} from '../../components/map/';
 
 export type RouteParams = {
   callerRouteName: string;
