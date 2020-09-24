@@ -45,14 +45,13 @@ const spacings = {
   large: 20,
   medium: 12,
   small: 8,
-  xSmall: 4
- 
+  xSmall: 4,
 };
 const fontSizes = {
-    body: 16,
-    lead: 14,
-    label: 12
-}
+  body: 16,
+  lead: 14,
+  label: 12,
+};
 export interface Theme {
   spacings: typeof spacings;
   background: {
@@ -69,8 +68,8 @@ export interface Theme {
       primary: string;
       destructive: string;
       faded: string;
-    }
-    sizes: typeof fontSizes,
+    };
+    sizes: typeof fontSizes;
   };
   border: {
     primary: string;
@@ -100,7 +99,7 @@ export const themes: Themes = {
         destructive: colors.general.white,
         faded: colors.general.gray400,
       },
-      sizes: fontSizes
+      sizes: fontSizes,
     },
     border: {
       primary: colors.primary.gray,
@@ -123,7 +122,7 @@ export const themes: Themes = {
         destructive: colors.general.white,
         faded: colors.general.gray400,
       },
-      sizes: fontSizes
+      sizes: fontSizes,
     },
     border: {
       primary: colors.primary.gray,

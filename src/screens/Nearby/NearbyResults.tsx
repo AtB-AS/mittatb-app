@@ -29,8 +29,8 @@ import insets from '../../utils/insets';
 import {WalkingPerson} from '../../assets/svg/icons/transportation';
 import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
 import OptionalNextDayLabel from '../../components/optional-day-header';
-import { Expand } from '../../assets/svg/icons/navigation';
-import { GeoPosition } from 'react-native-geolocation-service';
+import {Expand} from '../../assets/svg/icons/navigation';
+import {GeoPosition} from 'react-native-geolocation-service';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
@@ -98,7 +98,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
 };
 const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    padding: theme.spacings.medium
+    padding: theme.spacings.medium,
   },
   centerText: {
     textAlign: 'center',
@@ -139,7 +139,7 @@ const StopDepartures: React.FC<StopDeparturesProps> = React.memo(
 
     return (
       <>
-      <ItemHeader stop={departures.stop} />
+        <ItemHeader stop={departures.stop} />
         <LastElement last={styles.quayContainer__withoutBorder}>
           {Object.values(departures.quays).map((quay) => (
             <QuayResult
@@ -177,7 +177,6 @@ const QuayResult: React.FC<QuayProps> = React.memo(
       <View key={quay.quay.id} style={styles.quayContainer}>
         <View style={styles.platformHeader}>
           <Text>Plattform {quay.quay.publicCode}</Text>
-          
         </View>
         {items.map((departure, i) => (
           <React.Fragment key={departure.serviceJourney.id}>
@@ -186,10 +185,7 @@ const QuayResult: React.FC<QuayProps> = React.memo(
               previousDepartureTime={items[i - 1]?.expectedDepartureTime}
               allSameDay={allSameDay}
             />
-            <NearbyResultItem
-              departure={departure}
-              onPress={onPress}
-            />
+            <NearbyResultItem departure={departure} onPress={onPress} />
           </React.Fragment>
         ))}
         {showShowMoreButton && (
@@ -213,7 +209,7 @@ const ShowMoreButton: React.FC<ShowMoreButtonProps> = ({onPress}) => {
     >
       <View style={style.showMoreButton}>
         <Text style={style.text}>Vis flere avganger</Text>
-        <Expand/>
+        <Expand />
       </View>
     </TouchableOpacity>
   );
@@ -223,7 +219,7 @@ const useShowMoreButtonStyle = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.medium,
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   text: {
     fontSize: theme.text.sizes.body,
@@ -276,9 +272,7 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
             publicCode={
               departure.serviceJourney.journeyPattern?.line.publicCode
             }
-            circleStyle={
-              {margin: 0}
-            } 
+            circleStyle={{margin: 0}}
           />
           <View style={styles.textWrapper}>
             <Text style={styles.textContent} numberOfLines={1}>
@@ -374,7 +368,6 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: 8,
     marginBottom: theme.spacings.small,
   },
-
 }));
 
 type LastElementProps = {
