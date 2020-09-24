@@ -212,7 +212,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   contentBlock: {
-    paddingHorizontal: theme.sizes.pagePadding,
+    paddingHorizontal: theme.spacings.medium,
   },
   scroll: {
     flex: 1,
@@ -227,7 +227,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     left: 12,
   },
   placeholder: {
-    color: theme.text.faded,
+    color: theme.text.colors.faded,
   },
   inputContainer: {
     width: '100%',
@@ -244,7 +244,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     borderWidth: 1,
     borderColor: colors.general.gray,
     borderRadius: 4,
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
   },
   searchIcon: {
     position: 'absolute',

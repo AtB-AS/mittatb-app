@@ -43,7 +43,7 @@ export default function EditableListGroup<T>({
 }
 const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   textGroup: {
-    padding: theme.sizes.pagePadding,
+    padding: theme.spacings.medium,
     flex: 1,
   },
   listSection: {

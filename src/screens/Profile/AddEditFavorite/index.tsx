@@ -216,12 +216,12 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   innerContainer: {
     flex: 1,
-    padding: theme.sizes.pagePadding,
+    padding: theme.spacings.medium,
   },
   input: {
     backgroundColor: theme.background.level1,
     borderColor: colors.general.gray,
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     borderWidth: 1,
     borderRadius: 4,
     paddingLeft: 60,
@@ -238,7 +238,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   emojiContainer: {},
   placeholder: {
-    color: theme.text.faded,
+    color: theme.text.colors.faded,
   },
   inputContainer: {
     width: '100%',
@@ -253,7 +253,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     borderRadius: 4,
     borderWidth: 1,
     borderColor: colors.general.gray,
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     zIndex: -1,
   },
   searchIcon: {

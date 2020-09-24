@@ -29,6 +29,8 @@ import insets from '../../utils/insets';
 import {WalkingPerson} from '../../assets/svg/icons/transportation';
 import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
 import OptionalNextDayLabel from '../../components/optional-day-header';
+import { Expand } from '../../assets/svg/icons/navigation';
+import { GeoPosition } from 'react-native-geolocation-service';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
@@ -96,7 +98,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
 };
 const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    paddingHorizontal: theme.sizes.pagePadding,
+    padding: theme.spacings.medium
   },
   centerText: {
     textAlign: 'center',
@@ -131,15 +133,13 @@ type StopDeparturesProps = {
 const StopDepartures: React.FC<StopDeparturesProps> = React.memo(
   ({departures, onPress, onShowMoreOnQuay}) => {
     const styles = useResultItemStyles();
-
     if (!Object.keys(departures.quays).length) {
       return null;
     }
 
     return (
-      <View style={styles.stopContainer}>
-        <ItemHeader stop={departures.stop} />
-
+      <>
+      <ItemHeader stop={departures.stop} />
         <LastElement last={styles.quayContainer__withoutBorder}>
           {Object.values(departures.quays).map((quay) => (
             <QuayResult
@@ -150,7 +150,7 @@ const StopDepartures: React.FC<StopDeparturesProps> = React.memo(
             />
           ))}
         </LastElement>
-      </View>
+      </>
     );
   },
 );
@@ -173,11 +173,11 @@ const QuayResult: React.FC<QuayProps> = React.memo(
     );
 
     if (!items.length) return null;
-
     return (
       <View key={quay.quay.id} style={styles.quayContainer}>
         <View style={styles.platformHeader}>
           <Text>Plattform {quay.quay.publicCode}</Text>
+          
         </View>
         {items.map((departure, i) => (
           <React.Fragment key={departure.serviceJourney.id}>
@@ -189,9 +189,6 @@ const QuayResult: React.FC<QuayProps> = React.memo(
             <NearbyResultItem
               departure={departure}
               onPress={onPress}
-              style={
-                i == items.length - 1 && styles.itemContainer__withoutBorder
-              }
             />
           </React.Fragment>
         ))}
@@ -214,20 +211,22 @@ const ShowMoreButton: React.FC<ShowMoreButtonProps> = ({onPress}) => {
       onPress={onPress}
       hitSlop={insets.symmetric(8, 12)}
     >
-      <View style={style.button}>
+      <View style={style.showMoreButton}>
         <Text style={style.text}>Vis flere avganger</Text>
+        <Expand/>
       </View>
     </TouchableOpacity>
   );
 };
 const useShowMoreButtonStyle = StyleSheet.createThemeHook((theme) => ({
-  button: {
-    alignItems: 'center',
-    marginTop: 20,
+  showMoreButton: {
+    padding: theme.spacings.medium,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   text: {
-    fontSize: 12,
-    textDecorationLine: 'underline',
+    fontSize: theme.text.sizes.body,
   },
 }));
 
@@ -239,7 +238,7 @@ const ItemHeader: React.FC<{
 
   return (
     <View style={styles.resultHeader}>
-      <Text>{stop.name}</Text>
+      <Text style={styles.resultHeaderText}>{stop.name}</Text>
       {location && (
         <View style={styles.distance}>
           <TextHiddenSupportPrefix prefix="Distanse">
@@ -272,15 +271,14 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
           style={[styles.itemContainer, style]}
           onPress={() => onPress?.(departure)}
         >
-          <TextHiddenSupportPrefix prefix="Avgang" style={styles.time}>
-            {(!departure.realtime ? missingRealtimePrefix : '') +
-              formatToClockOrRelativeMinutes(departure.expectedDepartureTime)}
-          </TextHiddenSupportPrefix>
           <TransportationIcon
             mode={departure.serviceJourney.journeyPattern?.line.transportMode}
             publicCode={
               departure.serviceJourney.journeyPattern?.line.publicCode
             }
+            circleStyle={
+              {margin: 0}
+            } 
           />
           <View style={styles.textWrapper}>
             <Text style={styles.textContent} numberOfLines={1}>
@@ -290,6 +288,10 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
               {name}
             </Text>
           </View>
+          <TextHiddenSupportPrefix prefix="Avgang" style={styles.time}>
+            {(!departure.realtime ? missingRealtimePrefix : '') +
+              formatToClockOrRelativeMinutes(departure.expectedDepartureTime)}
+          </TextHiddenSupportPrefix>
         </TouchableOpacity>
       </View>
     );
@@ -300,10 +302,10 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
   itemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingBottom: 12,
-    marginBottom: 12,
+    padding: theme.spacings.medium,
     borderBottomColor: theme.background.level1,
     borderBottomWidth: 1,
+    fontSize: 40,
   },
   itemContainer__isInPast: {
     opacity: 0.5,
@@ -320,34 +322,30 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
   distanceIcon: {
     marginLeft: 4,
   },
-  stopContainer: {
-    padding: 12,
-    paddingBottom: 0,
-    backgroundColor: theme.background.level0,
-    borderRadius: 8,
-    marginBottom: 12,
-  },
   platformHeader: {
-    marginBottom: 12,
-    color: theme.text.faded,
-    fontSize: 12,
+    padding: theme.spacings.medium,
+    color: theme.text.colors.faded,
+    fontSize: theme.text.sizes.label,
+    borderBottomColor: theme.background.level1,
+    borderBottomWidth: 1,
   },
   time: {
     width: 78,
     textAlign: 'right',
-    fontSize: 16,
-    color: theme.text.primary,
+    fontSize: theme.text.sizes.body,
+    color: theme.text.colors.primary,
+    fontWeight: 'bold',
     paddingVertical: 4,
     marginRight: 8,
     fontVariant: ['tabular-nums'],
   },
   textContent: {
     flex: 1,
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
   },
   textWrapper: {
     flex: 1,
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     marginLeft: 10,
     paddingVertical: 4,
   },
@@ -355,19 +353,28 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingBottom: 8,
-    marginBottom: 20,
+    marginBottom: theme.spacings.small,
+    padding: theme.spacings.medium,
     borderBottomColor: theme.background.level1,
     borderBottomWidth: 1,
+  },
+  resultHeaderText: {
+    fontSize: theme.text.sizes.body,
+    lineHeight: 20,
+    fontWeight: 'bold',
+    color: theme.text.colors.primary,
   },
 
   quayContainer__withoutBorder: {
     marginBottom: 0,
-    paddingBottom: 12,
+    paddingBottom: 0,
   },
   quayContainer: {
-    marginBottom: 20,
+    backgroundColor: theme.background.level0,
+    borderRadius: 8,
+    marginBottom: theme.spacings.small,
   },
+
 }));
 
 type LastElementProps = {
