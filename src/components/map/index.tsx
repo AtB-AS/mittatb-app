@@ -1,5 +1,3 @@
-import {useControlPositionsStyle} from './use-control-styles';
-
 export {default as BackArrow} from './BackArrow';
 export {default as MapControls} from './MapControls';
 export {default as PositionArrow} from './PositionArrow';
