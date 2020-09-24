@@ -10,10 +10,12 @@ import DepartureDetails, {
 } from './DepartureDetails';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../navigation';
+import {MapDetailRouteParams, TravelDetailsMap} from './Map';
 
 export type DetailsModalStackParams = {
   Details: DetailsRouteParams;
   DepartureDetails: DepartureDetailsRouteParams;
+  DetailsMap: MapDetailRouteParams;
 };
 
 export type DetailsModalNavigationProp = CompositeNavigationProp<
@@ -36,6 +38,13 @@ const TripDetailsRoot = ({route}: TripDetailsRootProps) => {
         name="Details"
         component={Details}
         initialParams={route.params}
+      />
+      <Stack.Screen
+        name="DetailsMap"
+        component={TravelDetailsMap}
+        options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
       />
       <Stack.Screen
         name="DepartureDetails"
