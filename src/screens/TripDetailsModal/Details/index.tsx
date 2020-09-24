@@ -78,6 +78,7 @@ const TripDetailsModal: React.FC<Props> = (props) => {
           icon: <ArrowLeft />,
         }}
         title="Reisedetaljer"
+        style={{backgroundColor: colors.secondary.cyan}}
       />
       <ScrollView
         style={styles.scrollView}
