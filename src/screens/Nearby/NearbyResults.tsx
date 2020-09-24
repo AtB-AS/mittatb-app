@@ -30,7 +30,6 @@ import {WalkingPerson} from '../../assets/svg/icons/transportation';
 import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
 import OptionalNextDayLabel from '../../components/optional-day-header';
 import {Expand} from '../../assets/svg/icons/navigation';
-import {GeoPosition} from 'react-native-geolocation-service';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
