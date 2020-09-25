@@ -11,23 +11,23 @@ export function useControlPositionsStyle() {
     () => ({
       backArrowContainer: {
         position: 'absolute',
-        top: top + theme.sizes.pagePadding,
-        left: theme.sizes.pagePadding,
+        top: top + theme.spacings.medium,
+        left: theme.spacings.medium,
       },
       positionArrowContainer: {
         position: 'absolute',
-        top: top + theme.sizes.pagePadding,
-        right: theme.sizes.pagePadding,
+        top: top + theme.spacings.medium,
+        right: theme.spacings.medium,
       },
       controlsContainer: {
         position: 'absolute',
-        bottom: bottom + theme.sizes.pagePadding,
-        right: theme.sizes.pagePadding,
+        bottom: bottom + theme.spacings.medium,
+        right: theme.spacings.medium,
       },
       locationContainer: {
         position: 'absolute',
-        top: top + theme.sizes.pagePadding + 28 + theme.sizes.pagePadding,
-        paddingHorizontal: theme.sizes.pagePadding,
+        top: top + theme.spacings.medium + 28 + theme.spacings.medium,
+        paddingHorizontal: theme.spacings.medium,
         width: '100%',
       },
     }),

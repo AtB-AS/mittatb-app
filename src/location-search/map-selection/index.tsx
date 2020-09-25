@@ -1,7 +1,6 @@
 import {RouteProp} from '@react-navigation/native';
 import React, {useState, useRef, useMemo} from 'react';
 import {View, TouchableOpacity} from 'react-native';
-
 import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
 import {useReverseGeocoder} from '../../geocoder';
 import {LocationSearchNavigationProp, LocationSearchStackParams} from '../';
@@ -166,70 +165,6 @@ function getPinMode(isSearching: boolean, hasLocation: boolean): PinMode {
 
   return 'nothing';
 }
-
-const BackArrow: React.FC<{onBack(): void}> = ({onBack}) => {
-  return (
-    <TouchableOpacity
-      accessibilityLabel="Gå tilbake"
-      accessibilityRole="button"
-      onPress={onBack}
-      hitSlop={insets.symmetric(12, 20)}
-    >
-      <View style={styles.backArrow}>
-        <ArrowLeft fill={colors.general.white} />
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-function useControlPositionsStyle() {
-  const {top, bottom} = useSafeAreaInsets();
-  const {theme} = useTheme();
-
-  return useMemo<{[key: string]: ViewStyle}>(
-    () => ({
-      backArrowContainer: {
-        position: 'absolute',
-        top: top + theme.spacings.medium,
-        left: theme.spacings.medium,
-      },
-      positionArrowContainer: {
-        position: 'absolute',
-        top: top + theme.spacings.medium,
-        right: theme.spacings.medium,
-      },
-      controlsContainer: {
-        position: 'absolute',
-        bottom: bottom + theme.spacings.medium,
-        right: theme.spacings.medium,
-      },
-      locationContainer: {
-        position: 'absolute',
-        top: top + theme.spacings.medium + 28 + theme.spacings.medium,
-        paddingHorizontal: theme.spacings.medium,
-        width: '100%',
-      },
-    }),
-    [bottom, top],
-  );
-}
-
-const PositionArrow: React.FC<{flyToCurrentLocation(): void}> = ({
-  flyToCurrentLocation,
-}) => {
-  return (
-    <TouchableOpacity
-      accessibilityLabel="Min posisjon"
-      accessibilityRole="button"
-      onPress={flyToCurrentLocation}
-    >
-      <View style={styles.flyToButton}>
-        <CurrentLocationArrow />
-      </View>
-    </TouchableOpacity>
-  );
-};
-
 const styles = StyleSheet.create({
   container: {flex: 1},
   pinContainer: {
