@@ -1,24 +1,24 @@
 import {RouteProp} from '@react-navigation/native';
 import React, {useState, useRef, useMemo} from 'react';
-import {Text, Platform, View, TouchableOpacity, ViewStyle} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 
 import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
 import {useReverseGeocoder} from '../../geocoder';
-import colors from '../../theme/colors';
 import {LocationSearchNavigationProp, LocationSearchStackParams} from '../';
-import insets from '../../utils/insets';
-import MapControls from './MapControls';
 import {useGeolocationState} from '../../GeolocationContext';
 import LocationBar from './LocationBar';
-import {ArrowLeft} from '../../assets/svg/icons/navigation';
-import {StyleSheet, useTheme} from '../../theme';
-import shadows from './shadows';
+import {StyleSheet} from '../../theme';
 import {Coordinates} from '@entur/sdk';
-import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import SelectionPin, {PinMode} from './SelectionPin';
 import {Feature} from 'geojson';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {MAPBOX_STOP_PLACES_STYLE_URL} from 'react-native-dotenv';
+import {
+  MapViewConfig,
+  MapControls,
+  BackArrow,
+  shadows,
+  PositionArrow,
+  useControlPositionsStyle,
+} from '../../components/map/';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -119,17 +119,7 @@ const MapSelection: React.FC<Props> = ({
           setRegionEvent({isMoving: true, region: regionEvent?.region})
         }
         onPress={flyToFeature}
-        compassViewPosition={3}
-        compassEnabled={true}
-        compassViewMargins={{
-          x: Platform.select({default: 10, android: 6}),
-          y: 90,
-        }}
-        attributionPosition={Platform.select({
-          default: {bottom: 8, left: 95},
-          android: {bottom: 5, left: 90},
-        })}
-        styleURL={MAPBOX_STOP_PLACES_STYLE_URL}
+        {...MapViewConfig}
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
@@ -248,25 +238,6 @@ const styles = StyleSheet.create({
     right: '50%',
   },
   pin: {position: 'absolute', top: -40, right: -20, ...shadows},
-  backArrow: {
-    backgroundColor: colors.primary.gray,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 36,
-    height: 28,
-    ...shadows,
-  },
-  flyToButton: {
-    backgroundColor: 'white',
-    borderRadius: 5,
-    width: 36,
-    height: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 8,
-    ...shadows,
-  },
 });
 
 export default MapSelection;

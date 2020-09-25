@@ -1,5 +1,4 @@
-import LogoOutline from './LogoOutline';
-import {View, Text, AccessibilityProps, TouchableOpacity} from 'react-native';
+import {View, Text, ViewStyle} from 'react-native';
 import React from 'react';
 import {StyleSheet} from '../theme';
 import HeaderButton, {IconButton} from './HeaderButton';
@@ -8,12 +7,14 @@ type ScreenHeaderProps = {
   leftButton?: IconButton;
   rightButton?: IconButton;
   title: string;
+  style?: ViewStyle;
 };
 
 const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   leftButton,
   rightButton,
   title,
+  style,
 }) => {
   const css = useHeaderStyle();
 
@@ -29,7 +30,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   );
 
   return (
-    <View style={css.container}>
+    <View style={[css.container, style]}>
       <View style={css.iconContainerLeft}>{leftIcon}</View>
       <Text style={css.text}>{title}</Text>
       <View style={css.iconContainerRight}>{rightIcon}</View>
