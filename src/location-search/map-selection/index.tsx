@@ -1,7 +1,6 @@
 import {RouteProp} from '@react-navigation/native';
 import React, {useState, useRef, useMemo} from 'react';
 import {View, TouchableOpacity} from 'react-native';
-
 import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
 import {useReverseGeocoder} from '../../geocoder';
 import {LocationSearchNavigationProp, LocationSearchStackParams} from '../';
@@ -166,7 +165,6 @@ function getPinMode(isSearching: boolean, hasLocation: boolean): PinMode {
 
   return 'nothing';
 }
-
 const styles = StyleSheet.create({
   container: {flex: 1},
   pinContainer: {

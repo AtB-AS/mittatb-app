@@ -349,7 +349,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   chipBox: {
     marginTop: 8,
-    paddingHorizontal: theme.sizes.pagePadding,
+    paddingHorizontal: theme.spacings.medium,
   },
   altTitle: {
     flex: 1,

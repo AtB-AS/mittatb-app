@@ -117,7 +117,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   stopName: {
     fontSize: 16,
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     flexShrink: 1,
   },
   lineContainer: {
@@ -126,13 +126,13 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   time: {
     fontSize: 32,
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     marginVertical: 8,
   },
   lineName: {
     fontSize: 16,
     fontWeight: '600',
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     textAlign: 'center',
     marginLeft: 8,
   },
@@ -233,13 +233,13 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
   textDeprioritized: {
     fontWeight: 'normal',
     fontSize: 14,
-    color: theme.text.faded,
+    color: theme.text.colors.faded,
   },
   textBold: {
     fontWeight: 'bold',
   },
   walkingPerson: {
-    backgroundColor: theme.text.primary,
+    backgroundColor: theme.text.colors.primary,
   },
 }));
 

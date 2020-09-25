@@ -243,7 +243,7 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   },
   text: {
     marginLeft: 12,
-    color: theme.text.faded,
+    color: theme.text.colors.faded,
   },
 }));
 

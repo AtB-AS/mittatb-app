@@ -41,12 +41,19 @@ const colors = {
 
 export default colors;
 
-const sizes = {
-  pagePadding: 12,
+const spacings = {
+  large: 20,
+  medium: 12,
+  small: 8,
+  xSmall: 4,
 };
-
+const fontSizes = {
+  body: 16,
+  lead: 14,
+  label: 12,
+};
 export interface Theme {
-  sizes: typeof sizes;
+  spacings: typeof spacings;
   background: {
     level0: string;
     level1: string;
@@ -57,9 +64,12 @@ export interface Theme {
     accent: string;
   };
   text: {
-    primary: string;
-    destructive: string;
-    faded: string;
+    colors: {
+      primary: string;
+      destructive: string;
+      faded: string;
+    };
+    sizes: typeof fontSizes;
   };
   border: {
     primary: string;
@@ -73,7 +83,7 @@ export type Themes = {
 
 export const themes: Themes = {
   light: {
-    sizes,
+    spacings: spacings,
     background: {
       level0: backgrounds.light__level0,
       level1: backgrounds.light__level1,
@@ -84,16 +94,19 @@ export const themes: Themes = {
       accent: colors.secondary.cyan,
     },
     text: {
-      primary: colors.general.black,
-      destructive: colors.general.white,
-      faded: colors.general.gray400,
+      colors: {
+        primary: colors.general.black,
+        destructive: colors.general.white,
+        faded: colors.general.gray400,
+      },
+      sizes: fontSizes,
     },
     border: {
       primary: colors.primary.gray,
     },
   },
   dark: {
-    sizes,
+    spacings: spacings,
     background: {
       level0: colors.general.black,
       level1: colors.general.offblack,
@@ -104,9 +117,12 @@ export const themes: Themes = {
       accent: colors.secondary.cyan,
     },
     text: {
-      primary: colors.general.white,
-      destructive: colors.general.white,
-      faded: colors.general.gray400,
+      colors: {
+        primary: colors.general.white,
+        destructive: colors.general.white,
+        faded: colors.general.gray400,
+      },
+      sizes: fontSizes,
     },
     border: {
       primary: colors.primary.gray,

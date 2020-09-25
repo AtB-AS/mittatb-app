@@ -81,7 +81,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   title: {
     fontSize: 26,
     textAlign: 'center',
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     marginTop: 24,
   },
   figure: {
@@ -92,20 +92,20 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     marginTop: 12,
   },
   description: {
     fontSize: 16,
     textAlign: 'center',
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     marginVertical: 12,
   },
   privacyPolicy: {
     fontSize: 16,
     textAlign: 'center',
     textDecorationLine: 'underline',
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     marginTop: 24,
   },
   svgContainer: {
@@ -133,7 +133,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   buttonText: {
     fontSize: 17,
     fontWeight: '600',
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
   },
 }));
 

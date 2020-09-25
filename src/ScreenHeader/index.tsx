@@ -43,7 +43,7 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: theme.sizes.pagePadding,
+    padding: theme.spacings.medium,
     height: 64,
   },
   iconContainerLeft: {
@@ -55,7 +55,7 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     right: 12,
   },
   text: {
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     fontSize: 16,
     fontWeight: 'bold',
   },

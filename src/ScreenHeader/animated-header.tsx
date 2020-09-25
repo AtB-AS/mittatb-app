@@ -86,23 +86,23 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: theme.sizes.pagePadding,
+    padding: theme.spacings.medium,
     backgroundColor: theme.background.accent,
   },
   iconContainerLeft: {
     position: 'absolute',
-    left: theme.sizes.pagePadding,
+    left: theme.spacings.medium,
   },
   iconContainerRight: {
     position: 'absolute',
-    right: theme.sizes.pagePadding,
+    right: theme.spacings.medium,
   },
   titleContainers: {
     height: HEADER_HEIGHT,
     flex: 1,
     alignItems: 'stretch',
     overflow: 'hidden',
-    marginHorizontal: theme.sizes.pagePadding + 30,
+    marginHorizontal: theme.spacings.medium + 30,
   },
   regularContainer: {
     height: HEADER_HEIGHT,
@@ -114,7 +114,7 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     position: 'absolute',
   },
   text: {
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     fontSize: 16,
     fontWeight: 'bold',
   },
