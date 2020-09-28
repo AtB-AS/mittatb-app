@@ -17,9 +17,9 @@ export function getMapBounds(features: MapLine[], padding: number) {
   const sortedByEast = coordinates.sort(compareByEasternmost);
 
   const westernMost = sortedByEast[sortedByEast.length - 1][0];
-  const southernMost = sortedByNorth[sortedByNorth.length - 1][0];
+  const southernMost = sortedByNorth[sortedByNorth.length - 1][1];
   const easternMost = sortedByEast[0][0];
-  const northernMost = sortedByNorth[0][0];
+  const northernMost = sortedByNorth[0][1];
 
   // Coordinates given in the opposite order below is intentional
   // MapboxGL camera bounds are expected as geojson coordinates ([longitude, latitude]), even though the property naming on the expected type suggests the opposite.
