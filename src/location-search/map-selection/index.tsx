@@ -12,6 +12,7 @@ import SelectionPin, {PinMode} from './SelectionPin';
 import {Feature} from 'geojson';
 import {
   MapViewConfig,
+  MapCameraConfig,
   MapControls,
   BackArrow,
   shadows,
@@ -124,7 +125,7 @@ const MapSelection: React.FC<Props> = ({
           ref={mapCameraRef}
           zoomLevel={coordinates.zoomLevel}
           centerCoordinate={[coordinates.longitude, coordinates.latitude]}
-          animationMode="moveTo"
+          {...MapCameraConfig}
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
       </MapboxGL.MapView>
