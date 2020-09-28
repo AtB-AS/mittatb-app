@@ -1,14 +1,39 @@
 import {
   Departure,
-  Quay,
-  StopPlaceDetails,
-  ServiceJourney,
   EstimatedCall,
-  Situation,
+  InfoLink,
+  Line,
+  MultilingualString,
+  ReportType,
+  ServiceJourney,
+  StopPlace,
+  StopPlaceDetails,
+  ValidityPeriod,
 } from '@entur/sdk';
 
 export * from '@entur/sdk';
 
+// @TODO This should come from Common lib
+
+export interface Situation {
+  situationNumber: string;
+  summary: Array<MultilingualString>;
+  description: Array<MultilingualString>;
+  advice: Array<MultilingualString>;
+  lines: Array<Line>;
+  validityPeriod: ValidityPeriod;
+  reportType: ReportType;
+  infoLinks: Array<InfoLink>;
+}
+
+export interface Quay {
+  id: string;
+  name: string;
+  description: string;
+  publicCode: string;
+  situations: Array<Situation>;
+  stopPlace: StopPlace;
+}
 export type QuayWithDepartures = {quay: Quay; departures: Array<Departure>};
 export type DeparturesWithStop = {
   stop: StopPlaceDetails;
@@ -16,8 +41,6 @@ export type DeparturesWithStop = {
     [quayId: string]: QuayWithDepartures;
   };
 };
-
-// @TODO This should come from Common lib
 
 export type ServiceJourneyWithDirection = ServiceJourney & {
   directionType: 'inbound' | 'outbound' | 'clockwise' | 'anticlockwise';

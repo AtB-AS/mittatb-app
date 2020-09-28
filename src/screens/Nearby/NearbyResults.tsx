@@ -30,6 +30,8 @@ import {WalkingPerson} from '../../assets/svg/icons/transportation';
 import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
 import OptionalNextDayLabel from '../../components/optional-day-header';
 import {Expand} from '../../assets/svg/icons/navigation';
+import SituationMessages from '../../situation-messages';
+import {flatMap} from '../../utils/array';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
@@ -132,15 +134,20 @@ type StopDeparturesProps = {
 const StopDepartures: React.FC<StopDeparturesProps> = React.memo(
   ({departures, onPress, onShowMoreOnQuay}) => {
     const styles = useResultItemStyles();
-    if (!Object.keys(departures.quays).length) {
+    const quays = Object.values(departures.quays);
+    if (!quays.length) {
       return null;
     }
 
     return (
       <>
         <ItemHeader stop={departures.stop} />
+        <SituationMessages
+          situations={flatMap(quays, (q) => q.quay.situations)}
+          containerStyle={styles.situationContainer}
+        />
         <LastElement last={styles.quayContainer__withoutBorder}>
-          {Object.values(departures.quays).map((quay) => (
+          {quays.map((quay) => (
             <QuayResult
               key={quay.quay.id}
               quay={quay}
@@ -314,6 +321,9 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
   },
   distanceIcon: {
     marginLeft: 4,
+  },
+  situationContainer: {
+    marginBottom: theme.spacings.small,
   },
   platformHeader: {
     padding: theme.spacings.medium,
