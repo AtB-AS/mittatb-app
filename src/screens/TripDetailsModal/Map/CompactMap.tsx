@@ -8,7 +8,7 @@ import {getMapBounds, legsToMapLines, pointOf} from './utils';
 import MapRoute from './MapRoute';
 import MapLabel from './MapLabel';
 import colors from '../../../theme/colors';
-import {MapViewConfig} from '../../../components/map/';
+import {MapViewConfig, MapCameraConfig} from '../../../components/map/';
 
 export type MapProps = {
   legs: Leg[];
@@ -51,7 +51,7 @@ export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
           <MapboxGL.Camera
             ref={mapCameraRef}
             bounds={bounds}
-            animationDuration={0}
+            {...MapCameraConfig}
           />
           <MapRoute lines={features}></MapRoute>
           <MapLabel point={endPoint} id={'end'} text="Slutt"></MapLabel>

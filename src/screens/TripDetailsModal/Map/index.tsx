@@ -11,6 +11,7 @@ import MapRoute from './MapRoute';
 import MapLabel from './MapLabel';
 import {
   MapViewConfig,
+  MapCameraConfig,
   MapControls,
   PositionArrow,
   BackArrow,
@@ -61,7 +62,7 @@ export const TravelDetailsMap: React.FC<MapProps> = ({route, navigation}) => {
   return (
     <View style={styles.mapView}>
       <MapboxGL.MapView ref={mapViewRef} style={styles.map} {...MapViewConfig}>
-        <MapboxGL.Camera ref={mapCameraRef} bounds={bounds} />
+        <MapboxGL.Camera ref={mapCameraRef} bounds={bounds} {...MapCameraConfig} />
         <MapRoute lines={features}></MapRoute>
         <MapLabel point={endPoint} id={'end'} text="Slutt"></MapLabel>
         <MapLabel point={startPoint} id={'start'} text="Start"></MapLabel>
