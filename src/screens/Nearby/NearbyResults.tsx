@@ -333,7 +333,6 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     fontVariant: ['tabular-nums'],
   },
   textContent: {
-    flex: 1,
     fontSize: theme.text.sizes.body,
   },
   textWrapper: {
