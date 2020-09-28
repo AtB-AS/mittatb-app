@@ -61,7 +61,11 @@ export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
       )}
       {!!snapshot && <Image style={styles.map} source={{uri: snapshot}} />}
       <View style={styles.togglerContainer}>
-        <TouchableOpacity style={styles.toggler} onPress={onExpand} hitSlop={insets.symmetric(8,12)}>
+        <TouchableOpacity
+          style={styles.toggler}
+          onPress={onExpand}
+          hitSlop={insets.symmetric(8, 12)}
+        >
           <Text style={styles.toggleText}>Utvid kart</Text>
           <MapIcon style={styles.toggleIcon} />
         </TouchableOpacity>
@@ -79,13 +83,13 @@ const styles = StyleSheet.create({
   togglerContainer: {
     position: 'absolute',
     right: 0,
-    bottom: 0
+    bottom: 0,
   },
   toggler: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
-    paddingVertical: 8
+    paddingVertical: 8,
   },
   toggleText: {
     fontSize: 14,
