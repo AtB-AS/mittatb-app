@@ -24,14 +24,22 @@ const MessageBox: React.FC<MessageBoxProps> = ({
   children,
 }) => {
   const styles = useBoxStyle();
-  const iconElement = icon ?? type === 'info' ? <Info /> : <Warning />;
+  const iconElement =
+    typeof icon !== 'undefined' ? (
+      icon
+    ) : type === 'info' ? (
+      <Info />
+    ) : (
+      <Warning />
+    );
   const child = message ? <Text style={styles.text}>{message}</Text> : children;
   const backgroundColor = styles[typeToColorClass(type)];
-
   return (
     <View style={[styles.container, backgroundColor, containerStyle]}>
-      <View>{iconElement}</View>
-      <View style={styles.childContainer}>{child}</View>
+      {iconElement != null && (
+        <View style={styles.iconContainer}>{iconElement}</View>
+      )}
+      <View>{child}</View>
     </View>
   );
 };
@@ -43,9 +51,10 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
+    flex: 1,
   },
-  childContainer: {
-    marginTop: 8,
+  iconContainer: {
+    marginBottom: 8,
   },
   text: {
     fontSize: 16,

@@ -1,5 +1,5 @@
 import React, {useState, Fragment} from 'react';
-import {EstimatedCall} from '../../../sdk';
+import {EstimatedCall, Situation} from '../../../sdk';
 import {DetailsModalStackParams, DetailsModalNavigationProp} from '..';
 import {RouteProp} from '@react-navigation/native';
 import {View, Text, ActivityIndicator, TouchableOpacity} from 'react-native';
@@ -22,6 +22,12 @@ import {getAimedTimeIfLargeDifference} from '../utils';
 import usePollableResource from '../../../utils/use-pollable-resource';
 import transportationColor from '../../../utils/transportation-color';
 import {LegMode} from '@entur/sdk';
+import SituationMessages, {
+  getSituationDiff,
+  hasSituations,
+  situationMessages,
+  SituationWarningIcon,
+} from '../../../situations';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -51,17 +57,20 @@ export default function DepartureDetails({navigation, route}: Props) {
   } = route.params;
   const styles = useStopsStyle();
 
-  const [{callGroups, mode, publicCode}, _, isLoading] = useDepartureData(
-    serviceJourneyId,
-    fromQuayId,
-    toQuayId,
-    30,
-  );
+  const [
+    {callGroups, mode, publicCode, situations: parentSituations},
+    _,
+    isLoading,
+  ] = useDepartureData(serviceJourneyId, fromQuayId, toQuayId, 30);
 
   const content = isLoading ? (
     <ActivityIndicator animating={true} size="large" style={styles.spinner} />
   ) : (
     <ScrollView style={styles.scrollView}>
+      <SituationMessages
+        situations={parentSituations}
+        containerStyle={styles.situationsContainer}
+      />
       <View style={styles.allGroups}>
         {mapGroup(callGroups, (name, group) => (
           <CallGroup
@@ -70,6 +79,7 @@ export default function DepartureDetails({navigation, route}: Props) {
             type={name}
             mode={mode}
             publicCode={publicCode}
+            parentSituations={parentSituations}
           />
         ))}
       </View>
@@ -106,8 +116,15 @@ type CallGroupProps = {
   type: keyof CallListGroup;
   mode?: LegMode;
   publicCode?: string;
+  parentSituations: Situation[];
 };
-function CallGroup({type, calls, mode, publicCode}: CallGroupProps) {
+function CallGroup({
+  type,
+  calls,
+  mode,
+  publicCode,
+  parentSituations,
+}: CallGroupProps) {
   const isOnRoute = type === 'trip';
   const isBefore = type === 'passed';
   const showCollapsable = isBefore && calls.length > 1;
@@ -199,9 +216,38 @@ function CallGroup({type, calls, mode, publicCode}: CallGroupProps) {
             ]}
             dashThroughIcon={true}
           />
+          {type !== 'passed' && (
+            <SituationRow
+              situations={call.situations}
+              parentSituations={parentSituations}
+            />
+          )}
           {i === 0 && collapseButton}
         </Fragment>
       ))}
+    </View>
+  );
+}
+
+function SituationRow({
+  situations,
+  parentSituations,
+}: {
+  situations: Situation[];
+  parentSituations: Situation[];
+}) {
+  const styles = useStopsStyle();
+  const uniqueFromParent = getSituationDiff(situations, parentSituations);
+  if (!hasSituations(uniqueFromParent)) {
+    return null;
+  }
+
+  return (
+    <View style={styles.situationRowContainer}>
+      <View style={styles.situationRowIcon}>
+        <SituationWarningIcon situations={uniqueFromParent} />
+      </View>
+      <SituationMessages mode="no-icon" situations={uniqueFromParent} />
     </View>
   );
 }
@@ -252,6 +298,22 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.background.modal_Level2,
   },
+  situationsContainer: {
+    marginBottom: theme.spacings.small,
+  },
+  situationRowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+    paddingHorizontal: 12,
+  },
+  situationRowIcon: {
+    width: 66,
+    alignItems: 'flex-end',
+    marginRight: 42,
+    justifyContent: 'flex-end',
+  },
   allGroups: {
     marginBottom: 250,
     backgroundColor: theme.background.level1,
@@ -291,6 +353,7 @@ type DepartureData = {
   callGroups: CallListGroup;
   mode?: LegMode;
   publicCode?: string;
+  situations: Situation[];
 };
 
 type CallListGroup = {
@@ -309,11 +372,14 @@ function useDepartureData(
     async function getServiceJourneyDepartures(): Promise<DepartureData> {
       const deps = await getDepartures(serviceJourneyId);
       const callGroups = groupAllCallsByQuaysInLeg(deps, fromQuayId, toQuayId);
-      const line = deps[0]?.serviceJourney?.journeyPattern?.line;
+      const line = callGroups.trip[0]?.serviceJourney?.journeyPattern?.line;
+      const parentSituation = callGroups.trip[0]?.situations;
+
       return {
         mode: line?.transportMode,
         publicCode: line?.publicCode,
         callGroups,
+        situations: parentSituation,
       };
     },
     [serviceJourneyId, fromQuayId, toQuayId],
@@ -326,6 +392,7 @@ function useDepartureData(
         trip: [],
         after: [],
       },
+      situations: [],
     },
     pollingTimeInSeconds,
   });
