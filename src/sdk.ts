@@ -1,5 +1,6 @@
 import {
   Authority,
+  BikeRentalStation,
   DestinationDisplay,
   InfoLink,
   Interchange,
@@ -8,7 +9,6 @@ import {
   MultilingualString,
   Notice,
   Operator,
-  Place,
   PointsOnLink,
   ReportType,
   ServiceJourney,
@@ -21,6 +21,14 @@ import {
 export * from '@entur/sdk';
 
 // @TODO This should come from Common lib
+
+export interface Place {
+  latitude: number;
+  longitude: number;
+  name?: string;
+  quay?: Quay;
+  bikeRentalStation?: BikeRentalStation;
+}
 
 export interface Leg {
   aimedEndTime: string;

@@ -1,11 +1,10 @@
-import {Leg} from '@entur/sdk';
 import {secondsBetween, secondsToMinutesShort} from '../../../utils/date';
 import React, {useEffect} from 'react';
 import {View, Text} from 'react-native';
 import colors from '../../../theme/colors';
 import {Duration} from '../../../assets/svg/icons/transportation';
 import {StyleSheet} from '../../../theme';
-import Dash from 'react-native-dash';
+import {Leg} from '../../../sdk';
 
 type WaitRowProps = {
   onCalculateTime(seconds: number): void;
