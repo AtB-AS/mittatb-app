@@ -1,37 +1,37 @@
+import {useNavigation} from '@react-navigation/native';
+import haversine from 'haversine-distance';
 import React, {useMemo} from 'react';
 import {
-  Text,
-  View,
-  StyleProp,
-  ViewStyle,
-  TextStyle,
-  ImageStyle,
   ActivityIndicator,
+  ImageStyle,
+  StyleProp,
+  Text,
+  TextStyle,
   TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
+import {NearbyScreenNavigationProp} from '.';
+import {Expand} from '../../assets/svg/icons/navigation';
+import {WalkingPerson} from '../../assets/svg/icons/transportation';
+import OptionalNextDayLabel from '../../components/optional-day-header';
+import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
 import TransportationIcon from '../../components/transportation-icon';
+import {useGeolocationState} from '../../GeolocationContext';
+import MessageBox from '../../message-box';
 import {EstimatedCall, StopPlaceDetails} from '../../sdk';
+import SituationMessages from '../../situations';
 import {StyleSheet} from '../../theme';
+import {flatMap} from '../../utils/array';
 import {
   formatToClockOrRelativeMinutes,
   isInThePast,
   isSeveralDays,
   missingRealtimePrefix,
 } from '../../utils/date';
-import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
-import {useNavigation} from '@react-navigation/native';
-import {NearbyScreenNavigationProp} from '.';
-import {useGeolocationState} from '../../GeolocationContext';
-import haversine from 'haversine-distance';
-import {DeparturesWithStopLocal, QuayWithDeparturesAndLimits} from './utils';
-import MessageBox from '../../message-box';
 import insets from '../../utils/insets';
-import {WalkingPerson} from '../../assets/svg/icons/transportation';
-import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
-import OptionalNextDayLabel from '../../components/optional-day-header';
-import {Expand} from '../../assets/svg/icons/navigation';
-import SituationMessages from '../../situation-messages';
-import {flatMap} from '../../utils/array';
+import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
+import {DeparturesWithStopLocal, QuayWithDeparturesAndLimits} from './utils';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;

@@ -1,19 +1,68 @@
 import {
+  Authority,
   Departure,
   EstimatedCall,
   InfoLink,
+  Interchange,
+  IntermediateEstimatedCall,
+  LegMode,
   Line,
   MultilingualString,
+  Notice,
+  Operator,
+  Place,
+  PointsOnLink,
   ReportType,
   ServiceJourney,
   StopPlace,
   StopPlaceDetails,
+  TransportSubmode,
   ValidityPeriod,
 } from '@entur/sdk';
 
 export * from '@entur/sdk';
 
 // @TODO This should come from Common lib
+
+export interface Leg {
+  aimedEndTime: string;
+  aimedStartTime: string;
+  authority?: Authority;
+  distance: number;
+  directDuration: number;
+  duration: number;
+  expectedEndTime: string;
+  expectedStartTime: string;
+  fromEstimatedCall?: EstimatedCall;
+  fromPlace: Place;
+  interchangeFrom?: Interchange;
+  interchangeTo?: Interchange;
+  intermediateEstimatedCalls: Array<IntermediateEstimatedCall>;
+  line?: Line;
+  mode: LegMode;
+  notices?: Array<Notice>;
+  operator?: Operator;
+  pointsOnLink: PointsOnLink;
+  realtime: boolean;
+  ride: boolean;
+  rentedBike?: boolean;
+  serviceJourney: ServiceJourney;
+  situations: Array<Situation>;
+  toEstimatedCall?: EstimatedCall;
+  toPlace: Place;
+  transportSubmode: TransportSubmode;
+}
+
+export interface TripPattern {
+  distance: number;
+  directDuration: number;
+  duration: number;
+  endTime: string;
+  id?: string;
+  legs: Array<Leg>;
+  startTime: string;
+  walkDistance: number;
+}
 
 export interface Situation {
   situationNumber: string;

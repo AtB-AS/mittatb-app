@@ -18,6 +18,8 @@ import {LegMode} from '@entur/sdk';
 import colors from '../../theme/colors';
 import {Duration} from '../../assets/svg/icons/transportation';
 import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
+import {SituationWarningIcon} from '../../situations';
+import {flatMap} from '../../utils/array';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -65,9 +67,16 @@ const ResultItemHeader: React.FC<{
         {timePrefix}
         {formatToClockOrRelativeMinutes(quayStartTime)}
       </Text>
-      <TextHiddenSupportPrefix prefix="Reisetid">
-        {durationText}
-      </TextHiddenSupportPrefix>
+      <View style={styles.durationContainer}>
+        <TextHiddenSupportPrefix prefix="Reisetid">
+          {durationText}
+        </TextHiddenSupportPrefix>
+      </View>
+
+      <SituationWarningIcon
+        situations={flatMap(tripPattern.legs, (leg) => leg.situations)}
+        style={styles.warningIcon}
+      />
     </View>
   );
 };
@@ -144,10 +153,18 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   resultHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     paddingBottom: 8,
     marginBottom: 8,
     borderBottomColor: theme.background.level1,
     borderBottomWidth: 1,
+  },
+  durationContainer: {
+    flex: 1,
+    alignItems: 'flex-end',
+  },
+  warningIcon: {
+    marginLeft: theme.spacings.small,
   },
 }));
 
