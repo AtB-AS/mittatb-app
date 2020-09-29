@@ -33,22 +33,19 @@ export default function SituationMessages({
 export type SituationWarningProps = {
   situations: Situation[];
   style?: ComponentProps<typeof Warning>['style'];
+  accessibilityLabel?: string;
 };
 
 export function SituationWarningIcon({
   situations,
   style,
+  accessibilityLabel,
 }: SituationWarningProps) {
   if (!hasSituations(situations)) {
     return null;
   }
 
-  return (
-    <Warning
-      accessibilityLabel="Denne reisen har driftsmeldinger. Se detaljer for mer info."
-      style={style}
-    />
-  );
+  return <Warning accessibilityLabel={accessibilityLabel} style={style} />;
 }
 
 export function hasSituations(situations: Situation[]) {

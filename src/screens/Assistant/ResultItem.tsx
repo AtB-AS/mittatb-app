@@ -75,6 +75,7 @@ const ResultItemHeader: React.FC<{
 
       <SituationWarningIcon
         situations={flatMap(tripPattern.legs, (leg) => leg.situations)}
+        accessibilityLabel="Denne reisen har driftsmeldinger. Se detaljer for mer info"
         style={styles.warningIcon}
       />
     </View>
