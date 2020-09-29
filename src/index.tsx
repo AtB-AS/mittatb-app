@@ -12,9 +12,17 @@ import FavoritesContextProvider from './favorites/FavoritesContext';
 import SearchHistoryContextProvider from './search-history';
 import RemoteConfigContextProvider from './RemoteConfigContext';
 import {loadLocalConfig} from './local-config';
-import bugsnag from './diagnostics/bugsnag';
+import Bugsnag from '@bugsnag/react-native';
 import {setInstallId as setApiInstallId} from './api/client';
 import ErrorBoundary from './error-boundary';
+
+if (!__DEV__) {
+  Bugsnag.start();
+} else {
+  Bugsnag.notify = () => {};
+  Bugsnag.setUser = () => {};
+  Bugsnag.leaveBreadcrumb = () => {};
+}
 
 import {MAPBOX_API_TOKEN} from 'react-native-dotenv';
 import MapboxGL from '@react-native-mapbox-gl/maps';
@@ -22,7 +30,7 @@ MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
 async function setupConfig() {
   const {installId} = await loadLocalConfig();
-  bugsnag.setUser(installId);
+  Bugsnag.setUser(installId);
   setApiInstallId(installId);
 }
 
