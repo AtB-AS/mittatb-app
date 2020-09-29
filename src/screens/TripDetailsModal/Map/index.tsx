@@ -2,7 +2,6 @@ import React, {useRef} from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {StyleSheet, View} from 'react-native';
 import {useGeolocationState} from '../../../GeolocationContext';
-import {Leg} from '@entur/sdk';
 import {RouteProp} from '@react-navigation/native';
 import {DetailsModalStackParams} from '..';
 import {DetailScreenNavigationProp} from '../Details';
@@ -17,6 +16,7 @@ import {
   BackArrow,
   useControlPositionsStyle,
 } from '../../../components/map/';
+import {Leg} from '../../../sdk';
 
 export type MapDetailRouteParams = {
   legs: Leg[];

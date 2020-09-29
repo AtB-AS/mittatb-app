@@ -1,7 +1,6 @@
 import React, {useRef, useState} from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import {Leg} from '@entur/sdk';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {MapIcon} from '../../../assets/svg/map';
 import {getMapBounds, legsToMapLines, pointOf} from './utils';
@@ -10,6 +9,7 @@ import MapLabel from './MapLabel';
 import colors from '../../../theme/colors';
 import {MapViewConfig, MapCameraConfig} from '../../../components/map/';
 import insets from '../../../utils/insets';
+import {Leg} from '../../../sdk';
 
 export type MapProps = {
   legs: Leg[];

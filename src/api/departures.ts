@@ -8,6 +8,7 @@ import client from './client';
 import {Location} from '../favorites/types';
 import {AxiosRequestConfig} from 'axios';
 import {build} from 'search-params';
+import {flatMap} from '../utils/array';
 
 export type DeparturesInputQuery = {
   numberOfDepartures: number; // Number of departures to fetch per quay.
@@ -44,11 +45,4 @@ export async function getRealtimeDeparture(
   let url = `bff/v1/departures-realtime?${params}`;
   const response = await client.get<DeparturesRealtimeData>(url, opts);
   return response.data;
-}
-
-function flatMap<T, U>(
-  array: T[],
-  callbackfn: (value: T, index: number, array: T[]) => U[],
-): U[] {
-  return Array.prototype.concat(...array.map(callbackfn));
 }

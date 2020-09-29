@@ -1,6 +1,6 @@
-import {Leg, LegMode, Place} from '@entur/sdk';
 import polyline from '@mapbox/polyline';
 import {Feature, LineString, Point, Position} from 'geojson';
+import {Leg, LegMode, Place} from '../../../sdk';
 
 export interface MapLine extends Feature {
   travelType?: LegMode;

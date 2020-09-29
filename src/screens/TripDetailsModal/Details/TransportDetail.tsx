@@ -15,6 +15,7 @@ import {
 import {getAimedTimeIfLargeDifference} from '../utils';
 import WaitRow from './WaitRow';
 import transportationColor from '../../../utils/transportation-color';
+import SituationRow from '../SituationRow';
 
 const TransportDetail: React.FC<LegDetailProps> = ({
   leg,
@@ -22,6 +23,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
   isIntermediateTravelLeg,
   onCalculateTime,
   showFrom,
+  parentSituations = [],
 }) => {
   const navigation = useNavigation<DetailScreenNavigationProp>();
   const showWaitTime = isIntermediateTravelLeg && Boolean(nextLeg);
@@ -33,6 +35,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
     }
     return formatToClock(time);
   };
+
   return (
     <View style={{marginTop: -6}}>
       <TouchableOpacity
@@ -78,6 +81,11 @@ const TransportDetail: React.FC<LegDetailProps> = ({
         )}
         <Text style={styles.lineName}>{getLineName(leg)}</Text>
 
+        <SituationRow
+          situations={leg.situations}
+          parentSituations={parentSituations}
+        />
+
         <LocationRow
           icon={<Dot fill={fill} />}
           label={getQuayNameFromStopLeg(leg)}
@@ -105,7 +113,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
 const styles = StyleSheet.create({
   textStyle: {fontSize: 14, lineHeight: 20},
   lineName: {
-    marginLeft: 112,
+    marginLeft: 120,
     fontSize: 16,
     fontWeight: '600',
     marginVertical: 12,
