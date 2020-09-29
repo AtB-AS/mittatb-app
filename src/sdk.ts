@@ -1,10 +1,8 @@
 import {
   Authority,
-  Departure,
-  EstimatedCall,
+  DestinationDisplay,
   InfoLink,
   Interchange,
-  IntermediateEstimatedCall,
   LegMode,
   Line,
   MultilingualString,
@@ -63,6 +61,29 @@ export interface TripPattern {
   startTime: string;
   walkDistance: number;
 }
+
+export interface EstimatedCall {
+  actualArrivalTime?: string; // Only available AFTER arrival has taken place
+  actualDepartureTime?: string; // Only available AFTER departure has taken place
+  aimedArrivalTime: string;
+  aimedDepartureTime: string;
+  cancellation: boolean;
+  date: string;
+  destinationDisplay: DestinationDisplay;
+  expectedArrivalTime: string;
+  expectedDepartureTime: string;
+  forAlighting: boolean;
+  forBoarding: boolean;
+  notices?: Array<Notice>;
+  quay?: Quay;
+  realtime: boolean;
+  requestStop: boolean;
+  serviceJourney: ServiceJourney;
+  situations: Array<Situation>;
+}
+export type IntermediateEstimatedCall = EstimatedCall;
+
+export type Departure = EstimatedCall;
 
 export interface Situation {
   situationNumber: string;

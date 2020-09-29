@@ -20,7 +20,7 @@ import TransportationIcon from '../../components/transportation-icon';
 import {useGeolocationState} from '../../GeolocationContext';
 import MessageBox from '../../message-box';
 import {EstimatedCall, StopPlaceDetails} from '../../sdk';
-import SituationMessages from '../../situations';
+import SituationMessages, {SituationWarningIcon} from '../../situations';
 import {StyleSheet} from '../../theme';
 import {flatMap} from '../../utils/array';
 import {
@@ -288,6 +288,8 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
               {name}
             </Text>
           </View>
+          <SituationWarningIcon situations={departure.situations} />
+
           <TextHiddenSupportPrefix prefix="Avgang" style={styles.time}>
             {(!departure.realtime ? missingRealtimePrefix : '') +
               formatToClockOrRelativeMinutes(departure.expectedDepartureTime)}
