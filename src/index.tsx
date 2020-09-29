@@ -20,6 +20,7 @@ if (!__DEV__) {
   Bugsnag.start();
 } else {
   Bugsnag.notify = () => {};
+  Bugsnag.setUser = () => {};
   Bugsnag.leaveBreadcrumb = () => {};
 }
 
@@ -29,9 +30,7 @@ MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
 async function setupConfig() {
   const {installId} = await loadLocalConfig();
-  if (!__DEV__) {
-    Bugsnag.setUser(installId);
-  }
+  Bugsnag.setUser(installId);
   setApiInstallId(installId);
 }
 
