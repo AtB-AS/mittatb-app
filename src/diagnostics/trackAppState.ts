@@ -1,8 +1,8 @@
 import {AppState, AppStateStatus} from 'react-native';
-import bugsnag from './bugsnag';
+import Bugsnag from '@bugsnag/react-native';
 
 function track(state: AppStateStatus) {
-  bugsnag.leaveBreadcrumb('appState', {state});
+  Bugsnag.leaveBreadcrumb('appState', {state});
 }
 
 export default function trackAppState() {

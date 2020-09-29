@@ -1,5 +1,5 @@
 import React, {ErrorInfo} from 'react';
-import bugsnag from '../diagnostics/bugsnag';
+import Bugsnag from '@bugsnag/react-native';
 import Intercom from 'react-native-intercom';
 import ErrorView from './ErrorView';
 
@@ -20,13 +20,8 @@ export default class ErrorBoundary extends React.Component<{}, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    bugsnag.notify(error, function (report) {
-      report.metadata = {
-        ...report.metadata,
-        component: {
-          stack: errorInfo.componentStack,
-        },
-      };
+    Bugsnag.notify(error, function (event) {
+      event.addMetadata('metadata', {stack: errorInfo.componentStack});
     });
     Intercom.logEvent('error-boundary', {
       error: error.message,
