@@ -45,7 +45,7 @@ export function SituationWarningIcon({
 
   return (
     <Warning
-      accessibilityLabel="Denne reisen har en driftsmelding"
+      accessibilityLabel="Denne reisen har driftsmeldinger. Se detaljer for mer info."
       style={style}
     />
   );
