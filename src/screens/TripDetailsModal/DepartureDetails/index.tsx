@@ -1,33 +1,31 @@
-import React, {useState, Fragment} from 'react';
-import {EstimatedCall, Situation} from '../../../sdk';
-import {DetailsModalStackParams, DetailsModalNavigationProp} from '..';
-import {RouteProp} from '@react-navigation/native';
-import {View, Text, ActivityIndicator, TouchableOpacity} from 'react-native';
-import {Dot} from '../../../assets/svg/icons/other';
-import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
-import colors from '../../../theme/colors';
-import LocationRow from '../LocationRow';
-import {StyleSheet} from '../../../theme';
-import ScreenHeader from '../../../ScreenHeader';
-import {ScrollView} from 'react-native-gesture-handler';
-import Dash from 'react-native-dash';
-import {getDepartures} from '../../../api/serviceJourney';
-import {Expand, ExpandLess} from '../../../assets/svg/icons/navigation';
-import {ArrowLeft} from '../../../assets/svg/icons/navigation';
-import {Close} from '../../../assets/svg/icons/actions';
-import TransportationIcon from '../../../components/transportation-icon';
-import {getQuayName} from '../../../utils/transportation-names';
-import {useCallback} from 'react';
-import {getAimedTimeIfLargeDifference} from '../utils';
-import usePollableResource from '../../../utils/use-pollable-resource';
-import transportationColor from '../../../utils/transportation-color';
 import {LegMode} from '@entur/sdk';
-import SituationMessages, {
-  getSituationDiff,
-  hasSituations,
-  situationMessages,
-  SituationWarningIcon,
-} from '../../../situations';
+import {RouteProp} from '@react-navigation/native';
+import React, {Fragment, useCallback, useState} from 'react';
+import {ActivityIndicator, Text, TouchableOpacity, View} from 'react-native';
+import Dash from 'react-native-dash';
+import {ScrollView} from 'react-native-gesture-handler';
+import {DetailsModalNavigationProp, DetailsModalStackParams} from '..';
+import {getDepartures} from '../../../api/serviceJourney';
+import {Close} from '../../../assets/svg/icons/actions';
+import {
+  ArrowLeft,
+  Expand,
+  ExpandLess,
+} from '../../../assets/svg/icons/navigation';
+import {Dot} from '../../../assets/svg/icons/other';
+import TransportationIcon from '../../../components/transportation-icon';
+import ScreenHeader from '../../../ScreenHeader';
+import {EstimatedCall, Situation} from '../../../sdk';
+import SituationMessages from '../../../situations';
+import {StyleSheet} from '../../../theme';
+import colors from '../../../theme/colors';
+import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
+import transportationColor from '../../../utils/transportation-color';
+import {getQuayName} from '../../../utils/transportation-names';
+import usePollableResource from '../../../utils/use-pollable-resource';
+import LocationRow from '../LocationRow';
+import SituationRow from '../SituationRow';
+import {getAimedTimeIfLargeDifference} from '../utils';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -229,29 +227,6 @@ function CallGroup({
   );
 }
 
-function SituationRow({
-  situations,
-  parentSituations,
-}: {
-  situations: Situation[];
-  parentSituations: Situation[];
-}) {
-  const styles = useStopsStyle();
-  const uniqueFromParent = getSituationDiff(situations, parentSituations);
-  if (!hasSituations(uniqueFromParent)) {
-    return null;
-  }
-
-  return (
-    <View style={styles.situationRowContainer}>
-      <View style={styles.situationRowIcon}>
-        <SituationWarningIcon situations={uniqueFromParent} />
-      </View>
-      <SituationMessages mode="no-icon" situations={uniqueFromParent} />
-    </View>
-  );
-}
-
 type CollapseButtonRowProps = {
   numberOfStops: number;
   collapsed: boolean;
@@ -300,19 +275,6 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
   situationsContainer: {
     marginBottom: theme.spacings.small,
-  },
-  situationRowContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-    paddingHorizontal: 12,
-  },
-  situationRowIcon: {
-    width: 66,
-    alignItems: 'flex-end',
-    marginRight: 42,
-    justifyContent: 'flex-end',
   },
   allGroups: {
     marginBottom: 250,

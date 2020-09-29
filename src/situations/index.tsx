@@ -68,9 +68,10 @@ export function getUniqueSituations(situations: Situation[]) {
   let uniqueSituations: {[id: string]: string} = {};
   for (let situation of situations) {
     if (uniqueSituations[situation.situationNumber]) continue;
-    if (!situation.description[0]?.value) continue;
-    uniqueSituations[situation.situationNumber] =
-      situation.description[0]?.value;
+    const value = situation.description[0]?.value;
+    if (!value) continue;
+    if (Object.values(uniqueSituations).includes(value)) continue;
+    uniqueSituations[situation.situationNumber] = value;
   }
   return uniqueSituations;
 }

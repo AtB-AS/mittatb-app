@@ -19,9 +19,11 @@ import {FavoriteIcon, useFavorites} from '../../../favorites';
 import {LocationWithMetadata} from '../../../favorites/types';
 import MessageBox from '../../../message-box';
 import Header from '../../../ScreenHeader';
-import {Leg, TripPattern} from '../../../sdk';
+import {Leg, Situation, TripPattern} from '../../../sdk';
+import SituationMessage from '../../../situations';
 import {StyleSheet} from '../../../theme';
 import colors from '../../../theme/colors';
+import {flatMap} from '../../../utils/array';
 import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
 import {getQuayNameFromStartLeg} from '../../../utils/transportation-names';
 import usePollableResource from '../../../utils/use-pollable-resource';
@@ -81,18 +83,14 @@ const TripDetailsModal: React.FC<Props> = (props) => {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
       >
-        {error && (
-          <MessageBox type="warning">
-            <Text>
-              Kunne ikke hente ut oppdatering for reiseforslaget. Det kan være
-              at reisen har endret seg eller ikke lengre er tilgjengelig.
-            </Text>
-          </MessageBox>
-        )}
         {!tripPattern ? (
           <ActivityIndicator animating={true} size="large" />
         ) : (
-          <DetailsContent {...passingProps} tripPattern={tripPattern} />
+          <DetailsContent
+            {...passingProps}
+            error={error}
+            tripPattern={tripPattern}
+          />
         )}
       </ScrollView>
     </View>
@@ -103,7 +101,8 @@ const DetailsContent: React.FC<{
   tripPattern: TripPattern;
   from: LocationWithMetadata;
   to: LocationWithMetadata;
-}> = ({tripPattern, from, to}) => {
+  error: Error | undefined;
+}> = ({tripPattern, from, to, error}) => {
   const styles = useDetailsStyle();
   const {favorites} = useFavorites();
 
@@ -150,6 +149,14 @@ const DetailsContent: React.FC<{
             containerStyle={styles.messageContainer}
             message="Vær oppmerksom på kort byttetid."
           />
+        )}
+        {error && (
+          <MessageBox type="warning">
+            <Text>
+              Kunne ikke hente ut oppdatering for reiseforslaget. Det kan være
+              at reisen har endret seg eller ikke lengre er tilgjengelig.
+            </Text>
+          </MessageBox>
         )}
         {legIsWalk(startLeg) && (
           <LocationRow
@@ -224,6 +231,7 @@ export type LegDetailProps = {
   isIntermediateTravelLeg: boolean;
   showFrom: boolean;
   showTo: boolean;
+  parentSituations?: Situation[];
 };
 
 const LegDetail: React.FC<LegDetailProps> = (props) => {
