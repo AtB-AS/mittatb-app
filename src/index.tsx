@@ -25,11 +25,11 @@ MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 async function setupConfig() {
   const {installId} = await loadLocalConfig();
   Bugsnag.setUser(installId);
-  // if (__DEV__) {
-  //   Bugsnag.addOnError(function () {
-  //     return false;
-  //   });
-  // }
+  if (__DEV__) {
+    Bugsnag.addOnError(function () {
+      return false;
+    });
+  }
   setApiInstallId(installId);
 }
 

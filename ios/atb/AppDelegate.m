@@ -48,8 +48,7 @@ static void InitializeFlipper(UIApplication *application) {
 
   NSString* bugsnagApiKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"BugsnagAPIKey"];
   if (bugsnagApiKey != nil) {
-    BugsnagConfiguration *config = [BugsnagConfiguration loadConfig];
-    config.apiKey = bugsnagApiKey;
+    BugsnagConfiguration *config = [[BugsnagConfiguration alloc] initWithApiKey:bugsnagApiKey];
     NSString* bugsnagReleaseStage = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"BugsnagReleaseStage"];
     if (bugsnagReleaseStage != nil)
       config.releaseStage = bugsnagReleaseStage;
