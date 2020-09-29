@@ -13,20 +13,22 @@ export function getMapBounds(features: MapLine[], padding: number) {
     coordinates = coordinates.concat((f.geometry as LineString)?.coordinates);
   });
 
-  let en = [-180, -90];
-  let ws = [180, 90];
+  const sortedByNorth = coordinates.sort(compareByNorthernmost);
+  const sortedByEast = coordinates.sort(compareByEasternmost);
+  const lastIndex = coordinates.length - 1;
 
-  coordinates.forEach((coordinate) => {
-    if (coordinate[0] > en[0]) en[0] = coordinate[0];
-    else if (coordinate[0] < ws[0]) ws[0] = coordinate[0];
-    if (coordinate[1] > en[1]) en[1] = coordinate[1];
-    else if (coordinate[1] < ws[1]) ws[1] = coordinate[1];
-  });
+  const [westernMost, southernMost, easternMost, northernMost] = [
+    sortedByEast[lastIndex][0],
+    sortedByNorth[lastIndex][1],
+    sortedByEast[0][0],
+    sortedByNorth[0][1],
+  ];
+
   // Coordinates given in the opposite order below is intentional
   // MapboxGL camera bounds are expected as geojson coordinates ([longitude, latitude]), even though the property naming on the expected type suggests the opposite.
   return {
-    sw: ws,
-    ne: en,
+    sw: [westernMost, southernMost],
+    ne: [easternMost, northernMost],
     paddingTop: padding / 2,
     paddingBottom: padding / 2,
     paddingLeft: padding,
@@ -58,4 +60,11 @@ export function pointOf(placing: any): Point {
     type: 'Point',
     coordinates: coords,
   };
+}
+
+function compareByNorthernmost(a: Position, b: Position): number {
+  return a[1] > b[1] ? 1 : 0;
+}
+function compareByEasternmost(a: Position, b: Position): number {
+  return a[0] > b[0] ? 1 : 0;
 }

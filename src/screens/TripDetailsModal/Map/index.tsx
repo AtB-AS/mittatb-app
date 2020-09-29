@@ -67,10 +67,10 @@ export const TravelDetailsMap: React.FC<MapProps> = ({route, navigation}) => {
           bounds={bounds}
           {...MapCameraConfig}
         />
+        <MapboxGL.UserLocation showsUserHeadingIndicator />
         <MapRoute lines={features}></MapRoute>
         <MapLabel point={endPoint} id={'end'} text="Slutt"></MapLabel>
         <MapLabel point={startPoint} id={'start'} text="Start"></MapLabel>
-        <MapboxGL.UserLocation showsUserHeadingIndicator />
       </MapboxGL.MapView>
       <View style={controlStyles.backArrowContainer}>
         <BackArrow onBack={() => navigation.goBack()} />
