@@ -1,14 +1,117 @@
 import {
-  Departure,
-  Quay,
-  StopPlaceDetails,
+  Authority,
+  BikeRentalStation,
+  DestinationDisplay,
+  InfoLink,
+  Interchange,
+  LegMode,
+  Line,
+  MultilingualString,
+  Notice,
+  Operator,
+  PointsOnLink,
+  ReportType,
   ServiceJourney,
-  EstimatedCall,
-  Situation,
+  StopPlace,
+  StopPlaceDetails,
+  TransportSubmode,
+  ValidityPeriod,
 } from '@entur/sdk';
 
 export * from '@entur/sdk';
 
+// @TODO This should come from Common lib
+
+export interface Place {
+  latitude: number;
+  longitude: number;
+  name?: string;
+  quay?: Quay;
+  bikeRentalStation?: BikeRentalStation;
+}
+
+export interface Leg {
+  aimedEndTime: string;
+  aimedStartTime: string;
+  authority?: Authority;
+  distance: number;
+  directDuration: number;
+  duration: number;
+  expectedEndTime: string;
+  expectedStartTime: string;
+  fromEstimatedCall?: EstimatedCall;
+  fromPlace: Place;
+  interchangeFrom?: Interchange;
+  interchangeTo?: Interchange;
+  intermediateEstimatedCalls: Array<IntermediateEstimatedCall>;
+  line?: Line;
+  mode: LegMode;
+  notices?: Array<Notice>;
+  operator?: Operator;
+  pointsOnLink: PointsOnLink;
+  realtime: boolean;
+  ride: boolean;
+  rentedBike?: boolean;
+  serviceJourney: ServiceJourney;
+  situations: Array<Situation>;
+  toEstimatedCall?: EstimatedCall;
+  toPlace: Place;
+  transportSubmode: TransportSubmode;
+}
+
+export interface TripPattern {
+  distance: number;
+  directDuration: number;
+  duration: number;
+  endTime: string;
+  id?: string;
+  legs: Array<Leg>;
+  startTime: string;
+  walkDistance: number;
+}
+
+export interface EstimatedCall {
+  actualArrivalTime?: string; // Only available AFTER arrival has taken place
+  actualDepartureTime?: string; // Only available AFTER departure has taken place
+  aimedArrivalTime: string;
+  aimedDepartureTime: string;
+  cancellation: boolean;
+  date: string;
+  destinationDisplay: DestinationDisplay;
+  expectedArrivalTime: string;
+  expectedDepartureTime: string;
+  forAlighting: boolean;
+  forBoarding: boolean;
+  notices?: Array<Notice>;
+  quay?: Quay;
+  realtime: boolean;
+  requestStop: boolean;
+  serviceJourney: ServiceJourney;
+  situations: Array<Situation>;
+}
+export type IntermediateEstimatedCall = EstimatedCall;
+
+export type Departure = EstimatedCall;
+
+export interface Situation {
+  situationNumber: string;
+  summary: Array<MultilingualString>;
+  description: Array<MultilingualString>;
+  advice: Array<MultilingualString>;
+  lines: Array<Line>;
+  validityPeriod: ValidityPeriod;
+  reportType: ReportType;
+  infoLinks: Array<InfoLink>;
+}
+
+export interface Quay {
+  id: string;
+  name: string;
+  description: string;
+  publicCode: string;
+  situations: Array<Situation>;
+  stopPlace: StopPlace;
+}
 export type QuayWithDepartures = {quay: Quay; departures: Array<Departure>};
 export type DeparturesWithStop = {
   stop: StopPlaceDetails;
@@ -16,8 +119,6 @@ export type DeparturesWithStop = {
     [quayId: string]: QuayWithDepartures;
   };
 };
-
-// @TODO This should come from Common lib
 
 export type ServiceJourneyWithDirection = ServiceJourney & {
   directionType: 'inbound' | 'outbound' | 'clockwise' | 'anticlockwise';

@@ -2,7 +2,7 @@ import axios, {AxiosError, AxiosRequestConfig} from 'axios';
 import {v4 as uuid} from 'uuid';
 import {API_BASE_URL} from 'react-native-dotenv';
 import {getAxiosErrorType, ErrorType, getAxiosErrorMetadata} from './utils';
-import bugsnag from '../diagnostics/bugsnag';
+import Bugsnag from '@bugsnag/react-native';
 import {InstallIdHeaderName, RequestIdHeaderName} from './headers';
 
 export default createClient(API_BASE_URL);
@@ -36,17 +36,12 @@ function responseErrorHandler(error: AxiosError) {
   switch (errorType) {
     case ErrorType.Normal:
       const errorMetadata = getAxiosErrorMetadata(error);
-      bugsnag.notify(error, (report) => {
-        report.metadata = {
-          ...report.metadata,
-          api: {
-            ...errorMetadata,
-          },
-        };
+      Bugsnag.notify(error, (event) => {
+        event.addMetadata('api', {...errorMetadata});
       });
       break;
     case ErrorType.Unknown:
-      bugsnag.notify(error);
+      Bugsnag.notify(error);
       break;
     case ErrorType.NetworkError:
     case ErrorType.Timeout:

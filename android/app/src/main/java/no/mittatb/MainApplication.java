@@ -7,7 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import com.bugsnag.BugsnagReactNative;
+import com.bugsnag.android.Bugsnag;
 import com.bugsnag.android.Configuration;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
@@ -69,7 +69,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
           if (!TextUtils.isEmpty(bugsnagKey)) {
               config.setReleaseStage(bugsnagReleaseStage);
           }
-          BugsnagReactNative.startWithConfiguration(this, config);
+          Bugsnag.start(this, config);
       }
     } catch (Exception e) {
       e.printStackTrace();

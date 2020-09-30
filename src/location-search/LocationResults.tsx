@@ -73,14 +73,14 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
   },
   subLabel: {
-    color: theme.text.faded,
+    color: theme.text.colors.faded,
     fontSize: 12,
     marginRight: 12,
   },
   subBar: {
     height: 12,
     flexGrow: 1,
-    borderBottomColor: theme.text.faded,
+    borderBottomColor: theme.text.colors.faded,
     borderBottomWidth: 1,
   },
   list: {
@@ -112,6 +112,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: 4,
   },
   locationIcon: {
-    backgroundColor: theme.text.primary,
+    backgroundColor: theme.text.colors.primary,
   },
 }));

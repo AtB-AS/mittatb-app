@@ -105,13 +105,13 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     paddingBottom: 0,
   },
   text: {
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
   },
   privacyPolicy: {
     fontSize: 16,
     textAlign: 'center',
     textDecorationLine: 'underline',
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     marginBottom: 24,
   },
 }));

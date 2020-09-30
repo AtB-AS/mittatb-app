@@ -18,6 +18,8 @@ import {LegMode} from '@entur/sdk';
 import colors from '../../theme/colors';
 import {Duration} from '../../assets/svg/icons/transportation';
 import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
+import {SituationWarningIcon} from '../../situations';
+import {flatMap} from '../../utils/array';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -65,9 +67,17 @@ const ResultItemHeader: React.FC<{
         {timePrefix}
         {formatToClockOrRelativeMinutes(quayStartTime)}
       </Text>
-      <TextHiddenSupportPrefix prefix="Reisetid">
-        {durationText}
-      </TextHiddenSupportPrefix>
+      <View style={styles.durationContainer}>
+        <TextHiddenSupportPrefix prefix="Reisetid">
+          {durationText}
+        </TextHiddenSupportPrefix>
+      </View>
+
+      <SituationWarningIcon
+        situations={flatMap(tripPattern.legs, (leg) => leg.situations)}
+        accessibilityLabel="Denne reisen har driftsmeldinger. Se detaljer for mer info"
+        style={styles.warningIcon}
+      />
     </View>
   );
 };
@@ -117,7 +127,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   stopName: {
     fontSize: 16,
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     flexShrink: 1,
   },
   lineContainer: {
@@ -126,13 +136,13 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   time: {
     fontSize: 32,
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     marginVertical: 8,
   },
   lineName: {
     fontSize: 16,
     fontWeight: '600',
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     textAlign: 'center',
     marginLeft: 8,
   },
@@ -144,10 +154,18 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   resultHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     paddingBottom: 8,
     marginBottom: 8,
     borderBottomColor: theme.background.level1,
     borderBottomWidth: 1,
+  },
+  durationContainer: {
+    flex: 1,
+    alignItems: 'flex-end',
+  },
+  warningIcon: {
+    marginLeft: theme.spacings.small,
   },
 }));
 
@@ -216,7 +234,7 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   time: {
-    width: 50,
+    minWidth: 50,
     fontVariant: ['tabular-nums'],
   },
   iconContainer: {
@@ -233,13 +251,13 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
   textDeprioritized: {
     fontWeight: 'normal',
     fontSize: 14,
-    color: theme.text.faded,
+    color: theme.text.colors.faded,
   },
   textBold: {
     fontWeight: 'bold',
   },
   walkingPerson: {
-    backgroundColor: theme.text.primary,
+    backgroundColor: theme.text.colors.primary,
   },
 }));
 

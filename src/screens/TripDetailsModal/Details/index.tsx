@@ -1,29 +1,36 @@
-import React, {useState, useCallback} from 'react';
-import {View, ActivityIndicator, Text} from 'react-native';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+} from '@react-navigation/native';
+import React, {useCallback, useState} from 'react';
+import {ActivityIndicator, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {NavigationProp, RouteProp} from '@react-navigation/native';
-import {Leg, TripPattern} from '../../../sdk';
-import WalkDetail from './WalkDetail';
-import TransportDetail from './TransportDetail';
-import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
-import LocationRow from '../LocationRow';
-import {StyleSheet} from '../../../theme';
-import Header from '../../../ScreenHeader';
+import {DetailsModalNavigationProp, DetailsModalStackParams} from '..';
+import {getSingleTripPattern} from '../../../api/trips';
+import {ArrowLeft} from '../../../assets/svg/icons/navigation';
 import {Dot} from '../../../assets/svg/icons/other/';
 import {
   CurrentLocationArrow,
   MapPointPin,
 } from '../../../assets/svg/icons/places';
-import {Close} from '../../../assets/svg/icons/actions';
-import colors from '../../../theme/colors';
-import {DetailsModalStackParams} from '..';
-import MessageBox from '../../../message-box';
-import {UserFavorites, LocationWithMetadata} from '../../../favorites/types';
 import LocationIcon from '../../../components/location-icon';
 import {FavoriteIcon, useFavorites} from '../../../favorites';
-import {getSingleTripPattern} from '../../../api/trips';
-import usePollableResource from '../../../utils/use-pollable-resource';
+import {LocationWithMetadata} from '../../../favorites/types';
+import MessageBox from '../../../message-box';
+import Header from '../../../ScreenHeader';
+import {Leg, Situation, TripPattern} from '../../../sdk';
+import SituationMessage from '../../../situations';
+import {StyleSheet} from '../../../theme';
+import colors from '../../../theme/colors';
+import {flatMap} from '../../../utils/array';
+import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
 import {getQuayNameFromStartLeg} from '../../../utils/transportation-names';
+import usePollableResource from '../../../utils/use-pollable-resource';
+import LocationRow from '../LocationRow';
+import {CompactMap} from '../Map/CompactMap';
+import TransportDetail from './TransportDetail';
+import WalkDetail from './WalkDetail';
 
 // @TODO Firebase config?
 const TIME_LIMIT_IN_MINUTES = 3;
@@ -67,26 +74,23 @@ const TripDetailsModal: React.FC<Props> = (props) => {
           accessible: true,
           accessibilityRole: 'button',
           accessibilityLabel: 'Gå tilbake',
-          icon: <Close />,
+          icon: <ArrowLeft />,
         }}
         title="Reisedetaljer"
+        style={{backgroundColor: colors.secondary.cyan}}
       />
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
       >
-        {error && (
-          <MessageBox type="warning">
-            <Text>
-              Kunne ikke hente ut oppdatering for reiseforslaget. Det kan være
-              at reisen har endret seg eller ikke lengre er tilgjengelig.
-            </Text>
-          </MessageBox>
-        )}
         {!tripPattern ? (
           <ActivityIndicator animating={true} size="large" />
         ) : (
-          <DetailsContent {...passingProps} tripPattern={tripPattern} />
+          <DetailsContent
+            {...passingProps}
+            error={error}
+            tripPattern={tripPattern}
+          />
         )}
       </ScrollView>
     </View>
@@ -97,7 +101,8 @@ const DetailsContent: React.FC<{
   tripPattern: TripPattern;
   from: LocationWithMetadata;
   to: LocationWithMetadata;
-}> = ({tripPattern, from, to}) => {
+  error: Error | undefined;
+}> = ({tripPattern, from, to, error}) => {
   const styles = useDetailsStyle();
   const {favorites} = useFavorites();
 
@@ -126,43 +131,63 @@ const DetailsContent: React.FC<{
     );
   };
 
+  const navigation = useNavigation<DetailsModalNavigationProp>();
+
   return (
     <>
-      {shortTime && (
-        <MessageBox
-          containerStyle={styles.messageContainer}
-          message="Vær oppmerksom på kort byttetid."
-        />
-      )}
-      {legIsWalk(startLeg) && (
-        <LocationRow
-          icon={getLocationIcon(from) ?? <Dot fill={colors.general.black} />}
-          label={getQuayNameFromStartLeg(startLeg, from.name)}
-          labelIcon={getIconIfFavorite(from)}
-          time={timeString(startLeg, tripPattern.startTime)}
-          textStyle={styles.textStyle}
-        />
-      )}
-      {tripPattern.legs.map((leg, i, legs) => (
-        <LegDetail
-          key={i}
-          leg={leg}
-          onCalculateTime={flagShortTime}
-          nextLeg={nextLeg(i, legs)}
-          isIntermediateTravelLeg={isIntermediateTravelLeg(i, legs)}
-          showFrom={showFrom(i, legs)}
-          showTo={showTo(i, legs)}
-        />
-      ))}
-      {lastLegIsFoot && (
-        <LocationRow
-          icon={getLocationIcon(to)}
-          label={to.name}
-          labelIcon={getIconIfFavorite(to)}
-          time={formatToClock(tripPattern.endTime)}
-          textStyle={styles.textStyle}
-        />
-      )}
+      <CompactMap
+        legs={tripPattern.legs}
+        onExpand={() => {
+          navigation.navigate('DetailsMap', {
+            legs: tripPattern.legs,
+          });
+        }}
+      />
+      <View style={styles.textDetailsContainer}>
+        {shortTime && (
+          <MessageBox
+            containerStyle={styles.messageContainer}
+            message="Vær oppmerksom på kort byttetid."
+          />
+        )}
+        {error && (
+          <MessageBox type="warning">
+            <Text>
+              Kunne ikke hente ut oppdatering for reiseforslaget. Det kan være
+              at reisen har endret seg eller ikke lengre er tilgjengelig.
+            </Text>
+          </MessageBox>
+        )}
+        {legIsWalk(startLeg) && (
+          <LocationRow
+            icon={getLocationIcon(from) ?? <Dot fill={colors.general.black} />}
+            label={getQuayNameFromStartLeg(startLeg, from.name)}
+            labelIcon={getIconIfFavorite(from)}
+            time={timeString(startLeg, tripPattern.startTime)}
+            textStyle={styles.textStyle}
+          />
+        )}
+        {tripPattern.legs.map((leg, i, legs) => (
+          <LegDetail
+            key={i}
+            leg={leg}
+            onCalculateTime={flagShortTime}
+            nextLeg={nextLeg(i, legs)}
+            isIntermediateTravelLeg={isIntermediateTravelLeg(i, legs)}
+            showFrom={showFrom(i, legs)}
+            showTo={showTo(i, legs)}
+          />
+        ))}
+        {lastLegIsFoot && (
+          <LocationRow
+            icon={getLocationIcon(to)}
+            label={to.name}
+            labelIcon={getIconIfFavorite(to)}
+            time={formatToClock(tripPattern.endTime)}
+            textStyle={styles.textStyle}
+          />
+        )}
+      </View>
     </>
   );
 };
@@ -206,6 +231,7 @@ export type LegDetailProps = {
   isIntermediateTravelLeg: boolean;
   showFrom: boolean;
   showTo: boolean;
+  parentSituations?: Situation[];
 };
 
 const LegDetail: React.FC<LegDetailProps> = (props) => {
@@ -227,11 +253,13 @@ const useDetailsStyle = StyleSheet.createThemeHook((theme) => ({
     margin: 24,
     marginTop: 0,
   },
+  textDetailsContainer: {
+    paddingTop: 8,
+  },
   scrollView: {
     flex: 1,
   },
   scrollViewContent: {
-    padding: 12,
     paddingBottom: 100,
   },
   textStyle: {

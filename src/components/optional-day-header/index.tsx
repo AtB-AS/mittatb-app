@@ -37,8 +37,9 @@ export default function OptionalNextDayLabel({
 }
 const useDayTextStyle = StyleSheet.createThemeHook((theme) => ({
   title: {
-    fontSize: 12,
-    marginVertical: 10,
+    fontSize: theme.text.sizes.lead,
+    padding: theme.spacings.medium,
+    color: theme.text.colors.faded,
   },
 }));
 function getHumanizedDepartureDatePrefixed(

@@ -52,7 +52,7 @@ const Input = forwardRef<TextInput, InputProps>(
         <TextInput
           ref={ref}
           style={[style.input, {borderColor}]}
-          placeholderTextColor={theme.text.faded}
+          placeholderTextColor={theme.text.colors.faded}
           onFocus={onFocusEvent}
           onBlur={onBlurEvent}
           {...props}
@@ -81,7 +81,7 @@ export default Input;
 const useInputStyle = StyleSheet.createTheme((theme) => ({
   input: {
     backgroundColor: theme.background.level1,
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     borderWidth: 1,
     borderRadius: 4,
     paddingLeft: 60,

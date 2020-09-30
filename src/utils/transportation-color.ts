@@ -13,7 +13,6 @@ export default function transportionColor(
   switch (mode) {
     case 'bus':
       const code = Number(publicCode);
-
       if (code < 100)
         return {
           fill: colors.primary.green,
@@ -39,10 +38,38 @@ export default function transportionColor(
         fill: colors.general.white,
         icon: colors.general.black,
       };
+    case 'air':
+      return {
+        fill: colors.secondary.orange,
+        icon: colors.general.white,
+      };
     default:
       return {
         fill: colors.general.gray,
         icon: colors.general.white,
       };
+  }
+}
+export function transportationMapLineColor(
+  mode?: LegMode,
+  publicCode?: string,
+): string {
+  switch (mode) {
+    case 'bus':
+      const code = Number(publicCode);
+      if (code < 100) {
+        return colors.primary.green;
+      }
+      return colors.secondary.blue;
+    case 'rail':
+      return colors.secondary.red;
+    case 'tram':
+      return colors.primary.green;
+    case 'water':
+      return colors.general.white;
+    case 'air':
+      return colors.secondary.orange;
+    default:
+      return colors.general.gray400;
   }
 }

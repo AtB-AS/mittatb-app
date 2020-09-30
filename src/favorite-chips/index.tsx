@@ -25,10 +25,9 @@ type Props = {
   onMapSelection?: () => void;
   containerStyle?: StyleProp<ViewStyle>;
   chipTypes?: ChipTypeGroup[];
-  hideChips?: boolean;
 };
 
-type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
+export type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
 
 type ProfileNearbyScreenNavigationProp = StackNavigationProp<
   TabNavigatorParams,
@@ -39,15 +38,12 @@ const FavoriteChips: React.FC<Props> = ({
   containerStyle,
   onMapSelection = () => {},
   chipTypes = ['favorites', 'location', 'map'],
-  hideChips = false,
 }) => {
   const navigation = useNavigation<ProfileNearbyScreenNavigationProp>();
   const {favorites} = useFavorites();
 
   const {onCurrentLocation} = useCurrentLocationChip(onSelectLocation);
   const activeType = (type: ChipTypeGroup) => chipTypes.includes(type);
-
-  if (hideChips) return null;
 
   return (
     <ScrollView

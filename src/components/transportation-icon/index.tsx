@@ -28,6 +28,7 @@ const TransportationIcon: React.FC<TransportationIconProps> = ({
 }) => {
   const styles = useStyle();
   const {fill, icon} = transportationColor(mode, publicCode);
+
   return (
     <View style={[styles.circle, {backgroundColor: fill}, circleStyle]}>
       {children ? (
@@ -85,6 +86,10 @@ function InnerIcon({
 }
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
+  iconContainer: {
+    width: 20,
+    height: 20,
+  },
   circle: {
     width: 20,
     height: 20,

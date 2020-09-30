@@ -85,7 +85,7 @@ const useLocationRowStyle = StyleSheet.createThemeHook((theme) => ({
     marginRight: 6,
   },
   label: {
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
   },
   timeContainer: {
     width: 78,
@@ -94,13 +94,13 @@ const useLocationRowStyle = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'flex-end',
   },
   time: {
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     fontVariant: ['tabular-nums'],
   },
   aimedTime: {
     position: 'absolute',
     top: '50%',
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
     fontSize: 12,
     lineHeight: 16,
     fontWeight: 'normal',

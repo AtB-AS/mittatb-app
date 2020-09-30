@@ -10,7 +10,7 @@ import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
 import {StyleSheet} from '../theme';
 import colors from '../theme/colors';
-import FavoriteChips from '../favorite-chips';
+import FavoriteChips, {ChipTypeGroup} from '../favorite-chips';
 import LocationResults from './LocationResults';
 import useDebounce from './useDebounce';
 import {LocationSearchNavigationProp} from './';
@@ -28,7 +28,7 @@ export type RouteParams = {
   callerRouteName: string;
   callerRouteParam: string;
   label: string;
-  hideFavorites?: boolean;
+  favoriteChipTypes?: ChipTypeGroup[];
   initialLocation?: LocationWithMetadata;
 };
 
@@ -39,7 +39,7 @@ const LocationSearch: React.FC<Props> = ({
       callerRouteName,
       callerRouteParam,
       label,
-      hideFavorites,
+      favoriteChipTypes,
       initialLocation,
     },
   },
@@ -146,7 +146,7 @@ const LocationSearch: React.FC<Props> = ({
           <FavoriteChips
             onSelectLocation={onSelect}
             onMapSelection={onMapSelection}
-            hideChips={!!hideFavorites}
+            chipTypes={favoriteChipTypes}
             containerStyle={[styles.contentBlock, styles.chipBox]}
           />
         </View>
@@ -212,7 +212,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   contentBlock: {
-    paddingHorizontal: theme.sizes.pagePadding,
+    paddingHorizontal: theme.spacings.medium,
   },
   scroll: {
     flex: 1,
@@ -227,7 +227,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     left: 12,
   },
   placeholder: {
-    color: theme.text.faded,
+    color: theme.text.colors.faded,
   },
   inputContainer: {
     width: '100%',
@@ -244,7 +244,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     borderWidth: 1,
     borderColor: colors.general.gray,
     borderRadius: 4,
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
   },
   searchIcon: {
     position: 'absolute',

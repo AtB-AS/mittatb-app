@@ -77,7 +77,7 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   buttonDestructive: {
     backgroundColor: theme.background.destructive,
-    color: theme.text.destructive,
+    color: theme.text.colors.destructive,
   },
   buttonDisabled: {
     opacity: 0.2,
@@ -90,9 +90,9 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     fontSize: 16,
     lineHeight: 20,
     fontWeight: '600',
-    color: theme.text.primary,
+    color: theme.text.colors.primary,
   },
   textDestructive: {
-    color: theme.text.destructive,
+    color: theme.text.colors.destructive,
   },
 }));
