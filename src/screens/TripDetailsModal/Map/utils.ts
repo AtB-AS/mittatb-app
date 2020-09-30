@@ -1,6 +1,5 @@
 import polyline from '@mapbox/polyline';
-import distance from 'haversine-distance';
-import {Feature, LineString, Point, Position} from 'geojson';
+import {Feature, Point, Position} from 'geojson';
 import {Leg, LegMode, Place} from '../../../sdk';
 import {flatMap} from '../../../utils/array';
 
