@@ -15,6 +15,7 @@ export const MapViewConfig: MapViewProps = {
   }),
   styleURL: MAPBOX_STOP_PLACES_STYLE_URL,
 };
+
 export const MapCameraConfig: CameraProps = {
   animationMode: 'moveTo',
 };

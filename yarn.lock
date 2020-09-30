@@ -1598,10 +1598,10 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/remote-config/-/remote-config-6.7.1.tgz#10d3ea0b19bb627e22c4a3fc72416926c24e1be7"
   integrity sha512-VEgHloZ21bWs+C5QV+mOm7jBrym118wgANC88e7naXMcZ3OlKDrSOSmGFr8R+N9goyyj2AV0Zmrvdm/5QY4TeQ==
 
-"@react-native-mapbox-gl/maps@^8.1.0-rc.2":
-  version "8.1.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@react-native-mapbox-gl/maps/-/maps-8.1.0-rc.2.tgz#09c8ecdfca900a861e0135d53f6cab20e6256294"
-  integrity sha512-gjU5YSjlxqWZ5flMxiEoKUsu9DjLy3aqntivJGbqooRT8d1wILtErXDG2TDyprWGrUpFUl/D27TjLLSIhVmyOw==
+"@react-native-mapbox-gl/maps@^8.1.0-rc.4":
+  version "8.1.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@react-native-mapbox-gl/maps/-/maps-8.1.0-rc.4.tgz#7a9415f1a076ed1a514a7107d74b7d8ea96ad560"
+  integrity sha512-OdzpkvBvkllU+ymO3hpAT31+zJJUITjsK/c7dX2j3wvHLCQmhAhg5GY3PJUK2cBhZsE6ojjc739Bcnbg9IBFIQ==
   dependencies:
     "@mapbox/geo-viewport" ">= 0.4.0"
     "@turf/along" ">= 4.0.0 <7.0.0"
@@ -1609,6 +1609,7 @@
     "@turf/helpers" ">= 4.6.0 <7.0.0"
     "@turf/length" ">= 4.6.0 <7.0.0"
     "@turf/nearest-point-on-line" ">= 4.0.0 <7.0.0"
+    "@types/geojson" "^7946.0.7"
     debounce "^1.2.0"
 
 "@react-navigation/bottom-tabs@^5.3.3":
