@@ -1,5 +1,5 @@
 diff --git a/node_modules/@react-native-mapbox-gl/maps/index.d.ts b/node_modules/@react-native-mapbox-gl/maps/index.d.ts
-index 0f07d73..a4c34a2 100644
+index 0f07d73..fbb59fe 100644
 --- a/node_modules/@react-native-mapbox-gl/maps/index.d.ts
 +++ b/node_modules/@react-native-mapbox-gl/maps/index.d.ts
 @@ -398,7 +398,7 @@ export interface MapViewProps extends ViewProps {
@@ -11,3 +11,12 @@ index 0f07d73..a4c34a2 100644
    surfaceView?: boolean;
    regionWillChangeDebounceTime?: number;
    regionDidChangeDebounceTime?: number;
+@@ -747,7 +747,7 @@ export interface VectorSourceProps extends TileSourceProps {
+ export interface ShapeSourceProps extends ViewProps {
+   id?: string;
+   url?: string;
+-  shape?: GeoJSON.GeometryCollection | GeoJSON.Feature | GeoJSON.FeatureCollection;
++  shape?: GeoJSON.Geometry | GeoJSON.GeometryCollection | GeoJSON.Feature | GeoJSON.FeatureCollection;
+   cluster?: boolean;
+   clusterRadius?: number;
+   clusterMaxZoomLevel?: number;

@@ -9,7 +9,7 @@ const MapLabel: React.FC<{
   id: string;
 }> = ({text, point, id}) => {
   const bg = require('../../../assets/images/map/mapLabelBg.png');
-  const shape = {
+  const shape: GeoJSON.Feature = {
     type: 'Feature',
     geometry: point,
     properties: {
