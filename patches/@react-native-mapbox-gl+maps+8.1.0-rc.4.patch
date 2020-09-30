@@ -1,8 +1,8 @@
 diff --git a/node_modules/@react-native-mapbox-gl/maps/index.d.ts b/node_modules/@react-native-mapbox-gl/maps/index.d.ts
-index 58939cd..2d64b79 100644
+index 0f07d73..a4c34a2 100644
 --- a/node_modules/@react-native-mapbox-gl/maps/index.d.ts
 +++ b/node_modules/@react-native-mapbox-gl/maps/index.d.ts
-@@ -373,7 +373,7 @@ export interface MapViewProps extends ViewProps {
+@@ -398,7 +398,7 @@ export interface MapViewProps extends ViewProps {
    logoEnabled?: boolean;
    compassEnabled?: boolean;
    compassViewPosition?: number;

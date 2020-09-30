@@ -66,6 +66,7 @@ export const TravelDetailsMap: React.FC<MapProps> = ({route, navigation}) => {
           ref={mapCameraRef}
           bounds={bounds}
           {...MapCameraConfig}
+          animationDuration={0}
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
         <MapRoute lines={features}></MapRoute>

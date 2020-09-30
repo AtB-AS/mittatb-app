@@ -1,6 +1,8 @@
 import polyline from '@mapbox/polyline';
+import distance from 'haversine-distance';
 import {Feature, LineString, Point, Position} from 'geojson';
 import {Leg, LegMode, Place} from '../../../sdk';
+import {flatMap} from '../../../utils/array';
 
 export interface MapLine extends Feature {
   travelType?: LegMode;
@@ -8,31 +10,31 @@ export interface MapLine extends Feature {
 }
 
 export function getMapBounds(features: MapLine[], padding: number) {
-  let coordinates: Position[] = [];
-  features.forEach((f) => {
-    coordinates = coordinates.concat((f.geometry as LineString)?.coordinates);
-  });
+  const lineLongitudes = flatMap(features, (f) =>
+    f.geometry.type === 'LineString' ? f.geometry.coordinates : [],
+  ).map(([lon, _]) => lon);
 
-  const sortedByNorth = coordinates.sort(compareByNorthernmost);
-  const sortedByEast = coordinates.sort(compareByEasternmost);
-  const lastIndex = coordinates.length - 1;
+  const lineLatitudes = flatMap(features, (f) =>
+    f.geometry.type === 'LineString' ? f.geometry.coordinates : [],
+  ).map(([_, lat]) => lat);
 
-  const [westernMost, southernMost, easternMost, northernMost] = [
-    sortedByEast[lastIndex][0],
-    sortedByNorth[lastIndex][1],
-    sortedByEast[0][0],
-    sortedByNorth[0][1],
-  ];
+  const westernMost = Math.min(...lineLongitudes);
+  const easternMost = Math.max(...lineLongitudes);
+  const northernMost = Math.max(...lineLatitudes);
+  const southernMost = Math.min(...lineLatitudes);
 
   // Coordinates given in the opposite order below is intentional
   // MapboxGL camera bounds are expected as geojson coordinates ([longitude, latitude]), even though the property naming on the expected type suggests the opposite.
+
+  const addVertical = (northernMost - southernMost) / 3;
+  const addHorizontal = (westernMost - easternMost) / 3;
+
+  const sw = [westernMost + addHorizontal, southernMost - addVertical];
+  const ne = [easternMost - addHorizontal, northernMost + addVertical];
+
   return {
-    sw: [westernMost, southernMost],
-    ne: [easternMost, northernMost],
-    paddingTop: padding / 2,
-    paddingBottom: padding / 2,
-    paddingLeft: padding,
-    paddingRight: padding,
+    sw,
+    ne,
   };
 }
 export function legsToMapLines(legs: Leg[]): MapLine[] {
@@ -60,11 +62,4 @@ export function pointOf(placing: any): Point {
     type: 'Point',
     coordinates: coords,
   };
-}
-
-function compareByNorthernmost(a: Position, b: Position): number {
-  return a[1] > b[1] ? 1 : 0;
-}
-function compareByEasternmost(a: Position, b: Position): number {
-  return a[0] > b[0] ? 1 : 0;
 }

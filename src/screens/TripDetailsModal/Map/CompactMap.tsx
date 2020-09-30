@@ -48,11 +48,13 @@ export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
           zoomEnabled={false}
           onDidFinishRenderingMapFully={finishedLoading}
           {...MapViewConfig}
+          compassEnabled={false}
         >
           <MapboxGL.Camera
             ref={mapCameraRef}
             bounds={bounds}
             {...MapCameraConfig}
+            animationDuration={0}
           />
           <MapRoute lines={features}></MapRoute>
           <MapLabel point={endPoint} id={'end'} text="Slutt"></MapLabel>
