@@ -23,14 +23,15 @@ export function getMapBounds(features: MapLine[], padding: number) {
   const northernMost = Math.max(...lineLatitudes);
   const southernMost = Math.min(...lineLatitudes);
 
+  // Dividing by 3 here is arbitrary, seems to work
+  // like a fine value for "padding"
+  const latPadding = (northernMost - southernMost) / 3;
+  const lonPadding = (westernMost - easternMost) / 3;
+
   // Coordinates given in the opposite order below is intentional
   // MapboxGL camera bounds are expected as geojson coordinates ([longitude, latitude]), even though the property naming on the expected type suggests the opposite.
-
-  const addVertical = (northernMost - southernMost) / 3;
-  const addHorizontal = (westernMost - easternMost) / 3;
-
-  const sw = [westernMost + addHorizontal, southernMost - addVertical];
-  const ne = [easternMost - addHorizontal, northernMost + addVertical];
+  const sw = [westernMost + lonPadding, southernMost - latPadding];
+  const ne = [easternMost - lonPadding, northernMost + latPadding];
 
   return {
     sw,
