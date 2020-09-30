@@ -9,7 +9,7 @@ export interface MapLine extends Feature {
   publicCode?: string;
 }
 
-export function getMapBounds(features: MapLine[], padding: number) {
+export function getMapBounds(features: MapLine[]) {
   const lineLongitudes = flatMap(features, (f) =>
     f.geometry.type === 'LineString' ? f.geometry.coordinates : [],
   ).map(([lon, _]) => lon);

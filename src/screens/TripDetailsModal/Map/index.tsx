@@ -39,7 +39,7 @@ export const TravelDetailsMap: React.FC<MapProps> = ({route, navigation}) => {
   const features = legsToMapLines(legs);
   const startPoint = pointOf(legs[0].fromPlace);
   const endPoint = pointOf(legs[legs.length - 1].toPlace);
-  const bounds = getMapBounds(features, 50);
+  const bounds = getMapBounds(features);
 
   async function zoomIn() {
     const currentZoom = await mapViewRef.current?.getZoom();

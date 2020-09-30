@@ -25,7 +25,7 @@ export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
   const features = legsToMapLines(legs);
   const startPoint = pointOf(legs[0].fromPlace);
   const endPoint = pointOf(legs[legs.length - 1].toPlace);
-  const bounds = getMapBounds(features, 40);
+  const bounds = getMapBounds(features);
 
   function finishedLoading() {
     setTimeout(async () => {
