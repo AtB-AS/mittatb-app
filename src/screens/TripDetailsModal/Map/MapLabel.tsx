@@ -8,17 +8,17 @@ const MapLabel: React.FC<{
   point: Point;
   id: string;
 }> = ({text, point, id}) => {
-  const bg = require('../../../assets/images/map/mapLabelBg.png');
+  // const bg = require('../../../assets/images/map/mapLabelBg.png');
   const shape: GeoJSON.Feature = {
     type: 'Feature',
     geometry: point,
     properties: {
-      icon: 'background',
+      // icon: 'background',
     },
   };
   return (
     <>
-      <MapboxGL.Images images={{background: bg}} />
+      {/* <MapboxGL.Images images={{background: bg}} /> */}
       <MapboxGL.ShapeSource id={id + '-shape'} shape={shape}>
         <MapboxGL.SymbolLayer
           id={id + '-label'}
@@ -27,10 +27,10 @@ const MapLabel: React.FC<{
             textHaloColor: colors.primary.gray,
             textHaloWidth: 1,
             textField: text,
-            iconImage: ['get', 'icon'],
-            iconAllowOverlap: true,
-            iconOpacity: 1,
-            iconSize: 0.33,
+            // iconImage: ['get', 'icon'],
+            // iconAllowOverlap: true,
+            // iconOpacity: 1,
+            // iconSize: 0.33,
           }}
         />
       </MapboxGL.ShapeSource>
