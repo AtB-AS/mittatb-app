@@ -19,9 +19,11 @@ import ErrorBoundary from './error-boundary';
 if (!__DEV__) {
   Bugsnag.start();
 } else {
-  Bugsnag.notify = () => {};
+  Bugsnag.notify = (error) => console.error(error);
+  Bugsnag.leaveBreadcrumb = (message, metadata) =>
+    // eslint-disable-next-line
+    console.log(message, metadata);
   Bugsnag.setUser = () => {};
-  Bugsnag.leaveBreadcrumb = () => {};
 }
 
 import {MAPBOX_API_TOKEN} from 'react-native-dotenv';

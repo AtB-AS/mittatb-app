@@ -10,6 +10,7 @@ import colors from '../../../theme/colors';
 import {MapViewConfig, MapCameraConfig} from '../../../components/map/';
 import insets from '../../../utils/insets';
 import {Leg} from '../../../sdk';
+import Bugsnag from '@bugsnag/react-native';
 
 export type MapProps = {
   legs: Leg[];
@@ -19,49 +20,36 @@ export type MapProps = {
 export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
-  const [snapshot, setSnapshot] = useState<string | undefined>();
-  const [inTransition, setInTransition] = useState<boolean>(true);
 
   const features = legsToMapLines(legs);
   const startPoint = pointOf(legs[0].fromPlace);
   const endPoint = pointOf(legs[legs.length - 1].toPlace);
   const bounds = getMapBounds(features);
 
-  function finishedLoading() {
-    setTimeout(async () => {
-      const snap = await mapViewRef.current?.takeSnap();
-      setSnapshot(snap);
-      setTimeout(() => setInTransition(false), 200);
-    }, 1000);
-  }
-
-  const renderMap = !snapshot || inTransition;
-
   return (
     <View style={styles.mapView}>
-      {renderMap && (
-        <MapboxGL.MapView
-          ref={mapViewRef}
-          style={styles.map}
-          scrollEnabled={false}
-          rotateEnabled={false}
-          zoomEnabled={false}
-          onDidFinishRenderingMapFully={finishedLoading}
-          {...MapViewConfig}
-          compassEnabled={false}
-        >
-          <MapboxGL.Camera
-            ref={mapCameraRef}
-            bounds={bounds}
-            {...MapCameraConfig}
-            animationDuration={0}
-          />
-          <MapRoute lines={features}></MapRoute>
-          <MapLabel point={endPoint} id={'end'} text="Slutt"></MapLabel>
-          <MapLabel point={startPoint} id={'start'} text="Start"></MapLabel>
-        </MapboxGL.MapView>
-      )}
-      {!!snapshot && <Image style={styles.map} source={{uri: snapshot}} />}
+      <MapboxGL.MapView
+        ref={mapViewRef}
+        style={styles.map}
+        scrollEnabled={false}
+        rotateEnabled={false}
+        zoomEnabled={false}
+        onWillStartRenderingMap={() => log('Start loading map')}
+        onDidFinishRenderingMapFully={() => log('Finished loading map')}
+        {...MapViewConfig}
+        compassEnabled={false}
+      >
+        <MapboxGL.Camera
+          ref={mapCameraRef}
+          bounds={bounds}
+          {...MapCameraConfig}
+          animationDuration={0}
+        />
+        <MapRoute lines={features}></MapRoute>
+        <MapLabel point={endPoint} id={'end'} text="Slutt"></MapLabel>
+        <MapLabel point={startPoint} id={'start'} text="Start"></MapLabel>
+      </MapboxGL.MapView>
+
       <View style={styles.togglerContainer}>
         <TouchableOpacity
           style={styles.toggler}
@@ -105,5 +93,9 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
 });
+
+function log(message: string) {
+  Bugsnag.leaveBreadcrumb(message, {component: 'CompactMap'});
+}
 
 export default CompactMap;
