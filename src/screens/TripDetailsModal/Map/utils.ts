@@ -53,7 +53,7 @@ export function legsToMapLines(legs: Leg[]): MapLine[] {
 }
 export function pointOf(place: Place): Point;
 export function pointOf(coordinates: Position): Point;
-export function pointOf(placing: any): Point {
+export function pointOf(placing: Place | Position): Point {
   let coords: Position;
   if (Array.isArray(placing)) {
     coords = placing;

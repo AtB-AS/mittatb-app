@@ -171,6 +171,7 @@ android {
         staging {
             initWith buildTypes.release
             applicationIdSuffix ".staging"
+            debuggable true
             matchingFallbacks = ['release']
         }
         release {

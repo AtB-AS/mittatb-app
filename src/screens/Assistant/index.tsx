@@ -39,6 +39,7 @@ import {NoResultReason} from './types';
 import FavoriteChips from '../../favorite-chips';
 
 import Animated, {Easing} from 'react-native-reanimated';
+import Bugsnag from '@bugsnag/react-native';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -96,6 +97,10 @@ const Assistant: React.FC<Props> = ({
   const {from, to} = useLocations(currentLocation);
 
   function swap() {
+    log('swap', {
+      newFrom: translateLocation(to),
+      newTo: translateLocation(from),
+    });
     navigation.setParams({fromLocation: to, toLocation: from});
   }
 
@@ -114,6 +119,7 @@ const Assistant: React.FC<Props> = ({
   }
 
   function setCurrentLocationAsFrom() {
+    log('set_current_location_as_from');
     navigation.setParams({
       fromLocation: currentLocation && {
         ...currentLocation,
@@ -137,6 +143,7 @@ const Assistant: React.FC<Props> = ({
   }
 
   function resetView() {
+    log('reset');
     setCurrentLocationOrRequest();
 
     navigation.setParams({
@@ -483,11 +490,19 @@ function useTripPatterns(
 
     async function search() {
       if (!fromLocation || !toLocation) return;
+
       setIsSearching(true);
       try {
         const arriveBy = date?.type === 'arrival';
         const searchDate =
           date && date?.type !== 'now' ? date.date : new Date();
+
+        log('searching', {
+          fromLocation: translateLocation(fromLocation),
+          toLocation: translateLocation(toLocation),
+          searchDate: searchDate.toISOString(),
+        });
+
         const response = await searchTrip(
           fromLocation,
           toLocation,
@@ -563,4 +578,13 @@ function Fade({style, children, visible, duration = 400}: FadeProps) {
       {!isDone || visible ? children : null}
     </Animated.View>
   );
+}
+
+function log(message: string, metadata?: {[key: string]: string}) {
+  Bugsnag.leaveBreadcrumb(message, {component: 'Assistant', ...metadata});
+}
+
+function translateLocation(location: Location | undefined): string {
+  if (!location) return 'Undefined location';
+  return `${location.id}--${location.name}--${location.locality}`;
 }

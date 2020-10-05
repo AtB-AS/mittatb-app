@@ -17,6 +17,7 @@ import {
   useControlPositionsStyle,
 } from '../../../components/map/';
 import {Leg} from '../../../sdk';
+import Bugsnag from '@bugsnag/react-native';
 
 export type MapDetailRouteParams = {
   legs: Leg[];
@@ -61,7 +62,13 @@ export const TravelDetailsMap: React.FC<MapProps> = ({route, navigation}) => {
   const controlStyles = useControlPositionsStyle();
   return (
     <View style={styles.mapView}>
-      <MapboxGL.MapView ref={mapViewRef} style={styles.map} {...MapViewConfig}>
+      <MapboxGL.MapView
+        ref={mapViewRef}
+        style={styles.map}
+        {...MapViewConfig}
+        onWillStartRenderingMap={() => log('Start loading map')}
+        onDidFinishRenderingMapFully={() => log('Finished loading map')}
+      >
         <MapboxGL.Camera
           ref={mapCameraRef}
           bounds={bounds}
@@ -91,4 +98,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+function log(message: string) {
+  Bugsnag.leaveBreadcrumb(message, {component: 'DetailsMap'});
+}
+
 export default TravelDetailsMap;
