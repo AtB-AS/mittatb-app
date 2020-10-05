@@ -18,9 +18,6 @@ export type MapProps = {
 };
 
 export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
-  const mapCameraRef = useRef<MapboxGL.Camera>(null);
-  const mapViewRef = useRef<MapboxGL.MapView>(null);
-
   const features = legsToMapLines(legs);
   const startPoint = pointOf(legs[0].fromPlace);
   const endPoint = pointOf(legs[legs.length - 1].toPlace);
@@ -29,7 +26,6 @@ export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
   return (
     <View style={styles.mapView}>
       <MapboxGL.MapView
-        ref={mapViewRef}
         style={styles.map}
         scrollEnabled={false}
         rotateEnabled={false}
@@ -41,7 +37,6 @@ export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
         compassEnabled={false}
       >
         <MapboxGL.Camera
-          ref={mapCameraRef}
           bounds={bounds}
           {...MapCameraConfig}
           animationDuration={0}
