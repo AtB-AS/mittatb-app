@@ -37,6 +37,7 @@ export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
         onWillStartRenderingMap={() => log('Start loading map')}
         onDidFinishRenderingMapFully={() => log('Finished loading map')}
         {...MapViewConfig}
+        styleURL={undefined}
         compassEnabled={false}
       >
         <MapboxGL.Camera
