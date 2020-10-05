@@ -23,6 +23,12 @@ export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
   const endPoint = pointOf(legs[legs.length - 1].toPlace);
   const bounds = getMapBounds(features);
 
+  const [loadingMap, setLoadingMap] = useState(true);
+
+  const expandMap = () => {
+    if (!loadingMap) onExpand();
+  };
+
   return (
     <View style={styles.mapView}>
       <MapboxGL.MapView
@@ -31,7 +37,10 @@ export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
         rotateEnabled={false}
         zoomEnabled={false}
         onWillStartRenderingMap={() => log('Start loading map')}
-        onDidFinishRenderingMapFully={() => log('Finished loading map')}
+        onDidFinishRenderingMapFully={() => {
+          setLoadingMap(false);
+          log('Finished loading map');
+        }}
         {...MapViewConfig}
         styleURL={undefined}
         compassEnabled={false}
@@ -49,7 +58,7 @@ export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
       <View style={styles.togglerContainer}>
         <TouchableOpacity
           style={styles.toggler}
-          onPress={onExpand}
+          onPress={expandMap}
           hitSlop={insets.symmetric(8, 12)}
         >
           <Text style={styles.toggleText}>Utvid kart</Text>
