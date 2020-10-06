@@ -37,7 +37,7 @@ type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
   onShowMoreOnQuay?(quayId: string): void;
   isFetchingMore?: boolean;
-
+  error?: string;
   isInitialScreen: boolean;
 };
 
@@ -45,7 +45,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
   departures,
   onShowMoreOnQuay,
   isFetchingMore = false,
-
+  error,
   isInitialScreen,
 }) => {
   const styles = useResultsStyle();
@@ -62,9 +62,11 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
   if (isInitialScreen) {
     return (
       <View style={styles.container}>
-        <Text style={styles.centerText}>
-          Søk etter avganger fra holdeplasser eller i nærheten av steder.
-        </Text>
+        <MessageBox type="info">
+          <Text>
+            Søk etter avganger fra holdeplasser eller i nærheten av steder.
+          </Text>
+        </MessageBox>
       </View>
     );
   }
@@ -79,21 +81,29 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
     );
   }
 
-  if (departures === null) {
-    return null;
-  }
-
   return (
     <View style={styles.container}>
-      {departures.map((item) => (
-        <StopDepartures
-          key={item.stop.id}
-          departures={item}
-          onPress={onPress}
-          onShowMoreOnQuay={onShowMoreOnQuay}
+      {error && (
+        <MessageBox
+          type="warning"
+          message={error}
+          containerStyle={{marginBottom: 24}}
         />
-      ))}
-      <FooterLoader isFetchingMore={isFetchingMore} />
+      )}
+
+      {departures && (
+        <>
+          {departures.map((item) => (
+            <StopDepartures
+              key={item.stop.id}
+              departures={item}
+              onPress={onPress}
+              onShowMoreOnQuay={onShowMoreOnQuay}
+            />
+          ))}
+          <FooterLoader isFetchingMore={isFetchingMore} />
+        </>
+      )}
     </View>
   );
 };
