@@ -18,6 +18,8 @@ import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
 import {Close} from '../assets/svg/icons/actions';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useGeocoder} from '../geocoder';
+import MessageBox from '../message-box';
+import {ErrorType} from '../api/utils';
 
 export type Props = {
   navigation: LocationSearchNavigationProp;
@@ -57,7 +59,7 @@ const LocationSearch: React.FC<Props> = ({
     requestPermission: requestGeoPermission,
   } = useGeolocationState();
 
-  const {locations} =
+  const {locations, error} =
     useGeocoder(debouncedText, geolocation?.coords ?? null) ?? [];
   const filteredLocations = filterCurrentLocation(locations, previousLocations);
 
@@ -151,6 +153,16 @@ const LocationSearch: React.FC<Props> = ({
           />
         </View>
 
+        {error && (
+          <View style={styles.contentBlock}>
+            <MessageBox
+              type="warning"
+              message={translateErrorType(error)}
+              containerStyle={{marginBottom: 12}}
+            />
+          </View>
+        )}
+
         {hasAnyResult ? (
           <ScrollView
             style={styles.scroll}
@@ -176,14 +188,28 @@ const LocationSearch: React.FC<Props> = ({
             )}
           </ScrollView>
         ) : (
-          <View style={styles.contentBlock}>
-            <Text>Fant ingen søkeresultat</Text>
-          </View>
+          !error && (
+            <View style={styles.contentBlock}>
+              <MessageBox type="info">
+                <Text>Fant ingen søkeresultat</Text>
+              </MessageBox>
+            </View>
+          )
         )}
       </View>
     </SafeAreaView>
   );
 };
+
+function translateErrorType(errorType: ErrorType): string {
+  switch (errorType) {
+    case 'network-error':
+    case 'timeout':
+      return 'Oisann vi sliter litt med nettforbindelsen. Prøv igjen du.';
+    default:
+      return 'Det oppstod en feil ved søk.';
+  }
+}
 
 const filterPreviousLocations = (
   searchText: string,
