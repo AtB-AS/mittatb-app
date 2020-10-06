@@ -44,17 +44,17 @@ const useDayTextStyle = StyleSheet.createThemeHook((theme) => ({
 }));
 function getHumanizedDepartureDatePrefixed(
   departureDate: Date,
-  suffix: string,
+  appendix: string,
 ) {
   const days = daysBetween(new Date(), departureDate);
   if (days === 0) {
     return 'I dag';
   }
   if (days == 1) {
-    return `I morgen - ${suffix}`;
+    return `I morgen - ${appendix}`;
   }
   if (days == 2) {
-    return `I overmorgen - ${suffix}`;
+    return `I overmorgen - ${appendix}`;
   }
-  return suffix;
+  return appendix;
 }
