@@ -19,12 +19,14 @@ import {useReverseGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
 import {TabNavigatorParams} from '../navigation/TabNavigator';
 import colors from '../theme/colors';
+import {screenreaderPause} from '../components/accessible-text';
 
 type Props = {
   onSelectLocation: (location: LocationWithMetadata) => void;
   onMapSelection?: () => void;
   containerStyle?: StyleProp<ViewStyle>;
   chipTypes?: ChipTypeGroup[];
+  chipActionHint?: string;
 };
 
 export type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
@@ -38,6 +40,7 @@ const FavoriteChips: React.FC<Props> = ({
   containerStyle,
   onMapSelection = () => {},
   chipTypes = ['favorites', 'location', 'map'],
+  chipActionHint,
 }) => {
   const navigation = useNavigation<ProfileNearbyScreenNavigationProp>();
   const {favorites} = useFavorites();
@@ -47,9 +50,8 @@ const FavoriteChips: React.FC<Props> = ({
 
   return (
     <ScrollView
-      accessibilityRole="menu"
       accessible={true}
-      accessibilityLabel="Favorittsteder"
+      accessibilityLabel="Favoritter"
       horizontal={true}
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={containerStyle}
@@ -58,7 +60,8 @@ const FavoriteChips: React.FC<Props> = ({
       {activeType('location') && (
         <FavoriteChip
           text="Posisjon"
-          accessibilityRole="menuitem"
+          accessibilityRole="button"
+          accessibilityHint={chipActionHint ?? ''}
           icon={<CurrentLocationArrow fill={colors.general.white} />}
           onPress={onCurrentLocation}
           mode="dark"
@@ -67,7 +70,7 @@ const FavoriteChips: React.FC<Props> = ({
       {activeType('map') && (
         <FavoriteChip
           text="Velg i kart"
-          accessibilityRole="menuitem"
+          accessibilityRole="button"
           icon={<MapPointPin fill={colors.general.white} />}
           onPress={onMapSelection}
           mode="dark"
@@ -78,7 +81,9 @@ const FavoriteChips: React.FC<Props> = ({
           <FavoriteChip
             key={fav.name}
             text={fav.name}
-            accessibilityRole="menuitem"
+            accessibilityLabel={'Favoritt: ' + fav.name + screenreaderPause}
+            accessibilityRole="button"
+            accessibilityHint={chipActionHint ?? ''}
             icon={<FavoriteIcon favorite={fav} />}
             onPress={() =>
               onSelectLocation({
@@ -97,7 +102,7 @@ const FavoriteChips: React.FC<Props> = ({
       {activeType('add-favorite') && (
         <FavoriteChip
           text={'Legg til favoritt'}
-          accessibilityRole="menuitem"
+          accessibilityRole="button"
           icon={<Add />}
           mode="light"
           onPress={() =>

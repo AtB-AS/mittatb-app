@@ -255,6 +255,11 @@ const Assistant: React.FC<Props> = ({
               chipTypes={['favorites', 'add-favorite']}
               onSelectLocation={fillNextAvailableLocation}
               containerStyle={styles.chipBox}
+              chipActionHint={
+                'Aktiver for å bruke som ' +
+                (from ? 'destinasjon' : 'avreisested') +
+                screenreaderPause
+              }
             />
           </Fade>
 

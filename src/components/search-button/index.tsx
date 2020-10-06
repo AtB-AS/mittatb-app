@@ -64,7 +64,7 @@ export const LocationButton: React.FC<LocationButtonProps> = ({
 
   if (currentValueLabel) {
     props.accessibilityValue = {
-      text: currentValueLabel + ' er valgt' + screenreaderPause,
+      text: currentValueLabel + ' er valgt.' + screenreaderPause,
     };
   }
   return <SearchButton text={currentValueLabel} {...props} />;
