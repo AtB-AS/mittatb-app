@@ -1,27 +1,22 @@
 import {AxiosError} from 'axios';
 import {RequestIdHeaderName} from './headers';
 
-export enum ErrorType {
-  Unknown,
-  Normal,
-  NetworkError,
-  Timeout,
-}
+export type ErrorType = 'unknown' | 'default' | 'network-error' | 'timeout';
 
 export const getAxiosErrorType = (error: AxiosError): ErrorType => {
   if (error) {
     if (error.response) {
-      return ErrorType.Normal;
+      return 'default';
     } else {
       if (error.code === 'ECONNABORTED') {
-        return ErrorType.Timeout;
+        return 'timeout';
       } else {
-        return ErrorType.NetworkError;
+        return 'network-error';
       }
     }
   }
 
-  return ErrorType.Unknown;
+  return 'unknown';
 };
 
 export interface ErrorMetadata {
