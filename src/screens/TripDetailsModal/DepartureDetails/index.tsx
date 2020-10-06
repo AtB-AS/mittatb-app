@@ -62,7 +62,9 @@ export default function DepartureDetails({navigation, route}: Props) {
   ] = useDepartureData(serviceJourneyId, fromQuayId, toQuayId, 30);
 
   const content = isLoading ? (
-    <ActivityIndicator animating={true} size="large" style={styles.spinner} />
+    <View accessibilityLabel={'Laster søkeresultat'} accessible={true}>
+      <ActivityIndicator style={styles.spinner} animating={true} size="large" />
+    </View>
   ) : (
     <ScrollView style={styles.scrollView}>
       <SituationMessages
