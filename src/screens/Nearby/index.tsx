@@ -247,6 +247,7 @@ type LoadType = 'initial' | 'more';
 type DepartureDataState = {
   departures: DeparturesWithStopLocal[] | null;
   error?: {type: ErrorType; loadType: LoadType};
+  locationId?: string;
   isLoading: boolean;
   isFetchingMore: boolean;
   queryInput: DeparturesInputQuery;
@@ -265,6 +266,7 @@ const initialPaging = {
 const initialState: DepartureDataState = {
   departures: null,
   error: undefined,
+  locationId: undefined,
   isLoading: false,
   isFetchingMore: false,
   paging: initialPaging,
@@ -292,6 +294,7 @@ type DepartureDataActions =
     }
   | {
       type: 'UPDATE_DEPARTURES';
+      locationId?: string;
       reset?: boolean;
       paginationData: Paginated<DeparturesWithStop[]>;
     }
@@ -299,6 +302,7 @@ type DepartureDataActions =
       type: 'SET_ERROR';
       loadType: LoadType;
       error: ErrorType;
+      reset?: boolean;
     }
   | {
       type: 'UPDATE_REALTIME';
@@ -339,11 +343,13 @@ const reducer: ReducerWithSideEffects<
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
+              locationId: action.location?.id,
               paginationData,
             });
           } catch (e) {
             dispatch({
               type: 'SET_ERROR',
+              reset: action.location?.id !== state.locationId,
               loadType: 'initial',
               error: getAxiosErrorType(e),
             });
@@ -371,6 +377,7 @@ const reducer: ReducerWithSideEffects<
 
             dispatch({
               type: 'UPDATE_DEPARTURES',
+              locationId: action.location?.id,
               paginationData,
             });
           } catch (e) {
@@ -432,6 +439,7 @@ const reducer: ReducerWithSideEffects<
       return Update({
         ...state,
         isLoading: false,
+        locationId: action.locationId,
         departures: action.reset
           ? mapQuayDeparturesToShowlimits(
               action.paginationData.data,
@@ -473,6 +481,7 @@ const reducer: ReducerWithSideEffects<
           type: action.error,
           loadType: action.loadType,
         },
+        departures: action.reset ? null : state.departures,
       });
     }
 
