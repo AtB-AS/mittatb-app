@@ -1,6 +1,5 @@
 import {LegMode} from '@entur/sdk';
 import MapboxGL, {LineLayerStyle} from '@react-native-mapbox-gl/maps';
-import {LineString} from 'geojson';
 import React from 'react';
 import {View} from 'react-native';
 import {transportationMapLineColor} from '../../../utils/transportation-color';
@@ -13,7 +12,7 @@ const MapRoute: React.FC<{lines: MapLine[]}> = ({lines}) => {
     };
   }
   function getFirstPoint(line: MapLine) {
-    const coordinates = (line.geometry as LineString).coordinates;
+    const coordinates = line.geometry.coordinates;
     return pointOf(coordinates[0]);
   }
   return (

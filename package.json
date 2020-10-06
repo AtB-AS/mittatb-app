@@ -2,6 +2,7 @@
   "name": "atb",
   "version": "0.0.1",
   "private": true,
+  "license": "EUPL-1.2",
   "scripts": {
     "android": "react-native run-android --appIdSuffix debug",
     "ios": "react-native run-ios",

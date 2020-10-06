@@ -1,21 +1,21 @@
 import polyline from '@mapbox/polyline';
-import {Feature, Point, Position} from 'geojson';
+import {Feature, LineString, Point, Position} from 'geojson';
 import {Leg, LegMode, Place} from '../../../sdk';
 import {flatMap} from '../../../utils/array';
 
-export interface MapLine extends Feature {
+export interface MapLine extends Feature<LineString> {
   travelType?: LegMode;
   publicCode?: string;
 }
 
 export function getMapBounds(features: MapLine[]) {
-  const lineLongitudes = flatMap(features, (f) =>
-    f.geometry.type === 'LineString' ? f.geometry.coordinates : [],
-  ).map(([lon, _]) => lon);
+  const lineLongitudes = flatMap(features, (f) => f.geometry.coordinates).map(
+    ([lon, _]) => lon,
+  );
 
-  const lineLatitudes = flatMap(features, (f) =>
-    f.geometry.type === 'LineString' ? f.geometry.coordinates : [],
-  ).map(([_, lat]) => lat);
+  const lineLatitudes = flatMap(features, (f) => f.geometry.coordinates).map(
+    ([_, lat]) => lat,
+  );
 
   const westernMost = Math.min(...lineLongitudes);
   const easternMost = Math.max(...lineLongitudes);
@@ -38,20 +38,22 @@ export function getMapBounds(features: MapLine[]) {
   };
 }
 export function legsToMapLines(legs: Leg[]): MapLine[] {
-  return legs.map((leg) => {
-    const line = polyline.toGeoJSON(leg.pointsOnLink?.points);
-    return {
-      type: 'Feature',
-      properties: {},
-      travelType: leg.mode,
-      publicCode: leg.line?.publicCode,
-      geometry: line,
-    };
-  });
+  return legs
+    .filter((leg) => leg.pointsOnLink?.points?.trim()?.length) // only include legs with line geometry
+    .map((leg) => {
+      const line = polyline.toGeoJSON(leg.pointsOnLink?.points);
+      return {
+        type: 'Feature',
+        properties: {},
+        travelType: leg.mode,
+        publicCode: leg.line?.publicCode,
+        geometry: line,
+      };
+    });
 }
 export function pointOf(place: Place): Point;
 export function pointOf(coordinates: Position): Point;
-export function pointOf(placing: any): Point {
+export function pointOf(placing: Place | Position): Point {
   let coords: Position;
   if (Array.isArray(placing)) {
     coords = placing;

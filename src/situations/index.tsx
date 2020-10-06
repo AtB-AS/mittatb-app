@@ -49,19 +49,20 @@ export function SituationWarningIcon({
 }
 
 export function hasSituations(situations: Situation[]) {
-  return situations.some((s) => s.description.length);
+  return situations?.some((s) => s.description.length) ?? false;
 }
 
 export function getSituationDiff(situations: Situation[], parent: Situation[]) {
-  const notInParent = situations.filter((situation) => {
-    return parent.every(
-      (pSituation) => pSituation.situationNumber != situation.situationNumber,
-    );
-  });
+  const notInParent =
+    situations?.filter((situation) => {
+      return parent.every(
+        (pSituation) => pSituation.situationNumber != situation.situationNumber,
+      );
+    }) ?? [];
   return notInParent;
 }
 
-export function getUniqueSituations(situations: Situation[]) {
+export function getUniqueSituations(situations: Situation[] = []) {
   let uniqueSituations: {[id: string]: string} = {};
   for (let situation of situations) {
     if (uniqueSituations[situation.situationNumber]) continue;
