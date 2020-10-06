@@ -46,7 +46,6 @@ import {useReverseGeocoder} from '../../geocoder';
 import {useLocationSearchValue} from '../../location-search';
 import {HOME_TAB_NAME} from '../../utils/navigation';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
-import {tr} from 'date-fns/locale';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
