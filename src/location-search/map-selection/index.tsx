@@ -151,6 +151,7 @@ const MapSelection: React.FC<Props> = ({
           location={location}
           onSelect={onSelect}
           isSearching={!!regionEvent?.isMoving || isSearching}
+          error={error}
         />
       </View>
       <View style={controlStyles.controlsContainer}>
