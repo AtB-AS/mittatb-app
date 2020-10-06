@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, TouchableOpacity} from 'react-native';
+import {Text, View, TouchableOpacity, AccessibilityProps} from 'react-native';
 import {Leg, TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {
@@ -9,6 +9,7 @@ import {
   secondsToMinutesShort,
   formatToClockOrRelativeMinutes,
   missingRealtimePrefix,
+  formatToClock,
 } from '../../utils/date';
 import TransportationIcon from '../../components/transportation-icon';
 import insets from '../../utils/insets';
@@ -17,7 +18,9 @@ import {DestinationFlag} from '../../assets/svg/icons/places';
 import {LegMode} from '@entur/sdk';
 import colors from '../../theme/colors';
 import {Duration} from '../../assets/svg/icons/transportation';
-import AccessibleText from '../../components/accessible-text';
+import AccessibleText, {
+  screenreaderPause,
+} from '../../components/accessible-text';
 import {SituationWarningIcon} from '../../situations';
 import {flatMap} from '../../utils/array';
 
@@ -80,9 +83,10 @@ const ResultItemHeader: React.FC<{
   );
 };
 
-const ResultItem: React.FC<ResultItemProps> = ({
+const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   tripPattern,
   onDetailsPressed,
+  ...props
 }) => {
   const styles = useThemeStyles();
 
@@ -93,6 +97,8 @@ const ResultItem: React.FC<ResultItemProps> = ({
       style={{paddingVertical: 4}}
       onPress={() => onDetailsPressed(tripPattern)}
       hitSlop={insets.symmetric(8, 16)}
+      accessibilityValue={{text: screenreaderSummary(tripPattern)}}
+      {...props}
     >
       <View style={styles.result}>
         <ResultItemHeader tripPattern={tripPattern} />
@@ -311,5 +317,45 @@ function LineDisplayName({leg}: {leg: Leg}) {
     </Text>
   );
 }
+
+const screenreaderSummary = (tripPattern: TripPattern) => {
+  const hasSituations = flatMap(tripPattern.legs, (leg) => leg.situations)
+    .length;
+
+  const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
+  const startLeg = !nonFootLegs.length ? tripPattern.legs[0] : nonFootLegs[0];
+
+  return `
+  ${
+    hasSituations
+      ? `Driftsmeldinger gjelder for dette forslaget. ${screenreaderPause} `
+      : ''
+  }
+  Fra klokken ${formatToClock(tripPattern.startTime)} ${screenreaderPause} til 
+    ${formatToClock(tripPattern.endTime)}. ${screenreaderPause}
+    Reisetid: ${secondsToDuration(tripPattern.duration)} ${screenreaderPause}
+    ${
+      !nonFootLegs.length
+        ? 'Hele reisen til fots'
+        : nonFootLegs.length === 1
+        ? 'Ingen bytter'
+        : nonFootLegs.length === 2
+        ? 'Étt bytte'
+        : nonFootLegs.length + 'bytter'
+    }. ${screenreaderPause}
+    ${nonFootLegs
+      ?.map((l) => {
+        return `${l.mode} ${l.line ? 'nummer ' + l.line.publicCode : ''}`;
+      })
+      .join(', ')} ${screenreaderPause}
+      Totalt ${tripPattern.walkDistance.toFixed(
+        0,
+      )} meter å gå. ${screenreaderPause}
+      Fra ${startLeg.fromPlace?.name}, klokken ${formatToClock(
+    startLeg.expectedStartTime,
+  )}. ${screenreaderPause}
+      Aktiver for å vise detaljert reiserute.
+  `;
+};
 
 export default ResultItem;

@@ -22,7 +22,7 @@ const AccessibleText = ({
       } ${pauseAfter ? screenreaderPause : ' '}`}
       {...props}
     >
-      {children}
+      {children ?? ' '}
     </Text>
   );
 };
