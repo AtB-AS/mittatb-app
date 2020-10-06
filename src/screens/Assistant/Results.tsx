@@ -7,6 +7,7 @@ import ResultItem from './ResultItem';
 import OptionalNextDayLabel from '../../components/optional-day-header';
 import {isSeveralDays} from '../../utils/date';
 import {NoResultReason} from './types';
+import {ErrorType} from '../../api/utils';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
@@ -15,6 +16,7 @@ type Props = {
   isSearching: boolean;
   resultReasons: NoResultReason[];
   onDetailsPressed(tripPattern: TripPattern): void;
+  errorType?: ErrorType;
 };
 
 export type ResultTabParams = {
@@ -27,6 +29,7 @@ const Results: React.FC<Props> = ({
   isEmptyResult,
   resultReasons,
   onDetailsPressed,
+  errorType,
 }) => {
   const {theme} = useTheme();
   const styles = useThemeStyles(theme);
@@ -38,6 +41,17 @@ const Results: React.FC<Props> = ({
 
   if (showEmptyScreen) {
     return null;
+  }
+
+  if (errorType) {
+    return (
+      <View style={styles.container}>
+        <MessageBox
+          type="warning"
+          message={translateErrorType(errorType)}
+        ></MessageBox>
+      </View>
+    );
   }
 
   if (isEmptyResult) {
@@ -96,3 +110,13 @@ const useThemeStyles = StyleSheet.createTheme(() => ({
   },
   infoBoxText: {fontSize: 16},
 }));
+
+function translateErrorType(errorType: ErrorType): string {
+  switch (errorType) {
+    case 'network-error':
+    case 'timeout':
+      return 'Klarte ikke å søke opp reiseruter grunnet dårlig nettforbindelse. Har du skrudd på mobildata?';
+    default:
+      return 'Det oppstod en feil ved søk av reiseruter. Vennligst prøv igjen.';
+  }
+}
