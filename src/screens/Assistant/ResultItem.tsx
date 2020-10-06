@@ -17,7 +17,7 @@ import {DestinationFlag} from '../../assets/svg/icons/places';
 import {LegMode} from '@entur/sdk';
 import colors from '../../theme/colors';
 import {Duration} from '../../assets/svg/icons/transportation';
-import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
+import AccessibleText from '../../components/accessible-text';
 import {SituationWarningIcon} from '../../situations';
 import {flatMap} from '../../utils/array';
 
@@ -68,9 +68,7 @@ const ResultItemHeader: React.FC<{
         {formatToClockOrRelativeMinutes(quayStartTime)}
       </Text>
       <View style={styles.durationContainer}>
-        <TextHiddenSupportPrefix prefix="Reisetid">
-          {durationText}
-        </TextHiddenSupportPrefix>
+        <AccessibleText prefix="Reisetid">{durationText}</AccessibleText>
       </View>
 
       <SituationWarningIcon

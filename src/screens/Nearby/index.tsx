@@ -41,7 +41,7 @@ import {
 } from './utils';
 import insets from '../../utils/insets';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
-import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
+import AccessibleText from '../../components/accessible-text';
 import {useReverseGeocoder} from '../../geocoder';
 import {useLocationSearchValue} from '../../location-search';
 import {HOME_TAB_NAME} from '../../utils/navigation';
@@ -189,12 +189,9 @@ const NearbyOverview: React.FC<Props> = ({
         accessibilityLabel: 'Gå til startskjerm',
       }}
       alternativeTitleComponent={
-        <TextHiddenSupportPrefix
-          prefix="Avganger fra"
-          style={styles.altTitleHeader}
-        >
+        <AccessibleText prefix="Avganger fra" style={styles.altTitleHeader}>
           {fromLocation?.name}
-        </TextHiddenSupportPrefix>
+        </AccessibleText>
       }
       onEndReached={loadMore}
     >

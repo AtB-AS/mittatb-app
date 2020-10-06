@@ -40,6 +40,7 @@ import FavoriteChips from '../../favorite-chips';
 
 import Animated, {Easing} from 'react-native-reanimated';
 import Bugsnag from '@bugsnag/react-native';
+import {screenreaderPause} from '../../components/accessible-text';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -184,7 +185,11 @@ const Assistant: React.FC<Props> = ({
             <View style={styles.styleButton}>
               <LocationButton
                 accessible={true}
-                accessibilityLabel="Velg avreisested."
+                accessibilityLabel={'Velg avreisested' + screenreaderPause}
+                accessibilityHint={
+                  'Aktiver for å søke etter adresse eller sted.' +
+                  screenreaderPause
+                }
                 accessibilityRole="button"
                 title="Fra"
                 placeholder="Søk etter adresse eller sted"
@@ -195,7 +200,11 @@ const Assistant: React.FC<Props> = ({
 
             <TouchableOpacity
               accessible={true}
-              accessibilityLabel="Bruk min posisjon som avreisested."
+              accessibilityLabel={
+                from?.resultType == 'geolocation'
+                  ? 'Oppdater posisjon.'
+                  : 'Bruk posisjon som avreisested.'
+              }
               accessibilityRole="button"
               hitSlop={insets.all(12)}
               onPress={setCurrentLocationOrRequest}
@@ -208,7 +217,11 @@ const Assistant: React.FC<Props> = ({
             <View style={styles.styleButton}>
               <LocationButton
                 accessible={true}
-                accessibilityLabel="Velg ankomststed."
+                accessibilityLabel={'Velg ankomststed' + screenreaderPause}
+                accessibilityHint={
+                  'Aktiver for å søke etter adresse eller sted.' +
+                  screenreaderPause
+                }
                 accessibilityRole="button"
                 title="Til"
                 placeholder="Søk etter adresse eller sted"
@@ -222,7 +235,9 @@ const Assistant: React.FC<Props> = ({
                 onPress={swap}
                 hitSlop={insets.all(12)}
                 accessible={true}
-                accessibilityLabel="Bytt om på avreisested og ankomststed"
+                accessibilityLabel={
+                  'Bytt avreisested og ankomststed' + screenreaderPause
+                }
                 accessibilityRole="button"
               >
                 <Swap />
