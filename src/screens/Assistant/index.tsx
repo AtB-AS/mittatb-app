@@ -40,7 +40,9 @@ import FavoriteChips from '../../favorite-chips';
 
 import Animated, {Easing} from 'react-native-reanimated';
 import Bugsnag from '@bugsnag/react-native';
-import {screenreaderPause} from '../../components/accessible-text';
+import AccessibleText, {
+  screenreaderPause,
+} from '../../components/accessible-text';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -275,6 +277,13 @@ const Assistant: React.FC<Props> = ({
               />
             </SearchGroup>
           </Fade>
+          <View accessible={true} accessibilityLiveRegion="polite">
+            <AccessibleText
+              prefix={
+                isSearching ? 'Laster søkeresultat' : 'Søkeresultat innlastet'
+              }
+            />
+          </View>
         </View>
       </View>
     ),
