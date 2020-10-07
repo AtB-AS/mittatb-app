@@ -4,6 +4,7 @@ import {Coordinates} from '../sdk';
 import {reverse} from '../api';
 import {mapFeatureToLocation} from './utils';
 import useGeocoderReducer, {GeocoderState} from './use-geocoder-reducer';
+import {getAxiosErrorType} from '../api/utils';
 
 export default function useReverseGeocoder(
   coords: Coordinates | null,
@@ -28,7 +29,7 @@ export default function useReverseGeocoder(
         } catch (err) {
           if (!isCancel(err)) {
             console.warn(err);
-            dispatch({type: 'SET_HAS_ERROR'});
+            dispatch({type: 'SET_ERROR', error: getAxiosErrorType(err)});
           } else {
             dispatch({type: 'SET_LOCATIONS', locations: null});
           }
