@@ -175,7 +175,7 @@ const Assistant: React.FC<Props> = ({
 
   const showEmptyScreen = !tripPatterns && !isSearching && !errorType;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
-  const useScroll = !showEmptyScreen;
+  const useScroll = (!showEmptyScreen && !isEmptyResult) || !!errorType;
   const isHeaderFullHeight = !from || !to;
 
   const renderHeader = useCallback(
