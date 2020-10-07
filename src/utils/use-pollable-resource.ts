@@ -2,11 +2,12 @@ import {useState, useCallback, useEffect} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import useInterval from './use-interval';
 
-type PollableResourceOptions<T> = {
+type PollableResourceOptions<T, E> = {
   initialValue: T;
   pollingTimeInSeconds?: number;
   skipRun?(): boolean;
   disabled?: boolean;
+  filterError?(error: E): boolean;
 };
 
 /**
@@ -17,16 +18,16 @@ type PollableResourceOptions<T> = {
  *
  * @param callback: () => Promise<T>
  * @param opts: PollableResourceOptions<T>
- * @returns [T, () => Promise<void>, boolean]
+ * @returns [T, () => Promise<void>, boolean, E]
  */
-export default function usePollableResource<T>(
+export default function usePollableResource<T, E extends Error = Error>(
   callback: () => Promise<T>,
-  opts: PollableResourceOptions<T>,
-): [T, () => Promise<void>, boolean, Error?] {
-  const {initialValue, pollingTimeInSeconds = 30, skipRun} = opts;
+  opts: PollableResourceOptions<T, E>,
+): [T, () => Promise<void>, boolean, E?] {
+  const {initialValue, pollingTimeInSeconds = 30, skipRun, filterError} = opts;
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<Error | undefined>(undefined);
+  const [error, setError] = useState<E | undefined>(undefined);
   const [state, setState] = useState<T>(initialValue);
   const pollTime = pollingTimeInSeconds * 1000;
   const isFocused = useIsFocused();
@@ -52,7 +53,7 @@ export default function usePollableResource<T>(
         const newState = await callback();
         setState(newState);
       } catch (e) {
-        setError(e);
+        if (!filterError || filterError(e)) setError(e);
       } finally {
         if (loading === 'WITH_LOADING') {
           setIsLoading(false);
