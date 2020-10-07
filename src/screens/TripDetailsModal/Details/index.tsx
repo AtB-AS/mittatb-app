@@ -3,11 +3,13 @@ import {
   RouteProp,
   useNavigation,
 } from '@react-navigation/native';
+import Axios, {AxiosError} from 'axios';
 import React, {useCallback, useState} from 'react';
 import {ActivityIndicator, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {DetailsModalNavigationProp, DetailsModalStackParams} from '..';
 import {getSingleTripPattern} from '../../../api/trips';
+import {getAxiosErrorType} from '../../../api/utils';
 import {ArrowLeft} from '../../../assets/svg/icons/navigation';
 import {Dot} from '../../../assets/svg/icons/other/';
 import {
@@ -101,7 +103,7 @@ const DetailsContent: React.FC<{
   tripPattern: TripPattern;
   from: LocationWithMetadata;
   to: LocationWithMetadata;
-  error: Error | undefined;
+  error: AxiosError | undefined;
 }> = ({tripPattern, from, to, error}) => {
   const styles = useDetailsStyle();
   const {favorites} = useFavorites();
@@ -151,12 +153,11 @@ const DetailsContent: React.FC<{
           />
         )}
         {error && (
-          <MessageBox type="warning">
-            <Text>
-              Kunne ikke hente ut oppdatering for reiseforslaget. Det kan være
-              at reisen har endret seg eller ikke lengre er tilgjengelig.
-            </Text>
-          </MessageBox>
+          <MessageBox
+            type="warning"
+            containerStyle={styles.messageContainer}
+            message={translateError(error)}
+          />
         )}
         {legIsWalk(startLeg) && (
           <LocationRow
@@ -191,6 +192,17 @@ const DetailsContent: React.FC<{
     </>
   );
 };
+
+function translateError(error: AxiosError): string {
+  const errorType = getAxiosErrorType(error);
+  switch (errorType) {
+    case 'network-error':
+    case 'timeout':
+      return 'Kunne ikke hente ut oppdatering for reiseforslaget grunnet dårlig nettforbindelse.';
+    default:
+      return 'Kunne ikke hente ut oppdatering for reiseforslaget. Det kan være at reisen har endret seg eller ikke lengre er tilgjengelig.';
+  }
+}
 
 function getLocationIcon(location: LocationWithMetadata) {
   switch (location.resultType) {
@@ -279,8 +291,9 @@ function useTripPattern(
     },
     [tripPatternId],
   );
-  return usePollableResource<TripPattern | null>(fetchTripPattern, {
+  return usePollableResource<TripPattern | null, AxiosError>(fetchTripPattern, {
     initialValue: initialTripPattern ?? null,
     pollingTimeInSeconds: 60,
+    filterError: (err) => !Axios.isCancel(err),
   });
 }

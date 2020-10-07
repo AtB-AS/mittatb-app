@@ -34,17 +34,17 @@ function requestHandler(config: AxiosRequestConfig): AxiosRequestConfig {
 function responseErrorHandler(error: AxiosError) {
   const errorType = getAxiosErrorType(error);
   switch (errorType) {
-    case ErrorType.Normal:
+    case 'default':
       const errorMetadata = getAxiosErrorMetadata(error);
       Bugsnag.notify(error, (event) => {
         event.addMetadata('api', {...errorMetadata});
       });
       break;
-    case ErrorType.Unknown:
+    case 'unknown':
       Bugsnag.notify(error);
       break;
-    case ErrorType.NetworkError:
-    case ErrorType.Timeout:
+    case 'network-error':
+    case 'timeout':
       if (!isCancel(error)) {
         // This happens all the time in mobile apps,
         // so will be a lot of noise if we choose to report these

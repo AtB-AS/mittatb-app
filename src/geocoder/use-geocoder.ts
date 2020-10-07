@@ -4,6 +4,7 @@ import {Coordinates} from '../sdk';
 import {autocomplete} from '../api';
 import useGeocoderReducer, {GeocoderState} from './use-geocoder-reducer';
 import {mapFeatureToLocation} from './utils';
+import {getAxiosErrorType} from '../api/utils';
 
 export default function useGeocoder(
   text: string | null,
@@ -30,7 +31,7 @@ export default function useGeocoder(
         } catch (err) {
           if (!isCancel(err)) {
             console.warn(err);
-            dispatch({type: 'SET_HAS_ERROR'});
+            dispatch({type: 'SET_ERROR', error: getAxiosErrorType(err)});
           } else {
             dispatch({type: 'SET_LOCATIONS', locations: null});
           }

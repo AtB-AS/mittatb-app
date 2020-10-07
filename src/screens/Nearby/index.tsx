@@ -45,6 +45,7 @@ import AccessibleText from '../../components/accessible-text';
 import {useReverseGeocoder} from '../../geocoder';
 import {useLocationSearchValue} from '../../location-search';
 import {HOME_TAB_NAME} from '../../utils/navigation';
+import {ErrorType, getAxiosErrorType} from '../../api/utils';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
@@ -113,10 +114,12 @@ const NearbyOverview: React.FC<Props> = ({
   const {state, refresh, loadMore, showMoreOnQuay} = useDepartureData(
     fromLocation,
   );
-  const {departures, isLoading, isFetchingMore} = state;
+  const {departures, isLoading, isFetchingMore, error} = state;
 
-  const isInitialScreen = departures == null && !isLoading;
-  const activateScroll = !isInitialScreen;
+  const isInitialScreen = departures == null && !isLoading && !error;
+  const activateScroll = !isInitialScreen || !!error;
+
+  const onScrollViewEndReached = () => departures?.length && loadMore();
 
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {
@@ -193,17 +196,30 @@ const NearbyOverview: React.FC<Props> = ({
           {fromLocation?.name}
         </AccessibleText>
       }
-      onEndReached={loadMore}
+      onEndReached={onScrollViewEndReached}
     >
       <NearbyResults
         departures={departures}
         onShowMoreOnQuay={showMoreOnQuay}
         isFetchingMore={isFetchingMore && !isLoading}
         isInitialScreen={isInitialScreen}
+        error={
+          error ? translateErrorType(error.type, error.loadType) : undefined
+        }
       />
     </DisappearingHeader>
   );
 };
+
+function translateErrorType(errorType: ErrorType, loadType: LoadType): string {
+  switch (errorType) {
+    case 'network-error':
+    case 'timeout':
+      return 'Klarte ikke å oppdatere avganger grunnet dårlig nettforbindelse. Har du skrudd på mobildata?';
+    default:
+      return 'Det oppstod en feil ved søk på avganger. Vennligst prøv igjen.';
+  }
+}
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   altTitleHeader: {
@@ -222,8 +238,12 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
 
 export default NearbyScreen;
 
+type LoadType = 'initial' | 'more';
+
 type DepartureDataState = {
   departures: DeparturesWithStopLocal[] | null;
+  error?: {type: ErrorType; loadType: LoadType};
+  locationId?: string;
   isLoading: boolean;
   isFetchingMore: boolean;
   queryInput: DeparturesInputQuery;
@@ -241,6 +261,8 @@ const initialPaging = {
 };
 const initialState: DepartureDataState = {
   departures: null,
+  error: undefined,
+  locationId: undefined,
   isLoading: false,
   isFetchingMore: false,
   paging: initialPaging,
@@ -268,8 +290,15 @@ type DepartureDataActions =
     }
   | {
       type: 'UPDATE_DEPARTURES';
+      locationId?: string;
       reset?: boolean;
       paginationData: Paginated<DeparturesWithStop[]>;
+    }
+  | {
+      type: 'SET_ERROR';
+      loadType: LoadType;
+      error: ErrorType;
+      reset?: boolean;
     }
   | {
       type: 'UPDATE_REALTIME';
@@ -292,7 +321,13 @@ const reducer: ReducerWithSideEffects<
       };
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
-        {...state, isLoading: true, isFetchingMore: true, queryInput},
+        {
+          ...state,
+          isLoading: true,
+          error: undefined,
+          isFetchingMore: true,
+          queryInput,
+        },
         async (_, dispatch) => {
           try {
             // Fresh fetch, reset paging and use new query input with new startTime
@@ -304,7 +339,15 @@ const reducer: ReducerWithSideEffects<
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
+              locationId: action.location?.id,
               paginationData,
+            });
+          } catch (e) {
+            dispatch({
+              type: 'SET_ERROR',
+              reset: action.location?.id !== state.locationId,
+              loadType: 'initial',
+              error: getAxiosErrorType(e),
             });
           } finally {
             dispatch({type: 'STOP_LOADER'});
@@ -318,7 +361,7 @@ const reducer: ReducerWithSideEffects<
       if (state.isFetchingMore) return NoUpdate();
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
-        {...state, isFetchingMore: true},
+        {...state, error: undefined, isFetchingMore: true},
         async (state, dispatch) => {
           try {
             // Use previously stored queryInput with stored startTime
@@ -330,7 +373,14 @@ const reducer: ReducerWithSideEffects<
 
             dispatch({
               type: 'UPDATE_DEPARTURES',
+              locationId: action.location?.id,
               paginationData,
+            });
+          } catch (e) {
+            dispatch({
+              type: 'SET_ERROR',
+              loadType: 'more',
+              error: getAxiosErrorType(e),
             });
           } finally {
             dispatch({type: 'STOP_LOADER'});
@@ -346,14 +396,18 @@ const reducer: ReducerWithSideEffects<
         async (state, dispatch) => {
           // Use same query input with same startTime to ensure that
           // we get the same result.
-          const realtimeData = await getRealtimeDeparture(
-            state.departures ?? [],
-            state.queryInput,
-          );
-          dispatch({
-            type: 'UPDATE_REALTIME',
-            realtimeData,
-          });
+          try {
+            const realtimeData = await getRealtimeDeparture(
+              state.departures ?? [],
+              state.queryInput,
+            );
+            dispatch({
+              type: 'UPDATE_REALTIME',
+              realtimeData,
+            });
+          } catch (e) {
+            console.warn(e);
+          }
         },
       );
     }
@@ -381,6 +435,7 @@ const reducer: ReducerWithSideEffects<
       return Update({
         ...state,
         isLoading: false,
+        locationId: action.locationId,
         departures: action.reset
           ? mapQuayDeparturesToShowlimits(
               action.paginationData.data,
@@ -412,6 +467,17 @@ const reducer: ReducerWithSideEffects<
           state.departures ?? [],
           action.realtimeData,
         ),
+      });
+    }
+
+    case 'SET_ERROR': {
+      return Update({
+        ...state,
+        error: {
+          type: action.error,
+          loadType: action.loadType,
+        },
+        departures: action.reset ? null : state.departures,
       });
     }
 

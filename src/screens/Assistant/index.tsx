@@ -40,6 +40,7 @@ import FavoriteChips from '../../favorite-chips';
 
 import Animated, {Easing} from 'react-native-reanimated';
 import Bugsnag from '@bugsnag/react-native';
+import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import AccessibleText, {
   screenreaderPause,
 } from '../../components/accessible-text';
@@ -161,6 +162,7 @@ const Assistant: React.FC<Props> = ({
     timeOfLastSearch,
     reload,
     clearPatterns,
+    errorType,
   ] = useTripPatterns(from, to, date);
 
   const openLocationSearch = (
@@ -174,9 +176,9 @@ const Assistant: React.FC<Props> = ({
       initialLocation,
     });
 
-  const showEmptyScreen = !tripPatterns && !isSearching;
+  const showEmptyScreen = !tripPatterns && !isSearching && !errorType;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
-  const useScroll = !showEmptyScreen && !isEmptyResult;
+  const useScroll = (!showEmptyScreen && !isEmptyResult) || !!errorType;
   const isHeaderFullHeight = !from || !to;
 
   const renderHeader = useCallback(
@@ -219,11 +221,7 @@ const Assistant: React.FC<Props> = ({
             <View style={styles.styleButton}>
               <LocationButton
                 accessible={true}
-                accessibilityLabel={'Velg ankomststed' + screenreaderPause}
-                accessibilityHint={
-                  'Aktiver for å søke etter adresse eller sted.' +
-                  screenreaderPause
-                }
+                accessibilityLabel="Velg ankomststed."
                 accessibilityRole="button"
                 title="Til"
                 placeholder="Søk etter adresse eller sted"
@@ -359,6 +357,7 @@ const Assistant: React.FC<Props> = ({
             tripPattern: tripPattern,
           })
         }
+        errorType={errorType}
       />
     </DisappearingHeader>
   );
@@ -508,10 +507,11 @@ function useTripPatterns(
   fromLocation: Location | undefined,
   toLocation: Location | undefined,
   date: DateOutput | undefined,
-): [TripPattern[] | null, boolean, Date, () => {}, () => void] {
+): [TripPattern[] | null, boolean, Date, () => {}, () => void, ErrorType?] {
   const [isSearching, setIsSearching] = useState(false);
   const [timeOfSearch, setTimeOfSearch] = useState<Date>(new Date());
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
+  const [errorType, setErrorType] = useState<ErrorType>();
 
   const clearPatterns = () => setTripPatterns(null);
   const reload = useCallback(() => {
@@ -521,6 +521,7 @@ function useTripPatterns(
       if (!fromLocation || !toLocation) return;
 
       setIsSearching(true);
+      setErrorType(undefined);
       try {
         const arriveBy = date?.type === 'arrival';
         const searchDate =
@@ -547,6 +548,7 @@ function useTripPatterns(
         setTimeOfSearch(searchDate);
       } catch (e) {
         if (!isCancel(e)) {
+          setErrorType(getAxiosErrorType(e));
           console.warn(e);
           setTripPatterns(null);
           setIsSearching(false);
@@ -563,7 +565,14 @@ function useTripPatterns(
 
   useEffect(reload, [reload]);
 
-  return [tripPatterns, isSearching, timeOfSearch, reload, clearPatterns];
+  return [
+    tripPatterns,
+    isSearching,
+    timeOfSearch,
+    reload,
+    clearPatterns,
+    errorType,
+  ];
 }
 
 function useDoOnceWhen(fn: () => void, condition: boolean) {

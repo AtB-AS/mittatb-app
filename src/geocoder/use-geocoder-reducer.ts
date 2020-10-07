@@ -1,10 +1,11 @@
 import {Location} from '../favorites/types';
 import {useReducer} from 'react';
+import {ErrorType} from '../api/utils';
 
 export type GeocoderState = {
   locations: Location[] | null;
   isSearching: boolean;
-  hasError: boolean;
+  error?: ErrorType;
 };
 
 type GeocoderReducerAction =
@@ -15,7 +16,7 @@ type GeocoderReducerAction =
   | {
       type: 'SET_IS_SEARCHING';
     }
-  | {type: 'SET_HAS_ERROR'};
+  | {type: 'SET_ERROR'; error: ErrorType};
 
 type GeocoderReducer = (
   prevState: GeocoderState,
@@ -28,19 +29,19 @@ export const geocoderReducer: GeocoderReducer = (prevState, action) => {
       return {
         locations: action.locations,
         isSearching: false,
-        hasError: false,
+        error: undefined,
       };
     case 'SET_IS_SEARCHING':
       return {
         locations: prevState.locations,
         isSearching: true,
-        hasError: false,
+        error: undefined,
       };
-    case 'SET_HAS_ERROR':
+    case 'SET_ERROR':
       return {
         locations: null,
         isSearching: false,
-        hasError: true,
+        error: action.error,
       };
   }
 };
@@ -48,7 +49,7 @@ export const geocoderReducer: GeocoderReducer = (prevState, action) => {
 const initialState: GeocoderState = {
   locations: null,
   isSearching: false,
-  hasError: false,
+  error: undefined,
 };
 
 export default function useGeocoderReducer() {

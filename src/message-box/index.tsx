@@ -51,7 +51,6 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    flex: 1,
   },
   iconContainer: {
     marginBottom: 8,
