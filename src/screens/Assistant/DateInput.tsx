@@ -17,6 +17,7 @@ import {formatToClock, formatToLongDateTime} from '../../utils/date';
 import nb from 'date-fns/locale/nb';
 import subDays from 'date-fns/subDays';
 import insets from '../../utils/insets';
+import {screenreaderPause} from '../../components/accessible-text';
 
 type DateTypesWithoutNow = 'departure' | 'arrival';
 type DateTypes = DateTypesWithoutNow | 'now';
@@ -147,14 +148,22 @@ const DateInput: React.FC<DateInputProps> = ({
     onClose();
   };
 
+  const searchValue = dateToText(valueOrDefault, timeOfLastSearch);
+
   return (
     <>
       <SearchButton
         accessible={true}
-        accessibilityLabel="Sett tidspunkt for avreise eller ankomst. "
+        accessibilityLabel={'Velg tidspunkt.' + screenreaderPause}
+        accessibilityValue={{
+          text: searchValue + ' er valgt.' + screenreaderPause,
+        }}
+        accessibilityHint={
+          'Aktiver for å velge tidspunkt og dato.' + screenreaderPause
+        }
         accessibilityRole="button"
         title="Når"
-        text={dateToText(valueOrDefault, timeOfLastSearch)}
+        text={searchValue}
         onPress={onOpen}
       />
 

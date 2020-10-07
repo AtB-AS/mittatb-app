@@ -15,7 +15,7 @@ import {NearbyScreenNavigationProp} from '.';
 import {Expand} from '../../assets/svg/icons/navigation';
 import {WalkingPerson} from '../../assets/svg/icons/transportation';
 import OptionalNextDayLabel from '../../components/optional-day-header';
-import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
+import AccessibleText from '../../components/accessible-text';
 import TransportationIcon from '../../components/transportation-icon';
 import {useGeolocationState} from '../../GeolocationContext';
 import MessageBox from '../../message-box';
@@ -253,9 +253,9 @@ const ItemHeader: React.FC<{
       <Text style={styles.resultHeaderText}>{stop.name}</Text>
       {location && (
         <View style={styles.distance}>
-          <TextHiddenSupportPrefix prefix="Distanse">
+          <AccessibleText prefix="Distanse">
             {humanizeDistance(haversine(location.coords, stop))}
-          </TextHiddenSupportPrefix>
+          </AccessibleText>
           <WalkingPerson width={16} style={styles.distanceIcon} />
         </View>
       )}
@@ -300,10 +300,10 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
           </View>
           <SituationWarningIcon situations={departure.situations} />
 
-          <TextHiddenSupportPrefix prefix="Avgang" style={styles.time}>
+          <AccessibleText prefix="Avgang" style={styles.time}>
             {(!departure.realtime ? missingRealtimePrefix : '') +
               formatToClockOrRelativeMinutes(departure.expectedDepartureTime)}
-          </TextHiddenSupportPrefix>
+          </AccessibleText>
         </TouchableOpacity>
       </View>
     );

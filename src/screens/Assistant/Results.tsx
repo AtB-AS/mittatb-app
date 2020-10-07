@@ -7,6 +7,7 @@ import ResultItem from './ResultItem';
 import OptionalNextDayLabel from '../../components/optional-day-header';
 import {isSeveralDays} from '../../utils/date';
 import {NoResultReason} from './types';
+import {screenreaderPause} from '../../components/accessible-text';
 import {ErrorType} from '../../api/utils';
 
 type Props = {
@@ -94,7 +95,14 @@ const Results: React.FC<Props> = ({
             previousDepartureTime={tripPatterns[i - 1]?.startTime}
             allSameDay={allSameDay}
           />
-          <ResultItem tripPattern={item} onDetailsPressed={onDetailsPressed} />
+          <ResultItem
+            tripPattern={item}
+            onDetailsPressed={onDetailsPressed}
+            accessibilityLabel={`Reiseforslag ${i + 1} av ${
+              tripPatterns.length
+            }. ${screenreaderPause}`}
+            accessibilityRole="button"
+          />
         </Fragment>
       ))}
     </View>

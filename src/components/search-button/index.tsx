@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {StyleSheet} from '../../theme';
-import insets from '../../utils/insets';
 import {LocationWithMetadata} from '../../favorites/types';
+import {screenreaderPause} from '../accessible-text';
 
 type SearchButtonProps = {
   title: string;
@@ -30,10 +30,6 @@ const SearchButton: React.FC<SearchButtonProps> = ({
   ...accessiblityProps
 }) => {
   const styles = useThemeStyles();
-
-  if (text) {
-    accessiblityProps.accessibilityValue = {text: text};
-  }
   return (
     <View style={style}>
       <TouchableOpacity
@@ -63,9 +59,15 @@ export const LocationButton: React.FC<LocationButtonProps> = ({
   location,
   ...props
 }) => {
-  const text =
+  const currentValueLabel =
     location?.resultType == 'geolocation' ? 'Min posisjon' : location?.label;
-  return <SearchButton text={text} {...props} />;
+
+  if (currentValueLabel) {
+    props.accessibilityValue = {
+      text: currentValueLabel + ' er valgt.' + screenreaderPause,
+    };
+  }
+  return <SearchButton text={currentValueLabel} {...props} />;
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({

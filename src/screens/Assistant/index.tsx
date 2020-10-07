@@ -41,6 +41,9 @@ import FavoriteChips from '../../favorite-chips';
 import Animated, {Easing} from 'react-native-reanimated';
 import Bugsnag from '@bugsnag/react-native';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
+import AccessibleText, {
+  screenreaderPause,
+} from '../../components/accessible-text';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -186,7 +189,11 @@ const Assistant: React.FC<Props> = ({
             <View style={styles.styleButton}>
               <LocationButton
                 accessible={true}
-                accessibilityLabel="Velg avreisested."
+                accessibilityLabel={'Velg avreisested' + screenreaderPause}
+                accessibilityHint={
+                  'Aktiver for å søke etter adresse eller sted.' +
+                  screenreaderPause
+                }
                 accessibilityRole="button"
                 title="Fra"
                 placeholder="Søk etter adresse eller sted"
@@ -197,7 +204,11 @@ const Assistant: React.FC<Props> = ({
 
             <TouchableOpacity
               accessible={true}
-              accessibilityLabel="Bruk min posisjon som avreisested."
+              accessibilityLabel={
+                from?.resultType == 'geolocation'
+                  ? 'Oppdater posisjon.'
+                  : 'Bruk posisjon som avreisested.'
+              }
               accessibilityRole="button"
               hitSlop={insets.all(12)}
               onPress={setCurrentLocationOrRequest}
@@ -224,7 +235,9 @@ const Assistant: React.FC<Props> = ({
                 onPress={swap}
                 hitSlop={insets.all(12)}
                 accessible={true}
-                accessibilityLabel="Bytt om på avreisested og ankomststed"
+                accessibilityLabel={
+                  'Bytt avreisested og ankomststed' + screenreaderPause
+                }
                 accessibilityRole="button"
               >
                 <Swap />
@@ -242,6 +255,11 @@ const Assistant: React.FC<Props> = ({
               chipTypes={['favorites', 'add-favorite']}
               onSelectLocation={fillNextAvailableLocation}
               containerStyle={styles.chipBox}
+              chipActionHint={
+                'Aktiver for å bruke som ' +
+                (from ? 'destinasjon' : 'avreisested') +
+                screenreaderPause
+              }
             />
           </Fade>
 
@@ -257,6 +275,13 @@ const Assistant: React.FC<Props> = ({
               />
             </SearchGroup>
           </Fade>
+          <View accessible={true} accessibilityLiveRegion="polite">
+            <AccessibleText
+              prefix={
+                isSearching ? 'Laster søkeresultat' : 'Søkeresultat innlastet'
+              }
+            />
+          </View>
         </View>
       </View>
     ),
