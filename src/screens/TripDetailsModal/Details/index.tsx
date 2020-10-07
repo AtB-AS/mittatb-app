@@ -151,7 +151,7 @@ const DetailsContent: React.FC<{
           />
         )}
         {error && (
-          <MessageBox type="warning">
+          <MessageBox type="warning" containerStyle={styles.messageContainer}>
             <Text>
               Kunne ikke hente ut oppdatering for reiseforslaget. Det kan være
               at reisen har endret seg eller ikke lengre er tilgjengelig.
