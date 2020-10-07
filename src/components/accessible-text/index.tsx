@@ -3,14 +3,14 @@ import {Text, TextProps} from 'react-native';
 
 type LabelProps = TextProps & {
   prefix?: string;
-  appendix?: string;
+  suffix?: string;
   children?: string;
   pauseAfter?: boolean;
 };
 
 const AccessibleText = ({
   prefix,
-  appendix,
+  suffix,
   children,
   pauseAfter = true,
   ...props
@@ -18,7 +18,7 @@ const AccessibleText = ({
   return (
     <Text
       accessibilityLabel={`${prefix ?? ''} : ${children ?? ''} ${
-        appendix ?? ''
+        suffix ?? ''
       } ${pauseAfter ? screenreaderPause : ' '}`}
       {...props}
     >
