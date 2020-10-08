@@ -16,6 +16,7 @@ import {getAimedTimeIfLargeDifference} from '../utils';
 import WaitRow from './WaitRow';
 import transportationColor from '../../../utils/transportation-color';
 import SituationRow from '../SituationRow';
+import colors from '../../../theme/colors';
 
 const TransportDetail: React.FC<LegDetailProps> = ({
   leg,
@@ -100,11 +101,31 @@ const TransportDetail: React.FC<LegDetailProps> = ({
         />
       </TouchableOpacity>
       {showWaitTime && (
-        <WaitRow
-          onCalculateTime={onCalculateTime}
-          currentLeg={leg}
-          nextLeg={nextLeg!}
-        />
+        <View style={styles.waitDashContainer}>
+          <Dash
+            dashGap={4}
+            dashLength={4}
+            dashThickness={4}
+            dashCount={3}
+            dashColor={colors.general.gray200}
+            style={styles.waitDash}
+          />
+          <View style={styles.waitContainer}>
+            <WaitRow
+              onCalculateTime={onCalculateTime}
+              currentLeg={leg}
+              nextLeg={nextLeg!}
+            />
+          </View>
+          <Dash
+            dashGap={4}
+            dashLength={4}
+            dashThickness={4}
+            dashCount={3}
+            dashColor={colors.general.gray200}
+            style={styles.waitDash}
+          />
+        </View>
       )}
     </View>
   );
@@ -127,6 +148,18 @@ const styles = StyleSheet.create({
   dash: {
     flexDirection: 'column',
     height: '100%',
+  },
+  waitDashContainer: {
+    marginLeft: 90,
+  },
+  waitContainer: {
+    marginBottom: 5,
+  },
+  waitDash: {
+    flexDirection: 'column',
+    padding: 0,
+    marginLeft: 7,
+    marginBottom: 1,
   },
 });
 
