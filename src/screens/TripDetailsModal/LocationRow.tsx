@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, TextStyle, StyleProp, ViewStyle} from 'react-native';
+import {
+  View,
+  Text,
+  TextStyle,
+  StyleProp,
+  ViewStyle,
+  LayoutChangeEvent,
+} from 'react-native';
 import {StyleSheet, useTheme} from '../../theme';
 
 const LocationRow: React.FC<{
@@ -13,6 +20,7 @@ const LocationRow: React.FC<{
   rowStyle?: StyleProp<ViewStyle>;
   iconContainerStyle?: StyleProp<ViewStyle>;
   dashThroughIcon?: boolean;
+  onLayout?: (event: LayoutChangeEvent) => void;
 }> = ({
   icon,
   labelIcon,
@@ -24,12 +32,13 @@ const LocationRow: React.FC<{
   timeStyle,
   iconContainerStyle,
   dashThroughIcon,
+  onLayout,
 }) => {
   const styles = useLocationRowStyle();
   const {theme} = useTheme();
 
   return (
-    <View style={[styles.row, rowStyle]}>
+    <View style={[styles.row, rowStyle]} onLayout={onLayout}>
       <View style={styles.iconLocationContainer}>
         <View style={styles.timeContainer}>
           <Text style={[styles.time, textStyle, timeStyle]}>{time}</Text>
