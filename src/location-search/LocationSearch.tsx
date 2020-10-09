@@ -188,7 +188,8 @@ const LocationSearch: React.FC<Props> = ({
             )}
           </ScrollView>
         ) : (
-          !error && (
+          !error &&
+          !!text && (
             <View style={styles.contentBlock}>
               <MessageBox type="info">
                 <Text>Fant ingen søkeresultat</Text>
