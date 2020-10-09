@@ -84,6 +84,7 @@ const TripDetailsModal: React.FC<Props> = (props) => {
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
+        bounces={false}
       >
         {!tripPattern ? (
           <ActivityIndicator animating={true} size="large" />

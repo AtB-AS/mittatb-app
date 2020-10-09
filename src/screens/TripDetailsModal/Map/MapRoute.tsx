@@ -1,5 +1,6 @@
 import {LegMode} from '@entur/sdk';
 import MapboxGL, {LineLayerStyle} from '@react-native-mapbox-gl/maps';
+import {Point} from 'geojson';
 import React from 'react';
 import {View} from 'react-native';
 import {transportationMapLineColor} from '../../../utils/transportation-color';
@@ -11,14 +12,15 @@ const MapRoute: React.FC<{lines: MapLine[]}> = ({lines}) => {
       lineColor: transportationMapLineColor(mode, publicCode),
     };
   }
-  function getFirstPoint(line: MapLine) {
+  function getFirstAndLastPoint(line: MapLine): [Point, Point] {
     const coordinates = line.geometry.coordinates;
-    return pointOf(coordinates[0]);
+    const {0: first, [coordinates.length - 1]: last} = coordinates;
+    return [pointOf(first), pointOf(last)];
   }
+
   return (
     <>
       {lines.map((line, index) => {
-        const isFirst = index === 0;
         const lineModeStyle = modeStyle(line.travelType, line.publicCode);
 
         return (
@@ -27,29 +29,28 @@ const MapRoute: React.FC<{lines: MapLine[]}> = ({lines}) => {
               <MapboxGL.LineLayer
                 id={'line-' + index}
                 style={{
-                  lineWidth: 8,
+                  lineWidth: 4,
                   lineOffset: -1,
                   ...lineModeStyle,
                 }}
               ></MapboxGL.LineLayer>
             </MapboxGL.ShapeSource>
 
-            {!isFirst && (
-              <>
-                <MapboxGL.ShapeSource
-                  id={'switch-' + index}
-                  shape={getFirstPoint(line)}
-                >
-                  <MapboxGL.CircleLayer
-                    id={'line-symbol-' + index}
-                    style={{
-                      circleRadius: 10,
-                      circleColor: lineModeStyle.lineColor,
-                    }}
-                  ></MapboxGL.CircleLayer>
-                </MapboxGL.ShapeSource>
-              </>
-            )}
+            <MapboxGL.ShapeSource
+              id={'switch-' + index}
+              shape={{
+                type: 'GeometryCollection',
+                geometries: getFirstAndLastPoint(line),
+              }}
+            >
+              <MapboxGL.CircleLayer
+                id={'line-symbol-' + index}
+                style={{
+                  circleRadius: 7.5,
+                  circleColor: lineModeStyle.lineColor,
+                }}
+              ></MapboxGL.CircleLayer>
+            </MapboxGL.ShapeSource>
           </View>
         );
       })}
