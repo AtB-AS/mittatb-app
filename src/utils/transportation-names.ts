@@ -38,8 +38,9 @@ export function getReadableModeName(mode: LegMode): string {
     case 'air':
       return 'Fly';
     case 'foot':
-    default:
       return 'Gange';
+    default:
+      return mode;
   }
 }
 
