@@ -23,6 +23,7 @@ import AccessibleText, {
 } from '../../components/accessible-text';
 import {SituationWarningIcon} from '../../situations';
 import {flatMap} from '../../utils/array';
+import {getReadableModeName} from '../../utils/transportation-names';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -331,8 +332,9 @@ const screenreaderSummary = (tripPattern: TripPattern) => {
       ? `Driftsmeldinger gjelder for dette forslaget. ${screenreaderPause} `
       : ''
   }
-  Fra klokken ${formatToClock(tripPattern.startTime)} ${screenreaderPause} til 
-    ${formatToClock(tripPattern.endTime)}. ${screenreaderPause}
+  Fra klokken: ${formatToClock(
+    tripPattern.startTime,
+  )}, til klokken ${formatToClock(tripPattern.endTime)}. ${screenreaderPause}
     Reisetid: ${secondsToDuration(tripPattern.duration)} ${screenreaderPause}
     ${
       !nonFootLegs.length
@@ -340,12 +342,14 @@ const screenreaderSummary = (tripPattern: TripPattern) => {
         : nonFootLegs.length === 1
         ? 'Ingen bytter'
         : nonFootLegs.length === 2
-        ? 'Étt bytte'
+        ? 'Ett bytte'
         : nonFootLegs.length + 'bytter'
     }. ${screenreaderPause}
     ${nonFootLegs
       ?.map((l) => {
-        return `${l.mode} ${l.line ? 'nummer ' + l.line.publicCode : ''}`;
+        return `${getReadableModeName(l.mode)} ${
+          l.line ? 'nummer ' + l.line.publicCode : ''
+        }`;
       })
       .join(', ')} ${screenreaderPause}
       Totalt ${tripPattern.walkDistance.toFixed(
@@ -354,7 +358,7 @@ const screenreaderSummary = (tripPattern: TripPattern) => {
       Fra ${startLeg.fromPlace?.name}, klokken ${formatToClock(
     startLeg.expectedStartTime,
   )}. ${screenreaderPause}
-      Aktiver for å vise detaljert reiserute.
+      Aktivér for å vise detaljert reiserute.
   `;
 };
 
