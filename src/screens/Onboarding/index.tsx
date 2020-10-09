@@ -7,7 +7,7 @@ import {
   Onboarding2,
   Onboarding1,
   Onboarding3,
-} from '../../assets/svg/illustrations';
+} from '../../assets/svg/illustrations/';
 import {useGeolocationState} from '../../GeolocationContext';
 import {StyleSheet} from '../../theme';
 import colors from '../../theme/colors';
@@ -19,7 +19,6 @@ import {
 import {SvgProps} from 'react-native-svg';
 import {ArrowRight} from '../../assets/svg/icons/navigation';
 import {Dot} from '../../assets/svg/icons/other';
-import NavigationRoot from '../../navigation/TabNavigator';
 type StepProps = {
   navigation: StackNavigationProp<OnboardingStackParams>;
 };
