@@ -11,7 +11,6 @@ import {
 import {useGeolocationState} from '../../GeolocationContext';
 import {StyleSheet} from '../../theme';
 import colors from '../../theme/colors';
-import {StackActions, NavigationContext} from '@react-navigation/core';
 import {
   createStackNavigator,
   StackNavigationProp,
