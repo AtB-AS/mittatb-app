@@ -42,6 +42,7 @@ const colors = {
 export default colors;
 
 const spacings = {
+  xLarge: 24,
   large: 20,
   medium: 12,
   small: 8,
