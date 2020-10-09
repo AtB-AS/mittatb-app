@@ -27,7 +27,7 @@ const MapRoute: React.FC<{lines: MapLine[]}> = ({lines}) => {
               <MapboxGL.LineLayer
                 id={'line-' + index}
                 style={{
-                  lineWidth: 8,
+                  lineWidth: 4,
                   lineOffset: -1,
                   ...lineModeStyle,
                 }}
