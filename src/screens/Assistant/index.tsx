@@ -2,6 +2,7 @@ import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Text, TouchableOpacity, View, ViewStyle, StyleProp} from 'react-native';
+import analytics from '@react-native-firebase/analytics';
 import {searchTrip} from '../../api';
 import {CancelToken, isCancel} from '../../api/client';
 import {Swap} from '../../assets/svg/icons/actions';
@@ -147,6 +148,7 @@ const Assistant: React.FC<Props> = ({
   }
 
   function resetView() {
+    analytics().logEvent('click_logo_reset');
     log('reset');
     setCurrentLocationOrRequest();
 

@@ -44,7 +44,7 @@ import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import AccessibleText from '../../components/accessible-text';
 import {useReverseGeocoder} from '../../geocoder';
 import {useLocationSearchValue} from '../../location-search';
-import {HOME_TAB_NAME} from '../../utils/navigation';
+import {useNavigateHome} from '../../utils/navigation';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
@@ -149,7 +149,7 @@ const NearbyOverview: React.FC<Props> = ({
     }
   }
 
-  const navigateHome = () => navigation.navigate(HOME_TAB_NAME);
+  const navigateHome = useNavigateHome();
 
   const renderHeader = () => (
     <SearchGroup>
