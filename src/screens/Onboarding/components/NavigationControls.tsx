@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import {Dot} from '../../../assets/svg/icons/other';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native';
 import {ArrowRight} from '../../../assets/svg/icons/navigation';
 import {StyleSheet} from '../../../theme';
 import colors from '../../../theme/colors';

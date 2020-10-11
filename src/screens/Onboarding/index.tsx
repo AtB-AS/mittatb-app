@@ -66,7 +66,7 @@ const StepOne: React.FC<StepProps> = ({navigation}) => {
     <>
       <Illustration Svg={Onboarding1} />
       <StepOuterContainer>
-        <View style={styles.textContainer}>
+        <View style={styles.textContainer} accessible={true}>
           <Text style={[styles.title, styles.text]}>
             Velkommen som testpilot!{' '}
           </Text>
@@ -90,7 +90,7 @@ const StepTwo: React.FC<StepProps> = ({navigation}) => {
     <>
       <Illustration Svg={Onboarding2} />
       <StepOuterContainer>
-        <View style={styles.textContainer}>
+        <View style={styles.textContainer} accessible={true}>
           <Text style={[styles.title, styles.text]}>
             Bidra til å gjøre appen bedre
           </Text>
@@ -124,7 +124,7 @@ const StepThree: React.FC<StepProps> = ({navigation}) => {
     <>
       <Illustration Svg={Onboarding3} />
       <StepOuterContainer>
-        <View style={styles.textContainer}>
+        <View style={styles.textContainer} accessible={true}>
           <Text style={[styles.title, styles.text]}>
             Bedre opplevelse med posisjonsdeling
           </Text>
