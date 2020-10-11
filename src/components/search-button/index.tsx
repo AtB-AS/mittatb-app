@@ -86,9 +86,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     fontSize: 16,
     lineHeight: 20,
     flex: 1,
+    marginLeft: 20,
   },
   icon: {
-    marginLeft: 6,
-    marginRight: 14,
+    position: 'absolute',
+    left: 46,
   },
 }));

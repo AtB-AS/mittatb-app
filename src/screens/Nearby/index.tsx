@@ -24,7 +24,7 @@ import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import SearchGroup from '../../components/search-button/search-group';
 import DisappearingHeader from '../../components/disappearing-header';
 import {DeparturesWithStop, Paginated, DeparturesRealtimeData} from '../../sdk';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
 import useReducerWithSideEffects, {
   Update,
   ReducerWithSideEffects,
@@ -68,7 +68,12 @@ type RootProps = {
 };
 
 const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
-  const {status, location, requestPermission} = useGeolocationState();
+  const {
+    status,
+    location,
+    locationEnabled,
+    requestPermission,
+  } = useGeolocationState();
 
   const {locations: reverseLookupLocations} =
     useReverseGeocoder(location?.coords ?? null) ?? [];
@@ -83,6 +88,7 @@ const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
   return (
     <NearbyOverview
       requestGeoPermission={requestPermission}
+      hasLocationPermission={locationEnabled && status === 'granted'}
       currentLocation={currentLocation}
       navigation={navigation}
     />
@@ -91,6 +97,7 @@ const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
 
 type Props = {
   currentLocation?: Location;
+  hasLocationPermission: boolean;
   requestGeoPermission: RequestPermissionFn;
   navigation: NearbyScreenNavigationProp;
 };
@@ -98,6 +105,7 @@ type Props = {
 const NearbyOverview: React.FC<Props> = ({
   requestGeoPermission,
   currentLocation,
+  hasLocationPermission,
   navigation,
 }) => {
   const styles = useThemeStyles();
@@ -110,6 +118,8 @@ const NearbyOverview: React.FC<Props> = ({
     [currentLocation],
   );
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
+
+  const updatingLocation = !fromLocation && hasLocationPermission;
 
   const {state, refresh, loadMore, showMoreOnQuay} = useDepartureData(
     fromLocation,
@@ -157,7 +167,12 @@ const NearbyOverview: React.FC<Props> = ({
         <View style={styles.styleButton}>
           <LocationButton
             title="Fra"
-            placeholder="Søk etter adresse eller sted"
+            placeholder={
+              updatingLocation
+                ? 'Oppdaterer posisjon'
+                : 'Søk etter adresse eller sted'
+            }
+            icon={updatingLocation ? <ActivityIndicator /> : undefined}
             location={fromLocation}
             onPress={openLocationSearch}
             accessible={true}
