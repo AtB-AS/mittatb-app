@@ -3,12 +3,14 @@ import {
   RouteProp,
   useNavigation,
 } from '@react-navigation/native';
+import Axios, {AxiosError} from 'axios';
 import React, {useCallback, useState} from 'react';
 import {ActivityIndicator, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {DetailsModalNavigationProp, DetailsModalStackParams} from '..';
 import {getSingleTripPattern} from '../../../api/trips';
-import {ArrowLeft} from '../../../assets/svg/icons/navigation';
+import {getAxiosErrorType} from '../../../api/utils';
+import {Close} from '../../../assets/svg/icons/actions';
 import {Dot} from '../../../assets/svg/icons/other/';
 import {
   CurrentLocationArrow,
@@ -74,7 +76,7 @@ const TripDetailsModal: React.FC<Props> = (props) => {
           accessible: true,
           accessibilityRole: 'button',
           accessibilityLabel: 'Gå tilbake',
-          icon: <ArrowLeft />,
+          icon: <Close />,
         }}
         title="Reisedetaljer"
         style={{backgroundColor: colors.secondary.cyan}}
@@ -82,6 +84,7 @@ const TripDetailsModal: React.FC<Props> = (props) => {
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
+        bounces={false}
       >
         {!tripPattern ? (
           <ActivityIndicator animating={true} size="large" />
@@ -101,7 +104,7 @@ const DetailsContent: React.FC<{
   tripPattern: TripPattern;
   from: LocationWithMetadata;
   to: LocationWithMetadata;
-  error: Error | undefined;
+  error: AxiosError | undefined;
 }> = ({tripPattern, from, to, error}) => {
   const styles = useDetailsStyle();
   const {favorites} = useFavorites();
@@ -151,12 +154,11 @@ const DetailsContent: React.FC<{
           />
         )}
         {error && (
-          <MessageBox type="warning">
-            <Text>
-              Kunne ikke hente ut oppdatering for reiseforslaget. Det kan være
-              at reisen har endret seg eller ikke lengre er tilgjengelig.
-            </Text>
-          </MessageBox>
+          <MessageBox
+            type="warning"
+            containerStyle={styles.messageContainer}
+            message={translateError(error)}
+          />
         )}
         {legIsWalk(startLeg) && (
           <LocationRow
@@ -191,6 +193,17 @@ const DetailsContent: React.FC<{
     </>
   );
 };
+
+function translateError(error: AxiosError): string {
+  const errorType = getAxiosErrorType(error);
+  switch (errorType) {
+    case 'network-error':
+    case 'timeout':
+      return 'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil.';
+    default:
+      return 'Vi kunne ikke oppdatere reiseforslaget ditt. Det kan hende reisen har endra seg eller er utdatert?';
+  }
+}
 
 function getLocationIcon(location: LocationWithMetadata) {
   switch (location.resultType) {
@@ -260,6 +273,7 @@ const useDetailsStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   scrollViewContent: {
+    paddingRight: theme.spacings.medium,
     paddingBottom: 100,
   },
   textStyle: {
@@ -279,8 +293,9 @@ function useTripPattern(
     },
     [tripPatternId],
   );
-  return usePollableResource<TripPattern | null>(fetchTripPattern, {
+  return usePollableResource<TripPattern | null, AxiosError>(fetchTripPattern, {
     initialValue: initialTripPattern ?? null,
     pollingTimeInSeconds: 60,
+    filterError: (err) => !Axios.isCancel(err),
   });
 }

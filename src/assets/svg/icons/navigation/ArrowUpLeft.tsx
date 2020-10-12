@@ -6,7 +6,7 @@ function SvgArrowUpLeft(props: SvgProps) {
     <Svg width={20} height={20} fill="black" viewBox="0 0 40 40" {...props}>
       <Path
         fillRule="evenodd"
-        d="M24.828 11.515a2 2 0 01-2 2h-6.485L29.9 27.07a2 2 0 11-2.828 2.828L13.515 16.343v6.485a2 2 0 11-4 0V11.515a2 2 0 012-2h11.313a2 2 0 012 2z"
+        d="M10 8h14v4h-9.172l16.586 16.586-2.828 2.828L12 14.828V24H8V10a2 2 0 012-2z"
         clipRule="evenodd"
       />
     </Svg>

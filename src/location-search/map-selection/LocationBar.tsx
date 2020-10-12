@@ -2,27 +2,38 @@ import React from 'react';
 import {Text, View, TouchableOpacity, ActivityIndicator} from 'react-native';
 import colors from '../../theme/colors';
 import {ArrowRight} from '../../assets/svg/icons/navigation';
-import {Info} from '../../assets/svg/icons/status';
+import {Info, Warning} from '../../assets/svg/icons/status';
 import {Location} from '../../favorites/types';
 import LocationIcon from '../../components/location-icon';
 import {StyleSheet} from '../../theme';
 import shadows from '../../components/map/shadows';
+import {ErrorType} from '../../api/utils';
 
 type Props = {
   location?: Location;
+  error?: ErrorType;
   onSelect(): void;
   isSearching: boolean;
 };
 
-const LocationBar: React.FC<Props> = ({location, onSelect, isSearching}) => {
+const LocationBar: React.FC<Props> = ({
+  location,
+  error,
+  onSelect,
+  isSearching,
+}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={{flex: 1}} onPress={onSelect}>
         <View style={styles.innerContainer}>
           <View style={styles.locationContainer}>
-            <Icon isSearching={isSearching} location={location} />
+            <Icon
+              isSearching={isSearching}
+              location={location}
+              hasError={!!error}
+            />
             <View style={{opacity: isSearching ? 0.6 : 1}}>
-              <LocationText location={location} />
+              <LocationText location={location} error={error} />
             </View>
           </View>
           {!isSearching && !!location && (
@@ -36,16 +47,19 @@ const LocationBar: React.FC<Props> = ({location, onSelect, isSearching}) => {
   );
 };
 
-const Icon: React.FC<{isSearching: boolean; location?: Location}> = ({
-  isSearching,
-  location,
-}) => {
+const Icon: React.FC<{
+  isSearching: boolean;
+  location?: Location;
+  hasError: boolean;
+}> = ({isSearching, location, hasError}) => {
   return (
     <View style={{marginHorizontal: 12}}>
       {isSearching ? (
         <ActivityIndicator animating={true} color={colors.general.gray200} />
       ) : location ? (
         <LocationIcon location={location} />
+      ) : hasError ? (
+        <Warning />
       ) : (
         <Info />
       )}
@@ -53,22 +67,54 @@ const Icon: React.FC<{isSearching: boolean; location?: Location}> = ({
   );
 };
 
-const LocationText: React.FC<{location?: Location}> = ({location}) => {
-  return location ? (
+const LocationText: React.FC<{
+  location?: Location;
+  error?: ErrorType;
+}> = ({location, error}) => {
+  const {title, subtitle} = getLocationText(location, error);
+
+  return (
     <>
-      <Text style={styles.name}>{location.name}</Text>
-      <Text style={styles.locality}>
-        {location.postalcode ? <Text>{location.postalcode}, </Text> : null}
-        {location.locality}
-      </Text>
-    </>
-  ) : (
-    <>
-      <Text style={styles.name}>Fant ikke noe her :(</Text>
-      <Text style={styles.locality}>Vennligst prøv et annet sted</Text>
+      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.subtitle}>{subtitle}</Text>
     </>
   );
 };
+
+function getLocationText(
+  location?: Location,
+  error?: ErrorType,
+): {title: string; subtitle: string} {
+  if (location) {
+    return {
+      title: location.name,
+      subtitle:
+        (location.postalcode ? location.postalcode + ', ' : '') +
+        location.locality,
+    };
+  }
+
+  if (error) {
+    switch (error) {
+      case 'network-error':
+      case 'timeout':
+        return {
+          title: 'Vi kan ikke oppdatere kartet.',
+          subtitle: 'Nettforbindelsen din mangler eller er ustabil.',
+        };
+      default:
+        return {
+          title: 'Oops - vi feila med å oppdatere kartet.',
+          subtitle: 'Supert om du prøver igjen 🤞',
+        };
+    }
+  }
+
+  return {
+    title: 'Akkurat her finner vi ikke noe reisetilbud.',
+    subtitle: 'Er du i nærheten av en adresse, vei eller stoppested?',
+  };
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -87,8 +133,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   locationContainer: {flexDirection: 'row', alignItems: 'center', height: 44},
-  name: {fontSize: 14, lineHeight: 20},
-  locality: {fontSize: 12, lineHeight: 16},
+  title: {fontSize: 14, lineHeight: 20},
+  subtitle: {fontSize: 12, lineHeight: 16},
   button: {
     width: 44,
     alignItems: 'center',

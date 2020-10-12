@@ -6,7 +6,7 @@ function SvgExpand(props: SvgProps) {
     <Svg width={20} height={20} fill="black" viewBox="0 0 40 40" {...props}>
       <Path
         fillRule="evenodd"
-        d="M6.586 12.586a2 2 0 012.828 0L20 23.172l10.586-10.586a2 2 0 112.828 2.828l-12 12a2 2 0 01-2.828 0l-12-12a2 2 0 010-2.828z"
+        d="M18.586 27.414a2 2 0 002.828 0l14-14-2.828-2.828L20 23.172 7.414 10.586l-2.828 2.828 14 14z"
         clipRule="evenodd"
       />
     </Svg>

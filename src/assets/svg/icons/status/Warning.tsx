@@ -3,11 +3,11 @@ import Svg, {Path, SvgProps} from 'react-native-svg';
 
 function SvgWarning(props: SvgProps) {
   return (
-    <Svg width={20} height={20} fill="black" viewBox="0 0 20 20" {...props}>
-      <Path d="M9 6v5h2V6H9zm2 6H9v2h2v-2z" />
+    <Svg width={20} height={20} fill="black" viewBox="0 0 40 40" {...props}>
+      <Path d="M18 12v10h4V12h-4zm4 12h-4v4h4v-4z" />
       <Path
         fillRule="evenodd"
-        d="M7 1a1 1 0 00-.707.293l-5 5A1 1 0 001 7v6a1 1 0 00.293.707l5 5A1 1 0 007 19h6a1 1 0 00.707-.293l5-5A1 1 0 0019 13V7a1 1 0 00-.293-.707l-5-5A1 1 0 0013 1H7zM3 7.414L7.414 3h5.172L17 7.414v5.172L12.586 17H7.414L3 12.586V7.414z"
+        d="M14 2a2 2 0 00-1.414.586l-10 10A2 2 0 002 14v12a2 2 0 00.586 1.414l10 10A2 2 0 0014 38h12a2 2 0 001.414-.586l10-10A2 2 0 0038 26V14a2 2 0 00-.586-1.414l-10-10A2 2 0 0026 2H14zM6 14.828L14.828 6h10.344L34 14.828v10.344L25.172 34H14.828L6 25.172V14.828z"
         clipRule="evenodd"
       />
     </Svg>

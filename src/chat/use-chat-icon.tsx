@@ -13,7 +13,6 @@ export default function useChatIcon() {
       <View
         accessible={true}
         accessibilityLabel="Brukerstøtte"
-        accessibilityHint="Åpner et meldingsvindu"
         accessibilityRole="button"
         style={styles.chatContainer}
       >

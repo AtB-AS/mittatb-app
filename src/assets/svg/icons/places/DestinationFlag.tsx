@@ -6,7 +6,7 @@ function SvgDestinationFlag(props: SvgProps) {
     <Svg width={20} height={20} fill="black" viewBox="0 0 40 40" {...props}>
       <Path
         fillRule="evenodd"
-        d="M10 8a1 1 0 00-1 1v22a1 1 0 001 1h2a1 1 0 001-1v-7h17.586c.89 0 1.337-1.077.707-1.707l-5.586-5.586a1 1 0 010-1.414l5.586-5.586c.63-.63.184-1.707-.707-1.707H10z"
+        d="M8 6a2 2 0 012-2h22a2 2 0 011.414 3.414L26.828 14l6.586 6.586A2 2 0 0132 24H12v12H8V6zm4 14h15.172l-4.586-4.586a2 2 0 010-2.828L27.172 8H12v12z"
         clipRule="evenodd"
       />
     </Svg>

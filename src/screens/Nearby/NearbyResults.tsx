@@ -15,7 +15,7 @@ import {NearbyScreenNavigationProp} from '.';
 import {Expand} from '../../assets/svg/icons/navigation';
 import {WalkingPerson} from '../../assets/svg/icons/transportation';
 import OptionalNextDayLabel from '../../components/optional-day-header';
-import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
+import AccessibleText from '../../components/accessible-text';
 import TransportationIcon from '../../components/transportation-icon';
 import {useGeolocationState} from '../../GeolocationContext';
 import MessageBox from '../../message-box';
@@ -37,7 +37,7 @@ type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
   onShowMoreOnQuay?(quayId: string): void;
   isFetchingMore?: boolean;
-
+  error?: string;
   isInitialScreen: boolean;
 };
 
@@ -45,7 +45,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
   departures,
   onShowMoreOnQuay,
   isFetchingMore = false,
-
+  error,
   isInitialScreen,
 }) => {
   const styles = useResultsStyle();
@@ -62,9 +62,11 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
   if (isInitialScreen) {
     return (
       <View style={styles.container}>
-        <Text style={styles.centerText}>
-          Søk etter avganger fra holdeplasser eller i nærheten av steder.
-        </Text>
+        <MessageBox type="info">
+          <Text>
+            Søk etter avganger fra holdeplasser eller i nærheten av steder.
+          </Text>
+        </MessageBox>
       </View>
     );
   }
@@ -79,21 +81,29 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
     );
   }
 
-  if (departures === null) {
-    return null;
-  }
-
   return (
     <View style={styles.container}>
-      {departures.map((item) => (
-        <StopDepartures
-          key={item.stop.id}
-          departures={item}
-          onPress={onPress}
-          onShowMoreOnQuay={onShowMoreOnQuay}
+      {error && (
+        <MessageBox
+          type="warning"
+          message={error}
+          containerStyle={{marginBottom: 24}}
         />
-      ))}
-      <FooterLoader isFetchingMore={isFetchingMore} />
+      )}
+
+      {departures && (
+        <>
+          {departures.map((item) => (
+            <StopDepartures
+              key={item.stop.id}
+              departures={item}
+              onPress={onPress}
+              onShowMoreOnQuay={onShowMoreOnQuay}
+            />
+          ))}
+          <FooterLoader isFetchingMore={isFetchingMore} />
+        </>
+      )}
     </View>
   );
 };
@@ -243,9 +253,9 @@ const ItemHeader: React.FC<{
       <Text style={styles.resultHeaderText}>{stop.name}</Text>
       {location && (
         <View style={styles.distance}>
-          <TextHiddenSupportPrefix prefix="Distanse">
+          <AccessibleText prefix="Distanse">
             {humanizeDistance(haversine(location.coords, stop))}
-          </TextHiddenSupportPrefix>
+          </AccessibleText>
           <WalkingPerson width={16} style={styles.distanceIcon} />
         </View>
       )}
@@ -290,10 +300,10 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
           </View>
           <SituationWarningIcon situations={departure.situations} />
 
-          <TextHiddenSupportPrefix prefix="Avgang" style={styles.time}>
+          <AccessibleText prefix="Avgang" style={styles.time}>
             {(!departure.realtime ? missingRealtimePrefix : '') +
               formatToClockOrRelativeMinutes(departure.expectedDepartureTime)}
-          </TextHiddenSupportPrefix>
+          </AccessibleText>
         </TouchableOpacity>
       </View>
     );

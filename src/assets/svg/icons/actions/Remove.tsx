@@ -1,10 +1,10 @@
 import * as React from 'react';
-import Svg, {Rect, SvgProps} from 'react-native-svg';
+import Svg, {Path, SvgProps} from 'react-native-svg';
 
 function SvgRemove(props: SvgProps) {
   return (
-    <Svg width={20} height={20} viewBox="0 0 40 40" fill="black" {...props}>
-      <Rect width={32} height={4} x={4} y={18} rx={2} />
+    <Svg width={20} height={20} fill="black" viewBox="0 0 40 40" {...props}>
+      <Path fillRule="evenodd" d="M36 22H4v-4h32v4z" clipRule="evenodd" />
     </Svg>
   );
 }

@@ -7,6 +7,8 @@ import ResultItem from './ResultItem';
 import OptionalNextDayLabel from '../../components/optional-day-header';
 import {isSeveralDays} from '../../utils/date';
 import {NoResultReason} from './types';
+import {screenreaderPause} from '../../components/accessible-text';
+import {ErrorType} from '../../api/utils';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
@@ -15,6 +17,7 @@ type Props = {
   isSearching: boolean;
   resultReasons: NoResultReason[];
   onDetailsPressed(tripPattern: TripPattern): void;
+  errorType?: ErrorType;
 };
 
 export type ResultTabParams = {
@@ -27,6 +30,7 @@ const Results: React.FC<Props> = ({
   isEmptyResult,
   resultReasons,
   onDetailsPressed,
+  errorType,
 }) => {
   const {theme} = useTheme();
   const styles = useThemeStyles(theme);
@@ -38,6 +42,17 @@ const Results: React.FC<Props> = ({
 
   if (showEmptyScreen) {
     return null;
+  }
+
+  if (errorType) {
+    return (
+      <View style={styles.container}>
+        <MessageBox
+          type="warning"
+          message={translateErrorType(errorType)}
+        ></MessageBox>
+      </View>
+    );
   }
 
   if (isEmptyResult) {
@@ -80,7 +95,14 @@ const Results: React.FC<Props> = ({
             previousDepartureTime={tripPatterns[i - 1]?.startTime}
             allSameDay={allSameDay}
           />
-          <ResultItem tripPattern={item} onDetailsPressed={onDetailsPressed} />
+          <ResultItem
+            tripPattern={item}
+            onDetailsPressed={onDetailsPressed}
+            accessibilityLabel={`Reiseforslag ${i + 1} av ${
+              tripPatterns.length
+            }. ${screenreaderPause}`}
+            accessibilityRole="button"
+          />
         </Fragment>
       ))}
     </View>
@@ -96,3 +118,13 @@ const useThemeStyles = StyleSheet.createTheme(() => ({
   },
   infoBoxText: {fontSize: 16},
 }));
+
+function translateErrorType(errorType: ErrorType): string {
+  switch (errorType) {
+    case 'network-error':
+    case 'timeout':
+      return 'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil.';
+    default:
+      return 'Oops - vi feila med søket. Supert om du prøver igjen 🤞';
+  }
+}

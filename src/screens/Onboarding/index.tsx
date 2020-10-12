@@ -1,20 +1,115 @@
 import React, {useEffect, useState} from 'react';
 import {Linking, Text, TouchableOpacity, View} from 'react-native';
 import {PRIVACY_POLICY_URL} from 'react-native-dotenv';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAppState} from '../../AppContext';
-import {TestPilotFigure} from '../../assets/svg/illustrations';
+import {
+  Onboarding2,
+  Onboarding1,
+  Onboarding3,
+} from '../../assets/svg/illustrations/';
 import {useGeolocationState} from '../../GeolocationContext';
 import {StyleSheet} from '../../theme';
-import colors from '../../theme/colors';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+  TransitionPresets,
+} from '@react-navigation/stack';
+import StepOuterContainer from './components/StepContainer';
+import Illustration from './components/Illustration';
+import NavigationControls from './components/NavigationControls';
+type StepProps = {
+  navigation: StackNavigationProp<OnboardingStackParams>;
+};
+type OnboardingStackParams = {
+  StepOne: StepProps;
+  StepTwo: StepProps;
+  StepThree: StepProps;
+};
+const Stack = createStackNavigator<OnboardingStackParams>();
 
-const Onboarding: React.FC = () => {
+const Onboarding = () => {
+  return (
+    <>
+      <Stack.Navigator initialRouteName="StepOne" headerMode="none">
+        <Stack.Screen
+          name="StepOne"
+          component={StepOne}
+          options={{
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        ></Stack.Screen>
+        <Stack.Screen
+          name="StepTwo"
+          component={StepTwo}
+          options={{
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        ></Stack.Screen>
+        <Stack.Screen
+          name="StepThree"
+          component={StepThree}
+          options={{
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        ></Stack.Screen>
+      </Stack.Navigator>
+    </>
+  );
+};
+
+const StepOne: React.FC<StepProps> = ({navigation}) => {
+  const styles = useStyles();
+  const onNavigate = () => {
+    navigation.navigate('StepTwo');
+  };
+  return (
+    <>
+      <Illustration Svg={Onboarding1} />
+      <StepOuterContainer>
+        <View style={styles.textContainer} accessible={true}>
+          <Text style={[styles.title, styles.text]}>
+            Velkommen som testpilot!{' '}
+          </Text>
+          <Text style={styles.text}>
+            Du bruker nå en betaversjon av den nye AtB-appen. Her kan du
+            planlegge reiser og sjekke avgangstider i Trøndelag. Appen vil bli
+            jevnlig oppdatert med nye funksjoner.
+          </Text>
+        </View>
+        <NavigationControls currentPage={1} onNavigate={onNavigate} />
+      </StepOuterContainer>
+    </>
+  );
+};
+const StepTwo: React.FC<StepProps> = ({navigation}) => {
+  const styles = useStyles();
+  const onNavigate = () => {
+    navigation.navigate('StepThree');
+  };
+  return (
+    <>
+      <Illustration Svg={Onboarding2} />
+      <StepOuterContainer>
+        <View style={styles.textContainer} accessible={true}>
+          <Text style={[styles.title, styles.text]}>
+            Bidra til å gjøre appen bedre
+          </Text>
+          <Text style={styles.text}>
+            Vi trenger dine idéer og tilbakemeldinger for å gjøre appen bedre.
+            Disse deler du enklest ved å velge chatikonet oppe i høyre hjørne av
+            appen. Chatten er anonym.
+          </Text>
+        </View>
+        <NavigationControls currentPage={2} onNavigate={onNavigate} />
+      </StepOuterContainer>
+    </>
+  );
+};
+const StepThree: React.FC<StepProps> = ({navigation}) => {
+  const styles = useStyles();
   const {completeOnboarding} = useAppState();
   const {status, requestPermission} = useGeolocationState();
   const [requestedOnce, setRequestedOnce] = useState(false);
-
-  const styles = useStyles();
-
   useEffect(() => {
     if (requestedOnce && status) {
       completeOnboarding();
@@ -25,115 +120,58 @@ const Onboarding: React.FC = () => {
     if (status !== 'granted') await requestPermission();
     setRequestedOnce(true);
   }
-
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.innerContainer}>
-        <View style={styles.textContainer}>
-          <Text style={styles.title}>Velkommen som testpilot! </Text>
-          <TestPilotFigure width={48} style={styles.figure} />
-          <Text style={styles.description}>
-            Nå kan du begynne å teste appen for å finne reiser og se busstrafikk
-            i sanntid fra telefonen din!
-          </Text>
-          <Text style={styles.subtitle}>
+    <>
+      <Illustration Svg={Onboarding3} />
+      <StepOuterContainer>
+        <View style={styles.textContainer} accessible={true}>
+          <Text style={[styles.title, styles.text]}>
             Bedre opplevelse med posisjonsdeling
           </Text>
-          <Text style={styles.description}>
-            Deling av posisjon mens du bruker appen vil gi en mye bedre
-            opplevelse og enklere bruk. Vi anbefaler derfor at du tillater
-            dette. Du kan når som helst slutte å dele posisjon.
+          <Text style={styles.text}>
+            Ved å tillate deling av posisjon kan du finne nærmeste holdeplass og
+            planlegge reisen fra din lokasjon. Du kan når som helst slutte å
+            dele posisjon.
           </Text>
         </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={onRequestPermission}>
-            <Text style={styles.buttonText}>Fortsett</Text>
-          </TouchableOpacity>
+        <NavigationControls
+          currentPage={3}
+          onNavigate={onRequestPermission}
+          title="Fullfør"
+          arrow={false}
+        >
           <TouchableOpacity
             onPress={() =>
               Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
             }
           >
-            <Text style={styles.privacyPolicy}>
+            <Text style={[styles.text, styles.privacyPolicy]}>
               Les vår personvernerklæring
             </Text>
           </TouchableOpacity>
-        </View>
-      </View>
-    </SafeAreaView>
+        </NavigationControls>
+      </StepOuterContainer>
+    </>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    backgroundColor: theme.background.level1,
-    flex: 1,
-  },
-  innerContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
   textContainer: {
-    flex: 1,
-    padding: 24,
+    padding: theme.spacings.xLarge,
+    backgroundColor: 'rgba(235,236,237,0.85)',
   },
   title: {
-    fontSize: 26,
-    textAlign: 'center',
-    color: theme.text.colors.primary,
-    marginTop: 24,
-  },
-  figure: {
-    alignSelf: 'center',
-    marginVertical: 12,
-  },
-  subtitle: {
-    fontSize: 16,
     fontWeight: 'bold',
-    textAlign: 'center',
+  },
+  text: {
+    fontSize: theme.text.sizes.body,
     color: theme.text.colors.primary,
     marginTop: 12,
   },
-  description: {
-    fontSize: 16,
-    textAlign: 'center',
-    color: theme.text.colors.primary,
-    marginVertical: 12,
-  },
   privacyPolicy: {
-    fontSize: 16,
     textAlign: 'center',
     textDecorationLine: 'underline',
-    color: theme.text.colors.primary,
-    marginTop: 24,
-  },
-  svgContainer: {
-    width: '100%',
-    maxHeight: 300,
-    zIndex: -1,
-  },
-  svg: {
-    opacity: 0.2,
-  },
-  buttonContainer: {
-    width: '100%',
-    position: 'absolute',
-    bottom: 0,
-    padding: 24,
-  },
-  button: {
-    backgroundColor: colors.secondary.cyan,
-    width: '100%',
-    height: 46,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: theme.text.colors.primary,
+    marginTop: theme.spacings.medium,
   },
 }));
 

@@ -240,7 +240,7 @@ const DisappearingHeader: React.FC<Props> = ({
               {children}
             </Animated.ScrollView>
           ) : (
-            <View style={{paddingTop: contentHeight + headerMargin}}>
+            <View style={{flex: 1, paddingTop: contentHeight + headerMargin}}>
               {children}
             </View>
           )}

@@ -30,7 +30,7 @@ export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
   };
 
   return (
-    <View style={styles.mapView}>
+    <View style={styles.container}>
       <MapboxGL.MapView
         style={styles.map}
         scrollEnabled={false}
@@ -44,6 +44,7 @@ export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
         {...MapViewConfig}
         styleURL={undefined}
         compassEnabled={false}
+        onPress={expandMap}
       >
         <MapboxGL.Camera
           bounds={bounds}
@@ -54,7 +55,6 @@ export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
         <MapLabel point={endPoint} id={'end'} text="Slutt"></MapLabel>
         <MapLabel point={startPoint} id={'start'} text="Start"></MapLabel>
       </MapboxGL.MapView>
-
       <View style={styles.togglerContainer}>
         <TouchableOpacity
           style={styles.toggler}
@@ -69,9 +69,8 @@ export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
   );
 };
 const styles = StyleSheet.create({
-  mapView: {flex: 1, height: 96, justifyContent: 'flex-end'},
+  container: {height: 160},
   map: {
-    position: 'absolute',
     width: '100%',
     height: '100%',
   },

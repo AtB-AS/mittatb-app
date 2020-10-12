@@ -1,7 +1,15 @@
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Text, TouchableOpacity, View, ViewStyle, StyleProp} from 'react-native';
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+  StyleProp,
+  ActivityIndicator,
+} from 'react-native';
+import analytics from '@react-native-firebase/analytics';
 import {searchTrip} from '../../api';
 import {CancelToken, isCancel} from '../../api/client';
 import {Swap} from '../../assets/svg/icons/actions';
@@ -40,6 +48,11 @@ import FavoriteChips from '../../favorite-chips';
 
 import Animated, {Easing} from 'react-native-reanimated';
 import Bugsnag from '@bugsnag/react-native';
+import {ErrorType, getAxiosErrorType} from '../../api/utils';
+import AccessibleText, {
+  screenreaderPause,
+} from '../../components/accessible-text';
+import colors from '../../theme/colors';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -59,6 +72,7 @@ type RootProps = {
 const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
   const {
     status,
+    locationEnabled,
     location,
     requestPermission: requestGeoPermission,
   } = useGeolocationState();
@@ -76,6 +90,7 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
   return (
     <Assistant
       currentLocation={currentLocation}
+      hasLocationPermission={locationEnabled && status === 'granted'}
       navigation={navigation}
       requestGeoPermission={requestGeoPermission}
     />
@@ -84,12 +99,14 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
 
 type Props = {
   currentLocation?: Location;
+  hasLocationPermission: boolean;
   requestGeoPermission: RequestPermissionFn;
   navigation: AssistantScreenNavigationProp;
 };
 
 const Assistant: React.FC<Props> = ({
   currentLocation,
+  hasLocationPermission,
   requestGeoPermission,
   navigation,
 }) => {
@@ -129,6 +146,17 @@ const Assistant: React.FC<Props> = ({
     });
   }
 
+  const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
+
+  useDoOnceWhen(
+    () => setUpdatingLocation(true),
+    !Boolean(currentLocation) && hasLocationPermission,
+  );
+  useDoOnceWhen(
+    () => setUpdatingLocation(false),
+    Boolean(currentLocation) && hasLocationPermission,
+  );
+
   useDoOnceWhen(setCurrentLocationAsFrom, Boolean(currentLocation));
 
   async function setCurrentLocationOrRequest() {
@@ -143,6 +171,7 @@ const Assistant: React.FC<Props> = ({
   }
 
   function resetView() {
+    analytics().logEvent('click_logo_reset');
     log('reset');
     setCurrentLocationOrRequest();
 
@@ -158,6 +187,7 @@ const Assistant: React.FC<Props> = ({
     timeOfLastSearch,
     reload,
     clearPatterns,
+    errorType,
   ] = useTripPatterns(from, to, date);
 
   const openLocationSearch = (
@@ -171,9 +201,9 @@ const Assistant: React.FC<Props> = ({
       initialLocation,
     });
 
-  const showEmptyScreen = !tripPatterns && !isSearching;
+  const showEmptyScreen = !tripPatterns && !isSearching && !errorType;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
-  const useScroll = !showEmptyScreen && !isEmptyResult;
+  const useScroll = (!showEmptyScreen && !isEmptyResult) || !!errorType;
   const isHeaderFullHeight = !from || !to;
 
   const renderHeader = useCallback(
@@ -184,10 +214,23 @@ const Assistant: React.FC<Props> = ({
             <View style={styles.styleButton}>
               <LocationButton
                 accessible={true}
-                accessibilityLabel="Velg avreisested."
+                accessibilityLabel={'Velg avreisested' + screenreaderPause}
+                accessibilityHint={
+                  'Aktiver for å søke etter adresse eller sted.' +
+                  screenreaderPause
+                }
                 accessibilityRole="button"
                 title="Fra"
-                placeholder="Søk etter adresse eller sted"
+                placeholder={
+                  updatingLocation
+                    ? 'Oppdaterer posisjon'
+                    : 'Søk etter adresse eller sted'
+                }
+                icon={
+                  updatingLocation && !from ? (
+                    <ActivityIndicator color={colors.general.gray200} />
+                  ) : undefined
+                }
                 location={from}
                 onPress={() => openLocationSearch('fromLocation', from)}
               />
@@ -195,7 +238,11 @@ const Assistant: React.FC<Props> = ({
 
             <TouchableOpacity
               accessible={true}
-              accessibilityLabel="Bruk min posisjon som avreisested."
+              accessibilityLabel={
+                from?.resultType == 'geolocation'
+                  ? 'Oppdater posisjon.'
+                  : 'Bruk posisjon som avreisested.'
+              }
               accessibilityRole="button"
               hitSlop={insets.all(12)}
               onPress={setCurrentLocationOrRequest}
@@ -222,7 +269,9 @@ const Assistant: React.FC<Props> = ({
                 onPress={swap}
                 hitSlop={insets.all(12)}
                 accessible={true}
-                accessibilityLabel="Bytt om på avreisested og ankomststed"
+                accessibilityLabel={
+                  'Bytt avreisested og ankomststed' + screenreaderPause
+                }
                 accessibilityRole="button"
               >
                 <Swap />
@@ -240,6 +289,11 @@ const Assistant: React.FC<Props> = ({
               chipTypes={['favorites', 'add-favorite']}
               onSelectLocation={fillNextAvailableLocation}
               containerStyle={styles.chipBox}
+              chipActionHint={
+                'Aktiver for å bruke som ' +
+                (from ? 'destinasjon' : 'avreisested') +
+                screenreaderPause
+              }
             />
           </Fade>
 
@@ -255,6 +309,13 @@ const Assistant: React.FC<Props> = ({
               />
             </SearchGroup>
           </Fade>
+          <View accessible={true} accessibilityLiveRegion="polite">
+            <AccessibleText
+              prefix={
+                isSearching ? 'Laster søkeresultat' : 'Søkeresultat innlastet'
+              }
+            />
+          </View>
         </View>
       </View>
     ),
@@ -330,6 +391,7 @@ const Assistant: React.FC<Props> = ({
             tripPattern: tripPattern,
           })
         }
+        errorType={errorType}
       />
     </DisappearingHeader>
   );
@@ -479,10 +541,11 @@ function useTripPatterns(
   fromLocation: Location | undefined,
   toLocation: Location | undefined,
   date: DateOutput | undefined,
-): [TripPattern[] | null, boolean, Date, () => {}, () => void] {
+): [TripPattern[] | null, boolean, Date, () => {}, () => void, ErrorType?] {
   const [isSearching, setIsSearching] = useState(false);
   const [timeOfSearch, setTimeOfSearch] = useState<Date>(new Date());
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
+  const [errorType, setErrorType] = useState<ErrorType>();
 
   const clearPatterns = () => setTripPatterns(null);
   const reload = useCallback(() => {
@@ -492,6 +555,7 @@ function useTripPatterns(
       if (!fromLocation || !toLocation) return;
 
       setIsSearching(true);
+      setErrorType(undefined);
       try {
         const arriveBy = date?.type === 'arrival';
         const searchDate =
@@ -518,6 +582,7 @@ function useTripPatterns(
         setTimeOfSearch(searchDate);
       } catch (e) {
         if (!isCancel(e)) {
+          setErrorType(getAxiosErrorType(e));
           console.warn(e);
           setTripPatterns(null);
           setIsSearching(false);
@@ -534,7 +599,14 @@ function useTripPatterns(
 
   useEffect(reload, [reload]);
 
-  return [tripPatterns, isSearching, timeOfSearch, reload, clearPatterns];
+  return [
+    tripPatterns,
+    isSearching,
+    timeOfSearch,
+    reload,
+    clearPatterns,
+    errorType,
+  ];
 }
 
 function useDoOnceWhen(fn: () => void, condition: boolean) {

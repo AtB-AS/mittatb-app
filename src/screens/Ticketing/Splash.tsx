@@ -9,7 +9,7 @@ import {StyleSheet} from '../../theme';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import LogoOutline from '../../ScreenHeader/LogoOutline';
-import {HOME_TAB_NAME} from '../../utils/navigation';
+import {useNavigateHome} from '../../utils/navigation';
 
 function openOtherTicketingApp() {
   const url =
@@ -26,7 +26,7 @@ type Props = {
 export default function Splash({navigation}: Props) {
   const {icon: chatIcon, openChat} = useChatIcon();
   const {width: windowWidth} = useWindowDimensions();
-  const navigateHome = () => navigation.navigate(HOME_TAB_NAME);
+  const navigateHome = useNavigateHome();
 
   return (
     <SafeAreaView style={styles.container}>

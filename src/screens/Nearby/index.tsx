@@ -24,7 +24,7 @@ import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import SearchGroup from '../../components/search-button/search-group';
 import DisappearingHeader from '../../components/disappearing-header';
 import {DeparturesWithStop, Paginated, DeparturesRealtimeData} from '../../sdk';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
 import useReducerWithSideEffects, {
   Update,
   ReducerWithSideEffects,
@@ -41,10 +41,12 @@ import {
 } from './utils';
 import insets from '../../utils/insets';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
-import TextHiddenSupportPrefix from '../../components/text-hidden-support-prefix';
+import AccessibleText from '../../components/accessible-text';
 import {useReverseGeocoder} from '../../geocoder';
 import {useLocationSearchValue} from '../../location-search';
-import {HOME_TAB_NAME} from '../../utils/navigation';
+import {useNavigateHome} from '../../utils/navigation';
+import {ErrorType, getAxiosErrorType} from '../../api/utils';
+import colors from '../../theme/colors';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
@@ -67,7 +69,12 @@ type RootProps = {
 };
 
 const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
-  const {status, location, requestPermission} = useGeolocationState();
+  const {
+    status,
+    location,
+    locationEnabled,
+    requestPermission,
+  } = useGeolocationState();
 
   const {locations: reverseLookupLocations} =
     useReverseGeocoder(location?.coords ?? null) ?? [];
@@ -82,6 +89,7 @@ const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
   return (
     <NearbyOverview
       requestGeoPermission={requestPermission}
+      hasLocationPermission={locationEnabled && status === 'granted'}
       currentLocation={currentLocation}
       navigation={navigation}
     />
@@ -90,6 +98,7 @@ const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
 
 type Props = {
   currentLocation?: Location;
+  hasLocationPermission: boolean;
   requestGeoPermission: RequestPermissionFn;
   navigation: NearbyScreenNavigationProp;
 };
@@ -97,6 +106,7 @@ type Props = {
 const NearbyOverview: React.FC<Props> = ({
   requestGeoPermission,
   currentLocation,
+  hasLocationPermission,
   navigation,
 }) => {
   const styles = useThemeStyles();
@@ -110,13 +120,17 @@ const NearbyOverview: React.FC<Props> = ({
   );
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
 
+  const updatingLocation = !fromLocation && hasLocationPermission;
+
   const {state, refresh, loadMore, showMoreOnQuay} = useDepartureData(
     fromLocation,
   );
-  const {departures, isLoading, isFetchingMore} = state;
+  const {departures, isLoading, isFetchingMore, error} = state;
 
-  const isInitialScreen = departures == null && !isLoading;
-  const activateScroll = !isInitialScreen;
+  const isInitialScreen = departures == null && !isLoading && !error;
+  const activateScroll = !isInitialScreen || !!error;
+
+  const onScrollViewEndReached = () => departures?.length && loadMore();
 
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {
@@ -146,7 +160,7 @@ const NearbyOverview: React.FC<Props> = ({
     }
   }
 
-  const navigateHome = () => navigation.navigate(HOME_TAB_NAME);
+  const navigateHome = useNavigateHome();
 
   const renderHeader = () => (
     <SearchGroup>
@@ -154,7 +168,16 @@ const NearbyOverview: React.FC<Props> = ({
         <View style={styles.styleButton}>
           <LocationButton
             title="Fra"
-            placeholder="Søk etter adresse eller sted"
+            placeholder={
+              updatingLocation
+                ? 'Oppdaterer posisjon'
+                : 'Søk etter adresse eller sted'
+            }
+            icon={
+              updatingLocation ? (
+                <ActivityIndicator color={colors.general.gray200} />
+              ) : undefined
+            }
             location={fromLocation}
             onPress={openLocationSearch}
             accessible={true}
@@ -189,24 +212,34 @@ const NearbyOverview: React.FC<Props> = ({
         accessibilityLabel: 'Gå til startskjerm',
       }}
       alternativeTitleComponent={
-        <TextHiddenSupportPrefix
-          prefix="Avganger fra"
-          style={styles.altTitleHeader}
-        >
+        <AccessibleText prefix="Avganger fra" style={styles.altTitleHeader}>
           {fromLocation?.name}
-        </TextHiddenSupportPrefix>
+        </AccessibleText>
       }
-      onEndReached={loadMore}
+      onEndReached={onScrollViewEndReached}
     >
       <NearbyResults
         departures={departures}
         onShowMoreOnQuay={showMoreOnQuay}
         isFetchingMore={isFetchingMore && !isLoading}
         isInitialScreen={isInitialScreen}
+        error={
+          error ? translateErrorType(error.type, error.loadType) : undefined
+        }
       />
     </DisappearingHeader>
   );
 };
+
+function translateErrorType(errorType: ErrorType, loadType: LoadType): string {
+  switch (errorType) {
+    case 'network-error':
+    case 'timeout':
+      return 'Hei, er du på nett? Vi kan ikke oppdatere avgangene siden nettforbindelsen din mangler eller er ustabil.';
+    default:
+      return 'Oops - vi klarte ikke hente avganger. Supert om du prøver igjen 🤞';
+  }
+}
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   altTitleHeader: {
@@ -225,8 +258,12 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
 
 export default NearbyScreen;
 
+type LoadType = 'initial' | 'more';
+
 type DepartureDataState = {
   departures: DeparturesWithStopLocal[] | null;
+  error?: {type: ErrorType; loadType: LoadType};
+  locationId?: string;
   isLoading: boolean;
   isFetchingMore: boolean;
   queryInput: DeparturesInputQuery;
@@ -244,6 +281,8 @@ const initialPaging = {
 };
 const initialState: DepartureDataState = {
   departures: null,
+  error: undefined,
+  locationId: undefined,
   isLoading: false,
   isFetchingMore: false,
   paging: initialPaging,
@@ -271,8 +310,15 @@ type DepartureDataActions =
     }
   | {
       type: 'UPDATE_DEPARTURES';
+      locationId?: string;
       reset?: boolean;
       paginationData: Paginated<DeparturesWithStop[]>;
+    }
+  | {
+      type: 'SET_ERROR';
+      loadType: LoadType;
+      error: ErrorType;
+      reset?: boolean;
     }
   | {
       type: 'UPDATE_REALTIME';
@@ -295,7 +341,13 @@ const reducer: ReducerWithSideEffects<
       };
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
-        {...state, isLoading: true, isFetchingMore: true, queryInput},
+        {
+          ...state,
+          isLoading: true,
+          error: undefined,
+          isFetchingMore: true,
+          queryInput,
+        },
         async (_, dispatch) => {
           try {
             // Fresh fetch, reset paging and use new query input with new startTime
@@ -307,7 +359,15 @@ const reducer: ReducerWithSideEffects<
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
+              locationId: action.location?.id,
               paginationData,
+            });
+          } catch (e) {
+            dispatch({
+              type: 'SET_ERROR',
+              reset: action.location?.id !== state.locationId,
+              loadType: 'initial',
+              error: getAxiosErrorType(e),
             });
           } finally {
             dispatch({type: 'STOP_LOADER'});
@@ -321,7 +381,7 @@ const reducer: ReducerWithSideEffects<
       if (state.isFetchingMore) return NoUpdate();
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
-        {...state, isFetchingMore: true},
+        {...state, error: undefined, isFetchingMore: true},
         async (state, dispatch) => {
           try {
             // Use previously stored queryInput with stored startTime
@@ -333,7 +393,14 @@ const reducer: ReducerWithSideEffects<
 
             dispatch({
               type: 'UPDATE_DEPARTURES',
+              locationId: action.location?.id,
               paginationData,
+            });
+          } catch (e) {
+            dispatch({
+              type: 'SET_ERROR',
+              loadType: 'more',
+              error: getAxiosErrorType(e),
             });
           } finally {
             dispatch({type: 'STOP_LOADER'});
@@ -349,14 +416,18 @@ const reducer: ReducerWithSideEffects<
         async (state, dispatch) => {
           // Use same query input with same startTime to ensure that
           // we get the same result.
-          const realtimeData = await getRealtimeDeparture(
-            state.departures ?? [],
-            state.queryInput,
-          );
-          dispatch({
-            type: 'UPDATE_REALTIME',
-            realtimeData,
-          });
+          try {
+            const realtimeData = await getRealtimeDeparture(
+              state.departures ?? [],
+              state.queryInput,
+            );
+            dispatch({
+              type: 'UPDATE_REALTIME',
+              realtimeData,
+            });
+          } catch (e) {
+            console.warn(e);
+          }
         },
       );
     }
@@ -384,6 +455,7 @@ const reducer: ReducerWithSideEffects<
       return Update({
         ...state,
         isLoading: false,
+        locationId: action.locationId,
         departures: action.reset
           ? mapQuayDeparturesToShowlimits(
               action.paginationData.data,
@@ -415,6 +487,17 @@ const reducer: ReducerWithSideEffects<
           state.departures ?? [],
           action.realtimeData,
         ),
+      });
+    }
+
+    case 'SET_ERROR': {
+      return Update({
+        ...state,
+        error: {
+          type: action.error,
+          loadType: action.loadType,
+        },
+        departures: action.reset ? null : state.departures,
       });
     }
 

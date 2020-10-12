@@ -1,4 +1,4 @@
-import {EstimatedCall, Leg, Quay} from '../sdk';
+import {EstimatedCall, Leg, Quay, LegMode} from '../sdk';
 
 export function getLineName(leg: Leg) {
   return leg.line
@@ -24,6 +24,24 @@ export function getLineNameFromEstimatedCall(
     return {name};
   }
   return {publicCode, name};
+}
+export function getReadableModeName(mode: LegMode): string {
+  switch (mode) {
+    case 'bus':
+      return 'Buss';
+    case 'rail':
+      return 'Tog';
+    case 'tram':
+      return 'Trikk';
+    case 'water':
+      return 'Båt';
+    case 'air':
+      return 'Fly';
+    case 'foot':
+      return 'Gange';
+    default:
+      return mode;
+  }
 }
 
 export function getQuayName(quay?: Quay, defaultName: string = 'Ukjent') {
