@@ -10,7 +10,7 @@ const HeaderButton: React.FC<{iconButton: IconButton}> = ({iconButton}) => {
   return (
     <TouchableOpacity
       onPress={iconButton.onPress}
-      hitSlop={insets.all(8)}
+      hitSlop={insets.all(12)}
       accessibilityLabel={iconButton.accessibilityLabel}
       accessibilityRole="button"
     >
