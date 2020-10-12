@@ -64,7 +64,7 @@ const ResultItemHeader: React.FC<{
   const wordSpacing = ' ';
   return (
     <View style={styles.resultHeader}>
-      <Text>
+      <Text style={styles.resultHeaderLabel}>
         Fra{wordSpacing}
         {quayName}
         {wordSpacing}
@@ -159,14 +159,17 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   resultHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingBottom: 8,
     marginBottom: 8,
     borderBottomColor: theme.background.level1,
     borderBottomWidth: 1,
   },
+  resultHeaderLabel: {
+    flex: 7,
+  },
   durationContainer: {
-    flex: 1,
+    flex: 2,
     alignItems: 'flex-end',
   },
   warningIcon: {
