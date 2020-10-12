@@ -123,8 +123,8 @@ function translateErrorType(errorType: ErrorType): string {
   switch (errorType) {
     case 'network-error':
     case 'timeout':
-      return 'Klarte ikke å søke opp reiseruter grunnet dårlig nettforbindelse. Har du skrudd på mobildata?';
+      return 'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil.';
     default:
-      return 'Det oppstod en feil ved søk av reiseruter. Vennligst prøv igjen.';
+      return 'Oops - vi feila med søket. Supert om du prøver igjen 🤞';
   }
 }
