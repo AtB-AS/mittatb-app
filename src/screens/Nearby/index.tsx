@@ -46,6 +46,7 @@ import {useReverseGeocoder} from '../../geocoder';
 import {useLocationSearchValue} from '../../location-search';
 import {useNavigateHome} from '../../utils/navigation';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
+import colors from '../../theme/colors';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
@@ -172,7 +173,11 @@ const NearbyOverview: React.FC<Props> = ({
                 ? 'Oppdaterer posisjon'
                 : 'Søk etter adresse eller sted'
             }
-            icon={updatingLocation ? <ActivityIndicator /> : undefined}
+            icon={
+              updatingLocation ? (
+                <ActivityIndicator color={colors.general.gray200} />
+              ) : undefined
+            }
             location={fromLocation}
             onPress={openLocationSearch}
             accessible={true}

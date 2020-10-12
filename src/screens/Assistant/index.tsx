@@ -52,6 +52,7 @@ import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import AccessibleText, {
   screenreaderPause,
 } from '../../components/accessible-text';
+import colors from '../../theme/colors';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -226,7 +227,9 @@ const Assistant: React.FC<Props> = ({
                     : 'Søk etter adresse eller sted'
                 }
                 icon={
-                  updatingLocation && !from ? <ActivityIndicator /> : undefined
+                  updatingLocation && !from ? (
+                    <ActivityIndicator color={colors.general.gray200} />
+                  ) : undefined
                 }
                 location={from}
                 onPress={() => openLocationSearch('fromLocation', from)}
