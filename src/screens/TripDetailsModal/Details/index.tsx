@@ -273,6 +273,7 @@ const useDetailsStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   scrollViewContent: {
+    paddingRight: theme.spacings.medium,
     paddingBottom: 100,
   },
   textStyle: {
