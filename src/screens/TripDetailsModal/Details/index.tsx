@@ -10,7 +10,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {DetailsModalNavigationProp, DetailsModalStackParams} from '..';
 import {getSingleTripPattern} from '../../../api/trips';
 import {getAxiosErrorType} from '../../../api/utils';
-import {ArrowLeft} from '../../../assets/svg/icons/navigation';
+import {Close} from '../../../assets/svg/icons/actions';
 import {Dot} from '../../../assets/svg/icons/other/';
 import {
   CurrentLocationArrow,
@@ -76,7 +76,7 @@ const TripDetailsModal: React.FC<Props> = (props) => {
           accessible: true,
           accessibilityRole: 'button',
           accessibilityLabel: 'Gå tilbake',
-          icon: <ArrowLeft />,
+          icon: <Close />,
         }}
         title="Reisedetaljer"
         style={{backgroundColor: colors.secondary.cyan}}
