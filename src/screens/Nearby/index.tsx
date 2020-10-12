@@ -235,9 +235,9 @@ function translateErrorType(errorType: ErrorType, loadType: LoadType): string {
   switch (errorType) {
     case 'network-error':
     case 'timeout':
-      return 'Klarte ikke å oppdatere avganger grunnet dårlig nettforbindelse. Har du skrudd på mobildata?';
+      return 'Hei, er du på nett? Vi kan ikke oppdatere avgangene siden nettforbindelsen din mangler eller er ustabil.';
     default:
-      return 'Det oppstod en feil ved søk på avganger. Vennligst prøv igjen.';
+      return 'Oops - vi klarte ikke hente avganger. Supert om du prøver igjen 🤞';
   }
 }
 

@@ -206,9 +206,9 @@ function translateErrorType(errorType: ErrorType): string {
   switch (errorType) {
     case 'network-error':
     case 'timeout':
-      return 'Oisann vi sliter litt med nettforbindelsen. Prøv igjen du.';
+      return 'Hei, er du på nett? Vi kan ikke søke siden nettforbindelsen din mangler eller er ustabil.';
     default:
-      return 'Det oppstod en feil ved søk.';
+      return 'Oops - vi feila med søket. Supert om du prøver igjen 🤞';
   }
 }
 

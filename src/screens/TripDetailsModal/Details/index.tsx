@@ -199,9 +199,9 @@ function translateError(error: AxiosError): string {
   switch (errorType) {
     case 'network-error':
     case 'timeout':
-      return 'Kunne ikke hente ut oppdatering for reiseforslaget grunnet dårlig nettforbindelse.';
+      return 'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil.';
     default:
-      return 'Kunne ikke hente ut oppdatering for reiseforslaget. Det kan være at reisen har endret seg eller ikke lengre er tilgjengelig.';
+      return 'Vi kunne ikke oppdatere reiseforslaget ditt. Det kan hende reisen har endra seg eller er utdatert?';
   }
 }
 
