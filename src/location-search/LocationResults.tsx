@@ -55,7 +55,7 @@ const LocationResults: React.FC<Props> = ({
               accessibilityLabel={'Legg ' + location.name + ' i søkefelt'}
               accessibilityRole="button"
               hitSlop={insets.all(8)}
-              onPressOut={() => onPrefillText(location.name + ' ')}
+              onPress={() => onPrefillText(location.name + ' ')}
             >
               <ArrowUpLeft />
             </TouchableOpacity>
