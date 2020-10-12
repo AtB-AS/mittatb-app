@@ -1,7 +1,14 @@
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Text, TouchableOpacity, View, ViewStyle, StyleProp} from 'react-native';
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+  StyleProp,
+  ActivityIndicator,
+} from 'react-native';
 import analytics from '@react-native-firebase/analytics';
 import {searchTrip} from '../../api';
 import {CancelToken, isCancel} from '../../api/client';
@@ -45,6 +52,7 @@ import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import AccessibleText, {
   screenreaderPause,
 } from '../../components/accessible-text';
+import colors from '../../theme/colors';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -64,6 +72,7 @@ type RootProps = {
 const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
   const {
     status,
+    locationEnabled,
     location,
     requestPermission: requestGeoPermission,
   } = useGeolocationState();
@@ -81,6 +90,7 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
   return (
     <Assistant
       currentLocation={currentLocation}
+      hasLocationPermission={locationEnabled && status === 'granted'}
       navigation={navigation}
       requestGeoPermission={requestGeoPermission}
     />
@@ -89,12 +99,14 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
 
 type Props = {
   currentLocation?: Location;
+  hasLocationPermission: boolean;
   requestGeoPermission: RequestPermissionFn;
   navigation: AssistantScreenNavigationProp;
 };
 
 const Assistant: React.FC<Props> = ({
   currentLocation,
+  hasLocationPermission,
   requestGeoPermission,
   navigation,
 }) => {
@@ -133,6 +145,17 @@ const Assistant: React.FC<Props> = ({
       toLocation: to,
     });
   }
+
+  const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
+
+  useDoOnceWhen(
+    () => setUpdatingLocation(true),
+    !Boolean(currentLocation) && hasLocationPermission,
+  );
+  useDoOnceWhen(
+    () => setUpdatingLocation(false),
+    Boolean(currentLocation) && hasLocationPermission,
+  );
 
   useDoOnceWhen(setCurrentLocationAsFrom, Boolean(currentLocation));
 
@@ -198,7 +221,16 @@ const Assistant: React.FC<Props> = ({
                 }
                 accessibilityRole="button"
                 title="Fra"
-                placeholder="Søk etter adresse eller sted"
+                placeholder={
+                  updatingLocation
+                    ? 'Oppdaterer posisjon'
+                    : 'Søk etter adresse eller sted'
+                }
+                icon={
+                  updatingLocation && !from ? (
+                    <ActivityIndicator color={colors.general.gray200} />
+                  ) : undefined
+                }
                 location={from}
                 onPress={() => openLocationSearch('fromLocation', from)}
               />
