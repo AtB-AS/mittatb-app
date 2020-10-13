@@ -24,7 +24,13 @@ import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import SearchGroup from '../../components/search-button/search-group';
 import DisappearingHeader from '../../components/disappearing-header';
 import {DeparturesWithStop, Paginated, DeparturesRealtimeData} from '../../sdk';
-import {View, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  AccessibilityInfo,
+} from 'react-native';
 import useReducerWithSideEffects, {
   Update,
   ReducerWithSideEffects,
@@ -161,6 +167,17 @@ const NearbyOverview: React.FC<Props> = ({
   }
 
   const navigateHome = useNavigateHome();
+
+  if (updatingLocation) {
+    AccessibilityInfo.announceForAccessibility(
+      'Oppdaterer posisjon for å finne avganger i nærheten.',
+    );
+  }
+  if (isLoading) {
+    AccessibilityInfo.announceForAccessibility(
+      'Laster avganger i nærheten av ',
+    );
+  }
 
   const renderHeader = () => (
     <SearchGroup>

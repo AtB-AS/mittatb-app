@@ -8,6 +8,7 @@ import {
   ViewStyle,
   StyleProp,
   ActivityIndicator,
+  AccessibilityInfo,
 } from 'react-native';
 import analytics from '@react-native-firebase/analytics';
 import {searchTrip} from '../../api';
@@ -49,9 +50,7 @@ import FavoriteChips from '../../favorite-chips';
 import Animated, {Easing} from 'react-native-reanimated';
 import Bugsnag from '@bugsnag/react-native';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
-import AccessibleText, {
-  screenreaderPause,
-} from '../../components/accessible-text';
+import {screenreaderPause} from '../../components/accessible-text';
 import colors from '../../theme/colors';
 
 type AssistantRouteName = 'Assistant';
@@ -309,13 +308,6 @@ const Assistant: React.FC<Props> = ({
               />
             </SearchGroup>
           </Fade>
-          <View accessible={true} accessibilityLiveRegion="polite">
-            <AccessibleText
-              prefix={
-                isSearching ? 'Laster søkeresultat' : 'Søkeresultat innlastet'
-              }
-            />
-          </View>
         </View>
       </View>
     ),
@@ -555,6 +547,7 @@ function useTripPatterns(
       if (!fromLocation || !toLocation) return;
 
       setIsSearching(true);
+      AccessibilityInfo.announceForAccessibility('Laster søkeresultat');
       setErrorType(undefined);
       try {
         const arriveBy = date?.type === 'arrival';
@@ -578,7 +571,9 @@ function useTripPatterns(
         );
         source.token.throwIfRequested();
         setTripPatterns(response.data);
+        AccessibilityInfo.announceForAccessibility('Søkeresultat innlastet');
         setIsSearching(false);
+
         setTimeOfSearch(searchDate);
       } catch (e) {
         if (!isCancel(e)) {
