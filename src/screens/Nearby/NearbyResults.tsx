@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
   ViewStyle,
+  AccessibilityInfo,
 } from 'react-native';
 import {NearbyScreenNavigationProp} from '.';
 import {Expand} from '../../assets/svg/icons/navigation';
@@ -80,7 +81,6 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
       </View>
     );
   }
-
   return (
     <View style={styles.container}>
       {error && (

@@ -1,6 +1,6 @@
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
-import {Text, TextInput, View, Keyboard} from 'react-native';
+import {Text, TextInput, View, Keyboard, AccessibilityInfo} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Header from '../ScreenHeader';
 import Input from '../components/input';
@@ -113,6 +113,10 @@ const LocationSearch: React.FC<Props> = ({
   const hasPreviousResults = !!previousLocations.length;
   const hasResults = !!filteredLocations.length;
   const hasAnyResult = hasResults || hasPreviousResults;
+
+  if (error) {
+    AccessibilityInfo.announceForAccessibility(translateErrorType(error));
+  }
 
   return (
     <SafeAreaView style={styles.container}>

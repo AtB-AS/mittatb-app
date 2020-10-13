@@ -1,5 +1,5 @@
-import React, {Fragment, useMemo} from 'react';
-import {Text, View} from 'react-native';
+import React, {Fragment, useMemo, useRef, useEffect} from 'react';
+import {Text, View, findNodeHandle, AccessibilityInfo} from 'react-native';
 import MessageBox from '../../message-box';
 import {TripPattern} from '../../sdk';
 import {StyleSheet, useTheme} from '../../theme';
@@ -7,7 +7,9 @@ import ResultItem from './ResultItem';
 import OptionalNextDayLabel from '../../components/optional-day-header';
 import {isSeveralDays} from '../../utils/date';
 import {NoResultReason} from './types';
-import {screenreaderPause} from '../../components/accessible-text';
+import AccessibleText, {
+  screenreaderPause,
+} from '../../components/accessible-text';
 import {ErrorType} from '../../api/utils';
 
 type Props = {
@@ -45,12 +47,11 @@ const Results: React.FC<Props> = ({
   }
 
   if (errorType) {
+    const errorMessage = translateErrorType(errorType);
+    AccessibilityInfo.announceForAccessibility(errorMessage);
     return (
       <View style={styles.container}>
-        <MessageBox
-          type="warning"
-          message={translateErrorType(errorType)}
-        ></MessageBox>
+        <MessageBox type="warning" message={errorMessage}></MessageBox>
       </View>
     );
   }
