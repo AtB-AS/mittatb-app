@@ -43,7 +43,7 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       - name: Replace ipa bundle
         if: steps.ipa-cache.outputs.cache-hit == 'true'
-        run: sh ./scripts/replace-bundle-ios.sh AtB.ipa AtB.app "Apple Distribution: ATB AS (CSV447Q97L)" 
+        run: sh ./scripts/replace-bundle-ios.sh AtB.ipa AtB.app 'Apple Distribution:: ATB AS (CSV447Q97L)' 
       - name: Distribute to AppCenter
         run: yarn appcenter:ios
         env:
