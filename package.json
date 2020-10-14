@@ -17,7 +17,7 @@
     "generate-svgs": "yarn generate-svg-mono-icons && yarn generate-svg-color",
     "build:ios": "fastlane ios build",
     "appcenter:ios": "fastlane ios appcenter",
-    "cert:ios": "fastlane ios cert"
+    "cert:ios": "fastlane ios get_cert"
   },
   "dependencies": {
     "@bugsnag/react-native": "^7.3.5",

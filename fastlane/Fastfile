@@ -7,7 +7,7 @@ end
 
 platform :ios do
   desc 'Match certificates'
-  lane :cert do 
+  lane :get_cert do 
     if is_ci
       create_keychain(
         name: "CI",
