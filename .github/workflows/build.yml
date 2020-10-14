@@ -35,12 +35,14 @@ jobs:
         with:
           path: 'AtB.ipa'
           key: ${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}
-      - name: Run fastlane build
-        if: steps.ipa-cache.outputs.cache-hit != 'true'
-        run: yarn build:ios
+      - name: Run fastlane cert match
+        run: yarn cert:ios
         env:
           FASTLANE_MATCH_URL: ${{ secrets.FASTLANE_MATCH_URL }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+      - name: Run fastlane build
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
+        run: yarn build:ios
       - name: Replace ipa bundle
         if: steps.ipa-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/replace-bundle-ios.sh AtB.ipa AtB.app "Apple Distribution:"" ATB AS (CSV447Q97L)"

@@ -6,6 +6,27 @@ before_all do
 end
 
 platform :ios do
+  desc 'Match certificates'
+  lane :cert do 
+    if is_ci
+      create_keychain(
+        name: "CI",
+        password: ENV["MATCH_PASSWORD"],
+        default_keychain: true,
+        unlock: true,
+        timeout: 3600,
+        lock_when_sleeps: false
+      )
+      match(
+        type: "adhoc",
+        readonly: true,
+        keychain_name: "CI",
+        keychain_password: ENV["MATCH_PASSWORD"]
+      )
+    else
+      match(type: 'adhoc', readonly: true)
+    end
+  end
   # iOS Lanes
   desc 'Build the iOS application.'
   lane :build do
@@ -13,24 +34,6 @@ platform :ios do
         build_number: Time.now.strftime("%Y%m%d%H%M"), 
         xcodeproj: './ios/atb.xcodeproj/'
       )
-      if is_ci
-        create_keychain(
-          name: "CI",
-          password: ENV["MATCH_PASSWORD"],
-          default_keychain: true,
-          unlock: true,
-          timeout: 3600,
-          lock_when_sleeps: false
-        )
-        match(
-          type: "adhoc",
-          readonly: true,
-          keychain_name: "CI",
-          keychain_password: ENV["MATCH_PASSWORD"]
-        )
-      else
-        match(type: 'adhoc', readonly: true)
-      end
       update_code_signing_settings(
         use_automatic_signing: false,
         bundle_identifier:"no.mittatb.staging",

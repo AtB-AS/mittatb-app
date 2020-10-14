@@ -13,24 +13,25 @@ else
 
     mkdir -p bundle
 
-    # Re-generate bundle
+    echo "Re-generate bundle"
     npx react-native bundle --platform ios --dev false --reset-cache --entry-file index.js --bundle-output bundle/main.jsbundle
 
     unzip $IPA_FILE_NAME
 
-    # Must delete old code signing
+    echo "Delete old signature"
     rm -rf Payload/$APP_NAME/\_CodeSignature
 
-    # Replace bundle
+    echo "Replace bundle"
+
     rm Payload/$APP_NAME/main.jsbundle
     cp bundle/main.jsbundle Payload/$APP_NAME/
 
-    # Generated entitlements file from ipa content
+    echo "Generated entitlements file from ipa content"
     codesign -d --entitlements :- "Payload/$APP_NAME" > entitlements.plist
 
-    # Re-sign new Payload
+    echo "Re-sign new Payload"
     codesign -f -s "$CODE_SIGN_IDENTITY" --entitlements entitlements.plist Payload/$APP_NAME/
 
-    # Generate new ipa
+    echo "Generate new ipa"
     zip -qr $IPA_FILE_NAME Payload/
 fi
