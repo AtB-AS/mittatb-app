@@ -18,7 +18,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: yarn install
         run: yarn install
       - name: Bundle Install
@@ -30,11 +30,20 @@ jobs:
       - uses: webfactory/ssh-agent@v0.4.0
         with:
           ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
+      - uses: actions/cache@v2
+        id: ipa-cache
+        with:
+          path: 'AtB.ipa'
+          key: ${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}
       - name: Run fastlane build
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: yarn build:ios
         env:
           FASTLANE_MATCH_URL: ${{ secrets.FASTLANE_MATCH_URL }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+      - name: Replace ipa bundle
+        if: steps.ipa-cache.outputs.cache-hit == 'true'
+        run: sh ./scripts/replace-bundle-ios.sh 'AtB.ipa' 'AtB.app' 'Apple Distribution: ATB AS (CSV447Q97L)'
       - name: Distribute to AppCenter
         run: yarn appcenter:ios
         env:
