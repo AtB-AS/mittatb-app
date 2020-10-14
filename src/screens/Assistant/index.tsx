@@ -220,7 +220,7 @@ const Assistant: React.FC<Props> = ({
                   screenreaderPause
                 }
                 accessibilityRole="button"
-                title="Fra"
+                title="Test"
                 placeholder={
                   updatingLocation
                     ? 'Oppdaterer posisjon'
