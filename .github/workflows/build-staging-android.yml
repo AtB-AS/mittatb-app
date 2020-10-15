@@ -1,0 +1,56 @@
+name: Build staging Android project
+on: [push]
+
+jobs:
+  build-ios:
+    name: Build Android
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Decrypt env files
+        run: sh ./scripts/git-crypt-unlock.sh
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+      - name: install node v12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Get potential cached node_modules
+        uses: actions/cache@v2
+        id: modules-cache
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+      - name: yarn install
+        if: steps.modules-cache.outputs.cache-hit != 'true'
+        run: yarn install
+      - name: Bundle install, fastlane dependencies
+        run: bundle install
+      - name: Set environment to staging
+        run: sh ./scripts/override-environment.sh staging
+      - name: Override native config files
+        run: sh ./scripts/override-config-files.sh
+      - name: Get potential cached APK
+        uses: actions/cache@v2
+        id: apk-cache
+        with:
+          path: 'app-staging.apk'
+          key: ${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}
+      - name: Get Android keystore
+        run: |
+          echo "${{ secrets.GPG_KEYSTORE_FILE }}" > atb.keystore.asc
+          gpg -d --passphrase '${{ secrets.GPG_KEYSTORE_PASS }}' --batch atb.keystore.asc > keystore.jks
+      - name: Run fastlane build
+        if: steps.apk-cache.outputs.cache-hit != 'true'
+        run: yarn build:android
+        env:
+          KEYSTORE_PASS: ${{ secrets.ATB_KEYSTORE_PASS }}
+          KEY_PASS: ${{ secrets.ATB_KEY_PASS }}
+          KEY_ALIAS: ${{ secrets.ATB_KEY_ALIAS }}
+      - name: Replace apk bundle
+        if: steps.apk-cache.outputs.cache-hit == 'true'
+        run: sh ./replace-bundle-android.sh app-staging.apk keystore.jks "${{ secrets.ATB_KEYSTORE_PASS }}" "${{ secrets.ATB_KEY_PASS }}" "${{ secrets.ATB_KEY_ALIAS }}" > /dev/null 2>&1
+      - name: Distribute to AppCenter
+        run: yarn appcenter:android
+        env:
+          APPCENTER_API_KEY: ${{ secrets.APPCENTER_API_KEY }}

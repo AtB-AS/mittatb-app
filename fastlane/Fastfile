@@ -49,19 +49,48 @@ platform :ios do
       )
     end
 
-    desc 'Upload the build to AppCenter'
-    lane :appcenter do
-      appcenter_upload(
-        api_token: ENV["APPCENTER_API_KEY"],
-        owner_name: "AtB-AS",
-        app_name: "MittAtb-1",
-        owner_type: "organization", 
-        file: "AtB.ipa",
-        notify_testers: false 
-      )
-    end
+  desc 'Upload the build to AppCenter'
+  lane :appcenter do
+    appcenter_upload(
+      api_token: ENV["APPCENTER_IOS_API_KEY"],
+      owner_name: "AtB-AS",
+      app_name: "MittAtb-1",
+      owner_type: "organization", 
+      file: "AtB.ipa",
+      notify_testers: false 
+    )
+  end
 end
 
 platform :android do
-  # Android Lanes
+  desc 'Upload the build to AppCenter'
+
+  lane :build do
+    gradle(task: 'clean', project_dir: 'android/')
+    sh("cp", "../keystore.jks", "../android/app/keystore.jks")
+    gradle(
+      task: 'assemble', 
+      build_type: 'staging', 
+      project_dir: 'android/', 
+      print_command: false, #don't print my passwords please
+      properties: {
+        "android.injected.signing.store.file" => "./keystore.jks",
+        "android.injected.signing.store.password" => ENV["KEYSTORE_PASS"],
+        "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
+        "android.injected.signing.key.password" => ENV["KEY_PASS"],
+      })
+    sh("pwd")
+    sh("cp", "../android/app/build/outputs/apk/staging/app-staging.apk", "../")
+  end
+
+  lane :appcenter do
+    appcenter_upload(
+      api_token: ENV["APPCENTER_ANDROID_API_KEY"],
+      owner_name: "AtB-AS",
+      app_name: "MittAtb",
+      owner_type: "organization", 
+      file: "app-staging.apk",
+      notify_testers: false 
+    )
+  end
 end

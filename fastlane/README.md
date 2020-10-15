@@ -16,6 +16,11 @@ or alternatively using `brew install fastlane`
 
 # Available Actions
 ## iOS
+### ios get_cert
+```
+fastlane ios get_cert
+```
+Match certificates
 ### ios build
 ```
 fastlane ios build
@@ -26,6 +31,20 @@ Build the iOS application.
 fastlane ios appcenter
 ```
 Upload the build to AppCenter
+
+----
+
+## Android
+### android build
+```
+fastlane android build
+```
+Upload the build to AppCenter
+### android appcenter
+```
+fastlane android appcenter
+```
+
 
 ----
 
