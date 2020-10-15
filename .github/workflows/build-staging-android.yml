@@ -53,7 +53,7 @@ jobs:
           KEY_ALIAS: ${{ secrets.ATB_KEY_ALIAS }}
       - name: Replace apk bundle
         if: steps.apk-cache.outputs.cache-hit == 'true'
-        run: sh ./scripts/replace-bundle-android.sh app-staging.apk keystore.jks '${{ secrets.ATB_KEYSTORE_PASS }}' '${{ secrets.ATB_KEY_PASS }}' '${{ secrets.ATB_KEY_ALIAS }}' > /dev/null 2>&1
+        run: sh ./scripts/replace-bundle-android.sh app-staging.apk keystore.jks '${{ secrets.ATB_KEYSTORE_PASS }}' '${{ secrets.ATB_KEY_PASS }}' '${{ secrets.ATB_KEY_ALIAS }}'
       - name: Distribute to AppCenter
         run: yarn appcenter:android
         env:
