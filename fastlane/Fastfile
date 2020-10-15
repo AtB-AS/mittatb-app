@@ -52,7 +52,7 @@ platform :ios do
   desc 'Upload the build to AppCenter'
   lane :appcenter do
     appcenter_upload(
-      api_token: ENV["APPCENTER_IOS_API_KEY"],
+      api_token: ENV["APPCENTER_API_KEY"],
       owner_name: "AtB-AS",
       app_name: "MittAtb-1",
       owner_type: "organization", 
@@ -85,7 +85,7 @@ platform :android do
 
   lane :appcenter do
     appcenter_upload(
-      api_token: ENV["APPCENTER_ANDROID_API_KEY"],
+      api_token: ENV["APPCENTER_API_KEY"],
       owner_name: "AtB-AS",
       app_name: "MittAtb",
       owner_type: "organization", 
