@@ -19,7 +19,7 @@ else
     npx react-native bundle --platform android --dev false --reset-cache --entry-file index.js --bundle-output bundle/android.bundle
 
     # Compile JS to Hermes Bytecode
-    ./node_modules/hermes-engine/osx-bin/hermesc -emit-binary -out bundle/index.android.bundle bundle/android.bundle
+    ./node_modules/hermes-engine/osx-bin/hermesc -emit-binary -output-source-map -out bundle/index.android.bundle bundle/android.bundle
 
     brew install apktool
 
