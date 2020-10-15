@@ -6,7 +6,8 @@ jobs:
     name: Build iOS
     runs-on: macOS-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout project
+        uses: actions/checkout@v1
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
         env:
@@ -21,7 +22,7 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
-      - name: yarn install
+      - name: Install node_modules
         if: steps.modules-cache.outputs.cache-hit != 'true'
         run: yarn install
       - name: Bundle Install
@@ -44,6 +45,9 @@ jobs:
         env:
           FASTLANE_MATCH_URL: ${{ secrets.FASTLANE_MATCH_URL }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+      - name: Generate icons
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
+        run: yarn app-icon generate -i icon.qa.png --platforms=ios
       - name: Run fastlane build
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: yarn build:ios
