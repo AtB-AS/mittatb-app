@@ -2,6 +2,7 @@
 
 # Security wise trying to avoid secrets being sent in via command line to the script
 # Safer to do it by env variable according to Github Actions docs
+
 if [[
     -z "${APK_FILE_NAME}"
     || -z "${KEYSTORE_FILE}"
@@ -16,6 +17,7 @@ if [[
   - KEYSTORE_PASS
   - KEY_PASS
   - KEY_ALIAS"
+
     exit 1
 else 
     mkdir -p bundle

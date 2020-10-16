@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Security wise trying to avoid secrets being sent in via command line to the script
-# Safer to do it by env variable according to Github Actions doc
+# Safer to do it by env variable according to Github Actions docs
+
 if [[
     -z "${IPA_FILE_NAME}"
     || -z "${APP_NAME}"

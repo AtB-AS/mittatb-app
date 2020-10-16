@@ -40,8 +40,8 @@ jobs:
       - name: Get Android keystore
         run: sh ./scripts/create-keystore-file.sh
         env:
-          GPG_KEYSTORE_FILE: '${{ secrets.GPG_KEYSTORE_FILE }}'
-          GPG_KEYSTORE_PASS: '${{ secrets.GPG_KEYSTORE_PASS }}'
+          GPG_KEYSTORE_FILE: ${{ secrets.GPG_KEYSTORE_FILE }}
+          GPG_KEYSTORE_PASS: ${{ secrets.GPG_KEYSTORE_PASS }}
       - name: Generate icons
         if: steps.apk-cache.outputs.cache-hit != 'true'
         run: yarn app-icon generate -i icon.qa.png --platforms=android --rounded none && app-icon generate -i icon.qa.round.png --platforms=android --rounded only
@@ -58,9 +58,9 @@ jobs:
         env:
           APK_FILE_NAME: 'app-staging.apk'
           KEYSTORE_FILE: 'keystore.jks'
-          KEYSTORE_PASS: '${{ secrets.ATB_KEYSTORE_PASS }}'
-          KEY_PASS: '${{ secrets.ATB_KEY_PASS }}'
-          KEY_ALIAS: '${{ secrets.ATB_KEY_ALIAS }}'
+          KEYSTORE_PASS: ${{ secrets.ATB_KEYSTORE_PASS }}
+          KEY_PASS: ${{ secrets.ATB_KEY_PASS }}
+          KEY_ALIAS: ${{ secrets.ATB_KEY_ALIAS }}
       - name: Distribute to AppCenter
         run: yarn appcenter:android
         env:
