@@ -57,7 +57,7 @@ jobs:
         env:
           IPA_FILE_NAME: 'AtB.ipa'
           APP_NAME: 'AtB.app'
-          CODE_SIGN_IDENTITY: ${{ IOS_CODE_SIGN_IDENTITY }}
+          CODE_SIGN_IDENTITY: ${{ secret.IOS_CODE_SIGN_IDENTITY }}
       - name: Distribute to AppCenter
         run: yarn appcenter:ios
         env:
