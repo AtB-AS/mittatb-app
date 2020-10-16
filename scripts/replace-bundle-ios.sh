@@ -1,16 +1,19 @@
 #!/bin/bash
 
-if [ "$#" -ne 3 ]; then
+# Security wise trying to avoid secrets being sent in via command line to the script
+# Safer to do it by env variable according to Github Actions doc
+if [[
+    -z "${IPA_FILE_NAME}"
+    || -z "${APP_NAME}"
+    || -z "${CODE_SIGN_IDENTITY}"
+   ]]; then
     echo "Argument error!"
-    echo "Expected three arguments: ipa-file-name, app-name, code-sign-identity"
-    echo "Example:"
-    echo "./replace-bundle-ios.sh app.ipa myapp.app 'My Code Sign Identity From Keychain'"
+    echo "Expected five env variables: 
+  - IPA_FILE_NAME
+  - APP_NAME
+  - CODE_SIGN_IDENTITY"
     exit 1
 else 
-    IPA_FILE_NAME=$1
-    APP_NAME=$2
-    CODE_SIGN_IDENTITY=$3
-
     mkdir -p bundle
 
     echo "Re-generate bundle"

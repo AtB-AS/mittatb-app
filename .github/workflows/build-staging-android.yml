@@ -38,9 +38,10 @@ jobs:
           path: 'app-staging.apk'
           key: ${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}
       - name: Get Android keystore
-        run: |
-          echo "${{ secrets.GPG_KEYSTORE_FILE }}" > atb.keystore.asc
-          gpg -d --passphrase '${{ secrets.GPG_KEYSTORE_PASS }}' --batch atb.keystore.asc > keystore.jks
+        run: sh ./scripts/create-keystore-file.sh
+        env:
+          GPG_KEYSTORE_FILE: '${{ secrets.GPG_KEYSTORE_FILE }}'
+          GPG_KEYSTORE_PASS: '${{ secrets.GPG_KEYSTORE_PASS }}'
       - name: Generate icons
         if: steps.apk-cache.outputs.cache-hit != 'true'
         run: yarn app-icon generate -i icon.qa.png --platforms=android --rounded none && app-icon generate -i icon.qa.round.png --platforms=android --rounded only
@@ -53,7 +54,13 @@ jobs:
           KEY_ALIAS: ${{ secrets.ATB_KEY_ALIAS }}
       - name: Replace apk bundle
         if: steps.apk-cache.outputs.cache-hit == 'true'
-        run: sh ./scripts/replace-bundle-android.sh app-staging.apk keystore.jks '${{ secrets.ATB_KEYSTORE_PASS }}' '${{ secrets.ATB_KEY_PASS }}' '${{ secrets.ATB_KEY_ALIAS }}'
+        run: sh ./scripts/replace-bundle-android.sh'
+        env:
+          APK_FILE_NAME: 'app-staging.apk'
+          KEYSTORE_FILE: 'keystore.jks'
+          KEYSTORE_PASS: '${{ secrets.ATB_KEYSTORE_PASS }}'
+          KEY_PASS: '${{ secrets.ATB_KEY_PASS }}'
+          KEY_ALIAS: '${{ secrets.ATB_KEY_ALIAS }}'
       - name: Distribute to AppCenter
         run: yarn appcenter:android
         env:

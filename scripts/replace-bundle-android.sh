@@ -1,18 +1,23 @@
 #!/bin/bash
 
-if [ "$#" -ne 5 ]; then
+# Security wise trying to avoid secrets being sent in via command line to the script
+# Safer to do it by env variable according to Github Actions docs
+if [[
+    -z "${APK_FILE_NAME}"
+    || -z "${KEYSTORE_FILE}"
+    || -z "${KEYSTORE_PASS}"
+    || -z "${KEY_PASS}"
+    || -z "${KEY_ALIAS}"
+   ]]; then
     echo "Argument error!"
-    echo "Expected five arguments: apk-name keystore-location keystore-pass key-pass key-alias"
-    echo "Example:"
-    echo "./replace-bundle-android.sh app-staging.apk ../keystore/mykeys.jks my_store_pass my_key_pass key_alias"
+    echo "Expected five env variables: 
+  - APK_FILE_NAME
+  - KEYSTORE_FILE
+  - KEYSTORE_PASS
+  - KEY_PASS
+  - KEY_ALIAS"
     exit 1
 else 
-    APK_FILE_NAME=$1
-    KEYSTORE_FILE=$2
-    KEYSTORE_PASS=$3
-    KEY_PASS=$4
-    KEY_ALIAS=$5
-
     mkdir -p bundle
 
     echo "Re-generate bundle"

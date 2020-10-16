@@ -53,7 +53,11 @@ jobs:
         run: yarn build:ios
       - name: Replace ipa bundle
         if: steps.ipa-cache.outputs.cache-hit == 'true'
-        run: sh ./scripts/replace-bundle-ios.sh AtB.ipa AtB.app "Apple Distribution:"" ATB AS (CSV447Q97L)"
+        run: sh ./scripts/replace-bundle-ios.sh
+        env:
+          IPA_FILE_NAME: 'AtB.ipa'
+          APP_NAME: 'AtB.app'
+          CODE_SIGN_IDENTITY: ${{ IOS_CODE_SIGN_IDENTIT }}
       - name: Distribute to AppCenter
         run: yarn appcenter:ios
         env:
