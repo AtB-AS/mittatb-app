@@ -547,7 +547,7 @@ function useTripPatterns(
       if (!fromLocation || !toLocation) return;
 
       setIsSearching(true);
-      AccessibilityInfo.announceForAccessibility('Laster søkeresultat');
+      AccessibilityInfo.announceForAccessibility('Laster søkeresultat.');
       setErrorType(undefined);
       try {
         const arriveBy = date?.type === 'arrival';
@@ -571,7 +571,9 @@ function useTripPatterns(
         );
         source.token.throwIfRequested();
         setTripPatterns(response.data);
-        AccessibilityInfo.announceForAccessibility('Søkeresultat innlastet');
+        AccessibilityInfo.announceForAccessibility(
+          'Søkeresultat er lastet inn.',
+        );
         setIsSearching(false);
 
         setTimeOfSearch(searchDate);
