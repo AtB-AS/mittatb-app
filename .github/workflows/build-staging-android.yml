@@ -54,10 +54,10 @@ jobs:
           KEY_ALIAS: ${{ secrets.ATB_KEY_ALIAS }}
       - name: Replace apk bundle
         if: steps.apk-cache.outputs.cache-hit == 'true'
-        run: sh ./scripts/replace-bundle-android.sh'
+        run: sh ./scripts/replace-bundle-android.sh
         env:
-          APK_FILE_NAME: 'app-staging.apk'
-          KEYSTORE_FILE: 'keystore.jks'
+          APK_FILE_NAME: app-staging.apk
+          KEYSTORE_FILE: keystore.jks
           KEYSTORE_PASS: ${{ secrets.ATB_KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.ATB_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.ATB_KEY_ALIAS }}
