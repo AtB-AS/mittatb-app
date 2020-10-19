@@ -26,9 +26,11 @@ else
     rm -rf Payload/$APP_NAME/\_CodeSignature
 
     echo "Replace bundle"
-
     rm Payload/$APP_NAME/main.jsbundle
     cp bundle/main.jsbundle Payload/$APP_NAME/
+
+    echo "Set CFBundleVersion to build id: $BUILD_ID"
+    plutil -replace CFBundleVersion -string "${BUILD_ID}" "Payload/$APP_NAME/Info.plist"
 
     echo "Generated entitlements file from ipa content"
     codesign -d --entitlements :- "Payload/$APP_NAME" > entitlements.plist

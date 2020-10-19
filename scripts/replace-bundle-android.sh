@@ -28,15 +28,20 @@ else
     echo "Compile JS to Hermes Bytecode"
     ./node_modules/hermes-engine/osx-bin/hermesc -emit-binary -output-source-map -out bundle/index.android.bundle bundle/android.bundle
 
-    echo "Unzip Android APK"
-    unzip $APK_FILE_NAME -d unzipped-apk
+    brew install apktool yq
 
-    echo "Replace bundle in unzipped APK"
-    rm unzipped-apk/assets/index.android.bundle
-    cp bundle/index.android.bundle unzipped-apk/assets/
+    echo "Decompile Android APK"
+    apktool d $APK_FILE_NAME --output decompiled-apk
 
-    echo "Zip APK"
-    zip -qr temp-$APK_FILE_NAME unzipped-apk/
+    echo "Replace bundle in decompiled APK"
+    rm decompiled-apk/assets/index.android.bundle
+    cp bundle/index.android.bundle decompiled-apk/assets/
+
+    echo "Set version code to build id: $BUILD_ID"
+    yq write decompiled-apk/apktool.yml versionInfo.versionCode $BUILD_ID
+
+    echo "Re-compile Android APK"
+    apktool b decompiled-apk -o temp-$APK_FILE_NAME
 
     echo "Re-sign APK"
     jarsigner -keystore $KEYSTORE_FILE -storepass "$KEYSTORE_PASS" -keypass "$KEY_PASS" -verbose -sigalg MD5withRSA -digestalg SHA1 -signedjar temp-$APK_FILE_NAME temp-$APK_FILE_NAME $KEY_ALIAS

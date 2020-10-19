@@ -8,6 +8,10 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v1
+      - name: Set Build ID
+        run: |
+          echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
+          echo "APP_ENVIRONMENT=staging" >> $GITHUB_ENV
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
         env:
@@ -27,8 +31,8 @@ jobs:
         run: yarn install
       - name: Bundle Install
         run: bundle install
-      - name: Set environment to staging
-        run: sh ./scripts/override-environment.sh staging
+      - name: Set environment
+        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT
       - name: Override native config files
         run: sh ./scripts/override-config-files.sh
       - uses: webfactory/ssh-agent@v0.4.0

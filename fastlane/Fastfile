@@ -31,7 +31,7 @@ platform :ios do
   desc 'Build the iOS application.'
   lane :build do
       increment_build_number(
-        build_number: Time.now.strftime("%Y%m%d%H%M"), 
+        build_number: ENV["BUILD_ID"], 
         xcodeproj: './ios/atb.xcodeproj/'
       )
       update_code_signing_settings(
@@ -74,6 +74,7 @@ platform :android do
       project_dir: 'android/', 
       print_command: false, #don't print my passwords please
       properties: {
+        "versionCode" => ENV["BUILD_ID"],
         "android.injected.signing.store.file" => "./keystore.jks",
         "android.injected.signing.store.password" => ENV["KEYSTORE_PASS"],
         "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
