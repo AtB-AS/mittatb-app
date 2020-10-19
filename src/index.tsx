@@ -26,7 +26,7 @@ if (!__DEV__) {
   Bugsnag.setUser = () => {};
 }
 
-import {MAPBOX_API_TOKEN} from 'react-native-dotenv';
+import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 

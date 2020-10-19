@@ -25,7 +25,7 @@ export default function trackNavigation(state: NavigationState | undefined) {
 
   if (previousRouteName !== currentRouteName) {
     Bugsnag.leaveBreadcrumb('navigate', {route: currentRouteName});
-    analytics().setCurrentScreen(currentRouteName, currentRouteName);
+    analytics().logScreenView({screen_name: currentRouteName});
   }
 
   previousRouteName = currentRouteName;

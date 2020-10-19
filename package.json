@@ -46,7 +46,7 @@
     "lottie-ios": "3.1.8",
     "lottie-react-native": "^3.5.0",
     "query-string": "^6.13.5",
-    "react": "16.13.1",
+    "react": "16.14.0",
     "react-native": "0.63.3",
     "react-native-bootsplash": "^2.2.6",
     "react-native-dash": "^0.0.11",
@@ -70,8 +70,8 @@
     "uuid": "^8.3.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.11.6",
-    "@babel/runtime": "^7.11.2",
+    "@babel/core": "^7.12.0",
+    "@babel/runtime": "^7.12.0",
     "@svgr/cli": "^5.4.0",
     "@types/geojson": "^7946.0.7",
     "@types/humanize-duration": "^3.18.1",
@@ -100,7 +100,7 @@
     "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.1.2",
     "react-native-dotenv": "^2.4.1",
-    "react-test-renderer": "16.13.1",
+    "react-test-renderer": "16.14.0",
     "typescript": "^4.0.3"
   },
   "jest": {
