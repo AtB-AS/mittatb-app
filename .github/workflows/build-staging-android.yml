@@ -71,3 +71,5 @@ jobs:
           APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
       - name: Upload bundle and source maps
         run: sh ./scripts/android/upload-sourcemaps.sh
+        env:
+          BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}

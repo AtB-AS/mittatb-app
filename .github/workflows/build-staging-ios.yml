@@ -71,3 +71,5 @@ jobs:
         run: sh ./scripts/ios/create-sourcemaps.sh
       - name: Upload bundle and source maps
         run: sh ./scripts/ios/upload-sourcemaps.sh
+        env:
+          BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
