@@ -6,7 +6,7 @@ brew installfindutils xmlstarlet # for git-crypt
 # xmlstarlet to edit androidmanifest
 
 echo "Attempting to override environment: $APP_ENVIRONMENT"
-sh ./override-environment.sh $APP_ENVIRONMENT
+sh ./scripts/override-environment.sh $APP_ENVIRONMENT
 
 echo "Loading all env variables from .env file"
 export $(grep -v '^#' .env | gxargs -d '\n')
