@@ -12,4 +12,5 @@ if [[
 else 
     echo "$GPG_KEYSTORE_FILE" > atb.keystore.asc
     gpg -d --passphrase "$GPG_KEYSTORE_PASS" --batch atb.keystore.asc > keystore.jks
+    cp keystore.jks android/app/keystore.jks
 fi

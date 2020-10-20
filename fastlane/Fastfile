@@ -80,7 +80,6 @@ platform :android do
       env_vars: ['BUILD_ID', 'KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS']
     )
     gradle(task: 'clean', project_dir: 'android/')
-    sh("cp", "../keystore.jks", "../android/app/keystore.jks")
     gradle(
       task: 'assemble', 
       build_type: 'staging', 
@@ -93,7 +92,6 @@ platform :android do
         "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
         "android.injected.signing.key.password" => ENV["KEY_PASS"],
       })
-    sh("pwd")
     sh("cp", "../android/app/build/outputs/apk/staging/app-staging.apk", "../")
   end
 
