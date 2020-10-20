@@ -77,7 +77,7 @@ jobs:
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
       - name: Upload dSYMs
-        if: steps.ipa-cache.outputs.cache-hit == 'true'
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: sh ./scripts/ios/upload-dsyms.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
