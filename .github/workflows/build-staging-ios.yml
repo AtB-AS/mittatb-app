@@ -1,5 +1,8 @@
 name: Build staging iOS project
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build-ios:
