@@ -7,7 +7,7 @@ if [[
     -z "${IPA_FILE_NAME}"
     || -z "${APP_NAME}"
     || -z "${CODE_SIGN_IDENTITY}"
-    || -z "${BUILD_ID}"
+    || -z "${BUILD_ID}"
    ]]; then
     echo "Argument error!"
     echo "Expected four env variables: 
