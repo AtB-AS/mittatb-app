@@ -51,7 +51,7 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       - name: Generate icons
         if: steps.ipa-cache.outputs.cache-hit != 'true'
-        run: yarn app-icon generate -i icon.qa.png --platforms=ios
+        run: brew install imagemagick && yarn app-icon generate -i icon.qa.png --platforms=ios
       - name: Run fastlane build
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: yarn build:ios
