@@ -4,6 +4,7 @@ import {isLocationEnabled} from 'react-native-device-info';
 import Geolocation, {
   GeoOptions,
   GeoPosition,
+  GeoError,
 } from 'react-native-geolocation-service';
 import {
   check,
@@ -18,6 +19,7 @@ type GeolocationState = {
   status: PermissionStatus | null;
   locationEnabled: boolean;
   location: GeoPosition | null;
+  locationError: GeoError | null;
 };
 
 type GeolocationReducerAction =
@@ -29,6 +31,10 @@ type GeolocationReducerAction =
   | {
       location: GeoPosition | null;
       type: 'LOCATION_CHANGED';
+    }
+  | {
+      locationError: GeoError | null;
+      type: 'LOCATION_ERROR';
     };
 
 type GeolocationReducer = (
@@ -43,11 +49,18 @@ const geolocationReducer: GeolocationReducer = (prevState, action) => {
         ...prevState,
         status: action.status,
         locationEnabled: action.locationEnabled,
+        locationError: null,
       };
     case 'LOCATION_CHANGED':
       return {
         ...prevState,
         location: action.location,
+        locationError: null,
+      };
+    case 'LOCATION_ERROR':
+      return {
+        ...prevState,
+        locationError: action.locationError,
       };
   }
 };
@@ -67,6 +80,7 @@ const defaultState: GeolocationState = {
   status: null,
   locationEnabled: false,
   location: null,
+  locationError: null,
 };
 
 const GeolocationContextProvider: React.FC = ({children}) => {
@@ -93,8 +107,17 @@ const GeolocationContextProvider: React.FC = ({children}) => {
     }
   }
 
-  const hasPermission = state.status === 'granted' && state.locationEnabled;
+  async function handleLocationError(locationError: GeoError) {
+    const status = await checkGeolocationPermission();
+    const locationEnabled = await isLocationEnabled();
+    if (status !== 'granted' || !locationEnabled) {
+      dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled});
+    } else {
+      dispatch({type: 'LOCATION_ERROR', locationError});
+    }
+  }
 
+  const hasPermission = state.status === 'granted' && state.locationEnabled;
   useEffect(() => {
     let watchId: number;
 
@@ -102,30 +125,36 @@ const GeolocationContextProvider: React.FC = ({children}) => {
       if (!hasPermission) {
         dispatch({type: 'LOCATION_CHANGED', location: null});
       } else {
-        const config: GeoOptions = {enableHighAccuracy: true};
+        const config: GeoOptions = {
+          enableHighAccuracy: true,
+          distanceFilter: 50,
+        };
+
         watchId = Geolocation.watchPosition(
           (location) => {
             dispatch({type: 'LOCATION_CHANGED', location});
           },
-          async () => {
-            const status = await checkGeolocationPermission();
-            const locationEnabled = await isLocationEnabled();
-            if (status !== 'granted' || !locationEnabled) {
-              dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled});
-            }
-            dispatch({type: 'LOCATION_CHANGED', location: null});
-          },
+          handleLocationError,
           config,
         );
       }
     }
-
     startLocationWatcher();
     return () => Geolocation.clearWatch(watchId);
   }, [hasPermission]);
 
-  const appStatus = useAppStateStatus();
+  const currentLocationError = state.locationError;
+  useEffect(() => {
+    if (!hasPermission) {
+      dispatch({type: 'LOCATION_CHANGED', location: null});
+    } else if (!!currentLocationError) {
+      Geolocation.getCurrentPosition((location) => {
+        dispatch({type: 'LOCATION_CHANGED', location});
+      }, handleLocationError);
+    }
+  }, [currentLocationError]);
 
+  const appStatus = useAppStateStatus();
   useEffect(() => {
     async function checkPermission() {
       if (appStatus === 'active') {

@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {View, StatusBar, Platform, Text} from 'react-native';
+import {StatusBar, Platform} from 'react-native';
 import {
   NavigationContainer,
   NavigationContainerRef,
@@ -12,7 +12,6 @@ import LocationSearch, {
   RouteParams as LocationSearchParams,
 } from '../location-search';
 import TabNavigator from './TabNavigator';
-import {useTheme} from '../theme';
 import transitionSpec from './transitionSpec';
 import TripDetailsModal, {
   RouteParams as TripDetailsModalParams,
