@@ -8,6 +8,9 @@ brew install findutils xmlstarlet # for git-crypt
 echo "Loading all env variables from .env file"
 export $(grep -v '^#' .env | gxargs -d '\n') > /dev/null 2>&1
 
+# needed for later when uploading source maps
+echo "BUGSNAG_API_KEY=$BUGSNAG_API_KEY" >> $GITHUB_ENV
+
 echo "Currently set ios bundle id: $IOS_BUNDLE_IDENTIFIER"
 
 echo "Adding Bugsnag API key and release stage to Info.plist"

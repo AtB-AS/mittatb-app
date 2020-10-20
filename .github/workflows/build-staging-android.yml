@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v1
-      - name: Set Build ID
+      - name: Set global env vars
         run: |
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
           echo "APP_ENVIRONMENT=staging" >> $GITHUB_ENV
@@ -69,3 +69,5 @@ jobs:
         run: yarn appcenter:android
         env:
           APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
+      - name: Upload bundle and source maps
+        run: sh ./scripts/android/upload-sourcemaps.sh

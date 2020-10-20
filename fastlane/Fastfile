@@ -52,7 +52,7 @@ platform :ios do
       scheme: 'atb', 
       configuration: 'Release', 
       export_method: "ad-hoc",
-      workspace: './ios/atb.xcworkspace' 
+      workspace: './ios/atb.xcworkspace'
     )
   end
 
@@ -93,6 +93,9 @@ platform :android do
         "android.injected.signing.key.password" => ENV["KEY_PASS"],
       })
     sh("cp", "../android/app/build/outputs/apk/staging/app-staging.apk", "../")
+    sh("mkdir", "-p", "../bundle")
+    sh("cp", "../android/app/build/generated/assets/react/staging/index.android.bundle", "../bundle")
+    sh("cp", "../android/app/build/generated/sourcemaps/react/staging/index.android.bundle.map", "../bundle")
   end
 
   lane :appcenter do

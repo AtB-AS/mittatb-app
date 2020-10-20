@@ -7,9 +7,11 @@ if [[
     -z "${IPA_FILE_NAME}"
     || -z "${APP_NAME}"
     || -z "${CODE_SIGN_IDENTITY}"
+    || -z "${BUILD_ID}"
    ]]; then
     echo "Argument error!"
-    echo "Expected five env variables: 
+    echo "Expected four env variables: 
+  - BUILD_ID
   - IPA_FILE_NAME
   - APP_NAME
   - CODE_SIGN_IDENTITY"
@@ -18,7 +20,7 @@ else
     mkdir -p bundle
 
     echo "Re-generate bundle"
-    npx react-native bundle --platform ios --dev false --reset-cache --entry-file index.js --bundle-output bundle/main.jsbundle
+    npx react-native bundle --platform ios --dev false --reset-cache --entry-file index.js --bundle-output bundle/main.jsbundle --sourcemap-output bundle/main.jsbundle.map
 
     unzip $IPA_FILE_NAME
 

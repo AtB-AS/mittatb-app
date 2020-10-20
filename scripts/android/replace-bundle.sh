@@ -9,9 +9,11 @@ if [[
     || -z "${KEYSTORE_PASS}"
     || -z "${KEY_PASS}"
     || -z "${KEY_ALIAS}"
+    || -z "${BUILD_ID}"
    ]]; then
     echo "Argument error!"
-    echo "Expected five env variables: 
+    echo "Expected six env variables: 
+  - BUILD_ID
   - APK_FILE_NAME
   - KEYSTORE_FILE
   - KEYSTORE_PASS
@@ -23,10 +25,10 @@ else
     mkdir -p bundle
 
     echo "Re-generate bundle"
-    npx react-native bundle --platform android --dev false --reset-cache --entry-file index.js --bundle-output bundle/android.bundle
+    npx react-native bundle --platform android --dev false --reset-cache --entry-file index.js --bundle-output bundle/temp.bundle --sourcemap-output bundle/temp.bundle.map
 
     echo "Compile JS to Hermes Bytecode"
-    ./node_modules/hermes-engine/osx-bin/hermesc -emit-binary -output-source-map -out bundle/index.android.bundle bundle/android.bundle
+    ./node_modules/hermes-engine/osx-bin/hermesc -emit-binary -source-map=bundle/temp.bundle.map -output-source-map -out bundle/index.android.bundle bundle/temp.bundle
 
     brew install apktool yq
 
