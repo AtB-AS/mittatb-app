@@ -57,7 +57,7 @@ jobs:
         run: yarn build:ios
       - name: Replace ipa bundle
         if: steps.ipa-cache.outputs.cache-hit == 'true'
-        run: sh ./scripts/replace-bundle-ios.sh
+        run: sh ./scripts/ios/replace-bundle.sh
         env:
           IPA_FILE_NAME: 'AtB.ipa'
           APP_NAME: 'AtB.app'
