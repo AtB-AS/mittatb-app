@@ -48,7 +48,7 @@ jobs:
           GPG_KEYSTORE_PASS: ${{ secrets.GPG_KEYSTORE_PASS }}
       - name: Generate icons
         if: steps.apk-cache.outputs.cache-hit != 'true'
-        run: brew install imagemagick && yarn app-icon generate -i icon.qa.png --platforms=android --rounded none && app-icon generate -i icon.qa.round.png --platforms=android --rounded only
+        run: brew install imagemagick && yarn app-icon generate -i icon.qa.png --platforms=android --rounded none && yarn app-icon generate -i icon.qa.round.png --platforms=android --rounded only
       - name: Run fastlane build
         if: steps.apk-cache.outputs.cache-hit != 'true'
         run: yarn build:android
