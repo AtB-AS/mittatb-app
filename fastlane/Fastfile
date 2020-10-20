@@ -45,6 +45,7 @@ platform :ios do
       build_app(
         scheme: 'atb', 
         configuration: 'Release', 
+        export_method: "ad-hoc",
         workspace: './ios/atb.xcworkspace' 
       )
     end
