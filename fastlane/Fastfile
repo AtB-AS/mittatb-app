@@ -8,6 +8,9 @@ end
 platform :ios do
   desc 'Match certificates'
   lane :get_cert do 
+    ensure_env_vars(
+      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_URL']
+    )
     if is_ci
       create_keychain(
         name: "CI",
@@ -30,28 +33,34 @@ platform :ios do
   # iOS Lanes
   desc 'Build the iOS application.'
   lane :build do
-      increment_build_number(
-        build_number: ENV["BUILD_ID"], 
-        xcodeproj: './ios/atb.xcodeproj/'
-      )
-      update_code_signing_settings(
-        use_automatic_signing: false,
-        bundle_identifier:"no.mittatb.staging",
-        code_sign_identity:"iPhone Distribution",
-        profile_name: "match AdHoc no.mittatb.staging",
-        path: "./ios/atb.xcodeproj"
-      )
-      cocoapods(podfile: './ios/Podfile')
-      build_app(
-        scheme: 'atb', 
-        configuration: 'Release', 
-        export_method: "ad-hoc",
-        workspace: './ios/atb.xcworkspace' 
-      )
-    end
+    ensure_env_vars(
+      env_vars: ['BUILD_ID']
+    )
+    increment_build_number(
+      build_number: ENV["BUILD_ID"], 
+      xcodeproj: './ios/atb.xcodeproj/'
+    )
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      bundle_identifier:"no.mittatb.staging",
+      code_sign_identity:"iPhone Distribution",
+      profile_name: "match AdHoc no.mittatb.staging",
+      path: "./ios/atb.xcodeproj"
+    )
+    cocoapods(podfile: './ios/Podfile')
+    build_app(
+      scheme: 'atb', 
+      configuration: 'Release', 
+      export_method: "ad-hoc",
+      workspace: './ios/atb.xcworkspace' 
+    )
+  end
 
   desc 'Upload the build to AppCenter'
   lane :appcenter do
+    ensure_env_vars(
+      env_vars: ['APPCENTER_API_KEY']
+    )
     appcenter_upload(
       api_token: ENV["APPCENTER_API_KEY"],
       owner_name: "AtB-AS",
@@ -67,6 +76,9 @@ platform :android do
   desc 'Upload the build to AppCenter'
 
   lane :build do
+    ensure_env_vars(
+      env_vars: ['BUILD_ID', 'KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS']
+    )
     gradle(task: 'clean', project_dir: 'android/')
     sh("cp", "../keystore.jks", "../android/app/keystore.jks")
     gradle(
@@ -86,6 +98,9 @@ platform :android do
   end
 
   lane :appcenter do
+    ensure_env_vars(
+      env_vars: ['APPCENTER_API_KEY']
+    )
     appcenter_upload(
       api_token: ENV["APPCENTER_API_KEY"],
       owner_name: "AtB-AS",
