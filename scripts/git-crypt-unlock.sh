@@ -17,4 +17,7 @@ else
 
     echo "Unlocking repository sensitive files"
     git-crypt unlock mittatb.key
+
+    echo "Delete key"
+    rm mittatb.key
 fi

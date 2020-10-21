@@ -1,7 +1,10 @@
 #!/bin/bash
 
+echo "Attempting to decrypt env"
+sh ./scripts/git-crypt-unlock.sh $GIT_CRYPT_KEY
+
 echo "Installing pre-build dependencies"
-brew installfindutils xmlstarlet # for git-crypt
+brew installfindutils xmlstarlet 
 # findutils for gxargs which is used to load environment variables from .env file
 # xmlstarlet to edit androidmanifest
 
