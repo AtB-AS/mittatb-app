@@ -6,11 +6,8 @@ export function useAppStateStatus() {
   const [appState, setAppState] = useState(currentState);
 
   function onChange(newState: AppStateStatus) {
-    if (appState !== newState) {
-      setAppState(newState);
-    }
+    setAppState(newState);
   }
-
   useEffect(() => {
     AppState.addEventListener('change', onChange);
 
