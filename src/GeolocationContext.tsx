@@ -144,17 +144,15 @@ const GeolocationContextProvider: React.FC = ({children}) => {
   }, [hasPermission]);
 
   const currentLocationError = state.locationError;
+  const appStatus = useAppStateStatus();
   useEffect(() => {
-    if (!hasPermission) {
-      dispatch({type: 'LOCATION_CHANGED', location: null});
-    } else if (!!currentLocationError) {
+    if (!!currentLocationError && appStatus === 'active') {
       Geolocation.getCurrentPosition((location) => {
         dispatch({type: 'LOCATION_CHANGED', location});
       }, handleLocationError);
     }
-  }, [currentLocationError]);
+  }, [currentLocationError, appStatus]);
 
-  const appStatus = useAppStateStatus();
   useEffect(() => {
     async function checkPermission() {
       if (appStatus === 'active') {
