@@ -235,6 +235,7 @@ const DisappearingHeader: React.FC<Props> = ({
               }}
               contentOffset={{
                 y: -contentHeight - headerMargin,
+                x: 0,
               }}
             >
               {children}

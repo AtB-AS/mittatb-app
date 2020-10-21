@@ -7,7 +7,7 @@ import {ArrowRight, Expand} from '../../../assets/svg/icons/navigation';
 import {searchOffers} from '../../../api/';
 import {UserType, Offer, OfferPrice} from '../../../api/fareContracts';
 import OfferGroup from './Group';
-import {SINGLE_TICKET_PRODUCT_ID} from 'react-native-dotenv';
+import {SINGLE_TICKET_PRODUCT_ID} from '@env';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'Offer'>;

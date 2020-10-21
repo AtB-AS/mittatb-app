@@ -40,13 +40,14 @@ const NavigationRoot = () => {
   const ref = useRef<NavigationContainerRef>(null);
   const {getInitialState} = useLinking(ref, {
     prefixes: ['atb://'],
-    config: {Profile: 'profile', PaymentVipps: 'payment'},
+    config: {screens: {Profile: 'profile', PaymentVipps: 'payment'}},
   });
 
   useEffect(() => {
-    getInitialState()
-      .then((state) => {})
-      .catch(() => {});
+    getInitialState().then(
+      (state) => {},
+      () => {},
+    );
   }, [getInitialState]);
 
   if (isLoading) {

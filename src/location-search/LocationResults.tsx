@@ -40,7 +40,7 @@ const LocationResults: React.FC<Props> = ({
                 <View style={{flexDirection: 'column'}}>
                   <LocationIcon
                     location={location}
-                    fill={styles.locationIcon.backgroundColor}
+                    fill={String(styles.locationIcon.backgroundColor)}
                     multiple={true}
                   />
                 </View>

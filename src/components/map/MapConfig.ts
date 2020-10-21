@@ -1,6 +1,6 @@
 import {MapViewProps, CameraProps} from '@react-native-mapbox-gl/maps';
 import {Platform} from 'react-native';
-import {MAPBOX_STOP_PLACES_STYLE_URL} from 'react-native-dotenv';
+import {MAPBOX_STOP_PLACES_STYLE_URL} from '@env';
 
 export const MapViewConfig: MapViewProps = {
   compassViewPosition: 3,
