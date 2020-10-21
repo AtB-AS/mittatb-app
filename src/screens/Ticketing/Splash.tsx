@@ -24,7 +24,7 @@ type Props = {
   navigation: StackNavigationProp<TabNavigatorParams>;
 };
 export default function Splash({navigation}: Props) {
-  const {icon: chatIcon, openChat} = useChatIcon();
+  const chatIcon = useChatIcon();
   const {width: windowWidth} = useWindowDimensions();
   const navigateHome = useNavigateHome();
 
@@ -32,7 +32,7 @@ export default function Splash({navigation}: Props) {
     <SafeAreaView style={styles.container}>
       <Header
         title="Billetter"
-        rightButton={{icon: chatIcon, onPress: openChat}}
+        rightButton={chatIcon}
         leftButton={{
           icon: <LogoOutline />,
           onPress: navigateHome,

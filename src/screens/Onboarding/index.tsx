@@ -60,7 +60,7 @@ const Onboarding = () => {
 const StepOne: React.FC<StepProps> = ({navigation}) => {
   const styles = useStyles();
   const onNavigate = () => {
-    navigation.navigate('StepTwo');
+    navigation.navigate({name: 'StepTwo', params: {navigation}});
   };
   return (
     <>
@@ -84,7 +84,7 @@ const StepOne: React.FC<StepProps> = ({navigation}) => {
 const StepTwo: React.FC<StepProps> = ({navigation}) => {
   const styles = useStyles();
   const onNavigate = () => {
-    navigation.navigate('StepThree');
+    navigation.navigate({name: 'StepThree', params: {navigation}});
   };
   return (
     <>

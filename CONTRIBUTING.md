@@ -3,6 +3,8 @@
 See full contribution guide on [AtB org repo](https://github.com/AtB-AS/org/blob/master/CONTRIBUTING.md) and
 startup instructions on the [README](./README.md#getting-started).
 
+Contributions are [noted as inbound=outbound](https://docs.github.com/en/free-pro-team@latest/github/site-policy/github-terms-of-service#6-contributions-under-repository-license). Meaning, the code you contribute will inherit the same license as this repository.
+
 ## Conventional commits
 
 To better be able to track changes relevant for the user, we do semantic commits. As we do a Pull Request approach, the important part is for the squashed and merged commits when completing a PR uses semantic commits, but it is encouraged for all commits to use it to easier be able to make a proper summary when merging pull requests and to track history.
@@ -62,3 +64,13 @@ build: Adds eslint step to Github Actions
 
 Adds eslint Github Actions to catch unnecessary errors on pull requests for contributors not using linting actively in their development flow.
 ```
+
+## Code Review practise
+
+1. Be nice!
+2. Take the time to understand the underlying goal for the pull request.
+3. Provide suggestions for improvement. Show solutions rather than problems.
+4. Avoid stylistic, overly nit-picky comments.
+5. Don't be afraid to check out the changes locally.
+6. Ask (open-ended) questions.
+7. Optimize for throughput, not for gatekeeping.

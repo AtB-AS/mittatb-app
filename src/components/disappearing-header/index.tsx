@@ -87,7 +87,7 @@ const DisappearingHeader: React.FC<Props> = ({
     }),
   );
 
-  const {icon: chatIcon, openChat} = useChatIcon();
+  const chatIcon = useChatIcon();
   const [scrollYValue, setScrollY] = useState<number>(0);
   const styles = useThemeStyles();
   const scrollYRef = useRef(new Animated.Value(IS_IOS ? -contentOffset : 0))
@@ -175,7 +175,7 @@ const DisappearingHeader: React.FC<Props> = ({
         <AnimatedScreenHeader
           onLayout={onScreenHeaderLayout}
           title={headerTitle}
-          rightButton={{onPress: openChat, icon: chatIcon}}
+          rightButton={chatIcon}
           alternativeTitleComponent={alternativeTitleComponent}
           alternativeTitleVisible={showAltTitle}
           leftButton={{
@@ -235,6 +235,7 @@ const DisappearingHeader: React.FC<Props> = ({
               }}
               contentOffset={{
                 y: -contentHeight - headerMargin,
+                x: 0,
               }}
             >
               {children}

@@ -4,9 +4,15 @@ import Intercom from 'react-native-intercom';
 import {Chat, ChatUnread} from '../assets/svg/icons/actions';
 import useChatUnreadCount from './use-chat-unread-count';
 import colors from '../theme/colors';
+import {useRemoteConfig} from '../RemoteConfigContext';
 
 export default function useChatIcon() {
+  const config = useRemoteConfig();
   const unreadCount = useChatUnreadCount();
+
+  if (!config.enable_intercom) {
+    return undefined;
+  }
 
   return {
     icon: (
@@ -19,7 +25,7 @@ export default function useChatIcon() {
         {unreadCount ? <ChatUnread /> : <Chat />}
       </View>
     ),
-    openChat: () =>
+    onPress: () =>
       unreadCount
         ? Intercom.displayMessenger()
         : Intercom.displayConversationsList(),

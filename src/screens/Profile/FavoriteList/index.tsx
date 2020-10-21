@@ -54,7 +54,7 @@ export default function Profile({navigation}: ProfileScreenProps) {
   const onAddButtonClick = () => navigation.push('AddEditFavorite', {});
 
   const navigateHome = useNavigateHome();
-  const {icon: chatIcon, openChat} = useChatIcon();
+  const chatIcon = useChatIcon();
 
   return (
     <SafeAreaView style={css.container}>
@@ -65,7 +65,7 @@ export default function Profile({navigation}: ProfileScreenProps) {
           onPress: navigateHome,
           accessibilityLabel: 'Gå til startskjerm',
         }}
-        rightButton={{icon: chatIcon, onPress: openChat}}
+        rightButton={chatIcon}
       />
 
       <ScrollView>

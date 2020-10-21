@@ -19,7 +19,7 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
 
       if (__DEV__) {
         configApi.setConfigSettings({
-          isDeveloperModeEnabled: true,
+          minimumFetchIntervalMillis: 0,
         });
       }
 
