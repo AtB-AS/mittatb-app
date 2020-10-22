@@ -1,15 +1,26 @@
-import React from 'react';
-import {Text, View, useWindowDimensions, Linking, Platform} from 'react-native';
+import React, {useRef} from 'react';
+import {
+  Text,
+  View,
+  useWindowDimensions,
+  Linking,
+  Platform,
+  Alert,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Header from '../../ScreenHeader';
-import useChatIcon from '../../chat/use-chat-icon';
-import colors from '../../theme/colors';
-import {ShinyTicketBanner} from '../../assets/svg/illustrations';
-import {StyleSheet} from '../../theme';
+import analytics from '@react-native-firebase/analytics';
+import Header from '../../../ScreenHeader';
+import useChatIcon from '../../../chat/use-chat-icon';
+import colors from '../../../theme/colors';
+import {ShinyTicketBanner} from '../../../assets/svg/illustrations';
+import {StyleSheet} from '../../../theme';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {TabNavigatorParams} from '../../navigation/TabNavigator';
-import LogoOutline from '../../ScreenHeader/LogoOutline';
-import {useNavigateHome} from '../../utils/navigation';
+import {TabNavigatorParams} from '../../../navigation/TabNavigator';
+import LogoOutline from '../../../ScreenHeader/LogoOutline';
+import {useNavigateHome} from '../../../utils/navigation';
+import {useRemoteConfig} from '../../../RemoteConfigContext';
+import InviteModal from './InviteModal';
+import {Modalize} from 'react-native-modalize';
 
 function openOtherTicketingApp() {
   const url =
@@ -20,13 +31,12 @@ function openOtherTicketingApp() {
     Linking.openURL(url);
   }
 }
-type Props = {
-  navigation: StackNavigationProp<TabNavigatorParams>;
-};
-export default function Splash({navigation}: Props) {
+
+export default function Splash() {
   const chatIcon = useChatIcon();
   const {width: windowWidth} = useWindowDimensions();
   const navigateHome = useNavigateHome();
+  const modalRef = useRef<Modalize>(null);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -46,10 +56,19 @@ export default function Splash({navigation}: Props) {
         <Text style={styles.text}>
           Her kan du snart kjøpe og administrere billetter til reisen din.
         </Text>
-        <Text style={[styles.text, {marginBottom: 0}]}>
+        <Text style={styles.text}>
           Frem til da kan du kjøpe billett fra{'\n'}
           <Text onPress={openOtherTicketingApp} style={styles.underline}>
             AtB Mobillett
+          </Text>
+        </Text>
+        <Text style={styles.text}>
+          Hvis du har en kode for å melde deg inn i beta for billettkjøp -{' '}
+          <Text
+            onPress={() => modalRef.current?.open()}
+            style={styles.underline}
+          >
+            trykk her
           </Text>
         </Text>
       </View>
@@ -59,6 +78,7 @@ export default function Splash({navigation}: Props) {
           height={windowWidth / 2}
         ></ShinyTicketBanner>
       </View>
+      <InviteModal ref={modalRef} />
     </SafeAreaView>
   );
 }
