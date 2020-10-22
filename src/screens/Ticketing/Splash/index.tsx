@@ -1,26 +1,16 @@
-import React, {useRef} from 'react';
-import {
-  Text,
-  View,
-  useWindowDimensions,
-  Linking,
-  Platform,
-  Alert,
-} from 'react-native';
+import React, {useCallback, useRef} from 'react';
+import {Text, View, useWindowDimensions, Linking, Platform} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import analytics from '@react-native-firebase/analytics';
 import Header from '../../../ScreenHeader';
 import useChatIcon from '../../../chat/use-chat-icon';
 import colors from '../../../theme/colors';
 import {ShinyTicketBanner} from '../../../assets/svg/illustrations';
 import {StyleSheet} from '../../../theme';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {TabNavigatorParams} from '../../../navigation/TabNavigator';
 import LogoOutline from '../../../ScreenHeader/LogoOutline';
 import {useNavigateHome} from '../../../utils/navigation';
-import {useRemoteConfig} from '../../../RemoteConfigContext';
 import InviteModal from './InviteModal';
 import {Modalize} from 'react-native-modalize';
+import {useRemoteConfig} from '../../../RemoteConfigContext';
 
 function openOtherTicketingApp() {
   const url =
@@ -33,10 +23,15 @@ function openOtherTicketingApp() {
 }
 
 export default function Splash() {
+  const {refresh} = useRemoteConfig();
   const chatIcon = useChatIcon();
   const {width: windowWidth} = useWindowDimensions();
   const navigateHome = useNavigateHome();
   const modalRef = useRef<Modalize>(null);
+
+  function onEnrolled() {
+    refresh();
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -78,7 +73,7 @@ export default function Splash() {
           height={windowWidth / 2}
         ></ShinyTicketBanner>
       </View>
-      <InviteModal ref={modalRef} />
+      <InviteModal ref={modalRef} onEnrolled={onEnrolled} />
     </SafeAreaView>
   );
 }
