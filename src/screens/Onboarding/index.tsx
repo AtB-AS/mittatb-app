@@ -21,9 +21,9 @@ type StepProps = {
   navigation: StackNavigationProp<OnboardingStackParams>;
 };
 type OnboardingStackParams = {
-  StepOne: StepProps;
-  StepTwo: StepProps;
-  StepThree: StepProps;
+  StepOne: undefined;
+  StepTwo: undefined;
+  StepThree: undefined;
 };
 const Stack = createStackNavigator<OnboardingStackParams>();
 
@@ -60,7 +60,7 @@ const Onboarding = () => {
 const StepOne: React.FC<StepProps> = ({navigation}) => {
   const styles = useStyles();
   const onNavigate = () => {
-    navigation.navigate({name: 'StepTwo', params: {navigation}});
+    navigation.push('StepTwo');
   };
   return (
     <>
@@ -84,7 +84,7 @@ const StepOne: React.FC<StepProps> = ({navigation}) => {
 const StepTwo: React.FC<StepProps> = ({navigation}) => {
   const styles = useStyles();
   const onNavigate = () => {
-    navigation.navigate({name: 'StepThree', params: {navigation}});
+    navigation.push('StepThree');
   };
   return (
     <>
@@ -105,7 +105,7 @@ const StepTwo: React.FC<StepProps> = ({navigation}) => {
     </>
   );
 };
-const StepThree: React.FC<StepProps> = ({navigation}) => {
+const StepThree: React.FC<StepProps> = () => {
   const styles = useStyles();
   const {completeOnboarding} = useAppState();
   const {status, requestPermission} = useGeolocationState();
