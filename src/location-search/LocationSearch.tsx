@@ -20,6 +20,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useGeocoder} from '../geocoder';
 import MessageBox from '../message-box';
 import {ErrorType} from '../api/utils';
+import ScreenreaderAnnouncement from '../components/screenreader-announcement';
 
 export type Props = {
   navigation: LocationSearchNavigationProp;
@@ -52,6 +53,7 @@ const LocationSearch: React.FC<Props> = ({
   const [text, setText] = useState<string>(initialLocation?.name ?? '');
   const debouncedText = useDebounce(text, 200);
 
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const previousLocations = filterPreviousLocations(debouncedText, history);
 
   const {
@@ -105,6 +107,12 @@ const LocationSearch: React.FC<Props> = ({
     if (isFocused) focusInput();
   }, [isFocused]);
 
+  useEffect(() => {
+    if (error) {
+      setErrorMessage(translateErrorType(error));
+    }
+  }, [error]);
+
   const onPrefillText = (text: string) => {
     setText(text);
     focusInput();
@@ -113,10 +121,6 @@ const LocationSearch: React.FC<Props> = ({
   const hasPreviousResults = !!previousLocations.length;
   const hasResults = !!filteredLocations.length;
   const hasAnyResult = hasResults || hasPreviousResults;
-
-  if (error) {
-    AccessibilityInfo.announceForAccessibility(translateErrorType(error));
-  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -133,6 +137,7 @@ const LocationSearch: React.FC<Props> = ({
             title="Søk"
           />
         </View>
+        <ScreenreaderAnnouncement message={errorMessage} />
 
         <View style={[{marginTop: 12}, styles.contentBlock]}>
           <Input
@@ -161,7 +166,7 @@ const LocationSearch: React.FC<Props> = ({
           <View style={styles.contentBlock}>
             <MessageBox
               type="warning"
-              message={translateErrorType(error)}
+              message={errorMessage}
               containerStyle={{marginBottom: 12}}
             />
           </View>
