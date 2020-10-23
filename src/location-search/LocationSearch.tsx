@@ -4,7 +4,11 @@ import {Text, TextInput, View, Keyboard} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Header from '../ScreenHeader';
 import Input from '../components/input';
-import {Location, LocationWithMetadata} from '../favorites/types';
+import {
+  Location,
+  LocationWithMetadata,
+  UserFavorites,
+} from '../favorites/types';
 import {useGeolocationState} from '../GeolocationContext';
 import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
@@ -20,6 +24,8 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useGeocoder} from '../geocoder';
 import MessageBox from '../message-box';
 import {ErrorType} from '../api/utils';
+import {useFavorites} from '../favorites';
+import {LocationSearchResult} from './types';
 
 export type Props = {
   navigation: LocationSearchNavigationProp;
@@ -48,16 +54,18 @@ const LocationSearch: React.FC<Props> = ({
 }) => {
   const styles = useThemeStyles();
   const {history, addSearchEntry} = useSearchHistory();
+  const {favorites} = useFavorites();
 
   const [text, setText] = useState<string>(initialLocation?.name ?? '');
   const debouncedText = useDebounce(text, 200);
 
-  const previousLocations = filterPreviousLocations(debouncedText, history);
+  const previousLocations = filterPreviousLocations(
+    debouncedText,
+    history,
+    favorites,
+  );
 
-  const {
-    location: geolocation,
-    requestPermission: requestGeoPermission,
-  } = useGeolocationState();
+  const {location: geolocation} = useGeolocationState();
 
   const {locations, error} =
     useGeocoder(debouncedText, geolocation?.coords ?? null) ?? [];
@@ -90,8 +98,16 @@ const LocationSearch: React.FC<Props> = ({
     });
   };
 
-  const onSearchSelect = (location: Location) =>
-    onSelect({...location, resultType: 'search'});
+  const onSearchSelect = (searchResult: LocationSearchResult) => {
+    if (!searchResult.favoriteInfo) {
+      return onSelect({...searchResult.location, resultType: 'search'});
+    }
+    return onSelect({
+      ...searchResult.location,
+      resultType: 'favorite',
+      favoriteId: searchResult.favoriteInfo.id,
+    });
+  };
 
   const inputRef = useRef<TextInput>(null);
 
@@ -172,7 +188,6 @@ const LocationSearch: React.FC<Props> = ({
           >
             {hasPreviousResults && (
               <LocationResults
-                title="Tidligere søk"
                 locations={previousLocations}
                 onSelect={onSearchSelect}
                 onPrefillText={onPrefillText}
@@ -215,22 +230,43 @@ function translateErrorType(errorType: ErrorType): string {
 const filterPreviousLocations = (
   searchText: string,
   previousLocations: Location[],
-): Location[] =>
-  searchText
-    ? previousLocations.filter((l) =>
-        l.name?.toLowerCase()?.startsWith(searchText.toLowerCase()),
-      )
-    : previousLocations;
+  favorites?: UserFavorites,
+): LocationSearchResult[] => {
+  const mappedHistory: LocationSearchResult[] =
+    previousLocations?.map((location) => ({
+      location,
+    })) ?? [];
+
+  if (!searchText) {
+    return mappedHistory;
+  }
+
+  const matchText = (text?: string) =>
+    text?.toLowerCase()?.startsWith(searchText.toLowerCase());
+  const filteredFavorites: LocationSearchResult[] = (favorites ?? [])
+    .filter(
+      (favorite) =>
+        matchText(favorite.location?.name) || matchText(favorite.name),
+    )
+    .map(({location, ...favoriteInfo}) => ({
+      location,
+      favoriteInfo,
+    }));
+
+  return filteredFavorites.concat(
+    mappedHistory.filter((l) => matchText(l.location.name)),
+  );
+};
 
 const filterCurrentLocation = (
   locations: Location[] | null,
-  previousLocations: Location[] | null,
-): Location[] => {
-  if (!previousLocations?.length) return locations ?? [];
-  if (!locations) return [];
-  return locations.filter(
-    (l) => !previousLocations.some((pl) => pl.id === l.id),
-  );
+  previousLocations: LocationSearchResult[] | null,
+): LocationSearchResult[] => {
+  if (!previousLocations?.length || !locations)
+    return locations?.map((location) => ({location})) ?? [];
+  return locations
+    .filter((l) => !previousLocations.some((pl) => pl.location.id === l.id))
+    .map((location) => ({location}));
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
