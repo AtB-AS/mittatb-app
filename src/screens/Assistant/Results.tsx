@@ -11,6 +11,7 @@ import AccessibleText, {
   screenreaderPause,
 } from '../../components/accessible-text';
 import {ErrorType} from '../../api/utils';
+import ScreenreaderAnnouncement from '../../components/screenreader-announcement';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
@@ -48,9 +49,10 @@ const Results: React.FC<Props> = ({
 
   if (errorType) {
     const errorMessage = translateErrorType(errorType);
-    AccessibilityInfo.announceForAccessibility(errorMessage);
+
     return (
       <View style={styles.container}>
+        <ScreenreaderAnnouncement message={errorMessage} />
         <MessageBox type="warning" message={errorMessage}></MessageBox>
       </View>
     );

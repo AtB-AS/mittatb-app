@@ -8,7 +8,6 @@ import {
   ViewStyle,
   StyleProp,
   ActivityIndicator,
-  AccessibilityInfo,
 } from 'react-native';
 import analytics from '@react-native-firebase/analytics';
 import {searchTrip} from '../../api';
@@ -44,7 +43,7 @@ import {useLayout} from '../../utils/use-layout';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
 import Results from './Results';
-import {NoResultReason} from './types';
+import {NoResultReason, SearchStateType} from './types';
 import FavoriteChips from '../../favorite-chips';
 
 import Animated, {Easing} from 'react-native-reanimated';
@@ -52,6 +51,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import {screenreaderPause} from '../../components/accessible-text';
 import colors from '../../theme/colors';
+import ScreenreaderAnnouncement from '../../components/screenreader-announcement';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -182,13 +182,13 @@ const Assistant: React.FC<Props> = ({
   const [date, setDate] = useState<DateOutput | undefined>();
   const [
     tripPatterns,
-    isSearching,
     timeOfLastSearch,
     reload,
     clearPatterns,
+    searchState,
     errorType,
   ] = useTripPatterns(from, to, date);
-
+  const isSearching = searchState === 'searching';
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
     initialLocation: LocationWithMetadata | undefined,
@@ -369,6 +369,7 @@ const Assistant: React.FC<Props> = ({
         }
       }}
     >
+      <ScreenreaderAnnouncement message={translateSearchState(searchState)} />
       <Results
         tripPatterns={tripPatterns}
         isSearching={isSearching}
@@ -533,11 +534,18 @@ function useTripPatterns(
   fromLocation: Location | undefined,
   toLocation: Location | undefined,
   date: DateOutput | undefined,
-): [TripPattern[] | null, boolean, Date, () => {}, () => void, ErrorType?] {
-  const [isSearching, setIsSearching] = useState(false);
+): [
+  TripPattern[] | null,
+  Date,
+  () => {},
+  () => void,
+  SearchStateType,
+  ErrorType?,
+] {
   const [timeOfSearch, setTimeOfSearch] = useState<Date>(new Date());
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
   const [errorType, setErrorType] = useState<ErrorType>();
+  const [searchState, setSearchState] = useState<SearchStateType>('idle');
 
   const clearPatterns = () => setTripPatterns(null);
   const reload = useCallback(() => {
@@ -546,8 +554,7 @@ function useTripPatterns(
     async function search() {
       if (!fromLocation || !toLocation) return;
 
-      setIsSearching(true);
-      AccessibilityInfo.announceForAccessibility('Laster søkeresultat.');
+      setSearchState('searching');
       setErrorType(undefined);
       try {
         const arriveBy = date?.type === 'arrival';
@@ -571,10 +578,9 @@ function useTripPatterns(
         );
         source.token.throwIfRequested();
         setTripPatterns(response.data);
-        AccessibilityInfo.announceForAccessibility(
-          'Søkeresultat er lastet inn.',
+        setSearchState(
+          response.data.length >= 1 ? 'search-success' : 'search-empty-result',
         );
-        setIsSearching(false);
 
         setTimeOfSearch(searchDate);
       } catch (e) {
@@ -582,7 +588,7 @@ function useTripPatterns(
           setErrorType(getAxiosErrorType(e));
           console.warn(e);
           setTripPatterns(null);
-          setIsSearching(false);
+          setSearchState('search-empty-result');
         }
       }
     }
@@ -598,10 +604,10 @@ function useTripPatterns(
 
   return [
     tripPatterns,
-    isSearching,
     timeOfSearch,
     reload,
     clearPatterns,
+    searchState,
     errorType,
   ];
 }
@@ -656,4 +662,18 @@ function log(message: string, metadata?: {[key: string]: string}) {
 function translateLocation(location: Location | undefined): string {
   if (!location) return 'Undefined location';
   return `${location.id}--${location.name}--${location.locality}`;
+}
+function translateSearchState(
+  searchState: SearchStateType,
+): string | undefined {
+  switch (searchState) {
+    case 'searching':
+      return 'Laster søkeresultater.';
+    case 'search-success':
+      return 'Søkeresultater er lastet inn.';
+    case 'search-empty-result':
+      return 'Fikk ingen søkeresultater.';
+    default:
+      return;
+  }
 }

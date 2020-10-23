@@ -5,3 +5,8 @@ export enum NoResultReason {
   PastArrivalTime = 'Ankomsttid har passert',
   PastDepartureTime = 'Avreisetid har passert',
 }
+export type SearchStateType =
+  | 'idle'
+  | 'searching'
+  | 'search-success'
+  | 'search-empty-result';
