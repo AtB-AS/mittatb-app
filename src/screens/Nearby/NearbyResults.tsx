@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   View,
   ViewStyle,
-  AccessibilityInfo,
 } from 'react-native';
 import {NearbyScreenNavigationProp} from '.';
 import {Expand} from '../../assets/svg/icons/navigation';

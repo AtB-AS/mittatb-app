@@ -175,7 +175,10 @@ const NearbyOverview: React.FC<Props> = ({
   }
   if (isLoading) {
     AccessibilityInfo.announceForAccessibility(
-      'Laster avganger i nærheten av ',
+      'Laster avganger i nærheten av ' +
+        (fromLocation?.resultType == 'geolocation'
+          ? 'gjeldende posisjon'
+          : fromLocation?.label),
     );
   }
 
