@@ -50,8 +50,6 @@ const FavoriteChips: React.FC<Props> = ({
 
   return (
     <ScrollView
-      accessible={true}
-      accessibilityLabel="Favoritter"
       horizontal={true}
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={containerStyle}
