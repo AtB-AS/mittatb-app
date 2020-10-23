@@ -11,6 +11,7 @@ import {useNavigateHome} from '../../../utils/navigation';
 import InviteModal from './InviteModal';
 import {Modalize} from 'react-native-modalize';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
+import Button from '../../../components/button';
 
 function openOtherTicketingApp() {
   const url =
@@ -57,15 +58,18 @@ export default function Splash() {
             AtB Mobillett
           </Text>
         </Text>
-        <Text style={styles.text}>
-          Hvis du har en kode for å melde deg inn i beta for billettkjøp -{' '}
-          <Text
-            onPress={() => modalRef.current?.open()}
-            style={styles.underline}
-          >
-            trykk her
-          </Text>
+        <Text style={[styles.text, styles.bold]}>
+          Testpilot for billettkjøp?
         </Text>
+        <Text style={styles.text}>
+          Har du mottatt invitasjon til å bli testpilot for billettkjøp i appen?
+        </Text>
+        <Button
+          onPress={() => modalRef.current?.open()}
+          text="Trykk her"
+          mode="secondary"
+          style={styles.button}
+        />
       </View>
       <View style={styles.bannerContainer}>
         <ShinyTicketBanner
@@ -94,4 +98,5 @@ const styles = StyleSheet.create({
     right: 0,
   },
   underline: {textDecorationLine: 'underline'},
+  button: {width: '100%', backgroundColor: colors.secondary.gray_Level2},
 });
