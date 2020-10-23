@@ -1,5 +1,5 @@
-import React, {Fragment, useMemo, useRef, useEffect} from 'react';
-import {Text, View, findNodeHandle, AccessibilityInfo} from 'react-native';
+import React, {Fragment, useMemo} from 'react';
+import {Text, View} from 'react-native';
 import MessageBox from '../../message-box';
 import {TripPattern} from '../../sdk';
 import {StyleSheet, useTheme} from '../../theme';

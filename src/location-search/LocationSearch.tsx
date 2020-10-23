@@ -1,6 +1,6 @@
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
-import {Text, TextInput, View, Keyboard, AccessibilityInfo} from 'react-native';
+import {Text, TextInput, View, Keyboard} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Header from '../ScreenHeader';
 import Input from '../components/input';
@@ -61,7 +61,6 @@ const LocationSearch: React.FC<Props> = ({
   const debouncedText = useDebounce(text, 200);
 
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const previousLocations = filterPreviousLocations(debouncedText, history);
   const previousLocations = filterPreviousLocations(
     debouncedText,
     history,

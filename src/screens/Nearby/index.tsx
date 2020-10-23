@@ -24,13 +24,7 @@ import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import SearchGroup from '../../components/search-button/search-group';
 import DisappearingHeader from '../../components/disappearing-header';
 import {DeparturesWithStop, Paginated, DeparturesRealtimeData} from '../../sdk';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
-  AccessibilityInfo,
-} from 'react-native';
+import {View, TouchableOpacity, ActivityIndicator} from 'react-native';
 import useReducerWithSideEffects, {
   Update,
   ReducerWithSideEffects,
