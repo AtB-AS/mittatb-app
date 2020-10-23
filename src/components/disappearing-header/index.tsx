@@ -332,7 +332,7 @@ const throttle = <F extends (...args: any[]) => any>(
 
 // This is code from react-navigation. Couldn't find any
 // way to reasonably calculate this.
-const DEFAULT_TABBAR_HEIGHT = 49;
+const DEFAULT_TABBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 49;
 
 function useCalculateHeaderContentHeight() {
   const {height: windowHeight} = useWindowDimensions();
