@@ -47,7 +47,7 @@ import {useLocationSearchValue} from '../../location-search';
 import {useNavigateHome} from '../../utils/navigation';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import colors from '../../theme/colors';
-import ScreenreaderAnnouncement from '../../components/screenreader-announcement';
+import ScreenreaderAnnouncement from '../../components/screen-reader-announcement';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 

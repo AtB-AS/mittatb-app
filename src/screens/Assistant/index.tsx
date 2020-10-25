@@ -49,9 +49,9 @@ import FavoriteChips from '../../favorite-chips';
 import Animated, {Easing} from 'react-native-reanimated';
 import Bugsnag from '@bugsnag/react-native';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
-import {screenreaderPause} from '../../components/accessible-text';
+import {screenReaderPause} from '../../components/accessible-text';
 import colors from '../../theme/colors';
-import ScreenreaderAnnouncement from '../../components/screenreader-announcement';
+import ScreenreaderAnnouncement from '../../components/screen-reader-announcement';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -213,10 +213,10 @@ const Assistant: React.FC<Props> = ({
             <View style={styles.styleButton}>
               <LocationButton
                 accessible={true}
-                accessibilityLabel={'Velg avreisested' + screenreaderPause}
+                accessibilityLabel={'Velg avreisested' + screenReaderPause}
                 accessibilityHint={
                   'Aktiver for å søke etter adresse eller sted.' +
-                  screenreaderPause
+                  screenReaderPause
                 }
                 accessibilityRole="button"
                 title="Fra"
@@ -269,7 +269,7 @@ const Assistant: React.FC<Props> = ({
                 hitSlop={insets.all(12)}
                 accessible={true}
                 accessibilityLabel={
-                  'Bytt avreisested og ankomststed' + screenreaderPause
+                  'Bytt avreisested og ankomststed' + screenReaderPause
                 }
                 accessibilityRole="button"
               >
@@ -291,7 +291,7 @@ const Assistant: React.FC<Props> = ({
               chipActionHint={
                 'Aktiver for å bruke som ' +
                 (from ? 'destinasjon' : 'avreisested') +
-                screenreaderPause
+                screenReaderPause
               }
             />
           </Fade>

@@ -26,7 +26,7 @@ import MessageBox from '../message-box';
 import {ErrorType} from '../api/utils';
 import {useFavorites} from '../favorites';
 import {LocationSearchResult} from './types';
-import ScreenreaderAnnouncement from '../components/screenreader-announcement';
+import ScreenreaderAnnouncement from '../components/screen-reader-announcement';
 
 export type Props = {
   navigation: LocationSearchNavigationProp;

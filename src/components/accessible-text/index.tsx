@@ -19,12 +19,12 @@ const AccessibleText = ({
     <Text
       accessibilityLabel={`${prefix ?? ''} : ${children ?? ''} ${
         suffix ?? ''
-      } ${pauseAfter ? screenreaderPause : ' '}`}
+      } ${pauseAfter ? screenReaderPause : ' '}`}
       {...props}
     >
       {children ?? ' '}
     </Text>
   );
 };
-export const screenreaderPause = '\n';
+export const screenReaderPause = '\n';
 export default AccessibleText;
