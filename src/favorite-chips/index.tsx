@@ -19,7 +19,7 @@ import {useReverseGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
 import {TabNavigatorParams} from '../navigation/TabNavigator';
 import colors from '../theme/colors';
-import {screenreaderPause} from '../components/accessible-text';
+import {screenReaderPause} from '../components/accessible-text';
 
 type Props = {
   onSelectLocation: (location: LocationWithMetadata) => void;
@@ -50,8 +50,6 @@ const FavoriteChips: React.FC<Props> = ({
 
   return (
     <ScrollView
-      accessible={true}
-      accessibilityLabel="Favoritter"
       horizontal={true}
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={containerStyle}
@@ -81,7 +79,7 @@ const FavoriteChips: React.FC<Props> = ({
           <FavoriteChip
             key={fav.name}
             text={fav.name}
-            accessibilityLabel={'Favoritt: ' + fav.name + screenreaderPause}
+            accessibilityLabel={'Favoritt: ' + fav.name + screenReaderPause}
             accessibilityRole="button"
             accessibilityHint={chipActionHint ?? ''}
             icon={<FavoriteIcon favorite={fav} />}

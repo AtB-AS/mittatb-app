@@ -4,7 +4,7 @@ import {
   useIsFocused,
 } from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useMemo, useEffect} from 'react';
+import React, {useCallback, useMemo, useEffect, useState} from 'react';
 import {
   getDepartures,
   getRealtimeDeparture,
@@ -24,7 +24,7 @@ import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import SearchGroup from '../../components/search-button/search-group';
 import DisappearingHeader from '../../components/disappearing-header';
 import {DeparturesWithStop, Paginated, DeparturesRealtimeData} from '../../sdk';
-import {View, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {View, TouchableOpacity, ActivityIndicator} from 'react-native';
 import useReducerWithSideEffects, {
   Update,
   ReducerWithSideEffects,
@@ -47,6 +47,7 @@ import {useLocationSearchValue} from '../../location-search';
 import {useNavigateHome} from '../../utils/navigation';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import colors from '../../theme/colors';
+import ScreenreaderAnnouncement from '../../components/screen-reader-announcement';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
@@ -113,6 +114,7 @@ const NearbyOverview: React.FC<Props> = ({
   const searchedFromLocation = useLocationSearchValue<NearbyScreenProp>(
     'location',
   );
+  const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
 
   const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
@@ -125,6 +127,7 @@ const NearbyOverview: React.FC<Props> = ({
   const {state, refresh, loadMore, showMoreOnQuay} = useDepartureData(
     fromLocation,
   );
+
   const {departures, isLoading, isFetchingMore, error} = state;
 
   const isInitialScreen = departures == null && !isLoading && !error;
@@ -161,6 +164,20 @@ const NearbyOverview: React.FC<Props> = ({
   }
 
   const navigateHome = useNavigateHome();
+  useEffect(() => {
+    if (updatingLocation)
+      setLoadAnnouncement(
+        'Oppdaterer posisjon for å finne avganger i nærheten.',
+      );
+    if (isLoading && !!fromLocation) {
+      setLoadAnnouncement(
+        'Laster avganger i nærheten av ' +
+          (fromLocation?.resultType == 'geolocation'
+            ? 'gjeldende posisjon'
+            : fromLocation?.label),
+      );
+    }
+  }, [updatingLocation, isLoading]);
 
   const renderHeader = () => (
     <SearchGroup>
@@ -218,6 +235,7 @@ const NearbyOverview: React.FC<Props> = ({
       }
       onEndReached={onScrollViewEndReached}
     >
+      <ScreenreaderAnnouncement message={loadAnnouncement} />
       <NearbyResults
         departures={departures}
         onShowMoreOnQuay={showMoreOnQuay}

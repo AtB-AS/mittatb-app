@@ -43,16 +43,15 @@ import {useLayout} from '../../utils/use-layout';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
 import Results from './Results';
-import {NoResultReason} from './types';
+import {NoResultReason, SearchStateType} from './types';
 import FavoriteChips from '../../favorite-chips';
 
 import Animated, {Easing} from 'react-native-reanimated';
 import Bugsnag from '@bugsnag/react-native';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
-import AccessibleText, {
-  screenreaderPause,
-} from '../../components/accessible-text';
+import {screenReaderPause} from '../../components/accessible-text';
 import colors from '../../theme/colors';
+import ScreenreaderAnnouncement from '../../components/screen-reader-announcement';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -183,13 +182,13 @@ const Assistant: React.FC<Props> = ({
   const [date, setDate] = useState<DateOutput | undefined>();
   const [
     tripPatterns,
-    isSearching,
     timeOfLastSearch,
     reload,
     clearPatterns,
+    searchState,
     errorType,
   ] = useTripPatterns(from, to, date);
-
+  const isSearching = searchState === 'searching';
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
     initialLocation: LocationWithMetadata | undefined,
@@ -214,10 +213,10 @@ const Assistant: React.FC<Props> = ({
             <View style={styles.styleButton}>
               <LocationButton
                 accessible={true}
-                accessibilityLabel={'Velg avreisested' + screenreaderPause}
+                accessibilityLabel={'Velg avreisested' + screenReaderPause}
                 accessibilityHint={
                   'Aktiver for å søke etter adresse eller sted.' +
-                  screenreaderPause
+                  screenReaderPause
                 }
                 accessibilityRole="button"
                 title="Fra"
@@ -270,7 +269,7 @@ const Assistant: React.FC<Props> = ({
                 hitSlop={insets.all(12)}
                 accessible={true}
                 accessibilityLabel={
-                  'Bytt avreisested og ankomststed' + screenreaderPause
+                  'Bytt avreisested og ankomststed' + screenReaderPause
                 }
                 accessibilityRole="button"
               >
@@ -292,7 +291,7 @@ const Assistant: React.FC<Props> = ({
               chipActionHint={
                 'Aktiver for å bruke som ' +
                 (from ? 'destinasjon' : 'avreisested') +
-                screenreaderPause
+                screenReaderPause
               }
             />
           </Fade>
@@ -309,13 +308,6 @@ const Assistant: React.FC<Props> = ({
               />
             </SearchGroup>
           </Fade>
-          <View accessible={true} accessibilityLiveRegion="polite">
-            <AccessibleText
-              prefix={
-                isSearching ? 'Laster søkeresultat' : 'Søkeresultat innlastet'
-              }
-            />
-          </View>
         </View>
       </View>
     ),
@@ -377,6 +369,7 @@ const Assistant: React.FC<Props> = ({
         }
       }}
     >
+      <ScreenreaderAnnouncement message={translateSearchState(searchState)} />
       <Results
         tripPatterns={tripPatterns}
         isSearching={isSearching}
@@ -541,11 +534,18 @@ function useTripPatterns(
   fromLocation: Location | undefined,
   toLocation: Location | undefined,
   date: DateOutput | undefined,
-): [TripPattern[] | null, boolean, Date, () => {}, () => void, ErrorType?] {
-  const [isSearching, setIsSearching] = useState(false);
+): [
+  TripPattern[] | null,
+  Date,
+  () => {},
+  () => void,
+  SearchStateType,
+  ErrorType?,
+] {
   const [timeOfSearch, setTimeOfSearch] = useState<Date>(new Date());
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
   const [errorType, setErrorType] = useState<ErrorType>();
+  const [searchState, setSearchState] = useState<SearchStateType>('idle');
 
   const clearPatterns = () => setTripPatterns(null);
   const reload = useCallback(() => {
@@ -554,7 +554,7 @@ function useTripPatterns(
     async function search() {
       if (!fromLocation || !toLocation) return;
 
-      setIsSearching(true);
+      setSearchState('searching');
       setErrorType(undefined);
       try {
         const arriveBy = date?.type === 'arrival';
@@ -578,14 +578,17 @@ function useTripPatterns(
         );
         source.token.throwIfRequested();
         setTripPatterns(response.data);
-        setIsSearching(false);
+        setSearchState(
+          response.data.length >= 1 ? 'search-success' : 'search-empty-result',
+        );
+
         setTimeOfSearch(searchDate);
       } catch (e) {
         if (!isCancel(e)) {
           setErrorType(getAxiosErrorType(e));
           console.warn(e);
           setTripPatterns(null);
-          setIsSearching(false);
+          setSearchState('search-empty-result');
         }
       }
     }
@@ -601,10 +604,10 @@ function useTripPatterns(
 
   return [
     tripPatterns,
-    isSearching,
     timeOfSearch,
     reload,
     clearPatterns,
+    searchState,
     errorType,
   ];
 }
@@ -659,4 +662,18 @@ function log(message: string, metadata?: {[key: string]: string}) {
 function translateLocation(location: Location | undefined): string {
   if (!location) return 'Undefined location';
   return `${location.id}--${location.name}--${location.locality}`;
+}
+function translateSearchState(
+  searchState: SearchStateType,
+): string | undefined {
+  switch (searchState) {
+    case 'searching':
+      return 'Laster søkeresultater.';
+    case 'search-success':
+      return 'Søkeresultater er lastet inn.';
+    case 'search-empty-result':
+      return 'Fikk ingen søkeresultater.';
+    default:
+      return;
+  }
 }

@@ -65,7 +65,6 @@
 		2D02E4901E0B4A5D006451C7 /* atb-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "atb-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "enforce-bridge.swift"; sourceTree = "<group>"; };
 		38E33D0D242C0838003D56ED /* atb-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "atb-Bridging-Header.h"; sourceTree = "<group>"; };
-		38F348B52542D8120073C300 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		39BBF66B9FD0BAD989E6DB44 /* Pods-atb-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atb-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-atb-tvOS/Pods-atb-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		5688FA526DA9D40F2D561C2D /* libPods-atb-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atb-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		56DFFF6CAD05217182173988 /* Pods-atbTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atbTests.debug.xcconfig"; path = "Target Support Files/Pods-atbTests/Pods-atbTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -331,7 +330,6 @@
 			knownRegions = (
 				en,
 				Base,
-				nb,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -666,7 +664,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				13B07FB21A68108700A75B9A /* Base */,
-				38F348B52542D8120073C300 /* nb */,
 			);
 			name = LaunchScreen.xib;
 			path = atb;

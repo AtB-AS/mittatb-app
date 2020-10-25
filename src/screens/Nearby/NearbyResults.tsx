@@ -80,7 +80,6 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
       </View>
     );
   }
-
   return (
     <View style={styles.container}>
       {error && (
