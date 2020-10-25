@@ -112,7 +112,7 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     textAlign: 'center',
     textDecorationLine: 'underline',
     color: theme.text.colors.primary,
-    marginBottom: 24,
+    marginBottom: theme.spacings.xLarge,
   },
 }));
 
@@ -138,8 +138,10 @@ const Item: React.FC<ItemProps> = ({item, onEdit, onClick}) => {
 
   const content = item.name ? (
     <>
-      <Text style={css.text}>{item.name ?? item.location.name}</Text>
-      <Text>{item.location.label}</Text>
+      <Text style={[css.textName, css.text]}>
+        {item.name ?? item.location.name}
+      </Text>
+      <Text style={[css.text]}>{item.location.label}</Text>
     </>
   ) : (
     <Text>{item.location.label}</Text>
@@ -200,7 +202,10 @@ const useItemStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     marginEnd: 10,
   },
   text: {
-    fontSize: 16,
+    color: theme.text.colors.primary,
+  },
+  textName: {
+    fontSize: theme.text.sizes.body,
     fontWeight: '600',
   },
 }));

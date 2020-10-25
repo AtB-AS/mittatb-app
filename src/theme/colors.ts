@@ -115,7 +115,7 @@ export const themes: Themes = {
       level3: colors.general.gray,
       modal_Level2: colors.secondary.gray_Level2,
       destructive: colors.secondary.red,
-      accent: colors.secondary.cyan,
+      accent: colors.general.black,
     },
     text: {
       colors: {
