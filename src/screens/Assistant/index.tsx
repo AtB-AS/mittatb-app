@@ -408,8 +408,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     top: -19,
     right: 23,
     backgroundColor: theme.background.level0,
+    borderColor: theme.border.primary,
     padding: 3,
-    borderColor: theme.background.accent,
     borderWidth: 2,
     borderRadius: 20,
   },
@@ -429,7 +429,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   altTitleText: {
     overflow: 'hidden',
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
+    color: theme.text.colors.primary,
     fontWeight: 'bold',
   },
   altTitleText__right: {

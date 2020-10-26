@@ -1,11 +1,12 @@
 import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 import {StyleSheet} from '../theme';
 import LocationIcon from '../components/location-icon';
 import insets from '../utils/insets';
 import {ArrowUpLeft} from '../assets/svg/icons/navigation';
 import {LocationSearchResult} from './types';
 import {FavoriteIcon} from '../favorites';
+import ThemedText from '../components/text';
 
 type Props = {
   title?: string;
@@ -25,7 +26,7 @@ const LocationResults: React.FC<Props> = ({
     <>
       {title && (
         <View accessibilityRole="header" style={styles.subHeader}>
-          <Text style={styles.subLabel}>{title}</Text>
+          <ThemedText style={styles.subLabel}>{title}</ThemedText>
           <View style={styles.subBar} />
         </View>
       )}
@@ -52,8 +53,12 @@ const LocationResults: React.FC<Props> = ({
                   )}
                 </View>
                 <View style={styles.locationTextContainer}>
-                  <Text style={styles.locationName}>{searchResult.text}</Text>
-                  <Text style={styles.locality}>{searchResult.subtext}</Text>
+                  <ThemedText style={styles.locationName}>
+                    {searchResult.text}
+                  </ThemedText>
+                  <ThemedText style={styles.locality}>
+                    {searchResult.subtext}
+                  </ThemedText>
                 </View>
               </TouchableOpacity>
             </View>

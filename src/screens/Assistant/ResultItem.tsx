@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, TouchableOpacity, AccessibilityProps} from 'react-native';
+import {View, TouchableOpacity, AccessibilityProps} from 'react-native';
 import {Leg, TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {
@@ -24,6 +24,7 @@ import AccessibleText, {
 import {SituationWarningIcon} from '../../situations';
 import {flatMap} from '../../utils/array';
 import {getReadableModeName} from '../../utils/transportation-names';
+import ThemedText from '../../components/text';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -64,13 +65,13 @@ const ResultItemHeader: React.FC<{
   const wordSpacing = ' ';
   return (
     <View style={styles.resultHeader}>
-      <Text style={styles.resultHeaderLabel}>
+      <ThemedText style={styles.resultHeaderLabel}>
         Fra{wordSpacing}
         {quayName}
         {wordSpacing}
         {timePrefix}
         {formatToClockOrRelativeMinutes(quayStartTime)}
-      </Text>
+      </ThemedText>
       <View style={styles.durationContainer}>
         <AccessibleText prefix="Reisetid">{durationText}</AccessibleText>
       </View>
@@ -131,7 +132,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: 8,
   },
   stopName: {
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
     color: theme.text.colors.primary,
     flexShrink: 1,
   },
@@ -145,7 +146,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginVertical: 8,
   },
   lineName: {
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
     fontWeight: '600',
     color: theme.text.colors.primary,
     textAlign: 'center',
@@ -154,8 +155,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   detailsContainer: {
     flexDirection: 'column',
   },
-  transferText: {fontSize: 16},
-  detailsText: {fontSize: 12, textDecorationLine: 'underline'},
+  transferText: {fontSize: theme.text.sizes.body},
+  detailsText: {
+    fontSize: theme.text.sizes.label,
+    textDecorationLine: 'underline',
+  },
   resultHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -208,13 +212,15 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 
   return (
     <View style={styles.legContainer}>
-      <Text style={[styles.textDeprioritized, styles.time]}>
+      <ThemedText style={[styles.textDeprioritized, styles.time]}>
         {formatToClockOrRelativeMinutes(leg.expectedStartTime)}
-      </Text>
+      </ThemedText>
       <View style={styles.iconContainer}>
         <WalkingPerson fill={colors.general.black} opacity={0.6} />
       </View>
-      <Text style={[styles.textContent, styles.textDeprioritized]}>{text}</Text>
+      <ThemedText style={[styles.textContent, styles.textDeprioritized]}>
+        {text}
+      </ThemedText>
     </View>
   );
 };
@@ -224,13 +230,15 @@ function WaitRow({time}: {time: number}) {
 
   return (
     <View style={styles.legContainer}>
-      <Text style={[styles.textDeprioritized, styles.time]}>
+      <ThemedText style={[styles.textDeprioritized, styles.time]}>
         {secondsToMinutesShort(time)}
-      </Text>
+      </ThemedText>
       <View style={styles.iconContainer}>
         <Duration fill={colors.general.black} opacity={0.6} />
       </View>
-      <Text style={[styles.textContent, styles.textDeprioritized]}>Vent</Text>
+      <ThemedText style={[styles.textContent, styles.textDeprioritized]}>
+        Vent
+      </ThemedText>
     </View>
   );
 }
@@ -254,11 +262,11 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
     flexWrap: 'wrap',
   },
   text: {
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
   },
   textDeprioritized: {
     fontWeight: 'normal',
-    fontSize: 14,
+    fontSize: theme.text.sizes.lead,
     color: theme.text.colors.faded,
   },
   textBold: {
@@ -273,15 +281,15 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
   const styles = useLegStyles();
   return (
     <View style={styles.legContainer}>
-      <Text style={[styles.text, styles.time]}>
+      <ThemedText style={[styles.text, styles.time]}>
         {formatToClockOrRelativeMinutes(leg.expectedStartTime)}
-      </Text>
+      </ThemedText>
       <View style={styles.iconContainer}>
         <TransportationIcon mode={leg.mode} publicCode={leg.line?.publicCode} />
       </View>
-      <Text style={[styles.textContent, styles.text]}>
+      <ThemedText style={[styles.textContent, styles.text]}>
         <LineDisplayName leg={leg} />
-      </Text>
+      </ThemedText>
     </View>
   );
 };
@@ -293,18 +301,18 @@ const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
 
   return (
     <View style={styles.legContainer}>
-      <Text style={[styles.time, styles.textDeprioritized]}>
+      <ThemedText style={[styles.time, styles.textDeprioritized]}>
         {formatToClockOrRelativeMinutes(lastLeg.expectedEndTime)}
-      </Text>
+      </ThemedText>
       <View accessibilityLabel="Destinasjon" style={styles.iconContainer}>
         <DestinationFlag fill={colors.general.black} opacity={0.6} />
       </View>
-      <Text
+      <ThemedText
         style={[styles.textContent, styles.textDeprioritized]}
         numberOfLines={1}
       >
         {lastLeg.toPlace.name}
-      </Text>
+      </ThemedText>
     </View>
   );
 };
@@ -313,12 +321,12 @@ function LineDisplayName({leg}: {leg: Leg}) {
   const name =
     leg.fromEstimatedCall?.destinationDisplay?.frontText ?? leg.line?.name;
   return (
-    <Text>
-      <Text style={{marginRight: 12, fontWeight: 'bold'}}>
+    <ThemedText>
+      <ThemedText style={{marginRight: 12, fontWeight: 'bold'}}>
         {leg.line?.publicCode}
-      </Text>{' '}
-      <Text numberOfLines={1}>{name}</Text>
-    </Text>
+      </ThemedText>{' '}
+      <ThemedText numberOfLines={1}>{name}</ThemedText>
+    </ThemedText>
   );
 }
 

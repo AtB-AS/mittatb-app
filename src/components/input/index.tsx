@@ -1,6 +1,5 @@
 import React, {useState, useRef, forwardRef} from 'react';
 import {
-  Text,
   TextInput,
   TextInputProperties,
   StyleProp,
@@ -14,6 +13,7 @@ import {StyleSheet, useTheme} from '../../theme';
 import colors from '../../theme/colors';
 import {Close} from '../../assets/svg/icons/actions';
 import insets from '../../utils/insets';
+import ThemedText from '../text';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -70,7 +70,7 @@ const Input = forwardRef<TextInput, InputProps>(
             </TouchableOpacity>
           </View>
         ) : null}
-        <Text style={style.label}>{label}</Text>
+        <ThemedText style={style.label}>{label}</ThemedText>
       </View>
     );
   },

@@ -1,6 +1,6 @@
 import React, {createContext, useContext, useState} from 'react';
 import {themes, Theme, Themes} from './colors';
-import {lightFormat} from 'date-fns';
+import {useColorScheme} from 'react-native';
 
 interface ThemeContextValue {
   theme: Theme;
@@ -23,7 +23,9 @@ export function useTheme() {
 }
 
 const ThemeContextProvider: React.FC = ({children}) => {
-  const [themeName, setThemeName] = useState<keyof Themes>('light');
+  const colorScheme = useColorScheme();
+  const defaultTheme = colorScheme ?? 'light';
+  const [themeName, setThemeName] = useState<keyof Themes>(defaultTheme);
   const toggleTheme = () =>
     setThemeName(themeName === 'dark' ? 'light' : 'dark');
   const updateTheme = (themeKey: keyof Themes) => {

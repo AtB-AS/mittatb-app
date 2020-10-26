@@ -5,7 +5,6 @@ import {
   ActivityIndicator,
   ImageStyle,
   StyleProp,
-  Text,
   TextStyle,
   TouchableOpacity,
   View,
@@ -32,6 +31,7 @@ import {
 import insets from '../../utils/insets';
 import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
 import {DeparturesWithStopLocal, QuayWithDeparturesAndLimits} from './utils';
+import ThemedText from '../../components/text';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
@@ -63,9 +63,9 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
     return (
       <View style={styles.container}>
         <MessageBox type="info">
-          <Text>
+          <ThemedText>
             Søk etter avganger fra holdeplasser eller i nærheten av steder.
-          </Text>
+          </ThemedText>
         </MessageBox>
       </View>
     );
@@ -75,7 +75,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
     return (
       <View style={styles.container}>
         <MessageBox type="info">
-          <Text>Fant ingen avganger i nærheten</Text>
+          <ThemedText>Fant ingen avganger i nærheten</ThemedText>
         </MessageBox>
       </View>
     );
@@ -192,7 +192,7 @@ const QuayResult: React.FC<QuayProps> = React.memo(
     return (
       <View key={quay.quay.id} style={styles.quayContainer}>
         <View style={styles.platformHeader}>
-          <Text>Plattform {quay.quay.publicCode}</Text>
+          <ThemedText>Plattform {quay.quay.publicCode}</ThemedText>
         </View>
         {items.map((departure, i) => (
           <React.Fragment key={departure.serviceJourney.id}>
@@ -224,7 +224,7 @@ const ShowMoreButton: React.FC<ShowMoreButtonProps> = ({onPress}) => {
       hitSlop={insets.symmetric(8, 12)}
     >
       <View style={style.showMoreButton}>
-        <Text style={style.text}>Vis flere avganger</Text>
+        <ThemedText style={style.text}>Vis flere avganger</ThemedText>
         <Expand />
       </View>
     </TouchableOpacity>
@@ -250,7 +250,7 @@ const ItemHeader: React.FC<{
 
   return (
     <View style={styles.resultHeader}>
-      <Text style={styles.resultHeaderText}>{stop.name}</Text>
+      <ThemedText style={styles.resultHeaderText}>{stop.name}</ThemedText>
       {location && (
         <View style={styles.distance}>
           <AccessibleText prefix="Distanse">
@@ -291,12 +291,14 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
             circleStyle={{margin: 0}}
           />
           <View style={styles.textWrapper}>
-            <Text style={styles.textContent} numberOfLines={1}>
+            <ThemedText style={styles.textContent} numberOfLines={1}>
               {publicCode && (
-                <Text style={{fontWeight: 'bold'}}>{publicCode} </Text>
+                <ThemedText style={{fontWeight: 'bold'}}>
+                  {publicCode}{' '}
+                </ThemedText>
               )}
               {name}
-            </Text>
+            </ThemedText>
           </View>
           <SituationWarningIcon situations={departure.situations} />
 

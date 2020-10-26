@@ -1,9 +1,8 @@
-import React, {useCallback, useRef} from 'react';
-import {Text, View, useWindowDimensions, Linking, Platform} from 'react-native';
+import React, {useRef} from 'react';
+import {View, useWindowDimensions, Linking, Platform} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../../ScreenHeader';
 import useChatIcon from '../../../chat/use-chat-icon';
-import colors from '../../../theme/colors';
 import {ShinyTicketBanner} from '../../../assets/svg/illustrations';
 import {StyleSheet} from '../../../theme';
 import LogoOutline from '../../../ScreenHeader/LogoOutline';
@@ -11,6 +10,7 @@ import {useNavigateHome} from '../../../utils/navigation';
 import InviteModal from './InviteModal';
 import {Modalize} from 'react-native-modalize';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
+import ThemedText from '../../../components/text';
 
 function openOtherTicketingApp() {
   const url =
@@ -28,6 +28,7 @@ export default function Splash() {
   const {width: windowWidth} = useWindowDimensions();
   const navigateHome = useNavigateHome();
   const modalRef = useRef<Modalize>(null);
+  const styles = useStyles();
 
   function onEnrolled() {
     refresh();
@@ -45,27 +46,27 @@ export default function Splash() {
         }}
       />
       <View style={styles.textContainer}>
-        <Text style={[styles.text, styles.bold]}>
+        <ThemedText style={[styles.text, styles.bold]}>
           Billettkjøp i app kommer snart!
-        </Text>
-        <Text style={styles.text}>
+        </ThemedText>
+        <ThemedText style={styles.text}>
           Her kan du snart kjøpe og administrere billetter til reisen din.
-        </Text>
-        <Text style={styles.text}>
+        </ThemedText>
+        <ThemedText style={styles.text}>
           Frem til da kan du kjøpe billett fra{'\n'}
-          <Text onPress={openOtherTicketingApp} style={styles.underline}>
+          <ThemedText onPress={openOtherTicketingApp} style={styles.underline}>
             AtB Mobillett
-          </Text>
-        </Text>
-        <Text style={styles.text}>
+          </ThemedText>
+        </ThemedText>
+        <ThemedText style={styles.text}>
           Hvis du har en kode for å melde deg inn i beta for billettkjøp -{' '}
-          <Text
+          <ThemedText
             onPress={() => modalRef.current?.open()}
             style={styles.underline}
           >
             trykk her
-          </Text>
-        </Text>
+          </ThemedText>
+        </ThemedText>
       </View>
       <View style={styles.bannerContainer}>
         <ShinyTicketBanner
@@ -78,8 +79,8 @@ export default function Splash() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: colors.secondary.cyan},
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {flex: 1, backgroundColor: theme.background.accent},
   textContainer: {
     paddingHorizontal: 20,
     paddingVertical: 40,
@@ -94,4 +95,4 @@ const styles = StyleSheet.create({
     right: 0,
   },
   underline: {textDecorationLine: 'underline'},
-});
+}));

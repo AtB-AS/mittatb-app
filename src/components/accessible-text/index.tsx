@@ -1,5 +1,6 @@
 import React from 'react';
-import {Text, TextProps} from 'react-native';
+import {TextProps} from 'react-native';
+import ThemedText from '../text';
 
 type LabelProps = TextProps & {
   prefix?: string;
@@ -16,14 +17,14 @@ const AccessibleText = ({
   ...props
 }: LabelProps) => {
   return (
-    <Text
+    <ThemedText
       accessibilityLabel={`${prefix ?? ''} : ${children ?? ''} ${
         suffix ?? ''
       } ${pauseAfter ? screenreaderPause : ' '}`}
       {...props}
     >
       {children ?? ' '}
-    </Text>
+    </ThemedText>
   );
 };
 export const screenreaderPause = '\n';

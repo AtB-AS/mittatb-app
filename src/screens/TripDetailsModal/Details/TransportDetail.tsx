@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import Dash from 'react-native-dash';
 import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
 import {Dot} from '../../../assets/svg/icons/other';
@@ -18,6 +18,7 @@ import transportationColor from '../../../utils/transportation-color';
 import SituationRow from '../SituationRow';
 import colors from '../../../theme/colors';
 import {useLayout} from '../../../utils/use-layout';
+import ThemedText from '../../../components/text';
 
 const TransportDetail: React.FC<LegDetailProps> = ({
   leg,
@@ -90,7 +91,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
             onLayout={onFromLayout}
           />
         )}
-        <Text style={styles.lineName}>{getLineName(leg)}</Text>
+        <ThemedText style={styles.lineName}>{getLineName(leg)}</ThemedText>
 
         <SituationRow
           situations={leg.situations}

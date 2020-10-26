@@ -61,15 +61,15 @@ export default Button;
 const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   button: {
     flexDirection: 'row',
-    padding: 12,
+    padding: theme.spacings.medium,
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: theme.background.accent,
-    marginBottom: 8,
+    backgroundColor: theme.button.primary.bg,
+    marginBottom: theme.spacings.small,
   },
   icon: {
     position: 'absolute',
-    left: 12,
+    left: theme.spacings.medium,
   },
   buttonSecondary: {
     backgroundColor: 'transparent',
@@ -87,7 +87,7 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
   },
   text: {
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
     lineHeight: 20,
     fontWeight: '600',
     color: theme.text.colors.primary,

@@ -22,10 +22,8 @@ import {LocationWithMetadata} from '../../../favorites/types';
 import MessageBox from '../../../message-box';
 import Header from '../../../ScreenHeader';
 import {Leg, Situation, TripPattern} from '../../../sdk';
-import SituationMessage from '../../../situations';
 import {StyleSheet} from '../../../theme';
 import colors from '../../../theme/colors';
-import {flatMap} from '../../../utils/array';
 import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
 import {getQuayNameFromStartLeg} from '../../../utils/transportation-names';
 import usePollableResource from '../../../utils/use-pollable-resource';
@@ -79,7 +77,7 @@ const TripDetailsModal: React.FC<Props> = (props) => {
           icon: <Close />,
         }}
         title="Reisedetaljer"
-        style={{backgroundColor: colors.secondary.cyan}}
+        style={styles.header}
       />
       <ScrollView
         style={styles.scrollView}
@@ -258,6 +256,9 @@ const LegDetail: React.FC<LegDetailProps> = (props) => {
 };
 
 const useDetailsStyle = StyleSheet.createThemeHook((theme) => ({
+  header: {
+    backgroundColor: theme.background.header,
+  },
   container: {
     flex: 1,
     backgroundColor: theme.background.modal_Level2,

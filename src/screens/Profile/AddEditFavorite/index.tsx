@@ -11,7 +11,6 @@ import {
   Alert,
   Keyboard,
   StyleProp,
-  Text,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -31,6 +30,7 @@ import ScreenHeader from '../../../ScreenHeader';
 import {StyleSheet, Theme} from '../../../theme';
 import colors from '../../../theme/colors';
 import EmojiPopup from './EmojiPopup';
+import ThemedText from '../../../components/text';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
@@ -247,7 +247,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
     paddingLeft: 60,
     backgroundColor: theme.background.level1,
     borderRadius: 4,
@@ -279,7 +279,7 @@ const SymbolPicker: React.FC<SymbolPickerProps> = ({onPress, value}) => {
         {!value ? (
           <MapPointPin style={css.emojiIcon} />
         ) : (
-          <Text style={css.emojiText}>{value}</Text>
+          <ThemedText style={css.emojiText}>{value}</ThemedText>
         )}
       </View>
       <Expand />
@@ -318,7 +318,7 @@ const InputGroup: React.FC<InputGroupProps> = ({title, boxStyle, children}) => {
   return (
     <View style={[css.container, boxStyle]}>
       {children}
-      <Text style={css.label}>{title}</Text>
+      <ThemedText style={css.label}>{title}</ThemedText>
     </View>
   );
 };
