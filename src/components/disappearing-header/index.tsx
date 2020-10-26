@@ -1,8 +1,9 @@
 import {useScrollToTop} from '@react-navigation/native';
-import DeviceInfo from 'react-native-device-info';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
+  AccessibilityProps,
   Animated,
+  Easing,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Platform,
@@ -10,17 +11,14 @@ import {
   ScrollView,
   useWindowDimensions,
   View,
-  Easing,
-  AccessibilityProps,
-  StatusBar,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import SvgBanner from '../../assets/svg/icons/other/Banner';
 import useChatIcon from '../../chat/use-chat-icon';
 import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
+import LogoOutline from '../../ScreenHeader/LogoOutline';
 import {StyleSheet} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
-import SvgBanner from '../../assets/svg/icons/other/Banner';
-import LogoOutline from '../../ScreenHeader/LogoOutline';
 
 type Props = {
   renderHeader(isFullHeight: boolean): React.ReactNode;
@@ -334,8 +332,6 @@ const throttle = <F extends (...args: any[]) => any>(
 // This is code from react-navigation. Couldn't find any
 // way to reasonably calculate this.
 const DEFAULT_TABBAR_HEIGHT = 44;
-const IS_UNNOTCHED_ANDROID =
-  Platform.OS === 'android' && !DeviceInfo.hasNotch();
 
 function useCalculateHeaderContentHeight() {
   const {height: windowHeight} = useWindowDimensions();
@@ -345,15 +341,9 @@ function useCalculateHeaderContentHeight() {
   } = useLayout();
   const {onLayout: onHeaderContentLayout, height: contentHeight} = useLayout();
   const {top, bottom} = useSafeAreaInsets();
-  const androidTop = IS_UNNOTCHED_ANDROID ? StatusBar.currentHeight ?? 0 : 0;
 
   const boxHeight =
-    windowHeight -
-    screenHeaderHeight -
-    top -
-    bottom -
-    DEFAULT_TABBAR_HEIGHT -
-    androidTop;
+    windowHeight - screenHeaderHeight - top - bottom - DEFAULT_TABBAR_HEIGHT;
 
   return {
     boxHeight,

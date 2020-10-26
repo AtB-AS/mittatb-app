@@ -59,6 +59,7 @@ const NavigationRoot = () => {
     <>
       <StatusBar
         barStyle="dark-content"
+        translucent={true}
         backgroundColor={theme.background.accent}
       />
       <Host>
