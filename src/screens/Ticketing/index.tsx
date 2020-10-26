@@ -5,7 +5,7 @@ import {
   VippsRedirectParams,
 } from '../../api/fareContracts';
 import TicketContextProvider from './TicketContext';
-import TicketsScreen from './Tickets';
+import TicketsScreen from './Tickets/index';
 import OfferScreen from './Offer';
 import {
   Method as PaymentMethodScreen,
@@ -41,7 +41,7 @@ export default function Ticketing() {
     </Stack.Navigator>
   ) : (
     <TicketContextProvider>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="Tickets" component={TicketsScreen} />
         <Stack.Screen name="Offer" component={OfferScreen} />
         <Stack.Screen name="PaymentMethod" component={PaymentMethodScreen} />
