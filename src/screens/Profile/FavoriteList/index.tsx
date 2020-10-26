@@ -141,7 +141,7 @@ const Item: React.FC<ItemProps> = ({item, onEdit, onClick}) => {
       <Text style={[css.textName, css.text]}>
         {item.name ?? item.location.name}
       </Text>
-      <Text style={[css.text]}>{item.location.label}</Text>
+      <Text style={css.text}>{item.location.label}</Text>
     </>
   ) : (
     <Text>{item.location.label}</Text>
