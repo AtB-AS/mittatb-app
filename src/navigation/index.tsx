@@ -21,6 +21,8 @@ import DepartureDetails, {
   DepartureDetailsRouteParams,
 } from '../screens/TripDetailsModal/DepartureDetails';
 import {Host} from 'react-native-portalize';
+import {useTheme} from '../theme';
+import DeviceInfo from 'react-native-device-info';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -33,8 +35,13 @@ export type RootStackParamList = {
 
 const Stack = createStackNavigator<RootStackParamList>();
 
+const hasNotch = DeviceInfo.hasNotch();
+// Use default status bar color when non-notched android.
+const isNotchedAndroid = Platform.OS === 'android' && hasNotch;
+
 const NavigationRoot = () => {
   const {isLoading, onboarded} = useAppState();
+  const {theme} = useTheme();
 
   const ref = useRef<NavigationContainerRef>(null);
   const {getInitialState} = useLinking(ref, {
@@ -56,10 +63,8 @@ const NavigationRoot = () => {
   return (
     <>
       <StatusBar
-        barStyle={Platform.select({
-          ios: 'dark-content',
-          android: 'light-content',
-        })}
+        barStyle={isNotchedAndroid ? 'default' : 'dark-content'}
+        backgroundColor={isNotchedAndroid ? undefined : theme.background.accent}
       />
       <Host>
         <NavigationContainer ref={ref} onStateChange={trackNavigation}>
