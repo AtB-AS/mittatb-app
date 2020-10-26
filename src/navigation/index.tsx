@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React, {useEffect, useRef} from 'react';
-import {Platform, StatusBar} from 'react-native';
+import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
 import {useAppState} from '../AppContext';
 import trackNavigation from '../diagnostics/trackNavigation';
@@ -19,6 +19,7 @@ import TripDetailsModal, {
 import DepartureDetails, {
   DepartureDetailsRouteParams,
 } from '../screens/TripDetailsModal/DepartureDetails';
+import {useTheme} from '../theme';
 import TabNavigator from './TabNavigator';
 import transitionSpec from './transitionSpec';
 
@@ -35,6 +36,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 const NavigationRoot = () => {
   const {isLoading, onboarded} = useAppState();
+  const {theme} = useTheme();
 
   const ref = useRef<NavigationContainerRef>(null);
   const {getInitialState} = useLinking(ref, {
@@ -56,7 +58,8 @@ const NavigationRoot = () => {
   return (
     <>
       <StatusBar
-        barStyle={Platform.select({ios: 'dark-content', android: 'default'})}
+        barStyle="dark-content"
+        backgroundColor={theme.background.accent}
       />
       <Host>
         <NavigationContainer ref={ref} onStateChange={trackNavigation}>
