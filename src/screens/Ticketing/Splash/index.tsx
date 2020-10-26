@@ -71,6 +71,7 @@ export default function Splash() {
             text="Jeg har kode til lukket beta"
             mode="secondary"
             style={styles.button}
+            textStyle={styles.buttonText}
           />
         </View>
       </View>
@@ -105,4 +106,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     width: '100%',
   },
   button: {backgroundColor: colors.secondary.blue},
+  buttonText: {color: colors.general.white},
 }));
