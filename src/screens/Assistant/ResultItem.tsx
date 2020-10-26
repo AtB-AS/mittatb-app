@@ -24,7 +24,7 @@ import AccessibleText, {
 import {SituationWarningIcon} from '../../situations';
 import {flatMap} from '../../utils/array';
 import {getReadableModeName} from '../../utils/transportation-names';
-import ThemedText from '../../components/text';
+import Text from '../../components/text';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -65,13 +65,13 @@ const ResultItemHeader: React.FC<{
   const wordSpacing = ' ';
   return (
     <View style={styles.resultHeader}>
-      <ThemedText style={styles.resultHeaderLabel}>
+      <Text style={styles.resultHeaderLabel}>
         Fra{wordSpacing}
         {quayName}
         {wordSpacing}
         {timePrefix}
         {formatToClockOrRelativeMinutes(quayStartTime)}
-      </ThemedText>
+      </Text>
       <View style={styles.durationContainer}>
         <AccessibleText prefix="Reisetid">{durationText}</AccessibleText>
       </View>
@@ -212,15 +212,13 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 
   return (
     <View style={styles.legContainer}>
-      <ThemedText style={[styles.textDeprioritized, styles.time]}>
+      <Text style={[styles.textDeprioritized, styles.time]}>
         {formatToClockOrRelativeMinutes(leg.expectedStartTime)}
-      </ThemedText>
+      </Text>
       <View style={styles.iconContainer}>
         <WalkingPerson fill={colors.general.black} opacity={0.6} />
       </View>
-      <ThemedText style={[styles.textContent, styles.textDeprioritized]}>
-        {text}
-      </ThemedText>
+      <Text style={[styles.textContent, styles.textDeprioritized]}>{text}</Text>
     </View>
   );
 };
@@ -230,15 +228,13 @@ function WaitRow({time}: {time: number}) {
 
   return (
     <View style={styles.legContainer}>
-      <ThemedText style={[styles.textDeprioritized, styles.time]}>
+      <Text style={[styles.textDeprioritized, styles.time]}>
         {secondsToMinutesShort(time)}
-      </ThemedText>
+      </Text>
       <View style={styles.iconContainer}>
         <Duration fill={colors.general.black} opacity={0.6} />
       </View>
-      <ThemedText style={[styles.textContent, styles.textDeprioritized]}>
-        Vent
-      </ThemedText>
+      <Text style={[styles.textContent, styles.textDeprioritized]}>Vent</Text>
     </View>
   );
 }
@@ -281,15 +277,15 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
   const styles = useLegStyles();
   return (
     <View style={styles.legContainer}>
-      <ThemedText style={[styles.text, styles.time]}>
+      <Text style={[styles.text, styles.time]}>
         {formatToClockOrRelativeMinutes(leg.expectedStartTime)}
-      </ThemedText>
+      </Text>
       <View style={styles.iconContainer}>
         <TransportationIcon mode={leg.mode} publicCode={leg.line?.publicCode} />
       </View>
-      <ThemedText style={[styles.textContent, styles.text]}>
+      <Text style={[styles.textContent, styles.text]}>
         <LineDisplayName leg={leg} />
-      </ThemedText>
+      </Text>
     </View>
   );
 };
@@ -301,18 +297,18 @@ const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
 
   return (
     <View style={styles.legContainer}>
-      <ThemedText style={[styles.time, styles.textDeprioritized]}>
+      <Text style={[styles.time, styles.textDeprioritized]}>
         {formatToClockOrRelativeMinutes(lastLeg.expectedEndTime)}
-      </ThemedText>
+      </Text>
       <View accessibilityLabel="Destinasjon" style={styles.iconContainer}>
         <DestinationFlag fill={colors.general.black} opacity={0.6} />
       </View>
-      <ThemedText
+      <Text
         style={[styles.textContent, styles.textDeprioritized]}
         numberOfLines={1}
       >
         {lastLeg.toPlace.name}
-      </ThemedText>
+      </Text>
     </View>
   );
 };
@@ -321,12 +317,12 @@ function LineDisplayName({leg}: {leg: Leg}) {
   const name =
     leg.fromEstimatedCall?.destinationDisplay?.frontText ?? leg.line?.name;
   return (
-    <ThemedText>
-      <ThemedText style={{marginRight: 12, fontWeight: 'bold'}}>
+    <Text>
+      <Text style={{marginRight: 12, fontWeight: 'bold'}}>
         {leg.line?.publicCode}
-      </ThemedText>{' '}
-      <ThemedText numberOfLines={1}>{name}</ThemedText>
-    </ThemedText>
+      </Text>{' '}
+      <Text numberOfLines={1}>{name}</Text>
+    </Text>
   );
 }
 

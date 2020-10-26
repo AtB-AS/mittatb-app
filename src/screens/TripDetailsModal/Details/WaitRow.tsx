@@ -5,7 +5,7 @@ import colors from '../../../theme/colors';
 import {Duration} from '../../../assets/svg/icons/transportation';
 import {StyleSheet} from '../../../theme';
 import {Leg} from '../../../sdk';
-import ThemedText from '../../../components/text';
+import Text from '../../../components/text';
 
 type WaitRowProps = {
   onCalculateTime(seconds: number): void;
@@ -32,9 +32,7 @@ export default function WaitRow({
   return (
     <View style={styles.container}>
       <Duration fill={colors.general.gray200} />
-      <ThemedText style={styles.text}>
-        Vent i {secondsToMinutesShort(time)}
-      </ThemedText>
+      <Text style={styles.text}>Vent i {secondsToMinutesShort(time)}</Text>
     </View>
   );
 }

@@ -30,7 +30,7 @@ import ScreenHeader from '../../../ScreenHeader';
 import {StyleSheet, Theme} from '../../../theme';
 import colors from '../../../theme/colors';
 import EmojiPopup from './EmojiPopup';
-import ThemedText from '../../../components/text';
+import Text from '../../../components/text';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
@@ -279,7 +279,7 @@ const SymbolPicker: React.FC<SymbolPickerProps> = ({onPress, value}) => {
         {!value ? (
           <MapPointPin style={css.emojiIcon} />
         ) : (
-          <ThemedText style={css.emojiText}>{value}</ThemedText>
+          <Text style={css.emojiText}>{value}</Text>
         )}
       </View>
       <Expand />
@@ -318,7 +318,7 @@ const InputGroup: React.FC<InputGroupProps> = ({title, boxStyle, children}) => {
   return (
     <View style={[css.container, boxStyle]}>
       {children}
-      <ThemedText style={css.label}>{title}</ThemedText>
+      <Text style={css.label}>{title}</Text>
     </View>
   );
 };

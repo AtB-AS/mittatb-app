@@ -20,6 +20,7 @@ import {TabNavigatorParams} from '../navigation/TabNavigator';
 import colors from '../theme/colors';
 import {screenreaderPause} from '../components/accessible-text';
 import {StyleSheet} from '../theme';
+import ThemedIcon from '../components/themed-icon';
 
 type Props = {
   onSelectLocation: (location: LocationWithMetadata) => void;
@@ -103,7 +104,7 @@ const FavoriteChips: React.FC<Props> = ({
         <FavoriteChip
           text={'Legg til favoritt'}
           accessibilityRole="button"
-          icon={<Add />}
+          icon={<ThemedIcon svg={Add} />}
           mode="light"
           onPress={() =>
             navigation.navigate('Profile', {

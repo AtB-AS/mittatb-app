@@ -1,16 +1,16 @@
 import React from 'react';
-import {Text, TextProps} from 'react-native';
+import {Text as RNText, TextProps} from 'react-native';
 import {StyleSheet} from '../../theme';
 
 type StyledTextProps = TextProps & {};
 
-const ThemedText: React.FC<StyledTextProps> = ({style, children, ...props}) => {
+const Text: React.FC<StyledTextProps> = ({style, children, ...props}) => {
   const styles = useStyle();
 
   return (
-    <Text {...props} style={[styles.default, style]}>
+    <RNText {...props} style={[styles.default, style]}>
       {children}
-    </Text>
+    </RNText>
   );
 };
 const useStyle = StyleSheet.createThemeHook((theme) => ({
@@ -19,4 +19,4 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     fontSize: theme.text.sizes.body,
   },
 }));
-export default ThemedText;
+export default Text;

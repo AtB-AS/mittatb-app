@@ -10,7 +10,7 @@ import {useNavigateHome} from '../../../utils/navigation';
 import InviteModal from './InviteModal';
 import {Modalize} from 'react-native-modalize';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
-import ThemedText from '../../../components/text';
+import Text from '../../../components/text';
 
 function openOtherTicketingApp() {
   const url =
@@ -46,27 +46,27 @@ export default function Splash() {
         }}
       />
       <View style={styles.textContainer}>
-        <ThemedText style={[styles.text, styles.bold]}>
+        <Text style={[styles.text, styles.bold]}>
           Billettkjøp i app kommer snart!
-        </ThemedText>
-        <ThemedText style={styles.text}>
+        </Text>
+        <Text style={styles.text}>
           Her kan du snart kjøpe og administrere billetter til reisen din.
-        </ThemedText>
-        <ThemedText style={styles.text}>
+        </Text>
+        <Text style={styles.text}>
           Frem til da kan du kjøpe billett fra{'\n'}
-          <ThemedText onPress={openOtherTicketingApp} style={styles.underline}>
+          <Text onPress={openOtherTicketingApp} style={styles.underline}>
             AtB Mobillett
-          </ThemedText>
-        </ThemedText>
-        <ThemedText style={styles.text}>
+          </Text>
+        </Text>
+        <Text style={styles.text}>
           Hvis du har en kode for å melde deg inn i beta for billettkjøp -{' '}
-          <ThemedText
+          <Text
             onPress={() => modalRef.current?.open()}
             style={styles.underline}
           >
             trykk her
-          </ThemedText>
-        </ThemedText>
+          </Text>
+        </Text>
       </View>
       <View style={styles.bannerContainer}>
         <ShinyTicketBanner

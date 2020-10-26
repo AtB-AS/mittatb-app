@@ -9,7 +9,7 @@ import {
 import {StyleSheet} from '../../theme';
 import {LocationWithMetadata} from '../../favorites/types';
 import {screenreaderPause} from '../accessible-text';
-import ThemedText from '../text';
+import Text from '../text';
 
 type SearchButtonProps = {
   title: string;
@@ -37,15 +37,13 @@ const SearchButton: React.FC<SearchButtonProps> = ({
         style={styles.button}
         onPress={onPress}
       >
-        <ThemedText style={styles.title}>{title}</ThemedText>
+        <Text style={styles.title}>{title}</Text>
         <View style={styles.icon}>{icon}</View>
-        <ThemedText style={styles.buttonText} numberOfLines={1}>
+        <Text style={styles.buttonText} numberOfLines={1}>
           {text ?? (
-            <ThemedText style={{color: 'rgba(0, 0, 0, 0.6)'}}>
-              {placeholder}
-            </ThemedText>
+            <Text style={{color: 'rgba(0, 0, 0, 0.6)'}}>{placeholder}</Text>
           )}
-        </ThemedText>
+        </Text>
       </TouchableOpacity>
     </View>
   );
