@@ -220,7 +220,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   input: {
     backgroundColor: theme.background.level1,
-    borderColor: colors.general.gray,
+    borderColor: theme.border.primary,
     color: theme.text.colors.primary,
     borderWidth: 1,
     borderRadius: 4,
@@ -252,7 +252,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     backgroundColor: theme.background.level1,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: colors.general.gray,
+    borderColor: theme.border.primary,
     color: theme.text.colors.primary,
     zIndex: -1,
   },
@@ -293,7 +293,7 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     backgroundColor: theme.background.level1,
     borderWidth: 1,
-    borderColor: colors.general.gray,
+    borderColor: theme.border.primary,
     borderRadius: 4,
   },
   emoji: {

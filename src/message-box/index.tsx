@@ -56,15 +56,16 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
     marginBottom: 8,
   },
   text: {
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
+    color: theme.text.colors.primary,
   },
   container__info: {
-    backgroundColor: colors.secondary.cyan_100,
-    borderColor: colors.secondary.cyan_500,
+    backgroundColor: theme.background.info,
+    borderColor: theme.border.info,
   },
   container__warning: {
-    backgroundColor: colors.secondary.yellow_100,
-    borderColor: colors.secondary.yellow_500,
+    backgroundColor: theme.background.warning,
+    borderColor: theme.border.warning,
   },
 }));
 

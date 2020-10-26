@@ -15,6 +15,8 @@ const backgrounds = {
 const colors = {
   primary: {
     green: '#A2AD00',
+    green_700: '#616800',
+    green_900: '#313400',
     gray: '#37424A',
   },
   secondary: {
@@ -33,6 +35,7 @@ const colors = {
     cyan_900: '#224043',
     gray_Level2: '#EBECED',
     gray_500: '#37424A',
+    brown: '#584528',
   },
   general: {
     white: '#ffffff',
@@ -71,6 +74,8 @@ export interface Theme {
     header: string;
     modal_Level2: string;
     destructive: string;
+    warning: string;
+    info: string;
     accent: string;
   };
   text: {
@@ -86,6 +91,8 @@ export interface Theme {
     primary: string;
     secondary: string;
     focus: string;
+    info: string;
+    warning: string;
   };
   button: {
     primary: Button;
@@ -116,6 +123,8 @@ export const themes: Themes = {
       header: colors.secondary.cyan_500,
       modal_Level2: colors.secondary.gray_Level2,
       destructive: colors.secondary.red,
+      info: colors.secondary.cyan_100,
+      warning: colors.secondary.yellow_100,
       accent: colors.secondary.cyan,
     },
     text: {
@@ -131,6 +140,8 @@ export const themes: Themes = {
       primary: colors.primary.gray,
       secondary: colors.general.black,
       focus: colors.secondary.blue_500,
+      info: colors.secondary.cyan_500,
+      warning: colors.secondary.yellow_500,
     },
     button: {
       primary: {bg: colors.secondary.cyan_500, color: colors.general.black},
@@ -150,6 +161,8 @@ export const themes: Themes = {
       header: backgrounds.dark__level1,
       modal_Level2: backgrounds.dark__level2,
       destructive: colors.secondary.red,
+      warning: colors.primary.green_900,
+      info: colors.secondary.cyan_900,
       accent: backgrounds.dark__level1,
     },
 
@@ -166,6 +179,8 @@ export const themes: Themes = {
       primary: colors.general.white,
       secondary: colors.general.white,
       focus: colors.secondary.cyan_500,
+      info: colors.secondary.cyan_800,
+      warning: colors.primary.green_700,
     },
     button: {
       primary: {bg: colors.secondary.blue_500, color: colors.general.white},

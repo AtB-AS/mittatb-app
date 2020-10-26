@@ -305,7 +305,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingLeft: 60,
     backgroundColor: theme.background.level1,
     borderWidth: 1,
-    borderColor: colors.general.gray,
+    borderColor: theme.border.primary,
     borderRadius: 4,
     color: theme.text.colors.primary,
   },
