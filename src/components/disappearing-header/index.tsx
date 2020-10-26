@@ -1,4 +1,5 @@
 import {useScrollToTop} from '@react-navigation/native';
+import DeviceInfo from 'react-native-device-info';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Animated,
@@ -332,7 +333,9 @@ const throttle = <F extends (...args: any[]) => any>(
 
 // This is code from react-navigation. Couldn't find any
 // way to reasonably calculate this.
-const DEFAULT_TABBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 49;
+const DEFAULT_TABBAR_HEIGHT = 44;
+const IS_UNNOTCHED_ANDROID =
+  Platform.OS === 'android' && !DeviceInfo.hasNotch();
 
 function useCalculateHeaderContentHeight() {
   const {height: windowHeight} = useWindowDimensions();
@@ -342,8 +345,7 @@ function useCalculateHeaderContentHeight() {
   } = useLayout();
   const {onLayout: onHeaderContentLayout, height: contentHeight} = useLayout();
   const {top, bottom} = useSafeAreaInsets();
-  const androidTop =
-    Platform.OS === 'android' ? StatusBar.currentHeight ?? 0 : 0;
+  const androidTop = IS_UNNOTCHED_ANDROID ? StatusBar.currentHeight ?? 0 : 0;
 
   const boxHeight =
     windowHeight -
@@ -351,8 +353,7 @@ function useCalculateHeaderContentHeight() {
     top -
     bottom -
     DEFAULT_TABBAR_HEIGHT -
-    androidTop +
-    (StatusBar.currentHeight ?? 0);
+    androidTop;
 
   return {
     boxHeight,
