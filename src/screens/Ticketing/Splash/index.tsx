@@ -68,7 +68,7 @@ export default function Splash() {
         <View style={styles.buttonContainer}>
           <Button
             onPress={() => modalRef.current?.open()}
-            text="Jeg har kode til lukket beta"
+            text="Jeg har kode til beta for billettkjøp"
             mode="secondary"
             style={styles.button}
             textStyle={styles.buttonText}
