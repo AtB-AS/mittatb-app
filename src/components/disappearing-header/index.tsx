@@ -342,6 +342,8 @@ function useCalculateHeaderContentHeight() {
   } = useLayout();
   const {onLayout: onHeaderContentLayout, height: contentHeight} = useLayout();
   const {top, bottom} = useSafeAreaInsets();
+  const androidTop =
+    Platform.OS === 'android' ? StatusBar.currentHeight ?? 0 : 0;
 
   const boxHeight =
     windowHeight -
@@ -349,6 +351,7 @@ function useCalculateHeaderContentHeight() {
     top -
     bottom -
     DEFAULT_TABBAR_HEIGHT -
+    androidTop +
     (StatusBar.currentHeight ?? 0);
 
   return {
