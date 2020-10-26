@@ -25,6 +25,7 @@ import {SituationWarningIcon} from '../../situations';
 import {flatMap} from '../../utils/array';
 import {getReadableModeName} from '../../utils/transportation-names';
 import Text from '../../components/text';
+import ThemeIcon from '../../components/themed-icon';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -216,7 +217,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
         {formatToClockOrRelativeMinutes(leg.expectedStartTime)}
       </Text>
       <View style={styles.iconContainer}>
-        <WalkingPerson fill={colors.general.black} opacity={0.6} />
+        <ThemeIcon svg={WalkingPerson} opacity={0.6} />
       </View>
       <Text style={[styles.textContent, styles.textDeprioritized]}>{text}</Text>
     </View>
@@ -269,7 +270,7 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
     fontWeight: 'bold',
   },
   walkingPerson: {
-    backgroundColor: theme.text.colors.primary,
+    //ackgroundColor: theme.text.colors.primary,
   },
 }));
 
@@ -301,7 +302,7 @@ const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
         {formatToClockOrRelativeMinutes(lastLeg.expectedEndTime)}
       </Text>
       <View accessibilityLabel="Destinasjon" style={styles.iconContainer}>
-        <DestinationFlag fill={colors.general.black} opacity={0.6} />
+        <ThemeIcon svg={DestinationFlag} opacity={0.6} />
       </View>
       <Text
         style={[styles.textContent, styles.textDeprioritized]}

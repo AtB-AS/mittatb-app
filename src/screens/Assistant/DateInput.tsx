@@ -18,6 +18,7 @@ import nb from 'date-fns/locale/nb';
 import subDays from 'date-fns/subDays';
 import insets from '../../utils/insets';
 import {screenreaderPause} from '../../components/accessible-text';
+import ThemeIcon from '../../components/themed-icon';
 
 type DateTypesWithoutNow = 'departure' | 'arrival';
 type DateTypes = DateTypesWithoutNow | 'now';
@@ -179,7 +180,7 @@ const DateInput: React.FC<DateInputProps> = ({
                 <Text style={style.headerText}>Velg tidspunkt</Text>
               </View>
               <TouchableOpacity onPress={onClose}>
-                <Close />
+                <ThemeIcon svg={Close} />
               </TouchableOpacity>
             </View>
 

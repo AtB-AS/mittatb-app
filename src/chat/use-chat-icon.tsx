@@ -5,6 +5,7 @@ import {Chat, ChatUnread} from '../assets/svg/icons/actions';
 import useChatUnreadCount from './use-chat-unread-count';
 import {useRemoteConfig} from '../RemoteConfigContext';
 import {StyleSheet} from '../theme';
+import ThemeIcon from '../components/themed-icon';
 
 export default function useChatIcon() {
   const config = useRemoteConfig();
@@ -23,7 +24,11 @@ export default function useChatIcon() {
         accessibilityRole="button"
         style={styles.chatContainer}
       >
-        {unreadCount ? <ChatUnread /> : <Chat />}
+        {unreadCount ? (
+          <ThemeIcon svg={ChatUnread} />
+        ) : (
+          <ThemeIcon svg={Chat} />
+        )}
       </View>
     ),
     onPress: () =>

@@ -31,6 +31,7 @@ import {StyleSheet, Theme} from '../../../theme';
 import colors from '../../../theme/colors';
 import EmojiPopup from './EmojiPopup';
 import Text from '../../../components/text';
+import ThemeIcon from '../../../components/themed-icon';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
@@ -117,7 +118,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
       <ScreenHeader
         leftButton={{
           onPress: cancel,
-          icon: <ArrowLeft />,
+          icon: <ThemeIcon svg={ArrowLeft} />,
           accessible: true,
           accessibilityRole: 'button',
           accessibilityLabel: 'Gå tilbake',
@@ -277,7 +278,7 @@ const SymbolPicker: React.FC<SymbolPickerProps> = ({onPress, value}) => {
     <TouchableOpacity onPress={onPress} style={css.container}>
       <View style={css.emoji}>
         {!value ? (
-          <MapPointPin style={css.emojiIcon} />
+          <ThemeIcon svg={MapPointPin} style={css.emojiIcon} />
         ) : (
           <Text style={css.emojiText}>{value}</Text>
         )}

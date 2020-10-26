@@ -7,7 +7,8 @@ import {secondsToDuration, secondsBetween} from '../../../utils/date';
 import {WalkingPerson} from '../../../assets/svg/icons/transportation';
 import {LegDetailProps} from '.';
 import WaitRow from './WaitRow';
-import ThemedText from '../../../components/text';
+import Text from '../../../components/text';
+import ThemeIcon from '../../../components/themed-icon';
 
 const MINIMUM_WAIT_IN_SECONDS = 30;
 
@@ -41,10 +42,10 @@ const WalkDetail: React.FC<LegDetailProps> = ({
           <View>
             {isWalkTimeOfSignificance && (
               <View style={styles.walkContainer}>
-                <WalkingPerson fill={colors.general.gray200} />
-                <ThemedText style={styles.walkText}>
+                <ThemeIcon svg={WalkingPerson} opacity={0.6} />
+                <Text style={styles.walkText}>
                   Gå i {secondsToDuration(leg.duration ?? 0)}
-                </ThemedText>
+                </Text>
               </View>
             )}
             {isWalkTimeOfSignificance && isWaitTimeOfSignificance && (

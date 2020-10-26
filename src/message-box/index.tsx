@@ -3,6 +3,7 @@ import {View, Text, StyleProp, ViewStyle} from 'react-native';
 import {Info, Warning} from '../assets/svg/icons/status';
 import {StyleSheet} from '../theme';
 import colors from '../theme/colors';
+import ThemeIcon from '../components/themed-icon';
 
 type WithMessage = {message: string; children?: never};
 type WithChildren = {
@@ -27,10 +28,8 @@ const MessageBox: React.FC<MessageBoxProps> = ({
   const iconElement =
     typeof icon !== 'undefined' ? (
       icon
-    ) : type === 'info' ? (
-      <Info />
     ) : (
-      <Warning />
+      <ThemeIcon svg={type === 'info' ? Info : Warning} />
     );
   const child = message ? <Text style={styles.text}>{message}</Text> : children;
   const backgroundColor = styles[typeToColorClass(type)];

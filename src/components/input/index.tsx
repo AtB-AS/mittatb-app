@@ -14,6 +14,7 @@ import colors from '../../theme/colors';
 import {Close} from '../../assets/svg/icons/actions';
 import insets from '../../utils/insets';
 import Text from '../text';
+import ThemeIcon from '../themed-icon';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -66,7 +67,7 @@ const Input = forwardRef<TextInput, InputProps>(
               hitSlop={insets.all(8)}
               onPress={onClear}
             >
-              <Close />
+              <ThemeIcon svg={Close} />
             </TouchableOpacity>
           </View>
         ) : null}

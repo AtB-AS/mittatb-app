@@ -53,7 +53,7 @@ import AccessibleText, {
   screenreaderPause,
 } from '../../components/accessible-text';
 import colors from '../../theme/colors';
-import ThemedIcon from '../../components/themed-icon';
+import ThemeIcon from '../../components/themed-icon';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -275,7 +275,7 @@ const Assistant: React.FC<Props> = ({
                 }
                 accessibilityRole="button"
               >
-                <ThemedIcon svg={Swap} />
+                <ThemeIcon svg={Swap} />
               </TouchableOpacity>
             </View>
           </View>

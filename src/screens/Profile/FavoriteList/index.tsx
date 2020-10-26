@@ -18,6 +18,7 @@ import {TabNavigatorParams} from '../../../navigation/TabNavigator';
 import {PRIVACY_POLICY_URL} from '@env';
 import LogoOutline from '../../../ScreenHeader/LogoOutline';
 import {useNavigateHome} from '../../../utils/navigation';
+import ThemeIcon from '../../../components/themed-icon';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -61,7 +62,7 @@ export default function Profile({navigation}: ProfileScreenProps) {
       <Header
         title="Mitt AtB"
         leftButton={{
-          icon: <LogoOutline />,
+          icon: <ThemeIcon svg={LogoOutline} />,
           onPress: navigateHome,
           accessibilityLabel: 'Gå til startskjerm',
         }}
@@ -108,7 +109,7 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     color: theme.text.colors.primary,
   },
   privacyPolicy: {
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
     textAlign: 'center',
     textDecorationLine: 'underline',
     color: theme.text.colors.primary,
@@ -120,7 +121,7 @@ function AddFavoriteButton({onPress}: {onPress(): void}) {
   const css = useItemStyle();
   return (
     <TouchableOpacity style={css.item} onPress={onPress}>
-      <Add />
+      <ThemeIcon svg={Add} />
       <View style={css.textContainer}>
         <Text style={css.text}>Legg til favorittsted</Text>
       </View>
@@ -174,7 +175,7 @@ const Item: React.FC<ItemProps> = ({item, onEdit, onClick}) => {
           onPress={onEdit}
           hitSlop={insets.all(12)}
         >
-          <Edit />
+          <ThemeIcon svg={Edit} />
         </TouchableOpacity>
       )}
     </View>

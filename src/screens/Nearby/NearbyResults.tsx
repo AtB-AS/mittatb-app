@@ -32,6 +32,7 @@ import insets from '../../utils/insets';
 import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
 import {DeparturesWithStopLocal, QuayWithDeparturesAndLimits} from './utils';
 import Text from '../../components/text';
+import ThemeIcon from '../../components/themed-icon';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
@@ -225,7 +226,7 @@ const ShowMoreButton: React.FC<ShowMoreButtonProps> = ({onPress}) => {
     >
       <View style={style.showMoreButton}>
         <Text style={style.text}>Vis flere avganger</Text>
-        <Expand />
+        <ThemeIcon svg={Expand} />
       </View>
     </TouchableOpacity>
   );
@@ -256,7 +257,11 @@ const ItemHeader: React.FC<{
           <AccessibleText prefix="Distanse">
             {humanizeDistance(haversine(location.coords, stop))}
           </AccessibleText>
-          <WalkingPerson width={16} style={styles.distanceIcon} />
+          <ThemeIcon
+            svg={WalkingPerson}
+            width={16}
+            style={styles.distanceIcon}
+          />
         </View>
       )}
     </View>

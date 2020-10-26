@@ -11,6 +11,7 @@ import InviteModal from './InviteModal';
 import {Modalize} from 'react-native-modalize';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
 import Text from '../../../components/text';
+import ThemeIcon from '../../../components/themed-icon';
 
 function openOtherTicketingApp() {
   const url =
@@ -40,7 +41,7 @@ export default function Splash() {
         title="Billetter"
         rightButton={chatIcon}
         leftButton={{
-          icon: <LogoOutline />,
+          icon: <ThemeIcon svg={LogoOutline} />,
           onPress: navigateHome,
           accessibilityLabel: 'Gå til startskjerm',
         }}

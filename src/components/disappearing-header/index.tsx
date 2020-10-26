@@ -20,7 +20,7 @@ import {StyleSheet} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
 import SvgBanner from '../../assets/svg/icons/other/Banner';
 import LogoOutline from '../../ScreenHeader/LogoOutline';
-import ThemedIcon from '../themed-icon';
+import ThemeIcon from '../themed-icon';
 
 type Props = {
   renderHeader(isFullHeight: boolean): React.ReactNode;
@@ -181,7 +181,7 @@ const DisappearingHeader: React.FC<Props> = ({
           alternativeTitleVisible={showAltTitle}
           leftButton={{
             onPress: logoClick?.callback,
-            icon: <ThemedIcon svg={LogoOutline} />,
+            icon: <ThemeIcon svg={LogoOutline} />,
             ...logoClick,
           }}
         />

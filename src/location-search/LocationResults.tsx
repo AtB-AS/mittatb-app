@@ -7,6 +7,7 @@ import {ArrowUpLeft} from '../assets/svg/icons/navigation';
 import {LocationSearchResult} from './types';
 import {FavoriteIcon} from '../favorites';
 import ThemedText from '../components/text';
+import ThemeIcon from '../components/themed-icon';
 
 type Props = {
   title?: string;
@@ -71,7 +72,7 @@ const LocationResults: React.FC<Props> = ({
               hitSlop={insets.all(8)}
               onPress={() => onPrefillText(searchResult.prefill + ' ')}
             >
-              <ArrowUpLeft />
+              <ThemeIcon svg={ArrowUpLeft} />
             </TouchableOpacity>
           </View>
         ))}

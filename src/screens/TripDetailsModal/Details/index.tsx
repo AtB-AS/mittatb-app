@@ -31,6 +31,7 @@ import LocationRow from '../LocationRow';
 import {CompactMap} from '../Map/CompactMap';
 import TransportDetail from './TransportDetail';
 import WalkDetail from './WalkDetail';
+import ThemeIcon from '../../../components/themed-icon';
 
 // @TODO Firebase config?
 const TIME_LIMIT_IN_MINUTES = 3;
@@ -74,7 +75,7 @@ const TripDetailsModal: React.FC<Props> = (props) => {
           accessible: true,
           accessibilityRole: 'button',
           accessibilityLabel: 'Gå tilbake',
-          icon: <Close />,
+          icon: <ThemeIcon svg={Close} />,
         }}
         title="Reisedetaljer"
         style={styles.header}
@@ -206,12 +207,12 @@ function translateError(error: AxiosError): string {
 function getLocationIcon(location: LocationWithMetadata) {
   switch (location.resultType) {
     case 'geolocation':
-      return <CurrentLocationArrow />;
+      return <ThemeIcon svg={CurrentLocationArrow} />;
     case 'favorite':
     case 'search':
       return <LocationIcon location={location} multiple />;
     default:
-      return <MapPointPin fill={colors.general.black} />;
+      return <ThemeIcon svg={MapPointPin} />;
   }
 }
 function nextLeg(curent: number, legs: Leg[]): Leg | undefined {
@@ -264,11 +265,11 @@ const useDetailsStyle = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.background.modal_Level2,
   },
   messageContainer: {
-    margin: 24,
+    margin: theme.spacings.xLarge,
     marginTop: 0,
   },
   textDetailsContainer: {
-    paddingTop: 8,
+    paddingTop: theme.spacings.small,
   },
   scrollView: {
     flex: 1,
@@ -278,7 +279,7 @@ const useDetailsStyle = StyleSheet.createThemeHook((theme) => ({
     paddingBottom: 100,
   },
   textStyle: {
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
   },
 }));
 

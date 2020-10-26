@@ -26,6 +26,7 @@ import usePollableResource from '../../../utils/use-pollable-resource';
 import LocationRow from '../LocationRow';
 import SituationRow from '../SituationRow';
 import {getAimedTimeIfLargeDifference} from '../utils';
+import ThemeIcon from '../../../components/themed-icon';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -91,7 +92,7 @@ export default function DepartureDetails({navigation, route}: Props) {
       <ScreenHeader
         leftButton={{
           onPress: () => navigation.goBack(),
-          icon: isBack ? <ArrowLeft /> : <Close />,
+          icon: <ThemeIcon svg={isBack ? ArrowLeft : Close} />,
           accessible: true,
           accessibilityRole: 'button',
           accessibilityLabel: 'Gå tilbake',
@@ -243,12 +244,12 @@ function CollapseButtonRow({
   const text = <Text style={styles.text}>{numberOfStops} Mellomstopp</Text>;
   const child = collapsed ? (
     <>
-      <Expand />
+      <ThemeIcon svg={Expand} />
       {text}
     </>
   ) : (
     <>
-      <ExpandLess />
+      <ThemeIcon svg={ExpandLess} />
       {text}
     </>
   );

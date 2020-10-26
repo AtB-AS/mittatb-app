@@ -1,6 +1,6 @@
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
-import {Text, TextInput, View, Keyboard} from 'react-native';
+import {TextInput, View, Keyboard} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Header from '../ScreenHeader';
 import Input from '../components/input';
@@ -13,7 +13,6 @@ import {useGeolocationState} from '../GeolocationContext';
 import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
 import {StyleSheet} from '../theme';
-import colors from '../theme/colors';
 import FavoriteChips, {ChipTypeGroup} from '../favorite-chips';
 import LocationResults from './LocationResults';
 import useDebounce from './useDebounce';
@@ -26,6 +25,8 @@ import MessageBox from '../message-box';
 import {ErrorType} from '../api/utils';
 import {useFavorites} from '../favorites';
 import {LocationSearchResult} from './types';
+import ThemeIcon from '../components/themed-icon';
+import Text from '../components/text';
 
 export type Props = {
   navigation: LocationSearchNavigationProp;
@@ -140,7 +141,7 @@ const LocationSearch: React.FC<Props> = ({
               accessible: true,
               accessibilityRole: 'button',
               accessibilityLabel: 'Gå tilbake',
-              icon: <Close />,
+              icon: <ThemeIcon svg={Close} />,
             }}
             title="Søk"
           />
