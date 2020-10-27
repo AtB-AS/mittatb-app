@@ -47,6 +47,7 @@ import {useLocationSearchValue} from '../../location-search';
 import {useNavigateHome} from '../../utils/navigation';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import colors from '../../theme/colors';
+import ThemeIcon from '../../components/theme-icon';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
@@ -193,7 +194,7 @@ const NearbyOverview: React.FC<Props> = ({
           accessibilityRole="button"
           onPress={setCurrentLocationOrRequest}
         >
-          <CurrentLocationArrow />
+          <ThemeIcon svg={CurrentLocationArrow} />
         </TouchableOpacity>
       </View>
     </SearchGroup>
