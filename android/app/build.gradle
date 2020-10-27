@@ -227,8 +227,6 @@ dependencies {
 
     implementation 'io.intercom.android:intercom-sdk-base:6.+'
 
-    implementation 'com.getkeepsafe.relinker:relinker:1.4.1'
-
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
     }
