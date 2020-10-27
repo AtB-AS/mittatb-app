@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import io.intercom.android.sdk.Intercom;
+import com.getkeepsafe.relinker.ReLinker;
 
 public class MainApplication extends MultiDexApplication implements ReactApplication {
 
@@ -69,6 +70,8 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
           if (!TextUtils.isEmpty(bugsnagKey)) {
               config.setReleaseStage(bugsnagReleaseStage);
           }
+          ReLinker.loadLibrary(this, "bugsnag-plugin-android-anr");
+          ReLinker.loadLibrary(this, "bugsnag-plugin-android-ndk");
           Bugsnag.start(this, config);
       }
     } catch (Exception e) {
