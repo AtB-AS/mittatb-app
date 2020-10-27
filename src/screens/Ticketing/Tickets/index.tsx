@@ -8,8 +8,8 @@ import useChatIcon from '../../../chat/use-chat-icon';
 import {useNavigateHome} from '../../../utils/navigation';
 import {StyleSheet} from '../../../theme';
 import colors from '../../../theme/colors';
-import Active from './Active';
-import Expired from './Expired';
+import ActiveTickets from './Active';
+import ExpiredTickets from './Expired';
 import TabBar from './TabBar';
 
 const Tab = createMaterialTopTabNavigator();
@@ -40,12 +40,12 @@ export default function MyTabs() {
       <Tab.Navigator tabBar={(props) => <TabBar {...props} />}>
         <Tab.Screen
           name="Active"
-          component={Active}
+          component={ActiveTickets}
           options={{tabBarLabel: 'Aktive'}}
         />
         <Tab.Screen
           name="Expired"
-          component={Expired}
+          component={ExpiredTickets}
           options={{tabBarLabel: 'Utløpte'}}
         />
       </Tab.Navigator>

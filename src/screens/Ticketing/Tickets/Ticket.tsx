@@ -1,11 +1,13 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-import {secondsToDuration} from '../../../utils/date';
+import {formatToLongDateTime, secondsToDuration} from '../../../utils/date';
 import {FareContract} from '../../../api/fareContracts';
 import {StyleSheet} from '../../../theme';
-import {ValidTicket} from '../../../assets/svg/icons/ticketing';
+import {InvalidTicket, ValidTicket} from '../../../assets/svg/icons/ticketing';
 import colors from '../../../theme/colors';
 import Dash from 'react-native-dash';
+import {fromUnixTime} from 'date-fns';
+import nb from 'date-fns/locale/nb';
 
 type Props = {
   fareContract: FareContract;
@@ -15,39 +17,44 @@ type Props = {
 const Ticket: React.FC<Props> = ({fareContract: fc, now}) => {
   const styles = useStyles();
 
-  const validitySeconds = fc.usage_valid_to - now / 1000;
-  const durationSeconds = fc.usage_valid_to - fc.usage_valid_from;
-  const validityPercent = Math.ceil((validitySeconds / durationSeconds) * 100);
+  const nowSeconds = now / 1000;
+  const isValidTicket = fc.usage_valid_to >= nowSeconds;
+  const validityLeftSeconds = fc.usage_valid_to - nowSeconds;
+
   return (
     <TouchableOpacity>
       <View style={styles.ticketContainer}>
         <View style={styles.validityContainer}>
-          <View style={styles.iconContainer}>
-            <ValidTicket fill={colors.primary.green} />
-          </View>
-          <Text style={styles.validityText}>
-            Gyldig i{' '}
-            {secondsToDuration(validitySeconds, undefined, {
-              delimiter: ' og ',
-            })}
-          </Text>
+          {isValidTicket ? (
+            <>
+              <View style={styles.iconContainer}>
+                <ValidTicket fill={colors.primary.green} />
+              </View>
+              <Text style={styles.validityText}>
+                Gyldig i{' '}
+                {secondsToDuration(validityLeftSeconds, undefined, {
+                  delimiter: ' og ',
+                })}
+              </Text>
+            </>
+          ) : (
+            <>
+              <View style={styles.iconContainer}>
+                <InvalidTicket fill={colors.secondary.red} />
+              </View>
+              <Text style={styles.validityText}>
+                Kjøpt{' '}
+                {formatToLongDateTime(fromUnixTime(fc.usage_valid_from), nb)}
+              </Text>
+            </>
+          )}
         </View>
-        <View style={styles.validityDashContainer}>
-          <Dash
-            style={{width: `${validityPercent}%`}}
-            dashGap={0}
-            dashLength={1}
-            dashThickness={4}
-            dashColor={colors.primary.green}
-          />
-          <Dash
-            style={{width: `${100 - validityPercent}%`}}
-            dashGap={0}
-            dashLength={1}
-            dashThickness={4}
-            dashColor={colors.secondary.gray_Level2}
-          />
-        </View>
+        <ValidityLine
+          isValid={isValidTicket}
+          validityLeftSeconds={validityLeftSeconds}
+          validFrom={fc.usage_valid_from}
+          validTo={fc.usage_valid_to}
+        />
         <View style={styles.ticketInfoContainer}>
           <Text style={styles.travellersText}>
             {fc.user_profiles.length > 1
@@ -60,6 +67,53 @@ const Ticket: React.FC<Props> = ({fareContract: fc, now}) => {
       </View>
     </TouchableOpacity>
   );
+};
+
+const ValidityLine: React.FC<{
+  isValid: boolean;
+  validityLeftSeconds: number;
+  validFrom: number;
+  validTo: number;
+}> = ({isValid, validityLeftSeconds, validFrom, validTo}) => {
+  const styles = useStyles();
+
+  if (isValid) {
+    const durationSeconds = validTo - validFrom;
+    const validityPercent = Math.ceil(
+      (validityLeftSeconds / durationSeconds) * 100,
+    );
+
+    return (
+      <View style={styles.validityDashContainer}>
+        <Dash
+          style={{width: `${validityPercent}%`}}
+          dashGap={0}
+          dashLength={1}
+          dashThickness={8}
+          dashColor={colors.primary.green}
+        />
+        <Dash
+          style={{width: `${100 - validityPercent}%`}}
+          dashGap={0}
+          dashLength={1}
+          dashThickness={8}
+          dashColor={colors.secondary.gray_Level2}
+        />
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.validityDashContainer}>
+        <Dash
+          style={{width: '100%'}}
+          dashGap={0}
+          dashLength={1}
+          dashThickness={1}
+          dashColor={colors.secondary.gray_Level2}
+        />
+      </View>
+    );
+  }
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

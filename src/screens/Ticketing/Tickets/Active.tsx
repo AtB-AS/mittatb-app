@@ -15,14 +15,8 @@ type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'Tickets'>;
 };
 
-const Tickets: React.FC<Props> = ({navigation}) => {
-  const {
-    paymentFailedReason,
-    paymentFailedForReason,
-    fareContracts,
-    isRefreshingTickets,
-    refreshTickets,
-  } = useTicketState();
+const ActiveTickets: React.FC<Props> = ({navigation}) => {
+  const {fareContracts, isRefreshingTickets, refreshTickets} = useTicketState();
   const [selectedFareContract, setSelectedFareContract] = useState<
     FareContract | undefined
   >(undefined);
@@ -130,4 +124,4 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-export default Tickets;
+export default ActiveTickets;
