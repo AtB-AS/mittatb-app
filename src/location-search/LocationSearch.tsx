@@ -25,7 +25,7 @@ import MessageBox from '../message-box';
 import {ErrorType} from '../api/utils';
 import {useFavorites} from '../favorites';
 import {LocationSearchResult} from './types';
-import ThemeIcon from '../components/themed-icon';
+import ThemeIcon from '../components/theme-icon';
 import Text from '../components/text';
 
 export type Props = {
@@ -307,7 +307,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.background.level1,
     borderWidth: 1,
     borderColor: theme.border.primary,
-    borderRadius: 4,
+    borderRadius: theme.border.borderRadius.small,
     color: theme.text.colors.primary,
   },
   searchIcon: {

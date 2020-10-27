@@ -26,7 +26,7 @@ import usePollableResource from '../../../utils/use-pollable-resource';
 import LocationRow from '../LocationRow';
 import SituationRow from '../SituationRow';
 import {getAimedTimeIfLargeDifference} from '../utils';
-import ThemeIcon from '../../../components/themed-icon';
+import ThemeIcon from '../../../components/theme-icon';
 
 export type DepartureDetailsRouteParams = {
   title: string;

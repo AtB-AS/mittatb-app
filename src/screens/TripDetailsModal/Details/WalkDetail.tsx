@@ -8,7 +8,7 @@ import {WalkingPerson} from '../../../assets/svg/icons/transportation';
 import {LegDetailProps} from '.';
 import WaitRow from './WaitRow';
 import Text from '../../../components/text';
-import ThemeIcon from '../../../components/themed-icon';
+import ThemeIcon from '../../../components/theme-icon';
 
 const MINIMUM_WAIT_IN_SECONDS = 30;
 

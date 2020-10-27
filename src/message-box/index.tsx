@@ -3,7 +3,7 @@ import {View, Text, StyleProp, ViewStyle} from 'react-native';
 import {Info, Warning} from '../assets/svg/icons/status';
 import {StyleSheet} from '../theme';
 import colors from '../theme/colors';
-import ThemeIcon from '../components/themed-icon';
+import ThemeIcon from '../components/theme-icon';
 
 type WithMessage = {message: string; children?: never};
 type WithChildren = {
@@ -48,7 +48,7 @@ export default MessageBox;
 const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     padding: 12,
-    borderRadius: 8,
+    borderRadius: theme.border.borderRadius.regular,
     borderWidth: 1,
   },
   iconContainer: {

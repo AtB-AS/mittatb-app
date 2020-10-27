@@ -10,7 +10,7 @@ import {
 import {Location} from '../../favorites/types';
 import {Category} from '../../sdk';
 import {SvgProps} from 'react-native-svg';
-import ThemeIcon from '../themed-icon';
+import ThemeIcon from '../theme-icon';
 
 const LocationIcon = ({
   location,

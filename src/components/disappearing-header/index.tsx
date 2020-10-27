@@ -20,7 +20,7 @@ import {StyleSheet} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
 import SvgBanner from '../../assets/svg/icons/other/Banner';
 import LogoOutline from '../../ScreenHeader/LogoOutline';
-import ThemeIcon from '../themed-icon';
+import ThemeIcon from '../theme-icon';
 
 type Props = {
   renderHeader(isFullHeight: boolean): React.ReactNode;

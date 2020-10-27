@@ -5,7 +5,7 @@ import {Chat, ChatUnread} from '../assets/svg/icons/actions';
 import useChatUnreadCount from './use-chat-unread-count';
 import {useRemoteConfig} from '../RemoteConfigContext';
 import {StyleSheet} from '../theme';
-import ThemeIcon from '../components/themed-icon';
+import ThemeIcon from '../components/theme-icon';
 
 export default function useChatIcon() {
   const config = useRemoteConfig();
@@ -45,6 +45,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.button.primary.bg,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: theme.border.borderRadius.regular,
   },
 }));

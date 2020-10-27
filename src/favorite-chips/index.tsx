@@ -20,7 +20,7 @@ import {TabNavigatorParams} from '../navigation/TabNavigator';
 import colors from '../theme/colors';
 import {screenreaderPause} from '../components/accessible-text';
 import {StyleSheet} from '../theme';
-import ThemeIcon from '../components/themed-icon';
+import ThemeIcon from '../components/theme-icon';
 
 type Props = {
   onSelectLocation: (location: LocationWithMetadata) => void;
@@ -166,7 +166,7 @@ const FavoriteChip: React.FC<ChipProps> = ({
 const useChipStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     height: 28,
-    borderRadius: 8,
+    borderRadius: theme.border.borderRadius.regular,
     backgroundColor: theme.button.secondary.bg,
     flexDirection: 'row',
     justifyContent: 'center',

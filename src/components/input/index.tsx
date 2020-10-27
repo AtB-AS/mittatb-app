@@ -14,7 +14,7 @@ import colors from '../../theme/colors';
 import {Close} from '../../assets/svg/icons/actions';
 import insets from '../../utils/insets';
 import Text from '../text';
-import ThemeIcon from '../themed-icon';
+import ThemeIcon from '../theme-icon';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -84,7 +84,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     backgroundColor: theme.background.level1,
     color: theme.text.colors.primary,
     borderWidth: 1,
-    borderRadius: 4,
+    borderRadius: theme.border.borderRadius.small,
     paddingLeft: 60,
     paddingRight: 40,
     padding: theme.spacings.medium,

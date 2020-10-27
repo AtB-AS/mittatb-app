@@ -7,7 +7,7 @@ import {ArrowUpLeft} from '../assets/svg/icons/navigation';
 import {LocationSearchResult} from './types';
 import {FavoriteIcon} from '../favorites';
 import ThemedText from '../components/text';
-import ThemeIcon from '../components/themed-icon';
+import ThemeIcon from '../components/theme-icon';
 
 type Props = {
   title?: string;

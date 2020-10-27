@@ -53,7 +53,7 @@ import AccessibleText, {
   screenreaderPause,
 } from '../../components/accessible-text';
 import colors from '../../theme/colors';
-import ThemeIcon from '../../components/themed-icon';
+import ThemeIcon from '../../components/theme-icon';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';

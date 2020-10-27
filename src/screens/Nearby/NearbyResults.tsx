@@ -32,7 +32,7 @@ import insets from '../../utils/insets';
 import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
 import {DeparturesWithStopLocal, QuayWithDeparturesAndLimits} from './utils';
 import Text from '../../components/text';
-import ThemeIcon from '../../components/themed-icon';
+import ThemeIcon from '../../components/theme-icon';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
@@ -390,7 +390,7 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
   },
   quayContainer: {
     backgroundColor: theme.background.level0,
-    borderRadius: 8,
+    borderRadius: theme.border.borderRadius.regular,
     marginBottom: theme.spacings.small,
   },
 }));

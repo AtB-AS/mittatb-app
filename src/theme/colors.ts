@@ -66,6 +66,10 @@ const lineHeights = {
   body: 20,
   label: 16,
 };
+const borderRadius = {
+  regular: 8,
+  small: 4,
+};
 type Button = {
   bg: string;
   color: string;
@@ -107,6 +111,7 @@ export interface Theme {
     focus: string;
     info: string;
     warning: string;
+    borderRadius: typeof borderRadius;
   };
   button: {
     primary: Button;
@@ -149,6 +154,7 @@ export const themes: Themes = {
       focus: colors.secondary.blue_500,
       info: colors.secondary.cyan_500,
       warning: colors.secondary.yellow_500,
+      borderRadius: borderRadius,
     },
     button: {
       primary: {bg: colors.secondary.cyan_500, color: colors.general.black},
@@ -190,6 +196,7 @@ export const themes: Themes = {
       focus: colors.secondary.cyan_500,
       info: colors.secondary.cyan_800,
       warning: colors.primary.green_700,
+      borderRadius: borderRadius,
     },
     button: {
       primary: {bg: colors.secondary.blue_500, color: colors.general.white},

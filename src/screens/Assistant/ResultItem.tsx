@@ -25,7 +25,7 @@ import {SituationWarningIcon} from '../../situations';
 import {flatMap} from '../../utils/array';
 import {getReadableModeName} from '../../utils/transportation-names';
 import Text from '../../components/text';
-import ThemeIcon from '../../components/themed-icon';
+import ThemeIcon from '../../components/theme-icon';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -130,7 +130,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   result: {
     padding: 12,
     backgroundColor: theme.background.level0,
-    borderRadius: 8,
+    borderRadius: theme.border.borderRadius.regular,
   },
   stopName: {
     fontSize: theme.text.sizes.body,

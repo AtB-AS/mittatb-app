@@ -31,7 +31,7 @@ import {StyleSheet, Theme} from '../../../theme';
 import colors from '../../../theme/colors';
 import EmojiPopup from './EmojiPopup';
 import Text from '../../../components/text';
-import ThemeIcon from '../../../components/themed-icon';
+import ThemeIcon from '../../../components/theme-icon';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
@@ -224,7 +224,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     borderColor: theme.border.primary,
     color: theme.text.colors.primary,
     borderWidth: 1,
-    borderRadius: 4,
+    borderRadius: theme.border.borderRadius.small,
     paddingLeft: 60,
     padding: 12,
     fontSize: 16,
@@ -251,7 +251,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     fontSize: theme.text.sizes.body,
     paddingLeft: 60,
     backgroundColor: theme.background.level1,
-    borderRadius: 4,
+    borderRadius: theme.border.borderRadius.small,
     borderWidth: 1,
     borderColor: theme.border.primary,
     color: theme.text.colors.primary,
@@ -295,7 +295,7 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.background.level1,
     borderWidth: 1,
     borderColor: theme.border.primary,
-    borderRadius: 4,
+    borderRadius: theme.border.borderRadius.small,
   },
   emoji: {
     marginRight: 12,

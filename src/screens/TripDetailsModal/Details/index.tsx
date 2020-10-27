@@ -31,7 +31,7 @@ import LocationRow from '../LocationRow';
 import {CompactMap} from '../Map/CompactMap';
 import TransportDetail from './TransportDetail';
 import WalkDetail from './WalkDetail';
-import ThemeIcon from '../../../components/themed-icon';
+import ThemeIcon from '../../../components/theme-icon';
 
 // @TODO Firebase config?
 const TIME_LIMIT_IN_MINUTES = 3;

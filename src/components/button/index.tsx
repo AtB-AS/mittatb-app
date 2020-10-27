@@ -63,7 +63,7 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flexDirection: 'row',
     padding: theme.spacings.medium,
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: theme.border.borderRadius.regular,
     backgroundColor: theme.button.primary.bg,
     marginBottom: theme.spacings.small,
   },

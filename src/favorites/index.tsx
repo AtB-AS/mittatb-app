@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text} from 'react-native';
 import {MapPointPin} from '../assets/svg/icons/places';
-import ThemeIcon from '../components/themed-icon';
+import ThemeIcon from '../components/theme-icon';
 
 export type FavoriteIconProps = {
   favorite?: {emoji?: string};

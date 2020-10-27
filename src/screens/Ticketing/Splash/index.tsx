@@ -11,7 +11,7 @@ import InviteModal from './InviteModal';
 import {Modalize} from 'react-native-modalize';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
 import Text from '../../../components/text';
-import ThemeIcon from '../../../components/themed-icon';
+import ThemeIcon from '../../../components/theme-icon';
 
 function openOtherTicketingApp() {
   const url =

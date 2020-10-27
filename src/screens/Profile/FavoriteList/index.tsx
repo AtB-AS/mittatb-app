@@ -18,7 +18,7 @@ import {TabNavigatorParams} from '../../../navigation/TabNavigator';
 import {PRIVACY_POLICY_URL} from '@env';
 import LogoOutline from '../../../ScreenHeader/LogoOutline';
 import {useNavigateHome} from '../../../utils/navigation';
-import ThemeIcon from '../../../components/themed-icon';
+import ThemeIcon from '../../../components/theme-icon';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
