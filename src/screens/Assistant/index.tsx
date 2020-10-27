@@ -399,7 +399,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   searchButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingRight: 12,
+    paddingRight: theme.spacings.medium,
   },
   swapButton: {
     position: 'relative',

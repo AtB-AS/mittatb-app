@@ -1,22 +1,30 @@
 import React from 'react';
 import {Text as RNText, TextProps} from 'react-native';
-import {StyleSheet} from '../../theme';
+import {fontSizes} from '../../theme/colors';
+import {useTheme} from '../../theme';
 
-type StyledTextProps = TextProps & {};
+type StyledTextProps = TextProps & {
+  type: keyof typeof fontSizes;
+};
 
-const Text: React.FC<StyledTextProps> = ({style, children, ...props}) => {
-  const styles = useStyle();
+const Text: React.FC<StyledTextProps> = ({
+  type: fontType = 'body',
+  style,
+  children,
+  ...props
+}) => {
+  const {theme} = useTheme();
+
+  const typeStyle = {
+    fontSize: theme.text.sizes[fontType],
+    lineHeight: theme.text.lineHeight[fontType],
+    color: theme.text.colors.primary,
+  };
 
   return (
-    <RNText {...props} style={[styles.default, style]}>
+    <RNText style={[typeStyle, style]} maxFontSizeMultiplier={2} {...props}>
       {children}
     </RNText>
   );
 };
-const useStyle = StyleSheet.createThemeHook((theme) => ({
-  default: {
-    color: theme.text.colors.primary,
-    fontSize: theme.text.sizes.body,
-  },
-}));
 export default Text;

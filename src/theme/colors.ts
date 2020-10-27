@@ -1,5 +1,4 @@
-import {ComponentProps} from 'react';
-import {StatusBar, StatusBarProps} from 'react-native';
+import {StatusBarProps} from 'react-native';
 
 const backgrounds = {
   light__level0: '#FFFFFF',
@@ -8,9 +7,9 @@ const backgrounds = {
   light__level3: '#E1E3E4',
 
   dark__level0: '#000000',
-  dark__level1: '#111416',
-  dark__level2: '#13171A',
-  dark__level3: '#161A1E',
+  dark__level1: '#13171A',
+  dark__level2: '#1D2225',
+  dark__level3: '#323A3E',
 };
 
 const colors = {
@@ -23,6 +22,9 @@ const colors = {
   secondary: {
     blue: '#008DA8',
     blue_500: '#007C92',
+    blue_700: '#004a58',
+    blue_800: '#00323a',
+    blue_900: '#00252c',
     orange: '#C75B12',
     yellow_100: '#F7F3B2',
     yellow_500: '#E4D700',
@@ -60,13 +62,14 @@ const spacings = {
   small: 8,
   xSmall: 4,
 };
-const fontSizes = {
+export const fontSizes = {
   body: 16,
   lead: 14,
   label: 12,
 };
 const lineHeights = {
   body: 20,
+  lead: 20,
   label: 16,
 };
 const borderRadius = {
@@ -175,7 +178,7 @@ export const themes: Themes = {
       level1: backgrounds.dark__level1,
       level2: backgrounds.dark__level2,
       level3: backgrounds.dark__level3,
-      header: backgrounds.dark__level1,
+      header: colors.secondary.blue_900,
       modal_Level2: backgrounds.dark__level2,
       destructive: colors.secondary.red,
       warning: colors.primary.green_900,

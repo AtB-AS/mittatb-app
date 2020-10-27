@@ -275,7 +275,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   topBorder: {
-    backgroundColor: theme.background.accent,
+    backgroundColor: theme.background.header,
   },
   bannerContainer: {
     position: 'absolute',
@@ -297,7 +297,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     overflow: 'hidden',
     zIndex: 2,
     elevated: 1,
-    backgroundColor: theme.background.accent,
+    backgroundColor: theme.background.header,
     justifyContent: 'flex-end',
   },
   header__inner: {

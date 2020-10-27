@@ -87,7 +87,7 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.spacings.medium,
-    backgroundColor: theme.background.accent,
+    backgroundColor: theme.background.header,
   },
   iconContainerLeft: {
     position: 'absolute',

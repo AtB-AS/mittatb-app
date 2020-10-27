@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Linking, Text, TouchableOpacity, View} from 'react-native';
+import {Linking, TouchableOpacity, View} from 'react-native';
 import {PRIVACY_POLICY_URL} from '@env';
 import {useAppState} from '../../AppContext';
 import {
@@ -17,6 +17,8 @@ import {
 import StepOuterContainer from './components/StepContainer';
 import Illustration from './components/Illustration';
 import NavigationControls from './components/NavigationControls';
+import Text from '../../components/text';
+
 type StepProps = {
   navigation: StackNavigationProp<OnboardingStackParams>;
 };
