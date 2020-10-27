@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {StyleSheet} from '../../theme';
 import {LocationWithMetadata} from '../../favorites/types';
-import {screenreaderPause} from '../accessible-text';
+import {screenReaderPause} from '../accessible-text';
 import Text from '../text';
 
 type SearchButtonProps = {
@@ -62,7 +62,7 @@ export const LocationButton: React.FC<LocationButtonProps> = ({
 
   if (currentValueLabel) {
     props.accessibilityValue = {
-      text: currentValueLabel + ' er valgt.' + screenreaderPause,
+      text: currentValueLabel + ' er valgt.' + screenReaderPause,
     };
   }
   return <SearchButton text={currentValueLabel} {...props} />;

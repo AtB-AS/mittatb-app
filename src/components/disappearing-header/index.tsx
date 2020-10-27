@@ -1,25 +1,31 @@
 import {useScrollToTop} from '@react-navigation/native';
+import {useHeaderHeight} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
+  AccessibilityProps,
   Animated,
+  Dimensions,
+  Easing,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Platform,
   RefreshControl,
+  ScaledSize,
   ScrollView,
+  StatusBar,
   useWindowDimensions,
   View,
-  Easing,
-  AccessibilityProps,
-  StatusBar,
 } from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {
+  useSafeAreaFrame,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import useChatIcon from '../../chat/use-chat-icon';
 import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
+import LogoOutline from '../../ScreenHeader/LogoOutline';
 import {StyleSheet} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
 import SvgBanner from '../../assets/svg/icons/other/Banner';
-import LogoOutline from '../../ScreenHeader/LogoOutline';
 import ThemeIcon from '../theme-icon';
 
 type Props = {
@@ -333,10 +339,12 @@ const throttle = <F extends (...args: any[]) => any>(
 
 // This is code from react-navigation. Couldn't find any
 // way to reasonably calculate this.
-const DEFAULT_TABBAR_HEIGHT = 49;
+const DEFAULT_TABBAR_HEIGHT = 44;
 
 function useCalculateHeaderContentHeight() {
-  const {height: windowHeight} = useWindowDimensions();
+  // Using safeAreaFrame for height instead of dimensions as
+  // dimensions are problamatic on Android: https://github.com/facebook/react-native/issues/23693
+  const {height: actualHeight} = useSafeAreaFrame();
   const {
     onLayout: onScreenHeaderLayout,
     height: screenHeaderHeight,
@@ -345,12 +353,7 @@ function useCalculateHeaderContentHeight() {
   const {top, bottom} = useSafeAreaInsets();
 
   const boxHeight =
-    windowHeight -
-    screenHeaderHeight -
-    top -
-    bottom -
-    DEFAULT_TABBAR_HEIGHT -
-    (StatusBar.currentHeight ?? 0);
+    actualHeight - screenHeaderHeight - top - bottom - DEFAULT_TABBAR_HEIGHT;
 
   return {
     boxHeight,

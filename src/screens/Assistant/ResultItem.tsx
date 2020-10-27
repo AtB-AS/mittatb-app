@@ -19,7 +19,7 @@ import {LegMode} from '@entur/sdk';
 import colors from '../../theme/colors';
 import {Duration} from '../../assets/svg/icons/transportation';
 import AccessibleText, {
-  screenreaderPause,
+  screenReaderPause,
 } from '../../components/accessible-text';
 import {SituationWarningIcon} from '../../situations';
 import {flatMap} from '../../utils/array';
@@ -100,7 +100,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       style={{paddingVertical: 4}}
       onPress={() => onDetailsPressed(tripPattern)}
       hitSlop={insets.symmetric(8, 16)}
-      accessibilityValue={{text: screenreaderSummary(tripPattern)}}
+      accessibilityValue={{text: screenReaderSummary(tripPattern)}}
       {...props}
     >
       <View style={styles.result}>
@@ -327,7 +327,7 @@ function LineDisplayName({leg}: {leg: Leg}) {
   );
 }
 
-const screenreaderSummary = (tripPattern: TripPattern) => {
+const screenReaderSummary = (tripPattern: TripPattern) => {
   const hasSituations = flatMap(tripPattern.legs, (leg) => leg.situations)
     .length;
 
@@ -337,13 +337,13 @@ const screenreaderSummary = (tripPattern: TripPattern) => {
   return `
   ${
     hasSituations
-      ? `Driftsmeldinger gjelder for dette forslaget. ${screenreaderPause} `
+      ? `Driftsmeldinger gjelder for dette forslaget. ${screenReaderPause} `
       : ''
   }
   Fra klokken: ${formatToClock(
     tripPattern.startTime,
-  )}, til klokken ${formatToClock(tripPattern.endTime)}. ${screenreaderPause}
-    Reisetid: ${secondsToDuration(tripPattern.duration)} ${screenreaderPause}
+  )}, til klokken ${formatToClock(tripPattern.endTime)}. ${screenReaderPause}
+    Reisetid: ${secondsToDuration(tripPattern.duration)} ${screenReaderPause}
     ${
       !nonFootLegs.length
         ? 'Hele reisen til fots'
@@ -352,20 +352,20 @@ const screenreaderSummary = (tripPattern: TripPattern) => {
         : nonFootLegs.length === 2
         ? 'Ett bytte'
         : nonFootLegs.length + 'bytter'
-    }. ${screenreaderPause}
+    }. ${screenReaderPause}
     ${nonFootLegs
       ?.map((l) => {
         return `${getReadableModeName(l.mode)} ${
           l.line ? 'nummer ' + l.line.publicCode : ''
         }`;
       })
-      .join(', ')} ${screenreaderPause}
+      .join(', ')} ${screenReaderPause}
       Totalt ${tripPattern.walkDistance.toFixed(
         0,
-      )} meter å gå. ${screenreaderPause}
+      )} meter å gå. ${screenReaderPause}
       Fra ${startLeg.fromPlace?.name}, klokken ${formatToClock(
     startLeg.expectedStartTime,
-  )}. ${screenreaderPause}
+  )}. ${screenReaderPause}
       Aktivér for å vise detaljert reiserute.
   `;
 };

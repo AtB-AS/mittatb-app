@@ -7,8 +7,11 @@ import ResultItem from './ResultItem';
 import OptionalNextDayLabel from '../../components/optional-day-header';
 import {isSeveralDays} from '../../utils/date';
 import {NoResultReason} from './types';
-import {screenreaderPause} from '../../components/accessible-text';
+import AccessibleText, {
+  screenReaderPause,
+} from '../../components/accessible-text';
 import {ErrorType} from '../../api/utils';
+import ScreenreaderAnnouncement from '../../components/screen-reader-announcement';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
@@ -45,12 +48,12 @@ const Results: React.FC<Props> = ({
   }
 
   if (errorType) {
+    const errorMessage = translateErrorType(errorType);
+
     return (
       <View style={styles.container}>
-        <MessageBox
-          type="warning"
-          message={translateErrorType(errorType)}
-        ></MessageBox>
+        <ScreenreaderAnnouncement message={errorMessage} />
+        <MessageBox type="warning" message={errorMessage}></MessageBox>
       </View>
     );
   }
@@ -100,7 +103,7 @@ const Results: React.FC<Props> = ({
             onDetailsPressed={onDetailsPressed}
             accessibilityLabel={`Reiseforslag ${i + 1} av ${
               tripPatterns.length
-            }. ${screenreaderPause}`}
+            }. ${screenReaderPause}`}
             accessibilityRole="button"
           />
         </Fragment>

@@ -1,26 +1,27 @@
-import React, {useEffect, useRef} from 'react';
-import {StatusBar, Platform} from 'react-native';
 import {
   NavigationContainer,
   NavigationContainerRef,
   useLinking,
 } from '@react-navigation/native';
-import trackNavigation from '../diagnostics/trackNavigation';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import React, {useEffect, useRef} from 'react';
+import {StatusBar} from 'react-native';
+import {Host} from 'react-native-portalize';
 import {useAppState} from '../AppContext';
-import Onboarding from '../screens/Onboarding';
+import trackNavigation from '../diagnostics/trackNavigation';
 import LocationSearch, {
   RouteParams as LocationSearchParams,
 } from '../location-search';
-import TabNavigator from './TabNavigator';
-import transitionSpec from './transitionSpec';
+import Onboarding from '../screens/Onboarding';
 import TripDetailsModal, {
   RouteParams as TripDetailsModalParams,
 } from '../screens/TripDetailsModal';
-import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 import DepartureDetails, {
   DepartureDetailsRouteParams,
 } from '../screens/TripDetailsModal/DepartureDetails';
-import {Host} from 'react-native-portalize';
+import {useTheme} from '../theme';
+import TabNavigator from './TabNavigator';
+import transitionSpec from './transitionSpec';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -35,6 +36,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 const NavigationRoot = () => {
   const {isLoading, onboarded} = useAppState();
+  const {theme} = useTheme();
 
   const ref = useRef<NavigationContainerRef>(null);
   const {getInitialState} = useLinking(ref, {
@@ -56,10 +58,9 @@ const NavigationRoot = () => {
   return (
     <>
       <StatusBar
-        barStyle={Platform.select({
-          ios: 'dark-content',
-          android: 'light-content',
-        })}
+        barStyle="dark-content"
+        translucent={true}
+        backgroundColor={theme.background.accent}
       />
       <Host>
         <NavigationContainer ref={ref} onStateChange={trackNavigation}>
