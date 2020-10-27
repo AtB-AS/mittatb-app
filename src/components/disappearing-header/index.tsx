@@ -1,18 +1,25 @@
 import {useScrollToTop} from '@react-navigation/native';
+import {useHeaderHeight} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   AccessibilityProps,
   Animated,
+  Dimensions,
   Easing,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Platform,
   RefreshControl,
+  ScaledSize,
   ScrollView,
+  StatusBar,
   useWindowDimensions,
   View,
 } from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {
+  useSafeAreaFrame,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import SvgBanner from '../../assets/svg/icons/other/Banner';
 import useChatIcon from '../../chat/use-chat-icon';
 import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
@@ -334,7 +341,9 @@ const throttle = <F extends (...args: any[]) => any>(
 const DEFAULT_TABBAR_HEIGHT = 44;
 
 function useCalculateHeaderContentHeight() {
-  const {height: windowHeight} = useWindowDimensions();
+  // Using safeAreaFrame for height instead of dimensions as
+  // dimensions are problamatic on Android: https://github.com/facebook/react-native/issues/23693
+  const {height: actualHeight} = useSafeAreaFrame();
   const {
     onLayout: onScreenHeaderLayout,
     height: screenHeaderHeight,
@@ -343,7 +352,7 @@ function useCalculateHeaderContentHeight() {
   const {top, bottom} = useSafeAreaInsets();
 
   const boxHeight =
-    windowHeight - screenHeaderHeight - top - bottom - DEFAULT_TABBAR_HEIGHT;
+    actualHeight - screenHeaderHeight - top - bottom - DEFAULT_TABBAR_HEIGHT;
 
   return {
     boxHeight,
