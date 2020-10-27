@@ -1,14 +1,13 @@
 import React, {useState} from 'react';
-import {View, Text, RefreshControl, TouchableOpacity} from 'react-native';
+import {View, Text, RefreshControl} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {TicketingStackParams} from '..';
-import {secondsToDuration} from '../../../utils/date';
-import {Expand} from '../../../assets/svg/icons/navigation';
 import {useTicketState} from '../TicketContext';
 import {FareContract} from '../../../api/fareContracts';
 import {StyleSheet} from '../../../theme';
 import Button from '../../../components/button';
+import Ticket from './Ticket';
 import ReceiptModal from './ReceiptModal';
 
 type Props = {
@@ -29,8 +28,12 @@ const Tickets: React.FC<Props> = ({navigation}) => {
   const showReceiptModal = (f: FareContract) => {
     setSelectedFareContract(f);
   };
-  const nowSecs = Date.now() / 1000;
-  const valid = (f: FareContract): boolean => f.usage_valid_to > nowSecs;
+
+  const [now, setNow] = useState<number>(Date.now());
+  setInterval(() => setNow(Date.now()), 2500);
+
+  const valid = (f: FareContract): boolean =>
+    f.usage_valid_to > Date.now() / 1000;
   const byExpiry = (a: FareContract, b: FareContract): number => {
     return b.usage_valid_to - a.usage_valid_to;
   };
@@ -46,43 +49,17 @@ const Tickets: React.FC<Props> = ({navigation}) => {
           />
         }
       >
-        {paymentFailedReason && (
-          <Text style={{color: 'red', ...styles.textItem}}>
-            {paymentFailedReason}
-          </Text>
-        )}
-
-        {fareContracts && fareContracts.length ? (
+        {fareContracts?.length ? (
           fareContracts
             .filter((fc) => valid(fc))
             .sort(byExpiry)
-            .map((fc, i) => {
-              return (
-                <View key={i} style={styles.ticketContainer}>
-                  <View style={styles.ticketLineContainer}>
-                    <Text style={styles.textItem}>
-                      {secondsToDuration(Date.now() / 1000 - fc.usage_valid_to)}{' '}
-                      - {fc.product_name}
-                    </Text>
-                    <Expand />
-                  </View>
-                  <Text style={styles.textItem}>
-                    {fc.user_profiles.length > 1
-                      ? `${fc.user_profiles.length} Voksne`
-                      : `1 Voksen`}
-                  </Text>
-                  <Text style={styles.textItem}>Sone A</Text>
-                  <View style={styles.receiptContainer}>
-                    <Text style={styles.textItem}>Ordre-ID: {fc.order_id}</Text>
-                    <TouchableOpacity onPress={() => showReceiptModal(fc)}>
-                      <Text style={styles.textItem}>Kvittering</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              );
-            })
+            .map((fc) => (
+              <Ticket key={fc.order_id} fareContract={fc} now={now} />
+            ))
         ) : (
-          <Text style={styles.body}>Du har ingen aktive reiserettigheter</Text>
+          <Text style={styles.nonActiveText}>
+            Du har ingen aktive billetter
+          </Text>
         )}
         <ReceiptModal
           fareContract={selectedFareContract}
@@ -95,7 +72,6 @@ const Tickets: React.FC<Props> = ({navigation}) => {
           text="Kjøp enkeltbillett"
           onPress={() => {
             navigation.push('Offer');
-            paymentFailedForReason(undefined);
           }}
           style={{marginBottom: 0}}
         />
@@ -110,18 +86,37 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   scrollView: {flex: 1, padding: theme.spacings.medium},
-  body: {fontSize: 16, paddingVertical: 24},
-  textItem: {fontSize: 16, paddingVertical: 4},
+  iconContainer: {marginRight: theme.spacings.medium},
+  validityText: {
+    fontSize: theme.text.sizes.lead,
+    color: theme.text.colors.faded,
+  },
+  nonActiveText: {
+    fontSize: theme.text.sizes.body,
+    textAlign: 'center',
+  },
+  travellersText: {
+    fontSize: theme.text.sizes.body,
+    paddingVertical: theme.spacings.xSmall,
+  },
   ticketContainer: {
     backgroundColor: theme.background.level0,
     borderRadius: 8,
-    padding: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
-  ticketLineContainer: {
+  extraText: {
+    fontSize: theme.text.sizes.lead,
+    paddingVertical: theme.spacings.xSmall,
+    color: theme.text.colors.faded,
+  },
+  validityContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     marginRight: 3,
+    padding: theme.spacings.medium,
+  },
+  ticketInfoContainer: {
+    padding: theme.spacings.medium,
   },
   buttonContainer: {
     width: '100%',
