@@ -34,6 +34,7 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
   }, []);
 
   async function refresh() {
+    await remoteConfig().reset();
     await remoteConfig().fetchAndActivate();
     const currentConfig = await getConfig();
     setConfig(currentConfig);

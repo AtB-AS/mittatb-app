@@ -5,12 +5,13 @@ import Header from '../../../ScreenHeader';
 import useChatIcon from '../../../chat/use-chat-icon';
 import colors from '../../../theme/colors';
 import {ShinyTicketBanner} from '../../../assets/svg/illustrations';
-import {StyleSheet} from '../../../theme';
+import {StyleSheet, useStyle} from '../../../theme';
 import LogoOutline from '../../../ScreenHeader/LogoOutline';
 import {useNavigateHome} from '../../../utils/navigation';
 import InviteModal from './InviteModal';
 import {Modalize} from 'react-native-modalize';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
+import Button from '../../../components/button';
 
 function openOtherTicketingApp() {
   const url =
@@ -23,6 +24,7 @@ function openOtherTicketingApp() {
 }
 
 export default function Splash() {
+  const styles = useStyles();
   const {refresh} = useRemoteConfig();
   const chatIcon = useChatIcon();
   const {width: windowWidth} = useWindowDimensions();
@@ -44,6 +46,12 @@ export default function Splash() {
           accessibilityLabel: 'Gå til startskjerm',
         }}
       />
+      <View style={styles.bannerContainer}>
+        <ShinyTicketBanner
+          width={windowWidth}
+          height={windowWidth / 2}
+        ></ShinyTicketBanner>
+      </View>
       <View style={styles.textContainer}>
         <Text style={[styles.text, styles.bold]}>
           Billettkjøp i app kommer snart!
@@ -57,41 +65,46 @@ export default function Splash() {
             AtB Mobillett
           </Text>
         </Text>
-        <Text style={styles.text}>
-          Hvis du har en kode for å melde deg inn i beta for billettkjøp -{' '}
-          <Text
+        <View style={styles.buttonContainer}>
+          <Button
             onPress={() => modalRef.current?.open()}
-            style={styles.underline}
-          >
-            trykk her
-          </Text>
-        </Text>
-      </View>
-      <View style={styles.bannerContainer}>
-        <ShinyTicketBanner
-          width={windowWidth}
-          height={windowWidth / 2}
-        ></ShinyTicketBanner>
+            text="Jeg har kode til beta for billettkjøp"
+            mode="secondary"
+            style={styles.button}
+            textStyle={styles.buttonText}
+          />
+        </View>
       </View>
       <InviteModal ref={modalRef} onEnrolled={onEnrolled} />
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {flex: 1, backgroundColor: colors.secondary.cyan},
   textContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 40,
+    paddingHorizontal: theme.spacings.large,
+    paddingVertical: theme.spacings.xLarge,
     alignItems: 'center',
+    flex: 1,
   },
-  text: {fontSize: 16, lineHeight: 20, textAlign: 'center', marginBottom: 20},
+  text: {
+    fontSize: theme.text.sizes.body,
+    lineHeight: 20,
+    textAlign: 'center',
+    marginBottom: theme.spacings.large,
+  },
   bold: {fontWeight: 'bold'},
   bannerContainer: {
     position: 'absolute',
-    bottom: 20,
-    left: 0,
-    right: 0,
+    bottom: theme.spacings.large,
   },
   underline: {textDecorationLine: 'underline'},
-});
+  buttonContainer: {
+    position: 'absolute',
+    bottom: theme.spacings.medium,
+    width: '100%',
+  },
+  button: {backgroundColor: colors.secondary.blue},
+  buttonText: {color: colors.general.white},
+}));

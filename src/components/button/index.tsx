@@ -5,6 +5,7 @@ import {
   StyleProp,
   ViewStyle,
   TouchableOpacity,
+  TextStyle,
 } from 'react-native';
 import React from 'react';
 import {StyleSheet, Theme} from '../../theme';
@@ -13,6 +14,7 @@ type ButtonProps = {
   onPress(): void;
   mode?: 'primary' | 'destructive' | 'secondary';
   textContainerStyle?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
   IconComponent?: React.ElementType;
   text: string;
 } & TouchableOpacityProperties;
@@ -24,6 +26,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled,
   style,
   textContainerStyle,
+  textStyle,
   ...props
 }) => {
   const css = useButtonStyle();
@@ -50,7 +53,7 @@ const Button: React.FC<ButtonProps> = ({
           </View>
         )}
         <View style={[css.textContainer, textContainerStyle]}>
-          <Text style={styleText}>{text}</Text>
+          <Text style={[styleText, textStyle]}>{text}</Text>
         </View>
       </TouchableOpacity>
     </View>

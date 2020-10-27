@@ -65,10 +65,12 @@ export default forwardRef<Modalize, Props>(function InviteModal(
             <ActivityIndicator style={styles.loading} />
           ) : (
             <>
-              <Text style={styles.title}>Lukket beta for billettkjøp</Text>
+              <Text style={styles.title}>
+                Registrer deg som testpilot for billettkjøp
+              </Text>
               <Text style={styles.text}>
-                Her kan du sende inn invitasjonskode du har fått tilsendt fra
-                AtB for å melde deg på beta for billettkjøp.
+                Send oss invitasjonskoden din og bli først ute med å teste
+                billettkjøp direkte fra reiseappen.
               </Text>
               <Input
                 label="Kode"
@@ -79,7 +81,7 @@ export default forwardRef<Modalize, Props>(function InviteModal(
               {hasError && (
                 <MessageBox
                   type="warning"
-                  message="Koden du prøvde å bruke er enten ugyldig eller utgått."
+                  message="Du har sendt en ugyldig invitasjonskode. Prøv igjen, eller kontakt oss i appchat dersom den ikke fungerer."
                   containerStyle={styles.messageBox}
                 />
               )}
