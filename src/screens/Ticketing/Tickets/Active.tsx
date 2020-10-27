@@ -9,6 +9,7 @@ import {StyleSheet} from '../../../theme';
 import Button from '../../../components/button';
 import Ticket from './Ticket';
 import ReceiptModal from './ReceiptModal';
+import useInterval from '../../../utils/use-interval';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'Tickets'>;
@@ -30,7 +31,7 @@ const Tickets: React.FC<Props> = ({navigation}) => {
   };
 
   const [now, setNow] = useState<number>(Date.now());
-  setInterval(() => setNow(Date.now()), 2500);
+  useInterval(() => setNow(Date.now()), 2500);
 
   const valid = (f: FareContract): boolean =>
     f.usage_valid_to > Date.now() / 1000;

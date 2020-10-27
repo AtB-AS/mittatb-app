@@ -3,13 +3,6 @@ import {View, Text, StyleSheet} from 'react-native';
 import {useTicketState} from '../TicketContext';
 
 function Expired() {
-  const {
-    paymentFailedReason,
-    paymentFailedForReason,
-    fareContracts,
-    isRefreshingTickets,
-    refreshTickets,
-  } = useTicketState();
   return <View style={styles.container}></View>;
 }
 

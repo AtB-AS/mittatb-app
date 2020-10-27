@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, TouchableOpacity} from 'react-native';
-import Animated from 'react-native-reanimated';
+import {Text, View, TouchableOpacity} from 'react-native';
 import {MaterialTopTabBarProps} from '@react-navigation/material-top-tabs';
 import {Route} from '@react-navigation/native';
 import colors from '../../../theme/colors';
@@ -45,14 +44,6 @@ const TicketsTabBar: React.FC<MaterialTopTabBarProps> = ({
           });
         };
 
-        const inputRange: number[] = state.routes.map<number>(
-          (_: Route<string>, i: number) => i,
-        );
-        const opacity = Animated.interpolate(position, {
-          inputRange,
-          outputRange: inputRange.map((i: number) => (i === index ? 1 : 0)),
-        });
-
         return (
           <TouchableOpacity
             accessibilityRole="button"
@@ -66,14 +57,14 @@ const TicketsTabBar: React.FC<MaterialTopTabBarProps> = ({
               {backgroundColor: isFocused ? '#F5F5F6' : colors.secondary.cyan},
             ]}
           >
-            <Animated.Text
+            <Text
               style={[
                 styles.buttonText,
                 {fontWeight: isFocused ? '600' : 'normal'},
               ]}
             >
               {label}
-            </Animated.Text>
+            </Text>
           </TouchableOpacity>
         );
       })}
