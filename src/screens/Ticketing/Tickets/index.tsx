@@ -8,9 +8,8 @@ import useChatIcon from '../../../chat/use-chat-icon';
 import {useNavigateHome} from '../../../utils/navigation';
 import {StyleSheet} from '../../../theme';
 import colors from '../../../theme/colors';
-import ActiveTickets from './Active';
-import ExpiredTickets from './Expired';
 import TabBar from './TabBar';
+import {ActiveTickets, ExpiredTickets} from './Tabs';
 
 const Tab = createMaterialTopTabNavigator();
 
