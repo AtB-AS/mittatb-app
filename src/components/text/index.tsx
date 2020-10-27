@@ -4,7 +4,7 @@ import {fontSizes} from '../../theme/colors';
 import {useTheme} from '../../theme';
 
 type StyledTextProps = TextProps & {
-  type: keyof typeof fontSizes;
+  type?: keyof typeof fontSizes;
 };
 
 const Text: React.FC<StyledTextProps> = ({
