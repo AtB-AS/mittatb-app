@@ -409,7 +409,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     top: -19,
     right: 23,
     backgroundColor: theme.background.level0,
-    borderColor: theme.border.primary,
+    borderColor: theme.background.header,
     padding: 3,
     borderWidth: 2,
     borderRadius: 20,
