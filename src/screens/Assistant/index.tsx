@@ -577,12 +577,15 @@ function useTripPatterns(
           },
         );
         source.token.throwIfRequested();
-        setTripPatterns(response.data);
-        setSearchState(
-          response.data.length >= 1 ? 'search-success' : 'search-empty-result',
-        );
-
         setTimeOfSearch(searchDate);
+        if (Array.isArray(response.data)) {
+          setTripPatterns(response.data);
+          setSearchState(
+            response.data.length >= 1
+              ? 'search-success'
+              : 'search-empty-result',
+          );
+        }
       } catch (e) {
         if (!isCancel(e)) {
           setErrorType(getAxiosErrorType(e));
