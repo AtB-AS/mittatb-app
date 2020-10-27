@@ -52,6 +52,7 @@ import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import {screenReaderPause} from '../../components/accessible-text';
 import colors from '../../theme/colors';
 import ThemeIcon from '../../components/theme-icon';
+import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -380,7 +381,7 @@ const Assistant: React.FC<Props> = ({
         }
       }}
     >
-      <ScreenreaderAnnouncement message={translateSearchState(searchState)} />
+      <ScreenReaderAnnouncement message={translateSearchState(searchState)} />
       <Results
         tripPatterns={tripPatterns}
         isSearching={isSearching}

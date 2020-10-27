@@ -48,7 +48,7 @@ import {useNavigateHome} from '../../utils/navigation';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import colors from '../../theme/colors';
 import ThemeIcon from '../../components/theme-icon';
-import ScreenreaderAnnouncement from '../../components/screen-reader-announcement';
+import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
@@ -236,7 +236,7 @@ const NearbyOverview: React.FC<Props> = ({
       }
       onEndReached={onScrollViewEndReached}
     >
-      <ScreenreaderAnnouncement message={loadAnnouncement} />
+      <ScreenReaderAnnouncement message={loadAnnouncement} />
       <NearbyResults
         departures={departures}
         onShowMoreOnQuay={showMoreOnQuay}

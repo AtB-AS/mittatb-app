@@ -27,7 +27,7 @@ import {useFavorites} from '../favorites';
 import {LocationSearchResult} from './types';
 import ThemeIcon from '../components/theme-icon';
 import Text from '../components/text';
-import ScreenreaderAnnouncement from '../components/screen-reader-announcement';
+import ScreenReaderAnnouncement from '../components/screen-reader-announcement';
 
 export type Props = {
   navigation: LocationSearchNavigationProp;
@@ -154,7 +154,7 @@ const LocationSearch: React.FC<Props> = ({
             title="Søk"
           />
         </View>
-        <ScreenreaderAnnouncement message={errorMessage} />
+        <ScreenReaderAnnouncement message={errorMessage} />
 
         <View style={[{marginTop: 12}, styles.contentBlock]}>
           <Input

@@ -203,7 +203,7 @@ export const themes: Themes = {
       primary2: {bg: colors.general.gray_500, color: colors.general.white},
       primary3: {bg: colors.general.gray_700, color: colors.general.white},
       secondaryStroke: {bg: colors.general.black, color: colors.general.white},
-      secondary: {bg: colors.secondary.blue_500, color: colors.general.black},
+      secondary: {bg: colors.secondary.blue_500, color: colors.general.white},
     },
   },
 };
