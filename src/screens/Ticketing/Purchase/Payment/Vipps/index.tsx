@@ -2,7 +2,10 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {TicketingStackParams} from '../../index';
 import {RouteProp} from '@react-navigation/native';
 import React, {useEffect} from 'react';
-import {useTicketState, PaymentFailedReason} from '../../TicketContext';
+import {
+  PaymentFailedReason,
+  useTicketState,
+} from '../../../../../TicketContext';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'PaymentVipps'>;

@@ -1,9 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View, Text, RefreshControl} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {TicketingStackParams} from '..';
-import {useTicketState} from '../TicketContext';
 import {FareContract} from '../../../api/fareContracts';
 import {StyleSheet} from '../../../theme';
 import LinearGradient from 'react-native-linear-gradient';

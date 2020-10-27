@@ -1,6 +1,7 @@
 import {
   NavigationProp,
   RouteProp,
+  useIsFocused,
   useNavigation,
 } from '@react-navigation/native';
 import Axios, {AxiosError} from 'axios';
@@ -62,9 +63,11 @@ const TripDetailsModal: React.FC<Props> = (props) => {
   const {
     params: {tripPatternId, tripPattern: initialTripPattern, ...passingProps},
   } = props.route;
+  const isFocused = useIsFocused();
   const [tripPattern, , isLoading, error] = useTripPattern(
     tripPatternId,
     initialTripPattern,
+    !isFocused,
   );
 
   return (
@@ -287,6 +290,7 @@ export default TripDetailsModal;
 function useTripPattern(
   tripPatternId: string,
   initialTripPattern?: TripPattern,
+  disabled?: boolean,
 ) {
   const fetchTripPattern = useCallback(
     async function reload() {
@@ -298,5 +302,6 @@ function useTripPattern(
     initialValue: initialTripPattern ?? null,
     pollingTimeInSeconds: 60,
     filterError: (err) => !Axios.isCancel(err),
+    disabled,
   });
 }

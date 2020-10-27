@@ -4,10 +4,9 @@ import {TouchableHighlight} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../..';
-import {reserveOffers} from '../../../../api';
-import {ArrowRight} from '../../../../assets/svg/icons/navigation';
-import {PaymentType} from '../../../../api/fareContracts';
-import {AxiosError} from 'axios';
+import {reserveOffers} from '../../../../../api';
+import {PaymentType} from '../../../../../api/fareContracts';
+import {ArrowRight} from '../../../../../assets/svg/icons/navigation';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'PaymentMethod'>;

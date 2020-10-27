@@ -1,16 +1,20 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {TicketingStackParams} from '..';
-import {useTicketState} from '../TicketContext';
+import {useTicketState} from '../../../TicketContext';
 import {FareContract} from '../../../api/fareContracts';
 import {StyleSheet} from '../../../theme';
 import Button from '../../../components/button';
 import useInterval from '../../../utils/use-interval';
 import TicketsScrollView from './TicketsScrollView';
+import {RootStackParamList} from '../../../navigation';
+
+export type TicketingScreenNavigationProp = StackNavigationProp<
+  RootStackParamList
+>;
 
 type Props = {
-  navigation: StackNavigationProp<TicketingStackParams, 'Tickets'>;
+  navigation: TicketingScreenNavigationProp;
 };
 
 export const ActiveTickets: React.FC<Props> = ({navigation}) => {
@@ -39,9 +43,7 @@ export const ActiveTickets: React.FC<Props> = ({navigation}) => {
       <View style={styles.buttonContainer}>
         <Button
           text="Kjøp enkeltbillett"
-          onPress={() => {
-            navigation.push('Offer');
-          }}
+          onPress={() => navigation.navigate('TicketPurchase')}
           style={{marginBottom: 0}}
         />
       </View>
@@ -76,9 +78,7 @@ export const ExpiredTickets: React.FC<Props> = ({navigation}) => {
       <View style={styles.buttonContainer}>
         <Button
           text="Kjøp enkeltbillett"
-          onPress={() => {
-            navigation.push('Offer');
-          }}
+          onPress={() => navigation.navigate('TicketPurchase')}
           style={{marginBottom: 0}}
         />
       </View>

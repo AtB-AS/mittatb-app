@@ -8,8 +8,11 @@ import {
   WebViewNavigationEvent,
   WebViewErrorEvent,
 } from 'react-native-webview/lib/WebViewTypes';
-import {capturePayment} from '../../../../api';
-import {useTicketState, PaymentFailedReason} from '../../TicketContext';
+import {capturePayment} from '../../../../../api';
+import {
+  PaymentFailedReason,
+  useTicketState,
+} from '../../../../../TicketContext';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'PaymentCreditCard'>;

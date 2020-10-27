@@ -11,9 +11,14 @@ import colors from '../../../theme/colors';
 import TabBar from './TabBar';
 import {ActiveTickets, ExpiredTickets} from './Tabs';
 
-const Tab = createMaterialTopTabNavigator();
+export type TicketTabsNavigatorParams = {
+  Active: undefined;
+  Expired: undefined;
+};
 
-export default function MyTabs() {
+const Tab = createMaterialTopTabNavigator<TicketTabsNavigatorParams>();
+
+export default function TicketTabs() {
   const styles = useStyles();
   const chatIcon = useChatIcon();
   const navigateHome = useNavigateHome();

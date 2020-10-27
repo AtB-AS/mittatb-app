@@ -10,6 +10,7 @@ import trackAppState from './diagnostics/trackAppState';
 import ThemeContextProvider from './theme/ThemeContext';
 import FavoritesContextProvider from './favorites/FavoritesContext';
 import SearchHistoryContextProvider from './search-history';
+import TicketContextProvider from './TicketContext';
 import RemoteConfigContextProvider from './RemoteConfigContext';
 import {loadLocalConfig} from './local-config';
 import Bugsnag from '@bugsnag/react-native';
@@ -63,9 +64,11 @@ const App = () => {
             <FavoritesContextProvider>
               <SearchHistoryContextProvider>
                 <GeolocationContextProvider>
-                  <RemoteConfigContextProvider>
-                    <NavigationRoot />
-                  </RemoteConfigContextProvider>
+                  <TicketContextProvider>
+                    <RemoteConfigContextProvider>
+                      <NavigationRoot />
+                    </RemoteConfigContextProvider>
+                  </TicketContextProvider>
                 </GeolocationContextProvider>
               </SearchHistoryContextProvider>
             </FavoritesContextProvider>

@@ -12,6 +12,7 @@ import trackNavigation from '../diagnostics/trackNavigation';
 import LocationSearch, {
   RouteParams as LocationSearchParams,
 } from '../location-search';
+import TicketPurchase from '../screens/Ticketing/Purchase';
 import Onboarding from '../screens/Onboarding';
 import TripDetailsModal, {
   RouteParams as TripDetailsModalParams,
@@ -30,6 +31,7 @@ export type RootStackParamList = {
   LocationSearch: LocationSearchParams;
   TripDetailsModal: TripDetailsModalParams;
   DepartureDetailsModal: DepartureDetailsRouteParams;
+  TicketPurchase: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -101,6 +103,17 @@ const NavigationRoot = () => {
                 <Stack.Screen
                   name="LocationSearch"
                   component={LocationSearch}
+                  options={{
+                    headerShown: false,
+                    transitionSpec: {
+                      open: transitionSpec,
+                      close: transitionSpec,
+                    },
+                  }}
+                />
+                <Stack.Screen
+                  name="TicketPurchase"
+                  component={TicketPurchase}
                   options={{
                     headerShown: false,
                     transitionSpec: {

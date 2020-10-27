@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import {Add, Remove} from '../../../assets/svg/icons/actions';
-import insets from '../../../utils/insets';
+import {Add, Remove} from '../../../../assets/svg/icons/actions';
+import insets from '../../../../utils/insets';
 
 type Props = {
   name: string;

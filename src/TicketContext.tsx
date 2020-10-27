@@ -5,9 +5,9 @@ import React, {
   useState,
   useEffect,
 } from 'react';
-import {FareContract} from '../../api/fareContracts';
-import usePollableResource from '../../utils/use-pollable-resource';
-import {listFareContracts} from '../../api';
+import {FareContract} from './api/fareContracts';
+import usePollableResource from './utils/use-pollable-resource';
+import {listFareContracts} from './api';
 
 type TicketState = {
   paymentFailedReason?: PaymentFailedReason;

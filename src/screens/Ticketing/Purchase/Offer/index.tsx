@@ -3,9 +3,9 @@ import {Text, View, StyleSheet, ActivityIndicator} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import {TicketingStackParams} from '../';
-import {ArrowRight, Expand} from '../../../assets/svg/icons/navigation';
-import {searchOffers} from '../../../api/';
-import {UserType, Offer, OfferPrice} from '../../../api/fareContracts';
+import {ArrowRight, Expand} from '../../../../assets/svg/icons/navigation';
+import {searchOffers} from '../../../../api';
+import {UserType, Offer, OfferPrice} from '../../../../api/fareContracts';
 import OfferGroup from './Group';
 import {SINGLE_TICKET_PRODUCT_ID} from '@env';
 
