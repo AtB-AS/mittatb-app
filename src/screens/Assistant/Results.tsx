@@ -35,8 +35,8 @@ const Results: React.FC<Props> = ({
   onDetailsPressed,
   errorType,
 }) => {
-  const {theme} = useTheme();
-  const styles = useThemeStyles(theme);
+  const {theme, themeName} = useTheme();
+  const styles = useThemeStyles(theme, themeName);
 
   const allSameDay = useMemo(
     () => isSeveralDays((tripPatterns ?? []).map((i) => i.startTime)),

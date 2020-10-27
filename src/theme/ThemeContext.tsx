@@ -1,15 +1,17 @@
 import React, {createContext, useContext, useState} from 'react';
-import {themes, Theme, Themes} from './colors';
+import {themes, Theme, Themes, Mode} from './colors';
 import {useColorScheme} from 'react-native';
 
 interface ThemeContextValue {
   theme: Theme;
+  themeName: Mode;
   updateTheme(themeKey: keyof Themes): void;
   toggleTheme(): void;
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
   theme: themes.light,
+  themeName: 'light',
   updateTheme() {},
   toggleTheme() {},
 });
@@ -34,7 +36,7 @@ const ThemeContextProvider: React.FC = ({children}) => {
 
   const theme = themes[themeName];
   return (
-    <ThemeContext.Provider value={{theme, updateTheme, toggleTheme}}>
+    <ThemeContext.Provider value={{theme, themeName, updateTheme, toggleTheme}}>
       {children}
     </ThemeContext.Provider>
   );
