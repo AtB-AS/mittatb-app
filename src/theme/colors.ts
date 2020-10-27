@@ -1,3 +1,6 @@
+import {ComponentProps} from 'react';
+import {StatusBar, StatusBarProps} from 'react-native';
+
 const backgrounds = {
   light__level0: '#FFFFFF',
   light__level1: '#F5F5F6',
@@ -74,14 +77,14 @@ type Button = {
   bg: string;
   color: string;
 };
-type Mode = 'dark' | 'light';
-
 export type Themes = {
   light: Theme;
   dark: Theme;
 };
+export type Mode = keyof Themes;
+
 export interface Theme {
-  mode: Mode;
+  statusBarStyle: StatusBarProps['barStyle'];
   spacings: typeof spacings;
   background: {
     level0: string;
@@ -124,8 +127,8 @@ export interface Theme {
 
 export const themes: Themes = {
   light: {
-    mode: 'light',
     spacings: spacings,
+    statusBarStyle: 'dark-content',
     background: {
       level0: backgrounds.light__level0,
       level1: backgrounds.light__level1,
@@ -165,8 +168,8 @@ export const themes: Themes = {
     },
   },
   dark: {
-    mode: 'dark',
     spacings: spacings,
+    statusBarStyle: 'light-content',
     background: {
       level0: backgrounds.dark__level0,
       level1: backgrounds.dark__level1,

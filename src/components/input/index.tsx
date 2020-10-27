@@ -30,8 +30,8 @@ const Input = forwardRef<TextInput, InputProps>(
     {label, containerStyle, onFocus, onBlur, showClear, onClear, ...props},
     ref,
   ) => {
-    const {theme} = useTheme();
-    const style = useInputStyle(theme);
+    const {theme, themeName} = useTheme();
+    const style = useInputStyle(theme, themeName);
     const [isFocused, setIsFocused] = useState(Boolean(props?.autoFocus));
 
     const onFocusEvent = (e: FocusEvent) => {

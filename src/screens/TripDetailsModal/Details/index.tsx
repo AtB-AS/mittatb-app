@@ -107,7 +107,7 @@ const DetailsContent: React.FC<{
 }> = ({tripPattern, from, to, error}) => {
   const styles = useDetailsStyle();
   const {favorites} = useFavorites();
-  const {theme} = useTheme();
+  const {themeName} = useTheme();
   const [shortTime, setShortTime] = useState(false);
   const flagShortTime = (secondsBetween: number) => {
     if (secondsBetween / 60 <= TIME_LIMIT_IN_MINUTES) {
@@ -139,7 +139,7 @@ const DetailsContent: React.FC<{
     <>
       <CompactMap
         legs={tripPattern.legs}
-        darkMode={theme.mode === 'dark'}
+        darkMode={themeName === 'dark'}
         onExpand={() => {
           navigation.navigate('DetailsMap', {
             legs: tripPattern.legs,
