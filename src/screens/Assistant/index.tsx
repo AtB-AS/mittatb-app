@@ -350,6 +350,17 @@ const Assistant: React.FC<Props> = ({
 
   const noResultReasons = computeNoResultReasons(date, from, to);
 
+  const onPressed = useCallback(
+    (tripPattern) =>
+      navigation.navigate('TripDetailsModal', {
+        from: from!,
+        to: to!,
+        tripPatternId: tripPattern.id!,
+        tripPattern: tripPattern,
+      }),
+    [navigation, from, to],
+  );
+
   return (
     <DisappearingHeader
       renderHeader={renderHeader}
@@ -376,14 +387,7 @@ const Assistant: React.FC<Props> = ({
         showEmptyScreen={showEmptyScreen}
         isEmptyResult={isEmptyResult}
         resultReasons={noResultReasons}
-        onDetailsPressed={(tripPattern) =>
-          navigation.navigate('TripDetailsModal', {
-            from: from!,
-            to: to!,
-            tripPatternId: tripPattern.id!,
-            tripPattern: tripPattern,
-          })
-        }
+        onDetailsPressed={onPressed}
         errorType={errorType}
       />
     </DisappearingHeader>
