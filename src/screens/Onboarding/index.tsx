@@ -158,7 +158,8 @@ const StepThree: React.FC<StepProps> = () => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   textContainer: {
     padding: theme.spacings.xLarge,
-    backgroundColor: 'rgba(235,236,237,0.85)',
+    backgroundColor:
+      theme.mode === 'light' ? 'rgba(235,236,237,0.85)' : 'rgba(22,23,24,0.85)',
   },
   title: {
     fontWeight: 'bold',
@@ -166,7 +167,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   text: {
     fontSize: theme.text.sizes.body,
     color: theme.text.colors.primary,
-    marginTop: 12,
+    marginTop: theme.spacings.medium,
   },
   privacyPolicy: {
     textAlign: 'center',

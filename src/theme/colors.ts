@@ -1,5 +1,3 @@
-import {color} from 'react-native-reanimated';
-
 const backgrounds = {
   light__level0: '#FFFFFF',
   light__level1: '#F5F5F6',
@@ -64,7 +62,22 @@ const fontSizes = {
   lead: 14,
   label: 12,
 };
+const lineHeights = {
+  body: 20,
+  label: 16,
+};
+type Button = {
+  bg: string;
+  color: string;
+};
+type Mode = 'dark' | 'light';
+
+export type Themes = {
+  light: Theme;
+  dark: Theme;
+};
 export interface Theme {
+  mode: Mode;
   spacings: typeof spacings;
   background: {
     level0: string;
@@ -85,6 +98,7 @@ export interface Theme {
       faded: string;
       focus: string;
     };
+    lineHeight: typeof lineHeights;
     sizes: typeof fontSizes;
   };
   border: {
@@ -102,18 +116,10 @@ export interface Theme {
     secondary: Button;
   };
 }
-type Button = {
-  bg: string;
-  color: string;
-};
-
-export type Themes = {
-  light: Theme;
-  dark: Theme;
-};
 
 export const themes: Themes = {
   light: {
+    mode: 'light',
     spacings: spacings,
     background: {
       level0: backgrounds.light__level0,
@@ -134,6 +140,7 @@ export const themes: Themes = {
         faded: colors.general.gray400,
         focus: colors.secondary.blue_500,
       },
+      lineHeight: lineHeights,
       sizes: fontSizes,
     },
     border: {
@@ -152,6 +159,7 @@ export const themes: Themes = {
     },
   },
   dark: {
+    mode: 'dark',
     spacings: spacings,
     background: {
       level0: backgrounds.dark__level0,
@@ -174,6 +182,7 @@ export const themes: Themes = {
         focus: colors.secondary.cyan_500,
       },
       sizes: fontSizes,
+      lineHeight: lineHeights,
     },
     border: {
       primary: colors.general.white,

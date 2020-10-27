@@ -282,13 +282,13 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   chipBox: {
-    marginBottom: 12,
+    marginBottom: theme.spacings.medium,
   },
   label: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: theme.text.sizes.lead,
+    lineHeight: theme.text.lineHeight.body,
     position: 'absolute',
-    left: 12,
+    left: theme.spacings.medium,
   },
   placeholder: {
     color: theme.text.colors.faded,
@@ -297,12 +297,12 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: '100%',
     height: 46,
     flexDirection: 'column',
-    marginBottom: 24,
+    marginBottom: theme.spacings.xLarge,
     justifyContent: 'center',
   },
   input: {
     flex: 1,
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
     paddingLeft: 60,
     backgroundColor: theme.background.level1,
     borderWidth: 1,

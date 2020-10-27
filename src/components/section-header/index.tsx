@@ -30,7 +30,7 @@ const useProfileStyle = StyleSheet.createThemeHook((theme) => ({
   headerText: {
     paddingEnd: 10,
     fontSize: theme.text.sizes.label,
-    lineHeight: 16,
+    lineHeight: theme.text.lineHeight.label,
   },
 }));
 

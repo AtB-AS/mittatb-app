@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {MapIcon} from '../../../assets/svg/map';
 import {getMapBounds, legsToMapLines, pointOf} from './utils';
@@ -11,6 +11,7 @@ import {MapViewConfig, MapCameraConfig} from '../../../components/map/';
 import insets from '../../../utils/insets';
 import {Leg} from '../../../sdk';
 import Bugsnag from '@bugsnag/react-native';
+import {StyleSheet} from '../../../theme';
 
 export type MapProps = {
   legs: Leg[];
@@ -24,6 +25,7 @@ export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
   const bounds = getMapBounds(features);
 
   const [loadingMap, setLoadingMap] = useState(true);
+  const styles = useStyles();
 
   const expandMap = () => {
     if (!loadingMap) onExpand();
@@ -68,7 +70,7 @@ export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
     </View>
   );
 };
-const styles = StyleSheet.create({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {height: 160},
   map: {
     width: '100%',
@@ -82,21 +84,21 @@ const styles = StyleSheet.create({
   toggler: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: theme.spacings.medium,
+    paddingVertical: theme.spacings.small,
   },
   toggleText: {
-    fontSize: 14,
-    lineHeight: 20,
-    color: colors.general.black,
+    fontSize: theme.text.sizes.lead,
+    lineHeight: theme.text.lineHeight.body,
+    color: theme.text.colors.primary,
     textShadowColor: colors.general.white,
     textShadowOffset: {height: 1, width: 1},
     textShadowRadius: 1,
   },
   toggleIcon: {
-    marginLeft: 4,
+    marginLeft: theme.spacings.xSmall,
   },
-});
+}));
 
 function log(message: string) {
   Bugsnag.leaveBreadcrumb(message, {component: 'CompactMap'});

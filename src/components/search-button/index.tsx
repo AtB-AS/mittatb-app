@@ -82,7 +82,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   title: {width: 40},
   buttonText: {
     fontSize: theme.text.sizes.body,
-    lineHeight: 20,
+    lineHeight: theme.text.lineHeight.body,
     flex: 1,
     marginLeft: theme.spacings.large,
   },

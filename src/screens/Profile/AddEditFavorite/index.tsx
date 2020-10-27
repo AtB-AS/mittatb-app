@@ -325,14 +325,14 @@ const InputGroup: React.FC<InputGroupProps> = ({title, boxStyle, children}) => {
 };
 const useGroupStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    marginBottom: 12,
+    marginBottom: theme.spacings.medium,
     flexDirection: 'column',
     justifyContent: 'center',
   },
   label: {
     position: 'absolute',
-    left: 12,
-    fontSize: 14,
-    lineHeight: 20,
+    left: theme.spacings.medium,
+    fontSize: theme.text.sizes.lead,
+    lineHeight: theme.text.lineHeight.body,
   },
 }));

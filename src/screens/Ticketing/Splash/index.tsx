@@ -83,11 +83,16 @@ export default function Splash() {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {flex: 1, backgroundColor: theme.background.accent},
   textContainer: {
-    paddingHorizontal: 20,
+    paddingHorizontal: theme.spacings.large,
     paddingVertical: 40,
     alignItems: 'center',
   },
-  text: {fontSize: 16, lineHeight: 20, textAlign: 'center', marginBottom: 20},
+  text: {
+    fontSize: theme.text.sizes.body,
+    lineHeight: theme.text.lineHeight.body,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
   bold: {fontWeight: 'bold'},
   bannerContainer: {
     position: 'absolute',

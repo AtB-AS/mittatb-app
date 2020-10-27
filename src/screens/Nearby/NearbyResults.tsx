@@ -355,8 +355,8 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     fontSize: theme.text.sizes.body,
     color: theme.text.colors.primary,
     fontWeight: 'bold',
-    paddingVertical: 4,
-    marginRight: 8,
+    paddingVertical: theme.spacings.xSmall,
+    marginRight: theme.spacings.small,
     fontVariant: ['tabular-nums'],
   },
   textContent: {
@@ -366,7 +366,7 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     color: theme.text.colors.primary,
     marginLeft: 10,
-    paddingVertical: 4,
+    paddingVertical: theme.spacings.xSmall,
   },
   resultHeader: {
     flexDirection: 'row',
@@ -379,7 +379,7 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
   },
   resultHeaderText: {
     fontSize: theme.text.sizes.body,
-    lineHeight: 20,
+    lineHeight: theme.text.lineHeight.body,
     fontWeight: 'bold',
     color: theme.text.colors.primary,
   },

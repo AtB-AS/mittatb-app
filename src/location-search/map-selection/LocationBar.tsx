@@ -22,6 +22,7 @@ const LocationBar: React.FC<Props> = ({
   onSelect,
   isSearching,
 }) => {
+  const styles = useStyles();
   return (
     <View style={styles.container}>
       <TouchableOpacity style={{flex: 1}} onPress={onSelect}>
@@ -52,6 +53,7 @@ const Icon: React.FC<{
   location?: Location;
   hasError: boolean;
 }> = ({isSearching, location, hasError}) => {
+  const styles = useStyles();
   return (
     <View style={{marginHorizontal: 12}}>
       {isSearching ? (
@@ -71,6 +73,7 @@ const LocationText: React.FC<{
   location?: Location;
   error?: ErrorType;
 }> = ({location, error}) => {
+  const styles = useStyles();
   const {title, subtitle} = getLocationText(location, error);
 
   return (
@@ -116,7 +119,7 @@ function getLocationText(
   };
 }
 
-const styles = StyleSheet.create({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -124,22 +127,28 @@ const styles = StyleSheet.create({
     ...shadows,
   },
   innerContainer: {
-    paddingRight: 8,
-    paddingVertical: 8,
+    paddingRight: theme.spacings.small,
+    paddingVertical: theme.spacings.small,
     borderRadius: 8,
-    backgroundColor: colors.general.white,
+    backgroundColor: theme.background.level0,
     flexDirection: 'row',
     flexGrow: 1,
     justifyContent: 'space-between',
   },
   locationContainer: {flexDirection: 'row', alignItems: 'center', height: 44},
-  title: {fontSize: 14, lineHeight: 20},
-  subtitle: {fontSize: 12, lineHeight: 16},
+  title: {
+    fontSize: theme.text.sizes.lead,
+    lineHeight: theme.text.lineHeight.body,
+  },
+  subtitle: {
+    fontSize: theme.text.sizes.label,
+    lineHeight: theme.text.lineHeight.label,
+  },
   button: {
     width: 44,
     alignItems: 'center',
     justifyContent: 'center',
   },
-});
+}));
 
 export default LocationBar;

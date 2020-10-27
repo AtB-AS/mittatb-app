@@ -88,7 +88,7 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   text: {
     fontSize: theme.text.sizes.body,
-    lineHeight: 20,
+    lineHeight: theme.text.lineHeight.body,
     fontWeight: '600',
     color: theme.text.colors.primary,
   },
