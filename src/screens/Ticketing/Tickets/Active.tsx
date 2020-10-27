@@ -32,6 +32,7 @@ const ActiveTickets: React.FC<Props> = ({navigation}) => {
   const byExpiry = (a: FareContract, b: FareContract): number => {
     return b.usage_valid_to - a.usage_valid_to;
   };
+  const validTickets = fareContracts?.filter((fc) => valid(fc)).sort(byExpiry);
   const styles = useStyles();
   return (
     <View style={styles.container}>
@@ -44,13 +45,10 @@ const ActiveTickets: React.FC<Props> = ({navigation}) => {
           />
         }
       >
-        {fareContracts?.length ? (
-          fareContracts
-            .filter((fc) => valid(fc))
-            .sort(byExpiry)
-            .map((fc) => (
-              <Ticket key={fc.order_id} fareContract={fc} now={now} />
-            ))
+        {validTickets?.length ? (
+          validTickets.map((fc) => (
+            <Ticket key={fc.order_id} fareContract={fc} now={now} />
+          ))
         ) : (
           <Text style={styles.nonActiveText}>
             Du har ingen aktive billetter

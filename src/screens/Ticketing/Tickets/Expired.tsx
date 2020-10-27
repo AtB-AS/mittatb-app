@@ -32,6 +32,9 @@ const ExpiredTickets: React.FC<Props> = ({navigation}) => {
   const byExpiry = (a: FareContract, b: FareContract): number => {
     return b.usage_valid_to - a.usage_valid_to;
   };
+  const expiredTickets = fareContracts
+    ?.filter((fc) => expired(fc))
+    .sort(byExpiry);
   const styles = useStyles();
   return (
     <View style={styles.container}>
@@ -44,17 +47,12 @@ const ExpiredTickets: React.FC<Props> = ({navigation}) => {
           />
         }
       >
-        {fareContracts?.length ? (
-          fareContracts
-            .filter((fc) => expired(fc))
-            .sort(byExpiry)
-            .map((fc) => (
-              <Ticket key={fc.order_id} fareContract={fc} now={now} />
-            ))
+        {expiredTickets?.length ? (
+          expiredTickets.map((fc) => (
+            <Ticket key={fc.order_id} fareContract={fc} now={now} />
+          ))
         ) : (
-          <Text style={styles.nonActiveText}>
-            Du har ingen aktive billetter
-          </Text>
+          <Text style={styles.nonActiveText}>Fant ingen utløpte billetter</Text>
         )}
         <ReceiptModal
           fareContract={selectedFareContract}
