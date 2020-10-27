@@ -152,7 +152,7 @@ export const themes: Themes = {
       sizes: fontSizes,
     },
     border: {
-      primary: colors.primary.gray,
+      primary: colors.general.gray,
       secondary: colors.general.black,
       focus: colors.secondary.blue_500,
       info: colors.secondary.cyan_500,
