@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {View, TouchableOpacity, ActivityIndicator} from 'react-native';
 import colors from '../../theme/colors';
 import {ArrowRight} from '../../assets/svg/icons/navigation';
 import {Info, Warning} from '../../assets/svg/icons/status';
@@ -8,6 +8,7 @@ import LocationIcon from '../../components/location-icon';
 import {StyleSheet} from '../../theme';
 import shadows from '../../components/map/shadows';
 import {ErrorType} from '../../api/utils';
+import Text from '../../components/text';
 
 type Props = {
   location?: Location;

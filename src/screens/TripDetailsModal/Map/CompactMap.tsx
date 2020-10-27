@@ -15,10 +15,11 @@ import {StyleSheet} from '../../../theme';
 
 export type MapProps = {
   legs: Leg[];
+  darkMode?: boolean;
   onExpand(): void;
 };
 
-export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
+export const CompactMap: React.FC<MapProps> = ({legs, darkMode, onExpand}) => {
   const features = legsToMapLines(legs);
   const startPoint = pointOf(legs[0].fromPlace);
   const endPoint = pointOf(legs[legs.length - 1].toPlace);
@@ -44,7 +45,7 @@ export const CompactMap: React.FC<MapProps> = ({legs, onExpand}) => {
           log('Finished loading map');
         }}
         {...MapViewConfig}
-        styleURL={undefined}
+        styleURL={darkMode ? 'mapbox://styles/mapbox/dark-v10' : undefined}
         compassEnabled={false}
         onPress={expandMap}
       >
@@ -91,7 +92,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     fontSize: theme.text.sizes.lead,
     lineHeight: theme.text.lineHeight.body,
     color: theme.text.colors.primary,
-    textShadowColor: colors.general.white,
+    textShadowColor: theme.background.level0,
     textShadowOffset: {height: 1, width: 1},
     textShadowRadius: 1,
   },
