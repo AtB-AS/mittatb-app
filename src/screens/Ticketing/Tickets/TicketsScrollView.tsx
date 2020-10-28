@@ -58,7 +58,7 @@ const TicketsScrollView: React.FC<Props> = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1, marginBottom: 8},
+  container: {flex: 1, marginBottom: theme.spacings.small},
   scrollView: {flex: 1, padding: theme.spacings.medium},
   noTicketsText: {
     fontSize: theme.text.sizes.body,

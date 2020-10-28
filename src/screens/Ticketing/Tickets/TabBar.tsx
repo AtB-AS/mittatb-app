@@ -83,14 +83,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {flexDirection: 'row', paddingHorizontal: theme.spacings.medium},
   button: {
     flex: 1,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    borderTopLeftRadius: theme.border.borderRadius.regular,
+    borderTopRightRadius: theme.border.borderRadius.regular,
     alignItems: 'center',
     padding: theme.spacings.small,
   },
   buttonText: {
     fontSize: theme.text.sizes.body,
-    lineHeight: 20,
+    lineHeight: theme.text.lineHeight.body,
   },
 }));
 
