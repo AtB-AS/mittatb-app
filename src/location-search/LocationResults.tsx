@@ -6,7 +6,7 @@ import insets from '../utils/insets';
 import {ArrowUpLeft} from '../assets/svg/icons/navigation';
 import {LocationSearchResult} from './types';
 import {FavoriteIcon} from '../favorites';
-import Text from '../components/text';
+import ThemeText from '../components/text';
 import ThemeIcon from '../components/theme-icon';
 
 type Props = {
@@ -27,7 +27,7 @@ const LocationResults: React.FC<Props> = ({
     <>
       {title && (
         <View accessibilityRole="header" style={styles.subHeader}>
-          <Text style={styles.subLabel}>{title}</Text>
+          <ThemeText style={styles.subLabel}>{title}</ThemeText>
           <View style={styles.subBar} />
         </View>
       )}
@@ -54,8 +54,12 @@ const LocationResults: React.FC<Props> = ({
                   )}
                 </View>
                 <View style={styles.locationTextContainer}>
-                  <Text style={styles.locationName}>{searchResult.text}</Text>
-                  <Text style={styles.locality}>{searchResult.subtext}</Text>
+                  <ThemeText style={styles.locationName}>
+                    {searchResult.text}
+                  </ThemeText>
+                  <ThemeText style={styles.locality}>
+                    {searchResult.subtext}
+                  </ThemeText>
                 </View>
               </TouchableOpacity>
             </View>

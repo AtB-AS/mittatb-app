@@ -13,7 +13,7 @@ import {StyleSheet, useTheme} from '../../theme';
 import colors from '../../theme/colors';
 import {Close} from '../../assets/svg/icons/actions';
 import insets from '../../utils/insets';
-import Text from '../text';
+import ThemeText from '../text';
 import ThemeIcon from '../theme-icon';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
@@ -71,7 +71,7 @@ const Input = forwardRef<TextInput, InputProps>(
             </TouchableOpacity>
           </View>
         ) : null}
-        <Text style={style.label}>{label}</Text>
+        <ThemeText style={style.label}>{label}</ThemeText>
       </View>
     );
   },

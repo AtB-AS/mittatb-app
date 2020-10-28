@@ -1,5 +1,5 @@
 import React, {Fragment, useMemo} from 'react';
-import {View} from 'react-native';
+import {Text, View} from 'react-native';
 import MessageBox from '../../message-box';
 import {TripPattern} from '../../sdk';
 import {StyleSheet, useTheme} from '../../theme';
@@ -10,8 +10,7 @@ import {NoResultReason} from './types';
 import {screenReaderPause} from '../../components/accessible-text';
 import {ErrorType} from '../../api/utils';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
-import Text from '../../components/text';
-
+import ThemeText from '../../components/text';
 type Props = {
   tripPatterns: TripPattern[] | null;
   showEmptyScreen: boolean;
@@ -63,7 +62,7 @@ const Results: React.FC<Props> = ({
     return (
       <View style={styles.container}>
         <MessageBox>
-          <Text style={styles.infoBoxText}>
+          <ThemeText style={styles.infoBoxText}>
             Vi fant dessverre ingen reiseruter som passer til ditt søk.
             {pluralResultReasons && (
               <Text>
@@ -82,7 +81,7 @@ const Results: React.FC<Props> = ({
             {!hasResultReasons && (
               <Text> Prøv å justere på sted eller tidspunkt. </Text>
             )}
-          </Text>
+          </ThemeText>
         </MessageBox>
       </View>
     );

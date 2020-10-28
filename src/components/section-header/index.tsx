@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleProp, ViewStyle} from 'react-native';
 import {StyleSheet} from '../../theme';
-import Text from '../text';
+import ThemeText from '../text';
 
 type SectionHeaderProps = {
   styles?: StyleProp<ViewStyle>;
@@ -14,7 +14,7 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
   const styles = useProfileStyle();
   return (
     <View style={[styles.header, extraStyles]}>
-      <Text style={styles.headerText}>{children}</Text>
+      <ThemeText style={styles.headerText}>{children}</ThemeText>
       <View style={styles.headerDecorator}></View>
     </View>
   );
