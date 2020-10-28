@@ -17,7 +17,8 @@ import {formatToClock, formatToLongDateTime} from '../../utils/date';
 import nb from 'date-fns/locale/nb';
 import subDays from 'date-fns/subDays';
 import insets from '../../utils/insets';
-import {screenreaderPause} from '../../components/accessible-text';
+import {screenReaderPause} from '../../components/accessible-text';
+import ThemeIcon from '../../components/theme-icon';
 
 type DateTypesWithoutNow = 'departure' | 'arrival';
 type DateTypes = DateTypesWithoutNow | 'now';
@@ -154,12 +155,12 @@ const DateInput: React.FC<DateInputProps> = ({
     <>
       <SearchButton
         accessible={true}
-        accessibilityLabel={'Velg tidspunkt.' + screenreaderPause}
+        accessibilityLabel={'Velg tidspunkt.' + screenReaderPause}
         accessibilityValue={{
-          text: searchValue + ' er valgt.' + screenreaderPause,
+          text: searchValue + ' er valgt.' + screenReaderPause,
         }}
         accessibilityHint={
-          'Aktiver for å velge tidspunkt og dato.' + screenreaderPause
+          'Aktiver for å velge tidspunkt og dato.' + screenReaderPause
         }
         accessibilityRole="button"
         title="Når"
@@ -179,7 +180,7 @@ const DateInput: React.FC<DateInputProps> = ({
                 <Text style={style.headerText}>Velg tidspunkt</Text>
               </View>
               <TouchableOpacity onPress={onClose}>
-                <Close />
+                <ThemeIcon svg={Close} />
               </TouchableOpacity>
             </View>
 

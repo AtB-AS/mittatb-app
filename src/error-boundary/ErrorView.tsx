@@ -16,16 +16,13 @@ type ErrorProps = {
 };
 
 const ErrorView: React.FC<ErrorProps> = ({onRestartApp, errorCode}) => {
-  const {icon: chatIcon, openChat} = useChatIcon();
+  const chatIcon = useChatIcon();
   const buildNumber = getBuildNumber();
   const config = useLocalConfig();
 
   return (
     <SafeAreaView style={styles.safearea}>
-      <ScreenHeader
-        title=""
-        rightButton={{onPress: openChat, icon: chatIcon}}
-      />
+      <ScreenHeader title="" rightButton={chatIcon} />
       <View style={styles.svgContainer}>
         <CrashParachute width="100%" height="100%" />
       </View>

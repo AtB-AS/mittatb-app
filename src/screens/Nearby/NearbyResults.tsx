@@ -5,7 +5,6 @@ import {
   ActivityIndicator,
   ImageStyle,
   StyleProp,
-  Text,
   TextStyle,
   TouchableOpacity,
   View,
@@ -32,6 +31,8 @@ import {
 import insets from '../../utils/insets';
 import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
 import {DeparturesWithStopLocal, QuayWithDeparturesAndLimits} from './utils';
+import Text from '../../components/text';
+import ThemeIcon from '../../components/theme-icon';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
@@ -80,7 +81,6 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
       </View>
     );
   }
-
   return (
     <View style={styles.container}>
       {error && (
@@ -225,7 +225,7 @@ const ShowMoreButton: React.FC<ShowMoreButtonProps> = ({onPress}) => {
     >
       <View style={style.showMoreButton}>
         <Text style={style.text}>Vis flere avganger</Text>
-        <Expand />
+        <ThemeIcon svg={Expand} />
       </View>
     </TouchableOpacity>
   );
@@ -256,7 +256,11 @@ const ItemHeader: React.FC<{
           <AccessibleText prefix="Distanse">
             {humanizeDistance(haversine(location.coords, stop))}
           </AccessibleText>
-          <WalkingPerson width={16} style={styles.distanceIcon} />
+          <ThemeIcon
+            svg={WalkingPerson}
+            width={16}
+            style={styles.distanceIcon}
+          />
         </View>
       )}
     </View>
@@ -350,8 +354,8 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     fontSize: theme.text.sizes.body,
     color: theme.text.colors.primary,
     fontWeight: 'bold',
-    paddingVertical: 4,
-    marginRight: 8,
+    paddingVertical: theme.spacings.xSmall,
+    marginRight: theme.spacings.small,
     fontVariant: ['tabular-nums'],
   },
   textContent: {
@@ -361,7 +365,7 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     color: theme.text.colors.primary,
     marginLeft: 10,
-    paddingVertical: 4,
+    paddingVertical: theme.spacings.xSmall,
   },
   resultHeader: {
     flexDirection: 'row',
@@ -374,7 +378,7 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
   },
   resultHeaderText: {
     fontSize: theme.text.sizes.body,
-    lineHeight: 20,
+    lineHeight: theme.text.lineHeight.body,
     fontWeight: 'bold',
     color: theme.text.colors.primary,
   },
@@ -385,7 +389,7 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
   },
   quayContainer: {
     backgroundColor: theme.background.level0,
-    borderRadius: 8,
+    borderRadius: theme.border.borderRadius.regular,
     marginBottom: theme.spacings.small,
   },
 }));

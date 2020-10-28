@@ -1,9 +1,24 @@
-# MittAtb app
-
-React Native POC.
+# AtB - Application Mobile
 
 [![iOS build status](https://build.appcenter.ms/v0.1/apps/ae9e8aeb-77a8-4071-937e-61a0e3cab5d3/branches/master/badge)](https://appcenter.ms)
 [![Android build status](https://build.appcenter.ms/v0.1/apps/f737d38e-497f-413d-9d44-be78ac1b25c0/branches/master/badge)](https://appcenter.ms)
+
+![AtB Illustration](https://atbeta-git-new-landingpage.atb.vercel.app/illustration.svg)
+
+This repo contains all planning, documentation, discussions and code for the AtB travel assistant (and eventually ticketing).
+
+Read more on AtB development, blogposts and projects at [the AtBeta page and blog](https://beta.atb.no).
+
+## Links and planning
+
+- See ongoing tasks at [Progress](https://github.com/AtB-AS/mittatb-app/projects/6).
+- Follow design work and feature refinements at [Feature refinements](https://github.com/AtB-AS/mittatb-app/projects/5)
+- [Follow different milestones](https://github.com/AtB-AS/mittatb-app/milestones)
+- [Report new bug of feature proposal](https://github.com/AtB-AS/mittatb-app/issues/new/choose)
+
+## Contribution
+
+We love feedback and suggestions. The AtB app and service is continously improved over time by working with users and observing real usage. If you have any issues or suggestions for improvement we would also love Pull Requests. See our [contribution guide](./CONTRIBUTING.md).
 
 ## Getting started
 
@@ -74,3 +89,7 @@ For test devices and developer devices we do continuous distribution through dir
 1. Revise and review PR on Github, making sure all checks pass.
 
 This will eventually (after review in the Stores) distribute a new app version. See [more details](./tools/release/README.md).
+
+## License
+
+The contents of this repository is licensed as [EUPL-1.2](./LICENSE). See [RFC](https://github.com/AtB-AS/org/blob/master/rfc/0015_License/index.md).

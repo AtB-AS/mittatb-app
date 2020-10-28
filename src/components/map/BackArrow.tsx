@@ -7,6 +7,7 @@ import insets from '../../utils/insets';
 import shadows from './shadows';
 
 const BackArrow: React.FC<{onBack(): void}> = ({onBack}) => {
+  const styles = useStyles();
   return (
     <TouchableOpacity
       accessibilityLabel="Gå tilbake"
@@ -21,16 +22,16 @@ const BackArrow: React.FC<{onBack(): void}> = ({onBack}) => {
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   backArrow: {
-    backgroundColor: colors.primary.gray,
-    borderRadius: 8,
+    backgroundColor: theme.button.primary2.bg,
+    borderRadius: theme.border.borderRadius.regular,
     justifyContent: 'center',
     alignItems: 'center',
     width: 36,
     height: 28,
     ...shadows,
   },
-});
+}));
 
 export default BackArrow;

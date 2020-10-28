@@ -5,6 +5,7 @@ import {
   StyleProp,
   ViewStyle,
   TouchableOpacity,
+  TextStyle,
 } from 'react-native';
 import React from 'react';
 import {StyleSheet, Theme} from '../../theme';
@@ -13,6 +14,7 @@ type ButtonProps = {
   onPress(): void;
   mode?: 'primary' | 'destructive' | 'secondary';
   textContainerStyle?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
   IconComponent?: React.ElementType;
   text: string;
 } & TouchableOpacityProperties;
@@ -24,6 +26,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled,
   style,
   textContainerStyle,
+  textStyle,
   ...props
 }) => {
   const css = useButtonStyle();
@@ -50,7 +53,7 @@ const Button: React.FC<ButtonProps> = ({
           </View>
         )}
         <View style={[css.textContainer, textContainerStyle]}>
-          <Text style={styleText}>{text}</Text>
+          <Text style={[styleText, textStyle]}>{text}</Text>
         </View>
       </TouchableOpacity>
     </View>
@@ -61,15 +64,15 @@ export default Button;
 const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   button: {
     flexDirection: 'row',
-    padding: 12,
+    padding: theme.spacings.medium,
     alignItems: 'center',
-    borderRadius: 8,
-    backgroundColor: theme.background.accent,
-    marginBottom: 8,
+    borderRadius: theme.border.borderRadius.regular,
+    backgroundColor: theme.button.primary.bg,
+    marginBottom: theme.spacings.small,
   },
   icon: {
     position: 'absolute',
-    left: 12,
+    left: theme.spacings.medium,
   },
   buttonSecondary: {
     backgroundColor: 'transparent',
@@ -87,8 +90,8 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
   },
   text: {
-    fontSize: 16,
-    lineHeight: 20,
+    fontSize: theme.text.sizes.body,
+    lineHeight: theme.text.lineHeight.body,
     fontWeight: '600',
     color: theme.text.colors.primary,
   },

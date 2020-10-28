@@ -11,7 +11,6 @@ import {
   Alert,
   Keyboard,
   StyleProp,
-  Text,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -31,6 +30,8 @@ import ScreenHeader from '../../../ScreenHeader';
 import {StyleSheet, Theme} from '../../../theme';
 import colors from '../../../theme/colors';
 import EmojiPopup from './EmojiPopup';
+import Text from '../../../components/text';
+import ThemeIcon from '../../../components/theme-icon';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
@@ -117,7 +118,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
       <ScreenHeader
         leftButton={{
           onPress: cancel,
-          icon: <ArrowLeft />,
+          icon: <ThemeIcon svg={ArrowLeft} />,
           accessible: true,
           accessibilityRole: 'button',
           accessibilityLabel: 'Gå tilbake',
@@ -220,10 +221,10 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   input: {
     backgroundColor: theme.background.level1,
-    borderColor: colors.general.gray,
+    borderColor: theme.border.primary,
     color: theme.text.colors.primary,
     borderWidth: 1,
-    borderRadius: 4,
+    borderRadius: theme.border.borderRadius.small,
     paddingLeft: 60,
     padding: 12,
     fontSize: 16,
@@ -247,12 +248,12 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
     paddingLeft: 60,
     backgroundColor: theme.background.level1,
-    borderRadius: 4,
+    borderRadius: theme.border.borderRadius.small,
     borderWidth: 1,
-    borderColor: colors.general.gray,
+    borderColor: theme.border.primary,
     color: theme.text.colors.primary,
     zIndex: -1,
   },
@@ -277,7 +278,7 @@ const SymbolPicker: React.FC<SymbolPickerProps> = ({onPress, value}) => {
     <TouchableOpacity onPress={onPress} style={css.container}>
       <View style={css.emoji}>
         {!value ? (
-          <MapPointPin style={css.emojiIcon} />
+          <ThemeIcon svg={MapPointPin} style={css.emojiIcon} />
         ) : (
           <Text style={css.emojiText}>{value}</Text>
         )}
@@ -293,8 +294,8 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     backgroundColor: theme.background.level1,
     borderWidth: 1,
-    borderColor: colors.general.gray,
-    borderRadius: 4,
+    borderColor: theme.border.primary,
+    borderRadius: theme.border.borderRadius.small,
   },
   emoji: {
     marginRight: 12,
@@ -324,14 +325,14 @@ const InputGroup: React.FC<InputGroupProps> = ({title, boxStyle, children}) => {
 };
 const useGroupStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    marginBottom: 12,
+    marginBottom: theme.spacings.medium,
     flexDirection: 'column',
     justifyContent: 'center',
   },
   label: {
     position: 'absolute',
-    left: 12,
-    fontSize: 14,
-    lineHeight: 20,
+    left: theme.spacings.medium,
+    fontSize: theme.text.sizes.lead,
+    lineHeight: theme.text.lineHeight.body,
   },
 }));

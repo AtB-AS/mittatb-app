@@ -1,5 +1,6 @@
 import React from 'react';
-import {Text, TextProps} from 'react-native';
+import {TextProps} from 'react-native';
+import Text from '../text';
 
 type LabelProps = TextProps & {
   prefix?: string;
@@ -19,12 +20,12 @@ const AccessibleText = ({
     <Text
       accessibilityLabel={`${prefix ?? ''} : ${children ?? ''} ${
         suffix ?? ''
-      } ${pauseAfter ? screenreaderPause : ' '}`}
+      } ${pauseAfter ? screenReaderPause : ' '}`}
       {...props}
     >
       {children ?? ' '}
     </Text>
   );
 };
-export const screenreaderPause = '\n';
+export const screenReaderPause = '\n';
 export default AccessibleText;

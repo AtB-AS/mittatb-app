@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Linking, Text, TouchableOpacity, View} from 'react-native';
-import {PRIVACY_POLICY_URL} from 'react-native-dotenv';
+import {Linking, TouchableOpacity, View} from 'react-native';
+import {PRIVACY_POLICY_URL} from '@env';
 import {useAppState} from '../../AppContext';
 import {
   Onboarding2,
@@ -17,13 +17,15 @@ import {
 import StepOuterContainer from './components/StepContainer';
 import Illustration from './components/Illustration';
 import NavigationControls from './components/NavigationControls';
+import Text from '../../components/text';
+
 type StepProps = {
   navigation: StackNavigationProp<OnboardingStackParams>;
 };
 type OnboardingStackParams = {
-  StepOne: StepProps;
-  StepTwo: StepProps;
-  StepThree: StepProps;
+  StepOne: undefined;
+  StepTwo: undefined;
+  StepThree: undefined;
 };
 const Stack = createStackNavigator<OnboardingStackParams>();
 
@@ -60,7 +62,7 @@ const Onboarding = () => {
 const StepOne: React.FC<StepProps> = ({navigation}) => {
   const styles = useStyles();
   const onNavigate = () => {
-    navigation.navigate('StepTwo');
+    navigation.push('StepTwo');
   };
   return (
     <>
@@ -84,7 +86,7 @@ const StepOne: React.FC<StepProps> = ({navigation}) => {
 const StepTwo: React.FC<StepProps> = ({navigation}) => {
   const styles = useStyles();
   const onNavigate = () => {
-    navigation.navigate('StepThree');
+    navigation.push('StepThree');
   };
   return (
     <>
@@ -105,7 +107,7 @@ const StepTwo: React.FC<StepProps> = ({navigation}) => {
     </>
   );
 };
-const StepThree: React.FC<StepProps> = ({navigation}) => {
+const StepThree: React.FC<StepProps> = () => {
   const styles = useStyles();
   const {completeOnboarding} = useAppState();
   const {status, requestPermission} = useGeolocationState();
@@ -155,10 +157,11 @@ const StepThree: React.FC<StepProps> = ({navigation}) => {
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   textContainer: {
     padding: theme.spacings.xLarge,
-    backgroundColor: 'rgba(235,236,237,0.85)',
+    backgroundColor:
+      themeName === 'light' ? 'rgba(235,236,237,0.85)' : 'rgba(22,23,24,0.85)',
   },
   title: {
     fontWeight: 'bold',
@@ -166,7 +169,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   text: {
     fontSize: theme.text.sizes.body,
     color: theme.text.colors.primary,
-    marginTop: 12,
+    marginTop: theme.spacings.medium,
   },
   privacyPolicy: {
     textAlign: 'center',

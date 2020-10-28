@@ -1,25 +1,32 @@
 import {useScrollToTop} from '@react-navigation/native';
+import {useHeaderHeight} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
+  AccessibilityProps,
   Animated,
+  Dimensions,
+  Easing,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Platform,
   RefreshControl,
+  ScaledSize,
   ScrollView,
+  StatusBar,
   useWindowDimensions,
   View,
-  Easing,
-  AccessibilityProps,
-  StatusBar,
 } from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {
+  useSafeAreaFrame,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import useChatIcon from '../../chat/use-chat-icon';
 import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
+import LogoOutline from '../../ScreenHeader/LogoOutline';
 import {StyleSheet} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
 import SvgBanner from '../../assets/svg/icons/other/Banner';
-import LogoOutline from '../../ScreenHeader/LogoOutline';
+import ThemeIcon from '../theme-icon';
 
 type Props = {
   renderHeader(isFullHeight: boolean): React.ReactNode;
@@ -87,7 +94,7 @@ const DisappearingHeader: React.FC<Props> = ({
     }),
   );
 
-  const {icon: chatIcon, openChat} = useChatIcon();
+  const chatIcon = useChatIcon();
   const [scrollYValue, setScrollY] = useState<number>(0);
   const styles = useThemeStyles();
   const scrollYRef = useRef(new Animated.Value(IS_IOS ? -contentOffset : 0))
@@ -175,12 +182,12 @@ const DisappearingHeader: React.FC<Props> = ({
         <AnimatedScreenHeader
           onLayout={onScreenHeaderLayout}
           title={headerTitle}
-          rightButton={{onPress: openChat, icon: chatIcon}}
+          rightButton={chatIcon}
           alternativeTitleComponent={alternativeTitleComponent}
           alternativeTitleVisible={showAltTitle}
           leftButton={{
             onPress: logoClick?.callback,
-            icon: <LogoOutline />,
+            icon: <ThemeIcon svg={LogoOutline} />,
             ...logoClick,
           }}
         />
@@ -235,6 +242,7 @@ const DisappearingHeader: React.FC<Props> = ({
               }}
               contentOffset={{
                 y: -contentHeight - headerMargin,
+                x: 0,
               }}
             >
               {children}
@@ -267,7 +275,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   topBorder: {
-    backgroundColor: theme.background.accent,
+    backgroundColor: theme.background.header,
   },
   bannerContainer: {
     position: 'absolute',
@@ -289,7 +297,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     overflow: 'hidden',
     zIndex: 2,
     elevated: 1,
-    backgroundColor: theme.background.accent,
+    backgroundColor: theme.background.header,
     justifyContent: 'flex-end',
   },
   header__inner: {
@@ -331,10 +339,12 @@ const throttle = <F extends (...args: any[]) => any>(
 
 // This is code from react-navigation. Couldn't find any
 // way to reasonably calculate this.
-const DEFAULT_TABBAR_HEIGHT = 49;
+const DEFAULT_TABBAR_HEIGHT = 44;
 
 function useCalculateHeaderContentHeight() {
-  const {height: windowHeight} = useWindowDimensions();
+  // Using safeAreaFrame for height instead of dimensions as
+  // dimensions are problamatic on Android: https://github.com/facebook/react-native/issues/23693
+  const {height: actualHeight} = useSafeAreaFrame();
   const {
     onLayout: onScreenHeaderLayout,
     height: screenHeaderHeight,
@@ -343,12 +353,7 @@ function useCalculateHeaderContentHeight() {
   const {top, bottom} = useSafeAreaInsets();
 
   const boxHeight =
-    windowHeight -
-    screenHeaderHeight -
-    top -
-    bottom -
-    DEFAULT_TABBAR_HEIGHT -
-    (StatusBar.currentHeight ?? 0);
+    actualHeight - screenHeaderHeight - top - bottom - DEFAULT_TABBAR_HEIGHT;
 
   return {
     boxHeight,
