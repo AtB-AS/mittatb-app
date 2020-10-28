@@ -1,8 +1,8 @@
 import React from 'react';
-import {View, Text, StyleProp, ViewStyle} from 'react-native';
+import {View, StyleProp, ViewStyle} from 'react-native';
 import {Info, Warning} from '../assets/svg/icons/status';
 import {StyleSheet} from '../theme';
-import colors from '../theme/colors';
+import Text from '../components/text';
 import ThemeIcon from '../components/theme-icon';
 
 type WithMessage = {message: string; children?: never};
