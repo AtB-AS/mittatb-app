@@ -6,7 +6,6 @@
  */
 import React, {useRef, useEffect, forwardRef, useState} from 'react';
 import {
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -23,6 +22,7 @@ import mapValues from 'lodash.mapvalues';
 import {Modalize} from 'react-native-modalize';
 import {Portal} from 'react-native-portalize';
 import composeRefs from '@seznam/compose-react-refs';
+import {StyleSheet} from '../../../theme';
 
 // Polyfill for Android
 require('string.fromcodepoint');
@@ -98,18 +98,17 @@ const CATEGORIES: LocalizedCategories = [
 const DEFAULT_NUM_EMOJI = 8;
 const PADDING = 5;
 
-const styles = StyleSheet.create({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   headerText: {
-    padding: PADDING,
-    color: 'black',
+    padding: theme.spacings.xSmall,
+    color: theme.text.colors.primary,
     justifyContent: 'center',
     textAlignVertical: 'center',
   },
 
   categoryOuter: {
-    margin: 12,
+    margin: theme.spacings.medium,
   },
-
   categoryInner: {
     flexWrap: 'wrap',
     flexDirection: 'row',
@@ -117,13 +116,13 @@ const styles = StyleSheet.create({
   },
 
   clearButton: {
-    padding: 15,
+    padding: theme.spacings.medium,
     textAlign: 'center',
-    color: 'black',
+    color: theme.text.colors.primary,
     textAlignVertical: 'center',
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
   },
-});
+}));
 
 const ClearButton: React.FC<{
   value: string | null;
@@ -132,6 +131,7 @@ const ClearButton: React.FC<{
   clearButtonText?: string;
 }> = ({value, onEmojiSelected, clearButtonStyle, clearButtonText}) => {
   if (!value) return null;
+  const styles = useStyles();
   return (
     <TouchableOpacity onPress={() => onEmojiSelected(null)}>
       <Text style={[styles.clearButton, clearButtonStyle]}>
@@ -173,6 +173,8 @@ const EmojiCategory: React.FC<EmojiCategory> = ({
     ? localizedCategories[CATEGORIES.indexOf(category)]
     : category;
 
+  const styles = useStyles();
+
   return (
     <View style={styles.categoryOuter}>
       <Text style={[styles.headerText, headerStyle]}>{categoryText}</Text>
@@ -198,6 +200,7 @@ const EmojiPicker = forwardRef<Modalize, Props>(
   ({value, onEmojiSelected, hideClearButton, closeOnSelect, ...props}, ref) => {
     const modalizeRef = useRef<Modalize>(null);
     const combinedRef = composeRefs<Modalize>(ref, modalizeRef);
+    const styles = usePickerStyles();
 
     const onClick = (emoji: string | null) => {
       onEmojiSelected(emoji);
@@ -222,6 +225,7 @@ const EmojiPicker = forwardRef<Modalize, Props>(
         <Modalize
           modalHeight={400}
           ref={combinedRef}
+          modalStyle={styles.modal}
           HeaderComponent={
             <ClearButton value={value} onEmojiSelected={onClick} />
           }
@@ -237,6 +241,11 @@ const EmojiPicker = forwardRef<Modalize, Props>(
     );
   },
 );
+const usePickerStyles = StyleSheet.createThemeHook((theme) => ({
+  modal: {
+    backgroundColor: theme.background.level0,
+  },
+}));
 
 export default EmojiPicker;
 

@@ -283,13 +283,13 @@ const SymbolPicker: React.FC<SymbolPickerProps> = ({onPress, value}) => {
           <ThemeText style={css.emojiText}>{value}</ThemeText>
         )}
       </View>
-      <Expand />
+      <ThemeIcon svg={Expand} />
     </TouchableOpacity>
   );
 };
 const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    paddingVertical: 12,
+    paddingVertical: theme.spacings.medium,
     paddingLeft: 64,
     flexDirection: 'row',
     backgroundColor: theme.background.level1,
@@ -298,14 +298,14 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.borderRadius.small,
   },
   emoji: {
-    marginRight: 12,
+    marginRight: theme.spacings.medium,
   },
   emojiIcon: {
     paddingTop: 3,
     paddingBottom: 3,
   },
   emojiText: {
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
   },
 }));
 
