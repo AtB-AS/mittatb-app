@@ -1,5 +1,5 @@
 import React, {Fragment, useMemo} from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import MessageBox from '../../message-box';
 import {TripPattern} from '../../sdk';
 import {StyleSheet, useTheme} from '../../theme';
@@ -7,11 +7,10 @@ import ResultItem from './ResultItem';
 import OptionalNextDayLabel from '../../components/optional-day-header';
 import {isSeveralDays} from '../../utils/date';
 import {NoResultReason} from './types';
-import AccessibleText, {
-  screenReaderPause,
-} from '../../components/accessible-text';
+import {screenReaderPause} from '../../components/accessible-text';
 import {ErrorType} from '../../api/utils';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
+import Text from '../../components/text';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
