@@ -42,7 +42,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   chatContainer: {
     width: 36,
     height: 28,
-    backgroundColor: theme.button.primary.bg,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: theme.border.borderRadius.regular,

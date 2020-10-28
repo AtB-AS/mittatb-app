@@ -7,9 +7,9 @@ const backgrounds = {
   light__level3: '#E1E3E4',
 
   dark__level0: '#000000',
-  dark__level1: '#13171A',
-  dark__level2: '#1D2225',
-  dark__level3: '#323A3E',
+  dark__level1: '#111416',
+  dark__level2: '#191E21',
+  dark__level3: '#1E2429',
 };
 
 const colors = {
