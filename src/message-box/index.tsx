@@ -15,6 +15,7 @@ export type MessageBoxProps = {
   icon?: React.ReactNode;
   type?: 'info' | 'warning';
   containerStyle?: StyleProp<ViewStyle>;
+  title?: string;
 } & (WithMessage | WithChildren);
 
 const MessageBox: React.FC<MessageBoxProps> = ({
@@ -23,6 +24,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({
   containerStyle,
   message,
   children,
+  title,
 }) => {
   const styles = useBoxStyle();
   const iconElement =
@@ -39,9 +41,12 @@ const MessageBox: React.FC<MessageBoxProps> = ({
   const backgroundColor = styles[typeToColorClass(type)];
   return (
     <View style={[styles.container, backgroundColor, containerStyle]}>
-      {iconElement != null && (
-        <View style={styles.iconContainer}>{iconElement}</View>
-      )}
+      <View style={styles.titleContainer}>
+        {iconElement != null && (
+          <View style={styles.iconContainer}>{iconElement}</View>
+        )}
+        {title && <Text style={styles.title}>{title}</Text>}
+      </View>
       <View>{child}</View>
     </View>
   );
@@ -57,10 +62,18 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
   },
   iconContainer: {
     marginBottom: 8,
+    marginRight: 12,
   },
   text: {
     ...theme.text.body,
     color: theme.text.colors.primary,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: '600',
   },
   container__info: {
     backgroundColor: theme.background.info,
