@@ -1,9 +1,10 @@
 import React from 'react';
-import {Text, View, TouchableOpacity} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 import {MaterialTopTabBarProps} from '@react-navigation/material-top-tabs';
 import {Route} from '@react-navigation/native';
 import colors from '../../../theme/colors';
-import {StyleSheet} from '../../../theme';
+import {StyleSheet, useTheme} from '../../../theme';
+import Text from '../../../components/text';
 
 const TicketsTabBar: React.FC<MaterialTopTabBarProps> = ({
   state,
@@ -12,6 +13,7 @@ const TicketsTabBar: React.FC<MaterialTopTabBarProps> = ({
   position,
 }) => {
   const styles = useStyles();
+  const {theme} = useTheme();
   return (
     <View style={styles.container}>
       {state.routes.map((route: Route<string>, index: number) => {
@@ -55,7 +57,11 @@ const TicketsTabBar: React.FC<MaterialTopTabBarProps> = ({
             onLongPress={onLongPress}
             style={[
               styles.button,
-              {backgroundColor: isFocused ? '#F5F5F6' : colors.secondary.cyan},
+              {
+                backgroundColor: isFocused
+                  ? theme.background.level1
+                  : theme.background.header,
+              },
             ]}
           >
             <Text

@@ -7,7 +7,6 @@ import LogoOutline from '../../../ScreenHeader/LogoOutline';
 import useChatIcon from '../../../chat/use-chat-icon';
 import {useNavigateHome} from '../../../utils/navigation';
 import {StyleSheet} from '../../../theme';
-import colors from '../../../theme/colors';
 import TabBar from './TabBar';
 import {ActiveTickets, ExpiredTickets} from './Tabs';
 

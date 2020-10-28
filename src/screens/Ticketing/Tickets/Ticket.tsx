@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 import {formatToLongDateTime, secondsToDuration} from '../../../utils/date';
 import {FareContract} from '../../../api/fareContracts';
 import {StyleSheet} from '../../../theme';
@@ -8,6 +8,7 @@ import colors from '../../../theme/colors';
 import Dash from 'react-native-dash';
 import {fromUnixTime} from 'date-fns';
 import nb from 'date-fns/locale/nb';
+import Text from '../../../components/text';
 
 type Props = {
   fareContract: FareContract;

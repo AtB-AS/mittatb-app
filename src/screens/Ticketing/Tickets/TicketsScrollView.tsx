@@ -1,11 +1,12 @@
 import React from 'react';
-import {View, Text, RefreshControl} from 'react-native';
+import {View, RefreshControl} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {FareContract} from '../../../api/fareContracts';
 import {StyleSheet, useTheme} from '../../../theme';
 import LinearGradient from 'react-native-linear-gradient';
 import Ticket from './Ticket';
 import hexToRgba from 'hex-to-rgba';
+import Text from '../../../components/text';
 
 type Props = {
   tickets?: FareContract[];
