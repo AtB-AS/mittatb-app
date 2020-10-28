@@ -130,8 +130,8 @@ const ClearButton: React.FC<{
   clearButtonStyle?: ViewStyle;
   clearButtonText?: string;
 }> = ({value, onEmojiSelected, clearButtonStyle, clearButtonText}) => {
-  if (!value) return null;
   const styles = useStyles();
+  if (!value) return null;
   return (
     <TouchableOpacity onPress={() => onEmojiSelected(null)}>
       <Text style={[styles.clearButton, clearButtonStyle]}>
