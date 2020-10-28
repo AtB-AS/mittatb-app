@@ -60,7 +60,7 @@ const NavigationRoot = () => {
       <StatusBar
         barStyle={theme.statusBarStyle}
         translucent={true}
-        backgroundColor={theme.background.accent}
+        backgroundColor={theme.background.header}
       />
       <Host>
         <NavigationContainer ref={ref} onStateChange={trackNavigation}>
