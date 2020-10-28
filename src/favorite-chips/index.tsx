@@ -21,6 +21,7 @@ import colors from '../theme/colors';
 import {StyleSheet} from '../theme';
 import ThemeIcon from '../components/theme-icon';
 import {screenReaderPause} from '../components/accessible-text';
+import Button from '../components/button';
 
 type Props = {
   onSelectLocation: (location: LocationWithMetadata) => void;
@@ -161,7 +162,7 @@ const FavoriteChip: React.FC<ChipProps> = ({
   );
 };
 
-const useChipStyles = StyleSheet.createThemeHook((theme) => ({
+const useChipStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   container: {
     height: 28,
     borderRadius: 8,
@@ -188,10 +189,16 @@ const useChipStyles = StyleSheet.createThemeHook((theme) => ({
     color: theme.button.primary2.color,
   },
   container__light: {
-    backgroundColor: theme.button.primary3.bg,
+    backgroundColor:
+      themeName === 'dark'
+        ? theme.button.primary3.bg
+        : colors.secondary.cyan_300,
   },
   text__light: {
-    color: theme.button.primary3.color,
+    color:
+      themeName === 'dark'
+        ? theme.button.primary3.color
+        : theme.text.colors.primary,
   },
 }));
 
