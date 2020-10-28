@@ -5,7 +5,7 @@ import {
   ReserveTicketResponse,
   VippsRedirectParams,
 } from '../../../api/fareContracts';
-import OfferScreen from './Offer';
+import TravellersScreen from './Travellers';
 import {
   Method as PaymentMethodScreen,
   CreditCard as CreditCardScreen,
@@ -13,7 +13,7 @@ import {
 } from './Payment';
 
 export type TicketingStackParams = {
-  Offer: undefined;
+  Travellers: undefined;
   PaymentMethod: {offers: {offer_id: string; count: number}[]};
   PaymentCreditCard: ReserveTicketResponse;
   PaymentVipps: VippsRedirectParams;
@@ -25,7 +25,7 @@ const Stack = createStackNavigator<TicketingStackParams>();
 export default function PurchaseStack() {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Offer" component={OfferScreen} />
+      <Stack.Screen name="Travellers" component={TravellersScreen} />
       <Stack.Screen name="PaymentMethod" component={PaymentMethodScreen} />
       <Stack.Screen name="PaymentCreditCard" component={CreditCardScreen} />
       <Stack.Screen name="PaymentVipps" component={VippsScreen} />
