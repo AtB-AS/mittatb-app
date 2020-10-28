@@ -2,9 +2,10 @@ import React from 'react';
 import {View, Text, RefreshControl} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {FareContract} from '../../../api/fareContracts';
-import {StyleSheet} from '../../../theme';
+import {StyleSheet, useTheme} from '../../../theme';
 import LinearGradient from 'react-native-linear-gradient';
 import Ticket from './Ticket';
+import hexToRgba from 'hex-to-rgba';
 
 type Props = {
   tickets?: FareContract[];
@@ -21,6 +22,7 @@ const TicketsScrollView: React.FC<Props> = ({
   refreshTickets,
   now,
 }) => {
+  const {theme} = useTheme();
   const styles = useStyles();
 
   return (
@@ -44,7 +46,10 @@ const TicketsScrollView: React.FC<Props> = ({
       </ScrollView>
       <LinearGradient
         style={{position: 'absolute', bottom: 0, width: '100%', height: 30}}
-        colors={['rgba(245, 245, 246, 0.1)', 'rgba(245, 245, 246, 1)']}
+        colors={[
+          hexToRgba(theme.background.level1, 0.1),
+          hexToRgba(theme.background.level1, 1),
+        ]}
         pointerEvents={'none'}
       />
     </View>
@@ -57,6 +62,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   noTicketsText: {
     fontSize: theme.text.sizes.body,
     textAlign: 'center',
+  },
+  gradient: {
+    backgroundColor: theme.background.level1,
   },
 }));
 

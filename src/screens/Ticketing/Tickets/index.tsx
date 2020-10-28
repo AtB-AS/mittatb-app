@@ -58,5 +58,5 @@ export default function TicketTabs() {
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1, backgroundColor: colors.secondary.cyan},
+  container: {flex: 1, backgroundColor: theme.background.header},
 }));
