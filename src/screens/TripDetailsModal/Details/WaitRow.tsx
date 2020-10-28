@@ -1,10 +1,11 @@
 import {secondsBetween, secondsToMinutesShort} from '../../../utils/date';
 import React, {useEffect} from 'react';
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
 import colors from '../../../theme/colors';
 import {Duration} from '../../../assets/svg/icons/transportation';
 import {StyleSheet} from '../../../theme';
 import {Leg} from '../../../sdk';
+import Text from '../../../components/text';
 
 type WaitRowProps = {
   onCalculateTime(seconds: number): void;

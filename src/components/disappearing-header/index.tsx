@@ -20,12 +20,13 @@ import {
   useSafeAreaFrame,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import SvgBanner from '../../assets/svg/icons/other/Banner';
 import useChatIcon from '../../chat/use-chat-icon';
 import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
 import LogoOutline from '../../ScreenHeader/LogoOutline';
 import {StyleSheet} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
+import SvgBanner from '../../assets/svg/icons/other/Banner';
+import ThemeIcon from '../theme-icon';
 
 type Props = {
   renderHeader(isFullHeight: boolean): React.ReactNode;
@@ -186,7 +187,7 @@ const DisappearingHeader: React.FC<Props> = ({
           alternativeTitleVisible={showAltTitle}
           leftButton={{
             onPress: logoClick?.callback,
-            icon: <LogoOutline />,
+            icon: <ThemeIcon svg={LogoOutline} />,
             ...logoClick,
           }}
         />
@@ -274,7 +275,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   topBorder: {
-    backgroundColor: theme.background.accent,
+    backgroundColor: theme.background.header,
   },
   bannerContainer: {
     position: 'absolute',
@@ -296,7 +297,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     overflow: 'hidden',
     zIndex: 2,
     elevated: 1,
-    backgroundColor: theme.background.accent,
+    backgroundColor: theme.background.header,
     justifyContent: 'flex-end',
   },
   header__inner: {

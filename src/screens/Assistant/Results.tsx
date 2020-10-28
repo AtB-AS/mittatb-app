@@ -11,7 +11,7 @@ import AccessibleText, {
   screenReaderPause,
 } from '../../components/accessible-text';
 import {ErrorType} from '../../api/utils';
-import ScreenreaderAnnouncement from '../../components/screen-reader-announcement';
+import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
@@ -35,8 +35,8 @@ const Results: React.FC<Props> = ({
   onDetailsPressed,
   errorType,
 }) => {
-  const {theme} = useTheme();
-  const styles = useThemeStyles(theme);
+  const {theme, themeName} = useTheme();
+  const styles = useThemeStyles(theme, themeName);
 
   const allSameDay = useMemo(
     () => isSeveralDays((tripPatterns ?? []).map((i) => i.startTime)),
@@ -52,7 +52,7 @@ const Results: React.FC<Props> = ({
 
     return (
       <View style={styles.container}>
-        <ScreenreaderAnnouncement message={errorMessage} />
+        <ScreenReaderAnnouncement message={errorMessage} />
         <MessageBox type="warning" message={errorMessage}></MessageBox>
       </View>
     );

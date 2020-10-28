@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, TouchableOpacity, AccessibilityProps} from 'react-native';
+import {View, TouchableOpacity, AccessibilityProps} from 'react-native';
 import {Leg, TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {
@@ -24,6 +24,8 @@ import AccessibleText, {
 import {SituationWarningIcon} from '../../situations';
 import {flatMap} from '../../utils/array';
 import {getReadableModeName} from '../../utils/transportation-names';
+import Text from '../../components/text';
+import ThemeIcon from '../../components/theme-icon';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -128,10 +130,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   result: {
     padding: 12,
     backgroundColor: theme.background.level0,
-    borderRadius: 8,
+    borderRadius: theme.border.borderRadius.regular,
   },
   stopName: {
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
     color: theme.text.colors.primary,
     flexShrink: 1,
   },
@@ -145,7 +147,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginVertical: 8,
   },
   lineName: {
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
     fontWeight: '600',
     color: theme.text.colors.primary,
     textAlign: 'center',
@@ -154,8 +156,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   detailsContainer: {
     flexDirection: 'column',
   },
-  transferText: {fontSize: 16},
-  detailsText: {fontSize: 12, textDecorationLine: 'underline'},
+  transferText: {fontSize: theme.text.sizes.body},
+  detailsText: {
+    fontSize: theme.text.sizes.label,
+    textDecorationLine: 'underline',
+  },
   resultHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -212,7 +217,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
         {formatToClockOrRelativeMinutes(leg.expectedStartTime)}
       </Text>
       <View style={styles.iconContainer}>
-        <WalkingPerson fill={colors.general.black} opacity={0.6} />
+        <ThemeIcon svg={WalkingPerson} opacity={0.6} />
       </View>
       <Text style={[styles.textContent, styles.textDeprioritized]}>{text}</Text>
     </View>
@@ -254,18 +259,18 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
     flexWrap: 'wrap',
   },
   text: {
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
   },
   textDeprioritized: {
     fontWeight: 'normal',
-    fontSize: 14,
+    fontSize: theme.text.sizes.lead,
     color: theme.text.colors.faded,
   },
   textBold: {
     fontWeight: 'bold',
   },
   walkingPerson: {
-    backgroundColor: theme.text.colors.primary,
+    //ackgroundColor: theme.text.colors.primary,
   },
 }));
 
@@ -297,7 +302,7 @@ const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
         {formatToClockOrRelativeMinutes(lastLeg.expectedEndTime)}
       </Text>
       <View accessibilityLabel="Destinasjon" style={styles.iconContainer}>
-        <DestinationFlag fill={colors.general.black} opacity={0.6} />
+        <ThemeIcon svg={DestinationFlag} opacity={0.6} />
       </View>
       <Text
         style={[styles.textContent, styles.textDeprioritized]}

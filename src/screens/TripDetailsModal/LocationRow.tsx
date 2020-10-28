@@ -111,7 +111,7 @@ const useLocationRowStyle = StyleSheet.createThemeHook((theme) => ({
     top: '50%',
     color: theme.text.colors.primary,
     fontSize: 12,
-    lineHeight: 16,
+    lineHeight: theme.text.lineHeight.label,
     fontWeight: 'normal',
     textDecorationLine: 'line-through',
     textDecorationStyle: 'solid',

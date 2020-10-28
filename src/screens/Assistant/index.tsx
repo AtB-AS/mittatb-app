@@ -51,7 +51,8 @@ import Bugsnag from '@bugsnag/react-native';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import {screenReaderPause} from '../../components/accessible-text';
 import colors from '../../theme/colors';
-import ScreenreaderAnnouncement from '../../components/screen-reader-announcement';
+import ThemeIcon from '../../components/theme-icon';
+import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -246,7 +247,7 @@ const Assistant: React.FC<Props> = ({
               hitSlop={insets.all(12)}
               onPress={setCurrentLocationOrRequest}
             >
-              <CurrentLocationArrow />
+              <ThemeIcon svg={CurrentLocationArrow} />
             </TouchableOpacity>
           </View>
 
@@ -273,7 +274,7 @@ const Assistant: React.FC<Props> = ({
                 }
                 accessibilityRole="button"
               >
-                <Swap />
+                <ThemeIcon svg={Swap} />
               </TouchableOpacity>
             </View>
           </View>
@@ -380,7 +381,7 @@ const Assistant: React.FC<Props> = ({
         }
       }}
     >
-      <ScreenreaderAnnouncement message={translateSearchState(searchState)} />
+      <ScreenReaderAnnouncement message={translateSearchState(searchState)} />
       <Results
         tripPatterns={tripPatterns}
         isSearching={isSearching}
@@ -398,15 +399,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   searchButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingRight: 12,
+    paddingRight: theme.spacings.medium,
   },
   swapButton: {
     position: 'relative',
     top: -19,
     right: 23,
     backgroundColor: theme.background.level0,
+    borderColor: theme.background.header,
     padding: 3,
-    borderColor: theme.background.accent,
     borderWidth: 2,
     borderRadius: 20,
   },
@@ -426,7 +427,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   altTitleText: {
     overflow: 'hidden',
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
+    color: theme.text.colors.primary,
     fontWeight: 'bold',
   },
   altTitleText__right: {

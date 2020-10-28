@@ -47,7 +47,8 @@ import {useLocationSearchValue} from '../../location-search';
 import {useNavigateHome} from '../../utils/navigation';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import colors from '../../theme/colors';
-import ScreenreaderAnnouncement from '../../components/screen-reader-announcement';
+import ThemeIcon from '../../components/theme-icon';
+import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
@@ -210,7 +211,7 @@ const NearbyOverview: React.FC<Props> = ({
           accessibilityRole="button"
           onPress={setCurrentLocationOrRequest}
         >
-          <CurrentLocationArrow />
+          <ThemeIcon svg={CurrentLocationArrow} />
         </TouchableOpacity>
       </View>
     </SearchGroup>
@@ -235,7 +236,7 @@ const NearbyOverview: React.FC<Props> = ({
       }
       onEndReached={onScrollViewEndReached}
     >
-      <ScreenreaderAnnouncement message={loadAnnouncement} />
+      <ScreenReaderAnnouncement message={loadAnnouncement} />
       <NearbyResults
         departures={departures}
         onShowMoreOnQuay={showMoreOnQuay}

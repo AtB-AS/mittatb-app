@@ -18,6 +18,7 @@ import {TabNavigatorParams} from '../../../navigation/TabNavigator';
 import {PRIVACY_POLICY_URL} from '@env';
 import LogoOutline from '../../../ScreenHeader/LogoOutline';
 import {useNavigateHome} from '../../../utils/navigation';
+import ThemeIcon from '../../../components/theme-icon';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -61,7 +62,7 @@ export default function Profile({navigation}: ProfileScreenProps) {
       <Header
         title="Mitt AtB"
         leftButton={{
-          icon: <LogoOutline />,
+          icon: <ThemeIcon svg={LogoOutline} />,
           onPress: navigateHome,
           accessibilityLabel: 'Gå til startskjerm',
         }}
@@ -108,11 +109,11 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     color: theme.text.colors.primary,
   },
   privacyPolicy: {
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
     textAlign: 'center',
     textDecorationLine: 'underline',
     color: theme.text.colors.primary,
-    marginBottom: 24,
+    marginBottom: theme.spacings.xLarge,
   },
 }));
 
@@ -120,7 +121,7 @@ function AddFavoriteButton({onPress}: {onPress(): void}) {
   const css = useItemStyle();
   return (
     <TouchableOpacity style={css.item} onPress={onPress}>
-      <Add />
+      <ThemeIcon svg={Add} />
       <View style={css.textContainer}>
         <Text style={css.text}>Legg til favorittsted</Text>
       </View>
@@ -138,8 +139,10 @@ const Item: React.FC<ItemProps> = ({item, onEdit, onClick}) => {
 
   const content = item.name ? (
     <>
-      <Text style={css.text}>{item.name ?? item.location.name}</Text>
-      <Text>{item.location.label}</Text>
+      <Text style={[css.textName, css.text]}>
+        {item.name ?? item.location.name}
+      </Text>
+      <Text style={css.text}>{item.location.label}</Text>
     </>
   ) : (
     <Text>{item.location.label}</Text>
@@ -172,7 +175,7 @@ const Item: React.FC<ItemProps> = ({item, onEdit, onClick}) => {
           onPress={onEdit}
           hitSlop={insets.all(12)}
         >
-          <Edit />
+          <ThemeIcon svg={Edit} />
         </TouchableOpacity>
       )}
     </View>
@@ -200,7 +203,10 @@ const useItemStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     marginEnd: 10,
   },
   text: {
-    fontSize: 16,
+    color: theme.text.colors.primary,
+  },
+  textName: {
+    fontSize: theme.text.sizes.body,
     fontWeight: '600',
   },
 }));

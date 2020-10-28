@@ -1,6 +1,7 @@
 import React from 'react';
-import {Text, View, StyleProp, ViewStyle} from 'react-native';
+import {View, StyleProp, ViewStyle} from 'react-native';
 import {StyleSheet} from '../../theme';
+import Text from '../text';
 
 type SectionHeaderProps = {
   styles?: StyleProp<ViewStyle>;
@@ -27,10 +28,9 @@ const useProfileStyle = StyleSheet.createThemeHook((theme) => ({
     marginBottom: 3,
   },
   headerText: {
-    backgroundColor: theme.background.level1,
     paddingEnd: 10,
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: theme.text.sizes.label,
+    lineHeight: theme.text.lineHeight.label,
   },
 }));
 

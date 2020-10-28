@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   View,
-  Text,
   ViewStyle,
   StyleProp,
   AccessibilityProps,
@@ -10,6 +9,7 @@ import {
 import {StyleSheet} from '../../theme';
 import {LocationWithMetadata} from '../../favorites/types';
 import {screenReaderPause} from '../accessible-text';
+import Text from '../text';
 
 type SearchButtonProps = {
   title: string;
@@ -40,9 +40,7 @@ const SearchButton: React.FC<SearchButtonProps> = ({
         <Text style={styles.title}>{title}</Text>
         <View style={styles.icon}>{icon}</View>
         <Text style={styles.buttonText} numberOfLines={1}>
-          {text ?? (
-            <Text style={{color: 'rgba(0, 0, 0, 0.6)'}}>{placeholder}</Text>
-          )}
+          {text ?? <Text style={styles.placeholder}>{placeholder}</Text>}
         </Text>
       </TouchableOpacity>
     </View>
@@ -75,21 +73,24 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: theme.spacings.medium,
+    paddingVertical: theme.spacings.small,
   },
   buttonContainer: {
     flexDirection: 'row',
   },
   title: {width: 40},
   buttonText: {
-    fontSize: 16,
-    lineHeight: 20,
+    fontSize: theme.text.sizes.body,
+    lineHeight: theme.text.lineHeight.body,
     flex: 1,
-    marginLeft: 20,
+    marginLeft: theme.spacings.large,
   },
   icon: {
     position: 'absolute',
     left: 46,
+  },
+  placeholder: {
+    color: theme.text.colors.faded,
   },
 }));

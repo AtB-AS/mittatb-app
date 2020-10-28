@@ -1,15 +1,15 @@
-import React, {forwardRef, useCallback, useRef, useState} from 'react';
-import {ActivityIndicator, Text, View} from 'react-native';
+import React, {forwardRef, useRef, useState} from 'react';
+import {ActivityIndicator, View} from 'react-native';
 import {Portal} from 'react-native-portalize';
 import {Modalize} from 'react-native-modalize';
 import analytics from '@react-native-firebase/analytics';
 import {enrollIntoBetaGroups} from '../../../api/enrollment';
-import {useRemoteConfig} from '../../../RemoteConfigContext';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Button from '../../../components/button';
 import {Confirm} from '../../../assets/svg/icons/actions';
 import {StyleSheet} from '../../../theme';
 import Input from '../../../components/input';
+import Text from '../../../components/text';
 import MessageBox from '../../../message-box';
 import composeRefs from '@seznam/compose-react-refs';
 
@@ -101,6 +101,7 @@ export default forwardRef<Modalize, Props>(function InviteModal(
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
+    backgroundColor: theme.background.level3,
     paddingVertical: theme.spacings.large,
     paddingHorizontal: theme.spacings.medium,
   },

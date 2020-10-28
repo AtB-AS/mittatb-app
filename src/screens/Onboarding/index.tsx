@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Linking, Text, TouchableOpacity, View} from 'react-native';
+import {Linking, TouchableOpacity, View} from 'react-native';
 import {PRIVACY_POLICY_URL} from '@env';
 import {useAppState} from '../../AppContext';
 import {
@@ -17,6 +17,8 @@ import {
 import StepOuterContainer from './components/StepContainer';
 import Illustration from './components/Illustration';
 import NavigationControls from './components/NavigationControls';
+import Text from '../../components/text';
+
 type StepProps = {
   navigation: StackNavigationProp<OnboardingStackParams>;
 };
@@ -155,10 +157,11 @@ const StepThree: React.FC<StepProps> = () => {
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   textContainer: {
     padding: theme.spacings.xLarge,
-    backgroundColor: 'rgba(235,236,237,0.85)',
+    backgroundColor:
+      themeName === 'light' ? 'rgba(235,236,237,0.85)' : 'rgba(22,23,24,0.85)',
   },
   title: {
     fontWeight: 'bold',
@@ -166,7 +169,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   text: {
     fontSize: theme.text.sizes.body,
     color: theme.text.colors.primary,
-    marginTop: 12,
+    marginTop: theme.spacings.medium,
   },
   privacyPolicy: {
     textAlign: 'center',

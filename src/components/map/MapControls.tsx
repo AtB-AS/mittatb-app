@@ -4,6 +4,7 @@ import colors from '../../theme/colors';
 import {Add, Remove} from '../../assets/svg/icons/actions';
 import {StyleSheet} from '../../theme';
 import shadows from './shadows';
+import ThemeIcon from '../theme-icon';
 
 export type Props = {
   zoomIn(): void;
@@ -11,6 +12,7 @@ export type Props = {
 };
 
 const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
+  const styles = useStyles();
   return (
     <View>
       <View style={styles.zoomContainer}>
@@ -20,7 +22,7 @@ const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
           accessibilityRole="button"
         >
           <View style={styles.zoomInButton}>
-            <Add />
+            <ThemeIcon svg={Add} />
           </View>
         </TouchableOpacity>
         <TouchableOpacity
@@ -29,7 +31,7 @@ const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
           accessibilityRole="button"
         >
           <View style={styles.zoomOutButton}>
-            <Remove />
+            <ThemeIcon svg={Remove} />
           </View>
         </TouchableOpacity>
       </View>
@@ -37,10 +39,10 @@ const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   zoomContainer: {
-    backgroundColor: 'white',
-    borderRadius: 5,
+    backgroundColor: theme.background.level0,
+    borderRadius: theme.border.borderRadius.small,
     ...shadows,
   },
   zoomInButton: {
@@ -52,10 +54,10 @@ const styles = StyleSheet.create({
   zoomOutButton: {
     width: 36,
     height: 36,
-    borderTopColor: colors.general.gray200,
+    borderTopColor: theme.border.primary,
     borderTopWidth: 0.5,
     justifyContent: 'center',
     alignItems: 'center',
   },
-});
+}));
 export default MapControls;

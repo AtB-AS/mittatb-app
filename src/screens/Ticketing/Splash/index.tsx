@@ -1,9 +1,8 @@
-import React, {useCallback, useRef} from 'react';
-import {Text, View, useWindowDimensions, Linking, Platform} from 'react-native';
+import React, {useRef} from 'react';
+import {View, useWindowDimensions, Linking, Platform} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../../ScreenHeader';
 import useChatIcon from '../../../chat/use-chat-icon';
-import colors from '../../../theme/colors';
 import {ShinyTicketBanner} from '../../../assets/svg/illustrations';
 import {StyleSheet, useStyle} from '../../../theme';
 import LogoOutline from '../../../ScreenHeader/LogoOutline';
@@ -11,6 +10,8 @@ import {useNavigateHome} from '../../../utils/navigation';
 import InviteModal from './InviteModal';
 import {Modalize} from 'react-native-modalize';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
+import Text from '../../../components/text';
+import ThemeIcon from '../../../components/theme-icon';
 import Button from '../../../components/button';
 
 function openOtherTicketingApp() {
@@ -41,7 +42,7 @@ export default function Splash() {
         title="Billetter"
         rightButton={chatIcon}
         leftButton={{
-          icon: <LogoOutline />,
+          icon: <ThemeIcon svg={LogoOutline} />,
           onPress: navigateHome,
           accessibilityLabel: 'Gå til startskjerm',
         }}
@@ -81,7 +82,7 @@ export default function Splash() {
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1, backgroundColor: colors.secondary.cyan},
+  container: {flex: 1, backgroundColor: theme.background.accent},
   textContainer: {
     paddingHorizontal: theme.spacings.large,
     paddingVertical: theme.spacings.xLarge,
@@ -90,7 +91,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   text: {
     fontSize: theme.text.sizes.body,
-    lineHeight: 20,
+    lineHeight: theme.text.lineHeight.body,
     textAlign: 'center',
     marginBottom: theme.spacings.large,
   },
@@ -105,6 +106,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     bottom: theme.spacings.medium,
     width: '100%',
   },
-  button: {backgroundColor: colors.secondary.blue},
-  buttonText: {color: colors.general.white},
+  button: {backgroundColor: theme.button.secondary.bg},
+  buttonText: {color: theme.button.secondary.color},
 }));

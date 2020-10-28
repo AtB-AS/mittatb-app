@@ -1,6 +1,6 @@
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
-import {Text, TextInput, View, Keyboard} from 'react-native';
+import {TextInput, View, Keyboard} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Header from '../ScreenHeader';
 import Input from '../components/input';
@@ -13,7 +13,6 @@ import {useGeolocationState} from '../GeolocationContext';
 import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
 import {StyleSheet} from '../theme';
-import colors from '../theme/colors';
 import FavoriteChips, {ChipTypeGroup} from '../favorite-chips';
 import LocationResults from './LocationResults';
 import useDebounce from './useDebounce';
@@ -26,7 +25,9 @@ import MessageBox from '../message-box';
 import {ErrorType} from '../api/utils';
 import {useFavorites} from '../favorites';
 import {LocationSearchResult} from './types';
-import ScreenreaderAnnouncement from '../components/screen-reader-announcement';
+import ThemeIcon from '../components/theme-icon';
+import Text from '../components/text';
+import ScreenReaderAnnouncement from '../components/screen-reader-announcement';
 
 export type Props = {
   navigation: LocationSearchNavigationProp;
@@ -148,12 +149,12 @@ const LocationSearch: React.FC<Props> = ({
               accessible: true,
               accessibilityRole: 'button',
               accessibilityLabel: 'Gå tilbake',
-              icon: <Close />,
+              icon: <ThemeIcon svg={Close} />,
             }}
             title="Søk"
           />
         </View>
-        <ScreenreaderAnnouncement message={errorMessage} />
+        <ScreenReaderAnnouncement message={errorMessage} />
 
         <View style={[{marginTop: 12}, styles.contentBlock]}>
           <Input
@@ -290,13 +291,13 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   chipBox: {
-    marginBottom: 12,
+    marginBottom: theme.spacings.medium,
   },
   label: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: theme.text.sizes.lead,
+    lineHeight: theme.text.lineHeight.body,
     position: 'absolute',
-    left: 12,
+    left: theme.spacings.medium,
   },
   placeholder: {
     color: theme.text.colors.faded,
@@ -305,17 +306,17 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: '100%',
     height: 46,
     flexDirection: 'column',
-    marginBottom: 24,
+    marginBottom: theme.spacings.xLarge,
     justifyContent: 'center',
   },
   input: {
     flex: 1,
-    fontSize: 16,
+    fontSize: theme.text.sizes.body,
     paddingLeft: 60,
     backgroundColor: theme.background.level1,
     borderWidth: 1,
-    borderColor: colors.general.gray,
-    borderRadius: 4,
+    borderColor: theme.border.primary,
+    borderRadius: theme.border.borderRadius.small,
     color: theme.text.colors.primary,
   },
   searchIcon: {

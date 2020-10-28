@@ -4,13 +4,13 @@ import {
   TextStyle,
   ImageStyle,
 } from 'react-native';
-import {Theme} from './colors';
+import {Mode as ThemeMode, Theme} from './colors';
 import {useTheme} from './ThemeContext';
 
 export type NamedStyles<T> = {
   [P in keyof T]: ViewStyle | TextStyle | ImageStyle;
 };
-export type ThemedStyles<T> = (theme: Theme) => T;
+export type ThemedStyles<T> = (theme: Theme, themeName: ThemeMode) => T;
 
 type StyleSheetType = typeof StyleSheetNative;
 interface StyleSheet extends StyleSheetType {
@@ -23,11 +23,11 @@ interface StyleSheet extends StyleSheetType {
 export function useStyle<T extends NamedStyles<T>>(
   style: ThemedStyles<T> | T,
 ): T {
-  const {theme} = useTheme();
+  const {theme, themeName} = useTheme();
   if (!isThemedStyles<T>(style)) {
     return style;
   }
-  return style(theme);
+  return style(theme, themeName);
 }
 
 function isThemedStyles<T>(style: any): style is ThemedStyles<T> {
@@ -46,8 +46,8 @@ const StyleSheetImpl: StyleSheet = {
   createTheme<T>(
     input: ThemedStyles<NamedStyles<T>>,
   ): ThemedStyles<NamedStyles<T>> {
-    return (theme: Theme) =>
-      StyleSheetNative.create<NamedStyles<T>>(input(theme));
+    return (theme: Theme, themeName: ThemeMode) =>
+      StyleSheetNative.create<NamedStyles<T>>(input(theme, themeName));
   },
 };
 

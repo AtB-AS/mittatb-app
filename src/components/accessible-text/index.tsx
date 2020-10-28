@@ -1,5 +1,6 @@
 import React from 'react';
-import {Text, TextProps} from 'react-native';
+import {TextProps} from 'react-native';
+import Text from '../text';
 
 type LabelProps = TextProps & {
   prefix?: string;

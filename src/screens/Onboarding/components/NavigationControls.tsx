@@ -5,6 +5,7 @@ import {TouchableOpacity} from 'react-native';
 import {ArrowRight} from '../../../assets/svg/icons/navigation';
 import {StyleSheet} from '../../../theme';
 import colors from '../../../theme/colors';
+import ThemeIcon from '../../../components/theme-icon';
 
 type NavigateButtonProps = {
   onNavigate(): void;
@@ -35,7 +36,7 @@ const NavigationControls: React.FC<NavigateButtonProps> = ({
       </View>
       <TouchableOpacity style={styles.button} onPress={onNavigate}>
         <Text style={styles.buttonText}>{title}</Text>
-        {arrow && <ArrowRight style={styles.buttonIcon} />}
+        {arrow && <ThemeIcon svg={ArrowRight} style={styles.buttonIcon} />}
       </TouchableOpacity>
       {children}
     </View>
@@ -57,17 +58,17 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacings.medium,
   },
   button: {
-    backgroundColor: colors.secondary.cyan,
+    backgroundColor: theme.button.primary.bg,
     width: '100%',
     height: 44,
-    borderRadius: 8,
+    borderRadius: theme.border.borderRadius.regular,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonText: {
     fontSize: theme.text.sizes.body,
     fontWeight: '600',
-    color: theme.text.colors.primary,
+    color: theme.button.primary.color,
   },
   buttonIcon: {
     position: 'absolute',
