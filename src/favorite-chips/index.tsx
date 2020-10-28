@@ -21,7 +21,6 @@ import colors from '../theme/colors';
 import {StyleSheet} from '../theme';
 import ThemeIcon from '../components/theme-icon';
 import {screenReaderPause} from '../components/accessible-text';
-import Button from '../components/button';
 
 type Props = {
   onSelectLocation: (location: LocationWithMetadata) => void;
