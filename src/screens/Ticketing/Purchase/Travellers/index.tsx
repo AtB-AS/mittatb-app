@@ -13,7 +13,9 @@ import Header from '../../../../ScreenHeader';
 import {Add, Close, Remove} from '../../../../assets/svg/icons/actions';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MessageBox from '../../../../message-box';
-import {StyleSheet} from '../../../../theme';
+import {StyleSheet, useTheme} from '../../../../theme';
+import ThemeText from '../../../../components/text';
+import ThemeIcon from '../../../../components/theme-icon';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'Travellers'>;
@@ -103,8 +105,9 @@ const offerReducer: OfferReducer = (prevState, action) => {
   }
 };
 
-const OfferRoot: React.FC<Props> = ({navigation}) => {
+const Travellers: React.FC<Props> = ({navigation}) => {
   const styles = useStyles();
+  const {theme} = useTheme();
   const [state, dispatch] = useReducer(offerReducer, {});
 
   const offerGroups = Object.entries(state);
@@ -130,39 +133,38 @@ const OfferRoot: React.FC<Props> = ({navigation}) => {
         }}
       />
       <MessageBox type="info" title="Beta-begrensning">
-        <Text>
+        <ThemeText type="label">
           Det er foreløpig kun mulig å kjøpe enkeltbillett voksen for buss og
           trikk. Bruk{' '}
           <Text style={{textDecorationLine: 'underline'}}>AtB Mobillett</Text>{' '}
           for å kjøpe andre billetter.
-        </Text>
+        </ThemeText>
       </MessageBox>
 
       <View
         style={{
-          backgroundColor: 'white',
+          backgroundColor: theme.background.level0,
           borderTopEndRadius: 8,
           borderTopLeftRadius: 8,
           borderBottomWidth: 1,
-          borderBottomColor: '#F5F5F6',
+          borderBottomColor: theme.background.level1,
           padding: 12,
           marginTop: 8,
         }}
       >
-        <Text
+        <ThemeText
           style={{
-            color: '#37424A',
             fontSize: 14,
             lineHeight: 20,
             fontWeight: '400',
           }}
         >
           Enkeltbillett, Sone A - Stor-Trondheim
-        </Text>
+        </ThemeText>
       </View>
       <View
         style={{
-          backgroundColor: 'white',
+          backgroundColor: theme.background.level0,
           borderBottomEndRadius: 8,
           borderBottomLeftRadius: 8,
           padding: 12,
@@ -172,7 +174,7 @@ const OfferRoot: React.FC<Props> = ({navigation}) => {
         }}
       >
         <View style={{flex: 2, flexDirection: 'row', alignItems: 'center'}}>
-          <Text
+          <ThemeText
             style={{
               fontSize: 16,
               lineHeight: 20,
@@ -180,7 +182,7 @@ const OfferRoot: React.FC<Props> = ({navigation}) => {
             }}
           >
             {count} voksen
-          </Text>
+          </ThemeText>
         </View>
 
         <View
@@ -191,7 +193,7 @@ const OfferRoot: React.FC<Props> = ({navigation}) => {
             width: 100,
           }}
         >
-          <Text
+          <ThemeText
             style={{
               fontSize: 14,
               lineHeight: 20,
@@ -199,18 +201,18 @@ const OfferRoot: React.FC<Props> = ({navigation}) => {
             }}
           >
             40,-
-          </Text>
+          </ThemeText>
           <TouchableOpacity onPress={remove}>
-            <Remove />
+            <ThemeIcon svg={Remove} />
           </TouchableOpacity>
           <TouchableOpacity onPress={add}>
-            <Add />
+            <ThemeIcon svg={Add} />
           </TouchableOpacity>
         </View>
       </View>
       <View style={styles.textContainer}>
-        <Text style={styles.textWithPadding}>Total</Text>
-        <Text style={styles.textWithPadding}>{total},00 kr</Text>
+        <ThemeText style={styles.textWithPadding}>Total</ThemeText>
+        <ThemeText style={styles.textWithPadding}>{total},00 kr</ThemeText>
       </View>
       <TouchableHighlight
         disabled={!hasPassengers}
@@ -233,7 +235,7 @@ const OfferRoot: React.FC<Props> = ({navigation}) => {
             {opacity: hasPassengers ? 1 : 0.2},
           ]}
         >
-          <Text style={styles.buttonText}>Velg betalingsmiddel</Text>
+          <ThemeText style={styles.buttonText}>Velg betalingsmiddel</ThemeText>
           <ArrowRight fill="white" width={14} height={14} />
         </View>
       </TouchableHighlight>
@@ -242,7 +244,7 @@ const OfferRoot: React.FC<Props> = ({navigation}) => {
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1, padding: 12, backgroundColor: '#E5E5E5'},
+  container: {flex: 1, padding: 12, backgroundColor: theme.background.level2},
   button: {padding: 12, backgroundColor: 'black'},
   buttonContentContainer: {
     flexDirection: 'row',
@@ -260,4 +262,4 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   textWithPadding: {fontSize: 16, paddingVertical: 24},
 }));
 
-export default OfferRoot;
+export default Travellers;

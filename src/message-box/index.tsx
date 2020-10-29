@@ -45,7 +45,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({
         {iconElement != null && (
           <View style={styles.iconContainer}>{iconElement}</View>
         )}
-        {title && <Text style={styles.title}>{title}</Text>}
+        {title && <ThemeText style={styles.title}>{title}</ThemeText>}
       </View>
       <View>{child}</View>
     </View>
