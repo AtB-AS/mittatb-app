@@ -225,7 +225,7 @@ const ShowMoreButton: React.FC<ShowMoreButtonProps> = ({onPress}) => {
       hitSlop={insets.symmetric(8, 12)}
     >
       <View style={style.showMoreButton}>
-        <ThemeText style={style.text}>Vis flere avganger</ThemeText>
+        <ThemeText type="body">Vis flere avganger</ThemeText>
         <ThemeIcon svg={Expand} />
       </View>
     </TouchableOpacity>
@@ -237,9 +237,6 @@ const useShowMoreButtonStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  text: {
-    fontSize: theme.text.sizes.body,
   },
 }));
 
@@ -296,7 +293,7 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
             circleStyle={{margin: 0}}
           />
           <View style={styles.textWrapper}>
-            <ThemeText style={styles.textContent} numberOfLines={1}>
+            <ThemeText type="body" numberOfLines={1}>
               {publicCode && (
                 <Text style={{fontWeight: 'bold'}}>{publicCode} </Text>
               )}
@@ -305,7 +302,7 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
           </View>
           <SituationWarningIcon situations={departure.situations} />
 
-          <AccessibleText prefix="Avgang" style={styles.time}>
+          <AccessibleText type="body" prefix="Avgang" style={styles.time}>
             {(!departure.realtime ? missingRealtimePrefix : '') +
               formatToClockOrRelativeMinutes(departure.expectedDepartureTime)}
           </AccessibleText>
@@ -345,22 +342,17 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
   platformHeader: {
     padding: theme.spacings.medium,
     color: theme.text.colors.faded,
-    fontSize: theme.text.sizes.label,
     borderBottomColor: theme.background.level1,
     borderBottomWidth: 1,
   },
   time: {
     width: 78,
     textAlign: 'right',
-    fontSize: theme.text.sizes.body,
     color: theme.text.colors.primary,
     fontWeight: 'bold',
     paddingVertical: theme.spacings.xSmall,
     marginRight: theme.spacings.small,
     fontVariant: ['tabular-nums'],
-  },
-  textContent: {
-    fontSize: theme.text.sizes.body,
   },
   textWrapper: {
     flex: 1,
@@ -378,8 +370,6 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
     borderBottomWidth: 1,
   },
   resultHeaderText: {
-    fontSize: theme.text.sizes.body,
-    lineHeight: theme.text.lineHeight.body,
     fontWeight: 'bold',
     color: theme.text.colors.primary,
   },

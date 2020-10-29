@@ -1,6 +1,6 @@
 import React, {ComponentProps} from 'react';
-import {Text} from 'react-native';
 import {Warning} from '../assets/svg/situations';
+import ThemeText from '../components/text';
 import MessageBox, {MessageBoxProps} from '../message-box';
 import {Situation} from '../sdk';
 
@@ -24,7 +24,7 @@ export default function SituationMessages({
   return (
     <MessageBox type="warning" icon={icon} containerStyle={containerStyle}>
       {Object.entries(uniqueSituations).map(([id, situation]) => (
-        <Text key={id}>{situation}</Text>
+        <ThemeText key={id}>{situation}</ThemeText>
       ))}
     </MessageBox>
   );

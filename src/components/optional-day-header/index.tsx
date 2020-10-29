@@ -1,9 +1,9 @@
 import {parseISO} from 'date-fns';
 import React from 'react';
-import {Text} from 'react-native';
 import {EstimatedCall} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {formatToSimpleDate, isSameDay, daysBetween} from '../../utils/date';
+import ThemeText from '../text';
 
 type OptionalNextDayLabelProps = {
   departureTime: string;
@@ -24,12 +24,12 @@ export default function OptionalNextDayLabel({
 
   if ((isFirst && !allSameDay) || !isSameDay(prevDate, departureDate)) {
     return (
-      <Text style={style.title}>
+      <ThemeText type="lead" style={style.title}>
         {getHumanizedDepartureDatePrefixed(
           departureDate,
           formatToSimpleDate(departureDate),
         )}
-      </Text>
+      </ThemeText>
     );
   }
 
@@ -37,7 +37,6 @@ export default function OptionalNextDayLabel({
 }
 const useDayTextStyle = StyleSheet.createThemeHook((theme) => ({
   title: {
-    fontSize: theme.text.sizes.lead,
     padding: theme.spacings.medium,
     color: theme.text.colors.faded,
   },

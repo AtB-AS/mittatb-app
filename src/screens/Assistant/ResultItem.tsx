@@ -132,34 +132,13 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.background.level0,
     borderRadius: theme.border.borderRadius.regular,
   },
-  stopName: {
-    fontSize: theme.text.sizes.body,
-    color: theme.text.colors.primary,
-    flexShrink: 1,
-  },
-  lineContainer: {
-    flexShrink: 1,
-    flexWrap: 'wrap',
-  },
   time: {
     fontSize: 32,
     color: theme.text.colors.primary,
     marginVertical: 8,
   },
-  lineName: {
-    fontSize: theme.text.sizes.body,
-    fontWeight: '600',
-    color: theme.text.colors.primary,
-    textAlign: 'center',
-    marginLeft: 8,
-  },
   detailsContainer: {
     flexDirection: 'column',
-  },
-  transferText: {fontSize: theme.text.sizes.body},
-  detailsText: {
-    fontSize: theme.text.sizes.label,
-    textDecorationLine: 'underline',
   },
   resultHeader: {
     flexDirection: 'row',
@@ -213,13 +192,21 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 
   return (
     <View style={styles.legContainer}>
-      <ThemeText style={[styles.textDeprioritized, styles.time]}>
+      <ThemeText
+        type="label"
+        color="faded"
+        style={[styles.textDeprioritized, styles.time]}
+      >
         {formatToClockOrRelativeMinutes(leg.expectedStartTime)}
       </ThemeText>
       <View style={styles.iconContainer}>
         <ThemeIcon svg={WalkingPerson} opacity={0.6} />
       </View>
-      <ThemeText style={[styles.textContent, styles.textDeprioritized]}>
+      <ThemeText
+        type="lead"
+        color="faded"
+        style={[styles.textContent, styles.textDeprioritized]}
+      >
         {text}
       </ThemeText>
     </View>
@@ -262,12 +249,9 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexWrap: 'wrap',
   },
-  text: {
-    fontSize: theme.text.sizes.body,
-  },
   textDeprioritized: {
+    ...theme.text.lead,
     fontWeight: 'normal',
-    fontSize: theme.text.sizes.lead,
     color: theme.text.colors.faded,
   },
   textBold: {
@@ -282,13 +266,13 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
   const styles = useLegStyles();
   return (
     <View style={styles.legContainer}>
-      <ThemeText style={[styles.text, styles.time]}>
+      <ThemeText type="body" style={styles.time}>
         {formatToClockOrRelativeMinutes(leg.expectedStartTime)}
       </ThemeText>
       <View style={styles.iconContainer}>
         <TransportationIcon mode={leg.mode} publicCode={leg.line?.publicCode} />
       </View>
-      <ThemeText style={[styles.textContent, styles.text]}>
+      <ThemeText type="body" style={styles.textContent}>
         <LineDisplayName leg={leg} />
       </ThemeText>
     </View>

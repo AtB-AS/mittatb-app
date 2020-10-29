@@ -65,10 +65,10 @@ export default forwardRef<Modalize, Props>(function InviteModal(
             <ActivityIndicator style={styles.loading} />
           ) : (
             <>
-              <ThemeText style={styles.title}>
+              <ThemeText type="paragraphHeadline" style={styles.title}>
                 Registrer deg som testpilot for billettkjøp
               </ThemeText>
-              <ThemeText style={styles.text}>
+              <ThemeText type="body" style={styles.text}>
                 Send oss invitasjonskoden din og bli først ute med å teste
                 billettkjøp direkte fra reiseappen.
               </ThemeText>
@@ -106,13 +106,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.medium,
   },
   title: {
-    fontSize: theme.text.sizes.body,
-    fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: theme.spacings.medium,
   },
   text: {
-    fontSize: theme.text.sizes.body,
     marginBottom: theme.spacings.medium,
   },
   messageBox: {

@@ -147,7 +147,7 @@ const StepThree: React.FC<StepProps> = () => {
               Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
             }
           >
-            <ThemeText style={[styles.text, styles.privacyPolicy]}>
+            <ThemeText type="body" style={[styles.text, styles.privacyPolicy]}>
               Les vår personvernerklæring
             </ThemeText>
           </TouchableOpacity>
@@ -167,8 +167,6 @@ const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
     fontWeight: 'bold',
   },
   text: {
-    fontSize: theme.text.sizes.body,
-    color: theme.text.colors.primary,
     marginTop: theme.spacings.medium,
   },
   privacyPolicy: {

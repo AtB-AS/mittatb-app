@@ -2,12 +2,7 @@ import * as React from 'react';
 import {StyleSheet} from '../../theme';
 import {Portal} from 'react-native-portalize';
 import {Modalize} from 'react-native-modalize';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  AccessibilityProperties,
-} from 'react-native';
+import {View, TouchableOpacity, AccessibilityProperties} from 'react-native';
 import {useState, useRef, useEffect} from 'react';
 import DatePicker from 'react-native-date-picker';
 import Button from '../../components/button';
@@ -19,6 +14,7 @@ import subDays from 'date-fns/subDays';
 import insets from '../../utils/insets';
 import {screenReaderPause} from '../../components/accessible-text';
 import ThemeIcon from '../../components/theme-icon';
+import ThemeText from '../../components/text';
 
 type DateTypesWithoutNow = 'departure' | 'arrival';
 type DateTypes = DateTypesWithoutNow | 'now';
@@ -86,7 +82,7 @@ const DateTypeButton: React.FC<
         hitSlop={insets.symmetric(12, 8)}
         {...props}
       >
-        <Text style={style.dateTypeButtonText}>{dateTypeToText(type)}</Text>
+        <ThemeText type="paragraphHeadline">{dateTypeToText(type)}</ThemeText>
       </TouchableOpacity>
     </View>
   );
@@ -177,7 +173,7 @@ const DateInput: React.FC<DateInputProps> = ({
           <View style={style.container}>
             <View style={style.header}>
               <View style={style.headerTextContainer}>
-                <Text style={style.headerText}>Velg tidspunkt</Text>
+                <ThemeText type="paragraphHeadline">Velg tidspunkt</ThemeText>
               </View>
               <TouchableOpacity onPress={onClose}>
                 <ThemeIcon svg={Close} />
@@ -256,16 +252,9 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginLeft: 20,
     alignItems: 'center',
   },
-  headerText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
   dateTypeButton: {
     paddingBottom: 4,
     marginHorizontal: 6,
-  },
-  dateTypeButtonText: {
-    fontWeight: '600',
   },
   dateTypeButtonSelected: {
     borderBottomColor: theme.background.accent,

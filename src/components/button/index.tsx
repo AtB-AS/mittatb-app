@@ -1,7 +1,6 @@
 import {
   TouchableOpacityProperties,
   View,
-  Text,
   StyleProp,
   ViewStyle,
   TouchableOpacity,
@@ -9,6 +8,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import {StyleSheet, Theme, useTheme} from '../../theme';
+import ThemeText from '../text';
 
 type ButtonProps = {
   onPress(): void;
@@ -55,7 +55,9 @@ const Button: React.FC<ButtonProps> = ({
           </View>
         )}
         <View style={[css.textContainer, textContainerStyle]}>
-          <Text style={[styleText, textStyle]}>{text}</Text>
+          <ThemeText type="paragraphHeadline" style={[styleText, textStyle]}>
+            {text}
+          </ThemeText>
         </View>
       </TouchableOpacity>
     </View>
@@ -92,9 +94,6 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
   },
   text: {
-    fontSize: theme.text.sizes.body,
-    lineHeight: theme.text.lineHeight.body,
-    fontWeight: '600',
     color: theme.text.colors.primary,
   },
   textDestructive: {

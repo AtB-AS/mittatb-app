@@ -1,5 +1,5 @@
 import React, {useRef, useEffect} from 'react';
-import {Text, Animated, View} from 'react-native';
+import {Animated, View} from 'react-native';
 import {
   SelectionPinConfirm,
   SelectionPinUnknown,

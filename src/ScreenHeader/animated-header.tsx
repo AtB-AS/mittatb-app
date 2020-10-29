@@ -1,9 +1,8 @@
 import React, {useEffect, useRef} from 'react';
-import {Animated, Text, View, ViewProps, TouchableOpacity} from 'react-native';
+import {Animated, View, ViewProps} from 'react-native';
+import ThemeText from '../components/text';
 import {StyleSheet} from '../theme';
-import insets from '../utils/insets';
 import HeaderButton, {IconButton} from './HeaderButton';
-import LogoOutline from './LogoOutline';
 type ScreenHeaderProps = ViewProps & {
   leftButton?: IconButton;
   rightButton?: IconButton;
@@ -71,7 +70,7 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
             {transform: [{translateY: titleOffset}]},
           ]}
         >
-          <Text style={style.text}>{title}</Text>
+          <ThemeText type="paragraphHeadline">{title}</ThemeText>
         </Animated.View>
         {altTitle}
       </View>
@@ -112,10 +111,5 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-  },
-  text: {
-    color: theme.text.colors.primary,
-    fontSize: 16,
-    fontWeight: 'bold',
   },
 }));

@@ -4,7 +4,6 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {
   AccessibilityProps,
   StyleProp,
-  Text,
   TouchableOpacity,
   ViewStyle,
 } from 'react-native';
@@ -21,6 +20,7 @@ import colors from '../theme/colors';
 import {StyleSheet} from '../theme';
 import ThemeIcon from '../components/theme-icon';
 import {screenReaderPause} from '../components/accessible-text';
+import ThemeText from '../components/text';
 
 type Props = {
   onSelectLocation: (location: LocationWithMetadata) => void;
@@ -148,7 +148,8 @@ const FavoriteChip: React.FC<ChipProps> = ({
       {...accessibilityProps}
     >
       {icon}
-      <Text
+      <ThemeText
+        type="body"
         style={[
           chipStyles.text,
           mode == 'light' && chipStyles.text__light,
@@ -156,7 +157,7 @@ const FavoriteChip: React.FC<ChipProps> = ({
         ]}
       >
         {text}
-      </Text>
+      </ThemeText>
     </TouchableOpacity>
   );
 };
@@ -177,7 +178,6 @@ const useChipStyles = StyleSheet.createThemeHook((theme, themeName) => ({
     marginLeft: theme.spacings.xSmall,
     marginRight: theme.spacings.xSmall,
     color: colors.general.white,
-    fontSize: theme.text.sizes.body,
     fontWeight: 'bold',
     letterSpacing: -0.31,
   },

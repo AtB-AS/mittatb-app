@@ -147,13 +147,11 @@ const TransportDetail: React.FC<LegDetailProps> = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   textStyle: {
-    fontSize: theme.text.sizes.lead,
-    lineHeight: theme.text.lineHeight.body,
+    ...theme.text.lead,
   },
   lineName: {
     marginLeft: 120,
-    fontSize: theme.text.sizes.body,
-    fontWeight: '600',
+    ...theme.text.paragraphHeadline,
   },
   dashContainer: {
     marginLeft: 95,

@@ -1,6 +1,6 @@
 import React from 'react';
-import {Text} from 'react-native';
 import {MapPointPin} from '../assets/svg/icons/places';
+import ThemeText from '../components/text';
 import ThemeIcon from '../components/theme-icon';
 
 export type FavoriteIconProps = {
@@ -11,7 +11,7 @@ export function FavoriteIcon({favorite}: FavoriteIconProps) {
   if (!favorite || !favorite.emoji) {
     return <ThemeIcon svg={MapPointPin} />;
   }
-  return <Text>{favorite.emoji}</Text>;
+  return <ThemeText>{favorite.emoji}</ThemeText>;
 }
 
 export {

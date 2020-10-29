@@ -293,37 +293,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   chipBox: {
     marginBottom: theme.spacings.medium,
   },
-  label: {
-    fontSize: theme.text.sizes.lead,
-    lineHeight: theme.text.lineHeight.body,
-    position: 'absolute',
-    left: theme.spacings.medium,
-  },
-  placeholder: {
-    color: theme.text.colors.faded,
-  },
-  inputContainer: {
-    width: '100%',
-    height: 46,
-    flexDirection: 'column',
-    marginBottom: theme.spacings.xLarge,
-    justifyContent: 'center',
-  },
-  input: {
-    flex: 1,
-    fontSize: theme.text.sizes.body,
-    paddingLeft: 60,
-    backgroundColor: theme.background.level1,
-    borderWidth: 1,
-    borderColor: theme.border.primary,
-    borderRadius: theme.border.borderRadius.small,
-    color: theme.text.colors.primary,
-  },
-  searchIcon: {
-    position: 'absolute',
-    left: 14,
-    alignSelf: 'center',
-  },
 }));
 
 export default LocationSearch;
