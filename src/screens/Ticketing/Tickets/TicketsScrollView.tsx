@@ -6,7 +6,7 @@ import {StyleSheet, useTheme} from '../../../theme';
 import LinearGradient from 'react-native-linear-gradient';
 import Ticket from './Ticket';
 import hexToRgba from 'hex-to-rgba';
-import Text from '../../../components/text';
+import ThemeText from '../../../components/text';
 
 type Props = {
   tickets?: FareContract[];
@@ -42,7 +42,7 @@ const TicketsScrollView: React.FC<Props> = ({
             <Ticket key={fc.order_id} fareContract={fc} now={now} />
           ))
         ) : (
-          <Text style={styles.noTicketsText}>{noTicketsLabel}</Text>
+          <ThemeText style={styles.noTicketsText}>{noTicketsLabel}</ThemeText>
         )}
       </ScrollView>
       <LinearGradient
@@ -61,7 +61,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {flex: 1, marginBottom: theme.spacings.small},
   scrollView: {flex: 1, padding: theme.spacings.medium},
   noTicketsText: {
-    fontSize: theme.text.sizes.body,
     textAlign: 'center',
   },
   gradient: {

@@ -8,7 +8,7 @@ import colors from '../../../theme/colors';
 import Dash from 'react-native-dash';
 import {fromUnixTime} from 'date-fns';
 import nb from 'date-fns/locale/nb';
-import Text from '../../../components/text';
+import ThemeText from '../../../components/text';
 
 type Props = {
   fareContract: FareContract;
@@ -31,22 +31,22 @@ const Ticket: React.FC<Props> = ({fareContract: fc, now}) => {
               <View style={styles.iconContainer}>
                 <ValidTicket fill={colors.primary.green} />
               </View>
-              <Text style={styles.validityText}>
+              <ThemeText type="lead" color="faded">
                 Gyldig i{' '}
                 {secondsToDuration(validityLeftSeconds, undefined, {
                   delimiter: ' og ',
                 })}
-              </Text>
+              </ThemeText>
             </>
           ) : (
             <>
               <View style={styles.iconContainer}>
                 <InvalidTicket fill={colors.secondary.red} />
               </View>
-              <Text style={styles.validityText}>
+              <ThemeText type="lead" color="faded">
                 Kjøpt{' '}
                 {formatToLongDateTime(fromUnixTime(fc.usage_valid_from), nb)}
-              </Text>
+              </ThemeText>
             </>
           )}
         </View>
@@ -57,13 +57,17 @@ const Ticket: React.FC<Props> = ({fareContract: fc, now}) => {
           validTo={fc.usage_valid_to}
         />
         <View style={styles.ticketInfoContainer}>
-          <Text style={styles.travellersText}>
+          <ThemeText style={styles.travellersText}>
             {fc.user_profiles.length > 1
               ? `${fc.user_profiles.length} voksne`
               : `1 voksen`}
-          </Text>
-          <Text style={styles.extraText}>{fc.product_name}</Text>
-          <Text style={styles.extraText}>Sone A - Stor-Trondheim</Text>
+          </ThemeText>
+          <ThemeText type="lead" style={styles.extraText}>
+            {fc.product_name}
+          </ThemeText>
+          <ThemeText type="lead" style={styles.extraText}>
+            Sone A - Stor-Trondheim
+          </ThemeText>
         </View>
       </View>
     </TouchableOpacity>
@@ -119,12 +123,7 @@ const ValidityLine: React.FC<{
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   iconContainer: {marginRight: theme.spacings.medium},
-  validityText: {
-    fontSize: theme.text.sizes.lead,
-    color: theme.text.colors.faded,
-  },
   travellersText: {
-    fontSize: theme.text.sizes.body,
     paddingVertical: theme.spacings.xSmall,
   },
   ticketContainer: {
@@ -133,7 +132,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
   },
   extraText: {
-    fontSize: theme.text.sizes.lead,
     paddingVertical: theme.spacings.xSmall,
     color: theme.text.colors.faded,
   },

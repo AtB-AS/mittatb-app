@@ -153,13 +153,7 @@ const Travellers: React.FC<Props> = ({navigation}) => {
           marginTop: 8,
         }}
       >
-        <ThemeText
-          style={{
-            fontSize: 14,
-            lineHeight: 20,
-            fontWeight: '400',
-          }}
-        >
+        <ThemeText type="lead">
           Enkeltbillett, Sone A - Stor-Trondheim
         </ThemeText>
       </View>
@@ -175,15 +169,7 @@ const Travellers: React.FC<Props> = ({navigation}) => {
         }}
       >
         <View style={{flex: 2, flexDirection: 'row', alignItems: 'center'}}>
-          <ThemeText
-            style={{
-              fontSize: 16,
-              lineHeight: 20,
-              fontWeight: '600',
-            }}
-          >
-            {count} voksen
-          </ThemeText>
+          <ThemeText type="paragraphHeadline">{count} voksen</ThemeText>
         </View>
 
         <View
@@ -218,7 +204,7 @@ const Travellers: React.FC<Props> = ({navigation}) => {
         </View>
         <ThemeText style={styles.totalPrice}>{total} kr</ThemeText>
       </View>
-      <ThemeText type="body" style={styles.informationLink}>
+      <ThemeText type="body__link" style={styles.informationLink}>
         Informasjon og vilkår
       </ThemeText>
       <Button
@@ -273,14 +259,6 @@ const Travellers: React.FC<Props> = ({navigation}) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {flex: 1, padding: 12, backgroundColor: theme.background.level2},
-  button: {padding: 12, backgroundColor: 'black'},
-  buttonContentContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginRight: 3,
-  },
-  buttonText: {color: 'white', fontSize: 16},
   totalContainer: {
     flexDirection: 'row',
     alignItems: 'center',
