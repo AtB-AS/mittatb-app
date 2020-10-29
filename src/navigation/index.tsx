@@ -65,7 +65,7 @@ const NavigationRoot = () => {
       <Host>
         <NavigationContainer ref={ref} onStateChange={trackNavigation}>
           <Stack.Navigator mode={isLoading || !onboarded ? 'card' : 'modal'}>
-            {onboarded ? (
+            {!onboarded ? (
               <Stack.Screen
                 name="Onboarding"
                 component={Onboarding}
