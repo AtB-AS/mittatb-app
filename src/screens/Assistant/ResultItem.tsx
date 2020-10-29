@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, TouchableOpacity, AccessibilityProps} from 'react-native';
+import {View, TouchableOpacity, Text, AccessibilityProps} from 'react-native';
 import {Leg, TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {
@@ -323,9 +323,9 @@ function LineDisplayName({leg}: {leg: Leg}) {
     leg.fromEstimatedCall?.destinationDisplay?.frontText ?? leg.line?.name;
   return (
     <ThemeText>
-      <ThemeText style={{marginRight: 12, fontWeight: 'bold'}}>
+      <Text style={{marginRight: 12, fontWeight: 'bold'}}>
         {leg.line?.publicCode}
-      </ThemeText>{' '}
+      </Text>{' '}
       <ThemeText numberOfLines={1}>{name}</ThemeText>
     </ThemeText>
   );

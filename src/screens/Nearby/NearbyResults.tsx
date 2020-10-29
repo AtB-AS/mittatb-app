@@ -8,6 +8,7 @@ import {
   TextStyle,
   TouchableOpacity,
   View,
+  Text,
   ViewStyle,
 } from 'react-native';
 import {NearbyScreenNavigationProp} from '.';
@@ -297,9 +298,7 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
           <View style={styles.textWrapper}>
             <ThemeText style={styles.textContent} numberOfLines={1}>
               {publicCode && (
-                <ThemeText style={{fontWeight: 'bold'}}>
-                  {publicCode}{' '}
-                </ThemeText>
+                <Text style={{fontWeight: 'bold'}}>{publicCode} </Text>
               )}
               {name}
             </ThemeText>
