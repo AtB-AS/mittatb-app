@@ -210,9 +210,12 @@ const Travellers: React.FC<Props> = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.textContainer}>
-        <ThemeText style={styles.textWithPadding}>Total</ThemeText>
-        <ThemeText style={styles.textWithPadding}>{total},00 kr</ThemeText>
+      <View style={styles.totalContainer}>
+        <View style={{flexDirection: 'column'}}>
+          <ThemeText style={styles.textWithPadding}>Total</ThemeText>
+          <ThemeText style={styles.textWithPadding}>Inkl. 6% mva</ThemeText>
+        </View>
+        <ThemeText style={styles.totalPrice}>{total},00 kr</ThemeText>
       </View>
       <TouchableHighlight
         disabled={!hasPassengers}
@@ -253,13 +256,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginRight: 3,
   },
   buttonText: {color: 'white', fontSize: 16},
-  textContainer: {
+  totalContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginRight: 3,
   },
-  textWithPadding: {fontSize: 16, paddingVertical: 24},
+  totalPrice: {
+    fontSize: 32,
+  },
+  textWithPadding: {fontSize: theme.text.sizes.body, paddingVertical: 24},
 }));
 
 export default Travellers;
