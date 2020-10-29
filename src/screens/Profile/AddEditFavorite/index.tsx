@@ -184,7 +184,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
         <Button
           onPress={save}
-          IconComponent={editItem ? Confirm : Add}
+          leftIcon={editItem ? Confirm : Add}
           disabled={!hasSelectedValues}
           text="Lagre favorittsted"
         />
@@ -193,7 +193,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           <Button
             onPress={deleteItem}
             mode="destructive"
-            IconComponent={RemoveIconWhite}
+            leftIcon={RemoveIconWhite}
             text="Slett favorittsted"
           />
         )}
@@ -201,7 +201,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         <Button
           onPress={cancel}
           mode="secondary"
-          IconComponent={Close}
+          leftIcon={Close}
           text="Avbryt"
         />
       </View>

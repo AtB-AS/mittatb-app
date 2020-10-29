@@ -16,6 +16,8 @@ import MessageBox from '../../../../message-box';
 import {StyleSheet, useTheme} from '../../../../theme';
 import ThemeText from '../../../../components/text';
 import ThemeIcon from '../../../../components/theme-icon';
+import Button from '../../../../components/button';
+import {CreditCard, Vipps} from '../../../../assets/svg/icons/ticketing';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'Travellers'>;
@@ -140,7 +142,6 @@ const Travellers: React.FC<Props> = ({navigation}) => {
           for å kjøpe andre billetter.
         </ThemeText>
       </MessageBox>
-
       <View
         style={{
           backgroundColor: theme.background.level0,
@@ -212,12 +213,36 @@ const Travellers: React.FC<Props> = ({navigation}) => {
       </View>
       <View style={styles.totalContainer}>
         <View style={{flexDirection: 'column'}}>
-          <ThemeText style={styles.textWithPadding}>Total</ThemeText>
-          <ThemeText style={styles.textWithPadding}>Inkl. 6% mva</ThemeText>
+          <ThemeText type="body">Total</ThemeText>
+          <ThemeText type="body">Inkl. 6% mva</ThemeText>
         </View>
-        <ThemeText style={styles.totalPrice}>{total},00 kr</ThemeText>
+        <ThemeText style={styles.totalPrice}>{total} kr</ThemeText>
       </View>
-      <TouchableHighlight
+      <ThemeText type="body" style={styles.informationLink}>
+        Informasjon og vilkår
+      </ThemeText>
+      <Button
+        mode="primary"
+        text="Betal med vipps"
+        accessibilityLabel="Trykk for å betale billett med vipps"
+        rightIcon={() => <ThemeIcon svg={Vipps} />}
+        onPress={() => navigation.goBack()}
+      />
+      <Button
+        mode="primary"
+        text="Betal med bankkort"
+        accessibilityLabel="Trykk for å betale billett med bankkort"
+        rightIcon={() => <ThemeIcon svg={CreditCard} />}
+        onPress={() => navigation.goBack()}
+      />
+      <Button
+        mode="secondary"
+        text="Avbryt"
+        accessibilityLabel="Trykk for å avbryte billettkjøp"
+        leftIcon={() => <ThemeIcon svg={Close} />}
+        onPress={() => navigation.goBack()}
+      />
+      {/* <TouchableHighlight
         disabled={!hasPassengers}
         onPress={() =>
           hasPassengers &&
@@ -241,7 +266,7 @@ const Travellers: React.FC<Props> = ({navigation}) => {
           <ThemeText style={styles.buttonText}>Velg betalingsmiddel</ThemeText>
           <ArrowRight fill="white" width={14} height={14} />
         </View>
-      </TouchableHighlight>
+      </TouchableHighlight> */}
     </SafeAreaView>
   );
 };
@@ -260,12 +285,17 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginRight: 3,
+    padding: theme.spacings.medium,
   },
   totalPrice: {
     fontSize: 32,
+    lineHeight: 40,
   },
-  textWithPadding: {fontSize: theme.text.sizes.body, paddingVertical: 24},
+  informationLink: {
+    textAlign: 'center',
+    paddingHorizontal: theme.spacings.medium,
+    paddingVertical: theme.spacings.small,
+  },
 }));
 
 export default Travellers;
