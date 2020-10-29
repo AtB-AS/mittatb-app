@@ -130,7 +130,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   result: {
     padding: 12,
     backgroundColor: theme.background.level0,
-    borderRadius: theme.border.borderRadius.regular,
+    borderRadius: theme.border.radius.regular,
   },
   time: {
     fontSize: 32,

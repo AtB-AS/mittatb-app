@@ -145,8 +145,8 @@ const Travellers: React.FC<Props> = ({navigation}) => {
       <View
         style={{
           backgroundColor: theme.background.level0,
-          borderTopEndRadius: 8,
-          borderTopLeftRadius: 8,
+          borderTopEndRadius: theme.border.radius.regular,
+          borderTopLeftRadius: theme.border.radius.regular,
           borderBottomWidth: 1,
           borderBottomColor: theme.background.level1,
           padding: 12,
@@ -180,15 +180,7 @@ const Travellers: React.FC<Props> = ({navigation}) => {
             width: 100,
           }}
         >
-          <ThemeText
-            style={{
-              fontSize: 14,
-              lineHeight: 20,
-              fontWeight: '400',
-            }}
-          >
-            40,-
-          </ThemeText>
+          <ThemeText type="lead">40,-</ThemeText>
           <TouchableOpacity onPress={remove}>
             <ThemeIcon svg={Remove} />
           </TouchableOpacity>
@@ -204,30 +196,34 @@ const Travellers: React.FC<Props> = ({navigation}) => {
         </View>
         <ThemeText style={styles.totalPrice}>{total} kr</ThemeText>
       </View>
-      <ThemeText type="body__link" style={styles.informationLink}>
-        Informasjon og vilkår
-      </ThemeText>
-      <Button
-        mode="primary"
-        text="Betal med vipps"
-        accessibilityLabel="Trykk for å betale billett med vipps"
-        rightIcon={() => <ThemeIcon svg={Vipps} />}
-        onPress={() => navigation.goBack()}
-      />
-      <Button
-        mode="primary"
-        text="Betal med bankkort"
-        accessibilityLabel="Trykk for å betale billett med bankkort"
-        rightIcon={() => <ThemeIcon svg={CreditCard} />}
-        onPress={() => navigation.goBack()}
-      />
-      <Button
-        mode="secondary"
-        text="Avbryt"
-        accessibilityLabel="Trykk for å avbryte billettkjøp"
-        leftIcon={() => <ThemeIcon svg={Close} />}
-        onPress={() => navigation.goBack()}
-      />
+
+      <View style={styles.buttons}>
+        <ThemeText type="body__link" style={styles.informationLink}>
+          Informasjon og vilkår
+        </ThemeText>
+        <Button
+          mode="primary"
+          text="Betal med vipps"
+          accessibilityLabel="Trykk for å betale billett med vipps"
+          rightIcon={() => <ThemeIcon svg={Vipps} />}
+          onPress={() => navigation.goBack()}
+        />
+        <Button
+          mode="primary"
+          text="Betal med bankkort"
+          accessibilityLabel="Trykk for å betale billett med bankkort"
+          rightIcon={() => <ThemeIcon svg={CreditCard} />}
+          onPress={() => navigation.goBack()}
+        />
+        <Button
+          mode="secondary"
+          text="Avbryt"
+          accessibilityLabel="Trykk for å avbryte billettkjøp"
+          leftIcon={() => <ThemeIcon svg={Close} />}
+          onPress={() => navigation.goBack()}
+        />
+      </View>
+
       {/* <TouchableHighlight
         disabled={!hasPassengers}
         onPress={() =>
@@ -273,6 +269,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
     paddingHorizontal: theme.spacings.medium,
     paddingVertical: theme.spacings.small,
+  },
+  buttons: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    margin: theme.spacings.medium,
   },
 }));
 

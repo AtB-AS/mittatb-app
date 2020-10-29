@@ -62,7 +62,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.button.primary.bg,
     width: '100%',
     height: 44,
-    borderRadius: theme.border.borderRadius.regular,
+    borderRadius: theme.border.radius.regular,
     alignItems: 'center',
     justifyContent: 'center',
   },

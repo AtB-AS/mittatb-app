@@ -77,11 +77,11 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flexDirection: 'row',
     padding: theme.spacings.medium,
     alignItems: 'center',
-    borderRadius: theme.border.borderRadius.regular,
+    borderRadius: theme.border.radius.regular,
+    borderWidth: theme.border.width.medium,
     backgroundColor: theme.button.primary.bg,
     marginBottom: theme.spacings.small,
     borderColor: theme.button.primary.bg,
-    borderWidth: 2,
   },
   leftIcon: {
     position: 'absolute',

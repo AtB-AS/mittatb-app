@@ -128,7 +128,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   ticketContainer: {
     backgroundColor: theme.background.level0,
-    borderRadius: theme.border.borderRadius.regular,
+    borderRadius: theme.border.radius.regular,
     marginBottom: theme.spacings.medium,
   },
   extraText: {

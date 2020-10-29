@@ -57,8 +57,8 @@ export default MessageBox;
 const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     padding: 12,
-    borderRadius: theme.border.borderRadius.regular,
-    borderWidth: 1,
+    borderRadius: theme.border.radius.regular,
+    borderWidth: theme.border.width.slim,
   },
   iconContainer: {
     marginBottom: 8,

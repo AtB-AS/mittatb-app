@@ -413,9 +413,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     right: 23,
     backgroundColor: theme.background.level0,
     borderColor: theme.background.header,
+    borderWidth: theme.border.width.medium,
+    borderRadius: theme.border.radius.circle,
     padding: 3,
-    borderWidth: 2,
-    borderRadius: 20,
   },
   styleButton: {
     flexGrow: 1,

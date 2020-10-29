@@ -25,7 +25,7 @@ const BackArrow: React.FC<{onBack(): void}> = ({onBack}) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   backArrow: {
     backgroundColor: theme.button.primary2.bg,
-    borderRadius: theme.border.borderRadius.regular,
+    borderRadius: theme.border.radius.regular,
     justifyContent: 'center',
     alignItems: 'center',
     width: 36,

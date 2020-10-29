@@ -91,8 +91,13 @@ export const textTypes: {[key in TextNames]: TextStyle} = {
 };
 
 const borderRadius = {
+  circle: 20,
   regular: 8,
   small: 4,
+};
+const borderWidth = {
+  slim: 1,
+  medium: 2,
 };
 type Button = {
   bg: string;
@@ -128,7 +133,8 @@ export interface Theme {
     focus: string;
     info: string;
     warning: string;
-    borderRadius: typeof borderRadius;
+    radius: typeof borderRadius;
+    width: typeof borderWidth;
   };
   button: {
     primary: Button;
@@ -170,7 +176,8 @@ export const themes: Themes = {
       focus: colors.secondary.blue_500,
       info: colors.secondary.cyan_500,
       warning: colors.secondary.yellow_500,
-      borderRadius: borderRadius,
+      radius: borderRadius,
+      width: borderWidth,
     },
     button: {
       primary: {bg: colors.secondary.cyan_500, color: colors.general.black},
@@ -211,7 +218,8 @@ export const themes: Themes = {
       focus: colors.secondary.cyan_500,
       info: colors.secondary.cyan_800,
       warning: colors.primary.green_700,
-      borderRadius: borderRadius,
+      radius: borderRadius,
+      width: borderWidth,
     },
     button: {
       primary: {bg: colors.secondary.blue_500, color: colors.general.white},

@@ -79,7 +79,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   modalInput: {
     color: 'black',
     borderColor: 'black',
-    borderWidth: 1,
+    borderWidth: theme.border.width.slim,
     padding: 8,
   },
 }));
