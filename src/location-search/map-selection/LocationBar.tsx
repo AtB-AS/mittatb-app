@@ -8,7 +8,7 @@ import LocationIcon from '../../components/location-icon';
 import {StyleSheet} from '../../theme';
 import shadows from '../../components/map/shadows';
 import {ErrorType} from '../../api/utils';
-import Text from '../../components/text';
+import ThemeText from '../../components/text';
 
 type Props = {
   location?: Location;
@@ -79,8 +79,8 @@ const LocationText: React.FC<{
 
   return (
     <>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.subtitle}>{subtitle}</Text>
+      <ThemeText style={styles.title}>{title}</ThemeText>
+      <ThemeText style={styles.subtitle}>{subtitle}</ThemeText>
     </>
   );
 };

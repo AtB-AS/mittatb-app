@@ -19,7 +19,7 @@ module.exports = {
     'react-hooks/rules-of-hooks': 2, // early error
 
     // https://github.com/Intellicode/eslint-plugin-react-native
-    'react-native/no-raw-text': [2, {skip: 'ThemedText'}], // rather early error than JS bundle crash
+    'react-native/no-raw-text': [2, {skip: 'ThemeText'}], // rather early error than JS bundle crash
     'react-native/no-single-element-style-arrays': 1,
     'react-native/no-unused-styles': 1,
   },

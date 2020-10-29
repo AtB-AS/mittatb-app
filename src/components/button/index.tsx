@@ -8,7 +8,7 @@ import {
   TextStyle,
 } from 'react-native';
 import React from 'react';
-import {StyleSheet, Theme} from '../../theme';
+import {StyleSheet, Theme, useTheme} from '../../theme';
 
 type ButtonProps = {
   onPress(): void;
@@ -30,6 +30,7 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const css = useButtonStyle();
+  const {theme} = useTheme();
   const styleContainer = [
     css.button,
     mode === 'secondary' ? css.buttonSecondary : undefined,
@@ -39,6 +40,7 @@ const Button: React.FC<ButtonProps> = ({
     css.text,
     mode === 'destructive' ? css.textDestructive : undefined,
   ];
+
   return (
     <View style={disabled ? css.buttonDisabled : undefined}>
       <TouchableOpacity
@@ -49,7 +51,7 @@ const Button: React.FC<ButtonProps> = ({
       >
         {IconComponent && (
           <View style={css.icon}>
-            <IconComponent />
+            <IconComponent fill={theme.text.colors.primary} />
           </View>
         )}
         <View style={[css.textContainer, textContainerStyle]}>

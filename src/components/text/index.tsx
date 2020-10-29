@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text as RNText, TextProps} from 'react-native';
+import {Text, TextProps} from 'react-native';
 import {fontSizes} from '../../theme/colors';
 import {useTheme} from '../../theme';
 
@@ -7,7 +7,7 @@ type StyledTextProps = TextProps & {
   type?: keyof typeof fontSizes;
 };
 
-const Text: React.FC<StyledTextProps> = ({
+const ThemeText: React.FC<StyledTextProps> = ({
   type: fontType = 'body',
   style,
   children,
@@ -22,9 +22,9 @@ const Text: React.FC<StyledTextProps> = ({
   };
 
   return (
-    <RNText style={[typeStyle, style]} maxFontSizeMultiplier={2} {...props}>
+    <Text style={[typeStyle, style]} maxFontSizeMultiplier={2} {...props}>
       {children}
-    </RNText>
+    </Text>
   );
 };
-export default Text;
+export default ThemeText;

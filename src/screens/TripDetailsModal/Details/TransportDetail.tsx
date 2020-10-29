@@ -18,7 +18,7 @@ import transportationColor from '../../../utils/transportation-color';
 import SituationRow from '../SituationRow';
 import colors from '../../../theme/colors';
 import {useLayout} from '../../../utils/use-layout';
-import ThemedText from '../../../components/text';
+import ThemeText from '../../../components/text';
 import {StyleSheet} from '../../../theme';
 
 const TransportDetail: React.FC<LegDetailProps> = ({
@@ -93,7 +93,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
             onLayout={onFromLayout}
           />
         )}
-        <ThemedText style={styles.lineName}>{getLineName(leg)}</ThemedText>
+        <ThemeText style={styles.lineName}>{getLineName(leg)}</ThemeText>
 
         <SituationRow
           situations={leg.situations}

@@ -26,7 +26,7 @@ import {ErrorType} from '../api/utils';
 import {useFavorites} from '../favorites';
 import {LocationSearchResult} from './types';
 import ThemeIcon from '../components/theme-icon';
-import Text from '../components/text';
+import ThemeText from '../components/text';
 import ScreenReaderAnnouncement from '../components/screen-reader-announcement';
 
 export type Props = {
@@ -217,7 +217,7 @@ const LocationSearch: React.FC<Props> = ({
           !!text && (
             <View style={styles.contentBlock}>
               <MessageBox type="info">
-                <Text>Fant ingen søkeresultat</Text>
+                <ThemeText>Fant ingen søkeresultat</ThemeText>
               </MessageBox>
             </View>
           )

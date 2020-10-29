@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {View, useWindowDimensions, Linking, Platform} from 'react-native';
+import {View, useWindowDimensions, Text, Linking, Platform} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../../ScreenHeader';
 import useChatIcon from '../../../chat/use-chat-icon';
@@ -10,10 +10,9 @@ import {useNavigateHome} from '../../../utils/navigation';
 import InviteModal from './InviteModal';
 import {Modalize} from 'react-native-modalize';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
-import Text from '../../../components/text';
+import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
 import Button from '../../../components/button';
-
 function openOtherTicketingApp() {
   const url =
     Platform.OS === 'ios'
@@ -54,18 +53,18 @@ export default function Splash() {
         ></ShinyTicketBanner>
       </View>
       <View style={styles.textContainer}>
-        <Text style={[styles.text, styles.bold]}>
+        <ThemeText style={[styles.text, styles.bold]}>
           Billettkjøp i app kommer snart!
-        </Text>
-        <Text style={styles.text}>
+        </ThemeText>
+        <ThemeText style={styles.text}>
           Her kan du snart kjøpe og administrere billetter til reisen din.
-        </Text>
-        <Text style={styles.text}>
+        </ThemeText>
+        <ThemeText style={styles.text}>
           Frem til da kan du kjøpe billett fra{'\n'}
           <Text onPress={openOtherTicketingApp} style={styles.underline}>
             AtB Mobillett
           </Text>
-        </Text>
+        </ThemeText>
         <View style={styles.buttonContainer}>
           <Button
             onPress={() => modalRef.current?.open()}
