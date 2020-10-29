@@ -59,7 +59,7 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
     marginBottom: 8,
   },
   text: {
-    fontSize: theme.text.sizes.body,
+    ...theme.text.body,
     color: theme.text.colors.primary,
   },
   container__info: {

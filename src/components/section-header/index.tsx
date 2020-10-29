@@ -14,7 +14,9 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
   const styles = useProfileStyle();
   return (
     <View style={[styles.header, extraStyles]}>
-      <ThemeText style={styles.headerText}>{children}</ThemeText>
+      <ThemeText type="label" style={styles.headerText}>
+        {children}
+      </ThemeText>
       <View style={styles.headerDecorator}></View>
     </View>
   );
@@ -29,8 +31,6 @@ const useProfileStyle = StyleSheet.createThemeHook((theme) => ({
   },
   headerText: {
     paddingEnd: 10,
-    fontSize: theme.text.sizes.label,
-    lineHeight: theme.text.lineHeight.label,
   },
 }));
 

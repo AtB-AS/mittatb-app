@@ -1,4 +1,4 @@
-import {StatusBarProps} from 'react-native';
+import {StatusBarProps, TextStyle} from 'react-native';
 
 const backgrounds = {
   light__level0: '#FFFFFF',
@@ -62,16 +62,34 @@ const spacings = {
   small: 8,
   xSmall: 4,
 };
-export const fontSizes = {
-  body: 16,
-  lead: 14,
-  label: 12,
+
+export type TextNames =
+  | 'heroTitle'
+  | 'pageTitle'
+  | 'sectionHeadline'
+  | 'itemHeadline'
+  | 'paragraphHeadline'
+  | 'body'
+  | 'body__link'
+  | 'lead'
+  | 'label'
+  | 'label__link';
+
+export type TextColors = 'primary' | 'destructive' | 'faded' | 'focus';
+
+export const textTypes: {[key in TextNames]: TextStyle} = {
+  heroTitle: {fontSize: 32, lineHeight: 40},
+  pageTitle: {fontSize: 26, lineHeight: 32},
+  sectionHeadline: {fontSize: 23, lineHeight: 28},
+  itemHeadline: {fontSize: 20, lineHeight: 24},
+  paragraphHeadline: {fontSize: 16, lineHeight: 20, fontWeight: '600'},
+  body: {fontSize: 16, lineHeight: 20},
+  body__link: {fontSize: 16, lineHeight: 20, textDecorationLine: 'underline'},
+  lead: {fontSize: 14, lineHeight: 20},
+  label: {fontSize: 12, lineHeight: 16},
+  label__link: {fontSize: 12, lineHeight: 16, textDecorationLine: 'underline'},
 };
-const lineHeights = {
-  body: 20,
-  lead: 20,
-  label: 16,
-};
+
 const borderRadius = {
   regular: 8,
   small: 4,
@@ -102,15 +120,8 @@ export interface Theme {
     accent: string;
   };
   text: {
-    colors: {
-      primary: string;
-      destructive: string;
-      faded: string;
-      focus: string;
-    };
-    lineHeight: typeof lineHeights;
-    sizes: typeof fontSizes;
-  };
+    colors: {[key in TextColors]: string};
+  } & typeof textTypes;
   border: {
     primary: string;
     secondary: string;
@@ -151,8 +162,7 @@ export const themes: Themes = {
         faded: colors.general.gray400,
         focus: colors.secondary.blue_500,
       },
-      lineHeight: lineHeights,
-      sizes: fontSizes,
+      ...textTypes,
     },
     border: {
       primary: colors.general.gray,
@@ -193,8 +203,7 @@ export const themes: Themes = {
         faded: colors.general.gray100,
         focus: colors.secondary.cyan_500,
       },
-      sizes: fontSizes,
-      lineHeight: lineHeights,
+      ...textTypes,
     },
     border: {
       primary: colors.general.white,

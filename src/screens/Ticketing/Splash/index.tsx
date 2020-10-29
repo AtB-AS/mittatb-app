@@ -89,8 +89,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   text: {
-    fontSize: theme.text.sizes.body,
-    lineHeight: theme.text.lineHeight.body,
     textAlign: 'center',
     marginBottom: theme.spacings.large,
   },

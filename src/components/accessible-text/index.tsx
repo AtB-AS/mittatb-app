@@ -1,8 +1,7 @@
 import React from 'react';
-import {TextProps} from 'react-native';
-import ThemeText from '../text';
+import ThemeText, {ThemeTextProps} from '../text';
 
-type LabelProps = TextProps & {
+type LabelProps = ThemeTextProps & {
   prefix?: string;
   suffix?: string;
   children?: string;

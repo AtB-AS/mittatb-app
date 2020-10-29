@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text as RNText} from 'react-native';
+import {View} from 'react-native';
 import {StyleSheet, Theme} from '../../../theme';
 import SectionHeader from '../../../components/section-header';
 import ThemeText from '../../../components/text';

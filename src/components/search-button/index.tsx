@@ -38,9 +38,11 @@ const SearchButton: React.FC<SearchButtonProps> = ({
         style={styles.button}
         onPress={onPress}
       >
-        <ThemeText style={styles.title}>{title}</ThemeText>
+        <ThemeText type="body" style={styles.title}>
+          {title}
+        </ThemeText>
         <View style={styles.icon}>{icon}</View>
-        <ThemeText style={styles.buttonText} numberOfLines={1}>
+        <ThemeText type="body" style={styles.buttonText} numberOfLines={1}>
           {text ?? <Text style={styles.placeholder}>{placeholder}</Text>}
         </ThemeText>
       </TouchableOpacity>
@@ -82,8 +84,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   title: {width: 40},
   buttonText: {
-    fontSize: theme.text.sizes.body,
-    lineHeight: theme.text.lineHeight.body,
     flex: 1,
     marginLeft: theme.spacings.large,
   },

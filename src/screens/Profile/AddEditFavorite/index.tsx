@@ -247,8 +247,8 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flexDirection: 'row',
   },
   searchInput: {
+    ...theme.text.body,
     flex: 1,
-    fontSize: theme.text.sizes.body,
     paddingLeft: 60,
     backgroundColor: theme.background.level1,
     borderRadius: theme.border.borderRadius.small,
@@ -280,7 +280,7 @@ const SymbolPicker: React.FC<SymbolPickerProps> = ({onPress, value}) => {
         {!value ? (
           <ThemeIcon svg={MapPointPin} style={css.emojiIcon} />
         ) : (
-          <ThemeText style={css.emojiText}>{value}</ThemeText>
+          <ThemeText type="body">{value}</ThemeText>
         )}
       </View>
       <ThemeIcon svg={Expand} />
@@ -304,9 +304,6 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
     paddingTop: 3,
     paddingBottom: 3,
   },
-  emojiText: {
-    fontSize: theme.text.sizes.body,
-  },
 }));
 
 type InputGroupProps = {
@@ -319,7 +316,9 @@ const InputGroup: React.FC<InputGroupProps> = ({title, boxStyle, children}) => {
   return (
     <View style={[css.container, boxStyle]}>
       {children}
-      <ThemeText style={css.label}>{title}</ThemeText>
+      <ThemeText type="lead" style={css.label}>
+        {title}
+      </ThemeText>
     </View>
   );
 };
@@ -332,7 +331,5 @@ const useGroupStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   label: {
     position: 'absolute',
     left: theme.spacings.medium,
-    fontSize: theme.text.sizes.lead,
-    lineHeight: theme.text.lineHeight.body,
   },
 }));

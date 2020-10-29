@@ -6,7 +6,6 @@
  */
 import React, {useRef, useEffect, forwardRef, useState} from 'react';
 import {
-  Text,
   TouchableOpacity,
   View,
   Platform,
@@ -23,6 +22,7 @@ import {Modalize} from 'react-native-modalize';
 import {Portal} from 'react-native-portalize';
 import composeRefs from '@seznam/compose-react-refs';
 import {StyleSheet} from '../../../theme';
+import ThemeText from '../../../components/text';
 
 // Polyfill for Android
 require('string.fromcodepoint');
@@ -114,13 +114,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
-
   clearButton: {
     padding: theme.spacings.medium,
     textAlign: 'center',
-    color: theme.text.colors.primary,
     textAlignVertical: 'center',
-    fontSize: theme.text.sizes.body,
   },
 }));
 
@@ -134,9 +131,9 @@ const ClearButton: React.FC<{
   if (!value) return null;
   return (
     <TouchableOpacity onPress={() => onEmojiSelected(null)}>
-      <Text style={[styles.clearButton, clearButtonStyle]}>
+      <ThemeText type="body" style={[styles.clearButton, clearButtonStyle]}>
         {clearButtonText ?? 'Fjern emoji'}
-      </Text>
+      </ThemeText>
     </TouchableOpacity>
   );
 };
@@ -177,12 +174,14 @@ const EmojiCategory: React.FC<EmojiCategory> = ({
 
   return (
     <View style={styles.categoryOuter}>
-      <Text style={[styles.headerText, headerStyle]}>{categoryText}</Text>
+      <ThemeText style={[styles.headerText, headerStyle]}>
+        {categoryText}
+      </ThemeText>
       <View style={styles.categoryInner}>
         {emojis.map((e: string) => (
-          <Text style={style} key={e} onPress={() => onEmojiSelected(e)}>
+          <ThemeText style={style} key={e} onPress={() => onEmojiSelected(e)}>
             {e}
-          </Text>
+          </ThemeText>
         ))}
       </View>
     </View>

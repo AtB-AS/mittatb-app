@@ -1,11 +1,12 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
 import {Dot} from '../../../assets/svg/icons/other';
 import {TouchableOpacity} from 'react-native';
 import {ArrowRight} from '../../../assets/svg/icons/navigation';
 import {StyleSheet} from '../../../theme';
 import colors from '../../../theme/colors';
 import ThemeIcon from '../../../components/theme-icon';
+import ThemeText from '../../../components/text';
 
 type NavigateButtonProps = {
   onNavigate(): void;
@@ -35,7 +36,7 @@ const NavigationControls: React.FC<NavigateButtonProps> = ({
         ))}
       </View>
       <TouchableOpacity style={styles.button} onPress={onNavigate}>
-        <Text style={styles.buttonText}>{title}</Text>
+        <ThemeText type="paragraphHeadline">{title}</ThemeText>
         {arrow && <ThemeIcon svg={ArrowRight} style={styles.buttonIcon} />}
       </TouchableOpacity>
       {children}
@@ -65,11 +66,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  buttonText: {
-    fontSize: theme.text.sizes.body,
-    fontWeight: '600',
-    color: theme.button.primary.color,
-  },
+
   buttonIcon: {
     position: 'absolute',
     right: theme.spacings.medium,

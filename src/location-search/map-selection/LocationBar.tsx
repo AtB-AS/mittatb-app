@@ -74,13 +74,12 @@ const LocationText: React.FC<{
   location?: Location;
   error?: ErrorType;
 }> = ({location, error}) => {
-  const styles = useStyles();
   const {title, subtitle} = getLocationText(location, error);
 
   return (
     <>
-      <ThemeText style={styles.title}>{title}</ThemeText>
-      <ThemeText style={styles.subtitle}>{subtitle}</ThemeText>
+      <ThemeText type="lead">{title}</ThemeText>
+      <ThemeText type="label">{subtitle}</ThemeText>
     </>
   );
 };
@@ -137,14 +136,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
   },
   locationContainer: {flexDirection: 'row', alignItems: 'center', height: 44},
-  title: {
-    fontSize: theme.text.sizes.lead,
-    lineHeight: theme.text.lineHeight.body,
-  },
-  subtitle: {
-    fontSize: theme.text.sizes.label,
-    lineHeight: theme.text.lineHeight.label,
-  },
   button: {
     width: 44,
     alignItems: 'center',
