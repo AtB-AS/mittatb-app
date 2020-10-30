@@ -69,9 +69,7 @@ export default function Splash() {
           <Button
             onPress={() => modalRef.current?.open()}
             text="Jeg har kode til beta for billettkjøp"
-            mode="secondary"
-            style={styles.button}
-            textStyle={styles.buttonText}
+            mode="primary"
           />
         </View>
       </View>
@@ -103,6 +101,4 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     bottom: theme.spacings.medium,
     width: '100%',
   },
-  button: {backgroundColor: theme.button.secondary.bg},
-  buttonText: {color: theme.button.secondary.color},
 }));
