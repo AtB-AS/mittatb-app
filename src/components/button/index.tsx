@@ -1,14 +1,14 @@
 import {
   TouchableOpacityProperties,
   View,
-  Text,
   StyleProp,
   ViewStyle,
   TouchableOpacity,
   TextStyle,
 } from 'react-native';
 import React from 'react';
-import {StyleSheet, Theme} from '../../theme';
+import {StyleSheet, Theme, useTheme} from '../../theme';
+import ThemeText from '../text';
 
 type ButtonProps = {
   onPress(): void;
@@ -30,6 +30,7 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const css = useButtonStyle();
+  const {theme} = useTheme();
   const styleContainer = [
     css.button,
     mode === 'secondary' ? css.buttonSecondary : undefined,
@@ -39,6 +40,7 @@ const Button: React.FC<ButtonProps> = ({
     css.text,
     mode === 'destructive' ? css.textDestructive : undefined,
   ];
+
   return (
     <View style={disabled ? css.buttonDisabled : undefined}>
       <TouchableOpacity
@@ -49,11 +51,13 @@ const Button: React.FC<ButtonProps> = ({
       >
         {IconComponent && (
           <View style={css.icon}>
-            <IconComponent />
+            <IconComponent fill={theme.text.colors.primary} />
           </View>
         )}
         <View style={[css.textContainer, textContainerStyle]}>
-          <Text style={[styleText, textStyle]}>{text}</Text>
+          <ThemeText type="paragraphHeadline" style={[styleText, textStyle]}>
+            {text}
+          </ThemeText>
         </View>
       </TouchableOpacity>
     </View>
@@ -90,9 +94,6 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
   },
   text: {
-    fontSize: theme.text.sizes.body,
-    lineHeight: theme.text.lineHeight.body,
-    fontWeight: '600',
     color: theme.text.colors.primary,
   },
   textDestructive: {

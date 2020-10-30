@@ -9,7 +9,7 @@ import Button from '../../../components/button';
 import {Confirm} from '../../../assets/svg/icons/actions';
 import {StyleSheet} from '../../../theme';
 import Input from '../../../components/input';
-import Text from '../../../components/text';
+import ThemeText from '../../../components/text';
 import MessageBox from '../../../message-box';
 import composeRefs from '@seznam/compose-react-refs';
 
@@ -65,13 +65,13 @@ export default forwardRef<Modalize, Props>(function InviteModal(
             <ActivityIndicator style={styles.loading} />
           ) : (
             <>
-              <Text style={styles.title}>
+              <ThemeText type="paragraphHeadline" style={styles.title}>
                 Registrer deg som testpilot for billettkjøp
-              </Text>
-              <Text style={styles.text}>
+              </ThemeText>
+              <ThemeText type="body" style={styles.text}>
                 Send oss invitasjonskoden din og bli først ute med å teste
                 billettkjøp direkte fra reiseappen.
-              </Text>
+              </ThemeText>
               <Input
                 label="Kode"
                 value={inviteKey}
@@ -106,13 +106,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.medium,
   },
   title: {
-    fontSize: theme.text.sizes.body,
-    fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: theme.spacings.medium,
   },
   text: {
-    fontSize: theme.text.sizes.body,
     marginBottom: theme.spacings.medium,
   },
   messageBox: {

@@ -23,6 +23,7 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* atbTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* atbTests.m */; };
 		385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */; };
+		38CD3270254B612600C6B978 /* AtBRootView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38CD326F254B612600C6B978 /* AtBRootView.m */; };
 		760F020F5EF28EA872E85D1E /* libPods-atb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F4A8BBB63B094DA5F9B2BA8 /* libPods-atb.a */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +65,8 @@
 		2D02E47B1E0B4A5D006451C7 /* atb-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "atb-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* atb-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "atb-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "enforce-bridge.swift"; sourceTree = "<group>"; };
+		38CD326F254B612600C6B978 /* AtBRootView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AtBRootView.m; path = atb/AtBRootView.m; sourceTree = "<group>"; };
+		38CD3275254B616300C6B978 /* AtBRootView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AtBRootView.h; path = atb/AtBRootView.h; sourceTree = "<group>"; };
 		38E33D0D242C0838003D56ED /* atb-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "atb-Bridging-Header.h"; sourceTree = "<group>"; };
 		38F348B52542D8120073C300 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		39BBF66B9FD0BAD989E6DB44 /* Pods-atb-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atb-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-atb-tvOS/Pods-atb-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -162,6 +165,8 @@
 				13B07FB71A68108700A75B9A /* main.m */,
 				38E33D0D242C0838003D56ED /* atb-Bridging-Header.h */,
 				385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */,
+				38CD326F254B612600C6B978 /* AtBRootView.m */,
+				38CD3275254B616300C6B978 /* AtBRootView.h */,
 			);
 			name = atb;
 			sourceTree = "<group>";
@@ -466,28 +471,12 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-atb/Pods-atb-frameworks.sh",
 				"${PODS_ROOT}/@react-native-mapbox-gl-mapbox-static/dynamic/MapboxMobileEvents.framework",
-				"${PODS_ROOT}/@react-native-mapbox-gl-mapbox-static/dynamic/MapboxMobileEvents.framework.dSYM",
-				"${PODS_ROOT}/@react-native-mapbox-gl-mapbox-static/dynamic/BADC3E19-B154-39DA-BE9A-E7C52B45BD0C.bcsymbolmap",
-				"${PODS_ROOT}/@react-native-mapbox-gl-mapbox-static/dynamic/F86F5A50-B0A0-3D96-8330-20AFDAC47DCC.bcsymbolmap",
-				"${PODS_ROOT}/@react-native-mapbox-gl-mapbox-static/dynamic/877E1F78-505A-34B9-A9A0-42F8BFA435B9.bcsymbolmap",
-				"${PODS_ROOT}/@react-native-mapbox-gl-mapbox-static/dynamic/7C38D00F-328F-3E0C-B30E-E47F366F0F3D.bcsymbolmap",
 				"${PODS_ROOT}/Mapbox-iOS-SDK/dynamic/Mapbox.framework",
-				"${PODS_ROOT}/Mapbox-iOS-SDK/dynamic/Mapbox.framework.dSYM",
-				"${PODS_ROOT}/Mapbox-iOS-SDK/dynamic/BADC3E19-B154-39DA-BE9A-E7C52B45BD0C.bcsymbolmap",
-				"${PODS_ROOT}/Mapbox-iOS-SDK/dynamic/F86F5A50-B0A0-3D96-8330-20AFDAC47DCC.bcsymbolmap",
-				"${PODS_ROOT}/Mapbox-iOS-SDK/dynamic/877E1F78-505A-34B9-A9A0-42F8BFA435B9.bcsymbolmap",
-				"${PODS_ROOT}/Mapbox-iOS-SDK/dynamic/7C38D00F-328F-3E0C-B30E-E47F366F0F3D.bcsymbolmap",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MapboxMobileEvents.framework",
-				"${DWARF_DSYM_FOLDER_PATH}/MapboxMobileEvents.framework.dSYM",
-				"${BUILT_PRODUCTS_DIR}/BADC3E19-B154-39DA-BE9A-E7C52B45BD0C.bcsymbolmap",
-				"${BUILT_PRODUCTS_DIR}/F86F5A50-B0A0-3D96-8330-20AFDAC47DCC.bcsymbolmap",
-				"${BUILT_PRODUCTS_DIR}/877E1F78-505A-34B9-A9A0-42F8BFA435B9.bcsymbolmap",
-				"${BUILT_PRODUCTS_DIR}/7C38D00F-328F-3E0C-B30E-E47F366F0F3D.bcsymbolmap",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mapbox.framework",
-				"${DWARF_DSYM_FOLDER_PATH}/Mapbox.framework.dSYM",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -623,6 +612,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38CD3270254B612600C6B978 /* AtBRootView.m in Sources */,
 				385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,

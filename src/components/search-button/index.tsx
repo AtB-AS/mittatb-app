@@ -2,6 +2,7 @@ import React from 'react';
 import {
   View,
   ViewStyle,
+  Text,
   StyleProp,
   AccessibilityProps,
   TouchableOpacity,
@@ -9,7 +10,7 @@ import {
 import {StyleSheet} from '../../theme';
 import {LocationWithMetadata} from '../../favorites/types';
 import {screenReaderPause} from '../accessible-text';
-import Text from '../text';
+import ThemeText from '../text';
 
 type SearchButtonProps = {
   title: string;
@@ -37,11 +38,13 @@ const SearchButton: React.FC<SearchButtonProps> = ({
         style={styles.button}
         onPress={onPress}
       >
-        <Text style={styles.title}>{title}</Text>
+        <ThemeText type="body" style={styles.title}>
+          {title}
+        </ThemeText>
         <View style={styles.icon}>{icon}</View>
-        <Text style={styles.buttonText} numberOfLines={1}>
+        <ThemeText type="body" style={styles.buttonText} numberOfLines={1}>
           {text ?? <Text style={styles.placeholder}>{placeholder}</Text>}
-        </Text>
+        </ThemeText>
       </TouchableOpacity>
     </View>
   );
@@ -81,8 +84,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   title: {width: 40},
   buttonText: {
-    fontSize: theme.text.sizes.body,
-    lineHeight: theme.text.lineHeight.body,
     flex: 1,
     marginLeft: theme.spacings.large,
   },

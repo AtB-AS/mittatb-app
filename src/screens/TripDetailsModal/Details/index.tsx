@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/native';
 import Axios, {AxiosError} from 'axios';
 import React, {useCallback, useState} from 'react';
-import {ActivityIndicator, Text, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {DetailsModalNavigationProp, DetailsModalStackParams} from '..';
 import {getSingleTripPattern} from '../../../api/trips';
@@ -279,9 +279,7 @@ const useDetailsStyle = StyleSheet.createThemeHook((theme) => ({
     paddingRight: theme.spacings.medium,
     paddingBottom: 100,
   },
-  textStyle: {
-    fontSize: theme.text.sizes.body,
-  },
+  textStyle: theme.text.body,
 }));
 
 export default TripDetailsModal;

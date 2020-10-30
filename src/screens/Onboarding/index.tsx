@@ -17,7 +17,7 @@ import {
 import StepOuterContainer from './components/StepContainer';
 import Illustration from './components/Illustration';
 import NavigationControls from './components/NavigationControls';
-import Text from '../../components/text';
+import ThemeText from '../../components/text';
 
 type StepProps = {
   navigation: StackNavigationProp<OnboardingStackParams>;
@@ -69,14 +69,14 @@ const StepOne: React.FC<StepProps> = ({navigation}) => {
       <Illustration Svg={Onboarding1} />
       <StepOuterContainer>
         <View style={styles.textContainer} accessible={true}>
-          <Text style={[styles.title, styles.text]}>
+          <ThemeText style={[styles.title, styles.text]}>
             Velkommen som testpilot!{' '}
-          </Text>
-          <Text style={styles.text}>
+          </ThemeText>
+          <ThemeText style={styles.text}>
             Du bruker nå en betaversjon av den nye AtB-appen. Her kan du
             planlegge reiser og sjekke avgangstider i Trøndelag. Appen vil bli
             jevnlig oppdatert med nye funksjoner.
-          </Text>
+          </ThemeText>
         </View>
         <NavigationControls currentPage={1} onNavigate={onNavigate} />
       </StepOuterContainer>
@@ -93,14 +93,14 @@ const StepTwo: React.FC<StepProps> = ({navigation}) => {
       <Illustration Svg={Onboarding2} />
       <StepOuterContainer>
         <View style={styles.textContainer} accessible={true}>
-          <Text style={[styles.title, styles.text]}>
+          <ThemeText style={[styles.title, styles.text]}>
             Bidra til å gjøre appen bedre
-          </Text>
-          <Text style={styles.text}>
+          </ThemeText>
+          <ThemeText style={styles.text}>
             Vi trenger dine idéer og tilbakemeldinger for å gjøre appen bedre.
             Disse deler du enklest ved å velge chatikonet oppe i høyre hjørne av
             appen. Chatten er anonym.
-          </Text>
+          </ThemeText>
         </View>
         <NavigationControls currentPage={2} onNavigate={onNavigate} />
       </StepOuterContainer>
@@ -127,14 +127,14 @@ const StepThree: React.FC<StepProps> = () => {
       <Illustration Svg={Onboarding3} />
       <StepOuterContainer>
         <View style={styles.textContainer} accessible={true}>
-          <Text style={[styles.title, styles.text]}>
+          <ThemeText style={[styles.title, styles.text]}>
             Bedre opplevelse med posisjonsdeling
-          </Text>
-          <Text style={styles.text}>
+          </ThemeText>
+          <ThemeText style={styles.text}>
             Ved å tillate deling av posisjon kan du finne nærmeste holdeplass og
             planlegge reisen fra din lokasjon. Du kan når som helst slutte å
             dele posisjon.
-          </Text>
+          </ThemeText>
         </View>
         <NavigationControls
           currentPage={3}
@@ -147,9 +147,9 @@ const StepThree: React.FC<StepProps> = () => {
               Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
             }
           >
-            <Text style={[styles.text, styles.privacyPolicy]}>
+            <ThemeText type="body" style={[styles.text, styles.privacyPolicy]}>
               Les vår personvernerklæring
-            </Text>
+            </ThemeText>
           </TouchableOpacity>
         </NavigationControls>
       </StepOuterContainer>
@@ -167,8 +167,6 @@ const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
     fontWeight: 'bold',
   },
   text: {
-    fontSize: theme.text.sizes.body,
-    color: theme.text.colors.primary,
     marginTop: theme.spacings.medium,
   },
   privacyPolicy: {

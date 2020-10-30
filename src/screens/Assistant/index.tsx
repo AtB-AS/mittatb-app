@@ -2,7 +2,6 @@ import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
-  Text,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -53,6 +52,7 @@ import {screenReaderPause} from '../../components/accessible-text';
 import colors from '../../theme/colors';
 import ThemeIcon from '../../components/theme-icon';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
+import ThemeText from '../../components/text';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -326,7 +326,8 @@ const Assistant: React.FC<Props> = ({
 
   const altHeaderComp = (
     <View accessible={true} onLayout={onAltLayout} style={styles.altTitle}>
-      <Text
+      <ThemeText
+        type="paragraphHeadline"
         style={[
           styles.altTitleText,
           styles.altTitleText__right,
@@ -335,17 +336,22 @@ const Assistant: React.FC<Props> = ({
         numberOfLines={1}
       >
         {from?.name}
-      </Text>
-      <Text accessibilityLabel="til" style={styles.altTitleText}>
+      </ThemeText>
+      <ThemeText
+        type="paragraphHeadline"
+        accessibilityLabel="til"
+        style={styles.altTitleText}
+      >
         {' '}
         –{' '}
-      </Text>
-      <Text
+      </ThemeText>
+      <ThemeText
+        type="paragraphHeadline"
         style={[styles.altTitleText, {maxWidth: altWidth / 2}]}
         numberOfLines={1}
       >
         {to?.name}
-      </Text>
+      </ThemeText>
     </View>
   );
 
@@ -427,9 +433,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   altTitleText: {
     overflow: 'hidden',
-    fontSize: theme.text.sizes.body,
-    color: theme.text.colors.primary,
-    fontWeight: 'bold',
   },
   altTitleText__right: {
     textAlign: 'right',

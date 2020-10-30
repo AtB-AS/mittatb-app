@@ -30,7 +30,7 @@ import ScreenHeader from '../../../ScreenHeader';
 import {StyleSheet, Theme} from '../../../theme';
 import colors from '../../../theme/colors';
 import EmojiPopup from './EmojiPopup';
-import Text from '../../../components/text';
+import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
 
 type AddEditRouteName = 'AddEditFavorite';
@@ -247,8 +247,8 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flexDirection: 'row',
   },
   searchInput: {
+    ...theme.text.body,
     flex: 1,
-    fontSize: theme.text.sizes.body,
     paddingLeft: 60,
     backgroundColor: theme.background.level1,
     borderRadius: theme.border.borderRadius.small,
@@ -280,16 +280,16 @@ const SymbolPicker: React.FC<SymbolPickerProps> = ({onPress, value}) => {
         {!value ? (
           <ThemeIcon svg={MapPointPin} style={css.emojiIcon} />
         ) : (
-          <Text style={css.emojiText}>{value}</Text>
+          <ThemeText type="body">{value}</ThemeText>
         )}
       </View>
-      <Expand />
+      <ThemeIcon svg={Expand} />
     </TouchableOpacity>
   );
 };
 const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    paddingVertical: 12,
+    paddingVertical: theme.spacings.medium,
     paddingLeft: 64,
     flexDirection: 'row',
     backgroundColor: theme.background.level1,
@@ -298,14 +298,11 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.borderRadius.small,
   },
   emoji: {
-    marginRight: 12,
+    marginRight: theme.spacings.medium,
   },
   emojiIcon: {
     paddingTop: 3,
     paddingBottom: 3,
-  },
-  emojiText: {
-    fontSize: 16,
   },
 }));
 
@@ -319,7 +316,9 @@ const InputGroup: React.FC<InputGroupProps> = ({title, boxStyle, children}) => {
   return (
     <View style={[css.container, boxStyle]}>
       {children}
-      <Text style={css.label}>{title}</Text>
+      <ThemeText type="lead" style={css.label}>
+        {title}
+      </ThemeText>
     </View>
   );
 };
@@ -332,7 +331,5 @@ const useGroupStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   label: {
     position: 'absolute',
     left: theme.spacings.medium,
-    fontSize: theme.text.sizes.lead,
-    lineHeight: theme.text.lineHeight.body,
   },
 }));

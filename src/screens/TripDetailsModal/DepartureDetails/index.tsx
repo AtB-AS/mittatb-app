@@ -1,7 +1,7 @@
 import {LegMode} from '@entur/sdk';
 import {RouteProp} from '@react-navigation/native';
 import React, {Fragment, useCallback, useState} from 'react';
-import {ActivityIndicator, Text, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import Dash from 'react-native-dash';
 import {ScrollView} from 'react-native-gesture-handler';
 import {DetailsModalNavigationProp, DetailsModalStackParams} from '..';
@@ -27,6 +27,7 @@ import LocationRow from '../LocationRow';
 import SituationRow from '../SituationRow';
 import {getAimedTimeIfLargeDifference} from '../utils';
 import ThemeIcon from '../../../components/theme-icon';
+import ThemeText from '../../../components/text';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -241,7 +242,11 @@ function CollapseButtonRow({
   setCollapsed,
 }: CollapseButtonRowProps) {
   const styles = useCollapseButtonStyle();
-  const text = <Text style={styles.text}>{numberOfStops} Mellomstopp</Text>;
+  const text = (
+    <ThemeText color="faded" style={styles.text}>
+      {numberOfStops} Mellomstopp
+    </ThemeText>
+  );
   const child = collapsed ? (
     <>
       <ThemeIcon svg={Expand} />
@@ -267,7 +272,6 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   },
   text: {
     marginLeft: 12,
-    color: theme.text.colors.faded,
   },
 }));
 

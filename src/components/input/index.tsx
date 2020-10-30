@@ -13,7 +13,7 @@ import {StyleSheet, useTheme} from '../../theme';
 import colors from '../../theme/colors';
 import {Close} from '../../assets/svg/icons/actions';
 import insets from '../../utils/insets';
-import Text from '../text';
+import ThemeText from '../text';
 import ThemeIcon from '../theme-icon';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
@@ -71,7 +71,9 @@ const Input = forwardRef<TextInput, InputProps>(
             </TouchableOpacity>
           </View>
         ) : null}
-        <Text style={style.label}>{label}</Text>
+        <ThemeText type="lead" style={style.label}>
+          {label}
+        </ThemeText>
       </View>
     );
   },
@@ -88,7 +90,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     paddingLeft: 60,
     paddingRight: 40,
     padding: theme.spacings.medium,
-    fontSize: theme.text.sizes.body,
+    fontSize: theme.text.body.fontSize,
   },
   container: {
     marginBottom: theme.spacings.medium,
@@ -98,8 +100,6 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   label: {
     position: 'absolute',
     left: theme.spacings.medium,
-    fontSize: theme.text.sizes.lead,
-    lineHeight: theme.text.lineHeight.body,
   },
   inputClear: {
     position: 'absolute',

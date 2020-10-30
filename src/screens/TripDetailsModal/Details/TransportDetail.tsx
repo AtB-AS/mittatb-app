@@ -18,7 +18,7 @@ import transportationColor from '../../../utils/transportation-color';
 import SituationRow from '../SituationRow';
 import colors from '../../../theme/colors';
 import {useLayout} from '../../../utils/use-layout';
-import ThemedText from '../../../components/text';
+import ThemeText from '../../../components/text';
 import {StyleSheet} from '../../../theme';
 
 const TransportDetail: React.FC<LegDetailProps> = ({
@@ -93,7 +93,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
             onLayout={onFromLayout}
           />
         )}
-        <ThemedText style={styles.lineName}>{getLineName(leg)}</ThemedText>
+        <ThemeText style={styles.lineName}>{getLineName(leg)}</ThemeText>
 
         <SituationRow
           situations={leg.situations}
@@ -147,13 +147,11 @@ const TransportDetail: React.FC<LegDetailProps> = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   textStyle: {
-    fontSize: theme.text.sizes.lead,
-    lineHeight: theme.text.lineHeight.body,
+    ...theme.text.lead,
   },
   lineName: {
     marginLeft: 120,
-    fontSize: theme.text.sizes.body,
-    fontWeight: '600',
+    ...theme.text.paragraphHeadline,
   },
   dashContainer: {
     marginLeft: 95,

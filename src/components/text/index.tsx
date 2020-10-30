@@ -1,14 +1,16 @@
 import React from 'react';
-import {Text as RNText, TextProps} from 'react-native';
-import {fontSizes} from '../../theme/colors';
+import {Text, TextProps} from 'react-native';
+import {TextColors, TextNames} from '../../theme/colors';
 import {useTheme} from '../../theme';
 
-type StyledTextProps = TextProps & {
-  type?: keyof typeof fontSizes;
+export type ThemeTextProps = TextProps & {
+  type?: TextNames;
+  color?: TextColors;
 };
 
-const Text: React.FC<StyledTextProps> = ({
+const ThemeText: React.FC<ThemeTextProps> = ({
   type: fontType = 'body',
+  color = 'primary',
   style,
   children,
   ...props
@@ -16,15 +18,14 @@ const Text: React.FC<StyledTextProps> = ({
   const {theme} = useTheme();
 
   const typeStyle = {
-    fontSize: theme.text.sizes[fontType],
-    lineHeight: theme.text.lineHeight[fontType],
-    color: theme.text.colors.primary,
+    ...theme.text[fontType],
+    color: theme.text.colors[color],
   };
 
   return (
-    <RNText style={[typeStyle, style]} maxFontSizeMultiplier={2} {...props}>
+    <Text style={[typeStyle, style]} maxFontSizeMultiplier={2} {...props}>
       {children}
-    </RNText>
+    </Text>
   );
 };
-export default Text;
+export default ThemeText;

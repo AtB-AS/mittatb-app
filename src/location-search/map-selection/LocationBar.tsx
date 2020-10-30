@@ -8,7 +8,7 @@ import LocationIcon from '../../components/location-icon';
 import {StyleSheet} from '../../theme';
 import shadows from '../../components/map/shadows';
 import {ErrorType} from '../../api/utils';
-import Text from '../../components/text';
+import ThemeText from '../../components/text';
 
 type Props = {
   location?: Location;
@@ -74,13 +74,12 @@ const LocationText: React.FC<{
   location?: Location;
   error?: ErrorType;
 }> = ({location, error}) => {
-  const styles = useStyles();
   const {title, subtitle} = getLocationText(location, error);
 
   return (
     <>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.subtitle}>{subtitle}</Text>
+      <ThemeText type="lead">{title}</ThemeText>
+      <ThemeText type="label">{subtitle}</ThemeText>
     </>
   );
 };
@@ -137,14 +136,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
   },
   locationContainer: {flexDirection: 'row', alignItems: 'center', height: 44},
-  title: {
-    fontSize: theme.text.sizes.lead,
-    lineHeight: theme.text.lineHeight.body,
-  },
-  subtitle: {
-    fontSize: theme.text.sizes.label,
-    lineHeight: theme.text.lineHeight.label,
-  },
   button: {
     width: 44,
     alignItems: 'center',

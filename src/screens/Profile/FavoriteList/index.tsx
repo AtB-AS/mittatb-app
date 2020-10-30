@@ -1,5 +1,5 @@
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {View, Text, Linking, TouchableOpacity} from 'react-native';
+import {View, Linking, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {StyleSheet, Theme} from '../../../theme';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -19,6 +19,7 @@ import {PRIVACY_POLICY_URL} from '@env';
 import LogoOutline from '../../../ScreenHeader/LogoOutline';
 import {useNavigateHome} from '../../../utils/navigation';
 import ThemeIcon from '../../../components/theme-icon';
+import ThemeText from '../../../components/text';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -91,7 +92,9 @@ export default function Profile({navigation}: ProfileScreenProps) {
           Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
         }
       >
-        <Text style={css.privacyPolicy}>Les vår personvernerklæring</Text>
+        <ThemeText type="body__link" style={css.privacyPolicy}>
+          Les vår personvernerklæring
+        </ThemeText>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -109,10 +112,7 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     color: theme.text.colors.primary,
   },
   privacyPolicy: {
-    fontSize: theme.text.sizes.body,
     textAlign: 'center',
-    textDecorationLine: 'underline',
-    color: theme.text.colors.primary,
     marginBottom: theme.spacings.xLarge,
   },
 }));
@@ -123,7 +123,7 @@ function AddFavoriteButton({onPress}: {onPress(): void}) {
     <TouchableOpacity style={css.item} onPress={onPress}>
       <ThemeIcon svg={Add} />
       <View style={css.textContainer}>
-        <Text style={css.text}>Legg til favorittsted</Text>
+        <ThemeText style={css.text}>Legg til favorittsted</ThemeText>
       </View>
     </TouchableOpacity>
   );
@@ -139,13 +139,13 @@ const Item: React.FC<ItemProps> = ({item, onEdit, onClick}) => {
 
   const content = item.name ? (
     <>
-      <Text style={[css.textName, css.text]}>
+      <ThemeText type="paragraphHeadline" style={css.text}>
         {item.name ?? item.location.name}
-      </Text>
-      <Text style={css.text}>{item.location.label}</Text>
+      </ThemeText>
+      <ThemeText style={css.text}>{item.location.label}</ThemeText>
     </>
   ) : (
-    <Text>{item.location.label}</Text>
+    <ThemeText>{item.location.label}</ThemeText>
   );
 
   const clickable = onClick ? (
@@ -204,9 +204,5 @@ const useItemStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   text: {
     color: theme.text.colors.primary,
-  },
-  textName: {
-    fontSize: theme.text.sizes.body,
-    fontWeight: '600',
   },
 }));

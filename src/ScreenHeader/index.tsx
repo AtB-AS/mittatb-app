@@ -1,7 +1,8 @@
-import {View, Text, ViewStyle} from 'react-native';
+import {View, ViewStyle} from 'react-native';
 import React from 'react';
 import {StyleSheet} from '../theme';
 import HeaderButton, {IconButton} from './HeaderButton';
+import ThemeText from '../components/text';
 
 type ScreenHeaderProps = {
   leftButton?: IconButton;
@@ -32,7 +33,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   return (
     <View style={[css.container, style]}>
       <View style={css.iconContainerLeft}>{leftIcon}</View>
-      <Text style={css.text}>{title}</Text>
+      <ThemeText type="paragraphHeadline">{title}</ThemeText>
       <View style={css.iconContainerRight}>{rightIcon}</View>
     </View>
   );
@@ -53,10 +54,5 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
   iconContainerRight: {
     position: 'absolute',
     right: 12,
-  },
-  text: {
-    color: theme.text.colors.primary,
-    fontSize: 16,
-    fontWeight: 'bold',
   },
 }));
