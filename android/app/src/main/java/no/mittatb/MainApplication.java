@@ -69,8 +69,6 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
           if (!TextUtils.isEmpty(bugsnagKey)) {
               config.setReleaseStage(bugsnagReleaseStage);
           }
-          SoLoader.loadLibrary("bugsnag-plugin-android-anr");
-          SoLoader.loadLibrary("bugsnag-plugin-android-ndk");
           Bugsnag.start(this, config);
       }
     } catch (Exception e) {
