@@ -2,8 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Vi trenger din posisjon for å lage reiseruter</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Vi trenger din posisjon for å lage reiseruter</string>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>nb</string>
+	<string>en</string>
 	<key>CFBundleDisplayName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleExecutable</key>
@@ -57,10 +61,6 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Vi trenger din posisjon for å lage reiseruter</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Vi trenger din posisjon for å lage reiseruter</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Vi trenger din posisjon for å lage reiseruter</string>
 	<key>NSPhotoLibraryUsageDescription</key>
