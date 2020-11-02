@@ -18,25 +18,25 @@ const PaymentMethod: React.FC<Props> = ({navigation, route}) => {
   const {offers} = route.params;
 
   const handlePress = async (paymentType: PaymentType) => {
-    setIsLoading(true);
-    try {
-      const response = await reserveOffers(offers, paymentType);
-      switch (paymentType) {
-        case PaymentType.CreditCard:
-          navigation.push('PaymentCreditCard', response);
-          break;
-        case PaymentType.Vipps:
-          if (await Linking.canOpenURL(response.url)) {
-            Linking.openURL(response.url);
-          }
-          break;
-      }
-    } catch (err) {
-      console.warn(err.response);
-      console.warn(err);
-    } finally {
-      setIsLoading(false);
-    }
+    // setIsLoading(true);
+    // try {
+    //   const response = await reserveOffers(offers, paymentType);
+    //   switch (paymentType) {
+    //     case PaymentType.CreditCard:
+    //       navigation.push('PaymentCreditCard', response);
+    //       break;
+    //     case PaymentType.Vipps:
+    //       if (await Linking.canOpenURL(response.url)) {
+    //         Linking.openURL(response.url);
+    //       }
+    //       break;
+    //   }
+    // } catch (err) {
+    //   console.warn(err.response);
+    //   console.warn(err);
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   return (
@@ -45,7 +45,7 @@ const PaymentMethod: React.FC<Props> = ({navigation, route}) => {
         <>
           <Text style={styles.heading}>Velg betalingsmiddel</Text>
           <TouchableHighlight
-            onPress={() => handlePress(PaymentType.CreditCard)}
+            // onPress={() => handlePress(PaymentType.CreditCard)}
             style={styles.button}
           >
             <View style={styles.buttonContentContainer}>
@@ -54,7 +54,7 @@ const PaymentMethod: React.FC<Props> = ({navigation, route}) => {
             </View>
           </TouchableHighlight>
           <TouchableHighlight
-            onPress={() => handlePress(PaymentType.Vipps)}
+            // onPress={() => handlePress(PaymentType.Vipps)}
             style={styles.button}
           >
             <View style={styles.buttonContentContainer}>

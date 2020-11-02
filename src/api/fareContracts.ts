@@ -46,10 +46,7 @@ export async function sendReceipt(fc: FareContract, email: string) {
   return response.data;
 }
 
-export enum PaymentType {
-  CreditCard = 1,
-  Vipps,
-}
+export type PaymentType = 'vipps' | 'creditcard';
 
 export async function reserve(
   offers: ReserveOffer[],
@@ -59,9 +56,9 @@ export async function reserve(
 
   const url = 'ticket/v1/reserve';
   const response = await client.post<ReserveTicketResponse>(url, {
-    payment_type: paymentType,
+    payment_type: paymentType === 'creditcard' ? 1 : 2,
     payment_redirect_url:
-      paymentType == PaymentType.Vipps
+      paymentType == 'vipps'
         ? 'atb://payment?transaction_id={transaction_id}&payment_id={payment_id}'
         : undefined,
     customer_id,

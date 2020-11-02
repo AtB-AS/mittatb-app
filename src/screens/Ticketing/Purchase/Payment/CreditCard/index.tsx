@@ -13,6 +13,8 @@ import {
   PaymentFailedReason,
   useTicketState,
 } from '../../../../../TicketContext';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {StyleSheet} from '../../../../../theme';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'PaymentCreditCard'>;
@@ -25,6 +27,7 @@ enum NetsPaymentStatus {
 }
 
 const CreditCard: React.FC<Props> = ({route, navigation}) => {
+  const styles = useStyles();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const {
     paymentFailedForReason,
@@ -71,15 +74,24 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
   };
 
   return (
-    <WebView
-      style={{opacity: isLoading ? 0 : 1}}
-      source={{
-        uri: url,
-      }}
-      onLoadStart={onLoadStart}
-      onLoadEnd={onLoadEnd}
-    />
+    <SafeAreaView style={styles.container}>
+      <WebView
+        style={{opacity: isLoading ? 0 : 1}}
+        source={{
+          uri: url,
+        }}
+        onLoadStart={onLoadStart}
+        onLoadEnd={onLoadEnd}
+      />
+    </SafeAreaView>
   );
 };
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    flex: 1,
+    backgroundColor: theme.background.modal_Level2,
+  },
+}));
 
 export default CreditCard;
