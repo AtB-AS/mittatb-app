@@ -13,17 +13,13 @@ export async function list(): Promise<ListTicketsResponse> {
 
 export async function search(
   zones: string[],
-  userTypes: {id: string; user_type: UserType}[],
+  travellers: {id: string; user_type: UserType; count: number}[],
   products: string[],
   opts?: AxiosRequestConfig,
 ): Promise<Offer[]> {
   const body = {
     zones,
-    travellers: userTypes.map(({id, user_type}) => ({
-      id,
-      user_type,
-      count: 1,
-    })),
+    travellers,
     products,
   };
 

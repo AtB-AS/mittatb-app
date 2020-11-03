@@ -132,6 +132,7 @@ export default function useOfferState() {
             {
               id: 'adult_group',
               user_type: 'ADULT',
+              count,
             },
           ],
           [SINGLE_TICKET_PRODUCT_ID],
