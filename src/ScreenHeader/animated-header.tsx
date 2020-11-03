@@ -34,16 +34,8 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
   }, [alternativeTitleVisible, alternativeTitleComponent]);
 
   const titleOffset = Animated.subtract(altTitleOffset, HEADER_HEIGHT);
-  const leftIcon = leftButton ? (
-    <HeaderButton iconButton={leftButton} />
-  ) : (
-    <View />
-  );
-  const rightIcon = rightButton ? (
-    <HeaderButton iconButton={rightButton} />
-  ) : (
-    <View />
-  );
+  const leftIcon = leftButton ? <HeaderButton {...leftButton} /> : <View />;
+  const rightIcon = rightButton ? <HeaderButton {...rightButton} /> : <View />;
 
   const altTitle = alternativeTitleComponent && (
     <Animated.View

@@ -6,15 +6,10 @@ export type IconButton = {
   icon: React.ReactNode;
   onPress?(): void;
 } & AccessibilityProps;
-const HeaderButton: React.FC<{iconButton: IconButton}> = ({iconButton}) => {
+const HeaderButton: React.FC<IconButton> = ({icon, onPress, ...props}) => {
   return (
-    <TouchableOpacity
-      onPress={iconButton.onPress}
-      hitSlop={insets.all(12)}
-      accessibilityLabel={iconButton.accessibilityLabel}
-      accessibilityRole="button"
-    >
-      {iconButton.icon}
+    <TouchableOpacity onPress={onPress} hitSlop={insets.all(12)} {...props}>
+      {icon}
     </TouchableOpacity>
   );
 };

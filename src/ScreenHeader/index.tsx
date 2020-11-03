@@ -19,16 +19,8 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 }) => {
   const css = useHeaderStyle();
 
-  const leftIcon = leftButton ? (
-    <HeaderButton iconButton={leftButton} />
-  ) : (
-    <View />
-  );
-  const rightIcon = rightButton ? (
-    <HeaderButton iconButton={rightButton} />
-  ) : (
-    <View />
-  );
+  const leftIcon = leftButton ? <HeaderButton {...leftButton} /> : <View />;
+  const rightIcon = rightButton ? <HeaderButton {...rightButton} /> : <View />;
 
   return (
     <View style={[css.container, style]}>
