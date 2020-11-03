@@ -1,0 +1,18 @@
+import qs from 'query-string';
+import client from './client';
+import {stringifyUrl} from './utils';
+
+type EnrollmentResponse =
+  | {
+      status: 'expired';
+    }
+  | {status: 'ok'; groups: string[]};
+
+export async function enrollIntoBetaGroups(inviteKey: string) {
+  const url = 'bff/v1/enrollment/group';
+  const query = qs.stringify({
+    inviteKey,
+  });
+
+  return await client.post<EnrollmentResponse>(stringifyUrl(url, query));
+}

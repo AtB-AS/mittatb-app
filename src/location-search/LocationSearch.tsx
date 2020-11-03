@@ -1,15 +1,18 @@
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
-import {Text, TextInput, View, Keyboard} from 'react-native';
+import {TextInput, View, Keyboard} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Header from '../ScreenHeader';
 import Input from '../components/input';
-import {Location, LocationWithMetadata} from '../favorites/types';
+import {
+  Location,
+  LocationWithMetadata,
+  UserFavorites,
+} from '../favorites/types';
 import {useGeolocationState} from '../GeolocationContext';
 import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
 import {StyleSheet} from '../theme';
-import colors from '../theme/colors';
 import FavoriteChips, {ChipTypeGroup} from '../favorite-chips';
 import LocationResults from './LocationResults';
 import useDebounce from './useDebounce';
@@ -20,6 +23,11 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useGeocoder} from '../geocoder';
 import MessageBox from '../message-box';
 import {ErrorType} from '../api/utils';
+import {useFavorites} from '../favorites';
+import {LocationSearchResult} from './types';
+import ThemeIcon from '../components/theme-icon';
+import ThemeText from '../components/text';
+import ScreenReaderAnnouncement from '../components/screen-reader-announcement';
 
 export type Props = {
   navigation: LocationSearchNavigationProp;
@@ -48,16 +56,19 @@ const LocationSearch: React.FC<Props> = ({
 }) => {
   const styles = useThemeStyles();
   const {history, addSearchEntry} = useSearchHistory();
+  const {favorites} = useFavorites();
 
   const [text, setText] = useState<string>(initialLocation?.name ?? '');
   const debouncedText = useDebounce(text, 200);
 
-  const previousLocations = filterPreviousLocations(debouncedText, history);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const previousLocations = filterPreviousLocations(
+    debouncedText,
+    history,
+    favorites,
+  );
 
-  const {
-    location: geolocation,
-    requestPermission: requestGeoPermission,
-  } = useGeolocationState();
+  const {location: geolocation} = useGeolocationState();
 
   const {locations, error} =
     useGeocoder(debouncedText, geolocation?.coords ?? null) ?? [];
@@ -90,8 +101,16 @@ const LocationSearch: React.FC<Props> = ({
     });
   };
 
-  const onSearchSelect = (location: Location) =>
-    onSelect({...location, resultType: 'search'});
+  const onSearchSelect = (searchResult: LocationSearchResult) => {
+    if (!searchResult.favoriteInfo) {
+      return onSelect({...searchResult.location, resultType: 'search'});
+    }
+    return onSelect({
+      ...searchResult.location,
+      resultType: 'favorite',
+      favoriteId: searchResult.favoriteInfo.id,
+    });
+  };
 
   const inputRef = useRef<TextInput>(null);
 
@@ -104,6 +123,12 @@ const LocationSearch: React.FC<Props> = ({
   useEffect(() => {
     if (isFocused) focusInput();
   }, [isFocused]);
+
+  useEffect(() => {
+    if (error) {
+      setErrorMessage(translateErrorType(error));
+    }
+  }, [error]);
 
   const onPrefillText = (text: string) => {
     setText(text);
@@ -124,11 +149,12 @@ const LocationSearch: React.FC<Props> = ({
               accessible: true,
               accessibilityRole: 'button',
               accessibilityLabel: 'Gå tilbake',
-              icon: <Close />,
+              icon: <ThemeIcon svg={Close} />,
             }}
             title="Søk"
           />
         </View>
+        <ScreenReaderAnnouncement message={errorMessage} />
 
         <View style={[{marginTop: 12}, styles.contentBlock]}>
           <Input
@@ -157,7 +183,7 @@ const LocationSearch: React.FC<Props> = ({
           <View style={styles.contentBlock}>
             <MessageBox
               type="warning"
-              message={translateErrorType(error)}
+              message={errorMessage}
               containerStyle={{marginBottom: 12}}
             />
           </View>
@@ -172,7 +198,6 @@ const LocationSearch: React.FC<Props> = ({
           >
             {hasPreviousResults && (
               <LocationResults
-                title="Tidligere søk"
                 locations={previousLocations}
                 onSelect={onSearchSelect}
                 onPrefillText={onPrefillText}
@@ -192,7 +217,7 @@ const LocationSearch: React.FC<Props> = ({
           !!text && (
             <View style={styles.contentBlock}>
               <MessageBox type="info">
-                <Text>Fant ingen søkeresultat</Text>
+                <ThemeText>Fant ingen søkeresultat</ThemeText>
               </MessageBox>
             </View>
           )
@@ -215,22 +240,43 @@ function translateErrorType(errorType: ErrorType): string {
 const filterPreviousLocations = (
   searchText: string,
   previousLocations: Location[],
-): Location[] =>
-  searchText
-    ? previousLocations.filter((l) =>
-        l.name?.toLowerCase()?.startsWith(searchText.toLowerCase()),
-      )
-    : previousLocations;
+  favorites?: UserFavorites,
+): LocationSearchResult[] => {
+  const mappedHistory: LocationSearchResult[] =
+    previousLocations?.map((location) => ({
+      location,
+    })) ?? [];
+
+  if (!searchText) {
+    return mappedHistory;
+  }
+
+  const matchText = (text?: string) =>
+    text?.toLowerCase()?.startsWith(searchText.toLowerCase());
+  const filteredFavorites: LocationSearchResult[] = (favorites ?? [])
+    .filter(
+      (favorite) =>
+        matchText(favorite.location?.name) || matchText(favorite.name),
+    )
+    .map(({location, ...favoriteInfo}) => ({
+      location,
+      favoriteInfo,
+    }));
+
+  return filteredFavorites.concat(
+    mappedHistory.filter((l) => matchText(l.location.name)),
+  );
+};
 
 const filterCurrentLocation = (
   locations: Location[] | null,
-  previousLocations: Location[] | null,
-): Location[] => {
-  if (!previousLocations?.length) return locations ?? [];
-  if (!locations) return [];
-  return locations.filter(
-    (l) => !previousLocations.some((pl) => pl.id === l.id),
-  );
+  previousLocations: LocationSearchResult[] | null,
+): LocationSearchResult[] => {
+  if (!previousLocations?.length || !locations)
+    return locations?.map((location) => ({location})) ?? [];
+  return locations
+    .filter((l) => !previousLocations.some((pl) => pl.location.id === l.id))
+    .map((location) => ({location}));
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
@@ -245,38 +291,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   chipBox: {
-    marginBottom: 12,
-  },
-  label: {
-    fontSize: 14,
-    lineHeight: 20,
-    position: 'absolute',
-    left: 12,
-  },
-  placeholder: {
-    color: theme.text.colors.faded,
-  },
-  inputContainer: {
-    width: '100%',
-    height: 46,
-    flexDirection: 'column',
-    marginBottom: 24,
-    justifyContent: 'center',
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    paddingLeft: 60,
-    backgroundColor: theme.background.level1,
-    borderWidth: 1,
-    borderColor: colors.general.gray,
-    borderRadius: 4,
-    color: theme.text.colors.primary,
-  },
-  searchIcon: {
-    position: 'absolute',
-    left: 14,
-    alignSelf: 'center',
+    marginBottom: theme.spacings.medium,
   },
 }));
 

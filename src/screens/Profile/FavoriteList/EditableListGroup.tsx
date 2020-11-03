@@ -1,7 +1,8 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import {StyleSheet, Theme} from '../../../theme';
 import SectionHeader from '../../../components/section-header';
+import ThemeText from '../../../components/text';
 
 export type ListRenderItem<ItemT> = (item: ItemT) => React.ReactElement | null;
 
@@ -29,9 +30,9 @@ export default function EditableListGroup<T>({
 
       <View style={css.listSection}>
         {!data?.length ? (
-          <Text style={css.empty}>
+          <ThemeText style={css.empty}>
             Du har ingen favorittsteder. Legg til et nå.
-          </Text>
+          </ThemeText>
         ) : (
           data.map((item, index) => (
             <View key={keyExtractor(item, index)}>{renderItem(item)}</View>
@@ -52,7 +53,7 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'stretch',
   },
   empty: {
-    fontSize: 16,
+    fontSize: 12,
     marginTop: 20,
   },
 }));

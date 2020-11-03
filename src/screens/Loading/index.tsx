@@ -1,5 +1,6 @@
 import React from 'react';
-import {ActivityIndicator, Text, View, StyleSheet} from 'react-native';
+import {ActivityIndicator, View, StyleSheet} from 'react-native';
+import ThemeText from '../../components/text';
 import colors from '../../theme/colors';
 
 const Loading: React.FC<{text?: string}> = ({text}) => {
@@ -10,7 +11,11 @@ const Loading: React.FC<{text?: string}> = ({text}) => {
         size="large"
         color={colors.general.white}
       />
-      {text ? <Text style={styles.text}>{text}</Text> : null}
+      {text ? (
+        <ThemeText type="paragraphHeadline" style={styles.text}>
+          {text}
+        </ThemeText>
+      ) : null}
     </View>
   );
 };
@@ -23,9 +28,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: colors.general.white,
     marginTop: 10,
   },
 });

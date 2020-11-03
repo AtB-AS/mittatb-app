@@ -1,15 +1,16 @@
 import React from 'react';
 import {
   View,
-  Text,
   ViewStyle,
+  Text,
   StyleProp,
   AccessibilityProps,
   TouchableOpacity,
 } from 'react-native';
 import {StyleSheet} from '../../theme';
 import {LocationWithMetadata} from '../../favorites/types';
-import {screenreaderPause} from '../accessible-text';
+import {screenReaderPause} from '../accessible-text';
+import ThemeText from '../text';
 
 type SearchButtonProps = {
   title: string;
@@ -37,13 +38,13 @@ const SearchButton: React.FC<SearchButtonProps> = ({
         style={styles.button}
         onPress={onPress}
       >
-        <Text style={styles.title}>{title}</Text>
+        <ThemeText type="body" style={styles.title}>
+          {title}
+        </ThemeText>
         <View style={styles.icon}>{icon}</View>
-        <Text style={styles.buttonText} numberOfLines={1}>
-          {text ?? (
-            <Text style={{color: 'rgba(0, 0, 0, 0.6)'}}>{placeholder}</Text>
-          )}
-        </Text>
+        <ThemeText type="body" style={styles.buttonText} numberOfLines={1}>
+          {text ?? <Text style={styles.placeholder}>{placeholder}</Text>}
+        </ThemeText>
       </TouchableOpacity>
     </View>
   );
@@ -64,7 +65,7 @@ export const LocationButton: React.FC<LocationButtonProps> = ({
 
   if (currentValueLabel) {
     props.accessibilityValue = {
-      text: currentValueLabel + ' er valgt.' + screenreaderPause,
+      text: currentValueLabel + ' er valgt.' + screenReaderPause,
     };
   }
   return <SearchButton text={currentValueLabel} {...props} />;
@@ -75,21 +76,22 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: theme.spacings.medium,
+    paddingVertical: theme.spacings.small,
   },
   buttonContainer: {
     flexDirection: 'row',
   },
   title: {width: 40},
   buttonText: {
-    fontSize: 16,
-    lineHeight: 20,
     flex: 1,
-    marginLeft: 20,
+    marginLeft: theme.spacings.large,
   },
   icon: {
     position: 'absolute',
     left: 46,
+  },
+  placeholder: {
+    color: theme.text.colors.faded,
   },
 }));

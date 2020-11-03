@@ -4,8 +4,6 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {
   AccessibilityProps,
   StyleProp,
-  StyleSheet,
-  Text,
   TouchableOpacity,
   ViewStyle,
 } from 'react-native';
@@ -19,7 +17,10 @@ import {useReverseGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
 import {TabNavigatorParams} from '../navigation/TabNavigator';
 import colors from '../theme/colors';
-import {screenreaderPause} from '../components/accessible-text';
+import {StyleSheet} from '../theme';
+import ThemeIcon from '../components/theme-icon';
+import {screenReaderPause} from '../components/accessible-text';
+import ThemeText from '../components/text';
 
 type Props = {
   onSelectLocation: (location: LocationWithMetadata) => void;
@@ -50,8 +51,6 @@ const FavoriteChips: React.FC<Props> = ({
 
   return (
     <ScrollView
-      accessible={true}
-      accessibilityLabel="Favoritter"
       horizontal={true}
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={containerStyle}
@@ -81,7 +80,7 @@ const FavoriteChips: React.FC<Props> = ({
           <FavoriteChip
             key={fav.name}
             text={fav.name}
-            accessibilityLabel={'Favoritt: ' + fav.name + screenreaderPause}
+            accessibilityLabel={'Favoritt: ' + fav.name + screenReaderPause}
             accessibilityRole="button"
             accessibilityHint={chipActionHint ?? ''}
             icon={<FavoriteIcon favorite={fav} />}
@@ -103,7 +102,7 @@ const FavoriteChips: React.FC<Props> = ({
         <FavoriteChip
           text={'Legg til favoritt'}
           accessibilityRole="button"
-          icon={<Add />}
+          icon={<ThemeIcon svg={Add} />}
           mode="light"
           onPress={() =>
             navigation.navigate('Profile', {
@@ -136,6 +135,7 @@ const FavoriteChip: React.FC<ChipProps> = ({
   mode = 'normal',
   ...accessibilityProps
 }) => {
+  const chipStyles = useChipStyles();
   return (
     <TouchableOpacity
       style={[
@@ -148,16 +148,21 @@ const FavoriteChip: React.FC<ChipProps> = ({
       {...accessibilityProps}
     >
       {icon}
-      <Text
-        style={[chipStyles.text, mode == 'light' && chipStyles.text__light]}
+      <ThemeText
+        type="body"
+        style={[
+          chipStyles.text,
+          mode == 'light' && chipStyles.text__light,
+          mode == 'dark' && chipStyles.text__dark,
+        ]}
       >
         {text}
-      </Text>
+      </ThemeText>
     </TouchableOpacity>
   );
 };
 
-const chipStyles = StyleSheet.create({
+const useChipStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   container: {
     height: 28,
     borderRadius: 8,
@@ -165,28 +170,36 @@ const chipStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    marginRight: 8,
-  },
-  container__dark: {
-    backgroundColor: colors.secondary.gray_500,
-  },
-  container__light: {
-    backgroundColor: colors.secondary.cyan_300,
+    paddingVertical: theme.spacings.xSmall,
+    paddingHorizontal: theme.spacings.small,
+    marginRight: theme.spacings.small,
   },
   text: {
-    marginLeft: 4,
-    marginRight: 4,
+    marginLeft: theme.spacings.xSmall,
+    marginRight: theme.spacings.xSmall,
     color: colors.general.white,
-    fontSize: 16,
     fontWeight: 'bold',
     letterSpacing: -0.31,
   },
-  text__light: {
-    color: colors.general.black,
+  container__dark: {
+    backgroundColor: theme.button.primary2.bg,
   },
-});
+  text__dark: {
+    color: theme.button.primary2.color,
+  },
+  container__light: {
+    backgroundColor:
+      themeName === 'dark'
+        ? theme.button.primary3.bg
+        : colors.secondary.cyan_300,
+  },
+  text__light: {
+    color:
+      themeName === 'dark'
+        ? theme.button.primary3.color
+        : theme.text.colors.primary,
+  },
+}));
 
 function useCurrentLocationChip(
   onSelectLocation: (location: LocationWithMetadata) => void,

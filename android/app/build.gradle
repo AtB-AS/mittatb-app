@@ -139,7 +139,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode  project.hasProperty("versionCode") ? project.getProperty("versionCode") as Integer : 1
-        versionName "1.0"
+        versionName "1.1"
         multiDexEnabled true
     }
     splits {
@@ -218,6 +218,8 @@ android {
 }
 
 dependencies {
+    implementation 'com.facebook.soloader:soloader:0.9.0+'
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules

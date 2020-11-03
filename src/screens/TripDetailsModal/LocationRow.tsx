@@ -1,12 +1,12 @@
 import React from 'react';
 import {
   View,
-  Text,
   TextStyle,
   StyleProp,
   ViewStyle,
   LayoutChangeEvent,
 } from 'react-native';
+import ThemeText from '../../components/text';
 import {StyleSheet, useTheme} from '../../theme';
 
 const LocationRow: React.FC<{
@@ -41,8 +41,14 @@ const LocationRow: React.FC<{
     <View style={[styles.row, rowStyle]} onLayout={onLayout}>
       <View style={styles.iconLocationContainer}>
         <View style={styles.timeContainer}>
-          <Text style={[styles.time, textStyle, timeStyle]}>{time}</Text>
-          {aimedTime && <Text style={styles.aimedTime}>{aimedTime}</Text>}
+          <ThemeText style={[styles.time, textStyle, timeStyle]}>
+            {time}
+          </ThemeText>
+          {aimedTime && (
+            <ThemeText type="label" style={styles.aimedTime}>
+              {aimedTime}
+            </ThemeText>
+          )}
         </View>
         <View
           style={[
@@ -58,8 +64,10 @@ const LocationRow: React.FC<{
           {icon}
         </View>
         <View style={styles.labelContainer}>
-          {!!labelIcon && <Text style={styles.labelIcon}>{labelIcon}</Text>}
-          <Text style={[styles.label, textStyle]}>{label}</Text>
+          {!!labelIcon && (
+            <ThemeText style={styles.labelIcon}>{labelIcon}</ThemeText>
+          )}
+          <ThemeText style={textStyle}>{label}</ThemeText>
         </View>
       </View>
     </View>
@@ -93,9 +101,6 @@ const useLocationRowStyle = StyleSheet.createThemeHook((theme) => ({
   labelIcon: {
     marginRight: 6,
   },
-  label: {
-    color: theme.text.colors.primary,
-  },
   timeContainer: {
     width: 78,
     alignItems: 'flex-end',
@@ -103,16 +108,11 @@ const useLocationRowStyle = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'flex-end',
   },
   time: {
-    color: theme.text.colors.primary,
     fontVariant: ['tabular-nums'],
   },
   aimedTime: {
     position: 'absolute',
     top: '50%',
-    color: theme.text.colors.primary,
-    fontSize: 12,
-    lineHeight: 16,
-    fontWeight: 'normal',
     textDecorationLine: 'line-through',
     textDecorationStyle: 'solid',
     fontVariant: ['tabular-nums'],

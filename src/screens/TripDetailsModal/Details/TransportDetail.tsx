@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 import Dash from 'react-native-dash';
 import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
 import {Dot} from '../../../assets/svg/icons/other';
@@ -18,6 +18,8 @@ import transportationColor from '../../../utils/transportation-color';
 import SituationRow from '../SituationRow';
 import colors from '../../../theme/colors';
 import {useLayout} from '../../../utils/use-layout';
+import ThemeText from '../../../components/text';
+import {StyleSheet} from '../../../theme';
 
 const TransportDetail: React.FC<LegDetailProps> = ({
   leg,
@@ -40,6 +42,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
 
   const {height: fromHeight, onLayout: onFromLayout} = useLayout();
   const {height: toHeight, onLayout: onToLayout} = useLayout();
+  const styles = useStyles();
 
   return (
     <View style={{marginTop: -6}}>
@@ -90,7 +93,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
             onLayout={onFromLayout}
           />
         )}
-        <Text style={styles.lineName}>{getLineName(leg)}</Text>
+        <ThemeText style={styles.lineName}>{getLineName(leg)}</ThemeText>
 
         <SituationRow
           situations={leg.situations}
@@ -142,18 +145,19 @@ const TransportDetail: React.FC<LegDetailProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  textStyle: {fontSize: 14, lineHeight: 20},
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  textStyle: {
+    ...theme.text.lead,
+  },
   lineName: {
     marginLeft: 120,
-    fontSize: 16,
-    fontWeight: '600',
+    ...theme.text.paragraphHeadline,
   },
   dashContainer: {
     marginLeft: 95,
     position: 'absolute',
     height: '100%',
-    paddingVertical: 12,
+    paddingVertical: theme.spacings.medium,
   },
   dash: {
     flexDirection: 'column',
@@ -171,6 +175,6 @@ const styles = StyleSheet.create({
     marginLeft: 7,
     marginBottom: 1,
   },
-});
+}));
 
 export default TransportDetail;

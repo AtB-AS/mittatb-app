@@ -1,7 +1,7 @@
 import {LegMode} from '@entur/sdk';
 import {RouteProp} from '@react-navigation/native';
 import React, {Fragment, useCallback, useState} from 'react';
-import {ActivityIndicator, Text, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import Dash from 'react-native-dash';
 import {ScrollView} from 'react-native-gesture-handler';
 import {DetailsModalNavigationProp, DetailsModalStackParams} from '..';
@@ -26,6 +26,8 @@ import usePollableResource from '../../../utils/use-pollable-resource';
 import LocationRow from '../LocationRow';
 import SituationRow from '../SituationRow';
 import {getAimedTimeIfLargeDifference} from '../utils';
+import ThemeIcon from '../../../components/theme-icon';
+import ThemeText from '../../../components/text';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -91,7 +93,7 @@ export default function DepartureDetails({navigation, route}: Props) {
       <ScreenHeader
         leftButton={{
           onPress: () => navigation.goBack(),
-          icon: isBack ? <ArrowLeft /> : <Close />,
+          icon: <ThemeIcon svg={isBack ? ArrowLeft : Close} />,
           accessible: true,
           accessibilityRole: 'button',
           accessibilityLabel: 'Gå tilbake',
@@ -240,15 +242,19 @@ function CollapseButtonRow({
   setCollapsed,
 }: CollapseButtonRowProps) {
   const styles = useCollapseButtonStyle();
-  const text = <Text style={styles.text}>{numberOfStops} Mellomstopp</Text>;
+  const text = (
+    <ThemeText color="faded" style={styles.text}>
+      {numberOfStops} Mellomstopp
+    </ThemeText>
+  );
   const child = collapsed ? (
     <>
-      <Expand />
+      <ThemeIcon svg={Expand} />
       {text}
     </>
   ) : (
     <>
-      <ExpandLess />
+      <ThemeIcon svg={ExpandLess} />
       {text}
     </>
   );
@@ -266,7 +272,6 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   },
   text: {
     marginLeft: 12,
-    color: theme.text.colors.faded,
   },
 }));
 

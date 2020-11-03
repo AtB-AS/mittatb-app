@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import Dash from 'react-native-dash';
 
 import colors from '../../../theme/colors';
@@ -7,6 +7,8 @@ import {secondsToDuration, secondsBetween} from '../../../utils/date';
 import {WalkingPerson} from '../../../assets/svg/icons/transportation';
 import {LegDetailProps} from '.';
 import WaitRow from './WaitRow';
+import ThemeText from '../../../components/text';
+import ThemeIcon from '../../../components/theme-icon';
 
 const MINIMUM_WAIT_IN_SECONDS = 30;
 
@@ -40,10 +42,10 @@ const WalkDetail: React.FC<LegDetailProps> = ({
           <View>
             {isWalkTimeOfSignificance && (
               <View style={styles.walkContainer}>
-                <WalkingPerson fill={colors.general.gray200} />
-                <Text style={styles.walkText}>
+                <ThemeIcon svg={WalkingPerson} opacity={0.6} />
+                <ThemeText style={styles.walkText}>
                   Gå i {secondsToDuration(leg.duration ?? 0)}
-                </Text>
+                </ThemeText>
               </View>
             )}
             {isWalkTimeOfSignificance && isWaitTimeOfSignificance && (

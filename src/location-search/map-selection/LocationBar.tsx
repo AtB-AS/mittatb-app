@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {View, TouchableOpacity, ActivityIndicator} from 'react-native';
 import colors from '../../theme/colors';
 import {ArrowRight} from '../../assets/svg/icons/navigation';
 import {Info, Warning} from '../../assets/svg/icons/status';
@@ -8,6 +8,7 @@ import LocationIcon from '../../components/location-icon';
 import {StyleSheet} from '../../theme';
 import shadows from '../../components/map/shadows';
 import {ErrorType} from '../../api/utils';
+import ThemeText from '../../components/text';
 
 type Props = {
   location?: Location;
@@ -22,6 +23,7 @@ const LocationBar: React.FC<Props> = ({
   onSelect,
   isSearching,
 }) => {
+  const styles = useStyles();
   return (
     <View style={styles.container}>
       <TouchableOpacity style={{flex: 1}} onPress={onSelect}>
@@ -52,6 +54,7 @@ const Icon: React.FC<{
   location?: Location;
   hasError: boolean;
 }> = ({isSearching, location, hasError}) => {
+  const styles = useStyles();
   return (
     <View style={{marginHorizontal: 12}}>
       {isSearching ? (
@@ -75,8 +78,8 @@ const LocationText: React.FC<{
 
   return (
     <>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.subtitle}>{subtitle}</Text>
+      <ThemeText type="lead">{title}</ThemeText>
+      <ThemeText type="label">{subtitle}</ThemeText>
     </>
   );
 };
@@ -116,7 +119,7 @@ function getLocationText(
   };
 }
 
-const styles = StyleSheet.create({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -124,22 +127,20 @@ const styles = StyleSheet.create({
     ...shadows,
   },
   innerContainer: {
-    paddingRight: 8,
-    paddingVertical: 8,
-    borderRadius: 8,
-    backgroundColor: colors.general.white,
+    paddingRight: theme.spacings.small,
+    paddingVertical: theme.spacings.small,
+    borderRadius: theme.border.borderRadius.regular,
+    backgroundColor: theme.background.level0,
     flexDirection: 'row',
     flexGrow: 1,
     justifyContent: 'space-between',
   },
   locationContainer: {flexDirection: 'row', alignItems: 'center', height: 44},
-  title: {fontSize: 14, lineHeight: 20},
-  subtitle: {fontSize: 12, lineHeight: 16},
   button: {
     width: 44,
     alignItems: 'center',
     justifyContent: 'center',
   },
-});
+}));
 
 export default LocationBar;

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleProp, ViewStyle} from 'react-native';
+import {View, StyleProp, ViewStyle} from 'react-native';
 import {StyleSheet} from '../../theme';
 
 type ResultItemProps = {
@@ -36,7 +36,7 @@ export default SearchGroup;
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.background.level0,
-    borderRadius: 8,
+    borderRadius: theme.border.borderRadius.regular,
     marginHorizontal: 12,
   },
   line: {

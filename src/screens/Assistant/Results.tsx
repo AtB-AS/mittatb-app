@@ -7,9 +7,10 @@ import ResultItem from './ResultItem';
 import OptionalNextDayLabel from '../../components/optional-day-header';
 import {isSeveralDays} from '../../utils/date';
 import {NoResultReason} from './types';
-import {screenreaderPause} from '../../components/accessible-text';
+import {screenReaderPause} from '../../components/accessible-text';
 import {ErrorType} from '../../api/utils';
-
+import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
+import ThemeText from '../../components/text';
 type Props = {
   tripPatterns: TripPattern[] | null;
   showEmptyScreen: boolean;
@@ -32,8 +33,8 @@ const Results: React.FC<Props> = ({
   onDetailsPressed,
   errorType,
 }) => {
-  const {theme} = useTheme();
-  const styles = useThemeStyles(theme);
+  const {theme, themeName} = useTheme();
+  const styles = useThemeStyles(theme, themeName);
 
   const allSameDay = useMemo(
     () => isSeveralDays((tripPatterns ?? []).map((i) => i.startTime)),
@@ -45,12 +46,12 @@ const Results: React.FC<Props> = ({
   }
 
   if (errorType) {
+    const errorMessage = translateErrorType(errorType);
+
     return (
       <View style={styles.container}>
-        <MessageBox
-          type="warning"
-          message={translateErrorType(errorType)}
-        ></MessageBox>
+        <ScreenReaderAnnouncement message={errorMessage} />
+        <MessageBox type="warning" message={errorMessage}></MessageBox>
       </View>
     );
   }
@@ -61,7 +62,7 @@ const Results: React.FC<Props> = ({
     return (
       <View style={styles.container}>
         <MessageBox>
-          <Text style={styles.infoBoxText}>
+          <ThemeText style={styles.infoBoxText}>
             Vi fant dessverre ingen reiseruter som passer til ditt søk.
             {pluralResultReasons && (
               <Text>
@@ -80,7 +81,7 @@ const Results: React.FC<Props> = ({
             {!hasResultReasons && (
               <Text> Prøv å justere på sted eller tidspunkt. </Text>
             )}
-          </Text>
+          </ThemeText>
         </MessageBox>
       </View>
     );
@@ -100,7 +101,7 @@ const Results: React.FC<Props> = ({
             onDetailsPressed={onDetailsPressed}
             accessibilityLabel={`Reiseforslag ${i + 1} av ${
               tripPatterns.length
-            }. ${screenreaderPause}`}
+            }. ${screenReaderPause}`}
             accessibilityRole="button"
           />
         </Fragment>

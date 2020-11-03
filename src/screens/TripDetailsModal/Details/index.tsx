@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/native';
 import Axios, {AxiosError} from 'axios';
 import React, {useCallback, useState} from 'react';
-import {ActivityIndicator, Text, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {DetailsModalNavigationProp, DetailsModalStackParams} from '..';
 import {getSingleTripPattern} from '../../../api/trips';
@@ -22,10 +22,8 @@ import {LocationWithMetadata} from '../../../favorites/types';
 import MessageBox from '../../../message-box';
 import Header from '../../../ScreenHeader';
 import {Leg, Situation, TripPattern} from '../../../sdk';
-import SituationMessage from '../../../situations';
-import {StyleSheet} from '../../../theme';
+import {StyleSheet, useTheme} from '../../../theme';
 import colors from '../../../theme/colors';
-import {flatMap} from '../../../utils/array';
 import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
 import {getQuayNameFromStartLeg} from '../../../utils/transportation-names';
 import usePollableResource from '../../../utils/use-pollable-resource';
@@ -33,6 +31,7 @@ import LocationRow from '../LocationRow';
 import {CompactMap} from '../Map/CompactMap';
 import TransportDetail from './TransportDetail';
 import WalkDetail from './WalkDetail';
+import ThemeIcon from '../../../components/theme-icon';
 
 // @TODO Firebase config?
 const TIME_LIMIT_IN_MINUTES = 3;
@@ -76,10 +75,10 @@ const TripDetailsModal: React.FC<Props> = (props) => {
           accessible: true,
           accessibilityRole: 'button',
           accessibilityLabel: 'Gå tilbake',
-          icon: <Close />,
+          icon: <ThemeIcon svg={Close} />,
         }}
         title="Reisedetaljer"
-        style={{backgroundColor: colors.secondary.cyan}}
+        style={styles.header}
       />
       <ScrollView
         style={styles.scrollView}
@@ -108,7 +107,7 @@ const DetailsContent: React.FC<{
 }> = ({tripPattern, from, to, error}) => {
   const styles = useDetailsStyle();
   const {favorites} = useFavorites();
-
+  const {themeName} = useTheme();
   const [shortTime, setShortTime] = useState(false);
   const flagShortTime = (secondsBetween: number) => {
     if (secondsBetween / 60 <= TIME_LIMIT_IN_MINUTES) {
@@ -140,6 +139,7 @@ const DetailsContent: React.FC<{
     <>
       <CompactMap
         legs={tripPattern.legs}
+        darkMode={themeName === 'dark'}
         onExpand={() => {
           navigation.navigate('DetailsMap', {
             legs: tripPattern.legs,
@@ -208,12 +208,12 @@ function translateError(error: AxiosError): string {
 function getLocationIcon(location: LocationWithMetadata) {
   switch (location.resultType) {
     case 'geolocation':
-      return <CurrentLocationArrow />;
+      return <ThemeIcon svg={CurrentLocationArrow} />;
     case 'favorite':
     case 'search':
       return <LocationIcon location={location} multiple />;
     default:
-      return <MapPointPin fill={colors.general.black} />;
+      return <ThemeIcon svg={MapPointPin} />;
   }
 }
 function nextLeg(curent: number, legs: Leg[]): Leg | undefined {
@@ -258,16 +258,19 @@ const LegDetail: React.FC<LegDetailProps> = (props) => {
 };
 
 const useDetailsStyle = StyleSheet.createThemeHook((theme) => ({
+  header: {
+    backgroundColor: theme.background.header,
+  },
   container: {
     flex: 1,
     backgroundColor: theme.background.modal_Level2,
   },
   messageContainer: {
-    margin: 24,
+    margin: theme.spacings.xLarge,
     marginTop: 0,
   },
   textDetailsContainer: {
-    paddingTop: 8,
+    paddingTop: theme.spacings.small,
   },
   scrollView: {
     flex: 1,
@@ -276,9 +279,7 @@ const useDetailsStyle = StyleSheet.createThemeHook((theme) => ({
     paddingRight: theme.spacings.medium,
     paddingBottom: 100,
   },
-  textStyle: {
-    fontSize: 16,
-  },
+  textStyle: theme.text.body,
 }));
 
 export default TripDetailsModal;

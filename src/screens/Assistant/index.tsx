@@ -2,7 +2,6 @@ import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
-  Text,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -43,16 +42,17 @@ import {useLayout} from '../../utils/use-layout';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
 import Results from './Results';
-import {NoResultReason} from './types';
+import {NoResultReason, SearchStateType} from './types';
 import FavoriteChips from '../../favorite-chips';
 
 import Animated, {Easing} from 'react-native-reanimated';
 import Bugsnag from '@bugsnag/react-native';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
-import AccessibleText, {
-  screenreaderPause,
-} from '../../components/accessible-text';
+import {screenReaderPause} from '../../components/accessible-text';
 import colors from '../../theme/colors';
+import ThemeIcon from '../../components/theme-icon';
+import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
+import ThemeText from '../../components/text';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -183,13 +183,13 @@ const Assistant: React.FC<Props> = ({
   const [date, setDate] = useState<DateOutput | undefined>();
   const [
     tripPatterns,
-    isSearching,
     timeOfLastSearch,
     reload,
     clearPatterns,
+    searchState,
     errorType,
   ] = useTripPatterns(from, to, date);
-
+  const isSearching = searchState === 'searching';
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
     initialLocation: LocationWithMetadata | undefined,
@@ -214,10 +214,10 @@ const Assistant: React.FC<Props> = ({
             <View style={styles.styleButton}>
               <LocationButton
                 accessible={true}
-                accessibilityLabel={'Velg avreisested' + screenreaderPause}
+                accessibilityLabel={'Velg avreisested' + screenReaderPause}
                 accessibilityHint={
                   'Aktiver for å søke etter adresse eller sted.' +
-                  screenreaderPause
+                  screenReaderPause
                 }
                 accessibilityRole="button"
                 title="Fra"
@@ -247,7 +247,7 @@ const Assistant: React.FC<Props> = ({
               hitSlop={insets.all(12)}
               onPress={setCurrentLocationOrRequest}
             >
-              <CurrentLocationArrow />
+              <ThemeIcon svg={CurrentLocationArrow} />
             </TouchableOpacity>
           </View>
 
@@ -270,11 +270,11 @@ const Assistant: React.FC<Props> = ({
                 hitSlop={insets.all(12)}
                 accessible={true}
                 accessibilityLabel={
-                  'Bytt avreisested og ankomststed' + screenreaderPause
+                  'Bytt avreisested og ankomststed' + screenReaderPause
                 }
                 accessibilityRole="button"
               >
-                <Swap />
+                <ThemeIcon svg={Swap} />
               </TouchableOpacity>
             </View>
           </View>
@@ -292,7 +292,7 @@ const Assistant: React.FC<Props> = ({
               chipActionHint={
                 'Aktiver for å bruke som ' +
                 (from ? 'destinasjon' : 'avreisested') +
-                screenreaderPause
+                screenReaderPause
               }
             />
           </Fade>
@@ -309,13 +309,6 @@ const Assistant: React.FC<Props> = ({
               />
             </SearchGroup>
           </Fade>
-          <View accessible={true} accessibilityLiveRegion="polite">
-            <AccessibleText
-              prefix={
-                isSearching ? 'Laster søkeresultat' : 'Søkeresultat innlastet'
-              }
-            />
-          </View>
         </View>
       </View>
     ),
@@ -333,7 +326,8 @@ const Assistant: React.FC<Props> = ({
 
   const altHeaderComp = (
     <View accessible={true} onLayout={onAltLayout} style={styles.altTitle}>
-      <Text
+      <ThemeText
+        type="paragraphHeadline"
         style={[
           styles.altTitleText,
           styles.altTitleText__right,
@@ -342,21 +336,37 @@ const Assistant: React.FC<Props> = ({
         numberOfLines={1}
       >
         {from?.name}
-      </Text>
-      <Text accessibilityLabel="til" style={styles.altTitleText}>
+      </ThemeText>
+      <ThemeText
+        type="paragraphHeadline"
+        accessibilityLabel="til"
+        style={styles.altTitleText}
+      >
         {' '}
         –{' '}
-      </Text>
-      <Text
+      </ThemeText>
+      <ThemeText
+        type="paragraphHeadline"
         style={[styles.altTitleText, {maxWidth: altWidth / 2}]}
         numberOfLines={1}
       >
         {to?.name}
-      </Text>
+      </ThemeText>
     </View>
   );
 
   const noResultReasons = computeNoResultReasons(date, from, to);
+
+  const onPressed = useCallback(
+    (tripPattern) =>
+      navigation.navigate('TripDetailsModal', {
+        from: from!,
+        to: to!,
+        tripPatternId: tripPattern.id!,
+        tripPattern: tripPattern,
+      }),
+    [navigation, from, to],
+  );
 
   return (
     <DisappearingHeader
@@ -377,20 +387,14 @@ const Assistant: React.FC<Props> = ({
         }
       }}
     >
+      <ScreenReaderAnnouncement message={translateSearchState(searchState)} />
       <Results
         tripPatterns={tripPatterns}
         isSearching={isSearching}
         showEmptyScreen={showEmptyScreen}
         isEmptyResult={isEmptyResult}
         resultReasons={noResultReasons}
-        onDetailsPressed={(tripPattern) =>
-          navigation.navigate('TripDetailsModal', {
-            from: from!,
-            to: to!,
-            tripPatternId: tripPattern.id!,
-            tripPattern: tripPattern,
-          })
-        }
+        onDetailsPressed={onPressed}
         errorType={errorType}
       />
     </DisappearingHeader>
@@ -401,15 +405,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   searchButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingRight: 12,
+    paddingRight: theme.spacings.medium,
   },
   swapButton: {
     position: 'relative',
     top: -19,
     right: 23,
     backgroundColor: theme.background.level0,
+    borderColor: theme.background.header,
     padding: 3,
-    borderColor: theme.background.accent,
     borderWidth: 2,
     borderRadius: 20,
   },
@@ -429,8 +433,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   altTitleText: {
     overflow: 'hidden',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   altTitleText__right: {
     textAlign: 'right',
@@ -541,11 +543,18 @@ function useTripPatterns(
   fromLocation: Location | undefined,
   toLocation: Location | undefined,
   date: DateOutput | undefined,
-): [TripPattern[] | null, boolean, Date, () => {}, () => void, ErrorType?] {
-  const [isSearching, setIsSearching] = useState(false);
+): [
+  TripPattern[] | null,
+  Date,
+  () => {},
+  () => void,
+  SearchStateType,
+  ErrorType?,
+] {
   const [timeOfSearch, setTimeOfSearch] = useState<Date>(new Date());
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
   const [errorType, setErrorType] = useState<ErrorType>();
+  const [searchState, setSearchState] = useState<SearchStateType>('idle');
 
   const clearPatterns = () => setTripPatterns(null);
   const reload = useCallback(() => {
@@ -554,7 +563,7 @@ function useTripPatterns(
     async function search() {
       if (!fromLocation || !toLocation) return;
 
-      setIsSearching(true);
+      setSearchState('searching');
       setErrorType(undefined);
       try {
         const arriveBy = date?.type === 'arrival';
@@ -577,15 +586,21 @@ function useTripPatterns(
           },
         );
         source.token.throwIfRequested();
-        setTripPatterns(response.data);
-        setIsSearching(false);
         setTimeOfSearch(searchDate);
+        if (Array.isArray(response.data)) {
+          setTripPatterns(response.data);
+          setSearchState(
+            response.data.length >= 1
+              ? 'search-success'
+              : 'search-empty-result',
+          );
+        }
       } catch (e) {
         if (!isCancel(e)) {
           setErrorType(getAxiosErrorType(e));
           console.warn(e);
           setTripPatterns(null);
-          setIsSearching(false);
+          setSearchState('search-empty-result');
         }
       }
     }
@@ -601,10 +616,10 @@ function useTripPatterns(
 
   return [
     tripPatterns,
-    isSearching,
     timeOfSearch,
     reload,
     clearPatterns,
+    searchState,
     errorType,
   ];
 }
@@ -659,4 +674,18 @@ function log(message: string, metadata?: {[key: string]: string}) {
 function translateLocation(location: Location | undefined): string {
   if (!location) return 'Undefined location';
   return `${location.id}--${location.name}--${location.locality}`;
+}
+function translateSearchState(
+  searchState: SearchStateType,
+): string | undefined {
+  switch (searchState) {
+    case 'searching':
+      return 'Laster søkeresultater.';
+    case 'search-success':
+      return 'Søkeresultater er lastet inn.';
+    case 'search-empty-result':
+      return 'Fikk ingen søkeresultater.';
+    default:
+      return;
+  }
 }

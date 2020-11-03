@@ -1,14 +1,17 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
 import Intercom from 'react-native-intercom';
 import {Chat, ChatUnread} from '../assets/svg/icons/actions';
 import useChatUnreadCount from './use-chat-unread-count';
-import colors from '../theme/colors';
 import {useRemoteConfig} from '../RemoteConfigContext';
+import {StyleSheet} from '../theme';
+import ThemeIcon from '../components/theme-icon';
+import {IconButton} from '../ScreenHeader/HeaderButton';
 
-export default function useChatIcon() {
+export default function useChatIcon(): IconButton | undefined {
   const config = useRemoteConfig();
   const unreadCount = useChatUnreadCount();
+  const styles = useStyles();
 
   if (!config.enable_intercom) {
     return undefined;
@@ -16,29 +19,29 @@ export default function useChatIcon() {
 
   return {
     icon: (
-      <View
-        accessible={true}
-        accessibilityLabel="Brukerstøtte"
-        accessibilityRole="button"
-        style={styles.chatContainer}
-      >
-        {unreadCount ? <ChatUnread /> : <Chat />}
+      <View style={styles.chatContainer}>
+        {unreadCount ? (
+          <ThemeIcon svg={ChatUnread} />
+        ) : (
+          <ThemeIcon svg={Chat} />
+        )}
       </View>
     ),
     onPress: () =>
       unreadCount
         ? Intercom.displayMessenger()
         : Intercom.displayConversationsList(),
+    importantForAccessibility: 'no-hide-descendants', // Android
+    accessibilityElementsHidden: true, // iOS
   };
 }
 
-const styles = StyleSheet.create({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   chatContainer: {
     width: 36,
     height: 28,
-    backgroundColor: colors.secondary.cyan,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: theme.border.borderRadius.regular,
   },
-});
+}));

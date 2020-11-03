@@ -1,5 +1,5 @@
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {View, Text, Linking, TouchableOpacity} from 'react-native';
+import {View, Linking, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {StyleSheet, Theme} from '../../../theme';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -18,6 +18,8 @@ import {TabNavigatorParams} from '../../../navigation/TabNavigator';
 import {PRIVACY_POLICY_URL} from '@env';
 import LogoOutline from '../../../ScreenHeader/LogoOutline';
 import {useNavigateHome} from '../../../utils/navigation';
+import ThemeIcon from '../../../components/theme-icon';
+import ThemeText from '../../../components/text';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -61,7 +63,7 @@ export default function Profile({navigation}: ProfileScreenProps) {
       <Header
         title="Mitt AtB"
         leftButton={{
-          icon: <LogoOutline />,
+          icon: <ThemeIcon svg={LogoOutline} />,
           onPress: navigateHome,
           accessibilityLabel: 'Gå til startskjerm',
         }}
@@ -90,7 +92,9 @@ export default function Profile({navigation}: ProfileScreenProps) {
           Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
         }
       >
-        <Text style={css.privacyPolicy}>Les vår personvernerklæring</Text>
+        <ThemeText type="body__link" style={css.privacyPolicy}>
+          Les vår personvernerklæring
+        </ThemeText>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -108,11 +112,8 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     color: theme.text.colors.primary,
   },
   privacyPolicy: {
-    fontSize: 16,
     textAlign: 'center',
-    textDecorationLine: 'underline',
-    color: theme.text.colors.primary,
-    marginBottom: 24,
+    marginBottom: theme.spacings.xLarge,
   },
 }));
 
@@ -120,9 +121,9 @@ function AddFavoriteButton({onPress}: {onPress(): void}) {
   const css = useItemStyle();
   return (
     <TouchableOpacity style={css.item} onPress={onPress}>
-      <Add />
+      <ThemeIcon svg={Add} />
       <View style={css.textContainer}>
-        <Text style={css.text}>Legg til favorittsted</Text>
+        <ThemeText style={css.text}>Legg til favorittsted</ThemeText>
       </View>
     </TouchableOpacity>
   );
@@ -138,11 +139,13 @@ const Item: React.FC<ItemProps> = ({item, onEdit, onClick}) => {
 
   const content = item.name ? (
     <>
-      <Text style={css.text}>{item.name ?? item.location.name}</Text>
-      <Text>{item.location.label}</Text>
+      <ThemeText type="paragraphHeadline" style={css.text}>
+        {item.name ?? item.location.name}
+      </ThemeText>
+      <ThemeText style={css.text}>{item.location.label}</ThemeText>
     </>
   ) : (
-    <Text>{item.location.label}</Text>
+    <ThemeText>{item.location.label}</ThemeText>
   );
 
   const clickable = onClick ? (
@@ -172,7 +175,7 @@ const Item: React.FC<ItemProps> = ({item, onEdit, onClick}) => {
           onPress={onEdit}
           hitSlop={insets.all(12)}
         >
-          <Edit />
+          <ThemeIcon svg={Edit} />
         </TouchableOpacity>
       )}
     </View>
@@ -200,7 +203,6 @@ const useItemStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     marginEnd: 10,
   },
   text: {
-    fontSize: 16,
-    fontWeight: '600',
+    color: theme.text.colors.primary,
   },
 }));

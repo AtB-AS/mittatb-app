@@ -12,6 +12,7 @@ import Assistant from '../screens/Assistant';
 import NearbyScreen from '../screens/Nearby';
 import ProfileScreen, {ProfileStackParams} from '../screens/Profile';
 import TicketingScreen from '../screens/Ticketing';
+import {useTheme} from '../theme';
 
 type SubNavigator<T extends ParamListBase> = {
   [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
@@ -32,8 +33,19 @@ export type TabNavigatorParams = {
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
 const NavigationRoot = () => {
+  const {theme} = useTheme();
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      tabBarOptions={{
+        activeTintColor: theme.text.colors.focus,
+        style: {
+          backgroundColor: theme.background.level0,
+        },
+        labelStyle: {
+          color: theme.text.colors.faded,
+        },
+      }}
+    >
       <Tab.Screen
         name="Assistant"
         component={Assistant}

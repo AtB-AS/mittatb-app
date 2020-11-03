@@ -1,18 +1,20 @@
 import {
   TouchableOpacityProperties,
   View,
-  Text,
   StyleProp,
   ViewStyle,
   TouchableOpacity,
+  TextStyle,
 } from 'react-native';
 import React from 'react';
-import {StyleSheet, Theme} from '../../theme';
+import {StyleSheet, Theme, useTheme} from '../../theme';
+import ThemeText from '../text';
 
 type ButtonProps = {
   onPress(): void;
   mode?: 'primary' | 'destructive' | 'secondary';
   textContainerStyle?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
   IconComponent?: React.ElementType;
   text: string;
 } & TouchableOpacityProperties;
@@ -24,9 +26,11 @@ const Button: React.FC<ButtonProps> = ({
   disabled,
   style,
   textContainerStyle,
+  textStyle,
   ...props
 }) => {
   const css = useButtonStyle();
+  const {theme} = useTheme();
   const styleContainer = [
     css.button,
     mode === 'secondary' ? css.buttonSecondary : undefined,
@@ -36,6 +40,7 @@ const Button: React.FC<ButtonProps> = ({
     css.text,
     mode === 'destructive' ? css.textDestructive : undefined,
   ];
+
   return (
     <View style={disabled ? css.buttonDisabled : undefined}>
       <TouchableOpacity
@@ -46,11 +51,13 @@ const Button: React.FC<ButtonProps> = ({
       >
         {IconComponent && (
           <View style={css.icon}>
-            <IconComponent />
+            <IconComponent fill={theme.text.colors.primary} />
           </View>
         )}
         <View style={[css.textContainer, textContainerStyle]}>
-          <Text style={styleText}>{text}</Text>
+          <ThemeText type="paragraphHeadline" style={[styleText, textStyle]}>
+            {text}
+          </ThemeText>
         </View>
       </TouchableOpacity>
     </View>
@@ -61,15 +68,15 @@ export default Button;
 const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   button: {
     flexDirection: 'row',
-    padding: 12,
+    padding: theme.spacings.medium,
     alignItems: 'center',
-    borderRadius: 8,
-    backgroundColor: theme.background.accent,
-    marginBottom: 8,
+    borderRadius: theme.border.borderRadius.regular,
+    backgroundColor: theme.button.primary.bg,
+    marginBottom: theme.spacings.small,
   },
   icon: {
     position: 'absolute',
-    left: 12,
+    left: theme.spacings.medium,
   },
   buttonSecondary: {
     backgroundColor: 'transparent',
@@ -87,9 +94,6 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
   },
   text: {
-    fontSize: 16,
-    lineHeight: 20,
-    fontWeight: '600',
     color: theme.text.colors.primary,
   },
   textDestructive: {

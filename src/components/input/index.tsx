@@ -1,6 +1,5 @@
 import React, {useState, useRef, forwardRef} from 'react';
 import {
-  Text,
   TextInput,
   TextInputProperties,
   StyleProp,
@@ -14,6 +13,8 @@ import {StyleSheet, useTheme} from '../../theme';
 import colors from '../../theme/colors';
 import {Close} from '../../assets/svg/icons/actions';
 import insets from '../../utils/insets';
+import ThemeText from '../text';
+import ThemeIcon from '../theme-icon';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -29,8 +30,8 @@ const Input = forwardRef<TextInput, InputProps>(
     {label, containerStyle, onFocus, onBlur, showClear, onClear, ...props},
     ref,
   ) => {
-    const {theme} = useTheme();
-    const style = useInputStyle(theme);
+    const {theme, themeName} = useTheme();
+    const style = useInputStyle(theme, themeName);
     const [isFocused, setIsFocused] = useState(Boolean(props?.autoFocus));
 
     const onFocusEvent = (e: FocusEvent) => {
@@ -66,11 +67,13 @@ const Input = forwardRef<TextInput, InputProps>(
               hitSlop={insets.all(8)}
               onPress={onClear}
             >
-              <Close />
+              <ThemeIcon svg={Close} />
             </TouchableOpacity>
           </View>
         ) : null}
-        <Text style={style.label}>{label}</Text>
+        <ThemeText type="lead" style={style.label}>
+          {label}
+        </ThemeText>
       </View>
     );
   },
@@ -83,22 +86,20 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     backgroundColor: theme.background.level1,
     color: theme.text.colors.primary,
     borderWidth: 1,
-    borderRadius: 4,
+    borderRadius: theme.border.borderRadius.small,
     paddingLeft: 60,
     paddingRight: 40,
-    padding: 12,
-    fontSize: 16,
+    padding: theme.spacings.medium,
+    fontSize: theme.text.body.fontSize,
   },
   container: {
-    marginBottom: 12,
+    marginBottom: theme.spacings.medium,
     flexDirection: 'column',
     justifyContent: 'center',
   },
   label: {
     position: 'absolute',
-    left: 12,
-    fontSize: 14,
-    lineHeight: 20,
+    left: theme.spacings.medium,
   },
   inputClear: {
     position: 'absolute',
