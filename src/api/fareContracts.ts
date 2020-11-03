@@ -1,3 +1,4 @@
+import {AxiosRequestConfig} from 'axios';
 import {getCustomerId} from '../utils/customerId';
 import client from './client';
 
@@ -14,6 +15,7 @@ export async function search(
   zones: string[],
   userTypes: {id: string; user_type: UserType}[],
   products: string[],
+  opts?: AxiosRequestConfig,
 ): Promise<Offer[]> {
   const body = {
     zones,
@@ -26,7 +28,7 @@ export async function search(
   };
 
   const url = 'ticket/v1/search';
-  const response = await client.post<Offer[]>(url, body);
+  const response = await client.post<Offer[]>(url, body, opts);
 
   return response.data;
 }
@@ -51,19 +53,24 @@ export type PaymentType = 'vipps' | 'creditcard';
 export async function reserve(
   offers: ReserveOffer[],
   paymentType: PaymentType,
+  opts?: AxiosRequestConfig,
 ) {
   const customer_id = await getCustomerId();
 
   const url = 'ticket/v1/reserve';
-  const response = await client.post<ReserveTicketResponse>(url, {
-    payment_type: paymentType === 'creditcard' ? 1 : 2,
-    payment_redirect_url:
-      paymentType == 'vipps'
-        ? 'atb://payment?transaction_id={transaction_id}&payment_id={payment_id}'
-        : undefined,
-    customer_id,
-    offers,
-  });
+  const response = await client.post<ReserveTicketResponse>(
+    url,
+    {
+      payment_type: paymentType === 'creditcard' ? 1 : 2,
+      payment_redirect_url:
+        paymentType == 'vipps'
+          ? 'atb://payment?transaction_id={transaction_id}&payment_id={payment_id}'
+          : undefined,
+      customer_id,
+      offers,
+    },
+    opts,
+  );
   return response.data;
 }
 

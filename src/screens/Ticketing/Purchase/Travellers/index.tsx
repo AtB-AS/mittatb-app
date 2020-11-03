@@ -17,7 +17,7 @@ import ThemeText from '../../../../components/text';
 import ThemeIcon from '../../../../components/theme-icon';
 import Button from '../../../../components/button';
 import {CreditCard, Vipps} from '../../../../assets/svg/icons/ticketing';
-import useOfferState from './use-offer-state';
+import useOfferState, {OfferError} from './use-offer-state';
 import insets from '../../../../utils/insets';
 
 type Props = {
@@ -68,14 +68,22 @@ const Travellers: React.FC<Props> = ({navigation}) => {
         }}
       />
 
-      <MessageBox type="info" title="Beta-begrensning">
-        <ThemeText type="label">
-          Det er foreløpig kun mulig å kjøpe enkeltbillett voksen for buss og
-          trikk. Bruk{' '}
-          <Text style={{textDecorationLine: 'underline'}}>AtB Mobillett</Text>
-          for å kjøpe andre billetter.
-        </ThemeText>
-      </MessageBox>
+      {error ? (
+        <MessageBox
+          type="warning"
+          title="Det oppstod en feil"
+          message={translateError(error)}
+        />
+      ) : (
+        <MessageBox type="info" title="Beta-begrensning">
+          <ThemeText type="label">
+            Det er foreløpig kun mulig å kjøpe enkeltbillett voksen for buss og
+            trikk. Bruk{' '}
+            <Text style={{textDecorationLine: 'underline'}}>AtB Mobillett</Text>{' '}
+            for å kjøpe andre billetter.
+          </ThemeText>
+        </MessageBox>
+      )}
       <View style={styles.ticketsContainer}>
         <ThemeText type="lead">
           Enkeltbillett, Sone A - Stor-Trondheim
@@ -139,6 +147,16 @@ const Travellers: React.FC<Props> = ({navigation}) => {
     </SafeAreaView>
   );
 };
+
+function translateError(error: OfferError) {
+  const {context, type} = error;
+  switch (context) {
+    case 'failed_offer_search':
+      return 'Klarte ikke å søke opp pris';
+    case 'failed_reservation':
+      return 'Klarte ikke å reservere billett';
+  }
+}
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

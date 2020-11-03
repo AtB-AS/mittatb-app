@@ -35,6 +35,7 @@
     "@seznam/compose-react-refs": "^1.0.4",
     "@types/mapbox__polyline": "^1.0.1",
     "axios": "^0.20.0",
+    "axios-retry": "^3.1.9",
     "date-fns": "^2.16.1",
     "emoji-datasource": "^6.0.0",
     "haversine-distance": "^1.2.1",

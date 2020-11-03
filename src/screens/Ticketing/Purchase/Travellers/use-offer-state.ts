@@ -1,14 +1,21 @@
 import {SINGLE_TICKET_PRODUCT_ID} from '@env';
 import {useCallback, useEffect, useReducer} from 'react';
-import {reserveOffers, searchOffers} from '../../../../api';
+import {CancelToken, reserveOffers, searchOffers} from '../../../../api';
 import {Offer, OfferPrice, PaymentType} from '../../../../api/fareContracts';
+import {ErrorType, getAxiosErrorType} from '../../../../api/utils';
 
-type OfferError = 'failed_offer_search' | 'failed_reservation';
+type OfferErrorContext = 'failed_offer_search' | 'failed_reservation';
+
+export type OfferError = {
+  context: OfferErrorContext;
+  type: ErrorType;
+};
 
 type OfferState = {
   count: number;
   offer?: Offer;
   isSearchingOffer: boolean;
+  isReservingOffer: boolean;
   totalPrice: number;
   error?: OfferError;
 };
@@ -73,6 +80,7 @@ const offerReducer: OfferReducer = (prevState, action) => {
 const initialState: OfferState = {
   count: 1,
   isSearchingOffer: true,
+  isReservingOffer: false,
   offer: undefined,
   totalPrice: 0,
   error: undefined,
@@ -96,10 +104,18 @@ export default function useOfferState() {
       if (offer) {
         const {offer_id} = offer;
         try {
-          return await reserveOffers([{offer_id, count}], paymentType);
+          return await reserveOffers([{offer_id, count}], paymentType, {
+            retry: true,
+          });
         } catch (err) {
           console.warn(err);
-          dispatch({type: 'SET_ERROR', error: 'failed_reservation'});
+          dispatch({
+            type: 'SET_ERROR',
+            error: {
+              context: 'failed_reservation',
+              type: getAxiosErrorType(err),
+            },
+          });
         }
       }
     },
@@ -107,6 +123,7 @@ export default function useOfferState() {
   );
 
   useEffect(() => {
+    const source = CancelToken.source();
     async function getOffers() {
       try {
         const response = await searchOffers(
@@ -118,17 +135,31 @@ export default function useOfferState() {
             },
           ],
           [SINGLE_TICKET_PRODUCT_ID],
+          {cancelToken: source.token, retry: true},
         );
+
+        source.token.throwIfRequested();
 
         const offer = response?.[0];
 
         dispatch({type: 'SET_OFFER', offer});
       } catch (err) {
         console.warn(err);
-        dispatch({type: 'SET_ERROR', error: 'failed_offer_search'});
+
+        const errorType = getAxiosErrorType(err);
+        if (errorType !== 'cancel') {
+          dispatch({
+            type: 'SET_ERROR',
+            error: {
+              context: 'failed_offer_search',
+              type: errorType,
+            },
+          });
+        }
       }
     }
     getOffers();
+    return () => source.cancel('Cancelling previous offer search');
   }, [count]);
 
   return {
