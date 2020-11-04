@@ -1,4 +1,5 @@
 import {StatusBarProps, TextStyle} from 'react-native';
+import {types} from '@babel/core';
 
 const backgrounds = {
   light__level0: '#FFFFFF',
@@ -89,15 +90,18 @@ export const textTypes: {[key in TextNames]: TextStyle} = {
   label: {fontSize: 12, lineHeight: 16},
   label__link: {fontSize: 12, lineHeight: 16, textDecorationLine: 'underline'},
 };
-
 const borderRadius = {
   regular: 8,
   small: 4,
+};
+const heights = {
+  field: 44,
 };
 type Button = {
   bg: string;
   color: string;
 };
+type Input = Button;
 export type Themes = {
   light: Theme;
   dark: Theme;
@@ -137,6 +141,11 @@ export interface Theme {
     secondaryStroke: Button;
     secondary: Button;
   };
+  input: {
+    primary: Input;
+    secondary: Input;
+  };
+  heights: typeof heights;
 }
 
 export const themes: Themes = {
@@ -179,6 +188,11 @@ export const themes: Themes = {
       secondaryStroke: {bg: colors.general.white, color: colors.general.black},
       secondary: {bg: colors.secondary.blue_500, color: colors.general.white},
     },
+    input: {
+      primary: {bg: colors.general.white, color: colors.general.black},
+      secondary: {bg: colors.secondary.cyan_100, color: colors.general.black},
+    },
+    heights: heights,
   },
   dark: {
     spacings: spacings,
@@ -220,5 +234,10 @@ export const themes: Themes = {
       secondaryStroke: {bg: colors.general.black, color: colors.general.white},
       secondary: {bg: colors.secondary.blue_500, color: colors.general.white},
     },
+    input: {
+      primary: {bg: colors.general.black, color: colors.general.white},
+      secondary: {bg: colors.secondary.cyan_900, color: colors.general.white},
+    },
+    heights: heights,
   },
 };

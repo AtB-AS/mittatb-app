@@ -9,15 +9,22 @@ import {
 import {useState, useRef, useEffect} from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Button from '../../components/button';
-import {Close} from '../../assets/svg/icons/actions';
+import {Close, Adjust} from '../../assets/svg/icons/actions';
 import SearchButton from '../../components/search-button';
-import {formatToClock, formatToLongDateTime} from '../../utils/date';
+import {
+  formatToClock,
+  formatToLongDateTime,
+  formatToSimpleDate,
+  isSameDay,
+  daysBetween,
+} from '../../utils/date';
 import nb from 'date-fns/locale/nb';
 import subDays from 'date-fns/subDays';
 import insets from '../../utils/insets';
 import {screenReaderPause} from '../../components/accessible-text';
 import ThemeIcon from '../../components/theme-icon';
 import ThemeText from '../../components/text';
+import {Time, Calendar} from '../../assets/svg/icons/date';
 type DateTypesWithoutNow = 'departure' | 'arrival';
 type DateTypes = DateTypesWithoutNow | 'now';
 export type DateOutput =
@@ -242,11 +249,6 @@ const useStyle = StyleSheet.createThemeHook((theme, name) => ({
     borderTopLeftRadius: theme.border.borderRadius.regular,
     borderTopRightRadius: theme.border.borderRadius.regular,
   },
-  dateContainer: {
-    alignItems: 'center',
-    zIndex: 1,
-    marginBottom: theme.spacings.medium,
-  },
   header: {
     flexDirection: 'row',
     borderBottomColor: theme.background.level1,
@@ -263,9 +265,26 @@ const useStyle = StyleSheet.createThemeHook((theme, name) => ({
     marginLeft: 20,
     alignItems: 'center',
   },
+  dateContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1,
+    marginBottom: theme.spacings.medium,
+    paddingVertical: theme.spacings.small,
+    flexDirection: 'row',
+  },
   datePickerToggler: {
+    backgroundColor: theme.input.secondary.bg,
+    borderRadius: theme.border.borderRadius.regular,
+    minHeight: theme.heights.field,
+    marginHorizontal: theme.spacings.xSmall,
     paddingHorizontal: theme.spacings.medium,
-    paddingVertical: theme.spacings.xSmall,
+    paddingVertical: theme.spacings.medium,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  fieldIcon: {
+    marginRight: theme.spacings.medium,
   },
   dateTypeButton: {
     paddingBottom: 4,
@@ -309,12 +328,12 @@ const TimePicker: React.FC<DateTimePickerProps> = ({dateTime, onChange}) => {
   return (
     <View style={style.dateContainer}>
       <TouchableOpacity style={style.datePickerToggler} onPress={toggleDate}>
-        <ThemeText type="itemHeadline">
-          {dateTime?.toLocaleDateString()}
-        </ThemeText>
+        <ThemeIcon style={style.fieldIcon} svg={Calendar} />
+        <ThemeText>{getHumanizedDate(dateTime)}</ThemeText>
       </TouchableOpacity>
       <TouchableOpacity style={style.datePickerToggler} onPress={toggleTime}>
-        <ThemeText type="heroTitle">{dateTime?.toLocaleTimeString()}</ThemeText>
+        <ThemeIcon style={style.fieldIcon} svg={Time} />
+        <ThemeText>{formatToClock(dateTime)}</ThemeText>
       </TouchableOpacity>
 
       {dateOpen && (
@@ -323,7 +342,7 @@ const TimePicker: React.FC<DateTimePickerProps> = ({dateTime, onChange}) => {
           value={dateTime}
           onChange={dateChanged}
           locale="nb"
-          mode="date"
+          mode="datetime"
           display="spinner"
         />
       )}
@@ -340,5 +359,18 @@ const TimePicker: React.FC<DateTimePickerProps> = ({dateTime, onChange}) => {
     </View>
   );
 };
+
+function getHumanizedDate(date: Date): string {
+  const daysFromNow = daysBetween(new Date(), date);
+  console.log(daysFromNow);
+  switch (daysFromNow) {
+    case 0:
+      return 'I dag';
+    case 1:
+      return 'I morgen';
+    default:
+      return formatToSimpleDate(date);
+  }
+}
 
 export default DateInput;
