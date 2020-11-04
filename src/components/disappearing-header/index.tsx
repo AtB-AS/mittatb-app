@@ -216,7 +216,7 @@ const DisappearingHeader: React.FC<Props> = ({
                 {paddingTop: !IS_IOS ? contentHeight : 0},
               ]}
               scrollEventThrottle={10}
-              style={{flex: 1, zIndex: 0, position: 'relative'}}
+              style={{flex: 1}}
               refreshControl={
                 <RefreshControl
                   refreshing={isRefreshing}
@@ -248,14 +248,7 @@ const DisappearingHeader: React.FC<Props> = ({
               {children}
             </Animated.ScrollView>
           ) : (
-            <View
-              style={{
-                flex: 1,
-                zIndex: 0,
-                position: 'relative',
-                paddingTop: contentHeight + headerMargin,
-              }}
-            >
+            <View style={{flex: 1, paddingTop: contentHeight + headerMargin}}>
               {children}
             </View>
           )}
