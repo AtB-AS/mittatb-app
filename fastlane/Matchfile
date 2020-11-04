@@ -1,0 +1,7 @@
+git_url(ENV["FASTLANE_MATCH_URL"])
+
+app_identifier(["no.mittatb.staging"])
+
+storage_mode("git")
+
+type("adhoc") # The default type, can be: appstore, adhoc, enterprise or development
