@@ -8,6 +8,7 @@ import {LocationSearchResult} from './types';
 import {FavoriteIcon} from '../favorites';
 import ThemeText from '../components/text';
 import ThemeIcon from '../components/theme-icon';
+import {screenReaderPause} from '../components/accessible-text';
 
 type Props = {
   title?: string;
@@ -37,7 +38,11 @@ const LocationResults: React.FC<Props> = ({
             <View style={styles.locationButtonContainer}>
               <TouchableOpacity
                 accessible={true}
-                accessibilityRole="menuitem"
+                accessibilityLabel={
+                  searchResult.location.label + screenReaderPause
+                }
+                accessibilityHint={'Aktivér for å bruke dette resultatet.'}
+                accessibilityRole="button"
                 hitSlop={insets.symmetric(8, 1)}
                 onPress={() => onSelect(searchResult.selectable)}
                 style={styles.locationButton}
