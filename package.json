@@ -16,6 +16,7 @@
     "generate-svg-color": "svgr --config-file .svgrrc.color.yml -d ./src/assets/svg/ ./assets/svgs/color && prettier --write ./src/assets/svg/",
     "generate-svgs": "yarn generate-svg-mono-icons && yarn generate-svg-color",
     "build:ios": "fastlane ios build",
+    "updatedevices:ios": "fastlane ios update_devices",
     "appcenter:ios": "fastlane ios appcenter",
     "cert:ios": "fastlane ios get_cert",
     "build:android": "fastlane android build",

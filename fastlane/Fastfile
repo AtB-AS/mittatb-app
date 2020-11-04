@@ -6,6 +6,12 @@ before_all do
 end
 
 platform :ios do
+  desc 'Update devices'
+  lane :update_devices do
+    register_devices(devices_file: "./devices.txt")
+    match(type: "adhoc", force_for_new_devices: true)
+  end
+  
   desc 'Match certificates'
   lane :get_cert do 
     ensure_env_vars(
