@@ -16,6 +16,11 @@ or alternatively using `brew install fastlane`
 
 # Available Actions
 ## iOS
+### ios update_devices
+```
+fastlane ios update_devices
+```
+Update devices
 ### ios get_cert
 ```
 fastlane ios get_cert
