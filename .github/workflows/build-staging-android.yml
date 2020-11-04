@@ -44,7 +44,7 @@ jobs:
         id: apk-cache
         with:
           path: 'app-staging.apk'
-          key: ${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}
+          key: ${{ runner.os }}-android-cache-${{ hashFiles('android/**') }-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: Get Android keystore
         run: sh ./scripts/android/create-keystore-file.sh
         env:
