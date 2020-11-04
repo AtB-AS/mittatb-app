@@ -8,7 +8,7 @@ end
 platform :ios do
   desc 'Update devices'
   lane :update_devices do
-    register_devices(devices_file: "./devices.txt")
+    register_devices(devices_file: "./ios/devices.txt")
     match(type: "adhoc", force_for_new_devices: true)
   end
   
