@@ -7,7 +7,8 @@ on:
 jobs:
   build-ios:
     name: Build Android
-    runs-on: macOS-latest
+    timeout-minutes: 60
+    runs-on: macos-latest
     steps:
       - name: Checkout project
         uses: actions/checkout@v1

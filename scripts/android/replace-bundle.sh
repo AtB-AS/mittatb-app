@@ -3,13 +3,13 @@
 # Security wise trying to avoid secrets being sent in via command line to the script
 # Safer to do it by env variable according to Github Actions docs
 
-if [[
-    -z "${APK_FILE_NAME}"
-    || -z "${KEYSTORE_FILE}"
-    || -z "${KEYSTORE_PASS}"
-    || -z "${KEY_PASS}"
-    || -z "${KEY_ALIAS}"
-    || -z "${BUILD_ID}"
+if [[ 
+  -z "${APK_FILE_NAME}" || 
+  -z "${KEYSTORE_FILE}" || 
+  -z "${KEYSTORE_PASS}" ||
+  -z "${KEY_PASS}" ||
+  -z "${KEY_ALIAS}" ||
+  -z "${BUILD_ID}"
    ]]; then
     echo "Argument error!"
     echo "Expected six env variables: 
