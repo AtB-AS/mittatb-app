@@ -1822,6 +1822,13 @@
     sudo-prompt "^9.0.0"
     wcwidth "^1.0.1"
 
+"@react-native-community/datetimepicker@^3.0.4":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-3.0.4.tgz#ad3efa90fab78fc3c0710abf3cb06d2976603140"
+  integrity sha512-IsBkemz1XYubH5twfQPC/xleZdILA5SEUaLJ2C86IbnIOctb6suk8tB6uT9VxQkCsw4zjkrlqt9p9LGx9DJ97w==
+  dependencies:
+    invariant "^2.2.4"
+
 "@react-native-community/masked-view@^0.1.10":
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.10.tgz#5dda643e19e587793bc2034dd9bf7398ad43d401"
@@ -2330,6 +2337,22 @@
   version "1.5.4"
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.4.tgz#15925414e0ad2cd765bfef58842f7e26a7accb24"
   integrity sha512-1HcDas8SEj4z1Wc696tH56G8OlRaH/sqZOynNNB+HF0WOeXPaxTtbYzJY2oEfiUxjSKjhCKr+MvR7dCHcEelug==
+
+"@types/react-native-datepicker@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@types/react-native-datepicker/-/react-native-datepicker-1.7.0.tgz#b4dc63ed3bd356ac30c9195b7987aea45f79fe8d"
+  integrity sha512-YbhwgveJSmJRsUNl82UcZbMdNDBzd+RiMmyev3+yiEepGYk56yh/Q3Ypi2dw7XjMEQ5GSNUehcVKVP31EWcUlw==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+    moment ">=2.14.0"
+
+"@types/react-native@*":
+  version "0.63.30"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.63.30.tgz#a0bd61e61b7a020a538ea22901be2f5d178fe02f"
+  integrity sha512-8/PrOjuUaPTCfMeW12ubseZPUGdbRhxYDa/aT+0D0KWVTe60b4H/gJrcfJmBXC6EcCFcimuTzQCv8/S03slYqA==
+  dependencies:
+    "@types/react" "*"
 
 "@types/react-native@^0.63.25":
   version "0.63.25"
@@ -7314,6 +7337,11 @@ modify-values@^1.0.0:
   resolved "https://registry.yarnpkg.com/modify-values/-/modify-values-1.0.1.tgz#b3939fa605546474e3e3e3c63d64bd43b4ee6022"
   integrity sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==
 
+moment@>=2.14.0, moment@^2.22.0:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
+
 moment@^2.10.6:
   version "2.25.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.25.1.tgz#1cb546dca1eccdd607c9324747842200b683465d"
@@ -8245,6 +8273,13 @@ react-native-date-picker@^3.2.4:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-3.2.4.tgz#59668e84c2477479f1794d9412280344feb4b1f3"
   integrity sha512-2Krw7ul92D2lEKEK6hEXR71Gx/92Itct5yrHu9+0tUanja+h1Va+9xH1sA/530AD20YMDhhU8JDIjAdsXipN5A==
+
+react-native-datepicker@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/react-native-datepicker/-/react-native-datepicker-1.7.2.tgz#58d0822591a0ac9b32aba082650222a0ee29669d"
+  integrity sha1-WNCCJZGgrJsyq6CCZQIioO4pZp0=
+  dependencies:
+    moment "^2.22.0"
 
 react-native-device-info@^6.2.0:
   version "6.2.0"

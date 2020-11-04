@@ -1,10 +1,13 @@
-import * as React from 'react';
+import React from 'react';
 import {StyleSheet} from '../../theme';
-import {Portal} from 'react-native-portalize';
-import {Modalize} from 'react-native-modalize';
-import {View, TouchableOpacity, AccessibilityProperties} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  AccessibilityProperties,
+  Modal,
+} from 'react-native';
 import {useState, useRef, useEffect} from 'react';
-import DatePicker from 'react-native-date-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import Button from '../../components/button';
 import {Close} from '../../assets/svg/icons/actions';
 import SearchButton from '../../components/search-button';
@@ -15,7 +18,6 @@ import insets from '../../utils/insets';
 import {screenReaderPause} from '../../components/accessible-text';
 import ThemeIcon from '../../components/theme-icon';
 import ThemeText from '../../components/text';
-
 type DateTypesWithoutNow = 'departure' | 'arrival';
 type DateTypes = DateTypesWithoutNow | 'now';
 export type DateOutput =
@@ -98,6 +100,7 @@ const DateInput: React.FC<DateInputProps> = ({
   const [dateObjectInternal, setDateObjectInternal] = useState<DateOutput>(
     valueOrDefault,
   );
+  const [modalVisible, setModalVisibile] = useState<boolean>(false);
   useEffect(() => {
     if (!value) {
       setDateObjectInternal(now());
@@ -105,17 +108,14 @@ const DateInput: React.FC<DateInputProps> = ({
       setDateObjectInternal(value);
     }
   }, [value]);
-
-  const modalizeRef = useRef<Modalize>(null);
-
-  const onOpen = () => {
-    modalizeRef.current?.open();
-  };
-  const onClose = () => {
-    modalizeRef.current?.close();
+  const toggleModal = () => {
+    setModalVisibile(!modalVisible);
   };
 
-  const onChange = (date: Date) => {
+  const onChange = (date?: Date) => {
+    if (!date) {
+      return;
+    }
     if (dateObjectInternal.type === 'now') {
       setDateObjectInternal({
         date,
@@ -142,7 +142,7 @@ const DateInput: React.FC<DateInputProps> = ({
 
   const onSave = () => {
     onDateSelected(dateObjectInternal);
-    onClose();
+    toggleModal();
   };
 
   const searchValue = dateToText(valueOrDefault, timeOfLastSearch);
@@ -161,21 +161,26 @@ const DateInput: React.FC<DateInputProps> = ({
         accessibilityRole="button"
         title="Når"
         text={searchValue}
-        onPress={onOpen}
+        onPress={toggleModal}
       />
 
-      <Portal>
-        <Modalize
-          ref={modalizeRef}
-          adjustToContentHeight={true}
-          tapGestureEnabled={false}
-        >
-          <View style={style.container}>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={toggleModal}
+      >
+        <View style={style.container}>
+          <View style={style.content}>
             <View style={style.header}>
               <View style={style.headerTextContainer}>
                 <ThemeText type="paragraphHeadline">Velg tidspunkt</ThemeText>
               </View>
-              <TouchableOpacity onPress={onClose}>
+              <TouchableOpacity
+                onPress={toggleModal}
+                accessibilityLabel="Lukk"
+                accessibilityRole="button"
+              >
                 <ThemeIcon svg={Close} />
               </TouchableOpacity>
             </View>
@@ -206,15 +211,10 @@ const DateInput: React.FC<DateInputProps> = ({
                 accessibilityRole="button"
               />
             </View>
-
-            <View style={style.dateContainer}>
-              <DatePicker
-                minimumDate={yesterday()}
-                date={dateOrDefault(dateObjectInternal)}
-                onDateChange={onChange}
-                locale="nb"
-              />
-            </View>
+            <TimePicker
+              dateTime={dateOrDefault(dateObjectInternal)}
+              onChange={onChange}
+            />
 
             <Button
               accessible={true}
@@ -224,17 +224,28 @@ const DateInput: React.FC<DateInputProps> = ({
               text="Søk etter reiser"
             />
           </View>
-        </Modalize>
-      </Portal>
+        </View>
+      </Modal>
     </>
   );
 };
-const useStyle = StyleSheet.createThemeHook((theme) => ({
+const useStyle = StyleSheet.createThemeHook((theme, name) => ({
   container: {
-    padding: 12,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'flex-end',
+    zIndex: 0,
+    flex: 1,
+  },
+  content: {
+    padding: theme.spacings.medium,
+    backgroundColor: theme.background.level0,
+    borderTopLeftRadius: theme.border.borderRadius.regular,
+    borderTopRightRadius: theme.border.borderRadius.regular,
   },
   dateContainer: {
     alignItems: 'center',
+    zIndex: 1,
+    marginBottom: theme.spacings.medium,
   },
   header: {
     flexDirection: 'row',
@@ -251,6 +262,10 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     marginLeft: 20,
     alignItems: 'center',
+  },
+  datePickerToggler: {
+    paddingHorizontal: theme.spacings.medium,
+    paddingVertical: theme.spacings.xSmall,
   },
   dateTypeButton: {
     paddingBottom: 4,
@@ -272,5 +287,58 @@ function dateOrDefault(dateObject: DateOutput) {
 function yesterday() {
   return subDays(new Date(), 1);
 }
+type DateTimePickerProps = {
+  dateTime: Date;
+  onChange(date?: Date): void;
+};
+const TimePicker: React.FC<DateTimePickerProps> = ({dateTime, onChange}) => {
+  const [dateOpen, setDateOpen] = useState<boolean>(false);
+  const [timeOpen, setTimeOpen] = useState<boolean>(false);
+
+  const style = useStyle();
+
+  const toggleDate = () => setDateOpen(!dateOpen);
+  const toggleTime = () => setTimeOpen(!timeOpen);
+
+  const dateChanged = (e: Event, date: Date | undefined) => {
+    setTimeOpen(false);
+    setDateOpen(false);
+    onChange(date);
+  };
+
+  return (
+    <View style={style.dateContainer}>
+      <TouchableOpacity style={style.datePickerToggler} onPress={toggleDate}>
+        <ThemeText type="itemHeadline">
+          {dateTime?.toLocaleDateString()}
+        </ThemeText>
+      </TouchableOpacity>
+      <TouchableOpacity style={style.datePickerToggler} onPress={toggleTime}>
+        <ThemeText type="heroTitle">{dateTime?.toLocaleTimeString()}</ThemeText>
+      </TouchableOpacity>
+
+      {dateOpen && (
+        <DateTimePicker
+          minimumDate={yesterday()}
+          value={dateTime}
+          onChange={dateChanged}
+          locale="nb"
+          mode="date"
+          display="spinner"
+        />
+      )}
+      {timeOpen && (
+        <DateTimePicker
+          minimumDate={yesterday()}
+          value={dateTime}
+          onChange={dateChanged}
+          locale="nb"
+          mode="time"
+          display="spinner"
+        />
+      )}
+    </View>
+  );
+};
 
 export default DateInput;
