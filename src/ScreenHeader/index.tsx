@@ -1,5 +1,5 @@
-import {View, ViewStyle} from 'react-native';
-import React from 'react';
+import {View, ViewStyle, findNodeHandle, AccessibilityInfo} from 'react-native';
+import React, {useRef, useEffect} from 'react';
 import {StyleSheet} from '../theme';
 import HeaderButton, {IconButton} from './HeaderButton';
 import ThemeText from '../components/text';
@@ -24,8 +24,10 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 
   return (
     <View style={[css.container, style]}>
+      <View accessible={true} accessibilityRole="header">
+        <ThemeText type="paragraphHeadline">{title}</ThemeText>
+      </View>
       <View style={css.iconContainerLeft}>{leftIcon}</View>
-      <ThemeText type="paragraphHeadline">{title}</ThemeText>
       <View style={css.iconContainerRight}>{rightIcon}</View>
     </View>
   );
@@ -37,14 +39,14 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.spacings.medium,
-    height: 64,
+    minHeight: 64,
   },
   iconContainerLeft: {
     position: 'absolute',
-    left: 12,
+    left: theme.spacings.medium,
   },
   iconContainerRight: {
     position: 'absolute',
-    right: 12,
+    right: theme.spacings.medium,
   },
 }));
