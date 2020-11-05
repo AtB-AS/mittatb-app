@@ -49,7 +49,10 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
         if (!isUserInfo(userInfo)) {
           throw e;
         }
-        if (isUserInfo(userInfo) && userInfo.code === 'failure') {
+        if (
+          isUserInfo(userInfo) &&
+          (userInfo.code === 'failure' || userInfo.fatal)
+        ) {
           Bugsnag.notify(e, function (event) {
             event.addMetadata('metadata', {userInfo});
           });
