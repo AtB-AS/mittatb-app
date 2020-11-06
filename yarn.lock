@@ -1845,10 +1845,10 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/remote-config/-/remote-config-9.0.10.tgz#7dfa82dd38e2e968a7ab6ac0ea92c2795fa2f73a"
   integrity sha512-0AkSD/jlCxxXEMf4bulFJXP/nP7qC3HLypNCmwWI3bkVIq66M1uok0cV2YbSquzBx0Ve5WgxPVViy+HZgTEJAg==
 
-"@react-native-mapbox-gl/maps@8.1.0-rc.8":
-  version "8.1.0-rc.8"
-  resolved "https://registry.yarnpkg.com/@react-native-mapbox-gl/maps/-/maps-8.1.0-rc.8.tgz#a3e57ea5a29e16388fd367aebfc8f2bc95a18677"
-  integrity sha512-fBPIGiDdTUN6r3DvOXxY29u+ifG5hQuhmonOLtsRlwWcuThhMypAQMUnrO0LEZiOtMy01RB21GXsmrbbuPPxiw==
+"@react-native-mapbox-gl/maps@8.1.0-rc.4":
+  version "8.1.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@react-native-mapbox-gl/maps/-/maps-8.1.0-rc.4.tgz#7a9415f1a076ed1a514a7107d74b7d8ea96ad560"
+  integrity sha512-OdzpkvBvkllU+ymO3hpAT31+zJJUITjsK/c7dX2j3wvHLCQmhAhg5GY3PJUK2cBhZsE6ojjc739Bcnbg9IBFIQ==
   dependencies:
     "@mapbox/geo-viewport" ">= 0.4.0"
     "@turf/along" ">= 4.0.0 <7.0.0"
