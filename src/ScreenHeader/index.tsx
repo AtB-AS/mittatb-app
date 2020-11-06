@@ -1,5 +1,5 @@
-import {View, ViewStyle, findNodeHandle, AccessibilityInfo} from 'react-native';
-import React, {useRef, useEffect} from 'react';
+import {View, ViewStyle} from 'react-native';
+import React from 'react';
 import {StyleSheet} from '../theme';
 import HeaderButton, {IconButton} from './HeaderButton';
 import ThemeText from '../components/text';
