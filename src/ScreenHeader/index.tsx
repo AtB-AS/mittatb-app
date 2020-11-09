@@ -7,7 +7,7 @@ import ThemeText from '../components/text';
 type ScreenHeaderProps = {
   leftButton?: IconButton;
   rightButton?: IconButton;
-  title: string;
+  title: React.ReactNode;
   style?: ViewStyle;
 };
 

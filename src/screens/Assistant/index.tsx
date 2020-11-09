@@ -53,6 +53,7 @@ import colors from '../../theme/colors';
 import ThemeIcon from '../../components/theme-icon';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 import ThemeText from '../../components/text';
+import {Trans} from '@lingui/macro';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -368,13 +369,15 @@ const Assistant: React.FC<Props> = ({
     [navigation, from, to],
   );
 
+  const title = <Trans>Reiseassistent</Trans>;
+
   return (
     <DisappearingHeader
       renderHeader={renderHeader}
       onRefresh={reload}
       isRefreshing={isSearching}
       useScroll={useScroll}
-      headerTitle="Reiseassistent"
+      headerTitle={title}
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
       logoClick={{
