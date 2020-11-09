@@ -20,11 +20,17 @@
     "appcenter:ios": "fastlane ios appcenter",
     "cert:ios": "fastlane ios get_cert",
     "build:android": "fastlane android build",
-    "appcenter:android": "fastlane android appcenter"
+    "appcenter:android": "fastlane android appcenter",
+    "add-locale": "lingui add-locale",
+    "i18n:extract": "lingui extract",
+    "i18n:compile": "lingui compile",
+    "i18n": "lingui extract && lingui compile"
   },
   "dependencies": {
     "@bugsnag/react-native": "^7.5.0",
     "@entur/sdk": "^1.11.0",
+    "@lingui/macro": "^3.0.3",
+    "@lingui/react": "^3.0.3",
     "@mapbox/polyline": "^1.1.1",
     "@react-native-community/async-storage": "^2.0.0-rc.1",
     "@react-native-community/async-storage-backend-legacy": "^2.0.0-rc.1",
@@ -51,6 +57,7 @@
     "lodash.pickby": "^4.6.0",
     "lottie-ios": "3.1.8",
     "lottie-react-native": "^3.5.0",
+    "make-plural": "^6.2.2",
     "query-string": "^6.13.5",
     "react": "16.14.0",
     "react-native": "0.63.3",
@@ -62,6 +69,7 @@
     "react-native-gesture-handler": "^1.8.0",
     "react-native-get-random-values": "^1.5.0",
     "react-native-intercom": "^18.0.0",
+    "react-native-localize": "^1.4.3",
     "react-native-modalize": "^2.0.6",
     "react-native-permissions": "^2.2.2",
     "react-native-portalize": "^1.0.7",
@@ -76,8 +84,9 @@
     "uuid": "^8.3.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.0",
+    "@babel/core": "^7.12.3",
     "@babel/runtime": "^7.12.0",
+    "@lingui/cli": "^3.0.3",
     "@svgr/cli": "^5.4.0",
     "@types/geojson": "^7946.0.7",
     "@types/humanize-duration": "^3.18.1",
