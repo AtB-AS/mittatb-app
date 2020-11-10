@@ -14,7 +14,13 @@
     "release-draft": "sh tools/release/release-draft.sh",
     "generate-svg-mono-icons": "svgr --config-file .svgrrc.mono-icons.yml -d ./src/assets/svg/icons ./assets/svgs/mono-icons && prettier --write ./src/assets/svg/icons",
     "generate-svg-color": "svgr --config-file .svgrrc.color.yml -d ./src/assets/svg/ ./assets/svgs/color && prettier --write ./src/assets/svg/",
-    "generate-svgs": "yarn generate-svg-mono-icons && yarn generate-svg-color"
+    "generate-svgs": "yarn generate-svg-mono-icons && yarn generate-svg-color",
+    "build:ios": "fastlane ios build",
+    "updatedevices:ios": "fastlane ios update_devices",
+    "appcenter:ios": "fastlane ios appcenter",
+    "cert:ios": "fastlane ios get_cert",
+    "build:android": "fastlane android build",
+    "appcenter:android": "fastlane android appcenter"
   },
   "dependencies": {
     "@bugsnag/react-native": "^7.5.0",
@@ -26,7 +32,7 @@
     "@react-native-firebase/analytics": "^7.6.7",
     "@react-native-firebase/app": "^8.4.5",
     "@react-native-firebase/remote-config": "^9.0.10",
-    "@react-native-mapbox-gl/maps": "8.1.0-rc.8",
+    "@react-native-mapbox-gl/maps": "8.1.0-rc.9",
     "@react-navigation/bottom-tabs": "^5.9.2",
     "@react-navigation/core": "^5.12.5",
     "@react-navigation/material-top-tabs": "^5.3.0",

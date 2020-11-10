@@ -19,21 +19,15 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 }) => {
   const css = useHeaderStyle();
 
-  const leftIcon = leftButton ? (
-    <HeaderButton iconButton={leftButton} />
-  ) : (
-    <View />
-  );
-  const rightIcon = rightButton ? (
-    <HeaderButton iconButton={rightButton} />
-  ) : (
-    <View />
-  );
+  const leftIcon = leftButton ? <HeaderButton {...leftButton} /> : <View />;
+  const rightIcon = rightButton ? <HeaderButton {...rightButton} /> : <View />;
 
   return (
     <View style={[css.container, style]}>
+      <View accessible={true} accessibilityRole="header">
+        <ThemeText type="paragraphHeadline">{title}</ThemeText>
+      </View>
       <View style={css.iconContainerLeft}>{leftIcon}</View>
-      <ThemeText type="paragraphHeadline">{title}</ThemeText>
       <View style={css.iconContainerRight}>{rightIcon}</View>
     </View>
   );
@@ -45,14 +39,14 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.spacings.medium,
-    height: 64,
+    minHeight: 64,
   },
   iconContainerLeft: {
     position: 'absolute',
-    left: 12,
+    left: theme.spacings.medium,
   },
   iconContainerRight: {
     position: 'absolute',
-    right: 12,
+    right: theme.spacings.medium,
   },
 }));

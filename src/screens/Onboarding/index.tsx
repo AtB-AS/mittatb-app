@@ -160,8 +160,6 @@ const StepThree: React.FC<StepProps> = () => {
 const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   textContainer: {
     padding: theme.spacings.xLarge,
-    backgroundColor:
-      themeName === 'light' ? 'rgba(235,236,237,0.85)' : 'rgba(22,23,24,0.85)',
   },
   title: {
     fontWeight: 'bold',

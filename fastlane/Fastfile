@@ -1,0 +1,120 @@
+fastlane_version '2.142.0'
+
+before_all do
+  # ensure_git_status_clean
+  # git_pull
+end
+
+platform :ios do
+  desc 'Update devices'
+  lane :update_devices do
+    register_devices(devices_file: "./ios/devices.txt")
+    match(type: "adhoc", force_for_new_devices: true)
+  end
+  
+  desc 'Match certificates'
+  lane :get_cert do 
+    ensure_env_vars(
+      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_URL']
+    )
+    if is_ci
+      create_keychain(
+        name: "CI",
+        password: ENV["MATCH_PASSWORD"],
+        default_keychain: true,
+        unlock: true,
+        timeout: 3600,
+        lock_when_sleeps: false
+      )
+      match(
+        type: "adhoc",
+        readonly: true,
+        keychain_name: "CI",
+        keychain_password: ENV["MATCH_PASSWORD"]
+      )
+    else
+      match(type: 'adhoc', readonly: true)
+    end
+  end
+  # iOS Lanes
+  desc 'Build the iOS application.'
+  lane :build do
+    ensure_env_vars(
+      env_vars: ['BUILD_ID']
+    )
+    increment_build_number(
+      build_number: ENV["BUILD_ID"], 
+      xcodeproj: './ios/atb.xcodeproj/'
+    )
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      bundle_identifier:"no.mittatb.staging",
+      code_sign_identity:"iPhone Distribution",
+      profile_name: "match AdHoc no.mittatb.staging",
+      path: "./ios/atb.xcodeproj"
+    )
+    cocoapods(podfile: './ios/Podfile')
+    build_app(
+      scheme: 'atb', 
+      configuration: 'Release', 
+      export_method: "ad-hoc",
+      workspace: './ios/atb.xcworkspace'
+    )
+  end
+
+  desc 'Upload the build to AppCenter'
+  lane :appcenter do
+    ensure_env_vars(
+      env_vars: ['APPCENTER_API_KEY']
+    )
+    appcenter_upload(
+      api_token: ENV["APPCENTER_API_KEY"],
+      owner_name: "AtB-AS",
+      app_name: "MittAtb-1",
+      owner_type: "organization", 
+      file: "AtB.ipa",
+      notify_testers: false 
+    )
+  end
+end
+
+platform :android do
+  desc 'Upload the build to AppCenter'
+
+  lane :build do
+    ensure_env_vars(
+      env_vars: ['BUILD_ID', 'KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS']
+    )
+    gradle(task: 'clean', project_dir: 'android/')
+    gradle(
+      task: 'assemble', 
+      build_type: 'staging', 
+      project_dir: 'android/', 
+      print_command: false, #don't print my passwords please
+      properties: {
+        "versionCode" => ENV["BUILD_ID"],
+        "android.injected.signing.store.file" => "./keystore.jks",
+        "android.injected.signing.store.password" => ENV["KEYSTORE_PASS"],
+        "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
+        "android.injected.signing.key.password" => ENV["KEY_PASS"],
+      })
+    sh("cp", "../android/app/build/outputs/apk/staging/app-staging.apk", "../")
+    sh("mkdir", "-p", "../bundle")
+    sh("cp", "../android/app/build/generated/assets/react/staging/index.android.bundle", "../bundle")
+    sh("cp", "../android/app/build/generated/sourcemaps/react/staging/index.android.bundle.map", "../bundle")
+  end
+
+  lane :appcenter do
+    ensure_env_vars(
+      env_vars: ['APPCENTER_API_KEY']
+    )
+    appcenter_upload(
+      api_token: ENV["APPCENTER_API_KEY"],
+      owner_name: "AtB-AS",
+      app_name: "MittAtb",
+      owner_type: "organization", 
+      file: "app-staging.apk",
+      notify_testers: false 
+    )
+  end
+end

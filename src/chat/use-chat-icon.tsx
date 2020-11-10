@@ -6,8 +6,9 @@ import useChatUnreadCount from './use-chat-unread-count';
 import {useRemoteConfig} from '../RemoteConfigContext';
 import {StyleSheet} from '../theme';
 import ThemeIcon from '../components/theme-icon';
+import {IconButton} from '../ScreenHeader/HeaderButton';
 
-export default function useChatIcon() {
+export default function useChatIcon(): IconButton | undefined {
   const config = useRemoteConfig();
   const unreadCount = useChatUnreadCount();
   const styles = useStyles();
@@ -18,12 +19,7 @@ export default function useChatIcon() {
 
   return {
     icon: (
-      <View
-        accessible={true}
-        accessibilityLabel="Brukerstøtte"
-        accessibilityRole="button"
-        style={styles.chatContainer}
-      >
+      <View style={styles.chatContainer}>
         {unreadCount ? (
           <ThemeIcon svg={ChatUnread} />
         ) : (
@@ -35,6 +31,8 @@ export default function useChatIcon() {
       unreadCount
         ? Intercom.displayMessenger()
         : Intercom.displayConversationsList(),
+    importantForAccessibility: 'no-hide-descendants', // Android
+    accessibilityElementsHidden: true, // iOS
   };
 }
 

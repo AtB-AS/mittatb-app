@@ -34,16 +34,8 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
   }, [alternativeTitleVisible, alternativeTitleComponent]);
 
   const titleOffset = Animated.subtract(altTitleOffset, HEADER_HEIGHT);
-  const leftIcon = leftButton ? (
-    <HeaderButton iconButton={leftButton} />
-  ) : (
-    <View />
-  );
-  const rightIcon = rightButton ? (
-    <HeaderButton iconButton={rightButton} />
-  ) : (
-    <View />
-  );
+  const leftIcon = leftButton ? <HeaderButton {...leftButton} /> : <View />;
+  const rightIcon = rightButton ? <HeaderButton {...rightButton} /> : <View />;
 
   const altTitle = alternativeTitleComponent && (
     <Animated.View
@@ -58,7 +50,6 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
 
   return (
     <View style={style.container} {...props}>
-      <View style={style.iconContainerLeft}>{leftIcon}</View>
       <View
         accessible={true}
         accessibilityRole="header"
@@ -70,10 +61,13 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
             {transform: [{translateY: titleOffset}]},
           ]}
         >
-          <ThemeText type="paragraphHeadline">{title}</ThemeText>
+          <View accessible={true} accessibilityRole="header">
+            <ThemeText type="paragraphHeadline">{title}</ThemeText>
+          </View>
         </Animated.View>
         {altTitle}
       </View>
+      <View style={style.iconContainerLeft}>{leftIcon}</View>
       <View style={style.iconContainerRight}>{rightIcon}</View>
     </View>
   );

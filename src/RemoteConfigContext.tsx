@@ -1,6 +1,7 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import remoteConfig from '@react-native-firebase/remote-config';
 import {RemoteConfig, defaultRemoteConfig, getConfig} from './remote-config';
+import Bugsnag from '@bugsnag/react-native';
 
 export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;
@@ -9,6 +10,18 @@ export type RemoteConfigContextState = RemoteConfig & {
 const RemoteConfigContext = createContext<RemoteConfigContextState | undefined>(
   undefined,
 );
+
+type UserInfoErrorFromFirebase = {
+  code: 'no_fetch_yet' | 'success' | 'throttled' | 'failure' | 'unknown';
+  message: string;
+  fatal: boolean;
+  nativeErrorMessage: string;
+  nativeErrorCode: number;
+};
+
+function isUserInfo(a: any): a is UserInfoErrorFromFirebase {
+  return a && 'code' in a && 'message' in a;
+}
 
 const RemoteConfigContextProvider: React.FC = ({children}) => {
   const [config, setConfig] = useState<RemoteConfig>(defaultRemoteConfig);
@@ -25,9 +38,26 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
 
       await configApi.setDefaults(defaultRemoteConfig);
 
-      await configApi.fetchAndActivate();
-      const currentConfig = await getConfig();
-      setConfig(currentConfig);
+      try {
+        const fetchedRemotely = await configApi.fetchAndActivate();
+        if (fetchedRemotely) {
+          const currentConfig = await getConfig();
+          setConfig(currentConfig);
+        }
+      } catch (e) {
+        const userInfo = e.userInfo;
+        if (!isUserInfo(userInfo)) {
+          throw e;
+        }
+        if (
+          isUserInfo(userInfo) &&
+          (userInfo.code === 'failure' || userInfo.fatal)
+        ) {
+          Bugsnag.notify(e, function (event) {
+            event.addMetadata('metadata', {userInfo});
+          });
+        }
+      }
     }
 
     setupRemoteConfig();

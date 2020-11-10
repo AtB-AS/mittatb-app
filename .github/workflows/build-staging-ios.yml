@@ -1,0 +1,84 @@
+name: Build staging iOS project
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-ios:
+    name: Build iOS
+    timeout-minutes: 60
+    runs-on: macos-latest
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v1
+      - name: Set global env vars
+        run: |
+          echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
+          echo "APP_ENVIRONMENT=staging" >> $GITHUB_ENV
+      - name: Decrypt env files
+        run: sh ./scripts/git-crypt-unlock.sh
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+      - name: install node v12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Get potential cached node_modules
+        uses: actions/cache@v2
+        id: modules-cache
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+      - name: Install node_modules
+        if: steps.modules-cache.outputs.cache-hit != 'true'
+        run: yarn install
+      - name: Bundle Install
+        run: bundle install
+      - name: Set environment
+        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT
+      - name: Override native config files
+        run: sh ./scripts/override-config-files.sh
+      - uses: webfactory/ssh-agent@v0.4.0
+        with:
+          ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
+      - name: Get potential cached ipa
+        uses: actions/cache@v2
+        id: ipa-cache
+        with:
+          path: 'AtB.ipa'
+          key: ${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}
+      - name: Run fastlane cert match
+        run: yarn cert:ios
+        env:
+          FASTLANE_MATCH_URL: ${{ secrets.FASTLANE_MATCH_URL }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+      - name: Generate icons
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
+        run: brew install imagemagick && yarn app-icon generate -i icon.qa.png --platforms=ios
+      - name: Run fastlane build
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
+        run: yarn build:ios
+      - name: Replace ipa bundle
+        if: steps.ipa-cache.outputs.cache-hit == 'true'
+        run: sh ./scripts/ios/replace-bundle.sh
+        env:
+          IPA_FILE_NAME: 'AtB.ipa'
+          APP_NAME: 'AtB.app'
+          CODE_SIGN_IDENTITY: ${{ secrets.IOS_CODE_SIGN_IDENTITY }}
+      - name: Distribute to AppCenter
+        run: yarn appcenter:ios
+        env:
+          APPCENTER_API_KEY: ${{ secrets.APPCENTER_IOS_API_KEY }}
+      - name: Create bundle and source maps
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
+        run: sh ./scripts/ios/create-sourcemaps.sh
+      - name: Upload bundle and source maps
+        run: sh ./scripts/ios/upload-sourcemaps.sh
+        env:
+          BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
+      - name: Upload dSYMs
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
+        run: sh ./scripts/ios/upload-dsyms.sh
+        env:
+          BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
