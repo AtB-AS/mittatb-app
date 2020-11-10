@@ -54,7 +54,7 @@ export async function reserve(
   const customer_id = await getCustomerId();
 
   const url = 'ticket/v1/reserve';
-  const response = await client.post<ReserveTicketResponse>(
+  const response = await client.post<TicketReservation>(
     url,
     {
       payment_type: paymentType === 'creditcard' ? 1 : 2,
@@ -117,7 +117,7 @@ export type ReserveOffer = {
   count: number;
 };
 
-export type ReserveTicketResponse = {
+export type TicketReservation = {
   payment_id: number;
   transaction_id: number;
   url: string;

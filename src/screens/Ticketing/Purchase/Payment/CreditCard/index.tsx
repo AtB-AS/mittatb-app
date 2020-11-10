@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useCallback, useEffect} from 'react';
 import WebView from 'react-native-webview';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -8,13 +8,17 @@ import {
   WebViewNavigationEvent,
   WebViewErrorEvent,
 } from 'react-native-webview/lib/WebViewTypes';
-import {capturePayment} from '../../../../../api';
+import {capturePayment, reserveOffers} from '../../../../../api';
 import {
   PaymentFailedReason,
   useTicketState,
 } from '../../../../../TicketContext';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {StyleSheet} from '../../../../../theme';
+import {TicketReservation} from '../../../../../api/fareContracts';
+import {ActivityIndicator, View} from 'react-native';
+import {ArrowLeft} from '../../../../../assets/svg/icons/navigation';
+import Header from '../../../../../ScreenHeader';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'PaymentCreditCard'>;
@@ -27,13 +31,74 @@ enum NetsPaymentStatus {
 }
 
 const CreditCard: React.FC<Props> = ({route, navigation}) => {
-  const styles = useStyles();
+  const {offer_id, count} = route.params;
+  const [reservation, setReservation] = useState<TicketReservation | undefined>(
+    undefined,
+  );
+
+  useEffect(() => {
+    async function reserveOffer() {
+      try {
+        const response = await reserveOffers(
+          [{offer_id, count}],
+          'creditcard',
+          {
+            retry: true,
+          },
+        );
+        setReservation(response);
+      } catch (err) {
+        console.warn(err);
+      }
+    }
+
+    reserveOffer();
+  }, [offer_id, count]);
+
+  const cancel = () => navigation.goBack();
+  const finish = () => {
+    navigation.popToTop();
+    navigation.goBack();
+  };
+
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <Header
+        title="Betaling"
+        leftButton={{
+          icon: <ArrowLeft />,
+          onPress: cancel,
+          accessibilityLabel:
+            'Avslutt betaling og gå tilbake til valg av reisende',
+        }}
+      />
+      <ActivityIndicator
+        style={{position: 'absolute', top: '50%', left: '50%'}}
+      />
+      <View style={{flex: 1}}>
+        {reservation && (
+          <PaymentTerminal
+            reservation={reservation}
+            cancel={cancel}
+            finish={finish}
+          />
+        )}
+      </View>
+    </SafeAreaView>
+  );
+};
+
+const PaymentTerminal: React.FC<{
+  reservation: TicketReservation;
+  cancel: () => void;
+  finish: () => void;
+}> = ({reservation, cancel, finish}) => {
+  const {url, payment_id, transaction_id} = reservation;
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const {
     paymentFailedForReason,
     activatePollingForNewTickets,
   } = useTicketState();
-  const {url, transaction_id, payment_id} = route.params;
   const isCaptureInProgressRef = useRef(false);
 
   const onLoadEnd = ({
@@ -62,28 +127,26 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
             paymentFailedForReason(PaymentFailedReason.CaptureFailed);
           } finally {
             isCaptureInProgressRef.current = false;
-            navigation.popToTop();
+            finish();
           }
           break;
         case NetsPaymentStatus.UserCancelled:
           paymentFailedForReason(PaymentFailedReason.UserCancelled);
-          navigation.popToTop();
+          cancel();
           break;
       }
     }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <WebView
-        style={{opacity: isLoading ? 0 : 1}}
-        source={{
-          uri: url,
-        }}
-        onLoadStart={onLoadStart}
-        onLoadEnd={onLoadEnd}
-      />
-    </SafeAreaView>
+    <WebView
+      style={{opacity: isLoading ? 0 : 1}}
+      source={{
+        uri: url,
+      }}
+      onLoadStart={onLoadStart}
+      onLoadEnd={onLoadEnd}
+    />
   );
 };
 

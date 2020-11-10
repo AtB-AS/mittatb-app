@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  ActivityIndicator,
-  Linking,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ActivityIndicator, Text, TouchableOpacity, View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {TicketingStackParams} from '../';
 import Header from '../../../../ScreenHeader';
@@ -28,33 +22,25 @@ const Travellers: React.FC<Props> = ({navigation}) => {
   const styles = useStyles();
 
   const {
+    offerId,
     count,
     isSearchingOffer,
     error,
     totalPrice,
     addCount,
     removeCount,
-    reserveOffer,
   } = useOfferState();
 
   const closeModal = () => navigation.goBack();
 
   async function payWithVipps() {
-    const reservation = await reserveOffer('vipps');
-
-    if (reservation) {
-      if (await Linking.canOpenURL(reservation.url)) {
-        Linking.openURL(reservation.url);
-      }
-    }
+    if (offerId && count)
+      navigation.push('PaymentVipps', {offer_id: offerId, count});
   }
 
   async function payWithCard() {
-    const reservation = await reserveOffer('creditcard');
-
-    if (reservation) {
-      navigation.push('PaymentCreditCard', reservation);
-    }
+    if (offerId && count)
+      navigation.push('PaymentCreditCard', {offer_id: offerId, count});
   }
 
   return (

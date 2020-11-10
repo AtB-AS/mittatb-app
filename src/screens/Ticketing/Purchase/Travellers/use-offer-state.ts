@@ -96,29 +96,6 @@ export default function useOfferState() {
     dispatch,
   ]);
 
-  // const reserveOffer = useCallback(
-  //   async function reserveOffer(paymentType: PaymentType) {
-  //     if (offer) {
-  //       const {offer_id} = offer;
-  //       try {
-  //         return await reserveOffers([{offer_id, count}], paymentType, {
-  //           retry: true,
-  //         });
-  //       } catch (err) {
-  //         console.warn(err);
-  //         dispatch({
-  //           type: 'SET_ERROR',
-  //           error: {
-  //             context: 'failed_reservation',
-  //             type: getAxiosErrorType(err),
-  //           },
-  //         });
-  //       }
-  //     }
-  //   },
-  //   [offer],
-  // );
-
   useEffect(() => {
     const source = CancelToken.source();
     async function getOffers() {
