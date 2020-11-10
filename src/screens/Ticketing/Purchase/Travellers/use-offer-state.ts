@@ -13,7 +13,7 @@ export type OfferError = {
 
 type OfferState = {
   count: number;
-  offer?: Offer;
+  offerId?: string;
   isSearchingOffer: boolean;
   isReservingOffer: boolean;
   totalPrice: number;
@@ -42,7 +42,7 @@ const offerReducer: OfferReducer = (prevState, action) => {
     case 'SET_OFFER':
       return {
         ...prevState,
-        offer: action.offer,
+        offerId: action.offer.offer_id,
         isSearchingOffer: false,
         totalPrice:
           getCurrencyAsFloat(action.offer.prices, 'NOK') * prevState.count,
@@ -81,16 +81,13 @@ const initialState: OfferState = {
   count: 1,
   isSearchingOffer: true,
   isReservingOffer: false,
-  offer: undefined,
+  offerId: undefined,
   totalPrice: 0,
   error: undefined,
 };
 
 export default function useOfferState() {
-  const [{count, offer, ...state}, dispatch] = useReducer(
-    offerReducer,
-    initialState,
-  );
+  const [{count, ...state}, dispatch] = useReducer(offerReducer, initialState);
 
   const addCount = useCallback(() => dispatch({type: 'INCREMENT_COUNT'}), [
     dispatch,
@@ -99,28 +96,28 @@ export default function useOfferState() {
     dispatch,
   ]);
 
-  const reserveOffer = useCallback(
-    async function reserveOffer(paymentType: PaymentType) {
-      if (offer) {
-        const {offer_id} = offer;
-        try {
-          return await reserveOffers([{offer_id, count}], paymentType, {
-            retry: true,
-          });
-        } catch (err) {
-          console.warn(err);
-          dispatch({
-            type: 'SET_ERROR',
-            error: {
-              context: 'failed_reservation',
-              type: getAxiosErrorType(err),
-            },
-          });
-        }
-      }
-    },
-    [offer],
-  );
+  // const reserveOffer = useCallback(
+  //   async function reserveOffer(paymentType: PaymentType) {
+  //     if (offer) {
+  //       const {offer_id} = offer;
+  //       try {
+  //         return await reserveOffers([{offer_id, count}], paymentType, {
+  //           retry: true,
+  //         });
+  //       } catch (err) {
+  //         console.warn(err);
+  //         dispatch({
+  //           type: 'SET_ERROR',
+  //           error: {
+  //             context: 'failed_reservation',
+  //             type: getAxiosErrorType(err),
+  //           },
+  //         });
+  //       }
+  //     }
+  //   },
+  //   [offer],
+  // );
 
   useEffect(() => {
     const source = CancelToken.source();
@@ -168,6 +165,5 @@ export default function useOfferState() {
     count,
     addCount,
     removeCount,
-    reserveOffer,
   };
 }
