@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet} from '../../theme';
+import {StyleSheet, useTheme} from '../../theme';
 import {Portal} from 'react-native-portalize';
 import {Modalize} from 'react-native-modalize';
 import {View, TouchableOpacity, AccessibilityProperties} from 'react-native';
@@ -94,6 +94,7 @@ const DateInput: React.FC<DateInputProps> = ({
   timeOfLastSearch = new Date(),
 }) => {
   const style = useStyle();
+  const {theme} = useTheme();
   const valueOrDefault = value ?? now();
   const [dateObjectInternal, setDateObjectInternal] = useState<DateOutput>(
     valueOrDefault,
@@ -213,6 +214,8 @@ const DateInput: React.FC<DateInputProps> = ({
                 date={dateOrDefault(dateObjectInternal)}
                 onDateChange={onChange}
                 locale="nb"
+                fadeToColor={theme.background.level0}
+                textColor={theme.text.colors.primary}
               />
             </View>
 
@@ -231,7 +234,8 @@ const DateInput: React.FC<DateInputProps> = ({
 };
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    padding: 12,
+    padding: theme.spacings.medium,
+    backgroundColor: theme.background.level0,
   },
   dateContainer: {
     alignItems: 'center',
@@ -240,16 +244,16 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     borderBottomColor: theme.background.level1,
     borderBottomWidth: 1,
-    paddingBottom: 12,
+    paddingBottom: theme.spacings.medium,
   },
   options: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginVertical: 12,
+    marginVertical: theme.spacings.medium,
   },
   headerTextContainer: {
     flex: 1,
-    marginLeft: 20,
+    marginLeft: theme.spacings.large,
     alignItems: 'center',
   },
   dateTypeButton: {
@@ -257,7 +261,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: 6,
   },
   dateTypeButtonSelected: {
-    borderBottomColor: theme.background.accent,
+    borderBottomColor: theme.text.colors.focus,
     borderBottomWidth: 2,
   },
 }));

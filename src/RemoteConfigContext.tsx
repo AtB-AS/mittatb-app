@@ -1,6 +1,7 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import remoteConfig from '@react-native-firebase/remote-config';
 import {RemoteConfig, defaultRemoteConfig, getConfig} from './remote-config';
+import Bugsnag from '@bugsnag/react-native';
 
 export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;
@@ -10,34 +11,63 @@ const RemoteConfigContext = createContext<RemoteConfigContextState | undefined>(
   undefined,
 );
 
+type UserInfoErrorFromFirebase = {
+  code: 'no_fetch_yet' | 'success' | 'throttled' | 'failure' | 'unknown';
+  message: string;
+  fatal: boolean;
+  nativeErrorMessage: string;
+  nativeErrorCode: number;
+};
+
+function isUserInfo(a: any): a is UserInfoErrorFromFirebase {
+  return a && 'code' in a && 'message' in a;
+}
+
 const RemoteConfigContextProvider: React.FC = ({children}) => {
   const [config, setConfig] = useState<RemoteConfig>(defaultRemoteConfig);
+
+  async function fetchConfig() {
+    try {
+      await remoteConfig().fetchAndActivate();
+      const currentConfig = await getConfig();
+      setConfig(currentConfig);
+    } catch (e) {
+      const userInfo = e.userInfo;
+      if (!isUserInfo(userInfo)) {
+        throw e;
+      }
+      if (
+        isUserInfo(userInfo) &&
+        (userInfo.code === 'failure' || userInfo.fatal)
+      ) {
+        Bugsnag.notify(e, function (event) {
+          event.addMetadata('metadata', {userInfo});
+        });
+      }
+    }
+  }
 
   useEffect(() => {
     async function setupRemoteConfig() {
       const configApi = remoteConfig();
 
-      if (__DEV__) {
-        configApi.setConfigSettings({
-          minimumFetchIntervalMillis: 0,
-        });
-      }
-
       await configApi.setDefaults(defaultRemoteConfig);
-
-      await configApi.fetchAndActivate();
-      const currentConfig = await getConfig();
-      setConfig(currentConfig);
+      await fetchConfig();
     }
 
     setupRemoteConfig();
   }, []);
 
   async function refresh() {
-    await remoteConfig().reset();
-    await remoteConfig().fetchAndActivate();
-    const currentConfig = await getConfig();
-    setConfig(currentConfig);
+    const configApi = remoteConfig();
+    const {minimumFetchIntervalMillis} = configApi.settings;
+    await configApi.setConfigSettings({
+      minimumFetchIntervalMillis: 0,
+    });
+    await fetchConfig();
+    await configApi.setConfigSettings({
+      minimumFetchIntervalMillis,
+    });
   }
 
   return (
