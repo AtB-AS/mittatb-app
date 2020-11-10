@@ -51,11 +51,6 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
     async function setupRemoteConfig() {
       const configApi = remoteConfig();
 
-      if (__DEV__) {
-        configApi.setConfigSettings({
-          minimumFetchIntervalMillis: 0,
-        });
-      }
       await configApi.setDefaults(defaultRemoteConfig);
       await fetchConfig();
     }
@@ -64,8 +59,15 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
   }, []);
 
   async function refresh() {
-    await remoteConfig().reset();
+    const configApi = remoteConfig();
+    const {minimumFetchIntervalMillis} = configApi.settings;
+    await configApi.setConfigSettings({
+      minimumFetchIntervalMillis: 0,
+    });
     await fetchConfig();
+    await configApi.setConfigSettings({
+      minimumFetchIntervalMillis,
+    });
   }
 
   return (
