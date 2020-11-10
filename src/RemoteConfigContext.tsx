@@ -26,6 +26,27 @@ function isUserInfo(a: any): a is UserInfoErrorFromFirebase {
 const RemoteConfigContextProvider: React.FC = ({children}) => {
   const [config, setConfig] = useState<RemoteConfig>(defaultRemoteConfig);
 
+  async function fetchConfig() {
+    try {
+      await remoteConfig().fetchAndActivate();
+      const currentConfig = await getConfig();
+      setConfig(currentConfig);
+    } catch (e) {
+      const userInfo = e.userInfo;
+      if (!isUserInfo(userInfo)) {
+        throw e;
+      }
+      if (
+        isUserInfo(userInfo) &&
+        (userInfo.code === 'failure' || userInfo.fatal)
+      ) {
+        Bugsnag.notify(e, function (event) {
+          event.addMetadata('metadata', {userInfo});
+        });
+      }
+    }
+  }
+
   useEffect(() => {
     async function setupRemoteConfig() {
       const configApi = remoteConfig();
@@ -35,29 +56,8 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
           minimumFetchIntervalMillis: 0,
         });
       }
-
       await configApi.setDefaults(defaultRemoteConfig);
-
-      try {
-        const fetchedRemotely = await configApi.fetchAndActivate();
-        if (fetchedRemotely) {
-          const currentConfig = await getConfig();
-          setConfig(currentConfig);
-        }
-      } catch (e) {
-        const userInfo = e.userInfo;
-        if (!isUserInfo(userInfo)) {
-          throw e;
-        }
-        if (
-          isUserInfo(userInfo) &&
-          (userInfo.code === 'failure' || userInfo.fatal)
-        ) {
-          Bugsnag.notify(e, function (event) {
-            event.addMetadata('metadata', {userInfo});
-          });
-        }
-      }
+      await fetchConfig();
     }
 
     setupRemoteConfig();
@@ -65,9 +65,7 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
 
   async function refresh() {
     await remoteConfig().reset();
-    await remoteConfig().fetchAndActivate();
-    const currentConfig = await getConfig();
-    setConfig(currentConfig);
+    await fetchConfig();
   }
 
   return (
