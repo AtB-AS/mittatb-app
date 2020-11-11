@@ -19,9 +19,13 @@ import {TicketReservation} from '../../../../../api/fareContracts';
 import {ActivityIndicator, View} from 'react-native';
 import {ArrowLeft} from '../../../../../assets/svg/icons/navigation';
 import Header from '../../../../../ScreenHeader';
+import {DismissableStackNavigationProp} from '../../../../../navigation/createDismissableStackNavigator';
 
 type Props = {
-  navigation: StackNavigationProp<TicketingStackParams, 'PaymentCreditCard'>;
+  navigation: DismissableStackNavigationProp<
+    TicketingStackParams,
+    'PaymentCreditCard'
+  >;
   route: RouteProp<TicketingStackParams, 'PaymentCreditCard'>;
 };
 
@@ -56,10 +60,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
   }, [offer_id, count]);
 
   const cancel = () => navigation.goBack();
-  const finish = () => {
-    navigation.popToTop();
-    navigation.goBack();
-  };
+  const dismiss = () => navigation.dismiss();
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -80,7 +81,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
           <PaymentTerminal
             reservation={reservation}
             cancel={cancel}
-            finish={finish}
+            finish={dismiss}
           />
         )}
       </View>

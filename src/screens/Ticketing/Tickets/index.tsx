@@ -10,9 +10,11 @@ import {StyleSheet} from '../../../theme';
 import TabBar from './TabBar';
 import {ActiveTickets, ExpiredTickets} from './Tabs';
 
+export const ActiveTicketsScreenName = 'ActiveTickets';
+
 export type TicketTabsNavigatorParams = {
-  Active: undefined;
-  Expired: undefined;
+  [ActiveTicketsScreenName]: undefined;
+  ExpiredTickets: undefined;
 };
 
 const Tab = createMaterialTopTabNavigator<TicketTabsNavigatorParams>();
@@ -42,12 +44,12 @@ export default function TicketTabs() {
       />
       <Tab.Navigator tabBar={(props) => <TabBar {...props} />}>
         <Tab.Screen
-          name="Active"
+          name={ActiveTicketsScreenName}
           component={ActiveTickets}
           options={{tabBarLabel: 'Aktive'}}
         />
         <Tab.Screen
-          name="Expired"
+          name="ExpiredTickets"
           component={ExpiredTickets}
           options={{tabBarLabel: 'Utløpte'}}
         />
