@@ -9,6 +9,7 @@ import {StyleSheet} from '../../theme';
 import shadows from '../../components/map/shadows';
 import {ErrorType} from '../../api/utils';
 import ThemeText from '../../components/text';
+import ThemeIcon from '../../components/theme-icon';
 
 type Props = {
   location?: Location;
@@ -40,7 +41,7 @@ const LocationBar: React.FC<Props> = ({
           </View>
           {!isSearching && !!location && (
             <View style={styles.button}>
-              <ArrowRight />
+              <ThemeIcon svg={ArrowRight} />
             </View>
           )}
         </View>
