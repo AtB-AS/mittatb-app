@@ -33,7 +33,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const {activatePollingForNewTickets} = useTicketState();
   const onPurchaseSuccess = () => {
     activatePollingForNewTickets();
-    navigation.dismiss({purchase: true});
+    navigation.dismiss();
   };
 
   const {
