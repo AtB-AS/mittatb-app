@@ -1,25 +1,22 @@
-import React, {useState, useRef, useCallback, useEffect} from 'react';
-import WebView from 'react-native-webview';
+import React from 'react';
 import {RouteProp} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {parse as parseURL} from 'search-params';
 import {TicketingStackParams} from '../..';
-import {
-  WebViewNavigationEvent,
-  WebViewErrorEvent,
-} from 'react-native-webview/lib/WebViewTypes';
-import {capturePayment, reserveOffers} from '../../../../../api';
-import {
-  PaymentFailedReason,
-  useTicketState,
-} from '../../../../../TicketContext';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {StyleSheet} from '../../../../../theme';
-import {TicketReservation} from '../../../../../api/fareContracts';
-import {ActivityIndicator, View} from 'react-native';
 import {ArrowLeft} from '../../../../../assets/svg/icons/navigation';
 import Header from '../../../../../ScreenHeader';
 import {DismissableStackNavigationProp} from '../../../../../navigation/createDismissableStackNavigator';
+import Processing from './Processing';
+import {View} from 'react-native';
+import useTerminalState, {
+  ErrorContext,
+  LoadingState,
+} from './use-terminal-state';
+import WebView from 'react-native-webview';
+import MessageBox from '../../../../../message-box';
+import {useTicketState} from '../../../../../TicketContext';
+import {StyleSheet} from '../../../../../theme';
+import {ErrorType} from '../../../../../api/utils';
+import Button from '../../../../../components/button';
 
 type Props = {
   navigation: DismissableStackNavigationProp<
@@ -29,133 +26,102 @@ type Props = {
   route: RouteProp<TicketingStackParams, 'PaymentCreditCard'>;
 };
 
-enum NetsPaymentStatus {
-  UserCancelled = 'Cancel',
-  Succeeded = 'OK',
-}
-
 const CreditCard: React.FC<Props> = ({route, navigation}) => {
+  const styles = useStyles();
   const {offer_id, count} = route.params;
-  const [reservation, setReservation] = useState<TicketReservation | undefined>(
-    undefined,
-  );
+  const cancelTerminal = () => navigation.goBack();
+  const {activatePollingForNewTickets} = useTicketState();
+  const onPurchaseSuccess = () => {
+    activatePollingForNewTickets();
+    navigation.dismiss({purchase: true});
+  };
 
-  useEffect(() => {
-    async function reserveOffer() {
-      try {
-        const response = await reserveOffers(
-          [{offer_id, count}],
-          'creditcard',
-          {
-            retry: true,
-          },
-        );
-        setReservation(response);
-      } catch (err) {
-        console.warn(err);
-      }
-    }
-
-    reserveOffer();
-  }, [offer_id, count]);
-
-  const cancel = () => navigation.goBack();
-  const dismiss = () => navigation.dismiss();
+  const {
+    loadingState,
+    terminalUrl,
+    onWebViewLoadEnd,
+    onWebViewLoadStart,
+    error,
+    restartTerminal,
+  } = useTerminalState(offer_id, count, cancelTerminal, onPurchaseSuccess);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={styles.container}>
       <Header
         title="Betaling"
         leftButton={{
           icon: <ArrowLeft />,
-          onPress: cancel,
+          onPress: cancelTerminal,
           accessibilityLabel:
             'Avslutt betaling og gå tilbake til valg av reisende',
         }}
       />
-      <ActivityIndicator
-        style={{position: 'absolute', top: '50%', left: '50%'}}
-      />
-      <View style={{flex: 1}}>
-        {reservation && (
-          <PaymentTerminal
-            reservation={reservation}
-            cancel={cancel}
-            finish={dismiss}
+      <View
+        style={{
+          flex: 1,
+          position: !loadingState && !error ? 'relative' : 'absolute',
+        }}
+      >
+        {terminalUrl && (
+          <WebView
+            source={{
+              uri: terminalUrl,
+            }}
+            onLoadStart={onWebViewLoadStart}
+            onLoadEnd={onWebViewLoadEnd}
           />
         )}
       </View>
+      {loadingState && (
+        <View style={styles.center}>
+          <Processing message={translateLoadingMessage(loadingState)} />
+        </View>
+      )}
+      {!!error && (
+        <View style={styles.center}>
+          <MessageBox
+            message={translateError(error.context, error.type)}
+            type="error"
+          />
+          <Button
+            mode="primary"
+            onPress={restartTerminal}
+            text="Start på nytt"
+            style={styles.button}
+          />
+          <Button mode="secondary" onPress={cancelTerminal} text="Avbryt" />
+        </View>
+      )}
     </SafeAreaView>
   );
 };
 
-const PaymentTerminal: React.FC<{
-  reservation: TicketReservation;
-  cancel: () => void;
-  finish: () => void;
-}> = ({reservation, cancel, finish}) => {
-  const {url, payment_id, transaction_id} = reservation;
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const {
-    paymentFailedForReason,
-    activatePollingForNewTickets,
-  } = useTicketState();
-  const isCaptureInProgressRef = useRef(false);
+const translateLoadingMessage = (loadingState: LoadingState) => {
+  switch (loadingState) {
+    case 'reserving-offer':
+      return 'Reserverer billett..';
+    case 'loading-terminal':
+      return 'Laster betalingsterminal..';
+    case 'processing-payment':
+      return 'Prosesserer betaling..';
+  }
+};
 
-  const onLoadEnd = ({
-    nativeEvent: {url},
-  }: WebViewNavigationEvent | WebViewErrorEvent) => {
-    if (isLoading && !url.includes('/EnturPaymentRedirect')) {
-      setIsLoading(false);
-    }
-  };
-
-  const onLoadStart = async ({
-    nativeEvent: {url},
-  }: WebViewNavigationEvent | WebViewErrorEvent) => {
-    if (url.includes('/EnturPaymentRedirect')) {
-      setIsLoading(true);
-      const params = parseURL(url);
-      const responseCode = params['responseCode'];
-      switch (responseCode) {
-        case NetsPaymentStatus.Succeeded:
-          if (isCaptureInProgressRef.current) return;
-          try {
-            isCaptureInProgressRef.current = true;
-            await capturePayment(payment_id, transaction_id);
-            activatePollingForNewTickets();
-          } catch (error) {
-            paymentFailedForReason(PaymentFailedReason.CaptureFailed);
-          } finally {
-            isCaptureInProgressRef.current = false;
-            finish();
-          }
-          break;
-        case NetsPaymentStatus.UserCancelled:
-          paymentFailedForReason(PaymentFailedReason.UserCancelled);
-          cancel();
-          break;
-      }
-    }
-  };
-
-  return (
-    <WebView
-      style={{opacity: isLoading ? 0 : 1}}
-      source={{
-        uri: url,
-      }}
-      onLoadStart={onLoadStart}
-      onLoadEnd={onLoadEnd}
-    />
-  );
+const translateError = (errorContext: ErrorContext, errorType: ErrorType) => {
+  switch (errorContext) {
+    case 'terminal-loading':
+      return 'Oops - vi feila når vi prøvde å laste inn betalingsterminal. Supert om du prøver igjen 🤞';
+    case 'reservation':
+      return 'Oops - vi feila når vi prøvde å reservere billett. Supert om du prøver igjen 🤞';
+    case 'capture':
+      return 'Oops - vi feila når vi prosessere betaling. Supert om du prøver igjen 🤞';
+  }
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    flex: 1,
-    backgroundColor: theme.background.modal_Level2,
-  },
+  container: {flex: 1, backgroundColor: theme.background.modal_Level2},
+  center: {flex: 1, justifyContent: 'center', padding: theme.spacings.medium},
+  button: {marginTop: theme.spacings.small},
 }));
 
 export default CreditCard;

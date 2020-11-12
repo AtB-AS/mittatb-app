@@ -2,7 +2,7 @@ import React from 'react';
 import {View, TouchableOpacity} from 'react-native';
 import {formatToLongDateTime, secondsToDuration} from '../../../utils/date';
 import {FareContract} from '../../../api/fareContracts';
-import {StyleSheet} from '../../../theme';
+import {StyleSheet, useTheme} from '../../../theme';
 import {InvalidTicket, ValidTicket} from '../../../assets/svg/icons/ticketing';
 import colors from '../../../theme/colors';
 import Dash from 'react-native-dash';
@@ -17,6 +17,7 @@ type Props = {
 
 const Ticket: React.FC<Props> = ({fareContract: fc, now}) => {
   const styles = useStyles();
+  const {theme} = useTheme();
 
   const nowSeconds = now / 1000;
   const isValidTicket = fc.usage_valid_to >= nowSeconds;
@@ -41,7 +42,7 @@ const Ticket: React.FC<Props> = ({fareContract: fc, now}) => {
           ) : (
             <>
               <View style={styles.iconContainer}>
-                <InvalidTicket fill={colors.secondary.red} />
+                <InvalidTicket fill={theme.border.error} />
               </View>
               <ThemeText type="lead" color="faded">
                 Kjøpt{' '}

@@ -28,7 +28,8 @@ const colors = {
     orange: '#C75B12',
     yellow_100: '#F7F3B2',
     yellow_500: '#E4D700',
-    red: '#A51140',
+    red_100: '#E4B8C6',
+    red_500: '#A51140',
     cyan: '#71D6E0',
     cyan_100: '#D4F3F6',
     cyan_300: '#AAE6EC',
@@ -121,6 +122,7 @@ export interface Theme {
     modal_Level2: string;
     destructive: string;
     warning: string;
+    error: string;
     info: string;
     accent: string;
   };
@@ -133,6 +135,7 @@ export interface Theme {
     focus: string;
     info: string;
     warning: string;
+    error: string;
     radius: typeof borderRadius;
     width: typeof borderWidth;
   };
@@ -156,9 +159,10 @@ export const themes: Themes = {
       level3: backgrounds.light__level3,
       header: colors.secondary.cyan_500,
       modal_Level2: colors.secondary.gray_Level2,
-      destructive: colors.secondary.red,
+      destructive: colors.secondary.red_500,
       info: colors.secondary.cyan_100,
       warning: colors.secondary.yellow_100,
+      error: colors.secondary.red_100,
       accent: colors.secondary.cyan,
     },
     text: {
@@ -176,6 +180,7 @@ export const themes: Themes = {
       focus: colors.secondary.blue_500,
       info: colors.secondary.cyan_500,
       warning: colors.secondary.yellow_500,
+      error: colors.secondary.red_500,
       radius: borderRadius,
       width: borderWidth,
     },
@@ -197,8 +202,9 @@ export const themes: Themes = {
       level3: backgrounds.dark__level3,
       header: colors.secondary.blue_900,
       modal_Level2: backgrounds.dark__level2,
-      destructive: colors.secondary.red,
+      destructive: colors.secondary.red_500,
       warning: colors.primary.green_900,
+      error: colors.secondary.red_100,
       info: colors.secondary.cyan_900,
       accent: backgrounds.dark__level1,
     },
@@ -218,6 +224,7 @@ export const themes: Themes = {
       focus: colors.secondary.cyan_500,
       info: colors.secondary.cyan_800,
       warning: colors.primary.green_700,
+      error: colors.secondary.red_500,
       radius: borderRadius,
       width: borderWidth,
     },
