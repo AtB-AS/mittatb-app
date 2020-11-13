@@ -5,7 +5,7 @@ import createDismissableStackNavigator from '../../../navigation/createDismissab
 import {ActiveTicketsScreenName} from '../Tickets';
 
 export type TicketingStackParams = {
-  Travellers: undefined;
+  Travellers: {refreshOffer?: boolean};
   PaymentCreditCard: {offer_id: string; count: number};
   PaymentVipps: {offer_id: string; count: number};
   Splash: undefined;

@@ -29,7 +29,8 @@ type Props = {
 const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const styles = useStyles();
   const {offer_id, count} = route.params;
-  const cancelTerminal = () => navigation.goBack();
+  const cancelTerminal = (refresh?: boolean) =>
+    navigation.navigate('Travellers', {refreshOffer: refresh});
   const {activatePollingForNewTickets} = useTicketState();
   const onPurchaseSuccess = () => {
     activatePollingForNewTickets();
@@ -82,14 +83,21 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
           <MessageBox
             message={translateError(error.context, error.type)}
             type="error"
+            containerStyle={styles.button}
           />
+          {(error.context === 'terminal-loading' ||
+            error.context === 'capture') && (
+            <Button
+              mode="primary"
+              onPress={restartTerminal}
+              text="Start på nytt"
+            />
+          )}
           <Button
-            mode="primary"
-            onPress={restartTerminal}
-            text="Start på nytt"
-            style={styles.button}
+            mode="secondary"
+            onPress={() => cancelTerminal(true)}
+            text="Gå tilbake"
           />
-          <Button mode="secondary" onPress={cancelTerminal} text="Avbryt" />
         </View>
       )}
     </SafeAreaView>
@@ -121,7 +129,7 @@ const translateError = (errorContext: ErrorContext, errorType: ErrorType) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {flex: 1, backgroundColor: theme.background.modal_Level2},
   center: {flex: 1, justifyContent: 'center', padding: theme.spacings.medium},
-  button: {marginTop: theme.spacings.small},
+  button: {marginBottom: theme.spacings.small},
 }));
 
 export default CreditCard;

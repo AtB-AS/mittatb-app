@@ -1,7 +1,8 @@
 import {SINGLE_TICKET_PRODUCT_ID} from '@env';
+import {CancelToken} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
-import {CancelToken, reserveOffers, searchOffers} from '../../../../api';
-import {Offer, OfferPrice, PaymentType} from '../../../../api/fareContracts';
+import {CancelToken as CancelTokenStatic, searchOffers} from '../../../../api';
+import {Offer, OfferPrice} from '../../../../api/fareContracts';
 import {ErrorType, getAxiosErrorType} from '../../../../api/utils';
 
 type OfferErrorContext = 'failed_offer_search' | 'failed_reservation';
@@ -96,9 +97,8 @@ export default function useOfferState() {
     dispatch,
   ]);
 
-  useEffect(() => {
-    const source = CancelToken.source();
-    async function getOffers() {
+  const getOffers = useCallback(
+    async function (count: number, cancelToken?: CancelToken) {
       try {
         const response = await searchOffers(
           ['ATB:TariffZone:1'],
@@ -110,10 +110,10 @@ export default function useOfferState() {
             },
           ],
           [SINGLE_TICKET_PRODUCT_ID],
-          {cancelToken: source.token, retry: true},
+          {cancelToken, retry: true},
         );
 
-        source.token.throwIfRequested();
+        cancelToken?.throwIfRequested();
 
         const offer = response?.[0];
 
@@ -132,15 +132,28 @@ export default function useOfferState() {
           });
         }
       }
-    }
-    getOffers();
+    },
+    [dispatch],
+  );
+
+  useEffect(() => {
+    const source = CancelTokenStatic.source();
+    getOffers(count, source.token);
     return () => source.cancel('Cancelling previous offer search');
   }, [count]);
+
+  const refreshOffer = useCallback(
+    async function () {
+      await getOffers(count, undefined);
+    },
+    [count],
+  );
 
   return {
     ...state,
     count,
     addCount,
     removeCount,
+    refreshOffer,
   };
 }

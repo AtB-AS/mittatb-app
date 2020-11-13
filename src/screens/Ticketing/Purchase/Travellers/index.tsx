@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ActivityIndicator, Text, TouchableOpacity, View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
 import Header from '../../../../ScreenHeader';
 import {Add, Close, Remove} from '../../../../assets/svg/icons/actions';
@@ -16,9 +17,10 @@ import insets from '../../../../utils/insets';
 
 type Props = {
   navigation: StackNavigationProp<TicketingStackParams, 'Travellers'>;
+  route: RouteProp<TicketingStackParams, 'Travellers'>;
 };
 
-const Travellers: React.FC<Props> = ({navigation}) => {
+const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
   const styles = useStyles();
 
   const {
@@ -29,7 +31,14 @@ const Travellers: React.FC<Props> = ({navigation}) => {
     totalPrice,
     addCount,
     removeCount,
+    refreshOffer,
   } = useOfferState();
+
+  useEffect(() => {
+    if (params?.refreshOffer) {
+      refreshOffer();
+    }
+  }, [params?.refreshOffer]);
 
   const closeModal = () => navigation.goBack();
 
