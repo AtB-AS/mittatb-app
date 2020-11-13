@@ -5,7 +5,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {ArrowLeft} from '../../../../../assets/svg/icons/navigation';
 import Header from '../../../../../ScreenHeader';
 import {DismissableStackNavigationProp} from '../../../../../navigation/createDismissableStackNavigator';
-import Processing from './Processing';
+import Processing from '../Processing';
 import {View} from 'react-native';
 import useTerminalState, {
   ErrorContext,
@@ -17,6 +17,7 @@ import {useTicketState} from '../../../../../TicketContext';
 import {StyleSheet} from '../../../../../theme';
 import {ErrorType} from '../../../../../api/utils';
 import Button from '../../../../../components/button';
+import ThemeIcon from '../../../../../components/theme-icon';
 
 type Props = {
   navigation: DismissableStackNavigationProp<
@@ -51,7 +52,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
       <Header
         title="Betaling"
         leftButton={{
-          icon: <ArrowLeft />,
+          icon: <ThemeIcon svg={ArrowLeft} />,
           onPress: cancelTerminal,
           accessibilityLabel:
             'Avslutt betaling og gå tilbake til valg av reisende',
@@ -83,7 +84,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
           <MessageBox
             message={translateError(error.context, error.type)}
             type="error"
-            containerStyle={styles.button}
+            containerStyle={styles.messageBox}
           />
           {(error.context === 'terminal-loading' ||
             error.context === 'capture') && (
@@ -129,7 +130,7 @@ const translateError = (errorContext: ErrorContext, errorType: ErrorType) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {flex: 1, backgroundColor: theme.background.modal_Level2},
   center: {flex: 1, justifyContent: 'center', padding: theme.spacings.medium},
-  button: {marginBottom: theme.spacings.small},
+  messageBox: {marginBottom: theme.spacings.small},
 }));
 
 export default CreditCard;

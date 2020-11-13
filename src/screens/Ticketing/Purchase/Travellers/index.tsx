@@ -15,9 +15,13 @@ import Button from '../../../../components/button';
 import {CreditCard, Vipps} from '../../../../assets/svg/icons/ticketing';
 import useOfferState, {OfferError} from './use-offer-state';
 import insets from '../../../../utils/insets';
+import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
 
 type Props = {
-  navigation: StackNavigationProp<TicketingStackParams, 'Travellers'>;
+  navigation: DismissableStackNavigationProp<
+    TicketingStackParams,
+    'Travellers'
+  >;
   route: RouteProp<TicketingStackParams, 'Travellers'>;
 };
 
@@ -45,7 +49,7 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
     }
   }, [params?.refreshOffer]);
 
-  const closeModal = () => navigation.goBack();
+  const closeModal = () => navigation.dismiss();
 
   async function payWithVipps() {
     if (offerId && offerExpirationTime && count) {
@@ -72,7 +76,7 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
       <Header
         title="Reisende"
         leftButton={{
-          icon: <Close />,
+          icon: <ThemeIcon svg={Close} />,
           onPress: closeModal,
           accessibilityLabel: 'Lukk kjøpsprosessen',
         }}

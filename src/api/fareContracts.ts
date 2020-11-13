@@ -60,7 +60,7 @@ export async function reserve(
       payment_type: paymentType === 'creditcard' ? 1 : 2,
       payment_redirect_url:
         paymentType == 'vipps'
-          ? 'atb://payment?transaction_id={transaction_id}&payment_id={payment_id}'
+          ? 'atb://vipps?transaction_id={transaction_id}&payment_id={payment_id}'
           : undefined,
       customer_id,
       offers,

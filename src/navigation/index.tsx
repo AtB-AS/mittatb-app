@@ -43,7 +43,7 @@ const NavigationRoot = () => {
   const ref = useRef<NavigationContainerRef>(null);
   const {getInitialState} = useLinking(ref, {
     prefixes: ['atb://'],
-    config: {screens: {Profile: 'profile', PaymentVipps: 'payment'}},
+    config: {screens: {Profile: 'profile', VippsCallback: 'vipps'}},
   });
 
   useEffect(() => {
