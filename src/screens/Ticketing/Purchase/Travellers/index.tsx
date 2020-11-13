@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import {ActivityIndicator, Text, TouchableOpacity, View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
+import {addMinutes} from 'date-fns';
 import {TicketingStackParams} from '../';
 import Header from '../../../../ScreenHeader';
 import {Add, Close, Remove} from '../../../../assets/svg/icons/actions';
@@ -25,6 +26,7 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
 
   const {
     offerId,
+    offerSearchTime,
     count,
     isSearchingOffer,
     error,
@@ -33,6 +35,9 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
     removeCount,
     refreshOffer,
   } = useOfferState();
+
+  const offerExpirationTime =
+    offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
 
   useEffect(() => {
     if (params?.refreshOffer) {
@@ -43,13 +48,23 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
   const closeModal = () => navigation.goBack();
 
   async function payWithVipps() {
-    if (offerId && count)
-      navigation.push('PaymentVipps', {offer_id: offerId, count});
+    if (offerId && offerExpirationTime && count) {
+      if (offerExpirationTime < Date.now()) {
+        refreshOffer();
+      } else {
+        navigation.push('PaymentVipps', {offer_id: offerId, count});
+      }
+    }
   }
 
   async function payWithCard() {
-    if (offerId && count)
-      navigation.push('PaymentCreditCard', {offer_id: offerId, count});
+    if (offerId && offerExpirationTime && count) {
+      if (offerExpirationTime < Date.now()) {
+        refreshOffer();
+      } else {
+        navigation.push('PaymentCreditCard', {offer_id: offerId, count});
+      }
+    }
   }
 
   return (

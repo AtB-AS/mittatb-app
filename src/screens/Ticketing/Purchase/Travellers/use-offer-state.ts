@@ -15,8 +15,8 @@ export type OfferError = {
 type OfferState = {
   count: number;
   offerId?: string;
+  offerSearchTime?: number;
   isSearchingOffer: boolean;
-  isReservingOffer: boolean;
   totalPrice: number;
   error?: OfferError;
 };
@@ -44,6 +44,7 @@ const offerReducer: OfferReducer = (prevState, action) => {
       return {
         ...prevState,
         offerId: action.offer.offer_id,
+        offerSearchTime: Date.now(),
         isSearchingOffer: false,
         totalPrice:
           getCurrencyAsFloat(action.offer.prices, 'NOK') * prevState.count,
@@ -55,6 +56,8 @@ const offerReducer: OfferReducer = (prevState, action) => {
         count: prevState.count + 1,
         isSearchingOffer: true,
         totalPrice: 0,
+        offerId: undefined,
+        offerSearchTime: undefined,
       };
     }
     case 'DECREMENT_COUNT': {
@@ -64,6 +67,8 @@ const offerReducer: OfferReducer = (prevState, action) => {
           count: prevState.count - 1,
           isSearchingOffer: true,
           totalPrice: 0,
+          offerId: undefined,
+          offerSearchTime: undefined,
         };
       }
 
@@ -81,8 +86,8 @@ const offerReducer: OfferReducer = (prevState, action) => {
 const initialState: OfferState = {
   count: 1,
   isSearchingOffer: true,
-  isReservingOffer: false,
   offerId: undefined,
+  offerSearchTime: undefined,
   totalPrice: 0,
   error: undefined,
 };
@@ -140,13 +145,13 @@ export default function useOfferState() {
     const source = CancelTokenStatic.source();
     getOffers(count, source.token);
     return () => source.cancel('Cancelling previous offer search');
-  }, [count]);
+  }, [count, getOffers]);
 
   const refreshOffer = useCallback(
     async function () {
       await getOffers(count, undefined);
     },
-    [count],
+    [count, getOffers],
   );
 
   return {
