@@ -102,7 +102,7 @@ export default function useOfferState() {
     dispatch,
   ]);
 
-  const getOffers = useCallback(
+  const updateOffer = useCallback(
     async function (count: number, cancelToken?: CancelToken) {
       try {
         const response = await searchOffers(
@@ -143,15 +143,15 @@ export default function useOfferState() {
 
   useEffect(() => {
     const source = CancelTokenStatic.source();
-    getOffers(count, source.token);
+    updateOffer(count, source.token);
     return () => source.cancel('Cancelling previous offer search');
-  }, [count, getOffers]);
+  }, [count, updateOffer]);
 
   const refreshOffer = useCallback(
     async function () {
-      await getOffers(count, undefined);
+      await updateOffer(count, undefined);
     },
-    [count, getOffers],
+    [count, updateOffer],
   );
 
   return {
