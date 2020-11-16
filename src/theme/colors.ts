@@ -189,7 +189,7 @@ export const themes: Themes = {
       colors: {
         primary: colors.text.black,
         destructive: colors.text.white,
-        faded: colors.primary.gray_400,
+        faded: colors.primary.gray_500,
         focus: colors.secondary.blue_500,
       },
       ...textTypes,
