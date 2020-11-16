@@ -26,48 +26,48 @@ function isUserInfo(a: any): a is UserInfoErrorFromFirebase {
 const RemoteConfigContextProvider: React.FC = ({children}) => {
   const [config, setConfig] = useState<RemoteConfig>(defaultRemoteConfig);
 
+  async function fetchConfig() {
+    try {
+      await remoteConfig().fetchAndActivate();
+      const currentConfig = await getConfig();
+      setConfig(currentConfig);
+    } catch (e) {
+      const userInfo = e.userInfo;
+      if (!isUserInfo(userInfo)) {
+        throw e;
+      }
+      if (
+        isUserInfo(userInfo) &&
+        (userInfo.code === 'failure' || userInfo.fatal)
+      ) {
+        Bugsnag.notify(e, function (event) {
+          event.addMetadata('metadata', {userInfo});
+        });
+      }
+    }
+  }
+
   useEffect(() => {
     async function setupRemoteConfig() {
       const configApi = remoteConfig();
 
-      if (__DEV__) {
-        configApi.setConfigSettings({
-          minimumFetchIntervalMillis: 0,
-        });
-      }
-
       await configApi.setDefaults(defaultRemoteConfig);
-
-      try {
-        const fetchedRemotely = await configApi.fetchAndActivate();
-        if (fetchedRemotely) {
-          const currentConfig = await getConfig();
-          setConfig(currentConfig);
-        }
-      } catch (e) {
-        const userInfo = e.userInfo;
-        if (!isUserInfo(userInfo)) {
-          throw e;
-        }
-        if (
-          isUserInfo(userInfo) &&
-          (userInfo.code === 'failure' || userInfo.fatal)
-        ) {
-          Bugsnag.notify(e, function (event) {
-            event.addMetadata('metadata', {userInfo});
-          });
-        }
-      }
+      await fetchConfig();
     }
 
     setupRemoteConfig();
   }, []);
 
   async function refresh() {
-    await remoteConfig().reset();
-    await remoteConfig().fetchAndActivate();
-    const currentConfig = await getConfig();
-    setConfig(currentConfig);
+    const configApi = remoteConfig();
+    const {minimumFetchIntervalMillis} = configApi.settings;
+    await configApi.setConfigSettings({
+      minimumFetchIntervalMillis: 0,
+    });
+    await fetchConfig();
+    await configApi.setConfigSettings({
+      minimumFetchIntervalMillis,
+    });
   }
 
   return (

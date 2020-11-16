@@ -16,7 +16,7 @@ echo 'Gathering commits and creating changelog'
 message=`yarn --silent conventional-changelog -p angular -n ./tools/release/changelog.config.js`
 
 if [ $? -eq 0 ]; then
-  gh pr create -B alpha-release -b "$message" -t '[Sync] New release to alpha channel'
+  gh pr create -B alpha-release -b "$message" -t 'chore: [Sync] New release to alpha channel'
 else
   echo 'Could not create changelog'
   exit 1;
