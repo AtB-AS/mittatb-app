@@ -1,11 +1,13 @@
 import React from 'react';
 import AddEditFavorite from './AddEditFavorite';
-import Profile from './FavoriteList';
+import FavoriteList from './FavoriteList';
 import {LocationFavorite, Location} from '../../favorites/types';
 import {createStackNavigator} from '@react-navigation/stack';
+import ProfileHome from './Home';
 
 export type ProfileStackParams = {
   ProfileHome: undefined;
+  FavoriteList: undefined;
   AddEditFavorite: {
     editItem?: LocationFavorite;
     searchLocation?: Location;
@@ -19,7 +21,15 @@ export default function ProfileScreen() {
     <Stack.Navigator initialRouteName="ProfileHome">
       <Stack.Screen
         name="ProfileHome"
-        component={Profile}
+        component={ProfileHome}
+        options={{
+          title: 'Mitt AtB',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FavoriteList"
+        component={FavoriteList}
         options={{
           title: 'Mitt AtB',
           headerShown: false,

@@ -1,18 +1,14 @@
 import {useScrollToTop} from '@react-navigation/native';
-import {useHeaderHeight} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   AccessibilityProps,
   Animated,
-  Dimensions,
   Easing,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Platform,
   RefreshControl,
-  ScaledSize,
   ScrollView,
-  StatusBar,
   useWindowDimensions,
   View,
 } from 'react-native';
@@ -20,12 +16,12 @@ import {
   useSafeAreaFrame,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import SvgBanner from '../../assets/svg/icons/other/Banner';
 import useChatIcon from '../../chat/use-chat-icon';
 import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
 import LogoOutline from '../../ScreenHeader/LogoOutline';
 import {StyleSheet} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
-import SvgBanner from '../../assets/svg/icons/other/Banner';
 import ThemeIcon from '../theme-icon';
 import useConditionalMemo from '../../utils/use-conditional-memo';
 

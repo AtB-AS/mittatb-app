@@ -1,25 +1,21 @@
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {View, Linking, TouchableOpacity} from 'react-native';
-import React from 'react';
-import {StyleSheet, Theme} from '../../../theme';
-import {ScrollView} from 'react-native-gesture-handler';
-import {Add, Edit} from '../../../assets/svg/icons/actions';
-import EditableListGroup from './EditableListGroup';
-import {LocationFavorite} from '../../../favorites/types';
-import {ProfileStackParams} from '..';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {useFavorites} from '../../../favorites/FavoritesContext';
-import Header from '../../../ScreenHeader';
-import {FavoriteIcon} from '../../../favorites';
-import insets from '../../../utils/insets';
-import useChatIcon from '../../../chat/use-chat-icon';
 import {CompositeNavigationProp} from '@react-navigation/native';
-import {TabNavigatorParams} from '../../../navigation/TabNavigator';
-import {PRIVACY_POLICY_URL} from '@env';
-import LogoOutline from '../../../ScreenHeader/LogoOutline';
-import {useNavigateHome} from '../../../utils/navigation';
-import ThemeIcon from '../../../components/theme-icon';
+import {StackNavigationProp} from '@react-navigation/stack';
+import React from 'react';
+import {TouchableOpacity, View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {ProfileStackParams} from '..';
+import {Add, Edit} from '../../../assets/svg/icons/actions';
 import ThemeText from '../../../components/text';
+import ThemeIcon from '../../../components/theme-icon';
+import {FavoriteIcon} from '../../../favorites';
+import {useFavorites} from '../../../favorites/FavoritesContext';
+import {LocationFavorite} from '../../../favorites/types';
+import {TabNavigatorParams} from '../../../navigation/TabNavigator';
+import {StyleSheet, Theme} from '../../../theme';
+import insets from '../../../utils/insets';
+import BackHeader from '../BackHeader';
+import EditableListGroup from './EditableListGroup';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -35,7 +31,7 @@ type ProfileScreenProps = {
   navigation: ProfileNearbyScreenNavigationProp;
 };
 
-export default function Profile({navigation}: ProfileScreenProps) {
+export default function FavoriteList({navigation}: ProfileScreenProps) {
   const css = useProfileStyle();
   const {favorites} = useFavorites();
   const items = favorites ?? [];
@@ -55,20 +51,9 @@ export default function Profile({navigation}: ProfileScreenProps) {
 
   const onAddButtonClick = () => navigation.push('AddEditFavorite', {});
 
-  const navigateHome = useNavigateHome();
-  const chatIcon = useChatIcon();
-
   return (
     <SafeAreaView style={css.container}>
-      <Header
-        title="Mitt AtB"
-        leftButton={{
-          icon: <ThemeIcon svg={LogoOutline} />,
-          onPress: navigateHome,
-          accessibilityLabel: 'Gå til startskjerm',
-        }}
-        rightButton={chatIcon}
-      />
+      <BackHeader title="Favorittsteder" />
 
       <ScrollView>
         <EditableListGroup
@@ -87,15 +72,6 @@ export default function Profile({navigation}: ProfileScreenProps) {
           )}
         />
       </ScrollView>
-      <TouchableOpacity
-        onPress={() =>
-          Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
-        }
-      >
-        <ThemeText type="body__link" style={css.privacyPolicy}>
-          Les vår personvernerklæring
-        </ThemeText>
-      </TouchableOpacity>
     </SafeAreaView>
   );
 }
