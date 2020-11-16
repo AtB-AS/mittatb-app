@@ -93,15 +93,6 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     position: 'absolute',
     right: theme.spacings.medium,
   },
-  // buttonSecondary: {
-  //   borderColor: theme.border.secondary,
-  //   backgroundColor: 'transparent',
-  //   padding: 14,
-  // },
-  // buttonDestructive: {
-  //   backgroundColor: theme.background.destructive,
-  //   color: theme.text.colors.destructive,
-  // },
   buttonDisabled: {
     opacity: 0.2,
   },
@@ -109,10 +100,4 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flex: 1,
     alignItems: 'center',
   },
-  // text: {
-  //   color: theme.text.colors.primary,
-  // },
-  // textDestructive: {
-  //   color: theme.text.colors.destructive,
-  // },
 }));
