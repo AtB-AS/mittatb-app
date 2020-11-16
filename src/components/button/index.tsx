@@ -43,15 +43,15 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const css = useButtonStyle();
   const {theme} = useTheme();
+  const {backgroundColor, borderColor, textColor} = theme.button[mode];
   const styleContainer = [
     css.button,
-    mode === 'secondary' ? css.buttonSecondary : undefined,
-    mode === 'destructive' ? css.buttonDestructive : undefined,
+    {
+      backgroundColor,
+      borderColor,
+    },
   ];
-  const styleText = [
-    css.text,
-    mode === 'destructive' ? css.textDestructive : undefined,
-  ];
+  const styleText = {color: textColor};
 
   return (
     <View style={disabled ? css.buttonDisabled : undefined}>
@@ -89,9 +89,9 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
     borderRadius: theme.border.radius.regular,
     borderWidth: theme.border.width.medium,
-    backgroundColor: theme.button.primary.bg,
+    backgroundColor: theme.button.primary.backgroundColor,
     marginBottom: theme.spacings.small,
-    borderColor: theme.button.primary.bg,
+    borderColor: theme.button.primary.backgroundColor,
   },
   leftIcon: {
     position: 'absolute',
@@ -101,15 +101,15 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     position: 'absolute',
     right: theme.spacings.medium,
   },
-  buttonSecondary: {
-    borderColor: theme.border.secondary,
-    backgroundColor: 'transparent',
-    padding: 14,
-  },
-  buttonDestructive: {
-    backgroundColor: theme.background.destructive,
-    color: theme.text.colors.destructive,
-  },
+  // buttonSecondary: {
+  //   borderColor: theme.border.secondary,
+  //   backgroundColor: 'transparent',
+  //   padding: 14,
+  // },
+  // buttonDestructive: {
+  //   backgroundColor: theme.background.destructive,
+  //   color: theme.text.colors.destructive,
+  // },
   buttonDisabled: {
     opacity: 0.2,
   },
@@ -117,10 +117,10 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flex: 1,
     alignItems: 'center',
   },
-  text: {
-    color: theme.text.colors.primary,
-  },
-  textDestructive: {
-    color: theme.text.colors.destructive,
-  },
+  // text: {
+  //   color: theme.text.colors.primary,
+  // },
+  // textDestructive: {
+  //   color: theme.text.colors.destructive,
+  // },
 }));

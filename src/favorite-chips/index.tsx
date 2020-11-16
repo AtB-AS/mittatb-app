@@ -61,7 +61,7 @@ const FavoriteChips: React.FC<Props> = ({
           text="Posisjon"
           accessibilityRole="button"
           accessibilityHint={chipActionHint ?? ''}
-          icon={<CurrentLocationArrow fill={colors.general.white} />}
+          icon={<ThemeIcon svg={CurrentLocationArrow} />}
           onPress={onCurrentLocation}
           mode="dark"
         />
@@ -70,7 +70,7 @@ const FavoriteChips: React.FC<Props> = ({
         <FavoriteChip
           text="Velg i kart"
           accessibilityRole="button"
-          icon={<MapPointPin fill={colors.general.white} />}
+          icon={<ThemeIcon svg={MapPointPin} />}
           onPress={onMapSelection}
           mode="dark"
         />
@@ -177,26 +177,26 @@ const useChipStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   text: {
     marginLeft: theme.spacings.xSmall,
     marginRight: theme.spacings.xSmall,
-    color: colors.general.white,
+    color: colors.text.white,
     fontWeight: 'bold',
     letterSpacing: -0.31,
   },
   container__dark: {
-    backgroundColor: theme.button.primary2.bg,
+    backgroundColor: theme.button.primary2.backgroundColor,
   },
   text__dark: {
-    color: theme.button.primary2.color,
+    color: theme.button.primary2.textColor,
   },
   container__light: {
     backgroundColor:
       themeName === 'dark'
-        ? theme.button.primary3.bg
+        ? theme.button.primary3.backgroundColor
         : colors.secondary.cyan_300,
   },
   text__light: {
     color:
       themeName === 'dark'
-        ? theme.button.primary3.color
+        ? theme.button.primary3.textColor
         : theme.text.colors.primary,
   },
 }));

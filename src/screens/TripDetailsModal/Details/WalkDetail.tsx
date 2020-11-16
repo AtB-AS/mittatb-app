@@ -2,13 +2,13 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import Dash from 'react-native-dash';
 
-import colors from '../../../theme/colors';
 import {secondsToDuration, secondsBetween} from '../../../utils/date';
 import {WalkingPerson} from '../../../assets/svg/icons/transportation';
 import {LegDetailProps} from '.';
 import WaitRow from './WaitRow';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
+import {defaultFill} from '../../../utils/transportation-color';
 
 const MINIMUM_WAIT_IN_SECONDS = 30;
 
@@ -36,7 +36,7 @@ const WalkDetail: React.FC<LegDetailProps> = ({
             dashLength={4}
             dashThickness={4}
             dashCount={3}
-            dashColor={colors.general.gray200}
+            dashColor={defaultFill}
             style={styles.dash}
           />
           <View>
@@ -54,7 +54,7 @@ const WalkDetail: React.FC<LegDetailProps> = ({
                 dashLength={4}
                 dashThickness={4}
                 dashCount={3}
-                dashColor={colors.general.gray200}
+                dashColor={defaultFill}
                 style={styles.dash}
               />
             )}
@@ -73,7 +73,7 @@ const WalkDetail: React.FC<LegDetailProps> = ({
             dashLength={4}
             dashThickness={4}
             dashCount={3}
-            dashColor={colors.general.gray200}
+            dashColor={defaultFill}
             style={styles.dash}
           />
         </>

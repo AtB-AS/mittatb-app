@@ -1,15 +1,17 @@
 import React from 'react';
-import {ActivityIndicator, View, StyleSheet} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import ThemeText from '../../components/text';
-import colors from '../../theme/colors';
+import {StyleSheet, useTheme} from '../../theme';
 
 const Loading: React.FC<{text?: string}> = ({text}) => {
+  const {theme} = useTheme();
+  const styles = useStyles();
   return (
     <View style={styles.container}>
       <ActivityIndicator
         animating={true}
         size="large"
-        color={colors.general.white}
+        color={theme.text.colors.primary}
       />
       {text ? (
         <ThemeText type="paragraphHeadline" style={styles.text}>
@@ -20,9 +22,9 @@ const Loading: React.FC<{text?: string}> = ({text}) => {
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: colors.secondary.cyan,
+    backgroundColor: theme.background.accent,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -30,6 +32,6 @@ const styles = StyleSheet.create({
   text: {
     marginTop: 10,
   },
-});
+}));
 
 export default Loading;

@@ -30,7 +30,7 @@ import {useLocationSearchValue} from '../../location-search';
 import {RootStackParamList} from '../../navigation';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import {TripPattern} from '../../sdk';
-import {StyleSheet} from '../../theme';
+import {StyleSheet, useTheme} from '../../theme';
 import insets from '../../utils/insets';
 import {
   locationDistanceInMetres as distanceInMetres,
@@ -49,7 +49,6 @@ import Animated, {Easing} from 'react-native-reanimated';
 import Bugsnag from '@bugsnag/react-native';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import {screenReaderPause} from '../../components/accessible-text';
-import colors from '../../theme/colors';
 import ThemeIcon from '../../components/theme-icon';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 import ThemeText from '../../components/text';
@@ -111,6 +110,7 @@ const Assistant: React.FC<Props> = ({
   navigation,
 }) => {
   const styles = useStyles();
+  const {theme} = useTheme();
   const {from, to} = useLocations(currentLocation);
 
   function swap() {
@@ -228,7 +228,7 @@ const Assistant: React.FC<Props> = ({
                 }
                 icon={
                   updatingLocation && !from ? (
-                    <ActivityIndicator color={colors.general.gray200} />
+                    <ActivityIndicator color={theme.text.colors.primary} />
                   ) : undefined
                 }
                 location={from}

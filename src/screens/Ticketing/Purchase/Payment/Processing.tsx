@@ -10,7 +10,7 @@ const Processing: React.FC<{message: string}> = ({message}) => {
   return (
     <View style={styles.container}>
       <ActivityIndicator
-        color={theme.text.body.color}
+        color={theme.text.colors.primary}
         style={styles.indicator}
       />
       <ThemeText>{message}</ThemeText>

@@ -28,7 +28,6 @@ import {useLocationSearchValue} from '../../../location-search';
 import {RootStackParamList} from '../../../navigation';
 import ScreenHeader from '../../../ScreenHeader';
 import {StyleSheet, Theme} from '../../../theme';
-import colors from '../../../theme/colors';
 import EmojiPopup from './EmojiPopup';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
@@ -184,6 +183,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
         <Button
           onPress={save}
+          mode="primary"
           icon={editItem ? Confirm : Add}
           disabled={!hasSelectedValues}
           text="Lagre favorittsted"
@@ -227,7 +227,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   line: {
     marginBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: colors.general.gray,
+    borderBottomColor: theme.background.level1,
   },
   lineNoMarginTop: {
     marginTop: 0,
