@@ -4,7 +4,7 @@ import {StyleSheet} from '../theme';
 import HeaderButton, {IconButton} from './HeaderButton';
 import ThemeText from '../components/text';
 
-type ScreenHeaderProps = {
+export type ScreenHeaderProps = {
   leftButton?: IconButton;
   rightButton?: IconButton;
   title: string;
@@ -39,7 +39,6 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.spacings.medium,
-    minHeight: 64,
   },
   iconContainerLeft: {
     position: 'absolute',

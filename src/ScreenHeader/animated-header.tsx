@@ -11,7 +11,7 @@ type ScreenHeaderProps = ViewProps & {
   alternativeTitleVisible: boolean;
 };
 
-const HEADER_HEIGHT = 40;
+const HEADER_HEIGHT = 20;
 
 const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
   leftButton,
