@@ -8,7 +8,7 @@ import Header from '../../../../ScreenHeader';
 import {Add, Close, Remove} from '../../../../assets/svg/icons/actions';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MessageBox from '../../../../message-box';
-import {StyleSheet} from '../../../../theme';
+import {StyleSheet, useTheme} from '../../../../theme';
 import ThemeText from '../../../../components/text';
 import ThemeIcon from '../../../../components/theme-icon';
 import Button from '../../../../components/button';
@@ -27,6 +27,7 @@ type Props = {
 
 const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
   const styles = useStyles();
+  const {theme} = useTheme();
 
   const {
     offerId,
@@ -126,7 +127,10 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
         {!isSearchingOffer ? (
           <ThemeText type="heroTitle">{totalPrice} kr</ThemeText>
         ) : (
-          <ActivityIndicator style={{margin: 12}} />
+          <ActivityIndicator
+            color={theme.text.colors.primary}
+            style={{margin: 12}}
+          />
         )}
       </View>
 
