@@ -1,5 +1,5 @@
 import {LegMode} from '@entur/sdk';
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {Fragment, useCallback, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import Dash from 'react-native-dash';
@@ -57,11 +57,12 @@ export default function DepartureDetails({navigation, route}: Props) {
   } = route.params;
   const styles = useStopsStyle();
 
+  const isFocused = useIsFocused();
   const [
     {callGroups, mode, publicCode, situations: parentSituations},
     _,
     isLoading,
-  ] = useDepartureData(serviceJourneyId, fromQuayId, toQuayId, 30);
+  ] = useDepartureData(serviceJourneyId, fromQuayId, toQuayId, 30, !isFocused);
 
   const content = isLoading ? (
     <View accessibilityLabel={'Laster søkeresultat'} accessible={true}>
@@ -336,6 +337,7 @@ function useDepartureData(
   fromQuayId?: string,
   toQuayId?: string,
   pollingTimeInSeconds: number = 0,
+  disabled?: boolean,
 ): [DepartureData, () => void, boolean, Error?] {
   const getService = useCallback(
     async function getServiceJourneyDepartures(): Promise<DepartureData> {
@@ -364,6 +366,7 @@ function useDepartureData(
       situations: [],
     },
     pollingTimeInSeconds,
+    disabled,
   });
 }
 

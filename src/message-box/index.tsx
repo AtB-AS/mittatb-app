@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleProp, ViewStyle} from 'react-native';
-import {Info, Warning} from '../assets/svg/icons/status';
+import {Error as ErrorIcon, Info, Warning} from '../assets/svg/icons/status';
 import {StyleSheet} from '../theme';
 import ThemeText from '../components/text';
 import ThemeIcon from '../components/theme-icon';
@@ -13,8 +13,9 @@ type WithChildren = {
 
 export type MessageBoxProps = {
   icon?: React.ReactNode;
-  type?: 'info' | 'warning';
+  type?: 'info' | 'warning' | 'error';
   containerStyle?: StyleProp<ViewStyle>;
+  title?: string;
 } & (WithMessage | WithChildren);
 
 const MessageBox: React.FC<MessageBoxProps> = ({
@@ -23,14 +24,11 @@ const MessageBox: React.FC<MessageBoxProps> = ({
   containerStyle,
   message,
   children,
+  title,
 }) => {
   const styles = useBoxStyle();
   const iconElement =
-    typeof icon !== 'undefined' ? (
-      icon
-    ) : (
-      <ThemeIcon svg={type === 'info' ? Info : Warning} />
-    );
+    typeof icon !== 'undefined' ? icon : <ThemeIcon svg={typeToIcon(type)} />;
   const child = message ? (
     <ThemeText style={styles.text}>{message}</ThemeText>
   ) : (
@@ -39,9 +37,12 @@ const MessageBox: React.FC<MessageBoxProps> = ({
   const backgroundColor = styles[typeToColorClass(type)];
   return (
     <View style={[styles.container, backgroundColor, containerStyle]}>
-      {iconElement != null && (
-        <View style={styles.iconContainer}>{iconElement}</View>
-      )}
+      <View style={styles.titleContainer}>
+        {iconElement != null && (
+          <View style={styles.iconContainer}>{iconElement}</View>
+        )}
+        {title && <ThemeText style={styles.title}>{title}</ThemeText>}
+      </View>
       <View>{child}</View>
     </View>
   );
@@ -52,15 +53,23 @@ export default MessageBox;
 const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     padding: 12,
-    borderRadius: theme.border.borderRadius.regular,
-    borderWidth: 1,
+    borderRadius: theme.border.radius.regular,
+    borderWidth: theme.border.width.slim,
   },
   iconContainer: {
     marginBottom: 8,
+    marginRight: 12,
   },
   text: {
     ...theme.text.body,
     color: theme.text.colors.primary,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: '600',
   },
   container__info: {
     backgroundColor: theme.background.info,
@@ -70,14 +79,31 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.background.warning,
     borderColor: theme.border.warning,
   },
+  container__error: {
+    backgroundColor: theme.background.error,
+    borderColor: theme.border.error,
+  },
 }));
+
+function typeToIcon(type: MessageBoxProps['type']) {
+  switch (type) {
+    case 'warning':
+      return Warning;
+    case 'error':
+      return ErrorIcon;
+    default:
+      return Info;
+  }
+}
 
 function typeToColorClass(
   type: MessageBoxProps['type'],
-): 'container__info' | 'container__warning' {
+): 'container__info' | 'container__warning' | 'container__error' {
   switch (type) {
     case 'warning':
       return 'container__warning';
+    case 'error':
+      return 'container__error';
     default:
       return 'container__info';
   }

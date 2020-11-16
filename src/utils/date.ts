@@ -44,11 +44,13 @@ export function secondsToMinutesShort(seconds: number): string {
 export function secondsToDuration(
   seconds: number,
   language: string = 'no',
+  opts?: humanizeDuration.Options,
 ): string {
   return humanizeDuration(seconds * 1000, {
     units: ['d', 'h', 'm'],
     round: true,
     language,
+    ...opts,
   });
 }
 

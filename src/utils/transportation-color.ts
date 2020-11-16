@@ -25,7 +25,7 @@ export default function transportionColor(
       };
     case 'rail':
       return {
-        fill: colors.secondary.red,
+        fill: colors.secondary.red_500,
         icon: colors.general.white,
       };
     case 'tram':
@@ -62,7 +62,7 @@ export function transportationMapLineColor(
       }
       return colors.secondary.blue;
     case 'rail':
-      return colors.secondary.red;
+      return colors.secondary.red_500;
     case 'tram':
       return colors.primary.green;
     case 'water':

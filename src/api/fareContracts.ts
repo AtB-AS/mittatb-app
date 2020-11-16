@@ -1,3 +1,4 @@
+import {AxiosRequestConfig} from 'axios';
 import {getCustomerId} from '../utils/customerId';
 import client from './client';
 
@@ -12,21 +13,18 @@ export async function list(): Promise<ListTicketsResponse> {
 
 export async function search(
   zones: string[],
-  userTypes: {id: string; user_type: UserType}[],
+  travellers: {id: string; user_type: UserType; count: number}[],
   products: string[],
+  opts?: AxiosRequestConfig,
 ): Promise<Offer[]> {
   const body = {
     zones,
-    travellers: userTypes.map(({id, user_type}) => ({
-      id,
-      user_type,
-      count: 1,
-    })),
+    travellers,
     products,
   };
 
   const url = 'ticket/v1/search';
-  const response = await client.post<Offer[]>(url, body);
+  const response = await client.post<Offer[]>(url, body, opts);
 
   return response.data;
 }
@@ -46,27 +44,29 @@ export async function sendReceipt(fc: FareContract, email: string) {
   return response.data;
 }
 
-export enum PaymentType {
-  CreditCard = 1,
-  Vipps,
-}
+export type PaymentType = 'vipps' | 'creditcard';
 
 export async function reserve(
   offers: ReserveOffer[],
   paymentType: PaymentType,
+  opts?: AxiosRequestConfig,
 ) {
   const customer_id = await getCustomerId();
 
   const url = 'ticket/v1/reserve';
-  const response = await client.post<ReserveTicketResponse>(url, {
-    payment_type: paymentType,
-    payment_redirect_url:
-      paymentType == PaymentType.Vipps
-        ? 'atb://payment?transaction_id={transaction_id}&payment_id={payment_id}'
-        : undefined,
-    customer_id,
-    offers,
-  });
+  const response = await client.post<TicketReservation>(
+    url,
+    {
+      payment_type: paymentType === 'creditcard' ? 1 : 2,
+      payment_redirect_url:
+        paymentType == 'vipps'
+          ? 'atb://vipps?transaction_id={transaction_id}&payment_id={payment_id}'
+          : undefined,
+      customer_id,
+      offers,
+    },
+    opts,
+  );
   return response.data;
 }
 
@@ -117,7 +117,7 @@ export type ReserveOffer = {
   count: number;
 };
 
-export type ReserveTicketResponse = {
+export type TicketReservation = {
   payment_id: number;
   transaction_id: number;
   url: string;

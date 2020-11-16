@@ -184,7 +184,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
         <Button
           onPress={save}
-          IconComponent={editItem ? Confirm : Add}
+          leftIcon={editItem ? Confirm : Add}
           disabled={!hasSelectedValues}
           text="Lagre favorittsted"
         />
@@ -193,7 +193,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           <Button
             onPress={deleteItem}
             mode="destructive"
-            IconComponent={RemoveIconWhite}
+            leftIcon={RemoveIconWhite}
             text="Slett favorittsted"
           />
         )}
@@ -201,7 +201,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         <Button
           onPress={cancel}
           mode="secondary"
-          IconComponent={Close}
+          leftIcon={Close}
           text="Avbryt"
         />
       </View>
@@ -223,8 +223,8 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     backgroundColor: theme.background.level1,
     borderColor: theme.border.primary,
     color: theme.text.colors.primary,
-    borderWidth: 1,
-    borderRadius: theme.border.borderRadius.small,
+    borderWidth: theme.border.width.slim,
+    borderRadius: theme.border.radius.small,
     paddingLeft: 60,
     padding: 12,
     fontSize: 16,
@@ -251,8 +251,8 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flex: 1,
     paddingLeft: 60,
     backgroundColor: theme.background.level1,
-    borderRadius: theme.border.borderRadius.small,
-    borderWidth: 1,
+    borderRadius: theme.border.radius.small,
+    borderWidth: theme.border.width.slim,
     borderColor: theme.border.primary,
     color: theme.text.colors.primary,
     zIndex: -1,
@@ -293,9 +293,9 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
     paddingLeft: 64,
     flexDirection: 'row',
     backgroundColor: theme.background.level1,
-    borderWidth: 1,
+    borderWidth: theme.border.width.slim,
     borderColor: theme.border.primary,
-    borderRadius: theme.border.borderRadius.small,
+    borderRadius: theme.border.radius.small,
   },
   emoji: {
     marginRight: theme.spacings.medium,

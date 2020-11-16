@@ -380,7 +380,7 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
   },
   quayContainer: {
     backgroundColor: theme.background.level0,
-    borderRadius: theme.border.borderRadius.regular,
+    borderRadius: theme.border.radius.regular,
     marginBottom: theme.spacings.small,
   },
 }));

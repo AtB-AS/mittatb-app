@@ -1,5 +1,5 @@
 import {
-  TouchableOpacityProperties,
+  TouchableOpacityProps,
   View,
   StyleProp,
   ViewStyle,
@@ -15,13 +15,15 @@ type ButtonProps = {
   mode?: 'primary' | 'destructive' | 'secondary';
   textContainerStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
-  IconComponent?: React.ElementType;
+  leftIcon?: React.ElementType;
+  rightIcon?: React.ElementType;
   text: string;
-} & TouchableOpacityProperties;
+} & TouchableOpacityProps;
 const Button: React.FC<ButtonProps> = ({
   onPress,
   mode = 'primary',
-  IconComponent,
+  leftIcon: LeftIcon,
+  rightIcon: RightIcon,
   text,
   disabled,
   style,
@@ -49,9 +51,9 @@ const Button: React.FC<ButtonProps> = ({
         disabled={disabled}
         {...props}
       >
-        {IconComponent && (
-          <View style={css.icon}>
-            <IconComponent fill={theme.text.colors.primary} />
+        {LeftIcon && (
+          <View style={css.leftIcon}>
+            <LeftIcon fill={theme.text.colors.primary} />
           </View>
         )}
         <View style={[css.textContainer, textContainerStyle]}>
@@ -59,6 +61,11 @@ const Button: React.FC<ButtonProps> = ({
             {text}
           </ThemeText>
         </View>
+        {RightIcon && (
+          <View style={css.rightIcon}>
+            <RightIcon fill={theme.text.colors.primary} />
+          </View>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -70,15 +77,22 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flexDirection: 'row',
     padding: theme.spacings.medium,
     alignItems: 'center',
-    borderRadius: theme.border.borderRadius.regular,
+    borderRadius: theme.border.radius.regular,
+    borderWidth: theme.border.width.medium,
     backgroundColor: theme.button.primary.bg,
     marginBottom: theme.spacings.small,
+    borderColor: theme.button.primary.bg,
   },
-  icon: {
+  leftIcon: {
     position: 'absolute',
     left: theme.spacings.medium,
   },
+  rightIcon: {
+    position: 'absolute',
+    right: theme.spacings.medium,
+  },
   buttonSecondary: {
+    borderColor: theme.border.secondary,
     backgroundColor: 'transparent',
     padding: 14,
   },

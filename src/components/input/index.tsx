@@ -85,8 +85,8 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   input: {
     backgroundColor: theme.background.level1,
     color: theme.text.colors.primary,
-    borderWidth: 1,
-    borderRadius: theme.border.borderRadius.small,
+    borderWidth: theme.border.width.slim,
+    borderRadius: theme.border.radius.small,
     paddingLeft: 60,
     paddingRight: 40,
     padding: theme.spacings.medium,
