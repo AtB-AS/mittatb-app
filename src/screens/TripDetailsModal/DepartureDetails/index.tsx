@@ -19,7 +19,9 @@ import {EstimatedCall, Situation} from '../../../sdk';
 import SituationMessages from '../../../situations';
 import {StyleSheet} from '../../../theme';
 import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
-import transportationColor from '../../../utils/transportation-color';
+import transportationColor, {
+  defaultFill,
+} from '../../../utils/transportation-color';
 import {getQuayName} from '../../../utils/transportation-names';
 import usePollableResource from '../../../utils/use-pollable-resource';
 import LocationRow from '../LocationRow';
@@ -164,7 +166,7 @@ function CallGroup({
 
   const dashColor = isOnRoute
     ? transportationColor(mode, publicCode).fill
-    : transportationColor().fill;
+    : defaultFill;
 
   return (
     <View>
