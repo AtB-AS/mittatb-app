@@ -62,9 +62,7 @@ export const ExpiredTickets: React.FC<Props> = ({navigation}) => {
   const byExpiry = (a: FareContract, b: FareContract): number => {
     return b.usage_valid_to - a.usage_valid_to;
   };
-  const expiredTickets = fareContracts
-    ?.filter(expired)
-    .sort(byExpiry);
+  const expiredTickets = fareContracts?.filter(expired).sort(byExpiry);
   const styles = useStyles();
   return (
     <View style={styles.container}>
