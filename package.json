@@ -20,11 +20,7 @@
     "appcenter:ios": "fastlane ios appcenter",
     "cert:ios": "fastlane ios get_cert",
     "build:android": "fastlane android build",
-    "appcenter:android": "fastlane android appcenter",
-    "add-locale": "lingui add-locale",
-    "i18n:extract": "lingui extract",
-    "i18n:compile": "lingui compile",
-    "i18n": "lingui extract && lingui compile"
+    "appcenter:android": "fastlane android appcenter"
   },
   "dependencies": {
     "@bugsnag/react-native": "^7.5.0",
