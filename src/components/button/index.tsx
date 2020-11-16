@@ -10,15 +10,7 @@ import React from 'react';
 import {StyleSheet, Theme, useTheme} from '../../theme';
 import ThemeText from '../text';
 
-const buttonModes = [
-  'primary',
-  'primary2',
-  'primary3',
-  'secondary',
-  'tertiary',
-  'destructive',
-] as const;
-type ButtonMode = typeof buttonModes[number];
+type ButtonMode = keyof Theme['button'];
 
 type ButtonProps = {
   onPress(): void;
