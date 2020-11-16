@@ -142,7 +142,8 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
           text="Betal med Vipps"
           disabled={isSearchingOffer}
           accessibilityLabel="Trykk for å betale billett med Vipps"
-          rightIcon={() => <ThemeIcon svg={Vipps} />}
+          icon={() => <ThemeIcon svg={Vipps} />}
+          iconPosition="right"
           onPress={payWithVipps}
         />
         <Button
@@ -150,14 +151,15 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
           text="Betal med bankkort"
           disabled={isSearchingOffer}
           accessibilityLabel="Trykk for å betale billett med bankkort"
-          rightIcon={() => <ThemeIcon svg={CreditCard} />}
+          icon={() => <ThemeIcon svg={CreditCard} />}
+          iconPosition="right"
           onPress={payWithCard}
         />
         <Button
           mode="secondary"
           text="Avbryt"
           accessibilityLabel="Trykk for å avbryte billettkjøp"
-          leftIcon={() => <ThemeIcon svg={Close} />}
+          icon={() => <ThemeIcon svg={Close} />}
           onPress={closeModal}
         />
       </View>

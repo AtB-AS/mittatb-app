@@ -90,7 +90,7 @@ export default forwardRef<Modalize, Props>(function InviteModal(
           <Button
             onPress={onTicketEnrollment}
             text="Send inn kode"
-            leftIcon={Confirm}
+            icon={Confirm}
             disabled={isLoading || !inviteKey}
           />
         </View>

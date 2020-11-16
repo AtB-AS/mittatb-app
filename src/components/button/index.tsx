@@ -10,20 +10,30 @@ import React from 'react';
 import {StyleSheet, Theme, useTheme} from '../../theme';
 import ThemeText from '../text';
 
+const buttonModes = [
+  'primary',
+  'primary2',
+  'primary3',
+  'secondary',
+  'tertiary',
+  'destructive',
+] as const;
+type ButtonMode = typeof buttonModes[number];
+
 type ButtonProps = {
   onPress(): void;
-  mode?: 'primary' | 'destructive' | 'secondary';
+  mode?: ButtonMode;
   textContainerStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
-  leftIcon?: React.ElementType;
-  rightIcon?: React.ElementType;
+  icon?: React.ElementType;
+  iconPosition?: 'left' | 'right';
   text: string;
 } & TouchableOpacityProps;
 const Button: React.FC<ButtonProps> = ({
   onPress,
   mode = 'primary',
-  leftIcon: LeftIcon,
-  rightIcon: RightIcon,
+  icon: Icon,
+  iconPosition = 'left',
   text,
   disabled,
   style,
@@ -51,9 +61,9 @@ const Button: React.FC<ButtonProps> = ({
         disabled={disabled}
         {...props}
       >
-        {LeftIcon && (
+        {Icon && iconPosition === 'left' && (
           <View style={css.leftIcon}>
-            <LeftIcon fill={theme.text.colors.primary} />
+            <Icon fill={theme.text.colors.primary} />
           </View>
         )}
         <View style={[css.textContainer, textContainerStyle]}>
@@ -61,9 +71,9 @@ const Button: React.FC<ButtonProps> = ({
             {text}
           </ThemeText>
         </View>
-        {RightIcon && (
+        {Icon && iconPosition === 'right' && (
           <View style={css.rightIcon}>
-            <RightIcon fill={theme.text.colors.primary} />
+            <Icon fill={theme.text.colors.primary} />
           </View>
         )}
       </TouchableOpacity>
