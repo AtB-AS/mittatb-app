@@ -1,17 +1,21 @@
 import * as RNLocalize from 'react-native-localize';
 import {useState, useEffect} from 'react';
+import {initLobot} from '@leile/lobo-t';
 
-const appLanguageCodes = ['nb', 'en'] as const;
-export type AppLanguageCode = typeof appLanguageCodes[number];
+export enum Language {
+  nb,
+  en,
+}
 
-export type AppLanguage = {
-  languageCode: AppLanguageCode;
-};
+const lobot = initLobot<typeof Language>(Language.nb);
 
-export function useLocaleSettings(): {languageCode: AppLanguageCode} {
-  const [locale, setLocale] = useState(getLocaleForApp());
+export const LanguageProvider = lobot.LanguageProvider;
+export const useTranslation = lobot.useTranslation;
+
+export function useLanguage(): {currentLanguage: Language} {
+  const [locale, setLocale] = useState(preferredLocale());
   const onChange = () => {
-    setLocale(getLocaleForApp());
+    setLocale(preferredLocale());
   };
   useEffect(() => {
     RNLocalize.addEventListener('change', onChange);
@@ -19,15 +23,17 @@ export function useLocaleSettings(): {languageCode: AppLanguageCode} {
       RNLocalize.removeEventListener('change', onChange);
     };
   }, []);
-  return {languageCode: (locale?.languageCode as AppLanguageCode) ?? 'en'};
+  return {
+    currentLanguage: getAsAppLanguage(locale?.languageCode) ?? Language.en,
+  };
 }
-function getLocaleForApp(): RNLocalize.Locale | undefined {
+function preferredLocale(): RNLocalize.Locale | undefined {
   const preferredSystemLocales = RNLocalize.getLocales();
-  const locale = preferredSystemLocales.find((l) =>
-    isAppLanguage(l.languageCode),
+  const locale = preferredSystemLocales.find(
+    (l) => !!getAsAppLanguage(l.languageCode),
   );
   return locale;
 }
-function isAppLanguage(arg: string): arg is AppLanguageCode {
-  return (appLanguageCodes as readonly string[]).includes(arg);
+function getAsAppLanguage(arg?: string): Language | undefined {
+  return Language[arg as keyof typeof Language];
 }

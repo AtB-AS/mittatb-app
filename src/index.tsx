@@ -15,13 +15,6 @@ import {loadLocalConfig} from './local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {setInstallId as setApiInstallId} from './api/client';
 import ErrorBoundary from './error-boundary';
-import {I18nProvider} from '@lingui/react';
-
-import catalogEn from './locales/en/messages.js';
-import catalogNo from './locales/no/messages.js';
-import {en, nb} from 'make-plural/plurals';
-
-import {i18n} from '@lingui/core';
 
 if (!__DEV__) {
   Bugsnag.start();
@@ -35,7 +28,7 @@ if (!__DEV__) {
 
 import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {useLocaleSettings} from './utils/language';
+import {useLanguage, LanguageProvider} from './utils/language';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
@@ -50,8 +43,9 @@ enableScreens();
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const catalogs = {en: catalogEn, nb: catalogNo};
-  const {languageCode} = useLocaleSettings();
+  const {currentLanguage} = useLanguage();
+
+  console.log(currentLanguage);
 
   useEffect(() => {
     async function config() {
@@ -60,14 +54,6 @@ const App = () => {
     }
     config();
   }, []);
-
-  useEffect(() => {
-    const plurals = languageCode === 'nb' ? nb : en;
-    i18n.loadLocaleData(languageCode, {plurals});
-    i18n.load(languageCode, catalogs[languageCode]?.messages);
-    i18n.activate(languageCode);
-  }, [languageCode]);
-
   if (isLoading) {
     return null;
   }
@@ -80,9 +66,9 @@ const App = () => {
               <SearchHistoryContextProvider>
                 <GeolocationContextProvider>
                   <RemoteConfigContextProvider>
-                    <I18nProvider i18n={i18n}>
+                    <LanguageProvider value={currentLanguage}>
                       <NavigationRoot />
-                    </I18nProvider>
+                    </LanguageProvider>
                   </RemoteConfigContextProvider>
                 </GeolocationContextProvider>
               </SearchHistoryContextProvider>

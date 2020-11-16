@@ -32,7 +32,6 @@ import {CompactMap} from '../Map/CompactMap';
 import TransportDetail from './TransportDetail';
 import WalkDetail from './WalkDetail';
 import ThemeIcon from '../../../components/theme-icon';
-import {Trans} from '@lingui/macro';
 
 // @TODO Firebase config?
 const TIME_LIMIT_IN_MINUTES = 3;
@@ -67,7 +66,6 @@ const TripDetailsModal: React.FC<Props> = (props) => {
     tripPatternId,
     initialTripPattern,
   );
-  const title = <Trans>Reisedetaljer</Trans>;
 
   return (
     <View style={styles.container}>
@@ -79,7 +77,7 @@ const TripDetailsModal: React.FC<Props> = (props) => {
           accessibilityLabel: 'Gå tilbake',
           icon: <ThemeIcon svg={Close} />,
         }}
-        title={title}
+        title="Reisedetaljer"
         style={styles.header}
       />
       <ScrollView

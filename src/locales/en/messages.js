@@ -1,1 +1,0 @@
-/*eslint-disable*/module.exports={messages:{"<0>Hei</0>":"<0>Hi</0>","Reiseassistent":"Travel assistant","Reisedetaljer":"Reisedetaljer","{title}":[["title"]]}};

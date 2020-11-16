@@ -53,8 +53,8 @@ import colors from '../../theme/colors';
 import ThemeIcon from '../../components/theme-icon';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 import ThemeText from '../../components/text';
-import {Trans} from '@lingui/macro';
-
+import {useTranslation} from '../../utils/language';
+import {assistantTexts} from '../../translations';
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
 
@@ -182,6 +182,8 @@ const Assistant: React.FC<Props> = ({
   }
 
   const [date, setDate] = useState<DateOutput | undefined>();
+  const {t, language} = useTranslation();
+  console.log(language);
   const [
     tripPatterns,
     timeOfLastSearch,
@@ -221,7 +223,7 @@ const Assistant: React.FC<Props> = ({
                   screenReaderPause
                 }
                 accessibilityRole="button"
-                title="Fra"
+                title={t(assistantTexts.location.departureLabel)}
                 placeholder={
                   updatingLocation
                     ? 'Oppdaterer posisjon'
@@ -258,7 +260,7 @@ const Assistant: React.FC<Props> = ({
                 accessible={true}
                 accessibilityLabel="Velg ankomststed."
                 accessibilityRole="button"
-                title="Til"
+                title={t(assistantTexts.location.destinationLabel)}
                 placeholder="Søk etter adresse eller sted"
                 location={to}
                 onPress={() => openLocationSearch('toLocation', to)}
@@ -369,15 +371,13 @@ const Assistant: React.FC<Props> = ({
     [navigation, from, to],
   );
 
-  const title = <Trans>Reiseassistent</Trans>;
-
   return (
     <DisappearingHeader
       renderHeader={renderHeader}
       onRefresh={reload}
       isRefreshing={isSearching}
       useScroll={useScroll}
-      headerTitle={title}
+      headerTitle="Reiseassistent"
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
       logoClick={{
