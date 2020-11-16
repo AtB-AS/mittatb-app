@@ -208,7 +208,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   totalContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
     padding: theme.spacings.medium,
   },
