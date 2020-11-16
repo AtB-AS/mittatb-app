@@ -9,6 +9,7 @@ import {useNavigateHome} from '../../../utils/navigation';
 import {StyleSheet} from '../../../theme';
 import TabBar from './TabBar';
 import {ActiveTickets, ExpiredTickets} from './Tabs';
+import ThemeIcon from '../../../components/theme-icon';
 
 export const ActiveTicketsScreenName = 'ActiveTickets';
 
@@ -37,7 +38,7 @@ export default function TicketTabs() {
         title="Billetter"
         rightButton={chatIcon}
         leftButton={{
-          icon: <LogoOutline />,
+          icon: <ThemeIcon svg={LogoOutline} />,
           onPress: navigateHome,
           accessibilityLabel: 'Gå til startskjerm',
         }}
