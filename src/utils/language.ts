@@ -4,10 +4,14 @@ import {useState, useEffect} from 'react';
 const appLanguageCodes = ['nb', 'en'] as const;
 export type AppLanguageCode = typeof appLanguageCodes[number];
 
-export function useSystemLocaleSettings(): {languageCode: AppLanguageCode} {
-  const [locale, setLocale] = useState(getLocale());
+export type AppLanguage = {
+  languageCode: AppLanguageCode;
+};
+
+export function useLocaleSettings(): {languageCode: AppLanguageCode} {
+  const [locale, setLocale] = useState(getLocaleForApp());
   const onChange = () => {
-    setLocale(getLocale());
+    setLocale(getLocaleForApp());
   };
   useEffect(() => {
     RNLocalize.addEventListener('change', onChange);
@@ -15,15 +19,14 @@ export function useSystemLocaleSettings(): {languageCode: AppLanguageCode} {
       RNLocalize.removeEventListener('change', onChange);
     };
   }, []);
-  return {languageCode: locale};
+  return {languageCode: (locale?.languageCode as AppLanguageCode) ?? 'en'};
 }
-function getLocale(): AppLanguageCode {
+function getLocaleForApp(): RNLocalize.Locale | undefined {
   const preferredSystemLocales = RNLocalize.getLocales();
-  const preferredAppLanguage = preferredSystemLocales.find((l) =>
+  const locale = preferredSystemLocales.find((l) =>
     isAppLanguage(l.languageCode),
-  )?.languageCode;
-  console.log(preferredSystemLocales);
-  return (preferredAppLanguage as AppLanguageCode) ?? 'en';
+  );
+  return locale;
 }
 function isAppLanguage(arg: string): arg is AppLanguageCode {
   return (appLanguageCodes as readonly string[]).includes(arg);

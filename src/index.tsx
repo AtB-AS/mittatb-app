@@ -35,7 +35,7 @@ if (!__DEV__) {
 
 import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {useSystemLocaleSettings} from './language';
+import {useLocaleSettings} from './utils/language';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
@@ -51,7 +51,7 @@ enableScreens();
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const catalogs = {en: catalogEn, nb: catalogNo};
-  const {languageCode} = useSystemLocaleSettings();
+  const {languageCode} = useLocaleSettings();
 
   useEffect(() => {
     async function config() {
