@@ -28,7 +28,7 @@ export const ActiveTickets: React.FC<Props> = ({navigation}) => {
   const byExpiry = (a: FareContract, b: FareContract): number => {
     return b.usage_valid_to - a.usage_valid_to;
   };
-  const validTickets = fareContracts?.filter((fc) => valid(fc)).sort(byExpiry);
+  const validTickets = fareContracts?.filter(valid).sort(byExpiry);
   const styles = useStyles();
   return (
     <View style={styles.container}>
@@ -63,7 +63,7 @@ export const ExpiredTickets: React.FC<Props> = ({navigation}) => {
     return b.usage_valid_to - a.usage_valid_to;
   };
   const expiredTickets = fareContracts
-    ?.filter((fc) => expired(fc))
+    ?.filter(expired)
     .sort(byExpiry);
   const styles = useStyles();
   return (

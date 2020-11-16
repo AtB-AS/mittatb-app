@@ -136,9 +136,9 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
         </ThemeText>
         <Button
           mode="primary"
-          text="Betal med vipps"
+          text="Betal med Vipps"
           disabled={isSearchingOffer}
-          accessibilityLabel="Trykk for å betale billett med vipps"
+          accessibilityLabel="Trykk for å betale billett med Vipps"
           rightIcon={() => <ThemeIcon svg={Vipps} />}
           onPress={payWithVipps}
         />
