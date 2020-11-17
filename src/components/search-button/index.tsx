@@ -13,7 +13,7 @@ import {screenReaderPause} from '../accessible-text';
 import ThemeText from '../text';
 
 type SearchButtonProps = {
-  title: string;
+  label: string;
   placeholder?: string;
   onPress: () => void;
   text?: string;
@@ -22,7 +22,7 @@ type SearchButtonProps = {
 } & AccessibilityProps;
 
 const SearchButton: React.FC<SearchButtonProps> = ({
-  title,
+  label: title,
   placeholder,
   text,
   icon,

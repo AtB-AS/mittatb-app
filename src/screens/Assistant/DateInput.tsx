@@ -160,7 +160,7 @@ const DateInput: React.FC<DateInputProps> = ({
           'Aktiver for å velge tidspunkt og dato.' + screenReaderPause
         }
         accessibilityRole="button"
-        title="Når"
+        label="Når"
         text={searchValue}
         onPress={onOpen}
       />

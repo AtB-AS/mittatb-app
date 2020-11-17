@@ -185,7 +185,7 @@ const NearbyOverview: React.FC<Props> = ({
       <View style={styles.searchButtonContainer}>
         <View style={styles.styleButton}>
           <LocationButton
-            title="Fra"
+            label="Fra"
             placeholder={
               updatingLocation
                 ? 'Oppdaterer posisjon'

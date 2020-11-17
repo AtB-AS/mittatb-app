@@ -1,1 +1,1 @@
-export {default as assistantTexts} from './Assistant';
+export {default as assistantTexts} from './screens/Assistant';

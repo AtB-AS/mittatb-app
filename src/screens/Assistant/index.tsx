@@ -182,8 +182,8 @@ const Assistant: React.FC<Props> = ({
   }
 
   const [date, setDate] = useState<DateOutput | undefined>();
-  const {t, language} = useTranslation();
-  console.log(language);
+  const {t} = useTranslation();
+
   const [
     tripPatterns,
     timeOfLastSearch,
@@ -198,7 +198,10 @@ const Assistant: React.FC<Props> = ({
     initialLocation: LocationWithMetadata | undefined,
   ) =>
     navigation.navigate('LocationSearch', {
-      label: callerRouteParam === 'fromLocation' ? 'Fra' : 'Til',
+      label:
+        callerRouteParam === 'fromLocation'
+          ? t(assistantTexts.location.departurePicker.label)
+          : t(assistantTexts.location.destinationPicker.label),
       callerRouteName: AssistantRouteNameStatic,
       callerRouteParam,
       initialLocation,
@@ -217,17 +220,20 @@ const Assistant: React.FC<Props> = ({
             <View style={styles.styleButton}>
               <LocationButton
                 accessible={true}
-                accessibilityLabel={'Velg avreisested' + screenReaderPause}
+                accessibilityLabel={
+                  t(assistantTexts.location.departurePicker.a11yLabel) +
+                  screenReaderPause
+                }
                 accessibilityHint={
-                  'Aktiver for å søke etter adresse eller sted.' +
+                  t(assistantTexts.location.departurePicker.a11yHint) +
                   screenReaderPause
                 }
                 accessibilityRole="button"
-                title={t(assistantTexts.location.departureLabel)}
+                label={t(assistantTexts.location.departurePicker.label)}
                 placeholder={
                   updatingLocation
-                    ? 'Oppdaterer posisjon'
-                    : 'Søk etter adresse eller sted'
+                    ? t(assistantTexts.location.updatingLocation)
+                    : t(assistantTexts.location.departurePicker.placeholder)
                 }
                 icon={
                   updatingLocation && !from ? (
@@ -243,8 +249,8 @@ const Assistant: React.FC<Props> = ({
               accessible={true}
               accessibilityLabel={
                 from?.resultType == 'geolocation'
-                  ? 'Oppdater posisjon.'
-                  : 'Bruk posisjon som avreisested.'
+                  ? t(assistantTexts.location.locationButton.a11yLabel.update)
+                  : t(assistantTexts.location.locationButton.a11yLabel.use)
               }
               accessibilityRole="button"
               hitSlop={insets.all(12)}
@@ -258,10 +264,14 @@ const Assistant: React.FC<Props> = ({
             <View style={styles.styleButton}>
               <LocationButton
                 accessible={true}
-                accessibilityLabel="Velg ankomststed."
+                accessibilityLabel={t(
+                  assistantTexts.location.destinationPicker.a11yLabel,
+                )}
                 accessibilityRole="button"
-                title={t(assistantTexts.location.destinationLabel)}
-                placeholder="Søk etter adresse eller sted"
+                label={t(assistantTexts.location.destinationPicker.label)}
+                placeholder={t(
+                  assistantTexts.location.destinationPicker.placeholder,
+                )}
                 location={to}
                 onPress={() => openLocationSearch('toLocation', to)}
               />
@@ -273,7 +283,8 @@ const Assistant: React.FC<Props> = ({
                 hitSlop={insets.all(12)}
                 accessible={true}
                 accessibilityLabel={
-                  'Bytt avreisested og ankomststed' + screenReaderPause
+                  t(assistantTexts.location.swapButton.a11yLabel) +
+                  screenReaderPause
                 }
                 accessibilityRole="button"
               >
@@ -377,12 +388,12 @@ const Assistant: React.FC<Props> = ({
       onRefresh={reload}
       isRefreshing={isSearching}
       useScroll={useScroll}
-      headerTitle="Reiseassistent"
+      headerTitle={t(assistantTexts.header.title)}
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
       logoClick={{
         callback: resetView,
-        accessibilityLabel: 'Nullstill reisesøk',
+        accessibilityLabel: t(assistantTexts.header.accessibility.logo),
       }}
       onFullscreenTransitionEnd={(fullHeight) => {
         if (fullHeight) {

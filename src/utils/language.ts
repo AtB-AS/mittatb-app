@@ -6,8 +6,9 @@ export enum Language {
   nb,
   en,
 }
+const DEFAULT_LANGUAGE = Language.en;
 
-const lobot = initLobot<typeof Language>(Language.nb);
+const lobot = initLobot<typeof Language>(DEFAULT_LANGUAGE);
 
 export const LanguageProvider = lobot.LanguageProvider;
 export const useTranslation = lobot.useTranslation;
@@ -24,7 +25,9 @@ export function useLanguage(): {currentLanguage: Language} {
     };
   }, []);
   return {
-    currentLanguage: getAsAppLanguage(locale?.languageCode) ?? Language.en,
+    currentLanguage: locale
+      ? getAsAppLanguage(locale.languageCode) ?? DEFAULT_LANGUAGE
+      : DEFAULT_LANGUAGE,
   };
 }
 function preferredLocale(): RNLocalize.Locale | undefined {
@@ -34,6 +37,6 @@ function preferredLocale(): RNLocalize.Locale | undefined {
   );
   return locale;
 }
-function getAsAppLanguage(arg?: string): Language | undefined {
+function getAsAppLanguage(arg: string): Language | undefined {
   return Language[arg as keyof typeof Language];
 }
