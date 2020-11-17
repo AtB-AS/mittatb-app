@@ -11,18 +11,23 @@ import {StyleSheet, Theme, useTheme} from '../../theme';
 import ThemeText from '../text';
 
 type ButtonMode = keyof Theme['button'];
-type ButtonType = 'block' | 'inline' | 'compact';
+
+type ButtonTypeAwareProps =
+  | {text?: string; type: 'inline' | 'compact'}
+  | {
+      text: string;
+      type?: 'block';
+    };
 
 type ButtonProps = {
   onPress(): void;
   mode?: ButtonMode;
-  type?: ButtonType;
   textContainerStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   icon?: React.ElementType;
   iconPosition?: 'left' | 'right';
-  text: string;
-} & TouchableOpacityProps;
+} & ButtonTypeAwareProps &
+  TouchableOpacityProps;
 const Button: React.FC<ButtonProps> = ({
   onPress,
   mode = 'primary',
@@ -55,14 +60,14 @@ const Button: React.FC<ButtonProps> = ({
   const textContainer: TextStyle = {
     flex: isInline ? undefined : 1,
     alignItems: 'center',
+    marginLeft: Icon && iconPosition === 'left' ? padding : undefined,
+    marginRight: Icon && iconPosition === 'right' ? padding : undefined,
   };
   const iconContainer: ViewStyle = isInline
     ? {
         position: 'relative',
         left: undefined,
         right: undefined,
-        marginRight: iconPosition === 'left' ? padding : undefined,
-        marginLeft: iconPosition === 'right' ? padding : undefined,
       }
     : {};
 
@@ -79,11 +84,13 @@ const Button: React.FC<ButtonProps> = ({
             <Icon fill={theme.text.colors.primary} />
           </View>
         )}
-        <View style={[textContainer, textContainerStyle]}>
-          <ThemeText type="paragraphHeadline" style={[styleText, textStyle]}>
-            {text}
-          </ThemeText>
-        </View>
+        {text && (
+          <View style={[textContainer, textContainerStyle]}>
+            <ThemeText type="paragraphHeadline" style={[styleText, textStyle]}>
+              {text}
+            </ThemeText>
+          </View>
+        )}
         {Icon && iconPosition === 'right' && (
           <View style={[css.rightIcon, iconContainer]}>
             <Icon fill={theme.text.colors.primary} />
