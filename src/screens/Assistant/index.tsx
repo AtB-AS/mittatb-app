@@ -7,6 +7,7 @@ import {
   ViewStyle,
   StyleProp,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import analytics from '@react-native-firebase/analytics';
 import {searchTrip} from '../../api';
@@ -206,6 +207,10 @@ const Assistant: React.FC<Props> = ({
   const useScroll = (!showEmptyScreen && !isEmptyResult) || !!errorType;
   const isHeaderFullHeight = !from || !to;
 
+  const fontResponsiveFadeHeight =
+    (theme.text.body.fontSize ?? 16) * Dimensions.get('screen').fontScale +
+    theme.spacings.medium * 2;
+
   const renderHeader = useCallback(
     () => (
       <View>
@@ -280,7 +285,7 @@ const Assistant: React.FC<Props> = ({
           </View>
         </SearchGroup>
 
-        <View style={{height: 40, position: 'relative'}}>
+        <View style={{height: fontResponsiveFadeHeight, position: 'relative'}}>
           <Fade
             visible={isHeaderFullHeight}
             style={{position: 'absolute', width: '100%'}}
