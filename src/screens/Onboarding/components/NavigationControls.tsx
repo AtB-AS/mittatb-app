@@ -4,7 +4,6 @@ import {Dot} from '../../../assets/svg/icons/other';
 import {TouchableOpacity} from 'react-native';
 import {ArrowRight} from '../../../assets/svg/icons/navigation';
 import {StyleSheet} from '../../../theme';
-import colors from '../../../theme/colors';
 import ThemeIcon from '../../../components/theme-icon';
 import ThemeText from '../../../components/text';
 
@@ -59,7 +58,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacings.medium,
   },
   button: {
-    backgroundColor: theme.button.primary.bg,
+    backgroundColor: theme.button.primary.backgroundColor,
     width: '100%',
     height: 44,
     borderRadius: theme.border.radius.regular,

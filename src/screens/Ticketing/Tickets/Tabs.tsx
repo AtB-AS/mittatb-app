@@ -42,6 +42,7 @@ export const ActiveTickets: React.FC<Props> = ({navigation}) => {
 
       <View style={styles.buttonContainer}>
         <Button
+          mode="primary"
           text="Kjøp enkeltbillett"
           onPress={() => navigation.navigate('TicketPurchase')}
           style={{marginBottom: 0}}
@@ -75,6 +76,7 @@ export const ExpiredTickets: React.FC<Props> = ({navigation}) => {
       />
       <View style={styles.buttonContainer}>
         <Button
+          mode="primary"
           text="Kjøp enkeltbillett"
           onPress={() => navigation.navigate('TicketPurchase')}
           style={{marginBottom: 0}}

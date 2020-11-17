@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, TouchableOpacity} from 'react-native';
-import colors from '../../theme/colors';
 import {Add, Remove} from '../../assets/svg/icons/actions';
 import {StyleSheet} from '../../theme';
 import shadows from './shadows';

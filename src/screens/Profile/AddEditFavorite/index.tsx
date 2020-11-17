@@ -28,7 +28,6 @@ import {useLocationSearchValue} from '../../../location-search';
 import {RootStackParamList} from '../../../navigation';
 import ScreenHeader from '../../../ScreenHeader';
 import {StyleSheet, Theme} from '../../../theme';
-import colors from '../../../theme/colors';
 import EmojiPopup from './EmojiPopup';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
@@ -184,7 +183,8 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
         <Button
           onPress={save}
-          leftIcon={editItem ? Confirm : Add}
+          mode="primary"
+          icon={editItem ? Confirm : Add}
           disabled={!hasSelectedValues}
           text="Lagre favorittsted"
         />
@@ -193,17 +193,12 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           <Button
             onPress={deleteItem}
             mode="destructive"
-            leftIcon={RemoveIconWhite}
+            icon={RemoveIconWhite}
             text="Slett favorittsted"
           />
         )}
 
-        <Button
-          onPress={cancel}
-          mode="secondary"
-          leftIcon={Close}
-          text="Avbryt"
-        />
+        <Button onPress={cancel} mode="secondary" icon={Close} text="Avbryt" />
       </View>
     </SafeAreaView>
   );
@@ -232,7 +227,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   line: {
     marginBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: colors.general.gray,
+    borderBottomColor: theme.background.level1,
   },
   lineNoMarginTop: {
     marginTop: 0,

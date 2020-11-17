@@ -18,9 +18,10 @@ import ScreenHeader from '../../../ScreenHeader';
 import {EstimatedCall, Situation} from '../../../sdk';
 import SituationMessages from '../../../situations';
 import {StyleSheet} from '../../../theme';
-import colors from '../../../theme/colors';
 import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
-import transportationColor from '../../../utils/transportation-color';
+import transportationColor, {
+  defaultFill,
+} from '../../../utils/transportation-color';
 import {getQuayName} from '../../../utils/transportation-names';
 import usePollableResource from '../../../utils/use-pollable-resource';
 import LocationRow from '../LocationRow';
@@ -165,7 +166,7 @@ function CallGroup({
 
   const dashColor = isOnRoute
     ? transportationColor(mode, publicCode).fill
-    : colors.general.gray;
+    : defaultFill;
 
   return (
     <View>
@@ -279,7 +280,7 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
 const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.background.modal_Level2,
+    backgroundColor: theme.background.level2,
   },
   situationsContainer: {
     marginBottom: theme.spacings.small,

@@ -3,7 +3,6 @@ import {TouchableOpacity, View} from 'react-native';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import {StyleSheet} from '../../theme';
 import shadows from './shadows';
-import colors from '../../theme/colors';
 import ThemeIcon from '../theme-icon';
 
 const PositionArrow: React.FC<{flyToCurrentLocation(): void}> = ({

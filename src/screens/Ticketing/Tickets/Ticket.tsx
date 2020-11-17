@@ -30,7 +30,7 @@ const Ticket: React.FC<Props> = ({fareContract: fc, now}) => {
           {isValidTicket ? (
             <>
               <View style={styles.iconContainer}>
-                <ValidTicket fill={colors.primary.green} />
+                <ValidTicket fill={colors.primary.green_500} />
               </View>
               <ThemeText type="lead" color="faded">
                 Gyldig i{' '}
@@ -82,6 +82,7 @@ const ValidityLine: React.FC<{
   validTo: number;
 }> = ({isValid, validityLeftSeconds, validFrom, validTo}) => {
   const styles = useStyles();
+  const {theme} = useTheme();
 
   if (isValid) {
     const durationSeconds = validTo - validFrom;
@@ -96,14 +97,14 @@ const ValidityLine: React.FC<{
           dashGap={0}
           dashLength={1}
           dashThickness={8}
-          dashColor={colors.primary.green}
+          dashColor={colors.primary.green_500}
         />
         <Dash
           style={{width: `${100 - validityPercent}%`}}
           dashGap={0}
           dashLength={1}
           dashThickness={8}
-          dashColor={colors.secondary.gray_Level2}
+          dashColor={colors.primary.gray_500}
         />
       </View>
     );
@@ -115,7 +116,7 @@ const ValidityLine: React.FC<{
           dashGap={0}
           dashLength={1}
           dashThickness={1}
-          dashColor={colors.secondary.gray_Level2}
+          dashColor={theme.background.level1}
         />
       </View>
     );
