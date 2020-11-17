@@ -43,16 +43,22 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const css = useButtonStyle();
   const {theme} = useTheme();
-  const {backgroundColor, borderColor, textColor} = theme.button[mode];
+
   const isInline = type === 'compact' || type === 'inline';
-  const padding =
+
+  const spacing =
     type === 'compact' ? theme.spacings.small : theme.spacings.medium;
+  const leftIconSpacing = Icon && iconPosition === 'left' ? spacing : undefined;
+  const rightIconSpacing =
+    Icon && iconPosition === 'right' ? spacing : undefined;
+
+  const {backgroundColor, borderColor, textColor} = theme.button[mode];
   const styleContainer: ViewStyle[] = [
     css.button,
     {
       backgroundColor,
       borderColor,
-      padding,
+      padding: spacing,
       alignSelf: isInline ? 'flex-start' : undefined,
     },
   ];
@@ -60,8 +66,8 @@ const Button: React.FC<ButtonProps> = ({
   const textContainer: TextStyle = {
     flex: isInline ? undefined : 1,
     alignItems: 'center',
-    marginLeft: Icon && iconPosition === 'left' ? padding : undefined,
-    marginRight: Icon && iconPosition === 'right' ? padding : undefined,
+    marginLeft: leftIconSpacing,
+    marginRight: rightIconSpacing,
   };
   const iconContainer: ViewStyle = isInline
     ? {
@@ -69,7 +75,11 @@ const Button: React.FC<ButtonProps> = ({
         left: undefined,
         right: undefined,
       }
-    : {};
+    : {
+        position: 'absolute',
+        left: leftIconSpacing,
+        right: rightIconSpacing,
+      };
 
   return (
     <View style={disabled ? css.buttonDisabled : undefined}>
@@ -80,7 +90,7 @@ const Button: React.FC<ButtonProps> = ({
         {...props}
       >
         {Icon && iconPosition === 'left' && (
-          <View style={[css.leftIcon, iconContainer]}>
+          <View style={iconContainer}>
             <Icon fill={theme.text.colors.primary} />
           </View>
         )}
@@ -92,7 +102,7 @@ const Button: React.FC<ButtonProps> = ({
           </View>
         )}
         {Icon && iconPosition === 'right' && (
-          <View style={[css.rightIcon, iconContainer]}>
+          <View style={iconContainer}>
             <Icon fill={theme.text.colors.primary} />
           </View>
         )}
@@ -111,14 +121,6 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     backgroundColor: theme.button.primary.backgroundColor,
     marginBottom: theme.spacings.small,
     borderColor: theme.button.primary.backgroundColor,
-  },
-  leftIcon: {
-    position: 'absolute',
-    left: theme.spacings.medium,
-  },
-  rightIcon: {
-    position: 'absolute',
-    right: theme.spacings.medium,
   },
   buttonDisabled: {
     opacity: 0.2,
