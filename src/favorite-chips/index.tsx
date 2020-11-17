@@ -164,7 +164,7 @@ const FavoriteChip: React.FC<ChipProps> = ({
 
 const useChipStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   container: {
-    height: 28,
+    minHeight: 28,
     borderRadius: 8,
     backgroundColor: colors.secondary.blue_500,
     flexDirection: 'row',
