@@ -10,7 +10,7 @@ export type LinkItemProps = {
   text: string;
   subline?: string;
   onPress?(event: GestureResponderEvent): void;
-  icon?: NavigationIconTypes;
+  icon?: NavigationIconTypes | JSX.Element;
 };
 export default function LinkItem({
   text,
@@ -19,11 +19,12 @@ export default function LinkItem({
   icon,
 }: LinkItemProps) {
   const style = useListStyle();
+  const iconEl = isNavigationIcon(icon) ? <NavigationIcon mode={icon} /> : icon;
   return (
     <TouchableOpacity onPress={onPress} style={style.baseItem}>
       <View style={style.action}>
         <ThemeText>{text}</ThemeText>
-        <NavigationIcon mode={icon} />
+        {iconEl}
       </View>
       {subline && (
         <ThemeText color="faded" type="lead">
@@ -32,4 +33,8 @@ export default function LinkItem({
       )}
     </TouchableOpacity>
   );
+}
+
+function isNavigationIcon(a: any): a is NavigationIconTypes {
+  return typeof a === 'string' || !a;
 }

@@ -23,6 +23,16 @@ const useListStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  favorite: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  favorite__text: {
+    flex: 1,
+  },
+  favorite__emoji: {
+    width: 30,
+  },
   headerExpandIconGroup: {
     flexDirection: 'row',
     justifyContent: 'space-between',

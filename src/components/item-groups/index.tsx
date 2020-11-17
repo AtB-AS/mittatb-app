@@ -1,6 +1,7 @@
 import React, {PropsWithChildren} from 'react';
 import {View} from 'react-native';
 import ActionItem from './action-item';
+import FavoriteItem from './favorite-item';
 import HeaderItem from './header-item';
 import LinkItem from './link-item';
 import useListStyle from './style';
@@ -40,6 +41,7 @@ const List = {
   Link: LinkItem,
   Action: ActionItem,
   Header: HeaderItem,
+  Favorite: FavoriteItem,
 };
 
 export default List;
