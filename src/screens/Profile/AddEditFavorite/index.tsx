@@ -193,7 +193,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           <Button
             onPress={deleteItem}
             mode="destructive"
-            icon={RemoveIconWhite}
+            icon={Remove}
             text="Slett favorittsted"
           />
         )}
@@ -258,10 +258,6 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignSelf: 'center',
   },
 }));
-
-function RemoveIconWhite() {
-  return <Remove fill="#ffffff" />;
-}
 
 type SymbolPickerProps = {
   onPress(): void;

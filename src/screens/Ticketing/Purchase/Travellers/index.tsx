@@ -142,7 +142,7 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
           text="Betal med Vipps"
           disabled={isSearchingOffer}
           accessibilityLabel="Trykk for å betale billett med Vipps"
-          icon={() => <ThemeIcon svg={Vipps} />}
+          icon={Vipps}
           iconPosition="right"
           onPress={payWithVipps}
         />
@@ -151,7 +151,7 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
           text="Betal med bankkort"
           disabled={isSearchingOffer}
           accessibilityLabel="Trykk for å betale billett med bankkort"
-          icon={() => <ThemeIcon svg={CreditCard} />}
+          icon={CreditCard}
           iconPosition="right"
           onPress={payWithCard}
         />
@@ -159,7 +159,7 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
           mode="secondary"
           text="Avbryt"
           accessibilityLabel="Trykk for å avbryte billettkjøp"
-          icon={() => <ThemeIcon svg={Close} />}
+          icon={Close}
           onPress={closeModal}
         />
       </View>

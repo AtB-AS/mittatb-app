@@ -162,6 +162,7 @@ export interface Theme {
     primary: Button;
     primary2: Button;
     primary3: Button;
+    primary4: Button;
     secondary: Button;
     tertiary: Button;
     destructive: Button;
@@ -218,6 +219,11 @@ export const themes: Themes = {
         backgroundColor: colors.primary.gray_100,
         textColor: colors.text.black,
         borderColor: colors.primary.gray_100,
+      },
+      primary4: {
+        backgroundColor: colors.secondary.blue_500,
+        textColor: colors.text.white,
+        borderColor: colors.secondary.blue_500,
       },
       secondary: {
         backgroundColor: 'transparent',
@@ -286,6 +292,11 @@ export const themes: Themes = {
         backgroundColor: colors.primary.gray_500,
         textColor: colors.text.white,
         borderColor: colors.primary.gray_500,
+      },
+      primary4: {
+        backgroundColor: colors.secondary.blue_500,
+        textColor: colors.text.white,
+        borderColor: colors.secondary.blue_500,
       },
       secondary: {
         backgroundColor: 'transparent',

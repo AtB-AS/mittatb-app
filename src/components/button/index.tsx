@@ -19,15 +19,16 @@ type ButtonTypeAwareProps =
       type?: 'block';
     };
 
-type ButtonProps = {
+export type ButtonProps = {
   onPress(): void;
   mode?: ButtonMode;
   textContainerStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
-  icon?: React.ElementType;
+  icon?: React.ElementType<{fill: string}>;
   iconPosition?: 'left' | 'right';
 } & ButtonTypeAwareProps &
   TouchableOpacityProps;
+
 const Button: React.FC<ButtonProps> = ({
   onPress,
   mode = 'primary',
@@ -91,7 +92,7 @@ const Button: React.FC<ButtonProps> = ({
       >
         {Icon && iconPosition === 'left' && (
           <View style={iconContainer}>
-            <Icon fill={theme.text.colors.primary} />
+            <Icon fill={textColor} />
           </View>
         )}
         {text && (
@@ -103,7 +104,7 @@ const Button: React.FC<ButtonProps> = ({
         )}
         {Icon && iconPosition === 'right' && (
           <View style={iconContainer}>
-            <Icon fill={theme.text.colors.primary} />
+            <Icon fill={textColor} />
           </View>
         )}
       </TouchableOpacity>

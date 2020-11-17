@@ -264,23 +264,21 @@ const Assistant: React.FC<Props> = ({
               />
             </View>
 
-            <View style={styles.swapButton}>
-              <TouchableOpacity
-                onPress={swap}
-                hitSlop={insets.all(12)}
-                accessible={true}
-                accessibilityLabel={
-                  'Bytt avreisested og ankomststed' + screenReaderPause
-                }
-                accessibilityRole="button"
-              >
-                <ThemeIcon svg={Swap} />
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              onPress={swap}
+              hitSlop={insets.all(12)}
+              accessible={true}
+              accessibilityLabel={
+                'Bytt avreisested og ankomststed' + screenReaderPause
+              }
+              accessibilityRole="button"
+            >
+              <ThemeIcon svg={Swap} />
+            </TouchableOpacity>
           </View>
         </SearchGroup>
 
-        <View style={{height: 40, position: 'relative'}}>
+        <View style={{height: 46, position: 'relative'}}>
           <Fade
             visible={isHeaderFullHeight}
             style={{position: 'absolute', width: '100%'}}
@@ -406,16 +404,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     paddingRight: theme.spacings.medium,
-  },
-  swapButton: {
-    position: 'relative',
-    top: -19,
-    right: 23,
-    backgroundColor: theme.background.level0,
-    borderColor: theme.background.header,
-    borderWidth: theme.border.width.medium,
-    borderRadius: theme.border.radius.circle,
-    padding: 3,
   },
   styleButton: {
     flexGrow: 1,
