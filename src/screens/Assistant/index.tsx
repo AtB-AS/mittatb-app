@@ -52,6 +52,7 @@ import {screenReaderPause} from '../../components/accessible-text';
 import ThemeIcon from '../../components/theme-icon';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 import ThemeText from '../../components/text';
+import FadeBetween from './FadeBetween';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -278,36 +279,29 @@ const Assistant: React.FC<Props> = ({
           </View>
         </SearchGroup>
 
-        <View style={{height: 46, position: 'relative'}}>
-          <Fade
-            visible={isHeaderFullHeight}
-            style={{position: 'absolute', width: '100%'}}
-          >
-            <FavoriteChips
-              chipTypes={['favorites', 'add-favorite']}
-              onSelectLocation={fillNextAvailableLocation}
-              containerStyle={styles.chipBox}
-              chipActionHint={
-                'Aktiver for å bruke som ' +
-                (from ? 'destinasjon' : 'avreisested') +
-                screenReaderPause
-              }
+        <FadeBetween
+          visibleKey={isHeaderFullHeight ? 'dateInput' : 'favoriteChips'}
+          style={{minHeight: 64}}
+        >
+          <FavoriteChips
+            key="favoriteChips"
+            chipTypes={['favorites', 'add-favorite']}
+            onSelectLocation={fillNextAvailableLocation}
+            containerStyle={styles.fadeChild}
+            chipActionHint={
+              'Aktiver for å bruke som ' +
+              (from ? 'destinasjon' : 'avreisested') +
+              screenReaderPause
+            }
+          />
+          <SearchGroup containerStyle={styles.fadeChild} key="dateInput">
+            <DateInput
+              onDateSelected={setDate}
+              value={date}
+              timeOfLastSearch={timeOfLastSearch}
             />
-          </Fade>
-
-          <Fade
-            visible={!isHeaderFullHeight}
-            style={{position: 'absolute', width: '100%'}}
-          >
-            <SearchGroup containerStyle={{marginTop: 2}}>
-              <DateInput
-                onDateSelected={setDate}
-                value={date}
-                timeOfLastSearch={timeOfLastSearch}
-              />
-            </SearchGroup>
-          </Fade>
-        </View>
+          </SearchGroup>
+        </FadeBetween>
       </View>
     ),
     [
@@ -408,10 +402,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   styleButton: {
     flexGrow: 1,
   },
-  chipBox: {
-    marginTop: 8,
-    paddingHorizontal: theme.spacings.medium,
-  },
   altTitle: {
     flex: 1,
     width: '100%',
@@ -424,6 +414,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   altTitleText__right: {
     textAlign: 'right',
+  },
+  fadeChild: {
+    marginVertical: theme.spacings.small,
+    marginHorizontal: theme.spacings.medium,
   },
 }));
 
@@ -620,39 +614,6 @@ function useDoOnceWhen(fn: () => void, condition: boolean) {
       fn();
     }
   }, [condition]);
-}
-
-type FadeProps = {
-  visible?: boolean;
-  style?: StyleProp<Animated.AnimateStyle<ViewStyle>>;
-  children?: any;
-  duration?: number;
-};
-
-function Fade({style, children, visible, duration = 400}: FadeProps) {
-  const opacityValue = useRef(new Animated.Value<number>(0)).current;
-  const [init, setInit] = useState(false);
-  const [isDone, setIsDone] = useState(false);
-
-  useEffect(() => {
-    opacityValue.setValue(visible ? 1 : 0);
-    setInit(true);
-  }, []);
-
-  useEffect(() => {
-    if (!init) return;
-    return Animated.timing(opacityValue, {
-      toValue: visible ? 1 : 0,
-      duration: duration,
-      easing: Easing.linear,
-    }).start(({finished}) => setIsDone(finished));
-  }, [visible, init, duration]);
-
-  return (
-    <Animated.View style={[{opacity: opacityValue}, style]}>
-      {!isDone || visible ? children : null}
-    </Animated.View>
-  );
 }
 
 function log(message: string, metadata?: {[key: string]: string}) {

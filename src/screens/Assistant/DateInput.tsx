@@ -150,7 +150,7 @@ const DateInput: React.FC<DateInputProps> = ({
 
   return (
     <>
-      <SearchButton
+      <Button
         accessible={true}
         accessibilityLabel={'Velg tidspunkt.' + screenReaderPause}
         accessibilityValue={{
@@ -160,7 +160,6 @@ const DateInput: React.FC<DateInputProps> = ({
           'Aktiver for å velge tidspunkt og dato.' + screenReaderPause
         }
         accessibilityRole="button"
-        title="Når"
         text={searchValue}
         onPress={onOpen}
       />
