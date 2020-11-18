@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   TextStyle,
 } from 'react-native';
-import React from 'react';
+import React, {PropsWithChildren} from 'react';
 import {StyleSheet, Theme, useTheme} from '../../theme';
 import ThemeText from '../text';
 

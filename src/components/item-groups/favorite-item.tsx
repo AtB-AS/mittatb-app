@@ -4,9 +4,6 @@ import {Edit} from '../../assets/svg/icons/actions';
 import {FavoriteIcon} from '../../favorites';
 import {LocationFavorite} from '../../favorites/types';
 import ThemeText from '../text';
-import NavigationIcon, {
-  NavigationIconTypes,
-} from '../theme-icon/navigation-icon';
 import useListStyle from './style';
 
 export type FavoriteItemProps = {
@@ -14,14 +11,24 @@ export type FavoriteItemProps = {
   onPress?(event: GestureResponderEvent): void;
   icon?: JSX.Element;
 };
-export default function FavoriteItem({
+export default function FavoriteItem({onPress, ...props}: FavoriteItemProps) {
+  if (!onPress) {
+    return <FavoriteItemContent {...props} />;
+  }
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <FavoriteItemContent {...props} />
+    </TouchableOpacity>
+  );
+}
+
+function FavoriteItemContent({
   favorite,
-  onPress,
   icon,
-}: FavoriteItemProps) {
+}: Omit<FavoriteItemProps, 'onPress'>) {
   const style = useListStyle();
   return (
-    <TouchableOpacity onPress={onPress} style={style.baseItem}>
+    <View style={style.baseItem}>
       <View style={style.favorite}>
         <View style={style.favorite__emoji}>
           <FavoriteIcon favorite={favorite} />
@@ -31,10 +38,6 @@ export default function FavoriteItem({
         </View>
         {icon ?? <Edit />}
       </View>
-    </TouchableOpacity>
+    </View>
   );
-}
-
-function isNavigationIcon(a: any): a is NavigationIconTypes {
-  return typeof a === 'string' || !a;
 }

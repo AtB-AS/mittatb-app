@@ -5,15 +5,14 @@ import {StyleProp, View, ViewStyle} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Add} from '../assets/svg/icons/actions';
 import {CurrentLocationArrow, MapPointPin} from '../assets/svg/icons/places';
+import {screenReaderPause} from '../components/accessible-text';
+import Button, {ButtonProps} from '../components/button';
 import {FavoriteIcon} from '../favorites';
 import {useFavorites} from '../favorites/FavoritesContext';
 import {LocationWithMetadata} from '../favorites/types';
 import {useReverseGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
-import {TabNavigatorParams} from '../navigation/TabNavigator';
-import ThemeIcon from '../components/theme-icon';
-import {screenReaderPause} from '../components/accessible-text';
-import Button, {ButtonProps} from '../components/button';
+import {RootStackParamList} from '../navigation';
 import {StyleSheet, useTheme} from '../theme';
 
 type Props = {
@@ -27,8 +26,7 @@ type Props = {
 export type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
 
 type ProfileNearbyScreenNavigationProp = StackNavigationProp<
-  TabNavigatorParams,
-  'Assistant'
+  RootStackParamList
 >;
 const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
@@ -103,12 +101,7 @@ const FavoriteChips: React.FC<Props> = ({
             text={'Legg til favoritt'}
             accessibilityRole="button"
             icon={Add}
-            onPress={() =>
-              navigation.navigate('Profile', {
-                screen: 'AddEditFavorite',
-                initial: false,
-              })
-            }
+            onPress={() => navigation.navigate('AddEditFavorite', {})}
             style={{marginRight: 0}}
           />
         )}

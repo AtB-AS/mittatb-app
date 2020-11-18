@@ -31,16 +31,23 @@ import {StyleSheet, Theme} from '../../../theme';
 import EmojiPopup from './EmojiPopup';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
+import {Location} from '@entur/sdk';
+import {LocationFavorite} from '../../../favorites/types';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
 
 export type AddEditNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<ProfileStackParams, AddEditRouteName>,
-  StackNavigationProp<RootStackParamList>
+  StackNavigationProp<RootStackParamList, AddEditRouteName>,
+  StackNavigationProp<ProfileStackParams>
 >;
 
-type AddEditScreenRouteProp = RouteProp<ProfileStackParams, AddEditRouteName>;
+type AddEditScreenRouteProp = RouteProp<RootStackParamList, AddEditRouteName>;
+
+export type AddEditParams = {
+  editItem?: LocationFavorite;
+  searchLocation?: Location;
+};
 
 type AddEditProps = {
   navigation: AddEditNavigationProp;

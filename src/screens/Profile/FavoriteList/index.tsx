@@ -5,28 +5,23 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ProfileStackParams} from '..';
 import {Add} from '../../../assets/svg/icons/actions';
+import SvgReorder from '../../../assets/svg/icons/actions/Reorder';
 import List from '../../../components/item-groups';
-import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import {LocationFavorite} from '../../../favorites/types';
 import MessageBox from '../../../message-box';
-import {TabNavigatorParams} from '../../../navigation/TabNavigator';
+import {RootStackParamList} from '../../../navigation';
 import {StyleSheet, Theme} from '../../../theme';
 import BackHeader from '../BackHeader';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
-  'ProfileHome'
->;
-
-type ProfileNearbyScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<TabNavigatorParams, 'Profile'>,
-  ProfileScreenNavigationProp
+  'FavoriteList'
 >;
 
 type ProfileScreenProps = {
-  navigation: ProfileNearbyScreenNavigationProp;
+  navigation: StackNavigationProp<RootStackParamList>;
 };
 
 export default function FavoriteList({navigation}: ProfileScreenProps) {
@@ -38,6 +33,7 @@ export default function FavoriteList({navigation}: ProfileScreenProps) {
     navigation.navigate('AddEditFavorite', {editItem: item});
   };
   const onAddButtonClick = () => navigation.push('AddEditFavorite', {});
+  const onSortClick = () => navigation.push('SortableFavoriteList');
 
   return (
     <SafeAreaView style={style.container}>
@@ -64,6 +60,11 @@ export default function FavoriteList({navigation}: ProfileScreenProps) {
 
         <List.Group>
           <List.Link
+            text="Endre rekkefølge"
+            onPress={onSortClick}
+            icon={<ThemeIcon svg={SvgReorder} />}
+          />
+          <List.Link
             text="Legg til favorittsted"
             onPress={onAddButtonClick}
             icon={<ThemeIcon svg={Add} />}
@@ -75,7 +76,7 @@ export default function FavoriteList({navigation}: ProfileScreenProps) {
 }
 const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.background.level2,
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-start',

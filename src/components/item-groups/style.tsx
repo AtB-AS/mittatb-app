@@ -17,6 +17,7 @@ const useListStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     marginTop: theme.spacings.medium,
   },
   baseItem: {
+    flex: 1,
     padding: theme.spacings.medium,
   },
   action: {
@@ -24,6 +25,7 @@ const useListStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     justifyContent: 'space-between',
   },
   favorite: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
