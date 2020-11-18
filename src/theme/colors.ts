@@ -83,6 +83,10 @@ const spacings = {
   xSmall: 4,
 };
 
+const sizes = {
+  touchable: 44,
+};
+
 export type TextNames =
   | 'heroTitle'
   | 'pageTitle'
@@ -133,6 +137,7 @@ export type Mode = keyof Themes;
 export interface Theme {
   statusBarStyle: StatusBarProps['barStyle'];
   spacings: typeof spacings;
+  sizes: typeof sizes;
   background: {
     level0: string;
     level1: string;
@@ -171,6 +176,7 @@ export interface Theme {
 export const themes: Themes = {
   light: {
     spacings: spacings,
+    sizes: sizes,
     statusBarStyle: 'dark-content',
     background: {
       level0: backgrounds.light__level0,
@@ -238,6 +244,7 @@ export const themes: Themes = {
   },
   dark: {
     spacings: spacings,
+    sizes: sizes,
     statusBarStyle: 'light-content',
     background: {
       level0: backgrounds.dark__level0,

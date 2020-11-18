@@ -414,19 +414,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   swapButton: {
     position: 'relative',
-    top: -19,
-    right: 23,
     backgroundColor: theme.background.level0,
-    borderColor: theme.background.header,
-    borderWidth: theme.border.width.medium,
-    borderRadius: theme.border.radius.circle,
-    padding: 3,
   },
   styleButton: {
     flexGrow: 1,
   },
   chipBox: {
-    marginTop: 8,
+    marginTop: theme.spacings.medium,
     paddingHorizontal: theme.spacings.medium,
   },
   altTitle: {

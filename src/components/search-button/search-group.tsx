@@ -40,8 +40,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: 12,
   },
   line: {
-    height: 2,
-    backgroundColor: theme.background.accent,
+    height: theme.border.width.slim,
+    backgroundColor: theme.background.level1,
     width: '100%',
   },
 }));
