@@ -288,7 +288,10 @@ const Assistant: React.FC<Props> = ({
             key="favoriteChips"
             chipTypes={['favorites', 'add-favorite']}
             onSelectLocation={fillNextAvailableLocation}
-            containerStyle={styles.fadeChild}
+            containerStyle={[
+              styles.fadeChild,
+              {marginLeft: theme.spacings.medium},
+            ]}
             chipActionHint={
               'Aktiver for å bruke som ' +
               (from ? 'destinasjon' : 'avreisested') +
@@ -418,7 +421,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   fadeChild: {
     marginVertical: theme.spacings.small,
-    marginHorizontal: theme.spacings.medium,
   },
 }));
 
