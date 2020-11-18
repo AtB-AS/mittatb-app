@@ -122,7 +122,6 @@ const FavoriteChip: React.FC<ButtonProps> = (props) => {
       {...props}
       style={{
         marginRight: theme.spacings.small,
-        marginBottom: theme.spacings.medium,
       }}
       type="compact"
     />

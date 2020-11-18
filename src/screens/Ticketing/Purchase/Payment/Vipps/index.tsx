@@ -51,15 +51,16 @@ export default function VippsPayment({
       />
       <View style={styles.content}>
         {!error &&
-        (state === 'reserving-offer' || state === 'offer-reserved') ? (
-          <Processing message={translateStateMessage(state)} />
-        ) : (
-          <Button
-            mode="primary"
-            text="Gå til vipps for betaling"
-            onPress={() => openVipps()}
-          />
-        )}
+          (state === 'reserving-offer' || state === 'offer-reserved' ? (
+            <Processing message={translateStateMessage(state)} />
+          ) : (
+            <Button
+              mode="primary"
+              text="Gå til vipps for betaling"
+              onPress={() => openVipps()}
+              style={styles.button}
+            />
+          ))}
         {!!error && (
           <>
             <MessageBox
@@ -68,12 +69,18 @@ export default function VippsPayment({
               containerStyle={styles.messageBox}
             />
             {error.context === 'open-vipps-url' && (
-              <Button mode="primary" onPress={openVipps} text="Prøv igjen" />
+              <Button
+                mode="primary"
+                onPress={openVipps}
+                text="Prøv igjen"
+                style={styles.button}
+              />
             )}
             <Button
               mode="secondary"
               onPress={() => cancelVipps(true)}
               text="Gå tilbake"
+              style={styles.button}
             />
           </>
         )}
@@ -112,4 +119,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
   },
   messageBox: {marginBottom: theme.spacings.small},
+  button: {marginBottom: theme.spacings.small},
 }));

@@ -92,6 +92,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
               mode="primary"
               onPress={restartTerminal}
               text="Start på nytt"
+              style={styles.button}
             />
           )}
           <Button
@@ -131,6 +132,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {flex: 1, backgroundColor: theme.background.level2},
   center: {flex: 1, justifyContent: 'center', padding: theme.spacings.medium},
   messageBox: {marginBottom: theme.spacings.small},
+  button: {marginBottom: theme.spacings.small},
 }));
 
 export default CreditCard;

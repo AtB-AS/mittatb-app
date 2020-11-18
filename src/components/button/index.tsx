@@ -120,7 +120,6 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     borderRadius: theme.border.radius.regular,
     borderWidth: theme.border.width.medium,
     backgroundColor: theme.button.primary.backgroundColor,
-    marginBottom: theme.spacings.small,
     borderColor: theme.button.primary.backgroundColor,
   },
   buttonDisabled: {
