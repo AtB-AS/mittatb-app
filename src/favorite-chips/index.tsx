@@ -14,7 +14,7 @@ import {TabNavigatorParams} from '../navigation/TabNavigator';
 import ThemeIcon from '../components/theme-icon';
 import {screenReaderPause} from '../components/accessible-text';
 import Button, {ButtonProps} from '../components/button';
-import {useTheme} from '../theme';
+import {StyleSheet, useTheme} from '../theme';
 
 type Props = {
   onSelectLocation: (location: LocationWithMetadata) => void;
@@ -39,33 +39,35 @@ const FavoriteChips: React.FC<Props> = ({
 }) => {
   const navigation = useNavigation<ProfileNearbyScreenNavigationProp>();
   const {favorites} = useFavorites();
-
+  const styles = useStyles();
   const {onCurrentLocation} = useCurrentLocationChip(onSelectLocation);
   const activeType = (type: ChipTypeGroup) => chipTypes.includes(type);
 
   return (
     <View style={containerStyle}>
-      <View style={{flexDirection: 'row'}}>
-        {activeType('location') && (
-          <FavoriteChip
-            mode="primary2"
-            text="Posisjon"
-            accessibilityRole="button"
-            accessibilityHint={chipActionHint ?? ''}
-            icon={CurrentLocationArrow}
-            onPress={onCurrentLocation}
-          />
-        )}
-        {activeType('map') && (
-          <FavoriteChip
-            text="Velg i kart"
-            accessibilityRole="button"
-            icon={MapPointPin}
-            onPress={onMapSelection}
-            mode="primary2"
-          />
-        )}
-      </View>
+      {(activeType('location') || activeType('map')) && (
+        <View style={styles.staticChipsContainer}>
+          {activeType('location') && (
+            <FavoriteChip
+              mode="primary2"
+              text="Posisjon"
+              accessibilityRole="button"
+              accessibilityHint={chipActionHint ?? ''}
+              icon={CurrentLocationArrow}
+              onPress={onCurrentLocation}
+            />
+          )}
+          {activeType('map') && (
+            <FavoriteChip
+              text="Velg i kart"
+              accessibilityRole="button"
+              icon={MapPointPin}
+              onPress={onMapSelection}
+              mode="primary2"
+            />
+          )}
+        </View>
+      )}
       <ScrollView
         horizontal={true}
         showsHorizontalScrollIndicator={false}
@@ -129,6 +131,13 @@ const FavoriteChip: React.FC<ButtonProps> = (props) => {
 };
 
 export default FavoriteChips;
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  staticChipsContainer: {
+    flexDirection: 'row',
+    marginBottom: theme.spacings.medium,
+  },
+}));
 
 function useCurrentLocationChip(
   onSelectLocation: (location: LocationWithMetadata) => void,
