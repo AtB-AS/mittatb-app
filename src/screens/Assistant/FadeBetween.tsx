@@ -69,6 +69,7 @@ function AnimatedChild({
         position: visibleChild ? 'relative' : 'absolute',
         opacity,
       }}
+      pointerEvents={visibleChild ? 'auto' : 'none'}
     >
       {child}
     </Animated.View>
