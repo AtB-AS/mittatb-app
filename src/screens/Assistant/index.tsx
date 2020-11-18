@@ -7,6 +7,7 @@ import {
   ViewStyle,
   StyleProp,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import analytics from '@react-native-firebase/analytics';
 import {searchTrip} from '../../api';
