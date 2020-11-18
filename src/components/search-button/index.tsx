@@ -78,7 +78,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     paddingHorizontal: theme.spacings.medium,
     paddingVertical: theme.spacings.small,
-    height: theme.sizes.touchable,
+    minHeight: theme.sizes.touchable,
   },
   buttonContainer: {
     flexDirection: 'row',
