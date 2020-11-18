@@ -2,7 +2,7 @@ import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {ProfileStackParams} from '..';
 import {Close, Confirm} from '../../../assets/svg/icons/actions';
 import SvgDragHandle from '../../../assets/svg/icons/actions/DragHandle';
@@ -33,7 +33,6 @@ type ProfileScreenProps = {
 export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
   const style = useProfileStyle();
   const {favorites, setFavorites} = useFavorites();
-  const {top} = useSafeAreaInsets();
   const items = favorites ?? [];
   const [sortedItems, setSortedItems] = useState(items);
   const [error, setError] = useState<string | null>(null);
@@ -50,8 +49,8 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
   };
 
   return (
-    <View style={[style.container, {paddingTop: top}]}>
-      <BackHeader title="Endre rekkefølge" />
+    <SafeAreaView style={style.container}>
+      <BackHeader title="Endre rekkefølge" closeIcon />
 
       {error && (
         <MessageBox type="error" message={error} containerStyle={style.error} />
@@ -97,7 +96,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
           iconPosition="right"
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({

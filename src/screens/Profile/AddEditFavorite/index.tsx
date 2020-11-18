@@ -33,6 +33,7 @@ import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
 import {Location} from '@entur/sdk';
 import {LocationFavorite} from '../../../favorites/types';
+import BackHeader from '../BackHeader';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
@@ -121,16 +122,8 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
   return (
     <SafeAreaView style={css.container}>
-      <ScreenHeader
-        leftButton={{
-          onPress: cancel,
-          icon: <ThemeIcon svg={ArrowLeft} />,
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: 'Gå tilbake',
-        }}
-        title="Legg til favorittsted"
-      />
+      <BackHeader title="Legg til favorittsted" closeIcon />
+
       <EmojiPopup
         localizedCategories={[
           'Smilefjes',
