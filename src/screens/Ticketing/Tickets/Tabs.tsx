@@ -45,7 +45,6 @@ export const ActiveTickets: React.FC<Props> = ({navigation}) => {
           mode="primary"
           text="Kjøp enkeltbillett"
           onPress={() => navigation.navigate('TicketPurchase')}
-          style={{marginBottom: 0}}
         />
       </View>
     </View>
@@ -79,7 +78,6 @@ export const ExpiredTickets: React.FC<Props> = ({navigation}) => {
           mode="primary"
           text="Kjøp enkeltbillett"
           onPress={() => navigation.navigate('TicketPurchase')}
-          style={{marginBottom: 0}}
         />
       </View>
     </View>

@@ -142,25 +142,28 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
           text="Betal med Vipps"
           disabled={isSearchingOffer}
           accessibilityLabel="Trykk for å betale billett med Vipps"
-          icon={() => <ThemeIcon svg={Vipps} />}
+          icon={Vipps}
           iconPosition="right"
           onPress={payWithVipps}
+          style={styles.button}
         />
         <Button
           mode="primary"
           text="Betal med bankkort"
           disabled={isSearchingOffer}
           accessibilityLabel="Trykk for å betale billett med bankkort"
-          icon={() => <ThemeIcon svg={CreditCard} />}
+          icon={CreditCard}
           iconPosition="right"
           onPress={payWithCard}
+          style={styles.button}
         />
         <Button
           mode="secondary"
           text="Avbryt"
           accessibilityLabel="Trykk for å avbryte billettkjøp"
-          icon={() => <ThemeIcon svg={Close} />}
+          icon={Close}
           onPress={closeModal}
+          style={styles.button}
         />
       </View>
     </SafeAreaView>
@@ -223,6 +226,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     bottom: 0,
     width: '100%',
     margin: theme.spacings.medium,
+  },
+  button: {
+    marginBottom: theme.spacings.small,
   },
 }));
 

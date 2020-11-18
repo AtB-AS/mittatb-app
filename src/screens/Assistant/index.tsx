@@ -53,6 +53,7 @@ import {screenReaderPause} from '../../components/accessible-text';
 import ThemeIcon from '../../components/theme-icon';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 import ThemeText from '../../components/text';
+import FadeBetween from './FadeBetween';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -207,10 +208,6 @@ const Assistant: React.FC<Props> = ({
   const useScroll = (!showEmptyScreen && !isEmptyResult) || !!errorType;
   const isHeaderFullHeight = !from || !to;
 
-  const fontResponsiveFadeHeight =
-    (theme.text.body.fontSize ?? 16) * Dimensions.get('screen').fontScale +
-    theme.spacings.medium * 2;
-
   const renderHeader = useCallback(
     () => (
       <View>
@@ -269,52 +266,46 @@ const Assistant: React.FC<Props> = ({
               />
             </View>
 
-            <View style={styles.swapButton}>
-              <TouchableOpacity
-                onPress={swap}
-                hitSlop={insets.all(12)}
-                accessible={true}
-                accessibilityLabel={
-                  'Bytt avreisested og ankomststed' + screenReaderPause
-                }
-                accessibilityRole="button"
-              >
-                <ThemeIcon svg={Swap} />
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              onPress={swap}
+              hitSlop={insets.all(12)}
+              accessible={true}
+              accessibilityLabel={
+                'Bytt avreisested og ankomststed' + screenReaderPause
+              }
+              accessibilityRole="button"
+            >
+              <ThemeIcon svg={Swap} />
+            </TouchableOpacity>
           </View>
         </SearchGroup>
 
-        <View style={{height: fontResponsiveFadeHeight, position: 'relative'}}>
-          <Fade
-            visible={isHeaderFullHeight}
-            style={{position: 'absolute', width: '100%'}}
-          >
-            <FavoriteChips
-              chipTypes={['favorites', 'add-favorite']}
-              onSelectLocation={fillNextAvailableLocation}
-              containerStyle={styles.chipBox}
-              chipActionHint={
-                'Aktiver for å bruke som ' +
-                (from ? 'destinasjon' : 'avreisested') +
-                screenReaderPause
-              }
+        <FadeBetween
+          visibleKey={isHeaderFullHeight ? 'dateInput' : 'favoriteChips'}
+          style={{minHeight: 64}}
+        >
+          <FavoriteChips
+            key="favoriteChips"
+            chipTypes={['favorites', 'add-favorite']}
+            onSelectLocation={fillNextAvailableLocation}
+            containerStyle={[
+              styles.fadeChild,
+              {marginLeft: theme.spacings.medium},
+            ]}
+            chipActionHint={
+              'Aktiver for å bruke som ' +
+              (from ? 'destinasjon' : 'avreisested') +
+              screenReaderPause
+            }
+          />
+          <SearchGroup containerStyle={styles.fadeChild} key="dateInput">
+            <DateInput
+              onDateSelected={setDate}
+              value={date}
+              timeOfLastSearch={timeOfLastSearch}
             />
-          </Fade>
-
-          <Fade
-            visible={!isHeaderFullHeight}
-            style={{position: 'absolute', width: '100%'}}
-          >
-            <SearchGroup containerStyle={{marginTop: 2}}>
-              <DateInput
-                onDateSelected={setDate}
-                value={date}
-                timeOfLastSearch={timeOfLastSearch}
-              />
-            </SearchGroup>
-          </Fade>
-        </View>
+          </SearchGroup>
+        </FadeBetween>
       </View>
     ),
     [
@@ -412,22 +403,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     paddingRight: theme.spacings.medium,
   },
-  swapButton: {
-    position: 'relative',
-    top: -19,
-    right: 23,
-    backgroundColor: theme.background.level0,
-    borderColor: theme.background.header,
-    borderWidth: theme.border.width.medium,
-    borderRadius: theme.border.radius.circle,
-    padding: 3,
-  },
   styleButton: {
     flexGrow: 1,
-  },
-  chipBox: {
-    marginTop: 8,
-    paddingHorizontal: theme.spacings.medium,
   },
   altTitle: {
     flex: 1,
@@ -441,6 +418,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   altTitleText__right: {
     textAlign: 'right',
+  },
+  fadeChild: {
+    marginVertical: theme.spacings.small,
   },
 }));
 
@@ -637,39 +617,6 @@ function useDoOnceWhen(fn: () => void, condition: boolean) {
       fn();
     }
   }, [condition]);
-}
-
-type FadeProps = {
-  visible?: boolean;
-  style?: StyleProp<Animated.AnimateStyle<ViewStyle>>;
-  children?: any;
-  duration?: number;
-};
-
-function Fade({style, children, visible, duration = 400}: FadeProps) {
-  const opacityValue = useRef(new Animated.Value<number>(0)).current;
-  const [init, setInit] = useState(false);
-  const [isDone, setIsDone] = useState(false);
-
-  useEffect(() => {
-    opacityValue.setValue(visible ? 1 : 0);
-    setInit(true);
-  }, []);
-
-  useEffect(() => {
-    if (!init) return;
-    return Animated.timing(opacityValue, {
-      toValue: visible ? 1 : 0,
-      duration: duration,
-      easing: Easing.linear,
-    }).start(({finished}) => setIsDone(finished));
-  }, [visible, init, duration]);
-
-  return (
-    <Animated.View style={[{opacity: opacityValue}, style]}>
-      {!isDone || visible ? children : null}
-    </Animated.View>
-  );
 }
 
 function log(message: string, metadata?: {[key: string]: string}) {

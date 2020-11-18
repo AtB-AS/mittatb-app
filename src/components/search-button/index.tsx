@@ -76,8 +76,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: theme.spacings.medium,
-    paddingVertical: theme.spacings.small,
+    padding: theme.spacings.medium,
   },
   buttonContainer: {
     flexDirection: 'row',

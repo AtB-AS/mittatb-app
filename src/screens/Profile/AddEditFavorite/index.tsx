@@ -187,18 +187,26 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           icon={editItem ? Confirm : Add}
           disabled={!hasSelectedValues}
           text="Lagre favorittsted"
+          style={css.button}
         />
 
         {editItem && (
           <Button
             onPress={deleteItem}
             mode="destructive"
-            icon={RemoveIconWhite}
+            icon={Remove}
             text="Slett favorittsted"
+            style={css.button}
           />
         )}
 
-        <Button onPress={cancel} mode="secondary" icon={Close} text="Avbryt" />
+        <Button
+          onPress={cancel}
+          mode="secondary"
+          icon={Close}
+          text="Avbryt"
+          style={css.button}
+        />
       </View>
     </SafeAreaView>
   );
@@ -257,11 +265,10 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     left: 14,
     alignSelf: 'center',
   },
+  button: {
+    marginBottom: theme.spacings.small,
+  },
 }));
-
-function RemoveIconWhite() {
-  return <Remove fill="#ffffff" />;
-}
 
 type SymbolPickerProps = {
   onPress(): void;

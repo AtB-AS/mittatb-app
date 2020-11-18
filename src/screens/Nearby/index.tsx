@@ -181,7 +181,7 @@ const NearbyOverview: React.FC<Props> = ({
   }, [updatingLocation, isLoading]);
 
   const renderHeader = () => (
-    <SearchGroup>
+    <SearchGroup containerStyle={styles.searchGroup}>
       <View style={styles.searchButtonContainer}>
         <View style={styles.styleButton}>
           <LocationButton
@@ -264,6 +264,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   altTitleHeader: {
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  searchGroup: {
+    marginBottom: theme.spacings.small,
   },
   searchButtonContainer: {
     flexDirection: 'row',

@@ -7,7 +7,6 @@ import {useState, useRef, useEffect} from 'react';
 import DatePicker from 'react-native-date-picker';
 import Button from '../../components/button';
 import {Close} from '../../assets/svg/icons/actions';
-import SearchButton from '../../components/search-button';
 import {formatToClock, formatToLongDateTime} from '../../utils/date';
 import nb from 'date-fns/locale/nb';
 import subDays from 'date-fns/subDays';
@@ -150,7 +149,7 @@ const DateInput: React.FC<DateInputProps> = ({
 
   return (
     <>
-      <SearchButton
+      <Button
         accessible={true}
         accessibilityLabel={'Velg tidspunkt.' + screenReaderPause}
         accessibilityValue={{
@@ -160,9 +159,9 @@ const DateInput: React.FC<DateInputProps> = ({
           'Aktiver for å velge tidspunkt og dato.' + screenReaderPause
         }
         accessibilityRole="button"
-        title="Når"
         text={searchValue}
         onPress={onOpen}
+        mode="primary4"
       />
 
       <Portal>
