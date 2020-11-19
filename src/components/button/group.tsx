@@ -28,10 +28,9 @@ export default function ButtonGroup({children}: ButtonGroupProps) {
 
 const useGroupStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    paddingTop: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.medium,
+    padding: theme.spacings.medium,
   },
   separator: {
-    height: theme.spacings.medium,
+    height: theme.spacings.small,
   },
 }));
