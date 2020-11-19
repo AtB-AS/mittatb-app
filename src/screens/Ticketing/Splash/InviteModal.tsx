@@ -90,8 +90,9 @@ export default forwardRef<Modalize, Props>(function InviteModal(
           <Button
             onPress={onTicketEnrollment}
             text="Send inn kode"
-            IconComponent={Confirm}
+            icon={Confirm}
             disabled={isLoading || !inviteKey}
+            style={styles.button}
           />
         </View>
       </Modalize>
@@ -117,6 +118,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   loading: {
     marginBottom: theme.spacings.medium,
+  },
+  button: {
+    marginBottom: theme.spacings.small,
   },
 }));
 

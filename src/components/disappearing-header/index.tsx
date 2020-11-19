@@ -204,7 +204,7 @@ const DisappearingHeader: React.FC<Props> = ({
               <SvgBanner width={windowWidth} height={windowWidth / 2} />
             </View>
 
-            <View style={styles.header__inner} onLayout={onHeaderContentLayout}>
+            <View onLayout={onHeaderContentLayout}>
               {renderHeader(fullheightTransitioned)}
             </View>
           </Animated.View>
@@ -299,9 +299,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     elevated: 1,
     backgroundColor: theme.background.header,
     justifyContent: 'flex-end',
-  },
-  header__inner: {
-    paddingBottom: 10,
   },
   container: {
     backgroundColor: theme.background.level1,

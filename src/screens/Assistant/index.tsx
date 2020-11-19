@@ -7,6 +7,7 @@ import {
   ViewStyle,
   StyleProp,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import analytics from '@react-native-firebase/analytics';
 import {searchTrip} from '../../api';
@@ -30,7 +31,7 @@ import {useLocationSearchValue} from '../../location-search';
 import {RootStackParamList} from '../../navigation';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import {TripPattern} from '../../sdk';
-import {StyleSheet} from '../../theme';
+import {StyleSheet, useTheme} from '../../theme';
 import insets from '../../utils/insets';
 import {
   locationDistanceInMetres as distanceInMetres,
@@ -49,12 +50,13 @@ import Animated, {Easing} from 'react-native-reanimated';
 import Bugsnag from '@bugsnag/react-native';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import {screenReaderPause} from '../../components/accessible-text';
-import colors from '../../theme/colors';
 import ThemeIcon from '../../components/theme-icon';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 import ThemeText from '../../components/text';
 import {useTranslation} from '../../utils/language';
 import {assistantTexts} from '../../translations';
+import FadeBetween from './FadeBetween';
+
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
 
@@ -112,6 +114,7 @@ const Assistant: React.FC<Props> = ({
   navigation,
 }) => {
   const styles = useStyles();
+  const {theme} = useTheme();
   const {from, to} = useLocations(currentLocation);
 
   function swap() {
@@ -237,7 +240,7 @@ const Assistant: React.FC<Props> = ({
                 }
                 icon={
                   updatingLocation && !from ? (
-                    <ActivityIndicator color={colors.general.gray200} />
+                    <ActivityIndicator color={theme.text.colors.primary} />
                   ) : undefined
                 }
                 location={from}
@@ -277,53 +280,46 @@ const Assistant: React.FC<Props> = ({
               />
             </View>
 
-            <View style={styles.swapButton}>
-              <TouchableOpacity
-                onPress={swap}
-                hitSlop={insets.all(12)}
-                accessible={true}
-                accessibilityLabel={
-                  t(assistantTexts.location.swapButton.a11yLabel) +
-                  screenReaderPause
-                }
-                accessibilityRole="button"
-              >
-                <ThemeIcon svg={Swap} />
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              onPress={swap}
+              hitSlop={insets.all(12)}
+              accessible={true}
+              accessibilityLabel={
+                t(assistantTexts.location.swapButton.a11yLabel+ screenReaderPause
+              }
+              accessibilityRole="button"
+            >
+              <ThemeIcon svg={Swap} />
+            </TouchableOpacity>
           </View>
         </SearchGroup>
 
-        <View style={{height: 40, position: 'relative'}}>
-          <Fade
-            visible={isHeaderFullHeight}
-            style={{position: 'absolute', width: '100%'}}
-          >
-            <FavoriteChips
-              chipTypes={['favorites', 'add-favorite']}
-              onSelectLocation={fillNextAvailableLocation}
-              containerStyle={styles.chipBox}
-              chipActionHint={
-                'Aktiver for å bruke som ' +
-                (from ? 'destinasjon' : 'avreisested') +
-                screenReaderPause
-              }
+        <FadeBetween
+          visibleKey={isHeaderFullHeight ? 'dateInput' : 'favoriteChips'}
+          style={{minHeight: 64}}
+        >
+          <FavoriteChips
+            key="favoriteChips"
+            chipTypes={['favorites', 'add-favorite']}
+            onSelectLocation={fillNextAvailableLocation}
+            containerStyle={[
+              styles.fadeChild,
+              {marginLeft: theme.spacings.medium},
+            ]}
+            chipActionHint={
+              'Aktiver for å bruke som ' +
+              (from ? 'destinasjon' : 'avreisested') +
+              screenReaderPause
+            }
+          />
+          <SearchGroup containerStyle={styles.fadeChild} key="dateInput">
+            <DateInput
+              onDateSelected={setDate}
+              value={date}
+              timeOfLastSearch={timeOfLastSearch}
             />
-          </Fade>
-
-          <Fade
-            visible={!isHeaderFullHeight}
-            style={{position: 'absolute', width: '100%'}}
-          >
-            <SearchGroup containerStyle={{marginTop: 2}}>
-              <DateInput
-                onDateSelected={setDate}
-                value={date}
-                timeOfLastSearch={timeOfLastSearch}
-              />
-            </SearchGroup>
-          </Fade>
-        </View>
+          </SearchGroup>
+        </FadeBetween>
       </View>
     ),
     [
@@ -421,22 +417,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     paddingRight: theme.spacings.medium,
   },
-  swapButton: {
-    position: 'relative',
-    top: -19,
-    right: 23,
-    backgroundColor: theme.background.level0,
-    borderColor: theme.background.header,
-    padding: 3,
-    borderWidth: 2,
-    borderRadius: 20,
-  },
   styleButton: {
     flexGrow: 1,
-  },
-  chipBox: {
-    marginTop: 8,
-    paddingHorizontal: theme.spacings.medium,
   },
   altTitle: {
     flex: 1,
@@ -450,6 +432,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   altTitleText__right: {
     textAlign: 'right',
+  },
+  fadeChild: {
+    marginVertical: theme.spacings.small,
   },
 }));
 
@@ -646,39 +631,6 @@ function useDoOnceWhen(fn: () => void, condition: boolean) {
       fn();
     }
   }, [condition]);
-}
-
-type FadeProps = {
-  visible?: boolean;
-  style?: StyleProp<Animated.AnimateStyle<ViewStyle>>;
-  children?: any;
-  duration?: number;
-};
-
-function Fade({style, children, visible, duration = 400}: FadeProps) {
-  const opacityValue = useRef(new Animated.Value<number>(0)).current;
-  const [init, setInit] = useState(false);
-  const [isDone, setIsDone] = useState(false);
-
-  useEffect(() => {
-    opacityValue.setValue(visible ? 1 : 0);
-    setInit(true);
-  }, []);
-
-  useEffect(() => {
-    if (!init) return;
-    return Animated.timing(opacityValue, {
-      toValue: visible ? 1 : 0,
-      duration: duration,
-      easing: Easing.linear,
-    }).start(({finished}) => setIsDone(finished));
-  }, [visible, init, duration]);
-
-  return (
-    <Animated.View style={[{opacity: opacityValue}, style]}>
-      {!isDone || visible ? children : null}
-    </Animated.View>
-  );
 }
 
 function log(message: string, metadata?: {[key: string]: string}) {

@@ -17,7 +17,7 @@ import {
   RequestPermissionFn,
 } from '../../GeolocationContext';
 import {RootStackParamList} from '../../navigation';
-import {StyleSheet} from '../../theme';
+import {StyleSheet, useTheme} from '../../theme';
 import Loading from '../Loading';
 import NearbyResults from './NearbyResults';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
@@ -46,7 +46,6 @@ import {useReverseGeocoder} from '../../geocoder';
 import {useLocationSearchValue} from '../../location-search';
 import {useNavigateHome} from '../../utils/navigation';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
-import colors from '../../theme/colors';
 import ThemeIcon from '../../components/theme-icon';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 
@@ -112,6 +111,7 @@ const NearbyOverview: React.FC<Props> = ({
   navigation,
 }) => {
   const styles = useThemeStyles();
+  const {theme} = useTheme();
   const searchedFromLocation = useLocationSearchValue<NearbyScreenProp>(
     'location',
   );
@@ -181,7 +181,7 @@ const NearbyOverview: React.FC<Props> = ({
   }, [updatingLocation, isLoading]);
 
   const renderHeader = () => (
-    <SearchGroup>
+    <SearchGroup containerStyle={styles.searchGroup}>
       <View style={styles.searchButtonContainer}>
         <View style={styles.styleButton}>
           <LocationButton
@@ -193,7 +193,7 @@ const NearbyOverview: React.FC<Props> = ({
             }
             icon={
               updatingLocation ? (
-                <ActivityIndicator color={colors.general.gray200} />
+                <ActivityIndicator color={theme.text.colors.primary} />
               ) : undefined
             }
             location={fromLocation}
@@ -264,6 +264,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   altTitleHeader: {
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  searchGroup: {
+    marginBottom: theme.spacings.small,
   },
   searchButtonContainer: {
     flexDirection: 'row',

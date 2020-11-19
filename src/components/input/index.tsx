@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {StyleSheet, useTheme} from '../../theme';
-import colors from '../../theme/colors';
 import {Close} from '../../assets/svg/icons/actions';
 import insets from '../../utils/insets';
 import ThemeText from '../text';
@@ -44,9 +43,7 @@ const Input = forwardRef<TextInput, InputProps>(
       onBlur?.(e);
     };
 
-    const borderColor = !isFocused
-      ? colors.general.gray
-      : colors.secondary.blue;
+    const borderColor = !isFocused ? theme.border.primary : theme.border.focus;
 
     return (
       <View style={[style.container, containerStyle]}>
@@ -85,8 +82,8 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   input: {
     backgroundColor: theme.background.level1,
     color: theme.text.colors.primary,
-    borderWidth: 1,
-    borderRadius: theme.border.borderRadius.small,
+    borderWidth: theme.border.width.slim,
+    borderRadius: theme.border.radius.small,
     paddingLeft: 60,
     paddingRight: 40,
     padding: theme.spacings.medium,

@@ -1,6 +1,7 @@
 import {
   NavigationProp,
   RouteProp,
+  useIsFocused,
   useNavigation,
 } from '@react-navigation/native';
 import Axios, {AxiosError} from 'axios';
@@ -23,7 +24,6 @@ import MessageBox from '../../../message-box';
 import Header from '../../../ScreenHeader';
 import {Leg, Situation, TripPattern} from '../../../sdk';
 import {StyleSheet, useTheme} from '../../../theme';
-import colors from '../../../theme/colors';
 import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
 import {getQuayNameFromStartLeg} from '../../../utils/transportation-names';
 import usePollableResource from '../../../utils/use-pollable-resource';
@@ -62,9 +62,11 @@ const TripDetailsModal: React.FC<Props> = (props) => {
   const {
     params: {tripPatternId, tripPattern: initialTripPattern, ...passingProps},
   } = props.route;
+  const isFocused = useIsFocused();
   const [tripPattern, , isLoading, error] = useTripPattern(
     tripPatternId,
     initialTripPattern,
+    !isFocused,
   );
 
   return (
@@ -162,7 +164,7 @@ const DetailsContent: React.FC<{
         )}
         {legIsWalk(startLeg) && (
           <LocationRow
-            icon={getLocationIcon(from) ?? <Dot fill={colors.general.black} />}
+            icon={getLocationIcon(from) ?? <ThemeIcon svg={Dot} />}
             label={getQuayNameFromStartLeg(startLeg, from.name)}
             labelIcon={getIconIfFavorite(from)}
             time={timeString(startLeg, tripPattern.startTime)}
@@ -263,7 +265,7 @@ const useDetailsStyle = StyleSheet.createThemeHook((theme) => ({
   },
   container: {
     flex: 1,
-    backgroundColor: theme.background.modal_Level2,
+    backgroundColor: theme.background.level2,
   },
   messageContainer: {
     margin: theme.spacings.xLarge,
@@ -287,6 +289,7 @@ export default TripDetailsModal;
 function useTripPattern(
   tripPatternId: string,
   initialTripPattern?: TripPattern,
+  disabled?: boolean,
 ) {
   const fetchTripPattern = useCallback(
     async function reload() {
@@ -298,5 +301,6 @@ function useTripPattern(
     initialValue: initialTripPattern ?? null,
     pollingTimeInSeconds: 60,
     filterError: (err) => !Axios.isCancel(err),
+    disabled,
   });
 }

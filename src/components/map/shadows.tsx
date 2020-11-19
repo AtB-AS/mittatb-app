@@ -2,7 +2,7 @@ import {ViewStyle} from 'react-native';
 import colors from '../../theme/colors';
 
 const shadows: ViewStyle = {
-  shadowColor: colors.general.black,
+  shadowColor: colors.text.black,
   shadowOffset: {
     width: 0,
     height: 2,

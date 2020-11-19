@@ -28,7 +28,6 @@ import {useLocationSearchValue} from '../../../location-search';
 import {RootStackParamList} from '../../../navigation';
 import ScreenHeader from '../../../ScreenHeader';
 import {StyleSheet, Theme} from '../../../theme';
-import colors from '../../../theme/colors';
 import EmojiPopup from './EmojiPopup';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
@@ -184,25 +183,29 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
         <Button
           onPress={save}
-          IconComponent={editItem ? Confirm : Add}
+          mode="primary"
+          icon={editItem ? Confirm : Add}
           disabled={!hasSelectedValues}
           text="Lagre favorittsted"
+          style={css.button}
         />
 
         {editItem && (
           <Button
             onPress={deleteItem}
             mode="destructive"
-            IconComponent={RemoveIconWhite}
+            icon={Remove}
             text="Slett favorittsted"
+            style={css.button}
           />
         )}
 
         <Button
           onPress={cancel}
           mode="secondary"
-          IconComponent={Close}
+          icon={Close}
           text="Avbryt"
+          style={css.button}
         />
       </View>
     </SafeAreaView>
@@ -223,8 +226,8 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     backgroundColor: theme.background.level1,
     borderColor: theme.border.primary,
     color: theme.text.colors.primary,
-    borderWidth: 1,
-    borderRadius: theme.border.borderRadius.small,
+    borderWidth: theme.border.width.slim,
+    borderRadius: theme.border.radius.small,
     paddingLeft: 60,
     padding: 12,
     fontSize: 16,
@@ -232,7 +235,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   line: {
     marginBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: colors.general.gray,
+    borderBottomColor: theme.background.level1,
   },
   lineNoMarginTop: {
     marginTop: 0,
@@ -251,8 +254,8 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flex: 1,
     paddingLeft: 60,
     backgroundColor: theme.background.level1,
-    borderRadius: theme.border.borderRadius.small,
-    borderWidth: 1,
+    borderRadius: theme.border.radius.small,
+    borderWidth: theme.border.width.slim,
     borderColor: theme.border.primary,
     color: theme.text.colors.primary,
     zIndex: -1,
@@ -262,11 +265,10 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     left: 14,
     alignSelf: 'center',
   },
+  button: {
+    marginBottom: theme.spacings.small,
+  },
 }));
-
-function RemoveIconWhite() {
-  return <Remove fill="#ffffff" />;
-}
 
 type SymbolPickerProps = {
   onPress(): void;
@@ -293,9 +295,9 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
     paddingLeft: 64,
     flexDirection: 'row',
     backgroundColor: theme.background.level1,
-    borderWidth: 1,
+    borderWidth: theme.border.width.slim,
     borderColor: theme.border.primary,
-    borderRadius: theme.border.borderRadius.small,
+    borderRadius: theme.border.radius.small,
   },
   emoji: {
     marginRight: theme.spacings.medium,

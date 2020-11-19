@@ -38,7 +38,7 @@ const SearchButton: React.FC<SearchButtonProps> = ({
         style={styles.button}
         onPress={onPress}
       >
-        <ThemeText type="body" style={styles.title}>
+        <ThemeText type="body" style={styles.title} maxFontSizeMultiplier={1.5}>
           {title}
         </ThemeText>
         <View style={styles.icon}>{icon}</View>
@@ -76,8 +76,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: theme.spacings.medium,
-    paddingVertical: theme.spacings.small,
+    padding: theme.spacings.medium,
   },
   buttonContainer: {
     flexDirection: 'row',

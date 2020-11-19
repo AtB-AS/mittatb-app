@@ -16,7 +16,6 @@ import insets from '../../utils/insets';
 import {WalkingPerson} from '../../assets/svg/icons/transportation';
 import {DestinationFlag} from '../../assets/svg/icons/places';
 import {LegMode} from '@entur/sdk';
-import colors from '../../theme/colors';
 import {Duration} from '../../assets/svg/icons/transportation';
 import AccessibleText, {
   screenReaderPause,
@@ -130,7 +129,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   result: {
     padding: 12,
     backgroundColor: theme.background.level0,
-    borderRadius: theme.border.borderRadius.regular,
+    borderRadius: theme.border.radius.regular,
   },
   time: {
     fontSize: 32,
@@ -222,7 +221,7 @@ function WaitRow({time}: {time: number}) {
         {secondsToMinutesShort(time)}
       </ThemeText>
       <View style={styles.iconContainer}>
-        <Duration fill={colors.general.black} opacity={0.6} />
+        <ThemeIcon svg={Duration} opacity={0.6} />
       </View>
       <ThemeText style={[styles.textContent, styles.textDeprioritized]}>
         Vent
@@ -256,9 +255,6 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
   },
   textBold: {
     fontWeight: 'bold',
-  },
-  walkingPerson: {
-    //ackgroundColor: theme.text.colors.primary,
   },
 }));
 

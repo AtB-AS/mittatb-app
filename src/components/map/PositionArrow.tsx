@@ -3,7 +3,6 @@ import {TouchableOpacity, View} from 'react-native';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import {StyleSheet} from '../../theme';
 import shadows from './shadows';
-import colors from '../../theme/colors';
 import ThemeIcon from '../theme-icon';
 
 const PositionArrow: React.FC<{flyToCurrentLocation(): void}> = ({
@@ -25,7 +24,7 @@ const PositionArrow: React.FC<{flyToCurrentLocation(): void}> = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   flyToButton: {
     backgroundColor: theme.background.level0,
-    borderRadius: theme.border.borderRadius.small,
+    borderRadius: theme.border.radius.small,
     width: 36,
     height: 28,
     justifyContent: 'center',

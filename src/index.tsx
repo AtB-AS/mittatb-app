@@ -10,6 +10,7 @@ import trackAppState from './diagnostics/trackAppState';
 import ThemeContextProvider from './theme/ThemeContext';
 import FavoritesContextProvider from './favorites/FavoritesContext';
 import SearchHistoryContextProvider from './search-history';
+import TicketContextProvider from './TicketContext';
 import RemoteConfigContextProvider from './RemoteConfigContext';
 import {loadLocalConfig} from './local-config';
 import Bugsnag from '@bugsnag/react-native';
@@ -45,8 +46,6 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const {currentLanguage} = useLanguage();
 
-  console.log(currentLanguage);
-
   useEffect(() => {
     async function config() {
       await setupConfig();
@@ -65,11 +64,13 @@ const App = () => {
             <FavoritesContextProvider>
               <SearchHistoryContextProvider>
                 <GeolocationContextProvider>
-                  <RemoteConfigContextProvider>
-                    <LanguageProvider value={currentLanguage}>
-                      <NavigationRoot />
-                    </LanguageProvider>
-                  </RemoteConfigContextProvider>
+                  <TicketContextProvider>
+                    <RemoteConfigContextProvider>
+                      <LanguageProvider value={currentLanguage}>
+                                           <NavigationRoot />
+                                         </LanguageProvider>
+                    </RemoteConfigContextProvider>
+                  </TicketContextProvider>
                 </GeolocationContextProvider>
               </SearchHistoryContextProvider>
             </FavoritesContextProvider>

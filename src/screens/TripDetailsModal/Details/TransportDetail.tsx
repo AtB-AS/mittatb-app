@@ -14,9 +14,10 @@ import {
 } from '../../../utils/transportation-names';
 import {getAimedTimeIfLargeDifference} from '../utils';
 import WaitRow from './WaitRow';
-import transportationColor from '../../../utils/transportation-color';
+import transportationColor, {
+  defaultFill,
+} from '../../../utils/transportation-color';
 import SituationRow from '../SituationRow';
-import colors from '../../../theme/colors';
 import {useLayout} from '../../../utils/use-layout';
 import ThemeText from '../../../components/text';
 import {StyleSheet} from '../../../theme';
@@ -121,7 +122,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
             dashLength={4}
             dashThickness={4}
             dashCount={3}
-            dashColor={colors.general.gray200}
+            dashColor={defaultFill}
             style={styles.waitDash}
           />
           <View style={styles.waitContainer}>
@@ -136,7 +137,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
             dashLength={4}
             dashThickness={4}
             dashCount={3}
-            dashColor={colors.general.gray200}
+            dashColor={defaultFill}
             style={styles.waitDash}
           />
         </View>

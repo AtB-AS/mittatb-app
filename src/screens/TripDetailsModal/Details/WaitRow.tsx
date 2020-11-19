@@ -1,11 +1,11 @@
 import {secondsBetween, secondsToMinutesShort} from '../../../utils/date';
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
-import colors from '../../../theme/colors';
 import {Duration} from '../../../assets/svg/icons/transportation';
 import {StyleSheet} from '../../../theme';
 import {Leg} from '../../../sdk';
 import ThemeText from '../../../components/text';
+import {defaultFill} from '../../../utils/transportation-color';
 
 type WaitRowProps = {
   onCalculateTime(seconds: number): void;
@@ -31,7 +31,7 @@ export default function WaitRow({
 
   return (
     <View style={styles.container}>
-      <Duration fill={colors.general.gray200} />
+      <Duration fill={defaultFill} />
       <ThemeText style={styles.text}>
         Vent i {secondsToMinutesShort(time)}
       </ThemeText>

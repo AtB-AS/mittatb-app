@@ -71,11 +71,10 @@ export default function Splash() {
           </View>
           <View style={styles.buttonContainer}>
             <Button
+              mode="primary2"
               onPress={() => modalRef.current?.open()}
               text="Jeg har kode til beta for billettkjøp"
-              mode="secondary"
               style={styles.button}
-              textStyle={styles.buttonText}
             />
           </View>
         </View>
@@ -119,7 +118,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     bottom: theme.spacings.large,
   },
   underline: {textDecorationLine: 'underline'},
-
-  button: {backgroundColor: theme.button.secondary.bg},
-  buttonText: {color: theme.button.secondary.color},
+  button: {marginBottom: theme.spacings.small},
 }));

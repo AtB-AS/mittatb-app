@@ -1,10 +1,18 @@
-import {AxiosError} from 'axios';
+import axios, {AxiosError} from 'axios';
 import {RequestIdHeaderName} from './headers';
 
-export type ErrorType = 'unknown' | 'default' | 'network-error' | 'timeout';
+export type ErrorType =
+  | 'unknown'
+  | 'default'
+  | 'network-error'
+  | 'timeout'
+  | 'cancel';
 
 export const getAxiosErrorType = (error: AxiosError): ErrorType => {
   if (error) {
+    if (axios.isCancel(error)) {
+      return 'cancel';
+    }
     if (error.response) {
       return 'default';
     } else {

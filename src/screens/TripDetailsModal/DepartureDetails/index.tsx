@@ -1,5 +1,5 @@
 import {LegMode} from '@entur/sdk';
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {Fragment, useCallback, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import Dash from 'react-native-dash';
@@ -18,9 +18,10 @@ import ScreenHeader from '../../../ScreenHeader';
 import {EstimatedCall, Situation} from '../../../sdk';
 import SituationMessages from '../../../situations';
 import {StyleSheet} from '../../../theme';
-import colors from '../../../theme/colors';
 import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
-import transportationColor from '../../../utils/transportation-color';
+import transportationColor, {
+  defaultFill,
+} from '../../../utils/transportation-color';
 import {getQuayName} from '../../../utils/transportation-names';
 import usePollableResource from '../../../utils/use-pollable-resource';
 import LocationRow from '../LocationRow';
@@ -57,11 +58,12 @@ export default function DepartureDetails({navigation, route}: Props) {
   } = route.params;
   const styles = useStopsStyle();
 
+  const isFocused = useIsFocused();
   const [
     {callGroups, mode, publicCode, situations: parentSituations},
     _,
     isLoading,
-  ] = useDepartureData(serviceJourneyId, fromQuayId, toQuayId, 30);
+  ] = useDepartureData(serviceJourneyId, fromQuayId, toQuayId, 30, !isFocused);
 
   const content = isLoading ? (
     <View accessibilityLabel={'Laster søkeresultat'} accessible={true}>
@@ -164,7 +166,7 @@ function CallGroup({
 
   const dashColor = isOnRoute
     ? transportationColor(mode, publicCode).fill
-    : colors.general.gray;
+    : defaultFill;
 
   return (
     <View>
@@ -278,7 +280,7 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
 const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.background.modal_Level2,
+    backgroundColor: theme.background.level2,
   },
   situationsContainer: {
     marginBottom: theme.spacings.small,
@@ -336,6 +338,7 @@ function useDepartureData(
   fromQuayId?: string,
   toQuayId?: string,
   pollingTimeInSeconds: number = 0,
+  disabled?: boolean,
 ): [DepartureData, () => void, boolean, Error?] {
   const getService = useCallback(
     async function getServiceJourneyDepartures(): Promise<DepartureData> {
@@ -364,6 +367,7 @@ function useDepartureData(
       situations: [],
     },
     pollingTimeInSeconds,
+    disabled,
   });
 }
 
