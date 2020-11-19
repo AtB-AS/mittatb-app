@@ -1,13 +1,11 @@
 import React, {forwardRef, useState} from 'react';
 import {
   NativeSyntheticEvent,
-  StyleProp,
-  TextInput,
+  TextInput as InternalTextInput,
   TextInputFocusEventData,
-  TextInputProps,
+  TextInputProps as InternalTextInputProps,
   TouchableOpacity,
   View,
-  ViewStyle,
 } from 'react-native';
 import {Close} from '../../assets/svg/icons/actions';
 import {StyleSheet, useTheme} from '../../theme';
@@ -17,18 +15,14 @@ import ThemeIcon from '../theme-icon';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
-type InputProps = TextInputProps & {
+type TextProps = InternalTextInputProps & {
   label: string;
   showClear?: boolean;
   onClear?: () => void;
-  containerStyle?: StyleProp<ViewStyle>;
 };
 
-const Input = forwardRef<TextInput, InputProps>(
-  (
-    {label, containerStyle, onFocus, onBlur, showClear, onClear, ...props},
-    ref,
-  ) => {
+const TextInput = forwardRef<InternalTextInput, TextProps>(
+  ({label, onFocus, onBlur, showClear, onClear, ...props}, ref) => {
     const {theme, themeName} = useTheme();
     const style = useInputStyle(theme, themeName);
     const [isFocused, setIsFocused] = useState(Boolean(props?.autoFocus));
@@ -43,13 +37,15 @@ const Input = forwardRef<TextInput, InputProps>(
       onBlur?.(e);
     };
 
-    const borderColor = !isFocused ? theme.border.primary : theme.border.focus;
+    const borderColor = !isFocused
+      ? undefined
+      : {borderColor: theme.border.focus};
 
     return (
-      <View style={[style.container, containerStyle]}>
-        <TextInput
+      <View style={style.container}>
+        <InternalTextInput
           ref={ref}
-          style={[style.input, {borderColor}]}
+          style={[style.input, borderColor]}
           placeholderTextColor={theme.text.colors.faded}
           onFocus={onFocusEvent}
           onBlur={onBlurEvent}
@@ -76,21 +72,21 @@ const Input = forwardRef<TextInput, InputProps>(
   },
 );
 
-export default Input;
+export default TextInput;
 
 const useInputStyle = StyleSheet.createTheme((theme) => ({
   input: {
     backgroundColor: theme.background.level1,
     color: theme.text.colors.primary,
     borderWidth: theme.border.width.slim,
-    borderRadius: theme.border.radius.small,
+    borderRadius: theme.border.radius.regular,
+    borderColor: theme.background.level1,
     paddingLeft: 60,
     paddingRight: 40,
     padding: theme.spacings.medium,
     fontSize: theme.text.body.fontSize,
   },
   container: {
-    marginBottom: theme.spacings.medium,
     flexDirection: 'column',
     justifyContent: 'center',
   },

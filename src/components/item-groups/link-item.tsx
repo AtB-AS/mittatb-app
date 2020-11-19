@@ -2,6 +2,7 @@ import React from 'react';
 import {GestureResponderEvent, TouchableOpacity, View} from 'react-native';
 import ThemeText from '../text';
 import NavigationIcon, {
+  isNavigationIcon,
   NavigationIconTypes,
 } from '../theme-icon/navigation-icon';
 import useListStyle from './style';
@@ -19,7 +20,8 @@ export default function LinkItem({
   icon,
 }: LinkItemProps) {
   const style = useListStyle();
-  const iconEl = isNavigationIcon(icon) ? <NavigationIcon mode={icon} /> : icon;
+  const iconEl =
+    isNavigationIcon(icon) || !icon ? <NavigationIcon mode={icon} /> : icon;
   return (
     <TouchableOpacity onPress={onPress} style={style.baseItem}>
       <View style={style.action}>
@@ -33,8 +35,4 @@ export default function LinkItem({
       )}
     </TouchableOpacity>
   );
-}
-
-function isNavigationIcon(a: any): a is NavigationIconTypes {
-  return typeof a === 'string' || !a;
 }

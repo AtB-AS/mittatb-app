@@ -12,16 +12,19 @@ import {
   UnfoldMore,
 } from '../../assets/svg/icons/navigation';
 
-export type NavigationIconTypes =
-  | 'arrow-left'
-  | 'arrow-right'
-  | 'arrow-upleft'
-  | 'chevron-left'
-  | 'chevron-right'
-  | 'expand-less'
-  | 'expand-more'
-  | 'unfold-less'
-  | 'unfold-more';
+const navigationTypes = [
+  'arrow-left',
+  'arrow-right',
+  'arrow-upleft',
+  'chevron-left',
+  'chevron-right',
+  'expand-less',
+  'expand-more',
+  'unfold-less',
+  'unfold-more',
+] as const;
+
+export type NavigationIconTypes = typeof navigationTypes[number];
 
 type NavigationIconProps = {
   mode?: NavigationIconTypes;
@@ -30,6 +33,10 @@ export default function NavigationIcon({
   mode = 'arrow-right',
 }: NavigationIconProps) {
   return <ThemeIcon svg={mapMode(mode)} />;
+}
+
+export function isNavigationIcon(a: any): a is NavigationIconTypes {
+  return navigationTypes.includes(a);
 }
 
 function mapMode(mode: NavigationIconTypes) {
