@@ -1,7 +1,7 @@
 // Code by Ben Awad
 // from https://github.com/benawad/drag-n-drop-flatlist/blob/master/SortableList.tsx
 import * as React from 'react';
-import {Dimensions, LayoutChangeEvent} from 'react-native';
+import {Dimensions, LayoutChangeEvent, ViewStyle} from 'react-native';
 import {PanGestureHandler, State} from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
@@ -11,6 +11,7 @@ const {cond, eq, add, call, Value, event, or} = Animated;
 interface Props<T> {
   rowHeight: number;
   data: T[];
+  containerStyle?: ViewStyle;
   indexToKey: (index: number) => string;
   renderRow: (
     data: T,
@@ -263,7 +264,7 @@ export class SortableList<T> extends React.PureComponent<Props<T>, RState> {
         ) : null}
         <RecyclerListView
           ref={this.list}
-          style={{flex: 1}}
+          style={{flex: 1, ...this.props.containerStyle}}
           onScroll={this.handleScroll}
           onLayout={this.handleLayout}
           layoutProvider={this._layoutProvider}

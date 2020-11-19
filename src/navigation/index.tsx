@@ -134,6 +134,9 @@ const NavigationRoot = () => {
                   name="SortableFavoriteList"
                   component={SortableFavoriteList}
                   options={{
+                    gestureResponseDistance: {
+                      vertical: 100,
+                    },
                     transitionSpec: {
                       open: transitionSpec,
                       close: transitionSpec,

@@ -6,7 +6,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {ProfileStackParams} from '..';
 import {Close, Confirm} from '../../../assets/svg/icons/actions';
 import SvgDragHandle from '../../../assets/svg/icons/actions/DragHandle';
-import Button from '../../../components/button';
+import Button, {ButtonGroup} from '../../../components/button';
 import List from '../../../components/item-groups';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import MessageBox from '../../../message-box';
@@ -60,6 +60,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
         data={items}
         rowHeight={52}
         onSort={setSortedItems}
+        containerStyle={style.orderContainer}
         renderRow={(data, index, state, dragHandle) => {
           let opacity = state === 'placeholder' ? 0 : 1;
           if (state === 'dragging') {
@@ -81,7 +82,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
         )}
       />
 
-      <View style={style.buttons}>
+      <ButtonGroup>
         <Button
           onPress={() => navigation.goBack()}
           text="Avbryt"
@@ -95,7 +96,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
           icon={Confirm}
           iconPosition="right"
         />
-      </View>
+      </ButtonGroup>
     </SafeAreaView>
   );
 }
@@ -107,7 +108,8 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   error: {
     margin: theme.spacings.medium,
   },
-  buttons: {
-    padding: theme.spacings.medium,
+  orderContainer: {
+    flex: 1,
+    paddingTop: theme.spacings.medium,
   },
 }));

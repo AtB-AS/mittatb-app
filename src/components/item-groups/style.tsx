@@ -8,16 +8,17 @@ const useListStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   container: {
     flex: 1,
-    backgroundColor: theme.background.level0,
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.small,
-    borderRadius: 8,
+    borderRadius: theme.spacings.small,
+    overflow: 'hidden',
   },
   container__marginTop: {
     marginTop: theme.spacings.medium,
   },
   baseItem: {
     flex: 1,
+    backgroundColor: theme.background.level0,
     padding: theme.spacings.medium,
   },
   action: {
