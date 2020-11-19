@@ -1,14 +1,7 @@
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {
-  TouchableOpacity,
-  View,
-  ViewStyle,
-  StyleProp,
-  ActivityIndicator,
-  Dimensions,
-} from 'react-native';
+import {TouchableOpacity, View, ActivityIndicator} from 'react-native';
 import analytics from '@react-native-firebase/analytics';
 import {searchTrip} from '../../api';
 import {CancelToken, isCancel} from '../../api/client';
@@ -45,8 +38,6 @@ import DateInput, {DateOutput} from './DateInput';
 import Results from './Results';
 import {NoResultReason, SearchStateType} from './types';
 import FavoriteChips from '../../favorite-chips';
-
-import Animated, {Easing} from 'react-native-reanimated';
 import Bugsnag from '@bugsnag/react-native';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import {screenReaderPause} from '../../components/accessible-text';
@@ -54,8 +45,9 @@ import ThemeIcon from '../../components/theme-icon';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 import ThemeText from '../../components/text';
 import {useTranslation} from '../../utils/language';
-import {assistantTexts} from '../../translations';
+import {AssistantTexts} from '../../translations';
 import FadeBetween from './FadeBetween';
+import dictionary from '../../translations/dictionary';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -186,7 +178,6 @@ const Assistant: React.FC<Props> = ({
 
   const [date, setDate] = useState<DateOutput | undefined>();
   const {t} = useTranslation();
-
   const [
     tripPatterns,
     timeOfLastSearch,
@@ -203,8 +194,8 @@ const Assistant: React.FC<Props> = ({
     navigation.navigate('LocationSearch', {
       label:
         callerRouteParam === 'fromLocation'
-          ? t(assistantTexts.location.departurePicker.label)
-          : t(assistantTexts.location.destinationPicker.label),
+          ? t(AssistantTexts.location.departurePicker.label)
+          : t(AssistantTexts.location.destinationPicker.label),
       callerRouteName: AssistantRouteNameStatic,
       callerRouteParam,
       initialLocation,
@@ -224,19 +215,19 @@ const Assistant: React.FC<Props> = ({
               <LocationButton
                 accessible={true}
                 accessibilityLabel={
-                  t(assistantTexts.location.departurePicker.a11yLabel) +
+                  t(AssistantTexts.location.departurePicker.a11yLabel) +
                   screenReaderPause
                 }
                 accessibilityHint={
-                  t(assistantTexts.location.departurePicker.a11yHint) +
+                  t(AssistantTexts.location.departurePicker.a11yHint) +
                   screenReaderPause
                 }
                 accessibilityRole="button"
-                label={t(assistantTexts.location.departurePicker.label)}
+                label={t(AssistantTexts.location.departurePicker.label)}
                 placeholder={
                   updatingLocation
-                    ? t(assistantTexts.location.updatingLocation)
-                    : t(assistantTexts.location.departurePicker.placeholder)
+                    ? t(AssistantTexts.location.updatingLocation)
+                    : t(AssistantTexts.location.departurePicker.placeholder)
                 }
                 icon={
                   updatingLocation && !from ? (
@@ -252,8 +243,8 @@ const Assistant: React.FC<Props> = ({
               accessible={true}
               accessibilityLabel={
                 from?.resultType == 'geolocation'
-                  ? t(assistantTexts.location.locationButton.a11yLabel.update)
-                  : t(assistantTexts.location.locationButton.a11yLabel.use)
+                  ? t(AssistantTexts.location.locationButton.a11yLabel.update)
+                  : t(AssistantTexts.location.locationButton.a11yLabel.use)
               }
               accessibilityRole="button"
               hitSlop={insets.all(12)}
@@ -268,12 +259,12 @@ const Assistant: React.FC<Props> = ({
               <LocationButton
                 accessible={true}
                 accessibilityLabel={t(
-                  assistantTexts.location.destinationPicker.a11yLabel,
+                  AssistantTexts.location.destinationPicker.a11yLabel,
                 )}
                 accessibilityRole="button"
-                label={t(assistantTexts.location.destinationPicker.label)}
+                label={t(AssistantTexts.location.destinationPicker.label)}
                 placeholder={t(
-                  assistantTexts.location.destinationPicker.placeholder,
+                  AssistantTexts.location.destinationPicker.placeholder,
                 )}
                 location={to}
                 onPress={() => openLocationSearch('toLocation', to)}
@@ -285,7 +276,8 @@ const Assistant: React.FC<Props> = ({
               hitSlop={insets.all(12)}
               accessible={true}
               accessibilityLabel={
-                t(assistantTexts.location.swapButton.a11yLabel+ screenReaderPause
+                t(AssistantTexts.location.swapButton.a11yLabel) +
+                screenReaderPause
               }
               accessibilityRole="button"
             >
@@ -307,8 +299,8 @@ const Assistant: React.FC<Props> = ({
               {marginLeft: theme.spacings.medium},
             ]}
             chipActionHint={
-              'Aktiver for å bruke som ' +
-              (from ? 'destinasjon' : 'avreisested') +
+              t(AssistantTexts.favorites.favoriteChip.a11yHint) +
+              t(!!from ? dictionary.toPlace : dictionary.fromPlace) +
               screenReaderPause
             }
           />
@@ -384,12 +376,12 @@ const Assistant: React.FC<Props> = ({
       onRefresh={reload}
       isRefreshing={isSearching}
       useScroll={useScroll}
-      headerTitle={t(assistantTexts.header.title)}
+      headerTitle={t(AssistantTexts.header.title)}
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
       logoClick={{
         callback: resetView,
-        accessibilityLabel: t(assistantTexts.header.accessibility.logo),
+        accessibilityLabel: t(AssistantTexts.header.accessibility.logo),
       }}
       onFullscreenTransitionEnd={(fullHeight) => {
         if (fullHeight) {
@@ -397,7 +389,7 @@ const Assistant: React.FC<Props> = ({
         }
       }}
     >
-      <ScreenReaderAnnouncement message={translateSearchState(searchState)} />
+      <ScreenReaderAnnouncement message={searchStateToText(searchState)} />
       <Results
         tripPatterns={tripPatterns}
         isSearching={isSearching}
@@ -641,16 +633,15 @@ function translateLocation(location: Location | undefined): string {
   if (!location) return 'Undefined location';
   return `${location.id}--${location.name}--${location.locality}`;
 }
-function translateSearchState(
-  searchState: SearchStateType,
-): string | undefined {
+function searchStateToText(searchState: SearchStateType): string | undefined {
+  const {t} = useTranslation();
   switch (searchState) {
     case 'searching':
-      return 'Laster søkeresultater.';
+      return t(AssistantTexts.searchState.searching);
     case 'search-success':
-      return 'Søkeresultater er lastet inn.';
+      return t(AssistantTexts.searchState.searchSuccess);
     case 'search-empty-result':
-      return 'Fikk ingen søkeresultater.';
+      return t(AssistantTexts.searchState.searchEmptyResult);
     default:
       return;
   }

@@ -67,8 +67,8 @@ const App = () => {
                   <TicketContextProvider>
                     <RemoteConfigContextProvider>
                       <LanguageProvider value={currentLanguage}>
-                                           <NavigationRoot />
-                                         </LanguageProvider>
+                        <NavigationRoot />
+                      </LanguageProvider>
                     </RemoteConfigContextProvider>
                   </TicketContextProvider>
                 </GeolocationContextProvider>

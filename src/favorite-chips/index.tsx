@@ -11,10 +11,11 @@ import {LocationWithMetadata} from '../favorites/types';
 import {useReverseGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
 import {TabNavigatorParams} from '../navigation/TabNavigator';
-import ThemeIcon from '../components/theme-icon';
 import {screenReaderPause} from '../components/accessible-text';
 import Button, {ButtonProps} from '../components/button';
 import {StyleSheet, useTheme} from '../theme';
+import {FavoriteTexts} from '../translations';
+import {useTranslation} from '../utils/language';
 
 type Props = {
   onSelectLocation: (location: LocationWithMetadata) => void;
@@ -40,6 +41,7 @@ const FavoriteChips: React.FC<Props> = ({
   const navigation = useNavigation<ProfileNearbyScreenNavigationProp>();
   const {favorites} = useFavorites();
   const styles = useStyles();
+  const {t} = useTranslation();
   const {onCurrentLocation} = useCurrentLocationChip(onSelectLocation);
   const activeType = (type: ChipTypeGroup) => chipTypes.includes(type);
 
@@ -50,7 +52,7 @@ const FavoriteChips: React.FC<Props> = ({
           {activeType('location') && (
             <FavoriteChip
               mode="primary2"
-              text="Posisjon"
+              text={t(FavoriteTexts.chips.currentLocation)}
               accessibilityRole="button"
               accessibilityHint={chipActionHint ?? ''}
               icon={CurrentLocationArrow}
@@ -59,7 +61,7 @@ const FavoriteChips: React.FC<Props> = ({
           )}
           {activeType('map') && (
             <FavoriteChip
-              text="Velg i kart"
+              text={t(FavoriteTexts.chips.mapLocation)}
               accessibilityRole="button"
               icon={MapPointPin}
               onPress={onMapSelection}
@@ -100,7 +102,7 @@ const FavoriteChips: React.FC<Props> = ({
         {activeType('add-favorite') && (
           <FavoriteChip
             mode="secondary"
-            text={'Legg til favoritt'}
+            text={t(FavoriteTexts.chips.addFavorite)}
             accessibilityRole="button"
             icon={Add}
             onPress={() =>

@@ -3,10 +3,10 @@ import {useState, useEffect} from 'react';
 import {initLobot} from '@leile/lobo-t';
 
 export enum Language {
-  nb,
-  en,
+  Norwegian = 'nb',
+  English = 'en',
 }
-const DEFAULT_LANGUAGE = Language.en;
+const DEFAULT_LANGUAGE = Language.Norwegian;
 
 const lobot = initLobot<typeof Language>(DEFAULT_LANGUAGE);
 
@@ -35,8 +35,10 @@ function preferredLocale(): RNLocalize.Locale | undefined {
   const locale = preferredSystemLocales.find(
     (l) => !!getAsAppLanguage(l.languageCode),
   );
+  console.log('locale', locale);
   return locale;
 }
 function getAsAppLanguage(arg: string): Language | undefined {
-  return Language[arg as keyof typeof Language];
+  if (arg == Language.English) return Language.English;
+  if (arg == Language.Norwegian) return Language.Norwegian;
 }
