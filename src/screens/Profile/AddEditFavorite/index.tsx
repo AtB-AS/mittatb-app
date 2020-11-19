@@ -4,6 +4,7 @@
  * Modifications: Copyright (c) 2020 Andre 'Staltz' Medeiros
  * MIT
  */
+import {Location} from '@entur/sdk';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useRef, useState} from 'react';
@@ -19,21 +20,19 @@ import {Modalize} from 'react-native-modalize';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ProfileStackParams} from '..';
 import {Add, Close, Confirm, Remove} from '../../../assets/svg/icons/actions/';
-import {ArrowLeft, Expand} from '../../../assets/svg/icons/navigation/';
+import {Expand} from '../../../assets/svg/icons/navigation/';
 import {MapPointPin} from '../../../assets/svg/icons/places';
 import Button from '../../../components/button';
 import Input from '../../../components/input';
-import {useFavorites} from '../../../favorites/FavoritesContext';
-import {useLocationSearchValue} from '../../../location-search';
-import {RootStackParamList} from '../../../navigation';
-import ScreenHeader from '../../../ScreenHeader';
-import {StyleSheet, Theme} from '../../../theme';
-import EmojiPopup from './EmojiPopup';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
-import {Location} from '@entur/sdk';
+import {useFavorites} from '../../../favorites/FavoritesContext';
 import {LocationFavorite} from '../../../favorites/types';
+import {useLocationSearchValue} from '../../../location-search';
+import {RootStackParamList} from '../../../navigation';
+import {StyleSheet, Theme} from '../../../theme';
 import BackHeader from '../BackHeader';
+import EmojiPopup from './EmojiPopup';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
@@ -95,7 +94,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
       // Add new
       await addFavorite(newFavorite);
     }
-    navigation.navigate('ProfileHome');
+    navigation.goBack();
   };
   const deleteItem = async () => {
     Alert.alert(
