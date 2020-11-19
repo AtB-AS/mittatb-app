@@ -109,7 +109,6 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     margin: theme.spacings.medium,
   },
   orderContainer: {
-    flex: 1,
     paddingTop: theme.spacings.medium,
   },
 }));
