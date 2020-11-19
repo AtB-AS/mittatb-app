@@ -138,11 +138,11 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
       <View style={css.innerContainer}>
         <Input.Group>
-          <Input.Text
+          <Input.Button
             label="Sted"
             value={location?.label}
             placeholder="Søk etter adresse eller stoppested"
-            onFocus={() =>
+            onPress={() =>
               navigation.navigate('LocationSearch', {
                 callerRouteName: AddEditRouteNameStatic,
                 callerRouteParam: 'searchLocation',
@@ -151,8 +151,6 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
                 initialLocation: location,
               })
             }
-            autoCorrect={false}
-            autoCompleteType="off"
           />
         </Input.Group>
 

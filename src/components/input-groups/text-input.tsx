@@ -22,9 +22,9 @@ type TextProps = InternalTextInputProps & {
 };
 
 const TextInput = forwardRef<InternalTextInput, TextProps>(
-  ({label, onFocus, onBlur, showClear, onClear, ...props}, ref) => {
+  ({label, onFocus, onBlur, showClear, onClear, style, ...props}, ref) => {
     const {theme, themeName} = useTheme();
-    const style = useInputStyle(theme, themeName);
+    const styles = useInputStyle(theme, themeName);
     const [isFocused, setIsFocused] = useState(Boolean(props?.autoFocus));
 
     const onFocusEvent = (e: FocusEvent) => {
@@ -42,17 +42,17 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
       : {borderColor: theme.border.focus};
 
     return (
-      <View style={style.container}>
+      <View style={styles.container}>
         <InternalTextInput
           ref={ref}
-          style={[style.input, borderColor]}
+          style={[styles.input, style, borderColor]}
           placeholderTextColor={theme.text.colors.faded}
           onFocus={onFocusEvent}
           onBlur={onBlurEvent}
           {...props}
         />
         {showClear ? (
-          <View style={style.inputClear}>
+          <View style={styles.inputClear}>
             <TouchableOpacity
               accessible={true}
               accessibilityRole="button"
@@ -64,7 +64,7 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
             </TouchableOpacity>
           </View>
         ) : null}
-        <ThemeText type="lead" style={style.label}>
+        <ThemeText type="lead" style={styles.label}>
           {label}
         </ThemeText>
       </View>
@@ -79,7 +79,6 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     backgroundColor: theme.background.level1,
     color: theme.text.colors.primary,
     borderWidth: theme.border.width.slim,
-    borderRadius: theme.border.radius.regular,
     borderColor: theme.background.level1,
     paddingLeft: 60,
     paddingRight: 40,
