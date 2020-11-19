@@ -3,15 +3,23 @@ import {ImageStyle, StyleProp, TextStyle, View, ViewStyle} from 'react-native';
 import TextInput from './text-input';
 import ButtonInput from './button-input';
 import {StyleSheet, Theme} from '../../theme';
+import LocationInput from './location-input';
 
-export type ListGroupProps = PropsWithChildren<{}>;
+export type ListGroupProps = PropsWithChildren<{
+  withPadding?: boolean;
+}>;
 
-function InputGroup({children}: ListGroupProps) {
+function InputGroup({children, withPadding}: ListGroupProps) {
   const style = useInputGroupStyle();
   const len = React.Children.count(children) - 1;
 
   return (
-    <View style={style.container}>
+    <View
+      style={[
+        style.container,
+        withPadding ? style.container__padded : undefined,
+      ]}
+    >
       {React.Children.map(children, (child, index) => {
         if (!React.isValidElement(child)) return child;
 
@@ -49,6 +57,7 @@ const Input = {
   Group: InputGroup,
   Text: TextInput,
   Button: ButtonInput,
+  Location: LocationInput,
 };
 
 export default Input;
@@ -59,9 +68,11 @@ const useInputGroupStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     height: 1,
   },
   container: {
+    overflow: 'hidden',
+  },
+  container__padded: {
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.small,
-    overflow: 'hidden',
   },
   first: {
     borderTopLeftRadius: theme.border.radius.regular,

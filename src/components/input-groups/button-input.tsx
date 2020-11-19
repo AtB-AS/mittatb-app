@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  AccessibilityProps,
   ImageStyle,
   StyleProp,
   TextStyle,
@@ -8,31 +9,38 @@ import {
   ViewStyle,
 } from 'react-native';
 import {StyleSheet} from '../../theme';
+import insets from '../../utils/insets';
 import ThemeText from '../text';
 import NavigationIcon, {
   isNavigationIcon,
   NavigationIconTypes,
 } from '../theme-icon/navigation-icon';
 
-type ButtonInputProps = {
+export type ButtonInputProps = {
   label: string;
   onPress(): void;
-  onHandlerPress?(): void;
+  onIconPress?(): void;
+  iconAccessibility?: AccessibilityProps;
   placeholder?: string;
   value?: string | JSX.Element;
   icon?: NavigationIconTypes | JSX.Element;
   type?: 'inline' | 'block';
   style?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
-};
+} & AccessibilityProps;
+
 export default function ButtonInput({
   onPress,
-  onHandlerPress,
   value,
   placeholder,
   label,
+
   icon,
+  onIconPress,
+  iconAccessibility,
+
   style,
   type = 'block',
+  ...props
 }: ButtonInputProps) {
   const styles = useSymbolPickerStyle();
   const iconEl = isNavigationIcon(icon) ? <NavigationIcon mode={icon} /> : icon;
@@ -46,12 +54,19 @@ export default function ButtonInput({
     type == 'inline' ? styles.value__inline : undefined,
   ];
 
-  const handlerInBody = !onHandlerPress ? (
+  const handlerWithoutPress = !onIconPress ? (
     <View style={styles.iconContainer}>{iconEl}</View>
   ) : undefined;
 
-  const handlerOutOfBody = onHandlerPress ? (
-    <View style={styles.iconContainer}>{iconEl}</View>
+  const handlerWithPress = onIconPress ? (
+    <TouchableOpacity
+      hitSlop={insets.all(12)}
+      onPress={onIconPress}
+      style={styles.iconContainer}
+      {...iconAccessibility}
+    >
+      <View>{iconEl}</View>
+    </TouchableOpacity>
   ) : undefined;
 
   const valueEl =
@@ -65,14 +80,18 @@ export default function ButtonInput({
 
   return (
     <View style={wrapperStyle}>
-      <TouchableOpacity onPress={onPress} style={[styles.container, style]}>
+      <TouchableOpacity
+        onPress={onPress}
+        style={[styles.container, style]}
+        {...props}
+      >
         <View style={valueStyle}>{valueEl}</View>
         <ThemeText type="lead" style={styles.label}>
           {label}
         </ThemeText>
-        {handlerInBody}
+        {handlerWithoutPress}
       </TouchableOpacity>
-      {handlerOutOfBody}
+      {handlerWithPress}
     </View>
   );
 }
@@ -88,8 +107,7 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
     paddingLeft: 60,
     paddingRight: 60,
     flexDirection: 'row',
-    backgroundColor: theme.background.level1,
-    borderRadius: theme.border.radius.regular,
+    backgroundColor: theme.background.level0,
   },
   wrapper: {},
   wrapper__inline: {

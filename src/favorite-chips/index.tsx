@@ -19,6 +19,7 @@ type Props = {
   onSelectLocation: (location: LocationWithMetadata) => void;
   onMapSelection?: () => void;
   containerStyle?: StyleProp<ViewStyle>;
+  contentContainerStyle?: StyleProp<ViewStyle>;
   chipTypes?: ChipTypeGroup[];
   chipActionHint?: string;
 };
@@ -31,6 +32,7 @@ type ProfileNearbyScreenNavigationProp = StackNavigationProp<
 const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
   containerStyle,
+  contentContainerStyle,
   onMapSelection = () => {},
   chipTypes = ['favorites', 'location', 'map'],
   chipActionHint,
@@ -44,7 +46,7 @@ const FavoriteChips: React.FC<Props> = ({
   return (
     <View style={containerStyle}>
       {(activeType('location') || activeType('map')) && (
-        <View style={styles.staticChipsContainer}>
+        <View style={[styles.staticChipsContainer, contentContainerStyle]}>
           {activeType('location') && (
             <FavoriteChip
               mode="primary2"
@@ -70,6 +72,7 @@ const FavoriteChips: React.FC<Props> = ({
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
+        contentContainerStyle={contentContainerStyle}
       >
         {activeType('favorites') &&
           favorites.map((fav, i) => (

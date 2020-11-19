@@ -142,18 +142,16 @@ const LocationSearch: React.FC<Props> = ({
   return (
     <SafeAreaView style={styles.container}>
       <View style={{paddingTop: 12, flex: 1}}>
-        <View style={{marginHorizontal: 20}}>
-          <Header
-            leftButton={{
-              onPress: () => navigation.goBack(),
-              accessible: true,
-              accessibilityRole: 'button',
-              accessibilityLabel: 'Gå tilbake',
-              icon: <ThemeIcon svg={Close} />,
-            }}
-            title="Søk"
-          />
-        </View>
+        <Header
+          leftButton={{
+            onPress: () => navigation.goBack(),
+            accessible: true,
+            accessibilityRole: 'button',
+            accessibilityLabel: 'Gå tilbake',
+            icon: <ThemeIcon svg={Close} />,
+          }}
+          title="Søk"
+        />
         <ScreenReaderAnnouncement message={errorMessage} />
 
         <View style={[{marginTop: 12}, styles.contentBlock]}>
@@ -175,7 +173,8 @@ const LocationSearch: React.FC<Props> = ({
             onSelectLocation={onSelect}
             onMapSelection={onMapSelection}
             chipTypes={favoriteChipTypes}
-            containerStyle={[styles.contentBlock, styles.chipBox]}
+            containerStyle={styles.chipBox}
+            contentContainerStyle={styles.contentBlock}
           />
         </View>
 

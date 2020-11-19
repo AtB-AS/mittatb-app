@@ -137,7 +137,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
       />
 
       <View style={css.innerContainer}>
-        <Input.Group>
+        <Input.Group withPadding>
           <Input.Button
             label="Sted"
             value={location?.label}
@@ -154,7 +154,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           />
         </Input.Group>
 
-        <Input.Group>
+        <Input.Group withPadding>
           <Input.Text
             label="Navn"
             onChangeText={setName}
@@ -166,7 +166,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           />
         </Input.Group>
 
-        <Input.Group>
+        <Input.Group withPadding>
           <Input.Button
             onPress={openEmojiPopup}
             label="Ikon"

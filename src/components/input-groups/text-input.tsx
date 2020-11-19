@@ -76,10 +76,10 @@ export default TextInput;
 
 const useInputStyle = StyleSheet.createTheme((theme) => ({
   input: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.background.level0,
     color: theme.text.colors.primary,
     borderWidth: theme.border.width.slim,
-    borderColor: theme.background.level1,
+    borderColor: theme.background.level0,
     paddingLeft: 60,
     paddingRight: 40,
     padding: theme.spacings.medium,
