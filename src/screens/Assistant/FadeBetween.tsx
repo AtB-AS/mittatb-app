@@ -29,7 +29,7 @@ export default function FadeBetween({
   children,
   visibleKey,
   duration,
-  isParentAnimating,
+  isParentAnimating = false,
 }: FadeProps) {
   const progress = useValue<number>(0);
   const clock = useRef<Clock>(new Clock()).current;
@@ -44,7 +44,7 @@ export default function FadeBetween({
           child={child}
           visibleKey={visibleKey}
           progress={progress}
-          isAnimating={!!isParentAnimating}
+          isAnimating={isParentAnimating}
         />
       ))}
     </View>
