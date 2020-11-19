@@ -13,7 +13,6 @@ import {screenReaderPause} from '../../components/accessible-text';
 import DisappearingHeader from '../../components/disappearing-header';
 import Input from '../../components/input-groups';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
-import SearchGroup from '../../components/search-button/search-group';
 import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
 import FavoriteChips from '../../favorite-chips';
