@@ -2,6 +2,8 @@ import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
 import {View} from 'react-native';
+import {PanGestureHandler} from 'react-native-gesture-handler';
+import Animated from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ProfileStackParams} from '..';
 import {Close, Confirm} from '../../../assets/svg/icons/actions';
@@ -59,28 +61,33 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
 
       <SortableList
         data={items}
+        // @TODO Find solution for not hardcoding this.
         rowHeight={52}
         onSort={setSortedItems}
         containerStyle={style.orderContainer}
-        renderRow={(data, index, state, dragHandle) => {
+        renderRow={(data, index, state, onGestureEvent) => {
           let opacity = state === 'placeholder' ? 0 : 1;
           if (state === 'dragging') {
             opacity -= 0.5;
           }
           return (
-            <View style={{flex: 1, opacity}}>
-              <List.Group>
-                <List.Favorite favorite={data} icon={dragHandle} />
-              </List.Group>
-            </View>
+            <PanGestureHandler
+              maxPointers={1}
+              onGestureEvent={onGestureEvent}
+              onHandlerStateChange={onGestureEvent}
+            >
+              <Animated.View style={{flex: 1, opacity}}>
+                <List.Group>
+                  <List.Favorite
+                    favorite={data}
+                    icon={<ThemeIcon svg={SvgDragHandle} />}
+                  />
+                </List.Group>
+              </Animated.View>
+            </PanGestureHandler>
           );
         }}
         indexToKey={(i) => items[i].id}
-        renderDragHandle={() => (
-          <View hitSlop={insets.all(12)}>
-            <ThemeIcon svg={SvgDragHandle} />
-          </View>
-        )}
       />
 
       <ButtonGroup>
@@ -110,6 +117,6 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     margin: theme.spacings.medium,
   },
   orderContainer: {
-    paddingTop: theme.spacings.medium,
+    marginTop: theme.spacings.medium,
   },
 }));

@@ -252,6 +252,7 @@ const Assistant: React.FC<Props> = ({
             onSelectLocation={fillNextAvailableLocation}
             containerStyle={styles.fadeChild}
             contentContainerStyle={{
+              // @TODO Find solution for not hardcoding this. e.g. do proper math
               paddingLeft: theme.spacings.medium,
               paddingRight: theme.spacings.medium / 2,
             }}

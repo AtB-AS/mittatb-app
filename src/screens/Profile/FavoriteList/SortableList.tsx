@@ -2,7 +2,7 @@
 // from https://github.com/benawad/drag-n-drop-flatlist/blob/master/SortableList.tsx
 import * as React from 'react';
 import {Dimensions, LayoutChangeEvent, ViewStyle} from 'react-native';
-import {PanGestureHandler, State} from 'react-native-gesture-handler';
+import {State} from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 
@@ -17,9 +17,8 @@ interface Props<T> {
     data: T,
     index: number,
     state: 'normal' | 'dragging' | 'placeholder',
-    dragHandle: JSX.Element,
+    dragEvent: any,
   ) => JSX.Element | null;
-  renderDragHandle: () => JSX.Element;
   onSort: (newData: T[]) => void;
 }
 
@@ -200,13 +199,7 @@ export class SortableList<T> extends React.PureComponent<Props<T>, RState> {
       data,
       index,
       this.state.draggingIdx === index ? 'placeholder' : 'normal',
-      <PanGestureHandler
-        maxPointers={1}
-        onGestureEvent={this.onGestureEvent}
-        onHandlerStateChange={this.onGestureEvent}
-      >
-        <Animated.View>{this.props.renderDragHandle()}</Animated.View>
-      </PanGestureHandler>,
+      this.onGestureEvent,
     );
   };
 
@@ -258,7 +251,7 @@ export class SortableList<T> extends React.PureComponent<Props<T>, RState> {
               dataProvider.getDataForIndex(draggingIdx),
               draggingIdx,
               'dragging',
-              this.props.renderDragHandle(),
+              null,
             )}
           </Animated.View>
         ) : null}
