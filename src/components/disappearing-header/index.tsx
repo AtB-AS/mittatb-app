@@ -29,7 +29,10 @@ import SvgBanner from '../../assets/svg/icons/other/Banner';
 import ThemeIcon from '../theme-icon';
 
 type Props = {
-  renderHeader(isFullHeight: boolean): React.ReactNode;
+  renderHeader(
+    isFullHeight: boolean,
+    isParentAnimating: boolean,
+  ): React.ReactNode;
   onRefresh?(): void;
   headerHeight?: number;
   isRefreshing?: boolean;
@@ -85,6 +88,7 @@ const DisappearingHeader: React.FC<Props> = ({
     onHeaderContentLayout,
   } = useCalculateHeaderContentHeight();
   const [fullheightTransitioned, setTransitioned] = useState(isFullHeight);
+  const [animating, setAnimating] = useState<boolean>(false);
   const {width: windowWidth} = useWindowDimensions();
   const scrollableContentRef = React.useRef<ScrollView>(null);
   useScrollToTop(
@@ -113,19 +117,19 @@ const DisappearingHeader: React.FC<Props> = ({
     [contentHeight, contentOffset],
   );
 
-  useEffect(
-    () =>
-      Animated.timing(fullscreenOffsetRef, {
-        toValue: isFullHeight ? 0 : contentOffset,
-        duration: 400,
-        easing: Easing.inOut(Easing.ease),
-        useNativeDriver: true,
-      }).start(function () {
-        setTransitioned(isFullHeight);
-        onFullscreenTransitionEnd?.(isFullHeight);
-      }),
-    [isFullHeight],
-  );
+  useEffect(() => {
+    setAnimating(true);
+    Animated.timing(fullscreenOffsetRef, {
+      toValue: isFullHeight ? 0 : contentOffset,
+      duration: 400,
+      easing: Easing.inOut(Easing.ease),
+      useNativeDriver: true,
+    }).start(function () {
+      setAnimating(false);
+      setTransitioned(isFullHeight);
+      onFullscreenTransitionEnd?.(isFullHeight);
+    });
+  }, [isFullHeight]);
 
   useEffect(
     () => fullscreenOffsetRef.setValue(isFullHeight ? 0 : contentOffset),
@@ -205,7 +209,7 @@ const DisappearingHeader: React.FC<Props> = ({
             </View>
 
             <View onLayout={onHeaderContentLayout}>
-              {renderHeader(fullheightTransitioned)}
+              {renderHeader(fullheightTransitioned, animating)}
             </View>
           </Animated.View>
 

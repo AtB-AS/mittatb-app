@@ -209,7 +209,7 @@ const Assistant: React.FC<Props> = ({
   const isHeaderFullHeight = !from || !to;
 
   const renderHeader = useCallback(
-    () => (
+    (_, isParentAnimating) => (
       <View>
         <SearchGroup>
           <View style={styles.searchButtonContainer}>
@@ -282,7 +282,7 @@ const Assistant: React.FC<Props> = ({
 
         <FadeBetween
           visibleKey={isHeaderFullHeight ? 'dateInput' : 'favoriteChips'}
-          style={{minHeight: 64}}
+          isParentAnimating={isParentAnimating}
         >
           <FavoriteChips
             key="favoriteChips"
