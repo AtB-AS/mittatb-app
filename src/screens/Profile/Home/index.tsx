@@ -2,7 +2,7 @@ import {PRIVACY_POLICY_URL} from '@env';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
-import {Linking} from 'react-native';
+import {Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
 import useChatIcon from '../../../chat/use-chat-icon';
@@ -11,6 +11,7 @@ import ThemeIcon from '../../../components/theme-icon';
 import {TabNavigatorParams} from '../../../navigation/TabNavigator';
 import FullScreenHeader from '../../../ScreenHeader/full-header';
 import LogoOutline from '../../../ScreenHeader/LogoOutline';
+import {StyleSheet, Theme} from '../../../theme';
 import {useNavigateHome} from '../../../utils/navigation';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
@@ -30,9 +31,10 @@ type ProfileScreenProps = {
 export default function ProfileHome({navigation}: ProfileScreenProps) {
   const navigateHome = useNavigateHome();
   const chatIcon = useChatIcon();
+  const style = useProfileHomeStyle();
 
   return (
-    <>
+    <View style={style.container}>
       <FullScreenHeader
         title="Mitt AtB"
         leftButton={{
@@ -64,6 +66,13 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           />
         </List.Group>
       </ScrollView>
-    </>
+    </View>
   );
 }
+
+const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+  container: {
+    backgroundColor: theme.background.level1,
+    flex: 1,
+  },
+}));

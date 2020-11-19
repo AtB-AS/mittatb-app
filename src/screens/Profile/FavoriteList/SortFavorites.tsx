@@ -8,6 +8,7 @@ import {Close, Confirm} from '../../../assets/svg/icons/actions';
 import SvgDragHandle from '../../../assets/svg/icons/actions/DragHandle';
 import Button, {ButtonGroup} from '../../../components/button';
 import List from '../../../components/item-groups';
+import ThemeIcon from '../../../components/theme-icon';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import MessageBox from '../../../message-box';
 import {TabNavigatorParams} from '../../../navigation/TabNavigator';
@@ -77,7 +78,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
         indexToKey={(i) => items[i].id}
         renderDragHandle={() => (
           <View hitSlop={insets.all(12)}>
-            <SvgDragHandle />
+            <ThemeIcon svg={SvgDragHandle} />
           </View>
         )}
       />
