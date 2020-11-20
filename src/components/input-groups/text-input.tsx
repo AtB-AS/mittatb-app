@@ -1,6 +1,7 @@
 import React, {forwardRef, useState} from 'react';
 import {
   NativeSyntheticEvent,
+  Platform,
   TextInput as InternalTextInput,
   TextInputFocusEventData,
   TextInputProps as InternalTextInputProps,
@@ -82,7 +83,13 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     borderColor: theme.background.level0,
     paddingLeft: 60,
     paddingRight: 40,
-    padding: theme.spacings.medium,
+
+    // There are some oddities with handling padding
+    // on Android and fonts: https://codeburst.io/react-native-quirks-2fb1ae0bbf80
+    paddingBottom:
+      theme.spacings.medium - Platform.select({android: 4, default: 0}),
+    paddingTop:
+      theme.spacings.medium - Platform.select({android: 5, default: 0}),
     fontSize: theme.text.body.fontSize,
   },
   container: {
