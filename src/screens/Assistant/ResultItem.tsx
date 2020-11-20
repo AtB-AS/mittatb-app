@@ -25,6 +25,8 @@ import {flatMap} from '../../utils/array';
 import {getReadableModeName} from '../../utils/transportation-names';
 import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
+import {AssistantResultTexts} from '../../translations/screens/assistant/Assistant';
+import {useTranslation} from '../../utils/language';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -56,6 +58,7 @@ const ResultItemHeader: React.FC<{
   const quayName = getFromLeg(tripPattern.legs);
   const styles = useThemeStyles();
   const durationText = secondsToDurationShort(tripPattern.duration);
+  const {t} = useTranslation();
 
   const quayLeg = tripPattern.legs.find(legWithQuay);
   const timePrefix =
@@ -78,7 +81,7 @@ const ResultItemHeader: React.FC<{
 
       <SituationWarningIcon
         situations={flatMap(tripPattern.legs, (leg) => leg.situations)}
-        accessibilityLabel="Denne reisen har driftsmeldinger. Se detaljer for mer info"
+        accessibilityLabel={t(AssistantResultTexts.resultItem.hasSituationsTip)}
         style={styles.warningIcon}
       />
     </View>
@@ -165,6 +168,7 @@ const MINIMUM_WAIT_IN_SECONDS = 30;
 const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   const styles = useLegStyles();
   const showWaitTime = Boolean(nextLeg);
+  const {t} = useTranslation();
   const waitTimeInSeconds = !nextLeg
     ? 0
     : secondsBetween(leg.expectedEndTime, nextLeg?.expectedStartTime);
@@ -186,8 +190,10 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 
   const walkTime = secondsToDuration(leg.duration ?? 0);
   const text = !isWaitTimeOfSignificance
-    ? `Gå ${walkTime}`
-    : `Gå ${walkTime}. Vent ${secondsToDuration(waitTimeInSeconds)}`;
+    ? t(AssistantResultTexts.resultItem.footLeg.walkLabel(walkTime))
+    : t(AssistantResultTexts.resultItem.footLeg.walkLabel(walkTime)) +
+      '. ' +
+      t(AssistantResultTexts.resultItem.footLeg.waitLabel(walkTime));
 
   return (
     <View style={styles.legContainer}>

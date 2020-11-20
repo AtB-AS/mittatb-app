@@ -10,6 +10,7 @@ import {
 import nb from 'date-fns/locale/nb';
 
 import humanizeDuration from 'humanize-duration';
+import {useTranslation, Language} from './language';
 const shortHumanizer = humanizeDuration.humanizer({
   language: 'shortNo',
   languages: {
@@ -43,13 +44,14 @@ export function secondsToMinutesShort(seconds: number): string {
 
 export function secondsToDuration(
   seconds: number,
-  language: string = 'no',
   opts?: humanizeDuration.Options,
 ): string {
+  const {language} = useTranslation();
+  const currentLanguage = language === Language.Norwegian ? 'no' : language;
   return humanizeDuration(seconds * 1000, {
     units: ['d', 'h', 'm'],
     round: true,
-    language,
+    language: currentLanguage,
     ...opts,
   });
 }
@@ -65,7 +67,7 @@ export function secondsBetween(
 
 export function formatToClock(isoDate: string | Date) {
   const parsed = isoDate instanceof Date ? isoDate : parseISO(isoDate);
-  return format(parsed, 'HH:mm');
+  return formatLocaleTime(parsed);
 }
 
 /**
@@ -82,7 +84,7 @@ export function formatToClockOrRelativeMinutes(
   const diff = secondsBetween(new Date(), parsed);
 
   if (isInThePast(parsed) || diff / 60 >= minuteThreshold) {
-    return format(parsed, 'HH:mm');
+    return formatLocaleTime(parsed);
   }
 
   if (diff / 60 <= 1) {
@@ -91,7 +93,15 @@ export function formatToClockOrRelativeMinutes(
 
   return secondsToMinutesShort(diff);
 }
-
+export function formatLocaleTime(date: Date) {
+  const {language} = useTranslation();
+  switch (language) {
+    case Language.Norwegian:
+      return format(date, 'HH:mm');
+    case Language.English:
+      return format(date, 'h:mm a');
+  }
+}
 export function isInThePast(isoDate: string | Date) {
   return isPast(isoDate instanceof Date ? isoDate : parseISO(isoDate));
 }
