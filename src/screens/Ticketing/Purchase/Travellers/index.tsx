@@ -92,9 +92,7 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
         <MessageBox type="info" title="Beta-begrensning">
           <ThemeText type="label">
             Det er foreløpig kun mulig å kjøpe enkeltbillett voksen for buss og
-            trikk. Bruk{' '}
-            <Text style={{textDecorationLine: 'underline'}}>AtB Mobillett</Text>{' '}
-            for å kjøpe andre billetter.
+            trikk. Bruk AtB Mobillett for å kjøpe andre billetter.
           </ThemeText>
         </MessageBox>
       )}
