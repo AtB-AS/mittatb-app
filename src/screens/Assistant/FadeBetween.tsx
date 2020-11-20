@@ -5,10 +5,9 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {Text, View, ViewStyle} from 'react-native';
+import {View, ViewStyle} from 'react-native';
 import Animated, {
   block,
-  call,
   Clock,
   clockRunning,
   cond,
@@ -28,7 +27,6 @@ type FadeProps = {
   style?: ViewStyle;
   children: [ReactElement, ReactElement];
   duration?: number;
-  isParentAnimating?: boolean;
 };
 
 export default function FadeBetween({
@@ -36,11 +34,9 @@ export default function FadeBetween({
   children,
   visibleKey,
   duration,
-  isParentAnimating = false,
 }: FadeProps) {
   const progress = useValue<number>(0);
   const clock = useRef<Clock>(new Clock()).current;
-  const [isAnimating, setIsAnimating] = useState(false);
   const [init, setInit] = useState(false);
 
   useEffect(() => {
@@ -48,11 +44,9 @@ export default function FadeBetween({
     setInit(true);
   }, []);
 
-  useCode(
-    () =>
-      init && set(progress, runTiming(clock, 0, 1, duration, setIsAnimating)),
-    [visibleKey],
-  );
+  useCode(() => init && set(progress, runTiming(clock, 0, 1, duration)), [
+    visibleKey,
+  ]);
 
   return (
     <View style={style}>
@@ -62,7 +56,6 @@ export default function FadeBetween({
           child={child}
           visibleKey={visibleKey}
           progress={progress}
-          isAnimating={isParentAnimating || isAnimating}
         />
       ))}
     </View>
@@ -73,12 +66,10 @@ function AnimatedChild({
   child,
   visibleKey,
   progress,
-  isAnimating,
 }: {
   child: ReactElement;
   visibleKey: string;
   progress: Animated.Value<number>;
-  isAnimating: boolean;
 }) {
   const visibleChild = child.key !== visibleKey;
 
@@ -87,14 +78,10 @@ function AnimatedChild({
     outputRange: visibleChild ? [0, 1] : [1, 0],
   });
 
-  const isPreviousChildWhenAnimating =
-    (visibleChild && !isAnimating) || (!visibleChild && isAnimating);
-
   return (
     <Animated.View
       style={{
-        position: isPreviousChildWhenAnimating ? 'relative' : 'absolute',
-        width: visibleChild && isAnimating ? '100%' : undefined,
+        position: visibleChild ? 'relative' : 'absolute',
         opacity,
       }}
       pointerEvents={visibleChild ? 'auto' : 'none'}
@@ -109,7 +96,6 @@ function runTiming(
   from: number,
   to: number,
   duration: number = 400,
-  setIsAnimating: (isAnimating: boolean) => void,
 ) {
   const state = {
     finished: new Value(0),
@@ -126,7 +112,6 @@ function runTiming(
 
   return block([
     cond(clockRunning(clock), 0, [
-      call([], () => setIsAnimating(true)),
       // If the clock isn't running we reset all the animation params and start the clock
       set(state.finished, 0),
       set(state.time, 0),
@@ -139,10 +124,6 @@ function runTiming(
     timing(clock, state, config),
     // if the animation is over we stop the clock
     cond(state.finished, debug('stop clock', stopClock(clock))),
-    cond(
-      state.finished,
-      call([], () => setIsAnimating(false)),
-    ),
     // the block returns the updated position
     state.position,
   ]);

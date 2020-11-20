@@ -27,6 +27,7 @@ import {StyleSheet} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
 import SvgBanner from '../../assets/svg/icons/other/Banner';
 import ThemeIcon from '../theme-icon';
+import useConditionalMemo from '../../utils/use-conditional-memo';
 
 type Props = {
   renderHeader(
@@ -80,15 +81,15 @@ const DisappearingHeader: React.FC<Props> = ({
 
   onFullscreenTransitionEnd,
 }) => {
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const {
     boxHeight,
     contentHeight,
     contentOffset,
     onScreenHeaderLayout,
     onHeaderContentLayout,
-  } = useCalculateHeaderContentHeight();
+  } = useCalculateHeaderContentHeight(isAnimating);
   const [fullheightTransitioned, setTransitioned] = useState(isFullHeight);
-  const [animating, setAnimating] = useState<boolean>(false);
   const {width: windowWidth} = useWindowDimensions();
   const scrollableContentRef = React.useRef<ScrollView>(null);
   useScrollToTop(
@@ -118,14 +119,14 @@ const DisappearingHeader: React.FC<Props> = ({
   );
 
   useEffect(() => {
-    setAnimating(true);
+    setIsAnimating(true);
     Animated.timing(fullscreenOffsetRef, {
       toValue: isFullHeight ? 0 : contentOffset,
       duration: 400,
       easing: Easing.inOut(Easing.ease),
       useNativeDriver: true,
     }).start(function () {
-      setAnimating(false);
+      setIsAnimating(false);
       setTransitioned(isFullHeight);
       onFullscreenTransitionEnd?.(isFullHeight);
     });
@@ -209,7 +210,7 @@ const DisappearingHeader: React.FC<Props> = ({
             </View>
 
             <View onLayout={onHeaderContentLayout}>
-              {renderHeader(fullheightTransitioned, animating)}
+              {renderHeader(fullheightTransitioned, isAnimating)}
             </View>
           </Animated.View>
 
@@ -342,7 +343,7 @@ const throttle = <F extends (...args: any[]) => any>(
 // way to reasonably calculate this.
 const DEFAULT_TABBAR_HEIGHT = 44;
 
-function useCalculateHeaderContentHeight() {
+function useCalculateHeaderContentHeight(isAnimating: boolean) {
   // Using safeAreaFrame for height instead of dimensions as
   // dimensions are problamatic on Android: https://github.com/facebook/react-native/issues/23693
   const {height: actualHeight} = useSafeAreaFrame();
@@ -356,11 +357,18 @@ function useCalculateHeaderContentHeight() {
   const boxHeight =
     actualHeight - screenHeaderHeight - top - bottom - DEFAULT_TABBAR_HEIGHT;
 
-  return {
+  const calculatedHeights = {
     boxHeight,
     contentHeight,
     contentOffset: boxHeight - contentHeight,
     onScreenHeaderLayout,
     onHeaderContentLayout,
   };
+
+  return useConditionalMemo(
+    () => calculatedHeights,
+    () => !isAnimating,
+    calculatedHeights,
+    [isAnimating],
+  );
 }
