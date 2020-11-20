@@ -1,7 +1,14 @@
-import React, {Children, ReactElement, useRef} from 'react';
-import {View, ViewStyle} from 'react-native';
+import React, {
+  Children,
+  ReactElement,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import {Text, View, ViewStyle} from 'react-native';
 import Animated, {
   block,
+  call,
   Clock,
   clockRunning,
   cond,
@@ -33,8 +40,19 @@ export default function FadeBetween({
 }: FadeProps) {
   const progress = useValue<number>(0);
   const clock = useRef<Clock>(new Clock()).current;
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [init, setInit] = useState(false);
 
-  useCode(() => set(progress, runTiming(clock, 0, 1, duration)), [visibleKey]);
+  useEffect(() => {
+    progress.setValue(1);
+    setInit(true);
+  }, []);
+
+  useCode(
+    () =>
+      init && set(progress, runTiming(clock, 0, 1, duration, setIsAnimating)),
+    [visibleKey],
+  );
 
   return (
     <View style={style}>
@@ -44,7 +62,7 @@ export default function FadeBetween({
           child={child}
           visibleKey={visibleKey}
           progress={progress}
-          isAnimating={isParentAnimating}
+          isAnimating={isParentAnimating || isAnimating}
         />
       ))}
     </View>
@@ -69,13 +87,14 @@ function AnimatedChild({
     outputRange: visibleChild ? [0, 1] : [1, 0],
   });
 
+  const isPreviousChildWhenAnimating =
+    (visibleChild && !isAnimating) || (!visibleChild && isAnimating);
+
   return (
     <Animated.View
       style={{
-        position:
-          (visibleChild && !isAnimating) || (!visibleChild && isAnimating)
-            ? 'relative'
-            : 'absolute',
+        position: isPreviousChildWhenAnimating ? 'relative' : 'absolute',
+        width: visibleChild && isAnimating ? '100%' : undefined,
         opacity,
       }}
       pointerEvents={visibleChild ? 'auto' : 'none'}
@@ -90,6 +109,7 @@ function runTiming(
   from: number,
   to: number,
   duration: number = 400,
+  setIsAnimating: (isAnimating: boolean) => void,
 ) {
   const state = {
     finished: new Value(0),
@@ -106,6 +126,7 @@ function runTiming(
 
   return block([
     cond(clockRunning(clock), 0, [
+      call([], () => setIsAnimating(true)),
       // If the clock isn't running we reset all the animation params and start the clock
       set(state.finished, 0),
       set(state.time, 0),
@@ -118,6 +139,10 @@ function runTiming(
     timing(clock, state, config),
     // if the animation is over we stop the clock
     cond(state.finished, debug('stop clock', stopClock(clock))),
+    cond(
+      state.finished,
+      call([], () => setIsAnimating(false)),
+    ),
     // the block returns the updated position
     state.position,
   ]);
