@@ -1,30 +1,35 @@
 import React from 'react';
 import {Switch, TouchableOpacity, View} from 'react-native';
 import {Confirm} from '../../assets/svg/icons/actions';
+import {StyleSheet, Theme} from '../../theme';
 import ThemeText from '../text';
 import ThemeIcon from '../theme-icon';
 import NavigationIcon from '../theme-icon/navigation-icon';
-import useListStyle from './style';
+import {useSectionItem, SectionItem, useSectionStyle} from './section-utils';
 
 export type ActionModes = 'check' | 'toggle' | 'heading-expand';
-export type ActionItemProps = {
+export type ActionItemProps = SectionItem<{
   text: string;
   onPress?(checked: boolean): void;
   checked?: boolean;
   mode?: ActionModes;
-};
+}>;
 export default function ActionItem({
   text,
   onPress,
   mode = 'check',
   checked = false,
+  ...props
 }: ActionItemProps) {
-  const style = useListStyle();
+  const {contentContainer, topContainer} = useSectionItem(props);
+  const style = useSectionStyle();
 
   if (mode === 'toggle') {
     return (
-      <View style={[style.baseItem, style.action]}>
-        <ThemeText type="body">{text}</ThemeText>
+      <View style={[style.baseItem, style.spaceBetween, topContainer]}>
+        <ThemeText type="body" style={contentContainer}>
+          {text}
+        </ThemeText>
         <Switch value={checked} onValueChange={(v) => onPress?.(v)} />
       </View>
     );
@@ -33,10 +38,11 @@ export default function ActionItem({
   return (
     <TouchableOpacity
       onPress={() => onPress?.(!checked)}
-      style={[style.baseItem, style.action]}
+      style={[style.baseItem, style.spaceBetween, topContainer]}
     >
       <ThemeText
         type={mode === 'heading-expand' ? 'paragraphHeadline' : 'body'}
+        style={contentContainer}
       >
         {text}
       </ThemeText>
@@ -49,7 +55,7 @@ function ActionModeIcon({
   mode,
   checked,
 }: Pick<ActionItemProps, 'mode' | 'checked'>) {
-  const style = useListStyle();
+  const style = useHeaderExpandStyle();
 
   switch (mode) {
     case 'check': {
@@ -74,3 +80,14 @@ function ActionModeIcon({
   }
   return null;
 }
+
+const useHeaderExpandStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+  headerExpandIconGroup: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  headerExpandIconGroup__text: {
+    marginRight: theme.spacings.xSmall,
+  },
+}));

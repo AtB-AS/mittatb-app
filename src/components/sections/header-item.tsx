@@ -1,29 +1,37 @@
 import React from 'react';
 import {View} from 'react-native';
 import ThemeText from '../text';
-import useListStyle from './style';
+import {useSectionItem, SectionItem, useSectionStyle} from './section-utils';
 
-export type HeaderItemProps = {
-  title: string;
+export type HeaderItemProps = SectionItem<{
+  text: string;
   subline?: string;
   mode?: 'heading' | 'subheading';
-};
+}>;
 export default function HeaderItem({
-  title,
+  text,
   subline,
   mode = 'heading',
+  ...props
 }: HeaderItemProps) {
-  const style = useListStyle();
+  const {contentContainer, topContainer} = useSectionItem(props);
+  const style = useSectionStyle();
+
   return (
-    <View style={style.baseItem}>
+    <View style={[style.baseItem, topContainer]}>
       <ThemeText
+        style={contentContainer}
         color={mode === 'heading' ? 'primary' : 'faded'}
         type={mode === 'heading' ? 'paragraphHeadline' : 'lead'}
       >
-        {title}
+        {text}
       </ThemeText>
       {subline && (
-        <ThemeText color="faded" type={mode === 'heading' ? 'lead' : 'label'}>
+        <ThemeText
+          style={contentContainer}
+          color="faded"
+          type={mode === 'heading' ? 'lead' : 'label'}
+        >
           {subline}
         </ThemeText>
       )}

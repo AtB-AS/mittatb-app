@@ -6,7 +6,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {ProfileStackParams} from '..';
 import {Add} from '../../../assets/svg/icons/actions';
 import SvgReorder from '../../../assets/svg/icons/actions/Reorder';
-import List from '../../../components/item-groups';
 import ThemeIcon from '../../../components/theme-icon';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import {LocationFavorite} from '../../../favorites/types';
@@ -14,6 +13,7 @@ import MessageBox from '../../../message-box';
 import {RootStackParamList} from '../../../navigation';
 import {StyleSheet, Theme} from '../../../theme';
 import BackHeader from '../BackHeader';
+import * as Sections from '../../../components/sections';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -48,28 +48,28 @@ export default function FavoriteList({navigation}: ProfileScreenProps) {
           />
         )}
 
-        <List.Group withTopMargin>
+        <Sections.Section withTopPadding withPadding>
           {items.map((favorite) => (
-            <List.Favorite
+            <Sections.FavoriteItem
               key={favorite.name + favorite.location.id}
               favorite={favorite}
               onPress={() => navigateToEdit(favorite)}
             />
           ))}
-        </List.Group>
+        </Sections.Section>
 
-        <List.Group>
-          <List.Link
+        <Sections.Section withPadding>
+          <Sections.LinkItem
             text="Endre rekkefølge"
             onPress={onSortClick}
             icon={<ThemeIcon svg={SvgReorder} />}
           />
-          <List.Link
+          <Sections.LinkItem
             text="Legg til favorittsted"
             onPress={onAddButtonClick}
             icon={<ThemeIcon svg={Add} />}
           />
-        </List.Group>
+        </Sections.Section>
       </ScrollView>
     </SafeAreaView>
   );

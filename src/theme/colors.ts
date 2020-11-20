@@ -114,7 +114,7 @@ const borderRadius = {
   circle: 20,
   regular: 8,
   small: 4,
-};
+} as const;
 const borderWidth = {
   slim: 1,
   medium: 2,
@@ -129,6 +129,8 @@ export type Themes = {
   dark: Theme;
 };
 export type Mode = keyof Themes;
+
+export type RadiusSizes = keyof typeof borderRadius;
 
 export interface Theme {
   statusBarStyle: StatusBarProps['barStyle'];

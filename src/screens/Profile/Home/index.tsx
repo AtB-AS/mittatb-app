@@ -6,7 +6,7 @@ import {Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
 import useChatIcon from '../../../chat/use-chat-icon';
-import List from '../../../components/item-groups';
+import * as Sections from '../../../components/sections';
 import ThemeIcon from '../../../components/theme-icon';
 import {TabNavigatorParams} from '../../../navigation/TabNavigator';
 import FullScreenHeader from '../../../ScreenHeader/full-header';
@@ -46,25 +46,32 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
       />
 
       <ScrollView>
-        <List.Group withTopMargin>
-          <List.Header title="Favoritter" mode="subheading" />
-          <List.Link
+        <Sections.Section withPadding withTopPadding>
+          <Sections.HeaderItem text="Favoritter" mode="subheading" />
+          <Sections.LinkItem
             text="Steder"
             icon="arrow-right"
             onPress={() => navigation.navigate('FavoriteList')}
           />
-        </List.Group>
+        </Sections.Section>
 
-        <List.Group>
-          <List.Header title="Personvern" mode="subheading" />
-          <List.Link
+        <Sections.Section withPadding>
+          <Sections.HeaderItem text="Personvern" mode="subheading" />
+          <Sections.LinkItem
             text="Personvernerklæring"
             icon="arrow-right"
             onPress={() =>
               Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
             }
           />
-        </List.Group>
+        </Sections.Section>
+
+        <Sections.Section withPadding>
+          <Sections.HeaderItem text="Hello" subline="Foo" />
+          <Sections.ActionItem mode="toggle" text="Hello" />
+          <Sections.ActionItem mode="heading-expand" text="Hello" />
+          <Sections.ActionItem mode="check" text="Hello" checked />
+        </Sections.Section>
       </ScrollView>
     </View>
   );

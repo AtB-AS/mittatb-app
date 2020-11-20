@@ -1,7 +1,6 @@
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
-import {View} from 'react-native';
 import {PanGestureHandler} from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -9,13 +8,12 @@ import {ProfileStackParams} from '..';
 import {Close, Confirm} from '../../../assets/svg/icons/actions';
 import SvgDragHandle from '../../../assets/svg/icons/actions/DragHandle';
 import Button, {ButtonGroup} from '../../../components/button';
-import List from '../../../components/item-groups';
+import {FavoriteItem, Section} from '../../../components/sections';
 import ThemeIcon from '../../../components/theme-icon';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import MessageBox from '../../../message-box';
 import {TabNavigatorParams} from '../../../navigation/TabNavigator';
 import {StyleSheet, Theme} from '../../../theme';
-import insets from '../../../utils/insets';
 import BackHeader from '../BackHeader';
 import {SortableList} from './SortableList';
 
@@ -77,12 +75,12 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
               onHandlerStateChange={onGestureEvent}
             >
               <Animated.View style={{flex: 1, opacity}}>
-                <List.Group>
-                  <List.Favorite
+                <Section withPadding>
+                  <FavoriteItem
                     favorite={data}
                     icon={<ThemeIcon svg={SvgDragHandle} />}
                   />
-                </List.Group>
+                </Section>
               </Animated.View>
             </PanGestureHandler>
           );
