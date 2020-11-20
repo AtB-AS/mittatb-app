@@ -282,7 +282,6 @@ const Assistant: React.FC<Props> = ({
 
         <FadeBetween
           visibleKey={isHeaderFullHeight ? 'dateInput' : 'favoriteChips'}
-          isParentAnimating={isParentAnimating}
         >
           <FavoriteChips
             key="favoriteChips"

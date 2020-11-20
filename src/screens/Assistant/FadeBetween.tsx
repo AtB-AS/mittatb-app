@@ -1,4 +1,10 @@
-import React, {Children, ReactElement, useRef} from 'react';
+import React, {
+  Children,
+  ReactElement,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {View, ViewStyle} from 'react-native';
 import Animated, {
   block,
@@ -21,7 +27,6 @@ type FadeProps = {
   style?: ViewStyle;
   children: [ReactElement, ReactElement];
   duration?: number;
-  isParentAnimating?: boolean;
 };
 
 export default function FadeBetween({
@@ -29,12 +34,19 @@ export default function FadeBetween({
   children,
   visibleKey,
   duration,
-  isParentAnimating = false,
 }: FadeProps) {
   const progress = useValue<number>(0);
   const clock = useRef<Clock>(new Clock()).current;
+  const [init, setInit] = useState(false);
 
-  useCode(() => set(progress, runTiming(clock, 0, 1, duration)), [visibleKey]);
+  useEffect(() => {
+    progress.setValue(1);
+    setInit(true);
+  }, []);
+
+  useCode(() => init && set(progress, runTiming(clock, 0, 1, duration)), [
+    visibleKey,
+  ]);
 
   return (
     <View style={style}>
@@ -44,7 +56,6 @@ export default function FadeBetween({
           child={child}
           visibleKey={visibleKey}
           progress={progress}
-          isAnimating={isParentAnimating}
         />
       ))}
     </View>
@@ -55,12 +66,10 @@ function AnimatedChild({
   child,
   visibleKey,
   progress,
-  isAnimating,
 }: {
   child: ReactElement;
   visibleKey: string;
   progress: Animated.Value<number>;
-  isAnimating: boolean;
 }) {
   const visibleChild = child.key !== visibleKey;
 
@@ -72,10 +81,7 @@ function AnimatedChild({
   return (
     <Animated.View
       style={{
-        position:
-          (visibleChild && !isAnimating) || (!visibleChild && isAnimating)
-            ? 'relative'
-            : 'absolute',
+        position: visibleChild ? 'relative' : 'absolute',
         opacity,
       }}
       pointerEvents={visibleChild ? 'auto' : 'none'}
