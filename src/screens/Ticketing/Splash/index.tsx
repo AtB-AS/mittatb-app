@@ -62,12 +62,6 @@ export default function Splash() {
             <ThemeText style={styles.text}>
               Her kan du snart kjøpe og administrere billetter til reisen din.
             </ThemeText>
-            <ThemeText style={styles.text}>
-              Frem til da kan du kjøpe billett fra{'\n'}
-              <Text onPress={openOtherTicketingApp} style={styles.underline}>
-                AtB Mobillett
-              </Text>
-            </ThemeText>
           </View>
           <View style={styles.buttonContainer}>
             <Button
