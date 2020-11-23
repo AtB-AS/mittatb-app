@@ -11,6 +11,7 @@ import {LocationFavorite} from '../../favorites/types';
 import {StyleSheet} from '../../theme';
 import {screenReaderPause} from '../accessible-text';
 import ThemeText from '../text';
+import ThemeIcon from '../theme-icon';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 
 type BaseProps = {
@@ -56,7 +57,7 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
       <View style={contentContainer}>
         <ThemeText>{favorite.name ?? favorite.location.name}</ThemeText>
       </View>
-      {icon ?? <Edit />}
+      {icon ?? <ThemeIcon svg={Edit} />}
     </View>
   );
 }
