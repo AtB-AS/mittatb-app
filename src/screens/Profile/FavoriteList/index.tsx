@@ -20,6 +20,8 @@ import LogoOutline from '../../../ScreenHeader/LogoOutline';
 import {useNavigateHome} from '../../../utils/navigation';
 import ThemeIcon from '../../../components/theme-icon';
 import ThemeText from '../../../components/text';
+import {ProfileTexts} from '../../../translations';
+import {useTranslation} from '../../../utils/language';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -38,6 +40,7 @@ type ProfileScreenProps = {
 export default function Profile({navigation}: ProfileScreenProps) {
   const css = useProfileStyle();
   const {favorites} = useFavorites();
+  const {t} = useTranslation();
   const items = favorites ?? [];
 
   const navigateToEdit = (item: LocationFavorite) => {
@@ -93,7 +96,7 @@ export default function Profile({navigation}: ProfileScreenProps) {
         }
       >
         <ThemeText type="body__link" style={css.privacyPolicy}>
-          Les vår personvernerklæring
+          {t(ProfileTexts.privacyStatementLabel)}
         </ThemeText>
       </TouchableOpacity>
     </SafeAreaView>

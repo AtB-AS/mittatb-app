@@ -14,6 +14,8 @@ import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
 import Button from '../../../components/button';
 import {ScrollView} from 'react-native-gesture-handler';
+import {useTranslation} from '../../../utils/language';
+import {TicketTexts} from '../../../translations';
 function openOtherTicketingApp() {
   const url =
     Platform.OS === 'ios'
@@ -31,6 +33,7 @@ export default function Splash() {
   const {width: windowWidth} = useWindowDimensions();
   const navigateHome = useNavigateHome();
   const modalRef = useRef<Modalize>(null);
+  const {t} = useTranslation();
 
   function onEnrolled() {
     refresh();
@@ -57,29 +60,25 @@ export default function Splash() {
         <View style={styles.contentContainer}>
           <View style={styles.textContent}>
             <ThemeText style={[styles.text, styles.bold]}>
-              Billettkjøp i app kommer snart!
+              {t(TicketTexts.splash.title)}
             </ThemeText>
             <ThemeText style={styles.text}>
-              Her kan du snart kjøpe og administrere billetter til reisen din.
+              {t(TicketTexts.splash.paragraph1)}
             </ThemeText>
             <ThemeText style={styles.text}>
-              Frem til da kan du kjøpe billett fra{'\n'}
-              <Text onPress={openOtherTicketingApp} style={styles.underline}>
-                AtB Mobillett
-              </Text>
+              {t(TicketTexts.splash.paragraph2)}
             </ThemeText>
           </View>
           <View style={styles.buttonContainer}>
             <Button
               mode="primary2"
               onPress={() => modalRef.current?.open()}
-              text="Jeg har kode til beta for billettkjøp"
+              text={t(TicketTexts.splash.betaButtonLabel)}
               style={styles.button}
             />
           </View>
         </View>
       </ScrollView>
-
       <InviteModal ref={modalRef} onEnrolled={onEnrolled} />
     </SafeAreaView>
   );

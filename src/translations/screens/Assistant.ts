@@ -1,4 +1,4 @@
-import {translation as _} from '../../utils';
+import {translation as _} from '../utils';
 
 const AssistantTexts = {
   header: {
@@ -53,6 +53,7 @@ export const AssistantResultTexts = {
     emptyResult: _(
       'Vi fant dessverre ingen reiseruter som passer til ditt søk.',
     ),
+    reasonsTitle: _('Mulige årsaker: '),
     genericHint: _('Prøv å justere på sted eller tidspunkt'),
   },
   resultList: {
@@ -64,12 +65,18 @@ export const AssistantResultTexts = {
     }.`),
   },
   resultItem: {
+    details: {
+      totalDuration: _('Reisetid'),
+    },
     hasSituationsTip: _(
       'Denne reisen har driftsmeldinger. Se detaljer for mer info',
     ),
     footLeg: {
       walkLabel: (time: string) => _(`Gå ${time}`, `Walk ${time}`),
       waitLabel: (time: string) => _(`Vent ${time}`, `Wait ${time}`),
+    },
+    waitRow: {
+      label: _('Vent'),
     },
   },
 };

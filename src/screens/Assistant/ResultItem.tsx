@@ -25,7 +25,7 @@ import {flatMap} from '../../utils/array';
 import {getReadableModeName} from '../../utils/transportation-names';
 import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
-import {AssistantResultTexts} from '../../translations/screens/assistant/Assistant';
+import {AssistantResultTexts} from '../../translations/screens/Assistant';
 import {useTranslation} from '../../utils/language';
 
 type ResultItemProps = {
@@ -76,7 +76,11 @@ const ResultItemHeader: React.FC<{
         {formatToClockOrRelativeMinutes(quayStartTime)}
       </ThemeText>
       <View style={styles.durationContainer}>
-        <AccessibleText prefix="Reisetid">{durationText}</AccessibleText>
+        <AccessibleText
+          prefix={t(AssistantResultTexts.resultItem.details.totalDuration)}
+        >
+          {durationText}
+        </AccessibleText>
       </View>
 
       <SituationWarningIcon
@@ -220,6 +224,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 
 function WaitRow({time}: {time: number}) {
   const styles = useLegStyles();
+  const {t} = useTranslation();
 
   return (
     <View style={styles.legContainer}>
@@ -230,7 +235,7 @@ function WaitRow({time}: {time: number}) {
         <ThemeIcon svg={Duration} opacity={0.6} />
       </View>
       <ThemeText style={[styles.textContent, styles.textDeprioritized]}>
-        Vent
+        {t(AssistantResultTexts.resultItem.waitRow.label)}
       </ThemeText>
     </View>
   );

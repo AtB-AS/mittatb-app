@@ -48,6 +48,8 @@ import {useNavigateHome} from '../../utils/navigation';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import ThemeIcon from '../../components/theme-icon';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
+import {useTranslation} from '../../utils/language';
+import {NearbyTexts} from '../../translations';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
@@ -134,6 +136,8 @@ const NearbyOverview: React.FC<Props> = ({
   const isInitialScreen = departures == null && !isLoading && !error;
   const activateScroll = !isInitialScreen || !!error;
 
+  const {t} = useTranslation();
+
   const onScrollViewEndReached = () => departures?.length && loadMore();
 
   const openLocationSearch = () =>
@@ -185,11 +189,11 @@ const NearbyOverview: React.FC<Props> = ({
       <View style={styles.searchButtonContainer}>
         <View style={styles.styleButton}>
           <LocationButton
-            label="Fra"
+            label={t(NearbyTexts.location.departurePicker.label)}
             placeholder={
               updatingLocation
-                ? 'Oppdaterer posisjon'
-                : 'Søk etter adresse eller sted'
+                ? t(NearbyTexts.location.updatingLocation)
+                : t(NearbyTexts.location.departurePicker.placeholder)
             }
             icon={
               updatingLocation ? (
@@ -199,7 +203,10 @@ const NearbyOverview: React.FC<Props> = ({
             location={fromLocation}
             onPress={openLocationSearch}
             accessible={true}
-            accessibilityLabel="Søk på avreisested."
+            accessibilityLabel={t(
+              NearbyTexts.location.departurePicker.a11yLabel,
+            )}
+            accessibilityHint={t(NearbyTexts.location.departurePicker.a11yHint)}
             accessibilityRole="button"
           />
         </View>
@@ -207,7 +214,7 @@ const NearbyOverview: React.FC<Props> = ({
         <TouchableOpacity
           hitSlop={insets.all(12)}
           accessible={true}
-          accessibilityLabel="Bruk min posisjon."
+          accessibilityLabel={t(NearbyTexts.location.locationButton.a11yLabel)}
           accessibilityRole="button"
           onPress={setCurrentLocationOrRequest}
         >
@@ -223,14 +230,17 @@ const NearbyOverview: React.FC<Props> = ({
       isRefreshing={isLoading}
       headerHeight={59}
       renderHeader={renderHeader}
-      headerTitle="Avganger"
+      headerTitle={t(NearbyTexts.header.title)}
       useScroll={activateScroll}
       logoClick={{
         callback: navigateHome,
-        accessibilityLabel: 'Gå til startskjerm',
+        accessibilityLabel: t(NearbyTexts.header.logo.a11yLabel),
       }}
       alternativeTitleComponent={
-        <AccessibleText prefix="Avganger fra" style={styles.altTitleHeader}>
+        <AccessibleText
+          prefix={t(NearbyTexts.header.altTitle.a11yPrefix)}
+          style={styles.altTitleHeader}
+        >
           {fromLocation?.name}
         </AccessibleText>
       }

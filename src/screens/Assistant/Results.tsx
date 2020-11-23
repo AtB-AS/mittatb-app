@@ -13,7 +13,7 @@ import {ErrorType} from '../../api/utils';
 import {AssistantTexts} from '../../translations';
 import {useTranslation} from '../../utils/language';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
-import {AssistantResultTexts} from '../../translations/screens/assistant/Assistant';
+import {AssistantResultTexts} from '../../translations/screens/Assistant';
 type Props = {
   tripPatterns: TripPattern[] | null;
   showEmptyScreen: boolean;
@@ -83,7 +83,7 @@ const Results: React.FC<Props> = ({
             {pluralResultReasons && (
               <Text>
                 {' '}
-                Mulige årsaker:
+                {AssistantResultTexts.info.reasonsTitle}
                 {resultReasons.map((reason, i) => (
                   <Text key={i}>
                     {'\n'}- {reason}
