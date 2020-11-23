@@ -18,6 +18,8 @@ import {useAppStateStatus} from '../../../utils/use-app-state-status';
 import BackHeader from '../BackHeader';
 import {SortableList} from './SortableList';
 import DeviceInfo from 'react-native-device-info';
+import useIsScreenReaderEnabled from '../../../utils/use-is-screen-reader-enabled';
+import SortableListFallback from './SortableListFallback';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -39,6 +41,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
   const items = favorites ?? [];
   const [sortedItems, setSortedItems] = useState(items);
   const [error, setError] = useState<string | null>(null);
+  const screenReaderEnabled = useIsScreenReaderEnabled();
   const fontScale = useFontScale();
 
   const minHeight = 40 + 12 * fontScale;
@@ -62,36 +65,40 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
         <MessageBox type="error" message={error} containerStyle={style.error} />
       )}
 
-      <SortableList
-        data={items}
-        // @TODO Find solution for not hardcoding this.
-        rowHeight={minHeight}
-        onSort={setSortedItems}
-        containerStyle={style.orderContainer}
-        renderRow={(data, index, state, onGestureEvent) => {
-          let opacity = state === 'placeholder' ? 0 : 1;
-          if (state === 'dragging') {
-            opacity -= 0.5;
-          }
-          return (
-            <PanGestureHandler
-              maxPointers={1}
-              onGestureEvent={onGestureEvent}
-              onHandlerStateChange={onGestureEvent}
-            >
-              <Animated.View style={{flex: 1, opacity}}>
-                <Section withPadding>
-                  <FavoriteItem
-                    favorite={data}
-                    icon={<ThemeIcon svg={SvgDragHandle} />}
-                  />
-                </Section>
-              </Animated.View>
-            </PanGestureHandler>
-          );
-        }}
-        indexToKey={(i) => items[i].id}
-      />
+      {screenReaderEnabled ? (
+        <SortableListFallback data={sortedItems} onSort={setSortedItems} />
+      ) : (
+        <SortableList
+          data={items}
+          // @TODO Find solution for not hardcoding this.
+          rowHeight={minHeight}
+          onSort={setSortedItems}
+          containerStyle={style.orderContainer}
+          renderRow={(data, index, state, onGestureEvent) => {
+            let opacity = state === 'placeholder' ? 0 : 1;
+            if (state === 'dragging') {
+              opacity -= 0.5;
+            }
+            return (
+              <PanGestureHandler
+                maxPointers={1}
+                onGestureEvent={onGestureEvent}
+                onHandlerStateChange={onGestureEvent}
+              >
+                <Animated.View style={{flex: 1, opacity}}>
+                  <Section withPadding>
+                    <FavoriteItem
+                      favorite={data}
+                      icon={<ThemeIcon svg={SvgDragHandle} />}
+                    />
+                  </Section>
+                </Animated.View>
+              </PanGestureHandler>
+            );
+          }}
+          indexToKey={(i) => items[i].id}
+        />
+      )}
 
       <ButtonGroup>
         <Button
