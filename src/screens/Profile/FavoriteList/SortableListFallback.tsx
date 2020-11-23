@@ -13,6 +13,7 @@ import ThemeIcon from '../../../components/theme-icon';
 import {StyleSheet, Theme, useTheme} from '../../../theme';
 import insets from '../../../utils/insets';
 import {immutableMove} from './sort-utils';
+import {screenReaderPause} from '../../../components/accessible-text';
 
 type SortableListFallbackProps = {
   data: UserFavorites;
@@ -110,8 +111,10 @@ function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
   const isDown = direction === 'down';
   const Icon = isDown ? Expand : ExpandLess;
   const diretion = isDown ? 'ned' : 'opp';
-  const label = `Flytt ${diretion}`;
-  const hint = `Aktivér for å flytt ${name(item)} ${diretion}`;
+  const label = `Flytt  ${name(item)} ${diretion} ${screenReaderPause}`;
+  const hint = `Aktivér for å flytte favoritten  ${name(
+    item,
+  )} ${diretion} ${screenReaderPause}`;
   const styles = useListStyle();
   const {theme} = useTheme();
 
