@@ -57,6 +57,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
     navigation.navigate('DepartureDetailsModal', {
       title: publicCode ? `${publicCode} ${name}` : name,
       serviceJourneyId: departure.serviceJourney.id,
+      date: departure.date,
       fromQuayId: departure.quay?.id,
     });
   };

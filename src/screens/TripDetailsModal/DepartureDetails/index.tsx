@@ -29,10 +29,12 @@ import SituationRow from '../SituationRow';
 import {getAimedTimeIfLargeDifference} from '../utils';
 import ThemeIcon from '../../../components/theme-icon';
 import ThemeText from '../../../components/text';
+import {parseISO} from 'date-fns';
 
 export type DepartureDetailsRouteParams = {
   title: string;
   serviceJourneyId: string;
+  date: string;
   fromQuayId?: string;
   toQuayId?: string;
   isBack?: boolean;
@@ -52,6 +54,7 @@ export default function DepartureDetails({navigation, route}: Props) {
   const {
     title,
     serviceJourneyId,
+    date,
     fromQuayId,
     toQuayId,
     isBack = false,
@@ -63,7 +66,14 @@ export default function DepartureDetails({navigation, route}: Props) {
     {callGroups, mode, publicCode, situations: parentSituations},
     _,
     isLoading,
-  ] = useDepartureData(serviceJourneyId, fromQuayId, toQuayId, 30, !isFocused);
+  ] = useDepartureData(
+    serviceJourneyId,
+    date,
+    fromQuayId,
+    toQuayId,
+    30,
+    !isFocused,
+  );
 
   const content = isLoading ? (
     <View accessibilityLabel={'Laster søkeresultat'} accessible={true}>
@@ -335,6 +345,7 @@ type CallListGroup = {
 
 function useDepartureData(
   serviceJourneyId: string,
+  date: string,
   fromQuayId?: string,
   toQuayId?: string,
   pollingTimeInSeconds: number = 0,
@@ -342,7 +353,7 @@ function useDepartureData(
 ): [DepartureData, () => void, boolean, Error?] {
   const getService = useCallback(
     async function getServiceJourneyDepartures(): Promise<DepartureData> {
-      const deps = await getDepartures(serviceJourneyId);
+      const deps = await getDepartures(serviceJourneyId, parseISO(date));
       const callGroups = groupAllCallsByQuaysInLeg(deps, fromQuayId, toQuayId);
       const line = callGroups.trip[0]?.serviceJourney?.journeyPattern?.line;
       const parentSituation = callGroups.trip[0]?.situations;
