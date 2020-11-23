@@ -15,6 +15,7 @@ export type SectionItem<T> = T & SectionItemProps;
 export type SectionReturnType = {
   topContainer: ViewStyle;
   contentContainer: ViewStyle;
+  spacing: number;
 };
 
 export default function useSectionItem({
@@ -40,6 +41,7 @@ export default function useSectionItem({
   return {
     topContainer,
     contentContainer,
+    spacing,
   };
 }
 

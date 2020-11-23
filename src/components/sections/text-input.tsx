@@ -13,17 +13,21 @@ import {StyleSheet, useTheme} from '../../theme';
 import insets from '../../utils/insets';
 import ThemeText from '../text';
 import ThemeIcon from '../theme-icon';
+import {SectionItem, useSectionItem} from './section-utils';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
-type TextProps = InternalTextInputProps & {
-  label: string;
-  showClear?: boolean;
-  onClear?: () => void;
-};
+type TextProps = SectionItem<
+  InternalTextInputProps & {
+    label: string;
+    showClear?: boolean;
+    onClear?: () => void;
+  }
+>;
 
 const TextInput = forwardRef<InternalTextInput, TextProps>(
   ({label, onFocus, onBlur, showClear, onClear, style, ...props}, ref) => {
+    const {topContainer, spacing} = useSectionItem(props);
     const {theme, themeName} = useTheme();
     const styles = useInputStyle(theme, themeName);
     const [isFocused, setIsFocused] = useState(Boolean(props?.autoFocus));
@@ -42,11 +46,18 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
       ? undefined
       : {borderColor: theme.border.focus};
 
+    const padding = {
+      // There are some oddities with handling padding
+      // on Android and fonts: https://codeburst.io/react-native-quirks-2fb1ae0bbf80
+      paddingBottom: spacing - Platform.select({android: 4, default: 0}),
+      paddingTop: spacing - Platform.select({android: 5, default: 0}),
+    };
+
     return (
       <View style={styles.container}>
         <InternalTextInput
           ref={ref}
-          style={[styles.input, style, borderColor]}
+          style={[styles.input, topContainer, padding, style, borderColor]}
           placeholderTextColor={theme.text.colors.faded}
           onFocus={onFocusEvent}
           onBlur={onBlurEvent}
@@ -84,12 +95,6 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     paddingLeft: 60,
     paddingRight: 40,
 
-    // There are some oddities with handling padding
-    // on Android and fonts: https://codeburst.io/react-native-quirks-2fb1ae0bbf80
-    paddingBottom:
-      theme.spacings.medium - Platform.select({android: 4, default: 0}),
-    paddingTop:
-      theme.spacings.medium - Platform.select({android: 5, default: 0}),
     fontSize: theme.text.body.fontSize,
   },
   container: {

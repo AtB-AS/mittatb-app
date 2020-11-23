@@ -11,8 +11,8 @@ import {Swap} from '../../assets/svg/icons/actions';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import {screenReaderPause} from '../../components/accessible-text';
 import DisappearingHeader from '../../components/disappearing-header';
-import Input from '../../components/input-groups';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
+import {LocationInput, Section} from '../../components/sections';
 import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
 import FavoriteChips from '../../favorite-chips';
@@ -201,8 +201,8 @@ const Assistant: React.FC<Props> = ({
     (_, isParentAnimating) => (
       <View>
         <View style={styles.paddedContainer}>
-          <Input.Group>
-            <Input.Location
+          <Section>
+            <LocationInput
               accessibilityLabel={'Velg avreisested' + screenReaderPause}
               accessibilityHint={
                 'Aktiver for å søke etter adresse eller sted.' +
@@ -224,7 +224,7 @@ const Assistant: React.FC<Props> = ({
               }}
             />
 
-            <Input.Location
+            <LocationInput
               accessibilityLabel="Velg ankomststed."
               label="Til"
               placeholder="Søk etter adresse eller sted"
@@ -239,7 +239,7 @@ const Assistant: React.FC<Props> = ({
                 accessibilityRole: 'button',
               }}
             />
-          </Input.Group>
+          </Section>
         </View>
 
         <FadeBetween

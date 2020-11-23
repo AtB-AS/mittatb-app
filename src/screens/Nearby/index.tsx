@@ -21,8 +21,8 @@ import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import AccessibleText from '../../components/accessible-text';
 import DisappearingHeader from '../../components/disappearing-header';
-import Input from '../../components/input-groups';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
+import {LocationInput, Section} from '../../components/sections';
 import ThemeIcon from '../../components/theme-icon';
 import {Location, LocationWithMetadata} from '../../favorites/types';
 import {useReverseGeocoder} from '../../geocoder';
@@ -177,8 +177,8 @@ const NearbyOverview: React.FC<Props> = ({
   }, [updatingLocation, isLoading]);
 
   const renderHeader = () => (
-    <Input.Group withPadding>
-      <Input.Location
+    <Section withPadding>
+      <LocationInput
         label="Fra"
         updatingLocation={updatingLocation}
         location={fromLocation}
@@ -192,7 +192,7 @@ const NearbyOverview: React.FC<Props> = ({
           accessibilityRole: 'button',
         }}
       />
-    </Input.Group>
+    </Section>
   );
 
   return (

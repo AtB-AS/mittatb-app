@@ -10,7 +10,6 @@ import SvgConfirm from '../../../assets/svg/icons/actions/Confirm';
 import SvgDelete from '../../../assets/svg/icons/actions/Delete';
 import {MapPointPin} from '../../../assets/svg/icons/places';
 import Button, {ButtonGroup} from '../../../components/button';
-import Input from '../../../components/input-groups';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
 import {useFavorites} from '../../../favorites/FavoritesContext';
@@ -20,6 +19,8 @@ import {RootStackParamList} from '../../../navigation';
 import {StyleSheet, Theme} from '../../../theme';
 import BackHeader from '../BackHeader';
 import EmojiPopup from './EmojiPopup';
+
+import * as Sections from '../../../components/sections';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
@@ -137,10 +138,10 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
       />
 
       <View style={css.innerContainer}>
-        <Input.Group withPadding>
-          <Input.Button
+        <Sections.Section withPadding>
+          <Sections.LocationInput
             label="Sted"
-            value={location?.label}
+            location={location}
             placeholder="Søk etter adresse eller stoppested"
             onPress={() =>
               navigation.navigate('LocationSearch', {
@@ -152,10 +153,10 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
               })
             }
           />
-        </Input.Group>
+        </Sections.Section>
 
-        <Input.Group withPadding>
-          <Input.Text
+        <Sections.Section withPadding>
+          <Sections.TextInput
             label="Navn"
             onChangeText={setName}
             value={name}
@@ -164,10 +165,10 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
             accessibilityHint="Navn for favoritten"
             placeholder="Legg til navn"
           />
-        </Input.Group>
+        </Sections.Section>
 
-        <Input.Group withPadding>
-          <Input.Button
+        <Sections.Section withPadding>
+          <Sections.ButtonInput
             onPress={openEmojiPopup}
             label="Ikon"
             icon="expand-more"
@@ -180,7 +181,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
               )
             }
           />
-        </Input.Group>
+        </Sections.Section>
       </View>
 
       <ButtonGroup>

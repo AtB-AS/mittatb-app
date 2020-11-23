@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  AccessibilityProps,
-  ImageStyle,
-  StyleProp,
-  TextStyle,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {AccessibilityProps, TouchableOpacity, View} from 'react-native';
 import {StyleSheet} from '../../theme';
 import insets from '../../utils/insets';
 import ThemeText from '../text';
@@ -15,8 +7,9 @@ import NavigationIcon, {
   isNavigationIcon,
   NavigationIconTypes,
 } from '../theme-icon/navigation-icon';
+import {SectionItem, useSectionItem} from './section-utils';
 
-export type ButtonInputProps = {
+export type ButtonInputProps = SectionItem<{
   label: string;
   onPress(): void;
   onIconPress?(): void;
@@ -24,9 +17,8 @@ export type ButtonInputProps = {
   placeholder?: string;
   value?: string | JSX.Element;
   icon?: NavigationIconTypes | JSX.Element;
-  type?: 'inline' | 'block';
-  style?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
-} & AccessibilityProps;
+}> &
+  AccessibilityProps;
 
 export default function ButtonInput({
   onPress,
@@ -38,31 +30,28 @@ export default function ButtonInput({
   onIconPress,
   iconAccessibility,
 
-  style,
-  type = 'block',
   ...props
 }: ButtonInputProps) {
+  const {topContainer, contentContainer, spacing} = useSectionItem(props);
   const styles = useSymbolPickerStyle();
   const iconEl = isNavigationIcon(icon) ? <NavigationIcon mode={icon} /> : icon;
 
-  const wrapperStyle = [
-    styles.wrapper,
-    type == 'inline' ? styles.wrapper__inline : undefined,
-  ];
-  const valueStyle = [
-    styles.value,
-    type == 'inline' ? styles.value__inline : undefined,
-  ];
+  const wrapperStyle =
+    props.type == 'compact' || props.type == 'inline'
+      ? styles.wrapper__inline
+      : undefined;
+
+  const padding = {padding: spacing};
 
   const handlerWithoutPress = !onIconPress ? (
-    <View style={styles.iconContainer}>{iconEl}</View>
+    <View style={[styles.iconContainer, padding]}>{iconEl}</View>
   ) : undefined;
 
   const handlerWithPress = onIconPress ? (
     <TouchableOpacity
       hitSlop={insets.all(12)}
       onPress={onIconPress}
-      style={styles.iconContainer}
+      style={[styles.iconContainer, padding]}
       {...iconAccessibility}
     >
       <View>{iconEl}</View>
@@ -82,11 +71,11 @@ export default function ButtonInput({
     <View style={wrapperStyle}>
       <TouchableOpacity
         onPress={onPress}
-        style={[styles.container, style]}
+        style={[styles.container, topContainer]}
         {...props}
       >
-        <View style={valueStyle}>{valueEl}</View>
-        <ThemeText type="lead" style={styles.label}>
+        <View style={contentContainer}>{valueEl}</View>
+        <ThemeText type="lead" style={[styles.label, padding]}>
           {label}
         </ThemeText>
         {handlerWithoutPress}
@@ -102,32 +91,22 @@ function isStringText(a: any): a is string {
 
 const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    padding: theme.spacings.medium,
     // @TODO Better way to do this.
     paddingLeft: 60,
     paddingRight: 60,
     flexDirection: 'row',
     backgroundColor: theme.background.level0,
   },
-  wrapper: {},
   wrapper__inline: {
     alignSelf: 'flex-start',
-  },
-  value: {
-    flex: 1,
-  },
-  value__inline: {
-    flex: 0,
   },
   iconContainer: {
     position: 'absolute',
     right: 0,
-    padding: theme.spacings.medium,
   },
   label: {
     position: 'absolute',
     left: 0,
-    padding: theme.spacings.medium,
   },
   faded: {
     color: theme.text.colors.faded,
