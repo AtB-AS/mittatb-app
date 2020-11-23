@@ -41,7 +41,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
   const [error, setError] = useState<string | null>(null);
   const fontScale = useFontScale();
 
-  const minHeight = 52 * fontScale;
+  const minHeight = 40 + 12 * fontScale;
 
   const saveOrder = async () => {
     try {
