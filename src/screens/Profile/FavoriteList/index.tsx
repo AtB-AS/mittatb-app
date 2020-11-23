@@ -53,7 +53,10 @@ export default function FavoriteList({navigation}: ProfileScreenProps) {
             <Sections.FavoriteItem
               key={favorite.name + favorite.location.id}
               favorite={favorite}
-              onPress={() => navigateToEdit(favorite)}
+              accessibility={{
+                accessibilityHint: 'Aktivér for å redigere',
+              }}
+              onPress={navigateToEdit}
             />
           ))}
         </Sections.Section>

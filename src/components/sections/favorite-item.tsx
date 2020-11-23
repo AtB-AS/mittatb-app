@@ -1,33 +1,50 @@
 import React from 'react';
-import {GestureResponderEvent, TouchableOpacity, View} from 'react-native';
+import {
+  AccessibilityProps,
+  GestureResponderEvent,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Edit} from '../../assets/svg/icons/actions';
 import {FavoriteIcon} from '../../favorites';
 import {LocationFavorite} from '../../favorites/types';
 import {StyleSheet} from '../../theme';
+import {screenReaderPause} from '../accessible-text';
 import ThemeText from '../text';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 
-export type FavoriteItemProps = SectionItem<{
+type BaseProps = {
   favorite: LocationFavorite;
-  onPress?(event: GestureResponderEvent): void;
   icon?: JSX.Element;
-}>;
-export default function FavoriteItem({onPress, ...props}: FavoriteItemProps) {
-  if (!onPress) {
+};
+type WithOnPress = BaseProps & {
+  onPress(favorite: LocationFavorite, event: GestureResponderEvent): void;
+  accessibility?: AccessibilityProps;
+};
+
+export type FavoriteItemProps = SectionItem<BaseProps | WithOnPress>;
+export default function FavoriteItem(props: FavoriteItemProps) {
+  if (!withOnPress(props)) {
     return <FavoriteItemContent {...props} />;
   }
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity
+      accessible
+      accessibilityLabel={props.favorite.location.label + screenReaderPause}
+      accessibilityRole="button"
+      onPress={(e) => props.onPress(props.favorite, e)}
+      {...props.accessibility}
+    >
       <FavoriteItemContent {...props} />
     </TouchableOpacity>
   );
 }
 
-function FavoriteItemContent({
-  favorite,
-  icon,
-  ...props
-}: Omit<FavoriteItemProps, 'onPress'>) {
+function withOnPress(a: any): a is WithOnPress {
+  return 'onPress' in a;
+}
+
+function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
   const style = useSectionStyle();
 

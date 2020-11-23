@@ -1,5 +1,10 @@
 import React from 'react';
-import {GestureResponderEvent, TouchableOpacity, View} from 'react-native';
+import {
+  AccessibilityProps,
+  GestureResponderEvent,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import ThemeText from '../text';
 import NavigationIcon, {
   isNavigationIcon,
@@ -12,12 +17,14 @@ export type LinkItemProps = SectionItem<{
   subline?: string;
   onPress?(event: GestureResponderEvent): void;
   icon?: NavigationIconTypes | JSX.Element;
+  accessibility?: AccessibilityProps;
 }>;
 export default function LinkItem({
   text,
   onPress,
   subline,
   icon,
+  accessibility,
   ...props
 }: LinkItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
@@ -25,7 +32,13 @@ export default function LinkItem({
   const iconEl =
     isNavigationIcon(icon) || !icon ? <NavigationIcon mode={icon} /> : icon;
   return (
-    <TouchableOpacity onPress={onPress} style={[style.baseItem, topContainer]}>
+    <TouchableOpacity
+      accessible
+      accessibilityRole="link"
+      onPress={onPress}
+      style={[style.baseItem, topContainer]}
+      {...accessibility}
+    >
       <View style={[style.spaceBetween, contentContainer]}>
         <ThemeText>{text}</ThemeText>
         {iconEl}
