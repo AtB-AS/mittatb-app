@@ -27,7 +27,7 @@ type TextProps = SectionItem<
 
 const TextInput = forwardRef<InternalTextInput, TextProps>(
   ({label, onFocus, onBlur, showClear, onClear, style, ...props}, ref) => {
-    const {topContainer, spacing} = useSectionItem(props);
+    const {topContainer, spacing, contentContainer} = useSectionItem(props);
     const {theme, themeName} = useTheme();
     const styles = useInputStyle(theme, themeName);
     const [isFocused, setIsFocused] = useState(Boolean(props?.autoFocus));
@@ -53,17 +53,31 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
       paddingTop: spacing - Platform.select({android: 5, default: 0}),
     };
 
+    // Remove padding from topContainerStyle
+    const {padding: _dropThis, ...topContainerStyle} = topContainer;
+    const containerPadding = {
+      paddingHorizontal: spacing,
+    };
+
     return (
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          topContainerStyle,
+          containerPadding,
+          borderColor,
+        ]}
+      >
         <ThemeText type="lead" style={styles.label}>
           {label}
         </ThemeText>
         <InternalTextInput
           ref={ref}
-          style={[styles.input, topContainer, padding, style, borderColor]}
+          style={[styles.input, contentContainer, padding, style]}
           placeholderTextColor={theme.text.colors.faded}
           onFocus={onFocusEvent}
           onBlur={onBlurEvent}
+          maxFontSizeMultiplier={2}
           {...props}
         />
         {showClear ? (
@@ -88,23 +102,21 @@ export default TextInput;
 
 const useInputStyle = StyleSheet.createTheme((theme) => ({
   input: {
-    backgroundColor: theme.background.level0,
     color: theme.text.colors.primary,
-    borderWidth: theme.border.width.slim,
-    borderColor: theme.background.level0,
-    paddingLeft: 60,
     paddingRight: 40,
 
     fontSize: theme.text.body.fontSize,
   },
   container: {
-    flexDirection: 'column',
-    justifyContent: 'center',
+    backgroundColor: theme.background.level0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderWidth: theme.border.width.slim,
+    borderColor: theme.background.level0,
   },
   label: {
-    position: 'absolute',
-    left: theme.spacings.medium,
-    zIndex: 2,
+    minWidth: 60 - theme.spacings.medium,
   },
   inputClear: {
     position: 'absolute',
