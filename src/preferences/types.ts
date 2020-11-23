@@ -1,3 +1,5 @@
+import {ColorSchemeName} from 'react-native';
+
 export const preference_screenAlternatives = [
   'assistant',
   'departures',
@@ -7,6 +9,8 @@ export type Preference_ScreenAlternatives = typeof preference_screenAlternatives
 
 export type UserPreferences = {
   startScreen?: Preference_ScreenAlternatives;
+  colorScheme?: ColorSchemeName;
+  overrideColorScheme?: boolean;
 };
 
 export type PreferenceItem = keyof UserPreferences;

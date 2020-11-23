@@ -1,8 +1,9 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
+import {useColorScheme} from 'react-native';
 import {
   getPreferences as getPreferences_storage,
-  setPreference as setPreference_storage,
   resetPreference as resetPreference_storage,
+  setPreference as setPreference_storage,
 } from './storage';
 import {PreferenceItem, UserPreferences} from './types';
 
@@ -16,7 +17,9 @@ const PreferencesContext = createContext<PreferencesContextState | undefined>(
 );
 
 const PreferencesContextProvider: React.FC = ({children}) => {
-  const [preferences, setPreferencesState] = useState<UserPreferences>({});
+  let [preferences, setPreferencesState] = useState<UserPreferences>({});
+  let colorScheme = useColorScheme();
+
   async function populatePreferences() {
     let preferences = await getPreferences_storage();
     setPreferencesState(preferences);
@@ -27,7 +30,10 @@ const PreferencesContextProvider: React.FC = ({children}) => {
   }, []);
 
   const contextValue: PreferencesContextState = {
-    preferences,
+    preferences: {
+      colorScheme,
+      ...preferences,
+    },
     async setPreference(items: UserPreferences) {
       const preferences = await setPreference_storage(items);
       setPreferencesState(preferences);

@@ -49,8 +49,11 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         <Sections.Section withPadding withTopPadding>
           <Sections.HeaderItem text="Innstillinger" mode="subheading" />
           <Sections.LinkItem
+            text="Utseende"
+            onPress={() => navigation.navigate('Appearance')}
+          />
+          <Sections.LinkItem
             text="Startside"
-            icon="arrow-right"
             onPress={() => navigation.navigate('SelectStartScreen')}
           />
         </Sections.Section>
@@ -59,7 +62,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           <Sections.HeaderItem text="Favoritter" mode="subheading" />
           <Sections.LinkItem
             text="Steder"
-            icon="arrow-right"
             onPress={() => navigation.navigate('FavoriteList')}
           />
         </Sections.Section>
@@ -68,7 +70,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           <Sections.HeaderItem text="Personvern" mode="subheading" />
           <Sections.LinkItem
             text="Personvernerklæring"
-            icon="arrow-right"
             accessibility={{
               accessibilityHint:
                 'Aktivér for å lese personvernerklæring på ekstern side',
