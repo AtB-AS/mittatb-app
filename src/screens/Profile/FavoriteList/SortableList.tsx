@@ -6,6 +6,10 @@ import {State} from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
 
+// @TODO
+// Rewrite implementation to be modern components
+// and handle state better.
+
 const {cond, eq, add, call, Value, event, or} = Animated;
 
 interface Props<T> {
@@ -26,6 +30,7 @@ interface RState {
   dataProvider: DataProvider;
   dragging: boolean;
   draggingIdx: number;
+  rowHeight: number;
 }
 
 function immutableMove<T>(arr: T[], from: number, to: number) {
@@ -51,12 +56,12 @@ function immutableMove<T>(arr: T[], from: number, to: number) {
 
 export class SortableList<T> extends React.PureComponent<Props<T>, RState> {
   list = React.createRef<RecyclerListView<any, any>>();
-  _layoutProvider: LayoutProvider;
-  rowCenterY: Animated.Node<number>;
+  _layoutProvider!: LayoutProvider;
+  rowCenterY!: Animated.Node<number>;
   absoluteY = new Value(0);
   gestureState = new Value(-1);
   onGestureEvent: any;
-  halfRowHeightValue: Animated.Value<number>;
+  halfRowHeightValue!: Animated.Value<number>;
   currIdx = -1;
   scrollOffset = 0;
   flatlistHeight = 0;
@@ -65,8 +70,6 @@ export class SortableList<T> extends React.PureComponent<Props<T>, RState> {
 
   constructor(props: Props<T>) {
     super(props);
-    this.halfRowHeightValue = new Value(-props.rowHeight / 2);
-    const {width} = Dimensions.get('window');
 
     this.onGestureEvent = event([
       {
@@ -77,17 +80,7 @@ export class SortableList<T> extends React.PureComponent<Props<T>, RState> {
       },
     ]);
 
-    this.rowCenterY = add(this.absoluteY, this.halfRowHeightValue);
-
-    this._layoutProvider = new LayoutProvider(
-      (index) => {
-        return 1;
-      },
-      (type, dim) => {
-        dim.width = width;
-        dim.height = props.rowHeight;
-      },
-    );
+    this.setRowHeight(props.rowHeight, false);
 
     const dataProvider = new DataProvider((r1, r2) => {
       return r1 !== r2;
@@ -97,7 +90,29 @@ export class SortableList<T> extends React.PureComponent<Props<T>, RState> {
       dataProvider: dataProvider.cloneWithRows(props.data),
       dragging: false,
       draggingIdx: -1,
+      rowHeight: props.rowHeight,
     };
+  }
+
+  setRowHeight(rowHeight: number, saveState: boolean) {
+    this.halfRowHeightValue = new Value(-rowHeight / 2);
+    this.rowCenterY = add(this.absoluteY, this.halfRowHeightValue);
+    const {width} = Dimensions.get('window');
+
+    this._layoutProvider = new LayoutProvider(
+      (index) => {
+        return 1;
+      },
+      (type, dim) => {
+        dim.width = width;
+        dim.height = rowHeight;
+      },
+    );
+    if (saveState) {
+      this.setState({
+        rowHeight,
+      });
+    }
   }
 
   componentDidUpdate(prevProps: Props<T>) {
@@ -105,6 +120,10 @@ export class SortableList<T> extends React.PureComponent<Props<T>, RState> {
       this.setState({
         dataProvider: this.state.dataProvider.cloneWithRows(this.props.data),
       });
+    }
+
+    if (prevProps.rowHeight !== this.props.rowHeight) {
+      this.setRowHeight(this.props.rowHeight, true);
     }
   }
 

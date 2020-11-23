@@ -1,6 +1,6 @@
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {PanGestureHandler} from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -14,8 +14,10 @@ import {useFavorites} from '../../../favorites/FavoritesContext';
 import MessageBox from '../../../message-box';
 import {TabNavigatorParams} from '../../../navigation/TabNavigator';
 import {StyleSheet, Theme} from '../../../theme';
+import {useAppStateStatus} from '../../../utils/use-app-state-status';
 import BackHeader from '../BackHeader';
 import {SortableList} from './SortableList';
+import DeviceInfo from 'react-native-device-info';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -37,6 +39,9 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
   const items = favorites ?? [];
   const [sortedItems, setSortedItems] = useState(items);
   const [error, setError] = useState<string | null>(null);
+  const fontScale = useFontScale();
+
+  const minHeight = 52 * fontScale;
 
   const saveOrder = async () => {
     try {
@@ -60,7 +65,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
       <SortableList
         data={items}
         // @TODO Find solution for not hardcoding this.
-        rowHeight={52}
+        rowHeight={minHeight}
         onSort={setSortedItems}
         containerStyle={style.orderContainer}
         renderRow={(data, index, state, onGestureEvent) => {
@@ -118,3 +123,17 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     marginTop: theme.spacings.medium,
   },
 }));
+
+function useFontScale() {
+  const appStatus = useAppStateStatus();
+  const [fontScale, setScale] = useState<number>(1);
+  useEffect(() => {
+    const get = async () => {
+      const scale = await DeviceInfo.getFontScale();
+      setScale(scale);
+    };
+    get();
+  }, [appStatus]);
+
+  return fontScale;
+}
