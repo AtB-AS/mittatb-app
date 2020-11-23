@@ -1,9 +1,8 @@
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
-import {TextInput, View, Keyboard} from 'react-native';
+import {TextInput as InternalTextInput, View, Keyboard} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Header from '../ScreenHeader';
-import Input from '../components/input';
 import {
   Location,
   LocationWithMetadata,
@@ -28,6 +27,7 @@ import {LocationSearchResult} from './types';
 import ThemeIcon from '../components/theme-icon';
 import ThemeText from '../components/text';
 import ScreenReaderAnnouncement from '../components/screen-reader-announcement';
+import {TextInput} from '../components/sections';
 
 export type Props = {
   navigation: LocationSearchNavigationProp;
@@ -112,7 +112,7 @@ const LocationSearch: React.FC<Props> = ({
     });
   };
 
-  const inputRef = useRef<TextInput>(null);
+  const inputRef = useRef<InternalTextInput>(null);
 
   const isFocused = useIsFocused();
 
@@ -142,23 +142,22 @@ const LocationSearch: React.FC<Props> = ({
   return (
     <SafeAreaView style={styles.container}>
       <View style={{paddingTop: 12, flex: 1}}>
-        <View style={{marginHorizontal: 20}}>
-          <Header
-            leftButton={{
-              onPress: () => navigation.goBack(),
-              accessible: true,
-              accessibilityRole: 'button',
-              accessibilityLabel: 'Gå tilbake',
-              icon: <ThemeIcon svg={Close} />,
-            }}
-            title="Søk"
-          />
-        </View>
+        <Header
+          leftButton={{
+            onPress: () => navigation.goBack(),
+            accessible: true,
+            accessibilityRole: 'button',
+            accessibilityLabel: 'Gå tilbake',
+            icon: <ThemeIcon svg={Close} />,
+          }}
+          title="Søk"
+        />
         <ScreenReaderAnnouncement message={errorMessage} />
 
-        <View style={[{marginTop: 12}, styles.contentBlock]}>
-          <Input
+        <View style={styles.inputBlock}>
+          <TextInput
             ref={inputRef}
+            radius="top-bottom"
             label={label}
             value={text}
             onChangeText={setText}
@@ -175,7 +174,8 @@ const LocationSearch: React.FC<Props> = ({
             onSelectLocation={onSelect}
             onMapSelection={onMapSelection}
             chipTypes={favoriteChipTypes}
-            containerStyle={[styles.contentBlock, styles.chipBox]}
+            containerStyle={styles.chipBox}
+            contentContainerStyle={styles.contentBlock}
           />
         </View>
 
@@ -283,6 +283,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.background.level2,
     flex: 1,
+  },
+  inputBlock: {
+    margin: theme.spacings.medium,
   },
   contentBlock: {
     paddingHorizontal: theme.spacings.medium,

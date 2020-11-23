@@ -10,6 +10,8 @@ import React from 'react';
 import {StyleSheet, Theme, useTheme} from '../../theme';
 import ThemeText from '../text';
 
+export {default as ButtonGroup} from './group';
+
 type ButtonMode = keyof Theme['button'];
 
 type ButtonTypeAwareProps =

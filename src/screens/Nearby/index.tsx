@@ -4,50 +4,47 @@ import {
   useIsFocused,
 } from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useMemo, useEffect, useState} from 'react';
-import {
-  getDepartures,
-  getRealtimeDeparture,
-  DeparturesInputQuery,
-} from '../../api/departures';
-import {LocationButton} from '../../components/search-button';
-import {Location, LocationWithMetadata} from '../../favorites/types';
-import {
-  useGeolocationState,
-  RequestPermissionFn,
-} from '../../GeolocationContext';
-import {RootStackParamList} from '../../navigation';
-import {StyleSheet, useTheme} from '../../theme';
-import Loading from '../Loading';
-import NearbyResults from './NearbyResults';
-import {TabNavigatorParams} from '../../navigation/TabNavigator';
-import SearchGroup from '../../components/search-button/search-group';
-import DisappearingHeader from '../../components/disappearing-header';
-import {DeparturesWithStop, Paginated, DeparturesRealtimeData} from '../../sdk';
-import {View, TouchableOpacity, ActivityIndicator} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import useReducerWithSideEffects, {
-  Update,
+  NoUpdate,
   ReducerWithSideEffects,
   SideEffect,
-  NoUpdate,
+  Update,
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
-import useInterval from '../../utils/use-interval';
 import {
-  updateStopsWithRealtime,
+  DeparturesInputQuery,
+  getDepartures,
+  getRealtimeDeparture,
+} from '../../api/departures';
+import {ErrorType, getAxiosErrorType} from '../../api/utils';
+import {CurrentLocationArrow} from '../../assets/svg/icons/places';
+import AccessibleText from '../../components/accessible-text';
+import DisappearingHeader from '../../components/disappearing-header';
+import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
+import {LocationInput, Section} from '../../components/sections';
+import ThemeIcon from '../../components/theme-icon';
+import {Location, LocationWithMetadata} from '../../favorites/types';
+import {useReverseGeocoder} from '../../geocoder';
+import {
+  RequestPermissionFn,
+  useGeolocationState,
+} from '../../GeolocationContext';
+import {useLocationSearchValue} from '../../location-search';
+import {RootStackParamList} from '../../navigation';
+import {TabNavigatorParams} from '../../navigation/TabNavigator';
+import {DeparturesRealtimeData, DeparturesWithStop, Paginated} from '../../sdk';
+import {StyleSheet} from '../../theme';
+import {useNavigateHome} from '../../utils/navigation';
+import useInterval from '../../utils/use-interval';
+import Loading from '../Loading';
+import NearbyResults from './NearbyResults';
+import {
   DeparturesWithStopLocal,
   mapQuayDeparturesToShowlimits,
   showMoreItemsOnQuay,
+  updateStopsWithRealtime,
 } from './utils';
-import insets from '../../utils/insets';
-import {CurrentLocationArrow} from '../../assets/svg/icons/places';
-import AccessibleText from '../../components/accessible-text';
-import {useReverseGeocoder} from '../../geocoder';
-import {useLocationSearchValue} from '../../location-search';
-import {useNavigateHome} from '../../utils/navigation';
-import {ErrorType, getAxiosErrorType} from '../../api/utils';
-import ThemeIcon from '../../components/theme-icon';
-import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
 
@@ -111,7 +108,6 @@ const NearbyOverview: React.FC<Props> = ({
   navigation,
 }) => {
   const styles = useThemeStyles();
-  const {theme} = useTheme();
   const searchedFromLocation = useLocationSearchValue<NearbyScreenProp>(
     'location',
   );
@@ -181,40 +177,22 @@ const NearbyOverview: React.FC<Props> = ({
   }, [updatingLocation, isLoading]);
 
   const renderHeader = () => (
-    <SearchGroup containerStyle={styles.searchGroup}>
-      <View style={styles.searchButtonContainer}>
-        <View style={styles.styleButton}>
-          <LocationButton
-            title="Fra"
-            placeholder={
-              updatingLocation
-                ? 'Oppdaterer posisjon'
-                : 'Søk etter adresse eller sted'
-            }
-            icon={
-              updatingLocation ? (
-                <ActivityIndicator color={theme.text.colors.primary} />
-              ) : undefined
-            }
-            location={fromLocation}
-            onPress={openLocationSearch}
-            accessible={true}
-            accessibilityLabel="Søk på avreisested."
-            accessibilityRole="button"
-          />
-        </View>
-
-        <TouchableOpacity
-          hitSlop={insets.all(12)}
-          accessible={true}
-          accessibilityLabel="Bruk min posisjon."
-          accessibilityRole="button"
-          onPress={setCurrentLocationOrRequest}
-        >
-          <ThemeIcon svg={CurrentLocationArrow} />
-        </TouchableOpacity>
-      </View>
-    </SearchGroup>
+    <Section withPadding>
+      <LocationInput
+        label="Fra"
+        updatingLocation={updatingLocation}
+        location={fromLocation}
+        onPress={openLocationSearch}
+        accessibilityLabel="Søk på avreisested."
+        icon={<ThemeIcon svg={CurrentLocationArrow} />}
+        onIconPress={setCurrentLocationOrRequest}
+        iconAccessibility={{
+          accessible: true,
+          accessibilityLabel: 'Bruk min posisjon.',
+          accessibilityRole: 'button',
+        }}
+      />
+    </Section>
   );
 
   return (
@@ -264,17 +242,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   altTitleHeader: {
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  searchGroup: {
-    marginBottom: theme.spacings.small,
-  },
-  searchButtonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingRight: 12,
-  },
-  styleButton: {
-    flexGrow: 1,
   },
 }));
 

@@ -74,6 +74,7 @@
     "react-native-svg": "^12.1.0",
     "react-native-tab-view": "^2.15.2",
     "react-native-webview": "^10.9.2",
+    "recyclerlistview": "^3.0.0",
     "search-params": "^3.0.0",
     "string.fromcodepoint": "^1.0.0",
     "use-reducer-with-side-effects": "^2.2.0",

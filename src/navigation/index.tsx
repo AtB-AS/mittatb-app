@@ -23,6 +23,10 @@ import DepartureDetails, {
 import {useTheme} from '../theme';
 import TabNavigator from './TabNavigator';
 import transitionSpec from './transitionSpec';
+import AddEditFavorite, {
+  AddEditParams,
+} from '../screens/Profile/AddEditFavorite';
+import SortableFavoriteList from '../screens/Profile/FavoriteList/SortFavorites';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -31,6 +35,8 @@ export type RootStackParamList = {
   LocationSearch: LocationSearchParams;
   TripDetailsModal: TripDetailsModalParams;
   DepartureDetailsModal: DepartureDetailsRouteParams;
+  SortableFavoriteList: undefined;
+  AddEditFavorite: AddEditParams;
   TicketPurchase: undefined;
 };
 
@@ -66,25 +72,19 @@ const NavigationRoot = () => {
       />
       <Host>
         <NavigationContainer ref={ref} onStateChange={trackNavigation}>
-          <Stack.Navigator mode={isLoading || !onboarded ? 'card' : 'modal'}>
+          <Stack.Navigator
+            mode={isLoading || !onboarded ? 'card' : 'modal'}
+            screenOptions={{headerShown: false}}
+          >
             {!onboarded ? (
-              <Stack.Screen
-                name="Onboarding"
-                component={Onboarding}
-                options={{headerShown: false}}
-              />
+              <Stack.Screen name="Onboarding" component={Onboarding} />
             ) : (
               <>
-                <Stack.Screen
-                  name="TabNavigator"
-                  component={TabNavigator}
-                  options={{headerShown: false}}
-                />
+                <Stack.Screen name="TabNavigator" component={TabNavigator} />
                 <Stack.Screen
                   name="TripDetailsModal"
                   component={TripDetailsModal}
                   options={{
-                    headerShown: false,
                     cardOverlayEnabled: true,
                     cardShadowEnabled: true,
                     ...TransitionPresets.ModalPresentationIOS,
@@ -94,7 +94,6 @@ const NavigationRoot = () => {
                   name="DepartureDetailsModal"
                   component={DepartureDetails}
                   options={{
-                    headerShown: false,
                     cardOverlayEnabled: true,
                     cardShadowEnabled: true,
                     ...TransitionPresets.ModalPresentationIOS,
@@ -104,7 +103,6 @@ const NavigationRoot = () => {
                   name="LocationSearch"
                   component={LocationSearch}
                   options={{
-                    headerShown: false,
                     transitionSpec: {
                       open: transitionSpec,
                       close: transitionSpec,
@@ -115,7 +113,30 @@ const NavigationRoot = () => {
                   name="TicketPurchase"
                   component={TicketPurchase}
                   options={{
-                    headerShown: false,
+                    transitionSpec: {
+                      open: transitionSpec,
+                      close: transitionSpec,
+                    },
+                  }}
+                />
+
+                <Stack.Screen
+                  name="AddEditFavorite"
+                  component={AddEditFavorite}
+                  options={{
+                    transitionSpec: {
+                      open: transitionSpec,
+                      close: transitionSpec,
+                    },
+                  }}
+                />
+                <Stack.Screen
+                  name="SortableFavoriteList"
+                  component={SortableFavoriteList}
+                  options={{
+                    gestureResponseDistance: {
+                      vertical: 100,
+                    },
                     transitionSpec: {
                       open: transitionSpec,
                       close: transitionSpec,
