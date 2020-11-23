@@ -2,7 +2,7 @@ import {Location} from '@entur/sdk';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useRef, useState} from 'react';
-import {Alert, Keyboard, View, TouchableOpacity} from 'react-native';
+import {Alert, Keyboard, View} from 'react-native';
 import {Modalize} from 'react-native-modalize';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ProfileStackParams} from '..';
@@ -48,7 +48,6 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   const css = useScreenStyle();
   const {addFavorite, removeFavorite, updateFavorite} = useFavorites();
   const editItem = route?.params?.editItem;
-  const locationInputRef = useRef<TouchableOpacity>(null);
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined,
@@ -80,7 +79,6 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   const save = async () => {
     if (!location) {
       setErrorMessage('Du må velge et sted du vil ha som favoritt');
-      locationInputRef.current?.focus();
       return;
     }
     const newFavorite = {
@@ -159,7 +157,6 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           <Sections.LocationInput
             label="Sted"
             location={location}
-            ref={locationInputRef}
             placeholder="Søk etter adresse eller stoppested"
             onPress={() =>
               navigation.navigate('LocationSearch', {

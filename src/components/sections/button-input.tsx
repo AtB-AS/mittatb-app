@@ -1,4 +1,4 @@
-import React, {forwardRef} from 'react';
+import React from 'react';
 import {AccessibilityProps, TouchableOpacity, View} from 'react-native';
 import {StyleSheet} from '../../theme';
 import insets from '../../utils/insets';
@@ -20,82 +20,70 @@ export type ButtonInputProps = SectionItem<{
 }> &
   AccessibilityProps;
 
-const ButtonInput = forwardRef<TouchableOpacity, ButtonInputProps>(
-  (
-    {
-      onPress,
-      value,
-      placeholder,
-      label,
+export default function ButtonInput({
+  onPress,
+  value,
+  placeholder,
+  label,
 
-      icon,
-      onIconPress,
-      iconAccessibility,
+  icon,
+  onIconPress,
+  iconAccessibility,
 
-      ...props
-    },
-    ref,
-  ) => {
-    const {topContainer, contentContainer, spacing} = useSectionItem(props);
-    const styles = useSymbolPickerStyle();
-    const iconEl = isNavigationIcon(icon) ? (
-      <NavigationIcon mode={icon} />
+  ...props
+}: ButtonInputProps) {
+  const {topContainer, contentContainer, spacing} = useSectionItem(props);
+  const styles = useSymbolPickerStyle();
+  const iconEl = isNavigationIcon(icon) ? <NavigationIcon mode={icon} /> : icon;
+
+  const wrapperStyle =
+    props.type == 'compact' || props.type == 'inline'
+      ? styles.wrapper__inline
+      : undefined;
+
+  const padding = {padding: spacing};
+
+  const handlerWithoutPress = !onIconPress ? (
+    <View style={[styles.iconContainer, padding]}>{iconEl}</View>
+  ) : undefined;
+
+  const handlerWithPress = onIconPress ? (
+    <TouchableOpacity
+      hitSlop={insets.all(12)}
+      onPress={onIconPress}
+      style={[styles.iconContainer, padding]}
+      {...iconAccessibility}
+    >
+      <View>{iconEl}</View>
+    </TouchableOpacity>
+  ) : undefined;
+
+  const valueEl =
+    isStringText(value) || !value ? (
+      <ThemeText type="body" style={!value && styles.faded}>
+        {value ?? placeholder}
+      </ThemeText>
     ) : (
-      icon
+      value
     );
 
-    const wrapperStyle =
-      props.type == 'compact' || props.type == 'inline'
-        ? styles.wrapper__inline
-        : undefined;
-
-    const padding = {padding: spacing};
-
-    const handlerWithoutPress = !onIconPress ? (
-      <View style={[styles.iconContainer, padding]}>{iconEl}</View>
-    ) : undefined;
-
-    const handlerWithPress = onIconPress ? (
+  return (
+    <View style={wrapperStyle}>
       <TouchableOpacity
-        hitSlop={insets.all(12)}
-        onPress={onIconPress}
-        style={[styles.iconContainer, padding]}
-        {...iconAccessibility}
+        onPress={onPress}
+        style={[styles.container, topContainer]}
+        {...props}
       >
-        <View>{iconEl}</View>
-      </TouchableOpacity>
-    ) : undefined;
-
-    const valueEl =
-      isStringText(value) || !value ? (
-        <ThemeText type="body" style={!value && styles.faded}>
-          {value ?? placeholder}
+        <ThemeText type="lead" style={styles.label}>
+          {label}
         </ThemeText>
-      ) : (
-        value
-      );
-
-    return (
-      <View style={wrapperStyle}>
-        <TouchableOpacity
-          onPress={onPress}
-          style={[styles.container, topContainer]}
-          ref={ref}
-          {...props}
-        >
-          <ThemeText type="lead" style={styles.label}>
-            {label}
-          </ThemeText>
-          <View style={contentContainer}>{valueEl}</View>
-          {handlerWithoutPress}
-        </TouchableOpacity>
-        {handlerWithPress}
-      </View>
-    );
-  },
-);
-
-export default ButtonInput;
+        <View style={contentContainer}>{valueEl}</View>
+        {handlerWithoutPress}
+      </TouchableOpacity>
+      {handlerWithPress}
+    </View>
+  );
+}
 
 function isStringText(a: any): a is string {
   return typeof a === 'string';
