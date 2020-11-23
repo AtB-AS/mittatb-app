@@ -47,6 +47,15 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
       <ScrollView>
         <Sections.Section withPadding withTopPadding>
+          <Sections.HeaderItem text="Innstillinger" mode="subheading" />
+          <Sections.LinkItem
+            text="Startside"
+            icon="arrow-right"
+            onPress={() => navigation.navigate('SelectStartScreen')}
+          />
+        </Sections.Section>
+
+        <Sections.Section withPadding>
           <Sections.HeaderItem text="Favoritter" mode="subheading" />
           <Sections.LinkItem
             text="Steder"

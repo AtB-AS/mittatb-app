@@ -11,6 +11,10 @@ import {
 } from '../assets/svg/icons/tab-bar';
 import ThemeText from '../components/text';
 import {LocationWithMetadata} from '../favorites/types';
+import {
+  Preference_ScreenAlternatives,
+  usePreferenceItems,
+} from '../preferences';
 import Assistant from '../screens/Assistant';
 import NearbyScreen from '../screens/Nearby';
 import ProfileScreen, {ProfileStackParams} from '../screens/Profile';
@@ -37,6 +41,7 @@ const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
 const NavigationRoot = () => {
   const {theme} = useTheme();
+  const {startScreen} = usePreferenceItems();
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -48,6 +53,7 @@ const NavigationRoot = () => {
           color: theme.text.colors.faded,
         },
       }}
+      initialRouteName={settingToRouteName(startScreen)}
     >
       <Tab.Screen
         name="Assistant"
@@ -100,4 +106,19 @@ function tabSettings(
     ),
     tabBarIcon: ({color}) => <Icon fill={color} />,
   };
+}
+
+function settingToRouteName(
+  setting?: Preference_ScreenAlternatives,
+): keyof TabNavigatorParams {
+  switch (setting) {
+    case 'assistant':
+      return 'Assistant';
+    case 'departures':
+      return 'Nearest';
+    case 'ticketing':
+      return 'Ticketing';
+    default:
+      return 'Assistant';
+  }
 }
