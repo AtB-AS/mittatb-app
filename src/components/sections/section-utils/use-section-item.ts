@@ -1,4 +1,4 @@
-import {ImageStyle, StyleProp, TextStyle, ViewStyle} from 'react-native';
+import {ViewStyle} from 'react-native';
 import {Theme, useTheme} from '../../../theme';
 import {RadiusSizes} from '../../../theme/colors';
 

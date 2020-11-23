@@ -65,13 +65,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             }
           />
         </Sections.Section>
-
-        <Sections.Section withPadding>
-          <Sections.HeaderItem text="Hello" subline="Foo" />
-          <Sections.ActionItem mode="toggle" text="Hello" />
-          <Sections.ActionItem mode="heading-expand" text="Hello" />
-          <Sections.ActionItem mode="check" text="Hello" checked />
-        </Sections.Section>
       </ScrollView>
     </View>
   );
