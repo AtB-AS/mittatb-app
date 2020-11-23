@@ -53,6 +53,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
           navigation.navigate('DepartureDetails', {
             title: getLineName(leg),
             serviceJourneyId: leg.serviceJourney.id,
+            date: leg.expectedStartTime,
             fromQuayId: leg.fromPlace.quay?.id,
             toQuayId: leg.toPlace.quay?.id,
             isBack: true,

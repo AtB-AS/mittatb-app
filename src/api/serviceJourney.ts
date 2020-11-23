@@ -1,3 +1,4 @@
+import {formatISO} from 'date-fns';
 import {EstimatedCall} from '../sdk';
 import client from './client';
 
@@ -11,7 +12,7 @@ export async function getDepartures(
 ): Promise<EstimatedCall[]> {
   let url = `bff/v1/servicejourney/${encodeURIComponent(id)}/departures`;
   if (date) {
-    url = url + `?date=${date.toISOString()}`;
+    url = url + `?date=${formatISO(date, {representation: 'date'})}`;
   }
   const response = await client.get<ServiceJourneDepartures>(url);
   return response.data?.value ?? [];
