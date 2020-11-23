@@ -1,6 +1,9 @@
 import {useCallback, useEffect, useReducer} from 'react';
 import {reserveOffers} from '../../../../../api';
-import {TicketReservation} from '../../../../../api/fareContracts';
+import {
+  ReserveOffer,
+  TicketReservation,
+} from '../../../../../api/fareContracts';
 import {ErrorType, getAxiosErrorType} from '../../../../../api/utils';
 import {AxiosError} from 'axios';
 import {Linking} from 'react-native';
@@ -57,7 +60,13 @@ const initialState: VippsReducerState = {
   state: 'reserving-offer',
 };
 
-export default function useVippsState(offer_id: string, count: number) {
+export default function useVippsState(
+  offers: ReserveOffer[],
+  activatePolling: (
+    reservation: TicketReservation,
+    offers: ReserveOffer[],
+  ) => void,
+) {
   const [{state, error, reservation}, dispatch] = useReducer(
     vippsReducer,
     initialState,
@@ -81,7 +90,7 @@ export default function useVippsState(offer_id: string, count: number) {
   const reserveOffer = useCallback(
     async function () {
       try {
-        const response = await reserveOffers([{offer_id, count}], 'vipps', {
+        const response = await reserveOffers(offers, 'vipps', {
           retry: true,
         });
 
@@ -91,7 +100,7 @@ export default function useVippsState(offer_id: string, count: number) {
         handleAxiosError(err, 'reserve-offer');
       }
     },
-    [offer_id, count, dispatch, handleAxiosError],
+    [offers, dispatch, handleAxiosError],
   );
 
   useEffect(() => {
@@ -118,7 +127,10 @@ export default function useVippsState(offer_id: string, count: number) {
   );
 
   useEffect(() => {
-    if (state === 'offer-reserved') openVipps();
+    if (state === 'offer-reserved' && reservation) {
+      activatePolling(reservation, offers);
+      openVipps();
+    }
   }, [state, openVipps]);
 
   return {

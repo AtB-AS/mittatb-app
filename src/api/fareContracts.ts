@@ -11,20 +11,18 @@ export async function list(): Promise<ListTicketsResponse> {
   return response.data;
 }
 
+export type OfferSearchParams = {
+  zones: string[];
+  travellers: {id: string; user_type: UserType; count: number}[];
+  products: string[];
+};
+
 export async function search(
-  zones: string[],
-  travellers: {id: string; user_type: UserType; count: number}[],
-  products: string[],
+  params: OfferSearchParams,
   opts?: AxiosRequestConfig,
 ): Promise<Offer[]> {
-  const body = {
-    zones,
-    travellers,
-    products,
-  };
-
   const url = 'ticket/v1/search';
-  const response = await client.post<Offer[]>(url, body, opts);
+  const response = await client.post<Offer[]>(url, params, opts);
 
   return response.data;
 }
@@ -70,16 +68,6 @@ export async function reserve(
   return response.data;
 }
 
-export async function capture(payment_id: number, transaction_id: number) {
-  const url = 'ticket/v1/capture';
-  await client.put(url, {
-    //@ts-ignore
-    payment_id: parseInt(payment_id, 10),
-    //@ts-ignore
-    transaction_id: parseInt(transaction_id, 10),
-  });
-}
-
 export type UserType = 'ADULT';
 
 export type OfferPrice = {
@@ -118,6 +106,7 @@ export type ReserveOffer = {
 };
 
 export type TicketReservation = {
+  order_id: string;
   payment_id: number;
   transaction_id: number;
   url: string;

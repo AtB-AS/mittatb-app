@@ -18,6 +18,10 @@ import {StyleSheet} from '../../../../../theme';
 import {ErrorType} from '../../../../../api/utils';
 import Button from '../../../../../components/button';
 import ThemeIcon from '../../../../../components/theme-icon';
+import {
+  ReserveOffer,
+  TicketReservation,
+} from '../../../../../api/fareContracts';
 
 type Props = {
   navigation: DismissableStackNavigationProp<
@@ -29,12 +33,17 @@ type Props = {
 
 const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const styles = useStyles();
-  const {offer_id, count} = route.params;
+  const {offers} = route.params;
+
   const cancelTerminal = (refresh?: boolean) =>
     navigation.navigate('Travellers', {refreshOffer: refresh});
+
   const {activatePollingForNewTickets} = useTicketState();
-  const onPurchaseSuccess = () => {
-    activatePollingForNewTickets();
+  const dismissAndActivatePolling = (
+    reservation: TicketReservation,
+    reservationOffers: ReserveOffer[],
+  ) => {
+    activatePollingForNewTickets(reservation, reservationOffers, 'creditcard');
     navigation.dismiss();
   };
 
@@ -45,7 +54,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     onWebViewLoadStart,
     error,
     restartTerminal,
-  } = useTerminalState(offer_id, count, cancelTerminal, onPurchaseSuccess);
+  } = useTerminalState(offers, cancelTerminal, dismissAndActivatePolling);
 
   return (
     <SafeAreaView style={styles.container}>

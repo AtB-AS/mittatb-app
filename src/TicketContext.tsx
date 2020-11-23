@@ -1,11 +1,10 @@
-import React, {
-  useContext,
-  createContext,
-  useCallback,
-  useState,
-  useEffect,
-} from 'react';
-import {FareContract} from './api/fareContracts';
+import React, {useContext, createContext, useCallback, useState} from 'react';
+import {
+  FareContract,
+  PaymentType,
+  ReserveOffer,
+  TicketReservation,
+} from './api/fareContracts';
 import usePollableResource from './utils/use-pollable-resource';
 import {listFareContracts} from './api';
 
@@ -13,13 +12,29 @@ type TicketState = {
   fareContracts: FareContract[] | undefined;
   isRefreshingTickets: boolean;
   refreshTickets: () => void;
-  activatePollingForNewTickets: () => void;
+  activatePollingForNewTickets: (
+    reservation: TicketReservation,
+    offers: ReserveOffer[],
+    paymentType: PaymentType,
+  ) => void;
+};
+
+type ActiveReservation = {
+  reservation: TicketReservation;
+  offers: ReserveOffer[];
+  paymentType: PaymentType;
 };
 
 const TicketContext = createContext<TicketState | undefined>(undefined);
 
 const TicketContextProvider: React.FC = ({children}) => {
-  const [poll, setPoll] = useState(false);
+  const [reservations, setReservations] = useState<ActiveReservation[]>([]);
+
+  const updateReservations = (
+    reservation: TicketReservation,
+    offers: ReserveOffer[],
+    paymentType: PaymentType,
+  ) => setReservations([...reservations, {reservation, offers, paymentType}]);
 
   const getFareContracts = useCallback(async function () {
     try {
@@ -37,10 +52,8 @@ const TicketContextProvider: React.FC = ({children}) => {
   ] = usePollableResource(getFareContracts, {
     initialValue: [],
     pollingTimeInSeconds: 1,
-    disabled: !poll,
+    disabled: !reservations.length,
   });
-
-  useEffect(() => setPoll(false), [fareContracts?.length]);
 
   return (
     <TicketContext.Provider
@@ -48,7 +61,7 @@ const TicketContextProvider: React.FC = ({children}) => {
         fareContracts,
         refreshTickets,
         isRefreshingTickets,
-        activatePollingForNewTickets: () => setPoll(true),
+        activatePollingForNewTickets: updateReservations,
       }}
     >
       {children}

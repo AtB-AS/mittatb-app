@@ -7,11 +7,14 @@ import {
 } from './Payment';
 import createDismissableStackNavigator from '../../../navigation/createDismissableStackNavigator';
 import {ActiveTicketsScreenName} from '../Tickets';
+import {ReserveOffer} from '../../../api/fareContracts';
+
+type PaymentParams = {offers: ReserveOffer[]};
 
 export type TicketingStackParams = {
   Travellers: {refreshOffer?: boolean};
-  PaymentCreditCard: {offer_id: string; count: number};
-  PaymentVipps: {offer_id: string; count: number};
+  PaymentCreditCard: PaymentParams;
+  PaymentVipps: PaymentParams;
   VippsCallback: {status: string; transaction_id: string; payment_id: string};
   Splash: undefined;
 };

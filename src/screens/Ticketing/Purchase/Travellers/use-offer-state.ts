@@ -106,15 +106,17 @@ export default function useOfferState() {
     async function (count: number, cancelToken?: CancelToken) {
       try {
         const response = await searchOffers(
-          ['ATB:TariffZone:1'],
-          [
-            {
-              id: 'adult_group',
-              user_type: 'ADULT',
-              count,
-            },
-          ],
-          [SINGLE_TICKET_PRODUCT_ID],
+          {
+            zones: ['ATB:TariffZone:1'],
+            travellers: [
+              {
+                id: 'adult_group',
+                user_type: 'ADULT',
+                count,
+              },
+            ],
+            products: [SINGLE_TICKET_PRODUCT_ID],
+          },
           {cancelToken, retry: true},
         );
 

@@ -5,8 +5,11 @@ import {
   WebViewNavigation,
   WebViewNavigationEvent,
 } from 'react-native-webview/lib/WebViewTypes';
-import {capturePayment, reserveOffers} from '../../../../../api';
-import {TicketReservation} from '../../../../../api/fareContracts';
+import {reserveOffers} from '../../../../../api';
+import {
+  ReserveOffer,
+  TicketReservation,
+} from '../../../../../api/fareContracts';
 import {ErrorType, getAxiosErrorType} from '../../../../../api/utils';
 import {parse as parseURL} from 'search-params';
 import {AxiosError} from 'axios';
@@ -84,10 +87,12 @@ const initialState: TerminalReducerState = {
 };
 
 export default function useTerminalState(
-  offer_id: string,
-  count: number,
+  offers: ReserveOffer[],
   cancelTerminal: () => void,
-  onPurchaseSuccess: () => void,
+  activatePolling: (
+    reservation: TicketReservation,
+    offers: ReserveOffer[],
+  ) => void,
 ) {
   const [
     {paymentResponseCode, reservation, loadingState, error},
@@ -112,13 +117,9 @@ export default function useTerminalState(
   const reserveOffer = useCallback(
     async function () {
       try {
-        const response = await reserveOffers(
-          [{offer_id, count}],
-          'creditcard',
-          {
-            retry: true,
-          },
-        );
+        const response = await reserveOffers(offers, 'creditcard', {
+          retry: true,
+        });
 
         dispatch({type: 'OFFER_RESERVED', reservation: response});
       } catch (err) {
@@ -126,23 +127,7 @@ export default function useTerminalState(
         handleAxiosError(err, 'reservation');
       }
     },
-    [offer_id, count, dispatch, handleAxiosError],
-  );
-
-  const capture = useCallback(
-    async function () {
-      try {
-        if (!reservation) throw new Error('Has no active offer reservation');
-        const {payment_id, transaction_id} = reservation;
-        await capturePayment(payment_id, transaction_id);
-
-        onPurchaseSuccess();
-      } catch (err) {
-        console.warn(err);
-        handleAxiosError(err, 'capture');
-      }
-    },
-    [reservation, onPurchaseSuccess, handleAxiosError],
+    [offers, dispatch, handleAxiosError],
   );
 
   useEffect(() => {
@@ -182,7 +167,9 @@ export default function useTerminalState(
     // so we have a "payment redirect guard" here
     if (
       !paymentRedirectCompleteRef.current &&
-      url.includes('/EnturPaymentRedirect')
+      url.includes(
+        '/ticket/v1/payments/{payment_id}/transactions/{transaction_id}/callback',
+      )
     ) {
       paymentRedirectCompleteRef.current = true;
       const params = parseURL(url);
@@ -196,7 +183,9 @@ export default function useTerminalState(
   useEffect(() => {
     switch (paymentResponseCode) {
       case 'OK':
-        capture();
+        if (!reservation) return;
+
+        activatePolling(reservation, offers);
         break;
       case 'Cancel':
         cancelTerminal();
