@@ -5,12 +5,12 @@ import {useSectionItem, SectionItem, useSectionStyle} from './section-utils';
 
 export type HeaderItemProps = SectionItem<{
   text: string;
-  subline?: string;
+  subtitle?: string;
   mode?: 'heading' | 'subheading';
 }>;
 export default function HeaderItem({
   text,
-  subline,
+  subtitle,
   mode = 'heading',
   ...props
 }: HeaderItemProps) {
@@ -26,13 +26,13 @@ export default function HeaderItem({
       >
         {text}
       </ThemeText>
-      {subline && (
+      {subtitle && (
         <ThemeText
           style={contentContainer}
           color="faded"
           type={mode === 'heading' ? 'lead' : 'label'}
         >
-          {subline}
+          {subtitle}
         </ThemeText>
       )}
     </View>

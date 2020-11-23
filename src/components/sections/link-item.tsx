@@ -14,7 +14,7 @@ import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 
 export type LinkItemProps = SectionItem<{
   text: string;
-  subline?: string;
+  subtitle?: string;
   onPress?(event: GestureResponderEvent): void;
   icon?: NavigationIconTypes | JSX.Element;
   accessibility?: AccessibilityProps;
@@ -22,7 +22,7 @@ export type LinkItemProps = SectionItem<{
 export default function LinkItem({
   text,
   onPress,
-  subline,
+  subtitle,
   icon,
   accessibility,
   ...props
@@ -43,9 +43,9 @@ export default function LinkItem({
         <ThemeText>{text}</ThemeText>
         {iconEl}
       </View>
-      {subline && (
+      {subtitle && (
         <ThemeText color="faded" type="lead">
-          {subline}
+          {subtitle}
         </ThemeText>
       )}
     </TouchableOpacity>
