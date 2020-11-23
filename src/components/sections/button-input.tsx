@@ -74,10 +74,10 @@ export default function ButtonInput({
         style={[styles.container, topContainer]}
         {...props}
       >
-        <View style={contentContainer}>{valueEl}</View>
         <ThemeText type="lead" style={[styles.label, padding]}>
           {label}
         </ThemeText>
+        <View style={contentContainer}>{valueEl}</View>
         {handlerWithoutPress}
       </TouchableOpacity>
       {handlerWithPress}
