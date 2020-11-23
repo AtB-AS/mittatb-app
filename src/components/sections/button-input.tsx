@@ -74,7 +74,7 @@ export default function ButtonInput({
         style={[styles.container, topContainer]}
         {...props}
       >
-        <ThemeText type="lead" style={[styles.label, padding]}>
+        <ThemeText type="lead" style={styles.label}>
           {label}
         </ThemeText>
         <View style={contentContainer}>{valueEl}</View>
@@ -91,11 +91,11 @@ function isStringText(a: any): a is string {
 
 const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    // @TODO Better way to do this.
-    paddingLeft: 60,
-    paddingRight: 60,
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     backgroundColor: theme.background.level0,
+    paddingRight: 40,
   },
   wrapper__inline: {
     alignSelf: 'flex-start',
@@ -105,8 +105,8 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
     right: 0,
   },
   label: {
-    position: 'absolute',
-    left: 0,
+    // @TODO Find a better way to do this.
+    minWidth: 60 - theme.spacings.medium,
   },
   faded: {
     color: theme.text.colors.faded,
