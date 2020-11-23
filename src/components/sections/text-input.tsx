@@ -55,6 +55,9 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
 
     return (
       <View style={styles.container}>
+        <ThemeText type="lead" style={styles.label}>
+          {label}
+        </ThemeText>
         <InternalTextInput
           ref={ref}
           style={[styles.input, topContainer, padding, style, borderColor]}
@@ -76,9 +79,6 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
             </TouchableOpacity>
           </View>
         ) : null}
-        <ThemeText type="lead" style={styles.label}>
-          {label}
-        </ThemeText>
       </View>
     );
   },
@@ -104,6 +104,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   label: {
     position: 'absolute',
     left: theme.spacings.medium,
+    zIndex: 2,
   },
   inputClear: {
     position: 'absolute',
