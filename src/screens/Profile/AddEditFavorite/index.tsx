@@ -21,6 +21,8 @@ import BackHeader from '../BackHeader';
 import EmojiPopup from './EmojiPopup';
 
 import * as Sections from '../../../components/sections';
+import MessageBox from '../../../message-box';
+import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
@@ -47,6 +49,9 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   const {addFavorite, removeFavorite, updateFavorite} = useFavorites();
   const editItem = route?.params?.editItem;
 
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(
+    undefined,
+  );
   const [emoji, setEmoji] = useState<string | undefined>(editItem?.emoji);
   const [name, setName] = useState<string>(editItem?.name ?? '');
   const location = useLocationSearchValue<AddEditScreenRouteProp>(
@@ -60,14 +65,20 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
     emojiRef.current?.open();
   };
 
-  const hasSelectedValues = Boolean(location);
   useEffect(() => setEmoji(editItem?.emoji), [editItem?.emoji]);
+
+  useEffect(() => {
+    if (errorMessage && location) {
+      setErrorMessage(undefined);
+    }
+  }, [location]);
 
   // @TODO This must be fixed so that the emoji item it self is stored
   // in favorites, or some lookup to set selected item inside emoji panel.
 
   const save = async () => {
     if (!location) {
+      setErrorMessage('Du må velge et sted du vil ha som favoritt');
       return;
     }
     const newFavorite = {
@@ -105,7 +116,6 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
       ],
     );
   };
-  const cancel = () => navigation.goBack();
 
   return (
     <SafeAreaView style={css.container}>
@@ -138,6 +148,11 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
       />
 
       <View style={css.innerContainer}>
+        <ScreenReaderAnnouncement message={errorMessage} />
+        {errorMessage && (
+          <MessageBox withMargin message={errorMessage} type="error" />
+        )}
+
         <Sections.Section withPadding>
           <Sections.LocationInput
             label="Sted"
@@ -190,7 +205,6 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           mode="primary"
           iconPosition="right"
           icon={SvgConfirm}
-          disabled={!hasSelectedValues}
           text="Lagre favoritt"
         />
 
