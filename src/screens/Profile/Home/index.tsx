@@ -60,6 +60,10 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           <Sections.LinkItem
             text="Personvernerklæring"
             icon="arrow-right"
+            accessibility={{
+              accessibilityHint:
+                'Aktivér for å lese personvernerklæring på ekstern side',
+            }}
             onPress={() =>
               Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
             }
