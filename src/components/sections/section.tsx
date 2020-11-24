@@ -16,7 +16,10 @@ export default function SectionGroup({
   type = 'block',
 }: SectionProps) {
   const style = useInputGroupStyle();
-  const len = React.Children.count(children) - 1;
+  const len =
+    (React.Children.map(children, (child) =>
+      Number(React.isValidElement(child)),
+    )?.reduce((a, b) => a + b) ?? 1) - 1;
 
   const containerStyle = [
     withPadding ? style.container__padded : undefined,
