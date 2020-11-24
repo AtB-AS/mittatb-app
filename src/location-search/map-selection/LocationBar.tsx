@@ -123,8 +123,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
-    ...shadows,
+    padding: theme.spacings.medium,
+    backgroundColor: theme.background.header,
   },
   innerContainer: {
     paddingRight: theme.spacings.small,
