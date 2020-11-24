@@ -21,9 +21,11 @@ export default function Appearance() {
         <Section withTopPadding withPadding>
           <ActionItem
             mode="toggle"
-            text="Overstyr mørk modus"
-            checked={overrideColorScheme}
-            onPress={(checked) => setPreference({overrideColorScheme: checked})}
+            text="Bruk telefoninnstillinger"
+            checked={!overrideColorScheme}
+            onPress={(checked) =>
+              setPreference({overrideColorScheme: !checked})
+            }
           />
 
           {overrideColorScheme && (
