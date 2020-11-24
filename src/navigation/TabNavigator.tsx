@@ -2,7 +2,6 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {ParamListBase} from '@react-navigation/native';
 import React from 'react';
-import {Text} from 'react-native';
 import {SvgProps} from 'react-native-svg';
 import {
   Assistant as AssistantIcon,
@@ -10,6 +9,7 @@ import {
   Profile,
   Tickets,
 } from '../assets/svg/icons/tab-bar';
+import ThemeText from '../components/text';
 import {LocationWithMetadata} from '../favorites/types';
 import Assistant from '../screens/Assistant';
 import NearbyScreen from '../screens/Nearby';
@@ -94,12 +94,9 @@ function tabSettings(
 ): TabSettings {
   return {
     tabBarLabel: ({color}) => (
-      <Text
-        style={{color, fontSize: 14, lineHeight: 14}}
-        maxFontSizeMultiplier={2}
-      >
+      <ThemeText type="lead" style={{color, lineHeight: 14}}>
         {tabBarLabel}
-      </Text>
+      </ThemeText>
     ),
     tabBarIcon: ({color}) => <Icon fill={color} />,
   };
