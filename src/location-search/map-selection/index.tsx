@@ -1,26 +1,26 @@
-import {RouteProp} from '@react-navigation/native';
-import React, {useState, useRef, useMemo} from 'react';
-import {View, TouchableOpacity, Text} from 'react-native';
-import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
-import {useReverseGeocoder} from '../../geocoder';
-import {LocationSearchNavigationProp, LocationSearchStackParams} from '../';
-import {useGeolocationState} from '../../GeolocationContext';
-import LocationBar from './LocationBar';
-import {StyleSheet} from '../../theme';
 import {Coordinates} from '@entur/sdk';
-import SelectionPin, {PinMode} from './SelectionPin';
+import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
+import {RouteProp} from '@react-navigation/native';
 import {Feature} from 'geojson';
+import React, {useMemo, useRef, useState} from 'react';
+import {TouchableOpacity, View} from 'react-native';
+import {LocationSearchNavigationProp, LocationSearchStackParams} from '../';
+import {ArrowLeft} from '../../assets/svg/icons/navigation';
 import {
-  MapViewConfig,
   MapCameraConfig,
   MapControls,
-  shadows,
+  MapViewConfig,
   PositionArrow,
+  shadows,
   useControlPositionsStyle,
 } from '../../components/map/';
-import {ArrowLeft} from '../../assets/svg/icons/navigation';
-import FullScreenHeader from '../../ScreenHeader/full-header';
 import ThemeIcon from '../../components/theme-icon';
+import {useReverseGeocoder} from '../../geocoder';
+import {useGeolocationState} from '../../GeolocationContext';
+import FullScreenHeader from '../../ScreenHeader/full-header';
+import {StyleSheet} from '../../theme';
+import LocationBar from './LocationBar';
+import SelectionPin, {PinMode} from './SelectionPin';
 
 export type RouteParams = {
   callerRouteName: string;
