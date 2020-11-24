@@ -13,6 +13,8 @@ import NearbyScreen from '../screens/Nearby';
 import ProfileScreen, {ProfileStackParams} from '../screens/Profile';
 import TicketingScreen from '../screens/Ticketing';
 import {useTheme} from '../theme';
+import {useTranslation} from '../utils/language';
+import dictionary from '../translations/dictionary';
 
 type SubNavigator<T extends ParamListBase> = {
   [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
@@ -29,11 +31,11 @@ export type TabNavigatorParams = {
   Ticketing: undefined;
   Profile: SubNavigator<ProfileStackParams>;
 };
-
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
 const NavigationRoot = () => {
   const {theme} = useTheme();
+  const {t} = useTranslation();
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -50,7 +52,7 @@ const NavigationRoot = () => {
         name="Assistant"
         component={Assistant}
         options={{
-          tabBarLabel: 'Reisesøk',
+          tabBarLabel: t(dictionary.navigation.assistant),
           tabBarIcon: ({color}) => <AssistantIcon fill={color} />,
         }}
       />
@@ -58,7 +60,7 @@ const NavigationRoot = () => {
         name="Nearest"
         component={NearbyScreen}
         options={{
-          tabBarLabel: 'Avganger',
+          tabBarLabel: t(dictionary.navigation.nearby),
           tabBarIcon: ({color}) => <Nearby fill={color} />,
         }}
       />
@@ -66,7 +68,7 @@ const NavigationRoot = () => {
         name="Ticketing"
         component={TicketingScreen}
         options={{
-          tabBarLabel: 'Billetter',
+          tabBarLabel: t(dictionary.navigation.ticketing),
           tabBarIcon: ({color}) => <Tickets fill={color} />,
         }}
       />
@@ -74,7 +76,7 @@ const NavigationRoot = () => {
         name="Profile"
         component={ProfileScreen}
         options={{
-          tabBarLabel: 'Mitt AtB',
+          tabBarLabel: t(dictionary.navigation.profile),
           tabBarIcon: ({color}) => <Profile fill={color} />,
         }}
       />
