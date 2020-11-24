@@ -60,9 +60,7 @@ const LocationSearch: React.FC<Props> = ({
   const [text, setText] = useState<string>(initialLocation?.name ?? '');
   const debouncedText = useDebounce(text, 200);
 
-  const [errorMessage, setErrorMessage] = useState<string>(
-    'Some error message',
-  );
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const previousLocations = filterPreviousLocations(
     debouncedText,
     history,
@@ -182,7 +180,7 @@ const LocationSearch: React.FC<Props> = ({
         </View>
       </View>
 
-      {true && (
+      {error && (
         <View style={styles.withMargin}>
           <MessageBox type="warning" message={errorMessage} />
         </View>
