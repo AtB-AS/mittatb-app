@@ -1,6 +1,9 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {ParamListBase} from '@react-navigation/native';
 import React from 'react';
+import {Text} from 'react-native';
+import {SvgProps} from 'react-native-svg';
 import {
   Assistant as AssistantIcon,
   Nearby,
@@ -49,37 +52,55 @@ const NavigationRoot = () => {
       <Tab.Screen
         name="Assistant"
         component={Assistant}
-        options={{
-          tabBarLabel: 'Reisesøk',
-          tabBarIcon: ({color}) => <AssistantIcon fill={color} />,
-        }}
+        options={tabSettings('Reisesøk', AssistantIcon)}
       />
       <Tab.Screen
         name="Nearest"
         component={NearbyScreen}
-        options={{
-          tabBarLabel: 'Avganger',
-          tabBarIcon: ({color}) => <Nearby fill={color} />,
-        }}
+        options={tabSettings('Avganger', Nearby)}
       />
       <Tab.Screen
         name="Ticketing"
         component={TicketingScreen}
-        options={{
-          tabBarLabel: 'Billetter',
-          tabBarIcon: ({color}) => <Tickets fill={color} />,
-        }}
+        options={tabSettings('Billetter', Tickets)}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{
-          tabBarLabel: 'Mitt AtB',
-          tabBarIcon: ({color}) => <Profile fill={color} />,
-        }}
+        options={tabSettings('Mitt AtB', Profile)}
       />
     </Tab.Navigator>
   );
 };
 
 export default NavigationRoot;
+
+type TabSettings = {
+  tabBarLabel(props: {
+    focused: boolean;
+    color: string;
+    position: LabelPosition;
+  }): JSX.Element;
+  tabBarIcon(props: {
+    focused: boolean;
+    color: string;
+    size: number;
+  }): JSX.Element;
+};
+
+function tabSettings(
+  tabBarLabel: string,
+  Icon: (svg: SvgProps) => JSX.Element,
+): TabSettings {
+  return {
+    tabBarLabel: ({color}) => (
+      <Text
+        style={{color, fontSize: 14, lineHeight: 14}}
+        maxFontSizeMultiplier={2}
+      >
+        {tabBarLabel}
+      </Text>
+    ),
+    tabBarIcon: ({color}) => <Icon fill={color} />,
+  };
+}
