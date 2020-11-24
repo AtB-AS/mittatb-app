@@ -1,14 +1,14 @@
 import React from 'react';
-import {View, TouchableOpacity, ActivityIndicator} from 'react-native';
-import {ArrowRight} from '../../assets/svg/icons/navigation';
-import {Info, Warning} from '../../assets/svg/icons/status';
-import {Location} from '../../favorites/types';
-import LocationIcon from '../../components/location-icon';
-import {StyleSheet, useTheme} from '../../theme';
-import shadows from '../../components/map/shadows';
+import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {ErrorType} from '../../api/utils';
+import {ArrowRight} from '../../assets/svg/icons/navigation';
+import SvgError from '../../assets/svg/icons/status/Error';
+import SvgInfo from '../../assets/svg/icons/status/Info';
+import LocationIcon from '../../components/location-icon';
 import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
+import {Location} from '../../favorites/types';
+import {StyleSheet, useTheme} from '../../theme';
 
 type Props = {
   location?: Location;
@@ -62,9 +62,9 @@ const Icon: React.FC<{
       ) : location ? (
         <LocationIcon location={location} />
       ) : hasError ? (
-        <Warning />
+        <ThemeIcon svg={SvgError} />
       ) : (
-        <Info />
+        <ThemeIcon svg={SvgInfo} />
       )}
     </View>
   );
