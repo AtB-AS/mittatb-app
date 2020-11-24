@@ -29,6 +29,3 @@ then
 else 
     echo "CocoaPods version is suitable for the project"
 fi;
-
-# copy file mapbox api download token
-cat .netrc >> ~/.netrc
