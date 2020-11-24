@@ -83,10 +83,8 @@ export const TravelDetailsMap: React.FC<MapProps> = ({route, navigation}) => {
       <View style={controlStyles.backArrowContainer}>
         <BackArrow onBack={() => navigation.goBack()} />
       </View>
-      <View style={controlStyles.positionArrowContainer}>
-        <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
-      </View>
       <View style={controlStyles.controlsContainer}>
+        <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
         <MapControls zoomIn={zoomIn} zoomOut={zoomOut} />
       </View>
     </View>
