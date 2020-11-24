@@ -1,5 +1,5 @@
 PODS:
-  - "@react-native-mapbox-gl-mapbox-static (5.8.0)"
+  - "@react-native-mapbox-gl-mapbox-static (6.3.0)"
   - boost-for-react-native (1.63.0)
   - BugsnagReactNative (7.5.0):
     - React
@@ -145,9 +145,9 @@ PODS:
   - lottie-react-native (3.5.0):
     - lottie-ios (~> 3.1.8)
     - React
-  - Mapbox-iOS-SDK (5.8.0):
-    - MapboxMobileEvents (= 0.10.2)
-  - MapboxMobileEvents (0.10.2)
+  - Mapbox-iOS-SDK (6.3.0):
+    - MapboxMobileEvents (~> 0.10.4)
+  - MapboxMobileEvents (0.10.6)
   - nanopb (1.30905.0):
     - nanopb/decode (= 1.30905.0)
     - nanopb/encode (= 1.30905.0)
@@ -335,20 +335,20 @@ PODS:
     - Intercom (~> 8.0.0)
     - React
   - react-native-mapbox-gl (8.1.0-rc.9):
-    - "@react-native-mapbox-gl-mapbox-static (~> 5.8.0)"
-    - Mapbox-iOS-SDK (~> 5.8.0)
+    - "@react-native-mapbox-gl-mapbox-static (= 6.3.0)"
+    - Mapbox-iOS-SDK (= 6.3.0)
     - React
     - React-Core
     - react-native-mapbox-gl/DynamicLibrary (= 8.1.0-rc.9)
     - react-native-mapbox-gl/StaticLibraryFixer (= 8.1.0-rc.9)
   - react-native-mapbox-gl/DynamicLibrary (8.1.0-rc.9):
-    - "@react-native-mapbox-gl-mapbox-static (~> 5.8.0)"
-    - Mapbox-iOS-SDK (~> 5.8.0)
+    - "@react-native-mapbox-gl-mapbox-static (= 6.3.0)"
+    - Mapbox-iOS-SDK (= 6.3.0)
     - React
     - React-Core
   - react-native-mapbox-gl/StaticLibraryFixer (8.1.0-rc.9):
-    - "@react-native-mapbox-gl-mapbox-static (~> 5.8.0)"
-    - Mapbox-iOS-SDK (~> 5.8.0)
+    - "@react-native-mapbox-gl-mapbox-static (= 6.3.0)"
+    - Mapbox-iOS-SDK (= 6.3.0)
     - React
     - React-Core
   - react-native-safe-area-context (3.1.8):
@@ -656,7 +656,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  "@react-native-mapbox-gl-mapbox-static": e247172bc43f47757f47d6cec1b325b1ab3e9287
+  "@react-native-mapbox-gl-mapbox-static": 7ab93cffee38c24fa367e5d3ea3f0334d35d3d06
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BugsnagReactNative: 9966b45b3d88fe9d768bb76a67e4e5b41beb1aee
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
@@ -687,8 +687,8 @@ SPEC CHECKSUMS:
   Intercom: 5d8058e3476ab6b0350dea165338164364eb1acb
   lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
   lottie-react-native: 1fb4ce21d6ad37dab8343eaff8719df76035bd93
-  Mapbox-iOS-SDK: 02590a60fe300810c55432219a0caaa1338fbafb
-  MapboxMobileEvents: 2bc0ca2eedb627b73cf403258dce2b2fa98074a6
+  Mapbox-iOS-SDK: 6a67397df2bcafe5d2851604192aa8de6f8d6c89
+  MapboxMobileEvents: 5ef561e6b6f9cbff2900d62a52322e75d1a7dfdf
   nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
   OpenSSL-Universal: ff34003318d5e1163e9529b08470708e389ffcdd
   Permission-LocationWhenInUse: 871e81c06c1fc578353fce962d5d8e6efa697f1a
@@ -707,7 +707,7 @@ SPEC CHECKSUMS:
   react-native-geolocation-service: 141e33bdb179bcba10b216ee13962611e21f2be4
   react-native-get-random-values: 1404bd5cc0ab0e287f75ee1c489555688fc65f89
   react-native-intercom: c48e0e15877bf96ff4d461f7aa9b833d11188139
-  react-native-mapbox-gl: 2a4b1bbfb5708b4c997d312ad73337bafdc5baf5
+  react-native-mapbox-gl: 40690a3e9822494b3b17675a1113881e4c12e03f
   react-native-safe-area-context: 79fea126c6830c85f65947c223a5e3058a666937
   react-native-webview: 4e96d493f9f90ba4f03b28933f30b2964df07e39
   React-RCTActionSheet: 53ea72699698b0b47a6421cb1c8b4ab215a774aa
@@ -735,6 +735,6 @@ SPEC CHECKSUMS:
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 62e6d8fc85ac6b63b6370c161340ec610b2d688a
+PODFILE CHECKSUM: 6d76cf5421526542cff9352929d51804e9b24971
 
 COCOAPODS: 1.9.3
