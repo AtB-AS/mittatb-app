@@ -60,7 +60,9 @@ const LocationSearch: React.FC<Props> = ({
   const [text, setText] = useState<string>(initialLocation?.name ?? '');
   const debouncedText = useDebounce(text, 200);
 
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>(
+    'Some error message',
+  );
   const previousLocations = filterPreviousLocations(
     debouncedText,
     history,
@@ -154,7 +156,7 @@ const LocationSearch: React.FC<Props> = ({
       <View style={styles.header}>
         <ScreenReaderAnnouncement message={errorMessage} />
 
-        <View style={styles.inputBlock}>
+        <View style={styles.withMargin}>
           <TextInput
             ref={inputRef}
             radius="top-bottom"
@@ -180,13 +182,9 @@ const LocationSearch: React.FC<Props> = ({
         </View>
       </View>
 
-      {error && (
-        <View style={styles.contentBlock}>
-          <MessageBox
-            type="warning"
-            message={errorMessage}
-            containerStyle={{marginBottom: 12}}
-          />
+      {true && (
+        <View style={styles.withMargin}>
+          <MessageBox type="warning" message={errorMessage} />
         </View>
       )}
 
@@ -288,17 +286,17 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
     backgroundColor: theme.background.header,
   },
-  inputBlock: {
+  withMargin: {
     margin: theme.spacings.medium,
+  },
+  chipBox: {
+    marginBottom: theme.spacings.medium,
   },
   contentBlock: {
     paddingHorizontal: theme.spacings.medium,
   },
   scroll: {
     flex: 1,
-  },
-  chipBox: {
-    marginBottom: theme.spacings.medium,
   },
 }));
 
