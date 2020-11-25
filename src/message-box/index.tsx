@@ -4,6 +4,7 @@ import {Error as ErrorIcon, Info, Warning} from '../assets/svg/icons/status';
 import {StyleSheet} from '../theme';
 import ThemeText from '../components/text';
 import ThemeIcon from '../components/theme-icon';
+import hexToRgba from 'hex-to-rgba';
 
 type WithMessage = {message: string; children?: never};
 type WithChildren = {
@@ -89,7 +90,7 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
     borderColor: theme.border.warning,
   },
   container__error: {
-    backgroundColor: theme.background.error,
+    backgroundColor: hexToRgba(theme.background.error, 0.5),
     borderColor: theme.border.error,
   },
 }));

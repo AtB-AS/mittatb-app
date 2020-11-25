@@ -6,7 +6,7 @@ import useChatIcon from '../../../chat/use-chat-icon';
 import {ShinyTicketBanner} from '../../../assets/svg/illustrations';
 import {StyleSheet, useStyle} from '../../../theme';
 import LogoOutline from '../../../ScreenHeader/LogoOutline';
-import {useNavigateHome} from '../../../utils/navigation';
+import {useNavigateToStartScreen} from '../../../utils/navigation';
 import InviteModal from './InviteModal';
 import {Modalize} from 'react-native-modalize';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
@@ -29,7 +29,7 @@ export default function Splash() {
   const {refresh} = useRemoteConfig();
   const chatIcon = useChatIcon();
   const {width: windowWidth} = useWindowDimensions();
-  const navigateHome = useNavigateHome();
+  const navigateHome = useNavigateToStartScreen();
   const modalRef = useRef<Modalize>(null);
 
   function onEnrolled() {
@@ -44,7 +44,7 @@ export default function Splash() {
         leftButton={{
           icon: <ThemeIcon svg={LogoOutline} />,
           onPress: navigateHome,
-          accessibilityLabel: 'Gå til startskjerm',
+          accessibilityLabel: 'Gå til startside',
         }}
       />
       <View style={styles.bannerContainer}>

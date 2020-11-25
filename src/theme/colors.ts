@@ -184,7 +184,7 @@ export const themes: Themes = {
       destructive: colors.secondary.red_500,
       info: colors.secondary.cyan_100,
       warning: colors.secondary.yellow_100,
-      error: colors.secondary.red_100,
+      error: colors.secondary.red_500,
       accent: colors.secondary.cyan_500,
     },
     text: {
@@ -255,7 +255,7 @@ export const themes: Themes = {
       header: colors.secondary.blue_900,
       destructive: colors.secondary.red_500,
       warning: colors.primary.green_900,
-      error: colors.secondary.red_100,
+      error: colors.secondary.red_500,
       info: colors.secondary.cyan_900,
       accent: backgrounds.dark__level1,
     },

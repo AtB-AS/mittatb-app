@@ -35,7 +35,7 @@ import {RootStackParamList} from '../../navigation';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import {DeparturesRealtimeData, DeparturesWithStop, Paginated} from '../../sdk';
 import {StyleSheet} from '../../theme';
-import {useNavigateHome} from '../../utils/navigation';
+import {useNavigateToStartScreen} from '../../utils/navigation';
 import useInterval from '../../utils/use-interval';
 import Loading from '../Loading';
 import NearbyResults from './NearbyResults';
@@ -160,7 +160,7 @@ const NearbyOverview: React.FC<Props> = ({
     }
   }
 
-  const navigateHome = useNavigateHome();
+  const navigateHome = useNavigateToStartScreen();
   useEffect(() => {
     if (updatingLocation)
       setLoadAnnouncement(
@@ -205,7 +205,7 @@ const NearbyOverview: React.FC<Props> = ({
       useScroll={activateScroll}
       logoClick={{
         callback: navigateHome,
-        accessibilityLabel: 'Gå til startskjerm',
+        accessibilityLabel: 'Gå til startside',
       }}
       alternativeTitleComponent={
         <AccessibleText prefix="Avganger fra" style={styles.altTitleHeader}>

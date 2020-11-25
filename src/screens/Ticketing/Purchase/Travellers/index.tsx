@@ -81,7 +81,7 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
         leftButton={{
           icon: <ThemeIcon svg={Close} />,
           onPress: closeModal,
-          accessibilityLabel: 'Lukk kjøpsprosessen',
+          accessibilityLabel: 'Avbryt kjøpsprosessen',
         }}
       />
 
@@ -110,10 +110,24 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
         </View>
         <View style={styles.travellerCountActions}>
           <ThemeText type="lead">40,-</ThemeText>
-          <TouchableOpacity onPress={removeCount} hitSlop={insets.all(8)}>
+          <TouchableOpacity
+            onPress={removeCount}
+            accessibilityRole="button"
+            accessibilityLabel={`Minsk antall til ${count - 1}`}
+            accessibilityElementsHidden={count <= 1}
+            importantForAccessibility={
+              count > 1 ? 'yes' : 'no-hide-descendants'
+            }
+            hitSlop={insets.all(8)}
+          >
             <ThemeIcon svg={Remove} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={addCount} hitSlop={insets.all(8)}>
+          <TouchableOpacity
+            onPress={addCount}
+            accessibilityRole="button"
+            accessibilityLabel={`Øk antall til ${count + 1}`}
+            hitSlop={insets.all(8)}
+          >
             <ThemeIcon svg={Add} />
           </TouchableOpacity>
         </View>

@@ -2,12 +2,11 @@ import Bugsnag from '@bugsnag/react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {MapIcon} from '../../../assets/svg/map';
 import {MapCameraConfig, MapViewConfig} from '../../../components/map/';
-import ThemeText from '../../../components/text';
 import {Leg} from '../../../sdk';
 import {StyleSheet} from '../../../theme';
+import Button from '../../../components/button';
 import insets from '../../../utils/insets';
 import useDisableMapCheck from '../../../utils/use-disable-map-check';
 import MapLabel from './MapLabel';
@@ -65,16 +64,15 @@ export const CompactMap: React.FC<MapProps> = ({legs, darkMode, onExpand}) => {
         <MapLabel point={startPoint} id={'start'} text="Start"></MapLabel>
       </MapboxGL.MapView>
       <View style={styles.togglerContainer}>
-        <TouchableOpacity
+        <Button
           style={styles.toggler}
+          type="inline"
+          mode="tertiary"
           onPress={expandMap}
           hitSlop={insets.symmetric(8, 12)}
-        >
-          <ThemeText type="lead" style={styles.toggleText}>
-            Utvid kart
-          </ThemeText>
-          <MapIcon style={styles.toggleIcon} />
-        </TouchableOpacity>
+          text="Utvid kart"
+          icon={MapIcon}
+        ></Button>
       </View>
     </View>
   );

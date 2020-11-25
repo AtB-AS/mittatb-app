@@ -24,6 +24,7 @@ import {StyleSheet} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
 import ThemeIcon from '../theme-icon';
 import useConditionalMemo from '../../utils/use-conditional-memo';
+import {useBottomNavigationStyles} from '../../utils/navigation';
 
 type Props = {
   renderHeader(
@@ -335,10 +336,6 @@ const throttle = <F extends (...args: any[]) => any>(
     });
 };
 
-// This is code from react-navigation. Couldn't find any
-// way to reasonably calculate this.
-const DEFAULT_TABBAR_HEIGHT = 44;
-
 function useCalculateHeaderContentHeight(isAnimating: boolean) {
   // Using safeAreaFrame for height instead of dimensions as
   // dimensions are problamatic on Android: https://github.com/facebook/react-native/issues/23693
@@ -350,8 +347,9 @@ function useCalculateHeaderContentHeight(isAnimating: boolean) {
   const {onLayout: onHeaderContentLayout, height: contentHeight} = useLayout();
   const {top, bottom} = useSafeAreaInsets();
 
+  const {height: bottomTabBarHeight} = useBottomNavigationStyles();
   const boxHeight =
-    actualHeight - screenHeaderHeight - top - bottom - DEFAULT_TABBAR_HEIGHT;
+    actualHeight - screenHeaderHeight - top - bottom - bottomTabBarHeight;
 
   const calculatedHeights = {
     boxHeight,
