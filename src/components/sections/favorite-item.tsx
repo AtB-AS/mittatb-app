@@ -28,10 +28,14 @@ export default function FavoriteItem(props: FavoriteItemProps) {
   if (!withOnPress(props)) {
     return <FavoriteItemContent {...props} />;
   }
+  const a11yLabel =
+    props.favorite.name === props.favorite.location.name
+      ? props.favorite.name
+      : `${props.favorite.name}, ${props.favorite.location.name}`;
   return (
     <TouchableOpacity
       accessible
-      accessibilityLabel={props.favorite.location.label + screenReaderPause}
+      accessibilityLabel={a11yLabel + screenReaderPause}
       accessibilityRole="button"
       onPress={(e) => props.onPress(props.favorite, e)}
       {...props.accessibility}
