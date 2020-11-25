@@ -167,9 +167,7 @@ export default function useTerminalState(
     // so we have a "payment redirect guard" here
     if (
       !paymentRedirectCompleteRef.current &&
-      url.includes(
-        '/ticket/v1/payments/{payment_id}/transactions/{transaction_id}/callback',
-      )
+      url.includes('/ticket/v1/payments/')
     ) {
       paymentRedirectCompleteRef.current = true;
       const params = parseURL(url);

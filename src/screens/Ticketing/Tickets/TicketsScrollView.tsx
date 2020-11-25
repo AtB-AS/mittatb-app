@@ -7,8 +7,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import Ticket from './Ticket';
 import hexToRgba from 'hex-to-rgba';
 import ThemeText from '../../../components/text';
+import {ActiveReservation} from '../../../TicketContext';
+import TicketReservation from './TicketReservation';
 
 type Props = {
+  reservations?: ActiveReservation[];
   tickets?: FareContract[];
   noTicketsLabel: string;
   isRefreshingTickets: boolean;
@@ -18,6 +21,7 @@ type Props = {
 
 const TicketsScrollView: React.FC<Props> = ({
   tickets,
+  reservations,
   noTicketsLabel,
   isRefreshingTickets,
   refreshTickets,
@@ -37,13 +41,15 @@ const TicketsScrollView: React.FC<Props> = ({
           />
         }
       >
-        {tickets?.length ? (
-          tickets.map((fc) => (
-            <Ticket key={fc.order_id} fareContract={fc} now={now} />
-          ))
-        ) : (
+        {!tickets?.length && !reservations?.length && (
           <ThemeText style={styles.noTicketsText}>{noTicketsLabel}</ThemeText>
         )}
+        {reservations?.map((res) => (
+          <TicketReservation key={res.reservation.order_id} reservation={res} />
+        ))}
+        {tickets?.map((fc) => (
+          <Ticket key={fc.order_id} fareContract={fc} now={now} />
+        ))}
       </ScrollView>
       <LinearGradient
         style={{position: 'absolute', bottom: 0, width: '100%', height: 30}}

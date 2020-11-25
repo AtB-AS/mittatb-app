@@ -49,12 +49,12 @@ const NavigationRoot = () => {
   const ref = useRef<NavigationContainerRef>(null);
   const {getInitialState} = useLinking(ref, {
     prefixes: ['atb://'],
-    config: {screens: {Profile: 'profile', VippsCallback: 'vipps'}},
+    config: {screens: {Profile: 'profile', Ticketing: 'vipps'}},
   });
 
   useEffect(() => {
     getInitialState().then(
-      (state) => {},
+      () => {},
       () => {},
     );
   }, [getInitialState]);

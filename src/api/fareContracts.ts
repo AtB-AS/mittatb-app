@@ -68,6 +68,29 @@ export async function reserve(
   return response.data;
 }
 
+export type PaymentStatus =
+  | 'AUTHENTICATE'
+  | 'CANCEL'
+  | 'CAPTURE'
+  | 'CREATE'
+  | 'CREDIT'
+  | 'IMPORT'
+  | 'INITIATE'
+  | 'REJECT';
+
+type PaymentResponse = {
+  order_id: string;
+  payment_type: string;
+  status: PaymentStatus;
+};
+
+export async function getPayment(paymentId: number): Promise<PaymentResponse> {
+  const url = 'ticket/v1/payments/' + paymentId;
+  const response = await client.get<PaymentResponse>(url);
+
+  return response.data;
+}
+
 export type UserType = 'ADULT';
 
 export type OfferPrice = {

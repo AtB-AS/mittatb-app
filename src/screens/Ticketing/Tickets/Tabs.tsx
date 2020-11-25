@@ -18,7 +18,12 @@ type Props = {
 };
 
 export const ActiveTickets: React.FC<Props> = ({navigation}) => {
-  const {fareContracts, isRefreshingTickets, refreshTickets} = useTicketState();
+  const {
+    activeReservations,
+    fareContracts,
+    isRefreshingTickets,
+    refreshTickets,
+  } = useTicketState();
 
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
