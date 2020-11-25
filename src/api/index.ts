@@ -5,5 +5,4 @@ export {
   list as listFareContracts,
   search as searchOffers,
   reserve as reserveOffers,
-  capture as capturePayment,
 } from './fareContracts';

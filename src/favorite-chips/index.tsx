@@ -14,6 +14,7 @@ import {useReverseGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
 import {RootStackParamList} from '../navigation';
 import {StyleSheet, useTheme} from '../theme';
+import useDisableMapCheck from '../utils/use-disable-map-check';
 
 type Props = {
   onSelectLocation: (location: LocationWithMetadata) => void;
@@ -41,6 +42,7 @@ const FavoriteChips: React.FC<Props> = ({
   const {favorites} = useFavorites();
   const styles = useStyles();
   const {onCurrentLocation} = useCurrentLocationChip(onSelectLocation);
+  const disableMap = useDisableMapCheck();
   const activeType = (type: ChipTypeGroup) => chipTypes.includes(type);
 
   return (
@@ -57,7 +59,7 @@ const FavoriteChips: React.FC<Props> = ({
               onPress={onCurrentLocation}
             />
           )}
-          {activeType('map') && (
+          {activeType('map') && !disableMap && (
             <FavoriteChip
               text="Velg i kart"
               accessibilityRole="button"
