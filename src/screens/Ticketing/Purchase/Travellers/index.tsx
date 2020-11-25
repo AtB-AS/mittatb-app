@@ -15,6 +15,7 @@ import {CreditCard, Vipps} from '../../../../assets/svg/icons/ticketing';
 import useOfferState, {OfferError} from './use-offer-state';
 import insets from '../../../../utils/insets';
 import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
+import {SINGLE_TICKET_PRODUCT_ID} from '@env';
 
 type Props = {
   navigation: DismissableStackNavigationProp<
@@ -56,7 +57,7 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
       } else {
-        navigation.push('PaymentVipps', {offer_id: offerId, count});
+        navigation.push('PaymentVipps', {offers: [{offer_id: offerId, count}]});
       }
     }
   }
@@ -66,7 +67,9 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
       } else {
-        navigation.push('PaymentCreditCard', {offer_id: offerId, count});
+        navigation.push('PaymentCreditCard', {
+          offers: [{offer_id: offerId, count}],
+        });
       }
     }
   }

@@ -90,6 +90,7 @@ const Button: React.FC<ButtonProps> = ({
         style={[styleContainer, style]}
         onPress={onPress}
         disabled={disabled}
+        accessibilityRole="button"
         {...props}
       >
         {Icon && iconPosition === 'left' && (

@@ -17,6 +17,10 @@ import useVippsState, {ErrorContext, State} from './use-vipps-state';
 import Processing from '../Processing';
 import MessageBox from '../../../../../message-box';
 import {ErrorType} from '../../../../../api/utils';
+import {
+  ReserveOffer,
+  TicketReservation,
+} from '../../../../../api/fareContracts';
 
 type Props = {
   navigation: DismissableStackNavigationProp<
@@ -29,14 +33,31 @@ type Props = {
 export default function VippsPayment({
   navigation,
   route: {
-    params: {offer_id, count},
+    params: {offers},
   },
 }: Props) {
   const styles = useStyles();
 
-  const {state, error, openVipps} = useVippsState(offer_id, count);
   const cancelVipps = (refresh?: boolean) =>
     navigation.navigate('Travellers', {refreshOffer: refresh});
+
+  const {activatePollingForNewTickets} = useTicketState();
+  const dismissAndActivatePolling = (
+    reservation: TicketReservation,
+    reservationOffers: ReserveOffer[],
+  ) => {
+    activatePollingForNewTickets({
+      reservation,
+      offers: reservationOffers,
+      paymentType: 'vipps',
+    });
+    navigation.dismiss();
+  };
+
+  const {state, error, openVipps} = useVippsState(
+    offers,
+    dismissAndActivatePolling,
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -44,7 +65,7 @@ export default function VippsPayment({
         title="Videresendes til vipps"
         leftButton={{
           icon: <ThemeIcon svg={ArrowLeft} />,
-          onPress: cancelVipps,
+          onPress: () => cancelVipps(false),
           accessibilityLabel:
             'Avslutt vipps og gå tilbake til valg av reisende',
         }}
