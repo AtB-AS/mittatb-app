@@ -43,7 +43,11 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     reservation: TicketReservation,
     reservationOffers: ReserveOffer[],
   ) => {
-    activatePollingForNewTickets(reservation, reservationOffers, 'creditcard');
+    activatePollingForNewTickets({
+      reservation,
+      offers: reservationOffers,
+      paymentType: 'creditcard',
+    });
     navigation.dismiss();
   };
 

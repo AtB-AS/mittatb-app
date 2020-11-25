@@ -16,7 +16,6 @@ import {
 } from './api/fareContracts';
 import {listFareContracts} from './api';
 import useInterval from './utils/use-interval';
-import {updateObjectInArray} from './utils/array';
 
 type TicketReducerState = {
   fareContracts: FareContract[];
@@ -29,9 +28,8 @@ type TicketReducerAction =
   | {type: 'UPDATE_FARE_CONTRACTS'; fareContracts: FareContract[]}
   | {type: 'ADD_RESERVATION'; reservation: ActiveReservation}
   | {
-      type: 'UPDATE_PAYMENT_STATUS';
-      orderId: string;
-      paymentStatus: ActivePaymentStatus;
+      type: 'UPDATE_RESERVATIONS';
+      activeReservations: ActiveReservation[];
     };
 
 type TicketReducer = (
@@ -67,42 +65,25 @@ const ticketReducer: TicketReducer = (prevState, action) => {
         ],
       };
     }
-    case 'UPDATE_PAYMENT_STATUS': {
-      const index = prevState.activeReservations.findIndex(
-        (res) => res.reservation.order_id === action.orderId,
-      );
-      if (index === -1) return prevState;
-
-      const activeReservations = updateObjectInArray(
-        prevState.activeReservations,
-        {paymentStatus: action.paymentStatus},
-        index,
-      );
-
+    case 'UPDATE_RESERVATIONS': {
       return {
         ...prevState,
-        activeReservations,
+        activeReservations: action.activeReservations,
       };
     }
   }
 };
 
-type ActivePaymentStatus = PaymentStatus | 'UNKNOWN';
-
 export type ActiveReservation = {
   reservation: TicketReservation;
   offers: ReserveOffer[];
   paymentType: PaymentType;
-  paymentStatus: ActivePaymentStatus;
+  paymentStatus?: PaymentStatus;
 };
 
 type TicketState = {
   refreshTickets: () => void;
-  activatePollingForNewTickets: (
-    reservation: TicketReservation,
-    offers: ReserveOffer[],
-    paymentType: PaymentType,
-  ) => void;
+  activatePollingForNewTickets: (reservation: ActiveReservation) => void;
 } & Pick<
   TicketReducerState,
   'activeReservations' | 'fareContracts' | 'isRefreshingTickets'
@@ -123,43 +104,45 @@ const TicketContextProvider: React.FC = ({children}) => {
   );
 
   const updateReservations = useCallback(
-    (
-      reservation: TicketReservation,
-      offers: ReserveOffer[],
-      paymentType: PaymentType,
-      paymentStatus: ActivePaymentStatus = 'UNKNOWN',
-    ) =>
+    (reservation: ActiveReservation) =>
       dispatch({
         type: 'ADD_RESERVATION',
-        reservation: {reservation, offers, paymentType, paymentStatus},
+        reservation,
       }),
     [dispatch],
   );
 
   const getPaymentStatus = useCallback(async function (
     paymentId: number,
-  ): Promise<ActivePaymentStatus> {
+  ): Promise<PaymentStatus | undefined> {
     try {
       const payment = await getPayment(paymentId);
       return payment.status;
     } catch (err) {
       console.warn(err);
-      return 'UNKNOWN';
     }
   },
   []);
 
   const pollPaymentStatus = useCallback(
     async function () {
-      activeReservations.forEach(async (res) => {
-        const paymentStatus = await getPaymentStatus(
-          res.reservation.payment_id,
-        );
-        dispatch({
-          type: 'UPDATE_PAYMENT_STATUS',
-          orderId: res.reservation.order_id,
-          paymentStatus,
-        });
+      const updatedReservations = await Promise.all(
+        activeReservations.map(async (res) => {
+          const paymentStatus = await getPaymentStatus(
+            res.reservation.payment_id,
+          );
+          return {
+            ...res,
+            paymentStatus,
+          };
+        }),
+      );
+
+      dispatch({
+        type: 'UPDATE_RESERVATIONS',
+        activeReservations: updatedReservations.filter(
+          (res) => !isHandledPaymentStatus(res.paymentStatus),
+        ),
       });
     },
     [activeReservations, getPaymentStatus],
@@ -182,10 +165,7 @@ const TicketContextProvider: React.FC = ({children}) => {
     pollPaymentStatus,
     500,
     [activeReservations],
-    !activeReservations.some(
-      (res) =>
-        res.paymentStatus !== 'CANCEL' && res.paymentStatus !== 'CAPTURE',
-    ),
+    activeReservations.some((res) => res.paymentStatus === 'CAPTURE'),
   );
 
   useInterval(
@@ -212,6 +192,17 @@ const TicketContextProvider: React.FC = ({children}) => {
     </TicketContext.Provider>
   );
 };
+
+function isHandledPaymentStatus(status: PaymentStatus | undefined): boolean {
+  switch (status) {
+    case 'CANCEL':
+    case 'CREDIT':
+    case 'REJECT':
+      return true;
+    default:
+      return false;
+  }
+}
 
 export function useTicketState() {
   const context = useContext(TicketContext);

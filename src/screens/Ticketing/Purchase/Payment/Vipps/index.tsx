@@ -46,7 +46,11 @@ export default function VippsPayment({
     reservation: TicketReservation,
     reservationOffers: ReserveOffer[],
   ) => {
-    activatePollingForNewTickets(reservation, reservationOffers, 'vipps');
+    activatePollingForNewTickets({
+      reservation,
+      offers: reservationOffers,
+      paymentType: 'vipps',
+    });
     navigation.dismiss();
   };
 
