@@ -1,17 +1,18 @@
-import React, {useState} from 'react';
+import Bugsnag from '@bugsnag/react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
+import React, {useState} from 'react';
 import {View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {MapIcon} from '../../../assets/svg/map';
-import {getMapBounds, legsToMapLines, pointOf} from './utils';
-import MapRoute from './MapRoute';
-import MapLabel from './MapLabel';
-import {MapViewConfig, MapCameraConfig} from '../../../components/map/';
-import insets from '../../../utils/insets';
-import {Leg} from '../../../sdk';
-import Bugsnag from '@bugsnag/react-native';
-import {StyleSheet} from '../../../theme';
+import {MapCameraConfig, MapViewConfig} from '../../../components/map/';
 import ThemeText from '../../../components/text';
+import {Leg} from '../../../sdk';
+import {StyleSheet} from '../../../theme';
+import insets from '../../../utils/insets';
+import useDisableMapCheck from '../../../utils/use-disable-map-check';
+import MapLabel from './MapLabel';
+import MapRoute from './MapRoute';
+import {getMapBounds, legsToMapLines, pointOf} from './utils';
 
 export type MapProps = {
   legs: Leg[];
@@ -24,6 +25,7 @@ export const CompactMap: React.FC<MapProps> = ({legs, darkMode, onExpand}) => {
   const startPoint = pointOf(legs[0].fromPlace);
   const endPoint = pointOf(legs[legs.length - 1].toPlace);
   const bounds = getMapBounds(features);
+  const disableMap = useDisableMapCheck();
 
   const [loadingMap, setLoadingMap] = useState(true);
   const styles = useStyles();
@@ -31,6 +33,10 @@ export const CompactMap: React.FC<MapProps> = ({legs, darkMode, onExpand}) => {
   const expandMap = () => {
     if (!loadingMap) onExpand();
   };
+
+  if (disableMap) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
