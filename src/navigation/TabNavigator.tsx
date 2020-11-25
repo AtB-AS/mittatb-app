@@ -17,7 +17,10 @@ import NearbyScreen from '../screens/Nearby';
 import ProfileScreen, {ProfileStackParams} from '../screens/Profile';
 import TicketingScreen from '../screens/Ticketing';
 import {useTheme} from '../theme';
-import {settingToRouteName} from '../utils/navigation';
+import {
+  settingToRouteName,
+  useBottomNavigationStyles,
+} from '../utils/navigation';
 
 type SubNavigator<T extends ParamListBase> = {
   [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
@@ -46,6 +49,7 @@ const NavigationRoot = () => {
         activeTintColor: theme.text.colors.focus,
         style: {
           backgroundColor: theme.background.level0,
+          ...useBottomNavigationStyles(),
         },
         labelStyle: {
           color: theme.text.colors.faded,

@@ -6,7 +6,14 @@ import {
   Preference_ScreenAlternatives,
 } from '../preferences';
 import {TabNavigatorParams} from '../navigation/TabNavigator';
+import {useWindowDimensions} from 'react-native';
 
+export const useBottomNavigationStyles = (): {height: number} => {
+  const {fontScale} = useWindowDimensions();
+  return {
+    height: 50 * fontScale,
+  };
+};
 export const useNavigateToStartScreen = () => {
   const navigation = useNavigation();
   const {startScreen} = usePreferenceItems();
