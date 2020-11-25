@@ -1,6 +1,7 @@
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
+import {useWindowDimensions} from 'react-native';
 import {PanGestureHandler} from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -14,11 +15,9 @@ import {useFavorites} from '../../../favorites/FavoritesContext';
 import MessageBox from '../../../message-box';
 import {TabNavigatorParams} from '../../../navigation/TabNavigator';
 import {StyleSheet, Theme} from '../../../theme';
-import {useAppStateStatus} from '../../../utils/use-app-state-status';
+import useIsScreenReaderEnabled from '../../../utils/use-is-screen-reader-enabled';
 import BackHeader from '../BackHeader';
 import {SortableList} from './SortableList';
-import DeviceInfo from 'react-native-device-info';
-import useIsScreenReaderEnabled from '../../../utils/use-is-screen-reader-enabled';
 import SortableListFallback from './SortableListFallback';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
@@ -42,8 +41,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
   const [sortedItems, setSortedItems] = useState(items);
   const [error, setError] = useState<string | null>(null);
   const screenReaderEnabled = useIsScreenReaderEnabled();
-  const fontScale = useFontScale();
-
+  const {fontScale} = useWindowDimensions();
   const minHeight = 40 + 12 * fontScale;
 
   const saveOrder = async () => {
@@ -130,17 +128,3 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     marginTop: theme.spacings.medium,
   },
 }));
-
-function useFontScale() {
-  const appStatus = useAppStateStatus();
-  const [fontScale, setScale] = useState<number>(1);
-  useEffect(() => {
-    const get = async () => {
-      const scale = await DeviceInfo.getFontScale();
-      setScale(scale);
-    };
-    get();
-  }, [appStatus]);
-
-  return fontScale;
-}
