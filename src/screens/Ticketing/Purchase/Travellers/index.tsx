@@ -78,7 +78,7 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
         leftButton={{
           icon: <ThemeIcon svg={Close} />,
           onPress: closeModal,
-          accessibilityLabel: 'Lukk kjøpsprosessen',
+          accessibilityLabel: 'Avbryt kjøpsprosessen',
         }}
       />
 

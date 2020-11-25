@@ -41,12 +41,12 @@ export default function VippsPayment({
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        title="Videresendes til vipps"
+        title="Videresendes til Vipps"
         leftButton={{
           icon: <ThemeIcon svg={ArrowLeft} />,
           onPress: cancelVipps,
           accessibilityLabel:
-            'Avslutt vipps og gå tilbake til valg av reisende',
+            'Avslutt Vipps og gå tilbake til valg av reisende',
         }}
       />
       <View style={styles.content}>
@@ -56,7 +56,7 @@ export default function VippsPayment({
           ) : (
             <Button
               mode="primary"
-              text="Gå til vipps for betaling"
+              text="Gå til Vipps for betaling"
               onPress={() => openVipps()}
               style={styles.button}
             />
@@ -92,9 +92,9 @@ export default function VippsPayment({
 const translateError = (errorContext: ErrorContext, errorType: ErrorType) => {
   switch (errorContext) {
     case 'open-vipps-url':
-      return 'Oops - vi feila når vi prøvde å laste åpne vipps. Har du installert vipps-appen?';
+      return 'Oops - Vi klarte ikke å åpne Vipps. Har du installert Vipps-appen?';
     case 'reserve-offer':
-      return 'Oops - vi feila når vi prøvde å reservere billett. Supert om du prøver igjen 🤞';
+      return 'Oops - Vi klarte ikke å reservere billett. Supert om du prøver igjen 🤞';
   }
 };
 
