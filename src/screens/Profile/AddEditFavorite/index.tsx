@@ -185,6 +185,8 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         <Sections.Section withPadding>
           <Sections.ButtonInput
             onPress={openEmojiPopup}
+            accessibilityElementsHidden={true}
+            importantForAccessibility="no-hide-descendants"
             label="Ikon"
             icon="expand-more"
             type="inline"
