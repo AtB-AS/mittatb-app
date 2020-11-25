@@ -38,6 +38,7 @@ export const ActiveTickets: React.FC<Props> = ({navigation}) => {
   return (
     <View style={styles.container}>
       <TicketsScrollView
+        reservations={activeReservations}
         tickets={validTickets}
         isRefreshingTickets={isRefreshingTickets}
         refreshTickets={refreshTickets}

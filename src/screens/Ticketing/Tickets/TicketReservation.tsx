@@ -12,6 +12,7 @@ import colors from '../../../theme/colors';
 import Dash from 'react-native-dash';
 import ThemeText from '../../../components/text';
 import {ActiveReservation} from '../../../TicketContext';
+import ThemeIcon from '../../../components/theme-icon';
 
 type Props = {
   reservation: ActiveReservation;
@@ -26,16 +27,19 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
       <View style={styles.ticketContainer}>
         <View style={styles.validityContainer}>
           <View style={styles.iconContainer}>
-            <BlankTicket fill={colors.text.black} />
+            <ThemeIcon svg={BlankTicket} />
           </View>
           <ThemeText type="lead" color="faded">
-            Prosesseres... ikke gylding enda
+            Prosesseres... ikke gyldig enda
           </ThemeText>
         </View>
         <VerifyingValidityLine />
         <View style={styles.ticketInfoContainer}>
           <ThemeText style={styles.orderText}>
             Ordre-id {reservation.reservation.order_id}
+          </ThemeText>
+          <ThemeText style={styles.orderText}>
+            Betalt med {reservation.paymentType}
           </ThemeText>
         </View>
       </View>
