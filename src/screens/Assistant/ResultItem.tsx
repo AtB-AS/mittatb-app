@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, TouchableOpacity, Text, AccessibilityProps} from 'react-native';
+import {View, Text, AccessibilityProps} from 'react-native';
 import {Leg, TripPattern} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {
@@ -25,6 +25,7 @@ import {flatMap} from '../../utils/array';
 import {getReadableModeName} from '../../utils/transportation-names';
 import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
+import {BouncePressable} from '../../components/button';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -95,7 +96,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   if (!tripPattern?.legs?.length) return null;
 
   return (
-    <TouchableOpacity
+    <BouncePressable
       style={{paddingVertical: 4}}
       onPress={() => onDetailsPressed(tripPattern)}
       hitSlop={insets.symmetric(8, 16)}
@@ -121,7 +122,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
           <DestinationLeg tripPattern={tripPattern} />
         </View>
       </View>
-    </TouchableOpacity>
+    </BouncePressable>
   );
 };
 

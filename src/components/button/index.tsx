@@ -3,10 +3,12 @@ import {
   View,
   StyleProp,
   ViewStyle,
-  TouchableOpacity,
   TextStyle,
+  Animated,
+  Pressable,
+  PressableProps,
 } from 'react-native';
-import React from 'react';
+import React, {useRef} from 'react';
 import {StyleSheet, Theme, useTheme} from '../../theme';
 import ThemeText from '../text';
 
@@ -44,7 +46,7 @@ const Button: React.FC<ButtonProps> = ({
   textStyle,
   ...props
 }) => {
-  const css = useButtonStyle();
+  const styles = useButtonStyle();
   const {theme} = useTheme();
 
   const isInline = type === 'compact' || type === 'inline';
@@ -57,7 +59,7 @@ const Button: React.FC<ButtonProps> = ({
 
   const {backgroundColor, borderColor, textColor} = theme.button[mode];
   const styleContainer: ViewStyle[] = [
-    css.button,
+    styles.button,
     {
       backgroundColor,
       borderColor,
@@ -85,33 +87,31 @@ const Button: React.FC<ButtonProps> = ({
       };
 
   return (
-    <View style={disabled ? css.buttonDisabled : undefined}>
-      <TouchableOpacity
-        style={[styleContainer, style]}
-        onPress={onPress}
-        disabled={disabled}
-        accessibilityRole="button"
-        {...props}
-      >
-        {Icon && iconPosition === 'left' && (
-          <View style={iconContainer}>
-            <Icon fill={textColor} />
-          </View>
-        )}
-        {text && (
-          <View style={[textContainer, textContainerStyle]}>
-            <ThemeText type="paragraphHeadline" style={[styleText, textStyle]}>
-              {text}
-            </ThemeText>
-          </View>
-        )}
-        {Icon && iconPosition === 'right' && (
-          <View style={iconContainer}>
-            <Icon fill={textColor} />
-          </View>
-        )}
-      </TouchableOpacity>
-    </View>
+    <BouncePressable
+      style={[styleContainer, style]}
+      onPress={onPress}
+      disabled={disabled}
+      accessibilityRole="button"
+      {...props}
+    >
+      {Icon && iconPosition === 'left' && (
+        <View style={iconContainer}>
+          <Icon fill={textColor} />
+        </View>
+      )}
+      {text && (
+        <View style={[textContainer, textContainerStyle]}>
+          <ThemeText type="paragraphHeadline" style={[styleText, textStyle]}>
+            {text}
+          </ThemeText>
+        </View>
+      )}
+      {Icon && iconPosition === 'right' && (
+        <View style={iconContainer}>
+          <Icon fill={textColor} />
+        </View>
+      )}
+    </BouncePressable>
   );
 };
 export default Button;
@@ -129,3 +129,44 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     opacity: 0.2,
   },
 }));
+
+export function BouncePressable(props: PressableProps) {
+  const styles = useButtonStyle();
+  const animation = useRef(new Animated.Value(0)).current;
+  const scale = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 0.99],
+  });
+  const opacity = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 0.8],
+  });
+
+  const onPressIn = () => {
+    Animated.spring(animation, {
+      toValue: 1,
+      bounciness: 10,
+      useNativeDriver: true,
+      speed: 20,
+    }).start();
+  };
+  const onPressOut = () => {
+    Animated.spring(animation, {
+      toValue: 0,
+      bounciness: 14,
+      speed: 20,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  return (
+    <Animated.View
+      style={[
+        props.disabled ? styles.buttonDisabled : undefined,
+        {transform: [{scale}], opacity},
+      ]}
+    >
+      <Pressable onPressIn={onPressIn} onPressOut={onPressOut} {...props} />
+    </Animated.View>
+  );
+}
