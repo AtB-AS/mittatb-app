@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../..';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -34,6 +34,12 @@ type Props = {
 const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const styles = useStyles();
   const {offers} = route.params;
+  const [showWebView, setShowWebView] = useState<boolean>(true);
+
+  React.useEffect(
+    () => navigation.addListener('blur', () => setShowWebView(false)),
+    [navigation],
+  );
 
   const cancelTerminal = (refresh?: boolean) =>
     navigation.navigate('Travellers', {refreshOffer: refresh});
@@ -66,7 +72,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
         title="Betaling"
         leftButton={{
           icon: <ThemeIcon svg={ArrowLeft} />,
-          onPress: cancelTerminal,
+          onPress: () => cancelTerminal(false),
           accessibilityLabel:
             'Avslutt betaling og gå tilbake til valg av reisende',
         }}
@@ -77,7 +83,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
           position: !loadingState && !error ? 'relative' : 'absolute',
         }}
       >
-        {terminalUrl && (
+        {terminalUrl && showWebView && (
           <WebView
             source={{
               uri: terminalUrl,

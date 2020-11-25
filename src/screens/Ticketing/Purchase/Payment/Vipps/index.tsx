@@ -65,7 +65,7 @@ export default function VippsPayment({
         title="Videresendes til vipps"
         leftButton={{
           icon: <ThemeIcon svg={ArrowLeft} />,
-          onPress: cancelVipps,
+          onPress: () => cancelVipps(false),
           accessibilityLabel:
             'Avslutt vipps og gå tilbake til valg av reisende',
         }}
