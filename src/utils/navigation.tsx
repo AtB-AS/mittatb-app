@@ -11,7 +11,7 @@ import {useWindowDimensions} from 'react-native';
 export const useBottomNavigationStyles = (): {height: number} => {
   const {fontScale} = useWindowDimensions();
   return {
-    height: 45 * fontScale,
+    height: 44 * fontScale,
   };
 };
 export const useNavigateToStartScreen = () => {
