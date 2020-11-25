@@ -165,7 +165,8 @@ const TicketContextProvider: React.FC = ({children}) => {
     pollPaymentStatus,
     500,
     [activeReservations],
-    activeReservations.some((res) => res.paymentStatus === 'CAPTURE'),
+    !activeReservations.length ||
+      activeReservations.every((res) => res.paymentStatus === 'CAPTURE'),
   );
 
   useInterval(
