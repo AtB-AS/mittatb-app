@@ -11,7 +11,7 @@ import insets from '../../../utils/insets';
 import {Leg} from '../../../sdk';
 import Bugsnag from '@bugsnag/react-native';
 import {StyleSheet} from '../../../theme';
-import ThemeText from '../../../components/text';
+import Button from '../../../components/button';
 
 export type MapProps = {
   legs: Leg[];
@@ -59,16 +59,15 @@ export const CompactMap: React.FC<MapProps> = ({legs, darkMode, onExpand}) => {
         <MapLabel point={startPoint} id={'start'} text="Start"></MapLabel>
       </MapboxGL.MapView>
       <View style={styles.togglerContainer}>
-        <TouchableOpacity
+        <Button
           style={styles.toggler}
+          type="inline"
+          mode="tertiary"
           onPress={expandMap}
           hitSlop={insets.symmetric(8, 12)}
-        >
-          <ThemeText type="lead" style={styles.toggleText}>
-            Utvid kart
-          </ThemeText>
-          <MapIcon style={styles.toggleIcon} />
-        </TouchableOpacity>
+          text="Utvid kart"
+          icon={MapIcon}
+        ></Button>
       </View>
     </View>
   );
