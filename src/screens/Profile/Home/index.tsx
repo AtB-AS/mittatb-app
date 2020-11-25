@@ -12,7 +12,7 @@ import {TabNavigatorParams} from '../../../navigation/TabNavigator';
 import FullScreenHeader from '../../../ScreenHeader/full-header';
 import LogoOutline from '../../../ScreenHeader/LogoOutline';
 import {StyleSheet, Theme} from '../../../theme';
-import {useNavigateHome} from '../../../utils/navigation';
+import {useNavigateToStartScreen} from '../../../utils/navigation';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -29,7 +29,7 @@ type ProfileScreenProps = {
 };
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
-  const navigateHome = useNavigateHome();
+  const navigateHome = useNavigateToStartScreen();
   const chatIcon = useChatIcon();
   const style = useProfileHomeStyle();
 
@@ -40,7 +40,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         leftButton={{
           icon: <ThemeIcon svg={LogoOutline} />,
           onPress: navigateHome,
-          accessibilityLabel: 'Gå til startskjerm',
+          accessibilityLabel: 'Gå til startside',
         }}
         rightButton={chatIcon}
       />
