@@ -243,7 +243,7 @@ const Assistant: React.FC<Props> = ({
         </View>
 
         <FadeBetween
-          visibleKey={isHeaderFullHeight ? 'dateInput' : 'favoriteChips'}
+          visibleKey={isHeaderFullHeight ? 'favoriteChips' : 'dateInput'}
         >
           <FavoriteChips
             key="favoriteChips"
@@ -336,6 +336,7 @@ const Assistant: React.FC<Props> = ({
       onRefresh={reload}
       isRefreshing={isSearching}
       useScroll={useScroll}
+      headerMargin={24}
       headerTitle="Reiseassistent"
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
