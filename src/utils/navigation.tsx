@@ -1,17 +1,21 @@
 import analytics from '@react-native-firebase/analytics';
 import {useNavigation} from '@react-navigation/native';
 import {useCallback} from 'react';
-import {
-  usePreferenceItems,
-  Preference_ScreenAlternatives,
-} from '../preferences';
-import {TabNavigatorParams} from '../navigation/TabNavigator';
 import {useWindowDimensions} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {TabNavigatorParams} from '../navigation/TabNavigator';
+import {
+  Preference_ScreenAlternatives,
+  usePreferenceItems,
+} from '../preferences';
 
-export const useBottomNavigationStyles = (): {height: number} => {
+export const useBottomNavigationStyles = (
+  maxScale: number = 2,
+): {minHeight: number} => {
   const {fontScale} = useWindowDimensions();
+  const {bottom} = useSafeAreaInsets();
   return {
-    height: 44 * fontScale,
+    minHeight: 44 * Math.min(fontScale, maxScale) + bottom,
   };
 };
 export const useNavigateToStartScreen = () => {
