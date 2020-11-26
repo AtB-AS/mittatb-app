@@ -20,7 +20,7 @@ import SvgBanner from '../../assets/svg/icons/other/Banner';
 import useChatIcon from '../../chat/use-chat-icon';
 import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
 import LogoOutline from '../../ScreenHeader/LogoOutline';
-import {StyleSheet} from '../../theme';
+import {StyleSheet, useTheme} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
 import ThemeIcon from '../theme-icon';
 import useConditionalMemo from '../../utils/use-conditional-memo';
@@ -99,6 +99,7 @@ const DisappearingHeader: React.FC<Props> = ({
   const chatIcon = useChatIcon();
   const [scrollYValue, setScrollY] = useState<number>(0);
   const styles = useThemeStyles();
+  const {theme} = useTheme();
   const scrollYRef = useRef(new Animated.Value(IS_IOS ? -contentOffset : 0))
     .current;
 
@@ -224,6 +225,7 @@ const DisappearingHeader: React.FC<Props> = ({
                   refreshing={isRefreshing}
                   onRefresh={onRefresh}
                   progressViewOffset={contentHeight}
+                  tintColor={theme.text.colors.primary}
                 />
               }
               onScroll={Animated.event(
