@@ -199,10 +199,10 @@ const NearbyOverview: React.FC<Props> = ({
     <DisappearingHeader
       onRefresh={refresh}
       isRefreshing={isLoading}
+      headerHeight={59}
       renderHeader={renderHeader}
       headerTitle="Avganger"
       useScroll={activateScroll}
-      headerMargin={0}
       logoClick={{
         callback: navigateHome,
         accessibilityLabel: 'Gå til startside',
