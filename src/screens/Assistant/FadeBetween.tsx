@@ -71,7 +71,7 @@ function AnimatedChild({
   visibleKey: string;
   progress: Animated.Value<number>;
 }) {
-  const visibleChild = child.key !== visibleKey;
+  const visibleChild = child.key === visibleKey;
 
   const opacity = Animated.interpolate(progress, {
     inputRange: [0, 1],

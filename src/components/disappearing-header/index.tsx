@@ -20,7 +20,7 @@ import SvgBanner from '../../assets/svg/icons/other/Banner';
 import useChatIcon from '../../chat/use-chat-icon';
 import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
 import LogoOutline from '../../ScreenHeader/LogoOutline';
-import {StyleSheet} from '../../theme';
+import {StyleSheet, useTheme} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
 import ThemeIcon from '../theme-icon';
 import useConditionalMemo from '../../utils/use-conditional-memo';
@@ -32,7 +32,6 @@ type Props = {
     isParentAnimating: boolean,
   ): React.ReactNode;
   onRefresh?(): void;
-  headerHeight?: number;
   isRefreshing?: boolean;
   isFullHeight?: boolean;
 
@@ -88,6 +87,8 @@ const DisappearingHeader: React.FC<Props> = ({
   } = useCalculateHeaderContentHeight(isAnimating);
   const [fullheightTransitioned, setTransitioned] = useState(isFullHeight);
   const {width: windowWidth} = useWindowDimensions();
+  const {theme} = useTheme();
+
   const scrollableContentRef = React.useRef<ScrollView>(null);
   useScrollToTop(
     React.useRef<Scrollable>({
@@ -99,26 +100,35 @@ const DisappearingHeader: React.FC<Props> = ({
   const chatIcon = useChatIcon();
   const [scrollYValue, setScrollY] = useState<number>(0);
   const styles = useThemeStyles();
-  const scrollYRef = useRef(new Animated.Value(IS_IOS ? -contentOffset : 0))
+
+  // @TODO There are some issues with timing and offset and scrolling
+  // on IOS, so adding additional margin to compansate.
+  // This is fixing a symptom.
+  const osOffset = IS_IOS ? contentHeight - headerMargin : 0;
+
+  const scrollYRef = useRef(new Animated.Value(0)).current;
+
+  const fullscreenOffsetRef = useRef(new Animated.Value(isFullHeight ? 0 : 1))
     .current;
 
-  const fullscreenOffsetRef = useRef(
-    new Animated.Value(isFullHeight ? 0 : contentOffset),
-  ).current;
-
-  useEffect(
-    function () {
-      if (IS_IOS) {
-        scrollYRef.setValue(-contentHeight);
-      }
-    },
-    [contentHeight, contentOffset],
-  );
+  useEffect(() => {
+    // @TODO Same as above. iOS timing issues. Temporary hack :(
+    if (!isRefreshing) {
+      setTimeout(
+        () =>
+          scrollableContentRef.current?.scrollTo({
+            y: -contentHeight - headerMargin,
+          }),
+        0,
+      );
+    }
+  }, [isRefreshing]);
 
   useEffect(() => {
     setIsAnimating(true);
+    // console.log('starting animation', contentOffset);
     Animated.timing(fullscreenOffsetRef, {
-      toValue: isFullHeight ? 0 : contentOffset,
+      toValue: isFullHeight ? 0 : 1,
       duration: 400,
       easing: Easing.inOut(Easing.ease),
       useNativeDriver: true,
@@ -129,16 +139,10 @@ const DisappearingHeader: React.FC<Props> = ({
     });
   }, [isFullHeight]);
 
-  useEffect(
-    () => fullscreenOffsetRef.setValue(isFullHeight ? 0 : contentOffset),
-    [contentOffset],
-  );
-
-  const osOffset = IS_IOS ? contentHeight : 0;
-  const scrollY = Animated.add(scrollYRef, osOffset);
   const showAltTitle =
     useScroll && scrollYValue + osOffset > SCROLL_OFFSET_HEADER_ANIMATION;
 
+  const scrollY = Animated.add(scrollYRef, osOffset);
   const headerTranslate = Animated.subtract(
     isFullHeight
       ? 0
@@ -147,7 +151,11 @@ const DisappearingHeader: React.FC<Props> = ({
           outputRange: [0, -contentHeight],
           extrapolate: 'clamp',
         }),
-    fullscreenOffsetRef,
+    fullscreenOffsetRef.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, contentOffset],
+      extrapolate: 'clamp',
+    }),
   );
 
   const {top} = useSafeAreaInsets();
@@ -217,13 +225,23 @@ const DisappearingHeader: React.FC<Props> = ({
               contentContainerStyle={[
                 {paddingTop: !IS_IOS ? contentHeight : 0},
               ]}
+              contentInset={{
+                top: contentHeight + headerMargin,
+              }}
+              contentOffset={{
+                y: -contentHeight - headerMargin,
+                x: 0,
+              }}
+              showsVerticalScrollIndicator={false}
               scrollEventThrottle={10}
-              style={{flex: 1}}
+              style={{flex: 1, minHeight: 200}}
               refreshControl={
                 <RefreshControl
                   refreshing={isRefreshing}
                   onRefresh={onRefresh}
                   progressViewOffset={contentHeight}
+                  tintColor={theme.text.colors.primary}
+                  titleColor={theme.text.colors.primary}
                 />
               }
               onScroll={Animated.event(
@@ -239,13 +257,6 @@ const DisappearingHeader: React.FC<Props> = ({
                   },
                 },
               )}
-              contentInset={{
-                top: contentHeight + headerMargin,
-              }}
-              contentOffset={{
-                y: -contentHeight - headerMargin,
-                x: 0,
-              }}
             >
               {children}
             </Animated.ScrollView>
