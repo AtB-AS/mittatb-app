@@ -43,6 +43,7 @@ import DateInput, {DateOutput} from './DateInput';
 import FadeBetween from './FadeBetween';
 import Results from './Results';
 import {NoResultReason, SearchStateType} from './types';
+import NewsBanner from './NewsBanner';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -330,9 +331,12 @@ const Assistant: React.FC<Props> = ({
     [navigation, from, to],
   );
 
+  const newsBanner = <NewsBanner />;
+
   return (
     <DisappearingHeader
       renderHeader={renderHeader}
+      highlightComponent={newsBanner}
       onRefresh={reload}
       isRefreshing={isSearching}
       useScroll={useScroll}
