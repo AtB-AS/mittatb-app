@@ -2,6 +2,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {ParamListBase} from '@react-navigation/native';
 import React from 'react';
+import {Platform} from 'react-native';
 import {SvgProps} from 'react-native-svg';
 import {
   Assistant as AssistantIcon,
@@ -40,6 +41,8 @@ export type TabNavigatorParams = {
 
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
+const softhyphen = Platform.OS === 'ios' ? '\u00AD' : '\u200B';
+
 const NavigationRoot = () => {
   const {theme} = useTheme();
   const {startScreen} = usePreferenceItems();
@@ -60,12 +63,12 @@ const NavigationRoot = () => {
       <Tab.Screen
         name="Assistant"
         component={Assistant}
-        options={tabSettings('Reisesøk', AssistantIcon)}
+        options={tabSettings(`Reise${softhyphen}søk`, AssistantIcon)}
       />
       <Tab.Screen
         name="Nearest"
         component={NearbyScreen}
-        options={tabSettings('Avganger', Nearby)}
+        options={tabSettings(`Av${softhyphen}ganger`, Nearby)}
       />
       <Tab.Screen
         name="Ticketing"
@@ -102,7 +105,10 @@ function tabSettings(
 ): TabSettings {
   return {
     tabBarLabel: ({color}) => (
-      <ThemeText type="lead" style={{color, lineHeight: 14}}>
+      <ThemeText
+        type="lead"
+        style={{color, textAlign: 'center', lineHeight: 14}}
+      >
         {tabBarLabel}
       </ThemeText>
     ),

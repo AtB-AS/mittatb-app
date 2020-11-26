@@ -345,11 +345,11 @@ function useCalculateHeaderContentHeight(isAnimating: boolean) {
     height: screenHeaderHeight,
   } = useLayout();
   const {onLayout: onHeaderContentLayout, height: contentHeight} = useLayout();
-  const {top, bottom} = useSafeAreaInsets();
+  const {top} = useSafeAreaInsets();
 
-  const {height: bottomTabBarHeight} = useBottomNavigationStyles();
+  const {minHeight: bottomTabBarHeight} = useBottomNavigationStyles();
   const boxHeight =
-    actualHeight - screenHeaderHeight - top - bottom - bottomTabBarHeight;
+    actualHeight - screenHeaderHeight - top - bottomTabBarHeight;
 
   const calculatedHeights = {
     boxHeight,
