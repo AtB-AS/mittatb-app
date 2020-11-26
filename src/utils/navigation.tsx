@@ -9,13 +9,18 @@ import {
   usePreferenceItems,
 } from '../preferences';
 
+// This is code from react-navigation, for regular tab bar
+// (not compact). Should be a better way to set this or
+// get it from React Navigation, but alas not.
+const DEFAULT_TABBAR_HEIGHT = 44;
+
 export const useBottomNavigationStyles = (
   maxScale: number = 2,
 ): {minHeight: number} => {
   const {fontScale} = useWindowDimensions();
   const {bottom} = useSafeAreaInsets();
   return {
-    minHeight: 44 * Math.min(fontScale, maxScale) + bottom,
+    minHeight: DEFAULT_TABBAR_HEIGHT * Math.min(fontScale, maxScale) + bottom,
   };
 };
 export const useNavigateToStartScreen = () => {
