@@ -14,42 +14,62 @@ const backgrounds = {
 
 const colors = {
   primary: {
-    green: '#A2AD00',
+    // grays
+    gray_100: '#C3C6C9',
+    gray_200: '#AFB3B7',
+    gray_300: '#878E92',
+    gray_400: '#5F686E',
+    gray_500: '#37424A',
+    gray_600: '#2C353B',
+    gray_700: '#21282C',
+    gray_800: '#161A1E',
+    gray_900: '#101416',
+    // greens
+    green_100: '#E3E6B3',
+    green_200: '#DADE99',
+    green_300: '#C7CE66',
+    green_400: '#B5BD33',
+    green_500: '#A2AD00',
+    green_600: '#828A00',
     green_700: '#616800',
+    green_800: '#414500',
     green_900: '#313400',
-    gray: '#37424A',
   },
   secondary: {
-    blue: '#008DA8',
+    // cyan
+    cyan_100: '#D4F3F6',
+    cyan_200: '#C6EFF3',
+    cyan_300: '#AAE6EC',
+    cyan_400: '#8DDEE6',
+    cyan_500: '#71D6E0',
+    cyan_600: '#5AABB3',
+    cyan_700: '#448086',
+    cyan_800: '#2D565A',
+    cyan_900: '#224043',
+    // i got the blues
+    blue_100: '#B3D8DE',
+    blue_200: '#99CBD3',
+    blue_300: '#66B0BE',
+    blue_400: '#3396A8',
     blue_500: '#007C92',
-    blue_700: '#004a58',
-    blue_800: '#00323a',
-    blue_900: '#00252c',
+    blue_600: '#006375',
+    blue_700: '#004A58',
+    blue_800: '#00323A',
+    blue_900: '#00252C',
+
+    brown: '#584528',
+
     orange: '#C75B12',
+
     yellow_100: '#F7F3B2',
     yellow_500: '#E4D700',
-    red: '#A51140',
-    cyan: '#71D6E0',
-    cyan_100: '#D4F3F6',
-    cyan_300: '#AAE6EC',
-    cyan_500: '#71D6E0',
-    cyan_700: '#448086',
-    cyan_800: '#2d565a',
-    cyan_900: '#224043',
-    gray_Level2: '#EBECED',
-    gray_500: '#37424A',
-    brown: '#584528',
+
+    red_100: '#E4B8C6',
+    red_500: '#A51140',
   },
-  general: {
-    white: '#ffffff',
-    gray: '#D7D9DB',
-    gray100: '#C3C6C9',
-    gray200: '#AFB3B7',
-    gray400: '#5F686E',
-    gray_500: '#37424A',
-    gray_700: '#21282C',
+  text: {
+    white: '#FFFFFF',
     black: '#000000',
-    offblack: '#111416',
   },
 };
 
@@ -91,18 +111,26 @@ export const textTypes: {[key in TextNames]: TextStyle} = {
 };
 
 const borderRadius = {
+  circle: 20,
   regular: 8,
   small: 4,
+} as const;
+const borderWidth = {
+  slim: 1,
+  medium: 2,
 };
 type Button = {
-  bg: string;
-  color: string;
+  backgroundColor: string;
+  textColor: string;
+  borderColor: string;
 };
 export type Themes = {
   light: Theme;
   dark: Theme;
 };
 export type Mode = keyof Themes;
+
+export type RadiusSizes = keyof typeof borderRadius;
 
 export interface Theme {
   statusBarStyle: StatusBarProps['barStyle'];
@@ -113,9 +141,9 @@ export interface Theme {
     level2: string;
     level3: string;
     header: string;
-    modal_Level2: string;
     destructive: string;
     warning: string;
+    error: string;
     info: string;
     accent: string;
   };
@@ -128,14 +156,18 @@ export interface Theme {
     focus: string;
     info: string;
     warning: string;
-    borderRadius: typeof borderRadius;
+    error: string;
+    radius: typeof borderRadius;
+    width: typeof borderWidth;
   };
   button: {
     primary: Button;
     primary2: Button;
     primary3: Button;
-    secondaryStroke: Button;
+    primary4: Button;
     secondary: Button;
+    tertiary: Button;
+    destructive: Button;
   };
 }
 
@@ -149,35 +181,67 @@ export const themes: Themes = {
       level2: backgrounds.light__level2,
       level3: backgrounds.light__level3,
       header: colors.secondary.cyan_500,
-      modal_Level2: colors.secondary.gray_Level2,
-      destructive: colors.secondary.red,
+      destructive: colors.secondary.red_500,
       info: colors.secondary.cyan_100,
       warning: colors.secondary.yellow_100,
-      accent: colors.secondary.cyan,
+      error: colors.secondary.red_500,
+      accent: colors.secondary.cyan_500,
     },
     text: {
       colors: {
-        primary: colors.general.black,
-        destructive: colors.general.white,
-        faded: colors.general.gray400,
+        primary: colors.text.black,
+        destructive: colors.text.white,
+        faded: colors.primary.gray_500,
         focus: colors.secondary.blue_500,
       },
       ...textTypes,
     },
     border: {
-      primary: colors.general.gray,
-      secondary: colors.general.black,
+      primary: colors.primary.gray_100,
+      secondary: colors.text.black,
       focus: colors.secondary.blue_500,
       info: colors.secondary.cyan_500,
       warning: colors.secondary.yellow_500,
-      borderRadius: borderRadius,
+      error: colors.secondary.red_500,
+      radius: borderRadius,
+      width: borderWidth,
     },
     button: {
-      primary: {bg: colors.secondary.cyan_500, color: colors.general.black},
-      primary2: {bg: colors.general.gray_500, color: colors.general.white},
-      primary3: {bg: colors.general.gray200, color: colors.general.black},
-      secondaryStroke: {bg: colors.general.white, color: colors.general.black},
-      secondary: {bg: colors.secondary.blue_500, color: colors.general.white},
+      primary: {
+        backgroundColor: colors.secondary.cyan_500,
+        textColor: colors.text.black,
+        borderColor: colors.secondary.cyan_500,
+      },
+      primary2: {
+        backgroundColor: colors.primary.gray_500,
+        textColor: colors.text.white,
+        borderColor: colors.primary.gray_500,
+      },
+      primary3: {
+        backgroundColor: colors.primary.gray_100,
+        textColor: colors.text.black,
+        borderColor: colors.primary.gray_100,
+      },
+      primary4: {
+        backgroundColor: colors.secondary.blue_500,
+        textColor: colors.text.white,
+        borderColor: colors.secondary.blue_500,
+      },
+      secondary: {
+        backgroundColor: 'transparent',
+        textColor: colors.text.black,
+        borderColor: colors.primary.gray_500,
+      },
+      tertiary: {
+        backgroundColor: 'transparent',
+        textColor: colors.text.black,
+        borderColor: 'transparent',
+      },
+      destructive: {
+        backgroundColor: colors.secondary.red_500,
+        textColor: colors.text.white,
+        borderColor: colors.secondary.red_500,
+      },
     },
   },
   dark: {
@@ -189,36 +253,68 @@ export const themes: Themes = {
       level2: backgrounds.dark__level2,
       level3: backgrounds.dark__level3,
       header: colors.secondary.blue_900,
-      modal_Level2: backgrounds.dark__level2,
-      destructive: colors.secondary.red,
+      destructive: colors.secondary.red_500,
       warning: colors.primary.green_900,
+      error: colors.secondary.red_500,
       info: colors.secondary.cyan_900,
       accent: backgrounds.dark__level1,
     },
 
     text: {
       colors: {
-        primary: colors.general.white,
-        destructive: colors.general.white,
-        faded: colors.general.gray100,
+        primary: colors.text.white,
+        destructive: colors.text.white,
+        faded: colors.primary.gray_100,
         focus: colors.secondary.cyan_500,
       },
       ...textTypes,
     },
     border: {
-      primary: colors.general.white,
-      secondary: colors.general.white,
+      primary: colors.text.white,
+      secondary: colors.text.white,
       focus: colors.secondary.cyan_500,
       info: colors.secondary.cyan_800,
       warning: colors.primary.green_700,
-      borderRadius: borderRadius,
+      error: colors.secondary.red_500,
+      radius: borderRadius,
+      width: borderWidth,
     },
     button: {
-      primary: {bg: colors.secondary.blue_500, color: colors.general.white},
-      primary2: {bg: colors.general.gray_500, color: colors.general.white},
-      primary3: {bg: colors.general.gray_700, color: colors.general.white},
-      secondaryStroke: {bg: colors.general.black, color: colors.general.white},
-      secondary: {bg: colors.secondary.blue_500, color: colors.general.white},
+      primary: {
+        backgroundColor: colors.secondary.blue_500,
+        textColor: colors.text.white,
+        borderColor: colors.secondary.blue_500,
+      },
+      primary2: {
+        backgroundColor: colors.primary.gray_100,
+        textColor: colors.text.black,
+        borderColor: colors.primary.gray_100,
+      },
+      primary3: {
+        backgroundColor: colors.primary.gray_500,
+        textColor: colors.text.white,
+        borderColor: colors.primary.gray_500,
+      },
+      primary4: {
+        backgroundColor: colors.secondary.blue_500,
+        textColor: colors.text.white,
+        borderColor: colors.secondary.blue_500,
+      },
+      secondary: {
+        backgroundColor: 'transparent',
+        textColor: colors.text.white,
+        borderColor: colors.primary.gray_100,
+      },
+      tertiary: {
+        backgroundColor: 'transparent',
+        textColor: colors.text.white,
+        borderColor: 'transparent',
+      },
+      destructive: {
+        backgroundColor: colors.secondary.red_500,
+        textColor: colors.text.white,
+        borderColor: colors.secondary.red_500,
+      },
     },
   },
 };

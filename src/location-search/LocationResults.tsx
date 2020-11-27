@@ -28,11 +28,12 @@ const LocationResults: React.FC<Props> = ({
     <>
       {title && (
         <View accessibilityRole="header" style={styles.subHeader}>
-          <ThemeText style={styles.subLabel}>{title}</ThemeText>
-          <View style={styles.subBar} />
+          <ThemeText type="lead" color="faded">
+            {title}
+          </ThemeText>
         </View>
       )}
-      <View style={styles.list}>
+      <View>
         {locations.map(mapToVisibleSearchResult).map((searchResult) => (
           <View style={styles.rowContainer} key={searchResult.key}>
             <View style={styles.locationButtonContainer}>
@@ -119,21 +120,13 @@ export default LocationResults;
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   subHeader: {
-    flexDirection: 'row',
+    padding: theme.spacings.medium,
+    margin: 0,
   },
   subLabel: {
     color: theme.text.colors.faded,
     fontSize: 12,
     marginRight: 12,
-  },
-  subBar: {
-    height: 12,
-    flexGrow: 1,
-    borderBottomColor: theme.text.colors.faded,
-    borderBottomWidth: 1,
-  },
-  list: {
-    marginVertical: 24,
   },
   rowContainer: {
     flexDirection: 'row',
@@ -142,8 +135,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   locationButtonContainer: {
     padding: 12,
-    marginVertical: 12,
     flex: 1,
+    minHeight: 84,
   },
   locationButton: {
     flexDirection: 'row',

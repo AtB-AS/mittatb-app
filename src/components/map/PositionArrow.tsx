@@ -1,35 +1,29 @@
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import {StyleSheet} from '../../theme';
+import insets from '../../utils/insets';
+import Button from '../button';
 import shadows from './shadows';
-import colors from '../../theme/colors';
-import ThemeIcon from '../theme-icon';
 
 const PositionArrow: React.FC<{flyToCurrentLocation(): void}> = ({
   flyToCurrentLocation,
 }) => {
   const styles = useStyles();
   return (
-    <TouchableOpacity
+    <Button
+      type="compact"
+      mode="primary"
       accessibilityLabel="Min posisjon"
       accessibilityRole="button"
       onPress={flyToCurrentLocation}
-    >
-      <View style={styles.flyToButton}>
-        <ThemeIcon svg={CurrentLocationArrow} />
-      </View>
-    </TouchableOpacity>
+      hitSlop={insets.symmetric(12, 20)}
+      icon={CurrentLocationArrow}
+      style={styles.flyToButton}
+    ></Button>
   );
 };
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   flyToButton: {
-    backgroundColor: theme.background.level0,
-    borderRadius: theme.border.borderRadius.small,
-    width: 36,
-    height: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
     marginBottom: theme.spacings.small,
     ...shadows,
   },

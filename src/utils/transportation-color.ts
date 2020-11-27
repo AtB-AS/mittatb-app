@@ -6,6 +6,8 @@ type TransportationColors = {
   icon: string;
 };
 
+export const defaultFill = colors.primary.gray_300;
+
 export default function transportionColor(
   mode?: LegMode,
   publicCode?: string,
@@ -15,38 +17,38 @@ export default function transportionColor(
       const code = Number(publicCode);
       if (code < 100)
         return {
-          fill: colors.primary.green,
-          icon: colors.general.black,
+          fill: colors.primary.green_500,
+          icon: colors.text.black,
         };
 
       return {
-        fill: colors.secondary.blue,
-        icon: colors.general.white,
+        fill: colors.secondary.blue_500,
+        icon: colors.text.white,
       };
     case 'rail':
       return {
-        fill: colors.secondary.red,
-        icon: colors.general.white,
+        fill: colors.secondary.red_500,
+        icon: colors.text.white,
       };
     case 'tram':
       return {
-        fill: colors.primary.green,
-        icon: colors.general.black,
+        fill: colors.primary.green_500,
+        icon: colors.text.black,
       };
     case 'water':
       return {
-        fill: colors.general.white,
-        icon: colors.general.black,
+        fill: colors.text.white,
+        icon: colors.text.black,
       };
     case 'air':
       return {
         fill: colors.secondary.orange,
-        icon: colors.general.white,
+        icon: colors.text.white,
       };
     default:
       return {
-        fill: colors.general.gray,
-        icon: colors.general.white,
+        fill: defaultFill,
+        icon: colors.text.white,
       };
   }
 }
@@ -58,18 +60,18 @@ export function transportationMapLineColor(
     case 'bus':
       const code = Number(publicCode);
       if (code < 100) {
-        return colors.primary.green;
+        return colors.primary.green_500;
       }
-      return colors.secondary.blue;
+      return colors.secondary.blue_500;
     case 'rail':
-      return colors.secondary.red;
+      return colors.secondary.red_500;
     case 'tram':
-      return colors.primary.green;
+      return colors.primary.green_500;
     case 'water':
-      return colors.general.white;
+      return colors.text.white;
     case 'air':
       return colors.secondary.orange;
     default:
-      return colors.general.gray400;
+      return defaultFill;
   }
 }

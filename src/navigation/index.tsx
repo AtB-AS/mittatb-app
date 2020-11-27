@@ -12,6 +12,7 @@ import trackNavigation from '../diagnostics/trackNavigation';
 import LocationSearch, {
   RouteParams as LocationSearchParams,
 } from '../location-search';
+import TicketPurchase from '../screens/Ticketing/Purchase';
 import Onboarding from '../screens/Onboarding';
 import TripDetailsModal, {
   RouteParams as TripDetailsModalParams,
@@ -22,6 +23,10 @@ import DepartureDetails, {
 import {useTheme} from '../theme';
 import TabNavigator from './TabNavigator';
 import transitionSpec from './transitionSpec';
+import AddEditFavorite, {
+  AddEditParams,
+} from '../screens/Profile/AddEditFavorite';
+import SortableFavoriteList from '../screens/Profile/FavoriteList/SortFavorites';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -30,6 +35,9 @@ export type RootStackParamList = {
   LocationSearch: LocationSearchParams;
   TripDetailsModal: TripDetailsModalParams;
   DepartureDetailsModal: DepartureDetailsRouteParams;
+  SortableFavoriteList: undefined;
+  AddEditFavorite: AddEditParams;
+  TicketPurchase: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -41,12 +49,12 @@ const NavigationRoot = () => {
   const ref = useRef<NavigationContainerRef>(null);
   const {getInitialState} = useLinking(ref, {
     prefixes: ['atb://'],
-    config: {screens: {Profile: 'profile', PaymentVipps: 'payment'}},
+    config: {screens: {Profile: 'profile', Ticketing: 'vipps'}},
   });
 
   useEffect(() => {
     getInitialState().then(
-      (state) => {},
+      () => {},
       () => {},
     );
   }, [getInitialState]);
@@ -64,25 +72,19 @@ const NavigationRoot = () => {
       />
       <Host>
         <NavigationContainer ref={ref} onStateChange={trackNavigation}>
-          <Stack.Navigator mode={isLoading || !onboarded ? 'card' : 'modal'}>
+          <Stack.Navigator
+            mode={isLoading || !onboarded ? 'card' : 'modal'}
+            screenOptions={{headerShown: false}}
+          >
             {!onboarded ? (
-              <Stack.Screen
-                name="Onboarding"
-                component={Onboarding}
-                options={{headerShown: false}}
-              />
+              <Stack.Screen name="Onboarding" component={Onboarding} />
             ) : (
               <>
-                <Stack.Screen
-                  name="TabNavigator"
-                  component={TabNavigator}
-                  options={{headerShown: false}}
-                />
+                <Stack.Screen name="TabNavigator" component={TabNavigator} />
                 <Stack.Screen
                   name="TripDetailsModal"
                   component={TripDetailsModal}
                   options={{
-                    headerShown: false,
                     cardOverlayEnabled: true,
                     cardShadowEnabled: true,
                     ...TransitionPresets.ModalPresentationIOS,
@@ -92,7 +94,6 @@ const NavigationRoot = () => {
                   name="DepartureDetailsModal"
                   component={DepartureDetails}
                   options={{
-                    headerShown: false,
                     cardOverlayEnabled: true,
                     cardShadowEnabled: true,
                     ...TransitionPresets.ModalPresentationIOS,
@@ -102,7 +103,40 @@ const NavigationRoot = () => {
                   name="LocationSearch"
                   component={LocationSearch}
                   options={{
-                    headerShown: false,
+                    transitionSpec: {
+                      open: transitionSpec,
+                      close: transitionSpec,
+                    },
+                  }}
+                />
+                <Stack.Screen
+                  name="TicketPurchase"
+                  component={TicketPurchase}
+                  options={{
+                    transitionSpec: {
+                      open: transitionSpec,
+                      close: transitionSpec,
+                    },
+                  }}
+                />
+
+                <Stack.Screen
+                  name="AddEditFavorite"
+                  component={AddEditFavorite}
+                  options={{
+                    transitionSpec: {
+                      open: transitionSpec,
+                      close: transitionSpec,
+                    },
+                  }}
+                />
+                <Stack.Screen
+                  name="SortableFavoriteList"
+                  component={SortableFavoriteList}
+                  options={{
+                    gestureResponseDistance: {
+                      vertical: 100,
+                    },
                     transitionSpec: {
                       open: transitionSpec,
                       close: transitionSpec,

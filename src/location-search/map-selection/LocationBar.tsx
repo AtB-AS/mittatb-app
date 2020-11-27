@@ -1,14 +1,14 @@
 import React from 'react';
-import {View, TouchableOpacity, ActivityIndicator} from 'react-native';
-import colors from '../../theme/colors';
-import {ArrowRight} from '../../assets/svg/icons/navigation';
-import {Info, Warning} from '../../assets/svg/icons/status';
-import {Location} from '../../favorites/types';
-import LocationIcon from '../../components/location-icon';
-import {StyleSheet} from '../../theme';
-import shadows from '../../components/map/shadows';
+import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {ErrorType} from '../../api/utils';
+import {ArrowRight} from '../../assets/svg/icons/navigation';
+import SvgError from '../../assets/svg/icons/status/Error';
+import SvgInfo from '../../assets/svg/icons/status/Info';
+import LocationIcon from '../../components/location-icon';
 import ThemeText from '../../components/text';
+import ThemeIcon from '../../components/theme-icon';
+import {Location} from '../../favorites/types';
+import {StyleSheet, useTheme} from '../../theme';
 
 type Props = {
   location?: Location;
@@ -40,7 +40,7 @@ const LocationBar: React.FC<Props> = ({
           </View>
           {!isSearching && !!location && (
             <View style={styles.button}>
-              <ArrowRight />
+              <ThemeIcon svg={ArrowRight} />
             </View>
           )}
         </View>
@@ -54,17 +54,17 @@ const Icon: React.FC<{
   location?: Location;
   hasError: boolean;
 }> = ({isSearching, location, hasError}) => {
-  const styles = useStyles();
+  const {theme} = useTheme();
   return (
     <View style={{marginHorizontal: 12}}>
       {isSearching ? (
-        <ActivityIndicator animating={true} color={colors.general.gray200} />
+        <ActivityIndicator animating={true} color={theme.text.colors.primary} />
       ) : location ? (
         <LocationIcon location={location} />
       ) : hasError ? (
-        <Warning />
+        <ThemeIcon svg={SvgError} />
       ) : (
-        <Info />
+        <ThemeIcon svg={SvgInfo} />
       )}
     </View>
   );
@@ -123,13 +123,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
-    ...shadows,
+    padding: theme.spacings.medium,
+    backgroundColor: theme.background.header,
   },
   innerContainer: {
     paddingRight: theme.spacings.small,
     paddingVertical: theme.spacings.small,
-    borderRadius: theme.border.borderRadius.regular,
+    borderRadius: theme.border.radius.regular,
     backgroundColor: theme.background.level0,
     flexDirection: 'row',
     flexGrow: 1,

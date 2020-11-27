@@ -1,5 +1,5 @@
 import {LegMode} from '@entur/sdk';
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {Fragment, useCallback, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import Dash from 'react-native-dash';
@@ -18,9 +18,10 @@ import ScreenHeader from '../../../ScreenHeader';
 import {EstimatedCall, Situation} from '../../../sdk';
 import SituationMessages from '../../../situations';
 import {StyleSheet} from '../../../theme';
-import colors from '../../../theme/colors';
 import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
-import transportationColor from '../../../utils/transportation-color';
+import transportationColor, {
+  defaultFill,
+} from '../../../utils/transportation-color';
 import {getQuayName} from '../../../utils/transportation-names';
 import usePollableResource from '../../../utils/use-pollable-resource';
 import LocationRow from '../LocationRow';
@@ -28,10 +29,12 @@ import SituationRow from '../SituationRow';
 import {getAimedTimeIfLargeDifference} from '../utils';
 import ThemeIcon from '../../../components/theme-icon';
 import ThemeText from '../../../components/text';
+import {parseISO} from 'date-fns';
 
 export type DepartureDetailsRouteParams = {
   title: string;
   serviceJourneyId: string;
+  date: string;
   fromQuayId?: string;
   toQuayId?: string;
   isBack?: boolean;
@@ -51,17 +54,26 @@ export default function DepartureDetails({navigation, route}: Props) {
   const {
     title,
     serviceJourneyId,
+    date,
     fromQuayId,
     toQuayId,
     isBack = false,
   } = route.params;
   const styles = useStopsStyle();
 
+  const isFocused = useIsFocused();
   const [
     {callGroups, mode, publicCode, situations: parentSituations},
     _,
     isLoading,
-  ] = useDepartureData(serviceJourneyId, fromQuayId, toQuayId, 30);
+  ] = useDepartureData(
+    serviceJourneyId,
+    date,
+    fromQuayId,
+    toQuayId,
+    30,
+    !isFocused,
+  );
 
   const content = isLoading ? (
     <View accessibilityLabel={'Laster søkeresultat'} accessible={true}>
@@ -164,7 +176,7 @@ function CallGroup({
 
   const dashColor = isOnRoute
     ? transportationColor(mode, publicCode).fill
-    : colors.general.gray;
+    : defaultFill;
 
   return (
     <View>
@@ -278,7 +290,7 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
 const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.background.modal_Level2,
+    backgroundColor: theme.background.level2,
   },
   situationsContainer: {
     marginBottom: theme.spacings.small,
@@ -333,13 +345,15 @@ type CallListGroup = {
 
 function useDepartureData(
   serviceJourneyId: string,
+  date: string,
   fromQuayId?: string,
   toQuayId?: string,
   pollingTimeInSeconds: number = 0,
+  disabled?: boolean,
 ): [DepartureData, () => void, boolean, Error?] {
   const getService = useCallback(
     async function getServiceJourneyDepartures(): Promise<DepartureData> {
-      const deps = await getDepartures(serviceJourneyId);
+      const deps = await getDepartures(serviceJourneyId, parseISO(date));
       const callGroups = groupAllCallsByQuaysInLeg(deps, fromQuayId, toQuayId);
       const line = callGroups.trip[0]?.serviceJourney?.journeyPattern?.line;
       const parentSituation = callGroups.trip[0]?.situations;
@@ -364,6 +378,7 @@ function useDepartureData(
       situations: [],
     },
     pollingTimeInSeconds,
+    disabled,
   });
 }
 

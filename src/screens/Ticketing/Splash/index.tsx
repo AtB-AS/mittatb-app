@@ -6,7 +6,7 @@ import useChatIcon from '../../../chat/use-chat-icon';
 import {ShinyTicketBanner} from '../../../assets/svg/illustrations';
 import {StyleSheet, useStyle} from '../../../theme';
 import LogoOutline from '../../../ScreenHeader/LogoOutline';
-import {useNavigateHome} from '../../../utils/navigation';
+import {useNavigateToStartScreen} from '../../../utils/navigation';
 import InviteModal from './InviteModal';
 import {Modalize} from 'react-native-modalize';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
@@ -29,7 +29,7 @@ export default function Splash() {
   const {refresh} = useRemoteConfig();
   const chatIcon = useChatIcon();
   const {width: windowWidth} = useWindowDimensions();
-  const navigateHome = useNavigateHome();
+  const navigateHome = useNavigateToStartScreen();
   const modalRef = useRef<Modalize>(null);
 
   function onEnrolled() {
@@ -44,7 +44,7 @@ export default function Splash() {
         leftButton={{
           icon: <ThemeIcon svg={LogoOutline} />,
           onPress: navigateHome,
-          accessibilityLabel: 'Gå til startskjerm',
+          accessibilityLabel: 'Gå til startside',
         }}
       />
       <View style={styles.bannerContainer}>
@@ -62,20 +62,13 @@ export default function Splash() {
             <ThemeText style={styles.text}>
               Her kan du snart kjøpe og administrere billetter til reisen din.
             </ThemeText>
-            <ThemeText style={styles.text}>
-              Frem til da kan du kjøpe billett fra{'\n'}
-              <Text onPress={openOtherTicketingApp} style={styles.underline}>
-                AtB Mobillett
-              </Text>
-            </ThemeText>
           </View>
           <View style={styles.buttonContainer}>
             <Button
+              mode="primary2"
               onPress={() => modalRef.current?.open()}
               text="Jeg har kode til beta for billettkjøp"
-              mode="secondary"
               style={styles.button}
-              textStyle={styles.buttonText}
             />
           </View>
         </View>
@@ -119,7 +112,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     bottom: theme.spacings.large,
   },
   underline: {textDecorationLine: 'underline'},
-
-  button: {backgroundColor: theme.button.secondary.bg},
-  buttonText: {color: theme.button.secondary.color},
+  button: {marginBottom: theme.spacings.small},
 }));

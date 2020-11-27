@@ -57,6 +57,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
     navigation.navigate('DepartureDetailsModal', {
       title: publicCode ? `${publicCode} ${name}` : name,
       serviceJourneyId: departure.serviceJourney.id,
+      date: departure.date,
       fromQuayId: departure.quay?.id,
     });
   };
@@ -380,7 +381,7 @@ const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
   },
   quayContainer: {
     backgroundColor: theme.background.level0,
-    borderRadius: theme.border.borderRadius.regular,
+    borderRadius: theme.border.radius.regular,
     marginBottom: theme.spacings.small,
   },
 }));

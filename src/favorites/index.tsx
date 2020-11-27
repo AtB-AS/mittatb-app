@@ -5,13 +5,19 @@ import ThemeIcon from '../components/theme-icon';
 
 export type FavoriteIconProps = {
   favorite?: {emoji?: string};
+  fill?: string;
 };
 
-export function FavoriteIcon({favorite}: FavoriteIconProps) {
+export function FavoriteIcon({favorite, fill}: FavoriteIconProps) {
   if (!favorite || !favorite.emoji) {
-    return <ThemeIcon svg={MapPointPin} />;
+    const fillProp = fill ? {fill} : undefined;
+    return <ThemeIcon svg={MapPointPin} {...fillProp} />;
   }
-  return <ThemeText>{favorite.emoji}</ThemeText>;
+  return (
+    <ThemeText style={fill ? {color: fill} : undefined}>
+      {favorite.emoji}
+    </ThemeText>
+  );
 }
 
 export {

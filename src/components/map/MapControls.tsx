@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, TouchableOpacity} from 'react-native';
-import colors from '../../theme/colors';
 import {Add, Remove} from '../../assets/svg/icons/actions';
 import {StyleSheet} from '../../theme';
 import shadows from './shadows';
@@ -42,7 +41,7 @@ const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   zoomContainer: {
     backgroundColor: theme.background.level0,
-    borderRadius: theme.border.borderRadius.small,
+    borderRadius: theme.border.radius.small,
     ...shadows,
   },
   zoomInButton: {

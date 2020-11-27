@@ -2,6 +2,7 @@ import React, {createContext, useContext, useEffect, useState} from 'react';
 import {
   getFavorites,
   addFavorite,
+  setFavorites as setFavoritesStorage,
   removeFavorite,
   updateFavorite,
 } from './storage';
@@ -12,16 +13,17 @@ type FavoriteContextState = {
   addFavorite(location: Omit<LocationFavorite, 'id'>): Promise<void>;
   removeFavorite(id: string): Promise<void>;
   updateFavorite(favorite: LocationFavorite): Promise<void>;
+  setFavorites(favorites: LocationFavorite[]): Promise<void>;
 };
 const FavoritesContext = createContext<FavoriteContextState | undefined>(
   undefined,
 );
 
 const FavoritesContextProvider: React.FC = ({children}) => {
-  const [favorites, setFavorites] = useState<UserFavorites>([]);
+  const [favorites, setFavoritesState] = useState<UserFavorites>([]);
   async function populateFavorites() {
     let favorites = await getFavorites();
-    setFavorites(favorites ?? []);
+    setFavoritesState(favorites ?? []);
   }
 
   useEffect(() => {
@@ -32,15 +34,19 @@ const FavoritesContextProvider: React.FC = ({children}) => {
     favorites,
     async addFavorite(favorite: Omit<LocationFavorite, 'id'>) {
       const favorites = await addFavorite(favorite);
-      setFavorites(favorites);
+      setFavoritesState(favorites);
     },
     async removeFavorite(id: string) {
       const favorites = await removeFavorite(id);
-      setFavorites(favorites);
+      setFavoritesState(favorites);
     },
     async updateFavorite(favorite: LocationFavorite) {
       const favorites = await updateFavorite(favorite);
-      setFavorites(favorites);
+      setFavoritesState(favorites);
+    },
+    async setFavorites(favorites: LocationFavorite[]) {
+      const newFavorites = await setFavoritesStorage(favorites);
+      setFavoritesState(newFavorites);
     },
   };
 

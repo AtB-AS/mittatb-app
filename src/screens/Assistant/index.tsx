@@ -1,27 +1,28 @@
+import Bugsnag from '@bugsnag/react-native';
+import analytics from '@react-native-firebase/analytics';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {
-  TouchableOpacity,
-  View,
-  ViewStyle,
-  StyleProp,
-  ActivityIndicator,
-} from 'react-native';
-import analytics from '@react-native-firebase/analytics';
+import {View} from 'react-native';
 import {searchTrip} from '../../api';
 import {CancelToken, isCancel} from '../../api/client';
+import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import {Swap} from '../../assets/svg/icons/actions';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
+import {screenReaderPause} from '../../components/accessible-text';
 import DisappearingHeader from '../../components/disappearing-header';
-import {LocationButton} from '../../components/search-button';
-import SearchGroup from '../../components/search-button/search-group';
+import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
+import {LocationInput, Section} from '../../components/sections';
+import ThemeText from '../../components/text';
+import ThemeIcon from '../../components/theme-icon';
+import FavoriteChips from '../../favorite-chips';
 import {useFavorites} from '../../favorites/FavoritesContext';
 import {
   Location,
   LocationWithMetadata,
   UserFavorites,
 } from '../../favorites/types';
+import {useReverseGeocoder} from '../../geocoder';
 import {
   RequestPermissionFn,
   useGeolocationState,
@@ -30,29 +31,18 @@ import {useLocationSearchValue} from '../../location-search';
 import {RootStackParamList} from '../../navigation';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import {TripPattern} from '../../sdk';
-import {StyleSheet} from '../../theme';
-import insets from '../../utils/insets';
+import {StyleSheet, useTheme} from '../../theme';
 import {
   locationDistanceInMetres as distanceInMetres,
   locationsAreEqual,
   LOCATIONS_REALLY_CLOSE_THRESHOLD,
 } from '../../utils/location';
-import {useReverseGeocoder} from '../../geocoder';
 import {useLayout} from '../../utils/use-layout';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
+import FadeBetween from './FadeBetween';
 import Results from './Results';
 import {NoResultReason, SearchStateType} from './types';
-import FavoriteChips from '../../favorite-chips';
-
-import Animated, {Easing} from 'react-native-reanimated';
-import Bugsnag from '@bugsnag/react-native';
-import {ErrorType, getAxiosErrorType} from '../../api/utils';
-import {screenReaderPause} from '../../components/accessible-text';
-import colors from '../../theme/colors';
-import ThemeIcon from '../../components/theme-icon';
-import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
-import ThemeText from '../../components/text';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -111,6 +101,7 @@ const Assistant: React.FC<Props> = ({
   navigation,
 }) => {
   const styles = useStyles();
+  const {theme} = useTheme();
   const {from, to} = useLocations(currentLocation);
 
   function swap() {
@@ -207,109 +198,80 @@ const Assistant: React.FC<Props> = ({
   const isHeaderFullHeight = !from || !to;
 
   const renderHeader = useCallback(
-    () => (
+    (_, isParentAnimating) => (
       <View>
-        <SearchGroup>
-          <View style={styles.searchButtonContainer}>
-            <View style={styles.styleButton}>
-              <LocationButton
-                accessible={true}
-                accessibilityLabel={'Velg avreisested' + screenReaderPause}
-                accessibilityHint={
-                  'Aktiver for å søke etter adresse eller sted.' +
-                  screenReaderPause
-                }
-                accessibilityRole="button"
-                title="Fra"
-                placeholder={
-                  updatingLocation
-                    ? 'Oppdaterer posisjon'
-                    : 'Søk etter adresse eller sted'
-                }
-                icon={
-                  updatingLocation && !from ? (
-                    <ActivityIndicator color={colors.general.gray200} />
-                  ) : undefined
-                }
-                location={from}
-                onPress={() => openLocationSearch('fromLocation', from)}
-              />
-            </View>
-
-            <TouchableOpacity
-              accessible={true}
-              accessibilityLabel={
-                from?.resultType == 'geolocation'
-                  ? 'Oppdater posisjon.'
-                  : 'Bruk posisjon som avreisested.'
-              }
-              accessibilityRole="button"
-              hitSlop={insets.all(12)}
-              onPress={setCurrentLocationOrRequest}
-            >
-              <ThemeIcon svg={CurrentLocationArrow} />
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.searchButtonContainer}>
-            <View style={styles.styleButton}>
-              <LocationButton
-                accessible={true}
-                accessibilityLabel="Velg ankomststed."
-                accessibilityRole="button"
-                title="Til"
-                placeholder="Søk etter adresse eller sted"
-                location={to}
-                onPress={() => openLocationSearch('toLocation', to)}
-              />
-            </View>
-
-            <View style={styles.swapButton}>
-              <TouchableOpacity
-                onPress={swap}
-                hitSlop={insets.all(12)}
-                accessible={true}
-                accessibilityLabel={
-                  'Bytt avreisested og ankomststed' + screenReaderPause
-                }
-                accessibilityRole="button"
-              >
-                <ThemeIcon svg={Swap} />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </SearchGroup>
-
-        <View style={{height: 40, position: 'relative'}}>
-          <Fade
-            visible={isHeaderFullHeight}
-            style={{position: 'absolute', width: '100%'}}
-          >
-            <FavoriteChips
-              chipTypes={['favorites', 'add-favorite']}
-              onSelectLocation={fillNextAvailableLocation}
-              containerStyle={styles.chipBox}
-              chipActionHint={
-                'Aktiver for å bruke som ' +
-                (from ? 'destinasjon' : 'avreisested') +
+        <View style={styles.paddedContainer}>
+          <Section>
+            <LocationInput
+              accessibilityLabel={'Velg avreisested' + screenReaderPause}
+              accessibilityHint={
+                'Aktiver for å søke etter adresse eller sted.' +
                 screenReaderPause
               }
+              updatingLocation={updatingLocation && !to}
+              location={from}
+              label="Fra"
+              onPress={() => openLocationSearch('fromLocation', from)}
+              icon={<ThemeIcon svg={CurrentLocationArrow} />}
+              onIconPress={setCurrentLocationOrRequest}
+              iconAccessibility={{
+                accessible: true,
+                accessibilityLabel:
+                  from?.resultType == 'geolocation'
+                    ? 'Oppdater posisjon.'
+                    : 'Bruk posisjon som avreisested.',
+                accessibilityRole: 'button',
+              }}
             />
-          </Fade>
 
-          <Fade
-            visible={!isHeaderFullHeight}
-            style={{position: 'absolute', width: '100%'}}
-          >
-            <SearchGroup containerStyle={{marginTop: 2}}>
-              <DateInput
-                onDateSelected={setDate}
-                value={date}
-                timeOfLastSearch={timeOfLastSearch}
-              />
-            </SearchGroup>
-          </Fade>
+            <LocationInput
+              accessibilityLabel="Velg ankomststed."
+              label="Til"
+              placeholder="Søk etter adresse eller sted"
+              location={to}
+              onPress={() => openLocationSearch('toLocation', to)}
+              icon={<ThemeIcon svg={Swap} />}
+              onIconPress={swap}
+              iconAccessibility={{
+                accessible: true,
+                accessibilityLabel:
+                  'Bytt avreisested og ankomststed' + screenReaderPause,
+                accessibilityRole: 'button',
+              }}
+            />
+          </Section>
         </View>
+
+        <FadeBetween
+          visibleKey={isHeaderFullHeight ? 'favoriteChips' : 'dateInput'}
+        >
+          <FavoriteChips
+            key="favoriteChips"
+            chipTypes={['favorites', 'add-favorite']}
+            onSelectLocation={fillNextAvailableLocation}
+            containerStyle={styles.fadeChild}
+            contentContainerStyle={{
+              // @TODO Find solution for not hardcoding this. e.g. do proper math
+              paddingLeft: theme.spacings.medium,
+              paddingRight: theme.spacings.medium / 2,
+            }}
+            chipActionHint={
+              'Aktiver for å bruke som ' +
+              (from ? 'destinasjon' : 'avreisested') +
+              screenReaderPause
+            }
+          />
+          <View
+            style={[styles.paddedContainer, styles.fadeChild]}
+            key="dateInput"
+          >
+            <DateInput
+              onDateSelected={setDate}
+              value={date}
+              timeOfLastSearch={timeOfLastSearch}
+            />
+          </View>
+        </FadeBetween>
       </View>
     ),
     [
@@ -375,6 +337,7 @@ const Assistant: React.FC<Props> = ({
       isRefreshing={isSearching}
       useScroll={useScroll}
       headerTitle="Reiseassistent"
+      headerMargin={24}
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
       logoClick={{
@@ -407,22 +370,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     paddingRight: theme.spacings.medium,
   },
-  swapButton: {
-    position: 'relative',
-    top: -19,
-    right: 23,
-    backgroundColor: theme.background.level0,
-    borderColor: theme.background.header,
-    padding: 3,
-    borderWidth: 2,
-    borderRadius: 20,
-  },
   styleButton: {
     flexGrow: 1,
-  },
-  chipBox: {
-    marginTop: 8,
-    paddingHorizontal: theme.spacings.medium,
   },
   altTitle: {
     flex: 1,
@@ -436,6 +385,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   altTitleText__right: {
     textAlign: 'right',
+  },
+  paddedContainer: {
+    marginHorizontal: theme.spacings.medium,
+  },
+  fadeChild: {
+    marginVertical: theme.spacings.medium,
   },
 }));
 
@@ -632,39 +587,6 @@ function useDoOnceWhen(fn: () => void, condition: boolean) {
       fn();
     }
   }, [condition]);
-}
-
-type FadeProps = {
-  visible?: boolean;
-  style?: StyleProp<Animated.AnimateStyle<ViewStyle>>;
-  children?: any;
-  duration?: number;
-};
-
-function Fade({style, children, visible, duration = 400}: FadeProps) {
-  const opacityValue = useRef(new Animated.Value<number>(0)).current;
-  const [init, setInit] = useState(false);
-  const [isDone, setIsDone] = useState(false);
-
-  useEffect(() => {
-    opacityValue.setValue(visible ? 1 : 0);
-    setInit(true);
-  }, []);
-
-  useEffect(() => {
-    if (!init) return;
-    return Animated.timing(opacityValue, {
-      toValue: visible ? 1 : 0,
-      duration: duration,
-      easing: Easing.linear,
-    }).start(({finished}) => setIsDone(finished));
-  }, [visible, init, duration]);
-
-  return (
-    <Animated.View style={[{opacity: opacityValue}, style]}>
-      {!isDone || visible ? children : null}
-    </Animated.View>
-  );
 }
 
 function log(message: string, metadata?: {[key: string]: string}) {

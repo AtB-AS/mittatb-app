@@ -1,6 +1,7 @@
-import React, {createContext, useContext, useState, useEffect} from 'react';
-import {themes, Theme, Themes, Mode} from './colors';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 import {useColorScheme} from 'react-native';
+import {usePreferenceItems} from '../preferences';
+import {Mode, Theme, themes, Themes} from './colors';
 
 interface ThemeContextValue {
   theme: Theme;
@@ -25,7 +26,15 @@ export function useTheme() {
 }
 
 const ThemeContextProvider: React.FC = ({children}) => {
-  const colorScheme = useColorScheme();
+  let colorScheme = useColorScheme();
+  const {
+    colorScheme: storedColorScheme,
+    overrideColorScheme,
+  } = usePreferenceItems();
+
+  if (overrideColorScheme && storedColorScheme) {
+    colorScheme = storedColorScheme;
+  }
   const defaultTheme = colorScheme ?? 'light';
   const [themeName, setThemeName] = useState<keyof Themes>(defaultTheme);
 
