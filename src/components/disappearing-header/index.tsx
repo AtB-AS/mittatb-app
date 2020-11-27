@@ -210,9 +210,9 @@ const DisappearingHeader: React.FC<Props> = ({
             </View>
 
             {highlightComponent ? (
-              <View style={styles.highlightComponent}>
+              <ScrollView style={styles.highlightComponent}>
                 {highlightComponent}
-              </View>
+              </ScrollView>
             ) : null}
 
             <View onLayout={onHeaderContentLayout}>
@@ -297,10 +297,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
 
   highlightComponent: {
-    position: 'absolute',
-    top: theme.spacings.medium,
-    left: theme.spacings.medium,
-    right: theme.spacings.medium,
+    margin: theme.spacings.medium,
   },
 
   content: {
@@ -317,7 +314,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     zIndex: 2,
     elevated: 1,
     backgroundColor: theme.background.header,
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
   },
   container: {
     backgroundColor: theme.background.level1,
