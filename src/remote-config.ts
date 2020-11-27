@@ -24,7 +24,7 @@ export async function getConfig(): Promise<RemoteConfig> {
   const enable_intercom = !!(values['enable_intercom']?.asBoolean() ?? true);
   const news_enabled = values['news_enabled']?.asBoolean() ?? false;
   const news_text = values['news_text']?.asString() ?? '';
-  const news_link_text = values['news_link_text']?.asString() ?? '';
+  const news_link_text = values['news_link_text']?.asString() ?? 'Les mer';
   const news_link_url = values['news_link_url']?.asString() ?? '';
   return {
     enable_ticketing,
