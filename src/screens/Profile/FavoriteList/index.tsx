@@ -62,11 +62,13 @@ export default function FavoriteList({navigation}: ProfileScreenProps) {
         </Sections.Section>
 
         <Sections.Section withPadding>
-          <Sections.LinkItem
-            text="Endre rekkefølge"
-            onPress={onSortClick}
-            icon={<ThemeIcon svg={SvgReorder} />}
-          />
+          {!!items.length && (
+            <Sections.LinkItem
+              text="Endre rekkefølge"
+              onPress={onSortClick}
+              icon={<ThemeIcon svg={SvgReorder} />}
+            />
+          )}
           <Sections.LinkItem
             text="Legg til favorittsted"
             onPress={onAddButtonClick}
