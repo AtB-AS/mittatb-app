@@ -64,18 +64,18 @@ export default function Profile({navigation}: ProfileScreenProps) {
   return (
     <SafeAreaView style={css.container}>
       <Header
-        title="Mitt AtB"
+        title={t(ProfileTexts.header.title)}
         leftButton={{
           icon: <ThemeIcon svg={LogoOutline} />,
           onPress: navigateHome,
-          accessibilityLabel: 'Gå til startskjerm',
+          accessibilityLabel: t(ProfileTexts.header.logo.a11yLabel),
         }}
         rightButton={chatIcon}
       />
 
       <ScrollView>
         <EditableListGroup
-          title="Favoritter"
+          title={t(ProfileTexts.favoriteList.title)}
           data={items}
           renderItem={(item) => (
             <Item
@@ -139,6 +139,7 @@ type ItemProps = {
 };
 const Item: React.FC<ItemProps> = ({item, onEdit, onClick}) => {
   const css = useItemStyle();
+  const {t} = useTranslation();
 
   const content = item.name ? (
     <>
@@ -173,7 +174,11 @@ const Item: React.FC<ItemProps> = ({item, onEdit, onClick}) => {
       {clickable}
       {onEdit && (
         <TouchableOpacity
-          accessibilityLabel={'Rediger favoritt:' + item.name}
+          accessibilityLabel={t(
+            ProfileTexts.favoriteList.editButton.a11yLabel(
+              item.name ?? item.location.name,
+            ),
+          )}
           accessibilityRole="button"
           onPress={onEdit}
           hitSlop={insets.all(12)}

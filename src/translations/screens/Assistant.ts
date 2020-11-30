@@ -41,43 +41,44 @@ const AssistantTexts = {
     searchSuccess: _('Søkeresultater er lastet inn'),
     searchEmptyResult: _('Fikk ingen søkeresultater'),
   },
+  results: {
+    error: {
+      network: _(
+        'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil',
+      ),
+      generic: _('Oops - vi feila med søket. Supert om du prøver igjen 🤞'),
+    },
+    info: {
+      emptyResult: _(
+        'Vi fant dessverre ingen reiseruter som passer til ditt søk.',
+      ),
+      reasonsTitle: _('Mulige årsaker: '),
+      genericHint: _('Prøv å justere på sted eller tidspunkt'),
+    },
+    resultList: {
+      listPositionExplanation: (
+        resultPosition: number,
+        totalResultCount: number,
+      ) =>
+        _(`Reiseforslag ${resultPosition} av ${totalResultCount}
+      }.`),
+    },
+    resultItem: {
+      details: {
+        totalDuration: _('Reisetid'),
+      },
+      hasSituationsTip: _(
+        'Denne reisen har driftsmeldinger. Se detaljer for mer info',
+      ),
+      footLeg: {
+        walkLabel: (time: string) => _(`Gå ${time}`, `Walk ${time}`),
+        waitLabel: (time: string) => _(`Vent ${time}`, `Wait ${time}`),
+      },
+      waitRow: {
+        label: _('Vent'),
+      },
+    },
+  },
 };
-export const AssistantResultTexts = {
-  error: {
-    network: _(
-      'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil',
-    ),
-    generic: _('Oops - vi feila med søket. Supert om du prøver igjen 🤞'),
-  },
-  info: {
-    emptyResult: _(
-      'Vi fant dessverre ingen reiseruter som passer til ditt søk.',
-    ),
-    reasonsTitle: _('Mulige årsaker: '),
-    genericHint: _('Prøv å justere på sted eller tidspunkt'),
-  },
-  resultList: {
-    listPositionExplanation: (
-      resultPosition: number,
-      totalResultCount: number,
-    ) =>
-      _(`Reiseforslag ${resultPosition} av ${totalResultCount}
-    }.`),
-  },
-  resultItem: {
-    details: {
-      totalDuration: _('Reisetid'),
-    },
-    hasSituationsTip: _(
-      'Denne reisen har driftsmeldinger. Se detaljer for mer info',
-    ),
-    footLeg: {
-      walkLabel: (time: string) => _(`Gå ${time}`, `Walk ${time}`),
-      waitLabel: (time: string) => _(`Vent ${time}`, `Wait ${time}`),
-    },
-    waitRow: {
-      label: _('Vent'),
-    },
-  },
-};
+
 export default AssistantTexts;

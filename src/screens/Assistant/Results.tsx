@@ -13,7 +13,6 @@ import {ErrorType} from '../../api/utils';
 import {AssistantTexts} from '../../translations';
 import {useTranslation} from '../../utils/language';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
-import {AssistantResultTexts} from '../../translations/screens/Assistant';
 type Props = {
   tripPatterns: TripPattern[] | null;
   showEmptyScreen: boolean;
@@ -46,10 +45,10 @@ const Results: React.FC<Props> = ({
       switch (error) {
         case 'network-error':
         case 'timeout':
-          setErrorMessage(t(AssistantResultTexts.error.network));
+          setErrorMessage(t(AssistantTexts.results.error.network));
           break;
         default:
-          setErrorMessage(t(AssistantResultTexts.error.generic));
+          setErrorMessage(t(AssistantTexts.results.error.generic));
           break;
       }
     }
@@ -79,11 +78,11 @@ const Results: React.FC<Props> = ({
       <View style={styles.container}>
         <MessageBox>
           <ThemeText style={styles.infoBoxText}>
-            {t(AssistantResultTexts.info.emptyResult)}
+            {t(AssistantTexts.results.info.emptyResult)}
             {pluralResultReasons && (
               <Text>
                 {' '}
-                {AssistantResultTexts.info.reasonsTitle}
+                {AssistantTexts.results.info.reasonsTitle}
                 {resultReasons.map((reason, i) => (
                   <Text key={i}>
                     {'\n'}- {reason}
@@ -95,7 +94,7 @@ const Results: React.FC<Props> = ({
               <Text> {resultReasons[0]}.</Text>
             )}
             {!hasResultReasons && (
-              <Text>{t(AssistantResultTexts.info.genericHint)}</Text>
+              <Text>{t(AssistantTexts.results.info.genericHint)}</Text>
             )}
           </ThemeText>
         </MessageBox>
@@ -117,7 +116,7 @@ const Results: React.FC<Props> = ({
             onDetailsPressed={onDetailsPressed}
             accessibilityLabel={
               t(
-                AssistantResultTexts.resultList.listPositionExplanation(
+                AssistantTexts.results.resultList.listPositionExplanation(
                   i + 1,
                   tripPatterns.length,
                 ),

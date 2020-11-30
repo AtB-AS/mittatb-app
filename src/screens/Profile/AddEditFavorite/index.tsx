@@ -31,6 +31,8 @@ import {StyleSheet, Theme} from '../../../theme';
 import EmojiPopup from './EmojiPopup';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
+import {useTranslation} from '../../../utils/language';
+import {AddEditFavoriteTexts} from '../../../translations';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
@@ -51,6 +53,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   const css = useScreenStyle();
   const {addFavorite, removeFavorite, updateFavorite} = useFavorites();
   const editItem = route?.params?.editItem;
+  const {t} = useTranslation();
 
   const [emoji, setEmoji] = useState<string | undefined>(editItem?.emoji);
   const [name, setName] = useState<string>(editItem?.name ?? '');
@@ -91,15 +94,15 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   };
   const deleteItem = async () => {
     Alert.alert(
-      'Slett favorittsted?',
-      'Sikker på at du vil fjerne favorittstedet ditt?',
+      t(AddEditFavoriteTexts.delete.label),
+      t(AddEditFavoriteTexts.delete.confirmWarning),
       [
         {
-          text: 'Avbryt',
+          text: t(AddEditFavoriteTexts.cancel.label),
           style: 'cancel',
         },
         {
-          text: 'Slett',
+          text: t(AddEditFavoriteTexts.delete.label),
           style: 'destructive',
           onPress: async () => {
             if (!editItem) return;
@@ -120,9 +123,9 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           icon: <ThemeIcon svg={ArrowLeft} />,
           accessible: true,
           accessibilityRole: 'button',
-          accessibilityLabel: 'Gå tilbake',
+          accessibilityLabel: t(AddEditFavoriteTexts.header.logo.a11yLabel),
         }}
-        title="Legg til favorittsted"
+        title={t(AddEditFavoriteTexts.header.title)}
       />
       <EmojiPopup
         localizedCategories={[
@@ -149,14 +152,14 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
       <View style={css.innerContainer}>
         <Input
-          label="Sted"
+          label={t(AddEditFavoriteTexts.fields.location.label)}
           value={location?.label}
-          placeholder="Søk etter adresse eller stoppested"
+          placeholder={t(AddEditFavoriteTexts.fields.location.placeholder)}
           onFocus={() =>
             navigation.navigate('LocationSearch', {
               callerRouteName: AddEditRouteNameStatic,
               callerRouteParam: 'searchLocation',
-              label: 'Sted',
+              label: t(AddEditFavoriteTexts.fields.location.label),
               favoriteChipTypes: ['location', 'map'],
               initialLocation: location,
             })
@@ -166,16 +169,19 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         />
 
         <Input
-          label="Navn"
+          label={t(AddEditFavoriteTexts.fields.name.label)}
           onChangeText={setName}
           value={name}
           editable
           autoCapitalize="sentences"
-          accessibilityHint="Navn for favoritten"
-          placeholder="Legg til navn"
+          accessibilityHint={t(AddEditFavoriteTexts.fields.name.a11yHint)}
+          placeholder={t(AddEditFavoriteTexts.fields.name.placeholder)}
         />
 
-        <InputGroup title="Ikon" boxStyle={{width: 124}}>
+        <InputGroup
+          title={t(AddEditFavoriteTexts.fields.icon.label)}
+          boxStyle={{width: 124}}
+        >
           <SymbolPicker onPress={openEmojiPopup} value={emoji} />
         </InputGroup>
 
@@ -186,7 +192,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           mode="primary"
           icon={editItem ? Confirm : Add}
           disabled={!hasSelectedValues}
-          text="Lagre favorittsted"
+          text={t(AddEditFavoriteTexts.save.label)}
           style={css.button}
         />
 
@@ -195,7 +201,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
             onPress={deleteItem}
             mode="destructive"
             icon={Remove}
-            text="Slett favorittsted"
+            text={t(AddEditFavoriteTexts.delete.label)}
             style={css.button}
           />
         )}
@@ -204,7 +210,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           onPress={cancel}
           mode="secondary"
           icon={Close}
-          text="Avbryt"
+          text={t(AddEditFavoriteTexts.cancel.label)}
           style={css.button}
         />
       </View>

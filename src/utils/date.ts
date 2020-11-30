@@ -11,25 +11,34 @@ import nb from 'date-fns/locale/nb';
 
 import humanizeDuration from 'humanize-duration';
 import {useTranslation, Language} from './language';
-const shortHumanizer = humanizeDuration.humanizer({
-  language: 'shortNo',
-  languages: {
-    shortNo: {
-      y: () => 'år',
-      mo: () => 'm',
-      w: () => 'u',
-      d: () => 'd',
-      h: () => 't',
-      m: () => 'min',
-      s: () => 'sek',
-      ms: () => 'ms',
+import dictionary from '../translations/dictionary';
+
+function getShortHumanizer(ms: number, options?: humanizeDuration.Options) {
+  const {t, language} = useTranslation();
+  const shortUnits = dictionary.date.units.short;
+  const opts = {
+    language: language,
+    languages: {
+      [language]: {
+        y: () => t(shortUnits.year),
+        mo: () => t(shortUnits.month),
+        w: () => t(shortUnits.week),
+        d: () => t(shortUnits.day),
+        h: () => t(shortUnits.hour),
+        m: () => t(shortUnits.minute),
+        s: () => t(shortUnits.second),
+        ms: () => t(shortUnits.ms),
+      },
     },
-  },
-});
+    ...options,
+  };
+  return shortHumanizer(ms, opts);
+}
+const shortHumanizer = humanizeDuration.humanizer({});
 
 export const missingRealtimePrefix = 'ca. ';
 export function secondsToDurationShort(seconds: number): string {
-  return shortHumanizer(seconds * 1000, {
+  return getShortHumanizer(seconds * 1000, {
     units: ['d', 'h', 'm'],
     round: true,
   });

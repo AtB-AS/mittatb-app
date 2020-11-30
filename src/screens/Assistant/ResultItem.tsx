@@ -25,7 +25,7 @@ import {flatMap} from '../../utils/array';
 import {getReadableModeName} from '../../utils/transportation-names';
 import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
-import {AssistantResultTexts} from '../../translations/screens/Assistant';
+import {AssistantTexts} from '../../translations/';
 import {useTranslation} from '../../utils/language';
 
 type ResultItemProps = {
@@ -77,7 +77,7 @@ const ResultItemHeader: React.FC<{
       </ThemeText>
       <View style={styles.durationContainer}>
         <AccessibleText
-          prefix={t(AssistantResultTexts.resultItem.details.totalDuration)}
+          prefix={t(AssistantTexts.results.resultItem.details.totalDuration)}
         >
           {durationText}
         </AccessibleText>
@@ -85,7 +85,9 @@ const ResultItemHeader: React.FC<{
 
       <SituationWarningIcon
         situations={flatMap(tripPattern.legs, (leg) => leg.situations)}
-        accessibilityLabel={t(AssistantResultTexts.resultItem.hasSituationsTip)}
+        accessibilityLabel={t(
+          AssistantTexts.results.resultItem.hasSituationsTip,
+        )}
         style={styles.warningIcon}
       />
     </View>
@@ -194,10 +196,10 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 
   const walkTime = secondsToDuration(leg.duration ?? 0);
   const text = !isWaitTimeOfSignificance
-    ? t(AssistantResultTexts.resultItem.footLeg.walkLabel(walkTime))
-    : t(AssistantResultTexts.resultItem.footLeg.walkLabel(walkTime)) +
+    ? t(AssistantTexts.results.resultItem.footLeg.walkLabel(walkTime))
+    : t(AssistantTexts.results.resultItem.footLeg.walkLabel(walkTime)) +
       '. ' +
-      t(AssistantResultTexts.resultItem.footLeg.waitLabel(walkTime));
+      t(AssistantTexts.results.resultItem.footLeg.waitLabel(walkTime));
 
   return (
     <View style={styles.legContainer}>
@@ -235,7 +237,7 @@ function WaitRow({time}: {time: number}) {
         <ThemeIcon svg={Duration} opacity={0.6} />
       </View>
       <ThemeText style={[styles.textContent, styles.textDeprioritized]}>
-        {t(AssistantResultTexts.resultItem.waitRow.label)}
+        {t(AssistantTexts.results.resultItem.waitRow.label)}
       </ThemeText>
     </View>
   );
