@@ -209,11 +209,9 @@ const DisappearingHeader: React.FC<Props> = ({
               <SvgBanner width={windowWidth} height={windowWidth / 2} />
             </View>
 
-            {highlightComponent ? (
-              <ScrollView style={styles.highlightComponent}>
-                {highlightComponent}
-              </ScrollView>
-            ) : null}
+            <ScrollView style={styles.highlightComponent}>
+              {highlightComponent}
+            </ScrollView>
 
             <View onLayout={onHeaderContentLayout}>
               {renderHeader(fullheightTransitioned, isAnimating)}
