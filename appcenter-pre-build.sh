@@ -3,6 +3,9 @@
 echo "Attempting to decrypt env"
 sh ./scripts/git-crypt-unlock.sh $GIT_CRYPT_KEY
 
+# copy file mapbox api download token
+cat .netrc >> ~/.netrc
+
 echo "Installing pre-build dependencies"
 brew install findutils xmlstarlet 
 # findutils for gxargs which is used to load environment variables from .env file

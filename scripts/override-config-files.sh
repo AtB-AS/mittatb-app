@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# copy file mapbox api download token
+cat .netrc >> ~/.netrc
+
 echo "Installing pre-build dependencies"
 brew install findutils xmlstarlet # for git-crypt
 # findutils for gxargs which is used to load environment variables from .env file
