@@ -1,21 +1,28 @@
+import Bugsnag from '@bugsnag/react-native';
+import analytics from '@react-native-firebase/analytics';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {TouchableOpacity, View, ActivityIndicator} from 'react-native';
-import analytics from '@react-native-firebase/analytics';
+import {View} from 'react-native';
 import {searchTrip} from '../../api';
 import {CancelToken, isCancel} from '../../api/client';
+import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import {Swap} from '../../assets/svg/icons/actions';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
+import {screenReaderPause} from '../../components/accessible-text';
 import DisappearingHeader from '../../components/disappearing-header';
-import {LocationButton} from '../../components/search-button';
-import SearchGroup from '../../components/search-button/search-group';
+import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
+import {LocationInput, Section} from '../../components/sections';
+import ThemeText from '../../components/text';
+import ThemeIcon from '../../components/theme-icon';
+import FavoriteChips from '../../favorite-chips';
 import {useFavorites} from '../../favorites/FavoritesContext';
 import {
   Location,
   LocationWithMetadata,
   UserFavorites,
 } from '../../favorites/types';
+import {useReverseGeocoder} from '../../geocoder';
 import {
   RequestPermissionFn,
   useGeolocationState,
@@ -25,29 +32,20 @@ import {RootStackParamList} from '../../navigation';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import {TripPattern} from '../../sdk';
 import {StyleSheet, useTheme} from '../../theme';
-import insets from '../../utils/insets';
+import {AssistantTexts} from '../../translations';
+import dictionary from '../../translations/dictionary';
+import {useTranslation} from '../../utils/language';
 import {
   locationDistanceInMetres as distanceInMetres,
   locationsAreEqual,
   LOCATIONS_REALLY_CLOSE_THRESHOLD,
 } from '../../utils/location';
-import {useReverseGeocoder} from '../../geocoder';
 import {useLayout} from '../../utils/use-layout';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
+import FadeBetween from './FadeBetween';
 import Results from './Results';
 import {NoResultReason, SearchStateType} from './types';
-import FavoriteChips from '../../favorite-chips';
-import Bugsnag from '@bugsnag/react-native';
-import {ErrorType, getAxiosErrorType} from '../../api/utils';
-import {screenReaderPause} from '../../components/accessible-text';
-import ThemeIcon from '../../components/theme-icon';
-import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
-import ThemeText from '../../components/text';
-import {useTranslation} from '../../utils/language';
-import {AssistantTexts} from '../../translations';
-import FadeBetween from './FadeBetween';
-import dictionary from '../../translations/dictionary';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
@@ -207,110 +205,84 @@ const Assistant: React.FC<Props> = ({
   const isHeaderFullHeight = !from || !to;
 
   const renderHeader = useCallback(
-    () => (
+    (_, isParentAnimating) => (
       <View>
-        <SearchGroup>
-          <View style={styles.searchButtonContainer}>
-            <View style={styles.styleButton}>
-              <LocationButton
-                accessible={true}
-                accessibilityLabel={
-                  t(AssistantTexts.location.departurePicker.a11yLabel) +
-                  screenReaderPause
-                }
-                accessibilityHint={
-                  t(AssistantTexts.location.departurePicker.a11yHint) +
-                  screenReaderPause
-                }
-                accessibilityRole="button"
-                label={t(AssistantTexts.location.departurePicker.label)}
-                placeholder={
-                  updatingLocation
-                    ? t(AssistantTexts.location.updatingLocation)
-                    : t(AssistantTexts.location.departurePicker.placeholder)
-                }
-                icon={
-                  updatingLocation && !from ? (
-                    <ActivityIndicator color={theme.text.colors.primary} />
-                  ) : undefined
-                }
-                location={from}
-                onPress={() => openLocationSearch('fromLocation', from)}
-              />
-            </View>
-
-            <TouchableOpacity
-              accessible={true}
+        <View style={styles.paddedContainer}>
+          <Section>
+            <LocationInput
               accessibilityLabel={
-                from?.resultType == 'geolocation'
-                  ? t(AssistantTexts.location.locationButton.a11yLabel.update)
-                  : t(AssistantTexts.location.locationButton.a11yLabel.use)
-              }
-              accessibilityRole="button"
-              hitSlop={insets.all(12)}
-              onPress={setCurrentLocationOrRequest}
-            >
-              <ThemeIcon svg={CurrentLocationArrow} />
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.searchButtonContainer}>
-            <View style={styles.styleButton}>
-              <LocationButton
-                accessible={true}
-                accessibilityLabel={t(
-                  AssistantTexts.location.destinationPicker.a11yLabel,
-                )}
-                accessibilityRole="button"
-                label={t(AssistantTexts.location.destinationPicker.label)}
-                placeholder={t(
-                  AssistantTexts.location.destinationPicker.placeholder,
-                )}
-                location={to}
-                onPress={() => openLocationSearch('toLocation', to)}
-              />
-            </View>
-
-            <TouchableOpacity
-              onPress={swap}
-              hitSlop={insets.all(12)}
-              accessible={true}
-              accessibilityLabel={
-                t(AssistantTexts.location.swapButton.a11yLabel) +
+                t(AssistantTexts.location.departurePicker.a11yLabel) +
                 screenReaderPause
               }
-              accessibilityRole="button"
-            >
-              <ThemeIcon svg={Swap} />
-            </TouchableOpacity>
-          </View>
-        </SearchGroup>
+              accessibilityHint={
+                t(AssistantTexts.location.departurePicker.a11yHint) +
+                screenReaderPause
+              }
+              updatingLocation={updatingLocation && !to}
+              location={from}
+              label={t(AssistantTexts.location.departurePicker.label)}
+              onPress={() => openLocationSearch('fromLocation', from)}
+              icon={<ThemeIcon svg={CurrentLocationArrow} />}
+              onIconPress={setCurrentLocationOrRequest}
+              iconAccessibility={{
+                accessible: true,
+                accessibilityLabel:
+                  from?.resultType == 'geolocation'
+                    ? t(AssistantTexts.location.locationButton.a11yLabel.update)
+                    : t(AssistantTexts.location.locationButton.a11yLabel.use),
+                accessibilityRole: 'button',
+              }}
+            />
+
+            <LocationInput
+              accessibilityLabel={t(
+                AssistantTexts.location.destinationPicker.a11yLabel,
+              )}
+              label={t(AssistantTexts.location.destinationPicker.label)}
+              location={to}
+              onPress={() => openLocationSearch('toLocation', to)}
+              icon={<ThemeIcon svg={Swap} />}
+              onIconPress={swap}
+              iconAccessibility={{
+                accessible: true,
+                accessibilityLabel:
+                  t(AssistantTexts.location.swapButton.a11yLabel) +
+                  screenReaderPause,
+                accessibilityRole: 'button',
+              }}
+            />
+          </Section>
+        </View>
 
         <FadeBetween
-          visibleKey={isHeaderFullHeight ? 'dateInput' : 'favoriteChips'}
-          style={{minHeight: 64}}
+          visibleKey={isHeaderFullHeight ? 'favoriteChips' : 'dateInput'}
         >
           <FavoriteChips
             key="favoriteChips"
             chipTypes={['favorites', 'add-favorite']}
             onSelectLocation={fillNextAvailableLocation}
-            containerStyle={[
-              styles.fadeChild,
-              {marginLeft: theme.spacings.medium},
-            ]}
+            containerStyle={styles.fadeChild}
+            contentContainerStyle={{
+              // @TODO Find solution for not hardcoding this. e.g. do proper math
+              paddingLeft: theme.spacings.medium,
+              paddingRight: theme.spacings.medium / 2,
+            }}
             chipActionHint={
               t(AssistantTexts.favorites.favoriteChip.a11yHint) +
               t(!!from ? dictionary.toPlace : dictionary.fromPlace) +
               screenReaderPause
             }
           />
-          <SearchGroup containerStyle={styles.fadeChild} key="dateInput">
+          <View
+            style={[styles.paddedContainer, styles.fadeChild]}
+            key="dateInput"
+          >
             <DateInput
               onDateSelected={setDate}
               value={date}
               timeOfLastSearch={timeOfLastSearch}
             />
-          </SearchGroup>
+          </View>
         </FadeBetween>
       </View>
     ),
@@ -396,6 +368,7 @@ const Assistant: React.FC<Props> = ({
       isRefreshing={isSearching}
       useScroll={useScroll}
       headerTitle={t(AssistantTexts.header.title)}
+      headerMargin={24}
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
       logoClick={{
@@ -448,8 +421,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   altTitleText__right: {
     textAlign: 'right',
   },
+  paddedContainer: {
+    marginHorizontal: theme.spacings.medium,
+  },
   fadeChild: {
-    marginVertical: theme.spacings.small,
+    marginVertical: theme.spacings.medium,
   },
 }));
 

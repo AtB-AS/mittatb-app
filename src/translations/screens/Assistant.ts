@@ -9,13 +9,11 @@ const AssistantTexts = {
   },
   location: {
     departurePicker: {
-      placeholder: _('Søk etter adresse eller sted', 'Search for a place'),
       label: _('Fra', 'From'),
       a11yLabel: _('Velg avreisested'),
       a11yHint: _('Aktivér for å søke etter adresse eller sted'),
     },
     destinationPicker: {
-      placeholder: _('Søk etter adresse eller sted', 'Search for a place'),
       label: _('Til', 'To'),
       a11yLabel: _('Velg ankomststed'),
       a11yHint: _('Aktivér for å søke etter adresse eller sted'),

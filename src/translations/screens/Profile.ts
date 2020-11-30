@@ -6,6 +6,9 @@ const ProfileTexts = {
     logo: {
       a11yLabel: _('Gå til startskjerm'),
     },
+    backButton: {
+      a11yLabel: _('Gå tilbake'),
+    },
   },
   favoriteList: {
     title: _('Favoritter'),

@@ -1,24 +1,26 @@
-import {RouteProp} from '@react-navigation/native';
-import React, {useState, useRef, useMemo} from 'react';
-import {View, TouchableOpacity} from 'react-native';
-import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
-import {useReverseGeocoder} from '../../geocoder';
-import {LocationSearchNavigationProp, LocationSearchStackParams} from '../';
-import {useGeolocationState} from '../../GeolocationContext';
-import LocationBar from './LocationBar';
-import {StyleSheet} from '../../theme';
 import {Coordinates} from '@entur/sdk';
-import SelectionPin, {PinMode} from './SelectionPin';
+import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
+import {RouteProp} from '@react-navigation/native';
 import {Feature} from 'geojson';
+import React, {useMemo, useRef, useState} from 'react';
+import {TouchableOpacity, View} from 'react-native';
+import {LocationSearchNavigationProp, LocationSearchStackParams} from '../';
+import {ArrowLeft} from '../../assets/svg/icons/navigation';
 import {
-  MapViewConfig,
   MapCameraConfig,
   MapControls,
-  BackArrow,
-  shadows,
+  MapViewConfig,
   PositionArrow,
+  shadows,
   useControlPositionsStyle,
 } from '../../components/map/';
+import ThemeIcon from '../../components/theme-icon';
+import {useReverseGeocoder} from '../../geocoder';
+import {useGeolocationState} from '../../GeolocationContext';
+import FullScreenHeader from '../../ScreenHeader/full-header';
+import {StyleSheet} from '../../theme';
+import LocationBar from './LocationBar';
+import SelectionPin, {PinMode} from './SelectionPin';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -103,10 +105,31 @@ const MapSelection: React.FC<Props> = ({
     }
   };
 
+  const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
 
   return (
     <View style={styles.container}>
+      <View>
+        <FullScreenHeader
+          title="Søk"
+          leftButton={{
+            onPress: () => navigation.goBack(),
+            accessible: true,
+            accessibilityRole: 'button',
+            accessibilityLabel: 'Gå tilbake',
+            icon: <ThemeIcon svg={ArrowLeft} />,
+          }}
+        />
+
+        <LocationBar
+          location={location}
+          onSelect={onSelect}
+          isSearching={!!regionEvent?.isMoving || isSearching}
+          error={error}
+        />
+      </View>
+
       <MapboxGL.MapView
         ref={mapViewRef}
         style={{
@@ -129,6 +152,7 @@ const MapSelection: React.FC<Props> = ({
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
       </MapboxGL.MapView>
+
       <View style={styles.pinContainer}>
         <TouchableOpacity onPress={onSelect} style={styles.pin}>
           <SelectionPin
@@ -140,21 +164,8 @@ const MapSelection: React.FC<Props> = ({
           />
         </TouchableOpacity>
       </View>
-      <View style={controlStyles.backArrowContainer}>
-        <BackArrow onBack={() => navigation.goBack()} />
-      </View>
-      <View style={controlStyles.positionArrowContainer}>
-        <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
-      </View>
-      <View style={controlStyles.locationContainer}>
-        <LocationBar
-          location={location}
-          onSelect={onSelect}
-          isSearching={!!regionEvent?.isMoving || isSearching}
-          error={error}
-        />
-      </View>
       <View style={controlStyles.controlsContainer}>
+        <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
         <MapControls zoomIn={zoomIn} zoomOut={zoomOut} />
       </View>
     </View>
@@ -167,14 +178,14 @@ function getPinMode(isSearching: boolean, hasLocation: boolean): PinMode {
 
   return 'nothing';
 }
-const styles = StyleSheet.create({
+const useMapStyles = StyleSheet.createThemeHook((theme) => ({
   container: {flex: 1},
   pinContainer: {
     position: 'absolute',
     top: '50%',
     right: '50%',
   },
-  pin: {position: 'absolute', top: -40, right: -20, ...shadows},
-});
+  pin: {position: 'absolute', top: 40, right: -20, ...shadows},
+}));
 
 export default MapSelection;

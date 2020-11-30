@@ -1,48 +1,44 @@
-/**
- * Implementation based on https://github.com/staltz/react-native-emoji-picker-staltz
- * Copyright (c) 2016 Yonah Forst
- * Modifications: Copyright (c) 2020 Andre 'Staltz' Medeiros
- * MIT
- */
+import {Location} from '@entur/sdk';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  Alert,
-  Keyboard,
-  StyleProp,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {Alert, Keyboard, View} from 'react-native';
 import {Modalize} from 'react-native-modalize';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ProfileStackParams} from '..';
-import {Add, Close, Confirm, Remove} from '../../../assets/svg/icons/actions/';
-import {ArrowLeft, Expand} from '../../../assets/svg/icons/navigation/';
+import SvgConfirm from '../../../assets/svg/icons/actions/Confirm';
+import SvgDelete from '../../../assets/svg/icons/actions/Delete';
 import {MapPointPin} from '../../../assets/svg/icons/places';
-import Button from '../../../components/button';
-import Input from '../../../components/input';
-import {useFavorites} from '../../../favorites/FavoritesContext';
-import {useLocationSearchValue} from '../../../location-search';
-import {RootStackParamList} from '../../../navigation';
-import ScreenHeader from '../../../ScreenHeader';
-import {StyleSheet, Theme} from '../../../theme';
-import EmojiPopup from './EmojiPopup';
+import Button, {ButtonGroup} from '../../../components/button';
+import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
+import * as Sections from '../../../components/sections';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
-import {useTranslation} from '../../../utils/language';
+import {useFavorites} from '../../../favorites/FavoritesContext';
+import {LocationFavorite} from '../../../favorites/types';
+import {useLocationSearchValue} from '../../../location-search';
+import MessageBox from '../../../message-box';
+import {RootStackParamList} from '../../../navigation';
+import {StyleSheet, Theme} from '../../../theme';
 import {AddEditFavoriteTexts} from '../../../translations';
+import {useTranslation} from '../../../utils/language';
+import BackHeader from '../BackHeader';
+import EmojiPopup from './EmojiPopup';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
 
 export type AddEditNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<ProfileStackParams, AddEditRouteName>,
-  StackNavigationProp<RootStackParamList>
+  StackNavigationProp<RootStackParamList, AddEditRouteName>,
+  StackNavigationProp<ProfileStackParams>
 >;
 
-type AddEditScreenRouteProp = RouteProp<ProfileStackParams, AddEditRouteName>;
+type AddEditScreenRouteProp = RouteProp<RootStackParamList, AddEditRouteName>;
+
+export type AddEditParams = {
+  editItem?: LocationFavorite;
+  searchLocation?: Location;
+};
 
 type AddEditProps = {
   navigation: AddEditNavigationProp;
@@ -55,6 +51,9 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   const editItem = route?.params?.editItem;
   const {t} = useTranslation();
 
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(
+    undefined,
+  );
   const [emoji, setEmoji] = useState<string | undefined>(editItem?.emoji);
   const [name, setName] = useState<string>(editItem?.name ?? '');
   const location = useLocationSearchValue<AddEditScreenRouteProp>(
@@ -68,14 +67,20 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
     emojiRef.current?.open();
   };
 
-  const hasSelectedValues = Boolean(location);
   useEffect(() => setEmoji(editItem?.emoji), [editItem?.emoji]);
+
+  useEffect(() => {
+    if (errorMessage && location) {
+      setErrorMessage(undefined);
+    }
+  }, [location]);
 
   // @TODO This must be fixed so that the emoji item it self is stored
   // in favorites, or some lookup to set selected item inside emoji panel.
 
   const save = async () => {
     if (!location) {
+      setErrorMessage(t(AddEditFavoriteTexts.save.notSelectedFromError));
       return;
     }
     const newFavorite = {
@@ -90,7 +95,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
       // Add new
       await addFavorite(newFavorite);
     }
-    navigation.navigate('ProfileHome');
+    navigation.goBack();
   };
   const deleteItem = async () => {
     Alert.alert(
@@ -107,26 +112,24 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           onPress: async () => {
             if (!editItem) return;
             await removeFavorite(editItem.id);
-            navigation.navigate('ProfileHome');
+            navigation.goBack();
           },
         },
       ],
     );
   };
-  const cancel = () => navigation.goBack();
 
   return (
     <SafeAreaView style={css.container}>
-      <ScreenHeader
-        leftButton={{
-          onPress: cancel,
-          icon: <ThemeIcon svg={ArrowLeft} />,
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: t(AddEditFavoriteTexts.header.logo.a11yLabel),
-        }}
-        title={t(AddEditFavoriteTexts.header.title)}
+      <BackHeader
+        title={
+          editItem
+            ? t(AddEditFavoriteTexts.header.titleEdit)
+            : t(AddEditFavoriteTexts.header.title)
+        }
+        closeIcon
       />
+
       <EmojiPopup
         localizedCategories={[
           'Smilefjes',
@@ -151,69 +154,77 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
       />
 
       <View style={css.innerContainer}>
-        <Input
-          label={t(AddEditFavoriteTexts.fields.location.label)}
-          value={location?.label}
-          placeholder={t(AddEditFavoriteTexts.fields.location.placeholder)}
-          onFocus={() =>
-            navigation.navigate('LocationSearch', {
-              callerRouteName: AddEditRouteNameStatic,
-              callerRouteParam: 'searchLocation',
-              label: t(AddEditFavoriteTexts.fields.location.label),
-              favoriteChipTypes: ['location', 'map'],
-              initialLocation: location,
-            })
-          }
-          autoCorrect={false}
-          autoCompleteType="off"
-        />
+        <ScreenReaderAnnouncement message={errorMessage} />
+        {errorMessage && (
+          <MessageBox withMargin message={errorMessage} type="error" />
+        )}
 
-        <Input
-          label={t(AddEditFavoriteTexts.fields.name.label)}
-          onChangeText={setName}
-          value={name}
-          editable
-          autoCapitalize="sentences"
-          accessibilityHint={t(AddEditFavoriteTexts.fields.name.a11yHint)}
-          placeholder={t(AddEditFavoriteTexts.fields.name.placeholder)}
-        />
+        <Sections.Section withPadding>
+          <Sections.LocationInput
+            label={t(AddEditFavoriteTexts.fields.location.label)}
+            location={location}
+            onPress={() =>
+              navigation.navigate('LocationSearch', {
+                callerRouteName: AddEditRouteNameStatic,
+                callerRouteParam: 'searchLocation',
+                label: t(AddEditFavoriteTexts.fields.location.label),
+                favoriteChipTypes: ['location', 'map'],
+                initialLocation: location,
+              })
+            }
+          />
+        </Sections.Section>
 
-        <InputGroup
-          title={t(AddEditFavoriteTexts.fields.icon.label)}
-          boxStyle={{width: 124}}
-        >
-          <SymbolPicker onPress={openEmojiPopup} value={emoji} />
-        </InputGroup>
+        <Sections.Section withPadding>
+          <Sections.TextInput
+            label={t(AddEditFavoriteTexts.fields.name.label)}
+            onChangeText={setName}
+            value={name}
+            editable
+            autoCapitalize="sentences"
+            accessibilityHint={t(AddEditFavoriteTexts.fields.name.a11yHint)}
+            placeholder={t(AddEditFavoriteTexts.fields.name.placeholder)}
+          />
+        </Sections.Section>
 
-        <View style={css.line} />
+        <Sections.Section withPadding>
+          <Sections.ButtonInput
+            onPress={openEmojiPopup}
+            accessibilityElementsHidden={true}
+            importantForAccessibility="no-hide-descendants"
+            label={t(AddEditFavoriteTexts.fields.icon.label)}
+            icon="expand-more"
+            type="inline"
+            value={
+              !emoji ? (
+                <ThemeIcon svg={MapPointPin} />
+              ) : (
+                <ThemeText type="body">{emoji}</ThemeText>
+              )
+            }
+          />
+        </Sections.Section>
+      </View>
 
+      <ButtonGroup>
         <Button
           onPress={save}
           mode="primary"
-          icon={editItem ? Confirm : Add}
-          disabled={!hasSelectedValues}
+          iconPosition="right"
+          icon={SvgConfirm}
           text={t(AddEditFavoriteTexts.save.label)}
-          style={css.button}
         />
 
         {editItem && (
           <Button
             onPress={deleteItem}
             mode="destructive"
-            icon={Remove}
+            iconPosition="right"
+            icon={SvgDelete}
             text={t(AddEditFavoriteTexts.delete.label)}
-            style={css.button}
           />
         )}
-
-        <Button
-          onPress={cancel}
-          mode="secondary"
-          icon={Close}
-          text={t(AddEditFavoriteTexts.cancel.label)}
-          style={css.button}
-        />
-      </View>
+      </ButtonGroup>
     </SafeAreaView>
   );
 }
@@ -226,118 +237,6 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   innerContainer: {
     flex: 1,
-    padding: theme.spacings.medium,
-  },
-  input: {
-    backgroundColor: theme.background.level1,
-    borderColor: theme.border.primary,
-    color: theme.text.colors.primary,
-    borderWidth: theme.border.width.slim,
-    borderRadius: theme.border.radius.small,
-    paddingLeft: 60,
-    padding: 12,
-    fontSize: 16,
-  },
-  line: {
-    marginBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.background.level1,
-  },
-  lineNoMarginTop: {
-    marginTop: 0,
-  },
-  emojiContainer: {},
-  placeholder: {
-    color: theme.text.colors.faded,
-  },
-  inputContainer: {
-    width: '100%',
-    height: 46,
-    flexDirection: 'row',
-  },
-  searchInput: {
-    ...theme.text.body,
-    flex: 1,
-    paddingLeft: 60,
-    backgroundColor: theme.background.level1,
-    borderRadius: theme.border.radius.small,
-    borderWidth: theme.border.width.slim,
-    borderColor: theme.border.primary,
-    color: theme.text.colors.primary,
-    zIndex: -1,
-  },
-  searchIcon: {
-    position: 'absolute',
-    left: 14,
-    alignSelf: 'center',
-  },
-  button: {
-    marginBottom: theme.spacings.small,
-  },
-}));
-
-type SymbolPickerProps = {
-  onPress(): void;
-  value?: string;
-};
-const SymbolPicker: React.FC<SymbolPickerProps> = ({onPress, value}) => {
-  const css = useSymbolPickerStyle();
-  return (
-    <TouchableOpacity onPress={onPress} style={css.container}>
-      <View style={css.emoji}>
-        {!value ? (
-          <ThemeIcon svg={MapPointPin} style={css.emojiIcon} />
-        ) : (
-          <ThemeText type="body">{value}</ThemeText>
-        )}
-      </View>
-      <ThemeIcon svg={Expand} />
-    </TouchableOpacity>
-  );
-};
-const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    paddingVertical: theme.spacings.medium,
-    paddingLeft: 64,
-    flexDirection: 'row',
-    backgroundColor: theme.background.level1,
-    borderWidth: theme.border.width.slim,
-    borderColor: theme.border.primary,
-    borderRadius: theme.border.radius.small,
-  },
-  emoji: {
-    marginRight: theme.spacings.medium,
-  },
-  emojiIcon: {
-    paddingTop: 3,
-    paddingBottom: 3,
-  },
-}));
-
-type InputGroupProps = {
-  title: string;
-  boxStyle?: StyleProp<ViewStyle>;
-};
-const InputGroup: React.FC<InputGroupProps> = ({title, boxStyle, children}) => {
-  const css = useGroupStyle();
-
-  return (
-    <View style={[css.container, boxStyle]}>
-      {children}
-      <ThemeText type="lead" style={css.label}>
-        {title}
-      </ThemeText>
-    </View>
-  );
-};
-const useGroupStyle = StyleSheet.createThemeHook((theme: Theme) => ({
-  container: {
-    marginBottom: theme.spacings.medium,
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
-  label: {
-    position: 'absolute',
-    left: theme.spacings.medium,
+    paddingTop: theme.spacings.medium,
   },
 }));

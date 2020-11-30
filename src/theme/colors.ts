@@ -114,7 +114,7 @@ const borderRadius = {
   circle: 20,
   regular: 8,
   small: 4,
-};
+} as const;
 const borderWidth = {
   slim: 1,
   medium: 2,
@@ -129,6 +129,8 @@ export type Themes = {
   dark: Theme;
 };
 export type Mode = keyof Themes;
+
+export type RadiusSizes = keyof typeof borderRadius;
 
 export interface Theme {
   statusBarStyle: StatusBarProps['barStyle'];
@@ -182,14 +184,14 @@ export const themes: Themes = {
       destructive: colors.secondary.red_500,
       info: colors.secondary.cyan_100,
       warning: colors.secondary.yellow_100,
-      error: colors.secondary.red_100,
+      error: colors.secondary.red_500,
       accent: colors.secondary.cyan_500,
     },
     text: {
       colors: {
         primary: colors.text.black,
         destructive: colors.text.white,
-        faded: colors.primary.gray_400,
+        faded: colors.primary.gray_500,
         focus: colors.secondary.blue_500,
       },
       ...textTypes,
@@ -253,7 +255,7 @@ export const themes: Themes = {
       header: colors.secondary.blue_900,
       destructive: colors.secondary.red_500,
       warning: colors.primary.green_900,
-      error: colors.secondary.red_100,
+      error: colors.secondary.red_500,
       info: colors.secondary.cyan_900,
       accent: backgrounds.dark__level1,
     },

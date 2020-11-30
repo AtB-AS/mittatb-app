@@ -2,13 +2,16 @@ import LegacyStorage from '@react-native-community/async-storage-backend-legacy'
 import AsyncStorageFactory from '@react-native-community/async-storage';
 import Bugsnag from '@bugsnag/react-native';
 
-type StorageModel = {
+export type StorageModel = {
   stored_user_locations: string;
+  '@ATB_user_preferences': string;
   install_id: string;
   customer_id: string;
   onboarded: string;
   '@ATB_search-history': string;
 };
+
+export type StorageModelTypes = keyof StorageModel;
 
 const legacyStorage = new LegacyStorage();
 

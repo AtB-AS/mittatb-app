@@ -16,6 +16,7 @@ import {loadLocalConfig} from './local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {setInstallId as setApiInstallId} from './api/client';
 import ErrorBoundary from './error-boundary';
+import {PreferencesContextProvider} from './preferences';
 
 if (!__DEV__) {
   Bugsnag.start();
@@ -60,21 +61,23 @@ const App = () => {
     <SafeAreaProvider>
       <ErrorBoundary>
         <AppContextProvider>
-          <ThemeContextProvider>
-            <FavoritesContextProvider>
-              <SearchHistoryContextProvider>
-                <GeolocationContextProvider>
-                  <TicketContextProvider>
-                    <RemoteConfigContextProvider>
-                      <LanguageProvider value={currentLanguage}>
-                        <NavigationRoot />
-                      </LanguageProvider>
-                    </RemoteConfigContextProvider>
-                  </TicketContextProvider>
-                </GeolocationContextProvider>
-              </SearchHistoryContextProvider>
-            </FavoritesContextProvider>
-          </ThemeContextProvider>
+          <PreferencesContextProvider>
+            <ThemeContextProvider>
+              <FavoritesContextProvider>
+                <SearchHistoryContextProvider>
+                  <GeolocationContextProvider>
+                    <TicketContextProvider>
+                      <RemoteConfigContextProvider>
+                        <LanguageProvider value={currentLanguage}>
+                          <NavigationRoot />
+                        </LanguageProvider>
+                      </RemoteConfigContextProvider>
+                    </TicketContextProvider>
+                  </GeolocationContextProvider>
+                </SearchHistoryContextProvider>
+              </FavoritesContextProvider>
+            </ThemeContextProvider>
+          </PreferencesContextProvider>
         </AppContextProvider>
       </ErrorBoundary>
     </SafeAreaProvider>

@@ -3,13 +3,13 @@ import Svg, {Path, SvgProps} from 'react-native-svg';
 
 function SvgProfile(props: SvgProps) {
   return (
-    <Svg width={20} height={20} fill="black" viewBox="0 0 40 40" {...props}>
+    <Svg width={20} height={20} fill="black" viewBox="0 0 20 20" {...props}>
       <Path
         fillRule="evenodd"
-        d="M20 2a8 8 0 100 16 8 8 0 000-16zm-4 8a4 4 0 118 0 4 4 0 01-8 0z"
+        d="M10 1a4 4 0 100 8 4 4 0 000-8zM8 5a2 2 0 114 0 2 2 0 01-4 0z"
         clipRule="evenodd"
       />
-      <Path d="M8 36c0-6.627 5.373-12 12-12s12 5.373 12 12v2h4v-2c0-8.837-7.163-16-16-16S4 27.163 4 36v2h4v-2z" />
+      <Path d="M4 18a6 6 0 0112 0v1h2v-1a8 8 0 10-16 0v1h2v-1z" />
     </Svg>
   );
 }

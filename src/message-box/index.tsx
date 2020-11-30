@@ -4,6 +4,7 @@ import {Error as ErrorIcon, Info, Warning} from '../assets/svg/icons/status';
 import {StyleSheet} from '../theme';
 import ThemeText from '../components/text';
 import ThemeIcon from '../components/theme-icon';
+import hexToRgba from 'hex-to-rgba';
 
 type WithMessage = {message: string; children?: never};
 type WithChildren = {
@@ -16,6 +17,7 @@ export type MessageBoxProps = {
   type?: 'info' | 'warning' | 'error';
   containerStyle?: StyleProp<ViewStyle>;
   title?: string;
+  withMargin?: boolean;
 } & (WithMessage | WithChildren);
 
 const MessageBox: React.FC<MessageBoxProps> = ({
@@ -25,6 +27,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({
   message,
   children,
   title,
+  withMargin = false,
 }) => {
   const styles = useBoxStyle();
   const iconElement =
@@ -35,8 +38,11 @@ const MessageBox: React.FC<MessageBoxProps> = ({
     children
   );
   const backgroundColor = styles[typeToColorClass(type)];
+  const paddedStyle = withMargin ? styles.container__padded : undefined;
   return (
-    <View style={[styles.container, backgroundColor, containerStyle]}>
+    <View
+      style={[styles.container, paddedStyle, backgroundColor, containerStyle]}
+    >
       <View style={styles.titleContainer}>
         {iconElement != null && (
           <View style={styles.iconContainer}>{iconElement}</View>
@@ -52,9 +58,13 @@ export default MessageBox;
 
 const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    padding: 12,
+    padding: theme.spacings.medium,
     borderRadius: theme.border.radius.regular,
     borderWidth: theme.border.width.slim,
+  },
+  container__padded: {
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
   iconContainer: {
     marginBottom: 8,
@@ -80,7 +90,7 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
     borderColor: theme.border.warning,
   },
   container__error: {
-    backgroundColor: theme.background.error,
+    backgroundColor: hexToRgba(theme.background.error, 0.5),
     borderColor: theme.border.error,
   },
 }));

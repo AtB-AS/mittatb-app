@@ -1,4 +1,10 @@
-import React, {Children, ReactElement, useRef} from 'react';
+import React, {
+  Children,
+  ReactElement,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {View, ViewStyle} from 'react-native';
 import Animated, {
   block,
@@ -31,7 +37,16 @@ export default function FadeBetween({
 }: FadeProps) {
   const progress = useValue<number>(0);
   const clock = useRef<Clock>(new Clock()).current;
-  useCode(() => set(progress, runTiming(clock, 0, 1, duration)), [visibleKey]);
+  const [init, setInit] = useState(false);
+
+  useEffect(() => {
+    progress.setValue(1);
+    setInit(true);
+  }, []);
+
+  useCode(() => init && set(progress, runTiming(clock, 0, 1, duration)), [
+    visibleKey,
+  ]);
 
   return (
     <View style={style}>
@@ -56,7 +71,7 @@ function AnimatedChild({
   visibleKey: string;
   progress: Animated.Value<number>;
 }) {
-  const visibleChild = child.key !== visibleKey;
+  const visibleChild = child.key === visibleKey;
 
   const opacity = Animated.interpolate(progress, {
     inputRange: [0, 1],

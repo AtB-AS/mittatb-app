@@ -1,33 +1,32 @@
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
-import {TextInput, View, Keyboard} from 'react-native';
+import {Keyboard, TextInput as InternalTextInput, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import Header from '../ScreenHeader';
-import Input from '../components/input';
+import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
+import {ErrorType} from '../api/utils';
+import {Close} from '../assets/svg/icons/actions';
+import ScreenReaderAnnouncement from '../components/screen-reader-announcement';
+import {TextInput} from '../components/sections';
+import ThemeText from '../components/text';
+import ThemeIcon from '../components/theme-icon';
+import FavoriteChips, {ChipTypeGroup} from '../favorite-chips';
+import {useFavorites} from '../favorites';
 import {
   Location,
   LocationWithMetadata,
   UserFavorites,
 } from '../favorites/types';
+import {useGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
+import MessageBox from '../message-box';
 import {RootStackParamList} from '../navigation';
+import FullScreenHeader from '../ScreenHeader/full-header';
 import {useSearchHistory} from '../search-history';
 import {StyleSheet} from '../theme';
-import FavoriteChips, {ChipTypeGroup} from '../favorite-chips';
-import LocationResults from './LocationResults';
-import useDebounce from './useDebounce';
 import {LocationSearchNavigationProp} from './';
-import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
-import {Close} from '../assets/svg/icons/actions';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {useGeocoder} from '../geocoder';
-import MessageBox from '../message-box';
-import {ErrorType} from '../api/utils';
-import {useFavorites} from '../favorites';
+import LocationResults from './LocationResults';
 import {LocationSearchResult} from './types';
-import ThemeIcon from '../components/theme-icon';
-import ThemeText from '../components/text';
-import ScreenReaderAnnouncement from '../components/screen-reader-announcement';
+import useDebounce from './useDebounce';
 
 export type Props = {
   navigation: LocationSearchNavigationProp;
@@ -112,7 +111,7 @@ const LocationSearch: React.FC<Props> = ({
     });
   };
 
-  const inputRef = useRef<TextInput>(null);
+  const inputRef = useRef<InternalTextInput>(null);
 
   const isFocused = useIsFocused();
 
@@ -140,25 +139,25 @@ const LocationSearch: React.FC<Props> = ({
   const hasAnyResult = hasResults || hasPreviousResults;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={{paddingTop: 12, flex: 1}}>
-        <View style={{marginHorizontal: 20}}>
-          <Header
-            leftButton={{
-              onPress: () => navigation.goBack(),
-              accessible: true,
-              accessibilityRole: 'button',
-              accessibilityLabel: 'Gå tilbake',
-              icon: <ThemeIcon svg={Close} />,
-            }}
-            title="Søk"
-          />
-        </View>
+    <View style={styles.container}>
+      <FullScreenHeader
+        title="Søk"
+        leftButton={{
+          onPress: () => navigation.goBack(),
+          accessible: true,
+          accessibilityRole: 'button',
+          accessibilityLabel: 'Gå tilbake',
+          icon: <ThemeIcon svg={Close} />,
+        }}
+      />
+
+      <View style={styles.header}>
         <ScreenReaderAnnouncement message={errorMessage} />
 
-        <View style={[{marginTop: 12}, styles.contentBlock]}>
-          <Input
+        <View style={styles.withMargin}>
+          <TextInput
             ref={inputRef}
+            radius="top-bottom"
             label={label}
             value={text}
             onChangeText={setText}
@@ -175,55 +174,53 @@ const LocationSearch: React.FC<Props> = ({
             onSelectLocation={onSelect}
             onMapSelection={onMapSelection}
             chipTypes={favoriteChipTypes}
-            containerStyle={[styles.contentBlock, styles.chipBox]}
+            containerStyle={styles.chipBox}
+            contentContainerStyle={styles.contentBlock}
           />
         </View>
-
-        {error && (
-          <View style={styles.contentBlock}>
-            <MessageBox
-              type="warning"
-              message={errorMessage}
-              containerStyle={{marginBottom: 12}}
-            />
-          </View>
-        )}
-
-        {hasAnyResult ? (
-          <ScrollView
-            style={styles.scroll}
-            contentContainerStyle={styles.contentBlock}
-            keyboardShouldPersistTaps="handled"
-            onScrollBeginDrag={() => Keyboard.dismiss()}
-          >
-            {hasPreviousResults && (
-              <LocationResults
-                locations={previousLocations}
-                onSelect={onSearchSelect}
-                onPrefillText={onPrefillText}
-              />
-            )}
-            {hasResults && (
-              <LocationResults
-                title="Søkeresultat"
-                locations={filteredLocations}
-                onSelect={onSearchSelect}
-                onPrefillText={onPrefillText}
-              />
-            )}
-          </ScrollView>
-        ) : (
-          !error &&
-          !!text && (
-            <View style={styles.contentBlock}>
-              <MessageBox type="info">
-                <ThemeText>Fant ingen søkeresultat</ThemeText>
-              </MessageBox>
-            </View>
-          )
-        )}
       </View>
-    </SafeAreaView>
+
+      {error && (
+        <View style={styles.withMargin}>
+          <MessageBox type="warning" message={errorMessage} />
+        </View>
+      )}
+
+      {hasAnyResult ? (
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={styles.contentBlock}
+          keyboardShouldPersistTaps="handled"
+          onScrollBeginDrag={() => Keyboard.dismiss()}
+        >
+          {hasPreviousResults && (
+            <LocationResults
+              title="Siste steder"
+              locations={previousLocations}
+              onSelect={onSearchSelect}
+              onPrefillText={onPrefillText}
+            />
+          )}
+          {hasResults && (
+            <LocationResults
+              title="Søkeresultater"
+              locations={filteredLocations}
+              onSelect={onSearchSelect}
+              onPrefillText={onPrefillText}
+            />
+          )}
+        </ScrollView>
+      ) : (
+        !error &&
+        !!text && (
+          <View style={styles.contentBlock}>
+            <MessageBox type="info">
+              <ThemeText>Fant ingen søkeresultat</ThemeText>
+            </MessageBox>
+          </View>
+        )
+      )}
+    </View>
   );
 };
 
@@ -284,14 +281,20 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.background.level2,
     flex: 1,
   },
+  header: {
+    backgroundColor: theme.background.header,
+  },
+  withMargin: {
+    margin: theme.spacings.medium,
+  },
+  chipBox: {
+    marginBottom: theme.spacings.medium,
+  },
   contentBlock: {
     paddingHorizontal: theme.spacings.medium,
   },
   scroll: {
     flex: 1,
-  },
-  chipBox: {
-    marginBottom: theme.spacings.medium,
   },
 }));
 
