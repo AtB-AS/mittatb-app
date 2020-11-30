@@ -1,17 +1,17 @@
-import React, {useState} from 'react';
-import MapboxGL from '@react-native-mapbox-gl/maps';
-import {View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {MapIcon} from '../../../assets/svg/map';
-import {getMapBounds, legsToMapLines, pointOf} from './utils';
-import MapRoute from './MapRoute';
-import MapLabel from './MapLabel';
-import {MapViewConfig, MapCameraConfig} from '../../../components/map/';
-import insets from '../../../utils/insets';
-import {Leg} from '../../../sdk';
 import Bugsnag from '@bugsnag/react-native';
+import MapboxGL from '@react-native-mapbox-gl/maps';
+import React, {useState} from 'react';
+import {View} from 'react-native';
+import {MapIcon} from '../../../assets/svg/map';
+import {MapCameraConfig, MapViewConfig} from '../../../components/map/';
+import {Leg} from '../../../sdk';
 import {StyleSheet} from '../../../theme';
-import ThemeText from '../../../components/text';
+import Button from '../../../components/button';
+import insets from '../../../utils/insets';
+import useDisableMapCheck from '../../../utils/use-disable-map-check';
+import MapLabel from './MapLabel';
+import MapRoute from './MapRoute';
+import {getMapBounds, legsToMapLines, pointOf} from './utils';
 
 export type MapProps = {
   legs: Leg[];
@@ -24,6 +24,7 @@ export const CompactMap: React.FC<MapProps> = ({legs, darkMode, onExpand}) => {
   const startPoint = pointOf(legs[0].fromPlace);
   const endPoint = pointOf(legs[legs.length - 1].toPlace);
   const bounds = getMapBounds(features);
+  const disableMap = useDisableMapCheck();
 
   const [loadingMap, setLoadingMap] = useState(true);
   const styles = useStyles();
@@ -31,6 +32,10 @@ export const CompactMap: React.FC<MapProps> = ({legs, darkMode, onExpand}) => {
   const expandMap = () => {
     if (!loadingMap) onExpand();
   };
+
+  if (disableMap) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
@@ -59,16 +64,15 @@ export const CompactMap: React.FC<MapProps> = ({legs, darkMode, onExpand}) => {
         <MapLabel point={startPoint} id={'start'} text="Start"></MapLabel>
       </MapboxGL.MapView>
       <View style={styles.togglerContainer}>
-        <TouchableOpacity
+        <Button
           style={styles.toggler}
+          type="inline"
+          mode="tertiary"
           onPress={expandMap}
           hitSlop={insets.symmetric(8, 12)}
-        >
-          <ThemeText type="lead" style={styles.toggleText}>
-            Utvid kart
-          </ThemeText>
-          <MapIcon style={styles.toggleIcon} />
-        </TouchableOpacity>
+          text="Utvid kart"
+          icon={MapIcon}
+        ></Button>
       </View>
     </View>
   );

@@ -6,7 +6,7 @@ import useChatIcon from '../../../chat/use-chat-icon';
 import {ShinyTicketBanner} from '../../../assets/svg/illustrations';
 import {StyleSheet, useStyle} from '../../../theme';
 import LogoOutline from '../../../ScreenHeader/LogoOutline';
-import {useNavigateHome} from '../../../utils/navigation';
+import {useNavigateToStartScreen} from '../../../utils/navigation';
 import InviteModal from './InviteModal';
 import {Modalize} from 'react-native-modalize';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
@@ -31,7 +31,7 @@ export default function Splash() {
   const {refresh} = useRemoteConfig();
   const chatIcon = useChatIcon();
   const {width: windowWidth} = useWindowDimensions();
-  const navigateHome = useNavigateHome();
+  const navigateHome = useNavigateToStartScreen();
   const modalRef = useRef<Modalize>(null);
   const {t} = useTranslation();
 
@@ -42,12 +42,12 @@ export default function Splash() {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        title="Billetter"
+        title={t(TicketTexts.header.title)}
         rightButton={chatIcon}
         leftButton={{
           icon: <ThemeIcon svg={LogoOutline} />,
           onPress: navigateHome,
-          accessibilityLabel: 'Gå til startskjerm',
+          accessibilityLabel: t(TicketTexts.header.logo.a11yLabel),
         }}
       />
       <View style={styles.bannerContainer}>
@@ -64,9 +64,6 @@ export default function Splash() {
             </ThemeText>
             <ThemeText style={styles.text}>
               {t(TicketTexts.splash.paragraph1)}
-            </ThemeText>
-            <ThemeText style={styles.text}>
-              {t(TicketTexts.splash.paragraph2)}
             </ThemeText>
           </View>
           <View style={styles.buttonContainer}>

@@ -5,7 +5,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Header from '../../../ScreenHeader';
 import LogoOutline from '../../../ScreenHeader/LogoOutline';
 import useChatIcon from '../../../chat/use-chat-icon';
-import {useNavigateHome} from '../../../utils/navigation';
+import {useNavigateToStartScreen} from '../../../utils/navigation';
 import {StyleSheet} from '../../../theme';
 import TabBar from './TabBar';
 import {ActiveTickets, ExpiredTickets} from './Tabs';
@@ -23,7 +23,7 @@ const Tab = createMaterialTopTabNavigator<TicketTabsNavigatorParams>();
 export default function TicketTabs() {
   const styles = useStyles();
   const chatIcon = useChatIcon();
-  const navigateHome = useNavigateHome();
+  const navigateHome = useNavigateToStartScreen();
   const {top} = useSafeAreaInsets();
   const screenTopStyle = useMemo(
     () => ({
@@ -40,7 +40,7 @@ export default function TicketTabs() {
         leftButton={{
           icon: <ThemeIcon svg={LogoOutline} />,
           onPress: navigateHome,
-          accessibilityLabel: 'Gå til startskjerm',
+          accessibilityLabel: 'Gå til startside',
         }}
       />
       <Tab.Navigator tabBar={(props) => <TabBar {...props} />}>

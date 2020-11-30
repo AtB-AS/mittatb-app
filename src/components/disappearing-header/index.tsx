@@ -1,18 +1,14 @@
 import {useScrollToTop} from '@react-navigation/native';
-import {useHeaderHeight} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   AccessibilityProps,
   Animated,
-  Dimensions,
   Easing,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Platform,
   RefreshControl,
-  ScaledSize,
   ScrollView,
-  StatusBar,
   useWindowDimensions,
   View,
 } from 'react-native';
@@ -20,16 +16,21 @@ import {
   useSafeAreaFrame,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import SvgBanner from '../../assets/svg/icons/other/Banner';
 import useChatIcon from '../../chat/use-chat-icon';
 import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
 import LogoOutline from '../../ScreenHeader/LogoOutline';
-import {StyleSheet} from '../../theme';
+import {StyleSheet, useTheme} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
-import SvgBanner from '../../assets/svg/icons/other/Banner';
 import ThemeIcon from '../theme-icon';
+import useConditionalMemo from '../../utils/use-conditional-memo';
+import {useBottomNavigationStyles} from '../../utils/navigation';
 
 type Props = {
-  renderHeader(isFullHeight: boolean): React.ReactNode;
+  renderHeader(
+    isFullHeight: boolean,
+    isParentAnimating: boolean,
+  ): React.ReactNode;
   onRefresh?(): void;
   headerHeight?: number;
   isRefreshing?: boolean;
@@ -77,13 +78,14 @@ const DisappearingHeader: React.FC<Props> = ({
 
   onFullscreenTransitionEnd,
 }) => {
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const {
     boxHeight,
     contentHeight,
     contentOffset,
     onScreenHeaderLayout,
     onHeaderContentLayout,
-  } = useCalculateHeaderContentHeight();
+  } = useCalculateHeaderContentHeight(isAnimating);
   const [fullheightTransitioned, setTransitioned] = useState(isFullHeight);
   const {width: windowWidth} = useWindowDimensions();
   const scrollableContentRef = React.useRef<ScrollView>(null);
@@ -97,6 +99,7 @@ const DisappearingHeader: React.FC<Props> = ({
   const chatIcon = useChatIcon();
   const [scrollYValue, setScrollY] = useState<number>(0);
   const styles = useThemeStyles();
+  const {theme} = useTheme();
   const scrollYRef = useRef(new Animated.Value(IS_IOS ? -contentOffset : 0))
     .current;
 
@@ -113,19 +116,19 @@ const DisappearingHeader: React.FC<Props> = ({
     [contentHeight, contentOffset],
   );
 
-  useEffect(
-    () =>
-      Animated.timing(fullscreenOffsetRef, {
-        toValue: isFullHeight ? 0 : contentOffset,
-        duration: 400,
-        easing: Easing.inOut(Easing.ease),
-        useNativeDriver: true,
-      }).start(function () {
-        setTransitioned(isFullHeight);
-        onFullscreenTransitionEnd?.(isFullHeight);
-      }),
-    [isFullHeight],
-  );
+  useEffect(() => {
+    setIsAnimating(true);
+    Animated.timing(fullscreenOffsetRef, {
+      toValue: isFullHeight ? 0 : contentOffset,
+      duration: 400,
+      easing: Easing.inOut(Easing.ease),
+      useNativeDriver: true,
+    }).start(function () {
+      setIsAnimating(false);
+      setTransitioned(isFullHeight);
+      onFullscreenTransitionEnd?.(isFullHeight);
+    });
+  }, [isFullHeight]);
 
   useEffect(
     () => fullscreenOffsetRef.setValue(isFullHeight ? 0 : contentOffset),
@@ -205,7 +208,7 @@ const DisappearingHeader: React.FC<Props> = ({
             </View>
 
             <View onLayout={onHeaderContentLayout}>
-              {renderHeader(fullheightTransitioned)}
+              {renderHeader(fullheightTransitioned, isAnimating)}
             </View>
           </Animated.View>
 
@@ -222,6 +225,7 @@ const DisappearingHeader: React.FC<Props> = ({
                   refreshing={isRefreshing}
                   onRefresh={onRefresh}
                   progressViewOffset={contentHeight}
+                  tintColor={theme.text.colors.primary}
                 />
               }
               onScroll={Animated.event(
@@ -334,11 +338,7 @@ const throttle = <F extends (...args: any[]) => any>(
     });
 };
 
-// This is code from react-navigation. Couldn't find any
-// way to reasonably calculate this.
-const DEFAULT_TABBAR_HEIGHT = 44;
-
-function useCalculateHeaderContentHeight() {
+function useCalculateHeaderContentHeight(isAnimating: boolean) {
   // Using safeAreaFrame for height instead of dimensions as
   // dimensions are problamatic on Android: https://github.com/facebook/react-native/issues/23693
   const {height: actualHeight} = useSafeAreaFrame();
@@ -347,16 +347,24 @@ function useCalculateHeaderContentHeight() {
     height: screenHeaderHeight,
   } = useLayout();
   const {onLayout: onHeaderContentLayout, height: contentHeight} = useLayout();
-  const {top, bottom} = useSafeAreaInsets();
+  const {top} = useSafeAreaInsets();
 
+  const {minHeight: bottomTabBarHeight} = useBottomNavigationStyles();
   const boxHeight =
-    actualHeight - screenHeaderHeight - top - bottom - DEFAULT_TABBAR_HEIGHT;
+    actualHeight - screenHeaderHeight - top - bottomTabBarHeight;
 
-  return {
+  const calculatedHeights = {
     boxHeight,
     contentHeight,
     contentOffset: boxHeight - contentHeight,
     onScreenHeaderLayout,
     onHeaderContentLayout,
   };
+
+  return useConditionalMemo(
+    () => calculatedHeights,
+    () => !isAnimating,
+    calculatedHeights,
+    [isAnimating],
+  );
 }

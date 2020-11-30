@@ -1,9 +1,11 @@
 export {default as AssistantTexts} from './screens/Assistant';
 export {default as FavoriteTexts} from './components/FavoriteChips';
+export {default as SectionTexts} from './components/Section';
 export {default as LocationSearchTexts} from './screens/subscreens/LocationSearch';
 export {default as DateInputTexts} from './components/DateInput';
 export {default as ProfileTexts} from './screens/Profile';
 export {default as TicketTexts} from './screens/Ticket';
 export {default as NearbyTexts} from './screens/Nearby';
 export {default as AddEditFavoriteTexts} from './screens/subscreens/AddEditFavorite';
+export {default as FavoriteListTexts} from './screens/subscreens/FavoriteList';
 export {default as TripDetailsTexts} from './screens/subscreens/TripDetails';

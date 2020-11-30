@@ -1,11 +1,14 @@
+import {Platform} from 'react-native';
 import {translation as _} from './utils';
+
+const softhyphen = Platform.OS === 'ios' ? '\u00AD' : '\u200B';
 
 const dictionary = {
   fromPlace: _('Avreisested'),
   toPlace: _('Destinasjon'),
   navigation: {
-    assistant: _('Reisesøk'),
-    nearby: _('Avganger'),
+    assistant: _(`Reise${softhyphen}søk`),
+    nearby: _(`Av${softhyphen}ganger`),
     ticketing: _('Billetter', 'Tickets'),
     profile: _('Mitt AtB'),
   },

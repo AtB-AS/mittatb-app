@@ -15,6 +15,7 @@ import {CreditCard, Vipps} from '../../../../assets/svg/icons/ticketing';
 import useOfferState, {OfferError} from './use-offer-state';
 import insets from '../../../../utils/insets';
 import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
+import {SINGLE_TICKET_PRODUCT_ID} from '@env';
 
 type Props = {
   navigation: DismissableStackNavigationProp<
@@ -56,7 +57,7 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
       } else {
-        navigation.push('PaymentVipps', {offer_id: offerId, count});
+        navigation.push('PaymentVipps', {offers: [{offer_id: offerId, count}]});
       }
     }
   }
@@ -66,7 +67,9 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
       } else {
-        navigation.push('PaymentCreditCard', {offer_id: offerId, count});
+        navigation.push('PaymentCreditCard', {
+          offers: [{offer_id: offerId, count}],
+        });
       }
     }
   }
@@ -78,7 +81,7 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
         leftButton={{
           icon: <ThemeIcon svg={Close} />,
           onPress: closeModal,
-          accessibilityLabel: 'Lukk kjøpsprosessen',
+          accessibilityLabel: 'Avbryt kjøpsprosessen',
         }}
       />
 
@@ -92,9 +95,7 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
         <MessageBox type="info" title="Beta-begrensning">
           <ThemeText type="label">
             Det er foreløpig kun mulig å kjøpe enkeltbillett voksen for buss og
-            trikk. Bruk{' '}
-            <Text style={{textDecorationLine: 'underline'}}>AtB Mobillett</Text>{' '}
-            for å kjøpe andre billetter.
+            trikk. Bruk AtB Mobillett for å kjøpe andre billetter.
           </ThemeText>
         </MessageBox>
       )}
@@ -109,10 +110,24 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
         </View>
         <View style={styles.travellerCountActions}>
           <ThemeText type="lead">40,-</ThemeText>
-          <TouchableOpacity onPress={removeCount} hitSlop={insets.all(8)}>
+          <TouchableOpacity
+            onPress={removeCount}
+            accessibilityRole="button"
+            accessibilityLabel={`Minsk antall til ${count - 1}`}
+            accessibilityElementsHidden={count <= 1}
+            importantForAccessibility={
+              count > 1 ? 'yes' : 'no-hide-descendants'
+            }
+            hitSlop={insets.all(8)}
+          >
             <ThemeIcon svg={Remove} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={addCount} hitSlop={insets.all(8)}>
+          <TouchableOpacity
+            onPress={addCount}
+            accessibilityRole="button"
+            accessibilityLabel={`Øk antall til ${count + 1}`}
+            hitSlop={insets.all(8)}
+          >
             <ThemeIcon svg={Add} />
           </TouchableOpacity>
         </View>

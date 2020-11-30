@@ -9,6 +9,7 @@ import Dash from 'react-native-dash';
 import {fromUnixTime} from 'date-fns';
 import nb from 'date-fns/locale/nb';
 import ThemeText from '../../../components/text';
+import {screenReaderPause} from '../../../components/accessible-text';
 
 type Props = {
   fareContract: FareContract;
@@ -30,7 +31,10 @@ const Ticket: React.FC<Props> = ({fareContract: fc, now}) => {
           {isValidTicket ? (
             <>
               <View style={styles.iconContainer}>
-                <ValidTicket fill={colors.primary.green_500} />
+                <ValidTicket
+                  fill={colors.primary.green_500}
+                  accessibilityLabel={'Gyldig billett' + screenReaderPause}
+                />
               </View>
               <ThemeText type="lead" color="faded">
                 Gyldig i{' '}
@@ -42,7 +46,10 @@ const Ticket: React.FC<Props> = ({fareContract: fc, now}) => {
           ) : (
             <>
               <View style={styles.iconContainer}>
-                <InvalidTicket fill={theme.border.error} />
+                <InvalidTicket
+                  fill={theme.border.error}
+                  accessibilityLabel={'Utløpt billett' + screenReaderPause}
+                />
               </View>
               <ThemeText type="lead" color="faded">
                 Kjøpt{' '}

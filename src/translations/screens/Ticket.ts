@@ -1,6 +1,12 @@
 import {translation as _} from '../utils';
 
 const TicketTexts = {
+  header: {
+    title: _('Billetter'),
+    logo: {
+      a11yLabel: _('Gå til startskjerm'),
+    },
+  },
   splash: {
     title: _('Billettkjøp i app kommer snart!'),
     paragraph1: _(

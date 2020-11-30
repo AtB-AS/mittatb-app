@@ -3,10 +3,10 @@ import Svg, {Path, SvgProps} from 'react-native-svg';
 
 function SvgConfirm(props: SvgProps) {
   return (
-    <Svg width={20} height={20} fill="black" viewBox="0 0 40 40" {...props}>
+    <Svg width={20} height={20} fill="black" viewBox="0 0 20 20" {...props}>
       <Path
         fillRule="evenodd"
-        d="M16 27.172L34.586 8.586l2.828 2.828-20 20a2 2 0 01-2.828 0l-10-10 2.828-2.828L16 27.172z"
+        d="M8 13.586l9.293-9.293 1.414 1.414-10 10a1 1 0 01-1.414 0l-5-5 1.414-1.414L8 13.586z"
         clipRule="evenodd"
       />
     </Svg>

@@ -2,6 +2,7 @@ import {translation as _} from '../../utils';
 const AddEditFavoriteTexts = {
   header: {
     title: _('Legg til favorittsted'),
+    titleEdit: _('Endre favorittsted'),
     logo: {
       a11yLabel: _('Gå tilbake'),
     },
@@ -22,6 +23,7 @@ const AddEditFavoriteTexts = {
   },
   save: {
     label: _('Lagre favorittsted'),
+    notSelectedFromError: _('Du må velge et sted du vil ha som favoritt'),
   },
   delete: {
     label: _('Slett favorittsted'),
