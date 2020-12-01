@@ -9,16 +9,18 @@ import {
 } from '../../../preferences';
 import {StyleSheet, Theme} from '../../../theme';
 import BackHeader from '../BackHeader';
+import {useTranslation, TranslatedString} from '../../../utils/language';
+import {SelectStartScreenTexts} from '../../../translations';
 
 const identity = (s: string) => s;
-function toName(alt: Preference_ScreenAlternatives): string {
+function toName(alt: Preference_ScreenAlternatives): TranslatedString {
   switch (alt) {
     case 'assistant':
-      return 'Reiseassistent';
+      return SelectStartScreenTexts.options.assistant;
     case 'departures':
-      return 'Avganger';
+      return SelectStartScreenTexts.options.departures;
     case 'ticketing':
-      return 'Billetter';
+      return SelectStartScreenTexts.options.ticketing;
   }
 }
 
@@ -28,11 +30,12 @@ export default function SelectStartScreen() {
     preferences: {startScreen},
   } = usePreferences();
   const style = useProfileHomeStyle();
+  const {t} = useTranslation();
   const items = Array.from(preference_screenAlternatives);
 
   return (
     <SafeAreaView style={style.container}>
-      <BackHeader title="Velg startside" />
+      <BackHeader title={t(SelectStartScreenTexts.header.title)} />
 
       <ScrollView>
         <RadioSection<Preference_ScreenAlternatives>
@@ -40,7 +43,7 @@ export default function SelectStartScreen() {
           withTopPadding
           items={items}
           keyExtractor={identity}
-          itemToText={toName}
+          itemToText={(alt) => t(toName(alt))}
           selected={startScreen ?? items[0]}
           onSelect={(startScreen) => setPreference({startScreen})}
         />
