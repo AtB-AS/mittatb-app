@@ -2,21 +2,13 @@ import React from 'react';
 import * as RNLocalize from 'react-native-localize';
 import {useState, useEffect} from 'react';
 import {Language, lobot, DEFAULT_LANGUAGE} from './utils/language';
-import {initLobot} from '@leile/lobo-t';
 
 const AppLanguageProvider: React.FC = ({children}) => {
-  const {currentLanguage} = useLanguage();
-  return (
-    <lobot.LanguageProvider value={currentLanguage}>
-      {children}
-    </lobot.LanguageProvider>
-  );
-};
+  const [locale, setLocale] = useState(preferredLocale);
+  const [currentLanguage, setCurrentLanguage] = useState(DEFAULT_LANGUAGE);
 
-function useLanguage(): {currentLanguage: Language} {
-  const [locale, setLocale] = useState(preferredLocale());
   const onChange = () => {
-    setLocale(preferredLocale());
+    setLocale(preferredLocale);
   };
   useEffect(() => {
     RNLocalize.addEventListener('change', onChange);
@@ -24,12 +16,21 @@ function useLanguage(): {currentLanguage: Language} {
       RNLocalize.removeEventListener('change', onChange);
     };
   }, []);
-  return {
-    currentLanguage: locale
+
+  useEffect(() => {
+    const language = locale
       ? getAsAppLanguage(locale.languageCode) ?? DEFAULT_LANGUAGE
-      : DEFAULT_LANGUAGE,
-  };
-}
+      : DEFAULT_LANGUAGE;
+    setCurrentLanguage(language);
+  }, [locale]);
+
+  return (
+    <lobot.LanguageProvider value={currentLanguage}>
+      {children}
+    </lobot.LanguageProvider>
+  );
+};
+
 function preferredLocale(): RNLocalize.Locale | undefined {
   const preferredSystemLocales = RNLocalize.getLocales();
   const locale = preferredSystemLocales.find(

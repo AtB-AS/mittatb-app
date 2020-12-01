@@ -52,7 +52,7 @@ export function secondsToDuration(
   opts?: humanizeDuration.Options,
   language?: Language,
 ): string {
-  const currentLanguage = language === Language.Norwegian ? 'no' : language;
+  const currentLanguage = language === Language.Norwegian ? 'no' : 'en';
   return humanizeDuration(seconds * 1000, {
     units: ['d', 'h', 'm'],
     round: true,
