@@ -46,6 +46,22 @@ For external contributors, we need to fix [#35](https://github.com/AtB-AS/mittat
 
 ### Common errors
 
+#### `401` When running `pod install`
+
+Mapbox v6 requires token for installing dependencies. This means you need to set proper auth on curl for MapBox API. `git-crypt` should decrypt a `.netrc` file in root. You can copy this to set user info:
+
+```
+cp .netrc ~/
+```
+
+If you don't have access to `git-crypt` you can use your own `.netrc` with the following info:
+
+```
+machine api.mapbox.com
+login mapbox
+password <YOUR_TOKEN_HERE>
+```
+
 #### Missing `ANDROID_SDK_ROOT`
 
 By following [React Native Guide](https://reactnative.dev/docs/getting-started) you can get an error saying ANDROID_SDK_ROOT is undefined. Set this in addition to your bashrc (or similar), such as:
