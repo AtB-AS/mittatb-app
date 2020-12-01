@@ -11,3 +11,4 @@ export {default as AddEditFavoriteTexts} from './screens/subscreens/AddEditFavor
 export {default as FavoriteListTexts} from './screens/subscreens/FavoriteList';
 export {default as TripDetailsTexts} from './screens/subscreens/TripDetails';
 export {default as SelectStartScreenTexts} from './screens/subscreens/SelectStartScreen';
+export {default as AppearanceSettingsTexts} from './screens/subscreens/AppearanceSettings';
