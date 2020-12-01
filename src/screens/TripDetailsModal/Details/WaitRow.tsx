@@ -1,4 +1,4 @@
-import {secondsBetween, secondsToMinutesShort} from '../../../utils/date';
+import {secondsBetween, secondsToMinutes} from '../../../utils/date';
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {Duration} from '../../../assets/svg/icons/transportation';
@@ -8,6 +8,7 @@ import ThemeText from '../../../components/text';
 import {defaultFill} from '../../../utils/transportation-color';
 import {useTranslation} from '../../../utils/language';
 import {TripDetailsTexts} from '../../../translations';
+import dictionary from '../../../translations/dictionary';
 
 type WaitRowProps = {
   onCalculateTime(seconds: number): void;
@@ -32,11 +33,15 @@ export default function WaitRow({
 
   if (!time) return null;
 
+  const waitTime = `${secondsToMinutes(time)} ${t(
+    dictionary.date.units.short.minute,
+  )}`;
+
   return (
     <View style={styles.container}>
       <Duration fill={defaultFill} />
       <ThemeText type="lead" style={styles.text}>
-        {t(TripDetailsTexts.legs.wait.label(secondsToMinutesShort(time)))}
+        {t(TripDetailsTexts.legs.wait.label(waitTime))}
       </ThemeText>
     </View>
   );

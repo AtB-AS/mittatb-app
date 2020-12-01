@@ -6,7 +6,7 @@ import {
   secondsToDuration,
   secondsToDurationShort,
   secondsBetween,
-  secondsToMinutesShort,
+  secondsToMinutes,
   formatToClockOrRelativeMinutes,
   missingRealtimePrefix,
   formatToClock,
@@ -27,6 +27,7 @@ import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
 import {AssistantTexts} from '../../translations/';
 import {useTranslation} from '../../utils/language';
+import dictionary from '../../translations/dictionary';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -230,11 +231,13 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 function WaitRow({time}: {time: number}) {
   const styles = useLegStyles();
   const {t} = useTranslation();
-
+  const waitTime = `${secondsToMinutes(time)} ${t(
+    dictionary.date.units.short.minute,
+  )}`;
   return (
     <View style={styles.legContainer}>
       <ThemeText style={[styles.textDeprioritized, styles.time]}>
-        {secondsToMinutesShort(time)}
+        {waitTime}
       </ThemeText>
       <View style={styles.iconContainer}>
         <ThemeIcon svg={Duration} opacity={0.6} />

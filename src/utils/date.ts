@@ -10,26 +10,24 @@ import {
 import nb from 'date-fns/locale/nb';
 
 import humanizeDuration from 'humanize-duration';
-import {useTranslation, Language} from './language';
-import dictionary from '../translations/dictionary';
+import {useTranslation, Language, DEFAULT_LANGUAGE} from './language';
 
 function getShortHumanizer(ms: number, options?: humanizeDuration.Options) {
-  const {t, language} = useTranslation();
-  const shortUnits = dictionary.date.units.short;
   const opts = {
-    language: language,
+    language: 'shortNo',
     languages: {
-      [language]: {
-        y: () => t(shortUnits.year),
-        mo: () => t(shortUnits.month),
-        w: () => t(shortUnits.week),
-        d: () => t(shortUnits.day),
-        h: () => t(shortUnits.hour),
-        m: () => t(shortUnits.minute),
-        s: () => t(shortUnits.second),
-        ms: () => t(shortUnits.ms),
+      shortNo: {
+        y: () => 'år',
+        mo: () => 'm',
+        w: () => 'u',
+        d: () => 'd',
+        h: () => 't',
+        m: () => 'min',
+        s: () => 'sek',
+        ms: () => 'ms',
       },
     },
+
     ...options,
   };
   return shortHumanizer(ms, opts);
@@ -37,6 +35,7 @@ function getShortHumanizer(ms: number, options?: humanizeDuration.Options) {
 const shortHumanizer = humanizeDuration.humanizer({});
 
 export const missingRealtimePrefix = 'ca. ';
+
 export function secondsToDurationShort(seconds: number): string {
   return getShortHumanizer(seconds * 1000, {
     units: ['d', 'h', 'm'],
@@ -44,11 +43,8 @@ export function secondsToDurationShort(seconds: number): string {
   });
 }
 
-export function secondsToMinutesShort(seconds: number): string {
-  return shortHumanizer(seconds * 1000, {
-    units: ['m'],
-    round: true,
-  });
+export function secondsToMinutes(seconds: number): number {
+  return Math.round(seconds / 60);
 }
 
 export function secondsToDuration(
@@ -88,23 +84,24 @@ export function formatToClock(isoDate: string | Date) {
 export function formatToClockOrRelativeMinutes(
   isoDate: string | Date,
   minuteThreshold: number = 9,
+  language?: Language,
 ) {
   const parsed = isoDate instanceof Date ? isoDate : parseISO(isoDate);
   const diff = secondsBetween(new Date(), parsed);
 
   if (isInThePast(parsed) || diff / 60 >= minuteThreshold) {
-    return formatLocaleTime(parsed);
+    return formatLocaleTime(parsed, language);
   }
 
   if (diff / 60 <= 1) {
     return 'Nå';
   }
 
-  return secondsToMinutesShort(diff);
+  return secondsToMinutes(diff);
 }
-export function formatLocaleTime(date: Date) {
-  const {language} = useTranslation();
-  switch (language) {
+export function formatLocaleTime(date: Date, language?: Language) {
+  const lang = language ?? DEFAULT_LANGUAGE;
+  switch (lang) {
     case Language.Norwegian:
       return format(date, 'HH:mm');
     case Language.English:

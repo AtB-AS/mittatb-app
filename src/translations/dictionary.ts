@@ -12,8 +12,10 @@ const dictionary = {
     ticketing: _('Billetter', 'Tickets'),
     profile: _('Mitt AtB'),
   },
+  missingRealTime: _('ca.'),
   date: {
     units: {
+      now: _('Nå', 'Now'),
       short: {
         year: _('år', 'y'),
         month: _('m'),
