@@ -6,6 +6,8 @@ import {StyleSheet} from '../../../theme';
 import {Leg} from '../../../sdk';
 import ThemeText from '../../../components/text';
 import {defaultFill} from '../../../utils/transportation-color';
+import {useTranslation} from '../../../utils/language';
+import {TripDetailsTexts} from '../../../translations';
 
 type WaitRowProps = {
   onCalculateTime(seconds: number): void;
@@ -18,6 +20,7 @@ export default function WaitRow({
   nextLeg,
 }: WaitRowProps) {
   const styles = useWaitStyles();
+  const {t} = useTranslation();
   const time = secondsBetween(
     currentLeg.expectedEndTime,
     nextLeg.expectedStartTime,
@@ -32,8 +35,8 @@ export default function WaitRow({
   return (
     <View style={styles.container}>
       <Duration fill={defaultFill} />
-      <ThemeText style={styles.text}>
-        Vent i {secondsToMinutesShort(time)}
+      <ThemeText type="lead" style={styles.text}>
+        {t(TripDetailsTexts.legs.wait.label(secondsToMinutesShort(time)))}
       </ThemeText>
     </View>
   );
@@ -45,8 +48,7 @@ const useWaitStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   text: {
-    fontSize: 14,
     opacity: 0.6,
-    marginLeft: 8,
+    marginLeft: theme.spacings.small,
   },
 }));

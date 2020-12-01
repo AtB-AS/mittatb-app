@@ -9,6 +9,8 @@ import WaitRow from './WaitRow';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
 import {defaultFill} from '../../../utils/transportation-color';
+import {useTranslation} from '../../../utils/language';
+import {TripDetailsTexts} from '../../../translations';
 
 const MINIMUM_WAIT_IN_SECONDS = 30;
 
@@ -26,6 +28,7 @@ const WalkDetail: React.FC<LegDetailProps> = ({
   const isWaitTimeOfSignificance =
     showWaitTime && waitTimeInSeconds > MINIMUM_WAIT_IN_SECONDS;
   const showRow = isWaitTimeOfSignificance || isWalkTimeOfSignificance;
+  const {t} = useTranslation();
 
   return (
     <View style={styles.container}>
@@ -44,7 +47,11 @@ const WalkDetail: React.FC<LegDetailProps> = ({
               <View style={styles.walkContainer}>
                 <ThemeIcon svg={WalkingPerson} opacity={0.6} />
                 <ThemeText style={styles.walkText}>
-                  Gå i {secondsToDuration(leg.duration ?? 0)}
+                  {t(
+                    TripDetailsTexts.legs.walk.label(
+                      secondsToDuration(leg.duration ?? 0),
+                    ),
+                  )}
                 </ThemeText>
               </View>
             )}

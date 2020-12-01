@@ -4,6 +4,8 @@ import {Add, Remove} from '../../assets/svg/icons/actions';
 import {StyleSheet} from '../../theme';
 import shadows from './shadows';
 import ThemeIcon from '../theme-icon';
+import {useTranslation} from '../../utils/language';
+import {MapTexts} from '../../translations';
 
 export type Props = {
   zoomIn(): void;
@@ -12,12 +14,13 @@ export type Props = {
 
 const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
   const styles = useStyles();
+  const {t} = useTranslation();
   return (
     <View>
       <View style={styles.zoomContainer}>
         <TouchableOpacity
           onPress={zoomIn}
-          accessibilityLabel="Zoom inn"
+          accessibilityLabel={t(MapTexts.controls.zoomIn.a11yLabel)}
           accessibilityRole="button"
         >
           <View style={styles.zoomInButton}>
@@ -26,7 +29,7 @@ const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={zoomOut}
-          accessibilityLabel="Zoom ut"
+          accessibilityLabel={t(MapTexts.controls.zoomOut.a11yLabel)}
           accessibilityRole="button"
         >
           <View style={styles.zoomOutButton}>

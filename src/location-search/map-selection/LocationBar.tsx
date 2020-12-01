@@ -9,6 +9,8 @@ import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
 import {Location} from '../../favorites/types';
 import {StyleSheet, useTheme} from '../../theme';
+import {useTranslation} from '../../utils/language';
+import {LocationSearchTexts} from '../../translations';
 
 type Props = {
   location?: Location;
@@ -88,6 +90,7 @@ function getLocationText(
   location?: Location,
   error?: ErrorType,
 ): {title: string; subtitle: string} {
+  const {t} = useTranslation();
   if (location) {
     return {
       title: location.name,
@@ -102,20 +105,26 @@ function getLocationText(
       case 'network-error':
       case 'timeout':
         return {
-          title: 'Vi kan ikke oppdatere kartet.',
-          subtitle: 'Nettforbindelsen din mangler eller er ustabil.',
+          title: t(
+            LocationSearchTexts.mapSelection.messages.networkError.title,
+          ),
+          subtitle: t(
+            LocationSearchTexts.mapSelection.messages.networkError.message,
+          ),
         };
       default:
         return {
-          title: 'Oops - vi feila med å oppdatere kartet.',
-          subtitle: 'Supert om du prøver igjen 🤞',
+          title: t(LocationSearchTexts.mapSelection.messages.updateError.title),
+          subtitle: t(
+            LocationSearchTexts.mapSelection.messages.updateError.message,
+          ),
         };
     }
   }
 
   return {
-    title: 'Akkurat her finner vi ikke noe reisetilbud.',
-    subtitle: 'Er du i nærheten av en adresse, vei eller stoppested?',
+    title: t(LocationSearchTexts.mapSelection.messages.noResult.title),
+    subtitle: t(LocationSearchTexts.mapSelection.messages.noResult.message),
   };
 }
 

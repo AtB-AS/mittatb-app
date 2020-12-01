@@ -30,6 +30,8 @@ import {getAimedTimeIfLargeDifference} from '../utils';
 import ThemeIcon from '../../../components/theme-icon';
 import ThemeText from '../../../components/text';
 import {parseISO} from 'date-fns';
+import {useTranslation} from '../../../utils/language';
+import DepartureDetailsTexts from '../../../translations/screens/subscreens/DepartureDetails';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -157,7 +159,7 @@ function CallGroup({
       return missingRealtimePrefix + timeString;
     }
   };
-
+  const {t} = useTranslation();
   const [collapsed, setCollapsed] = useState(isBefore);
   const styles = useStopsStyle();
   if (!calls?.length) {
@@ -170,7 +172,7 @@ function CallGroup({
       key={`collapse-button-${type}`}
       collapsed={collapsed}
       setCollapsed={setCollapsed}
-      numberOfStops={calls.length - 1}
+      numberOfStops={t(DepartureDetailsTexts.collapse.label(calls.length - 1))}
     />
   ) : null;
 
@@ -244,19 +246,19 @@ function CallGroup({
 }
 
 type CollapseButtonRowProps = {
-  numberOfStops: number;
+  label: string;
   collapsed: boolean;
   setCollapsed(collapsed: boolean): void;
 };
 function CollapseButtonRow({
-  numberOfStops,
+  label,
   collapsed,
   setCollapsed,
 }: CollapseButtonRowProps) {
   const styles = useCollapseButtonStyle();
   const text = (
     <ThemeText color="faded" style={styles.text}>
-      {numberOfStops} Mellomstopp
+      {label}
     </ThemeText>
   );
   const child = collapsed ? (

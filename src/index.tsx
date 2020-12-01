@@ -30,7 +30,7 @@ if (!__DEV__) {
 
 import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {useLanguage, LanguageProvider} from './utils/language';
+import AppLanguageProvider from './LanguageContext';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
@@ -45,7 +45,6 @@ enableScreens();
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const {currentLanguage} = useLanguage();
 
   useEffect(() => {
     async function config() {
@@ -68,9 +67,9 @@ const App = () => {
                   <GeolocationContextProvider>
                     <TicketContextProvider>
                       <RemoteConfigContextProvider>
-                        <LanguageProvider value={currentLanguage}>
+                        <AppLanguageProvider>
                           <NavigationRoot />
-                        </LanguageProvider>
+                        </AppLanguageProvider>
                       </RemoteConfigContextProvider>
                     </TicketContextProvider>
                   </GeolocationContextProvider>

@@ -69,8 +69,12 @@ const AssistantTexts = {
         'Denne reisen har driftsmeldinger. Se detaljer for mer info',
       ),
       footLeg: {
+        walkandWaitLabel: (walkTime: string, waitTime: string) =>
+          _(
+            `Gå ${walkTime}. Vent ${waitTime}`,
+            `Walk ${walkTime}. Wait ${waitTime}`,
+          ),
         walkLabel: (time: string) => _(`Gå ${time}`, `Walk ${time}`),
-        waitLabel: (time: string) => _(`Vent ${time}`, `Wait ${time}`),
       },
       waitRow: {
         label: _('Vent'),

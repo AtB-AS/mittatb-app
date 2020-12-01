@@ -197,9 +197,12 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   const walkTime = secondsToDuration(leg.duration ?? 0);
   const text = !isWaitTimeOfSignificance
     ? t(AssistantTexts.results.resultItem.footLeg.walkLabel(walkTime))
-    : t(AssistantTexts.results.resultItem.footLeg.walkLabel(walkTime)) +
-      '. ' +
-      t(AssistantTexts.results.resultItem.footLeg.waitLabel(walkTime));
+    : t(
+        AssistantTexts.results.resultItem.footLeg.walkandWaitLabel(
+          walkTime,
+          secondsToDuration(waitTimeInSeconds),
+        ),
+      );
 
   return (
     <View style={styles.legContainer}>

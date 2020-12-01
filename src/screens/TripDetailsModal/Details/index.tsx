@@ -32,6 +32,8 @@ import {CompactMap} from '../Map/CompactMap';
 import TransportDetail from './TransportDetail';
 import WalkDetail from './WalkDetail';
 import ThemeIcon from '../../../components/theme-icon';
+import {useTranslation} from '../../../utils/language';
+import {TripDetailsTexts} from '../../../translations';
 
 // @TODO Firebase config?
 const TIME_LIMIT_IN_MINUTES = 3;
@@ -59,6 +61,7 @@ type Props = {
 
 const TripDetailsModal: React.FC<Props> = (props) => {
   const styles = useDetailsStyle();
+  const {t} = useTranslation();
   const {
     params: {tripPatternId, tripPattern: initialTripPattern, ...passingProps},
   } = props.route;
@@ -76,10 +79,10 @@ const TripDetailsModal: React.FC<Props> = (props) => {
           onPress: () => props.navigation.goBack(),
           accessible: true,
           accessibilityRole: 'button',
-          accessibilityLabel: 'Gå tilbake',
+          accessibilityLabel: t(TripDetailsTexts.header.leftButton.a11yLabel),
           icon: <ThemeIcon svg={Close} />,
         }}
-        title="Reisedetaljer"
+        title={t(TripDetailsTexts.header.title)}
         style={styles.header}
       />
       <ScrollView
@@ -109,6 +112,7 @@ const DetailsContent: React.FC<{
 }> = ({tripPattern, from, to, error}) => {
   const styles = useDetailsStyle();
   const {favorites} = useFavorites();
+  const {t} = useTranslation();
   const {themeName} = useTheme();
   const [shortTime, setShortTime] = useState(false);
   const flagShortTime = (secondsBetween: number) => {
@@ -152,7 +156,7 @@ const DetailsContent: React.FC<{
         {shortTime && (
           <MessageBox
             containerStyle={styles.messageContainer}
-            message="Vær oppmerksom på kort byttetid."
+            message={t(TripDetailsTexts.messages.shortTime)}
           />
         )}
         {error && (
@@ -194,18 +198,18 @@ const DetailsContent: React.FC<{
       </View>
     </>
   );
-};
 
-function translateError(error: AxiosError): string {
-  const errorType = getAxiosErrorType(error);
-  switch (errorType) {
-    case 'network-error':
-    case 'timeout':
-      return 'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil.';
-    default:
-      return 'Vi kunne ikke oppdatere reiseforslaget ditt. Det kan hende reisen har endra seg eller er utdatert?';
+  function translateError(error: AxiosError): string {
+    const errorType = getAxiosErrorType(error);
+    switch (errorType) {
+      case 'network-error':
+      case 'timeout':
+        return t(TripDetailsTexts.messages.errorNetwork);
+      default:
+        return t(TripDetailsTexts.messages.errorDefault);
+    }
   }
-}
+};
 
 function getLocationIcon(location: LocationWithMetadata) {
   switch (location.resultType) {
