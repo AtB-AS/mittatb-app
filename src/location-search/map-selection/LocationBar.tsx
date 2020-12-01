@@ -76,6 +76,46 @@ const LocationText: React.FC<{
   location?: Location;
   error?: ErrorType;
 }> = ({location, error}) => {
+  const getLocationText = (location?: Location, error?: ErrorType) => {
+    const {t} = useTranslation();
+    if (location) {
+      return {
+        title: location.name,
+        subtitle:
+          (location.postalcode ? location.postalcode + ', ' : '') +
+          location.locality,
+      };
+    }
+
+    if (error) {
+      switch (error) {
+        case 'network-error':
+        case 'timeout':
+          return {
+            title: t(
+              LocationSearchTexts.mapSelection.messages.networkError.title,
+            ),
+            subtitle: t(
+              LocationSearchTexts.mapSelection.messages.networkError.message,
+            ),
+          };
+        default:
+          return {
+            title: t(
+              LocationSearchTexts.mapSelection.messages.updateError.title,
+            ),
+            subtitle: t(
+              LocationSearchTexts.mapSelection.messages.updateError.message,
+            ),
+          };
+      }
+    }
+
+    return {
+      title: t(LocationSearchTexts.mapSelection.messages.noResult.title),
+      subtitle: t(LocationSearchTexts.mapSelection.messages.noResult.message),
+    };
+  };
   const {title, subtitle} = getLocationText(location, error);
 
   return (
@@ -85,48 +125,6 @@ const LocationText: React.FC<{
     </>
   );
 };
-
-function getLocationText(
-  location?: Location,
-  error?: ErrorType,
-): {title: string; subtitle: string} {
-  const {t} = useTranslation();
-  if (location) {
-    return {
-      title: location.name,
-      subtitle:
-        (location.postalcode ? location.postalcode + ', ' : '') +
-        location.locality,
-    };
-  }
-
-  if (error) {
-    switch (error) {
-      case 'network-error':
-      case 'timeout':
-        return {
-          title: t(
-            LocationSearchTexts.mapSelection.messages.networkError.title,
-          ),
-          subtitle: t(
-            LocationSearchTexts.mapSelection.messages.networkError.message,
-          ),
-        };
-      default:
-        return {
-          title: t(LocationSearchTexts.mapSelection.messages.updateError.title),
-          subtitle: t(
-            LocationSearchTexts.mapSelection.messages.updateError.message,
-          ),
-        };
-    }
-  }
-
-  return {
-    title: t(LocationSearchTexts.mapSelection.messages.noResult.title),
-    subtitle: t(LocationSearchTexts.mapSelection.messages.noResult.message),
-  };
-}
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
