@@ -172,7 +172,7 @@ function CallGroup({
       key={`collapse-button-${type}`}
       collapsed={collapsed}
       setCollapsed={setCollapsed}
-      numberOfStops={t(DepartureDetailsTexts.collapse.label(calls.length - 1))}
+      label={t(DepartureDetailsTexts.collapse.label(calls.length - 1))}
     />
   ) : null;
 
