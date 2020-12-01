@@ -10,7 +10,7 @@ import {
 import nb from 'date-fns/locale/nb';
 
 import humanizeDuration from 'humanize-duration';
-import {useTranslation, Language, DEFAULT_LANGUAGE} from './language';
+import {Language, DEFAULT_LANGUAGE} from './language';
 
 function getShortHumanizer(ms: number, options?: humanizeDuration.Options) {
   const opts = {
@@ -50,8 +50,8 @@ export function secondsToMinutes(seconds: number): number {
 export function secondsToDuration(
   seconds: number,
   opts?: humanizeDuration.Options,
+  language?: Language,
 ): string {
-  const {language} = useTranslation();
   const currentLanguage = language === Language.Norwegian ? 'no' : language;
   return humanizeDuration(seconds * 1000, {
     units: ['d', 'h', 'm'],

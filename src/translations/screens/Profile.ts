@@ -4,22 +4,41 @@ const ProfileTexts = {
   header: {
     title: _('Mitt AtB'),
     logo: {
-      a11yLabel: _('Gå til startskjerm'),
+      a11yLabel: _('Gå til startside'),
     },
     backButton: {
       a11yLabel: _('Gå tilbake'),
     },
   },
-  favoriteList: {
-    title: _('Favoritter'),
-    add: _('Legg til favorittsted'),
-    editButton: {
-      a11yLabel: (place: string) => _(`Rediger favoritt: ${place}`),
+  sections: {
+    settings: {
+      heading: _('Innstillinger', 'Settings'),
+      linkItems: {
+        appearance: {
+          label: _('Utseende'),
+        },
+        startScreen: {
+          label: _('Startside'),
+        },
+      },
+    },
+    favorites: {
+      heading: _('Favoritter'),
+      linkItems: {
+        places: {
+          label: _('Steder'),
+        },
+      },
+    },
+    privacy: {
+      heading: _('Personvern', 'Privacy'),
+      linkItems: {
+        privacy: {
+          label: _('Personvernerklæring'),
+          a11yHint: _('Aktivér for å lese personvernerklæring på ekstern side'),
+        },
+      },
     },
   },
-  privacyStatementLabel: _(
-    'Les vår personvernerklæring',
-    'Go to our privacy statement',
-  ),
 };
 export default ProfileTexts;

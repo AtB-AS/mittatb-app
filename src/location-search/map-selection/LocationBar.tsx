@@ -11,6 +11,7 @@ import {Location} from '../../favorites/types';
 import {StyleSheet, useTheme} from '../../theme';
 import {useTranslation} from '../../utils/language';
 import {LocationSearchTexts} from '../../translations';
+import {TranslateFunction} from '../../translations/utils';
 
 type Props = {
   location?: Location;
@@ -76,48 +77,8 @@ const LocationText: React.FC<{
   location?: Location;
   error?: ErrorType;
 }> = ({location, error}) => {
-  const getLocationText = (location?: Location, error?: ErrorType) => {
-    const {t} = useTranslation();
-    if (location) {
-      return {
-        title: location.name,
-        subtitle:
-          (location.postalcode ? location.postalcode + ', ' : '') +
-          location.locality,
-      };
-    }
-
-    if (error) {
-      switch (error) {
-        case 'network-error':
-        case 'timeout':
-          return {
-            title: t(
-              LocationSearchTexts.mapSelection.messages.networkError.title,
-            ),
-            subtitle: t(
-              LocationSearchTexts.mapSelection.messages.networkError.message,
-            ),
-          };
-        default:
-          return {
-            title: t(
-              LocationSearchTexts.mapSelection.messages.updateError.title,
-            ),
-            subtitle: t(
-              LocationSearchTexts.mapSelection.messages.updateError.message,
-            ),
-          };
-      }
-    }
-
-    return {
-      title: t(LocationSearchTexts.mapSelection.messages.noResult.title),
-      subtitle: t(LocationSearchTexts.mapSelection.messages.noResult.message),
-    };
-  };
-  const {title, subtitle} = getLocationText(location, error);
-
+  const {t} = useTranslation();
+  const {title, subtitle} = getLocationText(t, location, error);
   return (
     <>
       <ThemeText type="lead">{title}</ThemeText>
@@ -125,6 +86,48 @@ const LocationText: React.FC<{
     </>
   );
 };
+
+function getLocationText(
+  t: TranslateFunction,
+  location?: Location,
+  error?: ErrorType,
+): {title: string; subtitle: string} {
+  if (location) {
+    return {
+      title: location.name,
+      subtitle:
+        (location.postalcode ? location.postalcode + ', ' : '') +
+        location.locality,
+    };
+  }
+
+  if (error) {
+    switch (error) {
+      case 'network-error':
+      case 'timeout':
+        return {
+          title: t(
+            LocationSearchTexts.mapSelection.messages.networkError.title,
+          ),
+          subtitle: t(
+            LocationSearchTexts.mapSelection.messages.networkError.message,
+          ),
+        };
+      default:
+        return {
+          title: t(LocationSearchTexts.mapSelection.messages.updateError.title),
+          subtitle: t(
+            LocationSearchTexts.mapSelection.messages.updateError.message,
+          ),
+        };
+    }
+  }
+
+  return {
+    title: t(LocationSearchTexts.mapSelection.messages.noResult.title),
+    subtitle: t(LocationSearchTexts.mapSelection.messages.noResult.message),
+  };
+}
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

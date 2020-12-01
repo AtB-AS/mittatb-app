@@ -9,7 +9,7 @@ const AddEditFavoriteTexts = {
   },
   fields: {
     location: {
-      label: _('Sted'),
+      label: _('Sted', 'Place'),
       placeholder: _('Søk etter adresse eller stoppested'),
     },
     name: {
