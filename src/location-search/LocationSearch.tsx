@@ -213,7 +213,7 @@ const LocationSearch: React.FC<Props> = ({
       ) : (
         !error &&
         !!text && (
-          <View style={styles.contentBlock}>
+          <View style={styles.withMargin}>
             <MessageBox type="info">
               <ThemeText>Fant ingen søkeresultat</ThemeText>
             </MessageBox>
