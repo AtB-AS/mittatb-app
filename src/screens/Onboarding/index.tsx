@@ -18,6 +18,8 @@ import StepOuterContainer from './components/StepContainer';
 import Illustration from './components/Illustration';
 import NavigationControls from './components/NavigationControls';
 import ThemeText from '../../components/text';
+import {useTranslation} from '../../utils/language';
+import {OnboardingTexts} from '../../translations';
 
 type StepProps = {
   navigation: StackNavigationProp<OnboardingStackParams>;
@@ -61,6 +63,7 @@ const Onboarding = () => {
 
 const StepOne: React.FC<StepProps> = ({navigation}) => {
   const styles = useStyles();
+  const {t} = useTranslation();
   const onNavigate = () => {
     navigation.push('StepTwo');
   };
@@ -70,12 +73,10 @@ const StepOne: React.FC<StepProps> = ({navigation}) => {
       <StepOuterContainer>
         <View style={styles.textContainer} accessible={true}>
           <ThemeText style={[styles.title, styles.text]}>
-            Velkommen som testpilot!{' '}
+            {t(OnboardingTexts.step1.title)}
           </ThemeText>
           <ThemeText style={styles.text}>
-            Du bruker nå en betaversjon av den nye AtB-appen. Her kan du
-            planlegge reiser og sjekke avgangstider i Trøndelag. Appen vil bli
-            jevnlig oppdatert med nye funksjoner.
+            {t(OnboardingTexts.step1.description)}
           </ThemeText>
         </View>
         <NavigationControls currentPage={1} onNavigate={onNavigate} />
@@ -85,6 +86,7 @@ const StepOne: React.FC<StepProps> = ({navigation}) => {
 };
 const StepTwo: React.FC<StepProps> = ({navigation}) => {
   const styles = useStyles();
+  const {t} = useTranslation();
   const onNavigate = () => {
     navigation.push('StepThree');
   };
@@ -94,12 +96,10 @@ const StepTwo: React.FC<StepProps> = ({navigation}) => {
       <StepOuterContainer>
         <View style={styles.textContainer} accessible={true}>
           <ThemeText style={[styles.title, styles.text]}>
-            Bidra til å gjøre appen bedre
+            {t(OnboardingTexts.step2.title)}
           </ThemeText>
           <ThemeText style={styles.text}>
-            Vi trenger dine idéer og tilbakemeldinger for å gjøre appen bedre.
-            Disse deler du enklest ved å velge chatikonet oppe i høyre hjørne av
-            appen. Chatten er anonym.
+            {t(OnboardingTexts.step2.description)}
           </ThemeText>
         </View>
         <NavigationControls currentPage={2} onNavigate={onNavigate} />
@@ -109,6 +109,7 @@ const StepTwo: React.FC<StepProps> = ({navigation}) => {
 };
 const StepThree: React.FC<StepProps> = () => {
   const styles = useStyles();
+  const {t} = useTranslation();
   const {completeOnboarding} = useAppState();
   const {status, requestPermission} = useGeolocationState();
   const [requestedOnce, setRequestedOnce] = useState(false);
@@ -128,27 +129,27 @@ const StepThree: React.FC<StepProps> = () => {
       <StepOuterContainer>
         <View style={styles.textContainer} accessible={true}>
           <ThemeText style={[styles.title, styles.text]}>
-            Bedre opplevelse med posisjonsdeling
+            {t(OnboardingTexts.step3.title)}
           </ThemeText>
           <ThemeText style={styles.text}>
-            Ved å tillate deling av posisjon kan du finne nærmeste holdeplass og
-            planlegge reisen fra din lokasjon. Du kan når som helst slutte å
-            dele posisjon.
+            {t(OnboardingTexts.step3.description)}
           </ThemeText>
         </View>
         <NavigationControls
           currentPage={3}
           onNavigate={onRequestPermission}
-          title="Fullfør"
+          title={t(OnboardingTexts.navigation.complete)}
           arrow={false}
         >
           <TouchableOpacity
+            accessibilityRole="link"
+            accessibilityHint={t(OnboardingTexts.step3.privacyLink.a11yHint)}
             onPress={() =>
               Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
             }
           >
             <ThemeText type="body" style={[styles.text, styles.privacyPolicy]}>
-              Les vår personvernerklæring
+              {t(OnboardingTexts.step3.privacyLink.text)}
             </ThemeText>
           </TouchableOpacity>
         </NavigationControls>
