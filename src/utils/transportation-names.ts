@@ -1,4 +1,6 @@
 import {EstimatedCall, Leg, Quay, LegMode} from '../sdk';
+import {TranslatedString} from './language';
+import dictionary from '../translations/dictionary';
 
 export function getLineName(leg: Leg) {
   return leg.line
@@ -25,22 +27,23 @@ export function getLineNameFromEstimatedCall(
   }
   return {publicCode, name};
 }
-export function getReadableModeName(mode: LegMode): string {
+export function getModeName(mode: LegMode): TranslatedString {
+  const legModeNames = dictionary.travel.legModes;
   switch (mode) {
     case 'bus':
-      return 'Buss';
+      return legModeNames.bus;
     case 'rail':
-      return 'Tog';
+      return legModeNames.rail;
     case 'tram':
-      return 'Trikk';
+      return legModeNames.tram;
     case 'water':
-      return 'Båt';
+      return legModeNames.water;
     case 'air':
-      return 'Fly';
+      return legModeNames.air;
     case 'foot':
-      return 'Gange';
+      return legModeNames.foot;
     default:
-      return mode;
+      return legModeNames.unknown;
   }
 }
 

@@ -22,5 +22,21 @@ const NearbyTexts = {
     },
     updatingLocation: _('Oppdaterer posisjon'),
   },
+  results: {
+    messages: {
+      initial: _(
+        'Søk etter avganger fra holdeplasser eller i nærheten av steder.',
+      ),
+      emptyResult: _('Fant ingen avganger i nærheten'),
+    },
+    quayResult: {
+      platformHeader: {
+        title: _('Plattform', 'Platform'),
+      },
+      showMoreToggler: {
+        text: _('Vis flere avganger'),
+      },
+    },
+  },
 };
 export default NearbyTexts;

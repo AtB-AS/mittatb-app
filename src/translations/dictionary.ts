@@ -13,6 +13,17 @@ const dictionary = {
     profile: _('Mitt AtB'),
   },
   missingRealTime: _('ca.'),
+  travel: {
+    legModes: {
+      bus: _('Buss'),
+      rail: _('Tog'),
+      tram: _('Trikk'),
+      water: _('Båt'),
+      air: _('Fly'),
+      foot: _('Gange'),
+      unknown: _('Ukjent transportmiddel'),
+    },
+  },
   date: {
     units: {
       now: _('Nå', 'Now'),

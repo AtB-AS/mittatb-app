@@ -4,6 +4,27 @@ const LocationSearchTexts = {
   searchField: {
     placeholder: _('Søk etter adresse eller sted', 'Search for a place'),
   },
+  header: {
+    title: _('Søk', 'Search'),
+    leftButton: {
+      a11yLabel: _('Gå tilbake'),
+    },
+  },
+  results: {
+    previousResults: {
+      heading: _('Siste steder'),
+    },
+    searchResults: {
+      heading: _('Søkeresultater'),
+    },
+  },
+  messages: {
+    networkError: _(
+      'Hei, er du på nett? Vi kan ikke søke siden nettforbindelsen din mangler eller er ustabil.',
+    ),
+    defaultError: _('Oops - vi feila med søket. Supert om du prøver igjen 🤞'),
+    emptyResult: _('Fant ingen søkeresultat'),
+  },
   mapSelection: {
     header: {
       title: _('Søk', 'Search'),

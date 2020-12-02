@@ -1,10 +1,14 @@
-import {Language} from '../utils/language';
+import {Language, TranslatedString} from '../utils/language';
 import {TFunc} from '@leile/lobo-t';
 
-export function translation(original: string, english?: string) {
+export function translation(
+  norwegian: string,
+  english?: string,
+): TranslatedString {
   return {
-    [Language.Norwegian]: original,
-    [Language.English]: !!english ? english : original,
+    [Language.Norwegian]: norwegian,
+    [Language.English]: !!english ? english : norwegian,
   };
 }
+
 export type TranslateFunction = TFunc<typeof Language>;

@@ -22,12 +22,13 @@ import AccessibleText, {
 } from '../../components/accessible-text';
 import {SituationWarningIcon} from '../../situations';
 import {flatMap} from '../../utils/array';
-import {getReadableModeName} from '../../utils/transportation-names';
+import {getModeName} from '../../utils/transportation-names';
 import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
 import {AssistantTexts} from '../../translations/';
 import {useTranslation} from '../../utils/language';
 import dictionary from '../../translations/dictionary';
+import {TranslateFunction} from '../../translations/utils';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -101,6 +102,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   ...props
 }) => {
   const styles = useThemeStyles();
+  const {t} = useTranslation();
 
   if (!tripPattern?.legs?.length) return null;
 
@@ -109,7 +111,8 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       style={{paddingVertical: 4}}
       onPress={() => onDetailsPressed(tripPattern)}
       hitSlop={insets.symmetric(8, 16)}
-      accessibilityValue={{text: screenReaderSummary(tripPattern)}}
+      accessibilityHint={t(AssistantTexts.results.resultItem.a11yHint)}
+      accessibilityValue={{text: screenReaderSummary(tripPattern, t)}}
       {...props}
     >
       <View style={styles.result}>
@@ -330,46 +333,58 @@ function LineDisplayName({leg}: {leg: Leg}) {
   );
 }
 
-const screenReaderSummary = (tripPattern: TripPattern) => {
+const screenReaderSummary = (
+  tripPattern: TripPattern,
+  t: TranslateFunction,
+) => {
   const hasSituations = flatMap(tripPattern.legs, (leg) => leg.situations)
     .length;
 
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
   const startLeg = !nonFootLegs.length ? tripPattern.legs[0] : nonFootLegs[0];
+  const screenreaderText = AssistantTexts.results.resultItem.journeySummary;
 
   return `
   ${
     hasSituations
-      ? `Driftsmeldinger gjelder for dette forslaget. ${screenReaderPause} `
+      ? `${t(screenreaderText.situationsWarning)} ${screenReaderPause} `
       : ''
   }
-  Fra klokken: ${formatToClock(
-    tripPattern.startTime,
-  )}, til klokken ${formatToClock(tripPattern.endTime)}. ${screenReaderPause}
-    Reisetid: ${secondsToDuration(tripPattern.duration)} ${screenReaderPause}
+  ${screenreaderText.time(
+    formatToClock(tripPattern.startTime),
+    formatToClock(tripPattern.endTime),
+  )} ${screenReaderPause}
+     ${t(
+       screenreaderText.duration(secondsToDuration(tripPattern.duration)),
+     )} ${screenReaderPause}
     ${
       !nonFootLegs.length
-        ? 'Hele reisen til fots'
+        ? t(screenreaderText.legsDescription.footLegsOnly)
         : nonFootLegs.length === 1
-        ? 'Ingen bytter'
+        ? t(screenreaderText.legsDescription.noSwitching)
         : nonFootLegs.length === 2
-        ? 'Ett bytte'
-        : nonFootLegs.length + 'bytter'
+        ? t(screenreaderText.legsDescription.oneSwitch)
+        : t(screenreaderText.legsDescription.someSwitches(nonFootLegs.length))
     }. ${screenReaderPause}
     ${nonFootLegs
       ?.map((l) => {
-        return `${getReadableModeName(l.mode)} ${
-          l.line ? 'nummer ' + l.line.publicCode : ''
+        return `${t(getModeName(l.mode))} ${
+          l.line
+            ? t(screenreaderText.prefixedLineNumber(l.line.publicCode))
+            : ''
         }`;
       })
       .join(', ')} ${screenReaderPause}
-      Totalt ${tripPattern.walkDistance.toFixed(
-        0,
-      )} meter å gå. ${screenReaderPause}
-      Fra ${startLeg.fromPlace?.name}, klokken ${formatToClock(
-    startLeg.expectedStartTime,
-  )}. ${screenReaderPause}
-      Aktivér for å vise detaljert reiserute.
+      ${t(
+        screenreaderText.totalWalkDistance(tripPattern.walkDistance.toFixed(0)),
+      )}  ${screenReaderPause}
+      ${t(
+        screenreaderText.departureInfo(
+          startLeg.fromPlace?.name ?? '',
+          formatToClock(startLeg.expectedStartTime),
+        ),
+      )} ${screenReaderPause}
+
   `;
 };
 

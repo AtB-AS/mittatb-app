@@ -68,6 +68,7 @@ const AssistantTexts = {
       hasSituationsTip: _(
         'Denne reisen har driftsmeldinger. Se detaljer for mer info',
       ),
+      a11yHint: _('Aktiver for å vise detaljert reiserute'),
       footLeg: {
         walkandWaitLabel: (walkTime: string, waitTime: string) =>
           _(
@@ -78,6 +79,22 @@ const AssistantTexts = {
       },
       waitRow: {
         label: _('Vent'),
+      },
+      journeySummary: {
+        situationsWarning: _('Driftsmeldinger gjelder for dette forslaget.'),
+        time: (startTime: string, endTime: string) =>
+          _(`Fra klokken ${startTime}, til klokken ${endTime}`),
+        duration: (duration: string) => _(`Reisetid: ${duration}`),
+        legsDescription: {
+          footLegsOnly: _('Hele reisen til fots'),
+          noSwitching: _('Ingen bytter'),
+          oneSwitch: _('Ett bytte'),
+          someSwitches: (switchCount: number) => _(`${switchCount} bytter`),
+        },
+        prefixedLineNumber: (number: string) => _(`nummer ${number}`),
+        totalWalkDistance: (meters: string) => _(`Totalt ${meters} meter å`),
+        departureInfo: (fromPlace: string, fromPlaceDepartureTime: string) =>
+          _(`Fra ${fromPlace}, klokken ${fromPlaceDepartureTime}`),
       },
     },
   },
