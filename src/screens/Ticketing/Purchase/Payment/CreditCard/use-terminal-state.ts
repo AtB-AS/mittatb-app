@@ -139,6 +139,8 @@ export default function useTerminalState(
   const onWebViewLoadEnd = ({
     nativeEvent,
   }: WebViewNavigationEvent | WebViewErrorEvent) => {
+    const {url} = nativeEvent;
+
     // load events might be called several times
     // for each type of resource, html, assets, etc
     // so we have a "loading guard" here
@@ -153,19 +155,8 @@ export default function useTerminalState(
       } else {
         dispatch({type: 'TERMINAL_LOADED'});
       }
-    }
-  };
-
-  const paymentRedirectCompleteRef = useRef<boolean>(false);
-
-  const onWebViewLoadStart = async ({
-    nativeEvent,
-  }: WebViewNavigationEvent | WebViewErrorEvent) => {
-    const {url} = nativeEvent;
-    // load events might be called several times
-    // for each type of resource, html, assets, etc
-    // so we have a "payment redirect guard" here
-    if (
+      // "payment redirect guard" here
+    } else if (
       !paymentRedirectCompleteRef.current &&
       url.includes('/ticket/v1/payments/')
     ) {
@@ -177,6 +168,8 @@ export default function useTerminalState(
       else console.warn('No response code');
     }
   };
+
+  const paymentRedirectCompleteRef = useRef<boolean>(false);
 
   useEffect(() => {
     switch (paymentResponseCode) {
@@ -201,7 +194,6 @@ export default function useTerminalState(
     terminalUrl: reservation?.url,
     loadingState,
     onWebViewLoadEnd,
-    onWebViewLoadStart,
     error,
     restartTerminal,
   };
