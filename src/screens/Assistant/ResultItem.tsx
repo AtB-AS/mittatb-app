@@ -350,9 +350,11 @@ const screenReaderSummary = (
       ? `${t(screenreaderText.situationsWarning)} ${screenReaderPause} `
       : ''
   }
-  ${screenreaderText.time(
-    formatToClock(tripPattern.startTime),
-    formatToClock(tripPattern.endTime),
+  ${t(
+    screenreaderText.time(
+      formatToClock(tripPattern.startTime),
+      formatToClock(tripPattern.endTime),
+    ),
   )} ${screenReaderPause}
      ${t(
        screenreaderText.duration(secondsToDuration(tripPattern.duration)),

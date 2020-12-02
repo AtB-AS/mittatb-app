@@ -57,9 +57,7 @@ const AssistantTexts = {
       listPositionExplanation: (
         resultPosition: number,
         totalResultCount: number,
-      ) =>
-        _(`Reiseforslag ${resultPosition} av ${totalResultCount}
-      }.`),
+      ) => _(`Reiseforslag ${resultPosition} av ${totalResultCount}`),
     },
     resultItem: {
       details: {
@@ -92,7 +90,7 @@ const AssistantTexts = {
           someSwitches: (switchCount: number) => _(`${switchCount} bytter`),
         },
         prefixedLineNumber: (number: string) => _(`nummer ${number}`),
-        totalWalkDistance: (meters: string) => _(`Totalt ${meters} meter å`),
+        totalWalkDistance: (meters: string) => _(`Totalt ${meters} meter å gå`),
         departureInfo: (fromPlace: string, fromPlaceDepartureTime: string) =>
           _(`Fra ${fromPlace}, klokken ${fromPlaceDepartureTime}`),
       },

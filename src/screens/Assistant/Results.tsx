@@ -114,14 +114,12 @@ const Results: React.FC<Props> = ({
           <ResultItem
             tripPattern={item}
             onDetailsPressed={onDetailsPressed}
-            accessibilityLabel={
-              t(
-                AssistantTexts.results.resultList.listPositionExplanation(
-                  i + 1,
-                  tripPatterns.length,
-                ),
-              ) + screenReaderPause
-            }
+            accessibilityLabel={t(
+              AssistantTexts.results.resultList.listPositionExplanation(
+                i + 1,
+                tripPatterns.length,
+              ),
+            )}
             accessibilityRole="button"
           />
         </Fragment>
