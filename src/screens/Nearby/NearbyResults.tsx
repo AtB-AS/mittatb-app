@@ -36,6 +36,7 @@ import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
 import {useTranslation} from '../../utils/language';
 import {NearbyTexts} from '../../translations';
+import dictionary from '../../translations/dictionary';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
@@ -57,8 +58,13 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
   const {t} = useTranslation();
   const onPress = (departure: EstimatedCall) => {
     const {publicCode, name} = getLineNameFromEstimatedCall(departure);
+    const title = publicCode
+      ? `${publicCode} ${name}`
+      : name
+      ? name
+      : t(dictionary.travel.line.defaultName);
     navigation.navigate('DepartureDetailsModal', {
-      title: publicCode ? `${publicCode} ${name}` : name,
+      title: title,
       serviceJourneyId: departure.serviceJourney.id,
       date: departure.date,
       fromQuayId: departure.quay?.id,

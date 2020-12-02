@@ -6,7 +6,7 @@ import {
   secondsToDuration,
   secondsToDurationShort,
   secondsBetween,
-  secondsToMinutes,
+  secondsToMinutesShort,
   formatToClockOrRelativeMinutes,
   missingRealtimePrefix,
   formatToClock,
@@ -234,7 +234,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 function WaitRow({time}: {time: number}) {
   const styles = useLegStyles();
   const {t} = useTranslation();
-  const waitTime = `${secondsToMinutes(time)} ${t(
+  const waitTime = `${secondsToMinutesShort(time)} ${t(
     dictionary.date.units.short.minute,
   )}`;
   return (

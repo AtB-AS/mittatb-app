@@ -43,8 +43,11 @@ export function secondsToDurationShort(seconds: number): string {
   });
 }
 
-export function secondsToMinutes(seconds: number): number {
-  return Math.round(seconds / 60);
+export function secondsToMinutesShort(seconds: number): string {
+  return getShortHumanizer(seconds * 1000, {
+    units: ['m'],
+    round: true,
+  });
 }
 
 export function secondsToDuration(
@@ -52,7 +55,8 @@ export function secondsToDuration(
   opts?: humanizeDuration.Options,
   language?: Language,
 ): string {
-  const currentLanguage = language === Language.Norwegian ? 'no' : 'en';
+  const currentLanguage =
+    (language ?? DEFAULT_LANGUAGE) === Language.Norwegian ? 'no' : 'en';
   return humanizeDuration(seconds * 1000, {
     units: ['d', 'h', 'm'],
     round: true,
@@ -97,7 +101,7 @@ export function formatToClockOrRelativeMinutes(
     return 'Nå';
   }
 
-  return secondsToMinutes(diff);
+  return secondsToMinutesShort(diff);
 }
 export function formatLocaleTime(date: Date, language?: Language) {
   const lang = language ?? DEFAULT_LANGUAGE;

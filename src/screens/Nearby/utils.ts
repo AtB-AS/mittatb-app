@@ -5,7 +5,6 @@ import {
   DepartureRealtimeData,
   QuayWithDepartures,
 } from '../../sdk';
-import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
 
 export function updateStopsWithRealtime(
   stops: DeparturesWithStopLocal[],

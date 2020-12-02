@@ -23,6 +23,12 @@ const dictionary = {
       foot: _('Gange'),
       unknown: _('Ukjent transportmiddel'),
     },
+    quay: {
+      defaultName: _(''),
+    },
+    line: {
+      defaultName: _(''),
+    },
   },
   date: {
     units: {

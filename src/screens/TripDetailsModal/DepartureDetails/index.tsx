@@ -32,6 +32,7 @@ import ThemeText from '../../../components/text';
 import {parseISO} from 'date-fns';
 import {useTranslation} from '../../../utils/language';
 import DepartureDetailsTexts from '../../../translations/screens/subscreens/DepartureDetails';
+import dictionary from '../../../translations/dictionary';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -216,7 +217,9 @@ function CallGroup({
               shouldDropMarginBottom(i) ? {marginBottom: 0} : undefined,
               shouldHaveMarginTop(i) ? {marginTop: 24} : undefined,
             ]}
-            label={getQuayName(call.quay)}
+            label={
+              getQuayName(call.quay) ?? t(dictionary.travel.quay.defaultName)
+            }
             time={departureTimeString(call, isStartPlace(i))}
             timeStyle={
               isStartPlace(i) ? {fontWeight: 'bold', fontSize: 16} : undefined

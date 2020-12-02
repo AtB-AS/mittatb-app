@@ -169,7 +169,7 @@ const DetailsContent: React.FC<{
         {legIsWalk(startLeg) && (
           <LocationRow
             icon={getLocationIcon(from) ?? <ThemeIcon svg={Dot} />}
-            label={getQuayNameFromStartLeg(startLeg, from.name)}
+            label={getQuayNameFromStartLeg(startLeg) ?? from.name}
             labelIcon={getIconIfFavorite(from)}
             time={timeString(startLeg, tripPattern.startTime)}
             textStyle={styles.textStyle}
