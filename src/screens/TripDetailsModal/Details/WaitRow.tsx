@@ -1,4 +1,4 @@
-import {secondsBetween, secondsToMinutes} from '../../../utils/date';
+import {secondsBetween, secondsToMinutesShort} from '../../../utils/date';
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {Duration} from '../../../assets/svg/icons/transportation';
@@ -33,7 +33,7 @@ export default function WaitRow({
 
   if (!time) return null;
 
-  const waitTime = `${secondsToMinutes(time)} ${t(
+  const waitTime = `${secondsToMinutesShort(time)} ${t(
     dictionary.date.units.short.minute,
   )}`;
 
