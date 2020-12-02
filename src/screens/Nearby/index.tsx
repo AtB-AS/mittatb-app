@@ -34,9 +34,8 @@ import {useLocationSearchValue} from '../../location-search';
 import {RootStackParamList} from '../../navigation';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import {DeparturesRealtimeData, DeparturesWithStop, Paginated} from '../../sdk';
-import {StyleSheet} from '../../theme';
 import {NearbyTexts} from '../../translations';
-import {useTranslation} from '../../utils/language';
+import {useTranslation, TranslatedString} from '../../utils/language';
 import {useNavigateToStartScreen} from '../../utils/navigation';
 import useInterval from '../../utils/use-interval';
 import Loading from '../Loading';
@@ -109,7 +108,6 @@ const NearbyOverview: React.FC<Props> = ({
   hasLocationPermission,
   navigation,
 }) => {
-  const styles = useThemeStyles();
   const searchedFromLocation = useLocationSearchValue<NearbyScreenProp>(
     'location',
   );
@@ -167,15 +165,16 @@ const NearbyOverview: React.FC<Props> = ({
   const navigateHome = useNavigateToStartScreen();
   useEffect(() => {
     if (updatingLocation)
-      setLoadAnnouncement(
-        'Oppdaterer posisjon for å finne avganger i nærheten.',
-      );
+      setLoadAnnouncement(t(NearbyTexts.stateAnnouncements.updatingLocation));
     if (isLoading && !!fromLocation) {
       setLoadAnnouncement(
-        'Laster avganger i nærheten av ' +
-          (fromLocation?.resultType == 'geolocation'
-            ? 'gjeldende posisjon'
-            : fromLocation?.label),
+        fromLocation?.resultType == 'geolocation'
+          ? t(NearbyTexts.stateAnnouncements.loadingFromCurrentLocation)
+          : t(
+              NearbyTexts.stateAnnouncements.loadingFromGivenLocation(
+                fromLocation.name,
+              ),
+            ),
       );
     }
   }, [updatingLocation, isLoading]);
@@ -214,7 +213,7 @@ const NearbyOverview: React.FC<Props> = ({
       alternativeTitleComponent={
         <AccessibleText
           prefix={t(NearbyTexts.header.altTitle.a11yPrefix)}
-          style={styles.altTitleHeader}
+          type={'paragraphHeadline'}
         >
           {fromLocation?.name}
         </AccessibleText>
@@ -228,29 +227,25 @@ const NearbyOverview: React.FC<Props> = ({
         isFetchingMore={isFetchingMore && !isLoading}
         isInitialScreen={isInitialScreen}
         error={
-          error ? translateErrorType(error.type, error.loadType) : undefined
+          error ? t(translateErrorType(error.type, error.loadType)) : undefined
         }
       />
     </DisappearingHeader>
   );
 };
 
-function translateErrorType(errorType: ErrorType, loadType: LoadType): string {
+function translateErrorType(
+  errorType: ErrorType,
+  loadType: LoadType,
+): TranslatedString {
   switch (errorType) {
     case 'network-error':
     case 'timeout':
-      return 'Hei, er du på nett? Vi kan ikke oppdatere avgangene siden nettforbindelsen din mangler eller er ustabil.';
+      return NearbyTexts.messages.networkError;
     default:
-      return 'Oops - vi klarte ikke hente avganger. Supert om du prøver igjen 🤞';
+      return NearbyTexts.messages.defaultFetchError;
   }
 }
-
-const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  altTitleHeader: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-}));
 
 export default NearbyScreen;
 

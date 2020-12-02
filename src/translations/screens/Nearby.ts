@@ -22,6 +22,22 @@ const NearbyTexts = {
     },
     updatingLocation: _('Oppdaterer posisjon'),
   },
+  messages: {
+    networkError: _(
+      'Hei, er du på nett? Vi kan ikke oppdatere avgangene siden nettforbindelsen din mangler eller er ustabil.',
+    ),
+    defaultFetchError: _(
+      'Oops - vi klarte ikke hente avganger. Supert om du prøver igjen 🤞',
+    ),
+  },
+  stateAnnouncements: {
+    updatingLocation: _('Oppdaterer posisjon for å finne avganger i nærheten.'),
+    loadingFromCurrentLocation: _(
+      'Laster avganger i nærheten av gjeldende posisjon',
+    ),
+    loadingFromGivenLocation: (locationName: string) =>
+      _(`Laster avganger i nærheten av ${locationName}`),
+  },
   results: {
     messages: {
       initial: _(
