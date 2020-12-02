@@ -33,7 +33,7 @@ type Props = {
 
 const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const styles = useStyles();
-  const {offers} = route.params;
+  const {offers, travellers} = route.params;
   const [showWebView, setShowWebView] = useState<boolean>(true);
 
   React.useEffect(
@@ -42,7 +42,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
   );
 
   const cancelTerminal = (refresh?: boolean) =>
-    navigation.navigate('Travellers', {refreshOffer: refresh});
+    navigation.navigate('PaymentOptions', {refreshOffer: refresh, travellers});
 
   const {activatePollingForNewTickets} = useTicketState();
   const dismissAndActivatePolling = (

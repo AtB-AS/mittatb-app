@@ -4,6 +4,7 @@ import {useCallback, useEffect, useReducer} from 'react';
 import {CancelToken as CancelTokenStatic, searchOffers} from '../../../../api';
 import {Offer, OfferPrice} from '../../../../api/fareContracts';
 import {ErrorType, getAxiosErrorType} from '../../../../api/utils';
+import {TravellerWithCount} from '../traveller-types';
 
 type OfferErrorContext = 'failed_offer_search' | 'failed_reservation';
 
@@ -13,7 +14,6 @@ export type OfferError = {
 };
 
 type OfferState = {
-  count: number;
   offerId?: string;
   offerSearchTime?: number;
   isSearchingOffer: boolean;
@@ -26,8 +26,6 @@ type OfferReducerAction =
       type: 'SET_OFFER';
       offer: Offer;
     }
-  | {type: 'INCREMENT_COUNT'}
-  | {type: 'DECREMENT_COUNT'}
   | {type: 'SET_ERROR'; error: OfferError};
 
 type OfferReducer = (
@@ -38,7 +36,10 @@ type OfferReducer = (
 const getCurrencyAsFloat = (prices: OfferPrice[], currency: string) =>
   prices.find((p) => p.currency === currency)?.amount_float ?? 0;
 
-const offerReducer: OfferReducer = (prevState, action) => {
+const createOfferReducer = (travellers: TravellerWithCount[]): OfferReducer => (
+  prevState,
+  action,
+) => {
   switch (action.type) {
     case 'SET_OFFER':
       return {
@@ -47,33 +48,10 @@ const offerReducer: OfferReducer = (prevState, action) => {
         offerSearchTime: Date.now(),
         isSearchingOffer: false,
         totalPrice:
-          getCurrencyAsFloat(action.offer.prices, 'NOK') * prevState.count,
+          getCurrencyAsFloat(action.offer.prices, 'NOK') *
+          travellers.find((t) => t.type === 'ADULT')!.count,
         error: undefined,
       };
-    case 'INCREMENT_COUNT': {
-      return {
-        ...prevState,
-        count: prevState.count + 1,
-        isSearchingOffer: true,
-        totalPrice: 0,
-        offerId: undefined,
-        offerSearchTime: undefined,
-      };
-    }
-    case 'DECREMENT_COUNT': {
-      if (prevState.count > 1) {
-        return {
-          ...prevState,
-          count: prevState.count - 1,
-          isSearchingOffer: true,
-          totalPrice: 0,
-          offerId: undefined,
-          offerSearchTime: undefined,
-        };
-      }
-
-      return prevState;
-    }
     case 'SET_ERROR': {
       return {
         ...prevState,
@@ -84,7 +62,6 @@ const offerReducer: OfferReducer = (prevState, action) => {
 };
 
 const initialState: OfferState = {
-  count: 1,
   isSearchingOffer: true,
   offerId: undefined,
   offerSearchTime: undefined,
@@ -92,18 +69,12 @@ const initialState: OfferState = {
   error: undefined,
 };
 
-export default function useOfferState() {
-  const [{count, ...state}, dispatch] = useReducer(offerReducer, initialState);
-
-  const addCount = useCallback(() => dispatch({type: 'INCREMENT_COUNT'}), [
-    dispatch,
-  ]);
-  const removeCount = useCallback(() => dispatch({type: 'DECREMENT_COUNT'}), [
-    dispatch,
-  ]);
+export default function useOfferState(travellers: TravellerWithCount[]) {
+  const offerReducer = createOfferReducer(travellers);
+  const [state, dispatch] = useReducer(offerReducer, initialState);
 
   const updateOffer = useCallback(
-    async function (count: number, cancelToken?: CancelToken) {
+    async function (cancelToken?: CancelToken) {
       try {
         const response = await searchOffers(
           {
@@ -112,7 +83,8 @@ export default function useOfferState() {
               {
                 id: 'adult_group',
                 user_type: 'ADULT',
-                count,
+                // TODO
+                count: travellers.find((t) => t.type === 'ADULT')!.count,
               },
             ],
             products: [SINGLE_TICKET_PRODUCT_ID],
@@ -145,22 +117,19 @@ export default function useOfferState() {
 
   useEffect(() => {
     const source = CancelTokenStatic.source();
-    updateOffer(count, source.token);
+    updateOffer(source.token);
     return () => source.cancel('Cancelling previous offer search');
-  }, [count, updateOffer]);
+  }, [updateOffer]);
 
   const refreshOffer = useCallback(
     async function () {
-      await updateOffer(count, undefined);
+      await updateOffer(undefined);
     },
-    [count, updateOffer],
+    [updateOffer],
   );
 
   return {
     ...state,
-    count,
-    addCount,
-    removeCount,
     refreshOffer,
   };
 }

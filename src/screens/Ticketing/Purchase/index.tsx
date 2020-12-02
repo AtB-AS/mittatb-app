@@ -1,14 +1,24 @@
 import React from 'react';
 import TravellersScreen from './Travellers';
+import PaymentOptionsScreen from './PaymentOptions';
 import {CreditCard as CreditCardScreen, Vipps as VippsScreen} from './Payment';
 import createDismissableStackNavigator from '../../../navigation/createDismissableStackNavigator';
 import {ActiveTicketsScreenName} from '../Tickets';
 import {ReserveOffer} from '../../../api/fareContracts';
+import {TravellerWithCount} from './traveller-types';
 
-type PaymentParams = {offers: ReserveOffer[]};
+type PaymentOptionsParams = {
+  refreshOffer?: boolean;
+  travellers: TravellerWithCount[];
+};
+type PaymentParams = {
+  offers: ReserveOffer[];
+  travellers: TravellerWithCount[];
+};
 
 export type TicketingStackParams = {
-  Travellers: {refreshOffer?: boolean};
+  Travellers: undefined;
+  PaymentOptions: PaymentOptionsParams;
   PaymentCreditCard: PaymentParams;
   PaymentVipps: PaymentParams;
   Splash: undefined;
@@ -23,6 +33,7 @@ export default function PurchaseStack() {
       dismissToScreen={ActiveTicketsScreenName}
     >
       <Stack.Screen name="Travellers" component={TravellersScreen} />
+      <Stack.Screen name="PaymentOptions" component={PaymentOptionsScreen} />
       <Stack.Screen name="PaymentCreditCard" component={CreditCardScreen} />
       <Stack.Screen name="PaymentVipps" component={VippsScreen} />
     </Stack.Navigator>
