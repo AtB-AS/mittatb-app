@@ -6,8 +6,11 @@ import {useRemoteConfig} from './RemoteConfigContext';
 
 const AppLanguageProvider: React.FC = ({children}) => {
   const {enable_i18n} = useRemoteConfig();
-  const currentLanguage = enable_i18n ? useLanguage() : DEFAULT_LANGUAGE;
+  if (!enable_i18n) {
+    return <>{children}</>;
+  }
 
+  const currentLanguage = useLanguage();
   return (
     <lobot.LanguageProvider value={currentLanguage}>
       {children}
