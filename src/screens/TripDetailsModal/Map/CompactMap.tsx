@@ -1,13 +1,10 @@
 import Bugsnag from '@bugsnag/react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import React, {useState} from 'react';
-import MapboxGL from '@react-native-mapbox-gl/maps';
 import {View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {MapIcon} from '../../../assets/svg/map';
 import {MapCameraConfig, MapViewConfig} from '../../../components/map/';
 import {Leg} from '../../../sdk';
-import Bugsnag from '@bugsnag/react-native';
 import {StyleSheet} from '../../../theme';
 import Button from '../../../components/button';
 import insets from '../../../utils/insets';
@@ -17,12 +14,6 @@ import MapRoute from './MapRoute';
 import {getMapBounds, legsToMapLines, pointOf} from './utils';
 import {useTranslation} from '../../../utils/language';
 import {MapTexts} from '../../../translations';
-import Button from '../../../components/button';
-import insets from '../../../utils/insets';
-import useDisableMapCheck from '../../../utils/use-disable-map-check';
-import MapLabel from './MapLabel';
-import MapRoute from './MapRoute';
-import {getMapBounds, legsToMapLines, pointOf} from './utils';
 
 export type MapProps = {
   legs: Leg[];

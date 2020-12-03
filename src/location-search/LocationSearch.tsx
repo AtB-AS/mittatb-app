@@ -30,10 +30,6 @@ import useDebounce from './useDebounce';
 import {useTranslation} from '../utils/language';
 import {LocationSearchTexts} from '../translations';
 import {TranslateFunction} from '../translations/utils';
-import {LocationSearchNavigationProp} from './';
-import LocationResults from './LocationResults';
-import {LocationSearchResult} from './types';
-import useDebounce from './useDebounce';
 
 export type Props = {
   navigation: LocationSearchNavigationProp;

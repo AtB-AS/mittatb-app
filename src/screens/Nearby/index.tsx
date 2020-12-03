@@ -32,8 +32,6 @@ import {
 } from '../../GeolocationContext';
 import {useLocationSearchValue} from '../../location-search';
 import {RootStackParamList} from '../../navigation';
-import {TabNavigatorParams} from '../../navigation/TabNavigator';
-import {DeparturesRealtimeData, DeparturesWithStop, Paginated} from '../../sdk';
 import {NearbyTexts} from '../../translations';
 import {useTranslation, TranslatedString} from '../../utils/language';
 import {useNavigateToStartScreen} from '../../utils/navigation';
@@ -42,11 +40,6 @@ import Loading from '../Loading';
 import NearbyResults from './NearbyResults';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import {DeparturesRealtimeData, DeparturesWithStop, Paginated} from '../../sdk';
-import {StyleSheet} from '../../theme';
-import {useNavigateToStartScreen} from '../../utils/navigation';
-import useInterval from '../../utils/use-interval';
-import Loading from '../Loading';
-import NearbyResults from './NearbyResults';
 import {
   DeparturesWithStopLocal,
   mapQuayDeparturesToShowlimits,
