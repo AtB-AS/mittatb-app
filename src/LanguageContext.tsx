@@ -2,10 +2,21 @@ import React from 'react';
 import * as RNLocalize from 'react-native-localize';
 import {useState, useEffect} from 'react';
 import {Language, lobot, DEFAULT_LANGUAGE} from './utils/language';
+import {useRemoteConfig} from './RemoteConfigContext';
 
 const AppLanguageProvider: React.FC = ({children}) => {
-  const [locale, setLocale] = useState(preferredLocale);
+  const {enable_i18n} = useRemoteConfig();
+  const currentLanguage = enable_i18n ? useLanguage() : DEFAULT_LANGUAGE;
+
+  return (
+    <lobot.LanguageProvider value={currentLanguage}>
+      {children}
+    </lobot.LanguageProvider>
+  );
+};
+function useLanguage() {
   const [currentLanguage, setCurrentLanguage] = useState(DEFAULT_LANGUAGE);
+  const [locale, setLocale] = useState(preferredLocale);
 
   const onChange = () => {
     setLocale(preferredLocale);
@@ -24,13 +35,8 @@ const AppLanguageProvider: React.FC = ({children}) => {
     setCurrentLanguage(language);
   }, [locale]);
 
-  return (
-    <lobot.LanguageProvider value={currentLanguage}>
-      {children}
-    </lobot.LanguageProvider>
-  );
-};
-
+  return currentLanguage;
+}
 function preferredLocale(): RNLocalize.Locale | undefined {
   const preferredSystemLocales = RNLocalize.getLocales();
   const locale = preferredSystemLocales.find(

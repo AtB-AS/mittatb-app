@@ -3,6 +3,7 @@ import remoteConfig from '@react-native-firebase/remote-config';
 export type RemoteConfig = {
   enable_ticketing: boolean;
   enable_intercom: boolean;
+  enable_i18n: boolean;
   news_enabled: boolean;
   news_text: string;
   news_link_text: string;
@@ -12,6 +13,7 @@ export type RemoteConfig = {
 export const defaultRemoteConfig: RemoteConfig = {
   enable_ticketing: false,
   enable_intercom: true,
+  enable_i18n: false,
   news_enabled: false,
   news_text: '',
   news_link_text: 'Les mer',
