@@ -1,5 +1,7 @@
 import React from 'react';
+import {TouchableOpacity, View} from 'react-native';
 import {ArrowLeft} from '../../assets/svg/icons/navigation';
+import {StyleSheet} from '../../theme';
 import insets from '../../utils/insets';
 import Button from '../button';
 import shadows from './shadows';

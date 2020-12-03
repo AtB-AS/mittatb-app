@@ -31,6 +31,7 @@ type Props = {
     isFullHeight: boolean,
     isParentAnimating: boolean,
   ): React.ReactNode;
+  highlightComponent?: React.ReactNode;
   onRefresh?(): void;
   headerHeight?: number;
   isRefreshing?: boolean;
@@ -60,6 +61,7 @@ const IS_IOS = Platform.OS === 'ios';
 
 const DisappearingHeader: React.FC<Props> = ({
   renderHeader,
+  highlightComponent,
   children,
   isRefreshing = false,
   useScroll = true,
@@ -207,6 +209,10 @@ const DisappearingHeader: React.FC<Props> = ({
               <SvgBanner width={windowWidth} height={windowWidth / 2} />
             </View>
 
+            <ScrollView style={styles.highlightComponent}>
+              {highlightComponent}
+            </ScrollView>
+
             <View onLayout={onHeaderContentLayout}>
               {renderHeader(fullheightTransitioned, isAnimating)}
             </View>
@@ -288,6 +294,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     right: 0,
   },
 
+  highlightComponent: {
+    margin: theme.spacings.medium,
+  },
+
   content: {
     flex: 1,
     overflow: 'hidden',
@@ -302,7 +312,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     zIndex: 2,
     elevated: 1,
     backgroundColor: theme.background.header,
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
   },
   container: {
     backgroundColor: theme.background.level1,

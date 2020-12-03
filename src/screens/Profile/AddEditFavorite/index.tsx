@@ -14,16 +14,24 @@ import ScreenReaderAnnouncement from '../../../components/screen-reader-announce
 import * as Sections from '../../../components/sections';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
+import Button, {ButtonGroup} from '../../../components/button';
+import ThemeText from '../../../components/text';
+import ThemeIcon from '../../../components/theme-icon';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import {LocationFavorite} from '../../../favorites/types';
 import {useLocationSearchValue} from '../../../location-search';
 import MessageBox from '../../../message-box';
 import {RootStackParamList} from '../../../navigation';
 import {StyleSheet, Theme} from '../../../theme';
+import BackHeader from '../BackHeader';
 import {AddEditFavoriteTexts} from '../../../translations';
 import {useTranslation} from '../../../utils/language';
 import BackHeader from '../BackHeader';
 import EmojiPopup from './EmojiPopup';
+
+import * as Sections from '../../../components/sections';
+import MessageBox from '../../../message-box';
+import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
@@ -210,6 +218,8 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         <Button
           onPress={save}
           mode="primary"
+          icon={SvgConfirm}
+          text="Lagre favoritt"
           iconPosition="right"
           icon={SvgConfirm}
           text={t(AddEditFavoriteTexts.save.label)}
@@ -219,6 +229,8 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           <Button
             onPress={deleteItem}
             mode="destructive"
+            icon={SvgDelete}
+            text="Slett favorittsted"
             iconPosition="right"
             icon={SvgDelete}
             text={t(AddEditFavoriteTexts.delete.label)}

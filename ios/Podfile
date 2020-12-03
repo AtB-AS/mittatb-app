@@ -3,6 +3,8 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
+$ReactNativeMapboxGLIOSVersion = '6.3.0'
+
 target 'atb' do
   # Pods for atb
   config = use_native_modules!

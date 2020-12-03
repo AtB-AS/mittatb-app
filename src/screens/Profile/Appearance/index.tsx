@@ -35,6 +35,7 @@ export default function Appearance() {
             <ActionItem
               mode="toggle"
               text={t(AppearanceSettingsTexts.actions.darkMode)}
+              text="Mørk modus"
               checked={colorScheme === 'dark'}
               onPress={(checked) =>
                 setPreference({colorScheme: checked ? 'dark' : 'light'})
