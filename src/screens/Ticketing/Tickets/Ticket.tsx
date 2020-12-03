@@ -14,9 +14,10 @@ import {screenReaderPause} from '../../../components/accessible-text';
 type Props = {
   fareContract: FareContract;
   now: number;
+  onPress: () => void;
 };
 
-const Ticket: React.FC<Props> = ({fareContract: fc, now}) => {
+const Ticket: React.FC<Props> = ({fareContract: fc, now, onPress}) => {
   const styles = useStyles();
   const {theme} = useTheme();
 
@@ -25,7 +26,7 @@ const Ticket: React.FC<Props> = ({fareContract: fc, now}) => {
   const validityLeftSeconds = fc.usage_valid_to - nowSeconds;
 
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={onPress}>
       <View style={styles.ticketContainer}>
         <View style={styles.validityContainer}>
           {isValidTicket ? (
