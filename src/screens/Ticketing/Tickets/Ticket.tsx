@@ -67,8 +67,8 @@ const Ticket: React.FC<Props> = ({fareContract: fc, now}) => {
         <View style={styles.ticketInfoContainer}>
           <ThemeText style={styles.travellersText}>
             {fc.user_profiles.length > 1
-              ? `${fc.user_profiles.length} voksne`
-              : `1 voksen`}
+              ? `${fc.user_profiles.length} billetter`
+              : `1 billett`}
           </ThemeText>
           <ThemeText type="lead" style={styles.extraText}>
             {fc.product_name}

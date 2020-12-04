@@ -13,7 +13,7 @@ export async function list(): Promise<ListTicketsResponse> {
 
 export type OfferSearchParams = {
   zones: string[];
-  travellers: {id: string; user_type: UserType; count: number}[];
+  travellers: {id: string; user_type: TravellerType; count: number}[];
   products: string[];
 };
 
@@ -91,7 +91,13 @@ export async function getPayment(paymentId: number): Promise<PaymentResponse> {
   return response.data;
 }
 
-export type UserType = 'ADULT';
+export type TravellerType =
+  | 'ADULT'
+  | 'CHILD'
+  | 'SENIOR'
+  | 'MILITARY'
+  | 'YOUTH'
+  | 'STUDENT';
 
 export type OfferPrice = {
   amount: string | null;

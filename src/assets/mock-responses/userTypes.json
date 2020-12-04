@@ -1,0 +1,193 @@
+[
+  {
+    "alternativeNames": [
+      {
+        "lang": "eng",
+        "value": "Senior"
+      },
+      {
+        "lang": "nno",
+        "value": "Honnør"
+      }
+    ],
+    "description": {
+      "lang": "nob",
+      "value": "Person 67 eller over, personer med uførepensjon, blinde eller ektefelle/partner som reiser sammen med person med honnørbillett."
+    },
+    "id": "ATB:UserProfile:203ee30e",
+    "maxAge": 110,
+    "minAge": 18,
+    "name": {
+      "lang": "nob",
+      "value": "Honnør"
+    },
+    "userType": 4
+  },
+  {
+    "alternativeNames": [
+      {
+        "lang": "eng",
+        "value": "Adult"
+      },
+      {
+        "lang": "nno",
+        "value": "Vaksen"
+      }
+    ],
+    "description": {
+      "lang": "nob",
+      "value": "Reisende fra 18 år uten krav på moderasjon må kjøpe voksenbillett."
+    },
+    "id": "ATB:UserProfile:febc6178",
+    "maxAge": 110,
+    "minAge": 6,
+    "name": {
+      "lang": "nob",
+      "value": "Voksen"
+    },
+    "userType": 14
+  },
+  {
+    "alternativeNames": [
+      {
+        "lang": "eng",
+        "value": "Infant"
+      },
+      {
+        "lang": "nno",
+        "value": "Spedbarn"
+      }
+    ],
+    "description": {
+      "lang": "nob",
+      "value": "Barn 0-5 år reiser gratis"
+    },
+    "id": "ATB:UserProfile:a93060b4",
+    "maxAge": 5,
+    "name": {
+      "lang": "nob",
+      "value": "Spedbarn"
+    },
+    "userType": 3
+  },
+  {
+    "alternativeNames": [
+      {
+        "lang": "eng",
+        "value": "Military"
+      },
+      {
+        "lang": "nno",
+        "value": "Militær"
+      }
+    ],
+    "description": {
+      "lang": "nob",
+      "value": "Person i førstegangstjeneste"
+    },
+    "id": "ATB:UserProfile:09e01871",
+    "maxAge": 66,
+    "minAge": 18,
+    "name": {
+      "lang": "nob",
+      "value": "Militær"
+    },
+    "userType": 8
+  },
+  {
+    "alternativeNames": [
+      {
+        "lang": "eng",
+        "value": "Student"
+      },
+      {
+        "lang": "nno",
+        "value": "Student"
+      }
+    ],
+    "description": {
+      "lang": "nob",
+      "value": "Elever ved videregående skole og studenter. Du må ha gyldig elevbevis fra din videregående skole med semestermerke for gjeldende semester, gyldig norsk studentbevis med semesterkort fra høyere utdannelse, eller ISIC-kort. \n\nEt gyldig bevis skal ha navn, fødselsdato, studiested og vise hvilket semester det er gyldig for.\n\nVoksne fremmedspråklige til og med 34 år som gjennomgår kurset \"Norsk med samfunnskunnskap\" eller introduksjonsprogrammet for flyktninger får studentrabatt. Gyldig ID og studentbevis med navn, fødselsdato, gyldig semester og bilde med stempel må forevises på forespørsel"
+    },
+    "id": "ATB:UserProfile:08f2a0e2",
+    "maxAge": 34,
+    "minAge": 16,
+    "name": {
+      "lang": "nob",
+      "value": "Student"
+    },
+    "userType": 5
+  },
+  {
+    "alternativeNames": [
+      {
+        "lang": "eng",
+        "value": "Child"
+      },
+      {
+        "lang": "nno",
+        "value": "Barn"
+      }
+    ],
+    "description": {
+      "lang": "nob",
+      "value": "Person 6-17 år"
+    },
+    "id": "ATB:UserProfile:54dd556b",
+    "maxAge": 17,
+    "minAge": 6,
+    "name": {
+      "lang": "nob",
+      "value": "Barn"
+    },
+    "userType": 2
+  },
+  {
+    "alternativeNames": [
+      {
+        "lang": "eng",
+        "value": "Youth"
+      },
+      {
+        "lang": "nno",
+        "value": "Ungdom"
+      }
+    ],
+    "description": {
+      "lang": "nob",
+      "value": "Person 16-19 år."
+    },
+    "id": "ATB:UserProfile:fccc2100",
+    "maxAge": 19,
+    "minAge": 16,
+    "name": {
+      "lang": "nob",
+      "value": "Ungdom"
+    },
+    "userType": 6
+  },
+  {
+    "alternativeNames": [
+      {
+        "lang": "eng",
+        "value": "Adult"
+      },
+      {
+        "lang": "nno",
+        "value": "Vaksen"
+      }
+    ],
+    "description": {
+      "lang": "nob",
+      "value": "Person 18-66 år"
+    },
+    "id": "ATB:UserProfile:a5a7b14c",
+    "maxAge": 66,
+    "minAge": 18,
+    "name": {
+      "lang": "nob",
+      "value": "Voksen"
+    },
+    "userType": 1
+  }
+]

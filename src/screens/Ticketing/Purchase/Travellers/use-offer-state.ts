@@ -2,8 +2,9 @@ import {SINGLE_TICKET_PRODUCT_ID} from '@env';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
 import {CancelToken as CancelTokenStatic, searchOffers} from '../../../../api';
-import {Offer, OfferPrice} from '../../../../api/fareContracts';
+import {Offer, OfferPrice, ReserveOffer} from '../../../../api/fareContracts';
 import {ErrorType, getAxiosErrorType} from '../../../../api/utils';
+import {TravellerWithCount} from './traveller-types';
 
 type OfferErrorContext = 'failed_offer_search' | 'failed_reservation';
 
@@ -13,21 +14,17 @@ export type OfferError = {
 };
 
 type OfferState = {
-  count: number;
-  offerId?: string;
   offerSearchTime?: number;
   isSearchingOffer: boolean;
   totalPrice: number;
+  offers: ReserveOffer[];
   error?: OfferError;
 };
 
 type OfferReducerAction =
-  | {
-      type: 'SET_OFFER';
-      offer: Offer;
-    }
-  | {type: 'INCREMENT_COUNT'}
-  | {type: 'DECREMENT_COUNT'}
+  | {type: 'SEARCHING_OFFER'}
+  | {type: 'SET_OFFER'; offers: Offer[]}
+  | {type: 'CLEAR_OFFER'}
   | {type: 'SET_ERROR'; error: OfferError};
 
 type OfferReducer = (
@@ -38,42 +35,60 @@ type OfferReducer = (
 const getCurrencyAsFloat = (prices: OfferPrice[], currency: string) =>
   prices.find((p) => p.currency === currency)?.amount_float ?? 0;
 
-const offerReducer: OfferReducer = (prevState, action) => {
+const calculateTotalPrice = (
+  travellers: TravellerWithCount[],
+  offers: Offer[],
+) =>
+  travellers.reduce((total, traveller) => {
+    const maybeOffer = offers.find((o) => o.traveller_id === traveller.type);
+    const price = maybeOffer
+      ? getCurrencyAsFloat(maybeOffer.prices, 'NOK') * traveller.count
+      : 0;
+    return total + price;
+  }, 0);
+
+const mapToReserveOffers = (
+  travellers: TravellerWithCount[],
+  offers: Offer[],
+): ReserveOffer[] =>
+  travellers
+    .map((traveller) => ({
+      count: traveller.count,
+      offer_id: offers.find((o) => o.traveller_id === traveller.type)?.offer_id,
+    }))
+    .filter(
+      (countAndOffer): countAndOffer is ReserveOffer =>
+        countAndOffer.offer_id != null,
+    );
+
+const getOfferReducer = (travellers: TravellerWithCount[]): OfferReducer => (
+  prevState,
+  action,
+): OfferState => {
   switch (action.type) {
+    case 'SEARCHING_OFFER':
+      return {
+        ...prevState,
+        isSearchingOffer: true,
+      };
+    case 'CLEAR_OFFER':
+      return {
+        ...prevState,
+        offerSearchTime: undefined,
+        isSearchingOffer: false,
+        totalPrice: 0,
+        error: undefined,
+        offers: [],
+      };
     case 'SET_OFFER':
       return {
         ...prevState,
-        offerId: action.offer.offer_id,
         offerSearchTime: Date.now(),
         isSearchingOffer: false,
-        totalPrice:
-          getCurrencyAsFloat(action.offer.prices, 'NOK') * prevState.count,
+        totalPrice: calculateTotalPrice(travellers, action.offers),
+        offers: mapToReserveOffers(travellers, action.offers),
         error: undefined,
       };
-    case 'INCREMENT_COUNT': {
-      return {
-        ...prevState,
-        count: prevState.count + 1,
-        isSearchingOffer: true,
-        totalPrice: 0,
-        offerId: undefined,
-        offerSearchTime: undefined,
-      };
-    }
-    case 'DECREMENT_COUNT': {
-      if (prevState.count > 1) {
-        return {
-          ...prevState,
-          count: prevState.count - 1,
-          isSearchingOffer: true,
-          totalPrice: 0,
-          offerId: undefined,
-          offerSearchTime: undefined,
-        };
-      }
-
-      return prevState;
-    }
     case 'SET_ERROR': {
       return {
         ...prevState,
@@ -84,83 +99,78 @@ const offerReducer: OfferReducer = (prevState, action) => {
 };
 
 const initialState: OfferState = {
-  count: 1,
-  isSearchingOffer: true,
-  offerId: undefined,
+  isSearchingOffer: false,
   offerSearchTime: undefined,
   totalPrice: 0,
   error: undefined,
+  offers: [],
 };
 
-export default function useOfferState() {
-  const [{count, ...state}, dispatch] = useReducer(offerReducer, initialState);
-
-  const addCount = useCallback(() => dispatch({type: 'INCREMENT_COUNT'}), [
-    dispatch,
-  ]);
-  const removeCount = useCallback(() => dispatch({type: 'DECREMENT_COUNT'}), [
-    dispatch,
-  ]);
+export default function useOfferState(travellers: TravellerWithCount[]) {
+  const offerReducer = getOfferReducer(travellers);
+  const [state, dispatch] = useReducer(offerReducer, initialState);
 
   const updateOffer = useCallback(
-    async function (count: number, cancelToken?: CancelToken) {
-      try {
-        const response = await searchOffers(
-          {
-            zones: ['ATB:TariffZone:1'],
-            travellers: [
-              {
-                id: 'adult_group',
-                user_type: 'ADULT',
-                count,
-              },
-            ],
-            products: [SINGLE_TICKET_PRODUCT_ID],
-          },
-          {cancelToken, retry: true},
-        );
+    async function (cancelToken?: CancelToken) {
+      const offerTravellers = travellers
+        .filter((t) => t.count)
+        .map((t) => ({
+          id: t.type,
+          user_type: t.type,
+          count: t.count,
+        }));
 
-        cancelToken?.throwIfRequested();
-
-        const offer = response?.[0];
-
-        dispatch({type: 'SET_OFFER', offer});
-      } catch (err) {
-        console.warn(err);
-
-        const errorType = getAxiosErrorType(err);
-        if (errorType !== 'cancel') {
-          dispatch({
-            type: 'SET_ERROR',
-            error: {
-              context: 'failed_offer_search',
-              type: errorType,
+      if (!offerTravellers.length) {
+        dispatch({type: 'CLEAR_OFFER'});
+      } else {
+        try {
+          dispatch({type: 'SEARCHING_OFFER'});
+          const response = await searchOffers(
+            {
+              zones: ['ATB:TariffZone:1'],
+              travellers: offerTravellers,
+              products: [SINGLE_TICKET_PRODUCT_ID],
             },
-          });
+            {cancelToken, retry: true},
+          );
+
+          cancelToken?.throwIfRequested();
+
+          dispatch({type: 'SET_OFFER', offers: response});
+        } catch (err) {
+          console.warn(err);
+
+          const errorType = getAxiosErrorType(err);
+          if (errorType !== 'cancel') {
+            dispatch({
+              type: 'SET_ERROR',
+              error: {
+                context: 'failed_offer_search',
+                type: errorType,
+              },
+            });
+          }
         }
       }
     },
-    [dispatch],
+    [dispatch, travellers],
   );
 
   useEffect(() => {
     const source = CancelTokenStatic.source();
-    updateOffer(count, source.token);
+    updateOffer(source.token);
     return () => source.cancel('Cancelling previous offer search');
-  }, [count, updateOffer]);
+  }, [updateOffer, travellers]);
 
   const refreshOffer = useCallback(
     async function () {
-      await updateOffer(count, undefined);
+      await updateOffer(undefined);
     },
-    [count, updateOffer],
+    [updateOffer],
   );
 
   return {
     ...state,
-    count,
-    addCount,
-    removeCount,
     refreshOffer,
   };
 }

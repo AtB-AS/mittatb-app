@@ -5,10 +5,11 @@ import createDismissableStackNavigator from '../../../navigation/createDismissab
 import {ActiveTicketsScreenName} from '../Tickets';
 import {ReserveOffer} from '../../../api/fareContracts';
 
+type TravellersParams = {refreshOffer?: boolean};
 type PaymentParams = {offers: ReserveOffer[]};
 
 export type TicketingStackParams = {
-  Travellers: {refreshOffer?: boolean};
+  Travellers: TravellersParams;
   PaymentCreditCard: PaymentParams;
   PaymentVipps: PaymentParams;
   Splash: undefined;
