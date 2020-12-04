@@ -4,10 +4,10 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {useTicketState} from '../../../TicketContext';
 import {FareContractTicket} from '../../../api/fareContracts';
 import {StyleSheet} from '../../../theme';
-import Button from '../../../components/button';
 import useInterval from '../../../utils/use-interval';
 import TicketsScrollView from './TicketsScrollView';
 import {RootStackParamList} from '../../../navigation';
+import TicketOptions from './TicketOptions';
 
 export type TicketingScreenNavigationProp = StackNavigationProp<
   RootStackParamList
@@ -23,6 +23,7 @@ export const ActiveTickets: React.FC<Props> = ({navigation}) => {
     fareContractTickets,
     isRefreshingTickets,
     refreshTickets,
+    fareContractTypes,
   } = useTicketState();
 
   const [now, setNow] = useState<number>(Date.now());
@@ -46,13 +47,10 @@ export const ActiveTickets: React.FC<Props> = ({navigation}) => {
         now={now}
       />
 
-      <View style={styles.buttonContainer}>
-        <Button
-          mode="primary"
-          text="Kjøp enkeltbillett"
-          onPress={() => navigation.navigate('TicketPurchase')}
-        />
-      </View>
+      <TicketOptions
+        fareContractTypes={fareContractTypes}
+        navigation={navigation}
+      />
     </View>
   );
 };
@@ -62,6 +60,8 @@ export const ExpiredTickets: React.FC<Props> = ({navigation}) => {
     fareContractTickets,
     isRefreshingTickets,
     refreshTickets,
+    fareContractTypes,
+    isRefreshingTypes,
   } = useTicketState();
 
   const [now, setNow] = useState<number>(Date.now());
@@ -83,13 +83,12 @@ export const ExpiredTickets: React.FC<Props> = ({navigation}) => {
         noTicketsLabel="Fant ingen billetthistorikk"
         now={now}
       />
-      <View style={styles.buttonContainer}>
-        <Button
-          mode="primary"
-          text="Kjøp enkeltbillett"
-          onPress={() => navigation.navigate('TicketPurchase')}
-        />
-      </View>
+
+      <TicketOptions
+        fareContractTypes={fareContractTypes}
+        isRefreshingTypes={isRefreshingTypes}
+        navigation={navigation}
+      />
     </View>
   );
 };
@@ -98,10 +97,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.background.level1,
-  },
-  buttonContainer: {
-    width: '100%',
-    paddingHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
   },
 }));

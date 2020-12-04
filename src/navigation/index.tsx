@@ -12,7 +12,9 @@ import trackNavigation from '../diagnostics/trackNavigation';
 import LocationSearch, {
   RouteParams as LocationSearchParams,
 } from '../location-search';
-import TicketPurchase from '../screens/Ticketing/Purchase';
+import TicketPurchase, {
+  RouteParams as TicketPurchaseParams,
+} from '../screens/Ticketing/Purchase';
 import Onboarding from '../screens/Onboarding';
 import TripDetailsModal, {
   RouteParams as TripDetailsModalParams,
@@ -37,7 +39,7 @@ export type RootStackParamList = {
   DepartureDetailsModal: DepartureDetailsRouteParams;
   SortableFavoriteList: undefined;
   AddEditFavorite: AddEditParams;
-  TicketPurchase: undefined;
+  TicketPurchase: TicketPurchaseParams;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();

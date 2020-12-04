@@ -19,7 +19,7 @@ import {travellerTypes} from './traveller-types';
 import * as Sections from '../../../../components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
 
-type Props = {
+export type TravellersProps = {
   navigation: DismissableStackNavigationProp<
     TicketingStackParams,
     'Travellers'
@@ -27,7 +27,10 @@ type Props = {
   route: RouteProp<TicketingStackParams, 'Travellers'>;
 };
 
-const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
+const Travellers: React.FC<TravellersProps> = ({
+  navigation,
+  route: {params},
+}) => {
   const styles = useStyles();
   const {theme} = useTheme();
 
@@ -42,7 +45,7 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
     totalPrice,
     refreshOffer,
     offers,
-  } = useOfferState(travellersWithCount);
+  } = useOfferState(params.fareContractType, travellersWithCount);
 
   const offerExpirationTime =
     offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
@@ -62,6 +65,7 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
       } else {
         navigation.push('PaymentVipps', {
           offers,
+          fareContractType: params.fareContractType,
         });
       }
     }
@@ -74,6 +78,7 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
       } else {
         navigation.push('PaymentCreditCard', {
           offers,
+          fareContractType: params.fareContractType,
         });
       }
     }
@@ -82,7 +87,7 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        title="Reisende"
+        title={params.fareContractType.name.value}
         leftButton={{
           icon: <ThemeIcon svg={Close} />,
           onPress: closeModal,

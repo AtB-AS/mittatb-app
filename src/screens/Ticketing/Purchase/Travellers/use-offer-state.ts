@@ -1,8 +1,12 @@
-import {SINGLE_TICKET_PRODUCT_ID} from '@env';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
 import {CancelToken as CancelTokenStatic, searchOffers} from '../../../../api';
-import {Offer, OfferPrice, ReserveOffer} from '../../../../api/fareContracts';
+import {
+  FareContractType,
+  Offer,
+  OfferPrice,
+  ReserveOffer,
+} from '../../../../api/fareContracts';
 import {ErrorType, getAxiosErrorType} from '../../../../api/utils';
 import {TravellerWithCount} from './traveller-types';
 
@@ -106,7 +110,10 @@ const initialState: OfferState = {
   offers: [],
 };
 
-export default function useOfferState(travellers: TravellerWithCount[]) {
+export default function useOfferState(
+  fareContractType: FareContractType,
+  travellers: TravellerWithCount[],
+) {
   const offerReducer = getOfferReducer(travellers);
   const [state, dispatch] = useReducer(offerReducer, initialState);
 
@@ -129,7 +136,7 @@ export default function useOfferState(travellers: TravellerWithCount[]) {
             {
               zones: ['ATB:TariffZone:1'],
               travellers: offerTravellers,
-              products: [SINGLE_TICKET_PRODUCT_ID],
+              products: [fareContractType.id],
             },
             {cancelToken, retry: true},
           );
@@ -153,14 +160,14 @@ export default function useOfferState(travellers: TravellerWithCount[]) {
         }
       }
     },
-    [dispatch, travellers],
+    [dispatch, travellers, fareContractType],
   );
 
   useEffect(() => {
     const source = CancelTokenStatic.source();
     updateOffer(source.token);
     return () => source.cancel('Cancelling previous offer search');
-  }, [updateOffer, travellers]);
+  }, [updateOffer, travellers, fareContractType]);
 
   const refreshOffer = useCallback(
     async function () {
