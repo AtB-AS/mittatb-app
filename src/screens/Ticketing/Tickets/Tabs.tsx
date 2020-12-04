@@ -24,6 +24,7 @@ export const ActiveTickets: React.FC<Props> = ({navigation}) => {
     isRefreshingTickets,
     refreshTickets,
     fareContractTypes,
+    isRefreshingTypes,
   } = useTicketState();
 
   const [now, setNow] = useState<number>(Date.now());
@@ -49,6 +50,7 @@ export const ActiveTickets: React.FC<Props> = ({navigation}) => {
 
       <TicketOptions
         fareContractTypes={fareContractTypes}
+        isRefreshingTypes={isRefreshingTypes}
         navigation={navigation}
       />
     </View>
