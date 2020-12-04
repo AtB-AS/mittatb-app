@@ -1,14 +1,20 @@
 import {AxiosRequestConfig} from 'axios';
 import {getCustomerId} from '../utils/customerId';
 import client from './client';
+import {LanguageAndText} from './utils';
+import fareContractTypes from '../assets/mock-responses/fareContractTypes.json';
 
-export async function list(): Promise<ListTicketsResponse> {
+export async function listTickets(): Promise<ListTicketsResponse> {
   const customerId = await getCustomerId();
 
   const url = 'ticket/v1/ticket/' + customerId;
   const response = await client.get<ListTicketsResponse>(url);
 
   return response.data;
+}
+
+export async function listTypes(): Promise<FareContractType[]> {
+  return fareContractTypes as FareContractType[];
 }
 
 export type OfferSearchParams = {
@@ -31,7 +37,7 @@ interface SendReceiptResponse {
   reference: string;
 }
 
-export async function sendReceipt(fc: FareContract, email: string) {
+export async function sendReceipt(fc: FareContractTicket, email: string) {
   const url = 'ticket/v1/receipt';
   const response = await client.post<SendReceiptResponse>(url, {
     order_id: fc.order_id,
@@ -115,7 +121,7 @@ export type Offer = {
 
 export type OfferSearchResponse = Offer[];
 
-export type FareContract = {
+export type FareContractTicket = {
   order_id: string;
   order_version: string;
   product_name: string;
@@ -125,8 +131,15 @@ export type FareContract = {
   user_profiles: string[];
 };
 
+export type FareContractType = {
+  id: string;
+  name: LanguageAndText;
+  description: LanguageAndText;
+  alternativeNames: LanguageAndText[];
+};
+
 export type ListTicketsResponse = {
-  fare_contracts: FareContract[];
+  fare_contracts: FareContractTicket[];
 };
 
 export type ReserveOffer = {

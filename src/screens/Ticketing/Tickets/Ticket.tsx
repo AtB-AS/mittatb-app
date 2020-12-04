@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, TouchableOpacity} from 'react-native';
 import {formatToLongDateTime, secondsToDuration} from '../../../utils/date';
-import {FareContract} from '../../../api/fareContracts';
+import {FareContractTicket} from '../../../api/fareContracts';
 import {StyleSheet, useTheme} from '../../../theme';
 import {InvalidTicket, ValidTicket} from '../../../assets/svg/icons/ticketing';
 import colors from '../../../theme/colors';
@@ -12,7 +12,7 @@ import ThemeText from '../../../components/text';
 import {screenReaderPause} from '../../../components/accessible-text';
 
 type Props = {
-  fareContract: FareContract;
+  fareContract: FareContractTicket;
   now: number;
 };
 

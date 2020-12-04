@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTicketState} from '../../../TicketContext';
-import {FareContract} from '../../../api/fareContracts';
+import {FareContractTicket} from '../../../api/fareContracts';
 import {StyleSheet} from '../../../theme';
 import Button from '../../../components/button';
 import useInterval from '../../../utils/use-interval';
@@ -20,7 +20,7 @@ type Props = {
 export const ActiveTickets: React.FC<Props> = ({navigation}) => {
   const {
     activeReservations,
-    fareContracts,
+    fareContractTickets,
     isRefreshingTickets,
     refreshTickets,
   } = useTicketState();
@@ -28,12 +28,12 @@ export const ActiveTickets: React.FC<Props> = ({navigation}) => {
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
 
-  const valid = (f: FareContract): boolean =>
+  const valid = (f: FareContractTicket): boolean =>
     f.usage_valid_to > Date.now() / 1000;
-  const byExpiry = (a: FareContract, b: FareContract): number => {
+  const byExpiry = (a: FareContractTicket, b: FareContractTicket): number => {
     return b.usage_valid_to - a.usage_valid_to;
   };
-  const validTickets = fareContracts?.filter(valid).sort(byExpiry);
+  const validTickets = fareContractTickets?.filter(valid).sort(byExpiry);
   const styles = useStyles();
   return (
     <View style={styles.container}>
@@ -58,17 +58,21 @@ export const ActiveTickets: React.FC<Props> = ({navigation}) => {
 };
 
 export const ExpiredTickets: React.FC<Props> = ({navigation}) => {
-  const {fareContracts, isRefreshingTickets, refreshTickets} = useTicketState();
+  const {
+    fareContractTickets,
+    isRefreshingTickets,
+    refreshTickets,
+  } = useTicketState();
 
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
 
-  const expired = (f: FareContract): boolean =>
+  const expired = (f: FareContractTicket): boolean =>
     !(f.usage_valid_to > Date.now() / 1000);
-  const byExpiry = (a: FareContract, b: FareContract): number => {
+  const byExpiry = (a: FareContractTicket, b: FareContractTicket): number => {
     return b.usage_valid_to - a.usage_valid_to;
   };
-  const expiredTickets = fareContracts?.filter(expired).sort(byExpiry);
+  const expiredTickets = fareContractTickets?.filter(expired).sort(byExpiry);
   const styles = useStyles();
   return (
     <View style={styles.container}>

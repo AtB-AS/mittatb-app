@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, RefreshControl} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {FareContract} from '../../../api/fareContracts';
+import {FareContractTicket} from '../../../api/fareContracts';
 import {StyleSheet, useTheme} from '../../../theme';
 import LinearGradient from 'react-native-linear-gradient';
 import Ticket from './Ticket';
@@ -12,7 +12,7 @@ import TicketReservation from './TicketReservation';
 
 type Props = {
   reservations?: ActiveReservation[];
-  tickets?: FareContract[];
+  tickets?: FareContractTicket[];
   noTicketsLabel: string;
   isRefreshingTickets: boolean;
   refreshTickets: () => void;

@@ -2,30 +2,32 @@ import React, {
   useContext,
   createContext,
   useCallback,
-  useState,
   useReducer,
   useEffect,
 } from 'react';
 import {
-  FareContract,
+  FareContractTicket,
   getPayment,
   PaymentStatus,
   PaymentType,
   ReserveOffer,
   TicketReservation,
 } from './api/fareContracts';
-import {listFareContracts} from './api';
+import {listFareContractTickets} from './api';
 import useInterval from './utils/use-interval';
 
 type TicketReducerState = {
-  fareContracts: FareContract[];
+  fareContractTickets: FareContractTicket[];
   activeReservations: ActiveReservation[];
   isRefreshingTickets: boolean;
 };
 
 type TicketReducerAction =
-  | {type: 'SET_IS_REFRESHING_FARE_CONTRACTS'}
-  | {type: 'UPDATE_FARE_CONTRACTS'; fareContracts: FareContract[]}
+  | {type: 'SET_IS_REFRESHING_FARE_CONTRACT_TICKETS'}
+  | {
+      type: 'UPDATE_FARE_CONTRACT_TICKETS';
+      fareContractTickets: FareContractTicket[];
+    }
   | {type: 'ADD_RESERVATION'; reservation: ActiveReservation}
   | {
       type: 'UPDATE_RESERVATIONS';
@@ -37,22 +39,25 @@ type TicketReducer = (
   action: TicketReducerAction,
 ) => TicketReducerState;
 
-const ticketReducer: TicketReducer = (prevState, action) => {
+const ticketReducer: TicketReducer = (
+  prevState,
+  action,
+): TicketReducerState => {
   switch (action.type) {
-    case 'SET_IS_REFRESHING_FARE_CONTRACTS': {
+    case 'SET_IS_REFRESHING_FARE_CONTRACT_TICKETS': {
       return {
         ...prevState,
         isRefreshingTickets: true,
       };
     }
-    case 'UPDATE_FARE_CONTRACTS': {
-      const orderIds = action.fareContracts.map((fc) => fc.order_id);
+    case 'UPDATE_FARE_CONTRACT_TICKETS': {
+      const orderIds = action.fareContractTickets.map((fc) => fc.order_id);
       return {
         ...prevState,
         activeReservations: prevState.activeReservations.filter(
           (res) => !orderIds.includes(res.reservation.order_id),
         ),
-        fareContracts: action.fareContracts,
+        fareContractTickets: action.fareContractTickets,
         isRefreshingTickets: false,
       };
     }
@@ -86,11 +91,11 @@ type TicketState = {
   activatePollingForNewTickets: (reservation: ActiveReservation) => void;
 } & Pick<
   TicketReducerState,
-  'activeReservations' | 'fareContracts' | 'isRefreshingTickets'
+  'activeReservations' | 'fareContractTickets' | 'isRefreshingTickets'
 >;
 
 const initialReducerState: TicketReducerState = {
-  fareContracts: [],
+  fareContractTickets: [],
   activeReservations: [],
   isRefreshingTickets: false,
 };
@@ -148,12 +153,14 @@ const TicketContextProvider: React.FC = ({children}) => {
     [activeReservations, getPaymentStatus],
   );
 
-  const updateFareContracts = useCallback(
+  const updateFareContractTickets = useCallback(
     async function () {
       try {
-        dispatch({type: 'SET_IS_REFRESHING_FARE_CONTRACTS'});
-        const {fare_contracts: fareContracts} = await listFareContracts();
-        dispatch({type: 'UPDATE_FARE_CONTRACTS', fareContracts});
+        dispatch({type: 'SET_IS_REFRESHING_FARE_CONTRACT_TICKETS'});
+        const {
+          fare_contracts: fareContractTickets,
+        } = await listFareContractTickets();
+        dispatch({type: 'UPDATE_FARE_CONTRACT_TICKETS', fareContractTickets});
       } catch (err) {
         console.warn(err);
       }
@@ -170,14 +177,14 @@ const TicketContextProvider: React.FC = ({children}) => {
   );
 
   useInterval(
-    updateFareContracts,
+    updateFareContractTickets,
     1000,
     [],
     !activeReservations.some((res) => res.paymentStatus === 'CAPTURE'),
   );
 
   useEffect(() => {
-    updateFareContracts();
+    updateFareContractTickets();
   }, []);
 
   return (
@@ -185,7 +192,7 @@ const TicketContextProvider: React.FC = ({children}) => {
       value={{
         ...state,
         activeReservations,
-        refreshTickets: updateFareContracts,
+        refreshTickets: updateFareContractTickets,
         activatePollingForNewTickets: updateReservations,
       }}
     >

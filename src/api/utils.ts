@@ -48,3 +48,10 @@ export const getAxiosErrorMetadata = (error: AxiosError): ErrorMetadata => ({
 });
 
 export const stringifyUrl = (url: string, query: string) => `${url}?${query}`;
+
+export type Language = 'nob' | 'nno' | 'eng';
+
+export type LanguageAndText = {
+  lang: Language;
+  value: string;
+};
