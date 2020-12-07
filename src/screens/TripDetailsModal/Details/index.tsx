@@ -1,46 +1,33 @@
-import {
-  NavigationProp,
-  RouteProp,
-  useIsFocused,
-  useNavigation,
-} from '@react-navigation/native';
-import Axios, {AxiosError} from 'axios';
-import React, {useCallback, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import {DetailsModalNavigationProp, DetailsModalStackParams} from '..';
-import {getSingleTripPattern} from '../../../api/trips';
-import {getAxiosErrorType} from '../../../api/utils';
-import {Close} from '../../../assets/svg/icons/actions';
-import {Dot} from '../../../assets/svg/icons/other/';
-import {
-  CurrentLocationArrow,
-  MapPointPin,
-} from '../../../assets/svg/icons/places';
-import LocationIcon from '../../../components/location-icon';
-import {FavoriteIcon, useFavorites} from '../../../favorites';
-import {LocationWithMetadata} from '../../../favorites/types';
-import MessageBox from '../../../message-box';
-import Header from '../../../ScreenHeader';
+import React, {useState, useCallback, useEffect} from 'react';
 import {Leg, Situation, TripPattern} from '../../../sdk';
-import {StyleSheet, useTheme} from '../../../theme';
-import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
-import {getQuayNameFromStartLeg} from '../../../utils/transportation-names';
-import usePollableResource from '../../../utils/use-pollable-resource';
-import LocationRow from '../LocationRow';
-import {CompactMap} from '../Map/CompactMap';
-import TransportDetail from './TransportDetail';
-import WalkDetail from './WalkDetail';
-import ThemeIcon from '../../../components/theme-icon';
+import {RouteProp, NavigationProp, useIsFocused} from '@react-navigation/core';
+import {DetailsModalStackParams} from '..';
+import CompactMap from '../Map/CompactMap';
+import {useTheme, StyleSheet} from '../../../theme';
 
-// @TODO Firebase config?
-const TIME_LIMIT_IN_MINUTES = 3;
+import Header from '../../../ScreenHeader';
+import {View, ActivityIndicator} from 'react-native';
+import ThemeIcon from '../../../components/theme-icon';
+import {ScrollView} from 'react-native-gesture-handler';
+import Pagination from './Pagination';
+import ThemeText from '../../../components/text';
+import {ArrowLeft} from '../../../assets/svg/icons/navigation';
+import Axios, {AxiosError} from 'axios';
+import MessageBox from '../../../message-box';
+import {getAxiosErrorType} from '../../../api/utils';
+import {secondsToDuration} from '../../../utils/date';
+import {
+  Duration,
+  WalkingPerson,
+} from '../../../assets/svg/icons/transportation';
+import {getSingleTripPattern} from '../../../api/trips';
+import usePollableResource from '../../../utils/use-pollable-resource';
+import hexToRgba from 'hex-to-rgba';
+import TripSection from './TripLeg';
 
 export type DetailsRouteParams = {
-  tripPatternId: string;
-  tripPattern?: TripPattern;
-  from: LocationWithMetadata;
-  to: LocationWithMetadata;
+  tripPatterns: TripPattern[];
+  currentIndex: number;
 };
 
 export type DetailScreenRouteProp = RouteProp<
@@ -51,24 +38,45 @@ export type DetailScreenRouteProp = RouteProp<
 export type DetailScreenNavigationProp = NavigationProp<
   DetailsModalStackParams
 >;
+// @TODO User setting?
+const TIME_LIMIT_IN_MINUTES = 3;
 
 type Props = {
   route: DetailScreenRouteProp;
   navigation: DetailScreenNavigationProp;
 };
-
-const TripDetailsModal: React.FC<Props> = (props) => {
-  const styles = useDetailsStyle();
+const Details: React.FC<Props> = (props) => {
   const {
-    params: {tripPatternId, tripPattern: initialTripPattern, ...passingProps},
+    params: {tripPatterns, currentIndex: startIndex},
   } = props.route;
+  if (!tripPatterns || tripPatterns.length < startIndex + 1) {
+    return null;
+  }
+  const {theme, themeName} = useTheme();
+  const [currentIndex, setCurrentIndex] = useState<number>(startIndex);
+
+  const styles = useStyle();
+
+  function navigate(page: number) {
+    if (page > tripPatterns.length || page < 1) {
+      return;
+    }
+    const newIndex = page - 1;
+    setCurrentIndex(newIndex);
+  }
+
+  const initialTripPattern = tripPatterns[currentIndex];
   const isFocused = useIsFocused();
-  const [tripPattern, , isLoading, error] = useTripPattern(
-    tripPatternId,
+  const [updatedTripPattern, , isLoading, error] = useTripPattern(
+    initialTripPattern.id ?? '',
     initialTripPattern,
     !isFocused,
   );
+  const tripPattern = updatedTripPattern ?? tripPatterns[currentIndex]; // Fallback to initial
 
+  const showActivityIndicator = (!tripPattern || isLoading) && !error;
+
+  const [shortTime, setShortTime] = useState(false);
   return (
     <View style={styles.container}>
       <Header
@@ -77,7 +85,7 @@ const TripDetailsModal: React.FC<Props> = (props) => {
           accessible: true,
           accessibilityRole: 'button',
           accessibilityLabel: 'Gå tilbake',
-          icon: <ThemeIcon svg={Close} />,
+          icon: <ThemeIcon svg={ArrowLeft} />,
         }}
         title="Reisedetaljer"
         style={styles.header}
@@ -87,115 +95,71 @@ const TripDetailsModal: React.FC<Props> = (props) => {
         contentContainerStyle={styles.scrollViewContent}
         bounces={false}
       >
-        {!tripPattern ? (
-          <ActivityIndicator animating={true} size="large" />
-        ) : (
-          <DetailsContent
-            {...passingProps}
-            error={error}
-            tripPattern={tripPattern}
+        {showActivityIndicator && (
+          <ActivityIndicator
+            style={styles.activityIndicator}
+            color={theme.text.colors.faded}
+            animating={true}
+            size="large"
           />
+        )}
+        {tripPattern && (
+          <>
+            <CompactMap
+              legs={tripPattern.legs}
+              darkMode={themeName === 'dark'}
+              onExpand={() => {
+                props.navigation.navigate('DetailsMap', {
+                  legs: tripPattern.legs,
+                });
+              }}
+            />
+            <View style={styles.paddedContainer}>
+              <Pagination
+                page={currentIndex + 1}
+                totalPages={tripPatterns.length}
+                onNavigate={navigate}
+                style={styles.pagination}
+              ></Pagination>
+              <View style={styles.line} />
+              <Messages error={error} shortTime={shortTime} />
+              {tripPattern.legs.map((leg, key) => {
+                return <TripSection key={key} {...leg} />;
+              })}
+              <View style={styles.line} />
+              <Summary {...tripPattern} />
+            </View>
+          </>
         )}
       </ScrollView>
     </View>
   );
 };
-
-const DetailsContent: React.FC<{
-  tripPattern: TripPattern;
-  from: LocationWithMetadata;
-  to: LocationWithMetadata;
-  error: AxiosError | undefined;
-}> = ({tripPattern, from, to, error}) => {
-  const styles = useDetailsStyle();
-  const {favorites} = useFavorites();
-  const {themeName} = useTheme();
-  const [shortTime, setShortTime] = useState(false);
-  const flagShortTime = (secondsBetween: number) => {
-    if (secondsBetween / 60 <= TIME_LIMIT_IN_MINUTES) {
-      setShortTime(true);
-    }
-  };
-  const lastLegIsFoot =
-    tripPattern.legs?.length > 0 &&
-    tripPattern.legs[tripPattern.legs.length - 1].mode === 'foot';
-
-  const startLeg = tripPattern.legs[0];
-  const timeString = (leg: Leg, time: string) => {
-    let timeString = formatToClock(time);
-    if (leg.mode !== 'foot' && !leg.realtime) {
-      timeString = missingRealtimePrefix + timeString;
-    }
-    return timeString;
-  };
-  const getIconIfFavorite = (loc: LocationWithMetadata) => {
-    if (loc.resultType !== 'favorite') return;
-    return (
-      <FavoriteIcon favorite={favorites.find((f) => f.id === loc.favoriteId)} />
-    );
-  };
-
-  const navigation = useNavigation<DetailsModalNavigationProp>();
-
+type JourneyMessagesProps = {
+  shortTime: boolean;
+  error?: AxiosError;
+};
+const Messages: React.FC<JourneyMessagesProps> = ({error, shortTime}) => {
+  const styles = useStyle();
   return (
     <>
-      <CompactMap
-        legs={tripPattern.legs}
-        darkMode={themeName === 'dark'}
-        onExpand={() => {
-          navigation.navigate('DetailsMap', {
-            legs: tripPattern.legs,
-          });
-        }}
-      />
-      <View style={styles.textDetailsContainer}>
-        {shortTime && (
-          <MessageBox
-            containerStyle={styles.messageContainer}
-            message="Vær oppmerksom på kort byttetid."
-          />
-        )}
-        {error && (
-          <MessageBox
-            type="warning"
-            containerStyle={styles.messageContainer}
-            message={translateError(error)}
-          />
-        )}
-        {legIsWalk(startLeg) && (
-          <LocationRow
-            icon={getLocationIcon(from) ?? <ThemeIcon svg={Dot} />}
-            label={getQuayNameFromStartLeg(startLeg, from.name)}
-            labelIcon={getIconIfFavorite(from)}
-            time={timeString(startLeg, tripPattern.startTime)}
-            textStyle={styles.textStyle}
-          />
-        )}
-        {tripPattern.legs.map((leg, i, legs) => (
-          <LegDetail
-            key={i}
-            leg={leg}
-            onCalculateTime={flagShortTime}
-            nextLeg={nextLeg(i, legs)}
-            isIntermediateTravelLeg={isIntermediateTravelLeg(i, legs)}
-            showFrom={showFrom(i, legs)}
-            showTo={showTo(i, legs)}
-          />
-        ))}
-        {lastLegIsFoot && (
-          <LocationRow
-            icon={getLocationIcon(to)}
-            label={to.name}
-            labelIcon={getIconIfFavorite(to)}
-            time={formatToClock(tripPattern.endTime)}
-            textStyle={styles.textStyle}
-          />
-        )}
-      </View>
+      {shortTime && (
+        <MessageBox
+          containerStyle={styles.message}
+          type="info"
+          message="Vær oppmerksom på kort byttetid."
+        />
+      )}
+      {error && (
+        <MessageBox
+          containerStyle={styles.message}
+          type="warning"
+          message={translateError(error)}
+        />
+      )}
     </>
   );
 };
-
 function translateError(error: AxiosError): string {
   const errorType = getAxiosErrorType(error);
   switch (errorType) {
@@ -207,84 +171,67 @@ function translateError(error: AxiosError): string {
   }
 }
 
-function getLocationIcon(location: LocationWithMetadata) {
-  switch (location.resultType) {
-    case 'geolocation':
-      return <ThemeIcon svg={CurrentLocationArrow} />;
-    case 'favorite':
-    case 'search':
-      return <LocationIcon location={location} multiple />;
-    default:
-      return <ThemeIcon svg={MapPointPin} />;
-  }
-}
-function nextLeg(curent: number, legs: Leg[]): Leg | undefined {
-  return legs[curent + 1];
-}
-
-function isIntermediateTravelLeg(index: number, legs: Leg[]) {
-  const next = nextLeg(index, legs);
-  if (!next) return false;
-  if (next.mode === 'foot') return false;
-  return true;
-}
-
-function showFrom(index: number, legs: Leg[]) {
-  return index > 0 || !legIsWalk(legs?.[0]);
-}
-function showTo(index: number, legs: Leg[]) {
-  return index !== legs.length - 1;
-}
-function legIsWalk(leg: Leg) {
-  return leg?.mode === 'foot';
-}
-
-export type LegDetailProps = {
-  leg: Leg;
-  onCalculateTime(timeInSeconds: number): void;
-  nextLeg?: Leg;
-  isIntermediateTravelLeg: boolean;
-  showFrom: boolean;
-  showTo: boolean;
-  parentSituations?: Situation[];
+const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
+  const styles = useStyle();
+  return (
+    <View style={styles.summary}>
+      <View style={styles.summaryDetail}>
+        <ThemeIcon style={styles.leftIcon} svg={Duration} />
+        <ThemeText>Reisetid: {secondsToDuration(duration)}</ThemeText>
+      </View>
+      <View style={styles.summaryDetail}>
+        <ThemeIcon style={styles.leftIcon} svg={WalkingPerson} />
+        <ThemeText>Gangavstand: {walkDistance.toFixed()} m</ThemeText>
+      </View>
+    </View>
+  );
 };
-
-const LegDetail: React.FC<LegDetailProps> = (props) => {
-  const {leg} = props;
-  switch (leg.mode) {
-    case 'foot':
-      return <WalkDetail {...props} />;
-    default:
-      return <TransportDetail {...props} />;
-  }
-};
-
-const useDetailsStyle = StyleSheet.createThemeHook((theme) => ({
+const useStyle = StyleSheet.createThemeHook((theme) => ({
   header: {
     backgroundColor: theme.background.header,
   },
   container: {
     flex: 1,
-    backgroundColor: theme.background.level2,
-  },
-  messageContainer: {
-    margin: theme.spacings.xLarge,
-    marginTop: 0,
-  },
-  textDetailsContainer: {
-    paddingTop: theme.spacings.small,
+    backgroundColor: theme.background.level0,
   },
   scrollView: {
     flex: 1,
   },
-  scrollViewContent: {
-    paddingRight: theme.spacings.medium,
-    paddingBottom: 100,
+  paddedContainer: {
+    paddingHorizontal: theme.spacings.medium,
   },
-  textStyle: theme.text.body,
+  activityIndicator: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: hexToRgba(theme.background.level0, 0.5),
+    zIndex: 1,
+  },
+  scrollViewContent: {},
+  pagination: {
+    marginVertical: theme.spacings.medium,
+  },
+  line: {
+    flex: 1,
+    height: theme.border.width.slim,
+    backgroundColor: theme.background.level1,
+  },
+  message: {
+    marginTop: theme.spacings.medium,
+  },
+  summary: {
+    marginVertical: theme.spacings.medium,
+  },
+  summaryDetail: {
+    padding: theme.spacings.medium,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  leftIcon: {
+    marginRight: theme.spacings.small,
+  },
 }));
-
-export default TripDetailsModal;
 
 function useTripPattern(
   tripPatternId: string,
@@ -304,3 +251,5 @@ function useTripPattern(
     disabled,
   });
 }
+
+export default Details;

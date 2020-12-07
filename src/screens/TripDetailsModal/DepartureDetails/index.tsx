@@ -175,7 +175,7 @@ function CallGroup({
   ) : null;
 
   const dashColor = isOnRoute
-    ? transportationColor(mode, publicCode).fill
+    ? transportationColor(mode, publicCode).color
     : defaultFill;
 
   return (

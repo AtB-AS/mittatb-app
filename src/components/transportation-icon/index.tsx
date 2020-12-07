@@ -16,25 +16,23 @@ export type TransportationIconProps = {
   mode?: LegMode;
   publicCode?: string;
   style?: StyleProp<ViewStyle>;
-  circleStyle?: StyleProp<ViewStyle>;
 };
 
 const TransportationIcon: React.FC<TransportationIconProps> = ({
   mode,
   publicCode,
   style,
-  circleStyle,
   children,
 }) => {
   const styles = useStyle();
-  const {fill, icon} = transportationColor(mode, publicCode);
+  const {color} = transportationColor(mode, publicCode);
 
   return (
-    <View style={[styles.circle, {backgroundColor: fill}, circleStyle]}>
+    <View style={styles.iconContainer}>
       {children ? (
         children
       ) : (
-        <InnerIcon fill={icon} style={style} mode={mode} />
+        <InnerIcon fill={color} style={style} mode={mode} />
       )}
     </View>
   );
@@ -89,13 +87,5 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   iconContainer: {
     width: 20,
     height: 20,
-  },
-  circle: {
-    width: 20,
-    height: 20,
-    margin: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 20,
   },
 }));

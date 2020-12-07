@@ -2,9 +2,9 @@ import {StatusBarProps, TextStyle} from 'react-native';
 
 const backgrounds = {
   light__level0: '#FFFFFF',
-  light__level1: '#F5F5F6',
-  light__level2: '#EBECED',
-  light__level3: '#E1E3E4',
+  light__level1: '#E7E8E9',
+  light__level2: '#DBDDDE',
+  light__level3: '#CFD2D3',
 
   dark__level0: '#000000',
   dark__level1: '#111416',

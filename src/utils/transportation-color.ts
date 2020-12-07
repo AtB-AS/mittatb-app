@@ -2,13 +2,13 @@ import colors from '../theme/colors';
 import {LegMode} from '../sdk';
 
 type TransportationColors = {
-  fill: string;
-  icon: string;
+  color: string;
+  contrast: string;
 };
 
 export const defaultFill = colors.primary.gray_300;
 
-export default function transportionColor(
+export default function transportationColor(
   mode?: LegMode,
   publicCode?: string,
 ): TransportationColors {
@@ -17,38 +17,38 @@ export default function transportionColor(
       const code = Number(publicCode);
       if (code < 100)
         return {
-          fill: colors.primary.green_500,
-          icon: colors.text.black,
+          color: colors.primary.green_500,
+          contrast: colors.text.black,
         };
 
       return {
-        fill: colors.secondary.blue_500,
-        icon: colors.text.white,
+        color: colors.secondary.blue_500,
+        contrast: colors.text.white,
       };
     case 'rail':
       return {
-        fill: colors.secondary.red_500,
-        icon: colors.text.white,
+        color: colors.secondary.red_500,
+        contrast: colors.text.white,
       };
     case 'tram':
       return {
-        fill: colors.primary.green_500,
-        icon: colors.text.black,
+        color: colors.primary.green_500,
+        contrast: colors.text.black,
       };
     case 'water':
       return {
-        fill: colors.text.white,
-        icon: colors.text.black,
+        color: colors.text.white,
+        contrast: colors.text.black,
       };
     case 'air':
       return {
-        fill: colors.secondary.orange,
-        icon: colors.text.white,
+        color: colors.secondary.orange,
+        contrast: colors.text.white,
       };
     default:
       return {
-        fill: defaultFill,
-        icon: colors.text.white,
+        color: defaultFill,
+        contrast: colors.text.white,
       };
   }
 }

@@ -17,7 +17,7 @@ type Props = {
   isEmptyResult: boolean;
   isSearching: boolean;
   resultReasons: NoResultReason[];
-  onDetailsPressed(tripPattern: TripPattern): void;
+  onDetailsPressed(tripPatterns: TripPattern[], index: number): void;
   errorType?: ErrorType;
 };
 
@@ -98,7 +98,7 @@ const Results: React.FC<Props> = ({
           />
           <ResultItem
             tripPattern={item}
-            onDetailsPressed={onDetailsPressed}
+            onDetailsPressed={() => onDetailsPressed(tripPatterns, i)}
             accessibilityLabel={`Reiseforslag ${i + 1} av ${
               tripPatterns.length
             }. ${screenReaderPause}`}

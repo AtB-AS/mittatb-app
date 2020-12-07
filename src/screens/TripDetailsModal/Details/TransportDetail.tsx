@@ -4,7 +4,7 @@ import Dash from 'react-native-dash';
 import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
 import {Dot} from '../../../assets/svg/icons/other';
 import LocationRow from '../LocationRow';
-import {LegDetailProps, DetailScreenNavigationProp} from '.';
+import {LegDetailProps, DetailScreenNavigationProp} from './index_old';
 import {useNavigation} from '@react-navigation/native';
 import TransportationIcon from '../../../components/transportation-icon';
 import {
@@ -32,7 +32,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
 }) => {
   const navigation = useNavigation<DetailScreenNavigationProp>();
   const showWaitTime = isIntermediateTravelLeg && Boolean(nextLeg);
-  const {fill} = transportationColor(leg.mode, leg.line?.publicCode);
+  const {color: fill} = transportationColor(leg.mode, leg.line?.publicCode);
 
   const timeString = (time: string) => {
     if (!leg.realtime) {

@@ -28,7 +28,7 @@ import ThemeIcon from '../../components/theme-icon';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
-  onDetailsPressed(tripPattern: TripPattern): void;
+  onDetailsPressed(): void;
 };
 
 function legWithQuay(leg: Leg) {
@@ -97,7 +97,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   return (
     <TouchableOpacity
       style={{paddingVertical: 4}}
-      onPress={() => onDetailsPressed(tripPattern)}
+      onPress={onDetailsPressed}
       hitSlop={insets.symmetric(8, 16)}
       accessibilityValue={{text: screenReaderSummary(tripPattern)}}
       {...props}

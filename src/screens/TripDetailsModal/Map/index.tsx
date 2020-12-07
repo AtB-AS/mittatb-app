@@ -4,7 +4,7 @@ import {StyleSheet, View} from 'react-native';
 import {useGeolocationState} from '../../../GeolocationContext';
 import {RouteProp} from '@react-navigation/native';
 import {DetailsModalStackParams} from '..';
-import {DetailScreenNavigationProp} from '../Details';
+import {DetailScreenNavigationProp} from '../Details/index_old';
 import {getMapBounds, legsToMapLines, pointOf} from './utils';
 import MapRoute from './MapRoute';
 import MapLabel from './MapLabel';

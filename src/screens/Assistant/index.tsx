@@ -321,12 +321,10 @@ const Assistant: React.FC<Props> = ({
   const noResultReasons = computeNoResultReasons(date, from, to);
 
   const onPressed = useCallback(
-    (tripPattern) =>
+    (tripPatterns, index) =>
       navigation.navigate('TripDetailsModal', {
-        from: from!,
-        to: to!,
-        tripPatternId: tripPattern.id!,
-        tripPattern: tripPattern,
+        tripPatterns: tripPatterns,
+        currentIndex: index,
       }),
     [navigation, from, to],
   );
