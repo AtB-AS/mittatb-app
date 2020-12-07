@@ -20,10 +20,10 @@ function useLanguage() {
   const [currentLanguage, setCurrentLanguage] = useState(DEFAULT_LANGUAGE);
   const [locale, setLocale] = useState(preferredLocale);
 
-  const onChange = () => {
-    setLocale(preferredLocale);
-  };
   useEffect(() => {
+    const onChange = () => {
+      setLocale(preferredLocale);
+    };
     RNLocalize.addEventListener('change', onChange);
     return () => {
       RNLocalize.removeEventListener('change', onChange);
