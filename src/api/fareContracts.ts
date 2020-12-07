@@ -2,7 +2,6 @@ import {AxiosRequestConfig} from 'axios';
 import {getCustomerId} from '../utils/customerId';
 import client from './client';
 import {LanguageAndText} from './utils';
-import fareContractTypes from '../assets/mock-responses/fareContractTypes.json';
 
 export async function listTickets(): Promise<ListTicketsResponse> {
   const customerId = await getCustomerId();
@@ -14,7 +13,10 @@ export async function listTickets(): Promise<ListTicketsResponse> {
 }
 
 export async function listTypes(): Promise<FareContractType[]> {
-  return fareContractTypes as FareContractType[];
+  const url =
+    'https://gateway-5pwmu3xz7a-ew.a.run.app/api/v1/reference-data/ATB/preassigned-fare-products';
+  const response = await client.get<FareContractType[]>(url, {retry: true});
+  return response.data;
 }
 
 export type OfferSearchParams = {

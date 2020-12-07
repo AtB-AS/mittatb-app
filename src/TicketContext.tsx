@@ -227,8 +227,6 @@ const TicketContextProvider: React.FC = ({children}) => {
     updateFareContractTickets();
   }, []);
 
-  useInterval(updateFareContractTypes, 10000);
-
   useEffect(() => {
     updateFareContractTypes();
   }, []);
