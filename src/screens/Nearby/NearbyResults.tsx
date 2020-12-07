@@ -291,7 +291,6 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
             publicCode={
               departure.serviceJourney.journeyPattern?.line.publicCode
             }
-            circleStyle={{margin: 0}}
           />
           <View style={styles.textWrapper}>
             <ThemeText type="body" numberOfLines={1}>

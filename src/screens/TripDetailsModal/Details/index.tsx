@@ -49,9 +49,7 @@ const Details: React.FC<Props> = (props) => {
   const {
     params: {tripPatterns, currentIndex: startIndex},
   } = props.route;
-  if (!tripPatterns || tripPatterns.length < startIndex + 1) {
-    return null;
-  }
+
   const {theme, themeName} = useTheme();
   const [currentIndex, setCurrentIndex] = useState<number>(startIndex);
 
