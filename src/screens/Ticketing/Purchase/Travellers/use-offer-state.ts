@@ -8,7 +8,7 @@ import {
   ReserveOffer,
 } from '../../../../api/fareContracts';
 import {ErrorType, getAxiosErrorType} from '../../../../api/utils';
-import {TravellerWithCount} from './traveller-types';
+import {UserProfileWithCount} from './use-user-count-state';
 
 type OfferErrorContext = 'failed_offer_search' | 'failed_reservation';
 
@@ -40,11 +40,13 @@ const getCurrencyAsFloat = (prices: OfferPrice[], currency: string) =>
   prices.find((p) => p.currency === currency)?.amount_float ?? 0;
 
 const calculateTotalPrice = (
-  travellers: TravellerWithCount[],
+  travellers: UserProfileWithCount[],
   offers: Offer[],
 ) =>
   travellers.reduce((total, traveller) => {
-    const maybeOffer = offers.find((o) => o.traveller_id === traveller.type);
+    const maybeOffer = offers.find(
+      (o) => o.traveller_id === traveller.userTypeString,
+    );
     const price = maybeOffer
       ? getCurrencyAsFloat(maybeOffer.prices, 'NOK') * traveller.count
       : 0;
@@ -52,20 +54,21 @@ const calculateTotalPrice = (
   }, 0);
 
 const mapToReserveOffers = (
-  travellers: TravellerWithCount[],
+  travellers: UserProfileWithCount[],
   offers: Offer[],
 ): ReserveOffer[] =>
   travellers
     .map((traveller) => ({
       count: traveller.count,
-      offer_id: offers.find((o) => o.traveller_id === traveller.type)?.offer_id,
+      offer_id: offers.find((o) => o.traveller_id === traveller.userTypeString)
+        ?.offer_id,
     }))
     .filter(
       (countAndOffer): countAndOffer is ReserveOffer =>
         countAndOffer.offer_id != null,
     );
 
-const getOfferReducer = (travellers: TravellerWithCount[]): OfferReducer => (
+const getOfferReducer = (travellers: UserProfileWithCount[]): OfferReducer => (
   prevState,
   action,
 ): OfferState => {
@@ -112,18 +115,18 @@ const initialState: OfferState = {
 
 export default function useOfferState(
   fareContractType: FareContractType,
-  travellers: TravellerWithCount[],
+  userProfilesWithCount: UserProfileWithCount[],
 ) {
-  const offerReducer = getOfferReducer(travellers);
+  const offerReducer = getOfferReducer(userProfilesWithCount);
   const [state, dispatch] = useReducer(offerReducer, initialState);
 
   const updateOffer = useCallback(
     async function (cancelToken?: CancelToken) {
-      const offerTravellers = travellers
+      const offerTravellers = userProfilesWithCount
         .filter((t) => t.count)
         .map((t) => ({
-          id: t.type,
-          user_type: t.type,
+          id: t.userTypeString,
+          user_type: t.userTypeString,
           count: t.count,
         }));
 
@@ -160,14 +163,14 @@ export default function useOfferState(
         }
       }
     },
-    [dispatch, travellers, fareContractType],
+    [dispatch, userProfilesWithCount, fareContractType],
   );
 
   useEffect(() => {
     const source = CancelTokenStatic.source();
     updateOffer(source.token);
     return () => source.cancel('Cancelling previous offer search');
-  }, [updateOffer, travellers, fareContractType]);
+  }, [updateOffer, userProfilesWithCount, fareContractType]);
 
   const refreshOffer = useCallback(
     async function () {

@@ -9,13 +9,14 @@ import {StyleSheet, useTheme} from '../../../../theme';
 import ThemeText from '../../../../components/text';
 import ThemeIcon from '../../../../components/theme-icon';
 import Button from '../../../../components/button';
-import useTravellerCountState from './use-traveller-count-state';
+import useUserCountState, {
+  FetchUserProfilesError,
+} from './use-user-count-state';
 import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
 import useOfferState, {OfferError} from './use-offer-state';
 import {addMinutes} from 'date-fns';
 import MessageBox from '../../../../message-box';
 import {CreditCard, Vipps} from '../../../../assets/svg/icons/ticketing';
-import {travellerTypes} from './traveller-types';
 import * as Sections from '../../../../components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
 
@@ -34,9 +35,13 @@ const Travellers: React.FC<TravellersProps> = ({
   const styles = useStyles();
   const {theme} = useTheme();
 
-  const {travellersWithCount, addCount, removeCount} = useTravellerCountState(
-    travellerTypes,
-  );
+  const {
+    userProfilesWithCount,
+    userProfilesLoading,
+    userProfilesError,
+    addCount,
+    removeCount,
+  } = useUserCountState();
 
   const {
     offerSearchTime,
@@ -45,7 +50,7 @@ const Travellers: React.FC<TravellersProps> = ({
     totalPrice,
     refreshOffer,
     offers,
-  } = useOfferState(params.fareContractType, travellersWithCount);
+  } = useOfferState(params.fareContractType, userProfilesWithCount);
 
   const offerExpirationTime =
     offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
@@ -103,22 +108,36 @@ const Travellers: React.FC<TravellersProps> = ({
             message={translateError(error)}
           />
         )}
-
-        <Sections.Section withTopPadding>
-          <Sections.HeaderItem
-            text="Enkeltbillett, Sone A - Stor-Trondheim"
-            mode="subheading"
+        {userProfilesError && (
+          <MessageBox
+            type="warning"
+            title="Det oppstod en feil"
+            message={translateUserProfilesError(userProfilesError)}
           />
-          {travellersWithCount.map((traveller) => (
-            <Sections.CounterInput
-              key={traveller.type}
-              text={traveller.text}
-              count={traveller.count}
-              addCount={() => addCount(traveller.type)}
-              removeCount={() => removeCount(traveller.type)}
+        )}
+
+        {userProfilesLoading ? (
+          <View>
+            <ThemeText>LOADING!!</ThemeText>
+            <ActivityIndicator />
+          </View>
+        ) : (
+          <Sections.Section withTopPadding>
+            <Sections.HeaderItem
+              text="Enkeltbillett, Sone A - Stor-Trondheim"
+              mode="subheading"
             />
-          ))}
-        </Sections.Section>
+            {userProfilesWithCount.map((u) => (
+              <Sections.CounterInput
+                key={u.userTypeString}
+                text={u.name.value}
+                count={u.count}
+                addCount={() => addCount(u.userTypeString)}
+                removeCount={() => removeCount(u.userTypeString)}
+              />
+            ))}
+          </Sections.Section>
+        )}
 
         <View style={styles.totalContainer}>
           <View style={{flexDirection: 'column'}}>
@@ -182,6 +201,10 @@ function translateError(error: OfferError) {
     case 'failed_reservation':
       return 'Klarte ikke å reservere billett';
   }
+}
+
+function translateUserProfilesError(_: FetchUserProfilesError) {
+  return 'Klarte ikke å hente reiseprofiler';
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

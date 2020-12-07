@@ -7,4 +7,4 @@ export {
   search as searchOffers,
   reserve as reserveOffers,
 } from './fareContracts';
-export {list as listUserTypes} from './userTypes';
+export {list as listUserProfiles} from './userProfiles';

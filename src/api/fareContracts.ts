@@ -21,7 +21,7 @@ export async function listTypes(): Promise<FareContractType[]> {
 
 export type OfferSearchParams = {
   zones: string[];
-  travellers: {id: string; user_type: TravellerType; count: number}[];
+  travellers: {id: string; user_type: string; count: number}[];
   products: string[];
 };
 
@@ -98,14 +98,6 @@ export async function getPayment(paymentId: number): Promise<PaymentResponse> {
 
   return response.data;
 }
-
-export type TravellerType =
-  | 'ADULT'
-  | 'CHILD'
-  | 'SENIOR'
-  | 'MILITARY'
-  | 'YOUTH'
-  | 'STUDENT';
 
 export type OfferPrice = {
   amount: string | null;
