@@ -30,7 +30,7 @@ if (!__DEV__) {
 
 import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import AppLanguageProvider from './LanguageContext';
+import AppLanguageProvider from './translations/LanguageContext';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 

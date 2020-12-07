@@ -1,8 +1,8 @@
 import React from 'react';
 import * as RNLocalize from 'react-native-localize';
 import {useState, useEffect} from 'react';
-import {Language, lobot, DEFAULT_LANGUAGE} from './utils/language';
-import {useRemoteConfig} from './RemoteConfigContext';
+import {Language, lobot, DEFAULT_LANGUAGE} from '../utils/language';
+import {useRemoteConfig} from '../RemoteConfigContext';
 
 const AppLanguageProvider: React.FC = ({children}) => {
   const currentLanguage = useLanguage();
