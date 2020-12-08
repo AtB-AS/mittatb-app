@@ -13,7 +13,7 @@ import FullScreenHeader from '../../../ScreenHeader/full-header';
 import LogoOutline from '../../../ScreenHeader/LogoOutline';
 import {StyleSheet, Theme} from '../../../theme';
 import {useNavigateToStartScreen} from '../../../utils/navigation';
-import {useTranslation} from '../../../utils/language';
+import {useTranslation} from '../../../translations';
 import {ProfileTexts} from '../../../translations';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<

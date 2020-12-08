@@ -10,7 +10,7 @@ import {
 import nb from 'date-fns/locale/nb';
 
 import humanizeDuration from 'humanize-duration';
-import {Language, DEFAULT_LANGUAGE} from './language';
+import {Language, DEFAULT_LANGUAGE} from '../translations';
 
 function getShortHumanizer(ms: number, options?: humanizeDuration.Options) {
   const opts = {

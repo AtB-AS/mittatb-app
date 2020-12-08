@@ -30,7 +30,7 @@ import {getAimedTimeIfLargeDifference} from '../utils';
 import ThemeIcon from '../../../components/theme-icon';
 import ThemeText from '../../../components/text';
 import {parseISO} from 'date-fns';
-import {useTranslation} from '../../../utils/language';
+import {useTranslation} from '../../../translations';
 import DepartureDetailsTexts from '../../../translations/screens/subscreens/DepartureDetails';
 import dictionary from '../../../translations/dictionary';
 

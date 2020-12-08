@@ -34,7 +34,7 @@ import {TripPattern} from '../../sdk';
 import {StyleSheet, useTheme} from '../../theme';
 import {AssistantTexts} from '../../translations';
 import dictionary from '../../translations/dictionary';
-import {useTranslation} from '../../utils/language';
+import {useTranslation} from '../../translations';
 import {
   locationDistanceInMetres as distanceInMetres,
   locationsAreEqual,

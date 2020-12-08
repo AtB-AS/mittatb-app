@@ -11,7 +11,7 @@ import ThemeText from '../../components/text';
 import MessageBox from '../../message-box';
 import {ErrorType} from '../../api/utils';
 import {AssistantTexts} from '../../translations';
-import {useTranslation} from '../../utils/language';
+import {useTranslation} from '../../translations';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 type Props = {
   tripPatterns: TripPattern[] | null;

@@ -5,7 +5,7 @@ import {useTheme} from '../../theme';
 import {screenReaderPause} from '../accessible-text';
 import ButtonInput, {ButtonInputProps} from './button-input';
 import {SectionTexts} from '../../translations';
-import {useTranslation} from '../../utils/language';
+import {useTranslation} from '../../translations';
 
 type LocationInputProps = Omit<ButtonInputProps, 'value'> & {
   location?: LocationWithMetadata;

@@ -19,7 +19,7 @@ import {
 import {Leg} from '../../../sdk';
 import Bugsnag from '@bugsnag/react-native';
 import {MapTexts} from '../../../translations';
-import {useTranslation} from '../../../utils/language';
+import {useTranslation} from '../../../translations';
 
 export type MapDetailRouteParams = {
   legs: Leg[];

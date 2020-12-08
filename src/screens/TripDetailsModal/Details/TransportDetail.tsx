@@ -21,7 +21,7 @@ import SituationRow from '../SituationRow';
 import {useLayout} from '../../../utils/use-layout';
 import ThemeText from '../../../components/text';
 import {StyleSheet} from '../../../theme';
-import {useTranslation} from '../../../utils/language';
+import {useTranslation} from '../../../translations';
 import dictionary from '../../../translations/dictionary';
 
 const TransportDetail: React.FC<LegDetailProps> = ({

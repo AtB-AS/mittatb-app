@@ -14,7 +14,7 @@ import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
 import Button from '../../../components/button';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useTranslation} from '../../../utils/language';
+import {useTranslation} from '../../../translations';
 import {TicketTexts} from '../../../translations';
 function openOtherTicketingApp() {
   const url =

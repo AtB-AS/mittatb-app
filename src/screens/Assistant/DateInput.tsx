@@ -14,7 +14,7 @@ import insets from '../../utils/insets';
 import {screenReaderPause} from '../../components/accessible-text';
 import ThemeIcon from '../../components/theme-icon';
 import ThemeText from '../../components/text';
-import {useTranslation, TranslatedString} from '../../utils/language';
+import {useTranslation, TranslatedString} from '../../translations';
 import {DateInputTexts} from '../../translations';
 
 type DateTypesWithoutNow = 'departure' | 'arrival';
