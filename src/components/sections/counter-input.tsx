@@ -32,14 +32,18 @@ export default function CounterInput({
       </View>
       <View style={counterStyles.travellerCountActions}>
         <TouchableOpacity
+          disabled={count === 0}
           onPress={() => removeCount()}
           accessibilityRole="button"
           accessibilityLabel={`Minsk antall til ${count - 1}`}
           accessibilityElementsHidden={count <= 1}
-          importantForAccessibility={count > 1 ? 'yes' : 'no-hide-descendants'}
+          importantForAccessibility={count >= 1 ? 'yes' : 'no-hide-descendants'}
           hitSlop={insets.all(8)}
         >
-          <ThemeIcon svg={Remove} />
+          <ThemeIcon
+            style={count === 0 && counterStyles.disabled}
+            svg={Remove}
+          />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => addCount()}
@@ -65,5 +69,8 @@ const useStyles = StyleSheet.createThemeHook(() => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     width: 70,
+  },
+  disabled: {
+    opacity: 0.4,
   },
 }));
