@@ -4,6 +4,8 @@ import ThemeText from '../../../components/text';
 import * as Sections from '../../../components/sections';
 import ValidityHeader from './ValidityHeader';
 import ValidityLine from './ValidityLine';
+import {formatToLongDateTime} from '../../../utils/date';
+import {fromUnixTime} from 'date-fns';
 type Props = {
   fareContract: FareContract;
   now: number;
@@ -46,7 +48,15 @@ const DetailedTicket: React.FC<Props> = ({
           Sone A - Stor-Trondheim
         </ThemeText>
       </Sections.GenericItem>
+      <Sections.GenericItem>
+        <ThemeText>Ordre-id: {fc.order_id}</ThemeText>
+        <ThemeText type="lead" color="faded">
+          Kjøpt {formatToLongDateTime(fromUnixTime(fc.usage_valid_from))}
+        </ThemeText>
+      </Sections.GenericItem>
       {isValidTicket && <Sections.LinkItem text="Vis for kontroll" disabled />}
+      <Sections.LinkItem text="Be om refusjon" disabled />
+      <Sections.LinkItem text="Be om kvittering" disabled />
     </Sections.Section>
   );
 };
