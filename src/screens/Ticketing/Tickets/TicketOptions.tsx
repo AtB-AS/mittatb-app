@@ -1,18 +1,18 @@
 import React from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {FareContractType} from '../../../api/fareContracts';
+import {PreassignedFareProduct} from '../../../api/fareContracts';
 import {StyleSheet, useTheme} from '../../../theme';
 import Button from '../../../components/button';
 import {TicketingScreenNavigationProp} from './Tabs';
 
 type Props = {
-  fareContractTypes: FareContractType[];
+  preassignedFareProducts: PreassignedFareProduct[];
   isRefreshingTypes: boolean;
   navigation: TicketingScreenNavigationProp;
 };
 
 const TicketOptions: React.FC<Props> = ({
-  fareContractTypes,
+  preassignedFareProducts,
   isRefreshingTypes,
   navigation,
 }) => {
@@ -27,7 +27,7 @@ const TicketOptions: React.FC<Props> = ({
       />
     );
   }
-  const buttons = fareContractTypes.map((fareContractType) => (
+  const buttons = preassignedFareProducts.map((fareContractType) => (
     <View key={fareContractType.id} style={styles.buttonContainer}>
       <Button
         mode="primary"

@@ -2,7 +2,7 @@ import {CancelToken} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
 import {CancelToken as CancelTokenStatic, searchOffers} from '../../../../api';
 import {
-  FareContractType,
+  PreassignedFareProduct,
   Offer,
   OfferPrice,
   ReserveOffer,
@@ -114,7 +114,7 @@ const initialState: OfferState = {
 };
 
 export default function useOfferState(
-  fareContractType: FareContractType,
+  fareContractType: PreassignedFareProduct,
   userProfilesWithCount: UserProfileWithCount[],
 ) {
   const offerReducer = getOfferReducer(userProfilesWithCount);

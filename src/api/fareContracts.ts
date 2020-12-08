@@ -12,10 +12,12 @@ export async function listFareContracts(): Promise<FareContract[]> {
   return response.data.fare_contracts;
 }
 
-export async function listTypes(): Promise<FareContractType[]> {
+export async function listPreassignedFareProducts() {
   const url =
     'https://gateway-5pwmu3xz7a-ew.a.run.app/api/v1/reference-data/ATB/preassigned-fare-products';
-  const response = await client.get<FareContractType[]>(url, {retry: true});
+  const response = await client.get<PreassignedFareProduct[]>(url, {
+    retry: true,
+  });
   return response.data;
 }
 
@@ -125,7 +127,7 @@ export type FareContract = {
   user_profiles: string[];
 };
 
-export type FareContractType = {
+export type PreassignedFareProduct = {
   id: string;
   name: LanguageAndText;
   description: LanguageAndText;

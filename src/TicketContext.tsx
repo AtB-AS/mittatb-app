@@ -7,22 +7,22 @@ import React, {
 } from 'react';
 import {
   FareContract,
-  FareContractType,
+  PreassignedFareProduct,
   getPayment,
   PaymentStatus,
   PaymentType,
   ReserveOffer,
   TicketReservation,
 } from './api/fareContracts';
-import {listFareContracts, listFareContractTypes} from './api';
+import {listFareContracts, listPreassignedFareProducts} from './api';
 import useInterval from './utils/use-interval';
 
 type TicketReducerState = {
   fareContracts: FareContract[];
-  fareContractTypes: FareContractType[];
+  preassignedFareProducts: PreassignedFareProduct[];
   activeReservations: ActiveReservation[];
   isRefreshingTickets: boolean;
-  isRefreshingTypes: boolean;
+  isRefreshingPreassignedFareProducts: boolean;
 };
 
 type TicketReducerAction =
@@ -31,10 +31,10 @@ type TicketReducerAction =
       type: 'UPDATE_FARE_CONTRACT_TICKETS';
       fareContracts: FareContract[];
     }
-  | {type: 'SET_IS_REFRESHING_FARE_CONTRACT_TYPES'}
+  | {type: 'SET_IS_REFRESHING_PREASSIGNED_FARE_PRODUCTS'}
   | {
-      type: 'UPDATE_FARE_CONTRACT_TYPES';
-      fareContractTypes: FareContractType[];
+      type: 'UPDATE_PREASSIGNED_FARE_PRODUCTS';
+      preassignedFareProducts: PreassignedFareProduct[];
     }
   | {type: 'ADD_RESERVATION'; reservation: ActiveReservation}
   | {
@@ -69,17 +69,17 @@ const ticketReducer: TicketReducer = (
         isRefreshingTickets: false,
       };
     }
-    case 'SET_IS_REFRESHING_FARE_CONTRACT_TYPES': {
+    case 'SET_IS_REFRESHING_PREASSIGNED_FARE_PRODUCTS': {
       return {
         ...prevState,
-        isRefreshingTypes: true,
+        isRefreshingPreassignedFareProducts: true,
       };
     }
-    case 'UPDATE_FARE_CONTRACT_TYPES': {
+    case 'UPDATE_PREASSIGNED_FARE_PRODUCTS': {
       return {
         ...prevState,
-        fareContractTypes: action.fareContractTypes,
-        isRefreshingTypes: false,
+        preassignedFareProducts: action.preassignedFareProducts,
+        isRefreshingPreassignedFareProducts: false,
       };
     }
     case 'ADD_RESERVATION': {
@@ -114,17 +114,17 @@ type TicketState = {
   TicketReducerState,
   | 'activeReservations'
   | 'fareContracts'
-  | 'fareContractTypes'
+  | 'preassignedFareProducts'
   | 'isRefreshingTickets'
-  | 'isRefreshingTypes'
+  | 'isRefreshingPreassignedFareProducts'
 >;
 
 const initialReducerState: TicketReducerState = {
   fareContracts: [],
-  fareContractTypes: [],
+  preassignedFareProducts: [],
   activeReservations: [],
   isRefreshingTickets: false,
-  isRefreshingTypes: false,
+  isRefreshingPreassignedFareProducts: false,
 };
 
 const TicketContext = createContext<TicketState | undefined>(undefined);
@@ -196,9 +196,12 @@ const TicketContextProvider: React.FC = ({children}) => {
   const updateFareContractTypes = useCallback(
     async function () {
       try {
-        dispatch({type: 'SET_IS_REFRESHING_FARE_CONTRACT_TYPES'});
-        const fareContractTypes = await listFareContractTypes();
-        dispatch({type: 'UPDATE_FARE_CONTRACT_TYPES', fareContractTypes});
+        dispatch({type: 'SET_IS_REFRESHING_PREASSIGNED_FARE_PRODUCTS'});
+        const preassignedFareProducts = await listPreassignedFareProducts();
+        dispatch({
+          type: 'UPDATE_PREASSIGNED_FARE_PRODUCTS',
+          preassignedFareProducts,
+        });
       } catch (err) {
         console.warn(err);
       }
