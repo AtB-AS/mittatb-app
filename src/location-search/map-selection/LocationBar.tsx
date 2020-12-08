@@ -9,6 +9,11 @@ import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
 import {Location} from '../../favorites/types';
 import {StyleSheet, useTheme} from '../../theme';
+import {
+  LocationSearchTexts,
+  useTranslation,
+  TranslateFunction,
+} from '../../translations';
 
 type Props = {
   location?: Location;
@@ -74,8 +79,8 @@ const LocationText: React.FC<{
   location?: Location;
   error?: ErrorType;
 }> = ({location, error}) => {
-  const {title, subtitle} = getLocationText(location, error);
-
+  const {t} = useTranslation();
+  const {title, subtitle} = getLocationText(t, location, error);
   return (
     <>
       <ThemeText type="lead">{title}</ThemeText>
@@ -85,6 +90,7 @@ const LocationText: React.FC<{
 };
 
 function getLocationText(
+  t: TranslateFunction,
   location?: Location,
   error?: ErrorType,
 ): {title: string; subtitle: string} {
@@ -102,20 +108,26 @@ function getLocationText(
       case 'network-error':
       case 'timeout':
         return {
-          title: 'Vi kan ikke oppdatere kartet.',
-          subtitle: 'Nettforbindelsen din mangler eller er ustabil.',
+          title: t(
+            LocationSearchTexts.mapSelection.messages.networkError.title,
+          ),
+          subtitle: t(
+            LocationSearchTexts.mapSelection.messages.networkError.message,
+          ),
         };
       default:
         return {
-          title: 'Oops - vi feila med å oppdatere kartet.',
-          subtitle: 'Supert om du prøver igjen 🤞',
+          title: t(LocationSearchTexts.mapSelection.messages.updateError.title),
+          subtitle: t(
+            LocationSearchTexts.mapSelection.messages.updateError.message,
+          ),
         };
     }
   }
 
   return {
-    title: 'Akkurat her finner vi ikke noe reisetilbud.',
-    subtitle: 'Er du i nærheten av en adresse, vei eller stoppested?',
+    title: t(LocationSearchTexts.mapSelection.messages.noResult.title),
+    subtitle: t(LocationSearchTexts.mapSelection.messages.noResult.message),
   };
 }
 

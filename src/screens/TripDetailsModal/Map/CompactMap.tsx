@@ -12,6 +12,7 @@ import useDisableMapCheck from '../../../utils/use-disable-map-check';
 import MapLabel from './MapLabel';
 import MapRoute from './MapRoute';
 import {getMapBounds, legsToMapLines, pointOf} from './utils';
+import {MapTexts, useTranslation} from '../../../translations';
 
 export type MapProps = {
   legs: Leg[];
@@ -25,6 +26,7 @@ export const CompactMap: React.FC<MapProps> = ({legs, darkMode, onExpand}) => {
   const endPoint = pointOf(legs[legs.length - 1].toPlace);
   const bounds = getMapBounds(features);
   const disableMap = useDisableMapCheck();
+  const {t} = useTranslation();
 
   const [loadingMap, setLoadingMap] = useState(true);
   const styles = useStyles();
@@ -60,8 +62,16 @@ export const CompactMap: React.FC<MapProps> = ({legs, darkMode, onExpand}) => {
           animationDuration={0}
         />
         <MapRoute lines={features}></MapRoute>
-        <MapLabel point={endPoint} id={'end'} text="Slutt"></MapLabel>
-        <MapLabel point={startPoint} id={'start'} text="Start"></MapLabel>
+        <MapLabel
+          point={endPoint}
+          id={'end'}
+          text={t(MapTexts.endPoint.label)}
+        ></MapLabel>
+        <MapLabel
+          point={startPoint}
+          id={'start'}
+          text={t(MapTexts.startPoint.label)}
+        ></MapLabel>
       </MapboxGL.MapView>
       <View style={styles.togglerContainer}>
         <Button
@@ -70,7 +80,7 @@ export const CompactMap: React.FC<MapProps> = ({legs, darkMode, onExpand}) => {
           mode="tertiary"
           onPress={expandMap}
           hitSlop={insets.symmetric(8, 12)}
-          text="Utvid kart"
+          text={t(MapTexts.expandButton.label)}
           icon={MapIcon}
         ></Button>
       </View>

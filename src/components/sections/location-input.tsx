@@ -4,6 +4,8 @@ import {LocationWithMetadata} from '../../favorites/types';
 import {useTheme} from '../../theme';
 import {screenReaderPause} from '../accessible-text';
 import ButtonInput, {ButtonInputProps} from './button-input';
+import {SectionTexts} from '../../translations';
+import {useTranslation} from '../../translations';
 
 type LocationInputProps = Omit<ButtonInputProps, 'value'> & {
   location?: LocationWithMetadata;
@@ -17,13 +19,19 @@ export default function LocationInput({
   onIconPress,
   ...props
 }: LocationInputProps) {
+  const {t} = useTranslation();
+
   const {theme} = useTheme();
   const currentValueLabel =
-    location?.resultType == 'geolocation' ? 'Min posisjon' : location?.label;
+    location?.resultType == 'geolocation'
+      ? t(SectionTexts.locationInput.myPosition)
+      : location?.label;
 
   if (currentValueLabel) {
     props.accessibilityValue = {
-      text: currentValueLabel + ' er valgt.' + screenReaderPause,
+      text:
+        t(SectionTexts.locationInput.a11yValue(currentValueLabel)) +
+        screenReaderPause,
     };
   }
 
@@ -33,7 +41,9 @@ export default function LocationInput({
       accessibilityRole="button"
       value={currentValueLabel}
       placeholder={
-        updatingLocation ? 'Oppdater posisjon' : 'Søk etter adresse eller sted'
+        updatingLocation
+          ? t(SectionTexts.locationInput.updatingLocation)
+          : t(SectionTexts.locationInput.placeholder)
       }
       icon={
         updatingLocation ? (

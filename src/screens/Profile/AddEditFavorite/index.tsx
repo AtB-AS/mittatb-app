@@ -10,19 +10,20 @@ import SvgConfirm from '../../../assets/svg/icons/actions/Confirm';
 import SvgDelete from '../../../assets/svg/icons/actions/Delete';
 import {MapPointPin} from '../../../assets/svg/icons/places';
 import Button, {ButtonGroup} from '../../../components/button';
+import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
+import * as Sections from '../../../components/sections';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import {LocationFavorite} from '../../../favorites/types';
 import {useLocationSearchValue} from '../../../location-search';
+import MessageBox from '../../../message-box';
 import {RootStackParamList} from '../../../navigation';
 import {StyleSheet, Theme} from '../../../theme';
 import BackHeader from '../BackHeader';
-import EmojiPopup from './EmojiPopup';
+import {AddEditFavoriteTexts, useTranslation} from '../../../translations';
 
-import * as Sections from '../../../components/sections';
-import MessageBox from '../../../message-box';
-import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
+import EmojiPopup from './EmojiPopup';
 
 type AddEditRouteName = 'AddEditFavorite';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditFavorite';
@@ -48,6 +49,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   const css = useScreenStyle();
   const {addFavorite, removeFavorite, updateFavorite} = useFavorites();
   const editItem = route?.params?.editItem;
+  const {t} = useTranslation();
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined,
@@ -78,7 +80,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
   const save = async () => {
     if (!location) {
-      setErrorMessage('Du må velge et sted du vil ha som favoritt');
+      setErrorMessage(t(AddEditFavoriteTexts.save.notSelectedFromError));
       return;
     }
     const newFavorite = {
@@ -97,15 +99,15 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   };
   const deleteItem = async () => {
     Alert.alert(
-      'Slett favorittsted?',
-      'Sikker på at du vil fjerne favorittstedet ditt?',
+      t(AddEditFavoriteTexts.delete.label),
+      t(AddEditFavoriteTexts.delete.confirmWarning),
       [
         {
-          text: 'Avbryt',
+          text: t(AddEditFavoriteTexts.cancel.label),
           style: 'cancel',
         },
         {
-          text: 'Slett',
+          text: t(AddEditFavoriteTexts.delete.label),
           style: 'destructive',
           onPress: async () => {
             if (!editItem) return;
@@ -120,7 +122,11 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   return (
     <SafeAreaView style={css.container}>
       <BackHeader
-        title={editItem ? 'Endre favorittsted' : 'Legg til favorittsted'}
+        title={
+          editItem
+            ? t(AddEditFavoriteTexts.header.titleEdit)
+            : t(AddEditFavoriteTexts.header.title)
+        }
         closeIcon
       />
 
@@ -155,14 +161,13 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
         <Sections.Section withPadding>
           <Sections.LocationInput
-            label="Sted"
+            label={t(AddEditFavoriteTexts.fields.location.label)}
             location={location}
-            placeholder="Søk etter adresse eller stoppested"
             onPress={() =>
               navigation.navigate('LocationSearch', {
                 callerRouteName: AddEditRouteNameStatic,
                 callerRouteParam: 'searchLocation',
-                label: 'Sted',
+                label: t(AddEditFavoriteTexts.fields.location.label),
                 favoriteChipTypes: ['location', 'map'],
                 initialLocation: location,
               })
@@ -172,13 +177,13 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
         <Sections.Section withPadding>
           <Sections.TextInput
-            label="Navn"
+            label={t(AddEditFavoriteTexts.fields.name.label)}
             onChangeText={setName}
             value={name}
             editable
             autoCapitalize="sentences"
-            accessibilityHint="Navn for favoritten"
-            placeholder="Legg til navn"
+            accessibilityHint={t(AddEditFavoriteTexts.fields.name.a11yHint)}
+            placeholder={t(AddEditFavoriteTexts.fields.name.placeholder)}
           />
         </Sections.Section>
 
@@ -187,7 +192,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
             onPress={openEmojiPopup}
             accessibilityElementsHidden={true}
             importantForAccessibility="no-hide-descendants"
-            label="Ikon"
+            label={t(AddEditFavoriteTexts.fields.icon.label)}
             icon="expand-more"
             type="inline"
             value={
@@ -205,18 +210,18 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         <Button
           onPress={save}
           mode="primary"
-          iconPosition="right"
           icon={SvgConfirm}
-          text="Lagre favoritt"
+          iconPosition="right"
+          text={t(AddEditFavoriteTexts.save.label)}
         />
 
         {editItem && (
           <Button
             onPress={deleteItem}
             mode="destructive"
-            iconPosition="right"
             icon={SvgDelete}
-            text="Slett favorittsted"
+            iconPosition="right"
+            text={t(AddEditFavoriteTexts.delete.label)}
           />
         )}
       </ButtonGroup>

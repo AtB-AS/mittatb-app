@@ -5,6 +5,7 @@ import {ActionItem, Section} from '../../../components/sections';
 import {usePreferences} from '../../../preferences';
 import {StyleSheet, Theme} from '../../../theme';
 import BackHeader from '../BackHeader';
+import {useTranslation, AppearanceSettingsTexts} from '../../../translations';
 
 export default function Appearance() {
   const {
@@ -12,16 +13,17 @@ export default function Appearance() {
     preferences: {colorScheme, overrideColorScheme},
   } = usePreferences();
   const style = useProfileHomeStyle();
+  const {t} = useTranslation();
 
   return (
     <SafeAreaView style={style.container}>
-      <BackHeader title="Utseende" />
+      <BackHeader title={t(AppearanceSettingsTexts.header.title)} />
 
       <ScrollView>
         <Section withTopPadding withPadding>
           <ActionItem
             mode="toggle"
-            text="Bruk telefoninnstillinger"
+            text={t(AppearanceSettingsTexts.actions.usePhoneSettings)}
             checked={!overrideColorScheme}
             onPress={(checked) =>
               setPreference({overrideColorScheme: !checked})
@@ -31,7 +33,7 @@ export default function Appearance() {
           {overrideColorScheme && (
             <ActionItem
               mode="toggle"
-              text="Mørk modus"
+              text={t(AppearanceSettingsTexts.actions.darkMode)}
               checked={colorScheme === 'dark'}
               onPress={(checked) =>
                 setPreference({colorScheme: checked ? 'dark' : 'light'})

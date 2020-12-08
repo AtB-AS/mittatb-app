@@ -1,4 +1,3 @@
-import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -6,14 +5,15 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {ProfileStackParams} from '..';
 import {Add} from '../../../assets/svg/icons/actions';
 import SvgReorder from '../../../assets/svg/icons/actions/Reorder';
+import * as Sections from '../../../components/sections';
 import ThemeIcon from '../../../components/theme-icon';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import {LocationFavorite} from '../../../favorites/types';
 import MessageBox from '../../../message-box';
 import {RootStackParamList} from '../../../navigation';
 import {StyleSheet, Theme} from '../../../theme';
+import {FavoriteListTexts, useTranslation} from '../../../translations';
 import BackHeader from '../BackHeader';
-import * as Sections from '../../../components/sections';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -27,6 +27,7 @@ type ProfileScreenProps = {
 export default function FavoriteList({navigation}: ProfileScreenProps) {
   const style = useProfileStyle();
   const {favorites} = useFavorites();
+  const {t} = useTranslation();
   const items = favorites ?? [];
 
   const navigateToEdit = (item: LocationFavorite) => {
@@ -37,13 +38,13 @@ export default function FavoriteList({navigation}: ProfileScreenProps) {
 
   return (
     <SafeAreaView style={style.container}>
-      <BackHeader title="Favorittsteder" />
+      <BackHeader title={t(FavoriteListTexts.header.title)} />
 
       <ScrollView>
         {!items?.length && (
           <MessageBox
             containerStyle={style.empty}
-            message="Du har ingen favorittsteder. Du kan legg til et nå ved å trykke på knappen under."
+            message={t(FavoriteListTexts.noFavorites)}
             type="info"
           />
         )}
@@ -54,7 +55,7 @@ export default function FavoriteList({navigation}: ProfileScreenProps) {
               key={favorite.name + favorite.location.id}
               favorite={favorite}
               accessibility={{
-                accessibilityHint: 'Aktivér for å redigere',
+                accessibilityHint: t(FavoriteListTexts.favoriteItem.a11yHint),
               }}
               onPress={navigateToEdit}
             />
@@ -64,13 +65,13 @@ export default function FavoriteList({navigation}: ProfileScreenProps) {
         <Sections.Section withPadding>
           {!!items.length && (
             <Sections.LinkItem
-              text="Endre rekkefølge"
+              text={t(FavoriteListTexts.buttons.changeOrder)}
               onPress={onSortClick}
               icon={<ThemeIcon svg={SvgReorder} />}
             />
           )}
           <Sections.LinkItem
-            text="Legg til favorittsted"
+            text={t(FavoriteListTexts.buttons.addFavorite)}
             onPress={onAddButtonClick}
             icon={<ThemeIcon svg={Add} />}
           />

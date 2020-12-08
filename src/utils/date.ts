@@ -10,32 +10,41 @@ import {
 import nb from 'date-fns/locale/nb';
 
 import humanizeDuration from 'humanize-duration';
-const shortHumanizer = humanizeDuration.humanizer({
-  language: 'shortNo',
-  languages: {
-    shortNo: {
-      y: () => 'år',
-      mo: () => 'm',
-      w: () => 'u',
-      d: () => 'd',
-      h: () => 't',
-      m: () => 'min',
-      s: () => 'sek',
-      ms: () => 'ms',
+import {Language, DEFAULT_LANGUAGE} from '../translations';
+
+function getShortHumanizer(ms: number, options?: humanizeDuration.Options) {
+  const opts = {
+    language: 'shortNo',
+    languages: {
+      shortNo: {
+        y: () => 'år',
+        mo: () => 'm',
+        w: () => 'u',
+        d: () => 'd',
+        h: () => 't',
+        m: () => 'min',
+        s: () => 'sek',
+        ms: () => 'ms',
+      },
     },
-  },
-});
+
+    ...options,
+  };
+  return shortHumanizer(ms, opts);
+}
+const shortHumanizer = humanizeDuration.humanizer({});
 
 export const missingRealtimePrefix = 'ca. ';
+
 export function secondsToDurationShort(seconds: number): string {
-  return shortHumanizer(seconds * 1000, {
+  return getShortHumanizer(seconds * 1000, {
     units: ['d', 'h', 'm'],
     round: true,
   });
 }
 
 export function secondsToMinutesShort(seconds: number): string {
-  return shortHumanizer(seconds * 1000, {
+  return getShortHumanizer(seconds * 1000, {
     units: ['m'],
     round: true,
   });
@@ -43,13 +52,15 @@ export function secondsToMinutesShort(seconds: number): string {
 
 export function secondsToDuration(
   seconds: number,
-  language: string = 'no',
   opts?: humanizeDuration.Options,
+  language?: Language,
 ): string {
+  const currentLanguage =
+    (language ?? DEFAULT_LANGUAGE) === Language.Norwegian ? 'no' : 'en';
   return humanizeDuration(seconds * 1000, {
     units: ['d', 'h', 'm'],
     round: true,
-    language,
+    language: currentLanguage,
     ...opts,
   });
 }
@@ -65,7 +76,7 @@ export function secondsBetween(
 
 export function formatToClock(isoDate: string | Date) {
   const parsed = isoDate instanceof Date ? isoDate : parseISO(isoDate);
-  return format(parsed, 'HH:mm');
+  return formatLocaleTime(parsed);
 }
 
 /**
@@ -77,12 +88,13 @@ export function formatToClock(isoDate: string | Date) {
 export function formatToClockOrRelativeMinutes(
   isoDate: string | Date,
   minuteThreshold: number = 9,
+  language?: Language,
 ) {
   const parsed = isoDate instanceof Date ? isoDate : parseISO(isoDate);
   const diff = secondsBetween(new Date(), parsed);
 
   if (isInThePast(parsed) || diff / 60 >= minuteThreshold) {
-    return format(parsed, 'HH:mm');
+    return formatLocaleTime(parsed, language);
   }
 
   if (diff / 60 <= 1) {
@@ -91,7 +103,15 @@ export function formatToClockOrRelativeMinutes(
 
   return secondsToMinutesShort(diff);
 }
-
+export function formatLocaleTime(date: Date, language?: Language) {
+  const lang = language ?? DEFAULT_LANGUAGE;
+  switch (lang) {
+    case Language.Norwegian:
+      return format(date, 'HH:mm');
+    case Language.English:
+      return format(date, 'h:mm a');
+  }
+}
 export function isInThePast(isoDate: string | Date) {
   return isPast(isoDate instanceof Date ? isoDate : parseISO(isoDate));
 }

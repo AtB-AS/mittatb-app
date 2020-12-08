@@ -32,6 +32,7 @@ import {RootStackParamList} from '../../navigation';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import {TripPattern} from '../../sdk';
 import {StyleSheet, useTheme} from '../../theme';
+import {useTranslation, dictionary, AssistantTexts} from '../../translations';
 import {
   locationDistanceInMetres as distanceInMetres,
   locationsAreEqual,
@@ -173,13 +174,14 @@ const Assistant: React.FC<Props> = ({
   }
 
   const [date, setDate] = useState<DateOutput | undefined>();
+  const {t} = useTranslation();
   const [
     tripPatterns,
     timeOfLastSearch,
     reload,
     clearPatterns,
     searchState,
-    errorType,
+    error,
   ] = useTripPatterns(from, to, date);
   const isSearching = searchState === 'searching';
   const openLocationSearch = (
@@ -187,15 +189,18 @@ const Assistant: React.FC<Props> = ({
     initialLocation: LocationWithMetadata | undefined,
   ) =>
     navigation.navigate('LocationSearch', {
-      label: callerRouteParam === 'fromLocation' ? 'Fra' : 'Til',
+      label:
+        callerRouteParam === 'fromLocation'
+          ? t(AssistantTexts.location.departurePicker.label)
+          : t(AssistantTexts.location.destinationPicker.label),
       callerRouteName: AssistantRouteNameStatic,
       callerRouteParam,
       initialLocation,
     });
 
-  const showEmptyScreen = !tripPatterns && !isSearching && !errorType;
+  const showEmptyScreen = !tripPatterns && !isSearching && !error;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
-  const useScroll = (!showEmptyScreen && !isEmptyResult) || !!errorType;
+  const useScroll = (!showEmptyScreen && !isEmptyResult) || !!error;
   const isHeaderFullHeight = !from || !to;
 
   const renderHeader = useCallback(
@@ -204,14 +209,17 @@ const Assistant: React.FC<Props> = ({
         <View style={styles.paddedContainer}>
           <Section>
             <LocationInput
-              accessibilityLabel={'Velg avreisested' + screenReaderPause}
+              accessibilityLabel={
+                t(AssistantTexts.location.departurePicker.a11yLabel) +
+                screenReaderPause
+              }
               accessibilityHint={
-                'Aktiver for å søke etter adresse eller sted.' +
+                t(AssistantTexts.location.departurePicker.a11yHint) +
                 screenReaderPause
               }
               updatingLocation={updatingLocation && !to}
               location={from}
-              label="Fra"
+              label={t(AssistantTexts.location.departurePicker.label)}
               onPress={() => openLocationSearch('fromLocation', from)}
               icon={<ThemeIcon svg={CurrentLocationArrow} />}
               onIconPress={setCurrentLocationOrRequest}
@@ -219,16 +227,17 @@ const Assistant: React.FC<Props> = ({
                 accessible: true,
                 accessibilityLabel:
                   from?.resultType == 'geolocation'
-                    ? 'Oppdater posisjon.'
-                    : 'Bruk posisjon som avreisested.',
+                    ? t(AssistantTexts.location.locationButton.a11yLabel.update)
+                    : t(AssistantTexts.location.locationButton.a11yLabel.use),
                 accessibilityRole: 'button',
               }}
             />
 
             <LocationInput
-              accessibilityLabel="Velg ankomststed."
-              label="Til"
-              placeholder="Søk etter adresse eller sted"
+              accessibilityLabel={t(
+                AssistantTexts.location.destinationPicker.a11yLabel,
+              )}
+              label={t(AssistantTexts.location.destinationPicker.label)}
               location={to}
               onPress={() => openLocationSearch('toLocation', to)}
               icon={<ThemeIcon svg={Swap} />}
@@ -236,7 +245,8 @@ const Assistant: React.FC<Props> = ({
               iconAccessibility={{
                 accessible: true,
                 accessibilityLabel:
-                  'Bytt avreisested og ankomststed' + screenReaderPause,
+                  t(AssistantTexts.location.swapButton.a11yLabel) +
+                  screenReaderPause,
                 accessibilityRole: 'button',
               }}
             />
@@ -257,8 +267,8 @@ const Assistant: React.FC<Props> = ({
               paddingRight: theme.spacings.medium / 2,
             }}
             chipActionHint={
-              'Aktiver for å bruke som ' +
-              (from ? 'destinasjon' : 'avreisested') +
+              t(AssistantTexts.favorites.favoriteChip.a11yHint) +
+              t(!!from ? dictionary.toPlace : dictionary.fromPlace) +
               screenReaderPause
             }
           />
@@ -317,7 +327,6 @@ const Assistant: React.FC<Props> = ({
       </ThemeText>
     </View>
   );
-
   const noResultReasons = computeNoResultReasons(date, from, to);
 
   const onPressed = useCallback(
@@ -333,6 +342,26 @@ const Assistant: React.FC<Props> = ({
 
   const newsBanner = <NewsBanner />;
 
+  const [searchStateMessage, setSearchStateMessage] = useState<
+    string | undefined
+  >();
+
+  useEffect(() => {
+    switch (searchState) {
+      case 'searching':
+        setSearchStateMessage(t(AssistantTexts.searchState.searching));
+        break;
+      case 'search-success':
+        setSearchStateMessage(t(AssistantTexts.searchState.searchSuccess));
+        break;
+      case 'search-empty-result':
+        setSearchStateMessage(t(AssistantTexts.searchState.searchEmptyResult));
+        break;
+      default:
+        break;
+    }
+  }, [searchState]);
+
   return (
     <DisappearingHeader
       renderHeader={renderHeader}
@@ -340,13 +369,13 @@ const Assistant: React.FC<Props> = ({
       onRefresh={reload}
       isRefreshing={isSearching}
       useScroll={useScroll}
-      headerTitle="Reiseassistent"
+      headerTitle={t(AssistantTexts.header.title)}
       headerMargin={24}
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
       logoClick={{
         callback: resetView,
-        accessibilityLabel: 'Nullstill reisesøk',
+        accessibilityLabel: t(AssistantTexts.header.accessibility.logo),
       }}
       onFullscreenTransitionEnd={(fullHeight) => {
         if (fullHeight) {
@@ -354,7 +383,7 @@ const Assistant: React.FC<Props> = ({
         }
       }}
     >
-      <ScreenReaderAnnouncement message={translateSearchState(searchState)} />
+      <ScreenReaderAnnouncement message={searchStateMessage} />
       <Results
         tripPatterns={tripPatterns}
         isSearching={isSearching}
@@ -362,7 +391,7 @@ const Assistant: React.FC<Props> = ({
         isEmptyResult={isEmptyResult}
         resultReasons={noResultReasons}
         onDetailsPressed={onPressed}
-        errorType={errorType}
+        error={error}
       />
     </DisappearingHeader>
   );
@@ -373,6 +402,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     paddingRight: theme.spacings.medium,
+  },
+  container: {
+    paddingHorizontal: theme.spacings.medium,
+    paddingBottom: theme.spacings.medium,
   },
   styleButton: {
     flexGrow: 1,
@@ -600,18 +633,4 @@ function log(message: string, metadata?: {[key: string]: string}) {
 function translateLocation(location: Location | undefined): string {
   if (!location) return 'Undefined location';
   return `${location.id}--${location.name}--${location.locality}`;
-}
-function translateSearchState(
-  searchState: SearchStateType,
-): string | undefined {
-  switch (searchState) {
-    case 'searching':
-      return 'Laster søkeresultater.';
-    case 'search-success':
-      return 'Søkeresultater er lastet inn.';
-    case 'search-empty-result':
-      return 'Fikk ingen søkeresultater.';
-    default:
-      return;
-  }
 }

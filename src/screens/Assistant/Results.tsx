@@ -1,16 +1,16 @@
-import React, {Fragment, useMemo} from 'react';
+import React, {Fragment, useMemo, useState, useEffect} from 'react';
 import {Text, View} from 'react-native';
-import MessageBox from '../../message-box';
 import {TripPattern} from '../../sdk';
 import {StyleSheet, useTheme} from '../../theme';
 import ResultItem from './ResultItem';
 import OptionalNextDayLabel from '../../components/optional-day-header';
 import {isSeveralDays} from '../../utils/date';
 import {NoResultReason} from './types';
-import {screenReaderPause} from '../../components/accessible-text';
-import {ErrorType} from '../../api/utils';
-import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 import ThemeText from '../../components/text';
+import MessageBox from '../../message-box';
+import {ErrorType} from '../../api/utils';
+import {useTranslation, AssistantTexts} from '../../translations';
+import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 type Props = {
   tripPatterns: TripPattern[] | null;
   showEmptyScreen: boolean;
@@ -18,7 +18,7 @@ type Props = {
   isSearching: boolean;
   resultReasons: NoResultReason[];
   onDetailsPressed(tripPattern: TripPattern): void;
-  errorType?: ErrorType;
+  error?: ErrorType;
 };
 
 export type ResultTabParams = {
@@ -31,10 +31,26 @@ const Results: React.FC<Props> = ({
   isEmptyResult,
   resultReasons,
   onDetailsPressed,
-  errorType,
+  error,
 }) => {
-  const {theme, themeName} = useTheme();
-  const styles = useThemeStyles(theme, themeName);
+  const styles = useThemeStyles();
+
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const {t} = useTranslation();
+
+  useEffect(() => {
+    if (error) {
+      switch (error) {
+        case 'network-error':
+        case 'timeout':
+          setErrorMessage(t(AssistantTexts.results.error.network));
+          break;
+        default:
+          setErrorMessage(t(AssistantTexts.results.error.generic));
+          break;
+      }
+    }
+  }, [error]);
 
   const allSameDay = useMemo(
     () => isSeveralDays((tripPatterns ?? []).map((i) => i.startTime)),
@@ -44,10 +60,7 @@ const Results: React.FC<Props> = ({
   if (showEmptyScreen) {
     return null;
   }
-
-  if (errorType) {
-    const errorMessage = translateErrorType(errorType);
-
+  if (error) {
     return (
       <View style={styles.container}>
         <ScreenReaderAnnouncement message={errorMessage} />
@@ -63,11 +76,11 @@ const Results: React.FC<Props> = ({
       <View style={styles.container}>
         <MessageBox>
           <ThemeText style={styles.infoBoxText}>
-            Vi fant dessverre ingen reiseruter som passer til ditt søk.
+            {t(AssistantTexts.results.info.emptyResult)}
             {pluralResultReasons && (
               <Text>
                 {' '}
-                Mulige årsaker:
+                {AssistantTexts.results.info.reasonsTitle}
                 {resultReasons.map((reason, i) => (
                   <Text key={i}>
                     {'\n'}- {reason}
@@ -79,7 +92,7 @@ const Results: React.FC<Props> = ({
               <Text> {resultReasons[0]}.</Text>
             )}
             {!hasResultReasons && (
-              <Text> Prøv å justere på sted eller tidspunkt. </Text>
+              <Text>{t(AssistantTexts.results.info.genericHint)}</Text>
             )}
           </ThemeText>
         </MessageBox>
@@ -99,9 +112,12 @@ const Results: React.FC<Props> = ({
           <ResultItem
             tripPattern={item}
             onDetailsPressed={onDetailsPressed}
-            accessibilityLabel={`Reiseforslag ${i + 1} av ${
-              tripPatterns.length
-            }. ${screenReaderPause}`}
+            accessibilityLabel={t(
+              AssistantTexts.results.resultList.listPositionExplanation(
+                i + 1,
+                tripPatterns.length,
+              ),
+            )}
             accessibilityRole="button"
           />
         </Fragment>
@@ -112,20 +128,10 @@ const Results: React.FC<Props> = ({
 
 export default Results;
 
-const useThemeStyles = StyleSheet.createTheme(() => ({
+const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    paddingHorizontal: 12,
-    paddingBottom: 12,
+    paddingHorizontal: theme.spacings.medium,
+    paddingBottom: theme.spacings.medium,
   },
-  infoBoxText: {fontSize: 16},
+  infoBoxText: theme.text.body,
 }));
-
-function translateErrorType(errorType: ErrorType): string {
-  switch (errorType) {
-    case 'network-error':
-    case 'timeout':
-      return 'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil.';
-    default:
-      return 'Oops - vi feila med søket. Supert om du prøver igjen 🤞';
-  }
-}
