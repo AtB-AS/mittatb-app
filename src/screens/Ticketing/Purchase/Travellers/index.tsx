@@ -50,7 +50,7 @@ const Travellers: React.FC<TravellersProps> = ({
     totalPrice,
     refreshOffer,
     offers,
-  } = useOfferState(params.fareContractType, userProfilesWithCount);
+  } = useOfferState(params.preassignedFareProduct, userProfilesWithCount);
 
   const offerExpirationTime =
     offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
@@ -70,7 +70,7 @@ const Travellers: React.FC<TravellersProps> = ({
       } else {
         navigation.push('PaymentVipps', {
           offers,
-          fareContractType: params.fareContractType,
+          preassignedFareProduct: params.preassignedFareProduct,
         });
       }
     }
@@ -83,7 +83,7 @@ const Travellers: React.FC<TravellersProps> = ({
       } else {
         navigation.push('PaymentCreditCard', {
           offers,
-          fareContractType: params.fareContractType,
+          preassignedFareProduct: params.preassignedFareProduct,
         });
       }
     }
@@ -92,7 +92,7 @@ const Travellers: React.FC<TravellersProps> = ({
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        title={params.fareContractType.name.value}
+        title={params.preassignedFareProduct.name.value}
         leftButton={{
           icon: <ThemeText>Avbryt</ThemeText>,
           onPress: closeModal,

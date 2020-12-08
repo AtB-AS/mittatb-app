@@ -4,16 +4,15 @@ import {CreditCard as CreditCardScreen, Vipps as VippsScreen} from './Payment';
 import createDismissableStackNavigator from '../../../navigation/createDismissableStackNavigator';
 import {ActiveTicketsScreenName} from '../Tickets';
 import {PreassignedFareProduct, ReserveOffer} from '../../../api/fareContracts';
-import {DetailScreenRouteProp} from '../../TripDetailsModal/Details';
 import {RouteProp} from '@react-navigation/core';
 
 type TravellersParams = {
   refreshOffer?: boolean;
-  fareContractType: PreassignedFareProduct;
+  preassignedFareProduct: PreassignedFareProduct;
 };
 type PaymentParams = {
   offers: ReserveOffer[];
-  fareContractType: PreassignedFareProduct;
+  preassignedFareProduct: PreassignedFareProduct;
 };
 
 export type TicketingStackParams = {

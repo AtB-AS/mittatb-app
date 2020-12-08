@@ -193,7 +193,7 @@ const TicketContextProvider: React.FC = ({children}) => {
     [dispatch],
   );
 
-  const updateFareContractTypes = useCallback(
+  const updatePreassignedFareProducts = useCallback(
     async function () {
       try {
         dispatch({type: 'SET_IS_REFRESHING_PREASSIGNED_FARE_PRODUCTS'});
@@ -229,7 +229,7 @@ const TicketContextProvider: React.FC = ({children}) => {
   }, []);
 
   useEffect(() => {
-    updateFareContractTypes();
+    updatePreassignedFareProducts();
   }, []);
 
   return (

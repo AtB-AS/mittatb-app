@@ -27,13 +27,13 @@ const TicketOptions: React.FC<Props> = ({
       />
     );
   }
-  const buttons = preassignedFareProducts.map((fareContractType) => (
-    <View key={fareContractType.id} style={styles.buttonContainer}>
+  const buttons = preassignedFareProducts.map((preassignedFareProduct) => (
+    <View key={preassignedFareProduct.id} style={styles.buttonContainer}>
       <Button
         mode="primary"
-        text={fareContractType.name.value}
+        text={preassignedFareProduct.name.value}
         onPress={() =>
-          navigation.navigate('TicketPurchase', {fareContractType})
+          navigation.navigate('TicketPurchase', {preassignedFareProduct})
         }
       />
     </View>

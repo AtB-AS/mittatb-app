@@ -114,7 +114,7 @@ const initialState: OfferState = {
 };
 
 export default function useOfferState(
-  fareContractType: PreassignedFareProduct,
+  preassignedFareProduct: PreassignedFareProduct,
   userProfilesWithCount: UserProfileWithCount[],
 ) {
   const offerReducer = getOfferReducer(userProfilesWithCount);
@@ -139,7 +139,7 @@ export default function useOfferState(
             {
               zones: ['ATB:TariffZone:1'],
               travellers: offerTravellers,
-              products: [fareContractType.id],
+              products: [preassignedFareProduct.id],
             },
             {cancelToken, retry: true},
           );
@@ -163,14 +163,14 @@ export default function useOfferState(
         }
       }
     },
-    [dispatch, userProfilesWithCount, fareContractType],
+    [dispatch, userProfilesWithCount, preassignedFareProduct],
   );
 
   useEffect(() => {
     const source = CancelTokenStatic.source();
     updateOffer(source.token);
     return () => source.cancel('Cancelling previous offer search');
-  }, [updateOffer, userProfilesWithCount, fareContractType]);
+  }, [updateOffer, userProfilesWithCount, preassignedFareProduct]);
 
   const refreshOffer = useCallback(
     async function () {
