@@ -3,7 +3,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
 import Header from '../../../../ScreenHeader';
-import {Close} from '../../../../assets/svg/icons/actions';
+import {Close, Edit} from '../../../../assets/svg/icons/actions';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {StyleSheet, useTheme} from '../../../../theme';
 import ThemeText from '../../../../components/text';
@@ -94,13 +94,14 @@ const Travellers: React.FC<TravellersProps> = ({
       <Header
         title={params.fareContractType.name.value}
         leftButton={{
-          icon: <ThemeIcon svg={Close} />,
+          icon: <ThemeText>Avbryt</ThemeText>,
           onPress: closeModal,
           accessibilityLabel: 'Avbryt kjøpsprosessen',
         }}
+        style={styles.header}
       />
 
-      <ScrollView style={{overflow: 'hidden'}}>
+      <ScrollView>
         {error && (
           <MessageBox
             type="warning"
@@ -116,17 +117,18 @@ const Travellers: React.FC<TravellersProps> = ({
           />
         )}
 
+        <Sections.Section withPadding>
+          <Sections.LinkItem
+            text="Reise gjennom 1 sone (Sone A)"
+            onPress={() => {}}
+            icon={<ThemeIcon svg={Edit} />}
+          />
+        </Sections.Section>
+
         {userProfilesLoading ? (
-          <View>
-            <ThemeText>LOADING!!</ThemeText>
-            <ActivityIndicator />
-          </View>
+          <ActivityIndicator />
         ) : (
-          <Sections.Section withTopPadding>
-            <Sections.HeaderItem
-              text="Enkeltbillett, Sone A - Stor-Trondheim"
-              mode="subheading"
-            />
+          <Sections.Section withPadding>
             {userProfilesWithCount.map((u) => (
               <Sections.CounterInput
                 key={u.userTypeString}
@@ -138,57 +140,60 @@ const Travellers: React.FC<TravellersProps> = ({
             ))}
           </Sections.Section>
         )}
+      </ScrollView>
 
+      <View style={styles.footer}>
         <View style={styles.totalContainer}>
-          <View style={{flexDirection: 'column'}}>
-            <ThemeText type="body">Total</ThemeText>
-            <ThemeText type="body">Inkl. 6% mva</ThemeText>
+          <View style={styles.totalContainerHeadings}>
+            <ThemeText type="body">Totalt</ThemeText>
+            <ThemeText type="label" color={'faded'}>
+              Inkl. 6% mva
+            </ThemeText>
           </View>
 
           {!isSearchingOffer ? (
             <ThemeText type="heroTitle">{totalPrice} kr</ThemeText>
           ) : (
             <ActivityIndicator
+              size={theme.spacings.medium}
               color={theme.text.colors.primary}
               style={{margin: 12}}
             />
           )}
         </View>
-      </ScrollView>
-
-      <View style={styles.buttons}>
-        <ThemeText type="body__link" style={styles.informationLink}>
-          Informasjon og vilkår
-        </ThemeText>
-        <Button
-          mode="primary"
-          text="Betal med Vipps"
-          disabled={isSearchingOffer}
-          accessibilityLabel="Trykk for å betale billett med Vipps"
-          icon={Vipps}
-          iconPosition="right"
-          onPress={payWithVipps}
-          style={styles.button}
-        />
-        <Button
-          mode="primary"
-          text="Betal med bankkort"
-          disabled={isSearchingOffer}
-          accessibilityLabel="Trykk for å betale billett med bankkort"
-          icon={CreditCard}
-          iconPosition="right"
-          onPress={payWithCard}
-          style={styles.button}
-        />
-        <Button
-          mode="secondary"
-          text="Avbryt"
-          accessibilityLabel="Trykk for å avbryte billettkjøp"
-          icon={Close}
-          onPress={closeModal}
-          style={styles.button}
-        />
+        <View style={styles.buttons}>
+          <Button
+            mode="primary2"
+            text="Betal med Vipps"
+            disabled={isSearchingOffer}
+            accessibilityLabel="Trykk for å betale billett med Vipps"
+            icon={Vipps}
+            iconPosition="left"
+            onPress={payWithVipps}
+            viewContainerStyle={[
+              styles.paymentButton,
+              styles.vippsPaymentButton,
+            ]}
+            style={{flex: 1}}
+            textContainerStyle={{marginLeft: 20}}
+          />
+          <Button
+            mode="primary2"
+            text="Betal med bankkort"
+            disabled={isSearchingOffer}
+            accessibilityLabel="Trykk for å betale billett med bankkort"
+            icon={CreditCard}
+            iconPosition="left"
+            onPress={payWithCard}
+            viewContainerStyle={[
+              styles.paymentButton,
+              styles.cardPaymentButton,
+            ]}
+            textContainerStyle={{marginLeft: 20}}
+          />
+        </View>
       </View>
+      <View style={styles.bottomColor} />
     </SafeAreaView>
   );
 };
@@ -210,7 +215,6 @@ function translateUserProfilesError(_: FetchUserProfilesError) {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    padding: theme.spacings.medium,
     backgroundColor: theme.background.level2,
   },
   ticketsContainer: {
@@ -222,24 +226,47 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.medium,
     marginTop: theme.spacings.small,
   },
+  header: {
+    paddingHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
+  },
   totalContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: theme.spacings.medium,
+    backgroundColor: theme.background.level0,
+    borderRadius: theme.border.radius.regular,
   },
-  informationLink: {
-    textAlign: 'center',
+  totalContainerHeadings: {
+    flexDirection: 'column',
+    paddingVertical: theme.spacings.xSmall,
+  },
+  footer: {
+    paddingTop: theme.spacings.medium,
     paddingHorizontal: theme.spacings.medium,
-    paddingVertical: theme.spacings.small,
+    backgroundColor: theme.background.header,
   },
   buttons: {
+    flexDirection: 'row',
+  },
+  paymentButton: {
+    marginTop: theme.spacings.medium,
+    flex: 1,
+    minHeight: 64,
+  },
+  vippsPaymentButton: {
+    marginRight: 6,
+  },
+  cardPaymentButton: {
+    marginLeft: 6,
+  },
+  bottomColor: {
+    backgroundColor: theme.background.header,
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    margin: theme.spacings.medium,
-  },
-  button: {
-    marginBottom: theme.spacings.small,
+    height: 50,
+    zIndex: -1,
   },
 }));
 
