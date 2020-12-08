@@ -25,10 +25,9 @@ import {flatMap} from '../../utils/array';
 import {getModeName} from '../../utils/transportation-names';
 import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
-import {AssistantTexts} from '../../translations/';
-import {useTranslation} from '../../utils/language';
+import {AssistantTexts, TranslateFunction} from '../../translations/';
+import {useTranslation} from '../../translations/';
 import dictionary from '../../translations/dictionary';
-import {TranslateFunction} from '../../translations/utils';
 
 type ResultItemProps = {
   tripPattern: TripPattern;

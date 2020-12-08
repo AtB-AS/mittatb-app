@@ -12,8 +12,7 @@ import {LocationFavorite} from '../../../favorites/types';
 import MessageBox from '../../../message-box';
 import {RootStackParamList} from '../../../navigation';
 import {StyleSheet, Theme} from '../../../theme';
-import {FavoriteListTexts} from '../../../translations';
-import {useTranslation} from '../../../utils/language';
+import {FavoriteListTexts, useTranslation} from '../../../translations';
 import BackHeader from '../BackHeader';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<

@@ -1,3 +1,12 @@
+export type {TranslateFunction, TranslatedString} from './commons';
+export {
+  Language,
+  DEFAULT_LANGUAGE,
+  lobot,
+  useTranslation,
+  translation,
+} from './commons';
+
 export {default as AssistantTexts} from './screens/Assistant';
 export {default as FavoriteTexts} from './components/FavoriteChips';
 export {default as OnboardingTexts} from './screens/Onboarding';
@@ -13,3 +22,4 @@ export {default as FavoriteListTexts} from './screens/subscreens/FavoriteList';
 export {default as TripDetailsTexts} from './screens/subscreens/TripDetails';
 export {default as SelectStartScreenTexts} from './screens/subscreens/SelectStartScreen';
 export {default as AppearanceSettingsTexts} from './screens/subscreens/AppearanceSettings';
+export {default as dictionary} from './dictionary';

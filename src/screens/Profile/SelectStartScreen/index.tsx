@@ -9,8 +9,11 @@ import {
 } from '../../../preferences';
 import {StyleSheet, Theme} from '../../../theme';
 import BackHeader from '../BackHeader';
-import {useTranslation, TranslatedString} from '../../../utils/language';
-import {SelectStartScreenTexts} from '../../../translations';
+import {
+  SelectStartScreenTexts,
+  useTranslation,
+  TranslatedString,
+} from '../../../translations';
 
 const identity = (s: string) => s;
 function toName(alt: Preference_ScreenAlternatives): TranslatedString {

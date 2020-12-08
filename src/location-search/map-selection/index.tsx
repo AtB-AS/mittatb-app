@@ -21,8 +21,7 @@ import FullScreenHeader from '../../ScreenHeader/full-header';
 import {StyleSheet} from '../../theme';
 import LocationBar from './LocationBar';
 import SelectionPin, {PinMode} from './SelectionPin';
-import {useTranslation} from '../../utils/language';
-import {LocationSearchTexts} from '../../translations';
+import {LocationSearchTexts, useTranslation} from '../../translations';
 
 export type RouteParams = {
   callerRouteName: string;

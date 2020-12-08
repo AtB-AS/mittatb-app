@@ -32,8 +32,7 @@ import {CompactMap} from '../Map/CompactMap';
 import TransportDetail from './TransportDetail';
 import WalkDetail from './WalkDetail';
 import ThemeIcon from '../../../components/theme-icon';
-import {useTranslation} from '../../../utils/language';
-import {TripDetailsTexts} from '../../../translations';
+import {useTranslation, TripDetailsTexts} from '../../../translations/';
 
 // @TODO Firebase config?
 const TIME_LIMIT_IN_MINUTES = 3;

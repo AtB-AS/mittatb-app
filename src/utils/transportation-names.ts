@@ -1,6 +1,5 @@
 import {EstimatedCall, Leg, Quay, LegMode} from '../sdk';
-import {TranslatedString} from './language';
-import dictionary from '../translations/dictionary';
+import {TranslatedString, dictionary} from '../translations';
 
 export function getLineName(leg: Leg) {
   return leg.line

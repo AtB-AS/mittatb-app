@@ -34,8 +34,7 @@ import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
 import {DeparturesWithStopLocal, QuayWithDeparturesAndLimits} from './utils';
 import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
-import {useTranslation} from '../../utils/language';
-import {NearbyTexts} from '../../translations';
+import {NearbyTexts, useTranslation} from '../../translations';
 import dictionary from '../../translations/dictionary';
 
 type NearbyResultsProps = {

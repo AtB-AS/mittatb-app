@@ -18,8 +18,7 @@ import NearbyScreen from '../screens/Nearby';
 import ProfileScreen, {ProfileStackParams} from '../screens/Profile';
 import TicketingScreen from '../screens/Ticketing';
 import {useTheme} from '../theme';
-import dictionary from '../translations/dictionary';
-import {useTranslation} from '../utils/language';
+import {useTranslation, dictionary} from '../translations/';
 import {
   settingToRouteName,
   useBottomNavigationStyles,

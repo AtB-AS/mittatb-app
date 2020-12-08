@@ -12,8 +12,7 @@ import useDisableMapCheck from '../../../utils/use-disable-map-check';
 import MapLabel from './MapLabel';
 import MapRoute from './MapRoute';
 import {getMapBounds, legsToMapLines, pointOf} from './utils';
-import {useTranslation} from '../../../utils/language';
-import {MapTexts} from '../../../translations';
+import {MapTexts, useTranslation} from '../../../translations';
 
 export type MapProps = {
   legs: Leg[];

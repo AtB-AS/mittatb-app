@@ -9,8 +9,8 @@ import WaitRow from './WaitRow';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
 import {defaultFill} from '../../../utils/transportation-color';
-import {useTranslation} from '../../../utils/language';
-import {TripDetailsTexts} from '../../../translations';
+
+import {TripDetailsTexts, useTranslation} from '../../../translations';
 
 const MINIMUM_WAIT_IN_SECONDS = 30;
 

@@ -9,9 +9,11 @@ import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
 import {Location} from '../../favorites/types';
 import {StyleSheet, useTheme} from '../../theme';
-import {useTranslation} from '../../utils/language';
-import {LocationSearchTexts} from '../../translations';
-import {TranslateFunction} from '../../translations/utils';
+import {
+  LocationSearchTexts,
+  useTranslation,
+  TranslateFunction,
+} from '../../translations';
 
 type Props = {
   location?: Location;

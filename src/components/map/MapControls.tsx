@@ -4,9 +4,7 @@ import {Add, Remove} from '../../assets/svg/icons/actions';
 import {StyleSheet} from '../../theme';
 import shadows from './shadows';
 import ThemeIcon from '../theme-icon';
-import {useTranslation} from '../../utils/language';
-import {MapTexts} from '../../translations';
-
+import {useTranslation, MapTexts} from '../../translations/';
 export type Props = {
   zoomIn(): void;
   zoomOut(): void;

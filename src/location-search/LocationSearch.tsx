@@ -27,10 +27,11 @@ import {LocationSearchNavigationProp} from './';
 import LocationResults from './LocationResults';
 import {LocationSearchResult} from './types';
 import useDebounce from './useDebounce';
-import {useTranslation} from '../utils/language';
-import {LocationSearchTexts} from '../translations';
-import {TranslateFunction} from '../translations/utils';
-
+import {
+  useTranslation,
+  LocationSearchTexts,
+  TranslateFunction,
+} from '../translations/';
 export type Props = {
   navigation: LocationSearchNavigationProp;
   route: RouteProp<RootStackParamList, 'LocationSearch'>;

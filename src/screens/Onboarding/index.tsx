@@ -18,7 +18,7 @@ import StepOuterContainer from './components/StepContainer';
 import Illustration from './components/Illustration';
 import NavigationControls from './components/NavigationControls';
 import ThemeText from '../../components/text';
-import {useTranslation} from '../../utils/language';
+import {useTranslation} from '../../translations/';
 import {OnboardingTexts} from '../../translations';
 
 type StepProps = {

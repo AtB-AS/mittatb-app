@@ -14,8 +14,7 @@ import {useReverseGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
 import {RootStackParamList} from '../navigation';
 import {StyleSheet, useTheme} from '../theme';
-import {FavoriteTexts} from '../translations';
-import {useTranslation} from '../utils/language';
+import {FavoriteTexts, useTranslation} from '../translations';
 import useDisableMapCheck from '../utils/use-disable-map-check';
 
 type Props = {

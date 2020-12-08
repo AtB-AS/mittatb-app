@@ -1,4 +1,4 @@
-import {translation as _} from '../../utils';
+import {translation as _} from '../../commons';
 const TripDetailsTexts = {
   header: {
     title: _('Reisedetaljer', 'Trip details'),

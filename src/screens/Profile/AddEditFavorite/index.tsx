@@ -21,8 +21,8 @@ import MessageBox from '../../../message-box';
 import {RootStackParamList} from '../../../navigation';
 import {StyleSheet, Theme} from '../../../theme';
 import BackHeader from '../BackHeader';
-import {AddEditFavoriteTexts} from '../../../translations';
-import {useTranslation} from '../../../utils/language';
+import {AddEditFavoriteTexts, useTranslation} from '../../../translations';
+
 import EmojiPopup from './EmojiPopup';
 
 type AddEditRouteName = 'AddEditFavorite';

@@ -32,8 +32,11 @@ import {
 } from '../../GeolocationContext';
 import {useLocationSearchValue} from '../../location-search';
 import {RootStackParamList} from '../../navigation';
-import {NearbyTexts} from '../../translations';
-import {useTranslation, TranslatedString} from '../../utils/language';
+import {
+  useTranslation,
+  TranslatedString,
+  NearbyTexts,
+} from '../../translations/';
 import {useNavigateToStartScreen} from '../../utils/navigation';
 import useInterval from '../../utils/use-interval';
 import Loading from '../Loading';

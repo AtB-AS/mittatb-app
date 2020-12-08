@@ -1,5 +1,5 @@
 import {Platform} from 'react-native';
-import {translation as _} from './utils';
+import {translation as _} from './commons';
 
 const softhyphen = Platform.OS === 'ios' ? '\u00AD' : '\u200B';
 

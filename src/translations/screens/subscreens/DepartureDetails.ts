@@ -1,4 +1,4 @@
-import {translation as _} from '../../utils';
+import {translation as _} from '../../commons';
 const DepartureDetailsTexts = {
   header: {
     title: (departureName: string) => _(departureName),
