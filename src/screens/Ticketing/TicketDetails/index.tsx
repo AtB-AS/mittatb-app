@@ -50,7 +50,7 @@ export default function TicketDetails({navigation, route}: Props) {
           accessibilityLabel: 'Gå tilbake',
           icon: <ThemeIcon svg={Close} />,
         }}
-        title="Reisedetaljer"
+        title="Billettdetaljer"
         style={styles.header}
       />
       <View style={styles.content}>
