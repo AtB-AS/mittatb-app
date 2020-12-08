@@ -1,5 +1,5 @@
 import React, {PropsWithChildren} from 'react';
-import {View} from 'react-native';
+import {View, ViewStyle} from 'react-native';
 import {StyleSheet, Theme} from '../../theme';
 import {ContainerSizingType, SectionItemProps} from './section-utils';
 
@@ -23,7 +23,7 @@ export default function SectionGroup({
   const firstIndex = validChildren.indexOf(true);
   const lastIndex = validChildren.lastIndexOf(true);
 
-  const containerStyle = [
+  const containerStyle: Array<ViewStyle | undefined> = [
     withPadding ? style.container__padded : undefined,
     withTopPadding ? style.container__topPadded : undefined,
     withBottomPadding ? style.container__bottomPadded : undefined,

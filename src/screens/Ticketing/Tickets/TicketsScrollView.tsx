@@ -5,7 +5,7 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {FareContract} from '../../../api/fareContracts';
 import {StyleSheet, useTheme} from '../../../theme';
 import LinearGradient from 'react-native-linear-gradient';
-import Ticket from '../Ticket';
+import {SimpleTicket} from '../Ticket';
 import hexToRgba from 'hex-to-rgba';
 import ThemeText from '../../../components/text';
 import {ActiveReservation} from '../../../TicketContext';
@@ -53,7 +53,7 @@ const TicketsScrollView: React.FC<Props> = ({
           <TicketReservation key={res.reservation.order_id} reservation={res} />
         ))}
         {tickets?.map((fc) => (
-          <Ticket
+          <SimpleTicket
             key={fc.order_id}
             fareContract={fc}
             now={now}
