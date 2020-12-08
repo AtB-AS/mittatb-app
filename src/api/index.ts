@@ -2,7 +2,7 @@ export {CancelToken, isCancel, default as client} from './client';
 export {autocomplete, reverse} from './geocoder';
 export {default as searchTrip} from './trips';
 export {
-  listTickets as listFareContractTickets,
+  listFareContracts,
   listTypes as listFareContractTypes,
   search as searchOffers,
   reserve as reserveOffers,

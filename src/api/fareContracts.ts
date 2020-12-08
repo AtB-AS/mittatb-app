@@ -3,13 +3,13 @@ import {getCustomerId} from '../utils/customerId';
 import client from './client';
 import {LanguageAndText} from './utils';
 
-export async function listTickets(): Promise<ListTicketsResponse> {
+export async function listFareContracts(): Promise<FareContract[]> {
   const customerId = await getCustomerId();
 
   const url = 'ticket/v1/ticket/' + customerId;
   const response = await client.get<ListTicketsResponse>(url);
 
-  return response.data;
+  return response.data.fare_contracts;
 }
 
 export async function listTypes(): Promise<FareContractType[]> {
@@ -39,7 +39,7 @@ interface SendReceiptResponse {
   reference: string;
 }
 
-export async function sendReceipt(fc: FareContractTicket, email: string) {
+export async function sendReceipt(fc: FareContract, email: string) {
   const url = 'ticket/v1/receipt';
   const response = await client.post<SendReceiptResponse>(url, {
     order_id: fc.order_id,
@@ -115,7 +115,7 @@ export type Offer = {
 
 export type OfferSearchResponse = Offer[];
 
-export type FareContractTicket = {
+export type FareContract = {
   order_id: string;
   order_version: string;
   product_name: string;
@@ -132,8 +132,8 @@ export type FareContractType = {
   alternativeNames: LanguageAndText[];
 };
 
-export type ListTicketsResponse = {
-  fare_contracts: FareContractTicket[];
+type ListTicketsResponse = {
+  fare_contracts: FareContract[];
 };
 
 export type ReserveOffer = {

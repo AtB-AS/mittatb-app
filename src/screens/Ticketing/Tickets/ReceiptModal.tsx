@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {View, TouchableOpacity, Modal, TextInput} from 'react-native';
-import {FareContractTicket, sendReceipt} from '../../../api/fareContracts';
+import {FareContract, sendReceipt} from '../../../api/fareContracts';
 import {StyleSheet} from '../../../theme';
 import Text from '../../../components/text';
 
 interface ModalProps {
-  fareContract?: FareContractTicket;
+  fareContract?: FareContract;
   show: boolean;
   close: () => void;
 }
