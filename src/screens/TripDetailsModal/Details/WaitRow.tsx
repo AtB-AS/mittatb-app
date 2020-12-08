@@ -6,9 +6,11 @@ import {StyleSheet} from '../../../theme';
 import {Leg} from '../../../sdk';
 import ThemeText from '../../../components/text';
 import {defaultFill} from '../../../utils/transportation-color';
-import {useTranslation} from '../../../translations';
-import {TripDetailsTexts} from '../../../translations';
-import dictionary from '../../../translations/dictionary';
+import {
+  TripDetailsTexts,
+  dictionary,
+  useTranslation,
+} from '../../../translations';
 
 type WaitRowProps = {
   onCalculateTime(seconds: number): void;

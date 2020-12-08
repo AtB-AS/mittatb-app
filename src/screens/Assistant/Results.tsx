@@ -6,12 +6,10 @@ import ResultItem from './ResultItem';
 import OptionalNextDayLabel from '../../components/optional-day-header';
 import {isSeveralDays} from '../../utils/date';
 import {NoResultReason} from './types';
-import {screenReaderPause} from '../../components/accessible-text';
 import ThemeText from '../../components/text';
 import MessageBox from '../../message-box';
 import {ErrorType} from '../../api/utils';
-import {AssistantTexts} from '../../translations';
-import {useTranslation} from '../../translations';
+import {useTranslation, AssistantTexts} from '../../translations';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 type Props = {
   tripPatterns: TripPattern[] | null;

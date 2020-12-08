@@ -5,8 +5,7 @@ import {ActionItem, Section} from '../../../components/sections';
 import {usePreferences} from '../../../preferences';
 import {StyleSheet, Theme} from '../../../theme';
 import BackHeader from '../BackHeader';
-import {useTranslation} from '../../../translations';
-import {AppearanceSettingsTexts} from '../../../translations';
+import {useTranslation, AppearanceSettingsTexts} from '../../../translations';
 
 export default function Appearance() {
   const {

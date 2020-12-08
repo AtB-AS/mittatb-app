@@ -4,8 +4,7 @@ import SvgClose from '../../assets/svg/icons/actions/Close';
 import {ArrowLeft} from '../../assets/svg/icons/navigation';
 import ThemeIcon from '../../components/theme-icon';
 import ScreenHeader from '../../ScreenHeader';
-import {ProfileTexts} from '../../translations';
-import {useTranslation} from '../../translations/';
+import {useTranslation, ProfileTexts} from '../../translations/';
 
 type BackHeaderProps = {
   title: string;

@@ -32,9 +32,7 @@ import {RootStackParamList} from '../../navigation';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import {TripPattern} from '../../sdk';
 import {StyleSheet, useTheme} from '../../theme';
-import {AssistantTexts} from '../../translations';
-import dictionary from '../../translations/dictionary';
-import {useTranslation} from '../../translations';
+import {useTranslation, dictionary, AssistantTexts} from '../../translations';
 import {
   locationDistanceInMetres as distanceInMetres,
   locationsAreEqual,
