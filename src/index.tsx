@@ -13,7 +13,7 @@ import SearchHistoryContextProvider from './search-history';
 import TicketContextProvider from './TicketContext';
 import RemoteConfigContextProvider from './RemoteConfigContext';
 import {loadLocalConfig} from './local-config';
-import Bugsnag from '@bugsnag/react-native';
+import Bugsnag, {Event} from '@bugsnag/react-native';
 import {setInstallId as setApiInstallId} from './api/client';
 import ErrorBoundary from './error-boundary';
 import {PreferencesContextProvider} from './preferences';
@@ -21,7 +21,26 @@ import {PreferencesContextProvider} from './preferences';
 if (!__DEV__) {
   Bugsnag.start();
 } else {
-  Bugsnag.notify = (error) => console.error(error);
+  Bugsnag.notify = function (error, onError) {
+    const event = Event.create(error, true, {} as any, 'notify()', 1, console);
+    let metadata: {[key: string]: any} = {};
+    event.addMetadata = (
+      section: string,
+      values: string | object,
+      values2?: unknown,
+    ) => {
+      if (typeof values === 'string') {
+        metadata[values] = values2;
+      } else {
+        metadata = {
+          ...metadata,
+          ...values,
+        };
+      }
+    };
+    onError?.(event);
+    console.error('[BUGSNAG]', error, JSON.stringify(metadata, null, 2));
+  };
   Bugsnag.leaveBreadcrumb = (message, metadata) =>
     // eslint-disable-next-line
     console.log(message, metadata);
