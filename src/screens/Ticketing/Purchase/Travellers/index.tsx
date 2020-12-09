@@ -3,7 +3,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
 import Header from '../../../../ScreenHeader';
-import {Close, Edit} from '../../../../assets/svg/icons/actions';
+import {Edit} from '../../../../assets/svg/icons/actions';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {StyleSheet, useTheme} from '../../../../theme';
 import ThemeText from '../../../../components/text';

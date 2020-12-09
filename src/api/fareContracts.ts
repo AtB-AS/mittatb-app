@@ -13,8 +13,7 @@ export async function listFareContracts(): Promise<FareContract[]> {
 }
 
 export async function listPreassignedFareProducts() {
-  const url =
-    'https://gateway-5pwmu3xz7a-ew.a.run.app/api/v1/reference-data/ATB/preassigned-fare-products';
+  const url = '/reference-data/v1/ATB/preassigned-fare-products';
   const response = await client.get<PreassignedFareProduct[]>(url, {
     retry: true,
   });
