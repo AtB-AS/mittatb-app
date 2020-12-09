@@ -4,6 +4,7 @@ export {default as Chat} from './Chat';
 export {default as ChatUnread} from './ChatUnread';
 export {default as Close} from './Close';
 export {default as Confirm} from './Confirm';
+export {default as Context} from './Context';
 export {default as Delete} from './Delete';
 export {default as DragHandle} from './DragHandle';
 export {default as Edit} from './Edit';
