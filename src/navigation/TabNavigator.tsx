@@ -18,6 +18,7 @@ import NearbyScreen from '../screens/Nearby';
 import ProfileScreen, {ProfileStackParams} from '../screens/Profile';
 import TicketingScreen from '../screens/Ticketing';
 import {useTheme} from '../theme';
+import {useTranslation, dictionary} from '../translations/';
 import {
   settingToRouteName,
   useBottomNavigationStyles,
@@ -38,13 +39,13 @@ export type TabNavigatorParams = {
   Ticketing: undefined;
   Profile: SubNavigator<ProfileStackParams>;
 };
-
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
 const softhyphen = Platform.OS === 'ios' ? '\u00AD' : '\u200B';
 
 const NavigationRoot = () => {
   const {theme} = useTheme();
+  const {t} = useTranslation();
   const {startScreen} = usePreferenceItems();
   return (
     <Tab.Navigator
@@ -63,22 +64,22 @@ const NavigationRoot = () => {
       <Tab.Screen
         name="Assistant"
         component={Assistant}
-        options={tabSettings(`Reise${softhyphen}søk`, AssistantIcon)}
+        options={tabSettings(t(dictionary.navigation.assistant), AssistantIcon)}
       />
       <Tab.Screen
         name="Nearest"
         component={NearbyScreen}
-        options={tabSettings(`Av${softhyphen}ganger`, Nearby)}
+        options={tabSettings(t(dictionary.navigation.nearby), Nearby)}
       />
       <Tab.Screen
         name="Ticketing"
         component={TicketingScreen}
-        options={tabSettings('Billetter', Tickets)}
+        options={tabSettings(t(dictionary.navigation.ticketing), Tickets)}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={tabSettings('Mitt AtB', Profile)}
+        options={tabSettings(t(dictionary.navigation.profile), Profile)}
       />
     </Tab.Navigator>
   );

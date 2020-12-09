@@ -3,6 +3,9 @@
 echo "Attempting to decrypt env"
 sh ./scripts/git-crypt-unlock.sh $GIT_CRYPT_KEY
 
+# copy file mapbox api download token
+cat .netrc >> ~/.netrc
+
 echo "Installing pre-build dependencies"
 brew install findutils xmlstarlet 
 # findutils for gxargs which is used to load environment variables from .env file
@@ -58,12 +61,12 @@ if [[ "$APP_ENVIRONMENT" = "staging" || "$APP_ENVIRONMENT" = "prodstaging" ]]; t
   brew switch pango 1.42.4_1 
 
   if [ "$APP_ENVIRONMENT" = "staging" ]; then
-    badge --shield "1.2-QA-orange" --no_badge  --glob "/android/app/src/staging/res/*/*.{png,PNG}"
-    badge --shield "1.2-QA-orange" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
+    badge --shield "1.3-QA-orange" --no_badge  --glob "/android/app/src/staging/res/*/*.{png,PNG}"
+    badge --shield "1.3-QA-orange" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
   fi
   if [ "$APP_ENVIRONMENT" = "prodstaging" ]; then
-    badge --shield "1.2-Prod-blue" --no_badge  --glob "/android/app/src/staging/res/*/*.{png,PNG}"
-    badge --shield "1.2-Prod-blue" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
+    badge --shield "1.3-Prod-blue" --no_badge  --glob "/android/app/src/staging/res/*/*.{png,PNG}"
+    badge --shield "1.3-Prod-blue" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
   fi
 fi 
 

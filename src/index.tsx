@@ -30,6 +30,8 @@ if (!__DEV__) {
 
 import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@react-native-mapbox-gl/maps';
+import AppLanguageProvider from './translations/LanguageContext';
+
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
 async function setupConfig() {
@@ -49,14 +51,11 @@ const App = () => {
       await setupConfig();
       setIsLoading(false);
     }
-
     config();
   }, []);
-
   if (isLoading) {
     return null;
   }
-
   return (
     <SafeAreaProvider>
       <ErrorBoundary>
@@ -68,7 +67,9 @@ const App = () => {
                   <GeolocationContextProvider>
                     <TicketContextProvider>
                       <RemoteConfigContextProvider>
-                        <NavigationRoot />
+                        <AppLanguageProvider>
+                          <NavigationRoot />
+                        </AppLanguageProvider>
                       </RemoteConfigContextProvider>
                     </TicketContextProvider>
                   </GeolocationContextProvider>

@@ -1,11 +1,12 @@
 import React, {PropsWithChildren} from 'react';
-import {View} from 'react-native';
+import {View, ViewStyle} from 'react-native';
 import {StyleSheet, Theme} from '../../theme';
 import {ContainerSizingType, SectionItemProps} from './section-utils';
 
 export type SectionProps = PropsWithChildren<{
   withPadding?: boolean;
   withTopPadding?: boolean;
+  withBottomPadding?: boolean;
   type?: ContainerSizingType;
 }>;
 
@@ -13,17 +14,19 @@ export default function SectionGroup({
   children,
   withPadding = false,
   withTopPadding = false,
+  withBottomPadding = false,
   type = 'block',
 }: SectionProps) {
   const style = useInputGroupStyle();
-  const len =
-    (React.Children.map(children, (child) =>
-      Number(React.isValidElement(child)),
-    )?.reduce((a, b) => a + b) ?? 1) - 1;
+  const validChildren: boolean[] =
+    React.Children.map(children, React.isValidElement) ?? [];
+  const firstIndex = validChildren.indexOf(true);
+  const lastIndex = validChildren.lastIndexOf(true);
 
-  const containerStyle = [
+  const containerStyle: Array<ViewStyle | undefined> = [
     withPadding ? style.container__padded : undefined,
     withTopPadding ? style.container__topPadded : undefined,
+    withBottomPadding ? style.container__bottomPadded : undefined,
   ];
 
   return (
@@ -32,7 +35,7 @@ export default function SectionGroup({
         if (!React.isValidElement(child)) return child;
 
         let additionalProps: Partial<SectionItemProps> = {
-          radius: toRadius(index, len),
+          radius: toRadius(index, lastIndex, firstIndex),
           radiusSize: 'regular',
           type,
           ...child.props,
@@ -41,7 +44,7 @@ export default function SectionGroup({
         return (
           <>
             {React.cloneElement(child, additionalProps)}
-            {index !== len && <View style={style.separator} />}
+            {index !== lastIndex && <View style={style.separator} />}
           </>
         );
       })}
@@ -49,9 +52,9 @@ export default function SectionGroup({
   );
 }
 
-function toRadius(index: number, len: number) {
-  const isFirst = index === 0;
-  const isLast = index === len;
+function toRadius(index: number, lastIndex: number, firstIndex: number) {
+  const isFirst = index === firstIndex;
+  const isLast = index === lastIndex;
 
   if (isFirst && isLast) {
     return 'top-bottom';
@@ -76,5 +79,8 @@ const useInputGroupStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   container__topPadded: {
     marginTop: theme.spacings.large,
+  },
+  container__bottomPadded: {
+    marginBottom: theme.spacings.large,
   },
 }));

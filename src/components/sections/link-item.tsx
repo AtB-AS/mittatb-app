@@ -17,6 +17,7 @@ export type LinkItemProps = SectionItem<{
   subtitle?: string;
   onPress?(event: GestureResponderEvent): void;
   icon?: NavigationIconTypes | JSX.Element;
+  disabled?: boolean;
   accessibility?: AccessibilityProps;
 }>;
 export default function LinkItem({
@@ -25,21 +26,24 @@ export default function LinkItem({
   subtitle,
   icon,
   accessibility,
+  disabled,
   ...props
 }: LinkItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
   const style = useSectionStyle();
   const iconEl =
     isNavigationIcon(icon) || !icon ? <NavigationIcon mode={icon} /> : icon;
+  const disabledStyle = disabled ? {opacity: 0.2} : undefined;
   return (
     <TouchableOpacity
       accessible
       accessibilityRole="link"
       onPress={onPress}
+      disabled={disabled}
       style={[style.baseItem, topContainer]}
       {...accessibility}
     >
-      <View style={[style.spaceBetween, contentContainer]}>
+      <View style={[style.spaceBetween, contentContainer, disabledStyle]}>
         <ThemeText>{text}</ThemeText>
         {iconEl}
       </View>

@@ -61,7 +61,6 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     loadingState,
     terminalUrl,
     onWebViewLoadEnd,
-    onWebViewLoadStart,
     error,
     restartTerminal,
   } = useTerminalState(offers, cancelTerminal, dismissAndActivatePolling);
@@ -88,7 +87,6 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
             source={{
               uri: terminalUrl,
             }}
-            onLoadStart={onWebViewLoadStart}
             onLoadEnd={onWebViewLoadEnd}
           />
         )}

@@ -22,9 +22,15 @@ import AccessibleText, {
 } from '../../components/accessible-text';
 import {SituationWarningIcon} from '../../situations';
 import {flatMap} from '../../utils/array';
-import {getReadableModeName} from '../../utils/transportation-names';
+import {getModeName} from '../../utils/transportation-names';
 import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
+import {
+  AssistantTexts,
+  TranslateFunction,
+  dictionary,
+  useTranslation,
+} from '../../translations/';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -56,6 +62,7 @@ const ResultItemHeader: React.FC<{
   const quayName = getFromLeg(tripPattern.legs);
   const styles = useThemeStyles();
   const durationText = secondsToDurationShort(tripPattern.duration);
+  const {t} = useTranslation();
 
   const quayLeg = tripPattern.legs.find(legWithQuay);
   const timePrefix =
@@ -73,12 +80,18 @@ const ResultItemHeader: React.FC<{
         {formatToClockOrRelativeMinutes(quayStartTime)}
       </ThemeText>
       <View style={styles.durationContainer}>
-        <AccessibleText prefix="Reisetid">{durationText}</AccessibleText>
+        <AccessibleText
+          prefix={t(AssistantTexts.results.resultItem.details.totalDuration)}
+        >
+          {durationText}
+        </AccessibleText>
       </View>
 
       <SituationWarningIcon
         situations={flatMap(tripPattern.legs, (leg) => leg.situations)}
-        accessibilityLabel="Denne reisen har driftsmeldinger. Se detaljer for mer info"
+        accessibilityLabel={t(
+          AssistantTexts.results.resultItem.hasSituationsTip,
+        )}
         style={styles.warningIcon}
       />
     </View>
@@ -91,6 +104,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   ...props
 }) => {
   const styles = useThemeStyles();
+  const {t} = useTranslation();
 
   if (!tripPattern?.legs?.length) return null;
 
@@ -99,7 +113,8 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       style={{paddingVertical: 4}}
       onPress={() => onDetailsPressed(tripPattern)}
       hitSlop={insets.symmetric(8, 16)}
-      accessibilityValue={{text: screenReaderSummary(tripPattern)}}
+      accessibilityHint={t(AssistantTexts.results.resultItem.a11yHint)}
+      accessibilityValue={{text: screenReaderSummary(tripPattern, t)}}
       {...props}
     >
       <View style={styles.result}>
@@ -165,6 +180,7 @@ const MINIMUM_WAIT_IN_SECONDS = 30;
 const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   const styles = useLegStyles();
   const showWaitTime = Boolean(nextLeg);
+  const {t} = useTranslation();
   const waitTimeInSeconds = !nextLeg
     ? 0
     : secondsBetween(leg.expectedEndTime, nextLeg?.expectedStartTime);
@@ -186,8 +202,13 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 
   const walkTime = secondsToDuration(leg.duration ?? 0);
   const text = !isWaitTimeOfSignificance
-    ? `Gå ${walkTime}`
-    : `Gå ${walkTime}. Vent ${secondsToDuration(waitTimeInSeconds)}`;
+    ? t(AssistantTexts.results.resultItem.footLeg.walkLabel(walkTime))
+    : t(
+        AssistantTexts.results.resultItem.footLeg.walkandWaitLabel(
+          walkTime,
+          secondsToDuration(waitTimeInSeconds),
+        ),
+      );
 
   return (
     <View style={styles.legContainer}>
@@ -214,17 +235,20 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 
 function WaitRow({time}: {time: number}) {
   const styles = useLegStyles();
-
+  const {t} = useTranslation();
+  const waitTime = `${secondsToMinutesShort(time)} ${t(
+    dictionary.date.units.short.minute,
+  )}`;
   return (
     <View style={styles.legContainer}>
       <ThemeText style={[styles.textDeprioritized, styles.time]}>
-        {secondsToMinutesShort(time)}
+        {waitTime}
       </ThemeText>
       <View style={styles.iconContainer}>
         <ThemeIcon svg={Duration} opacity={0.6} />
       </View>
       <ThemeText style={[styles.textContent, styles.textDeprioritized]}>
-        Vent
+        {t(AssistantTexts.results.resultItem.waitRow.label)}
       </ThemeText>
     </View>
   );
@@ -311,46 +335,60 @@ function LineDisplayName({leg}: {leg: Leg}) {
   );
 }
 
-const screenReaderSummary = (tripPattern: TripPattern) => {
+const screenReaderSummary = (
+  tripPattern: TripPattern,
+  t: TranslateFunction,
+) => {
   const hasSituations = flatMap(tripPattern.legs, (leg) => leg.situations)
     .length;
 
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
   const startLeg = !nonFootLegs.length ? tripPattern.legs[0] : nonFootLegs[0];
+  const screenreaderText = AssistantTexts.results.resultItem.journeySummary;
 
   return `
   ${
     hasSituations
-      ? `Driftsmeldinger gjelder for dette forslaget. ${screenReaderPause} `
+      ? `${t(screenreaderText.situationsWarning)} ${screenReaderPause} `
       : ''
   }
-  Fra klokken: ${formatToClock(
-    tripPattern.startTime,
-  )}, til klokken ${formatToClock(tripPattern.endTime)}. ${screenReaderPause}
-    Reisetid: ${secondsToDuration(tripPattern.duration)} ${screenReaderPause}
+  ${t(
+    screenreaderText.time(
+      formatToClock(tripPattern.startTime),
+      formatToClock(tripPattern.endTime),
+    ),
+  )} ${screenReaderPause}
+     ${t(
+       screenreaderText.duration(secondsToDuration(tripPattern.duration)),
+     )} ${screenReaderPause}
     ${
       !nonFootLegs.length
-        ? 'Hele reisen til fots'
+        ? t(screenreaderText.legsDescription.footLegsOnly)
         : nonFootLegs.length === 1
-        ? 'Ingen bytter'
+        ? t(screenreaderText.legsDescription.noSwitching)
         : nonFootLegs.length === 2
-        ? 'Ett bytte'
-        : nonFootLegs.length + 'bytter'
+        ? t(screenreaderText.legsDescription.oneSwitch)
+        : t(screenreaderText.legsDescription.someSwitches(nonFootLegs.length))
     }. ${screenReaderPause}
     ${nonFootLegs
       ?.map((l) => {
-        return `${getReadableModeName(l.mode)} ${
-          l.line ? 'nummer ' + l.line.publicCode : ''
+        return `${t(getModeName(l.mode))} ${
+          l.line
+            ? t(screenreaderText.prefixedLineNumber(l.line.publicCode))
+            : ''
         }`;
       })
       .join(', ')} ${screenReaderPause}
-      Totalt ${tripPattern.walkDistance.toFixed(
-        0,
-      )} meter å gå. ${screenReaderPause}
-      Fra ${startLeg.fromPlace?.name}, klokken ${formatToClock(
-    startLeg.expectedStartTime,
-  )}. ${screenReaderPause}
-      Aktivér for å vise detaljert reiserute.
+      ${t(
+        screenreaderText.totalWalkDistance(tripPattern.walkDistance.toFixed(0)),
+      )}  ${screenReaderPause}
+      ${t(
+        screenreaderText.departureInfo(
+          startLeg.fromPlace?.name ?? '',
+          formatToClock(startLeg.expectedStartTime),
+        ),
+      )} ${screenReaderPause}
+
   `;
 };
 

@@ -1,14 +1,18 @@
 import React from 'react';
 import {View, RefreshControl} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {FareContract} from '../../../api/fareContracts';
 import {StyleSheet, useTheme} from '../../../theme';
 import LinearGradient from 'react-native-linear-gradient';
-import Ticket from './Ticket';
+import {SimpleTicket} from '../Ticket';
 import hexToRgba from 'hex-to-rgba';
 import ThemeText from '../../../components/text';
 import {ActiveReservation} from '../../../TicketContext';
 import TicketReservation from './TicketReservation';
+import {RootStackParamList} from '../../../navigation';
+
+type RootNavigationProp = NavigationProp<RootStackParamList>;
 
 type Props = {
   reservations?: ActiveReservation[];
@@ -29,6 +33,7 @@ const TicketsScrollView: React.FC<Props> = ({
 }) => {
   const {theme} = useTheme();
   const styles = useStyles();
+  const navigation = useNavigation<RootNavigationProp>();
 
   return (
     <View style={styles.container}>
@@ -48,7 +53,14 @@ const TicketsScrollView: React.FC<Props> = ({
           <TicketReservation key={res.reservation.order_id} reservation={res} />
         ))}
         {tickets?.map((fc) => (
-          <Ticket key={fc.order_id} fareContract={fc} now={now} />
+          <SimpleTicket
+            key={fc.order_id}
+            fareContract={fc}
+            now={now}
+            onPressDetails={() =>
+              navigation.navigate('TicketDetails', {orderId: fc.order_id})
+            }
+          />
         ))}
       </ScrollView>
       <LinearGradient
