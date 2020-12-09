@@ -106,6 +106,14 @@ For test devices and developer devices we do continuous distribution through dir
 
 This will eventually (after review in the Stores) distribute a new app version. See [more details](./tools/release/README.md).
 
+### QA
+
+Before distributing a new app version to the `alpha-release` channels, we have to QA the new features and fixes.
+
+Specific notes on QA:
+
+- [QA Ticketing](./docs/TicketingQA.md)
+
 ## License
 
 The contents of this repository is licensed as [EUPL-1.2](./LICENSE). See [RFC](https://github.com/AtB-AS/org/blob/master/rfc/0015_License/index.md).
