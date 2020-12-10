@@ -1,28 +1,35 @@
 import React, {
-  useContext,
   createContext,
   useCallback,
-  useReducer,
+  useContext,
   useEffect,
+  useReducer,
 } from 'react';
 import {
   FareContract,
-  PreassignedFareProduct,
   getPayment,
   PaymentStatus,
   PaymentType,
+  PreassignedFareProduct,
   ReserveOffer,
   TicketReservation,
 } from './api/fareContracts';
-import {listFareContracts, listPreassignedFareProducts} from './api';
+import {
+  listFareContracts,
+  listPreassignedFareProducts,
+  listUserProfiles,
+} from './api';
 import useInterval from './utils/use-interval';
+import {UserProfile} from './api/userProfiles';
 
 type TicketReducerState = {
   fareContracts: FareContract[];
   preassignedFareProducts: PreassignedFareProduct[];
+  preassignedFareProductsLoading: boolean;
+  userProfiles: UserProfile[];
+  userProfilesLoading: boolean;
   activeReservations: ActiveReservation[];
   isRefreshingTickets: boolean;
-  isRefreshingPreassignedFareProducts: boolean;
 };
 
 type TicketReducerAction =
@@ -31,10 +38,13 @@ type TicketReducerAction =
       type: 'UPDATE_FARE_CONTRACT_TICKETS';
       fareContracts: FareContract[];
     }
-  | {type: 'SET_IS_REFRESHING_PREASSIGNED_FARE_PRODUCTS'}
   | {
-      type: 'UPDATE_PREASSIGNED_FARE_PRODUCTS';
+      type: 'LOADED_PREASSIGNED_FARE_PRODUCTS';
       preassignedFareProducts: PreassignedFareProduct[];
+    }
+  | {
+      type: 'LOADED_USER_PROFILES';
+      userProfiles: UserProfile[];
     }
   | {type: 'ADD_RESERVATION'; reservation: ActiveReservation}
   | {
@@ -69,17 +79,18 @@ const ticketReducer: TicketReducer = (
         isRefreshingTickets: false,
       };
     }
-    case 'SET_IS_REFRESHING_PREASSIGNED_FARE_PRODUCTS': {
-      return {
-        ...prevState,
-        isRefreshingPreassignedFareProducts: true,
-      };
-    }
-    case 'UPDATE_PREASSIGNED_FARE_PRODUCTS': {
+    case 'LOADED_PREASSIGNED_FARE_PRODUCTS': {
       return {
         ...prevState,
         preassignedFareProducts: action.preassignedFareProducts,
-        isRefreshingPreassignedFareProducts: false,
+        preassignedFareProductsLoading: false,
+      };
+    }
+    case 'LOADED_USER_PROFILES': {
+      return {
+        ...prevState,
+        userProfiles: action.userProfiles,
+        userProfilesLoading: false,
       };
     }
     case 'ADD_RESERVATION': {
@@ -110,21 +121,24 @@ export type ActiveReservation = {
 type TicketState = {
   refreshTickets: () => void;
   activatePollingForNewTickets: (reservation: ActiveReservation) => void;
+  isLoadingNecessaryTicketData: boolean;
 } & Pick<
   TicketReducerState,
   | 'activeReservations'
   | 'fareContracts'
   | 'preassignedFareProducts'
+  | 'userProfiles'
   | 'isRefreshingTickets'
-  | 'isRefreshingPreassignedFareProducts'
 >;
 
 const initialReducerState: TicketReducerState = {
   fareContracts: [],
   preassignedFareProducts: [],
+  preassignedFareProductsLoading: true,
+  userProfiles: [],
+  userProfilesLoading: true,
   activeReservations: [],
   isRefreshingTickets: false,
-  isRefreshingPreassignedFareProducts: false,
 };
 
 const TicketContext = createContext<TicketState | undefined>(undefined);
@@ -193,14 +207,28 @@ const TicketContextProvider: React.FC = ({children}) => {
     [dispatch],
   );
 
-  const updatePreassignedFareProducts = useCallback(
+  const loadPreassignedFareProducts = useCallback(
     async function () {
       try {
-        dispatch({type: 'SET_IS_REFRESHING_PREASSIGNED_FARE_PRODUCTS'});
         const preassignedFareProducts = await listPreassignedFareProducts();
         dispatch({
-          type: 'UPDATE_PREASSIGNED_FARE_PRODUCTS',
+          type: 'LOADED_PREASSIGNED_FARE_PRODUCTS',
           preassignedFareProducts,
+        });
+      } catch (err) {
+        console.warn(err);
+      }
+    },
+    [dispatch],
+  );
+
+  const loadUserProfiles = useCallback(
+    async function () {
+      try {
+        const userProfiles = await listUserProfiles();
+        dispatch({
+          type: 'LOADED_USER_PROFILES',
+          userProfiles,
         });
       } catch (err) {
         console.warn(err);
@@ -229,7 +257,11 @@ const TicketContextProvider: React.FC = ({children}) => {
   }, []);
 
   useEffect(() => {
-    updatePreassignedFareProducts();
+    loadPreassignedFareProducts();
+  }, []);
+
+  useEffect(() => {
+    loadUserProfiles();
   }, []);
 
   return (
@@ -239,6 +271,8 @@ const TicketContextProvider: React.FC = ({children}) => {
         activeReservations,
         refreshTickets: updateFareContracts,
         activatePollingForNewTickets: updateReservations,
+        isLoadingNecessaryTicketData:
+          state.preassignedFareProductsLoading || state.userProfilesLoading,
       }}
     >
       {children}

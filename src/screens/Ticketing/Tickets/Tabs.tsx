@@ -24,7 +24,7 @@ export const ActiveTickets: React.FC<Props> = ({navigation}) => {
     isRefreshingTickets,
     refreshTickets,
     preassignedFareProducts,
-    isRefreshingPreassignedFareProducts,
+    isLoadingNecessaryTicketData,
   } = useTicketState();
 
   const [now, setNow] = useState<number>(Date.now());
@@ -50,7 +50,7 @@ export const ActiveTickets: React.FC<Props> = ({navigation}) => {
 
       <TicketOptions
         preassignedFareProducts={preassignedFareProducts}
-        isRefreshingTypes={isRefreshingPreassignedFareProducts}
+        isLoading={isLoadingNecessaryTicketData}
         navigation={navigation}
       />
     </View>
@@ -63,7 +63,7 @@ export const ExpiredTickets: React.FC<Props> = ({navigation}) => {
     isRefreshingTickets,
     refreshTickets,
     preassignedFareProducts,
-    isRefreshingPreassignedFareProducts,
+    isLoadingNecessaryTicketData,
   } = useTicketState();
 
   const [now, setNow] = useState<number>(Date.now());
@@ -88,7 +88,7 @@ export const ExpiredTickets: React.FC<Props> = ({navigation}) => {
 
       <TicketOptions
         preassignedFareProducts={preassignedFareProducts}
-        isRefreshingTypes={isRefreshingPreassignedFareProducts}
+        isLoading={isLoadingNecessaryTicketData}
         navigation={navigation}
       />
     </View>

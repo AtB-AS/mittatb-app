@@ -7,18 +7,18 @@ import {TicketingScreenNavigationProp} from './Tabs';
 
 type Props = {
   preassignedFareProducts: PreassignedFareProduct[];
-  isRefreshingTypes: boolean;
+  isLoading: boolean;
   navigation: TicketingScreenNavigationProp;
 };
 
 const TicketOptions: React.FC<Props> = ({
   preassignedFareProducts,
-  isRefreshingTypes,
+  isLoading,
   navigation,
 }) => {
   const styles = useStyles();
   const {theme} = useTheme();
-  if (isRefreshingTypes) {
+  if (isLoading) {
     return (
       <ActivityIndicator
         size={'large'}

@@ -9,9 +9,7 @@ import {StyleSheet, useTheme} from '../../../../theme';
 import ThemeText from '../../../../components/text';
 import ThemeIcon from '../../../../components/theme-icon';
 import Button from '../../../../components/button';
-import useUserCountState, {
-  FetchUserProfilesError,
-} from './use-user-count-state';
+import useUserCountState from './use-user-count-state';
 import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
 import useOfferState, {OfferError} from './use-offer-state';
 import {addMinutes} from 'date-fns';
@@ -35,13 +33,7 @@ const Travellers: React.FC<TravellersProps> = ({
   const styles = useStyles();
   const {theme} = useTheme();
 
-  const {
-    userProfilesWithCount,
-    userProfilesLoading,
-    userProfilesError,
-    addCount,
-    removeCount,
-  } = useUserCountState();
+  const {userProfilesWithCount, addCount, removeCount} = useUserCountState();
 
   const {
     offerSearchTime,
@@ -111,13 +103,6 @@ const Travellers: React.FC<TravellersProps> = ({
             message={translateError(error)}
           />
         )}
-        {userProfilesError && (
-          <MessageBox
-            type="warning"
-            title="Det oppstod en feil"
-            message={translateUserProfilesError(userProfilesError)}
-          />
-        )}
 
         <Sections.Section withPadding>
           <Sections.LinkItem
@@ -127,21 +112,17 @@ const Travellers: React.FC<TravellersProps> = ({
           />
         </Sections.Section>
 
-        {userProfilesLoading ? (
-          <ActivityIndicator />
-        ) : (
-          <Sections.Section withPadding>
-            {userProfilesWithCount.map((u) => (
-              <Sections.CounterInput
-                key={u.userTypeString}
-                text={u.name.value}
-                count={u.count}
-                addCount={() => addCount(u.userTypeString)}
-                removeCount={() => removeCount(u.userTypeString)}
-              />
-            ))}
-          </Sections.Section>
-        )}
+        <Sections.Section withPadding>
+          {userProfilesWithCount.map((u) => (
+            <Sections.CounterInput
+              key={u.userTypeString}
+              text={u.name.value}
+              count={u.count}
+              addCount={() => addCount(u.userTypeString)}
+              removeCount={() => removeCount(u.userTypeString)}
+            />
+          ))}
+        </Sections.Section>
       </ScrollView>
 
       <View
@@ -214,10 +195,6 @@ function translateError(error: OfferError) {
     case 'failed_reservation':
       return 'Klarte ikke å reservere billett';
   }
-}
-
-function translateUserProfilesError(_: FetchUserProfilesError) {
-  return 'Klarte ikke å hente reiseprofiler';
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
