@@ -38,7 +38,7 @@ const Ticket: React.FC<Props> = ({fareContract: fc, now}) => {
               </View>
               <ThemeText type="lead" color="faded">
                 Gyldig i{' '}
-                {secondsToDuration(validityLeftSeconds, undefined, {
+                {secondsToDuration(validityLeftSeconds, {
                   delimiter: ' og ',
                 })}
               </ThemeText>

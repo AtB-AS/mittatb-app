@@ -21,6 +21,8 @@ import SituationRow from '../SituationRow';
 import {useLayout} from '../../../utils/use-layout';
 import ThemeText from '../../../components/text';
 import {StyleSheet} from '../../../theme';
+import {useTranslation} from '../../../translations';
+import dictionary from '../../../translations/dictionary';
 
 const TransportDetail: React.FC<LegDetailProps> = ({
   leg,
@@ -43,6 +45,7 @@ const TransportDetail: React.FC<LegDetailProps> = ({
 
   const {height: fromHeight, onLayout: onFromLayout} = useLayout();
   const {height: toHeight, onLayout: onToLayout} = useLayout();
+  const {t} = useTranslation();
   const styles = useStyles();
 
   return (
@@ -82,7 +85,10 @@ const TransportDetail: React.FC<LegDetailProps> = ({
                 publicCode={leg.line?.publicCode}
               />
             }
-            label={getQuayNameFromStartLeg(leg)}
+            label={
+              getQuayNameFromStartLeg(leg) ??
+              t(dictionary.travel.quay.defaultName)
+            }
             time={timeString(leg.expectedStartTime)}
             aimedTime={
               leg.realtime
@@ -104,7 +110,9 @@ const TransportDetail: React.FC<LegDetailProps> = ({
 
         <LocationRow
           icon={<Dot fill={fill} />}
-          label={getQuayNameFromStopLeg(leg)}
+          label={
+            getQuayNameFromStopLeg(leg) ?? t(dictionary.travel.quay.defaultName)
+          }
           time={timeString(leg.expectedEndTime)}
           aimedTime={
             leg.realtime

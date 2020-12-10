@@ -38,7 +38,7 @@ type Props = {
   isFullHeight?: boolean;
 
   useScroll?: boolean;
-  headerTitle: string;
+  headerTitle: React.ReactNode;
   alternativeTitleComponent?: React.ReactNode;
 
   headerMargin?: number;

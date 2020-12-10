@@ -14,6 +14,7 @@ import {useReverseGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
 import {RootStackParamList} from '../navigation';
 import {StyleSheet, useTheme} from '../theme';
+import {FavoriteTexts, useTranslation} from '../translations';
 import useDisableMapCheck from '../utils/use-disable-map-check';
 
 type Props = {
@@ -41,6 +42,7 @@ const FavoriteChips: React.FC<Props> = ({
   const navigation = useNavigation<ProfileNearbyScreenNavigationProp>();
   const {favorites} = useFavorites();
   const styles = useStyles();
+  const {t} = useTranslation();
   const {onCurrentLocation} = useCurrentLocationChip(onSelectLocation);
   const disableMap = useDisableMapCheck();
   const activeType = (type: ChipTypeGroup) => chipTypes.includes(type);
@@ -52,7 +54,7 @@ const FavoriteChips: React.FC<Props> = ({
           {activeType('location') && (
             <FavoriteChip
               mode="primary2"
-              text="Posisjon"
+              text={t(FavoriteTexts.chips.currentLocation)}
               accessibilityRole="button"
               accessibilityHint={chipActionHint ?? ''}
               icon={CurrentLocationArrow}
@@ -61,7 +63,7 @@ const FavoriteChips: React.FC<Props> = ({
           )}
           {activeType('map') && !disableMap && (
             <FavoriteChip
-              text="Velg i kart"
+              text={t(FavoriteTexts.chips.mapLocation)}
               accessibilityRole="button"
               icon={MapPointPin}
               onPress={onMapSelection}
@@ -103,7 +105,7 @@ const FavoriteChips: React.FC<Props> = ({
         {activeType('add-favorite') && (
           <FavoriteChip
             mode="secondary"
-            text={'Legg til favoritt'}
+            text={t(FavoriteTexts.chips.addFavorite)}
             accessibilityRole="button"
             icon={Add}
             onPress={() => navigation.navigate('AddEditFavorite', {})}

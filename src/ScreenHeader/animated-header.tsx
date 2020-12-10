@@ -6,7 +6,7 @@ import HeaderButton, {IconButton} from './HeaderButton';
 type ScreenHeaderProps = ViewProps & {
   leftButton?: IconButton;
   rightButton?: IconButton;
-  title: string;
+  title: React.ReactNode;
   alternativeTitleComponent?: React.ReactNode;
   alternativeTitleVisible: boolean;
 };

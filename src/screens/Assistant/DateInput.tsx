@@ -14,6 +14,8 @@ import insets from '../../utils/insets';
 import {screenReaderPause} from '../../components/accessible-text';
 import ThemeIcon from '../../components/theme-icon';
 import ThemeText from '../../components/text';
+import {useTranslation, TranslatedString} from '../../translations';
+import {DateInputTexts} from '../../translations';
 
 type DateTypesWithoutNow = 'departure' | 'arrival';
 type DateTypes = DateTypesWithoutNow | 'now';
@@ -47,16 +49,16 @@ function dateTypeToText(type: DateTypes): string {
   }
 }
 
-function dateToText(date: DateOutput, timeOfSearch: Date): string {
+function dateToText(date: DateOutput, timeOfSearch: Date): TranslatedString {
   if (date.type === 'now') {
-    return `Avreise nå (${formatToClock(timeOfSearch)})`;
+    return DateInputTexts.value.departureNow(formatToClock(timeOfSearch));
   }
 
   if (date.type === 'arrival') {
-    return `Ankomst ${formatToLongDateTime(date.date, nb)}`;
+    return DateInputTexts.value.arrival(formatToLongDateTime(date.date, nb));
   }
 
-  return `Avreise ${formatToLongDateTime(date.date, nb)}`;
+  return DateInputTexts.value.departure(formatToLongDateTime(date.date, nb));
 }
 
 const DateTypeButton: React.FC<
@@ -145,6 +147,8 @@ const DateInput: React.FC<DateInputProps> = ({
     onClose();
   };
 
+  const {t} = useTranslation();
+
   const searchValue = dateToText(valueOrDefault, timeOfLastSearch);
 
   return (
@@ -159,7 +163,7 @@ const DateInput: React.FC<DateInputProps> = ({
           'Aktiver for å velge tidspunkt og dato.' + screenReaderPause
         }
         accessibilityRole="button"
-        text={searchValue}
+        text={t(searchValue)}
         onPress={onOpen}
         mode="primary4"
       />

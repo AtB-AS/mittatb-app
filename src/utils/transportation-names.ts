@@ -1,16 +1,17 @@
 import {EstimatedCall, Leg, Quay, LegMode} from '../sdk';
+import {TranslatedString, dictionary} from '../translations';
 
 export function getLineName(leg: Leg) {
   return leg.line
     ? leg.line.publicCode +
         ' ' +
         leg.fromEstimatedCall?.destinationDisplay?.frontText ?? leg.line.name
-    : 'Ukjent';
+    : '';
 }
 
 export function getLineNameFromEstimatedCall(
   call: EstimatedCall,
-): {publicCode?: string; name: string} {
+): {publicCode?: string; name?: string} {
   const name =
     call.destinationDisplay?.frontText ??
     call.serviceJourney.journeyPattern?.line.name;
@@ -18,60 +19,55 @@ export function getLineNameFromEstimatedCall(
   const publicCode = call.serviceJourney.journeyPattern?.line.publicCode;
 
   if (!publicCode && !name) {
-    return {name: 'Ukjent'};
+    return {};
   }
   if (!publicCode) {
     return {name};
   }
   return {publicCode, name};
 }
-export function getReadableModeName(mode: LegMode): string {
+export function getModeName(mode: LegMode): TranslatedString {
+  const legModeNames = dictionary.travel.legModes;
   switch (mode) {
     case 'bus':
-      return 'Buss';
+      return legModeNames.bus;
     case 'rail':
-      return 'Tog';
+      return legModeNames.rail;
     case 'tram':
-      return 'Trikk';
+      return legModeNames.tram;
     case 'water':
-      return 'Båt';
+      return legModeNames.water;
     case 'air':
-      return 'Fly';
+      return legModeNames.air;
     case 'foot':
-      return 'Gange';
+      return legModeNames.foot;
     default:
-      return mode;
+      return legModeNames.unknown;
   }
 }
 
-export function getQuayName(quay?: Quay, defaultName: string = 'Ukjent') {
-  if (!quay) return defaultName;
+export function getQuayName(quay?: Quay): string | undefined {
+  if (!quay) return;
   if (!quay.publicCode) return quay.name;
   return `${quay.name} ${quay.publicCode}`;
 }
 
-export function getQuayNameFromStartLeg(
-  leg?: Leg,
-  defaultName: string = 'Ukjent',
-) {
+export function getQuayNameFromStartLeg(leg?: Leg): string | undefined {
   if (leg?.fromEstimatedCall?.quay) {
     return getQuayName(leg?.fromEstimatedCall?.quay);
   }
   if (leg?.fromPlace.quay) {
     return getQuayName(leg?.fromPlace.quay);
   }
-  return leg?.fromPlace.name ?? defaultName;
+  return leg?.fromPlace.name;
 }
 
-export function getQuayNameFromStopLeg(
-  leg?: Leg,
-  defaultName: string = 'Ukjent',
-) {
+export function getQuayNameFromStopLeg(leg?: Leg): string | undefined {
   if (leg?.fromEstimatedCall?.quay) {
     return getQuayName(leg?.toEstimatedCall?.quay);
   }
   if (leg?.fromPlace.quay) {
     return getQuayName(leg?.toPlace.quay);
   }
-  return leg?.fromPlace.name ?? defaultName;
+  return leg?.fromPlace.name;
 }

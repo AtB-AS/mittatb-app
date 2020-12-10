@@ -34,6 +34,7 @@ import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
 import {DeparturesWithStopLocal, QuayWithDeparturesAndLimits} from './utils';
 import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
+import {NearbyTexts, useTranslation, dictionary} from '../../translations';
 
 type NearbyResultsProps = {
   departures: DeparturesWithStopLocal[] | null;
@@ -52,10 +53,16 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
 }) => {
   const styles = useResultsStyle();
   const navigation = useNavigation<NearbyScreenNavigationProp>();
+  const {t} = useTranslation();
   const onPress = (departure: EstimatedCall) => {
     const {publicCode, name} = getLineNameFromEstimatedCall(departure);
+    const title = publicCode
+      ? `${publicCode} ${name}`
+      : name
+      ? name
+      : t(dictionary.travel.line.defaultName);
     navigation.navigate('DepartureDetailsModal', {
-      title: publicCode ? `${publicCode} ${name}` : name,
+      title,
       serviceJourneyId: departure.serviceJourney.id,
       date: departure.date,
       fromQuayId: departure.quay?.id,
@@ -66,9 +73,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
     return (
       <View style={styles.container}>
         <MessageBox type="info">
-          <ThemeText>
-            Søk etter avganger fra holdeplasser eller i nærheten av steder.
-          </ThemeText>
+          <ThemeText>{t(NearbyTexts.results.messages.initial)}</ThemeText>
         </MessageBox>
       </View>
     );
@@ -78,7 +83,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
     return (
       <View style={styles.container}>
         <MessageBox type="info">
-          <ThemeText>Fant ingen avganger i nærheten</ThemeText>
+          <ThemeText>{t(NearbyTexts.results.messages.emptyResult)}</ThemeText>
         </MessageBox>
       </View>
     );
@@ -181,6 +186,7 @@ type QuayProps = {
 const QuayResult: React.FC<QuayProps> = React.memo(
   ({quay, onPress, onShowMoreOnQuay}) => {
     const styles = useResultItemStyles();
+    const {t} = useTranslation();
 
     const items = quay.departures.slice(0, quay.showLimit);
     const showShowMoreButton =
@@ -194,7 +200,10 @@ const QuayResult: React.FC<QuayProps> = React.memo(
     return (
       <View key={quay.quay.id} style={styles.quayContainer}>
         <View style={styles.platformHeader}>
-          <ThemeText>Plattform {quay.quay.publicCode}</ThemeText>
+          <ThemeText>
+            {t(NearbyTexts.results.quayResult.platformHeader.title)}{' '}
+            {quay.quay.publicCode}
+          </ThemeText>
         </View>
         {items.map((departure, i) => (
           <React.Fragment key={departure.serviceJourney.id}>
@@ -207,7 +216,10 @@ const QuayResult: React.FC<QuayProps> = React.memo(
           </React.Fragment>
         ))}
         {showShowMoreButton && (
-          <ShowMoreButton onPress={() => onShowMoreOnQuay!(quay.quay.id)} />
+          <ShowMoreButton
+            text={t(NearbyTexts.results.quayResult.showMoreToggler.text)}
+            onPress={() => onShowMoreOnQuay!(quay.quay.id)}
+          />
         )}
       </View>
     );
@@ -215,9 +227,10 @@ const QuayResult: React.FC<QuayProps> = React.memo(
 );
 
 type ShowMoreButtonProps = {
+  text: string;
   onPress(): void;
 };
-const ShowMoreButton: React.FC<ShowMoreButtonProps> = ({onPress}) => {
+const ShowMoreButton: React.FC<ShowMoreButtonProps> = ({text, onPress}) => {
   const style = useShowMoreButtonStyle();
   return (
     <TouchableOpacity
@@ -226,7 +239,7 @@ const ShowMoreButton: React.FC<ShowMoreButtonProps> = ({onPress}) => {
       hitSlop={insets.symmetric(8, 12)}
     >
       <View style={style.showMoreButton}>
-        <ThemeText type="body">Vis flere avganger</ThemeText>
+        <ThemeText type="body">{text}</ThemeText>
         <ThemeIcon svg={Expand} />
       </View>
     </TouchableOpacity>

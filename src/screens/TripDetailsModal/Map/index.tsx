@@ -18,6 +18,7 @@ import {
 } from '../../../components/map/';
 import {Leg} from '../../../sdk';
 import Bugsnag from '@bugsnag/react-native';
+import {useTranslation, MapTexts} from '../../../translations';
 
 export type MapDetailRouteParams = {
   legs: Leg[];
@@ -59,6 +60,7 @@ export const TravelDetailsMap: React.FC<MapProps> = ({route, navigation}) => {
         750,
       );
   }
+  const {t} = useTranslation();
   const controlStyles = useControlPositionsStyle();
   return (
     <View style={styles.mapView}>
@@ -77,11 +79,22 @@ export const TravelDetailsMap: React.FC<MapProps> = ({route, navigation}) => {
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
         <MapRoute lines={features}></MapRoute>
-        <MapLabel point={endPoint} id={'end'} text="Slutt"></MapLabel>
-        <MapLabel point={startPoint} id={'start'} text="Start"></MapLabel>
+        <MapLabel
+          point={endPoint}
+          id={'end'}
+          text={t(MapTexts.endPoint.label)}
+        ></MapLabel>
+        <MapLabel
+          point={startPoint}
+          id={'start'}
+          text={t(MapTexts.startPoint.label)}
+        ></MapLabel>
       </MapboxGL.MapView>
       <View style={controlStyles.backArrowContainer}>
-        <BackArrow onBack={() => navigation.goBack()} />
+        <BackArrow
+          accessibilityLabel={t(MapTexts.exitButton.a11yLabel)}
+          onBack={() => navigation.goBack()}
+        />
       </View>
       <View style={controlStyles.controlsContainer}>
         <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
