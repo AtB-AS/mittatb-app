@@ -4,7 +4,7 @@ import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
 import Header from '../../../../ScreenHeader';
 import {Edit} from '../../../../assets/svg/icons/actions';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StyleSheet, useTheme} from '../../../../theme';
 import ThemeText from '../../../../components/text';
 import ThemeIcon from '../../../../components/theme-icon';
@@ -89,8 +89,10 @@ const Travellers: React.FC<TravellersProps> = ({
     }
   }
 
+  const {top: safeAreaTop, bottom: safeAreBottom} = useSafeAreaInsets();
+
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[styles.container, {paddingTop: safeAreaTop}]}>
       <Header
         title={params.preassignedFareProduct.name.value}
         leftButton={{
@@ -142,7 +144,14 @@ const Travellers: React.FC<TravellersProps> = ({
         )}
       </ScrollView>
 
-      <View style={styles.footer}>
+      <View
+        style={[
+          styles.footer,
+          {
+            paddingBottom: Math.max(safeAreBottom, theme.spacings.medium),
+          },
+        ]}
+      >
         <View style={styles.totalContainer}>
           <View style={styles.totalContainerHeadings}>
             <ThemeText type="body">Totalt</ThemeText>
@@ -193,8 +202,7 @@ const Travellers: React.FC<TravellersProps> = ({
           />
         </View>
       </View>
-      <View style={styles.bottomColor} />
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -242,8 +250,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingVertical: theme.spacings.xSmall,
   },
   footer: {
-    paddingTop: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.medium,
+    padding: theme.spacings.medium,
     backgroundColor: theme.background.header,
   },
   buttons: {
@@ -252,21 +259,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   paymentButton: {
     marginTop: theme.spacings.medium,
     flex: 1,
-    minHeight: 64,
   },
   vippsPaymentButton: {
     marginRight: 6,
   },
   cardPaymentButton: {
     marginLeft: 6,
-  },
-  bottomColor: {
-    backgroundColor: theme.background.header,
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    height: 50,
-    zIndex: -1,
   },
 }));
 
