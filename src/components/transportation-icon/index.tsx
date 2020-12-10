@@ -6,6 +6,7 @@ import {
   TrainSide,
   PlaneSide,
   FerrySide,
+  WalkingPerson,
 } from '../../assets/svg/icons/transportation';
 import {LegMode} from '../../sdk';
 import {StyleSheet} from '../../theme';
@@ -77,6 +78,8 @@ function InnerIcon({
       return (
         <FerrySide accessibilityLabel="Ferge" key="boat" {...innerIconProps} />
       );
+    case 'foot':
+      return <WalkingPerson accessibilityLabel="Gange" {...innerIconProps} />;
     case 'unknown':
     default:
       return null;
