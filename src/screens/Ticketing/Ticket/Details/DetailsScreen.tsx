@@ -1,37 +1,31 @@
 import React, {useState} from 'react';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
-import {RootStackParamList} from '../../../navigation';
-import Header from '../../../ScreenHeader';
-import {StyleSheet} from '../../../theme';
-import ThemeIcon from '../../../components/theme-icon';
-import {Close} from '../../../assets/svg/icons/actions';
-import ThemeText from '../../../components/text';
+import Header from '../../../../ScreenHeader';
+import {StyleSheet} from '../../../../theme';
+import ThemeIcon from '../../../../components/theme-icon';
+import {Close} from '../../../../assets/svg/icons/actions';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import DetailedTicket from '../Ticket/DetailedTicket';
-import useInterval from '../../../utils/use-interval';
-import {useTicketState} from '../../../TicketContext';
+import useInterval from '../../../../utils/use-interval';
+import {useTicketState} from '../../../../TicketContext';
 import {View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import DetailsContent from './DetailsContent';
+import {TicketModalNavigationProp, TicketModalStackParams} from '.';
 
 export type TicketDetailsRouteParams = {
   orderId: string;
 };
 
 export type TicketDetailsScreenRouteProp = RouteProp<
-  RootStackParamList,
+  TicketModalStackParams,
   'TicketDetails'
->;
-
-export type TicketDetailsScreenNavigationProp = NavigationProp<
-  RootStackParamList
 >;
 
 type Props = {
   route: TicketDetailsScreenRouteProp;
-  navigation: TicketDetailsScreenNavigationProp;
+  navigation: TicketModalNavigationProp;
 };
 
-export default function TicketDetails({navigation, route}: Props) {
+export default function DetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
@@ -39,6 +33,13 @@ export default function TicketDetails({navigation, route}: Props) {
   const fc = fareContracts?.find(
     (fc) => fc.order_id === route?.params?.orderId,
   );
+
+  const onReceiptNavigate = () =>
+    fc &&
+    navigation.push('TicketReceipt', {
+      orderId: fc.order_id,
+      orderVersion: fc.order_version,
+    });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -54,7 +55,13 @@ export default function TicketDetails({navigation, route}: Props) {
         style={styles.header}
       />
       <View style={styles.content}>
-        {fc && <DetailedTicket fareContract={fc} now={now} />}
+        {fc && (
+          <DetailsContent
+            fareContract={fc}
+            now={now}
+            onReceiptNavigate={onReceiptNavigate}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
