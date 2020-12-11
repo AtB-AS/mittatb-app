@@ -143,11 +143,9 @@ function useCurrentLocationChip(
   onSelectLocation: (location: LocationWithMetadata) => void,
 ) {
   const {location, requestPermission} = useGeolocationState();
-  const {locations: reverseLookupLocations} =
-    useReverseGeocoder(location?.coords ?? null) ?? [];
-  const currentLocation = reverseLookupLocations?.length
-    ? reverseLookupLocations[1]
-    : null;
+  const {closestLocation: currentLocation} = useReverseGeocoder(
+    location?.coords ?? null,
+  );
 
   const [recentlyAllowedGeo, setsetRecentlyAllowedGeo] = useState(false);
 
