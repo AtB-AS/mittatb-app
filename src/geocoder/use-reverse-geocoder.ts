@@ -5,10 +5,13 @@ import {reverse} from '../api';
 import {mapFeatureToLocation} from './utils';
 import useGeocoderReducer, {GeocoderState} from './use-geocoder-reducer';
 import {getAxiosErrorType} from '../api/utils';
+import {Location} from '../favorites/types';
+
+type ReverseGeocoderState = GeocoderState & {closestLocation?: Location};
 
 export default function useReverseGeocoder(
   coords: Coordinates | null,
-): GeocoderState {
+): ReverseGeocoderState {
   const [state, dispatch] = useGeocoderReducer();
 
   useEffect(() => {
@@ -43,5 +46,8 @@ export default function useReverseGeocoder(
     return () => source.cancel('Cancelling previous reverse');
   }, [coords?.latitude, coords?.longitude]);
 
-  return state;
+  return {
+    ...state,
+    closestLocation: state.locations?.[0],
+  };
 }
