@@ -20,7 +20,6 @@ export default function SituationMessages({
 
   const uniqueSituations = getUniqueSituations(situations);
   const icon = mode === 'no-icon' ? null : undefined;
-
   return (
     <MessageBox type="warning" icon={icon} containerStyle={containerStyle}>
       {Object.entries(uniqueSituations).map(([id, situation]) => (

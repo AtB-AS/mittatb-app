@@ -24,10 +24,11 @@ import {getSingleTripPattern} from '../../../api/trips';
 import usePollableResource from '../../../utils/use-pollable-resource';
 import hexToRgba from 'hex-to-rgba';
 import TripSection from './TripLeg';
+import {is} from 'date-fns/locale';
 
 export type DetailsRouteParams = {
-  tripPatterns: TripPattern[];
-  currentIndex: number;
+  initialTripPatterns: TripPattern[];
+  startIndex: number;
 };
 
 export type DetailScreenRouteProp = RouteProp<
@@ -47,34 +48,44 @@ type Props = {
 };
 const Details: React.FC<Props> = (props) => {
   const {
-    params: {tripPatterns, currentIndex: startIndex},
+    params: {initialTripPatterns: initialTripPatterns, startIndex: startIndex},
   } = props.route;
 
   const {theme, themeName} = useTheme();
   const [currentIndex, setCurrentIndex] = useState<number>(startIndex);
 
+  const isFocused = useIsFocused();
+
   const styles = useStyle();
 
   function navigate(page: number) {
-    if (page > tripPatterns.length || page < 1) {
+    if (page > initialTripPatterns.length || page < 1) {
       return;
     }
     const newIndex = page - 1;
     setCurrentIndex(newIndex);
   }
-
-  const initialTripPattern = tripPatterns[currentIndex];
-  const isFocused = useIsFocused();
-  const [updatedTripPattern, , isLoading, error] = useTripPattern(
-    initialTripPattern.id ?? '',
-    initialTripPattern,
+  const [tripPattern, setTripPattern] = useState<TripPattern | undefined>(
+    initialTripPatterns[currentIndex],
+  );
+  const [updatedTripPattern, , loading, error] = useTripPattern(
+    currentIndex,
+    initialTripPatterns[currentIndex],
     !isFocused,
   );
-  const tripPattern = updatedTripPattern ?? tripPatterns[currentIndex]; // Fallback to initial
+  const showActivityIndicator = (!tripPattern && !error) || loading;
 
-  const showActivityIndicator = (!tripPattern || isLoading) && !error;
+  useEffect(() => {
+    const currentPagePatternId = initialTripPatterns[currentIndex].id;
+    setTripPattern(
+      updatedTripPattern?.id === currentPagePatternId
+        ? updatedTripPattern
+        : initialTripPatterns[currentIndex],
+    );
+  }, [currentIndex, updatedTripPattern]);
 
   const [shortTime, setShortTime] = useState(false);
+
   return (
     <View style={styles.container}>
       <Header
@@ -115,14 +126,25 @@ const Details: React.FC<Props> = (props) => {
             <View style={styles.paddedContainer}>
               <Pagination
                 page={currentIndex + 1}
-                totalPages={tripPatterns.length}
+                totalPages={initialTripPatterns.length}
                 onNavigate={navigate}
                 style={styles.pagination}
               ></Pagination>
               <View style={styles.line} />
               <Messages error={error} shortTime={shortTime} />
-              {tripPattern.legs.map((leg, key) => {
-                return <TripSection key={key} {...leg} />;
+              {tripPattern.legs.map((leg, index) => {
+                return (
+                  <TripSection
+                    key={index}
+                    isFirst={index == 0}
+                    isIntermediate={isIntermediateTravelLeg(
+                      index,
+                      tripPattern.legs,
+                    )}
+                    isLast={index == tripPattern.legs.length - 1}
+                    {...leg}
+                  />
+                );
               })}
               <View style={styles.line} />
               <Summary {...tripPattern} />
@@ -174,16 +196,56 @@ const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
   return (
     <View style={styles.summary}>
       <View style={styles.summaryDetail}>
-        <ThemeIcon style={styles.leftIcon} svg={Duration} />
-        <ThemeText>Reisetid: {secondsToDuration(duration)}</ThemeText>
+        <ThemeIcon colorType="faded" style={styles.leftIcon} svg={Duration} />
+        <ThemeText color="faded">
+          Reisetid: {secondsToDuration(duration)}
+        </ThemeText>
       </View>
       <View style={styles.summaryDetail}>
-        <ThemeIcon style={styles.leftIcon} svg={WalkingPerson} />
-        <ThemeText>Gangavstand: {walkDistance.toFixed()} m</ThemeText>
+        <ThemeIcon
+          colorType="faded"
+          style={styles.leftIcon}
+          svg={WalkingPerson}
+        />
+        <ThemeText color="faded">
+          Gangavstand: {walkDistance.toFixed()} m
+        </ThemeText>
       </View>
     </View>
   );
 };
+function nextLeg(curent: number, legs: Leg[]): Leg | undefined {
+  return legs[curent + 1];
+}
+
+function isIntermediateTravelLeg(index: number, legs: Leg[]) {
+  const next = nextLeg(index, legs);
+  if (!next) return false;
+  if (next.mode === 'foot') return false;
+  return true;
+}
+function useTripPattern(
+  currentIndex: number,
+  initialTripPattern?: TripPattern,
+  disabled?: boolean,
+) {
+  const fetchTripPattern = useCallback(
+    async function reload() {
+      return await getSingleTripPattern(initialTripPattern?.id ?? '');
+    },
+    [currentIndex],
+  );
+
+  return usePollableResource<TripPattern | undefined, AxiosError>(
+    fetchTripPattern,
+    {
+      initialValue: initialTripPattern,
+      pollingTimeInSeconds: 10,
+      filterError: (err) => !Axios.isCancel(err),
+      disabled,
+    },
+  );
+}
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   header: {
     backgroundColor: theme.background.header,
@@ -201,8 +263,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   activityIndicator: {
     position: 'absolute',
     width: '100%',
-    height: '100%',
-    backgroundColor: hexToRgba(theme.background.level0, 0.5),
     zIndex: 1,
   },
   scrollViewContent: {},
@@ -230,24 +290,5 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginRight: theme.spacings.small,
   },
 }));
-
-function useTripPattern(
-  tripPatternId: string,
-  initialTripPattern?: TripPattern,
-  disabled?: boolean,
-) {
-  const fetchTripPattern = useCallback(
-    async function reload() {
-      return await getSingleTripPattern(tripPatternId);
-    },
-    [tripPatternId],
-  );
-  return usePollableResource<TripPattern | null, AxiosError>(fetchTripPattern, {
-    initialValue: initialTripPattern ?? null,
-    pollingTimeInSeconds: 60,
-    filterError: (err) => !Axios.isCancel(err),
-    disabled,
-  });
-}
 
 export default Details;

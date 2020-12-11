@@ -332,8 +332,8 @@ const Assistant: React.FC<Props> = ({
   const onPressed = useCallback(
     (tripPatterns, index) =>
       navigation.navigate('TripDetailsModal', {
-        tripPatterns: tripPatterns,
-        currentIndex: index,
+        initialTripPatterns: tripPatterns,
+        startIndex: index,
       }),
     [navigation, from, to],
   );
@@ -389,7 +389,7 @@ const Assistant: React.FC<Props> = ({
         isEmptyResult={isEmptyResult}
         resultReasons={noResultReasons}
         onDetailsPressed={onPressed}
-        error={error}
+        errorType={error}
       />
     </DisappearingHeader>
   );

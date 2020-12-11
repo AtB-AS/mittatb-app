@@ -31,7 +31,7 @@ const Results: React.FC<Props> = ({
   isEmptyResult,
   resultReasons,
   onDetailsPressed,
-  error,
+  errorType,
 }) => {
   const styles = useThemeStyles();
 
@@ -39,8 +39,8 @@ const Results: React.FC<Props> = ({
   const {t} = useTranslation();
 
   useEffect(() => {
-    if (error) {
-      switch (error) {
+    if (errorType) {
+      switch (errorType) {
         case 'network-error':
         case 'timeout':
           setErrorMessage(t(AssistantTexts.results.error.network));
@@ -50,7 +50,7 @@ const Results: React.FC<Props> = ({
           break;
       }
     }
-  }, [error]);
+  }, [errorType]);
 
   const allSameDay = useMemo(
     () => isSeveralDays((tripPatterns ?? []).map((i) => i.startTime)),
@@ -60,7 +60,7 @@ const Results: React.FC<Props> = ({
   if (showEmptyScreen) {
     return null;
   }
-  if (error) {
+  if (errorType) {
     return (
       <View style={styles.container}>
         <ScreenReaderAnnouncement message={errorMessage} />

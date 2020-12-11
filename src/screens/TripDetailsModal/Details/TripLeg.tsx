@@ -1,6 +1,6 @@
-import React from 'react';
-import {Leg} from '../../../sdk';
-import {View, ViewProps} from 'react-native';
+import React, {useEffect} from 'react';
+import {Leg, Place} from '../../../sdk';
+import {View, ViewProps, TouchableOpacity} from 'react-native';
 import ThemeText from '../../../components/text';
 import {StyleSheet} from '../../../theme';
 import {formatToClock, secondsToDuration} from '../../../utils/date';
@@ -8,30 +8,61 @@ import {WalkingPerson} from '../../../assets/svg/icons/transportation';
 import {getLineName} from '../../../utils/transportation-names';
 import TransportationIcon from '../../../components/transportation-icon';
 import {transportationMapLineColor} from '../../../utils/transportation-color';
+import {useNavigation} from '@react-navigation/core';
+import {DetailScreenNavigationProp} from '.';
+import {TinyMessageBox} from '../../../message-box';
+import {Warning, Info} from '../../../assets/svg/situations/';
+import SituationMessages from '../../../situations';
 
-const TripSection: React.FC<Leg> = (leg) => {
+type TripSectionProps = {
+  isLast?: boolean;
+  isIntermediate?: boolean;
+  isFirst?: boolean;
+} & Leg;
+
+const TripSection: React.FC<TripSectionProps> = ({isLast, isFirst, ...leg}) => {
   const style = useSectionStyles();
-  const isLegMode = leg.mode === 'foot';
+  const isWalkSection = leg.mode === 'foot';
   const legColor = transportationMapLineColor(leg.mode, leg.line?.publicCode);
 
-  return (
+  const isLastWalk = isWalkSection && isLast;
+  const isFirstWalk = isWalkSection && isFirst;
+
+  const sectionOutput = (
     <View style={style.tripSection}>
-      <TripSectionLine color={legColor} hasStart={true} hasEnd={true} />
-      <TripRow time={leg.expectedStartTime}>
-        <ThemeText>{leg.fromPlace.name}</ThemeText>
-        {leg.fromPlace.quay && (
+      <TripSectionLine
+        color={legColor}
+        hasStart={!(isLast && isWalkSection)}
+        hasEnd={!(isFirst && isWalkSection)}
+      />
+      {!isLastWalk && (
+        <TripRow
+          rowLabel={
+            <Time
+              scheduledTime={leg.aimedStartTime}
+              realTime={leg.expectedStartTime}
+            />
+          }
+        >
+          <PlaceName place={leg.fromPlace} />
+        </TripRow>
+      )}
+      {isWalkSection ? (
+        <TripRow
+          rowLabel={
+            <TransportationIcon
+              mode={leg.mode}
+              publicCode={leg.line?.publicCode}
+            />
+          }
+        >
           <ThemeText type="lead" color="faded">
-            {leg.fromPlace.name} {leg.fromPlace.quay.publicCode}
+            Gå i {secondsToDuration(leg.duration ?? 0)}
           </ThemeText>
-        )}
-      </TripRow>
-      {isLegMode ? (
-        <TripRow icon={<WalkingPerson />}>
-          <ThemeText>Gå i {secondsToDuration(leg.duration ?? 0)}</ThemeText>
         </TripRow>
       ) : (
         <TripRow
-          icon={
+          rowLabel={
             <TransportationIcon
               mode={leg.mode}
               publicCode={leg.line?.publicCode}
@@ -41,12 +72,102 @@ const TripSection: React.FC<Leg> = (leg) => {
           <ThemeText style={style.legLineName}>{getLineName(leg)}</ThemeText>
         </TripRow>
       )}
-      {!isLegMode && (
-        <TripRow time={leg.expectedEndTime}>
-          <ThemeText>{leg.toPlace.name}</ThemeText>
+      {!!leg.situations.length && (
+        <TripRow rowLabel={<Warning />}>
+          <SituationMessages mode="no-icon" situations={leg.situations} />
+        </TripRow>
+      )}
+      {leg.notices &&
+        leg.notices.map((notice) => {
+          return (
+            <TripRow rowLabel={<Info />}>
+              <TinyMessageBox
+                type="info"
+                message={notice.text}
+              ></TinyMessageBox>
+            </TripRow>
+          );
+        })}
+      {!isFirstWalk && (
+        <TripRow
+          alignBottom={true}
+          rowLabel={
+            <Time
+              scheduledTime={leg.aimedEndTime}
+              realTime={leg.expectedEndTime}
+            />
+          }
+        >
+          <PlaceName place={leg.toPlace} />
         </TripRow>
       )}
     </View>
+  );
+  return (
+    <>
+      {isWalkSection ? (
+        sectionOutput
+      ) : (
+        <WithFurtherDetails leg={leg}>{sectionOutput}</WithFurtherDetails>
+      )}
+    </>
+  );
+};
+type TimeProps = {
+  scheduledTime: string;
+  realTime?: string;
+};
+const Time: React.FC<TimeProps> = ({scheduledTime, realTime}) => {
+  const scheduled = formatToClock(scheduledTime);
+  const real = realTime ? formatToClock(realTime) : '';
+  if (real && real !== scheduled) {
+    return (
+      <View style={{flexDirection: 'column', alignItems: 'flex-end'}}>
+        <ThemeText>{real}</ThemeText>
+        <ThemeText
+          type="lead"
+          color="faded"
+          style={{textDecorationLine: 'line-through'}}
+        >
+          {scheduled}
+        </ThemeText>
+      </View>
+    );
+  }
+  return <ThemeText>{scheduled}</ThemeText>;
+};
+const WithFurtherDetails: React.FC<{leg: Leg} & ViewProps> = ({
+  leg,
+  children,
+}) => {
+  const navigation = useNavigation<DetailScreenNavigationProp>();
+  return (
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate('DepartureDetails', {
+          title: getLineName(leg),
+          serviceJourneyId: leg.serviceJourney.id,
+          date: leg.expectedStartTime,
+          fromQuayId: leg.fromPlace.quay?.id,
+          toQuayId: leg.toPlace.quay?.id,
+          isBack: true,
+        })
+      }
+    >
+      {children}
+    </TouchableOpacity>
+  );
+};
+const PlaceName: React.FC<{place: Place}> = ({place}) => {
+  return (
+    <>
+      <ThemeText>{place.name}</ThemeText>
+      {place.quay && (
+        <ThemeText type="lead" color="faded">
+          {place.quay.name} {place.quay.publicCode}
+        </ThemeText>
+      )}
+    </>
   );
 };
 type LineProps = {
@@ -59,31 +180,30 @@ const TripSectionLine: React.FC<LineProps> = ({color, hasStart, hasEnd}) => {
   const colorStyle = {backgroundColor: color};
   return (
     <View style={[style.decoration, colorStyle]}>
-      <View
-        style={[style.decorationMarker, style.decorationStart, colorStyle]}
-      ></View>
-      <View
-        style={[style.decorationMarker, style.decorationEnd, colorStyle]}
-      ></View>
+      {hasStart && (
+        <View
+          style={[style.decorationMarker, style.decorationStart, colorStyle]}
+        ></View>
+      )}
+      {hasEnd && (
+        <View
+          style={[style.decorationMarker, style.decorationEnd, colorStyle]}
+        ></View>
+      )}
     </View>
   );
 };
 type TripRowProps = {
-  time?: string;
-  icon?: JSX.Element;
+  rowLabel: React.ReactNode;
+  alignBottom?: boolean;
 } & ViewProps;
-const TripRow: React.FC<TripRowProps> = ({time, icon, children}) => {
+const TripRow: React.FC<TripRowProps> = ({rowLabel, children, alignBottom}) => {
   const style = useSectionStyles();
-
-  const leftContent = (
-    <>
-      {time && <ThemeText>{formatToClock(time)}</ThemeText>}
-      {icon}
-    </>
-  );
   return (
-    <View style={style.tripRow}>
-      <View style={style.rowLeft}>{leftContent}</View>
+    <View
+      style={[style.tripRow, alignBottom ? style.alignEnd : style.alignStart]}
+    >
+      <View style={style.rowLeft}>{rowLabel}</View>
       <View style={style.decorationPlaceholder}></View>
       <View style={style.rowRight}>{children}</View>
     </View>
@@ -98,7 +218,6 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
     paddingVertical: theme.spacings.small,
   },
   rowLeft: {
@@ -108,6 +227,12 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   rowRight: {
     flex: 5,
+  },
+  alignStart: {
+    alignItems: 'flex-start',
+  },
+  alignEnd: {
+    alignItems: 'flex-end',
   },
   legLineName: {
     fontWeight: 'bold',
