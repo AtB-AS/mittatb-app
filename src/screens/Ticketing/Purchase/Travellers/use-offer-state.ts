@@ -1,5 +1,5 @@
 import {CancelToken} from 'axios';
-import {useCallback, useEffect, useReducer} from 'react';
+import {useCallback, useEffect, useMemo, useReducer} from 'react';
 import {CancelToken as CancelTokenStatic, searchOffers} from '../../../../api';
 import {
   PreassignedFareProduct,
@@ -9,6 +9,7 @@ import {
 } from '../../../../api/fareContracts';
 import {ErrorType, getAxiosErrorType} from '../../../../api/utils';
 import {UserProfileWithCount} from './use-user-count-state';
+import {TariffZone} from '../../../../api/tariffZones';
 
 type OfferErrorContext = 'failed_offer_search' | 'failed_reservation';
 
@@ -115,10 +116,16 @@ const initialState: OfferState = {
 
 export default function useOfferState(
   preassignedFareProduct: PreassignedFareProduct,
+  fromTariffZone: TariffZone,
+  toTariffZone: TariffZone,
   userProfilesWithCount: UserProfileWithCount[],
 ) {
   const offerReducer = getOfferReducer(userProfilesWithCount);
   const [state, dispatch] = useReducer(offerReducer, initialState);
+  const zones = useMemo(
+    () => [...new Set([fromTariffZone.id, toTariffZone.id])],
+    [fromTariffZone, toTariffZone],
+  );
 
   const updateOffer = useCallback(
     async function (cancelToken?: CancelToken) {
@@ -137,7 +144,7 @@ export default function useOfferState(
           dispatch({type: 'SEARCHING_OFFER'});
           const response = await searchOffers(
             {
-              zones: ['ATB:TariffZone:1'],
+              zones,
               travellers: offerTravellers,
               products: [preassignedFareProduct.id],
             },
@@ -163,7 +170,7 @@ export default function useOfferState(
         }
       }
     },
-    [dispatch, userProfilesWithCount, preassignedFareProduct],
+    [dispatch, userProfilesWithCount, preassignedFareProduct, zones],
   );
 
   useEffect(() => {

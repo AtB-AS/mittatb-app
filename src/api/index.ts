@@ -8,3 +8,4 @@ export {
   reserve as reserveOffers,
 } from './fareContracts';
 export {list as listUserProfiles} from './userProfiles';
+export {list as listTariffZones} from './tariffZones';

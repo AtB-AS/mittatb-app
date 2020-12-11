@@ -18,9 +18,11 @@ import {
   listFareContracts,
   listPreassignedFareProducts,
   listUserProfiles,
+  listTariffZones,
 } from './api';
 import useInterval from './utils/use-interval';
 import {UserProfile} from './api/userProfiles';
+import {TariffZone} from './api/tariffZones';
 
 type TicketReducerState = {
   fareContracts: FareContract[];
@@ -28,6 +30,8 @@ type TicketReducerState = {
   preassignedFareProductsLoading: boolean;
   userProfiles: UserProfile[];
   userProfilesLoading: boolean;
+  tariffZones: TariffZone[];
+  tariffZonesLoading: boolean;
   activeReservations: ActiveReservation[];
   isRefreshingTickets: boolean;
 };
@@ -45,6 +49,10 @@ type TicketReducerAction =
   | {
       type: 'LOADED_USER_PROFILES';
       userProfiles: UserProfile[];
+    }
+  | {
+      type: 'LOADED_TARIFF_ZONES';
+      tariffZones: TariffZone[];
     }
   | {type: 'ADD_RESERVATION'; reservation: ActiveReservation}
   | {
@@ -93,6 +101,13 @@ const ticketReducer: TicketReducer = (
         userProfilesLoading: false,
       };
     }
+    case 'LOADED_TARIFF_ZONES': {
+      return {
+        ...prevState,
+        tariffZones: action.tariffZones,
+        tariffZonesLoading: false,
+      };
+    }
     case 'ADD_RESERVATION': {
       return {
         ...prevState,
@@ -129,6 +144,7 @@ type TicketState = {
   | 'preassignedFareProducts'
   | 'userProfiles'
   | 'isRefreshingTickets'
+  | 'tariffZones'
 >;
 
 const initialReducerState: TicketReducerState = {
@@ -137,6 +153,8 @@ const initialReducerState: TicketReducerState = {
   preassignedFareProductsLoading: true,
   userProfiles: [],
   userProfilesLoading: true,
+  tariffZones: [],
+  tariffZonesLoading: true,
   activeReservations: [],
   isRefreshingTickets: false,
 };
@@ -237,6 +255,21 @@ const TicketContextProvider: React.FC = ({children}) => {
     [dispatch],
   );
 
+  const loadTariffZones = useCallback(
+    async function () {
+      try {
+        const tariffZones = await listTariffZones();
+        dispatch({
+          type: 'LOADED_TARIFF_ZONES',
+          tariffZones,
+        });
+      } catch (err) {
+        console.warn(err);
+      }
+    },
+    [dispatch],
+  );
+
   useInterval(
     pollPaymentStatus,
     500,
@@ -264,6 +297,10 @@ const TicketContextProvider: React.FC = ({children}) => {
     loadUserProfiles();
   }, []);
 
+  useEffect(() => {
+    loadTariffZones();
+  }, []);
+
   return (
     <TicketContext.Provider
       value={{
@@ -272,7 +309,9 @@ const TicketContextProvider: React.FC = ({children}) => {
         refreshTickets: updateFareContracts,
         activatePollingForNewTickets: updateReservations,
         isLoadingNecessaryTicketData:
-          state.preassignedFareProductsLoading || state.userProfilesLoading,
+          state.preassignedFareProductsLoading ||
+          state.userProfilesLoading ||
+          state.tariffZonesLoading,
       }}
     >
       {children}

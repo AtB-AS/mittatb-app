@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
@@ -17,6 +17,7 @@ import MessageBox from '../../../../message-box';
 import {CreditCard, Vipps} from '../../../../assets/svg/icons/ticketing';
 import * as Sections from '../../../../components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
+import {useTicketState} from '../../../../TicketContext';
 
 export type TravellersProps = {
   navigation: DismissableStackNavigationProp<
@@ -35,6 +36,12 @@ const Travellers: React.FC<TravellersProps> = ({
 
   const {userProfilesWithCount, addCount, removeCount} = useUserCountState();
 
+  const {tariffZones} = useTicketState();
+  const {
+    fromTariffZone = tariffZones[0],
+    toTariffZone = tariffZones[0],
+  } = params;
+
   const {
     offerSearchTime,
     isSearchingOffer,
@@ -42,7 +49,12 @@ const Travellers: React.FC<TravellersProps> = ({
     totalPrice,
     refreshOffer,
     offers,
-  } = useOfferState(params.preassignedFareProduct, userProfilesWithCount);
+  } = useOfferState(
+    params.preassignedFareProduct,
+    fromTariffZone,
+    toTariffZone,
+    userProfilesWithCount,
+  );
 
   const offerExpirationTime =
     offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
@@ -83,6 +95,11 @@ const Travellers: React.FC<TravellersProps> = ({
 
   const {top: safeAreaTop, bottom: safeAreBottom} = useSafeAreaInsets();
 
+  const tariffZonesText =
+    fromTariffZone.id === toTariffZone.id
+      ? `Reise gjennom 1 sone (Sone ${fromTariffZone.name.value})`
+      : `Reise fra sone ${fromTariffZone.name.value} til sone ${toTariffZone.name.value}`;
+
   return (
     <View style={[styles.container, {paddingTop: safeAreaTop}]}>
       <Header
@@ -106,8 +123,14 @@ const Travellers: React.FC<TravellersProps> = ({
 
         <Sections.Section withPadding>
           <Sections.LinkItem
-            text="Reise gjennom 1 sone (Sone A)"
-            onPress={() => {}}
+            text={tariffZonesText}
+            onPress={() => {
+              navigation.push('TariffZones', {
+                fromTariffZone,
+                toTariffZone,
+                preassignedFareProduct: params.preassignedFareProduct,
+              });
+            }}
             icon={<ThemeIcon svg={Edit} />}
           />
         </Sections.Section>
