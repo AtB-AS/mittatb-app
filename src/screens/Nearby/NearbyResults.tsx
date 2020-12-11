@@ -1,56 +1,41 @@
 import {useNavigation} from '@react-navigation/native';
-import haversine from 'haversine-distance';
-import React, {useMemo} from 'react';
-import {
-  ActivityIndicator,
-  ImageStyle,
-  StyleProp,
-  TextStyle,
-  TouchableOpacity,
-  View,
-  Text,
-  ViewStyle,
-} from 'react-native';
+import React, {Fragment} from 'react';
+import {ActivityIndicator, Text, TouchableOpacity, View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 import {NearbyScreenNavigationProp} from '.';
-import {Expand} from '../../assets/svg/icons/navigation';
-import {WalkingPerson} from '../../assets/svg/icons/transportation';
-import OptionalNextDayLabel from '../../components/optional-day-header';
-import AccessibleText from '../../components/accessible-text';
-import TransportationIcon from '../../components/transportation-icon';
-import {useGeolocationState} from '../../GeolocationContext';
-import MessageBox from '../../message-box';
-import {EstimatedCall, StopPlaceDetails} from '../../sdk';
-import SituationMessages, {SituationWarningIcon} from '../../situations';
-import {StyleSheet} from '../../theme';
-import {flatMap} from '../../utils/array';
 import {
-  formatToClockOrRelativeMinutes,
-  isInThePast,
-  isSeveralDays,
-  missingRealtimePrefix,
-} from '../../utils/date';
-import insets from '../../utils/insets';
-import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
-import {DeparturesWithStopLocal, QuayWithDeparturesAndLimits} from './utils';
+  DepartureGroup,
+  QuayGroup,
+  StopPlaceGroup,
+} from '../../api/departures/types';
+import {Expand} from '../../assets/svg/icons/navigation';
+import * as Section from '../../components/sections';
+import {GenericItemProps} from '../../components/sections/generic-item';
 import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
-import {NearbyTexts, useTranslation, dictionary} from '../../translations';
+import MessageBox from '../../message-box';
+import {EstimatedCall} from '../../sdk';
+import {StyleSheet} from '../../theme';
+import {dictionary, NearbyTexts, useTranslation} from '../../translations';
+import {formatToClock} from '../../utils/date';
+import insets from '../../utils/insets';
+import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
 
 type NearbyResultsProps = {
-  departures: DeparturesWithStopLocal[] | null;
+  departures: StopPlaceGroup[] | null;
   onShowMoreOnQuay?(quayId: string): void;
   isFetchingMore?: boolean;
   error?: string;
   isInitialScreen: boolean;
 };
 
-const NearbyResults: React.FC<NearbyResultsProps> = ({
+export default function NearbyResults({
   departures,
   onShowMoreOnQuay,
   isFetchingMore = false,
   error,
   isInitialScreen,
-}) => {
+}: NearbyResultsProps) {
   const styles = useResultsStyle();
   const navigation = useNavigation<NearbyScreenNavigationProp>();
   const {t} = useTranslation();
@@ -88,6 +73,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
       </View>
     );
   }
+
   return (
     <View style={styles.container}>
       {error && (
@@ -102,10 +88,10 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
         <>
           {departures.map((item) => (
             <StopDepartures
-              key={item.stop.id}
-              departures={item}
+              key={item.stopPlace.id}
+              stopPlaceGroup={item}
               onPress={onPress}
-              onShowMoreOnQuay={onShowMoreOnQuay}
+              // onShowMoreOnQuay={onShowMoreOnQuay}
             />
           ))}
           <FooterLoader isFetchingMore={isFetchingMore} />
@@ -113,7 +99,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
       )}
     </View>
   );
-};
+}
 const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     padding: theme.spacings.medium,
@@ -133,98 +119,77 @@ function FooterLoader({isFetchingMore}: FooterLoaderProps) {
   return <ActivityIndicator style={{marginVertical: 20}} />;
 }
 
-export default NearbyResults;
-
-function hasNoQuays(departures: DeparturesWithStopLocal[] | null) {
-  return (
-    departures !== null &&
-    (Object.keys(departures).length === 0 ||
-      departures.every((deps) => Object.keys(deps.quays).length === 0))
-  );
-}
-
 type StopDeparturesProps = {
-  departures: DeparturesWithStopLocal;
+  stopPlaceGroup: StopPlaceGroup;
   onPress?(departure: EstimatedCall): void;
   onShowMoreOnQuay?(quayId: string): void;
 };
-const StopDepartures: React.FC<StopDeparturesProps> = React.memo(
-  ({departures, onPress, onShowMoreOnQuay}) => {
-    const styles = useResultItemStyles();
-    const quays = Object.values(departures.quays);
-    if (!quays.length) {
+const StopDepartures = React.memo(
+  ({stopPlaceGroup, onPress, onShowMoreOnQuay}: StopDeparturesProps) => {
+    if (!stopPlaceGroup.quays.length) {
+      return null;
+    }
+    if (hasNoGroupsWithDepartures(stopPlaceGroup.quays)) {
       return null;
     }
 
     return (
-      <>
-        <ItemHeader stop={departures.stop} />
-        <SituationMessages
-          situations={flatMap(quays, (q) => q.quay.situations)}
-          containerStyle={styles.situationContainer}
-        />
-        <LastElement last={styles.quayContainer__withoutBorder}>
-          {quays.map((quay) => (
-            <QuayResult
-              key={quay.quay.id}
-              quay={quay}
-              onPress={onPress}
-              onShowMoreOnQuay={onShowMoreOnQuay}
-            />
-          ))}
-        </LastElement>
-      </>
-    );
-  },
-);
-
-type QuayProps = {
-  quay: QuayWithDeparturesAndLimits;
-  onPress?(departure: EstimatedCall): void;
-  onShowMoreOnQuay?(quayId: string): void;
-};
-const QuayResult: React.FC<QuayProps> = React.memo(
-  ({quay, onPress, onShowMoreOnQuay}) => {
-    const styles = useResultItemStyles();
-    const {t} = useTranslation();
-
-    const items = quay.departures.slice(0, quay.showLimit);
-    const showShowMoreButton =
-      onShowMoreOnQuay && quay.departures.length > quay.showLimit;
-    const allSameDay = useMemo(
-      () => isSeveralDays(items.map((i) => i.expectedDepartureTime)),
-      [items],
-    );
-
-    if (!items.length) return null;
-    return (
-      <View key={quay.quay.id} style={styles.quayContainer}>
-        <View style={styles.platformHeader}>
-          <ThemeText>
-            {t(NearbyTexts.results.quayResult.platformHeader.title)}{' '}
-            {quay.quay.publicCode}
-          </ThemeText>
+      <View>
+        <View>
+          <Text>{stopPlaceGroup.stopPlace.name}</Text>
         </View>
-        {items.map((departure, i) => (
-          <React.Fragment key={departure.serviceJourney.id}>
-            <OptionalNextDayLabel
-              departureTime={departure.expectedDepartureTime}
-              previousDepartureTime={items[i - 1]?.expectedDepartureTime}
-              allSameDay={allSameDay}
-            />
-            <NearbyResultItem departure={departure} onPress={onPress} />
-          </React.Fragment>
+
+        {stopPlaceGroup.quays.map((quayGroup) => (
+          <QuayGroupItem key={quayGroup.quay.id} quayGroup={quayGroup} />
         ))}
-        {showShowMoreButton && (
-          <ShowMoreButton
-            text={t(NearbyTexts.results.quayResult.showMoreToggler.text)}
-            onPress={() => onShowMoreOnQuay!(quay.quay.id)}
-          />
-        )}
       </View>
     );
   },
 );
+
+function QuayGroupItem({quayGroup}: {quayGroup: QuayGroup}) {
+  if (hasNoGroupsWithDepartures([quayGroup])) {
+    return null;
+  }
+  return (
+    <Fragment>
+      <Section.Section>
+        <Section.HeaderItem text={quayGroup.quay.name} mode="subheading" />
+
+        {quayGroup.group.map((group) => (
+          <DepartureGroupItemProps
+            group={group}
+            key={group.lineInfo?.lineId + String(group.lineInfo?.lineName)}
+          />
+        ))}
+      </Section.Section>
+      <View style={{marginBottom: 12}} />
+    </Fragment>
+  );
+}
+
+type DepartureGroupItemProps = GenericItemProps & {
+  group: DepartureGroup;
+};
+function DepartureGroupItemProps({group, ...props}: DepartureGroupItemProps) {
+  if (hasNoDepartures(group)) {
+    return null;
+  }
+  return (
+    <Section.GenericItem {...props}>
+      <Text>
+        {group.lineInfo?.lineNumber} {group.lineInfo?.lineName}
+      </Text>
+      <ScrollView horizontal>
+        {group.departures.map((departure) => (
+          <View key={departure.serviceJourneyId} style={{marginHorizontal: 8}}>
+            <Text>{formatToClock(departure.aimedTime)}</Text>
+          </View>
+        ))}
+      </ScrollView>
+    </Section.GenericItem>
+  );
+}
 
 type ShowMoreButtonProps = {
   text: string;
@@ -254,192 +219,23 @@ const useShowMoreButtonStyle = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-const ItemHeader: React.FC<{
-  stop: StopPlaceDetails;
-}> = ({stop}) => {
-  const {location} = useGeolocationState();
-  const styles = useResultItemStyles();
-
-  return (
-    <View style={styles.resultHeader}>
-      <ThemeText style={styles.resultHeaderText}>{stop.name}</ThemeText>
-      {location && (
-        <View style={styles.distance}>
-          <AccessibleText prefix="Distanse">
-            {humanizeDistance(haversine(location.coords, stop))}
-          </AccessibleText>
-          <ThemeIcon
-            svg={WalkingPerson}
-            width={16}
-            style={styles.distanceIcon}
-          />
-        </View>
-      )}
-    </View>
-  );
-};
-
-type NearbyResultItemProps = {
-  departure: EstimatedCall;
-  style?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
-  onPress?(departure: EstimatedCall): void;
-};
-const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
-  ({departure, onPress, style}) => {
-    const styles = useResultItemStyles();
-    const {publicCode, name} = getLineNameFromEstimatedCall(departure);
-
-    const pastStyle = isInThePast(departure.expectedDepartureTime)
-      ? styles.itemContainer__isInPast
-      : undefined;
-
-    return (
-      <View style={pastStyle}>
-        <TouchableOpacity
-          style={[styles.itemContainer, style]}
-          onPress={() => onPress?.(departure)}
-        >
-          <TransportationIcon
-            mode={departure.serviceJourney.journeyPattern?.line.transportMode}
-            subMode={
-              departure.serviceJourney.journeyPattern?.line.transportSubmode
-            }
-          />
-          <View style={styles.textWrapper}>
-            <ThemeText type="body" numberOfLines={1}>
-              {publicCode && (
-                <Text style={{fontWeight: 'bold'}}>{publicCode} </Text>
-              )}
-              {name}
-            </ThemeText>
-          </View>
-          <SituationWarningIcon situations={departure.situations} />
-
-          <AccessibleText type="body" prefix="Avgang" style={styles.time}>
-            {(!departure.realtime ? missingRealtimePrefix : '') +
-              formatToClockOrRelativeMinutes(departure.expectedDepartureTime)}
-          </AccessibleText>
-        </TouchableOpacity>
-      </View>
-    );
-  },
-);
-
-const useResultItemStyles = StyleSheet.createThemeHook((theme) => ({
-  itemContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: theme.spacings.medium,
-    borderBottomColor: theme.background.level1,
-    borderBottomWidth: 1,
-    fontSize: 40,
-  },
-  itemContainer__isInPast: {
-    opacity: 0.5,
-  },
-  itemContainer__withoutBorder: {
-    marginBottom: 0,
-    borderBottomWidth: 0,
-    paddingBottom: 0,
-  },
-  distance: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  distanceIcon: {
-    marginLeft: 4,
-  },
-  situationContainer: {
-    marginBottom: theme.spacings.small,
-  },
-  platformHeader: {
-    padding: theme.spacings.medium,
-    color: theme.text.colors.faded,
-    borderBottomColor: theme.background.level1,
-    borderBottomWidth: 1,
-  },
-  time: {
-    width: 78,
-    textAlign: 'right',
-    color: theme.text.colors.primary,
-    fontWeight: 'bold',
-    paddingVertical: theme.spacings.xSmall,
-    marginRight: theme.spacings.small,
-    fontVariant: ['tabular-nums'],
-  },
-  textWrapper: {
-    flex: 1,
-    color: theme.text.colors.primary,
-    marginLeft: 10,
-    paddingVertical: theme.spacings.xSmall,
-  },
-  resultHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: theme.spacings.small,
-    padding: theme.spacings.medium,
-    borderBottomColor: theme.background.level1,
-    borderBottomWidth: 1,
-  },
-  resultHeaderText: {
-    fontWeight: 'bold',
-    color: theme.text.colors.primary,
-  },
-
-  quayContainer__withoutBorder: {
-    marginBottom: 0,
-    paddingBottom: 0,
-  },
-  quayContainer: {
-    backgroundColor: theme.background.level0,
-    borderRadius: theme.border.radius.regular,
-    marginBottom: theme.spacings.small,
-  },
-}));
-
-type LastElementProps = {
-  last?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
-  exceptSingleItems?: boolean;
-};
-const LastElement: React.FC<LastElementProps> = ({
-  children,
-  last,
-  exceptSingleItems = false,
-}) => {
-  const num = React.Children.count(children) - 1;
-  if (exceptSingleItems && num === 0 && children) {
-    return <>{children}</>;
-  }
-  return (
-    <>
-      {React.Children.map(children, (child, i) => {
-        if (React.isValidElement(child) && i == num) {
-          let previous: StyleProp<ViewStyle | TextStyle | ImageStyle> = [];
-          if (hasStyle(child)) {
-            previous = Array.isArray(child.style) ? child.style : [child.style];
-          }
-          return React.cloneElement(child, {
-            style: previous.concat(last),
-          });
-        } else {
-          return child;
-        }
-      })}
-    </>
-  );
-};
-
-type WithStyle = {
-  style?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
-};
-function hasStyle(a: any): a is Required<WithStyle> {
-  return 'style' in a;
-}
-
 function humanizeDistance(distanceInMeters: number): string {
   if (distanceInMeters >= 1000) {
     return Math.round(distanceInMeters / 1000) + ' km';
   }
   return Math.ceil(distanceInMeters) + 'm';
+}
+
+function hasNoQuays(departures: StopPlaceGroup[] | null) {
+  return (
+    departures !== null &&
+    (departures.length === 0 ||
+      departures.every((deps) => deps.quays.length === 0))
+  );
+}
+function hasNoGroupsWithDepartures(departures: QuayGroup[]) {
+  return departures.every((q) => !q.group.some((g) => g.departures.length));
+}
+function hasNoDepartures(group: DepartureGroup) {
+  return !Boolean(group.departures.length);
 }

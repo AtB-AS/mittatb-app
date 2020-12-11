@@ -183,3 +183,32 @@ export type DepartureRealtimeData = {
 export type DeparturesRealtimeData = {
   [quayId: string]: DepartureRealtimeData;
 };
+
+export type FavoriteDeparture = {
+  stopId: string;
+  lineName: string;
+  lineId: string;
+};
+
+export type NextCursorData = {
+  nextCursor?: string;
+  hasNextPage: boolean;
+};
+
+export type CursoredData<T> = {
+  data: T;
+  metadata:
+    | {hasNextPage: false}
+    | {
+        hasNextPage: true;
+        nextCursor: string;
+        nextUrlParams: string;
+      };
+};
+
+export type CursorInput = {
+  cursor?: string;
+  pageSize?: number;
+};
+
+export type CursoredQuery<T> = CursorInput & T;

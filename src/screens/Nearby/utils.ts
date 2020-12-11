@@ -1,55 +1,68 @@
+import {DepartureGroupMetadata} from '../../api/departures/departure-group';
+import {DepartureGroup, StopPlaceGroup} from '../../api/departures/types';
 import {
-  DeparturesWithStop,
-  EstimatedCall,
-  DeparturesRealtimeData,
   DepartureRealtimeData,
+  DeparturesRealtimeData,
+  DeparturesWithStop,
   QuayWithDepartures,
 } from '../../sdk';
 
 export function updateStopsWithRealtime(
-  stops: DeparturesWithStopLocal[],
+  stops: DepartureGroupMetadata['data'],
   realtime: DeparturesRealtimeData,
-): DeparturesWithStopLocal[] {
-  return stops.map(function (stop) {
-    let newQuays: typeof stop.quays = {};
-    for (let [quayId, quay] of Object.entries(stop.quays)) {
+): DepartureGroupMetadata['data'] {
+  return stops.map<StopPlaceGroup>(function (stop) {
+    let quays = stop.quays.map(function (quayGroup) {
+      const quayId = quayGroup.quay.id;
       const realtimeForQuay = realtime[quayId];
       if (!realtimeForQuay) {
-        newQuays[quayId] = quay;
-      } else {
-        newQuays[quayId] = {
-          ...quay,
-          departures: updateDeparturesWithRealtime(
-            quay.departures,
-            realtimeForQuay,
-          ),
-        };
+        return quayGroup;
       }
-    }
+
+      return {
+        quay: quayGroup.quay,
+        group: updateDeparturesWithRealtime(quayGroup.group, realtimeForQuay),
+      };
+    });
+
     return {
-      ...stop,
-      quays: newQuays,
+      stopPlace: stop.stopPlace,
+      quays,
     };
   });
 }
 
 function updateDeparturesWithRealtime(
-  departures: EstimatedCall[],
+  departureGroups: DepartureGroup[],
   realtime?: DepartureRealtimeData,
-): EstimatedCall[] {
-  if (!realtime) return departures;
+): DepartureGroup[] {
+  if (!realtime) return departureGroups;
 
-  return departures.map(function (departure) {
-    const serviceJourneyId = departure.serviceJourney.id;
-    const departureRealtime = realtime.departures[serviceJourneyId];
+  return departureGroups.map(function (group) {
+    const departures = group.departures.map(function (departure) {
+      const serviceJourneyId = departure.serviceJourneyId;
 
-    if (!departureRealtime) {
-      return departure;
-    }
+      if (!serviceJourneyId) {
+        return departure;
+      }
+
+      const departureRealtime = realtime.departures[serviceJourneyId];
+
+      if (!departureRealtime) {
+        return departure;
+      }
+
+      return {
+        ...departure,
+        time: departureRealtime.timeData.expectedDepartureTime,
+        aimedTime: departureRealtime.timeData.aimedDepartureTime,
+        realtime: departureRealtime.timeData.realtime,
+      };
+    });
 
     return {
-      ...departure,
-      ...departureRealtime.timeData,
+      lineInfo: group.lineInfo,
+      departures,
     };
   });
 }
