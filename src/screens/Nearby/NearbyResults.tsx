@@ -135,9 +135,11 @@ const StopDepartures = React.memo(
 
     return (
       <View>
-        <View>
-          <Text>{stopPlaceGroup.stopPlace.name}</Text>
-        </View>
+        <Section.ActionItem
+          transparent
+          text={stopPlaceGroup.stopPlace.name}
+          mode="heading-expand"
+        />
 
         {stopPlaceGroup.quays.map((quayGroup) => (
           <QuayGroupItem key={quayGroup.quay.id} quayGroup={quayGroup} />

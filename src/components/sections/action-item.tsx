@@ -26,7 +26,7 @@ export default function ActionItem({
 
   if (mode === 'toggle') {
     return (
-      <View style={[style.baseItem, style.spaceBetween, topContainer]}>
+      <View style={[style.spaceBetween, topContainer]}>
         <ThemeText type="body" style={contentContainer}>
           {text}
         </ThemeText>
@@ -38,7 +38,7 @@ export default function ActionItem({
   return (
     <TouchableOpacity
       onPress={() => onPress?.(!checked)}
-      style={[style.baseItem, style.spaceBetween, topContainer]}
+      style={[style.spaceBetween, topContainer]}
     >
       <ThemeText
         type={mode === 'heading-expand' ? 'paragraphHeadline' : 'body'}
