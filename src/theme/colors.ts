@@ -109,7 +109,12 @@ export const textTypes: {[key in TextNames]: TextStyle} = {
   label: {fontSize: 12, lineHeight: 16},
   label__link: {fontSize: 12, lineHeight: 16, textDecorationLine: 'underline'},
 };
-
+const tripLegDetail = {
+  labelWidth: 80,
+  decorationContainerWidth: 20,
+  decorationLineEndWidth: 12,
+  decorationLineWidth: 4,
+};
 const borderRadius = {
   circle: 20,
   regular: 8,
@@ -135,6 +140,7 @@ export type RadiusSizes = keyof typeof borderRadius;
 export interface Theme {
   statusBarStyle: StatusBarProps['barStyle'];
   spacings: typeof spacings;
+  tripLegDetail: typeof tripLegDetail;
   background: {
     level0: string;
     level1: string;
@@ -174,6 +180,7 @@ export interface Theme {
 export const themes: Themes = {
   light: {
     spacings: spacings,
+    tripLegDetail: tripLegDetail,
     statusBarStyle: 'dark-content',
     background: {
       level0: backgrounds.light__level0,
@@ -246,6 +253,7 @@ export const themes: Themes = {
   },
   dark: {
     spacings: spacings,
+    tripLegDetail: tripLegDetail,
     statusBarStyle: 'light-content',
     background: {
       level0: backgrounds.dark__level0,

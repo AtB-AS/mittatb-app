@@ -13,7 +13,7 @@ import {
   getQuayNameFromStopLeg,
 } from '../../../utils/transportation-names';
 import {getAimedTimeIfLargeDifference} from '../utils';
-import WaitRow from './WaitRow';
+import WaitRow from './components/WaitRow';
 import transportationColor, {
   defaultFill,
 } from '../../../utils/transportation-color';

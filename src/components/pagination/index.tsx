@@ -1,9 +1,9 @@
 import React from 'react';
-import ThemeText from '../../../components/text';
+import ThemeText from '../text';
 import {View, ViewProps} from 'react-native';
-import Button from '../../../components/button';
-import {StyleSheet} from '../../../theme';
-import {ArrowLeft, ArrowRight} from '../../../assets/svg/icons/navigation';
+import Button from '../button';
+import {StyleSheet} from '../../theme';
+import {ArrowLeft, ArrowRight} from '../../assets/svg/icons/navigation';
 
 type PaginationProps = ViewProps & {
   page: number;

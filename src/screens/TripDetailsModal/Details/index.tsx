@@ -9,22 +9,16 @@ import Header from '../../../ScreenHeader';
 import {View, ActivityIndicator} from 'react-native';
 import ThemeIcon from '../../../components/theme-icon';
 import {ScrollView} from 'react-native-gesture-handler';
-import Pagination from './Pagination';
-import ThemeText from '../../../components/text';
+import Pagination from '../../../components/pagination';
 import {ArrowLeft} from '../../../assets/svg/icons/navigation';
 import Axios, {AxiosError} from 'axios';
-import MessageBox from '../../../message-box';
-import {getAxiosErrorType} from '../../../api/utils';
-import {secondsToDuration} from '../../../utils/date';
-import {
-  Duration,
-  WalkingPerson,
-} from '../../../assets/svg/icons/transportation';
+import {secondsBetween, secondsToDuration} from '../../../utils/date';
 import {getSingleTripPattern} from '../../../api/trips';
 import usePollableResource from '../../../utils/use-pollable-resource';
-import hexToRgba from 'hex-to-rgba';
-import TripSection from './TripLeg';
-import {is} from 'date-fns/locale';
+import TripSection from './components/TripSection';
+import Summary from './components/TripSummary';
+import TripMessages from './components/TripMessages';
+import {timeIsShort} from './utils';
 
 export type DetailsRouteParams = {
   initialTripPatterns: TripPattern[];
@@ -39,8 +33,6 @@ export type DetailScreenRouteProp = RouteProp<
 export type DetailScreenNavigationProp = NavigationProp<
   DetailsModalStackParams
 >;
-// @TODO User setting?
-const TIME_LIMIT_IN_MINUTES = 3;
 
 type Props = {
   route: DetailScreenRouteProp;
@@ -57,14 +49,6 @@ const Details: React.FC<Props> = (props) => {
   const isFocused = useIsFocused();
 
   const styles = useStyle();
-
-  function navigate(page: number) {
-    if (page > initialTripPatterns.length || page < 1) {
-      return;
-    }
-    const newIndex = page - 1;
-    setCurrentIndex(newIndex);
-  }
   const [tripPattern, setTripPattern] = useState<TripPattern | undefined>(
     initialTripPatterns[currentIndex],
   );
@@ -85,6 +69,25 @@ const Details: React.FC<Props> = (props) => {
   }, [currentIndex, updatedTripPattern]);
 
   const [shortTime, setShortTime] = useState(false);
+
+  function navigate(page: number) {
+    const newIndex = page - 1;
+    if (
+      page > initialTripPatterns.length ||
+      page < 1 ||
+      currentIndex === newIndex
+    ) {
+      return;
+    }
+    setCurrentIndex(newIndex);
+    setShortTime(false);
+  }
+
+  const checkWaitTime = (secondsBetween: number) => {
+    if (!shortTime && timeIsShort(secondsBetween)) {
+      setShortTime(true);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -131,21 +134,30 @@ const Details: React.FC<Props> = (props) => {
                 style={styles.pagination}
               ></Pagination>
               <View style={styles.line} />
-              <Messages error={error} shortTime={shortTime} />
-              {tripPattern.legs.map((leg, index) => {
-                return (
-                  <TripSection
-                    key={index}
-                    isFirst={index == 0}
-                    isIntermediate={isIntermediateTravelLeg(
-                      index,
-                      tripPattern.legs,
-                    )}
-                    isLast={index == tripPattern.legs.length - 1}
-                    {...leg}
-                  />
-                );
-              })}
+              <TripMessages
+                error={error}
+                shortTime={shortTime}
+                messageStyle={styles.message}
+              />
+              <View style={styles.trip}>
+                {tripPattern.legs.map((leg, index) => {
+                  const waitDetails = legWaitDetails(index, tripPattern.legs);
+                  const isFirst = index == 0;
+                  const isLast = index == tripPattern.legs.length - 1;
+                  if (waitDetails?.waitAfter && !isFirst) {
+                    checkWaitTime(waitDetails.waitSeconds);
+                  }
+                  return (
+                    <TripSection
+                      key={index}
+                      isFirst={isFirst}
+                      wait={waitDetails}
+                      isLast={isLast}
+                      {...leg}
+                    />
+                  );
+                })}
+              </View>
               <View style={styles.line} />
               <Summary {...tripPattern} />
             </View>
@@ -155,74 +167,23 @@ const Details: React.FC<Props> = (props) => {
     </View>
   );
 };
-type JourneyMessagesProps = {
-  shortTime: boolean;
-  error?: AxiosError;
+
+export type WaitDetails = {
+  waitAfter: boolean;
+  waitSeconds: number;
 };
-const Messages: React.FC<JourneyMessagesProps> = ({error, shortTime}) => {
-  const styles = useStyle();
-  return (
-    <>
-      {shortTime && (
-        <MessageBox
-          containerStyle={styles.message}
-          type="info"
-          message="Vær oppmerksom på kort byttetid."
-        />
-      )}
-      {error && (
-        <MessageBox
-          containerStyle={styles.message}
-          type="warning"
-          message={translateError(error)}
-        />
-      )}
-    </>
-  );
-};
-function translateError(error: AxiosError): string {
-  const errorType = getAxiosErrorType(error);
-  switch (errorType) {
-    case 'network-error':
-    case 'timeout':
-      return 'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil.';
-    default:
-      return 'Vi kunne ikke oppdatere reiseforslaget ditt. Det kan hende reisen har endra seg eller er utdatert?';
+function legWaitDetails(index: number, legs: Leg[]): WaitDetails | undefined {
+  const next = legs.length > index + 1 && legs[index + 1];
+  if (!next) {
+    return;
   }
-}
-
-const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
-  const styles = useStyle();
-  return (
-    <View style={styles.summary}>
-      <View style={styles.summaryDetail}>
-        <ThemeIcon colorType="faded" style={styles.leftIcon} svg={Duration} />
-        <ThemeText color="faded">
-          Reisetid: {secondsToDuration(duration)}
-        </ThemeText>
-      </View>
-      <View style={styles.summaryDetail}>
-        <ThemeIcon
-          colorType="faded"
-          style={styles.leftIcon}
-          svg={WalkingPerson}
-        />
-        <ThemeText color="faded">
-          Gangavstand: {walkDistance.toFixed()} m
-        </ThemeText>
-      </View>
-    </View>
+  const waitSeconds = secondsBetween(
+    legs[index].expectedEndTime,
+    next.expectedStartTime,
   );
-};
-function nextLeg(curent: number, legs: Leg[]): Leg | undefined {
-  return legs[curent + 1];
-}
+  const waitAfter = next.mode !== 'foot' && waitSeconds > 0;
 
-function isIntermediateTravelLeg(index: number, legs: Leg[]) {
-  const next = nextLeg(index, legs);
-  if (!next) return false;
-  if (next.mode === 'foot') return false;
-  return true;
+  return {waitAfter, waitSeconds};
 }
 function useTripPattern(
   currentIndex: number,
@@ -277,17 +238,8 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   message: {
     marginTop: theme.spacings.medium,
   },
-  summary: {
-    marginVertical: theme.spacings.medium,
-  },
-  summaryDetail: {
-    padding: theme.spacings.medium,
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  leftIcon: {
-    marginRight: theme.spacings.small,
+  trip: {
+    paddingVertical: theme.spacings.medium,
   },
 }));
 

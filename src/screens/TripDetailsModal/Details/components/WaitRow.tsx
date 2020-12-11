@@ -1,16 +1,16 @@
-import {secondsBetween, secondsToMinutesShort} from '../../../utils/date';
+import {secondsBetween, secondsToMinutesShort} from '../../../../utils/date';
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
-import {Duration} from '../../../assets/svg/icons/transportation';
-import {StyleSheet} from '../../../theme';
-import {Leg} from '../../../sdk';
-import ThemeText from '../../../components/text';
-import {defaultFill} from '../../../utils/transportation-color';
+import {Duration} from '../../../../assets/svg/icons/transportation';
+import {StyleSheet} from '../../../../theme';
+import {Leg} from '../../../../sdk';
+import ThemeText from '../../../../components/text';
+import {defaultFill} from '../../../../utils/transportation-color';
 import {
   TripDetailsTexts,
   dictionary,
   useTranslation,
-} from '../../../translations';
+} from '../../../../translations';
 
 type WaitRowProps = {
   onCalculateTime(seconds: number): void;

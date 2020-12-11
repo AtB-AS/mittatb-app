@@ -5,7 +5,7 @@ import Dash from 'react-native-dash';
 import {secondsToDuration, secondsBetween} from '../../../utils/date';
 import {WalkingPerson} from '../../../assets/svg/icons/transportation';
 import {LegDetailProps} from './index_old';
-import WaitRow from './WaitRow';
+import WaitRow from './components/WaitRow';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
 import {defaultFill} from '../../../utils/transportation-color';
