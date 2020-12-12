@@ -66,6 +66,7 @@ export default function LineItem({
             onPress={() => onPress(departure)}
             text={formatToClock(departure.aimedTime)}
             style={styles.departure}
+            textStyle={styles.departureText}
           />
         ))}
       </ScrollView>
@@ -79,6 +80,9 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   },
   departure: {
     marginRight: theme.spacings.small,
+  },
+  departureText: {
+    fontVariant: ['tabular-nums'],
   },
 }));
 
