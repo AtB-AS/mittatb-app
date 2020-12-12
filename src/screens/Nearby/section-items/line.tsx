@@ -1,11 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {
-  AccessibilityProps,
-  GestureResponderEvent,
-  ScrollView,
-  View,
-} from 'react-native';
+import {AccessibilityProps, ScrollView, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {NearbyScreenNavigationProp} from '..';
 import {DepartureGroup, DepartureTime} from '../../../api/departures/types';
