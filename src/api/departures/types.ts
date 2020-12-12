@@ -52,7 +52,7 @@ type StopPlaceInfo = {
   longitude?: number | undefined;
 };
 
-type QuayInfo = {
+export type QuayInfo = {
   id: string;
   name: string;
   description?: string | undefined;

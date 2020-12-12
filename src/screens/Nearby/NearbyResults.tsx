@@ -3,6 +3,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {QuayGroup, StopPlaceGroup} from '../../api/departures/types';
 import * as Section from '../../components/sections';
 import ThemeText from '../../components/text';
+import {Location} from '../../favorites/types';
 import MessageBox from '../../message-box';
 import {EstimatedCall} from '../../sdk';
 import {StyleSheet} from '../../theme';
@@ -13,7 +14,7 @@ import QuayHeaderItem from './section-items/quay';
 
 type NearbyResultsProps = {
   departures: StopPlaceGroup[] | null;
-  onShowMoreOnQuay?(quayId: string): void;
+  currentLocation?: Location;
   isFetchingMore?: boolean;
   error?: string;
   isInitialScreen: boolean;
@@ -21,13 +22,12 @@ type NearbyResultsProps = {
 
 export default function NearbyResults({
   departures,
-  onShowMoreOnQuay,
   isFetchingMore = false,
   error,
   isInitialScreen,
+  currentLocation,
 }: NearbyResultsProps) {
   const styles = useResultsStyle();
-  // const navigation = useNavigation<NearbyScreenNavigationProp>();
   const {t} = useTranslation();
 
   if (isInitialScreen) {
@@ -63,7 +63,11 @@ export default function NearbyResults({
       {departures && (
         <>
           {departures.map((item) => (
-            <StopDepartures key={item.stopPlace.id} stopPlaceGroup={item} />
+            <StopDepartures
+              key={item.stopPlace.id}
+              stopPlaceGroup={item}
+              currentLocation={currentLocation}
+            />
           ))}
           <FooterLoader isFetchingMore={isFetchingMore} />
         </>
@@ -92,35 +96,46 @@ function FooterLoader({isFetchingMore}: FooterLoaderProps) {
 
 type StopDeparturesProps = {
   stopPlaceGroup: StopPlaceGroup;
-  onPress?(departure: EstimatedCall): void;
-  onShowMoreOnQuay?(quayId: string): void;
+  currentLocation?: Location;
 };
-const StopDepartures = React.memo(({stopPlaceGroup}: StopDeparturesProps) => {
-  if (!stopPlaceGroup.quays.length) {
-    return null;
-  }
-  if (hasNoGroupsWithDepartures(stopPlaceGroup.quays)) {
-    return null;
-  }
+const StopDepartures = React.memo(
+  ({stopPlaceGroup, currentLocation}: StopDeparturesProps) => {
+    if (!stopPlaceGroup.quays.length) {
+      return null;
+    }
+    if (hasNoGroupsWithDepartures(stopPlaceGroup.quays)) {
+      return null;
+    }
 
-  return (
-    <View>
-      <Section.ActionItem
-        transparent
-        text={stopPlaceGroup.stopPlace.name}
-        mode="heading-expand"
-      />
+    return (
+      <View>
+        <Section.ActionItem
+          transparent
+          text={stopPlaceGroup.stopPlace.name}
+          mode="heading-expand"
+        />
 
-      {stopPlaceGroup.quays.map((quayGroup) => (
-        <QuayGroupItem key={quayGroup.quay.id} quayGroup={quayGroup} />
-      ))}
-    </View>
-  );
-});
+        {stopPlaceGroup.quays.map((quayGroup) => (
+          <QuayGroupItem
+            key={quayGroup.quay.id}
+            quayGroup={quayGroup}
+            currentLocation={currentLocation}
+          />
+        ))}
+      </View>
+    );
+  },
+);
 
 const LIMIT_SIZE = 5;
 
-function QuayGroupItem({quayGroup}: {quayGroup: QuayGroup}) {
+function QuayGroupItem({
+  quayGroup,
+  currentLocation,
+}: {
+  quayGroup: QuayGroup;
+  currentLocation?: Location;
+}) {
   const [limit, setLimit] = useState(LIMIT_SIZE);
 
   useEffect(() => {
@@ -133,7 +148,10 @@ function QuayGroupItem({quayGroup}: {quayGroup: QuayGroup}) {
   return (
     <Fragment>
       <Section.Section>
-        <QuayHeaderItem text={quayGroup.quay.name} />
+        <QuayHeaderItem
+          quay={quayGroup.quay}
+          currentLocation={currentLocation}
+        />
 
         {quayGroup.group.slice(0, limit).map((group) => (
           <LineItem

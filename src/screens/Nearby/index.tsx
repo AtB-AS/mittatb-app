@@ -200,8 +200,8 @@ const NearbyOverview: React.FC<Props> = ({
     >
       <ScreenReaderAnnouncement message={loadAnnouncement} />
       <NearbyResults
+        currentLocation={currentLocation}
         departures={data}
-        onShowMoreOnQuay={showMoreOnQuay}
         isFetchingMore={isFetchingMore && !isLoading}
         isInitialScreen={isInitialScreen}
         error={error ? t(translateErrorType(error.type)) : undefined}
