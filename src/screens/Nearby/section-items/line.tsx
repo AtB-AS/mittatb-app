@@ -48,7 +48,7 @@ export default function LineItem({
   };
 
   return (
-    <>
+    <View style={[topContainer, {padding: 0}]}>
       <View style={[topContainer, sectionStyle.spaceBetween]}>
         <TouchableOpacity
           style={styles.lineHeader}
@@ -76,7 +76,7 @@ export default function LineItem({
           />
         ))}
       </ScrollView>
-    </>
+    </View>
   );
 }
 const useItemStyles = StyleSheet.createThemeHook((theme) => ({
