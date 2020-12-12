@@ -31,7 +31,7 @@ type DepartureLineInfo = {
   lineId: string;
 };
 
-type DepartureTime = {
+export type DepartureTime = {
   time: string;
   aimedTime: string;
   realtime?: boolean;

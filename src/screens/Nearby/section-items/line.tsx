@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {
   AccessibilityProps,
@@ -5,7 +6,9 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import {DepartureGroup} from '../../../api/departures/types';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {NearbyScreenNavigationProp} from '..';
+import {DepartureGroup, DepartureTime} from '../../../api/departures/types';
 import Button from '../../../components/button';
 import {
   SectionItem,
@@ -18,37 +21,49 @@ import {formatToClock} from '../../../utils/date';
 
 export type LineItemProps = SectionItem<{
   group: DepartureGroup;
-  onPress?(event: GestureResponderEvent): void;
   accessibility?: AccessibilityProps;
 }>;
 export default function LineItem({
   group,
-  onPress,
   accessibility,
   ...props
 }: LineItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
   const sectionStyle = useSectionStyle();
   const styles = useItemStyles();
+  const navigation = useNavigation<NearbyScreenNavigationProp>();
 
   if (hasNoDepartures(group)) {
     return null;
   }
 
+  const title = `${group.lineInfo?.lineNumber} ${group.lineInfo?.lineName}`;
+
+  const onPress = (departure: DepartureTime) => {
+    navigation.navigate('DepartureDetailsModal', {
+      title,
+      serviceJourneyId: departure.serviceJourneyId!,
+      date: departure.aimedTime,
+      fromQuayId: group.lineInfo?.quayId,
+    });
+  };
+
   return (
     <View style={[topContainer, {padding: 0}]}>
-      <View style={[topContainer, sectionStyle.spaceBetween, contentContainer]}>
-        <ThemeText>
-          {group.lineInfo?.lineNumber} {group.lineInfo?.lineName}
-        </ThemeText>
-      </View>
+      <TouchableOpacity onPress={() => onPress(group.departures[0])}>
+        <View
+          style={[topContainer, sectionStyle.spaceBetween, contentContainer]}
+        >
+          <ThemeText>{title}</ThemeText>
+        </View>
+      </TouchableOpacity>
       <ScrollView horizontal contentContainerStyle={styles.scrollContainer}>
         {group.departures.map((departure) => (
           <Button
             key={departure.serviceJourneyId}
             type="compact"
             mode="primary3"
-            onPress={() => {}}
+            onPress={() => onPress(departure)}
             text={formatToClock(departure.aimedTime)}
             style={styles.departure}
           />
