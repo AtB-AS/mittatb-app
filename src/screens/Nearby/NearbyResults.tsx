@@ -1,3 +1,4 @@
+import haversineDistance from 'haversine-distance';
 import React, {Fragment, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {QuayGroup, StopPlaceGroup} from '../../api/departures/types';
@@ -10,6 +11,7 @@ import {NearbyTexts, useTranslation} from '../../translations';
 import LineItem from './section-items/line';
 import MoreItem from './section-items/more';
 import QuayHeaderItem from './section-items/quay';
+import sortBy from 'lodash.sortby';
 
 type NearbyResultsProps = {
   departures: StopPlaceGroup[] | null;
@@ -109,27 +111,47 @@ const StopDepartures = React.memo(
     return (
       <View>
         <Section.HeaderItem transparent text={stopPlaceGroup.stopPlace.name} />
-
-        {stopPlaceGroup.quays.map((quayGroup) => (
-          <QuayGroupItem
-            key={quayGroup.quay.id}
-            quayGroup={quayGroup}
-            currentLocation={currentLocation}
-          />
-        ))}
+        {orderAndMapByDistance(stopPlaceGroup.quays, currentLocation).map(
+          ([distance, quayGroup]) => (
+            <QuayGroupItem
+              key={quayGroup.quay.id}
+              quayGroup={quayGroup}
+              distance={distance}
+            />
+          ),
+        )}
       </View>
     );
   },
 );
+const first = ([a]: unknown[]) => a;
+function orderAndMapByDistance(
+  groups: QuayGroup[],
+  currentLocation?: Location,
+): [number, QuayGroup][] {
+  return sortBy(
+    groups.map((g) => {
+      const pos = {
+        lat: g.quay.latitude!,
+        lng: g.quay.longitude!,
+      };
+      const distance = !currentLocation
+        ? 0
+        : haversineDistance(currentLocation.coordinates, pos);
+      return [distance, g];
+    }),
+    first,
+  );
+}
 
 const LIMIT_SIZE = 5;
 
 function QuayGroupItem({
   quayGroup,
-  currentLocation,
+  distance,
 }: {
   quayGroup: QuayGroup;
-  currentLocation?: Location;
+  distance?: number;
 }) {
   const [limit, setLimit] = useState(LIMIT_SIZE);
 
@@ -143,10 +165,7 @@ function QuayGroupItem({
   return (
     <Fragment>
       <Section.Section>
-        <QuayHeaderItem
-          quay={quayGroup.quay}
-          currentLocation={currentLocation}
-        />
+        <QuayHeaderItem quay={quayGroup.quay} distance={distance} />
 
         {quayGroup.group.slice(0, limit).map((group) => (
           <LineItem

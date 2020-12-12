@@ -17,11 +17,11 @@ import {dictionary, Language, useTranslation} from '../../../translations';
 
 export type QuayHeaderItemProps = SectionItem<{
   quay: QuayInfo;
-  currentLocation?: Location;
+  distance?: number;
 }>;
 export default function QuayHeaderItem({
   quay,
-  currentLocation,
+  distance,
   ...props
 }: QuayHeaderItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
@@ -29,35 +29,24 @@ export default function QuayHeaderItem({
   return (
     <View style={[topContainer, sectionStyle.spaceBetween, contentContainer]}>
       <ThemeText>{quay.name}</ThemeText>
-      <Distance
-        lat={quay.latitude}
-        lng={quay.longitude}
-        currentLocation={currentLocation}
-      />
+      <Distance distance={distance} />
     </View>
   );
 }
 
 type DistanceProps = {
-  lat?: number;
-  lng?: number;
-  currentLocation?: Location;
+  distance?: number;
 };
-function Distance({lat, lng, currentLocation}: DistanceProps) {
+function Distance({distance}: DistanceProps) {
   const styles = useItemStyles();
   const {t} = useTranslation();
-  if (!lat || !lng || !currentLocation) {
+  if (distance == null) {
     return null;
   }
 
   return (
     <View style={styles.itemStyle}>
-      <ThemeText>
-        {humanizeDistance(
-          haversineDistance(currentLocation.coordinates, {lat, lng}),
-          t,
-        )}
-      </ThemeText>
+      <ThemeText>{humanizeDistance(distance, t)}</ThemeText>
       <ThemeIcon svg={WalkingPerson} style={styles.icon} />
     </View>
   );
