@@ -1,20 +1,14 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {Fragment} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {NearbyScreenNavigationProp} from '.';
-import {
-  DepartureGroup,
-  QuayGroup,
-  StopPlaceGroup,
-} from '../../api/departures/types';
+import {QuayGroup, StopPlaceGroup} from '../../api/departures/types';
 import * as Section from '../../components/sections';
 import ThemeText from '../../components/text';
 import MessageBox from '../../message-box';
 import {EstimatedCall} from '../../sdk';
 import {StyleSheet} from '../../theme';
-import {dictionary, NearbyTexts, useTranslation} from '../../translations';
-import {getLineNameFromEstimatedCall} from '../../utils/transportation-names';
+import {NearbyTexts, useTranslation} from '../../translations';
 import LineItem from './section-items/line';
+import MoreItem from './section-items/more';
 import QuayHeaderItem from './section-items/quay';
 
 type NearbyResultsProps = {
@@ -124,7 +118,15 @@ const StopDepartures = React.memo(({stopPlaceGroup}: StopDeparturesProps) => {
   );
 });
 
+const LIMIT_SIZE = 5;
+
 function QuayGroupItem({quayGroup}: {quayGroup: QuayGroup}) {
+  const [limit, setLimit] = useState(LIMIT_SIZE);
+
+  useEffect(() => {
+    setLimit(LIMIT_SIZE);
+  }, [quayGroup.quay.id]);
+
   if (hasNoGroupsWithDepartures([quayGroup])) {
     return null;
   }
@@ -133,12 +135,18 @@ function QuayGroupItem({quayGroup}: {quayGroup: QuayGroup}) {
       <Section.Section>
         <QuayHeaderItem text={quayGroup.quay.name} />
 
-        {quayGroup.group.map((group) => (
+        {quayGroup.group.slice(0, limit).map((group) => (
           <LineItem
             group={group}
             key={group.lineInfo?.lineId + String(group.lineInfo?.lineName)}
           />
         ))}
+        {quayGroup.group.length >= limit && (
+          <MoreItem
+            onPress={() => setLimit(limit + LIMIT_SIZE)}
+            text="Vis flere avganger"
+          />
+        )}
       </Section.Section>
       <View style={{marginBottom: 12}} />
     </Fragment>

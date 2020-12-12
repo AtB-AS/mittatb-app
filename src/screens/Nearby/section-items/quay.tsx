@@ -7,17 +7,13 @@ import {
   useSectionStyle,
 } from '../../../components/sections/section-utils';
 import ThemeText from '../../../components/text';
+import ThemeIcon from '../../../components/theme-icon';
 import {StyleSheet} from '../../../theme';
 
 export type QuayHeaderItemProps = SectionItem<{
   text: string;
-  accessibility?: AccessibilityProps;
 }>;
-export default function QuayHeaderItem({
-  text,
-  accessibility,
-  ...props
-}: QuayHeaderItemProps) {
+export default function QuayHeaderItem({text, ...props}: QuayHeaderItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
   const sectionStyle = useSectionStyle();
   const styles = useItemStyles();
@@ -26,7 +22,7 @@ export default function QuayHeaderItem({
       <ThemeText>{text}</ThemeText>
       <View style={styles.itemStyle}>
         <ThemeText>300m</ThemeText>
-        <WalkingPerson style={styles.icon} />
+        <ThemeIcon svg={WalkingPerson} style={styles.icon} />
       </View>
     </View>
   );
