@@ -154,6 +154,7 @@ function QuayGroupItem({
   distance?: number;
 }) {
   const [limit, setLimit] = useState(LIMIT_SIZE);
+  const {t} = useTranslation();
 
   useEffect(() => {
     setLimit(LIMIT_SIZE);
@@ -176,7 +177,7 @@ function QuayGroupItem({
         {quayGroup.group.length >= limit && (
           <MoreItem
             onPress={() => setLimit(limit + LIMIT_SIZE)}
-            text="Vis flere avganger"
+            text={t(NearbyTexts.results.quayResult.showMoreToggler.text)}
           />
         )}
       </Section.Section>
