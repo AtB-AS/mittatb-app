@@ -4,6 +4,8 @@ import {AccessibilityProps, ScrollView, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {NearbyScreenNavigationProp} from '..';
 import {DepartureGroup, DepartureTime} from '../../../api/departures/types';
+import SvgFavoriteFill from '../../../assets/svg/icons/places/FavoriteFill';
+import {BusSide} from '../../../assets/svg/icons/transportation';
 import Button from '../../../components/button';
 import {
   SectionItem,
@@ -11,8 +13,10 @@ import {
   useSectionStyle,
 } from '../../../components/sections/section-utils';
 import ThemeText from '../../../components/text';
+import ThemeIcon from '../../../components/theme-icon';
 import {StyleSheet} from '../../../theme';
 import {formatToClock} from '../../../utils/date';
+import insets from '../../../utils/insets';
 
 export type LineItemProps = SectionItem<{
   group: DepartureGroup;
@@ -44,14 +48,21 @@ export default function LineItem({
   };
 
   return (
-    <View style={[topContainer, {padding: 0}]}>
-      <TouchableOpacity onPress={() => onPress(group.departures[0])}>
-        <View
-          style={[topContainer, sectionStyle.spaceBetween, contentContainer]}
+    <>
+      <View style={[topContainer, sectionStyle.spaceBetween]}>
+        <TouchableOpacity
+          style={styles.lineHeader}
+          containerStyle={contentContainer}
+          onPress={() => onPress(group.departures[0])}
+          hitSlop={insets.symmetric(12, 0)}
         >
+          <ThemeIcon svg={BusSide} />
           <ThemeText>{title}</ThemeText>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {}} hitSlop={insets.all(12)}>
+          <ThemeIcon svg={SvgFavoriteFill} />
+        </TouchableOpacity>
+      </View>
       <ScrollView horizontal contentContainerStyle={styles.scrollContainer}>
         {group.departures.map((departure) => (
           <Button
@@ -65,10 +76,13 @@ export default function LineItem({
           />
         ))}
       </ScrollView>
-    </View>
+    </>
   );
 }
 const useItemStyles = StyleSheet.createThemeHook((theme) => ({
+  lineHeader: {
+    flexDirection: 'row',
+  },
   scrollContainer: {
     marginBottom: theme.spacings.medium,
     paddingLeft: theme.spacings.medium,
