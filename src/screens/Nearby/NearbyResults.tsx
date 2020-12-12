@@ -5,7 +5,6 @@ import * as Section from '../../components/sections';
 import ThemeText from '../../components/text';
 import {Location} from '../../favorites/types';
 import MessageBox from '../../message-box';
-import {EstimatedCall} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {NearbyTexts, useTranslation} from '../../translations';
 import LineItem from './section-items/line';
@@ -109,11 +108,7 @@ const StopDepartures = React.memo(
 
     return (
       <View>
-        <Section.ActionItem
-          transparent
-          text={stopPlaceGroup.stopPlace.name}
-          mode="heading-expand"
-        />
+        <Section.HeaderItem transparent text={stopPlaceGroup.stopPlace.name} />
 
         {stopPlaceGroup.quays.map((quayGroup) => (
           <QuayGroupItem
