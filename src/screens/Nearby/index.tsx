@@ -27,11 +27,6 @@ import Loading from '../Loading';
 import NearbyResults from './NearbyResults';
 import {useDepartureData} from './state';
 
-const DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW = 5;
-
-// Should be a multiplum of the number we are showing.
-const DEFAULT_NUMBER_OF_DEPARTURES_TO_FETCH = 15;
-
 type NearbyRouteName = 'Nearest';
 const NearbyRouteNameStatic: NearbyRouteName = 'Nearest';
 
@@ -99,10 +94,7 @@ const NearbyOverview: React.FC<Props> = ({
 
   const updatingLocation = !fromLocation && hasLocationPermission;
 
-  const {state, refresh, loadMore, showMoreOnQuay} = useDepartureData(
-    fromLocation,
-  );
-
+  const {state, refresh, loadMore} = useDepartureData(fromLocation);
   const {data, isLoading, isFetchingMore, error} = state;
 
   const isInitialScreen = data == null && !isLoading && !error;

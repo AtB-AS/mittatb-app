@@ -49,10 +49,6 @@ const initialState: DepartureDataState = {
 
 type DepartureDataActions =
   | {
-      type: 'SHOW_MORE_ON_QUAY';
-      quayId: string;
-    }
-  | {
       type: 'LOAD_INITIAL_DEPARTURES';
       location: Location | undefined;
     }
@@ -94,7 +90,7 @@ const reducer: ReducerWithSideEffects<
       // Update input data with new date as this
       // is a fresh fetch. We should fetch tha latest information.
       const queryInput: DepartureGroupsQuery = {
-        limitPerLine: 7,
+        limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
         startTime: new Date(),
       };
 
@@ -191,17 +187,6 @@ const reducer: ReducerWithSideEffects<
       );
     }
 
-    // case 'SHOW_MORE_ON_QUAY': {
-    //   return Update({
-    //     ...state,
-    //     departures: showMoreItemsOnQuay(
-    //       state.departures ?? [],
-    //       action.quayId,
-    //       DEFAULT_NUMBER_OF_DEPARTURES_TO_SHOW,
-    //     ),
-    //   });
-    // }
-
     case 'STOP_LOADER': {
       return Update({
         ...state,
@@ -265,11 +250,6 @@ export function useDepartureData(
     [location?.id],
   );
 
-  const showMoreOnQuay = useCallback(
-    (quayId: string) => dispatch({type: 'SHOW_MORE_ON_QUAY', quayId}),
-    [],
-  );
-
   useEffect(refresh, [location?.id]);
   useInterval(
     () => dispatch({type: 'LOAD_REALTIME_DATA'}),
@@ -282,6 +262,5 @@ export function useDepartureData(
     state,
     refresh,
     loadMore,
-    showMoreOnQuay,
   };
 }
