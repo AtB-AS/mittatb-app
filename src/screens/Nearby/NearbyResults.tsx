@@ -175,7 +175,7 @@ function QuayGroupItem({
             key={group.lineInfo?.lineId + String(group.lineInfo?.lineName)}
           />
         ))}
-        {quayGroup.group.length >= limit && (
+        {quayGroup.group.length > limit && (
           <MoreItem
             onPress={() => setLimit(limit + LIMIT_SIZE)}
             text={t(NearbyTexts.results.quayResult.showMoreToggler.text)}
