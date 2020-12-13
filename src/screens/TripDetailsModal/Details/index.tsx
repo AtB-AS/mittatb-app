@@ -12,13 +12,9 @@ import {ScrollView} from 'react-native-gesture-handler';
 import Pagination from '../../../components/pagination';
 import {ArrowLeft} from '../../../assets/svg/icons/navigation';
 import Axios, {AxiosError} from 'axios';
-import {secondsBetween, secondsToDuration} from '../../../utils/date';
 import {getSingleTripPattern} from '../../../api/trips';
 import usePollableResource from '../../../utils/use-pollable-resource';
-import TripSection from './components/TripSection';
-import Summary from './components/TripSummary';
-import TripMessages from './components/TripMessages';
-import {timeIsShort} from './utils';
+import Trip from './components/Trip';
 
 export type DetailsRouteParams = {
   initialTripPatterns: TripPattern[];
@@ -68,8 +64,6 @@ const Details: React.FC<Props> = (props) => {
     );
   }, [currentIndex, updatedTripPattern]);
 
-  const [shortTime, setShortTime] = useState(false);
-
   function navigate(page: number) {
     const newIndex = page - 1;
     if (
@@ -80,14 +74,7 @@ const Details: React.FC<Props> = (props) => {
       return;
     }
     setCurrentIndex(newIndex);
-    setShortTime(false);
   }
-
-  const checkWaitTime = (secondsBetween: number) => {
-    if (!shortTime && timeIsShort(secondsBetween)) {
-      setShortTime(true);
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -133,33 +120,7 @@ const Details: React.FC<Props> = (props) => {
                 onNavigate={navigate}
                 style={styles.pagination}
               ></Pagination>
-              <View style={styles.line} />
-              <TripMessages
-                error={error}
-                shortTime={shortTime}
-                messageStyle={styles.message}
-              />
-              <View style={styles.trip}>
-                {tripPattern.legs.map((leg, index) => {
-                  const waitDetails = legWaitDetails(index, tripPattern.legs);
-                  const isFirst = index == 0;
-                  const isLast = index == tripPattern.legs.length - 1;
-                  if (waitDetails?.waitAfter && !isFirst) {
-                    checkWaitTime(waitDetails.waitSeconds);
-                  }
-                  return (
-                    <TripSection
-                      key={index}
-                      isFirst={isFirst}
-                      wait={waitDetails}
-                      isLast={isLast}
-                      {...leg}
-                    />
-                  );
-                })}
-              </View>
-              <View style={styles.line} />
-              <Summary {...tripPattern} />
+              <Trip tripPattern={tripPattern} error={error} />
             </View>
           </>
         )}
@@ -168,23 +129,6 @@ const Details: React.FC<Props> = (props) => {
   );
 };
 
-export type WaitDetails = {
-  waitAfter: boolean;
-  waitSeconds: number;
-};
-function legWaitDetails(index: number, legs: Leg[]): WaitDetails | undefined {
-  const next = legs.length > index + 1 && legs[index + 1];
-  if (!next) {
-    return;
-  }
-  const waitSeconds = secondsBetween(
-    legs[index].expectedEndTime,
-    next.expectedStartTime,
-  );
-  const waitAfter = next.mode !== 'foot' && waitSeconds > 0;
-
-  return {waitAfter, waitSeconds};
-}
 function useTripPattern(
   currentIndex: number,
   initialTripPattern?: TripPattern,
@@ -229,17 +173,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   scrollViewContent: {},
   pagination: {
     marginVertical: theme.spacings.medium,
-  },
-  line: {
-    flex: 1,
-    height: theme.border.width.slim,
-    backgroundColor: theme.background.level1,
-  },
-  message: {
-    marginTop: theme.spacings.medium,
-  },
-  trip: {
-    paddingVertical: theme.spacings.medium,
   },
 }));
 

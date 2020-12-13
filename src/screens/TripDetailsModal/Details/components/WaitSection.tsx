@@ -1,6 +1,5 @@
 import React from 'react';
 import {View} from 'react-native';
-import {WaitDetails} from '..';
 import {Wait} from '../../../../assets/svg/icons/transportation';
 import {Warning} from '../../../../assets/svg/situations';
 import ThemeText from '../../../../components/text';
@@ -11,6 +10,11 @@ import {transportationMapLineColor} from '../../../../utils/transportation-color
 import {timeIsShort} from '../utils';
 import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
+
+export type WaitDetails = {
+  waitAfter: boolean;
+  waitSeconds: number;
+};
 
 const WaitSection: React.FC<WaitDetails> = (wait) => {
   const style = useSectionStyles();

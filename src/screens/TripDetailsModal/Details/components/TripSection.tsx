@@ -1,25 +1,22 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Leg, Place} from '../../../../sdk';
 import {View, ViewProps, TouchableOpacity} from 'react-native';
 import ThemeText from '../../../../components/text';
 import {StyleSheet} from '../../../../theme';
-import {formatToClock, secondsToDuration} from '../../../../utils/date';
-import {Wait, WalkingPerson} from '../../../../assets/svg/icons/transportation';
+import {secondsToDuration} from '../../../../utils/date';
 import {getLineName, getQuayName} from '../../../../utils/transportation-names';
 import TransportationIcon from '../../../../components/transportation-icon';
-import transportionColor, {
-  transportationMapLineColor,
-} from '../../../../utils/transportation-color';
+import {transportationMapLineColor} from '../../../../utils/transportation-color';
 import {useNavigation} from '@react-navigation/core';
-import {DetailScreenNavigationProp, WaitDetails} from '..';
+import {DetailScreenNavigationProp} from '..';
 import {TinyMessageBox} from '../../../../message-box';
 import {Warning, Info} from '../../../../assets/svg/situations';
 import SituationMessages from '../../../../situations';
 import Time from './Time';
 import TripLegDecoration from './TripLegDecoration';
-import {significantWaitTime, significantWalkTime, timeIsShort} from '../utils';
+import {significantWaitTime, significantWalkTime} from '../utils';
 import TripRow from './TripRow';
-import WaitSection from './WaitSection';
+import WaitSection, {WaitDetails} from './WaitSection';
 
 type TripSectionProps = {
   isLast?: boolean;
