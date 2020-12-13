@@ -1,20 +1,20 @@
 import React from 'react';
-import {Leg, Place} from '../../../../sdk';
+import {Leg, Place} from '../../../sdk';
 import {View, ViewProps, TouchableOpacity} from 'react-native';
-import ThemeText from '../../../../components/text';
-import {StyleSheet} from '../../../../theme';
-import {secondsToDuration} from '../../../../utils/date';
-import {getLineName, getQuayName} from '../../../../utils/transportation-names';
-import TransportationIcon from '../../../../components/transportation-icon';
-import {transportationMapLineColor} from '../../../../utils/transportation-color';
+import ThemeText from '../../../components/text';
+import {StyleSheet} from '../../../theme';
+import {secondsToDuration} from '../../../utils/date';
+import {getLineName, getQuayName} from '../../../utils/transportation-names';
+import TransportationIcon from '../../../components/transportation-icon';
+import {transportationMapLineColor} from '../../../utils/transportation-color';
 import {useNavigation} from '@react-navigation/core';
-import {DetailScreenNavigationProp} from '..';
-import {TinyMessageBox} from '../../../../message-box';
-import {Warning, Info} from '../../../../assets/svg/situations';
-import SituationMessages from '../../../../situations';
+import {DetailScreenNavigationProp} from '../Details';
+import {TinyMessageBox} from '../../../message-box';
+import {Warning, Info} from '../../../assets/svg/situations';
+import SituationMessages from '../../../situations';
 import Time from './Time';
 import TripLegDecoration from './TripLegDecoration';
-import {significantWaitTime, significantWalkTime} from '../utils';
+import {significantWaitTime, significantWalkTime} from '../Details/utils';
 import TripRow from './TripRow';
 import WaitSection, {WaitDetails} from './WaitSection';
 
@@ -56,7 +56,7 @@ const TripSection: React.FC<TripSectionProps> = ({
               />
             }
           >
-            <PlaceName place={leg.fromPlace} />
+            {renderPlaceName(leg.fromPlace)}
           </TripRow>
         )}
         {isWalkSection ? (
@@ -100,7 +100,7 @@ const TripSection: React.FC<TripSectionProps> = ({
               />
             }
           >
-            <PlaceName place={leg.toPlace} />
+            {renderPlaceName(leg.toPlace)}
           </TripRow>
         )}
       </View>
@@ -159,7 +159,7 @@ const WithFurtherDetails: React.FC<{leg: Leg} & ViewProps> = ({
     </TouchableOpacity>
   );
 };
-const PlaceName: React.FC<{place: Place}> = ({place}) => {
+function renderPlaceName(place: Place): JSX.Element {
   return (
     <>
       {place.quay ? (
@@ -169,7 +169,7 @@ const PlaceName: React.FC<{place: Place}> = ({place}) => {
       )}
     </>
   );
-};
+}
 
 const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   tripSection: {

@@ -1,8 +1,7 @@
 import {LegMode} from '@entur/sdk';
 import {RouteProp, useIsFocused} from '@react-navigation/native';
-import React, {Fragment, useCallback, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
-import Dash from 'react-native-dash';
 import {ScrollView} from 'react-native-gesture-handler';
 import {DetailsModalNavigationProp, DetailsModalStackParams} from '..';
 import {getDepartures} from '../../../api/serviceJourney';
@@ -12,29 +11,24 @@ import {
   Expand,
   ExpandLess,
 } from '../../../assets/svg/icons/navigation';
-import {Dot} from '../../../assets/svg/icons/other';
-import TransportationIcon from '../../../components/transportation-icon';
 import ScreenHeader from '../../../ScreenHeader';
 import {EstimatedCall, Situation} from '../../../sdk';
 import SituationMessages from '../../../situations';
 import {StyleSheet} from '../../../theme';
-import {formatToClock, missingRealtimePrefix} from '../../../utils/date';
-import transportationColor, {
+import {
   defaultFill,
+  transportationMapLineColor,
 } from '../../../utils/transportation-color';
 import {getQuayName} from '../../../utils/transportation-names';
 import usePollableResource from '../../../utils/use-pollable-resource';
-import LocationRow from '../LocationRow';
 import SituationRow from '../SituationRow';
-import {getAimedTimeIfLargeDifference} from '../utils';
 import ThemeIcon from '../../../components/theme-icon';
 import ThemeText from '../../../components/text';
 import {parseISO} from 'date-fns';
-import {
-  useTranslation,
-  DepartureDetailsTexts,
-  dictionary,
-} from '../../../translations';
+import {useTranslation, DepartureDetailsTexts} from '../../../translations';
+import TripRow from '../components/TripRow';
+import Time from '../components/Time';
+import TripLegDecoration from '../components/TripLegDecoration';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -69,7 +63,7 @@ export default function DepartureDetails({navigation, route}: Props) {
   const isFocused = useIsFocused();
   const [
     {callGroups, mode, publicCode, situations: parentSituations},
-    _,
+    ,
     isLoading,
   ] = useDepartureData(
     serviceJourneyId,
@@ -82,7 +76,12 @@ export default function DepartureDetails({navigation, route}: Props) {
 
   const content = isLoading ? (
     <View accessibilityLabel={'Laster søkeresultat'} accessible={true}>
-      <ActivityIndicator style={styles.spinner} animating={true} size="large" />
+      <ActivityIndicator
+        color={defaultFill}
+        style={styles.spinner}
+        animating={true}
+        size="large"
+      />
     </View>
   ) : (
     <ScrollView style={styles.scrollView}>
@@ -148,20 +147,6 @@ function CallGroup({
   const isBefore = type === 'passed';
   const showCollapsable = isBefore && calls.length > 1;
   const isStartPlace = (i: number) => isOnRoute && i === 0;
-  const shouldDropMarginBottom = (i: number) =>
-    (type === 'after' || isOnRoute) && i == calls.length - 1;
-  const shouldHaveMarginTop = (i: number) => type === 'after' && i == 0;
-  const departureTimeString = (
-    call: EstimatedCall,
-    indicateMissingRealtime: boolean = false,
-  ) => {
-    const timeString = formatToClock(call.expectedDepartureTime);
-    if (call.realtime || !indicateMissingRealtime) {
-      return timeString;
-    } else {
-      return missingRealtimePrefix + timeString;
-    }
-  };
   const {t} = useTranslation();
   const [collapsed, setCollapsed] = useState(isBefore);
   const styles = useStopsStyle();
@@ -179,74 +164,51 @@ function CallGroup({
     />
   ) : null;
 
-  const dashColor = isOnRoute
-    ? transportationColor(mode, publicCode).color
-    : defaultFill;
-
   return (
-    <View>
-      {isOnRoute && (
-        <View style={styles.dashContainer}>
-          <Dash
-            dashGap={0}
-            dashThickness={8}
-            dashLength={8}
-            dashColor={dashColor}
-            style={styles.dash}
-          />
-        </View>
-      )}
-
-      {items.map((call, i) => (
-        <Fragment key={call.quay?.id + call.serviceJourney.id}>
-          <LocationRow
+    <>
+      {items.map((call, i) => {
+        const decorateStart = isStartPlace(i) || i === 0;
+        const decorateEnd = i === items.length - 1 && !collapsed;
+        return (
+          <View
             key={call.quay?.id + call.serviceJourney.id}
-            icon={
-              isStartPlace(i) ? (
-                <TransportationIcon
-                  mode={call.serviceJourney.journeyPattern?.line.transportMode}
-                  publicCode={
-                    call.serviceJourney.journeyPattern?.line.publicCode
-                  }
-                />
-              ) : (
-                <Dot fill={dashColor} style={{marginHorizontal: 4}} />
-              )
-            }
-            iconContainerStyle={{paddingVertical: 2}}
-            rowStyle={[
-              styles.item,
-              shouldDropMarginBottom(i) ? {marginBottom: 0} : undefined,
-              shouldHaveMarginTop(i) ? {marginTop: 24} : undefined,
-            ]}
-            label={
-              getQuayName(call.quay) ?? t(dictionary.travel.quay.defaultName)
-            }
-            time={departureTimeString(call, isStartPlace(i))}
-            timeStyle={
-              isStartPlace(i) ? {fontWeight: 'bold', fontSize: 16} : undefined
-            }
-            aimedTime={
-              isStartPlace(i) && call.realtime
-                ? getAimedTimeIfLargeDifference(call)
-                : undefined
-            }
-            textStyle={[
-              styles.textStyle,
-              !isOnRoute ? styles.textStyleFaded : undefined,
-            ]}
-            dashThroughIcon={true}
-          />
-          {type !== 'passed' && (
-            <SituationRow
-              situations={call.situations}
-              parentSituations={parentSituations}
-            />
-          )}
-          {i === 0 && collapseButton}
-        </Fragment>
-      ))}
-    </View>
+            style={isStartPlace(i) ? styles.startPlace : styles.place}
+          >
+            <TripLegDecoration
+              hasStart={decorateStart}
+              hasCenter={!decorateStart && !decorateEnd}
+              hasEnd={decorateEnd}
+              color={
+                type === 'passed'
+                  ? defaultFill
+                  : transportationMapLineColor(mode, publicCode)
+              }
+            ></TripLegDecoration>
+            <TripRow
+              rowLabel={
+                <Time
+                  scheduledTime={call.aimedDepartureTime}
+                  expectedTime={call.expectedDepartureTime}
+                  missingRealTime={!call.realtime && isStartPlace(i)}
+                ></Time>
+              }
+              alignChildren={'flex-start'}
+              style={styles.row}
+            >
+              <ThemeText>{getQuayName(call.quay)}</ThemeText>
+            </TripRow>
+
+            {type !== 'passed' && (
+              <SituationRow
+                situations={call.situations}
+                parentSituations={parentSituations}
+              />
+            )}
+            {i === 0 && collapseButton}
+          </View>
+        );
+      })}
+    </>
   );
 }
 
@@ -268,13 +230,13 @@ function CollapseButtonRow({
   );
   const child = collapsed ? (
     <>
-      <ThemeIcon svg={Expand} />
       {text}
+      <ThemeIcon svg={Expand} />
     </>
   ) : (
     <>
-      <ThemeIcon svg={ExpandLess} />
       {text}
+      <ThemeIcon svg={ExpandLess} />
     </>
   );
   return (
@@ -286,54 +248,40 @@ function CollapseButtonRow({
 const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
-    marginBottom: 12,
-    marginLeft: 89,
+    paddingBottom: theme.spacings.medium,
+    marginLeft:
+      theme.tripLegDetail.labelWidth +
+      theme.tripLegDetail.decorationContainerWidth,
   },
   text: {
-    marginLeft: 12,
+    marginRight: theme.spacings.xSmall,
   },
 }));
 
 const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.background.level0,
+  },
+  startPlace: {
+    marginTop: theme.spacings.large,
+  },
+  place: {},
+  row: {
+    paddingVertical: theme.spacings.small,
+    minHeight: 60,
   },
   situationsContainer: {
     marginBottom: theme.spacings.small,
   },
   allGroups: {
-    marginBottom: 250,
-    backgroundColor: theme.background.level1,
-    borderRadius: 10,
-    paddingVertical: 12,
+    backgroundColor: theme.background.level0,
+    marginBottom: theme.spacings.xLarge,
   },
   spinner: {height: 280},
-  dashContainer: {
-    marginLeft: 95,
-    position: 'absolute',
-    height: '100%',
-    paddingVertical: 10,
-  },
-  dash: {
-    flexDirection: 'column',
-    height: '100%',
-  },
-  item: {
-    marginBottom: 12,
-  },
-  itemNoMargin: {
-    marginBottom: 0,
-  },
   scrollView: {
     flex: 1,
-    padding: 12,
-  },
-  textStyle: {
-    fontSize: 16,
-  },
-  textStyleFaded: {
-    opacity: 0.6,
+    padding: theme.spacings.medium,
   },
 }));
 

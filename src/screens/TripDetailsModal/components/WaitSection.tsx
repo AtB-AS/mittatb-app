@@ -1,13 +1,13 @@
 import React from 'react';
 import {View} from 'react-native';
-import {Wait} from '../../../../assets/svg/icons/transportation';
-import {Warning} from '../../../../assets/svg/situations';
-import ThemeText from '../../../../components/text';
-import {TinyMessageBox} from '../../../../message-box';
-import {StyleSheet} from '../../../../theme';
-import {secondsToDuration} from '../../../../utils/date';
-import {transportationMapLineColor} from '../../../../utils/transportation-color';
-import {timeIsShort} from '../utils';
+import {Wait} from '../../../assets/svg/icons/transportation';
+import {Info} from '../../../assets/svg/situations';
+import ThemeText from '../../../components/text';
+import {TinyMessageBox} from '../../../message-box';
+import {StyleSheet} from '../../../theme';
+import {secondsToDuration} from '../../../utils/date';
+import {transportationMapLineColor} from '../../../utils/transportation-color';
+import {timeIsShort} from '../Details/utils';
 import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
 
@@ -28,8 +28,8 @@ const WaitSection: React.FC<WaitDetails> = (wait) => {
         hasEnd={false}
       ></TripLegDecoration>
       {shortWait && (
-        <TripRow rowLabel={<Warning />}>
-          <TinyMessageBox type="warning" message="Kort byttetid" />
+        <TripRow rowLabel={<Info />}>
+          <TinyMessageBox type="info" message="Kort byttetid" />
         </TripRow>
       )}
       <TripRow rowLabel={<Wait />}>

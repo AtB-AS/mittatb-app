@@ -14,7 +14,7 @@ import {ArrowLeft} from '../../../assets/svg/icons/navigation';
 import Axios, {AxiosError} from 'axios';
 import {getSingleTripPattern} from '../../../api/trips';
 import usePollableResource from '../../../utils/use-pollable-resource';
-import Trip from './components/Trip';
+import Trip from '../components/Trip';
 
 export type DetailsRouteParams = {
   initialTripPatterns: TripPattern[];

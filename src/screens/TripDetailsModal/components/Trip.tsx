@@ -1,10 +1,10 @@
 import {AxiosError} from 'axios';
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
-import {Leg, TripPattern} from '../../../../sdk';
-import {StyleSheet} from '../../../../theme';
-import {secondsBetween} from '../../../../utils/date';
-import {timeIsShort} from '../utils';
+import {Leg, TripPattern} from '../../../sdk';
+import {StyleSheet} from '../../../theme';
+import {secondsBetween} from '../../../utils/date';
+import {timeIsShort} from '../Details/utils';
 import TripMessages from './TripMessages';
 import TripSection from './TripSection';
 import Summary from './TripSummary';

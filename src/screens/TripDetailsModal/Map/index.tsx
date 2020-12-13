@@ -4,7 +4,6 @@ import {StyleSheet, View} from 'react-native';
 import {useGeolocationState} from '../../../GeolocationContext';
 import {RouteProp} from '@react-navigation/native';
 import {DetailsModalStackParams} from '..';
-import {DetailScreenNavigationProp} from '../Details/index_old';
 import {getMapBounds, legsToMapLines, pointOf} from './utils';
 import MapRoute from './MapRoute';
 import MapLabel from './MapLabel';
@@ -19,6 +18,7 @@ import {
 import {Leg} from '../../../sdk';
 import Bugsnag from '@bugsnag/react-native';
 import {useTranslation, MapTexts} from '../../../translations';
+import {DetailScreenNavigationProp} from '../Details';
 
 export type MapDetailRouteParams = {
   legs: Leg[];

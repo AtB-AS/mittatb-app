@@ -1,8 +1,8 @@
 import React from 'react';
 import {View} from 'react-native';
-import ThemeText from '../../../../components/text';
-import {useTranslation, dictionary} from '../../../../translations';
-import {formatToClock} from '../../../../utils/date';
+import ThemeText from '../../../components/text';
+import {useTranslation, dictionary} from '../../../translations';
+import {formatToClock} from '../../../utils/date';
 
 type TimeProps = {
   scheduledTime: string;
@@ -22,7 +22,7 @@ const Time: React.FC<TimeProps> = ({
       <View style={{flexDirection: 'column', alignItems: 'flex-end'}}>
         <ThemeText>{expected}</ThemeText>
         <ThemeText
-          type="lead"
+          type="label"
           color="faded"
           style={{textDecorationLine: 'line-through'}}
         >

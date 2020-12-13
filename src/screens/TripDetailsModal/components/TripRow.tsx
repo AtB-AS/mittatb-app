@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, ViewProps} from 'react-native';
-import {StyleSheet} from '../../../../theme';
+import {StyleSheet} from '../../../theme';
 
 type TripRowProps = {
   rowLabel: React.ReactNode;
@@ -10,13 +10,14 @@ const TripRow: React.FC<TripRowProps> = ({
   rowLabel,
   children,
   alignChildren = 'center',
+  style,
 }) => {
-  const style = useStyles();
+  const styles = useStyles();
   return (
-    <View style={[style.tripRow, {alignItems: alignChildren}]}>
-      <View style={style.leftColumn}>{rowLabel}</View>
-      <View style={style.decorationPlaceholder}></View>
-      <View style={style.rightColumn}>{children}</View>
+    <View style={[styles.tripRow, {alignItems: alignChildren}, style]}>
+      <View style={styles.leftColumn}>{rowLabel}</View>
+      <View style={styles.decorationPlaceholder}></View>
+      <View style={styles.rightColumn}>{children}</View>
     </View>
   );
 };

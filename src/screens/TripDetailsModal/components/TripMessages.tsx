@@ -1,9 +1,9 @@
 import {AxiosError} from 'axios';
 import React from 'react';
 import {ViewStyle} from 'react-native';
-import {getAxiosErrorType} from '../../../../api/utils';
-import MessageBox from '../../../../message-box';
-import {useStyle} from '../../../../theme';
+import {getAxiosErrorType} from '../../../api/utils';
+import MessageBox from '../../../message-box';
+import {useStyle} from '../../../theme';
 
 type TripMessagesProps = {
   shortTime: boolean;

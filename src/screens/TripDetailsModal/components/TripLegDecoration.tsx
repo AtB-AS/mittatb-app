@@ -1,15 +1,17 @@
 import React from 'react';
 import {View} from 'react-native';
-import {StyleSheet} from '../../../../theme';
+import {StyleSheet} from '../../../theme';
 
 type TripLegDecorationProps = {
-  hasStart: boolean;
-  hasEnd: boolean;
+  hasStart?: boolean;
+  hasCenter?: boolean;
+  hasEnd?: boolean;
   color: string;
 };
 const TripLegDecoration: React.FC<TripLegDecorationProps> = ({
   color,
   hasStart,
+  hasCenter,
   hasEnd,
 }) => {
   const style = useStyles();
@@ -19,6 +21,11 @@ const TripLegDecoration: React.FC<TripLegDecorationProps> = ({
       {hasStart && (
         <View
           style={[style.decorationMarker, style.decorationStart, colorStyle]}
+        ></View>
+      )}
+      {hasCenter && (
+        <View
+          style={[style.decorationMarker, style.decorationCenter, colorStyle]}
         ></View>
       )}
       {hasEnd && (
@@ -36,23 +43,29 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   decoration: {
     position: 'absolute',
     height: '100%',
+    width: theme.tripLegDetail.decorationLineWidth,
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
     left:
       theme.tripLegDetail.labelWidth +
       theme.tripLegDetail.decorationContainerWidth / 2,
-    width: theme.tripLegDetail.decorationLineWidth,
     backgroundColor: theme.background.accent,
   },
   decorationMarker: {
-    position: 'absolute',
     width: theme.tripLegDetail.decorationLineEndWidth,
     left: -theme.tripLegDetail.decorationLineWidth,
     height: theme.tripLegDetail.decorationLineWidth,
     backgroundColor: theme.background.accent,
   },
   decorationStart: {
+    position: 'absolute',
     top: 0,
   },
+  decorationCenter: {},
   decorationEnd: {
+    position: 'absolute',
     bottom: 0,
   },
 }));

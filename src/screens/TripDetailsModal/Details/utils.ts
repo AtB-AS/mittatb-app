@@ -1,4 +1,4 @@
-// @TODO User setting?
+// @TODO Remote config? User settings?
 const TIME_LIMIT_IN_MINUTES = 3;
 const MIN_SIGNIFICANT_WALK_IN_SECONDS = 30;
 const MIN_SIGNIFICANT_WAIT_IN_SECONDS = 30;
