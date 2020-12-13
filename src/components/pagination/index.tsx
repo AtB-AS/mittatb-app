@@ -4,6 +4,7 @@ import {View, ViewProps} from 'react-native';
 import Button from '../button';
 import {StyleSheet} from '../../theme';
 import {ArrowLeft, ArrowRight} from '../../assets/svg/icons/navigation';
+import {PaginationTexts, useTranslation} from '../../translations';
 
 type PaginationProps = ViewProps & {
   page: number;
@@ -17,6 +18,7 @@ const Pagination: React.FC<PaginationProps> = ({
   style,
 }) => {
   const styles = usePaginateStyles();
+  const {t} = useTranslation();
   const hasPrevious = page > 1;
   const hasNext = page < totalPages;
 
@@ -29,11 +31,17 @@ const Pagination: React.FC<PaginationProps> = ({
         iconPosition="left"
         icon={ArrowLeft}
         onPress={() => onNavigate(--page)}
-        text="Forrige"
+        text={t(PaginationTexts.previous.label)}
+        accessibilityHint={t(PaginationTexts.previous.a11yHint)}
       ></Button>
 
-      <ThemeText>
-        {page} av {totalPages}
+      <ThemeText
+        accessible={true}
+        accessibilityLabel={t(
+          PaginationTexts.current.a11yLabel(page, totalPages),
+        )}
+      >
+        {t(PaginationTexts.current.label(page, totalPages))}
       </ThemeText>
       <Button
         type="compact"
@@ -42,7 +50,8 @@ const Pagination: React.FC<PaginationProps> = ({
         iconPosition="right"
         icon={ArrowRight}
         onPress={() => onNavigate(++page)}
-        text="Neste"
+        text={t(PaginationTexts.next.label)}
+        accessibilityHint={t(PaginationTexts.next.a11yHint)}
       ></Button>
     </View>
   );
