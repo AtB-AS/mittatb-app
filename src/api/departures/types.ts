@@ -1,4 +1,4 @@
-import {ReportType} from '../../sdk';
+import {ReportType, TransportMode, TransportSubmode} from '../../sdk';
 
 type Notice = {text?: string};
 type Situation = {
@@ -26,6 +26,8 @@ type Situation = {
 type DepartureLineInfo = {
   lineName: string;
   lineNumber: string;
+  transportMode?: TransportMode;
+  transportSubmode?: TransportSubmode;
   quayId: string;
   notices: Notice[];
   lineId: string;

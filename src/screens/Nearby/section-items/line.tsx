@@ -4,8 +4,6 @@ import {AccessibilityProps, ScrollView, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {NearbyScreenNavigationProp} from '..';
 import {DepartureGroup, DepartureTime} from '../../../api/departures/types';
-import SvgFavoriteFill from '../../../assets/svg/icons/places/FavoriteFill';
-import {BusSide} from '../../../assets/svg/icons/transportation';
 import Button from '../../../components/button';
 import {
   SectionItem,
@@ -13,7 +11,7 @@ import {
   useSectionStyle,
 } from '../../../components/sections/section-utils';
 import ThemeText from '../../../components/text';
-import ThemeIcon from '../../../components/theme-icon';
+import TransportationIcon from '../../../components/transportation-icon';
 import {StyleSheet} from '../../../theme';
 import {formatToClock} from '../../../utils/date';
 import insets from '../../../utils/insets';
@@ -56,11 +54,13 @@ export default function LineItem({
           onPress={() => onPress(group.departures[0])}
           hitSlop={insets.symmetric(12, 0)}
         >
-          <ThemeIcon svg={BusSide} />
+          <View style={styles.transportationMode}>
+            <TransportationIcon
+              mode={group.lineInfo?.transportMode}
+              subMode={group.lineInfo?.transportSubmode}
+            />
+          </View>
           <ThemeText>{title}</ThemeText>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} hitSlop={insets.all(12)}>
-          <ThemeIcon svg={SvgFavoriteFill} />
         </TouchableOpacity>
       </View>
       <ScrollView horizontal contentContainerStyle={styles.scrollContainer}>
@@ -80,6 +80,9 @@ export default function LineItem({
   );
 }
 const useItemStyles = StyleSheet.createThemeHook((theme) => ({
+  transportationMode: {
+    marginRight: theme.spacings.small,
+  },
   lineHeader: {
     flexDirection: 'row',
   },
