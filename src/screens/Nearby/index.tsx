@@ -3,11 +3,14 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useMemo, useState} from 'react';
 import {ErrorType} from '../../api/utils';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
-import AccessibleText from '../../components/accessible-text';
+import AccessibleText, {
+  screenReaderPause,
+} from '../../components/accessible-text';
 import DisappearingHeader from '../../components/disappearing-header';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 import {LocationInput, Section} from '../../components/sections';
 import ThemeIcon from '../../components/theme-icon';
+import FavoriteChips from '../../favorite-chips';
 import {Location, LocationWithMetadata} from '../../favorites/types';
 import {useReverseGeocoder} from '../../geocoder';
 import {
@@ -17,7 +20,10 @@ import {
 import {useLocationSearchValue} from '../../location-search';
 import {RootStackParamList} from '../../navigation';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
+import {useTheme} from '../../theme';
 import {
+  AssistantTexts,
+  dictionary,
   NearbyTexts,
   TranslatedString,
   useTranslation,
@@ -85,20 +91,20 @@ const NearbyOverview: React.FC<Props> = ({
     'location',
   );
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
+  const {theme} = useTheme();
 
   const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
     [currentLocation],
   );
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
-
   const updatingLocation = !fromLocation && hasLocationPermission;
-
   const {state, refresh, loadMore} = useDepartureData(fromLocation);
   const {data, isLoading, isFetchingMore, error} = state;
 
   const isInitialScreen = data == null && !isLoading && !error;
   const activateScroll = !isInitialScreen || !!error;
+  const isGeoLocationActive = fromLocation?.resultType == 'geolocation';
 
   const {t} = useTranslation();
 
@@ -111,6 +117,12 @@ const NearbyOverview: React.FC<Props> = ({
       callerRouteParam: 'location',
       initialLocation: fromLocation,
     });
+
+  const fullLocation = (selectedLocation: LocationWithMetadata) => {
+    navigation.setParams({
+      location: selectedLocation,
+    });
+  };
 
   function setCurrentLocationAsFrom() {
     navigation.setParams({
@@ -150,22 +162,47 @@ const NearbyOverview: React.FC<Props> = ({
   }, [updatingLocation, isLoading]);
 
   const renderHeader = () => (
-    <Section withPadding>
-      <LocationInput
-        label={t(NearbyTexts.location.departurePicker.label)}
-        updatingLocation={updatingLocation}
-        location={fromLocation}
-        onPress={openLocationSearch}
-        accessibilityLabel={t(NearbyTexts.location.departurePicker.a11yLabel)}
-        icon={<ThemeIcon svg={CurrentLocationArrow} />}
-        onIconPress={setCurrentLocationOrRequest}
-        iconAccessibility={{
-          accessible: true,
-          accessibilityLabel: t(NearbyTexts.location.locationButton.a11yLabel),
-          accessibilityRole: 'button',
-        }}
-      />
-    </Section>
+    <>
+      <Section withPadding>
+        <LocationInput
+          label={t(NearbyTexts.location.departurePicker.label)}
+          updatingLocation={updatingLocation}
+          location={fromLocation}
+          onPress={openLocationSearch}
+          accessibilityLabel={t(NearbyTexts.location.departurePicker.a11yLabel)}
+          icon={<ThemeIcon svg={CurrentLocationArrow} />}
+          onIconPress={setCurrentLocationOrRequest}
+          iconAccessibility={{
+            accessible: true,
+            accessibilityLabel: t(
+              NearbyTexts.location.locationButton.a11yLabel,
+            ),
+            accessibilityRole: 'button',
+          }}
+        />
+      </Section>
+      {isGeoLocationActive && (
+        <FavoriteChips
+          key="favoriteChips"
+          chipTypes={['favorites', 'add-favorite']}
+          onSelectLocation={fullLocation}
+          containerStyle={{
+            marginTop: theme.spacings.xSmall,
+            marginBottom: theme.spacings.medium,
+          }}
+          contentContainerStyle={{
+            // @TODO Find solution for not hardcoding this. e.g. do proper math
+            paddingLeft: theme.spacings.medium,
+            paddingRight: theme.spacings.medium / 2,
+          }}
+          chipActionHint={
+            t(AssistantTexts.favorites.favoriteChip.a11yHint) +
+            t(dictionary.toPlace) +
+            screenReaderPause
+          }
+        />
+      )}
+    </>
   );
 
   return (
