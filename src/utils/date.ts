@@ -5,6 +5,7 @@ import {
   differenceInSeconds,
   isSameDay,
   isPast,
+  differenceInMinutes,
   differenceInCalendarDays,
 } from 'date-fns';
 import nb from 'date-fns/locale/nb';
@@ -93,7 +94,7 @@ export function formatToClockOrRelativeMinutes(
   const parsed = isoDate instanceof Date ? isoDate : parseISO(isoDate);
   const diff = secondsBetween(new Date(), parsed);
 
-  if (isInThePast(parsed) || diff / 60 >= minuteThreshold) {
+  if (diff / 60 >= minuteThreshold) {
     return formatLocaleTime(parsed, language);
   }
 
@@ -114,6 +115,17 @@ export function formatLocaleTime(date: Date, language?: Language) {
 }
 export function isInThePast(isoDate: string | Date) {
   return isPast(isoDate instanceof Date ? isoDate : parseISO(isoDate));
+}
+export function isNumberOfMinutesInThePast(
+  isoDate: string | Date,
+  minutes: number,
+) {
+  return (
+    differenceInMinutes(
+      isoDate instanceof Date ? isoDate : parseISO(isoDate),
+      new Date(),
+    ) < -minutes
+  );
 }
 
 export function formatToLongDateTime(isoDate: string | Date, locale?: Locale) {

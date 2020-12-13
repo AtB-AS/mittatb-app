@@ -1,4 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
+import {addMinutes} from 'date-fns';
 import React from 'react';
 import {AccessibilityProps, ScrollView, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -13,8 +14,14 @@ import {
 import ThemeText from '../../../components/text';
 import TransportationIcon from '../../../components/transportation-icon';
 import {StyleSheet} from '../../../theme';
-import {formatToClock} from '../../../utils/date';
+import {
+  formatToClockOrRelativeMinutes,
+  isInThePast,
+  isNumberOfMinutesInThePast,
+} from '../../../utils/date';
 import insets from '../../../utils/insets';
+
+const HIDE_AFTER_NUM_MINUTES = 2;
 
 export type LineItemProps = SectionItem<{
   group: DepartureGroup;
@@ -65,18 +72,42 @@ export default function LineItem({
       </View>
       <ScrollView horizontal contentContainerStyle={styles.scrollContainer}>
         {group.departures.map((departure) => (
-          <Button
+          <DepartureTimeItem
+            departure={departure}
             key={departure.serviceJourneyId}
-            type="compact"
-            mode="primary3"
-            onPress={() => onPress(departure)}
-            text={formatToClock(departure.aimedTime)}
-            style={styles.departure}
-            textStyle={styles.departureText}
+            onPress={onPress}
           />
         ))}
       </ScrollView>
     </View>
+  );
+}
+
+type DepartureTimeItemProps = {
+  departure: DepartureTime;
+  onPress(departure: DepartureTime): void;
+};
+function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
+  const styles = useItemStyles();
+  const time = formatToClockOrRelativeMinutes(departure.aimedTime);
+
+  if (isNumberOfMinutesInThePast(departure.aimedTime, HIDE_AFTER_NUM_MINUTES)) {
+    return null;
+  }
+
+  const inPast = isInThePast(departure.aimedTime);
+
+  return (
+    <Button
+      key={departure.serviceJourneyId}
+      type="compact"
+      mode="primary3"
+      onPress={() => onPress(departure)}
+      text={time}
+      style={styles.departure}
+      disabled={inPast}
+      textStyle={styles.departureText}
+    />
   );
 }
 const useItemStyles = StyleSheet.createThemeHook((theme) => ({

@@ -99,31 +99,32 @@ type StopDeparturesProps = {
   stopPlaceGroup: StopPlaceGroup;
   currentLocation?: Location;
 };
-const StopDepartures = React.memo(
-  ({stopPlaceGroup, currentLocation}: StopDeparturesProps) => {
-    if (!stopPlaceGroup.quays.length) {
-      return null;
-    }
-    if (hasNoGroupsWithDepartures(stopPlaceGroup.quays)) {
-      return null;
-    }
+function StopDepartures({
+  stopPlaceGroup,
+  currentLocation,
+}: StopDeparturesProps) {
+  if (!stopPlaceGroup.quays.length) {
+    return null;
+  }
+  if (hasNoGroupsWithDepartures(stopPlaceGroup.quays)) {
+    return null;
+  }
 
-    return (
-      <View>
-        <Section.HeaderItem transparent text={stopPlaceGroup.stopPlace.name} />
-        {orderAndMapByDistance(stopPlaceGroup.quays, currentLocation).map(
-          ([distance, quayGroup]) => (
-            <QuayGroupItem
-              key={quayGroup.quay.id}
-              quayGroup={quayGroup}
-              distance={distance}
-            />
-          ),
-        )}
-      </View>
-    );
-  },
-);
+  return (
+    <View>
+      <Section.HeaderItem transparent text={stopPlaceGroup.stopPlace.name} />
+      {orderAndMapByDistance(stopPlaceGroup.quays, currentLocation).map(
+        ([distance, quayGroup]) => (
+          <QuayGroupItem
+            key={quayGroup.quay.id}
+            quayGroup={quayGroup}
+            distance={distance}
+          />
+        ),
+      )}
+    </View>
+  );
+}
 const first = ([a]: unknown[]) => a;
 function orderAndMapByDistance(
   groups: QuayGroup[],
