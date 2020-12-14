@@ -1,10 +1,10 @@
 import {useNavigation} from '@react-navigation/native';
-import {addMinutes} from 'date-fns';
 import React from 'react';
 import {AccessibilityProps, ScrollView, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {NearbyScreenNavigationProp} from '..';
 import {DepartureGroup, DepartureTime} from '../../../api/departures/types';
+import Warning from '../../../assets/svg/situations/Warning';
 import Button from '../../../components/button';
 import {
   SectionItem,
@@ -74,7 +74,7 @@ export default function LineItem({
         {group.departures.map((departure) => (
           <DepartureTimeItem
             departure={departure}
-            key={departure.serviceJourneyId}
+            key={departure.serviceJourneyId + departure.aimedTime}
             onPress={onPress}
           />
         ))}
@@ -107,8 +107,13 @@ function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
       style={styles.departure}
       disabled={inPast}
       textStyle={styles.departureText}
+      icon={hasSituations(departure) ? Warning : undefined}
+      iconPosition="right"
     />
   );
+}
+function hasSituations(departure: DepartureTime) {
+  return departure.situations.length > 0;
 }
 const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   transportationMode: {
