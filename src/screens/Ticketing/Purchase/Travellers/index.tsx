@@ -165,7 +165,7 @@ const Travellers: React.FC<TravellersProps> = ({
               styles.vippsPaymentButton,
             ]}
             style={{flex: 1}}
-            textContainerStyle={{marginLeft: 20}}
+            textContainerStyle={{marginLeft: 30}}
           />
           <Button
             mode="primary2"
@@ -179,7 +179,7 @@ const Travellers: React.FC<TravellersProps> = ({
               styles.paymentButton,
               styles.cardPaymentButton,
             ]}
-            textContainerStyle={{marginLeft: 20}}
+            textContainerStyle={{marginLeft: 30}}
           />
         </View>
       </View>
