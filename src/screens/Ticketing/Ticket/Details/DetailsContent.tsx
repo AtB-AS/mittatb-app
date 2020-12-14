@@ -1,38 +1,38 @@
-import React from 'react';
-import {FareContract} from '../../../api/fareContracts';
-import ThemeText from '../../../components/text';
-import * as Sections from '../../../components/sections';
-import ValidityHeader from './ValidityHeader';
-import ValidityLine from './ValidityLine';
-import {formatToLongDateTime} from '../../../utils/date';
+import React, {useState} from 'react';
+import {FareContract} from '../../../../api/fareContracts';
+import ThemeText from '../../../../components/text';
+import * as Sections from '../../../../components/sections';
+import ValidityHeader from '../ValidityHeader';
+import ValidityLine from '../ValidityLine';
+import {formatToLongDateTime} from '../../../../utils/date';
 import {fromUnixTime} from 'date-fns';
+import nb from 'date-fns/locale/nb';
+
 type Props = {
   fareContract: FareContract;
   now: number;
-  onPressDetails?: () => void;
+  onReceiptNavigate: () => void;
 };
 
-const DetailedTicket: React.FC<Props> = ({
+const DetailsContent: React.FC<Props> = ({
   fareContract: fc,
   now,
-  onPressDetails,
+  onReceiptNavigate,
 }) => {
   const nowSeconds = now / 1000;
   const isValidTicket = fc.usage_valid_to >= nowSeconds;
-  const timeLeft = fc.usage_valid_to - nowSeconds;
 
   return (
     <Sections.Section withBottomPadding>
       <Sections.GenericItem>
         <ValidityHeader
           isValid={isValidTicket}
-          timeLeft={timeLeft}
-          validFrom={fc.usage_valid_from}
-          onPressDetails={onPressDetails}
+          nowSeconds={nowSeconds}
+          validTo={fc.usage_valid_to}
         />
         <ValidityLine
           isValid={isValidTicket}
-          validityLeftSeconds={timeLeft}
+          nowSeconds={nowSeconds}
           validFrom={fc.usage_valid_from}
           validTo={fc.usage_valid_to}
         />
@@ -51,14 +51,14 @@ const DetailedTicket: React.FC<Props> = ({
       <Sections.GenericItem>
         <ThemeText>Ordre-id: {fc.order_id}</ThemeText>
         <ThemeText type="lead" color="faded">
-          Kjøpt {formatToLongDateTime(fromUnixTime(fc.usage_valid_from))}
+          Kjøpt {formatToLongDateTime(fromUnixTime(fc.usage_valid_from), nb)}
         </ThemeText>
       </Sections.GenericItem>
       {isValidTicket && <Sections.LinkItem text="Vis for kontroll" disabled />}
       <Sections.LinkItem text="Be om refusjon" disabled />
-      <Sections.LinkItem text="Be om kvittering" disabled />
+      <Sections.LinkItem text="Be om kvittering" onPress={onReceiptNavigate} />
     </Sections.Section>
   );
 };
 
-export default DetailedTicket;
+export default DetailsContent;

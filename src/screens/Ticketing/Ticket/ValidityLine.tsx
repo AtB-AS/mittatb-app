@@ -6,10 +6,10 @@ import colors from '../../../theme/colors';
 
 const ValidityLine: React.FC<{
   isValid: boolean;
-  validityLeftSeconds: number;
+  nowSeconds: number;
   validFrom: number;
   validTo: number;
-}> = ({isValid, validityLeftSeconds, validFrom, validTo}) => {
+}> = ({isValid, nowSeconds, validFrom, validTo}) => {
   const {theme} = useTheme();
   const container: ViewStyle = {
     marginVertical: theme.spacings.medium,
@@ -19,8 +19,9 @@ const ValidityLine: React.FC<{
 
   if (isValid) {
     const durationSeconds = validTo - validFrom;
+    const timeLeftSeconds = validTo - nowSeconds;
     const validityPercent = Math.ceil(
-      (validityLeftSeconds / durationSeconds) * 100,
+      (timeLeftSeconds / durationSeconds) * 100,
     );
 
     return (
