@@ -10,6 +10,7 @@ import {
 } from '../../../components/sections/section-utils';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
+import SituationMessages from '../../../situations';
 import {StyleSheet} from '../../../theme';
 import {dictionary, Language, useTranslation} from '../../../translations';
 
@@ -22,12 +23,21 @@ export default function QuayHeaderItem({
   distance,
   ...props
 }: QuayHeaderItemProps) {
+  const styles = useItemStyles();
   const {contentContainer, topContainer} = useSectionItem(props);
   const sectionStyle = useSectionStyle();
   return (
-    <View style={[topContainer, sectionStyle.spaceBetween, contentContainer]}>
-      <ThemeText>{quay.name}</ThemeText>
-      <Distance distance={distance} />
+    <View style={topContainer}>
+      <View style={[sectionStyle.spaceBetween, contentContainer]}>
+        <ThemeText>{quay.name}</ThemeText>
+        <Distance distance={distance} />
+      </View>
+
+      <SituationMessages
+        mode="icon"
+        situations={quay.situations}
+        containerStyle={styles.situations}
+      />
     </View>
   );
 }
@@ -56,6 +66,9 @@ const humanizeDistance = (meters: number, t: TFunc<typeof Language>) => {
   return `${Math.round(meters)}${t(dictionary.distance.m)}`;
 };
 const useItemStyles = StyleSheet.createThemeHook((theme) => ({
+  situations: {
+    marginTop: theme.spacings.medium,
+  },
   itemStyle: {
     flexDirection: 'row',
   },

@@ -7,7 +7,6 @@ import * as Section from '../../components/sections';
 import ThemeText from '../../components/text';
 import {Location} from '../../favorites/types';
 import MessageBox from '../../message-box';
-import SituationMessages from '../../situations';
 import {StyleSheet, useTheme} from '../../theme';
 import {NearbyTexts, useTranslation} from '../../translations';
 import LineItem from './section-items/line';
@@ -110,6 +109,7 @@ function StopDepartures({
   if (hasNoGroupsWithDepartures(stopPlaceGroup.quays)) {
     return null;
   }
+
   return (
     <View>
       <Section.HeaderItem transparent text={stopPlaceGroup.stopPlace.name} />
@@ -168,11 +168,6 @@ function QuayGroupItem({
 
   return (
     <Fragment>
-      <SituationMessages
-        mode="icon"
-        situations={quayGroup.quay.situations}
-        containerStyle={{marginBottom: theme.spacings.small}}
-      />
       <Section.Section>
         <QuayHeaderItem quay={quayGroup.quay} distance={distance} />
 
