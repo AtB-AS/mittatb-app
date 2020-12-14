@@ -20,8 +20,7 @@ import {
   isNumberOfMinutesInThePast,
 } from '../../../utils/date';
 import insets from '../../../utils/insets';
-
-const HIDE_AFTER_NUM_MINUTES = 2;
+import {hasNoDeparturesOnGroup, HIDE_AFTER_NUM_MINUTES} from '../utils';
 
 export type LineItemProps = SectionItem<{
   group: DepartureGroup;
@@ -37,7 +36,7 @@ export default function LineItem({
   const styles = useItemStyles();
   const navigation = useNavigation<NearbyScreenNavigationProp>();
 
-  if (hasNoDepartures(group)) {
+  if (hasNoDeparturesOnGroup(group)) {
     return null;
   }
 
@@ -133,7 +132,3 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
     fontVariant: ['tabular-nums'],
   },
 }));
-
-function hasNoDepartures(group: DepartureGroup) {
-  return !Boolean(group.departures.length);
-}

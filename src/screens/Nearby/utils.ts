@@ -1,11 +1,13 @@
 import {DepartureGroupMetadata} from '../../api/departures/departure-group';
-import {DepartureGroup, StopPlaceGroup} from '../../api/departures/types';
 import {
-  DepartureRealtimeData,
-  DeparturesRealtimeData,
-  DeparturesWithStop,
-  QuayWithDepartures,
-} from '../../sdk';
+  DepartureGroup,
+  QuayGroup,
+  StopPlaceGroup,
+} from '../../api/departures/types';
+import {DepartureRealtimeData, DeparturesRealtimeData} from '../../sdk';
+import {isNumberOfMinutesInThePast} from '../../utils/date';
+
+export const HIDE_AFTER_NUM_MINUTES = 2;
 
 export function updateStopsWithRealtime(
   stops: DepartureGroupMetadata['data'],
@@ -67,58 +69,22 @@ function updateDeparturesWithRealtime(
   });
 }
 
-export type QuayWithDeparturesAndLimits = QuayWithDepartures & {
-  showLimit: number;
-};
-export type DeparturesWithStopLocal = DeparturesWithStop & {
-  quays: {
-    [quayId: string]: QuayWithDeparturesAndLimits;
-  };
-};
-
-export function mapQuayDeparturesToShowlimits(
-  stops: DeparturesWithStop[],
-  showLimit: number,
-): DeparturesWithStopLocal[] {
-  return stops.map(function (stop) {
-    let newQuays: DeparturesWithStopLocal['quays'] = {};
-
-    for (let [quayId, quay] of Object.entries(stop.quays)) {
-      newQuays[quayId] = {
-        ...quay,
-        showLimit,
-      };
-    }
-
-    return {
-      ...stop,
-      quays: newQuays,
-    };
-  });
+export function hasNoDeparturesOnGroup(group: DepartureGroup) {
+  return (
+    group.departures.length === 0 ||
+    group.departures.every((d) =>
+      isNumberOfMinutesInThePast(d.aimedTime, HIDE_AFTER_NUM_MINUTES),
+    )
+  );
 }
 
-export function showMoreItemsOnQuay(
-  stops: DeparturesWithStopLocal[],
-  quayIdToUpdate: string,
-  additionalItemsToShow: number,
-): DeparturesWithStopLocal[] {
-  return stops.map(function (stop) {
-    let newQuays: DeparturesWithStopLocal['quays'] = {};
-
-    for (let [quayId, quay] of Object.entries(stop.quays)) {
-      if (quayId !== quayIdToUpdate) {
-        newQuays[quayId] = quay;
-      } else {
-        newQuays[quayId] = {
-          ...quay,
-          showLimit: quay.showLimit + additionalItemsToShow,
-        };
-      }
-    }
-
-    return {
-      ...stop,
-      quays: newQuays,
-    };
-  });
+export function hasNoQuaysWithDepartures(departures: StopPlaceGroup[] | null) {
+  return (
+    departures !== null &&
+    (departures.length === 0 ||
+      departures.every((deps) => hasNoGroupsWithDepartures(deps.quays)))
+  );
+}
+export function hasNoGroupsWithDepartures(departures: QuayGroup[]) {
+  return departures.every((q) => q.group.every(hasNoDeparturesOnGroup));
 }

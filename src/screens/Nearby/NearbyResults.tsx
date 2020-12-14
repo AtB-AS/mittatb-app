@@ -1,17 +1,16 @@
 import haversineDistance from 'haversine-distance';
 import sortBy from 'lodash.sortby';
-import React, {Fragment, useEffect, useState} from 'react';
+import React from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {QuayGroup, StopPlaceGroup} from '../../api/departures/types';
 import * as Section from '../../components/sections';
 import ThemeText from '../../components/text';
 import {Location} from '../../favorites/types';
 import MessageBox from '../../message-box';
-import {StyleSheet, useTheme} from '../../theme';
+import {StyleSheet} from '../../theme';
 import {NearbyTexts, useTranslation} from '../../translations';
-import LineItem from './section-items/line';
-import MoreItem from './section-items/more';
-import QuayHeaderItem from './section-items/quay-header';
+import QuaySection from './section-items/quay-section';
+import {hasNoGroupsWithDepartures, hasNoQuaysWithDepartures} from './utils';
 
 type NearbyResultsProps = {
   departures: StopPlaceGroup[] | null;
@@ -41,7 +40,7 @@ export default function NearbyResults({
     );
   }
 
-  if (hasNoQuays(departures)) {
+  if (hasNoQuaysWithDepartures(departures)) {
     return (
       <View style={styles.container}>
         <MessageBox type="info">
@@ -115,7 +114,7 @@ function StopDepartures({
       <Section.HeaderItem transparent text={stopPlaceGroup.stopPlace.name} />
       {orderAndMapByDistance(stopPlaceGroup.quays, currentLocation).map(
         ([distance, quayGroup]) => (
-          <QuayGroupItem
+          <QuaySection
             key={quayGroup.quay.id}
             quayGroup={quayGroup}
             distance={distance}
@@ -143,59 +142,4 @@ function orderAndMapByDistance(
     }),
     first,
   );
-}
-
-const LIMIT_SIZE = 5;
-
-function QuayGroupItem({
-  quayGroup,
-  distance,
-}: {
-  quayGroup: QuayGroup;
-  distance?: number;
-}) {
-  const [limit, setLimit] = useState(LIMIT_SIZE);
-  const {t} = useTranslation();
-  const {theme} = useTheme();
-
-  useEffect(() => {
-    setLimit(LIMIT_SIZE);
-  }, [quayGroup.quay.id]);
-
-  if (hasNoGroupsWithDepartures([quayGroup])) {
-    return null;
-  }
-
-  return (
-    <Fragment>
-      <Section.Section>
-        <QuayHeaderItem quay={quayGroup.quay} distance={distance} />
-
-        {quayGroup.group.slice(0, limit).map((group) => (
-          <LineItem
-            group={group}
-            key={group.lineInfo?.lineId + String(group.lineInfo?.lineName)}
-          />
-        ))}
-        {quayGroup.group.length > limit && (
-          <MoreItem
-            onPress={() => setLimit(limit + LIMIT_SIZE)}
-            text={t(NearbyTexts.results.quayResult.showMoreToggler.text)}
-          />
-        )}
-      </Section.Section>
-      <View style={{marginBottom: theme.spacings.medium}} />
-    </Fragment>
-  );
-}
-
-function hasNoQuays(departures: StopPlaceGroup[] | null) {
-  return (
-    departures !== null &&
-    (departures.length === 0 ||
-      departures.every((deps) => deps.quays.length === 0))
-  );
-}
-function hasNoGroupsWithDepartures(departures: QuayGroup[]) {
-  return departures.every((q) => !q.group.some((g) => g.departures.length));
 }
