@@ -10,7 +10,7 @@ import {StyleSheet} from '../../theme';
 import {NearbyTexts, useTranslation} from '../../translations';
 import LineItem from './section-items/line';
 import MoreItem from './section-items/more';
-import QuayHeaderItem from './section-items/quay';
+import QuayHeaderItem from './section-items/quay-header';
 import sortBy from 'lodash.sortby';
 
 type NearbyResultsProps = {

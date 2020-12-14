@@ -1,5 +1,4 @@
 import {TFunc} from '@leile/lobo-t';
-import haversineDistance from 'haversine-distance';
 import React from 'react';
 import {View} from 'react-native';
 import {QuayInfo} from '../../../api/departures/types';
@@ -11,7 +10,6 @@ import {
 } from '../../../components/sections/section-utils';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
-import {Location} from '../../../favorites/types';
 import {StyleSheet} from '../../../theme';
 import {dictionary, Language, useTranslation} from '../../../translations';
 
