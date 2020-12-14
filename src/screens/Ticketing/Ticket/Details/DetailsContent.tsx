@@ -21,19 +21,18 @@ const DetailsContent: React.FC<Props> = ({
 }) => {
   const nowSeconds = now / 1000;
   const isValidTicket = fc.usage_valid_to >= nowSeconds;
-  const timeLeft = fc.usage_valid_to - nowSeconds;
 
   return (
     <Sections.Section withBottomPadding>
       <Sections.GenericItem>
         <ValidityHeader
           isValid={isValidTicket}
-          timeLeft={timeLeft}
-          validFrom={fc.usage_valid_from}
+          nowSeconds={nowSeconds}
+          validTo={fc.usage_valid_to}
         />
         <ValidityLine
           isValid={isValidTicket}
-          validityLeftSeconds={timeLeft}
+          nowSeconds={nowSeconds}
           validFrom={fc.usage_valid_from}
           validTo={fc.usage_valid_to}
         />
