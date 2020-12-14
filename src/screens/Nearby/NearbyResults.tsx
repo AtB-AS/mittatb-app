@@ -1,4 +1,5 @@
 import haversineDistance from 'haversine-distance';
+import sortBy from 'lodash.sortby';
 import React, {Fragment, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {QuayGroup, StopPlaceGroup} from '../../api/departures/types';
@@ -6,12 +7,12 @@ import * as Section from '../../components/sections';
 import ThemeText from '../../components/text';
 import {Location} from '../../favorites/types';
 import MessageBox from '../../message-box';
-import {StyleSheet} from '../../theme';
+import SituationMessages from '../../situations';
+import {StyleSheet, useTheme} from '../../theme';
 import {NearbyTexts, useTranslation} from '../../translations';
 import LineItem from './section-items/line';
 import MoreItem from './section-items/more';
 import QuayHeaderItem from './section-items/quay-header';
-import sortBy from 'lodash.sortby';
 
 type NearbyResultsProps = {
   departures: StopPlaceGroup[] | null;
@@ -109,7 +110,6 @@ function StopDepartures({
   if (hasNoGroupsWithDepartures(stopPlaceGroup.quays)) {
     return null;
   }
-
   return (
     <View>
       <Section.HeaderItem transparent text={stopPlaceGroup.stopPlace.name} />
@@ -156,6 +156,7 @@ function QuayGroupItem({
 }) {
   const [limit, setLimit] = useState(LIMIT_SIZE);
   const {t} = useTranslation();
+  const {theme} = useTheme();
 
   useEffect(() => {
     setLimit(LIMIT_SIZE);
@@ -164,8 +165,14 @@ function QuayGroupItem({
   if (hasNoGroupsWithDepartures([quayGroup])) {
     return null;
   }
+
   return (
     <Fragment>
+      <SituationMessages
+        mode="icon"
+        situations={quayGroup.quay.situations}
+        containerStyle={{marginBottom: theme.spacings.small}}
+      />
       <Section.Section>
         <QuayHeaderItem quay={quayGroup.quay} distance={distance} />
 
@@ -182,7 +189,7 @@ function QuayGroupItem({
           />
         )}
       </Section.Section>
-      <View style={{marginBottom: 12}} />
+      <View style={{marginBottom: theme.spacings.medium}} />
     </Fragment>
   );
 }

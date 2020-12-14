@@ -1,27 +1,6 @@
-import {ReportType, TransportMode, TransportSubmode} from '../../sdk';
+import {Situation, TransportMode, TransportSubmode} from '../../sdk';
 
 type Notice = {text?: string};
-type Situation = {
-  situationNumber?: string;
-  reportType?: ReportType;
-  summary: Array<{
-    language?: string;
-    value?: string;
-  }>;
-  description: Array<{
-    language?: string;
-    value?: string;
-  }>;
-  advice: Array<{
-    language?: string;
-    value?: string;
-  }>;
-  validityPeriod?: {
-    startTime?: any;
-    endTime?: any;
-  };
-  infoLinks?: Array<{uri?: string; label?: string}>;
-};
 
 type DepartureLineInfo = {
   lineName: string;

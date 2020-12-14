@@ -64,7 +64,11 @@ export function getSituationDiff(situations: Situation[], parent: Situation[]) {
 export function getUniqueSituations(situations: Situation[] = []) {
   let uniqueSituations: {[id: string]: string} = {};
   for (let situation of situations) {
-    if (uniqueSituations[situation.situationNumber]) continue;
+    if (
+      !situation.situationNumber ||
+      uniqueSituations[situation.situationNumber]
+    )
+      continue;
     const value = situation.description[0]?.value;
     if (!value) continue;
     if (Object.values(uniqueSituations).includes(value)) continue;
