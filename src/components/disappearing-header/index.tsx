@@ -38,7 +38,7 @@ type Props = {
   isFullHeight?: boolean;
 
   useScroll?: boolean;
-  headerTitle: string;
+  headerTitle: React.ReactNode;
   alternativeTitleComponent?: React.ReactNode;
 
   headerMargin?: number;
@@ -206,7 +206,11 @@ const DisappearingHeader: React.FC<Props> = ({
             ]}
           >
             <View style={styles.bannerContainer}>
-              <SvgBanner width={windowWidth} height={windowWidth / 2} />
+              <SvgBanner
+                width={windowWidth}
+                height={windowWidth / 2}
+                opacity={0.6}
+              />
             </View>
 
             <ScrollView style={styles.highlightComponent}>

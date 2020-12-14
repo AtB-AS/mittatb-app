@@ -27,7 +27,11 @@ import {LocationSearchNavigationProp} from './';
 import LocationResults from './LocationResults';
 import {LocationSearchResult} from './types';
 import useDebounce from './useDebounce';
-
+import {
+  useTranslation,
+  LocationSearchTexts,
+  TranslateFunction,
+} from '../translations/';
 export type Props = {
   navigation: LocationSearchNavigationProp;
   route: RouteProp<RootStackParamList, 'LocationSearch'>;
@@ -59,6 +63,7 @@ const LocationSearch: React.FC<Props> = ({
 
   const [text, setText] = useState<string>(initialLocation?.name ?? '');
   const debouncedText = useDebounce(text, 200);
+  const {t} = useTranslation();
 
   const [errorMessage, setErrorMessage] = useState<string>('');
   const previousLocations = filterPreviousLocations(
@@ -125,7 +130,7 @@ const LocationSearch: React.FC<Props> = ({
 
   useEffect(() => {
     if (error) {
-      setErrorMessage(translateErrorType(error));
+      setErrorMessage(translateErrorType(error, t));
     }
   }, [error]);
 
@@ -141,12 +146,14 @@ const LocationSearch: React.FC<Props> = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        title="Søk"
+        title={t(LocationSearchTexts.header.title)}
         leftButton={{
           onPress: () => navigation.goBack(),
           accessible: true,
           accessibilityRole: 'button',
-          accessibilityLabel: 'Gå tilbake',
+          accessibilityLabel: t(
+            LocationSearchTexts.header.leftButton.a11yLabel,
+          ),
           icon: <ThemeIcon svg={Close} />,
         }}
       />
@@ -163,7 +170,7 @@ const LocationSearch: React.FC<Props> = ({
             onChangeText={setText}
             showClear={Boolean(text?.length)}
             onClear={() => setText('')}
-            placeholder="Søk etter adresse eller stoppested"
+            placeholder={t(LocationSearchTexts.searchField.placeholder)}
             autoCorrect={false}
             autoCompleteType="off"
           />
@@ -195,7 +202,7 @@ const LocationSearch: React.FC<Props> = ({
         >
           {hasPreviousResults && (
             <LocationResults
-              title="Siste steder"
+              title={t(LocationSearchTexts.results.previousResults.heading)}
               locations={previousLocations}
               onSelect={onSearchSelect}
               onPrefillText={onPrefillText}
@@ -203,7 +210,7 @@ const LocationSearch: React.FC<Props> = ({
           )}
           {hasResults && (
             <LocationResults
-              title="Søkeresultater"
+              title={t(LocationSearchTexts.results.searchResults.heading)}
               locations={filteredLocations}
               onSelect={onSearchSelect}
               onPrefillText={onPrefillText}
@@ -213,9 +220,11 @@ const LocationSearch: React.FC<Props> = ({
       ) : (
         !error &&
         !!text && (
-          <View style={styles.withMargin}>
+          <View style={styles.contentBlock}>
             <MessageBox type="info">
-              <ThemeText>Fant ingen søkeresultat</ThemeText>
+              <ThemeText>
+                {t(LocationSearchTexts.messages.emptyResult)}
+              </ThemeText>
             </MessageBox>
           </View>
         )
@@ -224,13 +233,16 @@ const LocationSearch: React.FC<Props> = ({
   );
 };
 
-function translateErrorType(errorType: ErrorType): string {
+function translateErrorType(
+  errorType: ErrorType,
+  t: TranslateFunction,
+): string {
   switch (errorType) {
     case 'network-error':
     case 'timeout':
-      return 'Hei, er du på nett? Vi kan ikke søke siden nettforbindelsen din mangler eller er ustabil.';
+      return t(LocationSearchTexts.messages.networkError);
     default:
-      return 'Oops - vi feila med søket. Supert om du prøver igjen 🤞';
+      return t(LocationSearchTexts.messages.defaultError);
   }
 }
 

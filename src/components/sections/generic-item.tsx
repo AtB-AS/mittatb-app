@@ -1,0 +1,25 @@
+import React, {Children, PropsWithChildren} from 'react';
+import {AccessibilityProps, View} from 'react-native';
+import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
+
+export type GenericItemProps = PropsWithChildren<
+  SectionItem<{
+    accessibility?: AccessibilityProps;
+  }>
+>;
+export default function GenericItem({
+  children,
+  accessibility,
+  ...props
+}: GenericItemProps) {
+  const {contentContainer, topContainer} = useSectionItem(props);
+  const style = useSectionStyle();
+
+  return (
+    <View style={[style.baseItem, topContainer]} {...accessibility}>
+      {Children.map(children, (child) => (
+        <View style={[style.spaceBetween, contentContainer]}>{child}</View>
+      ))}
+    </View>
+  );
+}

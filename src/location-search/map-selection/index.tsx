@@ -21,6 +21,7 @@ import FullScreenHeader from '../../ScreenHeader/full-header';
 import {StyleSheet} from '../../theme';
 import LocationBar from './LocationBar';
 import SelectionPin, {PinMode} from './SelectionPin';
+import {LocationSearchTexts, useTranslation} from '../../translations';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -63,13 +64,11 @@ const MapSelection: React.FC<Props> = ({
     ],
   );
 
-  const {locations, isSearching, error} = useReverseGeocoder(
+  const {closestLocation: location, isSearching, error} = useReverseGeocoder(
     centeredCoordinates,
   );
 
   const {location: geolocation} = useGeolocationState();
-
-  const location = locations?.[0];
 
   const onSelect = () => {
     location &&
@@ -107,17 +106,19 @@ const MapSelection: React.FC<Props> = ({
 
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
-
+  const {t} = useTranslation();
   return (
     <View style={styles.container}>
       <View>
         <FullScreenHeader
-          title="Søk"
+          title={t(LocationSearchTexts.mapSelection.header.title)}
           leftButton={{
             onPress: () => navigation.goBack(),
             accessible: true,
             accessibilityRole: 'button',
-            accessibilityLabel: 'Gå tilbake',
+            accessibilityLabel: t(
+              LocationSearchTexts.mapSelection.header.leftButton.a11yLabel,
+            ),
             icon: <ThemeIcon svg={ArrowLeft} />,
           }}
         />

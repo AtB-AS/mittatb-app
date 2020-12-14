@@ -32,13 +32,17 @@ import {
 } from '../../GeolocationContext';
 import {useLocationSearchValue} from '../../location-search';
 import {RootStackParamList} from '../../navigation';
-import {TabNavigatorParams} from '../../navigation/TabNavigator';
-import {DeparturesRealtimeData, DeparturesWithStop, Paginated} from '../../sdk';
-import {StyleSheet} from '../../theme';
+import {
+  useTranslation,
+  TranslatedString,
+  NearbyTexts,
+} from '../../translations/';
 import {useNavigateToStartScreen} from '../../utils/navigation';
 import useInterval from '../../utils/use-interval';
 import Loading from '../Loading';
 import NearbyResults from './NearbyResults';
+import {TabNavigatorParams} from '../../navigation/TabNavigator';
+import {DeparturesRealtimeData, DeparturesWithStop, Paginated} from '../../sdk';
 import {
   DeparturesWithStopLocal,
   mapQuayDeparturesToShowlimits,
@@ -74,11 +78,9 @@ const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
     requestPermission,
   } = useGeolocationState();
 
-  const {locations: reverseLookupLocations} =
-    useReverseGeocoder(location?.coords ?? null) ?? [];
-  const currentLocation = reverseLookupLocations?.length
-    ? reverseLookupLocations[1]
-    : undefined;
+  const {closestLocation: currentLocation} = useReverseGeocoder(
+    location?.coords ?? null,
+  );
 
   if (!status) {
     return <Loading />;
@@ -107,7 +109,6 @@ const NearbyOverview: React.FC<Props> = ({
   hasLocationPermission,
   navigation,
 }) => {
-  const styles = useThemeStyles();
   const searchedFromLocation = useLocationSearchValue<NearbyScreenProp>(
     'location',
   );
@@ -129,6 +130,8 @@ const NearbyOverview: React.FC<Props> = ({
 
   const isInitialScreen = departures == null && !isLoading && !error;
   const activateScroll = !isInitialScreen || !!error;
+
+  const {t} = useTranslation();
 
   const onScrollViewEndReached = () => departures?.length && loadMore();
 
@@ -163,15 +166,16 @@ const NearbyOverview: React.FC<Props> = ({
   const navigateHome = useNavigateToStartScreen();
   useEffect(() => {
     if (updatingLocation)
-      setLoadAnnouncement(
-        'Oppdaterer posisjon for å finne avganger i nærheten.',
-      );
+      setLoadAnnouncement(t(NearbyTexts.stateAnnouncements.updatingLocation));
     if (isLoading && !!fromLocation) {
       setLoadAnnouncement(
-        'Laster avganger i nærheten av ' +
-          (fromLocation?.resultType == 'geolocation'
-            ? 'gjeldende posisjon'
-            : fromLocation?.label),
+        fromLocation?.resultType == 'geolocation'
+          ? t(NearbyTexts.stateAnnouncements.loadingFromCurrentLocation)
+          : t(
+              NearbyTexts.stateAnnouncements.loadingFromGivenLocation(
+                fromLocation.name,
+              ),
+            ),
       );
     }
   }, [updatingLocation, isLoading]);
@@ -179,16 +183,16 @@ const NearbyOverview: React.FC<Props> = ({
   const renderHeader = () => (
     <Section withPadding>
       <LocationInput
-        label="Fra"
+        label={t(NearbyTexts.location.departurePicker.label)}
         updatingLocation={updatingLocation}
         location={fromLocation}
         onPress={openLocationSearch}
-        accessibilityLabel="Søk på avreisested."
+        accessibilityLabel={t(NearbyTexts.location.departurePicker.a11yLabel)}
         icon={<ThemeIcon svg={CurrentLocationArrow} />}
         onIconPress={setCurrentLocationOrRequest}
         iconAccessibility={{
           accessible: true,
-          accessibilityLabel: 'Bruk min posisjon.',
+          accessibilityLabel: t(NearbyTexts.location.locationButton.a11yLabel),
           accessibilityRole: 'button',
         }}
       />
@@ -201,14 +205,17 @@ const NearbyOverview: React.FC<Props> = ({
       isRefreshing={isLoading}
       headerHeight={59}
       renderHeader={renderHeader}
-      headerTitle="Avganger"
+      headerTitle={t(NearbyTexts.header.title)}
       useScroll={activateScroll}
       logoClick={{
         callback: navigateHome,
-        accessibilityLabel: 'Gå til startside',
+        accessibilityLabel: t(NearbyTexts.header.logo.a11yLabel),
       }}
       alternativeTitleComponent={
-        <AccessibleText prefix="Avganger fra" style={styles.altTitleHeader}>
+        <AccessibleText
+          prefix={t(NearbyTexts.header.altTitle.a11yPrefix)}
+          type={'paragraphHeadline'}
+        >
           {fromLocation?.name}
         </AccessibleText>
       }
@@ -221,29 +228,25 @@ const NearbyOverview: React.FC<Props> = ({
         isFetchingMore={isFetchingMore && !isLoading}
         isInitialScreen={isInitialScreen}
         error={
-          error ? translateErrorType(error.type, error.loadType) : undefined
+          error ? t(translateErrorType(error.type, error.loadType)) : undefined
         }
       />
     </DisappearingHeader>
   );
 };
 
-function translateErrorType(errorType: ErrorType, loadType: LoadType): string {
+function translateErrorType(
+  errorType: ErrorType,
+  loadType: LoadType,
+): TranslatedString {
   switch (errorType) {
     case 'network-error':
     case 'timeout':
-      return 'Hei, er du på nett? Vi kan ikke oppdatere avgangene siden nettforbindelsen din mangler eller er ustabil.';
+      return NearbyTexts.messages.networkError;
     default:
-      return 'Oops - vi klarte ikke hente avganger. Supert om du prøver igjen 🤞';
+      return NearbyTexts.messages.defaultFetchError;
   }
 }
-
-const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  altTitleHeader: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-}));
 
 export default NearbyScreen;
 
