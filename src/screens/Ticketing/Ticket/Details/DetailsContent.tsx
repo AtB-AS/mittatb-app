@@ -6,6 +6,7 @@ import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
 import {formatToLongDateTime} from '../../../../utils/date';
 import {fromUnixTime} from 'date-fns';
+import nb from 'date-fns/locale/nb';
 
 type Props = {
   fareContract: FareContract;
@@ -51,7 +52,7 @@ const DetailsContent: React.FC<Props> = ({
       <Sections.GenericItem>
         <ThemeText>Ordre-id: {fc.order_id}</ThemeText>
         <ThemeText type="lead" color="faded">
-          Kjøpt {formatToLongDateTime(fromUnixTime(fc.usage_valid_from))}
+          Kjøpt {formatToLongDateTime(fromUnixTime(fc.usage_valid_from), nb)}
         </ThemeText>
       </Sections.GenericItem>
       {isValidTicket && <Sections.LinkItem text="Vis for kontroll" disabled />}
