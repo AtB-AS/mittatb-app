@@ -7,13 +7,13 @@ import {
   PlaneSide,
   FerrySide,
 } from '../../assets/svg/icons/transportation';
-import {LegMode} from '../../sdk';
+import {LegMode, TransportMode} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {SvgProps} from 'react-native-svg';
 import transportationColor from '../../utils/transportation-color';
 
 export type TransportationIconProps = {
-  mode?: LegMode;
+  mode?: LegMode | TransportMode;
   publicCode?: string;
   style?: StyleProp<ViewStyle>;
   circleStyle?: StyleProp<ViewStyle>;
@@ -49,7 +49,7 @@ function InnerIcon({
 }: {
   fill: string;
   style?: StyleProp<ViewStyle>;
-  mode?: LegMode;
+  mode?: LegMode | TransportMode;
 }) {
   const innerIconProps: SvgProps = {
     width: '100%',
@@ -79,7 +79,6 @@ function InnerIcon({
       return (
         <FerrySide accessibilityLabel="Ferge" key="boat" {...innerIconProps} />
       );
-    case 'unknown':
     default:
       return null;
   }

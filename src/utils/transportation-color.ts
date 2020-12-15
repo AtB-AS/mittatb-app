@@ -1,5 +1,5 @@
 import colors from '../theme/colors';
-import {LegMode} from '../sdk';
+import {LegMode, TransportMode} from '@entur/sdk';
 
 type TransportationColors = {
   fill: string;
@@ -9,7 +9,7 @@ type TransportationColors = {
 export const defaultFill = colors.primary.gray_300;
 
 export default function transportionColor(
-  mode?: LegMode,
+  mode?: TransportMode | LegMode,
   publicCode?: string,
 ): TransportationColors {
   switch (mode) {
@@ -53,7 +53,7 @@ export default function transportionColor(
   }
 }
 export function transportationMapLineColor(
-  mode?: LegMode,
+  mode?: LegMode | TransportMode,
   publicCode?: string,
 ): string {
   switch (mode) {
