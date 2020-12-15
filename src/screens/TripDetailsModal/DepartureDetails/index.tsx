@@ -195,7 +195,7 @@ function CallGroup({
               alignChildren={'flex-start'}
               style={styles.row}
             >
-              <ThemeText>{getQuayName(call.quay)}</ThemeText>
+              <ThemeText>{getQuayName(call.quay)} </ThemeText>
             </TripRow>
 
             {type !== 'passed' && (
@@ -269,7 +269,9 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   startPlace: {
     marginTop: theme.spacings.large,
   },
-  place: {},
+  place: {
+    marginBottom: -theme.tripLegDetail.decorationLineWidth,
+  },
   endPlace: {
     marginBottom: theme.spacings.large,
   },
