@@ -13,3 +13,4 @@ export {default as GenericItem} from './generic-item';
 export {default as TextInput} from './text-input';
 export {default as LocationInput} from './location-input';
 export {default as ButtonInput} from './button-input';
+export {default as CounterInput} from './counter-input';

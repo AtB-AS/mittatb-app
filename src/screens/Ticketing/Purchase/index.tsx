@@ -1,14 +1,22 @@
 import React from 'react';
-import TravellersScreen from './Travellers';
+import TravellersScreen, {TravellersProps} from './Travellers';
 import {CreditCard as CreditCardScreen, Vipps as VippsScreen} from './Payment';
 import createDismissableStackNavigator from '../../../navigation/createDismissableStackNavigator';
 import {ActiveTicketsScreenName} from '../Tickets';
-import {ReserveOffer} from '../../../api/fareContracts';
+import {PreassignedFareProduct, ReserveOffer} from '../../../api/fareContracts';
+import {RouteProp} from '@react-navigation/core';
 
-type PaymentParams = {offers: ReserveOffer[]};
+type TravellersParams = {
+  refreshOffer?: boolean;
+  preassignedFareProduct: PreassignedFareProduct;
+};
+type PaymentParams = {
+  offers: ReserveOffer[];
+  preassignedFareProduct: PreassignedFareProduct;
+};
 
 export type TicketingStackParams = {
-  Travellers: {refreshOffer?: boolean};
+  Travellers: TravellersParams;
   PaymentCreditCard: PaymentParams;
   PaymentVipps: PaymentParams;
   Splash: undefined;
@@ -16,13 +24,23 @@ export type TicketingStackParams = {
 
 const Stack = createDismissableStackNavigator<TicketingStackParams>();
 
-export default function PurchaseStack() {
+export type RouteParams = TravellersParams;
+
+type TicketPurchaseRootProps = {
+  route: RouteProp<TicketingStackParams, 'Travellers'>;
+};
+
+export default function PurchaseStack({route}: TicketPurchaseRootProps) {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
       dismissToScreen={ActiveTicketsScreenName}
     >
-      <Stack.Screen name="Travellers" component={TravellersScreen} />
+      <Stack.Screen
+        name="Travellers"
+        component={TravellersScreen}
+        initialParams={route.params}
+      />
       <Stack.Screen name="PaymentCreditCard" component={CreditCardScreen} />
       <Stack.Screen name="PaymentVipps" component={VippsScreen} />
     </Stack.Navigator>

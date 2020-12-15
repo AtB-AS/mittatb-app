@@ -1,19 +1,28 @@
 import {AxiosRequestConfig} from 'axios';
 import {getCustomerId} from '../utils/customerId';
 import client from './client';
+import {LanguageAndText} from './utils';
 
-export async function list(): Promise<ListTicketsResponse> {
+export async function listFareContracts(): Promise<FareContract[]> {
   const customerId = await getCustomerId();
 
   const url = 'ticket/v1/ticket/' + customerId;
   const response = await client.get<ListTicketsResponse>(url);
 
+  return response.data.fare_contracts;
+}
+
+export async function listPreassignedFareProducts() {
+  const url = '/reference-data/v1/ATB/preassigned-fare-products';
+  const response = await client.get<PreassignedFareProduct[]>(url, {
+    retry: true,
+  });
   return response.data;
 }
 
 export type OfferSearchParams = {
   zones: string[];
-  travellers: {id: string; user_type: UserType; count: number}[];
+  travellers: {id: string; user_type: string; count: number}[];
   products: string[];
 };
 
@@ -95,8 +104,6 @@ export async function getPayment(paymentId: number): Promise<PaymentResponse> {
   return response.data;
 }
 
-export type UserType = 'ADULT';
-
 export type OfferPrice = {
   amount: string | null;
   amount_float: number | null;
@@ -123,7 +130,14 @@ export type FareContract = {
   user_profiles: string[];
 };
 
-export type ListTicketsResponse = {
+export type PreassignedFareProduct = {
+  id: string;
+  name: LanguageAndText;
+  description: LanguageAndText;
+  alternativeNames: LanguageAndText[];
+};
+
+type ListTicketsResponse = {
   fare_contracts: FareContract[];
 };
 

@@ -33,13 +33,16 @@ type Props = {
 export default function VippsPayment({
   navigation,
   route: {
-    params: {offers},
+    params: {offers, preassignedFareProduct},
   },
 }: Props) {
   const styles = useStyles();
 
   const cancelVipps = (refresh?: boolean) =>
-    navigation.navigate('Travellers', {refreshOffer: refresh});
+    navigation.navigate('Travellers', {
+      refreshOffer: refresh,
+      preassignedFareProduct,
+    });
 
   const {activatePollingForNewTickets} = useTicketState();
   const dismissAndActivatePolling = (
