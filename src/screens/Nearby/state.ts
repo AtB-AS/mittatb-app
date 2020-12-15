@@ -1,4 +1,5 @@
 import {useIsFocused} from '@react-navigation/native';
+import {differenceInMinutes} from 'date-fns';
 import {useCallback, useEffect} from 'react';
 import useReducerWithSideEffects, {
   NoUpdate,
@@ -16,16 +17,21 @@ import {
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import {Location} from '../../favorites/types';
 import {DeparturesRealtimeData} from '../../sdk';
+import {differenceInMinutesStrings} from '../../utils/date';
 import useInterval from '../../utils/use-interval';
 import {updateStopsWithRealtime} from './utils';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
+// Used to re-trigger full refresh after N minutes.
+// To repopulate the view when we get fewer departures.
+const HARD_REFRESH_LIMIT_IN_MINUTES = 10;
+
 type LoadType = 'initial' | 'more';
 
 export type DepartureDataState = {
   data: DepartureGroupMetadata['data'] | null;
-  lastUpdated?: Date;
+  tick?: Date;
   error?: {type: ErrorType; loadType: LoadType};
   locationId?: string;
   isLoading: boolean;
@@ -49,7 +55,7 @@ const initialState: DepartureDataState = {
 
   // Store date as update tick to know when to rerender
   // and re-sort objects.
-  lastUpdated: undefined,
+  tick: undefined,
 };
 
 type DepartureDataActions =
@@ -82,6 +88,9 @@ type DepartureDataActions =
   | {
       type: 'UPDATE_REALTIME';
       realtimeData: DeparturesRealtimeData;
+    }
+  | {
+      type: 'TICK_TICK';
     };
 
 const reducer: ReducerWithSideEffects<
@@ -200,6 +209,16 @@ const reducer: ReducerWithSideEffects<
       });
     }
 
+    case 'TICK_TICK': {
+      return Update<DepartureDataState>({
+        ...state,
+
+        // We set lastUpdated here to count as a "tick" to
+        // know when to update components while still being performant.
+        tick: new Date(),
+      });
+    }
+
     case 'UPDATE_DEPARTURES': {
       return Update<DepartureDataState>({
         ...state,
@@ -209,6 +228,7 @@ const reducer: ReducerWithSideEffects<
           ? action.result.data
           : (state.data ?? []).concat(action.result.data),
         cursorInfo: action.result.metadata,
+        tick: new Date(),
       });
     }
 
@@ -219,7 +239,7 @@ const reducer: ReducerWithSideEffects<
 
         // We set lastUpdated here to count as a "tick" to
         // know when to update components while still being performant.
-        lastUpdated: new Date(),
+        tick: new Date(),
       });
     }
 
@@ -239,9 +259,18 @@ const reducer: ReducerWithSideEffects<
   }
 };
 
+/***
+ * Use state for fetching departure groups and keeping data up to date with realtime
+ * predictions.
+ *
+ * @param {Location} [location] - Location on which to fetch departures from. Can be venue or address
+ * @param {number} [updateFrequencyInSeconds=30] - frequency to fetch new data from realtime endpoint. Should not be too frequent as it can fetch a lot of data.
+ * @param {number} [tickRateInSeconds=10] - "tick frequency" is how often we retrigger time calculations and sorting. More frequent means more CPU load/battery drain. Less frequent can mean outdated data.
+ */
 export function useDepartureData(
   location?: Location,
   updateFrequencyInSeconds: number = 30,
+  tickRateInSeconds: number = 10,
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const isFocused = useIsFocused();
@@ -257,10 +286,29 @@ export function useDepartureData(
   );
 
   useEffect(refresh, [location?.id]);
+  useEffect(() => {
+    if (!state.tick) {
+      return;
+    }
+    const diff = differenceInMinutesStrings(
+      state.tick,
+      state.queryInput.startTime,
+    );
+
+    if (diff >= HARD_REFRESH_LIMIT_IN_MINUTES) {
+      refresh();
+    }
+  }, [state.tick, state.queryInput.startTime]);
   useInterval(
     () => dispatch({type: 'LOAD_REALTIME_DATA'}),
     updateFrequencyInSeconds * 1000,
     [location?.id],
+    !isFocused,
+  );
+  useInterval(
+    () => dispatch({type: 'TICK_TICK'}),
+    tickRateInSeconds * 1000,
+    [],
     !isFocused,
   );
 

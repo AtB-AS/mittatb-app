@@ -36,6 +36,9 @@ function getShortHumanizer(ms: number, options?: humanizeDuration.Options) {
 const shortHumanizer = humanizeDuration.humanizer({});
 
 export const missingRealtimePrefix = 'ca. ';
+function parseIfNeeded(a: string | Date): Date {
+  return a instanceof Date ? a : parseISO(a);
+}
 
 export function secondsToDurationShort(seconds: number): string {
   return getShortHumanizer(seconds * 1000, {
@@ -70,8 +73,8 @@ export function secondsBetween(
   start: string | Date,
   end: string | Date,
 ): number {
-  const parsedStart = start instanceof Date ? start : parseISO(start);
-  const parsedEnd = end instanceof Date ? end : parseISO(end);
+  const parsedStart = parseIfNeeded(start);
+  const parsedEnd = parseIfNeeded(end);
   return differenceInSeconds(parsedEnd, parsedStart);
 }
 
@@ -91,7 +94,7 @@ export function formatToClockOrRelativeMinutes(
   minuteThreshold: number = 9,
   language?: Language,
 ) {
-  const parsed = isoDate instanceof Date ? isoDate : parseISO(isoDate);
+  const parsed = parseIfNeeded(isoDate);
   const diff = secondsBetween(new Date(), parsed);
 
   if (diff / 60 >= minuteThreshold) {
@@ -114,22 +117,17 @@ export function formatLocaleTime(date: Date, language?: Language) {
   }
 }
 export function isInThePast(isoDate: string | Date) {
-  return isPast(isoDate instanceof Date ? isoDate : parseISO(isoDate));
+  return isPast(parseIfNeeded(isoDate));
 }
 export function isNumberOfMinutesInThePast(
   isoDate: string | Date,
   minutes: number,
 ) {
-  return (
-    differenceInMinutes(
-      isoDate instanceof Date ? isoDate : parseISO(isoDate),
-      new Date(),
-    ) < -minutes
-  );
+  return differenceInMinutesStrings(isoDate, new Date()) < -minutes;
 }
 
 export function formatToLongDateTime(isoDate: string | Date, locale?: Locale) {
-  const parsed = isoDate instanceof Date ? isoDate : parseISO(isoDate);
+  const parsed = parseIfNeeded(isoDate);
   if (isSameDay(parsed, new Date())) {
     return formatToClock(parsed);
   }
@@ -155,4 +153,11 @@ export function isSeveralDays(items: string[]) {
     }
   }
   return true;
+}
+
+export function differenceInMinutesStrings(
+  dateLeft: string | Date,
+  dateRight: string | Date,
+) {
+  return differenceInMinutes(parseIfNeeded(dateLeft), parseIfNeeded(dateRight));
 }
