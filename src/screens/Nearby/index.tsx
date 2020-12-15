@@ -103,7 +103,6 @@ const NearbyOverview: React.FC<Props> = ({
 
   const isInitialScreen = data == null && !isLoading && !error;
   const activateScroll = !isInitialScreen || !!error;
-  const isGeoLocationActive = fromLocation?.resultType == 'geolocation';
 
   const {t} = useTranslation();
 
@@ -169,7 +168,6 @@ const NearbyOverview: React.FC<Props> = ({
           fromLocation={fromLocation}
           updatingLocation={updatingLocation}
           fullLocation={fullLocation}
-          isGeoLocationActive={isGeoLocationActive}
           openLocationSearch={openLocationSearch}
           setCurrentLocationOrRequest={setCurrentLocationOrRequest}
         />
@@ -208,7 +206,6 @@ type HeaderProps = {
   fromLocation?: LocationWithMetadata;
   openLocationSearch: () => void;
   setCurrentLocationOrRequest(): Promise<void>;
-  isGeoLocationActive: boolean;
   fullLocation(selectedLocation: LocationWithMetadata): void;
 };
 
@@ -217,7 +214,6 @@ const Header = React.memo(function Header({
   fromLocation,
   openLocationSearch,
   setCurrentLocationOrRequest,
-  isGeoLocationActive,
   fullLocation,
 }: HeaderProps) {
   const {t} = useTranslation();
