@@ -15,6 +15,7 @@ import Axios, {AxiosError} from 'axios';
 import {getSingleTripPattern} from '../../../api/trips';
 import usePollableResource from '../../../utils/use-pollable-resource';
 import Trip from '../components/Trip';
+import {TripDetailsTexts, useTranslation} from '../../../translations';
 
 export type DetailsRouteParams = {
   initialTripPatterns: TripPattern[];
@@ -40,6 +41,7 @@ const Details: React.FC<Props> = (props) => {
   } = props.route;
 
   const {theme, themeName} = useTheme();
+  const {t} = useTranslation();
   const [currentIndex, setCurrentIndex] = useState<number>(startIndex);
 
   const isFocused = useIsFocused();
@@ -83,10 +85,10 @@ const Details: React.FC<Props> = (props) => {
           onPress: () => props.navigation.goBack(),
           accessible: true,
           accessibilityRole: 'button',
-          accessibilityLabel: 'Gå tilbake',
+          accessibilityLabel: t(TripDetailsTexts.header.leftButton.a11yLabel),
           icon: <ThemeIcon svg={ArrowLeft} />,
         }}
-        title="Reisedetaljer"
+        title={t(TripDetailsTexts.header.title)}
         style={styles.header}
       />
       <ScrollView

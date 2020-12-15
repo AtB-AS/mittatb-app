@@ -172,14 +172,14 @@ function CallGroup({
         return (
           <View
             key={call.quay?.id + call.serviceJourney.id}
-            style={isStartPlace(i) ? styles.startPlace : styles.place}
+            style={[styles.place, decorateStart && styles.startPlace]}
           >
             <TripLegDecoration
               hasStart={decorateStart}
               hasCenter={!decorateStart && !decorateEnd}
               hasEnd={decorateEnd}
               color={
-                type === 'passed'
+                type === 'passed' || type === 'after'
                   ? defaultFill
                   : transportationMapLineColor(mode, publicCode)
               }
@@ -187,7 +187,7 @@ function CallGroup({
             <TripRow
               rowLabel={
                 <Time
-                  scheduledTime={call.aimedDepartureTime}
+                  aimedTime={call.aimedDepartureTime}
                   expectedTime={call.expectedDepartureTime}
                   missingRealTime={!call.realtime && isStartPlace(i)}
                 ></Time>
@@ -240,7 +240,10 @@ function CollapseButtonRow({
     </>
   );
   return (
-    <TouchableOpacity onPress={() => setCollapsed(!collapsed)}>
+    <TouchableOpacity
+      accessibilityRole="button"
+      onPress={() => setCollapsed(!collapsed)}
+    >
       <View style={styles.container}>{child}</View>
     </TouchableOpacity>
   );
@@ -267,6 +270,9 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.large,
   },
   place: {},
+  endPlace: {
+    marginBottom: theme.spacings.large,
+  },
   row: {
     paddingVertical: theme.spacings.small,
     minHeight: 60,

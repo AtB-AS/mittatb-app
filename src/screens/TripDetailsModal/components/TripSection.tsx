@@ -3,8 +3,12 @@ import {Leg, Place} from '../../../sdk';
 import {View, ViewProps, TouchableOpacity} from 'react-native';
 import ThemeText from '../../../components/text';
 import {StyleSheet} from '../../../theme';
-import {secondsToDuration} from '../../../utils/date';
-import {getLineName, getQuayName} from '../../../utils/transportation-names';
+import {formatToClock, secondsToDuration} from '../../../utils/date';
+import {
+  getLineName,
+  getQuayName,
+  getTranslatedModeName,
+} from '../../../utils/transportation-names';
 import TransportationIcon from '../../../components/transportation-icon';
 import {transportationMapLineColor} from '../../../utils/transportation-color';
 import {useNavigation} from '@react-navigation/core';
@@ -17,29 +21,65 @@ import TripLegDecoration from './TripLegDecoration';
 import {significantWaitTime, significantWalkTime} from '../Details/utils';
 import TripRow from './TripRow';
 import WaitSection, {WaitDetails} from './WaitSection';
+import {
+  dictionary,
+  TranslatedString,
+  TripDetailsTexts,
+  useTranslation,
+} from '../../../translations';
+import AccessibleText, {
+  screenReaderPause,
+} from '../../../components/accessible-text';
+import {Line} from 'react-native-svg';
+import {getTimeRepresentationType, TimeValues} from '../utils';
 
 type TripSectionProps = {
   isLast?: boolean;
   wait?: WaitDetails;
   isFirst?: boolean;
+  step?: number;
 } & Leg;
 
 const TripSection: React.FC<TripSectionProps> = ({
   isLast,
   isFirst,
   wait,
+  step,
   ...leg
 }) => {
+  const {t} = useTranslation();
+  const navigation = useNavigation<DetailScreenNavigationProp>();
+  const navigateToDetails = () =>
+    navigation.navigate('DepartureDetails', {
+      title: getLineName(leg),
+      serviceJourneyId: leg.serviceJourney.id,
+      date: leg.expectedStartTime,
+      fromQuayId: leg.fromPlace.quay?.id,
+      toQuayId: leg.toPlace.quay?.id,
+      isBack: true,
+    });
   const style = useSectionStyles();
   const isWalkSection = leg.mode === 'foot';
-  const missingRealTime = !isWalkSection && !leg.realtime;
   const legColor = transportationMapLineColor(leg.mode, leg.line?.publicCode);
   const showFrom = !isWalkSection || !!(isFirst && isWalkSection);
   const showTo = !isWalkSection || !!(isLast && isWalkSection);
 
+  const {startTimes, endTimes} = mapLegToTimeValues(leg);
+
   const sectionOutput = (
     <>
       <View style={style.tripSection}>
+        {step && leg.mode && (
+          <AccessibleText
+            style={style.a11yHelper}
+            prefix={t(
+              TripDetailsTexts.trip.leg.a11yHelper(
+                step,
+                t(getTranslatedModeName(leg.mode)),
+              ),
+            )}
+          />
+        )}
         <TripLegDecoration
           color={legColor}
           hasStart={showFrom}
@@ -48,30 +88,45 @@ const TripSection: React.FC<TripSectionProps> = ({
         {showFrom && (
           <TripRow
             alignChildren="flex-start"
-            rowLabel={
-              <Time
-                scheduledTime={leg.aimedStartTime}
-                expectedTime={leg.expectedStartTime}
-                missingRealTime={missingRealTime}
-              />
-            }
+            accessibilityLabel={t(
+              getStopRowA11yTranslated(
+                'start',
+                getPlaceName(leg.fromPlace),
+                startTimes,
+              ),
+            )}
+            rowLabel={<Time {...startTimes} />}
           >
-            {renderPlaceName(leg.fromPlace)}
+            <ThemeText>{getPlaceName(leg.fromPlace)}</ThemeText>
           </TripRow>
         )}
         {isWalkSection ? (
           <WalkSection {...leg}></WalkSection>
         ) : (
-          <TripRow
-            rowLabel={
-              <TransportationIcon
-                mode={leg.mode}
-                publicCode={leg.line?.publicCode}
-              />
-            }
-          >
-            <ThemeText style={style.legLineName}>{getLineName(leg)}</ThemeText>
-          </TripRow>
+          leg.line && (
+            <TripRow
+              onPress={navigateToDetails}
+              accessibilityLabel={t(
+                TripDetailsTexts.trip.leg.transport.a11ylabel(
+                  t(getTranslatedModeName(leg.line.transportMode)),
+                  getLineName(leg),
+                ),
+              )}
+              accessibilityHint={t(
+                TripDetailsTexts.trip.leg.transport.a11yHint,
+              )}
+              rowLabel={
+                <TransportationIcon
+                  mode={leg.mode}
+                  publicCode={leg.line?.publicCode}
+                />
+              }
+            >
+              <ThemeText style={style.legLineName}>
+                {getLineName(leg)}
+              </ThemeText>
+            </TripRow>
+          )
         )}
         {!!leg.situations.length && (
           <TripRow rowLabel={<Warning />}>
@@ -92,34 +147,32 @@ const TripSection: React.FC<TripSectionProps> = ({
         {showTo && (
           <TripRow
             alignChildren="flex-end"
-            rowLabel={
-              <Time
-                scheduledTime={leg.aimedEndTime}
-                expectedTime={leg.expectedEndTime}
-                missingRealTime={missingRealTime}
-              />
-            }
+            accessibilityLabel={t(
+              getStopRowA11yTranslated(
+                'end',
+                getPlaceName(leg.toPlace),
+                endTimes,
+              ),
+            )}
+            rowLabel={<Time {...endTimes} />}
           >
-            {renderPlaceName(leg.toPlace)}
+            <ThemeText>{getPlaceName(leg.toPlace)}</ThemeText>
           </TripRow>
         )}
       </View>
+    </>
+  );
+  return (
+    <>
+      {sectionOutput}
       {wait?.waitAfter && significantWaitTime(wait.waitSeconds) && (
         <WaitSection {...wait} />
       )}
     </>
   );
-  return (
-    <>
-      {isWalkSection ? (
-        sectionOutput
-      ) : (
-        <WithFurtherDetails leg={leg}>{sectionOutput}</WithFurtherDetails>
-      )}
-    </>
-  );
 };
 const WalkSection: React.FC<TripSectionProps> = (leg) => {
+  const {t} = useTranslation();
   const isWalkTimeOfSignificance = significantWalkTime(leg.duration);
   if (!isWalkTimeOfSignificance) {
     return null;
@@ -131,50 +184,63 @@ const WalkSection: React.FC<TripSectionProps> = (leg) => {
       }
     >
       <ThemeText type="lead" color="faded">
-        Gå i {secondsToDuration(leg.duration ?? 0)}
+        {t(
+          TripDetailsTexts.trip.leg.walk.label(
+            secondsToDuration(leg.duration ?? 0),
+          ),
+        )}
       </ThemeText>
     </TripRow>
   );
 };
 
-const WithFurtherDetails: React.FC<{leg: Leg} & ViewProps> = ({
-  leg,
-  children,
-}) => {
-  const navigation = useNavigation<DetailScreenNavigationProp>();
-  return (
-    <TouchableOpacity
-      onPress={() =>
-        navigation.navigate('DepartureDetails', {
-          title: getLineName(leg),
-          serviceJourneyId: leg.serviceJourney.id,
-          date: leg.expectedStartTime,
-          fromQuayId: leg.fromPlace.quay?.id,
-          toQuayId: leg.toPlace.quay?.id,
-          isBack: true,
-        })
-      }
-    >
-      {children}
-    </TouchableOpacity>
-  );
-};
-function renderPlaceName(place: Place): JSX.Element {
-  return (
-    <>
-      {place.quay ? (
-        <ThemeText>{getQuayName(place.quay)}</ThemeText>
-      ) : (
-        <ThemeText>{place.name}</ThemeText>
-      )}
-    </>
-  );
+function getPlaceName(place: Place): string {
+  const fallback = place.name ?? '';
+  return place.quay ? getQuayName(place.quay) ?? fallback : fallback;
+}
+export function mapLegToTimeValues(leg: Leg) {
+  return {
+    startTimes: {
+      expectedTime: leg.expectedStartTime,
+      aimedTime: leg.aimedStartTime,
+      missingRealTime: !leg.realtime,
+    },
+    endTimes: {
+      expectedTime: leg.expectedEndTime,
+      aimedTime: leg.aimedEndTime,
+      missingRealTime: !leg.realtime,
+    },
+  };
+}
+function getStopRowA11yTranslated(
+  key: 'start' | 'end',
+  placeName: string,
+  values: TimeValues,
+): TranslatedString {
+  const timeType = getTimeRepresentationType(values);
+  const a11yLabels = TripDetailsTexts.trip.leg[key].a11yLabel;
+  const time = formatToClock(values.expectedTime ?? values.aimedTime);
+  switch (timeType) {
+    case 'no-realtime':
+      return a11yLabels.noRealTime(placeName, time);
+    case 'no-significant-difference':
+      return a11yLabels.singularTime(placeName, time);
+    case 'significant-difference':
+      const aimed = formatToClock(values.aimedTime);
+      return a11yLabels.realAndAimed(placeName, time, aimed);
+  }
 }
 
 const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   tripSection: {
     flex: 1,
     marginVertical: theme.spacings.medium,
+  },
+  a11yHelper: {
+    position: 'absolute',
+    top: -theme.spacings.medium,
+    left: 0,
+    width: '100%',
   },
   legLineName: {
     fontWeight: 'bold',

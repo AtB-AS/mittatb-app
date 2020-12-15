@@ -51,6 +51,7 @@ const Trip: React.FC<TripProps> = ({tripPattern, error}) => {
                 isFirst={isFirst}
                 wait={waitDetails}
                 isLast={isLast}
+                step={index + 1}
                 {...leg}
               />
             );

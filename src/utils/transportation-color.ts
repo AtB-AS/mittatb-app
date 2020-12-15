@@ -1,5 +1,6 @@
 import colors from '../theme/colors';
 import {LegMode} from '../sdk';
+import {dictionary, TranslatedString} from '../translations';
 
 type TransportationColors = {
   color: string;

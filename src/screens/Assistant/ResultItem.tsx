@@ -22,7 +22,7 @@ import AccessibleText, {
 } from '../../components/accessible-text';
 import {SituationWarningIcon} from '../../situations';
 import {flatMap} from '../../utils/array';
-import {getModeName} from '../../utils/transportation-names';
+import {getTranslatedModeName} from '../../utils/transportation-names';
 import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
 import {
@@ -372,7 +372,7 @@ const screenReaderSummary = (
     }. ${screenReaderPause}
     ${nonFootLegs
       ?.map((l) => {
-        return `${t(getModeName(l.mode))} ${
+        return `${t(getTranslatedModeName(l.mode))} ${
           l.line
             ? t(screenreaderText.prefixedLineNumber(l.line.publicCode))
             : ''

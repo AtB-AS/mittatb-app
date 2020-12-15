@@ -26,7 +26,7 @@ export function getLineNameFromEstimatedCall(
   }
   return {publicCode, name};
 }
-export function getModeName(mode: LegMode): TranslatedString {
+export function getTranslatedModeName(mode?: LegMode): TranslatedString {
   const legModeNames = dictionary.travel.legModes;
   switch (mode) {
     case 'bus':
