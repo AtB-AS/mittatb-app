@@ -2,7 +2,7 @@ import React from 'react';
 import {Leg, Place} from '../../../sdk';
 import {View, ViewProps, TouchableOpacity} from 'react-native';
 import ThemeText from '../../../components/text';
-import {StyleSheet} from '../../../theme';
+import {StyleSheet, useStyle} from '../../../theme';
 import {formatToClock, secondsToDuration} from '../../../utils/date';
 import {
   getLineName,
@@ -48,16 +48,6 @@ const TripSection: React.FC<TripSectionProps> = ({
   ...leg
 }) => {
   const {t} = useTranslation();
-  const navigation = useNavigation<DetailScreenNavigationProp>();
-  const navigateToDetails = () =>
-    navigation.navigate('DepartureDetails', {
-      title: getLineName(leg),
-      serviceJourneyId: leg.serviceJourney.id,
-      date: leg.expectedStartTime,
-      fromQuayId: leg.fromPlace.quay?.id,
-      toQuayId: leg.toPlace.quay?.id,
-      isBack: true,
-    });
   const style = useSectionStyles();
   const isWalkSection = leg.mode === 'foot';
   const legColor = transportationMapLineColor(leg.mode, leg.line?.publicCode);
@@ -100,34 +90,7 @@ const TripSection: React.FC<TripSectionProps> = ({
             <ThemeText>{getPlaceName(leg.fromPlace)}</ThemeText>
           </TripRow>
         )}
-        {isWalkSection ? (
-          <WalkSection {...leg}></WalkSection>
-        ) : (
-          leg.line && (
-            <TripRow
-              onPress={navigateToDetails}
-              accessibilityLabel={t(
-                TripDetailsTexts.trip.leg.transport.a11ylabel(
-                  t(getTranslatedModeName(leg.line.transportMode)),
-                  getLineName(leg),
-                ),
-              )}
-              accessibilityHint={t(
-                TripDetailsTexts.trip.leg.transport.a11yHint,
-              )}
-              rowLabel={
-                <TransportationIcon
-                  mode={leg.mode}
-                  publicCode={leg.line?.publicCode}
-                />
-              }
-            >
-              <ThemeText style={style.legLineName}>
-                {getLineName(leg)}
-              </ThemeText>
-            </TripRow>
-          )
-        )}
+        {isWalkSection ? <WalkSection {...leg} /> : <LineSection {...leg} />}
         {!!leg.situations.length && (
           <TripRow rowLabel={<Warning />}>
             <SituationMessages mode="no-icon" situations={leg.situations} />
@@ -167,6 +130,45 @@ const TripSection: React.FC<TripSectionProps> = ({
       {sectionOutput}
       {wait?.waitAfter && significantWaitTime(wait.waitSeconds) && (
         <WaitSection {...wait} />
+      )}
+    </>
+  );
+};
+const LineSection: React.FC<TripSectionProps> = (leg) => {
+  const {t} = useTranslation();
+  const style = useSectionStyles();
+
+  const navigation = useNavigation<DetailScreenNavigationProp>();
+  const navigateToDetails = () =>
+    navigation.navigate('DepartureDetails', {
+      title: getLineName(leg),
+      serviceJourneyId: leg.serviceJourney.id,
+      date: leg.expectedStartTime,
+      fromQuayId: leg.fromPlace.quay?.id,
+      toQuayId: leg.toPlace.quay?.id,
+      isBack: true,
+    });
+  return (
+    <>
+      {leg.line && (
+        <TripRow
+          onPress={navigateToDetails}
+          accessibilityLabel={t(
+            TripDetailsTexts.trip.leg.transport.a11ylabel(
+              t(getTranslatedModeName(leg.line.transportMode)),
+              getLineName(leg),
+            ),
+          )}
+          accessibilityHint={t(TripDetailsTexts.trip.leg.transport.a11yHint)}
+          rowLabel={
+            <TransportationIcon
+              mode={leg.mode}
+              publicCode={leg.line?.publicCode}
+            />
+          }
+        >
+          <ThemeText style={style.legLineName}>{getLineName(leg)}</ThemeText>
+        </TripRow>
       )}
     </>
   );
