@@ -1,8 +1,8 @@
 import React from 'react';
 import {Leg, Place} from '../../../sdk';
-import {View, ViewProps, TouchableOpacity} from 'react-native';
+import {View} from 'react-native';
 import ThemeText from '../../../components/text';
-import {StyleSheet, useStyle} from '../../../theme';
+import {StyleSheet} from '../../../theme';
 import {formatToClock, secondsToDuration} from '../../../utils/date';
 import {
   getLineName,
@@ -22,7 +22,6 @@ import {significantWaitTime, significantWalkTime} from '../Details/utils';
 import TripRow from './TripRow';
 import WaitSection, {WaitDetails} from './WaitSection';
 import {
-  dictionary,
   TranslatedString,
   TripDetailsTexts,
   useTranslation,
@@ -30,7 +29,6 @@ import {
 import AccessibleText, {
   screenReaderPause,
 } from '../../../components/accessible-text';
-import {Line} from 'react-native-svg';
 import {getTimeRepresentationType, TimeValues} from '../utils';
 
 type TripSectionProps = {
@@ -148,26 +146,49 @@ const LineSection: React.FC<TripSectionProps> = (leg) => {
       toQuayId: leg.toPlace.quay?.id,
       isBack: true,
     });
+
+  const numberOfIntermediateCalls = leg.intermediateEstimatedCalls.length;
   return (
     <>
-      {leg.line && (
+      <TripRow
+        accessibilityLabel={t(
+          TripDetailsTexts.trip.leg.transport.a11ylabel(
+            t(getTranslatedModeName(leg.line?.transportMode)),
+            getLineName(leg),
+          ),
+        )}
+        rowLabel={
+          <TransportationIcon
+            mode={leg.mode}
+            publicCode={leg.line?.publicCode}
+          />
+        }
+      >
+        <ThemeText style={style.legLineName}>{getLineName(leg)}</ThemeText>
+      </TripRow>
+      {numberOfIntermediateCalls > 0 && (
         <TripRow
           onPress={navigateToDetails}
-          accessibilityLabel={t(
-            TripDetailsTexts.trip.leg.transport.a11ylabel(
-              t(getTranslatedModeName(leg.line.transportMode)),
-              getLineName(leg),
-            ),
-          )}
-          accessibilityHint={t(TripDetailsTexts.trip.leg.transport.a11yHint)}
-          rowLabel={
-            <TransportationIcon
-              mode={leg.mode}
-              publicCode={leg.line?.publicCode}
-            />
+          accessibilityLabel={
+            t(
+              TripDetailsTexts.trip.leg.intermediateStops.a11yLabel(
+                numberOfIntermediateCalls,
+                secondsToDuration(leg.duration),
+              ),
+            ) + screenReaderPause
           }
+          accessibilityHint={t(
+            TripDetailsTexts.trip.leg.intermediateStops.a11yHint,
+          )}
         >
-          <ThemeText style={style.legLineName}>{getLineName(leg)}</ThemeText>
+          <ThemeText type="lead" color="faded">
+            {t(
+              TripDetailsTexts.trip.leg.intermediateStops.label(
+                numberOfIntermediateCalls,
+                secondsToDuration(leg.duration),
+              ),
+            )}
+          </ThemeText>
         </TripRow>
       )}
     </>

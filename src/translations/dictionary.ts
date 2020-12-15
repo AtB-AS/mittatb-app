@@ -29,6 +29,10 @@ const dictionary = {
     line: {
       defaultName: _(''),
     },
+    time: {
+      aimedPrefix: _('Rutetid'),
+      expectedPrefix: _('Forventet tid'),
+    },
   },
   date: {
     units: {

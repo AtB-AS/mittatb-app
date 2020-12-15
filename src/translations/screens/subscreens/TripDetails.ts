@@ -30,7 +30,13 @@ const TripDetailsTexts = {
       transport: {
         a11ylabel: (modeName: string, lineName: string) =>
           _(`${modeName} linje ${lineName}`),
-        a11yHint: _('Aktivér for detaljer om reisen'),
+      },
+      intermediateStops: {
+        a11yLabel: (count: number, duration: string) =>
+          _(`${count} mellomstopp. ${duration}.`),
+        label: (count: number, duration: string) =>
+          _(`${count} mellomstopp \n${duration}`),
+        a11yHint: _('Aktivér for å vise alle mellomstopp.'),
       },
       walk: {
         label: (duration: string) =>

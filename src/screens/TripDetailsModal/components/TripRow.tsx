@@ -4,7 +4,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {StyleSheet} from '../../../theme';
 
 type TripRowProps = {
-  rowLabel: React.ReactNode;
+  rowLabel?: React.ReactNode;
   alignChildren?: 'flex-start' | 'flex-end' | 'center';
   onPress?(): void;
 } & ViewProps;
