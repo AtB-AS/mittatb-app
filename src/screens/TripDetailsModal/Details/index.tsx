@@ -10,12 +10,12 @@ import {View, ActivityIndicator} from 'react-native';
 import ThemeIcon from '../../../components/theme-icon';
 import {ScrollView} from 'react-native-gesture-handler';
 import Pagination from '../../../components/pagination';
-import {ArrowLeft} from '../../../assets/svg/icons/navigation';
 import Axios, {AxiosError} from 'axios';
 import {getSingleTripPattern} from '../../../api/trips';
 import usePollableResource from '../../../utils/use-pollable-resource';
 import Trip from '../components/Trip';
 import {TripDetailsTexts, useTranslation} from '../../../translations';
+import {Close} from '../../../assets/svg/icons/actions';
 
 export type DetailsRouteParams = {
   initialTripPatterns: TripPattern[];
@@ -86,7 +86,7 @@ const Details: React.FC<Props> = (props) => {
           accessible: true,
           accessibilityRole: 'button',
           accessibilityLabel: t(TripDetailsTexts.header.leftButton.a11yLabel),
-          icon: <ThemeIcon svg={ArrowLeft} />,
+          icon: <ThemeIcon svg={Close} />,
         }}
         title={t(TripDetailsTexts.header.title)}
         style={styles.header}

@@ -91,7 +91,9 @@ const NavigationRoot = () => {
                   name="TripDetailsModal"
                   component={TripDetailsModal}
                   options={{
-                    ...TransitionPresets.SlideFromRightIOS,
+                    cardOverlayEnabled: true,
+                    cardShadowEnabled: true,
+                    ...TransitionPresets.ModalPresentationIOS,
                   }}
                 />
                 <Stack.Screen

@@ -3,7 +3,7 @@ const TripDetailsTexts = {
   header: {
     title: _('Reisedetaljer', 'Trip details'),
     leftButton: {
-      a11yLabel: _('Gå tilbake'),
+      a11yLabel: _('Lukk'),
     },
   },
   trip: {

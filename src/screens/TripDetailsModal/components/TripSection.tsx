@@ -47,8 +47,10 @@ const TripSection: React.FC<TripSectionProps> = ({
 }) => {
   const {t} = useTranslation();
   const style = useSectionStyles();
+
   const isWalkSection = leg.mode === 'foot';
   const legColor = transportationMapLineColor(leg.mode, leg.line?.publicCode);
+
   const showFrom = !isWalkSection || !!(isFirst && isWalkSection);
   const showTo = !isWalkSection || !!(isLast && isWalkSection);
 
@@ -88,12 +90,32 @@ const TripSection: React.FC<TripSectionProps> = ({
             <ThemeText>{getPlaceName(leg.fromPlace)}</ThemeText>
           </TripRow>
         )}
-        {isWalkSection ? <WalkSection {...leg} /> : <LineSection {...leg} />}
+        {isWalkSection ? (
+          <WalkSection {...leg} />
+        ) : (
+          <TripRow
+            accessibilityLabel={t(
+              TripDetailsTexts.trip.leg.transport.a11ylabel(
+                t(getTranslatedModeName(leg.line?.transportMode)),
+                getLineName(leg),
+              ),
+            )}
+            rowLabel={
+              <TransportationIcon
+                mode={leg.mode}
+                publicCode={leg.line?.publicCode}
+              />
+            }
+          >
+            <ThemeText style={style.legLineName}>{getLineName(leg)}</ThemeText>
+          </TripRow>
+        )}
         {!!leg.situations.length && (
           <TripRow rowLabel={<Warning />}>
             <SituationMessages mode="no-icon" situations={leg.situations} />
           </TripRow>
         )}
+
         {leg.notices &&
           leg.notices.map((notice) => {
             return (
@@ -105,6 +127,9 @@ const TripSection: React.FC<TripSectionProps> = ({
               </TripRow>
             );
           })}
+        {leg.intermediateEstimatedCalls.length > 0 && (
+          <IntermediateInfo {...leg} />
+        )}
         {showTo && (
           <TripRow
             alignChildren="flex-end"
@@ -132,9 +157,8 @@ const TripSection: React.FC<TripSectionProps> = ({
     </>
   );
 };
-const LineSection: React.FC<TripSectionProps> = (leg) => {
+const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
   const {t} = useTranslation();
-  const style = useSectionStyles();
 
   const navigation = useNavigation<DetailScreenNavigationProp>();
   const navigateToDetails = () =>
@@ -149,49 +173,29 @@ const LineSection: React.FC<TripSectionProps> = (leg) => {
 
   const numberOfIntermediateCalls = leg.intermediateEstimatedCalls.length;
   return (
-    <>
-      <TripRow
-        accessibilityLabel={t(
-          TripDetailsTexts.trip.leg.transport.a11ylabel(
-            t(getTranslatedModeName(leg.line?.transportMode)),
-            getLineName(leg),
+    <TripRow
+      onPress={navigateToDetails}
+      accessibilityLabel={
+        t(
+          TripDetailsTexts.trip.leg.intermediateStops.a11yLabel(
+            numberOfIntermediateCalls,
+            secondsToDuration(leg.duration),
+          ),
+        ) + screenReaderPause
+      }
+      accessibilityHint={t(
+        TripDetailsTexts.trip.leg.intermediateStops.a11yHint,
+      )}
+    >
+      <ThemeText type="lead" color="faded">
+        {t(
+          TripDetailsTexts.trip.leg.intermediateStops.label(
+            numberOfIntermediateCalls,
+            secondsToDuration(leg.duration),
           ),
         )}
-        rowLabel={
-          <TransportationIcon
-            mode={leg.mode}
-            publicCode={leg.line?.publicCode}
-          />
-        }
-      >
-        <ThemeText style={style.legLineName}>{getLineName(leg)}</ThemeText>
-      </TripRow>
-      {numberOfIntermediateCalls > 0 && (
-        <TripRow
-          onPress={navigateToDetails}
-          accessibilityLabel={
-            t(
-              TripDetailsTexts.trip.leg.intermediateStops.a11yLabel(
-                numberOfIntermediateCalls,
-                secondsToDuration(leg.duration),
-              ),
-            ) + screenReaderPause
-          }
-          accessibilityHint={t(
-            TripDetailsTexts.trip.leg.intermediateStops.a11yHint,
-          )}
-        >
-          <ThemeText type="lead" color="faded">
-            {t(
-              TripDetailsTexts.trip.leg.intermediateStops.label(
-                numberOfIntermediateCalls,
-                secondsToDuration(leg.duration),
-              ),
-            )}
-          </ThemeText>
-        </TripRow>
-      )}
-    </>
+      </ThemeText>
+    </TripRow>
   );
 };
 const WalkSection: React.FC<TripSectionProps> = (leg) => {

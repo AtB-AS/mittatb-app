@@ -236,9 +236,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 function WaitRow({time}: {time: number}) {
   const styles = useLegStyles();
   const {t} = useTranslation();
-  const waitTime = `${secondsToMinutesShort(time)} ${t(
-    dictionary.date.units.short.minute,
-  )}`;
+  const waitTime = `${secondsToMinutesShort(time)}`;
   return (
     <View style={styles.legContainer}>
       <ThemeText style={[styles.textDeprioritized, styles.time]}>
