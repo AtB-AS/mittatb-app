@@ -6,17 +6,15 @@ import nb from 'date-fns/locale/nb';
 import {Context} from '../../../assets/svg/icons/actions';
 import Button from '../../../components/button';
 import ThemeText from '../../../components/text';
-import {StyleSheet, useTheme} from '../../../theme';
+import {StyleSheet} from '../../../theme';
 import ValidityIcon from './ValidityIcon';
-import {FareContract} from '../../../api/fareContracts';
-import ValidityLine from './ValidityLine';
 
 const ValidityHeader: React.FC<{
   isValid: boolean;
-  timeLeft: number;
-  validFrom: number;
+  nowSeconds: number;
+  validTo: number;
   onPressDetails?: () => void;
-}> = ({isValid, timeLeft, validFrom, onPressDetails}) => {
+}> = ({isValid, nowSeconds, validTo, onPressDetails}) => {
   const styles = useStyles();
 
   return (
@@ -24,11 +22,7 @@ const ValidityHeader: React.FC<{
       <View style={styles.validityContainer}>
         <ValidityIcon isValid={isValid} />
         <ThemeText type="lead" color="faded">
-          {isValid
-            ? `Gyldig i ${secondsToDuration(timeLeft, {
-                delimiter: ' og ',
-              })}`
-            : `Kjøpt ${formatToLongDateTime(fromUnixTime(validFrom), nb)}`}
+          {validityTimeText(isValid, nowSeconds, validTo)}
         </ThemeText>
       </View>
       {onPressDetails && (
@@ -43,6 +37,28 @@ const ValidityHeader: React.FC<{
     </View>
   );
 };
+
+function validityTimeText(
+  isValid: boolean,
+  nowSeconds: number,
+  validTo: number,
+) {
+  const validityDifferenceSeconds = Math.abs(validTo - nowSeconds);
+
+  if (isValid) {
+    return `Gyldig i ${secondsToDuration(validityDifferenceSeconds, {
+      delimiter: ' og ',
+    })}`;
+  } else {
+    if (validityDifferenceSeconds < 60 * 60) {
+      return `Utløpt for ${secondsToDuration(validityDifferenceSeconds, {
+        delimiter: ' og ',
+      })} siden`;
+    } else {
+      return `Utløpt ${formatToLongDateTime(fromUnixTime(validTo), nb)}`;
+    }
+  }
+}
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   iconContainer: {marginRight: theme.spacings.medium},

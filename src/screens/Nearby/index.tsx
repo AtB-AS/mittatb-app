@@ -78,11 +78,9 @@ const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
     requestPermission,
   } = useGeolocationState();
 
-  const {locations: reverseLookupLocations} =
-    useReverseGeocoder(location?.coords ?? null) ?? [];
-  const currentLocation = reverseLookupLocations?.length
-    ? reverseLookupLocations[1]
-    : undefined;
+  const {closestLocation: currentLocation} = useReverseGeocoder(
+    location?.coords ?? null,
+  );
 
   if (!status) {
     return <Loading />;

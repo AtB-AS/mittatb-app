@@ -27,9 +27,9 @@ import AddEditFavorite, {
   AddEditParams,
 } from '../screens/Profile/AddEditFavorite';
 import SortableFavoriteList from '../screens/Profile/FavoriteList/SortFavorites';
-import TicketDetails, {
-  TicketDetailsRouteParams,
-} from '../screens/Ticketing/TicketDetails';
+import TicketModalScreen, {
+  TicketModalRouteParams,
+} from '../screens/Ticketing/Ticket/Details';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -41,7 +41,7 @@ export type RootStackParamList = {
   SortableFavoriteList: undefined;
   AddEditFavorite: AddEditParams;
   TicketPurchase: undefined;
-  TicketDetails: TicketDetailsRouteParams;
+  TicketModal: TicketModalRouteParams;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -124,8 +124,8 @@ const NavigationRoot = () => {
                   }}
                 />
                 <Stack.Screen
-                  name="TicketDetails"
-                  component={TicketDetails}
+                  name="TicketModal"
+                  component={TicketModalScreen}
                   options={{
                     transitionSpec: {
                       open: transitionSpec,
