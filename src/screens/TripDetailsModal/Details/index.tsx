@@ -1,5 +1,5 @@
 import React, {useState, useCallback, useEffect} from 'react';
-import {Leg, Situation, TripPattern} from '../../../sdk';
+import {TripPattern} from '../../../sdk';
 import {RouteProp, NavigationProp, useIsFocused} from '@react-navigation/core';
 import {DetailsModalStackParams} from '..';
 import CompactMap from '../Map/CompactMap';
