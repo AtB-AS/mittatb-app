@@ -68,16 +68,6 @@ function updateDeparturesWithRealtime(
     };
   });
 }
-
-export function hasNoDeparturesOnGroup(group: DepartureGroup) {
-  return (
-    group.departures.length === 0 ||
-    group.departures.every((d) =>
-      isNumberOfMinutesInThePast(d.aimedTime, HIDE_AFTER_NUM_MINUTES),
-    )
-  );
-}
-
 export function hasNoQuaysWithDepartures(departures: StopPlaceGroup[] | null) {
   return (
     departures !== null &&
@@ -87,4 +77,12 @@ export function hasNoQuaysWithDepartures(departures: StopPlaceGroup[] | null) {
 }
 export function hasNoGroupsWithDepartures(departures: QuayGroup[]) {
   return departures.every((q) => q.group.every(hasNoDeparturesOnGroup));
+}
+export function hasNoDeparturesOnGroup(group: DepartureGroup) {
+  return (
+    group.departures.length === 0 ||
+    group.departures.every((d) =>
+      isNumberOfMinutesInThePast(d.aimedTime, HIDE_AFTER_NUM_MINUTES),
+    )
+  );
 }
