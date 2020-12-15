@@ -40,11 +40,15 @@ interface SendReceiptResponse {
   reference: string;
 }
 
-export async function sendReceipt(fc: FareContract, email: string) {
+export async function sendReceipt(
+  order_id: string,
+  order_version: number,
+  email: string,
+) {
   const url = 'ticket/v1/receipt';
   const response = await client.post<SendReceiptResponse>(url, {
-    order_id: fc.order_id,
-    order_version: parseInt(fc.order_version, 10),
+    order_id,
+    order_version,
     email_address: email,
   });
 
