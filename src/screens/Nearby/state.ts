@@ -1,5 +1,4 @@
 import {useIsFocused} from '@react-navigation/native';
-import {differenceInMinutes} from 'date-fns';
 import {useCallback, useEffect} from 'react';
 import useReducerWithSideEffects, {
   NoUpdate,

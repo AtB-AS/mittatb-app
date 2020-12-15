@@ -243,27 +243,25 @@ const Header = React.memo(function Header({
           }}
         />
       </Section>
-      {isGeoLocationActive && (
-        <FavoriteChips
-          key="favoriteChips"
-          chipTypes={['favorites', 'add-favorite']}
-          onSelectLocation={fullLocation}
-          containerStyle={{
-            marginTop: theme.spacings.xSmall,
-            marginBottom: theme.spacings.medium,
-          }}
-          contentContainerStyle={{
-            // @TODO Find solution for not hardcoding this. e.g. do proper math
-            paddingLeft: theme.spacings.medium,
-            paddingRight: theme.spacings.medium / 2,
-          }}
-          chipActionHint={
-            t(AssistantTexts.favorites.favoriteChip.a11yHint) +
-            t(dictionary.toPlace) +
-            screenReaderPause
-          }
-        />
-      )}
+      <FavoriteChips
+        key="favoriteChips"
+        chipTypes={['favorites', 'add-favorite']}
+        onSelectLocation={fullLocation}
+        containerStyle={{
+          marginTop: theme.spacings.xSmall,
+          marginBottom: theme.spacings.medium,
+        }}
+        contentContainerStyle={{
+          // @TODO Find solution for not hardcoding this. e.g. do proper math
+          paddingLeft: theme.spacings.medium,
+          paddingRight: theme.spacings.medium / 2,
+        }}
+        chipActionHint={
+          t(AssistantTexts.favorites.favoriteChip.a11yHint) +
+          t(dictionary.toPlace) +
+          screenReaderPause
+        }
+      />
     </>
   );
 });

@@ -1,5 +1,5 @@
 import {useScrollToTop} from '@react-navigation/native';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {
   AccessibilityProps,
   Animated,
@@ -10,15 +10,11 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import {
-  useSafeAreaFrame,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import useChatIcon from '../../chat/use-chat-icon';
 import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
 import LogoOutline from '../../ScreenHeader/LogoOutline';
 import {StyleSheet, useTheme} from '../../theme';
-import {useBottomNavigationStyles} from '../../utils/navigation';
 import throttle from '../../utils/throttle';
 import {useLayout} from '../../utils/use-layout';
 import ThemeIcon from '../theme-icon';
@@ -194,12 +190,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   topBorder: {
     backgroundColor: theme.background.header,
-  },
-  bannerContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
   },
 
   content: {
