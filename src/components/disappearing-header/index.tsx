@@ -189,7 +189,7 @@ const DisappearingHeader: React.FC<Props> = ({
           title={headerTitle}
           rightButton={chatIcon}
           alternativeTitleComponent={alternativeTitleComponent}
-          alternativeTitleVisible={showAltTitle}
+          scrollRef={scrollYRef}
           leftButton={{
             onPress: logoClick?.callback,
             icon: <ThemeIcon svg={LogoOutline} />,
@@ -225,9 +225,6 @@ const DisappearingHeader: React.FC<Props> = ({
           {useScroll ? (
             <Animated.ScrollView
               ref={scrollableContentRef}
-              contentContainerStyle={[
-                {paddingTop: !IS_IOS ? contentHeight : 0},
-              ]}
               scrollEventThrottle={10}
               style={{flex: 1}}
               refreshControl={
@@ -251,6 +248,9 @@ const DisappearingHeader: React.FC<Props> = ({
                   },
                 },
               )}
+              contentContainerStyle={[
+                {paddingTop: !IS_IOS ? contentHeight : 0},
+              ]}
               contentInset={{
                 top: contentHeight + headerMargin,
               }}
