@@ -50,6 +50,7 @@ if (!__DEV__) {
 import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import AppLanguageProvider from './translations/LanguageContext';
+import {Platform, UIManager} from 'react-native';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
@@ -61,6 +62,14 @@ async function setupConfig() {
 
 trackAppState();
 enableScreens();
+
+// Adds ability to automatically animate between layout paint changes.
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);

@@ -1,9 +1,9 @@
 import haversineDistance from 'haversine-distance';
 import sortBy from 'lodash.sortby';
-import React, {useEffect, useMemo, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {ActivityIndicator, LayoutAnimation, View} from 'react-native';
 import {QuayGroup, StopPlaceGroup} from '../../api/departures/types';
-import {ActionItem, HeaderItem} from '../../components/sections';
+import {ActionItem} from '../../components/sections';
 import ThemeText from '../../components/text';
 import {Location} from '../../favorites/types';
 import MessageBox from '../../message-box';
@@ -128,7 +128,10 @@ const StopDepartures = React.memo(function StopDepartures({
         transparent
         text={stopPlaceGroup.stopPlace.name}
         mode="heading-expand"
-        onPress={() => setExpanded(!expanded)}
+        onPress={() => {
+          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+          setExpanded(!expanded);
+        }}
         checked={expanded}
       />
 

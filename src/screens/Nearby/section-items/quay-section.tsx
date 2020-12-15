@@ -16,6 +16,7 @@ type QuaySectionProps = {
   quayGroup: QuayGroup;
   distance?: number;
   lastUpdated?: Date;
+  hidden?: Date;
 };
 
 const QuaySection = React.memo(function QuaySection({
