@@ -33,7 +33,7 @@ const Time: React.FC<TimeValues> = (timeValues) => {
   return (
     <ThemeText>
       {representationType === 'no-realtime' && (
-        <ThemeText>{t(dictionary.missingRealTimePrefix)}</ThemeText>
+        <ThemeText>{t(dictionary.missingRealTimePrefix)} </ThemeText>
       )}
       {scheduled}
     </ThemeText>

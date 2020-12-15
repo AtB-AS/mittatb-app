@@ -1,7 +1,12 @@
 import {LegMode} from '@entur/sdk';
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useCallback, useState} from 'react';
-import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {DetailsModalNavigationProp, DetailsModalStackParams} from '..';
 import {getDepartures} from '../../../api/serviceJourney';
@@ -105,7 +110,7 @@ export default function DepartureDetails({navigation, route}: Props) {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScreenHeader
         leftButton={{
           onPress: () => navigation.goBack(),
@@ -117,7 +122,7 @@ export default function DepartureDetails({navigation, route}: Props) {
         title={title}
       />
       {content}
-    </View>
+    </SafeAreaView>
   );
 }
 function mapGroup<T>(

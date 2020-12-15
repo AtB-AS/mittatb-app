@@ -61,7 +61,7 @@ const NearbyResults: React.FC<NearbyResultsProps> = ({
       : name
       ? name
       : t(dictionary.travel.line.defaultName);
-    navigation.navigate('DepartureDetailsModal', {
+    navigation.navigate('DepartureDetails', {
       title,
       serviceJourneyId: departure.serviceJourney.id,
       date: departure.date,

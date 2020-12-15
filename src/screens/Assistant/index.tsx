@@ -329,7 +329,7 @@ const Assistant: React.FC<Props> = ({
 
   const onPressed = useCallback(
     (tripPatterns, index) =>
-      navigation.navigate('TripDetailsModal', {
+      navigation.navigate('TripDetailsRoot', {
         initialTripPatterns: tripPatterns,
         startIndex: index,
       }),

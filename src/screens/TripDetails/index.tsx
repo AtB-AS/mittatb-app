@@ -1,5 +1,5 @@
 import React from 'react';
-import Details, {DetailsRouteParams, DetailScreenRouteProp} from './Details/';
+import Details, {DetailsRouteParams, DetailScreenRouteProp} from './Details';
 import {
   createStackNavigator,
   StackNavigationProp,

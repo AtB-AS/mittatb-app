@@ -14,7 +14,7 @@ import {
   PositionArrow,
   BackArrow,
   useControlPositionsStyle,
-} from '../../../components/map/';
+} from '../../../components/map';
 import {Leg} from '../../../sdk';
 import Bugsnag from '@bugsnag/react-native';
 import {useTranslation, MapTexts} from '../../../translations';
