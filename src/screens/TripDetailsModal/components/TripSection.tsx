@@ -222,16 +222,17 @@ function getPlaceName(place: Place): string {
   return place.quay ? getQuayName(place.quay) ?? fallback : fallback;
 }
 export function mapLegToTimeValues(leg: Leg) {
+  const legIsMissingRealTime = !leg.realtime && leg.mode !== 'foot';
   return {
     startTimes: {
       expectedTime: leg.expectedStartTime,
       aimedTime: leg.aimedStartTime,
-      missingRealTime: !leg.realtime,
+      missingRealTime: legIsMissingRealTime,
     },
     endTimes: {
       expectedTime: leg.expectedEndTime,
       aimedTime: leg.aimedEndTime,
-      missingRealTime: !leg.realtime,
+      missingRealTime: legIsMissingRealTime,
     },
   };
 }

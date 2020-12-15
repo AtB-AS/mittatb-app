@@ -1,6 +1,7 @@
 import {AxiosError} from 'axios';
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
+import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
 import {Leg, TripPattern} from '../../../sdk';
 import {StyleSheet} from '../../../theme';
 import {secondsBetween} from '../../../utils/date';

@@ -2,8 +2,14 @@ import {AxiosError} from 'axios';
 import React from 'react';
 import {ViewStyle} from 'react-native';
 import {getAxiosErrorType} from '../../../api/utils';
+import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
 import MessageBox from '../../../message-box';
 import {useStyle} from '../../../theme';
+import {
+  TranslatedString,
+  TripDetailsTexts,
+  useTranslation,
+} from '../../../translations';
 
 type TripMessagesProps = {
   shortTime: boolean;
@@ -15,6 +21,7 @@ const TripMessages: React.FC<TripMessagesProps> = ({
   shortTime,
   messageStyle,
 }) => {
+  const {t} = useTranslation();
   return (
     <>
       {shortTime && (
@@ -25,23 +32,26 @@ const TripMessages: React.FC<TripMessagesProps> = ({
         />
       )}
       {error && (
-        <MessageBox
-          containerStyle={messageStyle}
-          type="warning"
-          message={translateError(error)}
-        />
+        <>
+          <ScreenReaderAnnouncement message={t(translatedError(error))} />
+          <MessageBox
+            containerStyle={messageStyle}
+            type="warning"
+            message={t(translatedError(error))}
+          />
+        </>
       )}
     </>
   );
 };
-function translateError(error: AxiosError): string {
+function translatedError(error: AxiosError): TranslatedString {
   const errorType = getAxiosErrorType(error);
   switch (errorType) {
     case 'network-error':
     case 'timeout':
-      return 'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil.';
+      return TripDetailsTexts.messages.errorNetwork;
     default:
-      return 'Vi kunne ikke oppdatere reiseforslaget ditt. Det kan hende reisen har endra seg eller er utdatert?';
+      return TripDetailsTexts.messages.errorDefault;
   }
 }
 export default TripMessages;

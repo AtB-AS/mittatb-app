@@ -22,10 +22,10 @@ export function getTimeRepresentationType({
   if (missingRealTime) {
     return 'no-realtime';
   }
-  const scheduled = formatToClock(aimedTime);
-  const expected = expectedTime ? formatToClock(expectedTime) : '';
-
-  return secondsBetween(scheduled, expected) <=
+  if (!expectedTime) {
+    return 'no-significant-difference';
+  }
+  return secondsBetween(aimedTime, expectedTime) <=
     DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES * 60
     ? 'no-significant-difference'
     : 'significant-difference';

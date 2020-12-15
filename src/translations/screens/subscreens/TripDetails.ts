@@ -23,7 +23,7 @@ const TripDetailsTexts = {
             aimedTime: string,
           ) =>
             _(
-              `Fra ${placeName}, forventet avgang klokken ${realTime}. Rutetid klokken ${aimedTime}.`,
+              `Fra ${placeName}, forventet tid klokken ${realTime}. Rutetid klokken ${aimedTime}.`,
             ),
         },
       },
@@ -51,16 +51,16 @@ const TripDetailsTexts = {
       end: {
         a11yLabel: {
           noRealTime: (placeName: string, aimedTime: string) =>
-            _(`Avstigning på ${placeName}, ca. klokken ${aimedTime}`),
+            _(`Avslutter på ${placeName}, ca. klokken ${aimedTime}`),
           singularTime: (placeName: string, time: string) =>
-            _(`Avstigning på ${placeName}, klokken ${time}`),
+            _(`Avslutter på ${placeName}, klokken ${time}`),
           realAndAimed: (
             placeName: string,
             realTime: string,
             aimedTime: string,
           ) =>
             _(
-              `Avstigning på ${placeName}, forventet tid klokken ${realTime}. Rutetid klokken ${aimedTime}.`,
+              `Avslutter på ${placeName}, forventet tid klokken ${realTime}. Rutetid klokken ${aimedTime}.`,
             ),
         },
       },
