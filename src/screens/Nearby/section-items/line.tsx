@@ -85,8 +85,9 @@ type DepartureTimeItemProps = {
 function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
   const styles = useItemStyles();
   const time = formatToClockOrRelativeMinutes(departure.aimedTime);
+  const isValid = isValidDeparture(departure);
 
-  if (!isValidDeparture(departure)) {
+  if (!isValid) {
     return null;
   }
 
