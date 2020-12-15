@@ -1,23 +1,24 @@
 import React, {useEffect} from 'react';
-import {ActivityIndicator, Text, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
-import {addMinutes} from 'date-fns';
 import {TicketingStackParams} from '../';
 import Header from '../../../../ScreenHeader';
-import {Add, Close, Remove} from '../../../../assets/svg/icons/actions';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import MessageBox from '../../../../message-box';
+import {Edit} from '../../../../assets/svg/icons/actions';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StyleSheet, useTheme} from '../../../../theme';
 import ThemeText from '../../../../components/text';
 import ThemeIcon from '../../../../components/theme-icon';
 import Button from '../../../../components/button';
-import {CreditCard, Vipps} from '../../../../assets/svg/icons/ticketing';
-import useOfferState, {OfferError} from './use-offer-state';
-import insets from '../../../../utils/insets';
+import useUserCountState from './use-user-count-state';
 import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
-import {SINGLE_TICKET_PRODUCT_ID} from '@env';
+import useOfferState, {OfferError} from './use-offer-state';
+import {addMinutes} from 'date-fns';
+import MessageBox from '../../../../message-box';
+import {CreditCard, Vipps} from '../../../../assets/svg/icons/ticketing';
+import * as Sections from '../../../../components/sections';
+import {ScrollView} from 'react-native-gesture-handler';
 
-type Props = {
+export type TravellersProps = {
   navigation: DismissableStackNavigationProp<
     TicketingStackParams,
     'Travellers'
@@ -25,21 +26,23 @@ type Props = {
   route: RouteProp<TicketingStackParams, 'Travellers'>;
 };
 
-const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
+const Travellers: React.FC<TravellersProps> = ({
+  navigation,
+  route: {params},
+}) => {
   const styles = useStyles();
   const {theme} = useTheme();
 
+  const {userProfilesWithCount, addCount, removeCount} = useUserCountState();
+
   const {
-    offerId,
     offerSearchTime,
-    count,
     isSearchingOffer,
     error,
     totalPrice,
-    addCount,
-    removeCount,
     refreshOffer,
-  } = useOfferState();
+    offers,
+  } = useOfferState(params.preassignedFareProduct, userProfilesWithCount);
 
   const offerExpirationTime =
     offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
@@ -53,140 +56,139 @@ const Travellers: React.FC<Props> = ({navigation, route: {params}}) => {
   const closeModal = () => navigation.dismiss();
 
   async function payWithVipps() {
-    if (offerId && offerExpirationTime && count) {
+    if (offerExpirationTime && totalPrice > 0) {
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
       } else {
-        navigation.push('PaymentVipps', {offers: [{offer_id: offerId, count}]});
-      }
-    }
-  }
-
-  async function payWithCard() {
-    if (offerId && offerExpirationTime && count) {
-      if (offerExpirationTime < Date.now()) {
-        refreshOffer();
-      } else {
-        navigation.push('PaymentCreditCard', {
-          offers: [{offer_id: offerId, count}],
+        navigation.push('PaymentVipps', {
+          offers,
+          preassignedFareProduct: params.preassignedFareProduct,
         });
       }
     }
   }
 
+  async function payWithCard() {
+    if (offerExpirationTime && totalPrice > 0) {
+      if (offerExpirationTime < Date.now()) {
+        refreshOffer();
+      } else {
+        navigation.push('PaymentCreditCard', {
+          offers,
+          preassignedFareProduct: params.preassignedFareProduct,
+        });
+      }
+    }
+  }
+
+  const {top: safeAreaTop, bottom: safeAreBottom} = useSafeAreaInsets();
+
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[styles.container, {paddingTop: safeAreaTop}]}>
       <Header
-        title="Reisende"
+        title={params.preassignedFareProduct.name.value}
         leftButton={{
-          icon: <ThemeIcon svg={Close} />,
+          icon: <ThemeText>Avbryt</ThemeText>,
           onPress: closeModal,
           accessibilityLabel: 'Avbryt kjøpsprosessen',
         }}
+        style={styles.header}
       />
 
-      {error ? (
-        <MessageBox
-          type="warning"
-          title="Det oppstod en feil"
-          message={translateError(error)}
-        />
-      ) : (
-        <MessageBox type="info" title="Beta-begrensning">
-          <ThemeText type="label">
-            Det er foreløpig kun mulig å kjøpe enkeltbillett voksen for buss og
-            trikk. Bruk AtB Mobillett for å kjøpe andre billetter.
-          </ThemeText>
-        </MessageBox>
-      )}
-      <View style={styles.ticketsContainer}>
-        <ThemeText type="lead">
-          Enkeltbillett, Sone A - Stor-Trondheim
-        </ThemeText>
-      </View>
-      <View style={styles.travellerContainer}>
-        <View style={styles.travellerCount}>
-          <ThemeText type="paragraphHeadline">{count} voksen</ThemeText>
-        </View>
-        <View style={styles.travellerCountActions}>
-          <ThemeText type="lead">40,-</ThemeText>
-          <TouchableOpacity
-            onPress={removeCount}
-            accessibilityRole="button"
-            accessibilityLabel={`Minsk antall til ${count - 1}`}
-            accessibilityElementsHidden={count <= 1}
-            importantForAccessibility={
-              count > 1 ? 'yes' : 'no-hide-descendants'
-            }
-            hitSlop={insets.all(8)}
-          >
-            <ThemeIcon svg={Remove} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={addCount}
-            accessibilityRole="button"
-            accessibilityLabel={`Øk antall til ${count + 1}`}
-            hitSlop={insets.all(8)}
-          >
-            <ThemeIcon svg={Add} />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={styles.totalContainer}>
-        <View style={{flexDirection: 'column'}}>
-          <ThemeText type="body">Total</ThemeText>
-          <ThemeText type="body">Inkl. 6% mva</ThemeText>
-        </View>
-
-        {!isSearchingOffer ? (
-          <ThemeText type="heroTitle">{totalPrice} kr</ThemeText>
-        ) : (
-          <ActivityIndicator
-            color={theme.text.colors.primary}
-            style={{margin: 12}}
+      <ScrollView>
+        {error && (
+          <MessageBox
+            type="warning"
+            title="Det oppstod en feil"
+            message={translateError(error)}
           />
         )}
-      </View>
 
-      <View style={styles.buttons}>
-        <ThemeText type="body__link" style={styles.informationLink}>
-          Informasjon og vilkår
-        </ThemeText>
-        <Button
-          mode="primary"
-          text="Betal med Vipps"
-          disabled={isSearchingOffer}
-          accessibilityLabel="Trykk for å betale billett med Vipps"
-          icon={Vipps}
-          iconPosition="right"
-          onPress={payWithVipps}
-          style={styles.button}
-        />
-        <Button
-          mode="primary"
-          text="Betal med bankkort"
-          disabled={isSearchingOffer}
-          accessibilityLabel="Trykk for å betale billett med bankkort"
-          icon={CreditCard}
-          iconPosition="right"
-          onPress={payWithCard}
-          style={styles.button}
-        />
-        <Button
-          mode="secondary"
-          text="Avbryt"
-          accessibilityLabel="Trykk for å avbryte billettkjøp"
-          icon={Close}
-          onPress={closeModal}
-          style={styles.button}
-        />
+        <Sections.Section withPadding>
+          <Sections.LinkItem
+            text="Reise gjennom 1 sone (Sone A)"
+            onPress={() => {}}
+            icon={<ThemeIcon svg={Edit} />}
+          />
+        </Sections.Section>
+
+        <Sections.Section withPadding>
+          {userProfilesWithCount.map((u) => (
+            <Sections.CounterInput
+              key={u.userTypeString}
+              text={u.name.value}
+              count={u.count}
+              addCount={() => addCount(u.userTypeString)}
+              removeCount={() => removeCount(u.userTypeString)}
+            />
+          ))}
+        </Sections.Section>
+      </ScrollView>
+
+      <View
+        style={[
+          styles.footer,
+          {
+            paddingBottom: Math.max(safeAreBottom, theme.spacings.medium),
+          },
+        ]}
+      >
+        <View style={styles.totalContainer}>
+          <View style={styles.totalContainerHeadings}>
+            <ThemeText type="body">Totalt</ThemeText>
+            <ThemeText type="label" color={'faded'}>
+              Inkl. 6% mva
+            </ThemeText>
+          </View>
+
+          {!isSearchingOffer ? (
+            <ThemeText type="heroTitle">{totalPrice} kr</ThemeText>
+          ) : (
+            <ActivityIndicator
+              size={theme.spacings.medium}
+              color={theme.text.colors.primary}
+              style={{margin: 12}}
+            />
+          )}
+        </View>
+        <View style={styles.buttons}>
+          <Button
+            mode="primary2"
+            text="Betal med Vipps"
+            disabled={isSearchingOffer}
+            accessibilityLabel="Trykk for å betale billett med Vipps"
+            icon={Vipps}
+            iconPosition="left"
+            onPress={payWithVipps}
+            viewContainerStyle={[
+              styles.paymentButton,
+              styles.vippsPaymentButton,
+            ]}
+            style={{flex: 1}}
+            textContainerStyle={{marginLeft: 30}}
+          />
+          <Button
+            mode="primary2"
+            text="Betal med bankkort"
+            disabled={isSearchingOffer}
+            accessibilityLabel="Trykk for å betale billett med bankkort"
+            icon={CreditCard}
+            iconPosition="left"
+            onPress={payWithCard}
+            viewContainerStyle={[
+              styles.paymentButton,
+              styles.cardPaymentButton,
+            ]}
+            textContainerStyle={{marginLeft: 30}}
+          />
+        </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
 function translateError(error: OfferError) {
-  const {context, type} = error;
+  const {context} = error;
   switch (context) {
     case 'failed_offer_search':
       return 'Klarte ikke å søke opp pris';
@@ -198,7 +200,6 @@ function translateError(error: OfferError) {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    padding: theme.spacings.medium,
     backgroundColor: theme.background.level2,
   },
   ticketsContainer: {
@@ -210,40 +211,37 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.medium,
     marginTop: theme.spacings.small,
   },
-  travellerContainer: {
-    backgroundColor: theme.background.level0,
-    borderBottomEndRadius: theme.border.radius.regular,
-    borderBottomLeftRadius: theme.border.radius.regular,
-    padding: theme.spacings.medium,
-    marginBottom: theme.spacings.small,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  travellerCount: {flex: 1, flexDirection: 'row', alignItems: 'center'},
-  travellerCountActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: 100,
+  header: {
+    paddingHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
   totalContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: theme.spacings.medium,
+    backgroundColor: theme.background.level0,
+    borderRadius: theme.border.radius.regular,
   },
-  informationLink: {
-    textAlign: 'center',
-    paddingHorizontal: theme.spacings.medium,
-    paddingVertical: theme.spacings.small,
+  totalContainerHeadings: {
+    flexDirection: 'column',
+    paddingVertical: theme.spacings.xSmall,
+  },
+  footer: {
+    padding: theme.spacings.medium,
+    backgroundColor: theme.background.header,
   },
   buttons: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    margin: theme.spacings.medium,
+    flexDirection: 'row',
   },
-  button: {
-    marginBottom: theme.spacings.small,
+  paymentButton: {
+    marginTop: theme.spacings.medium,
+    flex: 1,
+  },
+  vippsPaymentButton: {
+    marginRight: 6,
+  },
+  cardPaymentButton: {
+    marginLeft: 6,
   },
 }));
 

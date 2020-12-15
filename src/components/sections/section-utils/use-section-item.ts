@@ -35,7 +35,7 @@ export default function useSectionItem({
     ...mapToBorderRadius(theme, radiusSize, radius),
   };
   const contentContainer: ViewStyle = {
-    flex: isInline ? undefined : 1,
+    flexGrow: isInline ? undefined : 1,
   };
 
   return {

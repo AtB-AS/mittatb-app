@@ -1,3 +1,4 @@
+import hexToRgba from 'hex-to-rgba';
 import {StatusBarProps, TextStyle} from 'react-native';
 
 const backgrounds = {
@@ -150,6 +151,7 @@ export interface Theme {
     destructive: string;
     warning: string;
     error: string;
+    success: string;
     info: string;
     accent: string;
   };
@@ -163,6 +165,7 @@ export interface Theme {
     info: string;
     warning: string;
     error: string;
+    success: string;
     radius: typeof borderRadius;
     width: typeof borderWidth;
   };
@@ -192,6 +195,7 @@ export const themes: Themes = {
       info: colors.secondary.cyan_100,
       warning: colors.secondary.yellow_100,
       error: colors.secondary.red_500,
+      success: hexToRgba(colors.primary.green_500, 0.25),
       accent: colors.secondary.cyan_500,
     },
     text: {
@@ -210,6 +214,7 @@ export const themes: Themes = {
       info: colors.secondary.cyan_500,
       warning: colors.secondary.yellow_500,
       error: colors.secondary.red_500,
+      success: colors.primary.green_500,
       radius: borderRadius,
       width: borderWidth,
     },
@@ -264,6 +269,7 @@ export const themes: Themes = {
       destructive: colors.secondary.red_500,
       warning: colors.primary.green_900,
       error: colors.secondary.red_500,
+      success: hexToRgba(colors.primary.green_500, 0.25),
       info: colors.secondary.cyan_900,
       accent: backgrounds.dark__level1,
     },
@@ -284,6 +290,7 @@ export const themes: Themes = {
       info: colors.secondary.cyan_800,
       warning: colors.primary.green_700,
       error: colors.secondary.red_500,
+      success: colors.primary.green_500,
       radius: borderRadius,
       width: borderWidth,
     },

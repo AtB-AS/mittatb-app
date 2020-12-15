@@ -1,6 +1,11 @@
 import React from 'react';
 import {View, StyleProp, ViewStyle} from 'react-native';
-import {Error as ErrorIcon, Info, Warning} from '../assets/svg/icons/status';
+import {
+  Check,
+  Error as ErrorIcon,
+  Info,
+  Warning,
+} from '../assets/svg/icons/status';
 import {StyleSheet} from '../theme';
 import ThemeText from '../components/text';
 import ThemeIcon from '../components/theme-icon';
@@ -11,7 +16,7 @@ type WithChildren = {
   message?: never;
   children: React.ReactNode;
 };
-export type MessageType = 'info' | 'warning' | 'error';
+export type MessageType = 'info' | 'warning' | 'error' | 'success';
 export type MessageBoxProps = {
   icon?: React.ReactNode;
   type?: MessageType;
@@ -111,6 +116,10 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: hexToRgba(theme.background.error, 0.5),
     borderColor: theme.border.error,
   },
+  container__success: {
+    backgroundColor: theme.background.success,
+    borderColor: theme.border.success,
+  },
 }));
 
 function typeToIcon(type: MessageBoxProps['type']) {
@@ -119,6 +128,8 @@ function typeToIcon(type: MessageBoxProps['type']) {
       return Warning;
     case 'error':
       return ErrorIcon;
+    case 'success':
+      return Check;
     default:
       return Info;
   }
@@ -126,12 +137,18 @@ function typeToIcon(type: MessageBoxProps['type']) {
 
 function typeToColorClass(
   type: MessageBoxProps['type'],
-): 'container__info' | 'container__warning' | 'container__error' {
+):
+  | 'container__info'
+  | 'container__warning'
+  | 'container__error'
+  | 'container__success' {
   switch (type) {
     case 'warning':
       return 'container__warning';
     case 'error':
       return 'container__error';
+    case 'success':
+      return 'container__success';
     default:
       return 'container__info';
   }

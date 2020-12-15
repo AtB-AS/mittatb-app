@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, TouchableOpacity} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {formatToLongDateTime, secondsToDuration} from '../../../utils/date';
 import {FareContract} from '../../../api/fareContracts';
 import {StyleSheet, useTheme} from '../../../theme';
@@ -10,6 +10,7 @@ import {fromUnixTime} from 'date-fns';
 import nb from 'date-fns/locale/nb';
 import ThemeText from '../../../components/text';
 import {screenReaderPause} from '../../../components/accessible-text';
+import {Language} from '../../../translations';
 
 type Props = {
   fareContract: FareContract;
@@ -67,8 +68,8 @@ const Ticket: React.FC<Props> = ({fareContract: fc, now}) => {
         <View style={styles.ticketInfoContainer}>
           <ThemeText style={styles.travellersText}>
             {fc.user_profiles.length > 1
-              ? `${fc.user_profiles.length} voksne`
-              : `1 voksen`}
+              ? `${fc.user_profiles.length} billetter`
+              : `1 billett`}
           </ThemeText>
           <ThemeText type="lead" style={styles.extraText}>
             {fc.product_name}

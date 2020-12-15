@@ -24,6 +24,7 @@ type ButtonTypeAwareProps =
 export type ButtonProps = {
   onPress(): void;
   mode?: ButtonMode;
+  viewContainerStyle?: StyleProp<ViewStyle>;
   textContainerStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   icon?: React.ElementType<{fill: string}>;
@@ -40,6 +41,7 @@ const Button: React.FC<ButtonProps> = ({
   text,
   disabled,
   style,
+  viewContainerStyle,
   textContainerStyle,
   textStyle,
   ...props
@@ -85,7 +87,9 @@ const Button: React.FC<ButtonProps> = ({
       };
 
   return (
-    <View style={disabled ? css.buttonDisabled : undefined}>
+    <View
+      style={[disabled ? css.buttonDisabled : undefined, viewContainerStyle]}
+    >
       <TouchableOpacity
         style={[styleContainer, style]}
         onPress={onPress}

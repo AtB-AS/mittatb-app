@@ -12,7 +12,9 @@ import trackNavigation from '../diagnostics/trackNavigation';
 import LocationSearch, {
   RouteParams as LocationSearchParams,
 } from '../location-search';
-import TicketPurchase from '../screens/Ticketing/Purchase';
+import TicketPurchase, {
+  RouteParams as TicketPurchaseParams,
+} from '../screens/Ticketing/Purchase';
 import Onboarding from '../screens/Onboarding';
 import TripDetailsModal, {
   RouteParams as TripDetailsModalParams,
@@ -27,6 +29,9 @@ import AddEditFavorite, {
   AddEditParams,
 } from '../screens/Profile/AddEditFavorite';
 import SortableFavoriteList from '../screens/Profile/FavoriteList/SortFavorites';
+import TicketModalScreen, {
+  TicketModalRouteParams,
+} from '../screens/Ticketing/Ticket/Details';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -37,7 +42,8 @@ export type RootStackParamList = {
   DepartureDetailsModal: DepartureDetailsRouteParams;
   SortableFavoriteList: undefined;
   AddEditFavorite: AddEditParams;
-  TicketPurchase: undefined;
+  TicketPurchase: TicketPurchaseParams;
+  TicketModal: TicketModalRouteParams;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -110,6 +116,16 @@ const NavigationRoot = () => {
                 <Stack.Screen
                   name="TicketPurchase"
                   component={TicketPurchase}
+                  options={{
+                    transitionSpec: {
+                      open: transitionSpec,
+                      close: transitionSpec,
+                    },
+                  }}
+                />
+                <Stack.Screen
+                  name="TicketModal"
+                  component={TicketModalScreen}
                   options={{
                     transitionSpec: {
                       open: transitionSpec,
