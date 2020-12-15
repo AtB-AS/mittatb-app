@@ -7,7 +7,7 @@ import {ActionItem} from '../../components/sections';
 import ThemeText from '../../components/text';
 import {Location} from '../../favorites/types';
 import MessageBox from '../../message-box';
-import {StyleSheet} from '../../theme';
+import {StyleSheet, useTheme} from '../../theme';
 import {NearbyTexts, useTranslation} from '../../translations';
 import QuaySection from './section-items/quay-section';
 import {hasNoGroupsWithDepartures, hasNoQuaysWithDepartures} from './utils';
@@ -92,10 +92,18 @@ type FooterLoaderProps = {
   isFetchingMore: boolean;
 };
 function FooterLoader({isFetchingMore}: FooterLoaderProps) {
+  const {theme} = useTheme();
+
   if (!isFetchingMore) {
     return null;
   }
-  return <ActivityIndicator style={{marginVertical: 20}} />;
+
+  return (
+    <ActivityIndicator
+      color={theme.text.colors.primary}
+      style={{marginVertical: 20}}
+    />
+  );
 }
 
 type StopDeparturesProps = {

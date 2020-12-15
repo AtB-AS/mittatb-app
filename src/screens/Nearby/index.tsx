@@ -6,7 +6,7 @@ import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import AccessibleText, {
   screenReaderPause,
 } from '../../components/accessible-text';
-import DisappearingHeader from '../../components/disappearing-header';
+import SimpleDisappearingHeader from '../../components/disappearing-header/simple';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 import {LocationInput, Section} from '../../components/sections';
 import ThemeIcon from '../../components/theme-icon';
@@ -91,7 +91,6 @@ const NearbyOverview: React.FC<Props> = ({
     'location',
   );
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
-  const {theme} = useTheme();
 
   const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
@@ -161,7 +160,70 @@ const NearbyOverview: React.FC<Props> = ({
     }
   }, [updatingLocation, isLoading]);
 
-  const renderHeader = () => (
+  return (
+    <SimpleDisappearingHeader
+      onRefresh={refresh}
+      isRefreshing={isLoading}
+      header={
+        <Header
+          fromLocation={fromLocation}
+          updatingLocation={updatingLocation}
+          fullLocation={fullLocation}
+          isGeoLocationActive={isGeoLocationActive}
+          openLocationSearch={openLocationSearch}
+          setCurrentLocationOrRequest={setCurrentLocationOrRequest}
+        />
+      }
+      headerTitle={t(NearbyTexts.header.title)}
+      useScroll={activateScroll}
+      logoClick={{
+        callback: navigateHome,
+        accessibilityLabel: t(NearbyTexts.header.logo.a11yLabel),
+      }}
+      alternativeTitleComponent={
+        <AccessibleText
+          prefix={t(NearbyTexts.header.altTitle.a11yPrefix)}
+          type={'paragraphHeadline'}
+        >
+          {fromLocation?.name}
+        </AccessibleText>
+      }
+      onEndReached={onScrollViewEndReached}
+    >
+      <ScreenReaderAnnouncement message={loadAnnouncement} />
+      <NearbyResults
+        currentLocation={currentLocation}
+        departures={data}
+        lastUpdated={tick}
+        isFetchingMore={isFetchingMore && !isLoading}
+        isInitialScreen={isInitialScreen}
+        error={error ? t(translateErrorType(error.type)) : undefined}
+      />
+    </SimpleDisappearingHeader>
+  );
+};
+
+type HeaderProps = {
+  updatingLocation: boolean;
+  fromLocation?: LocationWithMetadata;
+  openLocationSearch: () => void;
+  setCurrentLocationOrRequest(): Promise<void>;
+  isGeoLocationActive: boolean;
+  fullLocation(selectedLocation: LocationWithMetadata): void;
+};
+
+const Header = React.memo(function Header({
+  updatingLocation,
+  fromLocation,
+  openLocationSearch,
+  setCurrentLocationOrRequest,
+  isGeoLocationActive,
+  fullLocation,
+}: HeaderProps) {
+  const {t} = useTranslation();
+  const {theme} = useTheme();
+
+  return (
     <>
       <Section withPadding>
         <LocationInput
@@ -204,41 +266,7 @@ const NearbyOverview: React.FC<Props> = ({
       )}
     </>
   );
-
-  return (
-    <DisappearingHeader
-      onRefresh={refresh}
-      isRefreshing={isLoading}
-      headerHeight={59}
-      renderHeader={renderHeader}
-      headerTitle={t(NearbyTexts.header.title)}
-      useScroll={activateScroll}
-      logoClick={{
-        callback: navigateHome,
-        accessibilityLabel: t(NearbyTexts.header.logo.a11yLabel),
-      }}
-      alternativeTitleComponent={
-        <AccessibleText
-          prefix={t(NearbyTexts.header.altTitle.a11yPrefix)}
-          type={'paragraphHeadline'}
-        >
-          {fromLocation?.name}
-        </AccessibleText>
-      }
-      onEndReached={onScrollViewEndReached}
-    >
-      <ScreenReaderAnnouncement message={loadAnnouncement} />
-      <NearbyResults
-        currentLocation={currentLocation}
-        departures={data}
-        lastUpdated={tick}
-        isFetchingMore={isFetchingMore && !isLoading}
-        isInitialScreen={isInitialScreen}
-        error={error ? t(translateErrorType(error.type)) : undefined}
-      />
-    </DisappearingHeader>
-  );
-};
+});
 
 function translateErrorType(errorType: ErrorType): TranslatedString {
   switch (errorType) {

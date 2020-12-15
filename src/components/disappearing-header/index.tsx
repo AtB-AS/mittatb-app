@@ -25,6 +25,7 @@ import {useLayout} from '../../utils/use-layout';
 import ThemeIcon from '../theme-icon';
 import useConditionalMemo from '../../utils/use-conditional-memo';
 import {useBottomNavigationStyles} from '../../utils/navigation';
+import throttle from '../../utils/throttle';
 
 type Props = {
   renderHeader(
@@ -139,8 +140,6 @@ const DisappearingHeader: React.FC<Props> = ({
 
   const osOffset = IS_IOS ? contentHeight : 0;
   const scrollY = Animated.add(scrollYRef, osOffset);
-  const showAltTitle =
-    useScroll && scrollYValue + osOffset > SCROLL_OFFSET_HEADER_ANIMATION;
 
   const headerTranslate = Animated.subtract(
     isFullHeight
@@ -324,33 +323,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
 }));
-
-const throttle = <F extends (...args: any[]) => any>(
-  func: F,
-  waitFor: number,
-) => {
-  const now = () => new Date().getTime();
-  const resetStartTime = () => (startTime = now());
-  let timeout: NodeJS.Timeout;
-  let startTime: number = now() - waitFor;
-
-  return (...args: Parameters<F>): Promise<ReturnType<F>> =>
-    new Promise((resolve) => {
-      const timeLeft = startTime + waitFor - now();
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-      if (startTime + waitFor <= now()) {
-        resetStartTime();
-        resolve(func(...args));
-      } else {
-        timeout = setTimeout(() => {
-          resetStartTime();
-          resolve(func(...args));
-        }, timeLeft);
-      }
-    });
-};
 
 function useCalculateHeaderContentHeight(isAnimating: boolean) {
   // Using safeAreaFrame for height instead of dimensions as
