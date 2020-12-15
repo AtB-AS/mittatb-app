@@ -1,9 +1,9 @@
 import haversineDistance from 'haversine-distance';
 import sortBy from 'lodash.sortby';
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {QuayGroup, StopPlaceGroup} from '../../api/departures/types';
-import {HeaderItem} from '../../components/sections';
+import {ActionItem, HeaderItem} from '../../components/sections';
 import ThemeText from '../../components/text';
 import {Location} from '../../favorites/types';
 import MessageBox from '../../message-box';
@@ -64,12 +64,13 @@ export default function NearbyResults({
 
       {departures && (
         <>
-          {departures.map((item) => (
+          {departures.map((item, i) => (
             <StopDepartures
               key={item.stopPlace.id}
               stopPlaceGroup={item}
               currentLocation={currentLocation}
               lastUpdated={lastUpdated}
+              defaultExpanded={i === 0}
             />
           ))}
           <FooterLoader isFetchingMore={isFetchingMore} />
@@ -101,12 +102,16 @@ type StopDeparturesProps = {
   stopPlaceGroup: StopPlaceGroup;
   currentLocation?: Location;
   lastUpdated?: Date;
+  defaultExpanded?: boolean;
 };
 const StopDepartures = React.memo(function StopDepartures({
   stopPlaceGroup,
   currentLocation,
   lastUpdated,
+  defaultExpanded = false,
 }: StopDeparturesProps) {
+  const [expanded, setExpanded] = useState(defaultExpanded);
+  useEffect(() => setExpanded(defaultExpanded), [defaultExpanded]);
   if (!stopPlaceGroup.quays.length) {
     return null;
   }
@@ -119,15 +124,23 @@ const StopDepartures = React.memo(function StopDepartures({
   );
   return (
     <View>
-      <HeaderItem transparent text={stopPlaceGroup.stopPlace.name} />
-      {orderedQuays.map(([distance, quayGroup]) => (
-        <QuaySection
-          key={quayGroup.quay.id}
-          quayGroup={quayGroup}
-          distance={distance}
-          lastUpdated={lastUpdated}
-        />
-      ))}
+      <ActionItem
+        transparent
+        text={stopPlaceGroup.stopPlace.name}
+        mode="heading-expand"
+        onPress={() => setExpanded(!expanded)}
+        checked={expanded}
+      />
+
+      {expanded &&
+        orderedQuays.map(([distance, quayGroup]) => (
+          <QuaySection
+            key={quayGroup.quay.id}
+            quayGroup={quayGroup}
+            distance={distance}
+            lastUpdated={lastUpdated}
+          />
+        ))}
     </View>
   );
 });
