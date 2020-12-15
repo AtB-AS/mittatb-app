@@ -25,6 +25,7 @@ type LoadType = 'initial' | 'more';
 
 export type DepartureDataState = {
   data: DepartureGroupMetadata['data'] | null;
+  lastUpdated?: Date;
   error?: {type: ErrorType; loadType: LoadType};
   locationId?: string;
   isLoading: boolean;
@@ -45,6 +46,10 @@ const initialState: DepartureDataState = {
   isFetchingMore: false,
   cursorInfo: undefined,
   queryInput: initialQueryInput,
+
+  // Store date as update tick to know when to rerender
+  // and re-sort objects.
+  lastUpdated: undefined,
 };
 
 type DepartureDataActions =
@@ -188,7 +193,7 @@ const reducer: ReducerWithSideEffects<
     }
 
     case 'STOP_LOADER': {
-      return Update({
+      return Update<DepartureDataState>({
         ...state,
         isLoading: false,
         isFetchingMore: false,
@@ -208,17 +213,18 @@ const reducer: ReducerWithSideEffects<
     }
 
     case 'UPDATE_REALTIME': {
-      return Update({
+      return Update<DepartureDataState>({
         ...state,
-        departures: updateStopsWithRealtime(
-          state.data ?? [],
-          action.realtimeData,
-        ),
+        data: updateStopsWithRealtime(state.data ?? [], action.realtimeData),
+
+        // We set lastUpdated here to count as a "tick" to
+        // know when to update components while still being performant.
+        lastUpdated: new Date(),
       });
     }
 
     case 'SET_ERROR': {
-      return Update({
+      return Update<DepartureDataState>({
         ...state,
         error: {
           type: action.error,

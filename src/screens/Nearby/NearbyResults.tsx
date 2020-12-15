@@ -1,9 +1,9 @@
 import haversineDistance from 'haversine-distance';
 import sortBy from 'lodash.sortby';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {QuayGroup, StopPlaceGroup} from '../../api/departures/types';
-import * as Section from '../../components/sections';
+import {HeaderItem} from '../../components/sections';
 import ThemeText from '../../components/text';
 import {Location} from '../../favorites/types';
 import MessageBox from '../../message-box';
@@ -14,6 +14,7 @@ import {hasNoGroupsWithDepartures, hasNoQuaysWithDepartures} from './utils';
 
 type NearbyResultsProps = {
   departures: StopPlaceGroup[] | null;
+  lastUpdated?: Date;
   currentLocation?: Location;
   isFetchingMore?: boolean;
   error?: string;
@@ -22,6 +23,7 @@ type NearbyResultsProps = {
 
 export default function NearbyResults({
   departures,
+  lastUpdated,
   isFetchingMore = false,
   error,
   isInitialScreen,
@@ -67,6 +69,7 @@ export default function NearbyResults({
               key={item.stopPlace.id}
               stopPlaceGroup={item}
               currentLocation={currentLocation}
+              lastUpdated={lastUpdated}
             />
           ))}
           <FooterLoader isFetchingMore={isFetchingMore} />
@@ -97,10 +100,12 @@ function FooterLoader({isFetchingMore}: FooterLoaderProps) {
 type StopDeparturesProps = {
   stopPlaceGroup: StopPlaceGroup;
   currentLocation?: Location;
+  lastUpdated?: Date;
 };
-function StopDepartures({
+const StopDepartures = React.memo(function StopDepartures({
   stopPlaceGroup,
   currentLocation,
+  lastUpdated,
 }: StopDeparturesProps) {
   if (!stopPlaceGroup.quays.length) {
     return null;
@@ -108,22 +113,25 @@ function StopDepartures({
   if (hasNoGroupsWithDepartures(stopPlaceGroup.quays)) {
     return null;
   }
-
+  const orderedQuays = orderAndMapByDistance(
+    stopPlaceGroup.quays,
+    currentLocation,
+  );
   return (
     <View>
-      <Section.HeaderItem transparent text={stopPlaceGroup.stopPlace.name} />
-      {orderAndMapByDistance(stopPlaceGroup.quays, currentLocation).map(
-        ([distance, quayGroup]) => (
-          <QuaySection
-            key={quayGroup.quay.id}
-            quayGroup={quayGroup}
-            distance={distance}
-          />
-        ),
-      )}
+      <HeaderItem transparent text={stopPlaceGroup.stopPlace.name} />
+      {orderedQuays.map(([distance, quayGroup]) => (
+        <QuaySection
+          key={quayGroup.quay.id}
+          quayGroup={quayGroup}
+          distance={distance}
+          lastUpdated={lastUpdated}
+        />
+      ))}
     </View>
   );
-}
+});
+
 const first = ([a]: unknown[]) => a;
 function orderAndMapByDistance(
   groups: QuayGroup[],

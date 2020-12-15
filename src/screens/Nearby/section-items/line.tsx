@@ -14,13 +14,9 @@ import {
 import ThemeText from '../../../components/text';
 import TransportationIcon from '../../../components/transportation-icon';
 import {StyleSheet} from '../../../theme';
-import {
-  formatToClockOrRelativeMinutes,
-  isInThePast,
-  isNumberOfMinutesInThePast,
-} from '../../../utils/date';
+import {formatToClockOrRelativeMinutes, isInThePast} from '../../../utils/date';
 import insets from '../../../utils/insets';
-import {hasNoDeparturesOnGroup, HIDE_AFTER_NUM_MINUTES} from '../utils';
+import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 
 export type LineItemProps = SectionItem<{
   group: DepartureGroup;
@@ -90,7 +86,7 @@ function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
   const styles = useItemStyles();
   const time = formatToClockOrRelativeMinutes(departure.aimedTime);
 
-  if (isNumberOfMinutesInThePast(departure.aimedTime, HIDE_AFTER_NUM_MINUTES)) {
+  if (!isValidDeparture(departure)) {
     return null;
   }
 

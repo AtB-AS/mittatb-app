@@ -16,6 +16,7 @@ export type DepartureTime = {
   time: string;
   aimedTime: string;
   realtime?: boolean;
+  predictionInaccurate?: boolean;
   situations: Situation[];
   serviceJourneyId?: string;
 };

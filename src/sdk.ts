@@ -177,12 +177,7 @@ export type RealtimeData = {
   serviceJourneyId: string;
   timeData: {
     realtime: boolean;
-    expectedArrivalTime: string;
     expectedDepartureTime: string;
-    actualArrivalTime: string;
-    actualDepartureTime: string;
-    aimedArrivalTime: string;
-    aimedDepartureTime: string;
   };
 };
 

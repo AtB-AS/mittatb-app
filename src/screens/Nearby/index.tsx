@@ -100,7 +100,7 @@ const NearbyOverview: React.FC<Props> = ({
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
   const updatingLocation = !fromLocation && hasLocationPermission;
   const {state, refresh, loadMore} = useDepartureData(fromLocation);
-  const {data, isLoading, isFetchingMore, error} = state;
+  const {data, lastUpdated, isLoading, isFetchingMore, error} = state;
 
   const isInitialScreen = data == null && !isLoading && !error;
   const activateScroll = !isInitialScreen || !!error;
@@ -231,6 +231,7 @@ const NearbyOverview: React.FC<Props> = ({
       <NearbyResults
         currentLocation={currentLocation}
         departures={data}
+        lastUpdated={lastUpdated}
         isFetchingMore={isFetchingMore && !isLoading}
         isInitialScreen={isInitialScreen}
         error={error ? t(translateErrorType(error.type)) : undefined}

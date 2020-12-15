@@ -1,14 +1,19 @@
 import {DepartureGroupMetadata} from '../../api/departures/departure-group';
 import {
   DepartureGroup,
+  DepartureTime,
   QuayGroup,
   StopPlaceGroup,
 } from '../../api/departures/types';
 import {DepartureRealtimeData, DeparturesRealtimeData} from '../../sdk';
 import {isNumberOfMinutesInThePast} from '../../utils/date';
 
-export const HIDE_AFTER_NUM_MINUTES = 2;
+export const HIDE_AFTER_NUM_MINUTES = 1;
 
+/***
+ * Used to update all stops with new time from realtime mapping object returned
+ * from the BFF. It also removes outdated departures which most likely have passed.
+ */
 export function updateStopsWithRealtime(
   stops: DepartureGroupMetadata['data'],
   realtime: DeparturesRealtimeData,
@@ -17,13 +22,18 @@ export function updateStopsWithRealtime(
     let quays = stop.quays.map(function (quayGroup) {
       const quayId = quayGroup.quay.id;
       const realtimeForQuay = realtime[quayId];
+      const newQuayGroup = filterOutOutdatedDepartures(quayGroup);
+
       if (!realtimeForQuay) {
-        return quayGroup;
+        return newQuayGroup;
       }
 
       return {
-        quay: quayGroup.quay,
-        group: updateDeparturesWithRealtime(quayGroup.group, realtimeForQuay),
+        quay: newQuayGroup.quay,
+        group: updateDeparturesWithRealtime(
+          newQuayGroup.group,
+          realtimeForQuay,
+        ),
       };
     });
 
@@ -32,6 +42,28 @@ export function updateStopsWithRealtime(
       quays,
     };
   });
+}
+
+function filterOutOutdatedDepartures(quayGroup: QuayGroup) {
+  const newDepartureGroups = quayGroup.group.map(function (group) {
+    const newDepartures = group.departures.filter(isValidDeparture);
+    // Optimization to avoid having to sort list to often.
+    // If after filtering it has the same length it means we could
+    // just use the previous departure list.
+    if (newDepartures.length === group.departures.length) {
+      return group;
+    }
+
+    return {
+      lineInfo: group.lineInfo,
+      departures: newDepartures,
+    };
+  });
+
+  return {
+    quay: quayGroup.quay,
+    group: newDepartureGroups,
+  };
 }
 
 function updateDeparturesWithRealtime(
@@ -57,7 +89,6 @@ function updateDeparturesWithRealtime(
       return {
         ...departure,
         time: departureRealtime.timeData.expectedDepartureTime,
-        aimedTime: departureRealtime.timeData.aimedDepartureTime,
         realtime: departureRealtime.timeData.realtime,
       };
     });
@@ -81,8 +112,10 @@ export function hasNoGroupsWithDepartures(departures: QuayGroup[]) {
 export function hasNoDeparturesOnGroup(group: DepartureGroup) {
   return (
     group.departures.length === 0 ||
-    group.departures.every((d) =>
-      isNumberOfMinutesInThePast(d.aimedTime, HIDE_AFTER_NUM_MINUTES),
-    )
+    group.departures.every((d) => !isValidDeparture(d))
   );
+}
+
+export function isValidDeparture(departure: DepartureTime) {
+  return !isNumberOfMinutesInThePast(departure.time, HIDE_AFTER_NUM_MINUTES);
 }
