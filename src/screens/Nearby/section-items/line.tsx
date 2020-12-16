@@ -16,6 +16,7 @@ import {
 import ThemeText from '../../../components/text';
 import TransportationIcon from '../../../components/transportation-icon';
 import {StyleSheet} from '../../../theme';
+import colors from '../../../theme/colors';
 import {dictionary, NearbyTexts, useTranslation} from '../../../translations';
 import {
   formatToClock,
@@ -151,7 +152,7 @@ function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
 
   const timeWithRealtimePrefix = departure.realtime
     ? time
-    : t(dictionary.missingRealTime) + ' ' + time;
+    : t(dictionary.missingRealTimePrefix) + ' ' + time;
 
   return (
     <Button
@@ -176,7 +177,7 @@ function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
 function hasSituations(departure: DepartureTime) {
   return departure.situations.length > 0;
 }
-const useItemStyles = StyleSheet.createThemeHook((theme) => ({
+const useItemStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   transportationMode: {
     marginRight: theme.spacings.small,
   },
@@ -188,6 +189,9 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
     paddingLeft: theme.spacings.medium,
   },
   departure: {
+    backgroundColor:
+      themeName === 'light' ? colors.primary.gray_50 : colors.primary.gray_950,
+    borderWidth: 0,
     marginRight: theme.spacings.small,
   },
   departureText: {
