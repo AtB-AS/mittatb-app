@@ -1,14 +1,9 @@
 import {LegMode} from '@entur/sdk';
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useCallback, useState} from 'react';
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {DetailsModalNavigationProp, DetailsModalStackParams} from '..';
+import {DetailsModalNavigationProp, DetailsStackParams} from '..';
 import {getDepartures} from '../../../api/serviceJourney';
 import {Close} from '../../../assets/svg/icons/actions';
 import {
@@ -34,6 +29,7 @@ import {useTranslation, DepartureDetailsTexts} from '../../../translations';
 import TripRow from '../components/TripRow';
 import Time from '../components/Time';
 import TripLegDecoration from '../components/TripLegDecoration';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -45,7 +41,7 @@ export type DepartureDetailsRouteParams = {
 };
 
 export type DetailScreenRouteProp = RouteProp<
-  DetailsModalStackParams,
+  DetailsStackParams,
   'DepartureDetails'
 >;
 

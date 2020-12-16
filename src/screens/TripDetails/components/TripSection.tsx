@@ -245,17 +245,19 @@ function getStopRowA11yTranslated(
   placeName: string,
   values: TimeValues,
 ): TranslatedString {
-  const timeType = getTimeRepresentationType(values);
   const a11yLabels = TripDetailsTexts.trip.leg[key].a11yLabel;
+
+  const timeType = getTimeRepresentationType(values);
   const time = formatToClock(values.expectedTime ?? values.aimedTime);
+  const aimedTime = formatToClock(values.aimedTime);
+
   switch (timeType) {
     case 'no-realtime':
-      return a11yLabels.noRealTime(placeName, time);
+      return a11yLabels.noRealTime(placeName, aimedTime);
     case 'no-significant-difference':
       return a11yLabels.singularTime(placeName, time);
     case 'significant-difference':
-      const aimed = formatToClock(values.aimedTime);
-      return a11yLabels.realAndAimed(placeName, time, aimed);
+      return a11yLabels.realAndAimed(placeName, time, aimedTime);
   }
 }
 

@@ -1,10 +1,9 @@
 import React, {useState, useCallback, useEffect} from 'react';
 import {TripPattern} from '../../../sdk';
 import {RouteProp, NavigationProp, useIsFocused} from '@react-navigation/core';
-import {DetailsModalStackParams} from '..';
+import {DetailsStackParams} from '..';
 import CompactMap from '../Map/CompactMap';
 import {useTheme, StyleSheet} from '../../../theme';
-
 import Header from '../../../ScreenHeader';
 import {View, ActivityIndicator} from 'react-native';
 import ThemeIcon from '../../../components/theme-icon';
@@ -15,22 +14,17 @@ import {getSingleTripPattern} from '../../../api/trips';
 import usePollableResource from '../../../utils/use-pollable-resource';
 import Trip from '../components/Trip';
 import {TripDetailsTexts, useTranslation} from '../../../translations';
-import {Close} from '../../../assets/svg/icons/actions';
 import {ArrowLeft} from '../../../assets/svg/icons/navigation';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export type DetailsRouteParams = {
   initialTripPatterns: TripPattern[];
   startIndex: number;
 };
 
-export type DetailScreenRouteProp = RouteProp<
-  DetailsModalStackParams,
-  'Details'
->;
+export type DetailScreenRouteProp = RouteProp<DetailsStackParams, 'Details'>;
 
-export type DetailScreenNavigationProp = NavigationProp<
-  DetailsModalStackParams
->;
+export type DetailScreenNavigationProp = NavigationProp<DetailsStackParams>;
 
 type Props = {
   route: DetailScreenRouteProp;
@@ -80,7 +74,7 @@ const Details: React.FC<Props> = (props) => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header
         leftButton={{
           onPress: () => props.navigation.goBack(),
@@ -128,7 +122,7 @@ const Details: React.FC<Props> = (props) => {
           </>
         )}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
