@@ -241,7 +241,7 @@ const Header = React.memo(function Header({
       </Section>
       <FavoriteChips
         key="favoriteChips"
-        chipTypes={['favorites', 'add-favorite']}
+        chipTypes={['favorites']}
         onSelectLocation={fullLocation}
         containerStyle={{
           marginTop: theme.spacings.xSmall,
