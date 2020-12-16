@@ -3,6 +3,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {QuayInfo} from '../../../api/departures/types';
 import {WalkingPerson} from '../../../assets/svg/icons/transportation';
+import {screenReaderPause} from '../../../components/accessible-text';
 import {
   SectionItem,
   useSectionItem,
@@ -55,7 +56,8 @@ export default function QuayHeaderItem({
       <View
         style={[sectionStyle.spaceBetween, contentContainer]}
         accessible
-        accessibilityLabel={accessibilityLabel}
+        accessibilityLabel={accessibilityLabel + screenReaderPause}
+        accessibilityRole="header"
       >
         <ThemeText>{title}</ThemeText>
         <Distance distance={distance} />

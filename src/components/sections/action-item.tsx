@@ -1,5 +1,5 @@
 import React from 'react';
-import {Switch, TouchableOpacity, View} from 'react-native';
+import {AccessibilityProps, Switch, TouchableOpacity, View} from 'react-native';
 import {Confirm} from '../../assets/svg/icons/actions';
 import {StyleSheet, Theme} from '../../theme';
 import ThemeText from '../text';
@@ -13,12 +13,14 @@ export type ActionItemProps = SectionItem<{
   onPress?(checked: boolean): void;
   checked?: boolean;
   mode?: ActionModes;
+  accessibility?: AccessibilityProps;
 }>;
 export default function ActionItem({
   text,
   onPress,
   mode = 'check',
   checked = false,
+  accessibility,
   ...props
 }: ActionItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
@@ -26,7 +28,7 @@ export default function ActionItem({
 
   if (mode === 'toggle') {
     return (
-      <View style={[style.spaceBetween, topContainer]}>
+      <View style={[style.spaceBetween, topContainer]} {...accessibility}>
         <ThemeText type="body" style={contentContainer}>
           {text}
         </ThemeText>
@@ -39,6 +41,7 @@ export default function ActionItem({
     <TouchableOpacity
       onPress={() => onPress?.(!checked)}
       style={[style.spaceBetween, topContainer]}
+      {...accessibility}
     >
       <ThemeText
         type={mode === 'heading-expand' ? 'paragraphHeadline' : 'body'}

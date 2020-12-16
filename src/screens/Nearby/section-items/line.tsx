@@ -5,6 +5,8 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {NearbyScreenNavigationProp} from '..';
 import {DepartureGroup, DepartureTime} from '../../../api/departures/types';
 import Warning from '../../../assets/svg/situations/Warning';
+import {screenReaderPause} from '../../../components/accessible-text';
+import HiddenHeader from '../../../components/accessible-text/hidden-header';
 import Button from '../../../components/button';
 import {
   SectionItem,
@@ -65,22 +67,29 @@ export default function LineItem({
 
   return (
     <View style={[topContainer, {padding: 0}]}>
+      <HiddenHeader
+        title={title}
+        prefix={t(NearbyTexts.results.lines.a11y.line)}
+      />
       <View style={[topContainer, sectionStyle.spaceBetween]}>
         <TouchableOpacity
           style={styles.lineHeader}
           containerStyle={contentContainer}
           onPress={() => onPress(firstResult)}
           hitSlop={insets.symmetric(12, 0)}
-          accessibilityRole="header"
-          accessibilityHint={t(
-            NearbyTexts.results.lines.lineNameAccessibilityHint,
-          )}
-          accessibilityLabel={t(
-            NearbyTexts.results.lines.firstResult(
-              title,
-              firstResultScreenReaderTimeText,
-            ),
-          )}
+          accessibilityRole="button"
+          accessibilityHint={
+            t(NearbyTexts.results.lines.lineNameAccessibilityHint) +
+            screenReaderPause
+          }
+          accessibilityLabel={
+            t(
+              NearbyTexts.results.lines.firstResult(
+                title,
+                firstResultScreenReaderTimeText,
+              ),
+            ) + screenReaderPause
+          }
         >
           <View style={styles.transportationMode}>
             <TransportationIcon
@@ -156,10 +165,11 @@ function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
       textStyle={styles.departureText}
       icon={hasSituations(departure) ? Warning : undefined}
       iconPosition="right"
-      accessibilityLabel={accessibilityLabel}
-      accessibilityHint={t(
-        NearbyTexts.results.departure.departureAccessibilityHint,
-      )}
+      accessibilityLabel={accessibilityLabel + screenReaderPause}
+      accessibilityHint={
+        t(NearbyTexts.results.departure.departureAccessibilityHint) +
+        screenReaderPause
+      }
     />
   );
 }

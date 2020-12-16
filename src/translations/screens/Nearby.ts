@@ -59,6 +59,9 @@ const NearbyTexts = {
     },
     relativeTime: (time: string) => _(`om ${time}`),
     lines: {
+      a11y: {
+        line: _(`Linje:`),
+      },
       firstResult: (line: string, time: string) =>
         _(`Neste avgang for ${line} går ${time}`),
       lineNameAccessibilityHint: _('Aktiver for detaljer om avgang.'),

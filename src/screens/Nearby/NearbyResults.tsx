@@ -141,6 +141,13 @@ const StopDepartures = React.memo(function StopDepartures({
           setExpanded(!expanded);
         }}
         checked={expanded}
+        accessibility={{
+          accessible: true,
+          // This makes it less accessible as a button, but arguably
+          // the expand/hide here is visual help to reduce info, while
+          // header with ability to jump between sections.
+          accessibilityRole: 'header',
+        }}
       />
 
       {expanded &&
