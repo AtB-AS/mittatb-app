@@ -12,7 +12,12 @@ import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
 import SituationMessages from '../../../situations';
 import {StyleSheet} from '../../../theme';
-import {dictionary, Language, useTranslation} from '../../../translations';
+import {
+  dictionary,
+  Language,
+  NearbyTexts,
+  useTranslation,
+} from '../../../translations';
 
 export type QuayHeaderItemProps = SectionItem<{
   quay: QuayInfo;
@@ -26,10 +31,33 @@ export default function QuayHeaderItem({
   const styles = useItemStyles();
   const {contentContainer, topContainer} = useSectionItem(props);
   const sectionStyle = useSectionStyle();
+  const {t} = useTranslation();
+
+  const accessibilityLabel = quay.publicCode
+    ? t(
+        NearbyTexts.results.quayResult.platformHeader.accessibilityLabel(
+          quay.name,
+          quay.publicCode,
+        ),
+      )
+    : t(
+        NearbyTexts.results.quayResult.platformHeader.accessibilityLabelNoPublicCode(
+          quay.name,
+        ),
+      );
+
+  const title = !quay.publicCode
+    ? quay.name
+    : `${quay.name} ${quay.publicCode}`;
+
   return (
     <View style={topContainer}>
-      <View style={[sectionStyle.spaceBetween, contentContainer]}>
-        <ThemeText>{quay.name}</ThemeText>
+      <View
+        style={[sectionStyle.spaceBetween, contentContainer]}
+        accessible
+        accessibilityLabel={accessibilityLabel}
+      >
+        <ThemeText>{title}</ThemeText>
         <Distance distance={distance} />
       </View>
 

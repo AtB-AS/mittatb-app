@@ -93,6 +93,7 @@ export function formatToClockOrRelativeMinutes(
   isoDate: string | Date,
   minuteThreshold: number = 9,
   language?: Language,
+  now = 'Nå',
 ) {
   const parsed = parseIfNeeded(isoDate);
   const diff = secondsBetween(new Date(), parsed);
@@ -102,11 +103,25 @@ export function formatToClockOrRelativeMinutes(
   }
 
   if (diff / 60 <= 1) {
-    return 'Nå';
+    return now;
   }
 
   return secondsToMinutesShort(diff);
 }
+export function isRelativeButNotNow(
+  isoDate: string | Date,
+  minuteThreshold: number = 9,
+) {
+  const parsed = parseIfNeeded(isoDate);
+  const diff = secondsBetween(new Date(), parsed);
+
+  if (diff / 60 >= minuteThreshold || diff / 60 <= 1) {
+    return false;
+  }
+
+  return true;
+}
+
 export function formatLocaleTime(date: Date, language?: Language) {
   const lang = language ?? DEFAULT_LANGUAGE;
   switch (lang) {

@@ -14,7 +14,13 @@ import {
 import ThemeText from '../../../components/text';
 import TransportationIcon from '../../../components/transportation-icon';
 import {StyleSheet} from '../../../theme';
-import {formatToClockOrRelativeMinutes, isInThePast} from '../../../utils/date';
+import {dictionary, NearbyTexts, useTranslation} from '../../../translations';
+import {
+  formatToClock,
+  formatToClockOrRelativeMinutes,
+  isInThePast,
+  isRelativeButNotNow,
+} from '../../../utils/date';
 import insets from '../../../utils/insets';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 
@@ -31,6 +37,7 @@ export default function LineItem({
   const sectionStyle = useSectionStyle();
   const styles = useItemStyles();
   const navigation = useNavigation<NearbyScreenNavigationProp>();
+  const {t} = useTranslation();
 
   if (hasNoDeparturesOnGroup(group)) {
     return null;
@@ -47,14 +54,33 @@ export default function LineItem({
     });
   };
 
+  // we know we have a departure as we've checked hasNoDeparturesOnGroup
+  const firstResult = group.departures.find(isValidDeparture)!;
+  const firstResultTime = formatToClockOrRelativeMinutes(firstResult?.time);
+  const firstIsRelative = isRelativeButNotNow(firstResult?.time);
+
+  const firstResultScreenReaderTimeText = firstIsRelative
+    ? t(NearbyTexts.results.relativeTime(firstResultTime))
+    : firstResultTime;
+
   return (
     <View style={[topContainer, {padding: 0}]}>
       <View style={[topContainer, sectionStyle.spaceBetween]}>
         <TouchableOpacity
           style={styles.lineHeader}
           containerStyle={contentContainer}
-          onPress={() => onPress(group.departures[0])}
+          onPress={() => onPress(firstResult)}
           hitSlop={insets.symmetric(12, 0)}
+          accessibilityRole="header"
+          accessibilityHint={t(
+            NearbyTexts.results.lines.lineNameAccessibilityHint,
+          )}
+          accessibilityLabel={t(
+            NearbyTexts.results.lines.firstResult(
+              title,
+              firstResultScreenReaderTimeText,
+            ),
+          )}
         >
           <View style={styles.transportationMode}>
             <TransportationIcon
@@ -85,13 +111,38 @@ type DepartureTimeItemProps = {
 function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
   const styles = useItemStyles();
   const time = formatToClockOrRelativeMinutes(departure.aimedTime);
+  const timeClock = formatToClock(departure.aimedTime);
   const isValid = isValidDeparture(departure);
+  const {t} = useTranslation();
+
+  const firstIsRelative = isRelativeButNotNow(departure.aimedTime);
+
+  const screenReaderTimeText = firstIsRelative
+    ? t(NearbyTexts.results.relativeTime(time))
+    : time;
 
   if (!isValid) {
     return null;
   }
 
   const inPast = isInThePast(departure.aimedTime);
+  const accessibilityLabel = inPast
+    ? t(NearbyTexts.results.departure.hasPassedAccessibilityLabel(timeClock))
+    : departure.realtime
+    ? t(
+        NearbyTexts.results.departure.upcommingRealtimeAccessibilityLabel(
+          screenReaderTimeText,
+        ),
+      )
+    : t(
+        NearbyTexts.results.departure.upcommingAccessibilityLabel(
+          screenReaderTimeText,
+        ),
+      );
+
+  const timeWithRealtimePrefix = departure.realtime
+    ? time
+    : t(dictionary.missingRealTime) + ' ' + time;
 
   return (
     <Button
@@ -99,12 +150,16 @@ function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
       type="compact"
       mode="primary3"
       onPress={() => onPress(departure)}
-      text={time}
+      text={timeWithRealtimePrefix}
       style={styles.departure}
       disabled={inPast}
       textStyle={styles.departureText}
       icon={hasSituations(departure) ? Warning : undefined}
       iconPosition="right"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={t(
+        NearbyTexts.results.departure.departureAccessibilityHint,
+      )}
     />
   );
 }

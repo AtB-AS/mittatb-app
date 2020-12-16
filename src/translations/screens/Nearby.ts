@@ -48,10 +48,29 @@ const NearbyTexts = {
     quayResult: {
       platformHeader: {
         title: _('Plattform', 'Platform'),
+        accessibilityLabel: (name: string, publicCode: string) =>
+          _(`Avganger fra plattform ${name} ${publicCode}`),
+        accessibilityLabelNoPublicCode: (name: string) =>
+          _(`Avganger fra plattform på holdeplassen ${name}`),
       },
       showMoreToggler: {
         text: _('Vis flere avganger'),
       },
+    },
+    relativeTime: (time: string) => _(`om ${time}`),
+    lines: {
+      firstResult: (line: string, time: string) =>
+        _(`Neste avgang for ${line} går ${time}`),
+      lineNameAccessibilityHint: _('Aktiver for detaljer om avgang.'),
+    },
+    departure: {
+      hasPassedAccessibilityLabel: (time: string) =>
+        _(`Avgangen ${time} har trolig passert plattformen`),
+      upcommingRealtimeAccessibilityLabel: (time: string) =>
+        _(`Avgang estimert til å komme ${time}`),
+      upcommingAccessibilityLabel: (time: string) =>
+        _(`Avgang kommer ca ${time}`),
+      departureAccessibilityHint: _('Aktiver for detaljer om avgang.'),
     },
   },
 };
