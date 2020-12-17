@@ -45,12 +45,13 @@ import FadeBetween from './FadeBetween';
 import Results from './Results';
 import {NoResultReason, SearchStateType} from './types';
 import NewsBanner from './NewsBanner';
+import {AssistantParams} from '.';
 
 type AssistantRouteName = 'Assistant';
 const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
 
 export type AssistantScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<TabNavigatorParams, AssistantRouteName>,
+  StackNavigationProp<AssistantParams>,
   StackNavigationProp<RootStackParamList>
 >;
 
@@ -329,7 +330,7 @@ const Assistant: React.FC<Props> = ({
 
   const onPressed = useCallback(
     (tripPatternId, tripPatterns, startIndex) =>
-      navigation.navigate('TripDetailsRoot', {
+      navigation.navigate('TripDetails', {
         tripPatternId,
         tripPatterns,
         startIndex,

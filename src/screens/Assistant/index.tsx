@@ -1,24 +1,32 @@
-import {createStackNavigator} from '@react-navigation/stack';
+import React from 'react';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {LocationWithMetadata} from '../../favorites/types';
-import {DepartureDetailsRouteParams} from '../TripDetails/DepartureDetails';
 import {DetailsRouteParams} from '../TripDetails/Details';
+import TripDetailsRoot from '../TripDetails';
+import AssistantRoot from './Assistant';
 
 export type AssistantParams = {
   Assistant: {
     fromLocation: LocationWithMetadata;
     toLocation: LocationWithMetadata;
   };
-  Details: DetailsRouteParams;
-  DepartureDetails: DepartureDetailsRouteParams;
+  TripDetails: DetailsRouteParams;
 };
 
 const Stack = createStackNavigator<AssistantParams>();
 
-const AssistantRoot = () => {
+const Assistant = () => {
   return (
-    <Stack.Navigator
-      initialRouteName="Assistant"
-      headerMode="none"
-    ></Stack.Navigator>
+    <Stack.Navigator initialRouteName="Assistant" headerMode="none">
+      <Stack.Screen name="Assistant" component={AssistantRoot}></Stack.Screen>
+      <Stack.Screen
+        name="TripDetails"
+        component={TripDetailsRoot}
+        options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
+      ></Stack.Screen>
+    </Stack.Navigator>
   );
 };
+export default Assistant;

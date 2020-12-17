@@ -13,7 +13,7 @@ import {
 import ThemeText from '../components/text';
 import {LocationWithMetadata} from '../favorites/types';
 import {usePreferenceItems} from '../preferences';
-import Assistant from '../screens/Assistant/Assistant';
+import Assistant from '../screens/Assistant/';
 import NearbyScreen from '../screens/Nearby';
 import ProfileScreen, {ProfileStackParams} from '../screens/Profile';
 import TicketingScreen from '../screens/Ticketing';
