@@ -6,7 +6,6 @@ import {NearbyScreenNavigationProp} from '..';
 import {DepartureGroup, DepartureTime} from '../../../api/departures/types';
 import Warning from '../../../assets/svg/situations/Warning';
 import {screenReaderPause} from '../../../components/accessible-text';
-import HiddenHeader from '../../../components/accessible-text/hidden-header';
 import Button from '../../../components/button';
 import {
   SectionItem,
