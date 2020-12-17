@@ -15,7 +15,7 @@ import usePollableResource from '../../../utils/use-pollable-resource';
 import Trip from '../components/Trip';
 import {TripDetailsTexts, useTranslation} from '../../../translations';
 import {ArrowLeft} from '../../../assets/svg/icons/navigation';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 export type DetailsRouteParams = {
   tripPatternId?: string;
   tripPatterns?: TripPattern[];
@@ -75,19 +75,22 @@ const Details: React.FC<Props> = (props) => {
     setCurrentIndex(newIndex);
   }
 
+  const {top: paddingTop} = useSafeAreaInsets();
+
   return (
-    <SafeAreaView style={styles.container}>
-      <Header
-        leftButton={{
-          onPress: () => props.navigation.goBack(),
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: t(TripDetailsTexts.header.leftButton.a11yLabel),
-          icon: <ThemeIcon svg={ArrowLeft} />,
-        }}
-        title={t(TripDetailsTexts.header.title)}
-        style={styles.header}
-      />
+    <View style={styles.container}>
+      <View style={[styles.header, {paddingTop}]}>
+        <Header
+          leftButton={{
+            onPress: () => props.navigation.goBack(),
+            accessible: true,
+            accessibilityRole: 'button',
+            accessibilityLabel: t(TripDetailsTexts.header.leftButton.a11yLabel),
+            icon: <ThemeIcon svg={ArrowLeft} />,
+          }}
+          title={t(TripDetailsTexts.header.title)}
+        />
+      </View>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
@@ -126,7 +129,7 @@ const Details: React.FC<Props> = (props) => {
           </>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -159,10 +162,10 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   container: {
     flex: 1,
-    backgroundColor: theme.background.level0,
   },
   scrollView: {
     flex: 1,
+    backgroundColor: theme.background.level0,
   },
   paddedContainer: {
     paddingHorizontal: theme.spacings.medium,

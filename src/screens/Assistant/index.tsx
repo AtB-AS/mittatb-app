@@ -6,7 +6,7 @@ import TripDetailsRoot from '../TripDetails';
 import AssistantRoot from './Assistant';
 
 export type AssistantParams = {
-  Assistant: {
+  AssistantRoot: {
     fromLocation: LocationWithMetadata;
     toLocation: LocationWithMetadata;
   };
@@ -17,14 +17,17 @@ const Stack = createStackNavigator<AssistantParams>();
 
 const Assistant = () => {
   return (
-    <Stack.Navigator initialRouteName="Assistant" headerMode="none">
-      <Stack.Screen name="Assistant" component={AssistantRoot}></Stack.Screen>
+    <Stack.Navigator
+      initialRouteName="AssistantRoot"
+      screenOptions={{headerShown: false}}
+    >
+      <Stack.Screen
+        name="AssistantRoot"
+        component={AssistantRoot}
+      ></Stack.Screen>
       <Stack.Screen
         name="TripDetails"
         component={TripDetailsRoot}
-        options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}
       ></Stack.Screen>
     </Stack.Navigator>
   );

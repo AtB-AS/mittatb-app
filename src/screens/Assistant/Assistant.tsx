@@ -47,15 +47,15 @@ import {NoResultReason, SearchStateType} from './types';
 import NewsBanner from './NewsBanner';
 import {AssistantParams} from '.';
 
-type AssistantRouteName = 'Assistant';
-const AssistantRouteNameStatic: AssistantRouteName = 'Assistant';
+type AssistantRouteName = 'AssistantRoot';
+const AssistantRouteNameStatic: AssistantRouteName = 'AssistantRoot';
 
 export type AssistantScreenNavigationProp = CompositeNavigationProp<
   StackNavigationProp<AssistantParams>,
   StackNavigationProp<RootStackParamList>
 >;
 
-type AssistantRouteProp = RouteProp<TabNavigatorParams, AssistantRouteName>;
+type AssistantRouteProp = RouteProp<AssistantParams, AssistantRouteName>;
 
 type RootProps = {
   navigation: AssistantScreenNavigationProp;
