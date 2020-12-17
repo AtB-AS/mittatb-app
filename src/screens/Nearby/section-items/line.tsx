@@ -67,10 +67,6 @@ export default function LineItem({
 
   return (
     <View style={[topContainer, {padding: 0}]}>
-      <HiddenHeader
-        title={title}
-        prefix={t(NearbyTexts.results.lines.a11y.line)}
-      />
       <View style={[topContainer, sectionStyle.spaceBetween]}>
         <TouchableOpacity
           style={styles.lineHeader}

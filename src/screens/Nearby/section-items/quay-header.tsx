@@ -33,6 +33,11 @@ export default function QuayHeaderItem({
   const {contentContainer, topContainer} = useSectionItem(props);
   const sectionStyle = useSectionStyle();
   const {t} = useTranslation();
+  const humanized = distance ? humanizeDistance(distance, t) : undefined;
+
+  const label = humanized
+    ? t(NearbyTexts.results.quayResult.platformHeader.distance.label(humanized))
+    : '';
 
   const accessibilityLabel = quay.publicCode
     ? t(
@@ -56,11 +61,11 @@ export default function QuayHeaderItem({
       <View
         style={[sectionStyle.spaceBetween, contentContainer]}
         accessible
-        accessibilityLabel={accessibilityLabel + screenReaderPause}
+        accessibilityLabel={`${accessibilityLabel} ${label} ${screenReaderPause}`}
         accessibilityRole="header"
       >
         <ThemeText>{title}</ThemeText>
-        <Distance distance={distance} />
+        <Distance distance={humanized} />
       </View>
 
       <SituationMessages
@@ -73,22 +78,17 @@ export default function QuayHeaderItem({
 }
 
 type DistanceProps = {
-  distance?: number;
+  distance?: string;
 };
 function Distance({distance}: DistanceProps) {
   const styles = useItemStyles();
-  const {t} = useTranslation();
-  if (distance == null) {
+  if (!distance) {
     return null;
   }
-  const humanized = humanizeDistance(distance, t);
-  const label = t(
-    NearbyTexts.results.quayResult.platformHeader.distance.label(humanized),
-  );
 
   return (
-    <View style={styles.itemStyle} accessible accessibilityLabel={label}>
-      <ThemeText>{humanizeDistance(distance, t)}</ThemeText>
+    <View style={styles.itemStyle}>
+      <ThemeText>{distance}</ThemeText>
       <ThemeIcon svg={WalkingPerson} style={styles.icon} />
     </View>
   );
