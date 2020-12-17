@@ -39,6 +39,12 @@ const NearbyTexts = {
       _(`Laster avganger i nærheten av ${locationName}`),
   },
   results: {
+    stops: {
+      header: {
+        hintShow: _('Aktiver for å vise'),
+        hintHide: _('Aktiver for å skjul'),
+      },
+    },
     messages: {
       initial: _(
         'Søk etter avganger fra holdeplasser eller i nærheten av steder.',
@@ -52,6 +58,9 @@ const NearbyTexts = {
           _(`Avganger fra plattform ${name} ${publicCode}`),
         accessibilityLabelNoPublicCode: (name: string) =>
           _(`Avganger fra plattform på holdeplassen ${name}`),
+        distance: {
+          label: (distance: string) => _(`Det er ca ${distance} til plattform`),
+        },
       },
       showMoreToggler: {
         text: _('Vis flere avganger'),

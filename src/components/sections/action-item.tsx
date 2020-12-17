@@ -41,6 +41,7 @@ export default function ActionItem({
     <TouchableOpacity
       onPress={() => onPress?.(!checked)}
       style={[style.spaceBetween, topContainer]}
+      accessibilityRole="switch"
       {...accessibility}
     >
       <ThemeText

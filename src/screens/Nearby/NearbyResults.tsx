@@ -118,6 +118,7 @@ const StopDepartures = React.memo(function StopDepartures({
   lastUpdated,
   defaultExpanded = false,
 }: StopDeparturesProps) {
+  const {t} = useTranslation();
   const [expanded, setExpanded] = useState(defaultExpanded);
   useEffect(() => setExpanded(defaultExpanded), [defaultExpanded]);
   if (!stopPlaceGroup.quays.length) {
@@ -131,7 +132,7 @@ const StopDepartures = React.memo(function StopDepartures({
     currentLocation,
   );
   return (
-    <View>
+    <View accessibilityState={{expanded}}>
       <ActionItem
         transparent
         text={stopPlaceGroup.stopPlace.name}
@@ -142,11 +143,11 @@ const StopDepartures = React.memo(function StopDepartures({
         }}
         checked={expanded}
         accessibility={{
-          accessible: true,
-          // This makes it less accessible as a button, but arguably
-          // the expand/hide here is visual help to reduce info, while
-          // header with ability to jump between sections.
-          accessibilityRole: 'header',
+          accessibilityHint: t(
+            NearbyTexts.results.stops.header[
+              expanded ? 'hintHide' : 'hintShow'
+            ],
+          ),
         }}
       />
 

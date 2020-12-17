@@ -81,9 +81,13 @@ function Distance({distance}: DistanceProps) {
   if (distance == null) {
     return null;
   }
+  const humanized = humanizeDistance(distance, t);
+  const label = t(
+    NearbyTexts.results.quayResult.platformHeader.distance.label(humanized),
+  );
 
   return (
-    <View style={styles.itemStyle}>
+    <View style={styles.itemStyle} accessible accessibilityLabel={label}>
       <ThemeText>{humanizeDistance(distance, t)}</ThemeText>
       <ThemeIcon svg={WalkingPerson} style={styles.icon} />
     </View>
