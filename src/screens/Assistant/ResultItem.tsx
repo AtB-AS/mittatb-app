@@ -43,7 +43,7 @@ function legWithQuay(leg: Leg) {
   }
   // Manually find name of from place based on mode as in some cases
   // (from adresses that are also quays) you won't have quay information in from place.
-  const modesWithoutQuay: LegMode[] = ['bicycle', 'foot'];
+  const modesWithoutQuay: LegMode[] = [LegMode.BICYCLE, LegMode.FOOT];
   return !modesWithoutQuay.includes(leg.mode);
 }
 

@@ -1,4 +1,4 @@
-import {LegMode} from '@entur/sdk';
+import {LegMode, TransportMode} from '@entur/sdk';
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {Fragment, useCallback, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
@@ -133,7 +133,7 @@ function mapGroup<T>(
 type CallGroupProps = {
   calls: EstimatedCall[];
   type: keyof CallListGroup;
-  mode?: LegMode;
+  mode?: TransportMode;
   publicCode?: string;
   parentSituations: Situation[];
 };
@@ -339,7 +339,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
 
 type DepartureData = {
   callGroups: CallListGroup;
-  mode?: LegMode;
+  mode?: TransportMode;
   publicCode?: string;
   situations: Situation[];
 };
