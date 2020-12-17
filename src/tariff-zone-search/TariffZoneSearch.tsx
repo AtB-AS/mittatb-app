@@ -85,9 +85,9 @@ const TariffZoneSearch: React.FC<Props> = ({
             ref={inputRef}
             radius="top-bottom"
             label={label}
-            value={debouncedText}
+            value={text}
             onChangeText={setText}
-            showClear={Boolean(debouncedText?.length)}
+            showClear={Boolean(text?.length)}
             onClear={() => setText('')}
             placeholder={t(TariffZoneSearchTexts.searchField.placeholder)}
             autoCorrect={false}
