@@ -1,7 +1,7 @@
 import React, {Fragment, useMemo, useState, useEffect} from 'react';
 import {Text, View} from 'react-native';
 import {TripPattern} from '../../sdk';
-import {StyleSheet, useTheme} from '../../theme';
+import {StyleSheet} from '../../theme';
 import ResultItem from './ResultItem';
 import OptionalNextDayLabel from '../../components/optional-day-header';
 import {isSeveralDays} from '../../utils/date';
@@ -17,7 +17,11 @@ type Props = {
   isEmptyResult: boolean;
   isSearching: boolean;
   resultReasons: NoResultReason[];
-  onDetailsPressed(tripPatterns: TripPattern[], index: number): void;
+  onDetailsPressed(
+    tripPatternId?: string,
+    tripPatterns?: TripPattern[],
+    index?: number,
+  ): void;
   errorType?: ErrorType;
 };
 
@@ -111,7 +115,7 @@ const Results: React.FC<Props> = ({
           />
           <ResultItem
             tripPattern={item}
-            onDetailsPressed={() => onDetailsPressed(tripPatterns, i)}
+            onDetailsPressed={() => onDetailsPressed(item.id, tripPatterns, i)}
             accessibilityLabel={t(
               AssistantTexts.results.resultList.listPositionExplanation(
                 i + 1,

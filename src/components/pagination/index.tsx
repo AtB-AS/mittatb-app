@@ -30,7 +30,7 @@ const Pagination: React.FC<PaginationProps> = ({
         disabled={!hasPrevious}
         iconPosition="left"
         icon={ArrowLeft}
-        onPress={() => onNavigate(--page)}
+        onPress={() => onNavigate(page - 1)}
         text={t(PaginationTexts.previous.label)}
         accessibilityHint={t(PaginationTexts.previous.a11yHint)}
       ></Button>
@@ -49,7 +49,7 @@ const Pagination: React.FC<PaginationProps> = ({
         disabled={!hasNext}
         iconPosition="right"
         icon={ArrowRight}
-        onPress={() => onNavigate(++page)}
+        onPress={() => onNavigate(page + 1)}
         text={t(PaginationTexts.next.label)}
         accessibilityHint={t(PaginationTexts.next.a11yHint)}
       ></Button>

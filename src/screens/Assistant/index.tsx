@@ -328,10 +328,11 @@ const Assistant: React.FC<Props> = ({
   const noResultReasons = computeNoResultReasons(date, from, to);
 
   const onPressed = useCallback(
-    (tripPatterns, index) =>
+    (tripPatternId, tripPatterns, startIndex) =>
       navigation.navigate('TripDetailsRoot', {
-        initialTripPatterns: tripPatterns,
-        startIndex: index,
+        tripPatternId,
+        tripPatterns,
+        startIndex,
       }),
     [navigation, from, to],
   );

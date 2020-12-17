@@ -16,10 +16,10 @@ import Trip from '../components/Trip';
 import {TripDetailsTexts, useTranslation} from '../../../translations';
 import {ArrowLeft} from '../../../assets/svg/icons/navigation';
 import {SafeAreaView} from 'react-native-safe-area-context';
-
 export type DetailsRouteParams = {
-  initialTripPatterns: TripPattern[];
-  startIndex: number;
+  tripPatternId?: string;
+  tripPatterns?: TripPattern[];
+  startIndex?: number;
 };
 
 export type DetailScreenRouteProp = RouteProp<DetailsStackParams, 'Details'>;
@@ -32,42 +32,44 @@ type Props = {
 };
 const Details: React.FC<Props> = (props) => {
   const {
-    params: {initialTripPatterns: initialTripPatterns, startIndex: startIndex},
+    params: {tripPatternId, tripPatterns: initialTripPatterns, startIndex},
   } = props.route;
-
   const {theme, themeName} = useTheme();
   const {t} = useTranslation();
-  const [currentIndex, setCurrentIndex] = useState<number>(startIndex);
-
   const isFocused = useIsFocused();
-
   const styles = useStyle();
+
+  const [currentIndex, setCurrentIndex] = useState<number>(startIndex ?? 0);
+
   const [tripPattern, setTripPattern] = useState<TripPattern | undefined>(
-    initialTripPatterns[currentIndex],
+    initialTripPatterns ? initialTripPatterns[currentIndex] : undefined,
   );
   const [updatedTripPattern, , loading, error] = useTripPattern(
     currentIndex,
-    initialTripPatterns[currentIndex],
+    tripPatternId,
+    initialTripPatterns ? initialTripPatterns[currentIndex] : undefined,
     !isFocused,
   );
+  const tripPatterns = initialTripPatterns ?? [updatedTripPattern];
+
   const showActivityIndicator = (!tripPattern && !error) || loading;
 
   useEffect(() => {
-    const currentPagePatternId = initialTripPatterns[currentIndex].id;
-    setTripPattern(
-      updatedTripPattern?.id === currentPagePatternId
-        ? updatedTripPattern
-        : initialTripPatterns[currentIndex],
-    );
+    const initialPatternForPage = tripPatterns[currentIndex];
+    if (initialPatternForPage) {
+      setTripPattern(
+        updatedTripPattern?.id === initialPatternForPage.id
+          ? updatedTripPattern
+          : initialPatternForPage,
+      );
+    } else if (updatedTripPattern) {
+      setTripPattern(updatedTripPattern);
+    }
   }, [currentIndex, updatedTripPattern]);
 
   function navigate(page: number) {
     const newIndex = page - 1;
-    if (
-      page > initialTripPatterns.length ||
-      page < 1 ||
-      currentIndex === newIndex
-    ) {
+    if (page > tripPatterns.length || page < 1 || currentIndex === newIndex) {
       return;
     }
     setCurrentIndex(newIndex);
@@ -111,12 +113,14 @@ const Details: React.FC<Props> = (props) => {
               }}
             />
             <View style={styles.paddedContainer}>
-              <Pagination
-                page={currentIndex + 1}
-                totalPages={initialTripPatterns.length}
-                onNavigate={navigate}
-                style={styles.pagination}
-              ></Pagination>
+              {tripPatterns.length > 1 && (
+                <Pagination
+                  page={currentIndex + 1}
+                  totalPages={tripPatterns.length}
+                  onNavigate={navigate}
+                  style={styles.pagination}
+                ></Pagination>
+              )}
               <Trip tripPattern={tripPattern} error={error} />
             </View>
           </>
@@ -128,12 +132,13 @@ const Details: React.FC<Props> = (props) => {
 
 function useTripPattern(
   currentIndex: number,
+  id?: string,
   initialTripPattern?: TripPattern,
   disabled?: boolean,
 ) {
   const fetchTripPattern = useCallback(
     async function reload() {
-      return await getSingleTripPattern(initialTripPattern?.id ?? '');
+      return await getSingleTripPattern(id ?? initialTripPattern?.id ?? '');
     },
     [currentIndex],
   );
@@ -142,7 +147,7 @@ function useTripPattern(
     fetchTripPattern,
     {
       initialValue: initialTripPattern,
-      pollingTimeInSeconds: 10,
+      pollingTimeInSeconds: 30,
       filterError: (err) => !Axios.isCancel(err),
       disabled,
     },
