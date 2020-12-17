@@ -8,7 +8,7 @@ import SvgReorder from '../../../assets/svg/icons/actions/Reorder';
 import * as Sections from '../../../components/sections';
 import ThemeIcon from '../../../components/theme-icon';
 import {useFavorites} from '../../../favorites/FavoritesContext';
-import {LocationFavorite} from '../../../favorites/types';
+import {StoredLocationFavorite} from '../../../favorites/types';
 import MessageBox from '../../../message-box';
 import {RootStackParamList} from '../../../navigation';
 import {StyleSheet, Theme} from '../../../theme';
@@ -30,7 +30,7 @@ export default function FavoriteList({navigation}: ProfileScreenProps) {
   const {t} = useTranslation();
   const items = favorites ?? [];
 
-  const navigateToEdit = (item: LocationFavorite) => {
+  const navigateToEdit = (item: StoredLocationFavorite) => {
     navigation.navigate('AddEditFavorite', {editItem: item});
   };
   const onAddButtonClick = () => navigation.push('AddEditFavorite', {});

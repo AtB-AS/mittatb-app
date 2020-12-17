@@ -15,14 +15,13 @@ import * as Sections from '../../../components/sections';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
 import {useFavorites} from '../../../favorites/FavoritesContext';
-import {LocationFavorite} from '../../../favorites/types';
+import {StoredLocationFavorite} from '../../../favorites/types';
 import {useLocationSearchValue} from '../../../location-search';
 import MessageBox from '../../../message-box';
 import {RootStackParamList} from '../../../navigation';
 import {StyleSheet, Theme} from '../../../theme';
-import BackHeader from '../BackHeader';
 import {AddEditFavoriteTexts, useTranslation} from '../../../translations';
-
+import BackHeader from '../BackHeader';
 import EmojiPopup from './EmojiPopup';
 
 type AddEditRouteName = 'AddEditFavorite';
@@ -36,7 +35,7 @@ export type AddEditNavigationProp = CompositeNavigationProp<
 type AddEditScreenRouteProp = RouteProp<RootStackParamList, AddEditRouteName>;
 
 export type AddEditParams = {
-  editItem?: LocationFavorite;
+  editItem?: StoredLocationFavorite;
   searchLocation?: Location;
 };
 
@@ -47,7 +46,11 @@ type AddEditProps = {
 
 export default function AddEditFavorite({navigation, route}: AddEditProps) {
   const css = useScreenStyle();
-  const {addFavorite, removeFavorite, updateFavorite} = useFavorites();
+  const {
+    addFavoriteLocation: addFavorite,
+    removeFavoriteLocation: removeFavorite,
+    updateFavoriteLocation: updateFavorite,
+  } = useFavorites();
   const editItem = route?.params?.editItem;
   const {t} = useTranslation();
 

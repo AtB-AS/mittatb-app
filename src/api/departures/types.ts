@@ -2,7 +2,7 @@ import {Situation, TransportMode, TransportSubmode} from '../../sdk';
 
 type Notice = {text?: string};
 
-type DepartureLineInfo = {
+export type DepartureLineInfo = {
   lineName: string;
   lineNumber: string;
   transportMode?: TransportMode;
@@ -26,7 +26,7 @@ export type DepartureGroup = {
   departures: DepartureTime[];
 };
 
-type StopPlaceInfo = {
+export type StopPlaceInfo = {
   id: string;
   description?: string | undefined;
   name: string;

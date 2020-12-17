@@ -36,7 +36,7 @@ type ProfileScreenProps = {
 
 export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
   const style = useProfileStyle();
-  const {favorites, setFavorites} = useFavorites();
+  const {favorites, setFavoriteLocationss: setFavorites} = useFavorites();
   const items = favorites ?? [];
   const [sortedItems, setSortedItems] = useState(items);
   const [error, setError] = useState<string | null>(null);

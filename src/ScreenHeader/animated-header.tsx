@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
 import {Animated, View, ViewProps} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import ThemeText from '../components/text';
@@ -29,6 +29,7 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
     outputRange: [0, -HEADER_HEIGHT],
     extrapolate: 'clamp',
   });
+
   const altTitleOffset = Animated.add(titleOffset, HEADER_HEIGHT);
   const leftIcon = leftButton ? <HeaderButton {...leftButton} /> : <View />;
   const rightIcon = rightButton ? <HeaderButton {...rightButton} /> : <View />;

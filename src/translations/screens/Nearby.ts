@@ -10,6 +10,9 @@ const NearbyTexts = {
       a11yLabel: _('Gå til startskjerm'),
     },
   },
+  favorites: {
+    toggle: _('Vis kun favorittavganger'),
+  },
   location: {
     departurePicker: {
       placeholder: _('Søk etter adresse eller sted', 'Search for a place'),
@@ -49,7 +52,8 @@ const NearbyTexts = {
       initial: _(
         'Søk etter avganger fra holdeplasser eller i nærheten av steder.',
       ),
-      emptyResult: _('Fant ingen avganger i nærheten'),
+      emptyResult: _('Fant ingen avganger på valgt plass'),
+      emptyResultFavorites: _('Fant ingen favorittavganger på valgt plass.'),
     },
     quayResult: {
       platformHeader: {
@@ -74,6 +78,16 @@ const NearbyTexts = {
       lineNameAccessibilityHint: _(
         'Aktiver for detaljer om avgang og oversikt over kommende avganger.',
       ),
+      favorite: {
+        addFavorite: (name: string, place: string) =>
+          _(`Legg til favorittavgang: ${name} fra ${place}`),
+        removeFavorite: (name: string, place: string) =>
+          _(`Fjern favorittavgang: ${name} fra ${place}`),
+        message: {
+          saved: _(`Lagt til.`),
+          removed: _(`Fjernet.`),
+        },
+      },
     },
     departure: {
       hasPassedAccessibilityLabel: (time: string) =>

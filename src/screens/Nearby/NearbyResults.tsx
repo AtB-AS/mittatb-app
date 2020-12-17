@@ -19,6 +19,8 @@ type NearbyResultsProps = {
   isFetchingMore?: boolean;
   error?: string;
   isInitialScreen: boolean;
+
+  showOnlyFavorites: boolean;
 };
 
 export default function NearbyResults({
@@ -28,6 +30,8 @@ export default function NearbyResults({
   error,
   isInitialScreen,
   currentLocation,
+
+  showOnlyFavorites,
 }: NearbyResultsProps) {
   const styles = useResultsStyle();
   const {t} = useTranslation();
@@ -36,7 +40,11 @@ export default function NearbyResults({
     return (
       <View style={styles.container}>
         <MessageBox type="info">
-          <ThemeText>{t(NearbyTexts.results.messages.initial)}</ThemeText>
+          <ThemeText>
+            {showOnlyFavorites
+              ? t(NearbyTexts.results.messages.initial)
+              : t(NearbyTexts.results.messages.initial)}
+          </ThemeText>
         </MessageBox>
       </View>
     );
@@ -46,7 +54,11 @@ export default function NearbyResults({
     return (
       <View style={styles.container}>
         <MessageBox type="info">
-          <ThemeText>{t(NearbyTexts.results.messages.emptyResult)}</ThemeText>
+          <ThemeText>
+            {!showOnlyFavorites
+              ? t(NearbyTexts.results.messages.emptyResult)
+              : t(NearbyTexts.results.messages.emptyResultFavorites)}
+          </ThemeText>
         </MessageBox>
       </View>
     );
@@ -81,7 +93,7 @@ export default function NearbyResults({
 }
 const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    padding: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
   },
   centerText: {
     textAlign: 'center',
@@ -155,6 +167,7 @@ const StopDepartures = React.memo(function StopDepartures({
         orderedQuays.map(([distance, quayGroup]) => (
           <QuaySection
             key={quayGroup.quay.id}
+            stop={stopPlaceGroup.stopPlace}
             quayGroup={quayGroup}
             distance={distance}
             lastUpdated={lastUpdated}
