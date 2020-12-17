@@ -1,12 +1,7 @@
 import haversineDistance from 'haversine-distance';
 import sortBy from 'lodash.sortby';
 import React, {useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  LayoutAnimation,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ActivityIndicator, LayoutAnimation, View} from 'react-native';
 import {QuayGroup, StopPlaceGroup} from '../../api/departures/types';
 import {ActionItem} from '../../components/sections';
 import ThemeText from '../../components/text';
@@ -15,12 +10,7 @@ import MessageBox from '../../message-box';
 import {StyleSheet, useTheme} from '../../theme';
 import {NearbyTexts, useTranslation} from '../../translations';
 import QuaySection from './section-items/quay-section';
-import {
-  hasNoGroupsWithDepartures,
-  hasNoQuaysWithDepartures,
-  useFocusableItem,
-  useFocusRegister,
-} from './utils';
+import {hasNoGroupsWithDepartures, hasNoQuaysWithDepartures} from './utils';
 
 type NearbyResultsProps = {
   departures: StopPlaceGroup[] | null;
@@ -41,7 +31,6 @@ export default function NearbyResults({
 }: NearbyResultsProps) {
   const styles = useResultsStyle();
   const {t} = useTranslation();
-  const {focusIndex, skipContent} = useFocusRegister();
 
   if (isInitialScreen) {
     return (
@@ -82,8 +71,6 @@ export default function NearbyResults({
               currentLocation={currentLocation}
               lastUpdated={lastUpdated}
               defaultExpanded={i === 0}
-              shouldFocus={focusIndex === i}
-              focusOnNextSection={() => skipContent(i, departures.length)}
             />
           ))}
           <FooterLoader isFetchingMore={isFetchingMore} />
@@ -123,25 +110,17 @@ type StopDeparturesProps = {
   stopPlaceGroup: StopPlaceGroup;
   currentLocation?: Location;
   lastUpdated?: Date;
-  shouldFocus?: boolean;
-  focusOnNextSection?(): void;
   defaultExpanded?: boolean;
 };
 const StopDepartures = React.memo(function StopDepartures({
   stopPlaceGroup,
   currentLocation,
   lastUpdated,
-  shouldFocus = false,
-  focusOnNextSection,
   defaultExpanded = false,
 }: StopDeparturesProps) {
   const {t} = useTranslation();
   const [expanded, setExpanded] = useState(defaultExpanded);
   useEffect(() => setExpanded(defaultExpanded), [defaultExpanded]);
-  const headerRef = useFocusableItem<TouchableOpacity>(shouldFocus);
-
-  const {focusIndex, skipContent} = useFocusRegister(focusOnNextSection);
-
   if (!stopPlaceGroup.quays.length) {
     return null;
   }
@@ -152,11 +131,9 @@ const StopDepartures = React.memo(function StopDepartures({
     stopPlaceGroup.quays,
     currentLocation,
   );
-
   return (
-    <View>
+    <View accessibilityState={{expanded}}>
       <ActionItem
-        ref={headerRef}
         transparent
         text={stopPlaceGroup.stopPlace.name}
         mode="heading-expand"
@@ -175,14 +152,12 @@ const StopDepartures = React.memo(function StopDepartures({
       />
 
       {expanded &&
-        orderedQuays.map(([distance, quayGroup], i) => (
+        orderedQuays.map(([distance, quayGroup]) => (
           <QuaySection
             key={quayGroup.quay.id}
             quayGroup={quayGroup}
             distance={distance}
             lastUpdated={lastUpdated}
-            shouldFocus={focusIndex === i}
-            focusOnNextSection={() => skipContent(i, orderedQuays.length)}
           />
         ))}
     </View>

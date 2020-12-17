@@ -1,4 +1,4 @@
-import React, {forwardRef} from 'react';
+import React from 'react';
 import {AccessibilityProps, Switch, TouchableOpacity, View} from 'react-native';
 import {Confirm} from '../../assets/svg/icons/actions';
 import {StyleSheet, Theme} from '../../theme';
@@ -15,45 +15,45 @@ export type ActionItemProps = SectionItem<{
   mode?: ActionModes;
   accessibility?: AccessibilityProps;
 }>;
-const ActionItem = forwardRef<TouchableOpacity, ActionItemProps>(
-  (
-    {text, onPress, mode = 'check', checked = false, accessibility, ...props},
-    ref,
-  ) => {
-    const {contentContainer, topContainer} = useSectionItem(props);
-    const style = useSectionStyle();
+export default function ActionItem({
+  text,
+  onPress,
+  mode = 'check',
+  checked = false,
+  accessibility,
+  ...props
+}: ActionItemProps) {
+  const {contentContainer, topContainer} = useSectionItem(props);
+  const style = useSectionStyle();
 
-    if (mode === 'toggle') {
-      return (
-        <View style={[style.spaceBetween, topContainer]} {...accessibility}>
-          <ThemeText type="body" style={contentContainer}>
-            {text}
-          </ThemeText>
-          <Switch value={checked} onValueChange={(v) => onPress?.(v)} />
-        </View>
-      );
-    }
-
+  if (mode === 'toggle') {
     return (
-      <TouchableOpacity
-        onPress={() => onPress?.(!checked)}
-        style={[style.spaceBetween, topContainer]}
-        accessibilityRole="switch"
-        ref={ref}
-        {...accessibility}
-      >
-        <ThemeText
-          type={mode === 'heading-expand' ? 'paragraphHeadline' : 'body'}
-          style={contentContainer}
-        >
+      <View style={[style.spaceBetween, topContainer]} {...accessibility}>
+        <ThemeText type="body" style={contentContainer}>
           {text}
         </ThemeText>
-        <ActionModeIcon mode={mode} checked={checked} />
-      </TouchableOpacity>
+        <Switch value={checked} onValueChange={(v) => onPress?.(v)} />
+      </View>
     );
-  },
-);
-export default ActionItem;
+  }
+
+  return (
+    <TouchableOpacity
+      onPress={() => onPress?.(!checked)}
+      style={[style.spaceBetween, topContainer]}
+      accessibilityRole="switch"
+      {...accessibility}
+    >
+      <ThemeText
+        type={mode === 'heading-expand' ? 'paragraphHeadline' : 'body'}
+        style={contentContainer}
+      >
+        {text}
+      </ThemeText>
+      <ActionModeIcon mode={mode} checked={checked} />
+    </TouchableOpacity>
+  );
+}
 
 function ActionModeIcon({
   mode,
