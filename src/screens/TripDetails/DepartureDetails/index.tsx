@@ -1,4 +1,4 @@
-import {LegMode} from '@entur/sdk';
+import {LegMode, TransportSubmode} from '../../../sdk';
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useCallback, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
@@ -17,7 +17,7 @@ import SituationMessages from '../../../situations';
 import {StyleSheet} from '../../../theme';
 import {
   defaultFill,
-  transportationMapLineColor,
+  transportationColor,
 } from '../../../utils/transportation-color';
 import {getQuayName} from '../../../utils/transportation-names';
 import usePollableResource from '../../../utils/use-pollable-resource';
@@ -63,7 +63,7 @@ export default function DepartureDetails({navigation, route}: Props) {
 
   const isFocused = useIsFocused();
   const [
-    {callGroups, mode, publicCode, situations: parentSituations},
+    {callGroups, mode, subMode, situations: parentSituations},
     ,
     isLoading,
   ] = useDepartureData(
@@ -97,7 +97,7 @@ export default function DepartureDetails({navigation, route}: Props) {
             calls={group}
             type={name}
             mode={mode}
-            publicCode={publicCode}
+            subMode={subMode}
             parentSituations={parentSituations}
           />
         ))}
@@ -134,14 +134,14 @@ type CallGroupProps = {
   calls: EstimatedCall[];
   type: keyof CallListGroup;
   mode?: LegMode;
-  publicCode?: string;
+  subMode?: TransportSubmode;
   parentSituations: Situation[];
 };
 function CallGroup({
   type,
   calls,
   mode,
-  publicCode,
+  subMode,
   parentSituations,
 }: CallGroupProps) {
   const isOnRoute = type === 'trip';
@@ -182,7 +182,7 @@ function CallGroup({
               color={
                 type === 'passed' || type === 'after'
                   ? defaultFill
-                  : transportationMapLineColor(mode, publicCode)
+                  : transportationColor(mode, subMode)
               }
             ></TripLegDecoration>
             <TripRow
@@ -297,7 +297,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
 type DepartureData = {
   callGroups: CallListGroup;
   mode?: LegMode;
-  publicCode?: string;
+  subMode?: TransportSubmode;
   situations: Situation[];
 };
 
@@ -324,7 +324,7 @@ function useDepartureData(
 
       return {
         mode: line?.transportMode,
-        publicCode: line?.publicCode,
+        subMode: line?.transportSubmode,
         callGroups,
         situations: parentSituation,
       };

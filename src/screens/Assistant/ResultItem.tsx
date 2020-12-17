@@ -288,7 +288,10 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
         {formatToClockOrRelativeMinutes(leg.expectedStartTime)}
       </ThemeText>
       <View style={styles.iconContainer}>
-        <TransportationIcon mode={leg.mode} publicCode={leg.line?.publicCode} />
+        <TransportationIcon
+          mode={leg.mode}
+          subMode={leg.line?.transportSubmode}
+        />
       </View>
       <ThemeText type="body" style={styles.textContent}>
         <LineDisplayName leg={leg} />

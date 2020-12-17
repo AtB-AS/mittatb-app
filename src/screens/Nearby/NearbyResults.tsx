@@ -301,8 +301,8 @@ const NearbyResultItem: React.FC<NearbyResultItemProps> = React.memo(
         >
           <TransportationIcon
             mode={departure.serviceJourney.journeyPattern?.line.transportMode}
-            publicCode={
-              departure.serviceJourney.journeyPattern?.line.publicCode
+            subMode={
+              departure.serviceJourney.journeyPattern?.line.transportSubmode
             }
           />
           <View style={styles.textWrapper}>

@@ -8,28 +8,28 @@ import {
   FerrySide,
   WalkingPerson,
 } from '../../assets/svg/icons/transportation';
-import {LegMode} from '../../sdk';
+import {LegMode, TransportSubmode} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {SvgProps} from 'react-native-svg';
-import transportationColor from '../../utils/transportation-color';
 import {useTranslation} from '../../translations';
 import {getTranslatedModeName} from '../../utils/transportation-names';
+import {transportationColor} from '../../utils/transportation-color';
 
 export type TransportationIconProps = {
   mode?: LegMode;
-  publicCode?: string;
+  subMode?: TransportSubmode;
   style?: StyleProp<ViewStyle>;
 };
 
 const TransportationIcon: React.FC<TransportationIconProps> = ({
   mode,
-  publicCode,
+  subMode,
   style,
   children,
 }) => {
   const styles = useStyle();
   const {t} = useTranslation();
-  const {color} = transportationColor(mode, publicCode);
+  const color = transportationColor(mode, subMode);
 
   return (
     <View style={styles.iconContainer}>

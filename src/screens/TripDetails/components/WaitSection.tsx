@@ -7,7 +7,7 @@ import {TinyMessageBox} from '../../../message-box';
 import {StyleSheet} from '../../../theme';
 import {TripDetailsTexts, useTranslation} from '../../../translations';
 import {secondsToDuration} from '../../../utils/date';
-import {transportationMapLineColor} from '../../../utils/transportation-color';
+import {transportationColor} from '../../../utils/transportation-color';
 import {timeIsShort} from '../Details/utils';
 import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
@@ -26,7 +26,7 @@ const WaitSection: React.FC<WaitDetails> = (wait) => {
   return (
     <View style={style.section}>
       <TripLegDecoration
-        color={transportationMapLineColor()}
+        color={transportationColor()}
         hasStart={false}
         hasEnd={false}
       ></TripLegDecoration>

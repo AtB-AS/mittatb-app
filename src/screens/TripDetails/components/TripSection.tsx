@@ -10,7 +10,7 @@ import {
   getTranslatedModeName,
 } from '../../../utils/transportation-names';
 import TransportationIcon from '../../../components/transportation-icon';
-import {transportationMapLineColor} from '../../../utils/transportation-color';
+import {transportationColor} from '../../../utils/transportation-color';
 import {useNavigation} from '@react-navigation/core';
 import {DetailScreenNavigationProp} from '../Details';
 import {TinyMessageBox} from '../../../message-box';
@@ -49,7 +49,7 @@ const TripSection: React.FC<TripSectionProps> = ({
   const style = useSectionStyles();
 
   const isWalkSection = leg.mode === 'foot';
-  const legColor = transportationMapLineColor(leg.mode, leg.line?.publicCode);
+  const legColor = transportationColor(leg.mode, leg.line?.transportSubmode);
 
   const showFrom = !isWalkSection || !!(isFirst && isWalkSection);
   const showTo = !isWalkSection || !!(isLast && isWalkSection);
@@ -103,7 +103,7 @@ const TripSection: React.FC<TripSectionProps> = ({
             rowLabel={
               <TransportationIcon
                 mode={leg.mode}
-                publicCode={leg.line?.publicCode}
+                subMode={leg.line?.transportSubmode}
               />
             }
           >
@@ -207,7 +207,10 @@ const WalkSection: React.FC<TripSectionProps> = (leg) => {
   return (
     <TripRow
       rowLabel={
-        <TransportationIcon mode={leg.mode} publicCode={leg.line?.publicCode} />
+        <TransportationIcon
+          mode={leg.mode}
+          subMode={leg.line?.transportSubmode}
+        />
       }
     >
       <ThemeText type="lead" color="faded">
