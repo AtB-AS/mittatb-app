@@ -1,3 +1,4 @@
+import {TFunc} from '@leile/lobo-t';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {AccessibilityProps, ScrollView, View} from 'react-native';
@@ -16,7 +17,12 @@ import ThemeText from '../../../components/text';
 import TransportationIcon from '../../../components/transportation-icon';
 import {StyleSheet} from '../../../theme';
 import colors from '../../../theme/colors';
-import {dictionary, NearbyTexts, useTranslation} from '../../../translations';
+import {
+  dictionary,
+  Language,
+  NearbyTexts,
+  useTranslation,
+} from '../../../translations';
 import {
   formatToClock,
   formatToClockOrRelativeMinutes,
@@ -57,13 +63,8 @@ export default function LineItem({
   };
 
   // we know we have a departure as we've checked hasNoDeparturesOnGroup
-  const firstResult = group.departures.find(isValidDeparture)!;
-  const firstResultTime = formatToClockOrRelativeMinutes(firstResult?.time);
-  const firstIsRelative = isRelativeButNotNow(firstResult?.time);
-
-  const firstResultScreenReaderTimeText = firstIsRelative
-    ? t(NearbyTexts.results.relativeTime(firstResultTime))
-    : firstResultTime;
+  const nextValids = group.departures.filter(isValidDeparture);
+  const firstResult = nextValids[0]!;
 
   return (
     <View style={[topContainer, {padding: 0}]}>
@@ -78,14 +79,11 @@ export default function LineItem({
             t(NearbyTexts.results.lines.lineNameAccessibilityHint) +
             screenReaderPause
           }
-          accessibilityLabel={
-            t(
-              NearbyTexts.results.lines.firstResult(
-                title,
-                firstResultScreenReaderTimeText,
-              ),
-            ) + screenReaderPause
-          }
+          accessibilityLabel={getAccessibilityTextFirstDeparture(
+            title,
+            nextValids,
+            t,
+          )}
         >
           <View style={styles.transportationMode}>
             <TransportationIcon
@@ -96,7 +94,11 @@ export default function LineItem({
           <ThemeText>{title}</ThemeText>
         </TouchableOpacity>
       </View>
-      <ScrollView horizontal contentContainerStyle={styles.scrollContainer}>
+      <ScrollView
+        horizontal
+        contentContainerStyle={styles.scrollContainer}
+        accessibilityElementsHidden
+      >
         {group.departures.map((departure) => (
           <DepartureTimeItem
             departure={departure}
@@ -109,42 +111,78 @@ export default function LineItem({
   );
 }
 
+function labelForTime(time: string, t: TFunc<typeof Language>) {
+  const resultTime = formatToClockOrRelativeMinutes(time);
+  const isRelative = isRelativeButNotNow(time);
+
+  return isRelative
+    ? t(NearbyTexts.results.relativeTime(resultTime))
+    : resultTime;
+}
+
+function getAccessibilityTextFirstDeparture(
+  title: string,
+  nextValids: DepartureTime[],
+  t: TFunc<typeof Language>,
+) {
+  const [firstResult, secondResult, ...rest] = nextValids;
+  const firstResultScreenReaderTimeText = labelForTime(firstResult?.time, t);
+
+  const inPast = isInThePast(firstResult.time);
+  const upcoming = inPast
+    ? t(
+        NearbyTexts.results.departure.hasPassedAccessibilityLabel(
+          formatToClock(firstResult.time),
+        ),
+      )
+    : firstResult.realtime
+    ? t(
+        NearbyTexts.results.departure.upcomingRealtimeAccessibilityLabel(
+          firstResultScreenReaderTimeText,
+        ),
+      )
+    : t(
+        NearbyTexts.results.departure.upcomingAccessibilityLabel(
+          firstResultScreenReaderTimeText,
+        ),
+      );
+
+  const nextLabel = secondResult
+    ? t(
+        NearbyTexts.results.departure.nextAccessibilityLabel(
+          [secondResult, ...rest]
+            .map((i) =>
+              i.realtime
+                ? formatToClock(i.time)
+                : t(
+                    NearbyTexts.results.departure.nextAccessibilityNotRealtime(
+                      formatToClock(i.time),
+                    ),
+                  ),
+            )
+            .join(', '),
+        ),
+      )
+    : '';
+
+  return `${title}. ${upcoming} ${nextLabel} ${screenReaderPause}`;
+}
+
 type DepartureTimeItemProps = {
   departure: DepartureTime;
   onPress(departure: DepartureTime): void;
 };
 function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
   const styles = useItemStyles();
-  const time = formatToClockOrRelativeMinutes(departure.aimedTime);
-  const timeClock = formatToClock(departure.aimedTime);
+  const time = formatToClockOrRelativeMinutes(departure.time);
   const isValid = isValidDeparture(departure);
   const {t} = useTranslation();
-
-  const firstIsRelative = isRelativeButNotNow(departure.aimedTime);
-
-  const screenReaderTimeText = firstIsRelative
-    ? t(NearbyTexts.results.relativeTime(time))
-    : time;
 
   if (!isValid) {
     return null;
   }
 
-  const inPast = isInThePast(departure.aimedTime);
-  const accessibilityLabel = inPast
-    ? t(NearbyTexts.results.departure.hasPassedAccessibilityLabel(timeClock))
-    : departure.realtime
-    ? t(
-        NearbyTexts.results.departure.upcommingRealtimeAccessibilityLabel(
-          screenReaderTimeText,
-        ),
-      )
-    : t(
-        NearbyTexts.results.departure.upcommingAccessibilityLabel(
-          screenReaderTimeText,
-        ),
-      );
-
+  const inPast = isInThePast(departure.time);
   const timeWithRealtimePrefix = departure.realtime
     ? time
     : t(dictionary.missingRealTimePrefix) + ' ' + time;
@@ -161,11 +199,6 @@ function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
       textStyle={styles.departureText}
       icon={hasSituations(departure) ? Warning : undefined}
       iconPosition="right"
-      accessibilityLabel={accessibilityLabel + screenReaderPause}
-      accessibilityHint={
-        t(NearbyTexts.results.departure.departureAccessibilityHint) +
-        screenReaderPause
-      }
     />
   );
 }

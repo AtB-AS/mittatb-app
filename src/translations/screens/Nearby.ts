@@ -71,18 +71,19 @@ const NearbyTexts = {
       a11y: {
         line: _(`Linje:`),
       },
-      firstResult: (line: string, time: string) =>
-        _(`Neste avgang for ${line} går ${time}`),
-      lineNameAccessibilityHint: _('Aktiver for detaljer om avgang.'),
+      lineNameAccessibilityHint: _(
+        'Aktiver for detaljer om avgang og oversikt over kommende avganger.',
+      ),
     },
     departure: {
       hasPassedAccessibilityLabel: (time: string) =>
-        _(`Avgangen ${time} har trolig passert plattformen`),
-      upcommingRealtimeAccessibilityLabel: (time: string) =>
-        _(`Avgang estimert til å komme ${time}`),
-      upcommingAccessibilityLabel: (time: string) =>
-        _(`Avgang kommer ca ${time}`),
-      departureAccessibilityHint: _('Aktiver for detaljer om avgang.'),
+        _(`Avgangen ${time} har trolig passert plattformen.`),
+      upcomingRealtimeAccessibilityLabel: (time: string) =>
+        _(`Kommende avgang estimert til ${time}.`),
+      upcomingAccessibilityLabel: (time: string) =>
+        _(`Kommende avgang har rutetid på ${time}.`),
+      nextAccessibilityLabel: (time: string) => _(`Neste avganger: ${time}`),
+      nextAccessibilityNotRealtime: (time: string) => _(`rutetid: ${time}`),
     },
   },
 };
