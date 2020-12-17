@@ -24,7 +24,6 @@ import {
   isRelativeButNotNow,
 } from '../../../utils/date';
 import insets from '../../../utils/insets';
-import useIsScreenReaderEnabled from '../../../utils/use-is-screen-reader-enabled';
 import {
   hasNoDeparturesOnGroup,
   isValidDeparture,
@@ -130,10 +129,8 @@ type DepartureTimeItemProps = {
 function SkipLink({skipContent}: {skipContent?(): void}) {
   const styles = useItemStyles();
   const {t} = useTranslation();
-  const screenReader = useIsScreenReaderEnabled();
-  if (!screenReader) return null;
   return (
-    <View style={styles.skipContent}>
+    <View style={styles.hidden}>
       <TouchableOpacity accessibilityRole="button" onPress={skipContent}>
         <Text>{t(NearbyTexts.results.lines.a11y.skipContent)}</Text>
       </TouchableOpacity>
@@ -220,7 +217,9 @@ const useItemStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   departureText: {
     fontVariant: ['tabular-nums'],
   },
-  skipContent: {
-    paddingHorizontal: theme.spacings.medium,
+  hidden: {
+    height: 1,
+    position: 'absolute',
+    top: theme.spacings.medium * 2,
   },
 }));
