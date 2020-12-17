@@ -1,15 +1,15 @@
 import colors from '../theme/colors';
-import {LegMode, TransportSubmode} from '../sdk';
+import {LegMode, TransportMode, TransportSubmode} from '../sdk';
 
 export const defaultFill = colors.primary.gray_300;
 
 export function transportationColor(
-  mode?: LegMode,
-  submode?: TransportSubmode,
+  mode?: LegMode | TransportMode,
+  subMode?: TransportSubmode,
 ): string {
   switch (mode) {
     case 'bus':
-      if (submode === 'localBus') {
+      if (subMode === 'localBus') {
         return colors.primary.green_500;
       }
       return colors.secondary.blue_500;

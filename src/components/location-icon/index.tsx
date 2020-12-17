@@ -8,7 +8,7 @@ import {
   PlaneSide,
 } from '../../assets/svg/icons/transportation';
 import {Location} from '../../favorites/types';
-import {Category} from '../../sdk';
+import {FeatureCategory} from '../../sdk';
 import {SvgProps} from 'react-native-svg';
 import ThemeIcon from '../theme-icon';
 
@@ -108,7 +108,7 @@ const mapTypeToIconComponent = (
   }
 };
 
-const mapCategoryToVenueIconType = (category: Category) => {
+const mapCategoryToVenueIconType = (category: FeatureCategory) => {
   switch (category) {
     case 'onstreetBus':
     case 'busStation':

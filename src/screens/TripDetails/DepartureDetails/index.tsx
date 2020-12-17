@@ -1,4 +1,4 @@
-import {LegMode, TransportSubmode} from '../../../sdk';
+import {LegMode, TransportSubmode, TransportMode} from '../../../sdk';
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useCallback, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
@@ -133,7 +133,7 @@ function mapGroup<T>(
 type CallGroupProps = {
   calls: EstimatedCall[];
   type: keyof CallListGroup;
-  mode?: LegMode;
+  mode?: TransportMode;
   subMode?: TransportSubmode;
   parentSituations: Situation[];
 };
@@ -296,7 +296,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
 
 type DepartureData = {
   callGroups: CallListGroup;
-  mode?: LegMode;
+  mode?: TransportMode;
   subMode?: TransportSubmode;
   situations: Situation[];
 };

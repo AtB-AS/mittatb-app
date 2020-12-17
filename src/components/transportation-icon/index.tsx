@@ -8,7 +8,7 @@ import {
   FerrySide,
   WalkingPerson,
 } from '../../assets/svg/icons/transportation';
-import {LegMode, TransportSubmode} from '../../sdk';
+import {LegMode, TransportSubmode, TransportMode} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {SvgProps} from 'react-native-svg';
 import {useTranslation} from '../../translations';
@@ -16,7 +16,7 @@ import {getTranslatedModeName} from '../../utils/transportation-names';
 import {transportationColor} from '../../utils/transportation-color';
 
 export type TransportationIconProps = {
-  mode?: LegMode;
+  mode?: LegMode | TransportMode;
   subMode?: TransportSubmode;
   style?: StyleProp<ViewStyle>;
 };
@@ -56,7 +56,7 @@ function InnerIcon({
 }: {
   fill: string;
   style?: StyleProp<ViewStyle>;
-  mode?: LegMode;
+  mode?: LegMode | TransportMode;
 } & AccessibilityProps) {
   const innerIconProps: SvgProps = {
     width: '100%',
