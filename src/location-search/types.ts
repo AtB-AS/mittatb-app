@@ -1,6 +1,6 @@
-import {Location, LocationFavorite} from '../favorites/types';
+import {Location, StoredLocationFavorite} from '../favorites/types';
 
 export type LocationSearchResult = {
   location: Location;
-  favoriteInfo?: Omit<LocationFavorite, 'location'>;
+  favoriteInfo?: Omit<StoredLocationFavorite, 'location'>;
 };

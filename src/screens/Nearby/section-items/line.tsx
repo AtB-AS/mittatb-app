@@ -1,10 +1,23 @@
 import {TFunc} from '@leile/lobo-t';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {AccessibilityProps, ScrollView, View} from 'react-native';
+import {
+  AccessibilityInfo,
+  AccessibilityProps,
+  ScrollView,
+  View,
+} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {NearbyScreenNavigationProp} from '..';
-import {DepartureGroup, DepartureTime} from '../../../api/departures/types';
+import {
+  DepartureGroup,
+  DepartureLineInfo,
+  DepartureTime,
+  QuayInfo,
+  StopPlaceInfo,
+} from '../../../api/departures/types';
+import SvgFavorite from '../../../assets/svg/icons/places/Favorite';
+import SvgFavoriteFill from '../../../assets/svg/icons/places/FavoriteFill';
 import Warning from '../../../assets/svg/situations/Warning';
 import {screenReaderPause} from '../../../components/accessible-text';
 import Button from '../../../components/button';
@@ -14,7 +27,9 @@ import {
   useSectionStyle,
 } from '../../../components/sections/section-utils';
 import ThemeText from '../../../components/text';
+import ThemeIcon from '../../../components/theme-icon';
 import TransportationIcon from '../../../components/transportation-icon';
+import {useFavorites} from '../../../favorites';
 import {StyleSheet} from '../../../theme';
 import colors from '../../../theme/colors';
 import {
@@ -34,13 +49,18 @@ import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 
 export type LineItemProps = SectionItem<{
   group: DepartureGroup;
+  stop: StopPlaceInfo;
+  quay: QuayInfo;
   accessibility?: AccessibilityProps;
 }>;
 export default function LineItem({
   group,
+  stop,
+  quay,
   accessibility,
   ...props
 }: LineItemProps) {
+  const {favoriteDepartures} = useFavorites();
   const {contentContainer, topContainer} = useSectionItem(props);
   const sectionStyle = useSectionStyle();
   const styles = useItemStyles();
@@ -93,6 +113,11 @@ export default function LineItem({
           </View>
           <ThemeText>{title}</ThemeText>
         </TouchableOpacity>
+        <ToggleFavoriteDepartureButton
+          line={group.lineInfo}
+          stop={stop}
+          quay={quay}
+        />
       </View>
       <ScrollView
         horizontal
@@ -227,3 +252,65 @@ const useItemStyles = StyleSheet.createThemeHook((theme, themeName) => ({
     fontVariant: ['tabular-nums'],
   },
 }));
+
+type FavoriteStarProps = {
+  line?: DepartureLineInfo;
+  stop: StopPlaceInfo;
+  quay: QuayInfo;
+};
+function ToggleFavoriteDepartureButton({line, stop, quay}: FavoriteStarProps) {
+  const {
+    getFavoriteDeparture,
+    addFavoriteDeparture,
+    removeFavoriteDeparture,
+  } = useFavorites();
+  const {t} = useTranslation();
+
+  if (!line) {
+    return null;
+  }
+
+  const favorite = getFavoriteDeparture({...line, stopId: stop.id});
+
+  const onPress = async () => {
+    if (favorite) {
+      await removeFavoriteDeparture(favorite.id);
+      AccessibilityInfo.announceForAccessibility(
+        t(NearbyTexts.results.lines.favorite.message.removed),
+      );
+    } else {
+      await addFavoriteDeparture({
+        lineId: line.lineId,
+        lineName: line.lineName,
+        lineLineNumber: line.lineNumber,
+        lineTransportationMode: line.transportMode,
+        lineTransportationSubMode: line.transportSubmode,
+        quayName: quay.name,
+        quayPublicCode: quay.publicCode,
+        quayId: quay.id,
+        stopId: stop.id,
+      });
+      AccessibilityInfo.announceForAccessibility(
+        t(NearbyTexts.results.lines.favorite.message.saved),
+      );
+    }
+  };
+
+  const Icon = favorite ? SvgFavoriteFill : SvgFavorite;
+  const label =
+    NearbyTexts.results.lines.favorite[
+      !favorite ? 'addFavorite' : 'removeFavorite'
+    ];
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      accessibilityRole="checkbox"
+      accessibilityState={{checked: !!favorite}}
+      accessibilityLabel={t(
+        label(`${line.lineNumber} ${line.lineName}`, stop.name),
+      )}
+    >
+      <ThemeIcon svg={Icon} />
+    </TouchableOpacity>
+  );
+}

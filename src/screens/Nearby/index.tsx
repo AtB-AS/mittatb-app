@@ -1,6 +1,7 @@
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useMemo, useState} from 'react';
+import {View} from 'react-native';
 import {ErrorType} from '../../api/utils';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
 import AccessibleText, {
@@ -8,7 +9,7 @@ import AccessibleText, {
 } from '../../components/accessible-text';
 import SimpleDisappearingHeader from '../../components/disappearing-header/simple';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
-import {LocationInput, Section} from '../../components/sections';
+import {ActionItem, LocationInput, Section} from '../../components/sections';
 import ThemeIcon from '../../components/theme-icon';
 import FavoriteChips from '../../favorite-chips';
 import {Location, LocationWithMetadata} from '../../favorites/types';
@@ -20,7 +21,7 @@ import {
 import {useLocationSearchValue} from '../../location-search';
 import {RootStackParamList} from '../../navigation';
 import {TabNavigatorParams} from '../../navigation/TabNavigator';
-import {useTheme} from '../../theme';
+import {StyleSheet, useTheme} from '../../theme';
 import {
   AssistantTexts,
   dictionary,
@@ -91,6 +92,7 @@ const NearbyOverview: React.FC<Props> = ({
     'location',
   );
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
+  const styles = useNearbyStyles();
 
   const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
@@ -98,8 +100,17 @@ const NearbyOverview: React.FC<Props> = ({
   );
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
   const updatingLocation = !fromLocation && hasLocationPermission;
-  const {state, refresh, loadMore} = useDepartureData(fromLocation);
-  const {data, tick, isLoading, isFetchingMore, error} = state;
+  const {state, refresh, loadMore, toggleShowFavorites} = useDepartureData(
+    fromLocation,
+  );
+  const {
+    data,
+    tick,
+    isLoading,
+    isFetchingMore,
+    error,
+    showOnlyFavorites,
+  } = state;
 
   const isInitialScreen = data == null && !isLoading && !error;
   const activateScroll = !isInitialScreen || !!error;
@@ -189,11 +200,26 @@ const NearbyOverview: React.FC<Props> = ({
       onEndReached={onScrollViewEndReached}
     >
       <ScreenReaderAnnouncement message={loadAnnouncement} />
+
+      {data !== null && (
+        <View style={styles.container}>
+          <ActionItem
+            transparent
+            text={t(NearbyTexts.favorites.toggle)}
+            mode="toggle"
+            checked={showOnlyFavorites}
+            onPress={toggleShowFavorites}
+          />
+        </View>
+      )}
+
       <NearbyResults
         currentLocation={currentLocation}
+        showOnlyFavorites={showOnlyFavorites}
         departures={data}
         lastUpdated={tick}
         isFetchingMore={isFetchingMore && !isLoading}
+        isLoading={isLoading}
         isInitialScreen={isInitialScreen}
         error={error ? t(translateErrorType(error.type)) : undefined}
       />
@@ -261,6 +287,12 @@ const Header = React.memo(function Header({
     </>
   );
 });
+const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    paddingTop: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
+  },
+}));
 
 function translateErrorType(errorType: ErrorType): TranslatedString {
   switch (errorType) {
