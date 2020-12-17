@@ -98,6 +98,7 @@ export default function LineItem({
         horizontal
         contentContainerStyle={styles.scrollContainer}
         accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
       >
         {group.departures.map((departure) => (
           <DepartureTimeItem
