@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {AccessibilityProps, ScrollView, View} from 'react-native';
+import {AccessibilityProps, ScrollView, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {NearbyScreenNavigationProp} from '..';
 import {DepartureGroup, DepartureTime} from '../../../api/departures/types';
@@ -25,15 +25,23 @@ import {
   isRelativeButNotNow,
 } from '../../../utils/date';
 import insets from '../../../utils/insets';
-import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
+import {
+  hasNoDeparturesOnGroup,
+  isValidDeparture,
+  useFocusableItem,
+} from '../utils';
 
 export type LineItemProps = SectionItem<{
   group: DepartureGroup;
+  skipContent?(): void;
+  shouldFocus?: boolean;
   accessibility?: AccessibilityProps;
 }>;
 export default function LineItem({
   group,
   accessibility,
+  skipContent,
+  shouldFocus = false,
   ...props
 }: LineItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
@@ -41,6 +49,8 @@ export default function LineItem({
   const styles = useItemStyles();
   const navigation = useNavigation<NearbyScreenNavigationProp>();
   const {t} = useTranslation();
+
+  const ref = useFocusableItem<TouchableOpacity>(shouldFocus);
 
   if (hasNoDeparturesOnGroup(group)) {
     return null;
@@ -67,13 +77,10 @@ export default function LineItem({
     : firstResultTime;
 
   return (
-    <View style={[topContainer, {padding: 0}]}>
-      <HiddenHeader
-        title={title}
-        prefix={t(NearbyTexts.results.lines.a11y.line)}
-      />
+    <View style={[topContainer, {padding: 0, position: 'relative'}]}>
       <View style={[topContainer, sectionStyle.spaceBetween]}>
         <TouchableOpacity
+          ref={ref}
           style={styles.lineHeader}
           containerStyle={contentContainer}
           onPress={() => onPress(firstResult)}
@@ -101,6 +108,7 @@ export default function LineItem({
           <ThemeText>{title}</ThemeText>
         </TouchableOpacity>
       </View>
+      <SkipLink skipContent={skipContent} />
       <ScrollView horizontal contentContainerStyle={styles.scrollContainer}>
         {group.departures.map((departure) => (
           <DepartureTimeItem
@@ -118,6 +126,19 @@ type DepartureTimeItemProps = {
   departure: DepartureTime;
   onPress(departure: DepartureTime): void;
 };
+
+function SkipLink({skipContent}: {skipContent?(): void}) {
+  const styles = useItemStyles();
+  const {t} = useTranslation();
+  return (
+    <View style={styles.hidden}>
+      <TouchableOpacity accessibilityRole="button" onPress={skipContent}>
+        <Text>{t(NearbyTexts.results.lines.a11y.skipContent)}</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
 function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
   const styles = useItemStyles();
   const time = formatToClockOrRelativeMinutes(departure.aimedTime);
@@ -196,5 +217,10 @@ const useItemStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   },
   departureText: {
     fontVariant: ['tabular-nums'],
+  },
+  hidden: {
+    height: 1,
+    position: 'absolute',
+    top: theme.spacings.medium * 2,
   },
 }));

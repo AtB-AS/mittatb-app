@@ -1,3 +1,13 @@
+import {
+  Component,
+  ComponentClass,
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import {AccessibilityInfo, findNodeHandle} from 'react-native';
 import {DepartureGroupMetadata} from '../../api/departures/departure-group';
 import {
   DepartureGroup,
@@ -118,4 +128,57 @@ export function hasNoDeparturesOnGroup(group: DepartureGroup) {
 
 export function isValidDeparture(departure: DepartureTime) {
   return !isNumberOfMinutesInThePast(departure.time, HIDE_AFTER_NUM_MINUTES);
+}
+
+export function useFocusableItem<
+  T extends number | Component<any, any, any> | ComponentClass<any, any> | null
+>(shouldFocus: boolean) {
+  const ref = useRef<T | null>(null);
+
+  useEffect(() => {
+    if (ref.current && shouldFocus) {
+      focusOnRef(ref);
+    }
+  }, [shouldFocus]);
+
+  return ref;
+}
+
+export function focusOnRef<
+  T extends number | Component<any, any, any> | ComponentClass<any, any> | null
+>(ref: React.RefObject<T>) {
+  if (ref.current) {
+    const reactTag = findNodeHandle(ref.current);
+    if (reactTag) {
+      AccessibilityInfo.setAccessibilityFocus(reactTag);
+    }
+  }
+}
+
+export function useFocusRegister<
+  T extends number | Component<any, any, any> | ComponentClass<any, any> | null
+>(
+  jumpToNextSection?: () => void,
+  nextRef?: RefObject<T>,
+  hasMoreItems?: boolean,
+) {
+  const [focusIndex, setFocusIndex] = useState<number | null>(null);
+
+  const skipContent = useCallback(
+    (i: number, length: number) => {
+      if (i < length - 1) {
+        setFocusIndex(i + 1);
+        return;
+      }
+
+      if (hasMoreItems && nextRef?.current) {
+        focusOnRef(nextRef);
+      } else {
+        jumpToNextSection?.();
+      }
+    },
+    [hasMoreItems, nextRef, jumpToNextSection],
+  );
+
+  return {focusIndex, skipContent};
 }

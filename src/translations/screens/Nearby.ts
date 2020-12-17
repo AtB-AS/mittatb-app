@@ -59,7 +59,8 @@ const NearbyTexts = {
         accessibilityLabelNoPublicCode: (name: string) =>
           _(`Avganger fra plattform på holdeplassen ${name}`),
         distance: {
-          label: (distance: string) => _(`Det er ca ${distance} til plattform`),
+          label: (distance: string) =>
+            _(`Det er rundt ${distance} til plattform`),
         },
       },
       showMoreToggler: {
@@ -70,6 +71,7 @@ const NearbyTexts = {
     lines: {
       a11y: {
         line: _(`Linje:`),
+        skipContent: _('Hopp over resten av avganger for denne linjen'),
       },
       firstResult: (line: string, time: string) =>
         _(`Neste avgang for ${line} går ${time}`),
