@@ -53,7 +53,6 @@ const NearbyTexts = {
     },
     quayResult: {
       platformHeader: {
-        title: _('Plattform', 'Platform'),
         accessibilityLabel: (name: string, publicCode: string) =>
           _(`Avganger fra plattform ${name} ${publicCode}`),
         accessibilityLabelNoPublicCode: (name: string) =>
