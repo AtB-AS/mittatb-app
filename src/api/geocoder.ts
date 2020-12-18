@@ -10,17 +10,22 @@ export const TRONDHEIM_CENTRAL_STATION: Coordinates = {
 };
 
 export async function autocomplete(
-  text: string | null,
+  text: string,
   coordinates: Coordinates | null,
+  onlyAtbVenues: boolean = false,
   config?: AxiosRequestConfig,
 ) {
   const url = 'bff/v1/geocoder/features';
-  const query = qs.stringify({
-    query: text,
-    lat: coordinates?.latitude ?? TRONDHEIM_CENTRAL_STATION.latitude,
-    lon: coordinates?.longitude ?? TRONDHEIM_CENTRAL_STATION.longitude,
-    limit: 10,
-  });
+  const query = qs.stringify(
+    {
+      query: text,
+      lat: coordinates?.latitude ?? TRONDHEIM_CENTRAL_STATION.latitude,
+      lon: coordinates?.longitude ?? TRONDHEIM_CENTRAL_STATION.longitude,
+      limit: 10,
+      tariff_zone_authorities: onlyAtbVenues ? 'ATB' : null,
+    },
+    {skipNull: true},
+  );
 
   return await client.get<Feature[]>(stringifyUrl(url, query), config);
 }

@@ -1,8 +1,12 @@
 import {RouteProp, useIsFocused} from '@react-navigation/native';
-import React, {useEffect, useRef, useState} from 'react';
-import {Keyboard, TextInput as InternalTextInput, View} from 'react-native';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {
+  ActivityIndicator,
+  Keyboard,
+  TextInput as InternalTextInput,
+  View,
+} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {Close} from '../assets/svg/icons/actions';
 import {TextInput} from '../components/sections';
 import ThemeText from '../components/text';
 import ThemeIcon from '../components/theme-icon';
@@ -12,10 +16,20 @@ import FullScreenHeader from '../ScreenHeader/full-header';
 import {StyleSheet} from '../theme';
 import {TariffZoneSearchNavigationProp} from './';
 import TariffZoneResults from './TariffZoneResults';
-import {TariffZoneSearchTexts, useTranslation} from '../translations/';
+import {
+  TariffZoneSearchTexts,
+  TranslateFunction,
+  useTranslation,
+} from '../translations/';
 import useDebounce from '../utils/useDebounce';
 import {useTicketState} from '../TicketContext';
 import {TariffZone} from '../api/tariffZones';
+import {useGeolocationState} from '../GeolocationContext';
+import {useGeocoder} from '../geocoder';
+import VenueResults, {LocationAndTariffZone} from './VenueResults';
+import {Location} from '../favorites/types';
+import {ArrowLeft} from '../assets/svg/icons/navigation';
+import {ErrorType} from '../api/utils';
 
 export type Props = {
   navigation: TariffZoneSearchNavigationProp;
@@ -26,25 +40,45 @@ export type RouteParams = {
   callerRouteName: string;
   callerRouteParam: string;
   label: string;
+  initialLocation?: string;
 };
 
 const TariffZoneSearch: React.FC<Props> = ({
   navigation,
   route: {
-    params: {callerRouteName, callerRouteParam, label},
+    params: {callerRouteName, callerRouteParam, label, initialLocation},
   },
 }) => {
   const styles = useThemeStyles();
 
-  const [text, setText] = useState<string>('');
+  const [text, setText] = useState<string>(initialLocation || '');
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
   const debouncedText = useDebounce(text, 200);
   const {t} = useTranslation();
 
   const {tariffZones} = useTicketState();
 
-  const onSelect = (tariffZone: TariffZone) => {
+  const getMatchingTariffZone = (location: Location) =>
+    tariffZones.find((tf) => location.tariff_zones?.includes(tf.id));
+
+  const onSelectZone = (tariffZone: TariffZone) => {
     navigation.navigate(callerRouteName as any, {
-      [callerRouteParam]: tariffZone,
+      [callerRouteParam]: {
+        ...tariffZone,
+        resultType: 'zone',
+      },
+    });
+  };
+
+  const onSelectVenue = (location: Location) => {
+    const tariffZone = getMatchingTariffZone(location);
+    navigation.navigate(callerRouteName as any, {
+      [callerRouteParam]: {
+        ...tariffZone,
+        resultType: 'venue',
+        venueName: location.name,
+      },
     });
   };
 
@@ -60,9 +94,38 @@ const TariffZoneSearch: React.FC<Props> = ({
     if (isFocused) focusInput();
   }, [isFocused]);
 
-  const filteredTariffZones = tariffZones.filter((tz) =>
-    tz.name.value.includes(debouncedText),
+  const {location: geolocation} = useGeolocationState();
+
+  const {locations, isSearching, error} =
+    useGeocoder(debouncedText, geolocation?.coords ?? null, true) ?? [];
+
+  useEffect(() => {
+    if (error) {
+      setErrorMessage(translateErrorType(error, t));
+    }
+  }, [error]);
+
+  const locationsAndTariffZones: LocationAndTariffZone[] = useMemo(
+    () =>
+      (locations || [])
+        ?.map((location) => ({
+          location,
+          tariffZone: getMatchingTariffZone(location),
+        }))
+        .filter(
+          (
+            locationAndTariffZone,
+          ): locationAndTariffZone is LocationAndTariffZone =>
+            locationAndTariffZone.tariffZone != null,
+        ),
+    [locations],
   );
+
+  const showActivityIndicator = isSearching && !locationsAndTariffZones.length;
+  const showTariffZones = !debouncedText && !isSearching;
+  const showVenueResults = !!locationsAndTariffZones.length;
+  const showEmptyResultText =
+    !locationsAndTariffZones.length && !!debouncedText && !isSearching;
 
   return (
     <View style={styles.container}>
@@ -75,7 +138,7 @@ const TariffZoneSearch: React.FC<Props> = ({
           accessibilityLabel: t(
             TariffZoneSearchTexts.header.leftButton.a11yLabel,
           ),
-          icon: <ThemeIcon svg={Close} />,
+          icon: <ThemeIcon svg={ArrowLeft} />,
         }}
       />
 
@@ -96,33 +159,54 @@ const TariffZoneSearch: React.FC<Props> = ({
         </View>
       </View>
 
-      {filteredTariffZones.length ? (
-        <ScrollView
-          style={styles.scroll}
-          contentContainerStyle={styles.contentBlock}
-          keyboardShouldPersistTaps="handled"
-          onScrollBeginDrag={() => Keyboard.dismiss()}
-        >
-          <TariffZoneResults
-            title={t(TariffZoneSearchTexts.results.searchResults.heading)}
-            tariffZones={filteredTariffZones}
-            onSelect={onSelect}
-          />
-        </ScrollView>
-      ) : (
-        !!text && (
-          <View style={styles.contentBlock}>
-            <MessageBox type="info">
-              <ThemeText>
-                {t(TariffZoneSearchTexts.messages.emptyResult)}
-              </ThemeText>
-            </MessageBox>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.contentBlock}
+        keyboardShouldPersistTaps="handled"
+        onScrollBeginDrag={() => Keyboard.dismiss()}
+      >
+        {error && (
+          <View style={styles.withMargin}>
+            <MessageBox type="warning" message={errorMessage} />
           </View>
-        )
-      )}
+        )}
+        {showActivityIndicator && <ActivityIndicator />}
+        {showTariffZones && (
+          <TariffZoneResults
+            tariffZones={tariffZones}
+            onSelect={onSelectZone}
+          />
+        )}
+        {showVenueResults && (
+          <VenueResults
+            locationsAndTariffZones={locationsAndTariffZones}
+            onSelect={onSelectVenue}
+          />
+        )}
+        {showEmptyResultText && (
+          <MessageBox type="info">
+            <ThemeText>
+              {t(TariffZoneSearchTexts.messages.emptyResult)}
+            </ThemeText>
+          </MessageBox>
+        )}
+      </ScrollView>
     </View>
   );
 };
+
+function translateErrorType(
+  errorType: ErrorType,
+  t: TranslateFunction,
+): string {
+  switch (errorType) {
+    case 'network-error':
+    case 'timeout':
+      return t(TariffZoneSearchTexts.messages.networkError);
+    default:
+      return t(TariffZoneSearchTexts.messages.defaultError);
+  }
+}
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
