@@ -1,5 +1,6 @@
 import {useIsFocused} from '@react-navigation/native';
 import {useCallback, useEffect} from 'react';
+import {LayoutAnimation} from 'react-native';
 import useReducerWithSideEffects, {
   NoUpdate,
   ReducerWithSideEffects,
@@ -14,7 +15,8 @@ import {
   getNextDepartureGroups,
 } from '../../api/departures/departure-group';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
-import {Location} from '../../favorites/types';
+import {useFavorites} from '../../favorites';
+import {Location, UserFavoriteDepartures} from '../../favorites/types';
 import {DeparturesRealtimeData} from '../../sdk';
 import {differenceInMinutesStrings} from '../../utils/date';
 import useInterval from '../../utils/use-interval';
@@ -30,6 +32,7 @@ type LoadType = 'initial' | 'more';
 
 export type DepartureDataState = {
   data: DepartureGroupMetadata['data'] | null;
+  showOnlyFavorites: boolean;
   tick?: Date;
   error?: {type: ErrorType; loadType: LoadType};
   locationId?: string;
@@ -45,6 +48,7 @@ const initialQueryInput: DepartureGroupsQuery = {
 };
 const initialState: DepartureDataState = {
   data: null,
+  showOnlyFavorites: false,
   error: undefined,
   locationId: undefined,
   isLoading: false,
@@ -60,11 +64,18 @@ const initialState: DepartureDataState = {
 type DepartureDataActions =
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
-      location: Location | undefined;
+      location?: Location;
+      favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
       type: 'LOAD_MORE_DEPARTURES';
-      location: Location | undefined;
+      location?: Location;
+      favoriteDepartures?: UserFavoriteDepartures;
+    }
+  | {
+      type: 'TOGGLE_SHOW_FAVORITES';
+      location?: Location;
+      favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
       type: 'LOAD_REALTIME_DATA';
@@ -115,11 +126,16 @@ const reducer: ReducerWithSideEffects<
           isFetchingMore: true,
           queryInput,
         },
-        async (state2, dispatch) => {
+        async (state, dispatch) => {
           try {
             // Fresh fetch, reset paging and use new query input with new startTime
             const result = await getDepartureGroups(
-              {location: action.location!},
+              {
+                location: action.location!,
+                favorites: state.showOnlyFavorites
+                  ? action.favoriteDepartures
+                  : undefined,
+              },
               queryInput,
             );
             dispatch({
@@ -153,7 +169,12 @@ const reducer: ReducerWithSideEffects<
             // Use previously stored queryInput with stored startTime
             // to ensure that we get the same departures.
             const result = await getNextDepartureGroups(
-              {location: action.location!},
+              {
+                location: action.location!,
+                favorites: state.showOnlyFavorites
+                  ? action.favoriteDepartures
+                  : undefined,
+              },
               state.cursorInfo!,
             );
 
@@ -218,7 +239,24 @@ const reducer: ReducerWithSideEffects<
       });
     }
 
+    case 'TOGGLE_SHOW_FAVORITES': {
+      return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
+        {
+          ...state,
+          showOnlyFavorites: !state.showOnlyFavorites,
+        },
+        async (_, dispatch) => {
+          dispatch({
+            type: 'LOAD_INITIAL_DEPARTURES',
+            location: action.location,
+            favoriteDepartures: action.favoriteDepartures,
+          });
+        },
+      );
+    }
+
     case 'UPDATE_DEPARTURES': {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       return Update<DepartureDataState>({
         ...state,
         isLoading: false,
@@ -232,6 +270,7 @@ const reducer: ReducerWithSideEffects<
     }
 
     case 'UPDATE_REALTIME': {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       return Update<DepartureDataState>({
         ...state,
         data: updateStopsWithRealtime(state.data ?? [], action.realtimeData),
@@ -273,15 +312,24 @@ export function useDepartureData(
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const isFocused = useIsFocused();
+  const {favoriteDepartures} = useFavorites();
 
   const refresh = useCallback(
-    () => dispatch({type: 'LOAD_INITIAL_DEPARTURES', location}),
-    [location?.id],
+    () =>
+      dispatch({type: 'LOAD_INITIAL_DEPARTURES', location, favoriteDepartures}),
+    [location?.id, favoriteDepartures],
   );
 
   const loadMore = useCallback(
-    () => dispatch({type: 'LOAD_MORE_DEPARTURES', location}),
-    [location?.id],
+    () =>
+      dispatch({type: 'LOAD_MORE_DEPARTURES', location, favoriteDepartures}),
+    [location?.id, favoriteDepartures],
+  );
+
+  const toggleShowFavorites = useCallback(
+    () =>
+      dispatch({type: 'TOGGLE_SHOW_FAVORITES', location, favoriteDepartures}),
+    [location?.id, favoriteDepartures],
   );
 
   useEffect(refresh, [location?.id]);
@@ -315,5 +363,6 @@ export function useDepartureData(
     state,
     refresh,
     loadMore,
+    toggleShowFavorites,
   };
 }

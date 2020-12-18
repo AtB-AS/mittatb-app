@@ -3,6 +3,7 @@ import sortBy from 'lodash.sortby';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {QuayGroup, StopPlaceGroup} from '../../api/departures/types';
+import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 import {ActionItem} from '../../components/sections';
 import ThemeText from '../../components/text';
 import {Location} from '../../favorites/types';
@@ -18,17 +19,23 @@ type NearbyResultsProps = {
   lastUpdated?: Date;
   currentLocation?: Location;
   isFetchingMore?: boolean;
+  isLoading?: boolean;
   error?: string;
   isInitialScreen: boolean;
+
+  showOnlyFavorites: boolean;
 };
 
 export default function NearbyResults({
   departures,
   lastUpdated,
   isFetchingMore = false,
+  isLoading = false,
   error,
   isInitialScreen,
   currentLocation,
+
+  showOnlyFavorites,
 }: NearbyResultsProps) {
   const styles = useResultsStyle();
   const {t} = useTranslation();
@@ -43,11 +50,16 @@ export default function NearbyResults({
     );
   }
 
-  if (hasNoQuaysWithDepartures(departures)) {
+  if (!isLoading && hasNoQuaysWithDepartures(departures)) {
+    const message = !showOnlyFavorites
+      ? t(NearbyTexts.results.messages.emptyResult)
+      : t(NearbyTexts.results.messages.emptyResultFavorites);
     return (
       <View style={styles.container}>
+        <ScreenReaderAnnouncement message={message} />
+
         <MessageBox type="info">
-          <ThemeText>{t(NearbyTexts.results.messages.emptyResult)}</ThemeText>
+          <ThemeText>{message}</ThemeText>
         </MessageBox>
       </View>
     );
@@ -56,11 +68,14 @@ export default function NearbyResults({
   return (
     <View style={styles.container}>
       {error && (
-        <MessageBox
-          type="warning"
-          message={error}
-          containerStyle={{marginBottom: 24}}
-        />
+        <>
+          <ScreenReaderAnnouncement message={error} />
+          <MessageBox
+            type="warning"
+            message={error}
+            containerStyle={{marginBottom: 24}}
+          />
+        </>
       )}
 
       {departures && (
@@ -82,7 +97,7 @@ export default function NearbyResults({
 }
 const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    padding: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
   },
   centerText: {
     textAlign: 'center',
@@ -156,6 +171,7 @@ const StopDepartures = React.memo(function StopDepartures({
         orderedQuays.map(([distance, quayGroup]) => (
           <QuaySection
             key={quayGroup.quay.id}
+            stop={stopPlaceGroup.stopPlace}
             quayGroup={quayGroup}
             distance={distance}
             lastUpdated={lastUpdated}

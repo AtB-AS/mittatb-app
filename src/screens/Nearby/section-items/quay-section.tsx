@@ -1,7 +1,7 @@
 import sortBy from 'lodash.sortby';
 import React, {Fragment, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
-import {QuayGroup} from '../../../api/departures/types';
+import {QuayGroup, StopPlaceInfo} from '../../../api/departures/types';
 import {Section} from '../../../components/sections';
 import {useTheme} from '../../../theme';
 import {NearbyTexts, useTranslation} from '../../../translations';
@@ -14,6 +14,7 @@ const LIMIT_SIZE = 5;
 
 type QuaySectionProps = {
   quayGroup: QuayGroup;
+  stop: StopPlaceInfo;
   distance?: number;
   lastUpdated?: Date;
   hidden?: Date;
@@ -21,6 +22,7 @@ type QuaySectionProps = {
 
 const QuaySection = React.memo(function QuaySection({
   quayGroup,
+  stop,
   distance,
   lastUpdated,
 }: QuaySectionProps) {
@@ -52,6 +54,8 @@ const QuaySection = React.memo(function QuaySection({
         {sorted.map((group) => (
           <LineItem
             group={group}
+            stop={stop}
+            quay={quayGroup.quay}
             key={group.lineInfo?.lineId + String(group.lineInfo?.lineName)}
           />
         ))}

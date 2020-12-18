@@ -78,6 +78,7 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
   const styles = useThemeStyles();
   const {theme} = useTheme();
   const scrollYRef = useRef(new Animated.Value(0)).current;
+  const nullRef = useRef(new Animated.Value(0)).current;
 
   const headerTranslate = scrollYRef.interpolate({
     inputRange: [0, contentHeight],
@@ -119,7 +120,7 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
           title={headerTitle}
           rightButton={chatIcon}
           alternativeTitleComponent={alternativeTitleComponent}
-          scrollRef={scrollYRef}
+          scrollRef={isRefreshing ? nullRef : scrollYRef}
           leftButton={{
             onPress: logoClick?.callback,
             icon: <ThemeIcon svg={LogoOutline} />,
