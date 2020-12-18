@@ -19,7 +19,7 @@ import * as Sections from '../../../../components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useTicketState} from '../../../../TicketContext';
 import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
-import {useTranslation} from '../../../../translations';
+import {TravellersTexts, useTranslation} from '../../../../translations';
 
 export type TravellersProps = {
   navigation: DismissableStackNavigationProp<
@@ -110,9 +110,11 @@ const Travellers: React.FC<TravellersProps> = ({
       <Header
         title={params.preassignedFareProduct.name.value}
         leftButton={{
-          icon: <ThemeText>Avbryt</ThemeText>,
+          icon: (
+            <ThemeText>{t(TravellersTexts.header.leftButton.text)}</ThemeText>
+          ),
           onPress: closeModal,
-          accessibilityLabel: 'Avbryt kjøpsprosessen',
+          accessibilityLabel: t(TravellersTexts.header.leftButton.a11yLabel),
         }}
         style={styles.header}
       />
@@ -121,8 +123,8 @@ const Travellers: React.FC<TravellersProps> = ({
         {error && (
           <MessageBox
             type="warning"
-            title="Det oppstod en feil"
-            message={translateError(error)}
+            title={t(TravellersTexts.errorMessageBox.title)}
+            message={t(translateError(error))}
           />
         )}
 
@@ -137,7 +139,9 @@ const Travellers: React.FC<TravellersProps> = ({
               });
             }}
             icon={<ThemeIcon svg={Edit} />}
-            accessibility={{accessibilityHint: 'Aktivér for å velge soner'}}
+            accessibility={{
+              accessibilityHint: t(TravellersTexts.tariffZones.a11yHint),
+            }}
           />
         </Sections.Section>
 
@@ -145,7 +149,7 @@ const Travellers: React.FC<TravellersProps> = ({
           {userProfilesWithCount.map((u) => (
             <Sections.CounterInput
               key={u.userTypeString}
-              text={u.name.value}
+              text={t(TravellersTexts.travellerCounter.text(u))}
               count={u.count}
               addCount={() => addCount(u.userTypeString)}
               removeCount={() => removeCount(u.userTypeString)}
@@ -164,9 +168,11 @@ const Travellers: React.FC<TravellersProps> = ({
       >
         <View style={styles.totalContainer}>
           <View style={styles.totalContainerHeadings}>
-            <ThemeText type="body">Totalt</ThemeText>
+            <ThemeText type="body">
+              {t(TravellersTexts.totalCost.title)}
+            </ThemeText>
             <ThemeText type="label" color={'faded'}>
-              Inkl. 6% mva
+              {t(TravellersTexts.totalCost.label)}
             </ThemeText>
           </View>
 
@@ -183,9 +189,9 @@ const Travellers: React.FC<TravellersProps> = ({
         <View style={styles.buttons}>
           <Button
             mode="primary2"
-            text="Betal med Vipps"
+            text={t(TravellersTexts.paymentButtonVipps.text)}
             disabled={isSearchingOffer}
-            accessibilityLabel="Trykk for å betale billett med Vipps"
+            accessibilityHint={t(TravellersTexts.paymentButtonVipps.a11yHint)}
             icon={Vipps}
             iconPosition="left"
             onPress={payWithVipps}
@@ -198,9 +204,9 @@ const Travellers: React.FC<TravellersProps> = ({
           />
           <Button
             mode="primary2"
-            text="Betal med bankkort"
+            text={t(TravellersTexts.paymentButtonCard.text)}
             disabled={isSearchingOffer}
-            accessibilityLabel="Trykk for å betale billett med bankkort"
+            accessibilityHint={t(TravellersTexts.paymentButtonCard.a11yHint)}
             icon={CreditCard}
             iconPosition="left"
             onPress={payWithCard}
@@ -220,9 +226,9 @@ function translateError(error: OfferError) {
   const {context} = error;
   switch (context) {
     case 'failed_offer_search':
-      return 'Klarte ikke å søke opp pris';
+      return TravellersTexts.errorMessageBox.failedOfferSearch;
     case 'failed_reservation':
-      return 'Klarte ikke å reservere billett';
+      return TravellersTexts.errorMessageBox.failedReservation;
   }
 }
 

@@ -80,7 +80,7 @@ const TariffZonesTexts = {
     },
   },
   saveButton: {
-    text: _('Lagre sonvalg'),
+    text: _('Lagre sonevalg'),
     a11yHint: _('Aktivér for å lagre sonevalget'),
   },
 };
