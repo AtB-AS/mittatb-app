@@ -28,6 +28,9 @@ const ProfileTexts = {
         places: {
           label: _('Steder'),
         },
+        departures: {
+          label: _('Avganger'),
+        },
       },
     },
     privacy: {

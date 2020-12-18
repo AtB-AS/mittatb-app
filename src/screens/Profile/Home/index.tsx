@@ -72,6 +72,10 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             text={t(ProfileTexts.sections.favorites.linkItems.places.label)}
             onPress={() => navigation.navigate('FavoriteList')}
           />
+          <Sections.LinkItem
+            text={t(ProfileTexts.sections.favorites.linkItems.departures.label)}
+            onPress={() => navigation.navigate('FavoriteDepartures')}
+          />
         </Sections.Section>
 
         <Sections.Section withPadding>

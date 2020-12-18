@@ -22,6 +22,7 @@ export {default as TicketTexts} from './screens/Ticket';
 export {default as NearbyTexts} from './screens/Nearby';
 export {default as AddEditFavoriteTexts} from './screens/subscreens/AddEditFavorite';
 export {default as FavoriteListTexts} from './screens/subscreens/FavoriteList';
+export {default as FavoriteDeparturesTexts} from './screens/subscreens/FavoriteDepartures';
 export {default as TripDetailsTexts} from './screens/subscreens/TripDetails';
 export {default as DepartureDetailsTexts} from './screens/subscreens/DepartureDetails';
 export {default as SelectStartScreenTexts} from './screens/subscreens/SelectStartScreen';
