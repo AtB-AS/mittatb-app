@@ -32,12 +32,14 @@ import SortableFavoriteList from '../screens/Profile/FavoriteList/SortFavorites'
 import TicketModalScreen, {
   TicketModalRouteParams,
 } from '../screens/Ticketing/Ticket/Details';
+import {RouteParams as TariffZoneSearchParams} from '../tariff-zone-search';
 
 export type RootStackParamList = {
   NotFound: undefined;
   Onboarding: undefined;
   TabNavigator: undefined;
   LocationSearch: LocationSearchParams;
+  TariffZoneSearch: TariffZoneSearchParams;
   DepartureDetailsModal: DepartureDetailsRouteParams;
   SortableFavoriteList: undefined;
   AddEditFavorite: AddEditParams;
