@@ -36,7 +36,7 @@ export default function CounterInput({
           onPress={() => removeCount()}
           accessibilityRole="button"
           accessibilityLabel={`Minsk antall til ${count - 1}`}
-          accessibilityElementsHidden={count <= 1}
+          accessibilityElementsHidden={count < 1}
           importantForAccessibility={count >= 1 ? 'yes' : 'no-hide-descendants'}
           hitSlop={insets.all(8)}
         >
