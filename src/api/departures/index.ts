@@ -1,14 +1,15 @@
-import {
-  DeparturesMetadata,
-  DeparturesWithStop,
-  DeparturesRealtimeData,
-  PaginationInput,
-} from '../sdk';
-import client from './client';
-import {Location} from '../favorites/types';
 import {AxiosRequestConfig} from 'axios';
 import {build} from 'search-params';
-import {flatMap} from '../utils/array';
+import {Location} from '../../favorites/types';
+import {
+  DeparturesMetadata,
+  DeparturesRealtimeData,
+  PaginationInput,
+} from '../../sdk';
+import {flatMap} from '../../utils/array';
+import client from '../client';
+import {DepartureGroupsQuery} from './departure-group';
+import {StopPlaceGroup} from './types';
 
 export type DeparturesInputQuery = {
   numberOfDepartures: number; // Number of departures to fetch per quay.
@@ -29,20 +30,22 @@ export async function getDepartures(
 }
 
 export async function getRealtimeDeparture(
-  stops: DeparturesWithStop[],
-  query: DeparturesInputQuery,
+  stops: StopPlaceGroup[],
+  query: DepartureGroupsQuery,
   opts?: AxiosRequestConfig,
 ): Promise<DeparturesRealtimeData> {
-  const quayIds = flatMap(stops, (s) => Object.keys(s.quays));
+  const quayIds = flatMap(stops, (s) => s.quays.map((q) => q.quay.id));
   const startTime = query.startTime.toISOString();
 
   const params = build({
     quayIds,
     startTime,
-    limit: query.numberOfDepartures,
+    limit: query.limitPerLine,
   });
 
   let url = `bff/v1/departures-realtime?${params}`;
   const response = await client.get<DeparturesRealtimeData>(url, opts);
   return response.data;
 }
+
+export {getDepartureGroups} from './departure-group';

@@ -5,8 +5,10 @@ import {
   ViewStyle,
   TouchableOpacity,
   TextStyle,
+  Animated,
+  Easing,
 } from 'react-native';
-import React from 'react';
+import React, {useRef} from 'react';
 import {StyleSheet, Theme, useTheme} from '../../theme';
 import ThemeText from '../text';
 
@@ -32,6 +34,8 @@ export type ButtonProps = {
 } & ButtonTypeAwareProps &
   TouchableOpacityProps;
 
+const DISABLED_OPACITY = 0.2;
+
 const Button: React.FC<ButtonProps> = ({
   onPress,
   mode = 'primary',
@@ -48,6 +52,17 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const css = useButtonStyle();
   const {theme} = useTheme();
+  const fadeAnim = useRef(new Animated.Value(disabled ? DISABLED_OPACITY : 1))
+    .current;
+
+  React.useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: disabled ? DISABLED_OPACITY : 1,
+      duration: 200,
+      easing: Easing.inOut(Easing.ease),
+      useNativeDriver: true,
+    }).start();
+  }, [disabled, fadeAnim]);
 
   const isInline = type === 'compact' || type === 'inline';
 
@@ -87,9 +102,7 @@ const Button: React.FC<ButtonProps> = ({
       };
 
   return (
-    <View
-      style={[disabled ? css.buttonDisabled : undefined, viewContainerStyle]}
-    >
+    <Animated.View style={[{opacity: fadeAnim}, viewContainerStyle]}>
       <TouchableOpacity
         style={[styleContainer, style]}
         onPress={onPress}
@@ -115,7 +128,7 @@ const Button: React.FC<ButtonProps> = ({
           </View>
         )}
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 };
 export default Button;
@@ -128,8 +141,5 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     borderWidth: theme.border.width.medium,
     backgroundColor: theme.button.primary.backgroundColor,
     borderColor: theme.button.primary.backgroundColor,
-  },
-  buttonDisabled: {
-    opacity: 0.2,
   },
 }));

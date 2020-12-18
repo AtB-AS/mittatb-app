@@ -16,7 +16,7 @@ export default function GenericItem({
   const style = useSectionStyle();
 
   return (
-    <View style={[style.baseItem, topContainer]} {...accessibility}>
+    <View style={topContainer} {...accessibility}>
       {Children.map(children, (child) => (
         <View style={[style.spaceBetween, contentContainer]}>{child}</View>
       ))}

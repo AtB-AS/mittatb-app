@@ -93,16 +93,27 @@ export type IntermediateEstimatedCall = EstimatedCall;
 
 export type Departure = EstimatedCall;
 
-export interface Situation {
-  situationNumber: string;
-  summary: Array<MultilingualString>;
-  description: Array<MultilingualString>;
-  advice: Array<MultilingualString>;
-  lines: Array<Line>;
-  validityPeriod: ValidityPeriod;
-  reportType: ReportType;
-  infoLinks: Array<InfoLink>;
-}
+export type Situation = {
+  situationNumber?: string;
+  reportType?: ReportType;
+  summary: Array<{
+    language?: string;
+    value?: string;
+  }>;
+  description: Array<{
+    language?: string;
+    value?: string;
+  }>;
+  advice: Array<{
+    language?: string;
+    value?: string;
+  }>;
+  validityPeriod?: {
+    startTime?: any;
+    endTime?: any;
+  };
+  infoLinks?: Array<{uri?: string; label?: string}>;
+};
 
 export interface Quay {
   id: string;
@@ -166,12 +177,7 @@ export type RealtimeData = {
   serviceJourneyId: string;
   timeData: {
     realtime: boolean;
-    expectedArrivalTime: string;
     expectedDepartureTime: string;
-    actualArrivalTime: string;
-    actualDepartureTime: string;
-    aimedArrivalTime: string;
-    aimedDepartureTime: string;
   };
 };
 
@@ -183,3 +189,32 @@ export type DepartureRealtimeData = {
 export type DeparturesRealtimeData = {
   [quayId: string]: DepartureRealtimeData;
 };
+
+export type FavoriteDeparture = {
+  stopId: string;
+  lineName: string;
+  lineId: string;
+};
+
+export type NextCursorData = {
+  nextCursor?: string;
+  hasNextPage: boolean;
+};
+
+export type CursoredData<T> = {
+  data: T;
+  metadata:
+    | {hasNextPage: false}
+    | {
+        hasNextPage: true;
+        nextCursor: string;
+        nextUrlParams: string;
+      };
+};
+
+export type CursorInput = {
+  cursor?: string;
+  pageSize?: number;
+};
+
+export type CursoredQuery<T> = CursorInput & T;

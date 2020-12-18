@@ -78,14 +78,7 @@ function Item(props: ItemProps) {
   const styles = useListStyle();
 
   return (
-    <View
-      style={[
-        styles.item,
-        sectionStyles.baseItem,
-        sectionStyles.spaceBetween,
-        topContainer,
-      ]}
-    >
+    <View style={[styles.item, sectionStyles.spaceBetween, topContainer]}>
       <FavoriteIcon favorite={item} />
       <ThemeText type="body" style={contentContainer}>
         {name(item)}

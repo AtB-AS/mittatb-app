@@ -5,6 +5,7 @@ import {
   differenceInSeconds,
   isSameDay,
   isPast,
+  differenceInMinutes,
   differenceInCalendarDays,
 } from 'date-fns';
 import nb from 'date-fns/locale/nb';
@@ -35,6 +36,9 @@ function getShortHumanizer(ms: number, options?: humanizeDuration.Options) {
 const shortHumanizer = humanizeDuration.humanizer({});
 
 export const missingRealtimePrefix = 'ca. ';
+function parseIfNeeded(a: string | Date): Date {
+  return a instanceof Date ? a : parseISO(a);
+}
 
 export function secondsToDurationShort(seconds: number): string {
   return getShortHumanizer(seconds * 1000, {
@@ -69,8 +73,8 @@ export function secondsBetween(
   start: string | Date,
   end: string | Date,
 ): number {
-  const parsedStart = start instanceof Date ? start : parseISO(start);
-  const parsedEnd = end instanceof Date ? end : parseISO(end);
+  const parsedStart = parseIfNeeded(start);
+  const parsedEnd = parseIfNeeded(end);
   return differenceInSeconds(parsedEnd, parsedStart);
 }
 
@@ -89,20 +93,35 @@ export function formatToClockOrRelativeMinutes(
   isoDate: string | Date,
   minuteThreshold: number = 9,
   language?: Language,
+  now = 'Nå',
 ) {
-  const parsed = isoDate instanceof Date ? isoDate : parseISO(isoDate);
+  const parsed = parseIfNeeded(isoDate);
   const diff = secondsBetween(new Date(), parsed);
 
-  if (isInThePast(parsed) || diff / 60 >= minuteThreshold) {
+  if (diff / 60 >= minuteThreshold) {
     return formatLocaleTime(parsed, language);
   }
 
   if (diff / 60 <= 1) {
-    return 'Nå';
+    return now;
   }
 
   return secondsToMinutesShort(diff);
 }
+export function isRelativeButNotNow(
+  isoDate: string | Date,
+  minuteThreshold: number = 9,
+) {
+  const parsed = parseIfNeeded(isoDate);
+  const diff = secondsBetween(new Date(), parsed);
+
+  if (diff / 60 >= minuteThreshold || diff / 60 <= 1) {
+    return false;
+  }
+
+  return true;
+}
+
 export function formatLocaleTime(date: Date, language?: Language) {
   const lang = language ?? DEFAULT_LANGUAGE;
   switch (lang) {
@@ -113,11 +132,17 @@ export function formatLocaleTime(date: Date, language?: Language) {
   }
 }
 export function isInThePast(isoDate: string | Date) {
-  return isPast(isoDate instanceof Date ? isoDate : parseISO(isoDate));
+  return isPast(parseIfNeeded(isoDate));
+}
+export function isNumberOfMinutesInThePast(
+  isoDate: string | Date,
+  minutes: number,
+) {
+  return differenceInMinutesStrings(isoDate, new Date()) < -minutes;
 }
 
 export function formatToLongDateTime(isoDate: string | Date, locale?: Locale) {
-  const parsed = isoDate instanceof Date ? isoDate : parseISO(isoDate);
+  const parsed = parseIfNeeded(isoDate);
   if (isSameDay(parsed, new Date())) {
     return formatToClock(parsed);
   }
@@ -143,4 +168,11 @@ export function isSeveralDays(items: string[]) {
     }
   }
   return true;
+}
+
+export function differenceInMinutesStrings(
+  dateLeft: string | Date,
+  dateRight: string | Date,
+) {
+  return differenceInMinutes(parseIfNeeded(dateLeft), parseIfNeeded(dateRight));
 }

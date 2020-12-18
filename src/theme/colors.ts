@@ -16,6 +16,7 @@ const backgrounds = {
 const colors = {
   primary: {
     // grays
+    gray_50: '#E7E8E9',
     gray_100: '#F5F5F6',
     gray_200: '#AFB3B7',
     gray_300: '#878E92',
@@ -25,6 +26,7 @@ const colors = {
     gray_700: '#21282C',
     gray_800: '#161A1E',
     gray_900: '#101416',
+    gray_950: '#1B1C1D',
     // greens
     green_100: '#E3E6B3',
     green_200: '#DADE99',

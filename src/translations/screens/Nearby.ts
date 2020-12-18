@@ -39,6 +39,12 @@ const NearbyTexts = {
       _(`Laster avganger i nærheten av ${locationName}`),
   },
   results: {
+    stops: {
+      header: {
+        hintShow: _('Aktiver for å vise'),
+        hintHide: _('Aktiver for å skjul'),
+      },
+    },
     messages: {
       initial: _(
         'Søk etter avganger fra holdeplasser eller i nærheten av steder.',
@@ -47,11 +53,37 @@ const NearbyTexts = {
     },
     quayResult: {
       platformHeader: {
-        title: _('Plattform', 'Platform'),
+        accessibilityLabel: (name: string, publicCode: string) =>
+          _(`Avganger fra plattform ${name} ${publicCode}`),
+        accessibilityLabelNoPublicCode: (name: string) =>
+          _(`Avganger fra plattform på holdeplassen ${name}`),
+        distance: {
+          label: (distance: string) =>
+            _(`Det er rundt ${distance} til plattform`),
+        },
       },
       showMoreToggler: {
         text: _('Vis flere avganger'),
       },
+    },
+    relativeTime: (time: string) => _(`om ${time}`),
+    lines: {
+      a11y: {
+        line: _(`Linje:`),
+      },
+      lineNameAccessibilityHint: _(
+        'Aktiver for detaljer om avgang og oversikt over kommende avganger.',
+      ),
+    },
+    departure: {
+      hasPassedAccessibilityLabel: (time: string) =>
+        _(`Avgangen ${time} har trolig passert plattformen.`),
+      upcomingRealtimeAccessibilityLabel: (time: string) =>
+        _(`Kommende avgang estimert til ${time}.`),
+      upcomingAccessibilityLabel: (time: string) =>
+        _(`Kommende avgang har rutetid på ${time}.`),
+      nextAccessibilityLabel: (time: string) => _(`Neste avganger: ${time}`),
+      nextAccessibilityNotRealtime: (time: string) => _(`rutetid: ${time}`),
     },
   },
 };

@@ -40,7 +40,7 @@ export default function LinkItem({
       accessibilityRole="link"
       onPress={onPress}
       disabled={disabled}
-      style={[style.baseItem, topContainer]}
+      style={topContainer}
       {...accessibility}
     >
       <View style={[style.spaceBetween, contentContainer, disabledStyle]}>

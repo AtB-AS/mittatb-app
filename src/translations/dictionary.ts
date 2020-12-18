@@ -50,5 +50,9 @@ const dictionary = {
       long: {},
     },
   },
+  distance: {
+    km: _('km', 'km'),
+    m: _('m', 'm'),
+  },
 };
 export default dictionary;

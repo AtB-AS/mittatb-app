@@ -55,7 +55,7 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
   const style = useSectionStyle();
 
   return (
-    <View style={[style.baseItem, style.spaceBetween, topContainer]}>
+    <View style={[style.spaceBetween, topContainer]}>
       <View style={favoriteStyle.favorite__emoji}>
         <FavoriteIcon favorite={favorite} />
       </View>

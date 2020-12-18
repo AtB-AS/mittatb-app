@@ -17,20 +17,14 @@ import Bugsnag from '@bugsnag/react-native';
 import {setInstallId as setApiInstallId} from './api/client';
 import ErrorBoundary from './error-boundary';
 import {PreferencesContextProvider} from './preferences';
+import configureAndStartBugsnag from './diagnostics/bugsnagConfig';
 
-if (!__DEV__) {
-  Bugsnag.start();
-} else {
-  Bugsnag.notify = (error) => console.error(error);
-  Bugsnag.leaveBreadcrumb = (message, metadata) =>
-    // eslint-disable-next-line
-    console.log(message, metadata);
-  Bugsnag.setUser = () => {};
-}
+configureAndStartBugsnag();
 
 import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import AppLanguageProvider from './translations/LanguageContext';
+import {Platform, UIManager} from 'react-native';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 

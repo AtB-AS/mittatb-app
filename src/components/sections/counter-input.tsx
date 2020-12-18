@@ -24,7 +24,7 @@ export default function CounterInput({
   const style = useSectionStyle();
   const counterStyles = useStyles();
   return (
-    <View style={[style.baseItem, topContainer, counterStyles.travellerCount]}>
+    <View style={[topContainer, counterStyles.travellerCount]}>
       <View style={[style.spaceBetween, contentContainer]}>
         <ThemeText>
           {count} {text}
