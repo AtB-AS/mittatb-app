@@ -3,6 +3,7 @@ import sortBy from 'lodash.sortby';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {QuayGroup, StopPlaceGroup} from '../../api/departures/types';
+import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 import {ActionItem} from '../../components/sections';
 import ThemeText from '../../components/text';
 import {Location} from '../../favorites/types';
@@ -43,25 +44,22 @@ export default function NearbyResults({
     return (
       <View style={styles.container}>
         <MessageBox type="info">
-          <ThemeText>
-            {showOnlyFavorites
-              ? t(NearbyTexts.results.messages.initial)
-              : t(NearbyTexts.results.messages.initial)}
-          </ThemeText>
+          <ThemeText>{t(NearbyTexts.results.messages.initial)}</ThemeText>
         </MessageBox>
       </View>
     );
   }
 
   if (!isLoading && hasNoQuaysWithDepartures(departures)) {
+    const message = !showOnlyFavorites
+      ? t(NearbyTexts.results.messages.emptyResult)
+      : t(NearbyTexts.results.messages.emptyResultFavorites);
     return (
       <View style={styles.container}>
+        <ScreenReaderAnnouncement message={message} />
+
         <MessageBox type="info">
-          <ThemeText>
-            {!showOnlyFavorites
-              ? t(NearbyTexts.results.messages.emptyResult)
-              : t(NearbyTexts.results.messages.emptyResultFavorites)}
-          </ThemeText>
+          <ThemeText>{message}</ThemeText>
         </MessageBox>
       </View>
     );
@@ -70,11 +68,14 @@ export default function NearbyResults({
   return (
     <View style={styles.container}>
       {error && (
-        <MessageBox
-          type="warning"
-          message={error}
-          containerStyle={{marginBottom: 24}}
-        />
+        <>
+          <ScreenReaderAnnouncement message={error} />
+          <MessageBox
+            type="warning"
+            message={error}
+            containerStyle={{marginBottom: 24}}
+          />
+        </>
       )}
 
       {departures && (
