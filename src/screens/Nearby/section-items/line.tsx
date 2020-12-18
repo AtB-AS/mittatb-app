@@ -309,6 +309,7 @@ function ToggleFavoriteDepartureButton({line, stop, quay}: FavoriteStarProps) {
       accessibilityLabel={t(
         label(`${line.lineNumber} ${line.lineName}`, stop.name),
       )}
+      hitSlop={insets.symmetric(14, 8)}
     >
       <ThemeIcon svg={Icon} />
     </TouchableOpacity>
