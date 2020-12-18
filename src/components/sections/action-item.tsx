@@ -29,12 +29,13 @@ export default function ActionItem({
   if (mode === 'toggle') {
     return (
       <View style={[style.spaceBetween, topContainer]}>
-        <ThemeText type="body" style={contentContainer}>
+        <ThemeText accessible={false} type="body" style={contentContainer}>
           {text}
         </ThemeText>
         <Switch
           value={checked}
           onValueChange={(v) => onPress?.(v)}
+          accessibilityLabel={text}
           {...accessibility}
         />
       </View>
