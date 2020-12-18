@@ -16,10 +16,10 @@ type WithChildren = {
   message?: never;
   children: React.ReactNode;
 };
-
+export type MessageType = 'info' | 'warning' | 'error' | 'success';
 export type MessageBoxProps = {
   icon?: React.ReactNode;
-  type?: 'info' | 'warning' | 'error' | 'success';
+  type?: MessageType;
   containerStyle?: StyleProp<ViewStyle>;
   title?: string;
   withMargin?: boolean;
@@ -55,6 +55,24 @@ const MessageBox: React.FC<MessageBoxProps> = ({
         {title && <ThemeText style={styles.title}>{title}</ThemeText>}
       </View>
       <View>{child}</View>
+    </View>
+  );
+};
+type TinyMessageProps = {type?: MessageType} & (WithChildren | WithMessage);
+export const TinyMessageBox: React.FC<TinyMessageProps> = ({
+  type = 'info',
+  message,
+  children,
+}) => {
+  const styles = useBoxStyle();
+  const backgroundColor = styles[typeToColorClass(type)];
+  return (
+    <View style={[styles.container, backgroundColor]}>
+      {message ? (
+        <ThemeText style={styles.text}>{message}</ThemeText>
+      ) : (
+        {children}
+      )}
     </View>
   );
 };

@@ -1,40 +1,47 @@
 import React from 'react';
-import {View, StyleProp, ViewStyle} from 'react-native';
+import {View, StyleProp, ViewStyle, AccessibilityProps} from 'react-native';
 import {
   BusSide,
   TramSide,
   TrainSide,
   PlaneSide,
   FerrySide,
+  WalkingPerson,
 } from '../../assets/svg/icons/transportation';
-import {LegMode, TransportMode} from '../../sdk';
+import {LegMode, TransportSubmode, TransportMode} from '../../sdk';
 import {StyleSheet} from '../../theme';
 import {SvgProps} from 'react-native-svg';
-import transportationColor from '../../utils/transportation-color';
+import {useTranslation} from '../../translations';
+import {getTranslatedModeName} from '../../utils/transportation-names';
+import {transportationColor} from '../../utils/transportation-color';
 
 export type TransportationIconProps = {
   mode?: LegMode | TransportMode;
-  publicCode?: string;
+  subMode?: TransportSubmode;
   style?: StyleProp<ViewStyle>;
-  circleStyle?: StyleProp<ViewStyle>;
 };
 
 const TransportationIcon: React.FC<TransportationIconProps> = ({
   mode,
-  publicCode,
+  subMode,
   style,
-  circleStyle,
   children,
 }) => {
   const styles = useStyle();
-  const {fill, icon} = transportationColor(mode, publicCode);
+  const {t} = useTranslation();
+  const color = transportationColor(mode, subMode);
 
   return (
-    <View style={[styles.circle, {backgroundColor: fill}, circleStyle]}>
+    <View style={styles.iconContainer}>
       {children ? (
         children
       ) : (
-        <InnerIcon fill={icon} style={style} mode={mode} />
+        <InnerIcon
+          fill={color}
+          style={style}
+          mode={mode}
+          accessibilityLabel={t(getTranslatedModeName(mode))}
+        />
       )}
     </View>
   );
@@ -50,7 +57,7 @@ function InnerIcon({
   fill: string;
   style?: StyleProp<ViewStyle>;
   mode?: LegMode | TransportMode;
-}) {
+} & AccessibilityProps) {
   const innerIconProps: SvgProps = {
     width: '100%',
     height: '100%',
@@ -60,25 +67,17 @@ function InnerIcon({
 
   switch (mode) {
     case 'bus':
-      return (
-        <BusSide accessibilityLabel="Buss" key="bus" {...innerIconProps} />
-      );
+      return <BusSide key="bus" {...innerIconProps} />;
     case 'tram':
-      return (
-        <TramSide accessibilityLabel="Trikk" key="tram" {...innerIconProps} />
-      );
+      return <TramSide key="tram" {...innerIconProps} />;
     case 'rail':
-      return (
-        <TrainSide accessibilityLabel="Tog" key="rail" {...innerIconProps} />
-      );
+      return <TrainSide key="rail" {...innerIconProps} />;
     case 'air':
-      return (
-        <PlaneSide accessibilityLabel="Fly" key="airport" {...innerIconProps} />
-      );
+      return <PlaneSide key="airport" {...innerIconProps} />;
     case 'water':
-      return (
-        <FerrySide accessibilityLabel="Ferge" key="boat" {...innerIconProps} />
-      );
+      return <FerrySide key="boat" {...innerIconProps} />;
+    case 'foot':
+      return <WalkingPerson {...innerIconProps} />;
     default:
       return null;
   }
@@ -88,13 +87,5 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   iconContainer: {
     width: 20,
     height: 20,
-  },
-  circle: {
-    width: 20,
-    height: 20,
-    margin: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 20,
   },
 }));

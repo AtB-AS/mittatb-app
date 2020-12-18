@@ -3,8 +3,7 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import {StyleSheet, View} from 'react-native';
 import {useGeolocationState} from '../../../GeolocationContext';
 import {RouteProp} from '@react-navigation/native';
-import {DetailsModalStackParams} from '..';
-import {DetailScreenNavigationProp} from '../Details';
+import {DetailsStackParams} from '..';
 import {getMapBounds, legsToMapLines, pointOf} from './utils';
 import MapRoute from './MapRoute';
 import MapLabel from './MapLabel';
@@ -15,18 +14,16 @@ import {
   PositionArrow,
   BackArrow,
   useControlPositionsStyle,
-} from '../../../components/map/';
+} from '../../../components/map';
 import {Leg} from '../../../sdk';
 import Bugsnag from '@bugsnag/react-native';
 import {useTranslation, MapTexts} from '../../../translations';
+import {DetailScreenNavigationProp} from '../Details';
 
 export type MapDetailRouteParams = {
   legs: Leg[];
 };
-export type MapDetailRouteProp = RouteProp<
-  DetailsModalStackParams,
-  'DetailsMap'
->;
+export type MapDetailRouteProp = RouteProp<DetailsStackParams, 'DetailsMap'>;
 type MapProps = {
   route: MapDetailRouteProp;
   navigation: DetailScreenNavigationProp;

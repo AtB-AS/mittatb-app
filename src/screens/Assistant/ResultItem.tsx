@@ -22,7 +22,7 @@ import AccessibleText, {
 } from '../../components/accessible-text';
 import {SituationWarningIcon} from '../../situations';
 import {flatMap} from '../../utils/array';
-import {getModeName} from '../../utils/transportation-names';
+import {getTranslatedModeName} from '../../utils/transportation-names';
 import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
 import {
@@ -34,7 +34,7 @@ import {
 
 type ResultItemProps = {
   tripPattern: TripPattern;
-  onDetailsPressed(tripPattern: TripPattern): void;
+  onDetailsPressed(): void;
 };
 
 function legWithQuay(leg: Leg) {
@@ -111,7 +111,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   return (
     <TouchableOpacity
       style={{paddingVertical: 4}}
-      onPress={() => onDetailsPressed(tripPattern)}
+      onPress={onDetailsPressed}
       hitSlop={insets.symmetric(8, 16)}
       accessibilityHint={t(AssistantTexts.results.resultItem.a11yHint)}
       accessibilityValue={{text: screenReaderSummary(tripPattern, t)}}
@@ -236,9 +236,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 function WaitRow({time}: {time: number}) {
   const styles = useLegStyles();
   const {t} = useTranslation();
-  const waitTime = `${secondsToMinutesShort(time)} ${t(
-    dictionary.date.units.short.minute,
-  )}`;
+  const waitTime = `${secondsToMinutesShort(time)}`;
   return (
     <View style={styles.legContainer}>
       <ThemeText style={[styles.textDeprioritized, styles.time]}>
@@ -290,7 +288,10 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
         {formatToClockOrRelativeMinutes(leg.expectedStartTime)}
       </ThemeText>
       <View style={styles.iconContainer}>
-        <TransportationIcon mode={leg.mode} publicCode={leg.line?.publicCode} />
+        <TransportationIcon
+          mode={leg.mode}
+          subMode={leg.line?.transportSubmode}
+        />
       </View>
       <ThemeText type="body" style={styles.textContent}>
         <LineDisplayName leg={leg} />
@@ -372,7 +373,7 @@ const screenReaderSummary = (
     }. ${screenReaderPause}
     ${nonFootLegs
       ?.map((l) => {
-        return `${t(getModeName(l.mode))} ${
+        return `${t(getTranslatedModeName(l.mode))} ${
           l.line
             ? t(screenreaderText.prefixedLineNumber(l.line.publicCode))
             : ''

@@ -1,11 +1,11 @@
 import polyline from '@mapbox/polyline';
 import {Feature, LineString, Point, Position} from 'geojson';
-import {Leg, LegMode, Place} from '../../../sdk';
+import {Leg, LegMode, Place, TransportSubmode} from '../../../sdk';
 import {flatMap} from '../../../utils/array';
 
 export interface MapLine extends Feature<LineString> {
   travelType?: LegMode;
-  publicCode?: string;
+  subMode?: TransportSubmode;
 }
 
 export function getMapBounds(features: MapLine[]) {
@@ -46,7 +46,7 @@ export function legsToMapLines(legs: Leg[]): MapLine[] {
         type: 'Feature',
         properties: {},
         travelType: leg.mode,
-        publicCode: leg.line?.publicCode,
+        subMode: leg.transportSubmode,
         geometry: line,
       };
     });
