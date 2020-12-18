@@ -96,7 +96,7 @@ const TripSection: React.FC<TripSectionProps> = ({
           <TripRow
             accessibilityLabel={t(
               TripDetailsTexts.trip.leg.transport.a11ylabel(
-                t(getTranslatedModeName(leg.line?.transportMode)),
+                t(getTranslatedModeName(leg.mode)),
                 getLineName(leg),
               ),
             )}

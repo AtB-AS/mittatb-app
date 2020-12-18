@@ -78,7 +78,6 @@ function InnerIcon({
       return <FerrySide key="boat" {...innerIconProps} />;
     case 'foot':
       return <WalkingPerson {...innerIconProps} />;
-    case 'unknown':
     default:
       return null;
   }
