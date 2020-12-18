@@ -251,6 +251,9 @@ const useItemStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   departureText: {
     fontVariant: ['tabular-nums'],
   },
+  favoriteButton: {
+    paddingLeft: theme.spacings.medium,
+  },
 }));
 
 type FavoriteStarProps = {
@@ -265,6 +268,7 @@ function ToggleFavoriteDepartureButton({line, stop, quay}: FavoriteStarProps) {
     removeFavoriteDeparture,
   } = useFavorites();
   const {t} = useTranslation();
+  const styles = useItemStyles();
 
   if (!line) {
     return null;
@@ -310,6 +314,7 @@ function ToggleFavoriteDepartureButton({line, stop, quay}: FavoriteStarProps) {
         label(`${line.lineNumber} ${line.lineName}`, stop.name),
       )}
       hitSlop={insets.symmetric(14, 8)}
+      style={styles.favoriteButton}
     >
       <ThemeIcon svg={Icon} />
     </TouchableOpacity>
