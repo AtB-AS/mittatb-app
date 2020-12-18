@@ -26,7 +26,9 @@ export function getLineNameFromEstimatedCall(
   }
   return {publicCode, name};
 }
-export function getTranslatedModeName(mode?: LegMode | TransportMode): TranslatedString {
+export function getTranslatedModeName(
+  mode?: LegMode | TransportMode,
+): TranslatedString {
   const legModeNames = dictionary.travel.legModes;
   switch (mode) {
     case 'bus':
@@ -44,6 +46,7 @@ export function getTranslatedModeName(mode?: LegMode | TransportMode): Translate
     default:
       return legModeNames.unknown;
   }
+}
 
 export function getQuayName(quay?: Quay): string | undefined {
   if (!quay) return;
