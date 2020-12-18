@@ -5,22 +5,22 @@ import createDismissableStackNavigator from '../../../navigation/createDismissab
 import {ActiveTicketsScreenName} from '../Tickets';
 import {PreassignedFareProduct, ReserveOffer} from '../../../api/fareContracts';
 import {RouteProp} from '@react-navigation/core';
-import TariffZones from './TariffZones';
-import {RouteParams as LocationSearchParams} from '../../../location-search';
+import TariffZones, {TariffZoneWithMetadata} from './TariffZones';
+import {RouteParams as TariffZoneSearchParams} from '../../../tariff-zone-search';
 
 import transitionSpec from '../../../navigation/transitionSpec';
-import {TariffZone} from '../../../api/tariffZones';
 import TariffZoneSearch from '../../../tariff-zone-search';
 
 type TravellersParams = {
   refreshOffer?: boolean;
   preassignedFareProduct: PreassignedFareProduct;
-  fromTariffZone?: TariffZone;
-  toTariffZone?: TariffZone;
+  fromTariffZone?: TariffZoneWithMetadata;
+  toTariffZone?: TariffZoneWithMetadata;
 };
+
 type TariffZonesParams = {
-  fromTariffZone?: TariffZone;
-  toTariffZone?: TariffZone;
+  fromTariffZone: TariffZoneWithMetadata;
+  toTariffZone: TariffZoneWithMetadata;
   preassignedFareProduct: PreassignedFareProduct;
 };
 type PaymentParams = {
@@ -31,7 +31,7 @@ type PaymentParams = {
 export type TicketingStackParams = {
   Travellers: TravellersParams;
   TariffZones: TariffZonesParams;
-  TariffZoneSearch: LocationSearchParams;
+  TariffZoneSearch: TariffZoneSearchParams;
   PaymentCreditCard: PaymentParams;
   PaymentVipps: PaymentParams;
   Splash: undefined;

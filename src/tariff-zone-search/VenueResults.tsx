@@ -3,52 +3,69 @@ import {TouchableOpacity, View} from 'react-native';
 import {StyleSheet} from '../theme';
 import insets from '../utils/insets';
 import ThemeText from '../components/text';
-import ThemeIcon from '../components/theme-icon';
 import {screenReaderPause} from '../components/accessible-text';
-import {TariffZone} from '../api/tariffZones';
-import {MapPointPin} from '../assets/svg/icons/places';
 import {TariffZoneSearchTexts, useTranslation} from '../translations';
+import {Location} from '../favorites/types';
+import {TariffZone} from '../api/tariffZones';
+import LocationIcon from '../components/location-icon';
 
-type Props = {
-  tariffZones: TariffZone[];
-  onSelect: (tariffZone: TariffZone) => void;
+export type LocationAndTariffZone = {
+  location: Location;
+  tariffZone: TariffZone;
 };
 
-const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
+type Props = {
+  locationsAndTariffZones: LocationAndTariffZone[];
+  onSelect: (l: Location) => void;
+};
+
+const VenueResults: React.FC<Props> = ({locationsAndTariffZones, onSelect}) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
   return (
     <>
       <View accessibilityRole="header" style={styles.subHeader}>
         <ThemeText type="lead" color="faded">
-          {t(TariffZoneSearchTexts.zones.heading)}
+          {t(TariffZoneSearchTexts.results.heading)}
         </ThemeText>
       </View>
       <View>
-        {tariffZones.map((tariffZone) => (
-          <View style={styles.rowContainer} key={tariffZone.id}>
+        {locationsAndTariffZones.map(({location, tariffZone}) => (
+          <View style={styles.rowContainer} key={location.id}>
             <View style={styles.tariffZoneButtonContainer}>
               <TouchableOpacity
                 accessible={true}
                 accessibilityLabel={
                   t(
-                    TariffZoneSearchTexts.zones.item.a11yLabelPrefix(
+                    TariffZoneSearchTexts.results.item.a11yLabelPrefix(
+                      location,
                       tariffZone,
                     ),
                   ) + screenReaderPause
                 }
-                accessibilityHint={t(TariffZoneSearchTexts.zones.item.a11yHint)}
+                accessibilityHint={t(
+                  TariffZoneSearchTexts.results.item.a11yHint,
+                )}
                 accessibilityRole="button"
                 hitSlop={insets.symmetric(8, 1)}
-                onPress={() => onSelect(tariffZone)}
+                onPress={() => onSelect(location)}
                 style={styles.tariffZoneButton}
               >
                 <View style={{flexDirection: 'column'}}>
-                  <ThemeIcon svg={MapPointPin} width={20} />
+                  <LocationIcon
+                    location={location}
+                    fill={String(styles.locationIcon.backgroundColor)}
+                    multiple={true}
+                  />
                 </View>
                 <View style={styles.nameContainer}>
-                  <ThemeText style={styles.nameText}>
-                    {tariffZone.name.value}
+                  <ThemeText type={'paragraphHeadline'}>
+                    {location.name}
+                  </ThemeText>
+                  <ThemeText type={'lead'}>
+                    {t(
+                      TariffZoneSearchTexts.results.item.zoneLabel(tariffZone),
+                    )}
                   </ThemeText>
                 </View>
               </TouchableOpacity>
@@ -60,7 +77,7 @@ const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
   );
 };
 
-export default TariffZoneResults;
+export default VenueResults;
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   subHeader: {
@@ -86,5 +103,12 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   nameText: {
     fontSize: 16,
     fontWeight: '600',
+  },
+  zoneText: {
+    fontSize: 14,
+    marginTop: 2,
+  },
+  locationIcon: {
+    backgroundColor: theme.text.colors.primary,
   },
 }));

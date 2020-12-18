@@ -18,6 +18,8 @@ import {CreditCard, Vipps} from '../../../../assets/svg/icons/ticketing';
 import * as Sections from '../../../../components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useTicketState} from '../../../../TicketContext';
+import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
+import {useTranslation} from '../../../../translations';
 
 export type TravellersProps = {
   navigation: DismissableStackNavigationProp<
@@ -33,13 +35,21 @@ const Travellers: React.FC<TravellersProps> = ({
 }) => {
   const styles = useStyles();
   const {theme} = useTheme();
+  const {t} = useTranslation();
 
   const {userProfilesWithCount, addCount, removeCount} = useUserCountState();
 
   const {tariffZones} = useTicketState();
+  const defaultTariffZone: TariffZoneWithMetadata = useMemo(
+    () => ({
+      ...tariffZones[0],
+      resultType: 'zone',
+    }),
+    [tariffZones],
+  );
   const {
-    fromTariffZone = tariffZones[0],
-    toTariffZone = tariffZones[0],
+    fromTariffZone = defaultTariffZone,
+    toTariffZone = defaultTariffZone,
   } = params;
 
   const {
@@ -95,11 +105,6 @@ const Travellers: React.FC<TravellersProps> = ({
 
   const {top: safeAreaTop, bottom: safeAreBottom} = useSafeAreaInsets();
 
-  const tariffZonesText =
-    fromTariffZone.id === toTariffZone.id
-      ? `Reise gjennom 1 sone (Sone ${fromTariffZone.name.value})`
-      : `Reise fra sone ${fromTariffZone.name.value} til sone ${toTariffZone.name.value}`;
-
   return (
     <View style={[styles.container, {paddingTop: safeAreaTop}]}>
       <Header
@@ -123,7 +128,7 @@ const Travellers: React.FC<TravellersProps> = ({
 
         <Sections.Section withPadding>
           <Sections.LinkItem
-            text={tariffZonesText}
+            text={tariffZonesSummary(fromTariffZone, toTariffZone, t)}
             onPress={() => {
               navigation.push('TariffZones', {
                 fromTariffZone,
@@ -132,6 +137,7 @@ const Travellers: React.FC<TravellersProps> = ({
               });
             }}
             icon={<ThemeIcon svg={Edit} />}
+            accessibility={{accessibilityHint: 'Aktivér for å velge soner'}}
           />
         </Sections.Section>
 
