@@ -67,6 +67,7 @@ function InnerIcon({
 
   switch (mode) {
     case 'bus':
+    case 'coach':
       return <BusSide key="bus" {...innerIconProps} />;
     case 'tram':
       return <TramSide key="tram" {...innerIconProps} />;

@@ -9,6 +9,7 @@ export function transportationColor(
 ): string {
   switch (mode) {
     case 'bus':
+    case 'coach':
       if (subMode === 'localBus') {
         return colors.primary.green_500;
       }

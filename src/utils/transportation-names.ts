@@ -32,6 +32,7 @@ export function getTranslatedModeName(
   const legModeNames = dictionary.travel.legModes;
   switch (mode) {
     case 'bus':
+    case 'coach':
       return legModeNames.bus;
     case 'rail':
       return legModeNames.rail;
