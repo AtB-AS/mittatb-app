@@ -18,7 +18,7 @@ export default function HeaderItem({
   const style = useSectionStyle();
 
   return (
-    <View style={[style.baseItem, topContainer]}>
+    <View style={topContainer}>
       <ThemeText
         style={contentContainer}
         color={mode === 'heading' ? 'primary' : 'faded'}

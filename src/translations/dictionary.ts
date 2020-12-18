@@ -12,7 +12,7 @@ const dictionary = {
     ticketing: _('Billetter', 'Tickets'),
     profile: _('Mitt AtB'),
   },
-  missingRealTime: _('ca.'),
+  missingRealTimePrefix: _('ca.'),
   travel: {
     legModes: {
       bus: _('Buss'),
@@ -28,6 +28,10 @@ const dictionary = {
     },
     line: {
       defaultName: _(''),
+    },
+    time: {
+      aimedPrefix: _('Rutetid'),
+      expectedPrefix: _('Forventet tid'),
     },
   },
   date: {
@@ -45,6 +49,10 @@ const dictionary = {
       },
       long: {},
     },
+  },
+  distance: {
+    km: _('km', 'km'),
+    m: _('m', 'm'),
   },
 };
 export default dictionary;

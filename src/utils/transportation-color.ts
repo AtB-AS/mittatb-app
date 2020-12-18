@@ -1,65 +1,16 @@
 import colors from '../theme/colors';
-import {LegMode} from '../sdk';
-
-type TransportationColors = {
-  fill: string;
-  icon: string;
-};
+import {LegMode, TransportMode, TransportSubmode} from '../sdk';
 
 export const defaultFill = colors.primary.gray_300;
 
-export default function transportionColor(
-  mode?: LegMode,
-  publicCode?: string,
-): TransportationColors {
-  switch (mode) {
-    case 'bus':
-      const code = Number(publicCode);
-      if (code < 100)
-        return {
-          fill: colors.primary.green_500,
-          icon: colors.text.black,
-        };
-
-      return {
-        fill: colors.secondary.blue_500,
-        icon: colors.text.white,
-      };
-    case 'rail':
-      return {
-        fill: colors.secondary.red_500,
-        icon: colors.text.white,
-      };
-    case 'tram':
-      return {
-        fill: colors.primary.green_500,
-        icon: colors.text.black,
-      };
-    case 'water':
-      return {
-        fill: colors.text.white,
-        icon: colors.text.black,
-      };
-    case 'air':
-      return {
-        fill: colors.secondary.orange,
-        icon: colors.text.white,
-      };
-    default:
-      return {
-        fill: defaultFill,
-        icon: colors.text.white,
-      };
-  }
-}
-export function transportationMapLineColor(
-  mode?: LegMode,
-  publicCode?: string,
+export function transportationColor(
+  mode?: LegMode | TransportMode,
+  subMode?: TransportSubmode,
 ): string {
   switch (mode) {
     case 'bus':
-      const code = Number(publicCode);
-      if (code < 100) {
+    case 'coach':
+      if (subMode === 'localBus') {
         return colors.primary.green_500;
       }
       return colors.secondary.blue_500;

@@ -20,7 +20,6 @@ export default function SituationMessages({
 
   const uniqueSituations = getUniqueSituations(situations);
   const icon = mode === 'no-icon' ? null : undefined;
-
   return (
     <MessageBox type="warning" icon={icon} containerStyle={containerStyle}>
       {Object.entries(uniqueSituations).map(([id, situation]) => (
@@ -65,7 +64,11 @@ export function getSituationDiff(situations: Situation[], parent: Situation[]) {
 export function getUniqueSituations(situations: Situation[] = []) {
   let uniqueSituations: {[id: string]: string} = {};
   for (let situation of situations) {
-    if (uniqueSituations[situation.situationNumber]) continue;
+    if (
+      !situation.situationNumber ||
+      uniqueSituations[situation.situationNumber]
+    )
+      continue;
     const value = situation.description[0]?.value;
     if (!value) continue;
     if (Object.values(uniqueSituations).includes(value)) continue;

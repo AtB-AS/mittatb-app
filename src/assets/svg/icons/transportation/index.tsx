@@ -4,4 +4,5 @@ export {default as FerrySide} from './FerrySide';
 export {default as PlaneSide} from './PlaneSide';
 export {default as TrainSide} from './TrainSide';
 export {default as TramSide} from './TramSide';
+export {default as Wait} from './Wait';
 export {default as WalkingPerson} from './WalkingPerson';

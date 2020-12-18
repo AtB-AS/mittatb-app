@@ -1,5 +1,6 @@
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
 import {Animated, View, ViewProps} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import ThemeText from '../components/text';
 import {StyleSheet} from '../theme';
 import HeaderButton, {IconButton} from './HeaderButton';
@@ -8,7 +9,7 @@ type ScreenHeaderProps = ViewProps & {
   rightButton?: IconButton;
   title: React.ReactNode;
   alternativeTitleComponent?: React.ReactNode;
-  alternativeTitleVisible: boolean;
+  scrollRef?: Animated.Value;
 };
 
 const HEADER_HEIGHT = 20;
@@ -18,22 +19,18 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
   rightButton,
   title,
   alternativeTitleComponent,
-  alternativeTitleVisible,
+  scrollRef,
   ...props
 }) => {
   const style = useHeaderStyle();
-  const altTitleOffset = useRef(new Animated.Value(HEADER_HEIGHT)).current;
+  const insets = useSafeAreaInsets();
+  const titleOffset = scrollRef!.interpolate({
+    inputRange: [0, HEADER_HEIGHT + insets.top],
+    outputRange: [0, -HEADER_HEIGHT],
+    extrapolate: 'clamp',
+  });
 
-  useEffect(() => {
-    if (!alternativeTitleComponent) return;
-    Animated.timing(altTitleOffset, {
-      toValue: alternativeTitleVisible ? 0 : HEADER_HEIGHT,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }, [alternativeTitleVisible, alternativeTitleComponent]);
-
-  const titleOffset = Animated.subtract(altTitleOffset, HEADER_HEIGHT);
+  const altTitleOffset = Animated.add(titleOffset, HEADER_HEIGHT);
   const leftIcon = leftButton ? <HeaderButton {...leftButton} /> : <View />;
   const rightIcon = rightButton ? <HeaderButton {...rightButton} /> : <View />;
 

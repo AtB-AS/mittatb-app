@@ -1,19 +1,28 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
+import {places, departures, StoredType} from './storage';
 import {
-  getFavorites,
-  addFavorite,
-  setFavorites as setFavoritesStorage,
-  removeFavorite,
-  updateFavorite,
-} from './storage';
-import {UserFavorites, LocationFavorite} from './types';
+  FavoriteDeparture,
+  FavoriteDepartureId,
+  LocationFavorite,
+  StoredFavoriteDeparture,
+  StoredLocationFavorite,
+  UserFavoriteDepartures,
+  UserFavorites,
+} from './types';
 
 type FavoriteContextState = {
   favorites: UserFavorites;
-  addFavorite(location: Omit<LocationFavorite, 'id'>): Promise<void>;
-  removeFavorite(id: string): Promise<void>;
-  updateFavorite(favorite: LocationFavorite): Promise<void>;
-  setFavorites(favorites: LocationFavorite[]): Promise<void>;
+  favoriteDepartures: UserFavoriteDepartures;
+  addFavoriteLocation(location: LocationFavorite): Promise<void>;
+  removeFavoriteLocation(id: string): Promise<void>;
+  updateFavoriteLocation(favorite: StoredLocationFavorite): Promise<void>;
+  setFavoriteLocationss(favorites: UserFavorites): Promise<void>;
+
+  getFavoriteDeparture(
+    favoriteDeparture: FavoriteDepartureId,
+  ): StoredFavoriteDeparture | undefined;
+  addFavoriteDeparture(favoriteDeparture: FavoriteDeparture): Promise<void>;
+  removeFavoriteDeparture(id: string): Promise<void>;
 };
 const FavoritesContext = createContext<FavoriteContextState | undefined>(
   undefined,
@@ -21,9 +30,16 @@ const FavoritesContext = createContext<FavoriteContextState | undefined>(
 
 const FavoritesContextProvider: React.FC = ({children}) => {
   const [favorites, setFavoritesState] = useState<UserFavorites>([]);
+  const [favoriteDepartures, setFavoriteDeparturesState] = useState<
+    UserFavoriteDepartures
+  >([]);
   async function populateFavorites() {
-    let favorites = await getFavorites();
+    const [favorites, favoriteDepartures] = await Promise.all([
+      places.getFavorites(),
+      departures.getFavorites(),
+    ]);
     setFavoritesState(favorites ?? []);
+    setFavoriteDeparturesState(favoriteDepartures ?? []);
   }
 
   useEffect(() => {
@@ -32,21 +48,41 @@ const FavoritesContextProvider: React.FC = ({children}) => {
 
   const contextValue: FavoriteContextState = {
     favorites,
-    async addFavorite(favorite: Omit<LocationFavorite, 'id'>) {
-      const favorites = await addFavorite(favorite);
+    favoriteDepartures,
+    async addFavoriteLocation(favorite: LocationFavorite) {
+      const favorites = await places.addFavorite(favorite);
       setFavoritesState(favorites);
     },
-    async removeFavorite(id: string) {
-      const favorites = await removeFavorite(id);
+    async removeFavoriteLocation(id: string) {
+      const favorites = await places.removeFavorite(id);
       setFavoritesState(favorites);
     },
-    async updateFavorite(favorite: LocationFavorite) {
-      const favorites = await updateFavorite(favorite);
+    async updateFavoriteLocation(favorite: StoredType<LocationFavorite>) {
+      const favorites = await places.updateFavorite(favorite);
       setFavoritesState(favorites);
     },
-    async setFavorites(favorites: LocationFavorite[]) {
-      const newFavorites = await setFavoritesStorage(favorites);
+    async setFavoriteLocationss(favorites: StoredType<LocationFavorite>[]) {
+      const newFavorites = await places.setFavorites(favorites);
       setFavoritesState(newFavorites);
+    },
+
+    async addFavoriteDeparture(favoriteDeparture: FavoriteDeparture) {
+      const favorites = await departures.addFavorite(favoriteDeparture);
+      setFavoriteDeparturesState(favorites);
+    },
+    async removeFavoriteDeparture(id: string) {
+      const favorites = await departures.removeFavorite(id);
+      setFavoriteDeparturesState(favorites);
+    },
+
+    getFavoriteDeparture(potential: FavoriteDepartureId) {
+      return favoriteDepartures.find(function (favorite) {
+        return (
+          favorite.lineId == potential.lineId &&
+          favorite.lineName == potential.lineName &&
+          favorite.stopId == potential.stopId
+        );
+      });
     },
   };
 

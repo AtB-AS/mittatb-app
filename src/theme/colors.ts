@@ -3,9 +3,9 @@ import {StatusBarProps, TextStyle} from 'react-native';
 
 const backgrounds = {
   light__level0: '#FFFFFF',
-  light__level1: '#F5F5F6',
-  light__level2: '#EBECED',
-  light__level3: '#E1E3E4',
+  light__level1: '#E7E8E9',
+  light__level2: '#DBDDDE',
+  light__level3: '#CFD2D3',
 
   dark__level0: '#000000',
   dark__level1: '#111416',
@@ -16,7 +16,8 @@ const backgrounds = {
 const colors = {
   primary: {
     // grays
-    gray_100: '#C3C6C9',
+    gray_50: '#E7E8E9',
+    gray_100: '#F5F5F6',
     gray_200: '#AFB3B7',
     gray_300: '#878E92',
     gray_400: '#5F686E',
@@ -25,6 +26,7 @@ const colors = {
     gray_700: '#21282C',
     gray_800: '#161A1E',
     gray_900: '#101416',
+    gray_950: '#1B1C1D',
     // greens
     green_100: '#E3E6B3',
     green_200: '#DADE99',
@@ -110,7 +112,12 @@ export const textTypes: {[key in TextNames]: TextStyle} = {
   label: {fontSize: 12, lineHeight: 16},
   label__link: {fontSize: 12, lineHeight: 16, textDecorationLine: 'underline'},
 };
-
+const tripLegDetail = {
+  labelWidth: 80,
+  decorationContainerWidth: 20,
+  decorationLineEndWidth: 12,
+  decorationLineWidth: 4,
+};
 const borderRadius = {
   circle: 20,
   regular: 8,
@@ -136,6 +143,7 @@ export type RadiusSizes = keyof typeof borderRadius;
 export interface Theme {
   statusBarStyle: StatusBarProps['barStyle'];
   spacings: typeof spacings;
+  tripLegDetail: typeof tripLegDetail;
   background: {
     level0: string;
     level1: string;
@@ -177,6 +185,7 @@ export interface Theme {
 export const themes: Themes = {
   light: {
     spacings: spacings,
+    tripLegDetail: tripLegDetail,
     statusBarStyle: 'dark-content',
     background: {
       level0: backgrounds.light__level0,
@@ -251,6 +260,7 @@ export const themes: Themes = {
   },
   dark: {
     spacings: spacings,
+    tripLegDetail: tripLegDetail,
     statusBarStyle: 'light-content',
     background: {
       level0: backgrounds.dark__level0,

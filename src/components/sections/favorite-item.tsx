@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import {Edit} from '../../assets/svg/icons/actions';
 import {FavoriteIcon} from '../../favorites';
-import {LocationFavorite} from '../../favorites/types';
+import {StoredLocationFavorite} from '../../favorites/types';
 import {StyleSheet} from '../../theme';
 import {screenReaderPause} from '../accessible-text';
 import ThemeText from '../text';
@@ -15,11 +15,11 @@ import ThemeIcon from '../theme-icon';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 
 type BaseProps = {
-  favorite: LocationFavorite;
+  favorite: StoredLocationFavorite;
   icon?: JSX.Element;
 };
 type WithOnPress = BaseProps & {
-  onPress(favorite: LocationFavorite, event: GestureResponderEvent): void;
+  onPress(favorite: StoredLocationFavorite, event: GestureResponderEvent): void;
   accessibility?: AccessibilityProps;
 };
 
@@ -55,7 +55,7 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
   const style = useSectionStyle();
 
   return (
-    <View style={[style.baseItem, style.spaceBetween, topContainer]}>
+    <View style={[style.spaceBetween, topContainer]}>
       <View style={favoriteStyle.favorite__emoji}>
         <FavoriteIcon favorite={favorite} />
       </View>

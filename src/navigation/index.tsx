@@ -12,14 +12,16 @@ import trackNavigation from '../diagnostics/trackNavigation';
 import LocationSearch, {
   RouteParams as LocationSearchParams,
 } from '../location-search';
-import TicketPurchase from '../screens/Ticketing/Purchase';
+import TicketPurchase, {
+  RouteParams as TicketPurchaseParams,
+} from '../screens/Ticketing/Purchase';
 import Onboarding from '../screens/Onboarding';
-import TripDetailsModal, {
-  RouteParams as TripDetailsModalParams,
-} from '../screens/TripDetailsModal';
+import TripDetailsScreen, {
+  RouteParams as TripDetailsRouteParams,
+} from '../screens/TripDetails';
 import DepartureDetails, {
   DepartureDetailsRouteParams,
-} from '../screens/TripDetailsModal/DepartureDetails';
+} from '../screens/TripDetails/DepartureDetails';
 import {useTheme} from '../theme';
 import TabNavigator from './TabNavigator';
 import transitionSpec from './transitionSpec';
@@ -30,17 +32,18 @@ import SortableFavoriteList from '../screens/Profile/FavoriteList/SortFavorites'
 import TicketModalScreen, {
   TicketModalRouteParams,
 } from '../screens/Ticketing/Ticket/Details';
+import {RouteParams as TariffZoneSearchParams} from '../tariff-zone-search';
 
 export type RootStackParamList = {
   NotFound: undefined;
   Onboarding: undefined;
   TabNavigator: undefined;
   LocationSearch: LocationSearchParams;
-  TripDetailsModal: TripDetailsModalParams;
+  TariffZoneSearch: TariffZoneSearchParams;
   DepartureDetailsModal: DepartureDetailsRouteParams;
   SortableFavoriteList: undefined;
   AddEditFavorite: AddEditParams;
-  TicketPurchase: undefined;
+  TicketPurchase: TicketPurchaseParams;
   TicketModal: TicketModalRouteParams;
 };
 
@@ -86,21 +89,13 @@ const NavigationRoot = () => {
               <>
                 <Stack.Screen name="TabNavigator" component={TabNavigator} />
                 <Stack.Screen
-                  name="TripDetailsModal"
-                  component={TripDetailsModal}
-                  options={{
-                    cardOverlayEnabled: true,
-                    cardShadowEnabled: true,
-                    ...TransitionPresets.ModalPresentationIOS,
-                  }}
-                />
-                <Stack.Screen
                   name="DepartureDetailsModal"
                   component={DepartureDetails}
                   options={{
-                    cardOverlayEnabled: true,
-                    cardShadowEnabled: true,
-                    ...TransitionPresets.ModalPresentationIOS,
+                    transitionSpec: {
+                      open: transitionSpec,
+                      close: transitionSpec,
+                    },
                   }}
                 />
                 <Stack.Screen

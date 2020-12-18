@@ -1,111 +1,121 @@
+import {DepartureGroupMetadata} from '../../api/departures/departure-group';
 import {
-  DeparturesWithStop,
-  EstimatedCall,
-  DeparturesRealtimeData,
-  DepartureRealtimeData,
-  QuayWithDepartures,
-} from '../../sdk';
+  DepartureGroup,
+  DepartureTime,
+  QuayGroup,
+  StopPlaceGroup,
+} from '../../api/departures/types';
+import {DepartureRealtimeData, DeparturesRealtimeData} from '../../sdk';
+import {isNumberOfMinutesInThePast} from '../../utils/date';
 
+export const HIDE_AFTER_NUM_MINUTES = 1;
+
+/***
+ * Used to update all stops with new time from realtime mapping object returned
+ * from the BFF. It also removes outdated departures which most likely have passed.
+ */
 export function updateStopsWithRealtime(
-  stops: DeparturesWithStopLocal[],
+  stops: DepartureGroupMetadata['data'],
   realtime: DeparturesRealtimeData,
-): DeparturesWithStopLocal[] {
-  return stops.map(function (stop) {
-    let newQuays: typeof stop.quays = {};
-    for (let [quayId, quay] of Object.entries(stop.quays)) {
+): DepartureGroupMetadata['data'] {
+  return stops.map<StopPlaceGroup>(function (stop) {
+    let quays = stop.quays.map(function (quayGroup) {
+      const quayId = quayGroup.quay.id;
       const realtimeForQuay = realtime[quayId];
+      const newQuayGroup = filterOutOutdatedDepartures(quayGroup);
+
       if (!realtimeForQuay) {
-        newQuays[quayId] = quay;
-      } else {
-        newQuays[quayId] = {
-          ...quay,
-          departures: updateDeparturesWithRealtime(
-            quay.departures,
-            realtimeForQuay,
-          ),
-        };
+        return newQuayGroup;
       }
-    }
+
+      return {
+        quay: newQuayGroup.quay,
+        group: updateDeparturesWithRealtime(
+          newQuayGroup.group,
+          realtimeForQuay,
+        ),
+      };
+    });
+
     return {
-      ...stop,
-      quays: newQuays,
+      stopPlace: stop.stopPlace,
+      quays,
     };
   });
+}
+
+function filterOutOutdatedDepartures(quayGroup: QuayGroup) {
+  const newDepartureGroups = quayGroup.group.map(function (group) {
+    const newDepartures = group.departures.filter(isValidDeparture);
+    // Optimization to avoid having to sort list to often.
+    // If after filtering it has the same length it means we could
+    // just use the previous departure list.
+    if (newDepartures.length === group.departures.length) {
+      return group;
+    }
+
+    return {
+      lineInfo: group.lineInfo,
+      departures: newDepartures,
+    };
+  });
+
+  return {
+    quay: quayGroup.quay,
+    group: newDepartureGroups,
+  };
 }
 
 function updateDeparturesWithRealtime(
-  departures: EstimatedCall[],
+  departureGroups: DepartureGroup[],
   realtime?: DepartureRealtimeData,
-): EstimatedCall[] {
-  if (!realtime) return departures;
+): DepartureGroup[] {
+  if (!realtime) return departureGroups;
 
-  return departures.map(function (departure) {
-    const serviceJourneyId = departure.serviceJourney.id;
-    const departureRealtime = realtime.departures[serviceJourneyId];
+  return departureGroups.map(function (group) {
+    const departures = group.departures.map(function (departure) {
+      const serviceJourneyId = departure.serviceJourneyId;
 
-    if (!departureRealtime) {
-      return departure;
-    }
-
-    return {
-      ...departure,
-      ...departureRealtime.timeData,
-    };
-  });
-}
-
-export type QuayWithDeparturesAndLimits = QuayWithDepartures & {
-  showLimit: number;
-};
-export type DeparturesWithStopLocal = DeparturesWithStop & {
-  quays: {
-    [quayId: string]: QuayWithDeparturesAndLimits;
-  };
-};
-
-export function mapQuayDeparturesToShowlimits(
-  stops: DeparturesWithStop[],
-  showLimit: number,
-): DeparturesWithStopLocal[] {
-  return stops.map(function (stop) {
-    let newQuays: DeparturesWithStopLocal['quays'] = {};
-
-    for (let [quayId, quay] of Object.entries(stop.quays)) {
-      newQuays[quayId] = {
-        ...quay,
-        showLimit,
-      };
-    }
-
-    return {
-      ...stop,
-      quays: newQuays,
-    };
-  });
-}
-
-export function showMoreItemsOnQuay(
-  stops: DeparturesWithStopLocal[],
-  quayIdToUpdate: string,
-  additionalItemsToShow: number,
-): DeparturesWithStopLocal[] {
-  return stops.map(function (stop) {
-    let newQuays: DeparturesWithStopLocal['quays'] = {};
-
-    for (let [quayId, quay] of Object.entries(stop.quays)) {
-      if (quayId !== quayIdToUpdate) {
-        newQuays[quayId] = quay;
-      } else {
-        newQuays[quayId] = {
-          ...quay,
-          showLimit: quay.showLimit + additionalItemsToShow,
-        };
+      if (!serviceJourneyId) {
+        return departure;
       }
-    }
+
+      const departureRealtime = realtime.departures[serviceJourneyId];
+
+      if (!departureRealtime) {
+        return departure;
+      }
+
+      return {
+        ...departure,
+        time: departureRealtime.timeData.expectedDepartureTime,
+        realtime: departureRealtime.timeData.realtime,
+      };
+    });
 
     return {
-      ...stop,
-      quays: newQuays,
+      lineInfo: group.lineInfo,
+      departures,
     };
   });
+}
+export function hasNoQuaysWithDepartures(departures: StopPlaceGroup[] | null) {
+  return (
+    departures !== null &&
+    (departures.length === 0 ||
+      departures.every((deps) => hasNoGroupsWithDepartures(deps.quays)))
+  );
+}
+export function hasNoGroupsWithDepartures(departures: QuayGroup[]) {
+  return departures.every((q) => q.group.every(hasNoDeparturesOnGroup));
+}
+export function hasNoDeparturesOnGroup(group: DepartureGroup) {
+  return (
+    group.departures.length === 0 ||
+    group.departures.every((d) => !isValidDeparture(d))
+  );
+}
+
+export function isValidDeparture(departure: DepartureTime) {
+  return !isNumberOfMinutesInThePast(departure.time, HIDE_AFTER_NUM_MINUTES);
 }

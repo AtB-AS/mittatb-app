@@ -33,6 +33,7 @@ export default function SectionGroup({
     <View style={containerStyle}>
       {React.Children.map(children, (child, index) => {
         if (!React.isValidElement(child)) return child;
+        if (child == null) return child;
 
         let additionalProps: Partial<SectionItemProps> = {
           radius: toRadius(index, lastIndex, firstIndex),

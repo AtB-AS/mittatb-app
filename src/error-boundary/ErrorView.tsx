@@ -18,13 +18,12 @@ type ErrorProps = {
 
 const ErrorView: React.FC<ErrorProps> = ({onRestartApp, errorCode}) => {
   const styles = useStyles();
-  const chatIcon = useChatIcon();
   const buildNumber = getBuildNumber();
   const config = useLocalConfig();
 
   return (
     <SafeAreaView style={styles.safearea}>
-      <ScreenHeader title="" rightButton={chatIcon} />
+      <ScreenHeader title="" />
       <View style={styles.svgContainer}>
         <CrashParachute width="100%" height="100%" />
       </View>
@@ -37,7 +36,7 @@ const ErrorView: React.FC<ErrorProps> = ({onRestartApp, errorCode}) => {
             Appen er i læringsmodus, og slike krasj er akkurat det vi trenger
             for å gjøre den enda mer robust.
             {'\n'}
-            Bruk gjerne chat-funskjonen vår til å fortelle oss hva som gikk
+            Bruk gjerne chat-funksjonen vår til å fortelle oss hva som gikk
             galt.
             {'\n'}
             {'\n'}

@@ -6,6 +6,7 @@ export type ContainerSizingType = 'inline' | 'compact' | 'block';
 export type RadiusMode = 'top' | 'bottom' | 'top-bottom';
 
 export type SectionItemProps = {
+  transparent?: boolean;
   type?: ContainerSizingType;
   radius?: RadiusMode;
   radiusSize?: RadiusSizes;
@@ -19,6 +20,7 @@ export type SectionReturnType = {
 };
 
 export default function useSectionItem({
+  transparent = false,
   type = 'block',
   radius,
   radiusSize,
@@ -33,6 +35,7 @@ export default function useSectionItem({
     padding: spacing,
     alignSelf: isInline ? 'flex-start' : undefined,
     ...mapToBorderRadius(theme, radiusSize, radius),
+    backgroundColor: transparent ? undefined : theme.background.level0,
   };
   const contentContainer: ViewStyle = {
     flexGrow: isInline ? undefined : 1,
