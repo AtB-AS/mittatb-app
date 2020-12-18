@@ -52,18 +52,18 @@ const NearbyTexts = {
       initial: _(
         'Søk etter avganger fra holdeplasser eller i nærheten av steder.',
       ),
-      emptyResult: _('Fant ingen avganger på valgt plass'),
+      emptyResult: _('Fant ingen avganger på valgt plass.'),
       emptyResultFavorites: _('Fant ingen favorittavganger på valgt plass.'),
     },
     quayResult: {
       platformHeader: {
         accessibilityLabel: (name: string, publicCode: string) =>
-          _(`Avganger fra plattform ${name} ${publicCode}`),
+          _(`Avganger fra plattform ${name} ${publicCode}.`),
         accessibilityLabelNoPublicCode: (name: string) =>
-          _(`Avganger fra plattform på holdeplassen ${name}`),
+          _(`Avganger fra plattform på holdeplassen ${name}.`),
         distance: {
           label: (distance: string) =>
-            _(`Det er rundt ${distance} til plattform`),
+            _(`Det er rundt ${distance} til plattform.`),
         },
       },
       showMoreToggler: {
