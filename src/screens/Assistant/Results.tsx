@@ -1,7 +1,7 @@
 import React, {Fragment, useMemo, useState, useEffect} from 'react';
 import {Text, View} from 'react-native';
 import {TripPattern} from '../../sdk';
-import {StyleSheet, useTheme} from '../../theme';
+import {StyleSheet} from '../../theme';
 import ResultItem from './ResultItem';
 import OptionalNextDayLabel from '../../components/optional-day-header';
 import {isSeveralDays} from '../../utils/date';
@@ -17,8 +17,12 @@ type Props = {
   isEmptyResult: boolean;
   isSearching: boolean;
   resultReasons: NoResultReason[];
-  onDetailsPressed(tripPattern: TripPattern): void;
-  error?: ErrorType;
+  onDetailsPressed(
+    tripPatternId?: string,
+    tripPatterns?: TripPattern[],
+    index?: number,
+  ): void;
+  errorType?: ErrorType;
 };
 
 export type ResultTabParams = {
@@ -31,7 +35,7 @@ const Results: React.FC<Props> = ({
   isEmptyResult,
   resultReasons,
   onDetailsPressed,
-  error,
+  errorType,
 }) => {
   const styles = useThemeStyles();
 
@@ -39,8 +43,8 @@ const Results: React.FC<Props> = ({
   const {t} = useTranslation();
 
   useEffect(() => {
-    if (error) {
-      switch (error) {
+    if (errorType) {
+      switch (errorType) {
         case 'network-error':
         case 'timeout':
           setErrorMessage(t(AssistantTexts.results.error.network));
@@ -50,7 +54,7 @@ const Results: React.FC<Props> = ({
           break;
       }
     }
-  }, [error]);
+  }, [errorType]);
 
   const allSameDay = useMemo(
     () => isSeveralDays((tripPatterns ?? []).map((i) => i.startTime)),
@@ -60,7 +64,7 @@ const Results: React.FC<Props> = ({
   if (showEmptyScreen) {
     return null;
   }
-  if (error) {
+  if (errorType) {
     return (
       <View style={styles.container}>
         <ScreenReaderAnnouncement message={errorMessage} />
@@ -111,7 +115,7 @@ const Results: React.FC<Props> = ({
           />
           <ResultItem
             tripPattern={item}
-            onDetailsPressed={onDetailsPressed}
+            onDetailsPressed={() => onDetailsPressed(item.id, tripPatterns, i)}
             accessibilityLabel={t(
               AssistantTexts.results.resultList.listPositionExplanation(
                 i + 1,

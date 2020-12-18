@@ -12,20 +12,20 @@ import {CompositeNavigationProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../navigation';
 import {MapDetailRouteParams, TravelDetailsMap} from './Map';
 
-export type DetailsModalStackParams = {
+export type DetailsStackParams = {
   Details: DetailsRouteParams;
   DepartureDetails: DepartureDetailsRouteParams;
   DetailsMap: MapDetailRouteParams;
 };
 
 export type DetailsModalNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<DetailsModalStackParams>,
+  StackNavigationProp<DetailsStackParams>,
   StackNavigationProp<RootStackParamList>
 >;
 
 export type RouteParams = DetailsRouteParams;
 
-const Stack = createStackNavigator<DetailsModalStackParams>();
+const Stack = createStackNavigator<DetailsStackParams>();
 
 type TripDetailsRootProps = {
   route: DetailScreenRouteProp;

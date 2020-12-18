@@ -3,7 +3,7 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {MapIcon} from '../../../assets/svg/map';
-import {MapCameraConfig, MapViewConfig} from '../../../components/map/';
+import {MapCameraConfig, MapViewConfig} from '../../../components/map';
 import {Leg} from '../../../sdk';
 import {StyleSheet} from '../../../theme';
 import Button from '../../../components/button';

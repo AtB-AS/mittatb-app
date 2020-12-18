@@ -1,4 +1,4 @@
-import {EstimatedCall, Leg, Quay, LegMode} from '../sdk';
+import {EstimatedCall, Leg, Quay, LegMode, TransportMode} from '../sdk';
 import {TranslatedString, dictionary} from '../translations';
 
 export function getLineName(leg: Leg) {
@@ -26,7 +26,9 @@ export function getLineNameFromEstimatedCall(
   }
   return {publicCode, name};
 }
-export function getModeName(mode: LegMode): TranslatedString {
+export function getTranslatedModeName(
+  mode?: LegMode | TransportMode,
+): TranslatedString {
   const legModeNames = dictionary.travel.legModes;
   switch (mode) {
     case 'bus':
@@ -50,24 +52,4 @@ export function getQuayName(quay?: Quay): string | undefined {
   if (!quay) return;
   if (!quay.publicCode) return quay.name;
   return `${quay.name} ${quay.publicCode}`;
-}
-
-export function getQuayNameFromStartLeg(leg?: Leg): string | undefined {
-  if (leg?.fromEstimatedCall?.quay) {
-    return getQuayName(leg?.fromEstimatedCall?.quay);
-  }
-  if (leg?.fromPlace.quay) {
-    return getQuayName(leg?.fromPlace.quay);
-  }
-  return leg?.fromPlace.name;
-}
-
-export function getQuayNameFromStopLeg(leg?: Leg): string | undefined {
-  if (leg?.fromEstimatedCall?.quay) {
-    return getQuayName(leg?.toEstimatedCall?.quay);
-  }
-  if (leg?.fromPlace.quay) {
-    return getQuayName(leg?.toPlace.quay);
-  }
-  return leg?.fromPlace.name;
 }
