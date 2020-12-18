@@ -61,12 +61,12 @@ if [[ "$APP_ENVIRONMENT" = "staging" || "$APP_ENVIRONMENT" = "prodstaging" ]]; t
   brew switch pango 1.42.4_1 
 
   if [ "$APP_ENVIRONMENT" = "staging" ]; then
-    badge --shield "1.3-QA-orange" --no_badge  --glob "/android/app/src/staging/res/*/*.{png,PNG}"
-    badge --shield "1.3-QA-orange" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
+    badge --shield "1.4-QA-orange" --no_badge  --glob "/android/app/src/staging/res/*/*.{png,PNG}"
+    badge --shield "1.4-QA-orange" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
   fi
   if [ "$APP_ENVIRONMENT" = "prodstaging" ]; then
-    badge --shield "1.3-Prod-blue" --no_badge  --glob "/android/app/src/staging/res/*/*.{png,PNG}"
-    badge --shield "1.3-Prod-blue" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
+    badge --shield "1.4-Prod-blue" --no_badge  --glob "/android/app/src/staging/res/*/*.{png,PNG}"
+    badge --shield "1.4-Prod-blue" --no_badge  --glob "/ios/atb/Images.xcassets/AppIcon.appiconset/*.{png,PNG}"
   fi
 fi 
 
