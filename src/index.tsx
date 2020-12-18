@@ -37,14 +37,6 @@ async function setupConfig() {
 trackAppState();
 enableScreens();
 
-// Adds ability to automatically animate between layout paint changes.
-if (
-  Platform.OS === 'android' &&
-  UIManager.setLayoutAnimationEnabledExperimental
-) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
-
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
