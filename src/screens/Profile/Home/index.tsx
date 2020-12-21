@@ -14,6 +14,7 @@ import LogoOutline from '../../../ScreenHeader/LogoOutline';
 import {StyleSheet, Theme} from '../../../theme';
 import {useNavigateToStartScreen} from '../../../utils/navigation';
 import {useTranslation, ProfileTexts} from '../../../translations';
+import {useRemoteConfig} from '../../../RemoteConfigContext';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -31,6 +32,7 @@ type ProfileScreenProps = {
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
   const navigateHome = useNavigateToStartScreen();
+  const {enable_i18n} = useRemoteConfig();
   const chatIcon = useChatIcon();
   const style = useProfileHomeStyle();
   const {t} = useTranslation();
@@ -61,6 +63,12 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             text={t(ProfileTexts.sections.settings.linkItems.startScreen.label)}
             onPress={() => navigation.navigate('SelectStartScreen')}
           />
+          {enable_i18n && (
+            <Sections.LinkItem
+              text={t(ProfileTexts.sections.settings.linkItems.language.label)}
+              onPress={() => navigation.navigate('Language')}
+            />
+          )}
         </Sections.Section>
 
         <Sections.Section withPadding>
