@@ -168,17 +168,18 @@ function CallGroup({
   return (
     <>
       {items.map((call, i) => {
-        const decorateStart = isStartPlace(i) || i === 0;
-        const decorateEnd = i === items.length - 1 && !collapsed;
+        const isStart = isStartPlace(i) || i === 0;
+        const isEnd = i === items.length - 1 && !collapsed;
+        const isBetween = !isStart && !isEnd;
         return (
           <View
             key={call.quay?.id + call.serviceJourney.id}
-            style={[styles.place, decorateStart && styles.startPlace]}
+            style={[styles.place, isStart && styles.startPlace]}
           >
             <TripLegDecoration
-              hasStart={decorateStart}
-              hasCenter={!decorateStart && !decorateEnd}
-              hasEnd={decorateEnd}
+              hasStart={isStart}
+              hasCenter={isBetween}
+              hasEnd={isEnd}
               color={
                 type === 'passed' || type === 'after'
                   ? defaultFill
@@ -193,8 +194,10 @@ function CallGroup({
                   missingRealTime={!call.realtime && isStartPlace(i)}
                 ></Time>
               }
-              alignChildren={'flex-start'}
-              style={styles.row}
+              alignChildren={
+                isStart ? 'flex-start' : isEnd ? 'flex-end' : 'center'
+              }
+              style={[styles.row, isBetween && styles.middleRow]}
             >
               <ThemeText>{getQuayName(call.quay)} </ThemeText>
             </TripRow>
@@ -278,6 +281,8 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
   row: {
     paddingVertical: theme.spacings.small,
+  },
+  middleRow: {
     minHeight: 60,
   },
   situationsContainer: {
