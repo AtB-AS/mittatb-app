@@ -30,6 +30,7 @@ import TripRow from '../components/TripRow';
 import Time from '../components/Time';
 import TripLegDecoration from '../components/TripLegDecoration';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -60,6 +61,7 @@ export default function DepartureDetails({navigation, route}: Props) {
     isBack = false,
   } = route.params;
   const styles = useStopsStyle();
+  const {t} = useTranslation();
 
   const isFocused = useIsFocused();
   const [
@@ -76,13 +78,16 @@ export default function DepartureDetails({navigation, route}: Props) {
   );
 
   const content = isLoading ? (
-    <View accessibilityLabel={'Laster søkeresultat'} accessible={true}>
+    <View>
       <ActivityIndicator
         color={defaultFill}
         style={styles.spinner}
         animating={true}
         size="large"
       />
+      <ScreenReaderAnnouncement
+        message={t(DepartureDetailsTexts.messages.loading)}
+      ></ScreenReaderAnnouncement>
     </View>
   ) : (
     <ScrollView style={styles.scrollView}>
@@ -113,7 +118,9 @@ export default function DepartureDetails({navigation, route}: Props) {
           icon: <ThemeIcon svg={isBack ? ArrowLeft : Close} />,
           accessible: true,
           accessibilityRole: 'button',
-          accessibilityLabel: 'Gå tilbake',
+          accessibilityLabel: t(
+            DepartureDetailsTexts.header.leftIcon.a11yLabel,
+          ),
         }}
         title={title}
       />
