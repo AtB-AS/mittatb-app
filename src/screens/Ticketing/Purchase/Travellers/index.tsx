@@ -130,7 +130,7 @@ const Travellers: React.FC<TravellersProps> = ({
 
         <Sections.Section withPadding>
           <Sections.LinkItem
-            text={tariffZonesSummary(fromTariffZone, toTariffZone, t)}
+            text={t(tariffZonesSummary(fromTariffZone, toTariffZone))}
             onPress={() => {
               navigation.push('TariffZones', {
                 fromTariffZone,
