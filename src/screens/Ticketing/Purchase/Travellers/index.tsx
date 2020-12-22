@@ -18,8 +18,12 @@ import {CreditCard, Vipps} from '../../../../assets/svg/icons/ticketing';
 import * as Sections from '../../../../components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useTicketState} from '../../../../TicketContext';
-import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
-import {TravellersTexts, useTranslation} from '../../../../translations';
+import {TariffZoneWithMetadata} from '../TariffZones';
+import {
+  TariffZonesTextsFacade,
+  TravellersTexts,
+  useTranslation,
+} from '../../../../translations';
 
 export type TravellersProps = {
   navigation: DismissableStackNavigationProp<
@@ -130,7 +134,12 @@ const Travellers: React.FC<TravellersProps> = ({
 
         <Sections.Section withPadding>
           <Sections.LinkItem
-            text={tariffZonesSummary(fromTariffZone, toTariffZone, t)}
+            text={t(
+              TariffZonesTextsFacade.zoneSummary.text(
+                fromTariffZone,
+                toTariffZone,
+              ),
+            )}
             onPress={() => {
               navigation.push('TariffZones', {
                 fromTariffZone,

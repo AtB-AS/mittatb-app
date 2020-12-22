@@ -4,13 +4,14 @@ import {TicketingStackParams} from '../';
 import Header from '../../../../ScreenHeader';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StyleSheet, useTheme} from '../../../../theme';
-import ThemeText from '../../../../components/text';
 import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
 import {ButtonInput, Section} from '../../../../components/sections';
-import {screenReaderPause} from '../../../../components/accessible-text';
+import AccessibleText, {
+  screenReaderPause,
+} from '../../../../components/accessible-text';
 import {
-  Language,
   TariffZonesTexts,
+  TariffZonesTextsFacade,
   useTranslation,
 } from '../../../../translations';
 import {TariffZone} from '../../../../api/tariffZones';
@@ -19,7 +20,6 @@ import ThemeIcon from '../../../../components/theme-icon';
 import {ArrowLeft} from '../../../../assets/svg/icons/navigation';
 import Button from '../../../../components/button';
 import {Confirm} from '../../../../assets/svg/icons/actions';
-import {TFunc} from '@leile/lobo-t';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
@@ -48,12 +48,6 @@ type Props = {
   navigation: NavigationProps;
   route: RouteProps;
 };
-
-export const tariffZonesSummary = (
-  fromTariffZone: TariffZoneWithMetadata,
-  toTariffZone: TariffZoneWithMetadata,
-  t: TFunc<typeof Language>,
-) => t(TariffZonesTexts.zoneSummary.text(fromTariffZone, toTariffZone));
 
 const TariffZones: React.FC<Props> = ({navigation, route}) => {
   const styles = useStyles();
@@ -98,7 +92,7 @@ const TariffZones: React.FC<Props> = ({navigation, route}) => {
           <ButtonInput
             accessibilityLabel={
               t(
-                TariffZonesTexts.location.departurePicker.a11yLabel(
+                TariffZonesTextsFacade.location.departurePicker.a11yLabel(
                   fromTariffZone,
                 ),
               ) + screenReaderPause
@@ -108,7 +102,9 @@ const TariffZones: React.FC<Props> = ({navigation, route}) => {
             )}
             accessibilityRole="button"
             value={t(
-              TariffZonesTexts.location.departurePicker.value(fromTariffZone),
+              TariffZonesTextsFacade.location.departurePicker.value(
+                fromTariffZone,
+              ),
             )}
             label={t(TariffZonesTexts.location.departurePicker.label)}
             placeholder={t(TariffZonesTexts.location.departurePicker.label)}
@@ -120,7 +116,7 @@ const TariffZones: React.FC<Props> = ({navigation, route}) => {
           <ButtonInput
             accessibilityLabel={
               t(
-                TariffZonesTexts.location.destinationPicker.a11yLabel(
+                TariffZonesTextsFacade.location.destinationPicker.a11yLabel(
                   toTariffZone,
                 ),
               ) + screenReaderPause
@@ -130,7 +126,7 @@ const TariffZones: React.FC<Props> = ({navigation, route}) => {
             )}
             accessibilityRole="button"
             value={t(
-              TariffZonesTexts.location.destinationPicker.value(
+              TariffZonesTextsFacade.location.destinationPicker.value(
                 fromTariffZone,
                 toTariffZone,
               ),
@@ -142,18 +138,18 @@ const TariffZones: React.FC<Props> = ({navigation, route}) => {
             }
           />
         </Section>
-        <ThemeText
+        <AccessibleText
           type={'body'}
           style={styles.tariffZoneText}
-          accessibilityLabel={t(
-            TariffZonesTexts.zoneSummary.a11yLabel(
+          prefix={t(TariffZonesTexts.zoneSummary.a11yLabelPrefix)}
+        >
+          {t(
+            TariffZonesTextsFacade.zoneSummary.text(
               fromTariffZone,
               toTariffZone,
             ),
           )}
-        >
-          {tariffZonesSummary(fromTariffZone, toTariffZone, t)}
-        </ThemeText>
+        </AccessibleText>
       </View>
       <View
         style={{
