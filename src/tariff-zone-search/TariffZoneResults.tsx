@@ -32,8 +32,8 @@ const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
                 accessible={true}
                 accessibilityLabel={
                   t(
-                    TariffZoneSearchTexts.zones.item.a11yLabelPrefix(
-                      tariffZone,
+                    TariffZoneSearchTexts.zones.item.a11yLabel(
+                      tariffZone.name.value,
                     ),
                   ) + screenReaderPause
                 }

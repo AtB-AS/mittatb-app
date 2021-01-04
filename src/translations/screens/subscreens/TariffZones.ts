@@ -4,7 +4,7 @@ const TariffZonesTexts = {
   header: {
     title: _('Velg sone'),
     leftButton: {
-      a11yLabel: _('Gå tilbake uten å lagre soner'),
+      a11yLabel: _('Gå tilbake uten å lagre sonevalget'),
     },
   },
   zoneSummary: {
