@@ -87,7 +87,7 @@ export default function DepartureDetails({navigation, route}: Props) {
       />
       <ScreenReaderAnnouncement
         message={t(DepartureDetailsTexts.messages.loading)}
-      ></ScreenReaderAnnouncement>
+      />
     </View>
   ) : (
     <ScrollView style={styles.scrollView}>
