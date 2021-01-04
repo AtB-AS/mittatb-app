@@ -15,17 +15,17 @@ const TariffZoneSearchTexts = {
   zones: {
     heading: _('Soner'),
     item: {
-      a11yLabelPrefix: (zone: TariffZone) => _(`Sone ${zone.name.value}`),
-      a11yHint: _('Aktivér for å bruke dette resultatet.'),
+      a11yLabel: (zoneName: string) => _(`Sone ${zoneName}`),
+      a11yHint: _('Aktivér for å velge denne sonen.'),
     },
   },
   results: {
     heading: _('Søkeresultater'),
     item: {
-      a11yLabelPrefix: (location: Location, zone: TariffZone) =>
-        _(`Stoppested ${location.name} i sone ${zone.name.value}`),
-      a11yHint: _('Aktivér for å bruke dette resultatet.'),
-      zoneLabel: (zone: TariffZone) => _(`Sone ${zone.name.value}`),
+      a11yLabel: (venueName: string, zoneName: string) =>
+        _(`Stoppested ${venueName} i sone ${zoneName}`),
+      a11yHint: _('Aktivér for å velge dette stoppestedet.'),
+      zoneLabel: (zoneName: string) => _(`Sone ${zoneName}`),
     },
   },
   messages: {

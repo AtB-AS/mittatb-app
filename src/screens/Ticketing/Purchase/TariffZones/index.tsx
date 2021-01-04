@@ -4,22 +4,18 @@ import {TicketingStackParams} from '../';
 import Header from '../../../../ScreenHeader';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StyleSheet, useTheme} from '../../../../theme';
-import ThemeText from '../../../../components/text';
 import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
 import {ButtonInput, Section} from '../../../../components/sections';
-import {screenReaderPause} from '../../../../components/accessible-text';
-import {
-  Language,
-  TariffZonesTexts,
-  useTranslation,
-} from '../../../../translations';
+import AccessibleText, {
+  screenReaderPause,
+} from '../../../../components/accessible-text';
+import {TariffZonesTexts, useTranslation} from '../../../../translations';
 import {TariffZone} from '../../../../api/tariffZones';
 import {View} from 'react-native';
 import ThemeIcon from '../../../../components/theme-icon';
 import {ArrowLeft} from '../../../../assets/svg/icons/navigation';
 import Button from '../../../../components/button';
 import {Confirm} from '../../../../assets/svg/icons/actions';
-import {TFunc} from '@leile/lobo-t';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
@@ -52,8 +48,83 @@ type Props = {
 export const tariffZonesSummary = (
   fromTariffZone: TariffZoneWithMetadata,
   toTariffZone: TariffZoneWithMetadata,
-  t: TFunc<typeof Language>,
-) => t(TariffZonesTexts.zoneSummary.text(fromTariffZone, toTariffZone));
+) => {
+  if (fromTariffZone.id === toTariffZone.id) {
+    return TariffZonesTexts.zoneSummary.text.singleZone(
+      fromTariffZone.name.value,
+    );
+  } else {
+    return TariffZonesTexts.zoneSummary.text.multipleZone(
+      fromTariffZone.name.value,
+      toTariffZone.name.value,
+    );
+  }
+};
+
+const departurePickerAccessibilityLabel = (
+  fromTariffZone: TariffZoneWithMetadata,
+) => {
+  if (fromTariffZone.venueName)
+    return TariffZonesTexts.location.departurePicker.a11yLabel.withVenue(
+      fromTariffZone.name.value,
+      fromTariffZone.venueName,
+    );
+  else {
+    return TariffZonesTexts.location.departurePicker.a11yLabel.noVenue(
+      fromTariffZone.name.value,
+    );
+  }
+};
+
+const destinationPickerAccessibilityLabel = (
+  toTariffZone: TariffZoneWithMetadata,
+) => {
+  if (toTariffZone.venueName)
+    return TariffZonesTexts.location.destinationPicker.a11yLabel.withVenue(
+      toTariffZone.name.value,
+      toTariffZone.venueName,
+    );
+  else {
+    return TariffZonesTexts.location.destinationPicker.a11yLabel.noVenue(
+      toTariffZone.name.value,
+    );
+  }
+};
+
+const departurePickerValue = (fromTariffZone: TariffZoneWithMetadata) => {
+  if (fromTariffZone.venueName)
+    return TariffZonesTexts.location.departurePicker.value.withVenue(
+      fromTariffZone.name.value,
+      fromTariffZone.venueName,
+    );
+  else {
+    return TariffZonesTexts.location.departurePicker.value.noVenue(
+      fromTariffZone.name.value,
+    );
+  }
+};
+
+const destinationPickerValue = (
+  fromTariffZone: TariffZoneWithMetadata,
+  toTariffZone: TariffZoneWithMetadata,
+) => {
+  if (fromTariffZone.id === toTariffZone.id && toTariffZone.venueName) {
+    return TariffZonesTexts.location.destinationPicker.value.withVenueSameZone(
+      toTariffZone.venueName,
+    );
+  } else if (fromTariffZone.id === toTariffZone.id && !toTariffZone.venueName) {
+    return TariffZonesTexts.location.destinationPicker.value.noVenueSameZone;
+  } else if (toTariffZone.venueName) {
+    return TariffZonesTexts.location.departurePicker.value.withVenue(
+      toTariffZone.name.value,
+      toTariffZone.venueName,
+    );
+  } else {
+    return TariffZonesTexts.location.departurePicker.value.noVenue(
+      toTariffZone.name.value,
+    );
+  }
+};
 
 const TariffZones: React.FC<Props> = ({navigation, route}) => {
   const styles = useStyles();
@@ -97,19 +168,14 @@ const TariffZones: React.FC<Props> = ({navigation, route}) => {
         <Section withPadding>
           <ButtonInput
             accessibilityLabel={
-              t(
-                TariffZonesTexts.location.departurePicker.a11yLabel(
-                  fromTariffZone,
-                ),
-              ) + screenReaderPause
+              t(departurePickerAccessibilityLabel(fromTariffZone)) +
+              screenReaderPause
             }
             accessibilityHint={t(
               TariffZonesTexts.location.departurePicker.a11yHint,
             )}
             accessibilityRole="button"
-            value={t(
-              TariffZonesTexts.location.departurePicker.value(fromTariffZone),
-            )}
+            value={t(departurePickerValue(fromTariffZone))}
             label={t(TariffZonesTexts.location.departurePicker.label)}
             placeholder={t(TariffZonesTexts.location.departurePicker.label)}
             onPress={() =>
@@ -119,22 +185,14 @@ const TariffZones: React.FC<Props> = ({navigation, route}) => {
 
           <ButtonInput
             accessibilityLabel={
-              t(
-                TariffZonesTexts.location.destinationPicker.a11yLabel(
-                  toTariffZone,
-                ),
-              ) + screenReaderPause
+              t(destinationPickerAccessibilityLabel(toTariffZone)) +
+              screenReaderPause
             }
             accessibilityHint={t(
               TariffZonesTexts.location.destinationPicker.a11yHint,
             )}
             accessibilityRole="button"
-            value={t(
-              TariffZonesTexts.location.destinationPicker.value(
-                fromTariffZone,
-                toTariffZone,
-              ),
-            )}
+            value={t(destinationPickerValue(fromTariffZone, toTariffZone))}
             label={t(TariffZonesTexts.location.destinationPicker.label)}
             placeholder={t(TariffZonesTexts.location.destinationPicker.label)}
             onPress={() =>
@@ -142,18 +200,13 @@ const TariffZones: React.FC<Props> = ({navigation, route}) => {
             }
           />
         </Section>
-        <ThemeText
+        <AccessibleText
           type={'body'}
           style={styles.tariffZoneText}
-          accessibilityLabel={t(
-            TariffZonesTexts.zoneSummary.a11yLabel(
-              fromTariffZone,
-              toTariffZone,
-            ),
-          )}
+          prefix={t(TariffZonesTexts.zoneSummary.a11yLabelPrefix)}
         >
-          {tariffZonesSummary(fromTariffZone, toTariffZone, t)}
-        </ThemeText>
+          {t(tariffZonesSummary(fromTariffZone, toTariffZone))}
+        </AccessibleText>
       </View>
       <View
         style={{

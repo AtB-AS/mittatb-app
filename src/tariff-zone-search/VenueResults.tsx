@@ -37,9 +37,9 @@ const VenueResults: React.FC<Props> = ({locationsAndTariffZones, onSelect}) => {
                 accessible={true}
                 accessibilityLabel={
                   t(
-                    TariffZoneSearchTexts.results.item.a11yLabelPrefix(
-                      location,
-                      tariffZone,
+                    TariffZoneSearchTexts.results.item.a11yLabel(
+                      location.name,
+                      tariffZone.name.value,
                     ),
                   ) + screenReaderPause
                 }
@@ -64,7 +64,9 @@ const VenueResults: React.FC<Props> = ({locationsAndTariffZones, onSelect}) => {
                   </ThemeText>
                   <ThemeText type={'lead'}>
                     {t(
-                      TariffZoneSearchTexts.results.item.zoneLabel(tariffZone),
+                      TariffZoneSearchTexts.results.item.zoneLabel(
+                        tariffZone.name.value,
+                      ),
                     )}
                   </ThemeText>
                 </View>
