@@ -28,16 +28,10 @@ function useLanguage() {
   const shouldUseUserPreferenced =
     !useSystemLanguage && !!userPreferencedLanguage;
 
-  const getAndSetPreferencedLanguage = () => {
+  useEffect(() => {
     if (shouldUseUserPreferenced) {
       const newLanguage = getAsAppLanguage(userPreferencedLanguage);
       setCurrentLanguage(newLanguage);
-    }
-  };
-
-  useEffect(() => {
-    if (shouldUseUserPreferenced) {
-      getAndSetPreferencedLanguage();
     } else {
       const onChange = () => {
         setLocale(preferredLocale);
@@ -47,7 +41,7 @@ function useLanguage() {
         RNLocalize.removeEventListener('change', onChange);
       };
     }
-  }, []);
+  }, [shouldUseUserPreferenced]);
 
   useEffect(() => {
     if (!shouldUseUserPreferenced) {
@@ -58,7 +52,6 @@ function useLanguage() {
     }
   }, [locale, useSystemLanguage]);
 
-  useEffect(getAndSetPreferencedLanguage, [userPreferencedLanguage]);
   return currentLanguage;
 }
 
