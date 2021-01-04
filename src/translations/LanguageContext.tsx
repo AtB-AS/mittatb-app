@@ -41,7 +41,7 @@ function useLanguage() {
         RNLocalize.removeEventListener('change', onChange);
       };
     }
-  }, [shouldUseUserPreferenced]);
+  }, [useSystemLanguage, userPreferencedLanguage]);
 
   useEffect(() => {
     if (!shouldUseUserPreferenced) {
