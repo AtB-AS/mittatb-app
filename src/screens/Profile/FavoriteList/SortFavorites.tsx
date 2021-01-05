@@ -56,7 +56,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
   };
 
   return (
-    <SafeAreaView style={style.container}>
+    <SafeAreaView style={style.container} edges={['right', 'top', 'left']}>
       <BackHeader title="Endre rekkefølge" closeIcon />
 
       {error && (
