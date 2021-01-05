@@ -22,14 +22,14 @@ import {
   useTranslation,
 } from '../translations/';
 import useDebounce from '../utils/useDebounce';
-import {useTicketState} from '../TicketContext';
-import {TariffZone} from '../api/tariffZones';
 import {useGeolocationState} from '../GeolocationContext';
 import {useGeocoder} from '../geocoder';
 import VenueResults, {LocationAndTariffZone} from './VenueResults';
 import {Location} from '../favorites/types';
 import {ArrowLeft} from '../assets/svg/icons/navigation';
 import {ErrorType} from '../api/utils';
+import {useRemoteConfig} from '../RemoteConfigContext';
+import {TariffZone} from '../reference-data/types';
 
 export type Props = {
   navigation: TariffZoneSearchNavigationProp;
@@ -57,7 +57,7 @@ const TariffZoneSearch: React.FC<Props> = ({
   const debouncedText = useDebounce(text, 200);
   const {t} = useTranslation();
 
-  const {tariffZones} = useTicketState();
+  const {tariff_zones: tariffZones} = useRemoteConfig();
 
   const getMatchingTariffZone = (location: Location) =>
     tariffZones.find((tf) => location.tariff_zones?.includes(tf.id));

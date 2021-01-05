@@ -1,6 +1,6 @@
 import {useCallback, useReducer} from 'react';
-import {UserProfile} from '../../../../api/userProfiles';
-import {useTicketState} from '../../../../TicketContext';
+import {useRemoteConfig} from '../../../../RemoteConfigContext';
+import {UserProfile} from '../../../../reference-data/types';
 
 export type UserProfileWithCount = UserProfile & {count: number};
 type UserCountState = {
@@ -59,7 +59,7 @@ const createInitialState = (userProfiles: UserProfile[]) => ({
 });
 
 export default function useUserCountState() {
-  const {userProfiles} = useTicketState();
+  const {user_profiles: userProfiles} = useRemoteConfig();
   const [userCountState, dispatch] = useReducer(
     countReducer,
     userProfiles,

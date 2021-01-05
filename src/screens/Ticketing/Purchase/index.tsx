@@ -3,13 +3,14 @@ import TravellersScreen from './Travellers';
 import {CreditCard as CreditCardScreen, Vipps as VippsScreen} from './Payment';
 import createDismissableStackNavigator from '../../../navigation/createDismissableStackNavigator';
 import {ActiveTicketsScreenName} from '../Tickets';
-import {PreassignedFareProduct, ReserveOffer} from '../../../api/fareContracts';
+import {ReserveOffer} from '../../../api/fareContracts';
 import {RouteProp} from '@react-navigation/core';
 import TariffZones, {TariffZoneWithMetadata} from './TariffZones';
 import {RouteParams as TariffZoneSearchParams} from '../../../tariff-zone-search';
 
 import transitionSpec from '../../../navigation/transitionSpec';
 import TariffZoneSearch from '../../../tariff-zone-search';
+import {PreassignedFareProduct} from '../../../reference-data/types';
 
 type TravellersParams = {
   refreshOffer?: boolean;

@@ -1,6 +1,4 @@
 import {translation as _} from '../../commons';
-import {TariffZone} from '../../../api/tariffZones';
-import {Location} from '../../../favorites/types';
 
 const TariffZoneSearchTexts = {
   searchField: {

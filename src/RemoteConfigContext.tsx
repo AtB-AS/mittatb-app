@@ -2,9 +2,31 @@ import React, {createContext, useContext, useEffect, useState} from 'react';
 import remoteConfig from '@react-native-firebase/remote-config';
 import {RemoteConfig, defaultRemoteConfig, getConfig} from './remote-config';
 import Bugsnag from '@bugsnag/react-native';
+import {
+  PreassignedFareProduct,
+  TariffZone,
+  UserProfile,
+} from './reference-data/types';
+import {
+  defaultPreassignedFareProducts,
+  defaultTariffZones,
+  defaultUserProfiles,
+} from './reference-data/defaults';
 
-export type RemoteConfigContextState = RemoteConfig & {
+export type RemoteConfigContextState = Pick<
+  RemoteConfig,
+  | 'enable_ticketing'
+  | 'enable_intercom'
+  | 'enable_i18n'
+  | 'news_enabled'
+  | 'news_text'
+  | 'news_link_text'
+  | 'news_link_url'
+> & {
   refresh: () => void;
+  preassigned_fare_products: PreassignedFareProduct[];
+  tariff_zones: TariffZone[];
+  user_profiles: UserProfile[];
 };
 
 const RemoteConfigContext = createContext<RemoteConfigContextState | undefined>(
@@ -71,7 +93,18 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
   }
 
   return (
-    <RemoteConfigContext.Provider value={{...config, refresh}}>
+    <RemoteConfigContext.Provider
+      value={{
+        ...config,
+        preassigned_fare_products: parseJson(
+          config.preassigned_fare_products,
+          defaultPreassignedFareProducts,
+        ),
+        tariff_zones: parseJson(config.tariff_zones, defaultTariffZones),
+        user_profiles: parseJson(config.user_profiles, defaultUserProfiles),
+        refresh,
+      }}
+    >
       {children}
     </RemoteConfigContext.Provider>
   );
@@ -86,5 +119,14 @@ export function useRemoteConfig() {
   }
   return context;
 }
+
+const parseJson = (text: string, defaultObject: object) => {
+  try {
+    return JSON.parse(text);
+  } catch (err) {
+    console.warn('Error parsing this json:', text, err);
+    return defaultObject;
+  }
+};
 
 export default RemoteConfigContextProvider;

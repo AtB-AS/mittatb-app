@@ -6,8 +6,8 @@ import ThemeText from '../components/text';
 import {screenReaderPause} from '../components/accessible-text';
 import {TariffZoneSearchTexts, useTranslation} from '../translations';
 import {Location} from '../favorites/types';
-import {TariffZone} from '../api/tariffZones';
 import LocationIcon from '../components/location-icon';
+import {TariffZone} from '../reference-data/types';
 
 export type LocationAndTariffZone = {
   location: Location;

@@ -8,6 +8,7 @@ import useInterval from '../../../utils/use-interval';
 import TicketsScrollView from './TicketsScrollView';
 import {RootStackParamList} from '../../../navigation';
 import TicketOptions from './TicketOptions';
+import {useRemoteConfig} from '../../../RemoteConfigContext';
 
 export type TicketingScreenNavigationProp = StackNavigationProp<
   RootStackParamList
@@ -23,9 +24,11 @@ export const ActiveTickets: React.FC<Props> = ({navigation}) => {
     fareContracts,
     isRefreshingTickets,
     refreshTickets,
-    preassignedFareProducts,
-    isLoadingNecessaryTicketData,
   } = useTicketState();
+
+  const {
+    preassigned_fare_products: preassignedFareProducts,
+  } = useRemoteConfig();
 
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
@@ -50,7 +53,6 @@ export const ActiveTickets: React.FC<Props> = ({navigation}) => {
 
       <TicketOptions
         preassignedFareProducts={preassignedFareProducts}
-        isLoading={isLoadingNecessaryTicketData}
         navigation={navigation}
       />
     </View>
@@ -58,13 +60,11 @@ export const ActiveTickets: React.FC<Props> = ({navigation}) => {
 };
 
 export const ExpiredTickets: React.FC<Props> = ({navigation}) => {
+  const {fareContracts, isRefreshingTickets, refreshTickets} = useTicketState();
+
   const {
-    fareContracts,
-    isRefreshingTickets,
-    refreshTickets,
-    preassignedFareProducts,
-    isLoadingNecessaryTicketData,
-  } = useTicketState();
+    preassigned_fare_products: preassignedFareProducts,
+  } = useRemoteConfig();
 
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
@@ -88,7 +88,6 @@ export const ExpiredTickets: React.FC<Props> = ({navigation}) => {
 
       <TicketOptions
         preassignedFareProducts={preassignedFareProducts}
-        isLoading={isLoadingNecessaryTicketData}
         navigation={navigation}
       />
     </View>

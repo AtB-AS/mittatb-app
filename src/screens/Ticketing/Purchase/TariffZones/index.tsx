@@ -10,12 +10,12 @@ import AccessibleText, {
   screenReaderPause,
 } from '../../../../components/accessible-text';
 import {TariffZonesTexts, useTranslation} from '../../../../translations';
-import {TariffZone} from '../../../../api/tariffZones';
 import {View} from 'react-native';
 import ThemeIcon from '../../../../components/theme-icon';
 import {ArrowLeft} from '../../../../assets/svg/icons/navigation';
 import Button from '../../../../components/button';
 import {Confirm} from '../../../../assets/svg/icons/actions';
+import {TariffZone} from '../../../../reference-data/types';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';

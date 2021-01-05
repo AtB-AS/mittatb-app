@@ -1,15 +1,13 @@
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useMemo, useReducer} from 'react';
 import {CancelToken as CancelTokenStatic, searchOffers} from '../../../../api';
-import {
-  PreassignedFareProduct,
-  Offer,
-  OfferPrice,
-  ReserveOffer,
-} from '../../../../api/fareContracts';
+import {Offer, OfferPrice, ReserveOffer} from '../../../../api/fareContracts';
 import {ErrorType, getAxiosErrorType} from '../../../../api/utils';
 import {UserProfileWithCount} from './use-user-count-state';
-import {TariffZone} from '../../../../api/tariffZones';
+import {
+  PreassignedFareProduct,
+  TariffZone,
+} from '../../../../reference-data/types';
 
 type OfferErrorContext = 'failed_offer_search' | 'failed_reservation';
 
