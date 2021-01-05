@@ -8,8 +8,8 @@ const TripDetailsTexts = {
   },
   trip: {
     leg: {
-      a11yHelper: (step: number, travelMode: string) =>
-        _(`${step}. steg, ${travelMode}`),
+      a11yHelper: (stepNumber: number, travelMode: string) =>
+        _(`Steg ${stepNumber}, ${travelMode}`),
 
       start: {
         a11yLabel: {
@@ -73,6 +73,8 @@ const TripDetailsTexts = {
       walkDistance: {
         label: (distanceInMetres: string) =>
           _(`Gangavstand: ${distanceInMetres} m`),
+        a11yLabel: (distanceInMetres: string) =>
+          _(`Total gangavstand: ${distanceInMetres} m`),
       },
     },
   },
