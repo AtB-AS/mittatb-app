@@ -1,6 +1,7 @@
-import {Feature} from '../sdk';
-import {Coordinates, TransportMode, TransportSubmode} from '@entur/sdk';
+import {Coordinates, FavoriteDeparture, Feature} from '../sdk';
 import {StoredType} from './storage';
+
+export type {FavoriteDeparture, FavoriteDepartureId} from '../sdk';
 
 export type Location = Feature['properties'] & {
   coordinates: Coordinates;
@@ -22,21 +23,6 @@ export type LocationWithMetadata = Location &
       }
     | {resultType: 'favorite'; favoriteId: string}
   );
-
-export type FavoriteDepartureId = {
-  stopId: string;
-  lineName: string;
-  lineId: string;
-};
-
-export type FavoriteDeparture = FavoriteDepartureId & {
-  lineLineNumber?: string;
-  lineTransportationMode?: TransportMode;
-  lineTransportationSubMode?: TransportSubmode;
-  quayName: string;
-  quayId: string;
-  quayPublicCode?: string;
-};
 
 export type StoredFavoriteDeparture = StoredType<FavoriteDeparture>;
 export type UserFavoriteDepartures = StoredFavoriteDeparture[];
