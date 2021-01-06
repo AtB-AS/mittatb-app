@@ -37,7 +37,7 @@ export default function FavoriteList({navigation}: ProfileScreenProps) {
   const onSortClick = () => navigation.push('SortableFavoriteList');
 
   return (
-    <SafeAreaView style={style.container}>
+    <SafeAreaView style={style.container} edges={['right', 'top', 'left']}>
       <BackHeader title={t(FavoriteListTexts.header.title)} />
 
       <ScrollView>
@@ -87,7 +87,6 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
-    paddingBottom: 0,
   },
   empty: {
     margin: theme.spacings.medium,

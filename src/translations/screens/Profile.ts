@@ -20,6 +20,9 @@ const ProfileTexts = {
         startScreen: {
           label: _('Startside'),
         },
+        language: {
+          label: _('Språk'),
+        },
       },
     },
     favorites: {

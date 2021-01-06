@@ -30,6 +30,7 @@ import TripRow from '../components/TripRow';
 import Time from '../components/Time';
 import TripLegDecoration from '../components/TripLegDecoration';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -60,6 +61,7 @@ export default function DepartureDetails({navigation, route}: Props) {
     isBack = false,
   } = route.params;
   const styles = useStopsStyle();
+  const {t} = useTranslation();
 
   const isFocused = useIsFocused();
   const [
@@ -76,12 +78,15 @@ export default function DepartureDetails({navigation, route}: Props) {
   );
 
   const content = isLoading ? (
-    <View accessibilityLabel={'Laster søkeresultat'} accessible={true}>
+    <View>
       <ActivityIndicator
         color={defaultFill}
         style={styles.spinner}
         animating={true}
         size="large"
+      />
+      <ScreenReaderAnnouncement
+        message={t(DepartureDetailsTexts.messages.loading)}
       />
     </View>
   ) : (
@@ -113,7 +118,9 @@ export default function DepartureDetails({navigation, route}: Props) {
           icon: <ThemeIcon svg={isBack ? ArrowLeft : Close} />,
           accessible: true,
           accessibilityRole: 'button',
-          accessibilityLabel: 'Gå tilbake',
+          accessibilityLabel: t(
+            DepartureDetailsTexts.header.leftIcon.a11yLabel,
+          ),
         }}
         title={title}
       />
@@ -168,17 +175,18 @@ function CallGroup({
   return (
     <>
       {items.map((call, i) => {
-        const decorateStart = isStartPlace(i) || i === 0;
-        const decorateEnd = i === items.length - 1 && !collapsed;
+        const isStart = isStartPlace(i) || i === 0;
+        const isEnd = i === items.length - 1 && !collapsed;
+        const isBetween = !isStart && !isEnd;
         return (
           <View
             key={call.quay?.id + call.serviceJourney.id}
-            style={[styles.place, decorateStart && styles.startPlace]}
+            style={[styles.place, isStart && styles.startPlace]}
           >
             <TripLegDecoration
-              hasStart={decorateStart}
-              hasCenter={!decorateStart && !decorateEnd}
-              hasEnd={decorateEnd}
+              hasStart={isStart}
+              hasCenter={isBetween}
+              hasEnd={isEnd}
               color={
                 type === 'passed' || type === 'after'
                   ? defaultFill
@@ -193,8 +201,10 @@ function CallGroup({
                   missingRealTime={!call.realtime && isStartPlace(i)}
                 ></Time>
               }
-              alignChildren={'flex-start'}
-              style={styles.row}
+              alignChildren={
+                isStart ? 'flex-start' : isEnd ? 'flex-end' : 'center'
+              }
+              style={[styles.row, isBetween && styles.middleRow]}
             >
               <ThemeText>{getQuayName(call.quay)} </ThemeText>
             </TripRow>
@@ -278,6 +288,8 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
   row: {
     paddingVertical: theme.spacings.small,
+  },
+  middleRow: {
     minHeight: 60,
   },
   situationsContainer: {

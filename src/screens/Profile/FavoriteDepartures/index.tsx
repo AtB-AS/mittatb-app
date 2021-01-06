@@ -53,7 +53,7 @@ export default function FavoriteDepartures({
   };
 
   return (
-    <SafeAreaView style={style.container}>
+    <SafeAreaView style={style.container} edges={['right', 'top', 'left']}>
       <BackHeader title={t(FavoriteDeparturesTexts.header.title)} />
 
       <ScrollView>
@@ -90,7 +90,6 @@ const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
-    paddingBottom: 0,
   },
   empty: {
     margin: theme.spacings.medium,

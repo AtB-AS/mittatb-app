@@ -108,6 +108,8 @@ const Button: React.FC<ButtonProps> = ({
         onPress={onPress}
         disabled={disabled}
         accessibilityRole="button"
+        importantForAccessibility={disabled ? 'no-hide-descendants' : 'auto'}
+        accessibilityElementsHidden={!!disabled}
         {...props}
       >
         {Icon && iconPosition === 'left' && (
