@@ -42,7 +42,7 @@ export default function NearbyResults({
 
   if (isInitialScreen) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, styles.container__paddedTop]}>
         <MessageBox type="info">
           <ThemeText>{t(NearbyTexts.results.messages.initial)}</ThemeText>
         </MessageBox>
@@ -98,6 +98,9 @@ export default function NearbyResults({
 const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacings.medium,
+  },
+  container__paddedTop: {
+    paddingTop: theme.spacings.medium,
   },
   centerText: {
     textAlign: 'center',
