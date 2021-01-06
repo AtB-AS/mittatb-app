@@ -31,9 +31,15 @@ export default function FavoriteList({navigation}: ProfileScreenProps) {
   const items = favorites ?? [];
 
   const navigateToEdit = (item: StoredLocationFavorite) => {
-    navigation.navigate('AddEditFavorite', {editItem: item});
+    navigation.navigate('AddEditFavorite', {
+      screen: 'AddEditForm',
+      params: {editItem: item},
+    });
   };
-  const onAddButtonClick = () => navigation.push('AddEditFavorite', {});
+  const onAddButtonClick = () =>
+    navigation.push('AddEditFavorite', {
+      screen: 'SearchLocation',
+    });
   const onSortClick = () => navigation.push('SortableFavoriteList');
 
   return (
