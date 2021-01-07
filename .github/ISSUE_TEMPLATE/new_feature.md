@@ -30,4 +30,4 @@ _List of relevant acceptance criteria as a part of a QA flow_
 - [] Is translatable to English and Norwegian.
 - [] Does not drain battery
 - [] Works in up to 200% font size
-- [] Is navigatable
+- [] Is operable and perceivable using screen reader
