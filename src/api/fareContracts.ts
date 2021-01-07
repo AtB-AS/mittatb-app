@@ -1,7 +1,6 @@
 import {AxiosRequestConfig} from 'axios';
 import {getCustomerId} from '../utils/customerId';
 import client from './client';
-import {LanguageAndText} from './utils';
 
 export async function listFareContracts(): Promise<FareContract[]> {
   const customerId = await getCustomerId();
@@ -10,14 +9,6 @@ export async function listFareContracts(): Promise<FareContract[]> {
   const response = await client.get<ListTicketsResponse>(url);
 
   return response.data.fare_contracts;
-}
-
-export async function listPreassignedFareProducts() {
-  const url = 'reference-data/v1/ATB/preassigned-fare-products';
-  const response = await client.get<PreassignedFareProduct[]>(url, {
-    retry: true,
-  });
-  return response.data;
 }
 
 export type OfferSearchParams = {
@@ -128,13 +119,6 @@ export type FareContract = {
   usage_valid_from: number;
   usage_valid_to: number;
   user_profiles: string[];
-};
-
-export type PreassignedFareProduct = {
-  id: string;
-  name: LanguageAndText;
-  description: LanguageAndText;
-  alternativeNames: LanguageAndText[];
 };
 
 type ListTicketsResponse = {

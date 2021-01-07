@@ -17,9 +17,9 @@ import MessageBox from '../../../../message-box';
 import {CreditCard, Vipps} from '../../../../assets/svg/icons/ticketing';
 import * as Sections from '../../../../components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useTicketState} from '../../../../TicketContext';
 import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
 import {TravellersTexts, useTranslation} from '../../../../translations';
+import {useRemoteConfig} from '../../../../RemoteConfigContext';
 
 export type TravellersProps = {
   navigation: DismissableStackNavigationProp<
@@ -39,7 +39,7 @@ const Travellers: React.FC<TravellersProps> = ({
 
   const {userProfilesWithCount, addCount, removeCount} = useUserCountState();
 
-  const {tariffZones} = useTicketState();
+  const {tariff_zones: tariffZones} = useRemoteConfig();
   const defaultTariffZone: TariffZoneWithMetadata = useMemo(
     () => ({
       ...tariffZones[0],

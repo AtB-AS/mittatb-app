@@ -5,9 +5,9 @@ import insets from '../utils/insets';
 import ThemeText from '../components/text';
 import ThemeIcon from '../components/theme-icon';
 import {screenReaderPause} from '../components/accessible-text';
-import {TariffZone} from '../api/tariffZones';
 import {MapPointPin} from '../assets/svg/icons/places';
 import {TariffZoneSearchTexts, useTranslation} from '../translations';
+import {TariffZone} from '../reference-data/types';
 
 type Props = {
   tariffZones: TariffZone[];
