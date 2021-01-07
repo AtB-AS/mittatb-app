@@ -1,3 +1,5 @@
+import {Polygon} from 'geojson';
+
 export type Language = 'nob' | 'nno' | 'nor' | 'eng';
 
 export type LanguageAndText = {
@@ -8,7 +10,7 @@ export type LanguageAndText = {
 export type PreassignedFareProduct = {
   id: string;
   name: LanguageAndText;
-  description: LanguageAndText | {};
+  description?: LanguageAndText;
   alternativeNames: LanguageAndText[];
   version: string;
 };
@@ -22,15 +24,11 @@ export type UserProfile = {
   name: LanguageAndText;
   alternativeNames: LanguageAndText[];
   description: LanguageAndText;
-  version: string;
 };
 
 export type TariffZone = {
   id: string;
   name: LanguageAndText;
   version: string;
-  geometry: {
-    interior: number[][];
-    exterior: number[][];
-  };
+  geometry: Polygon;
 };
