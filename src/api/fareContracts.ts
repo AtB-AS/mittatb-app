@@ -21,7 +21,7 @@ export async function search(
   params: OfferSearchParams,
   opts?: AxiosRequestConfig,
 ): Promise<Offer[]> {
-  const url = 'ticket/v1/search';
+  const url = 'ticket/v1/search/zones';
   const response = await client.post<Offer[]>(url, params, opts);
 
   return response.data;
