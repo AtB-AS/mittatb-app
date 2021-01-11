@@ -2,15 +2,6 @@ import {PreassignedFareProduct, TariffZone, UserProfile} from './types';
 
 export const defaultPreassignedFareProducts: PreassignedFareProduct[] = [
   {
-    id: 'ATB:PreassignedFareProduct:61be5f93',
-    version: 'ATB:Version:V1',
-    name: {lang: 'nob', value: 'Enkeltbillett'},
-    alternativeNames: [
-      {lang: 'eng', value: 'Single ticket'},
-      {lang: 'nno', value: 'Enkeltbillett'},
-    ],
-  },
-  {
     id: 'ATB:PreassignedFareProduct:3d83d176',
     version: 'ATB:Version:5c9ffb7b-bfab-46a3-bb9d-2aa3e1e6302d',
     name: {lang: 'nob', value: 'Enkeltbillett buss/trikk'},
