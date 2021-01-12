@@ -1,8 +1,9 @@
-import {LegMode, TransportSubmode, TransportMode} from '../../../sdk';
 import {RouteProp, useIsFocused} from '@react-navigation/native';
+import {parseISO} from 'date-fns';
 import React, {useCallback, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {DetailsModalNavigationProp, DetailsStackParams} from '..';
 import {getDepartures} from '../../../api/serviceJourney';
 import {Close} from '../../../assets/svg/icons/actions';
@@ -11,26 +12,29 @@ import {
   Expand,
   ExpandLess,
 } from '../../../assets/svg/icons/navigation';
+import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
+import ThemeText from '../../../components/text';
+import ThemeIcon from '../../../components/theme-icon';
 import ScreenHeader from '../../../ScreenHeader';
-import {EstimatedCall, Situation} from '../../../sdk';
+import {
+  EstimatedCall,
+  Situation,
+  TransportMode,
+  TransportSubmode,
+} from '../../../sdk';
 import SituationMessages from '../../../situations';
 import {StyleSheet} from '../../../theme';
+import {DepartureDetailsTexts, useTranslation} from '../../../translations';
 import {
   defaultFill,
   transportationColor,
 } from '../../../utils/transportation-color';
 import {getQuayName} from '../../../utils/transportation-names';
 import usePollableResource from '../../../utils/use-pollable-resource';
-import SituationRow from '../SituationRow';
-import ThemeIcon from '../../../components/theme-icon';
-import ThemeText from '../../../components/text';
-import {parseISO} from 'date-fns';
-import {useTranslation, DepartureDetailsTexts} from '../../../translations';
-import TripRow from '../components/TripRow';
 import Time from '../components/Time';
 import TripLegDecoration from '../components/TripLegDecoration';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
+import TripRow from '../components/TripRow';
+import SituationRow from '../SituationRow';
 
 export type DepartureDetailsRouteParams = {
   title: string;
