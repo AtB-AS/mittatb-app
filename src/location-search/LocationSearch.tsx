@@ -1,11 +1,6 @@
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  Keyboard,
-  SegmentedControlIOSComponent,
-  TextInput as InternalTextInput,
-  View,
-} from 'react-native';
+import {Keyboard, TextInput as InternalTextInput, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
 import {ErrorType} from '../api/utils';
