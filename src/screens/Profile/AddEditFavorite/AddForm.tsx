@@ -222,9 +222,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         </Sections.Section>
       </View>
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      >
+      <KeyboardAvoidingView behavior="padding">
         <ButtonGroup>
           <Button
             onPress={save}
