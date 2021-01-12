@@ -5,7 +5,6 @@ export {default as RadioSection} from './radio-section';
 // Links and actions
 export {default as LinkItem} from './link-item';
 export {default as HeaderItem} from './header-item';
-export {default as LabelItem} from './label-item';
 export {default as ActionItem} from './action-item';
 export {default as GenericItem} from './generic-item';
 export {default as FavoriteItem} from './favorite-item';

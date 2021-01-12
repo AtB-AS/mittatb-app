@@ -191,21 +191,6 @@ export type DeparturesRealtimeData = {
   [quayId: string]: DepartureRealtimeData;
 };
 
-export type FavoriteDepartureId = {
-  stopId: string;
-  lineName: string;
-  lineId: string;
-};
-
-export type FavoriteDeparture = FavoriteDepartureId & {
-  lineLineNumber?: string;
-  lineTransportationMode?: TransportMode;
-  lineTransportationSubMode?: TransportSubmode;
-  quayName: string;
-  quayId: string;
-  quayPublicCode?: string;
-};
-
 export type NextCursorData = {
   nextCursor?: string;
   hasNextPage: boolean;
