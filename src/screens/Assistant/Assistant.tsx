@@ -40,7 +40,6 @@ import {
 } from '../../utils/location';
 import {useLayout} from '../../utils/use-layout';
 import Loading from '../Loading';
-import DateInput, {DateOutput} from './DateInput';
 import FadeBetween from './FadeBetween';
 import Results from './Results';
 import {NoResultReason, SearchStateType} from './types';
