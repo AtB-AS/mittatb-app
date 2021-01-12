@@ -108,7 +108,9 @@ const FavoriteChips: React.FC<Props> = ({
             text={t(FavoriteTexts.chips.addFavorite)}
             accessibilityRole="button"
             icon={Add}
-            onPress={() => navigation.navigate('AddEditFavorite', {})}
+            onPress={() =>
+              navigation.navigate('AddEditFavorite', {screen: 'SearchLocation'})
+            }
             style={{marginRight: 0}}
           />
         )}
