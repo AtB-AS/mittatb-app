@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {Keyboard, View} from 'react-native';
 import {Close} from '../../../assets/svg/icons/actions';
 import ThemeIcon from '../../../components/theme-icon';
 import {LocationWithMetadata} from '../../../favorites/types';
@@ -22,6 +22,7 @@ export default function SearchStopPlace({navigation}: SearchStopPlaceProps) {
   const styles = useThemeStyles();
 
   const onSelect = (location: LocationWithMetadata) => {
+    Keyboard.dismiss();
     navigation.navigate('AddEditFavorite', {
       screen: 'AddEditForm',
       params: {searchLocation: location},

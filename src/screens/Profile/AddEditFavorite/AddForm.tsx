@@ -2,7 +2,13 @@ import {Location} from '@entur/sdk';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useRef, useState} from 'react';
-import {Alert, Keyboard, View} from 'react-native';
+import {
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  View,
+} from 'react-native';
 import {Modalize} from 'react-native-modalize';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AddEditFavoriteRootParams} from '.';
@@ -100,6 +106,11 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
     } else {
       // Add new
       await addFavorite(newFavorite);
+    }
+
+    Keyboard.dismiss();
+    if (!editItem) {
+      navigation.popToTop();
     }
     navigation.goBack();
   };
@@ -211,25 +222,29 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         </Sections.Section>
       </View>
 
-      <ButtonGroup>
-        <Button
-          onPress={save}
-          mode="primary"
-          icon={SvgConfirm}
-          iconPosition="right"
-          text={t(AddEditFavoriteTexts.save.label)}
-        />
-
-        {editItem && (
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <ButtonGroup>
           <Button
-            onPress={deleteItem}
-            mode="destructive"
-            icon={SvgDelete}
+            onPress={save}
+            mode="primary"
+            icon={SvgConfirm}
             iconPosition="right"
-            text={t(AddEditFavoriteTexts.delete.label)}
+            text={t(AddEditFavoriteTexts.save.label)}
           />
-        )}
-      </ButtonGroup>
+
+          {editItem && (
+            <Button
+              onPress={deleteItem}
+              mode="destructive"
+              icon={SvgDelete}
+              iconPosition="right"
+              text={t(AddEditFavoriteTexts.delete.label)}
+            />
+          )}
+        </ButtonGroup>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
