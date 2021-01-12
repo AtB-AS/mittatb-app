@@ -1,5 +1,5 @@
 import {AxiosRequestConfig} from 'axios';
-import {CursoredData, CursoredQuery, FavoriteDeparture} from '../../sdk';
+import {CursoredData, CursoredQuery, FavoriteDepartureId} from '../../sdk';
 import {stringifyWithDate} from '../../utils/querystring';
 import client from '../client';
 import {StopPlaceGroup} from './types';
@@ -14,7 +14,7 @@ export type DepartureGroupsPayload = {
         layer: 'venue';
         id: string;
       };
-  favorites?: FavoriteDeparture[];
+  favorites?: FavoriteDepartureId[];
 };
 
 export type DepartureGroupsQuery = CursoredQuery<{
