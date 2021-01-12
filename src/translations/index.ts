@@ -19,6 +19,7 @@ export {default as LocationSearchTexts} from './screens/subscreens/LocationSearc
 export {default as TravellersTexts} from './screens/subscreens/Travellers';
 export {default as TariffZonesTexts} from './screens/subscreens/TariffZones';
 export {default as TariffZoneSearchTexts} from './screens/subscreens/TariffZoneSearch';
+export {default as TariffZoneMapSelectionTexts} from './screens/subscreens/TariffZoneMapSelection';
 export {default as ProfileTexts} from './screens/Profile';
 export {default as TicketTexts} from './screens/Ticket';
 export {default as NearbyTexts} from './screens/Nearby';
