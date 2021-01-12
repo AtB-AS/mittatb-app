@@ -13,7 +13,7 @@ export type RemoteConfig = {
 export const defaultRemoteConfig: RemoteConfig = {
   enable_ticketing: false,
   enable_intercom: true,
-  enable_i18n: false,
+  enable_i18n: true,
   news_enabled: false,
   news_text: '',
   news_link_text: 'Les mer',

@@ -1,5 +1,10 @@
 import React from 'react';
-import {AccessibilityProps, TouchableOpacity, View} from 'react-native';
+import {
+  AccessibilityProps,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import {StyleSheet} from '../../theme';
 import insets from '../../utils/insets';
 import ThemeText from '../text';
@@ -17,6 +22,7 @@ export type ButtonInputProps = SectionItem<{
   placeholder?: string;
   value?: string | JSX.Element;
   icon?: NavigationIconTypes | JSX.Element;
+  containerStyle?: ViewStyle;
 }> &
   AccessibilityProps;
 

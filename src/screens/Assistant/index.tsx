@@ -4,6 +4,7 @@ import {LocationWithMetadata} from '../../favorites/types';
 import {DetailsRouteParams} from '../TripDetails/Details';
 import TripDetailsRoot from '../TripDetails';
 import AssistantRoot from './Assistant';
+import JourneyDatePicker, {DateTimePickerParams} from './journey-date-picker';
 
 export type AssistantParams = {
   AssistantRoot: {
@@ -11,6 +12,7 @@ export type AssistantParams = {
     toLocation: LocationWithMetadata;
   };
   TripDetails: DetailsRouteParams;
+  DateTimePicker: DateTimePickerParams;
 };
 
 const Stack = createStackNavigator<AssistantParams>();
@@ -28,6 +30,10 @@ const Assistant = () => {
       <Stack.Screen
         name="TripDetails"
         component={TripDetailsRoot}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="DateTimePicker"
+        component={JourneyDatePicker}
       ></Stack.Screen>
     </Stack.Navigator>
   );

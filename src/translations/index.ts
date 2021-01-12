@@ -30,3 +30,4 @@ export {default as SelectStartScreenTexts} from './screens/subscreens/SelectStar
 export {default as AppearanceSettingsTexts} from './screens/subscreens/AppearanceSettings';
 export {default as LanguageSettingsTexts} from './screens/subscreens/LanguageSettingsTexts';
 export {default as dictionary} from './dictionary';
+export {default as JourneyDatePickerTexts} from './screens/subscreens/JourneyDatePicker';

@@ -46,6 +46,10 @@ import Results from './Results';
 import {NoResultReason, SearchStateType} from './types';
 import NewsBanner from './NewsBanner';
 import {AssistantParams} from '.';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import Button from '../../components/button';
+import {formatLocaleTime, formatToLongDateTime} from '../../utils/date';
+import {getDateOptionText, SearchTime} from './journey-date-picker';
 
 type AssistantRouteName = 'AssistantRoot';
 const AssistantRouteNameStatic: AssistantRouteName = 'AssistantRoot';
@@ -171,9 +175,17 @@ const Assistant: React.FC<Props> = ({
       toLocation: undefined,
     });
   }
-
-  const [date, setDate] = useState<DateOutput | undefined>();
   const {t} = useTranslation();
+  const [searchTime, setSearchTime] = useState<SearchTime>({
+    option: 'now',
+    date: new Date(),
+  });
+  const getSearchTimeLabel = () => {
+    return `${t(getDateOptionText(searchTime.option))} (${formatLocaleTime(
+      searchTime.date,
+    )})`;
+  };
+
   const [
     tripPatterns,
     timeOfLastSearch,
@@ -181,7 +193,7 @@ const Assistant: React.FC<Props> = ({
     clearPatterns,
     searchState,
     error,
-  ] = useTripPatterns(from, to, date);
+  ] = useTripPatterns(from, to, searchTime);
   const isSearching = searchState === 'searching';
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
@@ -275,11 +287,18 @@ const Assistant: React.FC<Props> = ({
             style={[styles.paddedContainer, styles.fadeChild]}
             key="dateInput"
           >
-            <DateInput
-              onDateSelected={setDate}
-              value={date}
-              timeOfLastSearch={timeOfLastSearch}
-            />
+            <Button
+              text={getSearchTimeLabel()}
+              mode={'secondary'}
+              onPress={() =>
+                navigation.navigate('DateTimePicker', {
+                  onChange: (s: SearchTime) => {
+                    setSearchTime(s);
+                  },
+                  searchTime,
+                })
+              }
+            ></Button>
           </View>
         </FadeBetween>
       </View>
@@ -326,7 +345,7 @@ const Assistant: React.FC<Props> = ({
       </ThemeText>
     </View>
   );
-  const noResultReasons = computeNoResultReasons(date, from, to);
+  const noResultReasons = computeNoResultReasons(searchTime, from, to);
 
   const onPressed = useCallback(
     (tripPatternId, tripPatterns, startIndex) =>
@@ -435,7 +454,7 @@ type Locations = {
 };
 
 function computeNoResultReasons(
-  date?: DateOutput,
+  date?: SearchTime,
   from?: Location,
   to?: Location,
 ): NoResultReason[] {
@@ -448,10 +467,10 @@ function computeNoResultReasons(
       reasons.push(NoResultReason.CloseLocations);
     }
   }
-  const isPastDate = date && date?.type !== 'now' && date?.date < new Date();
+  const isPastDate = date && date?.option !== 'now' && date?.date < new Date();
 
   if (isPastDate) {
-    const isArrival = date?.type === 'arrival';
+    const isArrival = date?.option === 'arrival';
     const dateReason = isArrival
       ? NoResultReason.PastArrivalTime
       : NoResultReason.PastDepartureTime;
@@ -532,7 +551,7 @@ export default AssistantRoot;
 function useTripPatterns(
   fromLocation: Location | undefined,
   toLocation: Location | undefined,
-  date: DateOutput | undefined,
+  searchTime: SearchTime | undefined,
 ): [
   TripPattern[] | null,
   Date,
@@ -556,9 +575,12 @@ function useTripPatterns(
       setSearchState('searching');
       setErrorType(undefined);
       try {
-        const arriveBy = date?.type === 'arrival';
+        console.log(searchTime);
+        const arriveBy = searchTime?.option === 'arrival';
         const searchDate =
-          date && date?.type !== 'now' ? date.date : new Date();
+          searchTime && searchTime?.option !== 'now'
+            ? searchTime.date
+            : new Date();
 
         log('searching', {
           fromLocation: translateLocation(fromLocation),
@@ -600,7 +622,7 @@ function useTripPatterns(
       if (!fromLocation || !toLocation) return;
       source.cancel('New search to replace previous search');
     };
-  }, [fromLocation, toLocation, date]);
+  }, [fromLocation, toLocation, searchTime]);
 
   useEffect(reload, [reload]);
 
