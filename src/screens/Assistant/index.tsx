@@ -34,6 +34,9 @@ const Assistant = () => {
       <Stack.Screen
         name="DateTimePicker"
         component={JourneyDatePicker}
+        options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
       ></Stack.Screen>
     </Stack.Navigator>
   );
