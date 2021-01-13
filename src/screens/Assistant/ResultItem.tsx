@@ -210,7 +210,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingBottom: 0,
   },
   resultHeaderLabel: {
-    flex: 7,
+    flex: 3,
   },
   legOutput: {
     flex: 1,
