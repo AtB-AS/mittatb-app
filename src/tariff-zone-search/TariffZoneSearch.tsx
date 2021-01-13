@@ -30,6 +30,7 @@ import {ArrowLeft} from '../assets/svg/icons/navigation';
 import {ErrorType} from '../api/utils';
 import {useRemoteConfig} from '../RemoteConfigContext';
 import {TariffZone} from '../reference-data/types';
+import FavoriteChips from '../favorite-chips';
 
 export type Props = {
   navigation: TariffZoneSearchNavigationProp;
@@ -157,6 +158,18 @@ const TariffZoneSearch: React.FC<Props> = ({
             autoCompleteType="off"
           />
         </View>
+
+        <FavoriteChips
+          contentContainerStyle={styles.favouriteChips}
+          onSelectLocation={() => {}}
+          onMapSelection={() =>
+            navigation.navigate('TariffZoneMapSelection', {
+              callerRouteName,
+              callerRouteParam,
+            })
+          }
+          chipTypes={['map']}
+        />
       </View>
 
       <ScrollView
@@ -215,6 +228,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   header: {
     backgroundColor: theme.background.header,
+  },
+  favouriteChips: {
+    marginLeft: theme.spacings.medium,
   },
   withMargin: {
     margin: theme.spacings.medium,

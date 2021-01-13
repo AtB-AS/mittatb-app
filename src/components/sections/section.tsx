@@ -5,6 +5,7 @@ import {ContainerSizingType, SectionItemProps} from './section-utils';
 
 export type SectionProps = PropsWithChildren<{
   withPadding?: boolean;
+  withFullPadding?: boolean;
   withTopPadding?: boolean;
   withBottomPadding?: boolean;
   type?: ContainerSizingType;
@@ -13,6 +14,7 @@ export type SectionProps = PropsWithChildren<{
 export default function SectionGroup({
   children,
   withPadding = false,
+  withFullPadding = false,
   withTopPadding = false,
   withBottomPadding = false,
   type = 'block',
@@ -25,6 +27,7 @@ export default function SectionGroup({
 
   const containerStyle: Array<ViewStyle | undefined> = [
     withPadding ? style.container__padded : undefined,
+    withFullPadding ? style.container__fullPadded : undefined,
     withTopPadding ? style.container__topPadded : undefined,
     withBottomPadding ? style.container__bottomPadded : undefined,
   ];
@@ -77,6 +80,9 @@ const useInputGroupStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container__padded: {
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.small,
+  },
+  container__fullPadded: {
+    margin: theme.spacings.medium,
   },
   container__topPadded: {
     marginTop: theme.spacings.large,
