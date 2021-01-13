@@ -26,6 +26,7 @@ import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
 import {
   AssistantTexts,
+  dictionary,
   TranslateFunction,
   useTranslation,
 } from '../../translations/';
@@ -53,7 +54,7 @@ function getFromLeg(legs: Leg[]) {
   const found = legs.find(legWithQuay);
   const fromQuay = (found?.fromEstimatedCall ?? found?.fromPlace)?.quay;
   if (!fromQuay) {
-    return legs[0].fromPlace.name ?? '';
+    return legs[0].fromPlace.name;
   }
   const publicCodeOutput = fromQuay.publicCode ? ' ' + fromQuay.publicCode : '';
   return fromQuay.name + publicCodeOutput;
@@ -158,7 +159,7 @@ const ResultItemFooter: React.FC<{legs: Leg[]; onDetailsPressed(): void}> = ({
 }) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
-  const quayName = getFromLeg(legs);
+  const quayName = getFromLeg(legs) ?? t(dictionary.travel.quay.defaultName);
   const quayLeg = legs.find(legWithQuay);
   const timePrefix =
     !!quayLeg && !quayLeg.realtime ? missingRealtimePrefix : '';
