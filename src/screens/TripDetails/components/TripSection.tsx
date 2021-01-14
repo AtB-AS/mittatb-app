@@ -158,7 +158,7 @@ const TripSection: React.FC<TripSectionProps> = ({
   );
 };
 const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   const navigation = useNavigation<DetailScreenNavigationProp>();
   const navigateToDetails = () =>
@@ -179,7 +179,7 @@ const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
         t(
           TripDetailsTexts.trip.leg.intermediateStops.a11yLabel(
             numberOfIntermediateCalls,
-            secondsToDuration(leg.duration),
+            secondsToDuration(leg.duration, language),
           ),
         ) + screenReaderPause
       }
@@ -191,7 +191,7 @@ const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
         {t(
           TripDetailsTexts.trip.leg.intermediateStops.label(
             numberOfIntermediateCalls,
-            secondsToDuration(leg.duration),
+            secondsToDuration(leg.duration, language),
           ),
         )}
       </ThemeText>
@@ -199,7 +199,7 @@ const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
   );
 };
 const WalkSection: React.FC<TripSectionProps> = (leg) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const isWalkTimeOfSignificance = significantWalkTime(leg.duration);
   if (!isWalkTimeOfSignificance) {
     return null;
@@ -216,7 +216,7 @@ const WalkSection: React.FC<TripSectionProps> = (leg) => {
       <ThemeText type="lead" color="faded">
         {t(
           TripDetailsTexts.trip.leg.walk.label(
-            secondsToDuration(leg.duration ?? 0),
+            secondsToDuration(leg.duration ?? 0, language),
           ),
         )}
       </ThemeText>

@@ -22,6 +22,8 @@ export {default as TariffZoneSearchTexts} from './screens/subscreens/TariffZoneS
 export {default as TariffZoneMapSelectionTexts} from './screens/subscreens/TariffZoneMapSelection';
 export {default as ProfileTexts} from './screens/Profile';
 export {default as TicketTexts} from './screens/Ticket';
+export {default as TicketsTexts} from './screens/Tickets';
+export {default as TicketSplashTexts} from './screens/TicketSplash';
 export {default as NearbyTexts} from './screens/Nearby';
 export {default as AddEditFavoriteTexts} from './screens/subscreens/AddEditFavorite';
 export {default as FavoriteListTexts} from './screens/subscreens/FavoriteList';

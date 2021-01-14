@@ -9,6 +9,7 @@ import {
   differenceInCalendarDays,
 } from 'date-fns';
 import nb from 'date-fns/locale/nb';
+import en from 'date-fns/locale/en-GB';
 
 import humanizeDuration from 'humanize-duration';
 import {Language, DEFAULT_LANGUAGE} from '../translations';
@@ -56,11 +57,10 @@ export function secondsToMinutesShort(seconds: number): string {
 
 export function secondsToDuration(
   seconds: number,
+  language: Language,
   opts?: humanizeDuration.Options,
-  language?: Language,
 ): string {
-  const currentLanguage =
-    (language ?? DEFAULT_LANGUAGE) === Language.Norwegian ? 'no' : 'en';
+  const currentLanguage = language === Language.Norwegian ? 'no' : 'en';
   return humanizeDuration(seconds * 1000, {
     units: ['d', 'h', 'm'],
     round: true,
@@ -141,18 +141,21 @@ export function isNumberOfMinutesInThePast(
   return differenceInMinutesStrings(isoDate, new Date()) < -minutes;
 }
 
-export function formatToLongDateTime(isoDate: string | Date, locale?: Locale) {
+export function formatToLongDateTime(
+  isoDate: string | Date,
+  language: Language,
+) {
   const parsed = parseIfNeeded(isoDate);
   if (isSameDay(parsed, new Date())) {
     return formatToClock(parsed);
   }
-  return format(parsed, 'PPp', {locale});
+  return format(parsed, 'PPp', {locale: languageToLocale(language)});
 }
 
 export {isSameDay};
 
-export function formatToSimpleDate(date: Date, locale: Locale = nb) {
-  return format(date, 'do MMMM', {locale});
+export function formatToSimpleDate(date: Date, language: Language) {
+  return format(date, 'do MMMM', {locale: languageToLocale(language)});
 }
 
 export function daysBetween(base: Date, target: Date) {
@@ -176,3 +179,12 @@ export function differenceInMinutesStrings(
 ) {
   return differenceInMinutes(parseIfNeeded(dateLeft), parseIfNeeded(dateRight));
 }
+
+const languageToLocale = (language: Language): Locale => {
+  switch (language) {
+    case Language.Norwegian:
+      return nb;
+    case Language.English:
+      return en;
+  }
+};

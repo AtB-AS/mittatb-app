@@ -26,8 +26,8 @@ import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
 import {
   AssistantTexts,
-  dictionary,
   TranslateFunction,
+  dictionary,
   useTranslation,
 } from '../../translations/';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -243,7 +243,7 @@ const MINIMUM_WAIT_IN_SECONDS = 30;
 const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   const styles = useLegStyles();
   const showWaitTime = Boolean(nextLeg);
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const waitTimeInSeconds = !nextLeg
     ? 0
     : secondsBetween(leg.expectedEndTime, nextLeg?.expectedStartTime);
@@ -263,13 +263,13 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
     );
   }
 
-  const walkTime = secondsToDuration(leg.duration ?? 0);
+  const walkTime = secondsToDuration(leg.duration ?? 0, language);
   const text = !isWaitTimeOfSignificance
     ? t(AssistantTexts.results.resultItem.footLeg.walkLabel(walkTime))
     : t(
         AssistantTexts.results.resultItem.footLeg.walkandWaitLabel(
           walkTime,
-          secondsToDuration(waitTimeInSeconds),
+          secondsToDuration(waitTimeInSeconds, language),
         ),
       );
 
@@ -356,7 +356,6 @@ const tripSummary = (tripPattern: TripPattern, t: TranslateFunction) => {
   const screenreaderText = AssistantTexts.results.resultItem.journeySummary;
 
   return `
-  
     ${
       !nonFootLegs.length
         ? t(screenreaderText.legsDescription.footLegsOnly)

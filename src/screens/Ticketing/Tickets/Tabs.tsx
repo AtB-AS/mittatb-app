@@ -9,6 +9,7 @@ import TicketsScrollView from './TicketsScrollView';
 import {RootStackParamList} from '../../../navigation';
 import TicketOptions from './TicketOptions';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
+import {TicketsTexts, useTranslation} from '../../../translations';
 
 export type TicketingScreenNavigationProp = StackNavigationProp<
   RootStackParamList
@@ -40,6 +41,7 @@ export const ActiveTickets: React.FC<Props> = ({navigation}) => {
   };
   const validTickets = fareContracts?.filter(valid).sort(byExpiry);
   const styles = useStyles();
+  const {t} = useTranslation();
   return (
     <View style={styles.container}>
       <TicketsScrollView
@@ -47,7 +49,7 @@ export const ActiveTickets: React.FC<Props> = ({navigation}) => {
         tickets={validTickets}
         isRefreshingTickets={isRefreshingTickets}
         refreshTickets={refreshTickets}
-        noTicketsLabel="Du har ingen aktive billetter"
+        noTicketsLabel={t(TicketsTexts.activeTicketsTab.noTickets)}
         now={now}
       />
 
@@ -76,13 +78,14 @@ export const ExpiredTickets: React.FC<Props> = ({navigation}) => {
   };
   const expiredTickets = fareContracts?.filter(expired).sort(byExpiry);
   const styles = useStyles();
+  const {t} = useTranslation();
   return (
     <View style={styles.container}>
       <TicketsScrollView
         tickets={expiredTickets}
         isRefreshingTickets={isRefreshingTickets}
         refreshTickets={refreshTickets}
-        noTicketsLabel="Fant ingen billetthistorikk"
+        noTicketsLabel={t(TicketsTexts.expiredTicketsTab.noTickets)}
         now={now}
       />
 
