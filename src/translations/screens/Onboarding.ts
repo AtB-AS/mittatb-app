@@ -16,7 +16,7 @@ const OnboardingTexts = {
   step3: {
     title: _('Bedre opplevelse med posisjonsdeling'),
     description: _(
-      'Ved å tillate deling av posisjon kan du finne nærmeste holdeplass og planlegge reisen fra din lokasjon. Du kan når som helst slutte å dele posisjon.',
+      'Ved å tillate deling av posisjon, kan du finne nærmeste holdeplass og planlegge reisen fra din lokasjon. Du kan når som helst slutte å dele posisjon.',
     ),
     privacyLink: {
       text: _('Les vår personvernerklæring'),
