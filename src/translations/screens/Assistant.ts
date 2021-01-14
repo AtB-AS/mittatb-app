@@ -60,13 +60,14 @@ const AssistantTexts = {
       ) => _(`Reiseforslag ${resultPosition} av ${totalResultCount}`),
     },
     resultItem: {
-      details: {
+      header: {
+        time: (startTime: string, endTime: string) =>
+          _(`Fra klokken ${startTime}, til klokken ${endTime}`),
         totalDuration: _('Reisetid'),
       },
       hasSituationsTip: _(
         'Denne reisen har driftsmeldinger. Se detaljer for mer info',
       ),
-      a11yHint: _('Aktiver for å vise detaljert reiserute'),
       footLeg: {
         walkandWaitLabel: (walkTime: string, waitTime: string) =>
           _(
@@ -75,13 +76,18 @@ const AssistantTexts = {
           ),
         walkLabel: (time: string) => _(`Gå ${time}`, `Walk ${time}`),
       },
+      destination: {
+        a11yLabel: _('Destinasjon'),
+      },
       waitRow: {
         label: _('Vent'),
       },
+      footer: {
+        fromLabel: (place: string, time: string) => _(`Fra ${place} ${time}`),
+        detailsLabel: _('Detaljer'),
+        detailsHint: _('Aktivér for å vise flere detaljer om reisen'),
+      },
       journeySummary: {
-        situationsWarning: _('Driftsmeldinger gjelder for dette forslaget.'),
-        time: (startTime: string, endTime: string) =>
-          _(`Fra klokken ${startTime}, til klokken ${endTime}`),
         duration: (duration: string) => _(`Reisetid: ${duration}`),
         legsDescription: {
           footLegsOnly: _('Hele reisen til fots'),

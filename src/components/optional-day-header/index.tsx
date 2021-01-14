@@ -37,7 +37,8 @@ export default function OptionalNextDayLabel({
 }
 const useDayTextStyle = StyleSheet.createThemeHook((theme) => ({
   title: {
-    padding: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
+    marginTop: theme.spacings.medium,
     color: theme.text.colors.faded,
   },
 }));

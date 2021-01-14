@@ -24,10 +24,10 @@ const dictionary = {
       unknown: _('Ukjent transportmiddel'),
     },
     quay: {
-      defaultName: _(''),
+      defaultName: _('Ukjent stoppestedsnavn'),
     },
     line: {
-      defaultName: _(''),
+      defaultName: _('Ukjent linjenavn'),
     },
     time: {
       aimedPrefix: _('Rutetid'),
