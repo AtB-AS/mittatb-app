@@ -181,9 +181,9 @@ const ResultItemFooter: React.FC<{legs: Leg[]; onDetailsPressed(): void}> = ({
           AssistantTexts.results.resultItem.footer.detailsHint,
         )}
         icon={ArrowRight}
-        iconPosition={'right'}
-        mode={'tertiary'}
-        type={'compact'}
+        iconPosition="right"
+        mode="tertiary"
+        type="compact"
         onPress={onDetailsPressed}
         textStyle={styles.detailsButtonText}
       />
