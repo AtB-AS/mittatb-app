@@ -14,6 +14,7 @@ import {
   ServiceJourney,
   StopPlace,
   StopPlaceDetails,
+  TransportMode,
   TransportSubmode,
   ValidityPeriod,
 } from '@entur/sdk';
@@ -188,12 +189,6 @@ export type DepartureRealtimeData = {
 
 export type DeparturesRealtimeData = {
   [quayId: string]: DepartureRealtimeData;
-};
-
-export type FavoriteDeparture = {
-  stopId: string;
-  lineName: string;
-  lineId: string;
 };
 
 export type NextCursorData = {
