@@ -2,12 +2,17 @@ import React from 'react';
 import {View} from 'react-native';
 import {formatToLongDateTime, secondsToDuration} from '../../../utils/date';
 import {fromUnixTime} from 'date-fns';
-import nb from 'date-fns/locale/nb';
 import {Context} from '../../../assets/svg/icons/actions';
 import Button from '../../../components/button';
 import ThemeText from '../../../components/text';
 import {StyleSheet} from '../../../theme';
 import ValidityIcon from './ValidityIcon';
+import {
+  Language,
+  TicketTexts,
+  TranslateFunction,
+  useTranslation,
+} from '../../../translations';
 
 const ValidityHeader: React.FC<{
   isValid: boolean;
@@ -16,13 +21,14 @@ const ValidityHeader: React.FC<{
   onPressDetails?: () => void;
 }> = ({isValid, nowSeconds, validTo, onPressDetails}) => {
   const styles = useStyles();
+  const {t, language} = useTranslation();
 
   return (
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
         <ValidityIcon isValid={isValid} />
         <ThemeText type="lead" color="faded">
-          {validityTimeText(isValid, nowSeconds, validTo)}
+          {validityTimeText(isValid, nowSeconds, validTo, t, language)}
         </ThemeText>
       </View>
       {onPressDetails && (
@@ -42,20 +48,23 @@ function validityTimeText(
   isValid: boolean,
   nowSeconds: number,
   validTo: number,
+  t: TranslateFunction,
+  language: Language,
 ) {
   const validityDifferenceSeconds = Math.abs(validTo - nowSeconds);
+  const delimiter = t(TicketTexts.validityHeader.durationDelimiter);
+  const duration = secondsToDuration(validityDifferenceSeconds, language, {
+    delimiter,
+  });
 
   if (isValid) {
-    return `Gyldig i ${secondsToDuration(validityDifferenceSeconds, {
-      delimiter: ' og ',
-    })}`;
+    return t(TicketTexts.validityHeader.valid(duration));
   } else {
     if (validityDifferenceSeconds < 60 * 60) {
-      return `Utløpt for ${secondsToDuration(validityDifferenceSeconds, {
-        delimiter: ' og ',
-      })} siden`;
+      return t(TicketTexts.validityHeader.recentlyExpired(duration));
     } else {
-      return `Utløpt ${formatToLongDateTime(fromUnixTime(validTo), nb)}`;
+      const dateTime = formatToLongDateTime(fromUnixTime(validTo), language);
+      return t(TicketTexts.validityHeader.expired(dateTime));
     }
   }
 }

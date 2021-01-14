@@ -28,8 +28,8 @@ import ThemeIcon from '../../components/theme-icon';
 import {
   AssistantTexts,
   TranslateFunction,
-  dictionary,
   useTranslation,
+  Language,
 } from '../../translations/';
 
 type ResultItemProps = {
@@ -104,7 +104,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   ...props
 }) => {
   const styles = useThemeStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   if (!tripPattern?.legs?.length) return null;
 
@@ -114,7 +114,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       onPress={onDetailsPressed}
       hitSlop={insets.symmetric(8, 16)}
       accessibilityHint={t(AssistantTexts.results.resultItem.a11yHint)}
-      accessibilityValue={{text: screenReaderSummary(tripPattern, t)}}
+      accessibilityValue={{text: screenReaderSummary(tripPattern, t, language)}}
       {...props}
     >
       <View style={styles.result}>
@@ -180,7 +180,7 @@ const MINIMUM_WAIT_IN_SECONDS = 30;
 const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   const styles = useLegStyles();
   const showWaitTime = Boolean(nextLeg);
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const waitTimeInSeconds = !nextLeg
     ? 0
     : secondsBetween(leg.expectedEndTime, nextLeg?.expectedStartTime);
@@ -200,13 +200,13 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
     );
   }
 
-  const walkTime = secondsToDuration(leg.duration ?? 0);
+  const walkTime = secondsToDuration(leg.duration ?? 0, language);
   const text = !isWaitTimeOfSignificance
     ? t(AssistantTexts.results.resultItem.footLeg.walkLabel(walkTime))
     : t(
         AssistantTexts.results.resultItem.footLeg.walkandWaitLabel(
           walkTime,
-          secondsToDuration(waitTimeInSeconds),
+          secondsToDuration(waitTimeInSeconds, language),
         ),
       );
 
@@ -339,6 +339,7 @@ function LineDisplayName({leg}: {leg: Leg}) {
 const screenReaderSummary = (
   tripPattern: TripPattern,
   t: TranslateFunction,
+  language: Language,
 ) => {
   const hasSituations = flatMap(tripPattern.legs, (leg) => leg.situations)
     .length;
@@ -360,7 +361,9 @@ const screenReaderSummary = (
     ),
   )} ${screenReaderPause}
      ${t(
-       screenreaderText.duration(secondsToDuration(tripPattern.duration)),
+       screenreaderText.duration(
+         secondsToDuration(tripPattern.duration, language),
+       ),
      )} ${screenReaderPause}
     ${
       !nonFootLegs.length

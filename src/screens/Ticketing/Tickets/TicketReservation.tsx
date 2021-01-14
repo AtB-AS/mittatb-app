@@ -7,6 +7,7 @@ import ThemeText from '../../../components/text';
 import {ActiveReservation} from '../../../TicketContext';
 import ThemeIcon from '../../../components/theme-icon';
 import Button from '../../../components/button';
+import {TicketsTexts, useTranslation} from '../../../translations';
 
 type Props = {
   reservation: ActiveReservation;
@@ -15,6 +16,7 @@ type Props = {
 const TicketReservation: React.FC<Props> = ({reservation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
+  const {t} = useTranslation();
 
   function openVippsUrl(vippsUrl: string) {
     if (Linking.canOpenURL(vippsUrl)) {
@@ -32,8 +34,8 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
             </View>
             <ThemeText type="lead" color="faded">
               {reservation.paymentStatus !== 'CAPTURE'
-                ? 'Prosesseres... ikke gyldig enda'
-                : 'Betaling godkjent. Henter billett...'}
+                ? t(TicketsTexts.reservation.processing)
+                : t(TicketsTexts.reservation.approved)}
             </ThemeText>
           </View>
           <ActivityIndicator color={theme.text.colors.primary} />
@@ -41,17 +43,23 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
         <VerifyingValidityLine />
         <View style={styles.ticketInfoContainer}>
           <ThemeText style={styles.orderText}>
-            Ordre-id {reservation.reservation.order_id}
+            {t(
+              TicketsTexts.reservation.orderId(
+                reservation.reservation.order_id,
+              ),
+            )}
           </ThemeText>
           <ThemeText style={styles.orderText}>
             Betales med{' '}
-            {reservation.paymentType === 'vipps' ? 'Vipps' : 'kredittkort'}
+            {reservation.paymentType === 'vipps'
+              ? t(TicketsTexts.reservation.paymentType.vipps)
+              : t(TicketsTexts.reservation.paymentType.creditcard)}
           </ThemeText>
           {reservation.paymentType === 'vipps' &&
             reservation.paymentStatus !== 'CAPTURE' && (
               <Button
                 onPress={() => openVippsUrl(reservation.reservation.url)}
-                text="Gå til Vipps for betaling"
+                text={t(TicketsTexts.reservation.goToVipps)}
                 mode="tertiary"
               />
             )}

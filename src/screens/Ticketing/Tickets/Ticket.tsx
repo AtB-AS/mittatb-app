@@ -7,10 +7,9 @@ import {InvalidTicket, ValidTicket} from '../../../assets/svg/icons/ticketing';
 import colors from '../../../theme/colors';
 import Dash from 'react-native-dash';
 import {fromUnixTime} from 'date-fns';
-import nb from 'date-fns/locale/nb';
 import ThemeText from '../../../components/text';
 import {screenReaderPause} from '../../../components/accessible-text';
-import {Language} from '../../../translations';
+import {TicketsTexts, TicketTexts, useTranslation} from '../../../translations';
 
 type Props = {
   fareContract: FareContract;
@@ -20,6 +19,7 @@ type Props = {
 const Ticket: React.FC<Props> = ({fareContract: fc, now}) => {
   const styles = useStyles();
   const {theme} = useTheme();
+  const {t, language} = useTranslation();
 
   const nowSeconds = now / 1000;
   const isValidTicket = fc.usage_valid_to >= nowSeconds;
@@ -34,14 +34,19 @@ const Ticket: React.FC<Props> = ({fareContract: fc, now}) => {
               <View style={styles.iconContainer}>
                 <ValidTicket
                   fill={colors.primary.green_500}
-                  accessibilityLabel={'Gyldig billett' + screenReaderPause}
+                  accessibilityLabel={
+                    t(TicketsTexts.ticket.valid.a11yLabel) + screenReaderPause
+                  }
                 />
               </View>
               <ThemeText type="lead" color="faded">
-                Gyldig i{' '}
-                {secondsToDuration(validityLeftSeconds, {
-                  delimiter: ' og ',
-                })}
+                {t(
+                  TicketsTexts.ticket.valid.text(
+                    secondsToDuration(validityLeftSeconds, language, {
+                      delimiter: t(TicketsTexts.ticket.valid.durationDelimiter),
+                    }),
+                  ),
+                )}
               </ThemeText>
             </>
           ) : (
@@ -49,12 +54,20 @@ const Ticket: React.FC<Props> = ({fareContract: fc, now}) => {
               <View style={styles.iconContainer}>
                 <InvalidTicket
                   fill={theme.border.error}
-                  accessibilityLabel={'Utløpt billett' + screenReaderPause}
+                  accessibilityLabel={
+                    t(TicketsTexts.ticket.expired.a11yLabel) + screenReaderPause
+                  }
                 />
               </View>
               <ThemeText type="lead" color="faded">
-                Kjøpt{' '}
-                {formatToLongDateTime(fromUnixTime(fc.usage_valid_from), nb)}
+                {t(
+                  TicketsTexts.ticket.expired.text(
+                    formatToLongDateTime(
+                      fromUnixTime(fc.usage_valid_from),
+                      language,
+                    ),
+                  ),
+                )}
               </ThemeText>
             </>
           )}
@@ -67,15 +80,17 @@ const Ticket: React.FC<Props> = ({fareContract: fc, now}) => {
         />
         <View style={styles.ticketInfoContainer}>
           <ThemeText style={styles.travellersText}>
-            {fc.user_profiles.length > 1
-              ? `${fc.user_profiles.length} billetter`
-              : `1 billett`}
+            {/*Todo: Should use user profile names*/}
+            {t(TicketTexts.ticketsSummary(fc.user_profiles.length))}
           </ThemeText>
           <ThemeText type="lead" style={styles.extraText}>
             {fc.product_name}
           </ThemeText>
           <ThemeText type="lead" style={styles.extraText}>
-            Sone A - Stor-Trondheim
+            {
+              // Hardcoded until API returns zone
+              t(TicketTexts.zone('A'))
+            }
           </ThemeText>
         </View>
       </View>

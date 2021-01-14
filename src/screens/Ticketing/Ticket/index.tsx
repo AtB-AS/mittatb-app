@@ -4,6 +4,7 @@ import ThemeText from '../../../components/text';
 import * as Sections from '../../../components/sections';
 import ValidityHeader from './ValidityHeader';
 import ValidityLine from './ValidityLine';
+import {useTranslation, TicketTexts} from '../../../translations';
 type Props = {
   fareContract: FareContract;
   now: number;
@@ -17,6 +18,7 @@ const SimpleTicket: React.FC<Props> = ({
 }) => {
   const nowSeconds = now / 1000;
   const isValidTicket = fc.usage_valid_to >= nowSeconds;
+  const {t} = useTranslation();
 
   return (
     <Sections.Section withBottomPadding>
@@ -34,18 +36,22 @@ const SimpleTicket: React.FC<Props> = ({
           validTo={fc.usage_valid_to}
         />
         <ThemeText>
-          {fc.user_profiles.length > 1
-            ? `${fc.user_profiles.length} voksne`
-            : `1 voksen`}
+          {/*Todo: Should use user profile names*/}
+          {t(TicketTexts.ticketsSummary(fc.user_profiles.length))}
         </ThemeText>
         <ThemeText type="lead" color="faded">
           {fc.product_name}
         </ThemeText>
         <ThemeText type="lead" color="faded">
-          Sone A - Stor-Trondheim
+          {
+            // Hardcoded until API returns zone
+            t(TicketTexts.zone('A'))
+          }
         </ThemeText>
       </Sections.GenericItem>
-      {isValidTicket && <Sections.LinkItem text="Vis for kontroll" disabled />}
+      {isValidTicket && (
+        <Sections.LinkItem text={t(TicketTexts.controlLink)} disabled />
+      )}
     </Sections.Section>
   );
 };

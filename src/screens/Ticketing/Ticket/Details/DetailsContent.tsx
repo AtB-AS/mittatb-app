@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {FareContract} from '../../../../api/fareContracts';
 import ThemeText from '../../../../components/text';
 import * as Sections from '../../../../components/sections';
@@ -6,7 +6,7 @@ import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
 import {formatToLongDateTime} from '../../../../utils/date';
 import {fromUnixTime} from 'date-fns';
-import nb from 'date-fns/locale/nb';
+import {TicketTexts, useTranslation} from '../../../../translations';
 
 type Props = {
   fareContract: FareContract;
@@ -21,6 +21,7 @@ const DetailsContent: React.FC<Props> = ({
 }) => {
   const nowSeconds = now / 1000;
   const isValidTicket = fc.usage_valid_to >= nowSeconds;
+  const {t, language} = useTranslation();
 
   return (
     <Sections.Section withBottomPadding>
@@ -37,26 +38,37 @@ const DetailsContent: React.FC<Props> = ({
           validTo={fc.usage_valid_to}
         />
         <ThemeText>
-          {fc.user_profiles.length > 1
-            ? `${fc.user_profiles.length} voksne`
-            : `1 voksen`}
+          {/*Todo: Should use user profile names*/}
+          {t(TicketTexts.ticketsSummary(fc.user_profiles.length))}
         </ThemeText>
         <ThemeText type="lead" color="faded">
           {fc.product_name}
         </ThemeText>
         <ThemeText type="lead" color="faded">
-          Sone A - Stor-Trondheim
+          {
+            // Hardcoded until API returns zone
+            t(TicketTexts.zone('A'))
+          }
         </ThemeText>
       </Sections.GenericItem>
       <Sections.GenericItem>
-        <ThemeText>Ordre-id: {fc.order_id}</ThemeText>
+        <ThemeText>{t(TicketTexts.details.orderId(fc.order_id))}</ThemeText>
         <ThemeText type="lead" color="faded">
-          Kjøpt {formatToLongDateTime(fromUnixTime(fc.usage_valid_from), nb)}
+          {t(
+            TicketTexts.details.purchaseTime(
+              formatToLongDateTime(fromUnixTime(fc.usage_valid_from), language),
+            ),
+          )}
         </ThemeText>
       </Sections.GenericItem>
-      {isValidTicket && <Sections.LinkItem text="Vis for kontroll" disabled />}
-      <Sections.LinkItem text="Be om refusjon" disabled />
-      <Sections.LinkItem text="Be om kvittering" onPress={onReceiptNavigate} />
+      {isValidTicket && (
+        <Sections.LinkItem text={t(TicketTexts.controlLink)} disabled />
+      )}
+      <Sections.LinkItem text={t(TicketTexts.details.askForRefund)} disabled />
+      <Sections.LinkItem
+        text={t(TicketTexts.details.askForReceipt)}
+        onPress={onReceiptNavigate}
+      />
     </Sections.Section>
   );
 };

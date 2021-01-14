@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {NavigationProp, RouteProp} from '@react-navigation/native';
+import {RouteProp} from '@react-navigation/native';
 import Header from '../../../../ScreenHeader';
 import {StyleSheet} from '../../../../theme';
 import ThemeIcon from '../../../../components/theme-icon';
@@ -10,6 +10,7 @@ import {useTicketState} from '../../../../TicketContext';
 import {View} from 'react-native';
 import DetailsContent from './DetailsContent';
 import {TicketModalNavigationProp, TicketModalStackParams} from '.';
+import {TicketTexts, useTranslation} from '../../../../translations';
 
 export type TicketDetailsRouteParams = {
   orderId: string;
@@ -33,6 +34,7 @@ export default function DetailsScreen({navigation, route}: Props) {
   const fc = fareContracts?.find(
     (fc) => fc.order_id === route?.params?.orderId,
   );
+  const {t} = useTranslation();
 
   const onReceiptNavigate = () =>
     fc &&
@@ -48,10 +50,12 @@ export default function DetailsScreen({navigation, route}: Props) {
           onPress: () => navigation.goBack(),
           accessible: true,
           accessibilityRole: 'button',
-          accessibilityLabel: 'Gå tilbake',
+          accessibilityLabel: t(
+            TicketTexts.details.header.leftButton.a11yLabel,
+          ),
           icon: <ThemeIcon svg={Close} />,
         }}
-        title="Billettdetaljer"
+        title={t(TicketTexts.details.header.title)}
         style={styles.header}
       />
       <View style={styles.content}>

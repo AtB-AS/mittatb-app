@@ -19,9 +19,9 @@ export type WaitDetails = {
 
 const WaitSection: React.FC<WaitDetails> = (wait) => {
   const style = useSectionStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const WaitTexts = TripDetailsTexts.trip.leg.wait;
-  const waitTime = secondsToDuration(wait.waitSeconds);
+  const waitTime = secondsToDuration(wait.waitSeconds, language);
   const shortWait = timeIsShort(wait.waitSeconds);
   return (
     <View style={style.section}>
