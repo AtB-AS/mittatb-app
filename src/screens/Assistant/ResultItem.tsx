@@ -275,9 +275,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 
   return (
     <View style={styles.legContainer} accessibilityLabel={text}>
-      <View style={styles.iconContainer}>
-        <ThemeIcon svg={WalkingPerson} opacity={0.6} />
-      </View>
+      <ThemeIcon svg={WalkingPerson} opacity={0.6} />
     </View>
   );
 };
