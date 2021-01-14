@@ -1,9 +1,10 @@
 import {
   NavigationContainer,
   NavigationContainerRef,
+  NavigatorScreenParams,
   useLinking,
 } from '@react-navigation/native';
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import React, {useEffect, useRef} from 'react';
 import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
@@ -12,27 +13,24 @@ import trackNavigation from '../diagnostics/trackNavigation';
 import LocationSearch, {
   RouteParams as LocationSearchParams,
 } from '../location-search';
+import Onboarding from '../screens/Onboarding';
+import AddEditFavorite, {
+  AddEditFavoriteRootParams,
+} from '../screens/Profile/AddEditFavorite';
+import SortableFavoriteList from '../screens/Profile/FavoriteList/SortFavorites';
 import TicketPurchase, {
   RouteParams as TicketPurchaseParams,
 } from '../screens/Ticketing/Purchase';
-import Onboarding from '../screens/Onboarding';
-import TripDetailsScreen, {
-  RouteParams as TripDetailsRouteParams,
-} from '../screens/TripDetails';
-import DepartureDetails, {
-  DepartureDetailsRouteParams,
-} from '../screens/TripDetails/DepartureDetails';
-import {useTheme} from '../theme';
-import TabNavigator from './TabNavigator';
-import transitionSpec from './transitionSpec';
-import AddEditFavorite, {
-  AddEditParams,
-} from '../screens/Profile/AddEditFavorite';
-import SortableFavoriteList from '../screens/Profile/FavoriteList/SortFavorites';
 import TicketModalScreen, {
   TicketModalRouteParams,
 } from '../screens/Ticketing/Ticket/Details';
+import DepartureDetails, {
+  DepartureDetailsRouteParams,
+} from '../screens/TripDetails/DepartureDetails';
 import {RouteParams as TariffZoneSearchParams} from '../tariff-zone-search';
+import {useTheme} from '../theme';
+import TabNavigator from './TabNavigator';
+import transitionSpec from './transitionSpec';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -42,7 +40,7 @@ export type RootStackParamList = {
   TariffZoneSearch: TariffZoneSearchParams;
   DepartureDetailsModal: DepartureDetailsRouteParams;
   SortableFavoriteList: undefined;
-  AddEditFavorite: AddEditParams;
+  AddEditFavorite: NavigatorScreenParams<AddEditFavoriteRootParams>;
   TicketPurchase: TicketPurchaseParams;
   TicketModal: TicketModalRouteParams;
 };

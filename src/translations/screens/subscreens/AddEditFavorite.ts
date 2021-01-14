@@ -11,6 +11,7 @@ const AddEditFavoriteTexts = {
     location: {
       label: _('Sted', 'Place'),
       placeholder: _('Søk etter adresse eller stoppested'),
+      header: _('Søk etter adresse eller stoppested'),
     },
     name: {
       label: _('Navn'),

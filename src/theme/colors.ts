@@ -112,6 +112,10 @@ export const textTypes: {[key in TextNames]: TextStyle} = {
   label: {fontSize: 12, lineHeight: 16},
   label__link: {fontSize: 12, lineHeight: 16, textDecorationLine: 'underline'},
 };
+export const iconSizes = {
+  normal: 20,
+  small: 10,
+};
 const tripLegDetail = {
   labelWidth: 80,
   decorationContainerWidth: 20,
@@ -171,6 +175,9 @@ export interface Theme {
     radius: typeof borderRadius;
     width: typeof borderWidth;
   };
+  icon: {
+    size: typeof iconSizes;
+  };
   button: {
     primary: Button;
     primary2: Button;
@@ -210,7 +217,7 @@ export const themes: Themes = {
       ...textTypes,
     },
     border: {
-      primary: colors.primary.gray_100,
+      primary: colors.primary.gray_50,
       secondary: colors.text.black,
       focus: colors.secondary.blue_500,
       info: colors.secondary.cyan_500,
@@ -219,6 +226,9 @@ export const themes: Themes = {
       success: colors.primary.green_500,
       radius: borderRadius,
       width: borderWidth,
+    },
+    icon: {
+      size: iconSizes,
     },
     button: {
       primary: {
@@ -295,6 +305,9 @@ export const themes: Themes = {
       success: colors.primary.green_500,
       radius: borderRadius,
       width: borderWidth,
+    },
+    icon: {
+      size: iconSizes,
     },
     button: {
       primary: {

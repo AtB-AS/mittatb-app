@@ -1,30 +1,16 @@
-import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
 import {Alert, LayoutAnimation} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {ProfileStackParams} from '..';
 import * as Sections from '../../../components/sections';
 import {useFavorites} from '../../../favorites/FavoritesContext';
 import {StoredFavoriteDeparture} from '../../../favorites/types';
 import MessageBox from '../../../message-box';
-import {RootStackParamList} from '../../../navigation';
 import {StyleSheet, Theme} from '../../../theme';
 import {FavoriteDeparturesTexts, useTranslation} from '../../../translations';
 import BackHeader from '../BackHeader';
 
-export type ProfileScreenNavigationProp = StackNavigationProp<
-  ProfileStackParams,
-  'FavoriteDepartures'
->;
-
-type FavoriteDeparturesProps = {
-  navigation: StackNavigationProp<RootStackParamList>;
-};
-
-export default function FavoriteDepartures({
-  navigation,
-}: FavoriteDeparturesProps) {
+export default function FavoriteDepartures() {
   const style = useProfileStyle();
   const {favoriteDepartures, removeFavoriteDeparture} = useFavorites();
   const {t} = useTranslation();
