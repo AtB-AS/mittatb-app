@@ -85,7 +85,7 @@ const AssistantTexts = {
       footer: {
         fromLabel: (place: string, time: string) => _(`Fra ${place} ${time}`),
         detailsLabel: _('Detaljer'),
-        detailsHint: _('Aktivér for å  flere detaljer om reisen'),
+        detailsHint: _('Aktivér for å vise flere detaljer om reisen'),
       },
       journeySummary: {
         duration: (duration: string) => _(`Reisetid: ${duration}`),
