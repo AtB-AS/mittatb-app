@@ -66,7 +66,7 @@ const ValidityLine: React.FC<{
 const useAnimatedVerticalLineOffset = () => {
   const animatedOffset = useRef(new Animated.Value(0)).current;
   useEffect(() => {
-    Animated.loop(
+    return Animated.loop(
       Animated.timing(animatedOffset, {
         toValue: 1,
         duration: 1000,
@@ -81,7 +81,8 @@ const useAnimatedVerticalLineOffset = () => {
 /**
  * Calculates the validity percent based on time left on ticket. This value is
  * used for determining how wide the animated part of the progress bar should
- * be.
+ * be. The returned validity percent will never be below 5 as the progress bar
+ * need to be wide enough to always show some animation.
  */
 const getValidityPercent = (
   nowSeconds: number,
@@ -90,7 +91,8 @@ const getValidityPercent = (
 ) => {
   const durationSeconds = validTo - validFrom;
   const timeLeftSeconds = validTo - nowSeconds;
-  return Math.min(Math.ceil((timeLeftSeconds / durationSeconds) * 100), 100);
+  const percent = Math.ceil((timeLeftSeconds / durationSeconds) * 100);
+  return Math.max(5, Math.min(percent, 100));
 };
 
 /**
