@@ -24,13 +24,11 @@ function useLanguage() {
     preferences: {useSystemLanguage, language: userPreferencedLanguage},
   } = usePreferences();
 
-  // Usage of system setting not explicitly chosen, and user preferenced language has value
-  const shouldUseUserPreferenced =
-    !useSystemLanguage && !!userPreferencedLanguage;
-
   useEffect(() => {
-    if (shouldUseUserPreferenced) {
-      const newLanguage = getAsAppLanguage(userPreferencedLanguage);
+    if (!useSystemLanguage) {
+      const newLanguage = getAsAppLanguage(
+        userPreferencedLanguage ?? DEFAULT_LANGUAGE,
+      );
       setCurrentLanguage(newLanguage);
     } else {
       const onChange = () => {
@@ -44,7 +42,7 @@ function useLanguage() {
   }, [useSystemLanguage, userPreferencedLanguage]);
 
   useEffect(() => {
-    if (!shouldUseUserPreferenced) {
+    if (useSystemLanguage) {
       const language = locale
         ? getAsAppLanguage(locale.languageCode)
         : DEFAULT_LANGUAGE;
