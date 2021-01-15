@@ -46,7 +46,7 @@ function useLanguage() {
       );
       setCurrentLanguage(newLanguage);
     }
-  }, [userPreferencedLanguage, useSystemLanguage]);
+  }, [locale, userPreferencedLanguage, useSystemLanguage]);
 
   return currentLanguage;
 }
