@@ -5,8 +5,8 @@ const SelectStartScreenTexts = {
   },
   options: {
     assistant: _('Reiseassistent', 'Assistant'),
-    departures: _('Avganger'),
-    ticketing: _('Billetter'),
+    departures: _('Avganger', 'Departures'),
+    ticketing: _('Billetter', 'Tickets'),
   },
 };
 export default SelectStartScreenTexts;
