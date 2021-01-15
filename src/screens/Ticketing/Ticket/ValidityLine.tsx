@@ -90,7 +90,7 @@ const getValidityPercent = (
 ) => {
   const durationSeconds = validTo - validFrom;
   const timeLeftSeconds = validTo - nowSeconds;
-  return Math.ceil((timeLeftSeconds / durationSeconds) * 100);
+  return Math.min(Math.ceil((timeLeftSeconds / durationSeconds) * 100), 100);
 };
 
 /**
