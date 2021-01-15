@@ -4,7 +4,10 @@ const SectionTexts = {
   locationInput: {
     myPosition: _('Min posisjon'),
     updatingLocation: _('Oppdaterer posisjon', 'Updating current position'),
-    placeholder: _('Søk etter adresse eller sted', 'Search for an adress or location'),
+    placeholder: _(
+      'Søk etter adresse eller sted',
+      'Search for an adress or location',
+    ),
     a11yValue: (currentLocation: string) => _(`${currentLocation} er valgt.`),
   },
   counterInput: {
