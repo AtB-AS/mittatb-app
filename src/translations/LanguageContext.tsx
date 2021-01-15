@@ -25,21 +25,14 @@ function useLanguage() {
   } = usePreferences();
 
   useEffect(() => {
-    if (!useSystemLanguage) {
-      const newLanguage = getAsAppLanguage(
-        userPreferencedLanguage ?? DEFAULT_LANGUAGE,
-      );
-      setCurrentLanguage(newLanguage);
-    } else {
-      const onChange = () => {
-        setLocale(preferredLocale);
-      };
-      RNLocalize.addEventListener('change', onChange);
-      return () => {
-        RNLocalize.removeEventListener('change', onChange);
-      };
-    }
-  }, [useSystemLanguage, userPreferencedLanguage]);
+    const onChange = () => {
+      setLocale(preferredLocale);
+    };
+    RNLocalize.addEventListener('change', onChange);
+    return () => {
+      RNLocalize.removeEventListener('change', onChange);
+    };
+  }, []);
 
   useEffect(() => {
     if (useSystemLanguage) {
@@ -47,8 +40,13 @@ function useLanguage() {
         ? getAsAppLanguage(locale.languageCode)
         : DEFAULT_LANGUAGE;
       setCurrentLanguage(language);
+    } else {
+      const newLanguage = getAsAppLanguage(
+        userPreferencedLanguage ?? DEFAULT_LANGUAGE,
+      );
+      setCurrentLanguage(newLanguage);
     }
-  }, [locale, useSystemLanguage]);
+  }, [userPreferencedLanguage, useSystemLanguage]);
 
   return currentLanguage;
 }
