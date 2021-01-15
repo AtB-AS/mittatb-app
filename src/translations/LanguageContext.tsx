@@ -24,33 +24,29 @@ function useLanguage() {
     preferences: {useSystemLanguage, language: userPreferencedLanguage},
   } = usePreferences();
 
-  // Usage of system setting not explicitly chosen, and user preferenced language has value
-  const shouldUseUserPreferenced =
-    !useSystemLanguage && !!userPreferencedLanguage;
+  useEffect(() => {
+    const onChange = () => {
+      setLocale(preferredLocale);
+    };
+    RNLocalize.addEventListener('change', onChange);
+    return () => {
+      RNLocalize.removeEventListener('change', onChange);
+    };
+  }, []);
 
   useEffect(() => {
-    if (shouldUseUserPreferenced) {
-      const newLanguage = getAsAppLanguage(userPreferencedLanguage);
-      setCurrentLanguage(newLanguage);
-    } else {
-      const onChange = () => {
-        setLocale(preferredLocale);
-      };
-      RNLocalize.addEventListener('change', onChange);
-      return () => {
-        RNLocalize.removeEventListener('change', onChange);
-      };
-    }
-  }, [useSystemLanguage, userPreferencedLanguage]);
-
-  useEffect(() => {
-    if (!shouldUseUserPreferenced) {
+    if (useSystemLanguage) {
       const language = locale
         ? getAsAppLanguage(locale.languageCode)
         : DEFAULT_LANGUAGE;
       setCurrentLanguage(language);
+    } else {
+      const newLanguage = getAsAppLanguage(
+        userPreferencedLanguage ?? DEFAULT_LANGUAGE,
+      );
+      setCurrentLanguage(newLanguage);
     }
-  }, [locale, useSystemLanguage]);
+  }, [userPreferencedLanguage, useSystemLanguage]);
 
   return currentLanguage;
 }
