@@ -248,6 +248,17 @@ export function LocationSearchContent({
           keyboardShouldPersistTaps="handled"
           onScrollBeginDrag={() => Keyboard.dismiss()}
         >
+          {includeHistory &&
+            history.journeys.length &&
+            history.journeys.map((j, i) => {
+              return (
+                <View>
+                  <ThemeText>
+                    {j.from.label} - {j.to.label}
+                  </ThemeText>
+                </View>
+              );
+            })}
           {includeHistory && hasPreviousResults && (
             <LocationResults
               title={t(LocationSearchTexts.results.previousResults.heading)}

@@ -46,6 +46,7 @@ import Results from './Results';
 import {NoResultReason, SearchStateType} from './types';
 import NewsBanner from './NewsBanner';
 import {AssistantParams} from '.';
+import {useSearchHistory} from '../../search-history';
 
 type AssistantRouteName = 'AssistantRoot';
 const AssistantRouteNameStatic: AssistantRouteName = 'AssistantRoot';
@@ -545,6 +546,7 @@ function useTripPatterns(
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
   const [errorType, setErrorType] = useState<ErrorType>();
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
+  const {addJourneySearchEntry} = useSearchHistory();
 
   const clearPatterns = () => setTripPatterns(null);
   const reload = useCallback(() => {
@@ -577,8 +579,10 @@ function useTripPatterns(
         );
         source.token.throwIfRequested();
         setTimeOfSearch(searchDate);
+
         if (Array.isArray(response.data)) {
           setTripPatterns(response.data);
+          addJourneySearchEntry({from: fromLocation, to: toLocation});
           setSearchState(
             response.data.length >= 1
               ? 'search-success'
