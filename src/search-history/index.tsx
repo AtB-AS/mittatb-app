@@ -1,14 +1,15 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
-import {SearchHistoryEntry, SearchHistory} from './types';
+import {SearchHistoryLocation, SearchHistory} from './types';
 import {
   clearSearchHistory,
-  addSearchEntry as storage_addSearchEntry,
+  addLocationSearchEntry as storage_addLocationSearchEntry,
+  addJourneySearchEntry as storage_addJourneySearchEntry,
   getSearchHistory,
 } from './storage';
 
 type SearchHistoryContextState = {
   history: SearchHistory;
-  addSearchEntry(searchEntry: SearchHistoryEntry): Promise<void>;
+  addLocationSearchEntry(searchEntry: SearchHistoryLocation): Promise<void>;
   clearSearchHistory(): Promise<void>;
 };
 const SearchHistoryContext = createContext<
@@ -16,10 +17,11 @@ const SearchHistoryContext = createContext<
 >(undefined);
 
 const SearchHistoryContextProvider: React.FC = ({children}) => {
-  const [history, setSearchHistory] = useState<SearchHistory>([]);
+  const emptyHistory: SearchHistory = {locations: [], journeys: []};
+  const [history, setSearchHistory] = useState<SearchHistory>(emptyHistory);
   async function populateSearchHistory() {
     const history = await getSearchHistory();
-    setSearchHistory(history ?? []);
+    setSearchHistory(history ?? emptyHistory);
   }
 
   useEffect(() => {
@@ -28,8 +30,8 @@ const SearchHistoryContextProvider: React.FC = ({children}) => {
 
   const contextValue: SearchHistoryContextState = {
     history,
-    async addSearchEntry(searchEntry: SearchHistoryEntry) {
-      const history = await storage_addSearchEntry(searchEntry);
+    async addLocationSearchEntry(searchEntry: SearchHistoryLocation) {
+      const history = await storage_addLocationSearchEntry(searchEntry);
       setSearchHistory(history);
     },
     async clearSearchHistory() {

@@ -135,7 +135,7 @@ export function LocationSearchContent({
 }: LocationSearchContentProps) {
   const styles = useThemeStyles();
   const {favorites} = useFavorites();
-  const {history, addSearchEntry} = useSearchHistory();
+  const {history, addLocationSearchEntry} = useSearchHistory();
   const {t} = useTranslation();
 
   const [text, setText] = useState<string>(defaultText ?? '');
@@ -144,7 +144,7 @@ export function LocationSearchContent({
   const [errorMessage, setErrorMessage] = useState<string>('');
   const previousLocations = filterPreviousLocations(
     debouncedText,
-    history,
+    history.locations,
     favorites,
     onlyAtbVenues,
   );
@@ -164,7 +164,7 @@ export function LocationSearchContent({
 
   const onSearchSelect = (searchResult: LocationSearchResult) => {
     if (!searchResult.favoriteInfo) {
-      addSearchEntry(searchResult.location);
+      addLocationSearchEntry(searchResult.location);
     }
 
     if (!searchResult.favoriteInfo) {
