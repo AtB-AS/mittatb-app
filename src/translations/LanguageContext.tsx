@@ -21,7 +21,7 @@ function useLanguage() {
   const [currentLanguage, setCurrentLanguage] = useState(DEFAULT_LANGUAGE);
   const [locale, setLocale] = useState(preferredLocale);
   const {
-    preferences: {useSystemLanguage, language: userPreferencedLanguage},
+    preferences: {useSystemLanguage = true, language: userPreferencedLanguage},
   } = usePreferences();
 
   useEffect(() => {
