@@ -3,10 +3,9 @@ import {UserProfileWithCount} from '../../../screens/Ticketing/Purchase/Travelle
 
 const TravellersTexts = {
   header: {
-    title: _('Velg sone'),
+    title: _('Reisende'),
     leftButton: {
-      text: _('Avbryt'),
-      a11yLabel: _('Avbryt kjøpsprosessen'),
+      a11yLabel: _('Gå tilbake'),
     },
   },
   travellerCounter: {

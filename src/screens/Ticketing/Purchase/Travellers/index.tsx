@@ -5,13 +5,14 @@ import {TicketingStackParams} from '../';
 import Header from '../../../../ScreenHeader';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StyleSheet, useTheme} from '../../../../theme';
-import ThemeText from '../../../../components/text';
 import useUserCountState from './use-user-count-state';
 import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
 import * as Sections from '../../../../components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
 import {TravellersTexts, useTranslation} from '../../../../translations';
 import Button from '../../../../components/button';
+import ThemeIcon from '../../../../components/theme-icon';
+import {ArrowLeft} from '../../../../assets/svg/icons/navigation';
 
 export type TravellersProps = {
   navigation: DismissableStackNavigationProp<
@@ -33,20 +34,18 @@ const Travellers: React.FC<TravellersProps> = ({
     params.userProfilesWithCount,
   );
 
-  const closeModal = () => navigation.goBack();
-
   const {top: safeAreaTop, bottom: safeAreBottom} = useSafeAreaInsets();
 
   return (
     <View style={[styles.container, {paddingTop: safeAreaTop}]}>
       <Header
-        title="Reisende"
+        title={t(TravellersTexts.header.title)}
         leftButton={{
-          icon: (
-            <ThemeText>{t(TravellersTexts.header.leftButton.text)}</ThemeText>
-          ),
-          onPress: closeModal,
+          accessible: true,
+          accessibilityRole: 'button',
           accessibilityLabel: t(TravellersTexts.header.leftButton.a11yLabel),
+          icon: <ThemeIcon svg={ArrowLeft} />,
+          onPress: () => navigation.goBack(),
         }}
       />
 
