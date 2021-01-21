@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import {
   FareContract,
+  FareContractLifecycleState,
   getPayment,
   PaymentStatus,
   PaymentType,
@@ -208,15 +209,24 @@ const byExpiryComparator = (a: FareContract, b: FareContract): number => {
 };
 
 function getActive(fareContracts: FareContract[]) {
-  const valid = (f: FareContract): boolean =>
+  const isValidNow = (f: FareContract): boolean =>
     f.usage_valid_to > Date.now() / 1000;
-  return fareContracts.filter(valid).sort(byExpiryComparator);
+  const isActivated = (f: FareContract) =>
+    f.state === FareContractLifecycleState.Activated;
+  return fareContracts
+    .filter(isValidNow)
+    .filter(isActivated)
+    .sort(byExpiryComparator);
 }
 
 function getExpired(fareContracts: FareContract[]) {
-  const expired = (f: FareContract): boolean =>
+  const isExpired = (f: FareContract): boolean =>
     !(f.usage_valid_to > Date.now() / 1000);
-  return fareContracts.filter(expired).sort(byExpiryComparator);
+  const isRefunded = (f: FareContract) =>
+    f.state === FareContractLifecycleState.Refunded;
+  const isExpiredOrRefunded = (f: FareContract) =>
+    isExpired(f) || isRefunded(f);
+  return fareContracts.filter(isExpiredOrRefunded).sort(byExpiryComparator);
 }
 
 function isHandledPaymentStatus(status: PaymentStatus | undefined): boolean {

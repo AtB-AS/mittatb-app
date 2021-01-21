@@ -1,5 +1,8 @@
 import React from 'react';
-import {FareContract} from '../../../../api/fareContracts';
+import {
+  FareContract,
+  FareContractLifecycleState,
+} from '../../../../api/fareContracts';
 import ThemeText from '../../../../components/text';
 import * as Sections from '../../../../components/sections';
 import ValidityHeader from '../ValidityHeader';
@@ -28,6 +31,7 @@ const DetailsContent: React.FC<Props> = ({
       <Sections.GenericItem>
         <ValidityHeader
           isValid={isValidTicket}
+          isRefunded={fc.state === FareContractLifecycleState.Refunded}
           nowSeconds={nowSeconds}
           validTo={fc.usage_valid_to}
         />

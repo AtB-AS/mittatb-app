@@ -1,5 +1,8 @@
 import React from 'react';
-import {FareContract} from '../../../api/fareContracts';
+import {
+  FareContract,
+  FareContractLifecycleState,
+} from '../../../api/fareContracts';
 import ThemeText from '../../../components/text';
 import * as Sections from '../../../components/sections';
 import ValidityHeader from './ValidityHeader';
@@ -27,6 +30,7 @@ const SimpleTicket: React.FC<Props> = ({
           isValid={isValidTicket}
           nowSeconds={nowSeconds}
           validTo={fc.usage_valid_to}
+          isRefunded={fc.state === FareContractLifecycleState.Refunded}
           onPressDetails={onPressDetails}
         />
         <ValidityLine
