@@ -89,10 +89,9 @@ export type ActiveReservation = {
 type TicketState = {
   refreshTickets: () => void;
   activatePollingForNewTickets: (reservation: ActiveReservation) => void;
-} & Pick<
-  TicketReducerState,
-  'activeReservations' | 'fareContracts' | 'isRefreshingTickets'
->;
+  activeFareContracts: FareContract[];
+  expiredFareContracts: FareContract[];
+} & Pick<TicketReducerState, 'activeReservations' | 'isRefreshingTickets'>;
 
 const initialReducerState: TicketReducerState = {
   fareContracts: [],
@@ -192,12 +191,30 @@ const TicketContextProvider: React.FC = ({children}) => {
         activeReservations,
         refreshTickets: updateFareContracts,
         activatePollingForNewTickets: updateReservations,
+        activeFareContracts: getActive(state.fareContracts),
+        expiredFareContracts: getExpired(state.fareContracts),
       }}
     >
       {children}
     </TicketContext.Provider>
   );
 };
+
+const byExpiryComparator = (a: FareContract, b: FareContract): number => {
+  return b.usage_valid_to - a.usage_valid_to;
+};
+
+function getActive(fareContracts: FareContract[]) {
+  const valid = (f: FareContract): boolean =>
+    f.usage_valid_to > Date.now() / 1000;
+  return fareContracts.filter(valid).sort(byExpiryComparator);
+}
+
+function getExpired(fareContracts: FareContract[]) {
+  const expired = (f: FareContract): boolean =>
+    !(f.usage_valid_to > Date.now() / 1000);
+  return fareContracts.filter(expired).sort(byExpiryComparator);
+}
 
 function isHandledPaymentStatus(status: PaymentStatus | undefined): boolean {
   switch (status) {

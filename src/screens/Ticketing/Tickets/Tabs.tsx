@@ -2,14 +2,12 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTicketState} from '../../../TicketContext';
-import {FareContract} from '../../../api/fareContracts';
-import {StyleSheet} from '../../../theme';
+import {StyleSheet, useTheme} from '../../../theme';
 import useInterval from '../../../utils/use-interval';
 import TicketsScrollView from './TicketsScrollView';
 import {RootStackParamList} from '../../../navigation';
-import TicketOptions from './TicketOptions';
-import {useRemoteConfig} from '../../../RemoteConfigContext';
 import {TicketsTexts, useTranslation} from '../../../translations';
+import Button from '../../../components/button';
 
 export type TicketingScreenNavigationProp = StackNavigationProp<
   RootStackParamList
@@ -19,79 +17,70 @@ type Props = {
   navigation: TicketingScreenNavigationProp;
 };
 
-export const ActiveTickets: React.FC<Props> = ({navigation}) => {
+export const BuyTickets: React.FC<Props> = ({navigation}) => {
+  const styles = useStyles();
+  const {theme} = useTheme();
+  return (
+    <View style={styles.container}>
+      <View style={{flex: 1}}>{/*Reservert for "Sist kjøpte billetter"*/}</View>
+      <View style={{padding: theme.spacings.medium}}>
+        <Button
+          mode="primary"
+          text="Kjøp ny billett"
+          onPress={() => navigation.navigate('TicketPurchase', {})}
+        />
+      </View>
+    </View>
+  );
+};
+
+export const ActiveTickets: React.FC<Props> = () => {
   const {
     activeReservations,
-    fareContracts,
+    activeFareContracts,
     isRefreshingTickets,
     refreshTickets,
   } = useTicketState();
 
-  const {
-    preassigned_fare_products: preassignedFareProducts,
-  } = useRemoteConfig();
-
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
 
-  const valid = (f: FareContract): boolean =>
-    f.usage_valid_to > Date.now() / 1000;
-  const byExpiry = (a: FareContract, b: FareContract): number => {
-    return b.usage_valid_to - a.usage_valid_to;
-  };
-  const validTickets = fareContracts?.filter(valid).sort(byExpiry);
   const styles = useStyles();
   const {t} = useTranslation();
   return (
     <View style={styles.container}>
       <TicketsScrollView
         reservations={activeReservations}
-        tickets={validTickets}
+        tickets={activeFareContracts}
         isRefreshingTickets={isRefreshingTickets}
         refreshTickets={refreshTickets}
         noTicketsLabel={t(TicketsTexts.activeTicketsTab.noTickets)}
         now={now}
       />
-
-      <TicketOptions
-        preassignedFareProducts={preassignedFareProducts}
-        navigation={navigation}
-      />
     </View>
   );
 };
 
-export const ExpiredTickets: React.FC<Props> = ({navigation}) => {
-  const {fareContracts, isRefreshingTickets, refreshTickets} = useTicketState();
-
+export const ExpiredTickets: React.FC<Props> = () => {
   const {
-    preassigned_fare_products: preassignedFareProducts,
-  } = useRemoteConfig();
+    expiredFareContracts,
+    isRefreshingTickets,
+    refreshTickets,
+  } = useTicketState();
 
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
 
-  const expired = (f: FareContract): boolean =>
-    !(f.usage_valid_to > Date.now() / 1000);
-  const byExpiry = (a: FareContract, b: FareContract): number => {
-    return b.usage_valid_to - a.usage_valid_to;
-  };
-  const expiredTickets = fareContracts?.filter(expired).sort(byExpiry);
   const styles = useStyles();
   const {t} = useTranslation();
   return (
     <View style={styles.container}>
       <TicketsScrollView
-        tickets={expiredTickets}
+        tickets={expiredFareContracts}
         isRefreshingTickets={isRefreshingTickets}
         refreshTickets={refreshTickets}
         noTicketsLabel={t(TicketsTexts.expiredTicketsTab.noTickets)}
         now={now}
-      />
-
-      <TicketOptions
-        preassignedFareProducts={preassignedFareProducts}
-        navigation={navigation}
       />
     </View>
   );

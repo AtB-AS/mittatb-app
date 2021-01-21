@@ -1,5 +1,4 @@
 import {useCallback, useReducer} from 'react';
-import {useRemoteConfig} from '../../../../RemoteConfigContext';
 import {UserProfile} from '../../../../reference-data/types';
 
 export type UserProfileWithCount = UserProfile & {count: number};
@@ -51,20 +50,12 @@ const countReducer: CountReducer = (prevState, action): UserCountState => {
   }
 };
 
-const createInitialState = (userProfiles: UserProfile[]) => ({
-  userProfilesWithCount: userProfiles.map((u) => ({
-    ...u,
-    count: 0,
-  })),
-});
-
-export default function useUserCountState() {
-  const {user_profiles: userProfiles} = useRemoteConfig();
-  const [userCountState, dispatch] = useReducer(
-    countReducer,
-    userProfiles,
-    createInitialState,
-  );
+export default function useUserCountState(
+  userProfilesWithCount: UserProfileWithCount[],
+) {
+  const [userCountState, dispatch] = useReducer(countReducer, {
+    userProfilesWithCount,
+  });
 
   const addCount = useCallback(
     (userType: string) => dispatch({type: 'INCREMENT_COUNT', userType}),

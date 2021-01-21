@@ -7,6 +7,9 @@ const TicketsTexts = {
       a11yLabel: _('Gå til startside'),
     },
   },
+  buyTicketsTab: {
+    label: _('Kjøp'),
+  },
   activeTicketsTab: {
     label: _('Aktive'),
     noTickets: _('Du har ingen aktive billetter'),

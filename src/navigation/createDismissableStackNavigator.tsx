@@ -19,7 +19,7 @@ import {
 export type DismissableStackNavigationProp<
   ParamList extends ParamListBase,
   RouteName extends keyof ParamList = string
-> = {dismiss(params?: object): void} & StackNavigationProp<
+> = {dismiss(params?: object & {screen: string}): void} & StackNavigationProp<
   ParamList,
   RouteName
 >;
@@ -32,10 +32,10 @@ function DismissableStackRouter(
     ...router,
     actionCreators: {
       ...router.actionCreators,
-      dismiss(params?: object) {
+      dismiss(params?: object & {screen: string}) {
         return {
           type: 'NAVIGATE',
-          payload: {name: options.dismissToScreen, params},
+          payload: {name: params?.screen || options.dismissToScreen, params},
         };
       },
     },
