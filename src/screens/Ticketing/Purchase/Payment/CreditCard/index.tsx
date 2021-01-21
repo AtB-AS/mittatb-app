@@ -47,7 +47,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     [navigation],
   );
 
-  const cancelTerminal = () => navigation.goBack;
+  const cancelTerminal = () => navigation.pop();
 
   const {activatePollingForNewTickets} = useTicketState();
   const dismissAndActivatePolling = (

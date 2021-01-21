@@ -38,7 +38,7 @@ export default function VippsPayment({
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const cancelVipps = () => navigation.goBack();
+  const cancelVipps = () => navigation.pop();
 
   const {activatePollingForNewTickets} = useTicketState();
   const dismissAndActivatePolling = (
