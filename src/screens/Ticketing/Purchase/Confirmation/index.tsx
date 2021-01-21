@@ -201,7 +201,7 @@ const Confirmation: React.FC<TravellersProps> = ({
           <ThemeText style={{paddingBottom: theme.spacings.medium}}>
             {t(PurchaseConfirmationTexts.infoText.part1)}
           </ThemeText>
-          <ThemeText>{t(PurchaseConfirmationTexts.infoText.part2)}</ThemeText>
+          {/*<ThemeText>{t(PurchaseConfirmationTexts.infoText.part2)}</ThemeText>*/}
         </MessageBox>
 
         <View

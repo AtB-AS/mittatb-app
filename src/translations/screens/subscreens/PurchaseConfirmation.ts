@@ -28,7 +28,7 @@ const PurchaseConfirmationTexts = {
     part1: _(
       'Denne billetten blir gyldig med en gang kjøpet blir gjennomført.',
     ),
-    part2: _('Du kan angre kjøpet i 2 minutter.'),
+    // part2: _('Du kan angre kjøpet i 2 minutter.'),
   },
   paymentButtonVipps: {
     text: _('Betal med Vipps'),
