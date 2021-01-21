@@ -91,6 +91,7 @@ type TicketState = {
   activatePollingForNewTickets: (reservation: ActiveReservation) => void;
   activeFareContracts: FareContract[];
   expiredFareContracts: FareContract[];
+  findFareContractByOrderId: (id: string) => FareContract | undefined;
 } & Pick<TicketReducerState, 'activeReservations' | 'isRefreshingTickets'>;
 
 const initialReducerState: TicketReducerState = {
@@ -193,6 +194,8 @@ const TicketContextProvider: React.FC = ({children}) => {
         activatePollingForNewTickets: updateReservations,
         activeFareContracts: getActive(state.fareContracts),
         expiredFareContracts: getExpired(state.fareContracts),
+        findFareContractByOrderId: (orderId) =>
+          state.fareContracts.find((fc) => fc.order_id === orderId),
       }}
     >
       {children}
