@@ -18,8 +18,17 @@ const ValidityHeader: React.FC<{
   isValid: boolean;
   nowSeconds: number;
   validTo: number;
+  isNotExpired: boolean;
+  isRefunded: boolean;
   onPressDetails?: () => void;
-}> = ({isValid, nowSeconds, validTo, onPressDetails}) => {
+}> = ({
+  isValid,
+  nowSeconds,
+  validTo,
+  isNotExpired,
+  isRefunded,
+  onPressDetails,
+}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
 
@@ -28,7 +37,14 @@ const ValidityHeader: React.FC<{
       <View style={styles.validityContainer}>
         <ValidityIcon isValid={isValid} />
         <ThemeText type="lead" color="faded">
-          {validityTimeText(isValid, nowSeconds, validTo, t, language)}
+          {validityTimeText(
+            isNotExpired,
+            nowSeconds,
+            validTo,
+            isRefunded,
+            t,
+            language,
+          )}
         </ThemeText>
       </View>
       {onPressDetails && (
@@ -45,9 +61,10 @@ const ValidityHeader: React.FC<{
 };
 
 function validityTimeText(
-  isValid: boolean,
+  isNotExpired: boolean,
   nowSeconds: number,
   validTo: number,
+  isRefunded: boolean,
   t: TranslateFunction,
   language: Language,
 ) {
@@ -57,7 +74,9 @@ function validityTimeText(
     delimiter,
   });
 
-  if (isValid) {
+  if (isRefunded) {
+    return t(TicketTexts.validityHeader.refunded);
+  } else if (isNotExpired) {
     return t(TicketTexts.validityHeader.valid(duration));
   } else {
     if (validityDifferenceSeconds < 60 * 60) {

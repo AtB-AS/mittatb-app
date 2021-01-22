@@ -6,6 +6,7 @@ const TicketTexts = {
   controlLink: _('Vis for kontroll'),
   validityHeader: {
     valid: (duration: string) => _(`Gyldig i ${duration}`),
+    refunded: _(`Refundert`),
     recentlyExpired: (duration: string) => _(`Utløpt for ${duration} siden`),
     expired: (dateTime: string) => _(`Utløpt ${dateTime}`),
     durationDelimiter: _(' og ', ' and '),
