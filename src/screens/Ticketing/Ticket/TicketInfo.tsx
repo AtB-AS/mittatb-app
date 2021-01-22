@@ -5,7 +5,6 @@ import React from 'react';
 import {View} from 'react-native';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
 import {
-  PreassignedFareProduct,
   UserProfile,
 } from '../../../reference-data/types';
 
@@ -35,13 +34,9 @@ const TicketInfo = ({fareContract: fc}: {fareContract: FareContract}) => {
 
   return (
     <View>
-      {/*<View style={{flexDirection: 'row', flexWrap: 'wrap'}}>*/}
       <View>
-        {namesAndCounts.map(({name, count}, i) => (
-          <ThemeText key={name}>
-            {`${count} ${name}`}
-            {/* + (i !== namesAndCounts.length - 1 ? ', ' : '')}*/}
-          </ThemeText>
+        {namesAndCounts.map(({name, count}) => (
+          <ThemeText key={name}>{`${count} ${name}`}</ThemeText>
         ))}
       </View>
       {preassignedFareProduct && (
@@ -84,20 +79,22 @@ const groupByUserProfileNames = (
   userProfiles: UserProfile[],
 ): NameAndCount[] =>
   travellers
-    .reduce((grouped, t) => {
-      const existing = grouped.find(
+    .reduce((groupedById, t) => {
+      const existing = groupedById.find(
         (r) => r.userProfileId === t.user_profile_ref,
       );
       if (existing) {
         existing.count += 1;
-        return grouped;
+        return groupedById;
       }
-      return [...grouped, {userProfileId: t.user_profile_ref, count: 1}];
+      return [...groupedById, {userProfileId: t.user_profile_ref, count: 1}];
     }, [] as {userProfileId: string; count: number}[])
-    .map((x) => ({
-      name: findById(userProfiles, x.userProfileId)?.name.value,
-      count: x.count,
+    .map((idAndCount) => ({
+      name: findById(userProfiles, idAndCount.userProfileId)?.name.value,
+      count: idAndCount.count,
     }))
-    .filter((x): x is NameAndCount => x.name != null);
+    .filter(
+      (nameAndCount): nameAndCount is NameAndCount => nameAndCount.name != null,
+    );
 
 export default TicketInfo;
