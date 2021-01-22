@@ -1,15 +1,18 @@
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useMemo, useReducer} from 'react';
 import {CancelToken as CancelTokenStatic, searchOffers} from '../../../../api';
-import {Offer, OfferPrice, ReserveOffer} from '../../../../api/fareContracts';
+import {Offer, OfferPrice} from '../../../../api/fareContracts';
 import {ErrorType, getAxiosErrorType} from '../../../../api/utils';
-import {UserProfileWithCount} from './use-user-count-state';
+import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import {
   PreassignedFareProduct,
   TariffZone,
 } from '../../../../reference-data/types';
 
 type OfferErrorContext = 'failed_offer_search' | 'failed_reservation';
+export type UserProfileWithCountAndOffer = UserProfileWithCount & {
+  offer: Offer;
+};
 
 export type OfferError = {
   context: OfferErrorContext;
@@ -20,8 +23,8 @@ type OfferState = {
   offerSearchTime?: number;
   isSearchingOffer: boolean;
   totalPrice: number;
-  offers: ReserveOffer[];
   error?: OfferError;
+  userProfilesWithCountAndOffer: UserProfileWithCountAndOffer[];
 };
 
 type OfferReducerAction =
@@ -39,10 +42,10 @@ const getCurrencyAsFloat = (prices: OfferPrice[], currency: string) =>
   prices.find((p) => p.currency === currency)?.amount_float ?? 0;
 
 const calculateTotalPrice = (
-  travellers: UserProfileWithCount[],
+  userProfileWithCounts: UserProfileWithCount[],
   offers: Offer[],
 ) =>
-  travellers.reduce((total, traveller) => {
+  userProfileWithCounts.reduce((total, traveller) => {
     const maybeOffer = offers.find(
       (o) => o.traveller_id === traveller.userTypeString,
     );
@@ -52,25 +55,20 @@ const calculateTotalPrice = (
     return total + price;
   }, 0);
 
-const mapToReserveOffers = (
-  travellers: UserProfileWithCount[],
+const mapToUserProfilesWithCountAndOffer = (
+  userProfileWithCounts: UserProfileWithCount[],
   offers: Offer[],
-): ReserveOffer[] =>
-  travellers
-    .map((traveller) => ({
-      count: traveller.count,
-      offer_id: offers.find((o) => o.traveller_id === traveller.userTypeString)
-        ?.offer_id,
+): UserProfileWithCountAndOffer[] =>
+  userProfileWithCounts
+    .map((u) => ({
+      ...u,
+      offer: offers.find((o) => o.traveller_id === u.userTypeString),
     }))
-    .filter(
-      (countAndOffer): countAndOffer is ReserveOffer =>
-        countAndOffer.offer_id != null,
-    );
+    .filter((u): u is UserProfileWithCountAndOffer => u.offer != null);
 
-const getOfferReducer = (travellers: UserProfileWithCount[]): OfferReducer => (
-  prevState,
-  action,
-): OfferState => {
+const getOfferReducer = (
+  userProfilesWithCounts: UserProfileWithCount[],
+): OfferReducer => (prevState, action): OfferState => {
   switch (action.type) {
     case 'SEARCHING_OFFER':
       return {
@@ -84,15 +82,18 @@ const getOfferReducer = (travellers: UserProfileWithCount[]): OfferReducer => (
         isSearchingOffer: false,
         totalPrice: 0,
         error: undefined,
-        offers: [],
+        userProfilesWithCountAndOffer: [],
       };
     case 'SET_OFFER':
       return {
         ...prevState,
         offerSearchTime: Date.now(),
         isSearchingOffer: false,
-        totalPrice: calculateTotalPrice(travellers, action.offers),
-        offers: mapToReserveOffers(travellers, action.offers),
+        totalPrice: calculateTotalPrice(userProfilesWithCounts, action.offers),
+        userProfilesWithCountAndOffer: mapToUserProfilesWithCountAndOffer(
+          userProfilesWithCounts,
+          action.offers,
+        ),
         error: undefined,
       };
     case 'SET_ERROR': {
@@ -109,7 +110,7 @@ const initialState: OfferState = {
   offerSearchTime: undefined,
   totalPrice: 0,
   error: undefined,
-  offers: [],
+  userProfilesWithCountAndOffer: [],
 };
 
 export default function useOfferState(
