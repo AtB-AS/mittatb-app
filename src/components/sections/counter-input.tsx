@@ -28,9 +28,7 @@ export default function CounterInput({
   return (
     <View style={[topContainer, counterStyles.travellerCount]}>
       <View style={[style.spaceBetween, contentContainer]}>
-        <ThemeText>
-          {count} {text}
-        </ThemeText>
+        <ThemeText>{text}</ThemeText>
       </View>
       <View style={counterStyles.travellerCountActions}>
         <TouchableOpacity
@@ -46,12 +44,13 @@ export default function CounterInput({
           accessibilityElementsHidden={count < 1}
           importantForAccessibility={count >= 1 ? 'yes' : 'no-hide-descendants'}
           hitSlop={insets.all(8)}
+          style={counterStyles.removeCount}
         >
-          <ThemeIcon
-            style={count === 0 && counterStyles.disabled}
-            svg={Remove}
-          />
+          {count > 0 && <ThemeIcon svg={Remove} />}
         </TouchableOpacity>
+        <ThemeText style={counterStyles.count} type="paragraphHeadline">
+          {count}
+        </ThemeText>
         <TouchableOpacity
           onPress={() => addCount()}
           accessibilityRole="button"
@@ -62,6 +61,7 @@ export default function CounterInput({
             SectionTexts.counterInput.increaseButton.a11yHint(text, count),
           )}
           hitSlop={insets.all(8)}
+          style={counterStyles.addCount}
         >
           <ThemeIcon svg={Add} />
         </TouchableOpacity>
@@ -70,7 +70,7 @@ export default function CounterInput({
   );
 }
 
-const useStyles = StyleSheet.createThemeHook(() => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   travellerCount: {
     flex: 1,
     flexDirection: 'row',
@@ -78,11 +78,17 @@ const useStyles = StyleSheet.createThemeHook(() => ({
   },
   travellerCountActions: {
     flexDirection: 'row',
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    width: 70,
   },
-  disabled: {
-    opacity: 0.4,
+  count: {
+    width: theme.spacings.large,
+    textAlign: 'center',
+  },
+  removeCount: {
+    marginRight: theme.spacings.large,
+  },
+  addCount: {
+    marginLeft: theme.spacings.large,
   },
 }));
