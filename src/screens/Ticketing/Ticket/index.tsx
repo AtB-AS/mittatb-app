@@ -1,5 +1,8 @@
 import React from 'react';
-import {FareContract, FareContractLifecycleState,} from '../../../api/fareContracts';
+import {
+  FareContract,
+  FareContractLifecycleState,
+} from '../../../api/fareContracts';
 import ThemeText from '../../../components/text';
 import * as Sections from '../../../components/sections';
 import ValidityHeader from './ValidityHeader';
