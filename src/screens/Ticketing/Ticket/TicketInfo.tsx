@@ -4,9 +4,7 @@ import {TicketTexts, useTranslation} from '../../../translations';
 import React from 'react';
 import {View} from 'react-native';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
-import {
-  UserProfile,
-} from '../../../reference-data/types';
+import {UserProfile} from '../../../reference-data/types';
 
 const TicketInfo = ({fareContract: fc}: {fareContract: FareContract}) => {
   const {t} = useTranslation();
