@@ -1,7 +1,7 @@
 import {translation as _} from '../../commons';
 const SelectStartScreenTexts = {
   header: {
-    title: _('Velg startside'),
+    title: _('Velg startside', 'Select start page'),
   },
   options: {
     assistant: _('Reiseassistent', 'Assistant'),

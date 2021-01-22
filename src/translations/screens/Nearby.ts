@@ -11,7 +11,7 @@ const NearbyTexts = {
     },
   },
   favorites: {
-    toggle: _('Vis kun favorittavganger', 'Show favourite departures only'),
+    toggle: _('Vis kun favorittavganger', 'View favourite departures only'),
   },
   location: {
     departurePicker: {
@@ -38,7 +38,7 @@ const NearbyTexts = {
     ),
     defaultFetchError: _(
       'Oops - vi klarte ikke hente avganger. Supert om du prøver igjen 🤞',
-      'We failed fetching departures – please try again 🤞',
+      'We failed at fetching departures – please retry 🤞',
     ),
   },
   stateAnnouncements: {
@@ -51,12 +51,12 @@ const NearbyTexts = {
       'Loading departures nearby your current location',
     ),
     loadingFromGivenLocation: (locationName: string) =>
-      _(`Laster avganger i nærheten av ${locationName}`),
+      _(`Laster avganger i nærheten av ${locationName}`, `Loading departures nearby ${locationName}`),
   },
   results: {
     stops: {
       header: {
-        hintShow: _('Aktiver for å vise', 'Activat to display'),
+        hintShow: _('Aktiver for å vise', 'Activate to show'),
         hintHide: _('Aktiver for å skjul', 'Activate to hide'),
       },
     },

@@ -41,7 +41,7 @@ const TicketTexts = {
           `Din kvittering ble sendt til ${email} med referansen: ${reference}.`, 'Your receipt was sent to ${email} with refernce number: ${reference}.'
         ),
       defaultFallback: _(
-        'Du kan få tilsendt kvittering på e-post. Fyll inn din e-postadresse under, og trykk "Send".', 'Enter your e-mail adress below to receive your receipt',
+        'Du kan få tilsendt kvittering på e-post. Fyll inn din e-postadresse under, og trykk "Send".', 'To receive your receipt, enter your e-mail adress below',
       ),
     },
   },

@@ -7,7 +7,7 @@ const dictionary = {
   fromPlace: _('Avreisested', 'Place of departure'),
   toPlace: _('Destinasjon', 'Destination'),
   navigation: {
-    assistant: _(`Reise${softhyphen}søk`, 'Search'),
+    assistant: _(`Reise${softhyphen}søk`, 'Assistant'),
     nearby: _(`Av${softhyphen}ganger`, 'Departures'),
     ticketing: _('Billetter', 'Tickets'),
     profile: _('Mitt AtB', 'Profile'),

@@ -2,8 +2,8 @@ import {translation as _} from '../commons';
 
 const SectionTexts = {
   locationInput: {
-    myPosition: _('Min posisjon'),
-    updatingLocation: _('Oppdaterer posisjon', 'Updating current position'),
+    myPosition: _('Min posisjon', 'My current position'),
+    updatingLocation: _('Oppdaterer posisjon', 'Updating current location'),
     placeholder: _(
       'Søk etter adresse eller sted',
       'Search for an adress or location',

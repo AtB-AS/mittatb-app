@@ -27,7 +27,7 @@ const AssistantTexts = {
     locationButton: {
       a11yLabel: {
         update: _('Oppdater posisjon', 'Update position'),
-        use: _('Bruk min posisjon', 'Use my current position'),
+        use: _('Bruk min posisjon', 'Use my current location'),
       },
     },
     swapButton: {
@@ -36,7 +36,7 @@ const AssistantTexts = {
         'Swap place of departure/arrival',
       ),
     },
-    updatingLocation: _('Oppdaterer posisjon', 'Updating position'),
+    updatingLocation: _('Oppdaterer posisjon', 'Updating location'),
   },
   favorites: {
     favoriteChip: {
@@ -62,7 +62,7 @@ const AssistantTexts = {
       ),
       generic: _(
         'Oops - vi feila med søket. Supert om du prøver igjen 🤞',
-        'Oops – our search engine failed. Please try again 🤞',
+        'Woops – our search engine failed. Please try again 🤞',
       ),
     },
     info: {
@@ -70,7 +70,7 @@ const AssistantTexts = {
         'Vi fant dessverre ingen reiseruter som passer til ditt søk.',
         'We could not find any travel routes matching your search criteria',
       ),
-      reasonsTitle: _('Mulige årsaker: ', 'Potential causes:'),
+      reasonsTitle: _('Mulige årsaker: ', 'Possible causes:'),
       genericHint: _(
         'Prøv å justere på sted eller tidspunkt',
         'Try adjusting your time or location input',
@@ -80,7 +80,7 @@ const AssistantTexts = {
       listPositionExplanation: (
         resultPosition: number,
         totalResultCount: number,
-      ) => _(`Reiseforslag ${resultPosition} av ${totalResultCount}`, `Travel suggestion ${resultPosition} of ${totalResultCount}`),
+      ) => _(`Reiseforslag ${resultPosition} av ${totalResultCount}`, `Trip suggestion ${resultPosition} of ${totalResultCount}`),
     },
     resultItem: {
       header: {
