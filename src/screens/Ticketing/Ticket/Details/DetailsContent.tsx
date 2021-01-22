@@ -23,7 +23,9 @@ const DetailsContent: React.FC<Props> = ({
   onReceiptNavigate,
 }) => {
   const nowSeconds = now / 1000;
-  const isValidTicket = fc.usage_valid_to >= nowSeconds;
+  const isNotExpired = fc.usage_valid_to >= nowSeconds;
+  const isRefunded = fc.state === FareContractLifecycleState.Refunded;
+  const isValidTicket = isNotExpired && !isRefunded;
   const {t, language} = useTranslation();
 
   return (
@@ -31,6 +33,7 @@ const DetailsContent: React.FC<Props> = ({
       <Sections.GenericItem>
         <ValidityHeader
           isValid={isValidTicket}
+          isNotExpired={isNotExpired}
           isRefunded={fc.state === FareContractLifecycleState.Refunded}
           nowSeconds={nowSeconds}
           validTo={fc.usage_valid_to}

@@ -1,13 +1,11 @@
 import React from 'react';
-import {
-  FareContract,
-  FareContractLifecycleState,
-} from '../../../api/fareContracts';
+import {FareContract, FareContractLifecycleState,} from '../../../api/fareContracts';
 import ThemeText from '../../../components/text';
 import * as Sections from '../../../components/sections';
 import ValidityHeader from './ValidityHeader';
 import ValidityLine from './ValidityLine';
-import {useTranslation, TicketTexts} from '../../../translations';
+import {TicketTexts, useTranslation} from '../../../translations';
+
 type Props = {
   fareContract: FareContract;
   now: number;
@@ -20,7 +18,9 @@ const SimpleTicket: React.FC<Props> = ({
   onPressDetails,
 }) => {
   const nowSeconds = now / 1000;
-  const isValidTicket = fc.usage_valid_to >= nowSeconds;
+  const isNotExpired = fc.usage_valid_to >= nowSeconds;
+  const isRefunded = fc.state === FareContractLifecycleState.Refunded;
+  const isValidTicket = isNotExpired && !isRefunded;
   const {t} = useTranslation();
 
   return (
@@ -30,7 +30,8 @@ const SimpleTicket: React.FC<Props> = ({
           isValid={isValidTicket}
           nowSeconds={nowSeconds}
           validTo={fc.usage_valid_to}
-          isRefunded={fc.state === FareContractLifecycleState.Refunded}
+          isNotExpired={isNotExpired}
+          isRefunded={isRefunded}
           onPressDetails={onPressDetails}
         />
         <ValidityLine
