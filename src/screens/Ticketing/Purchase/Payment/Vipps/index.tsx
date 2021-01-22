@@ -1,4 +1,4 @@
-import {RouteProp} from '@react-navigation/native';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import React from 'react';
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -19,13 +19,19 @@ import {
   TicketReservation,
 } from '../../../../../api/fareContracts';
 import {PaymentVippsTexts, useTranslation} from '../../../../../translations';
-import {ActiveTicketsScreenName} from '../../../Tickets';
+import {
+  ActiveTicketsScreenName,
+  TicketTabsNavigatorParams,
+} from '../../../Tickets';
+import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
+
+type NavigationProp = CompositeNavigationProp<
+  MaterialTopTabNavigationProp<TicketTabsNavigatorParams>,
+  DismissableStackNavigationProp<TicketingStackParams, 'PaymentVipps'>
+>;
 
 type Props = {
-  navigation: DismissableStackNavigationProp<
-    TicketingStackParams,
-    'PaymentVipps'
-  >;
+  navigation: NavigationProp;
   route: RouteProp<TicketingStackParams, 'PaymentVipps'>;
 };
 
@@ -50,7 +56,7 @@ export default function VippsPayment({
       offers: reservationOffers,
       paymentType: 'vipps',
     });
-    navigation.dismiss({screen: ActiveTicketsScreenName});
+    navigation.navigate(ActiveTicketsScreenName);
   };
 
   const {state, error, openVipps} = useVippsState(

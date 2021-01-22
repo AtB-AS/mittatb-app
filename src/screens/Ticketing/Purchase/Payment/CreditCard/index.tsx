@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {RouteProp} from '@react-navigation/native';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../..';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ArrowLeft} from '../../../../../assets/svg/icons/navigation';
@@ -26,13 +26,19 @@ import {
   PaymentCreditCardTexts,
   useTranslation,
 } from '../../../../../translations';
-import {ActiveTicketsScreenName} from '../../../Tickets';
+import {
+  ActiveTicketsScreenName,
+  TicketTabsNavigatorParams,
+} from '../../../Tickets';
+import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
+
+type NavigationProp = CompositeNavigationProp<
+  MaterialTopTabNavigationProp<TicketTabsNavigatorParams>,
+  DismissableStackNavigationProp<TicketingStackParams, 'PaymentCreditCard'>
+>;
 
 type Props = {
-  navigation: DismissableStackNavigationProp<
-    TicketingStackParams,
-    'PaymentCreditCard'
-  >;
+  navigation: NavigationProp;
   route: RouteProp<TicketingStackParams, 'PaymentCreditCard'>;
 };
 
@@ -59,7 +65,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
       offers: reservationOffers,
       paymentType: 'creditcard',
     });
-    navigation.dismiss({screen: ActiveTicketsScreenName});
+    navigation.navigate(ActiveTicketsScreenName);
   };
 
   const {
