@@ -34,7 +34,7 @@ const DetailsContent: React.FC<Props> = ({
         <ValidityHeader
           isValid={isValidTicket}
           isNotExpired={isNotExpired}
-          isRefunded={fc.state === FareContractLifecycleState.Refunded}
+          isRefunded={isRefunded}
           nowSeconds={nowSeconds}
           validTo={fc.usage_valid_to}
         />
