@@ -18,6 +18,7 @@ import {
 } from '../../../../translations';
 import * as Sections from '../../../../components/sections';
 import {ReserveOffer} from '../../../../api/fareContracts';
+import {useRemoteConfig} from '../../../../RemoteConfigContext';
 
 export type TravellersProps = {
   navigation: DismissableStackNavigationProp<
@@ -34,6 +35,8 @@ const Confirmation: React.FC<TravellersProps> = ({
   const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
+
+  const {enable_creditcard: enableCreditCard} = useRemoteConfig();
 
   const {
     fromTariffZone,
@@ -221,18 +224,20 @@ const Confirmation: React.FC<TravellersProps> = ({
             onPress={payWithVipps}
             viewContainerStyle={styles.paymentButton}
           />
-          <Button
-            mode="primary2"
-            text={t(PurchaseConfirmationTexts.paymentButtonCard.text)}
-            disabled={isSearchingOffer}
-            accessibilityHint={t(
-              PurchaseConfirmationTexts.paymentButtonCard.a11yHint,
-            )}
-            icon={CreditCard}
-            iconPosition="left"
-            onPress={payWithCard}
-            viewContainerStyle={styles.paymentButton}
-          />
+          {enableCreditCard && (
+            <Button
+              mode="primary2"
+              text={t(PurchaseConfirmationTexts.paymentButtonCard.text)}
+              disabled={isSearchingOffer}
+              accessibilityHint={t(
+                PurchaseConfirmationTexts.paymentButtonCard.a11yHint,
+              )}
+              icon={CreditCard}
+              iconPosition="left"
+              onPress={payWithCard}
+              viewContainerStyle={styles.paymentButton}
+            />
+          )}
         </View>
       </View>
     </View>
