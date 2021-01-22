@@ -2,7 +2,14 @@ import {translation as _} from '../commons';
 
 const TicketTexts = {
   ticketsSummary: (n: number) => _(n > 1 ? `${n} billetter` : '1 billett'),
-  zone: (zoneName: string) => _(`Sone ${zoneName}`),
+  zone: {
+    single: (zoneName: string) => _(`Sone ${zoneName}`, `Zone ${zoneName}`),
+    multiple: (zoneNameFrom: string, zoneNameTo: string) =>
+      _(
+        `Sone ${zoneNameFrom} til sone ${zoneNameTo}`,
+        `Zone ${zoneNameFrom} to zone ${zoneNameTo}`,
+      ),
+  },
   controlLink: _('Vis for kontroll'),
   validityHeader: {
     valid: (duration: string) => _(`Gyldig i ${duration}`),
