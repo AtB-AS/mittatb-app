@@ -2,13 +2,13 @@ import {translation as _} from '../commons';
 
 const DateInput = {
   dateType: {
-    arrival: _('Ankomst'),
-    departure: _('Avreise'),
+    arrival: _('Ankomst', 'Arrival'),
+    departure: _('Avreise', 'Departure'),
     now: _('Nå', 'Now'),
   },
   value: {
     departureNow: (time: string) =>
-      _(`Avreise nå (${time})`, `Departure now (${time})`),
+    _(`Avreise nå (${time})`, `Departing now (${time})`),
     departure: (time: string) => _(`Avreise ${time}`),
     arrival: (time: string) => _(`Ankomst ${time}`),
   },

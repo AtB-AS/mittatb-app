@@ -9,7 +9,7 @@ const OnboardingTexts = {
     ),
   },
   step2: {
-    title: _('Bidra til å gjøre appen bedre', 'Help us improve the app'),
+    title: _('Bidra til å gjøre appen bedre', 'Help us improving the app'),
     description: _(
       'Vi trenger dine idéer og tilbakemeldinger for å gjøre appen bedre. Disse deler du enklest ved å tappe på chatikonet oppe i høyre hjørne av appen. Chatten er anonym.',
       'Your feedback is critical for improving the app experience. Share your ideas or report bugs/errors by initiating a chat with the development team. Simply tap the chat icon in the upper right corner. The chat is anonymous.',

@@ -4,16 +4,16 @@ const AssistantTexts = {
   header: {
     title: _('Reiseassistent', 'Travel assistant'),
     accessibility: {
-      logo: _('Nullstill reisesøk'),
+      logo: _('Nullstill reisesøk', 'Reset travel search'),
     },
   },
   location: {
     departurePicker: {
       label: _('Fra', 'From'),
-      a11yLabel: _('Velg avreisested'),
+      a11yLabel: _('Velg avreisested', 'Select place of departure'),
       a11yHint: _(
         'Aktivér for å søke etter adresse eller sted',
-        'Activate to search for an adress or a location',
+        'Activate to search for an adress or location',
       ),
     },
     destinationPicker: {
@@ -21,7 +21,7 @@ const AssistantTexts = {
       a11yLabel: _('Velg ankomststed', 'Select place of arrival'),
       a11yHint: _(
         'Aktivér for å søke etter adresse eller sted',
-        'Activate to search for an adress or a location',
+        'Activate to search for an adress or location',
       ),
     },
     locationButton: {
@@ -40,7 +40,7 @@ const AssistantTexts = {
   },
   favorites: {
     favoriteChip: {
-      a11yHint: _('Aktiver for å bruke som'),
+      a11yHint: _('Aktiver for å bruke som', 'Activate to use as'),
     },
   },
   searchState: {
@@ -80,13 +80,13 @@ const AssistantTexts = {
       listPositionExplanation: (
         resultPosition: number,
         totalResultCount: number,
-      ) => _(`Reiseforslag ${resultPosition} av ${totalResultCount}`),
+      ) => _(`Reiseforslag ${resultPosition} av ${totalResultCount}`, `Travel suggestion ${resultPosition} of ${totalResultCount}`),
     },
     resultItem: {
       header: {
         time: (startTime: string, endTime: string) =>
-          _(`Fra klokken ${startTime}, til klokken ${endTime}`),
-        totalDuration: _('Reisetid'),
+          _(`Fra klokken ${startTime}, til klokken ${endTime}`, `From ${startTime}, to ${endTime}`),
+        totalDuration: _('Reisetid', 'Trip duration'),
       },
       hasSituationsTip: _(
         'Denne reisen har driftsmeldinger. Se detaljer for mer info',
@@ -110,22 +110,22 @@ const AssistantTexts = {
         fromLabel: (place: string, time: string) => _(`Fra ${place} ${time}`),
         detailsLabel: _('Detaljer', 'Details'),
         detailsHint: _(
-          'Aktivér for å vise flere detaljer om reisen',
-          'Activate to show more journey details',
+          'Aktivér for å vise flere reisedetaljer',
+          'Activate to show more trip details',
         ),
       },
       journeySummary: {
-        duration: (duration: string) => _(`Reisetid: ${duration}`),
+        duration: (duration: string) => _(`Reisetid: ${duration}`, `Travel time: ${duration}`),
         legsDescription: {
-          footLegsOnly: _('Hele reisen til fots'),
-          noSwitching: _('Ingen bytter'),
-          oneSwitch: _('Ett bytte'),
-          someSwitches: (switchCount: number) => _(`${switchCount} bytter`),
+          footLegsOnly: _('Hele reisen til fots', 'Foot legs only'),
+          noSwitching: _('Ingen bytter', 'No transfers'),
+          oneSwitch: _('Ett bytte', 'One transfer'),
+          someSwitches: (switchCount: number) => _(`${switchCount} bytter`, `${switchCount} transfers`),
         },
-        prefixedLineNumber: (number: string) => _(`nummer ${number}`),
-        totalWalkDistance: (meters: string) => _(`Totalt ${meters} meter å gå`),
+        prefixedLineNumber: (number: string) => _(`nummer ${number}`, `number ${number}`),
+        totalWalkDistance: (meters: string) => _(`Totalt ${meters} meter å gå`, `Total of ${meters} meters to walk`),
         departureInfo: (fromPlace: string, fromPlaceDepartureTime: string) =>
-          _(`Fra ${fromPlace}, klokken ${fromPlaceDepartureTime}`),
+          _(`Fra ${fromPlace}, klokken ${fromPlaceDepartureTime}`, `From ${fromPlace}, at ${fromPlaceDepartureTime}`),
       },
     },
   },
