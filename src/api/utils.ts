@@ -1,7 +1,5 @@
 import axios, {AxiosError} from 'axios';
 import {RequestIdHeaderName} from './headers';
-import {LanguageAndText} from '../reference-data/types';
-import {Language} from '../translations';
 
 export type ErrorType =
   | 'unknown'
