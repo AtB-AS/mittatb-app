@@ -7,7 +7,6 @@ import {
   secondsToDurationShort,
   secondsBetween,
   secondsToMinutesShort,
-  missingRealtimePrefix,
   formatToClock,
 } from '../../utils/date';
 import TransportationIcon from '../../components/transportation-icon';
@@ -63,8 +62,8 @@ const ResultItemHeader: React.FC<{
   tripPattern: TripPattern;
 }> = ({tripPattern}) => {
   const styles = useThemeStyles();
-  const durationText = secondsToDurationShort(tripPattern.duration);
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
+  const durationText = secondsToDurationShort(tripPattern.duration, language);
   const startTime = tripPattern.legs[0].expectedStartTime;
   const endTime = tripPattern.legs[tripPattern.legs.length - 1].expectedEndTime;
 
@@ -162,7 +161,7 @@ const ResultItemFooter: React.FC<{legs: Leg[]; onDetailsPressed(): void}> = ({
   const quayName = getFromLeg(legs) ?? t(dictionary.travel.quay.defaultName);
   const quayLeg = legs.find(legWithQuay);
   const timePrefix =
-    !!quayLeg && !quayLeg.realtime ? missingRealtimePrefix : '';
+    !!quayLeg && !quayLeg.realtime ? t(dictionary.missingRealTimePrefix) : '';
   const quayStartTime = quayLeg?.expectedStartTime ?? legs[0].expectedStartTime;
 
   return (
@@ -282,8 +281,8 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 
 function WaitRow({time}: {time: number}) {
   const styles = useLegStyles();
-  const {t} = useTranslation();
-  const waitTime = `${secondsToMinutesShort(time)}`;
+  const {t, language} = useTranslation();
+  const waitTime = `${secondsToMinutesShort(time, language)}`;
   return (
     <View
       accessibilityLabel={t(AssistantTexts.results.resultItem.waitRow.label)}

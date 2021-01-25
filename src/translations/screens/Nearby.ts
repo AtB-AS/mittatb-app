@@ -10,6 +10,9 @@ const NearbyTexts = {
       a11yLabel: _('Gå til startskjerm', 'Back to start screen'),
     },
   },
+  search: {
+    label: _('Fra', 'From'),
+  },
   favorites: {
     toggle: _('Vis kun favorittavganger', 'View favourite departures only'),
   },

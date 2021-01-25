@@ -14,5 +14,17 @@ const FavoriteListTexts = {
     changeOrder: _('Endre rekkefølge', 'Re-arrange favourites'),
     addFavorite: _('Legg til favorittsted', 'Add favourite location'),
   },
+  sortableScreen: {
+    title: _('Endre rekkefølge', 'Reorder favourites'),
+    messages: {
+      error: _(
+        'Ooops. Fikk ikke til å lagre favoritter. Prøv igjen er du snill. 🤞',
+      ),
+    },
+    buttons: {
+      cancel: _('Avbryt', 'Cancel'),
+      save: _('Lagre', 'Save'),
+    },
+  },
 };
 export default FavoriteListTexts;

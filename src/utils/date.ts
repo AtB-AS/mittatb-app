@@ -1,55 +1,39 @@
 import {
+  differenceInCalendarDays,
+  differenceInMinutes,
+  differenceInSeconds,
+  format,
+  isPast,
+  isSameDay,
   Locale,
   parseISO,
-  format,
-  differenceInSeconds,
-  isSameDay,
-  isPast,
-  differenceInMinutes,
-  differenceInCalendarDays,
 } from 'date-fns';
-import nb from 'date-fns/locale/nb';
 import en from 'date-fns/locale/en-GB';
-
+import nb from 'date-fns/locale/nb';
 import humanizeDuration from 'humanize-duration';
-import {Language, DEFAULT_LANGUAGE} from '../translations';
+import {DEFAULT_LANGUAGE, Language} from '../translations';
 
-function getShortHumanizer(ms: number, options?: humanizeDuration.Options) {
-  const opts = {
-    language: 'shortNo',
-    languages: {
-      shortNo: {
-        y: () => 'år',
-        mo: () => 'm',
-        w: () => 'u',
-        d: () => 'd',
-        h: () => 't',
-        m: () => 'min',
-        s: () => 'sek',
-        ms: () => 'ms',
-      },
-    },
-
-    ...options,
-  };
-  return shortHumanizer(ms, opts);
-}
 const shortHumanizer = humanizeDuration.humanizer({});
 
-export const missingRealtimePrefix = 'ca. ';
 function parseIfNeeded(a: string | Date): Date {
   return a instanceof Date ? a : parseISO(a);
 }
 
-export function secondsToDurationShort(seconds: number): string {
-  return getShortHumanizer(seconds * 1000, {
+export function secondsToDurationShort(
+  seconds: number,
+  language: Language,
+): string {
+  return getShortHumanizer(seconds * 1000, language, {
     units: ['d', 'h', 'm'],
     round: true,
   });
 }
 
-export function secondsToMinutesShort(seconds: number): string {
-  return getShortHumanizer(seconds * 1000, {
+export function secondsToMinutesShort(
+  seconds: number,
+  language: Language,
+): string {
+  return getShortHumanizer(seconds * 1000, language, {
     units: ['m'],
     round: true,
   });
@@ -78,9 +62,9 @@ export function secondsBetween(
   return differenceInSeconds(parsedEnd, parsedStart);
 }
 
-export function formatToClock(isoDate: string | Date) {
+export function formatToClock(isoDate: string | Date, language?: Language) {
   const parsed = isoDate instanceof Date ? isoDate : parseISO(isoDate);
-  return formatLocaleTime(parsed);
+  return formatLocaleTime(parsed, language);
 }
 
 /**
@@ -91,9 +75,9 @@ export function formatToClock(isoDate: string | Date) {
  */
 export function formatToClockOrRelativeMinutes(
   isoDate: string | Date,
+  language: Language,
+  now: string,
   minuteThreshold: number = 9,
-  language?: Language,
-  now = 'Nå',
 ) {
   const parsed = parseIfNeeded(isoDate);
   const diff = secondsBetween(new Date(), parsed);
@@ -106,7 +90,7 @@ export function formatToClockOrRelativeMinutes(
     return now;
   }
 
-  return secondsToMinutesShort(diff);
+  return secondsToMinutesShort(diff, language);
 }
 export function isRelativeButNotNow(
   isoDate: string | Date,
@@ -188,3 +172,39 @@ const languageToLocale = (language: Language): Locale => {
       return en;
   }
 };
+
+function getShortHumanizer(
+  ms: number,
+  language: Language,
+  options?: humanizeDuration.Options,
+) {
+  const opts = {
+    language: language === Language.Norwegian ? 'shortNo' : 'shortEn',
+    languages: {
+      shortNo: {
+        y: () => 'år',
+        mo: () => 'm',
+        w: () => 'u',
+        d: () => 'd',
+        h: () => 't',
+        m: () => 'min',
+        s: () => 'sek',
+        ms: () => 'ms',
+      },
+      shortEn: {
+        y: () => 'y',
+        mo: () => 'mo',
+        w: () => 'w',
+        d: () => 'd',
+        h: () => 'h',
+        m: () => 'm',
+        s: () => 's',
+        ms: () => 'ms',
+      },
+    },
+
+    ...options,
+  };
+
+  return shortHumanizer(ms, opts);
+}

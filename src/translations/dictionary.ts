@@ -12,7 +12,7 @@ const dictionary = {
     ticketing: _('Billetter', 'Tickets'),
     profile: _('Mitt AtB', 'Profile'),
   },
-  missingRealTimePrefix: _('ca.'),
+  missingRealTimePrefix: _('ca. ', 'ca. '),
   travel: {
     legModes: {
       bus: _('Buss', 'Bus'),

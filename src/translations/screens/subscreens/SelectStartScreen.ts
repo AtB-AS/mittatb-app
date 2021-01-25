@@ -4,7 +4,7 @@ const SelectStartScreenTexts = {
     title: _('Velg startside', 'Select start page'),
   },
   options: {
-    assistant: _('Reiseassistent', 'Assistant'),
+    assistant: _('Søk', 'Assistant'),
     departures: _('Avganger', 'Departures'),
     ticketing: _('Billetter', 'Tickets'),
   },

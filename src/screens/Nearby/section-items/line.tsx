@@ -60,12 +60,11 @@ export default function LineItem({
   accessibility,
   ...props
 }: LineItemProps) {
-  const {favoriteDepartures} = useFavorites();
   const {contentContainer, topContainer} = useSectionItem(props);
   const sectionStyle = useSectionStyle();
   const styles = useItemStyles();
   const navigation = useNavigation<NearbyScreenNavigationProp>();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   if (hasNoDeparturesOnGroup(group)) {
     return null;
@@ -103,6 +102,7 @@ export default function LineItem({
             title,
             nextValids,
             t,
+            language,
           )}
         >
           <View style={styles.transportationMode}>
@@ -137,8 +137,16 @@ export default function LineItem({
   );
 }
 
-function labelForTime(time: string, t: TFunc<typeof Language>) {
-  const resultTime = formatToClockOrRelativeMinutes(time);
+function labelForTime(
+  time: string,
+  t: TFunc<typeof Language>,
+  language: Language,
+) {
+  const resultTime = formatToClockOrRelativeMinutes(
+    time,
+    language,
+    t(dictionary.date.units.now),
+  );
   const isRelative = isRelativeButNotNow(time);
 
   return isRelative
@@ -150,9 +158,14 @@ function getAccessibilityTextFirstDeparture(
   title: string,
   nextValids: DepartureTime[],
   t: TFunc<typeof Language>,
+  language: Language,
 ) {
   const [firstResult, secondResult, ...rest] = nextValids;
-  const firstResultScreenReaderTimeText = labelForTime(firstResult?.time, t);
+  const firstResultScreenReaderTimeText = labelForTime(
+    firstResult?.time,
+    t,
+    language,
+  );
 
   const inPast = isInThePast(firstResult.time);
   const upcoming = inPast
@@ -200,9 +213,13 @@ type DepartureTimeItemProps = {
 };
 function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
   const styles = useItemStyles();
-  const time = formatToClockOrRelativeMinutes(departure.time);
+  const {t, language} = useTranslation();
+  const time = formatToClockOrRelativeMinutes(
+    departure.time,
+    language,
+    t(dictionary.date.units.now),
+  );
   const isValid = isValidDeparture(departure);
-  const {t} = useTranslation();
 
   if (!isValid) {
     return null;

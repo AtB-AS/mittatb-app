@@ -8,7 +8,16 @@ const SectionTexts = {
       'Søk etter adresse eller sted',
       'Search for an adress or location',
     ),
-    a11yValue: (currentLocation: string) => _(`${currentLocation} er valgt.`),
+    a11yValue: (currentLocation: string) =>
+      _(`${currentLocation} er valgt.`, `${currentLocation} is selected.`),
+  },
+  actionItem: {
+    headingExpand: {
+      toggle: {
+        expand: _('Vis', 'Show'),
+        contract: _('Skjul', 'Hide'),
+      },
+    },
   },
   counterInput: {
     decreaseButton: {
