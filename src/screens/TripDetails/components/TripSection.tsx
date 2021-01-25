@@ -22,6 +22,7 @@ import {significantWaitTime, significantWalkTime} from '../Details/utils';
 import TripRow from './TripRow';
 import WaitSection, {WaitDetails} from './WaitSection';
 import {
+  Language,
   TranslatedString,
   TripDetailsTexts,
   useTranslation,
@@ -45,7 +46,7 @@ const TripSection: React.FC<TripSectionProps> = ({
   step,
   ...leg
 }) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const style = useSectionStyles();
 
   const isWalkSection = leg.mode === 'foot';
@@ -83,6 +84,7 @@ const TripSection: React.FC<TripSectionProps> = ({
                 'start',
                 getPlaceName(leg.fromPlace),
                 startTimes,
+                language,
               ),
             )}
             rowLabel={<Time {...startTimes} />}
@@ -138,6 +140,7 @@ const TripSection: React.FC<TripSectionProps> = ({
                 'end',
                 getPlaceName(leg.toPlace),
                 endTimes,
+                language,
               ),
             )}
             rowLabel={<Time {...endTimes} />}
@@ -158,7 +161,7 @@ const TripSection: React.FC<TripSectionProps> = ({
   );
 };
 const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   const navigation = useNavigation<DetailScreenNavigationProp>();
   const navigateToDetails = () =>
@@ -179,7 +182,7 @@ const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
         t(
           TripDetailsTexts.trip.leg.intermediateStops.a11yLabel(
             numberOfIntermediateCalls,
-            secondsToDuration(leg.duration),
+            secondsToDuration(leg.duration, language),
           ),
         ) + screenReaderPause
       }
@@ -191,7 +194,7 @@ const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
         {t(
           TripDetailsTexts.trip.leg.intermediateStops.label(
             numberOfIntermediateCalls,
-            secondsToDuration(leg.duration),
+            secondsToDuration(leg.duration, language),
           ),
         )}
       </ThemeText>
@@ -199,7 +202,7 @@ const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
   );
 };
 const WalkSection: React.FC<TripSectionProps> = (leg) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const isWalkTimeOfSignificance = significantWalkTime(leg.duration);
   if (!isWalkTimeOfSignificance) {
     return null;
@@ -216,7 +219,7 @@ const WalkSection: React.FC<TripSectionProps> = (leg) => {
       <ThemeText type="lead" color="faded">
         {t(
           TripDetailsTexts.trip.leg.walk.label(
-            secondsToDuration(leg.duration ?? 0),
+            secondsToDuration(leg.duration ?? 0, language),
           ),
         )}
       </ThemeText>
@@ -247,12 +250,13 @@ function getStopRowA11yTranslated(
   key: 'start' | 'end',
   placeName: string,
   values: TimeValues,
+  language: Language,
 ): TranslatedString {
   const a11yLabels = TripDetailsTexts.trip.leg[key].a11yLabel;
 
   const timeType = getTimeRepresentationType(values);
-  const time = formatToClock(values.expectedTime ?? values.aimedTime);
-  const aimedTime = formatToClock(values.aimedTime);
+  const time = formatToClock(values.expectedTime ?? values.aimedTime, language);
+  const aimedTime = formatToClock(values.aimedTime, language);
 
   switch (timeType) {
     case 'no-realtime':

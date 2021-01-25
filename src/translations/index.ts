@@ -19,8 +19,16 @@ export {default as LocationSearchTexts} from './screens/subscreens/LocationSearc
 export {default as TravellersTexts} from './screens/subscreens/Travellers';
 export {default as TariffZonesTexts} from './screens/subscreens/TariffZones';
 export {default as TariffZoneSearchTexts} from './screens/subscreens/TariffZoneSearch';
+export {default as TariffZoneMapSelectionTexts} from './screens/subscreens/TariffZoneMapSelection';
+export {default as PaymentCreditCardTexts} from './screens/subscreens/PaymentCreditCard';
+export {default as PaymentVippsTexts} from './screens/subscreens/PaymentVipps';
+export {default as PurchaseOverviewTexts} from './screens/subscreens/PurchaseOverview';
+export {default as PurchaseConfirmationTexts} from './screens/subscreens/PurchaseConfirmation';
 export {default as ProfileTexts} from './screens/Profile';
 export {default as TicketTexts} from './screens/Ticket';
+export {default as TicketsTexts} from './screens/Tickets';
+export {default as TicketSplashTexts} from './screens/TicketSplash';
+export {default as UpgradeSplashTexts} from './screens/UpgradeSplash';
 export {default as NearbyTexts} from './screens/Nearby';
 export {default as AddEditFavoriteTexts} from './screens/subscreens/AddEditFavorite';
 export {default as FavoriteListTexts} from './screens/subscreens/FavoriteList';

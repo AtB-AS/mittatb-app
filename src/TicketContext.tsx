@@ -7,52 +7,29 @@ import React, {
 } from 'react';
 import {
   FareContract,
+  FareContractLifecycleState,
   getPayment,
   PaymentStatus,
   PaymentType,
-  PreassignedFareProduct,
   ReserveOffer,
   TicketReservation,
 } from './api/fareContracts';
-import {
-  listFareContracts,
-  listPreassignedFareProducts,
-  listUserProfiles,
-  listTariffZones,
-} from './api';
+import {listFareContracts} from './api';
 import useInterval from './utils/use-interval';
-import {UserProfile} from './api/userProfiles';
-import {TariffZone} from './api/tariffZones';
 
 type TicketReducerState = {
   fareContracts: FareContract[];
-  preassignedFareProducts: PreassignedFareProduct[];
-  preassignedFareProductsLoading: boolean;
-  userProfiles: UserProfile[];
-  userProfilesLoading: boolean;
-  tariffZones: TariffZone[];
-  tariffZonesLoading: boolean;
   activeReservations: ActiveReservation[];
   isRefreshingTickets: boolean;
+  errorRefreshingTickets: boolean;
 };
 
 type TicketReducerAction =
   | {type: 'SET_IS_REFRESHING_FARE_CONTRACT_TICKETS'}
+  | {type: 'SET_ERROR_REFRESHING_FARE_CONTRACT_TICKETS'}
   | {
       type: 'UPDATE_FARE_CONTRACT_TICKETS';
       fareContracts: FareContract[];
-    }
-  | {
-      type: 'LOADED_PREASSIGNED_FARE_PRODUCTS';
-      preassignedFareProducts: PreassignedFareProduct[];
-    }
-  | {
-      type: 'LOADED_USER_PROFILES';
-      userProfiles: UserProfile[];
-    }
-  | {
-      type: 'LOADED_TARIFF_ZONES';
-      tariffZones: TariffZone[];
     }
   | {type: 'ADD_RESERVATION'; reservation: ActiveReservation}
   | {
@@ -74,6 +51,14 @@ const ticketReducer: TicketReducer = (
       return {
         ...prevState,
         isRefreshingTickets: true,
+        errorRefreshingTickets: false,
+      };
+    }
+    case 'SET_ERROR_REFRESHING_FARE_CONTRACT_TICKETS': {
+      return {
+        ...prevState,
+        isRefreshingTickets: false,
+        errorRefreshingTickets: true,
       };
     }
     case 'UPDATE_FARE_CONTRACT_TICKETS': {
@@ -85,27 +70,6 @@ const ticketReducer: TicketReducer = (
         ),
         fareContracts: action.fareContracts,
         isRefreshingTickets: false,
-      };
-    }
-    case 'LOADED_PREASSIGNED_FARE_PRODUCTS': {
-      return {
-        ...prevState,
-        preassignedFareProducts: action.preassignedFareProducts,
-        preassignedFareProductsLoading: false,
-      };
-    }
-    case 'LOADED_USER_PROFILES': {
-      return {
-        ...prevState,
-        userProfiles: action.userProfiles,
-        userProfilesLoading: false,
-      };
-    }
-    case 'LOADED_TARIFF_ZONES': {
-      return {
-        ...prevState,
-        tariffZones: action.tariffZones,
-        tariffZonesLoading: false,
       };
     }
     case 'ADD_RESERVATION': {
@@ -136,27 +100,16 @@ export type ActiveReservation = {
 type TicketState = {
   refreshTickets: () => void;
   activatePollingForNewTickets: (reservation: ActiveReservation) => void;
-  isLoadingNecessaryTicketData: boolean;
-} & Pick<
-  TicketReducerState,
-  | 'activeReservations'
-  | 'fareContracts'
-  | 'preassignedFareProducts'
-  | 'userProfiles'
-  | 'isRefreshingTickets'
-  | 'tariffZones'
->;
+  activeFareContracts: FareContract[];
+  expiredFareContracts: FareContract[];
+  findFareContractByOrderId: (id: string) => FareContract | undefined;
+} & Pick<TicketReducerState, 'activeReservations' | 'isRefreshingTickets'>;
 
 const initialReducerState: TicketReducerState = {
   fareContracts: [],
-  preassignedFareProducts: [],
-  preassignedFareProductsLoading: true,
-  userProfiles: [],
-  userProfilesLoading: true,
-  tariffZones: [],
-  tariffZonesLoading: true,
   activeReservations: [],
   isRefreshingTickets: false,
+  errorRefreshingTickets: false,
 };
 
 const TicketContext = createContext<TicketState | undefined>(undefined);
@@ -220,51 +173,7 @@ const TicketContextProvider: React.FC = ({children}) => {
         dispatch({type: 'UPDATE_FARE_CONTRACT_TICKETS', fareContracts});
       } catch (err) {
         console.warn(err);
-      }
-    },
-    [dispatch],
-  );
-
-  const loadPreassignedFareProducts = useCallback(
-    async function () {
-      try {
-        const preassignedFareProducts = await listPreassignedFareProducts();
-        dispatch({
-          type: 'LOADED_PREASSIGNED_FARE_PRODUCTS',
-          preassignedFareProducts,
-        });
-      } catch (err) {
-        console.warn(err);
-      }
-    },
-    [dispatch],
-  );
-
-  const loadUserProfiles = useCallback(
-    async function () {
-      try {
-        const userProfiles = await listUserProfiles();
-        dispatch({
-          type: 'LOADED_USER_PROFILES',
-          userProfiles,
-        });
-      } catch (err) {
-        console.warn(err);
-      }
-    },
-    [dispatch],
-  );
-
-  const loadTariffZones = useCallback(
-    async function () {
-      try {
-        const tariffZones = await listTariffZones();
-        dispatch({
-          type: 'LOADED_TARIFF_ZONES',
-          tariffZones,
-        });
-      } catch (err) {
-        console.warn(err);
+        dispatch({type: 'SET_ERROR_REFRESHING_FARE_CONTRACT_TICKETS'});
       }
     },
     [dispatch],
@@ -282,23 +191,12 @@ const TicketContextProvider: React.FC = ({children}) => {
     updateFareContracts,
     1000,
     [],
-    !activeReservations.some((res) => res.paymentStatus === 'CAPTURE'),
+    !state.errorRefreshingTickets &&
+      !activeReservations.some((res) => res.paymentStatus === 'CAPTURE'),
   );
 
   useEffect(() => {
     updateFareContracts();
-  }, []);
-
-  useEffect(() => {
-    loadPreassignedFareProducts();
-  }, []);
-
-  useEffect(() => {
-    loadUserProfiles();
-  }, []);
-
-  useEffect(() => {
-    loadTariffZones();
   }, []);
 
   return (
@@ -308,16 +206,41 @@ const TicketContextProvider: React.FC = ({children}) => {
         activeReservations,
         refreshTickets: updateFareContracts,
         activatePollingForNewTickets: updateReservations,
-        isLoadingNecessaryTicketData:
-          state.preassignedFareProductsLoading ||
-          state.userProfilesLoading ||
-          state.tariffZonesLoading,
+        activeFareContracts: getActive(state.fareContracts),
+        expiredFareContracts: getExpired(state.fareContracts),
+        findFareContractByOrderId: (orderId) =>
+          state.fareContracts.find((fc) => fc.order_id === orderId),
       }}
     >
       {children}
     </TicketContext.Provider>
   );
 };
+
+const byExpiryComparator = (a: FareContract, b: FareContract): number => {
+  return b.usage_valid_to - a.usage_valid_to;
+};
+
+function getActive(fareContracts: FareContract[]) {
+  const isValidNow = (f: FareContract): boolean =>
+    f.usage_valid_to > Date.now() / 1000;
+  const isActivated = (f: FareContract) =>
+    f.state === FareContractLifecycleState.Activated;
+  return fareContracts
+    .filter(isValidNow)
+    .filter(isActivated)
+    .sort(byExpiryComparator);
+}
+
+function getExpired(fareContracts: FareContract[]) {
+  const isExpired = (f: FareContract): boolean =>
+    !(f.usage_valid_to > Date.now() / 1000);
+  const isRefunded = (f: FareContract) =>
+    f.state === FareContractLifecycleState.Refunded;
+  const isExpiredOrRefunded = (f: FareContract) =>
+    isExpired(f) || isRefunded(f);
+  return fareContracts.filter(isExpiredOrRefunded).sort(byExpiryComparator);
+}
 
 function isHandledPaymentStatus(status: PaymentStatus | undefined): boolean {
   switch (status) {

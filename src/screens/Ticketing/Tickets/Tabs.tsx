@@ -2,12 +2,14 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTicketState} from '../../../TicketContext';
-import {FareContract} from '../../../api/fareContracts';
-import {StyleSheet} from '../../../theme';
+import {StyleSheet, useTheme} from '../../../theme';
 import useInterval from '../../../utils/use-interval';
 import TicketsScrollView from './TicketsScrollView';
 import {RootStackParamList} from '../../../navigation';
-import TicketOptions from './TicketOptions';
+import {TicketsTexts, useTranslation} from '../../../translations';
+import Button from '../../../components/button';
+import {useRemoteConfig} from '../../../RemoteConfigContext';
+import UpgradeSplash from './UpgradeSplash';
 
 export type TicketingScreenNavigationProp = StackNavigationProp<
   RootStackParamList
@@ -17,79 +19,74 @@ type Props = {
   navigation: TicketingScreenNavigationProp;
 };
 
-export const ActiveTickets: React.FC<Props> = ({navigation}) => {
+export const BuyTickets: React.FC<Props> = ({navigation}) => {
+  const styles = useStyles();
+  const {theme} = useTheme();
+  const {must_upgrade_ticketing} = useRemoteConfig();
+
+  if (must_upgrade_ticketing) return <UpgradeSplash />;
+
+  return (
+    <View style={styles.container}>
+      <View style={{flex: 1}}>{/*Reservert for "Sist kjøpte billetter"*/}</View>
+      <View style={{padding: theme.spacings.medium}}>
+        <Button
+          mode="primary"
+          text="Kjøp ny billett"
+          onPress={() => navigation.navigate('TicketPurchase', {})}
+        />
+      </View>
+    </View>
+  );
+};
+
+export const ActiveTickets: React.FC<Props> = () => {
   const {
     activeReservations,
-    fareContracts,
+    activeFareContracts,
     isRefreshingTickets,
     refreshTickets,
-    preassignedFareProducts,
-    isLoadingNecessaryTicketData,
   } = useTicketState();
 
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
 
-  const valid = (f: FareContract): boolean =>
-    f.usage_valid_to > Date.now() / 1000;
-  const byExpiry = (a: FareContract, b: FareContract): number => {
-    return b.usage_valid_to - a.usage_valid_to;
-  };
-  const validTickets = fareContracts?.filter(valid).sort(byExpiry);
   const styles = useStyles();
+  const {t} = useTranslation();
   return (
     <View style={styles.container}>
       <TicketsScrollView
         reservations={activeReservations}
-        tickets={validTickets}
+        tickets={activeFareContracts}
         isRefreshingTickets={isRefreshingTickets}
         refreshTickets={refreshTickets}
-        noTicketsLabel="Du har ingen aktive billetter"
+        noTicketsLabel={t(TicketsTexts.activeTicketsTab.noTickets)}
         now={now}
-      />
-
-      <TicketOptions
-        preassignedFareProducts={preassignedFareProducts}
-        isLoading={isLoadingNecessaryTicketData}
-        navigation={navigation}
       />
     </View>
   );
 };
 
-export const ExpiredTickets: React.FC<Props> = ({navigation}) => {
+export const ExpiredTickets: React.FC<Props> = () => {
   const {
-    fareContracts,
+    expiredFareContracts,
     isRefreshingTickets,
     refreshTickets,
-    preassignedFareProducts,
-    isLoadingNecessaryTicketData,
   } = useTicketState();
 
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
 
-  const expired = (f: FareContract): boolean =>
-    !(f.usage_valid_to > Date.now() / 1000);
-  const byExpiry = (a: FareContract, b: FareContract): number => {
-    return b.usage_valid_to - a.usage_valid_to;
-  };
-  const expiredTickets = fareContracts?.filter(expired).sort(byExpiry);
   const styles = useStyles();
+  const {t} = useTranslation();
   return (
     <View style={styles.container}>
       <TicketsScrollView
-        tickets={expiredTickets}
+        tickets={expiredFareContracts}
         isRefreshingTickets={isRefreshingTickets}
         refreshTickets={refreshTickets}
-        noTicketsLabel="Fant ingen billetthistorikk"
+        noTicketsLabel={t(TicketsTexts.expiredTicketsTab.noTickets)}
         now={now}
-      />
-
-      <TicketOptions
-        preassignedFareProducts={preassignedFareProducts}
-        isLoading={isLoadingNecessaryTicketData}
-        navigation={navigation}
       />
     </View>
   );

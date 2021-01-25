@@ -8,14 +8,19 @@ import useChatIcon from '../../../chat/use-chat-icon';
 import {useNavigateToStartScreen} from '../../../utils/navigation';
 import {StyleSheet} from '../../../theme';
 import TabBar from './TabBar';
-import {ActiveTickets, ExpiredTickets} from './Tabs';
+import {ActiveTickets, BuyTickets, ExpiredTickets} from './Tabs';
 import ThemeIcon from '../../../components/theme-icon';
+import {TicketsTexts, useTranslation} from '../../../translations';
+import {useTicketState} from '../../../TicketContext';
 
+export const BuyTicketsScreenName = 'BuyTickets';
 export const ActiveTicketsScreenName = 'ActiveTickets';
+export const ExpiredTicketsScreenName = 'ExpiredTickets';
 
 export type TicketTabsNavigatorParams = {
+  [BuyTicketsScreenName]: undefined;
   [ActiveTicketsScreenName]: undefined;
-  ExpiredTickets: undefined;
+  [ExpiredTicketsScreenName]: undefined;
 };
 
 const Tab = createMaterialTopTabNavigator<TicketTabsNavigatorParams>();
@@ -24,6 +29,7 @@ export default function TicketTabs() {
   const styles = useStyles();
   const chatIcon = useChatIcon();
   const navigateHome = useNavigateToStartScreen();
+  const {t} = useTranslation();
   const {top} = useSafeAreaInsets();
   const screenTopStyle = useMemo(
     () => ({
@@ -32,27 +38,40 @@ export default function TicketTabs() {
     [top],
   );
 
+  const {activeFareContracts} = useTicketState();
+  const initialRoute = activeFareContracts.length
+    ? ActiveTicketsScreenName
+    : BuyTicketsScreenName;
+
   return (
     <View style={[styles.container, screenTopStyle]}>
       <Header
-        title="Billetter"
+        title={t(TicketsTexts.header.title)}
         rightButton={chatIcon}
         leftButton={{
           icon: <ThemeIcon svg={LogoOutline} />,
           onPress: navigateHome,
-          accessibilityLabel: 'Gå til startside',
+          accessibilityLabel: t(TicketsTexts.header.leftButton.a11yLabel),
         }}
       />
-      <Tab.Navigator tabBar={(props) => <TabBar {...props} />}>
+      <Tab.Navigator
+        tabBar={(props) => <TabBar {...props} />}
+        initialRouteName={initialRoute}
+      >
+        <Tab.Screen
+          name={BuyTicketsScreenName}
+          component={BuyTickets}
+          options={{tabBarLabel: t(TicketsTexts.buyTicketsTab.label)}}
+        />
         <Tab.Screen
           name={ActiveTicketsScreenName}
           component={ActiveTickets}
-          options={{tabBarLabel: 'Aktive'}}
+          options={{tabBarLabel: t(TicketsTexts.activeTicketsTab.label)}}
         />
         <Tab.Screen
-          name="ExpiredTickets"
+          name={ExpiredTicketsScreenName}
           component={ExpiredTickets}
-          options={{tabBarLabel: 'Utløpte'}}
+          options={{tabBarLabel: t(TicketsTexts.expiredTicketsTab.label)}}
         />
       </Tab.Navigator>
     </View>

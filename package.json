@@ -42,7 +42,7 @@
     "@seznam/compose-react-refs": "^1.0.4",
     "@types/lodash.sortby": "^4.7.6",
     "@types/mapbox__polyline": "^1.0.1",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "axios-retry": "^3.1.9",
     "date-fns": "^2.16.1",
     "emoji-datasource": "^6.0.0",

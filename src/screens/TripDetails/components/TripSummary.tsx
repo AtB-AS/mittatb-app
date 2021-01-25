@@ -13,8 +13,8 @@ import {secondsToDuration} from '../../../utils/date';
 
 const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
   const styles = useStyle();
-  const {t} = useTranslation();
-  const time = secondsToDuration(duration);
+  const {t, language} = useTranslation();
+  const time = secondsToDuration(duration, language);
   const summaryTexts = TripDetailsTexts.trip.summary;
   const readableDistance = walkDistance.toFixed();
   return (

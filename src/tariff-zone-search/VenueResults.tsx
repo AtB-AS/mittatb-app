@@ -6,8 +6,9 @@ import ThemeText from '../components/text';
 import {screenReaderPause} from '../components/accessible-text';
 import {TariffZoneSearchTexts, useTranslation} from '../translations';
 import {Location} from '../favorites/types';
-import {TariffZone} from '../api/tariffZones';
 import LocationIcon from '../components/location-icon';
+import {TariffZone} from '../reference-data/types';
+import {getReferenceDataName} from '../reference-data/utils';
 
 export type LocationAndTariffZone = {
   location: Location;
@@ -21,7 +22,7 @@ type Props = {
 
 const VenueResults: React.FC<Props> = ({locationsAndTariffZones, onSelect}) => {
   const styles = useThemeStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   return (
     <>
       <View accessibilityRole="header" style={styles.subHeader}>
@@ -39,7 +40,7 @@ const VenueResults: React.FC<Props> = ({locationsAndTariffZones, onSelect}) => {
                   t(
                     TariffZoneSearchTexts.results.item.a11yLabel(
                       location.name,
-                      tariffZone.name.value,
+                      getReferenceDataName(tariffZone, language),
                     ),
                   ) + screenReaderPause
                 }
@@ -65,7 +66,7 @@ const VenueResults: React.FC<Props> = ({locationsAndTariffZones, onSelect}) => {
                   <ThemeText type={'lead'}>
                     {t(
                       TariffZoneSearchTexts.results.item.zoneLabel(
-                        tariffZone.name.value,
+                        getReferenceDataName(tariffZone, language),
                       ),
                     )}
                   </ThemeText>

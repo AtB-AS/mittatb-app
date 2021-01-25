@@ -15,7 +15,7 @@ const identity = (s: string) => s;
 export default function Language() {
   const {
     setPreference,
-    preferences: {useSystemLanguage, language},
+    preferences: {useSystemLanguage = true, language},
   } = usePreferences();
 
   const style = useStyle();

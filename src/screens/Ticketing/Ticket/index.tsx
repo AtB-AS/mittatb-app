@@ -1,9 +1,14 @@
 import React from 'react';
-import {FareContract} from '../../../api/fareContracts';
+import {
+  FareContract,
+  FareContractLifecycleState,
+} from '../../../api/fareContracts';
 import ThemeText from '../../../components/text';
 import * as Sections from '../../../components/sections';
 import ValidityHeader from './ValidityHeader';
 import ValidityLine from './ValidityLine';
+import {TicketTexts, useTranslation} from '../../../translations';
+import TicketInfo from './TicketInfo';
 type Props = {
   fareContract: FareContract;
   now: number;
@@ -16,7 +21,10 @@ const SimpleTicket: React.FC<Props> = ({
   onPressDetails,
 }) => {
   const nowSeconds = now / 1000;
-  const isValidTicket = fc.usage_valid_to >= nowSeconds;
+  const isNotExpired = fc.usage_valid_to >= nowSeconds;
+  const isRefunded = fc.state === FareContractLifecycleState.Refunded;
+  const isValidTicket = isNotExpired && !isRefunded;
+  const {t} = useTranslation();
 
   return (
     <Sections.Section withBottomPadding>
@@ -25,6 +33,8 @@ const SimpleTicket: React.FC<Props> = ({
           isValid={isValidTicket}
           nowSeconds={nowSeconds}
           validTo={fc.usage_valid_to}
+          isNotExpired={isNotExpired}
+          isRefunded={isRefunded}
           onPressDetails={onPressDetails}
         />
         <ValidityLine
@@ -33,19 +43,11 @@ const SimpleTicket: React.FC<Props> = ({
           validFrom={fc.usage_valid_from}
           validTo={fc.usage_valid_to}
         />
-        <ThemeText>
-          {fc.user_profiles.length > 1
-            ? `${fc.user_profiles.length} voksne`
-            : `1 voksen`}
-        </ThemeText>
-        <ThemeText type="lead" color="faded">
-          {fc.product_name}
-        </ThemeText>
-        <ThemeText type="lead" color="faded">
-          Sone A - Stor-Trondheim
-        </ThemeText>
+        <TicketInfo fareContract={fc} />
       </Sections.GenericItem>
-      {isValidTicket && <Sections.LinkItem text="Vis for kontroll" disabled />}
+      {isValidTicket && (
+        <Sections.LinkItem text={t(TicketTexts.controlLink)} disabled />
+      )}
     </Sections.Section>
   );
 };

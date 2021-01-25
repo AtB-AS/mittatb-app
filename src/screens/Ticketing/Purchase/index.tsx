@@ -1,27 +1,43 @@
 import React from 'react';
+import PurchaseOverviewScreen from './Overview';
+import ConfirmationScreen from './Confirmation';
 import TravellersScreen from './Travellers';
 import {CreditCard as CreditCardScreen, Vipps as VippsScreen} from './Payment';
 import createDismissableStackNavigator from '../../../navigation/createDismissableStackNavigator';
-import {ActiveTicketsScreenName} from '../Tickets';
-import {PreassignedFareProduct, ReserveOffer} from '../../../api/fareContracts';
+import {ActiveTicketsScreenName, BuyTicketsScreenName} from '../Tickets';
+import {ReserveOffer} from '../../../api/fareContracts';
 import {RouteProp} from '@react-navigation/core';
 import TariffZones, {TariffZoneWithMetadata} from './TariffZones';
-import {RouteParams as TariffZoneSearchParams} from '../../../tariff-zone-search';
+import TariffZoneSearch, {
+  RouteParams as TariffZoneSearchParams,
+} from '../../../tariff-zone-search';
 
 import transitionSpec from '../../../navigation/transitionSpec';
-import TariffZoneSearch from '../../../tariff-zone-search';
+import {PreassignedFareProduct} from '../../../reference-data/types';
+import {UserProfileWithCount} from './Travellers/use-user-count-state';
 
-type TravellersParams = {
+type PurchaseOverviewParams = {
   refreshOffer?: boolean;
-  preassignedFareProduct: PreassignedFareProduct;
+  preassignedFareProduct?: PreassignedFareProduct;
   fromTariffZone?: TariffZoneWithMetadata;
   toTariffZone?: TariffZoneWithMetadata;
+  userProfilesWithCount?: UserProfileWithCount[];
+};
+
+type TravellersParams = {
+  userProfilesWithCount: UserProfileWithCount[];
+};
+
+type ConfirmationParams = {
+  preassignedFareProduct: PreassignedFareProduct;
+  fromTariffZone: TariffZoneWithMetadata;
+  toTariffZone: TariffZoneWithMetadata;
+  userProfilesWithCount: UserProfileWithCount[];
 };
 
 type TariffZonesParams = {
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
-  preassignedFareProduct: PreassignedFareProduct;
 };
 type PaymentParams = {
   offers: ReserveOffer[];
@@ -29,9 +45,11 @@ type PaymentParams = {
 };
 
 export type TicketingStackParams = {
+  PurchaseOverview: PurchaseOverviewParams;
   Travellers: TravellersParams;
   TariffZones: TariffZonesParams;
   TariffZoneSearch: TariffZoneSearchParams;
+  Confirmation: ConfirmationParams;
   PaymentCreditCard: PaymentParams;
   PaymentVipps: PaymentParams;
   Splash: undefined;
@@ -39,7 +57,7 @@ export type TicketingStackParams = {
 
 const Stack = createDismissableStackNavigator<TicketingStackParams>();
 
-export type RouteParams = TravellersParams;
+export type RouteParams = PurchaseOverviewParams;
 
 type TicketPurchaseRootProps = {
   route: RouteProp<TicketingStackParams, 'Travellers'>;
@@ -49,14 +67,16 @@ export default function PurchaseStack({route}: TicketPurchaseRootProps) {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      dismissToScreen={ActiveTicketsScreenName}
+      dismissToScreen={BuyTicketsScreenName}
     >
       <Stack.Screen
-        name="Travellers"
-        component={TravellersScreen}
+        name="PurchaseOverview"
+        component={PurchaseOverviewScreen}
         initialParams={route.params}
       />
+      <Stack.Screen name="Travellers" component={TravellersScreen} />
       <Stack.Screen name="TariffZones" component={TariffZones} />
+      <Stack.Screen name="Confirmation" component={ConfirmationScreen} />
       <Stack.Screen name="PaymentCreditCard" component={CreditCardScreen} />
       <Stack.Screen name="PaymentVipps" component={VippsScreen} />
       <Stack.Screen

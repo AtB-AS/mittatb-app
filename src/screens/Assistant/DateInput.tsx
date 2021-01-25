@@ -8,13 +8,12 @@ import DatePicker from 'react-native-date-picker';
 import Button from '../../components/button';
 import {Close} from '../../assets/svg/icons/actions';
 import {formatToClock, formatToLongDateTime} from '../../utils/date';
-import nb from 'date-fns/locale/nb';
 import subDays from 'date-fns/subDays';
 import insets from '../../utils/insets';
 import {screenReaderPause} from '../../components/accessible-text';
 import ThemeIcon from '../../components/theme-icon';
 import ThemeText from '../../components/text';
-import {useTranslation, TranslatedString} from '../../translations';
+import {useTranslation, TranslatedString, Language} from '../../translations';
 import {DateInputTexts} from '../../translations';
 
 type DateTypesWithoutNow = 'departure' | 'arrival';
@@ -49,16 +48,26 @@ function dateTypeToText(type: DateTypes): string {
   }
 }
 
-function dateToText(date: DateOutput, timeOfSearch: Date): TranslatedString {
+function dateToText(
+  date: DateOutput,
+  timeOfSearch: Date,
+  language: Language,
+): TranslatedString {
   if (date.type === 'now') {
-    return DateInputTexts.value.departureNow(formatToClock(timeOfSearch));
+    return DateInputTexts.value.departureNow(
+      formatToClock(timeOfSearch, language),
+    );
   }
 
   if (date.type === 'arrival') {
-    return DateInputTexts.value.arrival(formatToLongDateTime(date.date, nb));
+    return DateInputTexts.value.arrival(
+      formatToLongDateTime(date.date, language),
+    );
   }
 
-  return DateInputTexts.value.departure(formatToLongDateTime(date.date, nb));
+  return DateInputTexts.value.departure(
+    formatToLongDateTime(date.date, language),
+  );
 }
 
 const DateTypeButton: React.FC<
@@ -147,9 +156,9 @@ const DateInput: React.FC<DateInputProps> = ({
     onClose();
   };
 
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
-  const searchValue = dateToText(valueOrDefault, timeOfLastSearch);
+  const searchValue = dateToText(valueOrDefault, timeOfLastSearch, language);
 
   return (
     <>
