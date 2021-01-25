@@ -1,7 +1,6 @@
 import {translation as _} from '../commons';
 
 const TicketTexts = {
-  ticketsSummary: (n: number) => _(n > 1 ? `${n} billetter` : '1 billett'),
   zone: {
     single: (zoneName: string) => _(`Sone ${zoneName}`, `Zone ${zoneName}`),
     multiple: (zoneNameFrom: string, zoneNameTo: string) =>
@@ -10,46 +9,54 @@ const TicketTexts = {
         `Zone ${zoneNameFrom} to zone ${zoneNameTo}`,
       ),
   },
-  controlLink: _('Vis for kontroll'),
+  controlLink: _('Vis for kontroll', 'Show for inspection'),
   validityHeader: {
-    valid: (duration: string) => _(`Gyldig i ${duration}`),
-    refunded: _(`Refundert`),
-    recentlyExpired: (duration: string) => _(`Utløpt for ${duration} siden`),
-    expired: (dateTime: string) => _(`Utløpt ${dateTime}`),
+    valid: (duration: string) =>
+      _(`Gyldig i ${duration}`, `Valid through ${duration}`),
+    recentlyExpired: (duration: string) =>
+      _(`Utløpt for ${duration} siden`, `Expired since ${duration}`),
+    expired: (dateTime: string) =>
+      _(`Utløpt ${dateTime}`, `Expired ${dateTime}`),
+    refunded: _(`Refundert`, 'Refunded'),
     durationDelimiter: _(' og ', ' and '),
   },
   details: {
     header: {
       leftButton: {
-        a11yLabel: _('Gå tilbake'),
+        a11yLabel: _('Gå tilbake', 'Go back'),
       },
-      title: _('Billettdetaljer'),
+      title: _('Billettdetaljer', 'Ticket details'),
     },
-    orderId: (orderId: string) => _(`Ordre-id: ${orderId}`),
-    purchaseTime: (dateTime: string) => _(`Kjøpt ${dateTime}`),
-    askForRefund: _('Be om refusjon'),
-    askForReceipt: _('Be om kvittering'),
+    orderId: (orderId: string) =>
+      _(`Ordre-id: ${orderId}`, `Order ID: ${orderId}`),
+    purchaseTime: (dateTime: string) =>
+      _(`Kjøpt ${dateTime}`, `Purchased ${dateTime}`),
+    askForRefund: _('Be om refusjon', 'Request refund '),
+    askForReceipt: _('Be om kvittering', 'Request receipt'),
   },
   receipt: {
     header: {
       leftButton: {
-        a11yLabel: _('Gå tilbake'),
+        a11yLabel: _('Gå tilbake', 'Go back'),
       },
-      title: _('Send kvittering'),
+      title: _('Send kvittering', 'Send receipt'),
     },
-    inputLabel: _('E-post'),
-    sendButton: _('Send'),
+    inputLabel: _('E-post', 'E-mail'),
+    sendButton: _('Send', 'Send'),
     messages: {
-      loading: _('Sender kvittering...'),
+      loading: _('Sender kvittering...', 'Sending receipt'),
       error: _(
         'Oops! Noe feilet under sending av kvittering, kan du prøve igjen? 🤞',
+        'Whops, something failed during the transfer of receipt. Please try again 🤞',
       ),
       success: (email: string, reference: string) =>
         _(
           `Din kvittering ble sendt til ${email} med referansen: ${reference}.`,
+          `Your receipt was sent to ${email} with reference number: ${reference}.`,
         ),
       defaultFallback: _(
         'Du kan få tilsendt kvittering på e-post. Fyll inn din e-postadresse under, og trykk "Send".',
+        'To receive your receipt, enter your e-mail adress below',
       ),
     },
   },

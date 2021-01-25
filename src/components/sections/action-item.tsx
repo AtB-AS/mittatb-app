@@ -2,6 +2,7 @@ import React from 'react';
 import {AccessibilityProps, Switch, TouchableOpacity, View} from 'react-native';
 import {Confirm} from '../../assets/svg/icons/actions';
 import {StyleSheet, Theme} from '../../theme';
+import {SectionTexts, useTranslation} from '../../translations';
 import ThemeText from '../text';
 import ThemeIcon from '../theme-icon';
 import NavigationIcon from '../theme-icon/navigation-icon';
@@ -65,6 +66,7 @@ function ActionModeIcon({
   checked,
 }: Pick<ActionItemProps, 'mode' | 'checked'>) {
   const style = useHeaderExpandStyle();
+  const {t} = useTranslation();
 
   switch (mode) {
     case 'check': {
@@ -75,7 +77,9 @@ function ActionModeIcon({
       }
     }
     case 'heading-expand': {
-      const text = checked ? 'Skjul' : 'Vis';
+      const text = checked
+        ? t(SectionTexts.actionItem.headingExpand.toggle.contract)
+        : t(SectionTexts.actionItem.headingExpand.toggle.expand);
       const icon = checked ? 'expand-less' : 'expand-more';
       return (
         <View style={style.headerExpandIconGroup}>

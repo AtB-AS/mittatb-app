@@ -75,6 +75,7 @@ const Travellers: React.FC<TravellersProps> = ({
           mode="primary"
           text={t(TravellersTexts.primaryButton.text)}
           accessibilityHint={t(TravellersTexts.primaryButton.a11yHint)}
+          disabled={!userProfilesWithCount.some((u) => u.count)}
           onPress={() => {
             navigation.navigate('PurchaseOverview', {
               userProfilesWithCount,
