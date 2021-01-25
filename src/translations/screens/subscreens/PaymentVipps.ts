@@ -13,7 +13,7 @@ const PaymentVippsTexts = {
   buttons: {
     goToVipps: _(
       'Gå til Vipps for betaling',
-      'Go to Vipps service for payment',
+      'Go to Vipps-app for payment',
     ),
     tryAgain: _('Prøv igjen', 'Try again'),
     goBack: _('Gå tilbake', 'Go back'),
