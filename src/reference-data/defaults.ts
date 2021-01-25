@@ -4,7 +4,7 @@ export const defaultPreassignedFareProducts: PreassignedFareProduct[] = [
   {
     id: 'ATB:PreassignedFareProduct:3d83d176',
     version: 'ATB:Version:5c9ffb7b-bfab-46a3-bb9d-2aa3e1e6302d',
-    name: {lang: 'nob', value: 'Enkeltbillett buss/trikk',},
+    name: {lang: 'nob', value: 'Enkeltbillett buss/trikk'},
     alternativeNames: [
       {lang: 'eng', value: 'Single ticket bus/tram'},
       {lang: 'nno', value: 'Enkeltbillett buss/trikk'},
@@ -649,7 +649,7 @@ export const defaultTariffZones: TariffZone[] = [
 export const defaultUserProfiles: UserProfile[] = [
   {
     id: 'ATB:UserProfile:a5a7b14c',
-    name: {lang: 'nob', value: 'Voksen',},
+    name: {lang: 'nob', value: 'Voksen'},
     description: {lang: 'nob', value: 'Person 18-66 år'},
     alternativeNames: [
       {lang: 'eng', value: 'Adult'},

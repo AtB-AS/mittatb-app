@@ -3,7 +3,10 @@ const LanguageSettingsTexts = {
   header: {
     title: _('Språk', 'Language'),
   },
-  usePhoneSettings: _('Bruk telefoninnstillingene mine', 'Use my phone settings'),
+  usePhoneSettings: _(
+    'Bruk telefoninnstillingene mine',
+    'Use my phone settings',
+  ),
   options: {
     nb: _('Norsk bokmål'),
     en: _('English'),

@@ -20,9 +20,13 @@ const PurchaseConfirmationTexts = {
   },
   validityTexts: {
     zone: {
-      single: (zoneName: string) => _(`Gyldig i sone ${zoneName}`,`Valid through zone ${zoneName}`),
+      single: (zoneName: string) =>
+        _(`Gyldig i sone ${zoneName}`, `Valid through zone ${zoneName}`),
       multiple: (zoneNameFrom: string, zoneNameTo: string) =>
-        _(`Gyldig fra sone ${zoneNameFrom} til sone ${zoneNameTo}`, `Valid from zone ${zoneNameFrom} to zone ${zoneNameTo}`),
+        _(
+          `Gyldig fra sone ${zoneNameFrom} til sone ${zoneNameTo}`,
+          `Valid from zone ${zoneNameFrom} to zone ${zoneNameTo}`,
+        ),
     },
     startTime: _('Gyldig fra kjøpstidspunkt', 'Valid from time of purchase'),
   },
@@ -32,7 +36,8 @@ const PurchaseConfirmationTexts = {
   },
   infoText: {
     part1: _(
-      'Denne billetten blir gyldig med en gang kjøpet blir gjennomført.', 'This ticket is valid when the purchase is completed.',
+      'Denne billetten blir gyldig med en gang kjøpet blir gjennomført.',
+      'This ticket is valid when the purchase is completed.',
     ),
     // part2: _('Du kan angre kjøpet i 2 minutter.', 'You can undo this purchase within 2 min.'),
   },
