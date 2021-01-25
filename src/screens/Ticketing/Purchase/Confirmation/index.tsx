@@ -19,8 +19,9 @@ import {
 import * as Sections from '../../../../components/sections';
 import {ReserveOffer} from '../../../../api/fareContracts';
 import {useRemoteConfig} from '../../../../RemoteConfigContext';
+import {getNameInLanguage} from '../../../../api/utils';
 
-export type TravellersProps = {
+export type ConfirmationProps = {
   navigation: DismissableStackNavigationProp<
     TicketingStackParams,
     'Confirmation'
@@ -28,13 +29,13 @@ export type TravellersProps = {
   route: RouteProp<TicketingStackParams, 'Confirmation'>;
 };
 
-const Confirmation: React.FC<TravellersProps> = ({
+const Confirmation: React.FC<ConfirmationProps> = ({
   navigation,
   route: {params},
 }) => {
   const styles = useStyles();
   const {theme} = useTheme();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   const {enable_creditcard: enableCreditCard} = useRemoteConfig();
 
@@ -100,7 +101,7 @@ const Confirmation: React.FC<TravellersProps> = ({
   return (
     <View style={[styles.container, {paddingTop: safeAreaTop}]}>
       <Header
-        title={params.preassignedFareProduct.name.value}
+        title={getNameInLanguage(preassignedFareProduct, language)}
         leftButton={{
           icon: (
             <ThemeText>
@@ -137,7 +138,7 @@ const Confirmation: React.FC<TravellersProps> = ({
                     ]}
                   >
                     <ThemeText>
-                      {u.count} {u.name.value}
+                      {u.count} {getNameInLanguage(u, language)}
                     </ThemeText>
                     <ThemeText>
                       {u.count * (u.offer.prices[0].amount_float || 0)},-
@@ -147,7 +148,9 @@ const Confirmation: React.FC<TravellersProps> = ({
               </Sections.GenericItem>
               <Sections.GenericItem>
                 <View>
-                  <ThemeText>{preassignedFareProduct.name.value}</ThemeText>
+                  <ThemeText>
+                    {getNameInLanguage(preassignedFareProduct, language)}
+                  </ThemeText>
                   <ThemeText
                     style={styles.smallTopMargin}
                     type="lead"
@@ -156,13 +159,13 @@ const Confirmation: React.FC<TravellersProps> = ({
                     {fromTariffZone.id === toTariffZone.id
                       ? t(
                           PurchaseConfirmationTexts.validityTexts.zone.single(
-                            fromTariffZone.name.value,
+                            getNameInLanguage(fromTariffZone, language),
                           ),
                         )
                       : t(
                           PurchaseConfirmationTexts.validityTexts.zone.multiple(
-                            fromTariffZone.name.value,
-                            toTariffZone.name.value,
+                            getNameInLanguage(fromTariffZone, language),
+                            getNameInLanguage(toTariffZone, language),
                           ),
                         )}
                   </ThemeText>

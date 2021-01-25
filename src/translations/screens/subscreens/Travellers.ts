@@ -9,9 +9,6 @@ const TravellersTexts = {
       a11yLabel: _('Avbryt kjøpsprosessen', 'Cancel purchase'),
     },
   },
-  travellerCounter: {
-    text: (u: UserProfileWithCount) => _(u.name.value),
-  },
   primaryButton: {
     text: _('Bekreft valg', 'Confirm choice'),
     a11yHint: _(
