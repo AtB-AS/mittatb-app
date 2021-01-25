@@ -10,7 +10,7 @@ const dictionary = {
     assistant: _(`Reise${softhyphen}søk`, 'Assistant'),
     nearby: _(`Av${softhyphen}ganger`, 'Departures'),
     ticketing: _('Billetter', 'Tickets'),
-    profile: _('Mitt AtB', 'Profile'),
+    profile: _('Mitt AtB', 'My AtB'),
   },
   missingRealTimePrefix: _('ca. ', 'ca. '),
   travel: {

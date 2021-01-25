@@ -5,7 +5,7 @@ const AppearanceSettingsTexts = {
   },
   actions: {
     usePhoneSettings: _('Bruk telefoninnstillinger', 'Use my phone settings'),
-    darkMode: _('Mørk modus', 'Dark mode'),
+    darkMode: _('Nattmodus', 'Dark mode'),
   },
 };
 export default AppearanceSettingsTexts;
