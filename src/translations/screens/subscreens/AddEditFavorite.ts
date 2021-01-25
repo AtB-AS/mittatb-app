@@ -1,7 +1,7 @@
 import {translation as _} from '../../commons';
 const AddEditFavoriteTexts = {
   header: {
-    title: _('Legg til favorittsted', 'Add favourite location'),
+    title: _('Legg til favorittsted', 'Add a favourite location'),
     titleEdit: _('Endre favorittsted', 'Edit favourite location'),
     logo: {
       a11yLabel: _('Gå tilbake', 'Go back'),

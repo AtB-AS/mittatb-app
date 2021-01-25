@@ -2,7 +2,7 @@ import {translation as _} from '../../commons';
 
 const PurchaseOverviewTexts = {
   header: {
-    title: _('Kjøp ny billett'),
+    title: _('Kjøp ny billett', 'Buy new ticket'),
     leftButton: {
       text: _('Avbryt'),
       a11yLabel: _('Avbryt kjøpsprosessen'),

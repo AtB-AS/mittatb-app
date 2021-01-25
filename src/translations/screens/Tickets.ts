@@ -8,7 +8,7 @@ const TicketsTexts = {
     },
   },
   buyTicketsTab: {
-    label: _('Kjøp'),
+    label: _('Kjøp', 'Buy'),
   },
   activeTicketsTab: {
     label: _('Aktive', 'Valid'),
