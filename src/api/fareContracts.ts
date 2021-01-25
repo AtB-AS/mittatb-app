@@ -119,7 +119,16 @@ export type FareContract = {
   usage_valid_from: number;
   usage_valid_to: number;
   user_profiles: string[];
+  state: FareContractLifecycleState;
 };
+
+export enum FareContractLifecycleState {
+  Unspecified = 0,
+  NotActivated = 1,
+  Activated = 2,
+  Cancelled = 3,
+  Refunded = 4,
+}
 
 type ListTicketsResponse = {
   fare_contracts: FareContract[];

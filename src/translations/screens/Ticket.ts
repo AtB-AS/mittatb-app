@@ -12,6 +12,7 @@ const TicketTexts = {
       _(`Utløpt for ${duration} siden`, `Expired since ${duration}`),
     expired: (dateTime: string) =>
       _(`Utløpt ${dateTime}`, `Expired ${dateTime}`),
+    refunded: _(`Refundert`, 'Refunded'),
     durationDelimiter: _(' og ', ' and '),
   },
   details: {

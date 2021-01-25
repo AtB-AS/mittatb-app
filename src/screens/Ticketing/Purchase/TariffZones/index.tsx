@@ -132,7 +132,7 @@ const TariffZones: React.FC<Props> = ({navigation, route}) => {
 
   const {t} = useTranslation();
 
-  const {fromTariffZone, toTariffZone, preassignedFareProduct} = route.params;
+  const {fromTariffZone, toTariffZone} = route.params;
 
   const openTariffZoneSearch = (
     callerRouteParam: keyof RouteProps['params'],
@@ -216,10 +216,9 @@ const TariffZones: React.FC<Props> = ({navigation, route}) => {
         <Button
           style={styles.saveButton}
           onPress={() =>
-            navigation.navigate('Travellers', {
+            navigation.navigate('PurchaseOverview', {
               fromTariffZone,
               toTariffZone,
-              preassignedFareProduct,
             })
           }
           text={t(TariffZonesTexts.saveButton.text)}

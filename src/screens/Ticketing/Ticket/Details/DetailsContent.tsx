@@ -1,5 +1,8 @@
 import React from 'react';
-import {FareContract} from '../../../../api/fareContracts';
+import {
+  FareContract,
+  FareContractLifecycleState,
+} from '../../../../api/fareContracts';
 import ThemeText from '../../../../components/text';
 import * as Sections from '../../../../components/sections';
 import ValidityHeader from '../ValidityHeader';
@@ -20,7 +23,9 @@ const DetailsContent: React.FC<Props> = ({
   onReceiptNavigate,
 }) => {
   const nowSeconds = now / 1000;
-  const isValidTicket = fc.usage_valid_to >= nowSeconds;
+  const isNotExpired = fc.usage_valid_to >= nowSeconds;
+  const isRefunded = fc.state === FareContractLifecycleState.Refunded;
+  const isValidTicket = isNotExpired && !isRefunded;
   const {t, language} = useTranslation();
 
   return (
@@ -28,6 +33,8 @@ const DetailsContent: React.FC<Props> = ({
       <Sections.GenericItem>
         <ValidityHeader
           isValid={isValidTicket}
+          isNotExpired={isNotExpired}
+          isRefunded={isRefunded}
           nowSeconds={nowSeconds}
           validTo={fc.usage_valid_to}
         />

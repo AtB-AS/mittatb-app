@@ -18,6 +18,7 @@ export type RemoteConfigContextState = Pick<
   | 'enable_ticketing'
   | 'enable_intercom'
   | 'enable_i18n'
+  | 'enable_creditcard'
   | 'news_enabled'
   | 'news_text'
   | 'news_link_text'

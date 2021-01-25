@@ -30,10 +30,8 @@ export default function DetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
-  const {fareContracts} = useTicketState();
-  const fc = fareContracts?.find(
-    (fc) => fc.order_id === route?.params?.orderId,
-  );
+  const {findFareContractByOrderId} = useTicketState();
+  const fc = findFareContractByOrderId(route?.params?.orderId);
   const {t} = useTranslation();
 
   const onReceiptNavigate = () =>
