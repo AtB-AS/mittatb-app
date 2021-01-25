@@ -14,19 +14,13 @@ const TicketInfo = ({fareContract: fc}: {fareContract: FareContract}) => {
     user_profiles: userProfiles,
   } = useRemoteConfig();
 
-  const preassignedFareProduct = findById(
-    preassignedFareProducts,
-    fc.travellers[0].fare_product_ref,
-  );
+  const {fare_product_ref: productRef, tariff_zone_refs} = fc.travellers[0];
+  const [firstZone] = tariff_zone_refs;
+  const [lastZone] = tariff_zone_refs.slice(-1);
 
-  const fromTariffZone = findById(
-    tariffZones,
-    fc.travellers[0].tariff_zone_refs[0],
-  );
-  const toTariffZone = findById(
-    tariffZones,
-    fc.travellers[0].tariff_zone_refs.slice(-1)[0],
-  );
+  const preassignedFareProduct = findById(preassignedFareProducts, productRef);
+  const fromTariffZone = findById(tariffZones, firstZone);
+  const toTariffZone = findById(tariffZones, lastZone);
 
   const namesAndCounts = groupByUserProfileNames(fc.travellers, userProfiles);
 
