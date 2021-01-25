@@ -16,9 +16,8 @@ import ThemeIcon from '../components/theme-icon';
 import FullScreenHeader from '../ScreenHeader/full-header';
 import {StyleSheet} from '../theme';
 import {
-  LocationSearchTexts,
+  Language,
   TariffZoneMapSelectionTexts,
-  TariffZonesTexts,
   useTranslation,
 } from '../translations';
 import {ButtonInput, Section} from '../components/sections';
@@ -32,7 +31,7 @@ import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
 import colors from '../theme/colors';
 import {useGeolocationState} from '../GeolocationContext';
 import {Coordinates} from '@entur/sdk';
-import {screenReaderPause} from '../components/accessible-text';
+import {getReferenceDataName} from '../reference-data/utils';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -141,9 +140,9 @@ const TariffZoneMapSelection: React.FC<Props> = ({
 
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
-  const featureCollection = mapZonesToFeatureCollection(tariffZones);
+  const featureCollection = mapZonesToFeatureCollection(tariffZones, language);
 
   return (
     <View style={styles.container}>
@@ -171,7 +170,7 @@ const TariffZoneMapSelection: React.FC<Props> = ({
               highlightedTariffZone
                 ? t(
                     TariffZoneMapSelectionTexts.button.label.selected(
-                      highlightedTariffZone.name.value,
+                      getReferenceDataName(highlightedTariffZone, language),
                     ),
                   )
                 : t(TariffZoneMapSelectionTexts.button.label.noneSelected)
@@ -254,13 +253,14 @@ const TariffZoneMapSelection: React.FC<Props> = ({
 
 const mapZonesToFeatureCollection = (
   zones: TariffZone[],
+  language: Language,
 ): FeatureCollection<Polygon> => ({
   type: 'FeatureCollection',
   features: zones.map((t) => ({
     type: 'Feature',
     id: t.id,
     properties: {
-      name: t.name.value,
+      name: getReferenceDataName(t, language),
     },
     geometry: t.geometry,
   })),

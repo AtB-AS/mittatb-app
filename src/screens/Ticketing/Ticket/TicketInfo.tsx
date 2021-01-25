@@ -1,13 +1,14 @@
 import {FareContract, FareContractTraveller} from '../../../api/fareContracts';
 import ThemeText from '../../../components/text';
-import {TicketTexts, useTranslation} from '../../../translations';
+import {Language, TicketTexts, useTranslation} from '../../../translations';
 import React from 'react';
 import {View} from 'react-native';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
 import {UserProfile} from '../../../reference-data/types';
+import {getReferenceDataName} from '../../../reference-data/utils';
 
 const TicketInfo = ({fareContract: fc}: {fareContract: FareContract}) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {
     tariff_zones: tariffZones,
     preassigned_fare_products: preassignedFareProducts,
@@ -22,7 +23,11 @@ const TicketInfo = ({fareContract: fc}: {fareContract: FareContract}) => {
   const fromTariffZone = findById(tariffZones, firstZone);
   const toTariffZone = findById(tariffZones, lastZone);
 
-  const namesAndCounts = groupByUserProfileNames(fc.travellers, userProfiles);
+  const namesAndCounts = groupByUserProfileNames(
+    fc.travellers,
+    userProfiles,
+    language,
+  );
 
   return (
     <View>
@@ -33,17 +38,21 @@ const TicketInfo = ({fareContract: fc}: {fareContract: FareContract}) => {
       </View>
       {preassignedFareProduct && (
         <ThemeText style={{paddingTop: 4}} type="lead" color="faded">
-          {preassignedFareProduct?.name.value}
+          {getReferenceDataName(preassignedFareProduct, language)}
         </ThemeText>
       )}
       {fromTariffZone && toTariffZone && (
         <ThemeText type="lead" color="faded">
           {fromTariffZone.id === toTariffZone.id
-            ? t(TicketTexts.zone.single(fromTariffZone.name.value))
+            ? t(
+                TicketTexts.zone.single(
+                  getReferenceDataName(fromTariffZone, language),
+                ),
+              )
             : t(
                 TicketTexts.zone.multiple(
-                  fromTariffZone.name.value,
-                  toTariffZone.name.value,
+                  getReferenceDataName(fromTariffZone, language),
+                  getReferenceDataName(toTariffZone, language),
                 ),
               )}
         </ThemeText>
@@ -69,6 +78,7 @@ type NameAndCount = {name: string; count: number};
 const groupByUserProfileNames = (
   travellers: FareContractTraveller[],
   userProfiles: UserProfile[],
+  language: Language,
 ): NameAndCount[] =>
   travellers
     .reduce((groupedById, t) => {
@@ -81,10 +91,16 @@ const groupByUserProfileNames = (
       }
       return [...groupedById, {userProfileId: t.user_profile_ref, count: 1}];
     }, [] as {userProfileId: string; count: number}[])
-    .map((idAndCount) => ({
-      name: findById(userProfiles, idAndCount.userProfileId)?.name.value,
-      count: idAndCount.count,
-    }))
+    .map((idAndCount) => {
+      const userProfile = findById(userProfiles, idAndCount.userProfileId);
+      const name = userProfile
+        ? getReferenceDataName(userProfile, language)
+        : undefined;
+      return {
+        name,
+        count: idAndCount.count,
+      };
+    })
     .filter(
       (nameAndCount): nameAndCount is NameAndCount => nameAndCount.name != null,
     );

@@ -8,6 +8,7 @@ import {screenReaderPause} from '../components/accessible-text';
 import {MapPointPin} from '../assets/svg/icons/places';
 import {TariffZoneSearchTexts, useTranslation} from '../translations';
 import {TariffZone} from '../reference-data/types';
+import {getReferenceDataName} from '../reference-data/utils';
 
 type Props = {
   tariffZones: TariffZone[];
@@ -16,7 +17,7 @@ type Props = {
 
 const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
   const styles = useThemeStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   return (
     <>
       <View accessibilityRole="header" style={styles.subHeader}>
@@ -33,7 +34,7 @@ const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
                 accessibilityLabel={
                   t(
                     TariffZoneSearchTexts.zones.item.a11yLabel(
-                      tariffZone.name.value,
+                      getReferenceDataName(tariffZone, language),
                     ),
                   ) + screenReaderPause
                 }
@@ -48,7 +49,7 @@ const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
                 </View>
                 <View style={styles.nameContainer}>
                   <ThemeText style={styles.nameText}>
-                    {tariffZone.name.value}
+                    getReferenceDataName(tariffZone, language)
                   </ThemeText>
                 </View>
               </TouchableOpacity>

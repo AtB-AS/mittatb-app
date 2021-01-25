@@ -13,6 +13,7 @@ import {TravellersTexts, useTranslation} from '../../../../translations';
 import Button from '../../../../components/button';
 import ThemeIcon from '../../../../components/theme-icon';
 import {ArrowLeft} from '../../../../assets/svg/icons/navigation';
+import {getReferenceDataName} from '../../../../reference-data/utils';
 
 export type TravellersProps = {
   navigation: DismissableStackNavigationProp<
@@ -28,7 +29,7 @@ const Travellers: React.FC<TravellersProps> = ({
 }) => {
   const styles = useStyles();
   const {theme} = useTheme();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   const {userProfilesWithCount, addCount, removeCount} = useUserCountState(
     params.userProfilesWithCount,
@@ -54,7 +55,7 @@ const Travellers: React.FC<TravellersProps> = ({
           {userProfilesWithCount.map((u) => (
             <Sections.CounterInput
               key={u.userTypeString}
-              text={t(TravellersTexts.travellerCounter.text(u))}
+              text={getReferenceDataName(u, language)}
               count={u.count}
               addCount={() => addCount(u.userTypeString)}
               removeCount={() => removeCount(u.userTypeString)}
