@@ -3,17 +3,21 @@ import {UserProfileWithCount} from '../../../screens/Ticketing/Purchase/Travelle
 
 const TravellersTexts = {
   header: {
-    title: _('Reisende'),
+    title: _('Velg sone', 'Select zone'),
     leftButton: {
-      a11yLabel: _('Gå tilbake'),
+      text: _('Avbryt', 'Cancel'),
+      a11yLabel: _('Avbryt kjøpsprosessen', 'Cancel purchase'),
     },
   },
   travellerCounter: {
     text: (u: UserProfileWithCount) => _(u.name.value),
   },
   primaryButton: {
-    text: _('Bekreft valg'),
-    a11yHint: _('Aktivér for å bekrefte valg'),
+    text: _('Bekreft valg', 'Confirm choice'),
+    a11yHint: _(
+      'Aktivér for å bekrefte valg',
+      'Activate to confirm your choice',
+    ),
   },
 };
 export default TravellersTexts;

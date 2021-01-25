@@ -7,11 +7,11 @@ import {formatToClock} from '../../../utils/date';
 import {getTimeRepresentationType, TimeValues} from '../utils';
 
 const Time: React.FC<TimeValues> = (timeValues) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {aimedTime, expectedTime} = timeValues;
   const representationType = getTimeRepresentationType(timeValues);
-  const scheduled = formatToClock(aimedTime);
-  const expected = expectedTime ? formatToClock(expectedTime) : '';
+  const scheduled = formatToClock(aimedTime, language);
+  const expected = expectedTime ? formatToClock(expectedTime, language) : '';
 
   switch (representationType) {
     case 'significant-difference': {

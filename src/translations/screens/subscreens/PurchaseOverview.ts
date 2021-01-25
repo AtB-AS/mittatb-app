@@ -9,9 +9,15 @@ const PurchaseOverviewTexts = {
     },
   },
   errorMessageBox: {
-    title: _('Det oppstod en feil'),
-    failedOfferSearch: _('Klarte ikke å søke opp pris'),
-    failedReservation: _('Klarte ikke å reservere billett'),
+    title: _('Det oppstod en feil', 'An error occurred'),
+    failedOfferSearch: _(
+      'Klarte ikke å søke opp pris',
+      'Unable to retrieve price',
+    ),
+    failedReservation: _(
+      'Klarte ikke å reservere billett',
+      'Unable to book a ticket',
+    ),
   },
   startTime: _('Oppstart nå'),
   travellers: {
@@ -19,7 +25,7 @@ const PurchaseOverviewTexts = {
     a11yHint: _('Aktivér for å velge reisende'),
   },
   tariffZones: {
-    a11yHint: _('Aktivér for å velge soner'),
+    a11yHint: _('Aktivér for å velge soner', 'Activate to select zones'),
   },
   primaryButton: {
     text: (totalPrice: number) => _(`Total: ${totalPrice},-`),

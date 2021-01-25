@@ -2,12 +2,15 @@ import {translation as _} from '../commons';
 
 const Pagination = {
   previous: {
-    label: _('Forrige'),
-    a11yHint: _('Aktivér for å vise forrige side'),
+    label: _('Forrige', 'Previous'),
+    a11yHint: _(
+      'Aktivér for å vise forrige side',
+      'Activate to show last page',
+    ),
   },
   next: {
-    label: _('Neste'),
-    a11yHint: _('Aktivér for å vise neste side'),
+    label: _('Neste', 'Next'),
+    a11yHint: _('Aktivér for å vise neste side', 'Activate to show next page'),
   },
   current: {
     label: (current: number, total: number) => _(`${current} av ${total}`),

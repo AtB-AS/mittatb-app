@@ -54,7 +54,9 @@ function dateToText(
   language: Language,
 ): TranslatedString {
   if (date.type === 'now') {
-    return DateInputTexts.value.departureNow(formatToClock(timeOfSearch));
+    return DateInputTexts.value.departureNow(
+      formatToClock(timeOfSearch, language),
+    );
   }
 
   if (date.type === 'arrival') {
