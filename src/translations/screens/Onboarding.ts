@@ -18,7 +18,7 @@ const OnboardingTexts = {
   step3: {
     title: _(
       'Bedre opplevelse med posisjonsdeling',
-      'Share your position for the best app experience',
+      'Share your location for the best app experience',
     ),
     description: _(
       'Ved å tillate deling av posisjon, kan du finne nærmeste holdeplass og planlegge reisen fra din lokasjon. Du kan når som helst slutte å dele posisjon.',

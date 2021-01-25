@@ -37,10 +37,10 @@ const PurchaseConfirmationTexts = {
     // part2: _('Du kan angre kjøpet i 2 minutter.', 'You can undo this purchase within 2 min.'),
   },
   paymentButtonVipps: {
-    text: _('Betal med Vipps', 'Pay by Vipps service'),
+    text: _('Betal med Vipps', 'Pay with the Vipps app'),
     a11yHint: _(
       'Aktivér for å betale billett med Vipps',
-      'Activate to pay your ticket by Vipps service',
+      'Activate to pay your ticket with the Vipps app',
     ),
   },
   paymentButtonCard: {
