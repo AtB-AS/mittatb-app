@@ -171,7 +171,7 @@ function getAccessibilityTextFirstDeparture(
   const upcoming = inPast
     ? t(
         NearbyTexts.results.departure.hasPassedAccessibilityLabel(
-          formatToClock(firstResult.time),
+          formatToClock(firstResult.time, language),
         ),
       )
     : firstResult.realtime
@@ -192,10 +192,10 @@ function getAccessibilityTextFirstDeparture(
           [secondResult, ...rest]
             .map((i) =>
               i.realtime
-                ? formatToClock(i.time)
+                ? formatToClock(i.time, language)
                 : t(
                     NearbyTexts.results.departure.nextAccessibilityNotRealtime(
-                      formatToClock(i.time),
+                      formatToClock(i.time, language),
                     ),
                   ),
             )

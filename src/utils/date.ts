@@ -62,7 +62,7 @@ export function secondsBetween(
   return differenceInSeconds(parsedEnd, parsedStart);
 }
 
-export function formatToClock(isoDate: string | Date, language?: Language) {
+export function formatToClock(isoDate: string | Date, language: Language) {
   const parsed = isoDate instanceof Date ? isoDate : parseISO(isoDate);
   return formatLocaleTime(parsed, language);
 }
@@ -106,7 +106,7 @@ export function isRelativeButNotNow(
   return true;
 }
 
-export function formatLocaleTime(date: Date, language?: Language) {
+export function formatLocaleTime(date: Date, language: Language) {
   const lang = language ?? DEFAULT_LANGUAGE;
   switch (lang) {
     case Language.Norwegian:
@@ -131,7 +131,7 @@ export function formatToLongDateTime(
 ) {
   const parsed = parseIfNeeded(isoDate);
   if (isSameDay(parsed, new Date())) {
-    return formatToClock(parsed);
+    return formatToClock(parsed, language);
   }
   return format(parsed, 'PPp', {locale: languageToLocale(language)});
 }

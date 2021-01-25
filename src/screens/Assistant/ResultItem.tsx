@@ -75,12 +75,13 @@ const ResultItemHeader: React.FC<{
         style={styles.resultHeaderLabel}
         accessibilityLabel={t(
           AssistantTexts.results.resultItem.header.time(
-            formatToClock(tripPattern.startTime),
-            formatToClock(tripPattern.endTime),
+            formatToClock(tripPattern.startTime, language),
+            formatToClock(tripPattern.endTime, language),
           ),
         )}
       >
-        {formatToClock(startTime)} – {formatToClock(endTime)}
+        {formatToClock(startTime, language)} –{' '}
+        {formatToClock(endTime, language)}
       </ThemeText>
       <View style={styles.durationContainer}>
         <AccessibleText
@@ -157,7 +158,7 @@ const ResultItemFooter: React.FC<{legs: Leg[]; onDetailsPressed(): void}> = ({
   onDetailsPressed,
 }) => {
   const styles = useThemeStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const quayName = getFromLeg(legs) ?? t(dictionary.travel.quay.defaultName);
   const quayLeg = legs.find(legWithQuay);
   const timePrefix =
@@ -170,7 +171,7 @@ const ResultItemFooter: React.FC<{legs: Leg[]; onDetailsPressed(): void}> = ({
         {t(
           AssistantTexts.results.resultItem.footer.fromLabel(
             quayName,
-            timePrefix + formatToClock(quayStartTime),
+            timePrefix + formatToClock(quayStartTime, language),
           ),
         )}
       </ThemeText>

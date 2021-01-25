@@ -22,6 +22,7 @@ import {significantWaitTime, significantWalkTime} from '../Details/utils';
 import TripRow from './TripRow';
 import WaitSection, {WaitDetails} from './WaitSection';
 import {
+  Language,
   TranslatedString,
   TripDetailsTexts,
   useTranslation,
@@ -45,7 +46,7 @@ const TripSection: React.FC<TripSectionProps> = ({
   step,
   ...leg
 }) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const style = useSectionStyles();
 
   const isWalkSection = leg.mode === 'foot';
@@ -83,6 +84,7 @@ const TripSection: React.FC<TripSectionProps> = ({
                 'start',
                 getPlaceName(leg.fromPlace),
                 startTimes,
+                language,
               ),
             )}
             rowLabel={<Time {...startTimes} />}
@@ -138,6 +140,7 @@ const TripSection: React.FC<TripSectionProps> = ({
                 'end',
                 getPlaceName(leg.toPlace),
                 endTimes,
+                language,
               ),
             )}
             rowLabel={<Time {...endTimes} />}
@@ -247,12 +250,13 @@ function getStopRowA11yTranslated(
   key: 'start' | 'end',
   placeName: string,
   values: TimeValues,
+  language: Language,
 ): TranslatedString {
   const a11yLabels = TripDetailsTexts.trip.leg[key].a11yLabel;
 
   const timeType = getTimeRepresentationType(values);
-  const time = formatToClock(values.expectedTime ?? values.aimedTime);
-  const aimedTime = formatToClock(values.aimedTime);
+  const time = formatToClock(values.expectedTime ?? values.aimedTime, language);
+  const aimedTime = formatToClock(values.aimedTime, language);
 
   switch (timeType) {
     case 'no-realtime':
