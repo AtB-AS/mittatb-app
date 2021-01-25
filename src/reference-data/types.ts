@@ -24,6 +24,7 @@ export type UserProfile = {
   name: LanguageAndText;
   alternativeNames: LanguageAndText[];
   description: LanguageAndText;
+  version: string;
 };
 
 export type TariffZone = {

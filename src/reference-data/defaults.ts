@@ -2,8 +2,8 @@ import {PreassignedFareProduct, TariffZone, UserProfile} from './types';
 
 export const defaultPreassignedFareProducts: PreassignedFareProduct[] = [
   {
-    id: 'ATB:PreassignedFareProduct:3d83d176',
-    version: 'ATB:Version:5c9ffb7b-bfab-46a3-bb9d-2aa3e1e6302d',
+    id: 'ATB:PreassignedFareProduct:8808c360',
+    version: 'ATB:Version:d918f8e3-eb23-4d62-9626-a5cbd02a1dee',
     name: {lang: 'nob', value: 'Enkeltbillett buss/trikk'},
     alternativeNames: [
       {lang: 'eng', value: 'Single ticket bus/tram'},
@@ -648,21 +648,23 @@ export const defaultTariffZones: TariffZone[] = [
 
 export const defaultUserProfiles: UserProfile[] = [
   {
-    id: 'ATB:UserProfile:a5a7b14c',
+    id: 'ATB:UserProfile:8ee842e3',
     name: {lang: 'nob', value: 'Voksen'},
-    description: {lang: 'nob', value: 'Person 18-66 år'},
+    version: 'ATB:Version:9c641c1b-32de-4ad0-b4b0-dd9469881911',
+    description: {lang: 'nob', value: 'Person 16-66 år'},
     alternativeNames: [
       {lang: 'eng', value: 'Adult'},
       {lang: 'nno', value: 'Vaksen'},
     ],
-    minAge: 18,
+    minAge: 16,
     maxAge: 66,
     userTypeString: 'ADULT',
     userType: 1,
   },
   {
-    id: 'ATB:UserProfile:203ee30e',
+    id: 'ATB:UserProfile:2832569f',
     name: {lang: 'nob', value: 'Honnør'},
+    version: 'ATB:Version:9fd60ebc-e73a-4327-a071-b88de283e9ac',
     description: {
       lang: 'nob',
       value:
@@ -672,31 +674,33 @@ export const defaultUserProfiles: UserProfile[] = [
       {lang: 'eng', value: 'Senior'},
       {lang: 'nno', value: 'Honnør'},
     ],
-    minAge: 18,
-    maxAge: 110,
+    minAge: 0,
+    maxAge: 0,
     userTypeString: 'SENIOR',
     userType: 4,
   },
   {
-    id: 'ATB:UserProfile:54dd556b',
+    id: 'ATB:UserProfile:d3e4ec09',
     name: {lang: 'nob', value: 'Barn'},
-    description: {lang: 'nob', value: 'Person 6-17 år'},
+    version: 'ATB:Version:bffcd027-5caf-4e92-9b33-cbf9327c9fd4',
+    description: {lang: 'nob', value: 'Person 4-15 år'},
     alternativeNames: [
       {lang: 'eng', value: 'Child'},
       {lang: 'nno', value: 'Barn'},
     ],
-    minAge: 6,
-    maxAge: 17,
+    minAge: 4,
+    maxAge: 15,
     userTypeString: 'CHILD',
     userType: 2,
   },
   {
-    id: 'ATB:UserProfile:08f2a0e2',
+    id: 'ATB:UserProfile:1ae560ba',
     name: {lang: 'nob', value: 'Student'},
+    version: 'ATB:Version:4ef6c745-6d7c-42a6-bae9-02027abddfa8',
     description: {
       lang: 'nob',
       value:
-        'Elever ved videregående skole og studenter. Du må ha gyldig elevbevis fra din videregående skole med semestermerke for gjeldende semester, gyldig norsk studentbevis med semesterkort fra høyere utdannelse, eller ISIC-kort. \n\nEt gyldig bevis skal ha navn, fødselsdato, studiested og vise hvilket semester det er gyldig for.\n\nVoksne fremmedspråklige til og med 34 år som gjennomgår kurset "Norsk med samfunnskunnskap" eller introduksjonsprogrammet for flyktninger får studentrabatt. Gyldig ID og studentbevis med navn, fødselsdato, gyldig semester og bilde med stempel må forevises på forespørsel',
+        'Gyldig elevbevis fra videregående skole med semestermerke for gjeldende semester, gyldig norsk studentbevis med semesterkort fra høyere utdannelse, eller ISIC-kort. Voksne fremmedspråklige til og med 34 år som gjennomgår kurset Norsk med samfunnskunnskap eller introduksjonsprogrammet for flyktninger',
     },
     alternativeNames: [
       {lang: 'eng', value: 'Student'},
@@ -708,9 +712,10 @@ export const defaultUserProfiles: UserProfile[] = [
     userType: 5,
   },
   {
-    id: 'ATB:UserProfile:fccc2100',
+    id: 'ATB:UserProfile:fe550eb7',
     name: {lang: 'nob', value: 'Ungdom'},
-    description: {lang: 'nob', value: 'Person 16-19 år.'},
+    version: 'ATB:Version:1efe1eb9-a6e7-493d-bbfd-da5042230a7e',
+    description: {lang: 'nob', value: 'Person 16-19 år'},
     alternativeNames: [
       {lang: 'eng', value: 'Youth'},
       {lang: 'nno', value: 'Ungdom'},
@@ -721,29 +726,17 @@ export const defaultUserProfiles: UserProfile[] = [
     userType: 6,
   },
   {
-    id: 'ATB:UserProfile:09e01871',
+    id: 'ATB:UserProfile:416d8b61',
     name: {lang: 'nob', value: 'Militær'},
-    description: {lang: 'nob', value: 'Person i førstegangstjeneste'},
+    version: 'ATB:Version:c862c868-b5d1-41c4-9fa0-bc1a56c64b76',
+    description: {lang: 'nob', value: 'Vernepliktig'},
     alternativeNames: [
       {lang: 'eng', value: 'Military'},
       {lang: 'nno', value: 'Militær'},
     ],
-    minAge: 18,
-    maxAge: 66,
+    minAge: 0,
+    maxAge: 0,
     userTypeString: 'MILITARY',
     userType: 8,
-  },
-  {
-    id: 'ATB:UserProfile:a93060b4',
-    name: {lang: 'nob', value: 'Spedbarn'},
-    description: {lang: 'nob', value: 'Barn 0-5 år reiser gratis'},
-    alternativeNames: [
-      {lang: 'eng', value: 'Infant'},
-      {lang: 'nno', value: 'Spedbarn'},
-    ],
-    minAge: 0,
-    maxAge: 5,
-    userTypeString: 'INFANT',
-    userType: 3,
   },
 ];
