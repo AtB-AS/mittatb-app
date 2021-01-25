@@ -1,32 +1,42 @@
 import Bugsnag from '@bugsnag/react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import React, {useState} from 'react';
+import {Position} from 'geojson';
+import React, {useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {MapIcon} from '../../../assets/svg/map';
-import {MapCameraConfig, MapViewConfig} from '../../../components/map';
-import {Leg} from '../../../sdk';
-import {StyleSheet} from '../../../theme';
 import Button from '../../../components/button';
+import {MapCameraConfig, MapViewConfig} from '../../../components/map';
+import {Coordinates, MapLeg, Place} from '../../../sdk';
+import {StyleSheet} from '../../../theme';
+import {MapTexts, useTranslation} from '../../../translations';
 import insets from '../../../utils/insets';
 import useDisableMapCheck from '../../../utils/use-disable-map-check';
 import MapLabel from './MapLabel';
 import MapRoute from './MapRoute';
-import {getMapBounds, legsToMapLines, pointOf} from './utils';
-import {MapTexts, useTranslation} from '../../../translations';
+import {createMapLines, getMapBounds, pointOf} from './utils';
 
 export type MapProps = {
-  legs: Leg[];
+  mapLegs: MapLeg[];
+  fromPlace: Coordinates | Position;
+  toPlace: Coordinates | Position;
   darkMode?: boolean;
   onExpand(): void;
 };
 
-export const CompactMap: React.FC<MapProps> = ({legs, darkMode, onExpand}) => {
-  const features = legsToMapLines(legs);
-  const startPoint = pointOf(legs[0].fromPlace);
-  const endPoint = pointOf(legs[legs.length - 1].toPlace);
-  const bounds = getMapBounds(features);
+export const CompactMap: React.FC<MapProps> = ({
+  mapLegs,
+  fromPlace,
+  toPlace,
+  darkMode,
+  onExpand,
+}) => {
+  const startPoint = pointOf(fromPlace);
+  const endPoint = pointOf(toPlace);
   const disableMap = useDisableMapCheck();
   const {t} = useTranslation();
+
+  const features = useMemo(() => createMapLines(mapLegs), [mapLegs]);
+  const bounds = useMemo(() => getMapBounds(features), [features]);
 
   const [loadingMap, setLoadingMap] = useState(true);
   const styles = useStyles();

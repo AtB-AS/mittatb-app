@@ -1,21 +1,21 @@
-import React, {useState, useCallback, useEffect} from 'react';
-import {TripPattern} from '../../../sdk';
-import {RouteProp, NavigationProp, useIsFocused} from '@react-navigation/core';
-import {DetailsStackParams} from '..';
-import CompactMap from '../Map/CompactMap';
-import {useTheme, StyleSheet} from '../../../theme';
-import Header from '../../../ScreenHeader';
-import {View, ActivityIndicator} from 'react-native';
-import ThemeIcon from '../../../components/theme-icon';
-import {ScrollView} from 'react-native-gesture-handler';
-import Pagination from '../../../components/pagination';
+import {NavigationProp, RouteProp, useIsFocused} from '@react-navigation/core';
 import Axios, {AxiosError} from 'axios';
+import React, {useCallback, useEffect, useState} from 'react';
+import {ActivityIndicator, View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {DetailsStackParams} from '..';
 import {getSingleTripPattern} from '../../../api/trips';
+import {ArrowLeft} from '../../../assets/svg/icons/navigation';
+import Pagination from '../../../components/pagination';
+import ThemeIcon from '../../../components/theme-icon';
+import Header from '../../../ScreenHeader';
+import {TripPattern} from '../../../sdk';
+import {StyleSheet, useTheme} from '../../../theme';
+import {TripDetailsTexts, useTranslation} from '../../../translations';
 import usePollableResource from '../../../utils/use-pollable-resource';
 import Trip from '../components/Trip';
-import {TripDetailsTexts, useTranslation} from '../../../translations';
-import {ArrowLeft} from '../../../assets/svg/icons/navigation';
-import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
+import CompactMap from '../Map/CompactMap';
 export type DetailsRouteParams = {
   tripPatternId?: string;
   tripPatterns?: TripPattern[];
@@ -107,7 +107,9 @@ const Details: React.FC<Props> = (props) => {
         {tripPattern && (
           <>
             <CompactMap
-              legs={tripPattern.legs}
+              mapLegs={tripPattern.legs}
+              fromPlace={tripPattern.legs[0].fromPlace}
+              toPlace={tripPattern.legs[tripPattern.legs.length - 1].toPlace}
               darkMode={themeName === 'dark'}
               onExpand={() => {
                 props.navigation.navigate('DetailsMap', {

@@ -213,3 +213,9 @@ export type CursorInput = {
 };
 
 export type CursoredQuery<T> = CursorInput & T;
+
+export type MapLeg = {
+  pointsOnLink: PointsOnLink;
+  mode: LegMode;
+  transportSubmode: TransportSubmode;
+};

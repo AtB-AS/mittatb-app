@@ -18,6 +18,7 @@ import ThemeIcon from '../../../components/theme-icon';
 import ScreenHeader from '../../../ScreenHeader';
 import {
   EstimatedCall,
+  Place,
   Situation,
   TransportMode,
   TransportSubmode,
@@ -34,6 +35,7 @@ import usePollableResource from '../../../utils/use-pollable-resource';
 import Time from '../components/Time';
 import TripLegDecoration from '../components/TripLegDecoration';
 import TripRow from '../components/TripRow';
+import CompactMap from '../Map/CompactMap';
 import SituationRow from '../SituationRow';
 
 export type DepartureDetailsRouteParams = {
@@ -94,24 +96,38 @@ export default function DepartureDetails({navigation, route}: Props) {
       />
     </View>
   ) : (
-    <ScrollView style={styles.scrollView}>
-      <SituationMessages
-        situations={parentSituations}
-        containerStyle={styles.situationsContainer}
-      />
-      <View style={styles.allGroups}>
-        {mapGroup(callGroups, (name, group) => (
-          <CallGroup
-            key={group[0]?.quay?.id ?? name}
-            calls={group}
-            type={name}
-            mode={mode}
-            subMode={subMode}
-            parentSituations={parentSituations}
-          />
-        ))}
-      </View>
-    </ScrollView>
+    <View style={{flex: 1}}>
+      {/* <CompactMap
+        mapLegs={[]}
+        fromPlace={tripPattern.legs[0].fromPlace}
+        toPlace={tripPattern.legs[tripPattern.legs.length - 1].toPlace}
+        darkMode={themeName === 'dark'}
+        onExpand={() => {
+          props.navigation.navigate('DetailsMap', {
+            legs: tripPattern.legs,
+          });
+        }}
+      /> */}
+
+      <ScrollView style={styles.scrollView}>
+        <SituationMessages
+          situations={parentSituations}
+          containerStyle={styles.situationsContainer}
+        />
+        <View style={styles.allGroups}>
+          {mapGroup(callGroups, (name, group) => (
+            <CallGroup
+              key={group[0]?.quay?.id ?? name}
+              calls={group}
+              type={name}
+              mode={mode}
+              subMode={subMode}
+              parentSituations={parentSituations}
+            />
+          ))}
+        </View>
+      </ScrollView>
+    </View>
   );
 
   return (

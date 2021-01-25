@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useMemo, useRef} from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {StyleSheet, View} from 'react-native';
 import {useGeolocationState} from '../../../GeolocationContext';
@@ -35,7 +35,7 @@ export const TravelDetailsMap: React.FC<MapProps> = ({route, navigation}) => {
   const {location: geolocation} = useGeolocationState();
   const {legs} = route.params;
 
-  const features = legsToMapLines(legs);
+  const features = useMemo(() => legsToMapLines(legs), [legs]);
   const startPoint = pointOf(legs[0].fromPlace);
   const endPoint = pointOf(legs[legs.length - 1].toPlace);
   const bounds = getMapBounds(features);
