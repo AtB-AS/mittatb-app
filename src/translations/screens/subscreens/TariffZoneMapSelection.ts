@@ -12,7 +12,7 @@ const TariffZoneMapSelectionTexts = {
   },
   button: {
     label: {
-      selected: (zoneName: string) => _(`Sone ${zoneName}`),
+      selected: (zoneName: string) => _(`Sone ${zoneName}`, `Zone ${zoneName}`),
       noneSelected: _(`Ingen sone valgt`, 'No zone selected'),
     },
     a11yHint: _(
