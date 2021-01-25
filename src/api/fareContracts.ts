@@ -118,8 +118,14 @@ export type FareContract = {
   duration: number;
   usage_valid_from: number;
   usage_valid_to: number;
-  user_profiles: string[];
+  travellers: FareContractTraveller[];
   state: FareContractLifecycleState;
+};
+
+export type FareContractTraveller = {
+  fare_product_ref: string;
+  user_profile_ref: string;
+  tariff_zone_refs: string[];
 };
 
 export enum FareContractLifecycleState {

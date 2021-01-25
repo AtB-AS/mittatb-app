@@ -10,6 +10,7 @@ import ValidityLine from '../ValidityLine';
 import {formatToLongDateTime} from '../../../../utils/date';
 import {fromUnixTime} from 'date-fns';
 import {TicketTexts, useTranslation} from '../../../../translations';
+import TicketInfo from '../TicketInfo';
 
 type Props = {
   fareContract: FareContract;
@@ -44,19 +45,7 @@ const DetailsContent: React.FC<Props> = ({
           validFrom={fc.usage_valid_from}
           validTo={fc.usage_valid_to}
         />
-        <ThemeText>
-          {/*Todo: Should use user profile names*/}
-          {t(TicketTexts.ticketsSummary(fc.user_profiles.length))}
-        </ThemeText>
-        <ThemeText type="lead" color="faded">
-          {fc.product_name}
-        </ThemeText>
-        <ThemeText type="lead" color="faded">
-          {
-            // Hardcoded until API returns zone
-            t(TicketTexts.zone('A'))
-          }
-        </ThemeText>
+        <TicketInfo fareContract={fc} />
       </Sections.GenericItem>
       <Sections.GenericItem>
         <ThemeText>{t(TicketTexts.details.orderId(fc.order_id))}</ThemeText>

@@ -8,7 +8,7 @@ import * as Sections from '../../../components/sections';
 import ValidityHeader from './ValidityHeader';
 import ValidityLine from './ValidityLine';
 import {TicketTexts, useTranslation} from '../../../translations';
-
+import TicketInfo from './TicketInfo';
 type Props = {
   fareContract: FareContract;
   now: number;
@@ -43,19 +43,7 @@ const SimpleTicket: React.FC<Props> = ({
           validFrom={fc.usage_valid_from}
           validTo={fc.usage_valid_to}
         />
-        <ThemeText>
-          {/*Todo: Should use user profile names*/}
-          {t(TicketTexts.ticketsSummary(fc.user_profiles.length))}
-        </ThemeText>
-        <ThemeText type="lead" color="faded">
-          {fc.product_name}
-        </ThemeText>
-        <ThemeText type="lead" color="faded">
-          {
-            // Hardcoded until API returns zone
-            t(TicketTexts.zone('A'))
-          }
-        </ThemeText>
+        <TicketInfo fareContract={fc} />
       </Sections.GenericItem>
       {isValidTicket && (
         <Sections.LinkItem text={t(TicketTexts.controlLink)} disabled />
