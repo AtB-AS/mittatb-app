@@ -4,8 +4,8 @@ const PurchaseOverviewTexts = {
   header: {
     title: _('Kjøp ny billett', 'Buy new ticket'),
     leftButton: {
-      text: _('Avbryt'),
-      a11yLabel: _('Avbryt kjøpsprosessen', 'Cancel purchase'),
+      text: _('Avbryt', 'Cancel'),
+      a11yLabel: _('Avbryt kjøpsprosessen', 'Cancel the purchase process'),
     },
   },
   errorMessageBox: {

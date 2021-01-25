@@ -14,14 +14,16 @@ import MessageBox from '../../../../message-box';
 import * as Sections from '../../../../components/sections';
 import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
 import {
+  Language,
   PurchaseOverviewTexts,
   TranslateFunction,
   useTranslation,
 } from '../../../../translations';
 import {useRemoteConfig} from '../../../../RemoteConfigContext';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
+import {getReferenceDataName} from '../../../../reference-data/utils';
 
-export type TravellersProps = {
+export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
     TicketingStackParams,
     'PurchaseOverview'
@@ -29,12 +31,12 @@ export type TravellersProps = {
   route: RouteProp<TicketingStackParams, 'PurchaseOverview'>;
 };
 
-const PurchaseOverview: React.FC<TravellersProps> = ({
+const PurchaseOverview: React.FC<OverviewProps> = ({
   navigation,
   route: {params},
 }) => {
   const styles = useStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   const {
     tariff_zones: tariffZones,
@@ -111,13 +113,13 @@ const PurchaseOverview: React.FC<TravellersProps> = ({
 
         <Sections.Section>
           <Sections.LinkItem
-            text={preassignedFareProduct.name.value}
+            text={getReferenceDataName(preassignedFareProduct, language)}
             onPress={() => {}}
             disabled={true}
             icon={<ThemeIcon svg={Edit} />}
           />
           <Sections.LinkItem
-            text={createTravellersText(userProfilesWithCount, t)}
+            text={createTravellersText(userProfilesWithCount, t, language)}
             onPress={() => {
               navigation.push('Travellers', {
                 userProfilesWithCount,
@@ -135,7 +137,7 @@ const PurchaseOverview: React.FC<TravellersProps> = ({
             icon={<ThemeIcon svg={Edit} />}
           />
           <Sections.LinkItem
-            text={t(tariffZonesSummary(fromTariffZone, toTariffZone))}
+            text={t(tariffZonesSummary(fromTariffZone, toTariffZone, language))}
             onPress={() => {
               navigation.push('TariffZones', {
                 fromTariffZone,
@@ -173,6 +175,7 @@ const PurchaseOverview: React.FC<TravellersProps> = ({
 const createTravellersText = (
   userProfilesWithCount: UserProfileWithCount[],
   t: TranslateFunction,
+  language: Language,
 ) => {
   const chosenUserProfiles = userProfilesWithCount.filter((u) => u.count);
   if (chosenUserProfiles.length > 2) {
@@ -183,7 +186,7 @@ const createTravellersText = (
     return t(PurchaseOverviewTexts.travellers.travellersCount(totalCount));
   } else {
     return chosenUserProfiles
-      .map((u) => `${u.count} ${u.name.value}`)
+      .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
       .join(', ');
   }
 };
