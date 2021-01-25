@@ -8,6 +8,8 @@ import TicketsScrollView from './TicketsScrollView';
 import {RootStackParamList} from '../../../navigation';
 import {TicketsTexts, useTranslation} from '../../../translations';
 import Button from '../../../components/button';
+import {useRemoteConfig} from '../../../RemoteConfigContext';
+import UpgradeSplash from './UpgradeSplash';
 
 export type TicketingScreenNavigationProp = StackNavigationProp<
   RootStackParamList
@@ -20,6 +22,10 @@ type Props = {
 export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
+  const {must_upgrade_ticketing} = useRemoteConfig();
+
+  if (must_upgrade_ticketing) return <UpgradeSplash />;
+
   return (
     <View style={styles.container}>
       <View style={{flex: 1}}>{/*Reservert for "Sist kjøpte billetter"*/}</View>

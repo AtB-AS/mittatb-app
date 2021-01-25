@@ -4,7 +4,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../../ScreenHeader';
 import useChatIcon from '../../../chat/use-chat-icon';
 import {ShinyTicketBanner} from '../../../assets/svg/illustrations';
-import {StyleSheet, useStyle} from '../../../theme';
+import {StyleSheet} from '../../../theme';
 import LogoOutline from '../../../ScreenHeader/LogoOutline';
 import {useNavigateToStartScreen} from '../../../utils/navigation';
 import InviteModal from './InviteModal';
@@ -15,15 +15,6 @@ import ThemeIcon from '../../../components/theme-icon';
 import Button from '../../../components/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useTranslation, TicketSplashTexts} from '../../../translations';
-function openOtherTicketingApp() {
-  const url =
-    Platform.OS === 'ios'
-      ? 'https://apps.apple.com/no/app/atb-mobillett/id472214198'
-      : 'https://play.google.com/store/apps/details?id=no.wtw.atb';
-  if (Linking.canOpenURL(url)) {
-    Linking.openURL(url);
-  }
-}
 
 export default function Splash() {
   const styles = useStyles();
