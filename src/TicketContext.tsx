@@ -21,10 +21,12 @@ type TicketReducerState = {
   fareContracts: FareContract[];
   activeReservations: ActiveReservation[];
   isRefreshingTickets: boolean;
+  errorRefreshingTickets: boolean;
 };
 
 type TicketReducerAction =
   | {type: 'SET_IS_REFRESHING_FARE_CONTRACT_TICKETS'}
+  | {type: 'SET_ERROR_REFRESHING_FARE_CONTRACT_TICKETS'}
   | {
       type: 'UPDATE_FARE_CONTRACT_TICKETS';
       fareContracts: FareContract[];
@@ -49,6 +51,14 @@ const ticketReducer: TicketReducer = (
       return {
         ...prevState,
         isRefreshingTickets: true,
+        errorRefreshingTickets: false,
+      };
+    }
+    case 'SET_ERROR_REFRESHING_FARE_CONTRACT_TICKETS': {
+      return {
+        ...prevState,
+        isRefreshingTickets: false,
+        errorRefreshingTickets: true,
       };
     }
     case 'UPDATE_FARE_CONTRACT_TICKETS': {
@@ -99,6 +109,7 @@ const initialReducerState: TicketReducerState = {
   fareContracts: [],
   activeReservations: [],
   isRefreshingTickets: false,
+  errorRefreshingTickets: false,
 };
 
 const TicketContext = createContext<TicketState | undefined>(undefined);
@@ -162,6 +173,7 @@ const TicketContextProvider: React.FC = ({children}) => {
         dispatch({type: 'UPDATE_FARE_CONTRACT_TICKETS', fareContracts});
       } catch (err) {
         console.warn(err);
+        dispatch({type: 'SET_ERROR_REFRESHING_FARE_CONTRACT_TICKETS'});
       }
     },
     [dispatch],
@@ -179,7 +191,8 @@ const TicketContextProvider: React.FC = ({children}) => {
     updateFareContracts,
     1000,
     [],
-    !activeReservations.some((res) => res.paymentStatus === 'CAPTURE'),
+    !state.errorRefreshingTickets &&
+      !activeReservations.some((res) => res.paymentStatus === 'CAPTURE'),
   );
 
   useEffect(() => {
