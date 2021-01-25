@@ -32,10 +32,8 @@ const PurchaseOverviewTexts = {
     a11yHint: _('Aktivér for å velge soner', 'Activate to select zones'),
   },
   primaryButton: {
-    text: (totalPrice: number) => _(
-      `Total: ${totalPrice},-`,
-      `Total: ${totalPrice},-`
-    ),
+    text: (totalPrice: number) =>
+      _(`Total: ${totalPrice},-`, `Total: ${totalPrice},-`),
     a11yHint: _(
       'Aktivér for å gå til betaling',
       'Activate to continue to purchase',

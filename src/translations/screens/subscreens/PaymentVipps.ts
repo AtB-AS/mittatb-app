@@ -11,10 +11,7 @@ const PaymentVippsTexts = {
     },
   },
   buttons: {
-    goToVipps: _(
-      'Gå til Vipps for betaling',
-      'Go to Vipps-app for payment',
-    ),
+    goToVipps: _('Gå til Vipps for betaling', 'Go to Vipps-app for payment'),
     tryAgain: _('Prøv igjen', 'Try again'),
     goBack: _('Gå tilbake', 'Go back'),
   },
