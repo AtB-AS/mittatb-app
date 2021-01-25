@@ -5,7 +5,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
 import {UserProfile} from '../../../reference-data/types';
-import {getNameInLanguage} from '../../../api/utils';
+import {getReferenceDataName} from '../../../reference-data/utils';
 
 const TicketInfo = ({fareContract: fc}: {fareContract: FareContract}) => {
   const {t, language} = useTranslation();
@@ -38,7 +38,7 @@ const TicketInfo = ({fareContract: fc}: {fareContract: FareContract}) => {
       </View>
       {preassignedFareProduct && (
         <ThemeText style={{paddingTop: 4}} type="lead" color="faded">
-          {getNameInLanguage(preassignedFareProduct, language)}
+          {getReferenceDataName(preassignedFareProduct, language)}
         </ThemeText>
       )}
       {fromTariffZone && toTariffZone && (
@@ -46,13 +46,13 @@ const TicketInfo = ({fareContract: fc}: {fareContract: FareContract}) => {
           {fromTariffZone.id === toTariffZone.id
             ? t(
                 TicketTexts.zone.single(
-                  getNameInLanguage(fromTariffZone, language),
+                  getReferenceDataName(fromTariffZone, language),
                 ),
               )
             : t(
                 TicketTexts.zone.multiple(
-                  getNameInLanguage(fromTariffZone, language),
-                  getNameInLanguage(toTariffZone, language),
+                  getReferenceDataName(fromTariffZone, language),
+                  getReferenceDataName(toTariffZone, language),
                 ),
               )}
         </ThemeText>
@@ -94,7 +94,7 @@ const groupByUserProfileNames = (
     .map((idAndCount) => {
       const userProfile = findById(userProfiles, idAndCount.userProfileId);
       const name = userProfile
-        ? getNameInLanguage(userProfile, language)
+        ? getReferenceDataName(userProfile, language)
         : undefined;
       return {
         name,

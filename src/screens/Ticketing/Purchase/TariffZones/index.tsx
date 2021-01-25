@@ -20,7 +20,7 @@ import {ArrowLeft} from '../../../../assets/svg/icons/navigation';
 import Button from '../../../../components/button';
 import {Confirm} from '../../../../assets/svg/icons/actions';
 import {TariffZone} from '../../../../reference-data/types';
-import {getNameInLanguage} from '../../../../api/utils';
+import {getReferenceDataName} from '../../../../reference-data/utils';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
@@ -57,12 +57,12 @@ export const tariffZonesSummary = (
 ) => {
   if (fromTariffZone.id === toTariffZone.id) {
     return TariffZonesTexts.zoneSummary.text.singleZone(
-      getNameInLanguage(fromTariffZone, language),
+      getReferenceDataName(fromTariffZone, language),
     );
   } else {
     return TariffZonesTexts.zoneSummary.text.multipleZone(
-      getNameInLanguage(fromTariffZone, language),
-      getNameInLanguage(toTariffZone, language),
+      getReferenceDataName(fromTariffZone, language),
+      getReferenceDataName(toTariffZone, language),
     );
   }
 };
@@ -73,12 +73,12 @@ const departurePickerAccessibilityLabel = (
 ) => {
   if (fromTariffZone.venueName)
     return TariffZonesTexts.location.departurePicker.a11yLabel.withVenue(
-      getNameInLanguage(fromTariffZone, language),
+      getReferenceDataName(fromTariffZone, language),
       fromTariffZone.venueName,
     );
   else {
     return TariffZonesTexts.location.departurePicker.a11yLabel.noVenue(
-      getNameInLanguage(fromTariffZone, language),
+      getReferenceDataName(fromTariffZone, language),
     );
   }
 };
@@ -89,12 +89,12 @@ const destinationPickerAccessibilityLabel = (
 ) => {
   if (toTariffZone.venueName)
     return TariffZonesTexts.location.destinationPicker.a11yLabel.withVenue(
-      getNameInLanguage(toTariffZone, language),
+      getReferenceDataName(toTariffZone, language),
       toTariffZone.venueName,
     );
   else {
     return TariffZonesTexts.location.destinationPicker.a11yLabel.noVenue(
-      getNameInLanguage(toTariffZone, language),
+      getReferenceDataName(toTariffZone, language),
     );
   }
 };
@@ -105,12 +105,12 @@ const departurePickerValue = (
 ) => {
   if (fromTariffZone.venueName)
     return TariffZonesTexts.location.departurePicker.value.withVenue(
-      getNameInLanguage(fromTariffZone, language),
+      getReferenceDataName(fromTariffZone, language),
       fromTariffZone.venueName,
     );
   else {
     return TariffZonesTexts.location.departurePicker.value.noVenue(
-      getNameInLanguage(fromTariffZone, language),
+      getReferenceDataName(fromTariffZone, language),
     );
   }
 };
@@ -128,12 +128,12 @@ const destinationPickerValue = (
     return TariffZonesTexts.location.destinationPicker.value.noVenueSameZone;
   } else if (toTariffZone.venueName) {
     return TariffZonesTexts.location.departurePicker.value.withVenue(
-      getNameInLanguage(toTariffZone, language),
+      getReferenceDataName(toTariffZone, language),
       toTariffZone.venueName,
     );
   } else {
     return TariffZonesTexts.location.departurePicker.value.noVenue(
-      getNameInLanguage(toTariffZone, language),
+      getReferenceDataName(toTariffZone, language),
     );
   }
 };

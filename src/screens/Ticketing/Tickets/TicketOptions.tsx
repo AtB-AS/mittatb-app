@@ -4,7 +4,7 @@ import {StyleSheet} from '../../../theme';
 import Button from '../../../components/button';
 import {TicketingScreenNavigationProp} from './Tabs';
 import {PreassignedFareProduct} from '../../../reference-data/types';
-import {getNameInLanguage} from '../../../api/utils';
+import {getReferenceDataName} from '../../../reference-data/utils';
 import {useTranslation} from '../../../translations';
 
 type Props = {
@@ -22,7 +22,7 @@ const TicketOptions: React.FC<Props> = ({
     <View key={preassignedFareProduct.id} style={styles.buttonContainer}>
       <Button
         mode="primary"
-        text={getNameInLanguage(preassignedFareProduct, language)}
+        text={getReferenceDataName(preassignedFareProduct, language)}
         onPress={() =>
           navigation.navigate('TicketPurchase', {preassignedFareProduct})
         }

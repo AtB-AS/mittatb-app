@@ -21,7 +21,7 @@ import {
 } from '../../../../translations';
 import {useRemoteConfig} from '../../../../RemoteConfigContext';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
-import {getNameInLanguage} from '../../../../api/utils';
+import {getReferenceDataName} from '../../../../reference-data/utils';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -113,7 +113,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
         <Sections.Section>
           <Sections.LinkItem
-            text={getNameInLanguage(preassignedFareProduct, language)}
+            text={getReferenceDataName(preassignedFareProduct, language)}
             onPress={() => {}}
             disabled={true}
             icon={<ThemeIcon svg={Edit} />}
@@ -186,7 +186,7 @@ const createTravellersText = (
     return t(PurchaseOverviewTexts.travellers.travellersCount(totalCount));
   } else {
     return chosenUserProfiles
-      .map((u) => `${u.count} ${getNameInLanguage(u, language)}`)
+      .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
       .join(', ');
   }
 };

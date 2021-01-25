@@ -19,7 +19,7 @@ import {
 import * as Sections from '../../../../components/sections';
 import {ReserveOffer} from '../../../../api/fareContracts';
 import {useRemoteConfig} from '../../../../RemoteConfigContext';
-import {getNameInLanguage} from '../../../../api/utils';
+import {getReferenceDataName} from '../../../../reference-data/utils';
 
 export type ConfirmationProps = {
   navigation: DismissableStackNavigationProp<
@@ -101,7 +101,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   return (
     <View style={[styles.container, {paddingTop: safeAreaTop}]}>
       <Header
-        title={getNameInLanguage(preassignedFareProduct, language)}
+        title={getReferenceDataName(preassignedFareProduct, language)}
         leftButton={{
           icon: (
             <ThemeText>
@@ -138,7 +138,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                     ]}
                   >
                     <ThemeText>
-                      {u.count} {getNameInLanguage(u, language)}
+                      {u.count} {getReferenceDataName(u, language)}
                     </ThemeText>
                     <ThemeText>
                       {u.count * (u.offer.prices[0].amount_float || 0)},-
@@ -149,7 +149,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               <Sections.GenericItem>
                 <View>
                   <ThemeText>
-                    {getNameInLanguage(preassignedFareProduct, language)}
+                    {getReferenceDataName(preassignedFareProduct, language)}
                   </ThemeText>
                   <ThemeText
                     style={styles.smallTopMargin}
@@ -159,13 +159,13 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                     {fromTariffZone.id === toTariffZone.id
                       ? t(
                           PurchaseConfirmationTexts.validityTexts.zone.single(
-                            getNameInLanguage(fromTariffZone, language),
+                            getReferenceDataName(fromTariffZone, language),
                           ),
                         )
                       : t(
                           PurchaseConfirmationTexts.validityTexts.zone.multiple(
-                            getNameInLanguage(fromTariffZone, language),
-                            getNameInLanguage(toTariffZone, language),
+                            getReferenceDataName(fromTariffZone, language),
+                            getReferenceDataName(toTariffZone, language),
                           ),
                         )}
                   </ThemeText>
