@@ -41,7 +41,10 @@ const ProfileTexts = {
       linkItems: {
         privacy: {
           label: _('Personvernerklæring', 'Privacy statement'),
-          a11yHint: _('Aktivér for å lese personvernerklæring på ekstern side', 'Activate to read our privacy statement (external content)'),
+          a11yHint: _(
+            'Aktivér for å lese personvernerklæring på ekstern side',
+            'Activate to read our privacy statement (external content)',
+          ),
         },
       },
     },

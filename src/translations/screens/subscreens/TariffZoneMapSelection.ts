@@ -15,7 +15,9 @@ const TariffZoneMapSelectionTexts = {
       selected: (zoneName: string) => _(`Sone ${zoneName}`),
       noneSelected: _(`Ingen sone valgt`, 'No zone selected'),
     },
-    a11yHint: _(`Aktivér for å velge denne sonen., 'Activate to select this zone`),
+    a11yHint: _(
+      `Aktivér for å velge denne sonen., 'Activate to select this zone`,
+    ),
   },
   map: {
     featureLabelPrefix: _('Sone ', 'Zone '),

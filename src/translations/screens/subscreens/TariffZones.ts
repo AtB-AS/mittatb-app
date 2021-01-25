@@ -4,7 +4,10 @@ const TariffZonesTexts = {
   header: {
     title: _('Velg sone', 'Select zone'),
     leftButton: {
-      a11yLabel: _('Gå tilbake uten å lagre sonevalget', 'Go back without saving your selected zone'),
+      a11yLabel: _(
+        'Gå tilbake uten å lagre sonevalget',
+        'Go back without saving your selected zone',
+      ),
     },
   },
   zoneSummary: {
@@ -36,13 +39,21 @@ const TariffZonesTexts = {
       },
       label: _('Fra', 'From'),
       a11yLabel: {
-        noVenue: (zoneName: string) => _(`Valgt avreisesone er ${zoneName}`, `Selected zone of departure is ${zoneName}`),
+        noVenue: (zoneName: string) =>
+          _(
+            `Valgt avreisesone er ${zoneName}`,
+            `Selected zone of departure is ${zoneName}`,
+          ),
         withVenue: (zoneName: string, venueName: string) =>
           _(
-            `Valgt avreisesone er ${zoneName} basert på stoppested ${venueName}`, 'Selected zone of departure is ${zoneName} based on stop place ${venueName}',
+            `Valgt avreisesone er ${zoneName} basert på stoppested ${venueName}`,
+            'Selected zone of departure is ${zoneName} based on stop place ${venueName}',
           ),
       },
-      a11yHint: _('Aktivér for å søke etter avreisesone', 'Activate to search zone of departure'),
+      a11yHint: _(
+        'Aktivér for å søke etter avreisesone',
+        'Activate to search zone of departure',
+      ),
       placeholder: _('Søk etter avreisesone', 'Search zone of departure'),
     },
     destinationPicker: {
@@ -60,19 +71,30 @@ const TariffZonesTexts = {
       },
       label: _('Til', 'To'),
       a11yLabel: {
-        noVenue: (zoneName: string) => _(`Valgt ankomstsone er ${zoneName}`, `Selected zone of arrival is ${zoneName}`),
+        noVenue: (zoneName: string) =>
+          _(
+            `Valgt ankomstsone er ${zoneName}`,
+            `Selected zone of arrival is ${zoneName}`,
+          ),
         withVenue: (zoneName: string, venueName: string) =>
           _(
-            `Valgt ankomstsone er ${zoneName} basert på stoppested ${venueName}`, 'Selected zone of arrival is ${zoneName} based on stop place ${venueName}'
+            `Valgt ankomstsone er ${zoneName} basert på stoppested ${venueName}`,
+            'Selected zone of arrival is ${zoneName} based on stop place ${venueName}',
           ),
       },
-      a11yHint: _('Aktivér for å søke etter ankomstsone', 'Activate to search for zone of arrival'),
+      a11yHint: _(
+        'Aktivér for å søke etter ankomstsone',
+        'Activate to search for zone of arrival',
+      ),
       placeholder: _('Søk etter ankomstsone', 'Search for zone of arrival'),
     },
   },
   saveButton: {
     text: _('Lagre sonevalg', 'Save selected zone'),
-    a11yHint: _('Aktivér for å lagre sonevalget', 'Activate to save selected zone'),
+    a11yHint: _(
+      'Aktivér for å lagre sonevalget',
+      'Activate to save selected zone',
+    ),
   },
 };
 export default TariffZonesTexts;

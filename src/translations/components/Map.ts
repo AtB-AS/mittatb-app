@@ -22,7 +22,10 @@ const MapTexts = {
     },
     position: {
       a11yLabel: _('Min posisjon', 'My location'),
-      a11yHint: _('Aktivér for å gå til din gjeldende posisjon', 'Activate to use your current position'),
+      a11yHint: _(
+        'Aktivér for å gå til din gjeldende posisjon',
+        'Activate to use your current position',
+      ),
     },
   },
 };

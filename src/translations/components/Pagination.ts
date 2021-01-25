@@ -3,7 +3,10 @@ import {translation as _} from '../commons';
 const Pagination = {
   previous: {
     label: _('Forrige', 'Previous'),
-    a11yHint: _('Aktivér for å vise forrige side', 'Activate to show last page'),
+    a11yHint: _(
+      'Aktivér for å vise forrige side',
+      'Activate to show last page',
+    ),
   },
   next: {
     label: _('Neste', 'Next'),

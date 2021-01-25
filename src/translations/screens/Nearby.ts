@@ -51,7 +51,10 @@ const NearbyTexts = {
       'Loading departures nearby your current location',
     ),
     loadingFromGivenLocation: (locationName: string) =>
-      _(`Laster avganger i nærheten av ${locationName}`, `Loading departures nearby ${locationName}`),
+      _(
+        `Laster avganger i nærheten av ${locationName}`,
+        `Loading departures nearby ${locationName}`,
+      ),
   },
   results: {
     stops: {
@@ -65,18 +68,33 @@ const NearbyTexts = {
         'Søk etter avganger fra holdeplasser eller i nærheten av steder.',
         'Search for departures from nearby stops or locations',
       ),
-      emptyResult: _('Fant ingen avganger på valgt plass.', 'No departures found at the specified location'),
-      emptyResultFavorites: _('Fant ingen favorittavganger på valgt plass.', 'No favourite departures found at the specified location'),
+      emptyResult: _(
+        'Fant ingen avganger på valgt plass.',
+        'No departures found at the specified location',
+      ),
+      emptyResultFavorites: _(
+        'Fant ingen favorittavganger på valgt plass.',
+        'No favourite departures found at the specified location',
+      ),
     },
     quayResult: {
       platformHeader: {
         accessibilityLabel: (name: string, publicCode: string) =>
-          _(`Avganger fra plattform ${name} ${publicCode}.`, `Departures from platform ${name} ${publicCode}.`),
+          _(
+            `Avganger fra plattform ${name} ${publicCode}.`,
+            `Departures from platform ${name} ${publicCode}.`,
+          ),
         accessibilityLabelNoPublicCode: (name: string) =>
-          _(`Avganger fra plattform på holdeplassen ${name}.`, `Departures from stop place platform ${name}.`),
+          _(
+            `Avganger fra plattform på holdeplassen ${name}.`,
+            `Departures from stop place platform ${name}.`,
+          ),
         distance: {
           label: (distance: string) =>
-            _(`Det er rundt ${distance} til plattform.,`, `About ${distance} to platform.`),
+            _(
+              `Det er rundt ${distance} til plattform.,`,
+              `About ${distance} to platform.`,
+            ),
         },
       },
       showMoreToggler: {
@@ -89,13 +107,20 @@ const NearbyTexts = {
         line: _(`Linje:`, 'Line'),
       },
       lineNameAccessibilityHint: _(
-        'Aktiver for detaljer om avgang og oversikt over kommende avganger.', 'Activate for departure details, and to review future departures',
+        'Aktiver for detaljer om avgang og oversikt over kommende avganger.',
+        'Activate for departure details, and to review future departures',
       ),
       favorite: {
         addFavorite: (name: string, place: string) =>
-          _(`Legg til favorittavgang: ${name} fra ${place}`, `Add favourite departure: ${name} from ${place}`),
+          _(
+            `Legg til favorittavgang: ${name} fra ${place}`,
+            `Add favourite departure: ${name} from ${place}`,
+          ),
         removeFavorite: (name: string, place: string) =>
-          _(`Fjern favorittavgang: ${name} fra ${place}`, `Delete favourite departure: ${name} from ${place}`),
+          _(
+            `Fjern favorittavgang: ${name} fra ${place}`,
+            `Delete favourite departure: ${name} from ${place}`,
+          ),
         message: {
           saved: _(`Lagt til.`, 'Added'),
           removed: _(`Fjernet.`, 'Removed'),
@@ -104,13 +129,24 @@ const NearbyTexts = {
     },
     departure: {
       hasPassedAccessibilityLabel: (time: string) =>
-        _(`Avgangen ${time} har trolig passert plattformen.`, `Departure ${time} has likely left the plattform.`),
+        _(
+          `Avgangen ${time} har trolig passert plattformen.`,
+          `Departure ${time} has likely left the plattform.`,
+        ),
       upcomingRealtimeAccessibilityLabel: (time: string) =>
-        _(`Kommende avgang estimert til ${time}.`, `Next departure estimated in ${time}.`),
+        _(
+          `Kommende avgang estimert til ${time}.`,
+          `Next departure estimated in ${time}.`,
+        ),
       upcomingAccessibilityLabel: (time: string) =>
-        _(`Kommende avgang har rutetid på ${time}.`, `Next departures route time ${time}.`),
-      nextAccessibilityLabel: (time: string) => _(`Neste avganger: ${time}`, `Next departures: ${time}`),
-      nextAccessibilityNotRealtime: (time: string) => _(`rutetid: ${time}`, `route time: ${time}`),
+        _(
+          `Kommende avgang har rutetid på ${time}.`,
+          `Next departures route time ${time}.`,
+        ),
+      nextAccessibilityLabel: (time: string) =>
+        _(`Neste avganger: ${time}`, `Next departures: ${time}`),
+      nextAccessibilityNotRealtime: (time: string) =>
+        _(`rutetid: ${time}`, `route time: ${time}`),
     },
   },
 };

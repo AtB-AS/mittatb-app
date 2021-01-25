@@ -13,23 +13,35 @@ const TicketsTexts = {
   },
   expiredTicketsTab: {
     label: _('Utløpte', 'Expired'),
-    noTickets: _('Fant ingen billetthistorikk', 'Could not find any expired tickets'),
+    noTickets: _(
+      'Fant ingen billetthistorikk',
+      'Could not find any expired tickets',
+    ),
   },
   ticket: {
     valid: {
       a11yLabel: _('Gyldig billett', 'Valid ticket'),
-      text: (duration: string) => _(`Gyldig i ${duration}`, `Valid for ${duration}`),
+      text: (duration: string) =>
+        _(`Gyldig i ${duration}`, `Valid for ${duration}`),
       durationDelimiter: _(` og `, 'and'),
     },
     expired: {
       a11yLabel: _('Utløpt billett', 'Expired ticket'),
-      text: (dateTime: string) => _(`Kjøpt ${dateTime}`, `Purchased ${dateTime}`),
+      text: (dateTime: string) =>
+        _(`Kjøpt ${dateTime}`, `Purchased ${dateTime}`),
     },
   },
   reservation: {
-    processing: _('Prosesseres... ikke gyldig enda', 'Processing... not yet valid'),
-    approved: _('Betaling godkjent. Henter billett...', 'Payment succeessful. Fetching ticket...'),
-    orderId: (orderId: string) => _(`Ordre-id ${orderId}`, `Order ID ${orderId}`),
+    processing: _(
+      'Prosesseres... ikke gyldig enda',
+      'Processing... not yet valid',
+    ),
+    approved: _(
+      'Betaling godkjent. Henter billett...',
+      'Payment succeessful. Fetching ticket...',
+    ),
+    orderId: (orderId: string) =>
+      _(`Ordre-id ${orderId}`, `Order ID ${orderId}`),
     paymentType: {
       vipps: _('Vipps'),
       creditcard: _('kredittkort', 'credit card'),

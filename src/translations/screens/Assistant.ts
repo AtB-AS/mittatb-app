@@ -80,12 +80,19 @@ const AssistantTexts = {
       listPositionExplanation: (
         resultPosition: number,
         totalResultCount: number,
-      ) => _(`Reiseforslag ${resultPosition} av ${totalResultCount}`, `Trip suggestion ${resultPosition} of ${totalResultCount}`),
+      ) =>
+        _(
+          `Reiseforslag ${resultPosition} av ${totalResultCount}`,
+          `Trip suggestion ${resultPosition} of ${totalResultCount}`,
+        ),
     },
     resultItem: {
       header: {
         time: (startTime: string, endTime: string) =>
-          _(`Fra klokken ${startTime}, til klokken ${endTime}`, `From ${startTime}, to ${endTime}`),
+          _(
+            `Fra klokken ${startTime}, til klokken ${endTime}`,
+            `From ${startTime}, to ${endTime}`,
+          ),
         totalDuration: _('Reisetid', 'Trip duration'),
       },
       hasSituationsTip: _(
@@ -115,17 +122,24 @@ const AssistantTexts = {
         ),
       },
       journeySummary: {
-        duration: (duration: string) => _(`Reisetid: ${duration}`, `Travel time: ${duration}`),
+        duration: (duration: string) =>
+          _(`Reisetid: ${duration}`, `Travel time: ${duration}`),
         legsDescription: {
           footLegsOnly: _('Hele reisen til fots', 'Foot legs only'),
           noSwitching: _('Ingen bytter', 'No transfers'),
           oneSwitch: _('Ett bytte', 'One transfer'),
-          someSwitches: (switchCount: number) => _(`${switchCount} bytter`, `${switchCount} transfers`),
+          someSwitches: (switchCount: number) =>
+            _(`${switchCount} bytter`, `${switchCount} transfers`),
         },
-        prefixedLineNumber: (number: string) => _(`nummer ${number}`, `number ${number}`),
-        totalWalkDistance: (meters: string) => _(`Totalt ${meters} meter å gå`, `Total of ${meters} meters to walk`),
+        prefixedLineNumber: (number: string) =>
+          _(`nummer ${number}`, `number ${number}`),
+        totalWalkDistance: (meters: string) =>
+          _(`Totalt ${meters} meter å gå`, `Total of ${meters} meters to walk`),
         departureInfo: (fromPlace: string, fromPlaceDepartureTime: string) =>
-          _(`Fra ${fromPlace}, klokken ${fromPlaceDepartureTime}`, `From ${fromPlace}, at ${fromPlaceDepartureTime}`),
+          _(
+            `Fra ${fromPlace}, klokken ${fromPlaceDepartureTime}`,
+            `From ${fromPlace}, at ${fromPlaceDepartureTime}`,
+          ),
       },
     },
   },

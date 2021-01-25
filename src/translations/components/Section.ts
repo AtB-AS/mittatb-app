@@ -14,12 +14,18 @@ const SectionTexts = {
     decreaseButton: {
       a11yLabel: _('Reduser antall', 'Reduce quantity'),
       a11yHint: (text: string, count: number) =>
-        _(`Aktivér for å redusere antall ${text} til ${count - 1}`, `Activate to reduce quantity ${text} to ${count - 1}`),
+        _(
+          `Aktivér for å redusere antall ${text} til ${count - 1}`,
+          `Activate to reduce quantity ${text} to ${count - 1}`,
+        ),
     },
     increaseButton: {
       a11yLabel: _('Øk antall', 'Increase quantity'),
       a11yHint: (text: string, count: number) =>
-        _(`Aktivér for å øke antall ${text} til ${count + 1}`, `Activate to increase quantity ${text} to ${count + 1}`),
+        _(
+          `Aktivér for å øke antall ${text} til ${count + 1}`,
+          `Activate to increase quantity ${text} to ${count + 1}`,
+        ),
     },
   },
   favoriteDeparture: {

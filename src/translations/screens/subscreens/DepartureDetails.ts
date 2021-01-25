@@ -7,7 +7,8 @@ const DepartureDetailsTexts = {
     },
   },
   collapse: {
-    label: (numberStops: number) => _(`${numberStops} mellomstopp`, `${numberStops} intermediate stops`),
+    label: (numberStops: number) =>
+      _(`${numberStops} mellomstopp`, `${numberStops} intermediate stops`),
   },
   messages: {
     loading: _('Laster detaljer', 'Loading details'),

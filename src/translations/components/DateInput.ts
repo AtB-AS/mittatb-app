@@ -8,7 +8,7 @@ const DateInput = {
   },
   value: {
     departureNow: (time: string) =>
-    _(`Avreise nå (${time})`, `Departing now (${time})`),
+      _(`Avreise nå (${time})`, `Departing now (${time})`),
     departure: (time: string) => _(`Avreise ${time}`, `Departure ${time}`),
     arrival: (time: string) => _(`Ankomst ${time}`, `Arrival ${time}`),
   },
