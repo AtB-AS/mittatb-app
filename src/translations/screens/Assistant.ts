@@ -2,9 +2,9 @@ import {translation as _} from '../commons';
 
 const AssistantTexts = {
   header: {
-    title: _('Reiseassistent', 'Travel assistant'),
+    title: _('Reisesøk', 'Travel assistant'),
     accessibility: {
-      logo: _('Nullstill reisesøk', 'Reset travel search'),
+      logo: _('Nullstill reisesøk', 'Reset search'),
     },
   },
   location: {

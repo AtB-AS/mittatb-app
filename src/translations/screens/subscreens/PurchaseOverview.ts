@@ -12,14 +12,14 @@ const PurchaseOverviewTexts = {
     title: _('Det oppstod en feil', 'An error occurred'),
     failedOfferSearch: _(
       'Klarte ikke å søke opp pris',
-      'Unable to retrieve price',
+      'Unable to retrieve cost',
     ),
     failedReservation: _(
       'Klarte ikke å reservere billett',
       'Unable to book a ticket',
     ),
   },
-  startTime: _('Oppstart nå', 'Valid from now'),
+  startTime: _('Oppstart nå', 'Starting now'),
   travellers: {
     travellersCount: (count: number) =>
       _(`${count} reisende`, `${count} travellers`),
@@ -32,9 +32,14 @@ const PurchaseOverviewTexts = {
     a11yHint: _('Aktivér for å velge soner', 'Activate to select zones'),
   },
   primaryButton: {
-    text: (totalPrice: number) =>
-      _(`Total: ${totalPrice},-`, `Total: ${totalPrice},-`),
-    a11yHint: _('Aktivér for å gå til betaling', 'Activate to go to payment'),
+    text: (totalPrice: number) => _(
+      `Total: ${totalPrice},-`,
+      `Total: ${totalPrice},-`
+    ),
+    a11yHint: _(
+      'Aktivér for å gå til betaling',
+      'Activate to continue to purchase',
+    ),
   },
 };
 export default PurchaseOverviewTexts;

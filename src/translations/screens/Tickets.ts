@@ -8,17 +8,17 @@ const TicketsTexts = {
     },
   },
   buyTicketsTab: {
-    label: _('Kjøp'),
+    label: _('Kjøp', 'Buy'),
   },
   activeTicketsTab: {
     label: _('Aktive', 'Valid'),
-    noTickets: _('Du har ingen aktive billetter', 'No valid tickets'),
+    noTickets: _('Du har ingen aktive billetter', 'No valid tickets right now'),
   },
   expiredTicketsTab: {
     label: _('Utløpte', 'Expired'),
     noTickets: _(
       'Fant ingen billetthistorikk',
-      'Could not find any expired tickets',
+      'Nothing to show here until you have purchased a ticket',
     ),
   },
   ticket: {

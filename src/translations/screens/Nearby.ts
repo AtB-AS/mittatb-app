@@ -63,7 +63,7 @@ const NearbyTexts = {
     stops: {
       header: {
         hintShow: _('Aktiver for å vise', 'Activate to show'),
-        hintHide: _('Aktiver for å skjul', 'Activate to hide'),
+        hintHide: _('Aktiver for å skjule', 'Activate to hide'),
       },
     },
     messages: {
@@ -72,7 +72,7 @@ const NearbyTexts = {
         'Search for departures from nearby stops or locations',
       ),
       emptyResult: _(
-        'Fant ingen avganger på valgt plass.',
+        'Fant ingen avganger på valgt sted.',
         'No departures found at the specified location',
       ),
       emptyResultFavorites: _(
