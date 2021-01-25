@@ -9,7 +9,10 @@ const TripDetailsTexts = {
   trip: {
     leg: {
       a11yHelper: (stepNumber: number, travelMode: string) =>
-        _(`Steg ${stepNumber}, ${travelMode}`),
+        _(
+          `Steg ${stepNumber}, ${travelMode}`,
+          `Step ${stepNumber}, ${travelMode}`,
+        ),
 
       start: {
         a11yLabel: {

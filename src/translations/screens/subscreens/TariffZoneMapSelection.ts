@@ -16,7 +16,8 @@ const TariffZoneMapSelectionTexts = {
       noneSelected: _(`Ingen sone valgt`, 'No zone selected'),
     },
     a11yHint: _(
-      `Aktivér for å velge denne sonen., 'Activate to select this zone`,
+      `Aktivér for å velge denne sonen.`,
+      `Activate to select this zone`,
     ),
   },
   map: {

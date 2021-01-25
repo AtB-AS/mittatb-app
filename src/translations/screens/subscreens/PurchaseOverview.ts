@@ -21,17 +21,19 @@ const PurchaseOverviewTexts = {
   },
   startTime: _('Oppstart nå', 'Starting now'),
   travellers: {
-    travellersCount: (count: number) => _(`${count} reisende`),
+    travellersCount: (count: number) =>
+      _(`${count} reisende`, `${count} travellers`),
     a11yHint: _(
       'Aktivér for å velge reisende',
-      'Activate to select travellers',
+      `Activate to select travellers`,
     ),
   },
   tariffZones: {
     a11yHint: _('Aktivér for å velge soner', 'Activate to select zones'),
   },
   primaryButton: {
-    text: (totalPrice: number) => _(`Total: ${totalPrice},-`),
+    text: (totalPrice: number) =>
+      _(`Total: ${totalPrice},-`, `Total: ${totalPrice},-`),
     a11yHint: _(
       'Aktivér for å gå til betaling',
       'Activate to continue to purchase',
