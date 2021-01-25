@@ -25,7 +25,6 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           commit-message: 'chore: update reference data'
-          committer: 'AtB Automation'
           branch: automation/update-reference-data
           delete-branch: true
           title: 'chore: update reference data'
