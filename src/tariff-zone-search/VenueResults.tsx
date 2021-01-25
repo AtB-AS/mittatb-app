@@ -8,7 +8,7 @@ import {TariffZoneSearchTexts, useTranslation} from '../translations';
 import {Location} from '../favorites/types';
 import LocationIcon from '../components/location-icon';
 import {TariffZone} from '../reference-data/types';
-import {getNameInLanguage} from '../api/utils';
+import {getReferenceDataName} from '../reference-data/utils';
 
 export type LocationAndTariffZone = {
   location: Location;
@@ -40,7 +40,7 @@ const VenueResults: React.FC<Props> = ({locationsAndTariffZones, onSelect}) => {
                   t(
                     TariffZoneSearchTexts.results.item.a11yLabel(
                       location.name,
-                      getNameInLanguage(tariffZone, language),
+                      getReferenceDataName(tariffZone, language),
                     ),
                   ) + screenReaderPause
                 }
@@ -66,7 +66,7 @@ const VenueResults: React.FC<Props> = ({locationsAndTariffZones, onSelect}) => {
                   <ThemeText type={'lead'}>
                     {t(
                       TariffZoneSearchTexts.results.item.zoneLabel(
-                        getNameInLanguage(tariffZone, language),
+                        getReferenceDataName(tariffZone, language),
                       ),
                     )}
                   </ThemeText>

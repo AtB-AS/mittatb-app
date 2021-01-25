@@ -2,10 +2,10 @@ import {translation as _} from '../../commons';
 
 const PurchaseOverviewTexts = {
   header: {
-    title: _('Kjøp ny billett'),
+    title: _('Kjøp ny billett', 'Buy new ticket'),
     leftButton: {
-      text: _('Avbryt'),
-      a11yLabel: _('Avbryt kjøpsprosessen'),
+      text: _('Avbryt', 'Cancel'),
+      a11yLabel: _('Avbryt kjøpsprosessen', 'Cancel the purchase process'),
     },
   },
   errorMessageBox: {
@@ -19,7 +19,7 @@ const PurchaseOverviewTexts = {
       'Unable to book a ticket',
     ),
   },
-  startTime: _('Oppstart nå'),
+  startTime: _('Oppstart nå', 'Valid from now'),
   travellers: {
     travellersCount: (count: number) => _(`${count} reisende`),
     a11yHint: _('Aktivér for å velge reisende'),

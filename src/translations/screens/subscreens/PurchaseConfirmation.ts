@@ -20,11 +20,15 @@ const PurchaseConfirmationTexts = {
   },
   validityTexts: {
     zone: {
-      single: (zoneName: string) => _(`Gyldig i sone ${zoneName}`),
+      single: (zoneName: string) =>
+        _(`Gyldig i sone ${zoneName}`, `Valid in zone ${zoneName}`),
       multiple: (zoneNameFrom: string, zoneNameTo: string) =>
-        _(`Gyldig fra sone ${zoneNameFrom} til sone ${zoneNameTo}`),
+        _(
+          `Gyldig fra sone ${zoneNameFrom} til sone ${zoneNameTo}`,
+          `Valid from zone ${zoneNameFrom} to zone ${zoneNameTo}`,
+        ),
     },
-    startTime: _('Gyldig fra kjøpstidspunkt'),
+    startTime: _('Gyldig fra kjøpstidspunkt', `Valid from time of purchase`),
   },
   totalCost: {
     title: _('Totalt', 'Total'),
@@ -33,8 +37,12 @@ const PurchaseConfirmationTexts = {
   infoText: {
     part1: _(
       'Denne billetten blir gyldig med en gang kjøpet blir gjennomført.',
+      'This ticket will be valid once the purchase is completed.',
     ),
-    // part2: _('Du kan angre kjøpet i 2 minutter.'),
+    // part2: _(
+    //   'Du kan angre kjøpet i 2 minutter.',
+    //   'You can undo the purchase during the first 2 minutes'
+    // ),
   },
   paymentButtonVipps: {
     text: _('Betal med Vipps', 'Pay by Vipps service'),

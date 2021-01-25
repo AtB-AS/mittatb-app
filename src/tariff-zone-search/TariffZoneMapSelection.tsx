@@ -31,7 +31,7 @@ import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
 import colors from '../theme/colors';
 import {useGeolocationState} from '../GeolocationContext';
 import {Coordinates} from '@entur/sdk';
-import {getNameInLanguage} from '../api/utils';
+import {getReferenceDataName} from '../reference-data/utils';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -170,7 +170,7 @@ const TariffZoneMapSelection: React.FC<Props> = ({
               highlightedTariffZone
                 ? t(
                     TariffZoneMapSelectionTexts.button.label.selected(
-                      getNameInLanguage(highlightedTariffZone, language),
+                      getReferenceDataName(highlightedTariffZone, language),
                     ),
                   )
                 : t(TariffZoneMapSelectionTexts.button.label.noneSelected)
@@ -260,7 +260,7 @@ const mapZonesToFeatureCollection = (
     type: 'Feature',
     id: t.id,
     properties: {
-      name: getNameInLanguage(t, language),
+      name: getReferenceDataName(t, language),
     },
     geometry: t.geometry,
   })),
