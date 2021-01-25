@@ -15,7 +15,7 @@ const getReferenceDataText = (texts: LanguageAndText[], language: Language) => {
   const norwegianText = texts.find((t) => t.lang === 'nor' || t.lang === 'nob');
   if (norwegianText) return norwegianText.value;
 
-  return texts[0].value;
+  return texts[0]?.value;
 };
 
 /**
