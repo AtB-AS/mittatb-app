@@ -12,11 +12,11 @@ const AddEditFavoriteTexts = {
       label: _('Sted', 'Place'),
       placeholder: _(
         'Søk etter adresse eller stoppested',
-        'Search for an adress or location',
+        'Search for an address or location',
       ),
       header: _(
         'Søk etter adresse eller stoppested',
-        'Search for an adress or location',
+        'Search for an address or location',
       ),
     },
     name: {

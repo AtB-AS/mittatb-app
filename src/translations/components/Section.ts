@@ -6,7 +6,7 @@ const SectionTexts = {
     updatingLocation: _('Oppdaterer posisjon', 'Updating current location'),
     placeholder: _(
       'Søk etter adresse eller sted',
-      'Search for an adress or location',
+      'Search for an address or location',
     ),
     a11yValue: (currentLocation: string) =>
       _(`${currentLocation} er valgt.`, `${currentLocation} is selected.`),

@@ -47,7 +47,7 @@ const TicketTexts = {
       success: (email: string, reference: string) =>
         _(
           `Din kvittering ble sendt til ${email} med referansen: ${reference}.`,
-          'Your receipt was sent to ${email} with refernce number: ${reference}.',
+          `Your receipt was sent to ${email} with reference number: ${reference}.`,
         ),
       defaultFallback: _(
         'Du kan få tilsendt kvittering på e-post. Fyll inn din e-postadresse under, og trykk "Send".',

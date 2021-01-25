@@ -16,7 +16,7 @@ const TripDetailsTexts = {
           noRealTime: (placeName: string, aimedTime: string) =>
             _(
               `Fra ${placeName}, ca. klokken ${aimedTime}`,
-              'From ${placeName}, appr. time ${aimedTime}',
+              `From ${placeName}, appr. time ${aimedTime}`,
             ),
           singularTime: (placeName: string, time: string) =>
             _(
@@ -30,7 +30,7 @@ const TripDetailsTexts = {
           ) =>
             _(
               `Fra ${placeName}, forventet tid klokken ${realTime}. Rutetid klokken ${aimedTime}.`,
-              'From ${placeName}, expected time ${realTime}. ROute time ${aimedTime}.',
+              `From ${placeName}, expected time ${realTime}. Route time ${aimedTime}.`,
             ),
         },
       },
@@ -83,7 +83,7 @@ const TripDetailsTexts = {
           ) =>
             _(
               `Avslutter på ${placeName}, forventet tid klokken ${realTime}. Rutetid klokken ${aimedTime}.`,
-              'Ending at ${placeName}, ETA ${realTime}. Route time ${aimedTime}.',
+              `Ending at ${placeName}, ETA ${realTime}. Route time ${aimedTime}.`,
             ),
         },
       },
@@ -113,7 +113,7 @@ const TripDetailsTexts = {
     shortTime: _('Vær oppmerksom på kort byttetid', 'Short changerover time'),
     errorNetwork: _(
       'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil.',
-      'Are you online? We´re unable to conduct a search since your device seems to be offline or the connection is unstable',
+      `Are you online? We're unable to conduct a search since your device seems to be offline or the connection is unstable`,
     ),
     errorDefault: _(
       'Vi kunne ikke oppdatere reiseforslaget ditt. Det kan hende reisen har endra seg eller er utdatert?',

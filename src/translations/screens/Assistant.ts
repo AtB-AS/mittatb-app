@@ -13,7 +13,7 @@ const AssistantTexts = {
       a11yLabel: _('Velg avreisested', 'Select place of departure'),
       a11yHint: _(
         'Aktivér for å søke etter adresse eller sted',
-        'Activate to search for an adress or location',
+        'Activate to search for an address or location',
       ),
     },
     destinationPicker: {
@@ -21,7 +21,7 @@ const AssistantTexts = {
       a11yLabel: _('Velg ankomststed', 'Select place of arrival'),
       a11yHint: _(
         'Aktivér for å søke etter adresse eller sted',
-        'Activate to search for an adress or location',
+        'Activate to search for an address or location',
       ),
     },
     locationButton: {
@@ -58,7 +58,7 @@ const AssistantTexts = {
     error: {
       network: _(
         'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil',
-        'Are you online? We´re unable to conduct a search since your device seems to be offline or the connection is unstable',
+        `Are you online? We're unable to conduct a search since your device seems to be offline or the connection is unstable`,
       ),
       generic: _(
         'Oops - vi feila med søket. Supert om du prøver igjen 🤞',

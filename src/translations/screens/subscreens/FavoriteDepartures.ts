@@ -5,7 +5,7 @@ const FavoriteDeparturesTexts = {
   },
   noFavorites: _(
     'Du har ingen favorittavganger. Du kan legge til med å stjernemarkere i Avganger-visningen.',
-    'You don´t have any favourite departures. Add one by clicking a start in the Departures view',
+    `You don't have any favourite departures. Add one by clicking a start in the Departures view`,
   ),
   favoriteItemDelete: {
     a11yHint: _(
@@ -17,7 +17,7 @@ const FavoriteDeparturesTexts = {
     label: _('Fjerne avgang?', 'Delete departure?'),
     confirmWarning: _(
       'Sikker på at du vil fjerne favorittavgang?',
-      'Sure you want to delete this favourite?',
+      'Are you sure you want to delete this favourite?',
     ),
     cancel: _('Avbryt', 'Cancel'),
     delete: _('Slett', 'Delete'),

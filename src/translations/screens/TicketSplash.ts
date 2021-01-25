@@ -11,7 +11,7 @@ const TicketSplashTexts = {
     title: _('Billettkjøp i app kommer snart!', 'App ticketing on its way!'),
     paragraph1: _(
       'Herfra kan du snart kjøpe og administrere billetter til reisen din!.',
-      'Soon you can purchase and organise tickets for your trips – righ here in the app!',
+      'Soon you can purchase and organise tickets for your trips – right here in the app!',
     ),
     betaButtonLabel: _(
       'Jeg har kode til beta for billettkjøp',

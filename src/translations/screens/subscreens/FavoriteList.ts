@@ -19,6 +19,7 @@ const FavoriteListTexts = {
     messages: {
       error: _(
         'Ooops. Fikk ikke til å lagre favoritter. Prøv igjen er du snill. 🤞',
+        'Whoops. We were unable to save your favourites. Please try again. 🤞',
       ),
     },
     buttons: {

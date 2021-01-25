@@ -24,7 +24,7 @@ const LocationSearchTexts = {
   messages: {
     networkError: _(
       'Hei, er du på nett? Vi kan ikke søke siden nettforbindelsen din mangler eller er ustabil.',
-      'Are you online? We´re unable to conduct a search since your device seems to be offline or the connection is unstable',
+      `Are you online? We're unable to conduct a search since your device seems to be offline or the connection is unstable`,
     ),
     defaultError: _(
       'Oops - vi feila med søket. Supert om du prøver igjen 🤞',
@@ -50,7 +50,7 @@ const LocationSearchTexts = {
         ),
         message: _(
           'Er du i nærheten av en adresse, vei eller stoppested?',
-          'Are you nearby an adress, public road or stop place?',
+          'Are you nearby an address, public road or stop place?',
         ),
       },
       networkError: {

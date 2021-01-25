@@ -5,7 +5,7 @@ const OnboardingTexts = {
     title: _('Velkommen som testpilot', 'Welcome test pilot!'),
     description: _(
       'Du bruker nå en betaversjon av den nye AtB-appen. Her kan du planlegge reiser og sjekke avgangstider i Trøndelag. Appen vil bli jevnlig oppdatert med nye funksjoner.',
-      'This is your new AtB travel app in beta stage. It helps you plan trips and look up availalble mobility services from locations within Trøndelag county. We are frequently adding new features and improvements.',
+      'This is your new AtB travel app in beta stage. It helps you plan trips and look up available mobility services from locations within Trøndelag county. We are frequently adding new features and improvements.',
     ),
   },
   step2: {
