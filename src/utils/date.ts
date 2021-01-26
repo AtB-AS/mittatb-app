@@ -112,7 +112,7 @@ export function formatLocaleTime(date: Date, language: Language) {
     case Language.Norwegian:
       return format(date, 'HH:mm');
     case Language.English:
-      return format(date, 'h:mm a');
+      return format(date, 'HH:mm');
   }
 }
 export function isInThePast(isoDate: string | Date) {

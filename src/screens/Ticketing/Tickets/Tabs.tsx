@@ -23,6 +23,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
   const {must_upgrade_ticketing} = useRemoteConfig();
+  const {t} = useTranslation();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
@@ -32,7 +33,8 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
       <View style={{padding: theme.spacings.medium}}>
         <Button
           mode="primary"
-          text="Kjøp ny billett"
+          text={t(TicketsTexts.buyTicketsTab.button.text)}
+          accessibilityHint={t(TicketsTexts.buyTicketsTab.button.a11yHint)}
           onPress={() => navigation.navigate('TicketPurchase', {})}
         />
       </View>

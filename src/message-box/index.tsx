@@ -10,10 +10,17 @@ import {StyleSheet} from '../theme';
 import ThemeText from '../components/text';
 import ThemeIcon from '../components/theme-icon';
 import hexToRgba from 'hex-to-rgba';
+import MessageBoxTexts from '../translations/components/MessageBox';
+import {useTranslation} from '../translations';
 
-type WithMessage = {message: string; children?: never};
+type WithMessage = {
+  message: string;
+  retryFunction?: () => void;
+  children?: never;
+};
 type WithChildren = {
   message?: never;
+  retryFunction?: never;
   children: React.ReactNode;
 };
 export type MessageType = 'info' | 'warning' | 'error' | 'success';
@@ -33,12 +40,25 @@ const MessageBox: React.FC<MessageBoxProps> = ({
   children,
   title,
   withMargin = false,
+  retryFunction,
 }) => {
   const styles = useBoxStyle();
+  const {t} = useTranslation();
   const iconElement =
     typeof icon !== 'undefined' ? icon : <ThemeIcon svg={typeToIcon(type)} />;
   const child = message ? (
-    <ThemeText style={styles.text}>{message}</ThemeText>
+    <>
+      <ThemeText style={styles.text}>{message}</ThemeText>
+      {retryFunction && (
+        <ThemeText
+          style={styles.retryText}
+          type="body__link"
+          onPress={retryFunction}
+        >
+          {t(MessageBoxTexts.tryAgainButton)}
+        </ThemeText>
+      )}
+    </>
   ) : (
     children
   );
@@ -96,6 +116,9 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
   text: {
     ...theme.text.body,
     color: theme.text.colors.primary,
+  },
+  retryText: {
+    marginTop: theme.spacings.medium,
   },
   titleContainer: {
     flexDirection: 'row',

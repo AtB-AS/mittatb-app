@@ -9,13 +9,11 @@ import {
   TariffZone,
 } from '../../../../reference-data/types';
 
-type OfferErrorContext = 'failed_offer_search' | 'failed_reservation';
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: Offer;
 };
 
-export type OfferError = {
-  context: OfferErrorContext;
+type OfferError = {
   type: ErrorType;
 };
 
@@ -100,6 +98,7 @@ const getOfferReducer = (
       return {
         ...prevState,
         error: action.error,
+        isSearchingOffer: false,
       };
     }
   }
@@ -161,7 +160,6 @@ export default function useOfferState(
             dispatch({
               type: 'SET_ERROR',
               error: {
-                context: 'failed_offer_search',
                 type: errorType,
               },
             });

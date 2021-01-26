@@ -9,6 +9,13 @@ const TicketsTexts = {
   },
   buyTicketsTab: {
     label: _('Kjøp', 'Buy'),
+    button: {
+      text: _('Kjøp ny billett', 'Buy new ticket'),
+      a11yHint: _(
+        'Aktivér for å kjøpe ny billett',
+        'Activate to buy a new ticket',
+      ),
+    },
   },
   activeTicketsTab: {
     label: _('Aktive', 'Valid'),

@@ -9,13 +9,9 @@ const PurchaseConfirmationTexts = {
   },
   errorMessageBox: {
     title: _('Det oppstod en feil', 'An error occurred'),
-    failedOfferSearch: _(
-      'Klarte ikke å søke opp pris',
-      'Unable to retrieve cost',
-    ),
-    failedReservation: _(
-      'Klarte ikke å reservere billett',
-      'Unable to book a ticket',
+    message: _(
+      'Oops - vi klarte ikke å søke opp prisen. Supert om du prøver igjen 🤞',
+      'Whoops - we were unable to retrieve cost. Please try again 🤞',
     ),
   },
   validityTexts: {
