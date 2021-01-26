@@ -268,7 +268,7 @@ export function LocationSearchContent({
       ) : (
         !error &&
         !!text && (
-          <View style={styles.contentBlock}>
+          <View style={[styles.contentBlock, styles.marginTop]}>
             <MessageBox type="info">
               <ThemeText>
                 {t(LocationSearchTexts.messages.emptyResult)}
@@ -358,6 +358,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   contentBlock: {
     paddingHorizontal: theme.spacings.medium,
+  },
+  marginTop: {
+    marginTop: theme.spacings.medium,
   },
   fullFlex: {
     flex: 1,
