@@ -9,7 +9,7 @@ import ThemeText from '../../../../components/text';
 import ThemeIcon from '../../../../components/theme-icon';
 import Button from '../../../../components/button';
 import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
-import useOfferState, {OfferError} from './use-offer-state';
+import useOfferState from './use-offer-state';
 import MessageBox from '../../../../message-box';
 import * as Sections from '../../../../components/sections';
 import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
@@ -107,7 +107,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           <MessageBox
             type="warning"
             title={t(PurchaseOverviewTexts.errorMessageBox.title)}
-            message={t(translateError(error))}
+            message={t(PurchaseOverviewTexts.errorMessageBox.message)}
+            retryFunction={refreshOffer}
+            containerStyle={styles.errorMessage}
           />
         )}
 
@@ -156,7 +158,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         <Button
           mode="primary"
           text={t(PurchaseOverviewTexts.primaryButton.text(totalPrice))}
-          disabled={isSearchingOffer || !totalPrice}
+          disabled={isSearchingOffer || !totalPrice || !!error}
           accessibilityHint={t(PurchaseOverviewTexts.primaryButton.a11yHint)}
           onPress={() => {
             navigation.navigate('Confirmation', {
@@ -191,20 +193,13 @@ const createTravellersText = (
   }
 };
 
-function translateError(error: OfferError) {
-  const {context} = error;
-  switch (context) {
-    case 'failed_offer_search':
-      return PurchaseOverviewTexts.errorMessageBox.failedOfferSearch;
-    case 'failed_reservation':
-      return PurchaseOverviewTexts.errorMessageBox.failedReservation;
-  }
-}
-
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.background.level2,
+  },
+  errorMessage: {
+    marginBottom: theme.spacings.medium,
   },
   selectionLinks: {margin: theme.spacings.medium},
   toPaymentButton: {marginHorizontal: theme.spacings.medium},

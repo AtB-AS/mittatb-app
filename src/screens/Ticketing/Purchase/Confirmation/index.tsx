@@ -8,7 +8,7 @@ import {StyleSheet, useTheme} from '../../../../theme';
 import ThemeText from '../../../../components/text';
 import Button from '../../../../components/button';
 import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
-import useOfferState, {OfferError} from '../Overview/use-offer-state';
+import useOfferState from '../Overview/use-offer-state';
 import {addMinutes} from 'date-fns';
 import MessageBox from '../../../../message-box';
 import {CreditCard, Vipps} from '../../../../assets/svg/icons/ticketing';
@@ -122,7 +122,9 @@ const Confirmation: React.FC<ConfirmationProps> = ({
             <MessageBox
               type="warning"
               title={t(PurchaseConfirmationTexts.errorMessageBox.title)}
-              message={t(translateError(error))}
+              message={t(PurchaseConfirmationTexts.errorMessageBox.message)}
+              retryFunction={refreshOffer}
+              containerStyle={styles.errorMessage}
             />
           )}
 
@@ -218,7 +220,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           <Button
             mode="primary2"
             text={t(PurchaseConfirmationTexts.paymentButtonVipps.text)}
-            disabled={isSearchingOffer}
+            disabled={isSearchingOffer || !!error}
             accessibilityHint={t(
               PurchaseConfirmationTexts.paymentButtonVipps.a11yHint,
             )}
@@ -231,7 +233,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
             <Button
               mode="primary2"
               text={t(PurchaseConfirmationTexts.paymentButtonCard.text)}
-              disabled={isSearchingOffer}
+              disabled={isSearchingOffer || !!error}
               accessibilityHint={t(
                 PurchaseConfirmationTexts.paymentButtonCard.a11yHint,
               )}
@@ -246,16 +248,6 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     </View>
   );
 };
-
-function translateError(error: OfferError) {
-  const {context} = error;
-  switch (context) {
-    case 'failed_offer_search':
-      return PurchaseConfirmationTexts.errorMessageBox.failedOfferSearch;
-    case 'failed_reservation':
-      return PurchaseConfirmationTexts.errorMessageBox.failedReservation;
-  }
-}
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
@@ -273,6 +265,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   header: {
     paddingHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
+  },
+  errorMessage: {
     marginBottom: theme.spacings.medium,
   },
   ticketInfoSection: {paddingHorizontal: theme.spacings.medium},
