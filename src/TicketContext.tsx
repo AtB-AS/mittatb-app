@@ -179,25 +179,25 @@ const TicketContextProvider: React.FC = ({children}) => {
     [dispatch],
   );
 
-  useInterval(
-    pollPaymentStatus,
-    500,
-    [activeReservations],
-    !activeReservations.length ||
-      activeReservations.every((res) => res.paymentStatus === 'CAPTURE'),
-  );
+  // useInterval(
+  //   pollPaymentStatus,
+  //   500,
+  //   [activeReservations],
+  //   !activeReservations.length ||
+  //     activeReservations.every((res) => res.paymentStatus === 'CAPTURE'),
+  // );
 
-  useInterval(
-    updateFareContracts,
-    1000,
-    [],
-    !state.errorRefreshingTickets &&
-      !activeReservations.some((res) => res.paymentStatus === 'CAPTURE'),
-  );
+  // useInterval(
+  //   updateFareContracts,
+  //   1000,
+  //   [],
+  //   !state.errorRefreshingTickets &&
+  //     !activeReservations.some((res) => res.paymentStatus === 'CAPTURE'),
+  // );
 
-  useEffect(() => {
-    updateFareContracts();
-  }, []);
+  // useEffect(() => {
+  //   updateFareContracts();
+  // }, []);
 
   return (
     <TicketContext.Provider

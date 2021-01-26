@@ -46,13 +46,7 @@ const TripDetailsRoot = ({route}: TripDetailsRootProps) => {
           ...TransitionPresets.SlideFromRightIOS,
         }}
       />
-      <Stack.Screen
-        name="DepartureDetails"
-        component={DepartureDetails}
-        options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}
-      />
+      <Stack.Screen name="DepartureDetails" component={DepartureDetails} />
     </Stack.Navigator>
   );
 };

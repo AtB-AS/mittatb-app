@@ -1,11 +1,18 @@
-import {RouteProp, useIsFocused} from '@react-navigation/native';
+import {
+  NavigationProp,
+  RouteProp,
+  useIsFocused,
+} from '@react-navigation/native';
 import {parseISO} from 'date-fns';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {DetailsModalNavigationProp, DetailsStackParams} from '..';
-import {getDepartures} from '../../../api/serviceJourney';
+import {DetailsStackParams} from '..';
+import {
+  getDepartures,
+  getServiceJourneyMapLegs,
+} from '../../../api/serviceJourney';
 import {Close} from '../../../assets/svg/icons/actions';
 import {
   ArrowLeft,
@@ -18,7 +25,7 @@ import ThemeIcon from '../../../components/theme-icon';
 import ScreenHeader from '../../../ScreenHeader';
 import {
   EstimatedCall,
-  Place,
+  ServiceJourneyMapInfoData,
   Situation,
   TransportMode,
   TransportSubmode,
@@ -52,9 +59,13 @@ export type DetailScreenRouteProp = RouteProp<
   'DepartureDetails'
 >;
 
+export type DepartureDetailScreenNavigationProp = NavigationProp<
+  DetailsStackParams
+>;
+
 type Props = {
   route: DetailScreenRouteProp;
-  navigation: DetailsModalNavigationProp;
+  navigation: DepartureDetailScreenNavigationProp;
 };
 
 export default function DepartureDetails({navigation, route}: Props) {
@@ -83,6 +94,8 @@ export default function DepartureDetails({navigation, route}: Props) {
     !isFocused,
   );
 
+  const mapData = useMapData(serviceJourneyId, fromQuayId);
+
   const content = isLoading ? (
     <View>
       <ActivityIndicator
@@ -97,16 +110,20 @@ export default function DepartureDetails({navigation, route}: Props) {
     </View>
   ) : (
     <View style={{flex: 1}}>
-      <CompactMap
-        mapLegs={[]}
-        // fromPlace={tripPattern.legs[0].fromPlace}
-        // toPlace={tripPattern.legs[tripPattern.legs.length - 1].toPlace}
-        // onExpand={() => {
-        //   // props.navigation.navigate('DetailsMap', {
-        //   //   legs: tripPattern.legs,
-        //   // });
-        // }}
-      />
+      {mapData && (
+        <CompactMap
+          mapLegs={mapData.mapLegs}
+          fromPlace={mapData.start}
+          toPlace={mapData.stop}
+          onExpand={() => {
+            navigation.navigate('DetailsMap', {
+              legs: mapData.mapLegs,
+              fromPlace: mapData.start,
+              toPlace: mapData.stop,
+            });
+          }}
+        />
+      )}
 
       <ScrollView style={styles.scrollView}>
         <SituationMessages
@@ -134,7 +151,7 @@ export default function DepartureDetails({navigation, route}: Props) {
       <ScreenHeader
         leftButton={{
           onPress: () => navigation.goBack(),
-          icon: <ThemeIcon svg={isBack ? ArrowLeft : Close} />,
+          icon: <ThemeIcon svg={ArrowLeft} />,
           accessible: true,
           accessibilityRole: 'button',
           accessibilityLabel: t(
@@ -324,6 +341,22 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.medium,
   },
 }));
+
+function useMapData(serviceJourneyId: string, fromQuayId?: string) {
+  const [mapData, setMapData] = useState<ServiceJourneyMapInfoData>();
+  useEffect(() => {
+    const getData = async () => {
+      const result = await getServiceJourneyMapLegs(
+        serviceJourneyId,
+        fromQuayId,
+      );
+      setMapData(result);
+    };
+
+    getData();
+  }, [serviceJourneyId, fromQuayId]);
+  return mapData;
+}
 
 type DepartureData = {
   callGroups: CallListGroup;

@@ -113,6 +113,9 @@ const Details: React.FC<Props> = (props) => {
               onExpand={() => {
                 props.navigation.navigate('DetailsMap', {
                   legs: tripPattern.legs,
+                  fromPlace: tripPattern.legs[0].fromPlace,
+                  toPlace:
+                    tripPattern.legs[tripPattern.legs.length - 1].toPlace,
                 });
               }}
             />

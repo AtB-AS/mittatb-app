@@ -13,6 +13,7 @@ import {flatMap} from '../../../utils/array';
 export interface MapLine extends Feature<LineString> {
   travelType?: LegMode;
   subMode?: TransportSubmode;
+  faded?: boolean;
 }
 
 export function getMapBounds(features: MapLine[]) {
@@ -57,6 +58,7 @@ export function createMapLines(legs: MapLeg[]): MapLine[] {
       return {
         type: 'Feature',
         properties: {},
+        faded: leg.faded,
         travelType: leg.mode,
         subMode: leg.transportSubmode,
         geometry: line,

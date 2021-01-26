@@ -1,5 +1,5 @@
 import {formatISO} from 'date-fns';
-import {EstimatedCall} from '../sdk';
+import {EstimatedCall, ServiceJourneyMapInfoData} from '../sdk';
 import client from './client';
 
 type ServiceJourneDepartures = {
@@ -16,4 +16,20 @@ export async function getDepartures(
   }
   const response = await client.get<ServiceJourneDepartures>(url);
   return response.data?.value ?? [];
+}
+
+export async function getServiceJourneyMapLegs(
+  id: string,
+  currentQuayId?: string,
+): Promise<ServiceJourneyMapInfoData> {
+  let url = `bff/v1/servicejourney/${encodeURIComponent(id)}/polyline`;
+  if (currentQuayId) {
+    url = url + `?currentQuayId=${encodeURIComponent(currentQuayId)}`;
+  }
+  const response = await client.get<ServiceJourneyMapInfoData>(url);
+  return (
+    response.data ?? {
+      mapLegs: [],
+    }
+  );
 }

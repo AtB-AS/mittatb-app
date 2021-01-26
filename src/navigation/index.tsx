@@ -38,7 +38,6 @@ export type RootStackParamList = {
   TabNavigator: undefined;
   LocationSearch: LocationSearchParams;
   TariffZoneSearch: TariffZoneSearchParams;
-  DepartureDetailsModal: DepartureDetailsRouteParams;
   SortableFavoriteList: undefined;
   AddEditFavorite: NavigatorScreenParams<AddEditFavoriteRootParams>;
   TicketPurchase: TicketPurchaseParams;
@@ -86,16 +85,6 @@ const NavigationRoot = () => {
             ) : (
               <>
                 <Stack.Screen name="TabNavigator" component={TabNavigator} />
-                <Stack.Screen
-                  name="DepartureDetailsModal"
-                  component={DepartureDetails}
-                  options={{
-                    transitionSpec: {
-                      open: transitionSpec,
-                      close: transitionSpec,
-                    },
-                  }}
-                />
                 <Stack.Screen
                   name="LocationSearch"
                   component={LocationSearch}
