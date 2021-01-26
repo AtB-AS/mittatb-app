@@ -8,7 +8,7 @@ export enum Language {
 }
 export const appLanguages = ['nb', 'en'] as const;
 
-export const DEFAULT_LANGUAGE = Language.English;
+export const DEFAULT_LANGUAGE = Language.Norwegian;
 export type TranslatedString = Translatable<typeof Language, string>;
 
 export const lobot = initLobot<typeof Language>(DEFAULT_LANGUAGE);
