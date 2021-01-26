@@ -68,14 +68,10 @@ export default function NearbyResults({
   return (
     <View style={styles.container}>
       {error && (
-        <>
+        <View style={styles.container__paddedTop}>
           <ScreenReaderAnnouncement message={error} />
-          <MessageBox
-            type="warning"
-            message={error}
-            containerStyle={{marginBottom: 24}}
-          />
-        </>
+          <MessageBox type="warning" message={error} />
+        </View>
       )}
 
       {departures && (
