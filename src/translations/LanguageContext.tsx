@@ -36,9 +36,13 @@ function useLanguage() {
 
   useEffect(() => {
     if (useSystemLanguage) {
+      // Get preferred locale from system settings.
+      // If no system settings match our languages we select
+      // English as it is more likely they know english than Norwegian.
+      // If locale is undefined we don't support any of the system languages.
       const language = locale
         ? getAsAppLanguage(locale.languageCode)
-        : DEFAULT_LANGUAGE;
+        : Language.English;
       setCurrentLanguage(language);
     } else {
       const newLanguage = getAsAppLanguage(
@@ -53,11 +57,16 @@ function useLanguage() {
 
 function preferredLocale(): RNLocalize.Locale | undefined {
   const preferredSystemLocales = RNLocalize.getLocales();
-  const locale = preferredSystemLocales.find(
-    (l) => !!getAsAppLanguage(l.languageCode),
-  );
+  const locale = preferredSystemLocales.find(isAppLanguage);
   return locale;
 }
+function isAppLanguage(arg?: RNLocalize.Locale): boolean {
+  return (
+    arg?.languageCode == Language.English ||
+    arg?.languageCode == Language.Norwegian
+  );
+}
+
 function getAsAppLanguage(arg?: string): Language {
   if (arg == Language.English) {
     return Language.English;
