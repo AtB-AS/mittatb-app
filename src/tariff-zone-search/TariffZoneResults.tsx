@@ -49,7 +49,7 @@ const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
                 </View>
                 <View style={styles.nameContainer}>
                   <ThemeText style={styles.nameText}>
-                    getReferenceDataName(tariffZone, language)
+                    {getReferenceDataName(tariffZone, language)}
                   </ThemeText>
                 </View>
               </TouchableOpacity>
