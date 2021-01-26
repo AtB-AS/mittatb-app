@@ -7,7 +7,7 @@ import {MapIcon} from '../../../assets/svg/map';
 import Button from '../../../components/button';
 import {MapCameraConfig, MapViewConfig} from '../../../components/map';
 import {Coordinates, MapLeg, Place} from '../../../sdk';
-import {StyleSheet} from '../../../theme';
+import {StyleSheet, useTheme} from '../../../theme';
 import {MapTexts, useTranslation} from '../../../translations';
 import insets from '../../../utils/insets';
 import useDisableMapCheck from '../../../utils/use-disable-map-check';
@@ -17,21 +17,18 @@ import {createMapLines, getMapBounds, pointOf} from './utils';
 
 export type MapProps = {
   mapLegs: MapLeg[];
-  fromPlace: Coordinates | Position;
-  toPlace: Coordinates | Position;
-  darkMode?: boolean;
-  onExpand(): void;
+  fromPlace?: Coordinates | Position;
+  toPlace?: Coordinates | Position;
+  onExpand?(): void;
 };
 
 export const CompactMap: React.FC<MapProps> = ({
   mapLegs,
   fromPlace,
   toPlace,
-  darkMode,
   onExpand,
 }) => {
-  const startPoint = pointOf(fromPlace);
-  const endPoint = pointOf(toPlace);
+  const {themeName} = useTheme();
   const disableMap = useDisableMapCheck();
   const {t} = useTranslation();
 
@@ -41,8 +38,10 @@ export const CompactMap: React.FC<MapProps> = ({
   const [loadingMap, setLoadingMap] = useState(true);
   const styles = useStyles();
 
+  const darkmode = themeName === 'dark';
+
   const expandMap = () => {
-    if (!loadingMap) onExpand();
+    if (!loadingMap) onExpand?.();
   };
 
   if (disableMap) {
@@ -62,7 +61,7 @@ export const CompactMap: React.FC<MapProps> = ({
           log('Finished loading map');
         }}
         {...MapViewConfig}
-        styleURL={darkMode ? 'mapbox://styles/mapbox/dark-v10' : undefined}
+        styleURL={darkmode ? 'mapbox://styles/mapbox/dark-v10' : undefined}
         compassEnabled={false}
         onPress={expandMap}
       >
@@ -72,28 +71,34 @@ export const CompactMap: React.FC<MapProps> = ({
           animationDuration={0}
         />
         <MapRoute lines={features}></MapRoute>
-        <MapLabel
-          point={endPoint}
-          id={'end'}
-          text={t(MapTexts.endPoint.label)}
-        ></MapLabel>
-        <MapLabel
-          point={startPoint}
-          id={'start'}
-          text={t(MapTexts.startPoint.label)}
-        ></MapLabel>
+        {toPlace && (
+          <MapLabel
+            point={pointOf(toPlace)}
+            id={'end'}
+            text={t(MapTexts.endPoint.label)}
+          />
+        )}
+        {fromPlace && (
+          <MapLabel
+            point={pointOf(fromPlace)}
+            id={'start'}
+            text={t(MapTexts.startPoint.label)}
+          />
+        )}
       </MapboxGL.MapView>
-      <View style={styles.togglerContainer}>
-        <Button
-          style={styles.toggler}
-          type="inline"
-          mode="tertiary"
-          onPress={expandMap}
-          hitSlop={insets.symmetric(8, 12)}
-          text={t(MapTexts.expandButton.label)}
-          icon={MapIcon}
-        ></Button>
-      </View>
+      {onExpand && (
+        <View style={styles.togglerContainer}>
+          <Button
+            style={styles.toggler}
+            type="inline"
+            mode="tertiary"
+            onPress={expandMap}
+            hitSlop={insets.symmetric(8, 12)}
+            text={t(MapTexts.expandButton.label)}
+            icon={MapIcon}
+          ></Button>
+        </View>
+      )}
     </View>
   );
 };

@@ -34,7 +34,7 @@ const Details: React.FC<Props> = (props) => {
   const {
     params: {tripPatternId, tripPatterns: initialTripPatterns, startIndex},
   } = props.route;
-  const {theme, themeName} = useTheme();
+  const {theme} = useTheme();
   const {t} = useTranslation();
   const isFocused = useIsFocused();
   const styles = useStyle();
@@ -110,7 +110,6 @@ const Details: React.FC<Props> = (props) => {
               mapLegs={tripPattern.legs}
               fromPlace={tripPattern.legs[0].fromPlace}
               toPlace={tripPattern.legs[tripPattern.legs.length - 1].toPlace}
-              darkMode={themeName === 'dark'}
               onExpand={() => {
                 props.navigation.navigate('DetailsMap', {
                   legs: tripPattern.legs,

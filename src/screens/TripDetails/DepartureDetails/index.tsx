@@ -97,17 +97,16 @@ export default function DepartureDetails({navigation, route}: Props) {
     </View>
   ) : (
     <View style={{flex: 1}}>
-      {/* <CompactMap
+      <CompactMap
         mapLegs={[]}
-        fromPlace={tripPattern.legs[0].fromPlace}
-        toPlace={tripPattern.legs[tripPattern.legs.length - 1].toPlace}
-        darkMode={themeName === 'dark'}
-        onExpand={() => {
-          props.navigation.navigate('DetailsMap', {
-            legs: tripPattern.legs,
-          });
-        }}
-      /> */}
+        // fromPlace={tripPattern.legs[0].fromPlace}
+        // toPlace={tripPattern.legs[tripPattern.legs.length - 1].toPlace}
+        // onExpand={() => {
+        //   // props.navigation.navigate('DetailsMap', {
+        //   //   legs: tripPattern.legs,
+        //   // });
+        // }}
+      />
 
       <ScrollView style={styles.scrollView}>
         <SituationMessages
