@@ -72,21 +72,24 @@ export default function LineItem({
 
   const title = `${group.lineInfo?.lineNumber} ${group.lineInfo?.lineName}`;
 
-  const onPress = (departure: DepartureTime) => {
+  const items = group.departures.map((dep) => ({
+    serviceJourneyId: dep.serviceJourneyId!,
+    date: dep.time,
+    fromQuayId: group.lineInfo?.quayId,
+  }));
+
+  const onPress = (activeItemIndex: number) => {
     navigation.navigate('TripDetails', {
       screen: 'DepartureDetails',
       params: {
-        title,
-        serviceJourneyId: departure.serviceJourneyId!,
-        date: departure.aimedTime,
-        fromQuayId: group.lineInfo?.quayId,
+        activeItemIndex,
+        items,
       },
     });
   };
 
   // we know we have a departure as we've checked hasNoDeparturesOnGroup
   const nextValids = group.departures.filter(isValidDeparture);
-  const firstResult = nextValids[0]!;
 
   return (
     <View style={[topContainer, {padding: 0}]}>
@@ -94,7 +97,7 @@ export default function LineItem({
         <TouchableOpacity
           style={styles.lineHeader}
           containerStyle={contentContainer}
-          onPress={() => onPress(firstResult)}
+          onPress={() => onPress(0)}
           hitSlop={insets.symmetric(12, 0)}
           accessibilityRole="button"
           accessibilityHint={
@@ -128,11 +131,11 @@ export default function LineItem({
         accessibilityElementsHidden
         importantForAccessibility="no-hide-descendants"
       >
-        {group.departures.map((departure) => (
+        {group.departures.map((departure, i) => (
           <DepartureTimeItem
             departure={departure}
             key={departure.serviceJourneyId + departure.aimedTime}
-            onPress={onPress}
+            onPress={() => onPress(i)}
           />
         ))}
       </ScrollView>

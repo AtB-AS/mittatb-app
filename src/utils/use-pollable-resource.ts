@@ -1,6 +1,7 @@
 import {useState, useCallback, useEffect} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import useInterval from './use-interval';
+import useDebounce from './useDebounce';
 
 type PollableResourceOptions<T, E> = {
   initialValue: T;
@@ -25,7 +26,8 @@ export default function usePollableResource<T, E extends Error = Error>(
 ): [T, () => Promise<void>, boolean, E?] {
   const {initialValue, pollingTimeInSeconds = 30, disabled, filterError} = opts;
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingInternal, setIsLoading] = useState<boolean>(false);
+  const isLoading = useDebounce(isLoadingInternal, 500);
   const [error, setError] = useState<E | undefined>(undefined);
   const [state, setState] = useState<T>(initialValue);
   const pollTime = pollingTimeInSeconds * 1000;

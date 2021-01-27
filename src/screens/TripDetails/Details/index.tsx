@@ -7,7 +7,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DetailsStackParams} from '..';
 import {getSingleTripPattern} from '../../../api/trips';
 import {ArrowLeft} from '../../../assets/svg/icons/navigation';
-import Pagination from '../../../components/pagination';
+import PaginatedDetailsHeader from '../../../components/pagination';
 import ThemeIcon from '../../../components/theme-icon';
 import Header from '../../../ScreenHeader';
 import {TripPattern} from '../../../sdk';
@@ -122,7 +122,7 @@ const Details: React.FC<Props> = (props) => {
             />
             <View style={styles.paddedContainer}>
               {tripPatterns.length > 1 && (
-                <Pagination
+                <PaginatedDetailsHeader
                   page={currentIndex + 1}
                   totalPages={tripPatterns.length}
                   onNavigate={navigate}
