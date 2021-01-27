@@ -30,6 +30,8 @@ const PurchaseOverviewTexts = {
   primaryButton: {
     text: (totalPrice: number) =>
       _(`Total: ${totalPrice},-`, `Total: ${totalPrice},-`),
+    a11yLabel: (totalPrice: number) =>
+      _(`Betal totalt ${totalPrice}`, `Pay a total of ${totalPrice}`),
     a11yHint: _(
       'Aktivér for å gå til betaling',
       'Activate to continue to purchase',

@@ -54,6 +54,9 @@ const ValidityHeader: React.FC<{
           icon={Context}
           style={{padding: 0}}
           onPress={onPressDetails}
+          accessibilityLabel={t(
+            TicketTexts.validityHeader.detailsButton.a11yLabel,
+          )}
         />
       )}
     </View>

@@ -40,6 +40,7 @@ export default function LinkItem({
       accessibilityRole="link"
       onPress={onPress}
       disabled={disabled}
+      accessibilityState={{disabled}}
       style={topContainer}
       {...accessibility}
     >
