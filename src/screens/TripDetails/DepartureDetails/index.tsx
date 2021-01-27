@@ -354,12 +354,14 @@ function useMapData(
   const [mapData, setMapData] = useState<ServiceJourneyMapInfoData>();
   useEffect(() => {
     const getData = async () => {
-      const result = await getServiceJourneyMapLegs(
-        serviceJourneyId,
-        fromQuayId,
-        toQuayId,
-      );
-      setMapData(result);
+      try {
+        const result = await getServiceJourneyMapLegs(
+          serviceJourneyId,
+          fromQuayId,
+          toQuayId,
+        );
+        setMapData(result);
+      } catch (e) {}
     };
 
     getData();
