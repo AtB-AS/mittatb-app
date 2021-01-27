@@ -21,7 +21,6 @@ import {
 } from '../../GeolocationContext';
 import {useLocationSearchValue} from '../../location-search';
 import {RootStackParamList} from '../../navigation';
-import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import {StyleSheet, useTheme} from '../../theme';
 import {
   AssistantTexts,
