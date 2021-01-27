@@ -5,7 +5,6 @@ import {
 } from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DetailsStackParams} from '..';
 import {getServiceJourneyMapLegs} from '../../../api/serviceJourney';
@@ -87,8 +86,22 @@ export default function DepartureDetails({navigation, route}: Props) {
     setActiveItem(newPage - 1);
   };
 
-  const content = (
-    <View style={{flex: 1}}>
+  return (
+    <View style={styles.container}>
+      <View style={[styles.header, {paddingTop}]}>
+        <ScreenHeader
+          leftButton={{
+            onPress: () => navigation.goBack(),
+            icon: <ThemeIcon svg={ArrowLeft} />,
+            accessible: true,
+            accessibilityRole: 'button',
+            accessibilityLabel: t(
+              DepartureDetailsTexts.header.leftIcon.a11yLabel,
+            ),
+          }}
+          title={title ?? t(DepartureDetailsTexts.header.notFound)}
+        />
+      </View>
       <ContentWithDisappearingHeader
         header={
           mapData && (
@@ -106,68 +119,49 @@ export default function DepartureDetails({navigation, route}: Props) {
             />
           )
         }
-        // style={styles.scrollView}
-        // contentContainerStyle={styles.scrollView__content}
+        //
       >
-        <PaginatedDetailsHeader
-          page={activeItemIndexState + 1}
-          totalPages={items.length}
-          onNavigate={onPaginactionPress}
-          showPagination={hasMultipleItems}
-          currentDate={activeItem?.date}
-        />
-        <SituationMessages
-          situations={parentSituations}
-          containerStyle={styles.situationsContainer}
-        />
+        <View style={styles.scrollView__content}>
+          <PaginatedDetailsHeader
+            page={activeItemIndexState + 1}
+            totalPages={items.length}
+            onNavigate={onPaginactionPress}
+            showPagination={hasMultipleItems}
+            currentDate={activeItem?.date}
+          />
+          <SituationMessages
+            situations={parentSituations}
+            containerStyle={styles.situationsContainer}
+          />
 
-        {isLoading && (
-          <View>
-            <ActivityIndicator
-              color={defaultFill}
-              style={styles.spinner}
-              animating={true}
-              size="large"
-            />
-            <ScreenReaderAnnouncement
-              message={t(DepartureDetailsTexts.messages.loading)}
-            />
+          {isLoading && (
+            <View>
+              <ActivityIndicator
+                color={defaultFill}
+                style={styles.spinner}
+                animating={true}
+                size="large"
+              />
+              <ScreenReaderAnnouncement
+                message={t(DepartureDetailsTexts.messages.loading)}
+              />
+            </View>
+          )}
+
+          <View style={styles.allGroups}>
+            {mapGroup(callGroups, (name, group) => (
+              <CallGroup
+                key={group[0]?.quay?.id ?? name}
+                calls={group}
+                type={name}
+                mode={mode}
+                subMode={subMode}
+                parentSituations={parentSituations}
+              />
+            ))}
           </View>
-        )}
-
-        <View style={styles.allGroups}>
-          {mapGroup(callGroups, (name, group) => (
-            <CallGroup
-              key={group[0]?.quay?.id ?? name}
-              calls={group}
-              type={name}
-              mode={mode}
-              subMode={subMode}
-              parentSituations={parentSituations}
-            />
-          ))}
         </View>
       </ContentWithDisappearingHeader>
-    </View>
-  );
-
-  return (
-    <View style={styles.container}>
-      <View style={[styles.header, {paddingTop}]}>
-        <ScreenHeader
-          leftButton={{
-            onPress: () => navigation.goBack(),
-            icon: <ThemeIcon svg={ArrowLeft} />,
-            accessible: true,
-            accessibilityRole: 'button',
-            accessibilityLabel: t(
-              DepartureDetailsTexts.header.leftIcon.a11yLabel,
-            ),
-          }}
-          title={title ?? t(DepartureDetailsTexts.header.notFound)}
-        />
-      </View>
-      {content}
     </View>
   );
 }
@@ -352,9 +346,6 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
   spinner: {
     paddingTop: theme.spacings.medium,
-  },
-  scrollView: {
-    flex: 1,
   },
   scrollView__content: {
     padding: theme.spacings.medium,
