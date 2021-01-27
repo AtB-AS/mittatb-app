@@ -1,6 +1,7 @@
 import {
   Authority,
   BikeRentalStation,
+  Coordinates,
   DestinationDisplay,
   InfoLink,
   Interchange,
@@ -213,3 +214,16 @@ export type CursorInput = {
 };
 
 export type CursoredQuery<T> = CursorInput & T;
+
+export type MapLeg = {
+  mode?: LegMode;
+  faded?: boolean;
+  transportSubmode?: TransportSubmode;
+  pointsOnLink: PointsOnLink;
+};
+
+export type ServiceJourneyMapInfoData = {
+  mapLegs: MapLeg[];
+  start?: Coordinates;
+  stop?: Coordinates;
+};

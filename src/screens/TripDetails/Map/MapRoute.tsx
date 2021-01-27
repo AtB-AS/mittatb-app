@@ -2,17 +2,18 @@ import MapboxGL, {LineLayerStyle} from '@react-native-mapbox-gl/maps';
 import {Point} from 'geojson';
 import React from 'react';
 import {View} from 'react-native';
-import {LegMode, TransportSubmode} from '../../../sdk';
-import {transportationColor} from '../../../utils/transportation-color';
+import {
+  defaultFill,
+  transportationColor,
+} from '../../../utils/transportation-color';
 import {MapLine, pointOf} from './utils';
 
 const MapRoute: React.FC<{lines: MapLine[]}> = ({lines}) => {
-  function modeStyle(
-    mode?: LegMode,
-    subMode?: TransportSubmode,
-  ): LineLayerStyle {
+  function modeStyle(line?: MapLine): LineLayerStyle {
     return {
-      lineColor: transportationColor(mode, subMode),
+      lineColor: line?.faded
+        ? defaultFill
+        : transportationColor(line?.travelType, line?.subMode),
     };
   }
   function getFirstAndLastPoint(line: MapLine): [Point, Point] {
@@ -24,7 +25,7 @@ const MapRoute: React.FC<{lines: MapLine[]}> = ({lines}) => {
   return (
     <>
       {lines.map((line, index) => {
-        const lineModeStyle = modeStyle(line.travelType, line.subMode);
+        const lineModeStyle = modeStyle(line);
 
         return (
           <View key={'line-' + index}>

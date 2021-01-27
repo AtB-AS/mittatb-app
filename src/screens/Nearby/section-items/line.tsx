@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {NearbyScreenNavigationProp} from '..';
+import {NearbyScreenNavigationProp} from '../Nearby';
 import {
   DepartureGroup,
   DepartureLineInfo,
@@ -73,11 +73,14 @@ export default function LineItem({
   const title = `${group.lineInfo?.lineNumber} ${group.lineInfo?.lineName}`;
 
   const onPress = (departure: DepartureTime) => {
-    navigation.navigate('DepartureDetailsModal', {
-      title,
-      serviceJourneyId: departure.serviceJourneyId!,
-      date: departure.aimedTime,
-      fromQuayId: group.lineInfo?.quayId,
+    navigation.navigate('TripDetails', {
+      screen: 'DepartureDetails',
+      params: {
+        title,
+        serviceJourneyId: departure.serviceJourneyId!,
+        date: departure.aimedTime,
+        fromQuayId: group.lineInfo?.quayId,
+      },
     });
   };
 

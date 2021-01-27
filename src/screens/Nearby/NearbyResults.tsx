@@ -42,7 +42,7 @@ export default function NearbyResults({
 
   if (isInitialScreen) {
     return (
-      <View style={[styles.container, styles.container__paddedTop]}>
+      <View style={[styles.container, styles.container__padded]}>
         <MessageBox type="info">
           <ThemeText>{t(NearbyTexts.results.messages.initial)}</ThemeText>
         </MessageBox>
@@ -68,14 +68,10 @@ export default function NearbyResults({
   return (
     <View style={styles.container}>
       {error && (
-        <>
+        <View style={styles.container__padded}>
           <ScreenReaderAnnouncement message={error} />
-          <MessageBox
-            type="warning"
-            message={error}
-            containerStyle={{marginBottom: 24}}
-          />
-        </>
+          <MessageBox type="warning" message={error} />
+        </View>
       )}
 
       {departures && (
@@ -99,8 +95,8 @@ const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacings.medium,
   },
-  container__paddedTop: {
-    paddingTop: theme.spacings.medium,
+  container__padded: {
+    paddingVertical: theme.spacings.medium,
   },
   centerText: {
     textAlign: 'center',

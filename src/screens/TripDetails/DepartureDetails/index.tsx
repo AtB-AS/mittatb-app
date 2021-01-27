@@ -1,36 +1,49 @@
-import {LegMode, TransportSubmode, TransportMode} from '../../../sdk';
-import {RouteProp, useIsFocused} from '@react-navigation/native';
-import React, {useCallback, useState} from 'react';
+import {
+  NavigationProp,
+  RouteProp,
+  useIsFocused,
+} from '@react-navigation/native';
+import {parseISO} from 'date-fns';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {DetailsModalNavigationProp, DetailsStackParams} from '..';
-import {getDepartures} from '../../../api/serviceJourney';
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
+import {DetailsStackParams} from '..';
+import {
+  getDepartures,
+  getServiceJourneyMapLegs,
+} from '../../../api/serviceJourney';
 import {Close} from '../../../assets/svg/icons/actions';
 import {
   ArrowLeft,
   Expand,
   ExpandLess,
 } from '../../../assets/svg/icons/navigation';
+import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
+import ThemeText from '../../../components/text';
+import ThemeIcon from '../../../components/theme-icon';
 import ScreenHeader from '../../../ScreenHeader';
-import {EstimatedCall, Situation} from '../../../sdk';
+import {
+  EstimatedCall,
+  ServiceJourneyMapInfoData,
+  Situation,
+  TransportMode,
+  TransportSubmode,
+} from '../../../sdk';
 import SituationMessages from '../../../situations';
 import {StyleSheet} from '../../../theme';
+import {DepartureDetailsTexts, useTranslation} from '../../../translations';
 import {
   defaultFill,
   transportationColor,
 } from '../../../utils/transportation-color';
 import {getQuayName} from '../../../utils/transportation-names';
 import usePollableResource from '../../../utils/use-pollable-resource';
-import SituationRow from '../SituationRow';
-import ThemeIcon from '../../../components/theme-icon';
-import ThemeText from '../../../components/text';
-import {parseISO} from 'date-fns';
-import {useTranslation, DepartureDetailsTexts} from '../../../translations';
-import TripRow from '../components/TripRow';
 import Time from '../components/Time';
 import TripLegDecoration from '../components/TripLegDecoration';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
+import TripRow from '../components/TripRow';
+import CompactMap from '../Map/CompactMap';
+import SituationRow from '../SituationRow';
 
 export type DepartureDetailsRouteParams = {
   title: string;
@@ -38,7 +51,6 @@ export type DepartureDetailsRouteParams = {
   date: string;
   fromQuayId?: string;
   toQuayId?: string;
-  isBack?: boolean;
 };
 
 export type DetailScreenRouteProp = RouteProp<
@@ -46,22 +58,20 @@ export type DetailScreenRouteProp = RouteProp<
   'DepartureDetails'
 >;
 
+export type DepartureDetailScreenNavigationProp = NavigationProp<
+  DetailsStackParams
+>;
+
 type Props = {
   route: DetailScreenRouteProp;
-  navigation: DetailsModalNavigationProp;
+  navigation: DepartureDetailScreenNavigationProp;
 };
 
 export default function DepartureDetails({navigation, route}: Props) {
-  const {
-    title,
-    serviceJourneyId,
-    date,
-    fromQuayId,
-    toQuayId,
-    isBack = false,
-  } = route.params;
+  const {title, serviceJourneyId, date, fromQuayId, toQuayId} = route.params;
   const styles = useStopsStyle();
   const {t} = useTranslation();
+  const {top: paddingTop} = useSafeAreaInsets();
 
   const isFocused = useIsFocused();
   const [
@@ -77,6 +87,8 @@ export default function DepartureDetails({navigation, route}: Props) {
     !isFocused,
   );
 
+  const mapData = useMapData(serviceJourneyId, fromQuayId, toQuayId);
+
   const content = isLoading ? (
     <View>
       <ActivityIndicator
@@ -90,42 +102,64 @@ export default function DepartureDetails({navigation, route}: Props) {
       />
     </View>
   ) : (
-    <ScrollView style={styles.scrollView}>
-      <SituationMessages
-        situations={parentSituations}
-        containerStyle={styles.situationsContainer}
-      />
-      <View style={styles.allGroups}>
-        {mapGroup(callGroups, (name, group) => (
-          <CallGroup
-            key={group[0]?.quay?.id ?? name}
-            calls={group}
-            type={name}
-            mode={mode}
-            subMode={subMode}
-            parentSituations={parentSituations}
-          />
-        ))}
-      </View>
-    </ScrollView>
+    <View style={{flex: 1}}>
+      {mapData && (
+        <CompactMap
+          mapLegs={mapData.mapLegs}
+          fromPlace={mapData.start}
+          toPlace={mapData.stop}
+          onExpand={() => {
+            navigation.navigate('DetailsMap', {
+              legs: mapData.mapLegs,
+              fromPlace: mapData.start,
+              toPlace: mapData.stop,
+            });
+          }}
+        />
+      )}
+
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollView__content}
+      >
+        <SituationMessages
+          situations={parentSituations}
+          containerStyle={styles.situationsContainer}
+        />
+        <View style={styles.allGroups}>
+          {mapGroup(callGroups, (name, group) => (
+            <CallGroup
+              key={group[0]?.quay?.id ?? name}
+              calls={group}
+              type={name}
+              mode={mode}
+              subMode={subMode}
+              parentSituations={parentSituations}
+            />
+          ))}
+        </View>
+      </ScrollView>
+    </View>
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScreenHeader
-        leftButton={{
-          onPress: () => navigation.goBack(),
-          icon: <ThemeIcon svg={isBack ? ArrowLeft : Close} />,
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: t(
-            DepartureDetailsTexts.header.leftIcon.a11yLabel,
-          ),
-        }}
-        title={title}
-      />
+    <View style={styles.container}>
+      <View style={[styles.header, {paddingTop}]}>
+        <ScreenHeader
+          leftButton={{
+            onPress: () => navigation.goBack(),
+            icon: <ThemeIcon svg={ArrowLeft} />,
+            accessible: true,
+            accessibilityRole: 'button',
+            accessibilityLabel: t(
+              DepartureDetailsTexts.header.leftIcon.a11yLabel,
+            ),
+          }}
+          title={title}
+        />
+      </View>
       {content}
-    </SafeAreaView>
+    </View>
   );
 }
 function mapGroup<T>(
@@ -277,6 +311,9 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.background.level0,
   },
+  header: {
+    backgroundColor: theme.background.header,
+  },
   startPlace: {
     marginTop: theme.spacings.large,
   },
@@ -302,9 +339,35 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   spinner: {height: 280},
   scrollView: {
     flex: 1,
+  },
+  scrollView__content: {
     padding: theme.spacings.medium,
+    paddingBottom: theme.spacings.large,
   },
 }));
+
+function useMapData(
+  serviceJourneyId: string,
+  fromQuayId?: string,
+  toQuayId?: string,
+) {
+  const [mapData, setMapData] = useState<ServiceJourneyMapInfoData>();
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const result = await getServiceJourneyMapLegs(
+          serviceJourneyId,
+          fromQuayId,
+          toQuayId,
+        );
+        setMapData(result);
+      } catch (e) {}
+    };
+
+    getData();
+  }, [serviceJourneyId, fromQuayId, toQuayId]);
+  return mapData;
+}
 
 type DepartureData = {
   callGroups: CallListGroup;

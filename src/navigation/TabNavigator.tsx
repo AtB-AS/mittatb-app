@@ -41,8 +41,6 @@ export type TabNavigatorParams = {
 };
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
-const softhyphen = Platform.OS === 'ios' ? '\u00AD' : '\u200B';
-
 const NavigationRoot = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
