@@ -33,7 +33,6 @@ export async function getServiceJourneyMapLegs(
     },
     {skipNull: true},
   );
-  console.log(stringifyUrl(url, query));
   const response = await client.get<ServiceJourneyMapInfoData>(
     stringifyUrl(url, query),
   );
