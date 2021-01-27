@@ -2,6 +2,7 @@ import {useState, useCallback, useEffect} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import useInterval from './use-interval';
 import useDebounce from './useDebounce';
+import useIsLoading from './use-is-loading';
 
 type PollableResourceOptions<T, E> = {
   initialValue: T;
@@ -24,10 +25,8 @@ export default function usePollableResource<T, E extends Error = Error>(
   callback: () => Promise<T>,
   opts: PollableResourceOptions<T, E>,
 ): [T, () => Promise<void>, boolean, E?] {
-  const {initialValue, pollingTimeInSeconds = 30, disabled, filterError} = opts;
-
-  const [isLoadingInternal, setIsLoading] = useState<boolean>(false);
-  const isLoading = useDebounce(isLoadingInternal, 500);
+  const {initialValue, pollingTimeInSeconds = 30, filterError} = opts;
+  const [isLoading, setIsLoading] = useIsLoading(false);
   const [error, setError] = useState<E | undefined>(undefined);
   const [state, setState] = useState<T>(initialValue);
   const pollTime = pollingTimeInSeconds * 1000;
