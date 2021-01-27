@@ -7,6 +7,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DetailsStackParams} from '..';
 import {getSingleTripPattern} from '../../../api/trips';
 import {ArrowLeft} from '../../../assets/svg/icons/navigation';
+import ContentWithDisappearingHeader from '../../../components/disappearing-header/content';
 import PaginatedDetailsHeader from '../../../components/pagination';
 import ThemeIcon from '../../../components/theme-icon';
 import Header from '../../../ScreenHeader';
@@ -92,21 +93,9 @@ const Details: React.FC<Props> = (props) => {
           title={t(TripDetailsTexts.header.title)}
         />
       </View>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollViewContent}
-        bounces={false}
-      >
-        {showActivityIndicator && (
-          <ActivityIndicator
-            style={styles.activityIndicator}
-            color={theme.text.colors.faded}
-            animating={true}
-            size="large"
-          />
-        )}
-        {tripPattern && (
-          <>
+      <ContentWithDisappearingHeader
+        header={
+          tripPattern && (
             <CompactMap
               mapLegs={tripPattern.legs}
               fromPlace={tripPattern.legs[0].fromPlace}
@@ -120,21 +109,32 @@ const Details: React.FC<Props> = (props) => {
                 });
               }}
             />
-            <View style={styles.paddedContainer}>
-              {tripPatterns.length > 1 && (
-                <PaginatedDetailsHeader
-                  page={currentIndex + 1}
-                  totalPages={tripPatterns.length}
-                  onNavigate={navigate}
-                  style={styles.pagination}
-                  currentDate={tripPattern.legs[0]?.expectedStartTime}
-                />
-              )}
-              <Trip tripPattern={tripPattern} error={error} />
-            </View>
-          </>
+          )
+        }
+      >
+        {showActivityIndicator && (
+          <ActivityIndicator
+            style={styles.activityIndicator}
+            color={theme.text.colors.faded}
+            animating={true}
+            size="large"
+          />
         )}
-      </ScrollView>
+        {tripPattern && (
+          <View style={styles.paddedContainer}>
+            {tripPatterns.length > 1 && (
+              <PaginatedDetailsHeader
+                page={currentIndex + 1}
+                totalPages={tripPatterns.length}
+                onNavigate={navigate}
+                style={styles.pagination}
+                currentDate={tripPattern.legs[0]?.expectedStartTime}
+              />
+            )}
+            <Trip tripPattern={tripPattern} error={error} />
+          </View>
+        )}
+      </ContentWithDisappearingHeader>
     </View>
   );
 };
