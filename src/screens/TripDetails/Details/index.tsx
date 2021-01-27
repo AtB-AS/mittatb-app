@@ -16,6 +16,7 @@ import {TripDetailsTexts, useTranslation} from '../../../translations';
 import usePollableResource from '../../../utils/use-pollable-resource';
 import Trip from '../components/Trip';
 import CompactMap from '../Map/CompactMap';
+
 export type DetailsRouteParams = {
   tripPatternId?: string;
   tripPatterns?: TripPattern[];
@@ -126,7 +127,8 @@ const Details: React.FC<Props> = (props) => {
                   totalPages={tripPatterns.length}
                   onNavigate={navigate}
                   style={styles.pagination}
-                ></Pagination>
+                  currentDate={tripPattern.legs[0]?.expectedStartTime}
+                />
               )}
               <Trip tripPattern={tripPattern} error={error} />
             </View>
