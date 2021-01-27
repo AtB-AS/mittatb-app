@@ -14,6 +14,7 @@ import {
   Expand,
   ExpandLess,
 } from '../../../assets/svg/icons/navigation';
+import ContentWithDisappearingHeader from '../../../components/disappearing-header/content';
 import PaginatedDetailsHeader from '../../../components/pagination';
 import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
 import ThemeText from '../../../components/text';
@@ -88,24 +89,25 @@ export default function DepartureDetails({navigation, route}: Props) {
 
   const content = (
     <View style={{flex: 1}}>
-      {mapData && (
-        <CompactMap
-          mapLegs={mapData.mapLegs}
-          fromPlace={mapData.start}
-          toPlace={mapData.stop}
-          onExpand={() => {
-            navigation.navigate('DetailsMap', {
-              legs: mapData.mapLegs,
-              fromPlace: mapData.start,
-              toPlace: mapData.stop,
-            });
-          }}
-        />
-      )}
-
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollView__content}
+      <ContentWithDisappearingHeader
+        header={
+          mapData && (
+            <CompactMap
+              mapLegs={mapData.mapLegs}
+              fromPlace={mapData.start}
+              toPlace={mapData.stop}
+              onExpand={() => {
+                navigation.navigate('DetailsMap', {
+                  legs: mapData.mapLegs,
+                  fromPlace: mapData.start,
+                  toPlace: mapData.stop,
+                });
+              }}
+            />
+          )
+        }
+        // style={styles.scrollView}
+        // contentContainerStyle={styles.scrollView__content}
       >
         <PaginatedDetailsHeader
           page={activeItemIndexState + 1}
@@ -145,7 +147,7 @@ export default function DepartureDetails({navigation, route}: Props) {
             />
           ))}
         </View>
-      </ScrollView>
+      </ContentWithDisappearingHeader>
     </View>
   );
 
