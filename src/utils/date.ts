@@ -136,6 +136,11 @@ export function formatToLongDateTime(
   return format(parsed, 'PPp', {locale: languageToLocale(language)});
 }
 
+export function fullDateTime(isoDate: string | Date, language: Language) {
+  const parsed = parseIfNeeded(isoDate);
+  return format(parsed, 'PPp', {locale: languageToLocale(language)});
+}
+
 export {isSameDay};
 
 export function formatToSimpleDate(date: Date, language: Language) {
