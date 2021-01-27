@@ -26,11 +26,11 @@ export default function CounterInput({
   const counterStyles = useStyles();
   const {t} = useTranslation();
   return (
-    <View style={[topContainer, counterStyles.travellerCount]}>
+    <View style={[topContainer, counterStyles.countContainer]}>
       <View style={[style.spaceBetween, contentContainer]}>
-        <ThemeText>{text}</ThemeText>
+        <ThemeText accessibilityLabel={`${count} ${text}`}>{text}</ThemeText>
       </View>
-      <View style={counterStyles.travellerCountActions}>
+      <View style={counterStyles.countActions}>
         <TouchableOpacity
           disabled={count === 0}
           onPress={() => removeCount()}
@@ -48,7 +48,11 @@ export default function CounterInput({
         >
           {count > 0 && <ThemeIcon svg={Remove} />}
         </TouchableOpacity>
-        <ThemeText style={counterStyles.count} type="paragraphHeadline">
+        <ThemeText
+          accessible={false}
+          style={counterStyles.countText}
+          type="paragraphHeadline"
+        >
           {count}
         </ThemeText>
         <TouchableOpacity
@@ -71,17 +75,17 @@ export default function CounterInput({
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  travellerCount: {
+  countContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
   },
-  travellerCountActions: {
+  countActions: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
-  count: {
+  countText: {
     width: theme.spacings.large,
     textAlign: 'center',
   },

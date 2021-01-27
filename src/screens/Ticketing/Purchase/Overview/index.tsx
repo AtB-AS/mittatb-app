@@ -159,6 +159,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           mode="primary"
           text={t(PurchaseOverviewTexts.primaryButton.text(totalPrice))}
           disabled={isSearchingOffer || !totalPrice || !!error}
+          accessibilityLabel={t(
+            PurchaseOverviewTexts.primaryButton.a11yLabel(totalPrice),
+          )}
           accessibilityHint={t(PurchaseOverviewTexts.primaryButton.a11yHint)}
           onPress={() => {
             navigation.navigate('Confirmation', {

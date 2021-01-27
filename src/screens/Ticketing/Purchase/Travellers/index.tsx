@@ -45,6 +45,7 @@ const Travellers: React.FC<TravellersProps> = ({
           accessible: true,
           accessibilityRole: 'button',
           accessibilityLabel: t(TravellersTexts.header.leftButton.a11yLabel),
+          accessibilityHint: t(TravellersTexts.header.leftButton.a11yHint),
           icon: <ThemeIcon svg={ArrowLeft} />,
           onPress: () => navigation.goBack(),
         }}

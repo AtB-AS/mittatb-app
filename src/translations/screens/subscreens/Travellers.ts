@@ -3,17 +3,20 @@ import {UserProfileWithCount} from '../../../screens/Ticketing/Purchase/Travelle
 
 const TravellersTexts = {
   header: {
-    title: _('Velg sone', 'Select zone'),
+    title: _('Velg reisende', 'Select travellers'),
     leftButton: {
-      text: _('Avbryt', 'Cancel'),
-      a11yLabel: _('Avbryt kjøpsprosessen', 'Cancel purchase'),
+      a11yLabel: _('Gå tilbake', 'Cancel'),
+      a11yHint: _(
+        'Aktivèr for å gå tilbake uten å lagre valg av reisende',
+        'Activate to go back without selecting travellers',
+      ),
     },
   },
   primaryButton: {
-    text: _('Bekreft valg', 'Confirm choice'),
+    text: _('Lagre valg av reisende', 'Confirm travellers selection'),
     a11yHint: _(
-      'Aktivér for å bekrefte valg',
-      'Activate to confirm your choice',
+      'Aktivér for å lagre valg av reisende',
+      'Activate to confirm your selection of travellers',
     ),
   },
 };

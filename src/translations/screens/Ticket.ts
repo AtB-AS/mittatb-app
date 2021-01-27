@@ -19,6 +19,9 @@ const TicketTexts = {
       _(`Utløpt ${dateTime}`, `Expired ${dateTime}`),
     refunded: _(`Refundert`, 'Refunded'),
     durationDelimiter: _(' og ', ' and '),
+    detailsButton: {
+      a11yLabel: _('Gå til billettdetaljer', 'Go to ticket details'),
+    },
   },
   details: {
     header: {
