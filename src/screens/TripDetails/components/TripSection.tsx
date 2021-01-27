@@ -1,36 +1,36 @@
-import React from 'react';
-import {Leg, Place} from '../../../sdk';
-import {View} from 'react-native';
-import ThemeText from '../../../components/text';
-import {StyleSheet} from '../../../theme';
-import {formatToClock, secondsToDuration} from '../../../utils/date';
-import {
-  getLineName,
-  getQuayName,
-  getTranslatedModeName,
-} from '../../../utils/transportation-names';
-import TransportationIcon from '../../../components/transportation-icon';
-import {transportationColor} from '../../../utils/transportation-color';
 import {useNavigation} from '@react-navigation/core';
-import {DetailScreenNavigationProp} from '../Details';
+import React from 'react';
+import {View} from 'react-native';
+import {Info, Warning} from '../../../assets/svg/situations';
+import AccessibleText, {
+  screenReaderPause,
+} from '../../../components/accessible-text';
+import ThemeText from '../../../components/text';
+import TransportationIcon from '../../../components/transportation-icon';
 import {TinyMessageBox} from '../../../message-box';
-import {Warning, Info} from '../../../assets/svg/situations';
+import {Leg, Place} from '../../../sdk';
 import SituationMessages from '../../../situations';
-import Time from './Time';
-import TripLegDecoration from './TripLegDecoration';
-import {significantWaitTime, significantWalkTime} from '../Details/utils';
-import TripRow from './TripRow';
-import WaitSection, {WaitDetails} from './WaitSection';
+import {StyleSheet} from '../../../theme';
 import {
   Language,
   TranslatedString,
   TripDetailsTexts,
   useTranslation,
 } from '../../../translations';
-import AccessibleText, {
-  screenReaderPause,
-} from '../../../components/accessible-text';
+import {formatToClock, secondsToDuration} from '../../../utils/date';
+import {transportationColor} from '../../../utils/transportation-color';
+import {
+  getLineName,
+  getQuayName,
+  getTranslatedModeName,
+} from '../../../utils/transportation-names';
+import {DetailScreenNavigationProp} from '../Details';
+import {significantWaitTime, significantWalkTime} from '../Details/utils';
 import {getTimeRepresentationType, TimeValues} from '../utils';
+import Time from './Time';
+import TripLegDecoration from './TripLegDecoration';
+import TripRow from './TripRow';
+import WaitSection, {WaitDetails} from './WaitSection';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -166,11 +166,14 @@ const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
   const navigation = useNavigation<DetailScreenNavigationProp>();
   const navigateToDetails = () =>
     navigation.navigate('DepartureDetails', {
-      title: getLineName(leg),
-      serviceJourneyId: leg.serviceJourney.id,
-      date: leg.expectedStartTime,
-      fromQuayId: leg.fromPlace.quay?.id,
-      toQuayId: leg.toPlace.quay?.id,
+      items: [
+        {
+          serviceJourneyId: leg.serviceJourney.id,
+          date: leg.expectedStartTime,
+          fromQuayId: leg.fromPlace.quay?.id,
+          toQuayId: leg.toPlace.quay?.id,
+        },
+      ],
     });
 
   const numberOfIntermediateCalls = leg.intermediateEstimatedCalls.length;

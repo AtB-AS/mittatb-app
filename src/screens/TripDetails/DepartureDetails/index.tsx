@@ -7,18 +7,18 @@ import {parseISO} from 'date-fns';
 import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DetailsStackParams} from '..';
 import {
   getDepartures,
   getServiceJourneyMapLegs,
 } from '../../../api/serviceJourney';
-import {Close} from '../../../assets/svg/icons/actions';
 import {
   ArrowLeft,
   Expand,
   ExpandLess,
 } from '../../../assets/svg/icons/navigation';
+import PaginatedDetailsHeader from '../../../components/pagination';
 import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
@@ -33,6 +33,7 @@ import {
 import SituationMessages from '../../../situations';
 import {StyleSheet} from '../../../theme';
 import {DepartureDetailsTexts, useTranslation} from '../../../translations';
+import {animateNextChange} from '../../../utils/animation';
 import {
   defaultFill,
   transportationColor,
@@ -45,12 +46,16 @@ import TripRow from '../components/TripRow';
 import CompactMap from '../Map/CompactMap';
 import SituationRow from '../SituationRow';
 
-export type DepartureDetailsRouteParams = {
-  title: string;
+export type ServiceJourneyDeparture = {
   serviceJourneyId: string;
   date: string;
   fromQuayId?: string;
   toQuayId?: string;
+};
+
+export type DepartureDetailsRouteParams = {
+  items: ServiceJourneyDeparture[];
+  activeItemIndex?: number;
 };
 
 export type DetailScreenRouteProp = RouteProp<
@@ -68,40 +73,30 @@ type Props = {
 };
 
 export default function DepartureDetails({navigation, route}: Props) {
-  const {title, serviceJourneyId, date, fromQuayId, toQuayId} = route.params;
+  const {activeItemIndex = 0, items} = route.params;
+  const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
+
+  const activeItem: ServiceJourneyDeparture | undefined =
+    items[activeItemIndexState];
+  const hasMultipleItems = items.length > 1;
+
   const styles = useStopsStyle();
   const {t} = useTranslation();
   const {top: paddingTop} = useSafeAreaInsets();
 
   const isFocused = useIsFocused();
   const [
-    {callGroups, mode, subMode, situations: parentSituations},
-    ,
+    {callGroups, title, mode, subMode, situations: parentSituations},
     isLoading,
-  ] = useDepartureData(
-    serviceJourneyId,
-    date,
-    fromQuayId,
-    toQuayId,
-    30,
-    !isFocused,
-  );
+  ] = useDepartureData(activeItem, 30, !isFocused);
+  const mapData = useMapData(activeItem);
 
-  const mapData = useMapData(serviceJourneyId, fromQuayId, toQuayId);
+  const onPaginactionPress = (newPage: number) => {
+    animateNextChange();
+    setActiveItem(newPage - 1);
+  };
 
-  const content = isLoading ? (
-    <View>
-      <ActivityIndicator
-        color={defaultFill}
-        style={styles.spinner}
-        animating={true}
-        size="large"
-      />
-      <ScreenReaderAnnouncement
-        message={t(DepartureDetailsTexts.messages.loading)}
-      />
-    </View>
-  ) : (
+  const content = (
     <View style={{flex: 1}}>
       {mapData && (
         <CompactMap
@@ -122,10 +117,32 @@ export default function DepartureDetails({navigation, route}: Props) {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollView__content}
       >
+        <PaginatedDetailsHeader
+          page={activeItemIndexState + 1}
+          totalPages={items.length}
+          onNavigate={onPaginactionPress}
+          showPagination={hasMultipleItems}
+          currentDate={activeItem?.date}
+        />
         <SituationMessages
           situations={parentSituations}
           containerStyle={styles.situationsContainer}
         />
+
+        {isLoading && (
+          <View>
+            <ActivityIndicator
+              color={defaultFill}
+              style={styles.spinner}
+              animating={true}
+              size="large"
+            />
+            <ScreenReaderAnnouncement
+              message={t(DepartureDetailsTexts.messages.loading)}
+            />
+          </View>
+        )}
+
         <View style={styles.allGroups}>
           {mapGroup(callGroups, (name, group) => (
             <CallGroup
@@ -155,7 +172,7 @@ export default function DepartureDetails({navigation, route}: Props) {
               DepartureDetailsTexts.header.leftIcon.a11yLabel,
             ),
           }}
-          title={title}
+          title={title ?? t(DepartureDetailsTexts.header.notFound)}
         />
       </View>
       {content}
@@ -196,12 +213,17 @@ function CallGroup({
     return null;
   }
 
+  const collapsePress = (c: boolean) => {
+    animateNextChange();
+    setCollapsed(c);
+  };
+
   const items = collapsed ? [calls[0]] : calls;
   const collapseButton = showCollapsable ? (
     <CollapseButtonRow
       key={`collapse-button-${type}`}
       collapsed={collapsed}
-      setCollapsed={setCollapsed}
+      setCollapsed={collapsePress}
       label={t(DepartureDetailsTexts.collapse.label(calls.length - 1))}
     />
   ) : null;
@@ -336,7 +358,9 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.background.level0,
     marginBottom: theme.spacings.xLarge,
   },
-  spinner: {height: 280},
+  spinner: {
+    paddingTop: theme.spacings.medium,
+  },
   scrollView: {
     flex: 1,
   },
@@ -346,32 +370,33 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-function useMapData(
-  serviceJourneyId: string,
-  fromQuayId?: string,
-  toQuayId?: string,
-) {
+function useMapData(activeItem: ServiceJourneyDeparture) {
   const [mapData, setMapData] = useState<ServiceJourneyMapInfoData>();
   useEffect(() => {
     const getData = async () => {
+      if (!activeItem) {
+        return;
+      }
+
       try {
         const result = await getServiceJourneyMapLegs(
-          serviceJourneyId,
-          fromQuayId,
-          toQuayId,
+          activeItem.serviceJourneyId,
+          activeItem.fromQuayId,
+          activeItem.toQuayId,
         );
         setMapData(result);
       } catch (e) {}
     };
 
     getData();
-  }, [serviceJourneyId, fromQuayId, toQuayId]);
+  }, [activeItem]);
   return mapData;
 }
 
 type DepartureData = {
   callGroups: CallListGroup;
   mode?: TransportMode;
+  title?: string;
   subMode?: TransportSubmode;
   situations: Situation[];
 };
@@ -383,31 +408,36 @@ type CallListGroup = {
 };
 
 function useDepartureData(
-  serviceJourneyId: string,
-  date: string,
-  fromQuayId?: string,
-  toQuayId?: string,
+  activeItem: ServiceJourneyDeparture,
   pollingTimeInSeconds: number = 0,
   disabled?: boolean,
-): [DepartureData, () => void, boolean, Error?] {
+): [DepartureData, boolean] {
   const getService = useCallback(
     async function getServiceJourneyDepartures(): Promise<DepartureData> {
-      const deps = await getDepartures(serviceJourneyId, parseISO(date));
-      const callGroups = groupAllCallsByQuaysInLeg(deps, fromQuayId, toQuayId);
+      const deps = await getDepartures(
+        activeItem.serviceJourneyId,
+        parseISO(activeItem.date),
+      );
+      const callGroups = groupAllCallsByQuaysInLeg(
+        deps,
+        activeItem.fromQuayId,
+        activeItem.toQuayId,
+      );
       const line = callGroups.trip[0]?.serviceJourney?.journeyPattern?.line;
       const parentSituation = callGroups.trip[0]?.situations;
 
       return {
         mode: line?.transportMode,
+        title: `${line?.publicCode} ${callGroups.trip[0]?.destinationDisplay.frontText}`,
         subMode: line?.transportSubmode,
         callGroups,
         situations: parentSituation,
       };
     },
-    [serviceJourneyId, fromQuayId, toQuayId],
+    [activeItem],
   );
 
-  return usePollableResource<DepartureData>(getService, {
+  const [data, , isLoading] = usePollableResource<DepartureData>(getService, {
     initialValue: {
       callGroups: {
         passed: [],
@@ -417,8 +447,10 @@ function useDepartureData(
       situations: [],
     },
     pollingTimeInSeconds,
-    disabled,
+    disabled: disabled || !activeItem,
   });
+
+  return [data, isLoading];
 }
 
 const onType = (

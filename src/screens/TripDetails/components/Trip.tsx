@@ -1,7 +1,6 @@
 import {AxiosError} from 'axios';
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
-import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
 import {Leg, TripPattern} from '../../../sdk';
 import {StyleSheet} from '../../../theme';
 import {secondsBetween} from '../../../utils/date';
@@ -32,7 +31,6 @@ const Trip: React.FC<TripProps> = ({tripPattern, error}) => {
 
   return (
     <>
-      <View style={styles.line} />
       <TripMessages
         error={error}
         shortTime={shortTime}
@@ -58,7 +56,6 @@ const Trip: React.FC<TripProps> = ({tripPattern, error}) => {
             );
           })}
       </View>
-      <View style={styles.line} />
       <Summary {...tripPattern} />
     </>
   );
@@ -95,11 +92,6 @@ function legWaitDetails(index: number, legs: Leg[]): WaitDetails | undefined {
   return {waitAfter, waitSeconds};
 }
 const useStyle = StyleSheet.createThemeHook((theme) => ({
-  line: {
-    flex: 1,
-    height: theme.border.width.slim,
-    backgroundColor: theme.background.level1,
-  },
   message: {
     marginTop: theme.spacings.medium,
   },

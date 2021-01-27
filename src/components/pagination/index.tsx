@@ -7,18 +7,20 @@ import {fullDateTime} from '../../utils/date';
 import Button from '../button';
 import ThemeText from '../text';
 
-type PaginationProps = ViewProps & {
+type PaginatedDetailsHeader = ViewProps & {
   page: number;
   totalPages: number;
   onNavigate(newPage: number): void;
+  showPagination?: boolean;
   currentDate?: string | Date;
 };
-const Pagination: React.FC<PaginationProps> = ({
+const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
   page,
   totalPages,
   onNavigate,
   style,
   currentDate,
+  showPagination = true,
 }) => {
   const styles = usePaginateStyles();
   const {t, language} = useTranslation();
@@ -26,42 +28,44 @@ const Pagination: React.FC<PaginationProps> = ({
   const hasNext = page < totalPages;
 
   return (
-    <View style={style}>
-      <View style={styles.container}>
-        <View style={styles.buttonLeft}>
-          <Button
-            type="compact"
-            mode="tertiary"
-            disabled={!hasPrevious}
-            iconPosition="left"
-            icon={ArrowLeft}
-            onPress={() => onNavigate(page - 1)}
-            text={t(PaginationTexts.previous.label)}
-            accessibilityHint={t(PaginationTexts.previous.a11yHint)}
-          />
-        </View>
+    <View style={[styles.wrapper, style]}>
+      {showPagination && (
+        <View style={styles.container}>
+          <View style={styles.buttonLeft}>
+            <Button
+              type="compact"
+              mode="tertiary"
+              disabled={!hasPrevious}
+              iconPosition="left"
+              icon={ArrowLeft}
+              onPress={() => onNavigate(page - 1)}
+              text={t(PaginationTexts.previous.label)}
+              accessibilityHint={t(PaginationTexts.previous.a11yHint)}
+            />
+          </View>
 
-        <ThemeText
-          accessible={true}
-          accessibilityLabel={t(
-            PaginationTexts.current.a11yLabel(page, totalPages),
-          )}
-        >
-          {t(PaginationTexts.current.label(page, totalPages))}
-        </ThemeText>
-        <View style={styles.buttonRight}>
-          <Button
-            type="compact"
-            mode="tertiary"
-            disabled={!hasNext}
-            iconPosition="right"
-            icon={ArrowRight}
-            onPress={() => onNavigate(page + 1)}
-            text={t(PaginationTexts.next.label)}
-            accessibilityHint={t(PaginationTexts.next.a11yHint)}
-          />
+          <ThemeText
+            accessible={true}
+            accessibilityLabel={t(
+              PaginationTexts.current.a11yLabel(page, totalPages),
+            )}
+          >
+            {t(PaginationTexts.current.label(page, totalPages))}
+          </ThemeText>
+          <View style={styles.buttonRight}>
+            <Button
+              type="compact"
+              mode="tertiary"
+              disabled={!hasNext}
+              iconPosition="right"
+              icon={ArrowRight}
+              onPress={() => onNavigate(page + 1)}
+              text={t(PaginationTexts.next.label)}
+              accessibilityHint={t(PaginationTexts.next.a11yHint)}
+            />
+          </View>
         </View>
-      </View>
+      )}
       {currentDate && (
         <View style={styles.subline}>
           <ThemeText
@@ -86,6 +90,10 @@ const usePaginateStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
     padding: theme.spacings.medium,
   },
+  wrapper: {
+    borderBottomWidth: theme.border.width.slim,
+    borderColor: theme.background.level1,
+  },
   buttonLeft: {
     position: 'absolute',
     zIndex: 2,
@@ -100,6 +108,7 @@ const usePaginateStyles = StyleSheet.createThemeHook((theme) => ({
   },
   subline: {
     alignItems: 'center',
+    paddingBottom: theme.spacings.medium,
   },
 }));
-export default Pagination;
+export default PaginatedDetailsHeader;
