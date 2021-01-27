@@ -3,16 +3,12 @@ import {
   RouteProp,
   useIsFocused,
 } from '@react-navigation/native';
-import {parseISO} from 'date-fns';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DetailsStackParams} from '..';
-import {
-  getDepartures,
-  getServiceJourneyMapLegs,
-} from '../../../api/serviceJourney';
+import {getServiceJourneyMapLegs} from '../../../api/serviceJourney';
 import {
   ArrowLeft,
   Expand,
@@ -39,19 +35,13 @@ import {
   transportationColor,
 } from '../../../utils/transportation-color';
 import {getQuayName} from '../../../utils/transportation-names';
-import usePollableResource from '../../../utils/use-pollable-resource';
 import Time from '../components/Time';
 import TripLegDecoration from '../components/TripLegDecoration';
 import TripRow from '../components/TripRow';
 import CompactMap from '../Map/CompactMap';
 import SituationRow from '../SituationRow';
-
-export type ServiceJourneyDeparture = {
-  serviceJourneyId: string;
-  date: string;
-  fromQuayId?: string;
-  toQuayId?: string;
-};
+import {ServiceJourneyDeparture} from './types';
+import useDepartureData, {CallListGroup} from './use-departure-data';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -391,121 +381,4 @@ function useMapData(activeItem: ServiceJourneyDeparture) {
     getData();
   }, [activeItem]);
   return mapData;
-}
-
-type DepartureData = {
-  callGroups: CallListGroup;
-  mode?: TransportMode;
-  title?: string;
-  subMode?: TransportSubmode;
-  situations: Situation[];
-};
-
-type CallListGroup = {
-  passed: EstimatedCall[];
-  trip: EstimatedCall[];
-  after: EstimatedCall[];
-};
-
-function useDepartureData(
-  activeItem: ServiceJourneyDeparture,
-  pollingTimeInSeconds: number = 0,
-  disabled?: boolean,
-): [DepartureData, boolean] {
-  const getService = useCallback(
-    async function getServiceJourneyDepartures(): Promise<DepartureData> {
-      const deps = await getDepartures(
-        activeItem.serviceJourneyId,
-        parseISO(activeItem.date),
-      );
-      const callGroups = groupAllCallsByQuaysInLeg(
-        deps,
-        activeItem.fromQuayId,
-        activeItem.toQuayId,
-      );
-      const line = callGroups.trip[0]?.serviceJourney?.journeyPattern?.line;
-      const parentSituation = callGroups.trip[0]?.situations;
-
-      return {
-        mode: line?.transportMode,
-        title: `${line?.publicCode} ${callGroups.trip[0]?.destinationDisplay.frontText}`,
-        subMode: line?.transportSubmode,
-        callGroups,
-        situations: parentSituation,
-      };
-    },
-    [activeItem],
-  );
-
-  const [data, , isLoading] = usePollableResource<DepartureData>(getService, {
-    initialValue: {
-      callGroups: {
-        passed: [],
-        trip: [],
-        after: [],
-      },
-      situations: [],
-    },
-    pollingTimeInSeconds,
-    disabled: disabled || !activeItem,
-  });
-
-  return [data, isLoading];
-}
-
-const onType = (
-  obj: CallListGroup,
-  key: keyof CallListGroup,
-  call: EstimatedCall,
-): CallListGroup => ({
-  ...obj,
-  [key]: obj[key].concat(call),
-});
-function groupAllCallsByQuaysInLeg(
-  calls: EstimatedCall[],
-  fromQuayId?: string,
-  toQuayId?: string,
-): CallListGroup {
-  let isAfterStart = false;
-  let isAfterStop = false;
-
-  if (!fromQuayId && !toQuayId) {
-    return {
-      passed: [],
-      trip: calls,
-      after: [],
-    };
-  }
-
-  return calls.reduce(
-    (obj, call) => {
-      // We are at start quay, update flag
-      if (call.quay?.id === fromQuayId) {
-        isAfterStart = true;
-      }
-
-      if (!isAfterStart && !isAfterStop) {
-        // is the first group
-        obj = onType(obj, 'passed', call);
-      } else if (isAfterStart && !isAfterStop) {
-        // is the current route (between start/stop)
-        obj = onType(obj, 'trip', call);
-      } else {
-        // is quays after stop
-        obj = onType(obj, 'after', call);
-      }
-
-      // We are at stop, update flag
-      if (call.quay?.id === toQuayId) {
-        isAfterStop = true;
-      }
-
-      return obj;
-    },
-    {
-      passed: [],
-      trip: [],
-      after: [],
-    } as CallListGroup,
-  );
 }
