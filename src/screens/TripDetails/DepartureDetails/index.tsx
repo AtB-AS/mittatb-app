@@ -7,7 +7,7 @@ import {parseISO} from 'date-fns';
 import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DetailsStackParams} from '..';
 import {
   getDepartures,
@@ -71,6 +71,7 @@ export default function DepartureDetails({navigation, route}: Props) {
   const {title, serviceJourneyId, date, fromQuayId, toQuayId} = route.params;
   const styles = useStopsStyle();
   const {t} = useTranslation();
+  const {top: paddingTop} = useSafeAreaInsets();
 
   const isFocused = useIsFocused();
   const [
@@ -117,7 +118,10 @@ export default function DepartureDetails({navigation, route}: Props) {
         />
       )}
 
-      <ScrollView style={styles.scrollView}>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollView__content}
+      >
         <SituationMessages
           situations={parentSituations}
           containerStyle={styles.situationsContainer}
@@ -139,21 +143,23 @@ export default function DepartureDetails({navigation, route}: Props) {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScreenHeader
-        leftButton={{
-          onPress: () => navigation.goBack(),
-          icon: <ThemeIcon svg={ArrowLeft} />,
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: t(
-            DepartureDetailsTexts.header.leftIcon.a11yLabel,
-          ),
-        }}
-        title={title}
-      />
+    <View style={styles.container}>
+      <View style={[styles.header, {paddingTop}]}>
+        <ScreenHeader
+          leftButton={{
+            onPress: () => navigation.goBack(),
+            icon: <ThemeIcon svg={ArrowLeft} />,
+            accessible: true,
+            accessibilityRole: 'button',
+            accessibilityLabel: t(
+              DepartureDetailsTexts.header.leftIcon.a11yLabel,
+            ),
+          }}
+          title={title}
+        />
+      </View>
       {content}
-    </SafeAreaView>
+    </View>
   );
 }
 function mapGroup<T>(
@@ -305,6 +311,9 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.background.level0,
   },
+  header: {
+    backgroundColor: theme.background.header,
+  },
   startPlace: {
     marginTop: theme.spacings.large,
   },
@@ -330,7 +339,10 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   spinner: {height: 280},
   scrollView: {
     flex: 1,
+  },
+  scrollView__content: {
     padding: theme.spacings.medium,
+    paddingBottom: theme.spacings.large,
   },
 }));
 
