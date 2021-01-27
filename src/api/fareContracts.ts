@@ -120,6 +120,7 @@ export type FareContract = {
   usage_valid_to: number;
   travellers: FareContractTraveller[];
   state: FareContractLifecycleState;
+  qr_code: string;
 };
 
 export type FareContractTraveller = {

@@ -16,12 +16,14 @@ type Props = {
   fareContract: FareContract;
   now: number;
   onReceiptNavigate: () => void;
+  onInspectionNavigate: () => void;
 };
 
 const DetailsContent: React.FC<Props> = ({
   fareContract: fc,
   now,
   onReceiptNavigate,
+  onInspectionNavigate,
 }) => {
   const nowSeconds = now / 1000;
   const isNotExpired = fc.usage_valid_to >= nowSeconds;
@@ -58,7 +60,11 @@ const DetailsContent: React.FC<Props> = ({
         </ThemeText>
       </Sections.GenericItem>
       {isValidTicket && (
-        <Sections.LinkItem text={t(TicketTexts.controlLink)} disabled />
+        <Sections.LinkItem
+          text={t(TicketTexts.controlLink)}
+          onPress={onInspectionNavigate}
+          disabled={!fc.qr_code}
+        />
       )}
       <Sections.LinkItem text={t(TicketTexts.details.askForRefund)} disabled />
       <Sections.LinkItem

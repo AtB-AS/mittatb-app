@@ -7,10 +7,14 @@ import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../../../navigation';
 import DetailsScreen, {TicketDetailsRouteParams} from './DetailsScreen';
 import ReceiptScreen, {ReceiptScreenRouteParams} from './ReceiptScreen';
+import InspectionScreen, {
+  InspectionScreenRouteParams,
+} from './TicketInspection';
 
 export type TicketModalStackParams = {
   TicketDetails: TicketDetailsRouteParams;
   TicketReceipt: ReceiptScreenRouteParams;
+  TicketInspection: InspectionScreenRouteParams;
 };
 
 export type TicketModalNavigationProp = CompositeNavigationProp<
@@ -36,6 +40,7 @@ const TicketModalRoot = ({route}: TicketModalRootProps) => {
         initialParams={route.params}
       />
       <Stack.Screen name="TicketReceipt" component={ReceiptScreen} />
+      <Stack.Screen name="TicketInspection" component={InspectionScreen} />
     </Stack.Navigator>
   );
 };
