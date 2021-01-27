@@ -13,12 +13,14 @@ type Props = {
   fareContract: FareContract;
   now: number;
   onPressDetails: () => void;
+  onPressInspection: () => void;
 };
 
 const SimpleTicket: React.FC<Props> = ({
   fareContract: fc,
   now,
   onPressDetails,
+  onPressInspection,
 }) => {
   const nowSeconds = now / 1000;
   const isNotExpired = fc.usage_valid_to >= nowSeconds;
@@ -46,7 +48,11 @@ const SimpleTicket: React.FC<Props> = ({
         <TicketInfo fareContract={fc} />
       </Sections.GenericItem>
       {isValidTicket && (
-        <Sections.LinkItem text={t(TicketTexts.controlLink)} disabled />
+        <Sections.LinkItem
+          text={t(TicketTexts.controlLink)}
+          onPress={onPressInspection}
+          disabled={!fc.qr_code}
+        />
       )}
     </Sections.Section>
   );

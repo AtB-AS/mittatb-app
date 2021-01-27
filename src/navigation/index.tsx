@@ -22,7 +22,7 @@ import TicketPurchase, {
   RouteParams as TicketPurchaseParams,
 } from '../screens/Ticketing/Purchase';
 import TicketModalScreen, {
-  TicketModalRouteParams,
+  TicketModalStackParams,
 } from '../screens/Ticketing/Ticket/Details';
 import DepartureDetails, {
   DepartureDetailsRouteParams,
@@ -42,7 +42,7 @@ export type RootStackParamList = {
   SortableFavoriteList: undefined;
   AddEditFavorite: NavigatorScreenParams<AddEditFavoriteRootParams>;
   TicketPurchase: TicketPurchaseParams;
-  TicketModal: TicketModalRouteParams;
+  TicketModal: NavigatorScreenParams<TicketModalStackParams>;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();

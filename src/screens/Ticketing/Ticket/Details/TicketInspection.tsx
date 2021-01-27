@@ -1,51 +1,49 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {RouteProp} from '@react-navigation/native';
 import Header from '../../../../ScreenHeader';
-import {StyleSheet} from '../../../../theme';
+import {StyleSheet, useTheme} from '../../../../theme';
 import ThemeIcon from '../../../../components/theme-icon';
-import {Close} from '../../../../assets/svg/icons/actions';
+import {ArrowLeft} from '../../../../assets/svg/icons/navigation';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import useInterval from '../../../../utils/use-interval';
 import {useTicketState} from '../../../../TicketContext';
-import {View} from 'react-native';
-import DetailsContent from './DetailsContent';
+import {ActivityIndicator, View} from 'react-native';
 import {TicketModalNavigationProp, TicketModalStackParams} from '.';
 import {TicketTexts, useTranslation} from '../../../../translations';
+import qrcode from 'qrcode';
+import {SvgXml} from 'react-native-svg';
 
-export type TicketDetailsRouteParams = {
+export type InspectionScreenRouteParams = {
   orderId: string;
 };
 
-export type TicketDetailsScreenRouteProp = RouteProp<
+export type TicketInspectionScreenRouteProp = RouteProp<
   TicketModalStackParams,
-  'TicketDetails'
+  'TicketInspection'
 >;
 
 type Props = {
-  route: TicketDetailsScreenRouteProp;
+  route: TicketInspectionScreenRouteProp;
   navigation: TicketModalNavigationProp;
 };
 
-export default function DetailsScreen({navigation, route}: Props) {
+export default function TicketInspection({navigation, route}: Props) {
   const styles = useStyles();
-  const [now, setNow] = useState<number>(Date.now());
-  useInterval(() => setNow(Date.now()), 2500);
+  const {theme} = useTheme();
   const {findFareContractByOrderId} = useTicketState();
   const fc = findFareContractByOrderId(route?.params?.orderId);
   const {t} = useTranslation();
+  const [qrCodeSvg, setQrCodeSvg] = useState<string | undefined>(undefined);
 
-  const onReceiptNavigate = () =>
-    fc &&
-    navigation.push('TicketReceipt', {
-      orderId: fc.order_id,
-      orderVersion: fc.order_version,
-    });
+  useEffect(() => {
+    (async function () {
+      if (!fc?.qr_code) return;
+      const svg = await qrcode.toString(fc.qr_code, {
+        type: 'svg',
+      });
 
-  const onInspectionNavigate = () =>
-    fc &&
-    navigation.push('TicketInspection', {
-      orderId: fc.order_id,
-    });
+      setQrCodeSvg(svg);
+    })();
+  }, [fc]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -55,21 +53,18 @@ export default function DetailsScreen({navigation, route}: Props) {
           accessible: true,
           accessibilityRole: 'button',
           accessibilityLabel: t(
-            TicketTexts.details.header.leftButton.a11yLabel,
+            TicketTexts.qr_code.header.leftButton.a11yLabel,
           ),
-          icon: <ThemeIcon svg={Close} />,
+          icon: <ThemeIcon svg={ArrowLeft} />,
         }}
-        title={t(TicketTexts.details.header.title)}
+        title={t(TicketTexts.qr_code.header.title)}
         style={styles.header}
       />
       <View style={styles.content}>
-        {fc && (
-          <DetailsContent
-            fareContract={fc}
-            now={now}
-            onReceiptNavigate={onReceiptNavigate}
-            onInspectionNavigate={onInspectionNavigate}
-          />
+        {qrCodeSvg ? (
+          <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
+        ) : (
+          <ActivityIndicator color={theme.text.colors.primary} />
         )}
       </View>
     </SafeAreaView>

@@ -60,5 +60,13 @@ const TicketTexts = {
       ),
     },
   },
+  qr_code: {
+    header: {
+      leftButton: {
+        a11yLabel: _('Gå tilbake', 'Go back'),
+      },
+      title: _('Vis for kontroll', 'Show for inspection'),
+    },
+  },
 };
 export default TicketTexts;

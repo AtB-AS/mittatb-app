@@ -58,7 +58,16 @@ const TicketsScrollView: React.FC<Props> = ({
             fareContract={fc}
             now={now}
             onPressDetails={() =>
-              navigation.navigate('TicketModal', {orderId: fc.order_id})
+              navigation.navigate('TicketModal', {
+                screen: 'TicketDetails',
+                params: {orderId: fc.order_id},
+              })
+            }
+            onPressInspection={() =>
+              navigation.navigate('TicketModal', {
+                screen: 'TicketInspection',
+                params: {orderId: fc.order_id},
+              })
             }
           />
         ))}
