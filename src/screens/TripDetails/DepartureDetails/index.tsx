@@ -51,7 +51,6 @@ export type DepartureDetailsRouteParams = {
   date: string;
   fromQuayId?: string;
   toQuayId?: string;
-  isBack?: boolean;
 };
 
 export type DetailScreenRouteProp = RouteProp<
@@ -69,14 +68,7 @@ type Props = {
 };
 
 export default function DepartureDetails({navigation, route}: Props) {
-  const {
-    title,
-    serviceJourneyId,
-    date,
-    fromQuayId,
-    toQuayId,
-    isBack = false,
-  } = route.params;
+  const {title, serviceJourneyId, date, fromQuayId, toQuayId} = route.params;
   const styles = useStopsStyle();
   const {t} = useTranslation();
 
@@ -94,7 +86,7 @@ export default function DepartureDetails({navigation, route}: Props) {
     !isFocused,
   );
 
-  const mapData = useMapData(serviceJourneyId, fromQuayId);
+  const mapData = useMapData(serviceJourneyId, fromQuayId, toQuayId);
 
   const content = isLoading ? (
     <View>
@@ -342,19 +334,24 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-function useMapData(serviceJourneyId: string, fromQuayId?: string) {
+function useMapData(
+  serviceJourneyId: string,
+  fromQuayId?: string,
+  toQuayId?: string,
+) {
   const [mapData, setMapData] = useState<ServiceJourneyMapInfoData>();
   useEffect(() => {
     const getData = async () => {
       const result = await getServiceJourneyMapLegs(
         serviceJourneyId,
         fromQuayId,
+        toQuayId,
       );
       setMapData(result);
     };
 
     getData();
-  }, [serviceJourneyId, fromQuayId]);
+  }, [serviceJourneyId, fromQuayId, toQuayId]);
   return mapData;
 }
 

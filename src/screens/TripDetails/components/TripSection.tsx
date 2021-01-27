@@ -171,7 +171,6 @@ const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
       date: leg.expectedStartTime,
       fromQuayId: leg.fromPlace.quay?.id,
       toQuayId: leg.toPlace.quay?.id,
-      isBack: true,
     });
 
   const numberOfIntermediateCalls = leg.intermediateEstimatedCalls.length;
