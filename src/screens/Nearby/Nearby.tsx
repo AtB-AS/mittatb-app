@@ -1,4 +1,8 @@
-import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
+import {
+  CompositeNavigationProp,
+  RouteProp,
+  useRoute,
+} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
@@ -34,8 +38,8 @@ import Loading from '../Loading';
 import NearbyResults from './NearbyResults';
 import {useDepartureData} from './state';
 
-type NearbyRouteName = 'Nearest';
-const NearbyRouteNameStatic: NearbyRouteName = 'Nearest';
+type NearbyRouteName = 'NearbyRoot';
+const NearbyRouteNameStatic: NearbyRouteName = 'NearbyRoot';
 
 export type NearbyScreenNavigationProp = CompositeNavigationProp<
   StackNavigationProp<NearbyStackParams>,
@@ -46,14 +50,14 @@ export type NearbyScreenParams = {
   location: LocationWithMetadata;
 };
 
-export type NearbyScreenProp = RouteProp<NearbyStackParams, 'NearbyRoot'>;
+export type NearbyScreenProp = RouteProp<NearbyStackParams, NearbyRouteName>;
 
 type RootProps = {
   navigation: NearbyScreenNavigationProp;
   route: NearbyScreenProp;
 };
 
-const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
+export default function NearbyScreen({navigation}: RootProps) {
   const {
     status,
     location,
@@ -77,7 +81,7 @@ const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
       navigation={navigation}
     />
   );
-};
+}
 
 type Props = {
   currentLocation?: Location;
@@ -92,6 +96,7 @@ const NearbyOverview: React.FC<Props> = ({
   hasLocationPermission,
   navigation,
 }) => {
+  const r = useRoute();
   const searchedFromLocation = useLocationSearchValue<NearbyScreenProp>(
     'location',
   );
@@ -307,5 +312,3 @@ function translateErrorType(errorType: ErrorType): TranslatedString {
       return NearbyTexts.messages.defaultFetchError;
   }
 }
-
-export default NearbyScreen;
