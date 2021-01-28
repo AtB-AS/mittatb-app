@@ -84,7 +84,7 @@ const Results: React.FC<Props> = ({
             {pluralResultReasons && (
               <Text>
                 {' '}
-                {AssistantTexts.results.info.reasonsTitle}
+                {t(AssistantTexts.results.info.reasonsTitle)}
                 {resultReasons.map((reason, i) => (
                   <Text key={i}>
                     {'\n'}- {reason}
