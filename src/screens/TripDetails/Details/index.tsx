@@ -2,7 +2,6 @@ import {NavigationProp, RouteProp, useIsFocused} from '@react-navigation/core';
 import Axios, {AxiosError} from 'axios';
 import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DetailsStackParams} from '..';
 import {getSingleTripPattern} from '../../../api/trips';
@@ -167,9 +166,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.background.header,
   },
   container: {
-    flex: 1,
-  },
-  scrollView: {
     flex: 1,
     backgroundColor: theme.background.level0,
   },
