@@ -1,8 +1,4 @@
-import {
-  CompositeNavigationProp,
-  RouteProp,
-  useRoute,
-} from '@react-navigation/native';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
@@ -96,7 +92,6 @@ const NearbyOverview: React.FC<Props> = ({
   hasLocationPermission,
   navigation,
 }) => {
-  const r = useRoute();
   const searchedFromLocation = useLocationSearchValue<NearbyScreenProp>(
     'location',
   );
