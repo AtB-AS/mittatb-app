@@ -51,6 +51,8 @@ const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   summary: {
     marginVertical: theme.spacings.medium,
+    borderTopWidth: theme.border.width.slim,
+    borderColor: theme.background.level1,
   },
   summaryDetail: {
     padding: theme.spacings.medium,

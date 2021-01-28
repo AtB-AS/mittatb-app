@@ -3,22 +3,18 @@ import {
   RouteProp,
   useIsFocused,
 } from '@react-navigation/native';
-import {parseISO} from 'date-fns';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DetailsStackParams} from '..';
-import {
-  getDepartures,
-  getServiceJourneyMapLegs,
-} from '../../../api/serviceJourney';
-import {Close} from '../../../assets/svg/icons/actions';
+import {getServiceJourneyMapLegs} from '../../../api/serviceJourney';
 import {
   ArrowLeft,
   Expand,
   ExpandLess,
 } from '../../../assets/svg/icons/navigation';
+import ContentWithDisappearingHeader from '../../../components/disappearing-header/content';
+import PaginatedDetailsHeader from '../../../components/pagination';
 import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
@@ -33,24 +29,23 @@ import {
 import SituationMessages from '../../../situations';
 import {StyleSheet} from '../../../theme';
 import {DepartureDetailsTexts, useTranslation} from '../../../translations';
+import {animateNextChange} from '../../../utils/animation';
 import {
   defaultFill,
   transportationColor,
 } from '../../../utils/transportation-color';
 import {getQuayName} from '../../../utils/transportation-names';
-import usePollableResource from '../../../utils/use-pollable-resource';
 import Time from '../components/Time';
 import TripLegDecoration from '../components/TripLegDecoration';
 import TripRow from '../components/TripRow';
 import CompactMap from '../Map/CompactMap';
 import SituationRow from '../SituationRow';
+import {ServiceJourneyDeparture} from './types';
+import useDepartureData, {CallListGroup} from './use-departure-data';
 
 export type DepartureDetailsRouteParams = {
-  title: string;
-  serviceJourneyId: string;
-  date: string;
-  fromQuayId?: string;
-  toQuayId?: string;
+  items: ServiceJourneyDeparture[];
+  activeItemIndex?: number;
 };
 
 export type DetailScreenRouteProp = RouteProp<
@@ -68,79 +63,28 @@ type Props = {
 };
 
 export default function DepartureDetails({navigation, route}: Props) {
-  const {title, serviceJourneyId, date, fromQuayId, toQuayId} = route.params;
+  const {activeItemIndex = 0, items} = route.params;
+  const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
+
+  const activeItem: ServiceJourneyDeparture | undefined =
+    items[activeItemIndexState];
+  const hasMultipleItems = items.length > 1;
+
   const styles = useStopsStyle();
   const {t} = useTranslation();
   const {top: paddingTop} = useSafeAreaInsets();
 
   const isFocused = useIsFocused();
   const [
-    {callGroups, mode, subMode, situations: parentSituations},
-    ,
+    {callGroups, title, mode, subMode, situations: parentSituations},
     isLoading,
-  ] = useDepartureData(
-    serviceJourneyId,
-    date,
-    fromQuayId,
-    toQuayId,
-    30,
-    !isFocused,
-  );
+  ] = useDepartureData(activeItem, 30, !isFocused);
+  const mapData = useMapData(activeItem);
 
-  const mapData = useMapData(serviceJourneyId, fromQuayId, toQuayId);
-
-  const content = isLoading ? (
-    <View>
-      <ActivityIndicator
-        color={defaultFill}
-        style={styles.spinner}
-        animating={true}
-        size="large"
-      />
-      <ScreenReaderAnnouncement
-        message={t(DepartureDetailsTexts.messages.loading)}
-      />
-    </View>
-  ) : (
-    <View style={{flex: 1}}>
-      {mapData && (
-        <CompactMap
-          mapLegs={mapData.mapLegs}
-          fromPlace={mapData.start}
-          toPlace={mapData.stop}
-          onExpand={() => {
-            navigation.navigate('DetailsMap', {
-              legs: mapData.mapLegs,
-              fromPlace: mapData.start,
-              toPlace: mapData.stop,
-            });
-          }}
-        />
-      )}
-
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollView__content}
-      >
-        <SituationMessages
-          situations={parentSituations}
-          containerStyle={styles.situationsContainer}
-        />
-        <View style={styles.allGroups}>
-          {mapGroup(callGroups, (name, group) => (
-            <CallGroup
-              key={group[0]?.quay?.id ?? name}
-              calls={group}
-              type={name}
-              mode={mode}
-              subMode={subMode}
-              parentSituations={parentSituations}
-            />
-          ))}
-        </View>
-      </ScrollView>
-    </View>
-  );
+  const onPaginactionPress = (newPage: number) => {
+    animateNextChange();
+    setActiveItem(newPage - 1);
+  };
 
   return (
     <View style={styles.container}>
@@ -155,10 +99,69 @@ export default function DepartureDetails({navigation, route}: Props) {
               DepartureDetailsTexts.header.leftIcon.a11yLabel,
             ),
           }}
-          title={title}
+          title={title ?? t(DepartureDetailsTexts.header.notFound)}
         />
       </View>
-      {content}
+      <ContentWithDisappearingHeader
+        header={
+          mapData && (
+            <CompactMap
+              mapLegs={mapData.mapLegs}
+              fromPlace={mapData.start}
+              toPlace={mapData.stop}
+              onExpand={() => {
+                navigation.navigate('DetailsMap', {
+                  legs: mapData.mapLegs,
+                  fromPlace: mapData.start,
+                  toPlace: mapData.stop,
+                });
+              }}
+            />
+          )
+        }
+        //
+      >
+        <View style={styles.scrollView__content}>
+          <PaginatedDetailsHeader
+            page={activeItemIndexState + 1}
+            totalPages={items.length}
+            onNavigate={onPaginactionPress}
+            showPagination={hasMultipleItems}
+            currentDate={activeItem?.date}
+          />
+          <SituationMessages
+            situations={parentSituations}
+            containerStyle={styles.situationsContainer}
+          />
+
+          {isLoading && (
+            <View>
+              <ActivityIndicator
+                color={defaultFill}
+                style={styles.spinner}
+                animating={true}
+                size="large"
+              />
+              <ScreenReaderAnnouncement
+                message={t(DepartureDetailsTexts.messages.loading)}
+              />
+            </View>
+          )}
+
+          <View style={styles.allGroups}>
+            {mapGroup(callGroups, (name, group) => (
+              <CallGroup
+                key={group[0]?.quay?.id ?? name}
+                calls={group}
+                type={name}
+                mode={mode}
+                subMode={subMode}
+                parentSituations={parentSituations}
+              />
+            ))}
+          </View>
+        </View>
+      </ContentWithDisappearingHeader>
     </View>
   );
 }
@@ -196,12 +199,17 @@ function CallGroup({
     return null;
   }
 
+  const collapsePress = (c: boolean) => {
+    animateNextChange();
+    setCollapsed(c);
+  };
+
   const items = collapsed ? [calls[0]] : calls;
   const collapseButton = showCollapsable ? (
     <CollapseButtonRow
       key={`collapse-button-${type}`}
       collapsed={collapsed}
-      setCollapsed={setCollapsed}
+      setCollapsed={collapsePress}
       label={t(DepartureDetailsTexts.collapse.label(calls.length - 1))}
     />
   ) : null;
@@ -336,9 +344,8 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.background.level0,
     marginBottom: theme.spacings.xLarge,
   },
-  spinner: {height: 280},
-  scrollView: {
-    flex: 1,
+  spinner: {
+    paddingTop: theme.spacings.medium,
   },
   scrollView__content: {
     padding: theme.spacings.medium,
@@ -346,134 +353,25 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-function useMapData(
-  serviceJourneyId: string,
-  fromQuayId?: string,
-  toQuayId?: string,
-) {
+function useMapData(activeItem: ServiceJourneyDeparture) {
   const [mapData, setMapData] = useState<ServiceJourneyMapInfoData>();
   useEffect(() => {
     const getData = async () => {
+      if (!activeItem) {
+        return;
+      }
+
       try {
         const result = await getServiceJourneyMapLegs(
-          serviceJourneyId,
-          fromQuayId,
-          toQuayId,
+          activeItem.serviceJourneyId,
+          activeItem.fromQuayId,
+          activeItem.toQuayId,
         );
         setMapData(result);
       } catch (e) {}
     };
 
     getData();
-  }, [serviceJourneyId, fromQuayId, toQuayId]);
+  }, [activeItem]);
   return mapData;
-}
-
-type DepartureData = {
-  callGroups: CallListGroup;
-  mode?: TransportMode;
-  subMode?: TransportSubmode;
-  situations: Situation[];
-};
-
-type CallListGroup = {
-  passed: EstimatedCall[];
-  trip: EstimatedCall[];
-  after: EstimatedCall[];
-};
-
-function useDepartureData(
-  serviceJourneyId: string,
-  date: string,
-  fromQuayId?: string,
-  toQuayId?: string,
-  pollingTimeInSeconds: number = 0,
-  disabled?: boolean,
-): [DepartureData, () => void, boolean, Error?] {
-  const getService = useCallback(
-    async function getServiceJourneyDepartures(): Promise<DepartureData> {
-      const deps = await getDepartures(serviceJourneyId, parseISO(date));
-      const callGroups = groupAllCallsByQuaysInLeg(deps, fromQuayId, toQuayId);
-      const line = callGroups.trip[0]?.serviceJourney?.journeyPattern?.line;
-      const parentSituation = callGroups.trip[0]?.situations;
-
-      return {
-        mode: line?.transportMode,
-        subMode: line?.transportSubmode,
-        callGroups,
-        situations: parentSituation,
-      };
-    },
-    [serviceJourneyId, fromQuayId, toQuayId],
-  );
-
-  return usePollableResource<DepartureData>(getService, {
-    initialValue: {
-      callGroups: {
-        passed: [],
-        trip: [],
-        after: [],
-      },
-      situations: [],
-    },
-    pollingTimeInSeconds,
-    disabled,
-  });
-}
-
-const onType = (
-  obj: CallListGroup,
-  key: keyof CallListGroup,
-  call: EstimatedCall,
-): CallListGroup => ({
-  ...obj,
-  [key]: obj[key].concat(call),
-});
-function groupAllCallsByQuaysInLeg(
-  calls: EstimatedCall[],
-  fromQuayId?: string,
-  toQuayId?: string,
-): CallListGroup {
-  let isAfterStart = false;
-  let isAfterStop = false;
-
-  if (!fromQuayId && !toQuayId) {
-    return {
-      passed: [],
-      trip: calls,
-      after: [],
-    };
-  }
-
-  return calls.reduce(
-    (obj, call) => {
-      // We are at start quay, update flag
-      if (call.quay?.id === fromQuayId) {
-        isAfterStart = true;
-      }
-
-      if (!isAfterStart && !isAfterStop) {
-        // is the first group
-        obj = onType(obj, 'passed', call);
-      } else if (isAfterStart && !isAfterStop) {
-        // is the current route (between start/stop)
-        obj = onType(obj, 'trip', call);
-      } else {
-        // is quays after stop
-        obj = onType(obj, 'after', call);
-      }
-
-      // We are at stop, update flag
-      if (call.quay?.id === toQuayId) {
-        isAfterStop = true;
-      }
-
-      return obj;
-    },
-    {
-      passed: [],
-      trip: [],
-      after: [],
-    } as CallListGroup,
-  );
 }

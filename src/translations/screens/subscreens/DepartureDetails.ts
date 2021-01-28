@@ -2,6 +2,7 @@ import {translation as _} from '../../commons';
 const DepartureDetailsTexts = {
   header: {
     title: (departureName: string) => _(departureName),
+    notFound: _('Ikke funnet', 'Not found'),
     leftIcon: {
       a11yLabel: _('Gå tilbake', 'Go back'),
     },
