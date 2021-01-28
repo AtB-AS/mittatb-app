@@ -1,53 +1,21 @@
-import {useScrollToTop} from '@react-navigation/native';
-import React, {PropsWithChildren, useCallback, useEffect, useRef} from 'react';
-import {
-  Animated,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  Platform,
-  RefreshControl,
-  ScrollView,
-  View,
-} from 'react-native';
+import React, {PropsWithChildren, useEffect, useRef} from 'react';
+import {Animated, Platform, RefreshControl, View} from 'react-native';
 import {StyleSheet, useTheme} from '../../theme';
-import throttle from '../../utils/throttle';
 import {useLayout} from '../../utils/use-layout';
 
-type Props = PropsWithChildren<{
+export type ContentWithDisappearingHeaderProps = PropsWithChildren<{
   header: React.ReactNode;
   onRefresh?(): void;
   isRefreshing?: boolean;
-
-  onEndReached?(e: NativeScrollEvent): void;
-  onEndReachedThreshold?: number;
 }>;
-
-type Scrollable = {
-  scrollTo(opts: {y: number}): void;
-};
-
 export default function ContentWithDisappearingHeader({
   header,
   children,
   isRefreshing = false,
   onRefresh,
-
-  onEndReached,
-  onEndReachedThreshold = 10,
-}: Props) {
-  const {
-    contentHeight,
-    onHeaderContentLayout,
-  } = useCalculateHeaderContentHeight();
+}: ContentWithDisappearingHeaderProps) {
+  const {onLayout: onHeaderContentLayout, height: contentHeight} = useLayout();
   const contentHeightRef = React.useRef(contentHeight);
-  const scrollableContentRef = React.useRef<ScrollView>(null);
-  useScrollToTop(
-    React.useRef<Scrollable>({
-      scrollTo: () =>
-        scrollableContentRef.current?.scrollTo({y: contentHeightRef.current}),
-    }),
-  );
-
   useEffect(() => {
     contentHeightRef.current = contentHeight;
   }, [contentHeight]);
@@ -62,23 +30,6 @@ export default function ContentWithDisappearingHeader({
     extrapolate: 'clamp',
   });
 
-  const endReachListener = useCallback(
-    throttle((e: NativeScrollEvent) => {
-      if (!onEndReached) return;
-      if (!isRefreshing && hasReachedEnd(e, onEndReachedThreshold)) {
-        onEndReached(e);
-      }
-    }, 400),
-    [isRefreshing, onEndReached, onEndReachedThreshold],
-  );
-
-  const onScrolling = useCallback(
-    (e: NativeScrollEvent) => {
-      endReachListener(e);
-    },
-    [endReachListener],
-  );
-
   return (
     <View style={styles.content}>
       <Animated.View
@@ -88,7 +39,6 @@ export default function ContentWithDisappearingHeader({
       </Animated.View>
 
       <Animated.ScrollView
-        ref={scrollableContentRef}
         scrollEventThrottle={10}
         refreshControl={
           onRefresh && (
@@ -102,12 +52,7 @@ export default function ContentWithDisappearingHeader({
         }
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {y: scrollYRef}}}],
-          {
-            useNativeDriver: true,
-            listener: (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-              onScrolling(e.nativeEvent);
-            },
-          },
+          {useNativeDriver: true},
         )}
         contentContainerStyle={{
           paddingTop: Platform.OS === 'ios' ? 0 : contentHeight,
@@ -122,17 +67,7 @@ export default function ContentWithDisappearingHeader({
   );
 }
 
-const hasReachedEnd = (
-  {layoutMeasurement, contentOffset, contentSize}: NativeScrollEvent,
-  paddingThreshold: number,
-) => {
-  return (
-    layoutMeasurement.height + contentOffset.y >=
-    contentSize.height - paddingThreshold
-  );
-};
-
-const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
+const useThemeStyles = StyleSheet.createThemeHook(() => ({
   content: {
     flex: 1,
     overflow: 'hidden',
@@ -149,11 +84,3 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
   },
 }));
-
-function useCalculateHeaderContentHeight() {
-  const {onLayout: onHeaderContentLayout, height: contentHeight} = useLayout();
-  return {
-    contentHeight,
-    onHeaderContentLayout,
-  };
-}
