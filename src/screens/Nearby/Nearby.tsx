@@ -34,8 +34,8 @@ import Loading from '../Loading';
 import NearbyResults from './NearbyResults';
 import {useDepartureData} from './state';
 
-type NearbyRouteName = 'Nearest';
-const NearbyRouteNameStatic: NearbyRouteName = 'Nearest';
+type NearbyRouteName = 'NearbyRoot';
+const NearbyRouteNameStatic: NearbyRouteName = 'NearbyRoot';
 
 export type NearbyScreenNavigationProp = CompositeNavigationProp<
   StackNavigationProp<NearbyStackParams>,
@@ -46,14 +46,14 @@ export type NearbyScreenParams = {
   location: LocationWithMetadata;
 };
 
-export type NearbyScreenProp = RouteProp<NearbyStackParams, 'NearbyRoot'>;
+export type NearbyScreenProp = RouteProp<NearbyStackParams, NearbyRouteName>;
 
 type RootProps = {
   navigation: NearbyScreenNavigationProp;
   route: NearbyScreenProp;
 };
 
-const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
+export default function NearbyScreen({navigation}: RootProps) {
   const {
     status,
     location,
@@ -77,7 +77,7 @@ const NearbyScreen: React.FC<RootProps> = ({navigation}) => {
       navigation={navigation}
     />
   );
-};
+}
 
 type Props = {
   currentLocation?: Location;
@@ -307,5 +307,3 @@ function translateErrorType(errorType: ErrorType): TranslatedString {
       return NearbyTexts.messages.defaultFetchError;
   }
 }
-
-export default NearbyScreen;
