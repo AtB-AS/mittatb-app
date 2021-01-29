@@ -7,7 +7,7 @@ import NavigationIcon, {
   isNavigationIcon,
   NavigationIconTypes,
 } from '../theme-icon/navigation-icon';
-import {SectionItem, useSectionItem} from './section-utils';
+import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 
 export type ButtonInputProps = SectionItem<{
   label: string;
@@ -32,6 +32,7 @@ export default function ButtonInput({
 
   ...props
 }: ButtonInputProps) {
+  const sectionStyles = useSectionStyle();
   const {topContainer, contentContainer, spacing} = useSectionItem(props);
   const styles = useSymbolPickerStyle();
   const iconEl = isNavigationIcon(icon) ? <NavigationIcon mode={icon} /> : icon;
@@ -71,7 +72,7 @@ export default function ButtonInput({
     <View style={wrapperStyle}>
       <TouchableOpacity
         onPress={onPress}
-        style={[styles.container, topContainer]}
+        style={[topContainer, sectionStyles.spaceBetween, styles.container]}
         {...props}
       >
         <ThemeText type="lead" style={styles.label}>
@@ -91,11 +92,8 @@ function isStringText(a: any): a is string {
 
 const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     backgroundColor: theme.background.level0,
-    paddingRight: 40,
+    paddingRight: 60,
   },
   wrapper__inline: {
     alignSelf: 'flex-start',

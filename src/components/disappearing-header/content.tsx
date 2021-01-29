@@ -1,5 +1,6 @@
 import React, {PropsWithChildren, useEffect, useRef} from 'react';
 import {Animated, Platform, RefreshControl, View} from 'react-native';
+import {Easing} from 'react-native-reanimated';
 import {StyleSheet, useTheme} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
 
@@ -25,9 +26,12 @@ export default function ContentWithDisappearingHeader({
   const scrollYRef = useRef(new Animated.Value(0)).current;
 
   const headerTranslate = scrollYRef.interpolate({
-    inputRange: [-contentHeight, contentHeight],
-    outputRange: [0, -contentHeight],
-    extrapolate: 'clamp',
+    // iOS and Android behaves differently here, so to match scrolling half speed
+    // there are two different ways to do it.
+    inputRange: [Platform.OS === 'ios' ? -contentHeight : 0, contentHeight],
+    outputRange: [0, -(contentHeight / (Platform.OS === 'ios' ? 1 : 2))],
+    extrapolateRight: 'extend',
+    extrapolateLeft: 'clamp',
   });
 
   return (
