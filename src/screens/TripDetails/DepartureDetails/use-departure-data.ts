@@ -42,10 +42,13 @@ export default function useDepartureData(
       );
       const line = callGroups.trip[0]?.serviceJourney?.journeyPattern?.line;
       const parentSituation = callGroups.trip[0]?.situations;
+      const title = line?.publicCode
+        ? `${line?.publicCode} ${callGroups.trip[0]?.destinationDisplay.frontText}`
+        : undefined;
 
       return {
         mode: line?.transportMode,
-        title: `${line?.publicCode} ${callGroups.trip[0]?.destinationDisplay.frontText}`,
+        title,
         subMode: line?.transportSubmode,
         callGroups,
         situations: parentSituation,
