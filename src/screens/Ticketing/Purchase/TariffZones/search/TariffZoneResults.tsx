@@ -1,14 +1,17 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {StyleSheet} from '../theme';
-import insets from '../utils/insets';
-import ThemeText from '../components/text';
-import ThemeIcon from '../components/theme-icon';
-import {screenReaderPause} from '../components/accessible-text';
-import {MapPointPin} from '../assets/svg/icons/places';
-import {TariffZoneSearchTexts, useTranslation} from '../translations';
-import {TariffZone} from '../reference-data/types';
-import {getReferenceDataName} from '../reference-data/utils';
+import {StyleSheet} from '../../../../../theme';
+import insets from '../../../../../utils/insets';
+import ThemeText from '../../../../../components/text';
+import ThemeIcon from '../../../../../components/theme-icon';
+import {screenReaderPause} from '../../../../../components/accessible-text';
+import {MapPointPin} from '../../../../../assets/svg/icons/places';
+import {
+  TariffZoneSearchTexts,
+  useTranslation,
+} from '../../../../../translations';
+import {TariffZone} from '../../../../../reference-data/types';
+import {getReferenceDataName} from '../../../../../reference-data/utils';
 
 type Props = {
   tariffZones: TariffZone[];

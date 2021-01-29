@@ -4,13 +4,16 @@ import ConfirmationScreen from './Confirmation';
 import TravellersScreen from './Travellers';
 import {CreditCard as CreditCardScreen, Vipps as VippsScreen} from './Payment';
 import createDismissableStackNavigator from '../../../navigation/createDismissableStackNavigator';
-import {ActiveTicketsScreenName, BuyTicketsScreenName} from '../Tickets';
+import {BuyTicketsScreenName} from '../Tickets';
 import {ReserveOffer} from '../../../api/fareContracts';
 import {RouteProp} from '@react-navigation/core';
-import TariffZones, {TariffZoneWithMetadata} from './TariffZones';
+import TariffZones, {
+  TariffZoneWithMetadata,
+  RouteParams as TariffZonesParams,
+} from './TariffZones';
 import TariffZoneSearch, {
   RouteParams as TariffZoneSearchParams,
-} from '../../../tariff-zone-search';
+} from './TariffZones/search';
 
 import transitionSpec from '../../../navigation/transitionSpec';
 import {PreassignedFareProduct} from '../../../reference-data/types';
@@ -35,10 +38,6 @@ type ConfirmationParams = {
   userProfilesWithCount: UserProfileWithCount[];
 };
 
-type TariffZonesParams = {
-  fromTariffZone: TariffZoneWithMetadata;
-  toTariffZone: TariffZoneWithMetadata;
-};
 type PaymentParams = {
   offers: ReserveOffer[];
   preassignedFareProduct: PreassignedFareProduct;

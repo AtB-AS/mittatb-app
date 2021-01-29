@@ -1,29 +1,48 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
-import Header from '../../../../ScreenHeader';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StyleSheet, useTheme} from '../../../../theme';
 import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
 import {ButtonInput, Section} from '../../../../components/sections';
-import AccessibleText, {
-  screenReaderPause,
-} from '../../../../components/accessible-text';
 import {
   Language,
   TariffZonesTexts,
   useTranslation,
 } from '../../../../translations';
-import {View} from 'react-native';
+import {PixelRatio, Platform, View} from 'react-native';
 import ThemeIcon from '../../../../components/theme-icon';
 import {ArrowLeft} from '../../../../assets/svg/icons/navigation';
 import Button from '../../../../components/button';
-import {Confirm} from '../../../../assets/svg/icons/actions';
 import {TariffZone} from '../../../../reference-data/types';
 import {getReferenceDataName} from '../../../../reference-data/utils';
+import {useRemoteConfig} from '../../../../RemoteConfigContext';
+import {useGeolocationState} from '../../../../GeolocationContext';
+import {TRONDHEIM_CENTRAL_STATION} from '../../../../api/geocoder';
+import MapboxGL, {
+  OnPressEvent,
+  RegionPayload,
+} from '@react-native-mapbox-gl/maps';
+import FullScreenHeader from '../../../../ScreenHeader/full-header';
+import {
+  MapCameraConfig,
+  MapControls,
+  MapViewConfig,
+  PositionArrow,
+  shadows,
+} from '../../../../components/map';
+import colors from '../../../../theme/colors';
+import {FeatureCollection, Polygon} from 'geojson';
+import turfCentroid from '@turf/centroid';
+import {CurrentLocationArrow} from '../../../../assets/svg/icons/places';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
+
+export type RouteParams = {
+  fromTariffZone: TariffZoneWithMetadata;
+  toTariffZone: TariffZoneWithMetadata;
+};
 
 type RouteProps = RouteProp<TicketingStackParams, TariffZonesRouteName>;
 type NavigationProps = DismissableStackNavigationProp<
@@ -31,14 +50,26 @@ type NavigationProps = DismissableStackNavigationProp<
   TariffZonesRouteName
 >;
 
+export type TariffZoneResultType = 'venue' | 'geolocation' | 'zone';
 export type TariffZoneWithMetadata = TariffZone & {
-  resultType: 'venue' | 'geolocation' | 'zone';
+  resultType: TariffZoneResultType;
   venueName?: string;
 };
 
 export type TariffZonesProps = {
   navigation: NavigationProps;
   route: RouteProps;
+};
+
+type RegionEvent = {
+  isMoving: boolean;
+  region?: GeoJSON.Feature<GeoJSON.Point, RegionPayload>;
+};
+
+type TariffZoneSelection = {
+  from: TariffZoneWithMetadata;
+  to: TariffZoneWithMetadata;
+  selectNext: 'from' | 'to';
 };
 
 const TariffZonesRoot: React.FC<TariffZonesProps> = ({navigation, route}) => {
@@ -138,18 +169,62 @@ const destinationPickerValue = (
   }
 };
 
-const TariffZones: React.FC<Props> = ({navigation, route}) => {
-  const styles = useStyles();
-  const {theme} = useTheme();
+const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
+  const {fromTariffZone, toTariffZone} = params;
+  const [regionEvent, setRegionEvent] = useState<RegionEvent>();
+  const {tariff_zones: tariffZones} = useRemoteConfig();
+  const [selectedZones, setSelectedZones] = useState<TariffZoneSelection>({
+    from: fromTariffZone,
+    to: toTariffZone,
+    selectNext: 'to',
+  });
 
-  const {t, language} = useTranslation();
+  useEffect(() => {
+    setSelectedZones({
+      ...selectedZones,
+      from: fromTariffZone,
+      to: toTariffZone,
+    });
+  }, [fromTariffZone, toTariffZone]);
 
-  const {fromTariffZone, toTariffZone} = route.params;
+  const {location: geolocation} = useGeolocationState();
 
-  const openTariffZoneSearch = (
-    callerRouteParam: keyof RouteProps['params'],
-    initialLocation?: string,
-  ) =>
+  const {bottom: safeAreaBottom} = useSafeAreaInsets();
+
+  const updateSelectedZones = (
+    tariffZoneId: string,
+    resultType: TariffZoneResultType = 'zone',
+  ) => {
+    const clickedTariffZone = tariffZones.find((t) => tariffZoneId === t.id)!;
+    const newZoneSelection: TariffZoneSelection = {
+      ...selectedZones,
+      [selectedZones.selectNext]: {
+        ...clickedTariffZone,
+        resultType: resultType,
+      },
+      selectNext: selectedZones.selectNext === 'from' ? 'to' : 'from',
+    };
+    setSelectedZones(newZoneSelection);
+  };
+
+  const startCoordinates = geolocation
+    ? [geolocation.coords.longitude, geolocation.coords.latitude]
+    : [TRONDHEIM_CENTRAL_STATION.longitude, TRONDHEIM_CENTRAL_STATION.latitude];
+
+  const onSave = () => {
+    navigation.navigate('PurchaseOverview', {
+      fromTariffZone: {
+        ...selectedZones.from,
+        resultType: 'zone',
+      },
+      toTariffZone: {
+        ...selectedZones.to,
+        resultType: 'zone',
+      },
+    });
+  };
+
+  const onVenueSearchClick = (callerRouteParam: keyof RouteParams) => {
     navigation.navigate('TariffZoneSearch', {
       label:
         callerRouteParam === 'fromTariffZone'
@@ -157,109 +232,248 @@ const TariffZones: React.FC<Props> = ({navigation, route}) => {
           : t(TariffZonesTexts.location.destinationPicker.label),
       callerRouteName: TariffZonesRouteNameStatic,
       callerRouteParam,
-      initialLocation,
     });
+  };
 
-  const {top: safeAreaTop, bottom: safeAreBottom} = useSafeAreaInsets();
+  const mapCameraRef = useRef<MapboxGL.Camera>(null);
+  const mapViewRef = useRef<MapboxGL.MapView>(null);
+
+  async function zoomIn() {
+    const currentZoom = await mapViewRef.current?.getZoom();
+    mapCameraRef.current?.zoomTo((currentZoom ?? 10) + 1, 200);
+  }
+
+  async function zoomOut() {
+    const currentZoom = await mapViewRef.current?.getZoom();
+    mapCameraRef.current?.zoomTo((currentZoom ?? 10) - 1, 200);
+  }
+
+  const selectFeature = (event: OnPressEvent) => {
+    const feature = event.features[0];
+    mapCameraRef.current?.flyTo(
+      [event.coordinates.longitude, event.coordinates.latitude],
+      300,
+    );
+    updateSelectedZones(feature.id as string);
+  };
+
+  async function flyToCurrentLocation() {
+    geolocation &&
+      mapCameraRef.current?.flyTo(
+        [geolocation.coords.longitude, geolocation.coords.latitude],
+        750,
+      );
+
+    if (mapViewRef.current && geolocation) {
+      let point = await mapViewRef.current.getPointInView([
+        geolocation.coords.longitude,
+        geolocation.coords.latitude,
+      ]);
+      if (Platform.OS == 'android') {
+        // Necessary hack (https://github.com/react-native-mapbox-gl/maps/issues/1085)
+        point = point.map((p) => p * PixelRatio.get());
+      }
+      const featuresAtPoint = await mapViewRef.current.queryRenderedFeaturesAtPoint(
+        point,
+        ['all', true],
+        ['tariffZonesFill'],
+      );
+      const featureId = featuresAtPoint?.features?.[0]?.id;
+      if (featureId) {
+        updateSelectedZones(featureId as string, 'geolocation');
+      }
+    }
+  }
+
+  const styles = useMapStyles();
+  const {t, language} = useTranslation();
+  const {theme} = useTheme();
+
+  const featureCollection = mapZonesToFeatureCollection(tariffZones, language);
 
   return (
-    <View style={[styles.container, {paddingTop: safeAreaTop}]}>
-      <View>
-        <Header
+    <View style={styles.container}>
+      <View style={{backgroundColor: theme.background.header}}>
+        <FullScreenHeader
           title={t(TariffZonesTexts.header.title)}
           leftButton={{
+            onPress: () => navigation.goBack(),
             accessible: true,
             accessibilityRole: 'button',
             accessibilityLabel: t(TariffZonesTexts.header.leftButton.a11yLabel),
             icon: <ThemeIcon svg={ArrowLeft} />,
-            onPress: () => navigation.goBack(),
           }}
-          style={styles.header}
         />
 
         <Section withPadding>
           <ButtonInput
-            accessibilityLabel={
-              t(departurePickerAccessibilityLabel(fromTariffZone, language)) +
-              screenReaderPause
-            }
+            label={t(TariffZonesTexts.location.departurePicker.label)}
+            value={t(departurePickerValue(selectedZones.from, language))}
+            accessibilityLabel={t(
+              departurePickerAccessibilityLabel(selectedZones.from, language),
+            )}
             accessibilityHint={t(
               TariffZonesTexts.location.departurePicker.a11yHint,
             )}
-            accessibilityRole="button"
-            value={t(departurePickerValue(fromTariffZone, language))}
-            label={t(TariffZonesTexts.location.departurePicker.label)}
-            placeholder={t(TariffZonesTexts.location.departurePicker.label)}
-            onPress={() =>
-              openTariffZoneSearch('fromTariffZone', fromTariffZone.venueName)
+            onPress={() => onVenueSearchClick('fromTariffZone')}
+            icon={
+              selectedZones.from.resultType === 'geolocation' ? (
+                <ThemeIcon svg={CurrentLocationArrow} />
+              ) : undefined
             }
           />
-
           <ButtonInput
-            accessibilityLabel={
-              t(destinationPickerAccessibilityLabel(toTariffZone, language)) +
-              screenReaderPause
-            }
-            accessibilityHint={t(
-              TariffZonesTexts.location.destinationPicker.a11yHint,
-            )}
-            accessibilityRole="button"
-            value={t(
-              destinationPickerValue(fromTariffZone, toTariffZone, language),
-            )}
             label={t(TariffZonesTexts.location.destinationPicker.label)}
-            placeholder={t(TariffZonesTexts.location.destinationPicker.label)}
-            onPress={() =>
-              openTariffZoneSearch('toTariffZone', toTariffZone.venueName)
+            value={t(
+              destinationPickerValue(
+                selectedZones.from,
+                selectedZones.to,
+                language,
+              ),
+            )}
+            accessibilityLabel={t(
+              destinationPickerAccessibilityLabel(selectedZones.from, language),
+            )}
+            accessibilityHint={t(
+              TariffZonesTexts.location.departurePicker.a11yHint,
+            )}
+            onPress={() => onVenueSearchClick('toTariffZone')}
+            icon={
+              selectedZones.to.resultType === 'geolocation' ? (
+                <ThemeIcon svg={CurrentLocationArrow} />
+              ) : undefined
             }
           />
         </Section>
-        <AccessibleText
-          type={'body'}
-          style={styles.tariffZoneText}
-          prefix={t(TariffZonesTexts.zoneSummary.a11yLabelPrefix)}
-        >
-          {t(tariffZonesSummary(fromTariffZone, toTariffZone, language))}
-        </AccessibleText>
       </View>
-      <View
+
+      <MapboxGL.MapView
+        ref={mapViewRef}
         style={{
-          paddingBottom: Math.max(safeAreBottom, theme.spacings.medium),
+          flex: 1,
         }}
+        onRegionDidChange={(region) => {
+          setRegionEvent({isMoving: false, region});
+        }}
+        onRegionWillChange={() => {
+          setRegionEvent({isMoving: true, region: regionEvent?.region});
+        }}
+        {...MapViewConfig}
       >
-        <Button
-          style={styles.saveButton}
-          onPress={() =>
-            navigation.navigate('PurchaseOverview', {
-              fromTariffZone,
-              toTariffZone,
-            })
-          }
-          text={t(TariffZonesTexts.saveButton.text)}
-          accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
-          icon={Confirm}
-          iconPosition="right"
+        <MapboxGL.ShapeSource
+          id={'tariffZonesShape'}
+          shape={featureCollection}
+          hitbox={{width: 1, height: 1}} // to not be able to hit multiple zones with one click
+          buffer={20} // tweak to improve rendering speed
+          tolerance={2} // tweak to improve rendering speed
+          onPress={selectFeature}
+        >
+          <MapboxGL.FillLayer
+            id="tariffZonesFill"
+            style={{
+              fillAntialias: true,
+              fillColor: [
+                // Mapbox Expression syntax
+                'case',
+                ['==', selectedZones.from.id, ['id']],
+                colors.secondary.red_500,
+                ['==', selectedZones.to.id, ['id']],
+                colors.secondary.blue_500,
+                'transparent',
+              ],
+              fillOpacity: 0.2,
+            }}
+          />
+          <MapboxGL.LineLayer
+            id="tariffZonesLine"
+            style={{
+              lineWidth: 1,
+              lineColor: colors.primary.gray_400,
+            }}
+          />
+        </MapboxGL.ShapeSource>
+        {featureCollection.features.map((f) => (
+          <MapboxGL.ShapeSource
+            key={f.id}
+            id={`label-shape-${f.id}`}
+            shape={f.properties!.midPoint}
+          >
+            <MapboxGL.SymbolLayer
+              id={`label-symbol-${f.id}`}
+              style={{
+                textSize: 20,
+                textField: f.properties!.name,
+                textHaloColor: 'white',
+                textHaloWidth: 10,
+              }}
+            />
+          </MapboxGL.ShapeSource>
+        ))}
+        <MapboxGL.Camera
+          ref={mapCameraRef}
+          zoomLevel={6}
+          centerCoordinate={startCoordinates}
+          {...MapCameraConfig}
         />
+      </MapboxGL.MapView>
+
+      <View style={[styles.bottomControls, {bottom: safeAreaBottom}]}>
+        <View>
+          <View style={styles.mapControls}>
+            <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
+            <MapControls zoomIn={zoomIn} zoomOut={zoomOut} />
+          </View>
+        </View>
+        <View style={styles.saveButton}>
+          <Button
+            onPress={onSave}
+            text={t(TariffZonesTexts.saveButton.text)}
+            accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
+          />
+        </View>
       </View>
     </View>
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    flex: 1,
-    backgroundColor: theme.background.level2,
-    justifyContent: 'space-between',
+const mapZonesToFeatureCollection = (
+  zones: TariffZone[],
+  language: Language,
+): FeatureCollection<Polygon> => ({
+  type: 'FeatureCollection',
+  features: zones.map((t) => ({
+    type: 'Feature',
+    id: t.id,
+    properties: {
+      name: getReferenceDataName(t, language),
+      midPoint: turfCentroid(t.geometry, {
+        properties: {name: getReferenceDataName(t, language)},
+      }),
+    },
+    geometry: t.geometry,
+  })),
+});
+
+const useMapStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {flex: 1},
+  pinContainer: {
+    position: 'absolute',
+    top: '50%',
+    right: '50%',
   },
-  header: {
-    paddingHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
+  pin: {position: 'absolute', top: 40, right: -20, ...shadows},
+  bottomControls: {
+    position: 'absolute',
+    width: '100%',
+    justifyContent: 'flex-end',
   },
-  tariffZoneText: {
-    textAlign: 'center',
-    marginTop: theme.spacings.medium,
+  mapControls: {
+    position: 'absolute',
+    bottom: theme.spacings.medium,
+    right: theme.spacings.medium,
   },
   saveButton: {
+    paddingBottom: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
   },
 }));
