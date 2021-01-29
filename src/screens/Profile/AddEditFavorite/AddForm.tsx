@@ -144,6 +144,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
             ? t(AddEditFavoriteTexts.header.titleEdit)
             : t(AddEditFavoriteTexts.header.title)
         }
+        closeIcon={!!editItem}
       />
 
       <EmojiPopup
