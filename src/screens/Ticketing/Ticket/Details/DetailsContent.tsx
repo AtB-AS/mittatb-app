@@ -41,12 +41,16 @@ const DetailsContent: React.FC<Props> = ({
           nowSeconds={nowSeconds}
           validTo={fc.usage_valid_to}
         />
-        <ValidityLine
-          isValid={isValidTicket}
-          nowSeconds={nowSeconds}
-          validFrom={fc.usage_valid_from}
-          validTo={fc.usage_valid_to}
-        />
+        {isValidTicket ? (
+          <ValidityLine
+            status="valid"
+            nowSeconds={nowSeconds}
+            validFrom={fc.usage_valid_from}
+            validTo={fc.usage_valid_to}
+          />
+        ) : (
+          <ValidityLine status="expired" />
+        )}
         <TicketInfo fareContract={fc} />
       </Sections.GenericItem>
       <Sections.GenericItem>

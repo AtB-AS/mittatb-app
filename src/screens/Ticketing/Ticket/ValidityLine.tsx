@@ -17,15 +17,9 @@ type Props =
     }
   | {
       status: 'reserving';
-      nowSeconds?: never;
-      validFrom?: never;
-      validTo?: never;
     }
   | {
       status: 'expired';
-      nowSeconds?: never;
-      validFrom?: never;
-      validTo?: never;
     };
 
 const ValidityLine = (props: Props) => {
@@ -33,13 +27,13 @@ const ValidityLine = (props: Props) => {
   const styles = useStyles();
 
   if (props.status === 'reserving') {
-    return <LineWithVerticalBars status={props.status} />;
+    return <LineWithVerticalBars backgroundColor={colors.secondary.cyan_500} />;
   } else if (props.status === 'valid') {
     const {nowSeconds, validFrom, validTo} = props;
     const validityPercent = getValidityPercent(nowSeconds, validFrom, validTo);
     return (
       <LineWithVerticalBars
-        status={props.status}
+        backgroundColor={colors.primary.green_500}
         validityPercent={validityPercent}
       />
     );
@@ -59,10 +53,10 @@ const ValidityLine = (props: Props) => {
 };
 
 const LineWithVerticalBars = ({
-  status,
+  backgroundColor,
   validityPercent = 100,
 }: {
-  status: 'valid' | 'reserving';
+  backgroundColor: string;
   validityPercent?: number;
 }) => {
   const styles = useStyles();
@@ -74,12 +68,9 @@ const LineWithVerticalBars = ({
       <View
         style={[
           styles.progressBar,
-          {width: `${validityPercent}%`},
           {
-            backgroundColor:
-              status === 'valid'
-                ? colors.primary.green_500
-                : colors.secondary.cyan_500,
+            width: `${validityPercent}%`,
+            backgroundColor,
           },
         ]}
       >
