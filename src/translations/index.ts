@@ -19,7 +19,6 @@ export {default as LocationSearchTexts} from './screens/subscreens/LocationSearc
 export {default as TravellersTexts} from './screens/subscreens/Travellers';
 export {default as TariffZonesTexts} from './screens/subscreens/TariffZones';
 export {default as TariffZoneSearchTexts} from './screens/subscreens/TariffZoneSearch';
-export {default as TariffZoneMapSelectionTexts} from './screens/subscreens/TariffZoneMapSelection';
 export {default as PaymentCreditCardTexts} from './screens/subscreens/PaymentCreditCard';
 export {default as PaymentVippsTexts} from './screens/subscreens/PaymentVipps';
 export {default as PurchaseOverviewTexts} from './screens/subscreens/PurchaseOverview';

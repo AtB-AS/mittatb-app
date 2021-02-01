@@ -24,10 +24,6 @@ import TicketPurchase, {
 import TicketModalScreen, {
   TicketModalStackParams,
 } from '../screens/Ticketing/Ticket/Details';
-import DepartureDetails, {
-  DepartureDetailsRouteParams,
-} from '../screens/TripDetails/DepartureDetails';
-import {RouteParams as TariffZoneSearchParams} from '../tariff-zone-search';
 import {useTheme} from '../theme';
 import TabNavigator from './TabNavigator';
 import transitionSpec from './transitionSpec';
@@ -37,7 +33,6 @@ export type RootStackParamList = {
   Onboarding: undefined;
   TabNavigator: undefined;
   LocationSearch: LocationSearchParams;
-  TariffZoneSearch: TariffZoneSearchParams;
   SortableFavoriteList: undefined;
   AddEditFavorite: NavigatorScreenParams<AddEditFavoriteRootParams>;
   TicketPurchase: TicketPurchaseParams;

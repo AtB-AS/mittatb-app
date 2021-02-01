@@ -2,11 +2,11 @@ import {translation as _} from '../../commons';
 
 const TariffZonesTexts = {
   header: {
-    title: _('Velg sone', 'Select zone'),
+    title: _('Velg soner', 'Select zones'),
     leftButton: {
       a11yLabel: _(
         'Gå tilbake uten å lagre sonevalget',
-        'Go back without saving your selected zone',
+        'Go back without saving your selected zones',
       ),
     },
   },
@@ -21,7 +21,7 @@ const TariffZonesTexts = {
       multipleZone: (zoneNameFrom: string, zoneNameTo: string) =>
         _(
           `Reise fra sone ${zoneNameFrom} til sone ${zoneNameTo}`,
-          `Travel from zone ${zoneNameFrom} to zone ${zoneNameTo})`,
+          `Travel from zone ${zoneNameFrom} to zone ${zoneNameTo}`,
         ),
     },
   },

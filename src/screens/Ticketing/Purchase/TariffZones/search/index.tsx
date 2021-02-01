@@ -7,36 +7,36 @@ import {
   View,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {TextInput} from '../components/sections';
-import ThemeText from '../components/text';
-import ThemeIcon from '../components/theme-icon';
-import MessageBox from '../message-box';
-import {RootStackParamList} from '../navigation';
-import FullScreenHeader from '../ScreenHeader/full-header';
-import {StyleSheet} from '../theme';
-import {TariffZoneSearchNavigationProp} from './';
+import {TextInput} from '../../../../../components/sections';
+import ThemeText from '../../../../../components/text';
+import ThemeIcon from '../../../../../components/theme-icon';
+import MessageBox from '../../../../../message-box';
+import FullScreenHeader from '../../../../../ScreenHeader/full-header';
+import {StyleSheet} from '../../../../../theme';
 import TariffZoneResults from './TariffZoneResults';
 import {
   TariffZoneSearchTexts,
   TranslateFunction,
   useTranslation,
-} from '../translations/';
-import useDebounce from '../utils/useDebounce';
-import {useGeolocationState} from '../GeolocationContext';
-import {useGeocoder} from '../geocoder';
+} from '../../../../../translations';
+import useDebounce from '../../../../../utils/useDebounce';
+import {useGeolocationState} from '../../../../../GeolocationContext';
+import {useGeocoder} from '../../../../../geocoder';
 import VenueResults, {LocationAndTariffZone} from './VenueResults';
-import {Location} from '../favorites/types';
-import {ArrowLeft} from '../assets/svg/icons/navigation';
-import {ErrorType} from '../api/utils';
-import {useRemoteConfig} from '../RemoteConfigContext';
-import {TariffZone} from '../reference-data/types';
-import FavoriteChips from '../favorite-chips';
+import {Location} from '../../../../../favorites/types';
+import {ArrowLeft} from '../../../../../assets/svg/icons/navigation';
+import {ErrorType} from '../../../../../api/utils';
+import {useRemoteConfig} from '../../../../../RemoteConfigContext';
+import {TariffZone} from '../../../../../reference-data/types';
+import {DismissableStackNavigationProp} from '../../../../../navigation/createDismissableStackNavigator';
+import {TicketingStackParams} from '../../index';
 
-export type Props = {
-  navigation: TariffZoneSearchNavigationProp;
-  route: RouteProp<RootStackParamList, 'TariffZoneSearch'>;
-};
+type TariffZonesSearchName = 'TariffZones';
 
+type NavigationProp = DismissableStackNavigationProp<
+  TicketingStackParams,
+  TariffZonesSearchName
+>;
 export type RouteParams = {
   callerRouteName: string;
   callerRouteParam: string;
@@ -44,7 +44,16 @@ export type RouteParams = {
   initialLocation?: string;
 };
 
-const TariffZoneSearch: React.FC<Props> = ({
+type TariffZoneSearchRouteName = 'TariffZoneSearch';
+
+type RouteProps = RouteProp<TicketingStackParams, TariffZoneSearchRouteName>;
+
+export type Props = {
+  navigation: NavigationProp;
+  route: RouteProps;
+};
+
+const Index: React.FC<Props> = ({
   navigation,
   route: {
     params: {callerRouteName, callerRouteParam, label, initialLocation},
@@ -158,18 +167,6 @@ const TariffZoneSearch: React.FC<Props> = ({
             autoCompleteType="off"
           />
         </View>
-
-        <FavoriteChips
-          contentContainerStyle={styles.favouriteChips}
-          onSelectLocation={() => {}}
-          onMapSelection={() =>
-            navigation.navigate('TariffZoneMapSelection', {
-              callerRouteName,
-              callerRouteParam,
-            })
-          }
-          chipTypes={['map']}
-        />
       </View>
 
       <ScrollView
@@ -243,4 +240,4 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-export default TariffZoneSearch;
+export default Index;
