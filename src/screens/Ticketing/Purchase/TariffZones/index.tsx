@@ -183,9 +183,15 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
     setSelectedZones({
       ...selectedZones,
       from: fromTariffZone,
+    });
+  }, [fromTariffZone]);
+
+  useEffect(() => {
+    setSelectedZones({
+      ...selectedZones,
       to: toTariffZone,
     });
-  }, [fromTariffZone, toTariffZone]);
+  }, [toTariffZone]);
 
   const {location: geolocation} = useGeolocationState();
 
@@ -213,14 +219,8 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
 
   const onSave = () => {
     navigation.navigate('PurchaseOverview', {
-      fromTariffZone: {
-        ...selectedZones.from,
-        resultType: 'zone',
-      },
-      toTariffZone: {
-        ...selectedZones.to,
-        resultType: 'zone',
-      },
+      fromTariffZone: selectedZones.from,
+      toTariffZone: selectedZones.to,
     });
   };
 
@@ -364,8 +364,6 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
           id={'tariffZonesShape'}
           shape={featureCollection}
           hitbox={{width: 1, height: 1}} // to not be able to hit multiple zones with one click
-          buffer={20} // tweak to improve rendering speed
-          tolerance={2} // tweak to improve rendering speed
           onPress={selectFeature}
         >
           <MapboxGL.FillLayer
