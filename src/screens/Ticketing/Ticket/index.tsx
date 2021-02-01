@@ -3,7 +3,6 @@ import {
   FareContract,
   FareContractLifecycleState,
 } from '../../../api/fareContracts';
-import ThemeText from '../../../components/text';
 import * as Sections from '../../../components/sections';
 import ValidityHeader from './ValidityHeader';
 import ValidityLine from './ValidityLine';
@@ -39,12 +38,17 @@ const SimpleTicket: React.FC<Props> = ({
           isRefunded={isRefunded}
           onPressDetails={onPressDetails}
         />
-        <ValidityLine
-          isValid={isValidTicket}
-          nowSeconds={nowSeconds}
-          validFrom={fc.usage_valid_from}
-          validTo={fc.usage_valid_to}
-        />
+        {isValidTicket ? (
+          <ValidityLine
+            status="valid"
+            nowSeconds={nowSeconds}
+            validFrom={fc.usage_valid_from}
+            validTo={fc.usage_valid_to}
+          />
+        ) : (
+          <ValidityLine status="expired" />
+        )}
+
         <TicketInfo fareContract={fc} />
       </Sections.GenericItem>
       {isValidTicket && (

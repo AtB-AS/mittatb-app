@@ -8,39 +8,40 @@ import colors from '../../../theme/colors';
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 
-const ValidityLine: React.FC<{
-  isValid: boolean;
-  nowSeconds: number;
-  validFrom: number;
-  validTo: number;
-}> = ({isValid, nowSeconds, validFrom, validTo}) => {
+type Props =
+  | {
+      status: 'valid';
+      nowSeconds: number;
+      validFrom: number;
+      validTo: number;
+    }
+  | {
+      status: 'reserving';
+      nowSeconds?: never;
+      validFrom?: never;
+      validTo?: never;
+    }
+  | {
+      status: 'expired';
+      nowSeconds?: never;
+      validFrom?: never;
+      validTo?: never;
+    };
+
+const ValidityLine = (props: Props) => {
   const {theme} = useTheme();
   const styles = useStyles();
-  const animatedVerticalLineOffset = useAnimatedVerticalLineOffset();
 
-  if (isValid) {
+  if (props.status === 'reserving') {
+    return <LineWithVerticalBars status={props.status} />;
+  } else if (props.status === 'valid') {
+    const {nowSeconds, validFrom, validTo} = props;
     const validityPercent = getValidityPercent(nowSeconds, validFrom, validTo);
-    const numberOfVerticalLines = getNumberOfVerticalLines();
-
     return (
-      <View style={styles.container}>
-        <View style={[styles.progressBar, {width: `${validityPercent}%`}]}>
-          {[...Array(numberOfVerticalLines)].map((e, i) => (
-            <VerticalLine
-              key={i}
-              offset={animatedVerticalLineOffset}
-              index={i}
-            />
-          ))}
-        </View>
-        <Dash
-          style={{width: `${100 - validityPercent}%`}}
-          dashGap={0}
-          dashLength={1}
-          dashThickness={8}
-          dashColor={theme.background.level1}
-        />
-      </View>
+      <LineWithVerticalBars
+        status={props.status}
+        validityPercent={validityPercent}
+      />
     );
   } else {
     return (
@@ -55,6 +56,46 @@ const ValidityLine: React.FC<{
       </View>
     );
   }
+};
+
+const LineWithVerticalBars = ({
+  status,
+  validityPercent = 100,
+}: {
+  status: 'valid' | 'reserving';
+  validityPercent?: number;
+}) => {
+  const styles = useStyles();
+  const {theme} = useTheme();
+  const animatedVerticalLineOffset = useAnimatedVerticalLineOffset();
+  const numberOfVerticalLines = getNumberOfVerticalLines();
+  return (
+    <View style={styles.container}>
+      <View
+        style={[
+          styles.progressBar,
+          {width: `${validityPercent}%`},
+          {
+            backgroundColor:
+              status === 'valid'
+                ? colors.primary.green_500
+                : colors.secondary.cyan_500,
+          },
+        ]}
+      >
+        {[...Array(numberOfVerticalLines)].map((e, i) => (
+          <VerticalLine key={i} offset={animatedVerticalLineOffset} index={i} />
+        ))}
+      </View>
+      <Dash
+        style={{width: `${100 - validityPercent}%`}}
+        dashGap={0}
+        dashLength={1}
+        dashThickness={8}
+        dashColor={theme.background.level1}
+      />
+    </View>
+  );
 };
 
 /**
@@ -148,7 +189,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   progressBar: {
     height: 8,
-    backgroundColor: colors.primary.green_500,
     overflow: 'hidden',
   },
   verticalLine: {
