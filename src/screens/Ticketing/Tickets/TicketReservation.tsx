@@ -2,12 +2,12 @@ import React from 'react';
 import {View, TouchableOpacity, Linking, ActivityIndicator} from 'react-native';
 import {StyleSheet, useTheme} from '../../../theme';
 import {BlankTicket} from '../../../assets/svg/icons/ticketing';
-import Dash from 'react-native-dash';
 import ThemeText from '../../../components/text';
 import {ActiveReservation} from '../../../TicketContext';
 import ThemeIcon from '../../../components/theme-icon';
 import Button from '../../../components/button';
 import {TicketsTexts, useTranslation} from '../../../translations';
+import ValidityLine from '../Ticket/ValidityLine';
 
 type Props = {
   reservation: ActiveReservation;
@@ -69,19 +69,12 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
   );
 };
 
-const VerifyingValidityLine: React.FC<{}> = () => {
+const VerifyingValidityLine: React.FC = () => {
   const styles = useStyles();
-  const {theme} = useTheme();
 
   return (
     <View style={styles.validityDashContainer}>
-      <Dash
-        style={{width: '100%'}}
-        dashGap={0}
-        dashLength={1}
-        dashThickness={4}
-        dashColor={theme.background.level1}
-      />
+      <ValidityLine status="reserving" />
     </View>
   );
 };
@@ -108,7 +101,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.medium,
   },
   validityDashContainer: {
-    flexDirection: 'row',
+    marginHorizontal: theme.spacings.medium,
   },
   ticketInfoContainer: {
     padding: theme.spacings.medium,
