@@ -1,7 +1,7 @@
 PODS:
   - "@react-native-mapbox-gl-mapbox-static (6.3.0)"
   - boost-for-react-native (1.63.0)
-  - BugsnagReactNative (7.5.2):
+  - BugsnagReactNative (7.6.1):
     - React
   - BVLinearGradient (2.5.6):
     - React
@@ -653,7 +653,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   "@react-native-mapbox-gl-mapbox-static": 7ab93cffee38c24fa367e5d3ea3f0334d35d3d06
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  BugsnagReactNative: 3cd02fe1b483dcbbfe41cc3bdef9056afca1e2ef
+  BugsnagReactNative: 4a1cfbbc0b87dc257c5c59a4aa6560ef8a419d31
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
   CocoaLibEvent: 2fab71b8bd46dd33ddb959f7928ec5909f838e3f

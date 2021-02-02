@@ -6,6 +6,7 @@ import {
 } from './reference-data/defaults';
 
 export type RemoteConfig = {
+  enable_network_logging: boolean;
   enable_ticketing: boolean;
   enable_intercom: boolean;
   enable_i18n: boolean;
@@ -21,6 +22,7 @@ export type RemoteConfig = {
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
+  enable_network_logging: true,
   enable_ticketing: false,
   enable_intercom: true,
   enable_i18n: false,
@@ -35,8 +37,11 @@ export const defaultRemoteConfig: RemoteConfig = {
   user_profiles: JSON.stringify(defaultUserProfiles),
 };
 
-export async function getConfig(): Promise<RemoteConfig> {
+export function getConfig(): RemoteConfig {
   const values = remoteConfig().getAll();
+  const enable_network_logging = !!(
+    values['enable_network_logging']?.asBoolean() ?? true
+  );
   const enable_ticketing = !!(values['enable_ticketing']?.asBoolean() ?? false);
   const enable_intercom = !!(values['enable_intercom']?.asBoolean() ?? true);
   const enable_i18n = !!(values['enable_i18n']?.asBoolean() ?? false);
@@ -58,6 +63,7 @@ export async function getConfig(): Promise<RemoteConfig> {
     values['user_profiles']?.asString() ?? defaultRemoteConfig.user_profiles;
 
   return {
+    enable_network_logging,
     enable_ticketing,
     enable_intercom,
     enable_i18n,
@@ -71,4 +77,26 @@ export async function getConfig(): Promise<RemoteConfig> {
     tariff_zones,
     user_profiles,
   };
+}
+
+// Pick keys of certain value type
+type SubType<Base, Condition> = Pick<
+  Base,
+  {
+    [Key in keyof Base]: Base[Key] extends Condition ? Key : never;
+  }[keyof Base]
+>;
+
+export function getBooleanConfigValue(
+  key: keyof SubType<RemoteConfig, boolean>,
+) {
+  return remoteConfig().getBoolean(key);
+}
+
+export function getStringConfigValue(key: keyof SubType<RemoteConfig, string>) {
+  return remoteConfig().getString(key);
+}
+
+export function getNumberConfigValue(key: keyof SubType<RemoteConfig, number>) {
+  return remoteConfig().getNumber(key);
 }
