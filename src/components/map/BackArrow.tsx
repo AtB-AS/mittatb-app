@@ -11,7 +11,7 @@ const BackArrow: React.FC<{onBack(): void} & AccessibilityProps> = ({
   return (
     <Button
       type="compact"
-      mode="primary2"
+      color="primary2"
       onPress={onBack}
       hitSlop={insets.symmetric(12, 20)}
       icon={ArrowLeft}

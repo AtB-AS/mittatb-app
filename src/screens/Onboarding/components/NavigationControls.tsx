@@ -58,7 +58,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacings.medium,
   },
   button: {
-    backgroundColor: theme.button.primary.backgroundColor,
+    backgroundColor: theme.button.primary.bg,
     width: '100%',
     height: 44,
     borderRadius: theme.border.radius.regular,

@@ -70,7 +70,7 @@ const ResultItemHeader: React.FC<{
     <View style={styles.resultHeader}>
       <ThemeText
         type="lead"
-        color="faded"
+        color="disabled"
         style={styles.resultHeaderLabel}
         accessibilityLabel={t(
           AssistantTexts.results.resultItem.header.time(
@@ -85,7 +85,7 @@ const ResultItemHeader: React.FC<{
       <View style={styles.durationContainer}>
         <AccessibleText
           type="lead"
-          color="faded"
+          color="disabled"
           prefix={t(AssistantTexts.results.resultItem.header.totalDuration)}
         >
           {durationText}
@@ -181,7 +181,7 @@ const ResultItemFooter: React.FC<{legs: Leg[]; onDetailsPressed(): void}> = ({
         )}
         icon={ArrowRight}
         iconPosition="right"
-        mode="tertiary"
+        color="tertiary"
         type="compact"
         onPress={onDetailsPressed}
         textStyle={styles.detailsButtonText}

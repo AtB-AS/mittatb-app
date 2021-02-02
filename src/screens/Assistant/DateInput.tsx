@@ -178,7 +178,7 @@ const DateInput: React.FC<DateInputProps> = ({
         accessibilityRole="button"
         text={t(searchValue)}
         onPress={onOpen}
-        mode="primary4"
+        color="primary4"
       />
 
       <Portal>

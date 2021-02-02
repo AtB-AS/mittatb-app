@@ -48,7 +48,7 @@ export default function Splash() {
           </View>
           <View style={styles.buttonContainer}>
             <Button
-              mode="primary2"
+              color="primary2"
               onPress={() => modalRef.current?.open()}
               text={t(TicketSplashTexts.splash.betaButtonLabel)}
               style={styles.button}

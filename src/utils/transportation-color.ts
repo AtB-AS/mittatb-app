@@ -19,7 +19,7 @@ export function transportationColor(
     case 'tram':
       return colors.primary.green_500;
     case 'water':
-      return colors.text.white;
+      return colors.text.light;
     case 'air':
       return colors.secondary.orange;
     default:

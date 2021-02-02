@@ -7,7 +7,7 @@ export const MAX_FONT_SCALE = 2;
 
 export type ThemeTextProps = TextProps & {
   type?: TextNames;
-  color?: TextColors;
+  color?: TextColor;
 };
 
 const ThemeText: React.FC<ThemeTextProps> = ({
@@ -21,7 +21,7 @@ const ThemeText: React.FC<ThemeTextProps> = ({
 
   const typeStyle = {
     ...theme.text[fontType],
-    color: theme.text.colors[color],
+    color: theme.text.color.dark[color],
   };
 
   return (

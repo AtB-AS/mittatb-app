@@ -1,10 +1,10 @@
 import {SvgProps} from 'react-native-svg';
 import {useTheme} from '@atb/theme';
-import {TextColors, iconSizes} from '@atb/theme/colors';
+import {TextColor, iconSizes} from '@atb/theme/colors';
 
 type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
-  colorType?: TextColors;
+  colorType?: TextColor;
   size?: keyof typeof iconSizes;
 } & SvgProps;
 
@@ -14,9 +14,9 @@ const ThemeIcon = ({
   size = 'normal',
   ...props
 }: ThemeIconProps): JSX.Element => {
-  const {theme} = useTheme();
+  const {theme, themeName} = useTheme();
   const settings = {
-    fill: theme.text.colors[colorType ?? 'primary'],
+    fill: theme.text.color[themeName][colorType ?? 'primary'],
     height: theme.icon.size[size],
     ...props,
   };

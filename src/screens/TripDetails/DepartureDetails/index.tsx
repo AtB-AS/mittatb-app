@@ -263,7 +263,7 @@ function CollapseButtonRow({
 }: CollapseButtonRowProps) {
   const styles = useCollapseButtonStyle();
   const text = (
-    <ThemeText color="faded" style={styles.text}>
+    <ThemeText color="disabled" style={styles.text}>
       {label}
     </ThemeText>
   );

@@ -91,7 +91,7 @@ export const CompactMap: React.FC<MapProps> = ({
           <Button
             style={styles.toggler}
             type="inline"
-            mode="tertiary"
+            color="tertiary"
             onPress={expandMap}
             hitSlop={insets.symmetric(8, 12)}
             text={t(MapTexts.expandButton.label)}

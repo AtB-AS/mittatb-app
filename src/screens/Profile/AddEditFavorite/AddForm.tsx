@@ -221,7 +221,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         <ButtonGroup>
           <Button
             onPress={save}
-            mode="primary"
+            color="primary"
             icon={SvgConfirm}
             iconPosition="right"
             text={t(AddEditFavoriteTexts.save.label)}
@@ -230,7 +230,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           {editItem && (
             <Button
               onPress={deleteItem}
-              mode="destructive"
+              color="destructive"
               icon={SvgDelete}
               iconPosition="right"
               text={t(AddEditFavoriteTexts.delete.label)}

@@ -14,6 +14,8 @@ const backgrounds = {
 };
 
 const colors = {
+  white: '#ffffff',
+  black: '#000000',
   primary: {
     // grays
     gray_50: '#E7E8E9',
@@ -71,8 +73,8 @@ const colors = {
     red_500: '#A51140',
   },
   text: {
-    white: '#FFFFFF',
-    black: '#000000',
+    light: '#FFFFFF',
+    dark: '#000000',
   },
 };
 
@@ -98,9 +100,7 @@ export type TextNames =
   | 'label'
   | 'label__link';
 
-export type TextColors = 'primary' | 'destructive' | 'faded' | 'focus';
-
-export const textTypes: {[key in TextNames]: TextStyle} = {
+export const textTypeStyles: {[key in TextNames]: TextStyle} = {
   heroTitle: {fontSize: 32, lineHeight: 40},
   pageTitle: {fontSize: 26, lineHeight: 32},
   sectionHeadline: {fontSize: 23, lineHeight: 28},
@@ -127,15 +127,12 @@ const borderRadius = {
   regular: 8,
   small: 4,
 } as const;
+
 const borderWidth = {
   slim: 1,
   medium: 2,
 };
-type Button = {
-  backgroundColor: string;
-  textColor: string;
-  borderColor: string;
-};
+
 export type Themes = {
   light: Theme;
   dark: Theme;
@@ -144,10 +141,55 @@ export type Mode = keyof Themes;
 
 export type RadiusSizes = keyof typeof borderRadius;
 
+export type TextColor = 'primary' | 'secondary' | 'disabled';
+
+type TextColorType = 'dark' | 'light';
+
+export type ContrastColor = {
+  backgroundColor: string;
+  textColorType: TextColorType;
+};
+const contrastColor = (
+  backgroundColor: string = colors.white,
+  textColorType: TextColorType = 'dark',
+): ContrastColor => {
+  return {backgroundColor, textColorType};
+};
+type StatusColor = {
+  main: ContrastColor;
+  bg: ContrastColor;
+};
 export interface Theme {
   statusBarStyle: StatusBarProps['barStyle'];
   spacings: typeof spacings;
   tripLegDetail: typeof tripLegDetail;
+  colors: {
+    background_0: ContrastColor;
+    background_1: ContrastColor;
+    background_2: ContrastColor;
+    background_3: ContrastColor;
+    primary_1: ContrastColor;
+    primary_2: ContrastColor;
+    primary_3: ContrastColor;
+    primary_destructive: ContrastColor;
+    secondary_1: ContrastColor;
+    secondary_2: ContrastColor;
+    secondary_3: ContrastColor;
+    secondary_4: ContrastColor;
+    transport_city: ContrastColor;
+    transport_region: ContrastColor;
+    transport_boat: ContrastColor;
+    transport_train: ContrastColor;
+    transport_airport: ContrastColor;
+    transport_plane: ContrastColor;
+    transport_other: ContrastColor;
+  };
+  status: {
+    status_valid: StatusColor;
+    status_info: StatusColor;
+    status_warning: StatusColor;
+    status_error: StatusColor;
+  };
   background: {
     level0: string;
     level1: string;
@@ -161,9 +203,12 @@ export interface Theme {
     info: string;
     accent: string;
   };
+
   text: {
-    colors: {[key in TextColors]: string};
-  } & typeof textTypes;
+    colors: typeof defaultTextColors.light;
+    color: typeof defaultTextColors;
+  } & typeof textTypeStyles;
+
   border: {
     primary: string;
     secondary: string;
@@ -178,16 +223,21 @@ export interface Theme {
   icon: {
     size: typeof iconSizes;
   };
-  button: {
-    primary: Button;
-    primary2: Button;
-    primary3: Button;
-    primary4: Button;
-    secondary: Button;
-    tertiary: Button;
-    destructive: Button;
-  };
 }
+const defaultTextColors: {
+  [key in TextColorType]: {[key in TextColor]: string};
+} = {
+  dark: {
+    primary: colors.text.dark,
+    secondary: hexToRgba(colors.text.dark, 0.6),
+    disabled: hexToRgba(colors.text.dark, 0.2),
+  },
+  light: {
+    primary: colors.text.light,
+    secondary: hexToRgba(colors.text.light, 0.6),
+    disabled: hexToRgba(colors.text.light, 0.2),
+  },
+};
 
 export const themes: Themes = {
   light: {
@@ -207,18 +257,55 @@ export const themes: Themes = {
       success: hexToRgba(colors.primary.green_500, 0.25),
       accent: colors.secondary.cyan_500,
     },
-    text: {
-      colors: {
-        primary: colors.text.black,
-        destructive: colors.text.white,
-        faded: colors.primary.gray_500,
-        focus: colors.secondary.blue_500,
+
+    colors: {
+      background_0: contrastColor(colors.white, 'dark'),
+      background_1: contrastColor(colors.primary.gray_50, 'dark'),
+      background_2: contrastColor(colors.primary.gray_100, 'dark'),
+      background_3: contrastColor(colors.primary.gray_200, 'dark'),
+      primary_1: contrastColor(colors.primary.green_500, 'dark'),
+      primary_2: contrastColor(colors.secondary.cyan_500, 'dark'),
+      primary_3: contrastColor(colors.secondary.blue_500, 'light'),
+      primary_destructive: contrastColor(colors.secondary.red_500, 'light'),
+      secondary_1: contrastColor(),
+      secondary_2: contrastColor(),
+      secondary_3: contrastColor(),
+      secondary_4: contrastColor(),
+
+      transport_city: contrastColor(),
+      transport_region: contrastColor(),
+      transport_boat: contrastColor(),
+      transport_train: contrastColor(),
+      transport_airport: contrastColor(),
+      transport_plane: contrastColor(),
+      transport_other: contrastColor(),
+    },
+    status: {
+      status_valid: {
+        main: contrastColor(),
+        bg: contrastColor(),
       },
-      ...textTypes,
+      status_info: {
+        main: contrastColor(),
+        bg: contrastColor(),
+      },
+      status_warning: {
+        main: contrastColor(),
+        bg: contrastColor(),
+      },
+      status_error: {
+        main: contrastColor(),
+        bg: contrastColor(),
+      },
+    },
+    text: {
+      colors: defaultTextColors['light'],
+      color: defaultTextColors,
+      ...textTypeStyles,
     },
     border: {
       primary: colors.primary.gray_50,
-      secondary: colors.text.black,
+      secondary: colors.text.dark,
       focus: colors.secondary.blue_500,
       info: colors.secondary.cyan_500,
       warning: colors.secondary.yellow_500,
@@ -229,43 +316,6 @@ export const themes: Themes = {
     },
     icon: {
       size: iconSizes,
-    },
-    button: {
-      primary: {
-        backgroundColor: colors.secondary.cyan_500,
-        textColor: colors.text.black,
-        borderColor: colors.secondary.cyan_500,
-      },
-      primary2: {
-        backgroundColor: colors.primary.gray_500,
-        textColor: colors.text.white,
-        borderColor: colors.primary.gray_500,
-      },
-      primary3: {
-        backgroundColor: colors.primary.gray_100,
-        textColor: colors.text.black,
-        borderColor: colors.primary.gray_100,
-      },
-      primary4: {
-        backgroundColor: colors.secondary.blue_500,
-        textColor: colors.text.white,
-        borderColor: colors.secondary.blue_500,
-      },
-      secondary: {
-        backgroundColor: 'transparent',
-        textColor: colors.text.black,
-        borderColor: colors.primary.gray_500,
-      },
-      tertiary: {
-        backgroundColor: 'transparent',
-        textColor: colors.text.black,
-        borderColor: 'transparent',
-      },
-      destructive: {
-        backgroundColor: colors.secondary.red_500,
-        textColor: colors.text.white,
-        borderColor: colors.secondary.red_500,
-      },
     },
   },
   dark: {
@@ -285,19 +335,53 @@ export const themes: Themes = {
       info: colors.secondary.cyan_900,
       accent: backgrounds.dark__level1,
     },
-
-    text: {
-      colors: {
-        primary: colors.text.white,
-        destructive: colors.text.white,
-        faded: colors.primary.gray_100,
-        focus: colors.secondary.cyan_500,
+    colors: {
+      background_0: contrastColor(colors.white, 'dark'),
+      background_1: contrastColor(colors.primary.gray_50, 'dark'),
+      background_2: contrastColor(colors.primary.gray_100, 'dark'),
+      background_3: contrastColor(colors.primary.gray_200, 'dark'),
+      primary_1: contrastColor(),
+      primary_2: contrastColor(),
+      primary_3: contrastColor(),
+      primary_destructive: contrastColor(),
+      secondary_1: contrastColor(),
+      secondary_2: contrastColor(),
+      secondary_3: contrastColor(),
+      secondary_4: contrastColor(),
+      transport_city: contrastColor(),
+      transport_region: contrastColor(),
+      transport_boat: contrastColor(),
+      transport_train: contrastColor(),
+      transport_airport: contrastColor(),
+      transport_plane: contrastColor(),
+      transport_other: contrastColor(),
+    },
+    status: {
+      status_valid: {
+        main: contrastColor(),
+        bg: contrastColor(),
       },
-      ...textTypes,
+      status_info: {
+        main: contrastColor(),
+        bg: contrastColor(),
+      },
+      status_warning: {
+        main: contrastColor(),
+        bg: contrastColor(),
+      },
+      status_error: {
+        main: contrastColor(),
+        bg: contrastColor(),
+      },
+    },
+    text: {
+      colors: defaultTextColors['light'],
+      color: defaultTextColors,
+      ...textTypeStyles,
     },
     border: {
-      primary: colors.text.white,
-      secondary: colors.text.white,
+      primary: colors.text.light,
+      secondary: colors.text.light,
       focus: colors.secondary.cyan_500,
       info: colors.secondary.cyan_800,
       warning: colors.primary.green_700,
@@ -308,43 +392,6 @@ export const themes: Themes = {
     },
     icon: {
       size: iconSizes,
-    },
-    button: {
-      primary: {
-        backgroundColor: colors.secondary.blue_500,
-        textColor: colors.text.white,
-        borderColor: colors.secondary.blue_500,
-      },
-      primary2: {
-        backgroundColor: colors.primary.gray_100,
-        textColor: colors.text.black,
-        borderColor: colors.primary.gray_100,
-      },
-      primary3: {
-        backgroundColor: colors.primary.gray_500,
-        textColor: colors.text.white,
-        borderColor: colors.primary.gray_500,
-      },
-      primary4: {
-        backgroundColor: colors.secondary.blue_500,
-        textColor: colors.text.white,
-        borderColor: colors.secondary.blue_500,
-      },
-      secondary: {
-        backgroundColor: 'transparent',
-        textColor: colors.text.white,
-        borderColor: colors.primary.gray_100,
-      },
-      tertiary: {
-        backgroundColor: 'transparent',
-        textColor: colors.text.white,
-        borderColor: 'transparent',
-      },
-      destructive: {
-        backgroundColor: colors.secondary.red_500,
-        textColor: colors.text.white,
-        borderColor: colors.secondary.red_500,
-      },
     },
   },
 };

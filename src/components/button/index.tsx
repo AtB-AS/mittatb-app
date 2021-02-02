@@ -11,10 +11,34 @@ import {
 import React, {useRef} from 'react';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import ThemeText from '@atb/components/text';
+import {ContrastColor} from '@atb/theme/colors';
 
 export {default as ButtonGroup} from './group';
 
-type ButtonMode = keyof Theme['button'];
+type ThemeColor = keyof Theme['colors'];
+
+type ButtonMode = 'primary' | 'secondary' | 'tertiary' | 'destructive';
+
+type ButtonSettings = {
+  themeColor: ThemeColor;
+  visibleBorder?: boolean;
+};
+
+const DefaultModeStyles: {[key in ButtonMode]: ButtonSettings} = {
+  primary: {
+    themeColor: 'primary_1',
+  },
+  secondary: {
+    themeColor: 'background_1',
+    visibleBorder: true,
+  },
+  tertiary: {
+    themeColor: 'background_1',
+  },
+  destructive: {
+    themeColor: 'primary_destructive',
+  },
+};
 
 type ButtonTypeAwareProps =
   | {text?: string; type: 'inline' | 'compact'}
@@ -25,6 +49,7 @@ type ButtonTypeAwareProps =
 
 export type ButtonProps = {
   onPress(): void;
+  color?: ThemeColor;
   mode?: ButtonMode;
   viewContainerStyle?: StyleProp<ViewStyle>;
   textContainerStyle?: StyleProp<ViewStyle>;
@@ -38,6 +63,7 @@ const DISABLED_OPACITY = 0.2;
 
 const Button: React.FC<ButtonProps> = ({
   onPress,
+  color,
   mode = 'primary',
   type = 'block',
   icon: Icon,
@@ -50,6 +76,7 @@ const Button: React.FC<ButtonProps> = ({
   textStyle,
   ...props
 }) => {
+  const themeColor = color ?? DefaultModeStyles.primary.themeColor;
   const css = useButtonStyle();
   const {theme} = useTheme();
   const fadeAnim = useRef(new Animated.Value(disabled ? DISABLED_OPACITY : 1))
@@ -72,17 +99,22 @@ const Button: React.FC<ButtonProps> = ({
   const rightIconSpacing =
     Icon && iconPosition === 'right' ? spacing : undefined;
 
-  const {backgroundColor, borderColor, textColor} = theme.button[mode];
+  const {backgroundColor, textColorType} =
+    theme.colors[themeColor] ??
+    ({backgroundColor: '#000', textColorType: 'light'} as ContrastColor);
+  const {primary, secondary, disabled: disabledColor} = theme.text.color[
+    textColorType
+  ];
   const styleContainer: ViewStyle[] = [
     css.button,
     {
-      backgroundColor,
-      borderColor,
+      backgroundColor: backgroundColor,
+      borderColor: mode === 'secondary' ? primary : backgroundColor,
       padding: spacing,
       alignSelf: isInline ? 'flex-start' : undefined,
     },
   ];
-  const styleText: TextStyle = {color: textColor};
+  const styleText: TextStyle = {color: primary};
   const textContainer: TextStyle = {
     flex: isInline ? undefined : 1,
     alignItems: 'center',
@@ -114,7 +146,7 @@ const Button: React.FC<ButtonProps> = ({
       >
         {Icon && iconPosition === 'left' && (
           <View style={iconContainer}>
-            <Icon fill={textColor} />
+            <Icon fill={primary} />
           </View>
         )}
         {text && (
@@ -126,7 +158,7 @@ const Button: React.FC<ButtonProps> = ({
         )}
         {Icon && iconPosition === 'right' && (
           <View style={iconContainer}>
-            <Icon fill={textColor} />
+            <Icon fill={primary} />
           </View>
         )}
       </TouchableOpacity>
@@ -141,7 +173,5 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
     borderRadius: theme.border.radius.regular,
     borderWidth: theme.border.width.medium,
-    backgroundColor: theme.button.primary.backgroundColor,
-    borderColor: theme.button.primary.backgroundColor,
   },
 }));
