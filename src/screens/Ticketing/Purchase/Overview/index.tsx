@@ -169,6 +169,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
               toTariffZone,
               userProfilesWithCount,
               preassignedFareProduct,
+              backButtonMode: 'back',
             });
           }}
         />
