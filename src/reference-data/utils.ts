@@ -1,4 +1,9 @@
-import {LanguageAndText} from './types';
+import {
+  LanguageAndText,
+  PreassignedFareProduct,
+  TariffZone,
+  UserProfile,
+} from './types';
 import {Language} from '../translations';
 
 enum ReferenceDataLanguage {
@@ -41,3 +46,10 @@ export const getReferenceDataName = <
   {name, alternativeNames}: T,
   language: Language,
 ) => getReferenceDataText([name, ...(alternativeNames || [])], language);
+
+export const findReferenceDataById = <
+  T extends UserProfile | PreassignedFareProduct | TariffZone
+>(
+  elements: T[],
+  id: string,
+) => elements.find((p) => p.id === id);

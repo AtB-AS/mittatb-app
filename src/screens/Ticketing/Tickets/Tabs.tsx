@@ -10,6 +10,7 @@ import {TicketsTexts, useTranslation} from '../../../translations';
 import Button from '../../../components/button';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
 import UpgradeSplash from './UpgradeSplash';
+import RecentTicketsScrollView from './RecentTicketsScrollView';
 
 export type TicketingScreenNavigationProp = StackNavigationProp<
   RootStackParamList
@@ -29,13 +30,18 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <View style={{flex: 1}}>{/*Reservert for "Sist kjøpte billetter"*/}</View>
+      <RecentTicketsScrollView />
       <View style={{padding: theme.spacings.medium}}>
         <Button
           mode="primary"
           text={t(TicketsTexts.buyTicketsTab.button.text)}
           accessibilityHint={t(TicketsTexts.buyTicketsTab.button.a11yHint)}
-          onPress={() => navigation.navigate('TicketPurchase', {})}
+          onPress={() =>
+            navigation.navigate('TicketPurchase', {
+              screen: 'PurchaseOverview',
+              params: {},
+            })
+          }
         />
       </View>
     </View>

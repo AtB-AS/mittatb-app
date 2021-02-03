@@ -19,7 +19,7 @@ import AddEditFavorite, {
 } from '../screens/Profile/AddEditFavorite';
 import SortableFavoriteList from '../screens/Profile/FavoriteList/SortFavorites';
 import TicketPurchase, {
-  RouteParams as TicketPurchaseParams,
+  TicketingStackParams,
 } from '../screens/Ticketing/Purchase';
 import TicketModalScreen, {
   TicketModalStackParams,
@@ -35,7 +35,7 @@ export type RootStackParamList = {
   LocationSearch: LocationSearchParams;
   SortableFavoriteList: undefined;
   AddEditFavorite: NavigatorScreenParams<AddEditFavoriteRootParams>;
-  TicketPurchase: TicketPurchaseParams;
+  TicketPurchase: NavigatorScreenParams<TicketingStackParams>;
   TicketModal: NavigatorScreenParams<TicketModalStackParams>;
 };
 

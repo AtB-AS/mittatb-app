@@ -1,6 +1,8 @@
 import React from 'react';
 import PurchaseOverviewScreen from './Overview';
-import ConfirmationScreen from './Confirmation';
+import ConfirmationScreen, {
+  RouteParams as ConfirmationRouteParams,
+} from './Confirmation';
 import TravellersScreen from './Travellers';
 import ProductScreen from './Product';
 import {CreditCard as CreditCardScreen, Vipps as VippsScreen} from './Payment';
@@ -33,13 +35,6 @@ type TravellersParams = {
   userProfilesWithCount: UserProfileWithCount[];
 };
 
-type ConfirmationParams = {
-  preassignedFareProduct: PreassignedFareProduct;
-  fromTariffZone: TariffZoneWithMetadata;
-  toTariffZone: TariffZoneWithMetadata;
-  userProfilesWithCount: UserProfileWithCount[];
-};
-
 type PaymentParams = {
   offers: ReserveOffer[];
   preassignedFareProduct: PreassignedFareProduct;
@@ -51,7 +46,7 @@ export type TicketingStackParams = {
   Travellers: TravellersParams;
   TariffZones: TariffZonesParams;
   TariffZoneSearch: TariffZoneSearchParams;
-  Confirmation: ConfirmationParams;
+  Confirmation: ConfirmationRouteParams;
   PaymentCreditCard: PaymentParams;
   PaymentVipps: PaymentParams;
   Splash: undefined;
