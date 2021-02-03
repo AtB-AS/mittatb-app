@@ -25,6 +25,7 @@ import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import AppLanguageProvider from './translations/LanguageContext';
 import {Platform, UIManager} from 'react-native';
+import AuthContextProvider from './AuthContext';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
@@ -55,21 +56,23 @@ const App = () => {
       <ErrorBoundary>
         <AppContextProvider>
           <PreferencesContextProvider>
-            <ThemeContextProvider>
-              <FavoritesContextProvider>
-                <SearchHistoryContextProvider>
-                  <GeolocationContextProvider>
-                    <TicketContextProvider>
-                      <RemoteConfigContextProvider>
-                        <AppLanguageProvider>
-                          <NavigationRoot />
-                        </AppLanguageProvider>
-                      </RemoteConfigContextProvider>
-                    </TicketContextProvider>
-                  </GeolocationContextProvider>
-                </SearchHistoryContextProvider>
-              </FavoritesContextProvider>
-            </ThemeContextProvider>
+            <AuthContextProvider>
+              <ThemeContextProvider>
+                <FavoritesContextProvider>
+                  <SearchHistoryContextProvider>
+                    <GeolocationContextProvider>
+                      <TicketContextProvider>
+                        <RemoteConfigContextProvider>
+                          <AppLanguageProvider>
+                            <NavigationRoot />
+                          </AppLanguageProvider>
+                        </RemoteConfigContextProvider>
+                      </TicketContextProvider>
+                    </GeolocationContextProvider>
+                  </SearchHistoryContextProvider>
+                </FavoritesContextProvider>
+              </ThemeContextProvider>
+            </AuthContextProvider>
           </PreferencesContextProvider>
         </AppContextProvider>
       </ErrorBoundary>
