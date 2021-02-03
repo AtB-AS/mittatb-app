@@ -1,8 +1,6 @@
-import haversineDistance from 'haversine-distance';
-import sortBy from 'lodash.sortby';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {QuayGroup, StopPlaceGroup} from '../../api/departures/types';
+import {StopPlaceGroup} from '../../api/departures/types';
 import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 import {ActionItem} from '../../components/sections';
 import ThemeText from '../../components/text';
@@ -78,7 +76,7 @@ export default function NearbyResults({
         <>
           {departures.map((item, i) => (
             <StopDepartures
-              key={item.stopPlace.id}
+              key={item?.stopPlace.id}
               stopPlaceGroup={item}
               currentLocation={currentLocation}
               lastUpdated={lastUpdated}
@@ -142,10 +140,7 @@ const StopDepartures = React.memo(function StopDepartures({
   if (hasNoGroupsWithDepartures(stopPlaceGroup.quays)) {
     return null;
   }
-  const orderedQuays = orderAndMapByDistance(
-    stopPlaceGroup.quays,
-    currentLocation,
-  );
+
   return (
     <View accessibilityState={{expanded}}>
       <ActionItem
@@ -167,35 +162,15 @@ const StopDepartures = React.memo(function StopDepartures({
       />
 
       {expanded &&
-        orderedQuays.map(([distance, quayGroup]) => (
+        stopPlaceGroup.quays.map((quayGroup) => (
           <QuaySection
             key={quayGroup.quay.id}
             stop={stopPlaceGroup.stopPlace}
             quayGroup={quayGroup}
-            distance={distance}
+            currentLocation={currentLocation}
             lastUpdated={lastUpdated}
           />
         ))}
     </View>
   );
 });
-
-const first = ([a]: unknown[]) => a;
-function orderAndMapByDistance(
-  groups: QuayGroup[],
-  currentLocation?: Location,
-): [number, QuayGroup][] {
-  return sortBy(
-    groups.map((g) => {
-      const pos = {
-        lat: g.quay.latitude!,
-        lng: g.quay.longitude!,
-      };
-      const distance = !currentLocation
-        ? 0
-        : haversineDistance(currentLocation.coordinates, pos);
-      return [distance, g];
-    }),
-    first,
-  );
-}
