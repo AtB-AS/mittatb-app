@@ -10,6 +10,8 @@ import {TicketsTexts, useTranslation} from '../../../translations';
 import Button from '../../../components/button';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
 import UpgradeSplash from './UpgradeSplash';
+import {useAuthState} from '../../../AuthContext';
+import ThemeText from '../../../components/text';
 
 export type TicketingScreenNavigationProp = StackNavigationProp<
   RootStackParamList
@@ -23,13 +25,44 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
   const {must_upgrade_ticketing} = useRemoteConfig();
+  const {
+    isInitialized,
+    user,
+    signInAnonymously,
+    signOut,
+    updateEmail,
+  } = useAuthState();
   const {t} = useTranslation();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
   return (
     <View style={styles.container}>
-      <View style={{flex: 1}}>{/*Reservert for "Sist kjøpte billetter"*/}</View>
+      <View style={{flex: 1}}>
+        <ThemeText>{user ? 'Init' : 'Not init'}</ThemeText>
+        <Button
+          mode="primary2"
+          onPress={() => signInAnonymously()}
+          text="Sign in"
+        />
+        <Button mode="primary2" onPress={() => signOut()} text="Sign out" />
+        <Button
+          mode="primary2"
+          onPress={() => updateEmail('noreply@atb.no')}
+          text="Email"
+        />
+        <Button
+          mode="primary2"
+          onPress={() => {
+            try {
+              user?.sendEmailVerification();
+            } catch (err) {
+              console.error(err);
+            }
+          }}
+          text="Send link"
+        />
+      </View>
       <View style={{padding: theme.spacings.medium}}>
         <Button
           mode="primary"
