@@ -1,4 +1,4 @@
-import {LanguageAndText} from './types';
+import {LanguageAndText, Language as RefDataLang} from './types';
 import {Language} from '../translations';
 
 /**
@@ -9,10 +9,12 @@ import {Language} from '../translations';
  */
 const getReferenceDataText = (texts: LanguageAndText[], language: Language) => {
   if (language === Language.English) {
-    const englishText = texts.find((t) => t.lang === 'eng');
+    const englishText = texts.find((t) => t.lang === RefDataLang.eng);
     if (englishText) return englishText.value;
   }
-  const norwegianText = texts.find((t) => t.lang === 'nor' || t.lang === 'nob');
+  const norwegianText = texts.find(
+    (t) => t.lang === RefDataLang.nor || t.lang === RefDataLang.nob,
+  );
   if (norwegianText) return norwegianText.value;
 
   return texts[0]?.value;
