@@ -19,7 +19,7 @@ jobs:
           for e in ${ENTITIES[@]}
           do
             curl --silent --fail https://remoteconfig.dev.mittatb.no/v1/${e} | \
-            npx prettier --format json > src/reference-data/${e}.json
+            npx prettier --parser json > src/reference-data/${e}.json
           done
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
