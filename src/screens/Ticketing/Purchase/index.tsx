@@ -2,6 +2,7 @@ import React from 'react';
 import PurchaseOverviewScreen from './Overview';
 import ConfirmationScreen from './Confirmation';
 import TravellersScreen from './Travellers';
+import ProductScreen from './Product';
 import {CreditCard as CreditCardScreen, Vipps as VippsScreen} from './Payment';
 import createDismissableStackNavigator from '../../../navigation/createDismissableStackNavigator';
 import {BuyTicketsScreenName} from '../Tickets';
@@ -18,6 +19,7 @@ import TariffZoneSearch, {
 import transitionSpec from '../../../navigation/transitionSpec';
 import {PreassignedFareProduct} from '../../../reference-data/types';
 import {UserProfileWithCount} from './Travellers/use-user-count-state';
+import {ProductRouteParams} from './Product';
 
 type PurchaseOverviewParams = {
   refreshOffer?: boolean;
@@ -45,6 +47,7 @@ type PaymentParams = {
 
 export type TicketingStackParams = {
   PurchaseOverview: PurchaseOverviewParams;
+  Product: ProductRouteParams;
   Travellers: TravellersParams;
   TariffZones: TariffZonesParams;
   TariffZoneSearch: TariffZoneSearchParams;
@@ -73,6 +76,7 @@ export default function PurchaseStack({route}: TicketPurchaseRootProps) {
         component={PurchaseOverviewScreen}
         initialParams={route.params}
       />
+      <Stack.Screen name="Product" component={ProductScreen} />
       <Stack.Screen name="Travellers" component={TravellersScreen} />
       <Stack.Screen name="TariffZones" component={TariffZones} />
       <Stack.Screen name="Confirmation" component={ConfirmationScreen} />
