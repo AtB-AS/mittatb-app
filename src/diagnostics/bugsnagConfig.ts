@@ -28,7 +28,7 @@ export default function configureAndStartBugsnag() {
           };
         }
       };
-      onError?.(event);
+      onError?.(event, () => {});
       console.error('[BUGSNAG]', error, JSON.stringify(metadata, null, 2));
     };
     Bugsnag.leaveBreadcrumb = (message, metadata) =>
