@@ -59,7 +59,7 @@ const Product: React.FC<{
         }}
       />
 
-      <ScrollView style={styles.travellerCounters}>
+      <ScrollView style={styles.productsSection}>
         <Sections.Section>
           <Sections.RadioSection<PreassignedFareProduct>
             items={preassignedFareProducts}
@@ -98,7 +98,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.background.level2,
   },
-  travellerCounters: {
+  productsSection: {
     margin: theme.spacings.medium,
   },
   saveButton: {
