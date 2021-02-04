@@ -1,5 +1,6 @@
 import {
   PreassignedFareProduct,
+  TariffZone,
   UserProfile,
 } from '../../../reference-data/types';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
@@ -8,7 +9,6 @@ import {
   listRecentFareContracts,
   RecentFareContract,
 } from '../../../api/fareContracts';
-import {TariffZoneWithMetadata} from '../Purchase/TariffZones';
 import {findReferenceDataById} from '../../../reference-data/utils';
 import {
   RemoteConfigContextState,
@@ -17,8 +17,8 @@ import {
 
 export type RecentTicket = {
   preassignedFareProduct: PreassignedFareProduct;
-  fromTariffZone: TariffZoneWithMetadata;
-  toTariffZone: TariffZoneWithMetadata;
+  fromTariffZone: TariffZone;
+  toTariffZone: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
 };
 
@@ -70,11 +70,18 @@ const mapUsers = (
   userProfiles: UserProfile[],
 ) =>
   Object.entries(users)
-    .map(([profileId, count]) => ({
-      ...findReferenceDataById(userProfiles, profileId),
-      count: parseInt(count),
-    }))
-    .filter((u): u is UserProfileWithCount => 'id' in u)
+    .reduce<UserProfileWithCount[]>((foundUserProfiles, [profileId, count]) => {
+      const userProfile = findReferenceDataById(userProfiles, profileId);
+      if (userProfile) {
+        const userProfileWithCount = {
+          ...userProfile,
+          count: parseInt(count),
+        };
+        return foundUserProfiles.concat(userProfileWithCount);
+      } else {
+        return foundUserProfiles;
+      }
+    }, [])
     .sort(
       // Sort by user profile order in remote config
       (u1, u2) =>
@@ -89,21 +96,42 @@ const mapRecentFareContractToRecentTicket = (
     user_profiles: userProfiles,
     preassigned_fare_products: preassignedFareProducts,
   }: RemoteConfigContextState,
-) => ({
-  preassignedFareProduct: findReferenceDataById(
+): RecentTicket | null => {
+  const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
     recentFareContract.products[0],
-  ),
-  fromTariffZone: findReferenceDataById(
+  );
+
+  const fromTariffZone = findReferenceDataById(
     tariffZones,
     recentFareContract.zones[0],
-  ),
-  toTariffZone: findReferenceDataById(
+  );
+  const toTariffZone = findReferenceDataById(
     tariffZones,
     recentFareContract.zones.slice(-1)[0],
-  ),
-  userProfilesWithCount: mapUsers(recentFareContract.users, userProfiles),
-});
+  );
+
+  const userProfilesWithCount = mapUsers(
+    recentFareContract.users,
+    userProfiles,
+  );
+
+  if (
+    !preassignedFareProduct ||
+    !fromTariffZone ||
+    !toTariffZone ||
+    !userProfilesWithCount?.length
+  ) {
+    return null;
+  }
+
+  return {
+    preassignedFareProduct,
+    fromTariffZone,
+    toTariffZone,
+    userProfilesWithCount,
+  };
+};
 
 const isUsersEqual = (
   users1: UserProfileWithCount[],
@@ -151,14 +179,13 @@ const mapToLastThreeUniqueTickets = (
 ): RecentTicket[] => {
   return recentFareContracts
     .sort((fc1, fc2) => fc2.created_at.localeCompare(fc1.created_at))
-    .map((fc) => mapRecentFareContractToRecentTicket(fc, remoteConfigState))
-    .filter(
-      (ticket): ticket is RecentTicket =>
-        !!ticket.preassignedFareProduct &&
-        !!ticket.fromTariffZone &&
-        !!ticket.toTariffZone &&
-        !!ticket.userProfilesWithCount?.length,
-    )
+    .reduce<RecentTicket[]>((mappedTickets, fc) => {
+      const maybeTicket = mapRecentFareContractToRecentTicket(
+        fc,
+        remoteConfigState,
+      );
+      return maybeTicket ? mappedTickets.concat(maybeTicket) : mappedTickets;
+    }, [])
     .reduce<RecentTicket[]>(
       (uniques, ticket) =>
         containsTicket(uniques, ticket) ? uniques : uniques.concat(ticket),
