@@ -16,6 +16,7 @@ export {default as SectionTexts} from './components/Section';
 export {default as MapTexts} from './components/Map';
 export {default as DateInputTexts} from './components/DateInput';
 export {default as LocationSearchTexts} from './screens/subscreens/LocationSearch';
+export {default as ProductTexts} from './screens/subscreens/Product';
 export {default as TravellersTexts} from './screens/subscreens/Travellers';
 export {default as TariffZonesTexts} from './screens/subscreens/TariffZones';
 export {default as TariffZoneSearchTexts} from './screens/subscreens/TariffZoneSearch';
