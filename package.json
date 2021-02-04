@@ -33,6 +33,7 @@
     "@react-native-firebase/analytics": "^10.5.1",
     "@react-native-firebase/app": "^10.5.0",
     "@react-native-firebase/auth": "^10.5.1",
+    "@react-native-firebase/messaging": "^10.5.1",
     "@react-native-firebase/remote-config": "^10.5.1",
     "@react-native-mapbox-gl/maps": "8.1.0-rc.9",
     "@react-navigation/bottom-tabs": "^5.9.2",
