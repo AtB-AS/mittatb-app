@@ -9,20 +9,23 @@ export default function useChatUnreadCount() {
   }, []);
 
   useEffect(() => {
+    let mounted = true;
     async function getInitialUnreadCount() {
       const initialCount = await Intercom.getUnreadConversationCount();
-      setCount(initialCount);
+      if (mounted) setCount(initialCount);
     }
 
     getInitialUnreadCount();
 
     Intercom.addEventListener(Intercom.Notifications.UNREAD_COUNT, callback);
 
-    return () =>
+    return () => {
+      mounted = false;
       Intercom.removeEventListener(
         Intercom.Notifications.UNREAD_COUNT,
         callback,
       );
+    };
   }, []);
 
   return count;
