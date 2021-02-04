@@ -20,14 +20,16 @@ import * as Sections from '../../../../components/sections';
 import {ReserveOffer} from '../../../../api/fareContracts';
 import {useRemoteConfig} from '../../../../RemoteConfigContext';
 import {getReferenceDataName} from '../../../../reference-data/utils';
-import {PreassignedFareProduct} from '../../../../reference-data/types';
-import {TariffZoneWithMetadata} from '../TariffZones';
+import {
+  PreassignedFareProduct,
+  TariffZone,
+} from '../../../../reference-data/types';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
-  fromTariffZone: TariffZoneWithMetadata;
-  toTariffZone: TariffZoneWithMetadata;
+  fromTariffZone: TariffZone;
+  toTariffZone: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
   backButtonMode: 'back' | 'cancel';
 };
