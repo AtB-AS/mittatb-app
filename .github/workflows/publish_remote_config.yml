@@ -1,0 +1,30 @@
+name: Publish remote config
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+      - name: Publish remote config
+        env:
+          SERVICE_ACCOUNT_KEY: ${{secrets.SERVICE_ACCOUNT_KEY}}
+          PROJECT_ID: atb-mobility-platform
+        run: |
+          set -euo pipefail
+          go get github.com/atb-as/remoteconfig/cmd/rc
+          ARGS=()
+          for FILE in src/reference-data/*.json
+          do
+            CONFIG_KEY=$(basename ${FILE} .json | sed 's/-/_/g')
+            JSON=$(jq -c < ${FILE} .)
+            ARGS+=("${CONFIG_KEY}"="${JSON}")
+          done
+          $HOME/go/bin/rc -project=$PROJECT_ID "${ARGS[@]}"

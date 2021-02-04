@@ -1,0 +1,32 @@
+name: Update reference data
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+ 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2.1.4
+      - name: Fetch latest reference data
+        run: |
+          set -exo pipefail
+          ENTITIES=('preassigned-fare-products' 'tariff-zones' 'user-profiles')
+          for e in ${ENTITIES[@]}
+          do
+            curl --silent --fail https://remoteconfig.dev.mittatb.no/v1/${e} | \
+            npx prettier --format json > src/reference-data/${e}.json
+          done
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: 'chore: update reference data'
+          branch: automation/update-reference-data
+          delete-branch: true
+          title: 'chore: update reference data'
+          body: Please review 
+            
