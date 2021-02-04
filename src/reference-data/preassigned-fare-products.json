@@ -1,0 +1,20 @@
+[
+  {
+    "id": "ATB:PreassignedFareProduct:8808c360",
+    "version": "ATB:Version:d918f8e3-eb23-4d62-9626-a5cbd02a1dee",
+    "name": {"lang": "nob", "value": "Enkeltbillett buss/trikk"},
+    "alternativeNames": [
+      {"lang": "eng", "value": "Single ticket bus/tram"},
+      {"lang": "nno", "value": "Enkeltbillett buss/trikk"}
+    ]
+  },
+  {
+    "id": "ATB:PreassignedFareProduct:925469fb",
+    "version": "ATB:Version:12b94a4d-b347-41c9-a6c6-35bc3386d4f4",
+    "name": {"lang": "nob", "value": "30-dagersbillett"},
+    "alternativeNames": [
+      {"lang": "eng", "value": "Monthly pass"},
+      {"lang": "nno", "value": "30-dagersbillett"}
+    ]
+  }
+]
