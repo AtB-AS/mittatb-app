@@ -23,14 +23,18 @@ type Props = {
 export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
-  const {must_upgrade_ticketing} = useRemoteConfig();
+  const {must_upgrade_ticketing, enable_recent_tickets} = useRemoteConfig();
   const {t} = useTranslation();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
   return (
     <View style={styles.container}>
-      <RecentTicketsScrollView />
+      {enable_recent_tickets ? (
+        <RecentTicketsScrollView />
+      ) : (
+        <View style={{flex: 1}} />
+      )}
       <View style={{padding: theme.spacings.medium}}>
         <Button
           mode="primary"
