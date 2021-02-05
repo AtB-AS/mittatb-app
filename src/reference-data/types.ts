@@ -1,12 +1,5 @@
 import {Polygon} from 'geojson';
 
-export enum Language {
-  'nob' = 'nob',
-  'nno' = 'nno',
-  'nor' = 'nor',
-  'eng' = 'eng',
-}
-
 export type LanguageAndText = {
   lang: string;
   value: string;

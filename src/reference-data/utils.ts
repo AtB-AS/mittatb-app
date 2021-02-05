@@ -1,5 +1,12 @@
-import {LanguageAndText, Language as RefDataLang} from './types';
+import {LanguageAndText} from './types';
 import {Language} from '../translations';
+
+enum ReferenceDataLanguage {
+  'nob' = 'nob',
+  'nno' = 'nno',
+  'nor' = 'nor',
+  'eng' = 'eng',
+}
 
 /**
  * Get the text of a field in a NeTeX entity in the correct language. If English
@@ -9,11 +16,13 @@ import {Language} from '../translations';
  */
 const getReferenceDataText = (texts: LanguageAndText[], language: Language) => {
   if (language === Language.English) {
-    const englishText = texts.find((t) => t.lang === RefDataLang.eng);
+    const englishText = texts.find((t) => t.lang === ReferenceDataLanguage.eng);
     if (englishText) return englishText.value;
   }
   const norwegianText = texts.find(
-    (t) => t.lang === RefDataLang.nor || t.lang === RefDataLang.nob,
+    (t) =>
+      t.lang === ReferenceDataLanguage.nor ||
+      t.lang === ReferenceDataLanguage.nob,
   );
   if (norwegianText) return norwegianText.value;
 
