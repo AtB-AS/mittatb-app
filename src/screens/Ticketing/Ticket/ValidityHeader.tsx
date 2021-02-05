@@ -2,8 +2,6 @@ import React from 'react';
 import {View} from 'react-native';
 import {formatToLongDateTime, secondsToDuration} from '../../../utils/date';
 import {fromUnixTime} from 'date-fns';
-import {Context} from '../../../assets/svg/icons/actions';
-import Button from '../../../components/button';
 import ThemeText from '../../../components/text';
 import {StyleSheet} from '../../../theme';
 import ValidityIcon from './ValidityIcon';
@@ -20,15 +18,7 @@ const ValidityHeader: React.FC<{
   validTo: number;
   isNotExpired: boolean;
   isRefunded: boolean;
-  onPressDetails?: () => void;
-}> = ({
-  isValid,
-  nowSeconds,
-  validTo,
-  isNotExpired,
-  isRefunded,
-  onPressDetails,
-}) => {
+}> = ({isValid, nowSeconds, validTo, isNotExpired, isRefunded}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
 
@@ -47,18 +37,6 @@ const ValidityHeader: React.FC<{
           )}
         </ThemeText>
       </View>
-      {onPressDetails && (
-        <Button
-          type="compact"
-          mode="tertiary"
-          icon={Context}
-          style={{padding: 0}}
-          onPress={onPressDetails}
-          accessibilityLabel={t(
-            TicketTexts.validityHeader.detailsButton.a11yLabel,
-          )}
-        />
-      )}
     </View>
   );
 };

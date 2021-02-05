@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FareContract,
   FareContractLifecycleState,
@@ -11,25 +11,29 @@ import {formatToLongDateTime} from '../../../../utils/date';
 import {fromUnixTime} from 'date-fns';
 import {TicketTexts, useTranslation} from '../../../../translations';
 import TicketInfo from '../TicketInfo';
+import qrcode from 'qrcode';
+import {SvgXml} from 'react-native-svg';
+import {View} from 'react-native';
+import {StyleSheet} from '../../../../theme';
 
 type Props = {
   fareContract: FareContract;
   now: number;
   onReceiptNavigate: () => void;
-  onInspectionNavigate: () => void;
 };
 
 const DetailsContent: React.FC<Props> = ({
   fareContract: fc,
   now,
   onReceiptNavigate,
-  onInspectionNavigate,
 }) => {
   const nowSeconds = now / 1000;
   const isNotExpired = fc.usage_valid_to >= nowSeconds;
   const isRefunded = fc.state === FareContractLifecycleState.Refunded;
   const isValidTicket = isNotExpired && !isRefunded;
   const {t, language} = useTranslation();
+  const styles = useStyles();
+  const qrCodeSvg = useQrCode(fc);
 
   return (
     <Sections.Section withBottomPadding>
@@ -63,20 +67,43 @@ const DetailsContent: React.FC<Props> = ({
           )}
         </ThemeText>
       </Sections.GenericItem>
-      {isValidTicket && (
-        <Sections.LinkItem
-          text={t(TicketTexts.controlLink)}
-          onPress={onInspectionNavigate}
-          disabled={!fc.qr_code}
-        />
-      )}
       <Sections.LinkItem text={t(TicketTexts.details.askForRefund)} disabled />
       <Sections.LinkItem
         text={t(TicketTexts.details.askForReceipt)}
         onPress={onReceiptNavigate}
       />
+      {isValidTicket && qrCodeSvg && (
+        <Sections.GenericItem>
+          <View style={styles.qrCode}>
+            <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
+          </View>
+        </Sections.GenericItem>
+      )}
     </Sections.Section>
   );
 };
+
+const useQrCode = (fc: FareContract) => {
+  const [qrCodeSvg, setQrCodeSvg] = useState<string | undefined>();
+
+  useEffect(() => {
+    (async function () {
+      if (!fc?.qr_code) return;
+      const svg = await qrcode.toString(fc.qr_code, {
+        type: 'svg',
+      });
+
+      setQrCodeSvg(svg);
+    })();
+  }, [fc]);
+  return qrCodeSvg;
+};
+
+const useStyles = StyleSheet.createThemeHook(() => ({
+  qrCode: {
+    width: '100%',
+    aspectRatio: 1,
+  },
+}));
 
 export default DetailsContent;
