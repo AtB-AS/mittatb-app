@@ -141,15 +141,7 @@ const Index: React.FC<Props> = ({
     <View style={styles.container}>
       <FullScreenHeader
         title={t(TariffZoneSearchTexts.header.title)}
-        leftButton={{
-          onPress: () => navigation.goBack(),
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: t(
-            TariffZoneSearchTexts.header.leftButton.a11yLabel,
-          ),
-          icon: <ThemeIcon svg={ArrowLeft} />,
-        }}
+        leftButton={{type: 'back'}}
       />
 
       <View style={styles.header}>

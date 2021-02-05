@@ -27,8 +27,8 @@ import MessageBox from '../../../message-box';
 import {RootStackParamList} from '../../../navigation';
 import {StyleSheet, Theme} from '../../../theme';
 import {AddEditFavoriteTexts, useTranslation} from '../../../translations';
-import BackHeader from '../BackHeader';
 import EmojiPopup from './EmojiPopup';
+import ScreenHeader from '../../../ScreenHeader';
 
 type AddEditRouteName = 'AddEditForm';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditForm';
@@ -138,13 +138,13 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
   return (
     <SafeAreaView style={css.container}>
-      <BackHeader
+      <ScreenHeader
         title={
           editItem
             ? t(AddEditFavoriteTexts.header.titleEdit)
             : t(AddEditFavoriteTexts.header.title)
         }
-        closeIcon={!!editItem}
+        leftButton={{type: !!editItem ? 'close' : 'back'}}
       />
 
       <EmojiPopup

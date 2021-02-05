@@ -296,13 +296,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
       <View style={{backgroundColor: theme.background.header}}>
         <FullScreenHeader
           title={t(TariffZonesTexts.header.title)}
-          leftButton={{
-            onPress: () => navigation.goBack(),
-            accessible: true,
-            accessibilityRole: 'button',
-            accessibilityLabel: t(TariffZonesTexts.header.leftButton.a11yLabel),
-            icon: <ThemeIcon svg={ArrowLeft} />,
-          }}
+          leftButton={{type: 'back'}}
         />
 
         <Section withPadding>

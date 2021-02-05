@@ -69,9 +69,8 @@ export default function VippsPayment({
       <Header
         title={t(PaymentVippsTexts.header.title)}
         leftButton={{
-          icon: <ThemeIcon svg={ArrowLeft} />,
+          type: 'cancel',
           onPress: () => cancelVipps(),
-          accessibilityLabel: t(PaymentVippsTexts.header.leftButton.a11yLabel),
         }}
       />
       <View style={styles.content}>

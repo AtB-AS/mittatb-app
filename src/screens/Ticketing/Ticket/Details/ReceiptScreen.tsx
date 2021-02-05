@@ -67,15 +67,7 @@ export default function ReceiptScreen({navigation, route}: Props) {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        leftButton={{
-          onPress: () => navigation.goBack(),
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: t(
-            TicketTexts.receipt.header.leftButton.a11yLabel,
-          ),
-          icon: <ThemeIcon svg={ArrowLeft} />,
-        }}
+        leftButton={{type: 'back'}}
         title={t(TicketTexts.receipt.header.title)}
         style={styles.header}
       />

@@ -371,8 +371,9 @@ const Assistant: React.FC<Props> = ({
       headerMargin={24}
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
-      logoClick={{
-        callback: resetView,
+      leftButton={{
+        type: 'home',
+        onPress: resetView,
         accessibilityLabel: t(AssistantTexts.header.accessibility.logo),
       }}
       onFullscreenTransitionEnd={(fullHeight) => {

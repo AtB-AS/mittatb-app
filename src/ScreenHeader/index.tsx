@@ -1,12 +1,21 @@
-import {View, ViewStyle} from 'react-native';
+import {AccessibilityProps, View, ViewStyle} from 'react-native';
 import React from 'react';
 import {StyleSheet} from '../theme';
-import HeaderButton, {IconButton} from './HeaderButton';
+import HeaderButton from './HeaderButton';
 import ThemeText from '../components/text';
 
+export type LeftButtonProps = {
+  type: 'back' | 'cancel' | 'close' | 'home';
+  onPress?: () => void;
+} & AccessibilityProps;
+
+export type RightButtonProps = {
+  type: 'chat';
+} & AccessibilityProps;
+
 export type ScreenHeaderProps = {
-  leftButton?: IconButton;
-  rightButton?: IconButton;
+  leftButton?: LeftButtonProps;
+  rightButton?: RightButtonProps;
   title: React.ReactNode;
   style?: ViewStyle;
 };

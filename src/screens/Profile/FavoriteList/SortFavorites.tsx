@@ -17,9 +17,9 @@ import {TabNavigatorParams} from '../../../navigation/TabNavigator';
 import {StyleSheet, Theme} from '../../../theme';
 import {FavoriteListTexts, useTranslation} from '../../../translations';
 import useIsScreenReaderEnabled from '../../../utils/use-is-screen-reader-enabled';
-import BackHeader from '../BackHeader';
 import {SortableList} from './SortableList';
 import SortableListFallback from './SortableListFallback';
+import ScreenHeader from '../../../ScreenHeader';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -57,7 +57,10 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
 
   return (
     <SafeAreaView style={style.container} edges={['right', 'top', 'left']}>
-      <BackHeader title={t(FavoriteListTexts.sortableScreen.title)} closeIcon />
+      <ScreenHeader
+        title={t(FavoriteListTexts.sortableScreen.title)}
+        leftButton={{type: 'close'}}
+      />
 
       {error && (
         <MessageBox type="error" message={error} containerStyle={style.error} />

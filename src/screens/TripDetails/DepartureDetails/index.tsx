@@ -90,15 +90,7 @@ export default function DepartureDetails({navigation, route}: Props) {
     <View style={styles.container}>
       <View style={[styles.header, {paddingTop}]}>
         <ScreenHeader
-          leftButton={{
-            onPress: () => navigation.goBack(),
-            icon: <ThemeIcon svg={ArrowLeft} />,
-            accessible: true,
-            accessibilityRole: 'button',
-            accessibilityLabel: t(
-              DepartureDetailsTexts.header.leftIcon.a11yLabel,
-            ),
-          }}
+          leftButton={{type: 'back'}}
           title={title ?? t(DepartureDetailsTexts.header.notFound)}
         />
       </View>

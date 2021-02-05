@@ -82,13 +82,7 @@ const Details: React.FC<Props> = (props) => {
     <View style={styles.container}>
       <View style={[styles.header, {paddingTop}]}>
         <Header
-          leftButton={{
-            onPress: () => props.navigation.goBack(),
-            accessible: true,
-            accessibilityRole: 'button',
-            accessibilityLabel: t(TripDetailsTexts.header.leftButton.a11yLabel),
-            icon: <ThemeIcon svg={ArrowLeft} />,
-          }}
+          leftButton={{type: 'back'}}
           title={t(TripDetailsTexts.header.title)}
         />
       </View>

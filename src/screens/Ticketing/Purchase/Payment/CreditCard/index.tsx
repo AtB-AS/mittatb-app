@@ -81,11 +81,8 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
       <Header
         title={t(PaymentCreditCardTexts.header.title)}
         leftButton={{
-          icon: <ThemeIcon svg={ArrowLeft} />,
+          type: 'cancel',
           onPress: () => cancelTerminal(),
-          accessibilityLabel: t(
-            PaymentCreditCardTexts.header.leftButton.a11yLabel,
-          ),
         }}
       />
       <View

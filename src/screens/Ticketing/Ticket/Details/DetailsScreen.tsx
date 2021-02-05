@@ -50,15 +50,7 @@ export default function DetailsScreen({navigation, route}: Props) {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        leftButton={{
-          onPress: () => navigation.goBack(),
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: t(
-            TicketTexts.details.header.leftButton.a11yLabel,
-          ),
-          icon: <ThemeIcon svg={Close} />,
-        }}
+        leftButton={{type: 'close'}}
         title={t(TicketTexts.details.header.title)}
         style={styles.header}
       />

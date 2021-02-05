@@ -8,7 +8,7 @@ import {StoredFavoriteDeparture} from '../../../favorites/types';
 import MessageBox from '../../../message-box';
 import {StyleSheet, Theme} from '../../../theme';
 import {FavoriteDeparturesTexts, useTranslation} from '../../../translations';
-import BackHeader from '../BackHeader';
+import ScreenHeader from '../../../ScreenHeader';
 
 export default function FavoriteDepartures() {
   const style = useProfileStyle();
@@ -40,7 +40,10 @@ export default function FavoriteDepartures() {
 
   return (
     <SafeAreaView style={style.container} edges={['right', 'top', 'left']}>
-      <BackHeader title={t(FavoriteDeparturesTexts.header.title)} />
+      <ScreenHeader
+        title={t(FavoriteDeparturesTexts.header.title)}
+        leftButton={{type: 'back'}}
+      />
 
       <ScrollView>
         {!favoriteDepartures.length && (

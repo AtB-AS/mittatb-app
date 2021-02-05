@@ -27,8 +27,6 @@ const Tab = createMaterialTopTabNavigator<TicketTabsNavigatorParams>();
 
 export default function TicketTabs() {
   const styles = useStyles();
-  const chatIcon = useChatIcon();
-  const navigateHome = useNavigateToStartScreen();
   const {t} = useTranslation();
   const {top} = useSafeAreaInsets();
   const screenTopStyle = useMemo(
@@ -47,12 +45,8 @@ export default function TicketTabs() {
     <View style={[styles.container, screenTopStyle]}>
       <Header
         title={t(TicketsTexts.header.title)}
-        rightButton={chatIcon}
-        leftButton={{
-          icon: <ThemeIcon svg={LogoOutline} />,
-          onPress: navigateHome,
-          accessibilityLabel: t(TicketsTexts.header.leftButton.a11yLabel),
-        }}
+        rightButton={{type: 'chat'}}
+        leftButton={{type: 'home'}}
       />
       <Tab.Navigator
         tabBar={(props) => <TabBar {...props} />}

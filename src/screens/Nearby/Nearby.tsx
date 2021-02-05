@@ -157,7 +157,6 @@ const NearbyOverview: React.FC<Props> = ({
     }
   }
 
-  const navigateHome = useNavigateToStartScreen();
   useEffect(() => {
     if (updatingLocation)
       setLoadAnnouncement(t(NearbyTexts.stateAnnouncements.updatingLocation));
@@ -189,10 +188,7 @@ const NearbyOverview: React.FC<Props> = ({
       }
       headerTitle={t(NearbyTexts.header.title)}
       useScroll={activateScroll}
-      logoClick={{
-        callback: navigateHome,
-        accessibilityLabel: t(NearbyTexts.header.logo.a11yLabel),
-      }}
+      leftButton={{type: 'home'}}
       alternativeTitleComponent={
         <AccessibleText
           prefix={t(NearbyTexts.header.altTitle.a11yPrefix)}

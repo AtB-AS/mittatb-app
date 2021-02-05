@@ -112,15 +112,7 @@ const MapSelection: React.FC<Props> = ({
       <View>
         <FullScreenHeader
           title={t(LocationSearchTexts.mapSelection.header.title)}
-          leftButton={{
-            onPress: () => navigation.goBack(),
-            accessible: true,
-            accessibilityRole: 'button',
-            accessibilityLabel: t(
-              LocationSearchTexts.mapSelection.header.leftButton.a11yLabel,
-            ),
-            icon: <ThemeIcon svg={ArrowLeft} />,
-          }}
+          leftButton={{type: 'back'}}
         />
 
         <LocationBar

@@ -31,7 +31,6 @@ type ProfileScreenProps = {
 };
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
-  const navigateHome = useNavigateToStartScreen();
   const {enable_i18n} = useRemoteConfig();
   const chatIcon = useChatIcon();
   const style = useProfileHomeStyle();
@@ -41,12 +40,8 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
     <View style={style.container}>
       <FullScreenHeader
         title={t(ProfileTexts.header.title)}
-        leftButton={{
-          icon: <ThemeIcon svg={LogoOutline} />,
-          onPress: navigateHome,
-          accessibilityLabel: t(ProfileTexts.header.logo.a11yLabel),
-        }}
-        rightButton={chatIcon}
+        leftButton={{type: 'home'}}
+        rightButton={{type: 'chat'}}
       />
 
       <ScrollView>

@@ -89,15 +89,7 @@ const LocationSearch: React.FC<Props> = ({
     <View style={styles.container}>
       <FullScreenHeader
         title={t(LocationSearchTexts.header.title)}
-        leftButton={{
-          onPress: () => navigation.goBack(),
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: t(
-            LocationSearchTexts.header.leftButton.a11yLabel,
-          ),
-          icon: <ThemeIcon svg={Close} />,
-        }}
+        leftButton={{type: 'close'}}
       />
 
       <LocationSearchContent
