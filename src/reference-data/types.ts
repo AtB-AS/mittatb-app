@@ -1,9 +1,7 @@
 import {Polygon} from 'geojson';
 
-export type Language = 'nob' | 'nno' | 'nor' | 'eng';
-
 export type LanguageAndText = {
-  lang: Language;
+  lang: string;
   value: string;
 };
 
@@ -31,5 +29,5 @@ export type TariffZone = {
   id: string;
   name: LanguageAndText;
   version: string;
-  geometry: Polygon;
+  geometry: Omit<Polygon, 'type'> & {type: any};
 };
