@@ -4,13 +4,13 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {ActionItem, RadioSection, Section} from '../../../components/sections';
 import {Preference_Language, usePreferences} from '../../../preferences';
 import {StyleSheet, Theme} from '../../../theme';
-import BackHeader from '../BackHeader';
 import {
   useTranslation,
   LanguageSettingsTexts,
   DEFAULT_LANGUAGE,
   appLanguages,
 } from '../../../translations';
+import ScreenHeader from '../../../ScreenHeader';
 const identity = (s: string) => s;
 export default function Language() {
   const {
@@ -25,7 +25,10 @@ export default function Language() {
 
   return (
     <SafeAreaView style={style.container}>
-      <BackHeader title={t(LanguageSettingsTexts.header.title)} />
+      <ScreenHeader
+        title={t(LanguageSettingsTexts.header.title)}
+        leftButton={{type: 'back'}}
+      />
       <ScrollView>
         <Section withPadding withTopPadding>
           <ActionItem

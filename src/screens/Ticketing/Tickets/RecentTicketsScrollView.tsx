@@ -31,7 +31,7 @@ const RecentTicketsScrollView = () => {
       screen: 'Confirmation',
       params: {
         ...ticket,
-        backButtonMode: 'cancel',
+        headerLeftButton: {type: 'cancel'},
       },
     });
   };

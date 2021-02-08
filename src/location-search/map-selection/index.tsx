@@ -5,7 +5,6 @@ import {Feature} from 'geojson';
 import React, {useMemo, useRef, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {LocationSearchNavigationProp, LocationSearchStackParams} from '../';
-import {ArrowLeft} from '../../assets/svg/icons/navigation';
 import {
   MapCameraConfig,
   MapControls,
@@ -14,7 +13,6 @@ import {
   shadows,
   useControlPositionsStyle,
 } from '../../components/map/';
-import ThemeIcon from '../../components/theme-icon';
 import {useReverseGeocoder} from '../../geocoder';
 import {useGeolocationState} from '../../GeolocationContext';
 import FullScreenHeader from '../../ScreenHeader/full-header';
@@ -112,15 +110,7 @@ const MapSelection: React.FC<Props> = ({
       <View>
         <FullScreenHeader
           title={t(LocationSearchTexts.mapSelection.header.title)}
-          leftButton={{
-            onPress: () => navigation.goBack(),
-            accessible: true,
-            accessibilityRole: 'button',
-            accessibilityLabel: t(
-              LocationSearchTexts.mapSelection.header.leftButton.a11yLabel,
-            ),
-            icon: <ThemeIcon svg={ArrowLeft} />,
-          }}
+          leftButton={{type: 'back'}}
         />
 
         <LocationBar

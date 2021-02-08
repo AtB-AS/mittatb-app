@@ -5,7 +5,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {searchTrip} from '../../api';
-import {CancelToken, isCancel} from '../../api/client';
+import {CancelToken, isCancel} from '../../api';
 import {ErrorType, getAxiosErrorType} from '../../api/utils';
 import {Swap} from '../../assets/svg/icons/actions';
 import {CurrentLocationArrow} from '../../assets/svg/icons/places';
@@ -16,7 +16,7 @@ import {LocationInput, Section} from '../../components/sections';
 import ThemeText from '../../components/text';
 import ThemeIcon from '../../components/theme-icon';
 import FavoriteChips from '../../favorite-chips';
-import {useFavorites} from '../../favorites/FavoritesContext';
+import {useFavorites} from '../../favorites';
 import {
   Location,
   LocationWithMetadata,
@@ -29,7 +29,6 @@ import {
 } from '../../GeolocationContext';
 import {useLocationSearchValue} from '../../location-search';
 import {RootStackParamList} from '../../navigation';
-import {TabNavigatorParams} from '../../navigation/TabNavigator';
 import {TripPattern} from '../../sdk';
 import {StyleSheet, useTheme} from '../../theme';
 import {useTranslation, dictionary, AssistantTexts} from '../../translations';
@@ -203,7 +202,7 @@ const Assistant: React.FC<Props> = ({
   const isHeaderFullHeight = !from || !to;
 
   const renderHeader = useCallback(
-    (_, isParentAnimating) => (
+    (_) => (
       <View>
         <View style={styles.paddedContainer}>
           <Section>
@@ -371,8 +370,9 @@ const Assistant: React.FC<Props> = ({
       headerMargin={24}
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
-      logoClick={{
-        callback: resetView,
+      leftButton={{
+        type: 'home',
+        onPress: resetView,
         accessibilityLabel: t(AssistantTexts.header.accessibility.logo),
       }}
       onFullscreenTransitionEnd={(fullHeight) => {

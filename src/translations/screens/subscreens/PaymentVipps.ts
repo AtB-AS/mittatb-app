@@ -3,12 +3,6 @@ import {translation as _} from '../../commons';
 const PaymentVippsTexts = {
   header: {
     title: _('Videresendes til Vipps', 'Redirecting to Vipps'),
-    leftButton: {
-      a11yLabel: _(
-        'Avslutt Vipps-betaling og gå tilbake',
-        'Cancel Vipps payment and go back',
-      ),
-    },
   },
   buttons: {
     goToVipps: _('Gå til Vipps for betaling', 'Go to Vipps-app for payment'),

@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../..';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {ArrowLeft} from '../../../../../assets/svg/icons/navigation';
 import Header from '../../../../../ScreenHeader';
 import {DismissableStackNavigationProp} from '../../../../../navigation/createDismissableStackNavigator';
 import Processing from '../Processing';
@@ -17,7 +16,6 @@ import {useTicketState} from '../../../../../TicketContext';
 import {StyleSheet} from '../../../../../theme';
 import {ErrorType} from '../../../../../api/utils';
 import Button from '../../../../../components/button';
-import ThemeIcon from '../../../../../components/theme-icon';
 import {
   ReserveOffer,
   TicketReservation,
@@ -81,11 +79,8 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
       <Header
         title={t(PaymentCreditCardTexts.header.title)}
         leftButton={{
-          icon: <ThemeIcon svg={ArrowLeft} />,
+          type: 'cancel',
           onPress: () => cancelTerminal(),
-          accessibilityLabel: t(
-            PaymentCreditCardTexts.header.leftButton.a11yLabel,
-          ),
         }}
       />
       <View

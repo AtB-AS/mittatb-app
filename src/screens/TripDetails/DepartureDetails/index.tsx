@@ -8,11 +8,7 @@ import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DetailsStackParams} from '..';
 import {getServiceJourneyMapLegs} from '../../../api/serviceJourney';
-import {
-  ArrowLeft,
-  Expand,
-  ExpandLess,
-} from '../../../assets/svg/icons/navigation';
+import {Expand, ExpandLess} from '../../../assets/svg/icons/navigation';
 import ContentWithDisappearingHeader from '../../../components/disappearing-header/content';
 import PaginatedDetailsHeader from '../../../components/pagination';
 import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
@@ -90,15 +86,7 @@ export default function DepartureDetails({navigation, route}: Props) {
     <View style={styles.container}>
       <View style={[styles.header, {paddingTop}]}>
         <ScreenHeader
-          leftButton={{
-            onPress: () => navigation.goBack(),
-            icon: <ThemeIcon svg={ArrowLeft} />,
-            accessible: true,
-            accessibilityRole: 'button',
-            accessibilityLabel: t(
-              DepartureDetailsTexts.header.leftIcon.a11yLabel,
-            ),
-          }}
+          leftButton={{type: 'back'}}
           title={title ?? t(DepartureDetailsTexts.header.notFound)}
         />
       </View>

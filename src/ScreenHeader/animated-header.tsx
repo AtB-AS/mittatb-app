@@ -3,10 +3,11 @@ import {Animated, View, ViewProps} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import ThemeText from '../components/text';
 import {StyleSheet} from '../theme';
-import HeaderButton, {IconButton} from './HeaderButton';
+import HeaderButton from './HeaderButton';
+import {LeftButtonProps, RightButtonProps} from './index';
 type ScreenHeaderProps = ViewProps & {
-  leftButton?: IconButton;
-  rightButton?: IconButton;
+  leftButton?: LeftButtonProps;
+  rightButton?: RightButtonProps;
   title: React.ReactNode;
   alternativeTitleComponent?: React.ReactNode;
   scrollRef?: Animated.Value;

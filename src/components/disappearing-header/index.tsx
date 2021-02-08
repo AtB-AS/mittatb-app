@@ -1,7 +1,6 @@
 import {useScrollToTop} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
-  AccessibilityProps,
   Animated,
   Easing,
   NativeScrollEvent,
@@ -17,15 +16,13 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import SvgBanner from '../../assets/svg/icons/other/Banner';
-import useChatIcon from '../../chat/use-chat-icon';
 import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
-import LogoOutline from '../../ScreenHeader/LogoOutline';
 import {StyleSheet, useTheme} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
-import ThemeIcon from '../theme-icon';
 import useConditionalMemo from '../../utils/use-conditional-memo';
 import {useBottomNavigationStyles} from '../../utils/navigation';
 import throttle from '../../utils/throttle';
+import {LeftButtonProps} from '../../ScreenHeader';
 
 type Props = {
   renderHeader(
@@ -44,7 +41,7 @@ type Props = {
 
   headerMargin?: number;
 
-  logoClick?: {callback(): void} & AccessibilityProps;
+  leftButton?: LeftButtonProps;
 
   onEndReached?(e: NativeScrollEvent): void;
   onEndReachedThreshold?: number;
@@ -70,7 +67,7 @@ const DisappearingHeader: React.FC<Props> = ({
 
   isFullHeight = false,
 
-  logoClick,
+  leftButton,
 
   headerTitle,
   alternativeTitleComponent,
@@ -99,7 +96,6 @@ const DisappearingHeader: React.FC<Props> = ({
     }),
   );
 
-  const chatIcon = useChatIcon();
   const [scrollYValue, setScrollY] = useState<number>(0);
   const styles = useThemeStyles();
   const {theme} = useTheme();
@@ -186,14 +182,10 @@ const DisappearingHeader: React.FC<Props> = ({
         <AnimatedScreenHeader
           onLayout={onScreenHeaderLayout}
           title={headerTitle}
-          rightButton={chatIcon}
+          rightButton={{type: 'chat'}}
           alternativeTitleComponent={alternativeTitleComponent}
           scrollRef={scrollYRef}
-          leftButton={{
-            onPress: logoClick?.callback,
-            icon: <ThemeIcon svg={LogoOutline} />,
-            ...logoClick,
-          }}
+          leftButton={leftButton}
         />
 
         <View style={styles.content}>

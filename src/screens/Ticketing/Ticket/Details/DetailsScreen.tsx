@@ -2,8 +2,6 @@ import React, {useState} from 'react';
 import {RouteProp} from '@react-navigation/native';
 import Header from '../../../../ScreenHeader';
 import {StyleSheet} from '../../../../theme';
-import ThemeIcon from '../../../../components/theme-icon';
-import {Close} from '../../../../assets/svg/icons/actions';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useInterval from '../../../../utils/use-interval';
 import {useTicketState} from '../../../../TicketContext';
@@ -50,15 +48,7 @@ export default function DetailsScreen({navigation, route}: Props) {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        leftButton={{
-          onPress: () => navigation.goBack(),
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: t(
-            TicketTexts.details.header.leftButton.a11yLabel,
-          ),
-          icon: <ThemeIcon svg={Close} />,
-        }}
+        leftButton={{type: 'close'}}
         title={t(TicketTexts.details.header.title)}
         style={styles.header}
       />

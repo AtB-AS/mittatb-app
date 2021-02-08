@@ -9,9 +9,6 @@ const LocationSearchTexts = {
   },
   header: {
     title: _('Søk', 'Search'),
-    leftButton: {
-      a11yLabel: _('Gå tilbake', 'Go back'),
-    },
   },
   results: {
     previousResults: {
@@ -38,9 +35,6 @@ const LocationSearchTexts = {
   mapSelection: {
     header: {
       title: _('Søk', 'Search'),
-      leftButton: {
-        a11yLabel: _('Gå tilbake', 'Go back'),
-      },
     },
     messages: {
       noResult: {

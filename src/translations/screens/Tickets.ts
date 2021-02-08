@@ -3,9 +3,6 @@ import {translation as _} from '../commons';
 const TicketsTexts = {
   header: {
     title: _('Billetter', 'Tickets'),
-    leftButton: {
-      a11yLabel: _('Gå til startside', 'Go to start page'),
-    },
   },
   buyTicketsTab: {
     label: _('Kjøp', 'Buy'),

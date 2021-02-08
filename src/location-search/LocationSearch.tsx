@@ -4,11 +4,9 @@ import {Keyboard, TextInput as InternalTextInput, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
 import {ErrorType} from '../api/utils';
-import {Close} from '../assets/svg/icons/actions';
 import ScreenReaderAnnouncement from '../components/screen-reader-announcement';
 import {TextInput} from '../components/sections';
 import ThemeText from '../components/text';
-import ThemeIcon from '../components/theme-icon';
 import FavoriteChips, {ChipTypeGroup} from '../favorite-chips';
 import {useFavorites} from '../favorites';
 import {
@@ -89,15 +87,7 @@ const LocationSearch: React.FC<Props> = ({
     <View style={styles.container}>
       <FullScreenHeader
         title={t(LocationSearchTexts.header.title)}
-        leftButton={{
-          onPress: () => navigation.goBack(),
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: t(
-            LocationSearchTexts.header.leftButton.a11yLabel,
-          ),
-          icon: <ThemeIcon svg={Close} />,
-        }}
+        leftButton={{type: 'close'}}
       />
 
       <LocationSearchContent

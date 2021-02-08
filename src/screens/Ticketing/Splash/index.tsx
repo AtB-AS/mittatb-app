@@ -1,17 +1,13 @@
 import React, {useRef} from 'react';
-import {View, useWindowDimensions, Text, Linking, Platform} from 'react-native';
+import {View, useWindowDimensions} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../../ScreenHeader';
-import useChatIcon from '../../../chat/use-chat-icon';
 import {ShinyTicketBanner} from '../../../assets/svg/illustrations';
 import {StyleSheet} from '../../../theme';
-import LogoOutline from '../../../ScreenHeader/LogoOutline';
-import {useNavigateToStartScreen} from '../../../utils/navigation';
 import InviteModal from './InviteModal';
 import {Modalize} from 'react-native-modalize';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
 import ThemeText from '../../../components/text';
-import ThemeIcon from '../../../components/theme-icon';
 import Button from '../../../components/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useTranslation, TicketSplashTexts} from '../../../translations';
@@ -19,9 +15,7 @@ import {useTranslation, TicketSplashTexts} from '../../../translations';
 export default function Splash() {
   const styles = useStyles();
   const {refresh} = useRemoteConfig();
-  const chatIcon = useChatIcon();
   const {width: windowWidth} = useWindowDimensions();
-  const navigateHome = useNavigateToStartScreen();
   const modalRef = useRef<Modalize>(null);
   const {t} = useTranslation();
 
@@ -33,12 +27,8 @@ export default function Splash() {
     <SafeAreaView style={styles.container}>
       <Header
         title={t(TicketSplashTexts.header.title)}
-        rightButton={chatIcon}
-        leftButton={{
-          icon: <ThemeIcon svg={LogoOutline} />,
-          onPress: navigateHome,
-          accessibilityLabel: t(TicketSplashTexts.header.logo.a11yLabel),
-        }}
+        rightButton={{type: 'chat'}}
+        leftButton={{type: 'home'}}
       />
       <View style={styles.bannerContainer}>
         <ShinyTicketBanner

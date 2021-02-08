@@ -9,7 +9,6 @@ import {
 import {ScrollView} from 'react-native-gesture-handler';
 import {TextInput} from '../../../../../components/sections';
 import ThemeText from '../../../../../components/text';
-import ThemeIcon from '../../../../../components/theme-icon';
 import MessageBox from '../../../../../message-box';
 import FullScreenHeader from '../../../../../ScreenHeader/full-header';
 import {StyleSheet} from '../../../../../theme';
@@ -24,7 +23,6 @@ import {useGeolocationState} from '../../../../../GeolocationContext';
 import {useGeocoder} from '../../../../../geocoder';
 import VenueResults, {LocationAndTariffZone} from './VenueResults';
 import {Location} from '../../../../../favorites/types';
-import {ArrowLeft} from '../../../../../assets/svg/icons/navigation';
 import {ErrorType} from '../../../../../api/utils';
 import {useRemoteConfig} from '../../../../../RemoteConfigContext';
 import {TariffZone} from '../../../../../reference-data/types';
@@ -141,15 +139,7 @@ const Index: React.FC<Props> = ({
     <View style={styles.container}>
       <FullScreenHeader
         title={t(TariffZoneSearchTexts.header.title)}
-        leftButton={{
-          onPress: () => navigation.goBack(),
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: t(
-            TariffZoneSearchTexts.header.leftButton.a11yLabel,
-          ),
-          icon: <ThemeIcon svg={ArrowLeft} />,
-        }}
+        leftButton={{type: 'back'}}
       />
 
       <View style={styles.header}>

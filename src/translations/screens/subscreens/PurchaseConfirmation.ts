@@ -1,14 +1,6 @@
 import {translation as _} from '../../commons';
 
 const PurchaseConfirmationTexts = {
-  header: {
-    leftButton: {
-      text: {
-        back: _('Tilbake', 'Back'),
-        cancel: _('Avbryt', 'Cancel'),
-      },
-    },
-  },
   errorMessageBox: {
     title: _('Det oppstod en feil', 'An error occurred'),
     message: _(

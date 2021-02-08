@@ -3,12 +3,6 @@ import {translation as _} from '../commons';
 const ProfileTexts = {
   header: {
     title: _('Mitt AtB', 'Profile'),
-    logo: {
-      a11yLabel: _('Gå til startside', 'Go to start page'),
-    },
-    backButton: {
-      a11yLabel: _('Gå tilbake', 'Go back'),
-    },
   },
   sections: {
     settings: {
