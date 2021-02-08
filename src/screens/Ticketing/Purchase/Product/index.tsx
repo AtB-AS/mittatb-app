@@ -12,7 +12,6 @@ import {ProductTexts, useTranslation} from '../../../../translations';
 import Button from '../../../../components/button';
 import {getReferenceDataName} from '../../../../reference-data/utils';
 import {useRemoteConfig} from '../../../../RemoteConfigContext';
-import ThemeText from '../../../../components/text';
 import {PreassignedFareProduct} from '../../../../reference-data/types';
 
 export type ProductRouteParams = {
@@ -51,12 +50,7 @@ const Product: React.FC<{
     <View style={[styles.container, {paddingTop: safeAreaTop}]}>
       <Header
         title={t(ProductTexts.header.title)}
-        leftButton={{
-          accessible: true,
-          accessibilityRole: 'button',
-          icon: <ThemeText>{t(ProductTexts.header.leftButton)}</ThemeText>,
-          onPress: () => navigation.goBack(),
-        }}
+        leftButton={{type: 'back'}}
       />
 
       <ScrollView style={styles.productsSection}>
