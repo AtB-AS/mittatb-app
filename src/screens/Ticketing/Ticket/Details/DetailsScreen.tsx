@@ -5,7 +5,7 @@ import {StyleSheet} from '../../../../theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useInterval from '../../../../utils/use-interval';
 import {useTicketState} from '../../../../TicketContext';
-import {View} from 'react-native';
+import {ScrollView} from 'react-native';
 import DetailsContent from './DetailsContent';
 import {TicketModalNavigationProp, TicketModalStackParams} from '.';
 import {TicketTexts, useTranslation} from '../../../../translations';
@@ -39,12 +39,6 @@ export default function DetailsScreen({navigation, route}: Props) {
       orderVersion: fc.order_version,
     });
 
-  const onInspectionNavigate = () =>
-    fc &&
-    navigation.push('TicketInspection', {
-      orderId: fc.order_id,
-    });
-
   return (
     <SafeAreaView style={styles.container}>
       <Header
@@ -52,16 +46,15 @@ export default function DetailsScreen({navigation, route}: Props) {
         title={t(TicketTexts.details.header.title)}
         style={styles.header}
       />
-      <View style={styles.content}>
+      <ScrollView style={styles.content}>
         {fc && (
           <DetailsContent
             fareContract={fc}
             now={now}
             onReceiptNavigate={onReceiptNavigate}
-            onInspectionNavigate={onInspectionNavigate}
           />
         )}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

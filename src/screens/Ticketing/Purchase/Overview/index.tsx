@@ -108,8 +108,12 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         <Sections.Section>
           <Sections.LinkItem
             text={getReferenceDataName(preassignedFareProduct, language)}
-            onPress={() => {}}
-            disabled={true}
+            onPress={() => {
+              navigation.push('Product', {
+                preassignedFareProductId: preassignedFareProduct.id,
+              });
+            }}
+            disabled={preassignedFareProducts.length <= 1}
             icon={<ThemeIcon svg={Edit} />}
           />
           <Sections.LinkItem
