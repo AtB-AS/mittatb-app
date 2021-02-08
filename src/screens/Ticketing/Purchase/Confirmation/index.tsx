@@ -1,5 +1,5 @@
 import React from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
 import Header from '../../../../ScreenHeader';
@@ -116,7 +116,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
         style={styles.header}
       />
 
-      <View style={styles.ticketInfoSection}>
+      <ScrollView style={styles.ticketInfoSection}>
         <View>
           {error && (
             <MessageBox
@@ -244,7 +244,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
             />
           )}
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
