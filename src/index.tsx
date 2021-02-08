@@ -18,7 +18,22 @@ import {setInstallId as setApiInstallId} from './api/client';
 import ErrorBoundary from './error-boundary';
 import {PreferencesContextProvider} from './preferences';
 import configureAndStartBugsnag from './diagnostics/bugsnagConfig';
+import messaging from '@react-native-firebase/messaging';
+messaging()
+  .getToken()
+  .then((token) => console.log('Token', token));
 
+// async function requestUserPermission() {
+//   const authStatus = await messaging().requestPermission();
+//   const enabled =
+//     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+//     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+//   if (enabled) {
+//     console.log('Authorization status:', authStatus);
+//   }
+// }
+// requestUserPermission();
 configureAndStartBugsnag();
 
 import {MAPBOX_API_TOKEN} from '@env';
