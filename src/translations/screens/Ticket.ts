@@ -9,7 +9,10 @@ const TicketTexts = {
         `Zone ${zoneNameFrom} to zone ${zoneNameTo}`,
       ),
   },
-  controlLink: _('Vis for kontroll', 'Show for inspection'),
+  detailsLink: {
+    valid: _('Vis detaljer / kontroll', 'Show details / inspection'),
+    expired: _('Vis detaljer', 'Show details'),
+  },
   validityHeader: {
     valid: (duration: string) =>
       _(`Gyldig i ${duration}`, `Valid through ${duration}`),
@@ -19,9 +22,6 @@ const TicketTexts = {
       _(`Utløpt ${dateTime}`, `Expired ${dateTime}`),
     refunded: _(`Refundert`, 'Refunded'),
     durationDelimiter: _(' og ', ' and '),
-    detailsButton: {
-      a11yLabel: _('Gå til billettdetaljer', 'Go to ticket details'),
-    },
   },
   details: {
     header: {
@@ -61,14 +61,6 @@ const TicketTexts = {
         'Du kan få tilsendt kvittering på e-post. Fyll inn din e-postadresse under, og trykk "Send".',
         'To receive your receipt, enter your e-mail adress below',
       ),
-    },
-  },
-  qr_code: {
-    header: {
-      leftButton: {
-        a11yLabel: _('Gå tilbake', 'Go back'),
-      },
-      title: _('Vis for kontroll', 'Show for inspection'),
     },
   },
 };
