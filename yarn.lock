@@ -2605,10 +2605,10 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.11.0.tgz#d61f46d83b2519250e2784daf5b09479a8b41c59"
   integrity sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
 
-axios-better-stacktrace@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/axios-better-stacktrace/-/axios-better-stacktrace-1.1.0.tgz#f040c42f194b43fe7748b7c069a5d12b75e56c51"
-  integrity sha512-n4QJUmMjcGtQnQfKINUC6tIj1tQrmvZXs8v4mo60hASld7quMdZp5CCq4hK+xhrIrBTJWxYamoE2U6wS4cppnQ==
+axios-better-stacktrace@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/axios-better-stacktrace/-/axios-better-stacktrace-1.2.0.tgz#56a677c6111217266d213718ea6c999621172bfa"
+  integrity sha512-SGcFKuNeOg5huThzpfx6OfGSLcw4aDPIVGlmglWKpWJXzufWbSPdyfLZutlHpRMZ/DzP9WgMrW0uwJTc6n0pnQ==
 
 axios-retry@^3.1.9:
   version "3.1.9"

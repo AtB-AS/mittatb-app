@@ -29,7 +29,10 @@ export function createClient(baseUrl: string) {
   const client = axios.create({
     baseURL: baseUrl,
   });
-  axiosBetterStacktrace(client);
+  axiosBetterStacktrace(client, {
+    errorMsg: 'Inner error',
+    exposeTopmostErrorViaConfig: true,
+  });
   client.interceptors.request.use(requestHandler, undefined);
   client.interceptors.response.use(undefined, responseErrorHandler);
   axiosRetry(client, {retries: 3, retryCondition});
@@ -53,6 +56,13 @@ function requestHandler(config: AxiosRequestConfig): AxiosRequestConfig {
 
 function responseErrorHandler(error: AxiosError) {
   const errorType = getAxiosErrorType(error);
+  const topmostError = error?.config?.topmostError;
+
+  const originalStack = error.stack;
+  if (topmostError) {
+    error.stack = `${error.stack}\n${topmostError.stack}`;
+  }
+
   switch (errorType) {
     case 'default':
       const errorMetadata = getAxiosErrorMetadata(error);
@@ -73,6 +83,8 @@ function responseErrorHandler(error: AxiosError) {
       }
       break;
   }
+
+  error.stack = originalStack;
 
   return Promise.reject(error);
 }
