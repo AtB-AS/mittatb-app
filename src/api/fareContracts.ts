@@ -53,8 +53,6 @@ export async function reserve(
   paymentType: PaymentType,
   opts?: AxiosRequestConfig,
 ) {
-  const customer_id = await getCustomerId();
-
   const url = 'ticket/v1/reserve';
   const response = await client.post<TicketReservation>(
     url,
@@ -64,7 +62,6 @@ export async function reserve(
         paymentType == 'vipps'
           ? 'atb://vipps?transaction_id={transaction_id}&payment_id={payment_id}'
           : undefined,
-      customer_id,
       offers,
     },
     opts,
@@ -91,7 +88,6 @@ type PaymentResponse = {
 export async function getPayment(paymentId: number): Promise<PaymentResponse> {
   const url = 'ticket/v1/payments/' + paymentId;
   const response = await client.get<PaymentResponse>(url);
-
   return response.data;
 }
 

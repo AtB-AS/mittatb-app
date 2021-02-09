@@ -12,35 +12,20 @@ import FavoritesContextProvider from './favorites/FavoritesContext';
 import SearchHistoryContextProvider from './search-history';
 import TicketContextProvider from './TicketContext';
 import RemoteConfigContextProvider from './RemoteConfigContext';
+import AuthContextProvider from './AuthContext';
 import {loadLocalConfig} from './local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {setInstallId as setApiInstallId} from './api/client';
 import ErrorBoundary from './error-boundary';
 import {PreferencesContextProvider} from './preferences';
 import configureAndStartBugsnag from './diagnostics/bugsnagConfig';
-import messaging from '@react-native-firebase/messaging';
-messaging()
-  .getToken()
-  .then((token) => console.log('Token', token));
 
-// async function requestUserPermission() {
-//   const authStatus = await messaging().requestPermission();
-//   const enabled =
-//     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-//     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-//   if (enabled) {
-//     console.log('Authorization status:', authStatus);
-//   }
-// }
-// requestUserPermission();
 configureAndStartBugsnag();
 
 import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import AppLanguageProvider from './translations/LanguageContext';
 import {Platform, UIManager} from 'react-native';
-import AuthContextProvider from './AuthContext';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
