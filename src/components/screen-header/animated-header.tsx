@@ -1,8 +1,8 @@
 import React from 'react';
 import {Animated, View, ViewProps} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import ThemeText from '../components/text';
-import {StyleSheet} from '../theme';
+import ThemeText from '../text';
+import {StyleSheet} from '../../theme';
 import HeaderButton from './HeaderButton';
 import {LeftButtonProps, RightButtonProps} from './index';
 type ScreenHeaderProps = ViewProps & {

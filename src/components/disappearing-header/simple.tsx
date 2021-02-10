@@ -10,11 +10,11 @@ import {
   View,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
+import AnimatedScreenHeader from '../screen-header/animated-header';
 import {StyleSheet, useTheme} from '../../theme';
 import throttle from '../../utils/throttle';
 import {useLayout} from '../../utils/use-layout';
-import {LeftButtonProps} from '../../ScreenHeader';
+import {LeftButtonProps} from '../screen-header';
 
 type Props = {
   header: React.ReactNode;

@@ -8,7 +8,7 @@ import {StoredFavoriteDeparture} from '../../../favorites/types';
 import MessageBox from '../../../message-box';
 import {StyleSheet, Theme} from '../../../theme';
 import {FavoriteDeparturesTexts, useTranslation} from '../../../translations';
-import ScreenHeader from '../../../ScreenHeader';
+import ScreenHeader from '../../../components/screen-header';
 
 export default function FavoriteDepartures() {
   const style = useProfileStyle();

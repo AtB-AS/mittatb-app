@@ -18,7 +18,7 @@ import {useGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
 import MessageBox from '../message-box';
 import {RootStackParamList} from '../navigation';
-import FullScreenHeader from '../ScreenHeader/full-header';
+import FullScreenHeader from '../components/screen-header/full-header';
 import {useSearchHistory} from '../search-history';
 import {StyleSheet} from '../theme';
 import {

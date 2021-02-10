@@ -2,7 +2,7 @@ import React, {useMemo} from 'react';
 import {View} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import Header from '../../../ScreenHeader';
+import Header from '../../../components/screen-header';
 import {StyleSheet} from '../../../theme';
 import TabBar from './TabBar';
 import {ActiveTickets, BuyTickets, ExpiredTickets} from './Tabs';

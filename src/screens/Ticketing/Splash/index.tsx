@@ -1,7 +1,7 @@
 import React, {useRef} from 'react';
 import {View, useWindowDimensions} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Header from '../../../ScreenHeader';
+import Header from '../../../components/screen-header';
 import {ShinyTicketBanner} from '../../../assets/svg/illustrations';
 import {StyleSheet} from '../../../theme';
 import InviteModal from './InviteModal';

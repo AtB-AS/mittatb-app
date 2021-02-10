@@ -10,7 +10,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {TextInput} from '../../../../../components/sections';
 import ThemeText from '../../../../../components/text';
 import MessageBox from '../../../../../message-box';
-import FullScreenHeader from '../../../../../ScreenHeader/full-header';
+import FullScreenHeader from '../../../../../components/screen-header/full-header';
 import {StyleSheet} from '../../../../../theme';
 import TariffZoneResults from './TariffZoneResults';
 import {

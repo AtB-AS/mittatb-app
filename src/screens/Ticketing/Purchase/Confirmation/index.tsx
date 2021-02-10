@@ -2,7 +2,7 @@ import React from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
-import Header, {LeftButtonProps} from '../../../../ScreenHeader';
+import Header, {LeftButtonProps} from '../../../../components/screen-header';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StyleSheet, useTheme} from '../../../../theme';
 import ThemeText from '../../../../components/text';

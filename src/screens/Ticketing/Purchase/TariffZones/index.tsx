@@ -22,7 +22,7 @@ import MapboxGL, {
   OnPressEvent,
   RegionPayload,
 } from '@react-native-mapbox-gl/maps';
-import FullScreenHeader from '../../../../ScreenHeader/full-header';
+import FullScreenHeader from '../../../../components/screen-header/full-header';
 import {
   MapCameraConfig,
   MapControls,

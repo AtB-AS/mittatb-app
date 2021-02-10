@@ -13,7 +13,7 @@ import MessageBox from '../../../message-box';
 import {RootStackParamList} from '../../../navigation';
 import {StyleSheet, Theme} from '../../../theme';
 import {FavoriteListTexts, useTranslation} from '../../../translations';
-import ScreenHeader from '../../../ScreenHeader';
+import ScreenHeader from '../../../components/screen-header';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,

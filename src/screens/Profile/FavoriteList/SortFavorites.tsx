@@ -19,7 +19,7 @@ import {FavoriteListTexts, useTranslation} from '../../../translations';
 import useIsScreenReaderEnabled from '../../../utils/use-is-screen-reader-enabled';
 import {SortableList} from './SortableList';
 import SortableListFallback from './SortableListFallback';
-import ScreenHeader from '../../../ScreenHeader';
+import ScreenHeader from '../../../components/screen-header';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,

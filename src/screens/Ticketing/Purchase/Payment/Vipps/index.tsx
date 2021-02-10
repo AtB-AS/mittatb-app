@@ -4,7 +4,7 @@ import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../..';
 import {DismissableStackNavigationProp} from '../../../../../navigation/createDismissableStackNavigator';
-import Header from '../../../../../ScreenHeader';
+import Header from '../../../../../components/screen-header';
 import {StyleSheet} from '../../../../../theme';
 import {useTicketState} from '../../../../../TicketContext';
 import Button from '../../../../../components/button';

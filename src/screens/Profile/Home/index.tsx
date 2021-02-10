@@ -7,7 +7,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
 import * as Sections from '../../../components/sections';
 import {TabNavigatorParams} from '../../../navigation/TabNavigator';
-import FullScreenHeader from '../../../ScreenHeader/full-header';
+import FullScreenHeader from '../../../components/screen-header/full-header';
 import {StyleSheet, Theme} from '../../../theme';
 import {useTranslation, ProfileTexts} from '../../../translations';
 import {useRemoteConfig} from '../../../RemoteConfigContext';

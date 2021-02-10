@@ -15,7 +15,7 @@ import {
 } from '../../components/map/';
 import {useReverseGeocoder} from '../../geocoder';
 import {useGeolocationState} from '../../GeolocationContext';
-import FullScreenHeader from '../../ScreenHeader/full-header';
+import FullScreenHeader from '../../components/screen-header/full-header';
 import {StyleSheet} from '../../theme';
 import LocationBar from './LocationBar';
 import SelectionPin, {PinMode} from './SelectionPin';

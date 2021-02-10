@@ -1,8 +1,8 @@
 import {View, ViewStyle} from 'react-native';
 import React from 'react';
-import {StyleSheet} from '../theme';
+import {StyleSheet} from '../../theme';
 import HeaderButton, {ButtonModes, HeaderButtonProps} from './HeaderButton';
-import ThemeText from '../components/text';
+import ThemeText from '../text';
 
 export type LeftButtonProps = HeaderButtonProps & {
   type: Exclude<ButtonModes, 'chat'>;

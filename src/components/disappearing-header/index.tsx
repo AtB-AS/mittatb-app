@@ -16,13 +16,13 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import SvgBanner from '../../assets/svg/icons/other/Banner';
-import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
+import AnimatedScreenHeader from '../screen-header/animated-header';
 import {StyleSheet, useTheme} from '../../theme';
 import {useLayout} from '../../utils/use-layout';
 import useConditionalMemo from '../../utils/use-conditional-memo';
 import {useBottomNavigationStyles} from '../../utils/navigation';
 import throttle from '../../utils/throttle';
-import {LeftButtonProps} from '../../ScreenHeader';
+import {LeftButtonProps} from '../screen-header';
 
 type Props = {
   renderHeader(

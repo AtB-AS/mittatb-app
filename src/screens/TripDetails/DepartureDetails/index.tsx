@@ -14,7 +14,7 @@ import PaginatedDetailsHeader from '../../../components/pagination';
 import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
-import ScreenHeader from '../../../ScreenHeader';
+import ScreenHeader from '../../../components/screen-header';
 import {
   EstimatedCall,
   ServiceJourneyMapInfoData,

@@ -1,13 +1,13 @@
 import {AccessibilityProps, TouchableOpacity} from 'react-native';
 import React from 'react';
-import insets from '../utils/insets';
+import insets from '../../utils/insets';
 import {useNavigation} from '@react-navigation/native';
-import ThemeText from '../components/text';
-import {useNavigateToStartScreen} from '../utils/navigation';
-import useChatIcon from '../chat/use-chat-icon';
+import ThemeText from '../text';
+import {useNavigateToStartScreen} from '../../utils/navigation';
+import useChatIcon from '../../chat/use-chat-icon';
 import LogoOutline from './LogoOutline';
-import ThemeIcon from '../components/theme-icon';
-import {ScreenHeaderTexts, useTranslation} from '../translations';
+import ThemeIcon from '../theme-icon';
+import {ScreenHeaderTexts, useTranslation} from '../../translations';
 
 export type ButtonModes = 'back' | 'cancel' | 'close' | 'home' | 'chat';
 export type HeaderButtonProps = {

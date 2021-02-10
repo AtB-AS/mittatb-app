@@ -2,7 +2,7 @@ import React, {useEffect, useMemo} from 'react';
 import {SafeAreaView, View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
-import Header from '../../../../ScreenHeader';
+import Header from '../../../../components/screen-header';
 import {Edit} from '../../../../assets/svg/icons/actions';
 import {StyleSheet} from '../../../../theme';
 import ThemeIcon from '../../../../components/theme-icon';

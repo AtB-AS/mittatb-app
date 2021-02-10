@@ -22,7 +22,7 @@ import {RootStackParamList} from '../../../navigation';
 import {StyleSheet, Theme} from '../../../theme';
 import {AddEditFavoriteTexts, useTranslation} from '../../../translations';
 import EmojiPopup from './EmojiPopup';
-import ScreenHeader from '../../../ScreenHeader';
+import ScreenHeader from '../../../components/screen-header';
 
 type AddEditRouteName = 'AddEditForm';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditForm';

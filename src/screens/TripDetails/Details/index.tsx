@@ -11,7 +11,7 @@ import {DetailsStackParams} from '..';
 import {getSingleTripPattern} from '../../../api/trips';
 import ContentWithDisappearingHeader from '../../../components/disappearing-header/content';
 import PaginatedDetailsHeader from '../../../components/pagination';
-import Header from '../../../ScreenHeader';
+import Header from '../../../components/screen-header';
 import {TripPattern} from '../../../sdk';
 import {StyleSheet, useTheme} from '../../../theme';
 import {TripDetailsTexts, useTranslation} from '../../../translations';

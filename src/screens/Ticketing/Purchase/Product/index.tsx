@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
-import Header from '../../../../ScreenHeader';
+import Header from '../../../../components/screen-header';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StyleSheet, useTheme} from '../../../../theme';
 import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';

@@ -2,7 +2,7 @@ import React from 'react';
 import {Keyboard, View} from 'react-native';
 import {LocationWithMetadata} from '../../../favorites/types';
 import {LocationSearchContent} from '../../../location-search/LocationSearch';
-import FullScreenHeader from '../../../ScreenHeader/full-header';
+import FullScreenHeader from '../../../components/screen-header/full-header';
 import {StyleSheet} from '../../../theme';
 import {AddEditFavoriteTexts, useTranslation} from '../../../translations';
 import {LocationSearchNavigationProp} from './';

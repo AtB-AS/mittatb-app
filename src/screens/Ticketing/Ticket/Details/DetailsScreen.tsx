@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {RouteProp} from '@react-navigation/native';
-import Header from '../../../../ScreenHeader';
+import Header from '../../../../components/screen-header';
 import {StyleSheet} from '../../../../theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useInterval from '../../../../utils/use-interval';

@@ -5,7 +5,7 @@ import {RouteProp} from '@react-navigation/native';
 import {sendReceipt} from '../../../../api/fareContracts';
 import {StyleSheet} from '../../../../theme';
 import * as Sections from '../../../../components/sections';
-import Header from '../../../../ScreenHeader';
+import Header from '../../../../components/screen-header';
 import {TicketModalNavigationProp, TicketModalStackParams} from './';
 import MessageBox, {MessageBoxProps} from '../../../../message-box';
 import Button from '../../../../components/button';

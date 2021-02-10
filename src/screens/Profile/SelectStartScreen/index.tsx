@@ -13,7 +13,7 @@ import {
   useTranslation,
   TranslatedString,
 } from '../../../translations';
-import ScreenHeader from '../../../ScreenHeader';
+import ScreenHeader from '../../../components/screen-header';
 
 const identity = (s: string) => s;
 function toName(alt: Preference_ScreenAlternatives): TranslatedString {
