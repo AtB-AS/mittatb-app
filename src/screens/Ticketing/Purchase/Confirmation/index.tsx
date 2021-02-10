@@ -20,6 +20,19 @@ import * as Sections from '../../../../components/sections';
 import {ReserveOffer} from '../../../../api/fareContracts';
 import {useRemoteConfig} from '../../../../RemoteConfigContext';
 import {getReferenceDataName} from '../../../../reference-data/utils';
+import {
+  PreassignedFareProduct,
+  TariffZone,
+} from '../../../../reference-data/types';
+import {UserProfileWithCount} from '../Travellers/use-user-count-state';
+
+export type RouteParams = {
+  preassignedFareProduct: PreassignedFareProduct;
+  fromTariffZone: TariffZone;
+  toTariffZone: TariffZone;
+  userProfilesWithCount: UserProfileWithCount[];
+  backButtonMode: 'back' | 'cancel';
+};
 
 export type ConfirmationProps = {
   navigation: DismissableStackNavigationProp<
@@ -44,6 +57,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     toTariffZone,
     preassignedFareProduct,
     userProfilesWithCount,
+    backButtonMode,
   } = params;
 
   const {
@@ -105,13 +119,14 @@ const Confirmation: React.FC<ConfirmationProps> = ({
         leftButton={{
           icon: (
             <ThemeText>
-              {t(PurchaseConfirmationTexts.header.leftButton.text)}
+              {t(
+                PurchaseConfirmationTexts.header.leftButton.text[
+                  backButtonMode
+                ],
+              )}
             </ThemeText>
           ),
           onPress: () => navigation.goBack(),
-          accessibilityLabel: t(
-            PurchaseConfirmationTexts.header.leftButton.a11yLabel,
-          ),
         }}
         style={styles.header}
       />

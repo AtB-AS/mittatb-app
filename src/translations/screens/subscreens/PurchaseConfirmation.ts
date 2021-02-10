@@ -3,8 +3,10 @@ import {translation as _} from '../../commons';
 const PurchaseConfirmationTexts = {
   header: {
     leftButton: {
-      text: _('Tilbake', 'Back'),
-      a11yLabel: _('Gå tilbake', 'Go back'),
+      text: {
+        back: _('Tilbake', 'Back'),
+        cancel: _('Avbryt', 'Cancel'),
+      },
     },
   },
   errorMessageBox: {

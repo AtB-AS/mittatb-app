@@ -11,6 +11,7 @@ export type RemoteConfig = {
   enable_intercom: boolean;
   enable_i18n: boolean;
   enable_creditcard: boolean;
+  enable_recent_tickets: boolean;
   must_upgrade_ticketing: boolean;
   news_enabled: boolean;
   news_text: string;
@@ -27,6 +28,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_intercom: true,
   enable_i18n: false,
   enable_creditcard: false,
+  enable_recent_tickets: false,
   must_upgrade_ticketing: false,
   news_enabled: false,
   news_text: '',
@@ -48,6 +50,9 @@ export function getConfig(): RemoteConfig {
   const enable_creditcard =
     values['enable_creditcard']?.asBoolean() ??
     defaultRemoteConfig.enable_creditcard;
+  const enable_recent_tickets =
+    values['enable_recent_tickets']?.asBoolean() ??
+    defaultRemoteConfig.enable_recent_tickets;
   const must_upgrade_ticketing =
     values['must_upgrade_ticketing']?.asBoolean() ?? false;
   const news_enabled = values['news_enabled']?.asBoolean() ?? false;
@@ -68,6 +73,7 @@ export function getConfig(): RemoteConfig {
     enable_intercom,
     enable_i18n,
     enable_creditcard,
+    enable_recent_tickets,
     must_upgrade_ticketing,
     news_enabled,
     news_text,

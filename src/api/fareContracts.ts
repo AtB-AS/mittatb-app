@@ -11,6 +11,15 @@ export async function listFareContracts(): Promise<FareContract[]> {
   return response.data.fare_contracts;
 }
 
+export async function listRecentFareContracts(): Promise<RecentFareContract[]> {
+  const customerId = await getCustomerId();
+
+  const url = 'ticket/v1/ticket/' + customerId + '/recent';
+  const response = await client.get<RecentFareContract[]>(url);
+
+  return response.data;
+}
+
 export type OfferSearchParams = {
   zones: string[];
   travellers: {id: string; user_type: string; count: number}[];
@@ -139,6 +148,17 @@ export enum FareContractLifecycleState {
 
 type ListTicketsResponse = {
   fare_contracts: FareContract[];
+};
+
+export type RecentFareContract = {
+  products: string[];
+  zones: string[];
+  users: {
+    [user_profile: string]: string;
+  };
+  payment_method: string;
+  total_amount: string;
+  created_at: string;
 };
 
 export type ReserveOffer = {

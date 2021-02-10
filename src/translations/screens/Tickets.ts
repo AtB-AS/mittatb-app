@@ -41,6 +41,14 @@ const TicketsTexts = {
         _(`Kjøpt ${dateTime}`, `Purchased ${dateTime}`),
     },
   },
+  recentTickets: {
+    title: _('Sist kjøpte billetter', 'Recently purchased tickets'),
+    loading: _('Laster siste kjøp…', 'Loading recent purchases'),
+    a11yHint: _(
+      'Aktivér for å kjøpe denne billetten',
+      'Activate to purchase this ticket',
+    ),
+  },
   reservation: {
     processing: _(
       'Prosesseres... ikke gyldig enda',
