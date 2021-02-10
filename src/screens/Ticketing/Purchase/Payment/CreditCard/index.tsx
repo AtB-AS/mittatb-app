@@ -55,12 +55,12 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
 
   const cancelTerminal = () => navigation.pop();
 
-  const {activatePollingForNewTickets} = useTicketState();
+  const {addReservation} = useTicketState();
   const dismissAndActivatePolling = (
     reservation: TicketReservation,
     reservationOffers: ReserveOffer[],
   ) => {
-    activatePollingForNewTickets({
+    addReservation({
       reservation,
       offers: reservationOffers,
       paymentType: 'creditcard',

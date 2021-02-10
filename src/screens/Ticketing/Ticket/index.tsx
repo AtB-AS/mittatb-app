@@ -1,7 +1,8 @@
 import React from 'react';
 import {
+  FareContractState,
   FareContract,
-  FareContractLifecycleState,
+  isPreactivatedTicket,
 } from '../../../api/fareContracts';
 import * as Sections from '../../../components/sections';
 import ValidityHeader from './ValidityHeader';
@@ -19,45 +20,65 @@ const SimpleTicket: React.FC<Props> = ({
   now,
   onPressDetails,
 }) => {
-  const nowSeconds = now / 1000;
-  const isNotExpired = fc.usage_valid_to >= nowSeconds;
-  const isRefunded = fc.state === FareContractLifecycleState.Refunded;
-  const isValidTicket = isNotExpired && !isRefunded;
   const {t} = useTranslation();
 
+  const firstTravelRight = fc.travelRights[0];
+  if (isPreactivatedTicket(firstTravelRight)) {
+    const {startDateTime, endDateTime} = firstTravelRight;
+    const validTo = endDateTime.getTime();
+    const validFrom = startDateTime.getTime();
+    const isNotExpired = validTo >= now;
+    const isRefunded = fc.state === FareContractState.Refunded;
+    const isValidTicket = isNotExpired && !isRefunded;
+
+    return (
+      <Sections.Section withBottomPadding>
+        <Sections.GenericItem>
+          <ValidityHeader
+            isValid={isValidTicket}
+            now={now}
+            validTo={validTo}
+            isNotExpired={isNotExpired}
+            isRefunded={isRefunded}
+          />
+          {isValidTicket ? (
+            <ValidityLine
+              status="valid"
+              now={now}
+              validFrom={validFrom}
+              validTo={validTo}
+            />
+          ) : (
+            <ValidityLine status="expired" />
+          )}
+
+          <TicketInfo
+            travelRights={fc.travelRights.filter(isPreactivatedTicket)}
+          />
+        </Sections.GenericItem>
+        <Sections.LinkItem
+          text={t(
+            isValidTicket
+              ? TicketTexts.detailsLink.valid
+              : TicketTexts.detailsLink.expired,
+          )}
+          onPress={onPressDetails}
+        />
+      </Sections.Section>
+    );
+  } else {
+    return <UnknownTicket />;
+  }
+};
+
+function UnknownTicket() {
   return (
     <Sections.Section withBottomPadding>
       <Sections.GenericItem>
-        <ValidityHeader
-          isValid={isValidTicket}
-          nowSeconds={nowSeconds}
-          validTo={fc.usage_valid_to}
-          isNotExpired={isNotExpired}
-          isRefunded={isRefunded}
-        />
-        {isValidTicket ? (
-          <ValidityLine
-            status="valid"
-            nowSeconds={nowSeconds}
-            validFrom={fc.usage_valid_from}
-            validTo={fc.usage_valid_to}
-          />
-        ) : (
-          <ValidityLine status="expired" />
-        )}
-
-        <TicketInfo fareContract={fc} />
+        <ValidityLine status="unknown" />
       </Sections.GenericItem>
-      <Sections.LinkItem
-        text={t(
-          isValidTicket
-            ? TicketTexts.detailsLink.valid
-            : TicketTexts.detailsLink.expired,
-        )}
-        onPress={onPressDetails}
-      />
     </Sections.Section>
   );
-};
+}
 
 export default SimpleTicket;

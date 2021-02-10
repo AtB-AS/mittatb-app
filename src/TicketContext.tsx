@@ -7,15 +7,17 @@ import React, {
 } from 'react';
 import {
   FareContract,
-  FareContractLifecycleState,
   getPayment,
   PaymentStatus,
   PaymentType,
   ReserveOffer,
   TicketReservation,
 } from './api/fareContracts';
-import {listFareContracts} from './api';
 import useInterval from './utils/use-interval';
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
+import {useAuthState} from './auth';
 
 type TicketReducerState = {
   fareContracts: FareContract[];
@@ -62,7 +64,7 @@ const ticketReducer: TicketReducer = (
       };
     }
     case 'UPDATE_FARE_CONTRACT_TICKETS': {
-      const orderIds = action.fareContracts.map((fc) => fc.order_id);
+      const orderIds = action.fareContracts.map((fc) => fc.orderId);
       return {
         ...prevState,
         activeReservations: prevState.activeReservations.filter(
@@ -98,8 +100,8 @@ export type ActiveReservation = {
 };
 
 type TicketState = {
+  addReservation: (reservation: ActiveReservation) => void;
   refreshTickets: () => void;
-  activatePollingForNewTickets: (reservation: ActiveReservation) => void;
   activeFareContracts: FareContract[];
   expiredFareContracts: FareContract[];
   findFareContractByOrderId: (id: string) => FareContract | undefined;
@@ -120,7 +122,35 @@ const TicketContextProvider: React.FC = ({children}) => {
     initialReducerState,
   );
 
-  const updateReservations = useCallback(
+  const {user, abtCustomerId} = useAuthState();
+
+  useEffect(() => {
+    if (user && abtCustomerId) {
+      const subscriber = firestore()
+        .collection('customers')
+        .doc(abtCustomerId)
+        .collection('fareContracts')
+        .onSnapshot(
+          (snapshot) => {
+            const fareContracts = snapshot.docs.map<FareContract>((d) =>
+              d.data(),
+            );
+            dispatch({type: 'UPDATE_FARE_CONTRACT_TICKETS', fareContracts});
+          },
+          (err) => {
+            console.warn(err),
+              dispatch({type: 'SET_ERROR_REFRESHING_FARE_CONTRACT_TICKETS'});
+          },
+        );
+
+      // Stop listening for updates when no longer required
+      return () => subscriber();
+    }
+  }, [user, abtCustomerId]);
+
+  const refreshTickets = () => {};
+
+  const addReservation = useCallback(
     (reservation: ActiveReservation) =>
       dispatch({
         type: 'ADD_RESERVATION',
@@ -165,19 +195,19 @@ const TicketContextProvider: React.FC = ({children}) => {
     [activeReservations, getPaymentStatus],
   );
 
-  const updateFareContracts = useCallback(
-    async function () {
-      try {
-        dispatch({type: 'SET_IS_REFRESHING_FARE_CONTRACT_TICKETS'});
-        const fareContracts = await listFareContracts();
-        dispatch({type: 'UPDATE_FARE_CONTRACT_TICKETS', fareContracts});
-      } catch (err) {
-        console.warn(err);
-        dispatch({type: 'SET_ERROR_REFRESHING_FARE_CONTRACT_TICKETS'});
-      }
-    },
-    [dispatch],
-  );
+  // const updateFareContracts = useCallback(
+  //   async function () {
+  //     try {
+  //       dispatch({type: 'SET_IS_REFRESHING_FARE_CONTRACT_TICKETS'});
+  //       const fareContracts = await listFareContracts();
+  //       dispatch({type: 'UPDATE_FARE_CONTRACT_TICKETS', fareContracts});
+  //     } catch (err) {
+  //       console.warn(err);
+  //       dispatch({type: 'SET_ERROR_REFRESHING_FARE_CONTRACT_TICKETS'});
+  //     }
+  //   },
+  //   [dispatch],
+  // );
 
   useInterval(
     pollPaymentStatus,
@@ -187,29 +217,32 @@ const TicketContextProvider: React.FC = ({children}) => {
       activeReservations.every((res) => res.paymentStatus === 'CAPTURE'),
   );
 
-  useInterval(
-    updateFareContracts,
-    1000,
-    [],
-    !state.errorRefreshingTickets &&
-      !activeReservations.some((res) => res.paymentStatus === 'CAPTURE'),
-  );
+  // useInterval(
+  //   updateFareContracts,
+  //   1000,
+  //   [],
+  //   !state.errorRefreshingTickets &&
+  //     !activeReservations.some((res) => res.paymentStatus === 'CAPTURE'),
+  // );
 
-  useEffect(() => {
-    updateFareContracts();
-  }, []);
+  // useEffect(() => {
+  //   updateFareContracts();
+  // }, []);
 
   return (
     <TicketContext.Provider
       value={{
         ...state,
         activeReservations,
-        refreshTickets: updateFareContracts,
-        activatePollingForNewTickets: updateReservations,
-        activeFareContracts: getActive(state.fareContracts),
-        expiredFareContracts: getExpired(state.fareContracts),
+        refreshTickets,
+        addReservation,
+        // activatePollingForNewTickets: updateReservations,
+        // activeFareContracts: getActive(state.fareContracts),
+        // expiredFareContracts: getExpired(state.fareContracts),
+        activeFareContracts: [],
+        expiredFareContracts: [],
         findFareContractByOrderId: (orderId) =>
-          state.fareContracts.find((fc) => fc.order_id === orderId),
+          state.fareContracts.find((fc) => fc.orderId === orderId),
       }}
     >
       {children}
@@ -217,30 +250,30 @@ const TicketContextProvider: React.FC = ({children}) => {
   );
 };
 
-const byExpiryComparator = (a: FareContract, b: FareContract): number => {
-  return b.usage_valid_to - a.usage_valid_to;
-};
+// const byExpiryComparator = (a: FareContract, b: FareContract): number => {
+//   return b.usage_valid_to - a.usage_valid_to;
+// };
 
-function getActive(fareContracts: FareContract[]) {
-  const isValidNow = (f: FareContract): boolean =>
-    f.usage_valid_to > Date.now() / 1000;
-  const isActivated = (f: FareContract) =>
-    f.state === FareContractLifecycleState.Activated;
-  return fareContracts
-    .filter(isValidNow)
-    .filter(isActivated)
-    .sort(byExpiryComparator);
-}
+// function getActive(fareContracts: FareContract[]) {
+//   const isValidNow = (f: FareContract): boolean =>
+//     f.usage_valid_to > Date.now() / 1000;
+//   const isActivated = (f: FareContract) =>
+//     f.state === FareContractLifecycleState.Activated;
+//   return fareContracts
+//     .filter(isValidNow)
+//     .filter(isActivated)
+//     .sort(byExpiryComparator);
+// }
 
-function getExpired(fareContracts: FareContract[]) {
-  const isExpired = (f: FareContract): boolean =>
-    !(f.usage_valid_to > Date.now() / 1000);
-  const isRefunded = (f: FareContract) =>
-    f.state === FareContractLifecycleState.Refunded;
-  const isExpiredOrRefunded = (f: FareContract) =>
-    isExpired(f) || isRefunded(f);
-  return fareContracts.filter(isExpiredOrRefunded).sort(byExpiryComparator);
-}
+// function getExpired(fareContracts: FareContract[]) {
+//   const isExpired = (f: FareContract): boolean =>
+//     !(f.usage_valid_to > Date.now() / 1000);
+//   const isRefunded = (f: FareContract) =>
+//     f.state === FareContractLifecycleState.Refunded;
+//   const isExpiredOrRefunded = (f: FareContract) =>
+//     isExpired(f) || isRefunded(f);
+//   return fareContracts.filter(isExpiredOrRefunded).sort(byExpiryComparator);
+// }
 
 function isHandledPaymentStatus(status: PaymentStatus | undefined): boolean {
   switch (status) {

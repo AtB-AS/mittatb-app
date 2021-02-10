@@ -37,8 +37,8 @@ export default function DetailsScreen({navigation, route}: Props) {
   const onReceiptNavigate = () =>
     fc &&
     navigation.push('TicketReceipt', {
-      orderId: fc.order_id,
-      orderVersion: fc.order_version,
+      orderId: fc.orderId,
+      orderVersion: fc.version,
     });
 
   return (

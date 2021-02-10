@@ -14,11 +14,11 @@ import {
 
 const ValidityHeader: React.FC<{
   isValid: boolean;
-  nowSeconds: number;
+  now: number;
   validTo: number;
   isNotExpired: boolean;
   isRefunded: boolean;
-}> = ({isValid, nowSeconds, validTo, isNotExpired, isRefunded}) => {
+}> = ({isValid, now, validTo, isNotExpired, isRefunded}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
 
@@ -29,7 +29,7 @@ const ValidityHeader: React.FC<{
         <ThemeText type="lead" color="faded">
           {validityTimeText(
             isNotExpired,
-            nowSeconds,
+            now,
             validTo,
             isRefunded,
             t,

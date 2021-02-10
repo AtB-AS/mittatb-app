@@ -16,7 +16,7 @@ type RootNavigationProp = NavigationProp<RootStackParamList>;
 
 type Props = {
   reservations?: ActiveReservation[];
-  tickets?: FareContract[];
+  fareContracts?: FareContract[];
   noTicketsLabel: string;
   isRefreshingTickets: boolean;
   refreshTickets: () => void;
@@ -24,7 +24,7 @@ type Props = {
 };
 
 const TicketsScrollView: React.FC<Props> = ({
-  tickets,
+  fareContracts,
   reservations,
   noTicketsLabel,
   isRefreshingTickets,
@@ -46,21 +46,21 @@ const TicketsScrollView: React.FC<Props> = ({
           />
         }
       >
-        {!tickets?.length && !reservations?.length && (
+        {!fareContracts?.length && !reservations?.length && (
           <ThemeText style={styles.noTicketsText}>{noTicketsLabel}</ThemeText>
         )}
         {reservations?.map((res) => (
           <TicketReservation key={res.reservation.order_id} reservation={res} />
         ))}
-        {tickets?.map((fc) => (
+        {fareContracts?.map((fc) => (
           <SimpleTicket
-            key={fc.order_id}
+            key={fc.orderId}
             fareContract={fc}
             now={now}
             onPressDetails={() =>
               navigation.navigate('TicketModal', {
                 screen: 'TicketDetails',
-                params: {orderId: fc.order_id},
+                params: {orderId: fc.orderId},
               })
             }
           />

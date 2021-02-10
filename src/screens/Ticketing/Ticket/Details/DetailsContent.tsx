@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {
+  FareContractState,
   FareContract,
-  FareContractLifecycleState,
+  isPreactivatedTicket,
 } from '../../../../api/fareContracts';
 import ThemeText from '../../../../components/text';
 import * as Sections from '../../../../components/sections';
@@ -27,69 +28,95 @@ const DetailsContent: React.FC<Props> = ({
   now,
   onReceiptNavigate,
 }) => {
-  const nowSeconds = now / 1000;
-  const isNotExpired = fc.usage_valid_to >= nowSeconds;
-  const isRefunded = fc.state === FareContractLifecycleState.Refunded;
-  const isValidTicket = isNotExpired && !isRefunded;
   const {t, language} = useTranslation();
   const styles = useStyles();
   const qrCodeSvg = useQrCode(fc);
 
+  const firstTravelRight = fc.travelRights[0];
+  if (isPreactivatedTicket(firstTravelRight)) {
+    const validFrom = firstTravelRight.startDateTime.getTime();
+    const validTo = firstTravelRight.endDateTime.getTime();
+    const isNotExpired = validTo >= now;
+    const isRefunded = fc.state === FareContractState.Refunded;
+    const isValidTicket = isNotExpired && !isRefunded;
+
+    return (
+      <Sections.Section withBottomPadding>
+        <Sections.GenericItem>
+          <ValidityHeader
+            isValid={isValidTicket}
+            isNotExpired={isNotExpired}
+            isRefunded={isRefunded}
+            now={now}
+            validTo={validTo}
+          />
+          {isValidTicket ? (
+            <ValidityLine
+              status="valid"
+              now={now}
+              validFrom={validFrom}
+              validTo={validTo}
+            />
+          ) : (
+            <ValidityLine status="expired" />
+          )}
+          <TicketInfo
+            travelRights={fc.travelRights.filter(isPreactivatedTicket)}
+          />
+        </Sections.GenericItem>
+        <Sections.GenericItem>
+          <ThemeText>{t(TicketTexts.details.orderId(fc.orderId))}</ThemeText>
+          <ThemeText type="lead" color="faded">
+            {t(
+              TicketTexts.details.purchaseTime(
+                formatToLongDateTime(fromUnixTime(validFrom), language),
+              ),
+            )}
+          </ThemeText>
+        </Sections.GenericItem>
+        <Sections.LinkItem
+          text={t(TicketTexts.details.askForRefund)}
+          disabled
+        />
+        <Sections.LinkItem
+          text={t(TicketTexts.details.askForReceipt)}
+          onPress={onReceiptNavigate}
+        />
+        {isValidTicket && qrCodeSvg && (
+          <Sections.GenericItem>
+            <View style={styles.qrCode}>
+              <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
+            </View>
+          </Sections.GenericItem>
+        )}
+      </Sections.Section>
+    );
+  } else {
+    return <UnknownTicketDetails fc={fc} />;
+  }
+};
+
+function UnknownTicketDetails({fc}: {fc: FareContract}) {
+  const {t} = useTranslation();
   return (
     <Sections.Section withBottomPadding>
       <Sections.GenericItem>
-        <ValidityHeader
-          isValid={isValidTicket}
-          isNotExpired={isNotExpired}
-          isRefunded={isRefunded}
-          nowSeconds={nowSeconds}
-          validTo={fc.usage_valid_to}
-        />
-        {isValidTicket ? (
-          <ValidityLine
-            status="valid"
-            nowSeconds={nowSeconds}
-            validFrom={fc.usage_valid_from}
-            validTo={fc.usage_valid_to}
-          />
-        ) : (
-          <ValidityLine status="expired" />
-        )}
-        <TicketInfo fareContract={fc} />
+        <ValidityLine status="unknown" />
       </Sections.GenericItem>
       <Sections.GenericItem>
-        <ThemeText>{t(TicketTexts.details.orderId(fc.order_id))}</ThemeText>
-        <ThemeText type="lead" color="faded">
-          {t(
-            TicketTexts.details.purchaseTime(
-              formatToLongDateTime(fromUnixTime(fc.usage_valid_from), language),
-            ),
-          )}
-        </ThemeText>
+        <ThemeText>{t(TicketTexts.details.orderId(fc.orderId))}</ThemeText>
       </Sections.GenericItem>
-      <Sections.LinkItem text={t(TicketTexts.details.askForRefund)} disabled />
-      <Sections.LinkItem
-        text={t(TicketTexts.details.askForReceipt)}
-        onPress={onReceiptNavigate}
-      />
-      {isValidTicket && qrCodeSvg && (
-        <Sections.GenericItem>
-          <View style={styles.qrCode}>
-            <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
-          </View>
-        </Sections.GenericItem>
-      )}
     </Sections.Section>
   );
-};
+}
 
 const useQrCode = (fc: FareContract) => {
   const [qrCodeSvg, setQrCodeSvg] = useState<string | undefined>();
 
   useEffect(() => {
     (async function () {
-      if (!fc?.qr_code) return;
-      const svg = await qrcode.toString(fc.qr_code, {
+      if (!fc?.qrCode) return;
+      const svg = await qrcode.toString(fc.qrCode, {
         type: 'svg',
       });
 

@@ -1,15 +1,6 @@
 import {AxiosRequestConfig} from 'axios';
-import {getCustomerId} from '../utils/customerId';
+import auth from '@react-native-firebase/auth';
 import client from './client';
-
-export async function listFareContracts(): Promise<FareContract[]> {
-  const customerId = await getCustomerId();
-
-  const url = 'ticket/v1/ticket/' + customerId;
-  const response = await client.get<ListTicketsResponse>(url);
-
-  return response.data.fare_contracts;
-}
 
 export type OfferSearchParams = {
   zones: string[];
@@ -53,6 +44,8 @@ export async function reserve(
   paymentType: PaymentType,
   opts?: AxiosRequestConfig,
 ) {
+  const user = auth().currentUser;
+  const idToken = await user?.getIdToken();
   const url = 'ticket/v1/reserve';
   const response = await client.post<TicketReservation>(
     url,
@@ -64,7 +57,12 @@ export async function reserve(
           : undefined,
       offers,
     },
-    opts,
+    {
+      ...opts,
+      headers: {
+        Authorization: 'Bearer ' + idToken,
+      },
+    },
   );
   return response.data;
 }
@@ -107,35 +105,75 @@ export type Offer = {
 
 export type OfferSearchResponse = Offer[];
 
+enum TravelRightStatus {
+  UNSPECIFIED = 0,
+  RESERVED = 1,
+  ORDERED = 2,
+  PAID_FOR = 3,
+  UNUSED = 4,
+  ACTIVATED = 5,
+  PARTIALLY_USED = 6,
+  USED = 7,
+  ARCHIVED = 8,
+  OTHER = 9,
+  CANCELLED = 20,
+  REFUNDED = 21,
+}
+
+export type TravelRight = {
+  id: string;
+  status: TravelRightStatus;
+  type:
+    | 'PreactivatedSingleTicket'
+    | 'PreactivatedPeriodTicket'
+    | 'UnknownTicket';
+};
+
+export type PreactivatedTicket = TravelRight & {
+  fareProductRef: string;
+  startDateTime: Date;
+  endDateTime: Date;
+  usageValidityPeriodRef: string;
+  userProfileRef: string;
+  authorityRefs: string[];
+  tariffZoneRefs: string[];
+};
+
+export type PreactivatedSingleTicket = PreactivatedTicket & {
+  type: 'PreactivatedSingleTicket';
+};
+
+export type PeriodTicket = PreactivatedTicket & {
+  type: 'PreactivatedPeriodTicket';
+};
+
 export type FareContract = {
-  order_id: string;
-  order_version: string;
-  product_name: string;
-  duration: number;
-  usage_valid_from: number;
-  usage_valid_to: number;
-  travellers: FareContractTraveller[];
-  state: FareContractLifecycleState;
-  qr_code: string;
+  created: Date;
+  version: number;
+  id: string;
+  orderId: string;
+  state: FareContractState;
+  minimumSecurityLevel: number;
+  travelRights: TravelRight[];
+  qrCode: string;
 };
 
-export type FareContractTraveller = {
-  fare_product_ref: string;
-  user_profile_ref: string;
-  tariff_zone_refs: string[];
-};
+export function isPreactivatedTicket(
+  travelRight: TravelRight,
+): travelRight is PreactivatedTicket {
+  return (
+    travelRight.type === 'PreactivatedSingleTicket' ||
+    travelRight.type === 'PreactivatedPeriodTicket'
+  );
+}
 
-export enum FareContractLifecycleState {
+export enum FareContractState {
   Unspecified = 0,
   NotActivated = 1,
   Activated = 2,
   Cancelled = 3,
   Refunded = 4,
 }
-
-type ListTicketsResponse = {
-  fare_contracts: FareContract[];
-};
 
 export type ReserveOffer = {
   offer_id: string;

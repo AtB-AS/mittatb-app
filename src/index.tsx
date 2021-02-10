@@ -12,7 +12,7 @@ import FavoritesContextProvider from './favorites/FavoritesContext';
 import SearchHistoryContextProvider from './search-history';
 import TicketContextProvider from './TicketContext';
 import RemoteConfigContextProvider from './RemoteConfigContext';
-import AuthContextProvider from './AuthContext';
+import {AuthContextProvider} from './auth';
 import {loadLocalConfig} from './local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {setInstallId as setApiInstallId} from './api/client';

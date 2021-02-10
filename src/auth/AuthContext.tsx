@@ -7,11 +7,11 @@ import React, {
   useReducer,
 } from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {usePreferences} from './preferences';
+import {usePreferences} from '../preferences';
 
 type AuthReducerState = {
   isInitialized: boolean;
-  hasAbtCustomer: boolean;
+  abtCustomerId: string | undefined;
   user: FirebaseAuthTypes.User | null;
 };
 
@@ -20,7 +20,7 @@ type AuthReducerAction =
       type: 'SET_USER';
       user: FirebaseAuthTypes.User | null;
     }
-  | {type: 'SET_HAS_ABT_CUSTOMER'; hasAbtCustomer: boolean};
+  | {type: 'SET_ABT_CUSTOMER_ID'; abtCustomerId: string | undefined};
 
 type AuthReducer = (
   prevState: AuthReducerState,
@@ -36,10 +36,10 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
         user: action.user,
       };
     }
-    case 'SET_HAS_ABT_CUSTOMER': {
+    case 'SET_ABT_CUSTOMER_ID': {
       return {
         ...prevState,
-        hasAbtCustomer: action.hasAbtCustomer,
+        abtCustomerId: action.abtCustomerId,
       };
     }
   }
@@ -47,7 +47,7 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
 
 const initialReducerState: AuthReducerState = {
   isInitialized: false,
-  hasAbtCustomer: false,
+  abtCustomerId: undefined,
   user: null,
 };
 
@@ -81,30 +81,32 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
     syncAbtCustomer();
   }, [state.user]);
 
-  const getHasAbtCustomer = useCallback(
+  const getAbtCustomerId = useCallback(
     async function () {
-      if (!state.user) return false;
+      if (!state.user) return undefined;
       const idToken = await state.user.getIdTokenResult(true);
-      return !!idToken.claims['abt_id'];
+      return idToken.claims['abt_id'] as string | undefined;
     },
     [state.user],
   );
 
   const syncAbtCustomer = useCallback(
     async function () {
-      async function sync(retries: number = 0): Promise<boolean> {
-        if (retries > 3) return false;
-        if (await getHasAbtCustomer()) {
-          return true;
+      async function sync(retries: number = 0): Promise<string | undefined> {
+        if (retries > 3) return undefined;
+
+        const abtCustomerId = await getAbtCustomerId();
+        if (abtCustomerId) {
+          return abtCustomerId;
         } else {
           return sync(retries + 1);
         }
       }
 
-      const hasAbtCustomer = await sync();
-      dispatch({type: 'SET_HAS_ABT_CUSTOMER', hasAbtCustomer});
+      const abtCustomerId = await sync();
+      dispatch({type: 'SET_ABT_CUSTOMER_ID', abtCustomerId});
     },
-    [getHasAbtCustomer],
+    [getAbtCustomerId],
   );
 
   useEffect(() => {

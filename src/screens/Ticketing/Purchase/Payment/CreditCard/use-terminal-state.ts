@@ -13,7 +13,6 @@ import {
 import {ErrorType, getAxiosErrorType} from '../../../../../api/utils';
 import {parse as parseURL} from 'search-params';
 import {AxiosError} from 'axios';
-import {useAuthState} from '../../../../../AuthContext';
 
 const possibleResponseCodes = ['Cancel', 'OK'] as const;
 type NetsResponseCode = typeof possibleResponseCodes[number];
@@ -100,8 +99,6 @@ export default function useTerminalState(
     dispatch,
   ] = useReducer(terminalReducer, initialState);
 
-  const {user} = useAuthState();
-
   const handleAxiosError = useCallback(
     function (err: AxiosError, errorContext: ErrorContext) {
       const errorType = getAxiosErrorType(err);
@@ -120,12 +117,8 @@ export default function useTerminalState(
   const reserveOffer = useCallback(
     async function () {
       try {
-        const idToken = await user?.getIdToken();
         const response = await reserveOffers(offers, 'creditcard', {
           retry: true,
-          headers: {
-            Authorization: 'Bearer ' + idToken,
-          },
         });
 
         dispatch({type: 'OFFER_RESERVED', reservation: response});
@@ -134,7 +127,7 @@ export default function useTerminalState(
         handleAxiosError(err, 'reservation');
       }
     },
-    [user, offers, dispatch, handleAxiosError],
+    [offers, dispatch, handleAxiosError],
   );
 
   useEffect(() => {

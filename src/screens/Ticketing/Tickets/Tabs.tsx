@@ -10,7 +10,7 @@ import {TicketsTexts, useTranslation} from '../../../translations';
 import Button from '../../../components/button';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
 import UpgradeSplash from './UpgradeSplash';
-import {useAuthState} from '../../../AuthContext';
+import {useAuthState} from '../../../auth';
 import ThemeText from '../../../components/text';
 
 export type TicketingScreenNavigationProp = StackNavigationProp<
@@ -25,7 +25,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
   const {must_upgrade_ticketing} = useRemoteConfig();
-  const {isInitialized, hasAbtCustomer} = useAuthState();
+  const {isInitialized, abtCustomerId} = useAuthState();
   const {t} = useTranslation();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
@@ -33,7 +33,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={{flex: 1}}>{/*Reservert for "Sist kjøpte billetter"*/}</View>
-      {isInitialized && hasAbtCustomer && (
+      {isInitialized && !!abtCustomerId && (
         <View style={{padding: theme.spacings.medium}}>
           <Button
             mode="primary"
@@ -64,7 +64,7 @@ export const ActiveTickets: React.FC<Props> = () => {
     <View style={styles.container}>
       <TicketsScrollView
         reservations={activeReservations}
-        tickets={activeFareContracts}
+        fareContracts={activeFareContracts}
         isRefreshingTickets={isRefreshingTickets}
         refreshTickets={refreshTickets}
         noTicketsLabel={t(TicketsTexts.activeTicketsTab.noTickets)}
@@ -89,7 +89,7 @@ export const ExpiredTickets: React.FC<Props> = () => {
   return (
     <View style={styles.container}>
       <TicketsScrollView
-        tickets={expiredFareContracts}
+        fareContracts={expiredFareContracts}
         isRefreshingTickets={isRefreshingTickets}
         refreshTickets={refreshTickets}
         noTicketsLabel={t(TicketsTexts.expiredTicketsTab.noTickets)}

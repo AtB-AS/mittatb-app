@@ -15,7 +15,7 @@ import {StyleSheet, Theme} from '../../../theme';
 import {useNavigateToStartScreen} from '../../../utils/navigation';
 import {useTranslation, ProfileTexts} from '../../../translations';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
-import {useAuthState} from '../../../AuthContext';
+import {useAuthState} from '../../../auth';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
