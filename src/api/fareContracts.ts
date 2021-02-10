@@ -3,10 +3,15 @@ import auth from '@react-native-firebase/auth';
 import client from './client';
 
 export async function listRecentFareContracts(): Promise<RecentFareContract[]> {
-  const customerId = await getCustomerId();
+  const user = auth().currentUser;
+  const idToken = await user?.getIdToken();
 
-  const url = 'ticket/v1/ticket/' + customerId + '/recent';
-  const response = await client.get<RecentFareContract[]>(url);
+  const url = 'ticket/v1/ticket/recent';
+  const response = await client.get<RecentFareContract[]>(url, {
+    headers: {
+      Authorization: 'Bearer ' + idToken,
+    },
+  });
 
   return response.data;
 }
@@ -158,7 +163,7 @@ export type PeriodTicket = PreactivatedTicket & {
 
 export type FareContract = {
   created: Date;
-  version: number;
+  version: string;
   id: string;
   orderId: string;
   state: FareContractState;

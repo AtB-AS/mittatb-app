@@ -217,18 +217,6 @@ const TicketContextProvider: React.FC = ({children}) => {
       activeReservations.every((res) => res.paymentStatus === 'CAPTURE'),
   );
 
-  // useInterval(
-  //   updateFareContracts,
-  //   1000,
-  //   [],
-  //   !state.errorRefreshingTickets &&
-  //     !activeReservations.some((res) => res.paymentStatus === 'CAPTURE'),
-  // );
-
-  // useEffect(() => {
-  //   updateFareContracts();
-  // }, []);
-
   return (
     <TicketContext.Provider
       value={{
@@ -236,7 +224,6 @@ const TicketContextProvider: React.FC = ({children}) => {
         activeReservations,
         refreshTickets,
         addReservation,
-        // activatePollingForNewTickets: updateReservations,
         // activeFareContracts: getActive(state.fareContracts),
         // expiredFareContracts: getExpired(state.fareContracts),
         activeFareContracts: state.fareContracts,
