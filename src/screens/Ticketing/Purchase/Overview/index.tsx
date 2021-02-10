@@ -2,10 +2,9 @@ import React, {useEffect, useMemo} from 'react';
 import {SafeAreaView, View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
-import Header from '../../../../ScreenHeader';
+import Header from '../../../../components/screen-header';
 import {Edit} from '../../../../assets/svg/icons/actions';
 import {StyleSheet} from '../../../../theme';
-import ThemeText from '../../../../components/text';
 import ThemeIcon from '../../../../components/theme-icon';
 import Button from '../../../../components/button';
 import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
@@ -90,15 +89,8 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
       <Header
         title={t(PurchaseOverviewTexts.header.title)}
         leftButton={{
-          icon: (
-            <ThemeText>
-              {t(PurchaseOverviewTexts.header.leftButton.text)}
-            </ThemeText>
-          ),
+          type: 'cancel',
           onPress: closeModal,
-          accessibilityLabel: t(
-            PurchaseOverviewTexts.header.leftButton.a11yLabel,
-          ),
         }}
       />
 
@@ -173,6 +165,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
               toTariffZone,
               userProfilesWithCount,
               preassignedFareProduct,
+              headerLeftButton: {type: 'back'},
             });
           }}
         />

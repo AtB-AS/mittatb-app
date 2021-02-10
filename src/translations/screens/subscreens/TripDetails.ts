@@ -2,9 +2,6 @@ import {translation as _} from '../../commons';
 const TripDetailsTexts = {
   header: {
     title: _('Reisedetaljer', 'Trip details'),
-    leftButton: {
-      a11yLabel: _('Gå tilbake', 'Go back'),
-    },
   },
   trip: {
     leg: {

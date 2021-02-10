@@ -2,7 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
-import Header from '../../../../ScreenHeader';
+import Header from '../../../../components/screen-header';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StyleSheet, useTheme} from '../../../../theme';
 import useUserCountState from './use-user-count-state';
@@ -11,8 +11,6 @@ import * as Sections from '../../../../components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
 import {TravellersTexts, useTranslation} from '../../../../translations';
 import Button from '../../../../components/button';
-import ThemeIcon from '../../../../components/theme-icon';
-import {ArrowLeft} from '../../../../assets/svg/icons/navigation';
 import {getReferenceDataName} from '../../../../reference-data/utils';
 
 export type TravellersProps = {
@@ -41,14 +39,7 @@ const Travellers: React.FC<TravellersProps> = ({
     <View style={[styles.container, {paddingTop: safeAreaTop}]}>
       <Header
         title={t(TravellersTexts.header.title)}
-        leftButton={{
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: t(TravellersTexts.header.leftButton.a11yLabel),
-          accessibilityHint: t(TravellersTexts.header.leftButton.a11yHint),
-          icon: <ThemeIcon svg={ArrowLeft} />,
-          onPress: () => navigation.goBack(),
-        }}
+        leftButton={{type: 'back'}}
       />
 
       <ScrollView style={styles.travellerCounters}>

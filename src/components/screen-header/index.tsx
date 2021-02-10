@@ -1,12 +1,20 @@
 import {View, ViewStyle} from 'react-native';
 import React from 'react';
-import {StyleSheet} from '../theme';
-import HeaderButton, {IconButton} from './HeaderButton';
-import ThemeText from '../components/text';
+import {StyleSheet} from '../../theme';
+import HeaderButton, {ButtonModes, HeaderButtonProps} from './HeaderButton';
+import ThemeText from '../text';
+
+export type LeftButtonProps = HeaderButtonProps & {
+  type: Exclude<ButtonModes, 'chat'>;
+};
+
+export type RightButtonProps = Omit<HeaderButtonProps, 'onPress'> & {
+  type: 'chat';
+};
 
 export type ScreenHeaderProps = {
-  leftButton?: IconButton;
-  rightButton?: IconButton;
+  leftButton?: LeftButtonProps;
+  rightButton?: RightButtonProps;
   title: React.ReactNode;
   style?: ViewStyle;
 };

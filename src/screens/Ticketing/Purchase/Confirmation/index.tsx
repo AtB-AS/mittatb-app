@@ -2,7 +2,7 @@ import React from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
-import Header from '../../../../ScreenHeader';
+import Header, {LeftButtonProps} from '../../../../components/screen-header';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StyleSheet, useTheme} from '../../../../theme';
 import ThemeText from '../../../../components/text';
@@ -20,6 +20,19 @@ import * as Sections from '../../../../components/sections';
 import {ReserveOffer} from '../../../../api/fareContracts';
 import {useRemoteConfig} from '../../../../RemoteConfigContext';
 import {getReferenceDataName} from '../../../../reference-data/utils';
+import {
+  PreassignedFareProduct,
+  TariffZone,
+} from '../../../../reference-data/types';
+import {UserProfileWithCount} from '../Travellers/use-user-count-state';
+
+export type RouteParams = {
+  preassignedFareProduct: PreassignedFareProduct;
+  fromTariffZone: TariffZone;
+  toTariffZone: TariffZone;
+  userProfilesWithCount: UserProfileWithCount[];
+  headerLeftButton: LeftButtonProps;
+};
 
 export type ConfirmationProps = {
   navigation: DismissableStackNavigationProp<
@@ -44,6 +57,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     toTariffZone,
     preassignedFareProduct,
     userProfilesWithCount,
+    headerLeftButton,
   } = params;
 
   const {
@@ -102,17 +116,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     <View style={[styles.container, {paddingTop: safeAreaTop}]}>
       <Header
         title={getReferenceDataName(preassignedFareProduct, language)}
-        leftButton={{
-          icon: (
-            <ThemeText>
-              {t(PurchaseConfirmationTexts.header.leftButton.text)}
-            </ThemeText>
-          ),
-          onPress: () => navigation.goBack(),
-          accessibilityLabel: t(
-            PurchaseConfirmationTexts.header.leftButton.a11yLabel,
-          ),
-        }}
+        leftButton={headerLeftButton}
         style={styles.header}
       />
 

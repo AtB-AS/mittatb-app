@@ -3,9 +3,6 @@ const DepartureDetailsTexts = {
   header: {
     title: (departureName: string) => _(departureName),
     notFound: _('Detaljer', 'Details'),
-    leftIcon: {
-      a11yLabel: _('Gå tilbake', 'Go back'),
-    },
   },
   collapse: {
     label: (numberStops: number) =>

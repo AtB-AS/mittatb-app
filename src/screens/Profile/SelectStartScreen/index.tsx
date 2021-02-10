@@ -8,12 +8,12 @@ import {
   usePreferences,
 } from '../../../preferences';
 import {StyleSheet, Theme} from '../../../theme';
-import BackHeader from '../BackHeader';
 import {
   SelectStartScreenTexts,
   useTranslation,
   TranslatedString,
 } from '../../../translations';
+import ScreenHeader from '../../../components/screen-header';
 
 const identity = (s: string) => s;
 function toName(alt: Preference_ScreenAlternatives): TranslatedString {
@@ -38,7 +38,10 @@ export default function SelectStartScreen() {
 
   return (
     <SafeAreaView style={style.container}>
-      <BackHeader title={t(SelectStartScreenTexts.header.title)} />
+      <ScreenHeader
+        title={t(SelectStartScreenTexts.header.title)}
+        leftButton={{type: 'back'}}
+      />
 
       <ScrollView>
         <RadioSection<Preference_ScreenAlternatives>

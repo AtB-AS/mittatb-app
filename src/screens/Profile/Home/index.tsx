@@ -5,14 +5,10 @@ import React from 'react';
 import {Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
-import useChatIcon from '../../../chat/use-chat-icon';
 import * as Sections from '../../../components/sections';
-import ThemeIcon from '../../../components/theme-icon';
 import {TabNavigatorParams} from '../../../navigation/TabNavigator';
-import FullScreenHeader from '../../../ScreenHeader/full-header';
-import LogoOutline from '../../../ScreenHeader/LogoOutline';
+import FullScreenHeader from '../../../components/screen-header/full-header';
 import {StyleSheet, Theme} from '../../../theme';
-import {useNavigateToStartScreen} from '../../../utils/navigation';
 import {useTranslation, ProfileTexts} from '../../../translations';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
 import {useAuthState} from '../../../auth';
@@ -32,9 +28,7 @@ type ProfileScreenProps = {
 };
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
-  const navigateHome = useNavigateToStartScreen();
   const {enable_i18n} = useRemoteConfig();
-  const chatIcon = useChatIcon();
   const style = useProfileHomeStyle();
   const {t} = useTranslation();
   const {signInAnonymously, signOut, user} = useAuthState();
@@ -43,12 +37,8 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
     <View style={style.container}>
       <FullScreenHeader
         title={t(ProfileTexts.header.title)}
-        leftButton={{
-          icon: <ThemeIcon svg={LogoOutline} />,
-          onPress: navigateHome,
-          accessibilityLabel: t(ProfileTexts.header.logo.a11yLabel),
-        }}
-        rightButton={chatIcon}
+        leftButton={{type: 'home'}}
+        rightButton={{type: 'chat'}}
       />
 
       <ScrollView>

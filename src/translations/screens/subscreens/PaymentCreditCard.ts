@@ -3,12 +3,6 @@ import {translation as _} from '../../commons';
 const PaymentCreditCardTexts = {
   header: {
     title: _('Betaling', 'Payment'),
-    leftButton: {
-      a11yLabel: _(
-        'Avslutt kort-betaling og gå tilbake',
-        'Cancel card payment and go back',
-      ),
-    },
   },
   buttons: {
     restart: _('Start på nytt', 'Retry'),

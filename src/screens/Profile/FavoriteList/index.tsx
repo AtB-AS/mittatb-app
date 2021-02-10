@@ -7,13 +7,13 @@ import {Add} from '../../../assets/svg/icons/actions';
 import SvgReorder from '../../../assets/svg/icons/actions/Reorder';
 import * as Sections from '../../../components/sections';
 import ThemeIcon from '../../../components/theme-icon';
-import {useFavorites} from '../../../favorites/FavoritesContext';
+import {useFavorites} from '../../../favorites';
 import {StoredLocationFavorite} from '../../../favorites/types';
 import MessageBox from '../../../message-box';
 import {RootStackParamList} from '../../../navigation';
 import {StyleSheet, Theme} from '../../../theme';
 import {FavoriteListTexts, useTranslation} from '../../../translations';
-import BackHeader from '../BackHeader';
+import ScreenHeader from '../../../components/screen-header';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -44,7 +44,10 @@ export default function FavoriteList({navigation}: ProfileScreenProps) {
 
   return (
     <SafeAreaView style={style.container} edges={['right', 'top', 'left']}>
-      <BackHeader title={t(FavoriteListTexts.header.title)} />
+      <ScreenHeader
+        title={t(FavoriteListTexts.header.title)}
+        leftButton={{type: 'back'}}
+      />
 
       <ScrollView>
         {!items?.length && (

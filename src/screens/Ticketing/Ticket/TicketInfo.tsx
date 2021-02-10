@@ -1,14 +1,22 @@
 import {PreactivatedTicket} from '../../../api/fareContracts';
 import ThemeText from '../../../components/text';
-import {Language, TicketTexts, useTranslation} from '../../../translations';
+import {TicketTexts, useTranslation} from '../../../translations';
 import React from 'react';
 import {View} from 'react-native';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
-import {UserProfile} from '../../../reference-data/types';
-import {getReferenceDataName} from '../../../reference-data/utils';
+import {
+  PreassignedFareProduct,
+  TariffZone,
+  UserProfile,
+} from '../../../reference-data/types';
+import {
+  findReferenceDataById,
+  getReferenceDataName,
+} from '../../../reference-data/utils';
+import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
+import {StyleSheet} from '../../../theme';
 
 const TicketInfo = ({travelRights}: {travelRights: PreactivatedTicket[]}) => {
-  const {t, language} = useTranslation();
   const {
     tariff_zones: tariffZones,
     preassigned_fare_products: preassignedFareProducts,
@@ -20,30 +28,57 @@ const TicketInfo = ({travelRights}: {travelRights: PreactivatedTicket[]}) => {
   const [firstZone] = tariffZoneRefs;
   const [lastZone] = tariffZoneRefs.slice(-1);
 
-  const preassignedFareProduct = findById(preassignedFareProducts, productRef);
-  const fromTariffZone = findById(tariffZones, firstZone);
-  const toTariffZone = findById(tariffZones, lastZone);
+  const preassignedFareProduct = findReferenceDataById(
+    preassignedFareProducts,
+    productRef,
+  );
+  const fromTariffZone = findReferenceDataById(tariffZones, firstZone);
+  const toTariffZone = findReferenceDataById(tariffZones, lastZone);
 
-  const namesAndCounts = groupByUserProfileNames(
+  const userProfilesWithCount = mapToUserProfilesWithCount(
     travelRights.map((tr) => tr.userProfileRef),
     userProfiles,
-    language,
   );
 
   return (
+    <TicketInfoView
+      preassignedFareProduct={preassignedFareProduct}
+      fromTariffZone={fromTariffZone}
+      toTariffZone={toTariffZone}
+      userProfilesWithCount={userProfilesWithCount}
+    />
+  );
+};
+export const TicketInfoView = ({
+  preassignedFareProduct,
+  fromTariffZone,
+  toTariffZone,
+  userProfilesWithCount,
+}: {
+  preassignedFareProduct?: PreassignedFareProduct;
+  fromTariffZone?: TariffZone;
+  toTariffZone?: TariffZone;
+  userProfilesWithCount: UserProfileWithCount[];
+}) => {
+  const {t, language} = useTranslation();
+  const styles = useStyles();
+  return (
     <View>
       <View>
-        {namesAndCounts.map(({name, count}) => (
-          <ThemeText key={name}>{`${count} ${name}`}</ThemeText>
+        {userProfilesWithCount.map((u) => (
+          <ThemeText key={u.id}>{`${u.count} ${getReferenceDataName(
+            u,
+            language,
+          )}`}</ThemeText>
         ))}
       </View>
       {preassignedFareProduct && (
-        <ThemeText style={{paddingTop: 4}} type="lead" color="faded">
+        <ThemeText style={styles.product}>
           {getReferenceDataName(preassignedFareProduct, language)}
         </ThemeText>
       )}
       {fromTariffZone && toTariffZone && (
-        <ThemeText type="lead" color="faded">
+        <ThemeText type="lead" color="faded" style={styles.zones}>
           {fromTariffZone.id === toTariffZone.id
             ? t(
                 TicketTexts.zone.single(
@@ -62,25 +97,10 @@ const TicketInfo = ({travelRights}: {travelRights: PreactivatedTicket[]}) => {
   );
 };
 
-const findById = <T extends {id: string}>(elements: T[], id: string) =>
-  elements.find((p) => p.id === id);
-
-type NameAndCount = {name: string; count: number};
-
-/**
- * Group the travellers by user profile names. Will return an array with format:
- *     [
- *       { name: 'Voksen', count: 3},
- *       { name: 'Barn', count: 2},
- *       { name: 'Student', count: 4},
- *       ...
- *     ]
- */
-const groupByUserProfileNames = (
+const mapToUserProfilesWithCount = (
   userProfileRefs: string[],
   userProfiles: UserProfile[],
-  language: Language,
-): NameAndCount[] =>
+): UserProfileWithCount[] =>
   userProfileRefs
     .reduce((groupedById, userProfileRef) => {
       const existing = groupedById.find(
@@ -92,18 +112,28 @@ const groupByUserProfileNames = (
       }
       return [...groupedById, {userProfileRef, count: 1}];
     }, [] as {userProfileRef: string; count: number}[])
-    .map((idAndCount) => {
-      const userProfile = findById(userProfiles, idAndCount.userProfileRef);
-      const name = userProfile
-        ? getReferenceDataName(userProfile, language)
-        : undefined;
+    .map((refAndCount) => {
+      const userProfile = findReferenceDataById(
+        userProfiles,
+        refAndCount.userProfileRef,
+      );
       return {
-        name,
-        count: idAndCount.count,
+        ...userProfile,
+        count: refAndCount.count,
       };
     })
     .filter(
-      (nameAndCount): nameAndCount is NameAndCount => nameAndCount.name != null,
+      (userProfileWithCount): userProfileWithCount is UserProfileWithCount =>
+        'id' in userProfileWithCount,
     );
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  product: {
+    marginTop: theme.spacings.small,
+  },
+  zones: {
+    marginTop: theme.spacings.small,
+  },
+}));
 
 export default TicketInfo;

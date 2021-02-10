@@ -2,13 +2,7 @@ import {Location} from '@entur/sdk';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  Alert,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  View,
-} from 'react-native';
+import {Alert, Keyboard, KeyboardAvoidingView, View} from 'react-native';
 import {Modalize} from 'react-native-modalize';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AddEditFavoriteRootParams} from '.';
@@ -20,15 +14,15 @@ import ScreenReaderAnnouncement from '../../../components/screen-reader-announce
 import * as Sections from '../../../components/sections';
 import ThemeText from '../../../components/text';
 import ThemeIcon from '../../../components/theme-icon';
-import {useFavorites} from '../../../favorites/FavoritesContext';
+import {useFavorites} from '../../../favorites';
 import {StoredLocationFavorite} from '../../../favorites/types';
 import {useLocationSearchValue} from '../../../location-search';
 import MessageBox from '../../../message-box';
 import {RootStackParamList} from '../../../navigation';
 import {StyleSheet, Theme} from '../../../theme';
 import {AddEditFavoriteTexts, useTranslation} from '../../../translations';
-import BackHeader from '../BackHeader';
 import EmojiPopup from './EmojiPopup';
+import ScreenHeader from '../../../components/screen-header';
 
 type AddEditRouteName = 'AddEditForm';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditForm';
@@ -138,13 +132,13 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
   return (
     <SafeAreaView style={css.container}>
-      <BackHeader
+      <ScreenHeader
         title={
           editItem
             ? t(AddEditFavoriteTexts.header.titleEdit)
             : t(AddEditFavoriteTexts.header.title)
         }
-        closeIcon={!!editItem}
+        leftButton={{type: !!editItem ? 'close' : 'back'}}
       />
 
       <EmojiPopup

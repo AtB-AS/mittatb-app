@@ -5,10 +5,8 @@ import {RouteProp} from '@react-navigation/native';
 import {sendReceipt} from '../../../../api/fareContracts';
 import {StyleSheet} from '../../../../theme';
 import * as Sections from '../../../../components/sections';
-import Header from '../../../../ScreenHeader';
+import Header from '../../../../components/screen-header';
 import {TicketModalNavigationProp, TicketModalStackParams} from './';
-import ThemeIcon from '../../../../components/theme-icon';
-import {ArrowLeft} from '../../../../assets/svg/icons/navigation';
 import MessageBox, {MessageBoxProps} from '../../../../message-box';
 import Button from '../../../../components/button';
 import {
@@ -67,15 +65,7 @@ export default function ReceiptScreen({navigation, route}: Props) {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        leftButton={{
-          onPress: () => navigation.goBack(),
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: t(
-            TicketTexts.receipt.header.leftButton.a11yLabel,
-          ),
-          icon: <ThemeIcon svg={ArrowLeft} />,
-        }}
+        leftButton={{type: 'back'}}
         title={t(TicketTexts.receipt.header.title)}
         style={styles.header}
       />

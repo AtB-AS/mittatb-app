@@ -3,12 +3,10 @@ import React from 'react';
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../..';
-import ThemeIcon from '../../../../../components/theme-icon';
 import {DismissableStackNavigationProp} from '../../../../../navigation/createDismissableStackNavigator';
-import Header from '../../../../../ScreenHeader';
+import Header from '../../../../../components/screen-header';
 import {StyleSheet} from '../../../../../theme';
 import {useTicketState} from '../../../../../TicketContext';
-import {ArrowLeft} from '../../../../../assets/svg/icons/navigation';
 import Button from '../../../../../components/button';
 import useVippsState, {ErrorContext, State} from './use-vipps-state';
 import Processing from '../Processing';
@@ -38,7 +36,7 @@ type Props = {
 export default function VippsPayment({
   navigation,
   route: {
-    params: {offers, preassignedFareProduct},
+    params: {offers},
   },
 }: Props) {
   const styles = useStyles();
@@ -69,9 +67,8 @@ export default function VippsPayment({
       <Header
         title={t(PaymentVippsTexts.header.title)}
         leftButton={{
-          icon: <ThemeIcon svg={ArrowLeft} />,
+          type: 'cancel',
           onPress: () => cancelVipps(),
-          accessibilityLabel: t(PaymentVippsTexts.header.leftButton.a11yLabel),
         }}
       />
       <View style={styles.content}>
