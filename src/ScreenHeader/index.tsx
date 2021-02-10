@@ -1,17 +1,16 @@
-import {AccessibilityProps, View, ViewStyle} from 'react-native';
+import {View, ViewStyle} from 'react-native';
 import React from 'react';
 import {StyleSheet} from '../theme';
-import HeaderButton from './HeaderButton';
+import HeaderButton, {ButtonModes, HeaderButtonProps} from './HeaderButton';
 import ThemeText from '../components/text';
 
-export type LeftButtonProps = {
-  type: 'back' | 'cancel' | 'close' | 'home';
-  onPress?: () => void;
-} & AccessibilityProps;
+export type LeftButtonProps = HeaderButtonProps & {
+  type: Exclude<ButtonModes, 'chat'>;
+};
 
-export type RightButtonProps = {
+export type RightButtonProps = Omit<HeaderButtonProps, 'onPress'> & {
   type: 'chat';
-} & AccessibilityProps;
+};
 
 export type ScreenHeaderProps = {
   leftButton?: LeftButtonProps;

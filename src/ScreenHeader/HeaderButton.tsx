@@ -1,7 +1,6 @@
 import {AccessibilityProps, TouchableOpacity} from 'react-native';
 import React from 'react';
 import insets from '../utils/insets';
-import {LeftButtonProps, RightButtonProps} from './index';
 import {useNavigation} from '@react-navigation/native';
 import ThemeText from '../components/text';
 import {useNavigateToStartScreen} from '../utils/navigation';
@@ -10,14 +9,17 @@ import LogoOutline from './LogoOutline';
 import ThemeIcon from '../components/theme-icon';
 import {ScreenHeaderTexts, useTranslation} from '../translations';
 
-export type IconButton = {
-  icon: React.ReactNode;
-  onPress?(): void;
+export type ButtonModes = 'back' | 'cancel' | 'close' | 'home' | 'chat';
+export type HeaderButtonProps = {
+  type: ButtonModes;
+  onPress?: () => void;
 } & AccessibilityProps;
 
-const HeaderButton: React.FC<LeftButtonProps | RightButtonProps> = (
-  buttonProps,
-) => {
+export type IconButton = Omit<HeaderButtonProps, 'type'> & {
+  icon: React.ReactNode;
+};
+
+const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
   const iconButton = useIconButton(buttonProps);
   if (!iconButton) {
     return null;
@@ -38,7 +40,7 @@ const HeaderButton: React.FC<LeftButtonProps | RightButtonProps> = (
 };
 
 const useIconButton = (
-  buttonProps: LeftButtonProps | RightButtonProps,
+  buttonProps: HeaderButtonProps,
 ): IconButton | undefined => {
   const navigation = useNavigation();
   const navigateHome = useNavigateToStartScreen();
