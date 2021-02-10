@@ -25,9 +25,6 @@ const TicketTexts = {
   },
   details: {
     header: {
-      leftButton: {
-        a11yLabel: _('Gå tilbake', 'Go back'),
-      },
       title: _('Billettdetaljer', 'Ticket details'),
     },
     orderId: (orderId: string) =>
@@ -39,9 +36,6 @@ const TicketTexts = {
   },
   receipt: {
     header: {
-      leftButton: {
-        a11yLabel: _('Gå tilbake', 'Go back'),
-      },
       title: _('Send kvittering', 'Send receipt'),
     },
     inputLabel: _('E-post', 'E-mail'),

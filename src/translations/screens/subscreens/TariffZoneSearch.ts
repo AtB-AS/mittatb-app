@@ -6,9 +6,6 @@ const TariffZoneSearchTexts = {
   },
   header: {
     title: _('Søk', 'Search'),
-    leftButton: {
-      a11yLabel: _('Gå tilbake', 'Go back'),
-    },
   },
   zones: {
     heading: _('Soner', 'Zones'),

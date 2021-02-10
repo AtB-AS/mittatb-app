@@ -3,10 +3,6 @@ import {translation as _} from '../../commons';
 const PurchaseOverviewTexts = {
   header: {
     title: _('Kjøp ny billett', 'Buy new ticket'),
-    leftButton: {
-      text: _('Avbryt', 'Cancel'),
-      a11yLabel: _('Avbryt kjøpsprosessen', 'Cancel the purchase process'),
-    },
   },
   errorMessageBox: {
     title: _('Det oppstod en feil', 'An error occurred'),

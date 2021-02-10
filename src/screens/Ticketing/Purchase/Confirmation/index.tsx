@@ -2,7 +2,7 @@ import React from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
-import Header from '../../../../ScreenHeader';
+import Header, {LeftButtonProps} from '../../../../components/screen-header';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StyleSheet, useTheme} from '../../../../theme';
 import ThemeText from '../../../../components/text';
@@ -31,7 +31,7 @@ export type RouteParams = {
   fromTariffZone: TariffZone;
   toTariffZone: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
-  backButtonMode: 'back' | 'cancel';
+  headerLeftButton: LeftButtonProps;
 };
 
 export type ConfirmationProps = {
@@ -57,7 +57,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     toTariffZone,
     preassignedFareProduct,
     userProfilesWithCount,
-    backButtonMode,
+    headerLeftButton,
   } = params;
 
   const {
@@ -116,18 +116,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     <View style={[styles.container, {paddingTop: safeAreaTop}]}>
       <Header
         title={getReferenceDataName(preassignedFareProduct, language)}
-        leftButton={{
-          icon: (
-            <ThemeText>
-              {t(
-                PurchaseConfirmationTexts.header.leftButton.text[
-                  backButtonMode
-                ],
-              )}
-            </ThemeText>
-          ),
-          onPress: () => navigation.goBack(),
-        }}
+        leftButton={headerLeftButton}
         style={styles.header}
       />
 

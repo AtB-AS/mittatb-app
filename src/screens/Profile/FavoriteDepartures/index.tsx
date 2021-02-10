@@ -3,12 +3,12 @@ import {Alert, LayoutAnimation} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import * as Sections from '../../../components/sections';
-import {useFavorites} from '../../../favorites/FavoritesContext';
+import {useFavorites} from '../../../favorites';
 import {StoredFavoriteDeparture} from '../../../favorites/types';
 import MessageBox from '../../../message-box';
 import {StyleSheet, Theme} from '../../../theme';
 import {FavoriteDeparturesTexts, useTranslation} from '../../../translations';
-import BackHeader from '../BackHeader';
+import ScreenHeader from '../../../components/screen-header';
 
 export default function FavoriteDepartures() {
   const style = useProfileStyle();
@@ -40,7 +40,10 @@ export default function FavoriteDepartures() {
 
   return (
     <SafeAreaView style={style.container} edges={['right', 'top', 'left']}>
-      <BackHeader title={t(FavoriteDeparturesTexts.header.title)} />
+      <ScreenHeader
+        title={t(FavoriteDeparturesTexts.header.title)}
+        leftButton={{type: 'back'}}
+      />
 
       <ScrollView>
         {!favoriteDepartures.length && (

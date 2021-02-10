@@ -6,7 +6,7 @@ import useChatUnreadCount from './use-chat-unread-count';
 import {useRemoteConfig} from '../RemoteConfigContext';
 import {StyleSheet} from '../theme';
 import ThemeIcon from '../components/theme-icon';
-import {IconButton} from '../ScreenHeader/HeaderButton';
+import {IconButton} from '../components/screen-header/HeaderButton';
 
 export default function useChatIcon(): IconButton | undefined {
   const config = useRemoteConfig();
