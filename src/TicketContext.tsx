@@ -132,9 +132,9 @@ const TicketContextProvider: React.FC = ({children}) => {
         .collection('fareContracts')
         .onSnapshot(
           (snapshot) => {
-            const fareContracts = snapshot.docs.map<FareContract>((d) =>
-              d.data(),
-            );
+            const fareContracts = (snapshot as FirebaseFirestoreTypes.QuerySnapshot<
+              FareContract
+            >).docs.map<FareContract>((d) => d.data());
             dispatch({type: 'UPDATE_FARE_CONTRACT_TICKETS', fareContracts});
           },
           (err) => {
@@ -239,7 +239,7 @@ const TicketContextProvider: React.FC = ({children}) => {
         // activatePollingForNewTickets: updateReservations,
         // activeFareContracts: getActive(state.fareContracts),
         // expiredFareContracts: getExpired(state.fareContracts),
-        activeFareContracts: [],
+        activeFareContracts: state.fareContracts,
         expiredFareContracts: [],
         findFareContractByOrderId: (orderId) =>
           state.fareContracts.find((fc) => fc.orderId === orderId),
