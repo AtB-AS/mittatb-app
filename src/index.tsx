@@ -53,7 +53,7 @@ const App = () => {
   }
   return (
     <SafeAreaProvider>
-      <ErrorBoundary>
+      <ErrorBoundary type="full-screen">
         <AppContextProvider>
           <PreferencesContextProvider>
             <AuthContextProvider>

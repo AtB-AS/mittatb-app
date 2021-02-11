@@ -11,6 +11,8 @@ import ThemeText from '../../../components/text';
 import {ActiveReservation} from '../../../TicketContext';
 import TicketReservation from './TicketReservation';
 import {RootStackParamList} from '../../../navigation';
+import ErrorBoundary from '../../../error-boundary';
+import {TicketsTexts, useTranslation} from '../../../translations';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
@@ -34,6 +36,7 @@ const TicketsScrollView: React.FC<Props> = ({
   const {theme} = useTheme();
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProp>();
+  const {t} = useTranslation();
 
   return (
     <View style={styles.container}>
@@ -53,17 +56,21 @@ const TicketsScrollView: React.FC<Props> = ({
           <TicketReservation key={res.reservation.order_id} reservation={res} />
         ))}
         {fareContracts?.map((fc) => (
-          <SimpleTicket
-            key={fc.orderId}
-            fareContract={fc}
-            now={now}
-            onPressDetails={() =>
-              navigation.navigate('TicketModal', {
-                screen: 'TicketDetails',
-                params: {orderId: fc.orderId},
-              })
-            }
-          />
+          <ErrorBoundary
+            message={t(TicketsTexts.scrollView.errorLoadingTicket(fc.orderId))}
+          >
+            <SimpleTicket
+              key={fc.orderId}
+              fareContract={fc}
+              now={now}
+              onPressDetails={() =>
+                navigation.navigate('TicketModal', {
+                  screen: 'TicketDetails',
+                  params: {orderId: fc.orderId},
+                })
+              }
+            />
+          </ErrorBoundary>
         ))}
       </ScrollView>
       <LinearGradient
