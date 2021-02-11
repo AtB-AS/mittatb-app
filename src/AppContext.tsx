@@ -75,7 +75,7 @@ const AppContextProvider: React.FC = ({children}) => {
         onboarded,
       });
 
-      RNBootSplash.hide({duration: 100});
+      RNBootSplash.hide({fade: true});
     }
     loadAppSettings();
   }, []);
