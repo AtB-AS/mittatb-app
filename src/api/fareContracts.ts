@@ -1,6 +1,7 @@
 import {AxiosRequestConfig} from 'axios';
 import auth from '@react-native-firebase/auth';
 import client from './client';
+import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 
 export async function listRecentFareContracts(): Promise<RecentFareContract[]> {
   const user = auth().currentUser;
@@ -143,10 +144,12 @@ export type TravelRight = {
     | 'UnknownTicket';
 };
 
+export type Timestamp = FirebaseFirestoreTypes.Timestamp;
+
 export type PreactivatedTicket = TravelRight & {
   fareProductRef: string;
-  startDateTime: Date;
-  endDateTime: Date;
+  startDateTime: Timestamp;
+  endDateTime: Timestamp;
   usageValidityPeriodRef: string;
   userProfileRef: string;
   authorityRefs: string[];
@@ -162,7 +165,7 @@ export type PeriodTicket = PreactivatedTicket & {
 };
 
 export type FareContract = {
-  created: Date;
+  created: Timestamp;
   version: string;
   id: string;
   orderId: string;
@@ -173,11 +176,11 @@ export type FareContract = {
 };
 
 export function isPreactivatedTicket(
-  travelRight: TravelRight,
+  travelRight: TravelRight | undefined,
 ): travelRight is PreactivatedTicket {
   return (
-    travelRight.type === 'PreactivatedSingleTicket' ||
-    travelRight.type === 'PreactivatedPeriodTicket'
+    travelRight?.type === 'PreactivatedSingleTicket' ||
+    travelRight?.type === 'PreactivatedPeriodTicket'
   );
 }
 

@@ -34,8 +34,8 @@ const DetailsContent: React.FC<Props> = ({
 
   const firstTravelRight = fc.travelRights[0];
   if (isPreactivatedTicket(firstTravelRight)) {
-    const validFrom = firstTravelRight.startDateTime.getTime();
-    const validTo = firstTravelRight.endDateTime.getTime();
+    const validFrom = firstTravelRight.startDateTime.toMillis();
+    const validTo = firstTravelRight.endDateTime.toMillis();
     const isNotExpired = validTo >= now;
     const isRefunded = fc.state === FareContractState.Refunded;
     const isValidTicket = isNotExpired && !isRefunded;
@@ -69,7 +69,7 @@ const DetailsContent: React.FC<Props> = ({
           <ThemeText type="lead" color="faded">
             {t(
               TicketTexts.details.purchaseTime(
-                formatToLongDateTime(fromUnixTime(validFrom), language),
+                formatToLongDateTime(fromUnixTime(validFrom / 1000), language),
               ),
             )}
           </ThemeText>

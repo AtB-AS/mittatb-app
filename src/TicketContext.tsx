@@ -130,6 +130,7 @@ const TicketContextProvider: React.FC = ({children}) => {
         .collection('customers')
         .doc(abtCustomerId)
         .collection('fareContracts')
+        .orderBy('created', 'desc')
         .onSnapshot(
           (snapshot) => {
             const fareContracts = (snapshot as FirebaseFirestoreTypes.QuerySnapshot<
@@ -138,8 +139,8 @@ const TicketContextProvider: React.FC = ({children}) => {
             dispatch({type: 'UPDATE_FARE_CONTRACT_TICKETS', fareContracts});
           },
           (err) => {
-            console.warn(err),
-              dispatch({type: 'SET_ERROR_REFRESHING_FARE_CONTRACT_TICKETS'});
+            console.warn(err);
+            dispatch({type: 'SET_ERROR_REFRESHING_FARE_CONTRACT_TICKETS'});
           },
         );
 
@@ -194,20 +195,6 @@ const TicketContextProvider: React.FC = ({children}) => {
     },
     [activeReservations, getPaymentStatus],
   );
-
-  // const updateFareContracts = useCallback(
-  //   async function () {
-  //     try {
-  //       dispatch({type: 'SET_IS_REFRESHING_FARE_CONTRACT_TICKETS'});
-  //       const fareContracts = await listFareContracts();
-  //       dispatch({type: 'UPDATE_FARE_CONTRACT_TICKETS', fareContracts});
-  //     } catch (err) {
-  //       console.warn(err);
-  //       dispatch({type: 'SET_ERROR_REFRESHING_FARE_CONTRACT_TICKETS'});
-  //     }
-  //   },
-  //   [dispatch],
-  // );
 
   useInterval(
     pollPaymentStatus,

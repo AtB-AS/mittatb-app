@@ -43,13 +43,13 @@ const ValidityHeader: React.FC<{
 
 function validityTimeText(
   isNotExpired: boolean,
-  nowSeconds: number,
+  now: number,
   validTo: number,
   isRefunded: boolean,
   t: TranslateFunction,
   language: Language,
 ) {
-  const validityDifferenceSeconds = Math.abs(validTo - nowSeconds);
+  const validityDifferenceSeconds = Math.abs(validTo - now) / 1000;
   const delimiter = t(TicketTexts.validityHeader.durationDelimiter);
   const duration = secondsToDuration(validityDifferenceSeconds, language, {
     delimiter,

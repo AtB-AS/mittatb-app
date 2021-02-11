@@ -6,5 +6,3 @@ export {
   search as searchOffers,
   reserve as reserveOffers,
 } from './fareContracts';
-
-export const listFareContracts = () => [];
