@@ -57,10 +57,10 @@ const TicketsScrollView: React.FC<Props> = ({
         ))}
         {fareContracts?.map((fc) => (
           <ErrorBoundary
+            key={fc.orderId}
             message={t(TicketsTexts.scrollView.errorLoadingTicket(fc.orderId))}
           >
             <SimpleTicket
-              key={fc.orderId}
               fareContract={fc}
               now={now}
               onPressDetails={() =>

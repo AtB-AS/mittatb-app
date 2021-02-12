@@ -116,7 +116,7 @@ const useQrCode = (fc: FareContract) => {
   useEffect(() => {
     (async function () {
       if (!fc?.qrCode) return;
-      const svg = await qrcode.toString(fc.qrCode, {
+      const svg = await qrcode.toString(fc.qrCode.toBase64(), {
         type: 'svg',
       });
 

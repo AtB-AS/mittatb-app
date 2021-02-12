@@ -139,12 +139,13 @@ export type TravelRight = {
   id: string;
   status: TravelRightStatus;
   type:
-    | 'PreactivatedSingleTicket'
-    | 'PreactivatedPeriodTicket'
+    | 'PreActivatedSingleTicket'
+    | 'PreActivatedPeriodTicket'
     | 'UnknownTicket';
 };
 
 export type Timestamp = FirebaseFirestoreTypes.Timestamp;
+export type Blob = FirebaseFirestoreTypes.Blob;
 
 export type PreactivatedTicket = TravelRight & {
   fareProductRef: string;
@@ -157,11 +158,11 @@ export type PreactivatedTicket = TravelRight & {
 };
 
 export type PreactivatedSingleTicket = PreactivatedTicket & {
-  type: 'PreactivatedSingleTicket';
+  type: 'PreActivatedSingleTicket';
 };
 
 export type PeriodTicket = PreactivatedTicket & {
-  type: 'PreactivatedPeriodTicket';
+  type: 'PreActivatedPeriodTicket';
 };
 
 export type FareContract = {
@@ -172,15 +173,15 @@ export type FareContract = {
   state: FareContractState;
   minimumSecurityLevel: number;
   travelRights: TravelRight[];
-  qrCode: string;
+  qrCode: Blob;
 };
 
 export function isPreactivatedTicket(
   travelRight: TravelRight | undefined,
 ): travelRight is PreactivatedTicket {
   return (
-    travelRight?.type === 'PreactivatedSingleTicket' ||
-    travelRight?.type === 'PreactivatedPeriodTicket'
+    travelRight?.type === 'PreActivatedSingleTicket' ||
+    travelRight?.type === 'PreActivatedPeriodTicket'
   );
 }
 
