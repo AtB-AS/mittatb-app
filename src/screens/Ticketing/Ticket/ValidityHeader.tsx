@@ -50,9 +50,10 @@ function validityTimeText(
   language: Language,
 ) {
   const validityDifferenceSeconds = Math.abs(validTo - nowSeconds);
-  const delimiter = t(TicketTexts.validityHeader.durationDelimiter);
+  const conjunction = t(TicketTexts.validityHeader.durationDelimiter);
   const duration = secondsToDuration(validityDifferenceSeconds, language, {
-    delimiter,
+    conjunction,
+    serialComma: false,
   });
 
   if (isRefunded) {
