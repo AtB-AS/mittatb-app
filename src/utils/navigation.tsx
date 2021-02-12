@@ -8,6 +8,7 @@ import {
   Preference_ScreenAlternatives,
   usePreferenceItems,
 } from '../preferences';
+import {MAX_FONT_SCALE} from '../components/text';
 
 // This is code from react-navigation, for regular tab bar
 // (not compact). Should be a better way to set this or
@@ -15,7 +16,7 @@ import {
 const DEFAULT_TABBAR_HEIGHT = 44;
 
 export const useBottomNavigationStyles = (
-  maxScale: number = 2,
+  maxScale: number = MAX_FONT_SCALE,
 ): {minHeight: number} => {
   const {fontScale} = useWindowDimensions();
   const {bottom} = useSafeAreaInsets();

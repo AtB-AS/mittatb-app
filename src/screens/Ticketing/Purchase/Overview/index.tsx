@@ -2,10 +2,9 @@ import React, {useEffect, useMemo} from 'react';
 import {SafeAreaView, View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
-import Header from '../../../../ScreenHeader';
+import Header from '../../../../components/screen-header';
 import {Edit} from '../../../../assets/svg/icons/actions';
 import {StyleSheet} from '../../../../theme';
-import ThemeText from '../../../../components/text';
 import ThemeIcon from '../../../../components/theme-icon';
 import Button from '../../../../components/button';
 import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
@@ -22,6 +21,9 @@ import {
 import {useRemoteConfig} from '../../../../RemoteConfigContext';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import {getReferenceDataName} from '../../../../reference-data/utils';
+import {TariffZone} from '../../../../reference-data/types';
+import {useGeolocationState} from '../../../../GeolocationContext';
+import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -58,13 +60,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const userProfilesWithCount =
     params.userProfilesWithCount ?? defaultUserProfilesWithCount;
 
-  const defaultTariffZone: TariffZoneWithMetadata = useMemo(
-    () => ({
-      ...tariffZones[0],
-      resultType: 'zone',
-    }),
-    [tariffZones],
-  );
+  const defaultTariffZone = useDefaultTariffZone(tariffZones);
   const {
     fromTariffZone = defaultTariffZone,
     toTariffZone = defaultTariffZone,
@@ -90,15 +86,8 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
       <Header
         title={t(PurchaseOverviewTexts.header.title)}
         leftButton={{
-          icon: (
-            <ThemeText>
-              {t(PurchaseOverviewTexts.header.leftButton.text)}
-            </ThemeText>
-          ),
+          type: 'cancel',
           onPress: closeModal,
-          accessibilityLabel: t(
-            PurchaseOverviewTexts.header.leftButton.a11yLabel,
-          ),
         }}
       />
 
@@ -173,6 +162,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
               toTariffZone,
               userProfilesWithCount,
               preassignedFareProduct,
+              headerLeftButton: {type: 'back'},
             });
           }}
         />
@@ -198,6 +188,31 @@ const createTravellersText = (
       .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
       .join(', ');
   }
+};
+
+/**
+ * Get the default tariff zone, either based on current location or else the
+ * first tariff zone in the provided tariff zones list.
+ */
+const useDefaultTariffZone = (
+  tariffZones: TariffZone[],
+): TariffZoneWithMetadata => {
+  const {location} = useGeolocationState();
+  const tariffZoneFromLocation = useMemo(() => {
+    if (location) {
+      const {longitude, latitude} = location.coords;
+      return tariffZones.find((t) =>
+        turfBooleanPointInPolygon([longitude, latitude], t.geometry),
+      );
+    }
+  }, [tariffZones, location]);
+  return useMemo<TariffZoneWithMetadata>(
+    () =>
+      tariffZoneFromLocation
+        ? {...tariffZoneFromLocation, resultType: 'geolocation'}
+        : {...tariffZones[0], resultType: 'zone'},
+    [tariffZones, tariffZoneFromLocation],
+  );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

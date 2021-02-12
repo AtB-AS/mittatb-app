@@ -3,12 +3,6 @@ import {translation as _} from '../../commons';
 const TariffZonesTexts = {
   header: {
     title: _('Velg soner', 'Select zones'),
-    leftButton: {
-      a11yLabel: _(
-        'Gå tilbake uten å lagre sonevalget',
-        'Go back without saving your selected zones',
-      ),
-    },
   },
   zoneSummary: {
     a11yLabelPrefix: _(`Sonevalget er`, `The zone selection is`),

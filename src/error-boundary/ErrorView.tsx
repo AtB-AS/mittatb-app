@@ -1,5 +1,5 @@
 import React from 'react';
-import ScreenHeader from '../ScreenHeader';
+import ScreenHeader from '../components/screen-header';
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {getBuildNumber} from 'react-native-device-info';

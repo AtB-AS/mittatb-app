@@ -1,16 +1,10 @@
 import React from 'react';
 import {Keyboard, View} from 'react-native';
-import {Close} from '../../../assets/svg/icons/actions';
-import ThemeIcon from '../../../components/theme-icon';
 import {LocationWithMetadata} from '../../../favorites/types';
 import {LocationSearchContent} from '../../../location-search/LocationSearch';
-import FullScreenHeader from '../../../ScreenHeader/full-header';
+import FullScreenHeader from '../../../components/screen-header/full-header';
 import {StyleSheet} from '../../../theme';
-import {
-  AddEditFavoriteTexts,
-  LocationSearchTexts,
-  useTranslation,
-} from '../../../translations';
+import {AddEditFavoriteTexts, useTranslation} from '../../../translations';
 import {LocationSearchNavigationProp} from './';
 
 export type SearchStopPlaceProps = {
@@ -33,15 +27,7 @@ export default function SearchStopPlace({navigation}: SearchStopPlaceProps) {
     <View style={styles.container}>
       <FullScreenHeader
         title={t(AddEditFavoriteTexts.header.title)}
-        leftButton={{
-          onPress: () => navigation.goBack(),
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: t(
-            LocationSearchTexts.header.leftButton.a11yLabel,
-          ),
-          icon: <ThemeIcon svg={Close} />,
-        }}
+        leftButton={{type: 'close'}}
       />
 
       <LocationSearchContent

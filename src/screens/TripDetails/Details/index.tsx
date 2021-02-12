@@ -1,15 +1,17 @@
-import {NavigationProp, RouteProp, useIsFocused} from '@react-navigation/core';
+import {
+  NavigationProp,
+  RouteProp,
+  useIsFocused,
+} from '@react-navigation/native';
 import Axios, {AxiosError} from 'axios';
 import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DetailsStackParams} from '..';
 import {getSingleTripPattern} from '../../../api/trips';
-import {ArrowLeft} from '../../../assets/svg/icons/navigation';
 import ContentWithDisappearingHeader from '../../../components/disappearing-header/content';
 import PaginatedDetailsHeader from '../../../components/pagination';
-import ThemeIcon from '../../../components/theme-icon';
-import Header from '../../../ScreenHeader';
+import Header from '../../../components/screen-header';
 import {TripPattern} from '../../../sdk';
 import {StyleSheet, useTheme} from '../../../theme';
 import {TripDetailsTexts, useTranslation} from '../../../translations';
@@ -82,13 +84,7 @@ const Details: React.FC<Props> = (props) => {
     <View style={styles.container}>
       <View style={[styles.header, {paddingTop}]}>
         <Header
-          leftButton={{
-            onPress: () => props.navigation.goBack(),
-            accessible: true,
-            accessibilityRole: 'button',
-            accessibilityLabel: t(TripDetailsTexts.header.leftButton.a11yLabel),
-            icon: <ThemeIcon svg={ArrowLeft} />,
-          }}
+          leftButton={{type: 'back'}}
           title={t(TripDetailsTexts.header.title)}
         />
       </View>

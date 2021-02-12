@@ -11,7 +11,7 @@ import {
 import {Close} from '../../assets/svg/icons/actions';
 import {StyleSheet, useTheme} from '../../theme';
 import insets from '../../utils/insets';
-import ThemeText from '../text';
+import ThemeText, {MAX_FONT_SCALE} from '../text';
 import ThemeIcon from '../theme-icon';
 import {SectionItem, useSectionItem} from './section-utils';
 
@@ -77,7 +77,7 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
           placeholderTextColor={theme.text.colors.faded}
           onFocus={onFocusEvent}
           onBlur={onBlurEvent}
-          maxFontSizeMultiplier={2}
+          maxFontSizeMultiplier={MAX_FONT_SCALE}
           {...props}
         />
         {showClear ? (

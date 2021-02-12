@@ -1,18 +1,19 @@
 import React from 'react';
-import {Animated, View, ViewProps} from 'react-native';
+import {Animated, useWindowDimensions, View, ViewProps} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import ThemeText from '../components/text';
-import {StyleSheet} from '../theme';
-import HeaderButton, {IconButton} from './HeaderButton';
+import ThemeText, {MAX_FONT_SCALE} from '../text';
+import {StyleSheet} from '../../theme';
+import HeaderButton from './HeaderButton';
+import {LeftButtonProps, RightButtonProps} from './index';
 type ScreenHeaderProps = ViewProps & {
-  leftButton?: IconButton;
-  rightButton?: IconButton;
+  leftButton?: LeftButtonProps;
+  rightButton?: RightButtonProps;
   title: React.ReactNode;
   alternativeTitleComponent?: React.ReactNode;
   scrollRef?: Animated.Value;
 };
 
-const HEADER_HEIGHT = 20;
+const BASE_HEADER_HEIGHT = 20;
 
 const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
   leftButton,
@@ -24,13 +25,17 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
 }) => {
   const style = useHeaderStyle();
   const insets = useSafeAreaInsets();
+
+  const {fontScale} = useWindowDimensions();
+  const headerHeight = BASE_HEADER_HEIGHT * Math.min(fontScale, MAX_FONT_SCALE);
+
   const titleOffset = scrollRef!.interpolate({
-    inputRange: [0, HEADER_HEIGHT + insets.top],
-    outputRange: [0, -HEADER_HEIGHT],
+    inputRange: [0, headerHeight + insets.top],
+    outputRange: [0, -headerHeight],
     extrapolate: 'clamp',
   });
 
-  const altTitleOffset = Animated.add(titleOffset, HEADER_HEIGHT);
+  const altTitleOffset = Animated.add(titleOffset, headerHeight);
   const leftIcon = leftButton ? <HeaderButton {...leftButton} /> : <View />;
   const rightIcon = rightButton ? <HeaderButton {...rightButton} /> : <View />;
 
@@ -38,7 +43,10 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
     <Animated.View
       style={[
         style.regularContainer,
-        {transform: [{translateY: altTitleOffset}]},
+        {
+          height: headerHeight,
+          transform: [{translateY: altTitleOffset}],
+        },
       ]}
     >
       {alternativeTitleComponent}
@@ -50,7 +58,7 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
       <View
         accessible={true}
         accessibilityRole="header"
-        style={style.titleContainers}
+        style={[style.titleContainers, {height: headerHeight}]}
       >
         <Animated.View
           style={[
@@ -64,8 +72,10 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
         </Animated.View>
         {altTitle}
       </View>
-      <View style={style.iconContainerLeft}>{leftIcon}</View>
-      <View style={style.iconContainerRight}>{rightIcon}</View>
+      <View style={style.buttonsContainer}>
+        <View>{leftIcon}</View>
+        <View>{rightIcon}</View>
+      </View>
     </View>
   );
 };
@@ -79,23 +89,21 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.medium,
     backgroundColor: theme.background.header,
   },
-  iconContainerLeft: {
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     position: 'absolute',
     left: theme.spacings.medium,
-  },
-  iconContainerRight: {
-    position: 'absolute',
-    right: theme.spacings.medium,
+    width: '100%',
   },
   titleContainers: {
-    height: HEADER_HEIGHT,
     flex: 1,
     alignItems: 'stretch',
     overflow: 'hidden',
     marginHorizontal: theme.spacings.medium + 30,
   },
   regularContainer: {
-    height: HEADER_HEIGHT,
     flex: 1,
     left: 0,
     right: 0,

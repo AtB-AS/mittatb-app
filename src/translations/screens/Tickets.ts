@@ -3,9 +3,6 @@ import {translation as _} from '../commons';
 const TicketsTexts = {
   header: {
     title: _('Billetter', 'Tickets'),
-    leftButton: {
-      a11yLabel: _('Gå til startside', 'Go to start page'),
-    },
   },
   buyTicketsTab: {
     label: _('Kjøp', 'Buy'),
@@ -40,6 +37,14 @@ const TicketsTexts = {
       text: (dateTime: string) =>
         _(`Kjøpt ${dateTime}`, `Purchased ${dateTime}`),
     },
+  },
+  recentTickets: {
+    title: _('Sist kjøpte billetter', 'Recently purchased tickets'),
+    loading: _('Laster siste kjøp…', 'Loading recent purchases'),
+    a11yHint: _(
+      'Aktivér for å kjøpe denne billetten',
+      'Activate to purchase this ticket',
+    ),
   },
   reservation: {
     processing: _(

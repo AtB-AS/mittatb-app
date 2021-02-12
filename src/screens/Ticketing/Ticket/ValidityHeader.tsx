@@ -26,7 +26,7 @@ const ValidityHeader: React.FC<{
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
         <ValidityIcon isValid={isValid} />
-        <ThemeText type="lead" color="faded">
+        <ThemeText style={styles.validityText} type="lead" color="faded">
           {validityTimeText(
             isNotExpired,
             nowSeconds,
@@ -90,6 +90,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacings.medium,
     marginHorizontal: -theme.spacings.medium,
     flexDirection: 'row',
+  },
+  validityText: {
+    flex: 1,
   },
 }));
 
