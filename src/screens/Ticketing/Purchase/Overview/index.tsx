@@ -171,13 +171,15 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   );
 };
 
-const createTravellersText = (
+export const createTravellersText = (
   userProfilesWithCount: UserProfileWithCount[],
   t: TranslateFunction,
   language: Language,
 ) => {
   const chosenUserProfiles = userProfilesWithCount.filter((u) => u.count);
-  if (chosenUserProfiles.length > 2) {
+  if (chosenUserProfiles.length === 0) {
+    return t(PurchaseOverviewTexts.travellers.noTravellers);
+  } else if (chosenUserProfiles.length > 2) {
     const totalCount = chosenUserProfiles.reduce(
       (total, u) => total + u.count,
       0,
