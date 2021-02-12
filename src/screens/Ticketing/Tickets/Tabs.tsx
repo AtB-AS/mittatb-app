@@ -11,9 +11,7 @@ import Button from '../../../components/button';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
 import UpgradeSplash from './UpgradeSplash';
 
-export type TicketingScreenNavigationProp = StackNavigationProp<
-  RootStackParamList
->;
+export type TicketingScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
 type Props = {
   navigation: TicketingScreenNavigationProp;
