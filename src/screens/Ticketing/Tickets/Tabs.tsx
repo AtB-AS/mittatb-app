@@ -12,9 +12,7 @@ import {useRemoteConfig} from '../../../RemoteConfigContext';
 import UpgradeSplash from './UpgradeSplash';
 import RecentTicketsScrollView from './RecentTicketsScrollView';
 
-export type TicketingScreenNavigationProp = StackNavigationProp<
-  RootStackParamList
->;
+export type TicketingScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
 type Props = {
   navigation: TicketingScreenNavigationProp;

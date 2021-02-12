@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo} from 'react';
-import {SafeAreaView, View} from 'react-native';
+import {View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
 import Header from '../../../../components/screen-header';
@@ -24,6 +24,7 @@ import {getReferenceDataName} from '../../../../reference-data/utils';
 import {TariffZone} from '../../../../reference-data/types';
 import {useGeolocationState} from '../../../../GeolocationContext';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<

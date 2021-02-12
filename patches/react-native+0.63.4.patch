@@ -2,7 +2,7 @@ diff --git a/node_modules/react-native/React/CoreModules/RCTAppearance.mm b/node
 index c561676..7c568c9 100644
 --- a/node_modules/react-native/React/CoreModules/RCTAppearance.mm
 +++ b/node_modules/react-native/React/CoreModules/RCTAppearance.mm
-@@ -91,7 +91,9 @@ RCT_EXPORT_MODULE(Appearance)
+@@ -91,7 +91,9 @@ - (dispatch_queue_t)methodQueue
  
  RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSString *, getColorScheme)
  {
@@ -39,7 +39,7 @@ index 4504a26..f7f1a53 100644
      return mDelegate.getReactNativeHost();
    }
 diff --git a/node_modules/react-native/ReactAndroid/src/main/java/com/facebook/react/ReactActivityDelegate.java b/node_modules/react-native/ReactAndroid/src/main/java/com/facebook/react/ReactActivityDelegate.java
-index 7083f86..1e1d54d 100644
+index 7083f86..d654425 100644
 --- a/node_modules/react-native/ReactAndroid/src/main/java/com/facebook/react/ReactActivityDelegate.java
 +++ b/node_modules/react-native/ReactAndroid/src/main/java/com/facebook/react/ReactActivityDelegate.java
 @@ -9,6 +9,7 @@ package com.facebook.react;
@@ -53,7 +53,7 @@ index 7083f86..1e1d54d 100644
 @@ -154,6 +155,13 @@ public class ReactActivityDelegate {
      }
    }
-   
+ 
 +  public void onConfigurationChanged(Configuration newConfig) {
 +    if (getReactNativeHost().hasInstance()) {
 +      getReactInstanceManager().onConfigurationChanged(getContext(), newConfig);
@@ -90,7 +90,7 @@ index 99b7c53..c6cd1b5 100644
    }
  
 diff --git a/node_modules/react-native/react.gradle b/node_modules/react-native/react.gradle
-index 6441d93..b5a2ec4 100644
+index c28cbd4..e886ad4 100644
 --- a/node_modules/react-native/react.gradle
 +++ b/node_modules/react-native/react.gradle
 @@ -129,6 +129,10 @@ afterEvaluate {
@@ -124,7 +124,7 @@ index 6441d93..b5a2ec4 100644
                              // Can't use ?: since that will also substitute valid empty lists
                              hermesFlags = config.hermesFlagsRelease
                              if (hermesFlags == null) hermesFlags = ["-O", "-output-source-map"]
-@@ -313,7 +313,6 @@ afterEvaluate {
+@@ -318,7 +318,6 @@ afterEvaluate {
          // This should really be done by packaging all Hermes releated libs into
          // two separate HermesDebug and HermesRelease AARs, but until then we'll
          // kludge it by deleting the .so files out of the /transforms/ directory.
@@ -132,7 +132,7 @@ index 6441d93..b5a2ec4 100644
          def libDir = "$buildDir/intermediates/transforms/"
          def vmSelectionAction = {
              fileTree(libDir).matching {
-@@ -321,7 +320,7 @@ afterEvaluate {
+@@ -326,7 +325,7 @@ afterEvaluate {
                      // For Hermes, delete all the libjsc* files
                      include "**/libjsc*.so"
  

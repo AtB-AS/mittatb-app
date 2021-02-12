@@ -49,9 +49,7 @@ export type DetailScreenRouteProp = RouteProp<
   'DepartureDetails'
 >;
 
-export type DepartureDetailScreenNavigationProp = NavigationProp<
-  DetailsStackParams
->;
+export type DepartureDetailScreenNavigationProp = NavigationProp<DetailsStackParams>;
 
 type Props = {
   route: DetailScreenRouteProp;
