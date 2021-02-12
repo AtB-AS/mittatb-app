@@ -5,7 +5,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import React, {useMemo, useState} from 'react';
-import {StyleSheet, useTheme} from '../../theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import HeaderButton, {ButtonModes, HeaderButtonProps} from './HeaderButton';
 import ThemeText from '../text';
 

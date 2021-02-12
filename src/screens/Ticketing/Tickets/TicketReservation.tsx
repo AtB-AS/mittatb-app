@@ -1,12 +1,12 @@
+import {BlankTicket} from '@atb/assets/svg/icons/ticketing';
+import Button from '@atb/components/button';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {ActiveReservation} from '@atb/TicketContext';
+import {TicketsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {View, TouchableOpacity, Linking, ActivityIndicator} from 'react-native';
-import {StyleSheet, useTheme} from '../../../theme';
-import {BlankTicket} from '../../../assets/svg/icons/ticketing';
-import ThemeText from '../../../components/text';
-import {ActiveReservation} from '../../../TicketContext';
-import ThemeIcon from '../../../components/theme-icon';
-import Button from '../../../components/button';
-import {TicketsTexts, useTranslation} from '../../../translations';
+import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
 import ValidityLine from '../Ticket/ValidityLine';
 
 type Props = {

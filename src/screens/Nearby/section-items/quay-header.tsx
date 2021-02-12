@@ -1,24 +1,24 @@
 import {TFunc} from '@leile/lobo-t';
 import React from 'react';
 import {View} from 'react-native';
-import {QuayInfo} from '../../../api/departures/types';
-import {WalkingPerson} from '../../../assets/svg/icons/transportation';
-import {screenReaderPause} from '../../../components/accessible-text';
+import {QuayInfo} from '@atb/api/departures/types';
+import {WalkingPerson} from '@atb/assets/svg/icons/transportation';
+import {screenReaderPause} from '@atb/components/accessible-text';
 import {
   SectionItem,
   useSectionItem,
   useSectionStyle,
-} from '../../../components/sections/section-utils';
-import ThemeText from '../../../components/text';
-import ThemeIcon from '../../../components/theme-icon';
-import SituationMessages from '../../../situations';
-import {StyleSheet} from '../../../theme';
+} from '@atb/components/sections/section-utils';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import SituationMessages from '@atb/situations';
+import {StyleSheet} from '@atb/theme';
 import {
   dictionary,
   Language,
   NearbyTexts,
   useTranslation,
-} from '../../../translations';
+} from '@atb/translations';
 
 export type QuayHeaderItemProps = SectionItem<{
   quay: QuayInfo;

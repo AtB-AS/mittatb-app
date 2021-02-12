@@ -1,14 +1,14 @@
+import {StopPlaceGroup} from '@atb/api/departures/types';
+import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import {ActionItem} from '@atb/components/sections';
+import ThemeText from '@atb/components/text';
+import {Location} from '@atb/favorites/types';
+import MessageBox from '@atb/message-box';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {NearbyTexts, useTranslation} from '@atb/translations';
+import {animateNextChange} from '@atb/utils/animation';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {StopPlaceGroup} from '../../api/departures/types';
-import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
-import {ActionItem} from '../../components/sections';
-import ThemeText from '../../components/text';
-import {Location} from '../../favorites/types';
-import MessageBox from '../../message-box';
-import {StyleSheet, useTheme} from '../../theme';
-import {NearbyTexts, useTranslation} from '../../translations';
-import {animateNextChange} from '../../utils/animation';
 import QuaySection from './section-items/quay-section';
 import {hasNoGroupsWithDepartures, hasNoQuaysWithDepartures} from './utils';
 

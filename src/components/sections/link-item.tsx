@@ -11,7 +11,7 @@ import NavigationIcon, {
   NavigationIconTypes,
 } from '../theme-icon/navigation-icon';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
-import {StyleSheet} from '../../theme';
+import {StyleSheet} from '@atb/theme';
 
 export type LinkItemProps = SectionItem<{
   text: string;

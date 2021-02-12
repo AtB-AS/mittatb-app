@@ -1,7 +1,7 @@
 import React from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Point} from 'geojson';
-import colors from '../../../theme/colors';
+import colors from '@atb/theme/colors';
 
 const MapLabel: React.FC<{
   text: string;

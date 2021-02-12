@@ -1,3 +1,6 @@
+import {StyleSheet, useTheme} from '@atb/theme';
+import throttle from '@atb/utils/throttle';
+import {useLayout} from '@atb/utils/use-layout';
 import {useScrollToTop} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {
@@ -10,11 +13,8 @@ import {
   View,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import AnimatedScreenHeader from '../screen-header/animated-header';
-import {StyleSheet, useTheme} from '../../theme';
-import throttle from '../../utils/throttle';
-import {useLayout} from '../../utils/use-layout';
 import {LeftButtonProps} from '../screen-header';
+import AnimatedScreenHeader from '../screen-header/animated-header';
 
 type Props = {
   header: React.ReactNode;

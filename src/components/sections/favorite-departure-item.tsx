@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import SvgDelete from '../../assets/svg/icons/actions/Delete';
-import {StoredFavoriteDeparture} from '../../favorites/types';
-import {useTheme} from '../../theme';
-import {SectionTexts, useTranslation} from '../../translations';
+import SvgDelete from '@atb/assets/svg/icons/actions/Delete';
+import {StoredFavoriteDeparture} from '@atb/favorites/types';
+import {useTheme} from '@atb/theme';
+import {SectionTexts, useTranslation} from '@atb/translations';
 import {screenReaderPause} from '../accessible-text';
 import ThemeText from '../text';
 import TransportationIcon from '../transportation-icon';

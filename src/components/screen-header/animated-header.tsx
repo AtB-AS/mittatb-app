@@ -1,8 +1,8 @@
+import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {Animated, useWindowDimensions, View, ViewProps} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import ThemeText, {MAX_FONT_SCALE} from '../text';
-import {StyleSheet} from '../../theme';
 import HeaderButton from './HeaderButton';
 import {LeftButtonProps, RightButtonProps} from './index';
 type ScreenHeaderProps = ViewProps & {

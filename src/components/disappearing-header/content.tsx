@@ -1,8 +1,7 @@
+import {StyleSheet, useTheme} from '@atb/theme';
+import {useLayout} from '@atb/utils/use-layout';
 import React, {PropsWithChildren, useEffect, useRef} from 'react';
 import {Animated, Platform, RefreshControl, View} from 'react-native';
-import {Easing} from 'react-native-reanimated';
-import {StyleSheet, useTheme} from '../../theme';
-import {useLayout} from '../../utils/use-layout';
 
 export type ContentWithDisappearingHeaderProps = PropsWithChildren<{
   header: React.ReactNode;

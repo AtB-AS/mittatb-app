@@ -1,9 +1,9 @@
 import React from 'react';
-import {CurrentLocationArrow} from '../../assets/svg/icons/places';
-import {FavoriteIcon} from '../../favorites';
+import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
+import {FavoriteIcon} from '@atb/favorites';
 import LocationIcon from '../location-icon';
-import {useFavorites} from '../../favorites/FavoritesContext';
-import {LocationWithMetadata} from '../../favorites/types';
+import {useFavorites} from '@atb/favorites/FavoritesContext';
+import {LocationWithMetadata} from '@atb/favorites/types';
 
 type SearchLocationIconProps = {
   location?: LocationWithMetadata;

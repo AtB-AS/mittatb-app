@@ -1,17 +1,14 @@
+import {screenReaderPause} from '@atb/components/accessible-text';
+import LocationIcon from '@atb/components/location-icon';
+import ThemeText from '@atb/components/text';
+import {Location} from '@atb/favorites/types';
+import {TariffZone} from '@atb/reference-data/types';
+import {getReferenceDataName} from '@atb/reference-data/utils';
+import {StyleSheet} from '@atb/theme';
+import {TariffZoneSearchTexts, useTranslation} from '@atb/translations';
+import insets from '@atb/utils/insets';
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {StyleSheet} from '../../../../../theme';
-import insets from '../../../../../utils/insets';
-import ThemeText from '../../../../../components/text';
-import {screenReaderPause} from '../../../../../components/accessible-text';
-import {
-  TariffZoneSearchTexts,
-  useTranslation,
-} from '../../../../../translations';
-import {Location} from '../../../../../favorites/types';
-import LocationIcon from '../../../../../components/location-icon';
-import {TariffZone} from '../../../../../reference-data/types';
-import {getReferenceDataName} from '../../../../../reference-data/utils';
 
 export type LocationAndTariffZone = {
   location: Location;

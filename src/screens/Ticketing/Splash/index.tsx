@@ -1,16 +1,16 @@
+import {ShinyTicketBanner} from '@atb/assets/svg/illustrations';
+import Button from '@atb/components/button';
+import Header from '@atb/components/screen-header';
+import ThemeText from '@atb/components/text';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {StyleSheet} from '@atb/theme';
+import {TicketSplashTexts, useTranslation} from '@atb/translations';
 import React, {useRef} from 'react';
-import {View, useWindowDimensions} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import Header from '../../../components/screen-header';
-import {ShinyTicketBanner} from '../../../assets/svg/illustrations';
-import {StyleSheet} from '../../../theme';
-import InviteModal from './InviteModal';
-import {Modalize} from 'react-native-modalize';
-import {useRemoteConfig} from '../../../RemoteConfigContext';
-import ThemeText from '../../../components/text';
-import Button from '../../../components/button';
+import {useWindowDimensions, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useTranslation, TicketSplashTexts} from '../../../translations';
+import {Modalize} from 'react-native-modalize';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import InviteModal from './InviteModal';
 
 export default function Splash() {
   const styles = useStyles();

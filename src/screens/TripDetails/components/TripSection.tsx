@@ -1,29 +1,29 @@
-import {useNavigation} from '@react-navigation/native';
-import React from 'react';
-import {View} from 'react-native';
-import {Info, Warning} from '../../../assets/svg/situations';
+import {Info, Warning} from '@atb/assets/svg/situations';
 import AccessibleText, {
   screenReaderPause,
-} from '../../../components/accessible-text';
-import ThemeText from '../../../components/text';
-import TransportationIcon from '../../../components/transportation-icon';
-import {TinyMessageBox} from '../../../message-box';
-import {Leg, Place} from '../../../sdk';
-import SituationMessages from '../../../situations';
-import {StyleSheet} from '../../../theme';
+} from '@atb/components/accessible-text';
+import ThemeText from '@atb/components/text';
+import TransportationIcon from '@atb/components/transportation-icon';
+import {TinyMessageBox} from '@atb/message-box';
+import {Leg, Place} from '@atb/sdk';
+import SituationMessages from '@atb/situations';
+import {StyleSheet} from '@atb/theme';
 import {
   Language,
   TranslatedString,
   TripDetailsTexts,
   useTranslation,
-} from '../../../translations';
-import {formatToClock, secondsToDuration} from '../../../utils/date';
-import {transportationColor} from '../../../utils/transportation-color';
+} from '@atb/translations';
+import {formatToClock, secondsToDuration} from '@atb/utils/date';
+import {transportationColor} from '@atb/utils/transportation-color';
 import {
   getLineName,
   getQuayName,
   getTranslatedModeName,
-} from '../../../utils/transportation-names';
+} from '@atb/utils/transportation-names';
+import {useNavigation} from '@react-navigation/native';
+import React from 'react';
+import {View} from 'react-native';
 import {DetailScreenNavigationProp} from '../Details';
 import {significantWaitTime, significantWalkTime} from '../Details/utils';
 import {getTimeRepresentationType, TimeValues} from '../utils';

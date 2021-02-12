@@ -1,7 +1,7 @@
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import React from 'react';
-import Tickets from './Tickets';
 import Splash from './Splash';
-import {useRemoteConfig} from '../../RemoteConfigContext';
+import Tickets from './Tickets';
 
 export default function Ticketing() {
   const {enable_ticketing} = useRemoteConfig();

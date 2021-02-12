@@ -1,15 +1,12 @@
+import {Duration, WalkingPerson} from '@atb/assets/svg/icons/transportation';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import {TripPattern} from '@atb/sdk';
+import {StyleSheet} from '@atb/theme';
+import {TripDetailsTexts, useTranslation} from '@atb/translations';
+import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
-import {
-  Duration,
-  WalkingPerson,
-} from '../../../assets/svg/icons/transportation';
-import ThemeText from '../../../components/text';
-import ThemeIcon from '../../../components/theme-icon';
-import {TripPattern} from '../../../sdk';
-import {StyleSheet} from '../../../theme';
-import {TripDetailsTexts, useTranslation} from '../../../translations';
-import {secondsToDuration} from '../../../utils/date';
 
 const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
   const styles = useStyle();

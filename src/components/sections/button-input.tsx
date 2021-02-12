@@ -1,7 +1,7 @@
 import React from 'react';
 import {AccessibilityProps, TouchableOpacity, View} from 'react-native';
-import {StyleSheet} from '../../theme';
-import insets from '../../utils/insets';
+import {StyleSheet} from '@atb/theme';
+import insets from '@atb/utils/insets';
 import ThemeText from '../text';
 import NavigationIcon, {
   isNavigationIcon,

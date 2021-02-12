@@ -5,12 +5,9 @@ import {
   WebViewNavigation,
   WebViewNavigationEvent,
 } from 'react-native-webview/lib/WebViewTypes';
-import {reserveOffers} from '../../../../../api';
-import {
-  ReserveOffer,
-  TicketReservation,
-} from '../../../../../api/fareContracts';
-import {ErrorType, getAxiosErrorType} from '../../../../../api/utils';
+import {reserveOffers} from '@atb/api';
+import {ReserveOffer, TicketReservation} from '@atb/api/fareContracts';
+import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {parse as parseURL} from 'search-params';
 import {AxiosError} from 'axios';
 

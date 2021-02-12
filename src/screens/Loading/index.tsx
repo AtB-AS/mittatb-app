@@ -1,7 +1,7 @@
 import React from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import ThemeText from '../../components/text';
-import {StyleSheet, useTheme} from '../../theme';
+import ThemeText from '@atb/components/text';
+import {StyleSheet, useTheme} from '@atb/theme';
 
 const Loading: React.FC<{text?: string}> = ({text}) => {
   const {theme} = useTheme();

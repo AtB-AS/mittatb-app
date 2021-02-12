@@ -1,8 +1,8 @@
 import React from 'react';
 import {AccessibilityProps, Switch, TouchableOpacity, View} from 'react-native';
-import {Confirm} from '../../assets/svg/icons/actions';
-import {StyleSheet, Theme} from '../../theme';
-import {SectionTexts, useTranslation} from '../../translations';
+import {Confirm} from '@atb/assets/svg/icons/actions';
+import {StyleSheet, Theme} from '@atb/theme';
+import {SectionTexts, useTranslation} from '@atb/translations';
 import ThemeText from '../text';
 import ThemeIcon from '../theme-icon';
 import NavigationIcon from '../theme-icon/navigation-icon';

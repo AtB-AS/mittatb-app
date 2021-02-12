@@ -1,3 +1,21 @@
+import {ErrorType} from '@atb/api/utils';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {TextInput} from '@atb/components/sections';
+import ThemeText from '@atb/components/text';
+import {Location} from '@atb/favorites/types';
+import {useGeocoder} from '@atb/geocoder';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import MessageBox from '@atb/message-box';
+import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
+import {TariffZone} from '@atb/reference-data/types';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {StyleSheet} from '@atb/theme';
+import {
+  TariffZoneSearchTexts,
+  TranslateFunction,
+  useTranslation,
+} from '@atb/translations';
+import useDebounce from '@atb/utils/useDebounce';
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
@@ -7,27 +25,9 @@ import {
   View,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {TextInput} from '../../../../../components/sections';
-import ThemeText from '../../../../../components/text';
-import MessageBox from '../../../../../message-box';
-import FullScreenHeader from '../../../../../components/screen-header/full-header';
-import {StyleSheet} from '../../../../../theme';
-import TariffZoneResults from './TariffZoneResults';
-import {
-  TariffZoneSearchTexts,
-  TranslateFunction,
-  useTranslation,
-} from '../../../../../translations';
-import useDebounce from '../../../../../utils/useDebounce';
-import {useGeolocationState} from '../../../../../GeolocationContext';
-import {useGeocoder} from '../../../../../geocoder';
-import VenueResults, {LocationAndTariffZone} from './VenueResults';
-import {Location} from '../../../../../favorites/types';
-import {ErrorType} from '../../../../../api/utils';
-import {useRemoteConfig} from '../../../../../RemoteConfigContext';
-import {TariffZone} from '../../../../../reference-data/types';
-import {DismissableStackNavigationProp} from '../../../../../navigation/createDismissableStackNavigator';
 import {TicketingStackParams} from '../../index';
+import TariffZoneResults from './TariffZoneResults';
+import VenueResults, {LocationAndTariffZone} from './VenueResults';
 
 type TariffZonesSearchName = 'TariffZones';
 

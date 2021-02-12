@@ -1,5 +1,5 @@
+import colors from '@atb/theme/colors';
 import {ViewStyle} from 'react-native';
-import colors from '../../theme/colors';
 
 const shadows: ViewStyle = {
   shadowColor: colors.text.black,

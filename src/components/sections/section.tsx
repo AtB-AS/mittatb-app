@@ -1,6 +1,6 @@
 import React, {PropsWithChildren} from 'react';
 import {View, ViewStyle} from 'react-native';
-import {StyleSheet, Theme} from '../../theme';
+import {StyleSheet, Theme} from '@atb/theme';
 import {ContainerSizingType, SectionItemProps} from './section-utils';
 
 export type SectionProps = PropsWithChildren<{

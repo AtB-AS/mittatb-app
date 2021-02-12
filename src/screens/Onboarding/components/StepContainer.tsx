@@ -1,6 +1,6 @@
 import React from 'react';
 import {SafeAreaView, View} from 'react-native';
-import {StyleSheet} from '../../../theme';
+import {StyleSheet} from '@atb/theme';
 import {ScrollView} from 'react-native-gesture-handler';
 const StepOuterContainer: React.FC = ({children}) => {
   const styles = useStyles();

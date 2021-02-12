@@ -1,20 +1,24 @@
-import * as React from 'react';
-import {StyleSheet, useTheme} from '../../theme';
-import {Portal} from 'react-native-portalize';
-import {Modalize} from 'react-native-modalize';
-import {View, TouchableOpacity, AccessibilityProperties} from 'react-native';
-import {useState, useRef, useEffect} from 'react';
-import DatePicker from 'react-native-date-picker';
-import Button from '../../components/button';
-import {Close} from '../../assets/svg/icons/actions';
-import {formatToClock, formatToLongDateTime} from '../../utils/date';
+import {Close} from '@atb/assets/svg/icons/actions';
+import {screenReaderPause} from '@atb/components/accessible-text';
+import Button from '@atb/components/button';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {
+  DateInputTexts,
+  Language,
+  TranslatedString,
+  useTranslation,
+} from '@atb/translations';
+import {formatToClock, formatToLongDateTime} from '@atb/utils/date';
+import insets from '@atb/utils/insets';
 import subDays from 'date-fns/subDays';
-import insets from '../../utils/insets';
-import {screenReaderPause} from '../../components/accessible-text';
-import ThemeIcon from '../../components/theme-icon';
-import ThemeText from '../../components/text';
-import {useTranslation, TranslatedString, Language} from '../../translations';
-import {DateInputTexts} from '../../translations';
+import * as React from 'react';
+import {useEffect, useRef, useState} from 'react';
+import {AccessibilityProperties, TouchableOpacity, View} from 'react-native';
+import DatePicker from 'react-native-date-picker';
+import {Modalize} from 'react-native-modalize';
+import {Portal} from 'react-native-portalize';
 
 type DateTypesWithoutNow = 'departure' | 'arrival';
 type DateTypes = DateTypesWithoutNow | 'now';

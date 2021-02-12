@@ -7,13 +7,13 @@ import {
   PlaneSide,
   FerrySide,
   WalkingPerson,
-} from '../../assets/svg/icons/transportation';
-import {LegMode, TransportSubmode, TransportMode} from '../../sdk';
-import {StyleSheet} from '../../theme';
+} from '@atb/assets/svg/icons/transportation';
+import {LegMode, TransportSubmode, TransportMode} from '@atb/sdk';
+import {StyleSheet} from '@atb/theme';
 import {SvgProps} from 'react-native-svg';
-import {useTranslation} from '../../translations';
-import {getTranslatedModeName} from '../../utils/transportation-names';
-import {transportationColor} from '../../utils/transportation-color';
+import {useTranslation} from '@atb/translations';
+import {getTranslatedModeName} from '@atb/utils/transportation-names';
+import {transportationColor} from '@atb/utils/transportation-color';
 
 export type TransportationIconProps = {
   mode?: LegMode | TransportMode;

@@ -1,13 +1,10 @@
+import {FareContract, FareContractLifecycleState} from '@atb/api/fareContracts';
+import * as Sections from '@atb/components/sections';
+import {TicketTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {
-  FareContract,
-  FareContractLifecycleState,
-} from '../../../api/fareContracts';
-import * as Sections from '../../../components/sections';
+import TicketInfo from './TicketInfo';
 import ValidityHeader from './ValidityHeader';
 import ValidityLine from './ValidityLine';
-import {TicketTexts, useTranslation} from '../../../translations';
-import TicketInfo from './TicketInfo';
 type Props = {
   fareContract: FareContract;
   now: number;

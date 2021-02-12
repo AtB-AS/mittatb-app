@@ -1,7 +1,7 @@
 import React from 'react';
 import {PropsWithChildren} from 'react';
 import {View} from 'react-native';
-import {StyleSheet, Theme} from '../../theme';
+import {StyleSheet, Theme} from '@atb/theme';
 
 type ButtonGroupProps = PropsWithChildren<{}>;
 

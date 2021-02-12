@@ -1,25 +1,24 @@
-import React, {useEffect, useState} from 'react';
-import {Linking, TouchableOpacity, View} from 'react-native';
-import {PRIVACY_POLICY_URL} from '@env';
-import {useAppState} from '../../AppContext';
+import {useAppState} from '@atb/AppContext';
 import {
-  Onboarding2,
   Onboarding1,
+  Onboarding2,
   Onboarding3,
-} from '../../assets/svg/illustrations/';
-import {useGeolocationState} from '../../GeolocationContext';
-import {StyleSheet} from '../../theme';
+} from '@atb/assets/svg/illustrations';
+import ThemeText from '@atb/components/text';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import {StyleSheet} from '@atb/theme';
+import {OnboardingTexts, useTranslation} from '@atb/translations';
+import {PRIVACY_POLICY_URL} from '@env';
 import {
   createStackNavigator,
   StackNavigationProp,
   TransitionPresets,
 } from '@react-navigation/stack';
-import StepOuterContainer from './components/StepContainer';
+import React, {useEffect, useState} from 'react';
+import {Linking, TouchableOpacity, View} from 'react-native';
 import Illustration from './components/Illustration';
 import NavigationControls from './components/NavigationControls';
-import ThemeText from '../../components/text';
-import {useTranslation} from '../../translations/';
-import {OnboardingTexts} from '../../translations';
+import StepOuterContainer from './components/StepContainer';
 
 type StepProps = {
   navigation: StackNavigationProp<OnboardingStackParams>;

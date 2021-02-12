@@ -1,11 +1,11 @@
 import React from 'react';
 import {AccessibilityProps, ActivityIndicator} from 'react-native';
-import {LocationWithMetadata} from '../../favorites/types';
-import {useTheme} from '../../theme';
+import {LocationWithMetadata} from '@atb/favorites/types';
+import {useTheme} from '@atb/theme';
 import {screenReaderPause} from '../accessible-text';
 import ButtonInput, {ButtonInputProps} from './button-input';
-import {SectionTexts} from '../../translations';
-import {useTranslation} from '../../translations';
+import {SectionTexts} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 
 type LocationInputProps = Omit<ButtonInputProps, 'value'> & {
   location?: LocationWithMetadata;

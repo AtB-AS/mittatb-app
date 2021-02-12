@@ -1,12 +1,12 @@
+import {QuayGroup, StopPlaceInfo} from '@atb/api/departures/types';
+import {Section} from '@atb/components/sections';
+import {Location} from '@atb/sdk';
+import {useTheme} from '@atb/theme';
+import {NearbyTexts, useTranslation} from '@atb/translations';
 import haversineDistance from 'haversine-distance';
 import sortBy from 'lodash.sortby';
 import React, {Fragment, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
-import {QuayGroup, StopPlaceInfo} from '../../../api/departures/types';
-import {Section} from '../../../components/sections';
-import {Location} from '../../../sdk';
-import {useTheme} from '../../../theme';
-import {NearbyTexts, useTranslation} from '../../../translations';
 import {hasNoGroupsWithDepartures, isValidDeparture} from '../utils';
 import LineItem from './line';
 import MoreItem from './more';

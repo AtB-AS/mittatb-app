@@ -105,6 +105,7 @@
     "@typescript-eslint/parser": "^4.14.2",
     "app-icon": "^0.13.2",
     "babel-jest": "^26.6.3",
+    "babel-plugin-module-resolver": "^4.1.0",
     "conventional-changelog-cli": "^2.1.1",
     "detox": "^18.2.2",
     "eslint": "^7.19.0",

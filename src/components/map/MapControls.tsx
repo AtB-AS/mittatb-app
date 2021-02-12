@@ -1,10 +1,10 @@
+import {Add, Remove} from '@atb/assets/svg/icons/actions';
+import {StyleSheet} from '@atb/theme';
+import {MapTexts, useTranslation} from '@atb/translations/';
 import React from 'react';
-import {View, TouchableOpacity} from 'react-native';
-import {Add, Remove} from '../../assets/svg/icons/actions';
-import {StyleSheet} from '../../theme';
-import shadows from './shadows';
+import {TouchableOpacity, View} from 'react-native';
 import ThemeIcon from '../theme-icon';
-import {useTranslation, MapTexts} from '../../translations/';
+import shadows from './shadows';
 export type Props = {
   zoomIn(): void;
   zoomOut(): void;

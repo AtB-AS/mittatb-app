@@ -5,10 +5,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Edit} from '../../assets/svg/icons/actions';
-import {FavoriteIcon} from '../../favorites';
-import {StoredLocationFavorite} from '../../favorites/types';
-import {StyleSheet} from '../../theme';
+import {Edit} from '@atb/assets/svg/icons/actions';
+import {FavoriteIcon} from '@atb/favorites';
+import {StoredLocationFavorite} from '@atb/favorites/types';
+import {StyleSheet} from '@atb/theme';
 import {screenReaderPause} from '../accessible-text';
 import ThemeText from '../text';
 import ThemeIcon from '../theme-icon';

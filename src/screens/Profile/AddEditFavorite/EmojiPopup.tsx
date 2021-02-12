@@ -4,25 +4,25 @@
  * Modifications: Copyright (c) 2020 Andre 'Staltz' Medeiros
  * MIT
  */
-import React, {useRef, useEffect, forwardRef, useState} from 'react';
-import {
-  TouchableOpacity,
-  View,
-  Platform,
-  ViewStyle,
-  TextStyle,
-  Dimensions,
-  ScaledSize,
-} from 'react-native';
+import ThemeText from '@atb/components/text';
+import {StyleSheet} from '@atb/theme';
+import composeRefs from '@seznam/compose-react-refs';
 import emoji from 'emoji-datasource';
 import groupBy from 'lodash.groupby';
-import orderBy from 'lodash.orderby';
 import mapValues from 'lodash.mapvalues';
+import orderBy from 'lodash.orderby';
+import React, {forwardRef, useEffect, useRef, useState} from 'react';
+import {
+  Dimensions,
+  Platform,
+  ScaledSize,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import {Modalize} from 'react-native-modalize';
 import {Portal} from 'react-native-portalize';
-import composeRefs from '@seznam/compose-react-refs';
-import {StyleSheet} from '../../../theme';
-import ThemeText from '../../../components/text';
 
 // Polyfill for Android
 require('string.fromcodepoint');

@@ -1,18 +1,18 @@
+import * as Sections from '@atb/components/sections';
+import ThemeText from '@atb/components/text';
+import {RootStackParamList} from '@atb/navigation';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {TicketsTexts, useTranslation} from '@atb/translations';
+import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import hexToRgba from 'hex-to-rgba';
 import React from 'react';
 import {RefreshControl, TouchableOpacity, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
-import {StyleSheet, useTheme} from '../../../theme';
 import LinearGradient from 'react-native-linear-gradient';
-import hexToRgba from 'hex-to-rgba';
-import ThemeText from '../../../components/text';
-import useRecentTickets, {RecentTicket} from './use-recent-tickets';
-import * as Sections from '../../../components/sections';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../navigation';
 import {TicketingStackParams} from '../Purchase';
 import {TicketInfoView} from '../Ticket/TicketInfo';
-import {TicketsTexts, useTranslation} from '../../../translations';
+import useRecentTickets, {RecentTicket} from './use-recent-tickets';
 
 type NavigationProp = CompositeNavigationProp<
   StackNavigationProp<TicketingStackParams>,

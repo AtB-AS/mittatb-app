@@ -1,16 +1,16 @@
-import React from 'react';
-import {View, RefreshControl} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {FareContract} from '@atb/api/fareContracts';
+import ThemeText from '@atb/components/text';
+import {RootStackParamList} from '@atb/navigation';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {ActiveReservation} from '@atb/TicketContext';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {FareContract} from '../../../api/fareContracts';
-import {StyleSheet, useTheme} from '../../../theme';
+import hexToRgba from 'hex-to-rgba';
+import React from 'react';
+import {RefreshControl, View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import SimpleTicket from '../Ticket';
-import hexToRgba from 'hex-to-rgba';
-import ThemeText from '../../../components/text';
-import {ActiveReservation} from '../../../TicketContext';
 import TicketReservation from './TicketReservation';
-import {RootStackParamList} from '../../../navigation';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, TextProps} from 'react-native';
-import {TextColors, TextNames} from '../../theme/colors';
-import {useTheme} from '../../theme';
+import {TextColors, TextNames} from '@atb/theme/colors';
+import {useTheme} from '@atb/theme';
 
 export const MAX_FONT_SCALE = 2;
 

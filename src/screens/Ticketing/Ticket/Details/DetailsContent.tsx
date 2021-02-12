@@ -1,20 +1,17 @@
+import {FareContract, FareContractLifecycleState} from '@atb/api/fareContracts';
+import * as Sections from '@atb/components/sections';
+import ThemeText from '@atb/components/text';
+import {StyleSheet} from '@atb/theme';
+import {TicketTexts, useTranslation} from '@atb/translations';
+import {formatToLongDateTime} from '@atb/utils/date';
+import {fromUnixTime} from 'date-fns';
+import qrcode from 'qrcode';
 import React, {useEffect, useState} from 'react';
-import {
-  FareContract,
-  FareContractLifecycleState,
-} from '../../../../api/fareContracts';
-import ThemeText from '../../../../components/text';
-import * as Sections from '../../../../components/sections';
+import {View} from 'react-native';
+import {SvgXml} from 'react-native-svg';
+import TicketInfo from '../TicketInfo';
 import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
-import {formatToLongDateTime} from '../../../../utils/date';
-import {fromUnixTime} from 'date-fns';
-import {TicketTexts, useTranslation} from '../../../../translations';
-import TicketInfo from '../TicketInfo';
-import qrcode from 'qrcode';
-import {SvgXml} from 'react-native-svg';
-import {View} from 'react-native';
-import {StyleSheet} from '../../../../theme';
 
 type Props = {
   fareContract: FareContract;

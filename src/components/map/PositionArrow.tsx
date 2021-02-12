@@ -1,10 +1,10 @@
+import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
+import {StyleSheet} from '@atb/theme';
+import insets from '@atb/utils/insets';
 import React from 'react';
-import {CurrentLocationArrow} from '../../assets/svg/icons/places';
-import {StyleSheet} from '../../theme';
-import insets from '../../utils/insets';
+import {AccessibilityProps} from 'react-native';
 import Button from '../button';
 import shadows from './shadows';
-import {AccessibilityProps} from 'react-native';
 
 const PositionArrow: React.FC<
   {flyToCurrentLocation(): void} & AccessibilityProps

@@ -1,4 +1,4 @@
-import {Situation, TransportMode, TransportSubmode} from '../../sdk';
+import {Situation, TransportMode, TransportSubmode} from '@atb/sdk';
 
 type Notice = {text?: string};
 

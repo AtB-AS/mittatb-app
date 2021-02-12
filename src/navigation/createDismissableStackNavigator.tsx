@@ -1,20 +1,18 @@
-import * as React from 'react';
 import {
-  useNavigationBuilder,
   createNavigatorFactory,
-  StackRouter,
   DefaultNavigatorOptions,
-  StackRouterOptions,
   DefaultRouterOptions,
   ParamListBase,
-  useRoute,
-  useNavigation,
+  StackRouter,
+  StackRouterOptions,
+  useNavigationBuilder,
 } from '@react-navigation/native';
 import {
   StackNavigationOptions,
   StackNavigationProp,
   StackView,
 } from '@react-navigation/stack';
+import * as React from 'react';
 
 export type DismissableStackNavigationProp<
   ParamList extends ParamListBase,

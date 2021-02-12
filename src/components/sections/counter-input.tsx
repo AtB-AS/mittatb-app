@@ -2,11 +2,11 @@ import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import ThemeText from '../text';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
-import insets from '../../utils/insets';
+import insets from '@atb/utils/insets';
 import ThemeIcon from '../theme-icon';
-import {Add, Remove} from '../../assets/svg/icons/actions';
-import {StyleSheet} from '../../theme';
-import {SectionTexts, useTranslation} from '../../translations';
+import {Add, Remove} from '@atb/assets/svg/icons/actions';
+import {StyleSheet} from '@atb/theme';
+import {SectionTexts, useTranslation} from '@atb/translations';
 
 export type CounterInputProps = SectionItem<{
   text: string;

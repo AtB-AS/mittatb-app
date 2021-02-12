@@ -1,21 +1,21 @@
+import SvgProfile from '@atb/assets/svg/icons/tab-bar/Profile';
+import Button from '@atb/components/button';
+import Header from '@atb/components/screen-header';
+import * as Sections from '@atb/components/sections';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
+import {getReferenceDataName} from '@atb/reference-data/utils';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {TravellersTexts, useTranslation} from '@atb/translations';
+import {RouteProp} from '@react-navigation/native';
 import React from 'react';
 import {View} from 'react-native';
-import {RouteProp} from '@react-navigation/native';
-import {TicketingStackParams} from '../';
-import Header from '../../../../components/screen-header';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {StyleSheet, useTheme} from '../../../../theme';
-import useUserCountState from './use-user-count-state';
-import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
-import * as Sections from '../../../../components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
-import {TravellersTexts, useTranslation} from '../../../../translations';
-import Button from '../../../../components/button';
-import {getReferenceDataName} from '../../../../reference-data/utils';
-import ThemeText from '../../../../components/text';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {TicketingStackParams} from '../';
 import {createTravellersText} from '../Overview';
-import ThemeIcon from '../../../../components/theme-icon';
-import SvgProfile from '../../../../assets/svg/icons/tab-bar/Profile';
+import useUserCountState from './use-user-count-state';
 
 export type TravellersProps = {
   navigation: DismissableStackNavigationProp<

@@ -1,26 +1,26 @@
-import React, {useMemo, useRef} from 'react';
-import MapboxGL from '@react-native-mapbox-gl/maps';
-import {StyleSheet, View} from 'react-native';
-import {useGeolocationState} from '../../../GeolocationContext';
-import {RouteProp} from '@react-navigation/native';
-import {DetailsStackParams} from '..';
-import {createMapLines, getMapBounds, legsToMapLines, pointOf} from './utils';
-import MapRoute from './MapRoute';
-import MapLabel from './MapLabel';
 import {
-  MapViewConfig,
+  BackArrow,
   MapCameraConfig,
   MapControls,
+  MapViewConfig,
   PositionArrow,
-  BackArrow,
   useControlPositionsStyle,
-} from '../../../components/map';
-import {Leg, MapLeg} from '../../../sdk';
+} from '@atb/components/map';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import {MapLeg} from '@atb/sdk';
+import {MapTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
-import {useTranslation, MapTexts} from '../../../translations';
-import {DetailScreenNavigationProp} from '../Details';
 import {Coordinates} from '@entur/sdk';
+import MapboxGL from '@react-native-mapbox-gl/maps';
+import {RouteProp} from '@react-navigation/native';
 import {Position} from 'geojson';
+import React, {useMemo, useRef} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {DetailsStackParams} from '..';
+import {DetailScreenNavigationProp} from '../Details';
+import MapLabel from './MapLabel';
+import MapRoute from './MapRoute';
+import {createMapLines, getMapBounds, pointOf} from './utils';
 
 export type MapDetailRouteParams = {
   legs: MapLeg[];

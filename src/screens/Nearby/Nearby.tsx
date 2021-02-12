@@ -1,34 +1,34 @@
-import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useEffect, useMemo, useState} from 'react';
-import {View} from 'react-native';
-import {NearbyStackParams} from '.';
-import {ErrorType} from '../../api/utils';
-import {CurrentLocationArrow} from '../../assets/svg/icons/places';
+import {ErrorType} from '@atb/api/utils';
+import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
 import AccessibleText, {
   screenReaderPause,
-} from '../../components/accessible-text';
-import SimpleDisappearingHeader from '../../components/disappearing-header/simple';
-import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
-import {ActionItem, LocationInput, Section} from '../../components/sections';
-import ThemeIcon from '../../components/theme-icon';
-import FavoriteChips from '../../favorite-chips';
-import {Location, LocationWithMetadata} from '../../favorites/types';
-import {useReverseGeocoder} from '../../geocoder';
+} from '@atb/components/accessible-text';
+import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
+import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import {ActionItem, LocationInput, Section} from '@atb/components/sections';
+import ThemeIcon from '@atb/components/theme-icon';
+import FavoriteChips from '@atb/favorite-chips';
+import {Location, LocationWithMetadata} from '@atb/favorites/types';
+import {useReverseGeocoder} from '@atb/geocoder';
 import {
   RequestPermissionFn,
   useGeolocationState,
-} from '../../GeolocationContext';
-import {useLocationSearchValue} from '../../location-search';
-import {RootStackParamList} from '../../navigation';
-import {StyleSheet, useTheme} from '../../theme';
+} from '@atb/GeolocationContext';
+import {useLocationSearchValue} from '@atb/location-search';
+import {RootStackParamList} from '@atb/navigation';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   AssistantTexts,
   dictionary,
   NearbyTexts,
   TranslatedString,
   useTranslation,
-} from '../../translations/';
+} from '@atb/translations/';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import React, {useEffect, useMemo, useState} from 'react';
+import {View} from 'react-native';
+import {NearbyStackParams} from '.';
 import Loading from '../Loading';
 import NearbyResults from './NearbyResults';
 import {useDepartureData} from './state';

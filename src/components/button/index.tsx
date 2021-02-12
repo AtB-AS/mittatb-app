@@ -9,7 +9,7 @@ import {
   Easing,
 } from 'react-native';
 import React, {useRef} from 'react';
-import {StyleSheet, Theme, useTheme} from '../../theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import ThemeText from '../text';
 
 export {default as ButtonGroup} from './group';

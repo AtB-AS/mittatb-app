@@ -8,18 +8,18 @@ import useReducerWithSideEffects, {
   Update,
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
-import {getDepartureGroups, getRealtimeDeparture} from '../../api/departures';
+import {getDepartureGroups, getRealtimeDeparture} from '@atb/api/departures';
 import {
   DepartureGroupMetadata,
   DepartureGroupsQuery,
   getNextDepartureGroups,
-} from '../../api/departures/departure-group';
-import {ErrorType, getAxiosErrorType} from '../../api/utils';
-import {useFavorites} from '../../favorites';
-import {Location, UserFavoriteDepartures} from '../../favorites/types';
-import {DeparturesRealtimeData} from '../../sdk';
-import {differenceInMinutesStrings} from '../../utils/date';
-import useInterval from '../../utils/use-interval';
+} from '@atb/api/departures/departure-group';
+import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
+import {useFavorites} from '@atb/favorites';
+import {Location, UserFavoriteDepartures} from '@atb/favorites/types';
+import {DeparturesRealtimeData} from '@atb/sdk';
+import {differenceInMinutesStrings} from '@atb/utils/date';
+import useInterval from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from './utils';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;

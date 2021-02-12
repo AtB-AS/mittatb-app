@@ -1,11 +1,11 @@
 import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {ActionItem, Section} from '../../../components/sections';
-import {usePreferences} from '../../../preferences';
-import {StyleSheet, Theme} from '../../../theme';
-import {useTranslation, AppearanceSettingsTexts} from '../../../translations';
-import ScreenHeader from '../../../components/screen-header';
+import {ActionItem, Section} from '@atb/components/sections';
+import {usePreferences} from '@atb/preferences';
+import {StyleSheet, Theme} from '@atb/theme';
+import {useTranslation, AppearanceSettingsTexts} from '@atb/translations';
+import ScreenHeader from '@atb/components/screen-header';
 
 export default function Appearance() {
   const {

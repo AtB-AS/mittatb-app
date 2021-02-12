@@ -1,34 +1,28 @@
-import React, {useState} from 'react';
+import {ReserveOffer, TicketReservation} from '@atb/api/fareContracts';
+import {ErrorType} from '@atb/api/utils';
+import Button from '@atb/components/button';
+import Header from '@atb/components/screen-header';
+import MessageBox from '@atb/message-box';
+import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
+import {StyleSheet} from '@atb/theme';
+import {useTicketState} from '@atb/TicketContext';
+import {PaymentCreditCardTexts, useTranslation} from '@atb/translations';
+import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
-import {TicketingStackParams} from '../..';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import Header from '../../../../../components/screen-header';
-import {DismissableStackNavigationProp} from '../../../../../navigation/createDismissableStackNavigator';
-import Processing from '../Processing';
+import React, {useState} from 'react';
 import {View} from 'react-native';
-import useTerminalState, {
-  ErrorContext,
-  LoadingState,
-} from './use-terminal-state';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import WebView from 'react-native-webview';
-import MessageBox from '../../../../../message-box';
-import {useTicketState} from '../../../../../TicketContext';
-import {StyleSheet} from '../../../../../theme';
-import {ErrorType} from '../../../../../api/utils';
-import Button from '../../../../../components/button';
-import {
-  ReserveOffer,
-  TicketReservation,
-} from '../../../../../api/fareContracts';
-import {
-  PaymentCreditCardTexts,
-  useTranslation,
-} from '../../../../../translations';
+import {TicketingStackParams} from '../..';
 import {
   ActiveTicketsScreenName,
   TicketTabsNavigatorParams,
 } from '../../../Tickets';
-import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
+import Processing from '../Processing';
+import useTerminalState, {
+  ErrorContext,
+  LoadingState,
+} from './use-terminal-state';
 
 type NavigationProp = CompositeNavigationProp<
   MaterialTopTabNavigationProp<TicketTabsNavigatorParams>,
