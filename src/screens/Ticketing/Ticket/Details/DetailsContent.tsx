@@ -1,9 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {
-  FareContractState,
-  FareContract,
-  isPreactivatedTicket,
-} from '../../../../api/fareContracts';
 import ThemeText from '../../../../components/text';
 import * as Sections from '../../../../components/sections';
 import ValidityHeader from '../ValidityHeader';
@@ -16,6 +11,11 @@ import qrcode from 'qrcode';
 import {SvgXml} from 'react-native-svg';
 import {View} from 'react-native';
 import {StyleSheet} from '../../../../theme';
+import {
+  FareContract,
+  FareContractState,
+  isPreactivatedTicket,
+} from '../../../../tickets';
 
 type Props = {
   fareContract: FareContract;
@@ -116,7 +116,7 @@ const useQrCode = (fc: FareContract) => {
   useEffect(() => {
     (async function () {
       if (!fc?.qrCode) return;
-      const svg = await qrcode.toString(fc.qrCode.toBase64(), {
+      const svg = await qrcode.toString(fc.qrCode, {
         type: 'svg',
       });
 

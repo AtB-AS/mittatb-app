@@ -4,7 +4,7 @@ import Header from '../../../../components/screen-header';
 import {StyleSheet} from '../../../../theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useInterval from '../../../../utils/use-interval';
-import {useTicketState} from '../../../../TicketContext';
+import {useTicketState} from '../../../../tickets';
 import {ScrollView} from 'react-native';
 import DetailsContent from './DetailsContent';
 import {TicketModalNavigationProp, TicketModalStackParams} from '.';

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RouteProp} from '@react-navigation/native';
-import {sendReceipt} from '../../../../api/fareContracts';
+import {sendReceipt} from '../../../../tickets';
 import {StyleSheet} from '../../../../theme';
 import * as Sections from '../../../../components/sections';
 import Header from '../../../../components/screen-header';

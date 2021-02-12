@@ -5,11 +5,11 @@ import {
   WebViewNavigation,
   WebViewNavigationEvent,
 } from 'react-native-webview/lib/WebViewTypes';
-import {reserveOffers} from '../../../../../api';
 import {
   ReserveOffer,
+  reserveOffers,
   TicketReservation,
-} from '../../../../../api/fareContracts';
+} from '../../../../../tickets';
 import {ErrorType, getAxiosErrorType} from '../../../../../api/utils';
 import {parse as parseURL} from 'search-params';
 import {AxiosError} from 'axios';
@@ -89,7 +89,7 @@ const initialState: TerminalReducerState = {
 export default function useTerminalState(
   offers: ReserveOffer[],
   cancelTerminal: () => void,
-  activatePolling: (
+  addReservation: (
     reservation: TicketReservation,
     offers: ReserveOffer[],
   ) => void,
@@ -176,7 +176,7 @@ export default function useTerminalState(
       case 'OK':
         if (!reservation) return;
 
-        activatePolling(reservation, offers);
+        addReservation(reservation, offers);
         break;
       case 'Cancel':
         cancelTerminal();

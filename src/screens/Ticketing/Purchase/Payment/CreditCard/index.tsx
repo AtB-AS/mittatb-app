@@ -12,14 +12,11 @@ import useTerminalState, {
 } from './use-terminal-state';
 import WebView from 'react-native-webview';
 import MessageBox from '../../../../../message-box';
-import {useTicketState} from '../../../../../TicketContext';
+import {useTicketState} from '../../../../../tickets';
 import {StyleSheet} from '../../../../../theme';
 import {ErrorType} from '../../../../../api/utils';
 import Button from '../../../../../components/button';
-import {
-  ReserveOffer,
-  TicketReservation,
-} from '../../../../../api/fareContracts';
+import {ReserveOffer, TicketReservation} from '../../../../../tickets';
 import {
   PaymentCreditCardTexts,
   useTranslation,
@@ -54,7 +51,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const cancelTerminal = () => navigation.pop();
 
   const {addReservation} = useTicketState();
-  const dismissAndActivatePolling = (
+  const dismissAndAddReservation = (
     reservation: TicketReservation,
     reservationOffers: ReserveOffer[],
   ) => {
@@ -72,7 +69,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     onWebViewLoadEnd,
     error,
     restartTerminal,
-  } = useTerminalState(offers, cancelTerminal, dismissAndActivatePolling);
+  } = useTerminalState(offers, cancelTerminal, dismissAndAddReservation);
 
   return (
     <SafeAreaView style={styles.container}>

@@ -1,4 +1,3 @@
-import {PreactivatedTicket} from '../../../api/fareContracts';
 import ThemeText from '../../../components/text';
 import {TicketTexts, useTranslation} from '../../../translations';
 import React from 'react';
@@ -15,6 +14,7 @@ import {
 } from '../../../reference-data/utils';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
 import {StyleSheet} from '../../../theme';
+import {PreactivatedTicket} from '../../../tickets';
 
 const TicketInfo = ({travelRights}: {travelRights: PreactivatedTicket[]}) => {
   const {

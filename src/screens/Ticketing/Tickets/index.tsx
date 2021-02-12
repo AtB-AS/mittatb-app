@@ -7,7 +7,7 @@ import {StyleSheet} from '../../../theme';
 import TabBar from './TabBar';
 import {ActiveTickets, BuyTickets, ExpiredTickets} from './Tabs';
 import {TicketsTexts, useTranslation} from '../../../translations';
-import {useTicketState} from '../../../TicketContext';
+import {useTicketState} from '../../../tickets';
 
 export const BuyTicketsScreenName = 'BuyTickets';
 export const ActiveTicketsScreenName = 'ActiveTickets';

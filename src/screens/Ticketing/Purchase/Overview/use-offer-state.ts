@@ -1,7 +1,7 @@
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useMemo, useReducer} from 'react';
-import {CancelToken as CancelTokenStatic, searchOffers} from '../../../../api';
-import {Offer, OfferPrice} from '../../../../api/fareContracts';
+import {CancelToken as CancelTokenStatic} from '../../../../api';
+import {Offer, OfferPrice, searchOffers} from '../../../../tickets';
 import {ErrorType, getAxiosErrorType} from '../../../../api/utils';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import {

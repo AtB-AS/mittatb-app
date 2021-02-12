@@ -6,16 +6,13 @@ import {TicketingStackParams} from '../..';
 import {DismissableStackNavigationProp} from '../../../../../navigation/createDismissableStackNavigator';
 import Header from '../../../../../components/screen-header';
 import {StyleSheet} from '../../../../../theme';
-import {useTicketState} from '../../../../../TicketContext';
+import {useTicketState} from '../../../../../tickets';
 import Button from '../../../../../components/button';
 import useVippsState, {ErrorContext, State} from './use-vipps-state';
 import Processing from '../Processing';
 import MessageBox from '../../../../../message-box';
 import {ErrorType} from '../../../../../api/utils';
-import {
-  ReserveOffer,
-  TicketReservation,
-} from '../../../../../api/fareContracts';
+import {ReserveOffer, TicketReservation} from '../../../../../tickets';
 import {PaymentVippsTexts, useTranslation} from '../../../../../translations';
 import {
   ActiveTicketsScreenName,

@@ -10,7 +10,7 @@ import trackAppState from './diagnostics/trackAppState';
 import ThemeContextProvider from './theme/ThemeContext';
 import FavoritesContextProvider from './favorites/FavoritesContext';
 import SearchHistoryContextProvider from './search-history';
-import TicketContextProvider from './TicketContext';
+import {TicketContextProvider} from './tickets';
 import RemoteConfigContextProvider from './RemoteConfigContext';
 import {AuthContextProvider} from './auth';
 import {loadLocalConfig} from './local-config';

@@ -3,7 +3,7 @@ import {View, TouchableOpacity, Linking, ActivityIndicator} from 'react-native';
 import {StyleSheet, useTheme} from '../../../theme';
 import {BlankTicket} from '../../../assets/svg/icons/ticketing';
 import ThemeText from '../../../components/text';
-import {ActiveReservation} from '../../../TicketContext';
+import {ActiveReservation} from '../../../tickets';
 import ThemeIcon from '../../../components/theme-icon';
 import Button from '../../../components/button';
 import {TicketsTexts, useTranslation} from '../../../translations';

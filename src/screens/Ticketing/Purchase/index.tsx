@@ -8,7 +8,7 @@ import ProductScreen from './Product';
 import {CreditCard as CreditCardScreen, Vipps as VippsScreen} from './Payment';
 import createDismissableStackNavigator from '../../../navigation/createDismissableStackNavigator';
 import {BuyTicketsScreenName} from '../Tickets';
-import {ReserveOffer} from '../../../api/fareContracts';
+import {ReserveOffer} from '../../../tickets';
 import {RouteProp} from '@react-navigation/native';
 import TariffZones, {
   TariffZoneWithMetadata,

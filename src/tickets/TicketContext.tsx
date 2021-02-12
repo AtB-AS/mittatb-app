@@ -5,19 +5,13 @@ import React, {
   useEffect,
   useReducer,
 } from 'react';
-import {
-  FareContract,
-  getPayment,
-  PaymentStatus,
-  PaymentType,
-  ReserveOffer,
-  TicketReservation,
-} from './api/fareContracts';
-import useInterval from './utils/use-interval';
+import useInterval from '../utils/use-interval';
 import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
-import {useAuthState} from './auth';
+import {useAuthState} from '../auth';
+import {ActiveReservation, FareContract, PaymentStatus} from './types';
+import {getPayment} from './api';
 
 type TicketReducerState = {
   fareContracts: FareContract[];
@@ -90,13 +84,6 @@ const ticketReducer: TicketReducer = (
       };
     }
   }
-};
-
-export type ActiveReservation = {
-  reservation: TicketReservation;
-  offers: ReserveOffer[];
-  paymentType: PaymentType;
-  paymentStatus?: PaymentStatus;
 };
 
 type TicketState = {

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {useTicketState} from '../../../TicketContext';
+import {useTicketState} from '../../../tickets';
 import {StyleSheet, useTheme} from '../../../theme';
 import useInterval from '../../../utils/use-interval';
 import TicketsScrollView from './TicketsScrollView';

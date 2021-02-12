@@ -1,15 +1,16 @@
 import React from 'react';
-import {
-  FareContractState,
-  FareContract,
-  isPreactivatedTicket,
-} from '../../../api/fareContracts';
 import * as Sections from '../../../components/sections';
 import ValidityHeader from './ValidityHeader';
 import ValidityLine from './ValidityLine';
 import {TicketTexts, useTranslation} from '../../../translations';
 import TicketInfo from './TicketInfo';
 import ThemeText from '../../../components/text';
+import {
+  FareContract,
+  FareContractState,
+  isPreactivatedTicket,
+} from '../../../tickets';
+
 type Props = {
   fareContract: FareContract;
   now: number;
