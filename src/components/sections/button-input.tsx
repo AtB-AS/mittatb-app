@@ -3,11 +3,11 @@ import {AccessibilityProps, TouchableOpacity, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import insets from '@atb/utils/insets';
 import ThemeText from '@atb/components/text';
-import {
-  NavigationIcon,
+import NavigationIcon, {
   isNavigationIcon,
   NavigationIconTypes,
-} from '@atb/components/theme-icon';
+} from '@atb/components/theme-icon/navigation-icon';
+
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 
 export type ButtonInputProps = SectionItem<{
