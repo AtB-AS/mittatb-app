@@ -16,7 +16,10 @@ type ErrorProps = {
   errorCode?: string;
 };
 
-const ErrorView: React.FC<ErrorProps> = ({onRestartApp, errorCode}) => {
+export default function FullScreenErrorView({
+  onRestartApp,
+  errorCode,
+}: ErrorProps) {
   const styles = useStyles();
   const buildNumber = getBuildNumber();
   const config = useLocalConfig();
@@ -56,7 +59,7 @@ const ErrorView: React.FC<ErrorProps> = ({onRestartApp, errorCode}) => {
       </View>
     </SafeAreaView>
   );
-};
+}
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   safearea: {
@@ -83,5 +86,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginVertical: 24,
   },
 }));
-
-export default ErrorView;

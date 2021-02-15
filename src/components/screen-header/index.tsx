@@ -115,7 +115,12 @@ const useHeaderLayouts = () => {
       return false;
     }
 
-    const widestButtonWidth = Math.max(leftButton.width, rightButton.height);
+    const leftButtonVisibleWidth = leftButton.height ? leftButton.width : 0;
+    const rightButtonVisibleWidth = rightButton.height ? rightButton.width : 0;
+    const widestButtonWidth = Math.max(
+      leftButtonVisibleWidth,
+      rightButtonVisibleWidth,
+    );
     const buttonsAndTitleWidth = title.width + widestButtonWidth * 2;
     const containerWidth = container.width;
     return buttonsAndTitleWidth > containerWidth - 10;

@@ -1794,18 +1794,33 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-7.6.10.tgz#1c8cd7b31cebed53aeacd177bb01fead5f733738"
   integrity sha512-Qok1s8oY1Gy3VHcCUSKK2oFc8ExghyKhf/KIjI/3gDVW6WDCB9eTGw/QmI5+br6nhZTKhWAgGfnToEQweJ24ig==
 
-"@react-native-firebase/app@^8.4.5":
-  version "8.4.7"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-8.4.7.tgz#7393ba7af36bd815bd5af7c64a20b0dd8a7e3341"
-  integrity sha512-jN788Q17aMOHc49wKc74RC3iZNhFoS+yTZhMBHFVyytf64uK3ofYAk3hjvukkylUTKF0Ni/L+04M0IDv8kStKg==
+"@react-native-firebase/app@10.5.0":
+  version "10.5.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-10.5.0.tgz#aa46cd3a62d2117914a6f81ffea0d1b3b9ef15c6"
+  integrity sha512-pEINud4A90RlwfTcE51m/5cOEGI4jiSi5Q4jsQ5UGGlsYqtbOw4Ja7b17x19o2OViJEQVjScpq4pH2bq9vie7Q==
   dependencies:
     opencollective-postinstall "^2.0.1"
     superstruct "^0.6.2"
 
-"@react-native-firebase/remote-config@^9.0.10":
-  version "9.0.12"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/remote-config/-/remote-config-9.0.12.tgz#72c0f5ed80be32f7444cb75e68ea10a284afa39e"
-  integrity sha512-Dipr/6l+bnhTwp1AXiIIN7hM4rSjAO/rBdQVtMsha4AWVsFhxA8zsxI5nwekfIutQB89XOS+H+u8lrBo+w1Q+Q==
+"@react-native-firebase/auth@10.5.1":
+  version "10.5.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/auth/-/auth-10.5.1.tgz#fb44d4aaa60e99aa782c0644ac291c5963f92d89"
+  integrity sha512-CPqTYQ0fMHGST663I9fW43Yj7uA7w0nNxXQtFxr4oBCs4ykWzy89mqLeiBSMtWufkrrPE0nFoTdJ1YJiQchOxg==
+
+"@react-native-firebase/firestore@10.5.1":
+  version "10.5.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-10.5.1.tgz#ecf047a38e20838297e2ab307b0769f1ca114c33"
+  integrity sha512-c51AynnkAm1ErnKKY5nIBFHUERkxD7nQE5G7zBo8t7T0P8YBofErxCjT7QTttILiyE/gFpAHsIsaX5a+CHCYDA==
+
+"@react-native-firebase/messaging@10.5.1":
+  version "10.5.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-10.5.1.tgz#f4b833f6ff6a7c234e790bae1f01289ac08199d8"
+  integrity sha512-cpx87M3vaR34vUYEFdpsFQk0/A29225tD5lqqvKW+l/u8FHD9KHyjm+XoEenV2eCayF8IxkmO9PQKsufgg4FHQ==
+
+"@react-native-firebase/remote-config@10.5.1":
+  version "10.5.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/remote-config/-/remote-config-10.5.1.tgz#01daa59a5d78fea7eaec933928b972dcd5290e99"
+  integrity sha512-6kI1OpGUZ45EM5h2GTN27Qg7mKWFcXKIVsCkcTUuatSAju8L1snGWFOXeSuMpRw2yWrdczwh/2c8TNl3qFXzyg==
 
 "@react-native-mapbox-gl/maps@8.1.0":
   version "8.1.0"

@@ -3,7 +3,7 @@ import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {ActiveReservation} from '@atb/TicketContext';
+import {ActiveReservation} from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';

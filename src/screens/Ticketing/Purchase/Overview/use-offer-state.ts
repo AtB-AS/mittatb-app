@@ -1,10 +1,10 @@
+import {CancelToken as CancelTokenStatic} from '@atb/api';
+import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
+import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
+import {Offer, OfferPrice, searchOffers} from '@atb/tickets';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useMemo, useReducer} from 'react';
-import {CancelToken as CancelTokenStatic, searchOffers} from '@atb/api';
-import {Offer, OfferPrice} from '@atb/api/fareContracts';
-import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
-import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: Offer;

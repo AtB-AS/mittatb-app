@@ -1,11 +1,10 @@
-import {ReserveOffer, TicketReservation} from '@atb/api/fareContracts';
 import {ErrorType} from '@atb/api/utils';
 import Button from '@atb/components/button';
 import Header from '@atb/components/screen-header';
 import MessageBox from '@atb/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {StyleSheet} from '@atb/theme';
-import {useTicketState} from '@atb/TicketContext';
+import {ReserveOffer, TicketReservation, useTicketState} from '@atb/tickets';
 import {PaymentCreditCardTexts, useTranslation} from '@atb/translations';
 import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
@@ -47,12 +46,12 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
 
   const cancelTerminal = () => navigation.pop();
 
-  const {activatePollingForNewTickets} = useTicketState();
-  const dismissAndActivatePolling = (
+  const {addReservation} = useTicketState();
+  const dismissAndAddReservation = (
     reservation: TicketReservation,
     reservationOffers: ReserveOffer[],
   ) => {
-    activatePollingForNewTickets({
+    addReservation({
       reservation,
       offers: reservationOffers,
       paymentType: 'creditcard',
@@ -66,7 +65,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     onWebViewLoadEnd,
     error,
     restartTerminal,
-  } = useTerminalState(offers, cancelTerminal, dismissAndActivatePolling);
+  } = useTerminalState(offers, cancelTerminal, dismissAndAddReservation);
 
   return (
     <SafeAreaView style={styles.container}>

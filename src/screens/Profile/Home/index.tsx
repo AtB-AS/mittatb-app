@@ -1,3 +1,4 @@
+import {useAuthState} from '@atb/auth';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
 import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
@@ -30,6 +31,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   const {enable_i18n} = useRemoteConfig();
   const style = useProfileHomeStyle();
   const {t} = useTranslation();
+  const {signInAnonymously, signOut, user} = useAuthState();
 
   return (
     <View style={style.container}>
@@ -93,6 +95,22 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             }
           />
         </Sections.Section>
+
+        {__DEV__ && (
+          <Sections.Section withPadding>
+            <Sections.HeaderItem text="Bruker" mode="subheading" />
+            <Sections.LinkItem
+              text="Logg ut"
+              onPress={() => signOut()}
+              disabled={!user}
+            />
+            <Sections.LinkItem
+              text="Logg inn"
+              onPress={() => signInAnonymously()}
+              disabled={!!user}
+            />
+          </Sections.Section>
+        )}
       </ScrollView>
     </View>
   );

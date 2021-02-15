@@ -1,6 +1,6 @@
 import Header from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
-import {useTicketState} from '@atb/TicketContext';
+import {useTicketState} from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import React, {useMemo} from 'react';

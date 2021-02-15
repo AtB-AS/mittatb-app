@@ -1,4 +1,3 @@
-import {FareContract, FareContractTraveller} from '@atb/api/fareContracts';
 import ThemeText from '@atb/components/text';
 import {
   PreassignedFareProduct,
@@ -11,21 +10,23 @@ import {
 } from '@atb/reference-data/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet} from '@atb/theme';
+import {PreactivatedTicket} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
 
-const TicketInfo = ({fareContract: fc}: {fareContract: FareContract}) => {
+const TicketInfo = ({travelRights}: {travelRights: PreactivatedTicket[]}) => {
   const {
     tariff_zones: tariffZones,
     preassigned_fare_products: preassignedFareProducts,
     user_profiles: userProfiles,
   } = useRemoteConfig();
 
-  const {fare_product_ref: productRef, tariff_zone_refs} = fc.travellers[0];
-  const [firstZone] = tariff_zone_refs;
-  const [lastZone] = tariff_zone_refs.slice(-1);
+  const firstTravelRight = travelRights[0];
+  const {fareProductRef: productRef, tariffZoneRefs} = firstTravelRight;
+  const [firstZone] = tariffZoneRefs;
+  const [lastZone] = tariffZoneRefs.slice(-1);
 
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
@@ -35,7 +36,7 @@ const TicketInfo = ({fareContract: fc}: {fareContract: FareContract}) => {
   const toTariffZone = findReferenceDataById(tariffZones, lastZone);
 
   const userProfilesWithCount = mapToUserProfilesWithCount(
-    fc.travellers,
+    travelRights.map((tr) => tr.userProfileRef),
     userProfiles,
   );
 
@@ -97,28 +98,28 @@ export const TicketInfoView = ({
 };
 
 const mapToUserProfilesWithCount = (
-  travellers: FareContractTraveller[],
+  userProfileRefs: string[],
   userProfiles: UserProfile[],
 ): UserProfileWithCount[] =>
-  travellers
-    .reduce((groupedById, t) => {
+  userProfileRefs
+    .reduce((groupedById, userProfileRef) => {
       const existing = groupedById.find(
-        (r) => r.userProfileId === t.user_profile_ref,
+        (r) => r.userProfileRef === userProfileRef,
       );
       if (existing) {
         existing.count += 1;
         return groupedById;
       }
-      return [...groupedById, {userProfileId: t.user_profile_ref, count: 1}];
-    }, [] as {userProfileId: string; count: number}[])
-    .map((idAndCount) => {
+      return [...groupedById, {userProfileRef, count: 1}];
+    }, [] as {userProfileRef: string; count: number}[])
+    .map((refAndCount) => {
       const userProfile = findReferenceDataById(
         userProfiles,
-        idAndCount.userProfileId,
+        refAndCount.userProfileRef,
       );
       return {
         ...userProfile,
-        count: idAndCount.count,
+        count: refAndCount.count,
       };
     })
     .filter(

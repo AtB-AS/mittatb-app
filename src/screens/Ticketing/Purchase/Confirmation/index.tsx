@@ -1,4 +1,3 @@
-import {ReserveOffer} from '@atb/api/fareContracts';
 import {CreditCard, Vipps} from '@atb/assets/svg/icons/ticketing';
 import Button from '@atb/components/button';
 import Header, {LeftButtonProps} from '@atb/components/screen-header';
@@ -10,6 +9,7 @@ import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
+import {ReserveOffer} from '@atb/tickets';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
 import {addMinutes} from 'date-fns';

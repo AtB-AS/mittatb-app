@@ -1,8 +1,4 @@
 import {
-  listRecentFareContracts,
-  RecentFareContract,
-} from '@atb/api/fareContracts';
-import {
   PreassignedFareProduct,
   TariffZone,
   UserProfile,
@@ -12,6 +8,7 @@ import {
   RemoteConfigContextState,
   useRemoteConfig,
 } from '@atb/RemoteConfigContext';
+import {listRecentFareContracts, RecentFareContract} from '@atb/tickets';
 import {useEffect, useMemo, useReducer} from 'react';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
 

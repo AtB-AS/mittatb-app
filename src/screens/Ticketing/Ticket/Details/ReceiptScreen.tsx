@@ -1,9 +1,9 @@
-import {sendReceipt} from '@atb/api/fareContracts';
 import Button from '@atb/components/button';
 import Header from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import MessageBox, {MessageBoxProps} from '@atb/message-box';
 import {StyleSheet} from '@atb/theme';
+import {sendReceipt} from '@atb/tickets';
 import {
   TicketTexts,
   TranslateFunction,
