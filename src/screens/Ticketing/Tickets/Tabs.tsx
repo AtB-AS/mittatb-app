@@ -24,10 +24,12 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
   const {must_upgrade_ticketing, enable_recent_tickets} = useRemoteConfig();
-  const {isInitialized, abtCustomerId} = useAuthState();
+  const {abtCustomerId} = useAuthState();
   const {t} = useTranslation();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
+
+  const isSignedInAsAbtCustomer = !!abtCustomerId;
 
   return (
     <View style={styles.container}>
@@ -36,7 +38,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
       ) : (
         <View style={{flex: 1}} />
       )}
-      {isInitialized && !!abtCustomerId && (
+      {isSignedInAsAbtCustomer && (
         <View style={{padding: theme.spacings.medium}}>
           <Button
             mode="primary"
