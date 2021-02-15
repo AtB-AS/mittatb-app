@@ -5,8 +5,8 @@ import {useNavigateToStartScreen} from '@atb/utils/navigation';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {AccessibilityProps, TouchableOpacity} from 'react-native';
-import ThemeText from '../text';
-import ThemeIcon from '../theme-icon';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
 import LogoOutline from './LogoOutline';
 
 export type ButtonModes = 'back' | 'cancel' | 'close' | 'home' | 'chat';

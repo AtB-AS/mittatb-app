@@ -10,7 +10,7 @@ import {Location} from '@atb/favorites/types';
 import {FeatureCategory} from '@atb/sdk';
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
-import ThemeIcon from '../theme-icon';
+import ThemeIcon from '@atb/components/theme-icon';
 
 const LocationIcon = ({
   location,

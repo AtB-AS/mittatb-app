@@ -3,7 +3,7 @@ import {StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations/';
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import ThemeIcon from '../theme-icon';
+import ThemeIcon from '@atb/components/theme-icon';
 import shadows from './shadows';
 export type Props = {
   zoomIn(): void;

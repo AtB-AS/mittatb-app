@@ -11,8 +11,8 @@ import {
 import {Close} from '@atb/assets/svg/icons/actions';
 import {StyleSheet, useTheme} from '@atb/theme';
 import insets from '@atb/utils/insets';
-import ThemeText, {MAX_FONT_SCALE} from '../text';
-import ThemeIcon from '../theme-icon';
+import ThemeText, {MAX_FONT_SCALE} from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
 import {SectionItem, useSectionItem} from './section-utils';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;

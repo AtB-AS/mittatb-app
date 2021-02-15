@@ -21,8 +21,10 @@ import {
   useSafeAreaFrame,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import {LeftButtonProps} from '../screen-header';
-import AnimatedScreenHeader from '../screen-header/animated-header';
+import {
+  LeftButtonProps,
+  AnimatedScreenHeader,
+} from '@atb/components/screen-header';
 
 type Props = {
   renderHeader(

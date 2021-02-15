@@ -1,7 +1,7 @@
 import React from 'react';
 import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
 import {FavoriteIcon} from '@atb/favorites';
-import LocationIcon from '../location-icon';
+import LocationIcon from '@atb/components/location-icon';
 import {useFavorites} from '@atb/favorites/FavoritesContext';
 import {LocationWithMetadata} from '@atb/favorites/types';
 

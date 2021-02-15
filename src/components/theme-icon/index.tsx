@@ -2,6 +2,9 @@ import {SvgProps} from 'react-native-svg';
 import {useTheme} from '@atb/theme';
 import {TextColors, iconSizes} from '@atb/theme/colors';
 
+export * from './navigation-icon';
+export {default as NavigationIcon} from './navigation-icon';
+
 type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
   colorType?: TextColors;

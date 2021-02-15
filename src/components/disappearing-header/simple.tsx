@@ -13,8 +13,10 @@ import {
   View,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {LeftButtonProps} from '../screen-header';
-import AnimatedScreenHeader from '../screen-header/animated-header';
+import {
+  LeftButtonProps,
+  AnimatedScreenHeader,
+} from '@atb/components/screen-header';
 
 type Props = {
   header: React.ReactNode;

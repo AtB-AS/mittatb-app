@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import React, {useRef} from 'react';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import ThemeText from '../text';
+import ThemeText from '@atb/components/text';
 
 export {default as ButtonGroup} from './group';
 

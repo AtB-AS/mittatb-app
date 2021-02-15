@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import ThemeText from '../text';
+import ThemeText from '@atb/components/text';
 import {useSectionItem, SectionItem, useSectionStyle} from './section-utils';
 
 export type HeaderItemProps = SectionItem<{

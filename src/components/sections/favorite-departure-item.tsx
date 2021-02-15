@@ -11,8 +11,8 @@ import {StoredFavoriteDeparture} from '@atb/favorites/types';
 import {useTheme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {screenReaderPause} from '../accessible-text';
-import ThemeText from '../text';
-import TransportationIcon from '../transportation-icon';
+import ThemeText from '@atb/components/text';
+import TransportationIcon from '@atb/components/transportation-icon';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 
 type BaseProps = {
