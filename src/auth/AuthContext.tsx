@@ -7,10 +7,10 @@ import React, {
   useReducer,
 } from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {usePreferences} from '../preferences';
+import {useTranslation} from '../translations';
 
 type AuthReducerState = {
-  isInitialized: boolean;
+  isAuthConnectionInitialized: boolean;
   abtCustomerId: string | undefined;
   user: FirebaseAuthTypes.User | null;
 };
@@ -32,7 +32,7 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
     case 'SET_USER': {
       return {
         ...prevState,
-        isInitialized: true,
+        isAuthConnectionInitialized: true,
         user: action.user,
       };
     }
@@ -46,7 +46,7 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
 };
 
 const initialReducerState: AuthReducerState = {
-  isInitialized: false,
+  isAuthConnectionInitialized: false,
   abtCustomerId: undefined,
   user: null,
 };
@@ -62,9 +62,7 @@ const AuthContext = createContext<AuthContextState | undefined>(undefined);
 
 export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
   const [state, dispatch] = useReducer(authReducer, initialReducerState);
-  const {
-    preferences: {language},
-  } = usePreferences();
+  const {language} = useTranslation();
 
   useEffect(() => {
     if (language) auth().setLanguageCode(language);
@@ -90,6 +88,9 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
     [state.user],
   );
 
+  // ABT customer is generated asynchronously after
+  // Firebase-user is signed in the first time
+  // Trying three times to retrieve the user
   const syncAbtCustomer = useCallback(
     async function () {
       async function sync(retries: number = 0): Promise<string | undefined> {
@@ -109,6 +110,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
     [getAbtCustomerId],
   );
 
+  // Subscribe to user changes. Will fire a onChangeEvent immediately on subscription.
   useEffect(() => {
     const subscriber = auth().onUserChanged(onUserChanged);
     return subscriber;
@@ -122,11 +124,12 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
     await auth().signOut();
   }, []);
 
+  // Sign in if the onChangeEvent fired immediately on subscription did not include user data. (in other words, user was not previously signed in)
   useEffect(() => {
-    if (state.isInitialized && !state.user) {
+    if (state.isAuthConnectionInitialized && !state.user) {
       signInAnonymously();
     }
-  }, [state.isInitialized]);
+  }, [state.isAuthConnectionInitialized]);
 
   const updateEmail = useCallback(
     async function (email: string) {
