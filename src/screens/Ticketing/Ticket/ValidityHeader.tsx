@@ -26,7 +26,7 @@ const ValidityHeader: React.FC<{
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
         <ValidityIcon isValid={isValid} />
-        <ThemeText type="lead" color="faded">
+        <ThemeText style={styles.validityText} type="lead" color="faded">
           {validityTimeText(
             isNotExpired,
             now,
@@ -50,9 +50,10 @@ function validityTimeText(
   language: Language,
 ) {
   const validityDifferenceSeconds = Math.abs(validTo - now) / 1000;
-  const delimiter = t(TicketTexts.validityHeader.durationDelimiter);
+  const conjunction = t(TicketTexts.validityHeader.durationDelimiter);
   const duration = secondsToDuration(validityDifferenceSeconds, language, {
-    delimiter,
+    conjunction,
+    serialComma: false,
   });
 
   if (isRefunded) {
@@ -90,6 +91,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacings.medium,
     marginHorizontal: -theme.spacings.medium,
     flexDirection: 'row',
+  },
+  validityText: {
+    flex: 1,
   },
 }));
 

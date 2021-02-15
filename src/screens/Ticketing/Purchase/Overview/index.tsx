@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo} from 'react';
-import {SafeAreaView, View} from 'react-native';
+import {View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
 import Header from '../../../../components/screen-header';
@@ -21,6 +21,10 @@ import {
 import {useRemoteConfig} from '../../../../RemoteConfigContext';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import {getReferenceDataName} from '../../../../reference-data/utils';
+import {TariffZone} from '../../../../reference-data/types';
+import {useGeolocationState} from '../../../../GeolocationContext';
+import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -57,13 +61,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const userProfilesWithCount =
     params.userProfilesWithCount ?? defaultUserProfilesWithCount;
 
-  const defaultTariffZone: TariffZoneWithMetadata = useMemo(
-    () => ({
-      ...tariffZones[0],
-      resultType: 'zone',
-    }),
-    [tariffZones],
-  );
+  const defaultTariffZone = useDefaultTariffZone(tariffZones);
   const {
     fromTariffZone = defaultTariffZone,
     toTariffZone = defaultTariffZone,
@@ -174,13 +172,15 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   );
 };
 
-const createTravellersText = (
+export const createTravellersText = (
   userProfilesWithCount: UserProfileWithCount[],
   t: TranslateFunction,
   language: Language,
 ) => {
   const chosenUserProfiles = userProfilesWithCount.filter((u) => u.count);
-  if (chosenUserProfiles.length > 2) {
+  if (chosenUserProfiles.length === 0) {
+    return t(PurchaseOverviewTexts.travellers.noTravellers);
+  } else if (chosenUserProfiles.length > 2) {
     const totalCount = chosenUserProfiles.reduce(
       (total, u) => total + u.count,
       0,
@@ -191,6 +191,31 @@ const createTravellersText = (
       .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
       .join(', ');
   }
+};
+
+/**
+ * Get the default tariff zone, either based on current location or else the
+ * first tariff zone in the provided tariff zones list.
+ */
+const useDefaultTariffZone = (
+  tariffZones: TariffZone[],
+): TariffZoneWithMetadata => {
+  const {location} = useGeolocationState();
+  const tariffZoneFromLocation = useMemo(() => {
+    if (location) {
+      const {longitude, latitude} = location.coords;
+      return tariffZones.find((t) =>
+        turfBooleanPointInPolygon([longitude, latitude], t.geometry),
+      );
+    }
+  }, [tariffZones, location]);
+  return useMemo<TariffZoneWithMetadata>(
+    () =>
+      tariffZoneFromLocation
+        ? {...tariffZoneFromLocation, resultType: 'geolocation'}
+        : {...tariffZones[0], resultType: 'zone'},
+    [tariffZones, tariffZoneFromLocation],
+  );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

@@ -13,6 +13,7 @@ const PurchaseOverviewTexts = {
   },
   startTime: _('Oppstart nå', 'Starting now'),
   travellers: {
+    noTravellers: _(`Ingen reisende`, `No travellers`),
     travellersCount: (count: number) =>
       _(`${count} reisende`, `${count} travellers`),
     a11yHint: _(

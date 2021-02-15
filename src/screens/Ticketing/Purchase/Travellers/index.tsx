@@ -12,6 +12,10 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {TravellersTexts, useTranslation} from '../../../../translations';
 import Button from '../../../../components/button';
 import {getReferenceDataName} from '../../../../reference-data/utils';
+import ThemeText from '../../../../components/text';
+import {createTravellersText} from '../Overview';
+import ThemeIcon from '../../../../components/theme-icon';
+import SvgProfile from '../../../../assets/svg/icons/tab-bar/Profile';
 
 export type TravellersProps = {
   navigation: DismissableStackNavigationProp<
@@ -43,6 +47,18 @@ const Travellers: React.FC<TravellersProps> = ({
       />
 
       <ScrollView style={styles.travellerCounters}>
+        <View style={styles.summarySection}>
+          <Sections.Section>
+            <Sections.GenericItem>
+              <View style={styles.summaryItem}>
+                <ThemeIcon style={styles.summaryIcon} svg={SvgProfile} />
+                <ThemeText>
+                  {createTravellersText(userProfilesWithCount, t, language)}
+                </ThemeText>
+              </View>
+            </Sections.GenericItem>
+          </Sections.Section>
+        </View>
         <Sections.Section>
           {userProfilesWithCount.map((u) => (
             <Sections.CounterInput
@@ -87,6 +103,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   travellerCounters: {
     margin: theme.spacings.medium,
+  },
+  summarySection: {
+    marginBottom: theme.spacings.medium,
+  },
+  summaryItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  summaryIcon: {
+    marginRight: theme.spacings.medium,
   },
   saveButton: {
     marginHorizontal: theme.spacings.medium,

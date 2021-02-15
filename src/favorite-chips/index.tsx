@@ -28,9 +28,7 @@ type Props = {
 
 export type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
 
-type ProfileNearbyScreenNavigationProp = StackNavigationProp<
-  RootStackParamList
->;
+type ProfileNearbyScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
   containerStyle,

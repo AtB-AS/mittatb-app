@@ -11,6 +11,7 @@ import NavigationIcon, {
   NavigationIconTypes,
 } from '../theme-icon/navigation-icon';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
+import {StyleSheet} from '../../theme';
 
 export type LinkItemProps = SectionItem<{
   text: string;
@@ -31,9 +32,10 @@ export default function LinkItem({
 }: LinkItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
   const style = useSectionStyle();
+  const linkItemStyle = useStyles();
   const iconEl =
     isNavigationIcon(icon) || !icon ? <NavigationIcon mode={icon} /> : icon;
-  const disabledStyle = disabled ? {opacity: 0.2} : undefined;
+  const disabledStyle = disabled ? linkItemStyle.disabled : undefined;
   return (
     <TouchableOpacity
       accessible
@@ -45,7 +47,7 @@ export default function LinkItem({
       {...accessibility}
     >
       <View style={[style.spaceBetween, contentContainer, disabledStyle]}>
-        <ThemeText>{text}</ThemeText>
+        <ThemeText style={linkItemStyle.text}>{text}</ThemeText>
         {iconEl}
       </View>
       {subtitle && (
@@ -56,3 +58,8 @@ export default function LinkItem({
     </TouchableOpacity>
   );
 }
+
+const useStyles = StyleSheet.createThemeHook(() => ({
+  disabled: {opacity: 0.2},
+  text: {flex: 1},
+}));

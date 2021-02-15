@@ -13,7 +13,7 @@ target 'atb' do
   pod "Intercom"
   
   permissions_path = '../node_modules/react-native-permissions/ios'
-  pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse.podspec"
+  pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
 
   target 'atbTests' do
     inherit! :search_paths

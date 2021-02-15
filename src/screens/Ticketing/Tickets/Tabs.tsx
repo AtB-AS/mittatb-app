@@ -14,9 +14,7 @@ import {useAuthState} from '../../../auth';
 import ThemeText from '../../../components/text';
 import RecentTicketsScrollView from './RecentTicketsScrollView';
 
-export type TicketingScreenNavigationProp = StackNavigationProp<
-  RootStackParamList
->;
+export type TicketingScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
 type Props = {
   navigation: TicketingScreenNavigationProp;
