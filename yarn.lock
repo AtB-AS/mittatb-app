@@ -1789,38 +1789,38 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.10.tgz#5dda643e19e587793bc2034dd9bf7398ad43d401"
   integrity sha512-rk4sWFsmtOw8oyx8SD3KSvawwaK7gRBSEIy2TAwURyGt+3TizssXP1r8nx3zY+R7v2vYYHXZ+k2/GULAT/bcaQ==
 
-"@react-native-firebase/analytics@^7.6.7":
-  version "7.6.10"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-7.6.10.tgz#1c8cd7b31cebed53aeacd177bb01fead5f733738"
-  integrity sha512-Qok1s8oY1Gy3VHcCUSKK2oFc8ExghyKhf/KIjI/3gDVW6WDCB9eTGw/QmI5+br6nhZTKhWAgGfnToEQweJ24ig==
+"@react-native-firebase/analytics@10.1.0":
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-10.1.0.tgz#8b503f08051ff3cf730ad83d418a307ffd32f11c"
+  integrity sha512-upTGcw5wl47lIeyhjsKFlXuJz2Fg7BbuAcgwq+FJ9sqkTJxDPRW/aHACsd9+WAs/UiwcGEpcT8gzgkvoJp68dg==
 
-"@react-native-firebase/app@10.5.0":
-  version "10.5.0"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-10.5.0.tgz#aa46cd3a62d2117914a6f81ffea0d1b3b9ef15c6"
-  integrity sha512-pEINud4A90RlwfTcE51m/5cOEGI4jiSi5Q4jsQ5UGGlsYqtbOw4Ja7b17x19o2OViJEQVjScpq4pH2bq9vie7Q==
+"@react-native-firebase/app@10.1.0":
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-10.1.0.tgz#4242933c52b4b753ba48216092c0447677118342"
+  integrity sha512-O8IxJU0K3mmmxaz2EZW+BuC08agr3m2eybxBq+SkcJri1fv95qVsNabABWPS7h4uSHQ5m1qHCtQJnvbnHwMrvA==
   dependencies:
     opencollective-postinstall "^2.0.1"
     superstruct "^0.6.2"
 
-"@react-native-firebase/auth@10.5.1":
-  version "10.5.1"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/auth/-/auth-10.5.1.tgz#fb44d4aaa60e99aa782c0644ac291c5963f92d89"
-  integrity sha512-CPqTYQ0fMHGST663I9fW43Yj7uA7w0nNxXQtFxr4oBCs4ykWzy89mqLeiBSMtWufkrrPE0nFoTdJ1YJiQchOxg==
+"@react-native-firebase/auth@10.1.0":
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/auth/-/auth-10.1.0.tgz#95584a428b52bef4850ff8ba47f8fb23e4e1e71d"
+  integrity sha512-Oeftl0x22NjnvnpK9iyQC/zVZ5blbSI4iQ0emmj17w1IMvWpJ0Z4bpe5p1RlXRDqAFdP7/y3MXx6VEoakcupkw==
 
-"@react-native-firebase/firestore@10.5.1":
-  version "10.5.1"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-10.5.1.tgz#ecf047a38e20838297e2ab307b0769f1ca114c33"
-  integrity sha512-c51AynnkAm1ErnKKY5nIBFHUERkxD7nQE5G7zBo8t7T0P8YBofErxCjT7QTttILiyE/gFpAHsIsaX5a+CHCYDA==
+"@react-native-firebase/firestore@10.1.0":
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-10.1.0.tgz#ee18d1e8b1153490470255db50711a526cfb386c"
+  integrity sha512-RIpSZZjeH9JLCI6rwNpC5SIsFprGvWXp3mtUNW2UzyYpi38+wB4Scuer9Kb456hMr6joJhma2wI9ypWv2r5oUg==
 
-"@react-native-firebase/messaging@10.5.1":
-  version "10.5.1"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-10.5.1.tgz#f4b833f6ff6a7c234e790bae1f01289ac08199d8"
-  integrity sha512-cpx87M3vaR34vUYEFdpsFQk0/A29225tD5lqqvKW+l/u8FHD9KHyjm+XoEenV2eCayF8IxkmO9PQKsufgg4FHQ==
+"@react-native-firebase/messaging@10.1.0":
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-10.1.0.tgz#adbeaae52db5c2aea2f61a98490bd107dd444e97"
+  integrity sha512-g8lDlkxcA/0AXtfx79DQiELtvX9z81mskxEA0wJLEd1QetP1sQsvIvoMzHIsj8Zzj3+Gn0Hz+qFcz/pJJ8ceRQ==
 
-"@react-native-firebase/remote-config@10.5.1":
-  version "10.5.1"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/remote-config/-/remote-config-10.5.1.tgz#01daa59a5d78fea7eaec933928b972dcd5290e99"
-  integrity sha512-6kI1OpGUZ45EM5h2GTN27Qg7mKWFcXKIVsCkcTUuatSAju8L1snGWFOXeSuMpRw2yWrdczwh/2c8TNl3qFXzyg==
+"@react-native-firebase/remote-config@10.1.0":
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/remote-config/-/remote-config-10.1.0.tgz#f99da58e7723956b54b5b0df5785adc3d3b55a09"
+  integrity sha512-FOzNw3QCZGfAh3UpYAm2o0GIS8Rw/MYbJlKKb4gxcRcM08xHFS6h/mmhQKaE7FBDtUyJng0pM0rTv4YupsMI2g==
 
 "@react-native-mapbox-gl/maps@8.1.0":
   version "8.1.0"
