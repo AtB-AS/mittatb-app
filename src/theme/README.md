@@ -24,7 +24,7 @@ useStyle(StyleSheet): StyleSheet
 
 ```tsx
 // Referring to themes and set theme
-import {useTheme} from '.';
+import {useTheme} from '@atb/theme';
 
 function MyComponent() {
   const {theme, updateTheme, toggleTheme} = useTheme();
@@ -42,7 +42,7 @@ function MyComponent() {
 NB: Use custom StyleSheet.create as specified in the API section
 
 ```tsx
-import {useStyle} from '.';
+import {useStyle} from '@atb/theme';
 
 export default function MyComponent() {
   const css = useStyle(style);
@@ -70,7 +70,7 @@ const style = StyleSheet.createTheme((theme: Theme) => ({
 Optionally shorthand API for using the `useStyle` is if you use `StyleSheet.createThemeHook` function:
 
 ```tsx
-import {StyleSheet} from './theme';
+import {StyleSheet} from '@atb/theme';
 
 export default function MyComponent() {
   const styles = useThemeStyles();

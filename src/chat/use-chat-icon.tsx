@@ -1,12 +1,12 @@
+import {Chat, ChatUnread} from '@atb/assets/svg/icons/actions';
+import {IconButton} from '@atb/components/screen-header/HeaderButton';
+import ThemeIcon from '@atb/components/theme-icon';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
 import Intercom from 'react-native-intercom';
-import {Chat, ChatUnread} from '../assets/svg/icons/actions';
 import useChatUnreadCount from './use-chat-unread-count';
-import {useRemoteConfig} from '../RemoteConfigContext';
-import {StyleSheet} from '../theme';
-import ThemeIcon from '../components/theme-icon';
-import {IconButton} from '../components/screen-header/HeaderButton';
 
 export default function useChatIcon(): IconButton | undefined {
   const config = useRemoteConfig();

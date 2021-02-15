@@ -7,7 +7,7 @@ import {RouteProp} from '@react-navigation/native';
 import {useState} from 'react';
 import {ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {TicketModalNavigationProp, TicketModalStackParams} from '.';
+import {TicketModalNavigationProp, TicketModalStackParams} from './index';
 import DetailsContent from './DetailsContent';
 
 export type TicketDetailsRouteParams = {

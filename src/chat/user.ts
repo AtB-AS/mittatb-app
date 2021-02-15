@@ -1,8 +1,8 @@
 import Intercom from 'react-native-intercom';
 import {Dimensions, PixelRatio, Platform} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import storage from '../storage';
-import {checkGeolocationPermission} from '../GeolocationContext';
+import storage from '@atb/storage';
+import {checkGeolocationPermission} from '@atb/GeolocationContext';
 import {updateMetadata} from './metadata';
 
 export async function register() {
