@@ -63,5 +63,12 @@ const TicketsTexts = {
     },
     goToVipps: _('Gå til Vipps for betaling', 'Go to Vipps for payment'),
   },
+  scrollView: {
+    errorLoadingTicket: (orderId: string) =>
+      _(
+        `Noe gikk feil når vi prøvde å laste inn billett med ordre-id ${orderId}`,
+        `Something went wrong when we tried to load ticket with order id ${orderId}`,
+      ),
+  },
 };
 export default TicketsTexts;

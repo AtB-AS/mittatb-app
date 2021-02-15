@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {useTicketState} from '../../../TicketContext';
+import {useTicketState} from '../../../tickets';
 import {StyleSheet, useTheme} from '../../../theme';
 import useInterval from '../../../utils/use-interval';
 import TicketsScrollView from './TicketsScrollView';
@@ -10,6 +10,8 @@ import {TicketsTexts, useTranslation} from '../../../translations';
 import Button from '../../../components/button';
 import {useRemoteConfig} from '../../../RemoteConfigContext';
 import UpgradeSplash from './UpgradeSplash';
+import {useAuthState} from '../../../auth';
+import ThemeText from '../../../components/text';
 import RecentTicketsScrollView from './RecentTicketsScrollView';
 
 export type TicketingScreenNavigationProp = StackNavigationProp<RootStackParamList>;
@@ -22,9 +24,12 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
   const {must_upgrade_ticketing, enable_recent_tickets} = useRemoteConfig();
+  const {abtCustomerId} = useAuthState();
   const {t} = useTranslation();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
+
+  const isSignedInAsAbtCustomer = !!abtCustomerId;
 
   return (
     <View style={styles.container}>
@@ -33,19 +38,21 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
       ) : (
         <View style={{flex: 1}} />
       )}
-      <View style={{padding: theme.spacings.medium}}>
-        <Button
-          mode="primary"
-          text={t(TicketsTexts.buyTicketsTab.button.text)}
-          accessibilityHint={t(TicketsTexts.buyTicketsTab.button.a11yHint)}
-          onPress={() =>
-            navigation.navigate('TicketPurchase', {
-              screen: 'PurchaseOverview',
-              params: {},
-            })
-          }
-        />
-      </View>
+      {isSignedInAsAbtCustomer && (
+        <View style={{padding: theme.spacings.medium}}>
+          <Button
+            mode="primary"
+            text={t(TicketsTexts.buyTicketsTab.button.text)}
+            accessibilityHint={t(TicketsTexts.buyTicketsTab.button.a11yHint)}
+            onPress={() =>
+              navigation.navigate('TicketPurchase', {
+                screen: 'PurchaseOverview',
+                params: {},
+              })
+            }
+          />
+        </View>
+      )}
     </View>
   );
 };
@@ -67,7 +74,7 @@ export const ActiveTickets: React.FC<Props> = () => {
     <View style={styles.container}>
       <TicketsScrollView
         reservations={activeReservations}
-        tickets={activeFareContracts}
+        fareContracts={activeFareContracts}
         isRefreshingTickets={isRefreshingTickets}
         refreshTickets={refreshTickets}
         noTicketsLabel={t(TicketsTexts.activeTicketsTab.noTickets)}
@@ -92,7 +99,7 @@ export const ExpiredTickets: React.FC<Props> = () => {
   return (
     <View style={styles.container}>
       <TicketsScrollView
-        tickets={expiredFareContracts}
+        fareContracts={expiredFareContracts}
         isRefreshingTickets={isRefreshingTickets}
         refreshTickets={refreshTickets}
         noTicketsLabel={t(TicketsTexts.expiredTicketsTab.noTickets)}

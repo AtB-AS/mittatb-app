@@ -17,7 +17,7 @@ import {
   useTranslation,
 } from '../../../../translations';
 import * as Sections from '../../../../components/sections';
-import {ReserveOffer} from '../../../../api/fareContracts';
+import {ReserveOffer} from '../../../../tickets';
 import {useRemoteConfig} from '../../../../RemoteConfigContext';
 import {getReferenceDataName} from '../../../../reference-data/utils';
 import {

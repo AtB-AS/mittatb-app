@@ -5,10 +5,7 @@ import {
 } from '../../../reference-data/types';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
 import {useEffect, useMemo, useReducer} from 'react';
-import {
-  listRecentFareContracts,
-  RecentFareContract,
-} from '../../../api/fareContracts';
+import {listRecentFareContracts, RecentFareContract} from '../../../tickets';
 import {findReferenceDataById} from '../../../reference-data/utils';
 import {
   RemoteConfigContextState,

@@ -14,11 +14,11 @@ import {
 
 const ValidityHeader: React.FC<{
   isValid: boolean;
-  nowSeconds: number;
+  now: number;
   validTo: number;
   isNotExpired: boolean;
   isRefunded: boolean;
-}> = ({isValid, nowSeconds, validTo, isNotExpired, isRefunded}) => {
+}> = ({isValid, now, validTo, isNotExpired, isRefunded}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
 
@@ -29,7 +29,7 @@ const ValidityHeader: React.FC<{
         <ThemeText style={styles.validityText} type="lead" color="faded">
           {validityTimeText(
             isNotExpired,
-            nowSeconds,
+            now,
             validTo,
             isRefunded,
             t,
@@ -43,13 +43,13 @@ const ValidityHeader: React.FC<{
 
 function validityTimeText(
   isNotExpired: boolean,
-  nowSeconds: number,
+  now: number,
   validTo: number,
   isRefunded: boolean,
   t: TranslateFunction,
   language: Language,
 ) {
-  const validityDifferenceSeconds = Math.abs(validTo - nowSeconds);
+  const validityDifferenceSeconds = Math.abs(validTo - now) / 1000;
   const conjunction = t(TicketTexts.validityHeader.durationDelimiter);
   const duration = secondsToDuration(validityDifferenceSeconds, language, {
     conjunction,

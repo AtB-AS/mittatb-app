@@ -64,3 +64,7 @@ keystore
 
 # vscode-react-native work folder
 .vscode/.react
+
+# Firebase
+ui-debug.log
+firebase-debug.log

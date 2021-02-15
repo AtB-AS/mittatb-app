@@ -6,16 +6,13 @@ import {TicketingStackParams} from '../..';
 import {DismissableStackNavigationProp} from '../../../../../navigation/createDismissableStackNavigator';
 import Header from '../../../../../components/screen-header';
 import {StyleSheet} from '../../../../../theme';
-import {useTicketState} from '../../../../../TicketContext';
+import {useTicketState} from '../../../../../tickets';
 import Button from '../../../../../components/button';
 import useVippsState, {ErrorContext, State} from './use-vipps-state';
 import Processing from '../Processing';
 import MessageBox from '../../../../../message-box';
 import {ErrorType} from '../../../../../api/utils';
-import {
-  ReserveOffer,
-  TicketReservation,
-} from '../../../../../api/fareContracts';
+import {ReserveOffer, TicketReservation} from '../../../../../tickets';
 import {PaymentVippsTexts, useTranslation} from '../../../../../translations';
 import {
   ActiveTicketsScreenName,
@@ -44,12 +41,12 @@ export default function VippsPayment({
 
   const cancelVipps = () => navigation.pop();
 
-  const {activatePollingForNewTickets} = useTicketState();
+  const {addReservation} = useTicketState();
   const dismissAndActivatePolling = (
     reservation: TicketReservation,
     reservationOffers: ReserveOffer[],
   ) => {
-    activatePollingForNewTickets({
+    addReservation({
       reservation,
       offers: reservationOffers,
       paymentType: 'vipps',

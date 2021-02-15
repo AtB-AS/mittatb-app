@@ -4,7 +4,7 @@ import Header from '../../../../components/screen-header';
 import {StyleSheet} from '../../../../theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useInterval from '../../../../utils/use-interval';
-import {useTicketState} from '../../../../TicketContext';
+import {useTicketState} from '../../../../tickets';
 import {ScrollView} from 'react-native';
 import DetailsContent from './DetailsContent';
 import {TicketModalNavigationProp, TicketModalStackParams} from '.';
@@ -35,8 +35,8 @@ export default function DetailsScreen({navigation, route}: Props) {
   const onReceiptNavigate = () =>
     fc &&
     navigation.push('TicketReceipt', {
-      orderId: fc.order_id,
-      orderVersion: fc.order_version,
+      orderId: fc.orderId,
+      orderVersion: fc.version,
     });
 
   return (

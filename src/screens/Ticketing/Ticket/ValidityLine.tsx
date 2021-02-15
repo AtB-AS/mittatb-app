@@ -11,7 +11,7 @@ const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 type Props =
   | {
       status: 'valid';
-      nowSeconds: number;
+      now: number;
       validFrom: number;
       validTo: number;
     }
@@ -20,35 +20,44 @@ type Props =
     }
   | {
       status: 'expired';
+    }
+  | {
+      status: 'unknown';
     };
 
 const ValidityLine = (props: Props) => {
   const {theme} = useTheme();
   const styles = useStyles();
 
-  if (props.status === 'reserving') {
-    return <LineWithVerticalBars backgroundColor={colors.secondary.cyan_500} />;
-  } else if (props.status === 'valid') {
-    const {nowSeconds, validFrom, validTo} = props;
-    const validityPercent = getValidityPercent(nowSeconds, validFrom, validTo);
-    return (
-      <LineWithVerticalBars
-        backgroundColor={colors.primary.green_500}
-        validityPercent={validityPercent}
-      />
-    );
-  } else {
-    return (
-      <View style={styles.container}>
-        <Dash
-          style={{width: '100%'}}
-          dashGap={0}
-          dashLength={1}
-          dashThickness={1}
-          dashColor={theme.background.level1}
+  switch (props.status) {
+    case 'reserving':
+      return (
+        <LineWithVerticalBars backgroundColor={colors.secondary.cyan_500} />
+      );
+    case 'valid':
+      const {now, validFrom, validTo} = props;
+      const validityPercent = getValidityPercent(now, validFrom, validTo);
+      return (
+        <LineWithVerticalBars
+          backgroundColor={colors.primary.green_500}
+          validityPercent={validityPercent}
         />
-      </View>
-    );
+      );
+    case 'expired':
+      return (
+        <View style={styles.container}>
+          <Dash
+            style={{width: '100%'}}
+            dashGap={0}
+            dashLength={1}
+            dashThickness={1}
+            dashColor={theme.background.level1}
+          />
+        </View>
+      );
+    case 'unknown':
+    default:
+      return <LineWithVerticalBars backgroundColor={colors.primary.gray_300} />;
   }
 };
 
@@ -117,13 +126,13 @@ const useAnimatedVerticalLineOffset = () => {
  * need to be wide enough to always show some animation.
  */
 const getValidityPercent = (
-  nowSeconds: number,
+  now: number,
   validFrom: number,
   validTo: number,
 ) => {
-  const durationSeconds = validTo - validFrom;
-  const timeLeftSeconds = validTo - nowSeconds;
-  const percent = Math.ceil((timeLeftSeconds / durationSeconds) * 100);
+  const duration = validTo - validFrom;
+  const timeLeft = validTo - now;
+  const percent = Math.ceil((timeLeft / duration) * 100);
   return Math.max(5, Math.min(percent, 100));
 };
 

@@ -57,5 +57,10 @@ const TicketTexts = {
       ),
     },
   },
+  unknownTicket: {
+    message: _('Ukjent billett', 'Unknown ticket'),
+    orderId: (orderId: string) =>
+      _(`Ordre-id: ${orderId}`, `Order ID: ${orderId}`),
+  },
 };
 export default TicketTexts;

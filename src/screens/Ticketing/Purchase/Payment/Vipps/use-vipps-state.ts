@@ -1,9 +1,9 @@
 import {useCallback, useEffect, useReducer} from 'react';
-import {reserveOffers} from '../../../../../api';
 import {
   ReserveOffer,
   TicketReservation,
-} from '../../../../../api/fareContracts';
+  reserveOffers,
+} from '../../../../../tickets';
 import {ErrorType, getAxiosErrorType} from '../../../../../api/utils';
 import {AxiosError} from 'axios';
 import {Linking} from 'react-native';
