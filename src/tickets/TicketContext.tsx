@@ -126,9 +126,9 @@ const TicketContextProvider: React.FC = ({children}) => {
         .orderBy('created', 'desc')
         .onSnapshot(
           (snapshot) => {
-            const fareContracts = (snapshot as FirebaseFirestoreTypes.QuerySnapshot<
-              FareContract
-            >).docs.map<FareContract>((d) => d.data());
+            const fareContracts = (snapshot as FirebaseFirestoreTypes.QuerySnapshot<FareContract>).docs.map<FareContract>(
+              (d) => d.data(),
+            );
             dispatch({type: 'UPDATE_FARE_CONTRACT_TICKETS', fareContracts});
           },
           (err) => {
