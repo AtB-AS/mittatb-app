@@ -21,7 +21,7 @@ const ThemeText: React.FC<ThemeTextProps> = ({
 
   const typeStyle = {
     ...theme.text[fontType],
-    color: theme.text.colorSelection.dark[color],
+    color: theme.text.colors.primary,
   };
 
   return (

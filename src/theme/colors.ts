@@ -382,7 +382,7 @@ export const themes: Themes = {
       },
     },
     text: {
-      colors: defaultTextColors['dark'],
+      colors: defaultTextColors['light'],
       colorSelection: defaultTextColors,
       ...textTypeStyles,
     },

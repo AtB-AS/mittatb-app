@@ -41,7 +41,11 @@ const RecentTicketsScrollView = () => {
       <ScrollView
         style={styles.scrollView}
         refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={refresh} />
+          <RefreshControl
+            refreshing={loading}
+            onRefresh={refresh}
+            tintColor={theme.text.colors.primary}
+          />
         }
       >
         {!recentTickets?.length && loading && (
