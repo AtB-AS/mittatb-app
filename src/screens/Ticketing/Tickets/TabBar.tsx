@@ -1,9 +1,9 @@
-import React from 'react';
-import {View, TouchableOpacity} from 'react-native';
+import ThemeText from '@atb/components/text';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {MaterialTopTabBarProps} from '@react-navigation/material-top-tabs';
 import {Route} from '@react-navigation/native';
-import {StyleSheet, useTheme} from '../../../theme';
-import ThemeText from '../../../components/text';
+import React from 'react';
+import {TouchableOpacity, View} from 'react-native';
 
 const TicketsTabBar: React.FC<MaterialTopTabBarProps> = ({
   state,

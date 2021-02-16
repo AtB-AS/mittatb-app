@@ -1,17 +1,17 @@
+import {enrollIntoBetaGroups} from '@atb/api/enrollment';
+import {Confirm} from '@atb/assets/svg/icons/actions';
+import Button from '@atb/components/button';
+import {TextInput} from '@atb/components/sections';
+import ThemeText from '@atb/components/text';
+import MessageBox from '@atb/message-box';
+import {StyleSheet} from '@atb/theme';
+import analytics from '@react-native-firebase/analytics';
+import composeRefs from '@seznam/compose-react-refs';
 import React, {forwardRef, useRef, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {Portal} from 'react-native-portalize';
 import {Modalize} from 'react-native-modalize';
-import analytics from '@react-native-firebase/analytics';
-import {enrollIntoBetaGroups} from '../../../api/enrollment';
+import {Portal} from 'react-native-portalize';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import Button from '../../../components/button';
-import {Confirm} from '../../../assets/svg/icons/actions';
-import {StyleSheet} from '../../../theme';
-import ThemeText from '../../../components/text';
-import MessageBox from '../../../message-box';
-import composeRefs from '@seznam/compose-react-refs';
-import {TextInput} from '../../../components/sections';
 
 type Props = {
   onEnrolled(): void;

@@ -1,27 +1,25 @@
+import createDismissableStackNavigator from '@atb/navigation/createDismissableStackNavigator';
+import transitionSpec from '@atb/navigation/transitionSpec';
+import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {ReserveOffer} from '@atb/tickets';
+import {RouteProp} from '@react-navigation/native';
 import React from 'react';
-import PurchaseOverviewScreen from './Overview';
+import {BuyTicketsScreenName} from '../Tickets';
 import ConfirmationScreen, {
   RouteParams as ConfirmationRouteParams,
 } from './Confirmation';
-import TravellersScreen from './Travellers';
-import ProductScreen from './Product';
+import PurchaseOverviewScreen from './Overview';
 import {CreditCard as CreditCardScreen, Vipps as VippsScreen} from './Payment';
-import createDismissableStackNavigator from '../../../navigation/createDismissableStackNavigator';
-import {BuyTicketsScreenName} from '../Tickets';
-import {ReserveOffer} from '../../../tickets';
-import {RouteProp} from '@react-navigation/native';
+import ProductScreen, {ProductRouteParams} from './Product';
 import TariffZones, {
-  TariffZoneWithMetadata,
   RouteParams as TariffZonesParams,
+  TariffZoneWithMetadata,
 } from './TariffZones';
 import TariffZoneSearch, {
   RouteParams as TariffZoneSearchParams,
 } from './TariffZones/search';
-
-import transitionSpec from '../../../navigation/transitionSpec';
-import {PreassignedFareProduct} from '../../../reference-data/types';
+import TravellersScreen from './Travellers';
 import {UserProfileWithCount} from './Travellers/use-user-count-state';
-import {ProductRouteParams} from './Product';
 
 type PurchaseOverviewParams = {
   refreshOffer?: boolean;

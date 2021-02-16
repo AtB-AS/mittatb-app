@@ -1,10 +1,3 @@
-import {Coordinates} from '@entur/sdk';
-import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
-import {RouteProp} from '@react-navigation/native';
-import {Feature} from 'geojson';
-import React, {useMemo, useRef, useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
-import {LocationSearchNavigationProp, LocationSearchStackParams} from '../';
 import {
   MapCameraConfig,
   MapControls,
@@ -12,14 +5,21 @@ import {
   PositionArrow,
   shadows,
   useControlPositionsStyle,
-} from '../../components/map/';
-import {useReverseGeocoder} from '../../geocoder';
-import {useGeolocationState} from '../../GeolocationContext';
-import FullScreenHeader from '../../components/screen-header/full-header';
-import {StyleSheet} from '../../theme';
+} from '@atb/components/map';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {useReverseGeocoder} from '@atb/geocoder';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import {StyleSheet} from '@atb/theme';
+import {LocationSearchTexts, useTranslation} from '@atb/translations';
+import {Coordinates} from '@entur/sdk';
+import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
+import {RouteProp} from '@react-navigation/native';
+import {Feature} from 'geojson';
+import React, {useMemo, useRef, useState} from 'react';
+import {TouchableOpacity, View} from 'react-native';
+import {LocationSearchNavigationProp, LocationSearchStackParams} from '../';
 import LocationBar from './LocationBar';
 import SelectionPin, {PinMode} from './SelectionPin';
-import {LocationSearchTexts, useTranslation} from '../../translations';
 
 export type RouteParams = {
   callerRouteName: string;

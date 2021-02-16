@@ -1,10 +1,10 @@
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {LocationWithMetadata} from '@atb/favorites/types';
+import {LocationSearchContent} from '@atb/location-search/LocationSearch';
+import {StyleSheet} from '@atb/theme';
+import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {Keyboard, View} from 'react-native';
-import {LocationWithMetadata} from '../../../favorites/types';
-import {LocationSearchContent} from '../../../location-search/LocationSearch';
-import FullScreenHeader from '../../../components/screen-header/full-header';
-import {StyleSheet} from '../../../theme';
-import {AddEditFavoriteTexts, useTranslation} from '../../../translations';
 import {LocationSearchNavigationProp} from './';
 
 export type SearchStopPlaceProps = {

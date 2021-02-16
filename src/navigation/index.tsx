@@ -1,3 +1,20 @@
+import {useAppState} from '@atb/AppContext';
+import trackNavigation from '@atb/diagnostics/trackNavigation';
+import LocationSearch, {
+  RouteParams as LocationSearchParams,
+} from '@atb/location-search';
+import Onboarding from '@atb/screens/Onboarding';
+import AddEditFavorite, {
+  AddEditFavoriteRootParams,
+} from '@atb/screens/Profile/AddEditFavorite';
+import SortableFavoriteList from '@atb/screens/Profile/FavoriteList/SortFavorites';
+import TicketPurchase, {
+  TicketingStackParams,
+} from '@atb/screens/Ticketing/Purchase';
+import TicketModalScreen, {
+  TicketModalStackParams,
+} from '@atb/screens/Ticketing/Ticket/Details';
+import {useTheme} from '@atb/theme';
 import {
   NavigationContainer,
   NavigationContainerRef,
@@ -8,23 +25,6 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React, {useEffect, useRef} from 'react';
 import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
-import {useAppState} from '../AppContext';
-import trackNavigation from '../diagnostics/trackNavigation';
-import LocationSearch, {
-  RouteParams as LocationSearchParams,
-} from '../location-search';
-import Onboarding from '../screens/Onboarding';
-import AddEditFavorite, {
-  AddEditFavoriteRootParams,
-} from '../screens/Profile/AddEditFavorite';
-import SortableFavoriteList from '../screens/Profile/FavoriteList/SortFavorites';
-import TicketPurchase, {
-  TicketingStackParams,
-} from '../screens/Ticketing/Purchase';
-import TicketModalScreen, {
-  TicketModalStackParams,
-} from '../screens/Ticketing/Ticket/Details';
-import {useTheme} from '../theme';
 import TabNavigator from './TabNavigator';
 import transitionSpec from './transitionSpec';
 

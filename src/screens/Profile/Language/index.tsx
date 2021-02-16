@@ -1,16 +1,16 @@
+import ScreenHeader from '@atb/components/screen-header';
+import {ActionItem, RadioSection, Section} from '@atb/components/sections';
+import {Preference_Language, usePreferences} from '@atb/preferences';
+import {StyleSheet, Theme} from '@atb/theme';
+import {
+  appLanguages,
+  DEFAULT_LANGUAGE,
+  LanguageSettingsTexts,
+  useTranslation,
+} from '@atb/translations';
 import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {ActionItem, RadioSection, Section} from '../../../components/sections';
-import {Preference_Language, usePreferences} from '../../../preferences';
-import {StyleSheet, Theme} from '../../../theme';
-import {
-  useTranslation,
-  LanguageSettingsTexts,
-  DEFAULT_LANGUAGE,
-  appLanguages,
-} from '../../../translations';
-import ScreenHeader from '../../../components/screen-header';
 const identity = (s: string) => s;
 export default function Language() {
   const {

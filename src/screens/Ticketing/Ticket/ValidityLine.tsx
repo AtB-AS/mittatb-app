@@ -1,9 +1,9 @@
 import React, {useEffect, useRef} from 'react';
 import {Animated, Dimensions, Easing, View} from 'react-native';
 import Dash from 'react-native-dash';
-import {StyleSheet, useTheme} from '../../../theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import LinearGradient from 'react-native-linear-gradient';
-import colors from '../../../theme/colors';
+import colors from '@atb/theme/colors';
 
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);

@@ -1,18 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {useAuthState} from '@atb/auth';
+import Button from '@atb/components/button';
+import {RootStackParamList} from '@atb/navigation';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {useTicketState} from '@atb/tickets';
+import {TicketsTexts, useTranslation} from '@atb/translations';
+import useInterval from '@atb/utils/use-interval';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {useTicketState} from '../../../tickets';
-import {StyleSheet, useTheme} from '../../../theme';
-import useInterval from '../../../utils/use-interval';
-import TicketsScrollView from './TicketsScrollView';
-import {RootStackParamList} from '../../../navigation';
-import {TicketsTexts, useTranslation} from '../../../translations';
-import Button from '../../../components/button';
-import {useRemoteConfig} from '../../../RemoteConfigContext';
-import UpgradeSplash from './UpgradeSplash';
-import {useAuthState} from '../../../auth';
-import ThemeText from '../../../components/text';
+import React, {useState} from 'react';
+import {View} from 'react-native';
 import RecentTicketsScrollView from './RecentTicketsScrollView';
+import TicketsScrollView from './TicketsScrollView';
+import UpgradeSplash from './UpgradeSplash';
 
 export type TicketingScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 

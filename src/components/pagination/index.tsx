@@ -1,11 +1,11 @@
+import {ArrowLeft, ArrowRight} from '@atb/assets/svg/icons/navigation';
+import {StyleSheet} from '@atb/theme';
+import {PaginationTexts, useTranslation} from '@atb/translations';
+import {fullDateTime} from '@atb/utils/date';
 import React from 'react';
 import {View, ViewProps} from 'react-native';
-import {ArrowLeft, ArrowRight} from '../../assets/svg/icons/navigation';
-import {StyleSheet} from '../../theme';
-import {PaginationTexts, useTranslation} from '../../translations';
-import {fullDateTime} from '../../utils/date';
-import Button from '../button';
-import ThemeText from '../text';
+import Button from '@atb/components/button';
+import ThemeText from '@atb/components/text';
 
 type PaginatedDetailsHeader = ViewProps & {
   page: number;

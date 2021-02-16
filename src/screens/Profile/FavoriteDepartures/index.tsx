@@ -1,14 +1,14 @@
+import ScreenHeader from '@atb/components/screen-header';
+import * as Sections from '@atb/components/sections';
+import {useFavorites} from '@atb/favorites';
+import {StoredFavoriteDeparture} from '@atb/favorites/types';
+import MessageBox from '@atb/message-box';
+import {StyleSheet, Theme} from '@atb/theme';
+import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {Alert, LayoutAnimation} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import * as Sections from '../../../components/sections';
-import {useFavorites} from '../../../favorites';
-import {StoredFavoriteDeparture} from '../../../favorites/types';
-import MessageBox from '../../../message-box';
-import {StyleSheet, Theme} from '../../../theme';
-import {FavoriteDeparturesTexts, useTranslation} from '../../../translations';
-import ScreenHeader from '../../../components/screen-header';
 
 export default function FavoriteDepartures() {
   const style = useProfileStyle();

@@ -7,8 +7,8 @@ import {
   MapLeg,
   Place,
   TransportSubmode,
-} from '../../../sdk';
-import {flatMap} from '../../../utils/array';
+} from '@atb/sdk';
+import {flatMap} from '@atb/utils/array';
 
 export interface MapLine extends Feature<LineString> {
   travelType?: LegMode;

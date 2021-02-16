@@ -1,21 +1,21 @@
-import React, {useEffect, useState} from 'react';
-import ThemeText from '../../../../components/text';
-import * as Sections from '../../../../components/sections';
-import ValidityHeader from '../ValidityHeader';
-import ValidityLine from '../ValidityLine';
-import {formatToLongDateTime} from '../../../../utils/date';
-import {fromUnixTime} from 'date-fns';
-import {TicketTexts, useTranslation} from '../../../../translations';
-import TicketInfo from '../TicketInfo';
-import qrcode from 'qrcode';
-import {SvgXml} from 'react-native-svg';
-import {View} from 'react-native';
-import {StyleSheet} from '../../../../theme';
+import * as Sections from '@atb/components/sections';
+import ThemeText from '@atb/components/text';
+import {StyleSheet} from '@atb/theme';
 import {
   FareContract,
   FareContractState,
   isPreactivatedTicket,
-} from '../../../../tickets';
+} from '@atb/tickets';
+import {TicketTexts, useTranslation} from '@atb/translations';
+import {formatToLongDateTime} from '@atb/utils/date';
+import {fromUnixTime} from 'date-fns';
+import qrcode from 'qrcode';
+import React, {useEffect, useState} from 'react';
+import {View} from 'react-native';
+import {SvgXml} from 'react-native-svg';
+import TicketInfo from '../TicketInfo';
+import ValidityHeader from '../ValidityHeader';
+import ValidityLine from '../ValidityLine';
 
 type Props = {
   fareContract: FareContract;

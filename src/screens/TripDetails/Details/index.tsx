@@ -1,3 +1,11 @@
+import {getSingleTripPattern} from '@atb/api/trips';
+import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
+import PaginatedDetailsHeader from '@atb/components/pagination';
+import Header from '@atb/components/screen-header';
+import {TripPattern} from '@atb/sdk';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {TripDetailsTexts, useTranslation} from '@atb/translations';
+import usePollableResource from '@atb/utils/use-pollable-resource';
 import {
   NavigationProp,
   RouteProp,
@@ -8,14 +16,6 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DetailsStackParams} from '..';
-import {getSingleTripPattern} from '../../../api/trips';
-import ContentWithDisappearingHeader from '../../../components/disappearing-header/content';
-import PaginatedDetailsHeader from '../../../components/pagination';
-import Header from '../../../components/screen-header';
-import {TripPattern} from '../../../sdk';
-import {StyleSheet, useTheme} from '../../../theme';
-import {TripDetailsTexts, useTranslation} from '../../../translations';
-import usePollableResource from '../../../utils/use-pollable-resource';
 import Trip from '../components/Trip';
 import CompactMap from '../Map/CompactMap';
 

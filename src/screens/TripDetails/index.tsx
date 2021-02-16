@@ -9,7 +9,7 @@ import DepartureDetails, {
   DepartureDetailsRouteParams,
 } from './DepartureDetails';
 import {CompositeNavigationProp} from '@react-navigation/native';
-import {RootStackParamList} from '../../navigation';
+import {RootStackParamList} from '@atb/navigation';
 import {MapDetailRouteParams, TravelDetailsMap} from './Map';
 
 export type DetailsStackParams = {

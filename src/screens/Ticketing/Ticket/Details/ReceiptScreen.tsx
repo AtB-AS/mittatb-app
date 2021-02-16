@@ -1,19 +1,19 @@
-import React, {useState} from 'react';
-import {View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {RouteProp} from '@react-navigation/native';
-import {sendReceipt} from '../../../../tickets';
-import {StyleSheet} from '../../../../theme';
-import * as Sections from '../../../../components/sections';
-import Header from '../../../../components/screen-header';
-import {TicketModalNavigationProp, TicketModalStackParams} from './';
-import MessageBox, {MessageBoxProps} from '../../../../message-box';
-import Button from '../../../../components/button';
+import Button from '@atb/components/button';
+import Header from '@atb/components/screen-header';
+import * as Sections from '@atb/components/sections';
+import MessageBox, {MessageBoxProps} from '@atb/message-box';
+import {StyleSheet} from '@atb/theme';
+import {sendReceipt} from '@atb/tickets';
 import {
   TicketTexts,
   TranslateFunction,
   useTranslation,
-} from '../../../../translations';
+} from '@atb/translations';
+import {RouteProp} from '@react-navigation/native';
+import React, {useState} from 'react';
+import {View} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {TicketModalNavigationProp, TicketModalStackParams} from './';
 
 export type ReceiptScreenRouteParams = {
   orderId: string;

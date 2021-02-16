@@ -1,30 +1,30 @@
-import React, {useEffect, useMemo} from 'react';
-import {View} from 'react-native';
-import {RouteProp} from '@react-navigation/native';
-import {TicketingStackParams} from '../';
-import Header from '../../../../components/screen-header';
-import {Edit} from '../../../../assets/svg/icons/actions';
-import {StyleSheet} from '../../../../theme';
-import ThemeIcon from '../../../../components/theme-icon';
-import Button from '../../../../components/button';
-import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
-import useOfferState from './use-offer-state';
-import MessageBox from '../../../../message-box';
-import * as Sections from '../../../../components/sections';
-import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
+import {Edit} from '@atb/assets/svg/icons/actions';
+import Button from '@atb/components/button';
+import Header from '@atb/components/screen-header';
+import * as Sections from '@atb/components/sections';
+import ThemeIcon from '@atb/components/theme-icon';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import MessageBox from '@atb/message-box';
+import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
+import {TariffZone} from '@atb/reference-data/types';
+import {getReferenceDataName} from '@atb/reference-data/utils';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {StyleSheet} from '@atb/theme';
 import {
   Language,
   PurchaseOverviewTexts,
   TranslateFunction,
   useTranslation,
-} from '../../../../translations';
-import {useRemoteConfig} from '../../../../RemoteConfigContext';
-import {UserProfileWithCount} from '../Travellers/use-user-count-state';
-import {getReferenceDataName} from '../../../../reference-data/utils';
-import {TariffZone} from '../../../../reference-data/types';
-import {useGeolocationState} from '../../../../GeolocationContext';
+} from '@atb/translations';
+import {RouteProp} from '@react-navigation/native';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import React, {useEffect, useMemo} from 'react';
+import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {TicketingStackParams} from '../';
+import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
+import {UserProfileWithCount} from '../Travellers/use-user-count-state';
+import useOfferState from './use-offer-state';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<

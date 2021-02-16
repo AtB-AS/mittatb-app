@@ -1,13 +1,10 @@
+import {ShinyTicketBanner} from '@atb/assets/svg/illustrations';
+import ThemeText from '@atb/components/text';
+import MessageBox from '@atb/message-box';
+import {StyleSheet} from '@atb/theme';
+import {UpgradeSplashTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {View, useWindowDimensions} from 'react-native';
-
-import {ShinyTicketBanner} from '../../../assets/svg/illustrations';
-import {StyleSheet} from '../../../theme';
-
-import ThemeText from '../../../components/text';
-
-import {useTranslation, UpgradeSplashTexts} from '../../../translations';
-import MessageBox from '../../../message-box';
+import {useWindowDimensions, View} from 'react-native';
 
 export default function UpgradeSplash() {
   const styles = useStyles();

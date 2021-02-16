@@ -5,7 +5,7 @@ import {View} from 'react-native';
 import {
   defaultFill,
   transportationColor,
-} from '../../../utils/transportation-color';
+} from '@atb/utils/transportation-color';
 import {MapLine, pointOf} from './utils';
 
 const MapRoute: React.FC<{lines: MapLine[]}> = ({lines}) => {

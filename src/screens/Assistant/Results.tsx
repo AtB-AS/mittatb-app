@@ -1,16 +1,16 @@
-import React, {Fragment, useMemo, useState, useEffect} from 'react';
+import {ErrorType} from '@atb/api/utils';
+import OptionalNextDayLabel from '@atb/components/optional-day-header';
+import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import ThemeText from '@atb/components/text';
+import MessageBox from '@atb/message-box';
+import {TripPattern} from '@atb/sdk';
+import {StyleSheet} from '@atb/theme';
+import {AssistantTexts, useTranslation} from '@atb/translations';
+import {isSeveralDays} from '@atb/utils/date';
+import React, {Fragment, useEffect, useMemo, useState} from 'react';
 import {Text, View} from 'react-native';
-import {TripPattern} from '../../sdk';
-import {StyleSheet} from '../../theme';
 import ResultItem from './ResultItem';
-import OptionalNextDayLabel from '../../components/optional-day-header';
-import {isSeveralDays} from '../../utils/date';
 import {NoResultReason} from './types';
-import ThemeText from '../../components/text';
-import MessageBox from '../../message-box';
-import {ErrorType} from '../../api/utils';
-import {useTranslation, AssistantTexts} from '../../translations';
-import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
 type Props = {
   tripPatterns: TripPattern[] | null;
   showEmptyScreen: boolean;

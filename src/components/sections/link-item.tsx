@@ -5,13 +5,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import ThemeText from '../text';
+import ThemeText from '@atb/components/text';
 import NavigationIcon, {
   isNavigationIcon,
   NavigationIconTypes,
-} from '../theme-icon/navigation-icon';
+} from '@atb/components/theme-icon/navigation-icon';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
-import {StyleSheet} from '../../theme';
+import {StyleSheet} from '@atb/theme';
 
 export type LinkItemProps = SectionItem<{
   text: string;

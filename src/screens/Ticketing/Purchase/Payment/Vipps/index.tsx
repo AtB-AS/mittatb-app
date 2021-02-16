@@ -1,24 +1,23 @@
+import {ErrorType} from '@atb/api/utils';
+import Button from '@atb/components/button';
+import Header from '@atb/components/screen-header';
+import MessageBox from '@atb/message-box';
+import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
+import {StyleSheet} from '@atb/theme';
+import {ReserveOffer, TicketReservation, useTicketState} from '@atb/tickets';
+import {PaymentVippsTexts, useTranslation} from '@atb/translations';
+import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import React from 'react';
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../..';
-import {DismissableStackNavigationProp} from '../../../../../navigation/createDismissableStackNavigator';
-import Header from '../../../../../components/screen-header';
-import {StyleSheet} from '../../../../../theme';
-import {useTicketState} from '../../../../../tickets';
-import Button from '../../../../../components/button';
-import useVippsState, {ErrorContext, State} from './use-vipps-state';
-import Processing from '../Processing';
-import MessageBox from '../../../../../message-box';
-import {ErrorType} from '../../../../../api/utils';
-import {ReserveOffer, TicketReservation} from '../../../../../tickets';
-import {PaymentVippsTexts, useTranslation} from '../../../../../translations';
 import {
   ActiveTicketsScreenName,
   TicketTabsNavigatorParams,
 } from '../../../Tickets';
-import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
+import Processing from '../Processing';
+import useVippsState, {ErrorContext, State} from './use-vipps-state';
 
 type NavigationProp = CompositeNavigationProp<
   MaterialTopTabNavigationProp<TicketTabsNavigatorParams>,

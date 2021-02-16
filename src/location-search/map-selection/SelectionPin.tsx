@@ -1,11 +1,11 @@
-import React, {useRef, useEffect} from 'react';
-import {Animated, View} from 'react-native';
 import {
   SelectionPinConfirm,
-  SelectionPinUnknown,
   SelectionPinMove,
   SelectionPinShadow,
-} from '../../assets/svg/map';
+  SelectionPinUnknown,
+} from '@atb/assets/svg/map';
+import React, {useEffect, useRef} from 'react';
+import {Animated, View} from 'react-native';
 
 export type PinMode = 'searching' | 'found' | 'nothing';
 

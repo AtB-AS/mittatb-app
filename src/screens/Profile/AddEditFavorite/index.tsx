@@ -4,7 +4,7 @@ import {
   StackNavigationProp,
 } from '@react-navigation/stack';
 import React from 'react';
-import {RootStackParamList} from '../../../navigation';
+import {RootStackParamList} from '@atb/navigation';
 import AddEditForm, {AddEditParams} from './AddForm';
 import SearchLocation from './SearchLocation';
 

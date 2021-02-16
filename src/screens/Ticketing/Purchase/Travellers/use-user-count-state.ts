@@ -1,5 +1,5 @@
 import {useCallback, useReducer} from 'react';
-import {UserProfile} from '../../../../reference-data/types';
+import {UserProfile} from '@atb/reference-data/types';
 
 export type UserProfileWithCount = UserProfile & {count: number};
 type UserCountState = {

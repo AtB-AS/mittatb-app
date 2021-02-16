@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
+import Header from '@atb/components/screen-header';
+import {StyleSheet} from '@atb/theme';
+import {useTicketState} from '@atb/tickets';
+import {TicketTexts, useTranslation} from '@atb/translations';
+import useInterval from '@atb/utils/use-interval';
 import {RouteProp} from '@react-navigation/native';
-import Header from '../../../../components/screen-header';
-import {StyleSheet} from '../../../../theme';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import useInterval from '../../../../utils/use-interval';
-import {useTicketState} from '../../../../tickets';
+import {useState} from 'react';
 import {ScrollView} from 'react-native';
-import DetailsContent from './DetailsContent';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {TicketModalNavigationProp, TicketModalStackParams} from '.';
-import {TicketTexts, useTranslation} from '../../../../translations';
+import DetailsContent from './DetailsContent';
 
 export type TicketDetailsRouteParams = {
   orderId: string;

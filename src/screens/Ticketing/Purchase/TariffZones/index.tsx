@@ -1,39 +1,35 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {RouteProp} from '@react-navigation/native';
-import {TicketingStackParams} from '../';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {StyleSheet, useTheme} from '../../../../theme';
-import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
-import {ButtonInput, Section} from '../../../../components/sections';
-import {
-  Language,
-  TariffZonesTexts,
-  useTranslation,
-} from '../../../../translations';
-import {PixelRatio, Platform, View} from 'react-native';
-import ThemeIcon from '../../../../components/theme-icon';
-import Button from '../../../../components/button';
-import {TariffZone} from '../../../../reference-data/types';
-import {getReferenceDataName} from '../../../../reference-data/utils';
-import {useRemoteConfig} from '../../../../RemoteConfigContext';
-import {useGeolocationState} from '../../../../GeolocationContext';
-import {TRONDHEIM_CENTRAL_STATION} from '../../../../api/geocoder';
-import MapboxGL, {
-  OnPressEvent,
-  RegionPayload,
-} from '@react-native-mapbox-gl/maps';
-import FullScreenHeader from '../../../../components/screen-header/full-header';
+import {TRONDHEIM_CENTRAL_STATION} from '@atb/api/geocoder';
+import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
+import Button from '@atb/components/button';
 import {
   MapCameraConfig,
   MapControls,
   MapViewConfig,
   PositionArrow,
   shadows,
-} from '../../../../components/map';
-import colors from '../../../../theme/colors';
-import {FeatureCollection, Polygon} from 'geojson';
+} from '@atb/components/map';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {ButtonInput, Section} from '@atb/components/sections';
+import ThemeIcon from '@atb/components/theme-icon';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
+import {TariffZone} from '@atb/reference-data/types';
+import {getReferenceDataName} from '@atb/reference-data/utils';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {StyleSheet, useTheme} from '@atb/theme';
+import colors from '@atb/theme/colors';
+import {Language, TariffZonesTexts, useTranslation} from '@atb/translations';
+import MapboxGL, {
+  OnPressEvent,
+  RegionPayload,
+} from '@react-native-mapbox-gl/maps';
+import {RouteProp} from '@react-navigation/native';
 import turfCentroid from '@turf/centroid';
-import {CurrentLocationArrow} from '../../../../assets/svg/icons/places';
+import {FeatureCollection, Polygon} from 'geojson';
+import React, {useEffect, useRef, useState} from 'react';
+import {PixelRatio, Platform, View} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {TicketingStackParams} from '../';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';

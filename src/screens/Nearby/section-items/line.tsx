@@ -1,3 +1,39 @@
+import {
+  DepartureGroup,
+  DepartureLineInfo,
+  DepartureTime,
+  QuayInfo,
+  StopPlaceInfo,
+} from '@atb/api/departures/types';
+import SvgFavorite from '@atb/assets/svg/icons/places/Favorite';
+import SvgFavoriteFill from '@atb/assets/svg/icons/places/FavoriteFill';
+import Warning from '@atb/assets/svg/situations/Warning';
+import {screenReaderPause} from '@atb/components/accessible-text';
+import Button from '@atb/components/button';
+import {
+  SectionItem,
+  useSectionItem,
+  useSectionStyle,
+} from '@atb/components/sections/section-utils';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import TransportationIcon from '@atb/components/transportation-icon';
+import {useFavorites} from '@atb/favorites';
+import {StyleSheet} from '@atb/theme';
+import colors from '@atb/theme/colors';
+import {
+  dictionary,
+  Language,
+  NearbyTexts,
+  useTranslation,
+} from '@atb/translations';
+import {
+  formatToClock,
+  formatToClockOrRelativeMinutes,
+  isInThePast,
+  isRelativeButNotNow,
+} from '@atb/utils/date';
+import insets from '@atb/utils/insets';
 import {TFunc} from '@leile/lobo-t';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
@@ -9,42 +45,6 @@ import {
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {NearbyScreenNavigationProp} from '../Nearby';
-import {
-  DepartureGroup,
-  DepartureLineInfo,
-  DepartureTime,
-  QuayInfo,
-  StopPlaceInfo,
-} from '../../../api/departures/types';
-import SvgFavorite from '../../../assets/svg/icons/places/Favorite';
-import SvgFavoriteFill from '../../../assets/svg/icons/places/FavoriteFill';
-import Warning from '../../../assets/svg/situations/Warning';
-import {screenReaderPause} from '../../../components/accessible-text';
-import Button from '../../../components/button';
-import {
-  SectionItem,
-  useSectionItem,
-  useSectionStyle,
-} from '../../../components/sections/section-utils';
-import ThemeText from '../../../components/text';
-import ThemeIcon from '../../../components/theme-icon';
-import TransportationIcon from '../../../components/transportation-icon';
-import {useFavorites} from '../../../favorites';
-import {StyleSheet} from '../../../theme';
-import colors from '../../../theme/colors';
-import {
-  dictionary,
-  Language,
-  NearbyTexts,
-  useTranslation,
-} from '../../../translations';
-import {
-  formatToClock,
-  formatToClockOrRelativeMinutes,
-  isInThePast,
-  isRelativeButNotNow,
-} from '../../../utils/date';
-import insets from '../../../utils/insets';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 
 export type LineItemProps = SectionItem<{

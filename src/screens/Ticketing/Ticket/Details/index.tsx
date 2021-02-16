@@ -4,7 +4,7 @@ import {
   StackNavigationProp,
 } from '@react-navigation/stack';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
-import {RootStackParamList} from '../../../../navigation';
+import {RootStackParamList} from '@atb/navigation';
 import DetailsScreen, {TicketDetailsRouteParams} from './DetailsScreen';
 import ReceiptScreen, {ReceiptScreenRouteParams} from './ReceiptScreen';
 

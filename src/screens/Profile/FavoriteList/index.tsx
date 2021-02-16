@@ -3,17 +3,17 @@ import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ProfileStackParams} from '..';
-import {Add} from '../../../assets/svg/icons/actions';
-import SvgReorder from '../../../assets/svg/icons/actions/Reorder';
-import * as Sections from '../../../components/sections';
-import ThemeIcon from '../../../components/theme-icon';
-import {useFavorites} from '../../../favorites';
-import {StoredLocationFavorite} from '../../../favorites/types';
-import MessageBox from '../../../message-box';
-import {RootStackParamList} from '../../../navigation';
-import {StyleSheet, Theme} from '../../../theme';
-import {FavoriteListTexts, useTranslation} from '../../../translations';
-import ScreenHeader from '../../../components/screen-header';
+import {Add} from '@atb/assets/svg/icons/actions';
+import SvgReorder from '@atb/assets/svg/icons/actions/Reorder';
+import * as Sections from '@atb/components/sections';
+import ThemeIcon from '@atb/components/theme-icon';
+import {useFavorites} from '@atb/favorites';
+import {StoredLocationFavorite} from '@atb/favorites/types';
+import MessageBox from '@atb/message-box';
+import {RootStackParamList} from '@atb/navigation';
+import {StyleSheet, Theme} from '@atb/theme';
+import {FavoriteListTexts, useTranslation} from '@atb/translations';
+import ScreenHeader from '@atb/components/screen-header';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,

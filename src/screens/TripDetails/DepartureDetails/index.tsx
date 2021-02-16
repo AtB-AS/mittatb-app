@@ -1,3 +1,27 @@
+import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
+import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
+import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
+import PaginatedDetailsHeader from '@atb/components/pagination';
+import ScreenHeader from '@atb/components/screen-header';
+import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import {
+  EstimatedCall,
+  ServiceJourneyMapInfoData,
+  Situation,
+  TransportMode,
+  TransportSubmode,
+} from '@atb/sdk';
+import SituationMessages from '@atb/situations';
+import {StyleSheet} from '@atb/theme';
+import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
+import {animateNextChange} from '@atb/utils/animation';
+import {
+  defaultFill,
+  transportationColor,
+} from '@atb/utils/transportation-color';
+import {getQuayName} from '@atb/utils/transportation-names';
 import {
   NavigationProp,
   RouteProp,
@@ -7,30 +31,6 @@ import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DetailsStackParams} from '..';
-import {getServiceJourneyMapLegs} from '../../../api/serviceJourney';
-import {Expand, ExpandLess} from '../../../assets/svg/icons/navigation';
-import ContentWithDisappearingHeader from '../../../components/disappearing-header/content';
-import PaginatedDetailsHeader from '../../../components/pagination';
-import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
-import ThemeText from '../../../components/text';
-import ThemeIcon from '../../../components/theme-icon';
-import ScreenHeader from '../../../components/screen-header';
-import {
-  EstimatedCall,
-  ServiceJourneyMapInfoData,
-  Situation,
-  TransportMode,
-  TransportSubmode,
-} from '../../../sdk';
-import SituationMessages from '../../../situations';
-import {StyleSheet} from '../../../theme';
-import {DepartureDetailsTexts, useTranslation} from '../../../translations';
-import {animateNextChange} from '../../../utils/animation';
-import {
-  defaultFill,
-  transportationColor,
-} from '../../../utils/transportation-color';
-import {getQuayName} from '../../../utils/transportation-names';
 import Time from '../components/Time';
 import TripLegDecoration from '../components/TripLegDecoration';
 import TripRow from '../components/TripRow';

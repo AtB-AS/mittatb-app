@@ -1,29 +1,23 @@
+import {CreditCard, Vipps} from '@atb/assets/svg/icons/ticketing';
+import Button from '@atb/components/button';
+import Header, {LeftButtonProps} from '@atb/components/screen-header';
+import * as Sections from '@atb/components/sections';
+import ThemeText from '@atb/components/text';
+import MessageBox from '@atb/message-box';
+import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
+import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
+import {getReferenceDataName} from '@atb/reference-data/utils';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {ReserveOffer} from '@atb/tickets';
+import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
+import {RouteProp} from '@react-navigation/native';
+import {addMinutes} from 'date-fns';
 import React from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
-import {RouteProp} from '@react-navigation/native';
-import {TicketingStackParams} from '../';
-import Header, {LeftButtonProps} from '../../../../components/screen-header';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {StyleSheet, useTheme} from '../../../../theme';
-import ThemeText from '../../../../components/text';
-import Button from '../../../../components/button';
-import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
+import {TicketingStackParams} from '../';
 import useOfferState from '../Overview/use-offer-state';
-import {addMinutes} from 'date-fns';
-import MessageBox from '../../../../message-box';
-import {CreditCard, Vipps} from '../../../../assets/svg/icons/ticketing';
-import {
-  PurchaseConfirmationTexts,
-  useTranslation,
-} from '../../../../translations';
-import * as Sections from '../../../../components/sections';
-import {ReserveOffer} from '../../../../tickets';
-import {useRemoteConfig} from '../../../../RemoteConfigContext';
-import {getReferenceDataName} from '../../../../reference-data/utils';
-import {
-  PreassignedFareProduct,
-  TariffZone,
-} from '../../../../reference-data/types';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 
 export type RouteParams = {

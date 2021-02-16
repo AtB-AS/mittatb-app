@@ -1,6 +1,6 @@
 import {SvgProps} from 'react-native-svg';
-import {useTheme} from '../../theme';
-import {TextColors, iconSizes} from '../../theme/colors';
+import {useTheme} from '@atb/theme';
+import {TextColors, iconSizes} from '@atb/theme/colors';
 
 type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;

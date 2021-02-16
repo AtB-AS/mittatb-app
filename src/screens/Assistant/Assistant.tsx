@@ -1,50 +1,49 @@
+import {CancelToken, isCancel, searchTrip} from '@atb/api';
+import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
+import {Swap} from '@atb/assets/svg/icons/actions';
+import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
+import {screenReaderPause} from '@atb/components/accessible-text';
+import DisappearingHeader from '@atb/components/disappearing-header';
+import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import {LocationInput, Section} from '@atb/components/sections';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import FavoriteChips from '@atb/favorite-chips';
+import {useFavorites} from '@atb/favorites';
+import {
+  Location,
+  LocationWithMetadata,
+  UserFavorites,
+} from '@atb/favorites/types';
+import {useReverseGeocoder} from '@atb/geocoder';
+import {
+  RequestPermissionFn,
+  useGeolocationState,
+} from '@atb/GeolocationContext';
+import {useLocationSearchValue} from '@atb/location-search';
+import {RootStackParamList} from '@atb/navigation';
+import {TripPattern} from '@atb/sdk';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {AssistantTexts, dictionary, useTranslation} from '@atb/translations';
+import {
+  locationDistanceInMetres as distanceInMetres,
+  locationsAreEqual,
+  LOCATIONS_REALLY_CLOSE_THRESHOLD,
+} from '@atb/utils/location';
+import {useLayout} from '@atb/utils/use-layout';
 import Bugsnag from '@bugsnag/react-native';
 import analytics from '@react-native-firebase/analytics';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
-import {searchTrip} from '../../api';
-import {CancelToken, isCancel} from '../../api';
-import {ErrorType, getAxiosErrorType} from '../../api/utils';
-import {Swap} from '../../assets/svg/icons/actions';
-import {CurrentLocationArrow} from '../../assets/svg/icons/places';
-import {screenReaderPause} from '../../components/accessible-text';
-import DisappearingHeader from '../../components/disappearing-header';
-import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
-import {LocationInput, Section} from '../../components/sections';
-import ThemeText from '../../components/text';
-import ThemeIcon from '../../components/theme-icon';
-import FavoriteChips from '../../favorite-chips';
-import {useFavorites} from '../../favorites';
-import {
-  Location,
-  LocationWithMetadata,
-  UserFavorites,
-} from '../../favorites/types';
-import {useReverseGeocoder} from '../../geocoder';
-import {
-  RequestPermissionFn,
-  useGeolocationState,
-} from '../../GeolocationContext';
-import {useLocationSearchValue} from '../../location-search';
-import {RootStackParamList} from '../../navigation';
-import {TripPattern} from '../../sdk';
-import {StyleSheet, useTheme} from '../../theme';
-import {useTranslation, dictionary, AssistantTexts} from '../../translations';
-import {
-  locationDistanceInMetres as distanceInMetres,
-  locationsAreEqual,
-  LOCATIONS_REALLY_CLOSE_THRESHOLD,
-} from '../../utils/location';
-import {useLayout} from '../../utils/use-layout';
+import {AssistantParams} from '.';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
 import FadeBetween from './FadeBetween';
+import NewsBanner from './NewsBanner';
 import Results from './Results';
 import {NoResultReason, SearchStateType} from './types';
-import NewsBanner from './NewsBanner';
-import {AssistantParams} from '.';
 
 type AssistantRouteName = 'AssistantRoot';
 const AssistantRouteNameStatic: AssistantRouteName = 'AssistantRoot';

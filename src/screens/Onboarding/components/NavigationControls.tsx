@@ -1,11 +1,11 @@
 import React from 'react';
 import {View} from 'react-native';
-import {Dot} from '../../../assets/svg/icons/other';
+import {Dot} from '@atb/assets/svg/icons/other';
 import {TouchableOpacity} from 'react-native';
-import {ArrowRight} from '../../../assets/svg/icons/navigation';
-import {StyleSheet} from '../../../theme';
-import ThemeIcon from '../../../components/theme-icon';
-import ThemeText from '../../../components/text';
+import {ArrowRight} from '@atb/assets/svg/icons/navigation';
+import {StyleSheet} from '@atb/theme';
+import ThemeIcon from '@atb/components/theme-icon';
+import ThemeText from '@atb/components/text';
 
 type NavigateButtonProps = {
   onNavigate(): void;

@@ -1,7 +1,7 @@
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
 import {View} from 'react-native';
-import {StyleSheet} from '../../../theme';
+import {StyleSheet} from '@atb/theme';
 type IllustrationProps = {
   Svg: React.FC<SvgProps>;
 };

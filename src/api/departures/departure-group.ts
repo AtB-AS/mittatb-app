@@ -1,7 +1,7 @@
 import {AxiosRequestConfig} from 'axios';
-import {FavoriteDeparture} from '../../favorites/types';
-import {CursoredData, CursoredQuery} from '../../sdk';
-import {stringifyWithDate} from '../../utils/querystring';
+import {FavoriteDeparture} from '@atb/favorites/types';
+import {CursoredData, CursoredQuery} from '@atb/sdk';
+import {stringifyWithDate} from '@atb/utils/querystring';
 import client from '../client';
 import {StopPlaceGroup} from './types';
 

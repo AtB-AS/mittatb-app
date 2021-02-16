@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, ViewProps} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {StyleSheet} from '../../../theme';
+import {StyleSheet} from '@atb/theme';
 
 type TripRowProps = {
   rowLabel?: React.ReactNode;

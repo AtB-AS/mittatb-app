@@ -1,38 +1,37 @@
-import React from 'react';
-import {View, AccessibilityProps, ViewStyle} from 'react-native';
-import {Leg, TripPattern} from '../../sdk';
-import {StyleSheet} from '../../theme';
-import {
-  secondsToDuration,
-  secondsToDurationShort,
-  secondsBetween,
-  secondsToMinutesShort,
-  formatToClock,
-} from '../../utils/date';
-import TransportationIcon from '../../components/transportation-icon';
-import insets from '../../utils/insets';
-import {WalkingPerson} from '../../assets/svg/icons/transportation';
-import {DestinationFlag} from '../../assets/svg/icons/places';
-import {LegMode} from '@entur/sdk';
-import {Duration} from '../../assets/svg/icons/transportation';
+import {ArrowRight, ChevronRight} from '@atb/assets/svg/icons/navigation';
+import {DestinationFlag} from '@atb/assets/svg/icons/places';
+import {Duration, WalkingPerson} from '@atb/assets/svg/icons/transportation';
 import AccessibleText, {
   screenReaderPause,
-} from '../../components/accessible-text';
-import {SituationWarningIcon} from '../../situations';
-import {flatMap} from '../../utils/array';
-import {getTranslatedModeName} from '../../utils/transportation-names';
-import ThemeText from '../../components/text';
-import ThemeIcon from '../../components/theme-icon';
+} from '@atb/components/accessible-text';
+import Button from '@atb/components/button';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import TransportationIcon from '@atb/components/transportation-icon';
+import {Leg, TripPattern} from '@atb/sdk';
+import {SituationWarningIcon} from '@atb/situations';
+import {StyleSheet} from '@atb/theme';
 import {
   AssistantTexts,
-  TranslateFunction,
   dictionary,
+  TranslateFunction,
   useTranslation,
-} from '../../translations/';
+} from '@atb/translations';
+import {screenReaderHidden} from '@atb/utils/accessibility';
+import {flatMap} from '@atb/utils/array';
+import {
+  formatToClock,
+  secondsBetween,
+  secondsToDuration,
+  secondsToDurationShort,
+  secondsToMinutesShort,
+} from '@atb/utils/date';
+import insets from '@atb/utils/insets';
+import {getTranslatedModeName} from '@atb/utils/transportation-names';
+import {LegMode} from '@entur/sdk';
+import React from 'react';
+import {AccessibilityProps, View, ViewStyle} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {ArrowRight, ChevronRight} from '../../assets/svg/icons/navigation';
-import Button from '../../components/button';
-import {screenReaderHidden} from '../../utils/accessibility';
 
 type ResultItemProps = {
   tripPattern: TripPattern;

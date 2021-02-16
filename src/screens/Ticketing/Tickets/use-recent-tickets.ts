@@ -2,15 +2,15 @@ import {
   PreassignedFareProduct,
   TariffZone,
   UserProfile,
-} from '../../../reference-data/types';
-import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
-import {useEffect, useMemo, useReducer} from 'react';
-import {listRecentFareContracts, RecentFareContract} from '../../../tickets';
-import {findReferenceDataById} from '../../../reference-data/utils';
+} from '@atb/reference-data/types';
+import {findReferenceDataById} from '@atb/reference-data/utils';
 import {
   RemoteConfigContextState,
   useRemoteConfig,
-} from '../../../RemoteConfigContext';
+} from '@atb/RemoteConfigContext';
+import {listRecentFareContracts, RecentFareContract} from '@atb/tickets';
+import {useEffect, useMemo, useReducer} from 'react';
+import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
 
 export type RecentTicket = {
   preassignedFareProduct: PreassignedFareProduct;

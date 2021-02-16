@@ -1,20 +1,20 @@
-import ThemeText from '../../../components/text';
-import {TicketTexts, useTranslation} from '../../../translations';
-import React from 'react';
-import {View} from 'react-native';
-import {useRemoteConfig} from '../../../RemoteConfigContext';
+import ThemeText from '@atb/components/text';
 import {
   PreassignedFareProduct,
   TariffZone,
   UserProfile,
-} from '../../../reference-data/types';
+} from '@atb/reference-data/types';
 import {
   findReferenceDataById,
   getReferenceDataName,
-} from '../../../reference-data/utils';
+} from '@atb/reference-data/utils';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {StyleSheet} from '@atb/theme';
+import {PreactivatedTicket} from '@atb/tickets';
+import {TicketTexts, useTranslation} from '@atb/translations';
+import React from 'react';
+import {View} from 'react-native';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
-import {StyleSheet} from '../../../theme';
-import {PreactivatedTicket} from '../../../tickets';
 
 const TicketInfo = ({travelRights}: {travelRights: PreactivatedTicket[]}) => {
   const {

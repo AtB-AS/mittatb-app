@@ -1,5 +1,5 @@
 import React from 'react';
-import ThemeText, {ThemeTextProps} from '../text';
+import ThemeText, {ThemeTextProps} from '@atb/components/text';
 import {screenReaderPause} from './utils';
 
 type LabelProps = ThemeTextProps & {

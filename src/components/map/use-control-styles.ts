@@ -1,7 +1,7 @@
+import {useTheme} from '@atb/theme';
 import {useMemo} from 'react';
 import {ViewStyle} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useTheme} from '../../theme';
 
 export function useControlPositionsStyle() {
   const {top, bottom} = useSafeAreaInsets();

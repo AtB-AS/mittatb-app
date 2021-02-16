@@ -1,16 +1,16 @@
-import React from 'react';
-import {View} from 'react-native';
-import {formatToLongDateTime, secondsToDuration} from '../../../utils/date';
-import {fromUnixTime} from 'date-fns';
-import ThemeText from '../../../components/text';
-import {StyleSheet} from '../../../theme';
-import ValidityIcon from './ValidityIcon';
+import ThemeText from '@atb/components/text';
+import {StyleSheet} from '@atb/theme';
 import {
   Language,
   TicketTexts,
   TranslateFunction,
   useTranslation,
-} from '../../../translations';
+} from '@atb/translations';
+import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
+import {fromUnixTime} from 'date-fns';
+import React from 'react';
+import {View} from 'react-native';
+import ValidityIcon from './ValidityIcon';
 
 const ValidityHeader: React.FC<{
   isValid: boolean;

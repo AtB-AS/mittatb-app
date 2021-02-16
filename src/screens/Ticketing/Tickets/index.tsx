@@ -1,13 +1,13 @@
+import Header from '@atb/components/screen-header';
+import {StyleSheet} from '@atb/theme';
+import {useTicketState} from '@atb/tickets';
+import {TicketsTexts, useTranslation} from '@atb/translations';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import React, {useMemo} from 'react';
 import {View} from 'react-native';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import Header from '../../../components/screen-header';
-import {StyleSheet} from '../../../theme';
 import TabBar from './TabBar';
 import {ActiveTickets, BuyTickets, ExpiredTickets} from './Tabs';
-import {TicketsTexts, useTranslation} from '../../../translations';
-import {useTicketState} from '../../../tickets';
 
 export const BuyTicketsScreenName = 'BuyTickets';
 export const ActiveTicketsScreenName = 'ActiveTickets';

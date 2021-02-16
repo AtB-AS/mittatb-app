@@ -1,11 +1,7 @@
-import {useCallback, useEffect, useReducer} from 'react';
-import {
-  ReserveOffer,
-  TicketReservation,
-  reserveOffers,
-} from '../../../../../tickets';
-import {ErrorType, getAxiosErrorType} from '../../../../../api/utils';
+import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
+import {ReserveOffer, reserveOffers, TicketReservation} from '@atb/tickets';
 import {AxiosError} from 'axios';
+import {useCallback, useEffect, useReducer} from 'react';
 import {Linking} from 'react-native';
 
 export type State = 'reserving-offer' | 'offer-reserved' | 'opened-vipps-app';

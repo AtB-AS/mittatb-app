@@ -1,18 +1,14 @@
-import {useRef, useCallback, useEffect, useReducer} from 'react';
+import {AxiosError} from 'axios';
+import {useCallback, useEffect, useReducer, useRef} from 'react';
 import {
   WebViewError,
   WebViewErrorEvent,
   WebViewNavigation,
   WebViewNavigationEvent,
 } from 'react-native-webview/lib/WebViewTypes';
-import {
-  ReserveOffer,
-  reserveOffers,
-  TicketReservation,
-} from '../../../../../tickets';
-import {ErrorType, getAxiosErrorType} from '../../../../../api/utils';
 import {parse as parseURL} from 'search-params';
-import {AxiosError} from 'axios';
+import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
+import {ReserveOffer, reserveOffers, TicketReservation} from '@atb/tickets';
 
 const possibleResponseCodes = ['Cancel', 'OK'] as const;
 type NetsResponseCode = typeof possibleResponseCodes[number];

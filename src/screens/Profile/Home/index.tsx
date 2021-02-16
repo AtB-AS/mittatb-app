@@ -1,3 +1,10 @@
+import {useAuthState} from '@atb/auth';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import * as Sections from '@atb/components/sections';
+import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {StyleSheet, Theme} from '@atb/theme';
+import {ProfileTexts, useTranslation} from '@atb/translations';
 import {PRIVACY_POLICY_URL} from '@env';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -5,13 +12,6 @@ import React from 'react';
 import {Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
-import * as Sections from '../../../components/sections';
-import {TabNavigatorParams} from '../../../navigation/TabNavigator';
-import FullScreenHeader from '../../../components/screen-header/full-header';
-import {StyleSheet, Theme} from '../../../theme';
-import {useTranslation, ProfileTexts} from '../../../translations';
-import {useRemoteConfig} from '../../../RemoteConfigContext';
-import {useAuthState} from '../../../auth';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,

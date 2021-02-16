@@ -1,13 +1,13 @@
 import {parseISO} from 'date-fns';
 import {useCallback} from 'react';
-import {getDepartures} from '../../../api/serviceJourney';
+import {getDepartures} from '@atb/api/serviceJourney';
 import {
   EstimatedCall,
   Situation,
   TransportMode,
   TransportSubmode,
-} from '../../../sdk';
-import usePollableResource from '../../../utils/use-pollable-resource';
+} from '@atb/sdk';
+import usePollableResource from '@atb/utils/use-pollable-resource';
 import {ServiceJourneyDeparture} from './types';
 
 export type DepartureData = {

@@ -1,15 +1,13 @@
+import {CrashParachute} from '@atb/assets/svg/illustrations';
+import Button from '@atb/components/button';
+import ScreenHeader from '@atb/components/screen-header';
+import ThemeText from '@atb/components/text';
+import {StyleSheet} from '@atb/theme';
+import useLocalConfig from '@atb/utils/use-local-config';
 import React from 'react';
-import ScreenHeader from '../components/screen-header';
 import {View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {getBuildNumber} from 'react-native-device-info';
-
-import useChatIcon from '../chat/use-chat-icon';
-import {CrashParachute} from '../assets/svg/illustrations';
-import Button from '../components/button';
-import useLocalConfig from '../utils/use-local-config';
-import ThemeText from '../components/text';
-import {StyleSheet} from '../theme';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 type ErrorProps = {
   onRestartApp: () => void;

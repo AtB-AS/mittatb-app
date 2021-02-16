@@ -1,9 +1,9 @@
+import {StyleSheet} from '@atb/theme';
+import {useTranslation} from '@atb/translations';
+import {daysBetween, formatToSimpleDate, isSameDay} from '@atb/utils/date';
 import {parseISO} from 'date-fns';
 import React from 'react';
-import {StyleSheet} from '../../theme';
-import {formatToSimpleDate, isSameDay, daysBetween} from '../../utils/date';
-import ThemeText from '../text';
-import {useTranslation} from '../../translations';
+import ThemeText from '@atb/components/text';
 
 type OptionalNextDayLabelProps = {
   departureTime: string;

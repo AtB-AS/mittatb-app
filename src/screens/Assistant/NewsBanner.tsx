@@ -1,13 +1,13 @@
 import * as React from 'react';
-import {StyleSheet} from '../../theme';
+import {StyleSheet} from '@atb/theme';
 import {
   AccessibilityProps,
   Linking,
   TouchableOpacity,
   View,
 } from 'react-native';
-import ThemeText from '../../components/text';
-import {useRemoteConfig} from '../../RemoteConfigContext';
+import ThemeText from '@atb/components/text';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 const NewsBanner: React.FC<{} & AccessibilityProps> = ({...props}) => {
   const style = useStyle();

@@ -2,17 +2,17 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
-import Header from '../../../../components/screen-header';
+import Header from '@atb/components/screen-header';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {StyleSheet, useTheme} from '../../../../theme';
-import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
-import * as Sections from '../../../../components/sections';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
+import * as Sections from '@atb/components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
-import {ProductTexts, useTranslation} from '../../../../translations';
-import Button from '../../../../components/button';
-import {getReferenceDataName} from '../../../../reference-data/utils';
-import {useRemoteConfig} from '../../../../RemoteConfigContext';
-import {PreassignedFareProduct} from '../../../../reference-data/types';
+import {ProductTexts, useTranslation} from '@atb/translations';
+import Button from '@atb/components/button';
+import {getReferenceDataName} from '@atb/reference-data/utils';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {PreassignedFareProduct} from '@atb/reference-data/types';
 
 export type ProductRouteParams = {
   preassignedFareProductId: string;

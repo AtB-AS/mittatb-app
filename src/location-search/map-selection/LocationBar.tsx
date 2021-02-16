@@ -1,19 +1,19 @@
+import {ArrowRight} from '@atb/assets/svg/icons/navigation';
+import SvgError from '@atb/assets/svg/icons/status/Error';
+import SvgInfo from '@atb/assets/svg/icons/status/Info';
+import LocationIcon from '@atb/components/location-icon';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
 import React from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
-import {ErrorType} from '../../api/utils';
-import {ArrowRight} from '../../assets/svg/icons/navigation';
-import SvgError from '../../assets/svg/icons/status/Error';
-import SvgInfo from '../../assets/svg/icons/status/Info';
-import LocationIcon from '../../components/location-icon';
-import ThemeText from '../../components/text';
-import ThemeIcon from '../../components/theme-icon';
-import {Location} from '../../favorites/types';
-import {StyleSheet, useTheme} from '../../theme';
+import {ErrorType} from '@atb/api/utils';
+import {Location} from '@atb/favorites/types';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   LocationSearchTexts,
-  useTranslation,
   TranslateFunction,
-} from '../../translations';
+  useTranslation,
+} from '@atb/translations';
 
 type Props = {
   location?: Location;

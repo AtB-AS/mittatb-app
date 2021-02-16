@@ -1,6 +1,6 @@
 import {ViewStyle} from 'react-native';
-import {Theme, useTheme} from '../../../theme';
-import {RadiusSizes} from '../../../theme/colors';
+import {Theme, useTheme} from '@atb/theme';
+import {RadiusSizes} from '@atb/theme/colors';
 
 export type ContainerSizingType = 'inline' | 'compact' | 'block';
 export type RadiusMode = 'top' | 'bottom' | 'top-bottom';
