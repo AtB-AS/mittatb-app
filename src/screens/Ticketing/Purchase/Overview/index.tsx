@@ -7,8 +7,6 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import MessageBox from '@atb/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {TariffZone} from '@atb/reference-data/types';
-import {getReferenceDataName} from '@atb/reference-data/utils';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet} from '@atb/theme';
 import {
   Language,
@@ -17,13 +15,18 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {UserProfileWithCount} from '../Travellers/use-user-count-state';
+import {
+  getReferenceDataName,
+  isUserProfileSelectableForProductType,
+} from '@atb/reference-data/utils';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useEffect, useMemo} from 'react';
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../';
 import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
-import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import useOfferState from './use-offer-state';
 
 export type OverviewProps = {
@@ -47,15 +50,25 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     user_profiles: userProfiles,
   } = useRemoteConfig();
 
+  const selectableProducts = preassignedFareProducts.filter(
+    (p) => p.type === params.selectableProductType,
+  );
+
+  const selectableProductType = params.selectableProductType ?? 'single';
+
   const preassignedFareProduct =
-    params.preassignedFareProduct ?? preassignedFareProducts[0];
+    params.preassignedFareProduct ?? selectableProducts[0];
 
   const defaultUserProfilesWithCount = useMemo(
     () =>
-      userProfiles.map((u, i) => ({
-        ...u,
-        count: i == 0 ? 1 : 0,
-      })),
+      userProfiles
+        .filter((u) =>
+          isUserProfileSelectableForProductType(u, preassignedFareProduct.type),
+        )
+        .map((u, i) => ({
+          ...u,
+          count: i == 0 ? 1 : 0,
+        })),
     [userProfiles],
   );
   const userProfilesWithCount =
@@ -85,7 +98,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        title={t(PurchaseOverviewTexts.header.title)}
+        title={t(PurchaseOverviewTexts.header.title[selectableProductType])}
         leftButton={{
           type: 'cancel',
           onPress: closeModal,
@@ -111,7 +124,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
                 preassignedFareProductId: preassignedFareProduct.id,
               });
             }}
-            disabled={preassignedFareProducts.length <= 1}
+            disabled={selectableProducts.length <= 1}
             icon={<ThemeIcon svg={Edit} />}
           />
           <Sections.LinkItem
@@ -119,6 +132,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             onPress={() => {
               navigation.push('Travellers', {
                 userProfilesWithCount,
+                preassignedFareProduct,
               });
             }}
             icon={<ThemeIcon svg={Edit} />}

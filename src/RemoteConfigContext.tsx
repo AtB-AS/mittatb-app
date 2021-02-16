@@ -102,7 +102,11 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
         preassigned_fare_products: parseJson(
           config.preassigned_fare_products,
           defaultPreassignedFareProducts,
-        ),
+        ).map((p: PreassignedFareProduct) => ({
+          ...p,
+          // Todo: Temporaraily mocked value until flag is added in RemoteConfig
+          type: p.name.value === '30-dagersbillett' ? 'period' : 'single',
+        })),
         tariff_zones: parseJson(config.tariff_zones, defaultTariffZones),
         user_profiles: parseJson(config.user_profiles, defaultUserProfiles),
         refresh,

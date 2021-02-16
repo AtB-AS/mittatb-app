@@ -23,6 +23,7 @@ import {UserProfileWithCount} from './Travellers/use-user-count-state';
 
 type PurchaseOverviewParams = {
   refreshOffer?: boolean;
+  selectableProductType?: PreassignedFareProduct['type'];
   preassignedFareProduct?: PreassignedFareProduct;
   fromTariffZone?: TariffZoneWithMetadata;
   toTariffZone?: TariffZoneWithMetadata;
@@ -31,6 +32,7 @@ type PurchaseOverviewParams = {
 
 type TravellersParams = {
   userProfilesWithCount: UserProfileWithCount[];
+  preassignedFareProduct: PreassignedFareProduct;
 };
 
 type PaymentParams = {

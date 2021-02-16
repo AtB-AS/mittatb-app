@@ -5,7 +5,6 @@ import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
-import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {TravellersTexts, useTranslation} from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
@@ -15,6 +14,8 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../';
 import {createTravellersText} from '../Overview';
+import SingleTravellerSelection from './SingleTravellerSelection';
+import MultipleTravellersSelection from './MultipleTravellersSelection';
 import useUserCountState from './use-user-count-state';
 
 export type TravellersProps = {
@@ -33,9 +34,7 @@ const Travellers: React.FC<TravellersProps> = ({
   const {theme} = useTheme();
   const {t, language} = useTranslation();
 
-  const {userProfilesWithCount, addCount, removeCount} = useUserCountState(
-    params.userProfilesWithCount,
-  );
+  const userCountState = useUserCountState(params.userProfilesWithCount);
 
   const {top: safeAreaTop, bottom: safeAreBottom} = useSafeAreaInsets();
 
@@ -53,23 +52,22 @@ const Travellers: React.FC<TravellersProps> = ({
               <View style={styles.summaryItem}>
                 <ThemeIcon style={styles.summaryIcon} svg={SvgProfile} />
                 <ThemeText>
-                  {createTravellersText(userProfilesWithCount, t, language)}
+                  {createTravellersText(
+                    userCountState.userProfilesWithCount,
+                    t,
+                    language,
+                  )}
                 </ThemeText>
               </View>
             </Sections.GenericItem>
           </Sections.Section>
         </View>
-        <Sections.Section>
-          {userProfilesWithCount.map((u) => (
-            <Sections.CounterInput
-              key={u.userTypeString}
-              text={getReferenceDataName(u, language)}
-              count={u.count}
-              addCount={() => addCount(u.userTypeString)}
-              removeCount={() => removeCount(u.userTypeString)}
-            />
-          ))}
-        </Sections.Section>
+
+        {params.preassignedFareProduct.type === 'single' ? (
+          <MultipleTravellersSelection {...userCountState} />
+        ) : (
+          <SingleTravellerSelection {...userCountState} />
+        )}
       </ScrollView>
 
       <View
@@ -84,10 +82,10 @@ const Travellers: React.FC<TravellersProps> = ({
           mode="primary"
           text={t(TravellersTexts.primaryButton.text)}
           accessibilityHint={t(TravellersTexts.primaryButton.a11yHint)}
-          disabled={!userProfilesWithCount.some((u) => u.count)}
+          disabled={!userCountState.userProfilesWithCount.some((u) => u.count)}
           onPress={() => {
             navigation.navigate('PurchaseOverview', {
-              userProfilesWithCount,
+              userProfilesWithCount: userCountState.userProfilesWithCount,
             });
           }}
         />

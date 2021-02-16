@@ -2,7 +2,10 @@ import {translation as _} from '../../commons';
 
 const PurchaseOverviewTexts = {
   header: {
-    title: _('Kjøp ny billett', 'Buy new ticket'),
+    title: {
+      single: _('Enkeltbillett', 'Single ticket'),
+      period: _('Periodebillett', 'Period ticket'),
+    },
   },
   errorMessageBox: {
     title: _('Det oppstod en feil', 'An error occurred'),

@@ -11,6 +11,7 @@ export type PreassignedFareProduct = {
   description?: LanguageAndText;
   alternativeNames: LanguageAndText[];
   version: string;
+  type: 'single' | 'period';
 };
 
 export type UserProfile = {

@@ -7,11 +7,20 @@ const TicketsTexts = {
   buyTicketsTab: {
     label: _('Kjøp', 'Buy'),
     button: {
-      text: _('Kjøp ny billett', 'Buy new ticket'),
-      a11yHint: _(
-        'Aktivér for å kjøpe ny billett',
-        'Activate to buy a new ticket',
-      ),
+      single: {
+        text: _('Kjøp enkeltbillett', 'Buy single ticket'),
+        a11yHint: _(
+          'Aktivér for å kjøpe enkeltbillett',
+          'Activate to buy a single ticket',
+        ),
+      },
+      period: {
+        text: _('Kjøp periodebillett', 'Buy period ticket'),
+        a11yHint: _(
+          'Aktivér for å kjøpe periodebillett',
+          'Activate to buy a period ticket',
+        ),
+      },
     },
   },
   activeTicketsTab: {
