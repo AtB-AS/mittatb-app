@@ -32,7 +32,6 @@ const DefaultModeStyles: {[key in ButtonMode]: ButtonSettings} = {
     visibleBorder: false,
   },
   secondary: {
-    themeColor: 'background_1',
     withBackground: false,
     visibleBorder: true,
   },
@@ -86,7 +85,7 @@ const Button: React.FC<ButtonProps> = ({
   const modeData = DefaultModeStyles[mode];
   const themeColor = color ?? modeData.themeColor;
   const css = useButtonStyle();
-  const {theme} = useTheme();
+  const {theme, themeName} = useTheme();
   const fadeAnim = useRef(new Animated.Value(disabled ? DISABLED_OPACITY : 1))
     .current;
 
@@ -111,7 +110,7 @@ const Button: React.FC<ButtonProps> = ({
     ? theme.colors[themeColor]
     : ({
         backgroundColor: 'transparent',
-        textColorType: 'dark',
+        textColorType: themeName == 'dark' ? 'light' : 'dark',
       } as ContrastColor);
   const {primary} = theme.text.colorSelection[textColorType];
 
