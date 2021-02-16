@@ -1,5 +1,5 @@
 import React from 'react';
-import ThemeIcon from './index';
+import ThemeIcon from '.';
 import {
   ArrowLeft,
   ArrowRight,

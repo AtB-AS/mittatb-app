@@ -21,7 +21,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Alert, Keyboard, KeyboardAvoidingView, View} from 'react-native';
 import {Modalize} from 'react-native-modalize';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {AddEditFavoriteRootParams} from './index';
+import {AddEditFavoriteRootParams} from '.';
 import EmojiPopup from './EmojiPopup';
 
 type AddEditRouteName = 'AddEditForm';

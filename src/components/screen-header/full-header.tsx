@@ -2,7 +2,7 @@ import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import ScreenHeader, {ScreenHeaderProps} from './index';
+import ScreenHeader, {ScreenHeaderProps} from '.';
 
 export default function FullScreenHeader(props: ScreenHeaderProps) {
   const style = useHeaderStyle();

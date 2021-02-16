@@ -28,7 +28,7 @@ import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
-import {NearbyStackParams} from './index';
+import {NearbyStackParams} from '.';
 import Loading from '../Loading';
 import NearbyResults from './NearbyResults';
 import {useDepartureData} from './state';

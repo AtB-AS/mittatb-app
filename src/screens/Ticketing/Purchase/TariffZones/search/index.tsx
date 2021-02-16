@@ -25,7 +25,7 @@ import {
   View,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {TicketingStackParams} from '../../index';
+import {TicketingStackParams} from '../..';
 import TariffZoneResults from './TariffZoneResults';
 import VenueResults, {LocationAndTariffZone} from './VenueResults';
 

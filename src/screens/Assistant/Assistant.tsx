@@ -37,7 +37,7 @@ import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
-import {AssistantParams} from './index';
+import {AssistantParams} from '.';
 import Loading from '../Loading';
 import DateInput, {DateOutput} from './DateInput';
 import FadeBetween from './FadeBetween';
