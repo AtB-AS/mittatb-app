@@ -122,7 +122,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     margin: 0,
   },
   subLabel: {
-    color: theme.text.colors.disabled,
+    color: theme.text.colors.secondary,
     fontSize: 12,
     marginRight: 12,
   },

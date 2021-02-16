@@ -1,4 +1,4 @@
-import {Close, Confirm} from '@atb/assets/svg/icons/actions';
+import {Confirm} from '@atb/assets/svg/icons/actions';
 import SvgDragHandle from '@atb/assets/svg/icons/actions/DragHandle';
 import Button, {ButtonGroup} from '@atb/components/button';
 import ScreenHeader from '@atb/components/screen-header';

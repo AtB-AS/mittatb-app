@@ -1,12 +1,9 @@
+import {ArrowRight} from '@atb/assets/svg/icons/navigation';
+import {Dot} from '@atb/assets/svg/icons/other';
+import Button from '@atb/components/button';
+import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
-import {Dot} from '@atb/assets/svg/icons/other';
-import {TouchableOpacity} from 'react-native';
-import {ArrowRight} from '@atb/assets/svg/icons/navigation';
-import {StyleSheet} from '@atb/theme';
-import ThemeIcon from '@atb/components/theme-icon';
-import ThemeText from '@atb/components/text';
-import Button from '@atb/components/button';
 
 type NavigateButtonProps = {
   onNavigate(): void;
@@ -35,7 +32,13 @@ const NavigationControls: React.FC<NavigateButtonProps> = ({
           />
         ))}
       </View>
-      <Button onPress={onNavigate} text={title} icon={ArrowRight} />
+      <Button
+        onPress={onNavigate}
+        text={title}
+        icon={arrow ? ArrowRight : undefined}
+        color="primary_2"
+        iconPosition="right"
+      />
       {children}
     </View>
   );
