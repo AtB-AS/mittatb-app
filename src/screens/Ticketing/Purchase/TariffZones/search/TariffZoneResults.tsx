@@ -21,7 +21,7 @@ const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
   return (
     <>
       <View accessibilityRole="header" style={styles.subHeader}>
-        <ThemeText type="lead" color="disabled">
+        <ThemeText type="lead" color="secondary">
           {t(TariffZoneSearchTexts.zones.heading)}
         </ThemeText>
       </View>

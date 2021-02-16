@@ -23,7 +23,7 @@ const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
           svg={Duration}
         />
         <ThemeText
-          color="disabled"
+          color="secondary"
           accessible={true}
           accessibilityLabel={t(summaryTexts.travelTime.a11yLabel(time))}
         >
@@ -32,12 +32,12 @@ const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
       </View>
       <View style={styles.summaryDetail}>
         <ThemeIcon
-          colorType="disabled"
+          colorType="secondary"
           style={styles.leftIcon}
           svg={WalkingPerson}
         />
         <ThemeText
-          color="disabled"
+          color="secondary"
           accessible={true}
           accessibilityLabel={t(
             summaryTexts.walkDistance.a11yLabel(readableDistance),

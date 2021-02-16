@@ -70,7 +70,7 @@ const ResultItemHeader: React.FC<{
     <View style={styles.resultHeader}>
       <ThemeText
         type="lead"
-        color="disabled"
+        color="secondary"
         style={styles.resultHeaderLabel}
         accessibilityLabel={t(
           AssistantTexts.results.resultItem.header.time(
@@ -85,7 +85,7 @@ const ResultItemHeader: React.FC<{
       <View style={styles.durationContainer}>
         <AccessibleText
           type="lead"
-          color="disabled"
+          color="secondary"
           prefix={t(AssistantTexts.results.resultItem.header.totalDuration)}
         >
           {durationText}

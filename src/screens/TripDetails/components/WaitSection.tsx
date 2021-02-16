@@ -39,7 +39,7 @@ const WaitSection: React.FC<WaitDetails> = (wait) => {
         </TripRow>
       )}
       <TripRow rowLabel={<Wait />}>
-        <ThemeText type="lead" color="disabled">
+        <ThemeText type="lead" color="secondary">
           {t(WaitTexts.label(waitTime))}
         </ThemeText>
       </TripRow>

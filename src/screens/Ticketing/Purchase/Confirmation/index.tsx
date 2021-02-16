@@ -154,7 +154,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                   <ThemeText
                     style={styles.smallTopMargin}
                     type="lead"
-                    color="disabled"
+                    color="secondary"
                   >
                     {fromTariffZone.id === toTariffZone.id
                       ? t(
@@ -172,7 +172,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                   <ThemeText
                     style={styles.smallTopMargin}
                     type="lead"
-                    color="disabled"
+                    color="secondary"
                   >
                     {t(PurchaseConfirmationTexts.validityTexts.startTime)}
                   </ThemeText>
@@ -187,7 +187,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
             <ThemeText type="body">
               {t(PurchaseConfirmationTexts.totalCost.title)}
             </ThemeText>
-            <ThemeText type="label" color="disabled">
+            <ThemeText type="label" color="secondary">
               {t(PurchaseConfirmationTexts.totalCost.label)}
             </ThemeText>
           </View>

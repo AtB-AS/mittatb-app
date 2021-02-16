@@ -32,7 +32,7 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
             <View style={styles.iconContainer}>
               <ThemeIcon svg={BlankTicket} />
             </View>
-            <ThemeText type="lead" color="disabled">
+            <ThemeText type="lead" color="secondary">
               {reservation.paymentStatus !== 'CAPTURE'
                 ? t(TicketsTexts.reservation.processing)
                 : t(TicketsTexts.reservation.approved)}

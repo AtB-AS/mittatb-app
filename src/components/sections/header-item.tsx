@@ -28,7 +28,7 @@ export default function HeaderItem({
       {subtitle && (
         <ThemeText
           style={contentContainer}
-          color="disabled"
+          color="secondary"
           type={mode === 'heading' ? 'lead' : 'label'}
         >
           {subtitle}
