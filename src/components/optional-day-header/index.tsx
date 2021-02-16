@@ -40,7 +40,7 @@ const useDayTextStyle = StyleSheet.createThemeHook((theme) => ({
   title: {
     paddingHorizontal: theme.spacings.medium,
     marginTop: theme.spacings.medium,
-    color: theme.text.colors.disabled,
+    color: theme.text.colors.secondary,
   },
 }));
 function getHumanizedDepartureDatePrefixed(
