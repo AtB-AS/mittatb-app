@@ -1,8 +1,5 @@
-name: Build staging Android project
-on:
-  push:
-    branches:
-      - master
+name: Build store Android project
+on: [push] 
 
 jobs:
   build-ios:
@@ -45,10 +42,10 @@ jobs:
           KEYSTORE_PASS: ${{ secrets.ATB_KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.ATB_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.ATB_KEY_ALIAS }}
-      - name: Distribute to AppCenter
-        run: fastlane android appcenter
-        env:
-          APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
+      # - name: Distribute to AppCenter
+      #   run: fastlane android appcenter
+      #   env:
+      #     APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
       - name: Upload bundle and source maps
         run: sh ./scripts/android/upload-sourcemaps.sh
         env:

@@ -1,8 +1,5 @@
-name: Build staging iOS project
-on:
-  push:
-    branches:
-      - master
+name: Build store iOS project
+on: [push]
 
 jobs:
   build-ios:
@@ -16,6 +13,8 @@ jobs:
         run: |
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
           echo "APP_ENVIRONMENT=store" >> $GITHUB_ENV
+          echo "BUNDLE_IDENTIFIER=no.mittatb.store" >> $GITHUB_ENV
+          echo "APPLE_TEAM_ID=CSV447Q97L" >> $GITHUB_ENV
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
         env:
@@ -40,14 +39,18 @@ jobs:
         env:
           FASTLANE_MATCH_URL: ${{ secrets.FASTLANE_MATCH_URL }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_TYPE: 'appstore'
       - name: Generate icons
         run: brew install imagemagick && yarn app-icon generate -i icon.qa.png --platforms=ios
       - name: Run fastlane build
         run: fastlane ios build
-      - name: Distribute to AppCenter
-        run: fastlane ios appcenter
         env:
-          APPCENTER_API_KEY: ${{ secrets.APPCENTER_IOS_API_KEY }}
+          PROVISIONING_PROFILE: 'match AppStore no.mittatb.store'
+          EXPORT_METHOD: 'app-store'
+      # - name: Distribute to AppCenter
+      #   run: fastlane ios appcenter
+      #   env:
+      #     APPCENTER_API_KEY: ${{ secrets.APPCENTER_IOS_API_KEY }}
       - name: Create bundle and source maps
         run: sh ./scripts/ios/create-sourcemaps.sh
       - name: Upload bundle and source maps

@@ -70,7 +70,7 @@ jobs:
           KEY_PASS: ${{ secrets.ATB_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.ATB_KEY_ALIAS }}
       - name: Distribute to AppCenter
-        run: fastlane android appcenter
+        run: fastlane android appcenter_staging
         env:
           APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
       - name: Upload bundle and source maps

@@ -16,6 +16,8 @@ jobs:
         run: |
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
           echo "APP_ENVIRONMENT=staging" >> $GITHUB_ENV
+          echo "BUNDLE_IDENTIFIER=no.mittatb.staging" >> $GITHUB_ENV
+          echo "APPLE_TEAM_ID=CSV447Q97L" >> $GITHUB_ENV
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
         env:
@@ -53,12 +55,16 @@ jobs:
         env:
           FASTLANE_MATCH_URL: ${{ secrets.FASTLANE_MATCH_URL }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_TYPE: 'adhoc'
       - name: Generate icons
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn app-icon generate -i icon.qa.png --platforms=ios
       - name: Run fastlane build
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: fastlane ios build
+        env:
+          PROVISIONING_PROFILE: 'match AdHoc no.mittatb.staging'
+          EXPORT_METHOD: 'ad-hoc'
       - name: Replace ipa bundle
         if: steps.ipa-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/ios/replace-bundle.sh
@@ -67,7 +73,7 @@ jobs:
           APP_NAME: 'AtB.app'
           CODE_SIGN_IDENTITY: ${{ secrets.IOS_CODE_SIGN_IDENTITY }}
       - name: Distribute to AppCenter
-        run: fastlane ios appcenter
+        run: fastlane ios appcenter_staging
         env:
           APPCENTER_API_KEY: ${{ secrets.APPCENTER_IOS_API_KEY }}
       - name: Create bundle and source maps
