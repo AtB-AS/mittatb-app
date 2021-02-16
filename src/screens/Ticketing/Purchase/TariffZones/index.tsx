@@ -414,6 +414,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
         <View style={styles.saveButton}>
           <Button
             onPress={onSave}
+            color="primary_2"
             text={t(TariffZonesTexts.saveButton.text)}
             accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
           />

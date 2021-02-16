@@ -219,13 +219,6 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 
       <KeyboardAvoidingView behavior="padding">
         <ButtonGroup>
-          <Button
-            onPress={save}
-            icon={SvgConfirm}
-            iconPosition="right"
-            text={t(AddEditFavoriteTexts.save.label)}
-          />
-
           {editItem && (
             <Button
               onPress={deleteItem}
@@ -235,6 +228,13 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
               text={t(AddEditFavoriteTexts.delete.label)}
             />
           )}
+          <Button
+            color="primary_2"
+            onPress={save}
+            icon={SvgConfirm}
+            iconPosition="right"
+            text={t(AddEditFavoriteTexts.save.label)}
+          />
         </ButtonGroup>
       </KeyboardAvoidingView>
     </SafeAreaView>

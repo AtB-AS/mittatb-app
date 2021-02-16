@@ -240,6 +240,7 @@ const DateInput: React.FC<DateInputProps> = ({
               accessibilityLabel="Søk etter reiser med nåværende valgte tidspunkt"
               accessibilityRole="search"
               onPress={onSave}
+              color="primary_2"
               text="Søk etter reiser"
             />
           </View>

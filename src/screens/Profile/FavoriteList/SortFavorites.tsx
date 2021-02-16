@@ -107,6 +107,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
           text={t(FavoriteListTexts.sortableScreen.buttons.save)}
           icon={Confirm}
           iconPosition="right"
+          color="primary_2"
         />
       </ButtonGroup>
     </SafeAreaView>

@@ -40,7 +40,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
       {isSignedInAsAbtCustomer && (
         <View style={{padding: theme.spacings.medium}}>
           <Button
-            mode="primary"
+            color="primary_2"
             text={t(TicketsTexts.buyTicketsTab.button.text)}
             accessibilityHint={t(TicketsTexts.buyTicketsTab.button.a11yHint)}
             onPress={() =>
