@@ -56,7 +56,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
   };
 
   return (
-    <SafeAreaView style={style.container} edges={['right', 'top', 'left']}>
+    <SafeAreaView style={style.container}>
       <ScreenHeader
         title={t(FavoriteListTexts.sortableScreen.title)}
         leftButton={{type: 'close'}}
