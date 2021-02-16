@@ -14,14 +14,11 @@ import {
   TransportSubmode,
 } from '@atb/sdk';
 import SituationMessages from '@atb/situations';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
-import {
-  defaultFill,
-  transportationColor,
-} from '@atb/utils/transportation-color';
 import {getQuayName} from '@atb/utils/transportation-names';
+import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {
   NavigationProp,
   RouteProp,
@@ -59,6 +56,7 @@ type Props = {
 export default function DepartureDetails({navigation, route}: Props) {
   const {activeItemIndex = 0, items} = route.params;
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
+  const {theme} = useTheme();
 
   const activeItem: ServiceJourneyDeparture | undefined =
     items[activeItemIndexState];
@@ -123,7 +121,7 @@ export default function DepartureDetails({navigation, route}: Props) {
           {isLoading && (
             <View>
               <ActivityIndicator
-                color={defaultFill}
+                color={theme.text.colors.primary}
                 style={styles.spinner}
                 animating={true}
                 size="large"
@@ -180,7 +178,7 @@ function CallGroup({
   const isStartPlace = (i: number) => isOnRoute && i === 0;
   const {t} = useTranslation();
   const [collapsed, setCollapsed] = useState(isBefore);
-  const styles = useStopsStyle();
+
   if (!calls?.length) {
     return null;
   }
@@ -203,51 +201,84 @@ function CallGroup({
   return (
     <>
       {items.map((call, i) => {
-        const isStart = isStartPlace(i) || i === 0;
-        const isEnd = i === items.length - 1 && !collapsed;
-        const isBetween = !isStart && !isEnd;
         return (
-          <View
+          <TripItem
             key={call.quay?.id + call.serviceJourney.id}
-            style={[styles.place, isStart && styles.startPlace]}
-          >
-            <TripLegDecoration
-              hasStart={isStart}
-              hasCenter={isBetween}
-              hasEnd={isEnd}
-              color={
-                type === 'passed' || type === 'after'
-                  ? defaultFill
-                  : transportationColor(mode, subMode)
-              }
-            ></TripLegDecoration>
-            <TripRow
-              rowLabel={
-                <Time
-                  aimedTime={call.aimedDepartureTime}
-                  expectedTime={call.expectedDepartureTime}
-                  missingRealTime={!call.realtime && isStartPlace(i)}
-                />
-              }
-              alignChildren={
-                isStart ? 'flex-start' : isEnd ? 'flex-end' : 'center'
-              }
-              style={[styles.row, isBetween && styles.middleRow]}
-            >
-              <ThemeText>{getQuayName(call.quay)} </ThemeText>
-            </TripRow>
-
-            {type !== 'passed' && (
-              <SituationRow
-                situations={call.situations}
-                parentSituations={parentSituations}
-              />
-            )}
-            {i === 0 && collapseButton}
-          </View>
+            isStartPlace={isStartPlace(i)}
+            isStart={isStartPlace(i) || i === 0}
+            isEnd={i === items.length - 1 && !collapsed}
+            call={call}
+            type={type}
+            mode={mode}
+            subMode={subMode}
+            parentSituations={parentSituations}
+            collapseButton={i === 0 ? collapseButton : null}
+          />
         );
       })}
     </>
+  );
+}
+
+type TripItemProps = {
+  isStartPlace: boolean;
+  call: EstimatedCall;
+  type: string;
+  mode: TransportMode | undefined;
+  subMode: TransportSubmode | undefined;
+  parentSituations: Situation[];
+  collapseButton: JSX.Element | null;
+  isStart: boolean;
+  isEnd: boolean;
+};
+function TripItem({
+  isStartPlace,
+  call,
+  type,
+  mode,
+  subMode,
+  parentSituations,
+  collapseButton,
+  isStart,
+  isEnd,
+}: TripItemProps) {
+  const styles = useStopsStyle();
+  const isBetween = !isStart && !isEnd;
+  const iconColor = useTransportationColor(
+    type === 'passed' || type === 'after' ? undefined : mode,
+    subMode,
+  );
+
+  return (
+    <View style={[styles.place, isStart && styles.startPlace]}>
+      <TripLegDecoration
+        hasStart={isStart}
+        hasCenter={isBetween}
+        hasEnd={isEnd}
+        color={iconColor}
+      />
+      <TripRow
+        rowLabel={
+          <Time
+            aimedTime={call.aimedDepartureTime}
+            expectedTime={call.expectedDepartureTime}
+            missingRealTime={!call.realtime && isStartPlace}
+          />
+        }
+        alignChildren={isStart ? 'flex-start' : isEnd ? 'flex-end' : 'center'}
+        style={[styles.row, isBetween && styles.middleRow]}
+      >
+        <ThemeText>{getQuayName(call.quay)} </ThemeText>
+      </TripRow>
+
+      {type !== 'passed' && (
+        <SituationRow
+          situations={call.situations}
+          parentSituations={parentSituations}
+        />
+      )}
+      {collapseButton}
+    </View>
   );
 }
 

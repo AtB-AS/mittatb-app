@@ -278,7 +278,7 @@ export const themes: Themes = {
       secondary_3: contrastColor(colors.secondary.cyan_200, 'dark'),
       secondary_4: contrastColor(colors.primary.gray_50, 'dark'),
 
-      transport_city: contrastColor(colors.primary.green_700),
+      transport_city: contrastColor(colors.primary.green_600),
       transport_region: contrastColor(colors.secondary.blue_500),
       transport_boat: contrastColor(colors.secondary.cyan_700),
       transport_train: contrastColor(colors.secondary.red_500),
