@@ -51,7 +51,7 @@ const FavoriteChips: React.FC<Props> = ({
         <View style={[styles.staticChipsContainer, contentContainerStyle]}>
           {activeType('location') && (
             <FavoriteChip
-              color="primary2"
+              color="secondary_1"
               text={t(FavoriteTexts.chips.currentLocation)}
               accessibilityRole="button"
               accessibilityHint={chipActionHint ?? ''}
@@ -65,7 +65,7 @@ const FavoriteChips: React.FC<Props> = ({
               accessibilityRole="button"
               icon={MapPointPin}
               onPress={onMapSelection}
-              color="primary2"
+              color="secondary_1"
             />
           )}
         </View>
@@ -79,7 +79,7 @@ const FavoriteChips: React.FC<Props> = ({
         {activeType('favorites') &&
           favorites.map((fav, i) => (
             <FavoriteChip
-              color="primary4"
+              color="primary_3"
               key={fav.name}
               text={fav.name ?? ''}
               accessibilityLabel={'Favoritt: ' + fav.name + screenReaderPause}
@@ -102,7 +102,7 @@ const FavoriteChips: React.FC<Props> = ({
           ))}
         {activeType('add-favorite') && (
           <FavoriteChip
-            color="secondary"
+            mode="secondary"
             text={t(FavoriteTexts.chips.addFavorite)}
             accessibilityRole="button"
             icon={Add}

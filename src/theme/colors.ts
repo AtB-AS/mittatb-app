@@ -70,11 +70,17 @@ const colors = {
     yellow_500: '#E4D700',
 
     red_100: '#E4B8C6',
+    red_400: '#B74166',
     red_500: '#A51140',
   },
   text: {
     light: '#FFFFFF',
     dark: '#000000',
+  },
+  other: {
+    orange_500: '#BE5604',
+    ekspressen_500: '#ED6C05',
+    ekspressen_600: '#C75B12',
   },
 };
 
@@ -206,7 +212,7 @@ export interface Theme {
 
   text: {
     colors: typeof defaultTextColors.light;
-    color: typeof defaultTextColors;
+    colorSelection: typeof defaultTextColors;
   } & typeof textTypeStyles;
 
   border: {
@@ -267,18 +273,18 @@ export const themes: Themes = {
       primary_2: contrastColor(colors.secondary.cyan_500, 'dark'),
       primary_3: contrastColor(colors.secondary.blue_500, 'light'),
       primary_destructive: contrastColor(colors.secondary.red_500, 'light'),
-      secondary_1: contrastColor(),
-      secondary_2: contrastColor(),
-      secondary_3: contrastColor(),
-      secondary_4: contrastColor(),
+      secondary_1: contrastColor(colors.primary.gray_500, 'light'),
+      secondary_2: contrastColor(colors.primary.gray_200, 'dark'),
+      secondary_3: contrastColor(colors.secondary.cyan_200, 'dark'),
+      secondary_4: contrastColor(colors.primary.gray_50, 'dark'),
 
-      transport_city: contrastColor(),
-      transport_region: contrastColor(),
-      transport_boat: contrastColor(),
-      transport_train: contrastColor(),
-      transport_airport: contrastColor(),
-      transport_plane: contrastColor(),
-      transport_other: contrastColor(),
+      transport_city: contrastColor(colors.primary.green_700),
+      transport_region: contrastColor(colors.secondary.blue_500),
+      transport_boat: contrastColor(colors.secondary.cyan_700),
+      transport_train: contrastColor(colors.secondary.red_500),
+      transport_airport: contrastColor(colors.other.ekspressen_600),
+      transport_plane: contrastColor(colors.other.orange_500),
+      transport_other: contrastColor(colors.primary.gray_400),
     },
     status: {
       status_valid: {
@@ -299,8 +305,8 @@ export const themes: Themes = {
       },
     },
     text: {
-      colors: defaultTextColors['light'],
-      color: defaultTextColors,
+      colors: defaultTextColors['dark'],
+      colorSelection: defaultTextColors,
       ...textTypeStyles,
     },
     border: {
@@ -340,21 +346,22 @@ export const themes: Themes = {
       background_1: contrastColor(colors.primary.gray_50, 'dark'),
       background_2: contrastColor(colors.primary.gray_100, 'dark'),
       background_3: contrastColor(colors.primary.gray_200, 'dark'),
-      primary_1: contrastColor(),
-      primary_2: contrastColor(),
-      primary_3: contrastColor(),
-      primary_destructive: contrastColor(),
-      secondary_1: contrastColor(),
-      secondary_2: contrastColor(),
-      secondary_3: contrastColor(),
-      secondary_4: contrastColor(),
-      transport_city: contrastColor(),
-      transport_region: contrastColor(),
-      transport_boat: contrastColor(),
-      transport_train: contrastColor(),
-      transport_airport: contrastColor(),
-      transport_plane: contrastColor(),
-      transport_other: contrastColor(),
+      primary_1: contrastColor(colors.primary.green_500, 'dark'),
+      primary_2: contrastColor(colors.secondary.blue_500, 'light'),
+      primary_3: contrastColor(colors.secondary.cyan_500, 'dark'),
+      primary_destructive: contrastColor(colors.secondary.red_500, 'light'),
+      secondary_1: contrastColor(colors.primary.gray_300, 'dark'),
+      secondary_2: contrastColor(colors.primary.gray_500, 'light'),
+      secondary_3: contrastColor(colors.secondary.blue_600, 'light'),
+      secondary_4: contrastColor(colors.primary.gray_600, 'light'),
+
+      transport_city: contrastColor(colors.primary.green_500),
+      transport_region: contrastColor(colors.secondary.blue_500),
+      transport_boat: contrastColor(colors.secondary.cyan_300),
+      transport_train: contrastColor(colors.secondary.red_400),
+      transport_airport: contrastColor(colors.other.ekspressen_500),
+      transport_plane: contrastColor(colors.other.orange_500),
+      transport_other: contrastColor(colors.primary.gray_300),
     },
     status: {
       status_valid: {
@@ -375,8 +382,8 @@ export const themes: Themes = {
       },
     },
     text: {
-      colors: defaultTextColors['light'],
-      color: defaultTextColors,
+      colors: defaultTextColors['dark'],
+      colorSelection: defaultTextColors,
       ...textTypeStyles,
     },
     border: {

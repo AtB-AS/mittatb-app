@@ -1,7 +1,7 @@
+import {useTheme} from '@atb/theme';
+import {TextColor, TextNames} from '@atb/theme/colors';
 import React from 'react';
 import {Text, TextProps} from 'react-native';
-import {TextColors, TextNames} from '@atb/theme/colors';
-import {useTheme} from '@atb/theme';
 
 export const MAX_FONT_SCALE = 2;
 
@@ -21,7 +21,7 @@ const ThemeText: React.FC<ThemeTextProps> = ({
 
   const typeStyle = {
     ...theme.text[fontType],
-    color: theme.text.color.dark[color],
+    color: theme.text.colorSelection.dark[color],
   };
 
   return (

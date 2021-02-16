@@ -53,7 +53,7 @@ const NavigationRoot = () => {
           ...useBottomNavigationStyles(),
         },
         labelStyle: {
-          color: theme.text.color.dark.secondary,
+          color: theme.text.colors.secondary,
         },
       }}
       initialRouteName={settingToRouteName(startScreen)}

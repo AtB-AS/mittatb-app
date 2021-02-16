@@ -20,23 +20,30 @@ type ThemeColor = keyof Theme['colors'];
 type ButtonMode = 'primary' | 'secondary' | 'tertiary' | 'destructive';
 
 type ButtonSettings = {
-  themeColor: ThemeColor;
-  visibleBorder?: boolean;
+  themeColor?: ThemeColor;
+  withBackground: boolean;
+  visibleBorder: boolean;
 };
 
 const DefaultModeStyles: {[key in ButtonMode]: ButtonSettings} = {
   primary: {
     themeColor: 'primary_1',
+    withBackground: true,
+    visibleBorder: false,
   },
   secondary: {
     themeColor: 'background_1',
+    withBackground: false,
     visibleBorder: true,
   },
   tertiary: {
-    themeColor: 'background_1',
+    withBackground: false,
+    visibleBorder: false,
   },
   destructive: {
     themeColor: 'primary_destructive',
+    withBackground: true,
+    visibleBorder: false,
   },
 };
 
@@ -76,7 +83,8 @@ const Button: React.FC<ButtonProps> = ({
   textStyle,
   ...props
 }) => {
-  const themeColor = color ?? DefaultModeStyles.primary.themeColor;
+  const modeData = DefaultModeStyles[mode];
+  const themeColor = color ?? modeData.themeColor;
   const css = useButtonStyle();
   const {theme} = useTheme();
   const fadeAnim = useRef(new Animated.Value(disabled ? DISABLED_OPACITY : 1))
@@ -99,17 +107,19 @@ const Button: React.FC<ButtonProps> = ({
   const rightIconSpacing =
     Icon && iconPosition === 'right' ? spacing : undefined;
 
-  const {backgroundColor, textColorType} =
-    theme.colors[themeColor] ??
-    ({backgroundColor: '#000', textColorType: 'light'} as ContrastColor);
-  const {primary, secondary, disabled: disabledColor} = theme.text.color[
-    textColorType
-  ];
+  const {backgroundColor, textColorType} = themeColor
+    ? theme.colors[themeColor]
+    : ({
+        backgroundColor: 'transparent',
+        textColorType: 'dark',
+      } as ContrastColor);
+  const {primary} = theme.text.colorSelection[textColorType];
+
   const styleContainer: ViewStyle[] = [
     css.button,
     {
-      backgroundColor: backgroundColor,
-      borderColor: mode === 'secondary' ? primary : backgroundColor,
+      backgroundColor: modeData.withBackground ? backgroundColor : undefined,
+      borderColor: modeData.visibleBorder ? primary : 'transparent',
       padding: spacing,
       alignSelf: isInline ? 'flex-start' : undefined,
     },

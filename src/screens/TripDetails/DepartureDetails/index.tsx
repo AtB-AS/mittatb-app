@@ -227,7 +227,7 @@ function CallGroup({
                   aimedTime={call.aimedDepartureTime}
                   expectedTime={call.expectedDepartureTime}
                   missingRealTime={!call.realtime && isStartPlace(i)}
-                ></Time>
+                />
               }
               alignChildren={
                 isStart ? 'flex-start' : isEnd ? 'flex-end' : 'center'
@@ -263,7 +263,7 @@ function CollapseButtonRow({
 }: CollapseButtonRowProps) {
   const styles = useCollapseButtonStyle();
   const text = (
-    <ThemeText color="disabled" style={styles.text}>
+    <ThemeText color="secondary" style={styles.text}>
       {label}
     </ThemeText>
   );

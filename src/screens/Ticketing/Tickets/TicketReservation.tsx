@@ -91,7 +91,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   extraText: {
     paddingVertical: theme.spacings.xSmall,
-    color: theme.text.colors.faded,
+    color: theme.text.colors.disabled,
   },
   validityContainer: {
     flexDirection: 'row',

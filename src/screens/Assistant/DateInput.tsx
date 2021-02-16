@@ -178,7 +178,7 @@ const DateInput: React.FC<DateInputProps> = ({
         accessibilityRole="button"
         text={t(searchValue)}
         onPress={onOpen}
-        color="primary4"
+        color="primary_3"
       />
 
       <Portal>
@@ -277,7 +277,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: 6,
   },
   dateTypeButtonSelected: {
-    borderBottomColor: theme.text.colors.focus,
+    borderBottomColor: theme.text.colors.primary,
     borderBottomWidth: 2,
   },
 }));

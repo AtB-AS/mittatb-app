@@ -181,7 +181,7 @@ const ResultItemFooter: React.FC<{legs: Leg[]; onDetailsPressed(): void}> = ({
         )}
         icon={ArrowRight}
         iconPosition="right"
-        color="tertiary"
+        mode="tertiary"
         type="compact"
         onPress={onDetailsPressed}
         textStyle={styles.detailsButtonText}

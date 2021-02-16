@@ -16,7 +16,7 @@ const ThemeIcon = ({
 }: ThemeIconProps): JSX.Element => {
   const {theme, themeName} = useTheme();
   const settings = {
-    fill: theme.text.color[themeName][colorType ?? 'primary'],
+    fill: theme.text.colorSelection.dark[colorType ?? 'primary'],
     height: theme.icon.size[size],
     ...props,
   };

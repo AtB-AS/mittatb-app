@@ -21,7 +21,6 @@ export default function HeaderItem({
     <View style={topContainer}>
       <ThemeText
         style={contentContainer}
-        color={mode === 'heading' ? 'primary' : 'faded'}
         type={mode === 'heading' ? 'paragraphHeadline' : 'lead'}
       >
         {text}

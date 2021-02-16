@@ -103,13 +103,6 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
 
       <ButtonGroup>
         <Button
-          onPress={() => navigation.goBack()}
-          text={t(FavoriteListTexts.sortableScreen.buttons.cancel)}
-          color="secondary"
-          icon={Close}
-          iconPosition="right"
-        />
-        <Button
           onPress={saveOrder}
           text={t(FavoriteListTexts.sortableScreen.buttons.save)}
           icon={Confirm}

@@ -106,14 +106,13 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
           {(error.context === 'terminal-loading' ||
             error.context === 'capture') && (
             <Button
-              color="primary"
               onPress={restartTerminal}
               text={t(PaymentCreditCardTexts.buttons.restart)}
               style={styles.button}
             />
           )}
           <Button
-            color="secondary"
+            color="secondary_1"
             onPress={() => cancelTerminal()}
             text={t(PaymentCreditCardTexts.buttons.goBack)}
           />

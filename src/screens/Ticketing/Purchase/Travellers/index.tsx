@@ -81,7 +81,7 @@ const Travellers: React.FC<TravellersProps> = ({
         ]}
       >
         <Button
-          color="primary2"
+          color="primary_2"
           text={t(TravellersTexts.primaryButton.text)}
           accessibilityHint={t(TravellersTexts.primaryButton.a11yHint)}
           disabled={!userProfilesWithCount.some((u) => u.count)}

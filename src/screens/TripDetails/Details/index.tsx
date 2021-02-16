@@ -110,7 +110,7 @@ const Details: React.FC<Props> = (props) => {
         {showActivityIndicator && (
           <ActivityIndicator
             style={styles.activityIndicator}
-            color={theme.text.colors.faded}
+            color={theme.text.colors.disabled}
             animating={true}
             size="large"
           />
