@@ -574,7 +574,6 @@ function useTripPatterns(
       setSearchState('searching');
       setErrorType(undefined);
       try {
-        console.log(searchTime);
         const arriveBy = searchTime?.option === 'arrival';
         const searchDate =
           searchTime && searchTime?.option !== 'now'
