@@ -39,7 +39,7 @@ plugins:
   - removeUselessDefs: true
   - removeUselessStrokeAndFill: false
   - removeViewBox: false
-  - removeXMLNS: false
+  - removeXMLNS: true
   - removeXMLProcInst: true
   - sortAttrs: true
 
