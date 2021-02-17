@@ -1,28 +1,27 @@
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {ParamListBase} from '@react-navigation/native';
-import React from 'react';
-import {Platform} from 'react-native';
-import {SvgProps} from 'react-native-svg';
 import {
   Assistant as AssistantIcon,
   Nearby,
   Profile,
   Tickets,
-} from '../assets/svg/icons/tab-bar';
-import ThemeText from '../components/text';
-import {LocationWithMetadata} from '../favorites/types';
-import {usePreferenceItems} from '../preferences';
-import Assistant from '../screens/Assistant/';
-import NearbyScreen from '../screens/Nearby';
-import ProfileScreen, {ProfileStackParams} from '../screens/Profile';
-import TicketingScreen from '../screens/Ticketing';
-import {useTheme} from '../theme';
-import {useTranslation, dictionary} from '../translations/';
+} from '@atb/assets/svg/icons/tab-bar';
+import ThemeText from '@atb/components/text';
+import {LocationWithMetadata} from '@atb/favorites/types';
+import {usePreferenceItems} from '@atb/preferences';
+import Assistant from '@atb/screens/Assistant/';
+import NearbyScreen from '@atb/screens/Nearby';
+import ProfileScreen, {ProfileStackParams} from '@atb/screens/Profile';
+import TicketingScreen from '@atb/screens/Ticketing';
+import {useTheme} from '@atb/theme';
+import {dictionary, useTranslation} from '@atb/translations/';
 import {
   settingToRouteName,
   useBottomNavigationStyles,
-} from '../utils/navigation';
+} from '@atb/utils/navigation';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
+import {ParamListBase} from '@react-navigation/native';
+import React from 'react';
+import {SvgProps} from 'react-native-svg';
 
 type SubNavigator<T extends ParamListBase> = {
   [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
@@ -41,8 +40,6 @@ export type TabNavigatorParams = {
 };
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
-const softhyphen = Platform.OS === 'ios' ? '\u00AD' : '\u200B';
-
 const NavigationRoot = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
@@ -50,13 +47,13 @@ const NavigationRoot = () => {
   return (
     <Tab.Navigator
       tabBarOptions={{
-        activeTintColor: theme.text.colors.focus,
+        activeTintColor: theme.colors.primary_3.backgroundColor,
         style: {
           backgroundColor: theme.background.level0,
           ...useBottomNavigationStyles(),
         },
         labelStyle: {
-          color: theme.text.colors.faded,
+          color: theme.text.colors.secondary,
         },
       }}
       initialRouteName={settingToRouteName(startScreen)}

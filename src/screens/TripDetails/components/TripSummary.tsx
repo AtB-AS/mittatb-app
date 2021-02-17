@@ -1,27 +1,29 @@
+import {Duration, WalkingPerson} from '@atb/assets/svg/icons/transportation';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import {TripPattern} from '@atb/sdk';
+import {StyleSheet} from '@atb/theme';
+import {TripDetailsTexts, useTranslation} from '@atb/translations';
+import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
-import {
-  Duration,
-  WalkingPerson,
-} from '../../../assets/svg/icons/transportation';
-import ThemeText from '../../../components/text';
-import ThemeIcon from '../../../components/theme-icon';
-import {TripPattern} from '../../../sdk';
-import {StyleSheet} from '../../../theme';
-import {TripDetailsTexts, useTranslation} from '../../../translations';
-import {secondsToDuration} from '../../../utils/date';
 
 const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
   const styles = useStyle();
-  const {t} = useTranslation();
-  const time = secondsToDuration(duration);
+  const {t, language} = useTranslation();
+  const time = secondsToDuration(duration, language);
   const summaryTexts = TripDetailsTexts.trip.summary;
+  const readableDistance = walkDistance.toFixed();
   return (
     <View style={styles.summary}>
       <View style={styles.summaryDetail}>
-        <ThemeIcon colorType="faded" style={styles.leftIcon} svg={Duration} />
+        <ThemeIcon
+          colorType="disabled"
+          style={styles.leftIcon}
+          svg={Duration}
+        />
         <ThemeText
-          color="faded"
+          color="secondary"
           accessible={true}
           accessibilityLabel={t(summaryTexts.travelTime.a11yLabel(time))}
         >
@@ -30,12 +32,18 @@ const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
       </View>
       <View style={styles.summaryDetail}>
         <ThemeIcon
-          colorType="faded"
+          colorType="secondary"
           style={styles.leftIcon}
           svg={WalkingPerson}
         />
-        <ThemeText color="faded">
-          {t(summaryTexts.walkDistance.label(walkDistance.toFixed()))}
+        <ThemeText
+          color="secondary"
+          accessible={true}
+          accessibilityLabel={t(
+            summaryTexts.walkDistance.a11yLabel(readableDistance),
+          )}
+        >
+          {t(summaryTexts.walkDistance.label(readableDistance))}
         </ThemeText>
       </View>
     </View>
@@ -44,6 +52,8 @@ const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   summary: {
     marginVertical: theme.spacings.medium,
+    borderTopWidth: theme.border.width.slim,
+    borderColor: theme.background.level1,
   },
   summaryDetail: {
     padding: theme.spacings.medium,

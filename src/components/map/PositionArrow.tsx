@@ -1,10 +1,10 @@
+import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
+import {StyleSheet} from '@atb/theme';
+import insets from '@atb/utils/insets';
 import React from 'react';
-import {CurrentLocationArrow} from '../../assets/svg/icons/places';
-import {StyleSheet} from '../../theme';
-import insets from '../../utils/insets';
-import Button from '../button';
-import shadows from './shadows';
 import {AccessibilityProps} from 'react-native';
+import Button from '@atb/components/button';
+import shadows from './shadows';
 
 const PositionArrow: React.FC<
   {flyToCurrentLocation(): void} & AccessibilityProps
@@ -14,12 +14,12 @@ const PositionArrow: React.FC<
   return (
     <Button
       type="compact"
-      mode="primary"
+      color="primary_2"
       onPress={flyToCurrentLocation}
       hitSlop={insets.symmetric(12, 20)}
       icon={CurrentLocationArrow}
       style={styles.flyToButton}
-    ></Button>
+    />
   );
 };
 const useStyles = StyleSheet.createThemeHook((theme) => ({

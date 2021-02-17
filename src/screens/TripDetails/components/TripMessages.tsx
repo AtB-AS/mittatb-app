@@ -1,15 +1,14 @@
-import {AxiosError} from 'axios';
-import React from 'react';
-import {ViewStyle} from 'react-native';
-import {getAxiosErrorType} from '../../../api/utils';
-import ScreenReaderAnnouncement from '../../../components/screen-reader-announcement';
-import MessageBox from '../../../message-box';
-import {useStyle} from '../../../theme';
+import {getAxiosErrorType} from '@atb/api/utils';
+import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import MessageBox from '@atb/message-box';
 import {
   TranslatedString,
   TripDetailsTexts,
   useTranslation,
-} from '../../../translations';
+} from '@atb/translations';
+import {AxiosError} from 'axios';
+import React from 'react';
+import {ViewStyle} from 'react-native';
 
 type TripMessagesProps = {
   shortTime: boolean;

@@ -1,19 +1,19 @@
-import {FlatList, TouchableOpacity, View, ViewStyle} from 'react-native';
-import {LocationFavorite, UserFavorites} from '../../../favorites/types';
+import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
+import {screenReaderPause} from '@atb/components/accessible-text';
 import {
-  useSectionItem,
   SectionItem,
+  useSectionItem,
   useSectionStyle,
-} from '../../../components/sections/section-utils';
+} from '@atb/components/sections/section-utils';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import {FavoriteIcon} from '@atb/favorites';
+import {LocationFavorite, UserFavorites} from '@atb/favorites/types';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import insets from '@atb/utils/insets';
 import React, {useCallback} from 'react';
-import ThemeText from '../../../components/text';
-import {FavoriteIcon} from '../../../favorites';
-import {Expand, ExpandLess} from '../../../assets/svg/icons/navigation';
-import ThemeIcon from '../../../components/theme-icon';
-import {StyleSheet, Theme, useTheme} from '../../../theme';
-import insets from '../../../utils/insets';
+import {FlatList, TouchableOpacity, View} from 'react-native';
 import {immutableMove} from './sort-utils';
-import {screenReaderPause} from '../../../components/accessible-text';
 
 type SortableListFallbackProps = {
   data: UserFavorites;

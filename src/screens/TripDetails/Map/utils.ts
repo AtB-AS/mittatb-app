@@ -1,11 +1,19 @@
 import polyline from '@mapbox/polyline';
 import {Feature, LineString, Point, Position} from 'geojson';
-import {Leg, LegMode, Place, TransportSubmode} from '../../../sdk';
-import {flatMap} from '../../../utils/array';
+import {
+  Coordinates,
+  Leg,
+  LegMode,
+  MapLeg,
+  Place,
+  TransportSubmode,
+} from '@atb/sdk';
+import {flatMap} from '@atb/utils/array';
 
 export interface MapLine extends Feature<LineString> {
   travelType?: LegMode;
   subMode?: TransportSubmode;
+  faded?: boolean;
 }
 
 export function getMapBounds(features: MapLine[]) {
@@ -37,23 +45,30 @@ export function getMapBounds(features: MapLine[]) {
     ne,
   };
 }
+
 export function legsToMapLines(legs: Leg[]): MapLine[] {
+  return createMapLines(legs);
+}
+
+export function createMapLines(legs: MapLeg[]): MapLine[] {
   return legs
-    .filter((leg) => leg.pointsOnLink?.points?.trim()?.length) // only include legs with line geometry
+    .filter((leg) => leg.pointsOnLink.points?.trim()?.length) // only include legs with line geometry
     .map((leg) => {
-      const line = polyline.toGeoJSON(leg.pointsOnLink?.points);
+      const line = polyline.toGeoJSON(leg.pointsOnLink.points);
       return {
         type: 'Feature',
         properties: {},
+        faded: leg.faded,
         travelType: leg.mode,
         subMode: leg.transportSubmode,
         geometry: line,
       };
     });
 }
-export function pointOf(place: Place): Point;
+export function pointOf(coords: Coordinates): Point;
 export function pointOf(coordinates: Position): Point;
-export function pointOf(placing: Place | Position): Point {
+export function pointOf(placing: Coordinates | Position): Point;
+export function pointOf(placing: Coordinates | Position): Point {
   let coords: Position;
   if (Array.isArray(placing)) {
     coords = placing;

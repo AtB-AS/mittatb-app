@@ -1,12 +1,12 @@
-import {DepartureGroupMetadata} from '../../api/departures/departure-group';
+import {DepartureGroupMetadata} from '@atb/api/departures/departure-group';
 import {
   DepartureGroup,
   DepartureTime,
   QuayGroup,
   StopPlaceGroup,
-} from '../../api/departures/types';
-import {DepartureRealtimeData, DeparturesRealtimeData} from '../../sdk';
-import {isNumberOfMinutesInThePast} from '../../utils/date';
+} from '@atb/api/departures/types';
+import {DepartureRealtimeData, DeparturesRealtimeData} from '@atb/sdk';
+import {isNumberOfMinutesInThePast} from '@atb/utils/date';
 
 export const HIDE_AFTER_NUM_MINUTES = 1;
 

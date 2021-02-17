@@ -1,12 +1,12 @@
 import {AxiosRequestConfig} from 'axios';
 import {build} from 'search-params';
-import {Location} from '../../favorites/types';
+import {Location} from '@atb/favorites/types';
 import {
   DeparturesMetadata,
   DeparturesRealtimeData,
   PaginationInput,
-} from '../../sdk';
-import {flatMap} from '../../utils/array';
+} from '@atb/sdk';
+import {flatMap} from '@atb/utils/array';
 import client from '../client';
 import {DepartureGroupsQuery} from './departure-group';
 import {StopPlaceGroup} from './types';

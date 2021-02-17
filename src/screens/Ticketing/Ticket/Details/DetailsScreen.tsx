@@ -1,15 +1,14 @@
+import Header from '@atb/components/screen-header';
+import {StyleSheet} from '@atb/theme';
+import {useTicketState} from '@atb/tickets';
+import {TicketTexts, useTranslation} from '@atb/translations';
+import useInterval from '@atb/utils/use-interval';
+import {RouteProp} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {NavigationProp, RouteProp} from '@react-navigation/native';
-import Header from '../../../../ScreenHeader';
-import {StyleSheet} from '../../../../theme';
-import ThemeIcon from '../../../../components/theme-icon';
-import {Close} from '../../../../assets/svg/icons/actions';
+import {ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import useInterval from '../../../../utils/use-interval';
-import {useTicketState} from '../../../../TicketContext';
-import {View} from 'react-native';
-import DetailsContent from './DetailsContent';
 import {TicketModalNavigationProp, TicketModalStackParams} from '.';
+import DetailsContent from './DetailsContent';
 
 export type TicketDetailsRouteParams = {
   orderId: string;
@@ -29,32 +28,25 @@ export default function DetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
-  const {fareContracts} = useTicketState();
-  const fc = fareContracts?.find(
-    (fc) => fc.order_id === route?.params?.orderId,
-  );
+  const {findFareContractByOrderId} = useTicketState();
+  const fc = findFareContractByOrderId(route?.params?.orderId);
+  const {t} = useTranslation();
 
   const onReceiptNavigate = () =>
     fc &&
     navigation.push('TicketReceipt', {
-      orderId: fc.order_id,
-      orderVersion: fc.order_version,
+      orderId: fc.orderId,
+      orderVersion: fc.version,
     });
 
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        leftButton={{
-          onPress: () => navigation.goBack(),
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: 'Gå tilbake',
-          icon: <ThemeIcon svg={Close} />,
-        }}
-        title="Billettdetaljer"
+        leftButton={{type: 'close'}}
+        title={t(TicketTexts.details.header.title)}
         style={styles.header}
       />
-      <View style={styles.content}>
+      <ScrollView style={styles.content}>
         {fc && (
           <DetailsContent
             fareContract={fc}
@@ -62,7 +54,7 @@ export default function DetailsScreen({navigation, route}: Props) {
             onReceiptNavigate={onReceiptNavigate}
           />
         )}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

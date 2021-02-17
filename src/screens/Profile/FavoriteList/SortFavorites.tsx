@@ -1,3 +1,15 @@
+import {Confirm} from '@atb/assets/svg/icons/actions';
+import SvgDragHandle from '@atb/assets/svg/icons/actions/DragHandle';
+import Button, {ButtonGroup} from '@atb/components/button';
+import ScreenHeader from '@atb/components/screen-header';
+import {FavoriteItem, Section} from '@atb/components/sections';
+import ThemeIcon from '@atb/components/theme-icon';
+import {useFavorites} from '@atb/favorites';
+import MessageBox from '@atb/message-box';
+import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
+import {StyleSheet, Theme} from '@atb/theme';
+import {FavoriteListTexts, useTranslation} from '@atb/translations';
+import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
@@ -6,17 +18,6 @@ import {PanGestureHandler} from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ProfileStackParams} from '..';
-import {Close, Confirm} from '../../../assets/svg/icons/actions';
-import SvgDragHandle from '../../../assets/svg/icons/actions/DragHandle';
-import Button, {ButtonGroup} from '../../../components/button';
-import {FavoriteItem, Section} from '../../../components/sections';
-import ThemeIcon from '../../../components/theme-icon';
-import {useFavorites} from '../../../favorites/FavoritesContext';
-import MessageBox from '../../../message-box';
-import {TabNavigatorParams} from '../../../navigation/TabNavigator';
-import {StyleSheet, Theme} from '../../../theme';
-import useIsScreenReaderEnabled from '../../../utils/use-is-screen-reader-enabled';
-import BackHeader from '../BackHeader';
 import {SortableList} from './SortableList';
 import SortableListFallback from './SortableListFallback';
 
@@ -43,21 +44,23 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
   const screenReaderEnabled = useIsScreenReaderEnabled();
   const {fontScale} = useWindowDimensions();
   const minHeight = 40 + 12 * fontScale;
+  const {t} = useTranslation();
 
   const saveOrder = async () => {
     try {
       await setFavorites(sortedItems);
       navigation.goBack();
     } catch (_) {
-      setError(
-        'Ooops. Fikk ikke til å lagre favoritter. Prøv igjen er du snill. 🤞',
-      );
+      setError(t(FavoriteListTexts.sortableScreen.messages.error));
     }
   };
 
   return (
     <SafeAreaView style={style.container}>
-      <BackHeader title="Endre rekkefølge" closeIcon />
+      <ScreenHeader
+        title={t(FavoriteListTexts.sortableScreen.title)}
+        leftButton={{type: 'close'}}
+      />
 
       {error && (
         <MessageBox type="error" message={error} containerStyle={style.error} />
@@ -100,17 +103,11 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
 
       <ButtonGroup>
         <Button
-          onPress={() => navigation.goBack()}
-          text="Avbryt"
-          mode="secondary"
-          icon={Close}
-          iconPosition="right"
-        />
-        <Button
           onPress={saveOrder}
-          text="Lagre"
+          text={t(FavoriteListTexts.sortableScreen.buttons.save)}
           icon={Confirm}
           iconPosition="right"
+          color="primary_2"
         />
       </ButtonGroup>
     </SafeAreaView>

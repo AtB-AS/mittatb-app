@@ -1,16 +1,14 @@
-import haversineDistance from 'haversine-distance';
-import sortBy from 'lodash.sortby';
+import {StopPlaceGroup} from '@atb/api/departures/types';
+import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import {ActionItem} from '@atb/components/sections';
+import ThemeText from '@atb/components/text';
+import {Location} from '@atb/favorites/types';
+import MessageBox from '@atb/message-box';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {NearbyTexts, useTranslation} from '@atb/translations';
+import {animateNextChange} from '@atb/utils/animation';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {QuayGroup, StopPlaceGroup} from '../../api/departures/types';
-import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
-import {ActionItem} from '../../components/sections';
-import ThemeText from '../../components/text';
-import {Location} from '../../favorites/types';
-import MessageBox from '../../message-box';
-import {StyleSheet, useTheme} from '../../theme';
-import {NearbyTexts, useTranslation} from '../../translations';
-import {animateNextChange} from '../../utils/animation';
 import QuaySection from './section-items/quay-section';
 import {hasNoGroupsWithDepartures, hasNoQuaysWithDepartures} from './utils';
 
@@ -42,7 +40,7 @@ export default function NearbyResults({
 
   if (isInitialScreen) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, styles.container__padded]}>
         <MessageBox type="info">
           <ThemeText>{t(NearbyTexts.results.messages.initial)}</ThemeText>
         </MessageBox>
@@ -68,21 +66,17 @@ export default function NearbyResults({
   return (
     <View style={styles.container}>
       {error && (
-        <>
+        <View style={styles.container__padded}>
           <ScreenReaderAnnouncement message={error} />
-          <MessageBox
-            type="warning"
-            message={error}
-            containerStyle={{marginBottom: 24}}
-          />
-        </>
+          <MessageBox type="warning" message={error} />
+        </View>
       )}
 
       {departures && (
         <>
           {departures.map((item, i) => (
             <StopDepartures
-              key={item.stopPlace.id}
+              key={item?.stopPlace.id}
               stopPlaceGroup={item}
               currentLocation={currentLocation}
               lastUpdated={lastUpdated}
@@ -98,6 +92,9 @@ export default function NearbyResults({
 const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacings.medium,
+  },
+  container__padded: {
+    paddingVertical: theme.spacings.medium,
   },
   centerText: {
     textAlign: 'center',
@@ -143,10 +140,7 @@ const StopDepartures = React.memo(function StopDepartures({
   if (hasNoGroupsWithDepartures(stopPlaceGroup.quays)) {
     return null;
   }
-  const orderedQuays = orderAndMapByDistance(
-    stopPlaceGroup.quays,
-    currentLocation,
-  );
+
   return (
     <View accessibilityState={{expanded}}>
       <ActionItem
@@ -168,35 +162,15 @@ const StopDepartures = React.memo(function StopDepartures({
       />
 
       {expanded &&
-        orderedQuays.map(([distance, quayGroup]) => (
+        stopPlaceGroup.quays.map((quayGroup) => (
           <QuaySection
             key={quayGroup.quay.id}
             stop={stopPlaceGroup.stopPlace}
             quayGroup={quayGroup}
-            distance={distance}
+            currentLocation={currentLocation}
             lastUpdated={lastUpdated}
           />
         ))}
     </View>
   );
 });
-
-const first = ([a]: unknown[]) => a;
-function orderAndMapByDistance(
-  groups: QuayGroup[],
-  currentLocation?: Location,
-): [number, QuayGroup][] {
-  return sortBy(
-    groups.map((g) => {
-      const pos = {
-        lat: g.quay.latitude!,
-        lng: g.quay.longitude!,
-      };
-      const distance = !currentLocation
-        ? 0
-        : haversineDistance(currentLocation.coordinates, pos);
-      return [distance, g];
-    }),
-    first,
-  );
-}

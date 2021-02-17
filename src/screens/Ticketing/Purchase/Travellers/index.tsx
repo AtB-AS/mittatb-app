@@ -1,25 +1,21 @@
-import React, {useEffect, useMemo} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import SvgProfile from '@atb/assets/svg/icons/tab-bar/Profile';
+import Button from '@atb/components/button';
+import Header from '@atb/components/screen-header';
+import * as Sections from '@atb/components/sections';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
+import {getReferenceDataName} from '@atb/reference-data/utils';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {TravellersTexts, useTranslation} from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
-import {TicketingStackParams} from '../';
-import Header from '../../../../ScreenHeader';
-import {Edit} from '../../../../assets/svg/icons/actions';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {StyleSheet, useTheme} from '../../../../theme';
-import ThemeText from '../../../../components/text';
-import ThemeIcon from '../../../../components/theme-icon';
-import Button from '../../../../components/button';
-import useUserCountState from './use-user-count-state';
-import {DismissableStackNavigationProp} from '../../../../navigation/createDismissableStackNavigator';
-import useOfferState, {OfferError} from './use-offer-state';
-import {addMinutes} from 'date-fns';
-import MessageBox from '../../../../message-box';
-import {CreditCard, Vipps} from '../../../../assets/svg/icons/ticketing';
-import * as Sections from '../../../../components/sections';
+import React from 'react';
+import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useTicketState} from '../../../../TicketContext';
-import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
-import {useTranslation} from '../../../../translations';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {TicketingStackParams} from '../';
+import {createTravellersText} from '../Overview';
+import useUserCountState from './use-user-count-state';
 
 export type TravellersProps = {
   navigation: DismissableStackNavigationProp<
@@ -35,117 +31,39 @@ const Travellers: React.FC<TravellersProps> = ({
 }) => {
   const styles = useStyles();
   const {theme} = useTheme();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
-  const {userProfilesWithCount, addCount, removeCount} = useUserCountState();
-
-  const {tariffZones} = useTicketState();
-  const defaultTariffZone: TariffZoneWithMetadata = useMemo(
-    () => ({
-      ...tariffZones[0],
-      resultType: 'zone',
-    }),
-    [tariffZones],
+  const {userProfilesWithCount, addCount, removeCount} = useUserCountState(
+    params.userProfilesWithCount,
   );
-  const {
-    fromTariffZone = defaultTariffZone,
-    toTariffZone = defaultTariffZone,
-  } = params;
-
-  const {
-    offerSearchTime,
-    isSearchingOffer,
-    error,
-    totalPrice,
-    refreshOffer,
-    offers,
-  } = useOfferState(
-    params.preassignedFareProduct,
-    fromTariffZone,
-    toTariffZone,
-    userProfilesWithCount,
-  );
-
-  const offerExpirationTime =
-    offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
-
-  useEffect(() => {
-    if (params?.refreshOffer) {
-      refreshOffer();
-    }
-  }, [params?.refreshOffer]);
-
-  const closeModal = () => navigation.dismiss();
-
-  async function payWithVipps() {
-    if (offerExpirationTime && totalPrice > 0) {
-      if (offerExpirationTime < Date.now()) {
-        refreshOffer();
-      } else {
-        navigation.push('PaymentVipps', {
-          offers,
-          preassignedFareProduct: params.preassignedFareProduct,
-        });
-      }
-    }
-  }
-
-  async function payWithCard() {
-    if (offerExpirationTime && totalPrice > 0) {
-      if (offerExpirationTime < Date.now()) {
-        refreshOffer();
-      } else {
-        navigation.push('PaymentCreditCard', {
-          offers,
-          preassignedFareProduct: params.preassignedFareProduct,
-        });
-      }
-    }
-  }
 
   const {top: safeAreaTop, bottom: safeAreBottom} = useSafeAreaInsets();
 
   return (
     <View style={[styles.container, {paddingTop: safeAreaTop}]}>
       <Header
-        title={params.preassignedFareProduct.name.value}
-        leftButton={{
-          icon: <ThemeText>Avbryt</ThemeText>,
-          onPress: closeModal,
-          accessibilityLabel: 'Avbryt kjøpsprosessen',
-        }}
-        style={styles.header}
+        title={t(TravellersTexts.header.title)}
+        leftButton={{type: 'back'}}
       />
 
-      <ScrollView>
-        {error && (
-          <MessageBox
-            type="warning"
-            title="Det oppstod en feil"
-            message={translateError(error)}
-          />
-        )}
-
-        <Sections.Section withPadding>
-          <Sections.LinkItem
-            text={tariffZonesSummary(fromTariffZone, toTariffZone, t)}
-            onPress={() => {
-              navigation.push('TariffZones', {
-                fromTariffZone,
-                toTariffZone,
-                preassignedFareProduct: params.preassignedFareProduct,
-              });
-            }}
-            icon={<ThemeIcon svg={Edit} />}
-            accessibility={{accessibilityHint: 'Aktivér for å velge soner'}}
-          />
-        </Sections.Section>
-
-        <Sections.Section withPadding>
+      <ScrollView style={styles.travellerCounters}>
+        <View style={styles.summarySection}>
+          <Sections.Section>
+            <Sections.GenericItem>
+              <View style={styles.summaryItem}>
+                <ThemeIcon style={styles.summaryIcon} svg={SvgProfile} />
+                <ThemeText>
+                  {createTravellersText(userProfilesWithCount, t, language)}
+                </ThemeText>
+              </View>
+            </Sections.GenericItem>
+          </Sections.Section>
+        </View>
+        <Sections.Section>
           {userProfilesWithCount.map((u) => (
             <Sections.CounterInput
               key={u.userTypeString}
-              text={u.name.value}
+              text={getReferenceDataName(u, language)}
               count={u.count}
               addCount={() => addCount(u.userTypeString)}
               removeCount={() => removeCount(u.userTypeString)}
@@ -156,121 +74,48 @@ const Travellers: React.FC<TravellersProps> = ({
 
       <View
         style={[
-          styles.footer,
+          styles.saveButton,
           {
             paddingBottom: Math.max(safeAreBottom, theme.spacings.medium),
           },
         ]}
       >
-        <View style={styles.totalContainer}>
-          <View style={styles.totalContainerHeadings}>
-            <ThemeText type="body">Totalt</ThemeText>
-            <ThemeText type="label" color={'faded'}>
-              Inkl. 6% mva
-            </ThemeText>
-          </View>
-
-          {!isSearchingOffer ? (
-            <ThemeText type="heroTitle">{totalPrice} kr</ThemeText>
-          ) : (
-            <ActivityIndicator
-              size={theme.spacings.medium}
-              color={theme.text.colors.primary}
-              style={{margin: 12}}
-            />
-          )}
-        </View>
-        <View style={styles.buttons}>
-          <Button
-            mode="primary2"
-            text="Betal med Vipps"
-            disabled={isSearchingOffer}
-            accessibilityLabel="Trykk for å betale billett med Vipps"
-            icon={Vipps}
-            iconPosition="left"
-            onPress={payWithVipps}
-            viewContainerStyle={[
-              styles.paymentButton,
-              styles.vippsPaymentButton,
-            ]}
-            style={{flex: 1}}
-            textContainerStyle={{marginLeft: 30}}
-          />
-          <Button
-            mode="primary2"
-            text="Betal med bankkort"
-            disabled={isSearchingOffer}
-            accessibilityLabel="Trykk for å betale billett med bankkort"
-            icon={CreditCard}
-            iconPosition="left"
-            onPress={payWithCard}
-            viewContainerStyle={[
-              styles.paymentButton,
-              styles.cardPaymentButton,
-            ]}
-            textContainerStyle={{marginLeft: 30}}
-          />
-        </View>
+        <Button
+          color="primary_2"
+          text={t(TravellersTexts.primaryButton.text)}
+          accessibilityHint={t(TravellersTexts.primaryButton.a11yHint)}
+          disabled={!userProfilesWithCount.some((u) => u.count)}
+          onPress={() => {
+            navigation.navigate('PurchaseOverview', {
+              userProfilesWithCount,
+            });
+          }}
+        />
       </View>
     </View>
   );
 };
-
-function translateError(error: OfferError) {
-  const {context} = error;
-  switch (context) {
-    case 'failed_offer_search':
-      return 'Klarte ikke å søke opp pris';
-    case 'failed_reservation':
-      return 'Klarte ikke å reservere billett';
-  }
-}
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.background.level2,
   },
-  ticketsContainer: {
-    backgroundColor: theme.background.level0,
-    borderTopEndRadius: theme.border.radius.regular,
-    borderTopLeftRadius: theme.border.radius.regular,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.background.level1,
-    padding: theme.spacings.medium,
-    marginTop: theme.spacings.small,
+  travellerCounters: {
+    margin: theme.spacings.medium,
   },
-  header: {
-    paddingHorizontal: theme.spacings.medium,
+  summarySection: {
     marginBottom: theme.spacings.medium,
   },
-  totalContainer: {
+  summaryItem: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: theme.spacings.medium,
-    backgroundColor: theme.background.level0,
-    borderRadius: theme.border.radius.regular,
+    alignItems: 'center',
   },
-  totalContainerHeadings: {
-    flexDirection: 'column',
-    paddingVertical: theme.spacings.xSmall,
+  summaryIcon: {
+    marginRight: theme.spacings.medium,
   },
-  footer: {
-    padding: theme.spacings.medium,
-    backgroundColor: theme.background.header,
-  },
-  buttons: {
-    flexDirection: 'row',
-  },
-  paymentButton: {
-    marginTop: theme.spacings.medium,
-    flex: 1,
-  },
-  vippsPaymentButton: {
-    marginRight: 6,
-  },
-  cardPaymentButton: {
-    marginLeft: 6,
+  saveButton: {
+    marginHorizontal: theme.spacings.medium,
   },
 }));
 

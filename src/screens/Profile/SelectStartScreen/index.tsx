@@ -1,19 +1,19 @@
 import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {RadioSection} from '../../../components/sections';
+import {RadioSection} from '@atb/components/sections';
 import {
   Preference_ScreenAlternatives,
   preference_screenAlternatives,
   usePreferences,
-} from '../../../preferences';
-import {StyleSheet, Theme} from '../../../theme';
-import BackHeader from '../BackHeader';
+} from '@atb/preferences';
+import {StyleSheet, Theme} from '@atb/theme';
 import {
   SelectStartScreenTexts,
   useTranslation,
   TranslatedString,
-} from '../../../translations';
+} from '@atb/translations';
+import ScreenHeader from '@atb/components/screen-header';
 
 const identity = (s: string) => s;
 function toName(alt: Preference_ScreenAlternatives): TranslatedString {
@@ -38,7 +38,10 @@ export default function SelectStartScreen() {
 
   return (
     <SafeAreaView style={style.container}>
-      <BackHeader title={t(SelectStartScreenTexts.header.title)} />
+      <ScreenHeader
+        title={t(SelectStartScreenTexts.header.title)}
+        leftButton={{type: 'back'}}
+      />
 
       <ScrollView>
         <RadioSection<Preference_ScreenAlternatives>

@@ -1,16 +1,16 @@
-import React from 'react';
-import {MapPointPin} from '../../assets/svg/icons/places';
+import {MapPointPin} from '@atb/assets/svg/icons/places';
 import {
   BusSide,
-  TramSide,
-  TrainSide,
   FerrySide,
   PlaneSide,
-} from '../../assets/svg/icons/transportation';
-import {Location} from '../../favorites/types';
-import {FeatureCategory} from '../../sdk';
+  TrainSide,
+  TramSide,
+} from '@atb/assets/svg/icons/transportation';
+import {Location} from '@atb/favorites/types';
+import {FeatureCategory} from '@atb/sdk';
+import React from 'react';
 import {SvgProps} from 'react-native-svg';
-import ThemeIcon from '../theme-icon';
+import ThemeIcon from '@atb/components/theme-icon';
 
 const LocationIcon = ({
   location,

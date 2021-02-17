@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import ThemeText from '../text';
+import ThemeText from '@atb/components/text';
 import {useSectionItem, SectionItem, useSectionStyle} from './section-utils';
 
 export type HeaderItemProps = SectionItem<{
@@ -21,7 +21,6 @@ export default function HeaderItem({
     <View style={topContainer}>
       <ThemeText
         style={contentContainer}
-        color={mode === 'heading' ? 'primary' : 'faded'}
         type={mode === 'heading' ? 'paragraphHeadline' : 'lead'}
       >
         {text}
@@ -29,7 +28,7 @@ export default function HeaderItem({
       {subtitle && (
         <ThemeText
           style={contentContainer}
-          color="faded"
+          color="secondary"
           type={mode === 'heading' ? 'lead' : 'label'}
         >
           {subtitle}

@@ -1,17 +1,19 @@
-import React, {useState} from 'react';
-import {View, TouchableOpacity, Modal, TextInput, Alert} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import Button from '@atb/components/button';
+import Header from '@atb/components/screen-header';
+import * as Sections from '@atb/components/sections';
+import MessageBox, {MessageBoxProps} from '@atb/message-box';
+import {StyleSheet} from '@atb/theme';
+import {sendReceipt} from '@atb/tickets';
+import {
+  TicketTexts,
+  TranslateFunction,
+  useTranslation,
+} from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
-import {sendReceipt} from '../../../../api/fareContracts';
-import {StyleSheet} from '../../../../theme';
-import Text from '../../../../components/text';
-import * as Sections from '../../../../components/sections';
-import Header from '../../../../ScreenHeader';
+import React, {useState} from 'react';
+import {View} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {TicketModalNavigationProp, TicketModalStackParams} from './';
-import ThemeIcon from '../../../../components/theme-icon';
-import {ArrowLeft} from '../../../../assets/svg/icons/navigation';
-import MessageBox, {MessageBoxProps} from '../../../../message-box';
-import Button from '../../../../components/button';
 
 export type ReceiptScreenRouteParams = {
   orderId: string;
@@ -36,6 +38,7 @@ export default function ReceiptScreen({navigation, route}: Props) {
   const [email, setEmail] = useState('');
   const [reference, setReference] = useState<string | undefined>(undefined);
   const [state, setState] = useState<MessageState>(undefined);
+  const {t} = useTranslation();
 
   async function onSend() {
     if (email.trim().length) {
@@ -62,21 +65,15 @@ export default function ReceiptScreen({navigation, route}: Props) {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        leftButton={{
-          onPress: () => navigation.goBack(),
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: 'Gå tilbake',
-          icon: <ThemeIcon svg={ArrowLeft} />,
-        }}
-        title="Send kvittering"
+        leftButton={{type: 'back'}}
+        title={t(TicketTexts.receipt.header.title)}
         style={styles.header}
       />
       <View style={styles.content}>
-        <MessageBox {...translateStateToMessage(state, email, reference)} />
+        <MessageBox {...translateStateToMessage(state, t, email, reference)} />
         <Sections.Section withTopPadding withBottomPadding>
           <Sections.TextInput
-            label="E-post"
+            label={t(TicketTexts.receipt.inputLabel)}
             value={email}
             onChangeText={setEmail}
             autoCapitalize="none"
@@ -85,7 +82,11 @@ export default function ReceiptScreen({navigation, route}: Props) {
             autoFocus={true}
           />
         </Sections.Section>
-        <Button text="Send" onPress={onSend} disabled={state === 'loading'} />
+        <Button
+          text={t(TicketTexts.receipt.sendButton)}
+          onPress={onSend}
+          disabled={state === 'loading'}
+        />
       </View>
     </SafeAreaView>
   );
@@ -93,29 +94,29 @@ export default function ReceiptScreen({navigation, route}: Props) {
 
 function translateStateToMessage(
   state: MessageState,
+  t: TranslateFunction,
   email: string,
   reference?: string,
 ): Required<Pick<MessageBoxProps, 'type' | 'message'>> {
   switch (state) {
     case 'loading':
       return {
-        message: 'Sender kvittering...',
+        message: t(TicketTexts.receipt.messages.loading),
         type: 'info',
       };
     case 'error':
       return {
-        message:
-          'Oops! Noe feilet under sending av kvittering, kan du prøve igjen? 🤞',
+        message: t(TicketTexts.receipt.messages.error),
         type: 'error',
       };
     case 'success':
       return {
-        message: `Din kvittering ble sendt til ${email} med referansen: ${reference}.`,
+        message: t(TicketTexts.receipt.messages.success(email, reference!)),
         type: 'success',
       };
     default:
       return {
-        message: `Du kan få tilsendt kvittering på e-post. Fyll inn din e-postadresse under, og trykk "Send".`,
+        message: t(TicketTexts.receipt.messages.defaultFallback),
         type: 'info',
       };
   }

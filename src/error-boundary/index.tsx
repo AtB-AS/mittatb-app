@@ -1,7 +1,18 @@
 import React, {ErrorInfo} from 'react';
 import Bugsnag from '@bugsnag/react-native';
 import Intercom from 'react-native-intercom';
-import ErrorView from './ErrorView';
+import FullScreenErrorView from './FullScreenErrorView';
+import ComponentErrorView from './ComponentErrorView';
+
+type Props =
+  | {
+      type: 'full-screen';
+      message?: string;
+    }
+  | {
+      type?: 'component';
+      message: string;
+    };
 
 type State = {
   hasError: boolean;
@@ -9,7 +20,7 @@ type State = {
   errorCount: number;
 };
 
-export default class ErrorBoundary extends React.Component<{}, State> {
+export default class ErrorBoundary extends React.Component<Props, State> {
   state: State = {
     hasError: false,
     errorCount: 0,
@@ -30,18 +41,28 @@ export default class ErrorBoundary extends React.Component<{}, State> {
     });
   }
   render() {
+    const {type = 'component', message} = this.props;
     const {hasError, errorCount, errorCode} = this.state;
 
-    const resetChildrenTree = () =>
-      this.setState((old) => ({
-        hasError: false,
-        errorCount: old.errorCount + 1,
-      }));
-
     if (hasError) {
-      return (
-        <ErrorView onRestartApp={resetChildrenTree} errorCode={errorCode} />
-      );
+      const resetChildrenTree = () =>
+        this.setState((old) => ({
+          hasError: false,
+          errorCount: old.errorCount + 1,
+        }));
+
+      switch (type) {
+        case 'full-screen':
+          return (
+            <FullScreenErrorView
+              onRestartApp={resetChildrenTree}
+              errorCode={errorCode}
+            />
+          );
+        case 'component':
+        default:
+          return <ComponentErrorView message={message!} />;
+      }
     }
     return (
       <React.Fragment key={errorCount}>{this.props.children}</React.Fragment>

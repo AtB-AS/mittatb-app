@@ -5,6 +5,8 @@ import {getAxiosErrorType, getAxiosErrorMetadata} from './utils';
 import Bugsnag from '@bugsnag/react-native';
 import {InstallIdHeaderName, RequestIdHeaderName} from './headers';
 import axiosRetry, {isIdempotentRequestError} from 'axios-retry';
+import axiosBetterStacktrace from 'axios-better-stacktrace';
+import {getBooleanConfigValue} from '../remote-config';
 
 export default createClient(API_BASE_URL);
 
@@ -26,6 +28,10 @@ function retryCondition(error: AxiosError): boolean {
 export function createClient(baseUrl: string) {
   const client = axios.create({
     baseURL: baseUrl,
+  });
+  axiosBetterStacktrace(client, {
+    errorMsg: 'Inner error',
+    exposeTopmostErrorViaConfig: true,
   });
   client.interceptors.request.use(requestHandler, undefined);
   client.interceptors.response.use(undefined, responseErrorHandler);
@@ -50,6 +56,13 @@ function requestHandler(config: AxiosRequestConfig): AxiosRequestConfig {
 
 function responseErrorHandler(error: AxiosError) {
   const errorType = getAxiosErrorType(error);
+  const topmostError = error?.config?.topmostError;
+
+  const originalStack = error.stack;
+  if (topmostError) {
+    error.stack = `${error.stack}\n${topmostError.stack}`;
+  }
+
   switch (errorType) {
     case 'default':
       const errorMetadata = getAxiosErrorMetadata(error);
@@ -62,19 +75,16 @@ function responseErrorHandler(error: AxiosError) {
       break;
     case 'network-error':
     case 'timeout':
-      if (!isCancel(error)) {
-        // This happens all the time in mobile apps,
-        // so will be a lot of noise if we choose to report these
-        console.warn(errorType, error);
-        warnConfig(error.config);
+      if (!isCancel(error) && getBooleanConfigValue('enable_network_logging')) {
+        const errorMetadata = getAxiosErrorMetadata(error);
+        Bugsnag.notify(error, (event) => {
+          event.addMetadata('api', {...errorMetadata});
+        });
       }
       break;
   }
 
-  return Promise.reject(error);
-}
+  error.stack = originalStack;
 
-function warnConfig(config: AxiosRequestConfig) {
-  if (!config) return;
-  console.warn(`URL: ${config.baseURL}${config.url}`);
+  return Promise.reject(error);
 }

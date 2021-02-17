@@ -1,36 +1,21 @@
+import {ShinyTicketBanner} from '@atb/assets/svg/illustrations';
+import Button from '@atb/components/button';
+import Header from '@atb/components/screen-header';
+import ThemeText from '@atb/components/text';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {StyleSheet} from '@atb/theme';
+import {TicketSplashTexts, useTranslation} from '@atb/translations';
 import React, {useRef} from 'react';
-import {View, useWindowDimensions, Text, Linking, Platform} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import Header from '../../../ScreenHeader';
-import useChatIcon from '../../../chat/use-chat-icon';
-import {ShinyTicketBanner} from '../../../assets/svg/illustrations';
-import {StyleSheet, useStyle} from '../../../theme';
-import LogoOutline from '../../../ScreenHeader/LogoOutline';
-import {useNavigateToStartScreen} from '../../../utils/navigation';
-import InviteModal from './InviteModal';
-import {Modalize} from 'react-native-modalize';
-import {useRemoteConfig} from '../../../RemoteConfigContext';
-import ThemeText from '../../../components/text';
-import ThemeIcon from '../../../components/theme-icon';
-import Button from '../../../components/button';
+import {useWindowDimensions, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useTranslation, TicketTexts} from '../../../translations';
-function openOtherTicketingApp() {
-  const url =
-    Platform.OS === 'ios'
-      ? 'https://apps.apple.com/no/app/atb-mobillett/id472214198'
-      : 'https://play.google.com/store/apps/details?id=no.wtw.atb';
-  if (Linking.canOpenURL(url)) {
-    Linking.openURL(url);
-  }
-}
+import {Modalize} from 'react-native-modalize';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import InviteModal from './InviteModal';
 
 export default function Splash() {
   const styles = useStyles();
   const {refresh} = useRemoteConfig();
-  const chatIcon = useChatIcon();
   const {width: windowWidth} = useWindowDimensions();
-  const navigateHome = useNavigateToStartScreen();
   const modalRef = useRef<Modalize>(null);
   const {t} = useTranslation();
 
@@ -41,13 +26,9 @@ export default function Splash() {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        title={t(TicketTexts.header.title)}
-        rightButton={chatIcon}
-        leftButton={{
-          icon: <ThemeIcon svg={LogoOutline} />,
-          onPress: navigateHome,
-          accessibilityLabel: t(TicketTexts.header.logo.a11yLabel),
-        }}
+        title={t(TicketSplashTexts.header.title)}
+        rightButton={{type: 'chat'}}
+        leftButton={{type: 'home'}}
       />
       <View style={styles.bannerContainer}>
         <ShinyTicketBanner
@@ -59,17 +40,17 @@ export default function Splash() {
         <View style={styles.contentContainer}>
           <View style={styles.textContent}>
             <ThemeText style={[styles.text, styles.bold]}>
-              {t(TicketTexts.splash.title)}
+              {t(TicketSplashTexts.splash.title)}
             </ThemeText>
             <ThemeText style={styles.text}>
-              {t(TicketTexts.splash.paragraph1)}
+              {t(TicketSplashTexts.splash.paragraph1)}
             </ThemeText>
           </View>
           <View style={styles.buttonContainer}>
             <Button
-              mode="primary2"
+              color="primary_2"
               onPress={() => modalRef.current?.open()}
-              text={t(TicketTexts.splash.betaButtonLabel)}
+              text={t(TicketSplashTexts.splash.betaButtonLabel)}
               style={styles.button}
             />
           </View>

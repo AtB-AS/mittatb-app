@@ -2,15 +2,14 @@ import {translation as _} from '../../commons';
 const DepartureDetailsTexts = {
   header: {
     title: (departureName: string) => _(departureName),
-    leftIcon: {
-      a11yLabel: _('Gå tilbake'),
-    },
+    notFound: _('Detaljer', 'Details'),
   },
   collapse: {
-    label: (numberStops: number) => _(`${numberStops} mellomstopp`),
+    label: (numberStops: number) =>
+      _(`${numberStops} mellomstopp`, `${numberStops} intermediate stops`),
   },
   messages: {
-    loading: _('Laster detaljer'),
+    loading: _('Laster detaljer', 'Loading details'),
   },
 };
 export default DepartureDetailsTexts;

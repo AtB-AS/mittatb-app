@@ -1,3 +1,39 @@
+import {
+  DepartureGroup,
+  DepartureLineInfo,
+  DepartureTime,
+  QuayInfo,
+  StopPlaceInfo,
+} from '@atb/api/departures/types';
+import SvgFavorite from '@atb/assets/svg/icons/places/Favorite';
+import SvgFavoriteFill from '@atb/assets/svg/icons/places/FavoriteFill';
+import Warning from '@atb/assets/svg/situations/Warning';
+import {screenReaderPause} from '@atb/components/accessible-text';
+import Button from '@atb/components/button';
+import {
+  SectionItem,
+  useSectionItem,
+  useSectionStyle,
+} from '@atb/components/sections/section-utils';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import TransportationIcon from '@atb/components/transportation-icon';
+import {useFavorites} from '@atb/favorites';
+import {StyleSheet} from '@atb/theme';
+import colors from '@atb/theme/colors';
+import {
+  dictionary,
+  Language,
+  NearbyTexts,
+  useTranslation,
+} from '@atb/translations';
+import {
+  formatToClock,
+  formatToClockOrRelativeMinutes,
+  isInThePast,
+  isRelativeButNotNow,
+} from '@atb/utils/date';
+import insets from '@atb/utils/insets';
 import {TFunc} from '@leile/lobo-t';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
@@ -8,43 +44,7 @@ import {
   View,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {NearbyScreenNavigationProp} from '..';
-import {
-  DepartureGroup,
-  DepartureLineInfo,
-  DepartureTime,
-  QuayInfo,
-  StopPlaceInfo,
-} from '../../../api/departures/types';
-import SvgFavorite from '../../../assets/svg/icons/places/Favorite';
-import SvgFavoriteFill from '../../../assets/svg/icons/places/FavoriteFill';
-import Warning from '../../../assets/svg/situations/Warning';
-import {screenReaderPause} from '../../../components/accessible-text';
-import Button from '../../../components/button';
-import {
-  SectionItem,
-  useSectionItem,
-  useSectionStyle,
-} from '../../../components/sections/section-utils';
-import ThemeText from '../../../components/text';
-import ThemeIcon from '../../../components/theme-icon';
-import TransportationIcon from '../../../components/transportation-icon';
-import {useFavorites} from '../../../favorites';
-import {StyleSheet} from '../../../theme';
-import colors from '../../../theme/colors';
-import {
-  dictionary,
-  Language,
-  NearbyTexts,
-  useTranslation,
-} from '../../../translations';
-import {
-  formatToClock,
-  formatToClockOrRelativeMinutes,
-  isInThePast,
-  isRelativeButNotNow,
-} from '../../../utils/date';
-import insets from '../../../utils/insets';
+import {NearbyScreenNavigationProp} from '../Nearby';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 
 export type LineItemProps = SectionItem<{
@@ -60,12 +60,11 @@ export default function LineItem({
   accessibility,
   ...props
 }: LineItemProps) {
-  const {favoriteDepartures} = useFavorites();
   const {contentContainer, topContainer} = useSectionItem(props);
   const sectionStyle = useSectionStyle();
   const styles = useItemStyles();
   const navigation = useNavigation<NearbyScreenNavigationProp>();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   if (hasNoDeparturesOnGroup(group)) {
     return null;
@@ -73,18 +72,24 @@ export default function LineItem({
 
   const title = `${group.lineInfo?.lineNumber} ${group.lineInfo?.lineName}`;
 
-  const onPress = (departure: DepartureTime) => {
-    navigation.navigate('DepartureDetailsModal', {
-      title,
-      serviceJourneyId: departure.serviceJourneyId!,
-      date: departure.aimedTime,
-      fromQuayId: group.lineInfo?.quayId,
+  const items = group.departures.map((dep) => ({
+    serviceJourneyId: dep.serviceJourneyId!,
+    date: dep.time,
+    fromQuayId: group.lineInfo?.quayId,
+  }));
+
+  const onPress = (activeItemIndex: number) => {
+    navigation.navigate('TripDetails', {
+      screen: 'DepartureDetails',
+      params: {
+        activeItemIndex,
+        items,
+      },
     });
   };
 
   // we know we have a departure as we've checked hasNoDeparturesOnGroup
   const nextValids = group.departures.filter(isValidDeparture);
-  const firstResult = nextValids[0]!;
 
   return (
     <View style={[topContainer, {padding: 0}]}>
@@ -92,7 +97,7 @@ export default function LineItem({
         <TouchableOpacity
           style={styles.lineHeader}
           containerStyle={contentContainer}
-          onPress={() => onPress(firstResult)}
+          onPress={() => onPress(0)}
           hitSlop={insets.symmetric(12, 0)}
           accessibilityRole="button"
           accessibilityHint={
@@ -103,6 +108,7 @@ export default function LineItem({
             title,
             nextValids,
             t,
+            language,
           )}
         >
           <View style={styles.transportationMode}>
@@ -125,11 +131,11 @@ export default function LineItem({
         accessibilityElementsHidden
         importantForAccessibility="no-hide-descendants"
       >
-        {group.departures.map((departure) => (
+        {group.departures.map((departure, i) => (
           <DepartureTimeItem
             departure={departure}
             key={departure.serviceJourneyId + departure.aimedTime}
-            onPress={onPress}
+            onPress={() => onPress(i)}
           />
         ))}
       </ScrollView>
@@ -137,8 +143,16 @@ export default function LineItem({
   );
 }
 
-function labelForTime(time: string, t: TFunc<typeof Language>) {
-  const resultTime = formatToClockOrRelativeMinutes(time);
+function labelForTime(
+  time: string,
+  t: TFunc<typeof Language>,
+  language: Language,
+) {
+  const resultTime = formatToClockOrRelativeMinutes(
+    time,
+    language,
+    t(dictionary.date.units.now),
+  );
   const isRelative = isRelativeButNotNow(time);
 
   return isRelative
@@ -150,15 +164,20 @@ function getAccessibilityTextFirstDeparture(
   title: string,
   nextValids: DepartureTime[],
   t: TFunc<typeof Language>,
+  language: Language,
 ) {
   const [firstResult, secondResult, ...rest] = nextValids;
-  const firstResultScreenReaderTimeText = labelForTime(firstResult?.time, t);
+  const firstResultScreenReaderTimeText = labelForTime(
+    firstResult?.time,
+    t,
+    language,
+  );
 
   const inPast = isInThePast(firstResult.time);
   const upcoming = inPast
     ? t(
         NearbyTexts.results.departure.hasPassedAccessibilityLabel(
-          formatToClock(firstResult.time),
+          formatToClock(firstResult.time, language),
         ),
       )
     : firstResult.realtime
@@ -179,10 +198,10 @@ function getAccessibilityTextFirstDeparture(
           [secondResult, ...rest]
             .map((i) =>
               i.realtime
-                ? formatToClock(i.time)
+                ? formatToClock(i.time, language)
                 : t(
                     NearbyTexts.results.departure.nextAccessibilityNotRealtime(
-                      formatToClock(i.time),
+                      formatToClock(i.time, language),
                     ),
                   ),
             )
@@ -200,9 +219,13 @@ type DepartureTimeItemProps = {
 };
 function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
   const styles = useItemStyles();
-  const time = formatToClockOrRelativeMinutes(departure.time);
+  const {t, language} = useTranslation();
+  const time = formatToClockOrRelativeMinutes(
+    departure.time,
+    language,
+    t(dictionary.date.units.now),
+  );
   const isValid = isValidDeparture(departure);
-  const {t} = useTranslation();
 
   if (!isValid) {
     return null;
@@ -217,7 +240,7 @@ function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
     <Button
       key={departure.serviceJourneyId}
       type="compact"
-      mode="primary3"
+      color="secondary_4"
       onPress={() => onPress(departure)}
       text={timeWithRealtimePrefix}
       style={styles.departure}

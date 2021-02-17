@@ -1,39 +1,42 @@
+import {ErrorType} from '@atb/api/utils';
+import Button from '@atb/components/button';
+import Header from '@atb/components/screen-header';
+import MessageBox from '@atb/message-box';
+import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
+import {StyleSheet} from '@atb/theme';
+import {ReserveOffer, TicketReservation, useTicketState} from '@atb/tickets';
+import {PaymentCreditCardTexts, useTranslation} from '@atb/translations';
+import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {RouteProp} from '@react-navigation/native';
-import {TicketingStackParams} from '../..';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {ArrowLeft} from '../../../../../assets/svg/icons/navigation';
-import Header from '../../../../../ScreenHeader';
-import {DismissableStackNavigationProp} from '../../../../../navigation/createDismissableStackNavigator';
-import Processing from '../Processing';
 import {View} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import WebView from 'react-native-webview';
+import {TicketingStackParams} from '../..';
+import {
+  ActiveTicketsScreenName,
+  TicketTabsNavigatorParams,
+} from '../../../Tickets';
+import Processing from '../Processing';
 import useTerminalState, {
   ErrorContext,
   LoadingState,
 } from './use-terminal-state';
-import WebView from 'react-native-webview';
-import MessageBox from '../../../../../message-box';
-import {useTicketState} from '../../../../../TicketContext';
-import {StyleSheet} from '../../../../../theme';
-import {ErrorType} from '../../../../../api/utils';
-import Button from '../../../../../components/button';
-import ThemeIcon from '../../../../../components/theme-icon';
-import {
-  ReserveOffer,
-  TicketReservation,
-} from '../../../../../api/fareContracts';
+
+type NavigationProp = CompositeNavigationProp<
+  MaterialTopTabNavigationProp<TicketTabsNavigatorParams>,
+  DismissableStackNavigationProp<TicketingStackParams, 'PaymentCreditCard'>
+>;
 
 type Props = {
-  navigation: DismissableStackNavigationProp<
-    TicketingStackParams,
-    'PaymentCreditCard'
-  >;
+  navigation: NavigationProp;
   route: RouteProp<TicketingStackParams, 'PaymentCreditCard'>;
 };
 
 const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const styles = useStyles();
-  const {offers, preassignedFareProduct} = route.params;
+  const {t} = useTranslation();
+  const {offers} = route.params;
   const [showWebView, setShowWebView] = useState<boolean>(true);
 
   React.useEffect(
@@ -41,23 +44,19 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     [navigation],
   );
 
-  const cancelTerminal = (refresh?: boolean) =>
-    navigation.navigate('Travellers', {
-      refreshOffer: refresh,
-      preassignedFareProduct,
-    });
+  const cancelTerminal = () => navigation.pop();
 
-  const {activatePollingForNewTickets} = useTicketState();
-  const dismissAndActivatePolling = (
+  const {addReservation} = useTicketState();
+  const dismissAndAddReservation = (
     reservation: TicketReservation,
     reservationOffers: ReserveOffer[],
   ) => {
-    activatePollingForNewTickets({
+    addReservation({
       reservation,
       offers: reservationOffers,
       paymentType: 'creditcard',
     });
-    navigation.dismiss();
+    navigation.navigate(ActiveTicketsScreenName);
   };
 
   const {
@@ -66,17 +65,15 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     onWebViewLoadEnd,
     error,
     restartTerminal,
-  } = useTerminalState(offers, cancelTerminal, dismissAndActivatePolling);
+  } = useTerminalState(offers, cancelTerminal, dismissAndAddReservation);
 
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        title="Betaling"
+        title={t(PaymentCreditCardTexts.header.title)}
         leftButton={{
-          icon: <ThemeIcon svg={ArrowLeft} />,
-          onPress: () => cancelTerminal(false),
-          accessibilityLabel:
-            'Avslutt betaling og gå tilbake til valg av reisende',
+          type: 'cancel',
+          onPress: () => cancelTerminal(),
         }}
       />
       <View
@@ -96,29 +93,28 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
       </View>
       {loadingState && (
         <View style={styles.center}>
-          <Processing message={translateLoadingMessage(loadingState)} />
+          <Processing message={t(translateLoadingMessage(loadingState))} />
         </View>
       )}
       {!!error && (
         <View style={styles.center}>
           <MessageBox
-            message={translateError(error.context, error.type)}
+            message={t(translateError(error.context, error.type))}
             type="error"
             containerStyle={styles.messageBox}
           />
           {(error.context === 'terminal-loading' ||
             error.context === 'capture') && (
             <Button
-              mode="primary"
               onPress={restartTerminal}
-              text="Start på nytt"
+              text={t(PaymentCreditCardTexts.buttons.restart)}
               style={styles.button}
             />
           )}
           <Button
-            mode="secondary"
-            onPress={() => cancelTerminal(true)}
-            text="Gå tilbake"
+            color="secondary_1"
+            onPress={() => cancelTerminal()}
+            text={t(PaymentCreditCardTexts.buttons.goBack)}
           />
         </View>
       )}
@@ -129,22 +125,22 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
 const translateLoadingMessage = (loadingState: LoadingState) => {
   switch (loadingState) {
     case 'reserving-offer':
-      return 'Reserverer billett..';
+      return PaymentCreditCardTexts.stateMessages.reserving;
     case 'loading-terminal':
-      return 'Laster betalingsterminal..';
+      return PaymentCreditCardTexts.stateMessages.loading;
     case 'processing-payment':
-      return 'Prosesserer betaling..';
+      return PaymentCreditCardTexts.stateMessages.processing;
   }
 };
 
 const translateError = (errorContext: ErrorContext, errorType: ErrorType) => {
   switch (errorContext) {
     case 'terminal-loading':
-      return 'Oops - vi feila når vi prøvde å laste inn betalingsterminal. Supert om du prøver igjen 🤞';
+      return PaymentCreditCardTexts.errorMessages.loading;
     case 'reservation':
-      return 'Oops - vi feila når vi prøvde å reservere billett. Supert om du prøver igjen 🤞';
+      return PaymentCreditCardTexts.errorMessages.reservation;
     case 'capture':
-      return 'Oops - vi feila når vi prosessere betaling. Supert om du prøver igjen 🤞';
+      return PaymentCreditCardTexts.errorMessages.capture;
   }
 };
 

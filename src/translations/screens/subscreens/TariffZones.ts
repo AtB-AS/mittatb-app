@@ -1,87 +1,94 @@
 import {translation as _} from '../../commons';
-import {TariffZoneWithMetadata} from '../../../screens/Ticketing/Purchase/TariffZones';
-
-const textForTariffZone = (zoneText: string, sourceText?: string) =>
-  sourceText ? `${sourceText} (${zoneText})` : `${zoneText}`;
-
-const tariffZoneSummaryText = (
-  from: TariffZoneWithMetadata,
-  to: TariffZoneWithMetadata,
-) =>
-  from.id === to.id
-    ? `Reise gjennom 1 sone (Sone ${from.name.value})`
-    : `Reise fra sone ${from.name.value} til sone ${to.name.value}`;
-
-const getSourceVenueText = (tf: TariffZoneWithMetadata, positionText: string) =>
-  tf.resultType === 'geolocation' ? positionText : tf.venueName;
-
-const getBasedOnVenueTextNorwegian = (
-  tf: TariffZoneWithMetadata,
-  fromOrTo: 'from' | 'to',
-) => {
-  const zoneText = fromOrTo === 'from' ? 'avreisesone' : 'ankomstsone';
-  const baseText = `Valgt ${zoneText} er sone ${tf.name.value}`;
-  if (tf.resultType === 'geolocation') {
-    return `${baseText} basert på min posisjon`;
-  } else if (tf.venueName) {
-    return `${baseText} basert på stoppested ${tf.venueName}`;
-  } else {
-    return baseText;
-  }
-};
 
 const TariffZonesTexts = {
   header: {
-    title: _('Velg sone'),
-    leftButton: {
-      a11yLabel: _('Gå tilbake uten å lagre soner'),
-    },
+    title: _('Velg soner', 'Select zones'),
   },
   zoneSummary: {
-    a11yLabel: (from: TariffZoneWithMetadata, to: TariffZoneWithMetadata) =>
-      _(`Sonevalget er ${tariffZoneSummaryText(from, to)}`),
-    text: (from: TariffZoneWithMetadata, to: TariffZoneWithMetadata) =>
-      _(tariffZoneSummaryText(from, to)),
+    a11yLabelPrefix: _(`Sonevalget er`, `The zone selection is`),
+    text: {
+      singleZone: (zoneName: string) =>
+        _(
+          `Reise gjennom 1 sone (Sone ${zoneName})`,
+          `Travel through 1 zone (Zone ${zoneName})`,
+        ),
+      multipleZone: (zoneNameFrom: string, zoneNameTo: string) =>
+        _(
+          `Reise fra sone ${zoneNameFrom} til sone ${zoneNameTo}`,
+          `Travel from zone ${zoneNameFrom} to zone ${zoneNameTo}`,
+        ),
+    },
   },
 
   location: {
     departurePicker: {
-      value: (from: TariffZoneWithMetadata) =>
-        _(
-          textForTariffZone(
-            `Sone ${from.name.value}`,
-            getSourceVenueText(from, 'Min posisjon'),
+      value: {
+        noVenue: (zoneName: string) =>
+          _(`Sone ${zoneName}`, `Zone ${zoneName}`),
+        withVenue: (zoneName: string, venueName: string) =>
+          _(
+            `Sone ${zoneName} (${venueName})`,
+            `Zone ${zoneName} (${venueName})`,
           ),
-        ),
+      },
       label: _('Fra', 'From'),
-      a11yLabel: (from: TariffZoneWithMetadata) =>
-        _(getBasedOnVenueTextNorwegian(from, 'from')),
-      a11yHint: _('Aktivér for å søke etter avreisesone'),
-      placeholder: _('Søk etter avreisesone'),
+      a11yLabel: {
+        noVenue: (zoneName: string) =>
+          _(
+            `Valgt avreisesone er ${zoneName}`,
+            `Selected zone of departure is ${zoneName}`,
+          ),
+        withVenue: (zoneName: string, venueName: string) =>
+          _(
+            `Valgt avreisesone er ${zoneName} basert på stoppested ${venueName}`,
+            'Selected zone of departure is ${zoneName} based on stop place ${venueName}',
+          ),
+      },
+      a11yHint: _(
+        'Aktivér for å søke etter avreisesone',
+        'Activate to search zone of departure',
+      ),
+      placeholder: _('Søk etter avreisesone', 'Search zone of departure'),
     },
     destinationPicker: {
-      value: (from: TariffZoneWithMetadata, to: TariffZoneWithMetadata) =>
-        _(
-          from.id === to.id
-            ? textForTariffZone(
-                `Samme sone`,
-                getSourceVenueText(to, 'Min posisjon'),
-              )
-            : textForTariffZone(
-                `Sone ${to.name.value}`,
-                getSourceVenueText(to, 'Min posisjon'),
-              ),
-        ),
+      value: {
+        noVenue: (zoneName: string) =>
+          _(`Sone ${zoneName}`, `Zone ${zoneName}`),
+        noVenueSameZone: _(`Samme sone`, `Same zone`),
+        withVenue: (zoneName: string, venueName: string) =>
+          _(
+            `Sone ${zoneName} (${venueName})`,
+            `Zone ${zoneName} (${venueName})`,
+          ),
+        withVenueSameZone: (venueName: string) =>
+          _(`Samme sone (${venueName})`, `Same zone (${venueName})`),
+      },
       label: _('Til', 'To'),
-      a11yLabel: (to: TariffZoneWithMetadata) =>
-        _(getBasedOnVenueTextNorwegian(to, 'to')),
-      a11yHint: _('Aktivér for å søke etter ankomstsone'),
-      placeholder: _('Søk etter ankomstsone'),
+      a11yLabel: {
+        noVenue: (zoneName: string) =>
+          _(
+            `Valgt ankomstsone er ${zoneName}`,
+            `Selected zone of arrival is ${zoneName}`,
+          ),
+        withVenue: (zoneName: string, venueName: string) =>
+          _(
+            `Valgt ankomstsone er ${zoneName} basert på stoppested ${venueName}`,
+            'Selected zone of arrival is ${zoneName} based on stop place ${venueName}',
+          ),
+      },
+      a11yHint: _(
+        'Aktivér for å søke etter ankomstsone',
+        'Activate to search for zone of arrival',
+      ),
+      placeholder: _('Søk etter ankomstsone', 'Search for zone of arrival'),
     },
   },
   saveButton: {
-    text: _('Lagre sonvalg'),
-    a11yHint: _('Aktivér for å lagre sonevalget'),
+    text: _('Lagre sonevalg', 'Save selected zone'),
+    a11yHint: _(
+      'Aktivér for å lagre sonevalget',
+      'Activate to save selected zone',
+    ),
   },
 };
 export default TariffZonesTexts;

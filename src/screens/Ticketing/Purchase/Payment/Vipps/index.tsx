@@ -1,60 +1,56 @@
-import {RouteProp} from '@react-navigation/native';
-import React, {useCallback, useEffect} from 'react';
-import {Linking, View} from 'react-native';
+import {ErrorType} from '@atb/api/utils';
+import Button from '@atb/components/button';
+import Header from '@atb/components/screen-header';
+import MessageBox from '@atb/message-box';
+import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
+import {StyleSheet} from '@atb/theme';
+import {ReserveOffer, TicketReservation, useTicketState} from '@atb/tickets';
+import {PaymentVippsTexts, useTranslation} from '@atb/translations';
+import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
+import React from 'react';
+import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../..';
-import {Close} from '../../../../../assets/svg/icons/actions';
-import ThemeText from '../../../../../components/text';
-import ThemeIcon from '../../../../../components/theme-icon';
-import {DismissableStackNavigationProp} from '../../../../../navigation/createDismissableStackNavigator';
-import Header from '../../../../../ScreenHeader';
-import {StyleSheet} from '../../../../../theme';
-import {useTicketState} from '../../../../../TicketContext';
-import {ArrowLeft} from '../../../../../assets/svg/icons/navigation';
-import {reserveOffers} from '../../../../../api';
-import Button from '../../../../../components/button';
-import useVippsState, {ErrorContext, State} from './use-vipps-state';
-import Processing from '../Processing';
-import MessageBox from '../../../../../message-box';
-import {ErrorType} from '../../../../../api/utils';
 import {
-  ReserveOffer,
-  TicketReservation,
-} from '../../../../../api/fareContracts';
+  ActiveTicketsScreenName,
+  TicketTabsNavigatorParams,
+} from '../../../Tickets';
+import Processing from '../Processing';
+import useVippsState, {ErrorContext, State} from './use-vipps-state';
+
+type NavigationProp = CompositeNavigationProp<
+  MaterialTopTabNavigationProp<TicketTabsNavigatorParams>,
+  DismissableStackNavigationProp<TicketingStackParams, 'PaymentVipps'>
+>;
 
 type Props = {
-  navigation: DismissableStackNavigationProp<
-    TicketingStackParams,
-    'PaymentVipps'
-  >;
+  navigation: NavigationProp;
   route: RouteProp<TicketingStackParams, 'PaymentVipps'>;
 };
 
 export default function VippsPayment({
   navigation,
   route: {
-    params: {offers, preassignedFareProduct},
+    params: {offers},
   },
 }: Props) {
   const styles = useStyles();
+  const {t} = useTranslation();
 
-  const cancelVipps = (refresh?: boolean) =>
-    navigation.navigate('Travellers', {
-      refreshOffer: refresh,
-      preassignedFareProduct,
-    });
+  const cancelVipps = () => navigation.pop();
 
-  const {activatePollingForNewTickets} = useTicketState();
+  const {addReservation} = useTicketState();
   const dismissAndActivatePolling = (
     reservation: TicketReservation,
     reservationOffers: ReserveOffer[],
   ) => {
-    activatePollingForNewTickets({
+    addReservation({
       reservation,
       offers: reservationOffers,
       paymentType: 'vipps',
     });
-    navigation.dismiss();
+    navigation.navigate(ActiveTicketsScreenName);
   };
 
   const {state, error, openVipps} = useVippsState(
@@ -65,22 +61,19 @@ export default function VippsPayment({
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        title="Videresendes til Vipps"
+        title={t(PaymentVippsTexts.header.title)}
         leftButton={{
-          icon: <ThemeIcon svg={ArrowLeft} />,
-          onPress: () => cancelVipps(false),
-          accessibilityLabel:
-            'Avslutt Vipps og gå tilbake til valg av reisende',
+          type: 'cancel',
+          onPress: () => cancelVipps(),
         }}
       />
       <View style={styles.content}>
         {!error &&
           (state === 'reserving-offer' || state === 'offer-reserved' ? (
-            <Processing message={translateStateMessage(state)} />
+            <Processing message={t(translateStateMessage(state))} />
           ) : (
             <Button
-              mode="primary"
-              text="Gå til Vipps for betaling"
+              text={t(PaymentVippsTexts.buttons.goToVipps)}
               onPress={() => openVipps()}
               style={styles.button}
             />
@@ -88,22 +81,21 @@ export default function VippsPayment({
         {!!error && (
           <>
             <MessageBox
-              message={translateError(error.context, error.type)}
+              message={t(translateError(error.context, error.type))}
               type="error"
               containerStyle={styles.messageBox}
             />
             {error.context === 'open-vipps-url' && (
               <Button
-                mode="primary"
                 onPress={openVipps}
-                text="Prøv igjen"
+                text={t(PaymentVippsTexts.buttons.tryAgain)}
                 style={styles.button}
               />
             )}
             <Button
-              mode="secondary"
-              onPress={() => cancelVipps(true)}
-              text="Gå tilbake"
+              color="secondary_1"
+              onPress={() => cancelVipps()}
+              text={t(PaymentVippsTexts.buttons.goBack)}
               style={styles.button}
             />
           </>
@@ -116,19 +108,19 @@ export default function VippsPayment({
 const translateError = (errorContext: ErrorContext, errorType: ErrorType) => {
   switch (errorContext) {
     case 'open-vipps-url':
-      return 'Oops - Vi klarte ikke å åpne Vipps. Har du installert Vipps-appen?';
+      return PaymentVippsTexts.errorMessages.openVipps;
     case 'reserve-offer':
-      return 'Oops - Vi klarte ikke å reservere billett. Supert om du prøver igjen 🤞';
+      return PaymentVippsTexts.errorMessages.reserveOffer;
   }
 };
 
 const translateStateMessage = (loadingState: State) => {
   switch (loadingState) {
     case 'reserving-offer':
-      return 'Reserverer billett..';
+      return PaymentVippsTexts.stateMessages.reserving;
     case 'offer-reserved':
     default:
-      return 'Åpner vipps..';
+      return PaymentVippsTexts.stateMessages.reserved;
   }
 };
 

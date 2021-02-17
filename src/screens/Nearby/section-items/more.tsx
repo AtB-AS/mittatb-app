@@ -1,15 +1,15 @@
-import React from 'react';
-import {AccessibilityProps, View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {Expand} from '../../../assets/svg/icons/navigation';
+import {Expand} from '@atb/assets/svg/icons/navigation';
 import {
   SectionItem,
   useSectionItem,
   useSectionStyle,
-} from '../../../components/sections/section-utils';
-import ThemeText from '../../../components/text';
-import ThemeIcon from '../../../components/theme-icon';
-import {StyleSheet} from '../../../theme';
+} from '@atb/components/sections/section-utils';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import {StyleSheet} from '@atb/theme';
+import React from 'react';
+import {AccessibilityProps, View} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export type MoreItemProps = SectionItem<{
   text: string;

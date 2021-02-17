@@ -1,18 +1,14 @@
-import {useRef, useCallback, useEffect, useReducer} from 'react';
+import {AxiosError} from 'axios';
+import {useCallback, useEffect, useReducer, useRef} from 'react';
 import {
   WebViewError,
   WebViewErrorEvent,
   WebViewNavigation,
   WebViewNavigationEvent,
 } from 'react-native-webview/lib/WebViewTypes';
-import {reserveOffers} from '../../../../../api';
-import {
-  ReserveOffer,
-  TicketReservation,
-} from '../../../../../api/fareContracts';
-import {ErrorType, getAxiosErrorType} from '../../../../../api/utils';
 import {parse as parseURL} from 'search-params';
-import {AxiosError} from 'axios';
+import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
+import {ReserveOffer, reserveOffers, TicketReservation} from '@atb/tickets';
 
 const possibleResponseCodes = ['Cancel', 'OK'] as const;
 type NetsResponseCode = typeof possibleResponseCodes[number];
@@ -89,7 +85,7 @@ const initialState: TerminalReducerState = {
 export default function useTerminalState(
   offers: ReserveOffer[],
   cancelTerminal: () => void,
-  activatePolling: (
+  addReservation: (
     reservation: TicketReservation,
     offers: ReserveOffer[],
   ) => void,
@@ -176,7 +172,7 @@ export default function useTerminalState(
       case 'OK':
         if (!reservation) return;
 
-        activatePolling(reservation, offers);
+        addReservation(reservation, offers);
         break;
       case 'Cancel':
         cancelTerminal();

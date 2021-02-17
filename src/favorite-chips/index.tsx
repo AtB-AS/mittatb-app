@@ -28,9 +28,7 @@ type Props = {
 
 export type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
 
-type ProfileNearbyScreenNavigationProp = StackNavigationProp<
-  RootStackParamList
->;
+type ProfileNearbyScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
   containerStyle,
@@ -53,7 +51,7 @@ const FavoriteChips: React.FC<Props> = ({
         <View style={[styles.staticChipsContainer, contentContainerStyle]}>
           {activeType('location') && (
             <FavoriteChip
-              mode="primary2"
+              color="secondary_1"
               text={t(FavoriteTexts.chips.currentLocation)}
               accessibilityRole="button"
               accessibilityHint={chipActionHint ?? ''}
@@ -67,7 +65,7 @@ const FavoriteChips: React.FC<Props> = ({
               accessibilityRole="button"
               icon={MapPointPin}
               onPress={onMapSelection}
-              mode="primary2"
+              color="secondary_1"
             />
           )}
         </View>
@@ -81,7 +79,7 @@ const FavoriteChips: React.FC<Props> = ({
         {activeType('favorites') &&
           favorites.map((fav, i) => (
             <FavoriteChip
-              mode="primary4"
+              color="primary_3"
               key={fav.name}
               text={fav.name ?? ''}
               accessibilityLabel={'Favoritt: ' + fav.name + screenReaderPause}
@@ -108,7 +106,9 @@ const FavoriteChips: React.FC<Props> = ({
             text={t(FavoriteTexts.chips.addFavorite)}
             accessibilityRole="button"
             icon={Add}
-            onPress={() => navigation.navigate('AddEditFavorite', {})}
+            onPress={() =>
+              navigation.navigate('AddEditFavorite', {screen: 'SearchLocation'})
+            }
             style={{marginRight: 0}}
           />
         )}

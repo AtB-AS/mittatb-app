@@ -4,11 +4,9 @@ import {Keyboard, TextInput as InternalTextInput, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
 import {ErrorType} from '../api/utils';
-import {Close} from '../assets/svg/icons/actions';
 import ScreenReaderAnnouncement from '../components/screen-reader-announcement';
 import {TextInput} from '../components/sections';
 import ThemeText from '../components/text';
-import ThemeIcon from '../components/theme-icon';
 import FavoriteChips, {ChipTypeGroup} from '../favorite-chips';
 import {useFavorites} from '../favorites';
 import {
@@ -20,18 +18,18 @@ import {useGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
 import MessageBox from '../message-box';
 import {RootStackParamList} from '../navigation';
-import FullScreenHeader from '../ScreenHeader/full-header';
+import FullScreenHeader from '../components/screen-header/full-header';
 import {useSearchHistory} from '../search-history';
 import {StyleSheet} from '../theme';
+import {
+  LocationSearchTexts,
+  TranslateFunction,
+  useTranslation,
+} from '../translations/';
 import {LocationSearchNavigationProp} from './';
 import LocationResults from './LocationResults';
 import {LocationSearchResult} from './types';
 import useDebounce from './useDebounce';
-import {
-  useTranslation,
-  LocationSearchTexts,
-  TranslateFunction,
-} from '../translations/';
 export type Props = {
   navigation: LocationSearchNavigationProp;
   route: RouteProp<RootStackParamList, 'LocationSearch'>;
@@ -57,31 +55,11 @@ const LocationSearch: React.FC<Props> = ({
     },
   },
 }) => {
-  const styles = useThemeStyles();
-  const {history, addSearchEntry} = useSearchHistory();
-  const {favorites} = useFavorites();
-
-  const [text, setText] = useState<string>(initialLocation?.name ?? '');
-  const debouncedText = useDebounce(text, 200);
   const {t} = useTranslation();
-
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const previousLocations = filterPreviousLocations(
-    debouncedText,
-    history,
-    favorites,
-  );
-
+  const styles = useThemeStyles();
   const {location: geolocation} = useGeolocationState();
 
-  const {locations, error} =
-    useGeocoder(debouncedText, geolocation?.coords ?? null) ?? [];
-  const filteredLocations = filterCurrentLocation(locations, previousLocations);
-
   const onSelect = (location: LocationWithMetadata) => {
-    if (location.resultType === 'search') {
-      addSearchEntry(location);
-    }
     navigation.navigate(callerRouteName as any, {
       [callerRouteParam]: location,
     });
@@ -105,7 +83,80 @@ const LocationSearch: React.FC<Props> = ({
     });
   };
 
+  return (
+    <View style={styles.container}>
+      <FullScreenHeader
+        title={t(LocationSearchTexts.header.title)}
+        leftButton={{type: 'close'}}
+      />
+
+      <LocationSearchContent
+        onSelect={onSelect}
+        onMapSelection={onMapSelection}
+        label={label}
+        favoriteChipTypes={favoriteChipTypes}
+        placeholder={t(LocationSearchTexts.searchField.placeholder)}
+        defaultText={initialLocation?.name}
+      />
+    </View>
+  );
+};
+
+type LocationSearchContentProps = {
+  label: string;
+  placeholder: string;
+  favoriteChipTypes?: ChipTypeGroup[];
+  defaultText?: string;
+  onSelect(location: LocationWithMetadata): void;
+  onMapSelection?(): void;
+  onlyAtbVenues?: boolean;
+  includeHistory?: boolean;
+};
+
+export function LocationSearchContent({
+  label,
+  placeholder,
+  favoriteChipTypes,
+  defaultText,
+  onSelect,
+  onMapSelection,
+  onlyAtbVenues = false,
+  includeHistory = true,
+}: LocationSearchContentProps) {
+  const styles = useThemeStyles();
+  const {favorites} = useFavorites();
+  const {history, addSearchEntry} = useSearchHistory();
+  const {t} = useTranslation();
+
+  const [text, setText] = useState<string>(defaultText ?? '');
+  const debouncedText = useDebounce(text, 200);
+
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const previousLocations = filterPreviousLocations(
+    debouncedText,
+    history,
+    favorites,
+    onlyAtbVenues,
+  );
+
+  const {location: geolocation} = useGeolocationState();
+
+  const {locations, error} = useGeocoder(
+    debouncedText,
+    geolocation?.coords ?? null,
+    onlyAtbVenues,
+  );
+
+  const filteredLocations = filterCurrentLocation(
+    locations,
+    includeHistory ? previousLocations : [],
+  );
+
   const onSearchSelect = (searchResult: LocationSearchResult) => {
+    if (!searchResult.favoriteInfo) {
+      addSearchEntry(searchResult.location);
+    }
+
     if (!searchResult.favoriteInfo) {
       return onSelect({...searchResult.location, resultType: 'search'});
     }
@@ -141,23 +192,10 @@ const LocationSearch: React.FC<Props> = ({
 
   const hasPreviousResults = !!previousLocations.length;
   const hasResults = !!filteredLocations.length;
-  const hasAnyResult = hasResults || hasPreviousResults;
+  const hasAnyResult = hasResults || (includeHistory && hasPreviousResults);
 
   return (
-    <View style={styles.container}>
-      <FullScreenHeader
-        title={t(LocationSearchTexts.header.title)}
-        leftButton={{
-          onPress: () => navigation.goBack(),
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: t(
-            LocationSearchTexts.header.leftButton.a11yLabel,
-          ),
-          icon: <ThemeIcon svg={Close} />,
-        }}
-      />
-
+    <>
       <View style={styles.header}>
         <ScreenReaderAnnouncement message={errorMessage} />
 
@@ -170,7 +208,7 @@ const LocationSearch: React.FC<Props> = ({
             onChangeText={setText}
             showClear={Boolean(text?.length)}
             onClear={() => setText('')}
-            placeholder={t(LocationSearchTexts.searchField.placeholder)}
+            placeholder={placeholder}
             autoCorrect={false}
             autoCompleteType="off"
           />
@@ -195,12 +233,12 @@ const LocationSearch: React.FC<Props> = ({
 
       {hasAnyResult ? (
         <ScrollView
-          style={styles.scroll}
+          style={styles.fullFlex}
           contentContainerStyle={styles.contentBlock}
           keyboardShouldPersistTaps="handled"
           onScrollBeginDrag={() => Keyboard.dismiss()}
         >
-          {hasPreviousResults && (
+          {includeHistory && hasPreviousResults && (
             <LocationResults
               title={t(LocationSearchTexts.results.previousResults.heading)}
               locations={previousLocations}
@@ -220,7 +258,7 @@ const LocationSearch: React.FC<Props> = ({
       ) : (
         !error &&
         !!text && (
-          <View style={styles.contentBlock}>
+          <View style={[styles.contentBlock, styles.marginTop]}>
             <MessageBox type="info">
               <ThemeText>
                 {t(LocationSearchTexts.messages.emptyResult)}
@@ -229,9 +267,9 @@ const LocationSearch: React.FC<Props> = ({
           </View>
         )
       )}
-    </View>
+    </>
   );
-};
+}
 
 function translateErrorType(
   errorType: ErrorType,
@@ -250,11 +288,16 @@ const filterPreviousLocations = (
   searchText: string,
   previousLocations: Location[],
   favorites?: UserFavorites,
+  onlyAtbVenues: boolean = false,
 ): LocationSearchResult[] => {
   const mappedHistory: LocationSearchResult[] =
-    previousLocations?.map((location) => ({
-      location,
-    })) ?? [];
+    previousLocations
+      ?.map((location) => ({
+        location,
+      }))
+      .filter(
+        (location) => !onlyAtbVenues || location.location.layer == 'venue',
+      ) ?? [];
 
   if (!searchText) {
     return mappedHistory;
@@ -265,7 +308,8 @@ const filterPreviousLocations = (
   const filteredFavorites: LocationSearchResult[] = (favorites ?? [])
     .filter(
       (favorite) =>
-        matchText(favorite.location?.name) || matchText(favorite.name),
+        (matchText(favorite.location?.name) || matchText(favorite.name)) &&
+        (!onlyAtbVenues || favorite.location.layer == 'venue'),
     )
     .map(({location, ...favoriteInfo}) => ({
       location,
@@ -305,7 +349,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   contentBlock: {
     paddingHorizontal: theme.spacings.medium,
   },
-  scroll: {
+  marginTop: {
+    marginTop: theme.spacings.medium,
+  },
+  fullFlex: {
     flex: 1,
   },
 }));

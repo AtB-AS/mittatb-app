@@ -1,29 +1,29 @@
+import Header from '@atb/components/screen-header';
+import {StyleSheet} from '@atb/theme';
+import {useTicketState} from '@atb/tickets';
+import {TicketsTexts, useTranslation} from '@atb/translations';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import React, {useMemo} from 'react';
 import {View} from 'react-native';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import Header from '../../../ScreenHeader';
-import LogoOutline from '../../../ScreenHeader/LogoOutline';
-import useChatIcon from '../../../chat/use-chat-icon';
-import {useNavigateToStartScreen} from '../../../utils/navigation';
-import {StyleSheet} from '../../../theme';
 import TabBar from './TabBar';
-import {ActiveTickets, ExpiredTickets} from './Tabs';
-import ThemeIcon from '../../../components/theme-icon';
+import {ActiveTickets, BuyTickets, ExpiredTickets} from './Tabs';
 
+export const BuyTicketsScreenName = 'BuyTickets';
 export const ActiveTicketsScreenName = 'ActiveTickets';
+export const ExpiredTicketsScreenName = 'ExpiredTickets';
 
 export type TicketTabsNavigatorParams = {
+  [BuyTicketsScreenName]: undefined;
   [ActiveTicketsScreenName]: undefined;
-  ExpiredTickets: undefined;
+  [ExpiredTicketsScreenName]: undefined;
 };
 
 const Tab = createMaterialTopTabNavigator<TicketTabsNavigatorParams>();
 
 export default function TicketTabs() {
   const styles = useStyles();
-  const chatIcon = useChatIcon();
-  const navigateHome = useNavigateToStartScreen();
+  const {t} = useTranslation();
   const {top} = useSafeAreaInsets();
   const screenTopStyle = useMemo(
     () => ({
@@ -32,27 +32,36 @@ export default function TicketTabs() {
     [top],
   );
 
+  const {activeFareContracts} = useTicketState();
+  const initialRoute = activeFareContracts.length
+    ? ActiveTicketsScreenName
+    : BuyTicketsScreenName;
+
   return (
     <View style={[styles.container, screenTopStyle]}>
       <Header
-        title="Billetter"
-        rightButton={chatIcon}
-        leftButton={{
-          icon: <ThemeIcon svg={LogoOutline} />,
-          onPress: navigateHome,
-          accessibilityLabel: 'Gå til startside',
-        }}
+        title={t(TicketsTexts.header.title)}
+        rightButton={{type: 'chat'}}
+        leftButton={{type: 'home'}}
       />
-      <Tab.Navigator tabBar={(props) => <TabBar {...props} />}>
+      <Tab.Navigator
+        tabBar={(props) => <TabBar {...props} />}
+        initialRouteName={initialRoute}
+      >
+        <Tab.Screen
+          name={BuyTicketsScreenName}
+          component={BuyTickets}
+          options={{tabBarLabel: t(TicketsTexts.buyTicketsTab.label)}}
+        />
         <Tab.Screen
           name={ActiveTicketsScreenName}
           component={ActiveTickets}
-          options={{tabBarLabel: 'Aktive'}}
+          options={{tabBarLabel: t(TicketsTexts.activeTicketsTab.label)}}
         />
         <Tab.Screen
-          name="ExpiredTickets"
+          name={ExpiredTicketsScreenName}
           component={ExpiredTickets}
-          options={{tabBarLabel: 'Utløpte'}}
+          options={{tabBarLabel: t(TicketsTexts.expiredTicketsTab.label)}}
         />
       </Tab.Navigator>
     </View>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Svg, {Circle, SvgProps} from 'react-native-svg';
+import Svg, {SvgProps, Circle} from 'react-native-svg';
 
 function SvgDot(props: SvgProps) {
   return (

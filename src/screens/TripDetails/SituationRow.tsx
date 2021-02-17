@@ -1,12 +1,12 @@
-import React from 'react';
-import {View} from 'react-native';
-import {Situation} from '../../sdk';
+import {Situation} from '@atb/sdk';
 import SituationMessages, {
   getSituationDiff,
   hasSituations,
   SituationWarningIcon,
-} from '../../situations';
-import {StyleSheet} from '../../theme';
+} from '@atb/situations';
+import {StyleSheet} from '@atb/theme';
+import React from 'react';
+import {View} from 'react-native';
 
 export default function SituationRow({
   situations,

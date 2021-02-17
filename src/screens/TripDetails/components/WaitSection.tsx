@@ -1,13 +1,13 @@
+import {Wait} from '@atb/assets/svg/icons/transportation';
+import {Info} from '@atb/assets/svg/situations';
+import ThemeText from '@atb/components/text';
+import {TinyMessageBox} from '@atb/message-box';
+import {StyleSheet} from '@atb/theme';
+import {TripDetailsTexts, useTranslation} from '@atb/translations';
+import {secondsToDuration} from '@atb/utils/date';
+import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import React from 'react';
 import {View} from 'react-native';
-import {Wait} from '../../../assets/svg/icons/transportation';
-import {Info} from '../../../assets/svg/situations';
-import ThemeText from '../../../components/text';
-import {TinyMessageBox} from '../../../message-box';
-import {StyleSheet} from '../../../theme';
-import {TripDetailsTexts, useTranslation} from '../../../translations';
-import {secondsToDuration} from '../../../utils/date';
-import {transportationColor} from '../../../utils/transportation-color';
 import {timeIsShort} from '../Details/utils';
 import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
@@ -19,17 +19,15 @@ export type WaitDetails = {
 
 const WaitSection: React.FC<WaitDetails> = (wait) => {
   const style = useSectionStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const WaitTexts = TripDetailsTexts.trip.leg.wait;
-  const waitTime = secondsToDuration(wait.waitSeconds);
+  const waitTime = secondsToDuration(wait.waitSeconds, language);
   const shortWait = timeIsShort(wait.waitSeconds);
+  const iconColor = useTransportationColor();
+
   return (
     <View style={style.section}>
-      <TripLegDecoration
-        color={transportationColor()}
-        hasStart={false}
-        hasEnd={false}
-      ></TripLegDecoration>
+      <TripLegDecoration color={iconColor} hasStart={false} hasEnd={false} />
       {shortWait && (
         <TripRow rowLabel={<Info />}>
           <TinyMessageBox
@@ -39,7 +37,7 @@ const WaitSection: React.FC<WaitDetails> = (wait) => {
         </TripRow>
       )}
       <TripRow rowLabel={<Wait />}>
-        <ThemeText type="lead" color="faded">
+        <ThemeText type="lead" color="secondary">
           {t(WaitTexts.label(waitTime))}
         </ThemeText>
       </TripRow>

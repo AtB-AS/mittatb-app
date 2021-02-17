@@ -28,9 +28,7 @@ const LocationResults: React.FC<Props> = ({
     <>
       {title && (
         <View accessibilityRole="header" style={styles.subHeader}>
-          <ThemeText type="lead" color="faded">
-            {title}
-          </ThemeText>
+          <ThemeText type="lead">{title}</ThemeText>
         </View>
       )}
       <View>
@@ -124,7 +122,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     margin: 0,
   },
   subLabel: {
-    color: theme.text.colors.faded,
+    color: theme.text.colors.secondary,
     fontSize: 12,
     marginRight: 12,
   },

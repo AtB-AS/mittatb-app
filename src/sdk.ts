@@ -1,6 +1,7 @@
 import {
   Authority,
   BikeRentalStation,
+  Coordinates,
   DestinationDisplay,
   InfoLink,
   Interchange,
@@ -14,6 +15,7 @@ import {
   ServiceJourney,
   StopPlace,
   StopPlaceDetails,
+  TransportMode,
   TransportSubmode,
   ValidityPeriod,
 } from '@entur/sdk';
@@ -190,12 +192,6 @@ export type DeparturesRealtimeData = {
   [quayId: string]: DepartureRealtimeData;
 };
 
-export type FavoriteDeparture = {
-  stopId: string;
-  lineName: string;
-  lineId: string;
-};
-
 export type NextCursorData = {
   nextCursor?: string;
   hasNextPage: boolean;
@@ -218,3 +214,16 @@ export type CursorInput = {
 };
 
 export type CursoredQuery<T> = CursorInput & T;
+
+export type MapLeg = {
+  mode?: LegMode;
+  faded?: boolean;
+  transportSubmode?: TransportSubmode;
+  pointsOnLink: PointsOnLink;
+};
+
+export type ServiceJourneyMapInfoData = {
+  mapLegs: MapLeg[];
+  start?: Coordinates;
+  stop?: Coordinates;
+};

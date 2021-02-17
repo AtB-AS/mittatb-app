@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Svg, {G, Path, Circle, Defs, ClipPath, SvgProps} from 'react-native-svg';
+import Svg, {SvgProps, G, Path, Circle, Defs, ClipPath} from 'react-native-svg';
 
 function SvgOnboarding2(props: SvgProps) {
   return (

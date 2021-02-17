@@ -4,7 +4,7 @@ const FavoriteTexts = {
   chips: {
     currentLocation: _('Posisjon', 'Location'),
     mapLocation: _('Velg i kart', 'Select in map'),
-    addFavorite: _('Legg til favoritt', 'Add favorite'),
+    addFavorite: _('Legg til et favorittsted', 'Add a favourite location'),
   },
 };
 export default FavoriteTexts;

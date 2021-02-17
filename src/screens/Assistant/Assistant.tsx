@@ -1,54 +1,51 @@
+import {CancelToken, isCancel, searchTrip} from '@atb/api';
+import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
+import {Swap} from '@atb/assets/svg/icons/actions';
+import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
+import {screenReaderPause} from '@atb/components/accessible-text';
+import Button from '@atb/components/button';
+import DisappearingHeader from '@atb/components/disappearing-header';
+import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import {LocationInput, Section} from '@atb/components/sections';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import FavoriteChips from '@atb/favorite-chips';
+import {useFavorites} from '@atb/favorites';
+import {
+  Location,
+  LocationWithMetadata,
+  UserFavorites,
+} from '@atb/favorites/types';
+import {useReverseGeocoder} from '@atb/geocoder';
+import {
+  RequestPermissionFn,
+  useGeolocationState,
+} from '@atb/GeolocationContext';
+import {useLocationSearchValue} from '@atb/location-search';
+import {RootStackParamList} from '@atb/navigation';
+import {TripPattern} from '@atb/sdk';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {AssistantTexts, dictionary, useTranslation} from '@atb/translations';
+import {formatLocaleTime} from '@atb/utils/date';
+import {
+  locationDistanceInMetres as distanceInMetres,
+  locationsAreEqual,
+  LOCATIONS_REALLY_CLOSE_THRESHOLD,
+} from '@atb/utils/location';
+import {useLayout} from '@atb/utils/use-layout';
 import Bugsnag from '@bugsnag/react-native';
 import analytics from '@react-native-firebase/analytics';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
-import {searchTrip} from '../../api';
-import {CancelToken, isCancel} from '../../api/client';
-import {ErrorType, getAxiosErrorType} from '../../api/utils';
-import {Swap} from '../../assets/svg/icons/actions';
-import {CurrentLocationArrow} from '../../assets/svg/icons/places';
-import {screenReaderPause} from '../../components/accessible-text';
-import DisappearingHeader from '../../components/disappearing-header';
-import ScreenReaderAnnouncement from '../../components/screen-reader-announcement';
-import {LocationInput, Section} from '../../components/sections';
-import ThemeText from '../../components/text';
-import ThemeIcon from '../../components/theme-icon';
-import FavoriteChips from '../../favorite-chips';
-import {useFavorites} from '../../favorites/FavoritesContext';
-import {
-  Location,
-  LocationWithMetadata,
-  UserFavorites,
-} from '../../favorites/types';
-import {useReverseGeocoder} from '../../geocoder';
-import {
-  RequestPermissionFn,
-  useGeolocationState,
-} from '../../GeolocationContext';
-import {useLocationSearchValue} from '../../location-search';
-import {RootStackParamList} from '../../navigation';
-import {TabNavigatorParams} from '../../navigation/TabNavigator';
-import {TripPattern} from '../../sdk';
-import {StyleSheet, useTheme} from '../../theme';
-import {useTranslation, dictionary, AssistantTexts} from '../../translations';
-import {
-  locationDistanceInMetres as distanceInMetres,
-  locationsAreEqual,
-  LOCATIONS_REALLY_CLOSE_THRESHOLD,
-} from '../../utils/location';
-import {useLayout} from '../../utils/use-layout';
+import {AssistantParams} from '.';
 import Loading from '../Loading';
 import FadeBetween from './FadeBetween';
+import {getDateOptionText, SearchTime} from './journey-date-picker';
+import NewsBanner from './NewsBanner';
 import Results from './Results';
 import {NoResultReason, SearchStateType} from './types';
-import NewsBanner from './NewsBanner';
-import {AssistantParams} from '.';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import Button from '../../components/button';
-import {formatLocaleTime, formatToLongDateTime} from '../../utils/date';
-import {getDateOptionText, SearchTime} from './journey-date-picker';
 
 type AssistantRouteName = 'AssistantRoot';
 const AssistantRouteNameStatic: AssistantRouteName = 'AssistantRoot';
@@ -107,6 +104,7 @@ const Assistant: React.FC<Props> = ({
   const styles = useStyles();
   const {theme} = useTheme();
   const {from, to} = useLocations(currentLocation);
+  const {language} = useTranslation();
 
   function swap() {
     log('swap', {
@@ -182,6 +180,7 @@ const Assistant: React.FC<Props> = ({
   const getSearchTimeLabel = () => {
     return `${t(getDateOptionText(searchTime.option))} (${formatLocaleTime(
       searchTime.date,
+      language,
     )})`;
   };
 
@@ -214,7 +213,7 @@ const Assistant: React.FC<Props> = ({
   const isHeaderFullHeight = !from || !to;
 
   const renderHeader = useCallback(
-    (_, isParentAnimating) => (
+    (_) => (
       <View>
         <View style={styles.paddedContainer}>
           <Section>
@@ -389,8 +388,9 @@ const Assistant: React.FC<Props> = ({
       headerMargin={24}
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
-      logoClick={{
-        callback: resetView,
+      leftButton={{
+        type: 'home',
+        onPress: resetView,
         accessibilityLabel: t(AssistantTexts.header.accessibility.logo),
       }}
       onFullscreenTransitionEnd={(fullHeight) => {

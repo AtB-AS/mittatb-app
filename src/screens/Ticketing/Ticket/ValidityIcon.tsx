@@ -1,9 +1,9 @@
+import {InvalidTicket, ValidTicket} from '@atb/assets/svg/icons/ticketing';
+import {screenReaderPause} from '@atb/components/accessible-text';
+import {useTheme} from '@atb/theme';
+import colors from '@atb/theme/colors';
 import React from 'react';
 import {View} from 'react-native';
-import {InvalidTicket, ValidTicket} from '../../../assets/svg/icons/ticketing';
-import {screenReaderPause} from '../../../components/accessible-text';
-import {useTheme} from '../../../theme';
-import colors from '../../../theme/colors';
 
 const ValidityIcon: React.FC<{isValid: boolean}> = ({isValid}) => {
   const {theme} = useTheme();

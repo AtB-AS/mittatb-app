@@ -1,27 +1,31 @@
-import React, {useRef} from 'react';
-import MapboxGL from '@react-native-mapbox-gl/maps';
-import {StyleSheet, View} from 'react-native';
-import {useGeolocationState} from '../../../GeolocationContext';
-import {RouteProp} from '@react-navigation/native';
-import {DetailsStackParams} from '..';
-import {getMapBounds, legsToMapLines, pointOf} from './utils';
-import MapRoute from './MapRoute';
-import MapLabel from './MapLabel';
 import {
-  MapViewConfig,
+  BackArrow,
   MapCameraConfig,
   MapControls,
+  MapViewConfig,
   PositionArrow,
-  BackArrow,
   useControlPositionsStyle,
-} from '../../../components/map';
-import {Leg} from '../../../sdk';
+} from '@atb/components/map';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import {MapLeg} from '@atb/sdk';
+import {MapTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
-import {useTranslation, MapTexts} from '../../../translations';
+import {Coordinates} from '@entur/sdk';
+import MapboxGL from '@react-native-mapbox-gl/maps';
+import {RouteProp} from '@react-navigation/native';
+import {Position} from 'geojson';
+import React, {useMemo, useRef} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {DetailsStackParams} from '..';
 import {DetailScreenNavigationProp} from '../Details';
+import MapLabel from './MapLabel';
+import MapRoute from './MapRoute';
+import {createMapLines, getMapBounds, pointOf} from './utils';
 
 export type MapDetailRouteParams = {
-  legs: Leg[];
+  legs: MapLeg[];
+  fromPlace?: Coordinates | Position;
+  toPlace?: Coordinates | Position;
 };
 export type MapDetailRouteProp = RouteProp<DetailsStackParams, 'DetailsMap'>;
 type MapProps = {
@@ -33,11 +37,9 @@ export const TravelDetailsMap: React.FC<MapProps> = ({route, navigation}) => {
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const {location: geolocation} = useGeolocationState();
-  const {legs} = route.params;
+  const {legs, toPlace, fromPlace} = route.params;
 
-  const features = legsToMapLines(legs);
-  const startPoint = pointOf(legs[0].fromPlace);
-  const endPoint = pointOf(legs[legs.length - 1].toPlace);
+  const features = useMemo(() => createMapLines(legs), [legs]);
   const bounds = getMapBounds(features);
 
   async function zoomIn() {
@@ -76,16 +78,20 @@ export const TravelDetailsMap: React.FC<MapProps> = ({route, navigation}) => {
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
         <MapRoute lines={features}></MapRoute>
-        <MapLabel
-          point={endPoint}
-          id={'end'}
-          text={t(MapTexts.endPoint.label)}
-        ></MapLabel>
-        <MapLabel
-          point={startPoint}
-          id={'start'}
-          text={t(MapTexts.startPoint.label)}
-        ></MapLabel>
+        {toPlace && (
+          <MapLabel
+            point={pointOf(toPlace)}
+            id={'end'}
+            text={t(MapTexts.endPoint.label)}
+          />
+        )}
+        {fromPlace && (
+          <MapLabel
+            point={pointOf(fromPlace)}
+            id={'start'}
+            text={t(MapTexts.startPoint.label)}
+          />
+        )}
       </MapboxGL.MapView>
       <View style={controlStyles.backArrowContainer}>
         <BackArrow

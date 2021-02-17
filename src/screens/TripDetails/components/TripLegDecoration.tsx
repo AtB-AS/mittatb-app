@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import {StyleSheet} from '../../../theme';
+import {StyleSheet} from '@atb/theme';
 
 type TripLegDecorationProps = {
   hasStart?: boolean;

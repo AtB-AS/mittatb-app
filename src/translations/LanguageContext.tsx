@@ -21,47 +21,52 @@ function useLanguage() {
   const [currentLanguage, setCurrentLanguage] = useState(DEFAULT_LANGUAGE);
   const [locale, setLocale] = useState(preferredLocale);
   const {
-    preferences: {useSystemLanguage, language: userPreferencedLanguage},
+    preferences: {useSystemLanguage = true, language: userPreferencedLanguage},
   } = usePreferences();
 
-  // Usage of system setting not explicitly chosen, and user preferenced language has value
-  const shouldUseUserPreferenced =
-    !useSystemLanguage && !!userPreferencedLanguage;
+  useEffect(() => {
+    const onChange = () => {
+      setLocale(preferredLocale);
+    };
+    RNLocalize.addEventListener('change', onChange);
+    return () => {
+      RNLocalize.removeEventListener('change', onChange);
+    };
+  }, []);
 
   useEffect(() => {
-    if (shouldUseUserPreferenced) {
-      const newLanguage = getAsAppLanguage(userPreferencedLanguage);
-      setCurrentLanguage(newLanguage);
-    } else {
-      const onChange = () => {
-        setLocale(preferredLocale);
-      };
-      RNLocalize.addEventListener('change', onChange);
-      return () => {
-        RNLocalize.removeEventListener('change', onChange);
-      };
-    }
-  }, [useSystemLanguage, userPreferencedLanguage]);
-
-  useEffect(() => {
-    if (!shouldUseUserPreferenced) {
+    if (useSystemLanguage) {
+      // Get preferred locale from system settings.
+      // If no system settings match our languages we select
+      // English as it is more likely they know english than Norwegian.
+      // If locale is undefined we don't support any of the system languages.
       const language = locale
         ? getAsAppLanguage(locale.languageCode)
-        : DEFAULT_LANGUAGE;
+        : Language.English;
       setCurrentLanguage(language);
+    } else {
+      const newLanguage = getAsAppLanguage(
+        userPreferencedLanguage ?? DEFAULT_LANGUAGE,
+      );
+      setCurrentLanguage(newLanguage);
     }
-  }, [locale, useSystemLanguage]);
+  }, [locale, userPreferencedLanguage, useSystemLanguage]);
 
   return currentLanguage;
 }
 
 function preferredLocale(): RNLocalize.Locale | undefined {
   const preferredSystemLocales = RNLocalize.getLocales();
-  const locale = preferredSystemLocales.find(
-    (l) => !!getAsAppLanguage(l.languageCode),
-  );
+  const locale = preferredSystemLocales.find(isAppLanguage);
   return locale;
 }
+function isAppLanguage(arg?: RNLocalize.Locale): boolean {
+  return (
+    arg?.languageCode == Language.English ||
+    arg?.languageCode == Language.Norwegian
+  );
+}
+
 function getAsAppLanguage(arg?: string): Language {
   if (arg == Language.English) {
     return Language.English;

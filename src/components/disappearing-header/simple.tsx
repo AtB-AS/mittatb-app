@@ -1,7 +1,9 @@
+import {StyleSheet, useTheme} from '@atb/theme';
+import throttle from '@atb/utils/throttle';
+import {useLayout} from '@atb/utils/use-layout';
 import {useScrollToTop} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {
-  AccessibilityProps,
   Animated,
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -11,13 +13,10 @@ import {
   View,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import useChatIcon from '../../chat/use-chat-icon';
-import AnimatedScreenHeader from '../../ScreenHeader/animated-header';
-import LogoOutline from '../../ScreenHeader/LogoOutline';
-import {StyleSheet, useTheme} from '../../theme';
-import throttle from '../../utils/throttle';
-import {useLayout} from '../../utils/use-layout';
-import ThemeIcon from '../theme-icon';
+import {
+  LeftButtonProps,
+  AnimatedScreenHeader,
+} from '@atb/components/screen-header';
 
 type Props = {
   header: React.ReactNode;
@@ -32,7 +31,7 @@ type Props = {
 
   headerMargin?: number;
 
-  logoClick?: {callback(): void} & AccessibilityProps;
+  leftButton: LeftButtonProps;
 
   onEndReached?(e: NativeScrollEvent): void;
   onEndReachedThreshold?: number;
@@ -48,7 +47,7 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
   isRefreshing = false,
   onRefresh,
 
-  logoClick,
+  leftButton,
 
   headerTitle,
   alternativeTitleComponent,
@@ -74,7 +73,6 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
     contentHeightRef.current = contentHeight;
   }, [contentHeight]);
 
-  const chatIcon = useChatIcon();
   const styles = useThemeStyles();
   const {theme} = useTheme();
   const scrollYRef = useRef(new Animated.Value(0)).current;
@@ -118,14 +116,10 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
         <AnimatedScreenHeader
           onLayout={onScreenHeaderLayout}
           title={headerTitle}
-          rightButton={chatIcon}
+          rightButton={{type: 'chat'}}
           alternativeTitleComponent={alternativeTitleComponent}
           scrollRef={isRefreshing ? nullRef : scrollYRef}
-          leftButton={{
-            onPress: logoClick?.callback,
-            icon: <ThemeIcon svg={LogoOutline} />,
-            ...logoClick,
-          }}
+          leftButton={leftButton}
         />
 
         <View style={styles.content}>

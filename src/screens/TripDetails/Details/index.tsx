@@ -1,21 +1,24 @@
-import React, {useState, useCallback, useEffect} from 'react';
-import {TripPattern} from '../../../sdk';
-import {RouteProp, NavigationProp, useIsFocused} from '@react-navigation/core';
-import {DetailsStackParams} from '..';
-import CompactMap from '../Map/CompactMap';
-import {useTheme, StyleSheet} from '../../../theme';
-import Header from '../../../ScreenHeader';
-import {View, ActivityIndicator} from 'react-native';
-import ThemeIcon from '../../../components/theme-icon';
-import {ScrollView} from 'react-native-gesture-handler';
-import Pagination from '../../../components/pagination';
+import {getSingleTripPattern} from '@atb/api/trips';
+import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
+import PaginatedDetailsHeader from '@atb/components/pagination';
+import Header from '@atb/components/screen-header';
+import {TripPattern} from '@atb/sdk';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {TripDetailsTexts, useTranslation} from '@atb/translations';
+import usePollableResource from '@atb/utils/use-pollable-resource';
+import {
+  NavigationProp,
+  RouteProp,
+  useIsFocused,
+} from '@react-navigation/native';
 import Axios, {AxiosError} from 'axios';
-import {getSingleTripPattern} from '../../../api/trips';
-import usePollableResource from '../../../utils/use-pollable-resource';
+import React, {useCallback, useEffect, useState} from 'react';
+import {ActivityIndicator, View} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {DetailsStackParams} from '..';
 import Trip from '../components/Trip';
-import {TripDetailsTexts, useTranslation} from '../../../translations';
-import {ArrowLeft} from '../../../assets/svg/icons/navigation';
-import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
+import CompactMap from '../Map/CompactMap';
+
 export type DetailsRouteParams = {
   tripPatternId?: string;
   tripPatterns?: TripPattern[];
@@ -34,7 +37,7 @@ const Details: React.FC<Props> = (props) => {
   const {
     params: {tripPatternId, tripPatterns: initialTripPatterns, startIndex},
   } = props.route;
-  const {theme, themeName} = useTheme();
+  const {theme} = useTheme();
   const {t} = useTranslation();
   const isFocused = useIsFocused();
   const styles = useStyle();
@@ -81,54 +84,52 @@ const Details: React.FC<Props> = (props) => {
     <View style={styles.container}>
       <View style={[styles.header, {paddingTop}]}>
         <Header
-          leftButton={{
-            onPress: () => props.navigation.goBack(),
-            accessible: true,
-            accessibilityRole: 'button',
-            accessibilityLabel: t(TripDetailsTexts.header.leftButton.a11yLabel),
-            icon: <ThemeIcon svg={ArrowLeft} />,
-          }}
+          leftButton={{type: 'back'}}
           title={t(TripDetailsTexts.header.title)}
         />
       </View>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollViewContent}
-        bounces={false}
+      <ContentWithDisappearingHeader
+        header={
+          tripPattern && (
+            <CompactMap
+              mapLegs={tripPattern.legs}
+              fromPlace={tripPattern.legs[0].fromPlace}
+              toPlace={tripPattern.legs[tripPattern.legs.length - 1].toPlace}
+              onExpand={() => {
+                props.navigation.navigate('DetailsMap', {
+                  legs: tripPattern.legs,
+                  fromPlace: tripPattern.legs[0].fromPlace,
+                  toPlace:
+                    tripPattern.legs[tripPattern.legs.length - 1].toPlace,
+                });
+              }}
+            />
+          )
+        }
       >
         {showActivityIndicator && (
           <ActivityIndicator
             style={styles.activityIndicator}
-            color={theme.text.colors.faded}
+            color={theme.text.colors.disabled}
             animating={true}
             size="large"
           />
         )}
         {tripPattern && (
-          <>
-            <CompactMap
-              legs={tripPattern.legs}
-              darkMode={themeName === 'dark'}
-              onExpand={() => {
-                props.navigation.navigate('DetailsMap', {
-                  legs: tripPattern.legs,
-                });
-              }}
-            />
-            <View style={styles.paddedContainer}>
-              {tripPatterns.length > 1 && (
-                <Pagination
-                  page={currentIndex + 1}
-                  totalPages={tripPatterns.length}
-                  onNavigate={navigate}
-                  style={styles.pagination}
-                ></Pagination>
-              )}
-              <Trip tripPattern={tripPattern} error={error} />
-            </View>
-          </>
+          <View style={styles.paddedContainer}>
+            {tripPatterns.length > 1 && (
+              <PaginatedDetailsHeader
+                page={currentIndex + 1}
+                totalPages={tripPatterns.length}
+                onNavigate={navigate}
+                style={styles.pagination}
+                currentDate={tripPattern.legs[0]?.expectedStartTime}
+              />
+            )}
+            <Trip tripPattern={tripPattern} error={error} />
+          </View>
         )}
-      </ScrollView>
+      </ContentWithDisappearingHeader>
     </View>
   );
 };
@@ -161,9 +162,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.background.header,
   },
   container: {
-    flex: 1,
-  },
-  scrollView: {
     flex: 1,
     backgroundColor: theme.background.level0,
   },

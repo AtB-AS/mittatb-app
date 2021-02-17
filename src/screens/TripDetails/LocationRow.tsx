@@ -1,13 +1,13 @@
+import ThemeText from '@atb/components/text';
+import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
 import {
-  View,
-  TextStyle,
-  StyleProp,
-  ViewStyle,
   LayoutChangeEvent,
+  StyleProp,
+  TextStyle,
+  View,
+  ViewStyle,
 } from 'react-native';
-import ThemeText from '../../components/text';
-import {StyleSheet, useTheme} from '../../theme';
 
 const LocationRow: React.FC<{
   icon: JSX.Element;

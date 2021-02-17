@@ -1,9 +1,16 @@
+import * as Sections from '@atb/components/sections';
+import ThemeText from '@atb/components/text';
+import {
+  FareContract,
+  FareContractState,
+  isPreactivatedTicket,
+} from '@atb/tickets';
+import {TicketTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {FareContract} from '../../../api/fareContracts';
-import ThemeText from '../../../components/text';
-import * as Sections from '../../../components/sections';
+import TicketInfo from './TicketInfo';
 import ValidityHeader from './ValidityHeader';
 import ValidityLine from './ValidityLine';
+
 type Props = {
   fareContract: FareContract;
   now: number;
@@ -15,39 +22,73 @@ const SimpleTicket: React.FC<Props> = ({
   now,
   onPressDetails,
 }) => {
-  const nowSeconds = now / 1000;
-  const isValidTicket = fc.usage_valid_to >= nowSeconds;
+  const {t} = useTranslation();
+
+  const firstTravelRight = fc.travelRights?.[0];
+  if (isPreactivatedTicket(firstTravelRight)) {
+    const {startDateTime, endDateTime} = firstTravelRight;
+    const validTo = endDateTime.toMillis();
+    const validFrom = startDateTime.toMillis();
+    const isNotExpired = validTo >= now;
+    const isRefunded = fc.state === FareContractState.Refunded;
+    const isValidTicket = isNotExpired && !isRefunded;
+
+    return (
+      <Sections.Section withBottomPadding>
+        <Sections.GenericItem>
+          <ValidityHeader
+            isValid={isValidTicket}
+            now={now}
+            validTo={validTo}
+            isNotExpired={isNotExpired}
+            isRefunded={isRefunded}
+          />
+          {isValidTicket ? (
+            <ValidityLine
+              status="valid"
+              now={now}
+              validFrom={validFrom}
+              validTo={validTo}
+            />
+          ) : (
+            <ValidityLine status="expired" />
+          )}
+
+          <TicketInfo
+            travelRights={fc.travelRights.filter(isPreactivatedTicket)}
+          />
+        </Sections.GenericItem>
+        <Sections.LinkItem
+          text={t(
+            isValidTicket
+              ? TicketTexts.detailsLink.valid
+              : TicketTexts.detailsLink.expired,
+          )}
+          onPress={onPressDetails}
+        />
+      </Sections.Section>
+    );
+  } else {
+    return <UnknownTicket fc={fc} />;
+  }
+};
+
+function UnknownTicket({fc}: {fc: FareContract}) {
+  const {t} = useTranslation();
 
   return (
     <Sections.Section withBottomPadding>
       <Sections.GenericItem>
-        <ValidityHeader
-          isValid={isValidTicket}
-          nowSeconds={nowSeconds}
-          validTo={fc.usage_valid_to}
-          onPressDetails={onPressDetails}
-        />
-        <ValidityLine
-          isValid={isValidTicket}
-          nowSeconds={nowSeconds}
-          validFrom={fc.usage_valid_from}
-          validTo={fc.usage_valid_to}
-        />
+        <ValidityLine status="unknown" />
+        <ThemeText>{t(TicketTexts.unknownTicket.message)}</ThemeText>
+      </Sections.GenericItem>
+      <Sections.GenericItem>
         <ThemeText>
-          {fc.user_profiles.length > 1
-            ? `${fc.user_profiles.length} voksne`
-            : `1 voksen`}
-        </ThemeText>
-        <ThemeText type="lead" color="faded">
-          {fc.product_name}
-        </ThemeText>
-        <ThemeText type="lead" color="faded">
-          Sone A - Stor-Trondheim
+          {t(TicketTexts.unknownTicket.orderId(fc.orderId))}
         </ThemeText>
       </Sections.GenericItem>
-      {isValidTicket && <Sections.LinkItem text="Vis for kontroll" disabled />}
     </Sections.Section>
   );
-};
+}
 
 export default SimpleTicket;

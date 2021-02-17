@@ -1,38 +1,47 @@
+import {MapIcon} from '@atb/assets/svg/map';
+import Button from '@atb/components/button';
+import {MapCameraConfig, MapViewConfig} from '@atb/components/map';
+import {Coordinates, MapLeg} from '@atb/sdk';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {MapTexts, useTranslation} from '@atb/translations';
+import insets from '@atb/utils/insets';
+import useDisableMapCheck from '@atb/utils/use-disable-map-check';
 import Bugsnag from '@bugsnag/react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import React, {useState} from 'react';
+import {Position} from 'geojson';
+import React, {useMemo, useState} from 'react';
 import {View} from 'react-native';
-import {MapIcon} from '../../../assets/svg/map';
-import {MapCameraConfig, MapViewConfig} from '../../../components/map';
-import {Leg} from '../../../sdk';
-import {StyleSheet} from '../../../theme';
-import Button from '../../../components/button';
-import insets from '../../../utils/insets';
-import useDisableMapCheck from '../../../utils/use-disable-map-check';
 import MapLabel from './MapLabel';
 import MapRoute from './MapRoute';
-import {getMapBounds, legsToMapLines, pointOf} from './utils';
-import {MapTexts, useTranslation} from '../../../translations';
+import {createMapLines, getMapBounds, pointOf} from './utils';
 
 export type MapProps = {
-  legs: Leg[];
-  darkMode?: boolean;
-  onExpand(): void;
+  mapLegs: MapLeg[];
+  fromPlace?: Coordinates | Position;
+  toPlace?: Coordinates | Position;
+  onExpand?(): void;
 };
 
-export const CompactMap: React.FC<MapProps> = ({legs, darkMode, onExpand}) => {
-  const features = legsToMapLines(legs);
-  const startPoint = pointOf(legs[0].fromPlace);
-  const endPoint = pointOf(legs[legs.length - 1].toPlace);
-  const bounds = getMapBounds(features);
+export const CompactMap: React.FC<MapProps> = ({
+  mapLegs,
+  fromPlace,
+  toPlace,
+  onExpand,
+}) => {
+  const {themeName} = useTheme();
   const disableMap = useDisableMapCheck();
   const {t} = useTranslation();
+
+  const features = useMemo(() => createMapLines(mapLegs), [mapLegs]);
+  const bounds = useMemo(() => getMapBounds(features), [features]);
 
   const [loadingMap, setLoadingMap] = useState(true);
   const styles = useStyles();
 
+  const darkmode = themeName === 'dark';
+
   const expandMap = () => {
-    if (!loadingMap) onExpand();
+    if (!loadingMap) onExpand?.();
   };
 
   if (disableMap) {
@@ -52,7 +61,7 @@ export const CompactMap: React.FC<MapProps> = ({legs, darkMode, onExpand}) => {
           log('Finished loading map');
         }}
         {...MapViewConfig}
-        styleURL={darkMode ? 'mapbox://styles/mapbox/dark-v10' : undefined}
+        styleURL={darkmode ? 'mapbox://styles/mapbox/dark-v10' : undefined}
         compassEnabled={false}
         onPress={expandMap}
       >
@@ -62,28 +71,34 @@ export const CompactMap: React.FC<MapProps> = ({legs, darkMode, onExpand}) => {
           animationDuration={0}
         />
         <MapRoute lines={features}></MapRoute>
-        <MapLabel
-          point={endPoint}
-          id={'end'}
-          text={t(MapTexts.endPoint.label)}
-        ></MapLabel>
-        <MapLabel
-          point={startPoint}
-          id={'start'}
-          text={t(MapTexts.startPoint.label)}
-        ></MapLabel>
+        {toPlace && (
+          <MapLabel
+            point={pointOf(toPlace)}
+            id={'end'}
+            text={t(MapTexts.endPoint.label)}
+          />
+        )}
+        {fromPlace && (
+          <MapLabel
+            point={pointOf(fromPlace)}
+            id={'start'}
+            text={t(MapTexts.startPoint.label)}
+          />
+        )}
       </MapboxGL.MapView>
-      <View style={styles.togglerContainer}>
-        <Button
-          style={styles.toggler}
-          type="inline"
-          mode="tertiary"
-          onPress={expandMap}
-          hitSlop={insets.symmetric(8, 12)}
-          text={t(MapTexts.expandButton.label)}
-          icon={MapIcon}
-        ></Button>
-      </View>
+      {onExpand && (
+        <View style={styles.togglerContainer}>
+          <Button
+            style={styles.toggler}
+            type="inline"
+            mode="tertiary"
+            onPress={expandMap}
+            hitSlop={insets.symmetric(8, 12)}
+            text={t(MapTexts.expandButton.label)}
+            icon={MapIcon}
+          ></Button>
+        </View>
+      )}
     </View>
   );
 };

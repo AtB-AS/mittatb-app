@@ -1,11 +1,3 @@
-import {Coordinates} from '@entur/sdk';
-import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
-import {RouteProp} from '@react-navigation/native';
-import {Feature} from 'geojson';
-import React, {useMemo, useRef, useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
-import {LocationSearchNavigationProp, LocationSearchStackParams} from '../';
-import {ArrowLeft} from '../../assets/svg/icons/navigation';
 import {
   MapCameraConfig,
   MapControls,
@@ -13,15 +5,21 @@ import {
   PositionArrow,
   shadows,
   useControlPositionsStyle,
-} from '../../components/map/';
-import ThemeIcon from '../../components/theme-icon';
-import {useReverseGeocoder} from '../../geocoder';
-import {useGeolocationState} from '../../GeolocationContext';
-import FullScreenHeader from '../../ScreenHeader/full-header';
-import {StyleSheet} from '../../theme';
+} from '@atb/components/map';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {useReverseGeocoder} from '@atb/geocoder';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import {StyleSheet} from '@atb/theme';
+import {LocationSearchTexts, useTranslation} from '@atb/translations';
+import {Coordinates} from '@entur/sdk';
+import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
+import {RouteProp} from '@react-navigation/native';
+import {Feature} from 'geojson';
+import React, {useMemo, useRef, useState} from 'react';
+import {TouchableOpacity, View} from 'react-native';
+import {LocationSearchNavigationProp, LocationSearchStackParams} from '../';
 import LocationBar from './LocationBar';
 import SelectionPin, {PinMode} from './SelectionPin';
-import {LocationSearchTexts, useTranslation} from '../../translations';
 
 export type RouteParams = {
   callerRouteName: string;
@@ -112,15 +110,7 @@ const MapSelection: React.FC<Props> = ({
       <View>
         <FullScreenHeader
           title={t(LocationSearchTexts.mapSelection.header.title)}
-          leftButton={{
-            onPress: () => navigation.goBack(),
-            accessible: true,
-            accessibilityRole: 'button',
-            accessibilityLabel: t(
-              LocationSearchTexts.mapSelection.header.leftButton.a11yLabel,
-            ),
-            icon: <ThemeIcon svg={ArrowLeft} />,
-          }}
+          leftButton={{type: 'back'}}
         />
 
         <LocationBar

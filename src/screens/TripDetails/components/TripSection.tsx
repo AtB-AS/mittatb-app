@@ -1,35 +1,36 @@
-import React from 'react';
-import {Leg, Place} from '../../../sdk';
-import {View} from 'react-native';
-import ThemeText from '../../../components/text';
-import {StyleSheet} from '../../../theme';
-import {formatToClock, secondsToDuration} from '../../../utils/date';
+import {Info, Warning} from '@atb/assets/svg/situations';
+import AccessibleText, {
+  screenReaderPause,
+} from '@atb/components/accessible-text';
+import ThemeText from '@atb/components/text';
+import TransportationIcon from '@atb/components/transportation-icon';
+import {TinyMessageBox} from '@atb/message-box';
+import {Leg, Place} from '@atb/sdk';
+import SituationMessages from '@atb/situations';
+import {StyleSheet} from '@atb/theme';
+import {
+  Language,
+  TranslatedString,
+  TripDetailsTexts,
+  useTranslation,
+} from '@atb/translations';
+import {formatToClock, secondsToDuration} from '@atb/utils/date';
+import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {
   getLineName,
   getQuayName,
   getTranslatedModeName,
-} from '../../../utils/transportation-names';
-import TransportationIcon from '../../../components/transportation-icon';
-import {transportationColor} from '../../../utils/transportation-color';
-import {useNavigation} from '@react-navigation/core';
+} from '@atb/utils/transportation-names';
+import {useNavigation} from '@react-navigation/native';
+import React from 'react';
+import {View} from 'react-native';
 import {DetailScreenNavigationProp} from '../Details';
-import {TinyMessageBox} from '../../../message-box';
-import {Warning, Info} from '../../../assets/svg/situations';
-import SituationMessages from '../../../situations';
+import {significantWaitTime, significantWalkTime} from '../Details/utils';
+import {getTimeRepresentationType, TimeValues} from '../utils';
 import Time from './Time';
 import TripLegDecoration from './TripLegDecoration';
-import {significantWaitTime, significantWalkTime} from '../Details/utils';
 import TripRow from './TripRow';
 import WaitSection, {WaitDetails} from './WaitSection';
-import {
-  TranslatedString,
-  TripDetailsTexts,
-  useTranslation,
-} from '../../../translations';
-import AccessibleText, {
-  screenReaderPause,
-} from '../../../components/accessible-text';
-import {getTimeRepresentationType, TimeValues} from '../utils';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -45,11 +46,11 @@ const TripSection: React.FC<TripSectionProps> = ({
   step,
   ...leg
 }) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const style = useSectionStyles();
 
   const isWalkSection = leg.mode === 'foot';
-  const legColor = transportationColor(leg.mode, leg.line?.transportSubmode);
+  const legColor = useTransportationColor(leg.mode, leg.line?.transportSubmode);
 
   const showFrom = !isWalkSection || !!(isFirst && isWalkSection);
   const showTo = !isWalkSection || !!(isLast && isWalkSection);
@@ -83,6 +84,7 @@ const TripSection: React.FC<TripSectionProps> = ({
                 'start',
                 getPlaceName(leg.fromPlace),
                 startTimes,
+                language,
               ),
             )}
             rowLabel={<Time {...startTimes} />}
@@ -138,6 +140,7 @@ const TripSection: React.FC<TripSectionProps> = ({
                 'end',
                 getPlaceName(leg.toPlace),
                 endTimes,
+                language,
               ),
             )}
             rowLabel={<Time {...endTimes} />}
@@ -158,17 +161,19 @@ const TripSection: React.FC<TripSectionProps> = ({
   );
 };
 const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   const navigation = useNavigation<DetailScreenNavigationProp>();
   const navigateToDetails = () =>
     navigation.navigate('DepartureDetails', {
-      title: getLineName(leg),
-      serviceJourneyId: leg.serviceJourney.id,
-      date: leg.expectedStartTime,
-      fromQuayId: leg.fromPlace.quay?.id,
-      toQuayId: leg.toPlace.quay?.id,
-      isBack: true,
+      items: [
+        {
+          serviceJourneyId: leg.serviceJourney.id,
+          date: leg.expectedStartTime,
+          fromQuayId: leg.fromPlace.quay?.id,
+          toQuayId: leg.toPlace.quay?.id,
+        },
+      ],
     });
 
   const numberOfIntermediateCalls = leg.intermediateEstimatedCalls.length;
@@ -179,7 +184,7 @@ const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
         t(
           TripDetailsTexts.trip.leg.intermediateStops.a11yLabel(
             numberOfIntermediateCalls,
-            secondsToDuration(leg.duration),
+            secondsToDuration(leg.duration, language),
           ),
         ) + screenReaderPause
       }
@@ -187,11 +192,11 @@ const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
         TripDetailsTexts.trip.leg.intermediateStops.a11yHint,
       )}
     >
-      <ThemeText type="lead" color="faded">
+      <ThemeText type="lead" color="secondary">
         {t(
           TripDetailsTexts.trip.leg.intermediateStops.label(
             numberOfIntermediateCalls,
-            secondsToDuration(leg.duration),
+            secondsToDuration(leg.duration, language),
           ),
         )}
       </ThemeText>
@@ -199,7 +204,7 @@ const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
   );
 };
 const WalkSection: React.FC<TripSectionProps> = (leg) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const isWalkTimeOfSignificance = significantWalkTime(leg.duration);
   if (!isWalkTimeOfSignificance) {
     return null;
@@ -213,10 +218,10 @@ const WalkSection: React.FC<TripSectionProps> = (leg) => {
         />
       }
     >
-      <ThemeText type="lead" color="faded">
+      <ThemeText type="lead" color="secondary">
         {t(
           TripDetailsTexts.trip.leg.walk.label(
-            secondsToDuration(leg.duration ?? 0),
+            secondsToDuration(leg.duration ?? 0, language),
           ),
         )}
       </ThemeText>
@@ -247,12 +252,13 @@ function getStopRowA11yTranslated(
   key: 'start' | 'end',
   placeName: string,
   values: TimeValues,
+  language: Language,
 ): TranslatedString {
   const a11yLabels = TripDetailsTexts.trip.leg[key].a11yLabel;
 
   const timeType = getTimeRepresentationType(values);
-  const time = formatToClock(values.expectedTime ?? values.aimedTime);
-  const aimedTime = formatToClock(values.aimedTime);
+  const time = formatToClock(values.expectedTime ?? values.aimedTime, language);
+  const aimedTime = formatToClock(values.aimedTime, language);
 
   switch (timeType) {
     case 'no-realtime':

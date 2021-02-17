@@ -1,3 +1,10 @@
+import {useAuthState} from '@atb/auth';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import * as Sections from '@atb/components/sections';
+import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {StyleSheet, Theme} from '@atb/theme';
+import {ProfileTexts, useTranslation} from '@atb/translations';
 import {PRIVACY_POLICY_URL} from '@env';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -5,16 +12,6 @@ import React from 'react';
 import {Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
-import useChatIcon from '../../../chat/use-chat-icon';
-import * as Sections from '../../../components/sections';
-import ThemeIcon from '../../../components/theme-icon';
-import {TabNavigatorParams} from '../../../navigation/TabNavigator';
-import FullScreenHeader from '../../../ScreenHeader/full-header';
-import LogoOutline from '../../../ScreenHeader/LogoOutline';
-import {StyleSheet, Theme} from '../../../theme';
-import {useNavigateToStartScreen} from '../../../utils/navigation';
-import {useTranslation, ProfileTexts} from '../../../translations';
-import {useRemoteConfig} from '../../../RemoteConfigContext';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -31,29 +28,23 @@ type ProfileScreenProps = {
 };
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
-  const navigateHome = useNavigateToStartScreen();
   const {enable_i18n} = useRemoteConfig();
-  const chatIcon = useChatIcon();
   const style = useProfileHomeStyle();
   const {t} = useTranslation();
+  const {signInAnonymously, signOut, user} = useAuthState();
 
   return (
     <View style={style.container}>
       <FullScreenHeader
         title={t(ProfileTexts.header.title)}
-        leftButton={{
-          icon: <ThemeIcon svg={LogoOutline} />,
-          onPress: navigateHome,
-          accessibilityLabel: t(ProfileTexts.header.logo.a11yLabel),
-        }}
-        rightButton={chatIcon}
+        leftButton={{type: 'home'}}
+        rightButton={{type: 'chat'}}
       />
 
       <ScrollView>
         <Sections.Section withPadding withTopPadding>
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.settings.heading)}
-            mode="subheading"
           />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.settings.linkItems.appearance.label)}
@@ -74,7 +65,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         <Sections.Section withPadding>
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.favorites.heading)}
-            mode="subheading"
           />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.favorites.linkItems.places.label)}
@@ -89,7 +79,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         <Sections.Section withPadding>
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.privacy.heading)}
-            mode="subheading"
           />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.privacy.linkItems.privacy.label)}
@@ -103,6 +92,22 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             }
           />
         </Sections.Section>
+
+        {__DEV__ && (
+          <Sections.Section withPadding>
+            <Sections.HeaderItem text="Bruker" />
+            <Sections.LinkItem
+              text="Logg ut"
+              onPress={() => signOut()}
+              disabled={!user}
+            />
+            <Sections.LinkItem
+              text="Logg inn"
+              onPress={() => signInAnonymously()}
+              disabled={!!user}
+            />
+          </Sections.Section>
+        )}
       </ScrollView>
     </View>
   );

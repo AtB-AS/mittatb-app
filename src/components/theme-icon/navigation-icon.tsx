@@ -1,5 +1,5 @@
 import React from 'react';
-import ThemeIcon from '.';
+import ThemeIcon from './theme-icon';
 import {
   ArrowLeft,
   ArrowRight,
@@ -10,7 +10,7 @@ import {
   ExpandLess,
   UnfoldLess,
   UnfoldMore,
-} from '../../assets/svg/icons/navigation';
+} from '@atb/assets/svg/icons/navigation';
 
 const navigationTypes = [
   'arrow-left',

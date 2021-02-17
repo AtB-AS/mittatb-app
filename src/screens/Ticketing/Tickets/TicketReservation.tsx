@@ -1,12 +1,13 @@
+import {BlankTicket} from '@atb/assets/svg/icons/ticketing';
+import Button from '@atb/components/button';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {ActiveReservation} from '@atb/tickets';
+import {TicketsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {View, TouchableOpacity, Linking, ActivityIndicator} from 'react-native';
-import {StyleSheet, useTheme} from '../../../theme';
-import {BlankTicket} from '../../../assets/svg/icons/ticketing';
-import Dash from 'react-native-dash';
-import ThemeText from '../../../components/text';
-import {ActiveReservation} from '../../../TicketContext';
-import ThemeIcon from '../../../components/theme-icon';
-import Button from '../../../components/button';
+import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
+import ValidityLine from '../Ticket/ValidityLine';
 
 type Props = {
   reservation: ActiveReservation;
@@ -15,6 +16,7 @@ type Props = {
 const TicketReservation: React.FC<Props> = ({reservation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
+  const {t} = useTranslation();
 
   function openVippsUrl(vippsUrl: string) {
     if (Linking.canOpenURL(vippsUrl)) {
@@ -30,10 +32,10 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
             <View style={styles.iconContainer}>
               <ThemeIcon svg={BlankTicket} />
             </View>
-            <ThemeText type="lead" color="faded">
+            <ThemeText type="lead" color="secondary">
               {reservation.paymentStatus !== 'CAPTURE'
-                ? 'Prosesseres... ikke gyldig enda'
-                : 'Betaling godkjent. Henter billett...'}
+                ? t(TicketsTexts.reservation.processing)
+                : t(TicketsTexts.reservation.approved)}
             </ThemeText>
           </View>
           <ActivityIndicator color={theme.text.colors.primary} />
@@ -41,17 +43,23 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
         <VerifyingValidityLine />
         <View style={styles.ticketInfoContainer}>
           <ThemeText style={styles.orderText}>
-            Ordre-id {reservation.reservation.order_id}
+            {t(
+              TicketsTexts.reservation.orderId(
+                reservation.reservation.order_id,
+              ),
+            )}
           </ThemeText>
           <ThemeText style={styles.orderText}>
             Betales med{' '}
-            {reservation.paymentType === 'vipps' ? 'Vipps' : 'kredittkort'}
+            {reservation.paymentType === 'vipps'
+              ? t(TicketsTexts.reservation.paymentType.vipps)
+              : t(TicketsTexts.reservation.paymentType.creditcard)}
           </ThemeText>
           {reservation.paymentType === 'vipps' &&
             reservation.paymentStatus !== 'CAPTURE' && (
               <Button
                 onPress={() => openVippsUrl(reservation.reservation.url)}
-                text="Gå til Vipps for betaling"
+                text={t(TicketsTexts.reservation.goToVipps)}
                 mode="tertiary"
               />
             )}
@@ -61,19 +69,12 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
   );
 };
 
-const VerifyingValidityLine: React.FC<{}> = () => {
+const VerifyingValidityLine: React.FC = () => {
   const styles = useStyles();
-  const {theme} = useTheme();
 
   return (
     <View style={styles.validityDashContainer}>
-      <Dash
-        style={{width: '100%'}}
-        dashGap={0}
-        dashLength={1}
-        dashThickness={4}
-        dashColor={theme.background.level1}
-      />
+      <ValidityLine status="reserving" />
     </View>
   );
 };
@@ -90,7 +91,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   extraText: {
     paddingVertical: theme.spacings.xSmall,
-    color: theme.text.colors.faded,
+    color: theme.text.colors.disabled,
   },
   validityContainer: {
     flexDirection: 'row',
@@ -100,7 +101,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.medium,
   },
   validityDashContainer: {
-    flexDirection: 'row',
+    marginHorizontal: theme.spacings.medium,
   },
   ticketInfoContainer: {
     padding: theme.spacings.medium,

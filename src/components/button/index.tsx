@@ -9,12 +9,42 @@ import {
   Easing,
 } from 'react-native';
 import React, {useRef} from 'react';
-import {StyleSheet, Theme, useTheme} from '../../theme';
-import ThemeText from '../text';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import ThemeText from '@atb/components/text';
+import {ContrastColor} from '@atb/theme/colors';
 
 export {default as ButtonGroup} from './group';
 
-type ButtonMode = keyof Theme['button'];
+type ThemeColor = keyof Theme['colors'];
+
+type ButtonMode = 'primary' | 'secondary' | 'tertiary' | 'destructive';
+
+type ButtonSettings = {
+  themeColor?: ThemeColor;
+  withBackground: boolean;
+  visibleBorder: boolean;
+};
+
+const DefaultModeStyles: {[key in ButtonMode]: ButtonSettings} = {
+  primary: {
+    themeColor: 'primary_1',
+    withBackground: true,
+    visibleBorder: false,
+  },
+  secondary: {
+    withBackground: false,
+    visibleBorder: true,
+  },
+  tertiary: {
+    withBackground: false,
+    visibleBorder: false,
+  },
+  destructive: {
+    themeColor: 'primary_destructive',
+    withBackground: true,
+    visibleBorder: false,
+  },
+};
 
 type ButtonTypeAwareProps =
   | {text?: string; type: 'inline' | 'compact'}
@@ -25,6 +55,7 @@ type ButtonTypeAwareProps =
 
 export type ButtonProps = {
   onPress(): void;
+  color?: ThemeColor;
   mode?: ButtonMode;
   viewContainerStyle?: StyleProp<ViewStyle>;
   textContainerStyle?: StyleProp<ViewStyle>;
@@ -38,6 +69,7 @@ const DISABLED_OPACITY = 0.2;
 
 const Button: React.FC<ButtonProps> = ({
   onPress,
+  color,
   mode = 'primary',
   type = 'block',
   icon: Icon,
@@ -50,8 +82,10 @@ const Button: React.FC<ButtonProps> = ({
   textStyle,
   ...props
 }) => {
+  const modeData = DefaultModeStyles[mode];
+  const themeColor = color ?? modeData.themeColor;
   const css = useButtonStyle();
-  const {theme} = useTheme();
+  const {theme, themeName} = useTheme();
   const fadeAnim = useRef(new Animated.Value(disabled ? DISABLED_OPACITY : 1))
     .current;
 
@@ -72,17 +106,24 @@ const Button: React.FC<ButtonProps> = ({
   const rightIconSpacing =
     Icon && iconPosition === 'right' ? spacing : undefined;
 
-  const {backgroundColor, borderColor, textColor} = theme.button[mode];
+  const {backgroundColor, textColorType} = themeColor
+    ? theme.colors[themeColor]
+    : ({
+        backgroundColor: 'transparent',
+        textColorType: themeName == 'dark' ? 'light' : 'dark',
+      } as ContrastColor);
+  const {primary} = theme.text.colorSelection[textColorType];
+
   const styleContainer: ViewStyle[] = [
     css.button,
     {
-      backgroundColor,
-      borderColor,
+      backgroundColor: modeData.withBackground ? backgroundColor : undefined,
+      borderColor: modeData.visibleBorder ? primary : 'transparent',
       padding: spacing,
       alignSelf: isInline ? 'flex-start' : undefined,
     },
   ];
-  const styleText: TextStyle = {color: textColor};
+  const styleText: TextStyle = {color: primary};
   const textContainer: TextStyle = {
     flex: isInline ? undefined : 1,
     alignItems: 'center',
@@ -108,11 +149,13 @@ const Button: React.FC<ButtonProps> = ({
         onPress={onPress}
         disabled={disabled}
         accessibilityRole="button"
+        importantForAccessibility={disabled ? 'no-hide-descendants' : 'auto'}
+        accessibilityElementsHidden={!!disabled}
         {...props}
       >
         {Icon && iconPosition === 'left' && (
           <View style={iconContainer}>
-            <Icon fill={textColor} />
+            <Icon fill={primary} />
           </View>
         )}
         {text && (
@@ -124,7 +167,7 @@ const Button: React.FC<ButtonProps> = ({
         )}
         {Icon && iconPosition === 'right' && (
           <View style={iconContainer}>
-            <Icon fill={textColor} />
+            <Icon fill={primary} />
           </View>
         )}
       </TouchableOpacity>
@@ -139,7 +182,5 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
     borderRadius: theme.border.radius.regular,
     borderWidth: theme.border.width.medium,
-    backgroundColor: theme.button.primary.backgroundColor,
-    borderColor: theme.button.primary.backgroundColor,
   },
 }));

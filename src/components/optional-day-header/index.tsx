@@ -1,9 +1,9 @@
+import {StyleSheet} from '@atb/theme';
+import {useTranslation} from '@atb/translations';
+import {daysBetween, formatToSimpleDate, isSameDay} from '@atb/utils/date';
 import {parseISO} from 'date-fns';
 import React from 'react';
-import {EstimatedCall} from '../../sdk';
-import {StyleSheet} from '../../theme';
-import {formatToSimpleDate, isSameDay, daysBetween} from '../../utils/date';
-import ThemeText from '../text';
+import ThemeText from '@atb/components/text';
 
 type OptionalNextDayLabelProps = {
   departureTime: string;
@@ -21,13 +21,14 @@ export default function OptionalNextDayLabel({
   const prevDate = !previousDepartureTime
     ? new Date()
     : parseISO(previousDepartureTime);
+  const {language} = useTranslation();
 
   if ((isFirst && !allSameDay) || !isSameDay(prevDate, departureDate)) {
     return (
       <ThemeText type="lead" style={style.title}>
         {getHumanizedDepartureDatePrefixed(
           departureDate,
-          formatToSimpleDate(departureDate),
+          formatToSimpleDate(departureDate, language),
         )}
       </ThemeText>
     );
@@ -37,8 +38,9 @@ export default function OptionalNextDayLabel({
 }
 const useDayTextStyle = StyleSheet.createThemeHook((theme) => ({
   title: {
-    padding: theme.spacings.medium,
-    color: theme.text.colors.faded,
+    paddingHorizontal: theme.spacings.medium,
+    marginTop: theme.spacings.medium,
+    color: theme.text.colors.secondary,
   },
 }));
 function getHumanizedDepartureDatePrefixed(

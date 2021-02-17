@@ -1,11 +1,12 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import ThemeText from '../text';
+import ThemeText from '@atb/components/text';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
-import insets from '../../utils/insets';
-import ThemeIcon from '../theme-icon';
-import {Add, Remove} from '../../assets/svg/icons/actions';
-import {StyleSheet} from '../../theme';
+import insets from '@atb/utils/insets';
+import ThemeIcon from '@atb/components/theme-icon';
+import {Add, Remove} from '@atb/assets/svg/icons/actions';
+import {StyleSheet} from '@atb/theme';
+import {SectionTexts, useTranslation} from '@atb/translations';
 
 export type CounterInputProps = SectionItem<{
   text: string;
@@ -23,33 +24,48 @@ export default function CounterInput({
   const {contentContainer, topContainer} = useSectionItem(props);
   const style = useSectionStyle();
   const counterStyles = useStyles();
+  const {t} = useTranslation();
   return (
-    <View style={[topContainer, counterStyles.travellerCount]}>
+    <View style={[topContainer, counterStyles.countContainer]}>
       <View style={[style.spaceBetween, contentContainer]}>
-        <ThemeText>
-          {count} {text}
-        </ThemeText>
+        <ThemeText accessibilityLabel={`${count} ${text}`}>{text}</ThemeText>
       </View>
-      <View style={counterStyles.travellerCountActions}>
+      <View style={counterStyles.countActions}>
         <TouchableOpacity
           disabled={count === 0}
           onPress={() => removeCount()}
           accessibilityRole="button"
-          accessibilityLabel={`Minsk antall til ${count - 1}`}
+          accessibilityLabel={t(
+            SectionTexts.counterInput.decreaseButton.a11yLabel,
+          )}
+          accessibilityHint={t(
+            SectionTexts.counterInput.decreaseButton.a11yHint(text, count),
+          )}
           accessibilityElementsHidden={count < 1}
           importantForAccessibility={count >= 1 ? 'yes' : 'no-hide-descendants'}
           hitSlop={insets.all(8)}
+          style={counterStyles.removeCount}
         >
-          <ThemeIcon
-            style={count === 0 && counterStyles.disabled}
-            svg={Remove}
-          />
+          {count > 0 && <ThemeIcon svg={Remove} />}
         </TouchableOpacity>
+        <ThemeText
+          accessible={false}
+          style={counterStyles.countText}
+          type="paragraphHeadline"
+        >
+          {count}
+        </ThemeText>
         <TouchableOpacity
           onPress={() => addCount()}
           accessibilityRole="button"
-          accessibilityLabel={`Øk antall til ${count + 1}`}
+          accessibilityLabel={t(
+            SectionTexts.counterInput.increaseButton.a11yLabel,
+          )}
+          accessibilityHint={t(
+            SectionTexts.counterInput.increaseButton.a11yHint(text, count),
+          )}
           hitSlop={insets.all(8)}
+          style={counterStyles.addCount}
         >
           <ThemeIcon svg={Add} />
         </TouchableOpacity>
@@ -58,19 +74,25 @@ export default function CounterInput({
   );
 }
 
-const useStyles = StyleSheet.createThemeHook(() => ({
-  travellerCount: {
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  countContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
   },
-  travellerCountActions: {
+  countActions: {
     flexDirection: 'row',
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    width: 70,
   },
-  disabled: {
-    opacity: 0.4,
+  countText: {
+    width: theme.spacings.large,
+    textAlign: 'center',
+  },
+  removeCount: {
+    marginRight: theme.spacings.large,
+  },
+  addCount: {
+    marginLeft: theme.spacings.large,
   },
 }));

@@ -1,7 +1,7 @@
 import React from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Point} from 'geojson';
-import colors from '../../../theme/colors';
+import colors from '@atb/theme/colors';
 
 const MapLabel: React.FC<{
   text: string;
@@ -19,7 +19,7 @@ const MapLabel: React.FC<{
         <MapboxGL.SymbolLayer
           id={id + '-label'}
           style={{
-            textColor: colors.text.white,
+            textColor: colors.text.light,
             textHaloColor: colors.primary.gray_500,
             textHaloWidth: 2,
             textField: text,

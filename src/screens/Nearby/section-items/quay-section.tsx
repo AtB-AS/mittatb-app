@@ -1,10 +1,12 @@
+import {QuayGroup, StopPlaceInfo} from '@atb/api/departures/types';
+import {Section} from '@atb/components/sections';
+import {Location} from '@atb/sdk';
+import {useTheme} from '@atb/theme';
+import {NearbyTexts, useTranslation} from '@atb/translations';
+import haversineDistance from 'haversine-distance';
 import sortBy from 'lodash.sortby';
 import React, {Fragment, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
-import {QuayGroup, StopPlaceInfo} from '../../../api/departures/types';
-import {Section} from '../../../components/sections';
-import {useTheme} from '../../../theme';
-import {NearbyTexts, useTranslation} from '../../../translations';
 import {hasNoGroupsWithDepartures, isValidDeparture} from '../utils';
 import LineItem from './line';
 import MoreItem from './more';
@@ -15,7 +17,7 @@ const LIMIT_SIZE = 5;
 type QuaySectionProps = {
   quayGroup: QuayGroup;
   stop: StopPlaceInfo;
-  distance?: number;
+  currentLocation?: Location;
   lastUpdated?: Date;
   hidden?: Date;
 };
@@ -23,7 +25,7 @@ type QuaySectionProps = {
 const QuaySection = React.memo(function QuaySection({
   quayGroup,
   stop,
-  distance,
+  currentLocation,
   lastUpdated,
 }: QuaySectionProps) {
   const [limit, setLimit] = useState(LIMIT_SIZE);
@@ -49,7 +51,10 @@ const QuaySection = React.memo(function QuaySection({
   return (
     <Fragment>
       <Section>
-        <QuayHeaderItem quay={quayGroup.quay} distance={distance} />
+        <QuayHeaderItem
+          quay={quayGroup.quay}
+          distance={getDistanceInfo(quayGroup, currentLocation)}
+        />
 
         {sorted.map((group) => (
           <LineItem
@@ -81,4 +86,14 @@ function sortAndLimit(quayGroup: QuayGroup, limit: number) {
     (v) => v.departures.find(isValidDeparture)?.time,
   ).slice(0, limit);
   return sorted;
+}
+
+function getDistanceInfo(group: QuayGroup, currentLocation?: Location): number {
+  const pos = {
+    lat: group.quay.latitude!,
+    lng: group.quay.longitude!,
+  };
+  return !currentLocation?.coordinates
+    ? 0
+    : haversineDistance(currentLocation.coordinates, pos);
 }

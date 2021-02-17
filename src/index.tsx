@@ -10,8 +10,9 @@ import trackAppState from './diagnostics/trackAppState';
 import ThemeContextProvider from './theme/ThemeContext';
 import FavoritesContextProvider from './favorites/FavoritesContext';
 import SearchHistoryContextProvider from './search-history';
-import TicketContextProvider from './TicketContext';
+import {TicketContextProvider} from './tickets';
 import RemoteConfigContextProvider from './RemoteConfigContext';
+import {AuthContextProvider} from './auth';
 import {loadLocalConfig} from './local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {setInstallId as setApiInstallId} from './api/client';
@@ -24,7 +25,6 @@ configureAndStartBugsnag();
 import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import AppLanguageProvider from './translations/LanguageContext';
-import {Platform, UIManager} from 'react-native';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
@@ -52,24 +52,26 @@ const App = () => {
   }
   return (
     <SafeAreaProvider>
-      <ErrorBoundary>
+      <ErrorBoundary type="full-screen">
         <AppContextProvider>
           <PreferencesContextProvider>
-            <ThemeContextProvider>
-              <FavoritesContextProvider>
-                <SearchHistoryContextProvider>
-                  <GeolocationContextProvider>
-                    <TicketContextProvider>
-                      <RemoteConfigContextProvider>
-                        <AppLanguageProvider>
-                          <NavigationRoot />
-                        </AppLanguageProvider>
-                      </RemoteConfigContextProvider>
-                    </TicketContextProvider>
-                  </GeolocationContextProvider>
-                </SearchHistoryContextProvider>
-              </FavoritesContextProvider>
-            </ThemeContextProvider>
+            <AuthContextProvider>
+              <ThemeContextProvider>
+                <FavoritesContextProvider>
+                  <SearchHistoryContextProvider>
+                    <GeolocationContextProvider>
+                      <TicketContextProvider>
+                        <RemoteConfigContextProvider>
+                          <AppLanguageProvider>
+                            <NavigationRoot />
+                          </AppLanguageProvider>
+                        </RemoteConfigContextProvider>
+                      </TicketContextProvider>
+                    </GeolocationContextProvider>
+                  </SearchHistoryContextProvider>
+                </FavoritesContextProvider>
+              </ThemeContextProvider>
+            </AuthContextProvider>
           </PreferencesContextProvider>
         </AppContextProvider>
       </ErrorBoundary>
