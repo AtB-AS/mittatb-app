@@ -27,6 +27,11 @@ jobs:
         run: yarn install
       - name: Bundle install, fastlane dependencies
         run: bundle install
+      - name: Get Github-release data
+        id: get_release
+        uses: bruceadams/get-release@v1.2.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set environment
         run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT
       - name: Override native config files
@@ -44,10 +49,12 @@ jobs:
           KEYSTORE_PASS: ${{ secrets.ATB_KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.ATB_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.ATB_KEY_ALIAS }}
-      # - name: Distribute to AppCenter
-      #   run: fastlane android appcenter
-      #   env:
-      #     APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
+      - name: Distribute to Google Alpha
+        run: fastlane android appcenter_alpha
+        env:
+          APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
+          RELEASE_NOTES: ${{ steps.get_release.outputs.body }}
+          RELEASE_URL: ${{ steps.get_release.outputs.html_url }}
       - name: Upload bundle and source maps
         run: sh ./scripts/android/upload-sourcemaps.sh
         env:

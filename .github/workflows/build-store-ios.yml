@@ -29,6 +29,11 @@ jobs:
         run: yarn install
       - name: Bundle Install
         run: bundle install
+      - name: Get Github-release data
+        id: get_release
+        uses: bruceadams/get-release@v1.2.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set environment
         run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT
       - name: Override native config files
@@ -49,10 +54,12 @@ jobs:
         env:
           PROVISIONING_PROFILE: 'match AppStore no.mittatb.store'
           EXPORT_METHOD: 'app-store'
-      # - name: Distribute to AppCenter
-      #   run: fastlane ios appcenter
-      #   env:
-      #     APPCENTER_API_KEY: ${{ secrets.APPCENTER_IOS_API_KEY }}
+      - name: Distribute to TestFlight
+        run: fastlane ios appcenter_testflight
+        env:
+          APPCENTER_API_KEY: ${{ secrets.APPCENTER_IOS_API_KEY }}
+          RELEASE_NOTES: ${{ steps.get_release.outputs.body }}
+          RELEASE_URL: ${{ steps.get_release.outputs.html_url }}
       - name: Create bundle and source maps
         run: sh ./scripts/ios/create-sourcemaps.sh
       - name: Upload bundle and source maps
