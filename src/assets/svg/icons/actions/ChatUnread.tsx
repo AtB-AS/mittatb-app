@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Svg, {Path, Circle, SvgProps} from 'react-native-svg';
+import Svg, {SvgProps, Path, Circle} from 'react-native-svg';
 
 function SvgChatUnread(props: SvgProps) {
   return (

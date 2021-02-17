@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Svg, {
+  SvgProps,
   Ellipse,
   Defs,
   RadialGradient,
   Stop,
-  SvgProps,
 } from 'react-native-svg';
 
 function SvgSelectionPinShadow(props: SvgProps) {
