@@ -178,7 +178,7 @@ const DateInput: React.FC<DateInputProps> = ({
         accessibilityRole="button"
         text={t(searchValue)}
         onPress={onOpen}
-        mode="primary4"
+        color="primary_3"
       />
 
       <Portal>
@@ -240,6 +240,7 @@ const DateInput: React.FC<DateInputProps> = ({
               accessibilityLabel="Søk etter reiser med nåværende valgte tidspunkt"
               accessibilityRole="search"
               onPress={onSave}
+              color="primary_2"
               text="Søk etter reiser"
             />
           </View>
@@ -277,7 +278,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: 6,
   },
   dateTypeButtonSelected: {
-    borderBottomColor: theme.text.colors.focus,
+    borderBottomColor: theme.text.colors.primary,
     borderBottomWidth: 2,
   },
 }));

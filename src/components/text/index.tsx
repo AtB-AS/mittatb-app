@@ -1,13 +1,13 @@
+import {useTheme} from '@atb/theme';
+import {TextColor, TextNames} from '@atb/theme/colors';
 import React from 'react';
 import {Text, TextProps} from 'react-native';
-import {TextColors, TextNames} from '@atb/theme/colors';
-import {useTheme} from '@atb/theme';
 
 export const MAX_FONT_SCALE = 2;
 
 export type ThemeTextProps = TextProps & {
   type?: TextNames;
-  color?: TextColors;
+  color?: TextColor;
 };
 
 const ThemeText: React.FC<ThemeTextProps> = ({

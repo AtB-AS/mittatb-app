@@ -73,7 +73,6 @@ export default function VippsPayment({
             <Processing message={t(translateStateMessage(state))} />
           ) : (
             <Button
-              mode="primary"
               text={t(PaymentVippsTexts.buttons.goToVipps)}
               onPress={() => openVipps()}
               style={styles.button}
@@ -88,14 +87,13 @@ export default function VippsPayment({
             />
             {error.context === 'open-vipps-url' && (
               <Button
-                mode="primary"
                 onPress={openVipps}
                 text={t(PaymentVippsTexts.buttons.tryAgain)}
                 style={styles.button}
               />
             )}
             <Button
-              mode="secondary"
+              color="secondary_1"
               onPress={() => cancelVipps()}
               text={t(PaymentVippsTexts.buttons.goBack)}
               style={styles.button}

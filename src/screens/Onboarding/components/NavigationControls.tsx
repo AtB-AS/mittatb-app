@@ -1,11 +1,9 @@
+import {ArrowRight} from '@atb/assets/svg/icons/navigation';
+import {Dot} from '@atb/assets/svg/icons/other';
+import Button from '@atb/components/button';
+import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
-import {Dot} from '@atb/assets/svg/icons/other';
-import {TouchableOpacity} from 'react-native';
-import {ArrowRight} from '@atb/assets/svg/icons/navigation';
-import {StyleSheet} from '@atb/theme';
-import ThemeIcon from '@atb/components/theme-icon';
-import ThemeText from '@atb/components/text';
 
 type NavigateButtonProps = {
   onNavigate(): void;
@@ -34,10 +32,13 @@ const NavigationControls: React.FC<NavigateButtonProps> = ({
           />
         ))}
       </View>
-      <TouchableOpacity style={styles.button} onPress={onNavigate}>
-        <ThemeText type="paragraphHeadline">{title}</ThemeText>
-        {arrow && <ThemeIcon svg={ArrowRight} style={styles.buttonIcon} />}
-      </TouchableOpacity>
+      <Button
+        onPress={onNavigate}
+        text={title}
+        icon={arrow ? ArrowRight : undefined}
+        color="primary_2"
+        iconPosition="right"
+      />
       {children}
     </View>
   );
@@ -56,19 +57,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   bullet: {
     marginHorizontal: theme.spacings.medium / 2,
     marginVertical: theme.spacings.medium,
-  },
-  button: {
-    backgroundColor: theme.button.primary.backgroundColor,
-    width: '100%',
-    height: 44,
-    borderRadius: theme.border.radius.regular,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  buttonIcon: {
-    position: 'absolute',
-    right: theme.spacings.medium,
   },
 }));
 export default NavigationControls;

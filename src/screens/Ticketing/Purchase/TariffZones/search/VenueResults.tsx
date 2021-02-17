@@ -26,7 +26,7 @@ const VenueResults: React.FC<Props> = ({locationsAndTariffZones, onSelect}) => {
   return (
     <>
       <View accessibilityRole="header" style={styles.subHeader}>
-        <ThemeText type="lead" color="faded">
+        <ThemeText type="lead" color="secondary">
           {t(TariffZoneSearchTexts.results.heading)}
         </ThemeText>
       </View>

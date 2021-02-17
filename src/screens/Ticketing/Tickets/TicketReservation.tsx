@@ -32,7 +32,7 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
             <View style={styles.iconContainer}>
               <ThemeIcon svg={BlankTicket} />
             </View>
-            <ThemeText type="lead" color="faded">
+            <ThemeText type="lead" color="secondary">
               {reservation.paymentStatus !== 'CAPTURE'
                 ? t(TicketsTexts.reservation.processing)
                 : t(TicketsTexts.reservation.approved)}
@@ -91,7 +91,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   extraText: {
     paddingVertical: theme.spacings.xSmall,
-    color: theme.text.colors.faded,
+    color: theme.text.colors.disabled,
   },
   validityContainer: {
     flexDirection: 'row',

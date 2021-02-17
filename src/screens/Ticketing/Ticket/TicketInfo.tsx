@@ -78,7 +78,7 @@ export const TicketInfoView = ({
         </ThemeText>
       )}
       {fromTariffZone && toTariffZone && (
-        <ThemeText type="lead" color="faded" style={styles.zones}>
+        <ThemeText type="lead" style={styles.zones}>
           {fromTariffZone.id === toTariffZone.id
             ? t(
                 TicketTexts.zone.single(

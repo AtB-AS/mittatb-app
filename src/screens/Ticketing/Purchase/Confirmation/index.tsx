@@ -154,7 +154,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                   <ThemeText
                     style={styles.smallTopMargin}
                     type="lead"
-                    color="faded"
+                    color="secondary"
                   >
                     {fromTariffZone.id === toTariffZone.id
                       ? t(
@@ -172,7 +172,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                   <ThemeText
                     style={styles.smallTopMargin}
                     type="lead"
-                    color="faded"
+                    color="secondary"
                   >
                     {t(PurchaseConfirmationTexts.validityTexts.startTime)}
                   </ThemeText>
@@ -187,7 +187,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
             <ThemeText type="body">
               {t(PurchaseConfirmationTexts.totalCost.title)}
             </ThemeText>
-            <ThemeText type="label" color={'faded'}>
+            <ThemeText type="label" color="secondary">
               {t(PurchaseConfirmationTexts.totalCost.label)}
             </ThemeText>
           </View>
@@ -216,7 +216,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           }}
         >
           <Button
-            mode="primary2"
+            color="secondary_1"
             text={t(PurchaseConfirmationTexts.paymentButtonVipps.text)}
             disabled={isSearchingOffer || !!error}
             accessibilityHint={t(
@@ -229,7 +229,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           />
           {enableCreditCard && (
             <Button
-              mode="primary2"
+              color="secondary_1"
               text={t(PurchaseConfirmationTexts.paymentButtonCard.text)}
               disabled={isSearchingOffer || !!error}
               accessibilityHint={t(

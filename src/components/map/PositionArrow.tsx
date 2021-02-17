@@ -14,12 +14,12 @@ const PositionArrow: React.FC<
   return (
     <Button
       type="compact"
-      mode="primary"
+      color="primary_2"
       onPress={flyToCurrentLocation}
       hitSlop={insets.symmetric(12, 20)}
       icon={CurrentLocationArrow}
       style={styles.flyToButton}
-    ></Button>
+    />
   );
 };
 const useStyles = StyleSheet.createThemeHook((theme) => ({

@@ -74,7 +74,7 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
         <InternalTextInput
           ref={ref}
           style={[styles.input, contentContainer, padding, style]}
-          placeholderTextColor={theme.text.colors.faded}
+          placeholderTextColor={theme.text.colors.secondary}
           onFocus={onFocusEvent}
           onBlur={onBlurEvent}
           maxFontSizeMultiplier={MAX_FONT_SCALE}

@@ -13,7 +13,7 @@ import {StyleSheet} from '@atb/theme';
 import {SvgProps} from 'react-native-svg';
 import {useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
-import {transportationColor} from '@atb/utils/transportation-color';
+import {useTransportationColor} from '@atb/utils/use-transportation-color';
 
 export type TransportationIconProps = {
   mode?: LegMode | TransportMode;
@@ -29,7 +29,7 @@ const TransportationIcon: React.FC<TransportationIconProps> = ({
 }) => {
   const styles = useStyle();
   const {t} = useTranslation();
-  const color = transportationColor(mode, subMode);
+  const color = useTransportationColor(mode, subMode);
 
   return (
     <View style={styles.iconContainer}>

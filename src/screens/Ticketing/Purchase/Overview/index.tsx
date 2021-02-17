@@ -150,7 +150,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
       <View style={styles.toPaymentButton}>
         <Button
-          mode="primary"
+          color="primary_2"
           text={t(PurchaseOverviewTexts.primaryButton.text(totalPrice))}
           disabled={isSearchingOffer || !totalPrice || !!error}
           accessibilityLabel={t(

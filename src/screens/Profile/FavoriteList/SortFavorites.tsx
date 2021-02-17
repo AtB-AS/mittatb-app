@@ -1,4 +1,4 @@
-import {Close, Confirm} from '@atb/assets/svg/icons/actions';
+import {Confirm} from '@atb/assets/svg/icons/actions';
 import SvgDragHandle from '@atb/assets/svg/icons/actions/DragHandle';
 import Button, {ButtonGroup} from '@atb/components/button';
 import ScreenHeader from '@atb/components/screen-header';
@@ -56,7 +56,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
   };
 
   return (
-    <SafeAreaView style={style.container} edges={['right', 'top', 'left']}>
+    <SafeAreaView style={style.container}>
       <ScreenHeader
         title={t(FavoriteListTexts.sortableScreen.title)}
         leftButton={{type: 'close'}}
@@ -103,17 +103,11 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
 
       <ButtonGroup>
         <Button
-          onPress={() => navigation.goBack()}
-          text={t(FavoriteListTexts.sortableScreen.buttons.cancel)}
-          mode="secondary"
-          icon={Close}
-          iconPosition="right"
-        />
-        <Button
           onPress={saveOrder}
           text={t(FavoriteListTexts.sortableScreen.buttons.save)}
           icon={Confirm}
           iconPosition="right"
+          color="primary_2"
         />
       </ButtonGroup>
     </SafeAreaView>
