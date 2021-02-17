@@ -129,4 +129,18 @@ platform :android do
       notify_testers: false 
     )
   end
+
+  lane :appcenter_store do
+    ensure_env_vars(
+      env_vars: ['APPCENTER_API_KEY']
+    )
+    appcenter_upload(
+      api_token: ENV["APPCENTER_API_KEY"],
+      owner_name: "AtB-AS",
+      app_name: "MittAtb",
+      owner_type: "organization", 
+      file: "app-store.apk",
+      notify_testers: false 
+    )
+  end
 end

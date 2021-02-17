@@ -1,5 +1,7 @@
 name: Build store iOS project
-on: [push]
+on:
+  release:
+    types: [published]
 
 jobs:
   build-ios:
