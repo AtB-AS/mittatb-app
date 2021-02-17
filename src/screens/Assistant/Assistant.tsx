@@ -287,7 +287,7 @@ const Assistant: React.FC<Props> = ({
           >
             <Button
               text={getSearchTimeLabel()}
-              mode={'secondary'}
+              color="secondary_3"
               onPress={() =>
                 navigation.navigate('DateTimePicker', {
                   onChange: (s: SearchTime) => {

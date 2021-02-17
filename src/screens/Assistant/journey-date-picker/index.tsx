@@ -1,17 +1,15 @@
-import React, {useEffect, useReducer, useState} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {ArrowLeft} from '../../../assets/svg/icons/navigation';
-import Header from '../../../ScreenHeader';
-import {AssistantParams} from '..';
-import ThemeIcon from '../../../components/theme-icon';
-import {NavigationProp, RouteProp} from '@react-navigation/core';
-import {JourneyDatePickerTexts, useTranslation} from '../../../translations';
-import {ButtonInput, RadioSection, Section} from '../../../components/sections';
-import Button from '../../../components/button';
-import {ScrollView, View} from 'react-native';
-import {StyleSheet} from '../../../theme';
+import Button from '@atb/components/button';
+import ScreenHeader from '@atb/components/screen-header';
+import {ButtonInput, RadioSection, Section} from '@atb/components/sections';
+import {StyleSheet} from '@atb/theme';
+import {JourneyDatePickerTexts, useTranslation} from '@atb/translations';
+import {formatLocaleTime, formatToSimpleDate} from '@atb/utils/date';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {formatLocaleTime, formatToSimpleDate} from '../../../utils/date';
+import {NavigationProp, RouteProp} from '@react-navigation/core';
+import React, {useEffect, useState} from 'react';
+import {ScrollView} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {AssistantParams} from '..';
 
 export type DateTimePickerParams = {
   searchTime: SearchTime;
@@ -38,7 +36,7 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
   navigation,
   route,
 }) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const styles = useStyles();
   const dateItems = Array.from(DateOptions);
 
@@ -67,18 +65,11 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header
-        leftButton={{
-          onPress: navigation.goBack,
-          accessible: true,
-          accessibilityRole: 'button',
-          accessibilityLabel: t(
-            JourneyDatePickerTexts.header.leftButton.a11yLabel,
-          ),
-          icon: <ThemeIcon svg={ArrowLeft} />,
-        }}
+      <ScreenHeader
         title={t(JourneyDatePickerTexts.header.title)}
+        leftButton={{type: 'back'}}
       />
+
       <ScrollView style={styles.contentContainer}>
         <RadioSection<DateOptionType>
           selected={option ?? dateItems[0]}
@@ -94,12 +85,12 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
             <ButtonInput
               onPress={showDatepicker}
               label={t(JourneyDatePickerTexts.dateTime.date)}
-              value={formatToSimpleDate(currentDate)}
+              value={formatToSimpleDate(currentDate, language)}
             />
             <ButtonInput
               onPress={showTimepicker}
               label={t(JourneyDatePickerTexts.dateTime.time)}
-              value={formatLocaleTime(currentDate)}
+              value={formatLocaleTime(currentDate, language)}
             />
             {showPicker && (
               <DateTimePicker
@@ -121,6 +112,7 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
             updateSearchTime({date: currentDate, option});
             navigation.goBack();
           }}
+          color="primary_2"
           text={t(JourneyDatePickerTexts.searchButton.text)}
         ></Button>
       </ScrollView>
