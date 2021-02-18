@@ -12,6 +12,7 @@ import React from 'react';
 import {Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
+import ThemeText from '@atb/components/text';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -31,7 +32,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   const {enable_i18n} = useRemoteConfig();
   const style = useProfileHomeStyle();
   const {t} = useTranslation();
-  const {signInAnonymously, signOut, user} = useAuthState();
+  const {authenticationType, signOut, user} = useAuthState();
 
   return (
     <View style={style.container}>
@@ -43,6 +44,34 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
       <ScrollView>
         <Sections.Section withPadding withTopPadding>
+          <Sections.HeaderItem
+            text={t(ProfileTexts.sections.account.heading)}
+          />
+          {authenticationType !== 'phone' && (
+            <Sections.LinkItem
+              text={t(ProfileTexts.sections.account.linkItems.login.label)}
+              onPress={() => navigation.navigate('Login')}
+            />
+          )}
+          {authenticationType === 'phone' && (
+            <Sections.GenericItem>
+              <ThemeText>{user?.phoneNumber}</ThemeText>
+            </Sections.GenericItem>
+          )}
+          {authenticationType === 'phone' && (
+            <Sections.LinkItem
+              text={t(ProfileTexts.sections.account.linkItems.logout.label)}
+              onPress={signOut}
+            />
+          )}
+          {__DEV__ && (
+            <Sections.GenericItem>
+              <ThemeText>SignedInState: {authenticationType}</ThemeText>
+            </Sections.GenericItem>
+          )}
+        </Sections.Section>
+
+        <Sections.Section withPadding>
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.settings.heading)}
           />
@@ -92,22 +121,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             }
           />
         </Sections.Section>
-
-        {__DEV__ && (
-          <Sections.Section withPadding>
-            <Sections.HeaderItem text="Bruker" />
-            <Sections.LinkItem
-              text="Logg ut"
-              onPress={() => signOut()}
-              disabled={!user}
-            />
-            <Sections.LinkItem
-              text="Logg inn"
-              onPress={() => signInAnonymously()}
-              disabled={!!user}
-            />
-          </Sections.Section>
-        )}
       </ScrollView>
     </View>
   );

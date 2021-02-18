@@ -42,6 +42,11 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
       onBlur?.(e);
     };
 
+    const onClearEvent = () => {
+      if (onClear) onClear();
+      else if (props.onChangeText) props.onChangeText('');
+    };
+
     const borderColor = !isFocused
       ? undefined
       : {borderColor: theme.border.focus};
@@ -87,7 +92,7 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
               accessibilityRole="button"
               accessibilityLabel="Tøm redigeringsfelt"
               hitSlop={insets.all(8)}
-              onPress={onClear}
+              onPress={onClearEvent}
             >
               <ThemeIcon svg={Close} />
             </TouchableOpacity>

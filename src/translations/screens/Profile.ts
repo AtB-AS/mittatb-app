@@ -5,6 +5,17 @@ const ProfileTexts = {
     title: _('Mitt AtB', 'Profile'),
   },
   sections: {
+    account: {
+      heading: _('Min konto', 'My account'),
+      linkItems: {
+        login: {
+          label: _('Logg inn', 'Log in'),
+        },
+        logout: {
+          label: _('Logg ut', 'Log out'),
+        },
+      },
+    },
     settings: {
       heading: _('Innstillinger', 'Settings'),
       linkItems: {
