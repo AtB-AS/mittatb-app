@@ -20,7 +20,7 @@ or alternatively using `brew install fastlane`
 ```
 fastlane ios update_devices
 ```
-Update devices
+Update ad hoc devices
 ### ios get_cert
 ```
 fastlane ios get_cert
@@ -31,9 +31,9 @@ Match certificates
 fastlane ios build
 ```
 Build the iOS application.
-### ios appcenter
+### ios appcenter_staging
 ```
-fastlane ios appcenter
+fastlane ios appcenter_staging
 ```
 Upload the build to AppCenter
 
@@ -45,9 +45,9 @@ Upload the build to AppCenter
 fastlane android build
 ```
 Upload the build to AppCenter
-### android appcenter
+### android appcenter_staging
 ```
-fastlane android appcenter
+fastlane android appcenter_staging
 ```
 
 

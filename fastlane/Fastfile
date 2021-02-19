@@ -6,7 +6,7 @@ before_all do
 end
 
 platform :ios do
-  desc 'Update devices'
+  desc 'Update ad hoc devices'
   lane :update_devices do
     register_devices(devices_file: "./ios/devices.txt")
     match(type: "adhoc", force_for_new_devices: true)
@@ -15,7 +15,7 @@ platform :ios do
   desc 'Match certificates'
   lane :get_cert do 
     ensure_env_vars(
-      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_URL']
+      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_URL', 'MATCH_TYPE', 'BUNDLE_IDENTIFIER', 'APPLE_TEAM_ID']
     )
     if is_ci
       create_keychain(
@@ -27,20 +27,31 @@ platform :ios do
         lock_when_sleeps: false
       )
       match(
-        type: "adhoc",
+        type: ENV["MATCH_TYPE"],
+        app_identifier: ENV['BUNDLE_IDENTIFIER'],
+        storage_mode: 'git',
+        git_url: ENV['FASTLANE_MATCH_URL'],
         readonly: true,
         keychain_name: "CI",
-        keychain_password: ENV["MATCH_PASSWORD"]
+        keychain_password: ENV["MATCH_PASSWORD"],
+        team_id: ENV['APPLE_TEAM_ID']
       )
     else
-      match(type: 'adhoc', readonly: true)
+      match(
+        type: ENV["MATCH_TYPE"],
+        app_identifier: ENV['BUNDLE_IDENTIFIER'],
+        storage_mode: 'git',
+        git_url: ENV['FASTLANE_MATCH_URL'], 
+        team_id: ENV['APPLE_TEAM_ID'],
+        readonly: true
+      )
     end
   end
   # iOS Lanes
   desc 'Build the iOS application.'
   lane :build do
     ensure_env_vars(
-      env_vars: ['BUILD_ID']
+      env_vars: ['BUILD_ID', 'BUNDLE_IDENTIFIER', 'PROVISIONING_PROFILE', 'EXPORT_METHOD']
     )
     increment_build_number(
       build_number: ENV["BUILD_ID"], 
@@ -48,22 +59,22 @@ platform :ios do
     )
     update_code_signing_settings(
       use_automatic_signing: false,
-      bundle_identifier:"no.mittatb.staging",
-      code_sign_identity:"iPhone Distribution",
-      profile_name: "match AdHoc no.mittatb.staging",
+      bundle_identifier: ENV['BUNDLE_IDENTIFIER'],
+      code_sign_identity: "iPhone Distribution",
+      profile_name: ENV['PROVISIONING_PROFILE'],
       path: "./ios/atb.xcodeproj"
     )
     cocoapods(podfile: './ios/Podfile')
     build_app(
       scheme: 'atb', 
       configuration: 'Release', 
-      export_method: "ad-hoc",
+      export_method: ENV['EXPORT_METHOD'],
       workspace: './ios/atb.xcworkspace'
     )
   end
 
   desc 'Upload the build to AppCenter'
-  lane :appcenter do
+  lane :appcenter_staging do
     ensure_env_vars(
       env_vars: ['APPCENTER_API_KEY']
     )
@@ -73,7 +84,25 @@ platform :ios do
       app_name: "MittAtb-1",
       owner_type: "organization", 
       file: "AtB.ipa",
-      notify_testers: false 
+      notify_testers: true 
+    )
+  end
+
+  desc 'Upload the build to AppCenter for distribution to TestFlight'
+  lane :appcenter_testflight do
+    ensure_env_vars(
+      env_vars: ['APPCENTER_API_KEY', 'RELEASE_NOTES', 'RELEASE_URL']
+    )
+    appcenter_upload(
+      api_token: ENV["APPCENTER_API_KEY"],
+      owner_name: "AtB-AS",
+      app_name: "MittAtb-1",
+      owner_type: "organization", 
+      file: "AtB.ipa",
+      destination_type: "store",
+      destinations: "AtB Internal",
+      release_notes: ENV['RELEASE_NOTES'],
+      release_notes_link: ENV['RELEASE_URL']
     )
   end
 end
@@ -83,12 +112,13 @@ platform :android do
 
   lane :build do
     ensure_env_vars(
-      env_vars: ['BUILD_ID', 'KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS']
+      env_vars: ['BUILD_ID', 'KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS', 'APP_ENVIRONMENT']
     )
+    build_type = ENV['APP_ENVIRONMENT']  
     gradle(task: 'clean', project_dir: 'android/')
     gradle(
       task: 'assemble', 
-      build_type: 'staging', 
+      build_type: build_type,
       project_dir: 'android/', 
       print_command: false, #don't print my passwords please
       properties: {
@@ -98,13 +128,13 @@ platform :android do
         "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
         "android.injected.signing.key.password" => ENV["KEY_PASS"],
       })
-    sh("cp", "../android/app/build/outputs/apk/staging/app-staging.apk", "../")
+    sh("cp", "../android/app/build/outputs/apk/#{build_type}/app-#{build_type}.apk", "../")
     sh("mkdir", "-p", "../bundle")
-    sh("cp", "../android/app/build/generated/assets/react/staging/index.android.bundle", "../bundle")
-    sh("cp", "../android/app/build/generated/sourcemaps/react/staging/index.android.bundle.map", "../bundle")
+    sh("cp", "../android/app/build/generated/assets/react/#{build_type}/index.android.bundle", "../bundle")
+    sh("cp", "../android/app/build/generated/sourcemaps/react/#{build_type}/index.android.bundle.map", "../bundle")
   end
 
-  lane :appcenter do
+  lane :appcenter_staging do
     ensure_env_vars(
       env_vars: ['APPCENTER_API_KEY']
     )
@@ -114,7 +144,24 @@ platform :android do
       app_name: "MittAtb",
       owner_type: "organization", 
       file: "app-staging.apk",
-      notify_testers: false 
+      notify_testers: true 
+    )
+  end
+
+  lane :appcenter_alpha do
+    ensure_env_vars(
+      env_vars: ['APPCENTER_API_KEY', 'RELEASE_NOTES', 'RELEASE_URL']
+    )
+    appcenter_upload(
+      api_token: ENV["APPCENTER_API_KEY"],
+      owner_name: "AtB-AS",
+      app_name: "MittAtb",
+      owner_type: "organization", 
+      file: "app-store.apk",
+      destination_type: "store",
+      destinations: "Alpha",
+      release_notes: ENV['RELEASE_NOTES'],
+      release_notes_link: ENV['RELEASE_URL']
     )
   end
 end
