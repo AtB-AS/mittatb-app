@@ -3,6 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
+ENV['REACT_NATIVE_MAPBOX_GL_USE_FRAMEWORKS'] = '1'
 $ReactNativeMapboxGLIOSVersion = '6.3.0'
 
 target 'atb' do
@@ -27,6 +28,20 @@ target 'atb' do
   use_flipper!
   post_install do |installer|
     flipper_post_install(installer)
+  end
+
+  pre_install do |installer|
+    fix_mapbox_events(installer)
+  end
+  
+  def fix_mapbox_events(installer)
+    installer.pod_targets.each do |pod|
+      if pod.name == 'MapboxMobileEvents'
+        def pod.build_type;
+          Pod::BuildType.dynamic_framework
+        end
+      end
+    end
   end
 end
 
