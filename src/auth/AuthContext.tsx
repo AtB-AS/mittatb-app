@@ -9,6 +9,9 @@ import React, {
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {useTranslation} from '../translations';
 
+const ERROR_INVALID_PHONE_NUMBER = 'auth/invalid-phone-number';
+const ERROR_INVALID_CONFIRMATION_CODE = 'auth/invalid-verification-code';
+
 type AuthReducerState = {
   isAuthConnectionInitialized: boolean;
   confirmationHandler: FirebaseAuthTypes.ConfirmationResult | undefined;
@@ -71,10 +74,15 @@ const getAuthenticationType = (state: AuthReducerState): AuthenticationType => {
   else return 'none';
 };
 
+export type ConfirmationErrorCode = 'invalid_code' | 'unknown_error';
+export type PhoneSignInErrorCode = 'invalid_phone' | 'unknown_error';
+
 type AuthContextState = {
-  signInWithPhoneNumber: (number: string) => Promise<void>;
+  signInWithPhoneNumber: (
+    number: string,
+  ) => Promise<PhoneSignInErrorCode | undefined>;
   signOut: () => Promise<void>;
-  confirmCode: (code: string) => Promise<void>;
+  confirmCode: (code: string) => Promise<ConfirmationErrorCode | undefined>;
   syncAbtCustomer: () => Promise<void>;
   authenticationType: AuthenticationType;
 } & AuthReducerState;
@@ -89,7 +97,11 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
     try {
       await state.confirmationHandler?.confirm(code);
     } catch (error) {
-      console.warn('Invalid code?', error);
+      if (error.code === ERROR_INVALID_CONFIRMATION_CODE) {
+        return 'invalid_code';
+      }
+      console.warn(error);
+      return 'unknown_error';
     }
   }
 
@@ -146,10 +158,18 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
   }, [onUserChanged]);
 
   async function signInWithPhoneNumber(phoneNumber: string) {
-    const confirmationHandler = await auth().signInWithPhoneNumber(
-      '+47' + phoneNumber,
-    );
-    dispatch({type: 'SIGN_IN_INITIATED', confirmationHandler});
+    try {
+      const confirmationHandler = await auth().signInWithPhoneNumber(
+        '+47' + phoneNumber,
+      );
+      dispatch({type: 'SIGN_IN_INITIATED', confirmationHandler});
+    } catch (error) {
+      if (error.code === ERROR_INVALID_PHONE_NUMBER) {
+        return 'invalid_phone';
+      }
+      console.warn(error);
+      return 'unknown_error';
+    }
   }
 
   const signInAnonymously = useCallback(async function () {

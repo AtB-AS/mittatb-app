@@ -11,7 +11,7 @@ import {
 import React, {useRef} from 'react';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import ThemeText from '@atb/components/text';
-import {ContrastColor} from '@atb/theme/colors';
+import {ContrastColor, TextNames} from '@atb/theme/colors';
 
 export {default as ButtonGroup} from './group';
 
@@ -62,6 +62,7 @@ export type ButtonProps = {
   textStyle?: StyleProp<TextStyle>;
   icon?: React.ElementType<{fill: string}>;
   iconPosition?: 'left' | 'right';
+  textType?: TextNames;
 } & ButtonTypeAwareProps &
   TouchableOpacityProps;
 
@@ -80,6 +81,7 @@ const Button: React.FC<ButtonProps> = ({
   viewContainerStyle,
   textContainerStyle,
   textStyle,
+  textType,
   ...props
 }) => {
   const modeData = DefaultModeStyles[mode];
@@ -160,7 +162,10 @@ const Button: React.FC<ButtonProps> = ({
         )}
         {text && (
           <View style={[textContainer, textContainerStyle]}>
-            <ThemeText type="paragraphHeadline" style={[styleText, textStyle]}>
+            <ThemeText
+              type={textType ?? 'paragraphHeadline'}
+              style={[styleText, textStyle]}
+            >
               {text}
             </ThemeText>
           </View>
