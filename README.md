@@ -26,7 +26,7 @@ We love feedback and suggestions. The AtB app and service is continously improve
 
 1. See [React Native: setting up the development environment](https://reactnative.dev/docs/environment-setup). (Click the `React Native CLI Quickstart` tab)
 1. yarn (https://yarnpkg.com/getting-started/install). Currently yarn 2.0 not supported, install `v1.22.0` or similar
-1. git-crypt: `brew install git-crypt`
+1. git-crypt: MacOS: `brew install git-crypt`, Linux: `apt install git-crypt`
 
 ### Starting locally
 
