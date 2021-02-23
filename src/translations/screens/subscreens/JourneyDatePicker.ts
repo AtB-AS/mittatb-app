@@ -11,10 +11,6 @@ const JourneyDatePickerTexts = {
     departure: _('Avgang', 'Departure'),
     arrival: _('Ankomst', 'Arrival'),
   },
-  dateTime: {
-    date: _('Dato', 'Date'),
-    time: _('Tid', 'Time'),
-  },
   searchButton: {
     text: _('Søk etter reiser', 'Search'),
   },

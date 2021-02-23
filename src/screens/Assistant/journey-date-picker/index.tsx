@@ -116,7 +116,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     margin: theme.spacings.medium,
   },
 }));
-export const getDateOptionText = (dateOption: DateOptionType) => {
+
+const getDateOptionText = (dateOption: DateOptionType) => {
   switch (dateOption) {
     case 'now':
       return JourneyDatePickerTexts.options.now;

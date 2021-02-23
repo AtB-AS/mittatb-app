@@ -1,5 +1,5 @@
 import {useTheme} from '@atb/theme';
-import {JourneyDatePickerTexts, useTranslation} from '@atb/translations';
+import {SectionTexts, useTranslation} from '@atb/translations';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import {parseISO} from 'date-fns';
 import React from 'react';
@@ -21,7 +21,7 @@ export default function DateInputItem(props: DateInputItemProps) {
 
   return (
     <InternalLabeledItem
-      label={t(JourneyDatePickerTexts.dateTime.date)}
+      label={t(SectionTexts.dateInput.label)}
       accessibleLabel={true}
       {...innerprops}
     >

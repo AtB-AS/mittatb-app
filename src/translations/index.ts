@@ -14,7 +14,6 @@ export {default as PaginationTexts} from './components/Pagination';
 export {default as OnboardingTexts} from './screens/Onboarding';
 export {default as SectionTexts} from './components/Section';
 export {default as MapTexts} from './components/Map';
-export {default as DateInputTexts} from './components/DateInput';
 export {default as ScreenHeaderTexts} from './components/ScreenHeader';
 export {default as LocationSearchTexts} from './screens/subscreens/LocationSearch';
 export {default as ProductTexts} from './screens/subscreens/Product';

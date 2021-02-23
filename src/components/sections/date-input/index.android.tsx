@@ -1,12 +1,10 @@
 import {useTheme} from '@atb/theme';
-import {JourneyDatePickerTexts, useTranslation} from '@atb/translations';
+import {SectionTexts, useTranslation} from '@atb/translations';
 import {formatToSimpleDate} from '@atb/utils/date';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import {parseISO} from 'date-fns';
 import React, {useState} from 'react';
-import {Platform} from 'react-native';
 import ButtonInput from '../button-input';
-import InternalLabeledItem from '../internals/internal-labeled-item';
 import {DateInputItemProps, dateToDateString} from './utils';
 
 export default function DateInputItem(props: DateInputItemProps) {
@@ -18,7 +16,7 @@ export default function DateInputItem(props: DateInputItemProps) {
   return (
     <>
       <ButtonInput
-        label={t(JourneyDatePickerTexts.dateTime.date)}
+        label={t(SectionTexts.dateInput.label)}
         value={formatToSimpleDate(value, language)}
         onPress={() => setShow(true)}
         containerStyle={{alignItems: 'flex-end'}}

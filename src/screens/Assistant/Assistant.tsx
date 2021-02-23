@@ -25,8 +25,13 @@ import {useLocationSearchValue} from '@atb/location-search';
 import {RootStackParamList} from '@atb/navigation';
 import {TripPattern} from '@atb/sdk';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {AssistantTexts, dictionary, useTranslation} from '@atb/translations';
-import {formatLocaleTime, isInThePast} from '@atb/utils/date';
+import {
+  AssistantTexts,
+  dictionary,
+  Language,
+  useTranslation,
+} from '@atb/translations';
+import {formatToLongDateTime, isInThePast} from '@atb/utils/date';
 import {
   locationDistanceInMetres as distanceInMetres,
   locationsAreEqual,
@@ -34,6 +39,7 @@ import {
 } from '@atb/utils/location';
 import {useLayout} from '@atb/utils/use-layout';
 import Bugsnag from '@bugsnag/react-native';
+import {TFunc} from '@leile/lobo-t';
 import analytics from '@react-native-firebase/analytics';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -42,11 +48,7 @@ import {View} from 'react-native';
 import {AssistantParams} from '.';
 import Loading from '../Loading';
 import FadeBetween from './FadeBetween';
-import {
-  getDateOptionText,
-  SearchTime,
-  useSearchTimeValue,
-} from './journey-date-picker';
+import {SearchTime, useSearchTimeValue} from './journey-date-picker';
 import NewsBanner from './NewsBanner';
 import Results from './Results';
 import {NoResultReason, SearchStateType} from './types';
@@ -108,7 +110,23 @@ const Assistant: React.FC<Props> = ({
   const styles = useStyles();
   const {theme} = useTheme();
   const {from, to} = useLocations(currentLocation);
-  const {language} = useTranslation();
+  const {language, t} = useTranslation();
+  const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
+
+  useDoOnceWhen(
+    () => setUpdatingLocation(true),
+    !Boolean(currentLocation) && hasLocationPermission,
+  );
+  useDoOnceWhen(
+    () => setUpdatingLocation(false),
+    Boolean(currentLocation) && hasLocationPermission,
+  );
+  useDoOnceWhen(setCurrentLocationAsFrom, Boolean(currentLocation));
+
+  const searchTime = useSearchTimeValue('searchTime', {
+    option: 'now',
+    date: new Date().toISOString(),
+  });
 
   function swap() {
     log('swap', {
@@ -151,19 +169,6 @@ const Assistant: React.FC<Props> = ({
     });
   }
 
-  const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
-
-  useDoOnceWhen(
-    () => setUpdatingLocation(true),
-    !Boolean(currentLocation) && hasLocationPermission,
-  );
-  useDoOnceWhen(
-    () => setUpdatingLocation(false),
-    Boolean(currentLocation) && hasLocationPermission,
-  );
-
-  useDoOnceWhen(setCurrentLocationAsFrom, Boolean(currentLocation));
-
   async function setCurrentLocationOrRequest() {
     if (currentLocation) {
       setCurrentLocationAsFrom();
@@ -184,17 +189,6 @@ const Assistant: React.FC<Props> = ({
       toLocation: undefined,
     });
   }
-  const {t} = useTranslation();
-  const searchTime = useSearchTimeValue('searchTime', {
-    option: 'now',
-    date: new Date().toISOString(),
-  });
-  const getSearchTimeLabel = () => {
-    return `${t(getDateOptionText(searchTime.option))} (${formatLocaleTime(
-      searchTime.date,
-      language,
-    )})`;
-  };
 
   const [
     tripPatterns,
@@ -298,10 +292,15 @@ const Assistant: React.FC<Props> = ({
             key="dateInput"
           >
             <Button
-              text={getSearchTimeLabel()}
+              text={getSearchTimeLabel(
+                searchTime,
+                timeOfLastSearch,
+                t,
+                language,
+              )}
               color="secondary_3"
               onPress={onSearchTimePress}
-            ></Button>
+            />
           </View>
         </FadeBetween>
       </View>
@@ -659,4 +658,24 @@ function log(message: string, metadata?: {[key: string]: string}) {
 function translateLocation(location: Location | undefined): string {
   if (!location) return 'Undefined location';
   return `${location.id}--${location.name}--${location.locality}`;
+}
+
+function getSearchTimeLabel(
+  searchTime: SearchTime,
+  timeOfLastSearch: string,
+  t: TFunc<typeof Language>,
+  language: Language,
+) {
+  const date = searchTime.option === 'now' ? timeOfLastSearch : searchTime.date;
+  const time = formatToLongDateTime(date, language);
+
+  switch (searchTime.option) {
+    case 'now':
+      return t(AssistantTexts.dateInput.departureNow(time));
+    case 'arrival':
+      return t(AssistantTexts.dateInput.arrival(time));
+    case 'departure':
+      return t(AssistantTexts.dateInput.departure(time));
+  }
+  return time;
 }

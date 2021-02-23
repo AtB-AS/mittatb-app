@@ -38,6 +38,12 @@ const AssistantTexts = {
     },
     updatingLocation: _('Oppdaterer posisjon', 'Updating location'),
   },
+  dateInput: {
+    departureNow: (time: string) =>
+      _(`Avreise nå (${time})`, `Departing now (${time})`),
+    departure: (time: string) => _(`Avreise ${time}`, `Departure ${time}`),
+    arrival: (time: string) => _(`Ankomst ${time}`, `Arrival ${time}`),
+  },
   favorites: {
     favoriteChip: {
       a11yHint: _('Aktiver for å bruke som', 'Activate to use as'),
