@@ -26,7 +26,7 @@ import {RootStackParamList} from '@atb/navigation';
 import {TripPattern} from '@atb/sdk';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {AssistantTexts, dictionary, useTranslation} from '@atb/translations';
-import {formatLocaleTime} from '@atb/utils/date';
+import {formatLocaleTime, isInThePast} from '@atb/utils/date';
 import {
   locationDistanceInMetres as distanceInMetres,
   locationsAreEqual,
@@ -42,7 +42,11 @@ import {View} from 'react-native';
 import {AssistantParams} from '.';
 import Loading from '../Loading';
 import FadeBetween from './FadeBetween';
-import {getDateOptionText, SearchTime} from './journey-date-picker';
+import {
+  getDateOptionText,
+  SearchTime,
+  useSearchTimeValue,
+} from './journey-date-picker';
 import NewsBanner from './NewsBanner';
 import Results from './Results';
 import {NoResultReason, SearchStateType} from './types';
@@ -139,6 +143,14 @@ const Assistant: React.FC<Props> = ({
     });
   }
 
+  function onSearchTimePress() {
+    navigation.navigate('DateTimePicker', {
+      callerRouteName: 'AssistantRoot',
+      callerRouteParam: 'searchTime',
+      searchTime,
+    });
+  }
+
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
 
   useDoOnceWhen(
@@ -173,9 +185,9 @@ const Assistant: React.FC<Props> = ({
     });
   }
   const {t} = useTranslation();
-  const [searchTime, setSearchTime] = useState<SearchTime>({
+  const searchTime = useSearchTimeValue('searchTime', {
     option: 'now',
-    date: new Date(),
+    date: new Date().toISOString(),
   });
   const getSearchTimeLabel = () => {
     return `${t(getDateOptionText(searchTime.option))} (${formatLocaleTime(
@@ -288,14 +300,7 @@ const Assistant: React.FC<Props> = ({
             <Button
               text={getSearchTimeLabel()}
               color="secondary_3"
-              onPress={() =>
-                navigation.navigate('DateTimePicker', {
-                  onChange: (s: SearchTime) => {
-                    setSearchTime(s);
-                  },
-                  searchTime,
-                })
-              }
+              onPress={onSearchTimePress}
             ></Button>
           </View>
         </FadeBetween>
@@ -466,7 +471,8 @@ function computeNoResultReasons(
       reasons.push(NoResultReason.CloseLocations);
     }
   }
-  const isPastDate = date && date?.option !== 'now' && date?.date < new Date();
+
+  const isPastDate = date && date?.option !== 'now' && isInThePast(date.date);
 
   if (isPastDate) {
     const isArrival = date?.option === 'arrival';
@@ -553,13 +559,15 @@ function useTripPatterns(
   searchTime: SearchTime | undefined,
 ): [
   TripPattern[] | null,
-  Date,
+  string,
   () => {},
   () => void,
   SearchStateType,
   ErrorType?,
 ] {
-  const [timeOfSearch, setTimeOfSearch] = useState<Date>(new Date());
+  const [timeOfSearch, setTimeOfSearch] = useState<string>(
+    new Date().toISOString(),
+  );
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
   const [errorType, setErrorType] = useState<ErrorType>();
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
@@ -578,12 +586,12 @@ function useTripPatterns(
         const searchDate =
           searchTime && searchTime?.option !== 'now'
             ? searchTime.date
-            : new Date();
+            : new Date().toISOString();
 
         log('searching', {
           fromLocation: translateLocation(fromLocation),
           toLocation: translateLocation(toLocation),
-          searchDate: searchDate.toISOString(),
+          searchDate: searchDate,
         });
 
         const response = await searchTrip(

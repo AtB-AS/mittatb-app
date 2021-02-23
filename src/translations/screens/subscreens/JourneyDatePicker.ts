@@ -1,22 +1,22 @@
 import {translation as _} from '../../commons';
 const JourneyDatePickerTexts = {
   header: {
-    title: _('Velg dato og tidspunkt'),
+    title: _('Velg dato og tidspunkt', 'Select date and time'),
     leftButton: {
-      a11yLabel: _('Gå tilbake'),
+      a11yLabel: _('Gå tilbake', 'Go back'),
     },
   },
   options: {
-    now: _('Nå'),
-    departure: _('Avgang'),
-    arrival: _('Ankomst'),
+    now: _('Nå', 'Now'),
+    departure: _('Avgang', 'Departure'),
+    arrival: _('Ankomst', 'Arrival'),
   },
   dateTime: {
-    date: _('Dato'),
-    time: _('Tid'),
+    date: _('Dato', 'Date'),
+    time: _('Tid', 'Time'),
   },
   searchButton: {
-    text: _('Søk etter reiser'),
+    text: _('Søk etter reiser', 'Search'),
   },
 };
 export default JourneyDatePickerTexts;

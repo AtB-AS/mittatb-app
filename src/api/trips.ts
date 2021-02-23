@@ -6,7 +6,7 @@ import {AxiosRequestConfig} from 'axios';
 export default async function search(
   from: Location,
   to: Location,
-  searchDate?: Date,
+  searchDate?: string,
   arriveBy: boolean = false,
   opts?: AxiosRequestConfig,
 ) {

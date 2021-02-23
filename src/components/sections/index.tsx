@@ -11,6 +11,8 @@ export {default as FavoriteItem} from './favorite-item';
 export {default as FavoriteDepartureItem} from './favorite-departure-item';
 
 // Inputs
+export {default as TimeInputItem} from './time-input';
+export {default as DateInputItem} from './date-input';
 export {default as TextInput} from './text-input';
 export {default as LocationInput} from './location-input';
 export {default as ButtonInput} from './button-input';

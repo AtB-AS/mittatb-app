@@ -7,8 +7,16 @@ Theme can be used by setting colors and general styling in `./colors.ts` and acc
 ```ts
 useTheme(): {
   theme: Theme; // Get current theme properties
-  updateTheme(theme: 'light' | 'dark'): void; // Set explicit theme
-  toggleTheme(): void; // Toggle between light and dark
+
+  themeName: Mode; // Active theme name.
+
+  // Settings in preferences.
+  storedColorScheme: Mode;
+  overrideColorScheme: boolean;
+
+  // Will update stored preferences (persistant storage)
+  updateThemePreference(theme: 'light' | 'dark'): void;
+  overrideOSThemePreference(override: boolean): void;
 }
 
 StyleSheet.create(Object): Object; // Same as React Native StyleSheet.create

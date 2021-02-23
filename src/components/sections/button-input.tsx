@@ -36,11 +36,14 @@ export default function ButtonInput({
   onIconPress,
   iconAccessibility,
 
+  containerStyle,
+
   ...props
 }: ButtonInputProps) {
   const sectionStyles = useSectionStyle();
   const {topContainer, contentContainer, spacing} = useSectionItem(props);
   const styles = useSymbolPickerStyle();
+  const hasIcon = Boolean(icon);
   const iconEl = isNavigationIcon(icon) ? <NavigationIcon mode={icon} /> : icon;
 
   const wrapperStyle =
@@ -50,20 +53,22 @@ export default function ButtonInput({
 
   const padding = {padding: spacing};
 
-  const handlerWithoutPress = !onIconPress ? (
-    <View style={[styles.iconContainer, padding]}>{iconEl}</View>
-  ) : undefined;
+  const handlerWithoutPress =
+    hasIcon && !onIconPress ? (
+      <View style={[styles.iconContainer, padding]}>{iconEl}</View>
+    ) : undefined;
 
-  const handlerWithPress = onIconPress ? (
-    <TouchableOpacity
-      hitSlop={insets.all(12)}
-      onPress={onIconPress}
-      style={[styles.iconContainer, padding]}
-      {...iconAccessibility}
-    >
-      <View>{iconEl}</View>
-    </TouchableOpacity>
-  ) : undefined;
+  const handlerWithPress =
+    hasIcon && onIconPress ? (
+      <TouchableOpacity
+        hitSlop={insets.all(12)}
+        onPress={onIconPress}
+        style={[styles.iconContainer, padding]}
+        {...iconAccessibility}
+      >
+        <View>{iconEl}</View>
+      </TouchableOpacity>
+    ) : undefined;
 
   const valueEl =
     isStringText(value) || !value ? (
@@ -74,17 +79,24 @@ export default function ButtonInput({
       value
     );
 
+  const containerPadding = hasIcon ? {paddingRight: 60} : undefined;
+
   return (
     <View style={wrapperStyle}>
       <TouchableOpacity
         onPress={onPress}
-        style={[topContainer, sectionStyles.spaceBetween, styles.container]}
+        style={[
+          topContainer,
+          sectionStyles.spaceBetween,
+          styles.container,
+          containerPadding,
+        ]}
         {...props}
       >
         <ThemeText type="lead" style={styles.label}>
           {label}
         </ThemeText>
-        <View style={contentContainer}>{valueEl}</View>
+        <View style={[contentContainer, containerStyle]}>{valueEl}</View>
         {handlerWithoutPress}
       </TouchableOpacity>
       {handlerWithPress}
@@ -99,7 +111,6 @@ function isStringText(a: any): a is string {
 const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.background.level0,
-    paddingRight: 60,
   },
   wrapper__inline: {
     alignSelf: 'flex-start',

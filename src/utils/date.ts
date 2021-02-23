@@ -3,10 +3,14 @@ import {
   differenceInMinutes,
   differenceInSeconds,
   format,
+  getHours,
+  getMinutes,
   isPast,
   isSameDay,
   Locale,
+  parse,
   parseISO,
+  set,
 } from 'date-fns';
 import en from 'date-fns/locale/en-GB';
 import nb from 'date-fns/locale/nb';
@@ -106,13 +110,13 @@ export function isRelativeButNotNow(
   return true;
 }
 
-export function formatLocaleTime(date: Date, language: Language) {
+export function formatLocaleTime(date: Date | string, language: Language) {
   const lang = language ?? DEFAULT_LANGUAGE;
   switch (lang) {
     case Language.Norwegian:
-      return format(date, 'HH:mm');
+      return format(parseIfNeeded(date), 'HH:mm');
     case Language.English:
-      return format(date, 'HH:mm');
+      return format(parseIfNeeded(date), 'HH:mm');
   }
 }
 export function isInThePast(isoDate: string | Date) {
@@ -143,8 +147,10 @@ export function fullDateTime(isoDate: string | Date, language: Language) {
 
 export {isSameDay};
 
-export function formatToSimpleDate(date: Date, language: Language) {
-  return format(date, 'do MMMM', {locale: languageToLocale(language)});
+export function formatToSimpleDate(date: Date | string, language: Language) {
+  return format(parseIfNeeded(date), 'do MMMM', {
+    locale: languageToLocale(language),
+  });
 }
 
 export function daysBetween(base: Date, target: Date) {
@@ -160,6 +166,14 @@ export function isSeveralDays(items: string[]) {
     }
   }
   return true;
+}
+
+export function dateWithReplacedTime(date: Date | string, time: string) {
+  const parsedTime = parse(time, 'HH:mm', new Date());
+  return set(parseIfNeeded(date), {
+    hours: getHours(parsedTime),
+    minutes: getMinutes(parsedTime),
+  });
 }
 
 export function differenceInMinutesStrings(

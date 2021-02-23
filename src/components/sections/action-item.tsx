@@ -7,6 +7,7 @@ import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import NavigationIcon from '@atb/components/theme-icon/navigation-icon';
 import {useSectionItem, SectionItem, useSectionStyle} from './section-utils';
+import InternalLabeledItem from './internals/internal-labeled-item';
 
 export type ActionModes = 'check' | 'toggle' | 'heading-expand';
 export type ActionItemProps = SectionItem<{
@@ -29,17 +30,14 @@ export default function ActionItem({
 
   if (mode === 'toggle') {
     return (
-      <View style={[style.spaceBetween, topContainer]}>
-        <ThemeText accessible={false} type="body" style={contentContainer}>
-          {text}
-        </ThemeText>
+      <InternalLabeledItem label={text} accessibleLabel={false} {...props}>
         <Switch
           value={checked}
           onValueChange={(v) => onPress?.(v)}
           accessibilityLabel={text}
           {...accessibility}
         />
-      </View>
+      </InternalLabeledItem>
     );
   }
 

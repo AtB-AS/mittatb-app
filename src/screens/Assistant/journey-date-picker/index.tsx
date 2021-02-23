@@ -1,19 +1,29 @@
 import Button from '@atb/components/button';
 import ScreenHeader from '@atb/components/screen-header';
-import {ButtonInput, RadioSection, Section} from '@atb/components/sections';
-import {StyleSheet} from '@atb/theme';
+import {
+  DateInputItem,
+  RadioSection,
+  Section,
+  TimeInputItem,
+} from '@atb/components/sections';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {JourneyDatePickerTexts, useTranslation} from '@atb/translations';
-import {formatLocaleTime, formatToSimpleDate} from '@atb/utils/date';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import {NavigationProp, RouteProp} from '@react-navigation/core';
-import React, {useEffect, useState} from 'react';
+import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
+import {
+  NavigationProp,
+  ParamListBase,
+  RouteProp,
+  useRoute,
+} from '@react-navigation/core';
+import React, {useRef, useState} from 'react';
 import {ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AssistantParams} from '..';
 
 export type DateTimePickerParams = {
   searchTime: SearchTime;
-  onChange(searchTime: SearchTime): void;
+  callerRouteName: string;
+  callerRouteParam: string;
 };
 
 export type DateTimeNavigationProp = NavigationProp<AssistantParams>;
@@ -30,88 +40,62 @@ type DateMode = 'date' | 'time' | undefined;
 
 export type SearchTime = {
   option: DateOptionType;
-  date: Date;
+  date: string;
 };
 const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
   navigation,
   route,
 }) => {
-  const {t, language} = useTranslation();
+  const {t, language, locale} = useTranslation();
   const styles = useStyles();
+  const {theme} = useTheme();
   const dateItems = Array.from(DateOptions);
 
-  const {onChange: updateSearchTime, searchTime} = route.params;
+  const {callerRouteName, callerRouteParam, searchTime} = route.params;
+  const [dateString, setDate] = useState<string>(searchTime.date);
+  const [timeString, setTime] = useState<string>(() =>
+    formatLocaleTime(searchTime.date, language),
+  );
+  // const currentDate = parseISO(dateString ?? new Date());
+
+  const onSelect = () => {
+    const calculatedTime: SearchTime = {
+      date: dateWithReplacedTime(dateString, timeString).toISOString(),
+      option,
+    };
+    navigation.navigate(callerRouteName as any, {
+      [callerRouteParam]: calculatedTime,
+    });
+  };
+
   const [option, setOption] = useState<DateOptionType>(searchTime.option);
-  const [currentDate, setDate] = useState<Date>(searchTime.date);
-
-  const [showPicker, setShowPicker] = useState(false);
-  const [pickerMode, setPickerMode] = useState<DateMode>('date');
-
-  useEffect(() => {}, [currentDate, option]);
-
-  const showMode = (currentMode: DateMode) => {
-    setShowPicker(true);
-    setPickerMode(currentMode);
-  };
-  const showDatepicker = () => {
-    showMode('date');
-  };
-  const showTimepicker = () => {
-    showMode('time');
-  };
-  const closeDatePicker = () => {
-    setShowPicker(false);
-  };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <ScreenHeader
         title={t(JourneyDatePickerTexts.header.title)}
         leftButton={{type: 'back'}}
       />
 
-      <ScrollView style={styles.contentContainer}>
+      <ScrollView contentContainerStyle={styles.contentContainer}>
         <RadioSection<DateOptionType>
           selected={option ?? dateItems[0]}
           keyExtractor={(s: string) => s}
           items={dateItems}
           withBottomPadding
-          onSelect={(s: DateOptionType) => setOption(s)}
+          onSelect={setOption}
           itemToText={(s: DateOptionType) => t(getDateOptionText(s))}
-        ></RadioSection>
+        />
 
         {option !== 'now' && (
           <Section withBottomPadding>
-            <ButtonInput
-              onPress={showDatepicker}
-              label={t(JourneyDatePickerTexts.dateTime.date)}
-              value={formatToSimpleDate(currentDate, language)}
-            />
-            <ButtonInput
-              onPress={showTimepicker}
-              label={t(JourneyDatePickerTexts.dateTime.time)}
-              value={formatLocaleTime(currentDate, language)}
-            />
-            {showPicker && (
-              <DateTimePicker
-                value={currentDate}
-                mode={pickerMode}
-                is24Hour={true}
-                display="spinner"
-                onChange={(e, date) => {
-                  closeDatePicker();
-                  setDate(date ?? new Date());
-                }}
-              />
-            )}
+            <DateInputItem value={dateString} onChange={setDate} />
+            <TimeInputItem value={timeString} onChange={setTime} />
           </Section>
         )}
 
         <Button
-          onPress={() => {
-            updateSearchTime({date: currentDate, option});
-            navigation.goBack();
-          }}
+          onPress={onSelect}
           color="primary_2"
           text={t(JourneyDatePickerTexts.searchButton.text)}
         ></Button>
@@ -144,3 +128,26 @@ export const getDateOptionText = (dateOption: DateOptionType) => {
   }
 };
 export default JourneyDatePicker;
+
+export function useSearchTimeValue<
+  T extends RouteProp<any, any> & {params: ParamListBase}
+>(callerRouteParam: keyof T['params'], initialValue: SearchTime): SearchTime {
+  const route = useRoute<T>();
+  const firstTimeRef = useRef(true);
+  const [searchTime, setSearchTime] = React.useState<SearchTime>(initialValue);
+
+  React.useEffect(() => {
+    if (
+      firstTimeRef.current &&
+      route.params?.[callerRouteParam] === undefined
+    ) {
+      firstTimeRef.current = false;
+      return;
+    }
+    if (route.params?.[callerRouteParam]) {
+      setSearchTime(route.params?.[callerRouteParam]);
+    }
+  }, [route.params?.[callerRouteParam]]);
+
+  return searchTime;
+}

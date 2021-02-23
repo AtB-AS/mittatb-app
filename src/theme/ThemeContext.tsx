@@ -1,20 +1,29 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
-import {useColorScheme} from 'react-native';
-import {usePreferenceItems} from '../preferences';
-import {Mode, Theme, themes, Themes} from './colors';
+import ChangeNative from '@atb/change-native';
+import React, {createContext, useContext, useEffect} from 'react';
+import {Platform, useColorScheme} from 'react-native';
+import {usePreferences} from '../preferences';
+import {Mode, Theme, Themes, themes} from './colors';
 
 interface ThemeContextValue {
   theme: Theme;
   themeName: Mode;
-  updateTheme(themeKey: keyof Themes): void;
-  toggleTheme(): void;
+
+  storedColorScheme: Mode;
+  overrideColorScheme: boolean;
+
+  updateThemePreference(themeKey: keyof Themes): void;
+  overrideOSThemePreference(override: boolean): void;
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
   theme: themes.light,
   themeName: 'light',
-  updateTheme() {},
-  toggleTheme() {},
+
+  storedColorScheme: 'light',
+  overrideColorScheme: false,
+
+  updateThemePreference() {},
+  overrideOSThemePreference() {},
 });
 
 export function useTheme() {
@@ -26,32 +35,43 @@ export function useTheme() {
 }
 
 const ThemeContextProvider: React.FC = ({children}) => {
-  let colorScheme = useColorScheme();
+  const colorScheme = useColorScheme();
   const {
-    colorScheme: storedColorScheme,
-    overrideColorScheme,
-  } = usePreferenceItems();
+    setPreference,
+    preferences: {colorScheme: storedColorScheme, overrideColorScheme},
+  } = usePreferences();
 
-  if (overrideColorScheme && storedColorScheme) {
-    colorScheme = storedColorScheme;
-  }
-  const defaultTheme = colorScheme ?? 'light';
-  const [themeName, setThemeName] = useState<keyof Themes>(defaultTheme);
+  const actualColorScheme =
+    (overrideColorScheme ? storedColorScheme : colorScheme) ?? 'light';
 
   useEffect(() => {
-    if (!!colorScheme) {
-      setThemeName(colorScheme);
+    if (Platform.OS !== 'ios') return;
+    if (overrideColorScheme && colorScheme !== storedColorScheme) {
+      ChangeNative.changeAppearance(storedColorScheme);
     }
-  }, [colorScheme]);
+    if (!overrideColorScheme) {
+      ChangeNative.changeAppearance(null);
+    }
+  }, [overrideColorScheme, storedColorScheme]);
 
-  const toggleTheme = () =>
-    setThemeName(themeName === 'dark' ? 'light' : 'dark');
-  const updateTheme = (themeKey: keyof Themes) => {
-    setThemeName(themeKey);
+  const overrideOSThemePreference = (override: boolean) => {
+    setPreference({overrideColorScheme: override});
   };
-  const theme = themes[themeName];
+  const updateThemePreference = (themeKey: keyof Themes) => {
+    setPreference({colorScheme: themeKey});
+  };
+  const theme = themes[actualColorScheme];
   return (
-    <ThemeContext.Provider value={{theme, themeName, updateTheme, toggleTheme}}>
+    <ThemeContext.Provider
+      value={{
+        theme,
+        themeName: actualColorScheme,
+        storedColorScheme: storedColorScheme ?? 'light',
+        overrideColorScheme: overrideColorScheme ?? false,
+        updateThemePreference,
+        overrideOSThemePreference,
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );
