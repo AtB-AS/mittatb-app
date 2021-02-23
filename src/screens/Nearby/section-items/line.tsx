@@ -240,7 +240,7 @@ function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
     <Button
       key={departure.serviceJourneyId}
       type="compact"
-      mode="primary3"
+      color="secondary_4"
       onPress={() => onPress(departure)}
       text={timeWithRealtimePrefix}
       style={styles.departure}

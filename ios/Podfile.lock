@@ -1,5 +1,4 @@
 PODS:
-  - "@react-native-mapbox-gl-mapbox-static (6.3.0)"
   - abseil/algorithm (0.20200225.0):
     - abseil/algorithm/algorithm (= 0.20200225.0)
     - abseil/algorithm/container (= 0.20200225.0)
@@ -614,19 +613,11 @@ PODS:
     - Intercom (~> 8.0.0)
     - React
   - react-native-mapbox-gl (8.1.0):
-    - "@react-native-mapbox-gl-mapbox-static (= 6.3.0)"
     - Mapbox-iOS-SDK (= 6.3.0)
     - React
     - React-Core
     - react-native-mapbox-gl/DynamicLibrary (= 8.1.0)
-    - react-native-mapbox-gl/StaticLibraryFixer (= 8.1.0)
   - react-native-mapbox-gl/DynamicLibrary (8.1.0):
-    - "@react-native-mapbox-gl-mapbox-static (= 6.3.0)"
-    - Mapbox-iOS-SDK (= 6.3.0)
-    - React
-    - React-Core
-  - react-native-mapbox-gl/StaticLibraryFixer (8.1.0):
-    - "@react-native-mapbox-gl-mapbox-static (= 6.3.0)"
     - Mapbox-iOS-SDK (= 6.3.0)
     - React
     - React-Core
@@ -819,7 +810,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - "@react-native-mapbox-gl-mapbox-static"
     - abseil
     - boost-for-react-native
     - BoringSSL-GRPC
@@ -965,7 +955,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  "@react-native-mapbox-gl-mapbox-static": 7ab93cffee38c24fa367e5d3ea3f0334d35d3d06
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
@@ -1004,7 +993,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
   Intercom: 5d8058e3476ab6b0350dea165338164364eb1acb
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
-  Mapbox-iOS-SDK: 2563ed87ead6ec08f1c2090873977b8a7be335a8
+  Mapbox-iOS-SDK: 6a67397df2bcafe5d2851604192aa8de6f8d6c89
   MapboxMobileEvents: 5ef561e6b6f9cbff2900d62a52322e75d1a7dfdf
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
   OpenSSL-Universal: ff34003318d5e1163e9529b08470708e389ffcdd
@@ -1024,7 +1013,7 @@ SPEC CHECKSUMS:
   react-native-geolocation-service: 7c9436da6dfdecd9526c62eac62ea2bc3f0cc8ea
   react-native-get-random-values: 41f0c91ac0da870e47b307e07752e9e54bc2dc7e
   react-native-intercom: c48e0e15877bf96ff4d461f7aa9b833d11188139
-  react-native-mapbox-gl: 2c9bb96228308c0ebaf43544c365d722afa98033
+  react-native-mapbox-gl: 4fd2d4035658102f516176370ea45778053a7a8e
   react-native-safe-area-context: b6e0e284002381d2ff29fa4fff42b4d8282e3c94
   react-native-webview: a4751ec8f0a6a397026f22ed54c1efeec4540555
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
@@ -1056,6 +1045,6 @@ SPEC CHECKSUMS:
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 858de23ea47935f7fc203b0cdcb5d5bc480c2a0f
+PODFILE CHECKSUM: 410898606fa36311aba2131a0c257df5b331f5a0
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.1

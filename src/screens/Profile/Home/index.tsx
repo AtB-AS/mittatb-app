@@ -45,7 +45,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         <Sections.Section withPadding withTopPadding>
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.settings.heading)}
-            mode="subheading"
           />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.settings.linkItems.appearance.label)}
@@ -66,7 +65,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         <Sections.Section withPadding>
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.favorites.heading)}
-            mode="subheading"
           />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.favorites.linkItems.places.label)}
@@ -81,7 +79,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         <Sections.Section withPadding>
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.privacy.heading)}
-            mode="subheading"
           />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.privacy.linkItems.privacy.label)}
@@ -98,7 +95,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
         {__DEV__ && (
           <Sections.Section withPadding>
-            <Sections.HeaderItem text="Bruker" mode="subheading" />
+            <Sections.HeaderItem text="Bruker" />
             <Sections.LinkItem
               text="Logg ut"
               onPress={() => signOut()}

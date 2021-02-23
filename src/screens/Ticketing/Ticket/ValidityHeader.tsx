@@ -26,7 +26,7 @@ const ValidityHeader: React.FC<{
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
         <ValidityIcon isValid={isValid} />
-        <ThemeText style={styles.validityText} type="lead" color="faded">
+        <ThemeText style={styles.validityText} type="lead" color="secondary">
           {validityTimeText(
             isNotExpired,
             now,

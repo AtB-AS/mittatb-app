@@ -4,7 +4,7 @@ import {useTicketState} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import useInterval from '@atb/utils/use-interval';
 import {RouteProp} from '@react-navigation/native';
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {TicketModalNavigationProp, TicketModalStackParams} from '.';

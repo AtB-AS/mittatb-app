@@ -1,12 +1,12 @@
 import * as React from 'react';
 import Svg, {
+  SvgProps,
   G,
   Path,
   Rect,
   Circle,
   Defs,
   ClipPath,
-  SvgProps,
 } from 'react-native-svg';
 
 function SvgCrashParachute(props: SvgProps) {

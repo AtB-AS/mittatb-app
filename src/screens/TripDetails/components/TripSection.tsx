@@ -15,7 +15,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {formatToClock, secondsToDuration} from '@atb/utils/date';
-import {transportationColor} from '@atb/utils/transportation-color';
+import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {
   getLineName,
   getQuayName,
@@ -50,7 +50,7 @@ const TripSection: React.FC<TripSectionProps> = ({
   const style = useSectionStyles();
 
   const isWalkSection = leg.mode === 'foot';
-  const legColor = transportationColor(leg.mode, leg.line?.transportSubmode);
+  const legColor = useTransportationColor(leg.mode, leg.line?.transportSubmode);
 
   const showFrom = !isWalkSection || !!(isFirst && isWalkSection);
   const showTo = !isWalkSection || !!(isLast && isWalkSection);
@@ -192,7 +192,7 @@ const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
         TripDetailsTexts.trip.leg.intermediateStops.a11yHint,
       )}
     >
-      <ThemeText type="lead" color="faded">
+      <ThemeText type="lead" color="secondary">
         {t(
           TripDetailsTexts.trip.leg.intermediateStops.label(
             numberOfIntermediateCalls,
@@ -218,7 +218,7 @@ const WalkSection: React.FC<TripSectionProps> = (leg) => {
         />
       }
     >
-      <ThemeText type="lead" color="faded">
+      <ThemeText type="lead" color="secondary">
         {t(
           TripDetailsTexts.trip.leg.walk.label(
             secondsToDuration(leg.duration ?? 0, language),

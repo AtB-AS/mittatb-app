@@ -47,13 +47,13 @@ const NavigationRoot = () => {
   return (
     <Tab.Navigator
       tabBarOptions={{
-        activeTintColor: theme.text.colors.focus,
+        activeTintColor: theme.colors.primary_3.backgroundColor,
         style: {
           backgroundColor: theme.background.level0,
           ...useBottomNavigationStyles(),
         },
         labelStyle: {
-          color: theme.text.colors.faded,
+          color: theme.text.colors.secondary,
         },
       }}
       initialRouteName={settingToRouteName(startScreen)}
