@@ -1,6 +1,9 @@
 import createDismissableStackNavigator from '@atb/navigation/createDismissableStackNavigator';
 import transitionSpec from '@atb/navigation/transitionSpec';
-import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {
+  PreassignedFareProduct,
+  PreassignedFareProductType,
+} from '@atb/reference-data/types';
 import {ReserveOffer} from '@atb/tickets';
 import {RouteProp} from '@react-navigation/native';
 import React from 'react';
@@ -23,7 +26,7 @@ import {UserProfileWithCount} from './Travellers/use-user-count-state';
 
 type PurchaseOverviewParams = {
   refreshOffer?: boolean;
-  selectableProductType?: PreassignedFareProduct['type'];
+  selectableProductType?: PreassignedFareProductType;
   preassignedFareProduct?: PreassignedFareProduct;
   fromTariffZone?: TariffZoneWithMetadata;
   toTariffZone?: TariffZoneWithMetadata;

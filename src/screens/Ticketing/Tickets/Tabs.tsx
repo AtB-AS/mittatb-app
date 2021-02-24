@@ -41,6 +41,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
         <View style={{padding: theme.spacings.medium}}>
           <Button
             mode="primary"
+            color="primary_2"
             text={t(TicketsTexts.buyTicketsTab.button.single.text)}
             accessibilityHint={t(
               TicketsTexts.buyTicketsTab.button.single.a11yHint,
@@ -57,6 +58,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
           />
           <Button
             mode="primary"
+            color="primary_2"
             text={t(TicketsTexts.buyTicketsTab.button.period.text)}
             accessibilityHint={t(
               TicketsTexts.buyTicketsTab.button.period.a11yHint,

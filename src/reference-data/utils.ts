@@ -1,6 +1,7 @@
 import {
   LanguageAndText,
   PreassignedFareProduct,
+  PreassignedFareProductType,
   TariffZone,
   UserProfile,
 } from './types';
@@ -56,7 +57,7 @@ export const findReferenceDataById = <
 
 export const isUserProfileSelectableForProductType = (
   userProfile: UserProfile,
-  type: PreassignedFareProduct['type'],
+  type: PreassignedFareProductType,
 ) => {
   /*
   This logic should in the future be modeled with the reference data somehow,
