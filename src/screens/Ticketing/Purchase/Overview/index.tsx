@@ -54,8 +54,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     (p) => p.type === params.selectableProductType,
   );
 
-  const selectableProductType = params.selectableProductType ?? 'single';
-
   const preassignedFareProduct =
     params.preassignedFareProduct ?? selectableProducts[0];
 
@@ -98,7 +96,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        title={t(PurchaseOverviewTexts.header.title[selectableProductType])}
+        title={t(
+          PurchaseOverviewTexts.header.title[preassignedFareProduct.type],
+        )}
         leftButton={{
           type: 'cancel',
           onPress: closeModal,
