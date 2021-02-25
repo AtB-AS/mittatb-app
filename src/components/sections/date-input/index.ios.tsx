@@ -38,7 +38,7 @@ export default function DateInputItem(props: DateInputItemProps) {
         textColor={theme.text.colors.primary}
         display="compact"
         minimumDate={new Date()}
-        onChange={(date) => {
+        onChange={(_, date) => {
           onChange(dateToDateString(date));
         }}
       />
