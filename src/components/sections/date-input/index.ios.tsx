@@ -22,13 +22,13 @@ export default function DateInputItem(props: DateInputItemProps) {
   return (
     <InternalLabeledItem
       label={t(SectionTexts.dateInput.label)}
-      accessibleLabel={true}
       {...innerprops}
     >
       <RNDateTimePicker
         value={parseISO(value)}
         mode="date"
-        locale={locale}
+        // Always use no as locale to enfore 24 Hour clock
+        locale="no"
         style={{
           ...style,
           alignItems: 'flex-end',
@@ -37,7 +37,8 @@ export default function DateInputItem(props: DateInputItemProps) {
         }}
         textColor={theme.text.colors.primary}
         display="compact"
-        onChange={(_, date) => {
+        minimumDate={new Date()}
+        onChange={(date) => {
           onChange(dateToDateString(date));
         }}
       />

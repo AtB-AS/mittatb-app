@@ -16,7 +16,6 @@ export default function TimeInputItem(props: TimeInputItemProps) {
     <InternalLabeledItem
       label={t(SectionTexts.timeInput.label)}
       wrapperStyle={{paddingVertical: 2}}
-      accessibleLabel={true}
       {...innerprops}
     >
       <View style={{flex: 1}}>

@@ -1,5 +1,11 @@
 import React from 'react';
-import {AccessibilityProps, Switch, TouchableOpacity, View} from 'react-native';
+import {
+  AccessibilityProps,
+  AccessibilityRole,
+  Switch,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Confirm} from '@atb/assets/svg/icons/actions';
 import {StyleSheet, Theme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
@@ -41,11 +47,17 @@ export default function ActionItem({
     );
   }
 
+  const role: AccessibilityRole = mode === 'check' ? 'radio' : 'switch';
+  const stateName = mode === 'check' ? 'selected' : 'expanded';
+
   return (
     <TouchableOpacity
       onPress={() => onPress?.(!checked)}
       style={[style.spaceBetween, topContainer]}
-      accessibilityRole="switch"
+      accessibilityRole={role}
+      accessibilityState={{
+        [stateName]: checked,
+      }}
       {...accessibility}
     >
       <ThemeText

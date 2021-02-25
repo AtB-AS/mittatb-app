@@ -15,10 +15,10 @@ export default function InternalLabeledItem({
   label,
   children,
   wrapperStyle,
-  accessibleLabel = true,
+  accessibleLabel = false,
   ...props
 }: InternalLabeledItemProps) {
-  const {contentContainer, topContainer} = useSectionItem(props);
+  const {topContainer} = useSectionItem(props);
   const style = useSectionStyle();
   const itemStyle = useStyle();
 
