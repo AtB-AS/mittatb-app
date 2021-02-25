@@ -2,7 +2,7 @@ import {getAxiosErrorType} from '@atb/api/utils';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import MessageBox from '@atb/message-box';
 import {
-  TranslatedString,
+  TranslateFunction,
   TripDetailsTexts,
   useTranslation,
 } from '@atb/translations';
@@ -32,25 +32,25 @@ const TripMessages: React.FC<TripMessagesProps> = ({
       )}
       {error && (
         <>
-          <ScreenReaderAnnouncement message={t(translatedError(error))} />
+          <ScreenReaderAnnouncement message={translatedError(error, t)} />
           <MessageBox
             containerStyle={messageStyle}
             type="warning"
-            message={t(translatedError(error))}
+            message={translatedError(error, t)}
           />
         </>
       )}
     </>
   );
 };
-function translatedError(error: AxiosError): TranslatedString {
+function translatedError(error: AxiosError, t: TranslateFunction): string {
   const errorType = getAxiosErrorType(error);
   switch (errorType) {
     case 'network-error':
     case 'timeout':
-      return TripDetailsTexts.messages.errorNetwork;
+      return t(TripDetailsTexts.messages.errorNetwork);
     default:
-      return TripDetailsTexts.messages.errorDefault;
+      return t(TripDetailsTexts.messages.errorDefault);
   }
 }
 export default TripMessages;

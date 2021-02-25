@@ -7,7 +7,11 @@ import {
   TimeInputItem,
 } from '@atb/components/sections';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {JourneyDatePickerTexts, useTranslation} from '@atb/translations';
+import {
+  JourneyDatePickerTexts,
+  TranslateFunction,
+  useTranslation,
+} from '@atb/translations';
 import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
 import {
   NavigationProp,
@@ -84,7 +88,7 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
           items={dateItems}
           withBottomPadding
           onSelect={setOption}
-          itemToText={(s: DateOptionType) => t(getDateOptionText(s))}
+          itemToText={(s: DateOptionType) => getDateOptionText(s, t)}
         />
 
         {option !== 'now' && (
@@ -117,15 +121,18 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-const getDateOptionText = (dateOption: DateOptionType) => {
+const getDateOptionText = (
+  dateOption: DateOptionType,
+  t: TranslateFunction,
+) => {
   switch (dateOption) {
     case 'now':
-      return JourneyDatePickerTexts.options.now;
+      return t(JourneyDatePickerTexts.options.now);
     case 'arrival':
-      return JourneyDatePickerTexts.options.arrival;
+      return t(JourneyDatePickerTexts.options.arrival);
     case 'departure':
     default:
-      return JourneyDatePickerTexts.options.departure;
+      return t(JourneyDatePickerTexts.options.departure);
   }
 };
 export default JourneyDatePicker;

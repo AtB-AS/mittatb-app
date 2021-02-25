@@ -18,7 +18,12 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import colors from '@atb/theme/colors';
-import {Language, TariffZonesTexts, useTranslation} from '@atb/translations';
+import {
+  Language,
+  TariffZonesTexts,
+  TranslateFunction,
+  useTranslation,
+} from '@atb/translations';
 import MapboxGL, {
   OnPressEvent,
   RegionPayload,
@@ -80,15 +85,20 @@ export const tariffZonesSummary = (
   fromTariffZone: TariffZoneWithMetadata,
   toTariffZone: TariffZoneWithMetadata,
   language: Language,
+  t: TranslateFunction,
 ) => {
   if (fromTariffZone.id === toTariffZone.id) {
-    return TariffZonesTexts.zoneSummary.text.singleZone(
-      getReferenceDataName(fromTariffZone, language),
+    return t(
+      TariffZonesTexts.zoneSummary.text.singleZone(
+        getReferenceDataName(fromTariffZone, language),
+      ),
     );
   } else {
-    return TariffZonesTexts.zoneSummary.text.multipleZone(
-      getReferenceDataName(fromTariffZone, language),
-      getReferenceDataName(toTariffZone, language),
+    return t(
+      TariffZonesTexts.zoneSummary.text.multipleZone(
+        getReferenceDataName(fromTariffZone, language),
+        getReferenceDataName(toTariffZone, language),
+      ),
     );
   }
 };
@@ -96,15 +106,20 @@ export const tariffZonesSummary = (
 const departurePickerAccessibilityLabel = (
   fromTariffZone: TariffZoneWithMetadata,
   language: Language,
-) => {
+  t: TranslateFunction,
+): string => {
   if (fromTariffZone.venueName)
-    return TariffZonesTexts.location.departurePicker.a11yLabel.withVenue(
-      getReferenceDataName(fromTariffZone, language),
-      fromTariffZone.venueName,
+    return t(
+      TariffZonesTexts.location.departurePicker.a11yLabel.withVenue(
+        getReferenceDataName(fromTariffZone, language),
+        fromTariffZone.venueName,
+      ),
     );
   else {
-    return TariffZonesTexts.location.departurePicker.a11yLabel.noVenue(
-      getReferenceDataName(fromTariffZone, language),
+    return t(
+      TariffZonesTexts.location.departurePicker.a11yLabel.noVenue(
+        getReferenceDataName(fromTariffZone, language),
+      ),
     );
   }
 };
@@ -112,15 +127,20 @@ const departurePickerAccessibilityLabel = (
 const destinationPickerAccessibilityLabel = (
   toTariffZone: TariffZoneWithMetadata,
   language: Language,
-) => {
+  t: TranslateFunction,
+): string => {
   if (toTariffZone.venueName)
-    return TariffZonesTexts.location.destinationPicker.a11yLabel.withVenue(
-      getReferenceDataName(toTariffZone, language),
-      toTariffZone.venueName,
+    return t(
+      TariffZonesTexts.location.destinationPicker.a11yLabel.withVenue(
+        getReferenceDataName(toTariffZone, language),
+        toTariffZone.venueName,
+      ),
     );
   else {
-    return TariffZonesTexts.location.destinationPicker.a11yLabel.noVenue(
-      getReferenceDataName(toTariffZone, language),
+    return t(
+      TariffZonesTexts.location.destinationPicker.a11yLabel.noVenue(
+        getReferenceDataName(toTariffZone, language),
+      ),
     );
   }
 };
@@ -128,15 +148,20 @@ const destinationPickerAccessibilityLabel = (
 const departurePickerValue = (
   fromTariffZone: TariffZoneWithMetadata,
   language: Language,
-) => {
+  t: TranslateFunction,
+): string => {
   if (fromTariffZone.venueName)
-    return TariffZonesTexts.location.departurePicker.value.withVenue(
-      getReferenceDataName(fromTariffZone, language),
-      fromTariffZone.venueName,
+    return t(
+      TariffZonesTexts.location.departurePicker.value.withVenue(
+        getReferenceDataName(fromTariffZone, language),
+        fromTariffZone.venueName,
+      ),
     );
   else {
-    return TariffZonesTexts.location.departurePicker.value.noVenue(
-      getReferenceDataName(fromTariffZone, language),
+    return t(
+      TariffZonesTexts.location.departurePicker.value.noVenue(
+        getReferenceDataName(fromTariffZone, language),
+      ),
     );
   }
 };
@@ -145,21 +170,28 @@ const destinationPickerValue = (
   fromTariffZone: TariffZoneWithMetadata,
   toTariffZone: TariffZoneWithMetadata,
   language: Language,
-) => {
+  t: TranslateFunction,
+): string => {
   if (fromTariffZone.id === toTariffZone.id && toTariffZone.venueName) {
-    return TariffZonesTexts.location.destinationPicker.value.withVenueSameZone(
-      toTariffZone.venueName,
+    return t(
+      TariffZonesTexts.location.destinationPicker.value.withVenueSameZone(
+        toTariffZone.venueName,
+      ),
     );
   } else if (fromTariffZone.id === toTariffZone.id && !toTariffZone.venueName) {
-    return TariffZonesTexts.location.destinationPicker.value.noVenueSameZone;
+    return t(TariffZonesTexts.location.destinationPicker.value.noVenueSameZone);
   } else if (toTariffZone.venueName) {
-    return TariffZonesTexts.location.departurePicker.value.withVenue(
-      getReferenceDataName(toTariffZone, language),
-      toTariffZone.venueName,
+    return t(
+      TariffZonesTexts.location.departurePicker.value.withVenue(
+        getReferenceDataName(toTariffZone, language),
+        toTariffZone.venueName,
+      ),
     );
   } else {
-    return TariffZonesTexts.location.departurePicker.value.noVenue(
-      getReferenceDataName(toTariffZone, language),
+    return t(
+      TariffZonesTexts.location.departurePicker.value.noVenue(
+        getReferenceDataName(toTariffZone, language),
+      ),
     );
   }
 };
@@ -297,9 +329,11 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
         <Section withPadding>
           <ButtonInput
             label={t(TariffZonesTexts.location.departurePicker.label)}
-            value={t(departurePickerValue(selectedZones.from, language))}
-            accessibilityLabel={t(
-              departurePickerAccessibilityLabel(selectedZones.from, language),
+            value={departurePickerValue(selectedZones.from, language, t)}
+            accessibilityLabel={departurePickerAccessibilityLabel(
+              selectedZones.from,
+              language,
+              t,
             )}
             accessibilityHint={t(
               TariffZonesTexts.location.departurePicker.a11yHint,
@@ -313,15 +347,16 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
           />
           <ButtonInput
             label={t(TariffZonesTexts.location.destinationPicker.label)}
-            value={t(
-              destinationPickerValue(
-                selectedZones.from,
-                selectedZones.to,
-                language,
-              ),
+            value={destinationPickerValue(
+              selectedZones.from,
+              selectedZones.to,
+              language,
+              t,
             )}
-            accessibilityLabel={t(
-              destinationPickerAccessibilityLabel(selectedZones.from, language),
+            accessibilityLabel={destinationPickerAccessibilityLabel(
+              selectedZones.from,
+              language,
+              t,
             )}
             accessibilityHint={t(
               TariffZonesTexts.location.departurePicker.a11yHint,

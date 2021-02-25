@@ -1,6 +1,4 @@
-import React from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import ScreenHeader from '@atb/components/screen-header';
 import {RadioSection} from '@atb/components/sections';
 import {
   Preference_ScreenAlternatives,
@@ -10,20 +8,25 @@ import {
 import {StyleSheet, Theme} from '@atb/theme';
 import {
   SelectStartScreenTexts,
+  TranslateFunction,
   useTranslation,
-  TranslatedString,
 } from '@atb/translations';
-import ScreenHeader from '@atb/components/screen-header';
+import React from 'react';
+import {ScrollView} from 'react-native-gesture-handler';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const identity = (s: string) => s;
-function toName(alt: Preference_ScreenAlternatives): TranslatedString {
+function toName(
+  alt: Preference_ScreenAlternatives,
+  t: TranslateFunction,
+): string {
   switch (alt) {
     case 'assistant':
-      return SelectStartScreenTexts.options.assistant;
+      return t(SelectStartScreenTexts.options.assistant);
     case 'departures':
-      return SelectStartScreenTexts.options.departures;
+      return t(SelectStartScreenTexts.options.departures);
     case 'ticketing':
-      return SelectStartScreenTexts.options.ticketing;
+      return t(SelectStartScreenTexts.options.ticketing);
   }
 }
 
@@ -49,7 +52,7 @@ export default function SelectStartScreen() {
           withTopPadding
           items={items}
           keyExtractor={identity}
-          itemToText={(alt) => t(toName(alt))}
+          itemToText={(alt) => toName(alt, t)}
           selected={startScreen ?? items[0]}
           onSelect={(startScreen) => setPreference({startScreen})}
         />

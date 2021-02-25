@@ -12,7 +12,6 @@ const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
   const styles = useStyle();
   const {t, language} = useTranslation();
   const time = secondsToDuration(duration, language);
-  const summaryTexts = TripDetailsTexts.trip.summary;
   const readableDistance = walkDistance.toFixed();
   return (
     <View style={styles.summary}>
@@ -25,9 +24,11 @@ const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
         <ThemeText
           color="secondary"
           accessible={true}
-          accessibilityLabel={t(summaryTexts.travelTime.a11yLabel(time))}
+          accessibilityLabel={t(
+            TripDetailsTexts.trip.summary.travelTime.a11yLabel(time),
+          )}
         >
-          {t(summaryTexts.travelTime.label(time))}
+          {t(TripDetailsTexts.trip.summary.travelTime.label(time))}
         </ThemeText>
       </View>
       <View style={styles.summaryDetail}>
@@ -40,10 +41,14 @@ const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
           color="secondary"
           accessible={true}
           accessibilityLabel={t(
-            summaryTexts.walkDistance.a11yLabel(readableDistance),
+            TripDetailsTexts.trip.summary.walkDistance.a11yLabel(
+              readableDistance,
+            ),
           )}
         >
-          {t(summaryTexts.walkDistance.label(readableDistance))}
+          {t(
+            TripDetailsTexts.trip.summary.walkDistance.label(readableDistance),
+          )}
         </ThemeText>
       </View>
     </View>
