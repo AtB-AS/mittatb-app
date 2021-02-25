@@ -27,5 +27,11 @@ module.exports = {
     'react-native/no-unused-styles': 1,
 
     'rulesdir/translations-warning': 'warn',
+    'rulesdir/import-warning': [
+      'warn',
+      {
+        SafeAreaView: 'react-native-safe-area-context',
+      },
+    ],
   },
 };
