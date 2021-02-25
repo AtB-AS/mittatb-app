@@ -27,6 +27,7 @@ export default function DateInputItem(props: DateInputItemProps) {
           value={parseISO(value)}
           mode="date"
           locale={locale}
+          minimumDate={new Date()}
           textColor={theme.text.colors.primary}
           onChange={(_, date) => {
             onChange(dateToDateString(date));
