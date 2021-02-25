@@ -86,7 +86,7 @@ export const tariffZonesSummary = (
   toTariffZone: TariffZoneWithMetadata,
   language: Language,
   t: TranslateFunction,
-) => {
+): string => {
   if (fromTariffZone.id === toTariffZone.id) {
     return t(
       TariffZonesTexts.zoneSummary.text.singleZone(
