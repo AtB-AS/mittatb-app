@@ -1,6 +1,12 @@
 import {translation as _} from '../../commons';
 
 const PurchaseConfirmationTexts = {
+  header: {
+    title: {
+      single: _('Enkeltbillett', 'Single ticket'),
+      period: _('Periodebillett', 'Period ticket'),
+    },
+  },
   errorMessageBox: {
     title: _('Det oppstod en feil', 'An error occurred'),
     message: _(

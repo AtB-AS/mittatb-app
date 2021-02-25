@@ -5,12 +5,15 @@ export type LanguageAndText = {
   value: string;
 };
 
+export type PreassignedFareProductType = 'single' | 'period';
+
 export type PreassignedFareProduct = {
   id: string;
   name: LanguageAndText;
   description?: LanguageAndText;
   alternativeNames: LanguageAndText[];
   version: string;
+  type: PreassignedFareProductType;
 };
 
 export type UserProfile = {

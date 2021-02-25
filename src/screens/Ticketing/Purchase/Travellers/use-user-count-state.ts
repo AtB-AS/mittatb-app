@@ -2,7 +2,7 @@ import {useCallback, useReducer} from 'react';
 import {UserProfile} from '@atb/reference-data/types';
 
 export type UserProfileWithCount = UserProfile & {count: number};
-type UserCountState = {
+type ReducerState = {
   userProfilesWithCount: UserProfileWithCount[];
 };
 
@@ -11,11 +11,11 @@ type CountReducerAction =
   | {type: 'DECREMENT_COUNT'; userType: string};
 
 type CountReducer = (
-  prevState: UserCountState,
+  prevState: ReducerState,
   action: CountReducerAction,
-) => UserCountState;
+) => ReducerState;
 
-const countReducer: CountReducer = (prevState, action): UserCountState => {
+const countReducer: CountReducer = (prevState, action): ReducerState => {
   switch (action.type) {
     case 'INCREMENT_COUNT': {
       return {
@@ -50,9 +50,15 @@ const countReducer: CountReducer = (prevState, action): UserCountState => {
   }
 };
 
+export type UserCountState = {
+  userProfilesWithCount: UserProfileWithCount[];
+  addCount: (userTypeString: string) => void;
+  removeCount: (userTypeString: string) => void;
+};
+
 export default function useUserCountState(
   userProfilesWithCount: UserProfileWithCount[],
-) {
+): UserCountState {
   const [userCountState, dispatch] = useReducer(countReducer, {
     userProfilesWithCount,
   });

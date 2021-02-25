@@ -40,13 +40,35 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
       {isSignedInAsAbtCustomer && (
         <View style={{padding: theme.spacings.medium}}>
           <Button
+            mode="primary"
             color="primary_2"
-            text={t(TicketsTexts.buyTicketsTab.button.text)}
-            accessibilityHint={t(TicketsTexts.buyTicketsTab.button.a11yHint)}
+            text={t(TicketsTexts.buyTicketsTab.button.single.text)}
+            accessibilityHint={t(
+              TicketsTexts.buyTicketsTab.button.single.a11yHint,
+            )}
             onPress={() =>
               navigation.navigate('TicketPurchase', {
                 screen: 'PurchaseOverview',
-                params: {},
+                params: {
+                  selectableProductType: 'single',
+                },
+              })
+            }
+            viewContainerStyle={styles.buySingleTicketButton}
+          />
+          <Button
+            mode="primary"
+            color="primary_2"
+            text={t(TicketsTexts.buyTicketsTab.button.period.text)}
+            accessibilityHint={t(
+              TicketsTexts.buyTicketsTab.button.period.a11yHint,
+            )}
+            onPress={() =>
+              navigation.navigate('TicketPurchase', {
+                screen: 'PurchaseOverview',
+                params: {
+                  selectableProductType: 'period',
+                },
               })
             }
           />
@@ -112,5 +134,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.background.level1,
+  },
+  buySingleTicketButton: {
+    marginBottom: theme.spacings.medium,
   },
 }));

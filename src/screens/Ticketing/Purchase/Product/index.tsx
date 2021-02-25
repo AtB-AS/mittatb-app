@@ -38,10 +38,14 @@ const Product: React.FC<{
   } = useRemoteConfig();
 
   const findProduct = (id: string) =>
-    preassignedFareProducts.find((p) => p.id === id);
+    preassignedFareProducts.find((p) => p.id === id)!;
 
   const [selectedProduct, setSelectedProduct] = useState(
     findProduct(params.preassignedFareProductId),
+  );
+
+  const selectableProducts = preassignedFareProducts.filter(
+    (p) => p.type === selectedProduct.type,
   );
 
   const {top: safeAreaTop, bottom: safeAreBottom} = useSafeAreaInsets();
@@ -56,7 +60,7 @@ const Product: React.FC<{
       <ScrollView style={styles.productsSection}>
         <Sections.Section>
           <Sections.RadioSection<PreassignedFareProduct>
-            items={preassignedFareProducts}
+            items={selectableProducts}
             itemToText={(p) => getReferenceDataName(p, language)}
             keyExtractor={(p) => p.id}
             onSelect={setSelectedProduct}

@@ -109,7 +109,9 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   return (
     <View style={[styles.container, {paddingTop: safeAreaTop}]}>
       <Header
-        title={getReferenceDataName(preassignedFareProduct, language)}
+        title={t(
+          PurchaseConfirmationTexts.header.title[preassignedFareProduct.type],
+        )}
         leftButton={headerLeftButton}
         style={styles.header}
       />
