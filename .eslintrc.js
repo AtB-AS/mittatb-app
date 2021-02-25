@@ -1,3 +1,6 @@
+const rulesDirPlugin = require('eslint-plugin-rulesdir');
+rulesDirPlugin.RULES_DIR = 'eslint-rules/';
+
 module.exports = {
   env: {
     es6: true,
@@ -8,7 +11,7 @@ module.exports = {
   root: true,
   extends: ['plugin:prettier/recommended', 'prettier/react'],
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint', 'react-hooks', 'react-native'],
+  plugins: ['@typescript-eslint', 'react-hooks', 'react-native', 'rulesdir'],
   rules: {
     // eslint
     'no-console': [1, {allow: ['warn', 'error']}],
@@ -22,5 +25,7 @@ module.exports = {
     'react-native/no-raw-text': [2, {skip: 'ThemeText'}], // rather early error than JS bundle crash
     'react-native/no-single-element-style-arrays': 1,
     'react-native/no-unused-styles': 1,
+
+    'rulesdir/translations-warning': 'warn',
   },
 };
