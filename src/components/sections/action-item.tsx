@@ -1,5 +1,11 @@
 import React from 'react';
-import {AccessibilityProps, Switch, TouchableOpacity, View} from 'react-native';
+import {
+  AccessibilityProps,
+  AccessibilityRole,
+  Switch,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Confirm} from '@atb/assets/svg/icons/actions';
 import {StyleSheet, Theme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
@@ -7,6 +13,7 @@ import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import NavigationIcon from '@atb/components/theme-icon/navigation-icon';
 import {useSectionItem, SectionItem, useSectionStyle} from './section-utils';
+import InternalLabeledItem from './internals/internal-labeled-item';
 
 export type ActionModes = 'check' | 'toggle' | 'heading-expand';
 export type ActionItemProps = SectionItem<{
@@ -29,25 +36,28 @@ export default function ActionItem({
 
   if (mode === 'toggle') {
     return (
-      <View style={[style.spaceBetween, topContainer]}>
-        <ThemeText accessible={false} type="body" style={contentContainer}>
-          {text}
-        </ThemeText>
+      <InternalLabeledItem label={text} accessibleLabel={false} {...props}>
         <Switch
           value={checked}
           onValueChange={(v) => onPress?.(v)}
           accessibilityLabel={text}
           {...accessibility}
         />
-      </View>
+      </InternalLabeledItem>
     );
   }
+
+  const role: AccessibilityRole = mode === 'check' ? 'radio' : 'switch';
+  const stateName = mode === 'check' ? 'selected' : 'expanded';
 
   return (
     <TouchableOpacity
       onPress={() => onPress?.(!checked)}
       style={[style.spaceBetween, topContainer]}
-      accessibilityRole="switch"
+      accessibilityRole={role}
+      accessibilityState={{
+        [stateName]: checked,
+      }}
       {...accessibility}
     >
       <ThemeText

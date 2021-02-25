@@ -70,7 +70,6 @@ static void InitializeFlipper(UIApplication *application) {
   self.window.rootViewController = rootViewController;
   [rootView setBackgroundByTrait];
   [self.window makeKeyAndVisible];
-
   [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView];
 
   return YES;

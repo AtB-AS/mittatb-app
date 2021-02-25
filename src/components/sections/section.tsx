@@ -1,5 +1,5 @@
 import React, {PropsWithChildren} from 'react';
-import {View, ViewStyle} from 'react-native';
+import {AccessibilityProps, View, ViewStyle} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ContainerSizingType, SectionItemProps} from './section-utils';
 
@@ -9,7 +9,8 @@ export type SectionProps = PropsWithChildren<{
   withTopPadding?: boolean;
   withBottomPadding?: boolean;
   type?: ContainerSizingType;
-}>;
+}> &
+  AccessibilityProps;
 
 export default function SectionGroup({
   children,
@@ -18,6 +19,7 @@ export default function SectionGroup({
   withTopPadding = false,
   withBottomPadding = false,
   type = 'block',
+  ...props
 }: SectionProps) {
   const style = useInputGroupStyle();
   const validChildren: boolean[] =
@@ -33,7 +35,7 @@ export default function SectionGroup({
   ];
 
   return (
-    <View style={containerStyle}>
+    <View style={containerStyle} {...props}>
       {React.Children.map(children, (child, index) => {
         if (!React.isValidElement(child)) return child;
         if (child == null) return child;

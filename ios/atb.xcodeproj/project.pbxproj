@@ -22,6 +22,7 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* atbTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* atbTests.m */; };
+		384D20F025E4FF730019DF98 /* ChangeNativeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 384D20EB25E4FA2B0019DF98 /* ChangeNativeBridge.m */; };
 		385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */; };
 		38CD3270254B612600C6B978 /* AtBRootView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38CD326F254B612600C6B978 /* AtBRootView.m */; };
 		760F020F5EF28EA872E85D1E /* libPods-atb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F4A8BBB63B094DA5F9B2BA8 /* libPods-atb.a */; };
@@ -65,6 +66,8 @@
 		26BD06F963956110E38EAE67 /* Pods-atb-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atb-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-atb-tvOSTests/Pods-atb-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* atb-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "atb-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* atb-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "atb-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		384D20EA25E4F9990019DF98 /* ChangeNativeBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangeNativeBridge.h; sourceTree = "<group>"; };
+		384D20EB25E4FA2B0019DF98 /* ChangeNativeBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChangeNativeBridge.m; sourceTree = "<group>"; };
 		385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "enforce-bridge.swift"; sourceTree = "<group>"; };
 		38CD326F254B612600C6B978 /* AtBRootView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AtBRootView.m; path = atb/AtBRootView.m; sourceTree = "<group>"; };
 		38CD3275254B616300C6B978 /* AtBRootView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AtBRootView.h; path = atb/AtBRootView.h; sourceTree = "<group>"; };
@@ -169,6 +172,8 @@
 				385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */,
 				38CD326F254B612600C6B978 /* AtBRootView.m */,
 				38CD3275254B616300C6B978 /* AtBRootView.h */,
+				384D20EA25E4F9990019DF98 /* ChangeNativeBridge.h */,
+				384D20EB25E4FA2B0019DF98 /* ChangeNativeBridge.m */,
 			);
 			name = atb;
 			sourceTree = "<group>";
@@ -617,6 +622,7 @@
 			files = (
 				38CD3270254B612600C6B978 /* AtBRootView.m in Sources */,
 				385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */,
+				384D20F025E4FF730019DF98 /* ChangeNativeBridge.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);

@@ -19,7 +19,7 @@ export default function RadioSectionGroup<T>({
   ...props
 }: RadioSectionProps<T>) {
   return (
-    <SectionGroup {...props}>
+    <SectionGroup {...props} accessibilityRole="radiogroup">
       {items.map((item: T, index) => (
         <ActionItem
           key={keyExtractor(item, index)}

@@ -11,6 +11,12 @@ const SectionTexts = {
     a11yValue: (currentLocation: string) =>
       _(`${currentLocation} er valgt.`, `${currentLocation} is selected.`),
   },
+  dateInput: {
+    label: _('Dato', 'Date'),
+  },
+  timeInput: {
+    label: _('Tid', 'Time'),
+  },
   actionItem: {
     headingExpand: {
       toggle: {

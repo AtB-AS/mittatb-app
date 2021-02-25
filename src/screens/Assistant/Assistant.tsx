@@ -3,6 +3,7 @@ import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {Swap} from '@atb/assets/svg/icons/actions';
 import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
 import {screenReaderPause} from '@atb/components/accessible-text';
+import Button from '@atb/components/button';
 import DisappearingHeader from '@atb/components/disappearing-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {LocationInput, Section} from '@atb/components/sections';
@@ -24,7 +25,13 @@ import {useLocationSearchValue} from '@atb/location-search';
 import {RootStackParamList} from '@atb/navigation';
 import {TripPattern} from '@atb/sdk';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {AssistantTexts, dictionary, useTranslation} from '@atb/translations';
+import {
+  AssistantTexts,
+  dictionary,
+  Language,
+  useTranslation,
+} from '@atb/translations';
+import {formatToLongDateTime, isInThePast} from '@atb/utils/date';
 import {
   locationDistanceInMetres as distanceInMetres,
   locationsAreEqual,
@@ -32,6 +39,7 @@ import {
 } from '@atb/utils/location';
 import {useLayout} from '@atb/utils/use-layout';
 import Bugsnag from '@bugsnag/react-native';
+import {TFunc} from '@leile/lobo-t';
 import analytics from '@react-native-firebase/analytics';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -39,8 +47,8 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {AssistantParams} from '.';
 import Loading from '../Loading';
-import DateInput, {DateOutput} from './DateInput';
 import FadeBetween from './FadeBetween';
+import {SearchTime, useSearchTimeValue} from './journey-date-picker';
 import NewsBanner from './NewsBanner';
 import Results from './Results';
 import {NoResultReason, SearchStateType} from './types';
@@ -102,6 +110,23 @@ const Assistant: React.FC<Props> = ({
   const styles = useStyles();
   const {theme} = useTheme();
   const {from, to} = useLocations(currentLocation);
+  const {language, t} = useTranslation();
+  const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
+
+  useDoOnceWhen(
+    () => setUpdatingLocation(true),
+    !Boolean(currentLocation) && hasLocationPermission,
+  );
+  useDoOnceWhen(
+    () => setUpdatingLocation(false),
+    Boolean(currentLocation) && hasLocationPermission,
+  );
+  useDoOnceWhen(setCurrentLocationAsFrom, Boolean(currentLocation));
+
+  const searchTime = useSearchTimeValue('searchTime', {
+    option: 'now',
+    date: new Date().toISOString(),
+  });
 
   function swap() {
     log('swap', {
@@ -136,18 +161,13 @@ const Assistant: React.FC<Props> = ({
     });
   }
 
-  const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
-
-  useDoOnceWhen(
-    () => setUpdatingLocation(true),
-    !Boolean(currentLocation) && hasLocationPermission,
-  );
-  useDoOnceWhen(
-    () => setUpdatingLocation(false),
-    Boolean(currentLocation) && hasLocationPermission,
-  );
-
-  useDoOnceWhen(setCurrentLocationAsFrom, Boolean(currentLocation));
+  function onSearchTimePress() {
+    navigation.navigate('DateTimePicker', {
+      callerRouteName: 'AssistantRoot',
+      callerRouteParam: 'searchTime',
+      searchTime,
+    });
+  }
 
   async function setCurrentLocationOrRequest() {
     if (currentLocation) {
@@ -170,8 +190,6 @@ const Assistant: React.FC<Props> = ({
     });
   }
 
-  const [date, setDate] = useState<DateOutput | undefined>();
-  const {t} = useTranslation();
   const [
     tripPatterns,
     timeOfLastSearch,
@@ -179,7 +197,7 @@ const Assistant: React.FC<Props> = ({
     clearPatterns,
     searchState,
     error,
-  ] = useTripPatterns(from, to, date);
+  ] = useTripPatterns(from, to, searchTime);
   const isSearching = searchState === 'searching';
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
@@ -273,10 +291,15 @@ const Assistant: React.FC<Props> = ({
             style={[styles.paddedContainer, styles.fadeChild]}
             key="dateInput"
           >
-            <DateInput
-              onDateSelected={setDate}
-              value={date}
-              timeOfLastSearch={timeOfLastSearch}
+            <Button
+              text={getSearchTimeLabel(
+                searchTime,
+                timeOfLastSearch,
+                t,
+                language,
+              )}
+              color="secondary_3"
+              onPress={onSearchTimePress}
             />
           </View>
         </FadeBetween>
@@ -324,7 +347,7 @@ const Assistant: React.FC<Props> = ({
       </ThemeText>
     </View>
   );
-  const noResultReasons = computeNoResultReasons(date, from, to);
+  const noResultReasons = computeNoResultReasons(searchTime, from, to);
 
   const onPressed = useCallback(
     (tripPatternId, tripPatterns, startIndex) =>
@@ -434,7 +457,7 @@ type Locations = {
 };
 
 function computeNoResultReasons(
-  date?: DateOutput,
+  date?: SearchTime,
   from?: Location,
   to?: Location,
 ): NoResultReason[] {
@@ -447,10 +470,11 @@ function computeNoResultReasons(
       reasons.push(NoResultReason.CloseLocations);
     }
   }
-  const isPastDate = date && date?.type !== 'now' && date?.date < new Date();
+
+  const isPastDate = date && date?.option !== 'now' && isInThePast(date.date);
 
   if (isPastDate) {
-    const isArrival = date?.type === 'arrival';
+    const isArrival = date?.option === 'arrival';
     const dateReason = isArrival
       ? NoResultReason.PastArrivalTime
       : NoResultReason.PastDepartureTime;
@@ -531,16 +555,18 @@ export default AssistantRoot;
 function useTripPatterns(
   fromLocation: Location | undefined,
   toLocation: Location | undefined,
-  date: DateOutput | undefined,
+  searchTime: SearchTime | undefined,
 ): [
   TripPattern[] | null,
-  Date,
+  string,
   () => {},
   () => void,
   SearchStateType,
   ErrorType?,
 ] {
-  const [timeOfSearch, setTimeOfSearch] = useState<Date>(new Date());
+  const [timeOfSearch, setTimeOfSearch] = useState<string>(
+    new Date().toISOString(),
+  );
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
   const [errorType, setErrorType] = useState<ErrorType>();
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
@@ -555,14 +581,16 @@ function useTripPatterns(
       setSearchState('searching');
       setErrorType(undefined);
       try {
-        const arriveBy = date?.type === 'arrival';
+        const arriveBy = searchTime?.option === 'arrival';
         const searchDate =
-          date && date?.type !== 'now' ? date.date : new Date();
+          searchTime && searchTime?.option !== 'now'
+            ? searchTime.date
+            : new Date().toISOString();
 
         log('searching', {
           fromLocation: translateLocation(fromLocation),
           toLocation: translateLocation(toLocation),
-          searchDate: searchDate.toISOString(),
+          searchDate: searchDate,
         });
 
         const response = await searchTrip(
@@ -599,7 +627,7 @@ function useTripPatterns(
       if (!fromLocation || !toLocation) return;
       source.cancel('New search to replace previous search');
     };
-  }, [fromLocation, toLocation, date]);
+  }, [fromLocation, toLocation, searchTime]);
 
   useEffect(reload, [reload]);
 
@@ -630,4 +658,24 @@ function log(message: string, metadata?: {[key: string]: string}) {
 function translateLocation(location: Location | undefined): string {
   if (!location) return 'Undefined location';
   return `${location.id}--${location.name}--${location.locality}`;
+}
+
+function getSearchTimeLabel(
+  searchTime: SearchTime,
+  timeOfLastSearch: string,
+  t: TFunc<typeof Language>,
+  language: Language,
+) {
+  const date = searchTime.option === 'now' ? timeOfLastSearch : searchTime.date;
+  const time = formatToLongDateTime(date, language);
+
+  switch (searchTime.option) {
+    case 'now':
+      return t(AssistantTexts.dateInput.departureNow(time));
+    case 'arrival':
+      return t(AssistantTexts.dateInput.arrival(time));
+    case 'departure':
+      return t(AssistantTexts.dateInput.departure(time));
+  }
+  return time;
 }

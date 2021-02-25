@@ -12,7 +12,10 @@ export const DEFAULT_LANGUAGE = Language.Norwegian;
 export type TranslatedString = Translatable<typeof Language, string>;
 
 export const lobot = initLobot<typeof Language>(DEFAULT_LANGUAGE);
-export const useTranslation = lobot.useTranslation;
+export const useTranslation = () => {
+  const {t, language} = lobot.useTranslation();
+  return {t, language, locale: languageToLocale(language)};
+};
 
 export type TranslateFunction = TFunc<typeof Language>;
 export function translation(
@@ -23,4 +26,12 @@ export function translation(
     [Language.Norwegian]: norwegian,
     [Language.English]: !!english ? english : norwegian,
   };
+}
+export function languageToLocale(language: Language) {
+  switch (language) {
+    case Language.Norwegian:
+      return 'no';
+    case Language.English:
+      return Language.English;
+  }
 }

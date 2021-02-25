@@ -603,8 +603,6 @@ PODS:
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
   - React-jsinspector (0.63.4)
-  - react-native-date-picker (3.2.9):
-    - React-Core
   - react-native-geolocation-service (5.2.0):
     - React
   - react-native-get-random-values (1.5.1):
@@ -691,6 +689,8 @@ PODS:
     - React
   - RNCMaskedView (0.1.10):
     - React
+  - RNDateTimePicker (3.0.9):
+    - React-Core
   - RNDeviceInfo (8.0.1):
     - React-Core
   - RNFBAnalytics (10.1.0):
@@ -773,7 +773,6 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
-  - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-intercom (from `../node_modules/react-native-intercom`)
@@ -793,6 +792,7 @@ DEPENDENCIES:
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage-backend-legacy`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
+  - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
@@ -885,8 +885,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
-  react-native-date-picker:
-    :path: "../node_modules/react-native-date-picker"
   react-native-geolocation-service:
     :path: "../node_modules/react-native-geolocation-service"
   react-native-get-random-values:
@@ -925,6 +923,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/async-storage-backend-legacy"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
+  RNDateTimePicker:
+    :path: "../node_modules/@react-native-community/datetimepicker"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
   RNFBAnalytics:
@@ -1009,7 +1009,6 @@ SPEC CHECKSUMS:
   React-jsi: a0418934cf48f25b485631deb27c64dc40fb4c31
   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
-  react-native-date-picker: 7f35e3562bfd46232f6f87dc4f4c30c5cd06aa4a
   react-native-geolocation-service: 7c9436da6dfdecd9526c62eac62ea2bc3f0cc8ea
   react-native-get-random-values: 41f0c91ac0da870e47b307e07752e9e54bc2dc7e
   react-native-intercom: c48e0e15877bf96ff4d461f7aa9b833d11188139
@@ -1029,6 +1028,7 @@ SPEC CHECKSUMS:
   RNBootSplash: 43868f415d2a2c7b5365ebc8dd0f93abbce0f00c
   RNCAsyncStorage: b5de28ebf07f83fc83fe718cb17793c5cfe55181
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
+  RNDateTimePicker: 8a51a2216c307769e69ef827293d59549ab1ca23
   RNDeviceInfo: 921a809eaf9de79645a24de1c6ca90db6cb91786
   RNFBAnalytics: 0a98aff1ad9abee16de201012f03179246c2e5bb
   RNFBApp: 2b4e07dfca4cf780b9e2d61bcc21e34d890cd654
