@@ -9,10 +9,10 @@ const ProfileTexts = {
       heading: _('Min konto', 'My account'),
       linkItems: {
         login: {
-          label: _('Logg inn', 'Log in'),
+          label: _('Logg inn', 'Sign in'),
         },
         logout: {
-          label: _('Logg ut', 'Log out'),
+          label: _('Logg ut', 'Sign out'),
         },
       },
     },

@@ -1,8 +1,8 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {PaymentCreditCardTexts, useTranslation} from '@atb/translations';
-import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {LoginTexts, useTranslation} from '@atb/translations';
+import React, {useState} from 'react';
+import {ActivityIndicator, View} from 'react-native';
 import {LoginNavigationProp, LoginRootParams} from './';
 import * as Sections from '@atb/components/sections';
 import Button from '@atb/components/button';
@@ -13,8 +13,6 @@ import {
 } from '@atb/auth/AuthContext';
 import MessageBox from '@atb/message-box';
 import ThemeText from '@atb/components/text';
-import {ErrorContext} from '@atb/screens/Ticketing/Purchase/Payment/CreditCard/use-terminal-state';
-import {ErrorType} from '@atb/api/utils';
 import {RouteProp} from '@react-navigation/core';
 
 export type ConfirmCodeRouteParams = {
@@ -64,19 +62,21 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader title={'Logg inn'} leftButton={{type: 'back'}} />
+      <FullScreenHeader
+        title={t(LoginTexts.confirmCode.title)}
+        leftButton={{type: 'back'}}
+      />
 
       <View style={styles.mainView}>
         <Sections.Section>
           <Sections.GenericItem>
             <ThemeText>
-              Vi har sendt en engangskode på SMS til {phoneNumber}, vennligst
-              skriv det inn nedenfor for å logge inn
+              {t(LoginTexts.confirmCode.description(phoneNumber))}
             </ThemeText>
           </Sections.GenericItem>
           <Sections.TextInput
-            label={'Engangskode'}
-            placeholder="Skriv inn engangskoden fra SMS'en"
+            label={t(LoginTexts.confirmCode.input.label)}
+            placeholder={t(LoginTexts.confirmCode.input.placeholder)}
             onChangeText={setCode}
             keyboardType="phone-pad"
             textContentType="oneTimeCode"
@@ -91,9 +91,9 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
 
           {error && !isLoading && (
             <MessageBox
-              containerStyle={{marginBottom: 12}}
+              containerStyle={styles.messageBox}
               type="error"
-              message={translateError(error)}
+              message={t(LoginTexts.confirmCode.errors[error])}
             />
           )}
 
@@ -102,7 +102,7 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
               <Button
                 color={'primary_2'}
                 onPress={onLogin}
-                text={'Logg inn'}
+                text={t(LoginTexts.confirmCode.mainButton)}
                 disabled={!code}
               />
               <Button
@@ -110,7 +110,7 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
                 mode={'tertiary'}
                 textType="body"
                 onPress={onResendCode}
-                text={'Send engangspassord på nytt'}
+                text={t(LoginTexts.confirmCode.resendButton)}
               />
             </>
           )}
@@ -120,17 +120,6 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
   );
 }
 
-const translateError = (
-  error: ConfirmationErrorCode | PhoneSignInErrorCode,
-) => {
-  switch (error) {
-    case 'invalid_code':
-      return 'Er du sikker på at engangspassordet er korrekt?';
-    default:
-      return 'Oops - noe gikk galt. Supert om du prøver på nytt 🤞';
-  }
-};
-
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.background.level2,
@@ -138,6 +127,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   mainView: {
     margin: theme.spacings.medium,
+  },
+  messageBox: {
+    marginBottom: theme.spacings.medium,
   },
   buttonView: {
     marginTop: theme.spacings.medium,

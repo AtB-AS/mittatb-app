@@ -1,6 +1,6 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {LoginNavigationProp} from './';
@@ -45,20 +45,23 @@ export default function PhoneInput({navigation}: PhoneInputProps) {
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader title={'Logg Inn'} leftButton={{type: 'cancel'}} />
+      <FullScreenHeader
+        title={t(LoginTexts.phoneInput.title)}
+        leftButton={{type: 'cancel'}}
+      />
 
       <View style={styles.mainView}>
         <Sections.Section>
           <Sections.GenericItem>
-            <ThemeText>Telefonnummer</ThemeText>
+            <ThemeText>{t(LoginTexts.phoneInput.description)}</ThemeText>
           </Sections.GenericItem>
           <Sections.TextInput
-            label={'+ 47'}
+            label={t(LoginTexts.phoneInput.input.label)}
             value={phoneNumber}
             onChangeText={setPhoneNumber}
             showClear={true}
             keyboardType="phone-pad"
-            placeholder={'Telefonnummer'}
+            placeholder={t(LoginTexts.phoneInput.input.placeholder)}
           />
         </Sections.Section>
         <View style={styles.buttonView}>
@@ -68,9 +71,9 @@ export default function PhoneInput({navigation}: PhoneInputProps) {
 
           {error && !isSubmitting && (
             <MessageBox
-              containerStyle={{marginBottom: 12}}
+              containerStyle={styles.messageBox}
               type="error"
-              message={translateError(error)}
+              message={t(LoginTexts.phoneInput.errors[error])}
             />
           )}
 
@@ -78,7 +81,7 @@ export default function PhoneInput({navigation}: PhoneInputProps) {
             <Button
               color={'primary_2'}
               onPress={onNext}
-              text={'Neste'}
+              text={t(LoginTexts.phoneInput.mainButton)}
               disabled={phoneNumber.length !== 8}
             />
           )}
@@ -88,15 +91,6 @@ export default function PhoneInput({navigation}: PhoneInputProps) {
   );
 }
 
-const translateError = (error: PhoneSignInErrorCode) => {
-  switch (error) {
-    case 'invalid_phone':
-      return 'Er du sikker på at telefonnummeret er korrekt?';
-    default:
-      return 'Oops - noe gikk galt. Supert om du prøver på nytt 🤞';
-  }
-};
-
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.background.level2,
@@ -104,6 +98,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   mainView: {
     margin: theme.spacings.medium,
+  },
+  messageBox: {
+    marginBottom: theme.spacings.medium,
   },
   buttonView: {
     marginTop: theme.spacings.medium,
