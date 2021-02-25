@@ -18,7 +18,7 @@ import {
   ParamListBase,
   RouteProp,
   useRoute,
-} from '@react-navigation/core';
+} from '@react-navigation/native';
 import React, {useRef, useState} from 'react';
 import {ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';

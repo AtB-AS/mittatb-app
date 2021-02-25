@@ -27,6 +27,12 @@ module.exports = {
     'react-native/no-unused-styles': 1,
 
     'rulesdir/translations-warning': 'warn',
+    'rulesdir/avoid-imports': [
+      'warn',
+      {
+        '@react-navigation/core': '@react-navigation/native',
+      },
+    ],
     'rulesdir/import-warning': [
       'warn',
       {
