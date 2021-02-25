@@ -114,6 +114,7 @@ export default function useOfferState(
   fromTariffZone: TariffZone,
   toTariffZone: TariffZone,
   userProfilesWithCount: UserProfileWithCount[],
+  travelDate?: Date,
 ) {
   const offerReducer = getOfferReducer(userProfilesWithCount);
   const [state, dispatch] = useReducer(offerReducer, initialState);
@@ -142,6 +143,7 @@ export default function useOfferState(
               zones,
               travellers: offerTravellers,
               products: [preassignedFareProduct.id],
+              travel_date: travelDate,
             },
             {cancelToken, retry: true},
           );
@@ -164,7 +166,13 @@ export default function useOfferState(
         }
       }
     },
-    [dispatch, userProfilesWithCount, preassignedFareProduct, zones],
+    [
+      dispatch,
+      userProfilesWithCount,
+      preassignedFareProduct,
+      zones,
+      travelDate,
+    ],
   );
 
   useEffect(() => {

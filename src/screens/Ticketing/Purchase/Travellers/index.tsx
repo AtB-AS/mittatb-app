@@ -17,6 +17,7 @@ import {createTravellersText} from '../Overview';
 import SingleTravellerSelection from './SingleTravellerSelection';
 import MultipleTravellersSelection from './MultipleTravellersSelection';
 import useUserCountState from './use-user-count-state';
+import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
 
 export type TravellersProps = {
   navigation: DismissableStackNavigationProp<
@@ -33,6 +34,9 @@ const Travellers: React.FC<TravellersProps> = ({
   const styles = useStyles();
   const {theme} = useTheme();
   const {t, language} = useTranslation();
+  const {travellerSelectionMode} = getPurchaseFlow(
+    params.preassignedFareProduct,
+  );
 
   const userCountState = useUserCountState(params.userProfilesWithCount);
 
@@ -63,7 +67,7 @@ const Travellers: React.FC<TravellersProps> = ({
           </Sections.Section>
         </View>
 
-        {params.preassignedFareProduct.type === 'single' ? (
+        {travellerSelectionMode === 'multiple' ? (
           <MultipleTravellersSelection {...userCountState} />
         ) : (
           <SingleTravellerSelection {...userCountState} />

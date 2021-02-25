@@ -40,3 +40,4 @@ export {default as AppearanceSettingsTexts} from './screens/subscreens/Appearanc
 export {default as LanguageSettingsTexts} from './screens/subscreens/LanguageSettingsTexts';
 export {default as dictionary} from './dictionary';
 export {default as JourneyDatePickerTexts} from './screens/subscreens/JourneyDatePicker';
+export {default as TravelDateTexts} from './screens/subscreens/TravelDate';

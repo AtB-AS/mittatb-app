@@ -1,7 +1,6 @@
 import {
   LanguageAndText,
   PreassignedFareProduct,
-  PreassignedFareProductType,
   TariffZone,
   UserProfile,
 } from './types';
@@ -54,20 +53,3 @@ export const findReferenceDataById = <
   elements: T[],
   id: string,
 ) => elements.find((p) => p.id === id);
-
-export const isUserProfileSelectableForProductType = (
-  userProfile: UserProfile,
-  type: PreassignedFareProductType,
-) => {
-  /*
-  This logic should in the future be modeled with the reference data somehow,
-  with the source being Entur, instead of being hardcoded into the app.
-   */
-  switch (type) {
-    case 'period': {
-      return ['ADULT', 'SENIOR', 'CHILD'].includes(userProfile.userTypeString);
-    }
-    case 'single':
-      return true;
-  }
-};

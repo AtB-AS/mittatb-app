@@ -14,7 +14,10 @@ const PurchaseOverviewTexts = {
       'Whoops - we were unable to retrieve cost. Please try again 🤞',
     ),
   },
-  startTime: _('Oppstart nå', 'Starting now'),
+  travelDate: {
+    now: _('Oppstart nå', 'Starting now'),
+    futureDate: (time: string) => _(`Oppstart ${time}`, `Start time ${time}`),
+  },
   travellers: {
     noTravellers: _(`Ingen reisende`, `No travellers`),
     travellersCount: (count: number) =>
