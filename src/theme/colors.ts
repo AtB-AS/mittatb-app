@@ -1,5 +1,5 @@
 import hexToRgba from 'hex-to-rgba';
-import {StatusBarProps, TextStyle} from 'react-native';
+import {Platform, StatusBarProps, TextStyle} from 'react-native';
 
 const backgrounds = {
   light__level0: '#FFFFFF',
@@ -111,7 +111,14 @@ export const textTypeStyles: {[key in TextNames]: TextStyle} = {
   pageTitle: {fontSize: 26, lineHeight: 32},
   sectionHeadline: {fontSize: 23, lineHeight: 28},
   itemHeadline: {fontSize: 20, lineHeight: 24},
-  paragraphHeadline: {fontSize: 16, lineHeight: 20, fontWeight: '600'},
+  paragraphHeadline: {
+    fontSize: 16,
+    lineHeight: 20,
+    fontWeight: Platform.select({
+      android: 'bold',
+      default: '600',
+    }),
+  },
   body: {fontSize: 16, lineHeight: 20},
   body__link: {fontSize: 16, lineHeight: 20, textDecorationLine: 'underline'},
   lead: {fontSize: 14, lineHeight: 20},
