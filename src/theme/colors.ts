@@ -114,7 +114,10 @@ export const textTypeStyles: {[key in TextNames]: TextStyle} = {
   paragraphHeadline: {
     fontSize: 16,
     lineHeight: 20,
-    fontWeight: Platform.OS === 'android' ? 'bold' : '600',
+    fontWeight: Platform.select({
+      android: 'bold',
+      default: '600',
+    }),
   },
   body: {fontSize: 16, lineHeight: 20},
   body__link: {fontSize: 16, lineHeight: 20, textDecorationLine: 'underline'},
