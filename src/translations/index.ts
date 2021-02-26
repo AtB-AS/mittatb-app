@@ -38,5 +38,6 @@ export {default as DepartureDetailsTexts} from './screens/subscreens/DepartureDe
 export {default as SelectStartScreenTexts} from './screens/subscreens/SelectStartScreen';
 export {default as AppearanceSettingsTexts} from './screens/subscreens/AppearanceSettings';
 export {default as LanguageSettingsTexts} from './screens/subscreens/LanguageSettingsTexts';
+export {default as LoginTexts} from './screens/subscreens/Login';
 export {default as dictionary} from './dictionary';
 export {default as JourneyDatePickerTexts} from './screens/subscreens/JourneyDatePicker';
