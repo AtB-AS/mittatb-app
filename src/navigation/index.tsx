@@ -21,7 +21,7 @@ import {
   NavigatorScreenParams,
   useLinking,
 } from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React, {useEffect, useRef} from 'react';
 import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
@@ -85,43 +85,21 @@ const NavigationRoot = () => {
                 <Stack.Screen
                   name="LocationSearch"
                   component={LocationSearch}
-                  options={{
-                    transitionSpec: {
-                      open: transitionSpec,
-                      close: transitionSpec,
-                    },
-                  }}
+                  options={{...TransitionPresets.ModalSlideFromBottomIOS}}
                 />
                 <Stack.Screen
                   name="TicketPurchase"
                   component={TicketPurchase}
-                  options={{
-                    transitionSpec: {
-                      open: transitionSpec,
-                      close: transitionSpec,
-                    },
-                  }}
                 />
                 <Stack.Screen
                   name="TicketModal"
                   component={TicketModalScreen}
-                  options={{
-                    transitionSpec: {
-                      open: transitionSpec,
-                      close: transitionSpec,
-                    },
-                  }}
                 />
 
                 <Stack.Screen
                   name="AddEditFavorite"
                   component={AddEditFavorite}
-                  options={{
-                    transitionSpec: {
-                      open: transitionSpec,
-                      close: transitionSpec,
-                    },
-                  }}
+                  options={{...TransitionPresets.ModalSlideFromBottomIOS}}
                 />
                 <Stack.Screen
                   name="SortableFavoriteList"
@@ -129,10 +107,6 @@ const NavigationRoot = () => {
                   options={{
                     gestureResponseDistance: {
                       vertical: 100,
-                    },
-                    transitionSpec: {
-                      open: transitionSpec,
-                      close: transitionSpec,
                     },
                   }}
                 />
