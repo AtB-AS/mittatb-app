@@ -34,7 +34,7 @@ type PurchaseOverviewParams = {
   fromTariffZone?: TariffZoneWithMetadata;
   toTariffZone?: TariffZoneWithMetadata;
   userProfilesWithCount?: UserProfileWithCount[];
-  travelDate?: Date;
+  travelDate?: string;
 };
 
 type TravellersParams = {

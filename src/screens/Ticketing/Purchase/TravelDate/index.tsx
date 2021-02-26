@@ -18,7 +18,7 @@ import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
 import {View} from 'react-native';
 
 export type TravelDateRouteParams = {
-  travelDate?: Date;
+  travelDate?: string;
 };
 
 type TravelDateNavigationProp = DismissableStackNavigationProp<
@@ -38,7 +38,7 @@ const TravelDate: React.FC<{
   const styles = useStyles();
 
   const {travelDate} = params;
-  const defaultDate = (travelDate ?? new Date()).toISOString();
+  const defaultDate = travelDate ?? new Date().toISOString();
   const [dateString, setDate] = useState(defaultDate);
   const [timeString, setTime] = useState(() =>
     formatLocaleTime(defaultDate, language),
@@ -52,7 +52,7 @@ const TravelDate: React.FC<{
     navigation.navigate('PurchaseOverview', {
       travelDate:
         option === 'futureDate'
-          ? dateWithReplacedTime(dateString, timeString)
+          ? dateWithReplacedTime(dateString, timeString).toISOString()
           : undefined,
     });
   };

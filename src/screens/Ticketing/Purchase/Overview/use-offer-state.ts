@@ -114,7 +114,7 @@ export default function useOfferState(
   fromTariffZone: TariffZone,
   toTariffZone: TariffZone,
   userProfilesWithCount: UserProfileWithCount[],
-  travelDate?: Date,
+  travelDate?: string,
 ) {
   const offerReducer = getOfferReducer(userProfilesWithCount);
   const [state, dispatch] = useReducer(offerReducer, initialState);

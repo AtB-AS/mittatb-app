@@ -220,7 +220,7 @@ export const createTravellersText = (
 export const createTravelDateText = (
   t: TranslateFunction,
   language: Language,
-  travelDate?: Date,
+  travelDate?: string,
 ) => {
   return travelDate
     ? t(

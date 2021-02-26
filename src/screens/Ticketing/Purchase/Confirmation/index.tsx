@@ -27,7 +27,7 @@ export type RouteParams = {
   fromTariffZone: TariffZone;
   toTariffZone: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
-  travelDate?: Date;
+  travelDate?: string;
   headerLeftButton: LeftButtonProps;
 };
 
