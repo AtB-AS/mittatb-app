@@ -15,7 +15,7 @@ export async function listRecentFareContracts(): Promise<RecentFareContract[]> {
   const user = auth().currentUser;
   const idToken = await user?.getIdToken();
 
-  const url = 'ticket/v1/ticket/recent';
+  const url = 'ticket/v2/ticket/recent';
   const response = await client.get<RecentFareContract[]>(url, {
     headers: {
       Authorization: 'Bearer ' + idToken,
@@ -63,7 +63,7 @@ export async function reserveOffers(
 ) {
   const user = auth().currentUser;
   const idToken = await user?.getIdToken();
-  const url = 'ticket/v1/reserve';
+  const url = 'ticket/v2/reserve';
   const response = await client.post<TicketReservation>(
     url,
     {
