@@ -9,13 +9,21 @@ import React, {
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {useTranslation} from '../translations';
 
+const ERROR_INVALID_PHONE_NUMBER = 'auth/invalid-phone-number';
+const ERROR_INVALID_CONFIRMATION_CODE = 'auth/invalid-verification-code';
+
 type AuthReducerState = {
   isAuthConnectionInitialized: boolean;
+  confirmationHandler: FirebaseAuthTypes.ConfirmationResult | undefined;
   abtCustomerId: string | undefined;
   user: FirebaseAuthTypes.User | null;
 };
 
 type AuthReducerAction =
+  | {
+      type: 'SIGN_IN_INITIATED';
+      confirmationHandler: FirebaseAuthTypes.ConfirmationResult;
+    }
   | {
       type: 'SET_USER';
       user: FirebaseAuthTypes.User | null;
@@ -29,6 +37,12 @@ type AuthReducer = (
 
 const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
   switch (action.type) {
+    case 'SIGN_IN_INITIATED': {
+      return {
+        ...prevState,
+        confirmationHandler: action.confirmationHandler,
+      };
+    }
     case 'SET_USER': {
       return {
         ...prevState,
@@ -47,15 +61,30 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
 
 const initialReducerState: AuthReducerState = {
   isAuthConnectionInitialized: false,
+  confirmationHandler: undefined,
   abtCustomerId: undefined,
   user: null,
 };
 
+type AuthenticationType = 'none' | 'anonymous' | 'phone';
+
+const getAuthenticationType = (state: AuthReducerState): AuthenticationType => {
+  if (state.user?.phoneNumber) return 'phone';
+  else if (state.user?.isAnonymous) return 'anonymous';
+  else return 'none';
+};
+
+export type ConfirmationErrorCode = 'invalid_code' | 'unknown_error';
+export type PhoneSignInErrorCode = 'invalid_phone' | 'unknown_error';
+
 type AuthContextState = {
-  signInAnonymously: () => Promise<void>;
+  signInWithPhoneNumber: (
+    number: string,
+  ) => Promise<PhoneSignInErrorCode | undefined>;
   signOut: () => Promise<void>;
-  updateEmail: (email: string) => Promise<void>;
+  confirmCode: (code: string) => Promise<ConfirmationErrorCode | undefined>;
   syncAbtCustomer: () => Promise<void>;
+  authenticationType: AuthenticationType;
 } & AuthReducerState;
 
 const AuthContext = createContext<AuthContextState | undefined>(undefined);
@@ -63,6 +92,18 @@ const AuthContext = createContext<AuthContextState | undefined>(undefined);
 export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
   const [state, dispatch] = useReducer(authReducer, initialReducerState);
   const {language} = useTranslation();
+
+  async function confirmCode(code: string) {
+    try {
+      await state.confirmationHandler?.confirm(code);
+    } catch (error) {
+      if (error.code === ERROR_INVALID_CONFIRMATION_CODE) {
+        return 'invalid_code';
+      }
+      console.warn(error);
+      return 'unknown_error';
+    }
+  }
 
   useEffect(() => {
     if (language) auth().setLanguageCode(language);
@@ -116,12 +157,27 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
     return subscriber;
   }, [onUserChanged]);
 
+  async function signInWithPhoneNumber(phoneNumber: string) {
+    try {
+      const confirmationHandler = await auth().signInWithPhoneNumber(
+        '+47' + phoneNumber,
+      );
+      dispatch({type: 'SIGN_IN_INITIATED', confirmationHandler});
+    } catch (error) {
+      if (error.code === ERROR_INVALID_PHONE_NUMBER) {
+        return 'invalid_phone';
+      }
+      console.warn(error);
+      return 'unknown_error';
+    }
+  }
+
   const signInAnonymously = useCallback(async function () {
     await auth().signInAnonymously();
   }, []);
 
   const signOut = useCallback(async function () {
-    await auth().signOut();
+    await auth().signInAnonymously();
   }, []);
 
   // Sign in if the onChangeEvent fired immediately on subscription did not include user data. (in other words, user was not previously signed in)
@@ -131,21 +187,15 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
     }
   }, [state.isAuthConnectionInitialized]);
 
-  const updateEmail = useCallback(
-    async function (email: string) {
-      await state.user?.updateEmail(email);
-    },
-    [state.user],
-  );
-
   return (
     <AuthContext.Provider
       value={{
         ...state,
-        signInAnonymously,
+        signInWithPhoneNumber,
+        confirmCode,
         signOut,
-        updateEmail,
         syncAbtCustomer,
+        authenticationType: getAuthenticationType(state),
       }}
     >
       {children}

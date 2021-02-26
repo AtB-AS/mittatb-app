@@ -20,13 +20,26 @@ type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 type TextProps = SectionItem<
   InternalTextInputProps & {
     label: string;
+    inlineLabel?: boolean;
     showClear?: boolean;
     onClear?: () => void;
   }
 >;
 
 const TextInput = forwardRef<InternalTextInput, TextProps>(
-  ({label, onFocus, onBlur, showClear, onClear, style, ...props}, ref) => {
+  (
+    {
+      label,
+      inlineLabel = true,
+      onFocus,
+      onBlur,
+      showClear,
+      onClear,
+      style,
+      ...props
+    },
+    ref,
+  ) => {
     const {topContainer, spacing, contentContainer} = useSectionItem(props);
     const {theme, themeName} = useTheme();
     const styles = useInputStyle(theme, themeName);
@@ -40,6 +53,11 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
     const onBlurEvent = (e: FocusEvent) => {
       setIsFocused(false);
       onBlur?.(e);
+    };
+
+    const onClearEvent = () => {
+      if (onClear) onClear();
+      else if (props.onChangeText) props.onChangeText('');
     };
 
     const borderColor = !isFocused
@@ -63,6 +81,7 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
       <View
         style={[
           styles.container,
+          inlineLabel ? styles.containerInline : styles.containerMultiline,
           topContainerStyle,
           containerPadding,
           borderColor,
@@ -87,7 +106,7 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
               accessibilityRole="button"
               accessibilityLabel="Tøm redigeringsfelt"
               hitSlop={insets.all(8)}
-              onPress={onClear}
+              onPress={onClearEvent}
             >
               <ThemeIcon svg={Close} />
             </TouchableOpacity>
@@ -109,18 +128,24 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   },
   container: {
     backgroundColor: theme.background.level0,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     borderWidth: theme.border.width.slim,
     borderColor: theme.background.level0,
+  },
+  containerInline: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  containerMultiline: {
+    paddingTop: theme.spacings.small,
   },
   label: {
     minWidth: 60 - theme.spacings.medium,
   },
   inputClear: {
     position: 'absolute',
-    right: 14,
+    right: theme.spacings.medium,
+    bottom: theme.spacings.medium,
     alignSelf: 'center',
   },
 }));
