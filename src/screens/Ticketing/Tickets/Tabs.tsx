@@ -12,6 +12,10 @@ import {View} from 'react-native';
 import RecentTicketsScrollView from './RecentTicketsScrollView';
 import TicketsScrollView from './TicketsScrollView';
 import UpgradeSplash from './UpgradeSplash';
+import MessageBox from '@atb/message-box';
+import ThemeText from '@atb/components/text';
+import MessageBoxTexts from '@atb/translations/components/MessageBox';
+import {BuyTicketsScreenName} from '@atb/screens/Ticketing/Tickets/index';
 
 export type TicketingScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -23,12 +27,46 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
   const {must_upgrade_ticketing, enable_recent_tickets} = useRemoteConfig();
-  const {abtCustomerId} = useAuthState();
+  const {abtCustomerId, authenticationType} = useAuthState();
   const {t} = useTranslation();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
   const isSignedInAsAbtCustomer = !!abtCustomerId;
+
+  const onBuySingleTicket = () => {
+    navigation.navigate('Login', {
+      screen: 'PhoneInput',
+      params: {
+        afterLogin: {
+          routeName: 'TicketPurchase',
+          routeParams: {selectableProductType: 'period'},
+        },
+      },
+    });
+  };
+
+  const onBuyPeriodTicket = () => {
+    if (authenticationType === 'phone') {
+      navigation.navigate('TicketPurchase', {
+        screen: 'PurchaseOverview',
+        params: {
+          selectableProductType: 'period',
+        },
+      });
+    } else {
+      navigation.navigate('Login', {
+        screen: 'PhoneInput',
+        params: {
+          loginReason: t(TicketsTexts.buyTicketsTab.loginReason),
+          afterLogin: {
+            routeName: 'TicketPurchase',
+            routeParams: {selectableProductType: 'period'},
+          },
+        },
+      });
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -46,14 +84,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
             accessibilityHint={t(
               TicketsTexts.buyTicketsTab.button.single.a11yHint,
             )}
-            onPress={() =>
-              navigation.navigate('TicketPurchase', {
-                screen: 'PurchaseOverview',
-                params: {
-                  selectableProductType: 'single',
-                },
-              })
-            }
+            onPress={onBuySingleTicket}
             viewContainerStyle={styles.buySingleTicketButton}
           />
           <Button
@@ -63,14 +94,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
             accessibilityHint={t(
               TicketsTexts.buyTicketsTab.button.period.a11yHint,
             )}
-            onPress={() =>
-              navigation.navigate('TicketPurchase', {
-                screen: 'PurchaseOverview',
-                params: {
-                  selectableProductType: 'period',
-                },
-              })
-            }
+            onPress={onBuyPeriodTicket}
           />
         </View>
       )}
@@ -136,6 +160,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.background.level1,
   },
   buySingleTicketButton: {
-    marginBottom: theme.spacings.medium,
+    marginVertical: theme.spacings.medium,
   },
 }));

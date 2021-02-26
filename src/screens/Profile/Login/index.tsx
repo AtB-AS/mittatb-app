@@ -4,21 +4,17 @@ import {
   StackNavigationProp,
 } from '@react-navigation/stack';
 import React from 'react';
-import PhoneInput from '@atb/screens/Profile/Login/PhoneInput';
+import PhoneInput, {
+  PhoneInputRouteParams,
+} from '@atb/screens/Profile/Login/PhoneInput';
 import ConfirmCode, {
   ConfirmCodeRouteParams,
 } from '@atb/screens/Profile/Login/ConfirmCode';
-import {ProfileStackParams} from '@atb/screens/Profile';
 
 export type LoginRootParams = {
-  PhoneInput: undefined;
+  PhoneInput: PhoneInputRouteParams;
   ConfirmCode: ConfirmCodeRouteParams;
 };
-
-export type LoginNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<LoginRootParams>,
-  StackNavigationProp<ProfileStackParams>
->;
 
 const Stack = createStackNavigator<LoginRootParams>();
 

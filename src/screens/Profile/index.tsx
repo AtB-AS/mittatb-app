@@ -10,7 +10,6 @@ import SelectStartScreen from './SelectStartScreen';
 
 export type ProfileStackParams = {
   ProfileHome: undefined;
-  Login: undefined;
   FavoriteList: undefined;
   FavoriteDepartures: undefined;
   SelectStartScreen: undefined;
@@ -27,7 +26,6 @@ export default function ProfileScreen() {
       screenOptions={{headerShown: false}}
     >
       <Stack.Screen name="ProfileHome" component={ProfileHome} />
-      <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="FavoriteList" component={FavoriteList} />
       <Stack.Screen name="FavoriteDepartures" component={FavoriteDepartures} />
       <Stack.Screen name="SelectStartScreen" component={SelectStartScreen} />

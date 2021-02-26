@@ -27,6 +27,7 @@ import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
 import TabNavigator from './TabNavigator';
 import transitionSpec from './transitionSpec';
+import Login, {LoginRootParams} from '@atb/screens/Profile/Login';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -35,6 +36,7 @@ export type RootStackParamList = {
   LocationSearch: LocationSearchParams;
   SortableFavoriteList: undefined;
   AddEditFavorite: NavigatorScreenParams<AddEditFavoriteRootParams>;
+  Login: NavigatorScreenParams<LoginRootParams>;
   TicketPurchase: NavigatorScreenParams<TicketingStackParams>;
   TicketModal: NavigatorScreenParams<TicketModalStackParams>;
 };
@@ -128,6 +130,16 @@ const NavigationRoot = () => {
                     gestureResponseDistance: {
                       vertical: 100,
                     },
+                    transitionSpec: {
+                      open: transitionSpec,
+                      close: transitionSpec,
+                    },
+                  }}
+                />
+                <Stack.Screen
+                  name="Login"
+                  component={Login}
+                  options={{
                     transitionSpec: {
                       open: transitionSpec,
                       close: transitionSpec,

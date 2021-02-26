@@ -3,7 +3,7 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {LoginNavigationProp, LoginRootParams} from './';
+import {LoginRootParams} from './';
 import * as Sections from '@atb/components/sections';
 import Button from '@atb/components/button';
 import {useAuthState} from '@atb/auth';
@@ -13,16 +13,20 @@ import {
 } from '@atb/auth/AuthContext';
 import MessageBox from '@atb/message-box';
 import ThemeText from '@atb/components/text';
-import {RouteProp} from '@react-navigation/core';
+import {RouteProp} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '@atb/navigation';
+import {AfterLoginParams} from '@atb/screens/Profile/Login/PhoneInput';
 
 export type ConfirmCodeRouteParams = {
   phoneNumber: string;
+  afterLogin: AfterLoginParams;
 };
 
 type ConfirmCodeRouteProps = RouteProp<LoginRootParams, 'ConfirmCode'>;
 
 export type ConfirmCodeProps = {
-  navigation: LoginNavigationProp;
+  navigation: StackNavigationProp<RootStackParamList>;
   route: ConfirmCodeRouteProps;
 };
 
@@ -36,13 +40,13 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
     ConfirmationErrorCode | PhoneSignInErrorCode
   >();
   const [isLoading, setIsLoading] = useState(false);
-  const {phoneNumber} = route.params;
+  const {phoneNumber, afterLogin} = route.params;
 
   const onLogin = async () => {
     setIsLoading(true);
     const errorCode = await confirmCode(code);
     if (!errorCode) {
-      navigation.navigate('ProfileHome');
+      navigation.navigate(afterLogin.routeName as any, afterLogin.routeParams);
     } else {
       setError(errorCode);
       setIsLoading(false);

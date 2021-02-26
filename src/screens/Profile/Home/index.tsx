@@ -13,6 +13,7 @@ import {Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
 import ThemeText from '@atb/components/text';
+import {RootStackParamList} from '@atb/navigation';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -20,7 +21,7 @@ export type ProfileScreenNavigationProp = StackNavigationProp<
 >;
 
 type ProfileNearbyScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<TabNavigatorParams, 'Profile'>,
+  StackNavigationProp<RootStackParamList>,
   ProfileScreenNavigationProp
 >;
 
@@ -50,7 +51,14 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           {authenticationType !== 'phone' && (
             <Sections.LinkItem
               text={t(ProfileTexts.sections.account.linkItems.login.label)}
-              onPress={() => navigation.navigate('Login')}
+              onPress={() =>
+                navigation.navigate('Login', {
+                  screen: 'PhoneInput',
+                  params: {
+                    afterLogin: {routeName: 'ProfileHome'},
+                  },
+                })
+              }
             />
           )}
           {authenticationType === 'phone' && (
