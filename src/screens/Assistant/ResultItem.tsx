@@ -31,7 +31,7 @@ import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {LegMode} from '@entur/sdk';
 import React from 'react';
 import {AccessibilityProps, View, ViewStyle} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -114,48 +114,49 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   if (!tripPattern?.legs?.length) return null;
 
   return (
-    <View style={styles.result} {...props}>
-      <ResultItemHeader tripPattern={tripPattern} />
-      <View style={styles.scrollContainer}>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          hitSlop={insets.symmetric(12, 20)}
-          contentContainerStyle={styles.detailsContainer}
-          accessibilityValue={{text: tripSummary(tripPattern, t)}}
-        >
-          {tripPattern.legs.map(function (leg, i) {
-            const legOutput =
-              leg.mode === 'foot' ? (
-                <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
-              ) : (
-                <TransportationLeg leg={leg} />
+    <TouchableOpacity
+      accessibilityHint={t(
+        AssistantTexts.results.resultItem.footer.detailsHint,
+      )}
+      onPress={onDetailsPressed}
+    >
+      <View style={styles.result} {...props}>
+        <ResultItemHeader tripPattern={tripPattern} />
+        <View style={styles.scrollContainer}>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            hitSlop={insets.symmetric(12, 20)}
+            contentContainerStyle={styles.detailsContainer}
+            accessibilityValue={{text: tripSummary(tripPattern, t)}}
+          >
+            {tripPattern.legs.map(function (leg, i) {
+              const legOutput =
+                leg.mode === 'foot' ? (
+                  <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
+                ) : (
+                  <TransportationLeg leg={leg} />
+                );
+              return (
+                <View
+                  style={styles.legOutput}
+                  key={leg.serviceJourney?.id ?? leg.fromPlace.latitude}
+                  {...screenReaderHidden}
+                >
+                  {legOutput}
+                  <ThemeIcon svg={ChevronRight} size={'small'} />
+                </View>
               );
-            return (
-              <View
-                style={styles.legOutput}
-                key={leg.serviceJourney?.id ?? leg.fromPlace.latitude}
-                {...screenReaderHidden}
-              >
-                {legOutput}
-                <ThemeIcon svg={ChevronRight} size={'small'} />
-              </View>
-            );
-          })}
-          <DestinationLeg tripPattern={tripPattern} />
-        </ScrollView>
+            })}
+            <DestinationLeg tripPattern={tripPattern} />
+          </ScrollView>
+        </View>
+        <ResultItemFooter legs={tripPattern.legs} />
       </View>
-      <ResultItemFooter
-        legs={tripPattern.legs}
-        onDetailsPressed={onDetailsPressed}
-      />
-    </View>
+    </TouchableOpacity>
   );
 };
-const ResultItemFooter: React.FC<{legs: Leg[]; onDetailsPressed(): void}> = ({
-  legs,
-  onDetailsPressed,
-}) => {
+function ResultItemFooter({legs}: {legs: Leg[]}) {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const quayName = getFromLeg(legs) ?? t(dictionary.travel.quay.defaultName);
@@ -174,21 +175,16 @@ const ResultItemFooter: React.FC<{legs: Leg[]; onDetailsPressed(): void}> = ({
           ),
         )}
       </ThemeText>
-      <Button
-        text={t(AssistantTexts.results.resultItem.footer.detailsLabel)}
-        accessibilityHint={t(
-          AssistantTexts.results.resultItem.footer.detailsHint,
-        )}
-        icon={ArrowRight}
-        iconPosition="right"
-        mode="tertiary"
-        type="compact"
-        onPress={onDetailsPressed}
-        textStyle={styles.detailsButtonText}
-      />
+
+      <View style={styles.detailsTextWrapper}>
+        <ThemeText type="lead">
+          {t(AssistantTexts.results.resultItem.footer.detailsLabel)}
+        </ThemeText>
+        <ThemeIcon svg={ArrowRight} style={styles.detailsIcon} />
+      </View>
     </View>
   );
-};
+}
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   result: {
@@ -221,13 +217,17 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     borderTopColor: theme.border.primary,
     borderTopWidth: theme.border.width.slim,
-    paddingLeft: theme.spacings.medium,
+    padding: theme.spacings.medium,
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-
-  detailsButtonText: theme.text.lead,
-
+  detailsTextWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  detailsIcon: {
+    marginLeft: theme.spacings.xSmall,
+  },
   durationContainer: {
     flex: 2,
     alignItems: 'flex-end',
