@@ -35,13 +35,10 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const isSignedInAsAbtCustomer = !!abtCustomerId;
 
   const onBuySingleTicket = () => {
-    navigation.navigate('Login', {
-      screen: 'PhoneInput',
+    navigation.navigate('TicketPurchase', {
+      screen: 'PurchaseOverview',
       params: {
-        afterLogin: {
-          routeName: 'TicketPurchase',
-          routeParams: {selectableProductType: 'period'},
-        },
+        selectableProductType: 'single',
       },
     });
   };
