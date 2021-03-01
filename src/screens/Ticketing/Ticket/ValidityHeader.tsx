@@ -11,30 +11,23 @@ import {fromUnixTime} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
 import ValidityIcon from './ValidityIcon';
+import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 
 const ValidityHeader: React.FC<{
-  isValid: boolean;
+  status: ValidityStatus;
   now: number;
+  validFrom: number;
   validTo: number;
-  isNotExpired: boolean;
-  isRefunded: boolean;
-}> = ({isValid, now, validTo, isNotExpired, isRefunded}) => {
+}> = ({status, now, validFrom, validTo}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
 
   return (
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
-        <ValidityIcon isValid={isValid} />
-        <ThemeText style={styles.validityText} type="lead" color="secondary">
-          {validityTimeText(
-            isNotExpired,
-            now,
-            validTo,
-            isRefunded,
-            t,
-            language,
-          )}
+        <ValidityIcon status={status} />
+        <ThemeText style={styles.validityText} type="lead">
+          {validityTimeText(status, now, validFrom, validTo, t, language)}
         </ThemeText>
       </View>
     </View>
@@ -42,10 +35,10 @@ const ValidityHeader: React.FC<{
 };
 
 function validityTimeText(
-  isNotExpired: boolean,
+  status: ValidityStatus,
   now: number,
+  validFrom: number,
   validTo: number,
-  isRefunded: boolean,
   t: TranslateFunction,
   language: Language,
 ) {
@@ -56,9 +49,16 @@ function validityTimeText(
     serialComma: false,
   });
 
-  if (isRefunded) {
+  if (status === 'refunded') {
     return t(TicketTexts.validityHeader.refunded);
-  } else if (isNotExpired) {
+  } else if (status === 'upcoming') {
+    const secondsUntilValid = Math.abs(now - validFrom) / 1000;
+    const untilValidDuration = secondsToDuration(secondsUntilValid, language, {
+      conjunction,
+      serialComma: false,
+    });
+    return t(TicketTexts.validityHeader.upcoming(untilValidDuration));
+  } else if (status === 'valid') {
     return t(TicketTexts.validityHeader.valid(duration));
   } else {
     if (validityDifferenceSeconds < 60 * 60) {

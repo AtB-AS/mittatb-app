@@ -11,7 +11,7 @@ const TicketTexts = {
   },
   detailsLink: {
     valid: _('Vis detaljer / kontroll', 'Show details / inspection'),
-    expired: _('Vis detaljer', 'Show details'),
+    notValid: _('Vis detaljer', 'Show details'),
   },
   validityHeader: {
     valid: (duration: string) =>
@@ -21,6 +21,8 @@ const TicketTexts = {
     expired: (dateTime: string) =>
       _(`Utløpt ${dateTime}`, `Expired ${dateTime}`),
     refunded: _(`Refundert`, 'Refunded'),
+    upcoming: (duration: string) =>
+      _(`Blir gyldig om ${duration}`, `Becomes valid in ${duration}`),
     durationDelimiter: _(' og ', ' and '),
   },
   details: {

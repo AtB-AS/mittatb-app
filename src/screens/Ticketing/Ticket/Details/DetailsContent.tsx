@@ -1,11 +1,7 @@
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {
-  FareContract,
-  FareContractState,
-  isPreactivatedTicket,
-} from '@atb/tickets';
+import {FareContract, isPreactivatedTicket} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
@@ -16,6 +12,7 @@ import {SvgXml} from 'react-native-svg';
 import TicketInfo from '../TicketInfo';
 import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
+import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 
 type Props = {
   fareContract: FareContract;
@@ -36,30 +33,23 @@ const DetailsContent: React.FC<Props> = ({
   if (isPreactivatedTicket(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
     const validTo = firstTravelRight.endDateTime.toMillis();
-    const isNotExpired = validTo >= now;
-    const isRefunded = fc.state === FareContractState.Refunded;
-    const isValidTicket = isNotExpired && !isRefunded;
+    const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
 
     return (
       <Sections.Section withBottomPadding>
         <Sections.GenericItem>
           <ValidityHeader
-            isValid={isValidTicket}
-            isNotExpired={isNotExpired}
-            isRefunded={isRefunded}
+            status={validityStatus}
             now={now}
+            validFrom={validFrom}
             validTo={validTo}
           />
-          {isValidTicket ? (
-            <ValidityLine
-              status="valid"
-              now={now}
-              validFrom={validFrom}
-              validTo={validTo}
-            />
-          ) : (
-            <ValidityLine status="expired" />
-          )}
+          <ValidityLine
+            status={validityStatus}
+            now={now}
+            validFrom={validFrom}
+            validTo={validTo}
+          />
           <TicketInfo
             travelRights={fc.travelRights.filter(isPreactivatedTicket)}
           />
@@ -82,7 +72,7 @@ const DetailsContent: React.FC<Props> = ({
           text={t(TicketTexts.details.askForReceipt)}
           onPress={onReceiptNavigate}
         />
-        {isValidTicket && qrCodeSvg && (
+        {validityStatus === 'valid' && qrCodeSvg && (
           <Sections.GenericItem>
             <View style={styles.qrCode}>
               <SvgXml xml={qrCodeSvg} width="100%" height="100%" />

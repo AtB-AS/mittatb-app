@@ -1,9 +1,10 @@
-import React, {useEffect, useRef} from 'react';
+import React, {ReactElement, useEffect, useRef} from 'react';
 import {Animated, Dimensions, Easing, View} from 'react-native';
 import Dash from 'react-native-dash';
 import {StyleSheet, useTheme} from '@atb/theme';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '@atb/theme/colors';
+import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
@@ -15,17 +16,9 @@ type Props =
       validFrom: number;
       validTo: number;
     }
-  | {
-      status: 'reserving';
-    }
-  | {
-      status: 'expired';
-    }
-  | {
-      status: 'unknown';
-    };
+  | {status: Exclude<ValidityStatus, 'valid'>};
 
-const ValidityLine = (props: Props) => {
+const ValidityLine = (props: Props): ReactElement => {
   const {theme} = useTheme();
   const styles = useStyles();
 
@@ -43,6 +36,8 @@ const ValidityLine = (props: Props) => {
           validityPercent={validityPercent}
         />
       );
+    case 'upcoming':
+    case 'refunded':
     case 'expired':
       return (
         <View style={styles.container}>
@@ -56,7 +51,6 @@ const ValidityLine = (props: Props) => {
         </View>
       );
     case 'unknown':
-    default:
       return <LineWithVerticalBars backgroundColor={colors.primary.gray_300} />;
   }
 };
