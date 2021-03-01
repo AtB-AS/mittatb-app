@@ -22,8 +22,9 @@ import {
   dictionary,
   NearbyTexts,
   TranslatedString,
+  TranslateFunction,
   useTranslation,
-} from '@atb/translations/';
+} from '@atb/translations';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useMemo, useState} from 'react';
@@ -220,7 +221,7 @@ const NearbyOverview: React.FC<Props> = ({
         isFetchingMore={isFetchingMore && !isLoading}
         isLoading={isLoading}
         isInitialScreen={isInitialScreen}
-        error={error ? t(translateErrorType(error.type)) : undefined}
+        error={error ? translateErrorType(error.type, t) : undefined}
       />
     </SimpleDisappearingHeader>
   );
@@ -293,12 +294,15 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-function translateErrorType(errorType: ErrorType): TranslatedString {
+function translateErrorType(
+  errorType: ErrorType,
+  t: TranslateFunction,
+): string {
   switch (errorType) {
     case 'network-error':
     case 'timeout':
-      return NearbyTexts.messages.networkError;
+      return t(NearbyTexts.messages.networkError);
     default:
-      return NearbyTexts.messages.defaultFetchError;
+      return t(NearbyTexts.messages.defaultFetchError);
   }
 }

@@ -20,7 +20,6 @@ export type WaitDetails = {
 const WaitSection: React.FC<WaitDetails> = (wait) => {
   const style = useSectionStyles();
   const {t, language} = useTranslation();
-  const WaitTexts = TripDetailsTexts.trip.leg.wait;
   const waitTime = secondsToDuration(wait.waitSeconds, language);
   const shortWait = timeIsShort(wait.waitSeconds);
   const iconColor = useTransportationColor();
@@ -32,13 +31,13 @@ const WaitSection: React.FC<WaitDetails> = (wait) => {
         <TripRow rowLabel={<Info />}>
           <TinyMessageBox
             type="info"
-            message={t(WaitTexts.messages.shortTime)}
+            message={t(TripDetailsTexts.trip.leg.wait.messages.shortTime)}
           />
         </TripRow>
       )}
       <TripRow rowLabel={<Wait />}>
         <ThemeText type="lead" color="secondary">
-          {t(WaitTexts.label(waitTime))}
+          {t(TripDetailsTexts.trip.leg.wait.label(waitTime))}
         </ThemeText>
       </TripRow>
     </View>

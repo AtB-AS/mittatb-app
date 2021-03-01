@@ -156,7 +156,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             icon={<ThemeIcon svg={Edit} />}
           />
           <Sections.LinkItem
-            text={t(tariffZonesSummary(fromTariffZone, toTariffZone, language))}
+            text={tariffZonesSummary(fromTariffZone, toTariffZone, language, t)}
             onPress={() => {
               navigation.push('TariffZones', {
                 fromTariffZone,

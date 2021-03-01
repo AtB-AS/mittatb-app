@@ -324,18 +324,17 @@ function ToggleFavoriteDepartureButton({line, stop, quay}: FavoriteStarProps) {
   };
 
   const Icon = favorite ? SvgFavoriteFill : SvgFavorite;
-  const label =
+  const label = t(
     NearbyTexts.results.lines.favorite[
       !favorite ? 'addFavorite' : 'removeFavorite'
-    ];
+    ](`${line.lineNumber} ${line.lineName}`, stop.name),
+  );
   return (
     <TouchableOpacity
       onPress={onPress}
       accessibilityRole="checkbox"
       accessibilityState={{checked: !!favorite}}
-      accessibilityLabel={t(
-        label(`${line.lineNumber} ${line.lineName}`, stop.name),
-      )}
+      accessibilityLabel={label}
       hitSlop={insets.symmetric(14, 8)}
       style={styles.favoriteButton}
     >

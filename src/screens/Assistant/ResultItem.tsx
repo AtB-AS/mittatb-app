@@ -352,29 +352,46 @@ function LineDisplayName({leg, style}: {leg: Leg; style?: ViewStyle}) {
 
 const tripSummary = (tripPattern: TripPattern, t: TranslateFunction) => {
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
-  const screenreaderText = AssistantTexts.results.resultItem.journeySummary;
-
   return `
     ${
       !nonFootLegs.length
-        ? t(screenreaderText.legsDescription.footLegsOnly)
+        ? t(
+            AssistantTexts.results.resultItem.journeySummary.legsDescription
+              .footLegsOnly,
+          )
         : nonFootLegs.length === 1
-        ? t(screenreaderText.legsDescription.noSwitching)
+        ? t(
+            AssistantTexts.results.resultItem.journeySummary.legsDescription
+              .noSwitching,
+          )
         : nonFootLegs.length === 2
-        ? t(screenreaderText.legsDescription.oneSwitch)
-        : t(screenreaderText.legsDescription.someSwitches(nonFootLegs.length))
+        ? t(
+            AssistantTexts.results.resultItem.journeySummary.legsDescription
+              .oneSwitch,
+          )
+        : t(
+            AssistantTexts.results.resultItem.journeySummary.legsDescription.someSwitches(
+              nonFootLegs.length,
+            ),
+          )
     }. ${screenReaderPause}
     ${nonFootLegs
       ?.map((l) => {
         return `${t(getTranslatedModeName(l.mode))} ${
           l.line
-            ? t(screenreaderText.prefixedLineNumber(l.line.publicCode))
+            ? t(
+                AssistantTexts.results.resultItem.journeySummary.prefixedLineNumber(
+                  l.line.publicCode,
+                ),
+              )
             : ''
         }`;
       })
       .join(', ')} ${screenReaderPause}
       ${t(
-        screenreaderText.totalWalkDistance(tripPattern.walkDistance.toFixed(0)),
+        AssistantTexts.results.resultItem.journeySummary.totalWalkDistance(
+          tripPattern.walkDistance.toFixed(0),
+        ),
       )}  ${screenReaderPause}
      
 
