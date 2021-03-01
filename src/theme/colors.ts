@@ -394,7 +394,7 @@ export const themes: Themes = {
       ...textTypeStyles,
     },
     border: {
-      primary: colors.text.light,
+      primary: colors.primary.gray_600,
       secondary: colors.text.light,
       focus: colors.secondary.cyan_500,
       info: colors.secondary.cyan_800,
