@@ -1,15 +1,12 @@
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
-import {
-  FareContract,
-  FareContractState,
-  isPreactivatedTicket,
-} from '@atb/tickets';
+import {FareContract, isPreactivatedTicket} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import TicketInfo from './TicketInfo';
 import ValidityHeader from './ValidityHeader';
 import ValidityLine from './ValidityLine';
+import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 
 type Props = {
   fareContract: FareContract;
@@ -29,30 +26,23 @@ const SimpleTicket: React.FC<Props> = ({
     const {startDateTime, endDateTime} = firstTravelRight;
     const validTo = endDateTime.toMillis();
     const validFrom = startDateTime.toMillis();
-    const isNotExpired = validTo >= now;
-    const isRefunded = fc.state === FareContractState.Refunded;
-    const isValidTicket = isNotExpired && !isRefunded;
+    const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
 
     return (
       <Sections.Section withBottomPadding>
         <Sections.GenericItem>
           <ValidityHeader
-            isValid={isValidTicket}
+            status={validityStatus}
             now={now}
+            validFrom={validFrom}
             validTo={validTo}
-            isNotExpired={isNotExpired}
-            isRefunded={isRefunded}
           />
-          {isValidTicket ? (
-            <ValidityLine
-              status="valid"
-              now={now}
-              validFrom={validFrom}
-              validTo={validTo}
-            />
-          ) : (
-            <ValidityLine status="expired" />
-          )}
+          <ValidityLine
+            status={validityStatus}
+            now={now}
+            validFrom={validFrom}
+            validTo={validTo}
+          />
 
           <TicketInfo
             travelRights={fc.travelRights.filter(isPreactivatedTicket)}
@@ -60,9 +50,9 @@ const SimpleTicket: React.FC<Props> = ({
         </Sections.GenericItem>
         <Sections.LinkItem
           text={t(
-            isValidTicket
+            validityStatus === 'valid'
               ? TicketTexts.detailsLink.valid
-              : TicketTexts.detailsLink.expired,
+              : TicketTexts.detailsLink.notValid,
           )}
           onPress={onPressDetails}
         />
