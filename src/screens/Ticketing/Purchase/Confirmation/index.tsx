@@ -19,12 +19,15 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../';
 import useOfferState from '../Overview/use-offer-state';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
+import {createTravelDateText} from '@atb/screens/Ticketing/Purchase/Overview';
+import {formatToLongDateTime} from '@atb/utils/date';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
   fromTariffZone: TariffZone;
   toTariffZone: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
+  travelDate?: string;
   headerLeftButton: LeftButtonProps;
 };
 
@@ -51,6 +54,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     toTariffZone,
     preassignedFareProduct,
     userProfilesWithCount,
+    travelDate,
     headerLeftButton,
   } = params;
 
@@ -66,6 +70,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     fromTariffZone,
     toTariffZone,
     userProfilesWithCount,
+    travelDate,
   );
 
   const offerExpirationTime =
@@ -176,7 +181,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                     type="lead"
                     color="secondary"
                   >
-                    {t(PurchaseConfirmationTexts.validityTexts.startTime)}
+                    {createTravelDateText(t, language, travelDate)}
                   </ThemeText>
                 </View>
               </Sections.GenericItem>
@@ -207,7 +212,13 @@ const Confirmation: React.FC<ConfirmationProps> = ({
 
         <MessageBox type="info">
           <ThemeText style={{paddingBottom: theme.spacings.medium}}>
-            {t(PurchaseConfirmationTexts.infoText.part1)}
+            {travelDate
+              ? t(
+                  PurchaseConfirmationTexts.infoText.validInFuture(
+                    formatToLongDateTime(travelDate, language),
+                  ),
+                )
+              : t(PurchaseConfirmationTexts.infoText.validNow)}
           </ThemeText>
           {/*<ThemeText>{t(PurchaseConfirmationTexts.infoText.part2)}</ThemeText>*/}
         </MessageBox>

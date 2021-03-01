@@ -23,6 +23,9 @@ import TariffZoneSearch, {
 } from './TariffZones/search';
 import TravellersScreen from './Travellers';
 import {UserProfileWithCount} from './Travellers/use-user-count-state';
+import TravelDateScreen, {
+  TravelDateRouteParams,
+} from '@atb/screens/Ticketing/Purchase/TravelDate';
 
 type PurchaseOverviewParams = {
   refreshOffer?: boolean;
@@ -31,6 +34,7 @@ type PurchaseOverviewParams = {
   fromTariffZone?: TariffZoneWithMetadata;
   toTariffZone?: TariffZoneWithMetadata;
   userProfilesWithCount?: UserProfileWithCount[];
+  travelDate?: string;
 };
 
 type TravellersParams = {
@@ -47,6 +51,7 @@ export type TicketingStackParams = {
   PurchaseOverview: PurchaseOverviewParams;
   Product: ProductRouteParams;
   Travellers: TravellersParams;
+  TravelDate: TravelDateRouteParams;
   TariffZones: TariffZonesParams;
   TariffZoneSearch: TariffZoneSearchParams;
   Confirmation: ConfirmationRouteParams;
@@ -56,8 +61,6 @@ export type TicketingStackParams = {
 };
 
 const Stack = createDismissableStackNavigator<TicketingStackParams>();
-
-export type RouteParams = PurchaseOverviewParams;
 
 type TicketPurchaseRootProps = {
   route: RouteProp<TicketingStackParams, 'Travellers'>;
@@ -76,6 +79,7 @@ export default function PurchaseStack({route}: TicketPurchaseRootProps) {
       />
       <Stack.Screen name="Product" component={ProductScreen} />
       <Stack.Screen name="Travellers" component={TravellersScreen} />
+      <Stack.Screen name="TravelDate" component={TravelDateScreen} />
       <Stack.Screen name="TariffZones" component={TariffZones} />
       <Stack.Screen name="Confirmation" component={ConfirmationScreen} />
       <Stack.Screen name="PaymentCreditCard" component={CreditCardScreen} />

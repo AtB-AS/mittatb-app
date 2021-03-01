@@ -29,6 +29,7 @@ export type OfferSearchParams = {
   zones: string[];
   travellers: {id: string; user_type: string; count: number}[];
   products: string[];
+  travel_date?: string;
 };
 
 export async function searchOffers(

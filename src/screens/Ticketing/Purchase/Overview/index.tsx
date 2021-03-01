@@ -17,10 +17,7 @@ import {
 import {RouteProp} from '@react-navigation/native';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
-import {
-  getReferenceDataName,
-  isUserProfileSelectableForProductType,
-} from '@atb/reference-data/utils';
+import {getReferenceDataName} from '@atb/reference-data/utils';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useEffect, useMemo} from 'react';
 import {View} from 'react-native';
@@ -28,6 +25,8 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../';
 import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
 import useOfferState from './use-offer-state';
+import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
+import {formatToLongDateTime} from '@atb/utils/date';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -57,11 +56,17 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const preassignedFareProduct =
     params.preassignedFareProduct ?? selectableProducts[0];
 
+  const {userProfilesWhiteList, travelDateSelectionEnabled} = getPurchaseFlow(
+    preassignedFareProduct,
+  );
+
   const defaultUserProfilesWithCount = useMemo(
     () =>
       userProfiles
-        .filter((u) =>
-          isUserProfileSelectableForProductType(u, preassignedFareProduct.type),
+        .filter(
+          (u) =>
+            !userProfilesWhiteList ||
+            userProfilesWhiteList.includes(u.userTypeString),
         )
         .map((u, i) => ({
           ...u,
@@ -76,6 +81,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const {
     fromTariffZone = defaultTariffZone,
     toTariffZone = defaultTariffZone,
+    travelDate,
   } = params;
 
   const {isSearchingOffer, error, totalPrice, refreshOffer} = useOfferState(
@@ -83,6 +89,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     fromTariffZone,
     toTariffZone,
     userProfilesWithCount,
+    travelDate,
   );
 
   useEffect(() => {
@@ -141,9 +148,11 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             }}
           />
           <Sections.LinkItem
-            text={t(PurchaseOverviewTexts.startTime)}
-            disabled={true}
-            onPress={() => {}}
+            text={createTravelDateText(t, language, travelDate)}
+            disabled={!travelDateSelectionEnabled}
+            onPress={() => {
+              navigation.navigate('TravelDate', {travelDate});
+            }}
             icon={<ThemeIcon svg={Edit} />}
           />
           <Sections.LinkItem
@@ -177,6 +186,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
               toTariffZone,
               userProfilesWithCount,
               preassignedFareProduct,
+              travelDate,
               headerLeftButton: {type: 'back'},
             });
           }}
@@ -207,6 +217,19 @@ export const createTravellersText = (
   }
 };
 
+export const createTravelDateText = (
+  t: TranslateFunction,
+  language: Language,
+  travelDate?: string,
+) => {
+  return travelDate
+    ? t(
+        PurchaseOverviewTexts.travelDate.futureDate(
+          formatToLongDateTime(travelDate, language),
+        ),
+      )
+    : t(PurchaseOverviewTexts.travelDate.now);
+};
 /**
  * Get the default tariff zone, either based on current location or else the
  * first tariff zone in the provided tariff zones list.
