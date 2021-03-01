@@ -11,7 +11,7 @@ import {
   ConfirmationErrorCode,
   PhoneSignInErrorCode,
 } from '@atb/auth/AuthContext';
-import MessageBox from '@atb/message-box';
+import MessageBox from '@atb/components/message-box';
 import ThemeText from '@atb/components/text';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';

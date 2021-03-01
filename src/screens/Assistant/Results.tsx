@@ -2,7 +2,7 @@ import {ErrorType} from '@atb/api/utils';
 import OptionalNextDayLabel from '@atb/components/optional-day-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import ThemeText from '@atb/components/text';
-import MessageBox from '@atb/message-box';
+import MessageBox from '@atb/components/message-box';
 import {TripPattern} from '@atb/sdk';
 import {StyleSheet} from '@atb/theme';
 import {AssistantTexts, useTranslation} from '@atb/translations';

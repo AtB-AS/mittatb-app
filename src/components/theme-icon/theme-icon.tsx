@@ -1,10 +1,10 @@
 import {useTheme} from '@atb/theme';
-import {iconSizes, TextColor} from '@atb/theme/colors';
+import {iconSizes, Statuses, TextColor, Theme} from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
 
 type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
-  colorType?: TextColor;
+  colorType?: TextColor | Statuses;
   size?: keyof typeof iconSizes;
 } & SvgProps;
 
@@ -15,11 +15,20 @@ const ThemeIcon = ({
   ...props
 }: ThemeIconProps): JSX.Element => {
   const {theme} = useTheme();
+
+  let fill = isStatuses(colorType, theme)
+    ? theme.status[colorType].main.backgroundColor
+    : theme.text.colors[colorType ?? 'primary'];
+
   const settings = {
-    fill: theme.text.colors[colorType ?? 'primary'],
+    fill,
     height: theme.icon.size[size],
     ...props,
   };
   return svg(settings);
 };
 export default ThemeIcon;
+
+function isStatuses(a: any, theme: Theme): a is Statuses {
+  return a in theme.status;
+}

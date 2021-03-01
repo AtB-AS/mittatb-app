@@ -1,7 +1,7 @@
 import {Wait} from '@atb/assets/svg/icons/transportation';
 import {Info} from '@atb/assets/svg/situations';
 import ThemeText from '@atb/components/text';
-import {TinyMessageBox} from '@atb/message-box';
+import {TinyMessageBox} from '@atb/components/message-box';
 import {StyleSheet} from '@atb/theme';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {secondsToDuration} from '@atb/utils/date';

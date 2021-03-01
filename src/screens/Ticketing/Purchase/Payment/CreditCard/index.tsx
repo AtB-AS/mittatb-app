@@ -1,7 +1,7 @@
 import {ErrorType} from '@atb/api/utils';
 import Button from '@atb/components/button';
 import Header from '@atb/components/screen-header';
-import MessageBox from '@atb/message-box';
+import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {StyleSheet} from '@atb/theme';
 import {ReserveOffer, TicketReservation, useTicketState} from '@atb/tickets';

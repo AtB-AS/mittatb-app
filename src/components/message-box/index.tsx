@@ -5,13 +5,12 @@ import {
   Error as ErrorIcon,
   Info,
   Warning,
-} from '../assets/svg/icons/status';
-import {StyleSheet} from '../theme';
-import ThemeText from '../components/text';
-import ThemeIcon from '../components/theme-icon';
-import hexToRgba from 'hex-to-rgba';
-import MessageBoxTexts from '../translations/components/MessageBox';
-import {useTranslation} from '../translations';
+} from '../../assets/svg/icons/status';
+import {StyleSheet, useTheme, Statuses} from '@atb/theme';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import MessageBoxTexts from '@atb/translations/components/MessageBox';
+import {useTranslation} from '@atb/translations';
 
 type WithMessage = {
   message: string;
@@ -23,7 +22,7 @@ type WithChildren = {
   retryFunction?: never;
   children: React.ReactNode;
 };
-export type MessageType = 'info' | 'warning' | 'error' | 'success';
+export type MessageType = Statuses;
 export type MessageBoxProps = {
   icon?: React.ReactNode;
   type?: MessageType;
@@ -42,6 +41,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({
   withMargin = false,
   retryFunction,
 }) => {
+  const {theme} = useTheme();
   const styles = useBoxStyle();
   const {t} = useTranslation();
   const iconElement =
@@ -62,19 +62,22 @@ const MessageBox: React.FC<MessageBoxProps> = ({
   ) : (
     children
   );
-  const backgroundColor = styles[typeToColorClass(type)];
+  const colorStyle = {
+    ...theme.status[type].bg,
+    borderColor: theme.status[type].main.backgroundColor,
+  };
   const paddedStyle = withMargin ? styles.container__padded : undefined;
   return (
-    <View
-      style={[styles.container, paddedStyle, backgroundColor, containerStyle]}
-    >
+    <View style={[styles.container, paddedStyle, colorStyle, containerStyle]}>
       <View style={styles.titleContainer}>
         {iconElement != null && (
           <View style={styles.iconContainer}>{iconElement}</View>
         )}
-        {title && <ThemeText style={styles.title}>{title}</ThemeText>}
       </View>
-      <View>{child}</View>
+      <View style={styles.content}>
+        {title && <ThemeText style={styles.title}>{title}</ThemeText>}
+        <View>{child}</View>
+      </View>
     </View>
   );
 };
@@ -84,10 +87,14 @@ export const TinyMessageBox: React.FC<TinyMessageProps> = ({
   message,
   children,
 }) => {
+  const {theme} = useTheme();
   const styles = useBoxStyle();
-  const backgroundColor = styles[typeToColorClass(type)];
+  const colorStyle = {
+    ...theme.status[type].bg,
+    borderColor: theme.status[type].main.backgroundColor,
+  };
   return (
-    <View style={[styles.container, backgroundColor]}>
+    <View style={[styles.container, colorStyle]}>
       {message ? (
         <ThemeText style={styles.text}>{message}</ThemeText>
       ) : (
@@ -104,19 +111,19 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.medium,
     borderRadius: theme.border.radius.regular,
     borderWidth: theme.border.width.slim,
+    flexDirection: 'row',
   },
   container__padded: {
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
   iconContainer: {
-    marginBottom: 8,
-    marginRight: 12,
+    marginRight: theme.spacings.medium,
   },
-  text: {
-    ...theme.text.body,
-    color: theme.text.colors.primary,
+  content: {
+    flex: 1,
   },
+  text: theme.text.body,
   retryText: {
     marginTop: theme.spacings.medium,
   },
@@ -127,22 +134,6 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
     fontSize: 16,
     fontWeight: '600',
   },
-  container__info: {
-    backgroundColor: theme.background.info,
-    borderColor: theme.border.info,
-  },
-  container__warning: {
-    backgroundColor: theme.background.warning,
-    borderColor: theme.border.warning,
-  },
-  container__error: {
-    backgroundColor: hexToRgba(theme.background.error, 0.5),
-    borderColor: theme.border.error,
-  },
-  container__success: {
-    backgroundColor: theme.background.success,
-    borderColor: theme.border.success,
-  },
 }));
 
 function typeToIcon(type: MessageBoxProps['type']) {
@@ -151,28 +142,9 @@ function typeToIcon(type: MessageBoxProps['type']) {
       return Warning;
     case 'error':
       return ErrorIcon;
-    case 'success':
+    case 'valid':
       return Check;
     default:
       return Info;
-  }
-}
-
-function typeToColorClass(
-  type: MessageBoxProps['type'],
-):
-  | 'container__info'
-  | 'container__warning'
-  | 'container__error'
-  | 'container__success' {
-  switch (type) {
-    case 'warning':
-      return 'container__warning';
-    case 'error':
-      return 'container__error';
-    case 'success':
-      return 'container__success';
-    default:
-      return 'container__info';
   }
 }

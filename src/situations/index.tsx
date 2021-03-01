@@ -1,7 +1,7 @@
 import React, {ComponentProps} from 'react';
 import {Warning} from '../assets/svg/situations';
 import ThemeText from '../components/text';
-import MessageBox, {MessageBoxProps} from '../message-box';
+import MessageBox, {MessageBoxProps} from '../components/message-box';
 import {Situation} from '../sdk';
 
 export type SituationMessageProps = {
