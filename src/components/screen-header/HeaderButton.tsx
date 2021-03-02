@@ -20,7 +20,41 @@ export type IconButton = Omit<HeaderButtonProps, 'type'> & {
 };
 
 const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
-  const iconButton = useIconButton(buttonProps);
+  return buttonProps.onPress ? (
+    <HeaderButtonWithSpecifiedOnPress
+      onPress={buttonProps.onPress}
+      {...buttonProps}
+    />
+  ) : (
+    <HeaderButtonWithDefaultNavigation {...buttonProps} />
+  );
+};
+
+const HeaderButtonWithSpecifiedOnPress: React.FC<
+  Omit<HeaderButtonProps, 'onPress'> & {onPress: () => void}
+> = (buttonProps) => {
+  const iconButton = useIconButton(
+    buttonProps,
+    buttonProps.onPress,
+    buttonProps.onPress,
+  );
+  return <HeaderButtonComponent iconButton={iconButton} />;
+};
+
+const HeaderButtonWithDefaultNavigation: React.FC<HeaderButtonProps> = (
+  buttonProps,
+) => {
+  const navigation = useNavigation();
+  const navigateHome = useNavigateToStartScreen();
+  const iconButton = useIconButton(
+    buttonProps,
+    navigation.goBack,
+    navigateHome,
+  );
+  return <HeaderButtonComponent iconButton={iconButton} />;
+};
+
+const HeaderButtonComponent = ({iconButton}: {iconButton?: IconButton}) => {
   if (!iconButton) {
     return null;
   }
@@ -40,31 +74,31 @@ const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
 };
 
 const useIconButton = (
-  buttonProps: HeaderButtonProps,
+  buttonProps: Omit<HeaderButtonProps, 'onPress'>,
+  goBack: () => void,
+  goHome: () => void,
 ): IconButton | undefined => {
-  const navigation = useNavigation();
-  const navigateHome = useNavigateToStartScreen();
   const chatIcon = useChatIcon();
   const {t} = useTranslation();
   switch (buttonProps.type) {
     case 'back':
     case 'cancel':
     case 'close': {
-      const {type, onPress, ...accessibilityProps} = buttonProps;
+      const {type, ...accessibilityProps} = buttonProps;
       return {
         icon: (
           <ThemeText>{t(ScreenHeaderTexts.headerButton[type].text)}</ThemeText>
         ),
         accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
-        onPress: onPress || (() => navigation.goBack()),
+        onPress: goBack,
         ...accessibilityProps,
       };
     }
     case 'home': {
-      const {type, onPress, ...accessibilityProps} = buttonProps;
+      const {type, ...accessibilityProps} = buttonProps;
       return {
         icon: <ThemeIcon svg={LogoOutline} />,
-        onPress: onPress || navigateHome,
+        onPress: goHome,
         accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
         ...accessibilityProps,
       };

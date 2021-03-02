@@ -19,7 +19,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../';
@@ -27,6 +27,7 @@ import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
 import useOfferState from './use-offer-state';
 import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
 import {formatToLongDateTime} from '@atb/utils/date';
+import ProductLinkAndPopup from '@atb/screens/Ticketing/Purchase/Product/ProductLinkAndPopup';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -53,8 +54,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     (p) => p.type === params.selectableProductType,
   );
 
-  const preassignedFareProduct =
-    params.preassignedFareProduct ?? selectableProducts[0];
+  const [preassignedFareProduct, setPreassignedFareProduct] = useState(
+    selectableProducts[0],
+  );
 
   const {userProfilesWhiteList, travelDateSelectionEnabled} = getPurchaseFlow(
     preassignedFareProduct,
@@ -124,15 +126,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         )}
 
         <Sections.Section>
-          <Sections.LinkItem
-            text={getReferenceDataName(preassignedFareProduct, language)}
-            onPress={() => {
-              navigation.push('Product', {
-                preassignedFareProductId: preassignedFareProduct.id,
-              });
-            }}
-            disabled={selectableProducts.length <= 1}
-            icon={<ThemeIcon svg={Edit} />}
+          <ProductLinkAndPopup
+            preassignedFareProduct={preassignedFareProduct}
+            onSave={setPreassignedFareProduct}
           />
           <Sections.LinkItem
             text={createTravellersText(userProfilesWithCount, t, language)}
