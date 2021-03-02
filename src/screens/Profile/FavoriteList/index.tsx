@@ -9,7 +9,7 @@ import * as Sections from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
 import {StoredLocationFavorite} from '@atb/favorites/types';
-import MessageBox from '@atb/message-box';
+import MessageBox from '@atb/components/message-box';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet, Theme} from '@atb/theme';
 import {FavoriteListTexts, useTranslation} from '@atb/translations';

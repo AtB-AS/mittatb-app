@@ -129,6 +129,16 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             }
           />
         </Sections.Section>
+
+        {__DEV__ && (
+          <Sections.Section withPadding>
+            <Sections.HeaderItem text="Developer menu" />
+            <Sections.LinkItem
+              text="Design system"
+              onPress={() => navigation.navigate('DesignSystem')}
+            />
+          </Sections.Section>
+        )}
       </ScrollView>
     </View>
   );

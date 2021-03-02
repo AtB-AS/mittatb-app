@@ -4,7 +4,7 @@ import AccessibleText, {
 } from '@atb/components/accessible-text';
 import ThemeText from '@atb/components/text';
 import TransportationIcon from '@atb/components/transportation-icon';
-import {TinyMessageBox} from '@atb/message-box';
+import {TinyMessageBox} from '@atb/components/message-box';
 import {Leg, Place} from '@atb/sdk';
 import SituationMessages from '@atb/situations';
 import {StyleSheet} from '@atb/theme';

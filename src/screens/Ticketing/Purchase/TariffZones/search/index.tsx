@@ -5,7 +5,7 @@ import ThemeText from '@atb/components/text';
 import {Location} from '@atb/favorites/types';
 import {useGeocoder} from '@atb/geocoder';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import MessageBox from '@atb/message-box';
+import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {TariffZone} from '@atb/reference-data/types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';

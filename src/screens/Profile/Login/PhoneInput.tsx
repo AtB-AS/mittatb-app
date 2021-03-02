@@ -9,7 +9,7 @@ import Button from '@atb/components/button';
 import {useAuthState} from '@atb/auth';
 import ThemeText from '@atb/components/text';
 import {PhoneSignInErrorCode} from '@atb/auth/AuthContext';
-import MessageBox from '@atb/message-box';
+import MessageBox from '@atb/components/message-box';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
 

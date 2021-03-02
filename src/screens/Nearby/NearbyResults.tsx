@@ -3,7 +3,7 @@ import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement
 import {ActionItem} from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import {Location} from '@atb/favorites/types';
-import MessageBox from '@atb/message-box';
+import MessageBox from '@atb/components/message-box';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
