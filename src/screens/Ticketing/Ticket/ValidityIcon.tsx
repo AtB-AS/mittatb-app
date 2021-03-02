@@ -6,6 +6,7 @@ import {View} from 'react-native';
 import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import {Wait} from '@atb/assets/svg/icons/transportation';
 import {TicketTexts, useTranslation} from '@atb/translations';
+import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 
 const ValidityIcon: React.FC<{status: ValidityStatus}> = ({status}) => {
   const {theme} = useTheme();
@@ -23,42 +24,44 @@ const ValidityIconSvg = ({status}: {status: ValidityStatus}) => {
   switch (status) {
     case 'valid':
       return (
-        <ValidTicket
-          fill={theme.colors.primary_1.backgroundColor}
+        <ThemeIcon
+          svg={ValidTicket}
+          colorType="valid"
           accessibilityLabel={a11yLabel}
         />
       );
     case 'reserving':
       return (
-        <ValidTicket
-          fill={theme.colors.primary_3.backgroundColor}
+        <ThemeIcon
+          svg={ValidTicket}
+          colorType="info"
           accessibilityLabel={a11yLabel}
         />
       );
     case 'unknown':
       return (
-        <ValidTicket
-          fill={theme.colors.secondary_1.backgroundColor}
+        <ThemeIcon
+          svg={ValidTicket}
+          colorType="primary"
           accessibilityLabel={a11yLabel}
         />
       );
     case 'expired':
-      return (
-        <InvalidTicket
-          fill={theme.colors.primary_destructive.backgroundColor}
-          accessibilityLabel={a11yLabel}
-        />
-      );
     case 'refunded':
       return (
-        <InvalidTicket
-          fill={theme.colors.primary_destructive.backgroundColor}
+        <ThemeIcon
+          svg={InvalidTicket}
+          colorType="error"
           accessibilityLabel={a11yLabel}
         />
       );
     case 'upcoming':
       return (
-        <Wait fill={theme.text.colors.primary} accessibilityLabel={a11yLabel} />
+        <ThemeIcon
+          svg={Wait}
+          colorType="primary"
+          accessibilityLabel={a11yLabel}
+        />
       );
   }
 };
