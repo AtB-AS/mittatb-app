@@ -5,7 +5,7 @@ import ScreenHeader from '@atb/components/screen-header';
 import {FavoriteItem, Section} from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
-import MessageBox from '@atb/message-box';
+import MessageBox from '@atb/components/message-box';
 import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
 import {StyleSheet, Theme} from '@atb/theme';
 import {FavoriteListTexts, useTranslation} from '@atb/translations';

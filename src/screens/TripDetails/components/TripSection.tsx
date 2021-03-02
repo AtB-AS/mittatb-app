@@ -4,13 +4,14 @@ import AccessibleText, {
 } from '@atb/components/accessible-text';
 import ThemeText from '@atb/components/text';
 import TransportationIcon from '@atb/components/transportation-icon';
-import {TinyMessageBox} from '@atb/message-box';
+import {TinyMessageBox} from '@atb/components/message-box';
 import {Leg, Place} from '@atb/sdk';
 import SituationMessages from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
 import {
   Language,
   TranslatedString,
+  TranslateFunction,
   TripDetailsTexts,
   useTranslation,
 } from '@atb/translations';
@@ -79,13 +80,12 @@ const TripSection: React.FC<TripSectionProps> = ({
         {showFrom && (
           <TripRow
             alignChildren="flex-start"
-            accessibilityLabel={t(
-              getStopRowA11yTranslated(
-                'start',
-                getPlaceName(leg.fromPlace),
-                startTimes,
-                language,
-              ),
+            accessibilityLabel={getStopRowA11yTranslated(
+              'start',
+              getPlaceName(leg.fromPlace),
+              startTimes,
+              language,
+              t,
             )}
             rowLabel={<Time {...startTimes} />}
           >
@@ -135,13 +135,12 @@ const TripSection: React.FC<TripSectionProps> = ({
         {showTo && (
           <TripRow
             alignChildren="flex-end"
-            accessibilityLabel={t(
-              getStopRowA11yTranslated(
-                'end',
-                getPlaceName(leg.toPlace),
-                endTimes,
-                language,
-              ),
+            accessibilityLabel={getStopRowA11yTranslated(
+              'end',
+              getPlaceName(leg.toPlace),
+              endTimes,
+              language,
+              t,
             )}
             rowLabel={<Time {...endTimes} />}
           >
@@ -253,20 +252,32 @@ function getStopRowA11yTranslated(
   placeName: string,
   values: TimeValues,
   language: Language,
-): TranslatedString {
-  const a11yLabels = TripDetailsTexts.trip.leg[key].a11yLabel;
-
+  t: TranslateFunction,
+): string {
   const timeType = getTimeRepresentationType(values);
   const time = formatToClock(values.expectedTime ?? values.aimedTime, language);
   const aimedTime = formatToClock(values.aimedTime, language);
 
   switch (timeType) {
     case 'no-realtime':
-      return a11yLabels.noRealTime(placeName, aimedTime);
+      return t(
+        TripDetailsTexts.trip.leg[key].a11yLabel.noRealTime(
+          placeName,
+          aimedTime,
+        ),
+      );
     case 'no-significant-difference':
-      return a11yLabels.singularTime(placeName, time);
+      return t(
+        TripDetailsTexts.trip.leg[key].a11yLabel.singularTime(placeName, time),
+      );
     case 'significant-difference':
-      return a11yLabels.realAndAimed(placeName, time, aimedTime);
+      return t(
+        TripDetailsTexts.trip.leg[key].a11yLabel.realAndAimed(
+          placeName,
+          time,
+          aimedTime,
+        ),
+      );
   }
 }
 

@@ -3,7 +3,7 @@ import Button from '@atb/components/button';
 import Header, {LeftButtonProps} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
-import MessageBox from '@atb/message-box';
+import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';

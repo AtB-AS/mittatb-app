@@ -1,11 +1,15 @@
 import {ErrorType} from '@atb/api/utils';
 import Button from '@atb/components/button';
 import Header from '@atb/components/screen-header';
-import MessageBox from '@atb/message-box';
+import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {StyleSheet} from '@atb/theme';
 import {ReserveOffer, TicketReservation, useTicketState} from '@atb/tickets';
-import {PaymentVippsTexts, useTranslation} from '@atb/translations';
+import {
+  PaymentVippsTexts,
+  TranslateFunction,
+  useTranslation,
+} from '@atb/translations';
 import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import React from 'react';
@@ -70,7 +74,7 @@ export default function VippsPayment({
       <View style={styles.content}>
         {!error &&
           (state === 'reserving-offer' || state === 'offer-reserved' ? (
-            <Processing message={t(translateStateMessage(state))} />
+            <Processing message={translateStateMessage(state, t)} />
           ) : (
             <Button
               text={t(PaymentVippsTexts.buttons.goToVipps)}
@@ -81,7 +85,7 @@ export default function VippsPayment({
         {!!error && (
           <>
             <MessageBox
-              message={t(translateError(error.context, error.type))}
+              message={translateError(error.context, error.type, t)}
               type="error"
               containerStyle={styles.messageBox}
             />
@@ -105,22 +109,26 @@ export default function VippsPayment({
   );
 }
 
-const translateError = (errorContext: ErrorContext, errorType: ErrorType) => {
+const translateError = (
+  errorContext: ErrorContext,
+  errorType: ErrorType,
+  t: TranslateFunction,
+) => {
   switch (errorContext) {
     case 'open-vipps-url':
-      return PaymentVippsTexts.errorMessages.openVipps;
+      return t(PaymentVippsTexts.errorMessages.openVipps);
     case 'reserve-offer':
-      return PaymentVippsTexts.errorMessages.reserveOffer;
+      return t(PaymentVippsTexts.errorMessages.reserveOffer);
   }
 };
 
-const translateStateMessage = (loadingState: State) => {
+const translateStateMessage = (loadingState: State, t: TranslateFunction) => {
   switch (loadingState) {
     case 'reserving-offer':
-      return PaymentVippsTexts.stateMessages.reserving;
+      return t(PaymentVippsTexts.stateMessages.reserving);
     case 'offer-reserved':
     default:
-      return PaymentVippsTexts.stateMessages.reserved;
+      return t(PaymentVippsTexts.stateMessages.reserved);
   }
 };
 

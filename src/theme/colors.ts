@@ -94,17 +94,20 @@ const spacings = {
   xSmall: 4,
 };
 
-export type TextNames =
-  | 'heroTitle'
-  | 'pageTitle'
-  | 'sectionHeadline'
-  | 'itemHeadline'
-  | 'paragraphHeadline'
-  | 'body'
-  | 'body__link'
-  | 'lead'
-  | 'label'
-  | 'label__link';
+export const textNames = [
+  'heroTitle',
+  'pageTitle',
+  'sectionHeadline',
+  'itemHeadline',
+  'paragraphHeadline',
+  'body',
+  'body__link',
+  'lead',
+  'label',
+  'label__link',
+] as const;
+
+export type TextNames = typeof textNames[number];
 
 export const textTypeStyles: {[key in TextNames]: TextStyle} = {
   heroTitle: {fontSize: 32, lineHeight: 40},
@@ -160,18 +163,20 @@ type TextColorType = 'dark' | 'light';
 
 export type ContrastColor = {
   backgroundColor: string;
+  color: string;
   textColorType: TextColorType;
 };
 const contrastColor = (
   backgroundColor: string = colors.white,
   textColorType: TextColorType = 'dark',
 ): ContrastColor => {
-  return {backgroundColor, textColorType};
+  return {backgroundColor, color: colors.text[textColorType], textColorType};
 };
 type StatusColor = {
   main: ContrastColor;
   bg: ContrastColor;
 };
+
 export interface Theme {
   statusBarStyle: StatusBarProps['barStyle'];
   spacings: typeof spacings;
@@ -198,10 +203,10 @@ export interface Theme {
     transport_other: ContrastColor;
   };
   status: {
-    status_valid: StatusColor;
-    status_info: StatusColor;
-    status_warning: StatusColor;
-    status_error: StatusColor;
+    valid: StatusColor;
+    info: StatusColor;
+    warning: StatusColor;
+    error: StatusColor;
   };
   background: {
     level0: string;
@@ -237,6 +242,9 @@ export interface Theme {
     size: typeof iconSizes;
   };
 }
+
+export type Statuses = keyof Theme['status'];
+
 const defaultTextColors: {
   [key in TextColorType]: {[key in TextColor]: string};
 } = {
@@ -294,21 +302,21 @@ export const themes: Themes = {
       transport_other: contrastColor(colors.primary.gray_400),
     },
     status: {
-      status_valid: {
-        main: contrastColor(),
-        bg: contrastColor(),
+      valid: {
+        main: contrastColor(colors.primary.green_500, 'dark'),
+        bg: contrastColor(hexToRgba(colors.primary.green_500, 0.25), 'dark'),
       },
-      status_info: {
-        main: contrastColor(),
-        bg: contrastColor(),
+      info: {
+        main: contrastColor(colors.secondary.blue_500, 'light'),
+        bg: contrastColor(hexToRgba(colors.secondary.blue_500, 0.25), 'dark'),
       },
-      status_warning: {
-        main: contrastColor(),
-        bg: contrastColor(),
+      warning: {
+        main: contrastColor(colors.secondary.yellow_500, 'dark'),
+        bg: contrastColor(hexToRgba(colors.secondary.yellow_500, 0.25), 'dark'),
       },
-      status_error: {
-        main: contrastColor(),
-        bg: contrastColor(),
+      error: {
+        main: contrastColor(colors.secondary.red_500, 'light'),
+        bg: contrastColor(hexToRgba(colors.secondary.red_500, 0.25), 'dark'),
       },
     },
     text: {
@@ -371,21 +379,21 @@ export const themes: Themes = {
       transport_other: contrastColor(colors.primary.gray_300),
     },
     status: {
-      status_valid: {
-        main: contrastColor(),
-        bg: contrastColor(),
+      valid: {
+        main: contrastColor(colors.primary.green_500, 'dark'),
+        bg: contrastColor(hexToRgba(colors.primary.green_500, 0.25), 'light'),
       },
-      status_info: {
-        main: contrastColor(),
-        bg: contrastColor(),
+      info: {
+        main: contrastColor(colors.secondary.cyan_500, 'dark'),
+        bg: contrastColor(hexToRgba(colors.secondary.cyan_500, 0.25), 'light'),
       },
-      status_warning: {
-        main: contrastColor(),
-        bg: contrastColor(),
+      warning: {
+        main: contrastColor(colors.secondary.yellow_500, 'dark'),
+        bg: contrastColor(hexToRgba(colors.secondary.yellow_500, 0.25), 'dark'),
       },
-      status_error: {
-        main: contrastColor(),
-        bg: contrastColor(),
+      error: {
+        main: contrastColor(colors.secondary.red_500, 'light'),
+        bg: contrastColor(hexToRgba(colors.secondary.red_500, 0.25), 'dark'),
       },
     },
     text: {

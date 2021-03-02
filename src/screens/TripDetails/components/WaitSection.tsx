@@ -1,7 +1,7 @@
 import {Wait} from '@atb/assets/svg/icons/transportation';
 import {Info} from '@atb/assets/svg/situations';
 import ThemeText from '@atb/components/text';
-import {TinyMessageBox} from '@atb/message-box';
+import {TinyMessageBox} from '@atb/components/message-box';
 import {StyleSheet} from '@atb/theme';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {secondsToDuration} from '@atb/utils/date';
@@ -20,7 +20,6 @@ export type WaitDetails = {
 const WaitSection: React.FC<WaitDetails> = (wait) => {
   const style = useSectionStyles();
   const {t, language} = useTranslation();
-  const WaitTexts = TripDetailsTexts.trip.leg.wait;
   const waitTime = secondsToDuration(wait.waitSeconds, language);
   const shortWait = timeIsShort(wait.waitSeconds);
   const iconColor = useTransportationColor();
@@ -32,13 +31,13 @@ const WaitSection: React.FC<WaitDetails> = (wait) => {
         <TripRow rowLabel={<Info />}>
           <TinyMessageBox
             type="info"
-            message={t(WaitTexts.messages.shortTime)}
+            message={t(TripDetailsTexts.trip.leg.wait.messages.shortTime)}
           />
         </TripRow>
       )}
       <TripRow rowLabel={<Wait />}>
         <ThemeText type="lead" color="secondary">
-          {t(WaitTexts.label(waitTime))}
+          {t(TripDetailsTexts.trip.leg.wait.label(waitTime))}
         </ThemeText>
       </TripRow>
     </View>

@@ -3,7 +3,7 @@ import {Confirm} from '@atb/assets/svg/icons/actions';
 import Button from '@atb/components/button';
 import {TextInput} from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
-import MessageBox from '@atb/message-box';
+import MessageBox from '@atb/components/message-box';
 import {StyleSheet} from '@atb/theme';
 import analytics from '@react-native-firebase/analytics';
 import composeRefs from '@seznam/compose-react-refs';

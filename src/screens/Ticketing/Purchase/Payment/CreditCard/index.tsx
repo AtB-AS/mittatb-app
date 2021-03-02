@@ -1,11 +1,15 @@
 import {ErrorType} from '@atb/api/utils';
 import Button from '@atb/components/button';
 import Header from '@atb/components/screen-header';
-import MessageBox from '@atb/message-box';
+import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {StyleSheet} from '@atb/theme';
 import {ReserveOffer, TicketReservation, useTicketState} from '@atb/tickets';
-import {PaymentCreditCardTexts, useTranslation} from '@atb/translations';
+import {
+  PaymentCreditCardTexts,
+  TranslateFunction,
+  useTranslation,
+} from '@atb/translations';
 import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import React, {useState} from 'react';
@@ -93,13 +97,13 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
       </View>
       {loadingState && (
         <View style={styles.center}>
-          <Processing message={t(translateLoadingMessage(loadingState))} />
+          <Processing message={translateLoadingMessage(loadingState, t)} />
         </View>
       )}
       {!!error && (
         <View style={styles.center}>
           <MessageBox
-            message={t(translateError(error.context, error.type))}
+            message={translateError(error.context, error.type, t)}
             type="error"
             containerStyle={styles.messageBox}
           />
@@ -122,25 +126,32 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
   );
 };
 
-const translateLoadingMessage = (loadingState: LoadingState) => {
+const translateLoadingMessage = (
+  loadingState: LoadingState,
+  t: TranslateFunction,
+) => {
   switch (loadingState) {
     case 'reserving-offer':
-      return PaymentCreditCardTexts.stateMessages.reserving;
+      return t(PaymentCreditCardTexts.stateMessages.reserving);
     case 'loading-terminal':
-      return PaymentCreditCardTexts.stateMessages.loading;
+      return t(PaymentCreditCardTexts.stateMessages.loading);
     case 'processing-payment':
-      return PaymentCreditCardTexts.stateMessages.processing;
+      return t(PaymentCreditCardTexts.stateMessages.processing);
   }
 };
 
-const translateError = (errorContext: ErrorContext, errorType: ErrorType) => {
+const translateError = (
+  errorContext: ErrorContext,
+  errorType: ErrorType,
+  t: TranslateFunction,
+) => {
   switch (errorContext) {
     case 'terminal-loading':
-      return PaymentCreditCardTexts.errorMessages.loading;
+      return t(PaymentCreditCardTexts.errorMessages.loading);
     case 'reservation':
-      return PaymentCreditCardTexts.errorMessages.reservation;
+      return t(PaymentCreditCardTexts.errorMessages.reservation);
     case 'capture':
-      return PaymentCreditCardTexts.errorMessages.capture;
+      return t(PaymentCreditCardTexts.errorMessages.capture);
   }
 };
 

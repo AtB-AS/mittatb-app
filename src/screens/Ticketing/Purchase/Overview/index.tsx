@@ -4,7 +4,7 @@ import Header from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import MessageBox from '@atb/message-box';
+import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {TariffZone} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
@@ -156,7 +156,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             icon={<ThemeIcon svg={Edit} />}
           />
           <Sections.LinkItem
-            text={t(tariffZonesSummary(fromTariffZone, toTariffZone, language))}
+            text={tariffZonesSummary(fromTariffZone, toTariffZone, language, t)}
             onPress={() => {
               navigation.push('TariffZones', {
                 fromTariffZone,

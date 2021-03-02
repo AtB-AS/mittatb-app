@@ -10,7 +10,7 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
 import {StoredLocationFavorite} from '@atb/favorites/types';
 import {useLocationSearchValue} from '@atb/location-search';
-import MessageBox from '@atb/message-box';
+import MessageBox from '@atb/components/message-box';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet, Theme} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
