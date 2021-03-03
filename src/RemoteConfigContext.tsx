@@ -99,10 +99,33 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
     <RemoteConfigContext.Provider
       value={{
         ...config,
-        preassigned_fare_products: parseJson(
-          config.preassigned_fare_products,
-          defaultPreassignedFareProducts,
-        ),
+        preassigned_fare_products: [
+          // Todo: this is just for testing
+          parseJson(
+            config.preassigned_fare_products,
+            defaultPreassignedFareProducts,
+          )[0],
+          {
+            ...parseJson(
+              config.preassigned_fare_products,
+              defaultPreassignedFareProducts,
+            )[0],
+            name: {
+              lang: 'nob',
+              value: 'TestProdukt 1',
+            },
+          },
+          {
+            ...parseJson(
+              config.preassigned_fare_products,
+              defaultPreassignedFareProducts,
+            )[0],
+            name: {
+              lang: 'nob',
+              value: 'TestProdukt 2',
+            },
+          },
+        ],
         tariff_zones: parseJson(config.tariff_zones, defaultTariffZones),
         user_profiles: parseJson(config.user_profiles, defaultUserProfiles),
         refresh,

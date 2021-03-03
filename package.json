@@ -20,6 +20,7 @@
   "dependencies": {
     "@bugsnag/react-native": "^7.6.1",
     "@entur/sdk": "^3.4.0",
+    "@gorhom/bottom-sheet": "^2",
     "@leile/lobo-t": "^1.0.5",
     "@mapbox/polyline": "^1.1.1",
     "@react-native-community/async-storage": "^2.0.0-rc.1",
