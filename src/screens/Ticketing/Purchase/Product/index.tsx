@@ -78,7 +78,7 @@ const Product: React.FC<{
         ]}
       >
         <Button
-          mode="primary"
+          color="primary_2"
           text={t(ProductTexts.primaryButton.text)}
           onPress={() => {
             navigation.navigate('PurchaseOverview', {
