@@ -29,7 +29,7 @@ export const getPurchaseFlow = (
     return {
       travellerSelectionMode: 'single',
       travelDateSelectionEnabled: true,
-      userProfilesWhiteList: ['ADULT', 'SENIOR', 'CHILD'],
+      userProfilesWhiteList: ['ADULT', 'SENIOR', 'CHILD', 'STUDENT'],
     };
   } else {
     return {
