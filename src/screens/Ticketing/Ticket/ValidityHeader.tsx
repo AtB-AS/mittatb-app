@@ -41,32 +41,44 @@ function validityTimeText(
   validTo: number,
   t: TranslateFunction,
   language: Language,
-) {
-  const validityDifferenceSeconds = Math.abs(validTo - now) / 1000;
+): string {
   const conjunction = t(TicketTexts.validityHeader.durationDelimiter);
-  const duration = secondsToDuration(validityDifferenceSeconds, language, {
-    conjunction,
-    serialComma: false,
-  });
-
-  if (status === 'refunded') {
-    return t(TicketTexts.validityHeader.refunded);
-  } else if (status === 'upcoming') {
-    const secondsUntilValid = Math.abs(now - validFrom) / 1000;
-    const untilValidDuration = secondsToDuration(secondsUntilValid, language, {
+  const toDurationText = (seconds: number) =>
+    secondsToDuration(seconds, language, {
       conjunction,
       serialComma: false,
     });
-    return t(TicketTexts.validityHeader.upcoming(untilValidDuration));
-  } else if (status === 'valid') {
-    return t(TicketTexts.validityHeader.valid(duration));
-  } else {
-    if (validityDifferenceSeconds < 60 * 60) {
-      return t(TicketTexts.validityHeader.recentlyExpired(duration));
-    } else {
-      const dateTime = formatToLongDateTime(fromUnixTime(validTo), language);
-      return t(TicketTexts.validityHeader.expired(dateTime));
+
+  switch (status) {
+    case 'refunded':
+      return t(TicketTexts.validityHeader.refunded);
+    case 'upcoming': {
+      const secondsUntilValid = (validFrom - now) / 1000;
+      const durationText = toDurationText(secondsUntilValid);
+      return t(TicketTexts.validityHeader.upcoming(durationText));
     }
+    case 'valid': {
+      const secondsUntilExpired = (validTo - now) / 1000;
+      const durationText = toDurationText(secondsUntilExpired);
+      return t(TicketTexts.validityHeader.valid(durationText));
+    }
+    case 'expired': {
+      const secondsSinceExpired = (now - validTo) / 1000;
+      if (secondsSinceExpired < 60 * 60) {
+        const durationText = toDurationText(secondsSinceExpired);
+        return t(TicketTexts.validityHeader.recentlyExpired(durationText));
+      } else {
+        const dateTime = formatToLongDateTime(
+          fromUnixTime(validTo / 1000),
+          language,
+        );
+        return t(TicketTexts.validityHeader.expired(dateTime));
+      }
+    }
+    case 'reserving':
+      return t(TicketTexts.validityHeader.reserving);
+    case 'unknown':
+      return t(TicketTexts.validityHeader.unknown);
   }
 }
 

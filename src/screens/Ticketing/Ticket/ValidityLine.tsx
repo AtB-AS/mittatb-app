@@ -25,14 +25,16 @@ const ValidityLine = (props: Props): ReactElement => {
   switch (props.status) {
     case 'reserving':
       return (
-        <LineWithVerticalBars backgroundColor={colors.secondary.cyan_500} />
+        <LineWithVerticalBars
+          backgroundColor={theme.colors.primary_2.backgroundColor}
+        />
       );
     case 'valid':
       const {now, validFrom, validTo} = props;
       const validityPercent = getValidityPercent(now, validFrom, validTo);
       return (
         <LineWithVerticalBars
-          backgroundColor={colors.primary.green_500}
+          backgroundColor={theme.colors.primary_1.backgroundColor}
           validityPercent={validityPercent}
         />
       );
@@ -51,7 +53,11 @@ const ValidityLine = (props: Props): ReactElement => {
         </View>
       );
     case 'unknown':
-      return <LineWithVerticalBars backgroundColor={colors.primary.gray_300} />;
+      return (
+        <LineWithVerticalBars
+          backgroundColor={theme.colors.secondary_2.backgroundColor}
+        />
+      );
   }
 };
 

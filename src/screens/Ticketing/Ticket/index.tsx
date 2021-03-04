@@ -27,7 +27,6 @@ const SimpleTicket: React.FC<Props> = ({
     const validTo = endDateTime.toMillis();
     const validFrom = startDateTime.toMillis();
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
-
     return (
       <Sections.Section withBottomPadding>
         <Sections.GenericItem>
