@@ -56,17 +56,13 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const preassignedFareProduct =
     params.preassignedFareProduct ?? selectableProducts[0];
 
-  const {userProfilesWhiteList, travelDateSelectionEnabled} = getPurchaseFlow(
-    preassignedFareProduct,
-  );
+  const {travelDateSelectionEnabled} = getPurchaseFlow(preassignedFareProduct);
 
   const defaultUserProfilesWithCount = useMemo(
     () =>
       userProfiles
-        .filter(
-          (u) =>
-            !userProfilesWhiteList ||
-            userProfilesWhiteList.includes(u.userTypeString),
+        .filter((u) =>
+          preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
         )
         .map((u, i) => ({
           ...u,
