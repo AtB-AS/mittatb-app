@@ -45,6 +45,7 @@ const SimpleTicket: React.FC<Props> = ({
 
           <TicketInfo
             travelRights={fc.travelRights.filter(isPreactivatedTicket)}
+            status={validityStatus}
           />
         </Sections.GenericItem>
         <Sections.LinkItem

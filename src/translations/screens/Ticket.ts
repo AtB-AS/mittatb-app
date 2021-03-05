@@ -1,14 +1,6 @@
 import {translation as _} from '../commons';
 
 const TicketTexts = {
-  zone: {
-    single: (zoneName: string) => _(`Sone ${zoneName}`, `Zone ${zoneName}`),
-    multiple: (zoneNameFrom: string, zoneNameTo: string) =>
-      _(
-        `Sone ${zoneNameFrom} til sone ${zoneNameTo}`,
-        `Zone ${zoneNameFrom} to zone ${zoneNameTo}`,
-      ),
-  },
   detailsLink: {
     valid: _('Vis detaljer / kontroll', 'Show details / inspection'),
     notValid: _('Vis detaljer', 'Show details'),

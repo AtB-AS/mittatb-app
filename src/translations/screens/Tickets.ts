@@ -12,17 +12,17 @@ const TicketsTexts = {
     ),
     button: {
       single: {
-        text: _('Kjøp enkeltbillett', 'Buy single ticket'),
+        text: _('Ny enkeltbillett', 'New single ticket'),
         a11yHint: _(
-          'Aktivér for å kjøpe enkeltbillett',
-          'Activate to buy a single ticket',
+          'Aktivér for å kjøpe ny enkeltbillett',
+          'Activate to buy a new single ticket',
         ),
       },
       period: {
-        text: _('Kjøp periodebillett', 'Buy period ticket'),
+        text: _('Ny periodebillett', 'New period ticket'),
         a11yHint: _(
-          'Aktivér for å kjøpe periodebillett',
-          'Activate to buy a period ticket',
+          'Aktivér for å kjøpe ny periodebillett',
+          'Activate to buy a new period ticket',
         ),
       },
     },

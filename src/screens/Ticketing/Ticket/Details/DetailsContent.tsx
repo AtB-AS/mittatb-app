@@ -52,6 +52,7 @@ const DetailsContent: React.FC<Props> = ({
           />
           <TicketInfo
             travelRights={fc.travelRights.filter(isPreactivatedTicket)}
+            status={validityStatus}
           />
         </Sections.GenericItem>
         <Sections.GenericItem>

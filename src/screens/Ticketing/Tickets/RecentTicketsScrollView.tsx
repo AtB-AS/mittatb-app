@@ -66,8 +66,9 @@ const RecentTicketsScrollView = () => {
                   onPress={() => selectTicket(ticket)}
                   accessibilityHint={t(TicketsTexts.recentTickets.a11yHint)}
                   accessibilityRole={'button'}
+                  style={styles.ticketInfoButton}
                 >
-                  <TicketInfoView {...ticket} />
+                  <TicketInfoView {...ticket} status="recent" />
                 </TouchableOpacity>
               </Sections.GenericItem>
             ))}
@@ -92,6 +93,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   noTicketsText: {
     textAlign: 'center',
   },
+  ticketInfoButton: {flex: 1},
   gradient: {position: 'absolute', bottom: 0, width: '100%', height: 30},
 }));
 
