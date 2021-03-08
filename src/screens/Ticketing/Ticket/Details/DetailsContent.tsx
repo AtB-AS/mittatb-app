@@ -59,7 +59,10 @@ const DetailsContent: React.FC<Props> = ({
           <ThemeText type="lead" color="secondary">
             {t(
               TicketTexts.details.purchaseTime(
-                formatToLongDateTime(fromUnixTime(validFrom / 1000), language),
+                formatToLongDateTime(
+                  fromUnixTime(fc.created.toMillis() / 1000),
+                  language,
+                ),
               ),
             )}
           </ThemeText>
