@@ -40,8 +40,6 @@ type JourneyDatePickerProps = {
 const DateOptions = ['now', 'departure', 'arrival'] as const;
 type DateOptionType = typeof DateOptions[number];
 
-type DateMode = 'date' | 'time' | undefined;
-
 export type SearchTime = {
   option: DateOptionType;
   date: string;
@@ -60,7 +58,6 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
   const [timeString, setTime] = useState<string>(() =>
     formatLocaleTime(searchTime.date, language),
   );
-  // const currentDate = parseISO(dateString ?? new Date());
 
   const onSelect = () => {
     const calculatedTime: SearchTime = {

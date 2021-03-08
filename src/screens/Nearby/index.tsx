@@ -16,6 +16,7 @@ type NearbyScreenRootProps = {
 };
 
 const NearbyScreen = ({route}: NearbyScreenRootProps) => {
+  console.log(route.params.location);
   return (
     <Stack.Navigator
       initialRouteName="NearbyRoot"

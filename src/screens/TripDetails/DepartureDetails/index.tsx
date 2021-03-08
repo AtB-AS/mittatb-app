@@ -23,11 +23,12 @@ import {
   NavigationProp,
   RouteProp,
   useIsFocused,
+  useNavigation,
 } from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {DetailsStackParams} from '..';
+import {DetailsModalNavigationProp, DetailsStackParams} from '..';
 import Time from '../components/Time';
 import TripLegDecoration from '../components/TripLegDecoration';
 import TripRow from '../components/TripRow';
@@ -242,6 +243,8 @@ function TripItem({
   isStart,
   isEnd,
 }: TripItemProps) {
+  const navigation = useNavigation<DetailsModalNavigationProp>();
+
   const styles = useStopsStyle();
   const isBetween = !isStart && !isEnd;
   const iconColor = useTransportationColor(
@@ -267,6 +270,18 @@ function TripItem({
         }
         alignChildren={isStart ? 'flex-start' : isEnd ? 'flex-end' : 'center'}
         style={[styles.row, isBetween && styles.middleRow]}
+        onPress={() => {
+          navigation.navigate('Nearest', {
+            screen: 'NearbyRoot',
+            params: {
+              location: {
+                layer: 'venue',
+                id: call.quay?.stopPlace.id!,
+                label: call.quay?.stopPlace.name!,
+              },
+            },
+          });
+        }}
       >
         <ThemeText>{getQuayName(call.quay)} </ThemeText>
       </TripRow>
