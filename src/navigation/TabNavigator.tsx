@@ -8,7 +8,7 @@ import ThemeText from '@atb/components/text';
 import {LocationWithMetadata} from '@atb/favorites/types';
 import {usePreferenceItems} from '@atb/preferences';
 import Assistant from '@atb/screens/Assistant/';
-import NearbyScreen from '@atb/screens/Nearby';
+import NearbyScreen, {NearbyStackParams} from '@atb/screens/Nearby';
 import ProfileScreen, {ProfileStackParams} from '@atb/screens/Profile';
 import TicketingScreen from '@atb/screens/Ticketing';
 import {useTheme} from '@atb/theme';
@@ -19,7 +19,7 @@ import {
 } from '@atb/utils/navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {ParamListBase} from '@react-navigation/native';
+import {NavigatorScreenParams, ParamListBase} from '@react-navigation/native';
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
 
@@ -32,9 +32,7 @@ export type TabNavigatorParams = {
     fromLocation: LocationWithMetadata;
     toLocation: LocationWithMetadata;
   };
-  Nearest: {
-    location: LocationWithMetadata;
-  };
+  Nearest: NavigatorScreenParams<NearbyStackParams>;
   Ticketing: undefined;
   Profile: SubNavigator<ProfileStackParams>;
 };

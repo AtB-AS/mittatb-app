@@ -11,6 +11,7 @@ import DepartureDetails, {
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {RootStackParamList} from '@atb/navigation';
 import {MapDetailRouteParams, TravelDetailsMap} from './Map';
+import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
 
 export type DetailsStackParams = {
   Details: DetailsRouteParams;
@@ -20,7 +21,7 @@ export type DetailsStackParams = {
 
 export type DetailsModalNavigationProp = CompositeNavigationProp<
   StackNavigationProp<DetailsStackParams>,
-  StackNavigationProp<RootStackParamList>
+  StackNavigationProp<TabNavigatorParams>
 >;
 
 export type RouteParams = DetailsRouteParams;
