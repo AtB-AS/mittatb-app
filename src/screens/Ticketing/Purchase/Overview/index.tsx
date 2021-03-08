@@ -133,6 +133,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             }}
             disabled={selectableProducts.length <= 1}
             icon={<ThemeIcon svg={Edit} />}
+            accessibility={{
+              accessibilityHint: t(PurchaseOverviewTexts.product.a11yHint),
+            }}
           />
           <Sections.LinkItem
             text={createTravellersText(userProfilesWithCount, t, language)}
@@ -154,6 +157,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
               navigation.navigate('TravelDate', {travelDate});
             }}
             icon={<ThemeIcon svg={Edit} />}
+            accessibility={{
+              accessibilityHint: t(PurchaseOverviewTexts.travelDate.a11yHint),
+            }}
           />
           <Sections.LinkItem
             text={tariffZonesSummary(fromTariffZone, toTariffZone, language, t)}
