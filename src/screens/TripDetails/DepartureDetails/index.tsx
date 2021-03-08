@@ -1,3 +1,4 @@
+import {getFeatureFromVenue} from '@atb/api/geocoder';
 import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
 import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
@@ -6,8 +7,11 @@ import ScreenHeader from '@atb/components/screen-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
+import {searchByStopPlace} from '@atb/geocoder/search-for-location';
+import {mapFeatureToLocation} from '@atb/geocoder/utils';
 import {
   EstimatedCall,
+  FeatureCategory,
   ServiceJourneyMapInfoData,
   Situation,
   TransportMode,
@@ -270,16 +274,25 @@ function TripItem({
         }
         alignChildren={isStart ? 'flex-start' : isEnd ? 'flex-end' : 'center'}
         style={[styles.row, isBetween && styles.middleRow]}
-        onPress={() => {
+        onPress={async () => {
+          const stopPlace = call.quay?.stopPlace;
+          if (!stopPlace || !stopPlace?.latitude || !stopPlace?.longitude) {
+            // should not happen, but just in case.
+            return;
+          }
+          const location = await searchByStopPlace({
+            name: stopPlace.name,
+            coordinates: {
+              latitude: stopPlace.latitude,
+              longitude: stopPlace.longitude,
+            },
+          });
+          if (!location) {
+            return;
+          }
           navigation.navigate('Nearest', {
             screen: 'NearbyRoot',
-            params: {
-              location: {
-                layer: 'venue',
-                id: call.quay?.stopPlace.id!,
-                label: call.quay?.stopPlace.name!,
-              },
-            },
+            params: {location},
           });
         }}
       >
