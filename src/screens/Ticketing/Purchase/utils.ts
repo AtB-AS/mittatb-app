@@ -12,14 +12,6 @@ export type PurchaseFlow = {
    * ticket.
    */
   travelDateSelectionEnabled: boolean;
-
-  /**
-   * An optional user profile white list containing the userTypeString of the
-   * user profiles that should be allowed. If no whitelist is defined, then all
-   * user profiles should be selectable. This should preferably later be
-   * modelled into the reference data with Entur as the source.
-   */
-  userProfilesWhiteList?: string[];
 };
 
 export const getPurchaseFlow = (
@@ -29,7 +21,6 @@ export const getPurchaseFlow = (
     return {
       travellerSelectionMode: 'single',
       travelDateSelectionEnabled: true,
-      userProfilesWhiteList: ['ADULT', 'SENIOR', 'CHILD', 'STUDENT'],
     };
   } else {
     return {

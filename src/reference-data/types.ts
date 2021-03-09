@@ -14,6 +14,9 @@ export type PreassignedFareProduct = {
   alternativeNames: LanguageAndText[];
   version: string;
   type: PreassignedFareProductType;
+  limitations: {
+    userProfileRefs: string[];
+  };
 };
 
 export type UserProfile = {
