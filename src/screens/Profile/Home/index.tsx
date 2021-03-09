@@ -30,7 +30,7 @@ type ProfileScreenProps = {
 };
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
-  const {enable_i18n} = useRemoteConfig();
+  const {enable_i18n, enable_login} = useRemoteConfig();
   const style = useProfileHomeStyle();
   const {t} = useTranslation();
   const {authenticationType, signOut, user} = useAuthState();
@@ -43,41 +43,43 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         rightButton={{type: 'chat'}}
       />
 
-      <ScrollView>
-        <Sections.Section withPadding withTopPadding>
-          <Sections.HeaderItem
-            text={t(ProfileTexts.sections.account.heading)}
-          />
-          {authenticationType !== 'phone' && (
-            <Sections.LinkItem
-              text={t(ProfileTexts.sections.account.linkItems.login.label)}
-              onPress={() =>
-                navigation.navigate('Login', {
-                  screen: 'PhoneInput',
-                  params: {
-                    afterLogin: {routeName: 'ProfileHome'},
-                  },
-                })
-              }
+      <ScrollView style={style.scrollView}>
+        {enable_login && (
+          <Sections.Section withPadding>
+            <Sections.HeaderItem
+              text={t(ProfileTexts.sections.account.heading)}
             />
-          )}
-          {authenticationType === 'phone' && (
-            <Sections.GenericItem>
-              <ThemeText>{user?.phoneNumber}</ThemeText>
-            </Sections.GenericItem>
-          )}
-          {authenticationType === 'phone' && (
-            <Sections.LinkItem
-              text={t(ProfileTexts.sections.account.linkItems.logout.label)}
-              onPress={signOut}
-            />
-          )}
-          {__DEV__ && (
-            <Sections.GenericItem>
-              <ThemeText>SignedInState: {authenticationType}</ThemeText>
-            </Sections.GenericItem>
-          )}
-        </Sections.Section>
+            {authenticationType !== 'phone' && (
+              <Sections.LinkItem
+                text={t(ProfileTexts.sections.account.linkItems.login.label)}
+                onPress={() =>
+                  navigation.navigate('Login', {
+                    screen: 'PhoneInput',
+                    params: {
+                      afterLogin: {routeName: 'ProfileHome'},
+                    },
+                  })
+                }
+              />
+            )}
+            {authenticationType === 'phone' && (
+              <Sections.GenericItem>
+                <ThemeText>{user?.phoneNumber}</ThemeText>
+              </Sections.GenericItem>
+            )}
+            {authenticationType === 'phone' && (
+              <Sections.LinkItem
+                text={t(ProfileTexts.sections.account.linkItems.logout.label)}
+                onPress={signOut}
+              />
+            )}
+            {__DEV__ && (
+              <Sections.GenericItem>
+                <ThemeText>SignedInState: {authenticationType}</ThemeText>
+              </Sections.GenericItem>
+            )}
+          </Sections.Section>
+        )}
 
         <Sections.Section withPadding>
           <Sections.HeaderItem
@@ -148,5 +150,8 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     backgroundColor: theme.background.level1,
     flex: 1,
+  },
+  scrollView: {
+    marginTop: theme.spacings.medium,
   },
 }));

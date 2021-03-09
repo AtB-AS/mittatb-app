@@ -26,7 +26,12 @@ type Props = {
 export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
-  const {must_upgrade_ticketing, enable_recent_tickets} = useRemoteConfig();
+  const {
+    must_upgrade_ticketing,
+    enable_recent_tickets,
+    enable_login,
+    enable_period_tickets,
+  } = useRemoteConfig();
   const {abtCustomerId, authenticationType} = useAuthState();
   const {t} = useTranslation();
 
@@ -44,7 +49,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   };
 
   const onBuyPeriodTicket = () => {
-    if (authenticationType === 'phone') {
+    if (authenticationType === 'phone' || !enable_login) {
       navigation.navigate('TicketPurchase', {
         screen: 'PurchaseOverview',
         params: {
@@ -82,17 +87,19 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
               TicketsTexts.buyTicketsTab.button.single.a11yHint,
             )}
             onPress={onBuySingleTicket}
-            viewContainerStyle={styles.buySingleTicketButton}
           />
-          <Button
-            mode="primary"
-            color="primary_2"
-            text={t(TicketsTexts.buyTicketsTab.button.period.text)}
-            accessibilityHint={t(
-              TicketsTexts.buyTicketsTab.button.period.a11yHint,
-            )}
-            onPress={onBuyPeriodTicket}
-          />
+          {enable_period_tickets && (
+            <Button
+              mode="primary"
+              color="primary_2"
+              text={t(TicketsTexts.buyTicketsTab.button.period.text)}
+              accessibilityHint={t(
+                TicketsTexts.buyTicketsTab.button.period.a11yHint,
+              )}
+              onPress={onBuyPeriodTicket}
+              viewContainerStyle={styles.buyPeriodTicketButton}
+            />
+          )}
         </View>
       )}
     </View>
@@ -156,7 +163,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.background.level1,
   },
-  buySingleTicketButton: {
-    marginVertical: theme.spacings.medium,
+  buyPeriodTicketButton: {
+    marginTop: theme.spacings.medium,
   },
 }));
