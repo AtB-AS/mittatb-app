@@ -40,15 +40,8 @@ const PurchaseOverviewTexts = {
       'Activate to select ticket type',
     ),
   },
-  primaryButton: {
-    text: (totalPrice: number) =>
-      _(`Total: ${totalPrice},-`, `Total: ${totalPrice},-`),
-    a11yLabel: (totalPrice: number) =>
-      _(`Betal totalt ${totalPrice}`, `Pay a total of ${totalPrice}`),
-    a11yHint: _(
-      'Aktivér for å gå til betaling',
-      'Activate to continue to purchase',
-    ),
-  },
+  totalPrice: (totalPrice: number) =>
+    _(`Totalt: ${totalPrice} kr`, `Total: ${totalPrice} kr`),
+  primaryButton: _('Gå til betaling', 'Go to payment'),
 };
 export default PurchaseOverviewTexts;
