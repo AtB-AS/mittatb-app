@@ -4,19 +4,28 @@ if [[ "$branch" != "master" ]]; then
   exit 1;
 fi
 
-read -p "This will create a Pull Request on Github, are you sure you want to do release? (n/Y) " -n 1 -r
+read -p "What do you want the release tag to be? The usual format is v1.x, for example v1.5. Can also suffix with -rc or similar:
+" -r
+echo    # (optional) move to a new line
+if [[ ! $REPLY =~ ^v[0-9]+\.[0-9]+.*$ ]]
+then
+  echo "The format has to start with 'v1.x' "
+  exit 0;
+fi
+releaseVersion=$REPLY
+
+read -p "This will create a draft release $releaseVersion on Github, are you sure you want to do release? (n/Y) " -n 1 -r
 echo    # (optional) move to a new line
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
   exit 0;
 fi
 
-
 echo 'Gathering commits and creating changelog'
 message=`yarn --silent conventional-changelog -p angular -n ./tools/release/changelog.config.js`
 
 if [ $? -eq 0 ]; then
-  gh pr create -B alpha-release -b "$message" -t 'chore: [Sync] New release to alpha channel'
+  gh release create $releaseVersion --draft --title "$releaseVersion release draft" --notes "$message" 
 else
   echo 'Could not create changelog'
   exit 1;
