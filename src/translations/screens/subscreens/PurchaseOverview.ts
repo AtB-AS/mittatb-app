@@ -17,6 +17,10 @@ const PurchaseOverviewTexts = {
   travelDate: {
     now: _('Oppstart nå', 'Starting now'),
     futureDate: (time: string) => _(`Oppstart ${time}`, `Start time ${time}`),
+    a11yHint: _(
+      'Aktivér for å velge starttidspunkt',
+      `Activate to select start time`,
+    ),
   },
   travellers: {
     noTravellers: _(`Ingen reisende`, `No travellers`),
@@ -29,6 +33,12 @@ const PurchaseOverviewTexts = {
   },
   tariffZones: {
     a11yHint: _('Aktivér for å velge soner', 'Activate to select zones'),
+  },
+  product: {
+    a11yHint: _(
+      'Aktivér for å velge billettype',
+      'Activate to select ticket type',
+    ),
   },
   primaryButton: {
     text: (totalPrice: number) =>
