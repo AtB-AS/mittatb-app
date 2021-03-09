@@ -202,7 +202,7 @@ const DisappearingHeader: React.FC<Props> = ({
               <SvgBanner
                 width={windowWidth}
                 height={windowWidth / 2}
-                opacity={0.6}
+                opacity={0.2}
               />
             </View>
 
