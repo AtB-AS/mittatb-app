@@ -47,7 +47,10 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   const {theme} = useTheme();
   const {t, language} = useTranslation();
 
-  const {enable_creditcard: enableCreditCard} = useRemoteConfig();
+  const {
+    enable_creditcard: enableCreditCard,
+    vat_percent: vatPercent,
+  } = useRemoteConfig();
 
   const {
     fromTariffZone,
@@ -83,7 +86,8 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     }),
   );
 
-  const vatString = (totalPrice * 0.06).toLocaleString(language, {
+  const vatAmount = totalPrice * (vatPercent / 100);
+  const vatAmountString = vatAmount.toLocaleString(language, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
@@ -200,7 +204,12 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               {t(PurchaseConfirmationTexts.totalCost.title)}
             </ThemeText>
             <ThemeText type="label" color="secondary">
-              {t(PurchaseConfirmationTexts.totalCost.label(vatString))}
+              {t(
+                PurchaseConfirmationTexts.totalCost.label(
+                  vatPercent,
+                  vatAmountString,
+                ),
+              )}
             </ThemeText>
           </View>
 
