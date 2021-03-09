@@ -18,7 +18,7 @@ export default function GenericItem({
   return (
     <View style={topContainer} {...accessibility}>
       {Children.map(children, (child) => (
-        <View style={[style.spaceBetween, contentContainer]}>{child}</View>
+        <View style={style.spaceBetween}>{child}</View>
       ))}
     </View>
   );

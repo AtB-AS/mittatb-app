@@ -38,7 +38,7 @@ export default function useSectionItem({
     backgroundColor: transparent ? undefined : theme.background.level0,
   };
   const contentContainer: ViewStyle = {
-    flexGrow: isInline ? undefined : 1,
+    flex: isInline ? undefined : 1,
   };
 
   return {

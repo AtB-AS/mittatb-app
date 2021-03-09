@@ -46,8 +46,8 @@ export default function LinkItem({
       style={topContainer}
       {...accessibility}
     >
-      <View style={[style.spaceBetween, contentContainer, disabledStyle]}>
-        <ThemeText style={linkItemStyle.text}>{text}</ThemeText>
+      <View style={[style.spaceBetween, disabledStyle]}>
+        <ThemeText style={contentContainer}>{text}</ThemeText>
         {iconEl}
       </View>
       {subtitle && (
@@ -61,5 +61,4 @@ export default function LinkItem({
 
 const useStyles = StyleSheet.createThemeHook(() => ({
   disabled: {opacity: 0.2},
-  text: {flex: 1},
 }));
