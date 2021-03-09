@@ -56,17 +56,13 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const preassignedFareProduct =
     params.preassignedFareProduct ?? selectableProducts[0];
 
-  const {userProfilesWhiteList, travelDateSelectionEnabled} = getPurchaseFlow(
-    preassignedFareProduct,
-  );
+  const {travelDateSelectionEnabled} = getPurchaseFlow(preassignedFareProduct);
 
   const defaultUserProfilesWithCount = useMemo(
     () =>
       userProfiles
-        .filter(
-          (u) =>
-            !userProfilesWhiteList ||
-            userProfilesWhiteList.includes(u.userTypeString),
+        .filter((u) =>
+          preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
         )
         .map((u, i) => ({
           ...u,
@@ -133,6 +129,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             }}
             disabled={selectableProducts.length <= 1}
             icon={<ThemeIcon svg={Edit} />}
+            accessibility={{
+              accessibilityHint: t(PurchaseOverviewTexts.product.a11yHint),
+            }}
           />
           <Sections.LinkItem
             text={createTravellersText(userProfilesWithCount, t, language)}
@@ -154,6 +153,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
               navigation.navigate('TravelDate', {travelDate});
             }}
             icon={<ThemeIcon svg={Edit} />}
+            accessibility={{
+              accessibilityHint: t(PurchaseOverviewTexts.travelDate.a11yHint),
+            }}
           />
           <Sections.LinkItem
             text={tariffZonesSummary(fromTariffZone, toTariffZone, language, t)}

@@ -7,7 +7,17 @@
     "alternativeNames": [
       {"lang": "eng", "value": "Single ticket bus/tram"},
       {"lang": "nno", "value": "Enkeltbillett buss/trikk"}
-    ]
+    ],
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:2832569f",
+        "ATB:UserProfile:8ee842e3",
+        "ATB:UserProfile:416d8b61",
+        "ATB:UserProfile:fe550eb7",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:1ae560ba"
+      ]
+    }
   },
   {
     "id": "ATB:PreassignedFareProduct:925469fb",
@@ -17,7 +27,15 @@
     "alternativeNames": [
       {"lang": "eng", "value": "Monthly pass"},
       {"lang": "nno", "value": "30-dagersbillett"}
-    ]
+    ],
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:1ae560ba",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:8ee842e3",
+        "ATB:UserProfile:2832569f"
+      ]
+    }
   },
   {
     "id": "ATB:PreassignedFareProduct:f87316e6",
@@ -27,6 +45,14 @@
     "alternativeNames": [
       {"lang": "eng", "value": "180 days pass"},
       {"lang": "nno", "value": "180-dagersbillett"}
-    ]
+    ],
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:1ae560ba",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:8ee842e3",
+        "ATB:UserProfile:2832569f"
+      ]
+    }
   }
 ]

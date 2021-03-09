@@ -20,6 +20,8 @@ export type RemoteConfigContextState = Pick<
   | 'enable_i18n'
   | 'enable_creditcard'
   | 'enable_recent_tickets'
+  | 'enable_login'
+  | 'enable_period_tickets'
   | 'must_upgrade_ticketing'
   | 'news_enabled'
   | 'news_text'
