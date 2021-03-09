@@ -27,7 +27,8 @@ const PurchaseConfirmationTexts = {
   },
   totalCost: {
     title: _('Totalt', 'Total'),
-    label: _('Inkl. 6% mva', 'Incl. 6% VAT'),
+    label: (vatString: string) =>
+      _(`Inkl. 6% mva (${vatString} kr)`, `Incl. 6% VAT (${vatString} kr)`),
   },
   infoText: {
     validNow: _(

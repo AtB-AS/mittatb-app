@@ -27,6 +27,8 @@ import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
 import useOfferState from './use-offer-state';
 import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
 import {formatToLongDateTime} from '@atb/utils/date';
+import ThemeText from '@atb/components/text';
+import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -170,18 +172,19 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
               accessibilityHint: t(PurchaseOverviewTexts.tariffZones.a11yHint),
             }}
           />
+          <Sections.GenericItem>
+            <ThemeText style={styles.totalSection} type="paragraphHeadline">
+              {t(PurchaseOverviewTexts.totalPrice(totalPrice))}
+            </ThemeText>
+          </Sections.GenericItem>
         </Sections.Section>
       </View>
 
       <View style={styles.toPaymentButton}>
         <Button
           color="primary_2"
-          text={t(PurchaseOverviewTexts.primaryButton.text(totalPrice))}
+          text={t(PurchaseOverviewTexts.primaryButton)}
           disabled={isSearchingOffer || !totalPrice || !!error}
-          accessibilityLabel={t(
-            PurchaseOverviewTexts.primaryButton.a11yLabel(totalPrice),
-          )}
-          accessibilityHint={t(PurchaseOverviewTexts.primaryButton.a11yHint)}
           onPress={() => {
             navigation.navigate('Confirmation', {
               fromTariffZone,
@@ -192,6 +195,8 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
               headerLeftButton: {type: 'back'},
             });
           }}
+          icon={ArrowRight}
+          iconPosition="right"
         />
       </View>
     </SafeAreaView>
@@ -266,6 +271,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
   },
   selectionLinks: {margin: theme.spacings.medium},
+  totalSection: {flex: 1, textAlign: 'center'},
   toPaymentButton: {marginHorizontal: theme.spacings.medium},
 }));
 

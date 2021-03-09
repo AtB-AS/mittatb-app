@@ -83,6 +83,11 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     }),
   );
 
+  const vatString = (totalPrice * 0.06).toLocaleString(language, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
   async function payWithVipps() {
     if (offerExpirationTime && totalPrice > 0) {
       if (offerExpirationTime < Date.now()) {
@@ -148,7 +153,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                       {u.count} {getReferenceDataName(u, language)}
                     </ThemeText>
                     <ThemeText>
-                      {u.count * (u.offer.prices[0].amount_float || 0)},-
+                      {u.count * (u.offer.prices[0].amount_float || 0)} kr
                     </ThemeText>
                   </View>
                 ))}
@@ -195,7 +200,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               {t(PurchaseConfirmationTexts.totalCost.title)}
             </ThemeText>
             <ThemeText type="label" color="secondary">
-              {t(PurchaseConfirmationTexts.totalCost.label)}
+              {t(PurchaseConfirmationTexts.totalCost.label(vatString))}
             </ThemeText>
           </View>
 
