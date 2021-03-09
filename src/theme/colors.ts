@@ -129,6 +129,7 @@ export const textTypeStyles: {[key in TextNames]: TextStyle} = {
   label__link: {fontSize: 12, lineHeight: 16, textDecorationLine: 'underline'},
 };
 export const iconSizes = {
+  large: 28,
   normal: 20,
   small: 10,
 };

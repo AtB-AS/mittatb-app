@@ -9,14 +9,24 @@ import {
   getReferenceDataName,
 } from '@atb/reference-data/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {PreactivatedTicket} from '@atb/tickets';
-import {TicketTexts, useTranslation} from '@atb/translations';
-import React from 'react';
+import {useTranslation} from '@atb/translations';
+import React, {ReactElement} from 'react';
 import {View} from 'react-native';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
+import {tariffZonesSummary} from '@atb/screens/Ticketing/Purchase/TariffZones';
+import {BusSide, Wait} from '@atb/assets/svg/icons/transportation';
+import ThemeIcon from '@atb/components/theme-icon/theme-icon';
+import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
+import {AddTicket, InvalidTicket} from '@atb/assets/svg/icons/ticketing';
 
-const TicketInfo = ({travelRights}: {travelRights: PreactivatedTicket[]}) => {
+type TicketInfoProps = {
+  travelRights: PreactivatedTicket[];
+  status: ValidityStatus | 'recent';
+};
+
+const TicketInfo = ({travelRights, status}: TicketInfoProps) => {
   const {
     tariff_zones: tariffZones,
     preassigned_fare_products: preassignedFareProducts,
@@ -46,55 +56,122 @@ const TicketInfo = ({travelRights}: {travelRights: PreactivatedTicket[]}) => {
       fromTariffZone={fromTariffZone}
       toTariffZone={toTariffZone}
       userProfilesWithCount={userProfilesWithCount}
+      status={status}
     />
   );
 };
-export const TicketInfoView = ({
-  preassignedFareProduct,
-  fromTariffZone,
-  toTariffZone,
-  userProfilesWithCount,
-}: {
+
+type TicketInfoViewProps = {
   preassignedFareProduct?: PreassignedFareProduct;
   fromTariffZone?: TariffZone;
   toTariffZone?: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
-}) => {
+  status: TicketInfoProps['status'];
+};
+
+export const TicketInfoView = (props: TicketInfoViewProps) => {
+  const styles = useStyles();
+  return (
+    <View style={styles.container}>
+      <TicketInfoTexts {...props} />
+      <TicketInspectionSymbol {...props} />
+    </View>
+  );
+};
+
+const TicketInfoTexts = (props: TicketInfoViewProps) => {
+  const {
+    preassignedFareProduct,
+    fromTariffZone,
+    toTariffZone,
+    userProfilesWithCount,
+  } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
   return (
-    <View>
+    <View style={styles.textsContainer}>
       <View>
         {userProfilesWithCount.map((u) => (
-          <ThemeText key={u.id}>{`${u.count} ${getReferenceDataName(
-            u,
-            language,
-          )}`}</ThemeText>
+          <ThemeText type="paragraphHeadline" key={u.id}>{`${
+            u.count
+          } ${getReferenceDataName(u, language)}`}</ThemeText>
         ))}
       </View>
       {preassignedFareProduct && (
-        <ThemeText style={styles.product}>
+        <ThemeText type="lead" style={styles.product}>
           {getReferenceDataName(preassignedFareProduct, language)}
         </ThemeText>
       )}
       {fromTariffZone && toTariffZone && (
         <ThemeText type="lead" style={styles.zones}>
-          {fromTariffZone.id === toTariffZone.id
-            ? t(
-                TicketTexts.zone.single(
-                  getReferenceDataName(fromTariffZone, language),
-                ),
-              )
-            : t(
-                TicketTexts.zone.multiple(
-                  getReferenceDataName(fromTariffZone, language),
-                  getReferenceDataName(toTariffZone, language),
-                ),
-              )}
+          {tariffZonesSummary(fromTariffZone, toTariffZone, language, t)}
         </ThemeText>
       )}
     </View>
   );
+};
+
+const TicketInspectionSymbol = ({
+  fromTariffZone,
+  toTariffZone,
+  preassignedFareProduct,
+  status,
+}: TicketInfoViewProps) => {
+  const styles = useStyles();
+  const {theme} = useTheme();
+  const {language} = useTranslation();
+  if (!fromTariffZone || !toTariffZone) return null;
+  const icon = getIconForStatus(status);
+  if (!icon) return null;
+  return (
+    <View
+      style={[
+        styles.symbolContainer,
+        status === 'valid' && {
+          ...styles.symbolContainerCircle,
+          backgroundColor:
+            preassignedFareProduct?.type === 'period'
+              ? theme.colors.primary_1.backgroundColor
+              : 'none',
+        },
+      ]}
+      accessibilityElementsHidden={true}
+    >
+      <>
+        {status === 'valid' && (
+          <ThemeText
+            type="paragraphHeadline"
+            allowFontScaling={false}
+            style={styles.symbolZones}
+          >
+            {getReferenceDataName(fromTariffZone, language)}
+            {fromTariffZone.id !== toTariffZone.id &&
+              '-' + getReferenceDataName(toTariffZone, language)}
+          </ThemeText>
+        )}
+        {icon}
+      </>
+    </View>
+  );
+};
+
+const getIconForStatus = (
+  status: TicketInfoProps['status'],
+): ReactElement | null => {
+  switch (status) {
+    case 'valid':
+      return <ThemeIcon svg={BusSide} colorType="primary" size={'large'} />;
+    case 'expired':
+    case 'refunded':
+      return <ThemeIcon svg={InvalidTicket} colorType="error" size={'large'} />;
+    case 'recent':
+      return <ThemeIcon svg={AddTicket} colorType="primary" size={'large'} />;
+    case 'upcoming':
+      return <ThemeIcon svg={Wait} colorType="primary" size={'large'} />;
+    case 'reserving':
+    case 'unknown':
+      return null;
+  }
 };
 
 const mapToUserProfilesWithCount = (
@@ -128,10 +205,26 @@ const mapToUserProfilesWithCount = (
     );
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {flexDirection: 'row'},
+  textsContainer: {flex: 1, paddingTop: theme.spacings.xSmall},
   product: {
     marginTop: theme.spacings.small,
   },
   zones: {
+    marginTop: theme.spacings.small,
+  },
+  symbolContainer: {
+    height: 72,
+    width: 72,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  symbolContainerCircle: {
+    borderRadius: 36,
+    borderColor: theme.colors.primary_1.backgroundColor,
+    borderWidth: 5,
+  },
+  symbolZones: {
     marginTop: theme.spacings.small,
   },
 }));

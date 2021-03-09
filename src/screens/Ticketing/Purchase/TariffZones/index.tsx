@@ -82,8 +82,8 @@ type Props = {
 };
 
 export const tariffZonesSummary = (
-  fromTariffZone: TariffZoneWithMetadata,
-  toTariffZone: TariffZoneWithMetadata,
+  fromTariffZone: TariffZone,
+  toTariffZone: TariffZone,
   language: Language,
   t: TranslateFunction,
 ): string => {

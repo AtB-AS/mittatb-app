@@ -23,6 +23,7 @@ const ThemeIcon = ({
   const settings = {
     fill,
     height: theme.icon.size[size],
+    width: theme.icon.size[size],
     ...props,
   };
   return svg(settings);

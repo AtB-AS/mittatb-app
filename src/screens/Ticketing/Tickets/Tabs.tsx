@@ -12,10 +12,7 @@ import {View} from 'react-native';
 import RecentTicketsScrollView from './RecentTicketsScrollView';
 import TicketsScrollView from './TicketsScrollView';
 import UpgradeSplash from './UpgradeSplash';
-import MessageBox from '@atb/components/message-box';
-import ThemeText from '@atb/components/text';
-import MessageBoxTexts from '@atb/translations/components/MessageBox';
-import {BuyTicketsScreenName} from '@atb/screens/Ticketing/Tickets/index';
+import {AddTicket} from '@atb/assets/svg/icons/ticketing';
 
 export type TicketingScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -87,6 +84,8 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
               TicketsTexts.buyTicketsTab.button.single.a11yHint,
             )}
             onPress={onBuySingleTicket}
+            icon={AddTicket}
+            iconPosition={'right'}
           />
           {enable_period_tickets && (
             <Button
@@ -98,6 +97,8 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
               )}
               onPress={onBuyPeriodTicket}
               viewContainerStyle={styles.buyPeriodTicketButton}
+              icon={AddTicket}
+              iconPosition={'right'}
             />
           )}
         </View>
