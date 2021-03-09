@@ -1,14 +1,14 @@
 const {execSync} = require('child_process');
 
-const latestAlphaReleaseTag = execSync(
-  `git tag --sort=committerdate | grep -E '^alpha-.*'  | tail -1`,
+const latestReleaseTag = execSync(
+  `git tag --sort=creatordate |  grep -E '(^alpha-.*)|(^v.*)' | tail -1`,
 )
   .toString('utf-8')
   .trim();
 
 module.exports = {
   gitRawCommitsOpts: {
-    from: latestAlphaReleaseTag,
+    from: latestReleaseTag,
     to: 'HEAD',
   },
 };
