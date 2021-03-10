@@ -152,8 +152,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   inputClear: {
     position: 'absolute',
     right: theme.spacings.medium,
-    // Not ideal but position X better centered when position absolute.
-    bottom: theme.spacings.medium + 3,
+    bottom: theme.spacings.medium,
     alignSelf: 'center',
   },
 }));
