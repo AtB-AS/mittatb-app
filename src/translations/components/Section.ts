@@ -25,6 +25,9 @@ const SectionTexts = {
       },
     },
   },
+  textInput: {
+    clear: _('Tøm redigeringsfelt', 'Clear input'),
+  },
   counterInput: {
     decreaseButton: {
       a11yLabel: _('Reduser antall', 'Reduce quantity'),

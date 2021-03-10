@@ -167,6 +167,28 @@ export default function DesignSystem() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
+          <Sections.TextInput
+            label="Input"
+            placeholder="My very long placeholder over here. Yes over multiple lines"
+            onChangeText={() => {}}
+            keyboardType="phone-pad"
+            textContentType="oneTimeCode"
+            showClear={true}
+            inlineLabel={false}
+          />
+
+          <Sections.TextInput
+            label="Input"
+            placeholder="Short placeholder"
+            onChangeText={() => {}}
+            keyboardType="phone-pad"
+            textContentType="oneTimeCode"
+            showClear={true}
+            inlineLabel={false}
+          />
+        </Sections.Section>
+
+        <Sections.Section withPadding withTopPadding>
           <Sections.HeaderItem text="Texts" />
 
           <Sections.GenericItem>
