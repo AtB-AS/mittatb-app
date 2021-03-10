@@ -14,6 +14,7 @@ import insets from '@atb/utils/insets';
 import ThemeText, {MAX_FONT_SCALE} from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {SectionItem, useSectionItem} from './section-utils';
+import {SectionTexts, useTranslation} from '@atb/translations';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -44,6 +45,7 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
     const {theme, themeName} = useTheme();
     const styles = useInputStyle(theme, themeName);
     const [isFocused, setIsFocused] = useState(Boolean(props?.autoFocus));
+    const {t} = useTranslation();
 
     const onFocusEvent = (e: FocusEvent) => {
       setIsFocused(true);
@@ -92,7 +94,12 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
         </ThemeText>
         <InternalTextInput
           ref={ref}
-          style={[styles.input, contentContainer, padding, style]}
+          style={[
+            styles.input,
+            inlineLabel ? contentContainer : undefined,
+            padding,
+            style,
+          ]}
           placeholderTextColor={theme.text.colors.secondary}
           onFocus={onFocusEvent}
           onBlur={onBlurEvent}
@@ -104,7 +111,7 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
             <TouchableOpacity
               accessible={true}
               accessibilityRole="button"
-              accessibilityLabel="Tøm redigeringsfelt"
+              accessibilityLabel={t(SectionTexts.textInput.clear)}
               hitSlop={insets.all(8)}
               onPress={onClearEvent}
             >

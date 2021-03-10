@@ -40,6 +40,8 @@ const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   label: {
     // @TODO Find a better way to do this.
     minWidth: 60 - theme.spacings.medium,
+    flex: 1,
+    flexWrap: 'wrap',
   },
   content: {
     // flexGrow: 1,

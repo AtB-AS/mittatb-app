@@ -1,4 +1,4 @@
-import {Delete} from '@atb/assets/svg/icons/actions';
+import {Delete, Edit} from '@atb/assets/svg/icons/actions';
 import {Check} from '@atb/assets/svg/icons/status';
 import {BlankTicket} from '@atb/assets/svg/icons/ticketing';
 import Button, {ButtonGroup} from '@atb/components/button';
@@ -107,7 +107,86 @@ export default function DesignSystem() {
           />
           <Button text="Press me" onPress={presser} type="inline" />
           <Button text="Press me" onPress={presser} type="compact" />
+          <Button
+            text="Press me"
+            onPress={presser}
+            type="compact"
+            icon={Delete}
+            iconPosition="right"
+          />
         </ButtonGroup>
+
+        <Sections.Section withPadding withTopPadding>
+          <Sections.ActionItem
+            text="Some very long text over here which goes over multiple lines"
+            mode="check"
+            checked
+          />
+          <Sections.ActionItem text="Some short text" mode="toggle" />
+          <Sections.ActionItem
+            text="Some short text"
+            mode="check"
+            checked
+            type="compact"
+          />
+        </Sections.Section>
+
+        <Sections.Section withPadding withTopPadding>
+          <Sections.LocationInput
+            label="Label"
+            placeholder="My very long placeholder over here. Yes over multiple lines"
+            onPress={() => {}}
+          />
+          <Sections.LocationInput
+            label="Label"
+            placeholder="Short"
+            onPress={() => {}}
+            type="compact"
+          />
+        </Sections.Section>
+
+        <Sections.Section withPadding withTopPadding>
+          <Sections.ButtonInput
+            label="Label"
+            placeholder="My very long placeholder over here. Yes over multiple lines"
+            onPress={() => {}}
+            icon="arrow-left"
+          />
+
+          <Sections.LinkItem
+            text="Some longer text"
+            onPress={() => {}}
+            disabled
+            icon={<ThemeIcon svg={Edit} />}
+          />
+          <Sections.LinkItem
+            text="Some longer text"
+            onPress={() => {}}
+            icon={<ThemeIcon svg={Edit} />}
+          />
+        </Sections.Section>
+
+        <Sections.Section withPadding withTopPadding>
+          <Sections.TextInput
+            label="Input"
+            placeholder="My very long placeholder over here. Yes over multiple lines"
+            onChangeText={() => {}}
+            keyboardType="phone-pad"
+            textContentType="oneTimeCode"
+            showClear={true}
+            inlineLabel={false}
+          />
+
+          <Sections.TextInput
+            label="Input"
+            placeholder="Short placeholder"
+            onChangeText={() => {}}
+            keyboardType="phone-pad"
+            textContentType="oneTimeCode"
+            showClear={true}
+            inlineLabel={false}
+          />
+        </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
           <Sections.HeaderItem text="Texts" />
