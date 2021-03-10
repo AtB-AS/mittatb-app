@@ -11,7 +11,7 @@ export type UserProfileWithCountAndOffer = UserProfileWithCount & {
 };
 
 type OfferError = {
-  type: ErrorType;
+  type: ErrorType | 'empty-offers';
 };
 
 type OfferState = {
@@ -150,7 +150,16 @@ export default function useOfferState(
 
           cancelToken?.throwIfRequested();
 
-          dispatch({type: 'SET_OFFER', offers: response});
+          if (response.length) {
+            dispatch({type: 'SET_OFFER', offers: response});
+          } else {
+            dispatch({
+              type: 'SET_ERROR',
+              error: {
+                type: 'empty-offers',
+              },
+            });
+          }
         } catch (err) {
           console.warn(err);
 

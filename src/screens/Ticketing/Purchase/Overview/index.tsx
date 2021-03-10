@@ -20,7 +20,7 @@ import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useEffect, useMemo} from 'react';
-import {View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../';
 import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
@@ -113,7 +113,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
       <View style={styles.selectionLinks}>
         {error && (
           <MessageBox
-            type="warning"
+            type="error"
             title={t(PurchaseOverviewTexts.errorMessageBox.title)}
             message={t(PurchaseOverviewTexts.errorMessageBox.message)}
             retryFunction={refreshOffer}
@@ -173,9 +173,13 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             }}
           />
           <Sections.GenericItem>
-            <ThemeText style={styles.totalSection} type="paragraphHeadline">
-              {t(PurchaseOverviewTexts.totalPrice(totalPrice))}
-            </ThemeText>
+            {isSearchingOffer ? (
+              <ActivityIndicator style={styles.totalSection} />
+            ) : (
+              <ThemeText style={styles.totalSection} type="paragraphHeadline">
+                {t(PurchaseOverviewTexts.totalPrice(totalPrice))}
+              </ThemeText>
+            )}
           </Sections.GenericItem>
         </Sections.Section>
       </View>
