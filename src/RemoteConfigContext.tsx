@@ -27,6 +27,7 @@ export type RemoteConfigContextState = Pick<
   | 'news_text'
   | 'news_link_text'
   | 'news_link_url'
+  | 'vat_percent'
 > & {
   refresh: () => void;
   preassigned_fare_products: PreassignedFareProduct[];

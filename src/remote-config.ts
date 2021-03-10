@@ -19,6 +19,7 @@ export type RemoteConfig = {
   news_text: string;
   news_link_text: string;
   news_link_url: string;
+  vat_percent: number;
   preassigned_fare_products: string;
   tariff_zones: string;
   user_profiles: string;
@@ -38,6 +39,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   news_text: '',
   news_link_text: 'Les mer',
   news_link_url: '',
+  vat_percent: 6,
   preassigned_fare_products: JSON.stringify(defaultPreassignedFareProducts),
   tariff_zones: JSON.stringify(defaultTariffZones),
   user_profiles: JSON.stringify(defaultUserProfiles),
@@ -68,6 +70,8 @@ export function getConfig(): RemoteConfig {
   const news_text = values['news_text']?.asString() ?? '';
   const news_link_text = values['news_link_text']?.asString() ?? 'Les mer';
   const news_link_url = values['news_link_url']?.asString() ?? '';
+  const vat_percent =
+    values['vat_percent']?.asNumber() ?? defaultRemoteConfig.vat_percent;
   const preassigned_fare_products =
     values['preassigned_fare_products']?.asString() ??
     defaultRemoteConfig.preassigned_fare_products;
@@ -90,6 +94,7 @@ export function getConfig(): RemoteConfig {
     news_text,
     news_link_url,
     news_link_text,
+    vat_percent,
     preassigned_fare_products,
     tariff_zones,
     user_profiles,
