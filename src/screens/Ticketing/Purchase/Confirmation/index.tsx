@@ -91,6 +91,10 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+  const vatPercentString = vatPercent.toLocaleString(language, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  });
 
   async function payWithVipps() {
     if (offerExpirationTime && totalPrice > 0) {
@@ -206,7 +210,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
             <ThemeText type="label" color="secondary">
               {t(
                 PurchaseConfirmationTexts.totalCost.label(
-                  vatPercent,
+                  vatPercentString,
                   vatAmountString,
                 ),
               )}
