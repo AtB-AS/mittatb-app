@@ -130,7 +130,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
         <View>
           {error && (
             <MessageBox
-              type="warning"
+              type="error"
               title={t(PurchaseConfirmationTexts.errorMessageBox.title)}
               message={t(PurchaseConfirmationTexts.errorMessageBox.message)}
               retryFunction={refreshOffer}
