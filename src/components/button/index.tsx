@@ -62,7 +62,6 @@ export type ButtonProps = {
   textStyle?: StyleProp<TextStyle>;
   icon?: React.ElementType<{fill: string}>;
   iconPosition?: 'left' | 'right';
-  textType?: TextNames;
 } & ButtonTypeAwareProps &
   TouchableOpacityProps;
 
@@ -81,7 +80,6 @@ const Button: React.FC<ButtonProps> = ({
   viewContainerStyle,
   textContainerStyle,
   textStyle,
-  textType,
   ...props
 }) => {
   const modeData = DefaultModeStyles[mode];
@@ -162,7 +160,7 @@ const Button: React.FC<ButtonProps> = ({
         {text && (
           <View style={[textContainer, textContainerStyle]}>
             <ThemeText
-              type={textType ?? 'paragraphHeadline'}
+              type={mode === 'tertiary' ? 'body' : 'paragraphHeadline'}
               style={[styleText, textStyle]}
             >
               {text}

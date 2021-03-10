@@ -2,7 +2,7 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {LoginRootParams} from './';
 import * as Sections from '@atb/components/sections';
 import Button from '@atb/components/button';
@@ -109,13 +109,14 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
                 text={t(LoginTexts.confirmCode.mainButton)}
                 disabled={!code}
               />
-              <Button
-                color={'primary_2'}
-                mode={'tertiary'}
-                textType="body"
+              <TouchableOpacity
+                style={styles.resendButton}
                 onPress={onResendCode}
-                text={t(LoginTexts.confirmCode.resendButton)}
-              />
+              >
+                <ThemeText style={styles.resendButtonText} type="body__link">
+                  {t(LoginTexts.confirmCode.resendButton)}
+                </ThemeText>
+              </TouchableOpacity>
             </>
           )}
         </View>
@@ -138,4 +139,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   buttonView: {
     marginTop: theme.spacings.medium,
   },
+  resendButton: {
+    marginTop: theme.spacings.medium,
+    padding: theme.spacings.medium,
+  },
+  resendButtonText: {textAlign: 'center'},
 }));
