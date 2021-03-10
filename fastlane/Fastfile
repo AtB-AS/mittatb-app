@@ -101,7 +101,7 @@ platform :ios do
       file: "AtB.ipa",
       destination_type: "store",
       destinations: "AtB Internal",
-      release_notes: ENV['RELEASE_NOTES'],
+      release_notes: ENV['RELEASE_NOTES'][0..3999],
       release_notes_link: ENV['RELEASE_URL']
     )
   end
@@ -160,7 +160,7 @@ platform :android do
       file: "app-store.apk",
       destination_type: "store",
       destinations: "Alpha",
-      release_notes: ENV['RELEASE_NOTES'],
+      release_notes: ENV['RELEASE_NOTES'][0..499],
       release_notes_link: ENV['RELEASE_URL']
     )
   end
