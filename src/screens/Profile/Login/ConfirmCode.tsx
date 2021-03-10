@@ -113,7 +113,7 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
                 style={styles.resendButton}
                 onPress={onResendCode}
               >
-                <ThemeText style={{textAlign: 'center'}} type="body__link">
+                <ThemeText style={styles.resendButtonText} type="body__link">
                   {t(LoginTexts.confirmCode.resendButton)}
                 </ThemeText>
               </TouchableOpacity>
@@ -143,4 +143,5 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.medium,
     padding: theme.spacings.medium,
   },
+  resendButtonText: {textAlign: 'center'},
 }));
