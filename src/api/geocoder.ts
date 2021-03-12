@@ -31,7 +31,7 @@ export async function autocomplete(
 }
 
 export async function getFeatureFromVenue(
-  stopPlace: {
+  venue: {
     name: string;
     coordinates: Coordinates;
   },
@@ -40,9 +40,9 @@ export async function getFeatureFromVenue(
   const url = 'bff/v1/geocoder/features';
   const query = qs.stringify(
     {
-      query: stopPlace.name,
-      lat: stopPlace.coordinates.latitude,
-      lon: stopPlace.coordinates.longitude,
+      query: venue.name,
+      lat: venue.coordinates.latitude,
+      lon: venue.coordinates.longitude,
       limit: 1,
       layers: ['venue'],
       tariff_zone_authorities: 'ATB',

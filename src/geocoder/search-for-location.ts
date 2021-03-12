@@ -1,6 +1,7 @@
 import {getFeatureFromVenue} from '@atb/api/geocoder';
 import {LocationWithMetadata} from '@atb/favorites/types';
 import {mapFeatureToLocation} from './utils';
+import {StopPlace} from '@entur/sdk';
 
 type StopPlaceInput = {
   name: string;
@@ -11,9 +12,20 @@ type StopPlaceInput = {
 };
 
 export async function searchByStopPlace(
-  stopPlace: StopPlaceInput,
+  stopPlace?: StopPlace,
 ): Promise<LocationWithMetadata | undefined> {
-  const locationResponse = await getFeatureFromVenue(stopPlace);
+  if (!stopPlace || !stopPlace?.latitude || !stopPlace?.longitude) {
+    return;
+  }
+
+  const locationResponse = await getFeatureFromVenue({
+    name: stopPlace.name,
+    coordinates: {
+      latitude: stopPlace.latitude,
+      longitude: stopPlace.longitude,
+    },
+  });
+
   const location = locationResponse?.data?.[0];
   if (!location) {
     return;

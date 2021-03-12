@@ -5,7 +5,7 @@ import AccessibleText, {
 import ThemeText from '@atb/components/text';
 import TransportationIcon from '@atb/components/transportation-icon';
 import {TinyMessageBox} from '@atb/components/message-box';
-import {Leg, Place} from '@atb/sdk';
+import {Leg, Place, Quay} from '@atb/sdk';
 import SituationMessages from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -32,6 +32,8 @@ import Time from './Time';
 import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
 import WaitSection, {WaitDetails} from './WaitSection';
+import {DetailsModalNavigationProp} from "@atb/screens/TripDetails";
+import {searchByStopPlace} from "@atb/geocoder/search-for-location";
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -57,6 +59,8 @@ const TripSection: React.FC<TripSectionProps> = ({
   const showTo = !isWalkSection || !!(isLast && isWalkSection);
 
   const {startTimes, endTimes} = mapLegToTimeValues(leg);
+
+  const navigation = useNavigation<DetailsModalNavigationProp>();
 
   const sectionOutput = (
     <>
@@ -88,6 +92,7 @@ const TripSection: React.FC<TripSectionProps> = ({
               t,
             )}
             rowLabel={<Time {...startTimes} />}
+            onPress={() => handleQuayPress(leg.fromPlace.quay)}
           >
             <ThemeText>{getPlaceName(leg.fromPlace)}</ThemeText>
           </TripRow>
@@ -143,6 +148,7 @@ const TripSection: React.FC<TripSectionProps> = ({
               t,
             )}
             rowLabel={<Time {...endTimes} />}
+            onPress={() => handleQuayPress(leg.toPlace.quay)}
           >
             <ThemeText>{getPlaceName(leg.toPlace)}</ThemeText>
           </TripRow>
@@ -158,6 +164,17 @@ const TripSection: React.FC<TripSectionProps> = ({
       )}
     </>
   );
+
+  async function handleQuayPress(quay: Quay | undefined) {
+    const location = await searchByStopPlace(quay?.stopPlace);
+    if (!location) {
+      return;
+    }
+    navigation.navigate('Nearest', {
+      screen: 'NearbyRoot',
+      params: {location},
+    });
+  }
 };
 const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
   const {t, language} = useTranslation();
