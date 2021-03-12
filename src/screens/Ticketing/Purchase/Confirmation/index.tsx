@@ -18,7 +18,7 @@ import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../';
 import useOfferState from '../Overview/use-offer-state';
-import {UserProfileWithCount} from '../Travellers/use-user-count-state';
+import {UserProfileWithCount} from '../TravellersSheet/use-user-count-state';
 import {createTravelDateText} from '@atb/screens/Ticketing/Purchase/Overview';
 import {formatToLongDateTime} from '@atb/utils/date';
 

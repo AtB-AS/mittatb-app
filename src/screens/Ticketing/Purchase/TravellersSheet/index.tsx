@@ -4,53 +4,48 @@ import Header from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
-import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {TravellersTexts, useTranslation} from '@atb/translations';
-import {RouteProp} from '@react-navigation/native';
-import React from 'react';
+import React, {RefObject} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {TicketingStackParams} from '../';
 import {createTravellersText} from '../Overview';
 import SingleTravellerSelection from './SingleTravellerSelection';
 import MultipleTravellersSelection from './MultipleTravellersSelection';
-import useUserCountState from './use-user-count-state';
+import useUserCountState, {UserProfileWithCount} from './use-user-count-state';
 import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
+import {PreassignedFareProduct} from '@atb/reference-data/types';
 
-export type TravellersProps = {
-  navigation: DismissableStackNavigationProp<
-    TicketingStackParams,
-    'Travellers'
-  >;
-  route: RouteProp<TicketingStackParams, 'Travellers'>;
+type Props = {
+  preassignedFareProduct: PreassignedFareProduct;
+  userProfilesWithCount: UserProfileWithCount[];
+  save: (userProfilesWithCount: UserProfileWithCount[]) => void;
+  close: () => void;
+  focusRef: RefObject<any>;
 };
 
-const Travellers: React.FC<TravellersProps> = ({
-  navigation,
-  route: {params},
-}) => {
+const TravellersSheet = ({
+  preassignedFareProduct,
+  userProfilesWithCount,
+  save,
+  close,
+  focusRef,
+}: Props) => {
   const styles = useStyles();
-  const {theme} = useTheme();
   const {t, language} = useTranslation();
-  const {travellerSelectionMode} = getPurchaseFlow(
-    params.preassignedFareProduct,
-  );
+  const {travellerSelectionMode} = getPurchaseFlow(preassignedFareProduct);
 
-  const userCountState = useUserCountState(params.userProfilesWithCount);
-
-  const {top: safeAreaTop, bottom: safeAreBottom} = useSafeAreaInsets();
+  const userCountState = useUserCountState(userProfilesWithCount);
 
   return (
-    <View style={[styles.container, {paddingTop: safeAreaTop}]}>
+    <>
       <Header
         title={t(TravellersTexts.header.title)}
-        leftButton={{type: 'back'}}
+        leftButton={{type: 'cancel', onPress: close}}
       />
 
       <ScrollView style={styles.travellerCounters}>
-        <View style={styles.summarySection}>
+        <View style={styles.summarySection} ref={focusRef}>
           <Sections.Section>
             <Sections.GenericItem>
               <View style={styles.summaryItem}>
@@ -74,27 +69,19 @@ const Travellers: React.FC<TravellersProps> = ({
         )}
       </ScrollView>
 
-      <View
-        style={[
-          styles.saveButton,
-          {
-            paddingBottom: Math.max(safeAreBottom, theme.spacings.medium),
-          },
-        ]}
-      >
+      <View style={styles.saveButton}>
         <Button
           color="primary_2"
           text={t(TravellersTexts.primaryButton.text)}
           accessibilityHint={t(TravellersTexts.primaryButton.a11yHint)}
           disabled={!userCountState.userProfilesWithCount.some((u) => u.count)}
           onPress={() => {
-            navigation.navigate('PurchaseOverview', {
-              userProfilesWithCount: userCountState.userProfilesWithCount,
-            });
+            save(userCountState.userProfilesWithCount);
+            close();
           }}
         />
       </View>
-    </View>
+    </>
   );
 };
 
@@ -121,4 +108,4 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-export default Travellers;
+export default TravellersSheet;

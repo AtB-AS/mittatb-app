@@ -10,7 +10,7 @@ import {
 } from '@atb/RemoteConfigContext';
 import {listRecentFareContracts, RecentFareContract} from '@atb/tickets';
 import {useEffect, useMemo, useReducer} from 'react';
-import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
+import {UserProfileWithCount} from '../Purchase/TravellersSheet/use-user-count-state';
 
 export type RecentTicket = {
   preassignedFareProduct: PreassignedFareProduct;

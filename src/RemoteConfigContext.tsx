@@ -114,6 +114,12 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
               lang: 'nob',
               value: 'TestProdukt 1',
             },
+            alternativeNames: [
+              {
+                lang: 'eng',
+                value: 'TestProdukt 1',
+              },
+            ],
           },
           {
             ...parseJson(
@@ -124,6 +130,12 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
               lang: 'nob',
               value: 'TestProdukt 2',
             },
+            alternativeNames: [
+              {
+                lang: 'eng',
+                value: 'TestProdukt 2',
+              },
+            ],
           },
         ],
         tariff_zones: parseJson(config.tariff_zones, defaultTariffZones),

@@ -61,6 +61,7 @@ export default function ActionItem({
       {...accessibility}
     >
       <ThemeText
+        accessible={false}
         type={mode === 'heading-expand' ? 'paragraphHeadline' : 'body'}
         style={contentContainer}
       >

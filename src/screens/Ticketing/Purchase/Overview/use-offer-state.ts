@@ -4,7 +4,7 @@ import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 import {Offer, OfferPrice, searchOffers} from '@atb/tickets';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useMemo, useReducer} from 'react';
-import {UserProfileWithCount} from '../Travellers/use-user-count-state';
+import {UserProfileWithCount} from '../TravellersSheet/use-user-count-state';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: Offer;

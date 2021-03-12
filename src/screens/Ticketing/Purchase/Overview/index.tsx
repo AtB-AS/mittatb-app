@@ -6,8 +6,8 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
-import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {TariffZone} from '@atb/reference-data/types';
+import {StyleSheet} from '@atb/theme';
 import {
   Language,
   PurchaseOverviewTexts,
@@ -16,10 +16,10 @@ import {
 } from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {UserProfileWithCount} from '../Travellers/use-user-count-state';
+import {UserProfileWithCount} from '../TravellersSheet/use-user-count-state';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../';
@@ -27,8 +27,9 @@ import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
 import useOfferState from './use-offer-state';
 import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
 import {formatToLongDateTime} from '@atb/utils/date';
-import ProductBottomSheet from '@atb/screens/Ticketing/Purchase/Product/ProductBottomSheet';
-import BottomSheet from '@gorhom/bottom-sheet';
+import useBottomSheet from '@atb/components/bottom-sheet/use-bottom-sheet';
+import ProductSheet from '../ProductSheet';
+import TravellersSheet from '../TravellersSheet';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -77,8 +78,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         })),
     [userProfiles],
   );
-  const userProfilesWithCount =
-    params.userProfilesWithCount ?? defaultUserProfilesWithCount;
+  const [userProfilesWithCount, setUserProfilesWithCount] = useState(
+    defaultUserProfilesWithCount,
+  );
 
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
   const {
@@ -103,113 +105,135 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
   const closeModal = () => navigation.dismiss();
 
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const openPopup = () => {
-    bottomSheetRef.current?.expand();
-  };
-  const closePopup = () => {
-    bottomSheetRef.current?.close();
-  };
-  const saveAndClose = (product: PreassignedFareProduct) => {
-    setPreassignedFareProduct(product);
-    bottomSheetRef.current?.close();
-  };
+  const {
+    open: openProductSheet,
+    isOpen: isProductSheetOpen,
+    bottomSheet: productSheet,
+  } = useBottomSheet((close, focusRef) => (
+    <ProductSheet
+      preassignedFareProduct={preassignedFareProduct}
+      close={close}
+      focusRef={focusRef}
+      save={setPreassignedFareProduct}
+    />
+  ));
+
+  const {
+    open: openTravellersSheet,
+    isOpen: isTravellersSheetOpen,
+    bottomSheet: travellersSheet,
+  } = useBottomSheet((close, focusRef) => (
+    <TravellersSheet
+      preassignedFareProduct={preassignedFareProduct}
+      userProfilesWithCount={userProfilesWithCount}
+      close={close}
+      focusRef={focusRef}
+      save={setUserProfilesWithCount}
+    />
+  ));
+
+  const anySheetOpen = isProductSheetOpen || isTravellersSheetOpen;
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header
-        title={t(
-          PurchaseOverviewTexts.header.title[preassignedFareProduct.type],
-        )}
-        leftButton={{
-          type: 'cancel',
-          onPress: closeModal,
-        }}
-      />
-
-      <View style={styles.selectionLinks}>
-        {error && (
-          <MessageBox
-            type="warning"
-            title={t(PurchaseOverviewTexts.errorMessageBox.title)}
-            message={t(PurchaseOverviewTexts.errorMessageBox.message)}
-            retryFunction={refreshOffer}
-            containerStyle={styles.errorMessage}
-          />
-        )}
-
-        <Sections.Section>
-          <Sections.LinkItem
-            text={getReferenceDataName(preassignedFareProduct, language)}
-            onPress={openPopup}
-            disabled={selectableProducts.length <= 1}
-            icon={<ThemeIcon svg={Edit} />}
-          />
-          <Sections.LinkItem
-            text={createTravellersText(userProfilesWithCount, t, language)}
-            onPress={() => {
-              navigation.push('Travellers', {
-                userProfilesWithCount,
-                preassignedFareProduct,
-              });
-            }}
-            icon={<ThemeIcon svg={Edit} />}
-            accessibility={{
-              accessibilityHint: t(PurchaseOverviewTexts.travellers.a11yHint),
-            }}
-          />
-          <Sections.LinkItem
-            text={createTravelDateText(t, language, travelDate)}
-            disabled={!travelDateSelectionEnabled}
-            onPress={() => {
-              navigation.navigate('TravelDate', {travelDate});
-            }}
-            icon={<ThemeIcon svg={Edit} />}
-          />
-          <Sections.LinkItem
-            text={tariffZonesSummary(fromTariffZone, toTariffZone, language, t)}
-            onPress={() => {
-              navigation.push('TariffZones', {
-                fromTariffZone,
-                toTariffZone,
-              });
-            }}
-            icon={<ThemeIcon svg={Edit} />}
-            accessibility={{
-              accessibilityHint: t(PurchaseOverviewTexts.tariffZones.a11yHint),
-            }}
-          />
-        </Sections.Section>
-      </View>
-
-      <View style={styles.toPaymentButton}>
-        <Button
-          color="primary_2"
-          text={t(PurchaseOverviewTexts.primaryButton.text(totalPrice))}
-          disabled={isSearchingOffer || !totalPrice || !!error}
-          accessibilityLabel={t(
-            PurchaseOverviewTexts.primaryButton.a11yLabel(totalPrice),
+      <View
+        accessibilityElementsHidden={anySheetOpen}
+        importantForAccessibility={
+          anySheetOpen ? 'no-hide-descendants' : 'auto'
+        }
+      >
+        <Header
+          title={t(
+            PurchaseOverviewTexts.header.title[preassignedFareProduct.type],
           )}
-          accessibilityHint={t(PurchaseOverviewTexts.primaryButton.a11yHint)}
-          onPress={() => {
-            navigation.navigate('Confirmation', {
-              fromTariffZone,
-              toTariffZone,
-              userProfilesWithCount,
-              preassignedFareProduct,
-              travelDate,
-              headerLeftButton: {type: 'back'},
-            });
+          leftButton={{
+            type: 'cancel',
+            onPress: closeModal,
           }}
         />
+
+        <View style={styles.selectionLinks}>
+          {error && (
+            <MessageBox
+              type="warning"
+              title={t(PurchaseOverviewTexts.errorMessageBox.title)}
+              message={t(PurchaseOverviewTexts.errorMessageBox.message)}
+              retryFunction={refreshOffer}
+              containerStyle={styles.errorMessage}
+            />
+          )}
+
+          <Sections.Section>
+            <Sections.LinkItem
+              text={getReferenceDataName(preassignedFareProduct, language)}
+              onPress={openProductSheet}
+              disabled={selectableProducts.length <= 1}
+              icon={<ThemeIcon svg={Edit} />}
+            />
+            <Sections.LinkItem
+              text={createTravellersText(userProfilesWithCount, t, language)}
+              onPress={openTravellersSheet}
+              icon={<ThemeIcon svg={Edit} />}
+              accessibility={{
+                accessibilityHint: t(PurchaseOverviewTexts.travellers.a11yHint),
+              }}
+            />
+            <Sections.LinkItem
+              text={createTravelDateText(t, language, travelDate)}
+              disabled={!travelDateSelectionEnabled}
+              onPress={() => {
+                navigation.navigate('TravelDate', {travelDate});
+              }}
+              icon={<ThemeIcon svg={Edit} />}
+            />
+            <Sections.LinkItem
+              text={tariffZonesSummary(
+                fromTariffZone,
+                toTariffZone,
+                language,
+                t,
+              )}
+              onPress={() => {
+                navigation.push('TariffZones', {
+                  fromTariffZone,
+                  toTariffZone,
+                });
+              }}
+              icon={<ThemeIcon svg={Edit} />}
+              accessibility={{
+                accessibilityHint: t(
+                  PurchaseOverviewTexts.tariffZones.a11yHint,
+                ),
+              }}
+            />
+          </Sections.Section>
+        </View>
+
+        <View style={styles.toPaymentButton}>
+          <Button
+            color="primary_2"
+            text={t(PurchaseOverviewTexts.primaryButton.text(totalPrice))}
+            disabled={isSearchingOffer || !totalPrice || !!error}
+            accessibilityLabel={t(
+              PurchaseOverviewTexts.primaryButton.a11yLabel(totalPrice),
+            )}
+            accessibilityHint={t(PurchaseOverviewTexts.primaryButton.a11yHint)}
+            onPress={() => {
+              navigation.navigate('Confirmation', {
+                fromTariffZone,
+                toTariffZone,
+                userProfilesWithCount,
+                preassignedFareProduct,
+                travelDate,
+                headerLeftButton: {type: 'back'},
+              });
+            }}
+          />
+        </View>
       </View>
 
-      <ProductBottomSheet
-        preassignedFareProduct={preassignedFareProduct}
-        onSave={saveAndClose}
-        onClose={closePopup}
-        ref={bottomSheetRef}
-      />
+      {productSheet}
+      {travellersSheet}
     </SafeAreaView>
   );
 };

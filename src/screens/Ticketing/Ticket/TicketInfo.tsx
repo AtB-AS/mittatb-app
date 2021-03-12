@@ -14,7 +14,7 @@ import {PreactivatedTicket} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
-import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
+import {UserProfileWithCount} from '../Purchase/TravellersSheet/use-user-count-state';
 
 const TicketInfo = ({travelRights}: {travelRights: PreactivatedTicket[]}) => {
   const {

@@ -1,26 +1,28 @@
 import React, {useMemo} from 'react';
-import {BottomSheetBackdropProps, useBottomSheet} from '@gorhom/bottom-sheet';
+import {BottomSheetBackdropProps} from '@gorhom/bottom-sheet';
 import Animated, {
   cond,
-  lessThan,
   Extrapolate,
+  greaterOrEq,
   interpolate,
 } from 'react-native-reanimated';
 import {TouchableWithoutFeedback} from 'react-native';
+import colors from '@atb/theme/colors';
 
 const AnimatedTouchableWithoutFeedback = Animated.createAnimatedComponent(
   TouchableWithoutFeedback,
 );
 
-const CustomBackdrop = ({animatedIndex, style}: BottomSheetBackdropProps) => {
-  const {close} = useBottomSheet();
-
+const getBackdrop = (onClose: () => void) => ({
+  animatedIndex,
+  style,
+}: BottomSheetBackdropProps) => {
   // animated variables
   const animatedOpacity = useMemo(
     () =>
       interpolate(animatedIndex, {
         inputRange: [0, 1],
-        outputRange: [0, 0.7],
+        outputRange: [0, 0.2],
         extrapolate: Extrapolate.CLAMP,
       }),
     [animatedIndex],
@@ -31,28 +33,32 @@ const CustomBackdrop = ({animatedIndex, style}: BottomSheetBackdropProps) => {
     () => [
       style,
       {
-        backgroundColor: '#a8b5eb',
+        backgroundColor: '#000000',
         opacity: animatedOpacity,
       },
     ],
     [style, animatedOpacity],
   );
 
-  const pointerEvents = cond(
-    lessThan(animatedIndex, 0.5),
-    'box-none',
-    'box-only',
-  );
+  const isOpenCond = greaterOrEq(animatedIndex, 0.5);
+  const pointerEvents = cond(isOpenCond, 'box-only', 'box-none');
+  const accessibleElementsHidden = cond(isOpenCond, false, true);
 
   return (
-    <TouchableWithoutFeedback onPress={close}>
+    <TouchableWithoutFeedback onPress={onClose}>
       <Animated.View
         style={containerStyle}
         pointerEvents={pointerEvents}
         accessible={false}
+        accessibilityElementsHidden={accessibleElementsHidden}
+        importantForAccessibility={
+          accessibleElementsHidden ? 'no-hide-descendants' : 'yes'
+        }
+        accessibilityLabel={'Background'} // Todo: Texts files
+        accessibilityHint={'Active to close'}
       />
     </TouchableWithoutFeedback>
   );
 };
 
-export default CustomBackdrop;
+export default getBackdrop;

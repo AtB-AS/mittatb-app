@@ -1,0 +1,42 @@
+diff --git a/node_modules/@gorhom/bottom-sheet/src/components/bottomSheet/BottomSheet.tsx b/node_modules/@gorhom/bottom-sheet/src/components/bottomSheet/BottomSheet.tsx
+index 790f7bc..4f76a52 100644
+--- a/node_modules/@gorhom/bottom-sheet/src/components/bottomSheet/BottomSheet.tsx
++++ b/node_modules/@gorhom/bottom-sheet/src/components/bottomSheet/BottomSheet.tsx
+@@ -543,27 +543,6 @@ const BottomSheetComponent = forwardRef<BottomSheet, BottomSheetProps>(
+               return;
+             }
+ 
+-            /**
+-             * Here we announce the bottom sheet position
+-             * for accessibility service.
+-             */
+-            AccessibilityInfo.isScreenReaderEnabled().then(isEnabled => {
+-              if (!isEnabled) {
+-                return;
+-              }
+-              const positionInScreen = Math.max(
+-                Math.floor(
+-                  ((WINDOW_HEIGHT - snapPoints[currentPositionIndex] || 1) /
+-                    WINDOW_HEIGHT) *
+-                    100
+-                ),
+-                0
+-              ).toFixed(0);
+-              AccessibilityInfo.announceForAccessibility(
+-                `Bottom sheet snapped to ${positionInScreen}% of the screen`
+-              );
+-            });
+-
+             currentIndexRef.current = currentPositionIndex;
+             refreshUIElements();
+             handleOnChange(currentPositionIndex);
+@@ -623,9 +602,6 @@ const BottomSheetComponent = forwardRef<BottomSheet, BottomSheetProps>(
+             {...containerTapGestureHandler}
+           >
+             <Animated.View
+-              accessible={true}
+-              accessibilityRole="adjustable"
+-              accessibilityLabel="Bottom Sheet"
+               style={containerStyle}
+             >
+               <BottomSheetInternalProvider value={internalContextVariables}>
