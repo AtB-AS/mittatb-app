@@ -3,14 +3,6 @@ import {LocationWithMetadata} from '@atb/favorites/types';
 import {mapFeatureToLocation} from './utils';
 import {StopPlace} from '@entur/sdk';
 
-type StopPlaceInput = {
-  name: string;
-  coordinates: {
-    latitude: number;
-    longitude: number;
-  };
-};
-
 export async function searchByStopPlace(
   stopPlace?: StopPlace,
 ): Promise<LocationWithMetadata | undefined> {
