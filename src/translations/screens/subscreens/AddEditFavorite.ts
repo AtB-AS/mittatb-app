@@ -23,6 +23,11 @@ const AddEditFavoriteTexts = {
     },
     icon: {
       label: _('Ikon', 'Icon'),
+      a11yLabel: _('Ikon for favoritten', 'Favourite icon'),
+      a11yHint: _(
+        'Aktivér for å velge ikon for favoritten',
+        'Activate to select favourite icon',
+      ),
     },
   },
   save: {

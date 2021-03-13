@@ -17,12 +17,12 @@ import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 import {Location} from '@entur/sdk';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Alert, Keyboard, KeyboardAvoidingView, View} from 'react-native';
-import {Modalize} from 'react-native-modalize';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AddEditFavoriteRootParams} from '.';
 import EmojiPopup from './EmojiPopup';
+import {useBottomSheet} from '@atb/components/bottom-sheet/use-bottom-sheet';
 
 type AddEditRouteName = 'AddEditForm';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditForm';
@@ -66,12 +66,6 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
     'searchLocation',
     editItem?.location,
   );
-
-  const emojiRef = useRef<Modalize>(null);
-  const openEmojiPopup = () => {
-    Keyboard.dismiss();
-    emojiRef.current?.open();
-  };
 
   useEffect(() => setEmoji(editItem?.emoji), [editItem?.emoji]);
 
@@ -130,17 +124,8 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
     );
   };
 
-  return (
-    <SafeAreaView style={css.container}>
-      <ScreenHeader
-        title={
-          editItem
-            ? t(AddEditFavoriteTexts.header.titleEdit)
-            : t(AddEditFavoriteTexts.header.title)
-        }
-        leftButton={{type: !!editItem ? 'close' : 'back'}}
-      />
-
+  const {open: openEmojiPicker, bottomSheet: emojiPickerSheet} = useBottomSheet(
+    (close) => (
       <EmojiPopup
         localizedCategories={[
           'Smilefjes',
@@ -152,7 +137,6 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           'Objekter',
           'Symboler',
         ]}
-        ref={emojiRef}
         value={emoji ?? null}
         closeOnSelect={true}
         onEmojiSelected={(emoji) => {
@@ -162,6 +146,25 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
             setEmoji(emoji);
           }
         }}
+        close={close}
+      />
+    ),
+  );
+
+  const openEmojiPopup = () => {
+    Keyboard.dismiss();
+    openEmojiPicker();
+  };
+
+  return (
+    <SafeAreaView style={css.container}>
+      <ScreenHeader
+        title={
+          editItem
+            ? t(AddEditFavoriteTexts.header.titleEdit)
+            : t(AddEditFavoriteTexts.header.title)
+        }
+        leftButton={{type: !!editItem ? 'close' : 'back'}}
       />
 
       <View style={css.innerContainer}>
@@ -201,8 +204,8 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         <Sections.Section withPadding>
           <Sections.ButtonInput
             onPress={openEmojiPopup}
-            accessibilityElementsHidden={true}
-            importantForAccessibility="no-hide-descendants"
+            accessibilityLabel={t(AddEditFavoriteTexts.fields.icon.a11yLabel)}
+            accessibilityHint={t(AddEditFavoriteTexts.fields.icon.a11yHint)}
             label={t(AddEditFavoriteTexts.fields.icon.label)}
             icon="expand-more"
             type="inline"
@@ -237,6 +240,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           />
         </ButtonGroup>
       </KeyboardAvoidingView>
+      {emojiPickerSheet}
     </SafeAreaView>
   );
 }
