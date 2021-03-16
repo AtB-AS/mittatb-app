@@ -124,7 +124,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
     async function () {
       if (!state.user) return undefined;
       const idToken = await state.user.getIdTokenResult(true);
-      return idToken.claims['abt_id'] as string | undefined;
+      return idToken.claims['sub'] as string | undefined;
     },
     [state.user],
   );
