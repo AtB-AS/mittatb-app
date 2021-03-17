@@ -32,7 +32,7 @@ type ProfileScreenProps = {
 export default function ProfileHome({navigation}: ProfileScreenProps) {
   const {enable_i18n, enable_login} = useRemoteConfig();
   const style = useProfileHomeStyle();
-  const {history, clearSearchHistory} = useSearchHistory();
+  const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
   const {authenticationType, signOut, user} = useAuthState();
 
@@ -157,7 +157,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                     ),
                     style: 'destructive',
                     onPress: async () => {
-                      await clearSearchHistory();
+                      await clearHistory();
                     },
                   },
                 ],
