@@ -24,6 +24,7 @@ import {
 import {useLocationSearchValue} from '@atb/location-search';
 import {RootStackParamList} from '@atb/navigation';
 import {TripPattern} from '@atb/sdk';
+import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   AssistantTexts,
@@ -570,6 +571,7 @@ function useTripPatterns(
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
   const [errorType, setErrorType] = useState<ErrorType>();
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
+  const {addJourneySearchEntry} = useSearchHistory();
 
   const clearPatterns = () => setTripPatterns(null);
   const reload = useCallback(() => {
@@ -592,6 +594,11 @@ function useTripPatterns(
           toLocation: translateLocation(toLocation),
           searchDate: searchDate,
         });
+
+        try {
+          // Fire and forget add journey search entry
+          await addJourneySearchEntry([fromLocation, toLocation]);
+        } catch (e) {}
 
         const response = await searchTrip(
           fromLocation,
