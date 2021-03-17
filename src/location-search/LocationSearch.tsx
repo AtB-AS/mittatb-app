@@ -112,6 +112,7 @@ type LocationSearchContentProps = {
   onMapSelection?(): void;
   onlyAtbVenues?: boolean;
   includeHistory?: boolean;
+  includeJourneyHistory?: boolean;
 };
 
 export function LocationSearchContent({
@@ -123,6 +124,7 @@ export function LocationSearchContent({
   onMapSelection,
   onlyAtbVenues = false,
   includeHistory = true,
+  includeJourneyHistory = false,
 }: LocationSearchContentProps) {
   const styles = useThemeStyles();
   const {favorites} = useFavorites();
@@ -239,7 +241,7 @@ export function LocationSearchContent({
           keyboardShouldPersistTaps="handled"
           onScrollBeginDrag={() => Keyboard.dismiss()}
         >
-          {includeHistory && !hasResults && (
+          {includeJourneyHistory && !hasResults && (
             <JourneyHistory onSelect={() => {}} />
           )}
           {includeHistory && hasPreviousResults && (
