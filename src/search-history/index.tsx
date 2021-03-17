@@ -38,14 +38,12 @@ const SearchHistoryContextProvider: React.FC = ({children}) => {
   const contextValue: SearchHistoryContextState = {
     history,
     async addSearchEntry(searchEntry: SearchHistoryEntry) {
-      console.log('adding entry:', searchEntry.name);
       const history = await searchStore.addEntry(searchEntry);
       setSearchHistory(history);
     },
 
     journeyHistory,
     async addJourneySearchEntry(searchEntry: JourneySearchHistoryEntry) {
-      console.log('adding journey entry:', searchEntry[0].name);
       setJourneySearchHistory(await journeyStore.addEntry(searchEntry));
     },
 
