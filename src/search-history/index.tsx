@@ -10,11 +10,11 @@ import {
 type SearchHistoryContextState = {
   history: SearchHistory;
   addSearchEntry(searchEntry: SearchHistoryEntry): Promise<void>;
-  clearSearchHistory(): Promise<void>;
 
   journeyHistory: JourneySearchHistory;
   addJourneySearchEntry(searchEntry: JourneySearchHistoryEntry): Promise<void>;
-  clearJourneySearchHistory(): Promise<void>;
+
+  clearHistory(): Promise<void>;
 };
 const SearchHistoryContext = createContext<
   SearchHistoryContextState | undefined
@@ -38,19 +38,19 @@ const SearchHistoryContextProvider: React.FC = ({children}) => {
   const contextValue: SearchHistoryContextState = {
     history,
     async addSearchEntry(searchEntry: SearchHistoryEntry) {
+      console.log('adding entry:', searchEntry.name);
       const history = await searchStore.addEntry(searchEntry);
-      setSearchHistory(history);
-    },
-    async clearSearchHistory() {
-      const history = await searchStore.clear();
       setSearchHistory(history);
     },
 
     journeyHistory,
     async addJourneySearchEntry(searchEntry: JourneySearchHistoryEntry) {
+      console.log('adding journey entry:', searchEntry[0].name);
       setJourneySearchHistory(await journeyStore.addEntry(searchEntry));
     },
-    async clearJourneySearchHistory() {
+
+    async clearHistory() {
+      setSearchHistory(await searchStore.clear());
       setJourneySearchHistory(await journeyStore.clear());
     },
   };
