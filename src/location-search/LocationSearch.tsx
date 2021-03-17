@@ -30,6 +30,7 @@ import {LocationSearchNavigationProp} from './';
 import LocationResults from './LocationResults';
 import {LocationSearchResult} from './types';
 import useDebounce from './useDebounce';
+import JourneyHistory from './JourneyHistory';
 export type Props = {
   navigation: LocationSearchNavigationProp;
   route: RouteProp<RootStackParamList, 'LocationSearch'>;
@@ -238,6 +239,9 @@ export function LocationSearchContent({
           keyboardShouldPersistTaps="handled"
           onScrollBeginDrag={() => Keyboard.dismiss()}
         >
+          {includeHistory && !hasResults && (
+            <JourneyHistory onSelect={() => {}} />
+          )}
           {includeHistory && hasPreviousResults && (
             <LocationResults
               title={t(LocationSearchTexts.results.previousResults.heading)}

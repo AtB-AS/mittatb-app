@@ -18,6 +18,17 @@ const LocationSearchTexts = {
       heading: _('Søkeresultater', 'Search results'),
     },
   },
+  journeySearch: {
+    previousJourneyResults: {
+      heading: _('Siste reisesøk', 'Most recent journeys'),
+    },
+    result: {
+      a11yHint: _(
+        'Aktivér for å søke etter reiser for dette resultatet.',
+        'Activate to search for trips for these locations.',
+      ),
+    },
+  },
   messages: {
     networkError: _(
       'Hei, er du på nett? Vi kan ikke søke siden nettforbindelsen din mangler eller er ustabil.',
