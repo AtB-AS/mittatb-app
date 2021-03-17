@@ -12,7 +12,7 @@ import {ActivityIndicator, View} from 'react-native';
 import QuaySection from './section-items/quay-section';
 import {hasNoGroupsWithDepartures, hasNoQuaysWithDepartures} from './utils';
 
-type NearbyResultsProps = {
+type DeparturesListProps = {
   departures: StopPlaceGroup[] | null;
   lastUpdated?: Date;
   currentLocation?: Location;
@@ -24,7 +24,7 @@ type NearbyResultsProps = {
   showOnlyFavorites: boolean;
 };
 
-export default function NearbyResults({
+export default function DeparturesList({
   departures,
   lastUpdated,
   isFetchingMore = false,
@@ -34,8 +34,8 @@ export default function NearbyResults({
   currentLocation,
 
   showOnlyFavorites,
-}: NearbyResultsProps) {
-  const styles = useResultsStyle();
+}: DeparturesListProps) {
+  const styles = useDeparturesListStyle();
   const {t} = useTranslation();
 
   if (isInitialScreen) {
@@ -89,7 +89,7 @@ export default function NearbyResults({
     </View>
   );
 }
-const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
+const useDeparturesListStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacings.medium,
   },

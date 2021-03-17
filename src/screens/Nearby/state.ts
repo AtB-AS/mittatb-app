@@ -20,7 +20,7 @@ import {Location, UserFavoriteDepartures} from '@atb/favorites/types';
 import {DeparturesRealtimeData} from '@atb/sdk';
 import {differenceInMinutesStrings} from '@atb/utils/date';
 import useInterval from '@atb/utils/use-interval';
-import {updateStopsWithRealtime} from './utils';
+import {updateStopsWithRealtime} from '../../components/departure-list/utils';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 

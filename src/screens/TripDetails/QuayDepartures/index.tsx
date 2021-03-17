@@ -4,7 +4,7 @@ import {LocationWithMetadata} from '@atb/favorites/types';
 import ScreenHeader from '@atb/components/screen-header';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import NearbyResults from '@atb/screens/Nearby/NearbyResults';
+import DeparturesList from '@atb/components/departure-list/DeparturesList';
 import {useDepartureData} from '@atb/screens/Nearby/state';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {DetailsStackParams} from '@atb/screens/TripDetails';
@@ -41,7 +41,7 @@ const QuayDepartures: React.FC<RootProps> = ({navigation, route}) => {
         <ScreenHeader leftButton={{type: 'back'}} title={'Platform-avganger'} />
       </View>
       <Animated.ScrollView>
-        <NearbyResults
+        <DeparturesList
           currentLocation={route.params.location}
           departures={departureData}
           isInitialScreen={false}

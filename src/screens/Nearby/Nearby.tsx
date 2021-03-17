@@ -31,7 +31,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {NearbyStackParams} from '.';
 import Loading from '../Loading';
-import NearbyResults from './NearbyResults';
+import DeparturesList from '../../components/departure-list/DeparturesList';
 import {useDepartureData} from './state';
 
 type NearbyRouteName = 'NearbyRoot';
@@ -213,7 +213,7 @@ const NearbyOverview: React.FC<Props> = ({
         </View>
       )}
 
-      <NearbyResults
+      <DeparturesList
         currentLocation={currentLocation}
         showOnlyFavorites={showOnlyFavorites}
         departures={data}
