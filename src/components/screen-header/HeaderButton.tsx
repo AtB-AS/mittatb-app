@@ -56,7 +56,12 @@ const useIconButton = (
           <ThemeText>{t(ScreenHeaderTexts.headerButton[type].text)}</ThemeText>
         ),
         accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
-        onPress: onPress || (() => navigation.goBack()),
+        onPress:
+          onPress ||
+          (() => {
+            debugger;
+            navigation.goBack();
+          }),
         ...accessibilityProps,
       };
     }

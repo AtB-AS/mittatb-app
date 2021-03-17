@@ -53,7 +53,7 @@ type RootProps = {
   route: NearbyScreenProp;
 };
 
-export default function NearbyScreen({navigation}: RootProps) {
+export default function NearbyScreen({navigation, route}: RootProps) {
   const {
     status,
     location,
@@ -127,7 +127,7 @@ const NearbyOverview: React.FC<Props> = ({
     navigation.navigate('LocationSearch', {
       label: t(NearbyTexts.search.label),
       callerRouteName: NearbyRouteNameStatic,
-      callerRouteParam: 'location',
+      callerRouteParam: 'test123',
       initialLocation: fromLocation,
     });
 
@@ -188,7 +188,7 @@ const NearbyOverview: React.FC<Props> = ({
       }
       headerTitle={t(NearbyTexts.header.title)}
       useScroll={activateScroll}
-      leftButton={{type: 'home'}}
+      leftButton={{type: 'back'}}
       alternativeTitleComponent={
         <AccessibleText
           prefix={t(NearbyTexts.header.altTitle.a11yPrefix)}

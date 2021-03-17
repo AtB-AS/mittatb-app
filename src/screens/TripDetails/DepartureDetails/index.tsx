@@ -294,9 +294,8 @@ function TripItem({
     if (!location) {
       return;
     }
-    navigation.navigate('Nearest', {
-      screen: 'NearbyRoot',
-      params: {location},
+    navigation.navigate('QuayDepartures', {
+      location,
     });
   }
 }
