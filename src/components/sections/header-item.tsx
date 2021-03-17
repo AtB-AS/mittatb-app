@@ -1,7 +1,7 @@
+import ThemeText from '@atb/components/text';
 import React from 'react';
 import {View} from 'react-native';
-import ThemeText from '@atb/components/text';
-import {useSectionItem, SectionItem, useSectionStyle} from './section-utils';
+import {SectionItem, useSectionItem} from './section-utils';
 
 export type HeaderItemProps = SectionItem<{
   text: string;
@@ -15,7 +15,6 @@ export default function HeaderItem({
   ...props
 }: HeaderItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
-  const style = useSectionStyle();
 
   return (
     <View style={topContainer}>
