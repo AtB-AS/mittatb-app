@@ -5,9 +5,6 @@ import {JourneySearchHistoryEntry, SearchHistoryEntry} from './types';
 // but in the future with external storage, this
 const HISTORY_LIMIT = 10;
 
-export const STORAGE_KEY = '@ATB_search-history';
-export const JOURNEY_STORAGE_KEY = '@ATB_journey_search-history';
-
 class HistoryStore<T = SearchHistoryEntry | JourneySearchHistoryEntry> {
   private key: StorageModelTypes;
   private eqaulityComparator: (a: T, b: T) => boolean;
@@ -51,7 +48,7 @@ class HistoryStore<T = SearchHistoryEntry | JourneySearchHistoryEntry> {
   }
 
   private async setSearchHistory(completeHistory: T[]): Promise<T[]> {
-    await storage.set(STORAGE_KEY, JSON.stringify(completeHistory));
+    await storage.set(this.key, JSON.stringify(completeHistory));
     return completeHistory;
   }
 
@@ -59,6 +56,9 @@ class HistoryStore<T = SearchHistoryEntry | JourneySearchHistoryEntry> {
     return history.filter((item) => !this.eqaulityComparator(item, entry));
   }
 }
+
+export const STORAGE_KEY = '@ATB_search-history';
+export const JOURNEY_STORAGE_KEY = '@ATB_journey_search-history';
 
 export const searchStore = new HistoryStore<SearchHistoryEntry>(
   STORAGE_KEY,
