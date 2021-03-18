@@ -2,6 +2,7 @@ import SvgConfirm from '@atb/assets/svg/icons/actions/Confirm';
 import SvgDelete from '@atb/assets/svg/icons/actions/Delete';
 import {MapPointPin} from '@atb/assets/svg/icons/places';
 import Button, {ButtonGroup} from '@atb/components/button';
+import MessageBox from '@atb/components/message-box';
 import ScreenHeader from '@atb/components/screen-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import * as Sections from '@atb/components/sections';
@@ -9,8 +10,7 @@ import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
 import {StoredLocationFavorite} from '@atb/favorites/types';
-import {useLocationSearchValue} from '@atb/location-search';
-import MessageBox from '@atb/components/message-box';
+import {useOnlySingleLocation} from '@atb/location-search';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet, Theme} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
@@ -62,7 +62,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   );
   const [emoji, setEmoji] = useState<string | undefined>(editItem?.emoji);
   const [name, setName] = useState<string>(editItem?.name ?? '');
-  const location = useLocationSearchValue<AddEditScreenRouteProp>(
+  const location = useOnlySingleLocation<AddEditScreenRouteProp>(
     'searchLocation',
     editItem?.location,
   );
