@@ -17,19 +17,18 @@ declare module 'axios' {
     retry?: boolean;
     // Use id token as bearer token in authorization header
     authWithIdToken?: boolean;
+    // Force refresh id token from firebase before request
+    forceRefreshIdToken?: boolean;
   }
 }
 
 function retryCondition(error: AxiosError): boolean {
-  const shouldRetryWithRefreshedIdToken =
-    Boolean(error.config.authWithIdToken) && error.response?.status === 401;
-
   const shouldRetryOnNetworkErrorOrIdempotentRequest =
     Boolean(error.config.retry) &&
     (getAxiosErrorType(error) === 'network-error' ||
       isIdempotentRequestError(error));
   return (
-    shouldRetryWithRefreshedIdToken ||
+    error.config.forceRefreshIdToken ||
     shouldRetryOnNetworkErrorOrIdempotentRequest
   );
 }
@@ -44,6 +43,7 @@ export function createClient(baseUrl: string) {
   });
   client.interceptors.request.use(requestHandler, undefined);
   client.interceptors.request.use(requestIdTokenHandler);
+  client.interceptors.response.use(undefined, responseIdTokenHandler);
   axiosRetry(client, {retries: 3, retryCondition});
   client.interceptors.response.use(undefined, responseErrorHandler);
   return client;
@@ -66,13 +66,17 @@ function requestHandler(config: AxiosRequestConfig): AxiosRequestConfig {
 
 async function requestIdTokenHandler(config: AxiosRequestConfig) {
   if (config.authWithIdToken) {
-    const retryCount = (config['axios-retry'] as any)?.retryCount;
-    const forceRefresh = retryCount > 0;
     const user = auth().currentUser;
-    const idToken = await user?.getIdToken(forceRefresh);
+    const idToken = await user?.getIdToken(config.forceRefreshIdToken);
     config.headers['Authorization'] = 'Bearer ' + idToken;
   }
   return config;
+}
+
+function responseIdTokenHandler(error: AxiosError) {
+  error.config.forceRefreshIdToken =
+    error.config.authWithIdToken && error.response?.status === 401;
+  throw error;
 }
 
 function responseErrorHandler(error: AxiosError) {
