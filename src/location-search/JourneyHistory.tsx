@@ -13,6 +13,9 @@ type JourneyHistoryProps = {
   onSelect: (journey: JourneySearchHistoryEntry) => void;
 };
 
+// @TODO Could be configurable at some point.
+const DEFAULT_HISTORY_LIMIT = 3;
+
 export default function JourneyHistory({onSelect}: JourneyHistoryProps) {
   const {t} = useTranslation();
   const {journeyHistory} = useSearchHistory();
@@ -31,23 +34,26 @@ export default function JourneyHistory({onSelect}: JourneyHistoryProps) {
         mode="subheading"
       />
       <View>
-        {journeyHistory.map(mapToVisibleSearchResult).map((searchResult) => (
-          <TouchableOpacity
-            accessible={true}
-            accessibilityLabel={searchResult.text + screenReaderPause}
-            accessibilityHint={t(
-              LocationSearchTexts.journeySearch.result.a11yHint,
-            )}
-            accessibilityRole="button"
-            onPress={() => onSelect(searchResult.selectable)}
-          >
-            <GenericItem transparent>
-              <ThemeText type="paragraphHeadline">
-                {searchResult.text}
-              </ThemeText>
-            </GenericItem>
-          </TouchableOpacity>
-        ))}
+        {journeyHistory
+          .slice(0, DEFAULT_HISTORY_LIMIT)
+          .map(mapToVisibleSearchResult)
+          .map((searchResult) => (
+            <TouchableOpacity
+              accessible={true}
+              accessibilityLabel={searchResult.text + screenReaderPause}
+              accessibilityHint={t(
+                LocationSearchTexts.journeySearch.result.a11yHint,
+              )}
+              accessibilityRole="button"
+              onPress={() => onSelect(searchResult.selectable)}
+            >
+              <GenericItem transparent>
+                <ThemeText type="paragraphHeadline">
+                  {searchResult.text}
+                </ThemeText>
+              </GenericItem>
+            </TouchableOpacity>
+          ))}
       </View>
     </SectionGroup>
   );
