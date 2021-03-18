@@ -69,10 +69,6 @@ const DetailsContent: React.FC<Props> = ({
           </ThemeText>
         </Sections.GenericItem>
         <Sections.LinkItem
-          text={t(TicketTexts.details.askForRefund)}
-          disabled
-        />
-        <Sections.LinkItem
           text={t(TicketTexts.details.askForReceipt)}
           onPress={onReceiptNavigate}
         />
