@@ -184,11 +184,10 @@ const Index: React.FC<Props> = ({
           />
         )}
         {showEmptyResultText && (
-          <MessageBox type="info">
-            <ThemeText>
-              {t(TariffZoneSearchTexts.messages.emptyResult)}
-            </ThemeText>
-          </MessageBox>
+          <MessageBox
+            type="info"
+            message={t(TariffZoneSearchTexts.messages.emptyResult)}
+          />
         )}
       </ScrollView>
     </View>

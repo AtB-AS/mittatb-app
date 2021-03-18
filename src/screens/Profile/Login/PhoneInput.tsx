@@ -72,9 +72,10 @@ export default function PhoneInput({navigation, route}: PhoneInputProps) {
 
       <View style={styles.mainView}>
         {loginReason && (
-          <MessageBox containerStyle={styles.loginReasonMessage}>
-            <ThemeText>{loginReason}</ThemeText>
-          </MessageBox>
+          <MessageBox
+            containerStyle={styles.loginReasonMessage}
+            message={loginReason}
+          />
         )}
         <Sections.Section>
           <Sections.GenericItem>

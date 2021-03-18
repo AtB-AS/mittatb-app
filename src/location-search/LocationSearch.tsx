@@ -259,11 +259,10 @@ export function LocationSearchContent({
         !error &&
         !!text && (
           <View style={[styles.contentBlock, styles.marginTop]}>
-            <MessageBox type="info">
-              <ThemeText>
-                {t(LocationSearchTexts.messages.emptyResult)}
-              </ThemeText>
-            </MessageBox>
+            <MessageBox
+              type="info"
+              message={t(LocationSearchTexts.messages.emptyResult)}
+            />
           </View>
         )
       )}

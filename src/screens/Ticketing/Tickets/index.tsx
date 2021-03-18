@@ -43,6 +43,7 @@ export default function TicketTabs() {
         title={t(TicketsTexts.header.title)}
         rightButton={{type: 'chat'}}
         leftButton={{type: 'home'}}
+        alertContext="ticketing"
       />
       <Tab.Navigator
         tabBar={(props) => <TabBar {...props} />}

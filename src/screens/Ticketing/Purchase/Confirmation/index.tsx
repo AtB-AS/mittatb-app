@@ -131,6 +131,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           PurchaseConfirmationTexts.header.title[preassignedFareProduct.type],
         )}
         leftButton={headerLeftButton}
+        alertContext="ticketing"
         style={styles.header}
       />
 
@@ -201,7 +202,6 @@ const Confirmation: React.FC<ConfirmationProps> = ({
             </Sections.Section>
           </View>
         </View>
-
         <View style={styles.totalContainer}>
           <View style={styles.totalContainerHeadings}>
             <ThemeText type="body">
@@ -227,20 +227,18 @@ const Confirmation: React.FC<ConfirmationProps> = ({
             />
           )}
         </View>
-
-        <MessageBox type="info">
-          <ThemeText style={{paddingBottom: theme.spacings.medium}}>
-            {travelDate
+        <MessageBox
+          type="info"
+          message={
+            travelDate
               ? t(
                   PurchaseConfirmationTexts.infoText.validInFuture(
                     formatToLongDateTime(travelDate, language),
                   ),
                 )
-              : t(PurchaseConfirmationTexts.infoText.validNow)}
-          </ThemeText>
-          {/*<ThemeText>{t(PurchaseConfirmationTexts.infoText.part2)}</ThemeText>*/}
-        </MessageBox>
-
+              : t(PurchaseConfirmationTexts.infoText.validNow)
+          }
+        />
         <View
           style={{
             paddingBottom: Math.max(safeAreBottom, theme.spacings.medium),

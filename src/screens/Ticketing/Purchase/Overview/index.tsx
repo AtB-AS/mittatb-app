@@ -108,6 +108,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           type: 'cancel',
           onPress: closeModal,
         }}
+        alertContext="ticketing"
       />
 
       <View style={styles.selectionLinks}>
