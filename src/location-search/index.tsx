@@ -1,23 +1,24 @@
-import React, {useRef} from 'react';
-import {
-  createStackNavigator,
-  StackNavigationProp,
-  TransitionPresets,
-} from '@react-navigation/stack';
-import LocationSearch, {
-  RouteParams as LocationSearchRouteParams,
-} from './LocationSearch';
-import MapSelection, {
-  RouteParams as MapSelectionRouteParams,
-} from './map-selection';
 import {
   CompositeNavigationProp,
   ParamListBase,
   RouteProp,
   useRoute,
 } from '@react-navigation/native';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+  TransitionPresets,
+} from '@react-navigation/stack';
+import React, {useRef} from 'react';
+import {Location} from '../favorites/types';
 import {RootStackParamList} from '../navigation';
-import {Location, LocationWithMetadata} from '../favorites/types';
+import LocationSearch, {
+  RouteParams as LocationSearchRouteParams,
+} from './LocationSearch';
+import MapSelection, {
+  RouteParams as MapSelectionRouteParams,
+} from './map-selection';
+import {SelectableLocationData} from './types';
 
 export type LocationSearchStackParams = {
   LocationSearch: LocationSearchRouteParams;
@@ -64,11 +65,11 @@ export function useLocationSearchValue<
 >(
   callerRouteParam: keyof T['params'],
   defaultLocation?: Location,
-): LocationWithMetadata | undefined {
+): SelectableLocationData | undefined {
   const route = useRoute<T>();
   const firstTimeRef = useRef(true);
   const [location, setLocation] = React.useState<
-    LocationWithMetadata | undefined
+    SelectableLocationData | undefined
   >(defaultLocation && {...defaultLocation, resultType: 'search'});
 
   React.useEffect(() => {

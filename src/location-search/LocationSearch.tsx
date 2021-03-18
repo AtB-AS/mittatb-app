@@ -1,9 +1,12 @@
+import {JourneySearchHistoryEntry} from '@atb/search-history/types';
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
 import {Keyboard, TextInput as InternalTextInput, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
 import {ErrorType} from '../api/utils';
+import MessageBox from '../components/message-box';
+import FullScreenHeader from '../components/screen-header/full-header';
 import ScreenReaderAnnouncement from '../components/screen-reader-announcement';
 import {TextInput} from '../components/sections';
 import ThemeText from '../components/text';
@@ -16,9 +19,7 @@ import {
 } from '../favorites/types';
 import {useGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
-import MessageBox from '../components/message-box';
 import {RootStackParamList} from '../navigation';
-import FullScreenHeader from '../components/screen-header/full-header';
 import {useSearchHistory} from '../search-history';
 import {StyleSheet} from '../theme';
 import {
@@ -27,10 +28,10 @@ import {
   useTranslation,
 } from '../translations/';
 import {LocationSearchNavigationProp} from './';
-import LocationResults from './LocationResults';
-import {LocationSearchResult} from './types';
-import useDebounce from './useDebounce';
 import JourneyHistory from './JourneyHistory';
+import LocationResults from './LocationResults';
+import {LocationSearchResult, SelectableLocationData} from './types';
+import useDebounce from './useDebounce';
 export type Props = {
   navigation: LocationSearchNavigationProp;
   route: RouteProp<RootStackParamList, 'LocationSearch'>;
@@ -42,6 +43,7 @@ export type RouteParams = {
   label: string;
   favoriteChipTypes?: ChipTypeGroup[];
   initialLocation?: LocationWithMetadata;
+  includeJourneyHistory?: boolean;
 };
 
 const LocationSearch: React.FC<Props> = ({
@@ -53,6 +55,7 @@ const LocationSearch: React.FC<Props> = ({
       label,
       favoriteChipTypes,
       initialLocation,
+      includeJourneyHistory = false,
     },
   },
 }) => {
@@ -60,7 +63,7 @@ const LocationSearch: React.FC<Props> = ({
   const styles = useThemeStyles();
   const {location: geolocation} = useGeolocationState();
 
-  const onSelect = (location: LocationWithMetadata) => {
+  const onSelect = (location: SelectableLocationData) => {
     navigation.navigate(callerRouteName as any, {
       [callerRouteParam]: location,
     });
@@ -98,6 +101,7 @@ const LocationSearch: React.FC<Props> = ({
         favoriteChipTypes={favoriteChipTypes}
         placeholder={t(LocationSearchTexts.searchField.placeholder)}
         defaultText={initialLocation?.name}
+        includeJourneyHistory={includeJourneyHistory}
       />
     </View>
   );
@@ -108,7 +112,7 @@ type LocationSearchContentProps = {
   placeholder: string;
   favoriteChipTypes?: ChipTypeGroup[];
   defaultText?: string;
-  onSelect(location: LocationWithMetadata): void;
+  onSelect(location: SelectableLocationData): void;
   onMapSelection?(): void;
   onlyAtbVenues?: boolean;
   includeHistory?: boolean;
@@ -167,6 +171,12 @@ export function LocationSearchContent({
       ...searchResult.location,
       resultType: 'favorite',
       favoriteId: searchResult.favoriteInfo.id,
+    });
+  };
+  const onJourneyHistorySelected = (journeyData: JourneySearchHistoryEntry) => {
+    return onSelect({
+      resultType: 'journey',
+      journeyData,
     });
   };
 
@@ -242,7 +252,7 @@ export function LocationSearchContent({
           onScrollBeginDrag={() => Keyboard.dismiss()}
         >
           {includeJourneyHistory && !hasResults && (
-            <JourneyHistory onSelect={() => {}} />
+            <JourneyHistory onSelect={onJourneyHistorySelected} />
           )}
           {includeHistory && hasPreviousResults && (
             <LocationResults

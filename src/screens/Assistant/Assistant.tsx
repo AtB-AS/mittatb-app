@@ -22,6 +22,7 @@ import {
   useGeolocationState,
 } from '@atb/GeolocationContext';
 import {useLocationSearchValue} from '@atb/location-search';
+import {SelectableLocationData} from '@atb/location-search/types';
 import {RootStackParamList} from '@atb/navigation';
 import {TripPattern} from '@atb/sdk';
 import {useSearchHistory} from '@atb/search-history';
@@ -212,6 +213,7 @@ const Assistant: React.FC<Props> = ({
       callerRouteName: AssistantRouteNameStatic,
       callerRouteParam,
       initialLocation,
+      includeJourneyHistory: true,
     });
 
   const showEmptyScreen = !tripPatterns && !isSearching && !error;
@@ -452,9 +454,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-type Locations = {
-  from: LocationWithMetadata | undefined;
-  to: LocationWithMetadata | undefined;
+type SearchForLocations = {
+  from?: LocationWithMetadata;
+  to?: LocationWithMetadata;
 };
 
 function computeNoResultReasons(
@@ -484,7 +486,9 @@ function computeNoResultReasons(
   return reasons;
 }
 
-function useLocations(currentLocation: Location | undefined): Locations {
+function useLocations(
+  currentLocation: Location | undefined,
+): SearchForLocations {
   const {favorites} = useFavorites();
 
   const memoedCurrentLocation = useMemo<LocationWithMetadata | undefined>(
@@ -502,53 +506,99 @@ function useLocations(currentLocation: Location | undefined): Locations {
     'toLocation',
   );
 
-  const from = useUpdatedLocation(
+  return useUpdatedLocation(
     searchedFromLocation,
-    memoedCurrentLocation,
-    favorites,
-  );
-
-  const to = useUpdatedLocation(
     searchedToLocation,
     memoedCurrentLocation,
     favorites,
   );
-
-  return {
-    from,
-    to,
-  };
 }
 
 function useUpdatedLocation(
-  searchedLocation: LocationWithMetadata | undefined,
-  currentLocation: LocationWithMetadata | undefined,
+  searchedFromLocation: SelectableLocationData | undefined,
+  searchedToLocation: SelectableLocationData | undefined,
+  currentLocation: SelectableLocationData | undefined,
   favorites: UserFavorites,
-): LocationWithMetadata | undefined {
-  return useMemo(() => {
-    if (!searchedLocation) return undefined;
+): SearchForLocations {
+  type Directions = 'from' | 'to' | 'from-to';
+  type SearchForLocationsWithDirections = {
+    direction: Directions;
+  } & SearchForLocations;
 
-    switch (searchedLocation.resultType) {
-      case 'search':
-        return searchedLocation;
-      case 'geolocation':
-        return currentLocation;
-      case 'favorite':
-        const favorite = favorites.find(
-          (f) => f.id === searchedLocation.favoriteId,
-        );
+  const getLocation = useCallback(
+    (
+      direction: 'from' | 'to',
+      searchedLocation?: SelectableLocationData,
+    ): SearchForLocationsWithDirections => {
+      if (!searchedLocation) return {direction};
 
-        if (favorite) {
+      switch (searchedLocation.resultType) {
+        case 'search':
           return {
-            ...favorite.location,
-            resultType: 'favorite',
-            favoriteId: favorite.id,
+            direction,
+            [direction]: searchedLocation,
+          };
+        case 'geolocation':
+          return {
+            direction,
+            [direction]: currentLocation,
+          };
+        case 'journey': {
+          const toSearch = (i: number): LocationWithMetadata => ({
+            ...searchedLocation.journeyData[i],
+            resultType: 'search',
+          });
+          return {
+            direction: 'from-to',
+            from: toSearch(0),
+            to: toSearch(1),
           };
         }
-    }
+        case 'favorite':
+          const favorite = favorites.find(
+            (f) => f.id === searchedLocation.favoriteId,
+          );
 
-    return undefined;
-  }, [searchedLocation, currentLocation, favorites]);
+          if (favorite) {
+            return {
+              direction: direction,
+              [direction]: {
+                ...favorite.location,
+                resultType: 'favorite',
+                favoriteId: favorite.id,
+              },
+            };
+          }
+      }
+
+      return {direction};
+    },
+    [currentLocation, favorites],
+  );
+
+  const newFrom = useMemo(() => getLocation('from', searchedFromLocation), [
+    searchedFromLocation,
+    getLocation,
+  ]);
+  const newTo = useMemo(() => getLocation('to', searchedToLocation), [
+    searchedToLocation,
+    getLocation,
+  ]);
+
+  // Prefer new from/to in the To field.
+  if (newTo.direction === 'from-to') {
+    return newTo;
+  }
+  // If from input contains both from/to
+  if (newFrom.direction === 'from-to') {
+    return newFrom;
+  }
+
+  // We don't have any entire journey selection. Just merge from/to:
+  return {
+    ...newTo,
+    ...newFrom,
+  };
 }
 
 export default AssistantRoot;
