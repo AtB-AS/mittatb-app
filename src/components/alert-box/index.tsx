@@ -1,9 +1,10 @@
 import React from 'react';
 import {useTranslation} from '@atb/translations';
-import {AlertContext, useAlertsState} from '@atb/alerts/AlertsContext';
+import {Alert, AlertContext, useAlertsState} from '@atb/alerts/AlertsContext';
 import MessageBox from '@atb/components/message-box';
 import {getReferenceDataText} from '@atb/reference-data/utils';
 import {StyleProp, ViewStyle} from 'react-native';
+import {Theme, useTheme} from '@atb/theme';
 
 type Props = {
   alertContext?: AlertContext;
@@ -12,17 +13,28 @@ type Props = {
 
 const AlertBox = ({alertContext, style}: Props) => {
   const {language} = useTranslation();
+  const {theme} = useTheme();
   const {findAlert} = useAlertsState();
 
   const alert = alertContext ? findAlert(alertContext) : undefined;
-  return alert ? (
+
+  if (!alert || !Object.keys(theme.status).includes(alert.type)) {
+    return null;
+  }
+
+  return (
     <MessageBox
       containerStyle={style}
-      title={getReferenceDataText(alert?.title ?? [], language)}
+      title={getReferenceDataText(alert.title ?? [], language)}
       message={getReferenceDataText(alert.body, language)}
       type={alert.type}
     />
-  ) : null;
+  );
+};
+
+const isValidAlert = (theme: Theme, alert?: Alert) => {
+  if (!alert) return false;
+  return Object.keys(theme.status).includes(alert.type);
 };
 
 export default AlertBox;
