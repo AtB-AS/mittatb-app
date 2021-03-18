@@ -1,8 +1,13 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
-import React, {useState} from 'react';
-import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  ActivityIndicator,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {LoginRootParams} from './';
 import * as Sections from '@atb/components/sections';
 import Button from '@atb/components/button';
@@ -34,7 +39,7 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
   const {t} = useTranslation();
   const {theme} = useTheme();
   const styles = useThemeStyles();
-  const {confirmCode, signInWithPhoneNumber} = useAuthState();
+  const {confirmCode, signInWithPhoneNumber, user} = useAuthState();
   const [code, setCode] = useState('');
   const [error, setError] = useState<
     ConfirmationErrorCode | PhoneSignInErrorCode
@@ -63,6 +68,20 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
       setError(errorCode);
     }
   };
+
+  // User might be automatically logged in with Firebase auth, but only on Android
+  // Check user from state and see if it is updated while we wait
+  useEffect(() => {
+    if (user?.phoneNumber) {
+      // OK To use toast here, as this is Android only for now
+      ToastAndroid.showWithGravity(
+        t(LoginTexts.confirmCode.autoVerifyToast),
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+      navigation.navigate(afterLogin.routeName as any, afterLogin.routeParams);
+    }
+  });
 
   return (
     <View style={styles.container}>

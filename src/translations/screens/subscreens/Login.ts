@@ -35,6 +35,10 @@ const LoginTexts = {
     },
     mainButton: _('Logg inn', 'Sign in'),
     resendButton: _('Send engangskode på nytt', 'Resend the one time code'),
+    autoVerifyToast: _(
+      'Engangskode er verifisert',
+      'One time code has been verified',
+    ),
     errors: {
       invalid_phone: _(
         'Er du sikker på at telefonnummeret er korrekt?',
