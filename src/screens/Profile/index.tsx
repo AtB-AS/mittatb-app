@@ -1,6 +1,5 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
-import Login from './Login';
 import Appearance from './Appearance';
 import FavoriteDepartures from './FavoriteDepartures';
 import FavoriteList from './FavoriteList';
