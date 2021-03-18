@@ -39,7 +39,11 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
   const {t} = useTranslation();
   const {theme} = useTheme();
   const styles = useThemeStyles();
-  const {confirmCode, signInWithPhoneNumber, user} = useAuthState();
+  const {
+    authenticationType,
+    confirmCode,
+    signInWithPhoneNumber,
+  } = useAuthState();
   const [code, setCode] = useState('');
   const [error, setError] = useState<
     ConfirmationErrorCode | PhoneSignInErrorCode
@@ -72,7 +76,7 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
   // User might be automatically logged in with Firebase auth, but only on Android
   // Check user from state and see if it is updated while we wait
   useEffect(() => {
-    if (user?.phoneNumber) {
+    if (authenticationType === 'phone') {
       // OK To use toast here, as this is Android only for now
       ToastAndroid.showWithGravity(
         t(LoginTexts.confirmCode.autoVerifyToast),
@@ -81,7 +85,7 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
       );
       navigation.navigate(afterLogin.routeName as any, afterLogin.routeParams);
     }
-  });
+  }, [authenticationType]);
 
   return (
     <View style={styles.container}>
