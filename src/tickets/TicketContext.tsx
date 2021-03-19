@@ -10,11 +10,7 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import {useAuthState} from '../auth';
-import {
-  ActiveReservation,
-  FareContract,
-  PaymentStatus,
-} from './types';
+import {ActiveReservation, FareContract, PaymentStatus} from './types';
 import {getPayment} from './api';
 
 type TicketReducerState = {
