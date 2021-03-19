@@ -26,7 +26,7 @@ import {
   AnimatedScreenHeader,
 } from '@atb/components/screen-header';
 import {AlertContext} from '@atb/alerts/AlertsContext';
-import AlertBox from '@atb/components/alert-box';
+import AlertBox from '@atb/alerts/AlertBox';
 
 type Props = {
   renderHeader(
@@ -200,7 +200,7 @@ const DisappearingHeader: React.FC<Props> = ({
           />
 
           <View style={styles.alertBoxContainer}>
-            <AlertBox alertContext={'travel'} style={styles.alertBox} />
+            <AlertBox alertContext={alertContext} style={styles.alertBox} />
           </View>
         </View>
 
@@ -299,8 +299,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.background.header,
   },
   alertBox: {
-    marginHorizontal: 12,
-    marginBottom: 12,
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
   topBorder: {
     backgroundColor: theme.background.header,

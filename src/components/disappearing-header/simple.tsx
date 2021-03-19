@@ -18,7 +18,7 @@ import {
   AnimatedScreenHeader,
 } from '@atb/components/screen-header';
 import {AlertContext} from '@atb/alerts/AlertsContext';
-import AlertBox from '@atb/components/alert-box';
+import AlertBox from '@atb/alerts/AlertBox';
 
 type Props = {
   header: React.ReactNode;
@@ -132,7 +132,7 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
             leftButton={leftButton}
           />
           <View style={{backgroundColor: theme.background.header}}>
-            <AlertBox alertContext={'travel'} style={styles.alertBox} />
+            <AlertBox alertContext={alertContext} style={styles.alertBox} />
           </View>
         </View>
 
@@ -201,8 +201,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.background.header,
   },
   alertBox: {
-    marginHorizontal: 12,
-    marginBottom: 12,
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
   topBorder: {
     backgroundColor: theme.background.header,
