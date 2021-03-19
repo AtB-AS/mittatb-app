@@ -8,27 +8,19 @@ const StepOuterContainer: React.FC = ({children}) => {
   const styles = useStyles();
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-        <View style={styles.innerContainer}>{children}</View>
-      </ScrollView>
+      <View style={styles.innerContainer}>{children}</View>
     </SafeAreaView>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.background.level1,
     flex: 1,
-    alignItems: 'center',
-  },
-  contentContainer: {
-    flexGrow: 1,
   },
   innerContainer: {
-    flex: 1,
-    alignItems: 'center',
-    maxWidth: 500,
     justifyContent: 'space-between',
+    flex: 1,
   },
 }));
 export default StepOuterContainer;
