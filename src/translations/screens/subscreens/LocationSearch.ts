@@ -23,6 +23,11 @@ const LocationSearchTexts = {
       heading: _('Siste reisesøk', 'Most recent journeys'),
     },
     result: {
+      a11yLabel: (fromName: string, toName: string) =>
+        _(
+          `Reise fra ${fromName} til ${toName}.`,
+          `Journey from ${fromName} to ${toName}.`,
+        ),
       a11yHint: _(
         'Aktivér for å søke etter reiser for dette resultatet.',
         'Activate to search for trips for these locations.',

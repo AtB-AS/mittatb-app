@@ -40,7 +40,14 @@ export default function JourneyHistory({onSelect}: JourneyHistoryProps) {
           .map((searchResult) => (
             <TouchableOpacity
               accessible={true}
-              accessibilityLabel={searchResult.text + screenReaderPause}
+              accessibilityLabel={
+                t(
+                  LocationSearchTexts.journeySearch.result.a11yLabel(
+                    searchResult.fromName,
+                    searchResult.toName,
+                  ),
+                ) + screenReaderPause
+              }
               accessibilityHint={t(
                 LocationSearchTexts.journeySearch.result.a11yHint,
               )}
@@ -64,6 +71,8 @@ function mapToVisibleSearchResult(entry: JourneySearchHistoryEntry) {
   return {
     key: `${from.id}-${to.id}`,
     selectable: entry,
+    fromName: from.name,
+    toName: to.name,
     text: `${from.name} - ${to.name}`,
   };
 }
