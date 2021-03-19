@@ -12,11 +12,7 @@ import {TextInput} from '../components/sections';
 import ThemeText from '../components/text';
 import FavoriteChips, {ChipTypeGroup} from '../favorite-chips';
 import {useFavorites} from '../favorites';
-import {
-  Location,
-  LocationWithMetadata,
-  UserFavorites,
-} from '../favorites/types';
+import {LocationWithMetadata} from '../favorites/types';
 import {useGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
 import {RootStackParamList} from '../navigation';
@@ -32,6 +28,7 @@ import JourneyHistory from './JourneyHistory';
 import LocationResults from './LocationResults';
 import {LocationSearchResult, SelectableLocationData} from './types';
 import useDebounce from './useDebounce';
+import {filterCurrentLocation, filterPreviousLocations} from './utils';
 export type Props = {
   navigation: LocationSearchNavigationProp;
   route: RouteProp<RootStackParamList, 'LocationSearch'>;
@@ -251,8 +248,11 @@ export function LocationSearchContent({
           keyboardShouldPersistTaps="handled"
           onScrollBeginDrag={() => Keyboard.dismiss()}
         >
-          {includeJourneyHistory && !hasResults && (
-            <JourneyHistory onSelect={onJourneyHistorySelected} />
+          {includeJourneyHistory && (
+            <JourneyHistory
+              searchText={debouncedText}
+              onSelect={onJourneyHistorySelected}
+            />
           )}
           {includeHistory && hasPreviousResults && (
             <LocationResults
@@ -299,54 +299,6 @@ function translateErrorType(
       return t(LocationSearchTexts.messages.defaultError);
   }
 }
-
-const filterPreviousLocations = (
-  searchText: string,
-  previousLocations: Location[],
-  favorites?: UserFavorites,
-  onlyAtbVenues: boolean = false,
-): LocationSearchResult[] => {
-  const mappedHistory: LocationSearchResult[] =
-    previousLocations
-      ?.map((location) => ({
-        location,
-      }))
-      .filter(
-        (location) => !onlyAtbVenues || location.location.layer == 'venue',
-      ) ?? [];
-
-  if (!searchText) {
-    return mappedHistory;
-  }
-
-  const matchText = (text?: string) =>
-    text?.toLowerCase()?.startsWith(searchText.toLowerCase());
-  const filteredFavorites: LocationSearchResult[] = (favorites ?? [])
-    .filter(
-      (favorite) =>
-        (matchText(favorite.location?.name) || matchText(favorite.name)) &&
-        (!onlyAtbVenues || favorite.location.layer == 'venue'),
-    )
-    .map(({location, ...favoriteInfo}) => ({
-      location,
-      favoriteInfo,
-    }));
-
-  return filteredFavorites.concat(
-    mappedHistory.filter((l) => matchText(l.location.name)),
-  );
-};
-
-const filterCurrentLocation = (
-  locations: Location[] | null,
-  previousLocations: LocationSearchResult[] | null,
-): LocationSearchResult[] => {
-  if (!previousLocations?.length || !locations)
-    return locations?.map((location) => ({location})) ?? [];
-  return locations
-    .filter((l) => !previousLocations.some((pl) => pl.location.id === l.id))
-    .map((location) => ({location}));
-};
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

@@ -1,24 +1,27 @@
 import {GenericItem, HeaderItem} from '@atb/components/sections';
 import SectionGroup from '@atb/components/sections/section';
-import {useSearchHistory} from '@atb/search-history';
 import {JourneySearchHistoryEntry} from '@atb/search-history/types';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {screenReaderPause} from '../components/accessible-text';
 import ThemeText from '../components/text';
-import insets from '../utils/insets';
+import {useFilteredJourneySearch} from './utils';
 
 type JourneyHistoryProps = {
+  searchText?: string;
   onSelect: (journey: JourneySearchHistoryEntry) => void;
 };
 
 // @TODO Could be configurable at some point.
 const DEFAULT_HISTORY_LIMIT = 3;
 
-export default function JourneyHistory({onSelect}: JourneyHistoryProps) {
+export default function JourneyHistory({
+  searchText,
+  onSelect,
+}: JourneyHistoryProps) {
   const {t} = useTranslation();
-  const {journeyHistory} = useSearchHistory();
+  const journeyHistory = useFilteredJourneySearch(searchText);
 
   if (!journeyHistory.length) {
     return null;
