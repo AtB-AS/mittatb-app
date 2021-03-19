@@ -9,7 +9,7 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import HeaderButton, {ButtonModes, HeaderButtonProps} from './HeaderButton';
 import ThemeText from '@atb/components/text';
 import {AlertContext} from '@atb/alerts/AlertsContext';
-import AlertBox from "@atb/alerts/AlertBox";
+import AlertBox from '@atb/alerts/AlertBox';
 
 export {default as AnimatedScreenHeader} from './animated-header';
 
