@@ -10,14 +10,8 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import {useAuthState} from '../auth';
-import {
-  ActiveReservation,
-  FareContract,
-  FareContractState,
-  PaymentStatus,
-} from './types';
+import {ActiveReservation, FareContract, PaymentStatus} from './types';
 import {getPayment} from './api';
-import {isPreactivatedTicket} from './utils';
 
 type TicketReducerState = {
   fareContracts: FareContract[];
@@ -95,8 +89,7 @@ const ticketReducer: TicketReducer = (
 type TicketState = {
   addReservation: (reservation: ActiveReservation) => void;
   refreshTickets: () => void;
-  activeFareContracts: FareContract[];
-  expiredFareContracts: FareContract[];
+  fareContracts: FareContract[];
   findFareContractByOrderId: (id: string) => FareContract | undefined;
 } & Pick<TicketReducerState, 'activeReservations' | 'isRefreshingTickets'>;
 
@@ -204,8 +197,6 @@ const TicketContextProvider: React.FC = ({children}) => {
         activeReservations,
         refreshTickets,
         addReservation,
-        activeFareContracts: getActive(state.fareContracts),
-        expiredFareContracts: getExpired(state.fareContracts),
         findFareContractByOrderId: (orderId) =>
           state.fareContracts.find((fc) => fc.orderId === orderId),
       }}
@@ -214,38 +205,6 @@ const TicketContextProvider: React.FC = ({children}) => {
     </TicketContext.Provider>
   );
 };
-
-// const byExpiryComparator = (a: FareContract, b: FareContract): number => {
-//   return b.usage_valid_to - a.usage_valid_to;
-// };
-
-function getActive(fareContracts: FareContract[]) {
-  const isValidNow = (f: FareContract): boolean => {
-    const firstTravelRight = f.travelRights?.[0];
-    if (isPreactivatedTicket(firstTravelRight)) {
-      return firstTravelRight.endDateTime.toMillis() > Date.now();
-    }
-    return false;
-  };
-  const isActivated = (f: FareContract) =>
-    f.state === FareContractState.Activated;
-  return fareContracts.filter(isValidNow).filter(isActivated);
-}
-
-function getExpired(fareContracts: FareContract[]) {
-  const isExpired = (f: FareContract): boolean => {
-    const firstTravelRight = f.travelRights?.[0];
-    if (isPreactivatedTicket(firstTravelRight)) {
-      return !(firstTravelRight.endDateTime.toMillis() > Date.now());
-    }
-    return false;
-  };
-  const isRefunded = (f: FareContract) =>
-    f.state === FareContractState.Refunded;
-  const isExpiredOrRefunded = (f: FareContract) =>
-    isExpired(f) || isRefunded(f);
-  return fareContracts.filter(isExpiredOrRefunded);
-}
 
 function isHandledPaymentStatus(status: PaymentStatus | undefined): boolean {
   switch (status) {
