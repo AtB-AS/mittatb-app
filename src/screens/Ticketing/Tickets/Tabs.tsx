@@ -3,11 +3,18 @@ import Button from '@atb/components/button';
 import {RootStackParamList} from '@atb/navigation';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {useTicketState} from '@atb/tickets';
+import {
+  FareContract,
+  FareContractState,
+  filterActiveFareContracts,
+  filterExpiredFareContracts,
+  isPreactivatedTicket,
+  useTicketState,
+} from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import useInterval from '@atb/utils/use-interval';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {View} from 'react-native';
 import RecentTicketsScrollView from './RecentTicketsScrollView';
 import TicketsScrollView from './TicketsScrollView';
@@ -110,10 +117,12 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
 export const ActiveTickets: React.FC<Props> = () => {
   const {
     activeReservations,
-    activeFareContracts,
+    fareContracts,
     isRefreshingTickets,
     refreshTickets,
   } = useTicketState();
+
+  const activeFareContracts = filterActiveFareContracts(fareContracts);
 
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
@@ -135,11 +144,9 @@ export const ActiveTickets: React.FC<Props> = () => {
 };
 
 export const ExpiredTickets: React.FC<Props> = () => {
-  const {
-    expiredFareContracts,
-    isRefreshingTickets,
-    refreshTickets,
-  } = useTicketState();
+  const {fareContracts, isRefreshingTickets, refreshTickets} = useTicketState();
+
+  const expiredFareContracts = filterExpiredFareContracts(fareContracts);
 
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);

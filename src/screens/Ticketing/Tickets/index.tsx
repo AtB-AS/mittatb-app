@@ -1,6 +1,6 @@
 import Header from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
-import {useTicketState} from '@atb/tickets';
+import {filterActiveFareContracts, useTicketState} from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import React, {useMemo} from 'react';
@@ -32,7 +32,8 @@ export default function TicketTabs() {
     [top],
   );
 
-  const {activeFareContracts} = useTicketState();
+  const {fareContracts} = useTicketState();
+  const activeFareContracts = filterActiveFareContracts(fareContracts);
   const initialRoute = activeFareContracts.length
     ? ActiveTicketsScreenName
     : BuyTicketsScreenName;
