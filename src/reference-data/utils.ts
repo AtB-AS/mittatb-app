@@ -19,7 +19,10 @@ enum ReferenceDataLanguage {
  * neither English nor Norwegian is found the first text in the provided texts
  * array is returned.
  */
-const getReferenceDataText = (texts: LanguageAndText[], language: Language) => {
+export const getReferenceDataText = (
+  texts: LanguageAndText[],
+  language: Language,
+) => {
   if (language === Language.English) {
     const englishText = texts.find((t) => t.lang === ReferenceDataLanguage.eng);
     if (englishText) return englishText.value;

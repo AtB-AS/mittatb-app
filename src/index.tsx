@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {enableScreens} from 'react-native-screens';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AppContextProvider from './AppContext';
+import {AlertsContextProvider} from './alerts';
 import GeolocationContextProvider from './GeolocationContext';
 import NavigationRoot from './navigation';
 import trackAppState from './diagnostics/trackAppState';
@@ -64,7 +65,9 @@ const App = () => {
                       <TicketContextProvider>
                         <RemoteConfigContextProvider>
                           <AppLanguageProvider>
-                            <NavigationRoot />
+                            <AlertsContextProvider>
+                              <NavigationRoot />
+                            </AlertsContextProvider>
                           </AppLanguageProvider>
                         </RemoteConfigContextProvider>
                       </TicketContextProvider>

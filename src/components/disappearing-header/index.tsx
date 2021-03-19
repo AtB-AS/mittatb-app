@@ -25,6 +25,8 @@ import {
   LeftButtonProps,
   AnimatedScreenHeader,
 } from '@atb/components/screen-header';
+import {AlertContext} from '@atb/alerts/AlertsContext';
+import AlertBox from '@atb/alerts/AlertBox';
 
 type Props = {
   renderHeader(
@@ -49,6 +51,12 @@ type Props = {
   onEndReachedThreshold?: number;
 
   onFullscreenTransitionEnd?(isFullscreen: boolean): void;
+
+  /**
+   * For specifying the alert context for alerts that should be shown in this
+   * header. If no context is specified then no alerts are shown.
+   */
+  alertContext?: AlertContext;
 };
 
 const SCROLL_OFFSET_HEADER_ANIMATION = 80;
@@ -79,6 +87,7 @@ const DisappearingHeader: React.FC<Props> = ({
   headerMargin = 12,
 
   onFullscreenTransitionEnd,
+  alertContext,
 }) => {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const {
@@ -181,14 +190,19 @@ const DisappearingHeader: React.FC<Props> = ({
     <>
       <View style={[styles.topBorder, screenTopStyle]} />
       <View style={styles.screen}>
-        <AnimatedScreenHeader
-          onLayout={onScreenHeaderLayout}
-          title={headerTitle}
-          rightButton={{type: 'chat'}}
-          alternativeTitleComponent={alternativeTitleComponent}
-          scrollRef={scrollYRef}
-          leftButton={leftButton}
-        />
+        <View onLayout={onScreenHeaderLayout}>
+          <AnimatedScreenHeader
+            title={headerTitle}
+            rightButton={{type: 'chat'}}
+            alternativeTitleComponent={alternativeTitleComponent}
+            scrollRef={scrollYRef}
+            leftButton={leftButton}
+          />
+
+          <View style={styles.alertBoxContainer}>
+            <AlertBox alertContext={alertContext} style={styles.alertBox} />
+          </View>
+        </View>
 
         <View style={styles.content}>
           <Animated.View
@@ -280,6 +294,13 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   screen: {
     backgroundColor: theme.background.level1,
     flexGrow: 1,
+  },
+  alertBoxContainer: {
+    backgroundColor: theme.background.header,
+  },
+  alertBox: {
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
   topBorder: {
     backgroundColor: theme.background.header,
