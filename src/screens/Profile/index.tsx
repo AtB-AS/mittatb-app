@@ -1,4 +1,4 @@
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
 import Login from './Login';
 import Appearance from './Appearance';
@@ -25,7 +25,10 @@ export default function ProfileScreen() {
   return (
     <Stack.Navigator
       initialRouteName="ProfileHome"
-      screenOptions={{headerShown: false}}
+      screenOptions={{
+        ...TransitionPresets.SlideFromRightIOS,
+        headerShown: false,
+      }}
     >
       <Stack.Screen name="ProfileHome" component={ProfileHome} />
       <Stack.Screen name="FavoriteList" component={FavoriteList} />
