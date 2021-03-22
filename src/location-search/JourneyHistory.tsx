@@ -43,6 +43,7 @@ export default function JourneyHistory({
           .map((searchResult) => (
             <TouchableOpacity
               accessible={true}
+              key={searchResult.key}
               accessibilityLabel={
                 t(
                   LocationSearchTexts.journeySearch.result.a11yLabel(
