@@ -74,8 +74,10 @@ async function requestIdTokenHandler(config: AxiosRequestConfig) {
 }
 
 function responseIdTokenHandler(error: AxiosError) {
-  error.config.forceRefreshIdToken =
-    error.config.authWithIdToken && error.response?.status === 401;
+  if (error?.config) {
+    error.config.forceRefreshIdToken =
+      error.config.authWithIdToken && error.response?.status === 401;
+  }
   throw error;
 }
 
