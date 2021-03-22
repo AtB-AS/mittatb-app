@@ -67,20 +67,18 @@ const StepOne: React.FC<StepProps> = ({navigation}) => {
     navigation.push('StepTwo');
   };
   return (
-    <>
+    <StepOuterContainer>
       <Illustration Svg={Onboarding1} />
-      <StepOuterContainer>
-        <View style={styles.textContainer} accessible={true}>
-          <ThemeText style={[styles.title, styles.text]}>
-            {t(OnboardingTexts.step1.title)}
-          </ThemeText>
-          <ThemeText style={styles.text}>
-            {t(OnboardingTexts.step1.description)}
-          </ThemeText>
-        </View>
-        <NavigationControls currentPage={1} onNavigate={onNavigate} />
-      </StepOuterContainer>
-    </>
+      <View style={styles.textContainer} accessible={true}>
+        <ThemeText style={[styles.title, styles.text]}>
+          {t(OnboardingTexts.step1.title)}
+        </ThemeText>
+        <ThemeText style={styles.text}>
+          {t(OnboardingTexts.step1.description)}
+        </ThemeText>
+      </View>
+      <NavigationControls currentPage={1} onNavigate={onNavigate} />
+    </StepOuterContainer>
   );
 };
 const StepTwo: React.FC<StepProps> = ({navigation}) => {
@@ -90,20 +88,18 @@ const StepTwo: React.FC<StepProps> = ({navigation}) => {
     navigation.push('StepThree');
   };
   return (
-    <>
+    <StepOuterContainer>
       <Illustration Svg={Onboarding2} />
-      <StepOuterContainer>
-        <View style={styles.textContainer} accessible={true}>
-          <ThemeText style={[styles.title, styles.text]}>
-            {t(OnboardingTexts.step2.title)}
-          </ThemeText>
-          <ThemeText style={styles.text}>
-            {t(OnboardingTexts.step2.description)}
-          </ThemeText>
-        </View>
-        <NavigationControls currentPage={2} onNavigate={onNavigate} />
-      </StepOuterContainer>
-    </>
+      <View style={styles.textContainer} accessible={true}>
+        <ThemeText style={[styles.title, styles.text]}>
+          {t(OnboardingTexts.step2.title)}
+        </ThemeText>
+        <ThemeText style={styles.text}>
+          {t(OnboardingTexts.step2.description)}
+        </ThemeText>
+      </View>
+      <NavigationControls currentPage={2} onNavigate={onNavigate} />
+    </StepOuterContainer>
   );
 };
 const StepThree: React.FC<StepProps> = () => {
@@ -123,43 +119,43 @@ const StepThree: React.FC<StepProps> = () => {
     setRequestedOnce(true);
   }
   return (
-    <>
+    <StepOuterContainer>
       <Illustration Svg={Onboarding3} />
-      <StepOuterContainer>
-        <View style={styles.textContainer} accessible={true}>
-          <ThemeText style={[styles.title, styles.text]}>
-            {t(OnboardingTexts.step3.title)}
-          </ThemeText>
-          <ThemeText style={styles.text}>
-            {t(OnboardingTexts.step3.description)}
-          </ThemeText>
-        </View>
-        <NavigationControls
-          currentPage={3}
-          onNavigate={onRequestPermission}
-          title={t(OnboardingTexts.navigation.complete)}
-          arrow={false}
+      <View style={styles.textContainer} accessible={true}>
+        <ThemeText style={[styles.title, styles.text]}>
+          {t(OnboardingTexts.step3.title)}
+        </ThemeText>
+        <ThemeText style={styles.text}>
+          {t(OnboardingTexts.step3.description)}
+        </ThemeText>
+      </View>
+      <NavigationControls
+        currentPage={3}
+        onNavigate={onRequestPermission}
+        title={t(OnboardingTexts.navigation.complete)}
+        arrow={false}
+      >
+        <TouchableOpacity
+          accessibilityRole="link"
+          accessibilityHint={t(OnboardingTexts.step3.privacyLink.a11yHint)}
+          onPress={() =>
+            Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
+          }
         >
-          <TouchableOpacity
-            accessibilityRole="link"
-            accessibilityHint={t(OnboardingTexts.step3.privacyLink.a11yHint)}
-            onPress={() =>
-              Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
-            }
-          >
-            <ThemeText type="body" style={[styles.text, styles.privacyPolicy]}>
-              {t(OnboardingTexts.step3.privacyLink.text)}
-            </ThemeText>
-          </TouchableOpacity>
-        </NavigationControls>
-      </StepOuterContainer>
-    </>
+          <ThemeText type="body" style={[styles.text, styles.privacyPolicy]}>
+            {t(OnboardingTexts.step3.privacyLink.text)}
+          </ThemeText>
+        </TouchableOpacity>
+      </NavigationControls>
+    </StepOuterContainer>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   textContainer: {
     padding: theme.spacings.xLarge,
+    paddingTop: 0,
+    paddingBottom: 0,
   },
   title: {
     fontWeight: 'bold',

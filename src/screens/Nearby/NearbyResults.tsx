@@ -41,9 +41,10 @@ export default function NearbyResults({
   if (isInitialScreen) {
     return (
       <View style={[styles.container, styles.container__padded]}>
-        <MessageBox type="info">
-          <ThemeText>{t(NearbyTexts.results.messages.initial)}</ThemeText>
-        </MessageBox>
+        <MessageBox
+          type="info"
+          message={t(NearbyTexts.results.messages.initial)}
+        />
       </View>
     );
   }
@@ -56,9 +57,7 @@ export default function NearbyResults({
       <View style={styles.container}>
         <ScreenReaderAnnouncement message={message} />
 
-        <MessageBox type="info">
-          <ThemeText>{message}</ThemeText>
-        </MessageBox>
+        <MessageBox type="info" message={message} />
       </View>
     );
   }

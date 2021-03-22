@@ -3,6 +3,7 @@ import {Warning} from '../assets/svg/situations';
 import ThemeText from '../components/text';
 import MessageBox, {MessageBoxProps} from '../components/message-box';
 import {Situation} from '../sdk';
+import {useTheme} from '@atb/theme';
 
 export type SituationMessageProps = {
   situations: Situation[];
@@ -14,6 +15,7 @@ export default function SituationMessages({
   mode = 'icon',
   containerStyle,
 }: SituationMessageProps) {
+  const {theme} = useTheme();
   if (!hasSituations(situations)) {
     return null;
   }
@@ -23,7 +25,9 @@ export default function SituationMessages({
   return (
     <MessageBox type="warning" icon={icon} containerStyle={containerStyle}>
       {Object.entries(uniqueSituations).map(([id, situation]) => (
-        <ThemeText key={id}>{situation}</ThemeText>
+        <ThemeText key={id} style={{color: theme.status.warning.main.color}}>
+          {situation}
+        </ThemeText>
       ))}
     </MessageBox>
   );

@@ -4,13 +4,14 @@ import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement
 import ThemeText from '@atb/components/text';
 import MessageBox from '@atb/components/message-box';
 import {TripPattern} from '@atb/sdk';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {AssistantTexts, useTranslation} from '@atb/translations';
 import {isSeveralDays} from '@atb/utils/date';
 import React, {Fragment, useEffect, useMemo, useState} from 'react';
 import {Text, View} from 'react-native';
 import ResultItem from './ResultItem';
 import {NoResultReason} from './types';
+
 type Props = {
   tripPatterns: TripPattern[] | null;
   showEmptyScreen: boolean;
@@ -38,6 +39,7 @@ const Results: React.FC<Props> = ({
   errorType,
 }) => {
   const styles = useThemeStyles();
+  const {theme} = useTheme();
 
   const [errorMessage, setErrorMessage] = useState<string>('');
   const {t} = useTranslation();
@@ -68,7 +70,7 @@ const Results: React.FC<Props> = ({
     return (
       <View style={styles.container}>
         <ScreenReaderAnnouncement message={errorMessage} />
-        <MessageBox type="warning" message={errorMessage}></MessageBox>
+        <MessageBox type="warning" message={errorMessage} />
       </View>
     );
   }
@@ -79,7 +81,9 @@ const Results: React.FC<Props> = ({
     return (
       <View style={styles.container}>
         <MessageBox>
-          <ThemeText style={styles.infoBoxText}>
+          <ThemeText
+            style={{...styles.infoBoxText, color: theme.status.info.main.color}}
+          >
             {t(AssistantTexts.results.info.emptyResult)}
             {pluralResultReasons && (
               <Text>

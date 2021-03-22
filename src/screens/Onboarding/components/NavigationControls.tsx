@@ -47,7 +47,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   navigationContainer: {
     width: '100%',
     padding: theme.spacings.xLarge,
-    minHeight: 170,
   },
   bulletContainer: {
     flexDirection: 'row',

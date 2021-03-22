@@ -402,6 +402,7 @@ const Assistant: React.FC<Props> = ({
           clearPatterns();
         }
       }}
+      alertContext="travel"
     >
       <ScreenReaderAnnouncement message={searchStateMessage} />
       <Results
