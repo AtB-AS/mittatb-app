@@ -86,6 +86,7 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
             textContentType="oneTimeCode"
             showClear={true}
             inlineLabel={false}
+            value={code}
           />
         </Sections.Section>
         <View style={styles.buttonView}>
