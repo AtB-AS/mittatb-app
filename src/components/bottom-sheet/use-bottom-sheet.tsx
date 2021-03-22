@@ -1,7 +1,8 @@
 import React, {
   ReactNode,
   RefObject,
-  useCallback,
+  useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -17,13 +18,18 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {BottomSheetTexts, useTranslation} from '@atb/translations';
 
-const Backdrop = ({isOpen}: {isOpen: boolean}) => {
+const Backdrop = ({animatedOffset}: {animatedOffset: Animated.Value}) => {
   const styles = useStyles();
+  const opacity = animatedOffset.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 0.2],
+  });
+
   return (
-    <View
+    <Animated.View
       style={{
         ...styles.backdrop,
-        opacity: isOpen ? 0.2 : 0,
+        opacity,
       }}
       pointerEvents={'box-none'}
     />
@@ -112,7 +118,7 @@ const InternalBottomSheet = ({
 
   return (
     <>
-      <Backdrop isOpen={isOpen} />
+      <Backdrop animatedOffset={animatedOffset} />
       <ClickableBackground isOpen={isOpen} close={close} height={height} />
       <AnimatedBottomSheet
         animatedOffset={animatedOffset}
@@ -136,32 +142,20 @@ export const useBottomSheet = (
   const animatedOffset = useRef(new Animated.Value(0)).current;
   const focusRef = useRef(null);
 
-  const openSheet = useCallback(
-    () =>
+  useEffect(
+    () => () =>
       Animated.timing(animatedOffset, {
-        toValue: 1,
+        toValue: isOpen ? 0 : 1,
         duration: 200,
         useNativeDriver: true,
       }).start(),
-    [],
-  );
-
-  const closeSheet = useCallback(
-    () =>
-      Animated.timing(animatedOffset, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: true,
-      }).start(),
-    [],
+    [isOpen],
   );
 
   const close = () => {
-    closeSheet();
     setIsOpen(false);
   };
   const open = () => {
-    openSheet();
     setIsOpen(true);
     const reactTag = findNodeHandle(focusRef.current);
     if (reactTag) {
@@ -169,24 +163,23 @@ export const useBottomSheet = (
     }
   };
 
-  return {
-    open,
-    isOpen,
-    bottomSheet: (
+  const bottomSheet = useMemo(
+    () => (
       <InternalBottomSheet
         isOpen={isOpen}
         close={close}
         animatedOffset={animatedOffset}
       >
-        <View
-          style={{
-            marginBottom: Math.max(safeAreaBottom, theme.spacings.medium),
-          }}
-        >
-          {contentFunction(close, focusRef)}
-        </View>
+        {contentFunction(close, focusRef)}
       </InternalBottomSheet>
     ),
+    [isOpen, close, focusRef, animatedOffset, safeAreaBottom],
+  );
+
+  return {
+    open,
+    isOpen,
+    bottomSheet,
   };
 };
 

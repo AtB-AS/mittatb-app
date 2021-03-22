@@ -1,7 +1,7 @@
 import React, {forwardRef, useState} from 'react';
 import {View} from 'react-native';
 import Header from '@atb/components/screen-header';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import * as Sections from '@atb/components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProductTexts, useTranslation} from '@atb/translations';
@@ -9,6 +9,7 @@ import Button from '@atb/components/button';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -19,6 +20,8 @@ type Props = {
 const ProductSheet = forwardRef<ScrollView, Props>(
   ({preassignedFareProduct, close, save}, focusRef) => {
     const styles = useStyles();
+    const {theme} = useTheme();
+    const {bottom: safeAreaBottom} = useSafeAreaInsets();
     const {t, language} = useTranslation();
 
     const {
@@ -52,7 +55,12 @@ const ProductSheet = forwardRef<ScrollView, Props>(
           </Sections.Section>
         </ScrollView>
 
-        <View style={styles.saveButton}>
+        <View
+          style={{
+            ...styles.saveButton,
+            paddingBottom: Math.max(theme.spacings.medium, safeAreaBottom),
+          }}
+        >
           <Button
             color="primary_2"
             text={t(ProductTexts.primaryButton.text)}
