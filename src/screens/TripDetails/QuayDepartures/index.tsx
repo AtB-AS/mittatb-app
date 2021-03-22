@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Animated, RefreshControl, ScrollView, ActivityIndicator} from 'react-native';
+import {View, Animated, RefreshControl} from 'react-native';
 import {LocationWithMetadata} from '@atb/favorites/types';
 import ScreenHeader from '@atb/components/screen-header';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -24,37 +24,41 @@ type RootProps = {
   navigation: QuayDeaparturesNavigationProps;
 };
 
-const QuayDepartures: React.FC<RootProps> = ({navigation, route}) => {
+const QuayDepartures: React.FC<RootProps> = ({route}) => {
   const styles = useNearbyStyles();
   const {theme} = useTheme();
   const {top: paddingTop} = useSafeAreaInsets();
 
-  const {state: departureState} = useDepartureData(route.params.location);
+  const {state: departureState, refresh} = useDepartureData(
+    route.params.location,
+  );
 
   const {data: departureData, isLoading} = departureState;
 
   return (
     <View style={styles.screen}>
       <View style={[styles.header, {paddingTop}]}>
-        <ScreenHeader leftButton={{type: 'back'}} title={route.params.location.name} />
-      </View>
-      <ScrollView>
-        {!departureData && (
-          <View style={styles.spinner}>
-            <ActivityIndicator
-              size="large"
-              color={theme.colors.primary_3.backgroundColor}
-            />
-          </View>
-        )}
-        <DeparturesList
-          currentLocation={route.params.location}
-          departures={departureData}
-          isInitialScreen={false}
-          showOnlyFavorites={false}
-          isLoading={isLoading}
+        <ScreenHeader
+          leftButton={{type: 'back'}}
+          title={route.params.location.name}
         />
-      </ScrollView>
+      </View>
+      <Animated.ScrollView
+        refreshControl={
+          <RefreshControl refreshing={!departureData} onRefresh={refresh} />
+        }
+      >
+        <View style={styles.scrollContainer}>
+          <DeparturesList
+            currentLocation={route.params.location}
+            departures={departureData}
+            isInitialScreen={false}
+            showOnlyFavorites={false}
+            isLoading={isLoading}
+            disableCollapsing={true}
+          />
+        </View>
+      </Animated.ScrollView>
     </View>
   );
 };
@@ -63,6 +67,7 @@ export default QuayDepartures;
 const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
     backgroundColor: theme.background.header,
+    zIndex: 2,
   },
   spinner: {
     backgroundColor: theme.background.level2,
@@ -79,10 +84,12 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.background.level1,
     flexGrow: 1,
   },
+  scrollContainer: {
+    marginTop: theme.spacings.large,
+  },
 }));
 
 const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
-
   container: {
     flex: 1,
     backgroundColor: theme.background.level0,

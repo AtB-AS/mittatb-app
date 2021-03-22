@@ -20,8 +20,8 @@ type DeparturesListProps = {
   isLoading?: boolean;
   error?: string;
   isInitialScreen: boolean;
-
   showOnlyFavorites: boolean;
+  disableCollapsing?: boolean;
 };
 
 export default function DeparturesList({
@@ -32,8 +32,8 @@ export default function DeparturesList({
   error,
   isInitialScreen,
   currentLocation,
-
   showOnlyFavorites,
+  disableCollapsing = false,
 }: DeparturesListProps) {
   const styles = useDeparturesListStyle();
   const {t} = useTranslation();
@@ -81,6 +81,7 @@ export default function DeparturesList({
               currentLocation={currentLocation}
               lastUpdated={lastUpdated}
               defaultExpanded={i === 0}
+              disableCollapsing={disableCollapsing}
             />
           ))}
           <FooterLoader isFetchingMore={isFetchingMore} />
@@ -124,16 +125,24 @@ type StopDeparturesProps = {
   currentLocation?: Location;
   lastUpdated?: Date;
   defaultExpanded?: boolean;
+  disableCollapsing?: boolean;
 };
 const StopDepartures = React.memo(function StopDepartures({
   stopPlaceGroup,
   currentLocation,
   lastUpdated,
   defaultExpanded = false,
+  disableCollapsing = false,
 }: StopDeparturesProps) {
   const {t} = useTranslation();
-  const [expanded, setExpanded] = useState(defaultExpanded);
-  useEffect(() => setExpanded(defaultExpanded), [defaultExpanded]);
+  const [expanded, setExpanded] = useState(
+    defaultExpanded || disableCollapsing,
+  );
+  useEffect(() => setExpanded(defaultExpanded || disableCollapsing), [
+    defaultExpanded,
+    disableCollapsing,
+  ]);
+
   if (!stopPlaceGroup.quays.length) {
     return null;
   }
@@ -143,23 +152,25 @@ const StopDepartures = React.memo(function StopDepartures({
 
   return (
     <View accessibilityState={{expanded}}>
-      <ActionItem
-        transparent
-        text={stopPlaceGroup.stopPlace.name}
-        mode="heading-expand"
-        onPress={() => {
-          animateNextChange();
-          setExpanded(!expanded);
-        }}
-        checked={expanded}
-        accessibility={{
-          accessibilityHint: t(
-            NearbyTexts.results.stops.header[
-              expanded ? 'hintHide' : 'hintShow'
-            ],
-          ),
-        }}
-      />
+      {!disableCollapsing && (
+        <ActionItem
+          transparent
+          text={stopPlaceGroup.stopPlace.name}
+          mode="heading-expand"
+          onPress={() => {
+            animateNextChange();
+            setExpanded(!expanded);
+          }}
+          checked={expanded}
+          accessibility={{
+            accessibilityHint: t(
+              NearbyTexts.results.stops.header[
+                expanded ? 'hintHide' : 'hintShow'
+              ],
+            ),
+          }}
+        />
+      )}
 
       {expanded &&
         stopPlaceGroup.quays.map((quayGroup) => (
