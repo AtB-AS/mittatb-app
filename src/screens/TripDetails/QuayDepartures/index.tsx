@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Animated} from 'react-native';
+import {View, Text, Animated, RefreshControl, ScrollView, ActivityIndicator} from 'react-native';
 import {LocationWithMetadata} from '@atb/favorites/types';
 import ScreenHeader from '@atb/components/screen-header';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -31,23 +31,30 @@ const QuayDepartures: React.FC<RootProps> = ({navigation, route}) => {
 
   const {state: departureState} = useDepartureData(route.params.location);
 
-  const {data: departureData} = departureState;
-
-  debugger;
+  const {data: departureData, isLoading} = departureState;
 
   return (
-    <View>
+    <View style={styles.screen}>
       <View style={[styles.header, {paddingTop}]}>
-        <ScreenHeader leftButton={{type: 'back'}} title={'Platform-avganger'} />
+        <ScreenHeader leftButton={{type: 'back'}} title={route.params.location.name} />
       </View>
-      <Animated.ScrollView>
+      <ScrollView>
+        {!departureData && (
+          <View style={styles.spinner}>
+            <ActivityIndicator
+              size="large"
+              color={theme.colors.primary_3.backgroundColor}
+            />
+          </View>
+        )}
         <DeparturesList
           currentLocation={route.params.location}
           departures={departureData}
           isInitialScreen={false}
           showOnlyFavorites={false}
+          isLoading={isLoading}
         />
-      </Animated.ScrollView>
+      </ScrollView>
     </View>
   );
 };
@@ -57,9 +64,25 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
     backgroundColor: theme.background.header,
   },
+  spinner: {
+    backgroundColor: theme.background.level2,
+    width: 100,
+    height: 100,
+    borderRadius: theme.border.radius.circle,
+    border: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    marginTop: '20%',
+  },
+  screen: {
+    backgroundColor: theme.background.level1,
+    flexGrow: 1,
+  },
 }));
 
 const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
+
   container: {
     flex: 1,
     backgroundColor: theme.background.level0,

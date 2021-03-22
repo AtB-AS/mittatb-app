@@ -59,7 +59,6 @@ const useIconButton = (
         onPress:
           onPress ||
           (() => {
-            debugger;
             navigation.goBack();
           }),
         ...accessibilityProps,
