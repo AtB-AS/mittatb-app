@@ -85,7 +85,7 @@ const NavigationRoot = () => {
                 <Stack.Screen
                   name="LocationSearch"
                   component={LocationSearch}
-                  options={{...TransitionPresets.ModalSlideFromBottomIOS}}
+                  options={TransitionPresets.ModalSlideFromBottomIOS}
                 />
                 <Stack.Screen
                   name="TicketPurchase"
@@ -99,7 +99,7 @@ const NavigationRoot = () => {
                 <Stack.Screen
                   name="AddEditFavorite"
                   component={AddEditFavorite}
-                  options={{...TransitionPresets.ModalSlideFromBottomIOS}}
+                  options={TransitionPresets.ModalSlideFromBottomIOS}
                 />
                 <Stack.Screen
                   name="SortableFavoriteList"
@@ -107,6 +107,10 @@ const NavigationRoot = () => {
                   options={{
                     gestureResponseDistance: {
                       vertical: 100,
+                    },
+                    transitionSpec: {
+                      open: transitionSpec,
+                      close: transitionSpec,
                     },
                   }}
                 />
