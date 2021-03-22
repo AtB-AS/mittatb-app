@@ -8,7 +8,11 @@ import {
   RemoteConfigContextState,
   useRemoteConfig,
 } from '@atb/RemoteConfigContext';
-import {listRecentFareContracts, RecentFareContract} from '@atb/tickets';
+import {
+  listRecentFareContracts,
+  RecentFareContract,
+  useTicketState,
+} from '@atb/tickets';
 import {useEffect, useMemo, useReducer} from 'react';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
 
@@ -194,6 +198,7 @@ const mapToLastThreeUniqueTickets = (
 export default function useRecentTickets() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const remoteConfigState = useRemoteConfig();
+  const {fareContracts} = useTicketState();
 
   const fetchRecentFareContracts = async () => {
     dispatch({type: 'FETCH'});
@@ -207,7 +212,7 @@ export default function useRecentTickets() {
 
   useEffect(() => {
     fetchRecentFareContracts();
-  }, []);
+  }, [fareContracts]);
 
   const recentTickets = useMemo(
     () =>
