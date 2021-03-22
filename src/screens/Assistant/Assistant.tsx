@@ -517,88 +517,62 @@ function useLocations(
 function useUpdatedLocation(
   searchedFromLocation: SelectableLocationData | undefined,
   searchedToLocation: SelectableLocationData | undefined,
-  currentLocation: SelectableLocationData | undefined,
+  currentLocation: LocationWithMetadata | undefined,
   favorites: UserFavorites,
 ): SearchForLocations {
-  type Directions = 'from' | 'to' | 'from-to';
-  type SearchForLocationsWithDirections = {
-    direction: Directions;
-  } & SearchForLocations;
+  const [from, setFrom] = useState<LocationWithMetadata | undefined>();
+  const [to, setTo] = useState<LocationWithMetadata | undefined>();
 
-  const getLocation = useCallback(
-    (
-      direction: 'from' | 'to',
-      searchedLocation?: SelectableLocationData,
-    ): SearchForLocationsWithDirections => {
-      if (!searchedLocation) return {direction};
+  const setLocation = useCallback(
+    (direction: 'from' | 'to', searchedLocation?: SelectableLocationData) => {
+      const updater = direction === 'from' ? setFrom : setTo;
+      if (!searchedLocation) return updater(searchedLocation);
 
       switch (searchedLocation.resultType) {
         case 'search':
-          return {
-            direction,
-            [direction]: searchedLocation,
-          };
+          return updater(searchedLocation);
         case 'geolocation':
-          return {
-            direction,
-            [direction]: currentLocation,
-          };
+          return updater(currentLocation);
         case 'journey': {
           const toSearch = (i: number): LocationWithMetadata => ({
             ...searchedLocation.journeyData[i],
             resultType: 'search',
           });
-          return {
-            direction: 'from-to',
-            from: toSearch(0),
-            to: toSearch(1),
-          };
+
+          // Set both states when journey is passed.
+          setFrom(toSearch(0));
+          setTo(toSearch(1));
+          return;
         }
-        case 'favorite':
+        case 'favorite': {
           const favorite = favorites.find(
             (f) => f.id === searchedLocation.favoriteId,
           );
 
           if (favorite) {
-            return {
-              direction: direction,
-              [direction]: {
-                ...favorite.location,
-                resultType: 'favorite',
-                favoriteId: favorite.id,
-              },
-            };
+            return updater({
+              ...favorite.location,
+              resultType: 'favorite',
+              favoriteId: favorite.id,
+            });
           }
+        }
       }
-
-      return {direction};
     },
     [currentLocation, favorites],
   );
 
-  const newFrom = useMemo(() => getLocation('from', searchedFromLocation), [
-    searchedFromLocation,
-    getLocation,
-  ]);
-  const newTo = useMemo(() => getLocation('to', searchedToLocation), [
-    searchedToLocation,
-    getLocation,
-  ]);
+  // Override from state on change
+  useEffect(() => {
+    setLocation('from', searchedFromLocation);
+  }, [searchedFromLocation, setLocation]);
 
-  // Prefer new from/to in the To field.
-  if (newTo.direction === 'from-to') {
-    return newTo;
-  }
-  // If from input contains both from/to
-  if (newFrom.direction === 'from-to') {
-    return newFrom;
-  }
+  // Override to state on change
+  useEffect(() => {
+    setLocation('to', searchedToLocation);
+  }, [searchedToLocation, setLocation]);
 
-  // We don't have any entire journey selection. Just merge from/to:
-  return {
-    ...newTo,
-    ...newFrom,
-  };
+  return {from, to};
 }
 
 export default AssistantRoot;
