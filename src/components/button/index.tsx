@@ -127,7 +127,7 @@ const Button: React.FC<ButtonProps> = ({
   const textContainer: TextStyle = {
     flex: isInline ? undefined : 1,
     alignItems: 'center',
-    marginHorizontal: Icon && type !== 'compact' ? theme.spacings.xLarge : 0,
+    marginHorizontal: Icon && !isInline ? theme.spacings.xLarge : 0,
   };
   const iconContainer: ViewStyle = isInline
     ? {
