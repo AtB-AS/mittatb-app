@@ -32,8 +32,8 @@ import Time from './Time';
 import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
 import WaitSection, {WaitDetails} from './WaitSection';
-import {DetailsModalNavigationProp} from "@atb/screens/TripDetails";
-import {searchByStopPlace} from "@atb/geocoder/search-for-location";
+import {DetailsModalNavigationProp} from '@atb/screens/TripDetails';
+import {searchByStopPlace} from '@atb/geocoder/search-for-location';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -170,9 +170,8 @@ const TripSection: React.FC<TripSectionProps> = ({
     if (!location) {
       return;
     }
-    navigation.navigate('Nearest', {
-      screen: 'NearbyRoot',
-      params: {location},
+    navigation.navigate('QuayDepartures', {
+      location,
     });
   }
 };
