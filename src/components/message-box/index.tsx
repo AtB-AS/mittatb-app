@@ -131,7 +131,7 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
   content: {
     flex: 1,
   },
-  text: theme.text.body,
+  text: theme.typography.body,
   retryText: {
     marginTop: theme.spacings.medium,
   },

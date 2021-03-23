@@ -101,7 +101,7 @@ const Travellers: React.FC<TravellersProps> = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
   },
   travellerCounters: {
     margin: theme.spacings.medium,

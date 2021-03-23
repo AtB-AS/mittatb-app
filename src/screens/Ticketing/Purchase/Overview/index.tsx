@@ -270,7 +270,7 @@ const useDefaultTariffZone = (
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
   },
   errorMessage: {
     marginBottom: theme.spacings.medium,

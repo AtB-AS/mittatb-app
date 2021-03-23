@@ -58,7 +58,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   summary: {
     marginVertical: theme.spacings.medium,
     borderTopWidth: theme.border.width.slim,
-    borderColor: theme.background.level1,
+    borderColor: theme.colors.background_1.backgroundColor,
   },
   summaryDetail: {
     padding: theme.spacings.medium,

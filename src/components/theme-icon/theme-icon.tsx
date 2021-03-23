@@ -1,11 +1,11 @@
 import {useTheme} from '@atb/theme';
-import {iconSizes, Statuses, TextColor, Theme} from '@atb/theme/colors';
+import {Statuses, TextColor, Theme} from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
 
 type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
   colorType?: TextColor | Statuses;
-  size?: keyof typeof iconSizes;
+  size?: keyof Theme['icon']['size'];
 } & SvgProps;
 
 const ThemeIcon = ({

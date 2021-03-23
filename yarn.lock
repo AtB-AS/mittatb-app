@@ -2,6 +2,14 @@
 # yarn lockfile v1
 
 
+"@atb-as/theme@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-1.2.0.tgz#b86e14ee102b1cb2fbf2dc92a7b6542de152a0da"
+  integrity sha512-Xmh01sXQqM7tmVna373vXJpMI2UpX1zELog83N42ly5yv8Y7XXjPeMBSwwxhIoJ56gM/sYJmY5jbGf5aDc15+Q==
+  dependencies:
+    hex-to-rgba "^2.0.1"
+    ts-deepmerge "^1.0.7"
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4":
   version "7.10.4"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.10.4.tgz#168da1a36e90da68ae8d49c0f1b48c7c6249213a"
@@ -9572,6 +9580,11 @@ truncate-utf8-bytes@^1.0.0:
   integrity sha1-QFkjkJWS1W94pYGENLC3hInKXys=
   dependencies:
     utf8-byte-length "^1.0.1"
+
+ts-deepmerge@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/ts-deepmerge/-/ts-deepmerge-1.0.7.tgz#8931501f750b3fb4d1e564d6753063fa3ed05298"
+  integrity sha512-zJInx1VKRn9S20n80P8/G19Xrov4xtcNFEUH0GwPfIUr24U/bNiw+I1X2RmQsnL2n0KT/7HQ6L5fbDuE7by/zw==
 
 ts-object-utils@0.0.5:
   version "0.0.5"

@@ -49,7 +49,7 @@ const NavigationRoot = () => {
       tabBarOptions={{
         activeTintColor: theme.colors.primary_3.backgroundColor,
         style: {
-          backgroundColor: theme.background.level0,
+          backgroundColor: theme.colors.background_0.backgroundColor,
           ...useBottomNavigationStyles(),
         },
         labelStyle: {

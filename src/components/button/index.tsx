@@ -1,17 +1,17 @@
+import ThemeText from '@atb/components/text';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {ContrastColor, defaultTextColors} from '@atb/theme/colors';
+import React, {useRef} from 'react';
 import {
-  TouchableOpacityProps,
-  View,
-  StyleProp,
-  ViewStyle,
-  TouchableOpacity,
-  TextStyle,
   Animated,
   Easing,
+  StyleProp,
+  TextStyle,
+  TouchableOpacity,
+  TouchableOpacityProps,
+  View,
+  ViewStyle,
 } from 'react-native';
-import React, {useRef} from 'react';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import ThemeText from '@atb/components/text';
-import {ContrastColor, TextNames} from '@atb/theme/colors';
 
 export {default as ButtonGroup} from './group';
 
@@ -112,7 +112,7 @@ const Button: React.FC<ButtonProps> = ({
         backgroundColor: 'transparent',
         textColorType: themeName == 'dark' ? 'light' : 'dark',
       } as ContrastColor);
-  const {primary} = theme.text.colorSelection[textColorType];
+  const {primary} = defaultTextColors[textColorType];
 
   const styleContainer: ViewStyle[] = [
     css.button,

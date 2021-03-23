@@ -142,7 +142,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingRight: theme.spacings.small,
     paddingVertical: theme.spacings.small,
     borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
     flexDirection: 'row',
     flexGrow: 1,
     justifyContent: 'space-between',

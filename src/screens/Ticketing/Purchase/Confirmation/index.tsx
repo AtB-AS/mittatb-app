@@ -279,14 +279,14 @@ const Confirmation: React.FC<ConfirmationProps> = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
   },
   ticketsContainer: {
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
     borderTopEndRadius: theme.border.radius.regular,
     borderTopLeftRadius: theme.border.radius.regular,
     borderBottomWidth: 1,
-    borderBottomColor: theme.background.level1,
+    borderBottomColor: theme.colors.background_1.backgroundColor,
     padding: theme.spacings.medium,
     marginTop: theme.spacings.small,
   },
@@ -308,7 +308,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     padding: theme.spacings.medium,
     marginVertical: theme.spacings.medium,
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
     borderRadius: theme.border.radius.regular,
   },
   totalContainerHeadings: {

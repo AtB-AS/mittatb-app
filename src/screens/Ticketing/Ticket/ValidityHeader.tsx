@@ -85,7 +85,7 @@ function validityTimeText(
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   iconContainer: {marginRight: theme.spacings.medium},
   ticketContainer: {
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
     borderRadius: theme.border.radius.regular,
     marginBottom: theme.spacings.medium,
   },

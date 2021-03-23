@@ -194,7 +194,7 @@ const hasReachedEnd = (
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   screen: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.colors.background_1.backgroundColor,
     flexGrow: 1,
   },
   alertBoxContainer: {
@@ -225,7 +225,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
   },
   container: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.colors.background_1.backgroundColor,
     paddingBottom: 0,
     flexGrow: 1,
   },

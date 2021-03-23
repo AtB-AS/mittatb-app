@@ -242,7 +242,7 @@ const EmojiPicker = forwardRef<Modalize, Props>(
 );
 const usePickerStyles = StyleSheet.createThemeHook((theme) => ({
   modal: {
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
   },
 }));
 

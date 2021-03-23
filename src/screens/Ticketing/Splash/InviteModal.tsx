@@ -105,7 +105,7 @@ export default forwardRef<Modalize, Props>(function InviteModal(
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.level3,
+    backgroundColor: theme.colors.background_3.backgroundColor,
     paddingVertical: theme.spacings.large,
     paddingHorizontal: theme.spacings.medium,
   },

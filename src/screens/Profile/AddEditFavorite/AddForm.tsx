@@ -245,7 +245,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center',
-    backgroundColor: theme.background.level3,
+    backgroundColor: theme.colors.background_3.backgroundColor,
   },
   innerContainer: {
     flex: 1,

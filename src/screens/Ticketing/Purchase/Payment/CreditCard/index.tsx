@@ -156,7 +156,10 @@ const translateError = (
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1, backgroundColor: theme.background.level2},
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.background_2.backgroundColor,
+  },
   center: {flex: 1, justifyContent: 'center', padding: theme.spacings.medium},
   messageBox: {marginBottom: theme.spacings.small},
   button: {marginBottom: theme.spacings.small},

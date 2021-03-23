@@ -58,7 +58,7 @@ const TicketsTabBar: React.FC<MaterialTopTabBarProps> = ({
               styles.button,
               {
                 backgroundColor: isFocused
-                  ? theme.background.level1
+                  ? theme.colors.background_1.backgroundColor
                   : theme.background.header,
               },
             ]}

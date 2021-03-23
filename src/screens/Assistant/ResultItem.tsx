@@ -188,7 +188,7 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   result: {
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
     borderRadius: theme.border.radius.regular,
     marginTop: theme.spacings.medium,
   },

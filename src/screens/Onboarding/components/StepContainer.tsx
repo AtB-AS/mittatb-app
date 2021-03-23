@@ -15,7 +15,7 @@ const StepOuterContainer: React.FC = ({children}) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.colors.background_1.backgroundColor,
     flex: 1,
   },
   innerContainer: {

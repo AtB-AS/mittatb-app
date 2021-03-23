@@ -301,7 +301,7 @@ function translateErrorType(
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
     flex: 1,
   },
   header: {

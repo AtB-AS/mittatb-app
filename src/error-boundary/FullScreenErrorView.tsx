@@ -62,7 +62,7 @@ export default function FullScreenErrorView({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   safearea: {
     flex: 1,
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
   },
   svgContainer: {
     aspectRatio: 1,

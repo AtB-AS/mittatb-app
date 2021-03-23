@@ -20,7 +20,7 @@ const ThemeText: React.FC<ThemeTextProps> = ({
   const {theme} = useTheme();
 
   const typeStyle = {
-    ...theme.text[fontType],
+    ...theme.typography[fontType],
     color: theme.text.colors[color],
   };
 

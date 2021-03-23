@@ -110,7 +110,7 @@ function isStringText(a: any): a is string {
 
 const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
   },
   wrapper__inline: {
     alignSelf: 'flex-start',
