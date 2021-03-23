@@ -9,42 +9,32 @@ import {
   ContrastColor,
   RadiusSizes,
   defaultTextColors,
+  TextNames,
+  createTextTypeStyles,
+  textNames,
 } from '@atb-as/theme';
 
 export default colors;
-export type {Statuses, Mode, TextColor, ContrastColor, RadiusSizes};
-export {defaultTextColors};
+export type {Statuses, Mode, TextColor, ContrastColor, RadiusSizes, TextNames};
+export {defaultTextColors, textNames};
 
-export const textNames = [
-  'body__primary--jumbo',
-  'body__primary--bold',
-  'body__primary',
-  'body__primary--underline',
-  'body__secondary',
-  'body__tertiary',
-] as const;
-
-export type TextNames = typeof textNames[number];
-
-export const textTypeStyles: {[key in TextNames]: TextStyle} = {
-  'body__primary--jumbo': {fontSize: 32, lineHeight: 40},
-  'body__primary--bold': {
-    fontSize: 16,
-    lineHeight: 20,
-    fontWeight: Platform.select({
-      android: 'bold',
-      default: '600',
-    }),
-  },
-  body__primary: {fontSize: 16, lineHeight: 20},
-  'body__primary--underline': {
-    fontSize: 16,
-    lineHeight: 20,
-    textDecorationLine: 'underline',
-  },
-  body__secondary: {fontSize: 14, lineHeight: 20},
-  body__tertiary: {fontSize: 12, lineHeight: 16},
+// Override semibold with bold to avoid Android Roboto bold bug.
+// See ttps://github.com/facebook/react-native/issues/25696
+const fontWeightFix: TextStyle = {
+  fontWeight: Platform.select({
+    android: 'bold',
+    default: '600',
+  }),
 };
+
+const androidOrIos = Platform.OS === 'android' ? 'android' : 'ios';
+export const textTypeStyles = createTextTypeStyles(androidOrIos, {
+  'body__primary--bold': fontWeightFix,
+  'body__secondary--bold': fontWeightFix,
+  heading__component: fontWeightFix,
+  heading__paragraph: fontWeightFix,
+  heading__title: fontWeightFix,
+});
 
 const tripLegDetail = {
   labelWidth: 80,
