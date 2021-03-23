@@ -69,22 +69,13 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.background.header,
     zIndex: 2,
   },
-  spinner: {
-    backgroundColor: theme.background.level2,
-    width: 100,
-    height: 100,
-    borderRadius: theme.border.radius.circle,
-    border: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    marginTop: '20%',
-  },
   screen: {
     backgroundColor: theme.background.level1,
     flexGrow: 1,
+    flex: 1,
   },
   scrollContainer: {
-    marginTop: theme.spacings.large,
+    paddingTop: theme.spacings.large,
+    paddingBottom: theme.spacings.large,
   },
 }));
