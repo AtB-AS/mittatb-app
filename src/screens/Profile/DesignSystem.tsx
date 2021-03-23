@@ -114,6 +114,13 @@ export default function DesignSystem() {
             icon={Delete}
             iconPosition="right"
           />
+          <Button
+            text="Press me"
+            onPress={presser}
+            type="inline"
+            icon={Delete}
+            iconPosition="left"
+          />
         </ButtonGroup>
 
         <Sections.Section withPadding withTopPadding>
