@@ -1,19 +1,19 @@
 import {useAuthState} from '@atb/auth';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
-import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
+import ThemeText from '@atb/components/text';
+import {RootStackParamList} from '@atb/navigation';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import {PRIVACY_POLICY_URL} from '@env';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
-import {Linking, View} from 'react-native';
+import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
-import ThemeText from '@atb/components/text';
-import {RootStackParamList} from '@atb/navigation';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -32,6 +32,7 @@ type ProfileScreenProps = {
 export default function ProfileHome({navigation}: ProfileScreenProps) {
   const {enable_i18n, enable_login} = useRemoteConfig();
   const style = useProfileHomeStyle();
+  const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
   const {authenticationType, signOut, user} = useAuthState();
 
@@ -128,6 +129,39 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             }}
             onPress={() =>
               Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
+            }
+          />
+          <Sections.LinkItem
+            text={t(ProfileTexts.sections.privacy.linkItems.clearHistory.label)}
+            accessibility={{
+              accessibilityHint: t(
+                ProfileTexts.sections.privacy.linkItems.clearHistory.a11yHint,
+              ),
+            }}
+            onPress={() =>
+              Alert.alert(
+                t(ProfileTexts.sections.privacy.linkItems.clearHistory.confirm),
+                undefined,
+                [
+                  {
+                    text: t(
+                      ProfileTexts.sections.privacy.linkItems.clearHistory.alert
+                        .cancel,
+                    ),
+                    style: 'cancel',
+                  },
+                  {
+                    text: t(
+                      ProfileTexts.sections.privacy.linkItems.clearHistory.alert
+                        .confirm,
+                    ),
+                    style: 'destructive',
+                    onPress: async () => {
+                      await clearHistory();
+                    },
+                  },
+                ],
+              )
             }
           />
         </Sections.Section>

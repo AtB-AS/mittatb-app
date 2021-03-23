@@ -51,6 +51,21 @@ const ProfileTexts = {
             'Activate to read our privacy statement (external content)',
           ),
         },
+        clearHistory: {
+          label: _('Tøm søkehistorikk', 'Clear search history'),
+          a11yHint: _(
+            'Aktivér for å tømme tidligere søk',
+            'Activate to clear previous searches',
+          ),
+          confirm: _(
+            'Dette vil fjerne søkehistorikk.',
+            'This will permanently clear search history.',
+          ),
+          alert: {
+            cancel: _('Avbryt', 'Cancel'),
+            confirm: _('Tøm historikk', 'Clear history'),
+          },
+        },
       },
     },
   },
