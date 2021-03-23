@@ -56,17 +56,19 @@ const DetailsContent: React.FC<Props> = ({
           />
         </Sections.GenericItem>
         <Sections.GenericItem>
-          <ThemeText>{t(TicketTexts.details.orderId(fc.orderId))}</ThemeText>
-          <ThemeText type="lead" color="secondary">
-            {t(
-              TicketTexts.details.purchaseTime(
-                formatToLongDateTime(
-                  fromUnixTime(fc.created.toMillis() / 1000),
-                  language,
+          <View accessible={true}>
+            <ThemeText>{t(TicketTexts.details.orderId(fc.orderId))}</ThemeText>
+            <ThemeText type="lead" color="secondary">
+              {t(
+                TicketTexts.details.purchaseTime(
+                  formatToLongDateTime(
+                    fromUnixTime(fc.created.toMillis() / 1000),
+                    language,
+                  ),
                 ),
-              ),
-            )}
-          </ThemeText>
+              )}
+            </ThemeText>
+          </View>
         </Sections.GenericItem>
         <Sections.LinkItem
           text={t(TicketTexts.details.askForReceipt)}
