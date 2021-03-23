@@ -11,7 +11,8 @@ import {searchByStopPlace} from '@atb/geocoder/search-for-location';
 import {mapFeatureToLocation} from '@atb/geocoder/utils';
 import {
   EstimatedCall,
-  FeatureCategory, Quay,
+  FeatureCategory,
+  Quay,
   ServiceJourneyMapInfoData,
   Situation,
   TransportMode,
