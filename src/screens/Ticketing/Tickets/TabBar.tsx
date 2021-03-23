@@ -63,7 +63,9 @@ const TicketsTabBar: React.FC<MaterialTopTabBarProps> = ({
               },
             ]}
           >
-            <ThemeText type={isFocused ? 'paragraphHeadline' : 'body'}>
+            <ThemeText
+              type={isFocused ? 'body__primary--bold' : 'body__primary'}
+            >
               {label}
             </ThemeText>
           </TouchableOpacity>

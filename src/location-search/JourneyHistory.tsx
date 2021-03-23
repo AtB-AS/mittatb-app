@@ -59,7 +59,7 @@ export default function JourneyHistory({
               onPress={() => onSelect(searchResult.selectable)}
             >
               <GenericItem transparent>
-                <ThemeText type="paragraphHeadline">
+                <ThemeText type="body__primary--bold">
                   {searchResult.text}
                 </ThemeText>
               </GenericItem>

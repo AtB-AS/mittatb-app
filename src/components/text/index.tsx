@@ -11,7 +11,7 @@ export type ThemeTextProps = TextProps & {
 };
 
 const ThemeText: React.FC<ThemeTextProps> = ({
-  type: fontType = 'body',
+  type: fontType = 'body__primary',
   color = 'primary',
   style,
   children,

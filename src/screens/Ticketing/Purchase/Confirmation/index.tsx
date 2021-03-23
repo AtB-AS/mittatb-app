@@ -174,7 +174,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                   </ThemeText>
                   <ThemeText
                     style={styles.smallTopMargin}
-                    type="lead"
+                    type="body__secondary"
                     color="secondary"
                   >
                     {fromTariffZone.id === toTariffZone.id
@@ -192,7 +192,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                   </ThemeText>
                   <ThemeText
                     style={styles.smallTopMargin}
-                    type="lead"
+                    type="body__secondary"
                     color="secondary"
                   >
                     {createTravelDateText(t, language, travelDate)}
@@ -204,10 +204,10 @@ const Confirmation: React.FC<ConfirmationProps> = ({
         </View>
         <View style={styles.totalContainer}>
           <View style={styles.totalContainerHeadings}>
-            <ThemeText type="body">
+            <ThemeText type="body__primary">
               {t(PurchaseConfirmationTexts.totalCost.title)}
             </ThemeText>
-            <ThemeText type="label" color="secondary">
+            <ThemeText type="body__tertiary" color="secondary">
               {t(
                 PurchaseConfirmationTexts.totalCost.label(
                   vatPercentString,
@@ -218,7 +218,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           </View>
 
           {!isSearchingOffer ? (
-            <ThemeText type="heroTitle">{totalPrice} kr</ThemeText>
+            <ThemeText type="body__primary--jumbo">{totalPrice} kr</ThemeText>
           ) : (
             <ActivityIndicator
               size={theme.spacings.medium}

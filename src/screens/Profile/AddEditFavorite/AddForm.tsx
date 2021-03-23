@@ -210,7 +210,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
               !emoji ? (
                 <ThemeIcon svg={MapPointPin} />
               ) : (
-                <ThemeText type="body">{emoji}</ThemeText>
+                <ThemeText type="body__primary">{emoji}</ThemeText>
               )
             }
           />

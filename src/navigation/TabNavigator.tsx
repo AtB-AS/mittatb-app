@@ -104,7 +104,7 @@ function tabSettings(
   return {
     tabBarLabel: ({color}) => (
       <ThemeText
-        type="lead"
+        type="body__secondary"
         style={{color, textAlign: 'center', lineHeight: 14}}
       >
         {tabBarLabel}

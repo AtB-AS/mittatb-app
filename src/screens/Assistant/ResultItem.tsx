@@ -69,7 +69,7 @@ const ResultItemHeader: React.FC<{
   return (
     <View style={styles.resultHeader}>
       <ThemeText
-        type="lead"
+        type="body__secondary"
         color="secondary"
         style={styles.resultHeaderLabel}
         accessibilityLabel={t(
@@ -84,7 +84,7 @@ const ResultItemHeader: React.FC<{
       </ThemeText>
       <View style={styles.durationContainer}>
         <AccessibleText
-          type="lead"
+          type="body__secondary"
           color="secondary"
           prefix={t(AssistantTexts.results.resultItem.header.totalDuration)}
         >
@@ -167,7 +167,7 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
 
   return (
     <View style={styles.resultFooter}>
-      <ThemeText type={'lead'}>
+      <ThemeText type={'body__secondary'}>
         {t(
           AssistantTexts.results.resultItem.footer.fromLabel(
             quayName,
@@ -177,7 +177,7 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
       </ThemeText>
 
       <View style={styles.detailsTextWrapper}>
-        <ThemeText type="lead">
+        <ThemeText type="body__secondary">
           {t(AssistantTexts.results.resultItem.footer.detailsLabel)}
         </ThemeText>
         <ThemeIcon svg={ArrowRight} style={styles.detailsIcon} />
@@ -319,7 +319,7 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
           subMode={leg.line?.transportSubmode}
         />
       </View>
-      <ThemeText type="body">
+      <ThemeText type="body__primary">
         <LineDisplayName style={styles.lineDisplayName} leg={leg} />
       </ThemeText>
     </View>

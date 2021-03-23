@@ -16,26 +16,19 @@ export type {Statuses, Mode, TextColor, ContrastColor, RadiusSizes};
 export {defaultTextColors};
 
 export const textNames = [
-  'heroTitle',
-  'pageTitle',
-  'sectionHeadline',
-  'itemHeadline',
-  'paragraphHeadline',
-  'body',
-  'body__link',
-  'lead',
-  'label',
-  'label__link',
+  'body__primary--jumbo',
+  'body__primary--bold',
+  'body__primary',
+  'body__primary--underline',
+  'body__secondary',
+  'body__tertiary',
 ] as const;
 
 export type TextNames = typeof textNames[number];
 
 export const textTypeStyles: {[key in TextNames]: TextStyle} = {
-  heroTitle: {fontSize: 32, lineHeight: 40},
-  pageTitle: {fontSize: 26, lineHeight: 32},
-  sectionHeadline: {fontSize: 23, lineHeight: 28},
-  itemHeadline: {fontSize: 20, lineHeight: 24},
-  paragraphHeadline: {
+  'body__primary--jumbo': {fontSize: 32, lineHeight: 40},
+  'body__primary--bold': {
     fontSize: 16,
     lineHeight: 20,
     fontWeight: Platform.select({
@@ -43,11 +36,14 @@ export const textTypeStyles: {[key in TextNames]: TextStyle} = {
       default: '600',
     }),
   },
-  body: {fontSize: 16, lineHeight: 20},
-  body__link: {fontSize: 16, lineHeight: 20, textDecorationLine: 'underline'},
-  lead: {fontSize: 14, lineHeight: 20},
-  label: {fontSize: 12, lineHeight: 16},
-  label__link: {fontSize: 12, lineHeight: 16, textDecorationLine: 'underline'},
+  body__primary: {fontSize: 16, lineHeight: 20},
+  'body__primary--underline': {
+    fontSize: 16,
+    lineHeight: 20,
+    textDecorationLine: 'underline',
+  },
+  body__secondary: {fontSize: 14, lineHeight: 20},
+  body__tertiary: {fontSize: 12, lineHeight: 16},
 };
 
 const tripLegDetail = {

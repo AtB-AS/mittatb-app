@@ -323,7 +323,7 @@ const Assistant: React.FC<Props> = ({
   const altHeaderComp = (
     <View accessible={true} onLayout={onAltLayout} style={styles.altTitle}>
       <ThemeText
-        type="paragraphHeadline"
+        type="body__primary--bold"
         style={[
           styles.altTitleText,
           styles.altTitleText__right,
@@ -334,7 +334,7 @@ const Assistant: React.FC<Props> = ({
         {from?.name}
       </ThemeText>
       <ThemeText
-        type="paragraphHeadline"
+        type="body__primary--bold"
         accessibilityLabel="til"
         style={styles.altTitleText}
       >
@@ -342,7 +342,7 @@ const Assistant: React.FC<Props> = ({
         –{' '}
       </ThemeText>
       <ThemeText
-        type="paragraphHeadline"
+        type="body__primary--bold"
         style={[styles.altTitleText, {maxWidth: altWidth / 2}]}
         numberOfLines={1}
       >

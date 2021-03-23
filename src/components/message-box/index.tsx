@@ -59,7 +59,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({
       {retryFunction && (
         <ThemeText
           style={styles.retryText}
-          type="body__link"
+          type="body__primary--underline"
           onPress={retryFunction}
         >
           {t(MessageBoxTexts.tryAgainButton)}
@@ -131,7 +131,7 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
   content: {
     flex: 1,
   },
-  text: theme.typography.body,
+  text: theme.typography.body__primary,
   retryText: {
     marginTop: theme.spacings.medium,
   },

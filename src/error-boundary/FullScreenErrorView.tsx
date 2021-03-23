@@ -30,7 +30,7 @@ export default function FullScreenErrorView({
       </View>
       <View style={styles.container}>
         <View>
-          <ThemeText type="paragraphHeadline" style={styles.title}>
+          <ThemeText type="body__primary--bold" style={styles.title}>
             Appen krasja - håper du lander mykt!
           </ThemeText>
           <ThemeText style={styles.message}>

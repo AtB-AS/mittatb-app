@@ -131,7 +131,10 @@ const ClearButton: React.FC<{
   if (!value) return null;
   return (
     <TouchableOpacity onPress={() => onEmojiSelected(null)}>
-      <ThemeText type="body" style={[styles.clearButton, clearButtonStyle]}>
+      <ThemeText
+        type="body__primary"
+        style={[styles.clearButton, clearButtonStyle]}
+      >
         {clearButtonText ?? 'Fjern emoji'}
       </ThemeText>
     </TouchableOpacity>

@@ -83,8 +83,8 @@ const LocationText: React.FC<{
   const {title, subtitle} = getLocationText(t, location, error);
   return (
     <>
-      <ThemeText type="lead">{title}</ThemeText>
-      <ThemeText type="label">{subtitle}</ThemeText>
+      <ThemeText type="body__secondary">{title}</ThemeText>
+      <ThemeText type="body__tertiary">{subtitle}</ThemeText>
     </>
   );
 };

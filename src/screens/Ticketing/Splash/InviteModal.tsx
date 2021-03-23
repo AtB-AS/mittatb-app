@@ -65,10 +65,10 @@ export default forwardRef<Modalize, Props>(function InviteModal(
             <ActivityIndicator style={styles.loading} />
           ) : (
             <>
-              <ThemeText type="paragraphHeadline" style={styles.title}>
+              <ThemeText type="body__primary--bold" style={styles.title}>
                 Registrer deg som testpilot for billettkjøp
               </ThemeText>
-              <ThemeText type="body" style={styles.text}>
+              <ThemeText type="body__primary" style={styles.text}>
                 Send oss invitasjonskoden din og bli først ute med å teste
                 billettkjøp direkte fra reiseappen.
               </ThemeText>

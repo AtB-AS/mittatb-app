@@ -177,7 +177,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             {isSearchingOffer ? (
               <ActivityIndicator style={styles.totalSection} />
             ) : (
-              <ThemeText style={styles.totalSection} type="paragraphHeadline">
+              <ThemeText style={styles.totalSection} type="body__primary--bold">
                 {t(PurchaseOverviewTexts.totalPrice(totalPrice))}
               </ThemeText>
             )}

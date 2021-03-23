@@ -160,7 +160,9 @@ const Button: React.FC<ButtonProps> = ({
         {text && (
           <View style={[textContainer, textContainerStyle]}>
             <ThemeText
-              type={mode === 'tertiary' ? 'body' : 'paragraphHeadline'}
+              type={
+                mode === 'tertiary' ? 'body__primary' : 'body__primary--bold'
+              }
               style={[styleText, textStyle]}
             >
               {text}

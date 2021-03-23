@@ -62,7 +62,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
         ]}
         onLayout={setLayoutFor('container')}
       >
-        <ThemeText onLayout={setLayoutFor('title')} type="paragraphHeadline">
+        <ThemeText onLayout={setLayoutFor('title')} type="body__primary--bold">
           {title}
         </ThemeText>
       </View>

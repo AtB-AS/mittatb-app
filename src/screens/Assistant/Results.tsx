@@ -134,5 +134,5 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.medium,
     paddingBottom: theme.spacings.medium,
   },
-  infoBoxText: theme.typography.body,
+  infoBoxText: theme.typography.body__primary,
 }));
