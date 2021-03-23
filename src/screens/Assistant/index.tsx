@@ -34,13 +34,13 @@ const Assistant = () => {
       <Stack.Screen
         name="TripDetails"
         component={TripDetailsRoot}
+        options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
       ></Stack.Screen>
       <Stack.Screen
         name="DateTimePicker"
         component={JourneyDatePicker}
-        options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}
       ></Stack.Screen>
     </Stack.Navigator>
   );
