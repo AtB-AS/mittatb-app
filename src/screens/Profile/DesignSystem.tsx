@@ -133,12 +133,12 @@ export default function DesignSystem() {
 
         <Sections.Section withPadding withTopPadding>
           <Sections.LocationInput
-            label="body__tertiary"
+            label="Label"
             placeholder="My very long placeholder over here. Yes over multiple lines"
             onPress={() => {}}
           />
           <Sections.LocationInput
-            label="body__tertiary"
+            label="Label"
             placeholder="Short"
             onPress={() => {}}
             type="compact"
@@ -147,7 +147,7 @@ export default function DesignSystem() {
 
         <Sections.Section withPadding withTopPadding>
           <Sections.ButtonInput
-            label="body__tertiary"
+            label="Label"
             placeholder="My very long placeholder over here. Yes over multiple lines"
             onPress={() => {}}
             icon="arrow-left"
