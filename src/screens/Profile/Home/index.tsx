@@ -44,7 +44,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         rightButton={{type: 'chat'}}
       />
 
-      <ScrollView style={style.scrollView}>
+      <ScrollView contentContainerStyle={style.scrollView}>
         {enable_login && (
           <Sections.Section withPadding>
             <Sections.HeaderItem
