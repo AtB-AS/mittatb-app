@@ -12,6 +12,7 @@ import {
   TextNames,
   createTextTypeStyles,
   textNames,
+  backgrounds,
 } from '@atb-as/theme';
 
 export default colors;
@@ -74,9 +75,9 @@ export const themes = createExtendedThemes<AppThemeExtension>({
     statusBarStyle: 'light-content',
 
     background: {
-      header: colors.secondary.cyan_500,
+      header: colors.secondary.blue_900,
       destructive: colors.secondary.red_500,
-      accent: colors.secondary.cyan_500,
+      accent: backgrounds.dark.level1,
     },
 
     typography: textTypeStyles,
