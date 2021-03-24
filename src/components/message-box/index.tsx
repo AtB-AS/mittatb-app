@@ -58,7 +58,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({
       </ThemeText>
       {retryFunction && (
         <ThemeText
-          style={styles.retryText}
+          style={[styles.retryText, {color: textColor}]}
           type="body__primary--underline"
           onPress={retryFunction}
         >
