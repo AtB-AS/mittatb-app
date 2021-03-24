@@ -1,3 +1,4 @@
+import runTiming from '@atb/utils/run-timing';
 import React, {
   Children,
   ReactElement,
@@ -6,21 +7,7 @@ import React, {
   useState,
 } from 'react';
 import {View, ViewStyle} from 'react-native';
-import Animated, {
-  block,
-  Clock,
-  clockRunning,
-  cond,
-  debug,
-  Easing,
-  set,
-  startClock,
-  stopClock,
-  timing,
-  useCode,
-  useValue,
-  Value,
-} from 'react-native-reanimated';
+import Animated, {Clock, set, useCode, useValue} from 'react-native-reanimated';
 
 type FadeProps = {
   visibleKey: string;
@@ -44,9 +31,10 @@ export default function FadeBetween({
     setInit(true);
   }, []);
 
-  useCode(() => init && set(progress, runTiming(clock, 0, 1, duration)), [
-    visibleKey,
-  ]);
+  useCode(
+    () => init && set(progress, runTiming({clock, from: 0, to: 1, duration})),
+    [visibleKey],
+  );
 
   return (
     <View style={style}>
@@ -89,42 +77,4 @@ function AnimatedChild({
       {child}
     </Animated.View>
   );
-}
-
-function runTiming(
-  clock: Clock,
-  from: number,
-  to: number,
-  duration: number = 400,
-) {
-  const state = {
-    finished: new Value(0),
-    position: new Value(from),
-    time: new Value(0),
-    frameTime: new Value(0),
-  };
-
-  const config = {
-    duration,
-    toValue: new Value<number>(to),
-    easing: Easing.linear,
-  };
-
-  return block([
-    cond(clockRunning(clock), 0, [
-      // If the clock isn't running we reset all the animation params and start the clock
-      set(state.finished, 0),
-      set(state.time, 0),
-      set(state.position, from),
-      set(state.frameTime, 0),
-      set(config.toValue, to),
-      startClock(clock),
-    ]),
-    // we run the step here that is going to update position
-    timing(clock, state, config),
-    // if the animation is over we stop the clock
-    cond(state.finished, debug('stop clock', stopClock(clock))),
-    // the block returns the updated position
-    state.position,
-  ]);
 }

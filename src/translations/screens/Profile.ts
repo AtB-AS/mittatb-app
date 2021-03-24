@@ -69,5 +69,13 @@ const ProfileTexts = {
       },
     },
   },
+  installId: {
+    label: _('ID', 'ID'),
+    wasCopiedAlert: _('ID ble kopiert!', 'ID was copied to clipboard!'),
+    a11yHint: _(
+      'Klikk for å kopiere id. Denne brukes til teknisk feilsøk.',
+      'Press to copy the id. This is used for technical debugging',
+    ),
+  },
 };
 export default ProfileTexts;
