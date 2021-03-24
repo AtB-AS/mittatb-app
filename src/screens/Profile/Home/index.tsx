@@ -192,29 +192,27 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           </Sections.Section>
         )}
 
-        <View style={style.debugInfoContainer}>
-          {config?.installId && (
-            <View>
-              {fadeIsAnimating && (
-                <ClipboardFadeContainer>
-                  <ScreenReaderAnnouncement
-                    message={t(ProfileTexts.installId.wasCopiedAlert)}
-                  />
-                  <ThemeText>
-                    ✅ {t(ProfileTexts.installId.wasCopiedAlert)}
-                  </ThemeText>
-                </ClipboardFadeContainer>
-              )}
+        {config?.installId && (
+          <View style={style.debugInfoContainer}>
+            {fadeIsAnimating ? (
+              <ClipboardFadeContainer>
+                <ScreenReaderAnnouncement
+                  message={t(ProfileTexts.installId.wasCopiedAlert)}
+                />
+                <ThemeText>
+                  ✅ {t(ProfileTexts.installId.wasCopiedAlert)}
+                </ThemeText>
+              </ClipboardFadeContainer>
+            ) : (
               <ThemeText
                 accessibilityHint={t(ProfileTexts.installId.a11yHint)}
-                style={style.debugInfo}
                 onPress={copyInstallId}
               >
                 {t(ProfileTexts.installId.label)}: {config.installId}
               </ThemeText>
-            </View>
-          )}
-        </View>
+            )}
+          </View>
+        )}
       </ScrollView>
     </View>
   );
@@ -226,13 +224,10 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flex: 1,
   },
   scrollView: {
-    marginTop: theme.spacings.medium,
+    paddingVertical: theme.spacings.medium,
   },
   debugInfoContainer: {
     alignItems: 'center',
     marginVertical: theme.spacings.medium,
-  },
-  debugInfo: {
-    color: theme.colors.background_1.color,
   },
 }));
