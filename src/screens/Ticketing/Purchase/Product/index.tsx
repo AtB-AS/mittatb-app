@@ -94,7 +94,7 @@ const Product: React.FC<{
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
   },
   productsSection: {
     margin: theme.spacings.medium,

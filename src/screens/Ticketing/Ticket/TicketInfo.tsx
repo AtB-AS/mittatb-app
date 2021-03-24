@@ -92,18 +92,18 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
     <View style={styles.textsContainer}>
       <View>
         {userProfilesWithCount.map((u) => (
-          <ThemeText type="paragraphHeadline" key={u.id}>{`${
+          <ThemeText type="body__primary--bold" key={u.id}>{`${
             u.count
           } ${getReferenceDataName(u, language)}`}</ThemeText>
         ))}
       </View>
       {preassignedFareProduct && (
-        <ThemeText type="lead" style={styles.product}>
+        <ThemeText type="body__secondary" style={styles.product}>
           {getReferenceDataName(preassignedFareProduct, language)}
         </ThemeText>
       )}
       {fromTariffZone && toTariffZone && (
-        <ThemeText type="lead" style={styles.zones}>
+        <ThemeText type="body__secondary" style={styles.zones}>
           {tariffZonesSummary(fromTariffZone, toTariffZone, language, t)}
         </ThemeText>
       )}
@@ -140,7 +140,7 @@ const TicketInspectionSymbol = ({
       <>
         {status === 'valid' && (
           <ThemeText
-            type="paragraphHeadline"
+            type="body__primary--bold"
             allowFontScaling={false}
             style={styles.symbolZones}
           >

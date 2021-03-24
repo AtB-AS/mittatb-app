@@ -39,7 +39,7 @@ const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   zoomContainer: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.colors.background_1.backgroundColor,
     borderRadius: theme.border.radius.small,
     alignContent: 'stretch',
     ...shadows,

@@ -114,7 +114,10 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
                 style={styles.resendButton}
                 onPress={onResendCode}
               >
-                <ThemeText style={styles.resendButtonText} type="body__link">
+                <ThemeText
+                  style={styles.resendButtonText}
+                  type="body__primary--underline"
+                >
                   {t(LoginTexts.confirmCode.resendButton)}
                 </ThemeText>
               </TouchableOpacity>
@@ -128,7 +131,7 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
     flex: 1,
   },
   mainView: {

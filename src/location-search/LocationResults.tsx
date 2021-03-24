@@ -28,7 +28,7 @@ const LocationResults: React.FC<Props> = ({
     <>
       {title && (
         <View accessibilityRole="header" style={styles.subHeader}>
-          <ThemeText type="lead">{title}</ThemeText>
+          <ThemeText type="body__secondary">{title}</ThemeText>
         </View>
       )}
       <View>

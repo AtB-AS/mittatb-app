@@ -142,7 +142,10 @@ const StepThree: React.FC<StepProps> = () => {
             Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
           }
         >
-          <ThemeText type="body" style={[styles.text, styles.privacyPolicy]}>
+          <ThemeText
+            type="body__primary"
+            style={[styles.text, styles.privacyPolicy]}
+          >
             {t(OnboardingTexts.step3.privacyLink.text)}
           </ThemeText>
         </TouchableOpacity>

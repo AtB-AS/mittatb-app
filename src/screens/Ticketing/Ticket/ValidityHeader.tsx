@@ -26,7 +26,7 @@ const ValidityHeader: React.FC<{
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
         <ValidityIcon status={status} />
-        <ThemeText style={styles.validityText} type="lead">
+        <ThemeText style={styles.validityText} type="body__secondary">
           {validityTimeText(status, now, validFrom, validTo, t, language)}
         </ThemeText>
       </View>
@@ -85,7 +85,7 @@ function validityTimeText(
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   iconContainer: {marginRight: theme.spacings.medium},
   ticketContainer: {
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
     borderRadius: theme.border.radius.regular,
     marginBottom: theme.spacings.medium,
   },

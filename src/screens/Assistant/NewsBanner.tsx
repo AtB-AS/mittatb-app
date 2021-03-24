@@ -24,12 +24,12 @@ const NewsBanner: React.FC<{} & AccessibilityProps> = ({...props}) => {
 
   return (
     <View style={style.container}>
-      <ThemeText type={'body'} style={style.text}>
+      <ThemeText type={'body__primary'} style={style.text}>
         {news_text}
       </ThemeText>
       {news_link_url ? (
         <TouchableOpacity onPress={() => Linking.openURL(news_link_url)}>
-          <ThemeText type="body__link" style={style.link}>
+          <ThemeText type="body__primary--underline" style={style.link}>
             {news_link_text}
           </ThemeText>
         </TouchableOpacity>

@@ -182,7 +182,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.colors.background_1.backgroundColor,
     flex: 1,
   },
   scrollView: {

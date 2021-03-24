@@ -115,7 +115,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
 }
 const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.background.level3,
+    backgroundColor: theme.colors.background_3.backgroundColor,
     flex: 1,
   },
   error: {
