@@ -4,6 +4,7 @@ import {PermissionStatus} from 'react-native-permissions';
 import pickBy from 'lodash.pickby';
 
 type Metadata = {
+  'AtB-Firebase-Auth-Id': string;
   'AtB-Install-Id': string;
   'AtB-Build-Number': string;
   'AtB-Device-Type': string;
