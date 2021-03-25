@@ -5,7 +5,7 @@ import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 import insets from '@atb/utils/insets';
 import ThemeIcon from '@atb/components/theme-icon';
 import {Add, Remove} from '@atb/assets/svg/icons/actions';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 
 export type CounterInputProps = SectionItem<{
@@ -25,6 +25,8 @@ export default function CounterInput({
   const style = useSectionStyle();
   const counterStyles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
+  const removeButtonDisabled = count === 0;
   return (
     <View style={[topContainer, counterStyles.countContainer]}>
       <View style={[style.spaceBetween, contentContainer]}>
@@ -32,21 +34,34 @@ export default function CounterInput({
       </View>
       <View style={counterStyles.countActions}>
         <TouchableOpacity
-          disabled={count === 0}
+          disabled={removeButtonDisabled}
           onPress={() => removeCount()}
           accessibilityRole="button"
           accessibilityLabel={t(
             SectionTexts.counterInput.decreaseButton.a11yLabel,
           )}
-          accessibilityHint={t(
-            SectionTexts.counterInput.decreaseButton.a11yHint(text, count),
-          )}
-          accessibilityElementsHidden={count < 1}
-          importantForAccessibility={count >= 1 ? 'yes' : 'no-hide-descendants'}
-          hitSlop={insets.all(8)}
+          accessibilityHint={
+            removeButtonDisabled
+              ? ''
+              : t(
+                  SectionTexts.counterInput.decreaseButton.a11yHint(
+                    text,
+                    count,
+                  ),
+                )
+          }
+          accessibilityState={{disabled: removeButtonDisabled}}
+          hitSlop={insets.all(theme.spacings.medium)}
           style={counterStyles.removeCount}
         >
-          {count > 0 && <ThemeIcon svg={Remove} />}
+          <ThemeIcon
+            svg={Remove}
+            fill={
+              removeButtonDisabled
+                ? theme.text.colors.disabled
+                : theme.text.colors.primary
+            }
+          />
         </TouchableOpacity>
         <ThemeText
           accessible={false}
@@ -90,9 +105,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
   },
   removeCount: {
-    marginRight: theme.spacings.large,
+    marginRight: theme.spacings.xLarge,
   },
   addCount: {
-    marginLeft: theme.spacings.large,
+    marginLeft: theme.spacings.xLarge,
   },
 }));
