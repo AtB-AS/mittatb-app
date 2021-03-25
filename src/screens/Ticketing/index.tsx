@@ -6,5 +6,5 @@ import Tickets from './Tickets';
 export default function Ticketing() {
   const {enable_ticketing} = useRemoteConfig();
 
-  return !enable_ticketing ? <Splash /> : <Tickets />;
+  return !false ? <Splash /> : <Tickets />;
 }

@@ -16,8 +16,6 @@ import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
 import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import {Check} from '@atb/assets/svg/icons/status';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
@@ -116,6 +114,10 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               onPress={() => navigation.navigate('Language')}
             />
           )}
+          <Sections.LinkItem
+            text={t(ProfileTexts.sections.settings.linkItems.enrollment.label)}
+            onPress={() => navigation.navigate('Enrollment')}
+          />
         </Sections.Section>
 
         <Sections.Section withPadding>
