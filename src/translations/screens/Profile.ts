@@ -28,6 +28,9 @@ const ProfileTexts = {
         language: {
           label: _('Språk', 'Language'),
         },
+        enrollment: {
+          label: _('Beta-funksjonalitet', 'Beta features'),
+        },
       },
     },
     favorites: {
