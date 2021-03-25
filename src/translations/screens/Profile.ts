@@ -51,8 +51,31 @@ const ProfileTexts = {
             'Activate to read our privacy statement (external content)',
           ),
         },
+        clearHistory: {
+          label: _('Tøm søkehistorikk', 'Clear search history'),
+          a11yHint: _(
+            'Aktivér for å tømme tidligere søk',
+            'Activate to clear previous searches',
+          ),
+          confirm: _(
+            'Dette vil fjerne søkehistorikk.',
+            'This will permanently clear search history.',
+          ),
+          alert: {
+            cancel: _('Avbryt', 'Cancel'),
+            confirm: _('Tøm historikk', 'Clear history'),
+          },
+        },
       },
     },
+  },
+  installId: {
+    label: _('ID', 'ID'),
+    wasCopiedAlert: _('ID ble kopiert!', 'ID was copied to clipboard!'),
+    a11yHint: _(
+      'Klikk for å kopiere id. Denne brukes til teknisk feilsøk.',
+      'Press to copy the id. This is used for technical debugging',
+    ),
   },
 };
 export default ProfileTexts;

@@ -61,7 +61,9 @@ export default function ActionItem({
       {...accessibility}
     >
       <ThemeText
-        type={mode === 'heading-expand' ? 'paragraphHeadline' : 'body'}
+        type={
+          mode === 'heading-expand' ? 'body__primary--bold' : 'body__primary'
+        }
         style={contentContainer}
       >
         {text}
@@ -93,7 +95,10 @@ function ActionModeIcon({
       const icon = checked ? 'expand-less' : 'expand-more';
       return (
         <View style={style.headerExpandIconGroup}>
-          <ThemeText style={style.headerExpandIconGroup__text} type="lead">
+          <ThemeText
+            style={style.headerExpandIconGroup__text}
+            type="body__secondary"
+          >
             {text}
           </ThemeText>
           <NavigationIcon mode={icon} />

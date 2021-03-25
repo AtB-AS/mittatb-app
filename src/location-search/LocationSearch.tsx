@@ -1,24 +1,21 @@
+import {JourneySearchHistoryEntry} from '@atb/search-history/types';
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
 import {Keyboard, TextInput as InternalTextInput, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
 import {ErrorType} from '../api/utils';
+import MessageBox from '../components/message-box';
+import FullScreenHeader from '../components/screen-header/full-header';
 import ScreenReaderAnnouncement from '../components/screen-reader-announcement';
 import {TextInput} from '../components/sections';
 import ThemeText from '../components/text';
 import FavoriteChips, {ChipTypeGroup} from '../favorite-chips';
 import {useFavorites} from '../favorites';
-import {
-  Location,
-  LocationWithMetadata,
-  UserFavorites,
-} from '../favorites/types';
+import {LocationWithMetadata} from '../favorites/types';
 import {useGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
-import MessageBox from '../components/message-box';
 import {RootStackParamList} from '../navigation';
-import FullScreenHeader from '../components/screen-header/full-header';
 import {useSearchHistory} from '../search-history';
 import {StyleSheet} from '../theme';
 import {
@@ -27,9 +24,11 @@ import {
   useTranslation,
 } from '../translations/';
 import {LocationSearchNavigationProp} from './';
+import JourneyHistory from './JourneyHistory';
 import LocationResults from './LocationResults';
-import {LocationSearchResult} from './types';
+import {LocationSearchResult, SelectableLocationData} from './types';
 import useDebounce from './useDebounce';
+import {filterCurrentLocation, filterPreviousLocations} from './utils';
 export type Props = {
   navigation: LocationSearchNavigationProp;
   route: RouteProp<RootStackParamList, 'LocationSearch'>;
@@ -41,6 +40,7 @@ export type RouteParams = {
   label: string;
   favoriteChipTypes?: ChipTypeGroup[];
   initialLocation?: LocationWithMetadata;
+  includeJourneyHistory?: boolean;
 };
 
 const LocationSearch: React.FC<Props> = ({
@@ -52,6 +52,7 @@ const LocationSearch: React.FC<Props> = ({
       label,
       favoriteChipTypes,
       initialLocation,
+      includeJourneyHistory = false,
     },
   },
 }) => {
@@ -59,7 +60,7 @@ const LocationSearch: React.FC<Props> = ({
   const styles = useThemeStyles();
   const {location: geolocation} = useGeolocationState();
 
-  const onSelect = (location: LocationWithMetadata) => {
+  const onSelect = (location: SelectableLocationData) => {
     navigation.navigate(callerRouteName as any, {
       [callerRouteParam]: location,
     });
@@ -97,6 +98,7 @@ const LocationSearch: React.FC<Props> = ({
         favoriteChipTypes={favoriteChipTypes}
         placeholder={t(LocationSearchTexts.searchField.placeholder)}
         defaultText={initialLocation?.name}
+        includeJourneyHistory={includeJourneyHistory}
       />
     </View>
   );
@@ -107,10 +109,11 @@ type LocationSearchContentProps = {
   placeholder: string;
   favoriteChipTypes?: ChipTypeGroup[];
   defaultText?: string;
-  onSelect(location: LocationWithMetadata): void;
+  onSelect(location: SelectableLocationData): void;
   onMapSelection?(): void;
   onlyAtbVenues?: boolean;
   includeHistory?: boolean;
+  includeJourneyHistory?: boolean;
 };
 
 export function LocationSearchContent({
@@ -122,6 +125,7 @@ export function LocationSearchContent({
   onMapSelection,
   onlyAtbVenues = false,
   includeHistory = true,
+  includeJourneyHistory = false,
 }: LocationSearchContentProps) {
   const styles = useThemeStyles();
   const {favorites} = useFavorites();
@@ -164,6 +168,12 @@ export function LocationSearchContent({
       ...searchResult.location,
       resultType: 'favorite',
       favoriteId: searchResult.favoriteInfo.id,
+    });
+  };
+  const onJourneyHistorySelected = (journeyData: JourneySearchHistoryEntry) => {
+    return onSelect({
+      resultType: 'journey',
+      journeyData,
     });
   };
 
@@ -238,6 +248,12 @@ export function LocationSearchContent({
           keyboardShouldPersistTaps="handled"
           onScrollBeginDrag={() => Keyboard.dismiss()}
         >
+          {includeJourneyHistory && (
+            <JourneyHistory
+              searchText={debouncedText}
+              onSelect={onJourneyHistorySelected}
+            />
+          )}
           {includeHistory && hasPreviousResults && (
             <LocationResults
               title={t(LocationSearchTexts.results.previousResults.heading)}
@@ -283,57 +299,9 @@ function translateErrorType(
   }
 }
 
-const filterPreviousLocations = (
-  searchText: string,
-  previousLocations: Location[],
-  favorites?: UserFavorites,
-  onlyAtbVenues: boolean = false,
-): LocationSearchResult[] => {
-  const mappedHistory: LocationSearchResult[] =
-    previousLocations
-      ?.map((location) => ({
-        location,
-      }))
-      .filter(
-        (location) => !onlyAtbVenues || location.location.layer == 'venue',
-      ) ?? [];
-
-  if (!searchText) {
-    return mappedHistory;
-  }
-
-  const matchText = (text?: string) =>
-    text?.toLowerCase()?.startsWith(searchText.toLowerCase());
-  const filteredFavorites: LocationSearchResult[] = (favorites ?? [])
-    .filter(
-      (favorite) =>
-        (matchText(favorite.location?.name) || matchText(favorite.name)) &&
-        (!onlyAtbVenues || favorite.location.layer == 'venue'),
-    )
-    .map(({location, ...favoriteInfo}) => ({
-      location,
-      favoriteInfo,
-    }));
-
-  return filteredFavorites.concat(
-    mappedHistory.filter((l) => matchText(l.location.name)),
-  );
-};
-
-const filterCurrentLocation = (
-  locations: Location[] | null,
-  previousLocations: LocationSearchResult[] | null,
-): LocationSearchResult[] => {
-  if (!previousLocations?.length || !locations)
-    return locations?.map((location) => ({location})) ?? [];
-  return locations
-    .filter((l) => !previousLocations.some((pl) => pl.location.id === l.id))
-    .map((location) => ({location}));
-};
-
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
     flex: 1,
   },
   header: {

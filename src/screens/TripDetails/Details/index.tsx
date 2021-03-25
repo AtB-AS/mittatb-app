@@ -163,7 +163,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   container: {
     flex: 1,
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
   },
   paddedContainer: {
     paddingHorizontal: theme.spacings.medium,

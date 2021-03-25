@@ -1,7 +1,7 @@
+import ThemeText from '@atb/components/text';
 import React from 'react';
 import {View} from 'react-native';
-import ThemeText from '@atb/components/text';
-import {useSectionItem, SectionItem, useSectionStyle} from './section-utils';
+import {SectionItem, useSectionItem} from './section-utils';
 
 export type HeaderItemProps = SectionItem<{
   text: string;
@@ -15,13 +15,12 @@ export default function HeaderItem({
   ...props
 }: HeaderItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
-  const style = useSectionStyle();
 
   return (
     <View style={topContainer}>
       <ThemeText
         style={contentContainer}
-        type={mode === 'heading' ? 'paragraphHeadline' : 'lead'}
+        type={mode === 'heading' ? 'body__primary--bold' : 'body__secondary'}
       >
         {text}
       </ThemeText>
@@ -29,7 +28,7 @@ export default function HeaderItem({
         <ThemeText
           style={contentContainer}
           color="secondary"
-          type={mode === 'heading' ? 'lead' : 'label'}
+          type={mode === 'heading' ? 'body__secondary' : 'body__tertiary'}
         >
           {subtitle}
         </ThemeText>

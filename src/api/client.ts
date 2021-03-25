@@ -3,7 +3,11 @@ import {v4 as uuid} from 'uuid';
 import {API_BASE_URL} from '@env';
 import {getAxiosErrorMetadata, getAxiosErrorType} from './utils';
 import Bugsnag from '@bugsnag/react-native';
-import {InstallIdHeaderName, RequestIdHeaderName} from './headers';
+import {
+  FirebaseAuthIdHeaderName,
+  InstallIdHeaderName,
+  RequestIdHeaderName,
+} from './headers';
 import axiosRetry, {isIdempotentRequestError} from 'axios-retry';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
 import {getBooleanConfigValue} from '../remote-config';
@@ -61,6 +65,7 @@ export const isCancel = axios.isCancel;
 function requestHandler(config: AxiosRequestConfig): AxiosRequestConfig {
   config.headers[InstallIdHeaderName] = installIdHeaderValue;
   config.headers[RequestIdHeaderName] = uuid();
+  config.headers[FirebaseAuthIdHeaderName] = auth().currentUser?.uid;
   return config;
 }
 
@@ -74,8 +79,10 @@ async function requestIdTokenHandler(config: AxiosRequestConfig) {
 }
 
 function responseIdTokenHandler(error: AxiosError) {
-  error.config.forceRefreshIdToken =
-    error.config.authWithIdToken && error.response?.status === 401;
+  if (error?.config) {
+    error.config.forceRefreshIdToken =
+      error.config.authWithIdToken && error.response?.status === 401;
+  }
   throw error;
 }
 

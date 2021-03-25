@@ -15,7 +15,7 @@ const Illustration: React.FC<IllustrationProps> = ({Svg}) => {
 };
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   svgContainer: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.colors.background_1.backgroundColor,
     width: '100%',
     maxHeight: '50%',
     flexShrink: 1,

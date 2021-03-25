@@ -1,15 +1,20 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
-import {SearchHistoryEntry, SearchHistory} from './types';
+import {searchStore, journeyStore} from './storage';
 import {
-  clearSearchHistory,
-  addSearchEntry as storage_addSearchEntry,
-  getSearchHistory,
-} from './storage';
+  JourneySearchHistory,
+  JourneySearchHistoryEntry,
+  SearchHistory,
+  SearchHistoryEntry,
+} from './types';
 
 type SearchHistoryContextState = {
   history: SearchHistory;
   addSearchEntry(searchEntry: SearchHistoryEntry): Promise<void>;
-  clearSearchHistory(): Promise<void>;
+
+  journeyHistory: JourneySearchHistory;
+  addJourneySearchEntry(searchEntry: JourneySearchHistoryEntry): Promise<void>;
+
+  clearHistory(): Promise<void>;
 };
 const SearchHistoryContext = createContext<
   SearchHistoryContextState | undefined
@@ -17,9 +22,13 @@ const SearchHistoryContext = createContext<
 
 const SearchHistoryContextProvider: React.FC = ({children}) => {
   const [history, setSearchHistory] = useState<SearchHistory>([]);
+  const [journeyHistory, setJourneySearchHistory] = useState<
+    JourneySearchHistoryEntry[]
+  >([]);
+
   async function populateSearchHistory() {
-    const history = await getSearchHistory();
-    setSearchHistory(history ?? []);
+    setSearchHistory(await searchStore.getHistory());
+    setJourneySearchHistory(await journeyStore.getHistory());
   }
 
   useEffect(() => {
@@ -29,12 +38,18 @@ const SearchHistoryContextProvider: React.FC = ({children}) => {
   const contextValue: SearchHistoryContextState = {
     history,
     async addSearchEntry(searchEntry: SearchHistoryEntry) {
-      const history = await storage_addSearchEntry(searchEntry);
+      const history = await searchStore.addEntry(searchEntry);
       setSearchHistory(history);
     },
-    async clearSearchHistory() {
-      const history = await clearSearchHistory();
-      setSearchHistory(history);
+
+    journeyHistory,
+    async addJourneySearchEntry(searchEntry: JourneySearchHistoryEntry) {
+      setJourneySearchHistory(await journeyStore.addEntry(searchEntry));
+    },
+
+    async clearHistory() {
+      setSearchHistory(await searchStore.clear());
+      setJourneySearchHistory(await journeyStore.clear());
     },
   };
 

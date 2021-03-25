@@ -63,7 +63,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     position: 'absolute',
     top: 0,
   },
-  decorationCenter: {},
+  decorationCenter: {
+    position: 'absolute',
+    top: theme.spacings.large + theme.spacings.small,
+  },
   decorationEnd: {
     position: 'absolute',
     bottom: 0,

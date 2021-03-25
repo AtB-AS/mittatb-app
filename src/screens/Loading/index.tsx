@@ -14,7 +14,7 @@ const Loading: React.FC<{text?: string}> = ({text}) => {
         color={theme.text.colors.primary}
       />
       {text ? (
-        <ThemeText type="paragraphHeadline" style={styles.text}>
+        <ThemeText type="body__primary--bold" style={styles.text}>
           {text}
         </ThemeText>
       ) : null}

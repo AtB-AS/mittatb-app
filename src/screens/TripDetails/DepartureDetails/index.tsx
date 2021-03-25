@@ -1,6 +1,8 @@
 import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
 import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
+import {Info, Warning} from '@atb/assets/svg/situations';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
+import {TinyMessageBox} from '@atb/components/message-box';
 import PaginatedDetailsHeader from '@atb/components/pagination';
 import ScreenHeader from '@atb/components/screen-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
@@ -32,7 +34,6 @@ import Time from '../components/Time';
 import TripLegDecoration from '../components/TripLegDecoration';
 import TripRow from '../components/TripRow';
 import CompactMap from '../Map/CompactMap';
-import SituationRow from '../SituationRow';
 import {ServiceJourneyDeparture} from './types';
 import useDepartureData, {CallListGroup} from './use-departure-data';
 
@@ -249,6 +250,8 @@ function TripItem({
     subMode,
   );
 
+  const showSituations = type !== 'passed' && call.situations.length > 0;
+
   return (
     <View style={[styles.place, isStart && styles.startPlace]}>
       <TripLegDecoration
@@ -270,13 +273,20 @@ function TripItem({
       >
         <ThemeText>{getQuayName(call.quay)} </ThemeText>
       </TripRow>
-
-      {type !== 'passed' && (
-        <SituationRow
-          situations={call.situations}
-          parentSituations={parentSituations}
-        />
+      {showSituations && (
+        <TripRow rowLabel={<Warning />}>
+          <SituationMessages mode="no-icon" situations={call.situations} />
+        </TripRow>
       )}
+      {call.notices &&
+        call.notices.map((notice) => {
+          return (
+            <TripRow rowLabel={<Info />}>
+              <TinyMessageBox type="info" message={notice.text} />
+            </TripRow>
+          );
+        })}
+
       {collapseButton}
     </View>
   );
@@ -334,7 +344,7 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
 const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
   },
   header: {
     backgroundColor: theme.background.header,
@@ -358,7 +368,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.small,
   },
   allGroups: {
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
     marginBottom: theme.spacings.xLarge,
   },
   spinner: {

@@ -57,7 +57,7 @@ const DetailsContent: React.FC<Props> = ({
         </Sections.GenericItem>
         <Sections.GenericItem>
           <ThemeText>{t(TicketTexts.details.orderId(fc.orderId))}</ThemeText>
-          <ThemeText type="lead" color="secondary">
+          <ThemeText type="body__secondary" color="secondary">
             {t(
               TicketTexts.details.purchaseTime(
                 formatToLongDateTime(

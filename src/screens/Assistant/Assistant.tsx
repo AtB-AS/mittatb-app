@@ -22,8 +22,10 @@ import {
   useGeolocationState,
 } from '@atb/GeolocationContext';
 import {useLocationSearchValue} from '@atb/location-search';
+import {SelectableLocationData} from '@atb/location-search/types';
 import {RootStackParamList} from '@atb/navigation';
 import {TripPattern} from '@atb/sdk';
+import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   AssistantTexts,
@@ -211,6 +213,7 @@ const Assistant: React.FC<Props> = ({
       callerRouteName: AssistantRouteNameStatic,
       callerRouteParam,
       initialLocation,
+      includeJourneyHistory: true,
     });
 
   const showEmptyScreen = !tripPatterns && !isSearching && !error;
@@ -320,7 +323,7 @@ const Assistant: React.FC<Props> = ({
   const altHeaderComp = (
     <View accessible={true} onLayout={onAltLayout} style={styles.altTitle}>
       <ThemeText
-        type="paragraphHeadline"
+        type="body__primary--bold"
         style={[
           styles.altTitleText,
           styles.altTitleText__right,
@@ -331,7 +334,7 @@ const Assistant: React.FC<Props> = ({
         {from?.name}
       </ThemeText>
       <ThemeText
-        type="paragraphHeadline"
+        type="body__primary--bold"
         accessibilityLabel="til"
         style={styles.altTitleText}
       >
@@ -339,7 +342,7 @@ const Assistant: React.FC<Props> = ({
         –{' '}
       </ThemeText>
       <ThemeText
-        type="paragraphHeadline"
+        type="body__primary--bold"
         style={[styles.altTitleText, {maxWidth: altWidth / 2}]}
         numberOfLines={1}
       >
@@ -452,9 +455,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-type Locations = {
-  from: LocationWithMetadata | undefined;
-  to: LocationWithMetadata | undefined;
+type SearchForLocations = {
+  from?: LocationWithMetadata;
+  to?: LocationWithMetadata;
 };
 
 function computeNoResultReasons(
@@ -484,7 +487,9 @@ function computeNoResultReasons(
   return reasons;
 }
 
-function useLocations(currentLocation: Location | undefined): Locations {
+function useLocations(
+  currentLocation: Location | undefined,
+): SearchForLocations {
   const {favorites} = useFavorites();
 
   const memoedCurrentLocation = useMemo<LocationWithMetadata | undefined>(
@@ -502,53 +507,73 @@ function useLocations(currentLocation: Location | undefined): Locations {
     'toLocation',
   );
 
-  const from = useUpdatedLocation(
+  return useUpdatedLocation(
     searchedFromLocation,
-    memoedCurrentLocation,
-    favorites,
-  );
-
-  const to = useUpdatedLocation(
     searchedToLocation,
     memoedCurrentLocation,
     favorites,
   );
-
-  return {
-    from,
-    to,
-  };
 }
 
 function useUpdatedLocation(
-  searchedLocation: LocationWithMetadata | undefined,
+  searchedFromLocation: SelectableLocationData | undefined,
+  searchedToLocation: SelectableLocationData | undefined,
   currentLocation: LocationWithMetadata | undefined,
   favorites: UserFavorites,
-): LocationWithMetadata | undefined {
-  return useMemo(() => {
-    if (!searchedLocation) return undefined;
+): SearchForLocations {
+  const [from, setFrom] = useState<LocationWithMetadata | undefined>();
+  const [to, setTo] = useState<LocationWithMetadata | undefined>();
 
-    switch (searchedLocation.resultType) {
-      case 'search':
-        return searchedLocation;
-      case 'geolocation':
-        return currentLocation;
-      case 'favorite':
-        const favorite = favorites.find(
-          (f) => f.id === searchedLocation.favoriteId,
-        );
+  const setLocation = useCallback(
+    (direction: 'from' | 'to', searchedLocation?: SelectableLocationData) => {
+      const updater = direction === 'from' ? setFrom : setTo;
+      if (!searchedLocation) return updater(searchedLocation);
 
-        if (favorite) {
-          return {
-            ...favorite.location,
-            resultType: 'favorite',
-            favoriteId: favorite.id,
-          };
+      switch (searchedLocation.resultType) {
+        case 'search':
+          return updater(searchedLocation);
+        case 'geolocation':
+          return updater(currentLocation);
+        case 'journey': {
+          const toSearch = (i: number): LocationWithMetadata => ({
+            ...searchedLocation.journeyData[i],
+            resultType: 'search',
+          });
+
+          // Set both states when journey is passed.
+          setFrom(toSearch(0));
+          setTo(toSearch(1));
+          return;
         }
-    }
+        case 'favorite': {
+          const favorite = favorites.find(
+            (f) => f.id === searchedLocation.favoriteId,
+          );
 
-    return undefined;
-  }, [searchedLocation, currentLocation, favorites]);
+          if (favorite) {
+            return updater({
+              ...favorite.location,
+              resultType: 'favorite',
+              favoriteId: favorite.id,
+            });
+          }
+        }
+      }
+    },
+    [currentLocation, favorites],
+  );
+
+  // Override from state on change
+  useEffect(() => {
+    setLocation('from', searchedFromLocation);
+  }, [searchedFromLocation, setLocation]);
+
+  // Override to state on change
+  useEffect(() => {
+    setLocation('to', searchedToLocation);
+  }, [searchedToLocation, setLocation]);
+
+  return {from, to};
 }
 
 export default AssistantRoot;
@@ -571,6 +596,7 @@ function useTripPatterns(
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
   const [errorType, setErrorType] = useState<ErrorType>();
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
+  const {addJourneySearchEntry} = useSearchHistory();
 
   const clearPatterns = () => setTripPatterns(null);
   const reload = useCallback(() => {
@@ -593,6 +619,11 @@ function useTripPatterns(
           toLocation: translateLocation(toLocation),
           searchDate: searchDate,
         });
+
+        try {
+          // Fire and forget add journey search entry
+          await addJourneySearchEntry([fromLocation, toLocation]);
+        } catch (e) {}
 
         const response = await searchTrip(
           fromLocation,
