@@ -83,6 +83,7 @@ platform :ios do
       owner_name: "AtB-AS",
       app_name: "MittAtb-1",
       owner_type: "organization", 
+      destinations: "*",
       file: "AtB.ipa",
       notify_testers: true 
     )
@@ -143,6 +144,7 @@ platform :android do
       owner_name: "AtB-AS",
       app_name: "MittAtb",
       owner_type: "organization", 
+      destinations: "*",
       file: "app-staging.apk",
       notify_testers: true 
     )
