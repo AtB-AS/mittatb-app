@@ -67,7 +67,7 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
           ]}
         >
           <View accessible={true} accessibilityRole="header">
-            <ThemeText type="paragraphHeadline">{title}</ThemeText>
+            <ThemeText type="body__primary--bold">{title}</ThemeText>
           </View>
         </Animated.View>
         {altTitle}

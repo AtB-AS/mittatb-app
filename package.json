@@ -18,10 +18,12 @@
     "update-device-profiles": "bundle exec fastlane ios update_devices"
   },
   "dependencies": {
+    "@atb-as/theme": "^1.2.2",
     "@bugsnag/react-native": "^7.6.1",
     "@entur/sdk": "^3.4.0",
     "@leile/lobo-t": "^1.0.5",
     "@mapbox/polyline": "^1.1.1",
+    "@react-native-clipboard/clipboard": "^1.7.0",
     "@react-native-community/async-storage": "^2.0.0-rc.1",
     "@react-native-community/async-storage-backend-legacy": "^2.0.0-rc.1",
     "@react-native-community/datetimepicker": "^3.0.9",

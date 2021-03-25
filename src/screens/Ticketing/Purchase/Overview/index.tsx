@@ -177,7 +177,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             {isSearchingOffer ? (
               <ActivityIndicator style={styles.totalSection} />
             ) : (
-              <ThemeText style={styles.totalSection} type="paragraphHeadline">
+              <ThemeText style={styles.totalSection} type="body__primary--bold">
                 {t(PurchaseOverviewTexts.totalPrice(totalPrice))}
               </ThemeText>
             )}
@@ -270,7 +270,7 @@ const useDefaultTariffZone = (
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
   },
   errorMessage: {
     marginBottom: theme.spacings.medium,

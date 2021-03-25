@@ -175,7 +175,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                   </ThemeText>
                   <ThemeText
                     style={styles.smallTopMargin}
-                    type="lead"
+                    type="body__secondary"
                     color="secondary"
                   >
                     {fromTariffZone.id === toTariffZone.id
@@ -193,7 +193,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                   </ThemeText>
                   <ThemeText
                     style={styles.smallTopMargin}
-                    type="lead"
+                    type="body__secondary"
                     color="secondary"
                   >
                     {createTravelDateText(t, language, travelDate)}
@@ -205,10 +205,10 @@ const Confirmation: React.FC<ConfirmationProps> = ({
         </View>
         <View style={styles.totalContainer} accessible={true}>
           <View style={styles.totalContainerHeadings}>
-            <ThemeText type="body">
+            <ThemeText type="body__primary">
               {t(PurchaseConfirmationTexts.totalCost.title)}
             </ThemeText>
-            <ThemeText type="label" color="secondary">
+            <ThemeText type="body__tertiary" color="secondary">
               {t(
                 PurchaseConfirmationTexts.totalCost.label(
                   vatPercentString,
@@ -219,7 +219,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           </View>
 
           {!isSearchingOffer ? (
-            <ThemeText type="heroTitle">{totalPrice} kr</ThemeText>
+            <ThemeText type="body__primary--jumbo">{totalPrice} kr</ThemeText>
           ) : (
             <ActivityIndicator
               size={theme.spacings.medium}
@@ -280,14 +280,14 @@ const Confirmation: React.FC<ConfirmationProps> = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
   },
   ticketsContainer: {
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
     borderTopEndRadius: theme.border.radius.regular,
     borderTopLeftRadius: theme.border.radius.regular,
     borderBottomWidth: 1,
-    borderBottomColor: theme.background.level1,
+    borderBottomColor: theme.colors.background_1.backgroundColor,
     padding: theme.spacings.medium,
     marginTop: theme.spacings.small,
   },
@@ -309,7 +309,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     padding: theme.spacings.medium,
     marginVertical: theme.spacings.medium,
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
     borderRadius: theme.border.radius.regular,
   },
   totalContainerHeadings: {

@@ -51,7 +51,7 @@ export default function LinkItem({
         {iconEl}
       </View>
       {subtitle && (
-        <ThemeText color="secondary" type="lead">
+        <ThemeText color="secondary" type="body__secondary">
           {subtitle}
         </ThemeText>
       )}

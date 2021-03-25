@@ -26,7 +26,7 @@ export default function InternalLabeledItem({
     <View style={[style.spaceBetween, topContainer, wrapperStyle]}>
       <ThemeText
         accessible={accessibleLabel}
-        type="body"
+        type="body__primary"
         style={itemStyle.label}
       >
         {label}

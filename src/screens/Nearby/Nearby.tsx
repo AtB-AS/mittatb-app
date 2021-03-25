@@ -195,7 +195,7 @@ const NearbyOverview: React.FC<Props> = ({
       alternativeTitleComponent={
         <AccessibleText
           prefix={t(NearbyTexts.header.altTitle.a11yPrefix)}
-          type={'paragraphHeadline'}
+          type={'body__primary--bold'}
         >
           {fromLocation?.name}
         </AccessibleText>

@@ -1,5 +1,5 @@
 import axios, {AxiosError} from 'axios';
-import {RequestIdHeaderName} from './headers';
+import {FirebaseAuthIdHeaderName, RequestIdHeaderName} from './headers';
 
 export type ErrorType =
   | 'unknown'
@@ -35,10 +35,12 @@ export interface ErrorMetadata {
   requestMessage?: string;
   requestCode?: string;
   requestId?: string;
+  firebaseAuthId?: string;
 }
 
 export const getAxiosErrorMetadata = (error: AxiosError): ErrorMetadata => ({
   requestId: error?.config?.headers[RequestIdHeaderName],
+  firebaseAuthId: error?.config?.headers[FirebaseAuthIdHeaderName],
   requestCode: error?.code,
   requestUrl: error?.config?.url,
   requestMessage: error?.message,

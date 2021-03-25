@@ -210,7 +210,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
               !emoji ? (
                 <ThemeIcon svg={MapPointPin} />
               ) : (
-                <ThemeText type="body">{emoji}</ThemeText>
+                <ThemeText type="body__primary">{emoji}</ThemeText>
               )
             }
           />
@@ -245,7 +245,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center',
-    backgroundColor: theme.background.level3,
+    backgroundColor: theme.colors.background_3.backgroundColor,
   },
   innerContainer: {
     flex: 1,

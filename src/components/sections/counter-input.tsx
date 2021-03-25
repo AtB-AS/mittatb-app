@@ -51,7 +51,7 @@ export default function CounterInput({
         <ThemeText
           accessible={false}
           style={counterStyles.countText}
-          type="paragraphHeadline"
+          type="body__primary--bold"
         >
           {count}
         </ThemeText>

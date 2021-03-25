@@ -92,7 +92,7 @@ const usePaginateStyles = StyleSheet.createThemeHook((theme) => ({
   },
   wrapper: {
     borderBottomWidth: theme.border.width.slim,
-    borderColor: theme.background.level1,
+    borderColor: theme.colors.background_1.backgroundColor,
   },
   buttonLeft: {
     position: 'absolute',

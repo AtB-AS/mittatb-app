@@ -20,7 +20,7 @@ export default function HeaderItem({
     <View style={topContainer}>
       <ThemeText
         style={contentContainer}
-        type={mode === 'heading' ? 'paragraphHeadline' : 'lead'}
+        type={mode === 'heading' ? 'body__primary--bold' : 'body__secondary'}
       >
         {text}
       </ThemeText>
@@ -28,7 +28,7 @@ export default function HeaderItem({
         <ThemeText
           style={contentContainer}
           color="secondary"
-          type={mode === 'heading' ? 'lead' : 'label'}
+          type={mode === 'heading' ? 'body__secondary' : 'body__tertiary'}
         >
           {subtitle}
         </ThemeText>
