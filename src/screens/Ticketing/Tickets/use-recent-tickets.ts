@@ -210,9 +210,14 @@ export default function useRecentTickets() {
     }
   };
 
+  const latestCreatedTime = useMemo(
+    () => Math.max(0, ...fareContracts.map((fc) => fc.created.seconds)),
+    [fareContracts],
+  );
+
   useEffect(() => {
     fetchRecentFareContracts();
-  }, [fareContracts]);
+  }, [latestCreatedTime]);
 
   const recentTickets = useMemo(
     () =>
