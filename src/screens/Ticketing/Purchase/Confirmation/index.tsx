@@ -152,6 +152,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               <Sections.GenericItem>
                 {userProfilesWithCountAndOffer.map((u, i) => (
                   <View
+                    accessible={true}
                     key={u.id}
                     style={[
                       styles.userProfileItem,
@@ -168,7 +169,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                 ))}
               </Sections.GenericItem>
               <Sections.GenericItem>
-                <View>
+                <View accessible={true}>
                   <ThemeText>
                     {getReferenceDataName(preassignedFareProduct, language)}
                   </ThemeText>
@@ -202,7 +203,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
             </Sections.Section>
           </View>
         </View>
-        <View style={styles.totalContainer}>
+        <View style={styles.totalContainer} accessible={true}>
           <View style={styles.totalContainerHeadings}>
             <ThemeText type="body__primary">
               {t(PurchaseConfirmationTexts.totalCost.title)}

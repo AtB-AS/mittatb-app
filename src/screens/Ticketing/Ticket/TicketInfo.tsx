@@ -89,7 +89,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
   return (
-    <View style={styles.textsContainer}>
+    <View style={styles.textsContainer} accessible={true}>
       <View>
         {userProfilesWithCount.map((u) => (
           <ThemeText type="body__primary--bold" key={u.id}>{`${
