@@ -11,13 +11,11 @@ import useLocalConfig from '@atb/utils/use-local-config';
 import {PRIVACY_POLICY_URL} from '@env';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useState} from 'react';
+import React from 'react';
 import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileStackParams} from '..';
 import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import {Check} from '@atb/assets/svg/icons/status';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
@@ -101,6 +99,10 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         <Sections.Section withPadding>
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.settings.heading)}
+          />
+          <Sections.LinkItem
+            text={t(ProfileTexts.sections.settings.linkItems.userProfile.label)}
+            onPress={() => navigation.navigate('DefaultUserProfile')}
           />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.settings.linkItems.appearance.label)}

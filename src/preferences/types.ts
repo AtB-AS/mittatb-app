@@ -16,6 +16,7 @@ export type UserPreferences = {
   overrideColorScheme?: boolean;
   language?: Preference_Language;
   useSystemLanguage?: boolean;
+  defaultUserTypeString?: string;
 };
 
 export type PreferenceItem = keyof UserPreferences;
