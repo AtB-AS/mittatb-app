@@ -26,7 +26,6 @@ configureAndStartBugsnag();
 import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import AppLanguageProvider from './translations/LanguageContext';
-import {NativeModules} from 'react-native';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
