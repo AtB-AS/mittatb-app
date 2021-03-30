@@ -1,4 +1,4 @@
-import {MapPointPin} from '@atb/assets/svg/icons/places';
+import {CurrentLocationArrow, MapPointPin} from '@atb/assets/svg/icons/places';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
@@ -9,6 +9,7 @@ import {TariffZoneSearchTexts, useTranslation} from '@atb/translations';
 import insets from '@atb/utils/insets';
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
+import {useTariffZoneFromLocation} from '@atb/screens/Ticketing/Purchase/Overview';
 
 type Props = {
   tariffZones: TariffZone[];
@@ -18,6 +19,7 @@ type Props = {
 const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
+  const tariffZoneFromLocation = useTariffZoneFromLocation(tariffZones);
   return (
     <>
       <View accessibilityRole="header" style={styles.subHeader}>
@@ -48,10 +50,15 @@ const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
                   <ThemeIcon svg={MapPointPin} width={20} />
                 </View>
                 <View style={styles.nameContainer}>
-                  <ThemeText style={styles.nameText}>
+                  <ThemeText type={'body__primary--bold'}>
                     {getReferenceDataName(tariffZone, language)}
                   </ThemeText>
                 </View>
+                {tariffZoneFromLocation?.id === tariffZone.id ? (
+                  <View style={styles.currentLocationIcon}>
+                    <ThemeIcon svg={CurrentLocationArrow} />
+                  </View>
+                ) : null}
               </TouchableOpacity>
             </View>
           </View>
@@ -82,10 +89,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   nameContainer: {
-    marginLeft: 16,
+    marginLeft: theme.spacings.large,
   },
-  nameText: {
-    fontSize: 16,
-    fontWeight: '600',
+  currentLocationIcon: {
+    marginLeft: theme.spacings.small,
   },
 }));
