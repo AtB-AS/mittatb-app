@@ -31,6 +31,7 @@ export {default as TicketSplashTexts} from './screens/TicketSplash';
 export {default as UpgradeSplashTexts} from './screens/UpgradeSplash';
 export {default as NearbyTexts} from './screens/Nearby';
 export {default as AddEditFavoriteTexts} from './screens/subscreens/AddEditFavorite';
+export {default as EnrollmentTexts} from './screens/subscreens/Enrollment';
 export {default as FavoriteListTexts} from './screens/subscreens/FavoriteList';
 export {default as FavoriteDeparturesTexts} from './screens/subscreens/FavoriteDepartures';
 export {default as TripDetailsTexts} from './screens/subscreens/TripDetails';

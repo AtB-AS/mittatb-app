@@ -5,6 +5,7 @@ import FavoriteDepartures from './FavoriteDepartures';
 import FavoriteList from './FavoriteList';
 import ProfileHome from './Home';
 import Language from './Language';
+import Enrollment from './Enrollment';
 import SelectStartScreen from './SelectStartScreen';
 import DesignSystem from './DesignSystem';
 import DefaultUserProfile from './DefaultUserProfile';
@@ -17,6 +18,7 @@ export type ProfileStackParams = {
   Appearance: undefined;
   Language: undefined;
   DefaultUserProfile: undefined;
+  Enrollment: undefined;
   DesignSystem: undefined;
 };
 
@@ -38,6 +40,7 @@ export default function ProfileScreen() {
       <Stack.Screen name="Appearance" component={Appearance} />
       <Stack.Screen name="Language" component={Language} />
       <Stack.Screen name="DefaultUserProfile" component={DefaultUserProfile} />
+      <Stack.Screen name="Enrollment" component={Enrollment} />
       <Stack.Screen name="DesignSystem" component={DesignSystem} />
     </Stack.Navigator>
   );
