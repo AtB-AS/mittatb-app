@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, Animated, RefreshControl} from 'react-native';
+import {View, RefreshControl, ScrollView} from 'react-native';
 import {LocationWithMetadata} from '@atb/favorites/types';
 import ScreenHeader from '@atb/components/screen-header';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import DeparturesList from '@atb/components/departure-list/DeparturesList';
+import DeparturesList from '@atb/departure-list/DeparturesList';
 import {useDepartureData} from '@atb/screens/Nearby/state';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {DetailsStackParams} from '@atb/screens/TripDetails';
@@ -43,7 +43,7 @@ const QuayDepartures: React.FC<RootProps> = ({route}) => {
           title={route.params.location.name}
         />
       </View>
-      <Animated.ScrollView
+      <ScrollView
         refreshControl={
           <RefreshControl refreshing={!departureData} onRefresh={refresh} />
         }
@@ -58,7 +58,7 @@ const QuayDepartures: React.FC<RootProps> = ({route}) => {
             disableCollapsing={true}
           />
         </View>
-      </Animated.ScrollView>
+      </ScrollView>
     </View>
   );
 };
