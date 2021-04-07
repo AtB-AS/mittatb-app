@@ -50,7 +50,7 @@ const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
                   <ThemeIcon svg={MapPointPin} width={20} />
                 </View>
                 <View style={styles.nameContainer}>
-                  <ThemeText type={'body__primary--bold'}>
+                  <ThemeText type="body__primary--bold">
                     {getReferenceDataName(tariffZone, language)}
                   </ThemeText>
                 </View>
