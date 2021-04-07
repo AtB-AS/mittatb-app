@@ -258,7 +258,9 @@ const useDefaultUserProfilesWithCount = (
     (u: UserProfile, index: number, filteredProfiles: UserProfile[]) => {
       if (
         defaultUserTypeString &&
-        filteredProfiles.some((u) => u.userTypeString === defaultUserTypeString)
+        filteredProfiles.some(
+          (fp) => fp.userTypeString === defaultUserTypeString,
+        )
       ) {
         return u.userTypeString === defaultUserTypeString;
       } else {
