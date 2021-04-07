@@ -6,7 +6,11 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
-import {TariffZone} from '@atb/reference-data/types';
+import {
+  PreassignedFareProduct,
+  TariffZone,
+  UserProfile,
+} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
 import {
   Language,
@@ -19,7 +23,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import React, {useEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../';
@@ -29,6 +33,7 @@ import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
 import {formatToLongDateTime} from '@atb/utils/date';
 import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/icons/navigation';
+import {usePreferences} from '@atb/preferences';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -60,17 +65,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
   const {travelDateSelectionEnabled} = getPurchaseFlow(preassignedFareProduct);
 
-  const defaultUserProfilesWithCount = useMemo(
-    () =>
-      userProfiles
-        .filter((u) =>
-          preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
-        )
-        .map((u, i) => ({
-          ...u,
-          count: i == 0 ? 1 : 0,
-        })),
-    [userProfiles],
+  const defaultUserProfilesWithCount = useDefaultUserProfilesWithCount(
+    userProfiles,
+    preassignedFareProduct,
   );
   const userProfilesWithCount =
     params.userProfilesWithCount ?? defaultUserProfilesWithCount;
@@ -242,6 +239,51 @@ export const createTravelDateText = (
       )
     : t(PurchaseOverviewTexts.travelDate.now);
 };
+
+/**
+ * Get the default user profiles with count. If a default user profile has been
+ * selected in the preferences that profile will have a count of one. If no
+ * default user profile preference exists then the first user profile will have
+ * a count of one.
+ */
+const useDefaultUserProfilesWithCount = (
+  userProfiles: UserProfile[],
+  preassignedFareProduct: PreassignedFareProduct,
+) => {
+  const {
+    preferences: {defaultUserTypeString},
+  } = usePreferences();
+
+  const isDefaultProfile = useCallback(
+    (u: UserProfile, index: number, filteredProfiles: UserProfile[]) => {
+      if (
+        defaultUserTypeString &&
+        filteredProfiles.some(
+          (fp) => fp.userTypeString === defaultUserTypeString,
+        )
+      ) {
+        return u.userTypeString === defaultUserTypeString;
+      } else {
+        return index === 0;
+      }
+    },
+    [defaultUserTypeString],
+  );
+
+  return useMemo(
+    () =>
+      userProfiles
+        .filter((u) =>
+          preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
+        )
+        .map((u, i, filteredProfiles) => ({
+          ...u,
+          count: isDefaultProfile(u, i, filteredProfiles) ? 1 : 0,
+        })),
+    [userProfiles, isDefaultProfile],
+  );
+};
+
 /**
  * Get the default tariff zone, either based on current location or else the
  * first tariff zone in the provided tariff zones list.

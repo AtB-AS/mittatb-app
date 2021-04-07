@@ -19,6 +19,9 @@ const ProfileTexts = {
     settings: {
       heading: _('Innstillinger', 'Settings'),
       linkItems: {
+        userProfile: {
+          label: _('Standard reisende', 'Default traveller'),
+        },
         appearance: {
           label: _('Utseende', 'Appearance'),
         },
