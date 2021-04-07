@@ -127,7 +127,7 @@ const NearbyOverview: React.FC<Props> = ({
     navigation.navigate('LocationSearch', {
       label: t(NearbyTexts.search.label),
       callerRouteName: NearbyRouteNameStatic,
-      callerRouteParam: 'test123',
+      callerRouteParam: 'location',
       initialLocation: fromLocation,
     });
 
