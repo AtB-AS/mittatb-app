@@ -75,7 +75,6 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   scrollContainer: {
-    paddingTop: theme.spacings.large,
-    paddingBottom: theme.spacings.large,
+    paddingVertical: theme.spacings.large,
   },
 }));
