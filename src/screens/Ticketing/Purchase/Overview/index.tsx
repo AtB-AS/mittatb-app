@@ -249,15 +249,7 @@ export const createTravelDateText = (
 const useDefaultTariffZone = (
   tariffZones: TariffZone[],
 ): TariffZoneWithMetadata => {
-  const {location} = useGeolocationState();
-  const tariffZoneFromLocation = useMemo(() => {
-    if (location) {
-      const {longitude, latitude} = location.coords;
-      return tariffZones.find((t) =>
-        turfBooleanPointInPolygon([longitude, latitude], t.geometry),
-      );
-    }
-  }, [tariffZones, location]);
+  const tariffZoneFromLocation = useTariffZoneFromLocation(tariffZones);
   return useMemo<TariffZoneWithMetadata>(
     () =>
       tariffZoneFromLocation
@@ -265,6 +257,18 @@ const useDefaultTariffZone = (
         : {...tariffZones[0], resultType: 'zone'},
     [tariffZones, tariffZoneFromLocation],
   );
+};
+
+export const useTariffZoneFromLocation = (tariffZones: TariffZone[]) => {
+  const {location} = useGeolocationState();
+  return useMemo(() => {
+    if (location) {
+      const {longitude, latitude} = location.coords;
+      return tariffZones.find((t) =>
+        turfBooleanPointInPolygon([longitude, latitude], t.geometry),
+      );
+    }
+  }, [tariffZones, location]);
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
