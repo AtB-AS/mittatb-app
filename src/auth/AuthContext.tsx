@@ -121,7 +121,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
   useEffect(() => {
     (async function () {
       if (state.user) {
-        const idToken = await state.user.getIdTokenResult(true);
+        const idToken = await state.user.getIdTokenResult();
         const abtCustomerId = idToken.claims['sub'];
         dispatch({type: 'SET_ABT_CUSTOMER_ID', abtCustomerId});
       }
