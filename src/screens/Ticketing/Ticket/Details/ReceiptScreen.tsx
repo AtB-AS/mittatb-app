@@ -76,6 +76,7 @@ export default function ReceiptScreen({navigation, route}: Props) {
             label={t(TicketTexts.receipt.inputLabel)}
             value={email}
             onChangeText={setEmail}
+            keyboardType="email-address"
             autoCapitalize="none"
             autoCompleteType="email"
             autoCorrect={false}
