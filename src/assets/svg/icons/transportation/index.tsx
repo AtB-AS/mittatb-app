@@ -6,3 +6,4 @@ export {default as TrainSide} from './TrainSide';
 export {default as TramSide} from './TramSide';
 export {default as Wait} from './Wait';
 export {default as WalkingPerson} from './WalkingPerson';
+export {default as Fillrate} from './Fillrate';

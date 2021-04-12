@@ -36,6 +36,8 @@ import TripRow from '../components/TripRow';
 import CompactMap from '../Map/CompactMap';
 import {ServiceJourneyDeparture} from './types';
 import useDepartureData, {CallListGroup} from './use-departure-data';
+import {WalkingPerson} from '@atb/assets/svg/icons/transportation';
+import FillrateIndicator from '@atb/screens/TripDetails/DepartureDetails/FillrateIndicator';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -271,7 +273,10 @@ function TripItem({
         alignChildren={isStart ? 'flex-start' : isEnd ? 'flex-end' : 'center'}
         style={[styles.row, isBetween && styles.middleRow]}
       >
-        <ThemeText>{getQuayName(call.quay)} </ThemeText>
+        <ThemeText style={{flexGrow: 2}}>{getQuayName(call.quay)}</ThemeText>
+        <View>
+          <FillrateIndicator rate={'unknown'} />
+        </View>
       </TripRow>
       {showSituations && (
         <TripRow rowLabel={<Warning />}>

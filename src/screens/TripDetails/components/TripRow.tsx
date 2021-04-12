@@ -52,7 +52,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
-  rightColumn: {flex: 1},
+  rightColumn: {flex: 1, flexDirection: 'row'},
   decorationPlaceholder: {
     width: theme.tripLegDetail.decorationContainerWidth,
   },
