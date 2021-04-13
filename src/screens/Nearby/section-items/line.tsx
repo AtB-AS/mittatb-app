@@ -42,8 +42,8 @@ import {
   AccessibilityProps,
   ScrollView,
   View,
+  TouchableOpacity,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {NearbyScreenNavigationProp} from '../Nearby';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 
@@ -95,8 +95,7 @@ export default function LineItem({
     <View style={[topContainer, {padding: 0}]}>
       <View style={[topContainer, sectionStyle.spaceBetween]}>
         <TouchableOpacity
-          style={styles.lineHeader}
-          containerStyle={contentContainer}
+          style={[styles.lineHeader, contentContainer]}
           onPress={() => onPress(0)}
           hitSlop={insets.symmetric(12, 0)}
           accessibilityRole="button"

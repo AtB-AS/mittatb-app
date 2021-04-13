@@ -4,7 +4,6 @@ import {Duration, WalkingPerson} from '@atb/assets/svg/icons/transportation';
 import AccessibleText, {
   screenReaderPause,
 } from '@atb/components/accessible-text';
-import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
@@ -30,8 +29,13 @@ import insets from '@atb/utils/insets';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {LegMode} from '@entur/sdk';
 import React from 'react';
-import {AccessibilityProps, View, ViewStyle} from 'react-native';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  AccessibilityProps,
+  View,
+  ViewStyle,
+  TouchableOpacity,
+} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
