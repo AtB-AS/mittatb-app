@@ -42,8 +42,8 @@ import {
   AccessibilityProps,
   ScrollView,
   View,
+  TouchableOpacity,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {NearbyScreenNavigationProp} from '../Nearby';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 

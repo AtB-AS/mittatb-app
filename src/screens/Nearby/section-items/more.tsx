@@ -8,8 +8,7 @@ import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
-import {AccessibilityProps, View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {AccessibilityProps, View, TouchableOpacity} from 'react-native';
 
 export type MoreItemProps = SectionItem<{
   text: string;
