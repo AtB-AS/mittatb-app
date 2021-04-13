@@ -1,7 +1,7 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {LoginRootParams} from './';
 import * as Sections from '@atb/components/sections';
@@ -34,7 +34,11 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
   const {t} = useTranslation();
   const {theme} = useTheme();
   const styles = useThemeStyles();
-  const {confirmCode, signInWithPhoneNumber} = useAuthState();
+  const {
+    authenticationType,
+    confirmCode,
+    signInWithPhoneNumber,
+  } = useAuthState();
   const [code, setCode] = useState('');
   const [error, setError] = useState<
     ConfirmationErrorCode | PhoneSignInErrorCode
@@ -63,6 +67,14 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
       setError(errorCode);
     }
   };
+
+  // User might be automatically logged in with Firebase auth, but only on Android
+  // Check authentication from state and see if it is updated while we wait
+  useEffect(() => {
+    if (authenticationType === 'phone') {
+      navigation.navigate(afterLogin.routeName as any, afterLogin.routeParams);
+    }
+  }, [authenticationType]);
 
   return (
     <View style={styles.container}>
