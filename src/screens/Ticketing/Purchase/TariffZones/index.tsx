@@ -357,7 +357,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
               t,
             )}
             accessibilityLabel={destinationPickerAccessibilityLabel(
-              selectedZones.from,
+              selectedZones.to,
               language,
               t,
             )}
