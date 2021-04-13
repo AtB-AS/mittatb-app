@@ -8,7 +8,7 @@ import {StyleSheet} from '@atb/theme';
 import {TariffZoneSearchTexts, useTranslation} from '@atb/translations';
 import insets from '@atb/utils/insets';
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {useTariffZoneFromLocation} from '@atb/screens/Ticketing/Purchase/Overview';
 
 type Props = {
@@ -27,7 +27,7 @@ const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
           {t(TariffZoneSearchTexts.zones.heading)}
         </ThemeText>
       </View>
-      <View>
+      <ScrollView>
         {tariffZones.map((tariffZone) => (
           <View style={styles.rowContainer} key={tariffZone.id}>
             <View style={styles.tariffZoneButtonContainer}>
@@ -63,7 +63,7 @@ const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
             </View>
           </View>
         ))}
-      </View>
+      </ScrollView>
     </>
   );
 };
