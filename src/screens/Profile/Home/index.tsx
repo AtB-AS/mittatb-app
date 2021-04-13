@@ -14,9 +14,13 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
 import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileStackParams} from '..';
 import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+
+const buildNumber = getBuildNumber();
+const version = getVersion();
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -198,9 +202,12 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           </Sections.Section>
         )}
 
-        {config?.installId && (
-          <View style={style.debugInfoContainer}>
-            {fadeIsAnimating ? (
+        <View style={style.debugInfoContainer}>
+          <ThemeText>
+            v{version} ({buildNumber})
+          </ThemeText>
+          {config?.installId &&
+            (fadeIsAnimating ? (
               <ClipboardFadeContainer>
                 <ScreenReaderAnnouncement
                   message={t(ProfileTexts.installId.wasCopiedAlert)}
@@ -216,9 +223,8 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               >
                 {t(ProfileTexts.installId.label)}: {config.installId}
               </ThemeText>
-            )}
-          </View>
-        )}
+            ))}
+        </View>
       </ScrollView>
     </View>
   );
