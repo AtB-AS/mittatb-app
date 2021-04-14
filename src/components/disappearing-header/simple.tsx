@@ -38,6 +38,8 @@ type Props = {
   onEndReached?(e: NativeScrollEvent): void;
   onEndReachedThreshold?: number;
 
+  setFocusOnLoad?: boolean;
+
   /**
    * For specifying the alert context for alerts that should be shown in this
    * header. If no context is specified then no alerts are shown.
@@ -62,6 +64,8 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
 
   onEndReached,
   onEndReachedThreshold = 10,
+
+  setFocusOnLoad,
 
   alertContext,
 }) => {
@@ -130,6 +134,7 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
             alternativeTitleComponent={alternativeTitleComponent}
             scrollRef={isRefreshing ? nullRef : scrollYRef}
             leftButton={leftButton}
+            setFocusOnLoad={setFocusOnLoad}
           />
           <View style={{backgroundColor: theme.background.header}}>
             <AlertBox alertContext={alertContext} style={styles.alertBox} />
