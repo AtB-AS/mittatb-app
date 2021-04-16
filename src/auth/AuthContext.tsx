@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {useTranslation} from '../translations';
+import {updateMetadata} from '@atb/chat/metadata';
 
 const ERROR_INVALID_PHONE_NUMBER = 'auth/invalid-phone-number';
 const ERROR_INVALID_CONFIRMATION_CODE = 'auth/invalid-verification-code';
@@ -83,7 +84,6 @@ type AuthContextState = {
   ) => Promise<PhoneSignInErrorCode | undefined>;
   signOut: () => Promise<void>;
   confirmCode: (code: string) => Promise<ConfirmationErrorCode | undefined>;
-  syncAbtCustomer: () => Promise<void>;
   authenticationType: AuthenticationType;
 } & AuthReducerState;
 
@@ -111,45 +111,22 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
 
   const onUserChanged = useCallback(
     async function (user: FirebaseAuthTypes.User | null) {
+      if (user) updateMetadata({'AtB-Firebase-Auth-Id': user.uid});
       dispatch({type: 'SET_USER', user});
     },
     [dispatch],
   );
 
+  // Refresh abt customer id from id token after logged in user changes
   useEffect(() => {
-    syncAbtCustomer();
-  }, [state.user]);
-
-  const getAbtCustomerId = useCallback(
-    async function () {
-      if (!state.user) return undefined;
-      const idToken = await state.user.getIdTokenResult(true);
-      return idToken.claims['abt_id'] as string | undefined;
-    },
-    [state.user],
-  );
-
-  // ABT customer is generated asynchronously after
-  // Firebase-user is signed in the first time
-  // Trying three times to retrieve the user
-  const syncAbtCustomer = useCallback(
-    async function () {
-      async function sync(retries: number = 0): Promise<string | undefined> {
-        if (retries > 3) return undefined;
-
-        const abtCustomerId = await getAbtCustomerId();
-        if (abtCustomerId) {
-          return abtCustomerId;
-        } else {
-          return sync(retries + 1);
-        }
+    (async function () {
+      if (state.user) {
+        const idToken = await state.user.getIdTokenResult();
+        const abtCustomerId = idToken.claims['sub'];
+        dispatch({type: 'SET_ABT_CUSTOMER_ID', abtCustomerId});
       }
-
-      const abtCustomerId = await sync();
-      dispatch({type: 'SET_ABT_CUSTOMER_ID', abtCustomerId});
-    },
-    [getAbtCustomerId],
-  );
+    })();
+  }, [state.user?.uid]);
 
   // Subscribe to user changes. Will fire a onChangeEvent immediately on subscription.
   useEffect(() => {
@@ -194,7 +171,6 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
         signInWithPhoneNumber,
         confirmCode,
         signOut,
-        syncAbtCustomer,
         authenticationType: getAuthenticationType(state),
       }}
     >

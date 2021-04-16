@@ -76,6 +76,7 @@ export default function ReceiptScreen({navigation, route}: Props) {
             label={t(TicketTexts.receipt.inputLabel)}
             value={email}
             onChangeText={setEmail}
+            keyboardType="email-address"
             autoCapitalize="none"
             autoCompleteType="email"
             autoCorrect={false}
@@ -124,11 +125,11 @@ function translateStateToMessage(
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
   },
   container: {
     flex: 1,
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
   },
   content: {
     padding: theme.spacings.medium,

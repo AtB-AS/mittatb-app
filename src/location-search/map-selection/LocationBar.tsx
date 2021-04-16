@@ -83,8 +83,8 @@ const LocationText: React.FC<{
   const {title, subtitle} = getLocationText(t, location, error);
   return (
     <>
-      <ThemeText type="lead">{title}</ThemeText>
-      <ThemeText type="label">{subtitle}</ThemeText>
+      <ThemeText type="body__secondary">{title}</ThemeText>
+      <ThemeText type="body__tertiary">{subtitle}</ThemeText>
     </>
   );
 };
@@ -142,7 +142,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingRight: theme.spacings.small,
     paddingVertical: theme.spacings.small,
     borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
     flexDirection: 'row',
     flexGrow: 1,
     justifyContent: 'space-between',

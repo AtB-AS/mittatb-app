@@ -44,15 +44,22 @@ const MessageBox: React.FC<MessageBoxProps> = ({
   const {theme} = useTheme();
   const styles = useBoxStyle();
   const {t} = useTranslation();
+  const textColor = theme.status[type].main.color;
   const iconElement =
-    typeof icon !== 'undefined' ? icon : <ThemeIcon svg={typeToIcon(type)} />;
+    typeof icon !== 'undefined' ? (
+      icon
+    ) : (
+      <ThemeIcon fill={textColor} svg={typeToIcon(type)} />
+    );
   const child = message ? (
     <>
-      <ThemeText style={styles.text}>{message}</ThemeText>
+      <ThemeText style={{...styles.text, color: textColor}}>
+        {message}
+      </ThemeText>
       {retryFunction && (
         <ThemeText
-          style={styles.retryText}
-          type="body__link"
+          style={[styles.retryText, {color: textColor}]}
+          type="body__primary--underline"
           onPress={retryFunction}
         >
           {t(MessageBoxTexts.tryAgainButton)}
@@ -63,8 +70,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({
     children
   );
   const colorStyle = {
-    ...theme.status[type].bg,
-    borderColor: theme.status[type].main.backgroundColor,
+    backgroundColor: theme.status[type].main.backgroundColor,
   };
   const paddedStyle = withMargin ? styles.container__padded : undefined;
   return (
@@ -75,7 +81,11 @@ const MessageBox: React.FC<MessageBoxProps> = ({
         )}
       </View>
       <View style={styles.content}>
-        {title && <ThemeText style={styles.title}>{title}</ThemeText>}
+        {title && (
+          <ThemeText style={{...styles.title, color: textColor}}>
+            {title}
+          </ThemeText>
+        )}
         <View>{child}</View>
       </View>
     </View>
@@ -90,8 +100,7 @@ export const TinyMessageBox: React.FC<TinyMessageProps> = ({
   const {theme} = useTheme();
   const styles = useBoxStyle();
   const colorStyle = {
-    ...theme.status[type].bg,
-    borderColor: theme.status[type].main.backgroundColor,
+    ...theme.status[type].main,
   };
   return (
     <View style={[styles.container, colorStyle]}>
@@ -110,7 +119,6 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     padding: theme.spacings.medium,
     borderRadius: theme.border.radius.regular,
-    borderWidth: theme.border.width.slim,
     flexDirection: 'row',
   },
   container__padded: {
@@ -123,7 +131,7 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
   content: {
     flex: 1,
   },
-  text: theme.text.body,
+  text: theme.typography.body__primary,
   retryText: {
     marginTop: theme.spacings.medium,
   },

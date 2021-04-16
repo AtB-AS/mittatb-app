@@ -131,7 +131,10 @@ const ClearButton: React.FC<{
   if (!value) return null;
   return (
     <TouchableOpacity onPress={() => onEmojiSelected(null)}>
-      <ThemeText type="body" style={[styles.clearButton, clearButtonStyle]}>
+      <ThemeText
+        type="body__primary"
+        style={[styles.clearButton, clearButtonStyle]}
+      >
         {clearButtonText ?? 'Fjern emoji'}
       </ThemeText>
     </TouchableOpacity>
@@ -242,7 +245,7 @@ const EmojiPicker = forwardRef<Modalize, Props>(
 );
 const usePickerStyles = StyleSheet.createThemeHook((theme) => ({
   modal: {
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
   },
 }));
 

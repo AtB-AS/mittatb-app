@@ -127,10 +127,7 @@ const TripSection: React.FC<TripSectionProps> = ({
           leg.notices.map((notice) => {
             return (
               <TripRow rowLabel={<Info />}>
-                <TinyMessageBox
-                  type="info"
-                  message={notice.text}
-                ></TinyMessageBox>
+                <TinyMessageBox type="info" message={notice.text} />
               </TripRow>
             );
           })}
@@ -207,7 +204,7 @@ const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
         TripDetailsTexts.trip.leg.intermediateStops.a11yHint,
       )}
     >
-      <ThemeText type="lead" color="secondary">
+      <ThemeText type="body__secondary" color="secondary">
         {t(
           TripDetailsTexts.trip.leg.intermediateStops.label(
             numberOfIntermediateCalls,
@@ -233,7 +230,7 @@ const WalkSection: React.FC<TripSectionProps> = (leg) => {
         />
       }
     >
-      <ThemeText type="lead" color="secondary">
+      <ThemeText type="body__secondary" color="secondary">
         {t(
           TripDetailsTexts.trip.leg.walk.label(
             secondsToDuration(leg.duration ?? 0, language),

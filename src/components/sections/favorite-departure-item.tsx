@@ -74,7 +74,7 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
         <ThemeText>
           {favorite.lineLineNumber} {favorite.lineName}
         </ThemeText>
-        <ThemeText type="lead" color="secondary">
+        <ThemeText type="body__secondary" color="secondary">
           {t(SectionTexts.favoriteDeparture.from)} {favorite.quayName}{' '}
           {favorite.quayPublicCode ?? ''}
         </ThemeText>

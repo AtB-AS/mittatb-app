@@ -1,19 +1,26 @@
 import {useAuthState} from '@atb/auth';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
-import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
+import ThemeText from '@atb/components/text';
+import {RootStackParamList} from '@atb/navigation';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
+import useLocalConfig from '@atb/utils/use-local-config';
 import {PRIVACY_POLICY_URL} from '@env';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
-import {Linking, View} from 'react-native';
+import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileStackParams} from '..';
-import ThemeText from '@atb/components/text';
-import {RootStackParamList} from '@atb/navigation';
+import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
+import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+
+const buildNumber = getBuildNumber();
+const version = getVersion();
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -32,8 +39,20 @@ type ProfileScreenProps = {
 export default function ProfileHome({navigation}: ProfileScreenProps) {
   const {enable_i18n, enable_login} = useRemoteConfig();
   const style = useProfileHomeStyle();
+  const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
   const {authenticationType, signOut, user} = useAuthState();
+  const config = useLocalConfig();
+
+  const {
+    setClipboard,
+    isAnimating: fadeIsAnimating,
+    FadeContainer: ClipboardFadeContainer,
+  } = useCopyWithOpacityFade(1500);
+
+  function copyInstallId() {
+    if (config?.installId) setClipboard(config.installId);
+  }
 
   return (
     <View style={style.container}>
@@ -43,7 +62,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         rightButton={{type: 'chat'}}
       />
 
-      <ScrollView style={style.scrollView}>
+      <ScrollView contentContainerStyle={style.scrollView}>
         {enable_login && (
           <Sections.Section withPadding>
             <Sections.HeaderItem
@@ -86,6 +105,10 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             text={t(ProfileTexts.sections.settings.heading)}
           />
           <Sections.LinkItem
+            text={t(ProfileTexts.sections.settings.linkItems.userProfile.label)}
+            onPress={() => navigation.navigate('DefaultUserProfile')}
+          />
+          <Sections.LinkItem
             text={t(ProfileTexts.sections.settings.linkItems.appearance.label)}
             onPress={() => navigation.navigate('Appearance')}
           />
@@ -99,6 +122,10 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               onPress={() => navigation.navigate('Language')}
             />
           )}
+          <Sections.LinkItem
+            text={t(ProfileTexts.sections.settings.linkItems.enrollment.label)}
+            onPress={() => navigation.navigate('Enrollment')}
+          />
         </Sections.Section>
 
         <Sections.Section withPadding>
@@ -130,6 +157,39 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
             }
           />
+          <Sections.LinkItem
+            text={t(ProfileTexts.sections.privacy.linkItems.clearHistory.label)}
+            accessibility={{
+              accessibilityHint: t(
+                ProfileTexts.sections.privacy.linkItems.clearHistory.a11yHint,
+              ),
+            }}
+            onPress={() =>
+              Alert.alert(
+                t(ProfileTexts.sections.privacy.linkItems.clearHistory.confirm),
+                undefined,
+                [
+                  {
+                    text: t(
+                      ProfileTexts.sections.privacy.linkItems.clearHistory.alert
+                        .cancel,
+                    ),
+                    style: 'cancel',
+                  },
+                  {
+                    text: t(
+                      ProfileTexts.sections.privacy.linkItems.clearHistory.alert
+                        .confirm,
+                    ),
+                    style: 'destructive',
+                    onPress: async () => {
+                      await clearHistory();
+                    },
+                  },
+                ],
+              )
+            }
+          />
         </Sections.Section>
 
         {__DEV__ && (
@@ -141,6 +201,30 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             />
           </Sections.Section>
         )}
+
+        <View style={style.debugInfoContainer}>
+          <ThemeText>
+            v{version} ({buildNumber})
+          </ThemeText>
+          {config?.installId &&
+            (fadeIsAnimating ? (
+              <ClipboardFadeContainer>
+                <ScreenReaderAnnouncement
+                  message={t(ProfileTexts.installId.wasCopiedAlert)}
+                />
+                <ThemeText>
+                  ✅ {t(ProfileTexts.installId.wasCopiedAlert)}
+                </ThemeText>
+              </ClipboardFadeContainer>
+            ) : (
+              <ThemeText
+                accessibilityHint={t(ProfileTexts.installId.a11yHint)}
+                onPress={copyInstallId}
+              >
+                {t(ProfileTexts.installId.label)}: {config.installId}
+              </ThemeText>
+            ))}
+        </View>
       </ScrollView>
     </View>
   );
@@ -148,10 +232,14 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.colors.background_1.backgroundColor,
     flex: 1,
   },
   scrollView: {
-    marginTop: theme.spacings.medium,
+    paddingVertical: theme.spacings.medium,
+  },
+  debugInfoContainer: {
+    alignItems: 'center',
+    marginVertical: theme.spacings.medium,
   },
 }));

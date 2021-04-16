@@ -114,6 +114,13 @@ export default function DesignSystem() {
             icon={Delete}
             iconPosition="right"
           />
+          <Button
+            text="Press me"
+            onPress={presser}
+            type="inline"
+            icon={Delete}
+            iconPosition="left"
+          />
         </ButtonGroup>
 
         <Sections.Section withPadding withTopPadding>
@@ -212,7 +219,7 @@ function presser() {
 
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.colors.background_1.backgroundColor,
     flex: 1,
   },
   icons: {

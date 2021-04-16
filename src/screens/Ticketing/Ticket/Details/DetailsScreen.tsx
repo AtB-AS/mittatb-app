@@ -61,11 +61,11 @@ export default function DetailsScreen({navigation, route}: Props) {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
   },
   container: {
     flex: 1,
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
   },
   content: {
     padding: theme.spacings.medium,
