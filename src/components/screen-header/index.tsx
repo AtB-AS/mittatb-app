@@ -8,6 +8,8 @@ import React, {useMemo, useState} from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
 import HeaderButton, {ButtonModes, HeaderButtonProps} from './HeaderButton';
 import ThemeText from '@atb/components/text';
+import {AlertContext} from '@atb/alerts/AlertsContext';
+import AlertBox from '@atb/alerts/AlertBox';
 
 export {default as AnimatedScreenHeader} from './animated-header';
 
@@ -23,6 +25,11 @@ export type ScreenHeaderProps = {
   leftButton?: LeftButtonProps;
   rightButton?: RightButtonProps;
   title: React.ReactNode;
+  /**
+   * For specifying the alert context for alerts that should be shown in this
+   * header. If no context is specified then no alerts are shown.
+   */
+  alertContext?: AlertContext;
   style?: ViewStyle;
 };
 
@@ -30,10 +37,12 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   leftButton,
   rightButton,
   title,
+  alertContext,
   style,
 }) => {
   const css = useHeaderStyle();
   const {theme} = useTheme();
+
   const {buttonsHeight, buttonsTopOffset, setLayoutFor} = useHeaderLayouts();
 
   const leftIcon = leftButton ? <HeaderButton {...leftButton} /> : <View />;
@@ -53,7 +62,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
         ]}
         onLayout={setLayoutFor('container')}
       >
-        <ThemeText onLayout={setLayoutFor('title')} type="paragraphHeadline">
+        <ThemeText onLayout={setLayoutFor('title')} type="body__primary--bold">
           {title}
         </ThemeText>
       </View>
@@ -69,6 +78,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
         <View onLayout={setLayoutFor('leftButton')}>{leftIcon}</View>
         <View onLayout={setLayoutFor('rightButton')}>{rightIcon}</View>
       </View>
+      <AlertBox alertContext={alertContext} style={css.alertBox} />
     </View>
   );
 };
@@ -86,6 +96,9 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     position: 'absolute',
     left: theme.spacings.medium,
     width: '100%',
+  },
+  alertBox: {
+    marginTop: theme.spacings.medium,
   },
 }));
 

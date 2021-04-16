@@ -35,7 +35,6 @@ const TicketTexts = {
       _(`Ordre-id: ${orderId}`, `Order ID: ${orderId}`),
     purchaseTime: (dateTime: string) =>
       _(`Kjøpt ${dateTime}`, `Purchased ${dateTime}`),
-    askForRefund: _('Be om refusjon', 'Request refund '),
     askForReceipt: _('Be om kvittering', 'Request receipt'),
   },
   receipt: {

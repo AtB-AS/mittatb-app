@@ -80,7 +80,7 @@ function Item(props: ItemProps) {
   return (
     <View style={[styles.item, sectionStyles.spaceBetween, topContainer]}>
       <FavoriteIcon favorite={item} />
-      <ThemeText type="body" style={contentContainer}>
+      <ThemeText type="body__primary" style={contentContainer}>
         {name(item)}
       </ThemeText>
       <MoveIcon direction="up" {...props} />

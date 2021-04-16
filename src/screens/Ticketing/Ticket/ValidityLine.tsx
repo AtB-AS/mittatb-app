@@ -48,7 +48,7 @@ const ValidityLine = (props: Props): ReactElement => {
             dashGap={0}
             dashLength={1}
             dashThickness={1}
-            dashColor={theme.background.level1}
+            dashColor={theme.colors.background_1.backgroundColor}
           />
         </View>
       );
@@ -92,7 +92,7 @@ const LineWithVerticalBars = ({
         dashGap={0}
         dashLength={1}
         dashThickness={8}
-        dashColor={theme.background.level1}
+        dashColor={theme.colors.background_1.backgroundColor}
       />
     </View>
   );

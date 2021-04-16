@@ -10,6 +10,7 @@ export type StorageModel = {
   customer_id: string;
   onboarded: string;
   '@ATB_search-history': string;
+  '@ATB_journey_search-history': string;
 };
 
 export type StorageModelTypes = keyof StorageModel;

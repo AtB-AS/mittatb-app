@@ -184,11 +184,10 @@ const Index: React.FC<Props> = ({
           />
         )}
         {showEmptyResultText && (
-          <MessageBox type="info">
-            <ThemeText>
-              {t(TariffZoneSearchTexts.messages.emptyResult)}
-            </ThemeText>
-          </MessageBox>
+          <MessageBox
+            type="info"
+            message={t(TariffZoneSearchTexts.messages.emptyResult)}
+          />
         )}
       </ScrollView>
     </View>
@@ -210,7 +209,7 @@ function translateErrorType(
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
     flex: 1,
   },
   header: {

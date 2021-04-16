@@ -19,6 +19,7 @@ export default function MultipleTravellersSelection({
           count={u.count}
           addCount={() => addCount(u.userTypeString)}
           removeCount={() => removeCount(u.userTypeString)}
+          type="spacious"
         />
       ))}
     </Sections.Section>

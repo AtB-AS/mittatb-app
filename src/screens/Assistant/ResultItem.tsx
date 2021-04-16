@@ -4,7 +4,6 @@ import {Duration, WalkingPerson} from '@atb/assets/svg/icons/transportation';
 import AccessibleText, {
   screenReaderPause,
 } from '@atb/components/accessible-text';
-import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
@@ -30,8 +29,13 @@ import insets from '@atb/utils/insets';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {LegMode} from '@entur/sdk';
 import React from 'react';
-import {AccessibilityProps, View, ViewStyle} from 'react-native';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  AccessibilityProps,
+  View,
+  ViewStyle,
+  TouchableOpacity,
+} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -69,7 +73,7 @@ const ResultItemHeader: React.FC<{
   return (
     <View style={styles.resultHeader}>
       <ThemeText
-        type="lead"
+        type="body__secondary"
         color="secondary"
         style={styles.resultHeaderLabel}
         accessibilityLabel={t(
@@ -84,7 +88,7 @@ const ResultItemHeader: React.FC<{
       </ThemeText>
       <View style={styles.durationContainer}>
         <AccessibleText
-          type="lead"
+          type="body__secondary"
           color="secondary"
           prefix={t(AssistantTexts.results.resultItem.header.totalDuration)}
         >
@@ -167,7 +171,7 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
 
   return (
     <View style={styles.resultFooter}>
-      <ThemeText type={'lead'}>
+      <ThemeText type={'body__secondary'}>
         {t(
           AssistantTexts.results.resultItem.footer.fromLabel(
             quayName,
@@ -177,7 +181,7 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
       </ThemeText>
 
       <View style={styles.detailsTextWrapper}>
-        <ThemeText type="lead">
+        <ThemeText type="body__secondary">
           {t(AssistantTexts.results.resultItem.footer.detailsLabel)}
         </ThemeText>
         <ThemeIcon svg={ArrowRight} style={styles.detailsIcon} />
@@ -188,7 +192,7 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   result: {
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
     borderRadius: theme.border.radius.regular,
     marginTop: theme.spacings.medium,
   },
@@ -319,7 +323,7 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
           subMode={leg.line?.transportSubmode}
         />
       </View>
-      <ThemeText type="body">
+      <ThemeText type="body__primary">
         <LineDisplayName style={styles.lineDisplayName} leg={leg} />
       </ThemeText>
     </View>

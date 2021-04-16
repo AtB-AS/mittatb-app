@@ -1,4 +1,3 @@
-import auth from '@react-native-firebase/auth';
 import {AxiosRequestConfig} from 'axios';
 import {client} from '../api';
 import {
@@ -12,14 +11,9 @@ import {
 } from './types';
 
 export async function listRecentFareContracts(): Promise<RecentFareContract[]> {
-  const user = auth().currentUser;
-  const idToken = await user?.getIdToken();
-
   const url = 'ticket/v2/ticket/recent';
   const response = await client.get<RecentFareContract[]>(url, {
-    headers: {
-      Authorization: 'Bearer ' + idToken,
-    },
+    authWithIdToken: true,
   });
 
   return response.data;
@@ -62,8 +56,6 @@ export async function reserveOffers(
   paymentType: PaymentType,
   opts?: AxiosRequestConfig,
 ) {
-  const user = auth().currentUser;
-  const idToken = await user?.getIdToken();
   const url = 'ticket/v2/reserve';
   const response = await client.post<TicketReservation>(
     url,
@@ -77,9 +69,7 @@ export async function reserveOffers(
     },
     {
       ...opts,
-      headers: {
-        Authorization: 'Bearer ' + idToken,
-      },
+      authWithIdToken: true,
     },
   );
   return response.data;

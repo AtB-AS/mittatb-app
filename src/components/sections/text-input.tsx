@@ -89,7 +89,7 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
           borderColor,
         ]}
       >
-        <ThemeText type="lead" style={styles.label}>
+        <ThemeText type="body__secondary" style={styles.label}>
           {label}
         </ThemeText>
         <InternalTextInput
@@ -131,12 +131,12 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     color: theme.text.colors.primary,
     paddingRight: 40,
 
-    fontSize: theme.text.body.fontSize,
+    fontSize: theme.typography.body__primary.fontSize,
   },
   container: {
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
     borderWidth: theme.border.width.slim,
-    borderColor: theme.background.level0,
+    borderColor: theme.colors.background_0.backgroundColor,
   },
   containerInline: {
     alignItems: 'center',

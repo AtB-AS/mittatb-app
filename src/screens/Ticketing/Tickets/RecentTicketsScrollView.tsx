@@ -78,8 +78,8 @@ const RecentTicketsScrollView = () => {
       <LinearGradient
         style={styles.gradient}
         colors={[
-          hexToRgba(theme.background.level1, 0.1),
-          hexToRgba(theme.background.level1, 1),
+          hexToRgba(theme.colors.background_1.backgroundColor, 0.1),
+          hexToRgba(theme.colors.background_1.backgroundColor, 1),
         ]}
         pointerEvents={'none'}
       />

@@ -72,9 +72,10 @@ export default function PhoneInput({navigation, route}: PhoneInputProps) {
 
       <View style={styles.mainView}>
         {loginReason && (
-          <MessageBox containerStyle={styles.loginReasonMessage}>
-            <ThemeText>{loginReason}</ThemeText>
-          </MessageBox>
+          <MessageBox
+            containerStyle={styles.loginReasonMessage}
+            message={loginReason}
+          />
         )}
         <Sections.Section>
           <Sections.GenericItem>
@@ -118,7 +119,7 @@ export default function PhoneInput({navigation, route}: PhoneInputProps) {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
     flex: 1,
   },
   mainView: {

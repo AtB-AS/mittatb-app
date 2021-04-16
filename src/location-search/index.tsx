@@ -1,23 +1,24 @@
-import React, {useRef} from 'react';
-import {
-  createStackNavigator,
-  StackNavigationProp,
-  TransitionPresets,
-} from '@react-navigation/stack';
-import LocationSearch, {
-  RouteParams as LocationSearchRouteParams,
-} from './LocationSearch';
-import MapSelection, {
-  RouteParams as MapSelectionRouteParams,
-} from './map-selection';
 import {
   CompositeNavigationProp,
   ParamListBase,
   RouteProp,
   useRoute,
 } from '@react-navigation/native';
-import {RootStackParamList} from '../navigation';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+  TransitionPresets,
+} from '@react-navigation/stack';
+import React, {useRef} from 'react';
 import {Location, LocationWithMetadata} from '../favorites/types';
+import {RootStackParamList} from '../navigation';
+import LocationSearch, {
+  RouteParams as LocationSearchRouteParams,
+} from './LocationSearch';
+import MapSelection, {
+  RouteParams as MapSelectionRouteParams,
+} from './map-selection';
+import {SelectableLocationData} from './types';
 
 export type LocationSearchStackParams = {
   LocationSearch: LocationSearchRouteParams;
@@ -64,11 +65,11 @@ export function useLocationSearchValue<
 >(
   callerRouteParam: keyof T['params'],
   defaultLocation?: Location,
-): LocationWithMetadata | undefined {
+): SelectableLocationData | undefined {
   const route = useRoute<T>();
   const firstTimeRef = useRef(true);
   const [location, setLocation] = React.useState<
-    LocationWithMetadata | undefined
+    SelectableLocationData | undefined
   >(defaultLocation && {...defaultLocation, resultType: 'search'});
 
   React.useEffect(() => {
@@ -83,4 +84,24 @@ export function useLocationSearchValue<
   }, [route.params?.[callerRouteParam]]);
 
   return location;
+}
+
+export function useOnlySingleLocation<
+  T extends RouteProp<any, any> & {params: ParamListBase}
+>(
+  callerRouteParam: keyof T['params'],
+  defaultLocation?: Location,
+): LocationWithMetadata | undefined {
+  const selectable = useLocationSearchValue(callerRouteParam, defaultLocation);
+
+  if (!selectable) return undefined;
+  switch (selectable.resultType) {
+    case 'journey': {
+      return {
+        resultType: 'search',
+        ...selectable.journeyData[0],
+      };
+    }
+  }
+  return selectable;
 }

@@ -21,7 +21,7 @@ const Time: React.FC<TimeValues> = (timeValues) => {
             {expected}
           </AccessibleText>
           <AccessibleText
-            type="label"
+            type="body__tertiary"
             color="secondary"
             prefix={t(dictionary.travel.time.aimedPrefix)}
             style={{textDecorationLine: 'line-through'}}
