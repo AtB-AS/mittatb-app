@@ -25,14 +25,14 @@ import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React, {useEffect, useRef} from 'react';
 import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
-import TabNavigator from './TabNavigator';
+import TabNavigator, {TabNavigatorParams} from './TabNavigator';
 import transitionSpec from './transitionSpec';
 import Login, {LoginRootParams} from '@atb/screens/Profile/Login';
 
 export type RootStackParamList = {
   NotFound: undefined;
   Onboarding: undefined;
-  TabNavigator: undefined;
+  TabNavigator: NavigatorScreenParams<TabNavigatorParams>;
   LocationSearch: LocationSearchParams;
   SortableFavoriteList: undefined;
   AddEditFavorite: NavigatorScreenParams<AddEditFavoriteRootParams>;

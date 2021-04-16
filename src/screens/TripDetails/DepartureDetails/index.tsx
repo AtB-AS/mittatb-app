@@ -1,3 +1,4 @@
+import {getFeatureFromVenue} from '@atb/api/geocoder';
 import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
 import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
 import {Info, Warning} from '@atb/assets/svg/situations';
@@ -8,8 +9,12 @@ import ScreenHeader from '@atb/components/screen-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
+import {searchByStopPlace} from '@atb/geocoder/search-for-location';
+import {mapFeatureToLocation} from '@atb/geocoder/utils';
 import {
   EstimatedCall,
+  FeatureCategory,
+  Quay,
   ServiceJourneyMapInfoData,
   Situation,
   TransportMode,
@@ -25,11 +30,12 @@ import {
   NavigationProp,
   RouteProp,
   useIsFocused,
+  useNavigation,
 } from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {DetailsStackParams} from '..';
+import {DetailsModalNavigationProp, DetailsStackParams} from '..';
 import Time from '../components/Time';
 import TripLegDecoration from '../components/TripLegDecoration';
 import TripRow from '../components/TripRow';
@@ -243,6 +249,8 @@ function TripItem({
   isStart,
   isEnd,
 }: TripItemProps) {
+  const navigation = useNavigation<DetailsModalNavigationProp>();
+
   const styles = useStopsStyle();
   const isBetween = !isStart && !isEnd;
   const iconColor = useTransportationColor(
@@ -270,6 +278,7 @@ function TripItem({
         }
         alignChildren={isStart ? 'flex-start' : isEnd ? 'flex-end' : 'center'}
         style={[styles.row, isBetween && styles.middleRow]}
+        onPress={() => handleQuayPress(call.quay)}
       >
         <ThemeText>{getQuayName(call.quay)} </ThemeText>
       </TripRow>
@@ -290,6 +299,16 @@ function TripItem({
       {collapseButton}
     </View>
   );
+
+  async function handleQuayPress(quay: Quay | undefined) {
+    const location = await searchByStopPlace(quay?.stopPlace);
+    if (!location) {
+      return;
+    }
+    navigation.navigate('QuayDepartures', {
+      location,
+    });
+  }
 }
 
 type CollapseButtonRowProps = {
