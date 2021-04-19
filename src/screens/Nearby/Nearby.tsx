@@ -34,7 +34,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {NearbyStackParams} from '.';
 import Loading from '../Loading';
-import NearbyResults from './NearbyResults';
+import DeparturesList from '@atb/departure-list/DeparturesList';
 import {useDepartureData} from './state';
 
 type NearbyRouteName = 'NearbyRoot';
@@ -56,7 +56,7 @@ type RootProps = {
   route: NearbyScreenProp;
 };
 
-export default function NearbyScreen({navigation}: RootProps) {
+export default function NearbyScreen({navigation, route}: RootProps) {
   const {
     status,
     location,
@@ -191,7 +191,7 @@ const NearbyOverview: React.FC<Props> = ({
       }
       headerTitle={t(NearbyTexts.header.title)}
       useScroll={activateScroll}
-      leftButton={{type: 'home'}}
+      leftButton={{type: 'back'}}
       alternativeTitleComponent={
         <AccessibleText
           prefix={t(NearbyTexts.header.altTitle.a11yPrefix)}
@@ -217,7 +217,7 @@ const NearbyOverview: React.FC<Props> = ({
         </View>
       )}
 
-      <NearbyResults
+      <DeparturesList
         currentLocation={currentLocation}
         showOnlyFavorites={showOnlyFavorites}
         departures={data}

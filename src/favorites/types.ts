@@ -1,9 +1,23 @@
 import {Feature} from '../sdk';
-import {Coordinates, TransportMode, TransportSubmode} from '@entur/sdk';
+import {
+  Coordinates,
+  TransportMode,
+  TransportSubmode,
+  Location as LocationSDK,
+  FeatureCategory,
+} from '@entur/sdk';
 import {StoredType} from './storage';
 
-export type Location = Feature['properties'] & {
+export type Location = {
+  id: string;
+  name: string;
+  layer: 'venue' | 'address';
   coordinates: Coordinates;
+  locality: string;
+  category: FeatureCategory[];
+  label?: string;
+  postalcode?: string;
+  tariff_zones?: string[];
 };
 
 export type LocationFavorite = {

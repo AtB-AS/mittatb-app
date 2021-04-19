@@ -11,16 +11,21 @@ import DepartureDetails, {
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {RootStackParamList} from '@atb/navigation';
 import {MapDetailRouteParams, TravelDetailsMap} from './Map';
+import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
+import QuayDepartures, {
+  QuayDeparturesRouteParams,
+} from '@atb/screens/TripDetails/QuayDepartures';
 
 export type DetailsStackParams = {
   Details: DetailsRouteParams;
   DepartureDetails: DepartureDetailsRouteParams;
   DetailsMap: MapDetailRouteParams;
+  QuayDepartures: QuayDeparturesRouteParams;
 };
 
 export type DetailsModalNavigationProp = CompositeNavigationProp<
   StackNavigationProp<DetailsStackParams>,
-  StackNavigationProp<RootStackParamList>
+  StackNavigationProp<TabNavigatorParams>
 >;
 
 export type RouteParams = DetailsRouteParams;
@@ -46,6 +51,7 @@ const TripDetailsRoot = ({route}: TripDetailsRootProps) => {
           ...TransitionPresets.SlideFromRightIOS,
         }}
       />
+      <Stack.Screen name="QuayDepartures" component={QuayDepartures} />
       <Stack.Screen name="DepartureDetails" component={DepartureDetails} />
     </Stack.Navigator>
   );

@@ -44,7 +44,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import {NearbyScreenNavigationProp} from '../Nearby';
+import {NearbyScreenNavigationProp} from '@atb/screens/Nearby/Nearby';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 
 export type LineItemProps = SectionItem<{

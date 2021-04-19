@@ -12,7 +12,7 @@ import {ActivityIndicator, View} from 'react-native';
 import QuaySection from './section-items/quay-section';
 import {hasNoGroupsWithDepartures, hasNoQuaysWithDepartures} from './utils';
 
-type NearbyResultsProps = {
+type DeparturesListProps = {
   departures: StopPlaceGroup[] | null;
   lastUpdated?: Date;
   currentLocation?: Location;
@@ -20,11 +20,11 @@ type NearbyResultsProps = {
   isLoading?: boolean;
   error?: string;
   isInitialScreen: boolean;
-
   showOnlyFavorites: boolean;
+  disableCollapsing?: boolean;
 };
 
-export default function NearbyResults({
+export default function DeparturesList({
   departures,
   lastUpdated,
   isFetchingMore = false,
@@ -32,10 +32,10 @@ export default function NearbyResults({
   error,
   isInitialScreen,
   currentLocation,
-
   showOnlyFavorites,
-}: NearbyResultsProps) {
-  const styles = useResultsStyle();
+  disableCollapsing = false,
+}: DeparturesListProps) {
+  const styles = useDeparturesListStyle();
   const {t} = useTranslation();
 
   if (isInitialScreen) {
@@ -80,6 +80,7 @@ export default function NearbyResults({
               currentLocation={currentLocation}
               lastUpdated={lastUpdated}
               defaultExpanded={i === 0}
+              disableCollapsing={disableCollapsing}
             />
           ))}
           <FooterLoader isFetchingMore={isFetchingMore} />
@@ -88,7 +89,7 @@ export default function NearbyResults({
     </View>
   );
 }
-const useResultsStyle = StyleSheet.createThemeHook((theme) => ({
+const useDeparturesListStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacings.medium,
   },
@@ -123,16 +124,24 @@ type StopDeparturesProps = {
   currentLocation?: Location;
   lastUpdated?: Date;
   defaultExpanded?: boolean;
+  disableCollapsing?: boolean;
 };
 const StopDepartures = React.memo(function StopDepartures({
   stopPlaceGroup,
   currentLocation,
   lastUpdated,
   defaultExpanded = false,
+  disableCollapsing = false,
 }: StopDeparturesProps) {
   const {t} = useTranslation();
-  const [expanded, setExpanded] = useState(defaultExpanded);
-  useEffect(() => setExpanded(defaultExpanded), [defaultExpanded]);
+  const [expanded, setExpanded] = useState(
+    defaultExpanded || disableCollapsing,
+  );
+  useEffect(() => setExpanded(defaultExpanded || disableCollapsing), [
+    defaultExpanded,
+    disableCollapsing,
+  ]);
+
   if (!stopPlaceGroup.quays.length) {
     return null;
   }
@@ -142,23 +151,25 @@ const StopDepartures = React.memo(function StopDepartures({
 
   return (
     <View accessibilityState={{expanded}}>
-      <ActionItem
-        transparent
-        text={stopPlaceGroup.stopPlace.name}
-        mode="heading-expand"
-        onPress={() => {
-          animateNextChange();
-          setExpanded(!expanded);
-        }}
-        checked={expanded}
-        accessibility={{
-          accessibilityHint: t(
-            NearbyTexts.results.stops.header[
-              expanded ? 'hintHide' : 'hintShow'
-            ],
-          ),
-        }}
-      />
+      {!disableCollapsing && (
+        <ActionItem
+          transparent
+          text={stopPlaceGroup.stopPlace.name}
+          mode="heading-expand"
+          onPress={() => {
+            animateNextChange();
+            setExpanded(!expanded);
+          }}
+          checked={expanded}
+          accessibility={{
+            accessibilityHint: t(
+              NearbyTexts.results.stops.header[
+                expanded ? 'hintHide' : 'hintShow'
+              ],
+            ),
+          }}
+        />
+      )}
 
       {expanded &&
         stopPlaceGroup.quays.map((quayGroup) => (
