@@ -301,6 +301,7 @@ const Assistant: React.FC<Props> = ({
                 t,
                 language,
               )}
+              accessibilityHint={t(AssistantTexts.dateInput.a11yHint)}
               color="secondary_3"
               onPress={onSearchTimePress}
             />
