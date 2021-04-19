@@ -38,7 +38,7 @@ export default function CounterInput({
           onPress={() => removeCount()}
           accessibilityRole="button"
           accessibilityLabel={t(
-            SectionTexts.counterInput.decreaseButton.a11yLabel,
+            SectionTexts.counterInput.decreaseButton.a11yLabel(text),
           )}
           accessibilityHint={
             removeButtonDisabled
@@ -74,7 +74,7 @@ export default function CounterInput({
           onPress={() => addCount()}
           accessibilityRole="button"
           accessibilityLabel={t(
-            SectionTexts.counterInput.increaseButton.a11yLabel,
+            SectionTexts.counterInput.increaseButton.a11yLabel(text),
           )}
           accessibilityHint={t(
             SectionTexts.counterInput.increaseButton.a11yHint(text, count),
