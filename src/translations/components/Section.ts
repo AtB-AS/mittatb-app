@@ -39,7 +39,8 @@ const SectionTexts = {
         ),
     },
     increaseButton: {
-      a11yLabel: (text: string) =>_(`Øk antall ${text}`, `Increase quantity ${text}`),
+      a11yLabel: (text: string) =>
+        _(`Øk antall ${text}`, `Increase quantity ${text}`),
       a11yHint: (text: string, count: number) =>
         _(
           `Aktivér for å øke antall ${text} til ${count + 1}`,
