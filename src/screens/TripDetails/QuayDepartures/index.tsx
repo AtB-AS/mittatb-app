@@ -70,7 +70,7 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
     zIndex: 2,
   },
   screen: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.colors.background_1.backgroundColor,
     flexGrow: 1,
     flex: 1,
   },
