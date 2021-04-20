@@ -20,11 +20,11 @@ export const useTranslation = () => {
 export type TranslateFunction = TFunc<typeof Language>;
 export function translation(
   norwegian: string,
-  english?: string,
+  english: string,
 ): TranslatedString {
   return {
     [Language.Norwegian]: norwegian,
-    [Language.English]: !!english ? english : norwegian,
+    [Language.English]: english,
   };
 }
 export function languageToLocale(language: Language) {

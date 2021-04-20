@@ -68,7 +68,10 @@ const LocationSearchTexts = {
           'Vi kan ikke oppdatere kartet.',
           'We failed to update your map',
         ),
-        message: _('Nettforbindelsen din mangler eller er ustabil.'),
+        message: _(
+          'Nettforbindelsen din mangler eller er ustabil.',
+          'Your network connection is missing or unstable',
+        ),
       },
       updateError: {
         title: _(

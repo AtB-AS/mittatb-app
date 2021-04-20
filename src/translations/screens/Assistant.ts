@@ -120,7 +120,8 @@ const AssistantTexts = {
         label: _('Vent', 'Wait'),
       },
       footer: {
-        fromLabel: (place: string, time: string) => _(`Fra ${place} ${time}`),
+        fromLabel: (place: string, time: string) =>
+          _(`Fra ${place} ${time}`, `From ${place} ${time}`),
         detailsLabel: _('Detaljer', 'Details'),
         detailsHint: _(
           'Aktivér for å vise flere reisedetaljer',
