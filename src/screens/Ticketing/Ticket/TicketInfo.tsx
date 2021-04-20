@@ -20,6 +20,7 @@ import {BusSide, Wait} from '@atb/assets/svg/icons/transportation';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import {AddTicket, InvalidTicket} from '@atb/assets/svg/icons/ticketing';
+import {screenReaderPause} from '@atb/components/accessible-text';
 
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
@@ -88,23 +89,48 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
+
+  const productName = preassignedFareProduct
+    ? getReferenceDataName(preassignedFareProduct, language)
+    : undefined;
+
+  const tariffZoneSummary =
+    fromTariffZone && toTariffZone
+      ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
+      : undefined;
+
+  const userProfileCountAndName = (u: UserProfileWithCount) =>
+    `${u.count} ${getReferenceDataName(u, language)}`;
+
   return (
     <View style={styles.textsContainer} accessible={true}>
       <View>
         {userProfilesWithCount.map((u) => (
-          <ThemeText type="body__primary--bold" key={u.id}>{`${
-            u.count
-          } ${getReferenceDataName(u, language)}`}</ThemeText>
+          <ThemeText
+            type="body__primary--bold"
+            key={u.id}
+            accessibilityLabel={userProfileCountAndName(u) + screenReaderPause}
+          >
+            {userProfileCountAndName(u)}
+          </ThemeText>
         ))}
       </View>
-      {preassignedFareProduct && (
-        <ThemeText type="body__secondary" style={styles.product}>
-          {getReferenceDataName(preassignedFareProduct, language)}
+      {productName && (
+        <ThemeText
+          type="body__secondary"
+          style={styles.product}
+          accessibilityLabel={productName + screenReaderPause}
+        >
+          {productName}
         </ThemeText>
       )}
-      {fromTariffZone && toTariffZone && (
-        <ThemeText type="body__secondary" style={styles.zones}>
-          {tariffZonesSummary(fromTariffZone, toTariffZone, language, t)}
+      {tariffZoneSummary && (
+        <ThemeText
+          type="body__secondary"
+          style={styles.zones}
+          accessibilityLabel={tariffZoneSummary + screenReaderPause}
+        >
+          {tariffZoneSummary}
         </ThemeText>
       )}
     </View>
