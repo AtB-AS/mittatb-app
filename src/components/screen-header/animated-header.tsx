@@ -5,7 +5,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import ThemeText from '@atb/components/text';
 import HeaderButton from './HeaderButton';
 import {LeftButtonProps, RightButtonProps} from '.';
-import useFontScale from "@atb/utils/use-font-scale";
+import useFontScale from '@atb/utils/use-font-scale';
 type ScreenHeaderProps = ViewProps & {
   leftButton?: LeftButtonProps;
   rightButton?: RightButtonProps;
