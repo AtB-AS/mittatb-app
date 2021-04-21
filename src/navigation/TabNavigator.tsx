@@ -22,6 +22,7 @@ import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/ty
 import {NavigatorScreenParams, ParamListBase} from '@react-navigation/native';
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
+import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 
 type SubNavigator<T extends ParamListBase> = {
   [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
@@ -108,6 +109,6 @@ function tabSettings(
         {tabBarLabel}
       </ThemeText>
     ),
-    tabBarIcon: ({color}) => <Icon fill={color} />,
+    tabBarIcon: ({color}) => <ThemeIcon svg={Icon} fill={color} />,
   };
 }

@@ -14,79 +14,50 @@ import {SvgProps} from 'react-native-svg';
 import {useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 
 export type TransportationIconProps = {
   mode?: LegMode | TransportMode;
   subMode?: TransportSubmode;
-  style?: StyleProp<ViewStyle>;
 };
 
 const TransportationIcon: React.FC<TransportationIconProps> = ({
   mode,
   subMode,
-  style,
-  children,
 }) => {
-  const styles = useStyle();
   const {t} = useTranslation();
   const color = useTransportationColor(mode, subMode);
+  const svg = getTransportModeSvg(mode);
 
-  return (
-    <View style={styles.iconContainer}>
-      {children ? (
-        children
-      ) : (
-        <InnerIcon
-          fill={color}
-          style={style}
-          mode={mode}
-          accessibilityLabel={t(getTranslatedModeName(mode))}
-        />
-      )}
+  return svg ? (
+    <View>
+      <ThemeIcon
+        svg={svg}
+        fill={color}
+        accessibilityLabel={t(getTranslatedModeName(mode))}
+      />
     </View>
-  );
+  ) : null;
 };
 
 export default TransportationIcon;
 
-function InnerIcon({
-  mode,
-  fill,
-  style,
-}: {
-  fill: string;
-  style?: StyleProp<ViewStyle>;
-  mode?: LegMode | TransportMode;
-} & AccessibilityProps) {
-  const innerIconProps: SvgProps = {
-    width: '100%',
-    height: '100%',
-    fill,
-    style,
-  };
-
+function getTransportModeSvg(mode?: LegMode | TransportMode) {
   switch (mode) {
     case 'bus':
     case 'coach':
-      return <BusSide key="bus" {...innerIconProps} />;
+      return BusSide;
     case 'tram':
-      return <TramSide key="tram" {...innerIconProps} />;
+      return TramSide;
     case 'rail':
-      return <TrainSide key="rail" {...innerIconProps} />;
+      return TrainSide;
     case 'air':
-      return <PlaneSide key="airport" {...innerIconProps} />;
+      return PlaneSide;
     case 'water':
-      return <FerrySide key="boat" {...innerIconProps} />;
+      return FerrySide;
     case 'foot':
-      return <WalkingPerson {...innerIconProps} />;
+      return WalkingPerson;
     default:
       return null;
   }
 }
-
-const useStyle = StyleSheet.createThemeHook((theme) => ({
-  iconContainer: {
-    width: 20,
-    height: 20,
-  },
-}));

@@ -1,6 +1,7 @@
 import {useTheme} from '@atb/theme';
 import {Statuses, TextColor, Theme} from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
+import useFontScale from '@atb/utils/use-font-scale';
 
 type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
@@ -20,10 +21,13 @@ const ThemeIcon = ({
     ? theme.status[colorType].main.backgroundColor
     : theme.text.colors[colorType ?? 'primary'];
 
+  const fontScale = useFontScale();
+  const iconSize = theme.icon.size[size] * fontScale;
+
   const settings = {
     fill,
-    height: theme.icon.size[size],
-    width: theme.icon.size[size],
+    height: iconSize,
+    width: iconSize,
     ...props,
   };
   return svg(settings);

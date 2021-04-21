@@ -9,6 +9,7 @@ import TripMessages from './TripMessages';
 import TripSection from './TripSection';
 import Summary from './TripSummary';
 import {WaitDetails} from './WaitSection';
+import ThemeText from "@atb/components/text";
 
 type TripProps = {
   tripPattern: TripPattern;
