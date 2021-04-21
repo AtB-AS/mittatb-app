@@ -105,7 +105,9 @@ export const TinyMessageBox: React.FC<TinyMessageProps> = ({
   return (
     <View style={[styles.container, colorStyle]}>
       {message ? (
-        <ThemeText style={styles.text}>{message}</ThemeText>
+        <ThemeText style={{...styles.text, color: colorStyle.color}}>
+          {message}
+        </ThemeText>
       ) : (
         {children}
       )}
