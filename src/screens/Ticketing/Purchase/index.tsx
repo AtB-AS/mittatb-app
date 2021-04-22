@@ -26,6 +26,7 @@ import {UserProfileWithCount} from './Travellers/use-user-count-state';
 import TravelDateScreen, {
   TravelDateRouteParams,
 } from '@atb/screens/Ticketing/Purchase/TravelDate';
+import {TransitionPresets} from '@react-navigation/stack';
 
 type PurchaseOverviewParams = {
   refreshOffer?: boolean;
@@ -66,6 +67,7 @@ type TicketPurchaseRootProps = {
   route: RouteProp<TicketingStackParams, 'Travellers'>;
 };
 
+// gegesdd
 export default function PurchaseStack({route}: TicketPurchaseRootProps) {
   return (
     <Stack.Navigator
@@ -81,7 +83,13 @@ export default function PurchaseStack({route}: TicketPurchaseRootProps) {
       <Stack.Screen name="Travellers" component={TravellersScreen} />
       <Stack.Screen name="TravelDate" component={TravelDateScreen} />
       <Stack.Screen name="TariffZones" component={TariffZones} />
-      <Stack.Screen name="Confirmation" component={ConfirmationScreen} />
+      <Stack.Screen
+        name="Confirmation"
+        component={ConfirmationScreen}
+        options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
+      />
       <Stack.Screen name="PaymentCreditCard" component={CreditCardScreen} />
       <Stack.Screen name="PaymentVipps" component={VippsScreen} />
       <Stack.Screen
