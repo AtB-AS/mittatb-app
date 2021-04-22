@@ -67,7 +67,6 @@ type TicketPurchaseRootProps = {
   route: RouteProp<TicketingStackParams, 'Travellers'>;
 };
 
-// gegesdd
 export default function PurchaseStack({route}: TicketPurchaseRootProps) {
   return (
     <Stack.Navigator
