@@ -5,7 +5,7 @@ const Pagination = {
     label: _('Forrige', 'Previous'),
     a11yHint: _(
       'Aktivér for å vise forrige side',
-      'Activate to show last page',
+      'Activate to show previous page',
     ),
   },
   next: {
