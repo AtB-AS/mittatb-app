@@ -50,7 +50,17 @@ const Travellers: React.FC<TravellersProps> = ({
       />
 
       <ScrollView style={styles.travellerCounters}>
-        <View style={styles.summarySection}>
+        <View
+          style={styles.summarySection}
+          accessible={true}
+          accessibilityLabel={createTravellersText(
+            userCountState.userProfilesWithCount,
+            false,
+            true,
+            t,
+            language,
+          )}
+        >
           <Sections.Section>
             <Sections.GenericItem>
               <View style={styles.summaryItem}>
@@ -58,6 +68,8 @@ const Travellers: React.FC<TravellersProps> = ({
                 <ThemeText>
                   {createTravellersText(
                     userCountState.userProfilesWithCount,
+                    true,
+                    false,
                     t,
                     language,
                   )}

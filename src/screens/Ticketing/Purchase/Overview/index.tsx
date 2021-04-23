@@ -134,7 +134,13 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             }}
           />
           <Sections.LinkItem
-            text={createTravellersText(userProfilesWithCount, t, language)}
+            text={createTravellersText(
+              userProfilesWithCount,
+              true,
+              false,
+              t,
+              language,
+            )}
             onPress={() => {
               navigation.push('Travellers', {
                 userProfilesWithCount,
@@ -143,6 +149,13 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             }}
             icon={<ThemeIcon svg={Edit} />}
             accessibility={{
+              accessibilityLabel: createTravellersText(
+                userProfilesWithCount,
+                false,
+                false,
+                t,
+                language,
+              ),
               accessibilityHint: t(PurchaseOverviewTexts.travellers.a11yHint),
             }}
           />
@@ -207,22 +220,40 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
 export const createTravellersText = (
   userProfilesWithCount: UserProfileWithCount[],
+  /**
+   * shortened Shorten text if more than two traveller groups, making
+   * '2 adults, 1 child, 2 senior' become '5 travellers'.
+   */
+  shortened: boolean,
+  /**
+   * prefixed Prefix the traveller selection with text signalling it is the current
+   * selection.
+   */
+  prefixed: boolean,
   t: TranslateFunction,
   language: Language,
 ) => {
   const chosenUserProfiles = userProfilesWithCount.filter((u) => u.count);
+
+  const prefix = prefixed ? t(PurchaseOverviewTexts.travellers.prefix) : '';
+
   if (chosenUserProfiles.length === 0) {
-    return t(PurchaseOverviewTexts.travellers.noTravellers);
-  } else if (chosenUserProfiles.length > 2) {
+    return prefix + t(PurchaseOverviewTexts.travellers.noTravellers);
+  } else if (chosenUserProfiles.length > 2 && shortened) {
     const totalCount = chosenUserProfiles.reduce(
       (total, u) => total + u.count,
       0,
     );
-    return t(PurchaseOverviewTexts.travellers.travellersCount(totalCount));
+    return (
+      prefix + t(PurchaseOverviewTexts.travellers.travellersCount(totalCount))
+    );
   } else {
-    return chosenUserProfiles
-      .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
-      .join(', ');
+    return (
+      prefix +
+      chosenUserProfiles
+        .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
+        .join(', ')
+    );
   }
 };
 
