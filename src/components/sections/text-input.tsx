@@ -148,6 +148,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   },
   label: {
     minWidth: 60 - theme.spacings.medium,
+    paddingRight: theme.spacings.xSmall,
   },
   inputClear: {
     position: 'absolute',
