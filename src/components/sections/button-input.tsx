@@ -21,6 +21,7 @@ export type ButtonInputProps = SectionItem<{
   iconAccessibility?: AccessibilityProps;
   placeholder?: string;
   value?: string | JSX.Element;
+  highlighted?: boolean;
   icon?: NavigationIconTypes | JSX.Element;
   containerStyle?: ViewStyle;
 }> &
@@ -31,6 +32,7 @@ export default function ButtonInput({
   value,
   placeholder,
   label,
+  highlighted,
 
   icon,
   onIconPress,
@@ -72,7 +74,10 @@ export default function ButtonInput({
 
   const valueEl =
     isStringText(value) || !value ? (
-      <ThemeText type="body__primary" style={!value && styles.faded}>
+      <ThemeText
+        type={value && highlighted ? 'body__primary--bold' : 'body__primary'}
+        style={!value && styles.faded}
+      >
         {value ?? placeholder}
       </ThemeText>
     ) : (

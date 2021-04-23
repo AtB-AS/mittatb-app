@@ -181,7 +181,11 @@ const destinationPickerValue = (
       ),
     );
   } else if (fromTariffZone.id === toTariffZone.id && !toTariffZone.venueName) {
-    return t(TariffZonesTexts.location.destinationPicker.value.noVenueSameZone);
+    return t(
+      TariffZonesTexts.location.destinationPicker.value.noVenueSameZone(
+        getReferenceDataName(toTariffZone, language),
+      ),
+    );
   } else if (toTariffZone.venueName) {
     return t(
       TariffZonesTexts.location.departurePicker.value.withVenue(
@@ -347,6 +351,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
                 <ThemeIcon svg={CurrentLocationArrow} />
               ) : undefined
             }
+            highlighted={selectedZones.selectNext === 'from'}
           />
           <ButtonInput
             label={t(TariffZonesTexts.location.destinationPicker.label)}
@@ -370,6 +375,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
                 <ThemeIcon svg={CurrentLocationArrow} />
               ) : undefined
             }
+            highlighted={selectedZones.selectNext === 'to'}
           />
         </Section>
       </View>
@@ -423,12 +429,11 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
                     // Mapbox Expression syntax
                     'case',
                     ['==', selectedZones.from.id, ['id']],
-                    colors.secondary.red_500,
+                    theme.status.valid.bg.backgroundColor,
                     ['==', selectedZones.to.id, ['id']],
-                    colors.secondary.blue_500,
+                    theme.status.info.bg.backgroundColor,
                     'transparent',
                   ],
-                  fillOpacity: 0.2,
                 }}
               />
               <MapboxGL.LineLayer
