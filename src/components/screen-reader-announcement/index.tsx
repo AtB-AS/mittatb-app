@@ -6,20 +6,12 @@ type AnnouncementProps = {
 const ScreenReaderAnnouncement: React.FC<AnnouncementProps> = ({
   message,
 }: AnnouncementProps) => {
-  useEffect(() => {
-    if (message) {
-      setTimeout(
-        () => AccessibilityInfo.announceForAccessibility(message),
-        100,
-      );
-    }
-  }, [message]);
-
+  useScreenReaderAnnouncement(message);
   return null;
 };
 
 export const useScreenReaderAnnouncement = (
-  message: string,
+  message?: string,
   enabled: boolean = true,
 ) => {
   useEffect(() => {
