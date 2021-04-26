@@ -23,6 +23,8 @@ declare module 'axios' {
     authWithIdToken?: boolean;
     // Force refresh id token from firebase before request
     forceRefreshIdToken?: boolean;
+    // Whether the error logging to Bugsnag should be skipped for a given error
+    skipErrorLogging?: (error: AxiosError) => boolean;
   }
 }
 
@@ -87,6 +89,10 @@ function responseIdTokenHandler(error: AxiosError) {
 }
 
 function responseErrorHandler(error: AxiosError) {
+  if (error.config?.skipErrorLogging?.(error)) {
+    return Promise.reject(error);
+  }
+
   const errorType = getAxiosErrorType(error);
   const topmostError = error?.config?.topmostError;
 
