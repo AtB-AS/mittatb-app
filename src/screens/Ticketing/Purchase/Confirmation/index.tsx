@@ -10,7 +10,11 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ReserveOffer} from '@atb/tickets';
-import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
+import {
+  Language,
+  PurchaseConfirmationTexts,
+  useTranslation,
+} from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
 import {addMinutes} from 'date-fns';
 import React from 'react';
@@ -87,14 +91,33 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   );
 
   const vatAmount = totalPrice * (vatPercent / 100);
-  const vatAmountString = vatAmount.toLocaleString(language, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-  const vatPercentString = vatPercent.toLocaleString(language, {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  });
+
+  /*
+  Todo: toLocaleString not working on Android until React Native 0.65. Remove manual
+    handling when RN 0.65 is used.
+  */
+  // const vatAmountString = vatAmount.toLocaleString(language, {
+  //   minimumFractionDigits: 2,
+  //   maximumFractionDigits: 2,
+  // });
+  // const vatPercentString = vatPercent.toLocaleString(language, {
+  //   minimumFractionDigits: 0,
+  //   maximumFractionDigits: 2,
+  // });
+
+  /*
+  Temporary manual handling of decimal number representation. Will use comma/dot
+  based on language, and a maximal of two decimals. Will not round the decimals.
+  */
+  const formatNumberRegexp = /(\d+)\.(\d{0,2})\d*/g;
+  const decimalMark = language === Language.Norwegian ? ',' : '.';
+  const formatNumberReplacement = `$1${decimalMark}$2`;
+  const vatAmountString = vatAmount
+    .toString()
+    .replace(formatNumberRegexp, formatNumberReplacement);
+  const vatPercentString = vatPercent
+    .toString()
+    .replace(formatNumberRegexp, formatNumberReplacement);
 
   async function payWithVipps() {
     if (offerExpirationTime && totalPrice > 0) {
