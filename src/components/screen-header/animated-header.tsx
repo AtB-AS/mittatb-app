@@ -5,12 +5,15 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import ThemeText, {MAX_FONT_SCALE} from '@atb/components/text';
 import HeaderButton from './HeaderButton';
 import {LeftButtonProps, RightButtonProps} from '.';
+import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+
 type ScreenHeaderProps = ViewProps & {
   leftButton?: LeftButtonProps;
   rightButton?: RightButtonProps;
   title: React.ReactNode;
   alternativeTitleComponent?: React.ReactNode;
   scrollRef?: Animated.Value;
+  setFocusOnLoad?: boolean;
 };
 
 const BASE_HEADER_HEIGHT = 20;
@@ -21,6 +24,7 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
   title,
   alternativeTitleComponent,
   scrollRef,
+  setFocusOnLoad,
   ...props
 }) => {
   const style = useHeaderStyle();
@@ -53,6 +57,8 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
     </Animated.View>
   );
 
+  const focusRef = useFocusOnLoad(setFocusOnLoad);
+
   return (
     <View style={style.container} {...props}>
       <View
@@ -66,7 +72,7 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
             {transform: [{translateY: titleOffset}]},
           ]}
         >
-          <View accessible={true} accessibilityRole="header">
+          <View accessible={true} accessibilityRole="header" ref={focusRef}>
             <ThemeText type="body__primary--bold">{title}</ThemeText>
           </View>
         </Animated.View>

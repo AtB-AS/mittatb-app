@@ -10,6 +10,7 @@ import HeaderButton, {ButtonModes, HeaderButtonProps} from './HeaderButton';
 import ThemeText from '@atb/components/text';
 import {AlertContext} from '@atb/alerts/AlertsContext';
 import AlertBox from '@atb/alerts/AlertBox';
+import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 
 export {default as AnimatedScreenHeader} from './animated-header';
 
@@ -31,6 +32,7 @@ export type ScreenHeaderProps = {
    */
   alertContext?: AlertContext;
   style?: ViewStyle;
+  setFocusOnLoad?: boolean;
 };
 
 const ScreenHeader: React.FC<ScreenHeaderProps> = ({
@@ -39,6 +41,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   title,
   alertContext,
   style,
+  setFocusOnLoad,
 }) => {
   const css = useHeaderStyle();
   const {theme} = useTheme();
@@ -47,6 +50,8 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 
   const leftIcon = leftButton ? <HeaderButton {...leftButton} /> : <View />;
   const rightIcon = rightButton ? <HeaderButton {...rightButton} /> : <View />;
+
+  const focusRef = useFocusOnLoad(setFocusOnLoad);
 
   return (
     <View style={[css.container, style]}>
@@ -61,6 +66,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
           },
         ]}
         onLayout={setLayoutFor('container')}
+        ref={focusRef}
       >
         <ThemeText onLayout={setLayoutFor('title')} type="body__primary--bold">
           {title}
