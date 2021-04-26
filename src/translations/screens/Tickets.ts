@@ -71,7 +71,7 @@ const TicketsTexts = {
     orderId: (orderId: string) =>
       _(`Ordre-id ${orderId}`, `Order ID ${orderId}`),
     paymentType: {
-      vipps: _('Vipps'),
+      vipps: _('Vipps', 'Vipps'),
       creditcard: _('kredittkort', 'credit card'),
     },
     goToVipps: _('Gå til Vipps for betaling', 'Go to Vipps for payment'),

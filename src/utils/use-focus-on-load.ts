@@ -1,0 +1,39 @@
+import {useEffect, useRef} from 'react';
+import {AccessibilityInfo, findNodeHandle} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+
+/**
+ * Return a ref which can be set on a component to make it be focused by screen
+ * reader when loaded on screen. This will work both on component mount, and
+ * when the screen gets back in focus while already on the stack.
+ */
+export default function useFocusOnLoad(setFocusOnLoad: boolean = true) {
+  const focusRef = useRef(null);
+  useEffect(() => {
+    giveFocus(setFocusOnLoad, focusRef);
+  }, [focusRef.current, setFocusOnLoad]);
+
+  const navigation = useNavigation();
+  useEffect(
+    () =>
+      navigation.addListener('focus', () => {
+        // 50 ms timeout necessary for iPhone VoiceOver
+        setTimeout(() => giveFocus(setFocusOnLoad, focusRef), 50);
+      }),
+    [navigation, focusRef.current, setFocusOnLoad],
+  );
+
+  return focusRef;
+}
+
+const giveFocus = (
+  shouldFocus: boolean,
+  focusRef: React.MutableRefObject<any>,
+) => {
+  if (shouldFocus && focusRef.current) {
+    const reactTag = findNodeHandle(focusRef.current);
+    if (reactTag) {
+      AccessibilityInfo.setAccessibilityFocus(reactTag);
+    }
+  }
+};

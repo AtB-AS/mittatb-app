@@ -8,10 +8,7 @@ const TariffZonesTexts = {
     a11yLabelPrefix: _(`Sonevalget er`, `The zone selection is`),
     text: {
       singleZone: (zoneName: string) =>
-        _(
-          `Reise gjennom 1 sone (Sone ${zoneName})`,
-          `Travel through 1 zone (Zone ${zoneName})`,
-        ),
+        _(`Reise i 1 sone (${zoneName})`, `Travel in 1 zone (${zoneName})`),
       multipleZone: (zoneNameFrom: string, zoneNameTo: string) =>
         _(
           `Reise fra sone ${zoneNameFrom} til sone ${zoneNameTo}`,
@@ -54,7 +51,8 @@ const TariffZonesTexts = {
       value: {
         noVenue: (zoneName: string) =>
           _(`Sone ${zoneName}`, `Zone ${zoneName}`),
-        noVenueSameZone: _(`Samme sone`, `Same zone`),
+        noVenueSameZone: (zoneName: string) =>
+          _(`Samme sone (${zoneName})`, `Same zone (${zoneName})`),
         withVenue: (zoneName: string, venueName: string) =>
           _(
             `Sone ${zoneName} (${venueName})`,
