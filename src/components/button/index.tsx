@@ -12,6 +12,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 
 export {default as ButtonGroup} from './group';
 
@@ -60,7 +61,7 @@ export type ButtonProps = {
   viewContainerStyle?: StyleProp<ViewStyle>;
   textContainerStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
-  icon?: React.ElementType<{fill: string}>;
+  icon?: ({fill}: {fill: string}) => JSX.Element;
   iconPosition?: 'left' | 'right';
 } & ButtonTypeAwareProps &
   TouchableOpacityProps;
@@ -154,7 +155,7 @@ const Button: React.FC<ButtonProps> = ({
       >
         {Icon && iconPosition === 'left' && (
           <View style={iconContainer}>
-            <Icon fill={primary} />
+            <ThemeIcon svg={Icon} fill={primary} />
           </View>
         )}
         {text && (
@@ -171,7 +172,7 @@ const Button: React.FC<ButtonProps> = ({
         )}
         {Icon && iconPosition === 'right' && (
           <View style={iconContainer}>
-            <Icon fill={primary} />
+            <ThemeIcon svg={Icon} fill={primary} />
           </View>
         )}
       </TouchableOpacity>

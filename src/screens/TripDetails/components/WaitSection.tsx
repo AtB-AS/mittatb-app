@@ -1,5 +1,5 @@
 import {Wait} from '@atb/assets/svg/icons/transportation';
-import {Info} from '@atb/assets/svg/situations';
+import {Info, Warning} from '@atb/assets/svg/situations';
 import ThemeText from '@atb/components/text';
 import {TinyMessageBox} from '@atb/components/message-box';
 import {StyleSheet} from '@atb/theme';
@@ -11,6 +11,7 @@ import {View} from 'react-native';
 import {timeIsShort} from '../Details/utils';
 import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
+import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 
 export type WaitDetails = {
   waitAfter: boolean;
@@ -28,14 +29,14 @@ const WaitSection: React.FC<WaitDetails> = (wait) => {
     <View style={style.section}>
       <TripLegDecoration color={iconColor} hasStart={false} hasEnd={false} />
       {shortWait && (
-        <TripRow rowLabel={<Info />}>
+        <TripRow rowLabel={<ThemeIcon svg={Info} />}>
           <TinyMessageBox
             type="info"
             message={t(TripDetailsTexts.trip.leg.wait.messages.shortTime)}
           />
         </TripRow>
       )}
-      <TripRow rowLabel={<Wait />}>
+      <TripRow rowLabel={<ThemeIcon svg={Wait} fill={iconColor} />}>
         <ThemeText type="body__secondary" color="secondary">
           {t(TripDetailsTexts.trip.leg.wait.label(waitTime))}
         </ThemeText>

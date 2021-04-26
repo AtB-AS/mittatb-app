@@ -34,6 +34,7 @@ import TripRow from './TripRow';
 import WaitSection, {WaitDetails} from './WaitSection';
 import {DetailsModalNavigationProp} from '@atb/screens/TripDetails';
 import {searchByStopPlace} from '@atb/geocoder/search-for-location';
+import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -118,7 +119,7 @@ const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
         {!!leg.situations.length && (
-          <TripRow rowLabel={<Warning />}>
+          <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
             <SituationMessages mode="no-icon" situations={leg.situations} />
           </TripRow>
         )}
@@ -126,7 +127,7 @@ const TripSection: React.FC<TripSectionProps> = ({
         {leg.notices &&
           leg.notices.map((notice) => {
             return (
-              <TripRow rowLabel={<Info />}>
+              <TripRow rowLabel={<ThemeIcon svg={Info} />}>
                 <TinyMessageBox type="info" message={notice.text} />
               </TripRow>
             );

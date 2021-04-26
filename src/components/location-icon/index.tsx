@@ -20,35 +20,30 @@ const LocationIcon = ({
   fill?: string;
   multiple?: boolean;
 }) => {
-  const svgProps = {
-    width: 20,
-  };
   switch (location.layer) {
     case 'address':
-      return <ThemeIcon svg={MapPointPin} {...svgProps} />;
+      return <ThemeIcon svg={MapPointPin} />;
     case 'venue':
       const venueIconTypes = location.category
         .map(mapCategoryToVenueIconType)
         .filter((v, i, arr) => arr.indexOf(v) === i); // get distinct values
 
-      if (!venueIconTypes.length)
-        return <ThemeIcon svg={MapPointPin} {...svgProps} />;
+      if (!venueIconTypes.length) {
+        return <ThemeIcon svg={MapPointPin} />;
+      }
 
       return multiple ? (
-        <>{venueIconTypes.map((it) => mapTypeToIconComponent(it, svgProps))}</>
+        <>{venueIconTypes.map((it) => mapTypeToIconComponent(it))}</>
       ) : (
-        mapTypeToIconComponent(venueIconTypes[0], svgProps)
+        mapTypeToIconComponent(venueIconTypes[0])
       );
 
     default:
-      return <ThemeIcon svg={MapPointPin} {...svgProps} />;
+      return <ThemeIcon svg={MapPointPin} />;
   }
 };
 
-const mapTypeToIconComponent = (
-  iconType: VenueIconType,
-  svgProps: SvgProps,
-) => {
+const mapTypeToIconComponent = (iconType: VenueIconType) => {
   switch (iconType) {
     case 'bus':
       return (
@@ -56,7 +51,6 @@ const mapTypeToIconComponent = (
           svg={BusSide}
           accessibilityLabel="Bussholdeplass"
           key="bus"
-          {...svgProps}
         />
       );
     case 'tram':
@@ -65,17 +59,11 @@ const mapTypeToIconComponent = (
           svg={TramSide}
           accessibilityLabel="Trikkeholdeplass"
           key="tram"
-          {...svgProps}
         />
       );
     case 'rail':
       return (
-        <ThemeIcon
-          svg={TrainSide}
-          accessibilityLabel="Togstasjon"
-          key="rail"
-          {...svgProps}
-        />
+        <ThemeIcon svg={TrainSide} accessibilityLabel="Togstasjon" key="rail" />
       );
     case 'airport':
       return (
@@ -83,17 +71,11 @@ const mapTypeToIconComponent = (
           svg={PlaneSide}
           accessibilityLabel="Flyplass"
           key="airport"
-          {...svgProps}
         />
       );
     case 'boat':
       return (
-        <ThemeIcon
-          svg={FerrySide}
-          accessibilityLabel="Fergeleie"
-          key="boat"
-          {...svgProps}
-        />
+        <ThemeIcon svg={FerrySide} accessibilityLabel="Fergeleie" key="boat" />
       );
     case 'unknown':
     default:
@@ -102,7 +84,6 @@ const mapTypeToIconComponent = (
           svg={MapPointPin}
           accessibilityLabel="Lokasjon"
           key="unknown"
-          {...svgProps}
         />
       );
   }

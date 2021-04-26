@@ -13,13 +13,13 @@ import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
-import {useWindowDimensions} from 'react-native';
 import {PanGestureHandler} from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ProfileStackParams} from '..';
 import {SortableList} from './SortableList';
 import SortableListFallback from './SortableListFallback';
+import useFontScale from '@atb/utils/use-font-scale';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -42,7 +42,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
   const [sortedItems, setSortedItems] = useState(items);
   const [error, setError] = useState<string | null>(null);
   const screenReaderEnabled = useIsScreenReaderEnabled();
-  const {fontScale} = useWindowDimensions();
+  const fontScale = useFontScale();
   const minHeight = 40 + 12 * fontScale;
   const {t} = useTranslation();
 

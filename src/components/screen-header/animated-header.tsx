@@ -1,12 +1,12 @@
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
-import {Animated, useWindowDimensions, View, ViewProps} from 'react-native';
+import {Animated, View, ViewProps} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import ThemeText, {MAX_FONT_SCALE} from '@atb/components/text';
+import ThemeText from '@atb/components/text';
 import HeaderButton from './HeaderButton';
 import {LeftButtonProps, RightButtonProps} from '.';
+import useFontScale from '@atb/utils/use-font-scale';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-
 type ScreenHeaderProps = ViewProps & {
   leftButton?: LeftButtonProps;
   rightButton?: RightButtonProps;
@@ -30,8 +30,8 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
   const style = useHeaderStyle();
   const insets = useSafeAreaInsets();
 
-  const {fontScale} = useWindowDimensions();
-  const headerHeight = BASE_HEADER_HEIGHT * Math.min(fontScale, MAX_FONT_SCALE);
+  const fontScale = useFontScale();
+  const headerHeight = BASE_HEADER_HEIGHT * fontScale;
 
   const titleOffset = scrollRef!.interpolate({
     inputRange: [0, headerHeight + insets.top],

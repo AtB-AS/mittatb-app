@@ -283,14 +283,14 @@ function TripItem({
         <ThemeText>{getQuayName(call.quay)} </ThemeText>
       </TripRow>
       {showSituations && (
-        <TripRow rowLabel={<Warning />}>
+        <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
           <SituationMessages mode="no-icon" situations={call.situations} />
         </TripRow>
       )}
       {call.notices &&
         call.notices.map((notice) => {
           return (
-            <TripRow rowLabel={<Info />}>
+            <TripRow rowLabel={<ThemeIcon svg={Info} />}>
               <TinyMessageBox type="info" message={notice.text} />
             </TripRow>
           );

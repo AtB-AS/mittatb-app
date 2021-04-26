@@ -1,27 +1,24 @@
 import analytics from '@react-native-firebase/analytics';
 import {useNavigation} from '@react-navigation/native';
 import {useCallback} from 'react';
-import {useWindowDimensions} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TabNavigatorParams} from '../navigation/TabNavigator';
 import {
   Preference_ScreenAlternatives,
   usePreferenceItems,
 } from '../preferences';
-import {MAX_FONT_SCALE} from '../components/text';
+import useFontScale from '@atb/utils/use-font-scale';
 
 // This is code from react-navigation, for regular tab bar
 // (not compact). Should be a better way to set this or
 // get it from React Navigation, but alas not.
 const DEFAULT_TABBAR_HEIGHT = 44;
 
-export const useBottomNavigationStyles = (
-  maxScale: number = MAX_FONT_SCALE,
-): {minHeight: number} => {
-  const {fontScale} = useWindowDimensions();
+export const useBottomNavigationStyles = () => {
+  const fontScale = useFontScale();
   const {bottom} = useSafeAreaInsets();
   return {
-    minHeight: DEFAULT_TABBAR_HEIGHT * Math.min(fontScale, maxScale) + bottom,
+    minHeight: DEFAULT_TABBAR_HEIGHT * fontScale + bottom,
   };
 };
 export const useNavigateToStartScreen = () => {
