@@ -89,7 +89,7 @@ function responseIdTokenHandler(error: AxiosError) {
 }
 
 function responseErrorHandler(error: AxiosError) {
-  if (error.config.skipErrorLogging?.(error)) {
+  if (error.config?.skipErrorLogging?.(error)) {
     return Promise.reject(error);
   }
 
