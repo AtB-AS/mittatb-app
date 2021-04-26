@@ -13,6 +13,7 @@ import TicketInfo from '../TicketInfo';
 import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
 import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
+import {screenReaderPause} from '@atb/components/accessible-text';
 
 type Props = {
   fareContract: FareContract;
@@ -34,6 +35,8 @@ const DetailsContent: React.FC<Props> = ({
     const validFrom = firstTravelRight.startDateTime.toMillis();
     const validTo = firstTravelRight.endDateTime.toMillis();
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
+
+    const orderIdText = t(TicketTexts.details.orderId(fc.orderId));
 
     return (
       <Sections.Section withBottomPadding>
@@ -57,7 +60,9 @@ const DetailsContent: React.FC<Props> = ({
         </Sections.GenericItem>
         <Sections.GenericItem>
           <View accessible={true}>
-            <ThemeText>{t(TicketTexts.details.orderId(fc.orderId))}</ThemeText>
+            <ThemeText accessibilityLabel={`${orderIdText},`}>
+              {orderIdText}
+            </ThemeText>
             <ThemeText type="body__secondary" color="secondary">
               {t(
                 TicketTexts.details.purchaseTime(
