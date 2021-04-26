@@ -43,10 +43,14 @@ const AssistantTexts = {
       _(`Avreise nå (${time})`, `Departing now (${time})`),
     departure: (time: string) => _(`Avreise ${time}`, `Departure ${time}`),
     arrival: (time: string) => _(`Ankomst ${time}`, `Arrival ${time}`),
+    a11yHint: _(
+      'Aktivér for å endre reisetidspunkt',
+      'Activate to change time of travel',
+    ),
   },
   favorites: {
     favoriteChip: {
-      a11yHint: _('Aktiver for å bruke som', 'Activate to use as'),
+      a11yHint: _('Aktivér for å bruke som', 'Activate to use as'),
     },
   },
   searchState: {
