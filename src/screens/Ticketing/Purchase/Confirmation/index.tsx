@@ -10,7 +10,11 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ReserveOffer} from '@atb/tickets';
-import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
+import {
+  Language,
+  PurchaseConfirmationTexts,
+  useTranslation,
+} from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
 import {addMinutes} from 'date-fns';
 import React from 'react';
@@ -21,6 +25,7 @@ import useOfferState from '../Overview/use-offer-state';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import {createTravelDateText} from '@atb/screens/Ticketing/Purchase/Overview';
 import {formatToLongDateTime} from '@atb/utils/date';
+import {formatDecimalNumber} from '@atb/utils/numbers';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -87,14 +92,9 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   );
 
   const vatAmount = totalPrice * (vatPercent / 100);
-  const vatAmountString = vatAmount.toLocaleString(language, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-  const vatPercentString = vatPercent.toLocaleString(language, {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  });
+
+  const vatAmountString = formatDecimalNumber(vatAmount, language);
+  const vatPercentString = formatDecimalNumber(vatPercent, language);
 
   async function payWithVipps() {
     if (offerExpirationTime && totalPrice > 0) {
