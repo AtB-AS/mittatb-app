@@ -117,6 +117,7 @@ function responseErrorHandler(error: AxiosError) {
         const errorMetadata = getAxiosErrorMetadata(error);
         Bugsnag.notify(error, (event) => {
           event.addMetadata('api', {...errorMetadata});
+          event.severity = 'info';
         });
       }
       break;

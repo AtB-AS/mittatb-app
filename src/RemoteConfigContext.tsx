@@ -70,6 +70,7 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
       ) {
         Bugsnag.notify(e, function (event) {
           event.addMetadata('metadata', {userInfo});
+          event.severity = 'info';
         });
       }
     }
