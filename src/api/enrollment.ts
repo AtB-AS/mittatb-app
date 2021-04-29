@@ -14,5 +14,11 @@ export async function enrollIntoBetaGroups(inviteKey: string) {
     inviteKey,
   });
 
-  return await client.post<EnrollmentResponse>(stringifyUrl(url, query));
+  return await client.post<EnrollmentResponse>(
+    stringifyUrl(url, query),
+    undefined,
+    {
+      skipErrorLogging: (error) => error.response?.status === 422,
+    },
+  );
 }
