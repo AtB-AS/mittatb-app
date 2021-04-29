@@ -15,6 +15,8 @@ import auth from '@react-native-firebase/auth';
 
 export default createClient(API_BASE_URL);
 
+const RETRY_COUNT = 3;
+
 declare module 'axios' {
   export interface AxiosRequestConfig {
     // Should retry if network error or 5xx idempotent request
@@ -28,13 +30,13 @@ declare module 'axios' {
   }
 }
 
-function retryCondition(error: AxiosError): boolean {
+function shouldRetry(error: AxiosError): boolean {
   const shouldRetryOnNetworkErrorOrIdempotentRequest =
-    Boolean(error.config.retry) &&
+    Boolean(error.config?.retry) &&
     (getAxiosErrorType(error) === 'network-error' ||
       isIdempotentRequestError(error));
   return (
-    error.config.forceRefreshIdToken ||
+    error.config?.forceRefreshIdToken ||
     shouldRetryOnNetworkErrorOrIdempotentRequest
   );
 }
@@ -50,8 +52,8 @@ export function createClient(baseUrl: string) {
   client.interceptors.request.use(requestHandler, undefined);
   client.interceptors.request.use(requestIdTokenHandler);
   client.interceptors.response.use(undefined, responseIdTokenHandler);
-  axiosRetry(client, {retries: 3, retryCondition});
   client.interceptors.response.use(undefined, responseErrorHandler);
+  axiosRetry(client, {retries: RETRY_COUNT, retryCondition: shouldRetry});
   return client;
 }
 
@@ -89,7 +91,7 @@ function responseIdTokenHandler(error: AxiosError) {
 }
 
 function responseErrorHandler(error: AxiosError) {
-  if (error.config?.skipErrorLogging?.(error)) {
+  if (shouldSkipLogging(error)) {
     return Promise.reject(error);
   }
 
@@ -126,3 +128,11 @@ function responseErrorHandler(error: AxiosError) {
 
   return Promise.reject(error);
 }
+
+const shouldSkipLogging = (error: AxiosError) => {
+  const configuredToSkipLogging = error.config?.skipErrorLogging?.(error);
+  const willRetry =
+    shouldRetry(error) &&
+    (error.config?.['axios-retry'] as any)?.retryCount < RETRY_COUNT;
+  return configuredToSkipLogging || willRetry;
+};
