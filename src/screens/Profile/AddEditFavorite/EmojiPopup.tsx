@@ -7,7 +7,7 @@
 import ThemeText from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import composeRefs from '@seznam/compose-react-refs';
-import emoji from 'emoji-datasource';
+import emoji, {Emoji} from 'emoji-datasource';
 import groupBy from 'lodash.groupby';
 import mapValues from 'lodash.mapvalues';
 import orderBy from 'lodash.orderby';
@@ -23,6 +23,10 @@ import {
 } from 'react-native';
 import {Modalize} from 'react-native-modalize';
 import {Portal} from 'react-native-portalize';
+import Button, {ButtonGroup} from '@atb/components/button';
+import SvgDelete from '@atb/assets/svg/icons/actions/Delete';
+import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
+import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 
 // Polyfill for Android
 require('string.fromcodepoint');
@@ -43,7 +47,7 @@ function charFromEmojiObj(obj: any) {
 
 const blocklistedEmojis = ['white_frowning_face', 'keycap_star', 'eject'];
 
-const filteredEmojis = emoji.filter((e: any) => {
+const filteredEmojis = emoji.filter((e: Emoji) => {
   if (blocklistedEmojis.includes(e.short_name)) return false;
   if (Platform.OS === 'android') {
     if (e.added_in === '2.0') return true;
@@ -128,16 +132,19 @@ const ClearButton: React.FC<{
   clearButtonText?: string;
 }> = ({value, onEmojiSelected, clearButtonStyle, clearButtonText}) => {
   const styles = useStyles();
+  const {t} = useTranslation();
   if (!value) return null;
   return (
-    <TouchableOpacity onPress={() => onEmojiSelected(null)}>
-      <ThemeText
-        type="body__primary"
-        style={[styles.clearButton, clearButtonStyle]}
-      >
-        {clearButtonText ?? 'Fjern emoji'}
-      </ThemeText>
-    </TouchableOpacity>
+    <ButtonGroup>
+      <Button
+        onPress={() => onEmojiSelected(null)}
+        color="primary_2"
+        icon={SvgDelete}
+        iconPosition="right"
+        text={t(AddEditFavoriteTexts.removeIcon.label)}
+        accessibilityHint={t(AddEditFavoriteTexts.removeIcon.a11yHint)}
+      />
+    </ButtonGroup>
   );
 };
 
@@ -169,9 +176,15 @@ const EmojiCategory: React.FC<EmojiCategory> = ({
     lineHeight: size + PADDING,
     padding: PADDING,
   };
-  const categoryText = localizedCategories
-    ? localizedCategories[CATEGORIES.indexOf(category)]
-    : category;
+
+  const {t, language} = useTranslation();
+
+  const categoryText: string =
+    language === 'en'
+      ? category
+      : localizedCategories
+      ? localizedCategories[CATEGORIES.indexOf(category)]
+      : category;
 
   const styles = useStyles();
 
@@ -196,6 +209,7 @@ type Props = Omit<EmojiCategory, 'category'> & {
   closeOnSelect?: boolean;
   clearButtonStyle?: ViewStyle;
   clearButtonText?: string;
+  onClose: Function;
   value: string | null;
 };
 const EmojiPicker = forwardRef<Modalize, Props>(
@@ -229,8 +243,12 @@ const EmojiPicker = forwardRef<Modalize, Props>(
           ref={combinedRef}
           modalStyle={styles.modal}
           HeaderComponent={
-            <ClearButton value={value} onEmojiSelected={onClick} />
+            <>
+              <ScreenReaderAnnouncement message={'select icon'} />
+              <ClearButton value={value} onEmojiSelected={onClick} />
+            </>
           }
+          onClose={() => props.onClose()}
           flatListProps={{
             data: CATEGORIES,
             initialNumToRender: 1,
@@ -238,6 +256,7 @@ const EmojiPicker = forwardRef<Modalize, Props>(
             keyExtractor: (category: string) => category as string,
             renderItem: renderCategory,
           }}
+          closeOnOverlayTap={true}
         />
       </Portal>
     );

@@ -23,6 +23,11 @@ const AddEditFavoriteTexts = {
     },
     icon: {
       label: _('Ikon', 'Icon'),
+      a11yHint: _(
+        'Ikon som skal vises for denne favoritten. ',
+        'Icon to display for this favourite. ',
+      ),
+      mapPoint: _('kartnål', 'map point'),
     },
   },
   save: {
@@ -41,6 +46,13 @@ const AddEditFavoriteTexts = {
   },
   cancel: {
     label: _('Avbryt', 'Cancel'),
+  },
+  removeIcon: {
+    label: _('Fern ikon', 'Remove icon'),
+    a11yHint: _(
+      'Fjern ikonet for denne favoritten',
+      'Remove the icon for this favourite',
+    ),
   },
 };
 export default AddEditFavoriteTexts;

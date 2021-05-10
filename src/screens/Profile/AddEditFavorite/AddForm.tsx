@@ -23,6 +23,7 @@ import {Modalize} from 'react-native-modalize';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AddEditFavoriteRootParams} from '.';
 import EmojiPopup from './EmojiPopup';
+import {screenReaderPause} from '@atb/components/accessible-text';
 
 type AddEditRouteName = 'AddEditForm';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditForm';
@@ -62,6 +63,12 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   );
   const [emoji, setEmoji] = useState<string | undefined>(editItem?.emoji);
   const [name, setName] = useState<string>(editItem?.name ?? '');
+  const [showingEmojiModal, setShowingEmojiModal] = useState(false);
+
+  const onEmojiModalClose = () => {
+    setShowingEmojiModal(false);
+  };
+
   const location = useOnlySingleLocation<AddEditScreenRouteProp>(
     'searchLocation',
     editItem?.location,
@@ -70,6 +77,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   const emojiRef = useRef<Modalize>(null);
   const openEmojiPopup = () => {
     Keyboard.dismiss();
+    setShowingEmojiModal(true);
     emojiRef.current?.open();
   };
 
@@ -155,6 +163,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         ref={emojiRef}
         value={emoji ?? null}
         closeOnSelect={true}
+        onClose={onEmojiModalClose}
         onEmojiSelected={(emoji) => {
           if (emoji == null) {
             setEmoji(undefined);
@@ -164,7 +173,13 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         }}
       />
 
-      <View style={css.innerContainer}>
+      <View
+        style={css.innerContainer}
+        accessibilityElementsHidden={showingEmojiModal}
+        importantForAccessibility={
+          !showingEmojiModal ? 'yes' : 'no-hide-descendants'
+        }
+      >
         <ScreenReaderAnnouncement message={errorMessage} />
         {errorMessage && (
           <MessageBox withMargin message={errorMessage} type="error" />
@@ -201,9 +216,15 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         <Sections.Section withPadding>
           <Sections.ButtonInput
             onPress={openEmojiPopup}
-            accessibilityElementsHidden={true}
-            importantForAccessibility="no-hide-descendants"
+            accessibilityElementsHidden={false}
+            importantForAccessibility="auto"
             label={t(AddEditFavoriteTexts.fields.icon.label)}
+            accessibilityLabel={
+              t(AddEditFavoriteTexts.fields.icon.a11yHint) +
+              (emoji ??
+                screenReaderPause +
+                  t(AddEditFavoriteTexts.fields.icon.mapPoint))
+            }
             icon="expand-more"
             type="inline"
             value={
@@ -217,7 +238,13 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         </Sections.Section>
       </View>
 
-      <KeyboardAvoidingView behavior="padding">
+      <KeyboardAvoidingView
+        behavior="padding"
+        accessibilityElementsHidden={showingEmojiModal}
+        importantForAccessibility={
+          !showingEmojiModal ? 'yes' : 'no-hide-descendants'
+        }
+      >
         <ButtonGroup>
           {editItem && (
             <Button
