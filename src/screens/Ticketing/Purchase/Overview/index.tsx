@@ -311,7 +311,7 @@ const useDefaultUserProfilesWithCount = (
           ...u,
           count: isDefaultProfile(u, i, filteredProfiles) ? 1 : 0,
         })),
-    [userProfiles, isDefaultProfile],
+    [userProfiles, isDefaultProfile, preassignedFareProduct],
   );
 };
 
