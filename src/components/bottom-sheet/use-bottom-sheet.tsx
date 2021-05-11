@@ -22,7 +22,7 @@ const Backdrop = ({animatedOffset}: {animatedOffset: Animated.Value}) => {
   const styles = useStyles();
   const opacity = animatedOffset.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 0.2],
+    outputRange: [0, 0.8],
   });
 
   return (
