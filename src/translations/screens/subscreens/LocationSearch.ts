@@ -29,7 +29,7 @@ const LocationSearchTexts = {
           `Journey from ${fromName} to ${toName}.`,
         ),
       a11yHint: _(
-        'Aktiver for å søke etter reiser for disse stedene.',
+        'Aktivér for å søke etter reiser for disse stedene.',
         'Activate to search for trips for these locations.',
       ),
     },
@@ -37,7 +37,7 @@ const LocationSearchTexts = {
   locationResults: {
     a11y: {
       activateToUse: _(
-        'Aktiver for å bruke dette stedet',
+        'Aktivér for å bruke dette stedet',
         'Activate to use this location',
       ),
       activateToSearch: (locationName: string) =>
