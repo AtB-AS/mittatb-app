@@ -9,6 +9,7 @@ import {FavoriteIcon} from '../favorites';
 import ThemeText from '../components/text';
 import ThemeIcon from '../components/theme-icon';
 import {screenReaderPause} from '../components/accessible-text';
+import {LocationSearchTexts, useTranslation} from '@atb/translations';
 
 type Props = {
   title?: string;
@@ -24,6 +25,7 @@ const LocationResults: React.FC<Props> = ({
   onPrefillText,
 }) => {
   const styles = useThemeStyles();
+  const {t} = useTranslation();
   return (
     <>
       {title && (
@@ -40,7 +42,9 @@ const LocationResults: React.FC<Props> = ({
                 accessibilityLabel={
                   searchResult.location.label + screenReaderPause
                 }
-                accessibilityHint={'Aktivér for å bruke dette resultatet.'}
+                accessibilityHint={t(
+                  LocationSearchTexts.locationResults.a11y.activateToUse,
+                )}
                 accessibilityRole="button"
                 hitSlop={insets.symmetric(8, 1)}
                 onPress={() => onSelect(searchResult.selectable)}
@@ -69,9 +73,11 @@ const LocationResults: React.FC<Props> = ({
             </View>
             <TouchableOpacity
               accessible={true}
-              accessibilityLabel={
-                'Legg ' + searchResult.prefill + ' i søkefelt'
-              }
+              accessibilityLabel={t(
+                LocationSearchTexts.locationResults.a11y.activateToSearch(
+                  searchResult.prefill,
+                ),
+              )}
               accessibilityRole="button"
               hitSlop={insets.all(8)}
               onPress={() => onPrefillText(searchResult.prefill + ' ')}
