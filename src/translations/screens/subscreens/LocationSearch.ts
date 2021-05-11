@@ -42,8 +42,8 @@ const LocationSearchTexts = {
       ),
       activateToSearch: (locationName: string) =>
         _(
-          `Aktiver for å legge ${locationName} i søkefeltet`,
-          `Activate to add ${locationName} to the search field`,
+          `Legg ${locationName} i søkefeltet`,
+          `Add ${locationName} to the search field`,
         ),
     },
   },
