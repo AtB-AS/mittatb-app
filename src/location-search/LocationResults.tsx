@@ -15,15 +15,9 @@ type Props = {
   title?: string;
   locations: LocationSearchResult[];
   onSelect: (location: LocationSearchResult) => void;
-  onPrefillText: (text: string) => void;
 };
 
-const LocationResults: React.FC<Props> = ({
-  title,
-  locations,
-  onSelect,
-  onPrefillText,
-}) => {
+const LocationResults: React.FC<Props> = ({title, locations, onSelect}) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
   return (
@@ -71,19 +65,6 @@ const LocationResults: React.FC<Props> = ({
                 </View>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              accessible={true}
-              accessibilityLabel={t(
-                LocationSearchTexts.locationResults.a11y.activateToSearch(
-                  searchResult.prefill,
-                ),
-              )}
-              accessibilityRole="button"
-              hitSlop={insets.all(8)}
-              onPress={() => onPrefillText(searchResult.prefill + ' ')}
-            >
-              <ThemeIcon svg={ArrowUpLeft} />
-            </TouchableOpacity>
           </View>
         ))}
       </View>
@@ -100,7 +81,6 @@ function mapToVisibleSearchResult(searchResult: LocationSearchResult) {
       location,
       text: location.name,
       subtext: location.locality,
-      prefill: location.name,
     };
   }
 
@@ -115,7 +95,6 @@ function mapToVisibleSearchResult(searchResult: LocationSearchResult) {
     location,
     text,
     subtext,
-    prefill: location.name,
     emoji: searchResult.favoriteInfo.emoji,
   };
 }
