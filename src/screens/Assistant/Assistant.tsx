@@ -381,6 +381,7 @@ const Assistant: React.FC<Props> = ({
         setSearchStateMessage(t(AssistantTexts.searchState.searchEmptyResult));
         break;
       default:
+        setSearchStateMessage('');
         break;
     }
   }, [searchState]);
@@ -604,7 +605,10 @@ function useTripPatterns(
     const source = CancelToken.source();
 
     async function search() {
-      if (!fromLocation || !toLocation) return;
+      if (!fromLocation || !toLocation) {
+        setSearchState('idle');
+        return;
+      }
 
       setSearchState('searching');
       setErrorType(undefined);
