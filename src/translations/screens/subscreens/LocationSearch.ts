@@ -20,7 +20,7 @@ const LocationSearchTexts = {
   },
   journeySearch: {
     previousJourneyResults: {
-      heading: _('Siste brukte reisesøk', 'Most recent journeys'),
+      heading: _('Sist brukte reisesøk', 'Most recent journeys'),
     },
     result: {
       a11yLabel: (fromName: string, toName: string) =>
@@ -40,11 +40,6 @@ const LocationSearchTexts = {
         'Aktivér for å bruke dette stedet',
         'Activate to use this location',
       ),
-      activateToSearch: (locationName: string) =>
-        _(
-          `Legg ${locationName} i søkefeltet`,
-          `Add ${locationName} to the search field`,
-        ),
     },
   },
   messages: {
