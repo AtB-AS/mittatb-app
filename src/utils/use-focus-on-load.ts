@@ -13,10 +13,10 @@ export default function useFocusOnLoad(setFocusOnLoad: boolean = true) {
     giveFocus(setFocusOnLoad, focusRef);
   }, [focusRef.current, setFocusOnLoad]);
 
-  const navigation = useNavigation();
+  const navigation = useNavigationSafe();
   useEffect(
     () =>
-      navigation.addListener('focus', () => {
+      navigation?.addListener('focus', () => {
         // 50 ms timeout necessary for iPhone VoiceOver
         setTimeout(() => giveFocus(setFocusOnLoad, focusRef), 50);
       }),
@@ -25,6 +25,18 @@ export default function useFocusOnLoad(setFocusOnLoad: boolean = true) {
 
   return focusRef;
 }
+
+const useNavigationSafe = () => {
+  try {
+    return useNavigation();
+  } catch (ex) {
+    /*
+    Navigation is not available as the current context is not inside a screen in
+    a navigator
+     */
+    return undefined;
+  }
+};
 
 const giveFocus = (
   shouldFocus: boolean,
