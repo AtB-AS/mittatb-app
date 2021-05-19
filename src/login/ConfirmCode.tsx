@@ -3,7 +3,6 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
-import {LoginRootParams} from './';
 import * as Sections from '@atb/components/sections';
 import Button from '@atb/components/button';
 import {useAuthState} from '@atb/auth';
@@ -13,24 +12,16 @@ import {
 } from '@atb/auth/AuthContext';
 import MessageBox from '@atb/components/message-box';
 import ThemeText from '@atb/components/text';
-import {RouteProp} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '@atb/navigation';
-import {AfterLoginParams} from '@atb/screens/Profile/Login/PhoneInput';
+import {ArrowRight} from '@atb/assets/svg/icons/navigation';
+import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 
-export type ConfirmCodeRouteParams = {
+export default function ConfirmCode({
+  phoneNumber,
+  doAfterLogin,
+}: {
   phoneNumber: string;
-  afterLogin: AfterLoginParams;
-};
-
-type ConfirmCodeRouteProps = RouteProp<LoginRootParams, 'ConfirmCode'>;
-
-export type ConfirmCodeProps = {
-  navigation: StackNavigationProp<RootStackParamList>;
-  route: ConfirmCodeRouteProps;
-};
-
-export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
+  doAfterLogin: () => void;
+}) {
   const {t} = useTranslation();
   const {theme} = useTheme();
   const styles = useThemeStyles();
@@ -44,13 +35,13 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
     ConfirmationErrorCode | PhoneSignInErrorCode
   >();
   const [isLoading, setIsLoading] = useState(false);
-  const {phoneNumber, afterLogin} = route.params;
+  const focusRef = useFocusOnLoad();
 
   const onLogin = async () => {
     setIsLoading(true);
     const errorCode = await confirmCode(code);
     if (!errorCode) {
-      navigation.navigate(afterLogin.routeName as any, afterLogin.routeParams);
+      doAfterLogin();
     } else {
       setError(errorCode);
       setIsLoading(false);
@@ -72,24 +63,26 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
   // Check authentication from state and see if it is updated while we wait
   useEffect(() => {
     if (authenticationType === 'phone') {
-      navigation.navigate(afterLogin.routeName as any, afterLogin.routeParams);
+      doAfterLogin();
     }
   }, [authenticationType]);
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader
-        title={t(LoginTexts.confirmCode.title)}
-        leftButton={{type: 'back'}}
-      />
+      <FullScreenHeader leftButton={{type: 'back'}} setFocusOnLoad={false} />
 
       <View style={styles.mainView}>
+        <View accessible={true} accessibilityRole="header" ref={focusRef}>
+          <ThemeText type={'body__primary--jumbo--bold'}>
+            {t(LoginTexts.confirmCode.title)}
+          </ThemeText>
+        </View>
+        <View>
+          <ThemeText style={styles.description}>
+            {t(LoginTexts.confirmCode.description(phoneNumber))}
+          </ThemeText>
+        </View>
         <Sections.Section>
-          <Sections.GenericItem>
-            <ThemeText>
-              {t(LoginTexts.confirmCode.description(phoneNumber))}
-            </ThemeText>
-          </Sections.GenericItem>
           <Sections.TextInput
             label={t(LoginTexts.confirmCode.input.label)}
             placeholder={t(LoginTexts.confirmCode.input.placeholder)}
@@ -117,14 +110,17 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
           {!isLoading && (
             <>
               <Button
-                color={'primary_2'}
+                color={'primary_3'}
                 onPress={onLogin}
                 text={t(LoginTexts.confirmCode.mainButton)}
                 disabled={!code}
+                icon={ArrowRight}
+                iconPosition="right"
               />
               <TouchableOpacity
                 style={styles.resendButton}
                 onPress={onResendCode}
+                accessibilityRole="button"
               >
                 <ThemeText
                   style={styles.resendButtonText}
@@ -143,11 +139,15 @@ export default function ConfirmCode({navigation, route}: ConfirmCodeProps) {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.colors.primary_2.backgroundColor,
     flex: 1,
   },
   mainView: {
     margin: theme.spacings.medium,
+    padding: theme.spacings.medium,
+  },
+  description: {
+    marginVertical: theme.spacings.medium,
   },
   messageBox: {
     marginBottom: theme.spacings.medium,

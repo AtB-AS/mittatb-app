@@ -197,8 +197,9 @@ export async function checkGeolocationPermission(): Promise<PermissionStatus> {
 
 async function requestGeolocationPermission(): Promise<PermissionStatus> {
   const rationale: Rationale = {
-    title: 'Vil du gi AtB Reise tilgang til posisjonen din?',
-    message: 'Vi trenger din posisjon for å lage reiseruter',
+    title: 'Vil du tillate at AtB bruker posisjonen din?',
+    message:
+      'Ved å tillate deling av posisjon kan du finne nærmeste holdeplass og planlegge reisen fra din lokasjon',
     buttonNeutral: 'Spør meg senere',
     buttonNegative: 'Ikke tillat',
     buttonPositive: 'Tillat',

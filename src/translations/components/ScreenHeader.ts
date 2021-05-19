@@ -15,7 +15,14 @@ const ScreenHeaderTexts = {
       a11yHint: _('Aktivér for å lukke', 'Activate to close'),
     },
     home: {
-      a11yHint: _('Gå til startskjerm', 'Go to start screen'),
+      a11yHint: _(
+        'Aktivér for å gå til startskjerm',
+        'Ativate to go to start screen',
+      ),
+    },
+    skip: {
+      text: _('Hopp over', 'Skip'),
+      a11yHint: _('Aktivér for å hoppe over', 'Activate to skip'),
     },
   },
 };
