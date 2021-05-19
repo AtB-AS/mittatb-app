@@ -6,6 +6,7 @@ const TicketsTexts = {
   },
   buyTicketsTab: {
     label: _('Kjøp', 'Buy'),
+    a11yLabel: _('Kjøp billetter', 'Buy tickets'),
     loginReason: _(
       'For å kjøpe periodebillett må du være logget inn.',
       'To buy a period ticket you have to be signed in.',
@@ -29,10 +30,12 @@ const TicketsTexts = {
   },
   activeTicketsTab: {
     label: _('Aktive', 'Valid'),
+    a11yLabel: _('Aktive billetter', 'Active tickets'),
     noTickets: _('Du har ingen aktive billetter', 'No valid tickets right now'),
   },
   expiredTicketsTab: {
     label: _('Utløpte', 'Expired'),
+    a11yLabel: _('Utløpte billetter', 'Expired tickets'),
     noTickets: _(
       'Fant ingen billetthistorikk',
       'Nothing to show here until you have purchased a ticket',
