@@ -40,7 +40,7 @@ export default function LinkItem({
     <TouchableOpacity
       accessible
       accessibilityRole="link"
-      onPress={onPress}
+      onPress={disabled ? undefined : onPress}
       disabled={disabled}
       accessibilityState={{disabled}}
       style={topContainer}
