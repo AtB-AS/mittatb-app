@@ -285,7 +285,7 @@ const Header = React.memo(function Header({
         }}
         chipActionHint={
           t(AssistantTexts.favorites.favoriteChip.a11yHint) +
-          t(dictionary.toPlace) +
+          t(dictionary.fromPlace) +
           screenReaderPause
         }
       />
