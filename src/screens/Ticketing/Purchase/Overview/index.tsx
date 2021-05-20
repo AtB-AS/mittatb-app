@@ -34,6 +34,7 @@ import {formatToLongDateTime} from '@atb/utils/date';
 import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import {usePreferences} from '@atb/preferences';
+import {screenReaderPause} from '@atb/components/accessible-text';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -130,6 +131,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             disabled={selectableProducts.length <= 1}
             icon={<ThemeIcon svg={Edit} />}
             accessibility={{
+              accessibilityLabel:
+                getReferenceDataName(preassignedFareProduct, language) +
+                screenReaderPause,
               accessibilityHint: t(PurchaseOverviewTexts.product.a11yHint),
             }}
           />
@@ -149,13 +153,14 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             }}
             icon={<ThemeIcon svg={Edit} />}
             accessibility={{
-              accessibilityLabel: createTravellersText(
-                userProfilesWithCount,
-                false,
-                false,
-                t,
-                language,
-              ),
+              accessibilityLabel:
+                createTravellersText(
+                  userProfilesWithCount,
+                  false,
+                  false,
+                  t,
+                  language,
+                ) + screenReaderPause,
               accessibilityHint: t(PurchaseOverviewTexts.travellers.a11yHint),
             }}
           />
@@ -167,6 +172,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             }}
             icon={<ThemeIcon svg={Edit} />}
             accessibility={{
+              accessibilityLabel:
+                createTravelDateText(t, language, travelDate) +
+                screenReaderPause,
               accessibilityHint: t(PurchaseOverviewTexts.travelDate.a11yHint),
             }}
           />
@@ -180,6 +188,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             }}
             icon={<ThemeIcon svg={Edit} />}
             accessibility={{
+              accessibilityLabel:
+                tariffZonesSummary(fromTariffZone, toTariffZone, language, t) +
+                screenReaderPause,
               accessibilityHint: t(PurchaseOverviewTexts.tariffZones.a11yHint),
             }}
           />
