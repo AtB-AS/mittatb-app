@@ -66,7 +66,7 @@ export default QuayDepartures;
 
 const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
-    backgroundColor: theme.background.header,
+    backgroundColor: theme.colors.primary_2.backgroundColor,
     zIndex: 2,
   },
   screen: {

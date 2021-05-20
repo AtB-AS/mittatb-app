@@ -44,7 +44,7 @@ export default function SplashInfo({navigation}: Props) {
           </View>
           <View style={styles.buttonContainer}>
             <Button
-              color="primary_2"
+              color="primary_3"
               onPress={() => navigation.navigate('TicketEnrollment')}
               text={t(TicketSplashTexts.splash.betaButtonLabel)}
               style={styles.button}
@@ -57,7 +57,7 @@ export default function SplashInfo({navigation}: Props) {
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1, backgroundColor: theme.background.accent},
+  container: {flex: 1, backgroundColor: theme.colors.primary_2.backgroundColor},
   scrollContainer: {
     flexGrow: 1,
   },
@@ -70,7 +70,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   textContent: {
     paddingHorizontal: theme.spacings.large,
-    backgroundColor: theme.background.accent,
     marginBottom: theme.spacings.xLarge,
     boxShadow: 'inset 0',
   },
