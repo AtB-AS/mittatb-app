@@ -36,6 +36,9 @@ export default function LinkItem({
   const iconEl =
     isNavigationIcon(icon) || !icon ? <NavigationIcon mode={icon} /> : icon;
   const disabledStyle = disabled ? linkItemStyle.disabled : undefined;
+  accessibility = disabled
+    ? {...accessibility, accessibilityHint: undefined}
+    : accessibility;
   return (
     <TouchableOpacity
       accessible
