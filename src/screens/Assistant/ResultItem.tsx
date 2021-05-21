@@ -305,9 +305,6 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     flexDirection: 'row',
   },
-  lineDisplayName: {
-    fontWeight: '700',
-  },
   transportationIcon: {
     marginRight: theme.spacings.xSmall,
   },
@@ -323,8 +320,8 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
           subMode={leg.line?.transportSubmode}
         />
       </View>
-      <ThemeText type="body__primary">
-        <LineDisplayName style={styles.lineDisplayName} leg={leg} />
+      <ThemeText type="body__primary--bold">
+        <LineDisplayName leg={leg} />
       </ThemeText>
     </View>
   );
