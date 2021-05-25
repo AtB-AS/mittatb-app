@@ -5,83 +5,48 @@ import React from 'react';
 import {ScrollView, View} from 'react-native';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
-import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {OnboardingStackParams} from '@atb/screens/Onboarding/index';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {Onboarding1} from '@atb/assets/svg/illustrations';
+import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
 import Illustration from '@atb/screens/Onboarding/components/Illustration';
+import {Onboarding2} from '@atb/assets/svg/illustrations';
+import {Confirm} from '@atb/assets/svg/icons/actions';
 
-export type WelcomeScreenProps = {
-  navigation: StackNavigationProp<OnboardingStackParams>;
-};
-
-export const WelcomeScreenLogin = ({navigation}: WelcomeScreenProps) => {
-  const onNext = () => {
-    navigation.navigate('PhoneInputInOnboarding');
-  };
-
-  return <WelcomeScreen inLoginContext={true} onNext={onNext} />;
-};
-
-export const WelcomeScreenWithoutLogin = ({navigation}: WelcomeScreenProps) => {
-  const onNext = () => {
-    navigation.navigate('IntercomInfo');
-  };
-
-  return <WelcomeScreen inLoginContext={false} onNext={onNext} />;
-};
-
-const WelcomeScreen = ({
-  inLoginContext,
-  onNext,
-}: {
-  inLoginContext: boolean;
-  onNext: () => void;
-}) => {
+export default function IntercomInfo() {
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const focusRef = useFocusOnLoad();
+  const finishOnboarding = useFinishOnboarding();
 
   return (
     <View style={styles.container}>
       <FullScreenHeader setFocusOnLoad={false} style={styles.header} />
-      <Illustration Svg={Onboarding1} />
+
+      <Illustration Svg={Onboarding2} />
       <ScrollView style={styles.mainView}>
         <View ref={focusRef} accessibilityRole="header" accessible={true}>
-          <ThemeText type={'body__primary--jumbo--bold'} style={styles.title}>
-            {t(OnboardingTexts.welcome.title)}
+          <ThemeText type={'body__primary--bold'} style={styles.title}>
+            {t(OnboardingTexts.intercom.title)}
           </ThemeText>
         </View>
-        <View accessible={true}>
-          <ThemeText style={styles.descriptionPart}>
-            {t(OnboardingTexts.welcome.description.part1)}
+        <View>
+          <ThemeText style={styles.description}>
+            {t(OnboardingTexts.intercom.description)}
           </ThemeText>
-          {inLoginContext ? (
-            <>
-              <ThemeText style={styles.descriptionPart}>
-                {t(OnboardingTexts.welcome.description.part2)}
-              </ThemeText>
-              <ThemeText style={styles.descriptionPart}>
-                {t(OnboardingTexts.welcome.description.part3)}
-              </ThemeText>
-            </>
-          ) : null}
         </View>
       </ScrollView>
       <FullScreenFooter>
         <Button
           color={'secondary_1'}
-          onPress={onNext}
-          text={t(OnboardingTexts.welcome.mainButton)}
-          icon={ArrowRight}
+          onPress={finishOnboarding}
+          text={t(OnboardingTexts.intercom.mainButton)}
+          icon={Confirm}
           iconPosition="right"
         />
       </FullScreenFooter>
     </View>
   );
-};
+}
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
@@ -100,7 +65,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   title: {
     color: theme.colors.primary_3.color,
   },
-  descriptionPart: {
+  description: {
     marginTop: theme.spacings.medium,
     color: theme.colors.primary_3.color,
   },
