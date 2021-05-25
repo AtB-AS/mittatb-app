@@ -25,7 +25,7 @@ export default function IntercomInfo() {
       <Illustration Svg={Onboarding2} />
       <ScrollView style={styles.mainView}>
         <View ref={focusRef} accessibilityRole="header" accessible={true}>
-          <ThemeText type={'body__primary--bold'} style={styles.title}>
+          <ThemeText type={'heading__title'} style={styles.title}>
             {t(OnboardingTexts.intercom.title)}
           </ThemeText>
         </View>
