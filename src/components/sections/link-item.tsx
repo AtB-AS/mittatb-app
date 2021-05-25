@@ -36,15 +36,18 @@ export default function LinkItem({
   const iconEl =
     isNavigationIcon(icon) || !icon ? <NavigationIcon mode={icon} /> : icon;
   const disabledStyle = disabled ? linkItemStyle.disabled : undefined;
+  const accessibilityWithOverrides = disabled
+    ? {...accessibility, accessibilityHint: undefined}
+    : accessibility;
   return (
     <TouchableOpacity
       accessible
       accessibilityRole="link"
-      onPress={onPress}
+      onPress={disabled ? undefined : onPress}
       disabled={disabled}
       accessibilityState={{disabled}}
       style={topContainer}
-      {...accessibility}
+      {...accessibilityWithOverrides}
     >
       <View style={[style.spaceBetween, disabledStyle]}>
         <ThemeText style={contentContainer}>{text}</ThemeText>
