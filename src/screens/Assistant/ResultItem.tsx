@@ -387,13 +387,11 @@ const tripSummary = (
             : ''
         }
         
-        ${l.line?.name}
+        ${l.fromEstimatedCall?.destinationDisplay?.frontText ?? l.line?.name}
         
         `;
       })
       .join(', ')} 
-      
-      ${screenReaderPause}
       
       ${
         !nonFootLegs.length
