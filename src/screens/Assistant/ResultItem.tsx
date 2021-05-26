@@ -13,6 +13,7 @@ import {StyleSheet} from '@atb/theme';
 import {
   AssistantTexts,
   dictionary,
+  Language,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
@@ -113,18 +114,20 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   ...props
 }) => {
   const styles = useThemeStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   if (!tripPattern?.legs?.length) return null;
 
   return (
     <TouchableOpacity
+      accessibilityLabel={tripSummary(tripPattern, t, language)}
       accessibilityHint={t(
         AssistantTexts.results.resultItem.footer.detailsHint,
       )}
       onPress={onDetailsPressed}
+      accessible={true}
     >
-      <View style={styles.result} {...props}>
+      <View style={styles.result} {...props} accessible={false}>
         <ResultItemHeader tripPattern={tripPattern} />
         <View style={styles.scrollContainer}>
           <ScrollView
@@ -132,7 +135,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
             showsHorizontalScrollIndicator={false}
             hitSlop={insets.symmetric(12, 20)}
             contentContainerStyle={styles.detailsContainer}
-            accessibilityValue={{text: tripSummary(tripPattern, t)}}
+            {...screenReaderHidden}
           >
             {tripPattern.legs.map(function (leg, i) {
               const legOutput =
@@ -145,7 +148,6 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                 <View
                   style={styles.legOutput}
                   key={leg.serviceJourney?.id ?? leg.fromPlace.latitude}
-                  {...screenReaderHidden}
                 >
                   {legOutput}
                   <ThemeIcon svg={ChevronRight} size={'small'} />
@@ -351,31 +353,28 @@ function LineDisplayName({leg, style}: {leg: Leg; style?: ViewStyle}) {
   );
 }
 
-const tripSummary = (tripPattern: TripPattern, t: TranslateFunction) => {
+const tripSummary = (
+  tripPattern: TripPattern,
+  t: TranslateFunction,
+  language: Language,
+) => {
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
-  return `
+
+  const firstLeg = nonFootLegs[0];
+
+  return ` 
+  
     ${
-      !nonFootLegs.length
+      firstLeg
         ? t(
-            AssistantTexts.results.resultItem.journeySummary.legsDescription
-              .footLegsOnly,
-          )
-        : nonFootLegs.length === 1
-        ? t(
-            AssistantTexts.results.resultItem.journeySummary.legsDescription
-              .noSwitching,
-          )
-        : nonFootLegs.length === 2
-        ? t(
-            AssistantTexts.results.resultItem.journeySummary.legsDescription
-              .oneSwitch,
-          )
-        : t(
-            AssistantTexts.results.resultItem.journeySummary.legsDescription.someSwitches(
-              nonFootLegs.length,
+            AssistantTexts.results.resultItem.footer.fromLabel(
+              firstLeg.fromPlace.name ?? '',
+              formatToClock(firstLeg.expectedStartTime, language),
             ),
           )
-    }. ${screenReaderPause}
+        : ''
+    }
+   
     ${nonFootLegs
       ?.map((l) => {
         return `${t(getTranslatedModeName(l.mode))} ${
@@ -386,16 +385,42 @@ const tripSummary = (tripPattern: TripPattern, t: TranslateFunction) => {
                 ),
               )
             : ''
-        }`;
+        }
+        
+        ${l.fromEstimatedCall?.destinationDisplay?.frontText ?? l.line?.name}
+        
+        `;
       })
-      .join(', ')} ${screenReaderPause}
+      .join(', ')} 
+      
+      ${
+        !nonFootLegs.length
+          ? t(
+              AssistantTexts.results.resultItem.journeySummary.legsDescription
+                .footLegsOnly,
+            )
+          : nonFootLegs.length === 1
+          ? t(
+              AssistantTexts.results.resultItem.journeySummary.legsDescription
+                .noSwitching,
+            )
+          : nonFootLegs.length === 2
+          ? t(
+              AssistantTexts.results.resultItem.journeySummary.legsDescription
+                .oneSwitch,
+            )
+          : t(
+              AssistantTexts.results.resultItem.journeySummary.legsDescription.someSwitches(
+                nonFootLegs.length,
+              ),
+            )
+      }
+      
       ${t(
         AssistantTexts.results.resultItem.journeySummary.totalWalkDistance(
           tripPattern.walkDistance.toFixed(0),
         ),
       )}  ${screenReaderPause}
-     
-
   `;
 };
 
