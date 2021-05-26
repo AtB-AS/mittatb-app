@@ -15,15 +15,15 @@ const TicketsTexts = {
       single: {
         text: _('Ny enkeltbillett', 'New single ticket'),
         a11yHint: _(
-          'Aktivér for å kjøpe ny enkeltbillett',
-          'Activate to buy a new single ticket',
+          'Kjøp ny enkeltbillett',
+          'Buy a new single ticket',
         ),
       },
       period: {
         text: _('Ny periodebillett', 'New period ticket'),
         a11yHint: _(
-          'Aktivér for å kjøpe ny periodebillett',
-          'Activate to buy a new period ticket',
+          'Kjøp ny periodebillett',
+          'Buy a new period ticket',
         ),
       },
     },
