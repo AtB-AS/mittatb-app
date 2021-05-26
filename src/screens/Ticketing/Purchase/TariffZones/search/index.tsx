@@ -213,7 +213,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   header: {
-    backgroundColor: theme.background.header,
+    backgroundColor: theme.colors.primary_2.backgroundColor,
   },
   favouriteChips: {
     marginLeft: theme.spacings.medium,

@@ -136,7 +136,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     padding: theme.spacings.medium,
-    backgroundColor: theme.background.header,
+    backgroundColor: theme.colors.primary_2.backgroundColor,
   },
   innerContainer: {
     paddingRight: theme.spacings.small,

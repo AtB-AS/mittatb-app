@@ -48,12 +48,6 @@ type AppThemeExtension = {
   statusBarStyle: StatusBarProps['barStyle'];
   tripLegDetail: typeof tripLegDetail;
 
-  background: {
-    header: string;
-    destructive: string;
-    accent: string;
-  };
-
   typography: typeof textTypeStyles;
 };
 
@@ -62,23 +56,11 @@ export const themes = createExtendedThemes<AppThemeExtension>({
     tripLegDetail,
     statusBarStyle: 'dark-content',
 
-    background: {
-      header: colors.secondary.cyan_500,
-      destructive: colors.secondary.red_500,
-      accent: colors.secondary.cyan_500,
-    },
-
     typography: textTypeStyles,
   },
   dark: {
     tripLegDetail,
     statusBarStyle: 'light-content',
-
-    background: {
-      header: colors.secondary.blue_900,
-      destructive: colors.secondary.red_500,
-      accent: backgrounds.dark.level1,
-    },
 
     typography: textTypeStyles,
   },

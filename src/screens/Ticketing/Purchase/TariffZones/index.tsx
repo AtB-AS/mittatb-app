@@ -327,7 +327,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
 
   return (
     <View style={styles.container}>
-      <View style={{backgroundColor: theme.background.header}}>
+      <View style={styles.headerContainer}>
         <FullScreenHeader
           title={t(TariffZonesTexts.header.title)}
           leftButton={{type: 'back'}}
@@ -513,6 +513,9 @@ const useMapStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background_2.backgroundColor,
+  },
+  headerContainer: {
+    backgroundColor: theme.colors.primary_2.backgroundColor,
   },
   pinContainer: {
     position: 'absolute',
