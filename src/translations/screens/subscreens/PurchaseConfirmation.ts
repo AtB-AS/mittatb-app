@@ -17,7 +17,7 @@ const PurchaseConfirmationTexts = {
   validityTexts: {
     zone: {
       single: (zoneName: string) =>
-        _(`Gyldig i sone ${zoneName}`, `Valid through zone ${zoneName}`),
+        _(`Gyldig i sone ${zoneName}`, `Valid in zone ${zoneName}`),
       multiple: (zoneNameFrom: string, zoneNameTo: string) =>
         _(
           `Gyldig fra sone ${zoneNameFrom} til sone ${zoneNameTo}`,
