@@ -8,17 +8,26 @@ import {
   usePreferenceItems,
 } from '../preferences';
 import useFontScale from '@atb/utils/use-font-scale';
+import {Platform} from 'react-native';
 
 // This is code from react-navigation, for regular tab bar
 // (not compact). Should be a better way to set this or
 // get it from React Navigation, but alas not.
 const DEFAULT_TABBAR_HEIGHT = 44;
 
+// extra padding for android native navigation
+const ANDROID_BOTTOM_PADDING = 12;
+
 export const useBottomNavigationStyles = () => {
   const fontScale = useFontScale();
   const {bottom} = useSafeAreaInsets();
+
+  const adjustedBottom =
+    Platform.OS == 'android' ? bottom + ANDROID_BOTTOM_PADDING : bottom;
+
   return {
-    minHeight: DEFAULT_TABBAR_HEIGHT * fontScale + bottom,
+    minHeight: DEFAULT_TABBAR_HEIGHT * fontScale + adjustedBottom,
+    paddingBottom: adjustedBottom,
   };
 };
 export const useNavigateToStartScreen = () => {
