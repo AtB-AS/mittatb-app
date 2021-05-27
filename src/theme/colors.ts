@@ -68,3 +68,12 @@ export const themes = createExtendedThemes<AppThemeExtension>({
 
 export type Themes = typeof themes;
 export type Theme = Themes['light'];
+
+export type ThemeColor = keyof Theme['colors'];
+
+export const isThemeColor = (
+  theme: Theme,
+  color?: string,
+): color is ThemeColor => {
+  return !!color && color in theme.colors;
+};

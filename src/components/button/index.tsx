@@ -1,6 +1,6 @@
 import ThemeText from '@atb/components/text';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {ContrastColor, defaultTextColors} from '@atb/theme/colors';
+import {ContrastColor, defaultTextColors, ThemeColor} from '@atb/theme/colors';
 import React, {useRef} from 'react';
 import {
   Animated,
@@ -15,8 +15,6 @@ import {
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 
 export {default as ButtonGroup} from './group';
-
-type ThemeColor = keyof Theme['colors'];
 
 type ButtonMode = 'primary' | 'secondary' | 'tertiary' | 'destructive';
 
