@@ -15,17 +15,17 @@ import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 export {default as AnimatedScreenHeader} from './animated-header';
 
 export type LeftButtonProps = HeaderButtonProps & {
-  type: Exclude<ButtonModes, 'chat'>;
+  type: Exclude<ButtonModes, 'chat' | 'skip'>;
 };
 
-export type RightButtonProps = Omit<HeaderButtonProps, 'onPress'> & {
-  type: 'chat';
+export type RightButtonProps = HeaderButtonProps & {
+  type: 'chat' | 'skip';
 };
 
 export type ScreenHeaderProps = {
   leftButton?: LeftButtonProps;
   rightButton?: RightButtonProps;
-  title: React.ReactNode;
+  title?: React.ReactNode;
   /**
    * For specifying the alert context for alerts that should be shown in this
    * header. If no context is specified then no alerts are shown.
@@ -56,7 +56,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   return (
     <View style={[css.container, style]}>
       <View
-        accessible={true}
+        accessible={!!title}
         accessibilityRole="header"
         style={[
           css.headerTitle,
@@ -68,8 +68,12 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
         onLayout={setLayoutFor('container')}
         ref={focusRef}
       >
-        <ThemeText onLayout={setLayoutFor('title')} type="body__primary--bold">
-          {title}
+        <ThemeText
+          accessible={!!title}
+          onLayout={setLayoutFor('title')}
+          type="body__primary--bold"
+        >
+          {title ?? '\u00a0'}
         </ThemeText>
       </View>
       <View

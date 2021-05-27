@@ -3,37 +3,28 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {LoginRootParams} from './';
 import * as Sections from '@atb/components/sections';
 import Button from '@atb/components/button';
 import {useAuthState} from '@atb/auth';
 import ThemeText from '@atb/components/text';
 import {PhoneSignInErrorCode} from '@atb/auth/AuthContext';
 import MessageBox from '@atb/components/message-box';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RouteProp} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import {ArrowRight} from '@atb/assets/svg/icons/navigation';
+import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
+import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 
-export type AfterLoginParams = {
-  routeName: string;
-  routeParams?: object;
-};
-
-export type PhoneInputRouteParams = {
-  /**
-   * An optional message to the user why the login is necessary
-   */
+export default function PhoneInput({
+  loginReason,
+  doAfterLogin,
+  headerLeftButton,
+  headerRightButton,
+}: {
   loginReason?: string;
-  afterLogin: AfterLoginParams;
-};
-
-type PhoneInputRouteProps = RouteProp<LoginRootParams, 'PhoneInput'>;
-
-export type PhoneInputProps = {
-  navigation: StackNavigationProp<LoginRootParams>;
-  route: PhoneInputRouteProps;
-};
-
-export default function PhoneInput({navigation, route}: PhoneInputProps) {
+  doAfterLogin: (phoneNumber: string) => void;
+  headerLeftButton?: LeftButtonProps;
+  headerRightButton?: RightButtonProps;
+}) {
   const {t} = useTranslation();
   const {theme} = useTheme();
   const styles = useThemeStyles();
@@ -41,7 +32,8 @@ export default function PhoneInput({navigation, route}: PhoneInputProps) {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<PhoneSignInErrorCode>();
-  const {loginReason, afterLogin} = route.params;
+  const navigation = useNavigation();
+  const focusRef = useFocusOnLoad();
 
   React.useEffect(
     () =>
@@ -56,7 +48,7 @@ export default function PhoneInput({navigation, route}: PhoneInputProps) {
     const errorCode = await signInWithPhoneNumber(phoneNumber);
     if (!errorCode) {
       setError(undefined);
-      navigation.navigate('ConfirmCode', {afterLogin, phoneNumber});
+      doAfterLogin(phoneNumber);
     } else {
       setIsSubmitting(false);
       setError(errorCode);
@@ -66,20 +58,28 @@ export default function PhoneInput({navigation, route}: PhoneInputProps) {
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        title={t(LoginTexts.phoneInput.title)}
-        leftButton={{type: 'cancel'}}
+        leftButton={headerLeftButton}
+        rightButton={headerRightButton}
+        setFocusOnLoad={false}
       />
 
       <View style={styles.mainView}>
-        {loginReason && (
-          <MessageBox
-            containerStyle={styles.loginReasonMessage}
-            message={loginReason}
-          />
-        )}
+        <View accessible={true} accessibilityRole="header" ref={focusRef}>
+          <ThemeText type={'body__primary--jumbo--bold'}>
+            {t(LoginTexts.phoneInput.title)}
+          </ThemeText>
+        </View>
+        <View accessible={true}>
+          {loginReason && (
+            <ThemeText style={styles.loginReason}>{loginReason}</ThemeText>
+          )}
+          <ThemeText style={styles.description}>
+            {t(LoginTexts.phoneInput.description)}
+          </ThemeText>
+        </View>
         <Sections.Section>
           <Sections.GenericItem>
-            <ThemeText>{t(LoginTexts.phoneInput.description)}</ThemeText>
+            <ThemeText>{t(LoginTexts.phoneInput.input.heading)}</ThemeText>
           </Sections.GenericItem>
           <Sections.TextInput
             label={t(LoginTexts.phoneInput.input.label)}
@@ -105,10 +105,12 @@ export default function PhoneInput({navigation, route}: PhoneInputProps) {
 
           {!isSubmitting && (
             <Button
-              color={'primary_2'}
+              color={'primary_3'}
               onPress={onNext}
               text={t(LoginTexts.phoneInput.mainButton)}
               disabled={phoneNumber.length !== 8}
+              icon={ArrowRight}
+              iconPosition="right"
             />
           )}
         </View>
@@ -119,15 +121,16 @@ export default function PhoneInput({navigation, route}: PhoneInputProps) {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.colors.primary_2.backgroundColor,
     flex: 1,
   },
   mainView: {
     margin: theme.spacings.medium,
-  },
-  loginReasonMessage: {
+    padding: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
+  loginReason: {marginTop: theme.spacings.medium},
+  description: {marginVertical: theme.spacings.medium},
   errorMessage: {
     marginBottom: theme.spacings.medium,
   },

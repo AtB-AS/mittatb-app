@@ -9,7 +9,7 @@ export default function FullScreenHeader(props: ScreenHeaderProps) {
   const {top} = useSafeAreaInsets();
 
   return (
-    <View style={[style.background, {paddingTop: top}]}>
+    <View style={[style.background, props.style, {paddingTop: top}]}>
       <ScreenHeader {...props} />
     </View>
   );

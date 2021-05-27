@@ -72,8 +72,8 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               <Sections.LinkItem
                 text={t(ProfileTexts.sections.account.linkItems.login.label)}
                 onPress={() =>
-                  navigation.navigate('Login', {
-                    screen: 'PhoneInput',
+                  navigation.navigate('LoginInApp', {
+                    screen: 'PhoneInputInApp',
                     params: {
                       afterLogin: {routeName: 'ProfileHome'},
                     },
@@ -91,11 +91,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 text={t(ProfileTexts.sections.account.linkItems.logout.label)}
                 onPress={signOut}
               />
-            )}
-            {__DEV__ && (
-              <Sections.GenericItem>
-                <ThemeText>SignedInState: {authenticationType}</ThemeText>
-              </Sections.GenericItem>
             )}
           </Sections.Section>
         )}

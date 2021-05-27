@@ -27,7 +27,9 @@ import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
 import TabNavigator, {TabNavigatorParams} from './TabNavigator';
 import transitionSpec from './transitionSpec';
-import Login, {LoginRootParams} from '@atb/screens/Profile/Login';
+import LoginInAppStack, {
+  LoginInAppStackParams,
+} from '@atb/login/in-app/LoginInAppStack';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -36,7 +38,7 @@ export type RootStackParamList = {
   LocationSearch: LocationSearchParams;
   SortableFavoriteList: undefined;
   AddEditFavorite: NavigatorScreenParams<AddEditFavoriteRootParams>;
-  Login: NavigatorScreenParams<LoginRootParams>;
+  LoginInApp: NavigatorScreenParams<LoginInAppStackParams>;
   TicketPurchase: NavigatorScreenParams<TicketingStackParams>;
   TicketModal: NavigatorScreenParams<TicketModalStackParams>;
 };
@@ -115,8 +117,8 @@ const NavigationRoot = () => {
                   }}
                 />
                 <Stack.Screen
-                  name="Login"
-                  component={Login}
+                  name="LoginInApp"
+                  component={LoginInAppStack}
                   options={{
                     transitionSpec: {
                       open: transitionSpec,

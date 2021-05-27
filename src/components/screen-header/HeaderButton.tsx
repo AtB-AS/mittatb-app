@@ -9,7 +9,13 @@ import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import LogoOutline from './LogoOutline';
 
-export type ButtonModes = 'back' | 'cancel' | 'close' | 'home' | 'chat';
+export type ButtonModes =
+  | 'back'
+  | 'cancel'
+  | 'close'
+  | 'home'
+  | 'chat'
+  | 'skip';
 export type HeaderButtonProps = {
   type: ButtonModes;
   onPress?: () => void;
@@ -49,6 +55,7 @@ const useIconButton = (
   switch (buttonProps.type) {
     case 'back':
     case 'cancel':
+    case 'skip':
     case 'close': {
       const {type, onPress, ...accessibilityProps} = buttonProps;
       return {

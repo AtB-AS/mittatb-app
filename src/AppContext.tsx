@@ -65,7 +65,7 @@ const AppContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     async function loadAppSettings() {
-      const savedOnboarded = await storage.get('onboarded');
+      const savedOnboarded = await storage.get('@ATB_onboarded');
       const onboarded = !savedOnboarded ? false : JSON.parse(savedOnboarded);
       if (onboarded) {
         registerChatUser();
@@ -83,7 +83,7 @@ const AppContextProvider: React.FC = ({children}) => {
   const {completeOnboarding, restartOnboarding} = useMemo(
     () => ({
       completeOnboarding: async () => {
-        await storage.set('onboarded', JSON.stringify(true));
+        await storage.set('@ATB_onboarded', JSON.stringify(true));
         dispatch({type: 'COMPLETE_ONBOARDING'});
 
         registerChatUser();
