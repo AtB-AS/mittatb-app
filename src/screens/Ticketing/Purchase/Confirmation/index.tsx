@@ -224,7 +224,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
             <ActivityIndicator
               size={theme.spacings.medium}
               color={theme.text.colors.primary}
-              style={{margin: 12}}
+              style={{margin: theme.spacings.medium}}
             />
           )}
         </View>
@@ -240,38 +240,46 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               : t(PurchaseConfirmationTexts.infoText.validNow)
           }
         />
-        <View
-          style={{
-            paddingBottom: Math.max(safeAreBottom, theme.spacings.medium),
-          }}
-        >
-          <Button
-            color="secondary_1"
-            text={t(PurchaseConfirmationTexts.paymentButtonVipps.text)}
-            disabled={isSearchingOffer || !!error}
-            accessibilityHint={t(
-              PurchaseConfirmationTexts.paymentButtonVipps.a11yHint,
-            )}
-            icon={Vipps}
-            iconPosition="left"
-            onPress={payWithVipps}
-            viewContainerStyle={styles.paymentButton}
+        {isSearchingOffer ? (
+          <ActivityIndicator
+            size="large"
+            color={theme.text.colors.primary}
+            style={{margin: theme.spacings.medium}}
           />
-          {enableCreditCard && (
+        ) : (
+          <View
+            style={{
+              paddingBottom: Math.max(safeAreBottom, theme.spacings.medium),
+            }}
+          >
             <Button
               color="secondary_1"
-              text={t(PurchaseConfirmationTexts.paymentButtonCard.text)}
-              disabled={isSearchingOffer || !!error}
+              text={t(PurchaseConfirmationTexts.paymentButtonVipps.text)}
+              disabled={!!error}
               accessibilityHint={t(
-                PurchaseConfirmationTexts.paymentButtonCard.a11yHint,
+                PurchaseConfirmationTexts.paymentButtonVipps.a11yHint,
               )}
-              icon={CreditCard}
+              icon={Vipps}
               iconPosition="left"
-              onPress={payWithCard}
+              onPress={payWithVipps}
               viewContainerStyle={styles.paymentButton}
             />
-          )}
-        </View>
+            {enableCreditCard && (
+              <Button
+                color="secondary_1"
+                text={t(PurchaseConfirmationTexts.paymentButtonCard.text)}
+                disabled={!!error}
+                accessibilityHint={t(
+                  PurchaseConfirmationTexts.paymentButtonCard.a11yHint,
+                )}
+                icon={CreditCard}
+                iconPosition="left"
+                onPress={payWithCard}
+                viewContainerStyle={styles.paymentButton}
+              />
+            )}
+          </View>
+        )}
       </ScrollView>
     </View>
   );

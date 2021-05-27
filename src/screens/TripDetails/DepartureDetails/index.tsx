@@ -366,7 +366,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.colors.background_0.backgroundColor,
   },
   header: {
-    backgroundColor: theme.background.header,
+    backgroundColor: theme.colors.primary_2.backgroundColor,
   },
   startPlace: {
     marginTop: theme.spacings.large,

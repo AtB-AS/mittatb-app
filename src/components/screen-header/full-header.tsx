@@ -17,6 +17,6 @@ export default function FullScreenHeader(props: ScreenHeaderProps) {
 
 const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
   background: {
-    backgroundColor: theme.background.header,
+    backgroundColor: theme.colors.primary_2.backgroundColor,
   },
 }));

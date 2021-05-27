@@ -191,7 +191,7 @@ const NearbyOverview: React.FC<Props> = ({
       }
       headerTitle={t(NearbyTexts.header.title)}
       useScroll={activateScroll}
-      leftButton={{type: 'back'}}
+      leftButton={{type: 'home'}}
       alternativeTitleComponent={
         <AccessibleText
           prefix={t(NearbyTexts.header.altTitle.a11yPrefix)}
@@ -285,7 +285,7 @@ const Header = React.memo(function Header({
         }}
         chipActionHint={
           t(AssistantTexts.favorites.favoriteChip.a11yHint) +
-          t(dictionary.toPlace) +
+          t(dictionary.fromPlace) +
           screenReaderPause
         }
       />

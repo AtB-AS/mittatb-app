@@ -53,17 +53,30 @@ export default function TicketTabs() {
         <Tab.Screen
           name={BuyTicketsScreenName}
           component={BuyTickets}
-          options={{tabBarLabel: t(TicketsTexts.buyTicketsTab.label)}}
+          options={{
+            tabBarLabel: t(TicketsTexts.buyTicketsTab.label),
+            tabBarAccessibilityLabel: t(TicketsTexts.buyTicketsTab.a11yLabel),
+          }}
         />
         <Tab.Screen
           name={ActiveTicketsScreenName}
           component={ActiveTickets}
-          options={{tabBarLabel: t(TicketsTexts.activeTicketsTab.label)}}
+          options={{
+            tabBarLabel: t(TicketsTexts.activeTicketsTab.label),
+            tabBarAccessibilityLabel: t(
+              TicketsTexts.activeTicketsTab.a11yLabel,
+            ),
+          }}
         />
         <Tab.Screen
           name={ExpiredTicketsScreenName}
           component={ExpiredTickets}
-          options={{tabBarLabel: t(TicketsTexts.expiredTicketsTab.label)}}
+          options={{
+            tabBarLabel: t(TicketsTexts.expiredTicketsTab.label),
+            tabBarAccessibilityLabel: t(
+              TicketsTexts.expiredTicketsTab.a11yLabel,
+            ),
+          }}
         />
       </Tab.Navigator>
     </View>
@@ -71,5 +84,5 @@ export default function TicketTabs() {
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1, backgroundColor: theme.background.header},
+  container: {flex: 1, backgroundColor: theme.colors.primary_2.backgroundColor},
 }));

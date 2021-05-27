@@ -195,11 +195,6 @@ export function LocationSearchContent({
     }
   }, [error]);
 
-  const onPrefillText = (text: string) => {
-    setText(text);
-    focusInput();
-  };
-
   const hasPreviousResults = !!previousLocations.length;
   const hasResults = !!filteredLocations.length;
   const hasAnyResult = hasResults || (includeHistory && hasPreviousResults);
@@ -259,7 +254,6 @@ export function LocationSearchContent({
               title={t(LocationSearchTexts.results.previousResults.heading)}
               locations={previousLocations}
               onSelect={onSearchSelect}
-              onPrefillText={onPrefillText}
             />
           )}
           {hasResults && (
@@ -267,7 +261,6 @@ export function LocationSearchContent({
               title={t(LocationSearchTexts.results.searchResults.heading)}
               locations={filteredLocations}
               onSelect={onSearchSelect}
-              onPrefillText={onPrefillText}
             />
           )}
         </ScrollView>
@@ -305,7 +298,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   header: {
-    backgroundColor: theme.background.header,
+    backgroundColor: theme.colors.primary_2.backgroundColor,
   },
   withMargin: {
     margin: theme.spacings.medium,

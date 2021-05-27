@@ -136,7 +136,7 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
             leftButton={leftButton}
             setFocusOnLoad={setFocusOnLoad}
           />
-          <View style={{backgroundColor: theme.background.header}}>
+          <View style={styles.alertBoxContainer}>
             <AlertBox alertContext={alertContext} style={styles.alertBox} />
           </View>
         </View>
@@ -203,14 +203,14 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   alertBoxContainer: {
-    backgroundColor: theme.background.header,
+    backgroundColor: theme.colors.primary_2.backgroundColor,
   },
   alertBox: {
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
   topBorder: {
-    backgroundColor: theme.background.header,
+    backgroundColor: theme.colors.primary_2.backgroundColor,
   },
 
   content: {
@@ -226,7 +226,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     overflow: 'hidden',
     zIndex: 2,
     elevated: 1,
-    backgroundColor: theme.background.header,
+    backgroundColor: theme.colors.primary_2.backgroundColor,
     justifyContent: 'space-between',
   },
   container: {

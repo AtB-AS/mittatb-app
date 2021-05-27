@@ -71,7 +71,7 @@ const NavigationRoot = () => {
       <StatusBar
         barStyle={theme.statusBarStyle}
         translucent={true}
-        backgroundColor={theme.background.header}
+        backgroundColor={theme.colors.primary_2.backgroundColor}
       />
       <Host>
         <NavigationContainer ref={ref} onStateChange={trackNavigation}>

@@ -4,7 +4,7 @@ const LocationSearchTexts = {
   searchField: {
     placeholder: _(
       'Søk etter adresse eller sted,',
-      'Search for an adress or location',
+      'Search for an address or location',
     ),
   },
   header: {
@@ -12,7 +12,7 @@ const LocationSearchTexts = {
   },
   results: {
     previousResults: {
-      heading: _('Siste steder', 'Most recent locations'),
+      heading: _('Sist brukte steder', 'Most recent locations'),
     },
     searchResults: {
       heading: _('Søkeresultater', 'Search results'),
@@ -20,7 +20,7 @@ const LocationSearchTexts = {
   },
   journeySearch: {
     previousJourneyResults: {
-      heading: _('Siste reisesøk', 'Most recent journeys'),
+      heading: _('Sist brukte reisesøk', 'Most recent journeys'),
     },
     result: {
       a11yLabel: (fromName: string, toName: string) =>
@@ -29,8 +29,16 @@ const LocationSearchTexts = {
           `Journey from ${fromName} to ${toName}.`,
         ),
       a11yHint: _(
-        'Aktivér for å søke etter reiser for dette resultatet.',
+        'Aktivér for å søke etter reiser for disse stedene.',
         'Activate to search for trips for these locations.',
+      ),
+    },
+  },
+  locationResults: {
+    a11y: {
+      activateToUse: _(
+        'Aktivér for å bruke dette stedet',
+        'Activate to use this location',
       ),
     },
   },

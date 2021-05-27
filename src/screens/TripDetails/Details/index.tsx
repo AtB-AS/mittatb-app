@@ -159,7 +159,7 @@ function useTripPattern(
 }
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   header: {
-    backgroundColor: theme.background.header,
+    backgroundColor: theme.colors.primary_2.backgroundColor,
   },
   container: {
     flex: 1,
