@@ -114,6 +114,7 @@ const TicketsTexts = {
       `${bulletPoint} Kvittering kan sendes til e-post fra “billettdetaljer”.`,
       `${bulletPoint} Receipts on-demand – sent to your specified e-mail via “ticket details”.`,
     ),
+    button: _('Godta', 'Accept'),
   },
 };
 

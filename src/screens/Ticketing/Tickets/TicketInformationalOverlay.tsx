@@ -72,7 +72,7 @@ export default function TicketInformationalOverlay() {
         </ThemeText>
         <View style={{marginVertical: theme.spacings.xLarge}}>
           <Button
-            text={'Godta'}
+            text={t(TicketsTexts.informational.button)}
             icon={Confirm}
             iconPosition="right"
             color="primary_2"
