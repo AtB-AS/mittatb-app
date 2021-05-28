@@ -386,7 +386,6 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
             tariffZones={tariffZones}
             onSelect={(t) => updateSelectedZones(t.id)}
           />
-
           <View
             style={[
               styles.saveButton,
