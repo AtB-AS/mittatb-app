@@ -59,6 +59,9 @@ jobs:
       - name: Generate icons
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn app-icon generate -i icon.qa.png --platforms=ios
+      - name: Install appropriate CocoaPods-version
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
+        run: gem uninstall cocoapods --all --executables && gem install cocoapods -v 1.10.1 --no-document
       - name: Run fastlane build
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: fastlane ios build
