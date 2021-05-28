@@ -389,7 +389,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
           <View
             style={[
               styles.saveButton,
-              {bottom: Math.max(safeAreaBottom, theme.spacings.medium)},
+              {paddingBottom: Math.max(safeAreaBottom, theme.spacings.medium)},
             ]}
           >
             <Button
