@@ -381,25 +381,16 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
       </View>
 
       {isScreenReaderEnabled ? (
-        <View style={{flex: 1}}>
-          <View
-            style={{
-              flex: 1,
-              paddingBottom: Math.max(safeAreaBottom, theme.spacings.medium),
-            }}
-          >
-            <TariffZoneResults
-              tariffZones={tariffZones}
-              onSelect={(t) => updateSelectedZones(t.id)}
-            />
-          </View>
+        <>
+          <TariffZoneResults
+            tariffZones={tariffZones}
+            onSelect={(t) => updateSelectedZones(t.id)}
+          />
+
           <View
             style={[
               styles.saveButton,
-              {
-                bottom: Math.max(safeAreaBottom, theme.spacings.medium),
-                flexShrink: 1,
-              },
+              {paddingBottom: Math.max(safeAreaBottom, theme.spacings.medium)},
             ]}
           >
             <Button
@@ -409,7 +400,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
               accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
             />
           </View>
-        </View>
+        </>
       ) : (
         <>
           <MapboxGL.MapView
