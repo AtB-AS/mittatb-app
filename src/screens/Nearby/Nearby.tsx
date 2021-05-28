@@ -202,7 +202,7 @@ const NearbyOverview: React.FC<Props> = ({
       }
       onEndReached={onScrollViewEndReached}
       alertContext={'travel'}
-      setFocusOnLoad={false}
+      setFocusOnLoad={true}
     >
       <ScreenReaderAnnouncement message={loadAnnouncement} />
 
