@@ -21,7 +21,6 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.0.0
-          bundler-cache: true
       - name: Install appropriate CocoaPods-version
         run: gem uninstall cocoapods -v 1.9.3 && gem install cocoapods -v 1.10.1 --no-document
       - name: Decrypt env files
