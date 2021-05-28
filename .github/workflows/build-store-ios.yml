@@ -49,6 +49,8 @@ jobs:
           MATCH_TYPE: 'appstore'
       - name: Generate icons
         run: brew install imagemagick && yarn app-icon generate -i icon.png --platforms=ios
+      - name: Install appropriate CocoaPods-version
+        run: gem uninstall cocoapods --all --executables && gem install cocoapods -v 1.10.1 --no-document
       - name: Run fastlane build
         run: fastlane ios build
         env:
