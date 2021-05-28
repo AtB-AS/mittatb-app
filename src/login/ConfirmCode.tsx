@@ -14,7 +14,9 @@ import MessageBox from '@atb/components/message-box';
 import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {onboardingThemeColor} from '@atb/screens/Onboarding';
+import {ThemeColor} from '@atb/theme/colors';
+
+const themeColor: ThemeColor = 'primary_2';
 
 export default function ConfirmCode({
   phoneNumber,
@@ -73,20 +75,17 @@ export default function ConfirmCode({
       <FullScreenHeader
         leftButton={{type: 'back'}}
         setFocusOnLoad={false}
-        color={onboardingThemeColor}
+        color={themeColor}
       />
 
       <View style={styles.mainView}>
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
-          <ThemeText
-            type={'body__primary--jumbo--bold'}
-            color={onboardingThemeColor}
-          >
+          <ThemeText type={'body__primary--jumbo--bold'} color={themeColor}>
             {t(LoginTexts.confirmCode.title)}
           </ThemeText>
         </View>
         <View>
-          <ThemeText style={styles.description} color={onboardingThemeColor}>
+          <ThemeText style={styles.description} color={themeColor}>
             {t(LoginTexts.confirmCode.description(phoneNumber))}
           </ThemeText>
         </View>
@@ -133,7 +132,7 @@ export default function ConfirmCode({
                 <ThemeText
                   style={styles.resendButtonText}
                   type="body__primary--underline"
-                  color={onboardingThemeColor}
+                  color={themeColor}
                 >
                   {t(LoginTexts.confirmCode.resendButton)}
                 </ThemeText>
@@ -148,7 +147,7 @@ export default function ConfirmCode({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors[onboardingThemeColor].backgroundColor,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
     flex: 1,
   },
   mainView: {

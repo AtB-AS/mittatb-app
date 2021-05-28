@@ -14,8 +14,6 @@ import {
 } from '@atb/screens/Onboarding/WelcomeScreen';
 import {ThemeColor} from '@atb/theme/colors';
 
-export const onboardingThemeColor: ThemeColor = 'primary_2';
-
 export type OnboardingStackParams = {
   WelcomeScreenLogin: undefined;
   WelcomeScreenWithoutLogin: undefined;

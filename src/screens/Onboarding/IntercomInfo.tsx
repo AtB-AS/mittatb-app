@@ -11,7 +11,9 @@ import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding
 import Illustration from '@atb/screens/Onboarding/components/Illustration';
 import {Onboarding2} from '@atb/assets/svg/illustrations';
 import {Confirm} from '@atb/assets/svg/icons/actions';
-import {onboardingThemeColor} from '@atb/screens/Onboarding/index';
+import {ThemeColor} from '@atb/theme/colors';
+
+const themeColor: ThemeColor = 'primary_2';
 
 export default function IntercomInfo() {
   const {t} = useTranslation();
@@ -21,17 +23,17 @@ export default function IntercomInfo() {
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader setFocusOnLoad={false} color={onboardingThemeColor} />
+      <FullScreenHeader setFocusOnLoad={false} color={themeColor} />
 
       <Illustration Svg={Onboarding2} />
       <ScrollView style={styles.mainView}>
         <View ref={focusRef} accessibilityRole="header" accessible={true}>
-          <ThemeText type={'heading__title'} color={onboardingThemeColor}>
+          <ThemeText type={'heading__title'} color={themeColor}>
             {t(OnboardingTexts.intercom.title)}
           </ThemeText>
         </View>
         <View>
-          <ThemeText style={styles.description} color={onboardingThemeColor}>
+          <ThemeText style={styles.description} color={themeColor}>
             {t(OnboardingTexts.intercom.description)}
           </ThemeText>
         </View>
@@ -51,7 +53,7 @@ export default function IntercomInfo() {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors[onboardingThemeColor].backgroundColor,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
     flex: 1,
   },
   mainView: {

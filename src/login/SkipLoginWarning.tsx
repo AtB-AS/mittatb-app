@@ -9,11 +9,11 @@ import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {
-  OnboardingStackParams,
-  onboardingThemeColor,
-} from '@atb/screens/Onboarding';
+import {OnboardingStackParams} from '@atb/screens/Onboarding';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {ThemeColor} from '@atb/theme/colors';
+
+const themeColor: ThemeColor = 'primary_2';
 
 export type SkipLoginWarningProps = {
   navigation: StackNavigationProp<OnboardingStackParams>;
@@ -31,15 +31,12 @@ export default function SkipLoginWarning({navigation}: SkipLoginWarningProps) {
 
       <ScrollView style={styles.mainView}>
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
-          <ThemeText
-            type={'body__primary--jumbo--bold'}
-            color={onboardingThemeColor}
-          >
+          <ThemeText type={'body__primary--jumbo--bold'} color={themeColor}>
             {t(LoginTexts.skipLoginWarning.title)}
           </ThemeText>
         </View>
         <View>
-          <ThemeText style={styles.description} color={onboardingThemeColor}>
+          <ThemeText style={styles.description} color={themeColor}>
             {t(LoginTexts.skipLoginWarning.description)}
           </ThemeText>
         </View>
@@ -60,7 +57,7 @@ export default function SkipLoginWarning({navigation}: SkipLoginWarningProps) {
           <ThemeText
             style={styles.goToLoginButtonText}
             type="body__primary--underline"
-            color={onboardingThemeColor}
+            color={themeColor}
           >
             {t(LoginTexts.skipLoginWarning.wantToLoginButton)}
           </ThemeText>
@@ -72,7 +69,7 @@ export default function SkipLoginWarning({navigation}: SkipLoginWarningProps) {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors[onboardingThemeColor].backgroundColor,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
     flex: 1,
   },
   mainView: {

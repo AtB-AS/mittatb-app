@@ -13,7 +13,9 @@ import {useNavigation} from '@react-navigation/native';
 import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {onboardingThemeColor} from '@atb/screens/Onboarding';
+import {ThemeColor} from '@atb/theme/colors';
+
+const themeColor: ThemeColor = 'primary_2';
 
 export default function PhoneInput({
   loginReason,
@@ -62,25 +64,22 @@ export default function PhoneInput({
         leftButton={headerLeftButton}
         rightButton={headerRightButton}
         setFocusOnLoad={false}
-        color={onboardingThemeColor}
+        color={themeColor}
       />
 
       <View style={styles.mainView}>
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
-          <ThemeText
-            type={'body__primary--jumbo--bold'}
-            color={onboardingThemeColor}
-          >
+          <ThemeText type={'body__primary--jumbo--bold'} color={themeColor}>
             {t(LoginTexts.phoneInput.title)}
           </ThemeText>
         </View>
         <View accessible={true}>
           {loginReason && (
-            <ThemeText style={styles.loginReason} color={onboardingThemeColor}>
+            <ThemeText style={styles.loginReason} color={themeColor}>
               {loginReason}
             </ThemeText>
           )}
-          <ThemeText style={styles.description} color={onboardingThemeColor}>
+          <ThemeText style={styles.description} color={themeColor}>
             {t(LoginTexts.phoneInput.description)}
           </ThemeText>
         </View>
@@ -128,7 +127,7 @@ export default function PhoneInput({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors[onboardingThemeColor].backgroundColor,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
     flex: 1,
   },
   mainView: {
