@@ -1,7 +1,6 @@
 import {ErrorType} from '@atb/api/utils';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {TextInput} from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
 import {Location} from '@atb/favorites/types';
 import {useGeocoder} from '@atb/geocoder';
 import {useGeolocationState} from '@atb/GeolocationContext';
@@ -213,7 +212,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   header: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.colors.background_gray.backgroundColor,
   },
   favouriteChips: {
     marginLeft: theme.spacings.medium,

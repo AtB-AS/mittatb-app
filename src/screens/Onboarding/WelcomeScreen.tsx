@@ -8,7 +8,10 @@ import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {OnboardingStackParams} from '@atb/screens/Onboarding/index';
+import {
+  OnboardingStackParams,
+  onboardingThemeColor,
+} from '@atb/screens/Onboarding/index';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {Onboarding1} from '@atb/assets/svg/illustrations';
 import Illustration from '@atb/screens/Onboarding/components/Illustration';
@@ -46,24 +49,36 @@ const WelcomeScreen = ({
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader setFocusOnLoad={false} style={styles.header} />
+      <FullScreenHeader setFocusOnLoad={false} color={onboardingThemeColor} />
       <Illustration Svg={Onboarding1} />
       <ScrollView style={styles.mainView}>
         <View ref={focusRef} accessibilityRole="header" accessible={true}>
-          <ThemeText type={'body__primary--jumbo--bold'} style={styles.title}>
+          <ThemeText
+            type={'body__primary--jumbo--bold'}
+            color={onboardingThemeColor}
+          >
             {t(OnboardingTexts.welcome.title)}
           </ThemeText>
         </View>
         <View accessible={true}>
-          <ThemeText style={styles.descriptionPart}>
+          <ThemeText
+            style={styles.descriptionPart}
+            color={onboardingThemeColor}
+          >
             {t(OnboardingTexts.welcome.description.part1)}
           </ThemeText>
           {inLoginContext ? (
             <>
-              <ThemeText style={styles.descriptionPart}>
+              <ThemeText
+                style={styles.descriptionPart}
+                color={onboardingThemeColor}
+              >
                 {t(OnboardingTexts.welcome.description.part2)}
               </ThemeText>
-              <ThemeText style={styles.descriptionPart}>
+              <ThemeText
+                style={styles.descriptionPart}
+                color={onboardingThemeColor}
+              >
                 {t(OnboardingTexts.welcome.description.part3)}
               </ThemeText>
             </>
@@ -85,11 +100,8 @@ const WelcomeScreen = ({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors.primary_3.backgroundColor,
+    backgroundColor: theme.colors[onboardingThemeColor].backgroundColor,
     flex: 1,
-  },
-  header: {
-    backgroundColor: theme.colors.primary_3.backgroundColor,
   },
   mainView: {
     margin: theme.spacings.medium,
@@ -97,12 +109,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
     flex: 1,
   },
-  title: {
-    color: theme.colors.primary_3.color,
-  },
   descriptionPart: {
     marginTop: theme.spacings.medium,
-    color: theme.colors.primary_3.color,
   },
   messageBox: {
     marginBottom: theme.spacings.medium,

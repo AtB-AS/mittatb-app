@@ -11,6 +11,7 @@ import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding
 import Illustration from '@atb/screens/Onboarding/components/Illustration';
 import {Onboarding2} from '@atb/assets/svg/illustrations';
 import {Confirm} from '@atb/assets/svg/icons/actions';
+import {onboardingThemeColor} from '@atb/screens/Onboarding/index';
 
 export default function IntercomInfo() {
   const {t} = useTranslation();
@@ -20,17 +21,17 @@ export default function IntercomInfo() {
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader setFocusOnLoad={false} style={styles.header} />
+      <FullScreenHeader setFocusOnLoad={false} color={onboardingThemeColor} />
 
       <Illustration Svg={Onboarding2} />
       <ScrollView style={styles.mainView}>
         <View ref={focusRef} accessibilityRole="header" accessible={true}>
-          <ThemeText type={'heading__title'} style={styles.title}>
+          <ThemeText type={'heading__title'} color={onboardingThemeColor}>
             {t(OnboardingTexts.intercom.title)}
           </ThemeText>
         </View>
         <View>
-          <ThemeText style={styles.description}>
+          <ThemeText style={styles.description} color={onboardingThemeColor}>
             {t(OnboardingTexts.intercom.description)}
           </ThemeText>
         </View>
@@ -50,11 +51,8 @@ export default function IntercomInfo() {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors.primary_3.backgroundColor,
+    backgroundColor: theme.colors[onboardingThemeColor].backgroundColor,
     flex: 1,
-  },
-  header: {
-    backgroundColor: theme.colors.primary_3.backgroundColor,
   },
   mainView: {
     margin: theme.spacings.medium,
@@ -62,12 +60,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
     flex: 1,
   },
-  title: {
-    color: theme.colors.primary_3.color,
-  },
   description: {
     marginTop: theme.spacings.medium,
-    color: theme.colors.primary_3.color,
   },
   messageBox: {
     marginBottom: theme.spacings.medium,

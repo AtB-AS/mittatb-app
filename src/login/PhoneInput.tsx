@@ -13,6 +13,7 @@ import {useNavigation} from '@react-navigation/native';
 import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {onboardingThemeColor} from '@atb/screens/Onboarding';
 
 export default function PhoneInput({
   loginReason,
@@ -61,19 +62,25 @@ export default function PhoneInput({
         leftButton={headerLeftButton}
         rightButton={headerRightButton}
         setFocusOnLoad={false}
+        color={onboardingThemeColor}
       />
 
       <View style={styles.mainView}>
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
-          <ThemeText type={'body__primary--jumbo--bold'}>
+          <ThemeText
+            type={'body__primary--jumbo--bold'}
+            color={onboardingThemeColor}
+          >
             {t(LoginTexts.phoneInput.title)}
           </ThemeText>
         </View>
         <View accessible={true}>
           {loginReason && (
-            <ThemeText style={styles.loginReason}>{loginReason}</ThemeText>
+            <ThemeText style={styles.loginReason} color={onboardingThemeColor}>
+              {loginReason}
+            </ThemeText>
           )}
-          <ThemeText style={styles.description}>
+          <ThemeText style={styles.description} color={onboardingThemeColor}>
             {t(LoginTexts.phoneInput.description)}
           </ThemeText>
         </View>
@@ -105,7 +112,7 @@ export default function PhoneInput({
 
           {!isSubmitting && (
             <Button
-              color={'primary_3'}
+              color={'secondary_1'}
               onPress={onNext}
               text={t(LoginTexts.phoneInput.mainButton)}
               disabled={phoneNumber.length !== 8}
@@ -121,7 +128,7 @@ export default function PhoneInput({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.colors[onboardingThemeColor].backgroundColor,
     flex: 1,
   },
   mainView: {

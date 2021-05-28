@@ -1,6 +1,5 @@
 import {ErrorType} from '@atb/api/utils';
 import Button from '@atb/components/button';
-import Header from '@atb/components/screen-header';
 import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {StyleSheet} from '@atb/theme';
@@ -14,7 +13,6 @@ import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs'
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import WebView from 'react-native-webview';
 import {TicketingStackParams} from '../..';
 import {
@@ -26,6 +24,7 @@ import useTerminalState, {
   ErrorContext,
   LoadingState,
 } from './use-terminal-state';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 type NavigationProp = CompositeNavigationProp<
   MaterialTopTabNavigationProp<TicketTabsNavigatorParams>,
@@ -72,8 +71,8 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
   } = useTerminalState(offers, cancelTerminal, dismissAndAddReservation);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header
+    <View style={styles.container}>
+      <FullScreenHeader
         title={t(PaymentCreditCardTexts.header.title)}
         leftButton={{
           type: 'cancel',
@@ -122,7 +121,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
           />
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -1,4 +1,3 @@
-import ScreenHeader from '@atb/components/screen-header';
 import {RadioSection} from '@atb/components/sections';
 import {
   Preference_ScreenAlternatives,
@@ -13,7 +12,8 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {View} from 'react-native';
 
 const identity = (s: string) => s;
 function toName(
@@ -40,8 +40,8 @@ export default function SelectStartScreen() {
   const items = Array.from(preference_screenAlternatives);
 
   return (
-    <SafeAreaView style={style.container}>
-      <ScreenHeader
+    <View style={style.container}>
+      <FullScreenHeader
         title={t(SelectStartScreenTexts.header.title)}
         leftButton={{type: 'back'}}
       />
@@ -57,7 +57,7 @@ export default function SelectStartScreen() {
           onSelect={(startScreen) => setPreference({startScreen})}
         />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

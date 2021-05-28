@@ -1,19 +1,15 @@
-import {getFeatureFromVenue} from '@atb/api/geocoder';
 import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
 import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
 import {Info, Warning} from '@atb/assets/svg/situations';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
 import {TinyMessageBox} from '@atb/components/message-box';
 import PaginatedDetailsHeader from '@atb/components/pagination';
-import ScreenHeader from '@atb/components/screen-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {searchByStopPlace} from '@atb/geocoder/search-for-location';
-import {mapFeatureToLocation} from '@atb/geocoder/utils';
 import {
   EstimatedCall,
-  FeatureCategory,
   Quay,
   ServiceJourneyMapInfoData,
   Situation,
@@ -42,6 +38,7 @@ import TripRow from '../components/TripRow';
 import CompactMap from '../Map/CompactMap';
 import {ServiceJourneyDeparture} from './types';
 import useDepartureData, {CallListGroup} from './use-departure-data';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -87,12 +84,10 @@ export default function DepartureDetails({navigation, route}: Props) {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.header, {paddingTop}]}>
-        <ScreenHeader
-          leftButton={{type: 'back'}}
-          title={title ?? t(DepartureDetailsTexts.header.notFound)}
-        />
-      </View>
+      <FullScreenHeader
+        leftButton={{type: 'back'}}
+        title={title ?? t(DepartureDetailsTexts.header.notFound)}
+      />
       <ContentWithDisappearingHeader
         header={
           mapData && (

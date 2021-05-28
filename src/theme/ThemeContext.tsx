@@ -47,10 +47,10 @@ const ThemeContextProvider: React.FC = ({children}) => {
   useEffect(() => {
     if (Platform.OS !== 'ios') return;
     if (overrideColorScheme && colorScheme !== storedColorScheme) {
-      ChangeNative.changeAppearance(storedColorScheme);
+      ChangeNative.changeAppearance('light');
     }
     if (!overrideColorScheme) {
-      ChangeNative.changeAppearance(null);
+      ChangeNative.changeAppearance('light');
     }
   }, [overrideColorScheme, storedColorScheme]);
 

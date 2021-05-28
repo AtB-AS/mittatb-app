@@ -1,4 +1,3 @@
-import ScreenHeader from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import {useFavorites} from '@atb/favorites';
 import {StoredFavoriteDeparture} from '@atb/favorites/types';
@@ -6,9 +5,9 @@ import MessageBox from '@atb/components/message-box';
 import {StyleSheet, Theme} from '@atb/theme';
 import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {Alert, LayoutAnimation} from 'react-native';
+import {Alert, LayoutAnimation, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export default function FavoriteDepartures() {
   const style = useProfileStyle();
@@ -39,8 +38,8 @@ export default function FavoriteDepartures() {
   };
 
   return (
-    <SafeAreaView style={style.container} edges={['right', 'top', 'left']}>
-      <ScreenHeader
+    <View style={style.container}>
+      <FullScreenHeader
         title={t(FavoriteDeparturesTexts.header.title)}
         leftButton={{type: 'back'}}
       />
@@ -69,7 +68,7 @@ export default function FavoriteDepartures() {
           ))}
         </Sections.Section>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({

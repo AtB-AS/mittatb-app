@@ -3,13 +3,11 @@ import {ActivityIndicator, View} from 'react-native';
 import Button from '@atb/components/button';
 import {StyleSheet} from '@atb/theme';
 import {EnrollmentTexts, useTranslation} from '@atb/translations';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import ScreenHeader from '@atb/components/screen-header';
 import MessageBox, {MessageType} from '@atb/components/message-box';
 import useEnroll from './use-enroll';
-import ThemeText from '@atb/components/text';
 import TextInput from '@atb/components/sections/text-input';
 import {Confirm} from '@atb/assets/svg/icons/actions';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export default function Splash() {
   const styles = useStyles();
@@ -26,8 +24,8 @@ export default function Splash() {
   const messageText = useMessageText(messageType);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScreenHeader
+    <View style={styles.container}>
+      <FullScreenHeader
         title={t(EnrollmentTexts.header)}
         leftButton={{type: 'back'}}
       />
@@ -52,11 +50,12 @@ export default function Splash() {
               icon={Confirm}
               disabled={isLoading || !inviteCode}
               style={styles.button}
+              color={'primary_2'}
             />
           </>
         )}
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -79,7 +78,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   contentContainer: {
-    paddingHorizontal: theme.spacings.medium,
+    padding: theme.spacings.medium,
     flex: 1,
   },
   input: {

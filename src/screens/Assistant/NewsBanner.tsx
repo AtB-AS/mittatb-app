@@ -8,6 +8,9 @@ import {
 } from 'react-native';
 import ThemeText from '@atb/components/text';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {ThemeColor} from '@atb/theme/colors';
+
+const themeColor: ThemeColor = 'background_gray';
 
 const NewsBanner: React.FC<{} & AccessibilityProps> = ({...props}) => {
   const style = useStyle();
@@ -24,12 +27,16 @@ const NewsBanner: React.FC<{} & AccessibilityProps> = ({...props}) => {
 
   return (
     <View style={style.container}>
-      <ThemeText type={'body__primary'} style={style.text}>
+      <ThemeText color={themeColor} type={'body__primary'} style={style.text}>
         {news_text}
       </ThemeText>
       {news_link_url ? (
         <TouchableOpacity onPress={() => Linking.openURL(news_link_url)}>
-          <ThemeText type="body__primary--underline" style={style.link}>
+          <ThemeText
+            color={themeColor}
+            type="body__primary--underline"
+            style={style.link}
+          >
             {news_link_text}
           </ThemeText>
         </TouchableOpacity>

@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
-import ScreenHeader from '@atb/components/screen-header';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {StyleSheet} from '@atb/theme';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {
@@ -16,6 +14,7 @@ import {TravelDateTexts, useTranslation} from '@atb/translations';
 import Button from '@atb/components/button';
 import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
 import {View} from 'react-native';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export type TravelDateRouteParams = {
   travelDate?: string;
@@ -58,8 +57,8 @@ const TravelDate: React.FC<{
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      <ScreenHeader
+    <View style={styles.container}>
+      <FullScreenHeader
         title={t(TravelDateTexts.header.title)}
         leftButton={{type: 'back'}}
       />
@@ -89,7 +88,7 @@ const TravelDate: React.FC<{
           style={styles.saveButton}
         />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

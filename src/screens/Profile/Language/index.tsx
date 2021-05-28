@@ -1,4 +1,3 @@
-import ScreenHeader from '@atb/components/screen-header';
 import {ActionItem, RadioSection, Section} from '@atb/components/sections';
 import {Preference_Language, usePreferences} from '@atb/preferences';
 import {StyleSheet, Theme} from '@atb/theme';
@@ -10,7 +9,9 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {View} from 'react-native';
+
 const identity = (s: string) => s;
 export default function Language() {
   const {
@@ -24,8 +25,8 @@ export default function Language() {
   const languages = Array.from(appLanguages);
 
   return (
-    <SafeAreaView style={style.container}>
-      <ScreenHeader
+    <View style={style.container}>
+      <FullScreenHeader
         title={t(LanguageSettingsTexts.header.title)}
         leftButton={{type: 'back'}}
       />
@@ -51,7 +52,7 @@ export default function Language() {
           />
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

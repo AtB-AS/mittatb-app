@@ -1,14 +1,13 @@
-import Header from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import {useTicketState} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import useInterval from '@atb/utils/use-interval';
 import {RouteProp} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {ScrollView} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {ScrollView, View} from 'react-native';
 import {TicketModalNavigationProp, TicketModalStackParams} from '.';
 import DetailsContent from './DetailsContent';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export type TicketDetailsRouteParams = {
   orderId: string;
@@ -40,11 +39,10 @@ export default function DetailsScreen({navigation, route}: Props) {
     });
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header
+    <View style={styles.container}>
+      <FullScreenHeader
         leftButton={{type: 'close'}}
         title={t(TicketTexts.details.header.title)}
-        style={styles.header}
       />
       <ScrollView style={styles.content}>
         {fc && (
@@ -55,14 +53,11 @@ export default function DetailsScreen({navigation, route}: Props) {
           />
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  header: {
-    backgroundColor: theme.colors.background_2.backgroundColor,
-  },
   container: {
     flex: 1,
     backgroundColor: theme.colors.background_2.backgroundColor,

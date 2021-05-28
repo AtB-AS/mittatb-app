@@ -9,7 +9,7 @@ import {ThemeColor} from '@atb/theme/colors';
 import storage from '@atb/storage';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 
-const themeColor: ThemeColor = 'secondary_1';
+const themeColor: ThemeColor = 'background_gray';
 
 export default function TicketInformationalOverlay() {
   const {theme} = useTheme();
@@ -27,7 +27,6 @@ export default function TicketInformationalOverlay() {
         title={t(TicketsTexts.header.title)}
         rightButton={{type: 'chat'}}
         leftButton={{type: 'home'}}
-        color={themeColor}
       />
       <ScrollView style={styles.scrollView}>
         <ThemeText color={themeColor} type="body__primary--jumbo--bold">

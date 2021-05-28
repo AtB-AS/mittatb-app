@@ -2,9 +2,7 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {TicketingStackParams} from '../';
-import Header from '@atb/components/screen-header';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import * as Sections from '@atb/components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -13,6 +11,8 @@ import Button from '@atb/components/button';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 
 export type ProductRouteParams = {
   preassignedFareProductId: string;
@@ -30,7 +30,6 @@ const Product: React.FC<{
   route: ProductRouteProp;
 }> = ({navigation, route: {params}}) => {
   const styles = useStyles();
-  const {theme} = useTheme();
   const {t, language} = useTranslation();
 
   const {
@@ -48,11 +47,9 @@ const Product: React.FC<{
     (p) => p.type === selectedProduct.type,
   );
 
-  const {top: safeAreaTop, bottom: safeAreBottom} = useSafeAreaInsets();
-
   return (
-    <View style={[styles.container, {paddingTop: safeAreaTop}]}>
-      <Header
+    <View style={styles.container}>
+      <FullScreenHeader
         title={t(ProductTexts.header.title)}
         leftButton={{type: 'back'}}
       />
@@ -69,14 +66,7 @@ const Product: React.FC<{
         </Sections.Section>
       </ScrollView>
 
-      <View
-        style={[
-          styles.saveButton,
-          {
-            paddingBottom: Math.max(safeAreBottom, theme.spacings.medium),
-          },
-        ]}
-      >
+      <FullScreenFooter>
         <Button
           color="primary_2"
           text={t(ProductTexts.primaryButton.text)}
@@ -86,7 +76,7 @@ const Product: React.FC<{
             });
           }}
         />
-      </View>
+      </FullScreenFooter>
     </View>
   );
 };

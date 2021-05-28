@@ -9,7 +9,10 @@ import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {OnboardingStackParams} from '@atb/screens/Onboarding';
+import {
+  OnboardingStackParams,
+  onboardingThemeColor,
+} from '@atb/screens/Onboarding';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 
 export type SkipLoginWarningProps = {
@@ -28,32 +31,36 @@ export default function SkipLoginWarning({navigation}: SkipLoginWarningProps) {
 
       <ScrollView style={styles.mainView}>
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
-          <ThemeText type={'body__primary--jumbo--bold'}>
+          <ThemeText
+            type={'body__primary--jumbo--bold'}
+            color={onboardingThemeColor}
+          >
             {t(LoginTexts.skipLoginWarning.title)}
           </ThemeText>
         </View>
         <View>
-          <ThemeText style={styles.description}>
+          <ThemeText style={styles.description} color={onboardingThemeColor}>
             {t(LoginTexts.skipLoginWarning.description)}
           </ThemeText>
         </View>
       </ScrollView>
       <FullScreenFooter>
         <Button
-          color={'primary_3'}
+          color={'secondary_1'}
           onPress={finishOnboarding}
           text={t(LoginTexts.skipLoginWarning.mainButton)}
           icon={ArrowRight}
           iconPosition="right"
         />
         <TouchableOpacity
-          style={styles.resendButton}
+          style={styles.goToLoginButton}
           onPress={navigation.goBack}
           accessibilityRole="button"
         >
           <ThemeText
-            style={styles.resendButtonText}
+            style={styles.goToLoginButtonText}
             type="body__primary--underline"
+            color={onboardingThemeColor}
           >
             {t(LoginTexts.skipLoginWarning.wantToLoginButton)}
           </ThemeText>
@@ -65,7 +72,7 @@ export default function SkipLoginWarning({navigation}: SkipLoginWarningProps) {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.colors[onboardingThemeColor].backgroundColor,
     flex: 1,
   },
   mainView: {
@@ -81,9 +88,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   buttonView: {
     marginTop: theme.spacings.medium,
   },
-  resendButton: {
+  goToLoginButton: {
     marginTop: theme.spacings.medium,
     padding: theme.spacings.medium,
   },
-  resendButtonText: {textAlign: 'center'},
+  goToLoginButtonText: {textAlign: 'center'},
 }));

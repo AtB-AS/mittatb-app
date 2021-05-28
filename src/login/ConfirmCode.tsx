@@ -14,6 +14,7 @@ import MessageBox from '@atb/components/message-box';
 import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {onboardingThemeColor} from '@atb/screens/Onboarding';
 
 export default function ConfirmCode({
   phoneNumber,
@@ -69,16 +70,23 @@ export default function ConfirmCode({
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader leftButton={{type: 'back'}} setFocusOnLoad={false} />
+      <FullScreenHeader
+        leftButton={{type: 'back'}}
+        setFocusOnLoad={false}
+        color={onboardingThemeColor}
+      />
 
       <View style={styles.mainView}>
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
-          <ThemeText type={'body__primary--jumbo--bold'}>
+          <ThemeText
+            type={'body__primary--jumbo--bold'}
+            color={onboardingThemeColor}
+          >
             {t(LoginTexts.confirmCode.title)}
           </ThemeText>
         </View>
         <View>
-          <ThemeText style={styles.description}>
+          <ThemeText style={styles.description} color={onboardingThemeColor}>
             {t(LoginTexts.confirmCode.description(phoneNumber))}
           </ThemeText>
         </View>
@@ -110,7 +118,7 @@ export default function ConfirmCode({
           {!isLoading && (
             <>
               <Button
-                color={'primary_3'}
+                color={'secondary_1'}
                 onPress={onLogin}
                 text={t(LoginTexts.confirmCode.mainButton)}
                 disabled={!code}
@@ -125,6 +133,7 @@ export default function ConfirmCode({
                 <ThemeText
                   style={styles.resendButtonText}
                   type="body__primary--underline"
+                  color={onboardingThemeColor}
                 >
                   {t(LoginTexts.confirmCode.resendButton)}
                 </ThemeText>
@@ -139,7 +148,7 @@ export default function ConfirmCode({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.colors[onboardingThemeColor].backgroundColor,
     flex: 1,
   },
   mainView: {

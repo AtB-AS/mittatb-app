@@ -1,6 +1,5 @@
 import {ErrorType} from '@atb/api/utils';
 import Button from '@atb/components/button';
-import Header from '@atb/components/screen-header';
 import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {StyleSheet} from '@atb/theme';
@@ -14,7 +13,6 @@ import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs'
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import React from 'react';
 import {View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../..';
 import {
   ActiveTicketsScreenName,
@@ -22,6 +20,7 @@ import {
 } from '../../../Tickets';
 import Processing from '../Processing';
 import useVippsState, {ErrorContext, State} from './use-vipps-state';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 type NavigationProp = CompositeNavigationProp<
   MaterialTopTabNavigationProp<TicketTabsNavigatorParams>,
@@ -63,8 +62,8 @@ export default function VippsPayment({
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header
+    <View style={styles.container}>
+      <FullScreenHeader
         title={t(PaymentVippsTexts.header.title)}
         leftButton={{
           type: 'cancel',
@@ -77,6 +76,7 @@ export default function VippsPayment({
             <Processing message={translateStateMessage(state, t)} />
           ) : (
             <Button
+              color="primary_2"
               text={t(PaymentVippsTexts.buttons.goToVipps)}
               onPress={() => openVipps()}
               style={styles.button}
@@ -91,6 +91,7 @@ export default function VippsPayment({
             />
             {error.context === 'open-vipps-url' && (
               <Button
+                color="primary_2"
                 onPress={openVipps}
                 text={t(PaymentVippsTexts.buttons.tryAgain)}
                 style={styles.button}
@@ -105,7 +106,7 @@ export default function VippsPayment({
           </>
         )}
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -135,7 +136,6 @@ const translateStateMessage = (loadingState: State, t: TranslateFunction) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    padding: theme.spacings.medium,
     backgroundColor: theme.colors.background_2.backgroundColor,
   },
   content: {

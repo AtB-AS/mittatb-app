@@ -1,6 +1,6 @@
 import {CreditCard, Vipps} from '@atb/assets/svg/icons/ticketing';
 import Button from '@atb/components/button';
-import Header, {LeftButtonProps} from '@atb/components/screen-header';
+import {LeftButtonProps} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import MessageBox from '@atb/components/message-box';
@@ -10,22 +10,18 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ReserveOffer} from '@atb/tickets';
-import {
-  Language,
-  PurchaseConfirmationTexts,
-  useTranslation,
-} from '@atb/translations';
+import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
 import {addMinutes} from 'date-fns';
 import React from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../';
 import useOfferState from '../Overview/use-offer-state';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import {createTravelDateText} from '@atb/screens/Ticketing/Purchase/Overview';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -122,17 +118,14 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     }
   }
 
-  const {top: safeAreaTop, bottom: safeAreBottom} = useSafeAreaInsets();
-
   return (
-    <View style={[styles.container, {paddingTop: safeAreaTop}]}>
-      <Header
+    <View style={styles.container}>
+      <FullScreenHeader
         title={t(
           PurchaseConfirmationTexts.header.title[preassignedFareProduct.type],
         )}
         leftButton={headerLeftButton}
         alertContext="ticketing"
-        style={styles.header}
       />
 
       <ScrollView style={styles.ticketInfoSection}>
@@ -247,11 +240,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
             style={{margin: theme.spacings.medium}}
           />
         ) : (
-          <View
-            style={{
-              paddingBottom: Math.max(safeAreBottom, theme.spacings.medium),
-            }}
-          >
+          <View>
             <Button
               color="secondary_1"
               text={t(PurchaseConfirmationTexts.paymentButtonVipps.text)}
@@ -299,14 +288,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.medium,
     marginTop: theme.spacings.small,
   },
-  header: {
-    paddingHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
-  },
   errorMessage: {
     marginBottom: theme.spacings.medium,
   },
-  ticketInfoSection: {paddingHorizontal: theme.spacings.medium},
+  ticketInfoSection: {padding: theme.spacings.medium},
   userProfileItem: {
     flex: 1,
     flexDirection: 'row',
