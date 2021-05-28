@@ -18,6 +18,12 @@ jobs:
           echo "APP_ENVIRONMENT=staging" >> $GITHUB_ENV
           echo "BUNDLE_IDENTIFIER=no.mittatb.staging" >> $GITHUB_ENV
           echo "APPLE_TEAM_ID=CSV447Q97L" >> $GITHUB_ENV
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0.0
+          bundler-cache: true
+      - name: Install appropriate CocoaPods-version
+        run: gem uninstall cocoapods -v 1.9.3 && gem install cocoapods -v 1.10.1 --no-document
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
         env:
@@ -59,9 +65,6 @@ jobs:
       - name: Generate icons
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn app-icon generate -i icon.qa.png --platforms=ios
-      - name: Install appropriate CocoaPods-version
-        if: steps.ipa-cache.outputs.cache-hit != 'true'
-        run: gem uninstall cocoapods --all --executables && gem install cocoapods -v 1.10.1 --no-document
       - name: Run fastlane build
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: fastlane ios build

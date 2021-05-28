@@ -17,6 +17,12 @@ jobs:
           echo "APP_ENVIRONMENT=store" >> $GITHUB_ENV
           echo "BUNDLE_IDENTIFIER=no.mittatb.store" >> $GITHUB_ENV
           echo "APPLE_TEAM_ID=CSV447Q97L" >> $GITHUB_ENV
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0.0
+          bundler-cache: true
+      - name: Install appropriate CocoaPods-version
+        run: gem uninstall cocoapods -v 1.9.3 && gem install cocoapods -v 1.10.1 --no-document
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
         env:
@@ -49,8 +55,6 @@ jobs:
           MATCH_TYPE: 'appstore'
       - name: Generate icons
         run: brew install imagemagick && yarn app-icon generate -i icon.png --platforms=ios
-      - name: Install appropriate CocoaPods-version
-        run: gem uninstall cocoapods --all --executables && gem install cocoapods -v 1.10.1 --no-document
       - name: Run fastlane build
         run: fastlane ios build
         env:
