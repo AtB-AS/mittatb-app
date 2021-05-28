@@ -11,6 +11,9 @@ import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {OnboardingStackParams} from '@atb/screens/Onboarding';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {ThemeColor} from '@atb/theme/colors';
+
+const themeColor: ThemeColor = 'primary_2';
 
 export type SkipLoginWarningProps = {
   navigation: StackNavigationProp<OnboardingStackParams>;
@@ -28,32 +31,33 @@ export default function SkipLoginWarning({navigation}: SkipLoginWarningProps) {
 
       <ScrollView style={styles.mainView}>
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
-          <ThemeText type={'body__primary--jumbo--bold'}>
+          <ThemeText type={'body__primary--jumbo--bold'} color={themeColor}>
             {t(LoginTexts.skipLoginWarning.title)}
           </ThemeText>
         </View>
         <View>
-          <ThemeText style={styles.description}>
+          <ThemeText style={styles.description} color={themeColor}>
             {t(LoginTexts.skipLoginWarning.description)}
           </ThemeText>
         </View>
       </ScrollView>
       <FullScreenFooter>
         <Button
-          color={'primary_3'}
+          color={'secondary_1'}
           onPress={finishOnboarding}
           text={t(LoginTexts.skipLoginWarning.mainButton)}
           icon={ArrowRight}
           iconPosition="right"
         />
         <TouchableOpacity
-          style={styles.resendButton}
+          style={styles.goToLoginButton}
           onPress={navigation.goBack}
           accessibilityRole="button"
         >
           <ThemeText
-            style={styles.resendButtonText}
+            style={styles.goToLoginButtonText}
             type="body__primary--underline"
+            color={themeColor}
           >
             {t(LoginTexts.skipLoginWarning.wantToLoginButton)}
           </ThemeText>
@@ -65,7 +69,7 @@ export default function SkipLoginWarning({navigation}: SkipLoginWarningProps) {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
     flex: 1,
   },
   mainView: {
@@ -81,9 +85,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   buttonView: {
     marginTop: theme.spacings.medium,
   },
-  resendButton: {
+  goToLoginButton: {
     marginTop: theme.spacings.medium,
     padding: theme.spacings.medium,
   },
-  resendButtonText: {textAlign: 'center'},
+  goToLoginButtonText: {textAlign: 'center'},
 }));

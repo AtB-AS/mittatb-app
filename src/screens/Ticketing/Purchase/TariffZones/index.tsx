@@ -515,7 +515,7 @@ const useMapStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.colors.background_2.backgroundColor,
   },
   headerContainer: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.colors.background_gray.backgroundColor,
   },
   pinContainer: {
     position: 'absolute',

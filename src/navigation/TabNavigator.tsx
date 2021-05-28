@@ -46,7 +46,7 @@ const NavigationRoot = () => {
   return (
     <Tab.Navigator
       tabBarOptions={{
-        activeTintColor: theme.colors.primary_3.backgroundColor,
+        activeTintColor: theme.colors.primary_2.backgroundColor,
         inactiveTintColor: theme.text.colors.secondary,
         style: {
           backgroundColor: theme.colors.background_0.backgroundColor,

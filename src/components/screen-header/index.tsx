@@ -11,6 +11,7 @@ import ThemeText from '@atb/components/text';
 import {AlertContext} from '@atb/alerts/AlertsContext';
 import AlertBox from '@atb/alerts/AlertBox';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {ThemeColor} from '@atb/theme/colors';
 
 export {default as AnimatedScreenHeader} from './animated-header';
 
@@ -32,6 +33,7 @@ export type ScreenHeaderProps = {
    */
   alertContext?: AlertContext;
   style?: ViewStyle;
+  color?: ThemeColor;
   setFocusOnLoad?: boolean;
 };
 
@@ -41,20 +43,32 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   title,
   alertContext,
   style,
+  color,
   setFocusOnLoad,
 }) => {
   const css = useHeaderStyle();
   const {theme} = useTheme();
+  const themeColor = color ?? 'background_gray';
 
   const {buttonsHeight, buttonsTopOffset, setLayoutFor} = useHeaderLayouts();
 
-  const leftIcon = leftButton ? <HeaderButton {...leftButton} /> : <View />;
-  const rightIcon = rightButton ? <HeaderButton {...rightButton} /> : <View />;
+  const leftIcon = leftButton ? (
+    <HeaderButton color={themeColor} {...leftButton} />
+  ) : (
+    <View />
+  );
+  const rightIcon = rightButton ? (
+    <HeaderButton color={themeColor} {...rightButton} />
+  ) : (
+    <View />
+  );
 
   const focusRef = useFocusOnLoad(setFocusOnLoad);
 
+  const backgroundColor = theme.colors[themeColor].backgroundColor;
+
   return (
-    <View style={[css.container, style]}>
+    <View style={[css.container, style, {backgroundColor}]}>
       <View
         accessible={!!title}
         accessibilityRole="header"
@@ -72,6 +86,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
           accessible={!!title}
           onLayout={setLayoutFor('title')}
           type="body__primary--bold"
+          color={themeColor}
         >
           {title ?? '\u00a0'}
         </ThemeText>

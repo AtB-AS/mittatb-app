@@ -14,17 +14,13 @@ import {
   RequestPermissionFn,
   useGeolocationState,
 } from '@atb/GeolocationContext';
-import {
-  useLocationSearchValue,
-  useOnlySingleLocation,
-} from '@atb/location-search';
+import {useOnlySingleLocation} from '@atb/location-search';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   AssistantTexts,
   dictionary,
   NearbyTexts,
-  TranslatedString,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
@@ -191,7 +187,7 @@ const NearbyOverview: React.FC<Props> = ({
       }
       headerTitle={t(NearbyTexts.header.title)}
       useScroll={activateScroll}
-      leftButton={{type: 'home'}}
+      leftButton={{type: 'home', color: 'background_gray'}}
       alternativeTitleComponent={
         <AccessibleText
           prefix={t(NearbyTexts.header.altTitle.a11yPrefix)}

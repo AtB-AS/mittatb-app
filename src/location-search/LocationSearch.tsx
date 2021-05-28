@@ -9,7 +9,6 @@ import MessageBox from '../components/message-box';
 import FullScreenHeader from '../components/screen-header/full-header';
 import ScreenReaderAnnouncement from '../components/screen-reader-announcement';
 import {TextInput} from '../components/sections';
-import ThemeText from '../components/text';
 import FavoriteChips, {ChipTypeGroup} from '../favorite-chips';
 import {useFavorites} from '../favorites';
 import {LocationWithMetadata} from '../favorites/types';
@@ -29,6 +28,7 @@ import LocationResults from './LocationResults';
 import {LocationSearchResult, SelectableLocationData} from './types';
 import useDebounce from './useDebounce';
 import {filterCurrentLocation, filterPreviousLocations} from './utils';
+
 export type Props = {
   navigation: LocationSearchNavigationProp;
   route: RouteProp<RootStackParamList, 'LocationSearch'>;
@@ -298,7 +298,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   header: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.colors.background_gray.backgroundColor,
   },
   withMargin: {
     margin: theme.spacings.medium,

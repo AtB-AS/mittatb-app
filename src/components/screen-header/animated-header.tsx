@@ -7,6 +7,8 @@ import HeaderButton from './HeaderButton';
 import {LeftButtonProps, RightButtonProps} from '.';
 import useFontScale from '@atb/utils/use-font-scale';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {ThemeColor} from '@atb/theme/colors';
+
 type ScreenHeaderProps = ViewProps & {
   leftButton?: LeftButtonProps;
   rightButton?: RightButtonProps;
@@ -15,6 +17,8 @@ type ScreenHeaderProps = ViewProps & {
   scrollRef?: Animated.Value;
   setFocusOnLoad?: boolean;
 };
+
+const themeColor: ThemeColor = 'background_gray';
 
 const BASE_HEADER_HEIGHT = 20;
 
@@ -73,7 +77,9 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
           ]}
         >
           <View accessible={true} accessibilityRole="header" ref={focusRef}>
-            <ThemeText type="body__primary--bold">{title}</ThemeText>
+            <ThemeText color={themeColor} type="body__primary--bold">
+              {title}
+            </ThemeText>
           </View>
         </Animated.View>
         {altTitle}
@@ -93,7 +99,7 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.spacings.medium,
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
   },
   buttonsContainer: {
     flexDirection: 'row',

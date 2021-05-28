@@ -399,6 +399,7 @@ const Assistant: React.FC<Props> = ({
       alternativeTitleComponent={altHeaderComp}
       leftButton={{
         type: 'home',
+        color: 'background_gray',
         onPress: resetView,
         accessibilityLabel: t(AssistantTexts.header.accessibility.logo),
       }}

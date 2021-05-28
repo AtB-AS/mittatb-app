@@ -8,6 +8,7 @@ import {AccessibilityProps, TouchableOpacity} from 'react-native';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import LogoOutline from './LogoOutline';
+import {ThemeColor} from '@atb/theme/colors';
 
 export type ButtonModes =
   | 'back'
@@ -19,6 +20,7 @@ export type ButtonModes =
 export type HeaderButtonProps = {
   type: ButtonModes;
   onPress?: () => void;
+  color?: ThemeColor;
 } & AccessibilityProps;
 
 export type IconButton = Omit<HeaderButtonProps, 'type'> & {
@@ -50,17 +52,19 @@ const useIconButton = (
 ): IconButton | undefined => {
   const navigation = useNavigation();
   const navigateHome = useNavigateToStartScreen();
-  const chatIcon = useChatIcon();
+  const chatIcon = useChatIcon(buttonProps.color);
   const {t} = useTranslation();
   switch (buttonProps.type) {
     case 'back':
     case 'cancel':
     case 'skip':
     case 'close': {
-      const {type, onPress, ...accessibilityProps} = buttonProps;
+      const {type, color, onPress, ...accessibilityProps} = buttonProps;
       return {
         icon: (
-          <ThemeText>{t(ScreenHeaderTexts.headerButton[type].text)}</ThemeText>
+          <ThemeText color={color}>
+            {t(ScreenHeaderTexts.headerButton[type].text)}
+          </ThemeText>
         ),
         accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
         onPress:
@@ -72,9 +76,9 @@ const useIconButton = (
       };
     }
     case 'home': {
-      const {type, onPress, ...accessibilityProps} = buttonProps;
+      const {type, color, onPress, ...accessibilityProps} = buttonProps;
       return {
-        icon: <ThemeIcon svg={LogoOutline} />,
+        icon: <ThemeIcon colorType={color} svg={LogoOutline} />,
         onPress: onPress || navigateHome,
         accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
         ...accessibilityProps,

@@ -1,10 +1,10 @@
-import ScreenHeader from '@atb/components/screen-header';
 import {ActionItem, Section} from '@atb/components/sections';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {AppearanceSettingsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {View} from 'react-native';
 
 export default function Appearance() {
   const {
@@ -17,8 +17,8 @@ export default function Appearance() {
   const {t} = useTranslation();
 
   return (
-    <SafeAreaView style={style.container}>
-      <ScreenHeader
+    <View style={style.container}>
+      <FullScreenHeader
         title={t(AppearanceSettingsTexts.header.title)}
         leftButton={{type: 'back'}}
       />
@@ -44,7 +44,7 @@ export default function Appearance() {
           )}
         </Section>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

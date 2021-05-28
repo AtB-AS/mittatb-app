@@ -2,17 +2,16 @@ import {Platform, StatusBarProps, TextStyle} from 'react-native';
 
 import {
   colors,
-  createExtendedThemes,
-  Statuses,
-  Mode,
-  TextColor,
   ContrastColor,
-  RadiusSizes,
-  defaultTextColors,
-  TextNames,
+  createExtendedThemes,
   createTextTypeStyles,
+  defaultTextColors,
+  Mode,
+  RadiusSizes,
+  Statuses,
+  TextColor,
+  TextNames,
   textNames,
-  backgrounds,
 } from '@atb-as/theme';
 
 export default colors;
@@ -54,7 +53,7 @@ type AppThemeExtension = {
 export const themes = createExtendedThemes<AppThemeExtension>({
   light: {
     tripLegDetail,
-    statusBarStyle: 'dark-content',
+    statusBarStyle: 'light-content',
 
     typography: textTypeStyles,
   },

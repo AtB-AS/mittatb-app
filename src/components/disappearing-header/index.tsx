@@ -22,11 +22,12 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import {
-  LeftButtonProps,
   AnimatedScreenHeader,
+  LeftButtonProps,
 } from '@atb/components/screen-header';
 import {AlertContext} from '@atb/alerts/AlertsContext';
 import AlertBox from '@atb/alerts/AlertBox';
+import {ThemeColor} from '@atb/theme/colors';
 
 type Props = {
   renderHeader(
@@ -60,6 +61,7 @@ type Props = {
 };
 
 const SCROLL_OFFSET_HEADER_ANIMATION = 80;
+const themeColor: ThemeColor = 'background_gray';
 
 type Scrollable = {
   scrollTo(opts: {y: number}): void;
@@ -193,7 +195,7 @@ const DisappearingHeader: React.FC<Props> = ({
         <View onLayout={onScreenHeaderLayout}>
           <AnimatedScreenHeader
             title={headerTitle}
-            rightButton={{type: 'chat'}}
+            rightButton={{type: 'chat', color: themeColor}}
             alternativeTitleComponent={alternativeTitleComponent}
             scrollRef={scrollYRef}
             leftButton={leftButton}
@@ -239,7 +241,7 @@ const DisappearingHeader: React.FC<Props> = ({
                   refreshing={isRefreshing}
                   onRefresh={onRefresh}
                   progressViewOffset={contentHeight}
-                  tintColor={theme.text.colors.primary}
+                  tintColor={theme.colors[themeColor].color}
                 />
               }
               onScroll={Animated.event(
@@ -303,7 +305,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
   },
   topBorder: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
   },
   bannerContainer: {
     position: 'absolute',
@@ -329,11 +331,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     overflow: 'hidden',
     zIndex: 2,
     elevated: 1,
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
     justifyContent: 'space-between',
   },
   container: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
     paddingBottom: 0,
     flexGrow: 1,
   },

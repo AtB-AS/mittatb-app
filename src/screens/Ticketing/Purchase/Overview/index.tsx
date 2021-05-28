@@ -1,6 +1,5 @@
 import {Edit} from '@atb/assets/svg/icons/actions';
 import Button from '@atb/components/button';
-import Header from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
 import {useGeolocationState} from '@atb/GeolocationContext';
@@ -25,7 +24,6 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../';
 import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
 import useOfferState from './use-offer-state';
@@ -35,6 +33,7 @@ import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import {usePreferences} from '@atb/preferences';
 import {screenReaderPause} from '@atb/components/accessible-text';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -97,8 +96,8 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const closeModal = () => navigation.dismiss();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header
+    <View style={styles.container}>
+      <FullScreenHeader
         title={t(
           PurchaseOverviewTexts.header.title[preassignedFareProduct.type],
         )}
@@ -225,7 +224,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           iconPosition="right"
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

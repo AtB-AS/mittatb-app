@@ -18,6 +18,9 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DetailsStackParams} from '..';
 import Trip from '../components/Trip';
 import CompactMap from '../Map/CompactMap';
+import {ThemeColor} from '@atb/theme/colors';
+
+const themeColor: ThemeColor = 'background_gray';
 
 export type DetailsRouteParams = {
   tripPatternId?: string;
@@ -86,6 +89,7 @@ const Details: React.FC<Props> = (props) => {
         <Header
           leftButton={{type: 'back'}}
           title={t(TripDetailsTexts.header.title)}
+          color={themeColor}
         />
       </View>
       <ContentWithDisappearingHeader
@@ -159,7 +163,7 @@ function useTripPattern(
 }
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   header: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
   },
   container: {
     flex: 1,

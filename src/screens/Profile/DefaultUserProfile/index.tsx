@@ -1,15 +1,15 @@
-import ScreenHeader from '@atb/components/screen-header';
-import {Section, RadioSection, GenericItem} from '@atb/components/sections';
+import {RadioSection} from '@atb/components/sections';
 import {usePreferences} from '@atb/preferences';
 import {StyleSheet, Theme} from '@atb/theme';
 import {UserProfileSettingsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {UserProfile} from '@atb/reference-data/types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import ThemeText from '@atb/components/text';
+import {View} from 'react-native';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export default function DefaultUserProfile() {
   const {
@@ -26,8 +26,8 @@ export default function DefaultUserProfile() {
     userProfiles[0];
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScreenHeader
+    <View style={styles.container}>
+      <FullScreenHeader
         title={t(UserProfileSettingsTexts.header.title)}
         leftButton={{type: 'back'}}
       />
@@ -46,7 +46,7 @@ export default function DefaultUserProfile() {
           }
         />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

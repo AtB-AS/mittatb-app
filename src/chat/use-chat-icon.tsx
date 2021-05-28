@@ -7,8 +7,11 @@ import React from 'react';
 import {View} from 'react-native';
 import Intercom from 'react-native-intercom';
 import useChatUnreadCount from './use-chat-unread-count';
+import {ThemeColor} from '@atb/theme/colors';
 
-export default function useChatIcon(): IconButton | undefined {
+export default function useChatIcon(
+  color?: ThemeColor,
+): IconButton | undefined {
   const config = useRemoteConfig();
   const unreadCount = useChatUnreadCount();
   const styles = useStyles();
@@ -21,9 +24,9 @@ export default function useChatIcon(): IconButton | undefined {
     icon: (
       <View style={styles.chatContainer}>
         {unreadCount ? (
-          <ThemeIcon svg={ChatUnread} />
+          <ThemeIcon colorType={color} svg={ChatUnread} />
         ) : (
-          <ThemeIcon svg={Chat} />
+          <ThemeIcon colorType={color} svg={Chat} />
         )}
       </View>
     ),
