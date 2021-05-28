@@ -1,5 +1,10 @@
 import {useTheme} from '@atb/theme';
-import {TextColor, TextNames} from '@atb/theme/colors';
+import {
+  isThemeColor,
+  TextColor,
+  TextNames,
+  ThemeColor,
+} from '@atb/theme/colors';
 import React from 'react';
 import {Text, TextProps} from 'react-native';
 
@@ -7,7 +12,7 @@ export const MAX_FONT_SCALE = 2;
 
 export type ThemeTextProps = TextProps & {
   type?: TextNames;
-  color?: TextColor;
+  color?: TextColor | ThemeColor;
 };
 
 const ThemeText: React.FC<ThemeTextProps> = ({
@@ -21,7 +26,9 @@ const ThemeText: React.FC<ThemeTextProps> = ({
 
   const typeStyle = {
     ...theme.typography[fontType],
-    color: theme.text.colors[color],
+    color: isThemeColor(theme, color)
+      ? theme.colors[color].color
+      : theme.text.colors[color],
   };
 
   return (

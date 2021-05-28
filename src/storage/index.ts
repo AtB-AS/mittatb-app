@@ -11,6 +11,7 @@ export type StorageModel = {
   '@ATB_onboarded': string;
   '@ATB_search-history': string;
   '@ATB_journey_search-history': string;
+  '@ATB_ticket_informational_accepted': string;
 };
 
 export type StorageModelTypes = keyof StorageModel;

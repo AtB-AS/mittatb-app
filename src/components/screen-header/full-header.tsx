@@ -1,15 +1,28 @@
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import ScreenHeader, {ScreenHeaderProps} from '.';
+import {ThemeColor} from '@atb/theme/colors';
 
-export default function FullScreenHeader(props: ScreenHeaderProps) {
+export type FullScreenHeaderProps = ScreenHeaderProps & {color?: ThemeColor};
+
+export default function FullScreenHeader(props: FullScreenHeaderProps) {
   const style = useHeaderStyle();
   const {top} = useSafeAreaInsets();
+  const {theme} = useTheme();
+  const backgroundColor =
+    props.color && theme.colors[props.color].backgroundColor;
 
   return (
-    <View style={[style.background, props.style, {paddingTop: top}]}>
+    <View
+      style={[
+        style.background,
+        props.style,
+        {backgroundColor},
+        {paddingTop: top},
+      ]}
+    >
       <ScreenHeader {...props} />
     </View>
   );

@@ -1,5 +1,7 @@
 import {translation as _} from '../commons';
 
+const bulletPoint = '\u2022';
+
 const TicketsTexts = {
   header: {
     title: _('Billetter', 'Tickets'),
@@ -86,5 +88,34 @@ const TicketsTexts = {
         `Something went wrong when we tried to load ticket with order id ${orderId}`,
       ),
   },
+  informational: {
+    title: _('Prøv billettkjøp', 'Try ticket purchasing'),
+    description: _(
+      'Les og godta vilkårene nedenfor, så kan du kjøpe billetter fra appen. Flere billettyper og betalingsmåter vil komme på plass snarlig!',
+      'Please accept the following terms to unlock app ticketing. More ticket categories and payment services will be added shortly.',
+    ),
+    paragraphHeading: _(
+      'Akkurat nå kan vi tilby:',
+      'Currently we are offering:',
+    ),
+    bullet1: _(
+      `${bulletPoint} Kjøp av enkeltbilletter for buss og trikk.`,
+      `${bulletPoint} Single tickets – bus and tram.`,
+    ),
+    bullet2: _(
+      `${bulletPoint} Betaling med Vipps.`,
+      `${bulletPoint} Payment by Vipps app.`,
+    ),
+    bullet3: _(
+      `${bulletPoint} Anonyme kjøp: Billetten er kun tilgjengelig fra den telefonen du har brukt til billettkjøpet.`,
+      `${bulletPoint} Anonymous purchases: Tickets are exclusive for the device used to purchase the ticket.`,
+    ),
+    bullet4: _(
+      `${bulletPoint} Kvittering kan sendes til e-post fra “billettdetaljer”.`,
+      `${bulletPoint} Receipts on-demand – sent to your specified e-mail via “ticket details”.`,
+    ),
+    button: _('Godta', 'Accept'),
+  },
 };
+
 export default TicketsTexts;

@@ -8,6 +8,7 @@ import {View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import TabBar from './TabBar';
 import {ActiveTickets, BuyTickets, ExpiredTickets} from './Tabs';
+import TicketInformationalOverlay from '@atb/screens/Ticketing/Tickets/TicketInformationalOverlay';
 
 export const BuyTicketsScreenName = 'BuyTickets';
 export const ActiveTicketsScreenName = 'ActiveTickets';
@@ -79,6 +80,8 @@ export default function TicketTabs() {
           }}
         />
       </Tab.Navigator>
+
+      <TicketInformationalOverlay />
     </View>
   );
 }
