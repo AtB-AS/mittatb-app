@@ -78,6 +78,7 @@ const DetailsContent: React.FC<Props> = ({
         <Sections.LinkItem
           text={t(TicketTexts.details.askForReceipt)}
           onPress={onReceiptNavigate}
+          accessibility={{accessibilityRole: 'button'}}
         />
         {validityStatus === 'valid' && qrCodeSvg && (
           <Sections.GenericItem>

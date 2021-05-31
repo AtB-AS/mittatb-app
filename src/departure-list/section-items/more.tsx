@@ -25,7 +25,11 @@ export default function MoreItem({
   const sectionStyle = useSectionStyle();
   const styles = useItemStyles();
   return (
-    <TouchableOpacity onPress={onPress} {...accessibility}>
+    <TouchableOpacity
+      onPress={onPress}
+      {...accessibility}
+      accessibilityRole={'button'}
+    >
       <View style={[topContainer, sectionStyle.spaceBetween]}>
         <ThemeText style={[styles.center, contentContainer]}>{text}</ThemeText>
         <ThemeIcon svg={Expand} />
