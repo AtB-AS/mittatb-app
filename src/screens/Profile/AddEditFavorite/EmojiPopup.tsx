@@ -181,7 +181,7 @@ const EmojiCategory: React.FC<EmojiCategory> = ({
         {categoryText}
       </ThemeText>
       <View style={styles.categoryInner}>
-        {emojis.map((e: string) => (
+        {emojis?.map((e: string) => (
           <ThemeText style={style} key={e} onPress={() => onEmojiSelected(e)}>
             {e}
           </ThemeText>
