@@ -1,7 +1,13 @@
 import {JourneySearchHistoryEntry} from '@atb/search-history/types';
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
-import {Keyboard, TextInput as InternalTextInput, View} from 'react-native';
+import {
+  findNodeHandle,
+  Keyboard,
+  NativeMethods,
+  TextInput as InternalTextInput,
+  View,
+} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
 import {ErrorType} from '../api/utils';
@@ -199,6 +205,24 @@ export function LocationSearchContent({
   const hasResults = !!filteredLocations.length;
   const hasAnyResult = hasResults || (includeHistory && hasPreviousResults);
 
+  const scrollViewRef = useRef<ScrollView>(null);
+  function onScrollToElement(nativeElement: NativeMethods) {
+    requestAnimationFrame(() => {
+      if (nativeElement && scrollViewRef.current) {
+        const nodeId = findNodeHandle(scrollViewRef.current);
+        if (nodeId !== null) {
+          nativeElement.measureLayout(
+            nodeId,
+            (_x, y) => {
+              scrollViewRef.current?.scrollTo({x: 0, y: y, animated: true});
+            },
+            () => console.warn('Failed to measure element'),
+          );
+        }
+      }
+    });
+  }
+
   return (
     <>
       <View style={styles.header}>
@@ -238,6 +262,7 @@ export function LocationSearchContent({
 
       {hasAnyResult ? (
         <ScrollView
+          ref={scrollViewRef}
           style={styles.fullFlex}
           contentContainerStyle={styles.contentBlock}
           keyboardShouldPersistTaps="handled"
@@ -254,6 +279,7 @@ export function LocationSearchContent({
               title={t(LocationSearchTexts.results.previousResults.heading)}
               locations={previousLocations}
               onSelect={onSearchSelect}
+              onScrollTo={onScrollToElement}
             />
           )}
           {hasResults && (
@@ -261,6 +287,7 @@ export function LocationSearchContent({
               title={t(LocationSearchTexts.results.searchResults.heading)}
               locations={filteredLocations}
               onSelect={onSearchSelect}
+              onScrollTo={onScrollToElement}
             />
           )}
         </ScrollView>
