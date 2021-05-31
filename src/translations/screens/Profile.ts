@@ -32,7 +32,7 @@ const ProfileTexts = {
           label: _('Språk', 'Language'),
         },
         enrollment: {
-          label: _('Beta-funksjonalitet', 'Beta features'),
+          label: _('Ny funksjonalitet', 'New features'),
         },
       },
     },
