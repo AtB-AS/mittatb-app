@@ -8,6 +8,7 @@ import DeparturesList from '@atb/departure-list/DeparturesList';
 import {useDepartureData} from '@atb/screens/Nearby/state';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {DetailsStackParams} from '@atb/screens/TripDetails';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export type QuayDeaparturesNavigationProps = NavigationProp<DetailsStackParams>;
 export type QuayDeparturesRouteProp = RouteProp<
@@ -26,8 +27,6 @@ type RootProps = {
 
 const QuayDepartures: React.FC<RootProps> = ({route}) => {
   const styles = useNearbyStyles();
-  const {theme} = useTheme();
-  const {top: paddingTop} = useSafeAreaInsets();
 
   const {state: departureState, refresh} = useDepartureData(
     route.params.location,
@@ -37,12 +36,10 @@ const QuayDepartures: React.FC<RootProps> = ({route}) => {
 
   return (
     <View style={styles.screen}>
-      <View style={[styles.header, {paddingTop}]}>
-        <ScreenHeader
-          leftButton={{type: 'back'}}
-          title={route.params.location.name}
-        />
-      </View>
+      <FullScreenHeader
+        leftButton={{type: 'back'}}
+        title={route.params.location.name}
+      />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={!departureData} onRefresh={refresh} />
@@ -65,10 +62,6 @@ const QuayDepartures: React.FC<RootProps> = ({route}) => {
 export default QuayDepartures;
 
 const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
-  header: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
-    zIndex: 2,
-  },
   screen: {
     backgroundColor: theme.colors.background_1.backgroundColor,
     flexGrow: 1,

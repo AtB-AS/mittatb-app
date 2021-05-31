@@ -32,6 +32,9 @@ import {NearbyStackParams} from '.';
 import Loading from '../Loading';
 import DeparturesList from '@atb/departure-list/DeparturesList';
 import {useDepartureData} from './state';
+import {ThemeColor} from '@atb/theme/colors';
+
+const themeColor: ThemeColor = 'background_gray';
 
 type NearbyRouteName = 'NearbyRoot';
 const NearbyRouteNameStatic: NearbyRouteName = 'NearbyRoot';
@@ -187,11 +190,12 @@ const NearbyOverview: React.FC<Props> = ({
       }
       headerTitle={t(NearbyTexts.header.title)}
       useScroll={activateScroll}
-      leftButton={{type: 'home', color: 'background_gray'}}
+      leftButton={{type: 'home', color: themeColor}}
       alternativeTitleComponent={
         <AccessibleText
           prefix={t(NearbyTexts.header.altTitle.a11yPrefix)}
           type={'body__primary--bold'}
+          color={themeColor}
         >
           {fromLocation?.name}
         </AccessibleText>
