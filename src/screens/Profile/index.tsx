@@ -9,6 +9,10 @@ import Enrollment from './Enrollment';
 import SelectStartScreen from './SelectStartScreen';
 import DesignSystem from './DesignSystem';
 import DefaultUserProfile from './DefaultUserProfile';
+import TicketingInformation from '@atb/screens/Profile/Information/TicketingInformation';
+import PaymentInformation from '@atb/screens/Profile/Information/PaymentInformation';
+import TermsInformation from '@atb/screens/Profile/Information/TermsInformation';
+import TicketInspectionInformation from '@atb/screens/Profile/Information/TicketInspectionInformation';
 
 export type ProfileStackParams = {
   ProfileHome: undefined;
@@ -20,6 +24,10 @@ export type ProfileStackParams = {
   DefaultUserProfile: undefined;
   Enrollment: undefined;
   DesignSystem: undefined;
+  TicketingInformation: undefined;
+  PaymentInformation: undefined;
+  TermsInformation: undefined;
+  TicketInspectionInformation: undefined;
 };
 
 const Stack = createStackNavigator<ProfileStackParams>();
@@ -42,6 +50,16 @@ export default function ProfileScreen() {
       <Stack.Screen name="DefaultUserProfile" component={DefaultUserProfile} />
       <Stack.Screen name="Enrollment" component={Enrollment} />
       <Stack.Screen name="DesignSystem" component={DesignSystem} />
+      <Stack.Screen
+        name="TicketingInformation"
+        component={TicketingInformation}
+      />
+      <Stack.Screen name="PaymentInformation" component={PaymentInformation} />
+      <Stack.Screen name="TermsInformation" component={TermsInformation} />
+      <Stack.Screen
+        name="TicketInspectionInformation"
+        component={TicketInspectionInformation}
+      />
     </Stack.Navigator>
   );
 }

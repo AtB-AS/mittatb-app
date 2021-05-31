@@ -187,6 +187,32 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           />
         </Sections.Section>
 
+        <Sections.Section withPadding>
+          <Sections.HeaderItem
+            text={t(ProfileTexts.sections.information.heading)}
+          />
+          <Sections.LinkItem
+            text={t(
+              ProfileTexts.sections.information.linkItems.ticketing.label,
+            )}
+            onPress={() => navigation.navigate('TicketingInformation')}
+          />
+          <Sections.LinkItem
+            text={t(ProfileTexts.sections.information.linkItems.payment.label)}
+            onPress={() => navigation.navigate('PaymentInformation')}
+          />
+          <Sections.LinkItem
+            text={t(ProfileTexts.sections.information.linkItems.terms.label)}
+            onPress={() => navigation.navigate('TermsInformation')}
+          />
+          <Sections.LinkItem
+            text={t(
+              ProfileTexts.sections.information.linkItems.inspection.label,
+            )}
+            onPress={() => navigation.navigate('TicketInspectionInformation')}
+          />
+        </Sections.Section>
+
         {__DEV__ && (
           <Sections.Section withPadding>
             <Sections.HeaderItem text="Developer menu" />
