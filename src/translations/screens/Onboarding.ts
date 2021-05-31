@@ -2,11 +2,11 @@ import {translation as _} from '../commons';
 
 const OnboardingTexts = {
   welcome: {
-    title: _('Velkommen til AtB appen!', 'Welcome to the AtB app!'),
+    title: _('Velkommen til AtB-appen', 'Welcome to the AtB app'),
     description: {
       part1: _(
-        'Her kan du planlegge reiser, sjekke avgangstider, og kjøpe billetter for dine kollektivreiser i hele Trøndelag.',
-        'You can use this app to plan your journeys, look up departure times, and buy tickets for your public transport in all of Trøndelag.',
+        'Her kan du planlegge reiser og sjekke avgangstider i hele Trøndelag. Snart kan du også kjøpe dine billetter i appen. Følg med!',
+        'Plan trips and check departure times throughout Trøndelag. Soon you can also buy tickets in the app. Stay tuned!',
       ),
       part2: _(
         'Hvis du logger inn vil du alltid ha tilgang til billettene dine, selv om du bytter eller mister telefonen din.',
@@ -20,10 +20,10 @@ const OnboardingTexts = {
     mainButton: _('Neste', 'Next'),
   },
   intercom: {
-    title: _('Bidra til å gjøre appen bedre', 'Help us improve the app'),
+    title: _('Bidra til å gjøre appen bedre', 'Help us make the app better'),
     description: _(
-      'Vi trenger dine idéer og tilbakemeldinger for å gjøre appen bedre. Disse deler du enklest ved å velge chatikonet oppe i høyre hjørne av appen. Chatten er anonym.',
-      'Your feedback is critical for improving the app experience. Share your ideas or report bugs/errors by initiating a chat with the development team. Simply use the chat icon in the upper right corner. The chat is anonymous.',
+      'Vi ønsker dine tilbakemeldinger for å gjøre appen bedre. Dette gjør du enklest i chatten i høyre hjørne. Chatten er anonym.',
+      'We appreciate your feedback to make the app better. Use the chat in the upper right corner. The chat is anonymous.',
     ),
     mainButton: _('Begynn å bruk appen', 'Start using the app'),
   },
