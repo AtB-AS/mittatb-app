@@ -15,7 +15,6 @@ import {
 
 export type RemoteConfigContextState = Pick<
   RemoteConfig,
-  | 'enable_ticketing'
   | 'enable_intercom'
   | 'enable_i18n'
   | 'enable_creditcard'
