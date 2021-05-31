@@ -54,6 +54,9 @@ import {SearchTime, useSearchTimeValue} from './journey-date-picker';
 import NewsBanner from './NewsBanner';
 import Results from './Results';
 import {NoResultReason, SearchStateType} from './types';
+import {ThemeColor} from '@atb/theme/colors';
+
+const themeColor: ThemeColor = 'background_gray';
 
 type AssistantRouteName = 'AssistantRoot';
 const AssistantRouteNameStatic: AssistantRouteName = 'AssistantRoot';
@@ -331,6 +334,7 @@ const Assistant: React.FC<Props> = ({
           {maxWidth: altWidth / 2},
         ]}
         numberOfLines={1}
+        color={themeColor}
       >
         {from?.name}
       </ThemeText>
@@ -338,6 +342,7 @@ const Assistant: React.FC<Props> = ({
         type="body__primary--bold"
         accessibilityLabel="til"
         style={styles.altTitleText}
+        color={themeColor}
       >
         {' '}
         –{' '}
@@ -346,6 +351,7 @@ const Assistant: React.FC<Props> = ({
         type="body__primary--bold"
         style={[styles.altTitleText, {maxWidth: altWidth / 2}]}
         numberOfLines={1}
+        color={themeColor}
       >
         {to?.name}
       </ThemeText>
@@ -399,7 +405,7 @@ const Assistant: React.FC<Props> = ({
       alternativeTitleComponent={altHeaderComp}
       leftButton={{
         type: 'home',
-        color: 'background_gray',
+        color: themeColor,
         onPress: resetView,
         accessibilityLabel: t(AssistantTexts.header.accessibility.logo),
       }}
