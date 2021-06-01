@@ -9,6 +9,8 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Animated,
   Easing,
+  Image,
+  ImageBackground,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Platform,
@@ -28,6 +30,8 @@ import {
 import {AlertContext} from '@atb/alerts/AlertsContext';
 import AlertBox from '@atb/alerts/AlertBox';
 import {ThemeColor} from '@atb/theme/colors';
+import LinearGradient from 'react-native-linear-gradient';
+import hexToRgba from 'hex-to-rgba';
 
 type Props = {
   renderHeader(
@@ -214,21 +218,32 @@ const DisappearingHeader: React.FC<Props> = ({
               {height: boxHeight},
             ]}
           >
-            <View style={styles.bannerContainer}>
-              <SvgBanner
-                width={windowWidth}
-                height={windowWidth / 2}
-                opacity={0.2}
-              />
-            </View>
+            <ImageBackground
+              source={require('../../../assets/assistant_background.jpeg')}
+              style={styles.backgroundImage}
+            >
+              <View style={{flex: 1}}>
+                <LinearGradient
+                  style={styles.backgroundImageGradient}
+                  colors={[
+                    'transparent',
+                    'transparent',
+                    'transparent',
+                    hexToRgba(theme.colors.background_gray.backgroundColor, 1),
+                  ]}
+                />
+                <ScrollView style={styles.highlightComponent}>
+                  {highlightComponent}
+                </ScrollView>
+              </View>
 
-            <ScrollView style={styles.highlightComponent}>
-              {highlightComponent}
-            </ScrollView>
-
-            <View onLayout={onHeaderContentLayout}>
-              {renderHeader(fullheightTransitioned, isAnimating)}
-            </View>
+              <View
+                onLayout={onHeaderContentLayout}
+                style={styles.headerContent}
+              >
+                {renderHeader(fullheightTransitioned, isAnimating)}
+              </View>
+            </ImageBackground>
           </Animated.View>
 
           {useScroll ? (
@@ -298,7 +313,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   alertBoxContainer: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
   },
   alertBox: {
     marginHorizontal: theme.spacings.medium,
@@ -318,10 +333,23 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     margin: theme.spacings.medium,
   },
 
+  backgroundImage: {height: '100%'},
+
+  backgroundImageGradient: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+
   content: {
     flex: 1,
     overflow: 'hidden',
     position: 'relative',
+  },
+  headerContent: {
+    backgroundColor: theme.colors[themeColor].backgroundColor,
   },
   header: {
     position: 'absolute',
