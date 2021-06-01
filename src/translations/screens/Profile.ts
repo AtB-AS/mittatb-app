@@ -74,6 +74,23 @@ const ProfileTexts = {
         },
       },
     },
+    information: {
+      heading: _('Info og priser', 'Info and prices'),
+      linkItems: {
+        ticketing: {
+          label: _('Billettkjøp', 'Ticketing'),
+        },
+        payment: {
+          label: _('Betaling', 'Payment'),
+        },
+        terms: {
+          label: _('Betingelser', 'Terms'),
+        },
+        inspection: {
+          label: _('Billettkontroll', 'Ticket inspection'),
+        },
+      },
+    },
   },
   installId: {
     label: _('ID', 'ID'),
