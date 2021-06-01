@@ -8,8 +8,7 @@
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
-      android:icon="@mipmap/ic_launcher_adaptive_2"
-      android:roundIcon="@mipmap/ic_launcher_round"
+      android:icon="@mipmap/ic_launcher"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
         <activity
