@@ -10,7 +10,7 @@ import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {OnboardingStackParams} from '@atb/screens/Onboarding/index';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {Onboarding1} from '@atb/assets/svg/illustrations';
+import {Onboarding1_2} from '@atb/assets/svg/illustrations';
 import Illustration from '@atb/screens/Onboarding/components/Illustration';
 import {ThemeColor} from '@atb/theme/colors';
 
@@ -50,7 +50,7 @@ const WelcomeScreen = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader setFocusOnLoad={false} color={themeColor} />
-      <Illustration Svg={Onboarding1} />
+      <Illustration Svg={Onboarding1_2} />
       <ScrollView style={styles.mainView}>
         <View ref={focusRef} accessibilityRole="header" accessible={true}>
           <ThemeText type={'body__primary--jumbo--bold'} color={themeColor}>
@@ -94,8 +94,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   mainView: {
     margin: theme.spacings.medium,
     padding: theme.spacings.medium,
+    paddingTop: 0,
     marginBottom: theme.spacings.medium,
-    flex: 1,
+    flex: 2,
   },
   descriptionPart: {
     marginTop: theme.spacings.medium,
