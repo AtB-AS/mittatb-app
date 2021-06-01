@@ -89,6 +89,7 @@ const LocationSearch: React.FC<Props> = ({
       <FullScreenHeader
         title={t(LocationSearchTexts.header.title)}
         leftButton={{type: 'close'}}
+        setFocusOnLoad={false}
       />
 
       <LocationSearchContent

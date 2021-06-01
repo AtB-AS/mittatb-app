@@ -27,6 +27,7 @@ const SectionTexts = {
   },
   textInput: {
     clear: _('Tøm redigeringsfelt', 'Clear input'),
+    closeKeyboard: _('Lukker tastatur', 'Closing keyboard'),
   },
   counterInput: {
     decreaseButton: {
