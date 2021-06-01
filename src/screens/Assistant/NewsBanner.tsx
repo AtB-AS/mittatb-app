@@ -47,7 +47,9 @@ const NewsBanner: React.FC<{} & AccessibilityProps> = ({...props}) => {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    padding: theme.spacings.xLarge,
+    padding: theme.spacings.medium,
+    backgroundColor: theme.colors.background_gray.backgroundColor,
+    borderRadius: theme.border.radius.regular,
   },
   text: {
     textAlign: 'center',

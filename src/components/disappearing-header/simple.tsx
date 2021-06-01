@@ -206,7 +206,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   alertBoxContainer: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
   },
   alertBox: {
     marginHorizontal: theme.spacings.medium,
