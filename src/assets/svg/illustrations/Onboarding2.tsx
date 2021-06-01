@@ -3,7 +3,7 @@ import Svg, {SvgProps, G, Path, Circle, Defs, ClipPath} from 'react-native-svg';
 
 function SvgOnboarding2(props: SvgProps) {
   return (
-    <Svg width={320} height={272} fill="none" viewBox="0 0 320 272" {...props}>
+    <Svg fill="none" viewBox="0 50 320 232" {...props}>
       <G clipPath="url(#Onboarding2_svg__Onboarding2_svg__clip0)">
         <Path
           fill="#D4F3F6"
