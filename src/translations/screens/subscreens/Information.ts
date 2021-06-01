@@ -59,7 +59,7 @@ const SelectStartScreenTexts = {
       },
       part3Text: _(
         'Ved avinstallering av appen vil også billettene fjernes. Vi advarer derfor mot avinstallering når du har kjøpt billetter. Da vil du ikke kunne framvise gyldig billett.',
-        '',
+        'If you uninstall the app, the tickets will be removed. We recommend that you do not uninstall once you have purchased tickets. If you uninstall, you will not be able to present a valid ticket.',
       ),
       part4Heading: _('Billettrefusjon', 'Ticket refund'),
       part4Link: {
