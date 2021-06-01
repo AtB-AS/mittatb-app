@@ -16,7 +16,7 @@ export default function TermsInformation() {
         leftButton={{type: 'back'}}
       />
 
-      <ScrollView style={styles.content}>
+      <ScrollView contentContainerStyle={styles.content}>
         <ThemeText>{t(InformationTexts.terms.texts.part1Text)}</ThemeText>
         <ThemeText style={styles.bullet}>
           {t(InformationTexts.terms.texts.part1Bullet1)}

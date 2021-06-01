@@ -16,7 +16,7 @@ export default function PaymentInformation() {
         leftButton={{type: 'back'}}
       />
 
-      <ScrollView style={styles.content}>
+      <ScrollView contentContainerStyle={styles.content}>
         <ThemeText style={styles.paragraphHeading} type="heading__paragraph">
           {t(InformationTexts.payment.texts.part1Heading)}
         </ThemeText>
