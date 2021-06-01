@@ -1,4 +1,4 @@
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
 import SkipLoginWarning from '@atb/login/SkipLoginWarning';
 import {
@@ -28,7 +28,12 @@ const Stack = createStackNavigator<OnboardingStackParams>();
 export default function Index() {
   const {enable_login} = useRemoteConfig();
   return (
-    <Stack.Navigator headerMode="none">
+    <Stack.Navigator
+      headerMode="none"
+      screenOptions={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
+    >
       {/*{enable_login ? (*/}
       {/*  <>*/}
       {/*    <Stack.Screen*/}
