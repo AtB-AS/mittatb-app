@@ -52,7 +52,10 @@ const NavigationRoot = () => {
           backgroundColor: theme.colors.background_0.backgroundColor,
           ...useBottomNavigationStyles(),
         },
-        labelStyle: {fontSize: 14, lineHeight: 14},
+        labelStyle: {
+          fontSize: theme.typography.body__primary.fontSize.valueOf(),
+          lineHeight: theme.typography.body__primary.fontSize.valueOf(),
+        },
       }}
       initialRouteName={settingToRouteName(startScreen)}
     >
