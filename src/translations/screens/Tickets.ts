@@ -89,30 +89,27 @@ const TicketsTexts = {
       ),
   },
   informational: {
-    title: _('Prøv billettkjøp', 'Try ticket purchasing'),
+    title: _('Prøv billettkjøp', 'Try buying tickets'),
     description: _(
-      'Les og godta vilkårene nedenfor, så kan du kjøpe billetter fra appen. Flere billettyper og betalingsmåter vil komme på plass snarlig!',
-      'Please accept the following terms to unlock app ticketing. More ticket categories and payment services will be added shortly.',
+      'Les og godta vilkårene for å kjøpe billetter. Flere billetter og betalingsmåter kommer!',
+      'Read and accept these terms to buy tickets. More tickets and payment methods are coming.',
     ),
-    paragraphHeading: _(
-      'Akkurat nå kan vi tilby:',
-      'Currently we are offering:',
-    ),
+    paragraphHeading: _('Akkurat nå kan du:', 'Right now you can:'),
     bullet1: _(
-      `${bulletPoint} Kjøp av enkeltbilletter for buss og trikk.`,
-      `${bulletPoint} Single tickets – bus and tram.`,
+      `${bulletPoint} Kjøpe enkeltbillett for buss og trikk.`,
+      `${bulletPoint} Buy single tickets for bus and tram.`,
     ),
     bullet2: _(
-      `${bulletPoint} Betaling med Vipps.`,
-      `${bulletPoint} Payment by Vipps app.`,
+      `${bulletPoint} Betale med Vipps.`,
+      `${bulletPoint} Payment with Vipps.`,
     ),
     bullet3: _(
-      `${bulletPoint} Anonyme kjøp: Billetten er kun tilgjengelig fra den telefonen du har brukt til billettkjøpet.`,
-      `${bulletPoint} Anonymous purchases: Tickets are exclusive for the device used to purchase the ticket.`,
+      `${bulletPoint} Kun bruke billetten på den telefonen du har gjennomført kjøpet med.`,
+      `${bulletPoint} Only use the ticket on the phone you made the purchase with.`,
     ),
     bullet4: _(
-      `${bulletPoint} Kvittering kan sendes til e-post fra “billettdetaljer”.`,
-      `${bulletPoint} Receipts on-demand – sent to your specified e-mail via “ticket details”.`,
+      `${bulletPoint} Be om kvittering på e-post fra “billettdetaljer”.`,
+      `${bulletPoint} Request an e-mail receipt from “Ticket details”`,
     ),
     button: _('Godta', 'Accept'),
   },
