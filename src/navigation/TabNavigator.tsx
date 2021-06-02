@@ -52,6 +52,7 @@ const NavigationRoot = () => {
           backgroundColor: theme.colors.background_0.backgroundColor,
           ...useBottomNavigationStyles(),
         },
+        labelStyle: {fontSize: 14, lineHeight: 14},
       }}
       initialRouteName={settingToRouteName(startScreen)}
     >
@@ -82,11 +83,7 @@ const NavigationRoot = () => {
 export default NavigationRoot;
 
 type TabSettings = {
-  tabBarLabel(props: {
-    focused: boolean;
-    color: string;
-    position: LabelPosition;
-  }): JSX.Element;
+  tabBarLabel: string;
   tabBarIcon(props: {
     focused: boolean;
     color: string;
@@ -99,14 +96,7 @@ function tabSettings(
   Icon: (svg: SvgProps) => JSX.Element,
 ): TabSettings {
   return {
-    tabBarLabel: ({color}) => (
-      <ThemeText
-        type="body__secondary"
-        style={{color, textAlign: 'center', lineHeight: 14}}
-      >
-        {tabBarLabel}
-      </ThemeText>
-    ),
+    tabBarLabel: tabBarLabel,
     tabBarIcon: ({color}) => <ThemeIcon svg={Icon} fill={color} />,
   };
 }
