@@ -16,7 +16,7 @@ export default function TicketingInformation() {
         leftButton={{type: 'back'}}
       />
 
-      <ScrollView style={styles.content}>
+      <ScrollView contentContainerStyle={styles.content}>
         <ThemeText>{t(InformationTexts.ticketing.texts.part1Text)}</ThemeText>
         <ThemeText style={styles.paragraphHeading} type="heading__paragraph">
           {t(InformationTexts.ticketing.texts.part2Heading)}

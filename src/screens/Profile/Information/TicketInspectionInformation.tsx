@@ -16,7 +16,7 @@ export default function TicketInspectionInformation() {
         leftButton={{type: 'back'}}
       />
 
-      <ScrollView style={styles.content}>
+      <ScrollView contentContainerStyle={styles.content}>
         <ThemeText>{t(InformationTexts.inspection.texts.part1Text1)}</ThemeText>
         <ThemeText style={styles.bullet}>
           {t(InformationTexts.inspection.texts.part1Bullet1)}
