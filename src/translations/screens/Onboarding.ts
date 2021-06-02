@@ -5,8 +5,8 @@ const OnboardingTexts = {
     title: _('Velkommen til AtB-appen', 'Welcome to the AtB app'),
     description: {
       part1: _(
-        'Her kan du planlegge reiser og sjekke avgangstider i hele Trøndelag. Snart kan du også kjøpe dine billetter i appen. Følg med!',
-        'Plan trips and check departure times throughout Trøndelag. Soon you can also buy tickets in the app. Stay tuned!',
+        'Her kan du planlegge reiser og sjekke avgangstider i hele Trøndelag. Du kan også prøve kjøp av enkeltbilletter med Vipps. Flere tjenester og billettyper kommer!',
+        'Plan trips and check departure times throughout Trøndelag. You may also purchase single tickets with Vipps. More features and ticket products are coming soon!',
       ),
       part2: _(
         'Hvis du logger inn vil du alltid ha tilgang til billettene dine, selv om du bytter eller mister telefonen din.',
