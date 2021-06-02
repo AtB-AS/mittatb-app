@@ -54,7 +54,7 @@ const NavigationRoot = () => {
         },
         labelStyle: {
           fontSize: theme.typography.body__secondary.fontSize.valueOf(),
-          lineHeight: theme.typography.body__secondary.fontSize.valueOf(),
+          lineHeight: theme.typography.body__secondary.lineHeight.valueOf(),
         },
       }}
       initialRouteName={settingToRouteName(startScreen)}
