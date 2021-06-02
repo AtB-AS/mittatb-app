@@ -66,12 +66,16 @@ const NavigationRoot = () => {
     return null;
   }
 
+  const statusBarColor = onboarded
+    ? theme.colors.background_gray.backgroundColor
+    : theme.colors.primary_2.backgroundColor;
+
   return (
     <>
       <StatusBar
         barStyle={theme.statusBarStyle}
         translucent={true}
-        backgroundColor={theme.colors.primary_2.backgroundColor}
+        backgroundColor={statusBarColor}
       />
       <Host>
         <NavigationContainer ref={ref} onStateChange={trackNavigation}>
