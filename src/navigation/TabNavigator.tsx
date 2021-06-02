@@ -53,8 +53,8 @@ const NavigationRoot = () => {
           ...useBottomNavigationStyles(),
         },
         labelStyle: {
-          fontSize: theme.typography.body__primary.fontSize.valueOf(),
-          lineHeight: theme.typography.body__primary.fontSize.valueOf(),
+          fontSize: theme.typography.body__secondary.fontSize.valueOf(),
+          lineHeight: theme.typography.body__secondary.fontSize.valueOf(),
         },
       }}
       initialRouteName={settingToRouteName(startScreen)}
