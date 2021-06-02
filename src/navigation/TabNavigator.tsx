@@ -23,6 +23,7 @@ import {NavigatorScreenParams, ParamListBase} from '@react-navigation/native';
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
+import {useFontScaleClamp} from '@atb/utils/use-font-scale';
 
 type SubNavigator<T extends ParamListBase> = {
   [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
@@ -43,6 +44,9 @@ const NavigationRoot = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
   const {startScreen} = usePreferenceItems();
+
+  const fontScaleClamp = useFontScaleClamp();
+
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -53,8 +57,12 @@ const NavigationRoot = () => {
           ...useBottomNavigationStyles(),
         },
         labelStyle: {
-          fontSize: theme.typography.body__secondary.fontSize.valueOf(),
-          lineHeight: theme.typography.body__secondary.lineHeight.valueOf(),
+          fontSize:
+            fontScaleClamp *
+            theme.typography.body__secondary.fontSize.valueOf(),
+          lineHeight:
+            fontScaleClamp *
+            theme.typography.body__secondary.fontSize.valueOf(),
         },
       }}
       initialRouteName={settingToRouteName(startScreen)}
