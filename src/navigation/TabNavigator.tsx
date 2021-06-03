@@ -44,7 +44,7 @@ const NavigationRoot = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
   const {startScreen} = usePreferenceItems();
-  const lineHeight = theme.typography.body__secondary.lineHeight.valueOf();
+  const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
   return (
     <Tab.Navigator
