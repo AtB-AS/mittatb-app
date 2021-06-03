@@ -77,7 +77,7 @@ fi
 access_token=$(echo "$login" | grep "access_token" | sed 's/^.*access_token\":\s*\"\([-a-zA-Z0-9\._=]\+\).*$/\1/')
 
 if ! [[ $access_token =~ ^ey[-a-zA-Z0-9\._=]+ ]]; then
-  echo "Failed to find access token, parsed '$access_token' from '$login'"
+  echo "Failed to find access token in response"
   exit 6
 fi
 
