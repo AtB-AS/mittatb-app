@@ -23,6 +23,7 @@ import {NavigatorScreenParams, ParamListBase} from '@react-navigation/native';
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
+import useFontScale from '@atb/utils/use-font-scale';
 
 type SubNavigator<T extends ParamListBase> = {
   [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
@@ -43,6 +44,8 @@ const NavigationRoot = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
   const {startScreen} = usePreferenceItems();
+  const lineHeight = theme.typography.body__secondary.lineHeight.valueOf();
+
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -58,22 +61,38 @@ const NavigationRoot = () => {
       <Tab.Screen
         name="Assistant"
         component={Assistant}
-        options={tabSettings(t(dictionary.navigation.assistant), AssistantIcon)}
+        options={tabSettings(
+          t(dictionary.navigation.assistant),
+          AssistantIcon,
+          lineHeight,
+        )}
       />
       <Tab.Screen
         name="Nearest"
         component={NearbyScreen}
-        options={tabSettings(t(dictionary.navigation.nearby), Nearby)}
+        options={tabSettings(
+          t(dictionary.navigation.nearby),
+          Nearby,
+          lineHeight,
+        )}
       />
       <Tab.Screen
         name="Ticketing"
         component={TicketingScreen}
-        options={tabSettings(t(dictionary.navigation.ticketing), Tickets)}
+        options={tabSettings(
+          t(dictionary.navigation.ticketing),
+          Tickets,
+          lineHeight,
+        )}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={tabSettings(t(dictionary.navigation.profile), Profile)}
+        options={tabSettings(
+          t(dictionary.navigation.profile),
+          Profile,
+          lineHeight,
+        )}
       />
     </Tab.Navigator>
   );
@@ -97,12 +116,13 @@ type TabSettings = {
 function tabSettings(
   tabBarLabel: string,
   Icon: (svg: SvgProps) => JSX.Element,
+  lineHeight: number,
 ): TabSettings {
   return {
     tabBarLabel: ({color}) => (
       <ThemeText
         type="body__secondary"
-        style={{color, textAlign: 'center', lineHeight: 14}}
+        style={{color, textAlign: 'center', lineHeight}}
       >
         {tabBarLabel}
       </ThemeText>
