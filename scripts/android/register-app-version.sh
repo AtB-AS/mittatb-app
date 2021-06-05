@@ -70,7 +70,7 @@ login=$(curl --silent \
 
 login_status=$?
 if [ $login_status -ne 0 ]; then
-    echo "Login failed: $login"
+    echo "Login failed"
     exit 5
 fi
 
