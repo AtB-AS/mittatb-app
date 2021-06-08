@@ -31,3 +31,5 @@ _List of relevant acceptance criteria as a part of a QA flow_
 - [] Does not drain battery
 - [] Works in up to 200% font size
 - [] Is operable and perceivable using screen reader
+
+Beskrivelse av QA prosessen finnes [her](https://github.com/AtB-AS/org/blob/master/guides/quality_assurance.md#qa-in-atb-mobile-application)
