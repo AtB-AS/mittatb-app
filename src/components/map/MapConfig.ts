@@ -3,11 +3,11 @@ import {Platform} from 'react-native';
 import {MAPBOX_STOP_PLACES_STYLE_URL} from '@env';
 
 export const MapViewConfig: MapViewProps = {
-  compassViewPosition: 3,
+  compassViewPosition: 1, // Upper right
   compassEnabled: true,
   compassViewMargins: {
     x: Platform.select({default: 10, android: 6}),
-    y: 90,
+    y: 60,
   },
   attributionPosition: Platform.select({
     default: {bottom: 8, left: 95},
