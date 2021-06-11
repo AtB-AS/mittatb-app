@@ -79,7 +79,9 @@ function Item(props: ItemProps) {
 
   return (
     <View style={[styles.item, sectionStyles.spaceBetween, topContainer]}>
-      <FavoriteIcon favorite={item} />
+      <View importantForAccessibility={'no-hide-descendants'}>
+        <FavoriteIcon favorite={item} />
+      </View>
       <ThemeText type="body__primary" style={contentContainer}>
         {name(item)}
       </ThemeText>
