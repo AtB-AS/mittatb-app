@@ -11,6 +11,7 @@ const dictionary = {
     nearby: _(`Av${softhyphen}ganger`, 'Departures'),
     ticketing: _('Billetter', 'Tickets'),
     profile: _('Mitt AtB', 'My AtB'),
+    profile_a11y: _('Mitt ATB', 'My ATB'),
   },
   missingRealTimePrefix: _('ca. ', 'ca. '),
   travel: {

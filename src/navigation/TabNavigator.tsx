@@ -64,6 +64,7 @@ const NavigationRoot = () => {
         component={Assistant}
         options={tabSettings(
           t(dictionary.navigation.assistant),
+          t(dictionary.navigation.assistant),
           AssistantIcon,
           lineHeight,
         )}
@@ -72,6 +73,7 @@ const NavigationRoot = () => {
         name="Nearest"
         component={NearbyScreen}
         options={tabSettings(
+          t(dictionary.navigation.nearby),
           t(dictionary.navigation.nearby),
           Nearby,
           lineHeight,
@@ -82,6 +84,7 @@ const NavigationRoot = () => {
         component={TicketingScreen}
         options={tabSettings(
           t(dictionary.navigation.ticketing),
+          t(dictionary.navigation.ticketing),
           Tickets,
           lineHeight,
         )}
@@ -91,6 +94,7 @@ const NavigationRoot = () => {
         component={ProfileScreen}
         options={tabSettings(
           t(dictionary.navigation.profile),
+          t(dictionary.navigation.profile_a11y),
           Profile,
           lineHeight,
         )}
@@ -116,6 +120,7 @@ type TabSettings = {
 
 function tabSettings(
   tabBarLabel: string,
+  tabBarA11yLabel: string,
   Icon: (svg: SvgProps) => JSX.Element,
   lineHeight: number,
 ): TabSettings {
@@ -124,6 +129,7 @@ function tabSettings(
       <ThemeText
         type="body__secondary"
         style={{color, textAlign: 'center', lineHeight}}
+        accessibilityLabel={tabBarA11yLabel}
       >
         {tabBarLabel}
       </ThemeText>
