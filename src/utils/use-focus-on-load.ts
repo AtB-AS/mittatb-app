@@ -1,5 +1,5 @@
 import {useEffect, useRef} from 'react';
-import {AccessibilityInfo, findNodeHandle} from 'react-native';
+import {AccessibilityInfo, findNodeHandle, Platform} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 /**
@@ -18,7 +18,9 @@ export default function useFocusOnLoad(setFocusOnLoad: boolean = true) {
     () =>
       navigation?.addListener('focus', () => {
         // 50 ms timeout necessary for iPhone VoiceOver
-        setTimeout(() => giveFocus(setFocusOnLoad, focusRef), 50);
+        // 150 ms timeout necessary for Android Talk back
+        const a11yFocusTimeout = Platform.OS == 'ios' ? 50 : 150;
+        setTimeout(() => giveFocus(setFocusOnLoad, focusRef), a11yFocusTimeout);
       }),
     [navigation, focusRef.current, setFocusOnLoad],
   );
