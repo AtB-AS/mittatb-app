@@ -57,7 +57,7 @@ const useListStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     paddingHorizontal: theme.spacings.small,
   },
   moveIconEmpty: {
-    opacity: 0,
+    opacity: 0.2,
   },
 }));
 
@@ -114,13 +114,17 @@ function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
   const {theme} = useTheme();
 
   if (index === 0 && !isDown) {
-    return null;
+    return (
+      <View style={[styles.moveIcon, styles.moveIconEmpty]}>
+        <ThemeIcon svg={Icon} />
+      </View>
+    );
   }
 
   if (index === length - 1 && isDown) {
     return (
       <View style={[styles.moveIcon, styles.moveIconEmpty]}>
-        <Icon />
+        <ThemeIcon svg={Icon} />
       </View>
     );
   }
