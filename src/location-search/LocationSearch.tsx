@@ -1,7 +1,12 @@
 import {JourneySearchHistoryEntry} from '@atb/search-history/types';
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
-import {Keyboard, TextInput as InternalTextInput, View} from 'react-native';
+import {
+  AccessibilityInfo,
+  Keyboard,
+  TextInput as InternalTextInput,
+  View,
+} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
 import {ErrorType} from '../api/utils';
@@ -184,10 +189,18 @@ export function LocationSearchContent({
 
   // using setTimeout to counteract issue of other elements
   // capturing focus on mount and on press
+  // but not if screen reader is active
+
   const focusInput = () => setTimeout(() => inputRef.current?.focus(), 0);
 
   useEffect(() => {
-    if (isFocused) focusInput();
+    if (isFocused) {
+      AccessibilityInfo.isScreenReaderEnabled().then((screenReaderEnabled) => {
+        if (!screenReaderEnabled) {
+          focusInput();
+        }
+      });
+    }
   }, [isFocused]);
 
   useEffect(() => {

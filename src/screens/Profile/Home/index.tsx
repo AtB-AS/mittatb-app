@@ -129,10 +129,20 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.favorites.linkItems.places.label)}
+            accessibility={{
+              accessibilityLabel: t(
+                ProfileTexts.sections.favorites.linkItems.places.a11yLabel,
+              ),
+            }}
             onPress={() => navigation.navigate('FavoriteList')}
           />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.favorites.linkItems.departures.label)}
+            accessibility={{
+              accessibilityLabel: t(
+                ProfileTexts.sections.favorites.linkItems.departures.a11yLabel,
+              ),
+            }}
             onPress={() => navigation.navigate('FavoriteDepartures')}
           />
         </Sections.Section>

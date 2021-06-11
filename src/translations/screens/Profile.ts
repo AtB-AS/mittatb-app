@@ -41,9 +41,17 @@ const ProfileTexts = {
       linkItems: {
         places: {
           label: _('Steder', 'Locations'),
+          a11yLabel: _(
+            'Steder, endre favorittsteder',
+            'Locations, edit locations',
+          ),
         },
         departures: {
           label: _('Avganger', 'Departures'),
+          a11yLabel: _(
+            'Avganger, endre favoritt-avganger',
+            'Locations, edit favourite departures',
+          ),
         },
       },
     },
