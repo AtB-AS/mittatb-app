@@ -1,5 +1,5 @@
 import {useEffect, useRef} from 'react';
-import {AccessibilityInfo, findNodeHandle, Platform} from 'react-native';
+import {AccessibilityInfo, findNodeHandle} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 /**
