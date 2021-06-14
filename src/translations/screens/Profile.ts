@@ -2,7 +2,8 @@ import {translation as _} from '../commons';
 
 const ProfileTexts = {
   header: {
-    title: _('Mitt AtB', 'Profile'),
+    title: _('Mitt AtB', 'My AtB'),
+    title_a11y: _('Mitt ATB', 'My ATB'),
   },
   sections: {
     account: {

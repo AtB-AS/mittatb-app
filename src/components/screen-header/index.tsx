@@ -26,7 +26,8 @@ export type RightButtonProps = HeaderButtonProps & {
 export type ScreenHeaderProps = {
   leftButton?: LeftButtonProps;
   rightButton?: RightButtonProps;
-  title?: React.ReactNode;
+  title?: string;
+  titleA11yLabel?: string;
   /**
    * For specifying the alert context for alerts that should be shown in this
    * header. If no context is specified then no alerts are shown.
@@ -41,6 +42,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   leftButton,
   rightButton,
   title,
+  titleA11yLabel,
   alertContext,
   style,
   color,
@@ -84,6 +86,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
       >
         <ThemeText
           accessible={!!title}
+          accessibilityLabel={titleA11yLabel}
           onLayout={setLayoutFor('title')}
           type="body__primary--bold"
           color={themeColor}
