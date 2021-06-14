@@ -130,8 +130,8 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           <Sections.LinkItem
             text={t(ProfileTexts.sections.favorites.linkItems.places.label)}
             accessibility={{
-              accessibilityLabel: t(
-                ProfileTexts.sections.favorites.linkItems.places.a11yLabel,
+              accessibilityHint: t(
+                ProfileTexts.sections.favorites.linkItems.places.a11yHint,
               ),
             }}
             onPress={() => navigation.navigate('FavoriteList')}
@@ -139,8 +139,8 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           <Sections.LinkItem
             text={t(ProfileTexts.sections.favorites.linkItems.departures.label)}
             accessibility={{
-              accessibilityLabel: t(
-                ProfileTexts.sections.favorites.linkItems.departures.a11yLabel,
+              accessibilityHint: t(
+                ProfileTexts.sections.favorites.linkItems.departures.a11yHint,
               ),
             }}
             onPress={() => navigation.navigate('FavoriteDepartures')}
