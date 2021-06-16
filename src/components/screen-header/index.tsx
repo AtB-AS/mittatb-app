@@ -16,12 +16,18 @@ import {ThemeColor} from '@atb/theme/colors';
 export {default as AnimatedScreenHeader} from './animated-header';
 
 export type LeftButtonProps = HeaderButtonProps & {
-  type: Exclude<ButtonModes, 'chat' | 'skip'>;
+  type: Exclude<ButtonModes, 'chat' | 'skip' | 'custom'>;
 };
 
-export type RightButtonProps = HeaderButtonProps & {
-  type: 'chat' | 'skip';
-};
+export type RightButtonProps =
+  | (HeaderButtonProps & {
+      type: 'chat' | 'skip';
+    })
+  | (HeaderButtonProps & {
+      type: 'custom';
+      onPress: () => void;
+      text: string;
+    });
 
 export type ScreenHeaderProps = {
   leftButton?: LeftButtonProps;

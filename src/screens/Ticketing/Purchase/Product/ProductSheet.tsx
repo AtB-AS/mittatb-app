@@ -41,6 +41,7 @@ const ProductSheet = forwardRef<ScrollView, Props>(
         <Header
           title={t(ProductTexts.header.title)}
           leftButton={{type: 'cancel', onPress: close}}
+          color={'background_2'}
         />
 
         <ScrollView style={styles.productsSection} ref={focusRef}>

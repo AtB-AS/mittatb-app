@@ -16,11 +16,13 @@ export type ButtonModes =
   | 'close'
   | 'home'
   | 'chat'
-  | 'skip';
+  | 'skip'
+  | 'custom';
 export type HeaderButtonProps = {
   type: ButtonModes;
   onPress?: () => void;
   color?: ThemeColor;
+  text?: string;
 } & AccessibilityProps;
 
 export type IconButton = Omit<HeaderButtonProps, 'type'> & {
@@ -86,6 +88,14 @@ const useIconButton = (
     }
     case 'chat':
       return chatIcon;
+    case 'custom': {
+      const {type, text, color, onPress, ...accessibilityProps} = buttonProps;
+      return {
+        icon: <ThemeText color={color}>{text}</ThemeText>,
+        onPress: onPress,
+        ...accessibilityProps,
+      };
+    }
   }
 };
 

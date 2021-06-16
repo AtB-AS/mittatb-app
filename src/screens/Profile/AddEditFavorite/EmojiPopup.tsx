@@ -21,6 +21,8 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+import Header from '@atb/components/screen-header';
+import {ProductTexts} from '@atb/translations';
 
 // Polyfill for Android
 require('string.fromcodepoint');
@@ -216,7 +218,16 @@ const EmojiPicker = ({
 
   return (
     <View style={{maxHeight: 350, ...styles.modal}}>
-      <ClearButton value={value} onEmojiSelected={onClick} />
+      <Header
+        title={'Velg emoji'}
+        leftButton={{type: 'cancel', onPress: close}}
+        rightButton={{
+          type: 'custom',
+          text: 'Fjern emoji',
+          onPress: () => onClick(null),
+        }}
+        color={'background_0'}
+      />
       <ScrollView>
         {CATEGORIES.map((category) => (
           <EmojiCategory
