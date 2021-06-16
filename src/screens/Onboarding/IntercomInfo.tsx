@@ -23,9 +23,10 @@ export default function IntercomInfo() {
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader setFocusOnLoad={false} color={themeColor} />
-
-      <Illustration Svg={Onboarding2} />
+      <View style={styles.illustration}>
+        <Illustration Svg={Onboarding2} />
+      </View>
+      <View style={styles.topPush} />
       <ScrollView style={styles.mainView}>
         <View ref={focusRef} accessibilityRole="header" accessible={true}>
           <ThemeText type={'heading__title'} color={themeColor}>
@@ -38,15 +39,17 @@ export default function IntercomInfo() {
           </ThemeText>
         </View>
       </ScrollView>
-      <FullScreenFooter>
-        <Button
-          color={'secondary_1'}
-          onPress={finishOnboarding}
-          text={t(OnboardingTexts.intercom.mainButton)}
-          icon={Confirm}
-          iconPosition="right"
-        />
-      </FullScreenFooter>
+      <View style={styles.bottomView}>
+        <FullScreenFooter>
+          <Button
+            color={'secondary_1'}
+            onPress={finishOnboarding}
+            text={t(OnboardingTexts.intercom.mainButton)}
+            icon={Confirm}
+            iconPosition="right"
+          />
+        </FullScreenFooter>
+      </View>
     </View>
   );
 }
@@ -55,12 +58,26 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.colors[themeColor].backgroundColor,
     flex: 1,
+    justifyContent: 'flex-end',
+  },
+  illustration: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  topPush: {
+    flexGrow: 1,
+    height: '40%',
   },
   mainView: {
     margin: theme.spacings.medium,
     padding: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
-    flex: 1,
+  },
+  bottomView: {
+    flexGrow: 0,
   },
   description: {
     marginTop: theme.spacings.medium,
