@@ -132,10 +132,10 @@ const SelectStartScreenTexts = {
     title: _('Billettkontroll', 'Ticket inspection'),
     texts: {
       part1Text1: _(
-        'Ved billettkontroll vil kontrolløren trykke på noen aktive felter på skjermbildet for billett, for å verifisere at billetten er en aktiv billett og ikke et skjermbilde (screenshot). Kontrolløren vil også enten scanne billettens QR kode eller taste inn billettens referansekode, for å verifisere billetten mot billettsystemet. Disse feltene inneholder informasjon som er relevant når kontrolløren skal forsikre seg om at du har en gyldig billett.\n\n' +
+        'Ved billettkontroll, åpne appen din og velg hovedmenyen «Billetter» nederst i appen. Velg fanen «Aktive». Her finner du din gyldige billett. Velg «Vis detaljer/kontroll». Du får nå opp informasjon om billetten og en QR-kode. Vis denne QR-koden til kontrollør som vil scanne denne med eget utstyr for å kontrollere om billetten er gyldig.\n\n' +
           'Husk at når du reiser med rabattert billett må du kunne vise gyldig bevis som bekrefter din rett til rabatt.\n\n' +
           'Uten gyldig billett må du ved billettkontroll betale gebyr etter følgende satser:',
-        'During ticket inspections, the inspector will press some active fields on the ticket screen to verify that the ticket is an active ticket and not a screenshot. In addition, the inspector will either scan the QR-code of the ticket or enter the ticket reference to verify the ticket in the ticketing system. These fields contain relevant information to verify the validity of your ticket.\n\n' +
+        'During ticket inspections, open your app and select the main menu "Tickets" at the bottom of the app. Select the "Valid" tab. Here you will find your valid ticket. Select "Show details / inspection". You will now receive information about the ticket and a QR code. Show this QR code to the ticket inspector who will scan it with his own equipment to check if the ticket is valid.\n\n' +
           'When traveling with a discounted ticket, always remember to bring valid proof of you being eligible for the discount.\n\n' +
           'Without a valid ticket, you need to pay an additional fee as described below:',
       ),

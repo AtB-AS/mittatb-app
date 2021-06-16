@@ -20,6 +20,7 @@ import {
   NavigationContainerRef,
   NavigatorScreenParams,
   useLinking,
+  DefaultTheme,
 } from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React, {useEffect, useRef} from 'react';
@@ -70,6 +71,14 @@ const NavigationRoot = () => {
     ? theme.colors.background_gray.backgroundColor
     : theme.colors.primary_2.backgroundColor;
 
+  const ReactNavigationTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: theme.colors.background_1.backgroundColor,
+    },
+  };
+
   return (
     <>
       <StatusBar
@@ -78,7 +87,11 @@ const NavigationRoot = () => {
         backgroundColor={statusBarColor}
       />
       <Host>
-        <NavigationContainer ref={ref} onStateChange={trackNavigation}>
+        <NavigationContainer
+          ref={ref}
+          onStateChange={trackNavigation}
+          theme={ReactNavigationTheme}
+        >
           <Stack.Navigator
             mode={isLoading || !onboarded ? 'card' : 'modal'}
             screenOptions={{headerShown: false}}
