@@ -3,6 +3,7 @@ import {translation as _} from '../commons';
 const OnboardingTexts = {
   welcome: {
     title: _('Velkommen til AtB-appen', 'Welcome to the AtB app'),
+    titleA11yLabel: _('Velkommen til ATB appen', 'Welcome to the ATB app'),
     description: {
       part1: _(
         'Her kan du planlegge reiser og sjekke avgangstider i hele Trøndelag. Du kan også prøve kjøp av enkeltbilletter med Vipps. Flere tjenester og billettyper kommer!',
