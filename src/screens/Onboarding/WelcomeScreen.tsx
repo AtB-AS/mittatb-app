@@ -53,7 +53,11 @@ const WelcomeScreen = ({
       <Illustration Svg={Onboarding1_2} />
       <ScrollView style={styles.mainView}>
         <View ref={focusRef} accessibilityRole="header" accessible={true}>
-          <ThemeText type={'body__primary--jumbo--bold'} color={themeColor}>
+          <ThemeText
+            type={'body__primary--jumbo--bold'}
+            color={themeColor}
+            accessibilityLabel={t(OnboardingTexts.welcome.titleA11yLabel)}
+          >
             {t(OnboardingTexts.welcome.title)}
           </ThemeText>
         </View>
