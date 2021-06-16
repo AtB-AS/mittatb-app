@@ -60,7 +60,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
     <View style={style.container}>
       <FullScreenHeader
         title={t(FavoriteListTexts.sortableScreen.title)}
-        leftButton={{type: 'close'}}
+        leftButton={{type: 'cancel'}}
       />
 
       {error && (

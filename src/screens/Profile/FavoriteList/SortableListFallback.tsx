@@ -56,9 +56,6 @@ const useListStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   moveIcon: {
     paddingHorizontal: theme.spacings.small,
   },
-  moveIconEmpty: {
-    opacity: 0,
-  },
 }));
 
 const name = (item: LocationFavorite) => item.name ?? item.location.label;
@@ -79,7 +76,9 @@ function Item(props: ItemProps) {
 
   return (
     <View style={[styles.item, sectionStyles.spaceBetween, topContainer]}>
-      <FavoriteIcon favorite={item} />
+      <View importantForAccessibility={'no-hide-descendants'}>
+        <FavoriteIcon favorite={item} />
+      </View>
       <ThemeText type="body__primary" style={contentContainer}>
         {name(item)}
       </ThemeText>
@@ -112,13 +111,17 @@ function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
   const {theme} = useTheme();
 
   if (index === 0 && !isDown) {
-    return null;
+    return (
+      <View style={styles.moveIcon}>
+        <ThemeIcon svg={Icon} colorType={'disabled'} />
+      </View>
+    );
   }
 
   if (index === length - 1 && isDown) {
     return (
-      <View style={[styles.moveIcon, styles.moveIconEmpty]}>
-        <Icon />
+      <View style={styles.moveIcon}>
+        <ThemeIcon svg={Icon} colorType={'disabled'} />
       </View>
     );
   }
