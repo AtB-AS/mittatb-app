@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {useTranslation} from '../translations';
+import {updateMetadata} from '@atb/chat/metadata';
 
 const ERROR_INVALID_PHONE_NUMBER = 'auth/invalid-phone-number';
 const ERROR_INVALID_CONFIRMATION_CODE = 'auth/invalid-verification-code';
@@ -110,6 +111,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
 
   const onUserChanged = useCallback(
     async function (user: FirebaseAuthTypes.User | null) {
+      if (user) updateMetadata({'AtB-Firebase-Auth-Id': user.uid});
       dispatch({type: 'SET_USER', user});
     },
     [dispatch],
@@ -119,7 +121,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
   useEffect(() => {
     (async function () {
       if (state.user) {
-        const idToken = await state.user.getIdTokenResult(true);
+        const idToken = await state.user.getIdTokenResult();
         const abtCustomerId = idToken.claims['sub'];
         dispatch({type: 'SET_ABT_CUSTOMER_ID', abtCustomerId});
       }

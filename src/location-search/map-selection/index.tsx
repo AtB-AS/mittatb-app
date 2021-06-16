@@ -126,9 +126,9 @@ const MapSelection: React.FC<Props> = ({
         style={{
           flex: 1,
         }}
-        onRegionDidChange={(region) =>
-          setRegionEvent({isMoving: false, region})
-        }
+        onRegionDidChange={(region) => {
+          setRegionEvent({isMoving: false, region});
+        }}
         onRegionWillChange={() =>
           setRegionEvent({isMoving: true, region: regionEvent?.region})
         }

@@ -1,7 +1,6 @@
 import {ErrorType} from '@atb/api/utils';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {TextInput} from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
 import {Location} from '@atb/favorites/types';
 import {useGeocoder} from '@atb/geocoder';
 import {useGeolocationState} from '@atb/GeolocationContext';
@@ -209,11 +208,11 @@ function translateErrorType(
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
     flex: 1,
   },
   header: {
-    backgroundColor: theme.background.header,
+    backgroundColor: theme.colors.background_gray.backgroundColor,
   },
   favouriteChips: {
     marginLeft: theme.spacings.medium,

@@ -27,7 +27,7 @@ const TripMessages: React.FC<TripMessagesProps> = ({
         <MessageBox
           containerStyle={messageStyle}
           type="info"
-          message="Vær oppmerksom på kort byttetid."
+          message={t(TripDetailsTexts.messages.shortTime)}
         />
       )}
       {error && (

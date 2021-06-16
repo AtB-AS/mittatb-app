@@ -3,13 +3,19 @@ import {v4 as uuid} from 'uuid';
 import {API_BASE_URL} from '@env';
 import {getAxiosErrorMetadata, getAxiosErrorType} from './utils';
 import Bugsnag from '@bugsnag/react-native';
-import {InstallIdHeaderName, RequestIdHeaderName} from './headers';
+import {
+  FirebaseAuthIdHeaderName,
+  InstallIdHeaderName,
+  RequestIdHeaderName,
+} from './headers';
 import axiosRetry, {isIdempotentRequestError} from 'axios-retry';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
 import {getBooleanConfigValue} from '../remote-config';
 import auth from '@react-native-firebase/auth';
 
 export default createClient(API_BASE_URL);
+
+const RETRY_COUNT = 3;
 
 declare module 'axios' {
   export interface AxiosRequestConfig {
@@ -19,16 +25,18 @@ declare module 'axios' {
     authWithIdToken?: boolean;
     // Force refresh id token from firebase before request
     forceRefreshIdToken?: boolean;
+    // Whether the error logging to Bugsnag should be skipped for a given error
+    skipErrorLogging?: (error: AxiosError) => boolean;
   }
 }
 
-function retryCondition(error: AxiosError): boolean {
+function shouldRetry(error: AxiosError): boolean {
   const shouldRetryOnNetworkErrorOrIdempotentRequest =
-    Boolean(error.config.retry) &&
+    Boolean(error.config?.retry) &&
     (getAxiosErrorType(error) === 'network-error' ||
       isIdempotentRequestError(error));
   return (
-    error.config.forceRefreshIdToken ||
+    error.config?.forceRefreshIdToken ||
     shouldRetryOnNetworkErrorOrIdempotentRequest
   );
 }
@@ -44,8 +52,8 @@ export function createClient(baseUrl: string) {
   client.interceptors.request.use(requestHandler, undefined);
   client.interceptors.request.use(requestIdTokenHandler);
   client.interceptors.response.use(undefined, responseIdTokenHandler);
-  axiosRetry(client, {retries: 3, retryCondition});
   client.interceptors.response.use(undefined, responseErrorHandler);
+  axiosRetry(client, {retries: RETRY_COUNT, retryCondition: shouldRetry});
   return client;
 }
 
@@ -61,6 +69,7 @@ export const isCancel = axios.isCancel;
 function requestHandler(config: AxiosRequestConfig): AxiosRequestConfig {
   config.headers[InstallIdHeaderName] = installIdHeaderValue;
   config.headers[RequestIdHeaderName] = uuid();
+  config.headers[FirebaseAuthIdHeaderName] = auth().currentUser?.uid;
   return config;
 }
 
@@ -74,12 +83,18 @@ async function requestIdTokenHandler(config: AxiosRequestConfig) {
 }
 
 function responseIdTokenHandler(error: AxiosError) {
-  error.config.forceRefreshIdToken =
-    error.config.authWithIdToken && error.response?.status === 401;
+  if (error?.config) {
+    error.config.forceRefreshIdToken =
+      error.config.authWithIdToken && error.response?.status === 401;
+  }
   throw error;
 }
 
 function responseErrorHandler(error: AxiosError) {
+  if (shouldSkipLogging(error)) {
+    return Promise.reject(error);
+  }
+
   const errorType = getAxiosErrorType(error);
   const topmostError = error?.config?.topmostError;
 
@@ -104,6 +119,7 @@ function responseErrorHandler(error: AxiosError) {
         const errorMetadata = getAxiosErrorMetadata(error);
         Bugsnag.notify(error, (event) => {
           event.addMetadata('api', {...errorMetadata});
+          event.severity = 'info';
         });
       }
       break;
@@ -113,3 +129,11 @@ function responseErrorHandler(error: AxiosError) {
 
   return Promise.reject(error);
 }
+
+const shouldSkipLogging = (error: AxiosError) => {
+  const configuredToSkipLogging = error.config?.skipErrorLogging?.(error);
+  const willRetry =
+    shouldRetry(error) &&
+    (error.config?.['axios-retry'] as any)?.retryCount < RETRY_COUNT;
+  return configuredToSkipLogging || willRetry;
+};

@@ -45,6 +45,7 @@ const TicketsTabBar: React.FC<MaterialTopTabBarProps> = ({
           });
         };
 
+        const tabColor = isFocused ? 'background_1' : 'background_gray';
         return (
           <TouchableOpacity
             key={index}
@@ -57,13 +58,14 @@ const TicketsTabBar: React.FC<MaterialTopTabBarProps> = ({
             style={[
               styles.button,
               {
-                backgroundColor: isFocused
-                  ? theme.background.level1
-                  : theme.background.header,
+                backgroundColor: theme.colors[tabColor].backgroundColor,
               },
             ]}
           >
-            <ThemeText type={isFocused ? 'paragraphHeadline' : 'body'}>
+            <ThemeText
+              type={isFocused ? 'body__primary--bold' : 'body__primary'}
+              color={tabColor}
+            >
               {label}
             </ThemeText>
           </TouchableOpacity>

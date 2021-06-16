@@ -200,7 +200,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     right: 0,
   },
   bottomSheet: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.colors.background_2.backgroundColor,
     width: '100%',
     position: 'absolute',
     bottom: 0,

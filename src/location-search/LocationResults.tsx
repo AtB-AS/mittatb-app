@@ -9,26 +9,22 @@ import {FavoriteIcon} from '../favorites';
 import ThemeText from '../components/text';
 import ThemeIcon from '../components/theme-icon';
 import {screenReaderPause} from '../components/accessible-text';
+import {LocationSearchTexts, useTranslation} from '@atb/translations';
 
 type Props = {
   title?: string;
   locations: LocationSearchResult[];
   onSelect: (location: LocationSearchResult) => void;
-  onPrefillText: (text: string) => void;
 };
 
-const LocationResults: React.FC<Props> = ({
-  title,
-  locations,
-  onSelect,
-  onPrefillText,
-}) => {
+const LocationResults: React.FC<Props> = ({title, locations, onSelect}) => {
   const styles = useThemeStyles();
+  const {t} = useTranslation();
   return (
     <>
       {title && (
         <View accessibilityRole="header" style={styles.subHeader}>
-          <ThemeText type="lead">{title}</ThemeText>
+          <ThemeText type="body__secondary">{title}</ThemeText>
         </View>
       )}
       <View>
@@ -40,7 +36,9 @@ const LocationResults: React.FC<Props> = ({
                 accessibilityLabel={
                   searchResult.location.label + screenReaderPause
                 }
-                accessibilityHint={'Aktivér for å bruke dette resultatet.'}
+                accessibilityHint={t(
+                  LocationSearchTexts.locationResults.a11y.activateToUse,
+                )}
                 accessibilityRole="button"
                 hitSlop={insets.symmetric(8, 1)}
                 onPress={() => onSelect(searchResult.selectable)}
@@ -67,17 +65,6 @@ const LocationResults: React.FC<Props> = ({
                 </View>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              accessible={true}
-              accessibilityLabel={
-                'Legg ' + searchResult.prefill + ' i søkefelt'
-              }
-              accessibilityRole="button"
-              hitSlop={insets.all(8)}
-              onPress={() => onPrefillText(searchResult.prefill + ' ')}
-            >
-              <ThemeIcon svg={ArrowUpLeft} />
-            </TouchableOpacity>
           </View>
         ))}
       </View>
@@ -94,7 +81,6 @@ function mapToVisibleSearchResult(searchResult: LocationSearchResult) {
       location,
       text: location.name,
       subtext: location.locality,
-      prefill: location.name,
     };
   }
 
@@ -109,7 +95,6 @@ function mapToVisibleSearchResult(searchResult: LocationSearchResult) {
     location,
     text,
     subtext,
-    prefill: location.name,
     emoji: searchResult.favoriteInfo.emoji,
   };
 }

@@ -1,7 +1,7 @@
 import {translation as _} from '../../commons';
 const DepartureDetailsTexts = {
   header: {
-    title: (departureName: string) => _(departureName),
+    title: (departureName: string) => _(departureName, departureName),
     notFound: _('Detaljer', 'Details'),
   },
   collapse: {

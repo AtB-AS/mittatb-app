@@ -2,6 +2,7 @@ import React from 'react';
 import {SvgProps} from 'react-native-svg';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
+
 type IllustrationProps = {
   Svg: React.FC<SvgProps>;
 };
@@ -15,10 +16,9 @@ const Illustration: React.FC<IllustrationProps> = ({Svg}) => {
 };
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   svgContainer: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.colors.primary_2.backgroundColor,
     width: '100%',
-    maxHeight: '50%',
-    flexShrink: 1,
+    flex: 2,
   },
 }));
 export default Illustration;

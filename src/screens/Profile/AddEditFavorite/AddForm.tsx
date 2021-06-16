@@ -2,15 +2,14 @@ import SvgConfirm from '@atb/assets/svg/icons/actions/Confirm';
 import SvgDelete from '@atb/assets/svg/icons/actions/Delete';
 import {MapPointPin} from '@atb/assets/svg/icons/places';
 import Button, {ButtonGroup} from '@atb/components/button';
-import ScreenHeader from '@atb/components/screen-header';
+import MessageBox from '@atb/components/message-box';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
 import {StoredLocationFavorite} from '@atb/favorites/types';
-import {useLocationSearchValue} from '@atb/location-search';
-import MessageBox from '@atb/components/message-box';
+import {useOnlySingleLocation} from '@atb/location-search';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet, Theme} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
@@ -18,10 +17,11 @@ import {Location} from '@entur/sdk';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useState} from 'react';
-import {Alert, Keyboard, KeyboardAvoidingView, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {Alert, Keyboard, View} from 'react-native';
 import {AddEditFavoriteRootParams} from '.';
 import EmojiPopup from './EmojiPopup';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {useBottomSheet} from '@atb/components/bottom-sheet/use-bottom-sheet';
 
 type AddEditRouteName = 'AddEditForm';
@@ -62,7 +62,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   );
   const [emoji, setEmoji] = useState<string | undefined>(editItem?.emoji);
   const [name, setName] = useState<string>(editItem?.name ?? '');
-  const location = useLocationSearchValue<AddEditScreenRouteProp>(
+  const location = useOnlySingleLocation<AddEditScreenRouteProp>(
     'searchLocation',
     editItem?.location,
   );
@@ -157,8 +157,8 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   };
 
   return (
-    <SafeAreaView style={css.container}>
-      <ScreenHeader
+    <View style={css.container}>
+      <FullScreenHeader
         title={
           editItem
             ? t(AddEditFavoriteTexts.header.titleEdit)
@@ -213,14 +213,14 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
               !emoji ? (
                 <ThemeIcon svg={MapPointPin} />
               ) : (
-                <ThemeText type="body">{emoji}</ThemeText>
+                <ThemeText type="body__primary">{emoji}</ThemeText>
               )
             }
           />
         </Sections.Section>
       </View>
 
-      <KeyboardAvoidingView behavior="padding">
+      <FullScreenFooter avoidKeyboard={true}>
         <ButtonGroup>
           {editItem && (
             <Button
@@ -239,9 +239,9 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
             text={t(AddEditFavoriteTexts.save.label)}
           />
         </ButtonGroup>
-      </KeyboardAvoidingView>
+      </FullScreenFooter>
       {emojiPickerSheet}
-    </SafeAreaView>
+    </View>
   );
 }
 const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
@@ -249,7 +249,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center',
-    backgroundColor: theme.background.level3,
+    backgroundColor: theme.colors.background_3.backgroundColor,
   },
   innerContainer: {
     flex: 1,

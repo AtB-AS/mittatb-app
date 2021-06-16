@@ -25,7 +25,7 @@ export default function OptionalNextDayLabel({
 
   if ((isFirst && !allSameDay) || !isSameDay(prevDate, departureDate)) {
     return (
-      <ThemeText type="lead" style={style.title}>
+      <ThemeText type="body__secondary" style={style.title}>
         {getHumanizedDepartureDatePrefixed(
           departureDate,
           formatToSimpleDate(departureDate, language),

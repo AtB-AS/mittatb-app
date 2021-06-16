@@ -82,39 +82,48 @@ export default function DesignSystem() {
           withMargin
         />
 
-        <ButtonGroup>
-          <Button text="Press me" onPress={presser} mode="primary" />
-          <Button
-            text="Press me"
-            onPress={presser}
-            mode="primary"
-            color="secondary_1"
-          />
-          <Button text="Press me" onPress={presser} mode="secondary" />
-          <Button text="Press me" onPress={presser} mode="destructive" />
-          <Button
-            text="Press me"
-            onPress={presser}
-            mode="destructive"
-            icon={Delete}
-          />
-          <Button
-            text="Press me"
-            onPress={presser}
-            mode="destructive"
-            icon={Delete}
-            iconPosition="right"
-          />
-          <Button text="Press me" onPress={presser} type="inline" />
-          <Button text="Press me" onPress={presser} type="compact" />
-          <Button
-            text="Press me"
-            onPress={presser}
-            type="compact"
-            icon={Delete}
-            iconPosition="right"
-          />
-        </ButtonGroup>
+        <View style={style.buttons}>
+          <ButtonGroup>
+            <Button text="Press me" onPress={presser} mode="primary" />
+            <Button
+              text="Press me"
+              onPress={presser}
+              mode="primary"
+              color="secondary_1"
+            />
+            <Button text="Press me" onPress={presser} mode="secondary" />
+            <Button text="Press me" onPress={presser} mode="destructive" />
+            <Button
+              text="Press me"
+              onPress={presser}
+              mode="destructive"
+              icon={Delete}
+            />
+            <Button
+              text="Press me"
+              onPress={presser}
+              mode="destructive"
+              icon={Delete}
+              iconPosition="right"
+            />
+            <Button text="Press me" onPress={presser} type="inline" />
+            <Button text="Press me" onPress={presser} type="compact" />
+            <Button
+              text="Press me"
+              onPress={presser}
+              type="compact"
+              icon={Delete}
+              iconPosition="right"
+            />
+            <Button
+              text="Press me"
+              onPress={presser}
+              type="inline"
+              icon={Delete}
+              iconPosition="left"
+            />
+          </ButtonGroup>
+        </View>
 
         <Sections.Section withPadding withTopPadding>
           <Sections.ActionItem
@@ -212,10 +221,13 @@ function presser() {
 
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.colors.background_1.backgroundColor,
     flex: 1,
   },
   icons: {
     flexDirection: 'row',
+  },
+  buttons: {
+    marginHorizontal: theme.spacings.medium,
   },
 }));

@@ -1,6 +1,6 @@
 import {CreditCard, Vipps} from '@atb/assets/svg/icons/ticketing';
 import Button from '@atb/components/button';
-import Header, {LeftButtonProps} from '@atb/components/screen-header';
+import {LeftButtonProps} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import MessageBox from '@atb/components/message-box';
@@ -15,12 +15,13 @@ import {RouteProp} from '@react-navigation/native';
 import {addMinutes} from 'date-fns';
 import React from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../';
 import useOfferState from '../Overview/use-offer-state';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import {createTravelDateText} from '@atb/screens/Ticketing/Purchase/Overview';
 import {formatToLongDateTime} from '@atb/utils/date';
+import {formatDecimalNumber} from '@atb/utils/numbers';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -87,14 +88,9 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   );
 
   const vatAmount = totalPrice * (vatPercent / 100);
-  const vatAmountString = vatAmount.toLocaleString(language, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-  const vatPercentString = vatPercent.toLocaleString(language, {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  });
+
+  const vatAmountString = formatDecimalNumber(vatAmount, language);
+  const vatPercentString = formatDecimalNumber(vatPercent, language);
 
   async function payWithVipps() {
     if (offerExpirationTime && totalPrice > 0) {
@@ -122,17 +118,14 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     }
   }
 
-  const {top: safeAreaTop, bottom: safeAreBottom} = useSafeAreaInsets();
-
   return (
-    <View style={[styles.container, {paddingTop: safeAreaTop}]}>
-      <Header
+    <View style={styles.container}>
+      <FullScreenHeader
         title={t(
           PurchaseConfirmationTexts.header.title[preassignedFareProduct.type],
         )}
         leftButton={headerLeftButton}
         alertContext="ticketing"
-        style={styles.header}
       />
 
       <ScrollView style={styles.ticketInfoSection}>
@@ -152,6 +145,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               <Sections.GenericItem>
                 {userProfilesWithCountAndOffer.map((u, i) => (
                   <View
+                    accessible={true}
                     key={u.id}
                     style={[
                       styles.userProfileItem,
@@ -168,13 +162,13 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                 ))}
               </Sections.GenericItem>
               <Sections.GenericItem>
-                <View>
+                <View accessible={true}>
                   <ThemeText>
                     {getReferenceDataName(preassignedFareProduct, language)}
                   </ThemeText>
                   <ThemeText
                     style={styles.smallTopMargin}
-                    type="lead"
+                    type="body__secondary"
                     color="secondary"
                   >
                     {fromTariffZone.id === toTariffZone.id
@@ -192,7 +186,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                   </ThemeText>
                   <ThemeText
                     style={styles.smallTopMargin}
-                    type="lead"
+                    type="body__secondary"
                     color="secondary"
                   >
                     {createTravelDateText(t, language, travelDate)}
@@ -202,12 +196,12 @@ const Confirmation: React.FC<ConfirmationProps> = ({
             </Sections.Section>
           </View>
         </View>
-        <View style={styles.totalContainer}>
+        <View style={styles.totalContainer} accessible={true}>
           <View style={styles.totalContainerHeadings}>
-            <ThemeText type="body">
+            <ThemeText type="body__primary">
               {t(PurchaseConfirmationTexts.totalCost.title)}
             </ThemeText>
-            <ThemeText type="label" color="secondary">
+            <ThemeText type="body__tertiary" color="secondary">
               {t(
                 PurchaseConfirmationTexts.totalCost.label(
                   vatPercentString,
@@ -218,12 +212,12 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           </View>
 
           {!isSearchingOffer ? (
-            <ThemeText type="heroTitle">{totalPrice} kr</ThemeText>
+            <ThemeText type="body__primary--jumbo">{totalPrice} kr</ThemeText>
           ) : (
             <ActivityIndicator
               size={theme.spacings.medium}
               color={theme.text.colors.primary}
-              style={{margin: 12}}
+              style={{margin: theme.spacings.medium}}
             />
           )}
         </View>
@@ -239,38 +233,42 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               : t(PurchaseConfirmationTexts.infoText.validNow)
           }
         />
-        <View
-          style={{
-            paddingBottom: Math.max(safeAreBottom, theme.spacings.medium),
-          }}
-        >
-          <Button
-            color="secondary_1"
-            text={t(PurchaseConfirmationTexts.paymentButtonVipps.text)}
-            disabled={isSearchingOffer || !!error}
-            accessibilityHint={t(
-              PurchaseConfirmationTexts.paymentButtonVipps.a11yHint,
-            )}
-            icon={Vipps}
-            iconPosition="left"
-            onPress={payWithVipps}
-            viewContainerStyle={styles.paymentButton}
+        {isSearchingOffer ? (
+          <ActivityIndicator
+            size="large"
+            color={theme.text.colors.primary}
+            style={{margin: theme.spacings.medium}}
           />
-          {enableCreditCard && (
+        ) : (
+          <View>
             <Button
               color="secondary_1"
-              text={t(PurchaseConfirmationTexts.paymentButtonCard.text)}
-              disabled={isSearchingOffer || !!error}
+              text={t(PurchaseConfirmationTexts.paymentButtonVipps.text)}
+              disabled={!!error}
               accessibilityHint={t(
-                PurchaseConfirmationTexts.paymentButtonCard.a11yHint,
+                PurchaseConfirmationTexts.paymentButtonVipps.a11yHint,
               )}
-              icon={CreditCard}
+              icon={Vipps}
               iconPosition="left"
-              onPress={payWithCard}
+              onPress={payWithVipps}
               viewContainerStyle={styles.paymentButton}
             />
-          )}
-        </View>
+            {enableCreditCard && (
+              <Button
+                color="secondary_1"
+                text={t(PurchaseConfirmationTexts.paymentButtonCard.text)}
+                disabled={!!error}
+                accessibilityHint={t(
+                  PurchaseConfirmationTexts.paymentButtonCard.a11yHint,
+                )}
+                icon={CreditCard}
+                iconPosition="left"
+                onPress={payWithCard}
+                viewContainerStyle={styles.paymentButton}
+              />
+            )}
+          </View>
+        )}
       </ScrollView>
     </View>
   );
@@ -279,25 +277,21 @@ const Confirmation: React.FC<ConfirmationProps> = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
   },
   ticketsContainer: {
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
     borderTopEndRadius: theme.border.radius.regular,
     borderTopLeftRadius: theme.border.radius.regular,
     borderBottomWidth: 1,
-    borderBottomColor: theme.background.level1,
+    borderBottomColor: theme.colors.background_1.backgroundColor,
     padding: theme.spacings.medium,
     marginTop: theme.spacings.small,
-  },
-  header: {
-    paddingHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
   },
   errorMessage: {
     marginBottom: theme.spacings.medium,
   },
-  ticketInfoSection: {paddingHorizontal: theme.spacings.medium},
+  ticketInfoSection: {padding: theme.spacings.medium},
   userProfileItem: {
     flex: 1,
     flexDirection: 'row',
@@ -308,7 +302,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     padding: theme.spacings.medium,
     marginVertical: theme.spacings.medium,
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
     borderRadius: theme.border.radius.regular,
   },
   totalContainerHeadings: {

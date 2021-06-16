@@ -14,11 +14,14 @@ import {
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
-  LeftButtonProps,
   AnimatedScreenHeader,
+  LeftButtonProps,
 } from '@atb/components/screen-header';
 import {AlertContext} from '@atb/alerts/AlertsContext';
 import AlertBox from '@atb/alerts/AlertBox';
+import {ThemeColor} from '@atb/theme/colors';
+
+const themeColor: ThemeColor = 'background_gray';
 
 type Props = {
   header: React.ReactNode;
@@ -37,6 +40,8 @@ type Props = {
 
   onEndReached?(e: NativeScrollEvent): void;
   onEndReachedThreshold?: number;
+
+  setFocusOnLoad?: boolean;
 
   /**
    * For specifying the alert context for alerts that should be shown in this
@@ -62,6 +67,8 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
 
   onEndReached,
   onEndReachedThreshold = 10,
+
+  setFocusOnLoad,
 
   alertContext,
 }) => {
@@ -126,12 +133,13 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
         <View onLayout={onScreenHeaderLayout}>
           <AnimatedScreenHeader
             title={headerTitle}
-            rightButton={{type: 'chat'}}
+            rightButton={{type: 'chat', color: themeColor}}
             alternativeTitleComponent={alternativeTitleComponent}
             scrollRef={isRefreshing ? nullRef : scrollYRef}
             leftButton={leftButton}
+            setFocusOnLoad={setFocusOnLoad}
           />
-          <View style={{backgroundColor: theme.background.header}}>
+          <View style={styles.alertBoxContainer}>
             <AlertBox alertContext={alertContext} style={styles.alertBox} />
           </View>
         </View>
@@ -194,18 +202,18 @@ const hasReachedEnd = (
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   screen: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.colors.background_1.backgroundColor,
     flexGrow: 1,
   },
   alertBoxContainer: {
-    backgroundColor: theme.background.header,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
   },
   alertBox: {
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
   topBorder: {
-    backgroundColor: theme.background.header,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
   },
 
   content: {
@@ -221,11 +229,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     overflow: 'hidden',
     zIndex: 2,
     elevated: 1,
-    backgroundColor: theme.background.header,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
     justifyContent: 'space-between',
   },
   container: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
     paddingBottom: 0,
     flexGrow: 1,
   },

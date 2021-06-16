@@ -8,7 +8,7 @@ import ThemeText from '@atb/components/text';
 import {LocationWithMetadata} from '@atb/favorites/types';
 import {usePreferenceItems} from '@atb/preferences';
 import Assistant from '@atb/screens/Assistant/';
-import NearbyScreen from '@atb/screens/Nearby';
+import NearbyScreen, {NearbyStackParams} from '@atb/screens/Nearby';
 import ProfileScreen, {ProfileStackParams} from '@atb/screens/Profile';
 import TicketingScreen from '@atb/screens/Ticketing';
 import {useTheme} from '@atb/theme';
@@ -19,9 +19,11 @@ import {
 } from '@atb/utils/navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {ParamListBase} from '@react-navigation/native';
+import {NavigatorScreenParams, ParamListBase} from '@react-navigation/native';
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
+import ThemeIcon from '@atb/components/theme-icon/theme-icon';
+import useFontScale from '@atb/utils/use-font-scale';
 
 type SubNavigator<T extends ParamListBase> = {
   [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
@@ -32,9 +34,7 @@ export type TabNavigatorParams = {
     fromLocation: LocationWithMetadata;
     toLocation: LocationWithMetadata;
   };
-  Nearest: {
-    location: LocationWithMetadata;
-  };
+  Nearest: NavigatorScreenParams<NearbyStackParams>;
   Ticketing: undefined;
   Profile: SubNavigator<ProfileStackParams>;
 };
@@ -44,16 +44,17 @@ const NavigationRoot = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
   const {startScreen} = usePreferenceItems();
+  const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
+
   return (
     <Tab.Navigator
       tabBarOptions={{
-        activeTintColor: theme.colors.primary_3.backgroundColor,
+        labelPosition: 'below-icon',
+        activeTintColor: theme.colors.primary_2.backgroundColor,
+        inactiveTintColor: theme.text.colors.secondary,
         style: {
-          backgroundColor: theme.background.level0,
+          backgroundColor: theme.colors.background_0.backgroundColor,
           ...useBottomNavigationStyles(),
-        },
-        labelStyle: {
-          color: theme.text.colors.secondary,
         },
       }}
       initialRouteName={settingToRouteName(startScreen)}
@@ -61,22 +62,42 @@ const NavigationRoot = () => {
       <Tab.Screen
         name="Assistant"
         component={Assistant}
-        options={tabSettings(t(dictionary.navigation.assistant), AssistantIcon)}
+        options={tabSettings(
+          t(dictionary.navigation.assistant),
+          t(dictionary.navigation.assistant),
+          AssistantIcon,
+          lineHeight,
+        )}
       />
       <Tab.Screen
         name="Nearest"
         component={NearbyScreen}
-        options={tabSettings(t(dictionary.navigation.nearby), Nearby)}
+        options={tabSettings(
+          t(dictionary.navigation.nearby),
+          t(dictionary.navigation.nearby),
+          Nearby,
+          lineHeight,
+        )}
       />
       <Tab.Screen
         name="Ticketing"
         component={TicketingScreen}
-        options={tabSettings(t(dictionary.navigation.ticketing), Tickets)}
+        options={tabSettings(
+          t(dictionary.navigation.ticketing),
+          t(dictionary.navigation.ticketing),
+          Tickets,
+          lineHeight,
+        )}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={tabSettings(t(dictionary.navigation.profile), Profile)}
+        options={tabSettings(
+          t(dictionary.navigation.profile),
+          t(dictionary.navigation.profile_a11y),
+          Profile,
+          lineHeight,
+        )}
       />
     </Tab.Navigator>
   );
@@ -99,17 +120,20 @@ type TabSettings = {
 
 function tabSettings(
   tabBarLabel: string,
+  tabBarA11yLabel: string,
   Icon: (svg: SvgProps) => JSX.Element,
+  lineHeight: number,
 ): TabSettings {
   return {
     tabBarLabel: ({color}) => (
       <ThemeText
-        type="lead"
-        style={{color, textAlign: 'center', lineHeight: 14}}
+        type="body__secondary"
+        style={{color, textAlign: 'center', lineHeight}}
+        accessibilityLabel={tabBarA11yLabel}
       >
         {tabBarLabel}
       </ThemeText>
     ),
-    tabBarIcon: ({color}) => <Icon fill={color} />,
+    tabBarIcon: ({color}) => <ThemeIcon svg={Icon} fill={color} />,
   };
 }

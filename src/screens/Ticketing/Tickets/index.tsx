@@ -1,13 +1,13 @@
-import Header from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import {filterActiveFareContracts, useTicketState} from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import React, {useMemo} from 'react';
+import React from 'react';
 import {View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import TabBar from './TabBar';
 import {ActiveTickets, BuyTickets, ExpiredTickets} from './Tabs';
+import TicketInformationalOverlay from '@atb/screens/Ticketing/Tickets/TicketInformationalOverlay';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export const BuyTicketsScreenName = 'BuyTickets';
 export const ActiveTicketsScreenName = 'ActiveTickets';
@@ -24,13 +24,6 @@ const Tab = createMaterialTopTabNavigator<TicketTabsNavigatorParams>();
 export default function TicketTabs() {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {top} = useSafeAreaInsets();
-  const screenTopStyle = useMemo(
-    () => ({
-      paddingTop: top,
-    }),
-    [top],
-  );
 
   const {fareContracts} = useTicketState();
   const activeFareContracts = filterActiveFareContracts(fareContracts);
@@ -39,8 +32,8 @@ export default function TicketTabs() {
     : BuyTicketsScreenName;
 
   return (
-    <View style={[styles.container, screenTopStyle]}>
-      <Header
+    <View style={styles.container}>
+      <FullScreenHeader
         title={t(TicketsTexts.header.title)}
         rightButton={{type: 'chat'}}
         leftButton={{type: 'home'}}
@@ -53,23 +46,41 @@ export default function TicketTabs() {
         <Tab.Screen
           name={BuyTicketsScreenName}
           component={BuyTickets}
-          options={{tabBarLabel: t(TicketsTexts.buyTicketsTab.label)}}
+          options={{
+            tabBarLabel: t(TicketsTexts.buyTicketsTab.label),
+            tabBarAccessibilityLabel: t(TicketsTexts.buyTicketsTab.a11yLabel),
+          }}
         />
         <Tab.Screen
           name={ActiveTicketsScreenName}
           component={ActiveTickets}
-          options={{tabBarLabel: t(TicketsTexts.activeTicketsTab.label)}}
+          options={{
+            tabBarLabel: t(TicketsTexts.activeTicketsTab.label),
+            tabBarAccessibilityLabel: t(
+              TicketsTexts.activeTicketsTab.a11yLabel,
+            ),
+          }}
         />
         <Tab.Screen
           name={ExpiredTicketsScreenName}
           component={ExpiredTickets}
-          options={{tabBarLabel: t(TicketsTexts.expiredTicketsTab.label)}}
+          options={{
+            tabBarLabel: t(TicketsTexts.expiredTicketsTab.label),
+            tabBarAccessibilityLabel: t(
+              TicketsTexts.expiredTicketsTab.a11yLabel,
+            ),
+          }}
         />
       </Tab.Navigator>
+
+      <TicketInformationalOverlay />
     </View>
   );
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1, backgroundColor: theme.background.header},
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.background_gray.backgroundColor,
+  },
 }));

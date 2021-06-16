@@ -42,7 +42,7 @@ export default function SearchStopPlace({navigation}: SearchStopPlaceProps) {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.colors.background_1.backgroundColor,
     flex: 1,
   },
 }));

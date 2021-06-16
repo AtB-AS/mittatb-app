@@ -4,7 +4,6 @@ import {Duration, WalkingPerson} from '@atb/assets/svg/icons/transportation';
 import AccessibleText, {
   screenReaderPause,
 } from '@atb/components/accessible-text';
-import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
@@ -14,6 +13,7 @@ import {StyleSheet} from '@atb/theme';
 import {
   AssistantTexts,
   dictionary,
+  Language,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
@@ -30,8 +30,13 @@ import insets from '@atb/utils/insets';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {LegMode} from '@entur/sdk';
 import React from 'react';
-import {AccessibilityProps, View, ViewStyle} from 'react-native';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  AccessibilityProps,
+  View,
+  ViewStyle,
+  TouchableOpacity,
+} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -69,7 +74,7 @@ const ResultItemHeader: React.FC<{
   return (
     <View style={styles.resultHeader}>
       <ThemeText
-        type="lead"
+        type="body__secondary"
         color="secondary"
         style={styles.resultHeaderLabel}
         accessibilityLabel={t(
@@ -84,7 +89,7 @@ const ResultItemHeader: React.FC<{
       </ThemeText>
       <View style={styles.durationContainer}>
         <AccessibleText
-          type="lead"
+          type="body__secondary"
           color="secondary"
           prefix={t(AssistantTexts.results.resultItem.header.totalDuration)}
         >
@@ -109,18 +114,20 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   ...props
 }) => {
   const styles = useThemeStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   if (!tripPattern?.legs?.length) return null;
 
   return (
     <TouchableOpacity
+      accessibilityLabel={tripSummary(tripPattern, t, language)}
       accessibilityHint={t(
         AssistantTexts.results.resultItem.footer.detailsHint,
       )}
       onPress={onDetailsPressed}
+      accessible={true}
     >
-      <View style={styles.result} {...props}>
+      <View style={styles.result} {...props} accessible={false}>
         <ResultItemHeader tripPattern={tripPattern} />
         <View style={styles.scrollContainer}>
           <ScrollView
@@ -128,7 +135,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
             showsHorizontalScrollIndicator={false}
             hitSlop={insets.symmetric(12, 20)}
             contentContainerStyle={styles.detailsContainer}
-            accessibilityValue={{text: tripSummary(tripPattern, t)}}
+            {...screenReaderHidden}
           >
             {tripPattern.legs.map(function (leg, i) {
               const legOutput =
@@ -141,7 +148,6 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                 <View
                   style={styles.legOutput}
                   key={leg.serviceJourney?.id ?? leg.fromPlace.latitude}
-                  {...screenReaderHidden}
                 >
                   {legOutput}
                   <ThemeIcon svg={ChevronRight} size={'small'} />
@@ -167,7 +173,7 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
 
   return (
     <View style={styles.resultFooter}>
-      <ThemeText type={'lead'}>
+      <ThemeText type={'body__secondary'}>
         {t(
           AssistantTexts.results.resultItem.footer.fromLabel(
             quayName,
@@ -177,7 +183,7 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
       </ThemeText>
 
       <View style={styles.detailsTextWrapper}>
-        <ThemeText type="lead">
+        <ThemeText type="body__secondary">
           {t(AssistantTexts.results.resultItem.footer.detailsLabel)}
         </ThemeText>
         <ThemeIcon svg={ArrowRight} style={styles.detailsIcon} />
@@ -188,7 +194,7 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   result: {
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
     borderRadius: theme.border.radius.regular,
     marginTop: theme.spacings.medium,
   },
@@ -301,9 +307,6 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     flexDirection: 'row',
   },
-  lineDisplayName: {
-    fontWeight: '700',
-  },
   transportationIcon: {
     marginRight: theme.spacings.xSmall,
   },
@@ -319,8 +322,8 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
           subMode={leg.line?.transportSubmode}
         />
       </View>
-      <ThemeText type="body">
-        <LineDisplayName style={styles.lineDisplayName} leg={leg} />
+      <ThemeText type="body__primary--bold">
+        <LineDisplayName leg={leg} />
       </ThemeText>
     </View>
   );
@@ -350,31 +353,28 @@ function LineDisplayName({leg, style}: {leg: Leg; style?: ViewStyle}) {
   );
 }
 
-const tripSummary = (tripPattern: TripPattern, t: TranslateFunction) => {
+const tripSummary = (
+  tripPattern: TripPattern,
+  t: TranslateFunction,
+  language: Language,
+) => {
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
-  return `
+
+  const firstLeg = nonFootLegs[0];
+
+  return ` 
+  
     ${
-      !nonFootLegs.length
+      firstLeg
         ? t(
-            AssistantTexts.results.resultItem.journeySummary.legsDescription
-              .footLegsOnly,
-          )
-        : nonFootLegs.length === 1
-        ? t(
-            AssistantTexts.results.resultItem.journeySummary.legsDescription
-              .noSwitching,
-          )
-        : nonFootLegs.length === 2
-        ? t(
-            AssistantTexts.results.resultItem.journeySummary.legsDescription
-              .oneSwitch,
-          )
-        : t(
-            AssistantTexts.results.resultItem.journeySummary.legsDescription.someSwitches(
-              nonFootLegs.length,
+            AssistantTexts.results.resultItem.footer.fromLabel(
+              firstLeg.fromPlace.name ?? '',
+              formatToClock(firstLeg.expectedStartTime, language),
             ),
           )
-    }. ${screenReaderPause}
+        : ''
+    }
+   
     ${nonFootLegs
       ?.map((l) => {
         return `${t(getTranslatedModeName(l.mode))} ${
@@ -385,16 +385,42 @@ const tripSummary = (tripPattern: TripPattern, t: TranslateFunction) => {
                 ),
               )
             : ''
-        }`;
+        }
+        
+        ${l.fromEstimatedCall?.destinationDisplay?.frontText ?? l.line?.name}
+        
+        `;
       })
-      .join(', ')} ${screenReaderPause}
+      .join(', ')} 
+      
+      ${
+        !nonFootLegs.length
+          ? t(
+              AssistantTexts.results.resultItem.journeySummary.legsDescription
+                .footLegsOnly,
+            )
+          : nonFootLegs.length === 1
+          ? t(
+              AssistantTexts.results.resultItem.journeySummary.legsDescription
+                .noSwitching,
+            )
+          : nonFootLegs.length === 2
+          ? t(
+              AssistantTexts.results.resultItem.journeySummary.legsDescription
+                .oneSwitch,
+            )
+          : t(
+              AssistantTexts.results.resultItem.journeySummary.legsDescription.someSwitches(
+                nonFootLegs.length,
+              ),
+            )
+      }
+      
       ${t(
         AssistantTexts.results.resultItem.journeySummary.totalWalkDistance(
           tripPattern.walkDistance.toFixed(0),
         ),
       )}  ${screenReaderPause}
-     
-
   `;
 };
 

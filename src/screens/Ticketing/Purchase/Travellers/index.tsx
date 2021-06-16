@@ -1,23 +1,23 @@
 import SvgProfile from '@atb/assets/svg/icons/tab-bar/Profile';
 import Button from '@atb/components/button';
-import Header from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {TravellersTexts, useTranslation} from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
 import React from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../';
 import {createTravellersText} from '../Overview';
 import SingleTravellerSelection from './SingleTravellerSelection';
 import MultipleTravellersSelection from './MultipleTravellersSelection';
 import useUserCountState from './use-user-count-state';
 import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 
 export type TravellersProps = {
   navigation: DismissableStackNavigationProp<
@@ -32,7 +32,6 @@ const Travellers: React.FC<TravellersProps> = ({
   route: {params},
 }) => {
   const styles = useStyles();
-  const {theme} = useTheme();
   const {t, language} = useTranslation();
   const {travellerSelectionMode} = getPurchaseFlow(
     params.preassignedFareProduct,
@@ -40,17 +39,25 @@ const Travellers: React.FC<TravellersProps> = ({
 
   const userCountState = useUserCountState(params.userProfilesWithCount);
 
-  const {top: safeAreaTop, bottom: safeAreBottom} = useSafeAreaInsets();
-
   return (
-    <View style={[styles.container, {paddingTop: safeAreaTop}]}>
-      <Header
+    <View style={styles.container}>
+      <FullScreenHeader
         title={t(TravellersTexts.header.title)}
         leftButton={{type: 'back'}}
       />
 
       <ScrollView style={styles.travellerCounters}>
-        <View style={styles.summarySection}>
+        <View
+          style={styles.summarySection}
+          accessible={true}
+          accessibilityLabel={createTravellersText(
+            userCountState.userProfilesWithCount,
+            false,
+            true,
+            t,
+            language,
+          )}
+        >
           <Sections.Section>
             <Sections.GenericItem>
               <View style={styles.summaryItem}>
@@ -58,6 +65,8 @@ const Travellers: React.FC<TravellersProps> = ({
                 <ThemeText>
                   {createTravellersText(
                     userCountState.userProfilesWithCount,
+                    true,
+                    false,
                     t,
                     language,
                   )}
@@ -74,14 +83,7 @@ const Travellers: React.FC<TravellersProps> = ({
         )}
       </ScrollView>
 
-      <View
-        style={[
-          styles.saveButton,
-          {
-            paddingBottom: Math.max(safeAreBottom, theme.spacings.medium),
-          },
-        ]}
-      >
+      <FullScreenFooter>
         <Button
           color="primary_2"
           text={t(TravellersTexts.primaryButton.text)}
@@ -93,7 +95,7 @@ const Travellers: React.FC<TravellersProps> = ({
             });
           }}
         />
-      </View>
+      </FullScreenFooter>
     </View>
   );
 };
@@ -101,7 +103,7 @@ const Travellers: React.FC<TravellersProps> = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
   },
   travellerCounters: {
     margin: theme.spacings.medium,

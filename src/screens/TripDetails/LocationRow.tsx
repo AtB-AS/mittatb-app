@@ -45,7 +45,7 @@ const LocationRow: React.FC<{
             {time}
           </ThemeText>
           {aimedTime && (
-            <ThemeText type="label" style={styles.aimedTime}>
+            <ThemeText type="body__tertiary" style={styles.aimedTime}>
               {aimedTime}
             </ThemeText>
           )}
@@ -56,7 +56,7 @@ const LocationRow: React.FC<{
             iconContainerStyle,
             {
               backgroundColor: !dashThroughIcon
-                ? theme.background.level2
+                ? theme.colors.background_2.backgroundColor
                 : 'transparent',
             },
           ]}

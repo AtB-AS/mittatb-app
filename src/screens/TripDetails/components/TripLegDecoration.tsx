@@ -51,19 +51,20 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     left:
       theme.tripLegDetail.labelWidth +
       theme.tripLegDetail.decorationContainerWidth / 2,
-    backgroundColor: theme.background.accent,
   },
   decorationMarker: {
     width: theme.tripLegDetail.decorationLineEndWidth,
     left: -theme.tripLegDetail.decorationLineWidth,
     height: theme.tripLegDetail.decorationLineWidth,
-    backgroundColor: theme.background.accent,
   },
   decorationStart: {
     position: 'absolute',
     top: 0,
   },
-  decorationCenter: {},
+  decorationCenter: {
+    position: 'absolute',
+    top: theme.spacings.large + theme.spacings.small,
+  },
   decorationEnd: {
     position: 'absolute',
     bottom: 0,

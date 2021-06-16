@@ -8,8 +8,10 @@ export type StorageModel = {
   '@ATB_user_preferences': string;
   install_id: string;
   customer_id: string;
-  onboarded: string;
+  '@ATB_onboarded': string;
   '@ATB_search-history': string;
+  '@ATB_journey_search-history': string;
+  '@ATB_ticket_informational_accepted': string;
 };
 
 export type StorageModelTypes = keyof StorageModel;

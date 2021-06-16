@@ -1,5 +1,4 @@
 import Button from '@atb/components/button';
-import Header from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import MessageBox, {MessageBoxProps} from '@atb/components/message-box';
 import {StyleSheet} from '@atb/theme';
@@ -12,8 +11,8 @@ import {
 import {RouteProp} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {TicketModalNavigationProp, TicketModalStackParams} from './';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export type ReceiptScreenRouteParams = {
   orderId: string;
@@ -63,11 +62,10 @@ export default function ReceiptScreen({navigation, route}: Props) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header
+    <View style={styles.container}>
+      <FullScreenHeader
         leftButton={{type: 'back'}}
         title={t(TicketTexts.receipt.header.title)}
-        style={styles.header}
       />
       <View style={styles.content}>
         <MessageBox {...translateStateToMessage(state, t, email, reference)} />
@@ -76,6 +74,7 @@ export default function ReceiptScreen({navigation, route}: Props) {
             label={t(TicketTexts.receipt.inputLabel)}
             value={email}
             onChangeText={setEmail}
+            keyboardType="email-address"
             autoCapitalize="none"
             autoCompleteType="email"
             autoCorrect={false}
@@ -86,9 +85,10 @@ export default function ReceiptScreen({navigation, route}: Props) {
           text={t(TicketTexts.receipt.sendButton)}
           onPress={onSend}
           disabled={state === 'loading'}
+          color="primary_2"
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -123,12 +123,9 @@ function translateStateToMessage(
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  header: {
-    backgroundColor: theme.background.level2,
-  },
   container: {
     flex: 1,
-    backgroundColor: theme.background.level2,
+    backgroundColor: theme.colors.background_2.backgroundColor,
   },
   content: {
     padding: theme.spacings.medium,

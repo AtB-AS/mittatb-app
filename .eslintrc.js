@@ -37,6 +37,7 @@ module.exports = {
       'warn',
       {
         SafeAreaView: 'react-native-safe-area-context',
+        TouchableOpacity: 'react-native',
       },
     ],
   },

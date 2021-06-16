@@ -26,7 +26,7 @@ const VenueResults: React.FC<Props> = ({locationsAndTariffZones, onSelect}) => {
   return (
     <>
       <View accessibilityRole="header" style={styles.subHeader}>
-        <ThemeText type="lead" color="secondary">
+        <ThemeText type="body__secondary" color="secondary">
           {t(TariffZoneSearchTexts.results.heading)}
         </ThemeText>
       </View>
@@ -60,10 +60,10 @@ const VenueResults: React.FC<Props> = ({locationsAndTariffZones, onSelect}) => {
                   />
                 </View>
                 <View style={styles.nameContainer}>
-                  <ThemeText type={'paragraphHeadline'}>
+                  <ThemeText type={'body__primary--bold'}>
                     {location.name}
                   </ThemeText>
-                  <ThemeText type={'lead'}>
+                  <ThemeText type={'body__secondary'}>
                     {t(
                       TariffZoneSearchTexts.results.item.zoneLabel(
                         getReferenceDataName(tariffZone, language),

@@ -1,5 +1,4 @@
 import {ShinyTicketBanner} from '@atb/assets/svg/illustrations';
-import ThemeText from '@atb/components/text';
 import MessageBox from '@atb/components/message-box';
 import {StyleSheet} from '@atb/theme';
 import {UpgradeSplashTexts, useTranslation} from '@atb/translations';
@@ -20,53 +19,23 @@ export default function UpgradeSplash() {
           height={windowWidth / 2}
         ></ShinyTicketBanner>
       </View>
-      <View style={styles.contentContainer}>
-        <View style={styles.textContent}>
-          <ThemeText style={[styles.text, styles.bold]}>
-            {t(UpgradeSplashTexts.title)}
-          </ThemeText>
-          <MessageBox
-            type="warning"
-            message={t(UpgradeSplashTexts.paragraph1)}
-          />
-        </View>
-      </View>
+      <MessageBox
+        type="warning"
+        title={t(UpgradeSplashTexts.title)}
+        message={t(UpgradeSplashTexts.paragraph1)}
+      />
     </View>
   );
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1, backgroundColor: theme.background.accent},
-  scrollContainer: {
-    flexGrow: 1,
-  },
-  contentContainer: {
-    paddingVertical: theme.spacings.xLarge,
+  container: {
     flex: 1,
-    height: '100%',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    backgroundColor: theme.colors.background_1.backgroundColor,
+    padding: theme.spacings.medium,
   },
-  textContent: {
-    paddingHorizontal: theme.spacings.large,
-    backgroundColor: theme.background.accent,
-    marginBottom: theme.spacings.xLarge,
-    boxShadow: 'inset 0',
-  },
-  buttonContainer: {
-    paddingHorizontal: theme.spacings.large,
-    width: '100%',
-    marginBottom: theme.spacings.medium,
-  },
-  text: {
-    textAlign: 'center',
-    marginBottom: theme.spacings.large,
-  },
-  bold: {fontWeight: 'bold'},
   bannerContainer: {
     position: 'absolute',
     bottom: theme.spacings.large,
   },
-  underline: {textDecorationLine: 'underline'},
-  button: {marginBottom: theme.spacings.small},
 }));

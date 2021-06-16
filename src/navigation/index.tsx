@@ -20,23 +20,26 @@ import {
   NavigationContainerRef,
   NavigatorScreenParams,
   useLinking,
+  DefaultTheme,
 } from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React, {useEffect, useRef} from 'react';
 import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
-import TabNavigator from './TabNavigator';
+import TabNavigator, {TabNavigatorParams} from './TabNavigator';
 import transitionSpec from './transitionSpec';
-import Login, {LoginRootParams} from '@atb/screens/Profile/Login';
+import LoginInAppStack, {
+  LoginInAppStackParams,
+} from '@atb/login/in-app/LoginInAppStack';
 
 export type RootStackParamList = {
   NotFound: undefined;
   Onboarding: undefined;
-  TabNavigator: undefined;
+  TabNavigator: NavigatorScreenParams<TabNavigatorParams>;
   LocationSearch: LocationSearchParams;
   SortableFavoriteList: undefined;
   AddEditFavorite: NavigatorScreenParams<AddEditFavoriteRootParams>;
-  Login: NavigatorScreenParams<LoginRootParams>;
+  LoginInApp: NavigatorScreenParams<LoginInAppStackParams>;
   TicketPurchase: NavigatorScreenParams<TicketingStackParams>;
   TicketModal: NavigatorScreenParams<TicketModalStackParams>;
 };
@@ -64,15 +67,31 @@ const NavigationRoot = () => {
     return null;
   }
 
+  const statusBarColor = onboarded
+    ? theme.colors.background_gray.backgroundColor
+    : theme.colors.primary_2.backgroundColor;
+
+  const ReactNavigationTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: theme.colors.background_1.backgroundColor,
+    },
+  };
+
   return (
     <>
       <StatusBar
         barStyle={theme.statusBarStyle}
         translucent={true}
-        backgroundColor={theme.background.header}
+        backgroundColor={statusBarColor}
       />
       <Host>
-        <NavigationContainer ref={ref} onStateChange={trackNavigation}>
+        <NavigationContainer
+          ref={ref}
+          onStateChange={trackNavigation}
+          theme={ReactNavigationTheme}
+        >
           <Stack.Navigator
             mode={isLoading || !onboarded ? 'card' : 'modal'}
             screenOptions={{headerShown: false}}
@@ -85,43 +104,21 @@ const NavigationRoot = () => {
                 <Stack.Screen
                   name="LocationSearch"
                   component={LocationSearch}
-                  options={{
-                    transitionSpec: {
-                      open: transitionSpec,
-                      close: transitionSpec,
-                    },
-                  }}
+                  options={TransitionPresets.ModalSlideFromBottomIOS}
                 />
                 <Stack.Screen
                   name="TicketPurchase"
                   component={TicketPurchase}
-                  options={{
-                    transitionSpec: {
-                      open: transitionSpec,
-                      close: transitionSpec,
-                    },
-                  }}
                 />
                 <Stack.Screen
                   name="TicketModal"
                   component={TicketModalScreen}
-                  options={{
-                    transitionSpec: {
-                      open: transitionSpec,
-                      close: transitionSpec,
-                    },
-                  }}
                 />
 
                 <Stack.Screen
                   name="AddEditFavorite"
                   component={AddEditFavorite}
-                  options={{
-                    transitionSpec: {
-                      open: transitionSpec,
-                      close: transitionSpec,
-                    },
-                  }}
+                  options={TransitionPresets.ModalSlideFromBottomIOS}
                 />
                 <Stack.Screen
                   name="SortableFavoriteList"
@@ -137,8 +134,8 @@ const NavigationRoot = () => {
                   }}
                 />
                 <Stack.Screen
-                  name="Login"
-                  component={Login}
+                  name="LoginInApp"
+                  component={LoginInAppStack}
                   options={{
                     transitionSpec: {
                       open: transitionSpec,

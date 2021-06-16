@@ -8,8 +8,8 @@ const LanguageSettingsTexts = {
     'Use my phone settings',
   ),
   options: {
-    nb: _('Norsk bokmål'),
-    en: _('English'),
+    nb: _('Norsk bokmål', 'Norsk bokmål'),
+    en: _('English', 'English'),
   },
 };
 export default LanguageSettingsTexts;

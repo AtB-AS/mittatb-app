@@ -1,13 +1,16 @@
 import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
 import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
+import {Info, Warning} from '@atb/assets/svg/situations';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
+import {TinyMessageBox} from '@atb/components/message-box';
 import PaginatedDetailsHeader from '@atb/components/pagination';
-import ScreenHeader from '@atb/components/screen-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
+import {searchByStopPlace} from '@atb/geocoder/search-for-location';
 import {
   EstimatedCall,
+  Quay,
   ServiceJourneyMapInfoData,
   Situation,
   TransportMode,
@@ -23,18 +26,19 @@ import {
   NavigationProp,
   RouteProp,
   useIsFocused,
+  useNavigation,
 } from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {DetailsStackParams} from '..';
+import {DetailsModalNavigationProp, DetailsStackParams} from '..';
 import Time from '../components/Time';
 import TripLegDecoration from '../components/TripLegDecoration';
 import TripRow from '../components/TripRow';
 import CompactMap from '../Map/CompactMap';
-import SituationRow from '../SituationRow';
 import {ServiceJourneyDeparture} from './types';
 import useDepartureData, {CallListGroup} from './use-departure-data';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -80,12 +84,10 @@ export default function DepartureDetails({navigation, route}: Props) {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.header, {paddingTop}]}>
-        <ScreenHeader
-          leftButton={{type: 'back'}}
-          title={title ?? t(DepartureDetailsTexts.header.notFound)}
-        />
-      </View>
+      <FullScreenHeader
+        leftButton={{type: 'back'}}
+        title={title ?? t(DepartureDetailsTexts.header.notFound)}
+      />
       <ContentWithDisappearingHeader
         header={
           mapData && (
@@ -242,12 +244,16 @@ function TripItem({
   isStart,
   isEnd,
 }: TripItemProps) {
+  const navigation = useNavigation<DetailsModalNavigationProp>();
+
   const styles = useStopsStyle();
   const isBetween = !isStart && !isEnd;
   const iconColor = useTransportationColor(
     type === 'passed' || type === 'after' ? undefined : mode,
     subMode,
   );
+
+  const showSituations = type !== 'passed' && call.situations.length > 0;
 
   return (
     <View style={[styles.place, isStart && styles.startPlace]}>
@@ -267,19 +273,37 @@ function TripItem({
         }
         alignChildren={isStart ? 'flex-start' : isEnd ? 'flex-end' : 'center'}
         style={[styles.row, isBetween && styles.middleRow]}
+        onPress={() => handleQuayPress(call.quay)}
       >
         <ThemeText>{getQuayName(call.quay)} </ThemeText>
       </TripRow>
-
-      {type !== 'passed' && (
-        <SituationRow
-          situations={call.situations}
-          parentSituations={parentSituations}
-        />
+      {showSituations && (
+        <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
+          <SituationMessages mode="no-icon" situations={call.situations} />
+        </TripRow>
       )}
+      {call.notices &&
+        call.notices.map((notice) => {
+          return (
+            <TripRow rowLabel={<ThemeIcon svg={Info} />}>
+              <TinyMessageBox type="info" message={notice.text} />
+            </TripRow>
+          );
+        })}
+
       {collapseButton}
     </View>
   );
+
+  async function handleQuayPress(quay: Quay | undefined) {
+    const location = await searchByStopPlace(quay?.stopPlace);
+    if (!location) {
+      return;
+    }
+    navigation.navigate('QuayDepartures', {
+      location,
+    });
+  }
 }
 
 type CollapseButtonRowProps = {
@@ -334,10 +358,10 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
 const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
   },
   header: {
-    backgroundColor: theme.background.header,
+    backgroundColor: theme.colors.primary_2.backgroundColor,
   },
   startPlace: {
     marginTop: theme.spacings.large,
@@ -358,7 +382,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.small,
   },
   allGroups: {
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
     marginBottom: theme.spacings.xLarge,
   },
   spinner: {

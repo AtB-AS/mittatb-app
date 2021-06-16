@@ -2,7 +2,7 @@ import {ViewStyle} from 'react-native';
 import {Theme, useTheme} from '@atb/theme';
 import {RadiusSizes} from '@atb/theme/colors';
 
-export type ContainerSizingType = 'inline' | 'compact' | 'block';
+export type ContainerSizingType = 'inline' | 'compact' | 'block' | 'spacious';
 export type RadiusMode = 'top' | 'bottom' | 'top-bottom';
 
 export type SectionItemProps = {
@@ -28,14 +28,15 @@ export default function useSectionItem({
   const {theme} = useTheme();
   const isInline = type === 'compact' || type === 'inline';
 
-  const spacing =
-    type === 'compact' ? theme.spacings.small : theme.spacings.medium;
+  const spacing = useSpacing(type);
 
   const topContainer: ViewStyle = {
     padding: spacing,
     alignSelf: isInline ? 'flex-start' : undefined,
     ...mapToBorderRadius(theme, radiusSize, radius),
-    backgroundColor: transparent ? undefined : theme.background.level0,
+    backgroundColor: transparent
+      ? undefined
+      : theme.colors.background_0.backgroundColor,
   };
   const contentContainer: ViewStyle = {
     flex: isInline ? undefined : 1,
@@ -46,6 +47,19 @@ export default function useSectionItem({
     contentContainer,
     spacing,
   };
+}
+
+function useSpacing(type: ContainerSizingType) {
+  const {theme} = useTheme();
+  switch (type) {
+    case 'compact':
+      return theme.spacings.small;
+    case 'inline':
+    case 'block':
+      return theme.spacings.medium;
+    case 'spacious':
+      return theme.spacings.large;
+  }
 }
 
 function mapToBorderRadius(

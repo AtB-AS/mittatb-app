@@ -11,6 +11,7 @@ const dictionary = {
     nearby: _(`Av${softhyphen}ganger`, 'Departures'),
     ticketing: _('Billetter', 'Tickets'),
     profile: _('Mitt AtB', 'My AtB'),
+    profile_a11y: _('Mitt ATB', 'My ATB'),
   },
   missingRealTimePrefix: _('ca. ', 'ca. '),
   travel: {
@@ -39,11 +40,11 @@ const dictionary = {
       now: _('Nå', 'Now'),
       short: {
         year: _('år', 'y'),
-        month: _('m'),
+        month: _('m', 'm'),
         week: _('u', 'w'),
-        day: _('d'),
+        day: _('d', 'd'),
         hour: _('t', 'h'),
-        minute: _('min'),
+        minute: _('min', 'min'),
         second: _('sek', 'sec'),
         ms: _('ms', 'msec'),
       },

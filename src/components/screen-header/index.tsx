@@ -10,48 +10,69 @@ import HeaderButton, {ButtonModes, HeaderButtonProps} from './HeaderButton';
 import ThemeText from '@atb/components/text';
 import {AlertContext} from '@atb/alerts/AlertsContext';
 import AlertBox from '@atb/alerts/AlertBox';
+import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {ThemeColor} from '@atb/theme/colors';
 
 export {default as AnimatedScreenHeader} from './animated-header';
 
 export type LeftButtonProps = HeaderButtonProps & {
-  type: Exclude<ButtonModes, 'chat'>;
+  type: Exclude<ButtonModes, 'chat' | 'skip'>;
 };
 
-export type RightButtonProps = Omit<HeaderButtonProps, 'onPress'> & {
-  type: 'chat';
+export type RightButtonProps = HeaderButtonProps & {
+  type: 'chat' | 'skip';
 };
 
 export type ScreenHeaderProps = {
   leftButton?: LeftButtonProps;
   rightButton?: RightButtonProps;
-  title: React.ReactNode;
+  title?: string;
+  titleA11yLabel?: string;
   /**
    * For specifying the alert context for alerts that should be shown in this
    * header. If no context is specified then no alerts are shown.
    */
   alertContext?: AlertContext;
   style?: ViewStyle;
+  color?: ThemeColor;
+  setFocusOnLoad?: boolean;
 };
 
 const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   leftButton,
   rightButton,
   title,
+  titleA11yLabel,
   alertContext,
   style,
+  color,
+  setFocusOnLoad,
 }) => {
   const css = useHeaderStyle();
   const {theme} = useTheme();
+  const themeColor = color ?? 'background_gray';
 
   const {buttonsHeight, buttonsTopOffset, setLayoutFor} = useHeaderLayouts();
 
-  const leftIcon = leftButton ? <HeaderButton {...leftButton} /> : <View />;
-  const rightIcon = rightButton ? <HeaderButton {...rightButton} /> : <View />;
+  const leftIcon = leftButton ? (
+    <HeaderButton color={themeColor} {...leftButton} />
+  ) : (
+    <View />
+  );
+  const rightIcon = rightButton ? (
+    <HeaderButton color={themeColor} {...rightButton} />
+  ) : (
+    <View />
+  );
+
+  const focusRef = useFocusOnLoad(setFocusOnLoad);
+
+  const backgroundColor = theme.colors[themeColor].backgroundColor;
 
   return (
-    <View style={[css.container, style]}>
+    <View style={[css.container, style, {backgroundColor}]}>
       <View
-        accessible={true}
+        accessible={!!title}
         accessibilityRole="header"
         style={[
           css.headerTitle,
@@ -61,9 +82,16 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
           },
         ]}
         onLayout={setLayoutFor('container')}
+        ref={focusRef}
       >
-        <ThemeText onLayout={setLayoutFor('title')} type="paragraphHeadline">
-          {title}
+        <ThemeText
+          accessible={!!title}
+          accessibilityLabel={titleA11yLabel}
+          onLayout={setLayoutFor('title')}
+          type="body__primary--bold"
+          color={themeColor}
+        >
+          {title ?? '\u00a0'}
         </ThemeText>
       </View>
       <View

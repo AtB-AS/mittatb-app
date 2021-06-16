@@ -15,7 +15,6 @@ import {
 
 export type RemoteConfigContextState = Pick<
   RemoteConfig,
-  | 'enable_ticketing'
   | 'enable_intercom'
   | 'enable_i18n'
   | 'enable_creditcard'
@@ -70,6 +69,7 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
       ) {
         Bugsnag.notify(e, function (event) {
           event.addMetadata('metadata', {userInfo});
+          event.severity = 'info';
         });
       }
     }

@@ -9,6 +9,8 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Animated,
   Easing,
+  Image,
+  ImageBackground,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Platform,
@@ -22,11 +24,14 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import {
-  LeftButtonProps,
   AnimatedScreenHeader,
+  LeftButtonProps,
 } from '@atb/components/screen-header';
 import {AlertContext} from '@atb/alerts/AlertsContext';
 import AlertBox from '@atb/alerts/AlertBox';
+import {ThemeColor} from '@atb/theme/colors';
+import LinearGradient from 'react-native-linear-gradient';
+import hexToRgba from 'hex-to-rgba';
 
 type Props = {
   renderHeader(
@@ -60,6 +65,7 @@ type Props = {
 };
 
 const SCROLL_OFFSET_HEADER_ANIMATION = 80;
+const themeColor: ThemeColor = 'background_gray';
 
 type Scrollable = {
   scrollTo(opts: {y: number}): void;
@@ -193,7 +199,7 @@ const DisappearingHeader: React.FC<Props> = ({
         <View onLayout={onScreenHeaderLayout}>
           <AnimatedScreenHeader
             title={headerTitle}
-            rightButton={{type: 'chat'}}
+            rightButton={{type: 'chat', color: themeColor}}
             alternativeTitleComponent={alternativeTitleComponent}
             scrollRef={scrollYRef}
             leftButton={leftButton}
@@ -212,21 +218,32 @@ const DisappearingHeader: React.FC<Props> = ({
               {height: boxHeight},
             ]}
           >
-            <View style={styles.bannerContainer}>
-              <SvgBanner
-                width={windowWidth}
-                height={windowWidth / 2}
-                opacity={0.2}
-              />
-            </View>
+            <ImageBackground
+              source={require('../../../assets/assistant_background.jpeg')}
+              style={styles.backgroundImage}
+            >
+              <View style={{flex: 1}}>
+                <LinearGradient
+                  style={styles.backgroundImageGradient}
+                  colors={[
+                    'transparent',
+                    'transparent',
+                    'transparent',
+                    hexToRgba(theme.colors.background_gray.backgroundColor, 1),
+                  ]}
+                />
+                <ScrollView style={styles.highlightComponent}>
+                  {highlightComponent}
+                </ScrollView>
+              </View>
 
-            <ScrollView style={styles.highlightComponent}>
-              {highlightComponent}
-            </ScrollView>
-
-            <View onLayout={onHeaderContentLayout}>
-              {renderHeader(fullheightTransitioned, isAnimating)}
-            </View>
+              <View
+                onLayout={onHeaderContentLayout}
+                style={styles.headerContent}
+              >
+                {renderHeader(fullheightTransitioned, isAnimating)}
+              </View>
+            </ImageBackground>
           </Animated.View>
 
           {useScroll ? (
@@ -239,7 +256,7 @@ const DisappearingHeader: React.FC<Props> = ({
                   refreshing={isRefreshing}
                   onRefresh={onRefresh}
                   progressViewOffset={contentHeight}
-                  tintColor={theme.text.colors.primary}
+                  tintColor={theme.colors[themeColor].color}
                 />
               }
               onScroll={Animated.event(
@@ -292,18 +309,18 @@ const hasReachedEnd = (
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   screen: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.colors.background_1.backgroundColor,
     flexGrow: 1,
   },
   alertBoxContainer: {
-    backgroundColor: theme.background.header,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
   },
   alertBox: {
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
   topBorder: {
-    backgroundColor: theme.background.header,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
   },
   bannerContainer: {
     position: 'absolute',
@@ -316,10 +333,23 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     margin: theme.spacings.medium,
   },
 
+  backgroundImage: {height: '100%'},
+
+  backgroundImageGradient: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+
   content: {
     flex: 1,
     overflow: 'hidden',
     position: 'relative',
+  },
+  headerContent: {
+    backgroundColor: theme.colors[themeColor].backgroundColor,
   },
   header: {
     position: 'absolute',
@@ -329,11 +359,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     overflow: 'hidden',
     zIndex: 2,
     elevated: 1,
-    backgroundColor: theme.background.header,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
     justifyContent: 'space-between',
   },
   container: {
-    backgroundColor: theme.background.level1,
+    backgroundColor: theme.colors[themeColor].backgroundColor,
     paddingBottom: 0,
     flexGrow: 1,
   },

@@ -13,6 +13,7 @@ import TicketInfo from '../TicketInfo';
 import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
 import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
+import {screenReaderPause} from '@atb/components/accessible-text';
 
 type Props = {
   fareContract: FareContract;
@@ -35,6 +36,8 @@ const DetailsContent: React.FC<Props> = ({
     const validTo = firstTravelRight.endDateTime.toMillis();
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
 
+    const orderIdText = t(TicketTexts.details.orderId(fc.orderId));
+
     return (
       <Sections.Section withBottomPadding>
         <Sections.GenericItem>
@@ -56,21 +59,26 @@ const DetailsContent: React.FC<Props> = ({
           />
         </Sections.GenericItem>
         <Sections.GenericItem>
-          <ThemeText>{t(TicketTexts.details.orderId(fc.orderId))}</ThemeText>
-          <ThemeText type="lead" color="secondary">
-            {t(
-              TicketTexts.details.purchaseTime(
-                formatToLongDateTime(
-                  fromUnixTime(fc.created.toMillis() / 1000),
-                  language,
+          <View accessible={true}>
+            <ThemeText accessibilityLabel={`${orderIdText},`}>
+              {orderIdText}
+            </ThemeText>
+            <ThemeText type="body__secondary" color="secondary">
+              {t(
+                TicketTexts.details.purchaseTime(
+                  formatToLongDateTime(
+                    fromUnixTime(fc.created.toMillis() / 1000),
+                    language,
+                  ),
                 ),
-              ),
-            )}
-          </ThemeText>
+              )}
+            </ThemeText>
+          </View>
         </Sections.GenericItem>
         <Sections.LinkItem
           text={t(TicketTexts.details.askForReceipt)}
           onPress={onReceiptNavigate}
+          accessibility={{accessibilityRole: 'button'}}
         />
         {validityStatus === 'valid' && qrCodeSvg && (
           <Sections.GenericItem>

@@ -23,6 +23,7 @@ const PurchaseOverviewTexts = {
     ),
   },
   travellers: {
+    prefix: _('Nåværende valg: ', 'Current selection: '),
     noTravellers: _(`Ingen reisende`, `No travellers`),
     travellersCount: (count: number) =>
       _(`${count} reisende`, `${count} travellers`),

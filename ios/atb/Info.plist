@@ -66,11 +66,11 @@
 		</dict>
 	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Vi trenger din posisjon for å lage reiseruter</string>
+	<string>Ved å tillate deling av posisjon kan du finne nærmeste holdeplass og planlegge reisen fra din lokasjon</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Vi trenger din posisjon for å lage reiseruter</string>
+	<string>Ved å tillate deling av posisjon kan du finne nærmeste holdeplass og planlegge reisen fra din lokasjon</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Vi trenger din posisjon for å lage reiseruter</string>
+	<string>Ved å tillate deling av posisjon kan du finne nærmeste holdeplass og planlegge reisen fra din lokasjon</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Send bilder for å hjelpe til med å løse problemer i appen</string>
 	<key>UIBackgroundModes</key>

@@ -16,6 +16,9 @@ import {RootStackParamList} from '../navigation';
 import {StyleSheet, useTheme} from '../theme';
 import {FavoriteTexts, useTranslation} from '../translations';
 import useDisableMapCheck from '../utils/use-disable-map-check';
+import {ThemeColor} from '@atb/theme/colors';
+
+const themeColor: ThemeColor = 'primary_2';
 
 type Props = {
   onSelectLocation: (location: LocationWithMetadata) => void;
@@ -51,7 +54,8 @@ const FavoriteChips: React.FC<Props> = ({
         <View style={[styles.staticChipsContainer, contentContainerStyle]}>
           {activeType('location') && (
             <FavoriteChip
-              color="secondary_1"
+              color={themeColor}
+              mode="secondary"
               text={t(FavoriteTexts.chips.currentLocation)}
               accessibilityRole="button"
               accessibilityHint={chipActionHint ?? ''}
@@ -65,7 +69,8 @@ const FavoriteChips: React.FC<Props> = ({
               accessibilityRole="button"
               icon={MapPointPin}
               onPress={onMapSelection}
-              color="secondary_1"
+              color={themeColor}
+              mode="secondary"
             />
           )}
         </View>
@@ -79,7 +84,7 @@ const FavoriteChips: React.FC<Props> = ({
         {activeType('favorites') &&
           favorites.map((fav, i) => (
             <FavoriteChip
-              color="primary_3"
+              color={themeColor}
               key={fav.name}
               text={fav.name ?? ''}
               accessibilityLabel={'Favoritt: ' + fav.name + screenReaderPause}
@@ -102,6 +107,7 @@ const FavoriteChips: React.FC<Props> = ({
           ))}
         {activeType('add-favorite') && (
           <FavoriteChip
+            color={themeColor}
             mode="secondary"
             text={t(FavoriteTexts.chips.addFavorite)}
             accessibilityRole="button"

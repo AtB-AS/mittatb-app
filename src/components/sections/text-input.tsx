@@ -1,5 +1,6 @@
-import React, {forwardRef, useState} from 'react';
+import React, {forwardRef, useRef, useState} from 'react';
 import {
+  AccessibilityInfo,
   NativeSyntheticEvent,
   Platform,
   TextInput as InternalTextInput,
@@ -15,6 +16,7 @@ import ThemeText, {MAX_FONT_SCALE} from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {SectionItem, useSectionItem} from './section-utils';
 import {SectionTexts, useTranslation} from '@atb/translations';
+import composeRefs from '@seznam/compose-react-refs';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -39,13 +41,26 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
       style,
       ...props
     },
-    ref,
+    forwardedRef,
   ) => {
     const {topContainer, spacing, contentContainer} = useSectionItem(props);
     const {theme, themeName} = useTheme();
     const styles = useInputStyle(theme, themeName);
     const [isFocused, setIsFocused] = useState(Boolean(props?.autoFocus));
     const {t} = useTranslation();
+    const myRef = useRef<InternalTextInput>(null);
+    const combinedRef = composeRefs<InternalTextInput>(forwardedRef, myRef);
+
+    function accessibilityEscapeKeyboard() {
+      setTimeout(
+        () =>
+          AccessibilityInfo.announceForAccessibility(
+            t(SectionTexts.textInput.closeKeyboard),
+          ),
+        50,
+      );
+      myRef.current?.blur();
+    }
 
     const onFocusEvent = (e: FocusEvent) => {
       setIsFocused(true);
@@ -88,12 +103,13 @@ const TextInput = forwardRef<InternalTextInput, TextProps>(
           containerPadding,
           borderColor,
         ]}
+        onAccessibilityEscape={accessibilityEscapeKeyboard}
       >
-        <ThemeText type="lead" style={styles.label}>
+        <ThemeText type="body__secondary" style={styles.label}>
           {label}
         </ThemeText>
         <InternalTextInput
-          ref={ref}
+          ref={combinedRef}
           style={[
             styles.input,
             inlineLabel ? contentContainer : undefined,
@@ -131,12 +147,12 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     color: theme.text.colors.primary,
     paddingRight: 40,
 
-    fontSize: theme.text.body.fontSize,
+    fontSize: theme.typography.body__primary.fontSize,
   },
   container: {
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
     borderWidth: theme.border.width.slim,
-    borderColor: theme.background.level0,
+    borderColor: theme.colors.background_0.backgroundColor,
   },
   containerInline: {
     alignItems: 'center',
@@ -148,6 +164,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   },
   label: {
     minWidth: 60 - theme.spacings.medium,
+    paddingRight: theme.spacings.xSmall,
   },
   inputClear: {
     position: 'absolute',

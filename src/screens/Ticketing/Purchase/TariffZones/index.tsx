@@ -35,6 +35,8 @@ import React, {useEffect, useRef, useState} from 'react';
 import {PixelRatio, Platform, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../';
+import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
+import TariffZoneResults from '@atb/screens/Ticketing/Purchase/TariffZones/search/TariffZoneResults';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
@@ -179,7 +181,11 @@ const destinationPickerValue = (
       ),
     );
   } else if (fromTariffZone.id === toTariffZone.id && !toTariffZone.venueName) {
-    return t(TariffZonesTexts.location.destinationPicker.value.noVenueSameZone);
+    return t(
+      TariffZonesTexts.location.destinationPicker.value.noVenueSameZone(
+        getReferenceDataName(toTariffZone, language),
+      ),
+    );
   } else if (toTariffZone.venueName) {
     return t(
       TariffZonesTexts.location.departurePicker.value.withVenue(
@@ -315,12 +321,13 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
   const styles = useMapStyles();
   const {t, language} = useTranslation();
   const {theme} = useTheme();
+  const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   const featureCollection = mapZonesToFeatureCollection(tariffZones, language);
 
   return (
     <View style={styles.container}>
-      <View style={{backgroundColor: theme.background.header}}>
+      <View style={styles.headerContainer}>
         <FullScreenHeader
           title={t(TariffZonesTexts.header.title)}
           leftButton={{type: 'back'}}
@@ -344,6 +351,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
                 <ThemeIcon svg={CurrentLocationArrow} />
               ) : undefined
             }
+            highlighted={selectedZones.selectNext === 'from'}
           />
           <ButtonInput
             label={t(TariffZonesTexts.location.destinationPicker.label)}
@@ -354,7 +362,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
               t,
             )}
             accessibilityLabel={destinationPickerAccessibilityLabel(
-              selectedZones.from,
+              selectedZones.to,
               language,
               t,
             )}
@@ -367,94 +375,118 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
                 <ThemeIcon svg={CurrentLocationArrow} />
               ) : undefined
             }
+            highlighted={selectedZones.selectNext === 'to'}
           />
         </Section>
       </View>
 
-      <MapboxGL.MapView
-        ref={mapViewRef}
-        style={{
-          flex: 1,
-        }}
-        onRegionDidChange={(region) => {
-          setRegionEvent({isMoving: false, region});
-        }}
-        onRegionWillChange={() => {
-          setRegionEvent({isMoving: true, region: regionEvent?.region});
-        }}
-        {...MapViewConfig}
-      >
-        <MapboxGL.ShapeSource
-          id={'tariffZonesShape'}
-          shape={featureCollection}
-          hitbox={{width: 1, height: 1}} // to not be able to hit multiple zones with one click
-          onPress={selectFeature}
-        >
-          <MapboxGL.FillLayer
-            id="tariffZonesFill"
-            style={{
-              fillAntialias: true,
-              fillColor: [
-                // Mapbox Expression syntax
-                'case',
-                ['==', selectedZones.from.id, ['id']],
-                colors.secondary.red_500,
-                ['==', selectedZones.to.id, ['id']],
-                colors.secondary.blue_500,
-                'transparent',
-              ],
-              fillOpacity: 0.2,
-            }}
+      {isScreenReaderEnabled ? (
+        <>
+          <TariffZoneResults
+            tariffZones={tariffZones}
+            onSelect={(t) => updateSelectedZones(t.id)}
           />
-          <MapboxGL.LineLayer
-            id="tariffZonesLine"
-            style={{
-              lineWidth: 1,
-              lineColor: colors.primary.gray_400,
-            }}
-          />
-        </MapboxGL.ShapeSource>
-        {featureCollection.features.map((f) => (
-          <MapboxGL.ShapeSource
-            key={f.id}
-            id={`label-shape-${f.id}`}
-            shape={f.properties!.midPoint}
+          <View
+            style={[
+              styles.saveButton,
+              {paddingBottom: Math.max(safeAreaBottom, theme.spacings.medium)},
+            ]}
           >
-            <MapboxGL.SymbolLayer
-              id={`label-symbol-${f.id}`}
-              style={{
-                textSize: 20,
-                textField: f.properties!.name,
-                textHaloColor: 'white',
-                textHaloWidth: 10,
-              }}
+            <Button
+              onPress={onSave}
+              color="primary_2"
+              text={t(TariffZonesTexts.saveButton.text)}
+              accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
             />
-          </MapboxGL.ShapeSource>
-        ))}
-        <MapboxGL.Camera
-          ref={mapCameraRef}
-          zoomLevel={6}
-          centerCoordinate={startCoordinates}
-          {...MapCameraConfig}
-        />
-      </MapboxGL.MapView>
-
-      <View style={[styles.bottomControls, {bottom: safeAreaBottom}]}>
-        <View>
-          <View style={styles.mapControls}>
-            <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
-            <MapControls zoomIn={zoomIn} zoomOut={zoomOut} />
           </View>
-        </View>
-        <View style={styles.saveButton}>
-          <Button
-            onPress={onSave}
-            color="primary_2"
-            text={t(TariffZonesTexts.saveButton.text)}
-            accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
-          />
-        </View>
-      </View>
+        </>
+      ) : (
+        <>
+          <MapboxGL.MapView
+            ref={mapViewRef}
+            style={{
+              flex: 1,
+            }}
+            onRegionDidChange={(region) => {
+              setRegionEvent({isMoving: false, region});
+            }}
+            onRegionWillChange={() => {
+              setRegionEvent({isMoving: true, region: regionEvent?.region});
+            }}
+            {...MapViewConfig}
+          >
+            <MapboxGL.ShapeSource
+              id={'tariffZonesShape'}
+              shape={featureCollection}
+              hitbox={{width: 1, height: 1}} // to not be able to hit multiple zones with one click
+              onPress={selectFeature}
+            >
+              <MapboxGL.FillLayer
+                id="tariffZonesFill"
+                style={{
+                  fillAntialias: true,
+                  fillColor: [
+                    // Mapbox Expression syntax
+                    'case',
+                    ['==', selectedZones.from.id, ['id']],
+                    theme.status.valid.bg.backgroundColor,
+                    ['==', selectedZones.to.id, ['id']],
+                    theme.status.info.bg.backgroundColor,
+                    'transparent',
+                  ],
+                }}
+              />
+              <MapboxGL.LineLayer
+                id="tariffZonesLine"
+                style={{
+                  lineWidth: 1,
+                  lineColor: colors.primary.gray_400,
+                }}
+              />
+            </MapboxGL.ShapeSource>
+            {featureCollection.features.map((f) => (
+              <MapboxGL.ShapeSource
+                key={f.id}
+                id={`label-shape-${f.id}`}
+                shape={f.properties!.midPoint}
+              >
+                <MapboxGL.SymbolLayer
+                  id={`label-symbol-${f.id}`}
+                  style={{
+                    textSize: 20,
+                    textField: f.properties!.name,
+                    textHaloColor: 'white',
+                    textHaloWidth: 10,
+                  }}
+                />
+              </MapboxGL.ShapeSource>
+            ))}
+            <MapboxGL.Camera
+              ref={mapCameraRef}
+              zoomLevel={6}
+              centerCoordinate={startCoordinates}
+              {...MapCameraConfig}
+            />
+          </MapboxGL.MapView>
+
+          <View style={[styles.bottomControls, {bottom: safeAreaBottom}]}>
+            <View>
+              <View style={styles.mapControls}>
+                <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
+                <MapControls zoomIn={zoomIn} zoomOut={zoomOut} />
+              </View>
+            </View>
+            <View style={styles.saveButton}>
+              <Button
+                onPress={onSave}
+                color="primary_2"
+                text={t(TariffZonesTexts.saveButton.text)}
+                accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
+              />
+            </View>
+          </View>
+        </>
+      )}
     </View>
   );
 };
@@ -478,7 +510,13 @@ const mapZonesToFeatureCollection = (
 });
 
 const useMapStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1},
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.background_2.backgroundColor,
+  },
+  headerContainer: {
+    backgroundColor: theme.colors.background_gray.backgroundColor,
+  },
   pinContainer: {
     position: 'absolute',
     top: '50%',
@@ -496,7 +534,6 @@ const useMapStyles = StyleSheet.createThemeHook((theme) => ({
     right: theme.spacings.medium,
   },
   saveButton: {
-    paddingBottom: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
   },
 }));

@@ -480,11 +480,13 @@
 				"${PODS_ROOT}/Target Support Files/Pods-atb/Pods-atb-frameworks.sh",
 				"${PODS_ROOT}/Mapbox-iOS-SDK/dynamic/Mapbox.framework",
 				"${BUILT_PRODUCTS_DIR}/MapboxMobileEvents/MapboxMobileEvents.framework",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mapbox.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MapboxMobileEvents.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -736,7 +738,7 @@
 				);
 				INFOPLIST_FILE = atb/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.8;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -764,7 +766,7 @@
 				DEVELOPMENT_TEAM = CSV447Q97L;
 				INFOPLIST_FILE = atb/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.8;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -794,7 +796,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "atb-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.8;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -823,7 +825,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "atb-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.8;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

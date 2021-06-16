@@ -21,6 +21,7 @@ export type ButtonInputProps = SectionItem<{
   iconAccessibility?: AccessibilityProps;
   placeholder?: string;
   value?: string | JSX.Element;
+  highlighted?: boolean;
   icon?: NavigationIconTypes | JSX.Element;
   containerStyle?: ViewStyle;
 }> &
@@ -31,6 +32,7 @@ export default function ButtonInput({
   value,
   placeholder,
   label,
+  highlighted,
 
   icon,
   onIconPress,
@@ -72,7 +74,10 @@ export default function ButtonInput({
 
   const valueEl =
     isStringText(value) || !value ? (
-      <ThemeText type="body" style={!value && styles.faded}>
+      <ThemeText
+        type={value && highlighted ? 'body__primary--bold' : 'body__primary'}
+        style={!value && styles.faded}
+      >
         {value ?? placeholder}
       </ThemeText>
     ) : (
@@ -93,7 +98,7 @@ export default function ButtonInput({
         ]}
         {...props}
       >
-        <ThemeText type="lead" style={styles.label}>
+        <ThemeText type="body__secondary" style={styles.label}>
           {label}
         </ThemeText>
         <View style={[contentContainer, containerStyle]}>{valueEl}</View>
@@ -110,7 +115,7 @@ function isStringText(a: any): a is string {
 
 const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.background.level0,
+    backgroundColor: theme.colors.background_0.backgroundColor,
   },
   wrapper__inline: {
     alignSelf: 'flex-start',

@@ -14,14 +14,13 @@ import {
   RequestPermissionFn,
   useGeolocationState,
 } from '@atb/GeolocationContext';
-import {useLocationSearchValue} from '@atb/location-search';
+import {useOnlySingleLocation} from '@atb/location-search';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   AssistantTexts,
   dictionary,
   NearbyTexts,
-  TranslatedString,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
@@ -31,8 +30,11 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {NearbyStackParams} from '.';
 import Loading from '../Loading';
-import NearbyResults from './NearbyResults';
+import DeparturesList from '@atb/departure-list/DeparturesList';
 import {useDepartureData} from './state';
+import {ThemeColor} from '@atb/theme/colors';
+
+const themeColor: ThemeColor = 'background_gray';
 
 type NearbyRouteName = 'NearbyRoot';
 const NearbyRouteNameStatic: NearbyRouteName = 'NearbyRoot';
@@ -53,7 +55,7 @@ type RootProps = {
   route: NearbyScreenProp;
 };
 
-export default function NearbyScreen({navigation}: RootProps) {
+export default function NearbyScreen({navigation, route}: RootProps) {
   const {
     status,
     location,
@@ -92,7 +94,7 @@ const NearbyOverview: React.FC<Props> = ({
   hasLocationPermission,
   navigation,
 }) => {
-  const searchedFromLocation = useLocationSearchValue<NearbyScreenProp>(
+  const searchedFromLocation = useOnlySingleLocation<NearbyScreenProp>(
     'location',
   );
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
@@ -188,17 +190,19 @@ const NearbyOverview: React.FC<Props> = ({
       }
       headerTitle={t(NearbyTexts.header.title)}
       useScroll={activateScroll}
-      leftButton={{type: 'home'}}
+      leftButton={{type: 'home', color: themeColor}}
       alternativeTitleComponent={
         <AccessibleText
           prefix={t(NearbyTexts.header.altTitle.a11yPrefix)}
-          type={'paragraphHeadline'}
+          type={'body__primary--bold'}
+          color={themeColor}
         >
           {fromLocation?.name}
         </AccessibleText>
       }
       onEndReached={onScrollViewEndReached}
       alertContext={'travel'}
+      setFocusOnLoad={true}
     >
       <ScreenReaderAnnouncement message={loadAnnouncement} />
 
@@ -214,7 +218,7 @@ const NearbyOverview: React.FC<Props> = ({
         </View>
       )}
 
-      <NearbyResults
+      <DeparturesList
         currentLocation={currentLocation}
         showOnlyFavorites={showOnlyFavorites}
         departures={data}
@@ -281,7 +285,7 @@ const Header = React.memo(function Header({
         }}
         chipActionHint={
           t(AssistantTexts.favorites.favoriteChip.a11yHint) +
-          t(dictionary.toPlace) +
+          t(dictionary.fromPlace) +
           screenReaderPause
         }
       />

@@ -1,21 +1,20 @@
+import ThemeText from '@atb/components/text';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {ContrastColor, defaultTextColors, ThemeColor} from '@atb/theme/colors';
+import React, {useRef} from 'react';
 import {
-  TouchableOpacityProps,
-  View,
-  StyleProp,
-  ViewStyle,
-  TouchableOpacity,
-  TextStyle,
   Animated,
   Easing,
+  StyleProp,
+  TextStyle,
+  TouchableOpacity,
+  TouchableOpacityProps,
+  View,
+  ViewStyle,
 } from 'react-native';
-import React, {useRef} from 'react';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import ThemeText from '@atb/components/text';
-import {ContrastColor, TextNames} from '@atb/theme/colors';
+import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 
 export {default as ButtonGroup} from './group';
-
-type ThemeColor = keyof Theme['colors'];
 
 type ButtonMode = 'primary' | 'secondary' | 'tertiary' | 'destructive';
 
@@ -60,7 +59,7 @@ export type ButtonProps = {
   viewContainerStyle?: StyleProp<ViewStyle>;
   textContainerStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
-  icon?: React.ElementType<{fill: string}>;
+  icon?: ({fill}: {fill: string}) => JSX.Element;
   iconPosition?: 'left' | 'right';
 } & ButtonTypeAwareProps &
   TouchableOpacityProps;
@@ -112,7 +111,7 @@ const Button: React.FC<ButtonProps> = ({
         backgroundColor: 'transparent',
         textColorType: themeName == 'dark' ? 'light' : 'dark',
       } as ContrastColor);
-  const {primary} = theme.text.colorSelection[textColorType];
+  const {primary} = defaultTextColors[textColorType];
 
   const styleContainer: ViewStyle[] = [
     css.button,
@@ -127,7 +126,7 @@ const Button: React.FC<ButtonProps> = ({
   const textContainer: TextStyle = {
     flex: isInline ? undefined : 1,
     alignItems: 'center',
-    marginHorizontal: Icon ? theme.spacings.xLarge : 0,
+    marginHorizontal: Icon && !isInline ? theme.spacings.xLarge : 0,
   };
   const iconContainer: ViewStyle = isInline
     ? {
@@ -154,13 +153,15 @@ const Button: React.FC<ButtonProps> = ({
       >
         {Icon && iconPosition === 'left' && (
           <View style={iconContainer}>
-            <Icon fill={primary} />
+            <ThemeIcon svg={Icon} fill={primary} />
           </View>
         )}
         {text && (
           <View style={[textContainer, textContainerStyle]}>
             <ThemeText
-              type={mode === 'tertiary' ? 'body' : 'paragraphHeadline'}
+              type={
+                mode === 'tertiary' ? 'body__primary' : 'body__primary--bold'
+              }
               style={[styleText, textStyle]}
             >
               {text}
@@ -169,7 +170,7 @@ const Button: React.FC<ButtonProps> = ({
         )}
         {Icon && iconPosition === 'right' && (
           <View style={iconContainer}>
-            <Icon fill={primary} />
+            <ThemeIcon svg={Icon} fill={primary} />
           </View>
         )}
       </TouchableOpacity>

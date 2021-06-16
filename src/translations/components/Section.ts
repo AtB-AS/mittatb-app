@@ -27,10 +27,12 @@ const SectionTexts = {
   },
   textInput: {
     clear: _('Tøm redigeringsfelt', 'Clear input'),
+    closeKeyboard: _('Lukker tastatur', 'Closing keyboard'),
   },
   counterInput: {
     decreaseButton: {
-      a11yLabel: _('Reduser antall', 'Reduce quantity'),
+      a11yLabel: (text: string) =>
+        _(`Reduser antall ${text}`, `Decrease quantity ${text}`),
       a11yHint: (text: string, count: number) =>
         _(
           `Aktivér for å redusere antall ${text} til ${count - 1}`,
@@ -38,7 +40,8 @@ const SectionTexts = {
         ),
     },
     increaseButton: {
-      a11yLabel: _('Øk antall', 'Increase quantity'),
+      a11yLabel: (text: string) =>
+        _(`Øk antall ${text}`, `Increase quantity ${text}`),
       a11yHint: (text: string, count: number) =>
         _(
           `Aktivér for å øke antall ${text} til ${count + 1}`,

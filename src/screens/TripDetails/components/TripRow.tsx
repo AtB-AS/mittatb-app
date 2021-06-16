@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, ViewProps} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {View, ViewProps, TouchableOpacity} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 
 type TripRowProps = {
