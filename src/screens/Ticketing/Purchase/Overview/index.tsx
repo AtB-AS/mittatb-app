@@ -36,6 +36,7 @@ import ProductSheet from '@atb/screens/Ticketing/Purchase/Product/ProductSheet';
 import {usePreferences} from '@atb/preferences';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import TravellersSheet from '@atb/screens/Ticketing/Purchase/Travellers/TravellersSheet';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -72,8 +73,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     userProfiles,
     preassignedFareProduct,
   );
-  const userProfilesWithCount =
-    params.userProfilesWithCount ?? defaultUserProfilesWithCount;
+  const [userProfilesWithCount, setUserProfilesWithCount] = useState(
+    defaultUserProfilesWithCount,
+  );
 
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
   const {
@@ -111,12 +113,28 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     />
   ));
 
+  const {
+    open: openTravellersSheet,
+    isOpen: isTravellersSheetOpen,
+    bottomSheet: travellersSheet,
+  } = useBottomSheet((close, focusRef) => (
+    <TravellersSheet
+      close={close}
+      save={setUserProfilesWithCount}
+      preassignedFareProduct={preassignedFareProduct}
+      userProfilesWithCount={userProfilesWithCount}
+      ref={focusRef}
+    />
+  ));
+
+  const isBottomSheetOpen = isProductSheetOpen && isTravellersSheetOpen;
+
   return (
     <View style={styles.container}>
       <View
-        accessibilityElementsHidden={isProductSheetOpen}
+        accessibilityElementsHidden={isBottomSheetOpen}
         importantForAccessibility={
-          isProductSheetOpen ? 'no-hide-descendants' : 'yes'
+          isBottomSheetOpen ? 'no-hide-descendants' : 'yes'
         }
       >
         <FullScreenHeader
@@ -162,12 +180,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
                 t,
                 language,
               )}
-              onPress={() => {
-                navigation.push('Travellers', {
-                  userProfilesWithCount,
-                  preassignedFareProduct,
-                });
-              }}
+              onPress={openTravellersSheet}
               icon={<ThemeIcon svg={Edit} />}
               accessibility={{
                 accessibilityLabel:
@@ -258,6 +271,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         </View>
       </View>
       {productSheet}
+      {travellersSheet}
     </View>
   );
 };

@@ -1,7 +1,6 @@
 import React, {forwardRef, useState} from 'react';
-import {View} from 'react-native';
 import Header from '@atb/components/screen-header';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import * as Sections from '@atb/components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProductTexts, useTranslation} from '@atb/translations';
@@ -9,7 +8,8 @@ import Button from '@atb/components/button';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {BottomSheetContainer} from '@atb/components/bottom-sheet/use-bottom-sheet';
+import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 
 type Props = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -20,8 +20,6 @@ type Props = {
 const ProductSheet = forwardRef<ScrollView, Props>(
   ({preassignedFareProduct, close, save}, focusRef) => {
     const styles = useStyles();
-    const {theme} = useTheme();
-    const {bottom: safeAreaBottom} = useSafeAreaInsets();
     const {t, language} = useTranslation();
 
     const {
@@ -37,7 +35,7 @@ const ProductSheet = forwardRef<ScrollView, Props>(
     );
 
     return (
-      <View>
+      <BottomSheetContainer>
         <Header
           title={t(ProductTexts.header.title)}
           leftButton={{type: 'cancel', onPress: close}}
@@ -56,12 +54,7 @@ const ProductSheet = forwardRef<ScrollView, Props>(
           </Sections.Section>
         </ScrollView>
 
-        <View
-          style={{
-            ...styles.saveButton,
-            paddingBottom: Math.max(theme.spacings.medium, safeAreaBottom),
-          }}
-        >
+        <FullScreenFooter>
           <Button
             color="primary_2"
             text={t(ProductTexts.primaryButton.text)}
@@ -70,8 +63,8 @@ const ProductSheet = forwardRef<ScrollView, Props>(
               close();
             }}
           />
-        </View>
-      </View>
+        </FullScreenFooter>
+      </BottomSheetContainer>
     );
   },
 );

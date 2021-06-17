@@ -12,6 +12,7 @@ import {
   findNodeHandle,
   LayoutChangeEvent,
   TouchableWithoutFeedback,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -208,3 +209,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderTopRightRadius: theme.border.radius.regular,
   },
 }));
+
+export const BottomSheetContainer = ({children}: {children: ReactNode}) => {
+  const {height: windowHeight} = useWindowDimensions();
+  const maxHeight = windowHeight * 0.8;
+  return <View style={{maxHeight}}>{children}</View>;
+};

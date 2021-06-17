@@ -22,7 +22,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import Header from '@atb/components/screen-header';
-import {ProductTexts} from '@atb/translations';
+import {BottomSheetContainer} from '@atb/components/bottom-sheet/use-bottom-sheet';
 
 // Polyfill for Android
 require('string.fromcodepoint');
@@ -207,8 +207,6 @@ const EmojiPicker = ({
   close,
   ...props
 }: Props) => {
-  const styles = usePickerStyles();
-
   const onClick = (emoji: string | null) => {
     onEmojiSelected(emoji);
     if (closeOnSelect) {
@@ -217,7 +215,7 @@ const EmojiPicker = ({
   };
 
   return (
-    <View style={{maxHeight: 350, ...styles.modal}}>
+    <BottomSheetContainer>
       <Header
         title={'Velg emoji'}
         leftButton={{type: 'cancel', onPress: close}}
@@ -226,7 +224,7 @@ const EmojiPicker = ({
           text: 'Fjern emoji',
           onPress: () => onClick(null),
         }}
-        color={'background_0'}
+        color={'background_2'}
       />
       <ScrollView>
         {CATEGORIES.map((category) => (
@@ -239,14 +237,9 @@ const EmojiPicker = ({
           />
         ))}
       </ScrollView>
-    </View>
+    </BottomSheetContainer>
   );
 };
-const usePickerStyles = StyleSheet.createThemeHook((theme) => ({
-  modal: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
-  },
-}));
 
 export default EmojiPicker;
 
