@@ -37,6 +37,7 @@ import {usePreferences} from '@atb/preferences';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import TravellersSheet from '@atb/screens/Ticketing/Purchase/Travellers/TravellersSheet';
+import TravelDateSheet from '@atb/screens/Ticketing/Purchase/TravelDate/TravelDateSheet';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -81,8 +82,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const {
     fromTariffZone = defaultTariffZone,
     toTariffZone = defaultTariffZone,
-    travelDate,
   } = params;
+
+  const [travelDate, setTravelDate] = useState<string | undefined>();
 
   const {isSearchingOffer, error, totalPrice, refreshOffer} = useOfferState(
     preassignedFareProduct,
@@ -127,7 +129,21 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     />
   ));
 
-  const isBottomSheetOpen = isProductSheetOpen && isTravellersSheetOpen;
+  const {
+    open: openTravelDateSheet,
+    isOpen: isTravelDateSheetOpen,
+    bottomSheet: travelDateSheet,
+  } = useBottomSheet((close, focusRef) => (
+    <TravelDateSheet
+      close={close}
+      save={setTravelDate}
+      travelDate={travelDate}
+      ref={focusRef}
+    />
+  ));
+
+  const isBottomSheetOpen =
+    isProductSheetOpen || isTravellersSheetOpen || isTravelDateSheetOpen;
 
   return (
     <View style={styles.container}>
@@ -197,9 +213,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             <Sections.LinkItem
               text={createTravelDateText(t, language, travelDate)}
               disabled={!travelDateSelectionEnabled}
-              onPress={() => {
-                navigation.navigate('TravelDate', {travelDate});
-              }}
+              onPress={openTravelDateSheet}
               icon={<ThemeIcon svg={Edit} />}
               accessibility={{
                 accessibilityLabel:
@@ -272,6 +286,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
       </View>
       {productSheet}
       {travellersSheet}
+      {travelDateSheet}
     </View>
   );
 };

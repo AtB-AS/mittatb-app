@@ -20,9 +20,6 @@ import TariffZones, {
 import TariffZoneSearch, {
   RouteParams as TariffZoneSearchParams,
 } from './TariffZones/search';
-import TravelDateScreen, {
-  TravelDateRouteParams,
-} from '@atb/screens/Ticketing/Purchase/TravelDate';
 import {TransitionPresets} from '@react-navigation/stack';
 
 type PurchaseOverviewParams = {
@@ -40,7 +37,6 @@ type PaymentParams = {
 
 export type TicketingStackParams = {
   PurchaseOverview: PurchaseOverviewParams;
-  TravelDate: TravelDateRouteParams;
   TariffZones: TariffZonesParams;
   TariffZoneSearch: TariffZoneSearchParams;
   Confirmation: ConfirmationRouteParams;
@@ -66,7 +62,6 @@ export default function PurchaseStack({route}: TicketPurchaseRootProps) {
         component={PurchaseOverviewScreen}
         initialParams={route.params}
       />
-      <Stack.Screen name="TravelDate" component={TravelDateScreen} />
       <Stack.Screen name="TariffZones" component={TariffZones} />
       <Stack.Screen
         name="Confirmation"

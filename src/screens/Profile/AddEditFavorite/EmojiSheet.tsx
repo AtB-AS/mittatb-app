@@ -10,19 +10,19 @@ import emoji from 'emoji-datasource';
 import groupBy from 'lodash.groupby';
 import mapValues from 'lodash.mapvalues';
 import orderBy from 'lodash.orderby';
-import React, {useEffect, useState} from 'react';
+import React, {forwardRef, useEffect, useState} from 'react';
 import {
   Dimensions,
   Platform,
   ScaledSize,
   ScrollView,
   TextStyle,
-  TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
 import Header from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet/use-bottom-sheet';
+import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 
 // Polyfill for Android
 require('string.fromcodepoint');
@@ -121,26 +121,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-const ClearButton: React.FC<{
-  value: string | null;
-  onEmojiSelected: (e: string | null) => void;
-  clearButtonStyle?: ViewStyle;
-  clearButtonText?: string;
-}> = ({value, onEmojiSelected, clearButtonStyle, clearButtonText}) => {
-  const styles = useStyles();
-  if (!value) return null;
-  return (
-    <TouchableOpacity onPress={() => onEmojiSelected(null)}>
-      <ThemeText
-        type="body__primary"
-        style={[styles.clearButton, clearButtonStyle]}
-      >
-        {clearButtonText ?? 'Fjern emoji'}
-      </ThemeText>
-    </TouchableOpacity>
-  );
-};
-
 type EmojiCategory = {
   value: string | null;
   category: string;
@@ -199,49 +179,49 @@ type Props = Omit<EmojiCategory, 'category'> & {
   value: string | null;
   close: () => void;
 };
-const EmojiPicker = ({
-  value,
-  onEmojiSelected,
-  hideClearButton,
-  closeOnSelect,
-  close,
-  ...props
-}: Props) => {
-  const onClick = (emoji: string | null) => {
-    onEmojiSelected(emoji);
-    if (closeOnSelect) {
-      close();
-    }
-  };
+const EmojiSheet = forwardRef<ScrollView, Props>(
+  (
+    {value, onEmojiSelected, hideClearButton, closeOnSelect, close, ...props},
+    focusRef,
+  ) => {
+    const {t} = useTranslation();
+    const onClick = (emoji: string | null) => {
+      onEmojiSelected(emoji);
+      if (closeOnSelect) {
+        close();
+      }
+    };
 
-  return (
-    <BottomSheetContainer>
-      <Header
-        title={'Velg emoji'}
-        leftButton={{type: 'cancel', onPress: close}}
-        rightButton={{
-          type: 'custom',
-          text: 'Fjern emoji',
-          onPress: () => onClick(null),
-        }}
-        color={'background_2'}
-      />
-      <ScrollView>
-        {CATEGORIES.map((category) => (
-          <EmojiCategory
-            onEmojiSelected={onClick}
-            key={category}
-            category={category}
-            value={value}
-            {...props}
-          />
-        ))}
-      </ScrollView>
-    </BottomSheetContainer>
-  );
-};
+    return (
+      <BottomSheetContainer>
+        <Header
+          title={t(AddEditFavoriteTexts.emojiSheet.title)}
+          leftButton={{type: 'cancel', onPress: close}}
+          rightButton={{
+            type: 'custom',
+            text: t(AddEditFavoriteTexts.emojiSheet.rightButton),
+            onPress: () => onClick(null),
+          }}
+          color={'background_2'}
+          setFocusOnLoad={true}
+        />
+        <ScrollView ref={focusRef}>
+          {CATEGORIES.map((category) => (
+            <EmojiCategory
+              onEmojiSelected={onClick}
+              key={category}
+              category={category}
+              value={value}
+              {...props}
+            />
+          ))}
+        </ScrollView>
+      </BottomSheetContainer>
+    );
+  },
+);
 
-export default EmojiPicker;
+export default EmojiSheet;
 
 type CallbackType = {
   screen: ScaledSize;

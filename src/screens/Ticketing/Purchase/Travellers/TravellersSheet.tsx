@@ -39,9 +39,10 @@ const TravellersSheet = forwardRef<ScrollView, Props>(
           title={t(TravellersTexts.header.title)}
           leftButton={{type: 'cancel', onPress: close}}
           color={'background_2'}
+          setFocusOnLoad={false}
         />
 
-        <ScrollView style={styles.travellerCounters}>
+        <ScrollView style={styles.travellerCounters} ref={focusRef}>
           <View
             style={styles.summarySection}
             accessible={true}

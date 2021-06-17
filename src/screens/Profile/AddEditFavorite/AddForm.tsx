@@ -17,9 +17,9 @@ import {Location} from '@entur/sdk';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useState} from 'react';
-import {Alert, Keyboard, View} from 'react-native';
+import {Alert, Keyboard, ScrollView, View} from 'react-native';
 import {AddEditFavoriteRootParams} from '.';
-import EmojiPopup from './EmojiPopup';
+import EmojiSheet from './EmojiSheet';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {useBottomSheet} from '@atb/components/bottom-sheet/use-bottom-sheet';
@@ -124,131 +124,139 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
     );
   };
 
-  const {open: openEmojiPicker, bottomSheet: emojiPickerSheet} = useBottomSheet(
-    (close) => (
-      <EmojiPopup
-        localizedCategories={[
-          'Smilefjes',
-          'Personer',
-          'Dyr og natur',
-          'Mat og drikke',
-          'Aktivitet',
-          'Reise og steder',
-          'Objekter',
-          'Symboler',
-        ]}
-        value={emoji ?? null}
-        closeOnSelect={true}
-        onEmojiSelected={(emoji) => {
-          if (emoji == null) {
-            setEmoji(undefined);
-          } else {
-            setEmoji(emoji);
-          }
-        }}
-        close={close}
-      />
-    ),
-  );
+  const {
+    open: openEmojiSheet,
+    isOpen: isEmojiSheetOpen,
+    bottomSheet: emojiSheet,
+  } = useBottomSheet((close) => (
+    <EmojiSheet
+      localizedCategories={[
+        t(AddEditFavoriteTexts.emojiSheet.categories.smileys),
+        t(AddEditFavoriteTexts.emojiSheet.categories.people),
+        t(AddEditFavoriteTexts.emojiSheet.categories.animals),
+        t(AddEditFavoriteTexts.emojiSheet.categories.food),
+        t(AddEditFavoriteTexts.emojiSheet.categories.activities),
+        t(AddEditFavoriteTexts.emojiSheet.categories.travel),
+        t(AddEditFavoriteTexts.emojiSheet.categories.objects),
+        t(AddEditFavoriteTexts.emojiSheet.categories.symbols),
+      ]}
+      value={emoji ?? null}
+      closeOnSelect={true}
+      onEmojiSelected={(emoji) => {
+        if (emoji == null) {
+          setEmoji(undefined);
+        } else {
+          setEmoji(emoji);
+        }
+      }}
+      close={close}
+    />
+  ));
 
   const openEmojiPopup = () => {
     Keyboard.dismiss();
-    openEmojiPicker();
+    openEmojiSheet();
   };
 
   return (
     <View style={css.container}>
-      <FullScreenHeader
-        title={
-          editItem
-            ? t(AddEditFavoriteTexts.header.titleEdit)
-            : t(AddEditFavoriteTexts.header.title)
+      <View
+        style={{flex: 1}}
+        accessibilityElementsHidden={isEmojiSheetOpen}
+        importantForAccessibility={
+          isEmojiSheetOpen ? 'no-hide-descendants' : 'yes'
         }
-        leftButton={{type: !!editItem ? 'close' : 'back'}}
-      />
+      >
+        <FullScreenHeader
+          title={
+            editItem
+              ? t(AddEditFavoriteTexts.header.titleEdit)
+              : t(AddEditFavoriteTexts.header.title)
+          }
+          leftButton={{type: !!editItem ? 'close' : 'back'}}
+        />
 
-      <View style={css.innerContainer}>
-        <ScreenReaderAnnouncement message={errorMessage} />
-        {errorMessage && (
-          <MessageBox withMargin message={errorMessage} type="error" />
-        )}
-
-        <Sections.Section withPadding>
-          <Sections.LocationInput
-            label={t(AddEditFavoriteTexts.fields.location.label)}
-            location={location}
-            onPress={() =>
-              navigation.navigate('LocationSearch', {
-                callerRouteName: AddEditRouteNameStatic,
-                callerRouteParam: 'searchLocation',
-                label: t(AddEditFavoriteTexts.fields.location.label),
-                favoriteChipTypes: ['location', 'map'],
-                initialLocation: location,
-              })
-            }
-          />
-        </Sections.Section>
-
-        <Sections.Section withPadding>
-          <Sections.TextInput
-            label={t(AddEditFavoriteTexts.fields.name.label)}
-            onChangeText={setName}
-            value={name}
-            editable
-            autoCapitalize="sentences"
-            accessibilityHint={t(AddEditFavoriteTexts.fields.name.a11yHint)}
-            placeholder={t(AddEditFavoriteTexts.fields.name.placeholder)}
-          />
-        </Sections.Section>
-
-        <Sections.Section withPadding>
-          <Sections.ButtonInput
-            onPress={openEmojiPopup}
-            accessibilityLabel={t(AddEditFavoriteTexts.fields.icon.a11yLabel)}
-            accessibilityHint={t(AddEditFavoriteTexts.fields.icon.a11yHint)}
-            label={t(AddEditFavoriteTexts.fields.icon.label)}
-            icon="expand-more"
-            type="inline"
-            value={
-              !emoji ? (
-                <ThemeIcon svg={MapPointPin} />
-              ) : (
-                <ThemeText type="body__primary">{emoji}</ThemeText>
-              )
-            }
-          />
-        </Sections.Section>
-      </View>
-
-      <FullScreenFooter avoidKeyboard={true}>
-        <ButtonGroup>
-          {editItem && (
-            <Button
-              onPress={deleteItem}
-              mode="destructive"
-              icon={SvgDelete}
-              iconPosition="right"
-              text={t(AddEditFavoriteTexts.delete.label)}
-            />
+        <ScrollView style={css.innerContainer}>
+          <ScreenReaderAnnouncement message={errorMessage} />
+          {errorMessage && (
+            <MessageBox withMargin message={errorMessage} type="error" />
           )}
-          <Button
-            color="primary_2"
-            onPress={save}
-            icon={SvgConfirm}
-            iconPosition="right"
-            text={t(AddEditFavoriteTexts.save.label)}
-          />
-        </ButtonGroup>
-      </FullScreenFooter>
-      {emojiPickerSheet}
+
+          <Sections.Section withPadding>
+            <Sections.LocationInput
+              label={t(AddEditFavoriteTexts.fields.location.label)}
+              location={location}
+              onPress={() =>
+                navigation.navigate('LocationSearch', {
+                  callerRouteName: AddEditRouteNameStatic,
+                  callerRouteParam: 'searchLocation',
+                  label: t(AddEditFavoriteTexts.fields.location.label),
+                  favoriteChipTypes: ['location', 'map'],
+                  initialLocation: location,
+                })
+              }
+            />
+          </Sections.Section>
+
+          <Sections.Section withPadding>
+            <Sections.TextInput
+              label={t(AddEditFavoriteTexts.fields.name.label)}
+              onChangeText={setName}
+              value={name}
+              editable
+              autoCapitalize="sentences"
+              accessibilityHint={t(AddEditFavoriteTexts.fields.name.a11yHint)}
+              placeholder={t(AddEditFavoriteTexts.fields.name.placeholder)}
+            />
+          </Sections.Section>
+
+          <Sections.Section withPadding>
+            <Sections.ButtonInput
+              onPress={openEmojiPopup}
+              accessibilityLabel={t(AddEditFavoriteTexts.fields.icon.a11yLabel)}
+              accessibilityHint={t(AddEditFavoriteTexts.fields.icon.a11yHint)}
+              label={t(AddEditFavoriteTexts.fields.icon.label)}
+              icon="expand-more"
+              type="inline"
+              value={
+                !emoji ? (
+                  <ThemeIcon svg={MapPointPin} />
+                ) : (
+                  <ThemeText type="body__primary">{emoji}</ThemeText>
+                )
+              }
+            />
+          </Sections.Section>
+        </ScrollView>
+
+        <FullScreenFooter avoidKeyboard={true}>
+          <ButtonGroup>
+            {editItem && (
+              <Button
+                onPress={deleteItem}
+                mode="destructive"
+                icon={SvgDelete}
+                iconPosition="right"
+                text={t(AddEditFavoriteTexts.delete.label)}
+              />
+            )}
+            <Button
+              color="primary_2"
+              onPress={save}
+              icon={SvgConfirm}
+              iconPosition="right"
+              text={t(AddEditFavoriteTexts.save.label)}
+            />
+          </ButtonGroup>
+        </FullScreenFooter>
+      </View>
+      {emojiSheet}
     </View>
   );
 }
 const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     flex: 1,
-    alignItems: 'stretch',
-    justifyContent: 'center',
     backgroundColor: theme.colors.background_3.backgroundColor,
   },
   innerContainer: {
