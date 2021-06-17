@@ -74,10 +74,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   return (
     <View style={styles.container}>
       {enable_recent_tickets ? (
-          <>
         <RecentTicketsScrollView />
-        <RecentTicketsScrollView />
-          </>
       ) : (
         <View style={{flex: 1}} />
       )}
