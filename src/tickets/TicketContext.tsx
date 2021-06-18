@@ -69,6 +69,14 @@ const ticketReducer: TicketReducer = (
       };
     }
     case 'ADD_RESERVATION': {
+      const fareContractAlreadyCreated = prevState.fareContracts.some(
+        (f) => f.orderId === action.reservation.reservation.order_id,
+      );
+
+      if (fareContractAlreadyCreated) {
+        return prevState;
+      }
+
       return {
         ...prevState,
         activeReservations: [
