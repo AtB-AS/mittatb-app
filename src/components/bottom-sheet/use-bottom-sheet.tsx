@@ -9,13 +9,15 @@ import React, {
 import {
   AccessibilityInfo,
   Animated,
+  BackHandler,
+  Easing,
   findNodeHandle,
   LayoutChangeEvent,
   TouchableWithoutFeedback,
   useWindowDimensions,
   View,
 } from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {BottomSheetTexts, useTranslation} from '@atb/translations';
 
@@ -135,7 +137,6 @@ const InternalBottomSheet = ({
 export const useBottomSheet = (
   contentFunction: (close: () => void, focusRef: RefObject<any>) => ReactNode,
 ) => {
-  const {theme} = useTheme();
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -147,7 +148,8 @@ export const useBottomSheet = (
     () => () =>
       Animated.timing(animatedOffset, {
         toValue: isOpen ? 0 : 1,
-        duration: 200,
+        duration: 400,
+        easing: Easing.out(Easing.exp),
         useNativeDriver: true,
       }).start(),
     [isOpen],
@@ -156,6 +158,7 @@ export const useBottomSheet = (
   const close = () => {
     setIsOpen(false);
   };
+
   const open = () => {
     setIsOpen(true);
     const reactTag = findNodeHandle(focusRef.current);
@@ -163,6 +166,20 @@ export const useBottomSheet = (
       AccessibilityInfo.setAccessibilityFocus(reactTag);
     }
   };
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        if (isOpen) {
+          close();
+          return true;
+        }
+        return false;
+      },
+    );
+    return () => backHandler.remove();
+  }, [isOpen]);
 
   const bottomSheet = useMemo(
     () => (
