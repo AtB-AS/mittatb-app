@@ -18,7 +18,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   svgContainer: {
     backgroundColor: theme.colors.primary_2.backgroundColor,
     width: '100%',
-    flex: 2,
+    height: '60%',
   },
 }));
 export default Illustration;

@@ -49,8 +49,10 @@ const WelcomeScreen = ({
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader setFocusOnLoad={false} color={themeColor} />
-      <Illustration Svg={Onboarding1_2} />
+      <View style={styles.illustration}>
+        <Illustration Svg={Onboarding1_2} />
+      </View>
+      <View style={styles.topPush} />
       <ScrollView style={styles.mainView}>
         <View ref={focusRef} accessibilityRole="header" accessible={true}>
           <ThemeText
@@ -77,15 +79,17 @@ const WelcomeScreen = ({
           ) : null}
         </View>
       </ScrollView>
-      <FullScreenFooter>
-        <Button
-          color={'secondary_1'}
-          onPress={onNext}
-          text={t(OnboardingTexts.welcome.mainButton)}
-          icon={ArrowRight}
-          iconPosition="right"
-        />
-      </FullScreenFooter>
+      <View style={styles.bottomView}>
+        <FullScreenFooter>
+          <Button
+            color={'secondary_1'}
+            onPress={onNext}
+            text={t(OnboardingTexts.welcome.mainButton)}
+            icon={ArrowRight}
+            iconPosition="right"
+          />
+        </FullScreenFooter>
+      </View>
     </View>
   );
 };
@@ -94,13 +98,27 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.colors[themeColor].backgroundColor,
     flex: 1,
+    justifyContent: 'flex-end',
+  },
+  illustration: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+
+  topPush: {
+    flexGrow: 1,
+    height: '40%',
   },
   mainView: {
     margin: theme.spacings.medium,
     padding: theme.spacings.medium,
-    paddingTop: 0,
     marginBottom: theme.spacings.medium,
-    flex: 2,
+  },
+  bottomView: {
+    flexGrow: 0,
   },
   descriptionPart: {
     marginTop: theme.spacings.medium,
