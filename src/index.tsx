@@ -61,15 +61,15 @@ const App = () => {
                 <FavoritesContextProvider>
                   <SearchHistoryContextProvider>
                     <GeolocationContextProvider>
-                      <TicketContextProvider>
-                        <RemoteConfigContextProvider>
+                      <RemoteConfigContextProvider>
+                        <TicketContextProvider>
                           <AppLanguageProvider>
                             <AlertsContextProvider>
                               <NavigationRoot />
                             </AlertsContextProvider>
                           </AppLanguageProvider>
-                        </RemoteConfigContextProvider>
-                      </TicketContextProvider>
+                        </TicketContextProvider>
+                      </RemoteConfigContextProvider>
                     </GeolocationContextProvider>
                   </SearchHistoryContextProvider>
                 </FavoritesContextProvider>

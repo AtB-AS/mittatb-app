@@ -12,6 +12,7 @@ import firestore, {
 import {useAuthState} from '../auth';
 import {ActiveReservation, FareContract, PaymentStatus} from './types';
 import {getPayment} from './api';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 type TicketReducerState = {
   fareContracts: FareContract[];
@@ -117,9 +118,10 @@ const TicketContextProvider: React.FC = ({children}) => {
   );
 
   const {user, abtCustomerId} = useAuthState();
+  const {enable_ticketing} = useRemoteConfig();
 
   useEffect(() => {
-    if (user && abtCustomerId) {
+    if (user && abtCustomerId && enable_ticketing) {
       const subscriber = firestore()
         .collection('customers')
         .doc(abtCustomerId)
