@@ -7,12 +7,16 @@ import {
   TimeInputItem,
 } from '@atb/components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
-import {TravelDateTexts, useTranslation} from '@atb/translations';
+import {
+  ScreenHeaderTexts,
+  TravelDateTexts,
+  useTranslation,
+} from '@atb/translations';
 import Button from '@atb/components/button';
 import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
 import {View} from 'react-native';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet/use-bottom-sheet';
-import ScreenHeader from '@atb/components/screen-header';
+import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 
 type Props = {
@@ -49,9 +53,13 @@ const TravelDate = forwardRef<ScrollView, Props>(
 
     return (
       <BottomSheetContainer>
-        <ScreenHeader
+        <ScreenHeaderWithoutNavigation
           title={t(TravelDateTexts.header.title)}
-          leftButton={{type: 'cancel', onPress: close}}
+          leftButton={{
+            type: 'cancel',
+            onPress: close,
+            text: t(ScreenHeaderTexts.headerButton.cancel.text),
+          }}
           color="background_2"
           setFocusOnLoad={false}
         />

@@ -10,7 +10,7 @@ import {useNavigation} from '@react-navigation/native';
 export default function useFocusOnLoad(setFocusOnLoad: boolean = true) {
   const focusRef = useRef(null);
   useEffect(() => {
-    giveFocus(setFocusOnLoad, focusRef);
+    giveFocus(focusRef, setFocusOnLoad);
   }, [focusRef.current, setFocusOnLoad]);
 
   const navigation = useNavigationSafe();
@@ -18,7 +18,7 @@ export default function useFocusOnLoad(setFocusOnLoad: boolean = true) {
     () =>
       navigation?.addListener('focus', () => {
         // 50 ms timeout necessary for iPhone VoiceOver
-        setTimeout(() => giveFocus(setFocusOnLoad, focusRef), 50);
+        setTimeout(() => giveFocus(focusRef, setFocusOnLoad), 50);
       }),
     [navigation, focusRef.current, setFocusOnLoad],
   );
@@ -38,9 +38,9 @@ const useNavigationSafe = () => {
   }
 };
 
-const giveFocus = (
-  shouldFocus: boolean,
+export const giveFocus = (
   focusRef: React.MutableRefObject<any>,
+  shouldFocus: boolean = true,
 ) => {
   if (shouldFocus && focusRef.current) {
     const reactTag = findNodeHandle(focusRef.current);

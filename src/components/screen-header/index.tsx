@@ -4,9 +4,14 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, {useMemo, useState} from 'react';
+import React, {ReactNode, useMemo, useState} from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
-import HeaderButton, {ButtonModes, HeaderButtonProps} from './HeaderButton';
+import HeaderButton, {
+  ButtonModes,
+  HeaderButtonProps,
+  HeaderButtonWithoutNavigation,
+  HeaderButtonWithoutNavigationProps,
+} from './HeaderButton';
 import ThemeText from '@atb/components/text';
 import {AlertContext} from '@atb/alerts/AlertsContext';
 import AlertBox from '@atb/alerts/AlertBox';
@@ -44,34 +49,72 @@ export type ScreenHeaderProps = {
   setFocusOnLoad?: boolean;
 };
 
-const ScreenHeader: React.FC<ScreenHeaderProps> = ({
-  leftButton,
-  rightButton,
+const ScreenHeader: React.FC<ScreenHeaderProps> = (props) => {
+  const themeColor = props.color ?? 'background_gray';
+
+  const leftIcon = props.leftButton ? (
+    <HeaderButton color={themeColor} {...props.leftButton} />
+  ) : (
+    <View />
+  );
+  const rightIcon = props.rightButton ? (
+    <HeaderButton color={themeColor} {...props.rightButton} />
+  ) : (
+    <View />
+  );
+
+  return <BaseHeader leftIcon={leftIcon} rightIcon={rightIcon} {...props} />;
+};
+
+type ScreenHeaderWithoutNavigationProps = ScreenHeaderProps & {
+  leftButton?: HeaderButtonWithoutNavigationProps;
+  rightButton?: HeaderButtonWithoutNavigationProps;
+};
+
+/**
+ * A screen header to use in contexts outside a stack navigation, for example in
+ * bottom sheet. This is necessary as the normal screen header accesses the
+ * navigation object, which throws an error outside of a stack navigations.
+ */
+export const ScreenHeaderWithoutNavigation = (
+  props: ScreenHeaderWithoutNavigationProps,
+) => {
+  const themeColor = props.color ?? 'background_gray';
+  const leftIcon = props.leftButton ? (
+    <HeaderButtonWithoutNavigation color={themeColor} {...props.leftButton} />
+  ) : (
+    <View />
+  );
+  const rightIcon = props.rightButton ? (
+    <HeaderButtonWithoutNavigation color={themeColor} {...props.rightButton} />
+  ) : (
+    <View />
+  );
+
+  return <BaseHeader leftIcon={leftIcon} rightIcon={rightIcon} {...props} />;
+};
+
+type BaseHeaderProps = ScreenHeaderProps & {
+  rightIcon: ReactNode;
+  leftIcon: ReactNode;
+};
+
+const BaseHeader = ({
+  color,
+  setFocusOnLoad,
+  style,
   title,
   titleA11yLabel,
   alertContext,
-  style,
-  color,
-  setFocusOnLoad,
-}) => {
+  leftIcon,
+  rightIcon,
+}: BaseHeaderProps) => {
   const css = useHeaderStyle();
   const {theme} = useTheme();
   const themeColor = color ?? 'background_gray';
+  const focusRef = useFocusOnLoad(setFocusOnLoad);
 
   const {buttonsHeight, buttonsTopOffset, setLayoutFor} = useHeaderLayouts();
-
-  const leftIcon = leftButton ? (
-    <HeaderButton color={themeColor} {...leftButton} />
-  ) : (
-    <View />
-  );
-  const rightIcon = rightButton ? (
-    <HeaderButton color={themeColor} {...rightButton} />
-  ) : (
-    <View />
-  );
-
-  const focusRef = useFocusOnLoad(setFocusOnLoad);
 
   const backgroundColor = theme.colors[themeColor].backgroundColor;
 
@@ -116,6 +159,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
     </View>
   );
 };
+
 export default ScreenHeader;
 
 const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({

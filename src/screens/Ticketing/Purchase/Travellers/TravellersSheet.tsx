@@ -4,7 +4,11 @@ import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
-import {TravellersTexts, useTranslation} from '@atb/translations';
+import {
+  ScreenHeaderTexts,
+  TravellersTexts,
+  useTranslation,
+} from '@atb/translations';
 import React, {forwardRef} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -15,8 +19,8 @@ import useUserCountState, {UserProfileWithCount} from './use-user-count-state';
 import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
-import ScreenHeader from '@atb/components/screen-header';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet/use-bottom-sheet';
+import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
+import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 
 type Props = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -35,9 +39,13 @@ const TravellersSheet = forwardRef<ScrollView, Props>(
 
     return (
       <BottomSheetContainer>
-        <ScreenHeader
+        <ScreenHeaderWithoutNavigation
           title={t(TravellersTexts.header.title)}
-          leftButton={{type: 'cancel', onPress: close}}
+          leftButton={{
+            type: 'cancel',
+            onPress: close,
+            text: t(ScreenHeaderTexts.headerButton.cancel.text),
+          }}
           color={'background_2'}
           setFocusOnLoad={false}
         />

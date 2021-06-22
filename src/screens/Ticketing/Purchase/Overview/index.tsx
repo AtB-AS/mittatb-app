@@ -31,7 +31,7 @@ import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
 import {formatToLongDateTime} from '@atb/utils/date';
 import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/icons/navigation';
-import {useBottomSheet} from '@atb/components/bottom-sheet/use-bottom-sheet';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
 import ProductSheet from '@atb/screens/Ticketing/Purchase/Product/ProductSheet';
 import {usePreferences} from '@atb/preferences';
 import {screenReaderPause} from '@atb/components/accessible-text';
@@ -102,191 +102,160 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
   const closeModal = () => navigation.dismiss();
 
-  const {
-    open: openProductSheet,
-    isOpen: isProductSheetOpen,
-    bottomSheet: productSheet,
-  } = useBottomSheet((close, focusRef) => (
-    <ProductSheet
-      close={close}
-      save={setPreassignedFareProduct}
-      preassignedFareProduct={preassignedFareProduct}
-      ref={focusRef}
-    />
-  ));
+  const {open: openBottomSheet} = useBottomSheet();
 
-  const {
-    open: openTravellersSheet,
-    isOpen: isTravellersSheetOpen,
-    bottomSheet: travellersSheet,
-  } = useBottomSheet((close, focusRef) => (
-    <TravellersSheet
-      close={close}
-      save={setUserProfilesWithCount}
-      preassignedFareProduct={preassignedFareProduct}
-      userProfilesWithCount={userProfilesWithCount}
-      ref={focusRef}
-    />
-  ));
+  const openProductSheet = () => {
+    openBottomSheet((close, focusRef) => (
+      <ProductSheet
+        close={close}
+        save={setPreassignedFareProduct}
+        preassignedFareProduct={preassignedFareProduct}
+        ref={focusRef}
+      />
+    ));
+  };
 
-  const {
-    open: openTravelDateSheet,
-    isOpen: isTravelDateSheetOpen,
-    bottomSheet: travelDateSheet,
-  } = useBottomSheet((close, focusRef) => (
-    <TravelDateSheet
-      close={close}
-      save={setTravelDate}
-      travelDate={travelDate}
-      ref={focusRef}
-    />
-  ));
+  const openTravellersSheet = () => {
+    openBottomSheet((close, focusRef) => (
+      <TravellersSheet
+        close={close}
+        save={setUserProfilesWithCount}
+        preassignedFareProduct={preassignedFareProduct}
+        userProfilesWithCount={userProfilesWithCount}
+        ref={focusRef}
+      />
+    ));
+  };
 
-  const isBottomSheetOpen =
-    isProductSheetOpen || isTravellersSheetOpen || isTravelDateSheetOpen;
+  const openTravelDateSheet = () => {
+    openBottomSheet((close, focusRef) => (
+      <TravelDateSheet
+        close={close}
+        save={setTravelDate}
+        travelDate={travelDate}
+        ref={focusRef}
+      />
+    ));
+  };
 
   return (
     <View style={styles.container}>
-      <View
-        accessibilityElementsHidden={isBottomSheetOpen}
-        importantForAccessibility={
-          isBottomSheetOpen ? 'no-hide-descendants' : 'yes'
-        }
-      >
-        <FullScreenHeader
-          title={t(
-            PurchaseOverviewTexts.header.title[preassignedFareProduct.type],
-          )}
-          leftButton={{
-            type: 'cancel',
-            onPress: closeModal,
-          }}
-          alertContext="ticketing"
-        />
+      <FullScreenHeader
+        title={t(
+          PurchaseOverviewTexts.header.title[preassignedFareProduct.type],
+        )}
+        leftButton={{
+          type: 'cancel',
+          onPress: closeModal,
+        }}
+        alertContext="ticketing"
+      />
 
-        <View style={styles.selectionLinks}>
-          {error && (
-            <MessageBox
-              type="error"
-              title={t(PurchaseOverviewTexts.errorMessageBox.title)}
-              message={t(PurchaseOverviewTexts.errorMessageBox.message)}
-              retryFunction={refreshOffer}
-              containerStyle={styles.errorMessage}
-            />
-          )}
+      <View style={styles.selectionLinks}>
+        {error && (
+          <MessageBox
+            type="error"
+            title={t(PurchaseOverviewTexts.errorMessageBox.title)}
+            message={t(PurchaseOverviewTexts.errorMessageBox.message)}
+            retryFunction={refreshOffer}
+            containerStyle={styles.errorMessage}
+          />
+        )}
 
-          <Sections.Section>
-            <Sections.LinkItem
-              text={getReferenceDataName(preassignedFareProduct, language)}
-              onPress={openProductSheet}
-              disabled={selectableProducts.length <= 1}
-              icon={<ThemeIcon svg={Edit} />}
-              accessibility={{
-                accessibilityLabel:
-                  getReferenceDataName(preassignedFareProduct, language) +
-                  screenReaderPause,
-                accessibilityHint: t(PurchaseOverviewTexts.product.a11yHint),
-              }}
-            />
-            <Sections.LinkItem
-              text={createTravellersText(
-                userProfilesWithCount,
-                true,
-                false,
-                t,
-                language,
-              )}
-              onPress={openTravellersSheet}
-              icon={<ThemeIcon svg={Edit} />}
-              accessibility={{
-                accessibilityLabel:
-                  createTravellersText(
-                    userProfilesWithCount,
-                    false,
-                    false,
-                    t,
-                    language,
-                  ) + screenReaderPause,
-                accessibilityHint: t(PurchaseOverviewTexts.travellers.a11yHint),
-              }}
-            />
-            <Sections.LinkItem
-              text={createTravelDateText(t, language, travelDate)}
-              disabled={!travelDateSelectionEnabled}
-              onPress={openTravelDateSheet}
-              icon={<ThemeIcon svg={Edit} />}
-              accessibility={{
-                accessibilityLabel:
-                  createTravelDateText(t, language, travelDate) +
-                  screenReaderPause,
-                accessibilityHint: t(PurchaseOverviewTexts.travelDate.a11yHint),
-              }}
-            />
-            <Sections.LinkItem
-              text={tariffZonesSummary(
-                fromTariffZone,
-                toTariffZone,
-                language,
-                t,
-              )}
-              onPress={() => {
-                navigation.push('TariffZones', {
-                  fromTariffZone,
-                  toTariffZone,
-                });
-              }}
-              icon={<ThemeIcon svg={Edit} />}
-              accessibility={{
-                accessibilityLabel:
-                  tariffZonesSummary(
-                    fromTariffZone,
-                    toTariffZone,
-                    language,
-                    t,
-                  ) + screenReaderPause,
-                accessibilityHint: t(
-                  PurchaseOverviewTexts.tariffZones.a11yHint,
-                ),
-              }}
-            />
-            <Sections.GenericItem>
-              {isSearchingOffer ? (
-                <ActivityIndicator style={styles.totalSection} />
-              ) : (
-                <ThemeText
-                  style={styles.totalSection}
-                  type="body__primary--bold"
-                >
-                  {t(PurchaseOverviewTexts.totalPrice(totalPrice))}
-                </ThemeText>
-              )}
-            </Sections.GenericItem>
-          </Sections.Section>
-        </View>
-
-        <View style={styles.toPaymentButton}>
-          <Button
-            color="primary_2"
-            text={t(PurchaseOverviewTexts.primaryButton)}
-            disabled={isSearchingOffer || !totalPrice || !!error}
+        <Sections.Section>
+          <Sections.LinkItem
+            text={getReferenceDataName(preassignedFareProduct, language)}
+            onPress={openProductSheet}
+            disabled={selectableProducts.length <= 1}
+            icon={<ThemeIcon svg={Edit} />}
+            accessibility={{
+              accessibilityLabel:
+                getReferenceDataName(preassignedFareProduct, language) +
+                screenReaderPause,
+              accessibilityHint: t(PurchaseOverviewTexts.product.a11yHint),
+            }}
+          />
+          <Sections.LinkItem
+            text={createTravellersText(
+              userProfilesWithCount,
+              true,
+              false,
+              t,
+              language,
+            )}
+            onPress={openTravellersSheet}
+            icon={<ThemeIcon svg={Edit} />}
+            accessibility={{
+              accessibilityLabel:
+                createTravellersText(
+                  userProfilesWithCount,
+                  false,
+                  false,
+                  t,
+                  language,
+                ) + screenReaderPause,
+              accessibilityHint: t(PurchaseOverviewTexts.travellers.a11yHint),
+            }}
+          />
+          <Sections.LinkItem
+            text={createTravelDateText(t, language, travelDate)}
+            disabled={!travelDateSelectionEnabled}
+            onPress={openTravelDateSheet}
+            icon={<ThemeIcon svg={Edit} />}
+            accessibility={{
+              accessibilityLabel:
+                createTravelDateText(t, language, travelDate) +
+                screenReaderPause,
+              accessibilityHint: t(PurchaseOverviewTexts.travelDate.a11yHint),
+            }}
+          />
+          <Sections.LinkItem
+            text={tariffZonesSummary(fromTariffZone, toTariffZone, language, t)}
             onPress={() => {
-              navigation.navigate('Confirmation', {
+              navigation.push('TariffZones', {
                 fromTariffZone,
                 toTariffZone,
-                userProfilesWithCount,
-                preassignedFareProduct,
-                travelDate,
-                headerLeftButton: {type: 'back'},
               });
             }}
-            icon={ArrowRight}
-            iconPosition="right"
+            icon={<ThemeIcon svg={Edit} />}
+            accessibility={{
+              accessibilityLabel:
+                tariffZonesSummary(fromTariffZone, toTariffZone, language, t) +
+                screenReaderPause,
+              accessibilityHint: t(PurchaseOverviewTexts.tariffZones.a11yHint),
+            }}
           />
-        </View>
+          <Sections.GenericItem>
+            {isSearchingOffer ? (
+              <ActivityIndicator style={styles.totalSection} />
+            ) : (
+              <ThemeText style={styles.totalSection} type="body__primary--bold">
+                {t(PurchaseOverviewTexts.totalPrice(totalPrice))}
+              </ThemeText>
+            )}
+          </Sections.GenericItem>
+        </Sections.Section>
       </View>
-      {productSheet}
-      {travellersSheet}
-      {travelDateSheet}
+
+      <View style={styles.toPaymentButton}>
+        <Button
+          color="primary_2"
+          text={t(PurchaseOverviewTexts.primaryButton)}
+          disabled={isSearchingOffer || !totalPrice || !!error}
+          onPress={() => {
+            navigation.navigate('Confirmation', {
+              fromTariffZone,
+              toTariffZone,
+              userProfilesWithCount,
+              preassignedFareProduct,
+              travelDate,
+              headerLeftButton: {type: 'back'},
+            });
+          }}
+          icon={ArrowRight}
+          iconPosition="right"
+        />
+      </View>
     </View>
   );
 };

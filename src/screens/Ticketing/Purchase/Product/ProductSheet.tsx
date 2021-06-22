@@ -1,14 +1,20 @@
 import React, {forwardRef, useState} from 'react';
-import Header from '@atb/components/screen-header';
+import Header, {
+  ScreenHeaderWithoutNavigation,
+} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import * as Sections from '@atb/components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
-import {ProductTexts, useTranslation} from '@atb/translations';
+import {
+  ProductTexts,
+  ScreenHeaderTexts,
+  useTranslation,
+} from '@atb/translations';
 import Button from '@atb/components/button';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet/use-bottom-sheet';
+import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 
 type Props = {
@@ -36,9 +42,13 @@ const ProductSheet = forwardRef<ScrollView, Props>(
 
     return (
       <BottomSheetContainer>
-        <Header
+        <ScreenHeaderWithoutNavigation
           title={t(ProductTexts.header.title)}
-          leftButton={{type: 'cancel', onPress: close}}
+          leftButton={{
+            type: 'cancel',
+            onPress: close,
+            text: t(ScreenHeaderTexts.headerButton.cancel.text),
+          }}
           color={'background_2'}
           setFocusOnLoad={false}
         />
