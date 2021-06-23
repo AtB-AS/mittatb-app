@@ -58,6 +58,7 @@ const BottomSheetProvider: React.FC = ({children}) => {
   );
 
   const close = () => {
+    setContentFunction(() => () => null);
     setIsOpen(false);
   };
 
