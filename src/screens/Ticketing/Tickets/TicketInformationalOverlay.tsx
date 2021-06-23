@@ -1,12 +1,12 @@
+import {useAppState} from '@atb/AppContext';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import ThemeText from '@atb/components/text';
 import Button from '@atb/components/button';
 import {ScrollView, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Confirm} from '@atb/assets/svg/icons/actions';
 import {ThemeColor} from '@atb/theme/colors';
-import storage from '@atb/storage';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 const themeColor: ThemeColor = 'background_gray';
@@ -15,11 +15,15 @@ export default function TicketInformationalOverlay() {
   const {theme} = useTheme();
   const {t} = useTranslation();
   const styles = useStyles();
+  const appContext = useAppState();
 
-  const {hasAccepted, onAccept} = useAcceptationState();
-  if (hasAccepted) {
+  if (appContext.ticketingAccepted) {
     return null;
   }
+
+  const onAccept = () => {
+    appContext.acceptTicketing();
+  };
 
   return (
     <View style={styles.container}>
@@ -97,24 +101,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.colors[themeColor].backgroundColor,
   },
 }));
-
-const useAcceptationState = () => {
-  const [hasAccepted, setHasAccepted] = useState(true);
-
-  useEffect(() => {
-    (async function () {
-      const hasRead = await storage.get('@ATB_ticket_informational_accepted');
-      setHasAccepted(hasRead && JSON.parse(hasRead));
-    })();
-  }, []);
-
-  const onAccept = () => {
-    storage.set('@ATB_ticket_informational_accepted', JSON.stringify(true));
-    setHasAccepted(true);
-  };
-
-  return {
-    hasAccepted,
-    onAccept,
-  };
-};
