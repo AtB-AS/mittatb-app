@@ -1,12 +1,6 @@
-import {
-  Animated,
-  LayoutChangeEvent,
-  TouchableWithoutFeedback, useWindowDimensions,
-  View,
-} from 'react-native';
+import {Animated, LayoutChangeEvent, useWindowDimensions} from 'react-native';
 import React, {ReactNode, useMemo} from 'react';
 import {StyleSheet} from '@atb/theme';
-import {BottomSheetTexts, useTranslation} from '@atb/translations';
 
 export default function AnimatedBottomSheet({
   animatedOffset,
