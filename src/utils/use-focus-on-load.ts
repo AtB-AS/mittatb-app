@@ -17,8 +17,7 @@ export default function useFocusOnLoad(setFocusOnLoad: boolean = true) {
   useEffect(
     () =>
       navigation?.addListener('focus', () => {
-        // 50 ms timeout necessary for iPhone VoiceOver
-        setTimeout(() => giveFocus(focusRef, setFocusOnLoad), 50);
+        setTimeout(() => giveFocus(focusRef, setFocusOnLoad), 200);
       }),
     [navigation, focusRef.current, setFocusOnLoad],
   );

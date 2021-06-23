@@ -120,29 +120,32 @@ const BaseHeader = ({
 
   return (
     <View style={[css.container, style, {backgroundColor}]}>
-      <View
-        accessible={!!title}
-        accessibilityRole="header"
-        style={[
-          css.headerTitle,
-          {
-            // Make space for absolute positioned buttons in case they are offset below title
-            marginBottom: buttonsTopOffset,
-          },
-        ]}
-        onLayout={setLayoutFor('container')}
-        ref={focusRef}
-      >
-        <ThemeText
+      {title && (
+        <View
           accessible={!!title}
-          accessibilityLabel={titleA11yLabel}
-          onLayout={setLayoutFor('title')}
-          type="body__primary--bold"
-          color={themeColor}
+          accessibilityRole="header"
+          style={[
+            css.headerTitle,
+            {
+              // Make space for absolute positioned buttons in case they are offset below title
+              marginBottom: buttonsTopOffset,
+            },
+          ]}
+          onLayout={setLayoutFor('container')}
+          ref={focusRef}
         >
-          {title ?? '\u00a0'}
-        </ThemeText>
-      </View>
+          <ThemeText
+            accessible={!!title}
+            accessibilityLabel={titleA11yLabel}
+            onLayout={setLayoutFor('title')}
+            type="body__primary--bold"
+            color={themeColor}
+          >
+            {title ?? '\u00a0'}
+          </ThemeText>
+        </View>
+      )}
+
       <View
         style={[
           css.buttons,

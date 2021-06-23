@@ -62,8 +62,8 @@ const App = () => {
                 <FavoritesContextProvider>
                   <SearchHistoryContextProvider>
                     <GeolocationContextProvider>
-                      <TicketContextProvider>
-                        <RemoteConfigContextProvider>
+                      <RemoteConfigContextProvider>
+                        <TicketContextProvider>
                           <AppLanguageProvider>
                             <AlertsContextProvider>
                               <BottomSheetProvider>
@@ -71,8 +71,8 @@ const App = () => {
                               </BottomSheetProvider>
                             </AlertsContextProvider>
                           </AppLanguageProvider>
-                        </RemoteConfigContextProvider>
-                      </TicketContextProvider>
+                        </TicketContextProvider>
+                      </RemoteConfigContextProvider>
                     </GeolocationContextProvider>
                   </SearchHistoryContextProvider>
                 </FavoritesContextProvider>
