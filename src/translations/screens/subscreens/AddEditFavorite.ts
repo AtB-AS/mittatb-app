@@ -23,6 +23,11 @@ const AddEditFavoriteTexts = {
     },
     icon: {
       label: _('Ikon', 'Icon'),
+      a11yLabel: _('Ikon for favoritten', 'Favourite icon'),
+      a11yHint: _(
+        'Aktivér for å velge ikon for favoritten',
+        'Activate to select favourite icon',
+      ),
     },
   },
   save: {
@@ -41,6 +46,20 @@ const AddEditFavoriteTexts = {
   },
   cancel: {
     label: _('Avbryt', 'Cancel'),
+  },
+  emojiSheet: {
+    title: _('Velg emoji', 'Select emoji'),
+    rightButton: _('Fjern emoji', 'Clear emoji'),
+    categories: {
+      smileys: _('Smilefjes', 'Smileys'),
+      people: _('Personer', 'People'),
+      animals: _('Dyr og natur', 'Animals and nature'),
+      food: _('Mat og drikke', 'Food and drinks'),
+      activities: _('Aktiviteter', 'Activities'),
+      travel: _('Reise og steder', 'Travel and places'),
+      objects: _('Objekter', 'Objects'),
+      symbols: _('Symboler', 'Symbols'),
+    },
   },
 };
 export default AddEditFavoriteTexts;

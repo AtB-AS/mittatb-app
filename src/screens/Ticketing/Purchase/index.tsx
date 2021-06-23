@@ -13,7 +13,6 @@ import ConfirmationScreen, {
 } from './Confirmation';
 import PurchaseOverviewScreen from './Overview';
 import {CreditCard as CreditCardScreen, Vipps as VippsScreen} from './Payment';
-import ProductScreen, {ProductRouteParams} from './Product';
 import TariffZones, {
   RouteParams as TariffZonesParams,
   TariffZoneWithMetadata,
@@ -21,26 +20,14 @@ import TariffZones, {
 import TariffZoneSearch, {
   RouteParams as TariffZoneSearchParams,
 } from './TariffZones/search';
-import TravellersScreen from './Travellers';
-import {UserProfileWithCount} from './Travellers/use-user-count-state';
-import TravelDateScreen, {
-  TravelDateRouteParams,
-} from '@atb/screens/Ticketing/Purchase/TravelDate';
 import {TransitionPresets} from '@react-navigation/stack';
 
 type PurchaseOverviewParams = {
   refreshOffer?: boolean;
   selectableProductType?: PreassignedFareProductType;
-  preassignedFareProduct?: PreassignedFareProduct;
   fromTariffZone?: TariffZoneWithMetadata;
   toTariffZone?: TariffZoneWithMetadata;
-  userProfilesWithCount?: UserProfileWithCount[];
   travelDate?: string;
-};
-
-type TravellersParams = {
-  userProfilesWithCount: UserProfileWithCount[];
-  preassignedFareProduct: PreassignedFareProduct;
 };
 
 type PaymentParams = {
@@ -50,9 +37,6 @@ type PaymentParams = {
 
 export type TicketingStackParams = {
   PurchaseOverview: PurchaseOverviewParams;
-  Product: ProductRouteParams;
-  Travellers: TravellersParams;
-  TravelDate: TravelDateRouteParams;
   TariffZones: TariffZonesParams;
   TariffZoneSearch: TariffZoneSearchParams;
   Confirmation: ConfirmationRouteParams;
@@ -64,7 +48,7 @@ export type TicketingStackParams = {
 const Stack = createDismissableStackNavigator<TicketingStackParams>();
 
 type TicketPurchaseRootProps = {
-  route: RouteProp<TicketingStackParams, 'Travellers'>;
+  route: RouteProp<TicketingStackParams, 'PurchaseOverview'>;
 };
 
 export default function PurchaseStack({route}: TicketPurchaseRootProps) {
@@ -78,9 +62,6 @@ export default function PurchaseStack({route}: TicketPurchaseRootProps) {
         component={PurchaseOverviewScreen}
         initialParams={route.params}
       />
-      <Stack.Screen name="Product" component={ProductScreen} />
-      <Stack.Screen name="Travellers" component={TravellersScreen} />
-      <Stack.Screen name="TravelDate" component={TravelDateScreen} />
       <Stack.Screen name="TariffZones" component={TariffZones} />
       <Stack.Screen
         name="Confirmation"

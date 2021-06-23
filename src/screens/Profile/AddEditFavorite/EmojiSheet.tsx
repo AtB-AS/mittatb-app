@@ -6,23 +6,27 @@
  */
 import ThemeText from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import composeRefs from '@seznam/compose-react-refs';
 import emoji from 'emoji-datasource';
 import groupBy from 'lodash.groupby';
 import mapValues from 'lodash.mapvalues';
 import orderBy from 'lodash.orderby';
-import React, {forwardRef, useEffect, useRef, useState} from 'react';
+import React, {forwardRef, useEffect, useState} from 'react';
 import {
   Dimensions,
   Platform,
   ScaledSize,
+  ScrollView,
   TextStyle,
-  TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
-import {Modalize} from 'react-native-modalize';
-import {Portal} from 'react-native-portalize';
+import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
+import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {
+  AddEditFavoriteTexts,
+  ScreenHeaderTexts,
+  useTranslation,
+} from '@atb/translations';
 
 // Polyfill for Android
 require('string.fromcodepoint');
@@ -121,26 +125,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-const ClearButton: React.FC<{
-  value: string | null;
-  onEmojiSelected: (e: string | null) => void;
-  clearButtonStyle?: ViewStyle;
-  clearButtonText?: string;
-}> = ({value, onEmojiSelected, clearButtonStyle, clearButtonText}) => {
-  const styles = useStyles();
-  if (!value) return null;
-  return (
-    <TouchableOpacity onPress={() => onEmojiSelected(null)}>
-      <ThemeText
-        type="body__primary"
-        style={[styles.clearButton, clearButtonStyle]}
-      >
-        {clearButtonText ?? 'Fjern emoji'}
-      </ThemeText>
-    </TouchableOpacity>
-  );
-};
-
 type EmojiCategory = {
   value: string | null;
   category: string;
@@ -197,59 +181,55 @@ type Props = Omit<EmojiCategory, 'category'> & {
   clearButtonStyle?: ViewStyle;
   clearButtonText?: string;
   value: string | null;
+  close: () => void;
 };
-const EmojiPicker = forwardRef<Modalize, Props>(
-  ({value, onEmojiSelected, hideClearButton, closeOnSelect, ...props}, ref) => {
-    const modalizeRef = useRef<Modalize>(null);
-    const combinedRef = composeRefs<Modalize>(ref, modalizeRef);
-    const styles = usePickerStyles();
-
+const EmojiSheet = forwardRef<ScrollView, Props>(
+  (
+    {value, onEmojiSelected, hideClearButton, closeOnSelect, close, ...props},
+    focusRef,
+  ) => {
+    const {t} = useTranslation();
     const onClick = (emoji: string | null) => {
       onEmojiSelected(emoji);
       if (closeOnSelect) {
-        modalizeRef.current?.close();
+        close();
       }
-    };
-    const renderCategory = ({item}: any) => {
-      return (
-        <EmojiCategory
-          onEmojiSelected={onClick}
-          key={item}
-          category={item}
-          value={value}
-          {...props}
-        />
-      );
     };
 
     return (
-      <Portal>
-        <Modalize
-          modalHeight={400}
-          ref={combinedRef}
-          modalStyle={styles.modal}
-          HeaderComponent={
-            <ClearButton value={value} onEmojiSelected={onClick} />
-          }
-          flatListProps={{
-            data: CATEGORIES,
-            initialNumToRender: 1,
-            maxToRenderPerBatch: 1,
-            keyExtractor: (category: string) => category as string,
-            renderItem: renderCategory,
+      <BottomSheetContainer>
+        <ScreenHeaderWithoutNavigation
+          title={t(AddEditFavoriteTexts.emojiSheet.title)}
+          leftButton={{
+            type: 'cancel',
+            onPress: close,
+            text: t(ScreenHeaderTexts.headerButton.cancel.text),
           }}
+          rightButton={{
+            type: 'custom',
+            text: t(AddEditFavoriteTexts.emojiSheet.rightButton),
+            onPress: () => onClick(null),
+          }}
+          color={'background_2'}
+          setFocusOnLoad={true}
         />
-      </Portal>
+        <ScrollView ref={focusRef}>
+          {CATEGORIES.map((category) => (
+            <EmojiCategory
+              onEmojiSelected={onClick}
+              key={category}
+              category={category}
+              value={value}
+              {...props}
+            />
+          ))}
+        </ScrollView>
+      </BottomSheetContainer>
     );
   },
 );
-const usePickerStyles = StyleSheet.createThemeHook((theme) => ({
-  modal: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
-  },
-}));
 
-export default EmojiPicker;
+export default EmojiSheet;
 
 type CallbackType = {
   screen: ScaledSize;

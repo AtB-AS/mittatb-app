@@ -10,14 +10,14 @@ import {useNavigation} from '@react-navigation/native';
 export default function useFocusOnLoad(setFocusOnLoad: boolean = true) {
   const focusRef = useRef(null);
   useEffect(() => {
-    giveFocus(setFocusOnLoad, focusRef);
+    giveFocus(focusRef, setFocusOnLoad);
   }, [focusRef.current, setFocusOnLoad]);
 
   const navigation = useNavigationSafe();
   useEffect(
     () =>
       navigation?.addListener('focus', () => {
-        setTimeout(() => giveFocus(setFocusOnLoad, focusRef), 200);
+        setTimeout(() => giveFocus(focusRef, setFocusOnLoad), 200);
       }),
     [navigation, focusRef.current, setFocusOnLoad],
   );
@@ -37,9 +37,9 @@ const useNavigationSafe = () => {
   }
 };
 
-const giveFocus = (
-  shouldFocus: boolean,
+export const giveFocus = (
   focusRef: React.MutableRefObject<any>,
+  shouldFocus: boolean = true,
 ) => {
   if (shouldFocus && focusRef.current) {
     const reactTag = findNodeHandle(focusRef.current);

@@ -16,13 +16,13 @@ import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 import {Location} from '@entur/sdk';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useEffect, useRef, useState} from 'react';
-import {Alert, Keyboard, View} from 'react-native';
-import {Modalize} from 'react-native-modalize';
+import React, {useEffect, useState} from 'react';
+import {Alert, Keyboard, ScrollView, View} from 'react-native';
 import {AddEditFavoriteRootParams} from '.';
-import EmojiPopup from './EmojiPopup';
+import EmojiSheet from './EmojiSheet';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
 
 type AddEditRouteName = 'AddEditForm';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditForm';
@@ -66,12 +66,6 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
     'searchLocation',
     editItem?.location,
   );
-
-  const emojiRef = useRef<Modalize>(null);
-  const openEmojiPopup = () => {
-    Keyboard.dismiss();
-    emojiRef.current?.open();
-  };
 
   useEffect(() => setEmoji(editItem?.emoji), [editItem?.emoji]);
 
@@ -130,6 +124,40 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
     );
   };
 
+  const {open: openBottomSheet} = useBottomSheet();
+
+  const openEmojiSheet = () => {
+    openBottomSheet((close) => (
+      <EmojiSheet
+        localizedCategories={[
+          t(AddEditFavoriteTexts.emojiSheet.categories.smileys),
+          t(AddEditFavoriteTexts.emojiSheet.categories.people),
+          t(AddEditFavoriteTexts.emojiSheet.categories.animals),
+          t(AddEditFavoriteTexts.emojiSheet.categories.food),
+          t(AddEditFavoriteTexts.emojiSheet.categories.activities),
+          t(AddEditFavoriteTexts.emojiSheet.categories.travel),
+          t(AddEditFavoriteTexts.emojiSheet.categories.objects),
+          t(AddEditFavoriteTexts.emojiSheet.categories.symbols),
+        ]}
+        value={emoji ?? null}
+        closeOnSelect={true}
+        onEmojiSelected={(emoji) => {
+          if (emoji == null) {
+            setEmoji(undefined);
+          } else {
+            setEmoji(emoji);
+          }
+        }}
+        close={close}
+      />
+    ));
+  };
+
+  const openEmojiPopup = () => {
+    Keyboard.dismiss();
+    openEmojiSheet();
+  };
+
   return (
     <View style={css.container}>
       <FullScreenHeader
@@ -141,30 +169,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         leftButton={{type: !!editItem ? 'close' : 'back'}}
       />
 
-      <EmojiPopup
-        localizedCategories={[
-          'Smilefjes',
-          'Personer',
-          'Dyr og natur',
-          'Mat og drikke',
-          'Aktivitet',
-          'Reise og steder',
-          'Objekter',
-          'Symboler',
-        ]}
-        ref={emojiRef}
-        value={emoji ?? null}
-        closeOnSelect={true}
-        onEmojiSelected={(emoji) => {
-          if (emoji == null) {
-            setEmoji(undefined);
-          } else {
-            setEmoji(emoji);
-          }
-        }}
-      />
-
-      <View style={css.innerContainer}>
+      <ScrollView style={css.innerContainer}>
         <ScreenReaderAnnouncement message={errorMessage} />
         {errorMessage && (
           <MessageBox withMargin message={errorMessage} type="error" />
@@ -201,8 +206,8 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         <Sections.Section withPadding>
           <Sections.ButtonInput
             onPress={openEmojiPopup}
-            accessibilityElementsHidden={true}
-            importantForAccessibility="no-hide-descendants"
+            accessibilityLabel={t(AddEditFavoriteTexts.fields.icon.a11yLabel)}
+            accessibilityHint={t(AddEditFavoriteTexts.fields.icon.a11yHint)}
             label={t(AddEditFavoriteTexts.fields.icon.label)}
             icon="expand-more"
             type="inline"
@@ -215,7 +220,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
             }
           />
         </Sections.Section>
-      </View>
+      </ScrollView>
 
       <FullScreenFooter avoidKeyboard={true}>
         <ButtonGroup>
@@ -243,8 +248,6 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     flex: 1,
-    alignItems: 'stretch',
-    justifyContent: 'center',
     backgroundColor: theme.colors.background_3.backgroundColor,
   },
   innerContainer: {

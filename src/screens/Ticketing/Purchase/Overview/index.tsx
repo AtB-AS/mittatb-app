@@ -22,7 +22,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {TicketingStackParams} from '../';
 import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
@@ -31,9 +31,13 @@ import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
 import {formatToLongDateTime} from '@atb/utils/date';
 import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/icons/navigation';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
+import ProductSheet from '@atb/screens/Ticketing/Purchase/Product/ProductSheet';
 import {usePreferences} from '@atb/preferences';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import TravellersSheet from '@atb/screens/Ticketing/Purchase/Travellers/TravellersSheet';
+import TravelDateSheet from '@atb/screens/Ticketing/Purchase/TravelDate/TravelDateSheet';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -60,8 +64,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     (p) => p.type === params.selectableProductType,
   );
 
-  const preassignedFareProduct =
-    params.preassignedFareProduct ?? selectableProducts[0];
+  const [preassignedFareProduct, setPreassignedFareProduct] = useState(
+    selectableProducts[0],
+  );
 
   const {travelDateSelectionEnabled} = getPurchaseFlow(preassignedFareProduct);
 
@@ -69,15 +74,17 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     userProfiles,
     preassignedFareProduct,
   );
-  const userProfilesWithCount =
-    params.userProfilesWithCount ?? defaultUserProfilesWithCount;
+  const [userProfilesWithCount, setUserProfilesWithCount] = useState(
+    defaultUserProfilesWithCount,
+  );
 
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
   const {
     fromTariffZone = defaultTariffZone,
     toTariffZone = defaultTariffZone,
-    travelDate,
   } = params;
+
+  const [travelDate, setTravelDate] = useState<string | undefined>();
 
   const {isSearchingOffer, error, totalPrice, refreshOffer} = useOfferState(
     preassignedFareProduct,
@@ -94,6 +101,42 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   }, [params?.refreshOffer]);
 
   const closeModal = () => navigation.dismiss();
+
+  const {open: openBottomSheet} = useBottomSheet();
+
+  const openProductSheet = () => {
+    openBottomSheet((close, focusRef) => (
+      <ProductSheet
+        close={close}
+        save={setPreassignedFareProduct}
+        preassignedFareProduct={preassignedFareProduct}
+        ref={focusRef}
+      />
+    ));
+  };
+
+  const openTravellersSheet = () => {
+    openBottomSheet((close, focusRef) => (
+      <TravellersSheet
+        close={close}
+        save={setUserProfilesWithCount}
+        preassignedFareProduct={preassignedFareProduct}
+        userProfilesWithCount={userProfilesWithCount}
+        ref={focusRef}
+      />
+    ));
+  };
+
+  const openTravelDateSheet = () => {
+    openBottomSheet((close, focusRef) => (
+      <TravelDateSheet
+        close={close}
+        save={setTravelDate}
+        travelDate={travelDate}
+        ref={focusRef}
+      />
+    ));
+  };
 
   return (
     <View style={styles.container}>
@@ -122,11 +165,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         <Sections.Section>
           <Sections.LinkItem
             text={getReferenceDataName(preassignedFareProduct, language)}
-            onPress={() => {
-              navigation.push('Product', {
-                preassignedFareProductId: preassignedFareProduct.id,
-              });
-            }}
+            onPress={openProductSheet}
             disabled={selectableProducts.length <= 1}
             icon={<ThemeIcon svg={Edit} />}
             accessibility={{
@@ -144,12 +183,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
               t,
               language,
             )}
-            onPress={() => {
-              navigation.push('Travellers', {
-                userProfilesWithCount,
-                preassignedFareProduct,
-              });
-            }}
+            onPress={openTravellersSheet}
             icon={<ThemeIcon svg={Edit} />}
             accessibility={{
               accessibilityLabel:
@@ -166,9 +200,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           <Sections.LinkItem
             text={createTravelDateText(t, language, travelDate)}
             disabled={!travelDateSelectionEnabled}
-            onPress={() => {
-              navigation.navigate('TravelDate', {travelDate});
-            }}
+            onPress={openTravelDateSheet}
             icon={<ThemeIcon svg={Edit} />}
             accessibility={{
               accessibilityLabel:

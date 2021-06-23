@@ -26,6 +26,7 @@ configureAndStartBugsnag();
 import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import AppLanguageProvider from './translations/LanguageContext';
+import {BottomSheetProvider} from '@atb/components/bottom-sheet';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
@@ -65,7 +66,9 @@ const App = () => {
                         <TicketContextProvider>
                           <AppLanguageProvider>
                             <AlertsContextProvider>
-                              <NavigationRoot />
+                              <BottomSheetProvider>
+                                <NavigationRoot />
+                              </BottomSheetProvider>
                             </AlertsContextProvider>
                           </AppLanguageProvider>
                         </TicketContextProvider>

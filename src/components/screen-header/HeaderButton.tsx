@@ -16,11 +16,13 @@ export type ButtonModes =
   | 'close'
   | 'home'
   | 'chat'
-  | 'skip';
+  | 'skip'
+  | 'custom';
 export type HeaderButtonProps = {
   type: ButtonModes;
   onPress?: () => void;
   color?: ThemeColor;
+  text?: string;
 } & AccessibilityProps;
 
 export type IconButton = Omit<HeaderButtonProps, 'type'> & {
@@ -33,19 +35,44 @@ const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
     return null;
   }
 
-  const {icon, onPress, ...accessibilityProps} = iconButton;
+  return <BaseHeaderButton {...iconButton} />;
+};
 
+export type HeaderButtonWithoutNavigationProps = {
+  text: string;
+  onPress: () => void;
+  color?: ThemeColor;
+} & AccessibilityProps;
+
+export const HeaderButtonWithoutNavigation = ({
+  text,
+  onPress,
+  color,
+  ...accessibilityProps
+}: HeaderButtonWithoutNavigationProps) => {
   return (
-    <TouchableOpacity
+    <BaseHeaderButton
+      icon={<ThemeText color={color}>{text}</ThemeText>}
       onPress={onPress}
-      hitSlop={insets.all(12)}
-      accessibilityRole="button"
       {...accessibilityProps}
-    >
-      {icon}
-    </TouchableOpacity>
+    />
   );
 };
+
+const BaseHeaderButton = ({
+  icon,
+  onPress,
+  ...accessibilityProps
+}: IconButton) => (
+  <TouchableOpacity
+    onPress={onPress}
+    hitSlop={insets.all(12)}
+    accessibilityRole="button"
+    {...accessibilityProps}
+  >
+    {icon}
+  </TouchableOpacity>
+);
 
 const useIconButton = (
   buttonProps: HeaderButtonProps,
@@ -86,6 +113,14 @@ const useIconButton = (
     }
     case 'chat':
       return chatIcon;
+    case 'custom': {
+      const {type, text, color, onPress, ...accessibilityProps} = buttonProps;
+      return {
+        icon: <ThemeText color={color}>{text}</ThemeText>,
+        onPress: onPress,
+        ...accessibilityProps,
+      };
+    }
   }
 };
 
