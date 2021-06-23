@@ -19,14 +19,18 @@ const SelectStartScreenTexts = {
       part2Text: _(
         'Du trenger ikke å vise frem billetten på grønne bybusser og trikk i Trondheimsområdet. På regionbuss og båt må du vise billetten til sjåfør eller billettør.\n\n' +
           'Billetten er gyldig for påstigning helt til den utløper, altså så lenge nedtellingen varer og i sonen(e) du har kjøpt billett for.\n\n' +
-          'Reiser i én sone: 90 minutter\n' +
-          'Reiser i to soner: 2 timer\n' +
-          'Reiser i tre eller flere soner: 4 timer og 30 minutter',
+          'Reiser i én sone: 1 time og 30 minutter\n' +
+          'Reiser i to soner: 2 timer og 30 minutter\n' +
+          'Reiser i tre soner: 3 timer og 30 minutter\n' +
+          'Reiser i fire soner: 4 timer og 30 minutter\n\n' +
+          'Ta kontakt med sjåføren om du har behov for en overgangsbillett.',
         'You do not need to show the ticket on green city buses and tram in the Trondheim area. Outside the Trondheim area, you must show the ticket to the driver or crew.\n\n' +
           'The ticket is valid for boarding until it expires, that is, as long as the countdown lasts and in the zone(s) you have purchased the ticket for.\n\n' +
-          'Travel in one zone: 90 minutes\n' +
-          'Travel in two zones: 2 hours\n' +
-          'Travel in three or more zones: 4 hours and 30 minutes',
+          'Travel in one zone: 1 hour and 30 minutes\n' +
+          'Travel in two zones: 2 hours and 30 minutes\n' +
+          'Travel in three zones: 3 hours and 30 minutes\n' +
+          'Travel in four zones: 4 hours and 30 minutes\n\n' +
+          'Please contact the driver if you need a transfer ticket.',
       ),
       part3Heading: _(
         'Priser for enkeltbillett buss og trikk',
