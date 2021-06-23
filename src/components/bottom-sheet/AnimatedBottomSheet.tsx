@@ -1,7 +1,7 @@
 import {
   Animated,
   LayoutChangeEvent,
-  TouchableWithoutFeedback,
+  TouchableWithoutFeedback, useWindowDimensions,
   View,
 } from 'react-native';
 import React, {ReactNode, useMemo} from 'react';
@@ -20,11 +20,12 @@ export default function AnimatedBottomSheet({
   onLayout: (ev: LayoutChangeEvent) => void;
 }) {
   const styles = useStyles();
+  const {height: windowHeight} = useWindowDimensions();
   const translateY = useMemo(
     () =>
       animatedOffset.interpolate({
         inputRange: [0, 1],
-        outputRange: [height || -2000, 0],
+        outputRange: [height || windowHeight, 0],
       }),
     [animatedOffset, height],
   );
