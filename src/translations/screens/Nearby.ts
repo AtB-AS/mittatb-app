@@ -152,5 +152,25 @@ const NearbyTexts = {
         _(`rutetid: ${time}`, `route time: ${time}`),
     },
   },
+  favoriteDialogSheet: {
+    title: _('Velg favorittavgang', 'Select favorite departure'),
+    description: (lineNumber: string, lineName: string) =>
+      _(
+        `Vil du favorittmarkere kun '${lineNumber} ${lineName}' eller alle variasjoner av linje ${lineNumber}?`,
+        `Do you want to favorite mark only '${lineNumber} ${lineName}' or all variations of line ${lineNumber}?`,
+      ),
+    buttons: {
+      specific: (lineNumber: string, lineName: string) =>
+        _(
+          `Kun '${lineNumber} ${lineName}'`,
+          `Only '${lineNumber} ${lineName}'`,
+        ),
+      all: (lineNumber: string) =>
+        _(
+          `Alle variasjoner av linje ${lineNumber}`,
+          `All variations of line ${lineNumber}`,
+        ),
+    },
+  },
 };
 export default NearbyTexts;
