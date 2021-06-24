@@ -3,6 +3,7 @@ import {Animated, Dimensions, Easing, View} from 'react-native';
 import Dash from 'react-native-dash';
 import {StyleSheet, useTheme} from '@atb/theme';
 import LinearGradient from 'react-native-linear-gradient';
+//TODO colors used directly
 import colors from '@atb/theme/colors';
 import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 

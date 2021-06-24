@@ -17,7 +17,6 @@ import {TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
-import colors from '@atb/theme/colors';
 import {
   Language,
   TariffZonesTexts,
@@ -440,7 +439,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
                 id="tariffZonesLine"
                 style={{
                   lineWidth: 1,
-                  lineColor: colors.primary.gray_400,
+                  lineColor: theme.colors.background_gray.backgroundColor,
                 }}
               />
             </MapboxGL.ShapeSource>

@@ -5,8 +5,11 @@ import {usePreferences} from '../preferences';
 import {Mode, Theme, Themes, themes} from './colors';
 
 interface ThemeContextValue {
+  //Theme & AppThemeExtension;?
   theme: Theme;
   themeName: Mode;
+  //Theme & AppThemeExtension;
+  themes: Themes;
 
   storedColorScheme: Mode;
   overrideColorScheme: boolean;
@@ -18,7 +21,7 @@ interface ThemeContextValue {
 const ThemeContext = createContext<ThemeContextValue>({
   theme: themes.light,
   themeName: 'light',
-
+  themes: themes,
   storedColorScheme: 'light',
   overrideColorScheme: false,
 
@@ -64,6 +67,7 @@ const ThemeContextProvider: React.FC = ({children}) => {
   return (
     <ThemeContext.Provider
       value={{
+        themes,
         theme,
         themeName: actualColorScheme,
         storedColorScheme: storedColorScheme ?? 'light',

@@ -20,6 +20,7 @@ import ThemeIcon from '@atb/components/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
 import {useFavorites} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
+//TODO colors used directly
 import colors from '@atb/theme/colors';
 import {
   dictionary,

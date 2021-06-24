@@ -1,5 +1,6 @@
 import ThemeText from '@atb/components/text';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
+//TODO defaultTextColors used
 import {ContrastColor, defaultTextColors, ThemeColor} from '@atb/theme/colors';
 import React, {useRef} from 'react';
 import {
