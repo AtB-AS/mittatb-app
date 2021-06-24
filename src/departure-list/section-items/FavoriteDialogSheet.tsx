@@ -36,7 +36,7 @@ const FavoriteDialogSheet = forwardRef<View, Props>(
             text: t(ScreenHeaderTexts.headerButton.cancel.text),
           }}
         />
-        <View style={styles.text} ref={focusRef}>
+        <View style={styles.text} ref={focusRef} accessible={true}>
           <ThemeText>
             {t(
               NearbyTexts.favoriteDialogSheet.description(
