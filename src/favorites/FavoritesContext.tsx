@@ -67,9 +67,21 @@ const FavoritesContextProvider: React.FC = ({children}) => {
       setFavoritesState(newFavorites);
     },
 
+    /**
+     * Add favorite departure. If adding a favorite for the complete line
+     * number, the existing favorites for specific line names on that line
+     * number will be removed.
+     */
     async addFavoriteDeparture(favoriteDeparture: FavoriteDeparture) {
-      const favorites = await departures.addFavorite(favoriteDeparture);
-      setFavoriteDeparturesState(favorites);
+      if (!favoriteDeparture.lineName) {
+        const favoritesExisting = await departures.getFavorites();
+        const favoritesFiltered = favoritesExisting.filter(
+          (f) => f.lineId !== favoriteDeparture.lineId,
+        );
+        await departures.setFavorites(favoritesFiltered);
+      }
+      const favoritesUpdated = await departures.addFavorite(favoriteDeparture);
+      setFavoriteDeparturesState(favoritesUpdated);
     },
     async removeFavoriteDeparture(id: string) {
       const favorites = await departures.removeFavorite(id);
@@ -80,8 +92,9 @@ const FavoritesContextProvider: React.FC = ({children}) => {
       return favoriteDepartures.find(function (favorite) {
         return (
           favorite.lineId == potential.lineId &&
-          favorite.lineName == potential.lineName &&
-          favorite.stopId == potential.stopId
+          (!favorite.lineName || favorite.lineName == potential.lineName) &&
+          favorite.stopId == potential.stopId &&
+          favorite.quayId == potential.quayId
         );
       });
     },
