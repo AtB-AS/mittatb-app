@@ -84,12 +84,17 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
       <View style={{padding: theme.spacings.medium}}>
         <MessageBox>
           <ThemeText type="body__primary" color="primary_1">
-            Enkelte begrensninger gjelder
+            {t(TicketsTexts.buyTicketsTab.reactivateSplash.message)}
           </ThemeText>
 
-          <TouchableOpacity onPress={enableTicketingOverlay}>
+          <TouchableOpacity
+            onPress={enableTicketingOverlay}
+            accessibilityLabel={t(
+              TicketsTexts.buyTicketsTab.reactivateSplash.linkA11yHint,
+            )}
+          >
             <ThemeText type="body__primary--underline" color="primary_1">
-              {'Les mer her'}
+              {t(TicketsTexts.buyTicketsTab.reactivateSplash.linkText)}
             </ThemeText>
           </TouchableOpacity>
         </MessageBox>
