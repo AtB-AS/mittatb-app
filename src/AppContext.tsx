@@ -10,22 +10,32 @@ import RNBootSplash from 'react-native-bootsplash';
 import {register as registerChatUser} from './chat/user';
 import storage from './storage';
 
+enum storeKey {
+  onboarding = '@ATB_onboarded',
+  ticketing = '@ATB_ticket_informational_accepted',
+}
 type AppState = {
   isLoading: boolean;
   onboarded: boolean;
+  ticketingAccepted: boolean;
 };
 
 type AppReducerAction =
   | {
       type: 'LOAD_APP_SETTINGS';
       onboarded: boolean;
+      ticketingAccepted: boolean;
     }
   | {type: 'COMPLETE_ONBOARDING'}
-  | {type: 'RESTART_ONBOARDING'};
+  | {type: 'RESTART_ONBOARDING'}
+  | {type: 'ACCEPT_TICKETING'}
+  | {type: 'RESET_TICKETING'};
 
 type AppContextState = AppState & {
   completeOnboarding: () => void;
   restartOnboarding: () => void;
+  acceptTicketing: () => void;
+  resetTicketing: () => void;
 };
 const AppContext = createContext<AppContextState | undefined>(undefined);
 const AppDispatch = createContext<Dispatch<AppReducerAction> | undefined>(
@@ -52,12 +62,23 @@ const appReducer: AppReducer = (prevState, action) => {
         ...prevState,
         onboarded: false,
       };
+    case 'ACCEPT_TICKETING':
+      return {
+        ...prevState,
+        ticketingAccepted: true,
+      };
+    case 'RESET_TICKETING':
+      return {
+        ...prevState,
+        ticketingAccepted: false,
+      };
   }
 };
 
 const defaultAppState: AppState = {
   isLoading: true,
   onboarded: false,
+  ticketingAccepted: false,
 };
 
 const AppContextProvider: React.FC = ({children}) => {
@@ -65,14 +86,24 @@ const AppContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     async function loadAppSettings() {
-      const savedOnboarded = await storage.get('@ATB_onboarded');
+      const savedOnboarded = await storage.get(storeKey.onboarding);
       const onboarded = !savedOnboarded ? false : JSON.parse(savedOnboarded);
+
+      const savedTicketingAccepted = await storage.get(
+        '@ATB_ticket_informational_accepted',
+      );
+      const ticketingAccepted = !savedTicketingAccepted
+        ? false
+        : JSON.parse(savedTicketingAccepted);
+
       if (onboarded) {
         registerChatUser();
       }
+
       dispatch({
         type: 'LOAD_APP_SETTINGS',
         onboarded,
+        ticketingAccepted,
       });
 
       RNBootSplash.hide({fade: true});
@@ -80,10 +111,15 @@ const AppContextProvider: React.FC = ({children}) => {
     loadAppSettings();
   }, []);
 
-  const {completeOnboarding, restartOnboarding} = useMemo(
+  const {
+    completeOnboarding,
+    restartOnboarding,
+    acceptTicketing,
+    resetTicketing,
+  } = useMemo(
     () => ({
       completeOnboarding: async () => {
-        await storage.set('@ATB_onboarded', JSON.stringify(true));
+        await storage.set(storeKey.onboarding, JSON.stringify(true));
         dispatch({type: 'COMPLETE_ONBOARDING'});
 
         registerChatUser();
@@ -91,13 +127,26 @@ const AppContextProvider: React.FC = ({children}) => {
       restartOnboarding: async () => {
         dispatch({type: 'RESTART_ONBOARDING'});
       },
+      acceptTicketing: async () => {
+        await storage.set(storeKey.ticketing, JSON.stringify(true));
+        dispatch({type: 'ACCEPT_TICKETING'});
+      },
+      resetTicketing: async () => {
+        dispatch({type: 'RESET_TICKETING'});
+      },
     }),
     [],
   );
 
   return (
     <AppContext.Provider
-      value={{...state, completeOnboarding, restartOnboarding}}
+      value={{
+        ...state,
+        completeOnboarding,
+        restartOnboarding,
+        acceptTicketing,
+        resetTicketing,
+      }}
     >
       <AppDispatch.Provider value={dispatch}>{children}</AppDispatch.Provider>
     </AppContext.Provider>

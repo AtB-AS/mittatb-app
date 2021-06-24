@@ -29,6 +29,14 @@ const TicketsTexts = {
         ),
       },
     },
+    reactivateSplash: {
+      message: _('Betingelser gjelder.', 'Some conditions apply.'),
+      linkText: _('Les mer her', 'Read more here'),
+      linkA11yHint: _(
+        'Les mer om betingelser for billettkjøp her',
+        'Read more about conditions for buying tickets here',
+      ),
+    },
   },
   activeTicketsTab: {
     label: _('Aktive', 'Valid'),

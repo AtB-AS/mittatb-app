@@ -12,11 +12,14 @@ import {TicketsTexts, useTranslation} from '@atb/translations';
 import useInterval from '@atb/utils/use-interval';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import RecentTicketsScrollView from './RecentTicketsScrollView';
 import TicketsScrollView from './TicketsScrollView';
 import UpgradeSplash from './UpgradeSplash';
 import {AddTicket} from '@atb/assets/svg/icons/ticketing';
+import ThemeText from '@atb/components/text';
+import MessageBox from '@atb/components/message-box';
+import {useAppState} from '@atb/AppContext';
 
 export type TicketingScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -35,6 +38,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   } = useRemoteConfig();
   const {abtCustomerId, authenticationType} = useAuthState();
   const {t} = useTranslation();
+  const appContext = useAppState();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
@@ -71,8 +75,31 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
     }
   };
 
+  const enableTicketingOverlay = () => {
+    appContext.resetTicketing();
+  };
+
   return (
     <View style={styles.container}>
+      <View style={{padding: theme.spacings.medium}}>
+        <MessageBox>
+          <ThemeText type="body__primary" color="primary_1">
+            {t(TicketsTexts.buyTicketsTab.reactivateSplash.message)}
+          </ThemeText>
+
+          <TouchableOpacity
+            onPress={enableTicketingOverlay}
+            accessibilityLabel={t(
+              TicketsTexts.buyTicketsTab.reactivateSplash.linkA11yHint,
+            )}
+          >
+            <ThemeText type="body__primary--underline" color="primary_1">
+              {t(TicketsTexts.buyTicketsTab.reactivateSplash.linkText)}
+            </ThemeText>
+          </TouchableOpacity>
+        </MessageBox>
+      </View>
+
       {enable_recent_tickets ? (
         <RecentTicketsScrollView />
       ) : (
