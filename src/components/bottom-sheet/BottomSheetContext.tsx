@@ -27,8 +27,11 @@ type BottomSheetContentFunction = (
 ) => ReactNode;
 
 type BottomSheetState = {
-  open: (contentFunction: BottomSheetContentFunction) => void;
-  close: () => void;
+  open: (
+    contentFunction: BottomSheetContentFunction,
+    /** Optional ref to component which should be focused on sheet close */
+    closeRef?: RefObject<any>,
+  ) => void;
 };
 
 const BottomSheetContext = createContext<BottomSheetState | undefined>(
@@ -45,6 +48,7 @@ const BottomSheetProvider: React.FC = ({children}) => {
 
   const animatedOffset = useMemo(() => new Animated.Value(0), []);
   const focusRef = useRef(null);
+  const [closeRef, setCloseRef] = useState<RefObject<any> | undefined>();
 
   useEffect(
     () => () =>
@@ -60,12 +64,17 @@ const BottomSheetProvider: React.FC = ({children}) => {
   const close = () => {
     setContentFunction(() => () => null);
     setIsOpen(false);
+    if (closeRef) {
+      setTimeout(() => giveFocus(closeRef), 200);
+    }
   };
 
   const open = (
     contentFunction: (close: () => void, focusRef: RefObject<any>) => ReactNode,
+    closeRef?: RefObject<any>,
   ) => {
     setContentFunction(() => contentFunction);
+    setCloseRef(closeRef);
     setIsOpen(true);
     setTimeout(() => giveFocus(focusRef), 200);
   };
@@ -108,7 +117,6 @@ const BottomSheetProvider: React.FC = ({children}) => {
 
   const state = {
     open,
-    close,
   };
 
   return (
