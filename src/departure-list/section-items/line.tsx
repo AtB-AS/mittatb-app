@@ -37,7 +37,7 @@ import {
 import insets from '@atb/utils/insets';
 import {TFunc} from '@leile/lobo-t';
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import React, {useRef} from 'react';
 import {
   AccessibilityInfo,
   AccessibilityProps,
@@ -296,6 +296,7 @@ function ToggleFavoriteDepartureButton({line, stop, quay}: FavoriteStarProps) {
   } = useFavorites();
   const {t} = useTranslation();
   const styles = useItemStyles();
+  const closeRef = useRef(null);
 
   const {open: openBottomSheet} = useBottomSheet();
 
@@ -312,14 +313,17 @@ function ToggleFavoriteDepartureButton({line, stop, quay}: FavoriteStarProps) {
         t(NearbyTexts.results.lines.favorite.message.removed),
       );
     } else {
-      openBottomSheet((close, focusRef) => (
-        <FavoriteDialogSheet
-          line={line}
-          addFavorite={addFavorite}
-          close={close}
-          ref={focusRef}
-        />
-      ));
+      openBottomSheet(
+        (close, focusRef) => (
+          <FavoriteDialogSheet
+            line={line}
+            addFavorite={addFavorite}
+            close={close}
+            ref={focusRef}
+          />
+        ),
+        closeRef,
+      );
     }
   };
 
@@ -355,6 +359,7 @@ function ToggleFavoriteDepartureButton({line, stop, quay}: FavoriteStarProps) {
       );
   return (
     <TouchableOpacity
+      ref={closeRef}
       onPress={onFavoritePress}
       accessibilityRole="checkbox"
       accessibilityState={{checked: !!existingFavorite}}
