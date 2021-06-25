@@ -11,8 +11,14 @@ import {
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import useInterval from '@atb/utils/use-interval';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import React, {ReactElement, useEffect, useRef, useState} from 'react';
+import {
+  AccessibilityInfo,
+  Alert,
+  findNodeHandle,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import RecentTicketsScrollView from './RecentTicketsScrollView';
 import TicketsScrollView from './TicketsScrollView';
 import UpgradeSplash from './UpgradeSplash';
@@ -39,6 +45,30 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const {abtCustomerId, authenticationType} = useAuthState();
   const {t} = useTranslation();
   const appContext = useAppState();
+  const focusRef = useRef(null);
+
+  const [refocusOnOverlayClose, setRefocusOnOverlayClose] = useState(false);
+  useEffect(() => {
+    console.log(
+      'focus',
+      refocusOnOverlayClose,
+      appContext.ticketingAccepted,
+      !!focusRef.current,
+    );
+    if (
+      refocusOnOverlayClose &&
+      appContext.ticketingAccepted &&
+      focusRef.current
+    ) {
+      if (focusRef.current) {
+        setRefocusOnOverlayClose(false);
+        const reactTag = findNodeHandle(focusRef.current);
+        if (reactTag) {
+          AccessibilityInfo.setAccessibilityFocus(reactTag);
+        }
+      }
+    }
+  }, [refocusOnOverlayClose, appContext.ticketingAccepted, focusRef.current]);
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
@@ -77,6 +107,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
 
   const enableTicketingOverlay = () => {
     appContext.resetTicketing();
+    setRefocusOnOverlayClose(true);
   };
 
   return (
@@ -88,6 +119,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
           </ThemeText>
 
           <TouchableOpacity
+            ref={focusRef}
             onPress={enableTicketingOverlay}
             accessibilityLabel={t(
               TicketsTexts.buyTicketsTab.reactivateSplash.linkA11yHint,
