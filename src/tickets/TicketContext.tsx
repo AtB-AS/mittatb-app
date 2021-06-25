@@ -14,12 +14,14 @@ import {ActiveReservation, FareContract, PaymentStatus} from './types';
 import {getPayment} from './api';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import Bugsnag from '@bugsnag/react-native';
+import {getToken, initToken, Token} from '@atb/mobile-token';
 
 type TicketReducerState = {
   fareContracts: FareContract[];
   activeReservations: ActiveReservation[];
   isRefreshingTickets: boolean;
   errorRefreshingTickets: boolean;
+  token?: Token;
 };
 
 type TicketReducerAction =
@@ -33,6 +35,10 @@ type TicketReducerAction =
   | {
       type: 'UPDATE_RESERVATIONS';
       activeReservations: ActiveReservation[];
+    }
+  | {
+      type: 'SET_MOBILE_TOKEN';
+      token: Token;
     };
 
 type TicketReducer = (
@@ -45,6 +51,12 @@ const ticketReducer: TicketReducer = (
   action,
 ): TicketReducerState => {
   switch (action.type) {
+    case 'SET_MOBILE_TOKEN': {
+      return {
+        ...prevState,
+        token: action.token,
+      };
+    }
     case 'SET_IS_REFRESHING_FARE_CONTRACT_TICKETS': {
       return {
         ...prevState,
@@ -101,9 +113,13 @@ type TicketState = {
   refreshTickets: () => void;
   fareContracts: FareContract[];
   findFareContractByOrderId: (id: string) => FareContract | undefined;
-} & Pick<TicketReducerState, 'activeReservations' | 'isRefreshingTickets'>;
+} & Pick<
+  TicketReducerState,
+  'activeReservations' | 'isRefreshingTickets' | 'token'
+>;
 
 const initialReducerState: TicketReducerState = {
+  token: undefined,
   fareContracts: [],
   activeReservations: [],
   isRefreshingTickets: false,
@@ -120,6 +136,27 @@ const TicketContextProvider: React.FC = ({children}) => {
 
   const {user, abtCustomerId} = useAuthState();
   const {enable_ticketing} = useRemoteConfig();
+
+  useEffect(() => {
+    async function ensureToken() {
+      let token: Token | undefined = undefined;
+      try {
+        token = await getToken();
+      } catch (err) {
+        console.warn(err);
+      }
+
+      try {
+        if (!token) {
+          token = await initToken();
+        }
+
+        dispatch({type: 'SET_MOBILE_TOKEN', token});
+      } catch (err) {
+        console.warn(err);
+      }
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     if (user && abtCustomerId && enable_ticketing) {

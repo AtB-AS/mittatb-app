@@ -24,6 +24,7 @@
   "dependencies": {
     "@atb-as/theme": "^3.0.0",
     "@bugsnag/react-native": "^7.12.0",
+    "@entur/react-native-traveller": "file:.yalc/@entur/react-native-traveller",
     "@entur/sdk": "^3.4.0",
     "@leile/lobo-t": "^1.0.5",
     "@mapbox/polyline": "^1.1.1",

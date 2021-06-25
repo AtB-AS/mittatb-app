@@ -144,6 +144,7 @@ export const ActiveTickets: React.FC<Props> = () => {
     fareContracts,
     isRefreshingTickets,
     refreshTickets,
+    token,
   } = useTicketState();
 
   const activeFareContracts = filterActiveFareContracts(fareContracts);
@@ -155,6 +156,7 @@ export const ActiveTickets: React.FC<Props> = () => {
   const {t} = useTranslation();
   return (
     <View style={styles.container}>
+      <ThemeText>{token?.tokenId}</ThemeText>
       <TicketsScrollView
         reservations={activeReservations}
         fareContracts={activeFareContracts}
