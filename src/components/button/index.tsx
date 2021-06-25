@@ -1,6 +1,6 @@
 import ThemeText from '@atb/components/text';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {ContrastColor, ThemeColor} from '@atb/theme/colors';
+import {ThemeColor} from '@atb/theme/colors';
 import React, {useRef} from 'react';
 import {
   Animated,
@@ -84,7 +84,7 @@ const Button: React.FC<ButtonProps> = ({
   const modeData = DefaultModeStyles[mode];
   const themeColor = color ?? modeData.themeColor;
   const css = useButtonStyle();
-  const {theme, themeName} = useTheme();
+  const {theme} = useTheme();
   const fadeAnim = useRef(new Animated.Value(disabled ? DISABLED_OPACITY : 1))
     .current;
 
@@ -105,13 +105,12 @@ const Button: React.FC<ButtonProps> = ({
   const rightIconSpacing =
     Icon && iconPosition === 'right' ? spacing : undefined;
 
-  const {backgroundColor, color: textColor, textColorType} = themeColor
+  const {backgroundColor, color: textColor} = themeColor
     ? theme.colors[themeColor]
-    : ({
+    : {
         backgroundColor: 'transparent',
         color: theme.text.colors.primary,
-        textColorType: themeName == 'dark' ? 'light' : 'dark',
-      } as ContrastColor);
+      };
 
   const styleContainer: ViewStyle[] = [
     css.button,
