@@ -20,8 +20,6 @@ import ThemeIcon from '@atb/components/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
 import {useFavorites} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
-//TODO colors used directly
-import colors from '@atb/theme/colors';
 import {
   dictionary,
   Language,
@@ -266,8 +264,6 @@ const useItemStyles = StyleSheet.createThemeHook((theme, themeName) => ({
     paddingLeft: theme.spacings.medium,
   },
   departure: {
-    backgroundColor:
-      themeName === 'light' ? colors.primary.gray_50 : colors.primary.gray_950,
     borderWidth: 0,
     marginRight: theme.spacings.small,
   },

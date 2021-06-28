@@ -13,21 +13,10 @@ import {
   createThemesFor,
   Org,
 } from '@atb-as/theme';
-import {APP_VARIANT} from '@env';
-import {AppVariants} from 'app-variants';
 let appVariantTheme = null;
 
 appVariantTheme = createThemesFor(Org.AtB);
-//TODO use env
-// switch (APP_VARIANT) {
-//   case AppVariants.AtB: {
-//     appVariantTheme = createThemesFor(Org.AtB);
-//     break;
-//   }
-//   default: {
-//     throw Error();
-//   }
-// }
+
 export type {Statuses, Mode, TextColor, ContrastColor, RadiusSizes, TextNames};
 export {textNames};
 

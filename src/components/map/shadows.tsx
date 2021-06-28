@@ -1,11 +1,7 @@
-//TODO colors used directly
-
-import colors from '@atb/theme/colors';
 import {ViewStyle} from 'react-native';
 
 const shadows: ViewStyle = {
-  //TODO colors used directly
-  shadowColor: colors.text.dark,
+  shadowColor: '#000000',
   shadowOffset: {
     width: 0,
     height: 2,

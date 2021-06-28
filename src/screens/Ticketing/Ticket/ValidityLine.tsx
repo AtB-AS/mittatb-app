@@ -3,8 +3,6 @@ import {Animated, Dimensions, Easing, View} from 'react-native';
 import Dash from 'react-native-dash';
 import {StyleSheet, useTheme} from '@atb/theme';
 import LinearGradient from 'react-native-linear-gradient';
-//TODO colors used directly
-import colors from '@atb/theme/colors';
 import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
@@ -174,8 +172,8 @@ const VerticalLine = ({
     locations={[0.25, 0.25, 0.75, 0.75]}
     colors={[
       'transparent',
-      colors.primary.gray_500,
-      colors.primary.gray_500,
+      useTheme().theme.colors.background_gray.backgroundColor,
+      useTheme().theme.colors.background_gray.backgroundColor,
       'transparent',
     ]}
     pointerEvents={'none'}
