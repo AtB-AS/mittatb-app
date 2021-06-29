@@ -79,7 +79,7 @@ const TicketsTexts = {
     ),
     approved: _(
       'Betaling godkjent. Henter billett...',
-      'Payment succeessful. Fetching ticket...',
+      'Payment successful. Fetching ticket...',
     ),
     orderId: (orderId: string) =>
       _(`Ordre-id ${orderId}`, `Order ID ${orderId}`),
