@@ -5,9 +5,6 @@
 # encrypted files/folders
 env/** filter=git-crypt diff=git-crypt
 .env filter=git-crypt diff=git-crypt
-.env.last filter=git-crypt diff=git-crypt
-.env.atb filter=git-crypt diff=git-crypt
-.env.nfk filter=git-crypt diff=git-crypt
 .netrc filter=git-crypt diff=git-crypt
 ios/devices.txt filter=git-crypt diff=git-crypt
 android/app/src/main/res/values/Intercom.xml filter=git-crypt diff=git-crypt
