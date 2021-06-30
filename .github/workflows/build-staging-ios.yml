@@ -16,6 +16,7 @@ jobs:
         run: |
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
           echo "APP_ENVIRONMENT=staging" >> $GITHUB_ENV
+          echo "APP_ORG=atb" >> $GITHUB_ENV
           echo "BUNDLE_IDENTIFIER=no.mittatb.staging" >> $GITHUB_ENV
           echo "APPLE_TEAM_ID=CSV447Q97L" >> $GITHUB_ENV
       - name: Decrypt env files
@@ -30,7 +31,7 @@ jobs:
         uses: actions/cache@v2
         id: modules-cache
         with:
-          path: '**/node_modules'
+          path: "**/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: Install node_modules
         if: steps.modules-cache.outputs.cache-hit != 'true'
@@ -38,7 +39,7 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Set environment
-        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT
+        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT $APP_ORG
       - name: Override native config files
         run: sh ./scripts/override-config-files.sh
       - uses: webfactory/ssh-agent@v0.4.1
@@ -48,14 +49,14 @@ jobs:
         uses: actions/cache@v2
         id: ipa-cache
         with:
-          path: 'AtB.ipa'
+          path: "AtB.ipa"
           key: ${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}
       - name: Run fastlane cert match
         run: fastlane ios get_cert
         env:
           FASTLANE_MATCH_URL: ${{ secrets.FASTLANE_MATCH_URL }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_TYPE: 'adhoc'
+          MATCH_TYPE: "adhoc"
       - name: Generate icons
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn app-icon generate -i icon.qa.png --platforms=ios
@@ -63,14 +64,14 @@ jobs:
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: fastlane ios build
         env:
-          PROVISIONING_PROFILE: 'match AdHoc no.mittatb.staging'
-          EXPORT_METHOD: 'ad-hoc'
+          PROVISIONING_PROFILE: "match AdHoc no.mittatb.staging"
+          EXPORT_METHOD: "ad-hoc"
       - name: Replace ipa bundle
         if: steps.ipa-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/ios/replace-bundle.sh
         env:
-          IPA_FILE_NAME: 'AtB.ipa'
-          APP_NAME: 'AtB.app'
+          IPA_FILE_NAME: "AtB.ipa"
+          APP_NAME: "AtB.app"
           CODE_SIGN_IDENTITY: ${{ secrets.IOS_CODE_SIGN_IDENTITY }}
       - name: Distribute to AppCenter
         run: fastlane ios appcenter_staging
