@@ -1,7 +1,7 @@
 import {AxiosError} from 'axios';
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
-import {Leg, TripPattern} from '@atb/sdk';
+import {Leg, TripPattern, LegMode} from '@atb/sdk';
 import {StyleSheet} from '@atb/theme';
 import {secondsBetween} from '@atb/utils/date';
 import {timeIsShort} from '../Details/utils';
@@ -9,6 +9,7 @@ import TripMessages from './TripMessages';
 import TripSection from './TripSection';
 import Summary from './TripSummary';
 import {WaitDetails} from './WaitSection';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 type TripProps = {
   tripPattern: TripPattern;
@@ -17,6 +18,7 @@ type TripProps = {
 const Trip: React.FC<TripProps> = ({tripPattern, error}) => {
   const [shortTime, setShortTime] = useState<boolean>(false);
   const styles = useStyle();
+  const {modes_we_sell_tickets_for} = useRemoteConfig();
 
   useEffect(() => {
     setShortTime(false);
@@ -29,11 +31,17 @@ const Trip: React.FC<TripProps> = ({tripPattern, error}) => {
     }
   };
 
+  const hasLegsWeCantSellTicketsFor = anyLegsWithNoValidTickets(
+    tripPattern,
+    modes_we_sell_tickets_for,
+  );
+
   return (
     <>
       <TripMessages
         error={error}
         shortTime={shortTime}
+        noTicketsAvailable={hasLegsWeCantSellTicketsFor}
         messageStyle={styles.message}
       />
       <View style={styles.trip}>
@@ -99,4 +107,16 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     paddingVertical: theme.spacings.medium,
   },
 }));
+
+function anyLegsWithNoValidTickets(
+  tripPattern: TripPattern,
+  validModes: string[],
+) {
+  return tripPattern.legs.some(function (leg) {
+    if (leg.mode == LegMode.FOOT) {
+      return false;
+    }
+    return !validModes.includes(leg.transportSubmode);
+  });
+}
 export default Trip;
