@@ -10,6 +10,10 @@ const DepartureDetailsTexts = {
   },
   messages: {
     loading: _('Laster detaljer', 'Loading details'),
+    noTickets: _(
+      'Billetter via app-en er ikke gyldig for denne avgangen.',
+      'Tickets bought through this app is not valid this departure.',
+    ),
   },
 };
 export default DepartureDetailsTexts;
