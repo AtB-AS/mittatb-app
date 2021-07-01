@@ -79,7 +79,7 @@ export default function DepartureDetails({navigation, route}: Props) {
   ] = useDepartureData(activeItem, 30, !isFocused);
   const mapData = useMapData(activeItem);
 
-  const noTicketsAvailale = withNoValidTickets(
+  const noTicketsAvailable = withNoValidTickets(
     subMode,
     modes_we_sell_tickets_for,
   );
@@ -141,7 +141,7 @@ export default function DepartureDetails({navigation, route}: Props) {
             </View>
           )}
 
-          {noTicketsAvailale && (
+          {noTicketsAvailable && (
             <MessageBox
               containerStyle={styles.ticketMessage}
               type="warning"
