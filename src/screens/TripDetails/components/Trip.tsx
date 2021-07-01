@@ -10,6 +10,7 @@ import TripSection from './TripSection';
 import Summary from './TripSummary';
 import {WaitDetails} from './WaitSection';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {anyLegsWithNoValidTickets} from '@atb/operator-config';
 
 type TripProps = {
   tripPattern: TripPattern;
@@ -108,15 +109,4 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-function anyLegsWithNoValidTickets(
-  tripPattern: TripPattern,
-  validModes: string[],
-) {
-  return tripPattern.legs.some(function (leg) {
-    if (leg.mode == LegMode.FOOT) {
-      return false;
-    }
-    return !validModes.includes(leg.transportSubmode);
-  });
-}
 export default Trip;

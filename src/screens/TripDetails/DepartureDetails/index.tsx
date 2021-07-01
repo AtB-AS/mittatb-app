@@ -40,6 +40,7 @@ import {ServiceJourneyDeparture} from './types';
 import useDepartureData, {CallListGroup} from './use-departure-data';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {withNoValidTickets} from '@atb/operator-config';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -432,11 +433,4 @@ function useMapData(activeItem: ServiceJourneyDeparture) {
     getData();
   }, [activeItem]);
   return mapData;
-}
-
-function withNoValidTickets(
-  subMode: TransportSubmode | undefined,
-  validModes: string[],
-) {
-  return subMode && !validModes.includes(subMode);
 }
