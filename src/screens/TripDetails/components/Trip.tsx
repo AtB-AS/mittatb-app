@@ -32,7 +32,7 @@ const Trip: React.FC<TripProps> = ({tripPattern, error}) => {
     }
   };
 
-  const hasLegsWeCantSellTicketsFor = hasLegsWeCantSellTicketsFor(
+  const CantSellTicketsFor = hasLegsWeCantSellTicketsFor(
     tripPattern,
     modes_we_sell_tickets_for,
   );
@@ -42,7 +42,7 @@ const Trip: React.FC<TripProps> = ({tripPattern, error}) => {
       <TripMessages
         error={error}
         shortTime={shortTime}
-        noTicketsAvailable={hasLegsWeCantSellTicketsFor}
+        noTicketsAvailable={CantSellTicketsFor}
         messageStyle={styles.message}
       />
       <View style={styles.trip}>
