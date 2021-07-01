@@ -10,7 +10,7 @@ import TripSection from './TripSection';
 import Summary from './TripSummary';
 import {WaitDetails} from './WaitSection';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {anyLegsWithNoValidTickets} from '@atb/operator-config';
+import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
 
 type TripProps = {
   tripPattern: TripPattern;
@@ -32,7 +32,7 @@ const Trip: React.FC<TripProps> = ({tripPattern, error}) => {
     }
   };
 
-  const hasLegsWeCantSellTicketsFor = anyLegsWithNoValidTickets(
+  const hasLegsWeCantSellTicketsFor = hasLegsWeCantSellTicketsFor(
     tripPattern,
     modes_we_sell_tickets_for,
   );

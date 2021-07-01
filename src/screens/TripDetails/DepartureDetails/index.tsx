@@ -40,7 +40,7 @@ import {ServiceJourneyDeparture} from './types';
 import useDepartureData, {CallListGroup} from './use-departure-data';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {withNoValidTickets} from '@atb/operator-config';
+import {canSellTicketsForSubMode} from '@atb/operator-config';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -79,7 +79,7 @@ export default function DepartureDetails({navigation, route}: Props) {
   ] = useDepartureData(activeItem, 30, !isFocused);
   const mapData = useMapData(activeItem);
 
-  const noTicketsAvailable = withNoValidTickets(
+  const canSellTicketsForDeparture = canSellTicketsForSubMode(
     subMode,
     modes_we_sell_tickets_for,
   );
@@ -141,7 +141,7 @@ export default function DepartureDetails({navigation, route}: Props) {
             </View>
           )}
 
-          {noTicketsAvailable && (
+          {!canSellTicketsForDeparture && (
             <MessageBox
               containerStyle={styles.ticketMessage}
               type="warning"

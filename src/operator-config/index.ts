@@ -3,7 +3,7 @@ import {AUTHORITY_ID} from '@env';
 
 const currentAppAuthorityId = AUTHORITY_ID ?? 'ATB:Authority:2';
 
-export function anyLegsWithNoValidTickets(
+export function hasLegsWeCantSellTicketsFor(
   tripPattern: TripPattern,
   validModes: string[],
 ) {
@@ -19,9 +19,9 @@ export function anyLegsWithNoValidTickets(
 }
 
 // @TODO Should be updated to take Authority ID.
-export function withNoValidTickets(
+export function canSellTicketsForSubMode(
   subMode: TransportSubmode | undefined,
   validModes: string[],
 ) {
-  return subMode && !validModes.includes(subMode);
+  return !subMode || validModes.includes(subMode);
 }
