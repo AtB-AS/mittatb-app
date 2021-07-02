@@ -2,7 +2,7 @@ import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
 import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
 import {Info, Warning} from '@atb/assets/svg/situations';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
-import {TinyMessageBox} from '@atb/components/message-box';
+import MessageBox, {TinyMessageBox} from '@atb/components/message-box';
 import PaginatedDetailsHeader from '@atb/components/pagination';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import ThemeText from '@atb/components/text';
@@ -39,6 +39,8 @@ import CompactMap from '../Map/CompactMap';
 import {ServiceJourneyDeparture} from './types';
 import useDepartureData, {CallListGroup} from './use-departure-data';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {canSellTicketsForSubMode} from '@atb/operator-config';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -61,6 +63,7 @@ export default function DepartureDetails({navigation, route}: Props) {
   const {activeItemIndex = 0, items} = route.params;
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useTheme();
+  const {modes_we_sell_tickets_for} = useRemoteConfig();
 
   const activeItem: ServiceJourneyDeparture | undefined =
     items[activeItemIndexState];
@@ -68,7 +71,6 @@ export default function DepartureDetails({navigation, route}: Props) {
 
   const styles = useStopsStyle();
   const {t} = useTranslation();
-  const {top: paddingTop} = useSafeAreaInsets();
 
   const isFocused = useIsFocused();
   const [
@@ -76,6 +78,11 @@ export default function DepartureDetails({navigation, route}: Props) {
     isLoading,
   ] = useDepartureData(activeItem, 30, !isFocused);
   const mapData = useMapData(activeItem);
+
+  const canSellTicketsForDeparture = canSellTicketsForSubMode(
+    subMode,
+    modes_we_sell_tickets_for,
+  );
 
   const onPaginactionPress = (newPage: number) => {
     animateNextChange();
@@ -132,6 +139,14 @@ export default function DepartureDetails({navigation, route}: Props) {
                 message={t(DepartureDetailsTexts.messages.loading)}
               />
             </View>
+          )}
+
+          {!canSellTicketsForDeparture && (
+            <MessageBox
+              containerStyle={styles.ticketMessage}
+              type="warning"
+              message={t(DepartureDetailsTexts.messages.ticketsWeDontSell)}
+            />
           )}
 
           <View style={styles.allGroups}>
@@ -387,6 +402,9 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
   spinner: {
     paddingTop: theme.spacings.medium,
+  },
+  ticketMessage: {
+    marginTop: theme.spacings.medium,
   },
   scrollView__content: {
     padding: theme.spacings.medium,
