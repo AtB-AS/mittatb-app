@@ -36,7 +36,7 @@ const TripMessages: React.FC<TripMessagesProps> = ({
         <MessageBox
           containerStyle={messageStyle}
           type="warning"
-          message={t(TripDetailsTexts.messages.noTickets)}
+          message={t(TripDetailsTexts.messages.ticketsWeDontSell)}
         />
       )}
       {error && (
