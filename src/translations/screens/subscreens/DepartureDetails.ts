@@ -10,9 +10,9 @@ const DepartureDetailsTexts = {
   },
   messages: {
     loading: _('Laster detaljer', 'Loading details'),
-    noTickets: _(
-      'Billetter via app-en er ikke gyldig for denne avgangen.',
-      'Tickets bought through this app is not valid for this departure.',
+    ticketsWeDontSell: _(
+      'Reisen inneholder reisetilbud som krever billett fra andre selskap enn AtB',
+      'This journey requires tickets from providers other than AtB',
     ),
   },
 };

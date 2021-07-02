@@ -145,7 +145,7 @@ export default function DepartureDetails({navigation, route}: Props) {
             <MessageBox
               containerStyle={styles.ticketMessage}
               type="warning"
-              message={t(DepartureDetailsTexts.messages.noTickets)}
+              message={t(DepartureDetailsTexts.messages.ticketsWeDontSell)}
             />
           )}
 
