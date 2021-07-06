@@ -7,6 +7,7 @@ import {
 } from '@atb/api/departures/types';
 import SvgFavorite from '@atb/assets/svg/icons/places/Favorite';
 import SvgFavoriteFill from '@atb/assets/svg/icons/places/FavoriteFill';
+import SvgFavoriteSemi from '@atb/assets/svg/icons/places/FavoriteSemi';
 import Warning from '@atb/assets/svg/situations/Warning';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import Button from '@atb/components/button';
@@ -36,16 +37,20 @@ import {
 import insets from '@atb/utils/insets';
 import {TFunc} from '@leile/lobo-t';
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import React, {useRef} from 'react';
 import {
   AccessibilityInfo,
   AccessibilityProps,
   ScrollView,
-  View,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import {NearbyScreenNavigationProp} from '@atb/screens/Nearby/Nearby';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {StoredType} from '@atb/favorites/storage';
+import {FavoriteDeparture} from '@atb/favorites/types';
+import FavoriteDialogSheet from '@atb/departure-list/section-items/FavoriteDialogSheet';
 
 export type LineItemProps = SectionItem<{
   group: DepartureGroup;
@@ -291,53 +296,88 @@ function ToggleFavoriteDepartureButton({line, stop, quay}: FavoriteStarProps) {
   } = useFavorites();
   const {t} = useTranslation();
   const styles = useItemStyles();
+  const closeRef = useRef(null);
+
+  const {open: openBottomSheet} = useBottomSheet();
 
   if (!line) {
     return null;
   }
 
-  const favorite = getFavoriteDeparture({...line, stopId: stop.id});
+  const existingFavorite = getFavoriteDeparture({...line, stopId: stop.id});
 
-  const onPress = async () => {
-    if (favorite) {
-      await removeFavoriteDeparture(favorite.id);
+  const onFavoritePress = async () => {
+    if (existingFavorite) {
+      await removeFavoriteDeparture(existingFavorite.id);
       AccessibilityInfo.announceForAccessibility(
         t(NearbyTexts.results.lines.favorite.message.removed),
       );
     } else {
-      await addFavoriteDeparture({
-        lineId: line.lineId,
-        lineName: line.lineName,
-        lineLineNumber: line.lineNumber,
-        lineTransportationMode: line.transportMode,
-        lineTransportationSubMode: line.transportSubmode,
-        quayName: quay.name,
-        quayPublicCode: quay.publicCode,
-        quayId: quay.id,
-        stopId: stop.id,
-      });
-      AccessibilityInfo.announceForAccessibility(
-        t(NearbyTexts.results.lines.favorite.message.saved),
+      openBottomSheet(
+        (close, focusRef) => (
+          <FavoriteDialogSheet
+            line={line}
+            addFavorite={addFavorite}
+            close={close}
+            ref={focusRef}
+          />
+        ),
+        closeRef,
       );
     }
   };
 
-  const Icon = favorite ? SvgFavoriteFill : SvgFavorite;
-  const label = t(
-    NearbyTexts.results.lines.favorite[
-      !favorite ? 'addFavorite' : 'removeFavorite'
-    ](`${line.lineNumber} ${line.lineName}`, stop.name),
-  );
+  const addFavorite = async (forSpecificLineName: boolean) => {
+    await addFavoriteDeparture({
+      lineId: line.lineId,
+      lineName: forSpecificLineName ? line.lineName : undefined,
+      lineLineNumber: line.lineNumber,
+      lineTransportationMode: line.transportMode,
+      lineTransportationSubMode: line.transportSubmode,
+      quayName: quay.name,
+      quayPublicCode: quay.publicCode,
+      quayId: quay.id,
+      stopId: stop.id,
+    });
+    AccessibilityInfo.announceForAccessibility(
+      t(NearbyTexts.results.lines.favorite.message.saved),
+    );
+  };
+
+  const label = existingFavorite
+    ? t(
+        NearbyTexts.results.lines.favorite.removeFavorite(
+          `${line.lineNumber} ${existingFavorite.lineName ?? ''}`,
+          stop.name,
+        ),
+      )
+    : t(
+        NearbyTexts.results.lines.favorite.addFavorite(
+          `${line.lineNumber} ${line.lineName}`,
+          stop.name,
+        ),
+      );
   return (
     <TouchableOpacity
-      onPress={onPress}
+      ref={closeRef}
+      onPress={onFavoritePress}
       accessibilityRole="checkbox"
-      accessibilityState={{checked: !!favorite}}
+      accessibilityState={{checked: !!existingFavorite}}
       accessibilityLabel={label}
       hitSlop={insets.symmetric(14, 8)}
       style={styles.favoriteButton}
     >
-      <ThemeIcon svg={Icon} />
+      <ThemeIcon svg={getFavoriteIcon(existingFavorite)} />
     </TouchableOpacity>
   );
 }
+
+const getFavoriteIcon = (existingFavorite?: StoredType<FavoriteDeparture>) => {
+  if (!existingFavorite) {
+    return SvgFavorite;
+  } else if (existingFavorite.lineName) {
+    return SvgFavoriteSemi;
+  } else {
+    return SvgFavoriteFill;
+  }
+};

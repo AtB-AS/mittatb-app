@@ -1,6 +1,6 @@
 import ThemeText from '@atb/components/text';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {ContrastColor, defaultTextColors, ThemeColor} from '@atb/theme/colors';
+import {ThemeColor} from '@atb/theme/colors';
 import React, {useRef} from 'react';
 import {
   Animated,
@@ -84,7 +84,7 @@ const Button: React.FC<ButtonProps> = ({
   const modeData = DefaultModeStyles[mode];
   const themeColor = color ?? modeData.themeColor;
   const css = useButtonStyle();
-  const {theme, themeName} = useTheme();
+  const {theme} = useTheme();
   const fadeAnim = useRef(new Animated.Value(disabled ? DISABLED_OPACITY : 1))
     .current;
 
@@ -105,24 +105,23 @@ const Button: React.FC<ButtonProps> = ({
   const rightIconSpacing =
     Icon && iconPosition === 'right' ? spacing : undefined;
 
-  const {backgroundColor, textColorType} = themeColor
+  const {backgroundColor, color: textColor} = themeColor
     ? theme.colors[themeColor]
-    : ({
+    : {
         backgroundColor: 'transparent',
-        textColorType: themeName == 'dark' ? 'light' : 'dark',
-      } as ContrastColor);
-  const {primary} = defaultTextColors[textColorType];
+        color: theme.text.colors.primary,
+      };
 
   const styleContainer: ViewStyle[] = [
     css.button,
     {
       backgroundColor: modeData.withBackground ? backgroundColor : undefined,
-      borderColor: modeData.visibleBorder ? primary : 'transparent',
+      borderColor: modeData.visibleBorder ? textColor : 'transparent',
       padding: spacing,
       alignSelf: isInline ? 'flex-start' : undefined,
     },
   ];
-  const styleText: TextStyle = {color: primary};
+  const styleText: TextStyle = {color: textColor};
   const textContainer: TextStyle = {
     flex: isInline ? undefined : 1,
     alignItems: 'center',
@@ -153,7 +152,7 @@ const Button: React.FC<ButtonProps> = ({
       >
         {Icon && iconPosition === 'left' && (
           <View style={iconContainer}>
-            <ThemeIcon svg={Icon} fill={primary} />
+            <ThemeIcon svg={Icon} fill={textColor} />
           </View>
         )}
         {text && (
@@ -170,7 +169,7 @@ const Button: React.FC<ButtonProps> = ({
         )}
         {Icon && iconPosition === 'right' && (
           <View style={iconContainer}>
-            <ThemeIcon svg={Icon} fill={primary} />
+            <ThemeIcon svg={Icon} fill={textColor} />
           </View>
         )}
       </TouchableOpacity>

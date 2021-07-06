@@ -39,8 +39,9 @@ export type LocationWithMetadata = Location &
 
 export type FavoriteDepartureId = {
   stopId: string;
-  lineName: string;
+  lineName?: string;
   lineId: string;
+  quayId: string;
 };
 
 export type FavoriteDeparture = FavoriteDepartureId & {
@@ -48,7 +49,6 @@ export type FavoriteDeparture = FavoriteDepartureId & {
   lineTransportationMode?: TransportMode;
   lineTransportationSubMode?: TransportSubmode;
   quayName: string;
-  quayId: string;
   quayPublicCode?: string;
 };
 

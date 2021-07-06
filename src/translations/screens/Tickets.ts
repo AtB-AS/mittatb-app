@@ -29,6 +29,14 @@ const TicketsTexts = {
         ),
       },
     },
+    reactivateSplash: {
+      message: _('Betingelser gjelder.', 'Some conditions apply.'),
+      linkText: _('Les mer her', 'Read more here'),
+      linkA11yHint: _(
+        'Les mer om betingelser for billettkjøp her',
+        'Read more about conditions for buying tickets here',
+      ),
+    },
   },
   activeTicketsTab: {
     label: _('Aktive', 'Valid'),
@@ -57,8 +65,8 @@ const TicketsTexts = {
     },
   },
   recentTickets: {
-    title: _('Sist kjøpte billetter', 'Recently purchased tickets'),
-    loading: _('Laster siste kjøp…', 'Loading recent purchases'),
+    title: _('Kjøp på nytt', 'Purchase again'),
+    loading: _('Laster tidligere kjøp', 'Loading recent purchases'),
     a11yHint: _(
       'Aktivér for å kjøpe denne billetten',
       'Activate to purchase this ticket',
