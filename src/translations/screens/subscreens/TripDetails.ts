@@ -114,6 +114,10 @@ const TripDetailsTexts = {
       'Vær oppmerksom på kort byttetid',
       'Please note short changeover time',
     ),
+    ticketsWeDontSell: _(
+      'Reisen inneholder reisetilbud som krever billett fra andre selskap enn AtB.',
+      'Parts of this journey requires tickets from providers other than AtB.',
+    ),
     errorNetwork: _(
       'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil.',
       `Are you online? We're unable to conduct a search since your device seems to be offline or the connection is unstable`,

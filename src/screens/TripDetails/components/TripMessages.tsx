@@ -12,12 +12,14 @@ import {ViewStyle} from 'react-native';
 
 type TripMessagesProps = {
   shortTime: boolean;
+  noTicketsAvailable: boolean;
   error?: AxiosError;
   messageStyle?: ViewStyle;
 };
 const TripMessages: React.FC<TripMessagesProps> = ({
   error,
   shortTime,
+  noTicketsAvailable,
   messageStyle,
 }) => {
   const {t} = useTranslation();
@@ -28,6 +30,13 @@ const TripMessages: React.FC<TripMessagesProps> = ({
           containerStyle={messageStyle}
           type="info"
           message={t(TripDetailsTexts.messages.shortTime)}
+        />
+      )}
+      {noTicketsAvailable && (
+        <MessageBox
+          containerStyle={messageStyle}
+          type="warning"
+          message={t(TripDetailsTexts.messages.ticketsWeDontSell)}
         />
       )}
       {error && (

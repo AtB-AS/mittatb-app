@@ -6,6 +6,7 @@ import {
 } from './reference-data/defaults';
 
 export type RemoteConfig = {
+  modes_we_sell_tickets_for: string;
   enable_network_logging: boolean;
   enable_ticketing: boolean;
   enable_intercom: boolean;
@@ -25,7 +26,17 @@ export type RemoteConfig = {
   user_profiles: string;
 };
 
+export const defaultModesWeSellTicketsFor: string[] = [
+  'cityTram',
+  'expressBus',
+  'localBus',
+  'localTram',
+  'regionalBus',
+  'shuttleBus',
+];
+
 export const defaultRemoteConfig: RemoteConfig = {
+  modes_we_sell_tickets_for: JSON.stringify(defaultModesWeSellTicketsFor),
   enable_network_logging: true,
   enable_ticketing: false,
   enable_intercom: true,
@@ -72,6 +83,9 @@ export function getConfig(): RemoteConfig {
   const news_link_url = values['news_link_url']?.asString() ?? '';
   const vat_percent =
     values['vat_percent']?.asNumber() ?? defaultRemoteConfig.vat_percent;
+  const modes_we_sell_tickets_for =
+    values['modes_we_sell_tickets_for']?.asString() ??
+    defaultRemoteConfig.modes_we_sell_tickets_for;
   const preassigned_fare_products =
     values['preassigned_fare_products']?.asString() ??
     defaultRemoteConfig.preassigned_fare_products;
@@ -81,6 +95,7 @@ export function getConfig(): RemoteConfig {
     values['user_profiles']?.asString() ?? defaultRemoteConfig.user_profiles;
 
   return {
+    modes_we_sell_tickets_for,
     enable_network_logging,
     enable_ticketing,
     enable_intercom,
