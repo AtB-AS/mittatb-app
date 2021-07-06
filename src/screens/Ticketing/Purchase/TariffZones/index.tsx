@@ -439,7 +439,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
                 id="tariffZonesLine"
                 style={{
                   lineWidth: 1,
-                  lineColor: theme.colors.background_gray.backgroundColor,
+                  lineColor: theme.colors.background_accent.backgroundColor,
                 }}
               />
             </MapboxGL.ShapeSource>
@@ -514,7 +514,7 @@ const useMapStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.colors.background_2.backgroundColor,
   },
   headerContainer: {
-    backgroundColor: theme.colors.background_gray.backgroundColor,
+    backgroundColor: theme.colors.background_accent.backgroundColor,
   },
   pinContainer: {
     position: 'absolute',

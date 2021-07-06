@@ -172,8 +172,8 @@ const VerticalLine = ({
     locations={[0.25, 0.25, 0.75, 0.75]}
     colors={[
       'transparent',
-      useTheme().theme.colors.background_gray.backgroundColor,
-      useTheme().theme.colors.background_gray.backgroundColor,
+      useTheme().theme.colors.background_accent.backgroundColor,
+      useTheme().theme.colors.background_accent.backgroundColor,
       'transparent',
     ]}
     pointerEvents={'none'}

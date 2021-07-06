@@ -21,7 +21,7 @@ import {AlertContext} from '@atb/alerts/AlertsContext';
 import AlertBox from '@atb/alerts/AlertBox';
 import {ThemeColor} from '@atb/theme/colors';
 
-const themeColor: ThemeColor = 'background_gray';
+const themeColor: ThemeColor = 'background_accent';
 
 type Props = {
   header: React.ReactNode;

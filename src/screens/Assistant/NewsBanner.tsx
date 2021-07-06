@@ -10,7 +10,7 @@ import ThemeText from '@atb/components/text';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {ThemeColor} from '@atb/theme/colors';
 
-const themeColor: ThemeColor = 'background_gray';
+const themeColor: ThemeColor = 'background_accent';
 
 const NewsBanner: React.FC<{} & AccessibilityProps> = ({...props}) => {
   const style = useStyle();
@@ -48,7 +48,7 @@ const NewsBanner: React.FC<{} & AccessibilityProps> = ({...props}) => {
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     padding: theme.spacings.medium,
-    backgroundColor: theme.colors.background_gray.backgroundColor,
+    backgroundColor: theme.colors.background_accent.backgroundColor,
     borderRadius: theme.border.radius.regular,
   },
   text: {

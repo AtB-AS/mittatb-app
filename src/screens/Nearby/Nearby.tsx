@@ -34,7 +34,7 @@ import DeparturesList from '@atb/departure-list/DeparturesList';
 import {useDepartureData} from './state';
 import {ThemeColor} from '@atb/theme/colors';
 
-const themeColor: ThemeColor = 'background_gray';
+const themeColor: ThemeColor = 'background_accent';
 
 type NearbyRouteName = 'NearbyRoot';
 const NearbyRouteNameStatic: NearbyRouteName = 'NearbyRoot';

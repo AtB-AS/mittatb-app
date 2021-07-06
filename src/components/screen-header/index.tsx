@@ -50,7 +50,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 }) => {
   const css = useHeaderStyle();
   const {theme} = useTheme();
-  const themeColor = color ?? 'background_gray';
+  const themeColor = color ?? 'background_accent';
 
   const {buttonsHeight, buttonsTopOffset, setLayoutFor} = useHeaderLayouts();
 

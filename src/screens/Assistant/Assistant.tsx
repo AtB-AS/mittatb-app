@@ -56,7 +56,7 @@ import Results from './Results';
 import {NoResultReason, SearchStateType} from './types';
 import {ThemeColor} from '@atb/theme/colors';
 
-const themeColor: ThemeColor = 'background_gray';
+const themeColor: ThemeColor = 'background_accent';
 
 type AssistantRouteName = 'AssistantRoot';
 const AssistantRouteNameStatic: AssistantRouteName = 'AssistantRoot';

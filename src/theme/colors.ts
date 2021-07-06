@@ -11,11 +11,11 @@ import {
   TextNames,
   textNames,
   createThemesFor,
-  Org,
+  ThemeVariant,
 } from '@atb-as/theme';
 let appVariantTheme = null;
 
-appVariantTheme = createThemesFor(Org.AtB);
+appVariantTheme = createThemesFor(ThemeVariant.NFK);
 
 export type {Statuses, Mode, TextColor, ContrastColor, RadiusSizes, TextNames};
 export {textNames};

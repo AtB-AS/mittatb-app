@@ -14,6 +14,7 @@ import ThemeIcon from '@atb/components/theme-icon';
 import NavigationIcon from '@atb/components/theme-icon/navigation-icon';
 import {useSectionItem, SectionItem, useSectionStyle} from './section-utils';
 import InternalLabeledItem from './internals/internal-labeled-item';
+import {useTheme} from '@atb/theme';
 
 export type ActionModes = 'check' | 'toggle' | 'heading-expand';
 export type ActionItemProps = SectionItem<{
@@ -31,6 +32,7 @@ export default function ActionItem({
   accessibility,
   ...props
 }: ActionItemProps) {
+  const {theme} = useTheme();
   const {contentContainer, topContainer} = useSectionItem(props);
   const style = useSectionStyle();
 
@@ -41,6 +43,11 @@ export default function ActionItem({
           value={checked}
           onValueChange={(v) => onPress?.(v)}
           accessibilityLabel={text}
+          thumbColor={'#f4f3f4'}
+          trackColor={{
+            false: theme.colors.secondary_2.backgroundColor,
+            true: theme.colors.primary_1.backgroundColor,
+          }}
           {...accessibility}
         />
       </InternalLabeledItem>

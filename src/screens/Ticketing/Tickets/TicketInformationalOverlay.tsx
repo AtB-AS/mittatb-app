@@ -9,7 +9,7 @@ import {ThemeColor} from '@atb/theme/colors';
 import storage from '@atb/storage';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 
-const themeColor: ThemeColor = 'background_gray';
+const themeColor: ThemeColor = 'background_accent';
 
 export default function TicketInformationalOverlay() {
   const {theme} = useTheme();
