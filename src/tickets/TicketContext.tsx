@@ -143,7 +143,7 @@ const TicketContextProvider: React.FC = ({children}) => {
       // Stop listening for updates when no longer required
       return () => subscriber();
     }
-  }, [user, abtCustomerId]);
+  }, [user, abtCustomerId, enable_ticketing]);
 
   const refreshTickets = () => {};
 
