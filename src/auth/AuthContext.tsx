@@ -162,7 +162,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
     if (state.isAuthConnectionInitialized && !state.user) {
       signInAnonymously();
     }
-  }, [state.isAuthConnectionInitialized]);
+  }, [state.isAuthConnectionInitialized, state.user?.uid]);
 
   return (
     <AuthContext.Provider
