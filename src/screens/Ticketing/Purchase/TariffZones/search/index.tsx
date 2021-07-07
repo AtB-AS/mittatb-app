@@ -16,7 +16,7 @@ import {
 } from '@atb/translations';
 import useDebounce from '@atb/utils/useDebounce';
 import {RouteProp, useIsFocused} from '@react-navigation/native';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   Keyboard,
@@ -66,8 +66,11 @@ const Index: React.FC<Props> = ({
 
   const {tariff_zones: tariffZones} = useRemoteConfig();
 
-  const getMatchingTariffZone = (location: Location) =>
-    tariffZones.find((tf) => location.tariff_zones?.includes(tf.id));
+  const getMatchingTariffZone = useCallback(
+    (location: Location) =>
+      tariffZones.find((tf) => location.tariff_zones?.includes(tf.id)),
+    [tariffZones],
+  );
 
   const onSelectZone = (tariffZone: TariffZone) => {
     navigation.navigate(callerRouteName as any, {
@@ -110,7 +113,7 @@ const Index: React.FC<Props> = ({
     if (error) {
       setErrorMessage(translateErrorType(error, t));
     }
-  }, [error]);
+  }, [error, t]);
 
   const locationsAndTariffZones: LocationAndTariffZone[] = useMemo(
     () =>
@@ -125,7 +128,7 @@ const Index: React.FC<Props> = ({
           ): locationAndTariffZone is LocationAndTariffZone =>
             locationAndTariffZone.tariffZone != null,
         ),
-    [locations],
+    [getMatchingTariffZone, locations],
   );
 
   const showActivityIndicator = isSearching && !locationsAndTariffZones.length;

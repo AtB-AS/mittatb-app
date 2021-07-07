@@ -21,7 +21,7 @@ export default function AnimatedBottomSheet({
         inputRange: [0, 1],
         outputRange: [height || windowHeight, 0],
       }),
-    [animatedOffset, height],
+    [animatedOffset, height, windowHeight],
   );
   return (
     <Animated.View

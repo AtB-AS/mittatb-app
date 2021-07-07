@@ -126,6 +126,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
         dispatch({type: 'SET_ABT_CUSTOMER_ID', abtCustomerId});
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.user?.uid]);
 
   // Subscribe to user changes. Will fire a onChangeEvent immediately on subscription.
@@ -157,12 +158,13 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
     await auth().signInAnonymously();
   }, []);
 
+  const hasUser = state.user != null;
   // Sign in if the onChangeEvent fired immediately on subscription did not include user data. (in other words, user was not previously signed in)
   useEffect(() => {
-    if (state.isAuthConnectionInitialized && !state.user) {
+    if (state.isAuthConnectionInitialized && !hasUser) {
       signInAnonymously();
     }
-  }, [state.isAuthConnectionInitialized]);
+  }, [state.isAuthConnectionInitialized, hasUser, signInAnonymously]);
 
   return (
     <AuthContext.Provider

@@ -129,6 +129,7 @@ const DisappearingHeader: React.FC<Props> = ({
         scrollYRef.setValue(-contentHeight);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [contentHeight, contentOffset],
   );
 
@@ -144,10 +145,12 @@ const DisappearingHeader: React.FC<Props> = ({
       setTransitioned(isFullHeight);
       onFullscreenTransitionEnd?.(isFullHeight);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFullHeight]);
 
   useEffect(
     () => fullscreenOffsetRef.setValue(isFullHeight ? 0 : contentOffset),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [contentOffset],
   );
 
@@ -173,6 +176,7 @@ const DisappearingHeader: React.FC<Props> = ({
     [top],
   );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const endReachListener = useCallback(
     throttle((e: NativeScrollEvent) => {
       if (!onEndReached) return;

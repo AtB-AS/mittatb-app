@@ -42,7 +42,15 @@ export default function useGeocoder(
 
     textLookup();
     return () => source.cancel('Cancelling previous autocomplete');
-  }, [coords?.latitude, coords?.longitude, text]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    coords?.latitude,
+    coords?.longitude,
+    text,
+    dispatch,
+    onlyAtbVenues,
+    text,
+  ]);
 
   return state;
 }

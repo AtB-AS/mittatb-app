@@ -38,7 +38,7 @@ export const useNavigateToStartScreen = () => {
   return useCallback(() => {
     analytics().logEvent('click_logo');
     navigation.navigate(startRoute);
-  }, [navigation]);
+  }, [navigation, startRoute]);
 };
 export function settingToRouteName(
   setting?: Preference_ScreenAlternatives,

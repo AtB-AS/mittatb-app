@@ -115,7 +115,7 @@ const useAnimatedVerticalLineOffset = () => {
         easing: Easing.linear,
       }),
     ).start();
-  }, []);
+  }, [animatedOffset]);
   return animatedOffset;
 };
 

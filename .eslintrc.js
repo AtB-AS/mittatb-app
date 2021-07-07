@@ -19,7 +19,8 @@ module.exports = {
 
     // React-Hooks Plugin
     // The following rules are made available via `eslint-plugin-react-hooks`
-    'react-hooks/rules-of-hooks': 2, // early error
+    'react-hooks/rules-of-hooks': 'error', // early error
+    'react-hooks/exhaustive-deps': 'warn',
 
     // https://github.com/Intellicode/eslint-plugin-react-native
     'react-native/no-raw-text': [2, {skip: 'ThemeText'}], // rather early error than JS bundle crash

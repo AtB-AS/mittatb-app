@@ -68,6 +68,7 @@ export default function ConfirmCode({
     if (authenticationType === 'phone') {
       doAfterLogin();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authenticationType]);
 
   return (

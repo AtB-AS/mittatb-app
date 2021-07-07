@@ -20,6 +20,7 @@ function useConditionalMemo<T>(
 
   const value = React.useMemo<T>(
     () => (predicate() ? factory() : lastMemoValue.current),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [...deps, predicate, initial],
   );
 

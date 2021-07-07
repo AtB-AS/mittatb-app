@@ -73,7 +73,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
     if (errorMessage && location) {
       setErrorMessage(undefined);
     }
-  }, [location]);
+  }, [errorMessage, location]);
 
   // @TODO This must be fixed so that the emoji item it self is stored
   // in favorites, or some lookup to set selected item inside emoji panel.

@@ -26,7 +26,7 @@ export default function useChatUnreadCount() {
         callback,
       );
     };
-  }, []);
+  }, [callback]);
 
   return count;
 }

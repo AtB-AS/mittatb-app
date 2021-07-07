@@ -179,7 +179,7 @@ function useCurrentLocationChip(
         resultType: 'geolocation',
       });
     }
-  }, [recentlyAllowedGeo, currentLocation]);
+  }, [recentlyAllowedGeo, currentLocation, onSelectLocation]);
 
   return {onCurrentLocation};
 }

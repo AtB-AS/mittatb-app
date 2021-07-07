@@ -317,22 +317,25 @@ export function useDepartureData(
   const refresh = useCallback(
     () =>
       dispatch({type: 'LOAD_INITIAL_DEPARTURES', location, favoriteDepartures}),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [location?.id, favoriteDepartures],
   );
 
   const loadMore = useCallback(
     () =>
       dispatch({type: 'LOAD_MORE_DEPARTURES', location, favoriteDepartures}),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [location?.id, favoriteDepartures],
   );
 
   const toggleShowFavorites = useCallback(
     () =>
       dispatch({type: 'TOGGLE_SHOW_FAVORITES', location, favoriteDepartures}),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [location?.id, favoriteDepartures],
   );
 
-  useEffect(refresh, [location?.id]);
+  useEffect(refresh, [refresh]);
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -345,7 +348,7 @@ export function useDepartureData(
     if (diff >= HARD_REFRESH_LIMIT_IN_MINUTES) {
       refresh();
     }
-  }, [state.tick, state.queryInput.startTime]);
+  }, [state.tick, state.queryInput.startTime, refresh]);
   useInterval(
     () => dispatch({type: 'LOAD_REALTIME_DATA'}),
     updateFrequencyInSeconds * 1000,

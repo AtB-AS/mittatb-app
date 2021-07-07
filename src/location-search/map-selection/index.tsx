@@ -56,8 +56,11 @@ const MapSelection: React.FC<Props> = ({
         longitude: regionEvent.region?.geometry?.coordinates[0],
       }) ??
       null,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       regionEvent?.region?.geometry?.coordinates[0],
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       regionEvent?.region?.geometry?.coordinates[1],
     ],
   );

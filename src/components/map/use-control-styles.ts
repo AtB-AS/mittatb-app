@@ -31,6 +31,6 @@ export function useControlPositionsStyle() {
         width: '100%',
       },
     }),
-    [bottom, top],
+    [bottom, theme.spacings.medium, top],
   );
 }

@@ -173,6 +173,8 @@ const NearbyOverview: React.FC<Props> = ({
             ),
       );
     }
+    // @TODO Check if this needs to include fromLocation
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updatingLocation, isLoading]);
 
   return (

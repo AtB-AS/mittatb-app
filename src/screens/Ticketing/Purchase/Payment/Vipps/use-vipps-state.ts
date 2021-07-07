@@ -119,6 +119,7 @@ export default function useVippsState(
         });
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [reservation?.url],
   );
 
@@ -127,7 +128,8 @@ export default function useVippsState(
       activatePolling(reservation, offers);
       openVipps();
     }
-  }, [state, openVipps]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state, openVipps, offers]);
 
   return {
     state,

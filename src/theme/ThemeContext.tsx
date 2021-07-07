@@ -52,7 +52,7 @@ const ThemeContextProvider: React.FC = ({children}) => {
     if (!overrideColorScheme) {
       ChangeNative.changeAppearance(null);
     }
-  }, [overrideColorScheme, storedColorScheme]);
+  }, [colorScheme, overrideColorScheme, storedColorScheme]);
 
   const overrideOSThemePreference = (override: boolean) => {
     setPreference({overrideColorScheme: override});

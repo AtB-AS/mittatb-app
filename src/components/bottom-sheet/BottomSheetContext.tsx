@@ -2,6 +2,7 @@ import React, {
   createContext,
   ReactNode,
   RefObject,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -61,23 +62,29 @@ const BottomSheetProvider: React.FC = ({children}) => {
     [animatedOffset, isOpen],
   );
 
-  const close = () => {
+  const close = useCallback(() => {
     setContentFunction(() => () => null);
     setIsOpen(false);
     if (closeRef) {
       setTimeout(() => giveFocus(closeRef), 200);
     }
-  };
+  }, [closeRef]);
 
-  const open = (
-    contentFunction: (close: () => void, focusRef: RefObject<any>) => ReactNode,
-    closeRef?: RefObject<any>,
-  ) => {
-    setContentFunction(() => contentFunction);
-    setCloseRef(closeRef);
-    setIsOpen(true);
-    setTimeout(() => giveFocus(focusRef), 200);
-  };
+  const open = useCallback(
+    (
+      contentFunction: (
+        close: () => void,
+        focusRef: RefObject<any>,
+      ) => ReactNode,
+      closeRef?: RefObject<any>,
+    ) => {
+      setContentFunction(() => contentFunction);
+      setCloseRef(closeRef);
+      setIsOpen(true);
+      setTimeout(() => giveFocus(focusRef), 200);
+    },
+    [],
+  );
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -91,7 +98,7 @@ const BottomSheetProvider: React.FC = ({children}) => {
       },
     );
     return () => backHandler.remove();
-  }, [isOpen]);
+  }, [isOpen, close]);
 
   const [height, setHeight] = useState<number>(0);
   const onLayout = ({nativeEvent}: LayoutChangeEvent) => {
@@ -112,7 +119,7 @@ const BottomSheetProvider: React.FC = ({children}) => {
         </AnimatedBottomSheet>
       </>
     ),
-    [isOpen, close, focusRef, animatedOffset, safeAreaBottom],
+    [animatedOffset, isOpen, close, height, contentFunction],
   );
 
   const state = {

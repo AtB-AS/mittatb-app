@@ -56,7 +56,7 @@ const Results: React.FC<Props> = ({
           break;
       }
     }
-  }, [errorType]);
+  }, [errorType, t]);
 
   const allSameDay = useMemo(
     () => isSeveralDays((tripPatterns ?? []).map((i) => i.startTime)),

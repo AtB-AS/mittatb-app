@@ -98,7 +98,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     if (params?.refreshOffer) {
       refreshOffer();
     }
-  }, [params?.refreshOffer]);
+  }, [refreshOffer, params?.refreshOffer]);
 
   const closeModal = () => navigation.dismiss();
 
