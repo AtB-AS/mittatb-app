@@ -134,6 +134,10 @@ const TicketContextProvider: React.FC = ({children}) => {
               (d) => d.data(),
             );
             dispatch({type: 'UPDATE_FARE_CONTRACT_TICKETS', fareContracts});
+
+            Bugsnag.leaveBreadcrumb('snapshot_fetched', {
+              count: fareContracts.length,
+            });
           },
           (err) => {
             Bugsnag.notify(err, function (event) {
@@ -151,11 +155,15 @@ const TicketContextProvider: React.FC = ({children}) => {
   const refreshTickets = () => {};
 
   const addReservation = useCallback(
-    (reservation: ActiveReservation) =>
+    (reservation: ActiveReservation) => {
+      Bugsnag.leaveBreadcrumb('add_reservation', {
+        order_id: reservation.reservation.order_id,
+      });
       dispatch({
         type: 'ADD_RESERVATION',
         reservation,
-      }),
+      });
+    },
     [dispatch],
   );
 
