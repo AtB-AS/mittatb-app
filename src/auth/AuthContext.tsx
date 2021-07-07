@@ -93,17 +93,20 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
   const [state, dispatch] = useReducer(authReducer, initialReducerState);
   const {language} = useTranslation();
 
-  async function confirmCode(code: string) {
-    try {
-      await state.confirmationHandler?.confirm(code);
-    } catch (error) {
-      if (error.code === ERROR_INVALID_CONFIRMATION_CODE) {
-        return 'invalid_code';
+  const confirmCode = useCallback(
+    async function confirmCode(code: string) {
+      try {
+        await state.confirmationHandler?.confirm(code);
+      } catch (error) {
+        if (error.code === ERROR_INVALID_CONFIRMATION_CODE) {
+          return 'invalid_code';
+        }
+        console.warn(error);
+        return 'unknown_error';
       }
-      console.warn(error);
-      return 'unknown_error';
-    }
-  }
+    },
+    [state.confirmationHandler],
+  );
 
   useEffect(() => {
     if (language) auth().setLanguageCode(language);
@@ -134,20 +137,23 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
     return subscriber;
   }, [onUserChanged]);
 
-  async function signInWithPhoneNumber(phoneNumber: string) {
-    try {
-      const confirmationHandler = await auth().signInWithPhoneNumber(
-        '+47' + phoneNumber,
-      );
-      dispatch({type: 'SIGN_IN_INITIATED', confirmationHandler});
-    } catch (error) {
-      if (error.code === ERROR_INVALID_PHONE_NUMBER) {
-        return 'invalid_phone';
+  const signInWithPhoneNumber = useCallback(
+    async function signInWithPhoneNumber(phoneNumber: string) {
+      try {
+        const confirmationHandler = await auth().signInWithPhoneNumber(
+          '+47' + phoneNumber,
+        );
+        dispatch({type: 'SIGN_IN_INITIATED', confirmationHandler});
+      } catch (error) {
+        if (error.code === ERROR_INVALID_PHONE_NUMBER) {
+          return 'invalid_phone';
+        }
+        console.warn(error);
+        return 'unknown_error';
       }
-      console.warn(error);
-      return 'unknown_error';
-    }
-  }
+    },
+    [],
+  );
 
   const signInAnonymously = useCallback(async function () {
     await auth().signInAnonymously();
