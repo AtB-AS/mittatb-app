@@ -13,6 +13,7 @@ import {useAuthState} from '../auth';
 import {ActiveReservation, FareContract, PaymentStatus} from './types';
 import {getPayment} from './api';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import Bugsnag from '@bugsnag/react-native';
 
 type TicketReducerState = {
   fareContracts: FareContract[];
@@ -135,7 +136,9 @@ const TicketContextProvider: React.FC = ({children}) => {
             dispatch({type: 'UPDATE_FARE_CONTRACT_TICKETS', fareContracts});
           },
           (err) => {
-            console.warn(err);
+            Bugsnag.notify(err, function (event) {
+              event.addMetadata('ticket', {abtCustomerId});
+            });
             dispatch({type: 'SET_ERROR_REFRESHING_FARE_CONTRACT_TICKETS'});
           },
         );
