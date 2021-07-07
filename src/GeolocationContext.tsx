@@ -166,7 +166,7 @@ const GeolocationContextProvider: React.FC = ({children}) => {
       }
     }
     checkPermission();
-  }, [appStatus]);
+  }, [appStatus, state.status]);
 
   return (
     <GeolocationContext.Provider value={{...state, requestPermission}}>

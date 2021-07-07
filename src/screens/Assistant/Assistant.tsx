@@ -312,6 +312,7 @@ const Assistant: React.FC<Props> = ({
         </FadeBetween>
       </View>
     ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       swap,
       isHeaderFullHeight,
@@ -366,7 +367,7 @@ const Assistant: React.FC<Props> = ({
         tripPatterns,
         startIndex,
       }),
-    [navigation, from, to],
+    [navigation],
   );
 
   const newsBanner = <NewsBanner />;
@@ -390,7 +391,7 @@ const Assistant: React.FC<Props> = ({
         setSearchStateMessage('');
         break;
     }
-  }, [searchState]);
+  }, [searchState, t]);
 
   return (
     <DisappearingHeader
@@ -503,6 +504,7 @@ function useLocations(
 
   const memoedCurrentLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       currentLocation?.coordinates.latitude,
       currentLocation?.coordinates.longitude,
@@ -671,7 +673,7 @@ function useTripPatterns(
       if (!fromLocation || !toLocation) return;
       source.cancel('New search to replace previous search');
     };
-  }, [fromLocation, toLocation, searchTime]);
+  }, [fromLocation, toLocation, searchTime, addJourneySearchEntry]);
 
   useEffect(reload, [reload]);
 
@@ -692,6 +694,7 @@ function useDoOnceWhen(fn: () => void, condition: boolean) {
       firstTimeRef.current = false;
       fn();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [condition]);
 }
 

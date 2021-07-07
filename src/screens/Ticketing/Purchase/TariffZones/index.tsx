@@ -217,14 +217,14 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
       ...selectedZones,
       from: fromTariffZone,
     });
-  }, [fromTariffZone]);
+  }, [fromTariffZone, selectedZones]);
 
   useEffect(() => {
     setSelectedZones({
       ...selectedZones,
       to: toTariffZone,
     });
-  }, [toTariffZone]);
+  }, [selectedZones, toTariffZone]);
 
   const {location: geolocation} = useGeolocationState();
 

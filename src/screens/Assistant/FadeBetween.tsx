@@ -29,6 +29,7 @@ export default function FadeBetween({
   useEffect(() => {
     progress.setValue(1);
     setInit(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useCode(

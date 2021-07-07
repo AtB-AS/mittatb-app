@@ -44,7 +44,8 @@ export default function useReverseGeocoder(
 
     reverseCoordLookup();
     return () => source.cancel('Cancelling previous reverse');
-  }, [coords?.latitude, coords?.longitude]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [coords?.latitude, coords?.longitude, dispatch]);
 
   return {
     ...state,

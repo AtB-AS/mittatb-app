@@ -10,7 +10,7 @@ export const useFinishOnboarding = () => {
     if (requestedOnce && status) {
       completeOnboarding();
     }
-  }, [status, requestedOnce]);
+  }, [status, requestedOnce, completeOnboarding]);
 
   return async () => {
     if (status !== 'granted') await requestPermission();

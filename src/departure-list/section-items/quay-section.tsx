@@ -38,6 +38,7 @@ const QuaySection = React.memo(function QuaySection({
 
   const hasMoreItems = quayGroup.group.length > limit;
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const sorted = useMemo(() => sortAndLimit(quayGroup, limit), [
     quayGroup,
     limit,

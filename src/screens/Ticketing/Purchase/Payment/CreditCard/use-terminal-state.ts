@@ -178,6 +178,8 @@ export default function useTerminalState(
         cancelTerminal();
         break;
     }
+    // @TODO Check if this should be fixed
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentResponseCode]);
 
   function restartTerminal() {

@@ -71,6 +71,7 @@ const Details: React.FC<Props> = (props) => {
     } else if (updatedTripPattern) {
       setTripPattern(updatedTripPattern);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, updatedTripPattern]);
 
   function navigate(page: number) {
@@ -148,7 +149,7 @@ function useTripPattern(
     async function reload() {
       return await getSingleTripPattern(id ?? initialTripPattern?.id ?? '');
     },
-    [currentIndex],
+    [id, initialTripPattern?.id],
   );
 
   return usePollableResource<TripPattern | undefined, AxiosError>(

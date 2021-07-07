@@ -52,7 +52,7 @@ export default function usePollableResource<T, E extends Error = Error>(
         }
       }
     },
-    [callback],
+    [callback, filterError, setIsLoading],
   );
 
   useEffect(() => {

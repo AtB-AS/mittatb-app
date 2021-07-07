@@ -11,7 +11,7 @@ export default function useFocusOnLoad(setFocusOnLoad: boolean = true) {
   const focusRef = useRef(null);
   useEffect(() => {
     giveFocus(focusRef, setFocusOnLoad);
-  }, [focusRef.current, setFocusOnLoad]);
+  }, [setFocusOnLoad]);
 
   const navigation = useNavigationSafe();
   useEffect(
@@ -19,7 +19,7 @@ export default function useFocusOnLoad(setFocusOnLoad: boolean = true) {
       navigation?.addListener('focus', () => {
         setTimeout(() => giveFocus(focusRef, setFocusOnLoad), 200);
       }),
-    [navigation, focusRef.current, setFocusOnLoad],
+    [navigation, setFocusOnLoad],
   );
 
   return focusRef;

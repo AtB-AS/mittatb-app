@@ -33,7 +33,7 @@ export default function useEnroll() {
         setIsLoading(false);
       }
     },
-    [setHasError, setIsLoading, setIsEnrolled],
+    [refresh],
   );
 
   return {

@@ -109,6 +109,7 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
     [top],
   );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const endReachListener = useCallback(
     throttle((e: NativeScrollEvent) => {
       if (!onEndReached) return;

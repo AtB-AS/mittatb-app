@@ -207,7 +207,7 @@ export function LocationSearchContent({
     if (error) {
       setErrorMessage(translateErrorType(error, t));
     }
-  }, [error]);
+  }, [error, t]);
 
   const hasPreviousResults = !!previousLocations.length;
   const hasResults = !!filteredLocations.length;

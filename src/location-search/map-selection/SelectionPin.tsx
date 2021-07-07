@@ -28,7 +28,7 @@ const AnimatedSelectionPin: React.FC<{isMoving: boolean; mode: PinMode}> = ({
         {value: scale, toValue: 2, duration: 100},
       );
     }
-  }, [isMoving]);
+  }, [isMoving, pinOffset, scale]);
 
   return (
     <View>

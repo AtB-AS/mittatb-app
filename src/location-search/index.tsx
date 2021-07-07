@@ -81,6 +81,7 @@ export function useLocationSearchValue<
       return;
     }
     setLocation(route.params?.[callerRouteParam]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route.params?.[callerRouteParam]]);
 
   return location;

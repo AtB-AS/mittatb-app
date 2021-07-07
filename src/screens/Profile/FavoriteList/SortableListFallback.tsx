@@ -34,6 +34,8 @@ export default function SortableListFallback({
       const newData = immutableMove(data, from, to);
       onSort(newData);
     },
+    // @TODO Check if this should be updated
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [data],
   );
 

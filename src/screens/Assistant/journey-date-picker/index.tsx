@@ -152,6 +152,7 @@ export function useSearchTimeValue<
     if (route.params?.[callerRouteParam]) {
       setSearchTime(route.params?.[callerRouteParam]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route.params?.[callerRouteParam]]);
 
   return searchTime;
