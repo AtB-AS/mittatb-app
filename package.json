@@ -15,7 +15,9 @@
     "generate-svg-mono-icons": "svgr --config-file .svgrrc.mono-icons.yml -d ./src/assets/svg/icons ./assets/svgs/mono-icons && prettier --write ./src/assets/svg/icons",
     "generate-svg-color": "svgr --config-file .svgrrc.color.yml -d ./src/assets/svg/ ./assets/svgs/color && prettier --write ./src/assets/svg/",
     "generate-svgs": "yarn generate-svg-mono-icons && yarn generate-svg-color",
-    "update-device-profiles": "bundle exec fastlane ios update_devices"
+    "update-device-profiles": "bundle exec fastlane ios update_devices",
+    "clean": "rm -rf node_modules/ **/node_modules/ yarn-error.log",
+    "clean:install": "yarn clean && yarn install"
   },
   "dependencies": {
     "@atb-as/theme": "^3.0.0",

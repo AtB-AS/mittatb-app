@@ -16,6 +16,7 @@ jobs:
         run: |
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
           echo "APP_ENVIRONMENT=staging" >> $GITHUB_ENV
+          echo "APP_ORG=atb" >> $GITHUB_ENV
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
         env:
@@ -28,7 +29,7 @@ jobs:
         uses: actions/cache@v2
         id: modules-cache
         with:
-          path: '**/node_modules'
+          path: "**/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: Install node_modules
         if: steps.modules-cache.outputs.cache-hit != 'true'
@@ -36,14 +37,14 @@ jobs:
       - name: Bundle install, fastlane dependencies
         run: bundle install
       - name: Set environment
-        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT
+        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT $APP_ORG
       - name: Override native config files
         run: sh ./scripts/override-config-files.sh
       - name: Get potential cached APK
         uses: actions/cache@v2
         id: apk-cache
         with:
-          path: 'app-staging.apk'
+          path: "app-staging.apk"
           key: ${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: Get Android keystore
         run: sh ./scripts/android/create-keystore-file.sh

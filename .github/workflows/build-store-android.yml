@@ -15,6 +15,7 @@ jobs:
         run: |
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
           echo "APP_ENVIRONMENT=store" >> $GITHUB_ENV
+          echo "APP_ORG=atb" >> $GITHUB_ENV
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
         env:
@@ -33,7 +34,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set environment
-        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT
+        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT $APP_ORG
       - name: Override native config files
         run: sh ./scripts/override-config-files.sh
       - name: Get Android keystore

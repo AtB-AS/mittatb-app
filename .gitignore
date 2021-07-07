@@ -68,3 +68,6 @@ keystore
 # Firebase
 ui-debug.log
 firebase-debug.log
+
+# Env
+/.env

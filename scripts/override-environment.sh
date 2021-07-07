@@ -1,15 +1,24 @@
-if [ -z "$1" ]; then
+if [ "$#" -ne 2 ]
+then
     echo "Argument error!"
     echo "First argument should be the environment name."
-    echo "Available environment names: 
- - store
-    
-Example: 
-./override-environment.sh store"
+    echo "Available environment names:
+ - dev
+ - prodstaging
+ - staging
+ - store"
+    echo "Second argument should be the app organisation name."
+    echo "Available app variant names:
+-atb
+-nfk"
+
+    echo "Example:
+./override-environment.sh store AtB"
     exit 1
-else 
+else
     APP_ENVIRONMENT=$1
-    ENV_FOLDER=env/$APP_ENVIRONMENT
+    APP_ORG=$2
+    ENV_FOLDER=env/$APP_ORG/$APP_ENVIRONMENT
     echo "Copying $APP_ENVIRONMENT .env file to root"
     cp $ENV_FOLDER/.env .
 

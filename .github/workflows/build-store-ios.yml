@@ -15,6 +15,7 @@ jobs:
         run: |
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
           echo "APP_ENVIRONMENT=store" >> $GITHUB_ENV
+          echo "APP_ORG=atb" >> $GITHUB_ENV
           echo "BUNDLE_IDENTIFIER=no.mittatb.store" >> $GITHUB_ENV
           echo "APPLE_TEAM_ID=CSV447Q97L" >> $GITHUB_ENV
       - name: Decrypt env files
@@ -35,7 +36,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set environment
-        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT
+        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT $APP_ORG
       - name: Override native config files
         run: sh ./scripts/override-config-files.sh
       - uses: webfactory/ssh-agent@v0.4.1
@@ -46,14 +47,14 @@ jobs:
         env:
           FASTLANE_MATCH_URL: ${{ secrets.FASTLANE_MATCH_URL }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_TYPE: 'appstore'
+          MATCH_TYPE: "appstore"
       - name: Generate icons
         run: brew install imagemagick && yarn app-icon generate -i icon.png --platforms=ios
       - name: Run fastlane build
         run: fastlane ios build
         env:
-          PROVISIONING_PROFILE: 'match AppStore no.mittatb.store'
-          EXPORT_METHOD: 'app-store'
+          PROVISIONING_PROFILE: "match AppStore no.mittatb.store"
+          EXPORT_METHOD: "app-store"
       - name: Distribute to TestFlight
         run: fastlane ios appcenter_testflight
         env:
