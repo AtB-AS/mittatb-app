@@ -300,6 +300,12 @@ const Header = React.memo(function Header({
       <View style={styles.paddedContainer} key="dateInput">
         <Button
           text={getSearchTimeLabel(searchTime, timeOfLastSearch, t, language)}
+          accessibilityLabel={getSearchTimeLabel(
+            searchTime,
+            timeOfLastSearch,
+            t,
+            language,
+          )}
           accessibilityHint={t(NearbyTexts.dateInput.a11yHint)}
           color="secondary_3"
           onPress={onSearchTimePress}
