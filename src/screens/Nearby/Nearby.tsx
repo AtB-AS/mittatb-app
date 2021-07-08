@@ -145,6 +145,17 @@ const NearbyOverview: React.FC<Props> = ({
       initialLocation: fromLocation,
     });
 
+  const onSearchTimePress = useCallback(
+    function onSearchTimePress() {
+      navigation.navigate('DateTimePicker', {
+        callerRouteName: 'NearbyRoot',
+        callerRouteParam: 'searchTime',
+        searchTime,
+      });
+    },
+    [searchTime],
+  );
+
   function setCurrentLocationAsFrom() {
     navigation.setParams({
       location: currentLocation && {
@@ -191,7 +202,7 @@ const NearbyOverview: React.FC<Props> = ({
           updatingLocation={updatingLocation}
           openLocationSearch={openLocationSearch}
           setCurrentLocationOrRequest={setCurrentLocationOrRequest}
-          navigation={navigation}
+          onSearchTimePress={onSearchTimePress}
           searchTime={searchTime}
           timeOfLastSearch={queryInput.startTime}
         />
@@ -250,7 +261,7 @@ type HeaderProps = {
   fromLocation?: LocationWithMetadata;
   openLocationSearch: () => void;
   setCurrentLocationOrRequest(): Promise<void>;
-  navigation: NearbyScreenNavigationProp;
+  onSearchTimePress: () => void;
   timeOfLastSearch: string;
   searchTime: SearchTime;
 };
@@ -260,20 +271,12 @@ const Header = React.memo(function Header({
   fromLocation,
   openLocationSearch,
   setCurrentLocationOrRequest,
-  navigation,
+  onSearchTimePress,
   timeOfLastSearch,
   searchTime,
 }: HeaderProps) {
   const {t, language} = useTranslation();
   const styles = useNearbyStyles();
-
-  const onSearchTimePress = useCallback(function onSearchTimePress() {
-    navigation.navigate('DateTimePicker', {
-      callerRouteName: 'NearbyRoot',
-      callerRouteParam: 'searchTime',
-      searchTime,
-    });
-  }, []);
 
   return (
     <>
