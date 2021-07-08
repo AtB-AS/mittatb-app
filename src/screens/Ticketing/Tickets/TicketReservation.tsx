@@ -24,6 +24,11 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
     }
   }
 
+  const paymentType =
+    reservation.paymentType === 'vipps'
+      ? t(TicketsTexts.reservation.paymentType.vipps)
+      : t(TicketsTexts.reservation.paymentType.creditcard);
+
   return (
     <TouchableOpacity>
       <View style={styles.ticketContainer}>
@@ -50,10 +55,9 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
             )}
           </ThemeText>
           <ThemeText style={styles.orderText}>
-            Betales med{' '}
-            {reservation.paymentType === 'vipps'
-              ? t(TicketsTexts.reservation.paymentType.vipps)
-              : t(TicketsTexts.reservation.paymentType.creditcard)}
+            {reservation.paymentStatus !== 'CAPTURE'
+              ? t(TicketsTexts.reservation.paymentStage.processing(paymentType))
+              : t(TicketsTexts.reservation.paymentStage.approved(paymentType))}
           </ThemeText>
           {reservation.paymentType === 'vipps' &&
             reservation.paymentStatus !== 'CAPTURE' && (
