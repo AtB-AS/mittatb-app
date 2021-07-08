@@ -251,6 +251,7 @@ const reducer: ReducerWithSideEffects<
             type: 'LOAD_INITIAL_DEPARTURES',
             location: action.location,
             favoriteDepartures: action.favoriteDepartures,
+            startTime: state.queryInput?.startTime,
           });
         },
       );
