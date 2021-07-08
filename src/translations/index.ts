@@ -44,5 +44,6 @@ export {default as UserProfileSettingsTexts} from './screens/subscreens/UserProf
 export {default as LoginTexts} from './screens/subscreens/Login';
 export {default as dictionary} from './dictionary';
 export {default as JourneyDatePickerTexts} from './screens/subscreens/JourneyDatePicker';
+export {default as DepartureDatePickerTexts} from './screens/subscreens/DepartureDatePicker';
 export {default as TravelDateTexts} from './screens/subscreens/TravelDate';
 export {default as InformationTexts} from './screens/subscreens/Information';

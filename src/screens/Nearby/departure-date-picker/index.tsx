@@ -8,7 +8,7 @@ import {
 } from '@atb/components/sections';
 import {StyleSheet} from '@atb/theme';
 import {
-  JourneyDatePickerTexts,
+  DepartureDatePickerTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
@@ -21,7 +21,7 @@ import {
 } from '@react-navigation/native';
 import React, {useRef, useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {AssistantParams} from '..';
+import {NearbyStackParams} from '..';
 
 export type DateTimePickerParams = {
   searchTime: SearchTime;
@@ -29,25 +29,25 @@ export type DateTimePickerParams = {
   callerRouteParam: string;
 };
 
-export type DateTimeNavigationProp = NavigationProp<AssistantParams>;
-export type DateTimeRouteProp = RouteProp<AssistantParams, 'DateTimePicker'>;
+export type DateTimeNavigationProp = NavigationProp<NearbyStackParams>;
+export type DateTimeRouteProp = RouteProp<NearbyStackParams, 'DateTimePicker'>;
 
-type JourneyDatePickerProps = {
+type DepartureDatePickerProps = {
   navigation: DateTimeNavigationProp;
   route: DateTimeRouteProp;
 };
-const DateOptions = ['now', 'departure', 'arrival'] as const;
+const DateOptions = ['now', 'departure'] as const;
 type DateOptionType = typeof DateOptions[number];
 
 export type SearchTime = {
   option: DateOptionType;
   date: string;
 };
-const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
+const DepartureDatePicker: React.FC<DepartureDatePickerProps> = ({
   navigation,
   route,
 }) => {
-  const {t, language, locale} = useTranslation();
+  const {t, language} = useTranslation();
   const styles = useStyles();
   const dateItems = Array.from(DateOptions);
 
@@ -72,7 +72,7 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        title={t(JourneyDatePickerTexts.header.title)}
+        title={t(DepartureDatePickerTexts.header.title)}
         leftButton={{type: 'back'}}
       />
 
@@ -96,8 +96,8 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
         <Button
           onPress={onSelect}
           color="primary_2"
-          text={t(JourneyDatePickerTexts.searchButton.text)}
-        ></Button>
+          text={t(DepartureDatePickerTexts.searchButton.text)}
+        />
       </ScrollView>
     </View>
   );
@@ -122,15 +122,12 @@ const getDateOptionText = (
 ) => {
   switch (dateOption) {
     case 'now':
-      return t(JourneyDatePickerTexts.options.now);
-    case 'arrival':
-      return t(JourneyDatePickerTexts.options.arrival);
-    case 'departure':
+      return t(DepartureDatePickerTexts.options.now);
     default:
-      return t(JourneyDatePickerTexts.options.departure);
+      return t(DepartureDatePickerTexts.options.future);
   }
 };
-export default JourneyDatePicker;
+export default DepartureDatePicker;
 
 export function useSearchTimeValue<
   T extends RouteProp<any, any> & {params: ParamListBase}

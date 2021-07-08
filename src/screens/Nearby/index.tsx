@@ -2,11 +2,15 @@ import {NavigatorScreenParams} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import TripDetailsRoot, {DetailsStackParams} from '../TripDetails';
+import DepartureDatePicker, {
+  DateTimePickerParams,
+} from './departure-date-picker';
 import NearbyRoot, {NearbyScreenParams, NearbyScreenProp} from './Nearby';
 
 export type NearbyStackParams = {
   NearbyRoot: NearbyScreenParams;
   TripDetails: NavigatorScreenParams<DetailsStackParams>;
+  DateTimePicker: DateTimePickerParams;
 };
 
 const Stack = createStackNavigator<NearbyStackParams>();
@@ -27,6 +31,7 @@ const NearbyScreen = ({route}: NearbyScreenRootProps) => {
         initialParams={route.params}
       />
       <Stack.Screen name="TripDetails" component={TripDetailsRoot} />
+      <Stack.Screen name="DateTimePicker" component={DepartureDatePicker} />
     </Stack.Navigator>
   );
 };

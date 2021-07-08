@@ -1,13 +1,12 @@
 import {ErrorType} from '@atb/api/utils';
 import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
-import AccessibleText, {
-  screenReaderPause,
-} from '@atb/components/accessible-text';
+import AccessibleText from '@atb/components/accessible-text';
+import Button from '@atb/components/button';
 import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {ActionItem, LocationInput, Section} from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
-import FavoriteChips from '@atb/favorite-chips';
+import DeparturesList from '@atb/departure-list/DeparturesList';
 import {Location, LocationWithMetadata} from '@atb/favorites/types';
 import {useReverseGeocoder} from '@atb/geocoder';
 import {
@@ -16,23 +15,27 @@ import {
 } from '@atb/GeolocationContext';
 import {useOnlySingleLocation} from '@atb/location-search';
 import {RootStackParamList} from '@atb/navigation';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
+import {ThemeColor} from '@atb/theme/colors';
 import {
-  AssistantTexts,
-  dictionary,
+  Language,
   NearbyTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
+import {
+  formatToLongDateTime,
+  formatToShortDateTimeWithoutYear,
+} from '@atb/utils/date';
+import {TFunc} from '@leile/lobo-t';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {NearbyStackParams} from '.';
 import Loading from '../Loading';
-import DeparturesList from '@atb/departure-list/DeparturesList';
+import {SearchTime, useSearchTimeValue} from './departure-date-picker';
 import {useDepartureData} from './state';
-import {ThemeColor} from '@atb/theme/colors';
 
 const themeColor: ThemeColor = 'background_gray';
 
@@ -100,14 +103,21 @@ const NearbyOverview: React.FC<Props> = ({
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
   const styles = useNearbyStyles();
 
+  const searchTime = useSearchTimeValue('searchTime', {
+    option: 'now',
+    date: new Date().toISOString(),
+  });
+
   const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
     [currentLocation],
   );
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
   const updatingLocation = !fromLocation && hasLocationPermission;
+
   const {state, refresh, loadMore, toggleShowFavorites} = useDepartureData(
     fromLocation,
+    searchTime?.option !== 'now' ? searchTime.date : undefined,
   );
   const {
     data,
@@ -116,12 +126,13 @@ const NearbyOverview: React.FC<Props> = ({
     isFetchingMore,
     error,
     showOnlyFavorites,
+    queryInput,
   } = state;
 
   const isInitialScreen = data == null && !isLoading && !error;
   const activateScroll = !isInitialScreen || !!error;
 
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   const onScrollViewEndReached = () => data?.length && loadMore();
 
@@ -133,11 +144,16 @@ const NearbyOverview: React.FC<Props> = ({
       initialLocation: fromLocation,
     });
 
-  const fullLocation = (selectedLocation: LocationWithMetadata) => {
-    navigation.setParams({
-      location: selectedLocation,
-    });
-  };
+  const onSearchTimePress = useCallback(
+    function onSearchTimePress() {
+      navigation.navigate('DateTimePicker', {
+        callerRouteName: 'NearbyRoot',
+        callerRouteParam: 'searchTime',
+        searchTime,
+      });
+    },
+    [searchTime],
+  );
 
   function setCurrentLocationAsFrom() {
     navigation.setParams({
@@ -183,9 +199,11 @@ const NearbyOverview: React.FC<Props> = ({
         <Header
           fromLocation={fromLocation}
           updatingLocation={updatingLocation}
-          fullLocation={fullLocation}
           openLocationSearch={openLocationSearch}
           setCurrentLocationOrRequest={setCurrentLocationOrRequest}
+          onSearchTimePress={onSearchTimePress}
+          searchTime={searchTime}
+          timeOfLastSearch={queryInput.startTime}
         />
       }
       headerTitle={t(NearbyTexts.header.title)}
@@ -197,7 +215,12 @@ const NearbyOverview: React.FC<Props> = ({
           type={'body__primary--bold'}
           color={themeColor}
         >
-          {fromLocation?.name}
+          {getHeaderAlternativeTitle(
+            fromLocation?.name ?? '',
+            searchTime,
+            t,
+            language,
+          )}
         </AccessibleText>
       }
       onEndReached={onScrollViewEndReached}
@@ -237,7 +260,9 @@ type HeaderProps = {
   fromLocation?: LocationWithMetadata;
   openLocationSearch: () => void;
   setCurrentLocationOrRequest(): Promise<void>;
-  fullLocation(selectedLocation: LocationWithMetadata): void;
+  onSearchTimePress: () => void;
+  timeOfLastSearch: string;
+  searchTime: SearchTime;
 };
 
 const Header = React.memo(function Header({
@@ -245,10 +270,12 @@ const Header = React.memo(function Header({
   fromLocation,
   openLocationSearch,
   setCurrentLocationOrRequest,
-  fullLocation,
+  onSearchTimePress,
+  timeOfLastSearch,
+  searchTime,
 }: HeaderProps) {
-  const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {t, language} = useTranslation();
+  const styles = useNearbyStyles();
 
   return (
     <>
@@ -270,25 +297,14 @@ const Header = React.memo(function Header({
           }}
         />
       </Section>
-      <FavoriteChips
-        key="favoriteChips"
-        chipTypes={['favorites']}
-        onSelectLocation={fullLocation}
-        containerStyle={{
-          marginTop: theme.spacings.xSmall,
-          marginBottom: theme.spacings.medium,
-        }}
-        contentContainerStyle={{
-          // @TODO Find solution for not hardcoding this. e.g. do proper math
-          paddingLeft: theme.spacings.medium,
-          paddingRight: theme.spacings.medium / 2,
-        }}
-        chipActionHint={
-          t(AssistantTexts.favorites.favoriteChip.a11yHint) +
-          t(dictionary.fromPlace) +
-          screenReaderPause
-        }
-      />
+      <View style={styles.paddedContainer} key="dateInput">
+        <Button
+          text={getSearchTimeLabel(searchTime, timeOfLastSearch, t, language)}
+          accessibilityHint={t(NearbyTexts.dateInput.a11yHint)}
+          color="secondary_3"
+          onPress={onSearchTimePress}
+        />
+      </View>
     </>
   );
 });
@@ -296,6 +312,10 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingTop: theme.spacings.medium,
     paddingHorizontal: theme.spacings.medium,
+  },
+  paddedContainer: {
+    marginHorizontal: theme.spacings.medium,
+    paddingBottom: theme.spacings.medium,
   },
 }));
 
@@ -309,5 +329,39 @@ function translateErrorType(
       return t(NearbyTexts.messages.networkError);
     default:
       return t(NearbyTexts.messages.defaultFetchError);
+  }
+}
+
+function getSearchTimeLabel(
+  searchTime: SearchTime,
+  timeOfLastSearch: string,
+  t: TFunc<typeof Language>,
+  language: Language,
+) {
+  const date = searchTime.option === 'now' ? timeOfLastSearch : searchTime.date;
+  const time = formatToLongDateTime(date, language);
+
+  switch (searchTime.option) {
+    case 'now':
+      return t(NearbyTexts.dateInput.departureNow(time));
+    case 'departure':
+      return t(NearbyTexts.dateInput.departure(time));
+  }
+  return time;
+}
+
+function getHeaderAlternativeTitle(
+  locationName: string,
+  searchTime: SearchTime,
+  t: TFunc<typeof Language>,
+  language: Language,
+) {
+  const time = formatToShortDateTimeWithoutYear(searchTime.date, language);
+
+  switch (searchTime.option) {
+    case 'now':
+      return locationName;
+    default:
+      return t(NearbyTexts.header.departureFuture(locationName, time));
   }
 }

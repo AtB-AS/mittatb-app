@@ -9,6 +9,8 @@ const NearbyTexts = {
     logo: {
       a11yLabel: _('Gå til startskjerm', 'Back to start screen'),
     },
+    departureFuture: (name: string, time: string) =>
+      _(`${name} (${time})`, `${name} (${time})`),
   },
   search: {
     label: _('Fra', 'From'),
@@ -33,6 +35,16 @@ const NearbyTexts = {
       a11yLabel: _('Bruk min posisjon', 'Use my current location'),
     },
     updatingLocation: _('Oppdaterer posisjon', 'Updating current location'),
+  },
+  dateInput: {
+    departureNow: (time: string) =>
+      _(`Avganger nå (${time})`, `Departing now (${time})`),
+    departure: (time: string) =>
+      _(`Avganger fra ${time}`, `Departures from ${time}`),
+    a11yHint: _(
+      'Aktivér for å endre avgangstidspunkt',
+      'Activate to change time of departures',
+    ),
   },
   messages: {
     networkError: _(
