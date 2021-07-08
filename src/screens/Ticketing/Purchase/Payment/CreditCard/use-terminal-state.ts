@@ -154,7 +154,7 @@ export default function useTerminalState(
       // "payment redirect guard" here
     } else if (
       !paymentRedirectCompleteRef.current &&
-      url.includes('/ticket/v1/payments/')
+      url.includes('/ticket/v2/payments/')
     ) {
       paymentRedirectCompleteRef.current = true;
       const params = parseURL(url);
