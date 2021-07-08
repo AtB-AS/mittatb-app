@@ -12,6 +12,7 @@ export type StorageModel = {
   '@ATB_search-history': string;
   '@ATB_journey_search-history': string;
   '@ATB_ticket_informational_accepted': string;
+  '@ATB_departures_show_only_favorites': string;
 };
 
 export type StorageModelTypes = keyof StorageModel;
