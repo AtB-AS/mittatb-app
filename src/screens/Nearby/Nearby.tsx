@@ -26,7 +26,6 @@ import {
 import {
   formatToLongDateTime,
   formatToShortDateTimeWithoutYear,
-  formatToSimpleDate,
 } from '@atb/utils/date';
 import {TFunc} from '@leile/lobo-t';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';

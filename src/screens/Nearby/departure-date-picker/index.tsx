@@ -6,7 +6,7 @@ import {
   Section,
   TimeInputItem,
 } from '@atb/components/sections';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   DepartureDatePickerTexts,
   TranslateFunction,
