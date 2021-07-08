@@ -1,0 +1,154 @@
+import Button from '@atb/components/button';
+import ScreenHeader from '@atb/components/screen-header';
+import {
+  DateInputItem,
+  RadioSection,
+  Section,
+  TimeInputItem,
+} from '@atb/components/sections';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {
+  DepartureDatePickerTexts,
+  TranslateFunction,
+  useTranslation,
+} from '@atb/translations';
+import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
+import {
+  NavigationProp,
+  ParamListBase,
+  RouteProp,
+  useRoute,
+} from '@react-navigation/native';
+import React, {useRef, useState} from 'react';
+import {ScrollView} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NearbyStackParams} from '..';
+
+export type DateTimePickerParams = {
+  searchTime: SearchTime;
+  callerRouteName: string;
+  callerRouteParam: string;
+};
+
+export type DateTimeNavigationProp = NavigationProp<NearbyStackParams>;
+export type DateTimeRouteProp = RouteProp<NearbyStackParams, 'DateTimePicker'>;
+
+type DepartureDatePickerProps = {
+  navigation: DateTimeNavigationProp;
+  route: DateTimeRouteProp;
+};
+const DateOptions = ['now', 'departure'] as const;
+type DateOptionType = typeof DateOptions[number];
+
+export type SearchTime = {
+  option: DateOptionType;
+  date: string;
+};
+const DepartureDatePicker: React.FC<DepartureDatePickerProps> = ({
+  navigation,
+  route,
+}) => {
+  const {t, language} = useTranslation();
+  const styles = useStyles();
+  const dateItems = Array.from(DateOptions);
+
+  const {callerRouteName, callerRouteParam, searchTime} = route.params;
+  const [dateString, setDate] = useState<string>(searchTime.date);
+  const [timeString, setTime] = useState<string>(() =>
+    formatLocaleTime(searchTime.date, language),
+  );
+
+  const onSelect = () => {
+    const calculatedTime: SearchTime = {
+      date: dateWithReplacedTime(dateString, timeString).toISOString(),
+      option,
+    };
+    navigation.navigate(callerRouteName as any, {
+      [callerRouteParam]: calculatedTime,
+    });
+  };
+
+  const [option, setOption] = useState<DateOptionType>(searchTime.option);
+
+  return (
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+      <ScreenHeader
+        title={t(DepartureDatePickerTexts.header.title)}
+        leftButton={{type: 'back'}}
+      />
+
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        <RadioSection<DateOptionType>
+          selected={option ?? dateItems[0]}
+          keyExtractor={(s: string) => s}
+          items={dateItems}
+          withBottomPadding
+          onSelect={setOption}
+          itemToText={(s: DateOptionType) => getDateOptionText(s, t)}
+        />
+
+        {option !== 'now' && (
+          <Section withBottomPadding>
+            <DateInputItem value={dateString} onChange={setDate} />
+            <TimeInputItem value={timeString} onChange={setTime} />
+          </Section>
+        )}
+
+        <Button
+          onPress={onSelect}
+          color="primary_2"
+          text={t(DepartureDatePickerTexts.searchButton.text)}
+        />
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.background_2.backgroundColor,
+  },
+  contentContainer: {
+    padding: theme.spacings.medium,
+  },
+  dateOptions: {
+    margin: theme.spacings.medium,
+  },
+}));
+
+const getDateOptionText = (
+  dateOption: DateOptionType,
+  t: TranslateFunction,
+) => {
+  switch (dateOption) {
+    case 'now':
+      return t(DepartureDatePickerTexts.options.now);
+    default:
+      return t(DepartureDatePickerTexts.options.future);
+  }
+};
+export default DepartureDatePicker;
+
+export function useSearchTimeValue<
+  T extends RouteProp<any, any> & {params: ParamListBase}
+>(callerRouteParam: keyof T['params'], initialValue: SearchTime): SearchTime {
+  const route = useRoute<T>();
+  const firstTimeRef = useRef(true);
+  const [searchTime, setSearchTime] = React.useState<SearchTime>(initialValue);
+
+  React.useEffect(() => {
+    if (
+      firstTimeRef.current &&
+      route.params?.[callerRouteParam] === undefined
+    ) {
+      firstTimeRef.current = false;
+      return;
+    }
+    if (route.params?.[callerRouteParam]) {
+      setSearchTime(route.params?.[callerRouteParam]);
+    }
+  }, [route.params?.[callerRouteParam]]);
+
+  return searchTime;
+}

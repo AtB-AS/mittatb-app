@@ -19,7 +19,7 @@ export type DepartureGroupsPayload = {
 };
 
 export type DepartureGroupsQuery = CursoredQuery<{
-  startTime: Date;
+  startTime: string;
   limitPerLine: number;
 }>;
 

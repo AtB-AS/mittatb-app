@@ -140,6 +140,17 @@ export function formatToLongDateTime(
   return format(parsed, 'PPp', {locale: languageToLocale(language)});
 }
 
+export function formatToShortDateTimeWithoutYear(
+  isoDate: string | Date,
+  language: Language,
+) {
+  const parsed = parseIfNeeded(isoDate);
+  if (isSameDay(parsed, new Date())) {
+    return formatToClock(parsed, language);
+  }
+  return format(parsed, 'dd.MM, HH:mm', {locale: languageToLocale(language)});
+}
+
 export function fullDateTime(isoDate: string | Date, language: Language) {
   const parsed = parseIfNeeded(isoDate);
   return format(parsed, 'PPp', {locale: languageToLocale(language)});
