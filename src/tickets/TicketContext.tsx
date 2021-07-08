@@ -13,6 +13,7 @@ import {useAuthState} from '../auth';
 import {ActiveReservation, FareContract, PaymentStatus} from './types';
 import {getPayment} from './api';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import Bugsnag from '@bugsnag/react-native';
 
 type TicketReducerState = {
   fareContracts: FareContract[];
@@ -133,9 +134,15 @@ const TicketContextProvider: React.FC = ({children}) => {
               (d) => d.data(),
             );
             dispatch({type: 'UPDATE_FARE_CONTRACT_TICKETS', fareContracts});
+
+            Bugsnag.leaveBreadcrumb('snapshot_fetched', {
+              count: fareContracts.length,
+            });
           },
           (err) => {
-            console.warn(err);
+            Bugsnag.notify(err, function (event) {
+              event.addMetadata('ticket', {abtCustomerId});
+            });
             dispatch({type: 'SET_ERROR_REFRESHING_FARE_CONTRACT_TICKETS'});
           },
         );
@@ -148,11 +155,15 @@ const TicketContextProvider: React.FC = ({children}) => {
   const refreshTickets = () => {};
 
   const addReservation = useCallback(
-    (reservation: ActiveReservation) =>
+    (reservation: ActiveReservation) => {
+      Bugsnag.leaveBreadcrumb('add_reservation', {
+        order_id: reservation.reservation.order_id,
+      });
       dispatch({
         type: 'ADD_RESERVATION',
         reservation,
-      }),
+      });
+    },
     [dispatch],
   );
 
