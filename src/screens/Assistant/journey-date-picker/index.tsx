@@ -1,12 +1,12 @@
 import Button from '@atb/components/button';
-import ScreenHeader from '@atb/components/screen-header';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {
   DateInputItem,
   RadioSection,
   Section,
   TimeInputItem,
 } from '@atb/components/sections';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   JourneyDatePickerTexts,
   TranslateFunction,
@@ -20,8 +20,7 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import React, {useRef, useState} from 'react';
-import {ScrollView} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {ScrollView, View} from 'react-native';
 import {AssistantParams} from '..';
 
 export type DateTimePickerParams = {
@@ -50,7 +49,6 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
 }) => {
   const {t, language, locale} = useTranslation();
   const styles = useStyles();
-  const {theme} = useTheme();
   const dateItems = Array.from(DateOptions);
 
   const {callerRouteName, callerRouteParam, searchTime} = route.params;
@@ -72,8 +70,8 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
   const [option, setOption] = useState<DateOptionType>(searchTime.option);
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      <ScreenHeader
+    <View style={styles.container}>
+      <FullScreenHeader
         title={t(JourneyDatePickerTexts.header.title)}
         leftButton={{type: 'back'}}
       />
@@ -101,7 +99,7 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
           text={t(JourneyDatePickerTexts.searchButton.text)}
         ></Button>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

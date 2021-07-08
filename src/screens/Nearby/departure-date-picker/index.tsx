@@ -1,5 +1,5 @@
 import Button from '@atb/components/button';
-import ScreenHeader from '@atb/components/screen-header';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {
   DateInputItem,
   RadioSection,
@@ -20,8 +20,7 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import React, {useRef, useState} from 'react';
-import {ScrollView} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {ScrollView, View} from 'react-native';
 import {NearbyStackParams} from '..';
 
 export type DateTimePickerParams = {
@@ -71,8 +70,8 @@ const DepartureDatePicker: React.FC<DepartureDatePickerProps> = ({
   const [option, setOption] = useState<DateOptionType>(searchTime.option);
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      <ScreenHeader
+    <View style={styles.container}>
+      <FullScreenHeader
         title={t(DepartureDatePickerTexts.header.title)}
         leftButton={{type: 'back'}}
       />
@@ -100,7 +99,7 @@ const DepartureDatePicker: React.FC<DepartureDatePickerProps> = ({
           text={t(DepartureDatePickerTexts.searchButton.text)}
         />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
