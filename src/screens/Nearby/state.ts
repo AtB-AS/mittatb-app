@@ -21,7 +21,6 @@ import {DeparturesRealtimeData} from '@atb/sdk';
 import {differenceInMinutesStrings} from '@atb/utils/date';
 import useInterval from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '../../departure-list/utils';
-import storage from '@atb/storage';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
@@ -75,7 +74,8 @@ type DepartureDataActions =
       favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
-      type: 'TOGGLE_SHOW_FAVORITES';
+      type: 'SET_SHOW_FAVORITES';
+      showOnlyFavorites: boolean;
       location?: Location;
       favoriteDepartures?: UserFavoriteDepartures;
     }
@@ -241,18 +241,13 @@ const reducer: ReducerWithSideEffects<
       });
     }
 
-    case 'TOGGLE_SHOW_FAVORITES': {
-      const showOnlyFavorites = !state.showOnlyFavorites;
+    case 'SET_SHOW_FAVORITES': {
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
         {
           ...state,
-          showOnlyFavorites,
+          showOnlyFavorites: action.showOnlyFavorites,
         },
         async (_, dispatch) => {
-          storage.set(
-            '@ATB_departures_show_only_favorites',
-            showOnlyFavorites.toString(),
-          );
           dispatch({
             type: 'LOAD_INITIAL_DEPARTURES',
             location: action.location,
@@ -339,22 +334,17 @@ export function useDepartureData(
     [location?.id, favoriteDepartures],
   );
 
-  const toggleShowFavorites = useCallback(
-    () =>
-      dispatch({type: 'TOGGLE_SHOW_FAVORITES', location, favoriteDepartures}),
+  const setShowFavorites = useCallback(
+    (showOnlyFavorites: boolean) =>
+      dispatch({
+        type: 'SET_SHOW_FAVORITES',
+        showOnlyFavorites,
+        location,
+        favoriteDepartures,
+      }),
     [location?.id, favoriteDepartures],
   );
 
-  useEffect(() => {
-    async function getStoredShowFavorites() {
-      const show = await storage.get('@ATB_departures_show_only_favorites');
-      if (show != null && !!show != state.showOnlyFavorites) {
-        toggleShowFavorites();
-      }
-    }
-
-    getStoredShowFavorites();
-  }, []);
   useEffect(refresh, [location?.id, startTime]);
   useEffect(() => {
     if (!state.tick) {
@@ -386,6 +376,6 @@ export function useDepartureData(
     state,
     refresh,
     loadMore,
-    toggleShowFavorites,
+    setShowFavorites,
   };
 }
