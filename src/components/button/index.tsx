@@ -143,11 +143,10 @@ const Button: React.FC<ButtonProps> = ({
     <Animated.View style={[{opacity: fadeAnim}, viewContainerStyle]}>
       <TouchableOpacity
         style={[styleContainer, style]}
-        onPress={onPress}
+        onPress={disabled ? undefined : onPress}
         disabled={disabled}
         accessibilityRole="button"
-        importantForAccessibility={disabled ? 'no-hide-descendants' : 'auto'}
-        accessibilityElementsHidden={!!disabled}
+        accessibilityState={{disabled: !!disabled}}
         {...props}
       >
         {Icon && iconPosition === 'left' && (
