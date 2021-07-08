@@ -15,6 +15,7 @@ import {
 } from '@atb/GeolocationContext';
 import {useOnlySingleLocation} from '@atb/location-search';
 import {RootStackParamList} from '@atb/navigation';
+import {usePreferences} from '@atb/preferences';
 import {StyleSheet} from '@atb/theme';
 import {ThemeColor} from '@atb/theme/colors';
 import {
@@ -115,7 +116,7 @@ const NearbyOverview: React.FC<Props> = ({
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
   const updatingLocation = !fromLocation && hasLocationPermission;
 
-  const {state, refresh, loadMore, toggleShowFavorites} = useDepartureData(
+  const {state, refresh, loadMore, setShowFavorites} = useDepartureData(
     fromLocation,
     searchTime?.option !== 'now' ? searchTime.date : undefined,
   );
@@ -128,6 +129,26 @@ const NearbyOverview: React.FC<Props> = ({
     showOnlyFavorites,
     queryInput,
   } = state;
+
+  const {
+    preferences: {departuresShowOnlyFavorites: pref__showOnlyFavorites},
+    setPreference,
+  } = usePreferences();
+
+  function toggleShowFavorites() {
+    const show = !showOnlyFavorites;
+    setShowFavorites(show);
+    setPreference({departuresShowOnlyFavorites: show});
+  }
+
+  useEffect(() => {
+    if (
+      pref__showOnlyFavorites != undefined &&
+      showOnlyFavorites != pref__showOnlyFavorites
+    ) {
+      setShowFavorites(pref__showOnlyFavorites);
+    }
+  }, [pref__showOnlyFavorites]);
 
   const isInitialScreen = data == null && !isLoading && !error;
   const activateScroll = !isInitialScreen || !!error;

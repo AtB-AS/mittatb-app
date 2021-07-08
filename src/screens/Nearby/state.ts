@@ -74,7 +74,8 @@ type DepartureDataActions =
       favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
-      type: 'TOGGLE_SHOW_FAVORITES';
+      type: 'SET_SHOW_FAVORITES';
+      showOnlyFavorites: boolean;
       location?: Location;
       favoriteDepartures?: UserFavoriteDepartures;
     }
@@ -240,11 +241,11 @@ const reducer: ReducerWithSideEffects<
       });
     }
 
-    case 'TOGGLE_SHOW_FAVORITES': {
+    case 'SET_SHOW_FAVORITES': {
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
         {
           ...state,
-          showOnlyFavorites: !state.showOnlyFavorites,
+          showOnlyFavorites: action.showOnlyFavorites,
         },
         async (_, dispatch) => {
           dispatch({
@@ -334,9 +335,14 @@ export function useDepartureData(
     [location?.id, favoriteDepartures],
   );
 
-  const toggleShowFavorites = useCallback(
-    () =>
-      dispatch({type: 'TOGGLE_SHOW_FAVORITES', location, favoriteDepartures}),
+  const setShowFavorites = useCallback(
+    (showOnlyFavorites: boolean) =>
+      dispatch({
+        type: 'SET_SHOW_FAVORITES',
+        showOnlyFavorites,
+        location,
+        favoriteDepartures,
+      }),
     [location?.id, favoriteDepartures],
   );
 
@@ -371,6 +377,6 @@ export function useDepartureData(
     state,
     refresh,
     loadMore,
-    toggleShowFavorites,
+    setShowFavorites,
   };
 }
