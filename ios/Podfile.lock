@@ -219,8 +219,8 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.7):
     - BoringSSL-GRPC/Interface (= 0.0.7)
   - BoringSSL-GRPC/Interface (0.0.7)
-  - BugsnagReactNative (7.6.1):
-    - React
+  - BugsnagReactNative (7.10.5):
+    - React-Core
   - BVLinearGradient (2.5.6):
     - React
   - CocoaAsyncSocket (7.6.5)
@@ -619,12 +619,12 @@ PODS:
   - react-native-intercom (18.0.0):
     - Intercom (~> 8.0.0)
     - React
-  - react-native-mapbox-gl (8.1.0):
+  - react-native-mapbox-gl (8.2.1):
     - Mapbox-iOS-SDK (= 6.3.0)
     - React
     - React-Core
-    - react-native-mapbox-gl/DynamicLibrary (= 8.1.0)
-  - react-native-mapbox-gl/DynamicLibrary (8.1.0):
+    - react-native-mapbox-gl/DynamicLibrary (= 8.2.1)
+  - react-native-mapbox-gl/DynamicLibrary (8.2.1):
     - Mapbox-iOS-SDK (= 6.3.0)
     - React
     - React-Core
@@ -696,11 +696,11 @@ PODS:
     - React-Core
   - RNCAsyncStorage (2.0.0):
     - React
-  - RNCClipboard (1.7.0):
+  - RNCClipboard (1.8.2):
     - React-Core
-  - RNCMaskedView (0.1.10):
+  - RNCMaskedView (0.1.11):
     - React
-  - RNDateTimePicker (3.0.9):
+  - RNDateTimePicker (3.5.2):
     - React-Core
   - RNDeviceInfo (8.0.1):
     - React-Core
@@ -972,7 +972,7 @@ SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
-  BugsnagReactNative: 4a1cfbbc0b87dc257c5c59a4aa6560ef8a419d31
+  BugsnagReactNative: a97b3132c1854fd7bf92350fabd505e3ebdd7829
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cde416483dac037923206447da6e1454df403714
@@ -1026,7 +1026,7 @@ SPEC CHECKSUMS:
   react-native-geolocation-service: 7c9436da6dfdecd9526c62eac62ea2bc3f0cc8ea
   react-native-get-random-values: 41f0c91ac0da870e47b307e07752e9e54bc2dc7e
   react-native-intercom: c48e0e15877bf96ff4d461f7aa9b833d11188139
-  react-native-mapbox-gl: 4fd2d4035658102f516176370ea45778053a7a8e
+  react-native-mapbox-gl: 0cc214967e63d01bae4c8eb45d16cf7ac33254ae
   react-native-safe-area-context: b6e0e284002381d2ff29fa4fff42b4d8282e3c94
   react-native-webview: a4751ec8f0a6a397026f22ed54c1efeec4540555
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
@@ -1041,9 +1041,9 @@ SPEC CHECKSUMS:
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
   RNBootSplash: 43868f415d2a2c7b5365ebc8dd0f93abbce0f00c
   RNCAsyncStorage: b5de28ebf07f83fc83fe718cb17793c5cfe55181
-  RNCClipboard: 245417a78ab585e0d4d83926c28907e7b2bc24bd
-  RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
-  RNDateTimePicker: 8a51a2216c307769e69ef827293d59549ab1ca23
+  RNCClipboard: 18e2e6048edf841b1225b81025969ba8330f3251
+  RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
+  RNDateTimePicker: 7658208086d86d09e1627b5c34ba0cf237c60140
   RNDeviceInfo: 921a809eaf9de79645a24de1c6ca90db6cb91786
   RNFBAnalytics: 0a98aff1ad9abee16de201012f03179246c2e5bb
   RNFBApp: 2b4e07dfca4cf780b9e2d61bcc21e34d890cd654
