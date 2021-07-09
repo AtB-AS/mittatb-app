@@ -1,4 +1,5 @@
 import {
+  DistributionChannel,
   PreassignedFareProduct,
   PreassignedFareProductType,
   TariffZone,
@@ -14,7 +15,11 @@ export const defaultPreassignedFareProducts: PreassignedFareProduct[] = preassig
   makes it extra important to ensure that the product type is correct when
   reviewing the pull requests from the RemoteConfig update job.
    */
-  (p) => ({...p, type: p.type as PreassignedFareProductType}),
+  (p) => ({
+    ...p,
+    type: p.type as PreassignedFareProductType,
+    distributionChannel: p.distributionChannel as DistributionChannel[],
+  }),
 );
 export const defaultTariffZones: TariffZone[] = tariffZones;
 export const defaultUserProfiles: UserProfile[] = userProfiles;
