@@ -139,7 +139,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode  project.hasProperty("versionCode") ? project.getProperty("versionCode") as Integer : 1
-        versionName "1.10"
+        versionName "1.11"
         multiDexEnabled true
     }
     splits {
