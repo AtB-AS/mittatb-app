@@ -8,7 +8,6 @@ import MessageBox from '@atb/components/message-box';
 import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
 import {StyleSheet, Theme} from '@atb/theme';
 import {FavoriteListTexts, useTranslation} from '@atb/translations';
-import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
@@ -21,6 +20,7 @@ import useFontScale from '@atb/utils/use-font-scale';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {View} from 'react-native';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {useAccessibilityContext} from '@atb/AccessibilityContext';
 
 export type ProfileScreenNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -42,7 +42,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
   const items = favorites ?? [];
   const [sortedItems, setSortedItems] = useState(items);
   const [error, setError] = useState<string | null>(null);
-  const screenReaderEnabled = useIsScreenReaderEnabled();
+  const a11yContext = useAccessibilityContext();
   const fontScale = useFontScale();
   const minHeight = 40 + 12 * fontScale;
   const {t} = useTranslation();
@@ -67,7 +67,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
         <MessageBox type="error" message={error} containerStyle={style.error} />
       )}
 
-      {screenReaderEnabled ? (
+      {a11yContext.isScreenReaderEnabled ? (
         <SortableListFallback data={sortedItems} onSort={setSortedItems} />
       ) : (
         <SortableList

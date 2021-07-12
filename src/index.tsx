@@ -20,6 +20,7 @@ import {setInstallId as setApiInstallId} from './api/client';
 import ErrorBoundary from './error-boundary';
 import {PreferencesContextProvider} from './preferences';
 import configureAndStartBugsnag from './diagnostics/bugsnagConfig';
+import AccessibilityContextProvider from '@atb/AccessibilityContext';
 
 configureAndStartBugsnag();
 
@@ -27,6 +28,7 @@ import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import AppLanguageProvider from './translations/LanguageContext';
 import {BottomSheetProvider} from '@atb/components/bottom-sheet';
+import {AccessibilityInfo} from 'react-native';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
@@ -58,25 +60,27 @@ const App = () => {
         <AppContextProvider>
           <PreferencesContextProvider>
             <AuthContextProvider>
-              <ThemeContextProvider>
-                <FavoritesContextProvider>
-                  <SearchHistoryContextProvider>
-                    <GeolocationContextProvider>
-                      <RemoteConfigContextProvider>
-                        <TicketContextProvider>
-                          <AppLanguageProvider>
-                            <AlertsContextProvider>
-                              <BottomSheetProvider>
-                                <NavigationRoot />
-                              </BottomSheetProvider>
-                            </AlertsContextProvider>
-                          </AppLanguageProvider>
-                        </TicketContextProvider>
-                      </RemoteConfigContextProvider>
-                    </GeolocationContextProvider>
-                  </SearchHistoryContextProvider>
-                </FavoritesContextProvider>
-              </ThemeContextProvider>
+              <AccessibilityContextProvider>
+                <ThemeContextProvider>
+                  <FavoritesContextProvider>
+                    <SearchHistoryContextProvider>
+                      <GeolocationContextProvider>
+                        <RemoteConfigContextProvider>
+                          <TicketContextProvider>
+                            <AppLanguageProvider>
+                              <AlertsContextProvider>
+                                <BottomSheetProvider>
+                                  <NavigationRoot />
+                                </BottomSheetProvider>
+                              </AlertsContextProvider>
+                            </AppLanguageProvider>
+                          </TicketContextProvider>
+                        </RemoteConfigContextProvider>
+                      </GeolocationContextProvider>
+                    </SearchHistoryContextProvider>
+                  </FavoritesContextProvider>
+                </ThemeContextProvider>
+              </AccessibilityContextProvider>
             </AuthContextProvider>
           </PreferencesContextProvider>
         </AppContextProvider>

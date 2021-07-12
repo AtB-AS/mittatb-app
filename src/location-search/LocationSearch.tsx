@@ -1,12 +1,7 @@
 import {JourneySearchHistoryEntry} from '@atb/search-history/types';
 import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  AccessibilityInfo,
-  Keyboard,
-  TextInput as InternalTextInput,
-  View,
-} from 'react-native';
+import {Keyboard, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
 import {ErrorType} from '../api/utils';
@@ -33,6 +28,7 @@ import LocationResults from './LocationResults';
 import {LocationSearchResult, SelectableLocationData} from './types';
 import useDebounce from './useDebounce';
 import {filterCurrentLocation, filterPreviousLocations} from './utils';
+import {useAccessibilityContext} from '@atb/AccessibilityContext';
 
 export type Props = {
   navigation: LocationSearchNavigationProp;
@@ -89,12 +85,14 @@ const LocationSearch: React.FC<Props> = ({
     });
   };
 
+  const a11yContext = useAccessibilityContext();
+
   return (
     <View style={styles.container}>
       <FullScreenHeader
         title={t(LocationSearchTexts.header.title)}
         leftButton={{type: 'close'}}
-        setFocusOnLoad={false}
+        setFocusOnLoad={a11yContext.isScreenReaderEnabled}
       />
 
       <LocationSearchContent
@@ -183,25 +181,7 @@ export function LocationSearchContent({
     });
   };
 
-  const inputRef = useRef<InternalTextInput>(null);
-
-  const isFocused = useIsFocused();
-
-  // using setTimeout to counteract issue of other elements
-  // capturing focus on mount and on press
-  // but not if screen reader is active
-
-  const focusInput = () => setTimeout(() => inputRef.current?.focus(), 0);
-
-  useEffect(() => {
-    if (isFocused) {
-      AccessibilityInfo.isScreenReaderEnabled().then((screenReaderEnabled) => {
-        if (!screenReaderEnabled) {
-          focusInput();
-        }
-      });
-    }
-  }, [isFocused]);
+  const a11yContext = useAccessibilityContext();
 
   useEffect(() => {
     if (error) {
@@ -220,7 +200,6 @@ export function LocationSearchContent({
 
         <View style={styles.withMargin}>
           <TextInput
-            ref={inputRef}
             radius="top-bottom"
             label={label}
             value={text}
@@ -230,6 +209,7 @@ export function LocationSearchContent({
             placeholder={placeholder}
             autoCorrect={false}
             autoCompleteType="off"
+            autoFocus={!a11yContext.isScreenReaderEnabled}
           />
         </View>
 
