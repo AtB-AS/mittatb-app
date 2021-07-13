@@ -1,9 +1,10 @@
 [
   {
     "id": "ATB:PreassignedFareProduct:8808c360",
-    "version": "ATB:Version:d918f8e3-eb23-4d62-9626-a5cbd02a1dee",
+    "version": "ATB:Version:df4139e1-9ceb-4fb5-97c8-e29efb552a83",
     "type": "single",
     "name": {"lang": "nob", "value": "Enkeltbillett buss/trikk"},
+    "description": {"lang": "nob", "value": ""},
     "alternativeNames": [
       {"lang": "eng", "value": "Single ticket bus/tram"},
       {"lang": "nno", "value": "Enkeltbillett buss/trikk"}
@@ -11,9 +12,66 @@
     "limitations": {
       "userProfileRefs": [
         "ATB:UserProfile:2832569f",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:fe550eb7",
+        "ATB:UserProfile:416d8b61",
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:416d8b61",
         "ATB:UserProfile:fe550eb7",
+        "ATB:UserProfile:1ae560ba",
+        "ATB:UserProfile:2832569f",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:1ae560ba"
+      ]
+    }
+  },
+  {
+    "id": "ATB:PreassignedFareProduct:8808c360",
+    "version": "ATB:Version:fe003ef4-252a-4366-b1b7-9ec1ee85f4fa",
+    "type": "single",
+    "name": {"lang": "nob", "value": "Enkeltbillett buss/trikk"},
+    "description": {"lang": "nob", "value": ""},
+    "alternativeNames": [
+      {"lang": "eng", "value": "Single ticket bus/tram"},
+      {"lang": "nno", "value": "Enkeltbillett buss/trikk"}
+    ],
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:2832569f",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:fe550eb7",
+        "ATB:UserProfile:416d8b61",
+        "ATB:UserProfile:8ee842e3",
+        "ATB:UserProfile:416d8b61",
+        "ATB:UserProfile:fe550eb7",
+        "ATB:UserProfile:1ae560ba",
+        "ATB:UserProfile:2832569f",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:1ae560ba"
+      ]
+    }
+  },
+  {
+    "id": "ATB:PreassignedFareProduct:8808c360",
+    "version": "ATB:Version:d918f8e3-eb23-4d62-9626-a5cbd02a1dee",
+    "type": "single",
+    "name": {"lang": "nob", "value": "Enkeltbillett buss/trikk"},
+    "description": {"lang": "nob", "value": ""},
+    "alternativeNames": [
+      {"lang": "eng", "value": "Single ticket bus/tram"},
+      {"lang": "nno", "value": "Enkeltbillett buss/trikk"}
+    ],
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:2832569f",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:fe550eb7",
+        "ATB:UserProfile:416d8b61",
+        "ATB:UserProfile:8ee842e3",
+        "ATB:UserProfile:416d8b61",
+        "ATB:UserProfile:fe550eb7",
+        "ATB:UserProfile:1ae560ba",
+        "ATB:UserProfile:2832569f",
         "ATB:UserProfile:d3e4ec09",
         "ATB:UserProfile:1ae560ba"
       ]
@@ -24,16 +82,20 @@
     "version": "ATB:Version:12b94a4d-b347-41c9-a6c6-35bc3386d4f4",
     "type": "period",
     "name": {"lang": "nob", "value": "30-dagersbillett"},
+    "description": {"lang": "nob", "value": ""},
     "alternativeNames": [
       {"lang": "eng", "value": "Monthly pass"},
       {"lang": "nno", "value": "30-dagersbillett"}
     ],
     "limitations": {
       "userProfileRefs": [
-        "ATB:UserProfile:1ae560ba",
+        "ATB:UserProfile:2832569f",
         "ATB:UserProfile:d3e4ec09",
         "ATB:UserProfile:8ee842e3",
-        "ATB:UserProfile:2832569f"
+        "ATB:UserProfile:1ae560ba",
+        "ATB:UserProfile:2832569f",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:1ae560ba"
       ]
     }
   },
@@ -42,16 +104,20 @@
     "version": "ATB:Version:62736d83-3854-4c71-b9f2-d2d9b52997ab",
     "type": "period",
     "name": {"lang": "nob", "value": "180-dagersbillett"},
+    "description": {"lang": "nob", "value": ""},
     "alternativeNames": [
       {"lang": "eng", "value": "180 days pass"},
       {"lang": "nno", "value": "180-dagersbillett"}
     ],
     "limitations": {
       "userProfileRefs": [
-        "ATB:UserProfile:1ae560ba",
+        "ATB:UserProfile:2832569f",
         "ATB:UserProfile:d3e4ec09",
         "ATB:UserProfile:8ee842e3",
-        "ATB:UserProfile:2832569f"
+        "ATB:UserProfile:1ae560ba",
+        "ATB:UserProfile:2832569f",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:1ae560ba"
       ]
     }
   }
