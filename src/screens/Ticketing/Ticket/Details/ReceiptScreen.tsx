@@ -13,6 +13,7 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {TicketModalNavigationProp, TicketModalStackParams} from './';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {validateEmail} from '@atb/utils/validation';
 
 export type ReceiptScreenRouteParams = {
   orderId: string;
@@ -29,7 +30,12 @@ type Props = {
   navigation: TicketModalNavigationProp;
 };
 
-type MessageState = 'loading' | 'success' | 'error' | undefined;
+type MessageState =
+  | 'loading'
+  | 'success'
+  | 'error'
+  | 'invalid-field'
+  | undefined;
 
 export default function ReceiptScreen({navigation, route}: Props) {
   const {orderId, orderVersion} = route.params;
@@ -40,7 +46,7 @@ export default function ReceiptScreen({navigation, route}: Props) {
   const {t} = useTranslation();
 
   async function onSend() {
-    if (email.trim().length) {
+    if (validateEmail(email.trim())) {
       try {
         setState('loading');
         setReference(undefined);
@@ -58,6 +64,8 @@ export default function ReceiptScreen({navigation, route}: Props) {
         console.warn(err);
         setState('error');
       }
+    } else {
+      setState('invalid-field');
     }
   }
 
@@ -68,7 +76,11 @@ export default function ReceiptScreen({navigation, route}: Props) {
         title={t(TicketTexts.receipt.header.title)}
       />
       <View style={styles.content}>
-        <MessageBox {...translateStateToMessage(state, t, email, reference)} />
+        <View accessibilityLiveRegion={'polite'}>
+          <MessageBox
+            {...translateStateToMessage(state, t, email, reference)}
+          />
+        </View>
         <Sections.Section withTopPadding withBottomPadding>
           <Sections.TextInput
             label={t(TicketTexts.receipt.inputLabel)}
@@ -113,6 +125,11 @@ function translateStateToMessage(
       return {
         message: t(TicketTexts.receipt.messages.success(email, reference!)),
         type: 'valid',
+      };
+    case 'invalid-field':
+      return {
+        message: t(TicketTexts.receipt.messages.invalidField),
+        type: 'error',
       };
     default:
       return {
