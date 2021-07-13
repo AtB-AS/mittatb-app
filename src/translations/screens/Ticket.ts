@@ -54,9 +54,13 @@ const TicketTexts = {
           `Din kvittering ble sendt til ${email} med referansen: ${reference}.`,
           `Your receipt was sent to ${email} with reference number: ${reference}.`,
         ),
+      invalidField: _(
+        'E-post adressen er ikke gyldig. fyll inn en gyldig e-postadresse og trykk "Send".',
+        'The e-mail address is invalid. Enter a valid e-mail address and press "Send"',
+      ),
       defaultFallback: _(
         'Du kan få tilsendt kvittering på e-post. Fyll inn din e-postadresse under, og trykk "Send".',
-        'To receive your receipt, enter your e-mail adress below',
+        'To receive your receipt, enter your e-mail address below',
       ),
     },
   },
