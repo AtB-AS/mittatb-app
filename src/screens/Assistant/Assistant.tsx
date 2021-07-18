@@ -275,7 +275,9 @@ const Assistant: React.FC<Props> = ({
         </View>
 
         <FadeBetween
+          duration={400}
           visibleKey={isHeaderFullHeight ? 'favoriteChips' : 'dateInput'}
+          preserveHeightFrom={'dateInput'}
         >
           <FavoriteChips
             key="favoriteChips"
