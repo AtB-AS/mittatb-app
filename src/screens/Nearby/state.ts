@@ -44,7 +44,7 @@ export type DepartureDataState = {
 
 const initialQueryInput: DepartureGroupsQuery = {
   limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
-  startTime: new Date(),
+  startTime: new Date().toISOString(),
 };
 const initialState: DepartureDataState = {
   data: null,
@@ -65,6 +65,7 @@ type DepartureDataActions =
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
       location?: Location;
+      startTime?: string;
       favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
@@ -73,7 +74,8 @@ type DepartureDataActions =
       favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
-      type: 'TOGGLE_SHOW_FAVORITES';
+      type: 'SET_SHOW_FAVORITES';
+      showOnlyFavorites: boolean;
       location?: Location;
       favoriteDepartures?: UserFavoriteDepartures;
     }
@@ -115,7 +117,7 @@ const reducer: ReducerWithSideEffects<
       // is a fresh fetch. We should fetch tha latest information.
       const queryInput: DepartureGroupsQuery = {
         limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
-        startTime: new Date(),
+        startTime: action.startTime ?? new Date().toISOString(),
       };
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
@@ -239,17 +241,18 @@ const reducer: ReducerWithSideEffects<
       });
     }
 
-    case 'TOGGLE_SHOW_FAVORITES': {
+    case 'SET_SHOW_FAVORITES': {
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
         {
           ...state,
-          showOnlyFavorites: !state.showOnlyFavorites,
+          showOnlyFavorites: action.showOnlyFavorites,
         },
         async (_, dispatch) => {
           dispatch({
             type: 'LOAD_INITIAL_DEPARTURES',
             location: action.location,
             favoriteDepartures: action.favoriteDepartures,
+            startTime: state.queryInput?.startTime,
           });
         },
       );
@@ -307,6 +310,7 @@ const reducer: ReducerWithSideEffects<
  */
 export function useDepartureData(
   location?: Location,
+  startTime?: string,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
 ) {
@@ -316,8 +320,13 @@ export function useDepartureData(
 
   const refresh = useCallback(
     () =>
-      dispatch({type: 'LOAD_INITIAL_DEPARTURES', location, favoriteDepartures}),
-    [location?.id, favoriteDepartures],
+      dispatch({
+        type: 'LOAD_INITIAL_DEPARTURES',
+        location,
+        startTime,
+        favoriteDepartures,
+      }),
+    [location?.id, favoriteDepartures, startTime],
   );
 
   const loadMore = useCallback(
@@ -326,13 +335,18 @@ export function useDepartureData(
     [location?.id, favoriteDepartures],
   );
 
-  const toggleShowFavorites = useCallback(
-    () =>
-      dispatch({type: 'TOGGLE_SHOW_FAVORITES', location, favoriteDepartures}),
+  const setShowFavorites = useCallback(
+    (showOnlyFavorites: boolean) =>
+      dispatch({
+        type: 'SET_SHOW_FAVORITES',
+        showOnlyFavorites,
+        location,
+        favoriteDepartures,
+      }),
     [location?.id, favoriteDepartures],
   );
 
-  useEffect(refresh, [location?.id]);
+  useEffect(refresh, [location?.id, startTime]);
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -363,6 +377,6 @@ export function useDepartureData(
     state,
     refresh,
     loadMore,
-    toggleShowFavorites,
+    setShowFavorites,
   };
 }

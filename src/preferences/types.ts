@@ -17,6 +17,7 @@ export type UserPreferences = {
   language?: Preference_Language;
   useSystemLanguage?: boolean;
   defaultUserTypeString?: string;
+  departuresShowOnlyFavorites?: boolean;
 };
 
 export type PreferenceItem = keyof UserPreferences;

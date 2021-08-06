@@ -87,6 +87,11 @@ const TicketsTexts = {
       vipps: _('Vipps', 'Vipps'),
       creditcard: _('kredittkort', 'credit card'),
     },
+    paymentStage: {
+      processing: (type: string) =>
+        _(`Betales med ${type}`, `Payment using ${type}`),
+      approved: (type: string) => _(`Betalt med ${type}`, `Payed with ${type}`),
+    },
     goToVipps: _('Gå til Vipps for betaling', 'Go to Vipps for payment'),
   },
   scrollView: {

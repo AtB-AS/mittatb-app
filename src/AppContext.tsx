@@ -50,6 +50,7 @@ const appReducer: AppReducer = (prevState, action) => {
       return {
         ...prevState,
         onboarded: action.onboarded,
+        ticketingAccepted: action.ticketingAccepted,
         isLoading: false,
       };
     case 'COMPLETE_ONBOARDING':
