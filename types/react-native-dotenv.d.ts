@@ -1,3 +1,4 @@
+import {AppOrgs} from './app-orgs.d';
 declare module '@env' {
   export const API_BASE_URL: string;
   export const APP_VERSION: string;
@@ -6,5 +7,5 @@ declare module '@env' {
   export const MAPBOX_API_TOKEN: string;
   export const MAPBOX_STOP_PLACES_STYLE_URL: string;
   export const AUTHORITY_ID: string;
-  export const APP_ORG: string;
+  export const APP_ORG: AppOrgs;
 }
