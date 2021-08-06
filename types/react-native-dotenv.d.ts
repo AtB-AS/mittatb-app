@@ -1,4 +1,8 @@
-import {AppOrgs} from './app-orgs.d';
+enum AppOrgs {
+  nfk = 'nfk',
+  atb = 'atb',
+}
+
 declare module '@env' {
   export const API_BASE_URL: string;
   export const APP_VERSION: string;
