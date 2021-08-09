@@ -82,9 +82,9 @@
     "react-native-screens": "^2.17.1",
     "react-native-svg": "^12.1.1",
     "react-native-tab-view": "^2.15.2",
-    "react-native-webview": "^11.8.0",
+    "react-native-webview": "^11.11.0",
     "recyclerlistview": "^3.0.5",
-    "search-params": "^3.0.0",
+    "search-params": "^4.0.1",
     "string.fromcodepoint": "^1.0.0",
     "use-reducer-with-side-effects": "^2.2.0",
     "uuid": "^8.3.2"

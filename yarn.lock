@@ -8518,10 +8518,10 @@ react-native-tab-view@^2.15.2:
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-2.15.2.tgz#4bc7832d33a119306614efee667509672a7ee64e"
   integrity sha512-2hxLkBnZtEKFDyfvNO5EUywhy3f/EiLOBO8SWqKj4BMBTO0QwnybaPE5MVF00Fhz+VA4+h/iI40Dkrrtq70dGg==
 
-react-native-webview@^11.8.0:
-  version "11.8.0"
-  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.8.0.tgz#f19d3949ac9ac201b18d9ed569c06cbbf2c4b841"
-  integrity sha512-UjcXG3zq/izFRl9U27FhUGrIFYNZhDrXoPZfOOrVTlG4h7cJUl43kVCt4c8ZcTVxPcHwoZptGo3yHeOoJMXdlw==
+react-native-webview@^11.11.0:
+  version "11.11.0"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.11.0.tgz#77153d6833a4d70853c782759d388419d9d19fe5"
+  integrity sha512-YhaYr/pd+GNvibR0H4q8G2v03inuwhSzJgwSEsRzdUbDW8qrEl6DusknxN9XFxU1cDfQ3na4WS3ji1zUNAgieQ==
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
@@ -9020,10 +9020,10 @@ scheduler@0.19.1, scheduler@^0.19.1:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
 
-search-params@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/search-params/-/search-params-3.0.0.tgz#dbc7c243058e5a33ae1e9870be91f5aced4100d8"
-  integrity sha512-8CYNl/bjkEhXWbDTU/K7c2jQtrnqEffIPyOLMqygW/7/b+ym8UtQumcAZjOfMLjZKR6AxK5tOr9fChbQZCzPqg==
+search-params@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/search-params/-/search-params-4.0.1.tgz#bd32bf8c11febbd760c27cde24a885ac8e969ae5"
+  integrity sha512-axiHDzALAbvAB1gQ7gh2K69Md9FJ6Cz/QOreaksDHQWjfwa+5rTR6twUnJg2f/luob2zRqVWENQcQgCUZYut5A==
 
 "semver@2 || 3 || 4 || 5", semver@^5.1.0, semver@^5.4.1, semver@^5.5.0, semver@^5.5.1, semver@^5.6.0:
   version "5.7.1"
