@@ -30,7 +30,10 @@ const TicketsTexts = {
       },
     },
     reactivateSplash: {
-      message: _('Betingelser gjelder.', 'Some conditions apply.'),
+      message: _(
+        'I en periode gjelder enkelte vilkår for billettkjøp i appen.',
+        'For a period, some conditions apply for ticket purchase in the app.',
+      ),
       linkText: _('Les mer her', 'Read more here'),
       linkA11yHint: _(
         'Les mer om betingelser for billettkjøp her',
