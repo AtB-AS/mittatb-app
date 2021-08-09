@@ -24,6 +24,7 @@ project.xcworkspace
 
 # Android/IntelliJ
 #
+/android/appConfig.properties
 build/
 .idea
 .gradle

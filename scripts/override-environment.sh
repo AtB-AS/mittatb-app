@@ -19,8 +19,12 @@ else
     APP_ENVIRONMENT=$1
     APP_ORG=$2
     ENV_FOLDER=env/$APP_ORG/$APP_ENVIRONMENT
+    APP_ORG_FOLDER=env/$APP_ORG/
     echo "Copying $APP_ENVIRONMENT .env file to root"
     cp $ENV_FOLDER/.env .
+
+    echo "Copying $APP_ENVIRONMENT .properties file to Android folder"
+    cp $APP_ORG_FOLDER/appConfig.properties android/
 
     echo "Copying $APP_ENVIRONMENT GoogleService-Info.plist to iOS folder"
     cp $ENV_FOLDER/GoogleService-Info.plist ios/atb

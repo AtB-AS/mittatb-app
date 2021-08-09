@@ -126,6 +126,43 @@ def jscFlavor = 'org.webkit:android-jsc:+'
  */
 def enableHermes = project.ext.react.get("enableHermes", false);
 
+def appConfigProperties = new Properties()
+def appConfigPropertiesFile = rootProject.file('appConfig.properties')
+if (appConfigPropertiesFile.exists()) {
+    appConfigPropertiesFile.withReader('UTF-8') { reader ->
+        appConfigProperties.load(reader)
+    }
+}
+def appVersionCode = appConfigProperties.getProperty('app.versionCode')
+if (appVersionCode == null) {
+    appVersionCode = '1'
+}
+
+def appVersionName = appConfigProperties.getProperty('app.versionName')
+if (appVersionName == null) {
+    appVersionName = '1.0'
+}
+
+def appApplicationId = appConfigProperties.getProperty('app.applicationId')
+if (appApplicationId == null) {
+    appApplicationId = 'test'
+}
+
+def appReleaseSuffix = appConfigProperties.getProperty('app.releaseSuffix')
+if (appReleaseSuffix == null) {
+    appReleaseSuffix = '.store'
+}
+
+def appStagingSuffix = appConfigProperties.getProperty('app.stagingSuffix')
+if (appStagingSuffix == null) {
+    appStagingSuffix = '.staging'
+}
+
+def appName = appConfigProperties.getProperty('app.name')
+if (appName == null) {
+    appName = 'AtB'
+}
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -135,11 +172,12 @@ android {
     }
 
     defaultConfig {
-        applicationId "no.mittatb"
+        resValue "string", "app_name", appName
+        applicationId appApplicationId
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode  project.hasProperty("versionCode") ? project.getProperty("versionCode") as Integer : 1
-        versionName "1.11"
+        versionCode  appVersionCode.toInteger()
+        versionName appVersionName
         multiDexEnabled true
     }
     splits {
@@ -165,12 +203,12 @@ android {
         }
         store {
             initWith buildTypes.release
-            applicationIdSuffix ".store"
+            applicationIdSuffix appReleaseSuffix
             matchingFallbacks = ['release']
         }
         staging {
             initWith buildTypes.release
-            applicationIdSuffix ".staging"
+            applicationIdSuffix appStagingSuffix
             debuggable true
             matchingFallbacks = ['release']
         }
