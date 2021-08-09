@@ -381,8 +381,9 @@ function useCalculateHeaderContentHeight(isAnimating: boolean) {
   const {top} = useSafeAreaInsets();
 
   const {minHeight: bottomTabBarHeight} = useBottomNavigationStyles();
-  const boxHeight =
-    actualHeight - screenHeaderHeight - top - bottomTabBarHeight;
+  const boxHeight = Math.ceil(
+    actualHeight - screenHeaderHeight - top - bottomTabBarHeight,
+  );
 
   const calculatedHeights = {
     boxHeight,
