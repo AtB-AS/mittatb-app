@@ -619,18 +619,18 @@ PODS:
   - react-native-intercom (18.0.0):
     - Intercom (~> 8.0.0)
     - React
-  - react-native-mapbox-gl (8.1.0):
+  - react-native-mapbox-gl (8.2.1):
     - Mapbox-iOS-SDK (= 6.3.0)
     - React
     - React-Core
-    - react-native-mapbox-gl/DynamicLibrary (= 8.1.0)
-  - react-native-mapbox-gl/DynamicLibrary (8.1.0):
+    - react-native-mapbox-gl/DynamicLibrary (= 8.2.1)
+  - react-native-mapbox-gl/DynamicLibrary (8.2.1):
     - Mapbox-iOS-SDK (= 6.3.0)
     - React
     - React-Core
   - react-native-safe-area-context (3.3.0):
     - React-Core
-  - react-native-webview (11.6.6):
+  - react-native-webview (11.11.0):
     - React-Core
   - React-RCTActionSheet (0.63.4):
     - React-Core/RCTActionSheetHeaders (= 0.63.4)
@@ -1026,9 +1026,9 @@ SPEC CHECKSUMS:
   react-native-geolocation-service: 7c9436da6dfdecd9526c62eac62ea2bc3f0cc8ea
   react-native-get-random-values: 237bffb1c7e05fb142092681531810a29ba53015
   react-native-intercom: c48e0e15877bf96ff4d461f7aa9b833d11188139
-  react-native-mapbox-gl: 4fd2d4035658102f516176370ea45778053a7a8e
+  react-native-mapbox-gl: 0cc214967e63d01bae4c8eb45d16cf7ac33254ae
   react-native-safe-area-context: 61c8c484a3a9e7d1fda19f7b1794b35bbfd2262a
-  react-native-webview: e6eddf2722f5e7220eae7229b516efabb1ed0acd
+  react-native-webview: 0e6ea1380ee165aaeaca30ed9f2e528126db4a44
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
   React-RCTAnimation: 1bde3ecc0c104c55df246eda516e0deb03c4e49b
   React-RCTBlob: a97d378b527740cc667e03ebfa183a75231ab0f0
