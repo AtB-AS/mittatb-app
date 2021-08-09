@@ -22,7 +22,7 @@ export default function TimeInputItem(props: TimeInputItemProps) {
         <RNDateTimePicker
           value={dateWithReplacedTime(new Date(), value)}
           mode="time"
-          locale={locale}
+          locale={locale + '_NO'}
           textColor={theme.text.colors.primary}
           display="inline"
           onChange={(_, date) => {
