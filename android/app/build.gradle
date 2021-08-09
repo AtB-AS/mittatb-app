@@ -145,7 +145,7 @@ if (appVersionName == null) {
 
 def appApplicationId = appConfigProperties.getProperty('app.applicationId')
 if (appApplicationId == null) {
-    appApplicationId = 'test'
+    appApplicationId = 'no.mittatb'
 }
 
 def appReleaseSuffix = appConfigProperties.getProperty('app.releaseSuffix')
