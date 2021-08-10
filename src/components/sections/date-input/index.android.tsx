@@ -29,7 +29,7 @@ export default function DateInputItem(props: DateInputItemProps) {
           locale={locale}
           minimumDate={new Date()}
           textColor={theme.text.colors.primary}
-          onChange={(_, date) => {
+          onChange={(_: Event, date?: Date) => {
             onChange(dateToDateString(date));
             setShow(false);
           }}
