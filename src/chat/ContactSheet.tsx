@@ -4,7 +4,7 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
 import {
   ScreenHeaderTexts,
-  TravellersTexts,
+  ContactSheetTexts,
   useTranslation,
 } from '@atb/translations';
 import React, {forwardRef} from 'react';
@@ -23,14 +23,14 @@ type Props = {
 
 const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
   const styles = useStyles();
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const unreadCount = useChatUnreadCount();
   const {customer_service_url} = useRemoteConfig();
 
   return (
     <BottomSheetContainer>
       <ScreenHeaderWithoutNavigation
-        title={'Kontakt AtB'}
+        title={t(ContactSheetTexts.header.title)}
         rightButton={{
           type: 'skip',
           onPress: close,
@@ -43,14 +43,14 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
       <FullScreenFooter>
         <View style={styles.descriptionSection} ref={focusRef}>
           <ThemeText type="body__secondary" color="secondary">
-            Spørsmål til kundeservice
+            {t(ContactSheetTexts.customer_service.title)}
           </ThemeText>
-          <ThemeText>Har du spørsmål eller trenger hjelp?</ThemeText>
+          <ThemeText>{t(ContactSheetTexts.customer_service.body)}</ThemeText>
         </View>
         <Button
           color="primary_2"
-          text="Kontakt kundeservice"
-          accessibilityHint={t(TravellersTexts.primaryButton.a11yHint)}
+          text={t(ContactSheetTexts.customer_service.button)}
+          accessibilityHint={t(ContactSheetTexts.customer_service.a11yHint)}
           onPress={() => {
             if (Linking.canOpenURL(customer_service_url)) {
               Linking.openURL(customer_service_url);
@@ -65,17 +65,15 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
 
         <View style={styles.descriptionSection}>
           <ThemeText type="body__secondary" color="secondary">
-            Tilbakemelding på appen
+            {t(ContactSheetTexts.intercom.title)}
           </ThemeText>
-          <ThemeText>
-            Vil du rapportere feil eller foreslå forbedringer?
-          </ThemeText>
+          <ThemeText>{t(ContactSheetTexts.intercom.body)}</ThemeText>
         </View>
 
         <Button
           color="primary_2"
-          text="Gi tilbakemelding på app"
-          accessibilityHint={t(TravellersTexts.primaryButton.a11yHint)}
+          text={t(ContactSheetTexts.intercom.button)}
+          accessibilityHint={t(ContactSheetTexts.intercom.a11yHint)}
           onPress={() => {
             unreadCount
               ? () => Intercom.displayMessenger()
