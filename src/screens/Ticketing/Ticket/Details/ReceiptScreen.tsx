@@ -13,6 +13,7 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {TicketModalNavigationProp, TicketModalStackParams} from './';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {validateEmail} from '@atb/utils/validation';
 
 export type ReceiptScreenRouteParams = {
@@ -44,6 +45,7 @@ export default function ReceiptScreen({navigation, route}: Props) {
   const [reference, setReference] = useState<string | undefined>(undefined);
   const [state, setState] = useState<MessageState>(undefined);
   const {t} = useTranslation();
+  const a11yContext = useAccessibilityContext();
 
   async function onSend() {
     if (validateEmail(email.trim())) {
@@ -74,6 +76,7 @@ export default function ReceiptScreen({navigation, route}: Props) {
       <FullScreenHeader
         leftButton={{type: 'back'}}
         title={t(TicketTexts.receipt.header.title)}
+        setFocusOnLoad={a11yContext.isScreenReaderEnabled}
       />
       <View style={styles.content}>
         <View accessibilityLiveRegion={'polite'}>
@@ -90,7 +93,7 @@ export default function ReceiptScreen({navigation, route}: Props) {
             autoCapitalize="none"
             autoCompleteType="email"
             autoCorrect={false}
-            autoFocus={true}
+            autoFocus={!a11yContext.isScreenReaderEnabled}
           />
         </Sections.Section>
         <Button
