@@ -43,7 +43,11 @@ import {useLayout} from '@atb/utils/use-layout';
 import Bugsnag from '@bugsnag/react-native';
 import {TFunc} from '@leile/lobo-t';
 import analytics from '@react-native-firebase/analytics';
-import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
+import {
+  CompositeNavigationProp,
+  RouteProp,
+  useIsFocused,
+} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
@@ -377,7 +381,10 @@ const Assistant: React.FC<Props> = ({
     string | undefined
   >();
 
+  const screenHasFocus = useIsFocused();
+
   useEffect(() => {
+    if (!screenHasFocus) return;
     switch (searchState) {
       case 'searching':
         setSearchStateMessage(t(AssistantTexts.searchState.searching));
