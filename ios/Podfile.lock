@@ -727,7 +727,7 @@ PODS:
     - Firebase/RemoteConfig (~> 7.1.0)
     - React-Core
     - RNFBApp
-  - RNGestureHandler (1.9.0):
+  - RNGestureHandler (1.10.3):
     - React-Core
   - RNLocalize (2.1.1):
     - React-Core
@@ -735,8 +735,9 @@ PODS:
     - React-Core
   - RNReanimated (1.13.2):
     - React-Core
-  - RNScreens (2.17.1):
+  - RNScreens (3.5.0):
     - React-Core
+    - React-RCTImage
   - RNSVG (12.1.1):
     - React
   - Yoga (1.14.0)
@@ -1051,11 +1052,11 @@ SPEC CHECKSUMS:
   RNFBFirestore: 70eed960ffd67ee07d9583fcc2031ba0e345a0fa
   RNFBMessaging: 483093ab71fb3de1d5b410fbf8ecdd32b84b5f78
   RNFBRemoteConfig: 5d00d02901bbe4524485235826b0a9d46e028b23
-  RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
+  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNLocalize: 82a569022724d35461e2dc5b5d015a13c3ca995b
   RNPermissions: 7043bacbf928eae25808275cfe73799b8f618911
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
-  RNScreens: b6c9607e6fe47c1b6e2f1910d2acd46dd7ecea3a
+  RNScreens: 01ab149b5dd5c27f5ff26741b1d2bdf2cee1af35
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
