@@ -1,7 +1,6 @@
 import 'react-native-get-random-values';
 
 import React, {useEffect, useState} from 'react';
-import {enableScreens} from 'react-native-screens';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AppContextProvider from './AppContext';
 import {AlertsContextProvider} from './alerts';
@@ -39,7 +38,6 @@ async function setupConfig() {
 }
 
 trackAppState();
-enableScreens();
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
