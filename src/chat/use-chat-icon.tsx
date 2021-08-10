@@ -5,9 +5,10 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
-import Intercom from 'react-native-intercom';
 import useChatUnreadCount from './use-chat-unread-count';
 import {ThemeColor} from '@atb/theme/colors';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
+import ContactSheet from '@atb/chat/ContactSheet';
 
 export default function useChatIcon(
   color?: ThemeColor,
@@ -15,10 +16,17 @@ export default function useChatIcon(
   const config = useRemoteConfig();
   const unreadCount = useChatUnreadCount();
   const styles = useStyles();
+  const {open: openBottomSheet} = useBottomSheet();
 
   if (!config.enable_intercom) {
     return undefined;
   }
+
+  const openContactSheet = () => {
+    openBottomSheet((close, focusRef) => (
+      <ContactSheet close={close} ref={focusRef} />
+    ));
+  };
 
   return {
     icon: (
@@ -30,10 +38,7 @@ export default function useChatIcon(
         )}
       </View>
     ),
-    onPress: () =>
-      unreadCount
-        ? Intercom.displayMessenger()
-        : Intercom.displayConversationsList(),
+    onPress: () => openContactSheet(),
     importantForAccessibility: 'no-hide-descendants', // Android
     accessibilityElementsHidden: true, // iOS
   };
