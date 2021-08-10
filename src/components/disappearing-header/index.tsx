@@ -136,8 +136,8 @@ const DisappearingHeader: React.FC<Props> = ({
     setIsAnimating(true);
     Animated.timing(fullscreenOffsetRef, {
       toValue: isFullHeight ? 0 : contentOffset,
-      duration: 400,
-      easing: Easing.inOut(Easing.ease),
+      duration: 800,
+      easing: Easing.out(Easing.exp),
       useNativeDriver: true,
     }).start(function () {
       setIsAnimating(false);
