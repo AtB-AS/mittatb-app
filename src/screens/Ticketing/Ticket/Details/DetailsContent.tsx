@@ -2,7 +2,7 @@ import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {FareContract, isPreactivatedTicket} from '@atb/tickets';
-import {TicketTexts, useTranslation} from '@atb/translations';
+import {TicketsTexts, TicketTexts, useTranslation} from '@atb/translations';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import qrcode from 'qrcode';
@@ -82,7 +82,11 @@ const DetailsContent: React.FC<Props> = ({
         />
         {validityStatus === 'valid' && qrCodeSvg && (
           <Sections.GenericItem>
-            <View style={styles.qrCode}>
+            <View
+              style={styles.qrCode}
+              accessible={true}
+              accessibilityLabel={t(TicketTexts.details.qrCodeA11yLabel)}
+            >
               <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
             </View>
           </Sections.GenericItem>
