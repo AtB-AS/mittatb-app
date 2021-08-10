@@ -33,6 +33,7 @@ export type RemoteConfigContextState = Pick<
   | 'news_link_text'
   | 'news_link_url'
   | 'vat_percent'
+  | 'customer_service_url'
 > & {
   refresh: () => void;
   modes_we_sell_tickets_for: string[];
