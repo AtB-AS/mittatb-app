@@ -16,12 +16,12 @@ const ContactSheetTexts = {
     ),
   },
   intercom: {
-    title: _('Tilbakemelding på appen', 'Feedback on the app'),
+    title: _('Tilbakemelding om appen', 'Feedback about the app'),
     body: _(
       'Vil du rapportere feil eller foreslå forbedringer?',
       'Do you want to report errors or suggest improvements?',
     ),
-    button: _('Gi tilbakemelding på app', 'Give feedback on the app'),
+    button: _('Gi tilbakemelding om app', 'Give feedback about the app'),
     a11yHint: _('Aktiver for å gi tilbakemelding', 'Activate to give feedback'),
   },
 };
