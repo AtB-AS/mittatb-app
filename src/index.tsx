@@ -28,6 +28,7 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import AppLanguageProvider from './translations/LanguageContext';
 import {BottomSheetProvider} from '@atb/components/bottom-sheet';
 import {AccessibilityInfo} from 'react-native';
+import LocaleContextProvider from '@atb/LocaleProvider';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
@@ -57,29 +58,31 @@ const App = () => {
       <ErrorBoundary type="full-screen">
         <AppContextProvider>
           <PreferencesContextProvider>
-            <AuthContextProvider>
-              <AccessibilityContextProvider>
-                <ThemeContextProvider>
-                  <FavoritesContextProvider>
-                    <SearchHistoryContextProvider>
-                      <GeolocationContextProvider>
-                        <RemoteConfigContextProvider>
-                          <TicketContextProvider>
-                            <AppLanguageProvider>
-                              <AlertsContextProvider>
-                                <BottomSheetProvider>
-                                  <NavigationRoot />
-                                </BottomSheetProvider>
-                              </AlertsContextProvider>
-                            </AppLanguageProvider>
-                          </TicketContextProvider>
-                        </RemoteConfigContextProvider>
-                      </GeolocationContextProvider>
-                    </SearchHistoryContextProvider>
-                  </FavoritesContextProvider>
-                </ThemeContextProvider>
-              </AccessibilityContextProvider>
-            </AuthContextProvider>
+            <LocaleContextProvider>
+              <AuthContextProvider>
+                <AccessibilityContextProvider>
+                  <ThemeContextProvider>
+                    <FavoritesContextProvider>
+                      <SearchHistoryContextProvider>
+                        <GeolocationContextProvider>
+                          <RemoteConfigContextProvider>
+                            <TicketContextProvider>
+                              <AppLanguageProvider>
+                                <AlertsContextProvider>
+                                  <BottomSheetProvider>
+                                    <NavigationRoot />
+                                  </BottomSheetProvider>
+                                </AlertsContextProvider>
+                              </AppLanguageProvider>
+                            </TicketContextProvider>
+                          </RemoteConfigContextProvider>
+                        </GeolocationContextProvider>
+                      </SearchHistoryContextProvider>
+                    </FavoritesContextProvider>
+                  </ThemeContextProvider>
+                </AccessibilityContextProvider>
+              </AuthContextProvider>
+            </LocaleContextProvider>
           </PreferencesContextProvider>
         </AppContextProvider>
       </ErrorBoundary>

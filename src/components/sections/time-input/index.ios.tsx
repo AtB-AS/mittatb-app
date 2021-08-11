@@ -6,10 +6,12 @@ import React from 'react';
 import {View} from 'react-native';
 import InternalLabeledItem from '../internals/internal-labeled-item';
 import {dateToTimeString, TimeInputItemProps} from './utils';
+import {useLocaleContext} from '@atb/LocaleProvider';
 
 export default function TimeInputItem(props: TimeInputItemProps) {
   const {value, onChange, ...innerprops} = props;
   const {t, locale, language} = useTranslation();
+  const localeContext = useLocaleContext();
   const {theme} = useTheme();
 
   return (
@@ -22,7 +24,7 @@ export default function TimeInputItem(props: TimeInputItemProps) {
         <RNDateTimePicker
           value={dateWithReplacedTime(new Date(), value)}
           mode="time"
-          locale={locale}
+          locale={localeContext.locale.localeString}
           textColor={theme.text.colors.primary}
           display="inline"
           onChange={(_, date) => {
