@@ -14,10 +14,6 @@ export type Locale = {
   localeString: string;
 };
 
-type LocaleState = {
-  locale: Locale;
-};
-
 const norwegianLocale: Locale = {
   language: Language.Norwegian,
   region: 'NO',
@@ -30,9 +26,7 @@ const fallbackLocale: Locale = {
   localeString: `${FALLBACK_LANGUAGE}_${DEFAULT_REGION}`,
 };
 
-export const LocaleContext = createContext<LocaleState>({
-  locale: norwegianLocale,
-});
+export const LocaleContext = createContext<Locale>(norwegianLocale);
 
 /**
  * We'll create a locale as a mix of system locale and language preferences set in 'my AtB'
@@ -43,7 +37,7 @@ export const LocaleContext = createContext<LocaleState>({
 const LocaleContextProvider: React.FC = ({children}) => {
   const locale = useLocale();
   return (
-    <LocaleContext.Provider value={{locale}}>{children}</LocaleContext.Provider>
+    <LocaleContext.Provider value={locale}>{children}</LocaleContext.Provider>
   );
 };
 
@@ -79,7 +73,7 @@ function useLocale(): Locale {
     language: language,
     region: systemLocale.region,
     localeString: `${language}_${systemLocale.region}`,
-  };
+  } as Locale;
 }
 
 // Fetch the preferred supported system locale or fallback
