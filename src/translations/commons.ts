@@ -9,13 +9,12 @@ export enum Language {
 export const appLanguages = ['nb', 'en'] as const;
 
 export const DEFAULT_LANGUAGE = Language.Norwegian;
+export const FALLBACK_LANGUAGE = Language.English;
+export const DEFAULT_REGION = 'NO';
 export type TranslatedString = Translatable<typeof Language, string>;
 
 export const lobot = initLobot<typeof Language>(DEFAULT_LANGUAGE);
-export const useTranslation = () => {
-  const {t, language} = lobot.useTranslation();
-  return {t, language, locale: languageToLocale(language)};
-};
+export const useTranslation = lobot.useTranslation;
 
 export type TranslateFunction = TFunc<typeof Language>;
 export function translation(
@@ -26,12 +25,4 @@ export function translation(
     [Language.Norwegian]: norwegian,
     [Language.English]: english,
   };
-}
-export function languageToLocale(language: Language) {
-  switch (language) {
-    case Language.Norwegian:
-      return 'no';
-    case Language.English:
-      return Language.English;
-  }
 }
