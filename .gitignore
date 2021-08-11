@@ -53,6 +53,8 @@ buck-out/
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
+fastlane/report.xml
+
 
 # Bundle artifact
 *.jsbundle
@@ -75,3 +77,4 @@ firebase-debug.log
 
 #Service files
 android/app/google-services.json
+ios/atb/GoogleService-Info.plist
