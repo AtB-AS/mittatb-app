@@ -31,8 +31,8 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
     <BottomSheetContainer>
       <ScreenHeaderWithoutNavigation
         title={t(ContactSheetTexts.header.title)}
-        rightButton={{
-          type: 'skip',
+        leftButton={{
+          type: 'cancel',
           onPress: close,
           text: t(ScreenHeaderTexts.headerButton.cancel.text),
         }}
@@ -52,14 +52,12 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
           text={t(ContactSheetTexts.customer_service.button)}
           accessibilityHint={t(ContactSheetTexts.customer_service.a11yHint)}
           onPress={() => {
-            if (Linking.canOpenURL(customer_service_url)) {
-              Linking.openURL(customer_service_url);
-            }
+            Linking.openURL(customer_service_url);
             close();
           }}
           iconPosition="right"
           icon={() => (
-            <ThemeIcon colorType="background_gray" svg={Support}></ThemeIcon>
+            <ThemeIcon colorType="primary_2" svg={Support}></ThemeIcon>
           )}
         />
 
@@ -83,9 +81,9 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
           iconPosition="right"
           icon={() =>
             unreadCount ? (
-              <ThemeIcon colorType="background_gray" svg={ChatUnread} />
+              <ThemeIcon colorType="primary_2" svg={ChatUnread} />
             ) : (
-              <ThemeIcon colorType="background_gray" svg={Chat} />
+              <ThemeIcon colorType="primary_2" svg={Chat} />
             )
           }
         />
