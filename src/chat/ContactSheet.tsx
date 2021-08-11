@@ -25,8 +25,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const unreadCount = useChatUnreadCount();
-  const {customer_service_url} = useRemoteConfig();
-  const {enable_intercom} = useRemoteConfig();
+  const {customer_service_url, enable_intercom} = useRemoteConfig();
 
   return (
     <BottomSheetContainer>
