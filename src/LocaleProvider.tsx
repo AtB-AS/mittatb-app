@@ -98,10 +98,13 @@ function getPreferredSystemLocale(): Locale {
 }
 
 function mapLanguageStringToEnum(language: string | undefined): Language {
-  try {
-    return language as Language;
-  } catch (e) {}
-  return DEFAULT_LANGUAGE;
+  if (language == Language.English) {
+    return Language.English;
+  }
+  if (language == Language.Norwegian) {
+    return Language.Norwegian;
+  }
+  return FALLBACK_LANGUAGE;
 }
 
 export default LocaleContextProvider;
