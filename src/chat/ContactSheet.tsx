@@ -26,6 +26,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
   const {t} = useTranslation();
   const unreadCount = useChatUnreadCount();
   const {customer_service_url} = useRemoteConfig();
+  const {enable_intercom} = useRemoteConfig();
 
   return (
     <BottomSheetContainer>
@@ -61,32 +62,36 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
           )}
         />
 
-        <View style={styles.descriptionSection}>
-          <ThemeText type="body__secondary" color="secondary">
-            {t(ContactSheetTexts.intercom.title)}
-          </ThemeText>
-          <ThemeText>{t(ContactSheetTexts.intercom.body)}</ThemeText>
-        </View>
+        {enable_intercom ? (
+          <>
+            <View style={styles.descriptionSection}>
+              <ThemeText type="body__secondary" color="secondary">
+                {t(ContactSheetTexts.intercom.title)}
+              </ThemeText>
+              <ThemeText>{t(ContactSheetTexts.intercom.body)}</ThemeText>
+            </View>
 
-        <Button
-          color="primary_2"
-          text={t(ContactSheetTexts.intercom.button)}
-          accessibilityHint={t(ContactSheetTexts.intercom.a11yHint)}
-          onPress={() => {
-            unreadCount
-              ? () => Intercom.displayMessenger()
-              : Intercom.displayConversationsList();
-            close();
-          }}
-          iconPosition="right"
-          icon={() =>
-            unreadCount ? (
-              <ThemeIcon colorType="primary_2" svg={ChatUnread} />
-            ) : (
-              <ThemeIcon colorType="primary_2" svg={Chat} />
-            )
-          }
-        />
+            <Button
+              color="primary_2"
+              text={t(ContactSheetTexts.intercom.button)}
+              accessibilityHint={t(ContactSheetTexts.intercom.a11yHint)}
+              onPress={() => {
+                unreadCount
+                  ? () => Intercom.displayMessenger()
+                  : Intercom.displayConversationsList();
+                close();
+              }}
+              iconPosition="right"
+              icon={() =>
+                unreadCount ? (
+                  <ThemeIcon colorType="primary_2" svg={ChatUnread} />
+                ) : (
+                  <ThemeIcon colorType="primary_2" svg={Chat} />
+                )
+              }
+            />
+          </>
+        ) : undefined}
       </FullScreenFooter>
     </BottomSheetContainer>
   );
