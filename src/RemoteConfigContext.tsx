@@ -18,22 +18,7 @@ import {
   defaultUserProfiles,
 } from './reference-data/defaults';
 
-export type RemoteConfigContextState = Pick<
-  RemoteConfig,
-  | 'enable_ticketing'
-  | 'enable_intercom'
-  | 'enable_i18n'
-  | 'enable_creditcard'
-  | 'enable_recent_tickets'
-  | 'enable_login'
-  | 'enable_period_tickets'
-  | 'must_upgrade_ticketing'
-  | 'news_enabled'
-  | 'news_text'
-  | 'news_link_text'
-  | 'news_link_url'
-  | 'vat_percent'
-> & {
+export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;
   modes_we_sell_tickets_for: string[];
   preassigned_fare_products: PreassignedFareProduct[];

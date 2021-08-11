@@ -18,6 +18,7 @@ import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileStackParams} from '..';
 import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import {useAppDispatch} from '@atb/AppContext';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -38,6 +39,7 @@ type ProfileScreenProps = {
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
   const {enable_i18n, enable_login} = useRemoteConfig();
+  const appDispatch = useAppDispatch();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
@@ -230,6 +232,12 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             <Sections.LinkItem
               text="Design system"
               onPress={() => navigation.navigate('DesignSystem')}
+            />
+            <Sections.LinkItem
+              text="Restart onboarding"
+              onPress={() => {
+                appDispatch({type: 'RESTART_ONBOARDING'});
+              }}
             />
           </Sections.Section>
         )}

@@ -10,7 +10,7 @@ import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {OnboardingStackParams} from '@atb/screens/Onboarding/index';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {Onboarding1_2} from '@atb/assets/svg/illustrations';
+import {Onboarding1} from '@atb/assets/svg/illustrations';
 import Illustration from '@atb/screens/Onboarding/components/Illustration';
 import {ThemeColor} from '@atb/theme/colors';
 
@@ -50,7 +50,7 @@ const WelcomeScreen = ({
   return (
     <View style={styles.container}>
       <View style={styles.illustration}>
-        <Illustration Svg={Onboarding1_2} />
+        <Illustration Svg={Onboarding1} />
       </View>
       <View style={styles.topPush} />
       <ScrollView style={styles.mainView}>
