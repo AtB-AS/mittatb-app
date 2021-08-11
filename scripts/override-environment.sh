@@ -22,6 +22,12 @@ else
     echo "Copying $APP_ENVIRONMENT .env file to root"
     cp $ENV_FOLDER/.env .
 
+    echo "Copying $APP_ENVIRONMENT .env file to env.properties file in Android folder"
+    cp $ENV_FOLDER/.env android/env.properties
+
+    echo "Copying $APP_ENVIRONMENT google-services.json to android folder"
+    cp $ENV_FOLDER/google-services.json android/app
+
     echo "Copying $APP_ENVIRONMENT GoogleService-Info.plist to iOS folder"
     cp $ENV_FOLDER/GoogleService-Info.plist ios/atb
 fi
