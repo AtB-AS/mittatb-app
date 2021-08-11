@@ -1,7 +1,6 @@
 import {Chat, ChatUnread} from '@atb/assets/svg/icons/actions';
 import {IconButton} from '@atb/components/screen-header/HeaderButton';
 import ThemeIcon from '@atb/components/theme-icon';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
@@ -13,14 +12,9 @@ import ContactSheet from '@atb/chat/ContactSheet';
 export default function useChatIcon(
   color?: ThemeColor,
 ): IconButton | undefined {
-  const config = useRemoteConfig();
   const unreadCount = useChatUnreadCount();
   const styles = useStyles();
   const {open: openBottomSheet} = useBottomSheet();
-
-  if (!config.enable_intercom) {
-    return undefined;
-  }
 
   const openContactSheet = () => {
     openBottomSheet((close, focusRef) => (
