@@ -55,7 +55,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   preassigned_fare_products: JSON.stringify(defaultPreassignedFareProducts),
   tariff_zones: JSON.stringify(defaultTariffZones),
   user_profiles: JSON.stringify(defaultUserProfiles),
-  customer_service_url: 'https://www.atb.no/kundeservice/',
+  customer_service_url: 'https://www.atb.no/kontakt/',
 };
 
 export function getConfig(): RemoteConfig {
