@@ -70,13 +70,15 @@ const FavoritesContextProvider: React.FC = ({children}) => {
     /**
      * Add favorite departure. If adding a favorite for the complete line
      * number, the existing favorites for specific line names on that line
-     * number will be removed.
+     * number on the same quay will be removed.
      */
     async addFavoriteDeparture(favoriteDeparture: FavoriteDeparture) {
       if (!favoriteDeparture.lineName) {
         const favoritesExisting = await departures.getFavorites();
         const favoritesFiltered = favoritesExisting.filter(
-          (f) => f.lineId !== favoriteDeparture.lineId,
+          (f) =>
+            f.lineId !== favoriteDeparture.lineId ||
+            f.quayId !== favoriteDeparture.quayId,
         );
         await departures.setFavorites(favoritesFiltered);
       }
