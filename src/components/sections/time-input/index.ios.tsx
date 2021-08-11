@@ -10,8 +10,8 @@ import {useLocaleContext} from '@atb/LocaleProvider';
 
 export default function TimeInputItem(props: TimeInputItemProps) {
   const {value, onChange, ...innerprops} = props;
-  const {t, locale, language} = useTranslation();
-  const localeContext = useLocaleContext();
+  const {t} = useTranslation();
+  const locale = useLocaleContext();
   const {theme} = useTheme();
 
   return (
@@ -24,11 +24,11 @@ export default function TimeInputItem(props: TimeInputItemProps) {
         <RNDateTimePicker
           value={dateWithReplacedTime(new Date(), value)}
           mode="time"
-          locale={localeContext.locale.localeString}
+          locale={locale.localeString}
           textColor={theme.text.colors.primary}
           display="inline"
           onChange={(_, date) => {
-            onChange(dateToTimeString(date, language));
+            onChange(dateToTimeString(date, locale.language));
           }}
         />
       </View>
