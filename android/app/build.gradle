@@ -125,6 +125,32 @@ def jscFlavor = 'org.webkit:android-jsc:+'
  * and the benefits of using Hermes will therefore be sharply reduced.
  */
 def enableHermes = project.ext.react.get("enableHermes", false);
+def envProperties = new Properties()
+def envPropertiesFile = rootProject.file('env.properties')
+if (envPropertiesFile.exists()) {
+    envPropertiesFile.withReader('UTF-8') { reader ->
+        envProperties.load(reader)
+    }
+}
+
+def appApplicationId = envProperties.getProperty('ANDROID_APPLICATION_ID')
+if (appApplicationId == null) {
+    appApplicationId = 'test'
+}
+
+def appVersionCode = '1'
+
+def appVersionName = envProperties.getProperty('APP_VERSION')
+if (appVersionName == null) {
+    appVersionName = 'test'
+}
+
+
+def appName = envProperties.getProperty('ANDROID_APP_NAME')
+if (appName == null) {
+    appName = 'AtB'
+}
+
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -135,11 +161,17 @@ android {
     }
 
     defaultConfig {
-        applicationId "no.mittatb"
+        resValue "string", "app_name", appName
+        applicationId appApplicationId
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode  project.hasProperty("versionCode") ? project.getProperty("versionCode") as Integer : 1
-        versionName "1.11"
+        if(System.getenv()["CI"]){
+            versionCode  project.getProperty("versionCode")
+            versionName project.getProperty("versionName")
+        } else {
+            versionCode  appVersionCode.toInteger()
+            versionName appVersionName
+        }
         multiDexEnabled true
     }
     splits {
@@ -160,17 +192,14 @@ android {
     }
     buildTypes {
         debug {
-            applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
         }
         store {
             initWith buildTypes.release
-            applicationIdSuffix ".store"
             matchingFallbacks = ['release']
         }
         staging {
             initWith buildTypes.release
-            applicationIdSuffix ".staging"
             debuggable true
             matchingFallbacks = ['release']
         }

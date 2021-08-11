@@ -28,6 +28,7 @@ build/
 .idea
 .gradle
 local.properties
+env.properties
 *.iml
 
 # node.js
@@ -71,3 +72,6 @@ firebase-debug.log
 
 # Env
 /.env
+
+#Service files
+android/app/google-services.json
