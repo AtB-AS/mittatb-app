@@ -70,7 +70,9 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
   useEffect(() => {
     async function setupRemoteConfig() {
       const configApi = remoteConfig();
-
+      await configApi.setConfigSettings({
+        minimumFetchIntervalMillis: 21600000, // 6 hours
+      });
       await configApi.setDefaults(defaultRemoteConfig);
       await fetchConfig();
     }
