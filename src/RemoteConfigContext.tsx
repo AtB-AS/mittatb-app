@@ -17,6 +17,7 @@ import {
   defaultTariffZones,
   defaultUserProfiles,
 } from './reference-data/defaults';
+import {useAppState} from './AppContext';
 
 export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;
@@ -44,6 +45,7 @@ function isUserInfo(a: any): a is UserInfoErrorFromFirebase {
 
 const RemoteConfigContextProvider: React.FC = ({children}) => {
   const [config, setConfig] = useState<RemoteConfig>(defaultRemoteConfig);
+  const {newBuildSincePreviousLaunch} = useAppState();
 
   async function fetchConfig() {
     try {
@@ -74,7 +76,11 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
         minimumFetchIntervalMillis: 21600000, // 6 hours
       });
       await configApi.setDefaults(defaultRemoteConfig);
-      await fetchConfig();
+      if (newBuildSincePreviousLaunch) {
+        await refresh();
+      } else {
+        await fetchConfig();
+      }
     }
 
     setupRemoteConfig();

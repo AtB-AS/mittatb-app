@@ -7,17 +7,22 @@ import React, {
   useMemo,
 } from 'react';
 import RNBootSplash from 'react-native-bootsplash';
+import {getBuildNumber} from 'react-native-device-info';
 import {register as registerChatUser} from './chat/user';
 import storage from './storage';
 
+const buildNumber = getBuildNumber();
+
 enum storeKey {
   onboarding = '@ATB_onboarded',
+  previousBuildNumber = '@ATB_previous_build_number',
   ticketing = '@ATB_ticket_informational_accepted',
 }
 type AppState = {
   isLoading: boolean;
   onboarded: boolean;
   ticketingAccepted: boolean;
+  newBuildSincePreviousLaunch: boolean;
 };
 
 type AppReducerAction =
@@ -25,6 +30,7 @@ type AppReducerAction =
       type: 'LOAD_APP_SETTINGS';
       onboarded: boolean;
       ticketingAccepted: boolean;
+      newBuildSincePreviousLaunch: boolean;
     }
   | {type: 'COMPLETE_ONBOARDING'}
   | {type: 'RESTART_ONBOARDING'}
@@ -80,6 +86,7 @@ const defaultAppState: AppState = {
   isLoading: true,
   onboarded: false,
   ticketingAccepted: false,
+  newBuildSincePreviousLaunch: false,
 };
 
 const AppContextProvider: React.FC = ({children}) => {
@@ -90,12 +97,20 @@ const AppContextProvider: React.FC = ({children}) => {
       const savedOnboarded = await storage.get(storeKey.onboarding);
       const onboarded = !savedOnboarded ? false : JSON.parse(savedOnboarded);
 
-      const savedTicketingAccepted = await storage.get(
-        '@ATB_ticket_informational_accepted',
-      );
+      const savedTicketingAccepted = await storage.get(storeKey.ticketing);
       const ticketingAccepted = !savedTicketingAccepted
         ? false
         : JSON.parse(savedTicketingAccepted);
+
+      const previousBuildNumber = await storage.get(
+        storeKey.previousBuildNumber,
+      );
+      const newBuildSincePreviousLaunch =
+        !!previousBuildNumber && buildNumber !== previousBuildNumber;
+
+      if (!previousBuildNumber || newBuildSincePreviousLaunch) {
+        await storage.set(storeKey.previousBuildNumber, buildNumber);
+      }
 
       if (onboarded) {
         registerChatUser();
@@ -105,6 +120,7 @@ const AppContextProvider: React.FC = ({children}) => {
         type: 'LOAD_APP_SETTINGS',
         onboarded,
         ticketingAccepted,
+        newBuildSincePreviousLaunch,
       });
 
       RNBootSplash.hide({fade: true});
