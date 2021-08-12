@@ -45,7 +45,10 @@ function isUserInfo(a: any): a is UserInfoErrorFromFirebase {
 
 const RemoteConfigContextProvider: React.FC = ({children}) => {
   const [config, setConfig] = useState<RemoteConfig>(defaultRemoteConfig);
-  const {newBuildSincePreviousLaunch} = useAppState();
+  const {
+    isLoading: isLoadingAppState,
+    newBuildSincePreviousLaunch,
+  } = useAppState();
 
   async function fetchConfig() {
     try {
@@ -83,8 +86,10 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
       }
     }
 
-    setupRemoteConfig();
-  }, []);
+    if (!isLoadingAppState) {
+      setupRemoteConfig();
+    }
+  }, [isLoadingAppState, newBuildSincePreviousLaunch]);
 
   async function refresh() {
     const configApi = remoteConfig();
@@ -96,6 +101,7 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
     await configApi.setConfigSettings({
       minimumFetchIntervalMillis,
     });
+    console.warn('Force-refreshed Remote Config');
   }
 
   return (

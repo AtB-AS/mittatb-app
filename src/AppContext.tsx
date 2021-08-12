@@ -57,6 +57,7 @@ const appReducer: AppReducer = (prevState, action) => {
         ...prevState,
         onboarded: action.onboarded,
         ticketingAccepted: action.ticketingAccepted,
+        newBuildSincePreviousLaunch: action.newBuildSincePreviousLaunch,
         isLoading: false,
       };
     case 'COMPLETE_ONBOARDING':
@@ -106,9 +107,9 @@ const AppContextProvider: React.FC = ({children}) => {
         storeKey.previousBuildNumber,
       );
       const newBuildSincePreviousLaunch =
-        !!previousBuildNumber && buildNumber !== previousBuildNumber;
+        previousBuildNumber !== null && buildNumber !== previousBuildNumber;
 
-      if (!previousBuildNumber || newBuildSincePreviousLaunch) {
+      if (previousBuildNumber == null || newBuildSincePreviousLaunch) {
         await storage.set(storeKey.previousBuildNumber, buildNumber);
       }
 
