@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   AccessibilityProps,
   AccessibilityRole,
@@ -33,18 +33,24 @@ export default function ActionItem({
 }: ActionItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
   const style = useSectionStyle();
+  const [checkedState, setCheckedState] = useState(checked);
 
   if (mode === 'toggle') {
     return (
       <InternalLabeledItem label={text} accessibleLabel={false} {...props}>
         <Switch
-          value={checked}
-          onValueChange={(v) => onPress?.(v)}
+          value={checkedState}
+          onValueChange={(value) => handleValueChange(value)}
           accessibilityLabel={text}
           {...accessibility}
         />
       </InternalLabeledItem>
     );
+  }
+
+  function handleValueChange(value: boolean) {
+    setCheckedState(value);
+    onPress?.(value);
   }
 
   const role: AccessibilityRole = mode === 'check' ? 'radio' : 'switch';
