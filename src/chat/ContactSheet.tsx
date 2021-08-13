@@ -76,7 +76,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
               accessibilityHint={t(ContactSheetTexts.intercom.a11yHint)}
               onPress={() => {
                 unreadCount
-                  ? () => Intercom.displayMessenger()
+                  ? Intercom.displayMessenger()
                   : Intercom.displayConversationsList();
                 close();
               }}
