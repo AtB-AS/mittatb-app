@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   AccessibilityProps,
   AccessibilityRole,
@@ -35,16 +35,34 @@ export default function ActionItem({
   const style = useSectionStyle();
   const [checkedState, setCheckedState] = useState(checked);
 
+  function useDelay(ms: number) {
+    const [gate, setGate] = useState(false);
+    useEffect(() => {
+      setTimeout(() => {
+        setGate(true);
+      }, ms);
+    });
+    return gate;
+  }
+
+  // A bug in RN borks Switch animations when Switch is used inside react navigation
+  // A small delay to render seems to mitigate the bug
+  const delayRender = useDelay(10);
+
   if (mode === 'toggle') {
     return (
-      <InternalLabeledItem label={text} accessibleLabel={false} {...props}>
-        <Switch
-          value={checkedState}
-          onValueChange={(value) => handleValueChange(value)}
-          accessibilityLabel={text}
-          {...accessibility}
-        />
-      </InternalLabeledItem>
+      <>
+        {delayRender && (
+          <InternalLabeledItem label={text} accessibleLabel={false} {...props}>
+            <Switch
+              value={checkedState}
+              onValueChange={(value) => handleValueChange(value)}
+              accessibilityLabel={text}
+              {...accessibility}
+            />
+          </InternalLabeledItem>
+        )}
+      </>
     );
   }
 
