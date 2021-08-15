@@ -31,8 +31,8 @@ const TicketsTexts = {
     },
     reactivateSplash: {
       message: _(
-        'Foreløpig kan du kun kjøpe **enkeltbillett** for buss/trikk i appen. Andre billettyper kan du fortsatt kjøpe fra appen **AtB Mobilett**.\n\n',
-        'Right now, the app offers **single tickets** for bus/tram only. You can buy other ticket types from the app **AtB Mobilett**.\n\n',
+        'Foreløpig kan du kjøpe **enkeltbillett** for buss/trikk i appen. Andre billettyper finner du i appen **AtB Mobilett**.\n\n',
+        'Right now, the app offers **single tickets** for bus/tram only. Use the app **AtB Mobilett** to purchase other ticket types.\n\n',
       ),
       linkText: _('Les mer her', 'Read more'),
       linkA11yHint: _(
