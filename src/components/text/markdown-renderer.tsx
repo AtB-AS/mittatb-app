@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text} from 'react-native';
+import {Linking, Text} from 'react-native';
 import {lexer, Token} from 'marked';
 
 export default function render(markdown: string): React.ReactElement[] {
@@ -32,6 +32,23 @@ function renderToken(token: Token, index: number): React.ReactElement {
     case 'em':
       return (
         <Text key={index} style={{fontStyle: 'italic'}}>
+          {token.text}
+        </Text>
+      );
+
+    case 'link':
+      const url = token.href;
+      async function openLink() {
+        if (await Linking.canOpenURL(url)) {
+          await Linking.openURL(url);
+        }
+      }
+      return (
+        <Text
+          key={index}
+          style={{textDecorationLine: 'underline'}}
+          onPress={openLink}
+        >
           {token.text}
         </Text>
       );
