@@ -27,6 +27,12 @@ function getRenderer(token: Token, index: number): MarkdownRenderer {
       );
     case 'space':
       return () => <Text key={index}>{'\n'}</Text>;
+    case 'em':
+      return () => (
+        <Text key={index} style={{fontStyle: 'italic'}}>
+          {token.text}
+        </Text>
+      );
     default:
       console.warn(
         `We haven't defined a renderer for markdown type: "${token.type}", rendering raw: "${token.raw}"`,
