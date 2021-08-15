@@ -7,17 +7,20 @@ import {
 } from '@atb/theme/colors';
 import React from 'react';
 import {Text, TextProps} from 'react-native';
+import renderMarkdown from './markdown-renderer';
 
 export const MAX_FONT_SCALE = 2;
 
 export type ThemeTextProps = TextProps & {
   type?: TextNames;
   color?: TextColor | ThemeColor;
+  isMarkdown?: boolean;
 };
 
 const ThemeText: React.FC<ThemeTextProps> = ({
   type: fontType = 'body__primary',
   color = 'primary',
+  isMarkdown = false,
   style,
   children,
   ...props
@@ -31,14 +34,20 @@ const ThemeText: React.FC<ThemeTextProps> = ({
       : theme.text.colors[color],
   };
 
+  const content =
+    isMarkdown && typeof children === 'string'
+      ? renderMarkdown(children)
+      : children;
+
   return (
     <Text
       style={[typeStyle, style]}
       maxFontSizeMultiplier={MAX_FONT_SCALE}
       {...props}
     >
-      {children}
+      {content}
     </Text>
   );
 };
+
 export default ThemeText;
