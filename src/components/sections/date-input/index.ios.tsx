@@ -6,11 +6,12 @@ import React from 'react';
 import {Platform, StyleProp, ViewStyle} from 'react-native';
 import InternalLabeledItem from '../internals/internal-labeled-item';
 import {DateInputItemProps, dateToDateString} from './utils';
+import {useLocaleContext} from '@atb/LocaleProvider';
 
 export default function DateInputItem(props: DateInputItemProps) {
   const {value, onChange, ...innerprops} = props;
-
-  const {t, locale} = useTranslation();
+  const {t} = useTranslation();
+  const locale = useLocaleContext();
   const {theme} = useTheme();
 
   const majorVersionIOS = parseInt(String(Platform.Version), 10);
@@ -27,8 +28,7 @@ export default function DateInputItem(props: DateInputItemProps) {
       <RNDateTimePicker
         value={parseISO(value)}
         mode="date"
-        // Always use no as locale to enfore 24 Hour clock
-        locale="no"
+        locale={locale.localeString}
         style={{
           ...style,
           alignItems: 'flex-end',

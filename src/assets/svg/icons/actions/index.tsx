@@ -11,4 +11,5 @@ export {default as Edit} from './Edit';
 export {default as Remove} from './Remove';
 export {default as Reorder} from './Reorder';
 export {default as Search} from './Search';
+export {default as Support} from './Support';
 export {default as Swap} from './Swap';

@@ -26,7 +26,7 @@ export default function TimeInputItem(props: TimeInputItemProps) {
           value={time}
           mode="time"
           is24Hour
-          onChange={(_, date) => {
+          onChange={(_: Event, date?: Date) => {
             setShow(false);
             onChange(dateToTimeString(date, language));
           }}

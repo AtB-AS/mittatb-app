@@ -22,11 +22,14 @@ export const useBottomNavigationStyles = () => {
   const fontScale = useFontScale();
   const {bottom} = useSafeAreaInsets();
 
+  // Prevent fontScale from affecting tab bar height when it is less than 1
+  const fontScaleFactor = fontScale < 1 ? 1 : fontScale;
+
   const adjustedBottom =
     Platform.OS == 'android' ? bottom + ANDROID_BOTTOM_PADDING : bottom;
 
   return {
-    minHeight: DEFAULT_TABBAR_HEIGHT * fontScale + adjustedBottom,
+    minHeight: DEFAULT_TABBAR_HEIGHT * fontScaleFactor + adjustedBottom,
     paddingBottom: adjustedBottom,
   };
 };

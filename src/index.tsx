@@ -1,7 +1,6 @@
 import 'react-native-get-random-values';
 
 import React, {useEffect, useState} from 'react';
-import {enableScreens} from 'react-native-screens';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AppContextProvider from './AppContext';
 import {AlertsContextProvider} from './alerts';
@@ -20,6 +19,7 @@ import {setInstallId as setApiInstallId} from './api/client';
 import ErrorBoundary from './error-boundary';
 import {PreferencesContextProvider} from './preferences';
 import configureAndStartBugsnag from './diagnostics/bugsnagConfig';
+import AccessibilityContextProvider from '@atb/AccessibilityContext';
 
 configureAndStartBugsnag();
 
@@ -27,6 +27,8 @@ import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import AppLanguageProvider from './translations/LanguageContext';
 import {BottomSheetProvider} from '@atb/components/bottom-sheet';
+import {AccessibilityInfo} from 'react-native';
+import LocaleContextProvider from '@atb/LocaleProvider';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
@@ -37,7 +39,6 @@ async function setupConfig() {
 }
 
 trackAppState();
-enableScreens();
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -57,27 +58,31 @@ const App = () => {
       <ErrorBoundary type="full-screen">
         <AppContextProvider>
           <PreferencesContextProvider>
-            <AuthContextProvider>
-              <ThemeContextProvider>
-                <FavoritesContextProvider>
-                  <SearchHistoryContextProvider>
-                    <GeolocationContextProvider>
-                      <RemoteConfigContextProvider>
-                        <TicketContextProvider>
-                          <AppLanguageProvider>
-                            <AlertsContextProvider>
-                              <BottomSheetProvider>
-                                <NavigationRoot />
-                              </BottomSheetProvider>
-                            </AlertsContextProvider>
-                          </AppLanguageProvider>
-                        </TicketContextProvider>
-                      </RemoteConfigContextProvider>
-                    </GeolocationContextProvider>
-                  </SearchHistoryContextProvider>
-                </FavoritesContextProvider>
-              </ThemeContextProvider>
-            </AuthContextProvider>
+            <LocaleContextProvider>
+              <AuthContextProvider>
+                <AccessibilityContextProvider>
+                  <ThemeContextProvider>
+                    <FavoritesContextProvider>
+                      <SearchHistoryContextProvider>
+                        <GeolocationContextProvider>
+                          <RemoteConfigContextProvider>
+                            <TicketContextProvider>
+                              <AppLanguageProvider>
+                                <AlertsContextProvider>
+                                  <BottomSheetProvider>
+                                    <NavigationRoot />
+                                  </BottomSheetProvider>
+                                </AlertsContextProvider>
+                              </AppLanguageProvider>
+                            </TicketContextProvider>
+                          </RemoteConfigContextProvider>
+                        </GeolocationContextProvider>
+                      </SearchHistoryContextProvider>
+                    </FavoritesContextProvider>
+                  </ThemeContextProvider>
+                </AccessibilityContextProvider>
+              </AuthContextProvider>
+            </LocaleContextProvider>
           </PreferencesContextProvider>
         </AppContextProvider>
       </ErrorBoundary>

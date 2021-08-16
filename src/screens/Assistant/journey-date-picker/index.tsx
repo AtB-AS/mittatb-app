@@ -47,7 +47,7 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
   navigation,
   route,
 }) => {
-  const {t, language, locale} = useTranslation();
+  const {t, language} = useTranslation();
   const styles = useStyles();
   const dateItems = Array.from(DateOptions);
 
