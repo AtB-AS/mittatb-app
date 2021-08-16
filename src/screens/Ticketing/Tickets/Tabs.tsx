@@ -83,7 +83,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
     <View style={styles.container}>
       <View style={{padding: theme.spacings.medium}}>
         <MessageBox>
-          <ThemeText type="body__primary" color="primary_1">
+          <ThemeText type="body__primary" color="primary_1" isMarkdown={true}>
             {t(TicketsTexts.buyTicketsTab.reactivateSplash.message)}
           </ThemeText>
 

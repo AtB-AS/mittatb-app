@@ -31,10 +31,10 @@ const TicketsTexts = {
     },
     reactivateSplash: {
       message: _(
-        'I en periode gjelder enkelte vilkår for billettkjøp i appen.',
-        'For a period, some conditions apply for ticket purchase in the app.',
+        'Foreløpig kan du kjøpe **enkeltbillett** for buss/trikk i appen. Andre billettyper finner du i appen **AtB Mobilett**.\n\n',
+        'Right now, the app offers **single tickets** for bus/tram only. Use the app **AtB Mobilett** to purchase other ticket types.\n\n',
       ),
-      linkText: _('Les mer her', 'Read more here'),
+      linkText: _('Les mer her', 'Read more'),
       linkA11yHint: _(
         'Les mer om betingelser for billettkjøp her',
         'Read more about conditions for buying tickets here',
