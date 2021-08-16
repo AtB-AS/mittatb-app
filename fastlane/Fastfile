@@ -113,7 +113,7 @@ platform :android do
 
   lane :build do
     ensure_env_vars(
-      env_vars: ['VERSION_NAME','VERSION_CODE','KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS', 'APP_ENVIRONMENT', 'CI','KEYSTORE_PATH']
+      env_vars: ['VERSION_NAME','BUILD_ID','KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS', 'APP_ENVIRONMENT', 'CI','KEYSTORE_PATH']
         )
     build_type = ENV['APP_ENVIRONMENT']
     gradle(task: 'clean', project_dir: 'android/')
@@ -123,8 +123,6 @@ platform :android do
       project_dir: 'android/',
       print_command: false, #don't print my passwords please
       properties: {
-        "VERSION_NAME" => ENV["VERSION_NAME"],
-        "VERSION_NAME" => ENV["VERSION_CODE"],
         "android.injected.signing.store.file" => ENV["KEYSTORE_PATH"],
         "android.injected.signing.store.password" => ENV["KEYSTORE_PASS"],
         "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
