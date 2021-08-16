@@ -1,6 +1,7 @@
 import {ErrorType} from '@atb/api/utils';
 import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
 import AccessibleText from '@atb/components/accessible-text';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
 import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
@@ -35,10 +36,17 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {NearbyStackParams} from '.';
 import Loading from '../Loading';
-import {SearchTime, useSearchTimeValue} from './departure-date-picker';
+import DepartureTimePicker from './departure-date-picker/DepartureTimePicker';
 import {useDepartureData} from './state';
 
 const themeColor: ThemeColor = 'background_gray';
+
+const DateOptions = ['now', 'departure'] as const;
+type DateOptionType = typeof DateOptions[number];
+export type SearchTime = {
+  option: DateOptionType;
+  date: string;
+};
 
 type NearbyRouteName = 'NearbyRoot';
 const NearbyRouteNameStatic: NearbyRouteName = 'NearbyRoot';
@@ -104,10 +112,11 @@ const NearbyOverview: React.FC<Props> = ({
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
   const styles = useNearbyStyles();
 
-  const searchTime = useSearchTimeValue('searchTime', {
+  const [searchTime, setSearchTime] = useState<SearchTime>({
     option: 'now',
     date: new Date().toISOString(),
   });
+  console.log(searchTime);
 
   const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
@@ -176,6 +185,19 @@ const NearbyOverview: React.FC<Props> = ({
     [searchTime],
   );
 
+  const {open: openBottomSheet} = useBottomSheet();
+  const onLaterTimePress = () => {
+    openBottomSheet((close, focusRef) => (
+      <DepartureTimePicker
+        close={close}
+        initialTime={searchTime}
+        setSearchTime={(time: string) =>
+          setSearchTime({option: 'departure', date: time})
+        }
+      ></DepartureTimePicker>
+    ));
+  };
+
   function setCurrentLocationAsFrom() {
     navigation.setParams({
       location: currentLocation && {
@@ -222,7 +244,8 @@ const NearbyOverview: React.FC<Props> = ({
           updatingLocation={updatingLocation}
           openLocationSearch={openLocationSearch}
           setCurrentLocationOrRequest={setCurrentLocationOrRequest}
-          onSearchTimePress={onSearchTimePress}
+          onNowPress={() => {}}
+          onLaterTimePress={onLaterTimePress}
           searchTime={searchTime}
           timeOfLastSearch={queryInput.startTime}
         />
@@ -281,7 +304,8 @@ type HeaderProps = {
   fromLocation?: LocationWithMetadata;
   openLocationSearch: () => void;
   setCurrentLocationOrRequest(): Promise<void>;
-  onSearchTimePress: () => void;
+  onNowPress: () => void;
+  onLaterTimePress: () => void;
   timeOfLastSearch: string;
   searchTime: SearchTime;
 };
@@ -291,7 +315,8 @@ const Header = React.memo(function Header({
   fromLocation,
   openLocationSearch,
   setCurrentLocationOrRequest,
-  onSearchTimePress,
+  onNowPress,
+  onLaterTimePress,
   timeOfLastSearch,
   searchTime,
 }: HeaderProps) {
@@ -320,16 +345,18 @@ const Header = React.memo(function Header({
       </Section>
       <View style={styles.paddedContainer} key="dateInput">
         <Button
-          text={getSearchTimeLabel(searchTime, timeOfLastSearch, t, language)}
-          accessibilityLabel={getSearchTimeLabel(
-            searchTime,
-            timeOfLastSearch,
-            t,
-            language,
-          )}
-          accessibilityHint={t(NearbyTexts.dateInput.a11yHint)}
+          text="Nå"
+          accessibilityLabel={'TODO'}
+          accessibilityHint={'TODO'}
           color="secondary_3"
-          onPress={onSearchTimePress}
+          onPress={onNowPress}
+        />
+        <Button
+          text={'Senere' + searchTime.date}
+          accessibilityLabel={'TODO'}
+          accessibilityHint={'TODO'}
+          color="secondary_3"
+          onPress={onLaterTimePress}
         />
       </View>
     </>
