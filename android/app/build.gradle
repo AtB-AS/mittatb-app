@@ -166,8 +166,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         if(System.getenv()["CI"]){
-            versionCode project.getProperty("versionCode").toInteger()
-            versionName project.getProperty("versionName")
+            versionCode System.getenv()["VERSION_CODE"] as Integer
+            versionName System.getenv()["VERSION_NAME"]
         } else {
             versionCode  appVersionCode.toInteger()
             versionName appVersionName
