@@ -1,6 +1,12 @@
 import React from 'react';
-import {Linking, Text} from 'react-native';
 import {lexer, Token} from 'marked';
+import {Linking, Platform, Text} from 'react-native';
+import {textTypeStyles} from '@atb-as/theme';
+
+const textStyles = Platform.select({
+  ios: textTypeStyles.ios,
+  default: textTypeStyles.android,
+});
 
 export default function render(markdown: string): React.ReactElement[] {
   const tree = lexer(markdown);
@@ -14,7 +20,10 @@ function renderToken(token: Token, index: number): React.ReactElement {
 
     case 'strong':
       return (
-        <Text key={index} style={{fontWeight: 'bold'}}>
+        <Text
+          key={index}
+          style={{fontWeight: textStyles['body__primary--bold'].fontWeight}}
+        >
           {token.text}
         </Text>
       );
