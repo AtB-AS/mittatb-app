@@ -10,12 +10,11 @@ import {DateInputItem, Section, TimeInputItem} from '@atb/components/sections';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {NearbyStackParams} from '..';
 import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
-import {useState} from 'react';
 
 type Props = {
   close: () => void;
   initialTime: string;
-  setSearchTime: (timeString: string) => void;
+  setSearchTime: (time: string) => void;
 };
 
 export type DateTimePickerParams = {
@@ -32,16 +31,14 @@ const DepartureTimePicker = forwardRef<ScrollView, Props>(
     const styles = useStyles();
     const {t, language} = useTranslation();
 
-    const [dateString, setDate] = useState<string>(initialTime);
-    const [timeString, setTime] = useState<string>(() =>
-      formatLocaleTime(initialTime, language),
-    );
+    let date = initialTime;
+    let time = formatLocaleTime(initialTime, language);
+
+    const setDate = (d: string) => (date = d);
+    const setTime = (t: string) => (time = t);
 
     const OnSelect = () => {
-      const calculatedTime = dateWithReplacedTime(
-        dateString,
-        timeString,
-      ).toISOString();
+      const calculatedTime = dateWithReplacedTime(date, time).toISOString();
       setSearchTime(calculatedTime);
       close();
     };
@@ -49,7 +46,7 @@ const DepartureTimePicker = forwardRef<ScrollView, Props>(
     return (
       <BottomSheetContainer>
         <ScreenHeaderWithoutNavigation
-          title={dateString + timeString}
+          title={'Velg dato og tid'}
           leftButton={{
             type: 'cancel',
             onPress: close,
@@ -64,11 +61,11 @@ const DepartureTimePicker = forwardRef<ScrollView, Props>(
           ref={focusRef}
         >
           <Section withBottomPadding>
-            <DateInputItem value={dateString} onChange={setDate} />
-            <TimeInputItem value={timeString} onChange={setTime} />
+            <DateInputItem value={date} onChange={setDate} />
+            <TimeInputItem value={time} onChange={setTime} />
           </Section>
 
-          <Button onPress={OnSelect} color="primary_2" text={'todo'} />
+          <Button onPress={OnSelect} color="primary_2" text={'Bekreft'} />
         </ScrollView>
 
         <FullScreenFooter>

@@ -47,6 +47,7 @@ export type SearchTime = {
   option: DateOptionType;
   date: string;
 };
+export type SearchTime = string;
 
 type NearbyRouteName = 'NearbyRoot';
 const NearbyRouteNameStatic: NearbyRouteName = 'NearbyRoot';
@@ -117,6 +118,9 @@ const NearbyOverview: React.FC<Props> = ({
     date: new Date().toISOString(),
   });
   console.log(searchTime);
+  const [getSearchTime, setSearchTime] = useState<SearchTime>(
+    new Date().toISOString(),
+  );
 
   const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
@@ -189,11 +193,10 @@ const NearbyOverview: React.FC<Props> = ({
   const onLaterTimePress = () => {
     openBottomSheet((close, focusRef) => (
       <DepartureTimePicker
+        ref={focusRef}
         close={close}
-        initialTime={searchTime}
-        setSearchTime={(time: string) =>
-          setSearchTime({option: 'departure', date: time})
-        }
+        initialTime={getSearchTime}
+        setSearchTime={setSearchTime}
       ></DepartureTimePicker>
     ));
   };
