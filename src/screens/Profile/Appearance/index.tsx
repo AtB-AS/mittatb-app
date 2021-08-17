@@ -1,7 +1,7 @@
 import {ActionItem, Section} from '@atb/components/sections';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {AppearanceSettingsTexts, useTranslation} from '@atb/translations';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {View} from 'react-native';
