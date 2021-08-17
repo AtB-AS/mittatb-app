@@ -309,7 +309,7 @@ const Header = React.memo(function Header({
   onNowPress,
   searchTime,
 }: HeaderProps) {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const styles = useNearbyStyles();
 
   return (
@@ -334,18 +334,28 @@ const Header = React.memo(function Header({
       </Section>
       <View style={styles.paddedContainer} key="dateInput">
         <Button
-          text={t(NearbyTexts.search.later.label)}
-          accessibilityLabel={t(NearbyTexts.search.later.a11yLabel)}
-          accessibilityHint={t(NearbyTexts.search.later.a11yHint)}
-          color="secondary_3"
-          onPress={onLaterTimePress}
-        />
-        <Button
+          mode={searchTime.option == 'now' ? 'primary' : 'tertiary'}
+          color={searchTime.option == 'now' ? 'background_0' : 'primary_2'}
           text={t(NearbyTexts.search.now.label)}
           accessibilityLabel={t(NearbyTexts.search.now.a11yLabel)}
           accessibilityHint={t(NearbyTexts.search.now.a11yHint)}
-          color="secondary_3"
           onPress={onNowPress}
+          viewContainerStyle={styles.dateInputButtonContainer}
+          style={styles.dateInputButton}
+        />
+        <Button
+          mode={searchTime.option == 'now' ? 'tertiary' : 'primary'}
+          color={searchTime.option == 'now' ? 'primary_2' : 'background_0'}
+          text={
+            searchTime.option == 'now'
+              ? t(NearbyTexts.search.later.label)
+              : formatToShortDateTimeWithoutYear(searchTime.date, language)
+          }
+          accessibilityLabel={t(NearbyTexts.search.later.a11yLabel)}
+          accessibilityHint={t(NearbyTexts.search.later.a11yHint)}
+          onPress={onLaterTimePress}
+          viewContainerStyle={styles.dateInputButtonContainer}
+          style={styles.dateInputButton}
         />
       </View>
     </>
@@ -358,7 +368,22 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
   },
   paddedContainer: {
     marginHorizontal: theme.spacings.medium,
-    paddingBottom: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
+    flexDirection: 'row',
+    flex: 1,
+    alignContent: 'space-between',
+    borderStyle: 'solid',
+    borderColor: theme.colors.background_0.backgroundColor,
+    borderWidth: 3,
+    padding: 3,
+    borderRadius: 14,
+  },
+  dateInputButtonContainer: {
+    width: '50%',
+  },
+  dateInputButton: {
+    color: theme.colors.background_0.backgroundColor,
+    padding: theme.spacings.small,
   },
 }));
 
