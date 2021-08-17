@@ -160,6 +160,7 @@ const Assistant: React.FC<Props> = ({
   }
 
   function setCurrentLocationAsFrom() {
+    log('set_current_location_as_from');
     navigation.setParams({
       fromLocation: currentLocation && {
         ...currentLocation,
