@@ -47,7 +47,6 @@ export type SearchTime = {
   option: DateOptionType;
   date: string;
 };
-export type SearchTime = string;
 
 type NearbyRouteName = 'NearbyRoot';
 const NearbyRouteNameStatic: NearbyRouteName = 'NearbyRoot';
@@ -68,7 +67,7 @@ type RootProps = {
   route: NearbyScreenProp;
 };
 
-export default function NearbyScreen({navigation, route}: RootProps) {
+export default function NearbyScreen({navigation}: RootProps) {
   const {
     status,
     location,
@@ -117,10 +116,6 @@ const NearbyOverview: React.FC<Props> = ({
     option: 'now',
     date: new Date().toISOString(),
   });
-  console.log(searchTime);
-  const [getSearchTime, setSearchTime] = useState<SearchTime>(
-    new Date().toISOString(),
-  );
 
   const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
@@ -178,24 +173,13 @@ const NearbyOverview: React.FC<Props> = ({
       initialLocation: fromLocation,
     });
 
-  const onSearchTimePress = useCallback(
-    function onSearchTimePress() {
-      navigation.navigate('DateTimePicker', {
-        callerRouteName: 'NearbyRoot',
-        callerRouteParam: 'searchTime',
-        searchTime,
-      });
-    },
-    [searchTime],
-  );
-
   const {open: openBottomSheet} = useBottomSheet();
   const onLaterTimePress = () => {
     openBottomSheet((close, focusRef) => (
       <DepartureTimePicker
         ref={focusRef}
         close={close}
-        initialTime={getSearchTime}
+        initialTime={searchTime}
         setSearchTime={setSearchTime}
       ></DepartureTimePicker>
     ));
@@ -318,12 +302,10 @@ const Header = React.memo(function Header({
   fromLocation,
   openLocationSearch,
   setCurrentLocationOrRequest,
-  onNowPress,
   onLaterTimePress,
-  timeOfLastSearch,
   searchTime,
 }: HeaderProps) {
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const styles = useNearbyStyles();
 
   return (
@@ -347,13 +329,6 @@ const Header = React.memo(function Header({
         />
       </Section>
       <View style={styles.paddedContainer} key="dateInput">
-        <Button
-          text="Nå"
-          accessibilityLabel={'TODO'}
-          accessibilityHint={'TODO'}
-          color="secondary_3"
-          onPress={onNowPress}
-        />
         <Button
           text={'Senere' + searchTime.date}
           accessibilityLabel={'TODO'}

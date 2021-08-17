@@ -10,11 +10,12 @@ import {DateInputItem, Section, TimeInputItem} from '@atb/components/sections';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {NearbyStackParams} from '..';
 import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
+import {SearchTime} from '@atb/screens/Nearby/Nearby';
 
 type Props = {
   close: () => void;
-  initialTime: string;
-  setSearchTime: (time: string) => void;
+  initialTime: SearchTime;
+  setSearchTime: (time: SearchTime) => void;
 };
 
 export type DateTimePickerParams = {
@@ -31,15 +32,15 @@ const DepartureTimePicker = forwardRef<ScrollView, Props>(
     const styles = useStyles();
     const {t, language} = useTranslation();
 
-    let date = initialTime;
-    let time = formatLocaleTime(initialTime, language);
+    let date = initialTime.date;
+    let time = formatLocaleTime(initialTime.date, language);
 
     const setDate = (d: string) => (date = d);
     const setTime = (t: string) => (time = t);
 
     const OnSelect = () => {
       const calculatedTime = dateWithReplacedTime(date, time).toISOString();
-      setSearchTime(calculatedTime);
+      setSearchTime({option: 'departure', date: calculatedTime});
       close();
     };
 
