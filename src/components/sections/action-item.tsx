@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {
   AccessibilityProps,
   AccessibilityRole,
-  Switch,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -14,6 +13,7 @@ import ThemeIcon from '@atb/components/theme-icon';
 import NavigationIcon from '@atb/components/theme-icon/navigation-icon';
 import {useSectionItem, SectionItem, useSectionStyle} from './section-utils';
 import InternalLabeledItem from './internals/internal-labeled-item';
+import FixedSwitch from '../switch';
 
 export type ActionModes = 'check' | 'toggle' | 'heading-expand';
 export type ActionItemProps = SectionItem<{
@@ -33,47 +33,18 @@ export default function ActionItem({
 }: ActionItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
   const style = useSectionStyle();
-  const [checkedState, setCheckedState] = useState(checked);
-
-  function useDelay(ms: number) {
-    const [gate, setGate] = useState(false);
-    useEffect(() => {
-      setTimeout(() => {
-        setGate(true);
-      }, ms);
-    });
-    return gate;
-  }
-
-  // Preserve outside changes
-  useEffect(() => {
-    setCheckedState(checked);
-  }, [checked]);
-
-  // A bug in RN borks Switch animations when Switch is used inside react navigation
-  // A small delay to render seems to mitigate the bug
-  const delayRender = useDelay(10);
 
   if (mode === 'toggle') {
     return (
-      <>
-        {delayRender && (
-          <InternalLabeledItem label={text} accessibleLabel={false} {...props}>
-            <Switch
-              value={checkedState}
-              onValueChange={(value) => handleValueChange(value)}
-              accessibilityLabel={text}
-              {...accessibility}
-            />
-          </InternalLabeledItem>
-        )}
-      </>
+      <InternalLabeledItem label={text} accessibleLabel={false} {...props}>
+        <FixedSwitch
+          value={checked}
+          onValueChange={(value) => onPress?.(value)}
+          accessibilityLabel={text}
+          {...accessibility}
+        />
+      </InternalLabeledItem>
     );
-  }
-
-  function handleValueChange(value: boolean) {
-    setCheckedState(value);
-    onPress?.(value);
   }
 
   const role: AccessibilityRole = mode === 'check' ? 'radio' : 'switch';
