@@ -71,3 +71,5 @@ firebase-debug.log
 
 # Env
 /.env
+ios/Configs/Config.xcconfig
+ios/atb/GoogleService-Info.plist

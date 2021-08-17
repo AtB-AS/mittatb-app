@@ -22,6 +22,10 @@ else
     echo "Copying $APP_ENVIRONMENT .env file to root"
     cp $ENV_FOLDER/.env .
 
+    echo "Copying $APP_ENVIRONMENT .env file to Config file in ios"
+    cp $ENV_FOLDER/.env ios/Configs/Config.xcconfig
+    sed -i '' -e "s,://,:/\$()/,g" ios/Configs/Config.xcconfig
+
     echo "Copying $APP_ENVIRONMENT GoogleService-Info.plist to iOS folder"
     cp $ENV_FOLDER/GoogleService-Info.plist ios/atb
 fi
