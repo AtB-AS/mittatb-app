@@ -1,6 +1,10 @@
 import Button from '@atb/components/button';
 import {StyleSheet} from '@atb/theme';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {
+  NearbyTexts,
+  ScreenHeaderTexts,
+  useTranslation,
+} from '@atb/translations';
 import React, {forwardRef} from 'react';
 import {ScrollView, View} from 'react-native';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
@@ -47,7 +51,7 @@ const DepartureTimePicker = forwardRef<ScrollView, Props>(
     return (
       <BottomSheetContainer>
         <ScreenHeaderWithoutNavigation
-          title={'Velg dato og tid'}
+          title={t(NearbyTexts.dateInput.header)}
           leftButton={{
             type: 'cancel',
             onPress: close,
@@ -69,7 +73,7 @@ const DepartureTimePicker = forwardRef<ScrollView, Props>(
           <Button
             onPress={OnSelect}
             color="primary_2"
-            text={'Bekreft'}
+            text={t(NearbyTexts.dateInput.confirm)}
             icon={Confirm}
             iconPosition="right"
           />

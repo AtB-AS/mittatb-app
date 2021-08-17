@@ -330,9 +330,9 @@ const Header = React.memo(function Header({
       </Section>
       <View style={styles.paddedContainer} key="dateInput">
         <Button
-          text={'Senere' + searchTime.date}
-          accessibilityLabel={'TODO'}
-          accessibilityHint={'TODO'}
+          text={t(NearbyTexts.search.later.label)}
+          accessibilityLabel={t(NearbyTexts.search.later.a11yLabel)}
+          accessibilityHint={t(NearbyTexts.search.later.a11yHint)}
           color="secondary_3"
           onPress={onLaterTimePress}
         />
