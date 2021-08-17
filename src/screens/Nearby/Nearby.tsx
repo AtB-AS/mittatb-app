@@ -25,10 +25,7 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {
-  formatToLongDateTime,
-  formatToShortDateTimeWithoutYear,
-} from '@atb/utils/date';
+import {formatToShortDateTimeWithoutYear} from '@atb/utils/date';
 import {TFunc} from '@leile/lobo-t';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -376,24 +373,6 @@ function translateErrorType(
     default:
       return t(NearbyTexts.messages.defaultFetchError);
   }
-}
-
-function getSearchTimeLabel(
-  searchTime: SearchTime,
-  timeOfLastSearch: string,
-  t: TFunc<typeof Language>,
-  language: Language,
-) {
-  const date = searchTime.option === 'now' ? timeOfLastSearch : searchTime.date;
-  const time = formatToLongDateTime(date, language);
-
-  switch (searchTime.option) {
-    case 'now':
-      return t(NearbyTexts.dateInput.departureNow(time));
-    case 'departure':
-      return t(NearbyTexts.dateInput.departure(time));
-  }
-  return time;
 }
 
 function getHeaderAlternativeTitle(
