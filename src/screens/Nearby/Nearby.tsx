@@ -185,6 +185,12 @@ const NearbyOverview: React.FC<Props> = ({
     ));
   };
 
+  const onNowPress = () =>
+    setSearchTime({
+      option: 'now',
+      date: new Date().toISOString(),
+    });
+
   function setCurrentLocationAsFrom() {
     navigation.setParams({
       location: currentLocation && {
@@ -231,7 +237,7 @@ const NearbyOverview: React.FC<Props> = ({
           updatingLocation={updatingLocation}
           openLocationSearch={openLocationSearch}
           setCurrentLocationOrRequest={setCurrentLocationOrRequest}
-          onNowPress={() => {}}
+          onNowPress={onNowPress}
           onLaterTimePress={onLaterTimePress}
           searchTime={searchTime}
           timeOfLastSearch={queryInput.startTime}
@@ -303,6 +309,7 @@ const Header = React.memo(function Header({
   openLocationSearch,
   setCurrentLocationOrRequest,
   onLaterTimePress,
+  onNowPress,
   searchTime,
 }: HeaderProps) {
   const {t} = useTranslation();
@@ -335,6 +342,13 @@ const Header = React.memo(function Header({
           accessibilityHint={t(NearbyTexts.search.later.a11yHint)}
           color="secondary_3"
           onPress={onLaterTimePress}
+        />
+        <Button
+          text={t(NearbyTexts.search.now.label)}
+          accessibilityLabel={t(NearbyTexts.search.now.a11yLabel)}
+          accessibilityHint={t(NearbyTexts.search.now.a11yHint)}
+          color="secondary_3"
+          onPress={onNowPress}
         />
       </View>
     </>
