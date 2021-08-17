@@ -26,7 +26,6 @@ export type DateTimePickerParams = {
 };
 
 export type DateTimeNavigationProp = NavigationProp<NearbyStackParams>;
-export type DateTimeRouteProp = RouteProp<NearbyStackParams, 'DateTimePicker'>;
 
 const DepartureTimePicker = forwardRef<ScrollView, Props>(
   ({close, initialTime, setSearchTime}, focusRef) => {
