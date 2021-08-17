@@ -45,6 +45,11 @@ export default function ActionItem({
     return gate;
   }
 
+  // Preserve outside changes
+  useEffect(() => {
+    setCheckedState(checked);
+  }, [checked]);
+
   // A bug in RN borks Switch animations when Switch is used inside react navigation
   // A small delay to render seems to mitigate the bug
   const delayRender = useDelay(10);
