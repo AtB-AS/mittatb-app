@@ -36,7 +36,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {NearbyStackParams} from '.';
 import Loading from '../Loading';
-import DepartureTimePicker from './departure-date-picker/DepartureTimePicker';
+import DepartureTimePicker from './DepartureTimeSheet';
 import {useDepartureData} from './state';
 
 const themeColor: ThemeColor = 'background_gray';

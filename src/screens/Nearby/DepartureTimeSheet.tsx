@@ -8,9 +8,10 @@ import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {DateInputItem, Section, TimeInputItem} from '@atb/components/sections';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
-import {NearbyStackParams} from '..';
+import {NearbyStackParams} from '.';
 import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
 import {SearchTime} from '@atb/screens/Nearby/Nearby';
+import {Confirm} from '@atb/assets/svg/icons/actions';
 
 type Props = {
   close: () => void;
@@ -66,7 +67,13 @@ const DepartureTimePicker = forwardRef<ScrollView, Props>(
             <TimeInputItem value={time} onChange={setTime} />
           </Section>
 
-          <Button onPress={OnSelect} color="primary_2" text={'Bekreft'} />
+          <Button
+            onPress={OnSelect}
+            color="primary_2"
+            text={'Bekreft'}
+            icon={Confirm}
+            iconPosition="right"
+          />
         </ScrollView>
 
         <FullScreenFooter>
