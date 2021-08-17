@@ -1,4 +1,4 @@
-import useGate from '@atb/utils/use-gate';
+import useDelayGate from '@atb/utils/use-delay-gate';
 import React, {useEffect, useState} from 'react';
 import {Switch, SwitchProps} from 'react-native';
 
@@ -22,7 +22,7 @@ export default function FixedSwitch({
     setChecked(value);
   }, [value]);
 
-  const delayRender = useGate(10);
+  const delayRender = useDelayGate(10);
 
   return delayRender ? (
     <Switch
