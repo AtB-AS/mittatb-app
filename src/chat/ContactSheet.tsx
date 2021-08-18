@@ -29,19 +29,21 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
 
   return (
     <BottomSheetContainer>
-      <ScreenHeaderWithoutNavigation
-        title={t(ContactSheetTexts.header.title)}
-        leftButton={{
-          type: 'cancel',
-          onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.cancel.text),
-        }}
-        color={'background_2'}
-        setFocusOnLoad={false}
-      />
+      <View accessible={true} ref={focusRef}>
+        <ScreenHeaderWithoutNavigation
+          title={t(ContactSheetTexts.header.title)}
+          leftButton={{
+            type: 'cancel',
+            onPress: close,
+            text: t(ScreenHeaderTexts.headerButton.cancel.text),
+          }}
+          color={'background_2'}
+          setFocusOnLoad={false}
+        />
+      </View>
 
       <FullScreenFooter>
-        <View style={styles.descriptionSection} ref={focusRef}>
+        <View style={styles.descriptionSection}>
           <ThemeText type="body__secondary" color="secondary">
             {t(ContactSheetTexts.customer_service.title)}
           </ThemeText>
@@ -62,7 +64,10 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
         />
 
         {enable_intercom ? (
-          <>
+          <View
+            importantForAccessibility={'no-hide-descendants'}
+            accessibilityElementsHidden={true}
+          >
             <View style={styles.descriptionSection}>
               <ThemeText type="body__secondary" color="secondary">
                 {t(ContactSheetTexts.intercom.title)}
@@ -89,7 +94,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
                 )
               }
             />
-          </>
+          </View>
         ) : undefined}
       </FullScreenFooter>
     </BottomSheetContainer>
