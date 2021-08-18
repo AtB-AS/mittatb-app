@@ -12,7 +12,7 @@ import {Linking, View} from 'react-native';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {Support, Chat, ChatUnread} from '@atb/assets/svg/icons/actions';
+import {Support, ChatUnread} from '@atb/assets/svg/icons/actions';
 import useChatUnreadCount from './use-chat-unread-count';
 import Intercom from 'react-native-intercom';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
@@ -90,7 +90,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
                 unreadCount ? (
                   <ThemeIcon colorType="primary_2" svg={ChatUnread} />
                 ) : (
-                  <ThemeIcon colorType="primary_2" svg={Chat} />
+                  <></>
                 )
               }
             />
