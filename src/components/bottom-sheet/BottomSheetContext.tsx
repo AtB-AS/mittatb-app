@@ -77,7 +77,7 @@ const BottomSheetProvider: React.FC = ({children}) => {
     setContentFunction(() => contentFunction);
     setCloseRef(closeRef);
     setIsOpen(true);
-    setTimeout(() => giveFocus(focusRef), 200);
+    setTimeout(() => giveFocus(focusRef), 300);
   };
 
   useEffect(() => {
