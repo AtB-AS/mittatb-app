@@ -16,6 +16,7 @@ import {Support, Chat, ChatUnread} from '@atb/assets/svg/icons/actions';
 import useChatUnreadCount from './use-chat-unread-count';
 import Intercom from 'react-native-intercom';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {screenReaderHidden} from '@atb/utils/accessibility';
 
 type Props = {
   close: () => void;
@@ -64,10 +65,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
         />
 
         {enable_intercom ? (
-          <View
-            importantForAccessibility={'no-hide-descendants'}
-            accessibilityElementsHidden={true}
-          >
+          <View {...screenReaderHidden}>
             <View style={styles.descriptionSection}>
               <ThemeText type="body__secondary" color="secondary">
                 {t(ContactSheetTexts.intercom.title)}
