@@ -46,11 +46,9 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
 
       <FullScreenFooter>
         <View style={styles.descriptionSection}>
-          <View accessible={true}>
-            <ThemeText type="body__secondary" color="secondary">
-              {t(ContactSheetTexts.customer_service.title)}
-            </ThemeText>
-          </View>
+          <ThemeText type="body__secondary" color="secondary">
+            {t(ContactSheetTexts.customer_service.title)}
+          </ThemeText>
           <ThemeText>{t(ContactSheetTexts.customer_service.body)}</ThemeText>
         </View>
         <Button
