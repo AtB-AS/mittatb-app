@@ -16,7 +16,6 @@ import {Support, Chat, ChatUnread} from '@atb/assets/svg/icons/actions';
 import useChatUnreadCount from './use-chat-unread-count';
 import Intercom from 'react-native-intercom';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useAccessibilityContext} from '@atb/AccessibilityContext';
 
 type Props = {
   close: () => void;
@@ -27,7 +26,6 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
   const {t} = useTranslation();
   const unreadCount = useChatUnreadCount();
   const {customer_service_url, enable_intercom} = useRemoteConfig();
-  const accessibilityContext = useAccessibilityContext();
 
   return (
     <BottomSheetContainer>
@@ -65,8 +63,11 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
           )}
         />
 
-        {enable_intercom && !accessibilityContext.isScreenReaderEnabled ? (
-          <>
+        {enable_intercom ? (
+          <View
+            importantForAccessibility={'no-hide-descendants'}
+            accessibilityElementsHidden={true}
+          >
             <View style={styles.descriptionSection}>
               <ThemeText type="body__secondary" color="secondary">
                 {t(ContactSheetTexts.intercom.title)}
@@ -93,7 +94,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
                 )
               }
             />
-          </>
+          </View>
         ) : undefined}
       </FullScreenFooter>
     </BottomSheetContainer>
