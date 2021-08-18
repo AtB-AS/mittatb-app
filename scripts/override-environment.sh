@@ -24,6 +24,7 @@ else
 
     echo "Copying $APP_ENVIRONMENT .env file to Config file in ios"
     cp $ENV_FOLDER/.env ios/Configs/Config.xcconfig
+    #replace urls containing :// with :/$()/ to be compatiable with xcconfig format
     sed -i '' -e "s,://,:/\$()/,g" ios/Configs/Config.xcconfig
 
     echo "Copying $APP_ENVIRONMENT GoogleService-Info.plist to iOS folder"
