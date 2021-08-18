@@ -335,7 +335,7 @@ const Header = React.memo(function Header({
       <View style={styles.paddedContainer} key="dateInput">
         <Button
           mode={searchTime.option == 'now' ? 'primary' : 'tertiary'}
-          color={searchTime.option == 'now' ? 'background_0' : 'primary_2'}
+          color={'primary_2'}
           text={t(NearbyTexts.search.now.label)}
           accessibilityLabel={t(NearbyTexts.search.now.a11yLabel)}
           accessibilityHint={t(NearbyTexts.search.now.a11yHint)}
@@ -345,7 +345,7 @@ const Header = React.memo(function Header({
         />
         <Button
           mode={searchTime.option == 'now' ? 'tertiary' : 'primary'}
-          color={searchTime.option == 'now' ? 'primary_2' : 'background_0'}
+          color={'primary_2'}
           text={
             searchTime.option == 'now'
               ? t(NearbyTexts.search.later.label)
@@ -373,7 +373,7 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     alignContent: 'space-between',
     borderStyle: 'solid',
-    borderColor: theme.colors.background_0.backgroundColor,
+    borderColor: theme.colors.primary_2.backgroundColor,
     borderWidth: 2,
     padding: 2,
     borderRadius: 12,
@@ -382,7 +382,7 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
     width: '50%',
   },
   dateInputButton: {
-    color: theme.colors.background_0.backgroundColor,
+    color: theme.colors.primary_2.backgroundColor,
     padding: theme.spacings.small,
   },
 }));
