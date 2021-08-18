@@ -16,6 +16,7 @@ import {Support, Chat, ChatUnread} from '@atb/assets/svg/icons/actions';
 import useChatUnreadCount from './use-chat-unread-count';
 import Intercom from 'react-native-intercom';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useAccessibilityContext} from '@atb/AccessibilityContext';
 
 type Props = {
   close: () => void;
@@ -26,25 +27,30 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
   const {t} = useTranslation();
   const unreadCount = useChatUnreadCount();
   const {customer_service_url, enable_intercom} = useRemoteConfig();
+  const accessibilityContext = useAccessibilityContext();
 
   return (
     <BottomSheetContainer>
-      <ScreenHeaderWithoutNavigation
-        title={t(ContactSheetTexts.header.title)}
-        leftButton={{
-          type: 'cancel',
-          onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.cancel.text),
-        }}
-        color={'background_2'}
-        setFocusOnLoad={false}
-      />
+      <View accessible={true} ref={focusRef}>
+        <ScreenHeaderWithoutNavigation
+          title={t(ContactSheetTexts.header.title)}
+          leftButton={{
+            type: 'cancel',
+            onPress: close,
+            text: t(ScreenHeaderTexts.headerButton.cancel.text),
+          }}
+          color={'background_2'}
+          setFocusOnLoad={false}
+        />
+      </View>
 
       <FullScreenFooter>
-        <View style={styles.descriptionSection} ref={focusRef}>
-          <ThemeText type="body__secondary" color="secondary">
-            {t(ContactSheetTexts.customer_service.title)}
-          </ThemeText>
+        <View style={styles.descriptionSection}>
+          <View accessible={true}>
+            <ThemeText type="body__secondary" color="secondary">
+              {t(ContactSheetTexts.customer_service.title)}
+            </ThemeText>
+          </View>
           <ThemeText>{t(ContactSheetTexts.customer_service.body)}</ThemeText>
         </View>
         <Button
@@ -61,7 +67,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
           )}
         />
 
-        {enable_intercom ? (
+        {enable_intercom && !accessibilityContext.isScreenReaderEnabled ? (
           <>
             <View style={styles.descriptionSection}>
               <ThemeText type="body__secondary" color="secondary">

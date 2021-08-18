@@ -33,8 +33,6 @@ export default function useChatIcon(
       </View>
     ),
     onPress: () => openContactSheet(),
-    importantForAccessibility: 'no-hide-descendants', // Android
-    accessibilityElementsHidden: true, // iOS
   };
 }
 
