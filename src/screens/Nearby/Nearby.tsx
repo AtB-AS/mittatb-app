@@ -374,9 +374,9 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
     alignContent: 'space-between',
     borderStyle: 'solid',
     borderColor: theme.colors.background_0.backgroundColor,
-    borderWidth: 3,
-    padding: 3,
-    borderRadius: 14,
+    borderWidth: 2,
+    padding: 2,
+    borderRadius: 12,
   },
   dateInputButtonContainer: {
     width: '50%',
