@@ -50,11 +50,10 @@ const blocklistedEmojis = ['white_frowning_face', 'keycap_star', 'eject'];
 const filteredEmojis = emoji.filter((e: any) => {
   if (blocklistedEmojis.includes(e.short_name)) return false;
   if (Platform.OS === 'android') {
-    if (e.added_in === '2.0') return true;
-    if (e.added_in === '4.0') return Platform.Version >= 24;
-    if (e.added_in === '5.0') return Platform.Version >= 26;
-    if (e.added_in === '11.0') return Platform.Version >= 28;
-    else return Platform.Version >= 29;
+    const version = parseFloat(e.added_in);
+    if (version <= 5.0) return Platform.Version >= 22;
+    if (version <= 11.0) return Platform.Version >= 30;
+    else return false;
   } else {
     return true;
   }
@@ -195,6 +194,15 @@ const EmojiSheet = forwardRef<ScrollView, Props>(
         close();
       }
     };
+
+    let allVersions = emoji.map((em) => em.added_in);
+    const unique = new Set(allVersions);
+
+    console.log(Object.values(allVersions));
+    console.log(unique);
+    console.log('this version: ', Platform.Version);
+
+    console.dir(groupedAndSorted);
 
     return (
       <BottomSheetContainer>
