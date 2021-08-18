@@ -33,7 +33,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {NearbyStackParams} from '.';
 import Loading from '../Loading';
-import DepartureTimePicker from './DepartureTimeSheet';
+import DepartureTimeSheet from './DepartureTimeSheet';
 import {useDepartureData} from './state';
 
 const themeColor: ThemeColor = 'background_gray';
@@ -173,12 +173,12 @@ const NearbyOverview: React.FC<Props> = ({
   const {open: openBottomSheet} = useBottomSheet();
   const onLaterTimePress = () => {
     openBottomSheet((close, focusRef) => (
-      <DepartureTimePicker
+      <DepartureTimeSheet
         ref={focusRef}
         close={close}
         initialTime={searchTime}
         setSearchTime={setSearchTime}
-      ></DepartureTimePicker>
+      ></DepartureTimeSheet>
     ));
   };
 

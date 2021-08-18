@@ -16,6 +16,7 @@ import {NearbyStackParams} from '.';
 import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
 import {SearchTime} from '@atb/screens/Nearby/Nearby';
 import {Confirm} from '@atb/assets/svg/icons/actions';
+import {useState} from 'react';
 
 type Props = {
   close: () => void;
@@ -31,16 +32,15 @@ export type DateTimePickerParams = {
 
 export type DateTimeNavigationProp = NavigationProp<NearbyStackParams>;
 
-const DepartureTimePicker = forwardRef<ScrollView, Props>(
+const DepartureTimeSheet = forwardRef<ScrollView, Props>(
   ({close, initialTime, setSearchTime}, focusRef) => {
     const styles = useStyles();
     const {t, language} = useTranslation();
 
-    let date = initialTime.date;
-    let time = formatLocaleTime(initialTime.date, language);
-
-    const setDate = (d: string) => (date = d);
-    const setTime = (t: string) => (time = t);
+    const [date, setDate] = useState(initialTime.date);
+    const [time, setTime] = useState(
+      formatLocaleTime(initialTime.date, language),
+    );
 
     const OnSelect = () => {
       const calculatedTime = dateWithReplacedTime(date, time).toISOString();
@@ -95,4 +95,4 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
   };
 });
 
-export default DepartureTimePicker;
+export default DepartureTimeSheet;
