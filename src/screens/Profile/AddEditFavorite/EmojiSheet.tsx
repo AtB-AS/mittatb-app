@@ -59,6 +59,10 @@ const filteredEmojis = emoji.filter((e: any) => {
     if (version <= 11.0) return Platform.Version >= 28;
     if (version <= 12.0) return Platform.Version >= 29;
     if (version <= 13.0) return Platform.Version >= 30;
+
+    fail here
+    // TODO: Legg inn tekst for eldre androids enn API 26
+    // TODO: Emoji sheet er tregt: legg in collapsing categories eller se på flatlist
     else return false;
   } else {
     return true;
