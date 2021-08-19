@@ -30,7 +30,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
 
   return (
     <BottomSheetContainer>
-      <View accessible={true} ref={focusRef}>
+      <View>
         <ScreenHeaderWithoutNavigation
           title={t(ContactSheetTexts.header.title)}
           leftButton={{
@@ -44,7 +44,11 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
       </View>
 
       <FullScreenFooter>
-        <View style={styles.descriptionSection}>
+        <View
+          accessible={true}
+          ref={focusRef}
+          style={styles.descriptionSection}
+        >
           <ThemeText type="body__secondary" color="secondary">
             {t(ContactSheetTexts.customer_service.title)}
           </ThemeText>
