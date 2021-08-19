@@ -201,15 +201,6 @@ const EmojiSheet = forwardRef<ScrollView, Props>(
       }
     };
 
-    let allVersions = emoji.map((em) => em.added_in);
-    const unique = new Set(allVersions);
-
-    console.log(Object.values(allVersions));
-    console.log(unique);
-    console.log('this version: ', Platform.Version);
-
-    console.dir(groupedAndSorted);
-
     return (
       <BottomSheetContainer>
         <ScreenHeaderWithoutNavigation
