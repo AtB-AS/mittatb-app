@@ -5,8 +5,8 @@ import {
   ScreenHeaderTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {forwardRef, useEffect} from 'react';
-import {ScrollView, View, Keyboard, KeyboardEvent} from 'react-native';
+import React, {forwardRef, useState} from 'react';
+import {ScrollView, View} from 'react-native';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
@@ -16,7 +16,7 @@ import {NearbyStackParams} from '.';
 import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
 import {SearchTime} from '@atb/screens/Nearby/Nearby';
 import {Confirm} from '@atb/assets/svg/icons/actions';
-import {useState} from 'react';
+import useKeyboardHeight from '@atb/utils/use-keyboard-height';
 
 type Props = {
   close: () => void;
@@ -48,7 +48,7 @@ const DepartureTimeSheet = forwardRef<ScrollView, Props>(
       close();
     };
 
-    const keyboardHeight = useKeyboard();
+    const keyboardHeight = useKeyboardHeight();
 
     return (
       <BottomSheetContainer>
@@ -97,28 +97,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
   };
 });
-
-export const useKeyboard = () => {
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-  function onKeyboardWillShow(e: KeyboardEvent) {
-    setKeyboardHeight(e.endCoordinates.height);
-  }
-
-  function onKeyboardWillHide() {
-    setKeyboardHeight(0);
-  }
-
-  useEffect(() => {
-    Keyboard.addListener('keyboardWillShow', onKeyboardWillShow);
-    Keyboard.addListener('keyboardWillHide', onKeyboardWillHide);
-    return () => {
-      Keyboard.removeListener('onKeyboardWillShow', onKeyboardWillShow);
-      Keyboard.removeListener('keyboardWillHide', onKeyboardWillHide);
-    };
-  }, []);
-
-  return keyboardHeight;
-};
 
 export default DepartureTimeSheet;
