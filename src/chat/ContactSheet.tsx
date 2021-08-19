@@ -30,7 +30,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
 
   return (
     <BottomSheetContainer>
-      <View accessible={true} ref={focusRef}>
+      <View ref={focusRef}>
         <ScreenHeaderWithoutNavigation
           title={t(ContactSheetTexts.header.title)}
           leftButton={{
