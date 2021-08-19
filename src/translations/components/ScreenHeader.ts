@@ -24,6 +24,9 @@ const ScreenHeaderTexts = {
       text: _('Hopp over', 'Skip'),
       a11yHint: _('Aktivér for å hoppe over', 'Activate to skip'),
     },
+    chat: {
+      a11yHint: _('Kontakt AtB', 'Contact AtB'),
+    },
   },
 };
 
