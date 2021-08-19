@@ -16,7 +16,7 @@ export default function useKeyboardHeight() {
     Keyboard.addListener('keyboardWillShow', onKeyboardWillShow);
     Keyboard.addListener('keyboardWillHide', onKeyboardWillHide);
     return () => {
-      Keyboard.removeListener('onKeyboardWillShow', onKeyboardWillShow);
+      Keyboard.removeListener('keyboardWillShow', onKeyboardWillShow);
       Keyboard.removeListener('keyboardWillHide', onKeyboardWillHide);
     };
   }, []);
