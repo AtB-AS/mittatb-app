@@ -22,6 +22,9 @@ else
     echo "Copying $APP_ENVIRONMENT .env file to root"
     cp $ENV_FOLDER/.env .
 
-    echo "Copying $APP_ENVIRONMENT GoogleService-Info.plist to iOS folder"
-    cp $ENV_FOLDER/GoogleService-Info.plist ios/atb
+    echo "Copying $APP_ENVIRONMENT icons to icons folder"
+    cp -a $ENV_FOLDER/icons/. icons/
+
+
+
 fi

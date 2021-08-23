@@ -58,6 +58,7 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+ios/atb/Images.xcassets/AppIcon.appiconset/*.png
 
 # Certs
 keystore
@@ -71,3 +72,5 @@ firebase-debug.log
 
 # Env
 /.env
+ic_launcher*.png
+/icons
