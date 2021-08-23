@@ -37,6 +37,7 @@ We love feedback and suggestions. The AtB app and service is continously improve
    1. iOS specific: `cd ios/` and `pod install`
 1. Decrypt sensitive files `git-crypt unlock <path/to/key>` (Key given to internal members)
 1. From root folder run: `sh scripts/override-environment.sh dev <organization>` where organization is either `AtB` or `nfk`, to set root .env for local development
+1. run `yarn icons` to generate all icons for iOS and Android. Do this when you run `override-environment.sh` with changes.
 
 For external contributors, we need to fix [#35](https://github.com/AtB-AS/mittatb-app/issues/35) before they are able to run the app.
 

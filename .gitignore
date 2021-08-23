@@ -72,5 +72,5 @@ firebase-debug.log
 
 # Env
 /.env
-ic_launcher*.png
+ic_launcher*
 /icons
