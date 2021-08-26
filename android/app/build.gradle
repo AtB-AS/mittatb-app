@@ -142,17 +142,17 @@ if (envFile.exists()) {
 
 def appApplicationId = System.getProperty('ANDROID_APPLICATION_ID')
 if (appApplicationId == null) {
-    throw new GradleException("ANDROID_APPLICATION_ID not found. Define ANDROID_APPLICATION_ID with the application ID in the envProperties.properties file.")
+    throw new GradleException("ANDROID_APPLICATION_ID not found. Define ANDROID_APPLICATION_ID with the application ID in the .env file.")
 }
 
 def appVersionName = System.getProperty('APP_VERSION')
 if (appVersionName == null) {
-    throw new GradleException("APP_VERSION not found. Define APP_VERSION with current app version name in the envProperties.properties file.")
+    throw new GradleException("APP_VERSION not found. Define APP_VERSION with current app version name in the .env file.")
 }
 
-def appName = System.getProperty('ANDROID_APP_NAME')
+def appName = System.getProperty('APP_NAME')
 if (appName == null) {
-    throw new GradleException("ANDROID_APP_NAME not found. Define ANDROID_APP_NAME with current app name in the envProperties.properties file.")
+    throw new GradleException("APP_NAME not found. Define APP_NAME with current app name in the .env file.")
 }
 
 def appVersionCode = '1'
