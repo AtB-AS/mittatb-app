@@ -12,7 +12,7 @@ target 'atb' do
   use_react_native!(:path => config["reactNativePath"])
 
   pod "Intercom"
-  
+
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
 
@@ -33,7 +33,7 @@ target 'atb' do
   pre_install do |installer|
     fix_mapbox_events(installer)
   end
-  
+
   def fix_mapbox_events(installer)
     installer.pod_targets.each do |pod|
       if pod.name == 'MapboxMobileEvents'
@@ -45,12 +45,3 @@ target 'atb' do
   end
 end
 
-target 'atb-tvOS' do
-  # Pods for atb-tvOS
-
-  target 'atb-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-end
