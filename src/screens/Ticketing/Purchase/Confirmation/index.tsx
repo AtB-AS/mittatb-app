@@ -1,4 +1,5 @@
 import {CreditCard, Vipps} from '@atb/assets/svg/icons/ticketing';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
 import {LeftButtonProps} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
@@ -22,6 +23,7 @@ import {createTravelDateText} from '@atb/screens/Ticketing/Purchase/Overview';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import { SelectCreditCard, PaymentOptionType } from '../Payment';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -47,6 +49,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   const styles = useStyles();
   const {theme} = useTheme();
   const {t, language} = useTranslation();
+  const {open: openBottomSheet} = useBottomSheet();
 
   const {
     enable_creditcard: enableCreditCard,
@@ -116,6 +119,59 @@ const Confirmation: React.FC<ConfirmationProps> = ({
         });
       }
     }
+  }
+
+  function selectPaymentOption(option: PaymentOptionType) {
+    console.log('selectPaymentOption', option.type);
+    switch (option.type) {
+      case 'VIPPS':
+        payWithVipps()
+        break;
+      case 'VISA':
+        payWithCard()
+        break;
+      case 'MASTERCARD':
+        payWithCard()
+        break;
+      default:
+        console.log('whooops')
+    }
+  }
+
+  function selectPaymentMethod() {
+    openBottomSheet((close) => {
+      return (
+        <SelectCreditCard
+          onSelect={(option: PaymentOptionType) => {
+            selectPaymentOption(option)
+            close()
+          }}
+          options={[
+              {
+                type: 'VIPPS',
+                description: t(PurchaseConfirmationTexts.paymentButtonVipps.text),
+                accessibilityHint: t(
+                  PurchaseConfirmationTexts.paymentButtonVipps.a11yHint,
+                )
+              },
+              {
+                type: 'VISA',
+                description: t(PurchaseConfirmationTexts.paymentButtonCardVisa.text),
+                accessibilityHint: t(
+                  PurchaseConfirmationTexts.paymentButtonCardVisa.a11yHint,
+                )
+              },
+              {
+                type: 'MASTERCARD',
+                description: t(PurchaseConfirmationTexts.paymentButtonCardMC.text),
+                accessibilityHint: t(
+                  PurchaseConfirmationTexts.paymentButtonCardMC.a11yHint,
+                )
+              },
+            ]}
+        ></SelectCreditCard>
+      )
+    })
   }
 
   return (
@@ -242,31 +298,15 @@ const Confirmation: React.FC<ConfirmationProps> = ({
         ) : (
           <View>
             <Button
-              color="secondary_1"
-              text={t(PurchaseConfirmationTexts.paymentButtonVipps.text)}
+              color="primary_2"
+              text={t(PurchaseConfirmationTexts.choosePaymentOption.text)}
               disabled={!!error}
               accessibilityHint={t(
-                PurchaseConfirmationTexts.paymentButtonVipps.a11yHint,
+                PurchaseConfirmationTexts.choosePaymentOption.a11yHint
               )}
-              icon={Vipps}
-              iconPosition="left"
-              onPress={payWithVipps}
+              onPress={selectPaymentMethod}
               viewContainerStyle={styles.paymentButton}
-            />
-            {enableCreditCard && (
-              <Button
-                color="secondary_1"
-                text={t(PurchaseConfirmationTexts.paymentButtonCard.text)}
-                disabled={!!error}
-                accessibilityHint={t(
-                  PurchaseConfirmationTexts.paymentButtonCard.a11yHint,
-                )}
-                icon={CreditCard}
-                iconPosition="left"
-                onPress={payWithCard}
-                viewContainerStyle={styles.paymentButton}
-              />
-            )}
+            ></Button>
           </View>
         )}
       </ScrollView>

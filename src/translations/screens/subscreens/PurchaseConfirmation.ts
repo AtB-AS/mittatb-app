@@ -45,18 +45,32 @@ const PurchaseConfirmationTexts = {
       ),
   },
   paymentButtonVipps: {
-    text: _('Betal med Vipps', 'Pay by Vipps service'),
+    text: _('Vipps', 'Vipps'),
     a11yHint: _(
       'Aktivér for å betale billett med Vipps',
       'Activate to pay your ticket by Vipps service',
     ),
   },
-  paymentButtonCard: {
-    text: _('Betal med bankkort', 'Pay by credit card'),
+  paymentButtonCardVisa: {
+    text: _('Visa', 'Visa'),
     a11yHint: _(
-      'Aktivér for å betale billett med bankkort',
-      'Activate to pay your ticket by credit card',
+      'Aktivér for å betale billett med Visa',
+      'Activate to pay your ticket with Visa',
     ),
   },
+  paymentButtonCardMC: {
+    text: _('MasterCard', 'MasterCard'),
+    a11yHint: _(
+      'Aktivér for å betale billett med MasterCard',
+      'Activate to pay your ticket with MasterCard',
+    ),
+  },
+  choosePaymentOption: {
+    text: _('Velg betalingsmåte', 'Choose payment option'),
+    a11yHint: _(
+      'Aktiver for å velge betalingsmåte',
+      'Activate to choose payment option'
+    )
+  }
 };
 export default PurchaseConfirmationTexts;

@@ -26,6 +26,21 @@ export type OfferSearchParams = {
   travel_date?: string;
 };
 
+export async function listRecurringPayments(): Promise<RecurringPayment[]> {
+  const url = 'ticket/v2/recurring-payments';
+  const response = await client.get<RecurringPayment[]>(url, {
+    authWithIdToken: true,
+  });
+  return response.data;
+}
+
+export type RecurringPayment = {
+  id: number;
+  expires_at: string;
+  masked_pan: string;
+  payment_type: number;
+}
+
 export async function searchOffers(
   params: OfferSearchParams,
   opts?: AxiosRequestConfig,
@@ -53,20 +68,50 @@ export async function sendReceipt(
 
 export async function reserveOffers(
   offers: ReserveOffer[],
-  paymentType: PaymentType,
+  paymentType?: PaymentType,
   opts?: AxiosRequestConfig,
+  storePayment?: boolean,
+  recurringPaymentId?: string
 ) {
   const url = 'ticket/v2/reserve';
+  const _paymentType = () => {
+    switch(paymentType) {
+      case 'creditcard':
+        return 1;
+      case 'recurring_card':
+        return 3;
+      default:
+        return 2;
+    };
+  }
+  let body: object = {
+    payment_redirect_url:
+      paymentType == 'vipps'
+        ? 'atb://vipps?transaction_id={transaction_id}&payment_id={payment_id}'
+        : undefined,
+    offers,
+  };
+  if (paymentType) {
+    body = {
+      ...body,
+      payment_type: _paymentType,
+    }
+  }
+  if (storePayment) {
+    body = {
+      ...body,
+      store_payment: storePayment,
+    };
+  }
+  if (recurringPaymentId) {
+    body = {
+      ...body,
+      recurring_payment_id: recurringPaymentId,
+    };
+  }
   const response = await client.post<TicketReservation>(
     url,
-    {
-      payment_type: paymentType === 'creditcard' ? 1 : 2,
-      payment_redirect_url:
-        paymentType == 'vipps'
-          ? 'atb://vipps?transaction_id={transaction_id}&payment_id={payment_id}'
-          : undefined,
-      offers,
-    },
+    body,
     {
       ...opts,
       authWithIdToken: true,
