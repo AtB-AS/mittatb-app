@@ -28,6 +28,7 @@ build/
 .idea
 .gradle
 local.properties
+env.properties
 *.iml
 
 # node.js
@@ -52,6 +53,8 @@ buck-out/
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
+fastlane/report.xml
+
 
 # Bundle artifact
 *.jsbundle
@@ -71,3 +74,7 @@ firebase-debug.log
 
 # Env
 /.env
+
+#Service files
+android/app/google-services.json
+ios/atb/GoogleService-Info.plist

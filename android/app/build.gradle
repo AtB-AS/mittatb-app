@@ -78,12 +78,12 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.js",
-    enableHermes: true,  // clean and rebuild if changing
-    devDisabledInStore: true,
-    bundleInStore: true,
-    devDisabledInStaging: true,
-    bundleInStaging: true
+        entryFile           : "index.js",
+        enableHermes        : true,  // clean and rebuild if changing
+        devDisabledInStore  : true,
+        bundleInStore       : true,
+        devDisabledInStaging: true,
+        bundleInStaging     : true
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -126,6 +126,38 @@ def jscFlavor = 'org.webkit:android-jsc:+'
  */
 def enableHermes = project.ext.react.get("enableHermes", false);
 
+def envFile = file('../../.env')
+if (envFile.exists()) {
+    envFile.eachLine { line ->
+        def result = line.tokenize("=")
+        def key = result[0]
+        def value = result[1]
+        if (System.getProperty(key) == null) {
+            System.setProperty(key, value)
+        }
+    }
+} else {
+    throw new GradleException(".env not found in project root dir. ")
+}
+
+def appApplicationId = System.getProperty('ANDROID_APPLICATION_ID')
+if (appApplicationId == null) {
+    throw new GradleException("ANDROID_APPLICATION_ID not found. Define ANDROID_APPLICATION_ID with the application ID in the .env file.")
+}
+
+def appVersionName = System.getProperty('APP_VERSION')
+if (appVersionName == null) {
+    throw new GradleException("APP_VERSION not found. Define APP_VERSION with current app version name in the .env file.")
+}
+
+def appName = System.getProperty('APP_NAME')
+if (appName == null) {
+    throw new GradleException("APP_NAME not found. Define APP_NAME with current app name in the .env file.")
+}
+
+def appVersionCode = '1'
+
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -135,11 +167,17 @@ android {
     }
 
     defaultConfig {
-        applicationId "no.mittatb"
+        resValue "string", "app_name", appName
+        applicationId appApplicationId
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode  project.hasProperty("versionCode") ? project.getProperty("versionCode") as Integer : 1
-        versionName "1.11"
+        if (System.getenv()["CI"]) {
+            versionCode System.getenv()["BUILD_ID"] as Integer
+            versionName System.getenv()["VERSION_NAME"]
+        } else {
+            versionCode appVersionCode.toInteger()
+            versionName appVersionName
+        }
         multiDexEnabled true
     }
     splits {
@@ -160,17 +198,14 @@ android {
     }
     buildTypes {
         debug {
-            applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
         }
         store {
             initWith buildTypes.release
-            applicationIdSuffix ".store"
             matchingFallbacks = ['release']
         }
         staging {
             initWith buildTypes.release
-            applicationIdSuffix ".staging"
             debuggable true
             matchingFallbacks = ['release']
         }
@@ -230,14 +265,14 @@ dependencies {
     implementation 'io.intercom.android:intercom-sdk-base:6.+'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
-      exclude group:'com.facebook.fbjni'
+        exclude group: 'com.facebook.fbjni'
     }
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
-        exclude group:'com.facebook.flipper'
-        exclude group:'com.squareup.okhttp3', module:'okhttp'
+        exclude group: 'com.facebook.flipper'
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
-        exclude group:'com.facebook.flipper'
+        exclude group: 'com.facebook.flipper'
     }
 
     if (enableHermes) {
