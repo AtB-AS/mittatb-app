@@ -157,7 +157,6 @@ if (appName == null) {
 
 def appVersionCode = '1'
 
-
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -171,14 +170,14 @@ android {
         applicationId appApplicationId
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        versionName appVersionName
+        multiDexEnabled true
+
         if (System.getenv()["CI"]) {
             versionCode System.getenv()["BUILD_ID"] as Integer
-            versionName System.getenv()["VERSION_NAME"]
         } else {
             versionCode appVersionCode.toInteger()
-            versionName appVersionName
         }
-        multiDexEnabled true
     }
     splits {
         abi {

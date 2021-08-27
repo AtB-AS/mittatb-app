@@ -113,7 +113,7 @@ platform :android do
 
   lane :build do
     ensure_env_vars(
-      env_vars: ['VERSION_NAME','BUILD_ID','KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS', 'APP_ENVIRONMENT', 'CI','KEYSTORE_PATH']
+      env_vars: ['BUILD_ID','KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS', 'APP_ENVIRONMENT', 'CI','KEYSTORE_PATH']
         )
     build_type = ENV['APP_ENVIRONMENT']
     gradle(task: 'clean', project_dir: 'android/')
