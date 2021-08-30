@@ -74,9 +74,7 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
           });
         }
       } else {
-        if (e instanceof Error) {
-          Bugsnag.notify(e);
-        }
+        Bugsnag.notify(e as any);
       }
     }
   }
