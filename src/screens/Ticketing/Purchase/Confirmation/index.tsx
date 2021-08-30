@@ -23,7 +23,10 @@ import {createTravelDateText} from '@atb/screens/Ticketing/Purchase/Overview';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import { SelectCreditCard, PaymentOptionType } from '../Payment';
+import { SelectCreditCard } from '../Payment';
+import { PaymentOption as PaymentOptionType, usePreferences } from '@atb/preferences';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -50,6 +53,16 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   const {theme} = useTheme();
   const {t, language} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
+  const {getSavedPaymentOptions} = usePreferences();
+  const [ paymentOptions, setPaymentOptions ] = useState<Array<PaymentOptionType>>([])
+
+  async function fetchPaymentOptions(): Promise<void> {
+    setPaymentOptions(await getSavedPaymentOptions())
+  }
+
+  useEffect(() => {
+    fetchPaymentOptions()
+  }, [])
 
   const {
     enable_creditcard: enableCreditCard,
@@ -103,12 +116,13 @@ const Confirmation: React.FC<ConfirmationProps> = ({
         navigation.push('PaymentVipps', {
           offers,
           preassignedFareProduct: params.preassignedFareProduct,
+          payment_type: 2,
         });
       }
     }
   }
 
-  async function payWithCard() {
+  async function payWithCard(option: PaymentOptionType) {
     if (offerExpirationTime && totalPrice > 0) {
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
@@ -116,6 +130,8 @@ const Confirmation: React.FC<ConfirmationProps> = ({
         navigation.push('PaymentCreditCard', {
           offers,
           preassignedFareProduct: params.preassignedFareProduct,
+          payment_type: option.type,
+          save: option.save
         });
       }
     }
@@ -124,14 +140,14 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   function selectPaymentOption(option: PaymentOptionType) {
     console.log('selectPaymentOption', option.type);
     switch (option.type) {
-      case 'VIPPS':
+      case 2:
         payWithVipps()
         break;
-      case 'VISA':
-        payWithCard()
+      case 1 | 3:
+        payWithCard(option)
         break;
-      case 'MASTERCARD':
-        payWithCard()
+      case 4:
+        payWithCard(option)
         break;
       default:
         console.log('whooops')
@@ -146,29 +162,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
             selectPaymentOption(option)
             close()
           }}
-          options={[
-              {
-                type: 'VIPPS',
-                description: t(PurchaseConfirmationTexts.paymentButtonVipps.text),
-                accessibilityHint: t(
-                  PurchaseConfirmationTexts.paymentButtonVipps.a11yHint,
-                )
-              },
-              {
-                type: 'VISA',
-                description: t(PurchaseConfirmationTexts.paymentButtonCardVisa.text),
-                accessibilityHint: t(
-                  PurchaseConfirmationTexts.paymentButtonCardVisa.a11yHint,
-                )
-              },
-              {
-                type: 'MASTERCARD',
-                description: t(PurchaseConfirmationTexts.paymentButtonCardMC.text),
-                accessibilityHint: t(
-                  PurchaseConfirmationTexts.paymentButtonCardMC.a11yHint,
-                )
-              },
-            ]}
+          options={paymentOptions}
         ></SelectCreditCard>
       )
     })
@@ -300,7 +294,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
             <Button
               color="primary_2"
               text={t(PurchaseConfirmationTexts.choosePaymentOption.text)}
-              disabled={!!error}
+              disabled={!!error || !paymentOptions.length}
               accessibilityHint={t(
                 PurchaseConfirmationTexts.choosePaymentOption.a11yHint
               )}

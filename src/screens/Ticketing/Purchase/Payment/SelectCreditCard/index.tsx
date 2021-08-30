@@ -16,9 +16,12 @@ import { useEffect } from 'react';
 import { borderRadius } from '@atb-as/theme';
 import { ArrowRight } from '@atb/assets/svg/icons/navigation';
 import { themeColor } from '@atb/screens/Onboarding/WelcomeScreen';
-import { PaymentOptionType } from '../index';
+import { PaymentOption as PaymentOptionType } from '@atb/preferences';
 import OptionalNextDayLabel from '@atb/components/optional-day-header';
 import { Confirm } from '@atb/assets/svg/icons/actions';
+import { parse, parseISO } from 'date-fns';
+import VisaLogo from '@atb/assets/svg/icons/ticketing/cardproviders/Visa';
+import MasterCardLogo from '@atb/assets/svg/icons/ticketing/cardproviders/MasterCard';
 
 
 type Props = {
@@ -31,10 +34,6 @@ const SelectCreditCard: React.FC<Props> = ({onSelect, options}) => {
   const [selectedOption, setSelectedOption] = useState<PaymentOptionType>();
   const styles = useStyles();
   const {theme} = useTheme();
-
-  useEffect(() => {
-    console.log('selected option', selectedOption)
-  }, [selectedOption])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -51,15 +50,15 @@ const SelectCreditCard: React.FC<Props> = ({onSelect, options}) => {
       </View>
       <FlatList
         data={options}
-        keyExtractor={item => item.type}
-        renderItem={({ item }) => {
+        keyExtractor={(item, index) => `${index}`}
+        renderItem={({ item, index }) => {
           return (
             <PaymentOption
               key={item.type}
               option={item}
               selected={selectedOption?.type === item.type}
               onSelect={(val: PaymentOptionType) => {
-                console.log('hello?')
+                console.log('selected:', val)
                 setSelectedOption(val)
               }}
             ></PaymentOption>
@@ -91,18 +90,25 @@ type PaymentOptionsProps = {
   onSelect: (value: PaymentOptionType) => void;
 }
 
-const PaymentOption: React.FC<PaymentOptionsProps> = ({option, selected, onSelect, ...props}) => {
+const PaymentOption: React.FC<PaymentOptionsProps> = ({option, selected, onSelect}) => {
   const { theme } = useTheme();
-  const[ save, setSave ] = useState<boolean>(option.save ?? false)
+  const [ save, setSave ] = useState<boolean>(option.save ?? false)
 
-  function getIcon(type: string) {
+  useEffect(() => {
+    if (selected) {
+      select()
+    }
+  }, [save])
+
+  function getIcon(type: number) {
+    console.log('type', type)
     switch (type) {
-      case 'VIPPS':
-        return null
-      case 'MASTERCARD':
-        return null
-      case 'VISA':
-        return null
+      case 2:
+        return Vipps
+      case 4:
+        return MasterCardLogo()
+      case 3 | 1:
+        return VisaLogo()
       default:
         return null;
     }
@@ -160,10 +166,13 @@ const PaymentOption: React.FC<PaymentOptionsProps> = ({option, selected, onSelec
             }
           </View>
           <Text>{option.description}</Text>
+          {option.id ? <Text style={{
+            paddingLeft: 8
+          }}>**** {`${option.masked_pan}`}</Text> : null}
         </View>
-        {getIcon(option.type)}
+        {option.id ? getIcon(option.type) : null}
       </TouchableOpacity>
-      {selected && !option.id && option.type !== 'VIPPS' ? (
+      {selected && !option.id && option.type !== 2 ? (
         <View>
           <Text style={{
             paddingTop: 18,
@@ -178,7 +187,6 @@ const PaymentOption: React.FC<PaymentOptionsProps> = ({option, selected, onSelec
             }}
             onPress={() => {
               setSave(!save)
-              select()
             }}
           >
             <View style={{
@@ -202,6 +210,15 @@ const PaymentOption: React.FC<PaymentOptionsProps> = ({option, selected, onSelec
           </TouchableOpacity>
         </View>
       ) : null }
+      {option.expires_at ? (
+            <View>
+              <Text style={{
+                opacity: 0.6,
+                paddingTop: 18,
+                paddingLeft: 36
+              }}>{`${parseISO(option.expires_at).getMonth()}`}/{`${parseISO(option.expires_at).getFullYear()}`.slice(2, 4)}</Text>
+            </View>
+          ) : null}
     </View>
   )
 }

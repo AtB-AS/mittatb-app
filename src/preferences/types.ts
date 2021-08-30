@@ -21,3 +21,14 @@ export type UserPreferences = {
 };
 
 export type PreferenceItem = keyof UserPreferences;
+
+export type PaymentOption = {
+  /// 1: 'creditcard', 2: 'VIPPS', 3: 'VISA, 4: 'MASTERCARD'
+  type: number,
+  masked_pan?: string,
+  id?: string,
+  save?: boolean,
+  description: string,
+  accessibilityHint: string,
+  expires_at?: string,
+}

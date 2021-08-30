@@ -68,7 +68,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     onWebViewLoadEnd,
     error,
     restartTerminal,
-  } = useTerminalState(offers, cancelTerminal, dismissAndAddReservation);
+  } = useTerminalState(offers, route.params.save || false, cancelTerminal, dismissAndAddReservation);
 
   return (
     <View style={styles.container}>

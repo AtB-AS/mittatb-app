@@ -33,6 +33,8 @@ type PurchaseOverviewParams = {
 type PaymentParams = {
   offers: ReserveOffer[];
   preassignedFareProduct: PreassignedFareProduct;
+  save?: boolean;
+  payment_type: number;
 };
 
 export type TicketingStackParams = {

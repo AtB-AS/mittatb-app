@@ -84,6 +84,7 @@ const initialState: TerminalReducerState = {
 
 export default function useTerminalState(
   offers: ReserveOffer[],
+  savePaymentMethod: boolean,
   cancelTerminal: () => void,
   addReservation: (
     reservation: TicketReservation,
@@ -113,7 +114,7 @@ export default function useTerminalState(
   const reserveOffer = useCallback(
     async function () {
       try {
-        const response = await reserveOffers(offers, 'creditcard', {
+        const response = await reserveOffers(offers, savePaymentMethod, 1, {
           retry: true,
         });
 

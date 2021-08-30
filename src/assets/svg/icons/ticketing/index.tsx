@@ -5,3 +5,5 @@ export {default as InvalidTicket} from './InvalidTicket';
 export {default as MultipleTickets} from './MultipleTickets';
 export {default as ValidTicket} from './ValidTicket';
 export {default as Vipps} from './Vipps';
+export {default as Visa} from './cardproviders/Visa';
+export {default as MasterCard} from './cardproviders/MasterCard';
