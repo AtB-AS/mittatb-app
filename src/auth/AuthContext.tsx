@@ -13,6 +13,12 @@ import {updateMetadata} from '@atb/chat/metadata';
 const ERROR_INVALID_PHONE_NUMBER = 'auth/invalid-phone-number';
 const ERROR_INVALID_CONFIRMATION_CODE = 'auth/invalid-verification-code';
 
+function isAuthError(
+  error: any,
+): error is FirebaseAuthTypes.NativeFirebaseAuthError {
+  return 'code' in error;
+}
+
 type AuthReducerState = {
   isAuthConnectionInitialized: boolean;
   confirmationHandler: FirebaseAuthTypes.ConfirmationResult | undefined;
@@ -98,7 +104,10 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
       try {
         await state.confirmationHandler?.confirm(code);
       } catch (error) {
-        if (error.code === ERROR_INVALID_CONFIRMATION_CODE) {
+        if (
+          isAuthError(error) &&
+          error.code === ERROR_INVALID_CONFIRMATION_CODE
+        ) {
           return 'invalid_code';
         }
         console.warn(error);
@@ -145,7 +154,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
         );
         dispatch({type: 'SIGN_IN_INITIATED', confirmationHandler});
       } catch (error) {
-        if (error.code === ERROR_INVALID_PHONE_NUMBER) {
+        if (isAuthError(error) && error.code === ERROR_INVALID_PHONE_NUMBER) {
           return 'invalid_phone';
         }
         console.warn(error);
