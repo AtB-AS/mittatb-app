@@ -1,4 +1,4 @@
-import axios, {AxiosError} from 'axios';
+import axios, {AxiosError, Cancel} from 'axios';
 import {FirebaseAuthIdHeaderName, RequestIdHeaderName} from './headers';
 
 export type ErrorType =
@@ -8,18 +8,22 @@ export type ErrorType =
   | 'timeout'
   | 'cancel';
 
-export const getAxiosErrorType = (error: AxiosError): ErrorType => {
+export const getAxiosErrorType = (
+  error: AxiosError | Cancel | unknown,
+): ErrorType => {
   if (error) {
     if (axios.isCancel(error)) {
       return 'cancel';
     }
-    if (error.response) {
-      return 'default';
-    } else {
-      if (error.code === 'ECONNABORTED') {
-        return 'timeout';
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        return 'default';
       } else {
-        return 'network-error';
+        if (error.code === 'ECONNABORTED') {
+          return 'timeout';
+        } else {
+          return 'network-error';
+        }
       }
     }
   }
