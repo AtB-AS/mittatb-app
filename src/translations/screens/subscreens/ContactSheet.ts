@@ -18,11 +18,14 @@ const ContactSheetTexts = {
   intercom: {
     title: _('Tilbakemelding om appen', 'Feedback about the app'),
     body: _(
-      'Vil du rapportere feil eller foreslå forbedringer?',
-      'Do you want to report errors or suggest improvements?',
+      'Vil du foreslå forbedringer til appen?',
+      'Do you have suggestions on how we can improve the app?',
     ),
-    button: _('Gi tilbakemelding om app', 'Give feedback about the app'),
-    a11yHint: _('Aktiver for å gi tilbakemelding', 'Activate to give feedback'),
+    button: _('Forbedre appen', 'Improve the app'),
+    a11yHint: _(
+      'Aktiver for å foreslå forbedringer',
+      'Activate to suggest improvements',
+    ),
   },
 };
 export default ContactSheetTexts;

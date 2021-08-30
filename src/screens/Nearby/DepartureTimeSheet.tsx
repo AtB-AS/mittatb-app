@@ -5,7 +5,7 @@ import {
   ScreenHeaderTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {forwardRef} from 'react';
+import React, {forwardRef, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
@@ -16,7 +16,7 @@ import {NearbyStackParams} from '.';
 import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
 import {SearchTime} from '@atb/screens/Nearby/Nearby';
 import {Confirm} from '@atb/assets/svg/icons/actions';
-import {useState} from 'react';
+import useKeyboardHeight from '@atb/utils/use-keyboard-height';
 
 type Props = {
   close: () => void;
@@ -48,6 +48,8 @@ const DepartureTimeSheet = forwardRef<ScrollView, Props>(
       close();
     };
 
+    const keyboardHeight = useKeyboardHeight();
+
     return (
       <BottomSheetContainer>
         <ScreenHeaderWithoutNavigation
@@ -63,6 +65,7 @@ const DepartureTimeSheet = forwardRef<ScrollView, Props>(
 
         <ScrollView
           contentContainerStyle={styles.contentContainer}
+          style={{paddingBottom: keyboardHeight}}
           ref={focusRef}
         >
           <Section withBottomPadding>

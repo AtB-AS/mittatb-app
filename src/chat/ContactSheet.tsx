@@ -12,10 +12,11 @@ import {Linking, View} from 'react-native';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {Support, Chat, ChatUnread} from '@atb/assets/svg/icons/actions';
+import {Support, ChatUnread} from '@atb/assets/svg/icons/actions';
 import useChatUnreadCount from './use-chat-unread-count';
 import Intercom from 'react-native-intercom';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {screenReaderHidden} from '@atb/utils/accessibility';
 
 type Props = {
   close: () => void;
@@ -29,7 +30,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
 
   return (
     <BottomSheetContainer>
-      <View accessible={true} ref={focusRef}>
+      <View>
         <ScreenHeaderWithoutNavigation
           title={t(ContactSheetTexts.header.title)}
           leftButton={{
@@ -43,7 +44,11 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
       </View>
 
       <FullScreenFooter>
-        <View style={styles.descriptionSection}>
+        <View
+          accessible={true}
+          ref={focusRef}
+          style={styles.descriptionSection}
+        >
           <ThemeText type="body__secondary" color="secondary">
             {t(ContactSheetTexts.customer_service.title)}
           </ThemeText>
@@ -64,10 +69,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
         />
 
         {enable_intercom ? (
-          <View
-            importantForAccessibility={'no-hide-descendants'}
-            accessibilityElementsHidden={true}
-          >
+          <View {...screenReaderHidden}>
             <View style={styles.descriptionSection}>
               <ThemeText type="body__secondary" color="secondary">
                 {t(ContactSheetTexts.intercom.title)}
@@ -90,7 +92,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
                 unreadCount ? (
                   <ThemeIcon colorType="primary_2" svg={ChatUnread} />
                 ) : (
-                  <ThemeIcon colorType="primary_2" svg={Chat} />
+                  <></>
                 )
               }
             />

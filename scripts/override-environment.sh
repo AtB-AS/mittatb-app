@@ -25,6 +25,9 @@ else
     echo "Copying $APP_ENVIRONMENT icons to icons folder"
     cp -a $ENV_FOLDER/icons/. icons/
 
+    echo "Copying $APP_ENVIRONMENT google-services.json to android folder"
+    cp $ENV_FOLDER/google-services.json android/app
 
-
+    echo "Copying $APP_ENVIRONMENT GoogleService-Info.plist to iOS folder"
+    cp $ENV_FOLDER/GoogleService-Info.plist ios/atb
 fi

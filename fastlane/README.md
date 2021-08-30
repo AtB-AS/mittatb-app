@@ -36,6 +36,11 @@ Build the iOS application.
 fastlane ios appcenter_staging
 ```
 Upload the build to AppCenter
+### ios appcenter_testflight
+```
+fastlane ios appcenter_testflight
+```
+Upload the build to AppCenter for distribution to TestFlight
 
 ----
 
@@ -48,6 +53,11 @@ Upload the build to AppCenter
 ### android appcenter_staging
 ```
 fastlane android appcenter_staging
+```
+
+### android appcenter_alpha
+```
+fastlane android appcenter_alpha
 ```
 
 
