@@ -18,7 +18,7 @@ import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useFavorites} from '@atb/favorites';
 import {Location, UserFavoriteDepartures} from '@atb/favorites/types';
 import {DeparturesRealtimeData} from '@atb/sdk';
-import {differenceInMinutesStrings} from '@atb/utils/date';
+import {differenceInMinutes} from 'date-fns';
 import useInterval from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '../../departure-list/utils';
 
@@ -40,6 +40,7 @@ export type DepartureDataState = {
   isFetchingMore: boolean;
   queryInput: DepartureGroupsQuery;
   cursorInfo: DepartureGroupMetadata['metadata'] | undefined;
+  lastRefreshTime: Date;
 };
 
 const initialQueryInput: DepartureGroupsQuery = {
@@ -55,6 +56,7 @@ const initialState: DepartureDataState = {
   isFetchingMore: false,
   cursorInfo: undefined,
   queryInput: initialQueryInput,
+  lastRefreshTime: new Date(),
 
   // Store date as update tick to know when to rerender
   // and re-sort objects.
@@ -269,6 +271,7 @@ const reducer: ReducerWithSideEffects<
           : (state.data ?? []).concat(action.result.data),
         cursorInfo: action.result.metadata,
         tick: new Date(),
+        lastRefreshTime: new Date(),
       });
     }
 
@@ -351,15 +354,12 @@ export function useDepartureData(
     if (!state.tick) {
       return;
     }
-    const diff = differenceInMinutesStrings(
-      state.tick,
-      state.queryInput.startTime,
-    );
+    const diff = differenceInMinutes(state.tick, state.lastRefreshTime);
 
     if (diff >= HARD_REFRESH_LIMIT_IN_MINUTES) {
       refresh();
     }
-  }, [state.tick, state.queryInput.startTime]);
+  }, [state.tick, state.lastRefreshTime]);
   useInterval(
     () => dispatch({type: 'LOAD_REALTIME_DATA'}),
     updateFrequencyInSeconds * 1000,

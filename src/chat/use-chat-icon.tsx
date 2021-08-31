@@ -8,6 +8,7 @@ import useChatUnreadCount from './use-chat-unread-count';
 import {ThemeColor} from '@atb/theme/colors';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import ContactSheet from '@atb/chat/ContactSheet';
+import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 
 export default function useChatIcon(
   color?: ThemeColor,
@@ -15,6 +16,7 @@ export default function useChatIcon(
   const unreadCount = useChatUnreadCount();
   const styles = useStyles();
   const {open: openBottomSheet} = useBottomSheet();
+  const {t} = useTranslation();
 
   const openContactSheet = () => {
     openBottomSheet((close, focusRef) => (
@@ -32,9 +34,8 @@ export default function useChatIcon(
         )}
       </View>
     ),
+    accessibilityHint: t(ScreenHeaderTexts.headerButton.chat.a11yHint),
     onPress: () => openContactSheet(),
-    importantForAccessibility: 'no-hide-descendants', // Android
-    accessibilityElementsHidden: true, // iOS
   };
 }
 

@@ -39,6 +39,14 @@ type UserInfoErrorFromFirebase = {
   nativeErrorCode: number;
 };
 
+type RemoteConfigError = {
+  userInfo: UserInfoErrorFromFirebase;
+} & Error;
+
+function isRemoteConfigError(error: any): error is RemoteConfigError {
+  return 'userInfo' in error;
+}
+
 function isUserInfo(a: any): a is UserInfoErrorFromFirebase {
   return a && 'code' in a && 'message' in a;
 }
@@ -56,18 +64,17 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
       const currentConfig = await getConfig();
       setConfig(currentConfig);
     } catch (e) {
-      const userInfo = e.userInfo;
-      if (!isUserInfo(userInfo)) {
-        throw e;
-      }
-      if (
-        isUserInfo(userInfo) &&
-        (userInfo.code === 'failure' || userInfo.fatal)
-      ) {
-        Bugsnag.notify(e, function (event) {
-          event.addMetadata('metadata', {userInfo});
-          event.severity = 'info';
-        });
+      if (isRemoteConfigError(e) && isUserInfo(e.userInfo)) {
+        const {userInfo} = e;
+
+        if (userInfo.code === 'failure' || userInfo.fatal) {
+          Bugsnag.notify(e, function (event) {
+            event.addMetadata('metadata', {userInfo});
+            event.severity = 'info';
+          });
+        }
+      } else {
+        Bugsnag.notify(e as any);
       }
     }
   }

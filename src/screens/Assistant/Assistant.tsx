@@ -130,7 +130,7 @@ const Assistant: React.FC<Props> = ({
     () => setUpdatingLocation(false),
     Boolean(currentLocation) && hasLocationPermission,
   );
-  useDoOnceWhen(setCurrentLocationAsFrom, Boolean(currentLocation));
+  useDoOnceWhen(setCurrentLocationAsFromIfEmpty, Boolean(currentLocation));
 
   const searchTime = useSearchTimeValue('searchTime', {
     option: 'now',
@@ -168,6 +168,13 @@ const Assistant: React.FC<Props> = ({
       },
       toLocation: to,
     });
+  }
+
+  function setCurrentLocationAsFromIfEmpty() {
+    if (from) {
+      return;
+    }
+    setCurrentLocationAsFrom();
   }
 
   function onSearchTimePress() {

@@ -148,7 +148,7 @@ export function formatToShortDateTimeWithoutYear(
   if (isSameDay(parsed, new Date())) {
     return formatToClock(parsed, language);
   }
-  return format(parsed, 'dd.MM, HH:mm', {locale: languageToLocale(language)});
+  return format(parsed, 'dd. MMM HH:mm', {locale: languageToLocale(language)});
 }
 
 export function fullDateTime(isoDate: string | Date, language: Language) {

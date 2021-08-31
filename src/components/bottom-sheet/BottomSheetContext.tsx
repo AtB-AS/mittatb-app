@@ -23,6 +23,7 @@ import AnimatedBottomSheet from '@atb/components/bottom-sheet/AnimatedBottomShee
 
 type BottomSheetContentFunction = (
   close: () => void,
+  /** Use focusRef to give a component accessibility focus when BottomSheet open. The component must be accessible! */
   focusRef: RefObject<any>,
 ) => ReactNode;
 
@@ -76,7 +77,7 @@ const BottomSheetProvider: React.FC = ({children}) => {
     setContentFunction(() => contentFunction);
     setCloseRef(closeRef);
     setIsOpen(true);
-    setTimeout(() => giveFocus(focusRef), 200);
+    setTimeout(() => giveFocus(focusRef), 300);
   };
 
   useEffect(() => {

@@ -237,7 +237,7 @@ function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
 
   const timeWithRealtimePrefix = departure.realtime
     ? time
-    : t(dictionary.missingRealTimePrefix) + ' ' + time;
+    : t(dictionary.missingRealTimePrefix) + time;
 
   return (
     <Button

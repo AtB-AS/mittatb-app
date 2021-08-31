@@ -1,6 +1,7 @@
 import {ErrorType} from '@atb/api/utils';
 import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
 import AccessibleText from '@atb/components/accessible-text';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
 import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
@@ -24,21 +25,25 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {
-  formatToLongDateTime,
-  formatToShortDateTimeWithoutYear,
-} from '@atb/utils/date';
+import {formatToShortDateTimeWithoutYear} from '@atb/utils/date';
 import {TFunc} from '@leile/lobo-t';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {NearbyStackParams} from '.';
 import Loading from '../Loading';
-import {SearchTime, useSearchTimeValue} from './departure-date-picker';
+import DepartureTimeSheet from './DepartureTimeSheet';
 import {useDepartureData} from './state';
 
 const themeColor: ThemeColor = 'background_gray';
+
+const DateOptions = ['now', 'departure'] as const;
+type DateOptionType = typeof DateOptions[number];
+export type SearchTime = {
+  option: DateOptionType;
+  date: string;
+};
 
 type NearbyRouteName = 'NearbyRoot';
 const NearbyRouteNameStatic: NearbyRouteName = 'NearbyRoot';
@@ -59,7 +64,7 @@ type RootProps = {
   route: NearbyScreenProp;
 };
 
-export default function NearbyScreen({navigation, route}: RootProps) {
+export default function NearbyScreen({navigation}: RootProps) {
   const {
     status,
     location,
@@ -104,7 +109,7 @@ const NearbyOverview: React.FC<Props> = ({
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
   const styles = useNearbyStyles();
 
-  const searchTime = useSearchTimeValue('searchTime', {
+  const [searchTime, setSearchTime] = useState<SearchTime>({
     option: 'now',
     date: new Date().toISOString(),
   });
@@ -165,16 +170,23 @@ const NearbyOverview: React.FC<Props> = ({
       initialLocation: fromLocation,
     });
 
-  const onSearchTimePress = useCallback(
-    function onSearchTimePress() {
-      navigation.navigate('DateTimePicker', {
-        callerRouteName: 'NearbyRoot',
-        callerRouteParam: 'searchTime',
-        searchTime,
-      });
-    },
-    [searchTime],
-  );
+  const {open: openBottomSheet} = useBottomSheet();
+  const onLaterTimePress = () => {
+    openBottomSheet((close, focusRef) => (
+      <DepartureTimeSheet
+        ref={focusRef}
+        close={close}
+        initialTime={searchTime}
+        setSearchTime={setSearchTime}
+      ></DepartureTimeSheet>
+    ));
+  };
+
+  const onNowPress = () =>
+    setSearchTime({
+      option: 'now',
+      date: new Date().toISOString(),
+    });
 
   function setCurrentLocationAsFrom() {
     navigation.setParams({
@@ -222,7 +234,8 @@ const NearbyOverview: React.FC<Props> = ({
           updatingLocation={updatingLocation}
           openLocationSearch={openLocationSearch}
           setCurrentLocationOrRequest={setCurrentLocationOrRequest}
-          onSearchTimePress={onSearchTimePress}
+          onNowPress={onNowPress}
+          onLaterTimePress={onLaterTimePress}
           searchTime={searchTime}
           timeOfLastSearch={queryInput.startTime}
         />
@@ -281,7 +294,8 @@ type HeaderProps = {
   fromLocation?: LocationWithMetadata;
   openLocationSearch: () => void;
   setCurrentLocationOrRequest(): Promise<void>;
-  onSearchTimePress: () => void;
+  onNowPress: () => void;
+  onLaterTimePress: () => void;
   timeOfLastSearch: string;
   searchTime: SearchTime;
 };
@@ -291,8 +305,8 @@ const Header = React.memo(function Header({
   fromLocation,
   openLocationSearch,
   setCurrentLocationOrRequest,
-  onSearchTimePress,
-  timeOfLastSearch,
+  onLaterTimePress,
+  onNowPress,
   searchTime,
 }: HeaderProps) {
   const {t, language} = useTranslation();
@@ -320,16 +334,28 @@ const Header = React.memo(function Header({
       </Section>
       <View style={styles.paddedContainer} key="dateInput">
         <Button
-          text={getSearchTimeLabel(searchTime, timeOfLastSearch, t, language)}
-          accessibilityLabel={getSearchTimeLabel(
-            searchTime,
-            timeOfLastSearch,
-            t,
-            language,
-          )}
-          accessibilityHint={t(NearbyTexts.dateInput.a11yHint)}
-          color="secondary_3"
-          onPress={onSearchTimePress}
+          mode={searchTime.option == 'now' ? 'primary' : 'tertiary'}
+          color={'primary_2'}
+          text={t(NearbyTexts.search.now.label)}
+          accessibilityLabel={t(NearbyTexts.search.now.a11yLabel)}
+          accessibilityHint={t(NearbyTexts.search.now.a11yHint)}
+          onPress={onNowPress}
+          viewContainerStyle={styles.dateInputButtonContainer}
+          style={styles.dateInputButton}
+        />
+        <Button
+          mode={searchTime.option == 'now' ? 'tertiary' : 'primary'}
+          color={'primary_2'}
+          text={
+            searchTime.option == 'now'
+              ? t(NearbyTexts.search.later.label)
+              : formatToShortDateTimeWithoutYear(searchTime.date, language)
+          }
+          accessibilityLabel={t(NearbyTexts.search.later.a11yLabel)}
+          accessibilityHint={t(NearbyTexts.search.later.a11yHint)}
+          onPress={onLaterTimePress}
+          viewContainerStyle={styles.dateInputButtonContainer}
+          style={styles.dateInputButton}
         />
       </View>
     </>
@@ -342,7 +368,22 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
   },
   paddedContainer: {
     marginHorizontal: theme.spacings.medium,
-    paddingBottom: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
+    flexDirection: 'row',
+    flex: 1,
+    alignContent: 'space-between',
+    borderStyle: 'solid',
+    borderColor: theme.colors.primary_2.backgroundColor,
+    borderWidth: 2,
+    padding: 2,
+    borderRadius: 12,
+  },
+  dateInputButtonContainer: {
+    width: '50%',
+  },
+  dateInputButton: {
+    color: theme.colors.primary_2.backgroundColor,
+    padding: theme.spacings.small,
   },
 }));
 
@@ -357,24 +398,6 @@ function translateErrorType(
     default:
       return t(NearbyTexts.messages.defaultFetchError);
   }
-}
-
-function getSearchTimeLabel(
-  searchTime: SearchTime,
-  timeOfLastSearch: string,
-  t: TFunc<typeof Language>,
-  language: Language,
-) {
-  const date = searchTime.option === 'now' ? timeOfLastSearch : searchTime.date;
-  const time = formatToLongDateTime(date, language);
-
-  switch (searchTime.option) {
-    case 'now':
-      return t(NearbyTexts.dateInput.departureNow(time));
-    case 'departure':
-      return t(NearbyTexts.dateInput.departure(time));
-  }
-  return time;
 }
 
 function getHeaderAlternativeTitle(
