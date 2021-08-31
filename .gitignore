@@ -30,6 +30,7 @@ build/
 local.properties
 env.properties
 *.iml
+ic_launcher*
 
 # node.js
 #
@@ -61,6 +62,7 @@ fastlane/report.xml
 
 # CocoaPods
 /ios/Pods/
+ios/atb/Images.xcassets/AppIcon.appiconset/*.png
 
 # Certs
 keystore
@@ -74,6 +76,7 @@ firebase-debug.log
 
 # Env
 /.env
+/icons
 
 #Service files
 android/app/google-services.json
