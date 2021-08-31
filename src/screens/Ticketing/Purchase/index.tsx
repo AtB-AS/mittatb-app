@@ -21,6 +21,7 @@ import TariffZoneSearch, {
   RouteParams as TariffZoneSearchParams,
 } from './TariffZones/search';
 import {TransitionPresets} from '@react-navigation/stack';
+import {PaymentOption} from '@atb/preferences';
 
 type PurchaseOverviewParams = {
   refreshOffer?: boolean;
@@ -33,8 +34,7 @@ type PurchaseOverviewParams = {
 type PaymentParams = {
   offers: ReserveOffer[];
   preassignedFareProduct: PreassignedFareProduct;
-  save?: boolean;
-  payment_type: number;
+  paymentOption: PaymentOption;
 };
 
 export type TicketingStackParams = {

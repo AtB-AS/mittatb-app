@@ -18,6 +18,7 @@ export type UserPreferences = {
   useSystemLanguage?: boolean;
   defaultUserTypeString?: string;
   departuresShowOnlyFavorites?: boolean;
+  previousPaymentMethod?: PaymentOption;
 };
 
 export type PreferenceItem = keyof UserPreferences;
@@ -28,7 +29,7 @@ export type PaymentOption = {
   masked_pan?: string,
   id?: string,
   save?: boolean,
-  description: string,
-  accessibilityHint: string,
+  description?: string,
+  accessibilityHint?: string,
   expires_at?: string,
 }

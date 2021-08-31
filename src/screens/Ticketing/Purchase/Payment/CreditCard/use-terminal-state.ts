@@ -9,6 +9,7 @@ import {
 import {parse as parseURL} from 'search-params';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {ReserveOffer, reserveOffers, TicketReservation} from '@atb/tickets';
+import {PaymentOption, usePreferences} from '@atb/preferences';
 
 const possibleResponseCodes = ['Cancel', 'OK'] as const;
 type NetsResponseCode = typeof possibleResponseCodes[number];
@@ -84,7 +85,7 @@ const initialState: TerminalReducerState = {
 
 export default function useTerminalState(
   offers: ReserveOffer[],
-  savePaymentMethod: boolean,
+  paymentOption: PaymentOption,
   cancelTerminal: () => void,
   addReservation: (
     reservation: TicketReservation,
@@ -95,6 +96,8 @@ export default function useTerminalState(
     {paymentResponseCode, reservation, loadingState, error},
     dispatch,
   ] = useReducer(terminalReducer, initialState);
+
+  const {setPreference} = usePreferences();
 
   const handleAxiosError = useCallback(
     function (err: AxiosError, errorContext: ErrorContext) {
@@ -114,10 +117,15 @@ export default function useTerminalState(
   const reserveOffer = useCallback(
     async function () {
       try {
-        const response = await reserveOffers(offers, savePaymentMethod, 1, {
-          retry: true,
-        });
-
+        const response = await reserveOffers(
+          offers,
+          paymentOption.save || false,
+          paymentOption.type,
+          paymentOption.id,
+          {
+            retry: true,
+          },
+        );
         dispatch({type: 'OFFER_RESERVED', reservation: response});
       } catch (err) {
         console.warn(err);
@@ -141,7 +149,7 @@ export default function useTerminalState(
     // load events might be called several times
     // for each type of resource, html, assets, etc
     // so we have a "loading guard" here
-    if (loadingRef.current) {
+    if (loadingRef.current && !url.includes('/ticket/v2/payments/')) {
       loadingRef.current = false;
       if (isWebViewError(nativeEvent)) {
         dispatch({
@@ -172,7 +180,12 @@ export default function useTerminalState(
     switch (paymentResponseCode) {
       case 'OK':
         if (!reservation) return;
-
+        setPreference({
+          previousPaymentMethod: {
+            type: paymentOption.type,
+            id: reservation.recurring_payment_id,
+          },
+        });
         addReservation(reservation, offers);
         break;
       case 'Cancel':

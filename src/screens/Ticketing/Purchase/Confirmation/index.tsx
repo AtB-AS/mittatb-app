@@ -108,7 +108,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   const vatAmountString = formatDecimalNumber(vatAmount, language);
   const vatPercentString = formatDecimalNumber(vatPercent, language);
 
-  async function payWithVipps() {
+  async function payWithVipps(option: PaymentOptionType) {
     if (offerExpirationTime && totalPrice > 0) {
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
@@ -116,7 +116,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
         navigation.push('PaymentVipps', {
           offers,
           preassignedFareProduct: params.preassignedFareProduct,
-          payment_type: 2,
+          paymentOption: option,
         });
       }
     }
@@ -130,8 +130,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
         navigation.push('PaymentCreditCard', {
           offers,
           preassignedFareProduct: params.preassignedFareProduct,
-          payment_type: option.type,
-          save: option.save
+          paymentOption: option,
         });
       }
     }
@@ -141,16 +140,16 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     console.log('selectPaymentOption', option.type);
     switch (option.type) {
       case 2:
-        payWithVipps()
+        payWithVipps(option);
         break;
-      case 1 | 3:
-        payWithCard(option)
+      case 1 | 3:
+        payWithCard(option);
         break;
       case 4:
-        payWithCard(option)
+        payWithCard(option);
         break;
       default:
-        console.log('whooops')
+        console.log('whooops');
     }
   }
 
@@ -159,13 +158,13 @@ const Confirmation: React.FC<ConfirmationProps> = ({
       return (
         <SelectCreditCard
           onSelect={(option: PaymentOptionType) => {
-            selectPaymentOption(option)
-            close()
+            selectPaymentOption(option);
+            close();
           }}
           options={paymentOptions}
         ></SelectCreditCard>
-      )
-    })
+      );
+    });
   }
 
   return (
@@ -291,16 +290,22 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           />
         ) : (
           <View>
-            <Button
-              color="primary_2"
-              text={t(PurchaseConfirmationTexts.choosePaymentOption.text)}
-              disabled={!!error || !paymentOptions.length}
-              accessibilityHint={t(
-                PurchaseConfirmationTexts.choosePaymentOption.a11yHint
-              )}
-              onPress={selectPaymentMethod}
-              viewContainerStyle={styles.paymentButton}
-            ></Button>
+            {
+              /*paymentOptions.filter(item => item.id).length === 0 ?) (*/
+              <Button
+                color="primary_2"
+                text={t(PurchaseConfirmationTexts.choosePaymentOption.text)}
+                disabled={!!error || !paymentOptions.length}
+                accessibilityHint={t(
+                  PurchaseConfirmationTexts.choosePaymentOption.a11yHint,
+                )}
+                onPress={selectPaymentMethod}
+                viewContainerStyle={styles.paymentButton}
+              ></Button>
+              /*) : (
+
+            )*/
+            }
           </View>
         )}
       </ScrollView>

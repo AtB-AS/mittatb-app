@@ -37,98 +37,115 @@ const SelectCreditCard: React.FC<Props> = ({onSelect, options}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        paddingBottom: 24,
-      }}>
-        <Text style={{
-          fontSize: 16,
-          fontWeight: '700',
-        }}>Velg betalingsmåte</Text>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          paddingBottom: 24,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: '700',
+          }}
+        >
+          Velg betalingsmåte
+        </Text>
       </View>
       <FlatList
         data={options}
         keyExtractor={(item, index) => `${index}`}
-        renderItem={({ item, index }) => {
+        renderItem={({item, index}) => {
           return (
             <PaymentOption
               key={item.type}
               option={item}
-              selected={selectedOption?.type === item.type}
+              selected={
+                JSON.stringify({
+                  type: selectedOption?.type,
+                  id: selectedOption?.id,
+                }) === JSON.stringify({type: item.type, id: item.id})
+              }
               onSelect={(val: PaymentOptionType) => {
-                console.log('selected:', val)
-                setSelectedOption(val)
+                setSelectedOption(val);
               }}
             ></PaymentOption>
-          )
+          );
         }}
       ></FlatList>
       <Button
         style={{
-          marginTop: 6
+          marginTop: 6,
         }}
-        color='primary_2'
+        color="primary_2"
         text="Til betaling"
         onPress={() => {
           if (selectedOption) {
-            onSelect(selectedOption)
+            onSelect(selectedOption);
           }
         }}
         disabled={!selectedOption}
         icon={ArrowRight}
-        iconPosition='right'
+        iconPosition="right"
       ></Button>
     </SafeAreaView>
-  )
+  );
 };
 
 type PaymentOptionsProps = {
   option: PaymentOptionType;
   selected: boolean;
   onSelect: (value: PaymentOptionType) => void;
-}
+};
 
-const PaymentOption: React.FC<PaymentOptionsProps> = ({option, selected, onSelect}) => {
-  const { theme } = useTheme();
-  const [ save, setSave ] = useState<boolean>(option.save ?? false)
+const PaymentOption: React.FC<PaymentOptionsProps> = ({
+  option,
+  selected,
+  onSelect,
+}) => {
+  const {theme} = useTheme();
+  const [save, setSave] = useState<boolean>(option.save ?? false);
 
   useEffect(() => {
     if (selected) {
-      select()
+      select();
     }
-  }, [save])
+  }, [save]);
 
   function getIcon(type: number) {
-    console.log('type', type)
     switch (type) {
       case 2:
-        return Vipps
+        return Vipps;
       case 4:
-        return MasterCardLogo()
-      case 3 | 1:
-        return VisaLogo()
+        return MasterCardLogo();
+      case 3 | 1:
+        return VisaLogo();
       default:
         return null;
     }
   }
 
   function select() {
-    onSelect(Object.assign({}, option, {
-      save: save
-    }))
+    onSelect(
+      Object.assign({}, option, {
+        save: save,
+      }),
+    );
   }
 
   return (
-    <View style={{
-      flex: 1,
-      flexDirection: 'column',
-      marginVertical: 6,
-      padding: 24,
-      backgroundColor: theme.colors.background_0.backgroundColor,
-      borderRadius: 8,
-    }}>
+    <View
+      style={{
+        flex: 1,
+        flexDirection: 'column',
+        marginVertical: 6,
+        padding: 24,
+        backgroundColor: theme.colors.background_0.backgroundColor,
+        borderRadius: 8,
+      }}
+    >
       <TouchableOpacity
         style={{
           flex: 1,
@@ -138,46 +155,62 @@ const PaymentOption: React.FC<PaymentOptionsProps> = ({option, selected, onSelec
         accessibilityHint={option.accessibilityHint}
         onPress={select}
       >
-        <View style={{
-          flex: 1,
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}>
-          <View style={{
-            marginRight: 12,
-            height: 24,
-            width: 24,
-            borderRadius: 12,
-            borderWidth: 2,
-            backgroundColor: selected ? theme.colors.primary_2.backgroundColor : theme.colors.background_0.backgroundColor,
-            borderColor: theme.colors.primary_2.backgroundColor,
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-            {
-              selected ?
-                <View style={{
+          }}
+        >
+          <View
+            style={{
+              marginRight: 12,
+              height: 24,
+              width: 24,
+              borderRadius: 12,
+              borderWidth: 2,
+              backgroundColor: selected
+                ? theme.colors.primary_2.backgroundColor
+                : theme.colors.background_0.backgroundColor,
+              borderColor: theme.colors.primary_2.backgroundColor,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {selected ? (
+              <View
+                style={{
                   height: 12,
                   width: 12,
                   borderRadius: 6,
                   backgroundColor: theme.colors.background_0.backgroundColor,
-                }} />
-                : null
-            }
+                }}
+              />
+            ) : null}
           </View>
           <Text>{option.description}</Text>
-          {option.id ? <Text style={{
-            paddingLeft: 8
-          }}>**** {`${option.masked_pan}`}</Text> : null}
+          {option.id ? (
+            <Text
+              style={{
+                paddingLeft: 8,
+              }}
+            >
+              **** {`${option.masked_pan}`}
+            </Text>
+          ) : null}
         </View>
         {option.id ? getIcon(option.type) : null}
       </TouchableOpacity>
       {selected && !option.id && option.type !== 2 ? (
         <View>
-          <Text style={{
-            paddingTop: 18,
-            opacity: 0.6,
-          }}>Lagre bankkortet for fremtidige betalinger?</Text>
+          <Text
+            style={{
+              paddingTop: 18,
+              opacity: 0.6,
+            }}
+          >
+            Lagre bankkortet for fremtidige betalinger?
+          </Text>
           <TouchableOpacity
             style={{
               alignItems: 'center',
@@ -186,42 +219,47 @@ const PaymentOption: React.FC<PaymentOptionsProps> = ({option, selected, onSelec
               paddingTop: 6,
             }}
             onPress={() => {
-              setSave(!save)
+              setSave(!save);
             }}
           >
-            <View style={{
-              marginRight: 12,
-              height: 24,
-              width: 24,
-              borderRadius: 4,
-              borderWidth: 2,
-              backgroundColor: save ? theme.colors.primary_2.backgroundColor : theme.colors.background_0.backgroundColor,
-              borderColor: theme.colors.primary_2.backgroundColor,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-              {
-                save ?
-                  <Confirm fill='white'></Confirm>
-                  : null
-              }
+            <View
+              style={{
+                marginRight: 12,
+                height: 24,
+                width: 24,
+                borderRadius: 4,
+                borderWidth: 2,
+                backgroundColor: save
+                  ? theme.colors.primary_2.backgroundColor
+                  : theme.colors.background_0.backgroundColor,
+                borderColor: theme.colors.primary_2.backgroundColor,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {save ? <Confirm fill="white"></Confirm> : null}
             </View>
             <Text>Lagre kort</Text>
           </TouchableOpacity>
         </View>
-      ) : null }
+      ) : null}
       {option.expires_at ? (
-            <View>
-              <Text style={{
-                opacity: 0.6,
-                paddingTop: 18,
-                paddingLeft: 36
-              }}>{`${parseISO(option.expires_at).getMonth()}`}/{`${parseISO(option.expires_at).getFullYear()}`.slice(2, 4)}</Text>
-            </View>
-          ) : null}
+        <View>
+          <Text
+            style={{
+              opacity: 0.6,
+              paddingTop: 18,
+              paddingLeft: 36,
+            }}
+          >
+            {`${parseISO(option.expires_at).getMonth()}`}/
+            {`${parseISO(option.expires_at).getFullYear()}`.slice(2, 4)}
+          </Text>
+        </View>
+      ) : null}
     </View>
-  )
-}
+  );
+};
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

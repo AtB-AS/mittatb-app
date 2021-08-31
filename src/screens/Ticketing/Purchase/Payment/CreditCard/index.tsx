@@ -59,6 +59,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
       offers: reservationOffers,
       paymentType: 'creditcard',
     });
+    // TODO set prev payment option
     navigation.navigate(ActiveTicketsScreenName);
   };
 
@@ -68,7 +69,12 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     onWebViewLoadEnd,
     error,
     restartTerminal,
-  } = useTerminalState(offers, route.params.save || false, cancelTerminal, dismissAndAddReservation);
+  } = useTerminalState(
+    offers,
+    route.params.paymentOption,
+    cancelTerminal,
+    dismissAndAddReservation,
+  );
 
   return (
     <View style={styles.container}>

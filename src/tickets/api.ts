@@ -70,8 +70,8 @@ export async function reserveOffers(
   offers: ReserveOffer[],
   savePaymentMethod: boolean,
   paymentType: number,
+  recurringPaymentId?: string,
   opts?: AxiosRequestConfig,
-  recurringPaymentId?: string
 ) {
   const url = 'ticket/v2/reserve';
   let body: object = {
@@ -85,7 +85,7 @@ export async function reserveOffers(
     body = {
       ...body,
       payment_type: paymentType,
-    }
+    };
   }
   if (savePaymentMethod) {
     body = {
@@ -96,18 +96,13 @@ export async function reserveOffers(
   if (recurringPaymentId) {
     body = {
       ...body,
-      recurring_payment_id: recurringPaymentId,
+      recurring_payment_id: parseInt(recurringPaymentId),
     };
   }
-  console.log('body', body);
-  const response = await client.post<TicketReservation>(
-    url,
-    body,
-    {
-      ...opts,
-      authWithIdToken: true,
-    },
-  );
+  const response = await client.post<TicketReservation>(url, body, {
+    ...opts,
+    authWithIdToken: true,
+  });
   return response.data;
 }
 

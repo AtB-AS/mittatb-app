@@ -1,4 +1,5 @@
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
+import {usePreferences} from '@atb/preferences';
 import {ReserveOffer, reserveOffers, TicketReservation} from '@atb/tickets';
 import {AxiosError} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
@@ -67,11 +68,11 @@ export default function useVippsState(
     vippsReducer,
     initialState,
   );
+  const {preferences, setPreference} = usePreferences();
 
   const handleAxiosError = useCallback(
     function (err: AxiosError, errorContext: ErrorContext) {
       const errorType = getAxiosErrorType(err);
-
       if (errorType !== 'cancel') {
         dispatch({
           type: 'SET_ERROR',
@@ -86,11 +87,11 @@ export default function useVippsState(
   const reserveOffer = useCallback(
     async function () {
       try {
-        const response = await reserveOffers(offers, 'vipps', {
+        const response = await reserveOffers(offers, false, 2, undefined, {
           retry: true,
         });
-
         dispatch({type: 'OFFER_RESERVED', reservation: response});
+        setPreference({previousPaymentMethod: {type: 2}});
       } catch (err) {
         console.warn(err);
         handleAxiosError(err, 'reserve-offer');
