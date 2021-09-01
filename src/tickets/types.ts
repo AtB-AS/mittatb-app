@@ -80,7 +80,7 @@ export type PaymentStatus =
   | 'INITIATE'
   | 'REJECT';
 
-export type PaymentType = 'vipps' | 'creditcard' | 'recurring_card';
+export type PaymentType = 'vipps' | 'creditcard' | 'recurring_card';
 
 export type PaymentResponse = {
   order_id: string;

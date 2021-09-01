@@ -39,7 +39,7 @@ export type RecurringPayment = {
   expires_at: string;
   masked_pan: string;
   payment_type: number;
-}
+};
 
 export async function searchOffers(
   params: OfferSearchParams,

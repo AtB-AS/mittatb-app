@@ -14,6 +14,6 @@ function VisaLogo(props?: SvgProps) {
       />
     </Svg>
   );
-};
+}
 
 export default VisaLogo;

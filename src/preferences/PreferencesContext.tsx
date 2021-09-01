@@ -1,5 +1,5 @@
-import { listRecurringPayments } from '@atb/tickets';
-import { PurchaseConfirmationTexts, useTranslation } from '@atb/translations';
+import {listRecurringPayments} from '@atb/tickets';
+import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {useColorScheme} from 'react-native';
 import {
@@ -13,7 +13,7 @@ type PreferencesContextState = {
   preferences: UserPreferences;
   setPreference(items: UserPreferences): void;
   resetPreference(key: PreferenceItem): void;
-  getSavedPaymentOptions: () => Promise<Array<PaymentOption>>
+  getSavedPaymentOptions: () => Promise<Array<PaymentOption>>;
 };
 const PreferencesContext = createContext<PreferencesContextState | undefined>(
   undefined,
@@ -36,13 +36,13 @@ const PreferencesContextProvider: React.FC = ({children}) => {
   function getTextsForType(type: number) {
     switch (type) {
       case 2:
-        return PurchaseConfirmationTexts.paymentButtonVipps
+        return PurchaseConfirmationTexts.paymentButtonVipps;
       case 3:
-        return PurchaseConfirmationTexts.paymentButtonCardVisa
+        return PurchaseConfirmationTexts.paymentButtonCardVisa;
       case 4:
-        return PurchaseConfirmationTexts.paymentButtonCardMC
+        return PurchaseConfirmationTexts.paymentButtonCardMC;
       default:
-        return PurchaseConfirmationTexts.paymentButtonCardVisa
+        return PurchaseConfirmationTexts.paymentButtonCardVisa;
     }
   }
 
@@ -59,25 +59,27 @@ const PreferencesContextProvider: React.FC = ({children}) => {
       const preferences = await resetPreference_storage(key);
       setPreferencesState(preferences);
     },
-    async getSavedPaymentOptions(): Promise<Array<PaymentOption>>  {
+    async getSavedPaymentOptions(): Promise<Array<PaymentOption>> {
       const options: Array<PaymentOption> = [
         {
           type: 4,
           description: t(getTextsForType(4).text),
-          accessibilityHint: t(getTextsForType(4).a11yHint,)
+          accessibilityHint: t(getTextsForType(4).a11yHint),
         },
         {
           type: 3,
           description: t(getTextsForType(3).text),
-          accessibilityHint: t(getTextsForType(3).a11yHint)
+          accessibilityHint: t(getTextsForType(3).a11yHint),
         },
         {
           type: 2,
           description: t(getTextsForType(2).text),
-          accessibilityHint: t(getTextsForType(2).a11yHint)
+          accessibilityHint: t(getTextsForType(2).a11yHint),
         },
-      ]
-      const remoteOptions: Array<PaymentOption> = (await listRecurringPayments()).map(option => {
+      ];
+      const remoteOptions: Array<PaymentOption> = (
+        await listRecurringPayments()
+      ).map((option) => {
         return {
           id: `${option.id}`,
           masked_pan: option.masked_pan,
@@ -85,10 +87,10 @@ const PreferencesContextProvider: React.FC = ({children}) => {
           accessibilityHint: t(getTextsForType(option.payment_type).a11yHint),
           type: option.payment_type,
           expires_at: option.expires_at,
-        }
-      })
-      return [...options, ...remoteOptions].reverse()
-    }
+        };
+      });
+      return [...options, ...remoteOptions].reverse();
+    },
   };
 
   return (

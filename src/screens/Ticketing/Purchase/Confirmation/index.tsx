@@ -15,7 +15,13 @@ import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
 import {addMinutes} from 'date-fns';
 import React from 'react';
-import {ActivityIndicator, ScrollView, View, Text} from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import {TicketingStackParams} from '../';
 import useOfferState from '../Overview/use-offer-state';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
@@ -31,7 +37,6 @@ import {
 } from '@atb/preferences';
 import {useState} from 'react';
 import {useEffect} from 'react';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -154,8 +159,6 @@ const Confirmation: React.FC<ConfirmationProps> = ({
       case 4:
         payWithCard(option);
         break;
-      default:
-        console.log('whooops');
     }
   }
 
@@ -174,7 +177,6 @@ const Confirmation: React.FC<ConfirmationProps> = ({
       default:
         str = '';
     }
-    console.log(paymentOptions);
     str =
       str +
       ` (**** ${

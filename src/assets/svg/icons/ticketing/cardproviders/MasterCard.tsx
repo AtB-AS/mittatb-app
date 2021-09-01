@@ -14,6 +14,6 @@ function MasterCardLogo(props?: SvgProps) {
       />
     </Svg>
   );
-};
+}
 
 export default MasterCardLogo;

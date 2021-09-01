@@ -1,25 +1,15 @@
 import React from 'react';
-import {
-  View,
-  Text,
-} from 'react-native';
-import {CreditCard, Vipps} from '@atb/assets/svg/icons/ticketing';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {View, Text, FlatList, TouchableOpacity} from 'react-native';
+import {Vipps} from '@atb/assets/svg/icons/ticketing';
 import {StyleSheet, useTheme} from '@atb/theme';
 import Button from '@atb/components/button';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
-import { ActionItem } from '@atb/components/sections';
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { borderRadius } from '@atb-as/theme';
-import { ArrowRight } from '@atb/assets/svg/icons/navigation';
-import { themeColor } from '@atb/screens/Onboarding/WelcomeScreen';
-import { PaymentOption as PaymentOptionType } from '@atb/preferences';
-import OptionalNextDayLabel from '@atb/components/optional-day-header';
-import { Confirm } from '@atb/assets/svg/icons/actions';
-import {parse, parseISO, sub} from 'date-fns';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {useTranslation} from '@atb/translations';
+import {useState, useEffect} from 'react';
+import {ArrowRight} from '@atb/assets/svg/icons/navigation';
+import {PaymentOption as PaymentOptionType} from '@atb/preferences';
+import {Confirm} from '@atb/assets/svg/icons/actions';
+import {parseISO} from 'date-fns';
 import VisaLogo from '@atb/assets/svg/icons/ticketing/cardproviders/Visa';
 import MasterCardLogo from '@atb/assets/svg/icons/ticketing/cardproviders/MasterCard';
 
@@ -279,11 +269,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background_2.backgroundColor,
-    paddingHorizontal: 12
+    paddingHorizontal: 12,
   },
   paymentButton: {
     marginTop: theme.spacings.medium,
   },
 }));
 
-export default SelectCreditCard
+export default SelectCreditCard;
