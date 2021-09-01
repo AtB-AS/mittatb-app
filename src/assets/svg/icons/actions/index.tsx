@@ -8,6 +8,7 @@ export {default as Context} from './Context';
 export {default as Delete} from './Delete';
 export {default as DragHandle} from './DragHandle';
 export {default as Edit} from './Edit';
+export {default as Interchange} from './Interchange';
 export {default as Remove} from './Remove';
 export {default as Reorder} from './Reorder';
 export {default as Search} from './Search';
