@@ -51,7 +51,7 @@ platform :ios do
   desc 'Build the iOS application.'
   lane :build do
     ensure_env_vars(
-      env_vars: ['BUILD_ID', 'BUNDLE_IDENTIFIER', 'PROVISIONING_PROFILE', 'EXPORT_METHOD']
+      env_vars: ['BUILD_ID', 'EXPORT_METHOD']
     )
     increment_build_number(
       build_number: ENV["BUILD_ID"],
@@ -59,9 +59,6 @@ platform :ios do
     )
     update_code_signing_settings(
       use_automatic_signing: false,
-      bundle_identifier: ENV['BUNDLE_IDENTIFIER'],
-      code_sign_identity: "iPhone Distribution",
-      profile_name: ENV['PROVISIONING_PROFILE'],
       path: "./ios/atb.xcodeproj"
     )
     cocoapods(podfile: './ios/Podfile')
@@ -166,3 +163,7 @@ platform :android do
     )
   end
 end
+
+
+
+
