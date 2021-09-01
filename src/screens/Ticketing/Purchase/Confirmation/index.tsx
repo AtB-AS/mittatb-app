@@ -1,4 +1,4 @@
-import {CreditCard, Vipps} from '@atb/assets/svg/icons/ticketing';
+import {MasterCard, Vipps, Visa} from '@atb/assets/svg/icons/ticketing';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
 import {LeftButtonProps} from '@atb/components/screen-header';
@@ -15,7 +15,7 @@ import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
 import {addMinutes} from 'date-fns';
 import React from 'react';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View, Text} from 'react-native';
 import {TicketingStackParams} from '../';
 import useOfferState from '../Overview/use-offer-state';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
@@ -23,10 +23,15 @@ import {createTravelDateText} from '@atb/screens/Ticketing/Purchase/Overview';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import { SelectCreditCard } from '../Payment';
-import { PaymentOption as PaymentOptionType, usePreferences } from '@atb/preferences';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import {SelectCreditCard} from '../Payment';
+import {
+  PaymentOption,
+  PaymentOption as PaymentOptionType,
+  usePreferences,
+} from '@atb/preferences';
+import {useState} from 'react';
+import {useEffect} from 'react';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -53,16 +58,18 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   const {theme} = useTheme();
   const {t, language} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
-  const {getSavedPaymentOptions} = usePreferences();
-  const [ paymentOptions, setPaymentOptions ] = useState<Array<PaymentOptionType>>([])
+  const {preferences, getSavedPaymentOptions} = usePreferences();
+  const [paymentOptions, setPaymentOptions] = useState<
+    Array<PaymentOptionType>
+  >([]);
 
   async function fetchPaymentOptions(): Promise<void> {
-    setPaymentOptions(await getSavedPaymentOptions())
+    setPaymentOptions(await getSavedPaymentOptions());
   }
 
   useEffect(() => {
-    fetchPaymentOptions()
-  }, [])
+    fetchPaymentOptions();
+  }, []);
 
   const {
     enable_creditcard: enableCreditCard,
@@ -137,7 +144,6 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   }
 
   function selectPaymentOption(option: PaymentOptionType) {
-    console.log('selectPaymentOption', option.type);
     switch (option.type) {
       case 2:
         payWithVipps(option);
@@ -151,6 +157,30 @@ const Confirmation: React.FC<ConfirmationProps> = ({
       default:
         console.log('whooops');
     }
+  }
+
+  function getPaymentOptionTexts(option: PaymentOption): string {
+    let str;
+    switch (option.type) {
+      case 2:
+        str = t(PurchaseConfirmationTexts.payWithVipps.text);
+        break;
+      case 1 | 3:
+        str = t(PurchaseConfirmationTexts.payWithVisa.text);
+        break;
+      case 4:
+        str = t(PurchaseConfirmationTexts.payWithMasterCard.text);
+        break;
+      default:
+        str = '';
+    }
+    console.log(paymentOptions);
+    str =
+      str +
+      ` (**** ${
+        paymentOptions.find((item) => item.id == option.id)?.masked_pan
+      })`;
+    return str;
   }
 
   function selectPaymentMethod() {
@@ -290,8 +320,9 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           />
         ) : (
           <View>
-            {
-              /*paymentOptions.filter(item => item.id).length === 0 ?) (*/
+            {paymentOptions.filter(
+              (item) => item.id == preferences.previousPaymentMethod?.id,
+            ).length === 0 ? (
               <Button
                 color="primary_2"
                 text={t(PurchaseConfirmationTexts.choosePaymentOption.text)}
@@ -302,10 +333,65 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                 onPress={selectPaymentMethod}
                 viewContainerStyle={styles.paymentButton}
               ></Button>
-              /*) : (
-
-            )*/
-            }
+            ) : (
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'column',
+                }}
+              >
+                <Button
+                  text={getPaymentOptionTexts(
+                    preferences.previousPaymentMethod!,
+                  )}
+                  color="primary_2"
+                  disabled={
+                    !!error ||
+                    !paymentOptions.length ||
+                    !preferences.previousPaymentMethod
+                  }
+                  iconPosition="right"
+                  icon={
+                    preferences.previousPaymentMethod?.type === 4
+                      ? MasterCard
+                      : preferences.previousPaymentMethod?.type === 2
+                      ? Vipps
+                      : Visa
+                  }
+                  viewContainerStyle={styles.paymentButton}
+                  onPress={() => {
+                    selectPaymentOption(preferences.previousPaymentMethod!);
+                  }}
+                ></Button>
+                <TouchableOpacity
+                  style={{
+                    marginTop: 24,
+                  }}
+                  disabled={!!error || !paymentOptions.length}
+                  onPress={selectPaymentMethod}
+                  accessibilityHint={t(
+                    PurchaseConfirmationTexts.choosePaymentOption.a11yHint,
+                  )}
+                >
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: '400',
+                        fontSize: 16,
+                      }}
+                    >
+                      {t(PurchaseConfirmationTexts.choosePaymentOption.text)}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
         )}
       </ScrollView>

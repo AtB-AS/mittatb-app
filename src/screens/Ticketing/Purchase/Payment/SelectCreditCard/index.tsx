@@ -19,10 +19,9 @@ import { themeColor } from '@atb/screens/Onboarding/WelcomeScreen';
 import { PaymentOption as PaymentOptionType } from '@atb/preferences';
 import OptionalNextDayLabel from '@atb/components/optional-day-header';
 import { Confirm } from '@atb/assets/svg/icons/actions';
-import { parse, parseISO } from 'date-fns';
+import {parse, parseISO, sub} from 'date-fns';
 import VisaLogo from '@atb/assets/svg/icons/ticketing/cardproviders/Visa';
 import MasterCardLogo from '@atb/assets/svg/icons/ticketing/cardproviders/MasterCard';
-
 
 type Props = {
   onSelect: (value: PaymentOptionType) => void;
@@ -133,6 +132,22 @@ const PaymentOption: React.FC<PaymentOptionsProps> = ({
         save: save,
       }),
     );
+  }
+
+  function getExpireDate(iso: string): string {
+    let date = parseISO(iso);
+    if (date.getDate() === 1) {
+      let sinceEpoc = date.getTime();
+      sinceEpoc = sinceEpoc - 86400000;
+      date = new Date(sinceEpoc);
+    }
+    let year = date.getFullYear();
+    let month = date.getMonth();
+    if (month === 0) {
+      month = 12;
+      year--;
+    }
+    return `${month < 10 ? '0' + month : month}/${year.toString().slice(2, 4)}`;
   }
 
   return (
@@ -252,8 +267,7 @@ const PaymentOption: React.FC<PaymentOptionsProps> = ({
               paddingLeft: 36,
             }}
           >
-            {`${parseISO(option.expires_at).getMonth()}`}/
-            {`${parseISO(option.expires_at).getFullYear()}`.slice(2, 4)}
+            {getExpireDate(option.expires_at)}
           </Text>
         </View>
       ) : null}

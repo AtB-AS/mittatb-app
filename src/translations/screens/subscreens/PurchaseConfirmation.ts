@@ -69,8 +69,23 @@ const PurchaseConfirmationTexts = {
     text: _('Velg betalingsmåte', 'Choose payment option'),
     a11yHint: _(
       'Aktiver for å velge betalingsmåte',
-      'Activate to choose payment option'
-    )
-  }
+      'Activate to choose payment option',
+    ),
+  },
+  payWithVipps: {
+    text: _('Betal med Vipps', 'Pay with Vipps'),
+    a11yHint: _('aktiver for å betale med Vipps', 'Activate to pay with Vipps'),
+  },
+  payWithVisa: {
+    text: _('Betal med Visa', 'Pay with Visa'),
+    a11yHint: _('aktiver for å betale med Visa', 'Activate to pay with Visa'),
+  },
+  payWithMasterCard: {
+    text: _('Betal med MasterCard', 'Pay with MasterCard'),
+    a11yHint: _(
+      'aktiver for å betale med MasterCard',
+      'Activate to pay with MasterCard',
+    ),
+  },
 };
 export default PurchaseConfirmationTexts;
