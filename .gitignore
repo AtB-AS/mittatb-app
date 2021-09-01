@@ -87,3 +87,4 @@ android/app/src/**/res/**/bootsplash_logo.png
 android/app/src/main/res/values/colors.xml
 bootsplash_logo*.png
 !env/**
+ios/atb/BootSplash.storyboard
