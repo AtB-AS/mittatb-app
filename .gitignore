@@ -32,6 +32,7 @@ env.properties
 *.iml
 ic_launcher*
 
+
 # node.js
 #
 node_modules/
@@ -82,3 +83,5 @@ ios/Configs/Config.xcconfig
 #Service files
 android/app/google-services.json
 ios/atb/GoogleService-Info.plist
+android/app/src/**/res/**/bootsplash_logo.png
+android/app/src/main/res/values/colors.xml
