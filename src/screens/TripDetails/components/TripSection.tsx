@@ -56,6 +56,8 @@ const TripSection: React.FC<TripSectionProps> = ({
 
   const isWalkSection = leg.mode === 'foot';
   const legColor = useTransportationColor(leg.mode, leg.line?.transportSubmode);
+  const legIsWait = Boolean(wait?.waitAfter);
+  const iconColor = useTransportationColor();
 
   const showFrom = !isWalkSection || !!(isFirst && isWalkSection);
   const showTo = !isWalkSection || !!(isLast && isWalkSection);
@@ -153,19 +155,28 @@ const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
       </View>
+
+      {leg.interchangeTo?.guaranteed && (
+        <View style={style.interchangeMessage}>
+          <TripLegDecoration
+            color={iconColor}
+            hasStart={false}
+            hasEnd={false}
+          />
+
+          <TripRow rowLabel={<ThemeIcon svg={Interchange} />}>
+            <TinyMessageBox
+              type="info"
+              message={'Denne overgangen korresponderer.'}
+            />
+          </TripRow>
+        </View>
+      )}
     </>
   );
   return (
     <>
-      {sectionOutput}
-      {leg.interchangeTo?.guaranteed && (
-        <TripRow rowLabel={<ThemeIcon svg={Interchange} />}>
-          <TinyMessageBox
-            type="info"
-            message={'Denne overgangen korresponderer.'}
-          />
-        </TripRow>
-      )}
+      {!legIsWait && sectionOutput}
       {wait?.waitAfter && significantWaitTime(wait.waitSeconds) && (
         <WaitSection {...wait} />
       )}
@@ -317,6 +328,10 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   legLineName: {
     fontWeight: 'bold',
+  },
+  interchangeMessage: {
+    marginTop: theme.spacings.medium,
+    marginBottom: -theme.spacings.medium,
   },
 }));
 export default TripSection;
