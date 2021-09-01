@@ -1,4 +1,5 @@
 import {Info, Warning} from '@atb/assets/svg/situations';
+import {Check} from '@atb/assets/svg/icons/status';
 import AccessibleText, {
   screenReaderPause,
 } from '@atb/components/accessible-text';
@@ -157,6 +158,14 @@ const TripSection: React.FC<TripSectionProps> = ({
   return (
     <>
       {sectionOutput}
+      {leg.interchangeTo?.guaranteed && (
+        <TripRow rowLabel={<ThemeIcon svg={Check} />}>
+          <TinyMessageBox
+            type="info"
+            message={'Denne overgangen korresponderer.'}
+          />
+        </TripRow>
+      )}
       {wait?.waitAfter && significantWaitTime(wait.waitSeconds) && (
         <WaitSection {...wait} />
       )}
