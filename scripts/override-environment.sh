@@ -37,6 +37,9 @@ else
     echo "Copying $APP_ENVIRONMENT GoogleService-Info.plist to iOS folder"
     cp $ENV_FOLDER/GoogleService-Info.plist ios/atb
 
+    cp $ORG_FOLDER/bootsplash_logo_original.png assets/
 
-    cp -a $ORG_FOLDER/launch-screens/android/. android/app/src/main/res/
+
+    # cp -a $ORG_FOLDER/launch-screens/android/. android/app/src/main/res/
+    # cp $ORG_FOLDER/launch-screens/android/colors.xml android/app/src/main/res/values/colors
 fi

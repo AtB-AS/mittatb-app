@@ -85,3 +85,5 @@ android/app/google-services.json
 ios/atb/GoogleService-Info.plist
 android/app/src/**/res/**/bootsplash_logo.png
 android/app/src/main/res/values/colors.xml
+bootsplash_logo*.png
+!env/**
