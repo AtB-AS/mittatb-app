@@ -323,7 +323,8 @@ const Confirmation: React.FC<ConfirmationProps> = ({
         ) : (
           <View>
             {paymentOptions.filter(
-              (item) => item.id == preferences.previousPaymentMethod?.id,
+              (item) =>
+                item.id && item.id == preferences.previousPaymentMethod?.id,
             ).length === 0 ? (
               <Button
                 color="primary_2"
