@@ -47,8 +47,8 @@ const SelectCreditCard: React.FC<Props> = ({onSelect, options}) => {
       </View>
       <FlatList
         data={options}
-        keyExtractor={(item, index) => `${index}`}
-        renderItem={({item, index}) => {
+        keyExtractor={(item) => `${item.type}_${item.id}`}
+        renderItem={({item}) => {
           return (
             <PaymentOption
               key={item.type}
