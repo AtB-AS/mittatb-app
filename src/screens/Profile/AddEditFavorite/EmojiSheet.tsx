@@ -50,11 +50,14 @@ const blocklistedEmojis = ['white_frowning_face', 'keycap_star', 'eject'];
 const filteredEmojis = emoji.filter((e: any) => {
   if (blocklistedEmojis.includes(e.short_name)) return false;
   if (Platform.OS === 'android') {
-    if (e.added_in === '2.0') return true;
-    if (e.added_in === '4.0') return Platform.Version >= 24;
-    if (e.added_in === '5.0') return Platform.Version >= 26;
-    if (e.added_in === '11.0') return Platform.Version >= 28;
-    else return Platform.Version >= 29;
+    const version = parseFloat(e.added_in);
+    if (Platform.Version < 26) return version < 0.7; // basic support, no genders no skintones
+    if (version <= 5.0) return Platform.Version >= 26; // Android 8
+    if (version <= 11.0) return Platform.Version >= 28; // Android 9
+    if (version <= 12.0) return Platform.Version >= 29; // Android 10
+    if (version <= 13) return Platform.Version >= 30;
+    // Android 11
+    else return false;
   } else {
     return true;
   }
