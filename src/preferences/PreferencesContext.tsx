@@ -36,13 +36,25 @@ const PreferencesContextProvider: React.FC = ({children}) => {
   function getTextsForType(type: number) {
     switch (type) {
       case 2:
-        return PurchaseConfirmationTexts.paymentButtonVipps;
+        return {
+          text: t(PurchaseConfirmationTexts.paymentButtonVipps.text),
+          a11y: t(PurchaseConfirmationTexts.paymentButtonVipps.a11yHint),
+        };
       case 3:
-        return PurchaseConfirmationTexts.paymentButtonCardVisa;
+        return {
+          text: t(PurchaseConfirmationTexts.paymentButtonCardVisa.text),
+          a11y: t(PurchaseConfirmationTexts.paymentButtonVipps.a11yHint),
+        };
       case 4:
-        return PurchaseConfirmationTexts.paymentButtonCardMC;
+        return {
+          text: t(PurchaseConfirmationTexts.paymentButtonCardMC.text),
+          a11y: t(PurchaseConfirmationTexts.paymentButtonVipps.a11yHint),
+        };
       default:
-        return PurchaseConfirmationTexts.paymentButtonCardVisa;
+        return {
+          text: t(PurchaseConfirmationTexts.paymentButtonCardVisa.text),
+          a11y: t(PurchaseConfirmationTexts.paymentButtonVipps.a11yHint),
+        };
     }
   }
 
@@ -63,18 +75,18 @@ const PreferencesContextProvider: React.FC = ({children}) => {
       const options: Array<PaymentOption> = [
         {
           type: 4,
-          description: t(getTextsForType(4).text),
-          accessibilityHint: t(getTextsForType(4).a11yHint),
+          description: getTextsForType(4).text,
+          accessibilityHint: getTextsForType(4).a11y,
         },
         {
           type: 3,
-          description: t(getTextsForType(3).text),
-          accessibilityHint: t(getTextsForType(3).a11yHint),
+          description: getTextsForType(3).text,
+          accessibilityHint: getTextsForType(3).a11y,
         },
         {
           type: 2,
-          description: t(getTextsForType(2).text),
-          accessibilityHint: t(getTextsForType(2).a11yHint),
+          description: getTextsForType(2).text,
+          accessibilityHint: getTextsForType(2).a11y,
         },
       ];
       const remoteOptions: Array<PaymentOption> = (
@@ -83,8 +95,8 @@ const PreferencesContextProvider: React.FC = ({children}) => {
         return {
           id: `${option.id}`,
           masked_pan: option.masked_pan,
-          description: t(getTextsForType(option.payment_type).text),
-          accessibilityHint: t(getTextsForType(option.payment_type).a11yHint),
+          description: getTextsForType(option.payment_type).text,
+          accessibilityHint: getTextsForType(option.payment_type).a11y,
           type: option.payment_type,
           expires_at: option.expires_at,
         };

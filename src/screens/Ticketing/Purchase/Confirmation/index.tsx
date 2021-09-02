@@ -19,7 +19,6 @@ import {
   ActivityIndicator,
   ScrollView,
   View,
-  Text,
   TouchableOpacity,
 } from 'react-native';
 import {TicketingStackParams} from '../';
@@ -383,14 +382,14 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                       justifyContent: 'center',
                     }}
                   >
-                    <Text
+                    <ThemeText
                       style={{
                         fontWeight: '400',
                         fontSize: 16,
                       }}
                     >
                       {t(PurchaseConfirmationTexts.choosePaymentOption.text)}
-                    </Text>
+                    </ThemeText>
                   </View>
                 </TouchableOpacity>
               </View>

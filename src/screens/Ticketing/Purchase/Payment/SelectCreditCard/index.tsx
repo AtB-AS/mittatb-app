@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, FlatList, TouchableOpacity} from 'react-native';
+import {View, FlatList, TouchableOpacity} from 'react-native';
 import {Vipps} from '@atb/assets/svg/icons/ticketing';
 import {StyleSheet, useTheme} from '@atb/theme';
 import Button from '@atb/components/button';
@@ -12,6 +12,8 @@ import {Confirm} from '@atb/assets/svg/icons/actions';
 import {parseISO} from 'date-fns';
 import VisaLogo from '@atb/assets/svg/icons/ticketing/cardproviders/Visa';
 import MasterCardLogo from '@atb/assets/svg/icons/ticketing/cardproviders/MasterCard';
+import ThemeText from '@atb/components/text';
+import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 
 type Props = {
   onSelect: (value: PaymentOptionType) => void;
@@ -34,14 +36,14 @@ const SelectCreditCard: React.FC<Props> = ({onSelect, options}) => {
           paddingBottom: 24,
         }}
       >
-        <Text
+        <ThemeText
           style={{
             fontSize: 16,
             fontWeight: '700',
           }}
         >
-          Velg betalingsmåte
-        </Text>
+          {t(SelectPaymentMethodTexts.header.text)}
+        </ThemeText>
       </View>
       <FlatList
         data={options}
@@ -69,7 +71,8 @@ const SelectCreditCard: React.FC<Props> = ({onSelect, options}) => {
           marginTop: 6,
         }}
         color="primary_2"
-        text="Til betaling"
+        text={t(SelectPaymentMethodTexts.confirm_button.text)}
+        accessibilityHint={t(SelectPaymentMethodTexts.confirm_button.a11yhint)}
         onPress={() => {
           if (selectedOption) {
             onSelect(selectedOption);
@@ -96,6 +99,7 @@ const PaymentOption: React.FC<PaymentOptionsProps> = ({
 }) => {
   const {theme} = useTheme();
   const [save, setSave] = useState<boolean>(option.save ?? false);
+  const {t} = useTranslation();
 
   useEffect(() => {
     if (selected) {
@@ -193,29 +197,29 @@ const PaymentOption: React.FC<PaymentOptionsProps> = ({
               />
             ) : null}
           </View>
-          <Text>{option.description}</Text>
+          <ThemeText>{option.description}</ThemeText>
           {option.id ? (
-            <Text
+            <ThemeText
               style={{
                 paddingLeft: 8,
               }}
             >
               **** {`${option.masked_pan}`}
-            </Text>
+            </ThemeText>
           ) : null}
         </View>
         {option.id ? getIcon(option.type) : null}
       </TouchableOpacity>
       {selected && !option.id && option.type !== 2 ? (
         <View>
-          <Text
+          <ThemeText
             style={{
               paddingTop: 18,
               opacity: 0.6,
             }}
           >
-            Lagre bankkortet for fremtidige betalinger?
-          </Text>
+            {t(SelectPaymentMethodTexts.save_payment_option_description.text)}
+          </ThemeText>
           <TouchableOpacity
             style={{
               alignItems: 'center',
@@ -244,13 +248,13 @@ const PaymentOption: React.FC<PaymentOptionsProps> = ({
             >
               {save ? <Confirm fill="white"></Confirm> : null}
             </View>
-            <Text>Lagre kort</Text>
+            <ThemeText>{t(SelectPaymentMethodTexts.save_card.text)}</ThemeText>
           </TouchableOpacity>
         </View>
       ) : null}
       {option.expires_at ? (
         <View>
-          <Text
+          <ThemeText
             style={{
               opacity: 0.6,
               paddingTop: 18,
@@ -258,7 +262,7 @@ const PaymentOption: React.FC<PaymentOptionsProps> = ({
             }}
           >
             {getExpireDate(option.expires_at)}
-          </Text>
+          </ThemeText>
         </View>
       ) : null}
     </View>

@@ -59,7 +59,6 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
       offers: reservationOffers,
       paymentType: 'creditcard',
     });
-    // TODO set prev payment option
     navigation.navigate(ActiveTicketsScreenName);
   };
 
