@@ -63,6 +63,21 @@ const AssistantTexts = {
       'Fikk ingen søkeresultater',
       'We could not find any search results',
     ),
+    noResultReason: {
+      IdenticalLocations: _(
+        'Fra- og til-sted er identiske',
+        'From- and to-place are identical',
+      ),
+      CloseLocations: _(
+        'Det er veldig kort avstand mellom fra- og til-sted',
+        'The distance between to- and from-place is very short',
+      ),
+      PastArrivalTime: _('Ankomsttid har passert', 'Arrival time has passed'),
+      PastDepartureTime: _(
+        'Avreisetid har passert',
+        'Departure time has passed',
+      ),
+    },
   },
   results: {
     error: {
@@ -78,7 +93,7 @@ const AssistantTexts = {
     info: {
       emptyResult: _(
         'Vi fant dessverre ingen reiseruter som passer til ditt søk.',
-        'We could not find any travel routes matching your search criteria',
+        'We could not find any travel routes matching your search criteria.',
       ),
       reasonsTitle: _('Mulige årsaker: ', 'Possible causes:'),
       genericHint: _(
