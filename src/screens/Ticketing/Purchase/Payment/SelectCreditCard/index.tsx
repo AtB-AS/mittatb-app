@@ -10,8 +10,8 @@ import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import {PaymentOption as PaymentOptionType} from '@atb/preferences';
 import {Confirm} from '@atb/assets/svg/icons/actions';
 import {parseISO} from 'date-fns';
-import VisaLogo from '@atb/assets/svg/icons/ticketing/cardproviders/Visa';
-import MasterCardLogo from '@atb/assets/svg/icons/ticketing/cardproviders/MasterCard';
+import VisaLogo from '@atb/assets/svg/icons/ticketing/Visa';
+import MasterCardLogo from '@atb/assets/svg/icons/ticketing/MasterCard';
 import ThemeText from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 
@@ -112,9 +112,9 @@ const PaymentOption: React.FC<PaymentOptionsProps> = ({
       case 2:
         return Vipps;
       case 4:
-        return MasterCardLogo();
+        return MasterCardLogo;
       case 3 | 1:
-        return VisaLogo();
+        return VisaLogo;
       default:
         return null;
     }
