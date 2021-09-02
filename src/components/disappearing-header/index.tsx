@@ -47,6 +47,7 @@ type Props = {
   useScroll?: boolean;
   headerTitle: React.ReactNode;
   alternativeTitleComponent?: React.ReactNode;
+  showAlterntativeTitle?: Boolean;
 
   headerMargin?: number;
 
@@ -87,6 +88,7 @@ const DisappearingHeader: React.FC<Props> = ({
 
   headerTitle,
   alternativeTitleComponent,
+  showAlterntativeTitle,
 
   onEndReached,
   onEndReachedThreshold = 10,
@@ -201,6 +203,7 @@ const DisappearingHeader: React.FC<Props> = ({
             title={headerTitle}
             rightButton={{type: 'chat', color: themeColor}}
             alternativeTitleComponent={alternativeTitleComponent}
+            showAlternativeTitle={showAlterntativeTitle && !isAnimating}
             scrollRef={scrollYRef}
             leftButton={leftButton}
           />
