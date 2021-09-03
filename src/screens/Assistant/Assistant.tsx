@@ -57,7 +57,7 @@ import FadeBetween from './FadeBetween';
 import {SearchTime, useSearchTimeValue} from './journey-date-picker';
 import NewsBanner from './NewsBanner';
 import Results from './Results';
-import {NoResultReason, SearchStateType} from './types';
+import {SearchStateType} from './types';
 import {ThemeColor} from '@atb/theme/colors';
 
 const themeColor: ThemeColor = 'background_gray';
@@ -370,7 +370,7 @@ const Assistant: React.FC<Props> = ({
       </ThemeText>
     </View>
   );
-  const noResultReasons = computeNoResultReasons(searchTime, from, to);
+  const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
 
   const onPressed = useCallback(
     (tripPatternId, tripPatterns, startIndex) =>
@@ -486,17 +486,20 @@ type SearchForLocations = {
 };
 
 function computeNoResultReasons(
+  t: TFunc<typeof Language>,
   date?: SearchTime,
   from?: Location,
   to?: Location,
-): NoResultReason[] {
+): String[] {
   let reasons = [];
 
   if (!!from && !!to) {
     if (locationsAreEqual(from, to)) {
-      reasons.push(NoResultReason.IdenticalLocations);
+      reasons.push(
+        t(AssistantTexts.searchState.noResultReason.IdenticalLocations),
+      );
     } else if (distanceInMetres(from, to) < LOCATIONS_REALLY_CLOSE_THRESHOLD) {
-      reasons.push(NoResultReason.CloseLocations);
+      reasons.push(t(AssistantTexts.searchState.noResultReason.CloseLocations));
     }
   }
 
@@ -505,8 +508,8 @@ function computeNoResultReasons(
   if (isPastDate) {
     const isArrival = date?.option === 'arrival';
     const dateReason = isArrival
-      ? NoResultReason.PastArrivalTime
-      : NoResultReason.PastDepartureTime;
+      ? t(AssistantTexts.searchState.noResultReason.PastArrivalTime)
+      : t(AssistantTexts.searchState.noResultReason.PastDepartureTime);
     reasons.push(dateReason);
   }
   return reasons;
