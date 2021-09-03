@@ -41,6 +41,17 @@ export type RecurringPayment = {
   payment_type: number;
 };
 
+export type ReserveOfferParams = {
+  offers: ReserveOffer[];
+  paymentType: number;
+  savePaymentMethod?: boolean;
+  opts?: AxiosRequestConfig;
+};
+
+export type ReserveOfferWithRecurringParams = ReserveOfferParams & {
+  recurringPaymentId: string;
+};
+
 export async function searchOffers(
   params: OfferSearchParams,
   opts?: AxiosRequestConfig,
@@ -66,12 +77,12 @@ export async function sendReceipt(
   return response.data;
 }
 
-export async function reserveOffersWithRecurring(
-  offers: ReserveOffer[],
-  paymentType: number,
-  recurringPaymentId: string,
-  opts?: AxiosRequestConfig,
-) {
+export async function reserveOffersWithRecurring({
+  offers,
+  paymentType,
+  recurringPaymentId,
+  opts,
+}: ReserveOfferWithRecurringParams) {
   const url = 'ticket/v2/reserve';
   let body: object = {
     payment_redirect_url:
@@ -89,12 +100,12 @@ export async function reserveOffersWithRecurring(
   return response.data;
 }
 
-export async function reserveOffers(
-  offers: ReserveOffer[],
-  paymentType: number,
-  savePaymentMethod?: boolean,
-  opts?: AxiosRequestConfig,
-) {
+export async function reserveOffers({
+  offers,
+  paymentType,
+  savePaymentMethod = false,
+  opts,
+}: ReserveOfferParams) {
   const url = 'ticket/v2/reserve';
   let body: object = {
     payment_redirect_url:

@@ -87,8 +87,12 @@ export default function useVippsState(
   const reserveOffer = useCallback(
     async function () {
       try {
-        const response = await reserveOffers(offers, false, 2, undefined, {
-          retry: true,
+        const response = await reserveOffers({
+          offers,
+          paymentType: 2,
+          opts: {
+            retry: true,
+          },
         });
         dispatch({type: 'OFFER_RESERVED', reservation: response});
         setPreference({previousPaymentMethod: {type: 2}});

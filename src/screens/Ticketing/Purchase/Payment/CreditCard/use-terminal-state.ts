@@ -123,22 +123,22 @@ export default function useTerminalState(
     async function () {
       try {
         const response = paymentOption.id
-          ? await reserveOffersWithRecurring(
+          ? await reserveOffersWithRecurring({
               offers,
-              paymentOption.type,
-              paymentOption.id,
-              {
+              paymentType: paymentOption.type,
+              recurringPaymentId: paymentOption.id,
+              opts: {
                 retry: true,
               },
-            )
-          : await reserveOffers(
+            })
+          : await reserveOffers({
               offers,
-              paymentOption.type,
-              paymentOption.save || false,
-              {
+              paymentType: paymentOption.type,
+              savePaymentMethod: paymentOption.save || false,
+              opts: {
                 retry: true,
               },
-            );
+            });
         dispatch({type: 'OFFER_RESERVED', reservation: response});
       } catch (err) {
         console.warn(err);
