@@ -66,11 +66,10 @@ export async function sendReceipt(
   return response.data;
 }
 
-export async function reserveOffers(
+export async function reserveOffersWithRecurring(
   offers: ReserveOffer[],
-  savePaymentMethod: boolean,
   paymentType: number,
-  recurringPaymentId?: string,
+  recurringPaymentId: string,
   opts?: AxiosRequestConfig,
 ) {
   const url = 'ticket/v2/reserve';
@@ -80,25 +79,32 @@ export async function reserveOffers(
         ? 'atb://vipps?transaction_id={transaction_id}&payment_id={payment_id}'
         : undefined,
     offers,
+    payment_type: paymentType,
+    recurring_payment_id: parseInt(recurringPaymentId),
   };
-  if (paymentType) {
-    body = {
-      ...body,
-      payment_type: paymentType,
-    };
-  }
-  if (savePaymentMethod) {
-    body = {
-      ...body,
-      store_payment: savePaymentMethod,
-    };
-  }
-  if (recurringPaymentId) {
-    body = {
-      ...body,
-      recurring_payment_id: parseInt(recurringPaymentId),
-    };
-  }
+  const response = await client.post<TicketReservation>(url, body, {
+    ...opts,
+    authWithIdToken: true,
+  });
+  return response.data;
+}
+
+export async function reserveOffers(
+  offers: ReserveOffer[],
+  paymentType: number,
+  savePaymentMethod?: boolean,
+  opts?: AxiosRequestConfig,
+) {
+  const url = 'ticket/v2/reserve';
+  let body: object = {
+    payment_redirect_url:
+      paymentType == 2
+        ? 'atb://vipps?transaction_id={transaction_id}&payment_id={payment_id}'
+        : undefined,
+    offers,
+    payment_type: paymentType,
+    ...(savePaymentMethod ? {store_payment: savePaymentMethod} : {}),
+  };
   const response = await client.post<TicketReservation>(url, body, {
     ...opts,
     authWithIdToken: true,

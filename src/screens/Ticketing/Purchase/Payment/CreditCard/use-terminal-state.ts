@@ -8,7 +8,12 @@ import {
 } from 'react-native-webview/lib/WebViewTypes';
 import {parse as parseURL} from 'search-params';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {ReserveOffer, reserveOffers, TicketReservation} from '@atb/tickets';
+import {
+  ReserveOffer,
+  reserveOffers,
+  reserveOffersWithRecurring,
+  TicketReservation,
+} from '@atb/tickets';
 import {PaymentOption, usePreferences} from '@atb/preferences';
 
 const possibleResponseCodes = ['Cancel', 'OK'] as const;
@@ -117,15 +122,23 @@ export default function useTerminalState(
   const reserveOffer = useCallback(
     async function () {
       try {
-        const response = await reserveOffers(
-          offers,
-          paymentOption.save || false,
-          paymentOption.type,
-          paymentOption.id,
-          {
-            retry: true,
-          },
-        );
+        const response = paymentOption.id
+          ? await reserveOffersWithRecurring(
+              offers,
+              paymentOption.type,
+              paymentOption.id,
+              {
+                retry: true,
+              },
+            )
+          : await reserveOffers(
+              offers,
+              paymentOption.type,
+              paymentOption.save || false,
+              {
+                retry: true,
+              },
+            );
         dispatch({type: 'OFFER_RESERVED', reservation: response});
       } catch (err) {
         console.warn(err);
