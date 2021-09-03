@@ -419,6 +419,7 @@ const Assistant: React.FC<Props> = ({
       headerMargin={24}
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
+      showAlterntativeTitle={Boolean(from && to)}
       leftButton={{
         type: 'home',
         color: themeColor,

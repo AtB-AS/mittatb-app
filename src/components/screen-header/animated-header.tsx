@@ -14,6 +14,7 @@ type ScreenHeaderProps = ViewProps & {
   rightButton?: RightButtonProps;
   title: React.ReactNode;
   alternativeTitleComponent?: React.ReactNode;
+  showAlternativeTitle?: Boolean;
   scrollRef?: Animated.Value;
   setFocusOnLoad?: boolean;
 };
@@ -27,6 +28,7 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
   rightButton,
   title,
   alternativeTitleComponent,
+  showAlternativeTitle,
   scrollRef,
   setFocusOnLoad,
   ...props
@@ -37,13 +39,16 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
   const fontScale = useFontScale();
   const headerHeight = BASE_HEADER_HEIGHT * fontScale;
 
-  const titleOffset = scrollRef!.interpolate({
-    inputRange: [0, headerHeight + insets.top],
-    outputRange: [0, -headerHeight],
-    extrapolate: 'clamp',
-  });
+  const titleOffset = showAlternativeTitle
+    ? scrollRef!.interpolate({
+        inputRange: [0, headerHeight + insets.top],
+        outputRange: [0, -headerHeight],
+        extrapolate: 'clamp',
+      })
+    : 0;
 
   const altTitleOffset = Animated.add(titleOffset, headerHeight);
+  const altTitleVisibility = showAlternativeTitle ? 'flex' : 'none';
   const leftIcon = leftButton ? <HeaderButton {...leftButton} /> : <View />;
   const rightIcon = rightButton ? <HeaderButton {...rightButton} /> : <View />;
 
@@ -54,6 +59,7 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
         {
           height: headerHeight,
           transform: [{translateY: altTitleOffset}],
+          display: altTitleVisibility,
         },
       ]}
     >
