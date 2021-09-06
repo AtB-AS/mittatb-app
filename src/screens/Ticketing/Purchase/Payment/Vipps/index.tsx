@@ -3,7 +3,12 @@ import Button from '@atb/components/button';
 import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {StyleSheet} from '@atb/theme';
-import {ReserveOffer, TicketReservation, useTicketState} from '@atb/tickets';
+import {
+  PaymentType,
+  ReserveOffer,
+  TicketReservation,
+  useTicketState,
+} from '@atb/tickets';
 import {
   PaymentVippsTexts,
   TranslateFunction,
@@ -51,7 +56,7 @@ export default function VippsPayment({
     addReservation({
       reservation,
       offers: reservationOffers,
-      paymentType: 'vipps',
+      paymentType: PaymentType.Vipps,
     });
     navigation.navigate(ActiveTicketsScreenName);
   };

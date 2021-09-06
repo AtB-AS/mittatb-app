@@ -7,7 +7,7 @@ import {
   resetPreference as resetPreference_storage,
   setPreference as setPreference_storage,
 } from './storage';
-import {PreferenceItem, UserPreferences, PaymentOption} from './types';
+import {PreferenceItem, UserPreferences, PaymentOption} from '@atb/preferences';
 
 type PreferencesContextState = {
   preferences: UserPreferences;
@@ -74,17 +74,20 @@ const PreferencesContextProvider: React.FC = ({children}) => {
     async getSavedPaymentOptions(): Promise<Array<PaymentOption>> {
       const options: Array<PaymentOption> = [
         {
-          type: 4,
+          paymentType: 4,
+          savedType: 'normal',
           description: getTextsForType(4).text,
           accessibilityHint: getTextsForType(4).a11y,
         },
         {
-          type: 3,
+          paymentType: 3,
+          savedType: 'normal',
           description: getTextsForType(3).text,
           accessibilityHint: getTextsForType(3).a11y,
         },
         {
-          type: 2,
+          savedType: 'normal',
+          paymentType: 2,
           description: getTextsForType(2).text,
           accessibilityHint: getTextsForType(2).a11y,
         },
@@ -93,12 +96,16 @@ const PreferencesContextProvider: React.FC = ({children}) => {
         await listRecurringPayments()
       ).map((option) => {
         return {
-          id: `${option.id}`,
-          masked_pan: option.masked_pan,
+          savedType: 'recurring',
+          paymentType: option.payment_type,
           description: getTextsForType(option.payment_type).text,
           accessibilityHint: getTextsForType(option.payment_type).a11y,
-          type: option.payment_type,
-          expires_at: option.expires_at,
+          recurringCard: {
+            id: option.id,
+            masked_pan: option.masked_pan,
+            expires_at: option.expires_at,
+            payment_type: option.payment_type,
+          },
         };
       });
       return [...options, ...remoteOptions].reverse();

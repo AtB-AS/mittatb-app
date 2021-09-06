@@ -25,6 +25,7 @@ import useTerminalState, {
   LoadingState,
 } from './use-terminal-state';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {PaymentOption} from '@atb/preferences';
 
 type NavigationProp = CompositeNavigationProp<
   MaterialTopTabNavigationProp<TicketTabsNavigatorParams>,
@@ -57,7 +58,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     addReservation({
       reservation,
       offers: reservationOffers,
-      paymentType: 'creditcard',
+      paymentType: route.params.paymentOption.paymentType,
     });
     navigation.navigate(ActiveTicketsScreenName);
   };
@@ -71,6 +72,9 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
   } = useTerminalState(
     offers,
     route.params.paymentOption,
+    route.params.paymentOption.savedType === 'normal'
+      ? route.params.paymentOption.save ?? false
+      : false,
     cancelTerminal,
     dismissAndAddReservation,
   );

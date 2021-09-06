@@ -1,6 +1,11 @@
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {usePreferences} from '@atb/preferences';
-import {ReserveOffer, reserveOffers, TicketReservation} from '@atb/tickets';
+import {
+  PaymentType,
+  ReserveOffer,
+  reserveOffers,
+  TicketReservation,
+} from '@atb/tickets';
 import {AxiosError} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
 import {Linking} from 'react-native';
@@ -89,16 +94,24 @@ export default function useVippsState(
       try {
         const response = await reserveOffers({
           offers,
-          paymentType: 2,
+          paymentType: PaymentType.Vipps,
+          savePaymentMethod: false,
           opts: {
             retry: true,
           },
         });
         dispatch({type: 'OFFER_RESERVED', reservation: response});
-        setPreference({previousPaymentMethod: {type: 2}});
+        // TODO: Cannot set savedType to normal?
+        /*setPreference({
+          previousPaymentMethod: {
+            savedType: 'normal',
+            paymentType: PaymentType.Vipps,
+          },
+        });*/
       } catch (err) {
         console.warn(err);
-        handleAxiosError(err, 'reserve-offer');
+        // TODO: Why is err throwing error?
+        //handleAxiosError(err, 'reserve-offer');
       }
     },
     [offers, dispatch, handleAxiosError],

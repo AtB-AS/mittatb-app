@@ -7,22 +7,23 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTranslation} from '@atb/translations';
 import {useState, useEffect} from 'react';
 import {ArrowRight} from '@atb/assets/svg/icons/navigation';
-import {PaymentOption as PaymentOptionType} from '@atb/preferences';
+import {PaymentOption} from '@atb/preferences';
 import {Confirm} from '@atb/assets/svg/icons/actions';
 import {parseISO} from 'date-fns';
 import VisaLogo from '@atb/assets/svg/icons/ticketing/Visa';
 import MasterCardLogo from '@atb/assets/svg/icons/ticketing/MasterCard';
 import ThemeText from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
+import {PaymentType} from '@atb/tickets';
 
 type Props = {
-  onSelect: (value: PaymentOptionType) => void;
-  options: Array<PaymentOptionType>;
+  onSelect: (value: PaymentOption) => void;
+  options: Array<PaymentOption>;
 };
 
 const SelectCreditCard: React.FC<Props> = ({onSelect, options}) => {
   const {t, language} = useTranslation();
-  const [selectedOption, setSelectedOption] = useState<PaymentOptionType>();
+  const [selectedOption, setSelectedOption] = useState<PaymentOption>();
   const styles = useStyles();
   const {theme} = useTheme();
 
@@ -47,22 +48,34 @@ const SelectCreditCard: React.FC<Props> = ({onSelect, options}) => {
       </View>
       <FlatList
         data={options}
-        keyExtractor={(item) => `${item.type}_${item.id}`}
+        keyExtractor={(item) =>
+          `${item.paymentType}_${
+            item.savedType === 'recurring' ? item.recurringCard.id : 0
+          }`
+        }
         renderItem={({item}) => {
           return (
-            <PaymentOption
-              key={item.type}
+            <PaymentOptionView
+              key={item.paymentType}
               option={item}
               selected={
                 JSON.stringify({
-                  type: selectedOption?.type,
-                  id: selectedOption?.id,
-                }) === JSON.stringify({type: item.type, id: item.id})
+                  type: selectedOption?.paymentType,
+                  id:
+                    selectedOption?.savedType === 'recurring'
+                      ? selectedOption.recurringCard.id
+                      : 0,
+                }) ===
+                JSON.stringify({
+                  type: item.paymentType,
+                  id:
+                    item.savedType === 'recurring' ? item.recurringCard.id : 0,
+                })
               }
-              onSelect={(val: PaymentOptionType) => {
+              onSelect={(val: PaymentOption) => {
                 setSelectedOption(val);
               }}
-            ></PaymentOption>
+            ></PaymentOptionView>
           );
         }}
       ></FlatList>
@@ -87,18 +100,18 @@ const SelectCreditCard: React.FC<Props> = ({onSelect, options}) => {
 };
 
 type PaymentOptionsProps = {
-  option: PaymentOptionType;
+  option: PaymentOption;
   selected: boolean;
-  onSelect: (value: PaymentOptionType) => void;
+  onSelect: (value: PaymentOption) => void;
 };
 
-const PaymentOption: React.FC<PaymentOptionsProps> = ({
+const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
   option,
   selected,
   onSelect,
 }) => {
   const {theme} = useTheme();
-  const [save, setSave] = useState<boolean>(option.save ?? false);
+  const [save, setSave] = useState<boolean>(false);
   const {t} = useTranslation();
 
   useEffect(() => {
@@ -110,11 +123,11 @@ const PaymentOption: React.FC<PaymentOptionsProps> = ({
   function getIcon(type: number) {
     switch (type) {
       case 2:
-        return Vipps;
+        return Vipps({});
       case 4:
-        return MasterCardLogo;
+        return MasterCardLogo({});
       case 3 | 1:
-        return VisaLogo;
+        return VisaLogo({});
       default:
         return null;
     }
@@ -198,19 +211,21 @@ const PaymentOption: React.FC<PaymentOptionsProps> = ({
             ) : null}
           </View>
           <ThemeText>{option.description}</ThemeText>
-          {option.id ? (
+          {option.savedType === 'recurring' ? (
             <ThemeText
               style={{
                 paddingLeft: 8,
               }}
             >
-              **** {`${option.masked_pan}`}
+              **** {`${option.recurringCard.masked_pan}`}
             </ThemeText>
           ) : null}
         </View>
-        {option.id ? getIcon(option.type) : null}
+        {option.savedType === 'recurring' ? getIcon(option.paymentType) : null}
       </TouchableOpacity>
-      {selected && !option.id && option.type !== 2 ? (
+      {selected &&
+      option.savedType === 'normal' &&
+      option.paymentType !== PaymentType.Vipps ? (
         <View>
           <ThemeText
             style={{
@@ -252,7 +267,7 @@ const PaymentOption: React.FC<PaymentOptionsProps> = ({
           </TouchableOpacity>
         </View>
       ) : null}
-      {option.expires_at ? (
+      {option.savedType === 'recurring' && option.recurringCard.expires_at ? (
         <View>
           <ThemeText
             style={{
@@ -261,7 +276,7 @@ const PaymentOption: React.FC<PaymentOptionsProps> = ({
               paddingLeft: 36,
             }}
           >
-            {getExpireDate(option.expires_at)}
+            {getExpireDate(option.recurringCard.expires_at)}
           </ThemeText>
         </View>
       ) : null}

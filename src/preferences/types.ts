@@ -1,3 +1,4 @@
+import {PaymentType, RecurringPayment} from '@atb/tickets';
 import {ColorSchemeName} from 'react-native';
 import {appLanguages} from '../translations';
 export const preference_screenAlternatives = [
@@ -23,13 +24,18 @@ export type UserPreferences = {
 
 export type PreferenceItem = keyof UserPreferences;
 
-export type PaymentOption = {
-  /// 1: 'creditcard', 2: 'VIPPS', 3: 'VISA, 4: 'MASTERCARD'
-  type: number;
-  masked_pan?: string;
-  id?: string;
-  save?: boolean;
-  description?: string;
-  accessibilityHint?: string;
-  expires_at?: string;
-};
+export type PaymentOption =
+  | {
+      savedType: 'normal';
+      paymentType: PaymentType;
+      description: string;
+      accessibilityHint: string;
+      save?: boolean;
+    }
+  | {
+      savedType: 'recurring';
+      paymentType: PaymentType.VISA | PaymentType.MasterCard;
+      recurringCard: RecurringPayment;
+      description: string;
+      accessibilityHint: string;
+    };

@@ -3,7 +3,7 @@ import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {ActiveReservation} from '@atb/tickets';
+import {ActiveReservation, PaymentType} from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
@@ -25,7 +25,7 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
   }
 
   const paymentType =
-    reservation.paymentType === 'vipps'
+    reservation.paymentType === PaymentType.Vipps
       ? t(TicketsTexts.reservation.paymentType.vipps)
       : t(TicketsTexts.reservation.paymentType.creditcard);
 
@@ -59,7 +59,7 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
               ? t(TicketsTexts.reservation.paymentStage.processing(paymentType))
               : t(TicketsTexts.reservation.paymentStage.approved(paymentType))}
           </ThemeText>
-          {reservation.paymentType === 'vipps' &&
+          {reservation.paymentType === PaymentType.Vipps &&
             reservation.paymentStatus !== 'CAPTURE' && (
               <Button
                 onPress={() => openVippsUrl(reservation.reservation.url)}

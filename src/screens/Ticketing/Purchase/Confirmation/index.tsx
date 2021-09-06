@@ -10,7 +10,7 @@ import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {ReserveOffer} from '@atb/tickets';
+import {PaymentType, ReserveOffer} from '@atb/tickets';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
 import {addMinutes} from 'date-fns';
@@ -30,7 +30,6 @@ import {formatDecimalNumber} from '@atb/utils/numbers';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {SelectCreditCard} from '../Payment';
 import {
-  PaymentOption,
   PaymentOption as PaymentOptionType,
   usePreferences,
 } from '@atb/preferences';
@@ -148,39 +147,45 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   }
 
   function selectPaymentOption(option: PaymentOptionType) {
-    switch (option.type) {
-      case 2:
+    switch (option.paymentType) {
+      case PaymentType.Vipps:
         payWithVipps(option);
         break;
-      case 1 | 3:
+      case PaymentType.VISA:
         payWithCard(option);
         break;
-      case 4:
+      case PaymentType.MasterCard:
         payWithCard(option);
         break;
     }
   }
 
-  function getPaymentOptionTexts(option: PaymentOption): string {
+  function getPaymentOptionTexts(option: PaymentOptionType): string {
     let str;
-    switch (option.type) {
-      case 2:
+    console.log('paymentType', option);
+    switch (option.paymentType) {
+      case PaymentType.Vipps:
         str = t(PurchaseConfirmationTexts.payWithVipps.text);
         break;
-      case 1 | 3:
+      case PaymentType.VISA:
         str = t(PurchaseConfirmationTexts.payWithVisa.text);
         break;
-      case 4:
+      case PaymentType.MasterCard:
         str = t(PurchaseConfirmationTexts.payWithMasterCard.text);
         break;
       default:
-        str = '';
+        str = `woops ${option}`;
     }
-    str =
-      str +
-      ` (**** ${
-        paymentOptions.find((item) => item.id == option.id)?.masked_pan
-      })`;
+    if (option.savedType === 'recurring') {
+      const paymentOption = paymentOptions.find(
+        (item) =>
+          item.savedType === 'recurring' &&
+          item.recurringCard.id === option.recurringCard.id,
+      );
+      if (paymentOption?.savedType === 'recurring') {
+        str = str + ` (**** ${paymentOption.recurringCard.masked_pan})`;
+      }
+    }
     return str;
   }
 
@@ -321,21 +326,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           />
         ) : (
           <View>
-            {paymentOptions.filter(
-              (item) =>
-                item.id && item.id == preferences.previousPaymentMethod?.id,
-            ).length === 0 ? (
-              <Button
-                color="primary_2"
-                text={t(PurchaseConfirmationTexts.choosePaymentOption.text)}
-                disabled={!!error || !paymentOptions.length}
-                accessibilityHint={t(
-                  PurchaseConfirmationTexts.choosePaymentOption.a11yHint,
-                )}
-                onPress={selectPaymentMethod}
-                viewContainerStyle={styles.paymentButton}
-              ></Button>
-            ) : (
+            {typeof preferences.previousPaymentMethod !== 'undefined' ? (
               <View
                 style={{
                   flex: 1,
@@ -344,7 +335,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               >
                 <Button
                   text={getPaymentOptionTexts(
-                    preferences.previousPaymentMethod!,
+                    preferences.previousPaymentMethod,
                   )}
                   color="primary_2"
                   disabled={
@@ -354,15 +345,19 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                   }
                   iconPosition="right"
                   icon={
-                    preferences.previousPaymentMethod?.type === 4
+                    preferences.previousPaymentMethod.paymentType ===
+                    PaymentType.MasterCard
                       ? MasterCard
-                      : preferences.previousPaymentMethod?.type === 2
+                      : preferences.previousPaymentMethod.paymentType ===
+                        PaymentType.Vipps
                       ? Vipps
                       : Visa
                   }
                   viewContainerStyle={styles.paymentButton}
                   onPress={() => {
-                    selectPaymentOption(preferences.previousPaymentMethod!);
+                    if (preferences.previousPaymentMethod) {
+                      selectPaymentOption(preferences.previousPaymentMethod);
+                    }
                   }}
                 ></Button>
                 <TouchableOpacity
@@ -393,6 +388,17 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                   </View>
                 </TouchableOpacity>
               </View>
+            ) : (
+              <Button
+                color="primary_2"
+                text={t(PurchaseConfirmationTexts.choosePaymentOption.text)}
+                disabled={!!error || !paymentOptions.length}
+                accessibilityHint={t(
+                  PurchaseConfirmationTexts.choosePaymentOption.a11yHint,
+                )}
+                onPress={selectPaymentMethod}
+                viewContainerStyle={styles.paymentButton}
+              ></Button>
             )}
           </View>
         )}

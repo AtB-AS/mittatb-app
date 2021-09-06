@@ -9,9 +9,10 @@ import {
 import {parse as parseURL} from 'search-params';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {
+  listRecurringPayments,
+  PaymentType,
   ReserveOffer,
   reserveOffers,
-  reserveOffersWithRecurring,
   TicketReservation,
 } from '@atb/tickets';
 import {PaymentOption, usePreferences} from '@atb/preferences';
@@ -91,6 +92,7 @@ const initialState: TerminalReducerState = {
 export default function useTerminalState(
   offers: ReserveOffer[],
   paymentOption: PaymentOption,
+  savePaymentOption: boolean,
   cancelTerminal: () => void,
   addReservation: (
     reservation: TicketReservation,
@@ -122,27 +124,29 @@ export default function useTerminalState(
   const reserveOffer = useCallback(
     async function () {
       try {
-        const response = paymentOption.id
-          ? await reserveOffersWithRecurring({
-              offers,
-              paymentType: paymentOption.type,
-              recurringPaymentId: paymentOption.id,
-              opts: {
-                retry: true,
-              },
-            })
-          : await reserveOffers({
-              offers,
-              paymentType: paymentOption.type,
-              savePaymentMethod: paymentOption.save || false,
-              opts: {
-                retry: true,
-              },
-            });
+        const response =
+          paymentOption.savedType === 'recurring'
+            ? await reserveOffers({
+                offers,
+                paymentType: paymentOption.paymentType,
+                recurringPaymentId: paymentOption.recurringCard.id,
+                opts: {
+                  retry: true,
+                },
+              })
+            : await reserveOffers({
+                offers,
+                paymentType: paymentOption.paymentType,
+                savePaymentMethod: savePaymentOption || false,
+                opts: {
+                  retry: true,
+                },
+              });
         dispatch({type: 'OFFER_RESERVED', reservation: response});
       } catch (err) {
         console.warn(err);
-        handleAxiosError(err, 'reservation');
+        // TODO: Is this problem?
+        //handleAxiosError(err, 'reservation');
       }
     },
     [offers, dispatch, handleAxiosError],
@@ -193,12 +197,34 @@ export default function useTerminalState(
     switch (paymentResponseCode) {
       case 'OK':
         if (!reservation) return;
-        setPreference({
-          previousPaymentMethod: {
-            type: paymentOption.type,
-            id: reservation.recurring_payment_id,
-          },
-        });
+        if (reservation.recurring_payment_id) {
+          listRecurringPayments().then((res) => {
+            const card = res.find((item) => {
+              item.id === parseInt(reservation.recurring_payment_id!);
+            });
+            if (card) {
+              setPreference({
+                previousPaymentMethod: {
+                  savedType: 'recurring',
+                  paymentType:
+                    paymentOption.paymentType === PaymentType.VISA
+                      ? PaymentType.VISA
+                      : PaymentType.MasterCard,
+                  recurringCard: card,
+                  description: '',
+                  accessibilityHint: '',
+                },
+              });
+            }
+          });
+        } else {
+          setPreference({
+            previousPaymentMethod: paymentOption,
+          });
+        }
+        /*if (reservation.recurring_payment_id) {
+          
+        }*/
         addReservation(reservation, offers);
         break;
       case 'Cancel':
