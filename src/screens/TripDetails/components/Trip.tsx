@@ -109,7 +109,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.medium,
   },
   trip: {
-    paddingVertical: theme.spacings.medium,
+    paddingTop: theme.spacings.large,
   },
 }));
 

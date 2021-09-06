@@ -332,7 +332,7 @@ function getStopRowA11yTranslated(
 const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   tripSection: {
     flex: 1,
-    marginVertical: theme.spacings.medium,
+    marginBottom: theme.spacings.large,
   },
   a11yHelper: {
     position: 'absolute',
@@ -344,8 +344,7 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
     fontWeight: 'bold',
   },
   interchangeMessage: {
-    marginTop: theme.spacings.medium,
-    marginBottom: -theme.spacings.medium,
+    marginBottom: -theme.spacings.large,
   },
 }));
 export default TripSection;
