@@ -133,7 +133,7 @@ const TripDetailsTexts = {
     ) =>
       _(
         `Korrespondanse mellom ${fromPublicCode} og ${toPublicCode} på ${location}.`,
-        `Interchange between ${fromPublicCode} and ${toPublicCode} on ${location}.`,
+        `Correspondance between ${fromPublicCode} and ${toPublicCode} on ${location}.`,
       ),
   },
 };
