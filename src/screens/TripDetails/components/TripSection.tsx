@@ -42,13 +42,20 @@ type TripSectionProps = {
   wait?: WaitDetails;
   isFirst?: boolean;
   step?: number;
+  interchangeDetails?: InterchangeDetails;
 } & Leg;
+
+export type InterchangeDetails = {
+  publicCode: string;
+  fromPlace: string;
+};
 
 const TripSection: React.FC<TripSectionProps> = ({
   isLast,
   isFirst,
   wait,
   step,
+  interchangeDetails,
   ...leg
 }) => {
   const {t, language} = useTranslation();
@@ -56,7 +63,6 @@ const TripSection: React.FC<TripSectionProps> = ({
 
   const isWalkSection = leg.mode === 'foot';
   const legColor = useTransportationColor(leg.mode, leg.line?.transportSubmode);
-  const legIsWait = Boolean(wait?.waitAfter);
   const iconColor = useTransportationColor();
 
   const showFrom = !isWalkSection || !!(isFirst && isWalkSection);
@@ -167,7 +173,15 @@ const TripSection: React.FC<TripSectionProps> = ({
           <TripRow rowLabel={<ThemeIcon svg={Interchange} />}>
             <TinyMessageBox
               type="info"
-              message={'Denne overgangen korresponderer.'}
+              message={
+                'Korrespondanse mellom ' +
+                leg.line?.publicCode +
+                ' og ' +
+                interchangeDetails?.publicCode +
+                ' på ' +
+                interchangeDetails?.fromPlace +
+                '.'
+              }
             />
           </TripRow>
         </View>
@@ -176,7 +190,7 @@ const TripSection: React.FC<TripSectionProps> = ({
   );
   return (
     <>
-      {!legIsWait && sectionOutput}
+      {sectionOutput}
       {wait?.waitAfter && significantWaitTime(wait.waitSeconds) && (
         <WaitSection {...wait} />
       )}
@@ -262,7 +276,7 @@ const WalkSection: React.FC<TripSectionProps> = (leg) => {
   );
 };
 
-function getPlaceName(place: Place): string {
+export function getPlaceName(place: Place): string {
   const fallback = place.name ?? '';
   return place.quay ? getQuayName(place.quay) ?? fallback : fallback;
 }
