@@ -126,6 +126,15 @@ const TripDetailsTexts = {
       'Vi kunne ikke oppdatere reiseforslaget ditt. Det kan hende reisen har endra seg eller er utdatert?',
       'We could not update your trip plan. Perhaps your trip has changed or timed out?',
     ),
+    interchange: (
+      fromPublicCode: string,
+      toPublicCode: string,
+      location: string,
+    ) =>
+      _(
+        `Korrespondanse mellom ${fromPublicCode} og ${toPublicCode} på ${location}.`,
+        `Interchange between ${fromPublicCode} and ${toPublicCode} on ${location}.`,
+      ),
   },
 };
 export default TripDetailsTexts;

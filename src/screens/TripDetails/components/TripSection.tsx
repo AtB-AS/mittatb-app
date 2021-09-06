@@ -161,27 +161,23 @@ const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
       </View>
-
-      {leg.interchangeTo?.guaranteed && (
+      {leg.interchangeTo?.guaranteed && interchangeDetails && leg.line && (
         <View style={style.interchangeMessage}>
           <TripLegDecoration
             color={iconColor}
             hasStart={false}
             hasEnd={false}
           />
-
           <TripRow rowLabel={<ThemeIcon svg={Interchange} />}>
             <TinyMessageBox
               type="info"
-              message={
-                'Korrespondanse mellom ' +
-                leg.line?.publicCode +
-                ' og ' +
-                interchangeDetails?.publicCode +
-                ' på ' +
-                interchangeDetails?.fromPlace +
-                '.'
-              }
+              message={t(
+                TripDetailsTexts.messages.interchange(
+                  leg.line.publicCode,
+                  interchangeDetails.publicCode,
+                  interchangeDetails.fromPlace,
+                ),
+              )}
             />
           </TripRow>
         </View>
