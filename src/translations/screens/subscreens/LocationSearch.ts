@@ -2,10 +2,7 @@ import {translation as _} from '../../commons';
 
 const LocationSearchTexts = {
   searchField: {
-    placeholder: _(
-      'Søk etter adresse eller sted,',
-      'Search for an address or location',
-    ),
+    placeholder: _('Sted eller adresse', 'Place or address'),
   },
   header: {
     title: _('Søk', 'Search'),

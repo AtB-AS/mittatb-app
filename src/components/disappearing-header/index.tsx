@@ -47,6 +47,7 @@ type Props = {
   useScroll?: boolean;
   headerTitle: React.ReactNode;
   alternativeTitleComponent?: React.ReactNode;
+  showAlterntativeTitle?: Boolean;
 
   headerMargin?: number;
 
@@ -87,6 +88,7 @@ const DisappearingHeader: React.FC<Props> = ({
 
   headerTitle,
   alternativeTitleComponent,
+  showAlterntativeTitle,
 
   onEndReached,
   onEndReachedThreshold = 10,
@@ -136,8 +138,8 @@ const DisappearingHeader: React.FC<Props> = ({
     setIsAnimating(true);
     Animated.timing(fullscreenOffsetRef, {
       toValue: isFullHeight ? 0 : contentOffset,
-      duration: 400,
-      easing: Easing.inOut(Easing.ease),
+      duration: 800,
+      easing: Easing.out(Easing.exp),
       useNativeDriver: true,
     }).start(function () {
       setIsAnimating(false);
@@ -201,6 +203,7 @@ const DisappearingHeader: React.FC<Props> = ({
             title={headerTitle}
             rightButton={{type: 'chat', color: themeColor}}
             alternativeTitleComponent={alternativeTitleComponent}
+            showAlternativeTitle={showAlterntativeTitle && !isAnimating}
             scrollRef={scrollYRef}
             leftButton={leftButton}
           />
@@ -381,8 +384,9 @@ function useCalculateHeaderContentHeight(isAnimating: boolean) {
   const {top} = useSafeAreaInsets();
 
   const {minHeight: bottomTabBarHeight} = useBottomNavigationStyles();
-  const boxHeight =
-    actualHeight - screenHeaderHeight - top - bottomTabBarHeight;
+  const boxHeight = Math.ceil(
+    actualHeight - screenHeaderHeight - top - bottomTabBarHeight,
+  );
 
   const calculatedHeights = {
     boxHeight,

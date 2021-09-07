@@ -1,7 +1,5 @@
 import {useState, useCallback, useEffect} from 'react';
-import {useIsFocused} from '@react-navigation/native';
 import useInterval from './use-interval';
-import useDebounce from './useDebounce';
 import useIsLoading from './use-is-loading';
 
 type PollableResourceOptions<T, E> = {
@@ -44,7 +42,11 @@ export default function usePollableResource<T, E extends Error = Error>(
         setError(undefined);
         const newState = await callback();
         setState(newState);
-      } catch (e) {
+      } catch (e: any) {
+        // only way to type guard e here is to have the consumer of
+        // use-pollable-resource send in a type guarding function
+        // or accept that arguments sent to filterError and setError
+        // can also be 'unknown'. So for simplicity we're setting e to 'any'
         if (!filterError || filterError(e)) setError(e);
       } finally {
         if (loading === 'WITH_LOADING') {

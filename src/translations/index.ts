@@ -47,3 +47,4 @@ export {default as JourneyDatePickerTexts} from './screens/subscreens/JourneyDat
 export {default as DepartureDatePickerTexts} from './screens/subscreens/DepartureDatePicker';
 export {default as TravelDateTexts} from './screens/subscreens/TravelDate';
 export {default as InformationTexts} from './screens/subscreens/Information';
+export {default as ContactSheetTexts} from './screens/subscreens/ContactSheet';

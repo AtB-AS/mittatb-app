@@ -34,7 +34,7 @@ const Time: React.FC<TimeValues> = (timeValues) => {
     case 'no-realtime': {
       return (
         <ThemeText>
-          <ThemeText>{t(dictionary.missingRealTimePrefix)} </ThemeText>
+          <ThemeText>{t(dictionary.missingRealTimePrefix)}</ThemeText>
           {scheduled}
         </ThemeText>
       );

@@ -49,7 +49,7 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_TYPE: "appstore"
       - name: Generate icons
-        run: brew install imagemagick && yarn app-icon generate -i icon.png --platforms=ios
+        run: brew install imagemagick && yarn icons
       - name: Run fastlane build
         run: fastlane ios build
         env:

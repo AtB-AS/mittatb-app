@@ -18,9 +18,9 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
   const {theme} = useTheme();
   const {t} = useTranslation();
 
-  function openVippsUrl(vippsUrl: string) {
-    if (Linking.canOpenURL(vippsUrl)) {
-      Linking.openURL(vippsUrl);
+  async function openVippsUrl(vippsUrl: string) {
+    if (await Linking.canOpenURL(vippsUrl)) {
+      await Linking.openURL(vippsUrl);
     }
   }
 

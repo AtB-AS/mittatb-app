@@ -1,8 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   AccessibilityProps,
   AccessibilityRole,
-  Switch,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -14,6 +13,7 @@ import ThemeIcon from '@atb/components/theme-icon';
 import NavigationIcon from '@atb/components/theme-icon/navigation-icon';
 import {useSectionItem, SectionItem, useSectionStyle} from './section-utils';
 import InternalLabeledItem from './internals/internal-labeled-item';
+import FixedSwitch from '../switch';
 
 export type ActionModes = 'check' | 'toggle' | 'heading-expand';
 export type ActionItemProps = SectionItem<{
@@ -37,9 +37,9 @@ export default function ActionItem({
   if (mode === 'toggle') {
     return (
       <InternalLabeledItem label={text} accessibleLabel={false} {...props}>
-        <Switch
+        <FixedSwitch
           value={checked}
-          onValueChange={(v) => onPress?.(v)}
+          onValueChange={(value) => onPress?.(value)}
           accessibilityLabel={text}
           {...accessibility}
         />

@@ -16,6 +16,7 @@ jobs:
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
           echo "APP_ENVIRONMENT=store" >> $GITHUB_ENV
           echo "APP_ORG=atb" >> $GITHUB_ENV
+          echo "KEYSTORE_PATH=./keystore.jks" >> $GITHUB_ENV
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
         env:
@@ -43,7 +44,7 @@ jobs:
           GPG_KEYSTORE_FILE: ${{ secrets.GPG_KEYSTORE_FILE }}
           GPG_KEYSTORE_PASS: ${{ secrets.GPG_KEYSTORE_PASS }}
       - name: Generate icons
-        run: brew install imagemagick && yarn app-icon generate -i icon.png --platforms=android --rounded none && yarn app-icon generate -i icon.round.png --platforms=android --rounded only
+        run: brew install imagemagick && yarn icons
       - name: Run fastlane build
         run: fastlane android build
         env:

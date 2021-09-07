@@ -13,6 +13,8 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {TicketModalNavigationProp, TicketModalStackParams} from './';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {useAccessibilityContext} from '@atb/AccessibilityContext';
+import {validateEmail} from '@atb/utils/validation';
 
 export type ReceiptScreenRouteParams = {
   orderId: string;
@@ -29,7 +31,12 @@ type Props = {
   navigation: TicketModalNavigationProp;
 };
 
-type MessageState = 'loading' | 'success' | 'error' | undefined;
+type MessageState =
+  | 'loading'
+  | 'success'
+  | 'error'
+  | 'invalid-field'
+  | undefined;
 
 export default function ReceiptScreen({navigation, route}: Props) {
   const {orderId, orderVersion} = route.params;
@@ -38,9 +45,10 @@ export default function ReceiptScreen({navigation, route}: Props) {
   const [reference, setReference] = useState<string | undefined>(undefined);
   const [state, setState] = useState<MessageState>(undefined);
   const {t} = useTranslation();
+  const a11yContext = useAccessibilityContext();
 
   async function onSend() {
-    if (email.trim().length) {
+    if (validateEmail(email.trim())) {
       try {
         setState('loading');
         setReference(undefined);
@@ -58,6 +66,8 @@ export default function ReceiptScreen({navigation, route}: Props) {
         console.warn(err);
         setState('error');
       }
+    } else {
+      setState('invalid-field');
     }
   }
 
@@ -66,9 +76,14 @@ export default function ReceiptScreen({navigation, route}: Props) {
       <FullScreenHeader
         leftButton={{type: 'back'}}
         title={t(TicketTexts.receipt.header.title)}
+        setFocusOnLoad={a11yContext.isScreenReaderEnabled}
       />
       <View style={styles.content}>
-        <MessageBox {...translateStateToMessage(state, t, email, reference)} />
+        <View accessibilityLiveRegion={'polite'}>
+          <MessageBox
+            {...translateStateToMessage(state, t, email, reference)}
+          />
+        </View>
         <Sections.Section withTopPadding withBottomPadding>
           <Sections.TextInput
             label={t(TicketTexts.receipt.inputLabel)}
@@ -78,7 +93,7 @@ export default function ReceiptScreen({navigation, route}: Props) {
             autoCapitalize="none"
             autoCompleteType="email"
             autoCorrect={false}
-            autoFocus={true}
+            autoFocus={!a11yContext.isScreenReaderEnabled}
           />
         </Sections.Section>
         <Button
@@ -113,6 +128,11 @@ function translateStateToMessage(
       return {
         message: t(TicketTexts.receipt.messages.success(email, reference!)),
         type: 'valid',
+      };
+    case 'invalid-field':
+      return {
+        message: t(TicketTexts.receipt.messages.invalidField),
+        type: 'error',
       };
     default:
       return {

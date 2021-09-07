@@ -33,6 +33,8 @@ export default function LocationInput({
         t(SectionTexts.locationInput.a11yValue(currentValueLabel)) +
         screenReaderPause,
     };
+  } else {
+    props.accessibilityValue = {text: ''}; // this must be reset or TB will announce previous result
   }
 
   return (

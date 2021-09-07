@@ -28,7 +28,9 @@ build/
 .idea
 .gradle
 local.properties
+env.properties
 *.iml
+ic_launcher*
 
 # node.js
 #
@@ -52,12 +54,15 @@ buck-out/
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
+fastlane/report.xml
+
 
 # Bundle artifact
 *.jsbundle
 
 # CocoaPods
 /ios/Pods/
+ios/atb/Images.xcassets/AppIcon.appiconset/*.png
 
 # Certs
 keystore
@@ -71,3 +76,9 @@ firebase-debug.log
 
 # Env
 /.env
+/icons
+ios/Configs/Config.xcconfig
+
+#Service files
+android/app/google-services.json
+ios/atb/GoogleService-Info.plist

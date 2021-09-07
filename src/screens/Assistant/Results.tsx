@@ -10,14 +10,13 @@ import {isSeveralDays} from '@atb/utils/date';
 import React, {Fragment, useEffect, useMemo, useState} from 'react';
 import {Text, View} from 'react-native';
 import ResultItem from './ResultItem';
-import {NoResultReason} from './types';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
   showEmptyScreen: boolean;
   isEmptyResult: boolean;
   isSearching: boolean;
-  resultReasons: NoResultReason[];
+  resultReasons: String[];
   onDetailsPressed(
     tripPatternId?: string,
     tripPatterns?: TripPattern[],

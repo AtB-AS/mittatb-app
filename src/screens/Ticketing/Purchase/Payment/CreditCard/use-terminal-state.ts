@@ -108,7 +108,7 @@ export default function useTerminalState(
   const {setPreference} = usePreferences();
 
   const handleAxiosError = useCallback(
-    function (err: AxiosError, errorContext: ErrorContext) {
+    function (err: AxiosError | unknown, errorContext: ErrorContext) {
       const errorType = getAxiosErrorType(err);
 
       if (errorType !== 'cancel') {

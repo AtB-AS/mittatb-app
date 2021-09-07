@@ -11,9 +11,9 @@ platform :ios do
     register_devices(devices_file: "./ios/devices.txt")
     match(type: "adhoc", force_for_new_devices: true)
   end
-  
+
   desc 'Match certificates'
-  lane :get_cert do 
+  lane :get_cert do
     ensure_env_vars(
       env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_URL', 'MATCH_TYPE', 'BUNDLE_IDENTIFIER', 'APPLE_TEAM_ID']
     )
@@ -41,7 +41,7 @@ platform :ios do
         type: ENV["MATCH_TYPE"],
         app_identifier: ENV['BUNDLE_IDENTIFIER'],
         storage_mode: 'git',
-        git_url: ENV['FASTLANE_MATCH_URL'], 
+        git_url: ENV['FASTLANE_MATCH_URL'],
         team_id: ENV['APPLE_TEAM_ID'],
         readonly: true
       )
@@ -51,23 +51,20 @@ platform :ios do
   desc 'Build the iOS application.'
   lane :build do
     ensure_env_vars(
-      env_vars: ['BUILD_ID', 'BUNDLE_IDENTIFIER', 'PROVISIONING_PROFILE', 'EXPORT_METHOD']
+      env_vars: ['BUILD_ID', 'EXPORT_METHOD']
     )
     increment_build_number(
-      build_number: ENV["BUILD_ID"], 
+      build_number: ENV["BUILD_ID"],
       xcodeproj: './ios/atb.xcodeproj/'
     )
     update_code_signing_settings(
       use_automatic_signing: false,
-      bundle_identifier: ENV['BUNDLE_IDENTIFIER'],
-      code_sign_identity: "iPhone Distribution",
-      profile_name: ENV['PROVISIONING_PROFILE'],
       path: "./ios/atb.xcodeproj"
     )
     cocoapods(podfile: './ios/Podfile')
     build_app(
-      scheme: 'atb', 
-      configuration: 'Release', 
+      scheme: 'atb',
+      configuration: 'Release',
       export_method: ENV['EXPORT_METHOD'],
       workspace: './ios/atb.xcworkspace'
     )
@@ -82,10 +79,10 @@ platform :ios do
       api_token: ENV["APPCENTER_API_KEY"],
       owner_name: "AtB-AS",
       app_name: "MittAtb-1",
-      owner_type: "organization", 
+      owner_type: "organization",
       destinations: "*",
       file: "AtB.ipa",
-      notify_testers: true 
+      notify_testers: true
     )
   end
 
@@ -98,7 +95,7 @@ platform :ios do
       api_token: ENV["APPCENTER_API_KEY"],
       owner_name: "AtB-AS",
       app_name: "MittAtb-1",
-      owner_type: "organization", 
+      owner_type: "organization",
       file: "AtB.ipa",
       destination_type: "store",
       destinations: "AtB Internal",
@@ -113,18 +110,17 @@ platform :android do
 
   lane :build do
     ensure_env_vars(
-      env_vars: ['BUILD_ID', 'KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS', 'APP_ENVIRONMENT']
-    )
-    build_type = ENV['APP_ENVIRONMENT']  
+      env_vars: ['BUILD_ID','KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS', 'APP_ENVIRONMENT', 'CI','KEYSTORE_PATH']
+        )
+    build_type = ENV['APP_ENVIRONMENT']
     gradle(task: 'clean', project_dir: 'android/')
     gradle(
-      task: 'assemble', 
+      task: 'assemble',
       build_type: build_type,
-      project_dir: 'android/', 
+      project_dir: 'android/',
       print_command: false, #don't print my passwords please
       properties: {
-        "versionCode" => ENV["BUILD_ID"],
-        "android.injected.signing.store.file" => "./keystore.jks",
+        "android.injected.signing.store.file" => ENV["KEYSTORE_PATH"],
         "android.injected.signing.store.password" => ENV["KEYSTORE_PASS"],
         "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
         "android.injected.signing.key.password" => ENV["KEY_PASS"],
@@ -143,10 +139,10 @@ platform :android do
       api_token: ENV["APPCENTER_API_KEY"],
       owner_name: "AtB-AS",
       app_name: "MittAtb",
-      owner_type: "organization", 
+      owner_type: "organization",
       destinations: "*",
       file: "app-staging.apk",
-      notify_testers: true 
+      notify_testers: true
     )
   end
 
@@ -158,7 +154,7 @@ platform :android do
       api_token: ENV["APPCENTER_API_KEY"],
       owner_name: "AtB-AS",
       app_name: "MittAtb",
-      owner_type: "organization", 
+      owner_type: "organization",
       file: "app-store.apk",
       destination_type: "store",
       destinations: "Alpha",
@@ -167,3 +163,7 @@ platform :android do
     )
   end
 end
+
+
+
+

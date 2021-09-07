@@ -14,6 +14,25 @@ const NearbyTexts = {
   },
   search: {
     label: _('Fra', 'From'),
+    later: {
+      label: _('Senere', 'Later'),
+      a11yLabel: _(
+        'Velg senere avreisetidspunkt',
+        'Choose later departure time',
+      ),
+      a11yHint: _(
+        'Aktiver for å velge et senere avreisetidspunkt',
+        'Activate to choose a later departure time',
+      ),
+    },
+    now: {
+      label: _('Nå', 'Now'),
+      a11yLabel: _('Velg avreisetidspunkt nå', 'Choose departure time now'),
+      a11yHint: _(
+        'Aktiver for å sette avreisetidspunkt til nå',
+        'Activate to set later departure time to now',
+      ),
+    },
   },
   favorites: {
     toggle: _('Vis kun favorittavganger', 'View favourite departures only'),
@@ -45,6 +64,8 @@ const NearbyTexts = {
       'Aktivér for å endre avgangstidspunkt',
       'Activate to change time of departures',
     ),
+    confirm: _('Bekreft', 'Confirm'),
+    header: _('Velg dato og tid', 'Select date and time'),
   },
   messages: {
     networkError: _(

@@ -43,7 +43,11 @@ import {useLayout} from '@atb/utils/use-layout';
 import Bugsnag from '@bugsnag/react-native';
 import {TFunc} from '@leile/lobo-t';
 import analytics from '@react-native-firebase/analytics';
-import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
+import {
+  CompositeNavigationProp,
+  RouteProp,
+  useIsFocused,
+} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
@@ -53,7 +57,7 @@ import FadeBetween from './FadeBetween';
 import {SearchTime, useSearchTimeValue} from './journey-date-picker';
 import NewsBanner from './NewsBanner';
 import Results from './Results';
-import {NoResultReason, SearchStateType} from './types';
+import {SearchStateType} from './types';
 import {ThemeColor} from '@atb/theme/colors';
 
 const themeColor: ThemeColor = 'background_gray';
@@ -126,7 +130,7 @@ const Assistant: React.FC<Props> = ({
     () => setUpdatingLocation(false),
     Boolean(currentLocation) && hasLocationPermission,
   );
-  useDoOnceWhen(setCurrentLocationAsFrom, Boolean(currentLocation));
+  useDoOnceWhen(setCurrentLocationAsFromIfEmpty, Boolean(currentLocation));
 
   const searchTime = useSearchTimeValue('searchTime', {
     option: 'now',
@@ -164,6 +168,13 @@ const Assistant: React.FC<Props> = ({
       },
       toLocation: to,
     });
+  }
+
+  function setCurrentLocationAsFromIfEmpty() {
+    if (from) {
+      return;
+    }
+    setCurrentLocationAsFrom();
   }
 
   function onSearchTimePress() {
@@ -275,7 +286,9 @@ const Assistant: React.FC<Props> = ({
         </View>
 
         <FadeBetween
+          duration={400}
           visibleKey={isHeaderFullHeight ? 'favoriteChips' : 'dateInput'}
+          preserveHeightFrom={'dateInput'}
         >
           <FavoriteChips
             key="favoriteChips"
@@ -357,7 +370,7 @@ const Assistant: React.FC<Props> = ({
       </ThemeText>
     </View>
   );
-  const noResultReasons = computeNoResultReasons(searchTime, from, to);
+  const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
 
   const onPressed = useCallback(
     (tripPatternId, tripPatterns, startIndex) =>
@@ -375,7 +388,10 @@ const Assistant: React.FC<Props> = ({
     string | undefined
   >();
 
+  const screenHasFocus = useIsFocused();
+
   useEffect(() => {
+    if (!screenHasFocus) return;
     switch (searchState) {
       case 'searching':
         setSearchStateMessage(t(AssistantTexts.searchState.searching));
@@ -403,6 +419,7 @@ const Assistant: React.FC<Props> = ({
       headerMargin={24}
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
+      showAlterntativeTitle={Boolean(from && to)}
       leftButton={{
         type: 'home',
         color: themeColor,
@@ -470,17 +487,20 @@ type SearchForLocations = {
 };
 
 function computeNoResultReasons(
+  t: TFunc<typeof Language>,
   date?: SearchTime,
   from?: Location,
   to?: Location,
-): NoResultReason[] {
+): String[] {
   let reasons = [];
 
   if (!!from && !!to) {
     if (locationsAreEqual(from, to)) {
-      reasons.push(NoResultReason.IdenticalLocations);
+      reasons.push(
+        t(AssistantTexts.searchState.noResultReason.IdenticalLocations),
+      );
     } else if (distanceInMetres(from, to) < LOCATIONS_REALLY_CLOSE_THRESHOLD) {
-      reasons.push(NoResultReason.CloseLocations);
+      reasons.push(t(AssistantTexts.searchState.noResultReason.CloseLocations));
     }
   }
 
@@ -489,8 +509,8 @@ function computeNoResultReasons(
   if (isPastDate) {
     const isArrival = date?.option === 'arrival';
     const dateReason = isArrival
-      ? NoResultReason.PastArrivalTime
-      : NoResultReason.PastDepartureTime;
+      ? t(AssistantTexts.searchState.noResultReason.PastArrivalTime)
+      : t(AssistantTexts.searchState.noResultReason.PastDepartureTime);
     reasons.push(dateReason);
   }
   return reasons;

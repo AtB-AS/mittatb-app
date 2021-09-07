@@ -17,23 +17,9 @@ import {
   defaultTariffZones,
   defaultUserProfiles,
 } from './reference-data/defaults';
+import {useAppState} from './AppContext';
 
-export type RemoteConfigContextState = Pick<
-  RemoteConfig,
-  | 'enable_ticketing'
-  | 'enable_intercom'
-  | 'enable_i18n'
-  | 'enable_creditcard'
-  | 'enable_recent_tickets'
-  | 'enable_login'
-  | 'enable_period_tickets'
-  | 'must_upgrade_ticketing'
-  | 'news_enabled'
-  | 'news_text'
-  | 'news_link_text'
-  | 'news_link_url'
-  | 'vat_percent'
-> & {
+export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;
   modes_we_sell_tickets_for: string[];
   preassigned_fare_products: PreassignedFareProduct[];
@@ -53,12 +39,24 @@ type UserInfoErrorFromFirebase = {
   nativeErrorCode: number;
 };
 
+type RemoteConfigError = {
+  userInfo: UserInfoErrorFromFirebase;
+} & Error;
+
+function isRemoteConfigError(error: any): error is RemoteConfigError {
+  return 'userInfo' in error;
+}
+
 function isUserInfo(a: any): a is UserInfoErrorFromFirebase {
   return a && 'code' in a && 'message' in a;
 }
 
 const RemoteConfigContextProvider: React.FC = ({children}) => {
   const [config, setConfig] = useState<RemoteConfig>(defaultRemoteConfig);
+  const {
+    isLoading: isLoadingAppState,
+    newBuildSincePreviousLaunch,
+  } = useAppState();
 
   async function fetchConfig() {
     try {
@@ -66,18 +64,17 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
       const currentConfig = await getConfig();
       setConfig(currentConfig);
     } catch (e) {
-      const userInfo = e.userInfo;
-      if (!isUserInfo(userInfo)) {
-        throw e;
-      }
-      if (
-        isUserInfo(userInfo) &&
-        (userInfo.code === 'failure' || userInfo.fatal)
-      ) {
-        Bugsnag.notify(e, function (event) {
-          event.addMetadata('metadata', {userInfo});
-          event.severity = 'info';
-        });
+      if (isRemoteConfigError(e) && isUserInfo(e.userInfo)) {
+        const {userInfo} = e;
+
+        if (userInfo.code === 'failure' || userInfo.fatal) {
+          Bugsnag.notify(e, function (event) {
+            event.addMetadata('metadata', {userInfo});
+            event.severity = 'info';
+          });
+        }
+      } else {
+        Bugsnag.notify(e as any);
       }
     }
   }
@@ -85,13 +82,21 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
   useEffect(() => {
     async function setupRemoteConfig() {
       const configApi = remoteConfig();
-
+      await configApi.setConfigSettings({
+        minimumFetchIntervalMillis: 21600000, // 6 hours
+      });
       await configApi.setDefaults(defaultRemoteConfig);
-      await fetchConfig();
+      if (newBuildSincePreviousLaunch) {
+        await refresh();
+      } else {
+        await fetchConfig();
+      }
     }
 
-    setupRemoteConfig();
-  }, []);
+    if (!isLoadingAppState) {
+      setupRemoteConfig();
+    }
+  }, [isLoadingAppState, newBuildSincePreviousLaunch]);
 
   async function refresh() {
     const configApi = remoteConfig();
@@ -103,6 +108,7 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
     await configApi.setConfigSettings({
       minimumFetchIntervalMillis,
     });
+    console.warn('Force-refreshed Remote Config');
   }
 
   return (

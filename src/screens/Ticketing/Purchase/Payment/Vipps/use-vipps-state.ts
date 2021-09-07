@@ -76,7 +76,7 @@ export default function useVippsState(
   const {preferences, setPreference} = usePreferences();
 
   const handleAxiosError = useCallback(
-    function (err: AxiosError, errorContext: ErrorContext) {
+    function (err: AxiosError | unknown, errorContext: ErrorContext) {
       const errorType = getAxiosErrorType(err);
       if (errorType !== 'cancel') {
         dispatch({

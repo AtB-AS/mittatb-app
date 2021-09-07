@@ -235,10 +235,9 @@ function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
     return null;
   }
 
-  const inPast = isInThePast(departure.time);
   const timeWithRealtimePrefix = departure.realtime
     ? time
-    : t(dictionary.missingRealTimePrefix) + ' ' + time;
+    : t(dictionary.missingRealTimePrefix) + time;
 
   return (
     <Button
@@ -248,7 +247,6 @@ function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
       onPress={() => onPress(departure)}
       text={timeWithRealtimePrefix}
       style={styles.departure}
-      disabled={inPast}
       textStyle={styles.departureText}
       icon={hasSituations(departure) ? Warning : undefined}
       iconPosition="right"

@@ -24,6 +24,7 @@ export type RemoteConfig = {
   preassigned_fare_products: string;
   tariff_zones: string;
   user_profiles: string;
+  customer_service_url: string;
 };
 
 export const defaultModesWeSellTicketsFor: string[] = [
@@ -54,6 +55,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   preassigned_fare_products: JSON.stringify(defaultPreassignedFareProducts),
   tariff_zones: JSON.stringify(defaultTariffZones),
   user_profiles: JSON.stringify(defaultUserProfiles),
+  customer_service_url: 'https://www.atb.no/kontakt/',
 };
 
 export function getConfig(): RemoteConfig {
@@ -93,6 +95,9 @@ export function getConfig(): RemoteConfig {
     values['tariff_zones']?.asString() ?? defaultRemoteConfig.tariff_zones;
   const user_profiles =
     values['user_profiles']?.asString() ?? defaultRemoteConfig.user_profiles;
+  const customer_service_url =
+    values['customer_service_url']?.asString() ??
+    defaultRemoteConfig.customer_service_url;
 
   return {
     modes_we_sell_tickets_for,
@@ -113,6 +118,7 @@ export function getConfig(): RemoteConfig {
     preassigned_fare_products,
     tariff_zones,
     user_profiles,
+    customer_service_url,
   };
 }
 

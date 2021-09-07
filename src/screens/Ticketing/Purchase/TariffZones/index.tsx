@@ -35,8 +35,8 @@ import React, {useEffect, useRef, useState} from 'react';
 import {PixelRatio, Platform, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../';
-import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 import TariffZoneResults from '@atb/screens/Ticketing/Purchase/TariffZones/search/TariffZoneResults';
+import {useAccessibilityContext} from '@atb/AccessibilityContext';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
@@ -321,7 +321,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
   const styles = useMapStyles();
   const {t, language} = useTranslation();
   const {theme} = useTheme();
-  const isScreenReaderEnabled = useIsScreenReaderEnabled();
+  const a11yContext = useAccessibilityContext();
 
   const featureCollection = mapZonesToFeatureCollection(tariffZones, language);
 
@@ -380,7 +380,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
         </Section>
       </View>
 
-      {isScreenReaderEnabled ? (
+      {a11yContext.isScreenReaderEnabled ? (
         <>
           <TariffZoneResults
             tariffZones={tariffZones}
