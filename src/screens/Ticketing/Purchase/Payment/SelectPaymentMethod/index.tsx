@@ -287,7 +287,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
   const info = getPaymentInfo(option.paymentType);
 
   return (
-    <View
+    <TouchableOpacity
       style={{
         flex: 1,
         flexDirection: 'column',
@@ -296,15 +296,15 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
         backgroundColor: theme.colors.background_0.backgroundColor,
         borderRadius: 8,
       }}
+      onPress={select}
+      accessibilityHint={info.a11y}
     >
-      <TouchableOpacity
+      <View
         style={{
           flex: 1,
           flexDirection: 'row',
           alignItems: 'center',
         }}
-        accessibilityHint={info.a11y}
-        onPress={select}
       >
         <View
           style={{
@@ -354,7 +354,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
         option.paymentType === PaymentType.Vipps
           ? info.icon
           : null}
-      </TouchableOpacity>
+      </View>
       {selected &&
       option.savedType === 'normal' &&
       option.paymentType !== PaymentType.Vipps ? (
@@ -412,7 +412,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
           </ThemeText>
         </View>
       ) : null}
-    </View>
+    </TouchableOpacity>
   );
 };
 
