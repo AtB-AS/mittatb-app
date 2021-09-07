@@ -40,10 +40,7 @@ const ThemeText: React.FC<ThemeTextProps> = ({
     textStyle = {
       ...typeStyle,
       fontFamily:
-        // typeStyle.fontWeight === 'bold' ? 'Roboto-Bold' : 'Roboto-Regular',
-        typeStyle.fontWeight === 'bold'
-          ? 'DancingScript-Bold'
-          : 'DancingScript-Regular',
+        typeStyle.fontWeight === 'bold' ? 'Roboto-Bold' : 'Roboto-Regular',
       fontWeight: 'normal',
     };
   }
