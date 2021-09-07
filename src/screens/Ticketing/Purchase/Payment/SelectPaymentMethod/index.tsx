@@ -213,6 +213,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
   const {theme} = useTheme();
   const [save, setSave] = useState<boolean>(false);
   const {t} = useTranslation();
+  const styles = useStyles();
 
   useEffect(() => {
     if (selected) {
@@ -288,57 +289,13 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
 
   return (
     <TouchableOpacity
-      style={{
-        flex: 1,
-        flexDirection: 'column',
-        marginVertical: 6,
-        padding: 24,
-        backgroundColor: theme.colors.background_0.backgroundColor,
-        borderRadius: 8,
-      }}
+      style={styles.paymentOption}
       onPress={select}
       accessibilityHint={info.a11y}
     >
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}
-      >
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
-          <View
-            style={{
-              marginRight: 12,
-              height: 24,
-              width: 24,
-              borderRadius: 12,
-              borderWidth: 2,
-              backgroundColor: selected
-                ? theme.colors.primary_2.backgroundColor
-                : theme.colors.background_0.backgroundColor,
-              borderColor: theme.colors.primary_2.backgroundColor,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            {selected ? (
-              <View
-                style={{
-                  height: 12,
-                  width: 12,
-                  borderRadius: 6,
-                  backgroundColor: theme.colors.background_0.backgroundColor,
-                }}
-              />
-            ) : null}
-          </View>
+      <View style={styles.centerRow}>
+        <View style={styles.centerRow}>
+          <RadioView checked={selected} />
           <ThemeText>{info.text}</ThemeText>
           {option.savedType === 'recurring' ? (
             <ThemeText
@@ -368,51 +325,54 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
             {t(SelectPaymentMethodTexts.save_payment_option_description.text)}
           </ThemeText>
           <TouchableOpacity
-            style={{
-              alignItems: 'center',
-              flex: 1,
-              flexDirection: 'row',
-              paddingTop: 6,
-            }}
+            style={styles.saveButton}
             onPress={() => {
               setSave(!save);
             }}
           >
-            <View
-              style={{
-                marginRight: 12,
-                height: 24,
-                width: 24,
-                borderRadius: 4,
-                borderWidth: 2,
-                backgroundColor: save
-                  ? theme.colors.primary_2.backgroundColor
-                  : theme.colors.background_0.backgroundColor,
-                borderColor: theme.colors.primary_2.backgroundColor,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              {save ? <Confirm fill="white"></Confirm> : null}
-            </View>
+            <SavedCheckbox checked={save} />
             <ThemeText>{t(SelectPaymentMethodTexts.save_card.text)}</ThemeText>
           </TouchableOpacity>
         </View>
       ) : null}
       {option.savedType === 'recurring' && option.recurringCard.expires_at ? (
         <View>
-          <ThemeText
-            style={{
-              opacity: 0.6,
-              paddingTop: 18,
-              paddingLeft: 36,
-            }}
-          >
+          <ThemeText style={styles.masked}>
             {getExpireDate(option.recurringCard.expires_at)}
           </ThemeText>
         </View>
       ) : null}
     </TouchableOpacity>
+  );
+};
+
+type CheckedProps = {
+  checked: boolean;
+};
+
+const RadioView: React.FC<CheckedProps> = ({checked}) => {
+  const styles = useStyles();
+  return (
+    <View
+      style={[styles.radio, checked ? styles.radioSelected : styles.radioBlank]}
+    >
+      {checked ? <View style={styles.radioInnner} /> : null}
+    </View>
+  );
+};
+
+const SavedCheckbox: React.FC<CheckedProps> = ({checked}) => {
+  const {theme} = useTheme();
+  const styles = useStyles();
+  return (
+    <View
+      style={[
+        styles.saveCheckbox,
+        checked ? styles.saveCheckboxChecked : styles.saveCheckboxDefault,
+      ]}
+    >
+      {checked ? <Confirm fill="white"></Confirm> : null}
+    </View>
   );
 };
 
@@ -422,8 +382,67 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.colors.background_2.backgroundColor,
     paddingHorizontal: 12,
   },
-  paymentButton: {
-    marginTop: theme.spacings.medium,
+  paymentOption: {
+    flex: 1,
+    flexDirection: 'column',
+    marginVertical: 6,
+    padding: 24,
+    backgroundColor: theme.colors.background_0.backgroundColor,
+    borderRadius: 8,
+  },
+  centerRow: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  radioSelected: {
+    backgroundColor: theme.colors.primary_2.backgroundColor,
+  },
+  radioBlank: {
+    backgroundColor: theme.colors.background_0.backgroundColor,
+  },
+  radio: {
+    marginRight: 12,
+    height: 24,
+    width: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: theme.colors.primary_2.backgroundColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  radioInnner: {
+    height: 12,
+    width: 12,
+    borderRadius: 6,
+    backgroundColor: theme.colors.background_0.backgroundColor,
+  },
+  saveCheckbox: {
+    marginRight: 12,
+    height: 24,
+    width: 24,
+    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: theme.colors.primary_2.backgroundColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  saveCheckboxChecked: {
+    backgroundColor: theme.colors.primary_2.backgroundColor,
+  },
+  saveCheckboxDefault: {
+    backgroundColor: theme.colors.background_0.backgroundColor,
+  },
+  saveButton: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    paddingTop: 6,
+  },
+  masked: {
+    opacity: 0.6,
+    paddingTop: 18,
+    paddingLeft: 36,
   },
 }));
 
