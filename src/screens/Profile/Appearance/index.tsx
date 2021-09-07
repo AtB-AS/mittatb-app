@@ -12,7 +12,7 @@ export default function Appearance() {
     overrideSystemAppearance,
     updateThemePreference,
     overrideOSThemePreference,
-    overrideSystemFont,
+    useAndroidSystemFont,
     updateFontOverride,
   } = useTheme();
   const style = useProfileHomeStyle();
@@ -29,7 +29,7 @@ export default function Appearance() {
         <Section withTopPadding withPadding>
           <ActionItem
             mode="toggle"
-            text={t(AppearanceSettingsTexts.actions.usePhoneSettings)}
+            text={t(AppearanceSettingsTexts.actions.usePhoneTheme)}
             checked={!overrideSystemAppearance}
             onPress={(checked) => overrideOSThemePreference(!checked)}
           />
@@ -44,17 +44,19 @@ export default function Appearance() {
                   updateThemePreference(checked ? 'dark' : 'light')
                 }
               />
-              {Platform.OS === 'android' && (
-                <ActionItem
-                  mode="toggle"
-                  text={'Overstyr font'}
-                  checked={overrideSystemFont}
-                  onPress={(checked) => updateFontOverride(checked)}
-                />
-              )}
             </>
           )}
         </Section>
+        {Platform.OS === 'android' && (
+          <Section withTopPadding withPadding>
+            <ActionItem
+              mode="toggle"
+              text={t(AppearanceSettingsTexts.actions.useSystemFont)}
+              checked={useAndroidSystemFont}
+              onPress={(checked) => updateFontOverride(checked)}
+            />
+          </Section>
+        )}
       </ScrollView>
     </View>
   );

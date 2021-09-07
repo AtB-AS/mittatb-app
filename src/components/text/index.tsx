@@ -6,7 +6,7 @@ import {
   ThemeColor,
 } from '@atb/theme/colors';
 import React from 'react';
-import {Text, TextProps, TextStyle} from 'react-native';
+import {Platform, Text, TextProps, TextStyle} from 'react-native';
 import renderMarkdown from './markdown-renderer';
 
 export const MAX_FONT_SCALE = 2;
@@ -25,7 +25,7 @@ const ThemeText: React.FC<ThemeTextProps> = ({
   children,
   ...props
 }) => {
-  const {theme, overrideSystemFont} = useTheme();
+  const {theme, useAndroidSystemFont} = useTheme();
 
   const typeStyle = {
     ...theme.typography[fontType],
@@ -36,11 +36,14 @@ const ThemeText: React.FC<ThemeTextProps> = ({
 
   let textStyle: TextStyle = typeStyle;
 
-  if (overrideSystemFont) {
+  if (Platform.OS === 'android' && !useAndroidSystemFont) {
     textStyle = {
       ...typeStyle,
       fontFamily:
-        typeStyle.fontWeight === 'bold' ? 'Roboto-Bold' : 'Roboto-Regular',
+        // typeStyle.fontWeight === 'bold' ? 'Roboto-Bold' : 'Roboto-Regular',
+        typeStyle.fontWeight === 'bold'
+          ? 'DancingScript-Bold'
+          : 'DancingScript-Regular',
       fontWeight: 'normal',
     };
   }
