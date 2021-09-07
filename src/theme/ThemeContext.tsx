@@ -14,7 +14,7 @@ interface ThemeContextValue {
 
   updateThemePreference(themeKey: keyof Themes): void;
   overrideOSThemePreference(override: boolean): void;
-  updateFontOverride(override: boolean): void;
+  updateAndroidFontOverride(override: boolean): void;
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
@@ -27,7 +27,7 @@ const ThemeContext = createContext<ThemeContextValue>({
 
   updateThemePreference() {},
   overrideOSThemePreference() {},
-  updateFontOverride() {},
+  updateAndroidFontOverride() {},
 });
 
 export function useTheme() {
@@ -45,7 +45,7 @@ const ThemeContextProvider: React.FC = ({children}) => {
     preferences: {
       colorScheme: storedColorScheme,
       overrideSystemAppearance,
-      overrideSystemFont,
+      useAndroidSystemFont,
     },
   } = usePreferences();
 
@@ -70,7 +70,7 @@ const ThemeContextProvider: React.FC = ({children}) => {
   };
 
   const updateFontOverride = (override: boolean) => {
-    setPreference({overrideSystemFont: override});
+    setPreference({useAndroidSystemFont: override});
   };
 
   const theme = themes[actualColorScheme];
@@ -81,10 +81,10 @@ const ThemeContextProvider: React.FC = ({children}) => {
         themeName: actualColorScheme,
         storedColorScheme: storedColorScheme ?? 'light',
         overrideSystemAppearance: overrideSystemAppearance ?? false,
-        useAndroidSystemFont: !!overrideSystemFont,
+        useAndroidSystemFont: !!useAndroidSystemFont,
         updateThemePreference,
         overrideOSThemePreference,
-        updateFontOverride,
+        updateAndroidFontOverride: updateFontOverride,
       }}
     >
       {children}

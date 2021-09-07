@@ -13,7 +13,7 @@ export default function Appearance() {
     updateThemePreference,
     overrideOSThemePreference,
     useAndroidSystemFont,
-    updateFontOverride,
+    updateAndroidFontOverride,
   } = useTheme();
   const style = useProfileHomeStyle();
   const {t} = useTranslation();
@@ -53,7 +53,7 @@ export default function Appearance() {
               mode="toggle"
               text={t(AppearanceSettingsTexts.actions.useSystemFont)}
               checked={useAndroidSystemFont}
-              onPress={(checked) => updateFontOverride(checked)}
+              onPress={(checked) => updateAndroidFontOverride(checked)}
             />
           </Section>
         )}
