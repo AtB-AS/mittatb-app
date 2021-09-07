@@ -40,4 +40,9 @@ else
     echo "Copying boot splash image to assets/"
     cp $ORG_FOLDER/bootsplash_logo_original.png assets/
 
+    echo "Generating app icons and bootsplash screens"
+    export $(grep -v '^#' .env | gxargs -d '\n') > /dev/null 2>&1
+    yarn icons && yarn react-native generate-bootsplash assets/bootsplash_logo_original.png \
+        --assets-path=assets/ --background-color=$BOOTSPLASH_BACKGROUND_COLOR
+
 fi
