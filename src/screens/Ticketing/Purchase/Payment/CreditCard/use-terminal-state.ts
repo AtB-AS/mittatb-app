@@ -93,7 +93,7 @@ export default function useTerminalState(
   offers: ReserveOffer[],
   paymentType: PaymentType.VISA | PaymentType.MasterCard,
   recurringPaymentId: number | undefined,
-  saveCard: boolean,
+  saveRecurringCard: boolean,
   cancelTerminal: () => void,
   addReservation: (
     reservation: TicketReservation,
@@ -137,7 +137,7 @@ export default function useTerminalState(
           : await reserveOffers({
               offers,
               paymentType: paymentType,
-              savePaymentMethod: saveCard,
+              savePaymentMethod: saveRecurringCard,
               opts: {
                 retry: true,
               },

@@ -22,7 +22,7 @@ type Props = {
   previousPaymentMethod?: SavedPaymentOption;
 };
 
-function getSelectedOption(
+function getSelectedPaymentMethod(
   previousPaymentMethod?: SavedPaymentOption,
 ): PaymentMethod | undefined {
   if (!previousPaymentMethod) return undefined;
@@ -69,14 +69,13 @@ const SelectPaymentMethod: React.FC<Props> = ({
   onSelect,
   previousPaymentMethod,
 }) => {
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
 
   const [selectedOption, setSelectedOption] = useState<
     PaymentMethod | undefined
-  >(getSelectedOption(previousPaymentMethod));
+  >(getSelectedPaymentMethod(previousPaymentMethod));
   const [options, setOptions] = useState<SavedPaymentOption[] | undefined>();
   const styles = useStyles();
-  const {theme} = useTheme();
 
   async function getOptions(): Promise<Array<SavedPaymentOption>> {
     const options: Array<SavedPaymentOption> = [

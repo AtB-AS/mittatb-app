@@ -49,6 +49,9 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
 
   const cancelTerminal = () => navigation.pop();
 
+  const {paymentMethod} = route.params;
+  const {paymentType} = paymentMethod;
+
   const {addReservation} = useTicketState();
   const dismissAndAddReservation = (
     reservation: TicketReservation,
@@ -57,10 +60,18 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     addReservation({
       reservation,
       offers: reservationOffers,
-      paymentType: route.params.paymentMethod.paymentType,
+      paymentType,
     });
     navigation.navigate(ActiveTicketsScreenName);
   };
+
+  const recurringPaymentId =
+    'recurringPaymentId' in paymentMethod
+      ? paymentMethod.recurringPaymentId
+      : undefined;
+
+  const saveRecurringCard =
+    'save' in paymentMethod ? paymentMethod.save : false;
 
   const {
     loadingState,
@@ -70,13 +81,9 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     restartTerminal,
   } = useTerminalState(
     offers,
-    route.params.paymentMethod.paymentType,
-    'recurringPaymentId' in route.params.paymentMethod
-      ? route.params.paymentMethod.recurringPaymentId
-      : undefined,
-    'save' in route.params.paymentMethod
-      ? route.params.paymentMethod.save
-      : false,
+    paymentType,
+    recurringPaymentId,
+    saveRecurringCard,
     cancelTerminal,
     dismissAndAddReservation,
   );
