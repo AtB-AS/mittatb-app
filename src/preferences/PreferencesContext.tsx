@@ -17,7 +17,6 @@ type PreferencesContextState = {
   preferences: UserPreferences;
   setPreference(items: UserPreferences): void;
   resetPreference(key: PreferenceItem): void;
-  // getSavedPaymentOptions: () => Promise<Array<SavedPaymentOption>>;
 };
 const PreferencesContext = createContext<PreferencesContextState | undefined>(
   undefined,
@@ -25,7 +24,6 @@ const PreferencesContext = createContext<PreferencesContextState | undefined>(
 
 const PreferencesContextProvider: React.FC = ({children}) => {
   let [preferences, setPreferencesState] = useState<UserPreferences>({});
-  const {t, language} = useTranslation();
   let colorScheme = useColorScheme();
 
   async function populatePreferences() {
@@ -37,31 +35,6 @@ const PreferencesContextProvider: React.FC = ({children}) => {
     populatePreferences();
   }, []);
 
-  // function getTextsForType(type: number) {
-  //   switch (type) {
-  //     case 2:
-  //       return {
-  //         text: t(PurchaseConfirmationTexts.paymentButtonVipps.text),
-  //         a11y: t(PurchaseConfirmationTexts.paymentButtonVipps.a11yHint),
-  //       };
-  //     case 3:
-  //       return {
-  //         text: t(PurchaseConfirmationTexts.paymentButtonCardVisa.text),
-  //         a11y: t(PurchaseConfirmationTexts.paymentButtonVipps.a11yHint),
-  //       };
-  //     case 4:
-  //       return {
-  //         text: t(PurchaseConfirmationTexts.paymentButtonCardMC.text),
-  //         a11y: t(PurchaseConfirmationTexts.paymentButtonVipps.a11yHint),
-  //       };
-  //     default:
-  //       return {
-  //         text: t(PurchaseConfirmationTexts.paymentButtonCardVisa.text),
-  //         a11y: t(PurchaseConfirmationTexts.paymentButtonVipps.a11yHint),
-  //       };
-  //   }
-  // }
-
   const contextValue: PreferencesContextState = {
     preferences: {
       colorScheme,
@@ -71,6 +44,7 @@ const PreferencesContextProvider: React.FC = ({children}) => {
       const preferences = await setPreference_storage(items);
       setPreferencesState(preferences);
     },
+
     async resetPreference(key: PreferenceItem) {
       const preferences = await resetPreference_storage(key);
       setPreferencesState(preferences);

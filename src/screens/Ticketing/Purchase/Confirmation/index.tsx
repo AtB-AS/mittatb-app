@@ -194,8 +194,6 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   }
 
   async function selectPaymentMethod() {
-    //const options = await fetchPaymentOptions();
-    //setPaymentOptions(options);
     openBottomSheet((close) => {
       return (
         <SelectPaymentMethod
