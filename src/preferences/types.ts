@@ -14,7 +14,7 @@ export type UserPreferences = {
   startScreen?: Preference_ScreenAlternatives;
   colorScheme?: ColorSchemeName;
   overrideSystemAppearance?: boolean;
-  overrideSystemFont?: boolean;
+  useAndroidSystemFont?: boolean;
   language?: Preference_Language;
   useSystemLanguage?: boolean;
   defaultUserTypeString?: string;
