@@ -55,8 +55,6 @@ jobs:
       - name: Generate icons
         if: steps.apk-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn icons
-      - name: Generate boot splash
-        run: yarn bootsplash-atb
       - name: Run fastlane build
         if: steps.apk-cache.outputs.cache-hit != 'true'
         run: fastlane android build
