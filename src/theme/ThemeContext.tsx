@@ -10,7 +10,7 @@ interface ThemeContextValue {
 
   storedColorScheme: Mode;
   overrideSystemAppearance: boolean;
-  overrideSystemFont: boolean;
+  useAndroidSystemFont: boolean;
 
   updateThemePreference(themeKey: keyof Themes): void;
   overrideOSThemePreference(override: boolean): void;
@@ -23,7 +23,7 @@ const ThemeContext = createContext<ThemeContextValue>({
 
   storedColorScheme: 'light',
   overrideSystemAppearance: false,
-  overrideSystemFont: false,
+  useAndroidSystemFont: false,
 
   updateThemePreference() {},
   overrideOSThemePreference() {},
@@ -81,7 +81,7 @@ const ThemeContextProvider: React.FC = ({children}) => {
         themeName: actualColorScheme,
         storedColorScheme: storedColorScheme ?? 'light',
         overrideSystemAppearance: overrideSystemAppearance ?? false,
-        overrideSystemFont: !!overrideSystemAppearance && !!overrideSystemFont,
+        useAndroidSystemFont: !!overrideSystemFont,
         updateThemePreference,
         overrideOSThemePreference,
         updateFontOverride,

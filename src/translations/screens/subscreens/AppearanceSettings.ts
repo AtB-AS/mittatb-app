@@ -4,9 +4,12 @@ const AppearanceSettingsTexts = {
     title: _('Utseende', 'Appearance'),
   },
   actions: {
-    usePhoneSettings: _('Bruk telefoninnstillinger', 'Use my phone settings'),
+    usePhoneTheme: _(
+      'Bruk fargetema fra telefonen',
+      "Use my phone's colour theme",
+    ),
     darkMode: _('Nattmodus', 'Dark mode'),
-    overrideFont: _('Overstyr skrifttypen', 'Override font'),
+    useSystemFont: _('Bruk telefonens skrifttype', "Use my phone's font"),
   },
 };
 export default AppearanceSettingsTexts;
