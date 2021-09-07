@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import {Vipps} from '@atb/assets/svg/icons/ticketing';
+import {Vipps, Visa} from '@atb/assets/svg/icons/ticketing';
 import {StyleSheet, useTheme} from '@atb/theme';
 import Button from '@atb/components/button';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -350,7 +350,10 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
             </ThemeText>
           ) : null}
         </View>
-        {option.savedType === 'recurring' ? info.icon : null}
+        {option.savedType === 'recurring' ||
+        option.paymentType === PaymentType.Vipps
+          ? info.icon
+          : null}
       </TouchableOpacity>
       {selected &&
       option.savedType === 'normal' &&
