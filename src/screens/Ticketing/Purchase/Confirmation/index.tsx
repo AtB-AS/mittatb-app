@@ -29,10 +29,7 @@ import {formatToLongDateTime} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {SelectCreditCard} from '../Payment';
-import {
-  PaymentOption as PaymentOptionType,
-  usePreferences,
-} from '@atb/preferences';
+import {PaymentOption, usePreferences} from '@atb/preferences';
 import {useState} from 'react';
 import {useEffect} from 'react';
 
@@ -62,9 +59,9 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   const {t, language} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
   const {preferences, getSavedPaymentOptions} = usePreferences();
-  const [paymentOptions, setPaymentOptions] = useState<
-    Array<PaymentOptionType>
-  >([]);
+  const [paymentOptions, setPaymentOptions] = useState<Array<PaymentOption>>(
+    [],
+  );
 
   async function fetchPaymentOptions(): Promise<void> {
     setPaymentOptions(await getSavedPaymentOptions());
@@ -118,7 +115,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   const vatAmountString = formatDecimalNumber(vatAmount, language);
   const vatPercentString = formatDecimalNumber(vatPercent, language);
 
-  async function payWithVipps(option: PaymentOptionType) {
+  async function payWithVipps(option: PaymentOption) {
     if (offerExpirationTime && totalPrice > 0) {
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
@@ -132,7 +129,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     }
   }
 
-  async function payWithCard(option: PaymentOptionType) {
+  async function payWithCard(option: PaymentOption) {
     if (offerExpirationTime && totalPrice > 0) {
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
@@ -146,7 +143,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     }
   }
 
-  function selectPaymentOption(option: PaymentOptionType) {
+  function selectPaymentOption(option: PaymentOption) {
     switch (option.paymentType) {
       case PaymentType.Vipps:
         payWithVipps(option);
@@ -160,9 +157,8 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     }
   }
 
-  function getPaymentOptionTexts(option: PaymentOptionType): string {
+  function getPaymentOptionTexts(option: PaymentOption): string {
     let str;
-    console.log('paymentType', option);
     switch (option.paymentType) {
       case PaymentType.Vipps:
         str = t(PurchaseConfirmationTexts.payWithVipps.text);
@@ -193,7 +189,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     openBottomSheet((close) => {
       return (
         <SelectCreditCard
-          onSelect={(option: PaymentOptionType) => {
+          onSelect={(option: PaymentOption) => {
             selectPaymentOption(option);
             close();
           }}
@@ -326,7 +322,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           />
         ) : (
           <View>
-            {typeof preferences.previousPaymentMethod !== 'undefined' ? (
+            {preferences.previousPaymentMethod ? (
               <View
                 style={{
                   flex: 1,

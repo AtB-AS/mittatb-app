@@ -193,39 +193,39 @@ export default function useTerminalState(
 
   const paymentRedirectCompleteRef = useRef<boolean>(false);
 
+  async function reservationOk(reservation: TicketReservation) {
+    if (reservation.recurring_payment_id) {
+      let allRecurringPaymentOptions = await listRecurringPayments();
+      const card = allRecurringPaymentOptions.find((item) => {
+        return item.id === parseInt(reservation.recurring_payment_id!);
+      });
+      if (card) {
+        setPreference({
+          previousPaymentMethod: {
+            savedType: 'recurring',
+            paymentType:
+              paymentOption.paymentType === PaymentType.VISA
+                ? PaymentType.VISA
+                : PaymentType.MasterCard,
+            recurringCard: card,
+            description: '',
+            accessibilityHint: '',
+          },
+        });
+      }
+    } else {
+      setPreference({
+        previousPaymentMethod: paymentOption,
+      });
+    }
+    addReservation(reservation, offers);
+  }
+
   useEffect(() => {
     switch (paymentResponseCode) {
       case 'OK':
         if (!reservation) return;
-        if (reservation.recurring_payment_id) {
-          listRecurringPayments().then((res) => {
-            const card = res.find((item) => {
-              item.id === parseInt(reservation.recurring_payment_id!);
-            });
-            if (card) {
-              setPreference({
-                previousPaymentMethod: {
-                  savedType: 'recurring',
-                  paymentType:
-                    paymentOption.paymentType === PaymentType.VISA
-                      ? PaymentType.VISA
-                      : PaymentType.MasterCard,
-                  recurringCard: card,
-                  description: '',
-                  accessibilityHint: '',
-                },
-              });
-            }
-          });
-        } else {
-          setPreference({
-            previousPaymentMethod: paymentOption,
-          });
-        }
-        /*if (reservation.recurring_payment_id) {
-          
-        }*/
-        addReservation(reservation, offers);
+        reservationOk(reservation);
         break;
       case 'Cancel':
         cancelTerminal();
