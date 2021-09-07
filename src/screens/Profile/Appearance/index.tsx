@@ -4,14 +4,16 @@ import {AppearanceSettingsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {View} from 'react-native';
+import {Platform, View} from 'react-native';
 
 export default function Appearance() {
   const {
     storedColorScheme,
-    overrideColorScheme,
+    overrideSystemAppearance,
     updateThemePreference,
     overrideOSThemePreference,
+    overrideSystemFont,
+    updateFontOverride,
   } = useTheme();
   const style = useProfileHomeStyle();
   const {t} = useTranslation();
@@ -28,19 +30,29 @@ export default function Appearance() {
           <ActionItem
             mode="toggle"
             text={t(AppearanceSettingsTexts.actions.usePhoneSettings)}
-            checked={!overrideColorScheme}
+            checked={!overrideSystemAppearance}
             onPress={(checked) => overrideOSThemePreference(!checked)}
           />
 
-          {overrideColorScheme && (
-            <ActionItem
-              mode="toggle"
-              text={t(AppearanceSettingsTexts.actions.darkMode)}
-              checked={storedColorScheme === 'dark'}
-              onPress={(checked) =>
-                updateThemePreference(checked ? 'dark' : 'light')
-              }
-            />
+          {overrideSystemAppearance && (
+            <>
+              <ActionItem
+                mode="toggle"
+                text={t(AppearanceSettingsTexts.actions.darkMode)}
+                checked={storedColorScheme === 'dark'}
+                onPress={(checked) =>
+                  updateThemePreference(checked ? 'dark' : 'light')
+                }
+              />
+              {Platform.OS === 'android' && (
+                <ActionItem
+                  mode="toggle"
+                  text={'Overstyr font'}
+                  checked={overrideSystemFont}
+                  onPress={(checked) => updateFontOverride(checked)}
+                />
+              )}
+            </>
           )}
         </Section>
       </ScrollView>
