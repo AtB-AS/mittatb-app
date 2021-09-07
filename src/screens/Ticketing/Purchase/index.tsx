@@ -21,7 +21,7 @@ import TariffZoneSearch, {
   RouteParams as TariffZoneSearchParams,
 } from './TariffZones/search';
 import {TransitionPresets} from '@react-navigation/stack';
-import {PaymentOption} from '@atb/preferences';
+import {CardPaymentMethod, PaymentMethod} from './types';
 
 type PurchaseOverviewParams = {
   refreshOffer?: boolean;
@@ -34,7 +34,6 @@ type PurchaseOverviewParams = {
 type PaymentParams = {
   offers: ReserveOffer[];
   preassignedFareProduct: PreassignedFareProduct;
-  paymentOption: PaymentOption;
 };
 
 export type TicketingStackParams = {
@@ -42,7 +41,7 @@ export type TicketingStackParams = {
   TariffZones: TariffZonesParams;
   TariffZoneSearch: TariffZoneSearchParams;
   Confirmation: ConfirmationRouteParams;
-  PaymentCreditCard: PaymentParams;
+  PaymentCreditCard: PaymentParams & {paymentMethod: CardPaymentMethod};
   PaymentVipps: PaymentParams;
   Splash: undefined;
 };

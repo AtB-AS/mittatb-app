@@ -15,7 +15,7 @@ import {
   reserveOffers,
   TicketReservation,
 } from '@atb/tickets';
-import {PaymentOption, usePreferences} from '@atb/preferences';
+import {SavedPaymentOption, usePreferences} from '@atb/preferences';
 
 const possibleResponseCodes = ['Cancel', 'OK'] as const;
 type NetsResponseCode = typeof possibleResponseCodes[number];
@@ -91,8 +91,9 @@ const initialState: TerminalReducerState = {
 
 export default function useTerminalState(
   offers: ReserveOffer[],
-  paymentOption: PaymentOption,
-  savePaymentOption: boolean,
+  paymentType: PaymentType.VISA | PaymentType.MasterCard,
+  recurringPaymentId: number | undefined,
+  saveCard: boolean,
   cancelTerminal: () => void,
   addReservation: (
     reservation: TicketReservation,
@@ -124,29 +125,27 @@ export default function useTerminalState(
   const reserveOffer = useCallback(
     async function () {
       try {
-        const response =
-          paymentOption.savedType === 'recurring'
-            ? await reserveOffers({
-                offers,
-                paymentType: paymentOption.paymentType,
-                recurringPaymentId: paymentOption.recurringCard.id,
-                opts: {
-                  retry: true,
-                },
-              })
-            : await reserveOffers({
-                offers,
-                paymentType: paymentOption.paymentType,
-                savePaymentMethod: savePaymentOption || false,
-                opts: {
-                  retry: true,
-                },
-              });
+        const response = recurringPaymentId
+          ? await reserveOffers({
+              offers,
+              paymentType: paymentType,
+              recurringPaymentId: recurringPaymentId,
+              opts: {
+                retry: true,
+              },
+            })
+          : await reserveOffers({
+              offers,
+              paymentType: paymentType,
+              savePaymentMethod: saveCard,
+              opts: {
+                retry: true,
+              },
+            });
         dispatch({type: 'OFFER_RESERVED', reservation: response});
       } catch (err) {
         console.warn(err);
-        // TODO: Is this problem?
-        //handleAxiosError(err, 'reservation');
+        handleAxiosError(err, 'reservation');
       }
     },
     [offers, dispatch, handleAxiosError],
@@ -203,19 +202,17 @@ export default function useTerminalState(
         setPreference({
           previousPaymentMethod: {
             savedType: 'recurring',
-            paymentType:
-              paymentOption.paymentType === PaymentType.VISA
-                ? PaymentType.VISA
-                : PaymentType.MasterCard,
+            paymentType: paymentType,
             recurringCard: card,
-            description: '',
-            accessibilityHint: '',
           },
         });
       }
     } else {
       setPreference({
-        previousPaymentMethod: paymentOption,
+        previousPaymentMethod: {
+          savedType: 'normal',
+          paymentType: paymentType,
+        },
       });
     }
     addReservation(reservation, offers);
