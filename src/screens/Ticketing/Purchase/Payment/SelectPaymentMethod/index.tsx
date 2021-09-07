@@ -1,5 +1,10 @@
 import React from 'react';
-import {View, FlatList, TouchableOpacity} from 'react-native';
+import {
+  View,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import {Vipps} from '@atb/assets/svg/icons/ticketing';
 import {StyleSheet, useTheme} from '@atb/theme';
 import Button from '@atb/components/button';
@@ -71,27 +76,30 @@ const SelectPaymentMethod: React.FC<Props> = ({
 }) => {
   const {t} = useTranslation();
 
+  const [loadingRemoteOption, setLoadingRemoteOptions] = useState<boolean>(
+    true,
+  );
+
   const [selectedOption, setSelectedOption] = useState<
     PaymentMethod | undefined
   >(getSelectedPaymentMethod(previousPaymentMethod));
-  const [options, setOptions] = useState<SavedPaymentOption[] | undefined>();
+  const [options, setOptions] = useState<SavedPaymentOption[]>([
+    {
+      paymentType: PaymentType.Vipps,
+      savedType: 'normal',
+    },
+    {
+      paymentType: PaymentType.VISA,
+      savedType: 'normal',
+    },
+    {
+      paymentType: PaymentType.MasterCard,
+      savedType: 'normal',
+    },
+  ]);
   const styles = useStyles();
 
   async function getOptions(): Promise<Array<SavedPaymentOption>> {
-    const options: Array<SavedPaymentOption> = [
-      {
-        paymentType: PaymentType.MasterCard,
-        savedType: 'normal',
-      },
-      {
-        paymentType: PaymentType.VISA,
-        savedType: 'normal',
-      },
-      {
-        paymentType: PaymentType.Vipps,
-        savedType: 'normal',
-      },
-    ];
     const remoteOptions: Array<SavedPaymentOption> = (
       await listRecurringPayments()
     ).map((option) => {
@@ -106,12 +114,14 @@ const SelectPaymentMethod: React.FC<Props> = ({
         },
       };
     });
-    return [...options, ...remoteOptions].reverse();
+    return [...remoteOptions.reverse(), ...options];
   }
 
   useEffect(() => {
     async function run() {
-      setOptions(await getOptions());
+      let remoteOptions = await getOptions();
+      setOptions(remoteOptions);
+      setLoadingRemoteOptions(false);
     }
     run();
   }, [previousPaymentMethod]);
@@ -135,6 +145,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
           {t(SelectPaymentMethodTexts.header.text)}
         </ThemeText>
       </View>
+      {loadingRemoteOption ? <ActivityIndicator /> : null}
       <FlatList
         data={options}
         keyExtractor={(item) =>
