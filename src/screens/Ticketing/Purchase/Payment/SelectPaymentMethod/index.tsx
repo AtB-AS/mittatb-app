@@ -36,6 +36,7 @@ function getSelectedOption(
           return {
             paymentType,
           };
+        default:
         case PaymentType.MasterCard:
         case PaymentType.VISA:
           return {

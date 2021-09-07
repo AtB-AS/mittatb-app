@@ -181,8 +181,6 @@ const Confirmation: React.FC<ConfirmationProps> = ({
       case PaymentType.MasterCard:
         str = t(PurchaseConfirmationTexts.payWithMasterCard.text);
         break;
-      default:
-        str = `woops ${option}`;
     }
     if (previousPaymentMethod) {
       const paymentOption = previousPaymentMethod;
