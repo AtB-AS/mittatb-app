@@ -6,6 +6,7 @@ const AppearanceSettingsTexts = {
   actions: {
     usePhoneSettings: _('Bruk telefoninnstillinger', 'Use my phone settings'),
     darkMode: _('Nattmodus', 'Dark mode'),
+    overrideFont: _('Overstyr skrifttypen', 'Override font'),
   },
 };
 export default AppearanceSettingsTexts;

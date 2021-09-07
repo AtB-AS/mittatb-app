@@ -9,10 +9,12 @@ interface ThemeContextValue {
   themeName: Mode;
 
   storedColorScheme: Mode;
-  overrideColorScheme: boolean;
+  overrideSystemAppearance: boolean;
+  overrideSystemFont: boolean;
 
   updateThemePreference(themeKey: keyof Themes): void;
   overrideOSThemePreference(override: boolean): void;
+  updateFontOverride(override: boolean): void;
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
@@ -20,10 +22,12 @@ const ThemeContext = createContext<ThemeContextValue>({
   themeName: 'light',
 
   storedColorScheme: 'light',
-  overrideColorScheme: false,
+  overrideSystemAppearance: false,
+  overrideSystemFont: false,
 
   updateThemePreference() {},
   overrideOSThemePreference() {},
+  updateFontOverride() {},
 });
 
 export function useTheme() {
@@ -38,28 +42,37 @@ const ThemeContextProvider: React.FC = ({children}) => {
   const colorScheme = useColorScheme();
   const {
     setPreference,
-    preferences: {colorScheme: storedColorScheme, overrideColorScheme},
+    preferences: {
+      colorScheme: storedColorScheme,
+      overrideSystemAppearance,
+      overrideSystemFont,
+    },
   } = usePreferences();
 
   const actualColorScheme =
-    (overrideColorScheme ? storedColorScheme : colorScheme) ?? 'light';
+    (overrideSystemAppearance ? storedColorScheme : colorScheme) ?? 'light';
 
   useEffect(() => {
     if (Platform.OS !== 'ios') return;
-    if (overrideColorScheme && colorScheme !== storedColorScheme) {
+    if (overrideSystemAppearance && colorScheme !== storedColorScheme) {
       ChangeNative.changeAppearance(storedColorScheme);
     }
-    if (!overrideColorScheme) {
+    if (!overrideSystemAppearance) {
       ChangeNative.changeAppearance(null);
     }
-  }, [overrideColorScheme, storedColorScheme]);
+  }, [overrideSystemAppearance, storedColorScheme]);
 
   const overrideOSThemePreference = (override: boolean) => {
-    setPreference({overrideColorScheme: override});
+    setPreference({overrideSystemAppearance: override});
   };
   const updateThemePreference = (themeKey: keyof Themes) => {
     setPreference({colorScheme: themeKey});
   };
+
+  const updateFontOverride = (override: boolean) => {
+    setPreference({overrideSystemFont: override});
+  };
+
   const theme = themes[actualColorScheme];
   return (
     <ThemeContext.Provider
@@ -67,9 +80,11 @@ const ThemeContextProvider: React.FC = ({children}) => {
         theme,
         themeName: actualColorScheme,
         storedColorScheme: storedColorScheme ?? 'light',
-        overrideColorScheme: overrideColorScheme ?? false,
+        overrideSystemAppearance: overrideSystemAppearance ?? false,
+        overrideSystemFont: !!overrideSystemAppearance && !!overrideSystemFont,
         updateThemePreference,
         overrideOSThemePreference,
+        updateFontOverride,
       }}
     >
       {children}

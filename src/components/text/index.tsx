@@ -6,7 +6,7 @@ import {
   ThemeColor,
 } from '@atb/theme/colors';
 import React from 'react';
-import {Text, TextProps} from 'react-native';
+import {Text, TextProps, TextStyle} from 'react-native';
 import renderMarkdown from './markdown-renderer';
 
 export const MAX_FONT_SCALE = 2;
@@ -25,7 +25,7 @@ const ThemeText: React.FC<ThemeTextProps> = ({
   children,
   ...props
 }) => {
-  const {theme} = useTheme();
+  const {theme, overrideSystemFont} = useTheme();
 
   const typeStyle = {
     ...theme.typography[fontType],
@@ -34,6 +34,17 @@ const ThemeText: React.FC<ThemeTextProps> = ({
       : theme.text.colors[color],
   };
 
+  let textStyle: TextStyle = typeStyle;
+
+  if (overrideSystemFont) {
+    textStyle = {
+      ...typeStyle,
+      fontFamily:
+        typeStyle.fontWeight === 'bold' ? 'Roboto-Bold' : 'Roboto-Regular',
+      fontWeight: 'normal',
+    };
+  }
+
   const content =
     isMarkdown && typeof children === 'string'
       ? renderMarkdown(children)
@@ -41,7 +52,7 @@ const ThemeText: React.FC<ThemeTextProps> = ({
 
   return (
     <Text
-      style={[typeStyle, style]}
+      style={[textStyle, style]}
       maxFontSizeMultiplier={MAX_FONT_SCALE}
       {...props}
     >

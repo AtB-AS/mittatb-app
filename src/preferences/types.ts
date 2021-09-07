@@ -14,7 +14,8 @@ export type Preference_Language = typeof appLanguages[number];
 export type UserPreferences = {
   startScreen?: Preference_ScreenAlternatives;
   colorScheme?: ColorSchemeName;
-  overrideColorScheme?: boolean;
+  overrideSystemAppearance?: boolean;
+  overrideSystemFont?: boolean;
   language?: Preference_Language;
   useSystemLanguage?: boolean;
   defaultUserTypeString?: string;

@@ -20,6 +20,7 @@
     "clean:install": "yarn clean && yarn install",
     "setup": "sh ./setup.sh",
     "generate-native-assets": "sh ./scripts/generate-native-assets.sh"
+    "link-assets": "react-native link"
   },
   "dependencies": {
     "@atb-as/theme": "^3.0.0",
