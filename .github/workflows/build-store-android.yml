@@ -45,7 +45,6 @@ jobs:
           GPG_KEYSTORE_PASS: ${{ secrets.GPG_KEYSTORE_PASS }}
       - name: Generate icons
         run: brew install imagemagick && yarn icons
-
       - name: Run fastlane build
         run: fastlane android build
         env:
