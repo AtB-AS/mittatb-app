@@ -392,10 +392,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                 accessibilityHint={t(
                   PurchaseConfirmationTexts.choosePaymentOption.a11yHint,
                 )}
-                onPress={async () => {
-                  //await fetchPaymentOptions();
-                  selectPaymentMethod();
-                }}
+                onPress={selectPaymentMethod}
                 viewContainerStyle={styles.paymentButton}
               ></Button>
             )}
