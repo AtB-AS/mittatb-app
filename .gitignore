@@ -78,6 +78,7 @@ firebase-debug.log
 /.env
 /icons
 ios/Configs/Config.xcconfig
+src/assets/svg/icons/logo/Logo.tsx
 
 #Service files
 android/app/google-services.json
