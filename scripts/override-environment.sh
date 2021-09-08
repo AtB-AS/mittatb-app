@@ -19,11 +19,17 @@ else
     APP_ENVIRONMENT=$1
     APP_ORG=$2
     ENV_FOLDER=env/$APP_ORG/$APP_ENVIRONMENT
+    ORG_FOLDER=env/$APP_ORG
+
     echo "Copying $APP_ENVIRONMENT .env file to root"
     cp $ENV_FOLDER/.env .
 
     echo "Copying $APP_ENVIRONMENT icons to icons folder"
     cp -a $ENV_FOLDER/icons/. icons/
+
+    echo "Copying and generating in app logo"
+    cp $ORG_FOLDER/assets/Logo.svg assets/svgs/mono-icons/logo/Logo.svg
+    yarn generate-svg-mono-icons
 
     echo "Copying $APP_ENVIRONMENT .env file to Config file in ios"
     cp $ENV_FOLDER/.env ios/Configs/Config.xcconfig
@@ -36,5 +42,5 @@ else
     echo "Copying $APP_ENVIRONMENT GoogleService-Info.plist to iOS folder"
     cp $ENV_FOLDER/GoogleService-Info.plist ios/atb
 
-    cp env/$APP_ORG/assets/Logo.svg assets/svgs/mono-icons/logo/Logo.svg
+
 fi
