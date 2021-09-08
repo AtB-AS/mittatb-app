@@ -101,7 +101,6 @@ export default function useVippsState(
           },
         });
         dispatch({type: 'OFFER_RESERVED', reservation: response});
-        // TODO: Cannot set savedType to normal?
         setPreference({
           previousPaymentMethod: {
             savedType: 'normal',
