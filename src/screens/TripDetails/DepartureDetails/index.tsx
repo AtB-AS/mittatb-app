@@ -30,7 +30,6 @@ import {
 } from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DetailsModalNavigationProp, DetailsStackParams} from '..';
 import Time from '../components/Time';
 import TripLegDecoration from '../components/TripLegDecoration';
@@ -260,14 +259,13 @@ function TripItem({
   isEnd,
 }: TripItemProps) {
   const navigation = useNavigation<DetailsModalNavigationProp>();
-
+  const {t} = useTranslation();
   const styles = useStopsStyle();
   const isBetween = !isStart && !isEnd;
   const iconColor = useTransportationColor(
     type === 'passed' || type === 'after' ? undefined : mode,
     subMode,
   );
-
   const showSituations = type !== 'passed' && call.situations.length > 0;
 
   return (
@@ -298,16 +296,22 @@ function TripItem({
         </TripRow>
       )}
       {call.notices &&
-        call.notices.map((notice) => {
+        call.notices.map((notice, index) => {
           return (
-            <TripRow rowLabel={<ThemeIcon svg={Info} />}>
+            <TripRow
+              key={'notice-' + index}
+              rowLabel={<ThemeIcon svg={Info} />}
+            >
               <TinyMessageBox type="info" message={notice.text} />
             </TripRow>
           );
         })}
       {!call.forAlighting && (
         <TripRow>
-          <TinyMessageBox type="info" message={'Ingen avstigning'} />
+          <TinyMessageBox
+            type="info"
+            message={t(DepartureDetailsTexts.messages.noAlighting)}
+          />
         </TripRow>
       )}
 
