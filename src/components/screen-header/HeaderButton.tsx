@@ -8,7 +8,7 @@ import {AccessibilityProps, TouchableOpacity} from 'react-native';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {ThemeColor} from '@atb/theme/colors';
-import {BlackMonoLogo} from '@atb/assets/svg/icons/logo';
+import {Logo} from '@atb/assets/svg/icons/logo';
 
 export type ButtonModes =
   | 'back'
@@ -105,7 +105,7 @@ const useIconButton = (
     case 'home': {
       const {type, color, onPress, ...accessibilityProps} = buttonProps;
       return {
-        icon: <ThemeIcon colorType={color} svg={BlackMonoLogo} />,
+        icon: <ThemeIcon colorType={color} svg={Logo} />,
         onPress: onPress || navigateHome,
         accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
         ...accessibilityProps,

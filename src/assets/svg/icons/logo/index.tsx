@@ -1,1 +1,1 @@
-export {default as BlackMonoLogo} from './BlackMonoLogo';
+export {default as Logo} from './Logo';
