@@ -78,7 +78,7 @@ const PurchaseConfirmationTexts = {
   },
   payWithVisa: {
     text: _('Betal med Visa', 'Pay with Visa'),
-    a11yHint: _('aktiver for å betale med Visa', 'Activate to pay with Visa'),
+    a11yHint: _('Aktiver for å betale med Visa', 'Activate to pay with Visa'),
   },
   payWithMasterCard: {
     text: _('Betal med MasterCard', 'Pay with MasterCard'),
