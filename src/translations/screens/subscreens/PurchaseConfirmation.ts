@@ -83,7 +83,7 @@ const PurchaseConfirmationTexts = {
   payWithMasterCard: {
     text: _('Betal med MasterCard', 'Pay with MasterCard'),
     a11yHint: _(
-      'aktiver for å betale med MasterCard',
+      'Aktiver for å betale med MasterCard',
       'Activate to pay with MasterCard',
     ),
   },
