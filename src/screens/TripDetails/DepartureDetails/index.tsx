@@ -305,6 +305,11 @@ function TripItem({
             </TripRow>
           );
         })}
+      {!call.forAlighting && (
+        <TripRow>
+          <TinyMessageBox type="info" message={'Ingen avstigning'} />
+        </TripRow>
+      )}
 
       {collapseButton}
     </View>
