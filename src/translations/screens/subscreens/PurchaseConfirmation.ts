@@ -74,7 +74,7 @@ const PurchaseConfirmationTexts = {
   },
   payWithVipps: {
     text: _('Betal med Vipps', 'Pay with Vipps'),
-    a11yHint: _('aktiver for å betale med Vipps', 'Activate to pay with Vipps'),
+    a11yHint: _('Aktiver for å betale med Vipps', 'Activate to pay with Vipps'),
   },
   payWithVisa: {
     text: _('Betal med Visa', 'Pay with Visa'),
