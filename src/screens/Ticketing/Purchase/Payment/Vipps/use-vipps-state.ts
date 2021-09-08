@@ -73,7 +73,7 @@ export default function useVippsState(
     vippsReducer,
     initialState,
   );
-  const {preferences, setPreference} = usePreferences();
+  const {setPreference} = usePreferences();
 
   const handleAxiosError = useCallback(
     function (err: AxiosError | unknown, errorContext: ErrorContext) {

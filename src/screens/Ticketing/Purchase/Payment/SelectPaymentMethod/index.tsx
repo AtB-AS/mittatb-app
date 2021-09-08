@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import {Vipps, Visa} from '@atb/assets/svg/icons/ticketing';
+import {Vipps} from '@atb/assets/svg/icons/ticketing';
 import {StyleSheet, useTheme} from '@atb/theme';
 import Button from '@atb/components/button';
 import {SafeAreaView} from 'react-native-safe-area-context';

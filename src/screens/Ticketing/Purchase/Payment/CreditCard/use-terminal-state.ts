@@ -15,7 +15,7 @@ import {
   reserveOffers,
   TicketReservation,
 } from '@atb/tickets';
-import {SavedPaymentOption, usePreferences} from '@atb/preferences';
+import {usePreferences} from '@atb/preferences';
 
 const possibleResponseCodes = ['Cancel', 'OK'] as const;
 type NetsResponseCode = typeof possibleResponseCodes[number];

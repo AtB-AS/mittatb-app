@@ -1,5 +1,3 @@
-import {listRecurringPayments} from '@atb/tickets';
-import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {useColorScheme} from 'react-native';
 import {
@@ -7,11 +5,7 @@ import {
   resetPreference as resetPreference_storage,
   setPreference as setPreference_storage,
 } from './storage';
-import {
-  PreferenceItem,
-  UserPreferences,
-  SavedPaymentOption,
-} from '@atb/preferences';
+import {PreferenceItem, UserPreferences} from '@atb/preferences';
 
 type PreferencesContextState = {
   preferences: UserPreferences;

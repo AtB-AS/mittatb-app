@@ -21,7 +21,7 @@ import TariffZoneSearch, {
   RouteParams as TariffZoneSearchParams,
 } from './TariffZones/search';
 import {TransitionPresets} from '@react-navigation/stack';
-import {CardPaymentMethod, PaymentMethod} from './types';
+import {CardPaymentMethod} from './types';
 
 type PurchaseOverviewParams = {
   refreshOffer?: boolean;
