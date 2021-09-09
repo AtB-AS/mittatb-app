@@ -128,20 +128,8 @@ const SelectPaymentMethod: React.FC<Props> = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          justifyContent: 'center',
-          paddingBottom: 24,
-        }}
-      >
-        <ThemeText
-          style={{
-            fontSize: 16,
-            fontWeight: '700',
-          }}
-        >
+      <View style={styles.heading}>
+        <ThemeText type="heading__title">
           {t(SelectPaymentMethodTexts.header.text)}
         </ThemeText>
       </View>
@@ -377,6 +365,12 @@ const SavedCheckbox: React.FC<CheckedProps> = ({checked}) => {
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  heading: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingBottom: 24,
+  },
   container: {
     flex: 1,
     backgroundColor: theme.colors.background_2.backgroundColor,

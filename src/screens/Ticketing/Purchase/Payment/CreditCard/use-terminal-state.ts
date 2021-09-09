@@ -196,7 +196,7 @@ export default function useTerminalState(
     if (reservation.recurring_payment_id) {
       let allRecurringPaymentOptions = await listRecurringPayments();
       const card = allRecurringPaymentOptions.find((item) => {
-        return item.id === parseInt(reservation.recurring_payment_id!);
+        return item.id === reservation.recurring_payment_id!;
       });
       if (card) {
         setPreference({

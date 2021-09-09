@@ -136,7 +136,7 @@ export type TicketReservation = {
   payment_id: number;
   transaction_id: number;
   url: string;
-  recurring_payment_id?: string;
+  recurring_payment_id?: number;
 };
 
 export type VippsRedirectParams = {

@@ -329,12 +329,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
         ) : (
           <View>
             {previousMethod ? (
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'column',
-                }}
-              >
+              <View style={styles.flexColumn}>
                 <Button
                   text={getPaymentOptionTexts(previousMethod)}
                   color="primary_2"
@@ -355,9 +350,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                   }}
                 ></Button>
                 <TouchableOpacity
-                  style={{
-                    marginTop: 24,
-                  }}
+                  style={styles.buttonTopSpacing}
                   disabled={!!error}
                   onPress={() => {
                     selectPaymentMethod();
@@ -366,19 +359,8 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                     PurchaseConfirmationTexts.choosePaymentOption.a11yHint,
                   )}
                 >
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <ThemeText
-                      style={{
-                        fontWeight: '400',
-                        fontSize: 16,
-                      }}
-                    >
+                  <View style={styles.flexRowCenter}>
+                    <ThemeText type="body__primary--bold">
                       {t(PurchaseConfirmationTexts.choosePaymentOption.text)}
                     </ThemeText>
                   </View>
@@ -407,6 +389,18 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background_2.backgroundColor,
+  },
+  flexColumn: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  flexRowCenter: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  buttonTopSpacing: {
+    marginTop: 24,
   },
   ticketsContainer: {
     backgroundColor: theme.colors.background_0.backgroundColor,
