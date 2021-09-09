@@ -15,7 +15,7 @@ import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ThemeColor} from '@atb/theme/colors';
 
-const themeColor: ThemeColor = 'primary_2';
+const themeColor: ThemeColor = 'background_gray';
 
 export default function PhoneInput({
   loginReason,

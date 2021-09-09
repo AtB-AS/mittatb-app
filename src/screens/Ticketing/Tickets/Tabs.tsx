@@ -63,7 +63,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
       });
     } else {
       navigation.navigate('LoginInApp', {
-        screen: 'PhoneInputInApp',
+        screen: 'LoginOnboarding',
         params: {
           loginReason: t(TicketsTexts.buyTicketsTab.loginReason),
           afterLogin: {
