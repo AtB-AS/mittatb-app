@@ -70,6 +70,19 @@ export type ActiveReservation = {
   paymentStatus?: PaymentStatus;
 };
 
+export enum PaymentType {
+  Vipps = 2,
+  VISA = 3,
+  MasterCard = 4,
+}
+
+export type RecurringPayment = {
+  id: number;
+  expires_at: string;
+  masked_pan: string;
+  payment_type: number;
+};
+
 export type PaymentStatus =
   | 'AUTHENTICATE'
   | 'CANCEL'
@@ -79,8 +92,6 @@ export type PaymentStatus =
   | 'IMPORT'
   | 'INITIATE'
   | 'REJECT';
-
-export type PaymentType = 'vipps' | 'creditcard';
 
 export type PaymentResponse = {
   order_id: string;
@@ -125,6 +136,7 @@ export type TicketReservation = {
   payment_id: number;
   transaction_id: number;
   url: string;
+  recurring_payment_id?: number;
 };
 
 export type VippsRedirectParams = {

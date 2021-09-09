@@ -5,6 +5,7 @@ import {
   PaymentResponse,
   PaymentType,
   RecentFareContract,
+  RecurringPayment,
   ReserveOffer,
   SendReceiptResponse,
   TicketReservation,
@@ -24,6 +25,28 @@ export type OfferSearchParams = {
   travellers: {id: string; user_type: string; count: number}[];
   products: string[];
   travel_date?: string;
+};
+
+export async function listRecurringPayments(): Promise<RecurringPayment[]> {
+  const url = 'ticket/v2/recurring-payments';
+  const response = await client.get<RecurringPayment[]>(url, {
+    authWithIdToken: true,
+  });
+  return response.data;
+}
+
+type ReserveOfferParams = {
+  offers: ReserveOffer[];
+  paymentType: PaymentType;
+  opts?: AxiosRequestConfig;
+};
+
+export type ReserveOfferWithSavePaymentParams = ReserveOfferParams & {
+  savePaymentMethod: boolean;
+};
+
+export type ReserveOfferWithRecurringParams = ReserveOfferParams & {
+  recurringPaymentId: number;
 };
 
 export async function searchOffers(
@@ -52,26 +75,36 @@ export async function sendReceipt(
 }
 
 export async function reserveOffers(
-  offers: ReserveOffer[],
-  paymentType: PaymentType,
-  opts?: AxiosRequestConfig,
-) {
+  res: ReserveOfferWithSavePaymentParams,
+): Promise<TicketReservation>;
+export async function reserveOffers(
+  res: ReserveOfferWithRecurringParams,
+): Promise<TicketReservation>;
+export async function reserveOffers({
+  offers,
+  paymentType,
+  opts,
+  ...rest
+}:
+  | ReserveOfferWithSavePaymentParams
+  | ReserveOfferWithRecurringParams): Promise<TicketReservation> {
   const url = 'ticket/v2/reserve';
-  const response = await client.post<TicketReservation>(
-    url,
-    {
-      payment_type: paymentType === 'creditcard' ? 1 : 2,
-      payment_redirect_url:
-        paymentType == 'vipps'
-          ? 'atb://vipps?transaction_id={transaction_id}&payment_id={payment_id}'
-          : undefined,
-      offers,
-    },
-    {
-      ...opts,
-      authWithIdToken: true,
-    },
-  );
+  let body: object = {
+    payment_redirect_url:
+      paymentType == PaymentType.Vipps
+        ? 'atb://vipps?transaction_id={transaction_id}&payment_id={payment_id}'
+        : undefined,
+    offers,
+    payment_type: paymentType,
+    store_payment:
+      'savePaymentMethod' in rest ? rest.savePaymentMethod : undefined,
+    recurring_payment_id:
+      'recurringPaymentId' in rest ? rest.recurringPaymentId : undefined,
+  };
+  const response = await client.post<TicketReservation>(url, body, {
+    ...opts,
+    authWithIdToken: true,
+  });
   return response.data;
 }
 
