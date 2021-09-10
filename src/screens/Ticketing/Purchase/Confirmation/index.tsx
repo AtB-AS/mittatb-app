@@ -33,6 +33,7 @@ import {SavedPaymentOption, usePreferences} from '@atb/preferences';
 import {useState} from 'react';
 import {useEffect} from 'react';
 import {CardPaymentMethod, PaymentMethod} from '../types';
+import {useAuthState} from '@atb/auth';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -116,6 +117,8 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     userProfilesWithCount,
     travelDate,
   );
+
+  const {user} = useAuthState();
 
   const offerExpirationTime =
     offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
@@ -328,7 +331,8 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           />
         ) : (
           <View>
-            {previousMethod ? (
+            {(previousMethod && user?.phoneNumber) ||
+            previousMethod?.paymentType === PaymentType.Vipps ? (
               <View style={styles.flexColumn}>
                 <Button
                   text={getPaymentOptionTexts(previousMethod)}
