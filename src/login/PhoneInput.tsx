@@ -69,7 +69,11 @@ export default function PhoneInput({
 
       <View style={styles.mainView}>
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
-          <ThemeText type={'body__primary--jumbo--bold'} color={themeColor}>
+          <ThemeText
+            type={'body__primary--jumbo--bold'}
+            style={styles.title}
+            color={themeColor}
+          >
             {t(LoginTexts.phoneInput.title)}
           </ThemeText>
         </View>
@@ -98,20 +102,21 @@ export default function PhoneInput({
         </Sections.Section>
         <View style={styles.buttonView}>
           {isSubmitting && (
-            <ActivityIndicator color={theme.text.colors.primary} size="large" />
+            <ActivityIndicator style={styles.activityIndicator} size="large" />
           )}
 
           {error && !isSubmitting && (
             <MessageBox
               containerStyle={styles.errorMessage}
               type="error"
-              message={t(LoginTexts.phoneInput.errors[error])}
+              message={t(LoginTexts.phoneInput.errors.invalid_phone)}
             />
           )}
 
           {!isSubmitting && (
             <Button
-              color={'secondary_1'}
+              style={styles.submitButton}
+              color={'primary_2'}
               onPress={onNext}
               text={t(LoginTexts.phoneInput.mainButton)}
               disabled={phoneNumber.length !== 8}
@@ -131,16 +136,33 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   mainView: {
+    flex: 1,
+    justifyContent: 'center',
     margin: theme.spacings.medium,
     padding: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
   },
-  loginReason: {marginTop: theme.spacings.medium},
-  description: {marginVertical: theme.spacings.medium},
+  title: {
+    textAlign: 'center',
+    marginVertical: theme.spacings.medium,
+  },
+  loginReason: {
+    marginTop: theme.spacings.medium,
+    textAlign: 'center',
+  },
+  description: {
+    marginVertical: theme.spacings.large,
+    textAlign: 'center',
+  },
+  activityIndicator: {
+    marginVertical: theme.spacings.large,
+  },
   errorMessage: {
     marginBottom: theme.spacings.medium,
   },
   buttonView: {
+    marginTop: theme.spacings.medium,
+  },
+  submitButton: {
     marginTop: theme.spacings.medium,
   },
 }));

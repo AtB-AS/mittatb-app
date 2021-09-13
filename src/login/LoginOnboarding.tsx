@@ -10,10 +10,9 @@ import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ThemeColor} from '@atb/theme/colors';
 import {useNavigation} from '@react-navigation/native';
+import {Ticket} from '@atb/assets/svg/illustrations';
+import {TouchableOpacity} from 'react-native';
 
-// background_0" | "background_1" | "background_2" | "background_3" | "background_gray" |
-// "primary_1" | "primary_2" | "primary_3" | "primary_destructive" | "secondary_1" | "secondary_2"
-// | ... 8 more ... | "transport_other"
 const themeColor: ThemeColor = 'background_gray';
 
 export default function LoginOnboarding({
@@ -47,7 +46,11 @@ export default function LoginOnboarding({
 
       <View style={styles.mainView}>
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
-          <ThemeText type={'body__primary--jumbo--bold'} color={themeColor}>
+          <ThemeText
+            type={'body__primary--jumbo--bold'}
+            style={styles.title}
+            color={themeColor}
+          >
             Nå kan du kjøpe periodebilletter!
           </ThemeText>
         </View>
@@ -57,6 +60,7 @@ export default function LoginOnboarding({
             dagers varighet.
           </ThemeText>
         </View>
+        <Ticket style={styles.illustation}></Ticket>
         <View style={styles.buttonView}>
           <Button
             color={'primary_2'}
@@ -66,14 +70,19 @@ export default function LoginOnboarding({
             iconPosition="right"
           />
         </View>
-        <View style={styles.buttonView}>
-          <Button
-            color={'background_gray'}
-            onPress={navigation.goBack}
-            text={'Jeg vil logge inn senere'}
-            iconPosition="right"
-          />
-        </View>
+        <TouchableOpacity
+          style={styles.resendButton}
+          onPress={navigation.goBack}
+          accessibilityRole="button"
+        >
+          <ThemeText
+            style={styles.resendButtonText}
+            type="body__primary"
+            color={themeColor}
+          >
+            {'Jeg vil logge inn senere'}
+          </ThemeText>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -85,16 +94,36 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   mainView: {
+    flex: 1,
+    justifyContent: 'center',
     margin: theme.spacings.medium,
     padding: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
-  loginReason: {marginTop: theme.spacings.medium},
-  description: {marginVertical: theme.spacings.medium},
+  title: {
+    textAlign: 'center',
+    marginVertical: theme.spacings.medium,
+  },
+  loginReason: {
+    marginTop: theme.spacings.medium,
+  },
+  description: {
+    marginVertical: theme.spacings.medium,
+    textAlign: 'center',
+  },
   errorMessage: {
     marginBottom: theme.spacings.medium,
   },
   buttonView: {
     marginTop: theme.spacings.medium,
   },
+  illustation: {
+    alignSelf: 'center',
+    marginVertical: theme.spacings.medium,
+  },
+  resendButton: {
+    marginTop: theme.spacings.medium,
+    padding: theme.spacings.medium,
+  },
+  resendButtonText: {textAlign: 'center'},
 }));

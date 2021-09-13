@@ -37,6 +37,6 @@ export const PhoneInputInApp = ({
         phoneNumber,
       })
     }
-    headerLeftButton={{type: 'cancel'}}
+    headerLeftButton={{type: 'back'}}
   />
 );

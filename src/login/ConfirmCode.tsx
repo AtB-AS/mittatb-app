@@ -16,7 +16,7 @@ import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ThemeColor} from '@atb/theme/colors';
 
-const themeColor: ThemeColor = 'primary_2';
+const themeColor: ThemeColor = 'background_gray';
 
 export default function ConfirmCode({
   phoneNumber,
@@ -80,7 +80,11 @@ export default function ConfirmCode({
 
       <View style={styles.mainView}>
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
-          <ThemeText type={'body__primary--jumbo--bold'} color={themeColor}>
+          <ThemeText
+            type={'body__primary--jumbo--bold'}
+            style={styles.title}
+            color={themeColor}
+          >
             {t(LoginTexts.confirmCode.title)}
           </ThemeText>
         </View>
@@ -103,7 +107,7 @@ export default function ConfirmCode({
         </Sections.Section>
         <View style={styles.buttonView}>
           {isLoading && (
-            <ActivityIndicator color={theme.text.colors.primary} size="large" />
+            <ActivityIndicator style={styles.activityIndicator} size="large" />
           )}
 
           {error && !isLoading && (
@@ -117,12 +121,13 @@ export default function ConfirmCode({
           {!isLoading && (
             <>
               <Button
-                color={'secondary_1'}
+                color={'primary_2'}
                 onPress={onLogin}
                 text={t(LoginTexts.confirmCode.mainButton)}
                 disabled={!code}
                 icon={ArrowRight}
                 iconPosition="right"
+                style={styles.submitButton}
               />
               <TouchableOpacity
                 style={styles.resendButton}
@@ -131,7 +136,7 @@ export default function ConfirmCode({
               >
                 <ThemeText
                   style={styles.resendButtonText}
-                  type="body__primary--underline"
+                  type="body__primary"
                   color={themeColor}
                 >
                   {t(LoginTexts.confirmCode.resendButton)}
@@ -151,16 +156,29 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   mainView: {
+    flex: 1,
+    justifyContent: 'center',
     margin: theme.spacings.medium,
     padding: theme.spacings.medium,
   },
-  description: {
+  title: {
+    textAlign: 'center',
     marginVertical: theme.spacings.medium,
+  },
+  description: {
+    marginVertical: theme.spacings.large,
+    textAlign: 'center',
+  },
+  activityIndicator: {
+    marginVertical: theme.spacings.large,
   },
   messageBox: {
     marginBottom: theme.spacings.medium,
   },
   buttonView: {
+    marginTop: theme.spacings.medium,
+  },
+  submitButton: {
     marginTop: theme.spacings.medium,
   },
   resendButton: {
