@@ -1,12 +1,13 @@
+import {FOCUS_LATITUDE, FOCUS_LONGITUDE} from '@env';
 import {Feature, Coordinates} from '../sdk';
 import client from './client';
 import qs from 'query-string';
 import {stringifyUrl} from './utils';
 import {AxiosRequestConfig} from 'axios';
 
-export const TRONDHEIM_CENTRAL_STATION: Coordinates = {
-  latitude: 63.43457,
-  longitude: 10.39844,
+export const FOCUS_ORIGIN: Coordinates = {
+  latitude: FOCUS_LATITUDE,
+  longitude: FOCUS_LONGITUDE,
 };
 
 export async function autocomplete(
@@ -19,8 +20,8 @@ export async function autocomplete(
   const query = qs.stringify(
     {
       query: text,
-      lat: coordinates?.latitude ?? TRONDHEIM_CENTRAL_STATION.latitude,
-      lon: coordinates?.longitude ?? TRONDHEIM_CENTRAL_STATION.longitude,
+      lat: coordinates?.latitude ?? FOCUS_ORIGIN.latitude,
+      lon: coordinates?.longitude ?? FOCUS_ORIGIN.longitude,
       limit: 10,
       tariff_zone_authorities: onlyAtbVenues ? 'ATB' : null,
     },
