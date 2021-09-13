@@ -1,4 +1,5 @@
 import {Info, Warning} from '@atb/assets/svg/situations';
+import {Interchange} from '@atb/assets/svg/icons/actions';
 import AccessibleText, {
   screenReaderPause,
 } from '@atb/components/accessible-text';
@@ -41,13 +42,20 @@ type TripSectionProps = {
   wait?: WaitDetails;
   isFirst?: boolean;
   step?: number;
+  interchangeDetails?: InterchangeDetails;
 } & Leg;
+
+export type InterchangeDetails = {
+  publicCode: string;
+  fromPlace: string;
+};
 
 const TripSection: React.FC<TripSectionProps> = ({
   isLast,
   isFirst,
   wait,
   step,
+  interchangeDetails,
   ...leg
 }) => {
   const {t, language} = useTranslation();
@@ -55,6 +63,7 @@ const TripSection: React.FC<TripSectionProps> = ({
 
   const isWalkSection = leg.mode === 'foot';
   const legColor = useTransportationColor(leg.mode, leg.line?.transportSubmode);
+  const iconColor = useTransportationColor();
 
   const showFrom = !isWalkSection || !!(isFirst && isWalkSection);
   const showTo = !isWalkSection || !!(isLast && isWalkSection);
@@ -152,6 +161,27 @@ const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
       </View>
+      {leg.interchangeTo?.guaranteed && interchangeDetails && leg.line && (
+        <View style={style.interchangeMessage}>
+          <TripLegDecoration
+            color={iconColor}
+            hasStart={false}
+            hasEnd={false}
+          />
+          <TripRow rowLabel={<ThemeIcon svg={Interchange} />}>
+            <TinyMessageBox
+              type="info"
+              message={t(
+                TripDetailsTexts.messages.interchange(
+                  leg.line.publicCode,
+                  interchangeDetails.publicCode,
+                  interchangeDetails.fromPlace,
+                ),
+              )}
+            />
+          </TripRow>
+        </View>
+      )}
     </>
   );
   return (
@@ -242,7 +272,7 @@ const WalkSection: React.FC<TripSectionProps> = (leg) => {
   );
 };
 
-function getPlaceName(place: Place): string {
+export function getPlaceName(place: Place): string {
   const fallback = place.name ?? '';
   return place.quay ? getQuayName(place.quay) ?? fallback : fallback;
 }
@@ -298,7 +328,7 @@ function getStopRowA11yTranslated(
 const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   tripSection: {
     flex: 1,
-    marginVertical: theme.spacings.medium,
+    marginBottom: theme.spacings.large,
   },
   a11yHelper: {
     position: 'absolute',
@@ -308,6 +338,9 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   legLineName: {
     fontWeight: 'bold',
+  },
+  interchangeMessage: {
+    marginBottom: -theme.spacings.large,
   },
 }));
 export default TripSection;

@@ -8,7 +8,14 @@ import {
 } from 'react-native-webview/lib/WebViewTypes';
 import {parse as parseURL} from 'search-params';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {ReserveOffer, reserveOffers, TicketReservation} from '@atb/tickets';
+import {
+  listRecurringPayments,
+  PaymentType,
+  ReserveOffer,
+  reserveOffers,
+  TicketReservation,
+} from '@atb/tickets';
+import {usePreferences} from '@atb/preferences';
 
 const possibleResponseCodes = ['Cancel', 'OK'] as const;
 type NetsResponseCode = typeof possibleResponseCodes[number];
@@ -84,6 +91,9 @@ const initialState: TerminalReducerState = {
 
 export default function useTerminalState(
   offers: ReserveOffer[],
+  paymentType: PaymentType.VISA | PaymentType.MasterCard,
+  recurringPaymentId: number | undefined,
+  saveRecurringCard: boolean,
   cancelTerminal: () => void,
   addReservation: (
     reservation: TicketReservation,
@@ -94,6 +104,8 @@ export default function useTerminalState(
     {paymentResponseCode, reservation, loadingState, error},
     dispatch,
   ] = useReducer(terminalReducer, initialState);
+
+  const {setPreference} = usePreferences();
 
   const handleAxiosError = useCallback(
     function (err: AxiosError | unknown, errorContext: ErrorContext) {
@@ -113,10 +125,23 @@ export default function useTerminalState(
   const reserveOffer = useCallback(
     async function () {
       try {
-        const response = await reserveOffers(offers, 'creditcard', {
-          retry: true,
-        });
-
+        const response = recurringPaymentId
+          ? await reserveOffers({
+              offers,
+              paymentType: paymentType,
+              recurringPaymentId: recurringPaymentId,
+              opts: {
+                retry: true,
+              },
+            })
+          : await reserveOffers({
+              offers,
+              paymentType: paymentType,
+              savePaymentMethod: saveRecurringCard,
+              opts: {
+                retry: true,
+              },
+            });
         dispatch({type: 'OFFER_RESERVED', reservation: response});
       } catch (err) {
         console.warn(err);
@@ -140,7 +165,7 @@ export default function useTerminalState(
     // load events might be called several times
     // for each type of resource, html, assets, etc
     // so we have a "loading guard" here
-    if (loadingRef.current) {
+    if (loadingRef.current && !url.includes('/ticket/v2/payments/')) {
       loadingRef.current = false;
       if (isWebViewError(nativeEvent)) {
         dispatch({
@@ -167,12 +192,37 @@ export default function useTerminalState(
 
   const paymentRedirectCompleteRef = useRef<boolean>(false);
 
+  async function reservationOk(reservation: TicketReservation) {
+    if (reservation.recurring_payment_id) {
+      let allRecurringPaymentOptions = await listRecurringPayments();
+      const card = allRecurringPaymentOptions.find((item) => {
+        return item.id === reservation.recurring_payment_id!;
+      });
+      if (card) {
+        setPreference({
+          previousPaymentMethod: {
+            savedType: 'recurring',
+            paymentType: paymentType,
+            recurringCard: card,
+          },
+        });
+      }
+    } else {
+      setPreference({
+        previousPaymentMethod: {
+          savedType: 'normal',
+          paymentType: paymentType,
+        },
+      });
+    }
+    addReservation(reservation, offers);
+  }
+
   useEffect(() => {
     switch (paymentResponseCode) {
       case 'OK':
         if (!reservation) return;
-
-        addReservation(reservation, offers);
+        reservationOk(reservation);
         break;
       case 'Cancel':
         cancelTerminal();

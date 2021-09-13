@@ -5,7 +5,7 @@ import {
   resetPreference as resetPreference_storage,
   setPreference as setPreference_storage,
 } from './storage';
-import {PreferenceItem, UserPreferences} from './types';
+import {PreferenceItem, UserPreferences} from '@atb/preferences';
 
 type PreferencesContextState = {
   preferences: UserPreferences;
