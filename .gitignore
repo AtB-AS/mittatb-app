@@ -32,7 +32,6 @@ env.properties
 *.iml
 ic_launcher*
 
-
 # node.js
 #
 node_modules/
@@ -88,5 +87,3 @@ ios/atb/Images.xcassets/BootSplashLogo.imageset/bootsplash_logo*.png
 #Service files
 android/app/google-services.json
 ios/atb/GoogleService-Info.plist
-
-
