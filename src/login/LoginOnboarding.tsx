@@ -10,7 +10,7 @@ import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ThemeColor} from '@atb/theme/colors';
 import {useNavigation} from '@react-navigation/native';
-import {Ticket} from '@atb/assets/svg/illustrations';
+import {TicketIllustration, Psst} from '@atb/assets/svg/illustrations';
 import {TouchableOpacity} from 'react-native';
 
 const themeColor: ThemeColor = 'background_gray';
@@ -60,7 +60,7 @@ export default function LoginOnboarding({
             dagers varighet.
           </ThemeText>
         </View>
-        <Ticket style={styles.illustation}></Ticket>
+        <TicketIllustration style={styles.illustation}></TicketIllustration>
         <View style={styles.buttonView}>
           <Button
             color={'primary_2'}
