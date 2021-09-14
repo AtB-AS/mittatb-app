@@ -2,7 +2,7 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/icons/navigation';
@@ -44,7 +44,7 @@ export default function LoginOnboarding({
         color={themeColor}
       />
 
-      <View style={styles.mainView}>
+      <ScrollView centerContent={true} contentContainerStyle={styles.mainView}>
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
           <ThemeText
             type={'body__primary--jumbo--bold'}
@@ -71,19 +71,34 @@ export default function LoginOnboarding({
           />
         </View>
         <TouchableOpacity
-          style={styles.resendButton}
+          style={styles.laterButton}
           onPress={navigation.goBack}
           accessibilityRole="button"
         >
           <ThemeText
-            style={styles.resendButtonText}
+            style={styles.laterButtonText}
             type="body__primary"
             color={themeColor}
           >
             {'Jeg vil logge inn senere'}
           </ThemeText>
         </TouchableOpacity>
-      </View>
+        <View style={styles.carrotInfo}>
+          <Psst></Psst>
+          <ThemeText
+            style={styles.carrotTitle}
+            type="body__primary--bold"
+            color={themeColor}
+          >
+            Det er lurt å logge inn
+          </ThemeText>
+          <ThemeText type="body__primary" color={themeColor}>
+            Da kan du også lagre betalingskort og etter hvert andre smarte
+            reiseting slik at du enkelt finner dem igjen – selv ved bytte av
+            mobil.
+          </ThemeText>
+        </View>
+      </ScrollView>
     </View>
   );
 }
@@ -94,11 +109,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   mainView: {
-    flex: 1,
-    justifyContent: 'center',
-    margin: theme.spacings.medium,
-    padding: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
+    padding: theme.spacings.large,
   },
   title: {
     textAlign: 'center',
@@ -121,9 +132,17 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignSelf: 'center',
     marginVertical: theme.spacings.medium,
   },
-  resendButton: {
+  laterButton: {
     marginTop: theme.spacings.medium,
     padding: theme.spacings.medium,
+    marginBottom: theme.spacings.xLarge,
   },
-  resendButtonText: {textAlign: 'center'},
+  laterButtonText: {textAlign: 'center'},
+  carrotInfo: {
+    margin: theme.spacings.xLarge,
+    marginBottom: theme.spacings.xLarge,
+  },
+  carrotTitle: {
+    marginVertical: theme.spacings.medium,
+  },
 }));
