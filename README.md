@@ -89,8 +89,22 @@ With errors:
 error: /mittatb-app/ios/Pods/Target Support Files/Pods-atb/Pods-atb.debug.xcconfig: unable to open file (in target "atb" in project "atb") (in target 'atb' from project 'atb')
 ...
 ```
-
 You might be missing iOS dependencies (Cocopods). See dependency step in [Starting locally](#starting-locally).
+
+
+### Building and running on Apple Silicon Macs
+Some steps may fail when building on an Apple Silicon Mac.
+We got it building on a Macbook pro M1 by doing a few extra steps:
+#### Set xcode to run with Rosetta 
+open finder, navigate to Applications, right click xcode and select "get info", tick checkbox "Open using Rosetta"
+#### Set Terminal to run with Rosetta
+open finder, navigate to Applications/Utilities , right click Terminal and select "get info", tick checkbox "Open using Rosetta".
+Restart your terminals.
+#### Update LibFFI
+run `sudo gem install ffi -- --enable-system-libffi`
+
+running `yarn ios` should now build and start the app in the ios simulator
+
 
 ## Distributing new app versions (deploy)
 
