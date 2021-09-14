@@ -51,13 +51,12 @@ export default function LoginOnboarding({
             style={styles.title}
             color={themeColor}
           >
-            Nå kan du kjøpe periodebilletter!
+            {t(LoginTexts.onboarding.title)}
           </ThemeText>
         </View>
         <View accessible={true}>
           <ThemeText style={styles.description} color={themeColor}>
-            Når du logger inn kan du kjøpe periodebilletter på 7, 30 eller 180
-            dagers varighet.
+            {t(LoginTexts.onboarding.description)}
           </ThemeText>
         </View>
         <TicketIllustration style={styles.illustation}></TicketIllustration>
@@ -65,7 +64,7 @@ export default function LoginOnboarding({
           <Button
             color={'primary_2'}
             onPress={onNext}
-            text={'Ta meg til innlogging'}
+            text={t(LoginTexts.onboarding.button)}
             icon={ArrowRight}
             iconPosition="right"
           />
@@ -80,7 +79,7 @@ export default function LoginOnboarding({
             type="body__primary"
             color={themeColor}
           >
-            {'Jeg vil logge inn senere'}
+            {t(LoginTexts.onboarding.laterButton)}
           </ThemeText>
         </TouchableOpacity>
         <View style={styles.carrotInfo}>
@@ -90,12 +89,10 @@ export default function LoginOnboarding({
             type="body__primary--bold"
             color={themeColor}
           >
-            Det er lurt å logge inn
+            {t(LoginTexts.onboarding.carrotTitle)}
           </ThemeText>
           <ThemeText type="body__primary" color={themeColor}>
-            Da kan du også lagre betalingskort og etter hvert andre smarte
-            reiseting slik at du enkelt finner dem igjen – selv ved bytte av
-            mobil.
+            {t(LoginTexts.onboarding.carrotBody)}
           </ThemeText>
         </View>
       </ScrollView>

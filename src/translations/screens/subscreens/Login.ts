@@ -1,17 +1,34 @@
 import {translation as _} from '../../commons';
 const LoginTexts = {
-  phoneInput: {
-    title: _('Logg inn', 'Sign in'),
+  onboarding: {
+    title: _(
+      'Nå kan du kjøpe periodebilletter!',
+      'Seasonal tickets – available now!',
+    ),
     description: _(
-      'Ingen profil enda? Skriv inn telefonnummeret ditt nedenfor og følg instruksjonene, så lager vi en til deg!',
-      'No profile yet? Type your phone number below and follow the instructions, and we will create a profile for you!',
+      'Når du logger inn kan du kjøpe periodebilletter på 7, 30 eller 180 dagers varighet.',
+      'Log in to purchase 7, 30 or 180-day tickets.',
+    ),
+    button: _('Ta meg til innlogging', 'Take me to login'),
+    laterButton: _('Jeg vil logge inn senere', 'I want to log in later'),
+    carrotTitle: _('Det er lurt å logge inn', 'Smart travellers log in...'),
+    carrotBody: _(
+      'Da kan du også lagre betalingskort og etter hvert andre smarte reiseting slik at du enkelt finner dem igjen – selv ved bytte av mobil.',
+      '...to store payment cards for later use. Soon, login will store personal preferences to your profile so that you can carry them with you when swapping phones.',
+    ),
+  },
+  phoneInput: {
+    title: _('Logg inn', 'Log in'),
+    description: _(
+      'Logg inn med engangskode sendt til din mobil',
+      'Log in with a one-time code sent to your mobile',
     ),
     input: {
-      heading: _('Telefonnummer', 'Phone number'),
+      heading: _('Mobilnummer', 'Mobile number'),
       label: _('+47', '+47'),
-      placeholder: _('Skriv inn ditt telefonnummer', 'Type your phone number'),
+      placeholder: _('Skriv inn ditt telefonnummer', 'Type your mobile number'),
     },
-    mainButton: _('Send engangskode', 'Send one time code'),
+    mainButton: _('Send engangskode', 'Send one-time code'),
     errors: {
       invalid_phone: _(
         'Er du sikker på at telefonnummeret er korrekt?',
@@ -24,21 +41,18 @@ const LoginTexts = {
     },
   },
   confirmCode: {
-    title: _('Bekreft kode', 'Confirm code'),
+    title: _('Skriv inn engangskoden', 'Enter your one-time code'),
     description: (phoneNumber: string) =>
       _(
-        `Vi har sendt deg en SMS med engangskode til ${phoneNumber}.`,
-        `We have sent you a SMS with a one time code to ${phoneNumber}.`,
+        `Vi har sendt en engangskode til ${phoneNumber}`,
+        `We just sent a one-time code to ${phoneNumber}`,
       ),
     input: {
-      label: _('Engangskode', 'One time code'),
-      placeholder: _(
-        'Skriv inn koden du fikk tilsendt',
-        'Type the one time code sent to you',
-      ),
+      label: _('Engangskode', 'One-time code'),
+      placeholder: _('Skriv inn engangskoden', 'Enter your one-time code'),
     },
-    mainButton: _('Logg inn', 'Sign in'),
-    resendButton: _('Send engangskode på nytt', 'Resend the one time code'),
+    mainButton: _('Logg inn', 'Log in'),
+    resendButton: _('Send engangskode på nytt', 'Request one-time code'),
     errors: {
       invalid_phone: _(
         'Er du sikker på at telefonnummeret er korrekt?',
