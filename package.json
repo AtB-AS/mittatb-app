@@ -4,8 +4,7 @@
   "private": true,
   "license": "EUPL-1.2",
   "scripts": {
-    "android-atb": "react-native run-android --appIdSuffix debug",
-    "android-nfk": "react-native run-android --appId no.reisnordland.reis.debug",
+    "android": "sh ./scripts/android/run-android.sh",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
