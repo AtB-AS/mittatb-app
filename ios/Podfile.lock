@@ -1008,7 +1008,7 @@ SPEC CHECKSUMS:
   Intercom: 5d8058e3476ab6b0350dea165338164364eb1acb
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  Mapbox-iOS-SDK: 2563ed87ead6ec08f1c2090873977b8a7be335a8
+  Mapbox-iOS-SDK: 6a67397df2bcafe5d2851604192aa8de6f8d6c89
   MapboxMobileEvents: 36ff53b135aac486eed94b61f813c7967a0c2c6f
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b

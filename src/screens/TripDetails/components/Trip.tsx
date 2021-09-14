@@ -6,7 +6,7 @@ import {StyleSheet} from '@atb/theme';
 import {secondsBetween} from '@atb/utils/date';
 import {timeIsShort} from '../Details/utils';
 import TripMessages from './TripMessages';
-import TripSection from './TripSection';
+import TripSection, {InterchangeDetails, getPlaceName} from './TripSection';
 import Summary from './TripSummary';
 import {WaitDetails} from './WaitSection';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
@@ -60,6 +60,10 @@ const Trip: React.FC<TripProps> = ({tripPattern, error}) => {
                 wait={waitDetails}
                 isLast={isLast}
                 step={index + 1}
+                interchangeDetails={getInterchangeDetails(
+                  tripPattern,
+                  leg.interchangeTo?.ToServiceJourney?.id,
+                )}
                 {...leg}
               />
             );
@@ -105,8 +109,25 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.medium,
   },
   trip: {
-    paddingVertical: theme.spacings.medium,
+    paddingTop: theme.spacings.large,
   },
 }));
+
+function getInterchangeDetails(
+  tripPattern: TripPattern,
+  id: string | undefined,
+): InterchangeDetails | undefined {
+  if (!id) return undefined;
+  const interchangeLeg = tripPattern.legs.find(
+    (leg) => leg.line && leg.serviceJourney.id === id,
+  );
+
+  if (!interchangeLeg || !interchangeLeg.line) return undefined;
+
+  return {
+    publicCode: interchangeLeg.line.publicCode,
+    fromPlace: getPlaceName(interchangeLeg.fromPlace),
+  };
+}
 
 export default Trip;
