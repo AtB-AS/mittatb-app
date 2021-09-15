@@ -134,9 +134,12 @@ const TripSection: React.FC<TripSectionProps> = ({
         )}
 
         {leg.notices &&
-          leg.notices.map((notice) => {
+          leg.notices.map((notice, index) => {
             return (
-              <TripRow rowLabel={<ThemeIcon svg={Info} />}>
+              <TripRow
+                key={'notice-' + index}
+                rowLabel={<ThemeIcon svg={Info} />}
+              >
                 <TinyMessageBox type="info" message={notice.text} />
               </TripRow>
             );

@@ -14,6 +14,7 @@ const DepartureDetailsTexts = {
       'Reisen inneholder reisetilbud som krever billett fra andre selskap enn AtB',
       'This journey requires tickets from providers other than AtB',
     ),
+    noAlighting: _('Ingen avstigning', 'No disembarking'),
   },
 };
 export default DepartureDetailsTexts;
