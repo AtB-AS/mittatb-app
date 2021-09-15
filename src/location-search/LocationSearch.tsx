@@ -3,7 +3,7 @@ import {RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
 import {Keyboard, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {TRONDHEIM_CENTRAL_STATION} from '../api/geocoder';
+import {FOCUS_ORIGIN} from '../api/geocoder';
 import {ErrorType} from '../api/utils';
 import MessageBox from '../components/message-box';
 import FullScreenHeader from '../components/screen-header/full-header';
@@ -76,7 +76,7 @@ const LocationSearch: React.FC<Props> = ({
       ? {...initialLocation.coordinates, zoomLevel: 12}
       : geolocation
       ? {...geolocation.coords, zoomLevel: 12}
-      : {...TRONDHEIM_CENTRAL_STATION, zoomLevel: 6};
+      : {...FOCUS_ORIGIN, zoomLevel: 6};
 
     navigation.navigate('MapSelection', {
       callerRouteName,

@@ -1,4 +1,4 @@
-import {TRONDHEIM_CENTRAL_STATION} from '@atb/api/geocoder';
+import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
 import Button from '@atb/components/button';
 import {
@@ -248,7 +248,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
 
   const startCoordinates = geolocation
     ? [geolocation.coords.longitude, geolocation.coords.latitude]
-    : [TRONDHEIM_CENTRAL_STATION.longitude, TRONDHEIM_CENTRAL_STATION.latitude];
+    : [FOCUS_ORIGIN.longitude, FOCUS_ORIGIN.latitude];
 
   const onSave = () => {
     navigation.navigate('PurchaseOverview', {

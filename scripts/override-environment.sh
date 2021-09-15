@@ -13,12 +13,13 @@ then
 -nfk"
 
     echo "Example:
-./override-environment.sh store AtB"
+./override-environment.sh store atb"
     exit 1
 else
     APP_ENVIRONMENT=$1
     APP_ORG=$2
     ENV_FOLDER=env/$APP_ORG/$APP_ENVIRONMENT
+    ORG_FOLDER=env/$APP_ORG
     echo "Copying $APP_ENVIRONMENT .env file to root"
     cp $ENV_FOLDER/.env .
 
@@ -35,4 +36,7 @@ else
 
     echo "Copying $APP_ENVIRONMENT GoogleService-Info.plist to iOS folder"
     cp $ENV_FOLDER/GoogleService-Info.plist ios/atb
+
+    echo "Copying boot splash image to assets/"
+    cp $ORG_FOLDER/bootsplash_logo_original.png assets/
 fi

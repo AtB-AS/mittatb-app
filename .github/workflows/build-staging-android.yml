@@ -52,9 +52,9 @@ jobs:
         env:
           GPG_KEYSTORE_FILE: ${{ secrets.GPG_KEYSTORE_FILE }}
           GPG_KEYSTORE_PASS: ${{ secrets.GPG_KEYSTORE_PASS }}
-      - name: Generate icons
+      - name: Generate native assets
         if: steps.apk-cache.outputs.cache-hit != 'true'
-        run: brew install imagemagick && yarn icons
+        run: brew install imagemagick && yarn generate-native-assets
       - name: Run fastlane build
         if: steps.apk-cache.outputs.cache-hit != 'true'
         run: fastlane android build

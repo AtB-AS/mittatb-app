@@ -4,8 +4,7 @@
   "private": true,
   "license": "EUPL-1.2",
   "scripts": {
-    "android-atb": "react-native run-android --appIdSuffix debug",
-    "android-nfk": "react-native run-android --appId no.reisnordland.reis.debug",
+    "android": "sh ./scripts/android/run-android.sh",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
@@ -18,7 +17,9 @@
     "generate-svgs": "yarn generate-svg-mono-icons && yarn generate-svg-color",
     "update-device-profiles": "bundle exec fastlane ios update_devices",
     "clean": "rm -rf node_modules/ **/node_modules/ yarn-error.log",
-    "clean:install": "yarn clean && yarn install"
+    "clean:install": "yarn clean && yarn install",
+    "setup": "sh ./setup.sh",
+    "generate-native-assets": "sh ./scripts/generate-native-assets.sh"
   },
   "dependencies": {
     "@atb-as/theme": "^3.0.0",

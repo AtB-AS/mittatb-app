@@ -47,7 +47,7 @@ const WaitSection: React.FC<WaitDetails> = (wait) => {
 const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   section: {
     flex: 1,
-    marginVertical: theme.spacings.medium,
+    marginBottom: theme.spacings.large,
   },
 }));
 export default WaitSection;

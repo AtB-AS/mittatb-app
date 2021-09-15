@@ -78,6 +78,11 @@ firebase-debug.log
 /.env
 /icons
 ios/Configs/Config.xcconfig
+android/app/src/**/res/**/bootsplash_logo.png
+android/app/src/main/res/values/colors.xml
+assets/bootsplash_logo*.png
+ios/atb/BootSplash.storyboard
+ios/atb/Images.xcassets/BootSplashLogo.imageset/bootsplash_logo*.png
 
 #Service files
 android/app/google-services.json

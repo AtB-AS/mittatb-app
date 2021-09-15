@@ -36,8 +36,8 @@ We love feedback and suggestions. The AtB app and service is continously improve
    1. React Native: `yarn`
    1. iOS specific: `cd ios/` and `pod install`
 1. Decrypt sensitive files `git-crypt unlock <path/to/key>` (Key given to internal members)
-1. From root folder run: `sh scripts/override-environment.sh dev <organization>` where organization is either `AtB` or `nfk`, to set root .env for local development
-2. run `yarn icons` to generate all icons for iOS and Android. Do this after you run `override-environment.sh`.
+1. From root folder run: `yarn setup dev <organization>` where organization is either `atb` or `nfk`, to set root .env for local development and generate all icons and launch screens for iOS and Android
+
 
 For external contributors, we need to fix [#35](https://github.com/AtB-AS/mittatb-app/issues/35) before they are able to run the app.
 
@@ -89,8 +89,22 @@ With errors:
 error: /mittatb-app/ios/Pods/Target Support Files/Pods-atb/Pods-atb.debug.xcconfig: unable to open file (in target "atb" in project "atb") (in target 'atb' from project 'atb')
 ...
 ```
-
 You might be missing iOS dependencies (Cocopods). See dependency step in [Starting locally](#starting-locally).
+
+
+### Building and running on Apple Silicon Macs
+Some steps may fail when building on an Apple Silicon Mac.
+We got it building on a Macbook pro M1 by doing a few extra steps:
+#### Set xcode to run with Rosetta 
+open finder, navigate to Applications, right click xcode and select "get info", tick checkbox "Open using Rosetta"
+#### Set Terminal to run with Rosetta
+open finder, navigate to Applications/Utilities , right click Terminal and select "get info", tick checkbox "Open using Rosetta".
+Restart your terminals.
+#### Update LibFFI
+run `sudo gem install ffi -- --enable-system-libffi`
+
+running `yarn ios` should now build and start the app in the ios simulator
+
 
 ## Distributing new app versions (deploy)
 
