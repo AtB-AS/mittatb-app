@@ -16,6 +16,7 @@ import {
   TicketReservation,
 } from '@atb/tickets';
 import {usePreferences} from '@atb/preferences';
+import {useAuthState} from '@atb/auth';
 
 const possibleResponseCodes = ['Cancel', 'OK'] as const;
 type NetsResponseCode = typeof possibleResponseCodes[number];
@@ -106,6 +107,7 @@ export default function useTerminalState(
   ] = useReducer(terminalReducer, initialState);
 
   const {setPreference} = usePreferences();
+  const {user} = useAuthState();
 
   const handleAxiosError = useCallback(
     function (err: AxiosError | unknown, errorContext: ErrorContext) {
@@ -194,18 +196,27 @@ export default function useTerminalState(
 
   async function reservationOk(reservation: TicketReservation) {
     if (reservation.recurring_payment_id) {
-      let allRecurringPaymentOptions = await listRecurringPayments();
-      const card = allRecurringPaymentOptions.find((item) => {
-        return item.id === reservation.recurring_payment_id!;
-      });
-      if (card) {
-        setPreference({
-          previousPaymentMethod: {
-            savedType: 'recurring',
-            paymentType: paymentType,
-            recurringCard: card,
-          },
+      if (user?.phoneNumber) {
+        let allRecurringPaymentOptions = await listRecurringPayments();
+        const card = allRecurringPaymentOptions.find((item) => {
+          return item.id === reservation.recurring_payment_id!;
         });
+        if (card) {
+          setPreference({
+            previousPaymentMethod: {
+              savedType: 'recurring',
+              paymentType: paymentType,
+              recurringCard: card,
+            },
+          });
+        } else {
+          setPreference({
+            previousPaymentMethod: {
+              savedType: 'normal',
+              paymentType: paymentType,
+            },
+          });
+        }
       }
     } else {
       setPreference({

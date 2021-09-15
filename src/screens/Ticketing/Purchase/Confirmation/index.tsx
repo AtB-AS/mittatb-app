@@ -331,8 +331,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           />
         ) : (
           <View>
-            {(previousMethod && user?.phoneNumber) ||
-            previousMethod?.paymentType === PaymentType.Vipps ? (
+            {previousMethod ? (
               <View style={styles.flexColumn}>
                 <Button
                   text={getPaymentOptionTexts(previousMethod)}
