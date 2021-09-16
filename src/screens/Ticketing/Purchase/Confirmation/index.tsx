@@ -33,7 +33,6 @@ import {SavedPaymentOption, usePreferences} from '@atb/preferences';
 import {useState} from 'react';
 import {useEffect} from 'react';
 import {CardPaymentMethod, PaymentMethod} from '../types';
-import {useAuthState} from '@atb/auth';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
