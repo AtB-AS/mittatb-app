@@ -21,6 +21,7 @@ import ThemeText from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {listRecurringPayments, PaymentType} from '@atb/tickets';
 import {PaymentMethod} from '../../types';
+import {useAuthState} from '@atb/auth';
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;
@@ -80,6 +81,8 @@ const SelectPaymentMethod: React.FC<Props> = ({
     true,
   );
 
+  const {user} = useAuthState();
+
   const [selectedOption, setSelectedOption] = useState<
     PaymentMethod | undefined
   >(getSelectedPaymentMethod(previousPaymentMethod));
@@ -100,6 +103,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
   const styles = useStyles();
 
   async function getOptions(): Promise<Array<SavedPaymentOption>> {
+    if (!user?.phoneNumber) return [...options];
     const remoteOptions: Array<SavedPaymentOption> = (
       await listRecurringPayments()
     ).map((option) => {
@@ -202,6 +206,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
   const [save, setSave] = useState<boolean>(false);
   const {t} = useTranslation();
   const styles = useStyles();
+  const {user} = useAuthState();
 
   useEffect(() => {
     if (selected) {
@@ -301,6 +306,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
           : null}
       </View>
       {selected &&
+      user?.phoneNumber &&
       option.savedType === 'normal' &&
       option.paymentType !== PaymentType.Vipps ? (
         <View>
