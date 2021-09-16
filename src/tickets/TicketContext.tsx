@@ -156,6 +156,8 @@ const TicketContextProvider: React.FC = ({children}) => {
         console.warn(err);
       }
     }
+
+    ensureToken();
   }, [dispatch]);
 
   useEffect(() => {

@@ -14,6 +14,8 @@ import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
 import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import {screenReaderPause} from '@atb/components/accessible-text';
+import {generateQrCode} from '@atb/mobile-token';
+import useInterval from '@atb/utils/use-interval';
 
 type Props = {
   fareContract: FareContract;
@@ -28,7 +30,21 @@ const DetailsContent: React.FC<Props> = ({
 }) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const qrCodeSvg = useQrCode(fc);
+  const [tokenQRCode, setTokenQRCode] = useState<string | undefined>(undefined);
+  const qrCodeSvg = useQrCodeSvg(tokenQRCode);
+
+  // TODO: Update so this happens in TicketContext later. Just proof-of-concept
+  useInterval(
+    () => {
+      async function updateQrCode() {
+        const qr = await generateQrCode();
+        setTokenQRCode(qr);
+      }
+      updateQrCode();
+    },
+    10000,
+    [],
+  );
 
   const firstTravelRight = fc.travelRights[0];
   if (isPreactivatedTicket(firstTravelRight)) {
@@ -112,19 +128,19 @@ function UnknownTicketDetails({fc}: {fc: FareContract}) {
   );
 }
 
-const useQrCode = (fc: FareContract) => {
+const useQrCodeSvg = (qrCode: string | undefined) => {
   const [qrCodeSvg, setQrCodeSvg] = useState<string | undefined>();
 
   useEffect(() => {
     (async function () {
-      if (!fc?.qrCode) return;
-      const svg = await qrcode.toString(fc.qrCode, {
+      if (!qrCode) return;
+      const svg = await qrcode.toString(qrCode, {
         type: 'svg',
       });
 
       setQrCodeSvg(svg);
     })();
-  }, [fc]);
+  }, [qrCode]);
   return qrCodeSvg;
 };
 
