@@ -117,8 +117,6 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     travelDate,
   );
 
-  const {user} = useAuthState();
-
   const offerExpirationTime =
     offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
 
