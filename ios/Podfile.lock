@@ -224,9 +224,13 @@ PODS:
   - BVLinearGradient (2.5.6):
     - React
   - CocoaAsyncSocket (7.6.5)
+  - CryptoSwift (1.4.0)
   - DoubleConversion (1.1.6)
   - entur-react-native-traveller (1.0.0):
+    - CryptoSwift
+    - Kronos
     - React-Core
+    - SwiftProtobuf
   - FBLazyVector (0.63.4)
   - FBReactNativeSpec (0.63.4):
     - Folly (= 2020.01.13.00)
@@ -434,6 +438,7 @@ PODS:
   - gRPC-Core/Interface (1.28.2)
   - GTMSessionFetcher/Core (1.5.0)
   - Intercom (8.0.0)
+  - Kronos (4.2.1)
   - leveldb-library (1.22.1)
   - libevent (2.1.12)
   - Mapbox-iOS-SDK (6.3.0):
@@ -742,6 +747,7 @@ PODS:
     - React-RCTImage
   - RNSVG (12.1.1):
     - React
+  - SwiftProtobuf (1.17.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -830,6 +836,7 @@ SPEC REPOS:
     - boost-for-react-native
     - BoringSSL-GRPC
     - CocoaAsyncSocket
+    - CryptoSwift
     - Firebase
     - FirebaseABTesting
     - FirebaseAnalytics
@@ -855,6 +862,7 @@ SPEC REPOS:
     - gRPC-Core
     - GTMSessionFetcher
     - Intercom
+    - Kronos
     - leveldb-library
     - libevent
     - Mapbox-iOS-SDK
@@ -862,6 +870,7 @@ SPEC REPOS:
     - nanopb
     - OpenSSL-Universal
     - PromisesObjC
+    - SwiftProtobuf
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -981,8 +990,9 @@ SPEC CHECKSUMS:
   BugsnagReactNative: 2e6375ce8a5789af2d1e3f2b6b8d5f679c1b2242
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
+  CryptoSwift: 7cc902df1784de3b389a387756c7d710f197730c
   DoubleConversion: cde416483dac037923206447da6e1454df403714
-  entur-react-native-traveller: 542b4f179b6b4d46f17fef4df1c1d749d9aa2f56
+  entur-react-native-traveller: 54d01d9d0e004a424bbfdefde3f389e225d0b73a
   FBLazyVector: 3bb422f41b18121b71783a905c10e58606f7dc3e
   FBReactNativeSpec: f2c97f2529dd79c083355182cc158c9f98f4bd6e
   Firebase: 78e8dd2e39d653de6270432ad84fe8b59f7bf4e8
@@ -1012,6 +1022,7 @@ SPEC CHECKSUMS:
   gRPC-Core: 4afa11bfbedf7cdecd04de535a9e046893404ed5
   GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
   Intercom: 5d8058e3476ab6b0350dea165338164364eb1acb
+  Kronos: 0ca73a1c00dc9a49a0bab4a6ed42f282562a7058
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   Mapbox-iOS-SDK: 6a67397df2bcafe5d2851604192aa8de6f8d6c89
@@ -1064,6 +1075,7 @@ SPEC CHECKSUMS:
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNScreens: eb0dfb2d6b21d2d7f980ad46b14eb306d2f1062e
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
+  SwiftProtobuf: 9c85136c6ba74b0a1b84279dbf0f6db8efb714e0
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
