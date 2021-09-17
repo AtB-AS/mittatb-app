@@ -28,7 +28,7 @@ const LoginTexts = {
       label: _('+47', '+47'),
       placeholder: _('Skriv inn ditt telefonnummer', 'Type your mobile number'),
     },
-    mainButton: _('Send engangskode', 'Send one-time code'),
+    mainButton: _('Send engangskode', 'Send new one-time code'),
     errors: {
       invalid_phone: _(
         'Er du sikker på at telefonnummeret er korrekt?',
