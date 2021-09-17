@@ -5,7 +5,7 @@ import Svg, {SvgProps, G, Path, Defs} from 'react-native-svg';
 function SvgTicketIllustration(props: SvgProps) {
   return (
     <Svg width={128} height={111} fill="none" viewBox="0 0 128 111" {...props}>
-      <G filter="url(#TicketIllustration_svg__TicketIllustration_svg__filter0_d)">
+      <G>
         <Path
           fill="#75B8C4"
           fillRule="evenodd"
@@ -13,7 +13,7 @@ function SvgTicketIllustration(props: SvgProps) {
           clipRule="evenodd"
         />
       </G>
-      <G filter="url(#TicketIllustration_svg__TicketIllustration_svg__filter1_d)">
+      <G>
         <Path
           fill="#007C92"
           fillRule="evenodd"
