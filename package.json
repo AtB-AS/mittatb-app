@@ -64,6 +64,7 @@
     "lodash.pickby": "^4.6.0",
     "lodash.sortby": "^4.7.0",
     "marked": "^3.0.2",
+    "phone": "^3.1.8",
     "qrcode": "^1.4.4",
     "query-string": "^7.0.1",
     "react": "16.13.1",

@@ -19,6 +19,7 @@ import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ThemeColor} from '@atb/theme/colors';
+import phone from 'phone';
 
 const themeColor: ThemeColor = 'background_gray';
 
@@ -43,9 +44,10 @@ export default function PhoneInput({
   const navigation = useNavigation();
   const focusRef = useFocusOnLoad();
 
-  // Remove whitespaces from phone number
-  const setCleanPhoneNumber = (number: string) =>
-    setPhoneNumber(number.replace(/\s+/g, ''));
+  const isValidPhoneNumber = (number: string) => {
+    const r = phone('+47' + number, {strictDetection: true});
+    return r.isValid;
+  };
 
   React.useEffect(
     () =>
@@ -57,10 +59,16 @@ export default function PhoneInput({
 
   const onNext = async () => {
     setIsSubmitting(true);
+    const phoneValidation = phone('+47' + phoneNumber);
+    if (!phoneValidation.phoneNumber) {
+      setIsSubmitting(false);
+      setError('invalid_phone');
+      return;
+    }
     const errorCode = await signInWithPhoneNumber(phoneNumber);
     if (!errorCode) {
       setError(undefined);
-      doAfterLogin(phoneNumber);
+      doAfterLogin(phoneValidation.phoneNumber);
     } else {
       setIsSubmitting(false);
       setError(errorCode);
@@ -108,7 +116,7 @@ export default function PhoneInput({
             <Sections.TextInput
               label={t(LoginTexts.phoneInput.input.label)}
               value={phoneNumber}
-              onChangeText={setCleanPhoneNumber}
+              onChangeText={setPhoneNumber}
               showClear={true}
               keyboardType="number-pad"
               placeholder={t(LoginTexts.phoneInput.input.placeholder)}
@@ -138,7 +146,7 @@ export default function PhoneInput({
                 color={'primary_2'}
                 onPress={onNext}
                 text={t(LoginTexts.phoneInput.mainButton)}
-                disabled={phoneNumber.length !== 8}
+                disabled={!isValidPhoneNumber(phoneNumber)}
                 icon={ArrowRight}
                 iconPosition="right"
               />
