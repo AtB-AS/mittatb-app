@@ -74,9 +74,6 @@ keystore
 ui-debug.log
 firebase-debug.log
 
-#yalc
-.yalc
-
 # Env
 /.env
 /icons
