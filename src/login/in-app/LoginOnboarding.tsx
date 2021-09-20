@@ -1,11 +1,13 @@
 import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
-import PhoneInput from '@atb/login/PhoneInput';
+
+import LoginOnboarding from '@atb/login/LoginOnboarding';
+// import LoginOnboarding from '@atb/login/LoginOnboarding';
 import {RouteProp} from '@react-navigation/native';
 import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
 import {AfterLoginParams} from '@atb/login/types';
 
-export type PhoneInputInAppRouteParams = {
+export type LoginOnboardingInAppRouteParams = {
   /**
    * An optional message to the user why the login is necessary
    */
@@ -13,30 +15,29 @@ export type PhoneInputInAppRouteParams = {
   afterLogin: AfterLoginParams;
 };
 
-type PhoneInputInAppRouteProps = RouteProp<
+type LoginOnboardingInAppRouteProps = RouteProp<
   LoginInAppStackParams,
   'PhoneInputInApp'
 >;
 
-export type PhoneInputInAppProps = {
+export type LoginOnboardingProps = {
   navigation: StackNavigationProp<LoginInAppStackParams>;
-  route: PhoneInputInAppRouteProps;
+  route: LoginOnboardingInAppRouteProps;
 };
 
-export const PhoneInputInApp = ({
+export const LoginOnboardingInApp = ({
   navigation,
   route: {
     params: {loginReason, afterLogin},
   },
-}: PhoneInputInAppProps) => (
-  <PhoneInput
+}: LoginOnboardingProps) => (
+  <LoginOnboarding
     loginReason={loginReason}
-    doAfterLogin={(phoneNumber: string) =>
-      navigation.navigate('ConfirmCodeInApp', {
+    doAfterSubmit={() =>
+      navigation.navigate('PhoneInputInApp', {
         afterLogin,
-        phoneNumber,
       })
     }
-    headerLeftButton={{type: 'back'}}
+    headerLeftButton={{type: 'cancel'}}
   />
 );
