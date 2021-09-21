@@ -39,13 +39,14 @@ export default function PhoneInput({
   const styles = useThemeStyles();
   const {signInWithPhoneNumber} = useAuthState();
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [prefix, setPrefix] = useState('47');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<PhoneSignInErrorCode>();
   const navigation = useNavigation();
   const focusRef = useFocusOnLoad();
 
   const isValidPhoneNumber = (number: string) => {
-    const r = phone('+47' + number, {strictDetection: true});
+    const r = phone('+' + prefix + number, {strictDetection: true});
     return r.isValid;
   };
 
@@ -59,7 +60,7 @@ export default function PhoneInput({
 
   const onNext = async () => {
     setIsSubmitting(true);
-    const phoneValidation = phone('+47' + phoneNumber);
+    const phoneValidation = phone('+' + prefix + phoneNumber);
     if (!phoneValidation.phoneNumber) {
       setIsSubmitting(false);
       setError('invalid_phone');
@@ -112,9 +113,10 @@ export default function PhoneInput({
           <Sections.Section>
             <Sections.PhoneInput
               label={t(LoginTexts.phoneInput.input.heading)}
-              enablePrefix={true}
               value={phoneNumber}
               onChangeText={setPhoneNumber}
+              prefix={prefix}
+              onChangePrefix={setPrefix}
               showClear={true}
               keyboardType="number-pad"
               placeholder={t(LoginTexts.phoneInput.input.placeholder)}

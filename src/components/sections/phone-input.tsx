@@ -20,7 +20,7 @@ import {SectionTexts, useTranslation} from '@atb/translations';
 import composeRefs from '@seznam/compose-react-refs';
 import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
 import {ScrollView} from 'react-native-gesture-handler';
-import {phone, countryPhoneData} from 'phone';
+import {countryPhoneData} from 'phone';
 import * as Sections from '@atb/components/sections';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
@@ -28,7 +28,8 @@ type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 type TextProps = SectionItem<
   InternalTextInputProps & {
     label: string;
-    enablePrefix: boolean;
+    prefix: string | undefined;
+    onChangePrefix: (prefix: string) => void;
     showClear?: boolean;
     onClear?: () => void;
   }
@@ -36,7 +37,17 @@ type TextProps = SectionItem<
 
 const PhoneInput = forwardRef<InternalTextInput, TextProps>(
   (
-    {label, enablePrefix, onFocus, onBlur, showClear, onClear, style, ...props},
+    {
+      label,
+      prefix,
+      onChangePrefix,
+      onFocus,
+      onBlur,
+      showClear,
+      onClear,
+      style,
+      ...props
+    },
     forwardedRef,
   ) => {
     const {topContainer, spacing} = useSectionItem(props);
@@ -44,7 +55,6 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
     const styles = useInputStyle(theme, themeName);
     const [isFocused, setIsFocused] = useState(Boolean(props?.autoFocus));
     const [isSelectingPrefix, setIsSelectingPrefix] = useState(false);
-    const [prefix, setPrefix] = useState('47');
     const {t} = useTranslation();
     const myRef = useRef<InternalTextInput>(null);
     const combinedRef = composeRefs<InternalTextInput>(forwardedRef, myRef);
@@ -97,7 +107,7 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
 
     const onSelectPrefix = (country_code: string) => {
       setIsSelectingPrefix(false);
-      setPrefix(country_code);
+      onChangePrefix(country_code);
     };
 
     const onOpenPrefixSelection = () => {
@@ -111,9 +121,6 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
           case '1':
             // Filter out non-US +1 prefixes
             return country.country_name === 'United States';
-          case '47':
-            // Filter out Svalbard / Jan Mayen
-            return country.country_name === 'Norway';
           default:
             return true;
         }
@@ -150,8 +157,8 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
               {label}
             </ThemeText>
           )}
-          <View style={enablePrefix ? styles.containerInline : null}>
-            {enablePrefix && (
+          <View style={prefix ? styles.containerInline : null}>
+            {prefix && (
               <TouchableOpacity
                 style={styles.prefix}
                 onPress={onOpenPrefixSelection}
