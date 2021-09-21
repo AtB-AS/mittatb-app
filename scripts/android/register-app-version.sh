@@ -31,15 +31,16 @@ fi
 # Get values based on environment
 case $1 in
   atb-staging)
-    authority="ATB:Authority:1"
+    authority="ATB:Authority:2"
     app_id="app-staging"
     token_url="https://partner-abt.staging.entur.org/oauth/token"
     abt_url="https://core-abt-abt.staging.entur.io"
     ;;
   atb-prod)
-    authority="ATB:Authority:1"
+    authority="ATB:Authority:2"
     app_id="app-store"
     token_url="https://partner-abt.entur.org/oauth/token"
+    abt_url="https://core-abt.entur.io"
     ;;
 
   *)
