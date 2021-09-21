@@ -17,7 +17,7 @@ import FixedSwitch from '../switch';
 
 export type ActionModes = 'check' | 'toggle' | 'heading-expand';
 export type ActionItemProps = SectionItem<{
-  children: JSX.Element | undefined;
+  children?: JSX.Element;
   text: string;
   onPress?(checked: boolean): void;
   checked?: boolean;
