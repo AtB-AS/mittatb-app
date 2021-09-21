@@ -131,6 +131,19 @@ platform :android do
     sh("cp", "../android/app/build/generated/sourcemaps/react/#{build_type}/index.android.bundle.map", "../bundle")
   end
 
+  lane :firebase_distribution_staging do
+    ensure_env_vars(
+      env_vars: ['APPCENTER_API_KEY']
+    )
+    firebase_app_distribution(
+      app:
+      firebase_cli_token:
+      service_credentials_file:
+      android_artifact_type:
+      android_artifact_path:
+    )
+  end
+
   lane :appcenter_staging do
     ensure_env_vars(
       env_vars: ['APPCENTER_API_KEY']
