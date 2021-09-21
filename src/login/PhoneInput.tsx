@@ -45,8 +45,13 @@ export default function PhoneInput({
   const navigation = useNavigation();
   const focusRef = useFocusOnLoad();
 
+  const phoneValidationParams = {
+    strictDetection: true,
+    validateMobilePrefix: false,
+  };
+
   const isValidPhoneNumber = (number: string) => {
-    const r = phone('+' + prefix + number, {strictDetection: true});
+    const r = phone('+' + prefix + number, phoneValidationParams);
     return r.isValid;
   };
 
@@ -60,7 +65,10 @@ export default function PhoneInput({
 
   const onNext = async () => {
     setIsSubmitting(true);
-    const phoneValidation = phone('+' + prefix + phoneNumber);
+    const phoneValidation = phone(
+      '+' + prefix + phoneNumber,
+      phoneValidationParams,
+    );
     if (!phoneValidation.phoneNumber) {
       setIsSubmitting(false);
       setError('invalid_phone');

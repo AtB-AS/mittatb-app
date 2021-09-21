@@ -131,11 +131,20 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
       <ScrollView style={styles.prefixList}>
         <Sections.Section>
           {prefixes.map((country) => (
-            <Sections.LinkItem
+            <Sections.ActionItem
               key={country.country_code + country.country_name}
               text={'+' + country.country_code + ' ' + country.country_name}
               onPress={() => onSelectPrefix(country.country_code)}
-            ></Sections.LinkItem>
+            >
+              <View style={styles.countryItem}>
+                <ThemeText style={styles.countryCode}>
+                  {'+' + country.country_code + ' '}
+                </ThemeText>
+                <ThemeText style={styles.countryName}>
+                  {country.country_name}
+                </ThemeText>
+              </View>
+            </Sections.ActionItem>
           ))}
         </Sections.Section>
       </ScrollView>
@@ -242,5 +251,15 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   },
   prefixList: {
     maxHeight: 300,
+    borderRadius: theme.border.radius.regular,
+  },
+  countryItem: {
+    flexDirection: 'row',
+  },
+  countryCode: {
+    minWidth: '17%',
+  },
+  countryName: {
+    width: '83%',
   },
 }));

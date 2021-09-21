@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
   AccessibilityProps,
   AccessibilityRole,
@@ -17,6 +17,7 @@ import FixedSwitch from '../switch';
 
 export type ActionModes = 'check' | 'toggle' | 'heading-expand';
 export type ActionItemProps = SectionItem<{
+  children: JSX.Element | undefined;
   text: string;
   onPress?(checked: boolean): void;
   checked?: boolean;
@@ -24,6 +25,7 @@ export type ActionItemProps = SectionItem<{
   accessibility?: AccessibilityProps;
 }>;
 export default function ActionItem({
+  children,
   text,
   onPress,
   mode = 'check',
@@ -60,14 +62,18 @@ export default function ActionItem({
       }}
       {...accessibility}
     >
-      <ThemeText
-        type={
-          mode === 'heading-expand' ? 'body__primary--bold' : 'body__primary'
-        }
-        style={contentContainer}
-      >
-        {text}
-      </ThemeText>
+      {children ? (
+        children
+      ) : (
+        <ThemeText
+          type={
+            mode === 'heading-expand' ? 'body__primary--bold' : 'body__primary'
+          }
+          style={contentContainer}
+        >
+          {text}
+        </ThemeText>
+      )}
       <ActionModeIcon mode={mode} checked={checked} />
     </TouchableOpacity>
   );
