@@ -264,17 +264,8 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
 
   function getExpireDate(iso: string): string {
     let date = parseISO(iso);
-    if (date.getDate() === 1) {
-      let sinceEpoc = date.getTime();
-      sinceEpoc = sinceEpoc - 86400000;
-      date = new Date(sinceEpoc);
-    }
     let year = date.getFullYear();
     let month = date.getMonth();
-    if (month === 0) {
-      month = 12;
-      year--;
-    }
     return `${month < 10 ? '0' + month : month}/${year.toString().slice(2, 4)}`;
   }
 
