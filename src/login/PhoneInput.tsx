@@ -112,7 +112,7 @@ export default function PhoneInput({
           <Sections.Section>
             <Sections.PhoneInput
               label={t(LoginTexts.phoneInput.input.heading)}
-              prefix={true}
+              enablePrefix={true}
               value={phoneNumber}
               onChangeText={setPhoneNumber}
               showClear={true}

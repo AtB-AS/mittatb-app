@@ -1,7 +1,7 @@
 import React, {forwardRef, useRef, useState} from 'react';
 import {
   AccessibilityInfo,
-  ListViewComponent,
+  Keyboard,
   NativeSyntheticEvent,
   Platform,
   TextInput as InternalTextInput,
@@ -18,21 +18,17 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {SectionItem, useSectionItem} from './section-utils';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import composeRefs from '@seznam/compose-react-refs';
-import {
-  ArrowRight,
-  ArrowUpLeft,
-  Expand,
-  ExpandLess,
-} from '@atb/assets/svg/icons/navigation';
+import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
 import {ScrollView} from 'react-native-gesture-handler';
 import {phone, countryPhoneData} from 'phone';
+import * as Sections from '@atb/components/sections';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
 type TextProps = SectionItem<
   InternalTextInputProps & {
     label: string;
-    prefix: boolean;
+    enablePrefix: boolean;
     showClear?: boolean;
     onClear?: () => void;
   }
@@ -40,14 +36,15 @@ type TextProps = SectionItem<
 
 const PhoneInput = forwardRef<InternalTextInput, TextProps>(
   (
-    {label, prefix, onFocus, onBlur, showClear, onClear, style, ...props},
+    {label, enablePrefix, onFocus, onBlur, showClear, onClear, style, ...props},
     forwardedRef,
   ) => {
-    const {topContainer, spacing, contentContainer} = useSectionItem(props);
+    const {topContainer, spacing} = useSectionItem(props);
     const {theme, themeName} = useTheme();
     const styles = useInputStyle(theme, themeName);
     const [isFocused, setIsFocused] = useState(Boolean(props?.autoFocus));
     const [isSelectingPrefix, setIsSelectingPrefix] = useState(false);
+    const [prefix, setPrefix] = useState('47');
     const {t} = useTranslation();
     const myRef = useRef<InternalTextInput>(null);
     const combinedRef = composeRefs<InternalTextInput>(forwardedRef, myRef);
@@ -65,6 +62,9 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
 
     const onFocusEvent = (e: FocusEvent) => {
       setIsFocused(true);
+      if (isSelectingPrefix) {
+        setIsSelectingPrefix(false);
+      }
       onFocus?.(e);
     };
 
@@ -95,7 +95,13 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
       paddingHorizontal: spacing,
     };
 
-    const onPrefixSelection = () => {
+    const onSelectPrefix = (country_code: string) => {
+      setIsSelectingPrefix(false);
+      setPrefix(country_code);
+    };
+
+    const onOpenPrefixSelection = () => {
+      Keyboard.dismiss();
       setIsSelectingPrefix(!isSelectingPrefix);
     };
 
@@ -115,14 +121,16 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
       .sort((a, b) => (a.country_name > b.country_name ? 1 : -1));
 
     const prefixList = (
-      <ScrollView>
-        {prefixes.map((country) => (
-          <View key={country.country_code + country.country_name}>
-            <ThemeText>
-              +{country.country_code} {country.country_name}
-            </ThemeText>
-          </View>
-        ))}
+      <ScrollView style={styles.prefixList}>
+        <Sections.Section>
+          {prefixes.map((country) => (
+            <Sections.LinkItem
+              key={country.country_code + country.country_name}
+              text={'+' + country.country_code + ' ' + country.country_name}
+              onPress={() => onSelectPrefix(country.country_code)}
+            ></Sections.LinkItem>
+          ))}
+        </Sections.Section>
       </ScrollView>
     );
     return (
@@ -142,14 +150,18 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
               {label}
             </ThemeText>
           )}
-          <View style={prefix ? styles.containerInline : null}>
-            {prefix && (
+          <View style={enablePrefix ? styles.containerInline : null}>
+            {enablePrefix && (
               <TouchableOpacity
                 style={styles.prefix}
-                onPress={onPrefixSelection}
+                onPress={onOpenPrefixSelection}
               >
-                <ThemeText>+123</ThemeText>
-                <ThemeIcon svg={isSelectingPrefix ? ExpandLess : Expand} />
+                <ThemeText>+{prefix}</ThemeText>
+                <ThemeIcon
+                  style={styles.expandIcon}
+                  svg={isSelectingPrefix ? ExpandLess : Expand}
+                  size="normal"
+                />
               </TouchableOpacity>
             )}
             <InternalTextInput
@@ -188,18 +200,18 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   input: {
     color: theme.text.colors.primary,
     paddingRight: 40,
-
     fontSize: theme.typography.body__primary.fontSize,
+    flexGrow: 1,
   },
   container: {
     backgroundColor: theme.colors.background_0.backgroundColor,
     borderWidth: theme.border.width.slim,
     borderColor: theme.colors.background_0.backgroundColor,
+    marginVertical: theme.spacings.xSmall,
   },
   containerInline: {
     alignItems: 'center',
     flexDirection: 'row',
-    // justifyContent: 'space-between',
   },
   containerMultiline: {
     paddingTop: theme.spacings.small,
@@ -211,10 +223,17 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   prefix: {
     flexDirection: 'row',
   },
+  expandIcon: {
+    marginLeft: theme.spacings.xSmall,
+    marginRight: theme.spacings.small,
+  },
   inputClear: {
     position: 'absolute',
     right: 0,
     bottom: theme.spacings.medium,
     alignSelf: 'center',
+  },
+  prefixList: {
+    maxHeight: 300,
   },
 }));
