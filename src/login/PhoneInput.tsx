@@ -51,8 +51,11 @@ export default function PhoneInput({
   };
 
   const isValidPhoneNumber = (number: string) => {
-    const r = phone('+' + prefix + number, phoneValidationParams);
-    return r.isValid;
+    const validationResult = phone(
+      '+' + prefix + number,
+      phoneValidationParams,
+    );
+    return validationResult.isValid;
   };
 
   React.useEffect(
