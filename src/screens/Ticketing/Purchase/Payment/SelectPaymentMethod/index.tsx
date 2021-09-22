@@ -4,12 +4,17 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import {Vipps} from '@atb/assets/svg/icons/ticketing';
 import {StyleSheet, useTheme} from '@atb/theme';
 import Button from '@atb/components/button';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
+import {
+  PurchaseConfirmationTexts,
+  ScreenHeaderTexts,
+  useTranslation,
+} from '@atb/translations';
 import {useState, useEffect} from 'react';
 import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import {SavedPaymentOption} from '@atb/preferences';
@@ -25,6 +30,7 @@ import {useAuthState} from '@atb/auth';
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;
+  close: () => void;
   previousPaymentMethod?: SavedPaymentOption;
 };
 
@@ -74,6 +80,7 @@ function isRecurring(
 const SelectPaymentMethod: React.FC<Props> = ({
   onSelect,
   previousPaymentMethod,
+  close,
 }) => {
   const {t} = useTranslation();
 
@@ -131,14 +138,35 @@ const SelectPaymentMethod: React.FC<Props> = ({
   }, [previousPaymentMethod]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.heading}>
-        <ThemeText type="heading__title">
-          {t(SelectPaymentMethodTexts.header.text)}
-        </ThemeText>
+    <SafeAreaView style={[styles.container]}>
+      <View style={{flex: 1, flexDirection: 'row'}}>
+        <View style={styles.heading}>
+          <ThemeText type="heading__title">
+            {t(SelectPaymentMethodTexts.header.text)}
+          </ThemeText>
+        </View>
+        <View
+          style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}
+        >
+          <TouchableOpacity
+            onPress={close}
+            accessibilityHint={t(
+              ScreenHeaderTexts.headerButton.cancel.a11yHint,
+            )}
+          >
+            <ThemeText>
+              {t(ScreenHeaderTexts.headerButton.cancel.text)}
+            </ThemeText>
+          </TouchableOpacity>
+        </View>
       </View>
       {loadingRemoteOption ? <ActivityIndicator /> : null}
       <FlatList
+        style={{
+          maxHeight:
+            Dimensions.get('screen').height -
+            Dimensions.get('screen').height / 3,
+        }}
         data={options}
         keyExtractor={(item) =>
           `${item.paymentType}_${
@@ -370,6 +398,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   container: {
     flex: 1,
+    //maxHeight: Dimensions.get('screen').height - 60,
     backgroundColor: theme.colors.background_2.backgroundColor,
     paddingHorizontal: 12,
   },

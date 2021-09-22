@@ -1,4 +1,9 @@
-import {Animated, LayoutChangeEvent, useWindowDimensions} from 'react-native';
+import {
+  Animated,
+  Dimensions,
+  LayoutChangeEvent,
+  useWindowDimensions,
+} from 'react-native';
 import React, {ReactNode, useMemo} from 'react';
 import {StyleSheet} from '@atb/theme';
 
@@ -44,6 +49,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   bottomSheet: {
     backgroundColor: theme.colors.background_2.backgroundColor,
     width: '100%',
+    maxHeight: Dimensions.get('screen').height,
     position: 'absolute',
     bottom: 0,
     borderTopLeftRadius: theme.border.radius.regular,
