@@ -171,6 +171,10 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
               <TouchableOpacity
                 style={styles.prefix}
                 onPress={onOpenPrefixSelection}
+                accessibilityRole="button"
+                accessibilityLabel={t(
+                  SectionTexts.phoneInput.a11yLabel(prefix),
+                )}
               >
                 <ThemeText>+{prefix}</ThemeText>
                 <ThemeIcon

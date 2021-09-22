@@ -26,6 +26,13 @@ const SectionTexts = {
     clear: _('Tøm redigeringsfelt', 'Clear input'),
     closeKeyboard: _('Lukker tastatur', 'Closing keyboard'),
   },
+  phoneInput: {
+    a11yLabel: (prefix: string) =>
+      _(
+        '+' + prefix + '. Velg for å forandre mobilnummer prefiks.',
+        '+' + prefix + '. Select to edit phone number prefix.',
+      ),
+  },
   counterInput: {
     decreaseButton: {
       a11yLabel: (text: string) =>
