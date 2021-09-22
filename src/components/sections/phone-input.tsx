@@ -22,6 +22,7 @@ import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
 import {ScrollView} from 'react-native-gesture-handler';
 import {countryPhoneData} from 'phone';
 import * as Sections from '@atb/components/sections';
+import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -58,6 +59,7 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
     const {t} = useTranslation();
     const myRef = useRef<InternalTextInput>(null);
     const combinedRef = composeRefs<InternalTextInput>(forwardedRef, myRef);
+    const prefixListRef = useFocusOnLoad();
 
     function accessibilityEscapeKeyboard() {
       setTimeout(
@@ -128,7 +130,7 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
       .sort((a, b) => (a.country_name > b.country_name ? 1 : -1));
 
     const prefixList = (
-      <ScrollView style={styles.prefixList}>
+      <ScrollView style={styles.prefixList} ref={prefixListRef}>
         <Sections.Section>
           {prefixes.map((country) => (
             <Sections.ActionItem
