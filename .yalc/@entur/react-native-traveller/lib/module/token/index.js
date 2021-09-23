@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import { addToken, attestLegacy } from '../native';
+import { addToken, attest, attestLegacy } from '../native';
 import { RequestError } from '../fetcher';
 const requireAttestation = Platform.select({
   default: true,
@@ -34,33 +34,13 @@ function createAttestActivateAdd(fetcher, hosts) {
 
   return async (initialTokenId, nonce, serverPublicKey) => {
     try {
-      const {
-        attestation,
-        signaturePublicKey,
-        encryptionPublicKey,
-        attestationEncryptionKey
-      } = await attestLegacy(initialTokenId, nonce, serverPublicKey);
+      const activateTokenRequestBody = await getActivateTokenRequestBody(initialTokenId, nonce, serverPublicKey);
       const {
         certificate,
         tokenId,
         tokenValidityEnd,
         tokenValidityStart
-      } = await activateTokenRequest(initialTokenId, {
-        signaturePublicKey,
-        encryptionPublicKey,
-        attestation: Platform.OS === 'ios' ? {
-          attestationType: AttestationType.iOS_Device_Check,
-          encryptedIosDeviceCheckData: attestation,
-          attestationEncryptionEncryptedKey: attestationEncryptionKey
-        } : {
-          attestationType: AttestationType.SafetyNet,
-          safetyNetJws: attestation,
-          signaturePublicKeyAttestation: ['noop'],
-          // TODO: erstatt med faktiske verdier
-          encryptionPublicKeyAttestation: ['noop'] // TODO: erstatt med faktiske verdier
-
-        }
-      });
+      } = await activateTokenRequest(initialTokenId, activateTokenRequestBody);
       if (tokenId !== initialTokenId) throw Error(`Activated token ${tokenId} does not match initial token ${initialTokenId}`);
       await addToken(tokenId, certificate, tokenValidityStart, tokenValidityEnd);
       return {
@@ -82,6 +62,78 @@ function createAttestActivateAdd(fetcher, hosts) {
     }
   };
 }
+
+const getActivateTokenRequestBody = (initialTokenId, nonce, serverPublicKey) => {
+  if (Platform.OS === 'ios') {
+    const iosVersion = typeof Platform.Version === 'string' ? parseFloat(Platform.Version) : Platform.Version;
+
+    if (iosVersion >= 14) {
+      return getActivateTokenRequestBodyIos14(initialTokenId, nonce);
+    } else {
+      return getActivateTokenRequestBodyIos11(initialTokenId, nonce, serverPublicKey);
+    }
+  } else {
+    return getActivateTokenRequestBodyAndroid(initialTokenId, nonce, serverPublicKey);
+  }
+};
+
+const getActivateTokenRequestBodyAndroid = async (initialTokenId, nonce, serverPublicKey) => {
+  const {
+    attestation,
+    signaturePublicKey,
+    encryptionPublicKey
+  } = await attestLegacy(initialTokenId, nonce, serverPublicKey);
+  return {
+    signaturePublicKey,
+    encryptionPublicKey,
+    attestation: {
+      attestationType: AttestationType.SafetyNet,
+      safetyNetJws: attestation,
+      signaturePublicKeyAttestation: ['noop'],
+      // TODO: erstatt med faktiske verdier
+      encryptionPublicKeyAttestation: ['noop'] // TODO: erstatt med faktiske verdier
+
+    }
+  };
+};
+
+const getActivateTokenRequestBodyIos11 = async (initialTokenId, nonce, serverPublicKey) => {
+  const {
+    attestation,
+    signaturePublicKey,
+    encryptionPublicKey,
+    attestationEncryptionKey
+  } = await attestLegacy(initialTokenId, nonce, serverPublicKey);
+  return {
+    signaturePublicKey,
+    encryptionPublicKey,
+    attestation: {
+      attestationType: AttestationType.iOS_Device_Check,
+      encryptedIosDeviceCheckData: attestation,
+      attestationEncryptionEncryptedKey: attestationEncryptionKey
+    }
+  };
+};
+
+const getActivateTokenRequestBodyIos14 = async (initialTokenId, nonce) => {
+  const {
+    attestationObject,
+    keyId,
+    deviceAttestationData,
+    signaturePublicKey,
+    encryptionPublicKey
+  } = await attest(initialTokenId, nonce);
+  return {
+    signaturePublicKey,
+    encryptionPublicKey,
+    attestation: {
+      attestationType: AttestationType.iOS_Device_Attestation,
+      attestationObject: attestationObject,
+      keyId: keyId,
+      deviceAttestationData: deviceAttestationData
+    }
+  };
+};
 
 export function createRenewToken(fetcher, hosts) {
   const attestActivateAdd = createAttestActivateAdd(fetcher, hosts);

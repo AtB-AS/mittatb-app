@@ -47,33 +47,13 @@ function createAttestActivateAdd(fetcher, hosts) {
 
   return async (initialTokenId, nonce, serverPublicKey) => {
     try {
-      const {
-        attestation,
-        signaturePublicKey,
-        encryptionPublicKey,
-        attestationEncryptionKey
-      } = await (0, _native.attestLegacy)(initialTokenId, nonce, serverPublicKey);
+      const activateTokenRequestBody = await getActivateTokenRequestBody(initialTokenId, nonce, serverPublicKey);
       const {
         certificate,
         tokenId,
         tokenValidityEnd,
         tokenValidityStart
-      } = await activateTokenRequest(initialTokenId, {
-        signaturePublicKey,
-        encryptionPublicKey,
-        attestation: _reactNative.Platform.OS === 'ios' ? {
-          attestationType: AttestationType.iOS_Device_Check,
-          encryptedIosDeviceCheckData: attestation,
-          attestationEncryptionEncryptedKey: attestationEncryptionKey
-        } : {
-          attestationType: AttestationType.SafetyNet,
-          safetyNetJws: attestation,
-          signaturePublicKeyAttestation: ['noop'],
-          // TODO: erstatt med faktiske verdier
-          encryptionPublicKeyAttestation: ['noop'] // TODO: erstatt med faktiske verdier
-
-        }
-      });
+      } = await activateTokenRequest(initialTokenId, activateTokenRequestBody);
       if (tokenId !== initialTokenId) throw Error(`Activated token ${tokenId} does not match initial token ${initialTokenId}`);
       await (0, _native.addToken)(tokenId, certificate, tokenValidityStart, tokenValidityEnd);
       return {
@@ -95,6 +75,78 @@ function createAttestActivateAdd(fetcher, hosts) {
     }
   };
 }
+
+const getActivateTokenRequestBody = (initialTokenId, nonce, serverPublicKey) => {
+  if (_reactNative.Platform.OS === 'ios') {
+    const iosVersion = typeof _reactNative.Platform.Version === 'string' ? parseFloat(_reactNative.Platform.Version) : _reactNative.Platform.Version;
+
+    if (iosVersion >= 14) {
+      return getActivateTokenRequestBodyIos14(initialTokenId, nonce);
+    } else {
+      return getActivateTokenRequestBodyIos11(initialTokenId, nonce, serverPublicKey);
+    }
+  } else {
+    return getActivateTokenRequestBodyAndroid(initialTokenId, nonce, serverPublicKey);
+  }
+};
+
+const getActivateTokenRequestBodyAndroid = async (initialTokenId, nonce, serverPublicKey) => {
+  const {
+    attestation,
+    signaturePublicKey,
+    encryptionPublicKey
+  } = await (0, _native.attestLegacy)(initialTokenId, nonce, serverPublicKey);
+  return {
+    signaturePublicKey,
+    encryptionPublicKey,
+    attestation: {
+      attestationType: AttestationType.SafetyNet,
+      safetyNetJws: attestation,
+      signaturePublicKeyAttestation: ['noop'],
+      // TODO: erstatt med faktiske verdier
+      encryptionPublicKeyAttestation: ['noop'] // TODO: erstatt med faktiske verdier
+
+    }
+  };
+};
+
+const getActivateTokenRequestBodyIos11 = async (initialTokenId, nonce, serverPublicKey) => {
+  const {
+    attestation,
+    signaturePublicKey,
+    encryptionPublicKey,
+    attestationEncryptionKey
+  } = await (0, _native.attestLegacy)(initialTokenId, nonce, serverPublicKey);
+  return {
+    signaturePublicKey,
+    encryptionPublicKey,
+    attestation: {
+      attestationType: AttestationType.iOS_Device_Check,
+      encryptedIosDeviceCheckData: attestation,
+      attestationEncryptionEncryptedKey: attestationEncryptionKey
+    }
+  };
+};
+
+const getActivateTokenRequestBodyIos14 = async (initialTokenId, nonce) => {
+  const {
+    attestationObject,
+    keyId,
+    deviceAttestationData,
+    signaturePublicKey,
+    encryptionPublicKey
+  } = await (0, _native.attest)(initialTokenId, nonce);
+  return {
+    signaturePublicKey,
+    encryptionPublicKey,
+    attestation: {
+      attestationType: AttestationType.iOS_Device_Attestation,
+      attestationObject: attestationObject,
+      keyId: keyId,
+      deviceAttestationData: deviceAttestationData
+    }
+  };
+};
 
 function createRenewToken(fetcher, hosts) {
   const attestActivateAdd = createAttestActivateAdd(fetcher, hosts);

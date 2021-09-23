@@ -1,12 +1,17 @@
 export type AttestationData = {
-  attestation: string;
+  attestationObject: string;
+  keyId: string;
+  deviceAttestationData: string;
   signaturePublicKey: string;
   encryptionPublicKey: string;
 };
 
 export type LegacyAttestationData = {
+  attestation: string;
   attestationEncryptionKey: string;
-} & AttestationData;
+  signaturePublicKey: string;
+  encryptionPublicKey: string;
+};
 
 export type Token = {
   tokenId: string;

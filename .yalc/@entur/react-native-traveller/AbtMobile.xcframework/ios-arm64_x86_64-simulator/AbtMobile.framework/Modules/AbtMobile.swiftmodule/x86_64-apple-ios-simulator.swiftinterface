@@ -92,7 +92,9 @@ public class EncryptedMessage : AbtMobile.Message {
   @objc deinit
 }
 public struct Attestation {
-  public let attestation: Swift.String
+  public let attestationObject: Swift.String
+  public let keyId: Swift.String
+  public let deviceAttestationData: Swift.String
   public let signaturePublicKey: Swift.String
   public let encryptionPublicKey: Swift.String
 }

@@ -50,7 +50,7 @@ export declare type ActivateTokenRequest = {
         /** base64 encoded key id, from generated iOS app attest data. */
         keyId: string;
         /** base64 encoded serialized DeviceAttestationData protobuf */
-        deviceAttestationData: string[];
+        deviceAttestationData: string;
     };
 };
 export declare type ActivateTokenResponse = {

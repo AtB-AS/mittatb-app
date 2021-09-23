@@ -1,4 +1,5 @@
 import AbtMobile
+import DeviceCheck
 
 @objc(EnturTraveller)
 class EnturTraveller: NSObject {
@@ -6,14 +7,16 @@ class EnturTraveller: NSObject {
     
     @objc(attest:withNonce:withResolver:withRejecter:)
     func attest(tokenId: String, nonce: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
-        if #available(iOS 14.0, *) {
+        if #available(iOS 14.0, *), DCAppAttestService.shared.isSupported {
             let attestor = Attestator(tokenId: tokenId, nonce: nonce)
             
             attestor.attest(deviceDetails: DeviceDetails.getPrefilledDeviceDetails(), completionHandler: { res in
                 switch res {
                     case .success(let attestationData):
                         let dict: NSDictionary = [
-                            "attestation": attestationData.attestation,
+                            "attestationObject": attestationData.attestationObject,
+                            "keyId": attestationData.keyId,
+                            "deviceAttestationData": attestationData.deviceAttestationData,
                             "signaturePublicKey" : attestationData.signaturePublicKey,
                             "encryptionPublicKey": attestationData.encryptionPublicKey,
                         ]
@@ -30,7 +33,7 @@ class EnturTraveller: NSObject {
     
     @objc(attestLegacy:withNonce:withServerPublicKey:withResolver:withRejecter:)
     func attestLegacy(tokenId: String, nonce: String, serverPublicKey: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
-        if #available(iOS 11.0, *) {
+        if #available(iOS 11.0, *), DCDevice.current.isSupported {
             let attestor = LegacyAttestator(tokenId: tokenId, nonce: nonce)
             
             attestor.attest(serverPublicKey: serverPublicKey, deviceDetails: DeviceDetails.getPrefilledDeviceDetails(), completionHandler: { res in
@@ -50,6 +53,32 @@ class EnturTraveller: NSObject {
             })
         } else {
             reject("ATTESTATION_ERROR", "Attestation is only supported by iOS 11+", nil)
+        }
+    }
+    
+    @objc(getAttestationSupport:withRejecter:)
+    func getAttestationSupport(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+        if #available(iOS 11, *) {
+            let currentDevice = DCDevice.current
+            if (currentDevice.isSupported) {
+                if #available(iOS 14, *) {
+                    let shared = DCAppAttestService.shared
+                    if shared.isSupported {
+                        resolve([
+                            "result": "SUCCESS",
+                            "attestation_type": "DCAppAttestService",
+                            "iOS_support": "14+"
+                        ])
+                    }
+                }  else {
+                    resolve([
+                        "result": "SUCCESS",
+                        "attestation_type": "DCDevice",
+                        "iOS_support": "11+"
+                    ])
+                }
+            }
+            reject("ATTESTATION_ERROR", "Device cannot be attested", nil)
         }
     }
     

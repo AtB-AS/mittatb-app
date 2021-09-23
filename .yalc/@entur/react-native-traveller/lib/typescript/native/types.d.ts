@@ -1,11 +1,16 @@
 export declare type AttestationData = {
-    attestation: string;
+    attestationObject: string;
+    keyId: string;
+    deviceAttestationData: string;
     signaturePublicKey: string;
     encryptionPublicKey: string;
 };
 export declare type LegacyAttestationData = {
+    attestation: string;
     attestationEncryptionKey: string;
-} & AttestationData;
+    signaturePublicKey: string;
+    encryptionPublicKey: string;
+};
 export declare type Token = {
     tokenId: string;
     tokenValidityStart: number;
