@@ -129,28 +129,6 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
       })
       .sort((a, b) => (a.country_name > b.country_name ? 1 : -1));
 
-    const prefixList = (
-      <ScrollView style={styles.prefixList} ref={prefixListRef}>
-        <Sections.Section>
-          {prefixes.map((country) => (
-            <Sections.ActionItem
-              key={country.country_code + country.country_name}
-              text={'+' + country.country_code + ' ' + country.country_name}
-              onPress={() => onSelectPrefix(country.country_code)}
-            >
-              <View style={styles.countryItem}>
-                <ThemeText style={styles.countryCode}>
-                  {'+' + country.country_code + ' '}
-                </ThemeText>
-                <ThemeText style={styles.countryName}>
-                  {country.country_name}
-                </ThemeText>
-              </View>
-            </Sections.ActionItem>
-          ))}
-        </Sections.Section>
-      </ScrollView>
-    );
     return (
       <View>
         <View
@@ -210,7 +188,27 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
             ) : null}
           </View>
         </View>
-        {isSelectingPrefix && prefixList}
+        {isSelectingPrefix && (
+          <ScrollView style={styles.prefixList} ref={prefixListRef}>
+            <Sections.Section>
+              {prefixes.map((country) => (
+                <Sections.GenericClickableItem
+                  key={country.country_code + country.country_name}
+                  onPress={() => onSelectPrefix(country.country_code)}
+                >
+                  <View style={styles.countryItem}>
+                    <ThemeText style={styles.countryCode}>
+                      {'+' + country.country_code + ' '}
+                    </ThemeText>
+                    <ThemeText style={styles.countryName}>
+                      {country.country_name}
+                    </ThemeText>
+                  </View>
+                </Sections.GenericClickableItem>
+              ))}
+            </Sections.Section>
+          </ScrollView>
+        )}
       </View>
     );
   },
