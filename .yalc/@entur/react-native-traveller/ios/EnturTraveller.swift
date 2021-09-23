@@ -1,9 +1,27 @@
 import AbtMobile
 import DeviceCheck
+@_implementationOnly import Kronos
 
 @objc(EnturTraveller)
 class EnturTraveller: NSObject {
-    let qrCodeService: QRCodeService = QRCodeService(deviceDetails: DeviceDetails.getPrefilledDeviceDetails())
+    let secureTokenService: SecureTokenService = SecureTokenService(deviceDetails: DeviceDetails.getPrefilledDeviceDetails())
+    
+    @objc(generateAssertion:withNonce:withTokenId:withHash:withResolver:withRejecter:)
+    func generateAssertion(keyId: String, nonce: String, tokenId: String, hash: Data, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+        if #available(iOS 14.0, *), DCAppAttestService.shared.isSupported {
+            let attestor = Attestator(tokenId: tokenId, nonce: nonce)
+            attestor.generateAssertion(keyId: keyId, hash: hash) { res in
+                switch res {
+                case .success(let data):
+                    resolve(data)
+                case .failure(let error):
+                    reject("GENERATE_ASSERTION_ERROR", error.localizedDescription, error)
+                }
+            }
+        } else {
+            reject("GENERATE_ASSERTION_ERROR", "Assertion generation only works on real devices running iOS14+", nil)
+        }
+    }
     
     @objc(attest:withNonce:withResolver:withRejecter:)
     func attest(tokenId: String, nonce: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
@@ -130,27 +148,36 @@ class EnturTraveller: NSObject {
         resolve(nil)
     }
     
-    @objc(generateQrCode:withRejecter:)
-    func generateQrCode(resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+    @objc(getSecureToken:withResolver:withRejecter:)
+    func getSecureToken(actions: NSArray, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         
-        let qrCodeResult = qrCodeService.getQrCode()
+        var payloadActions: [PayloadAction] = []
         
-        switch (qrCodeResult) {
-        case .success(let qrCode):
-            resolve(qrCode)
+        do {
+            payloadActions = try actions.toPayLoadActions()
+        } catch (let error) {
+            reject("SECURE_TOKEN_ERROR", error.localizedDescription, error)
+            return
+        }
+        
+        let secureToken = secureTokenService.getSecureToken(actions: payloadActions)
+        
+        switch (secureToken) {
+        case .success(let token):
+            resolve(token)
             
         case .failure(let error):
             switch (error) {
             case .couldNotSerializeToken:
-                reject("QR_ERROR", "Failed to serialize token", error)
+                reject("SECURE_TOKEN_ERROR", "Failed to serialize token", error)
             case .noActiveToken:
-                reject("QR_ERROR", "No active token", error)
+                reject("SECURE_TOKEN_ERROR", "No active token", error)
             case .noUpdatedTimestamp:
-                reject("QR_ERROR", "No updated timestamp", error)
+                reject("SECURE_TOKEN_ERROR", "No updated timestamp", error)
             case .tokenEncodingError(let tokenError):
-                reject("QR_ERROR", "Failed to encode token", tokenError)
+                reject("SECURE_TOKEN_ERROR", "Failed to encode token", tokenError)
             default:
-                reject("QR_ERROR", "Unknown error", error)
+                reject("SECURE_TOKEN_ERROR", "Unknown error", error)
             }
         }
     }
@@ -163,4 +190,26 @@ extension DeviceDetails {
         let details = DeviceDetails(applicationVersion: applicationVersion, applicationId: applicationId)
         return details
     }
+}
+
+private extension NSArray {
+    func toPayLoadActions() throws -> [PayloadAction] {
+        var actions: [PayloadAction] = []
+        for action in self {
+            if let rawValue = action as? Int {
+                if let payloadAction = PayloadAction(rawValue: rawValue) {
+                    actions.append(payloadAction)
+                } else {
+                    throw "COULD NOT MAP \(rawValue) TO ANY ACTION"
+                }
+            } else {
+                throw "COULD NOT CAST VALUE TO INT"
+            }
+        }
+        return actions
+    }
+}
+
+extension String: LocalizedError {
+    public var errorDescription: String? { return self }
 }

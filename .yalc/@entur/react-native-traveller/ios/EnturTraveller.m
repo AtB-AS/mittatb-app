@@ -26,7 +26,15 @@ RCT_EXTERN_METHOD(getToken:(RCTPromiseResolveBlock)resolve
 RCT_EXTERN_METHOD(deleteToken:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(generateQrCode:(RCTPromiseResolveBlock)resolve
+RCT_EXTERN_METHOD(getSecureToken:(nonnull NSArray *)actions
+                  withResolver:(RCTPromiseResolveBlock)resolve
+                 withRejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(generateAssertion:(nonnull NSString *)keyId
+                 withNonce:(nonnull NSString *)nonce
+                 withTokenId:(nonnull NSString *)tokenId
+                 withHash:(nonnull NSString *)hash
+                 withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
 @end

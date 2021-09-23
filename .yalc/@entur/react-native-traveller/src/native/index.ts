@@ -1,5 +1,10 @@
 import { NativeModules } from 'react-native';
-import type { AttestationData, LegacyAttestationData, Token } from './types';
+import type {
+  AttestationData,
+  LegacyAttestationData,
+  PayloadAction,
+  Token,
+} from './types';
 
 type EnturTravellerType = {
   attest(tokenId: string, nonce: string): Promise<AttestationData>;
@@ -16,7 +21,7 @@ type EnturTravellerType = {
   ): Promise<void>;
   getToken(): Promise<Token | undefined>;
   deleteToken(): Promise<void>;
-  generateQrCode(): Promise<string>;
+  getSecureToken(actions: PayloadAction[]): Promise<string>;
 };
 
 export const {
@@ -25,5 +30,5 @@ export const {
   addToken,
   getToken,
   deleteToken,
-  generateQrCode,
+  getSecureToken,
 }: EnturTravellerType = NativeModules.EnturTraveller;

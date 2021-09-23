@@ -25,6 +25,8 @@ var _token = require("./token");
 
 var _fetcher = require("./fetcher");
 
+var _types = require("./native/types");
+
 async function onStartup(fetcher, hosts) {
   const token = await (0, _native.getToken)();
 
@@ -41,7 +43,7 @@ function createClient(initialConfig) {
     initToken: (0, _token.createInitToken)(fetcher, config.hosts),
     getToken: _native.getToken,
     deleteToken: _native.deleteToken,
-    generateQrCode: _native.generateQrCode
+    generateQrCode: () => (0, _native.getSecureToken)([_types.PayloadAction.ticketInspection])
   };
 }
 //# sourceMappingURL=index.js.map

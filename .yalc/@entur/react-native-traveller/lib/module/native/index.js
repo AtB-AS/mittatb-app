@@ -5,6 +5,6 @@ export const {
   addToken,
   getToken,
   deleteToken,
-  generateQrCode
+  getSecureToken
 } = NativeModules.EnturTraveller;
 //# sourceMappingURL=index.js.map

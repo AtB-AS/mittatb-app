@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.generateQrCode = exports.deleteToken = exports.getToken = exports.addToken = exports.attestLegacy = exports.attest = void 0;
+exports.getSecureToken = exports.deleteToken = exports.getToken = exports.addToken = exports.attestLegacy = exports.attest = void 0;
 
 var _reactNative = require("react-native");
 
@@ -13,9 +13,9 @@ const {
   addToken,
   getToken,
   deleteToken,
-  generateQrCode
+  getSecureToken
 } = _reactNative.NativeModules.EnturTraveller;
-exports.generateQrCode = generateQrCode;
+exports.getSecureToken = getSecureToken;
 exports.deleteToken = deleteToken;
 exports.getToken = getToken;
 exports.addToken = addToken;

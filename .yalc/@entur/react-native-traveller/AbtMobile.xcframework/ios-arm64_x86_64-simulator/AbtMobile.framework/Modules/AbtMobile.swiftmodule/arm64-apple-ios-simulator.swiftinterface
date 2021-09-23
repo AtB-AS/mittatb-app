@@ -1,6 +1,7 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.4.2 (swiftlang-1205.0.28.2 clang-1205.0.19.57)
+// swift-compiler-version: Apple Swift version 5.5 (swiftlang-1300.0.31.1 clang-1300.0.29.1)
 // swift-module-flags: -target arm64-apple-ios14.5-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name AbtMobile
+import AVFoundation
 @_exported import AbtMobile
 import CoreBluetooth
 import DeviceCheck
@@ -8,6 +9,7 @@ import Foundation
 import Security
 import Swift
 import UIKit
+import _Concurrency
 public struct LegacyAttestation {
   public let attestation: Swift.String
   public let signaturePublicKey: Swift.String
@@ -28,7 +30,7 @@ public enum LegacyAttestationError : Swift.Error {
     get
   }
 }
-extension LegacyAttestationError {
+extension AbtMobile.LegacyAttestationError {
   public var description: Swift.String {
     get
   }
@@ -63,13 +65,27 @@ public enum TokenError : Swift.Error {
     get
   }
 }
+public enum PayloadAction : Swift.Int {
+  case unspecified
+  case ticketTransfer
+  case addRemoveToken
+  case identification
+  case ticketInspection
+  case getFarecontracts
+  case travelcard
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
 public protocol Message {
   var data: Foundation.Data { get }
   var base64String: Swift.String { get }
   init(data: Foundation.Data)
   init(base64Encoded base64String: Swift.String) throws
 }
-extension Message {
+extension AbtMobile.Message {
   public var base64String: Swift.String {
     get
   }
@@ -120,6 +136,7 @@ public class Attestator {
   public init(tokenId: Swift.String, nonce: Swift.String)
   @available(iOS 14.0, *)
   public func attest(deviceDetails: AbtMobile.DeviceDetails, completionHandler: @escaping (Swift.Result<AbtMobile.Attestation, Swift.Error>) -> Swift.Void)
+  public func generateAssertion(keyId: Swift.String, hash: Foundation.Data, completionHandler: @escaping (Swift.Result<Swift.String, Swift.Error>) -> Swift.Void)
   @objc deinit
 }
 public class Signature {
@@ -161,7 +178,7 @@ public struct KeyStore {
     get
   }
 }
-extension SecKey {
+extension Security.SecKey {
   public func toBase64String() -> Swift.String?
   public func toData() -> Foundation.NSData?
   public func publicKeyToPEM() -> Swift.String?
@@ -176,7 +193,7 @@ public enum KeyStoreError : Swift.Error {
     get
   }
 }
-extension KeyStoreError {
+extension AbtMobile.KeyStoreError {
   public var description: Swift.String {
     get
   }
@@ -208,7 +225,7 @@ public protocol Key : AnyObject {
   func data() throws -> Foundation.Data
   func base64String() throws -> Swift.String
 }
-extension Key {
+extension AbtMobile.Key {
   public func base64String() throws -> Swift.String
   public func data() throws -> Foundation.Data
   public init(base64Encoded base64String: Swift.String) throws
@@ -239,12 +256,12 @@ public class ClearMessage : AbtMobile.Message {
   public func encrypted(with key: AbtMobile.PublicKey, padding: AbtMobile.Padding) throws -> AbtMobile.EncryptedMessage
   @objc deinit
 }
-extension StringProtocol {
+extension Swift.StringProtocol {
   public var bytes: [Swift.UInt8] {
     get
   }
 }
-extension String {
+extension Swift.String {
   public var stripPEM: Swift.String {
     get
   }
@@ -286,10 +303,10 @@ public class PrivateKey : AbtMobile.Key {
   required public init(data: Foundation.Data) throws
   @objc deinit
 }
-public class QRCodeService {
+public class SecureTokenService {
   public init(deviceDetails: AbtMobile.DeviceDetails)
   @objc deinit
-  public func getQrCode() -> Swift.Result<Swift.String, AbtMobile.QRCodeServiceError>
+  public func getSecureToken(actions: [AbtMobile.PayloadAction]) -> Swift.Result<Swift.String, AbtMobile.QRCodeServiceError>
 }
 public enum QRCodeServiceError : Swift.Error {
   case noActiveToken
@@ -304,6 +321,9 @@ extension AbtMobile.LegacyAttestationError : Swift.Equatable {}
 extension AbtMobile.LegacyAttestationError : Swift.Hashable {}
 extension AbtMobile.TokenError : Swift.Equatable {}
 extension AbtMobile.TokenError : Swift.Hashable {}
+extension AbtMobile.PayloadAction : Swift.Equatable {}
+extension AbtMobile.PayloadAction : Swift.Hashable {}
+extension AbtMobile.PayloadAction : Swift.RawRepresentable {}
 extension AbtMobile.AttestError : Swift.Equatable {}
 extension AbtMobile.AttestError : Swift.Hashable {}
 extension AbtMobile.Signature.DigestType : Swift.Equatable {}

@@ -16,3 +16,12 @@ export declare type Token = {
     tokenValidityStart: number;
     tokenValidityEnd: number;
 };
+export declare enum PayloadAction {
+    unspecified = 0,
+    ticketTransfer = 1,
+    addRemoveToken = 2,
+    identification = 3,
+    ticketInspection = 4,
+    getFarecontracts = 5,
+    travelcard = 6
+}

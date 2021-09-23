@@ -4,9 +4,10 @@ import {
   InitialConfig,
   Hosts,
 } from './config';
-import { getToken, deleteToken, generateQrCode } from './native';
+import { getToken, deleteToken, getSecureToken } from './native';
 import { createInitToken, createRenewToken, isTokenValid } from './token';
 import { createFetcher } from './fetcher';
+import { PayloadAction } from './native/types';
 
 export type { Token } from './native/types';
 export { isTokenValid } from './token';
@@ -31,6 +32,6 @@ export default function createClient(initialConfig?: InitialConfig) {
     initToken: createInitToken(fetcher, config.hosts),
     getToken,
     deleteToken,
-    generateQrCode,
+    generateQrCode: () => getSecureToken([PayloadAction.ticketInspection]),
   };
 }
