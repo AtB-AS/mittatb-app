@@ -47,11 +47,11 @@ jobs:
         with:
           path: "app-staging.apk"
           key: ${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
-      - name: Get Android keystore
-        run: sh ./scripts/android/create-keystore-file.sh
+      - name: Decode keystore
+        run: |
+          echo $KEYSTORE | base64 -di > android/app/keystore.jks
         env:
-          GPG_KEYSTORE_FILE: ${{ secrets.GPG_KEYSTORE_FILE }}
-          GPG_KEYSTORE_PASS: ${{ secrets.GPG_KEYSTORE_PASS }}
+          KEYSTORE: ${{ secrets.NFK_KEYSTORE }}
       - name: Generate native assets
         if: steps.apk-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn generate-native-assets
@@ -59,9 +59,9 @@ jobs:
         if: steps.apk-cache.outputs.cache-hit != 'true'
         run: fastlane android build
         env:
-          KEYSTORE_PASS: ${{ secrets.ATB_KEYSTORE_PASS }}
-          KEY_PASS: ${{ secrets.ATB_KEY_PASS }}
-          KEY_ALIAS: ${{ secrets.ATB_KEY_ALIAS }}
+          KEYSTORE_PASS: ${{ secrets.NFK_KEYSTORE_PASS }}
+          KEY_PASS: ${{ secrets.NFK_KEY_PASS }}
+          KEY_ALIAS: ${{ secrets.NFK_KEY_ALIAS }}
       - name: Replace apk bundle
         if: steps.apk-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/android/replace-bundle.sh
@@ -71,11 +71,11 @@ jobs:
           KEYSTORE_PASS: ${{ secrets.ATB_KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.ATB_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.ATB_KEY_ALIAS }}
+      - name: Decode google-services.json
+        run: echo $GCP_CREDENTIALS | base64 --decode > google-services.json
+        env:
+          GCP_CREDENTIALS: ${{ secrets.NFK_FIREBASE_DISTRIBUTION_CREDENTIALS }}
       - name: Distribute to Firebase app distribution
-        run: fastlane android appcenter_staging
+        run: fastlane android firebase_distribution_staging
         env:
-          APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
-      - name: Upload bundle and source maps
-        run: sh ./scripts/android/upload-sourcemaps.sh
-        env:
-          BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
+          GCP_CREDENTIALS_PATH: google-services.json

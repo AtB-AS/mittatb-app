@@ -133,14 +133,13 @@ platform :android do
 
   lane :firebase_distribution_staging do
     ensure_env_vars(
-      env_vars: ['APPCENTER_API_KEY']
+      env_vars: ['FIREBASE_APP_ID','GCP_CREDENTIALS_PATH']
     )
     firebase_app_distribution(
-      app:
-      firebase_cli_token:
-      service_credentials_file:
-      android_artifact_type:
-      android_artifact_path:
+      app:ENV['FIREBASE_APP_ID'],
+      service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
+      android_artifact_type:'APK',
+      android_artifact_path:'app-staging.apk'
     )
   end
 
