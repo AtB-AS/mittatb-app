@@ -16,7 +16,7 @@ jobs:
         run: |
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
           echo "APP_ENVIRONMENT=staging" >> $GITHUB_ENV
-          echo "APP_ORG=atb" >> $GITHUB_ENV
+          echo "APP_ORG=nfk" >> $GITHUB_ENV
           echo "KEYSTORE_PATH=./keystore.jks" >> $GITHUB_ENV
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
@@ -68,9 +68,9 @@ jobs:
         env:
           APK_FILE_NAME: app-staging.apk
           KEYSTORE_FILE: keystore.jks
-          KEYSTORE_PASS: ${{ secrets.ATB_KEYSTORE_PASS }}
-          KEY_PASS: ${{ secrets.ATB_KEY_PASS }}
-          KEY_ALIAS: ${{ secrets.ATB_KEY_ALIAS }}
+          KEYSTORE_PASS: ${{ secrets.NFK_KEYSTORE_PASS }}
+          KEY_PASS: ${{ secrets.NFK_KEY_PASS }}
+          KEY_ALIAS: ${{ secrets.NFK_KEY_ALIAS }}
       - name: Decode google-services.json
         run: echo $GCP_CREDENTIALS | base64 --decode > google-services.json
         env:
