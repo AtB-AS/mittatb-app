@@ -9,7 +9,13 @@ import {
   PhoneInputInAppRouteParams,
 } from '@atb/login/in-app/PhoneInputInApp';
 
+import {
+  LoginOnboardingInApp,
+  LoginOnboardingInAppRouteParams,
+} from '@atb/login/in-app/LoginOnboarding';
+
 export type LoginInAppStackParams = {
+  LoginOnboarding: LoginOnboardingInAppRouteParams;
   PhoneInputInApp: PhoneInputInAppRouteParams;
   ConfirmCodeInApp: ConfirmCodeInAppRouteParams;
 };
@@ -20,8 +26,9 @@ export default function LoginInAppStack() {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="PhoneInputInApp"
+      initialRouteName="LoginOnboarding"
     >
+      <Stack.Screen name="LoginOnboarding" component={LoginOnboardingInApp} />
       <Stack.Screen name="PhoneInputInApp" component={PhoneInputInApp} />
       <Stack.Screen name="ConfirmCodeInApp" component={ConfirmCodeInApp} />
     </Stack.Navigator>

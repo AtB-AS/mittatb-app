@@ -2,7 +2,13 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import * as Sections from '@atb/components/sections';
 import Button from '@atb/components/button';
 import {useAuthState} from '@atb/auth';
@@ -16,7 +22,7 @@ import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ThemeColor} from '@atb/theme/colors';
 
-const themeColor: ThemeColor = 'primary_2';
+const themeColor: ThemeColor = 'background_gray';
 
 export default function ConfirmCode({
   phoneNumber,
@@ -78,69 +84,84 @@ export default function ConfirmCode({
         color={themeColor}
       />
 
-      <View style={styles.mainView}>
-        <View accessible={true} accessibilityRole="header" ref={focusRef}>
-          <ThemeText type={'body__primary--jumbo--bold'} color={themeColor}>
-            {t(LoginTexts.confirmCode.title)}
-          </ThemeText>
-        </View>
-        <View>
-          <ThemeText style={styles.description} color={themeColor}>
-            {t(LoginTexts.confirmCode.description(phoneNumber))}
-          </ThemeText>
-        </View>
-        <Sections.Section>
-          <Sections.TextInput
-            label={t(LoginTexts.confirmCode.input.label)}
-            placeholder={t(LoginTexts.confirmCode.input.placeholder)}
-            onChangeText={setCode}
-            keyboardType="phone-pad"
-            textContentType="oneTimeCode"
-            showClear={true}
-            inlineLabel={false}
-            value={code}
-          />
-        </Sections.Section>
-        <View style={styles.buttonView}>
-          {isLoading && (
-            <ActivityIndicator color={theme.text.colors.primary} size="large" />
-          )}
-
-          {error && !isLoading && (
-            <MessageBox
-              containerStyle={styles.messageBox}
-              type="error"
-              message={t(LoginTexts.confirmCode.errors[error])}
+      <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          centerContent={true}
+          contentContainerStyle={styles.scrollView}
+        >
+          <View accessible={true} accessibilityRole="header" ref={focusRef}>
+            <ThemeText
+              type={'body__primary--jumbo--bold'}
+              style={styles.title}
+              color={themeColor}
+            >
+              {t(LoginTexts.confirmCode.title)}
+            </ThemeText>
+          </View>
+          <View>
+            <ThemeText style={styles.description} color={themeColor}>
+              {t(LoginTexts.confirmCode.description(phoneNumber))}
+            </ThemeText>
+          </View>
+          <Sections.Section>
+            <Sections.TextInput
+              label={t(LoginTexts.confirmCode.input.label)}
+              placeholder={t(LoginTexts.confirmCode.input.placeholder)}
+              onChangeText={setCode}
+              keyboardType="number-pad"
+              textContentType="oneTimeCode"
+              showClear={true}
+              inlineLabel={false}
+              value={code}
+              autoFocus={true}
             />
-          )}
-
-          {!isLoading && (
-            <>
-              <Button
-                color={'secondary_1'}
-                onPress={onLogin}
-                text={t(LoginTexts.confirmCode.mainButton)}
-                disabled={!code}
-                icon={ArrowRight}
-                iconPosition="right"
+          </Sections.Section>
+          <View style={styles.buttonView}>
+            {isLoading && (
+              <ActivityIndicator
+                style={styles.activityIndicator}
+                size="large"
               />
-              <TouchableOpacity
-                style={styles.resendButton}
-                onPress={onResendCode}
-                accessibilityRole="button"
-              >
-                <ThemeText
-                  style={styles.resendButtonText}
-                  type="body__primary--underline"
-                  color={themeColor}
+            )}
+
+            {error && !isLoading && (
+              <MessageBox
+                containerStyle={styles.messageBox}
+                type="error"
+                message={t(LoginTexts.confirmCode.errors[error])}
+              />
+            )}
+
+            {!isLoading && (
+              <>
+                <Button
+                  color={'primary_2'}
+                  onPress={onLogin}
+                  text={t(LoginTexts.confirmCode.mainButton)}
+                  disabled={!code}
+                  icon={ArrowRight}
+                  iconPosition="right"
+                  style={styles.submitButton}
+                />
+                <TouchableOpacity
+                  style={styles.resendButton}
+                  onPress={onResendCode}
+                  accessibilityRole="button"
                 >
-                  {t(LoginTexts.confirmCode.resendButton)}
-                </ThemeText>
-              </TouchableOpacity>
-            </>
-          )}
-        </View>
-      </View>
+                  <ThemeText
+                    style={styles.resendButtonText}
+                    type="body__primary"
+                    color={themeColor}
+                  >
+                    {t(LoginTexts.confirmCode.resendButton)}
+                  </ThemeText>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 }
@@ -151,16 +172,30 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   mainView: {
-    margin: theme.spacings.medium,
-    padding: theme.spacings.medium,
+    flex: 1,
+    justifyContent: 'center',
+  },
+  scrollView: {
+    padding: theme.spacings.large,
+  },
+  title: {
+    textAlign: 'center',
+    marginVertical: theme.spacings.medium,
   },
   description: {
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacings.large,
+    textAlign: 'center',
+  },
+  activityIndicator: {
+    marginVertical: theme.spacings.large,
   },
   messageBox: {
     marginBottom: theme.spacings.medium,
   },
   buttonView: {
+    marginTop: theme.spacings.medium,
+  },
+  submitButton: {
     marginTop: theme.spacings.medium,
   },
   resendButton: {
