@@ -1,5 +1,19 @@
 [
   {
+    "id": "ATB:UserProfile:8ee842e3",
+    "name": {"lang": "nob", "value": "Voksen"},
+    "version": "ATB:Version:9c641c1b-32de-4ad0-b4b0-dd9469881911",
+    "description": {"lang": "nob", "value": "Fra 20 til og med 66 år."},
+    "alternativeNames": [
+      {"lang": "eng", "value": "Adult"},
+      {"lang": "nno", "value": "Vaksen"}
+    ],
+    "minAge": 20,
+    "maxAge": 66,
+    "userTypeString": "ADULT",
+    "userType": 1
+  },
+  {
     "id": "ATB:UserProfile:2832569f",
     "name": {"lang": "nob", "value": "Honnør"},
     "version": "ATB:Version:4a5038b4-ec6d-44c3-98e5-a7fbdfc7d294",
@@ -15,6 +29,23 @@
     "maxAge": 0,
     "userTypeString": "SENIOR",
     "userType": 4
+  },
+  {
+    "id": "ATB:UserProfile:d3e4ec09",
+    "name": {"lang": "nob", "value": "Barn"},
+    "version": "ATB:Version:bffcd027-5caf-4e92-9b33-cbf9327c9fd4",
+    "description": {
+      "lang": "nob",
+      "value": "Fra 6 til og med 19 år. Kjøp barnebillett om du skal ha med sykkel."
+    },
+    "alternativeNames": [
+      {"lang": "eng", "value": "Child"},
+      {"lang": "nno", "value": "Barn"}
+    ],
+    "minAge": 6,
+    "maxAge": 19,
+    "userTypeString": "CHILD",
+    "userType": 2
   },
   {
     "id": "ATB:UserProfile:1ae560ba",
