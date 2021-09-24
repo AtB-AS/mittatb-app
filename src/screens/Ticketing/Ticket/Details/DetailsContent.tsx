@@ -13,38 +13,26 @@ import TicketInfo from '../TicketInfo';
 import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
 import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
-import {screenReaderPause} from '@atb/components/accessible-text';
 import {generateQrCode} from '@atb/mobile-token';
 import useInterval from '@atb/utils/use-interval';
 
 type Props = {
   fareContract: FareContract;
   now: number;
+  hasMobileToken: boolean;
   onReceiptNavigate: () => void;
 };
 
 const DetailsContent: React.FC<Props> = ({
   fareContract: fc,
+  hasMobileToken,
   now,
   onReceiptNavigate,
 }) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const [tokenQRCode, setTokenQRCode] = useState<string | undefined>(undefined);
-  const qrCodeSvg = useQrCodeSvg(tokenQRCode);
-
-  // TODO: Update so this happens in TicketContext later. Just proof-of-concept
-  useInterval(
-    () => {
-      async function updateQrCode() {
-        const qr = await generateQrCode();
-        setTokenQRCode(qr);
-      }
-      updateQrCode();
-    },
-    10000,
-    [],
-  );
+  const qrCode = useQrCode(fc, hasMobileToken);
+  const qrCodeSvg = useQrCodeSvg(qrCode);
 
   const firstTravelRight = fc.travelRights[0];
   if (isPreactivatedTicket(firstTravelRight)) {
@@ -142,6 +130,25 @@ const useQrCodeSvg = (qrCode: string | undefined) => {
     })();
   }, [qrCode]);
   return qrCodeSvg;
+};
+
+const useQrCode = (fc: FareContract, hasMobileToken: boolean) => {
+  const [tokenQRCode, setTokenQRCode] = useState<string | undefined>(undefined);
+
+  // TODO: Update so this happens in TicketContext later. Just proof-of-concept
+  useInterval(
+    () => {
+      async function updateQrCode() {
+        const qr = await generateQrCode();
+        setTokenQRCode(qr);
+      }
+      if (hasMobileToken) updateQrCode();
+    },
+    10000,
+    [hasMobileToken],
+  );
+
+  return hasMobileToken ? tokenQRCode : fc.qrCode;
 };
 
 const useStyles = StyleSheet.createThemeHook(() => ({

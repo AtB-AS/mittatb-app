@@ -15,6 +15,7 @@ import {getPayment} from './api';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import Bugsnag from '@bugsnag/react-native';
 import {getToken, initToken, Token} from '@atb/mobile-token';
+import {Platform} from 'react-native';
 
 type TicketReducerState = {
   fareContracts: FareContract[];
@@ -157,8 +158,8 @@ const TicketContextProvider: React.FC = ({children}) => {
       }
     }
 
-    ensureToken();
-  }, [dispatch]);
+    if (Platform.OS === 'ios' && user?.phoneNumber) ensureToken();
+  }, [dispatch, user?.phoneNumber]);
 
   useEffect(() => {
     if (user && abtCustomerId && enable_ticketing) {

@@ -123,6 +123,7 @@ export default function useOfferState(
     [fromTariffZone, toTariffZone],
   );
 
+  console.log('ZONES1', fromTariffZone, toTariffZone);
   const updateOffer = useCallback(
     async function (cancelToken?: CancelToken) {
       const offerTravellers = userProfilesWithCount

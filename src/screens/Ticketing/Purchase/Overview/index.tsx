@@ -60,6 +60,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     user_profiles: userProfiles,
   } = useRemoteConfig();
 
+  console.log(tariffZones);
   const selectableProducts = preassignedFareProducts.filter(
     (p) => p.type === params.selectableProductType,
   );
