@@ -138,16 +138,14 @@ const SelectPaymentMethod: React.FC<Props> = ({
   }, [previousPaymentMethod]);
 
   return (
-    <SafeAreaView style={[styles.container]}>
-      <View style={{flex: 1, flexDirection: 'row'}}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.row}>
         <View style={styles.heading}>
           <ThemeText type="heading__title">
             {t(SelectPaymentMethodTexts.header.text)}
           </ThemeText>
         </View>
-        <View
-          style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}
-        >
+        <View style={styles.rowJustifyEnd}>
           <TouchableOpacity
             onPress={close}
             accessibilityHint={t(
@@ -162,11 +160,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
       </View>
       {loadingRemoteOption ? <ActivityIndicator /> : null}
       <FlatList
-        style={{
-          maxHeight:
-            Dimensions.get('screen').height -
-            Dimensions.get('screen').height / 3,
-        }}
+        style={styles.listMaxHeight}
         data={options}
         keyExtractor={(item) =>
           `${item.paymentType}_${
@@ -200,9 +194,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
         }}
       ></FlatList>
       <Button
-        style={{
-          marginTop: 6,
-        }}
+        style={styles.confirmButtonMargin}
         color="primary_2"
         text={t(SelectPaymentMethodTexts.confirm_button.text)}
         accessibilityHint={t(SelectPaymentMethodTexts.confirm_button.a11yhint)}
@@ -255,14 +247,14 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
       case PaymentType.MasterCard:
         return {
           icon: <MasterCardLogo />,
-          text: t(PurchaseConfirmationTexts.payWithMasterCard.text),
-          a11y: t(PurchaseConfirmationTexts.payWithMasterCard.a11yHint),
+          text: t(PurchaseConfirmationTexts.paymentButtonCardMC.text),
+          a11y: t(PurchaseConfirmationTexts.paymentButtonCardMC.a11yHint),
         };
       case PaymentType.VISA:
         return {
           icon: <VisaLogo />,
-          text: t(PurchaseConfirmationTexts.payWithVisa.text),
-          a11y: t(PurchaseConfirmationTexts.payWithVisa.a11yHint),
+          text: t(PurchaseConfirmationTexts.paymentButtonCardVisa.text),
+          a11y: t(PurchaseConfirmationTexts.paymentButtonCardVisa.a11yHint),
         };
     }
   }
@@ -300,62 +292,55 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
   const info = getPaymentInfo(option.paymentType);
 
   return (
-    <TouchableOpacity
-      style={styles.paymentOption}
-      onPress={select}
-      accessibilityHint={info.a11y}
-    >
-      <View style={styles.centerRow}>
-        <View style={styles.centerRow}>
-          <RadioView checked={selected} />
-          <ThemeText>{info.text}</ThemeText>
-          {option.savedType === 'recurring' ? (
-            <ThemeText
-              style={{
-                paddingLeft: 8,
-              }}
-            >
-              **** {`${option.recurringCard.masked_pan}`}
-            </ThemeText>
+    <View style={styles.card}>
+      <TouchableOpacity
+        style={[styles.paymentOption, styles.centerRow]}
+        onPress={select}
+        accessibilityHint={info.a11y}
+      >
+        <View style={styles.column}>
+          <View style={styles.row}>
+            <View style={styles.centerRow}>
+              <RadioView checked={selected} />
+              <ThemeText>{info.text}</ThemeText>
+              {option.savedType === 'recurring' ? (
+                <ThemeText style={styles.maskedPanPadding}>
+                  **** {`${option.recurringCard.masked_pan}`}
+                </ThemeText>
+              ) : null}
+            </View>
+            {info.icon}
+          </View>
+          {option.savedType === 'recurring' &&
+          option.recurringCard.expires_at ? (
+            <View>
+              <ThemeText style={styles.masked}>
+                {getExpireDate(option.recurringCard.expires_at)}
+              </ThemeText>
+            </View>
           ) : null}
         </View>
-        {option.savedType === 'recurring' ||
-        option.paymentType === PaymentType.Vipps
-          ? info.icon
-          : null}
-      </View>
+      </TouchableOpacity>
       {selected &&
       user?.phoneNumber &&
       option.savedType === 'normal' &&
       option.paymentType !== PaymentType.Vipps ? (
-        <View>
-          <ThemeText
-            style={{
-              paddingTop: 18,
-              opacity: 0.6,
-            }}
-          >
+        <TouchableOpacity
+          onPress={() => {
+            setSave(!save);
+          }}
+          style={styles.saveOptionSection}
+        >
+          <ThemeText style={styles.saveOptionTextPadding}>
             {t(SelectPaymentMethodTexts.save_payment_option_description.text)}
           </ThemeText>
-          <TouchableOpacity
-            style={styles.saveButton}
-            onPress={() => {
-              setSave(!save);
-            }}
-          >
+          <View style={styles.saveButton}>
             <SavedCheckbox checked={save} />
             <ThemeText>{t(SelectPaymentMethodTexts.save_card.text)}</ThemeText>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
       ) : null}
-      {option.savedType === 'recurring' && option.recurringCard.expires_at ? (
-        <View>
-          <ThemeText style={styles.masked}>
-            {getExpireDate(option.recurringCard.expires_at)}
-          </ThemeText>
-        </View>
-      ) : null}
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -393,21 +378,30 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   heading: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     paddingBottom: 24,
   },
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  column: {flex: 1, flexDirection: 'column'},
+  card: {
+    marginVertical: 6,
+    borderRadius: 8,
+    backgroundColor: theme.colors.background_0.backgroundColor,
+  },
+  saveOptionSection: {paddingHorizontal: 24, paddingBottom: 24},
   container: {
     flex: 1,
-    //maxHeight: Dimensions.get('screen').height - 60,
     backgroundColor: theme.colors.background_2.backgroundColor,
     paddingHorizontal: 12,
   },
+  rowJustifyEnd: {flex: 1, flexDirection: 'row', justifyContent: 'flex-end'},
   paymentOption: {
     flex: 1,
     flexDirection: 'column',
-    marginVertical: 6,
     padding: 24,
-    backgroundColor: theme.colors.background_0.backgroundColor,
     borderRadius: 8,
   },
   centerRow: {
@@ -463,6 +457,20 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     opacity: 0.6,
     paddingTop: 18,
     paddingLeft: 36,
+  },
+  confirmButtonMargin: {
+    marginTop: 6,
+  },
+  listMaxHeight: {
+    maxHeight:
+      Dimensions.get('screen').height - Dimensions.get('screen').height / 3,
+  },
+  maskedPanPadding: {
+    paddingLeft: 8,
+  },
+  saveOptionTextPadding: {
+    paddingTop: 18,
+    opacity: 0.6,
   },
 }));
 
