@@ -32,6 +32,6 @@ export const ActiveTicketPromptInApp = ({
         afterLogin,
       });
     }}
-    headerLeftButton={{type: 'cancel'}}
+    headerLeftButton={{type: 'back'}}
   />
 );

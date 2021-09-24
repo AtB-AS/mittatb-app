@@ -38,6 +38,6 @@ export const LoginOnboardingInApp = ({
         });
       }
     }}
-    headerLeftButton={{type: 'back'}}
+    headerLeftButton={{type: 'cancel'}}
   />
 );
