@@ -32,12 +32,17 @@ export const LoginOnboardingInApp = ({
   },
 }: LoginOnboardingProps) => (
   <LoginOnboarding
-    loginReason={loginReason}
-    doAfterSubmit={() =>
-      navigation.navigate('PhoneInputInApp', {
-        afterLogin,
-      })
-    }
+    doAfterSubmit={(hasActiveFareContracts: boolean) => {
+      if (hasActiveFareContracts) {
+        navigation.navigate('ActiveTicketPromptInApp', {
+          afterLogin,
+        });
+      } else {
+        navigation.navigate('PhoneInputInApp', {
+          afterLogin,
+        });
+      }
+    }}
     headerLeftButton={{type: 'back'}}
   />
 );

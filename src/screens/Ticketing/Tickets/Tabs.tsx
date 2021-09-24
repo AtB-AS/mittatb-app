@@ -63,17 +63,6 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
           selectableProductType: 'period',
         },
       });
-    } else if (activeFareContracts.length > 0) {
-      navigation.navigate('LoginInApp', {
-        screen: 'ActiveTicketPromptInApp',
-        params: {
-          loginReason: t(TicketsTexts.buyTicketsTab.loginReason),
-          afterLogin: {
-            routeName: 'TicketPurchase',
-            routeParams: {selectableProductType: 'period'},
-          },
-        },
-      });
     } else {
       navigation.navigate('LoginInApp', {
         screen: 'LoginOnboardingInApp',

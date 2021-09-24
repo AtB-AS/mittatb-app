@@ -28,13 +28,12 @@ export type ActiveTicketPromptProps = {
 export const ActiveTicketPromptInApp = ({
   navigation,
   route: {
-    params: {loginReason, afterLogin},
+    params: {afterLogin},
   },
 }: ActiveTicketPromptProps) => (
   <ActiveTicketPrompt
-    loginReason={loginReason}
     doAfterSubmit={() => {
-      navigation.navigate('LoginOnboardingInApp', {
+      navigation.navigate('PhoneInputInApp', {
         afterLogin,
       });
     }}

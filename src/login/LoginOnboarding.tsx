@@ -12,17 +12,16 @@ import {ThemeColor} from '@atb/theme/colors';
 import {useNavigation} from '@react-navigation/native';
 import {TicketIllustration, Psst} from '@atb/assets/svg/illustrations';
 import {TouchableOpacity} from 'react-native';
+import {filterActiveFareContracts, useTicketState} from '@atb/tickets';
 
 const themeColor: ThemeColor = 'background_gray';
 
 export default function LoginOnboarding({
-  loginReason,
   headerLeftButton,
   doAfterSubmit,
   headerRightButton,
 }: {
-  loginReason?: string;
-  doAfterSubmit: () => void;
+  doAfterSubmit: (hasActiveFareContracts: boolean) => void;
   headerLeftButton?: LeftButtonProps;
   headerRightButton?: RightButtonProps;
 }) {
@@ -31,8 +30,10 @@ export default function LoginOnboarding({
   const styles = useThemeStyles();
   const focusRef = useFocusOnLoad();
 
+  const {fareContracts} = useTicketState();
+  const activeFareContracts = filterActiveFareContracts(fareContracts);
   const onNext = async () => {
-    doAfterSubmit();
+    doAfterSubmit(activeFareContracts.length > 0);
   };
 
   return (
