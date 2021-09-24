@@ -22,7 +22,7 @@ const LoginTexts = {
     laterButton: _('Jeg vil logge inn senere', 'I want to log in later'),
     carrotTitle: _('Det er lurt å logge inn', 'Smart travellers log in...'),
     carrotBody: _(
-      'Da kan du også lagre betalingskort og etter hvert andre smarte reiseting slik at du enkelt finner dem igjen – selv ved bytte av mobil.',
+      'Da kan du også lagre betalingskort og etterhvert andre smarte reiseting slik at du enkelt finner dem igjen – selv ved bytte av mobil.',
       '...to store payment cards for later use. Soon, login will store personal preferences to your profile so that you can carry them with you when swapping phones.',
     ),
   },
