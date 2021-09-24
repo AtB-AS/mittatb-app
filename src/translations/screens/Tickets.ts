@@ -93,7 +93,7 @@ const TicketsTexts = {
     paymentStage: {
       processing: (type: string) =>
         _(`Betales med ${type}`, `Payment using ${type}`),
-      approved: (type: string) => _(`Betalt med ${type}`, `Payed with ${type}`),
+      approved: (type: string) => _(`Betalt med ${type}`, `Paid with ${type}`),
     },
     goToVipps: _('Gå til Vipps for betaling', 'Go to Vipps for payment'),
   },
