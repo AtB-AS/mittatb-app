@@ -39,6 +39,8 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const {abtCustomerId, authenticationType} = useAuthState();
   const {t} = useTranslation();
   const appContext = useAppState();
+  const {fareContracts} = useTicketState();
+  const activeFareContracts = filterActiveFareContracts(fareContracts);
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
@@ -61,9 +63,20 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
           selectableProductType: 'period',
         },
       });
+    } else if (activeFareContracts.length > 0) {
+      navigation.navigate('LoginInApp', {
+        screen: 'ActiveTicketPromptInApp',
+        params: {
+          loginReason: t(TicketsTexts.buyTicketsTab.loginReason),
+          afterLogin: {
+            routeName: 'TicketPurchase',
+            routeParams: {selectableProductType: 'period'},
+          },
+        },
+      });
     } else {
       navigation.navigate('LoginInApp', {
-        screen: 'LoginOnboarding',
+        screen: 'LoginOnboardingInApp',
         params: {
           loginReason: t(TicketsTexts.buyTicketsTab.loginReason),
           afterLogin: {

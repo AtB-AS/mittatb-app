@@ -2,12 +2,12 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
 
 import LoginOnboarding from '@atb/login/LoginOnboarding';
-// import LoginOnboarding from '@atb/login/LoginOnboarding';
 import {RouteProp} from '@react-navigation/native';
 import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
 import {AfterLoginParams} from '@atb/login/types';
+import ActiveTicketPrompt from '../ActiveTicketPrompt';
 
-export type LoginOnboardingInAppRouteParams = {
+export type ActiveTicketPromptInAppRouteParams = {
   /**
    * An optional message to the user why the login is necessary
    */
@@ -15,29 +15,29 @@ export type LoginOnboardingInAppRouteParams = {
   afterLogin: AfterLoginParams;
 };
 
-type LoginOnboardingInAppRouteProps = RouteProp<
+type ActiveTicketPromptInAppRouteProps = RouteProp<
   LoginInAppStackParams,
-  'PhoneInputInApp'
+  'ActiveTicketPromptInApp'
 >;
 
-export type LoginOnboardingProps = {
+export type ActiveTicketPromptProps = {
   navigation: StackNavigationProp<LoginInAppStackParams>;
-  route: LoginOnboardingInAppRouteProps;
+  route: ActiveTicketPromptInAppRouteProps;
 };
 
-export const LoginOnboardingInApp = ({
+export const ActiveTicketPromptInApp = ({
   navigation,
   route: {
     params: {loginReason, afterLogin},
   },
-}: LoginOnboardingProps) => (
-  <LoginOnboarding
+}: ActiveTicketPromptProps) => (
+  <ActiveTicketPrompt
     loginReason={loginReason}
-    doAfterSubmit={() =>
-      navigation.navigate('PhoneInputInApp', {
+    doAfterSubmit={() => {
+      navigation.navigate('LoginOnboardingInApp', {
         afterLogin,
-      })
-    }
-    headerLeftButton={{type: 'back'}}
+      });
+    }}
+    headerLeftButton={{type: 'cancel'}}
   />
 );
