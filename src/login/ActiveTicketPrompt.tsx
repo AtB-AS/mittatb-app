@@ -1,5 +1,5 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
@@ -21,7 +21,6 @@ export default function ActiveTicketPrompt({
   doAfterSubmit,
   headerRightButton,
 }: {
-  loginReason?: string;
   doAfterSubmit: () => void;
   headerLeftButton?: LeftButtonProps;
   headerRightButton?: RightButtonProps;
@@ -113,9 +112,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   title: {
     textAlign: 'center',
     marginVertical: theme.spacings.medium,
-  },
-  loginReason: {
-    marginTop: theme.spacings.medium,
   },
   description: {
     marginVertical: theme.spacings.medium,

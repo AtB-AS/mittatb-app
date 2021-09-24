@@ -23,12 +23,10 @@ import {ThemeColor} from '@atb/theme/colors';
 const themeColor: ThemeColor = 'background_gray';
 
 export default function PhoneInput({
-  loginReason,
   doAfterLogin,
   headerLeftButton,
   headerRightButton,
 }: {
-  loginReason?: string;
   doAfterLogin: (phoneNumber: string) => void;
   headerLeftButton?: LeftButtonProps;
   headerRightButton?: RightButtonProps;
@@ -92,11 +90,6 @@ export default function PhoneInput({
             </ThemeText>
           </View>
           <View accessible={true}>
-            {loginReason && (
-              <ThemeText style={styles.loginReason} color={themeColor}>
-                {loginReason}
-              </ThemeText>
-            )}
             <ThemeText style={styles.description} color={themeColor}>
               {t(LoginTexts.phoneInput.description)}
             </ThemeText>
@@ -165,10 +158,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   title: {
     textAlign: 'center',
     marginVertical: theme.spacings.medium,
-  },
-  loginReason: {
-    marginTop: theme.spacings.medium,
-    textAlign: 'center',
   },
   description: {
     marginVertical: theme.spacings.large,

@@ -6,10 +6,6 @@ import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
 import {AfterLoginParams} from '@atb/login/types';
 
 export type PhoneInputInAppRouteParams = {
-  /**
-   * An optional message to the user why the login is necessary
-   */
-  loginReason?: string;
   afterLogin: AfterLoginParams;
 };
 
@@ -26,11 +22,10 @@ export type PhoneInputInAppProps = {
 export const PhoneInputInApp = ({
   navigation,
   route: {
-    params: {loginReason, afterLogin},
+    params: {afterLogin},
   },
 }: PhoneInputInAppProps) => (
   <PhoneInput
-    loginReason={loginReason}
     doAfterLogin={(phoneNumber: string) =>
       navigation.navigate('ConfirmCodeInApp', {
         afterLogin,
