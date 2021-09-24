@@ -75,7 +75,7 @@ export default function ActiveTicketPrompt({
             style={styles.title}
             color={themeColor}
           >
-            Du har en aktiv billett
+            {t(LoginTexts.activeTicketPrompt.title)}
           </ThemeText>
         </View>
         <View accessible={true}>
@@ -84,9 +84,7 @@ export default function ActiveTicketPrompt({
             color={themeColor}
             isMarkdown={true}
           >
-            Når du logger inn vil dine anonyme billetter **ikke** kunne
-            overføres til din profil. Hvis du ønsker å beholde din aktive
-            billett venter du med innloggingen til billetten har utløpt.
+            {t(LoginTexts.activeTicketPrompt.body)}
           </ThemeText>
         </View>
         <View style={styles.ticket}>
@@ -104,7 +102,7 @@ export default function ActiveTicketPrompt({
         <Button
           color={'primary_2'}
           onPress={navigation.goBack}
-          text={'Logg inn senere'}
+          text={t(LoginTexts.activeTicketPrompt.laterButton)}
           icon={ArrowRight}
           iconPosition="right"
         />
@@ -118,7 +116,7 @@ export default function ActiveTicketPrompt({
             type="body__primary"
             color={themeColor}
           >
-            Jeg vil logge inn likevel
+            {t(LoginTexts.activeTicketPrompt.continueButton)}
           </ThemeText>
         </TouchableOpacity>
       </ScrollView>

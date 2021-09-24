@@ -1,5 +1,14 @@
 import {translation as _} from '../../commons';
 const LoginTexts = {
+  activeTicketPrompt: {
+    title: _('Du har en aktiv billett', 'You have an active ticket'),
+    body: _(
+      'Når du logger inn vil dine anonyme billetter **ikke** kunne overføres til din profil. Hvis du ønsker å beholde din aktive billett venter du med innloggingen til billetten har utløpt.',
+      'When you log in, your anonymous tickets will **not** be transferred to your profile. If you want to keep your active ticket, wait for it to expire before logging in.',
+    ),
+    laterButton: _('Logg inn senere', 'Log in later'),
+    continueButton: _('Jeg vil logge inn likevel', 'I want to log in anyway'),
+  },
   onboarding: {
     title: _(
       'Nå kan du kjøpe periodebilletter!',
