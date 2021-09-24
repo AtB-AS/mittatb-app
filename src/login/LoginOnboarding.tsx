@@ -112,9 +112,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
     marginVertical: theme.spacings.medium,
   },
-  loginReason: {
-    marginTop: theme.spacings.medium,
-  },
   description: {
     marginVertical: theme.spacings.medium,
     textAlign: 'center',

@@ -10,18 +10,9 @@ import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ThemeColor} from '@atb/theme/colors';
 import {useNavigation} from '@react-navigation/native';
-import {TicketIllustration, Psst} from '@atb/assets/svg/illustrations';
 import {TouchableOpacity} from 'react-native';
-import TicketInfo, {
-  TicketInfoView,
-} from '@atb/screens/Ticketing/Ticket/TicketInfo';
-import {
-  filterActiveFareContracts,
-  isPreactivatedTicket,
-  useTicketState,
-} from '@atb/tickets';
+import {useTicketState} from '@atb/tickets';
 import SimpleTicket from '@atb/screens/Ticketing/Ticket';
-import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 
 const themeColor: ThemeColor = 'background_gray';
 
@@ -39,21 +30,8 @@ export default function ActiveTicketPrompt({
   const navigation = useNavigation();
   const styles = useThemeStyles();
   const focusRef = useFocusOnLoad();
-  const {fareContracts, isRefreshingTickets, refreshTickets} = useTicketState();
+  const {fareContracts} = useTicketState();
   const [now, setNow] = useState<number>(Date.now());
-
-  // const firstTravelRight = fareContracts[0].travelRights?.[0];
-  // if (isPreactivatedTicket(firstTravelRight)) {
-  //   const {startDateTime, endDateTime} = firstTravelRight;
-  //   const validTo = endDateTime.toMillis();
-  //   const validFrom = startDateTime.toMillis();
-  //   const validityStatus = getValidityStatus(
-  //     now,
-  //     validFrom,
-  //     validTo,
-  //     fareContracts[0].state,
-  //   );
-  // }
 
   const onNext = async () => {
     doAfterSubmit();
