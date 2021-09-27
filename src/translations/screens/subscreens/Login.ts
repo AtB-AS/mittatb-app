@@ -1,10 +1,13 @@
 import {translation as _} from '../../commons';
 const LoginTexts = {
   activeTicketPrompt: {
-    title: _('Du har en aktiv billett', 'You have an active ticket'),
+    title: _(
+      'Vent litt, du har en gyldig billett',
+      'Wait a sec – you have a valid ticket',
+    ),
     body: _(
-      'Når du logger inn vil dine anonyme billetter **ikke** kunne overføres til din profil. Hvis du ønsker å beholde din aktive billett venter du med innloggingen til billetten har utløpt.',
-      'When you log in, your anonymous tickets will **not** be transferred to your profile. If you want to keep your active ticket, wait for it to expire before logging in.',
+      'Billetten kan **ikke** overføres til din profil og vil slettes ved innlogging. Dersom du trenger billetten, vent til den er utløpt **før** du logger inn.',
+      'This ticket can **not** be transferred to your profile, and will be deleted upon login. If you need the ticket, wait until it has expired **before** logging in.',
     ),
     laterButton: _('Logg inn senere', 'Log in later'),
     continueButton: _('Jeg vil logge inn likevel', 'I want to log in anyway'),
