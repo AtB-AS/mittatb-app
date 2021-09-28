@@ -1,37 +1,37 @@
 import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
-import PhoneInput from '@atb/login/PhoneInput';
+
 import {RouteProp} from '@react-navigation/native';
 import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
 import {AfterLoginParams} from '@atb/login/types';
+import ActiveTicketPrompt from '../ActiveTicketPrompt';
 
-export type PhoneInputInAppRouteParams = {
+export type ActiveTicketPromptInAppRouteParams = {
   afterLogin: AfterLoginParams;
 };
 
-type PhoneInputInAppRouteProps = RouteProp<
+type ActiveTicketPromptInAppRouteProps = RouteProp<
   LoginInAppStackParams,
-  'PhoneInputInApp'
+  'ActiveTicketPromptInApp'
 >;
 
-export type PhoneInputInAppProps = {
+export type ActiveTicketPromptProps = {
   navigation: StackNavigationProp<LoginInAppStackParams>;
-  route: PhoneInputInAppRouteProps;
+  route: ActiveTicketPromptInAppRouteProps;
 };
 
-export const PhoneInputInApp = ({
+export const ActiveTicketPromptInApp = ({
   navigation,
   route: {
     params: {afterLogin},
   },
-}: PhoneInputInAppProps) => (
-  <PhoneInput
-    doAfterLogin={(phoneNumber: string) =>
-      navigation.navigate('ConfirmCodeInApp', {
+}: ActiveTicketPromptProps) => (
+  <ActiveTicketPrompt
+    doAfterSubmit={() => {
+      navigation.navigate('PhoneInputInApp', {
         afterLogin,
-        phoneNumber,
-      })
-    }
+      });
+    }}
     headerLeftButton={{type: 'back'}}
   />
 );
