@@ -199,8 +199,17 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
 
       if (isFirstStart) {
         console.log('STORAGE FIRST START');
-        console.log('DELETE USER');
-        // signInAnonymously();
+        const currentUser = auth().currentUser;
+        if (currentUser) {
+          console.log(JSON.stringify(currentUser));
+          if (currentUser.isAnonymous) {
+            console.log('FOUND ANONYMOUS USER; DELETING');
+            currentUser.delete();
+          } else {
+            console.log('FOUND LOGGED IN USER; SIGNING OUT');
+            signOut();
+          }
+        }
         await storage.set(storeKey.isFirstStart, JSON.stringify(false));
       }
     }
