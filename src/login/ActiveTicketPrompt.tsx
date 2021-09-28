@@ -68,12 +68,7 @@ export default function ActiveTicketPrompt({
           <SimpleTicket
             fareContract={fareContracts[0]}
             now={now}
-            onPressDetails={() =>
-              navigation.navigate('TicketModal', {
-                screen: 'TicketDetails',
-                params: {orderId: fareContracts[0].orderId},
-              })
-            }
+            hideDetails={true}
           />
         </View>
         <Button

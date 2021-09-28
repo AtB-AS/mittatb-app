@@ -11,12 +11,14 @@ import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 type Props = {
   fareContract: FareContract;
   now: number;
-  onPressDetails: () => void;
+  hideDetails?: boolean;
+  onPressDetails?: () => void;
 };
 
 const SimpleTicket: React.FC<Props> = ({
   fareContract: fc,
   now,
+  hideDetails,
   onPressDetails,
 }) => {
   const {t} = useTranslation();
@@ -48,14 +50,16 @@ const SimpleTicket: React.FC<Props> = ({
             status={validityStatus}
           />
         </Sections.GenericItem>
-        <Sections.LinkItem
-          text={t(
-            validityStatus === 'valid'
-              ? TicketTexts.detailsLink.valid
-              : TicketTexts.detailsLink.notValid,
-          )}
-          onPress={onPressDetails}
-        />
+        {!hideDetails && (
+          <Sections.LinkItem
+            text={t(
+              validityStatus === 'valid'
+                ? TicketTexts.detailsLink.valid
+                : TicketTexts.detailsLink.notValid,
+            )}
+            onPress={onPressDetails}
+          />
+        )}
       </Sections.Section>
     );
   } else {
