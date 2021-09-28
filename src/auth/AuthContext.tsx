@@ -198,15 +198,14 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
         : true;
 
       if (isFirstStart) {
-        console.log('STORAGE FIRST START');
+        // The app was launched for the first time
         const currentUser = auth().currentUser;
         if (currentUser) {
-          console.log(JSON.stringify(currentUser));
           if (currentUser.isAnonymous) {
-            console.log('FOUND ANONYMOUS USER; DELETING');
+            // Deleting the the anonymous user from the last install
             currentUser.delete();
           } else {
-            console.log('FOUND LOGGED IN USER; SIGNING OUT');
+            // Logging out of the previously signed in user
             signOut();
           }
         }
@@ -215,7 +214,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
     }
 
     if (state.isFirstStart) {
-      console.log('STATE FIRST START');
+      // State isn't initialized, meaning the app was just started
       dispatch({type: 'SET_IS_FIRST_START'});
       onFirstStart();
     }
