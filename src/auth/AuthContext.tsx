@@ -9,6 +9,7 @@ import React, {
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {useTranslation} from '../translations';
 import {updateMetadata} from '@atb/chat/metadata';
+import storage from '../storage';
 
 const ERROR_INVALID_PHONE_NUMBER = 'auth/invalid-phone-number';
 const ERROR_INVALID_CONFIRMATION_CODE = 'auth/invalid-verification-code';
@@ -18,12 +19,16 @@ function isAuthError(
 ): error is FirebaseAuthTypes.NativeFirebaseAuthError {
   return 'code' in error;
 }
+enum storeKey {
+  isFirstStart = '@ATB_is_first_start',
+}
 
 type AuthReducerState = {
   isAuthConnectionInitialized: boolean;
   confirmationHandler: FirebaseAuthTypes.ConfirmationResult | undefined;
   abtCustomerId: string | undefined;
   user: FirebaseAuthTypes.User | null;
+  isFirstStart: boolean;
 };
 
 type AuthReducerAction =
@@ -35,7 +40,8 @@ type AuthReducerAction =
       type: 'SET_USER';
       user: FirebaseAuthTypes.User | null;
     }
-  | {type: 'SET_ABT_CUSTOMER_ID'; abtCustomerId: string | undefined};
+  | {type: 'SET_ABT_CUSTOMER_ID'; abtCustomerId: string | undefined}
+  | {type: 'SET_IS_FIRST_START'};
 
 type AuthReducer = (
   prevState: AuthReducerState,
@@ -63,6 +69,12 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
         abtCustomerId: action.abtCustomerId,
       };
     }
+    case 'SET_IS_FIRST_START': {
+      return {
+        ...prevState,
+        isFirstStart: false,
+      };
+    }
   }
 };
 
@@ -71,6 +83,7 @@ const initialReducerState: AuthReducerState = {
   confirmationHandler: undefined,
   abtCustomerId: undefined,
   user: null,
+  isFirstStart: true,
 };
 
 type AuthenticationType = 'none' | 'anonymous' | 'phone';
@@ -176,6 +189,26 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
   useEffect(() => {
     if (state.isAuthConnectionInitialized && !state.user) {
       signInAnonymously();
+    }
+
+    async function onFirstStart() {
+      const savedIsFirstStart = await storage.get(storeKey.isFirstStart);
+      const isFirstStart = savedIsFirstStart
+        ? JSON.parse(savedIsFirstStart)
+        : true;
+
+      if (isFirstStart) {
+        console.log('STORAGE FIRST START');
+        console.log('DELETE USER');
+        // signInAnonymously();
+        await storage.set(storeKey.isFirstStart, JSON.stringify(false));
+      }
+    }
+
+    if (state.isFirstStart) {
+      console.log('STATE FIRST START');
+      dispatch({type: 'SET_IS_FIRST_START'});
+      onFirstStart();
     }
   }, [state.isAuthConnectionInitialized, state.user?.uid]);
 
