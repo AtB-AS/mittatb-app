@@ -185,8 +185,16 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
     await auth().signInAnonymously();
   }, []);
 
-  // Sign in if the onChangeEvent fired immediately on subscription did not include user data. (in other words, user was not previously signed in)
   useEffect(() => {
+    // Check for preexisting user when the app is lauched for the first time.
+    if (state.isFirstStart) {
+      // State isn't initialized, meaning the app was just started
+      dispatch({type: 'SET_IS_FIRST_START'});
+      onFirstStart();
+    }
+
+    // Sign in if the onChangeEvent fired immediately on subscription did not
+    // include user data. (in other words, user was not previously signed in)
     if (state.isAuthConnectionInitialized && !state.user) {
       signInAnonymously();
     }
@@ -211,12 +219,6 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
         }
         await storage.set(storeKey.isFirstStart, JSON.stringify(false));
       }
-    }
-
-    if (state.isFirstStart) {
-      // State isn't initialized, meaning the app was just started
-      dispatch({type: 'SET_IS_FIRST_START'});
-      onFirstStart();
     }
   }, [state.isAuthConnectionInitialized, state.user?.uid]);
 
