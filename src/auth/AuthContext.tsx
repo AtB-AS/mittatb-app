@@ -150,7 +150,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
     async function signInWithPhoneNumber(phoneNumber: string) {
       try {
         const confirmationHandler = await auth().signInWithPhoneNumber(
-          '+47' + phoneNumber,
+          phoneNumber,
         );
         dispatch({type: 'SIGN_IN_INITIATED', confirmationHandler});
       } catch (error) {

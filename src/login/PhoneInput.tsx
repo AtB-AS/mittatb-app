@@ -75,7 +75,7 @@ export default function PhoneInput({
       setError('invalid_phone');
       return;
     }
-    const errorCode = await signInWithPhoneNumber(phoneNumber);
+    const errorCode = await signInWithPhoneNumber(phoneValidation.phoneNumber);
     if (!errorCode) {
       setError(undefined);
       doAfterLogin(phoneValidation.phoneNumber);
