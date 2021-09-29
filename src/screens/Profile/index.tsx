@@ -1,6 +1,7 @@
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
 import Appearance from './Appearance';
+import TravelCard from './TravelCard';
 import FavoriteDepartures from './FavoriteDepartures';
 import FavoriteList from './FavoriteList';
 import ProfileHome from './Home';
@@ -19,6 +20,7 @@ export type ProfileStackParams = {
   FavoriteList: undefined;
   FavoriteDepartures: undefined;
   SelectStartScreen: undefined;
+  TravelCard: undefined;
   Appearance: undefined;
   Language: undefined;
   DefaultUserProfile: undefined;
@@ -45,6 +47,7 @@ export default function ProfileScreen() {
       <Stack.Screen name="FavoriteList" component={FavoriteList} />
       <Stack.Screen name="FavoriteDepartures" component={FavoriteDepartures} />
       <Stack.Screen name="SelectStartScreen" component={SelectStartScreen} />
+      <Stack.Screen name="TravelCard" component={TravelCard} />
       <Stack.Screen name="Appearance" component={Appearance} />
       <Stack.Screen name="Language" component={Language} />
       <Stack.Screen name="DefaultUserProfile" component={DefaultUserProfile} />
