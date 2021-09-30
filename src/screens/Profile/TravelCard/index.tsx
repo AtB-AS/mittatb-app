@@ -12,9 +12,26 @@ import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import * as Sections from '@atb/components/sections';
 import {Warning} from '@atb/assets/svg/situations';
 import {Add, Edit} from '@atb/assets/svg/icons/actions';
-import SvgAdd from '@atb/assets/svg/icons/actions/Add';
+import {RootStackParamList} from '@atb/navigation';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {CompositeNavigationProp} from '@react-navigation/native';
+import {ProfileStackParams} from '..';
 
-export default function TravelCard() {
+export type TravelCardNavigationProp = StackNavigationProp<
+  ProfileStackParams,
+  'TravelCard'
+>;
+
+type TravelCardScreenNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<RootStackParamList>,
+  TravelCardNavigationProp
+>;
+
+type TravelCardScreenProps = {
+  navigation: TravelCardScreenNavigationProp;
+};
+
+export default function TravelCard({navigation}: TravelCardScreenProps) {
   const styles = useStyles();
   const {t, language} = useTranslation();
 
@@ -78,7 +95,9 @@ export default function TravelCard() {
         <Sections.Section withTopPadding>
           <Sections.LinkItem
             text={'Endre reisebevis'}
-            onPress={() => {}}
+            onPress={() => {
+              navigation.navigate('SelectTravelCard');
+            }}
             icon={<ThemeIcon svg={Edit}></ThemeIcon>}
           />
         </Sections.Section>
