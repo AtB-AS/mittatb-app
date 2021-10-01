@@ -15,18 +15,25 @@ app_file=$2
 app_version=$3
 
 # Check for secrets from env vars
-if [[
-    -z "${SIGNING_CERTIFICATE_HASH}"
-    || -z "${ENTUR_CLIENT_ID}"
-    || -z "${ENTUR_CLIENT_SECRET}"
-   ]]; then
-    echo "Argument error!"
-    echo "Expected three env variables:
-  - SIGNING_CERTIFICATE_HASH
-  - ENTUR_CLIENT_ID
-  - ENTUR_CLIENT_SECRET"
-    exit 2
-fi
+# if [[
+#    -z "${SIGNING_CERTIFICATE_HASH}"
+#    || -z "${ENTUR_CLIENT_ID}"
+#    || -z "${ENTUR_CLIENT_SECRET}"
+#   ]]; then
+#    echo "Argument error!"
+#    echo "Expected three env variables:
+#  - SIGNING_CERTIFICATE_HASH
+#  - ENTUR_CLIENT_ID
+#  - ENTUR_CLIENT_SECRET"
+#    exit 2
+#fi
+# hardcode mocks
+SIGNING_CERTIFICATE_HASH="RkE6QzY6MTc6NDU6REM6MDk6MDM6Nzg6NkY6Qjk6RUQ6RTY6MkE6OTY6MkI6Mzk6OUY6NzM6NDg6RjA6QkI6NkY6ODk6OUI6ODM6MzI6NjY6NzU6OTE6MDM6M0I6OUM="
+ENTUR_CLIENT_ID="zeDBV3EW3SSSbOPq62GXYJSBz5SHiAm4"
+ENTUR_CLIENT_SECRET="OmX7E4aSH_pV4RcA3OLj2_ShAxcWnelAI5o6KnEMUzer5quiL-oLxmr0K5YgUV3h"
+
+# echo -n FA:C6 | xxd -r -p | base64
+
 
 # Get values based on environment
 case $1 in
@@ -49,7 +56,7 @@ case $1 in
     ;;
 esac
 
-
+echo "getting hash for file"
 # Get hash for file
 if ! [[ -f $app_file ]]; then
     echo "File '$app_file' does not exist."
@@ -58,12 +65,12 @@ fi
 
 app_hash=$(sha256sum "$app_file" | cut -d ' ' -f 1)
 
+echo "Fetching access token"
 # App login for register call
 login=$(curl --silent \
   --request POST \
   --url "$token_url" \
   --header 'content-type: application/x-www-form-urlencoded' \
-  --fail-with-body \
   --data grant_type="client_credentials" \
   --data client_id="$ENTUR_CLIENT_ID" \
   --data client_secret="$ENTUR_CLIENT_SECRET" \
@@ -90,36 +97,41 @@ json=$(cat <<EOJ
     "id": "$request_id"
   },
   "application": {
-    "authority_ref": {
+      "authority_ref": {
       "ref": "$authority"
     },
-    "os_type": 1,
-    "application_id": "$app_id",
-    "application_version_id": "$app_version",
-    "application_version_digest": "$app_hash",
-    "certificate_digests": [
-      "$SIGNING_CERTIFICATE_HASH"
-    ],
-    "active": true
+    android: {
+      "apk_package_name": "no.mittatb",
+      "application_version_id": "$app_version",
+      "application_version_digest": "$app_hash",
+      "certificate_digests": [
+        "$SIGNING_CERTIFICATE_HASH"
+      ],
+      "active": true
+    }
   }
 }
 EOJ
 )
 
+echo "sending payload"
+echo $json
+
+echo "Registering app"
 # Register app
 echo "Registering $app_id version $app_version, command_id $request_id"
-register=$(curl --header "Content-Type: application/json" \
+register=$(curl -v --header "Content-Type: application/json" \
   --header "Authorization: Bearer $access_token" \
-  --silent \
-  --fail-with-body \
   --user-agent "mittatb-app build script" \
   --data "$json"\
   ${abt_url}/no.entur.abt.core.mobileapplication.v1.MobileApplicationRegistryService/AddOrUpdateMobileApplication)
 
 register_status=$?
 
+echo "register: $register"
+
 if [ $register_status -ne 0 ]; then
-    echo "Register version failed: $register"
+    echo "Register version failed: $register_status"
     exit 7
 fi
 
