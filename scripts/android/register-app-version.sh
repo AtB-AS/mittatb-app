@@ -2,56 +2,50 @@
 
 # This script will register a specific Android application version with Entur's
 # MobileApplicationRegistryService API.
-# The SHA256 hash of the signing key for the APK must be provided as an environment variable,
+# a base64 encoded SHA256 fingerprint as bytes of the signing certificate for the APK must be provided as an environment variable,
 # in addition to client ID and client secret for Entur ABT OAuth login.
 
-# Sanity check for number of parameters
-if [[ $# -ne 3 ]]; then
-    echo "Usage: <environment> <apk file> <version>"
-    exit 1
+# Check for secrets from env vars
+if [[
+  -z ${SIGNING_CERTIFICATE_DIGEST}
+  || -z ${ENTUR_CLIENT_ID}
+  || -z ${ENTUR_CLIENT_SECRET}
+]]; then
+  echo "Expected environment variables:
+  - SIGNING_CERTIFICATE_DIGEST
+  - ENTUR_CLIENT_ID
+  - ENTUR_CLIENT_SECRET"
+  exit 2
 fi
 
-app_file=$2
-app_version=$3
+# Read a property safely from config file, instead of sourcing the file
+envprop() {
+  grep -e "^${1}=" ./.env | cut -d'=' -f2 | head -n 1;
+}
 
-# Check for secrets from env vars
-# if [[
-#    -z "${SIGNING_CERTIFICATE_HASH}"
-#    || -z "${ENTUR_CLIENT_ID}"
-#    || -z "${ENTUR_CLIENT_SECRET}"
-#   ]]; then
-#    echo "Argument error!"
-#    echo "Expected three env variables:
-#  - SIGNING_CERTIFICATE_HASH
-#  - ENTUR_CLIENT_ID
-#  - ENTUR_CLIENT_SECRET"
-#    exit 2
-#fi
-# hardcode mocks
-SIGNING_CERTIFICATE_HASH="RkE6QzY6MTc6NDU6REM6MDk6MDM6Nzg6NkY6Qjk6RUQ6RTY6MkE6OTY6MkI6Mzk6OUY6NzM6NDg6RjA6QkI6NkY6ODk6OUI6ODM6MzI6NjY6NzU6OTE6MDM6M0I6OUM="
-ENTUR_CLIENT_ID="zeDBV3EW3SSSbOPq62GXYJSBz5SHiAm4"
-ENTUR_CLIENT_SECRET="OmX7E4aSH_pV4RcA3OLj2_ShAxcWnelAI5o6KnEMUzer5quiL-oLxmr0K5YgUV3h"
-
-# echo -n FA:C6 | xxd -r -p | base64
-
+environment="${APP_ENVIRONMENT-dev}"
+authority="${AUTHORITY}"
+app_file="${APK_FILE_NAME}"
+app_version="$(envprop APP_VERSION)-${BUILD_ID}"
+signing_certificate_digest="${SIGNING_CERTIFICATE_DIGEST}"
 
 # Get values based on environment
-case $1 in
-  atb-staging)
-    authority="ATB:Authority:2"
-    app_id="app-staging"
+case environment in
+  staging)
     token_url="https://partner-abt.staging.entur.org/oauth/token"
     abt_url="https://core-abt-abt.staging.entur.io"
     ;;
-  atb-prod)
-    authority="ATB:Authority:2"
-    app_id="app-store"
+  store)
     token_url="https://partner-abt.entur.org/oauth/token"
     abt_url="https://core-abt.entur.io"
     ;;
-
+  dev)
+    token_url="https://partner-abt.dev.entur.org/oauth/token"
+    abt_url="https://core-abt-abt.dev.entur.io"
+    # TODO handle build version and BUILD_ID for app-debug, if it is even required
+    ;;
   *)
-    echo "Unrecognized environment '$1'"
+    echo "Unrecognized environment '$environment'"
     exit 3
     ;;
 esac
@@ -105,7 +99,7 @@ json=$(cat <<EOJ
       "application_version_id": "$app_version",
       "application_version_digest": "$app_hash",
       "certificate_digests": [
-        "$SIGNING_CERTIFICATE_HASH"
+        "$signing_certificate_digest"
       ],
       "active": true
     }
@@ -114,12 +108,9 @@ json=$(cat <<EOJ
 EOJ
 )
 
-echo "sending payload"
-echo $json
-
 echo "Registering app"
 # Register app
-echo "Registering $app_id version $app_version, command_id $request_id"
+echo "Registering mitt-atb version $app_version, command_id $request_id"
 register=$(curl -v --header "Content-Type: application/json" \
   --header "Authorization: Bearer $access_token" \
   --user-agent "mittatb-app build script" \
@@ -127,8 +118,6 @@ register=$(curl -v --header "Content-Type: application/json" \
   ${abt_url}/no.entur.abt.core.mobileapplication.v1.MobileApplicationRegistryService/AddOrUpdateMobileApplication)
 
 register_status=$?
-
-echo "register: $register"
 
 if [ $register_status -ne 0 ]; then
     echo "Register version failed: $register_status"
