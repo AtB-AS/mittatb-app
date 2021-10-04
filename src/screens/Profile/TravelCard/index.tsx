@@ -150,7 +150,7 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     flex: 1,
   },
   scrollView: {
-    marginHorizontal: theme.spacings.large,
+    paddingHorizontal: theme.spacings.large,
   },
   sectionWithPadding: {
     marginVertical: theme.spacings.xLarge,

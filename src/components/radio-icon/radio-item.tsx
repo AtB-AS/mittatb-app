@@ -27,7 +27,7 @@ export default function RadioItem({
   return (
     <TouchableOpacity onPress={onPress} style={styles.radioItem}>
       <View style={styles.icon}>
-        <RadioIcon checked={checked} color={color}></RadioIcon>
+        <RadioIcon checked={checked} color={color || 'secondary_2'}></RadioIcon>
       </View>
       <View style={styles.content}>
         <ThemeText type="body__primary" color={color}>
@@ -46,7 +46,7 @@ export default function RadioItem({
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   radioItem: {
     flexDirection: 'row',
-    marginVertical: theme.spacings.small,
+    marginTop: theme.spacings.medium,
   },
   icon: {
     marginRight: theme.spacings.medium,

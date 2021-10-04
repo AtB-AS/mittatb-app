@@ -17,6 +17,7 @@ import RadioIcon from '@atb/components/radio-icon';
 import {Confirm} from '@atb/assets/svg/icons/actions';
 import * as Sections from '@atb/components/sections';
 import RadioItem from '@atb/components/radio-icon/radio-item';
+import deviceInfoModule from 'react-native-device-info';
 
 export type SelectTravelCardNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -48,10 +49,30 @@ export default function SelectTravelCard({
   const {theme} = useTheme();
 
   const [selectedDevice, setSelectedDevice] = useState(0);
+  const [devicename, setdevicename] = useState('');
+
+  if (!devicename) {
+    updateDevName();
+  }
+
+  async function updateDevName() {
+    let s = '';
+    s += (await deviceInfoModule.getDeviceName()) + ' ';
+    s +=
+      '(' +
+      (await deviceInfoModule.getManufacturer()) +
+      ' ' +
+      deviceInfoModule.getModel() +
+      ', ' +
+      deviceInfoModule.getSystemName() +
+      ')';
+    setdevicename(s);
+  }
+
   const availableDevices = [
     {
       id: 0,
-      modelName: 'iPhone 13 Pro',
+      modelName: devicename,
       addedDate: '14.09.2021',
     },
     {
@@ -154,6 +175,7 @@ export default function SelectTravelCard({
                 <ThemeText type="body__tertiary">Velg enhet</ThemeText>
                 {availableDevices.map((device) => (
                   <RadioItem
+                    key={device.id}
                     checked={selectedDevice == device.id}
                     text={device.modelName}
                     subText={'Lagt til ' + device.addedDate}
@@ -185,7 +207,7 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     flex: 1,
   },
   scrollView: {
-    marginHorizontal: theme.spacings.large,
+    paddingHorizontal: theme.spacings.large,
   },
   sectionWithPadding: {
     marginVertical: theme.spacings.xLarge,
