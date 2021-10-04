@@ -83,7 +83,16 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
                 X
               </ThemeText>
             </View>
-            <ThemeIcon svg={Warning}></ThemeIcon>
+            <View>
+              <ThemeText
+                type="body__tertiary"
+                color="primary_1"
+                style={styles.tcardicon}
+              >
+                {'\n'}
+                t:kort
+              </ThemeText>
+            </View>
           </View>
           <MessageBox type="info">
             <ThemeText type="body__primary" color="primary_1">
@@ -170,5 +179,12 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   cardNumber: {
     flexDirection: 'row',
+  },
+  tcardicon: {
+    borderWidth: 1,
+    borderRadius: 2,
+    padding: theme.spacings.small,
+    alignSelf: 'flex-end',
+    marginTop: theme.spacings.small,
   },
 }));
