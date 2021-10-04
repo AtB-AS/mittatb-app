@@ -7,7 +7,7 @@ jobs:
   build-ios:
     name: Build iOS
     timeout-minutes: 90
-    runs-on: macos-latest
+    runs-on: macos-11
     steps:
       - name: Checkout project
         uses: actions/checkout@v1
