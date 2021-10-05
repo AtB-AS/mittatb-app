@@ -29,14 +29,9 @@ import AppLanguageProvider from './translations/LanguageContext';
 import {BottomSheetProvider} from '@atb/components/bottom-sheet';
 import {AccessibilityInfo} from 'react-native';
 import LocaleContextProvider from '@atb/LocaleProvider';
+import {setupConfig} from './setup';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
-
-async function setupConfig() {
-  const {installId} = await loadLocalConfig();
-  Bugsnag.setUser(installId);
-  setApiInstallId(installId);
-}
 
 trackAppState();
 
