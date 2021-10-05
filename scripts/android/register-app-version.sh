@@ -5,32 +5,42 @@
 # a base64 encoded SHA256 fingerprint as bytes of the signing certificate for the APK must be provided as an environment variable,
 # in addition to client ID and client secret for Entur ABT OAuth login.
 
-# Check for secrets from env vars
-if [[
-  -z ${SIGNING_CERTIFICATE_DIGEST}
-  || -z ${ENTUR_CLIENT_ID}
-  || -z ${ENTUR_CLIENT_SECRET}
-]]; then
-  echo "Expected environment variables:
-  - SIGNING_CERTIFICATE_DIGEST
-  - ENTUR_CLIENT_ID
-  - ENTUR_CLIENT_SECRET"
-  exit 2
-fi
-
 # Read a property safely from config file, instead of sourcing the file
 envprop() {
   grep -e "^${1}=" ./.env | cut -d'=' -f2 | head -n 1;
 }
 
-environment="${APP_ENVIRONMENT-debug}"
-authority="${AUTHORITY}"
-app_file="${APK_FILE_NAME}"
-app_version="$(envprop APP_VERSION)-${BUILD_ID}"
-signing_certificate_digest="${SIGNING_CERTIFICATE_DIGEST}"
+app_main_version="$(envprop APP_VERSION)"
+
+# Check for secrets from env vars
+if [[
+  -z ${SIGNING_CERTIFICATE_DIGEST}
+  || -z ${ENTUR_CLIENT_ID}
+  || -z ${ENTUR_CLIENT_SECRET}
+  || -z ${APP_ENVIRONMENT}
+  || -z ${AUTHORITY}
+  || -z ${APK_FILE_NAME}
+  || -z ${app_main_version}
+  || -z ${BUILD_ID}
+]]; then
+  echo "Argument error!"
+  echo "Expected environment variables:
+  - SIGNING_CERTIFICATE_DIGEST
+  - ENTUR_CLIENT_ID
+  - ENTUR_CLIENT_SECRET
+  - APP_ENVIRONMENT
+  - AUTHORITY
+  - APK_FILE_NAME
+  - APP_VERSION
+  - BUILD_ID
+  "
+  exit 2
+fi
+
+app_version="${app_main_version}-${BUILD_ID}"
 
 # Get values based on environment
-case $environment in
+case ${APP_ENVIRONMENT} in
   staging)
     token_url="https://partner-abt.staging.entur.org/oauth/token"
     abt_url="https://core-abt-abt.staging.entur.io"
@@ -44,19 +54,19 @@ case $environment in
     abt_url="https://core-abt-abt.dev.entur.io"
     ;;
   *)
-    echo "Unrecognized environment '$environment'"
+    echo "Unrecognized environment '${APP_ENVIRONMENT}'"
     exit 3
     ;;
 esac
 
 echo "getting hash for file"
 # Get hash for file
-if ! [[ -f $app_file ]]; then
-    echo "File '$app_file' does not exist."
+if ! [[ -f ${APK_FILE_NAME} ]]; then
+    echo "File '${APK_FILE_NAME}' does not exist."
     exit 4
 fi
 
-app_hash=$(sha256sum "$app_file" | cut -d ' ' -f 1)
+app_hash=$(sha256sum "${APK_FILE_NAME}" | cut -d ' ' -f 1)
 
 echo "Fetching access token"
 # App login for register call
@@ -92,14 +102,14 @@ json=$(cat <<EOJ
   },
   "application": {
       "authority_ref": {
-      "ref": "$authority"
+      "ref": "${AUTHORITY}"
     },
     android: {
       "apk_package_name": "no.mittatb",
       "application_version_id": "$app_version",
       "application_version_digest": "$app_hash",
       "certificate_digests": [
-        "$signing_certificate_digest"
+        "${SIGNING_CERTIFICATE_DIGEST}"
       ],
       "active": true
     }

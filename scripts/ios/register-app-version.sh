@@ -3,31 +3,32 @@
 # This script will register a specific iOS application version with Entur's
 # MobileApplicationRegistryService API.
 
-# Sanity check for number of parameters
-if [[ $# -ne 1 ]]; then
-    echo "Usage: <version>"
-    exit 1
-fi
+# Read a property safely from config file, instead of sourcing the file
+envprop() {
+  grep -e "^${1}=" ./.env | cut -d'=' -f2 | head -n 1;
+}
 
-app_version=$1
+app_version="$(envprop APP_VERSION)"
 
 # Check for config and secrets from env vars
 if [[
     -z "${ENTUR_CLIENT_ID}"
     || -z "${ENTUR_CLIENT_SECRET}"
     || -z "${APP_ENVIRONMENT}"
-    || -z "${APP_ORG}"
     || -z "${BUNDLE_IDENTIFIER}"
     || -z "${APPLE_TEAM_ID}"
+    || -z "${app_version}"
+    || -z "${AUTHORITY}"
    ]]; then
     echo "Argument error!"
-    echo "Expected the following 6 env variables to be set:
+    echo "Expected the following 7 env variables to be set:
   - ENTUR_CLIENT_ID
   - ENTUR_CLIENT_SECRET
   - APP_ENVIRONMENT
-  - APP_ORG
   - BUNDLE_IDENTIFIER
-  - APPLE_TEAM_ID"
+  - APPLE_TEAM_ID
+  - APP_VERSION
+  - AUTHORITY"
     exit 2
 fi
 
@@ -41,21 +42,9 @@ case $APP_ENVIRONMENT in
     token_url="https://partner-abt.entur.org/oauth/token"
     abt_url="https://core-abt-abt.staging.entur.io"
     ;;
-
   *)
     echo "Unrecognized environment '$1'"
     exit 3
-    ;;
-esac
-
-# Get values based on organization
-case $APP_ORG in
-  atb)
-    authority="ATB:Authority:2"
-    ;;
-  *)
-    echo "Unrecognized organization '$1'"
-    exit 4
     ;;
 esac
 
@@ -64,7 +53,6 @@ login=$(curl --silent \
   --request POST \
   --url "$token_url" \
   --header 'content-type: application/x-www-form-urlencoded' \
-  --fail-with-body \
   --data grant_type="client_credentials" \
   --data client_id="$ENTUR_CLIENT_ID" \
   --data client_secret="$ENTUR_CLIENT_SECRET" \
@@ -76,10 +64,11 @@ if [ $login_status -ne 0 ]; then
     exit 5
 fi
 # Get access token from response
-access_token=$(echo "$login" | jq --raw-output .access_token)
+access_token=$(echo "$login" | grep "access_token" | sed 's/^.*access_token\":\s*\"\([-a-zA-Z0-9\._=]\+\).*$/\1/')
 
 if ! [[ $access_token =~ ^ey[-a-zA-Z0-9\._=]+ ]]; then
   echo "Failed to find access token in response"
+  echo "$login"
   exit 6
 fi
 
@@ -92,7 +81,7 @@ json=$(cat <<EOJ
   },
   "application": {
     "authority_ref": {
-      "ref": "$authority"
+      "ref": "$AUTHORITY"
     },
     "ios": {
       "team_identifier": "$APPLE_TEAM_ID",
@@ -107,10 +96,9 @@ EOJ
 
 # Register app
 echo "Registering $BUNDLE_IDENTIFIER version $app_version, command_id $request_id"
-register=$(curl --silent \
+register=$(curl -v --silent \
   --header "Content-Type: application/json" \
   --header "Authorization: Bearer $access_token" \
-  --fail-with-body \
   --user-agent "mittatb-app build script" \
   --data "$json"\
   ${abt_url}/no.entur.abt.core.mobileapplication.v1.MobileApplicationRegistryService/AddOrUpdateMobileApplication)
