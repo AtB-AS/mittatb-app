@@ -22,15 +22,17 @@ export async function ensureFirstTimeSetup() {
   }
 }
 
+/**
+ * If a user exists in memory from a previous installation, the user should be
+ * deleted (anonymous user) or logged out.
+ */
 async function cleanUpAuthUser() {
-  const currentUser = auth().currentUser;
-  if (currentUser) {
-    if (currentUser.isAnonymous) {
-      // Deleting the the anonymous user from the last install
-      currentUser.delete();
+  const user = auth().currentUser;
+  if (user) {
+    if (user.isAnonymous) {
+      user.delete();
     } else {
-      // Logging out of the previously signed in user
-      await auth().signInAnonymously();
+      await auth().signOut();
     }
   }
 }
