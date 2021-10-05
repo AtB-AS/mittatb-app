@@ -23,14 +23,14 @@ envprop() {
   grep -e "^${1}=" ./.env | cut -d'=' -f2 | head -n 1;
 }
 
-environment="${APP_ENVIRONMENT-dev}"
+environment="${APP_ENVIRONMENT-debug}"
 authority="${AUTHORITY}"
 app_file="${APK_FILE_NAME}"
 app_version="$(envprop APP_VERSION)-${BUILD_ID}"
 signing_certificate_digest="${SIGNING_CERTIFICATE_DIGEST}"
 
 # Get values based on environment
-case environment in
+case $environment in
   staging)
     token_url="https://partner-abt.staging.entur.org/oauth/token"
     abt_url="https://core-abt-abt.staging.entur.io"
@@ -39,10 +39,9 @@ case environment in
     token_url="https://partner-abt.entur.org/oauth/token"
     abt_url="https://core-abt.entur.io"
     ;;
-  dev)
+  debug)
     token_url="https://partner-abt.dev.entur.org/oauth/token"
     abt_url="https://core-abt-abt.dev.entur.io"
-    # TODO handle build version and BUILD_ID for app-debug, if it is even required
     ;;
   *)
     echo "Unrecognized environment '$environment'"
@@ -80,6 +79,7 @@ access_token=$(echo "$login" | grep "access_token" | sed 's/^.*access_token\":\s
 
 if ! [[ $access_token =~ ^ey[-a-zA-Z0-9\._=]+ ]]; then
   echo "Failed to find access token in response"
+  echo $login
   exit 6
 fi
 
