@@ -35,6 +35,27 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
   const styles = useStyles();
   const {t, language} = useTranslation();
 
+  const travelCard = {
+    allowedActions: [
+      'TOKEN_ACTION_TICKET_INSPECTION',
+      'TOKEN_ACTION_TRAVELCARD',
+      'TOKEN_ACTION_IDENTIFICATION',
+    ],
+    expires: 1949650000,
+    id: '20f2b64b-45b0-441b-a910-d9b1abcd1f1b',
+    keyValues: {
+      NodOrderGroupId: 'd956f62d-b2a2-5414-52cb-bfe32132ac6f',
+      travelCardId: '123412341',
+    },
+    state: 'TOKEN_LIFECYCLE_STATE_NOT_ACTIVATED',
+    type: 'TOKEN_TYPE_TRAVELCARD',
+  };
+
+  const formatedTravelCardId =
+    travelCard.keyValues.travelCardId.substr(0, 2) +
+    ' ' +
+    travelCard.keyValues.travelCardId.substr(2);
+
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -66,24 +87,25 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
             <View
               style={styles.cardNumber}
               accessible={true}
-              accessibilityLabel={'Card number ends with ' + '8224880' + 'X'}
+              accessibilityLabel={
+                'Card number ends with ' + formatedTravelCardId + 'X'
+              }
             >
               <ThemeText
                 type="body__tertiary"
                 color="primary_1"
                 style={styles.transparentText}
               >
-                XXXX XXXX{' '}
+                XXXX XX
               </ThemeText>
               <ThemeText type="body__tertiary" color="primary_1">
-                {'8224880'}
+                {formatedTravelCardId}
               </ThemeText>
               <ThemeText
                 type="body__tertiary"
                 color="primary_1"
                 style={styles.transparentText}
               >
-                {' '}
                 X
               </ThemeText>
             </View>
