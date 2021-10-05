@@ -63,7 +63,11 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
             kontroll viser du frem t:kortet ditt for avlesning.
           </ThemeText>
           <View style={styles.activeTicketCard}>
-            <View style={styles.cardNumber}>
+            <View
+              style={styles.cardNumber}
+              accessible={true}
+              accessibilityLabel={'Card number ends with ' + '8224880' + 'X'}
+            >
               <ThemeText
                 type="body__tertiary"
                 color="primary_1"
@@ -88,6 +92,7 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
                 type="body__tertiary"
                 color="primary_1"
                 style={styles.tcardicon}
+                accessible={false}
               >
                 {'\n'}
                 t:kort

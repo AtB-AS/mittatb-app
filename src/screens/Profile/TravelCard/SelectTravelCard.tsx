@@ -102,6 +102,11 @@ export default function SelectTravelCard({
               },
             ]}
             onPress={() => setChecked(true)}
+            accessibilityHint={
+              'Activate to select t:card as active travel card.'
+            }
+            accessibilityRole={'radio'}
+            accessibilityState={{selected: checked}}
           >
             <ThemeText
               type="heading__title"
@@ -136,6 +141,11 @@ export default function SelectTravelCard({
               },
             ]}
             onPress={() => setChecked(false)}
+            accessibilityHint={
+              'Activate to select mobile phone as active travel card.'
+            }
+            accessibilityRole={'radio'}
+            accessibilityState={{selected: !checked}}
           >
             <ThemeText
               type="heading__paragraph"
@@ -180,6 +190,9 @@ export default function SelectTravelCard({
                     text={device.modelName}
                     subText={'Lagt til ' + device.addedDate}
                     onPress={() => setSelectedDevice(device.id)}
+                    accessibilityHint={
+                      'Select to set this mobile phone as active travel card.'
+                    }
                   ></RadioItem>
                 ))}
               </Sections.GenericItem>

@@ -1,11 +1,11 @@
 import React from 'react';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
 import {View} from 'react-native';
-import {isThemeColor, TextColor, ThemeColor} from '@atb/theme/colors';
-import * as Sections from '@atb/components/sections';
+import {TextColor, ThemeColor} from '@atb/theme/colors';
 import ThemeText from '../text';
 import RadioIcon from '.';
 import {TouchableOpacity} from 'react-native';
+import {AccessibilityProps} from 'react-native';
 
 type CheckedProps = {
   checked: boolean;
@@ -13,7 +13,7 @@ type CheckedProps = {
   text: string;
   subText?: string;
   onPress?: () => void;
-};
+} & AccessibilityProps;
 
 export default function RadioItem({
   checked,
@@ -21,11 +21,18 @@ export default function RadioItem({
   text,
   subText,
   onPress,
+  accessibilityHint,
 }: CheckedProps) {
   const styles = useStyles();
 
   return (
-    <TouchableOpacity onPress={onPress} style={styles.radioItem}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={styles.radioItem}
+      accessibilityHint={accessibilityHint}
+      accessibilityRole="radio"
+      accessibilityState={{selected: checked}}
+    >
       <View style={styles.icon}>
         <RadioIcon checked={checked} color={color || 'secondary_2'}></RadioIcon>
       </View>
