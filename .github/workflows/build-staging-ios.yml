@@ -92,10 +92,8 @@ jobs:
       - name: Register app version
         run: sh ./scripts/ios/register-app-version.sh
         env:
-          ENTUR_CLIENT_ID: ${{ secrets.ENTUR_CLIENT_ID}}
-          ENTUR_CLIENT_SECRET: ${{ secrets.ENTUR_CLIENT_SECRET}}
-          BUNDLE_IDENTIFIER: no.mittatb.staging
-          APPLE_TEAM_ID: ${{ secrets.ATB_APPLE_TEAM_ID }}
+          ENTUR_CLIENT_ID: ${{ secrets.ATB_ENTUR_CLIENT_ID_STAGING}}
+          ENTUR_CLIENT_SECRET: ${{ secrets.ATB_ENTUR_CLIENT_SECRET_STAGING}}
           AUTHORITY: "ATB:Authority:2"
 
 

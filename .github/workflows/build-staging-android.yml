@@ -82,9 +82,9 @@ jobs:
       - name: Register app version
         run: sh ./scripts/android/register-app-version.sh
         env:
-          SIGNING_CERTIFICATE_DIGEST: ${{ secrets.SIGNING_CERTIFICATE_DIGEST_STAGING}}
-          ENTUR_CLIENT_ID: ${{ secrets.ENTUR_CLIENT_ID}}
-          ENTUR_CLIENT_SECRET: ${{ secrets.ENTUR_CLIENT_SECRET}}
+          SIGNING_CERTIFICATE_DIGEST: ${{ secrets.ATB_ANDROID_CERT_DIGEST_STAGING}}
+          ENTUR_CLIENT_ID: ${{ secrets.ATB_ENTUR_CLIENT_ID_STAGING}}
+          ENTUR_CLIENT_SECRET: ${{ secrets.ATB_ENTUR_CLIENT_SECRET_STAGING}}
           APP_ID: "app-staging"
           APK_FILE_NAME: "app-staging.apk"
           AUTHORITY: "ATB:Authority:2"
