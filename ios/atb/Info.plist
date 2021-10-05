@@ -92,9 +92,6 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>DancingScript.ttf</string>
-		<string>DancingScript-Bold.ttf</string>
-		<string>DancingScript-Regular.ttf</string>
 		<string>Roboto-Bold.ttf</string>
 		<string>Roboto-Regular.ttf</string>
 	</array>
