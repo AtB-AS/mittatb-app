@@ -1,9 +1,16 @@
+import {PreactivatedTicket} from '.';
 import {
   FareContract,
   FareContractState,
-  PreactivatedTicket,
+  CarnetTicket,
   TravelRight,
 } from './types';
+
+export function isCarnetTicket(
+  travelRight: TravelRight | undefined,
+): travelRight is CarnetTicket {
+  return travelRight?.type === 'CarnetTicket';
+}
 
 export function isPreactivatedTicket(
   travelRight: TravelRight | undefined,
@@ -17,13 +24,17 @@ export function isPreactivatedTicket(
 export const filterActiveFareContracts = (fareContracts: FareContract[]) => {
   const isValidNow = (f: FareContract): boolean => {
     const firstTravelRight = f.travelRights?.[0];
-    if (isPreactivatedTicket(firstTravelRight)) {
+    if (
+      isPreactivatedTicket(firstTravelRight) ||
+      isCarnetTicket(firstTravelRight)
+    ) {
       return firstTravelRight.endDateTime.toMillis() > Date.now();
     }
     return false;
   };
   const isActivated = (f: FareContract) =>
-    f.state === FareContractState.Activated;
+    f.state === FareContractState.Activated ||
+    f.state === FareContractState.NotActivated;
   return fareContracts.filter(isValidNow).filter(isActivated);
 };
 

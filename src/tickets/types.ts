@@ -21,19 +21,33 @@ export type TravelRight = {
   type:
     | 'PreActivatedSingleTicket'
     | 'PreActivatedPeriodTicket'
+    | 'CarnetTicket'
     | 'UnknownTicket';
 };
 
 export type Timestamp = FirebaseFirestoreTypes.Timestamp;
 
-export type PreactivatedTicket = TravelRight & {
+export type NormalTravelRight = TravelRight & {
   fareProductRef: string;
   startDateTime: Timestamp;
   endDateTime: Timestamp;
   usageValidityPeriodRef: string;
   userProfileRef: string;
-  authorityRefs: string[];
   tariffZoneRefs: string[];
+};
+
+export type PreactivatedTicket = NormalTravelRight;
+
+export type CarnetTicketUsedAccess = {
+  startDateTime: Timestamp;
+  endDateTime: Timestamp;
+};
+
+export type CarnetTicket = NormalTravelRight & {
+  type: 'CarnetTicket';
+  maximumNumberOfAccesses: number;
+  numberOfUsedAccesses: number;
+  usedAccesses: CarnetTicketUsedAccess[];
 };
 
 export type PreactivatedSingleTicket = PreactivatedTicket & {
