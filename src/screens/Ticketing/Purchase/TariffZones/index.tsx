@@ -17,7 +17,6 @@ import {TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
-import colors from '@atb/theme/colors';
 import {
   Language,
   TariffZonesTexts,
@@ -429,9 +428,9 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
                     // Mapbox Expression syntax
                     'case',
                     ['==', selectedZones.from.id, ['id']],
-                    theme.status.valid.bg.backgroundColor,
+                    theme.status.valid.main.backgroundColor,
                     ['==', selectedZones.to.id, ['id']],
-                    theme.status.info.bg.backgroundColor,
+                    theme.status.info.main.backgroundColor,
                     'transparent',
                   ],
                 }}
@@ -440,7 +439,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
                 id="tariffZonesLine"
                 style={{
                   lineWidth: 1,
-                  lineColor: colors.primary.gray_400,
+                  lineColor: theme.border.primary,
                 }}
               />
             </MapboxGL.ShapeSource>
@@ -515,7 +514,7 @@ const useMapStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.colors.background_2.backgroundColor,
   },
   headerContainer: {
-    backgroundColor: theme.colors.background_gray.backgroundColor,
+    backgroundColor: theme.colors.background_accent.backgroundColor,
   },
   pinContainer: {
     position: 'absolute',

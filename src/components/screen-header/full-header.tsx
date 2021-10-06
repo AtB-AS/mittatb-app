@@ -7,7 +7,7 @@ import ScreenHeader, {ScreenHeaderProps} from '.';
 export default function FullScreenHeader(props: ScreenHeaderProps) {
   const {top} = useSafeAreaInsets();
   const {theme} = useTheme();
-  const themeColor = props.color ?? 'background_gray';
+  const themeColor = props.color ?? 'background_accent';
   const backgroundColor = theme.colors[themeColor].backgroundColor;
 
   return (

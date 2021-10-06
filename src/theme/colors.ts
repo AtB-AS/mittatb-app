@@ -1,22 +1,23 @@
 import {Platform, StatusBarProps, TextStyle} from 'react-native';
 
 import {
-  colors,
   ContrastColor,
   createExtendedThemes,
   createTextTypeStyles,
-  defaultTextColors,
+  createThemesFor,
   Mode,
   RadiusSizes,
   Statuses,
   TextColor,
   TextNames,
   textNames,
+  ThemeVariant,
 } from '@atb-as/theme';
 
-export default colors;
 export type {Statuses, Mode, TextColor, ContrastColor, RadiusSizes, TextNames};
-export {defaultTextColors, textNames};
+export {textNames};
+
+const mainThemes = createThemesFor(ThemeVariant.AtB);
 
 // Override semibold with bold to avoid Android Roboto bold bug.
 // See ttps://github.com/facebook/react-native/issues/25696
@@ -50,7 +51,7 @@ type AppThemeExtension = {
   typography: typeof textTypeStyles;
 };
 
-export const themes = createExtendedThemes<AppThemeExtension>({
+export const themes = createExtendedThemes<AppThemeExtension>(mainThemes, {
   light: {
     tripLegDetail,
     statusBarStyle: 'light-content',
