@@ -13,7 +13,7 @@ import {RootStackParamList} from '@atb/navigation';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {ProfileStackParams} from '..';
 import Button from '@atb/components/button';
-import RadioIcon from '@atb/components/radio-icon';
+import RadioIcon from '@atb/components/radio-icon/radio-icon';
 import {Confirm} from '@atb/assets/svg/icons/actions';
 import * as Sections from '@atb/components/sections';
 import RadioItem from '@atb/components/radio-icon/radio-item';

@@ -3,7 +3,7 @@ import {StyleSheet, Theme} from '@atb/theme';
 import {View} from 'react-native';
 import {TextColor, ThemeColor} from '@atb/theme/colors';
 import ThemeText from '../text';
-import RadioIcon from '.';
+import RadioIcon from './radio-icon';
 import {TouchableOpacity} from 'react-native';
 import {AccessibilityProps} from 'react-native';
 
