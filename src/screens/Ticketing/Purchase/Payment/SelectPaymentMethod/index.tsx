@@ -379,7 +379,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    paddingBottom: 24,
+    paddingBottom: theme.spacings.xLarge,
   },
   row: {
     flex: 1,
