@@ -4,12 +4,17 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
+  useWindowDimensions,
 } from 'react-native';
 import {Vipps} from '@atb/assets/svg/icons/ticketing';
 import {StyleSheet, useTheme} from '@atb/theme';
 import Button from '@atb/components/button';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
+import {
+  PurchaseConfirmationTexts,
+  ScreenHeaderTexts,
+  useTranslation,
+} from '@atb/translations';
 import {useState, useEffect} from 'react';
 import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import {SavedPaymentOption} from '@atb/preferences';
@@ -25,6 +30,7 @@ import {useAuthState} from '@atb/auth';
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;
+  close: () => void;
   previousPaymentMethod?: SavedPaymentOption;
 };
 
@@ -74,6 +80,7 @@ function isRecurring(
 const SelectPaymentMethod: React.FC<Props> = ({
   onSelect,
   previousPaymentMethod,
+  close,
 }) => {
   const {t} = useTranslation();
 
@@ -82,6 +89,8 @@ const SelectPaymentMethod: React.FC<Props> = ({
   );
 
   const {user} = useAuthState();
+
+  const {height} = useWindowDimensions();
 
   const [selectedOption, setSelectedOption] = useState<
     PaymentMethod | undefined
@@ -132,13 +141,30 @@ const SelectPaymentMethod: React.FC<Props> = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.heading}>
-        <ThemeText type="heading__title">
-          {t(SelectPaymentMethodTexts.header.text)}
-        </ThemeText>
+      <View style={styles.row}>
+        <View style={styles.heading}>
+          <ThemeText type="heading__title">
+            {t(SelectPaymentMethodTexts.header.text)}
+          </ThemeText>
+        </View>
+        <View style={styles.rowJustifyEnd}>
+          <TouchableOpacity
+            onPress={close}
+            accessibilityHint={t(
+              ScreenHeaderTexts.headerButton.cancel.a11yHint,
+            )}
+          >
+            <ThemeText>
+              {t(ScreenHeaderTexts.headerButton.cancel.text)}
+            </ThemeText>
+          </TouchableOpacity>
+        </View>
       </View>
       {loadingRemoteOption ? <ActivityIndicator /> : null}
       <FlatList
+        style={{
+          maxHeight: height * (2 / 3),
+        }}
         data={options}
         keyExtractor={(item) =>
           `${item.paymentType}_${
@@ -172,9 +198,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
         }}
       ></FlatList>
       <Button
-        style={{
-          marginTop: 6,
-        }}
+        style={styles.confirmButtonMargin}
         color="primary_2"
         text={t(SelectPaymentMethodTexts.confirm_button.text)}
         accessibilityHint={t(SelectPaymentMethodTexts.confirm_button.a11yhint)}
@@ -227,14 +251,14 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
       case PaymentType.MasterCard:
         return {
           icon: <MasterCardLogo />,
-          text: t(PurchaseConfirmationTexts.payWithMasterCard.text),
-          a11y: t(PurchaseConfirmationTexts.payWithMasterCard.a11yHint),
+          text: t(PurchaseConfirmationTexts.paymentButtonCardMC.text),
+          a11y: t(PurchaseConfirmationTexts.paymentButtonCardMC.a11yHint),
         };
       case PaymentType.VISA:
         return {
           icon: <VisaLogo />,
-          text: t(PurchaseConfirmationTexts.payWithVisa.text),
-          a11y: t(PurchaseConfirmationTexts.payWithVisa.a11yHint),
+          text: t(PurchaseConfirmationTexts.paymentButtonCardVisa.text),
+          a11y: t(PurchaseConfirmationTexts.paymentButtonCardVisa.a11yHint),
         };
     }
   }
@@ -264,79 +288,63 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
 
   function getExpireDate(iso: string): string {
     let date = parseISO(iso);
-    if (date.getDate() === 1) {
-      let sinceEpoc = date.getTime();
-      sinceEpoc = sinceEpoc - 86400000;
-      date = new Date(sinceEpoc);
-    }
     let year = date.getFullYear();
     let month = date.getMonth();
-    if (month === 0) {
-      month = 12;
-      year--;
-    }
     return `${month < 10 ? '0' + month : month}/${year.toString().slice(2, 4)}`;
   }
 
   const info = getPaymentInfo(option.paymentType);
 
   return (
-    <TouchableOpacity
-      style={styles.paymentOption}
-      onPress={select}
-      accessibilityHint={info.a11y}
-    >
-      <View style={styles.centerRow}>
-        <View style={styles.centerRow}>
-          <RadioView checked={selected} />
-          <ThemeText>{info.text}</ThemeText>
-          {option.savedType === 'recurring' ? (
-            <ThemeText
-              style={{
-                paddingLeft: 8,
-              }}
-            >
-              **** {`${option.recurringCard.masked_pan}`}
-            </ThemeText>
+    <View style={styles.card}>
+      <TouchableOpacity
+        style={[styles.paymentOption, styles.centerRow]}
+        onPress={select}
+        accessibilityHint={info.a11y}
+      >
+        <View style={styles.column}>
+          <View style={styles.row}>
+            <View style={styles.centerRow}>
+              <RadioView checked={selected} />
+              <ThemeText>{info.text}</ThemeText>
+              {option.savedType === 'recurring' ? (
+                <ThemeText style={styles.maskedPanPadding}>
+                  **** {`${option.recurringCard.masked_pan}`}
+                </ThemeText>
+              ) : null}
+            </View>
+            {info.icon}
+          </View>
+          {option.savedType === 'recurring' &&
+          option.recurringCard.expires_at ? (
+            <View>
+              <ThemeText style={styles.masked}>
+                {getExpireDate(option.recurringCard.expires_at)}
+              </ThemeText>
+            </View>
           ) : null}
         </View>
-        {option.savedType === 'recurring' ||
-        option.paymentType === PaymentType.Vipps
-          ? info.icon
-          : null}
-      </View>
+      </TouchableOpacity>
       {selected &&
       user?.phoneNumber &&
       option.savedType === 'normal' &&
       option.paymentType !== PaymentType.Vipps ? (
-        <View>
-          <ThemeText
-            style={{
-              paddingTop: 18,
-              opacity: 0.6,
-            }}
-          >
+        <TouchableOpacity
+          onPress={() => {
+            setSave(!save);
+          }}
+          style={styles.saveOptionSection}
+        >
+          <ThemeText style={styles.saveOptionTextPadding}>
             {t(SelectPaymentMethodTexts.save_payment_option_description.text)}
           </ThemeText>
-          <TouchableOpacity
-            style={styles.saveButton}
-            onPress={() => {
-              setSave(!save);
-            }}
-          >
+          <View style={styles.saveButton}>
             <SavedCheckbox checked={save} />
             <ThemeText>{t(SelectPaymentMethodTexts.save_card.text)}</ThemeText>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
       ) : null}
-      {option.savedType === 'recurring' && option.recurringCard.expires_at ? (
-        <View>
-          <ThemeText style={styles.masked}>
-            {getExpireDate(option.recurringCard.expires_at)}
-          </ThemeText>
-        </View>
-      ) : null}
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -374,21 +382,31 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   heading: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center',
-    paddingBottom: 24,
+    justifyContent: 'flex-start',
+    paddingBottom: theme.spacings.xLarge,
   },
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  column: {flex: 1, flexDirection: 'column'},
+  card: {
+    marginVertical: theme.spacings.xSmall,
+    borderRadius: theme.border.radius.regular,
+    backgroundColor: theme.colors.background_0.backgroundColor,
+  },
+  saveOptionSection: {paddingHorizontal: 24, paddingBottom: 24},
   container: {
     flex: 1,
     backgroundColor: theme.colors.background_2.backgroundColor,
-    paddingHorizontal: 12,
+    paddingHorizontal: theme.spacings.medium,
   },
+  rowJustifyEnd: {flex: 1, flexDirection: 'row', justifyContent: 'flex-end'},
   paymentOption: {
     flex: 1,
     flexDirection: 'column',
-    marginVertical: 6,
-    padding: 24,
-    backgroundColor: theme.colors.background_0.backgroundColor,
-    borderRadius: 8,
+    padding: theme.spacings.xLarge,
+    borderRadius: theme.border.radius.regular,
   },
   centerRow: {
     flex: 1,
@@ -402,11 +420,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.colors.background_0.backgroundColor,
   },
   radio: {
-    marginRight: 12,
+    marginRight: theme.spacings.medium,
     height: 24,
     width: 24,
     borderRadius: 12,
-    borderWidth: 2,
+    borderWidth: theme.border.width.medium,
     borderColor: theme.colors.primary_2.backgroundColor,
     alignItems: 'center',
     justifyContent: 'center',
@@ -418,7 +436,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.colors.background_0.backgroundColor,
   },
   saveCheckbox: {
-    marginRight: 12,
+    marginRight: theme.spacings.medium,
     height: 24,
     width: 24,
     borderRadius: 4,
@@ -437,12 +455,22 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     flex: 1,
     flexDirection: 'row',
-    paddingTop: 6,
+    paddingTop: theme.spacings.small,
   },
   masked: {
     opacity: 0.6,
     paddingTop: 18,
     paddingLeft: 36,
+  },
+  confirmButtonMargin: {
+    marginTop: theme.spacings.small,
+  },
+  maskedPanPadding: {
+    paddingLeft: theme.spacings.small,
+  },
+  saveOptionTextPadding: {
+    paddingTop: theme.spacings.medium,
+    opacity: 0.6,
   },
 }));
 

@@ -199,6 +199,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
             selectPaymentOption(option);
             close();
           }}
+          close={close}
           previousPaymentMethod={previousPaymentMethod}
         ></SelectPaymentMethod>
       );
