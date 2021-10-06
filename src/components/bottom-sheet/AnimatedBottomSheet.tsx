@@ -37,6 +37,7 @@ export default function AnimatedBottomSheet({
             translateY,
           },
         ],
+        maxHeight: height,
       }}
       onLayout={onLayout}
     >
@@ -49,7 +50,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   bottomSheet: {
     backgroundColor: theme.colors.background_2.backgroundColor,
     width: '100%',
-    maxHeight: Dimensions.get('screen').height,
     position: 'absolute',
     bottom: 0,
     borderTopLeftRadius: theme.border.radius.regular,
