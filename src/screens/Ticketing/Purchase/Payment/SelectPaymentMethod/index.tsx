@@ -4,7 +4,7 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
-  Dimensions,
+  useWindowDimensions,
 } from 'react-native';
 import {Vipps} from '@atb/assets/svg/icons/ticketing';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -90,6 +90,8 @@ const SelectPaymentMethod: React.FC<Props> = ({
 
   const {user} = useAuthState();
 
+  const {height} = useWindowDimensions();
+
   const [selectedOption, setSelectedOption] = useState<
     PaymentMethod | undefined
   >(getSelectedPaymentMethod(previousPaymentMethod));
@@ -160,7 +162,9 @@ const SelectPaymentMethod: React.FC<Props> = ({
       </View>
       {loadingRemoteOption ? <ActivityIndicator /> : null}
       <FlatList
-        style={styles.listMaxHeight}
+        style={{
+          maxHeight: height * (2 / 3),
+        }}
         data={options}
         keyExtractor={(item) =>
           `${item.paymentType}_${
@@ -387,22 +391,22 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   column: {flex: 1, flexDirection: 'column'},
   card: {
-    marginVertical: 6,
-    borderRadius: 8,
+    marginVertical: theme.spacings.xSmall,
+    borderRadius: theme.border.radius.regular,
     backgroundColor: theme.colors.background_0.backgroundColor,
   },
   saveOptionSection: {paddingHorizontal: 24, paddingBottom: 24},
   container: {
     flex: 1,
     backgroundColor: theme.colors.background_2.backgroundColor,
-    paddingHorizontal: 12,
+    paddingHorizontal: theme.spacings.medium,
   },
   rowJustifyEnd: {flex: 1, flexDirection: 'row', justifyContent: 'flex-end'},
   paymentOption: {
     flex: 1,
     flexDirection: 'column',
-    padding: 24,
-    borderRadius: 8,
+    padding: theme.spacings.xLarge,
+    borderRadius: theme.border.radius.regular,
   },
   centerRow: {
     flex: 1,
@@ -416,11 +420,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.colors.background_0.backgroundColor,
   },
   radio: {
-    marginRight: 12,
+    marginRight: theme.spacings.medium,
     height: 24,
     width: 24,
     borderRadius: 12,
-    borderWidth: 2,
+    borderWidth: theme.border.width.medium,
     borderColor: theme.colors.primary_2.backgroundColor,
     alignItems: 'center',
     justifyContent: 'center',
@@ -432,7 +436,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.colors.background_0.backgroundColor,
   },
   saveCheckbox: {
-    marginRight: 12,
+    marginRight: theme.spacings.medium,
     height: 24,
     width: 24,
     borderRadius: 4,
@@ -451,7 +455,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     flex: 1,
     flexDirection: 'row',
-    paddingTop: 6,
+    paddingTop: theme.spacings.small,
   },
   masked: {
     opacity: 0.6,
@@ -459,17 +463,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingLeft: 36,
   },
   confirmButtonMargin: {
-    marginTop: 6,
-  },
-  listMaxHeight: {
-    maxHeight:
-      Dimensions.get('screen').height - Dimensions.get('screen').height / 3,
+    marginTop: theme.spacings.small,
   },
   maskedPanPadding: {
-    paddingLeft: 8,
+    paddingLeft: theme.spacings.small,
   },
   saveOptionTextPadding: {
-    paddingTop: 18,
+    paddingTop: theme.spacings.medium,
     opacity: 0.6,
   },
 }));
