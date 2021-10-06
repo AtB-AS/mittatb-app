@@ -30,7 +30,7 @@ async function cleanUpAuthUser() {
   const user = auth().currentUser;
   if (user) {
     if (user.isAnonymous) {
-      user.delete();
+      await user.delete();
     } else {
       await auth().signOut();
     }
