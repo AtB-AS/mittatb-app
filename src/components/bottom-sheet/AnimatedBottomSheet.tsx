@@ -37,7 +37,7 @@ export default function AnimatedBottomSheet({
             translateY,
           },
         ],
-        maxHeight: height,
+        maxHeight: windowHeight,
       }}
       onLayout={onLayout}
     >
