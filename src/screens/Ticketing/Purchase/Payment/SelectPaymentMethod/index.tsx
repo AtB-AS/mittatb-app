@@ -464,6 +464,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   confirmButtonMargin: {
     marginTop: theme.spacings.small,
+    marginBottom: theme.spacings.medium,
   },
   maskedPanPadding: {
     paddingLeft: theme.spacings.small,

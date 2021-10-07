@@ -106,7 +106,6 @@ const BottomSheetProvider: React.FC = ({children}) => {
         <ClickableBackground isOpen={isOpen} close={close} height={height} />
         <AnimatedBottomSheet
           animatedOffset={animatedOffset}
-          height={height}
           onLayout={onLayout}
         >
           {contentFunction(close, focusRef)}
