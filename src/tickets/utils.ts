@@ -1,4 +1,5 @@
-import {PreactivatedTicket} from '.';
+import {flatten, sumBy} from 'lodash';
+import {CarnetTicketUsedAccess, PreactivatedTicket} from '.';
 import {
   FareContract,
   FareContractState,
@@ -21,34 +22,79 @@ export function isPreactivatedTicket(
   );
 }
 
-export const filterActiveFareContracts = (fareContracts: FareContract[]) => {
-  const isValidNow = (f: FareContract): boolean => {
-    const firstTravelRight = f.travelRights?.[0];
-    if (
-      isPreactivatedTicket(firstTravelRight) ||
-      isCarnetTicket(firstTravelRight)
-    ) {
-      return firstTravelRight.endDateTime.toMillis() > Date.now();
-    }
-    return false;
+function isValidPreactivatedTicket(ticket: PreactivatedTicket): boolean {
+  return ticket.endDateTime.toMillis() > Date.now();
+}
+
+function hasActiveOrUsableCarnetTicket(tickets: CarnetTicket[]): boolean {
+  const [firstTicket] = tickets;
+  const {
+    usedAccesses,
+    maximumNumberOfAccesses,
+    numberOfUsedAccesses,
+  } = flattenCarnetTicketAccesses(tickets);
+
+  const [lastUsedAccess] = usedAccesses?.slice(-1);
+  const validTo = lastUsedAccess?.endDateTime.toMillis() ?? 0;
+  const now = Date.now();
+  return (
+    firstTicket.endDateTime.toMillis() > now &&
+    (maximumNumberOfAccesses > numberOfUsedAccesses || now < validTo)
+  );
+}
+
+type FlattenedCarnetTicket = {
+  usedAccesses: CarnetTicketUsedAccess[];
+  maximumNumberOfAccesses: number;
+  numberOfUsedAccesses: number;
+};
+
+export function flattenCarnetTicketAccesses(
+  tickets: CarnetTicket[],
+): FlattenedCarnetTicket {
+  const allUsedAccesses = tickets.map((t) => t.usedAccesses ?? []);
+  const usedAccesses = flatten(allUsedAccesses).sort(
+    (a, b) => a.startDateTime.toMillis() - b.startDateTime.toMillis(),
+  );
+  const maximumNumberOfAccesses = sumBy(
+    tickets,
+    (t) => t.maximumNumberOfAccesses,
+  );
+  const numberOfUsedAccesses = sumBy(tickets, (t) => t.numberOfUsedAccesses);
+  return {
+    usedAccesses,
+    maximumNumberOfAccesses,
+    numberOfUsedAccesses,
   };
-  const isActivated = (f: FareContract) =>
+}
+
+function isActiveFareContractNowOrCanBeUsed(f: FareContract): boolean {
+  const isOrWillBeActivated =
     f.state === FareContractState.Activated ||
     f.state === FareContractState.NotActivated;
-  return fareContracts.filter(isValidNow).filter(isActivated);
+
+  if (!isOrWillBeActivated) {
+    return false;
+  }
+
+  const firstTravelRight = f.travelRights?.[0];
+  if (isPreactivatedTicket(firstTravelRight)) {
+    return isValidPreactivatedTicket(firstTravelRight);
+  } else if (isCarnetTicket(firstTravelRight)) {
+    return hasActiveOrUsableCarnetTicket(f.travelRights.filter(isCarnetTicket));
+  }
+
+  return false;
+}
+
+export const filterActiveFareContracts = (fareContracts: FareContract[]) => {
+  return fareContracts.filter(isActiveFareContractNowOrCanBeUsed);
 };
 
 export const filterExpiredFareContracts = (fareContracts: FareContract[]) => {
-  const isExpired = (f: FareContract): boolean => {
-    const firstTravelRight = f.travelRights?.[0];
-    if (isPreactivatedTicket(firstTravelRight)) {
-      return !(firstTravelRight.endDateTime.toMillis() > Date.now());
-    }
-    return false;
-  };
   const isRefunded = (f: FareContract) =>
     f.state === FareContractState.Refunded;
   const isExpiredOrRefunded = (f: FareContract) =>
-    isExpired(f) || isRefunded(f);
+    !isActiveFareContractNowOrCanBeUsed(f) || isRefunded(f);
   return fareContracts.filter(isExpiredOrRefunded);
 };

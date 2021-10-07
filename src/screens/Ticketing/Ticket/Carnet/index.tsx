@@ -1,12 +1,22 @@
 import * as Sections from '@atb/components/sections';
-import {CarnetTicket, FareContractState} from '@atb/tickets';
+import {
+  CarnetTicket,
+  FareContractState,
+  flattenCarnetTicketAccesses,
+} from '@atb/tickets';
 import {useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
-import ValidityHeader from './ValidityHeader';
-import ValidityLine from './ValidityLine';
-import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
+import ValidityLine from '../ValidityLine';
+import {
+  getRelativeValidity,
+  getValidityStatus,
+  RelativeValidityStatus,
+  ValidityStatus,
+} from '../utils';
 import {useTheme} from '@atb/theme';
+import TicketInfo from '../TicketInfo';
+import CarnetValidityHeader from './CarnetValidityHeader';
 
 type Props = {
   fareContractState: FareContractState;
@@ -21,43 +31,39 @@ const CarnetTicketInfo: React.FC<Props> = ({
 }) => {
   const {t} = useTranslation();
   const {theme} = useTheme();
-  const firstTravelRight = travelRights[0];
   const {
     usedAccesses,
     maximumNumberOfAccesses,
     numberOfUsedAccesses,
-  } = firstTravelRight;
+  } = flattenCarnetTicketAccesses(travelRights);
 
   const [lastUsedAccess] = usedAccesses.slice(-1);
   const validTo = lastUsedAccess?.endDateTime.toMillis() ?? 0;
   const validFrom = lastUsedAccess?.startDateTime.toMillis();
-  const validityStatus = getValidityStatus(
-    now,
-    validFrom,
-    validTo,
-    fareContractState,
-  );
+  const accessValidityStatus = getRelativeValidity(now, validFrom, validTo);
 
   return (
     <Sections.Section withBottomPadding>
       <Sections.GenericItem>
-        <ValidityHeader
-          status={validityStatus}
+        <CarnetValidityHeader
+          status={accessValidityStatus}
           now={now}
           validFrom={validFrom}
           validTo={validTo}
         />
-        {usedAccesses?.length ? (
+        {isActiveValidity(accessValidityStatus) && (
           <ValidityLine
-            status={validityStatus}
+            status={accessValidityStatus}
             now={now}
             validFrom={validFrom}
             validTo={validTo}
           />
-        ) : (
-          <ValidityLine status="unknown" />
         )}
-
+      </Sections.GenericItem>
+      <Sections.GenericItem>
+        <TicketInfo travelRights={travelRights} status={accessValidityStatus} />
+      </Sections.GenericItem>
+      <Sections.GenericItem>
         <View
           style={{
             flex: 1,
@@ -97,5 +103,15 @@ const CarnetTicketInfo: React.FC<Props> = ({
     </Sections.Section>
   );
 };
+
+function isActiveValidity(status: RelativeValidityStatus): boolean {
+  switch (status) {
+    case 'valid':
+    case 'upcoming':
+      return true;
+    default:
+      return false;
+  }
+}
 
 export default CarnetTicketInfo;

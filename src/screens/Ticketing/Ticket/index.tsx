@@ -3,7 +3,7 @@ import {useTranslation} from '@atb/translations';
 import React from 'react';
 import PreactivatedTicketInfo from './PreactivatedTicketInfo';
 import UnknownTicket from './UnknownTicket';
-import CarnetTicketInfo from './CarnetTicketInfo';
+import Carnet from './Carnet';
 
 type Props = {
   fareContract: FareContract;
@@ -33,7 +33,7 @@ const SimpleTicket: React.FC<Props> = ({
     );
   } else if (isCarnetTicket(firstTravelRight)) {
     return (
-      <CarnetTicketInfo
+      <Carnet
         fareContractState={fc.state}
         travelRights={fc.travelRights.filter(isCarnetTicket)}
         now={now}

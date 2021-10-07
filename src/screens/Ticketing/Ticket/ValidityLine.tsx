@@ -64,13 +64,15 @@ const ValidityLine = (props: Props): ReactElement => {
 const LineWithVerticalBars = ({
   backgroundColor,
   validityPercent = 100,
+  animate = true,
 }: {
   backgroundColor: string;
   validityPercent?: number;
+  animate?: boolean;
 }) => {
   const styles = useStyles();
   const {theme} = useTheme();
-  const animatedVerticalLineOffset = useAnimatedVerticalLineOffset();
+  const animatedVerticalLineOffset = useAnimatedVerticalLineOffset(animate);
   const numberOfVerticalLines = getNumberOfVerticalLines();
   return (
     <View style={styles.container}>
@@ -104,9 +106,10 @@ const LineWithVerticalBars = ({
  * pixel offset value in the vertical line component.
  * @returns the current animated offset value
  */
-const useAnimatedVerticalLineOffset = () => {
+const useAnimatedVerticalLineOffset = (animate: boolean | undefined = true) => {
   const animatedOffset = useRef(new Animated.Value(0)).current;
   useEffect(() => {
+    if (!animate) return;
     return Animated.loop(
       Animated.timing(animatedOffset, {
         toValue: 1,
@@ -115,7 +118,7 @@ const useAnimatedVerticalLineOffset = () => {
         easing: Easing.linear,
       }),
     ).start();
-  }, []);
+  }, [animate]);
   return animatedOffset;
 };
 
