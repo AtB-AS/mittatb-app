@@ -1,5 +1,8 @@
 import {StyleSheet} from '@atb/theme';
-import {filterActiveFareContracts, useTicketState} from '@atb/tickets';
+import {
+  filterActiveOrCanBeUsedFareContracts,
+  useTicketState,
+} from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import React from 'react';
@@ -26,7 +29,9 @@ export default function TicketTabs() {
   const {t} = useTranslation();
 
   const {fareContracts} = useTicketState();
-  const activeFareContracts = filterActiveFareContracts(fareContracts);
+  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
+    fareContracts,
+  );
   const initialRoute = activeFareContracts.length
     ? ActiveTicketsScreenName
     : BuyTicketsScreenName;

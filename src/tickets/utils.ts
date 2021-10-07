@@ -22,8 +22,37 @@ export function isPreactivatedTicket(
   );
 }
 
+function isOrWillBeActivatedFareContract(f: FareContract): boolean {
+  return (
+    f.state === FareContractState.Activated ||
+    f.state === FareContractState.NotActivated
+  );
+}
+
 function isValidPreactivatedTicket(ticket: PreactivatedTicket): boolean {
   return ticket.endDateTime.toMillis() > Date.now();
+}
+
+function hasValidCarnetTicket(tickets: CarnetTicket[]): boolean {
+  const {usedAccesses} = flattenCarnetTicketAccesses(tickets);
+  const [lastUsedAccess] = usedAccesses?.slice(-1);
+  const validTo = lastUsedAccess?.endDateTime.toMillis() ?? 0;
+  return Date.now() < validTo;
+}
+
+export function isValidRightNowFareContract(f: FareContract): boolean {
+  if (!isOrWillBeActivatedFareContract(f)) {
+    return false;
+  }
+
+  const firstTravelRight = f.travelRights?.[0];
+  if (isPreactivatedTicket(firstTravelRight)) {
+    return isValidPreactivatedTicket(firstTravelRight);
+  } else if (isCarnetTicket(firstTravelRight)) {
+    return hasValidCarnetTicket(f.travelRights.filter(isCarnetTicket));
+  }
+
+  return false;
 }
 
 function hasActiveOrUsableCarnetTicket(tickets: CarnetTicket[]): boolean {
@@ -69,11 +98,7 @@ export function flattenCarnetTicketAccesses(
 }
 
 function isActiveFareContractNowOrCanBeUsed(f: FareContract): boolean {
-  const isOrWillBeActivated =
-    f.state === FareContractState.Activated ||
-    f.state === FareContractState.NotActivated;
-
-  if (!isOrWillBeActivated) {
+  if (!isOrWillBeActivatedFareContract(f)) {
     return false;
   }
 
@@ -87,7 +112,9 @@ function isActiveFareContractNowOrCanBeUsed(f: FareContract): boolean {
   return false;
 }
 
-export const filterActiveFareContracts = (fareContracts: FareContract[]) => {
+export const filterActiveOrCanBeUsedFareContracts = (
+  fareContracts: FareContract[],
+) => {
   return fareContracts.filter(isActiveFareContractNowOrCanBeUsed);
 };
 
