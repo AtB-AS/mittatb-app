@@ -11,7 +11,7 @@ import MessageBox from '@atb/components/message-box';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import * as Sections from '@atb/components/sections';
 import {Warning} from '@atb/assets/svg/situations';
-import {Add, Edit} from '@atb/assets/svg/icons/actions';
+import {Add, Edit, Remove} from '@atb/assets/svg/icons/actions';
 import {RootStackParamList} from '@atb/navigation';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {CompositeNavigationProp} from '@react-navigation/native';
@@ -34,6 +34,34 @@ type TravelCardScreenProps = {
 export default function TravelCard({navigation}: TravelCardScreenProps) {
   const styles = useStyles();
   const {t, language} = useTranslation();
+
+  const [faq, setFaq] = useState([
+    {
+      question: 'Hva er et reisebevis?',
+      answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      visible: false,
+    },
+    {
+      question: 'Hvor mange reisebevis kan jeg ha?',
+      answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      visible: false,
+    },
+    {
+      question: 'Hvor ofte kan jeg bytte?',
+      answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      visible: false,
+    },
+    {
+      question: 'Kan jeg reise uten mitt reisebevis?',
+      answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      visible: false,
+    },
+    {
+      question: 'Hva om jeg mister mobilen?',
+      answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      visible: false,
+    },
+  ]);
 
   const travelCard = {
     allowedActions: [
@@ -140,31 +168,23 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
 
         <Sections.Section withTopPadding withBottomPadding>
           <Sections.HeaderItem text="Ofte stilte spørsmål" />
-          <Sections.LinkItem
-            text={'Hva er et reisebevis?'}
-            onPress={() => {}}
-            icon={<ThemeIcon svg={Add} />}
-          />
-          <Sections.LinkItem
-            text={'Hva om jeg mister mobilen?'}
-            onPress={() => {}}
-            icon={<ThemeIcon svg={Add} />}
-          />
-          <Sections.LinkItem
-            text={'Hvor ofte kan jeg bytte?'}
-            onPress={() => {}}
-            icon={<ThemeIcon svg={Add} />}
-          />
-          <Sections.LinkItem
-            text={'Hvor mange reisebevis kan jeg ha?'}
-            onPress={() => {}}
-            icon={<ThemeIcon svg={Add} />}
-          />
-          <Sections.LinkItem
-            text={'Kan jeg reise uten mitt reisebevis?'}
-            onPress={() => {}}
-            icon={<ThemeIcon svg={Add} />}
-          />
+          {faq.map((item, n) => (
+            <View key={n}>
+              <Sections.LinkItem
+                text={item.question}
+                onPress={() => {
+                  item.visible = !item.visible;
+                  setFaq([...faq]);
+                }}
+                icon={<ThemeIcon svg={item.visible ? Remove : Add} />}
+              />
+              {item.visible ? (
+                <Sections.GenericItem>
+                  <ThemeText>{item.answer}</ThemeText>
+                </Sections.GenericItem>
+              ) : undefined}
+            </View>
+          ))}
         </Sections.Section>
       </ScrollView>
     </View>
