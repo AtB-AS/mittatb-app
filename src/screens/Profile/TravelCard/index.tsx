@@ -1,21 +1,19 @@
-import {usePreferences} from '@atb/preferences';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {UserProfileSettingsTexts, useTranslation} from '@atb/translations';
-import React from 'react';
+import {StyleSheet, Theme} from '@atb/theme';
+import {useTranslation} from '@atb/translations';
+import React, {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import ThemeText from '@atb/components/text';
 import {View} from 'react-native';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import MessageBox from '@atb/components/message-box';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import * as Sections from '@atb/components/sections';
-import {Warning} from '@atb/assets/svg/situations';
 import {Add, Edit, Remove} from '@atb/assets/svg/icons/actions';
 import {RootStackParamList} from '@atb/navigation';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {ProfileStackParams} from '..';
+import SelectTravelCardTexts from '@atb/translations/screens/subscreens/SelectTravelCard';
 
 export type TravelCardNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -35,33 +33,11 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
   const styles = useStyles();
   const {t, language} = useTranslation();
 
-  const [faq, setFaq] = useState([
-    {
-      question: 'Hva er et reisebevis?',
-      answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      visible: false,
-    },
-    {
-      question: 'Hvor mange reisebevis kan jeg ha?',
-      answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      visible: false,
-    },
-    {
-      question: 'Hvor ofte kan jeg bytte?',
-      answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      visible: false,
-    },
-    {
-      question: 'Kan jeg reise uten mitt reisebevis?',
-      answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      visible: false,
-    },
-    {
-      question: 'Hva om jeg mister mobilen?',
-      answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      visible: false,
-    },
-  ]);
+  const faqCount: number = 5;
+
+  const [visibleFaqs, setVisibleFaqs] = useState(
+    new Array(faqCount).fill(false),
+  );
 
   const travelCard = {
     allowedActions: [
@@ -98,18 +74,17 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
             color="primary_2"
             style={styles.activeTicketHeader}
           >
-            Aktivt reisebevis
+            {t(SelectTravelCardTexts.activeToken.title)}
           </ThemeText>
           <ThemeText
             type="heading__title"
             color="primary_2"
             style={styles.activeTicketType}
           >
-            T:kort
+            {t(SelectTravelCardTexts.activeToken.type.tcard.title)}
           </ThemeText>
           <ThemeText color="primary_2">
-            Ta med deg t:kortet når du er ute og reiser. Ved en eventuell
-            kontroll viser du frem t:kortet ditt for avlesning.
+            {t(SelectTravelCardTexts.activeToken.type.tcard.description)}
           </ThemeText>
           <View style={styles.activeTicketCard}>
             <View
@@ -151,14 +126,14 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
           </View>
           <MessageBox type="info">
             <ThemeText type="body__primary" color="primary_1">
-              Du kan ha ett gyldig reisebevis til enhver tid.
+              {t(SelectTravelCardTexts.activeToken.info)}
             </ThemeText>
           </MessageBox>
         </View>
 
         <Sections.Section withTopPadding>
           <Sections.LinkItem
-            text={'Endre reisebevis'}
+            text={t(SelectTravelCardTexts.changeTokenButton)}
             onPress={() => {
               navigation.navigate('SelectTravelCard');
             }}
@@ -167,20 +142,22 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
         </Sections.Section>
 
         <Sections.Section withTopPadding withBottomPadding>
-          <Sections.HeaderItem text="Ofte stilte spørsmål" />
-          {faq.map((item, n) => (
+          <Sections.HeaderItem text={t(SelectTravelCardTexts.faq.title)} />
+          {visibleFaqs.map((item: boolean, n: number) => (
             <View key={n}>
               <Sections.LinkItem
-                text={item.question}
+                text={t(SelectTravelCardTexts.faqs[n].question)}
                 onPress={() => {
-                  item.visible = !item.visible;
-                  setFaq([...faq]);
+                  visibleFaqs[n] = !item;
+                  setVisibleFaqs([...visibleFaqs]);
                 }}
-                icon={<ThemeIcon svg={item.visible ? Remove : Add} />}
+                icon={<ThemeIcon svg={item ? Remove : Add} />}
               />
-              {item.visible ? (
+              {item ? (
                 <Sections.GenericItem>
-                  <ThemeText>{item.answer}</ThemeText>
+                  <ThemeText>
+                    {t(SelectTravelCardTexts.faqs[n].answer)}
+                  </ThemeText>
                 </Sections.GenericItem>
               ) : undefined}
             </View>
