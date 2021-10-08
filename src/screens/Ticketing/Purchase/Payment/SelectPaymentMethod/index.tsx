@@ -290,6 +290,10 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
     let date = parseISO(iso);
     let year = date.getFullYear();
     let month = date.getMonth();
+    if (month === 0) {
+      month = 12;
+      year--;
+    }
     return `${month < 10 ? '0' + month : month}/${year.toString().slice(2, 4)}`;
   }
 
