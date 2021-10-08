@@ -133,6 +133,7 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
 
         <Sections.Section withTopPadding>
           <Sections.LinkItem
+            type="spacious"
             text={t(SelectTravelCardTexts.changeTokenButton)}
             onPress={() => {
               navigation.navigate('SelectTravelCard');
@@ -142,10 +143,14 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
         </Sections.Section>
 
         <Sections.Section withTopPadding withBottomPadding>
-          <Sections.HeaderItem text={t(SelectTravelCardTexts.faq.title)} />
+          <Sections.HeaderItem
+            text={t(SelectTravelCardTexts.faq.title)}
+            type="spacious"
+          />
           {visibleFaqs.map((item: boolean, n: number) => (
             <View key={n}>
               <Sections.LinkItem
+                type="spacious"
                 text={t(SelectTravelCardTexts.faqs[n].question)}
                 onPress={() => {
                   visibleFaqs[n] = !item;
@@ -154,8 +159,8 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
                 icon={<ThemeIcon svg={item ? Remove : Add} />}
               />
               {item ? (
-                <Sections.GenericItem>
-                  <ThemeText>
+                <Sections.GenericItem type="spacious">
+                  <ThemeText type="body__secondary">
                     {t(SelectTravelCardTexts.faqs[n].answer)}
                   </ThemeText>
                 </Sections.GenericItem>

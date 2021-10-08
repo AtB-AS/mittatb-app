@@ -172,7 +172,7 @@ export default function SelectTravelCard({
 
         {!checked && (
           <View style={styles.deviceSection}>
-            <Sections.Section>
+            <Sections.Section type="spacious">
               <Sections.GenericItem>
                 <ThemeText type="heading__title">
                   Hvilken enhet vil du bruke?
