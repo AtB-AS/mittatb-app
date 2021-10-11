@@ -347,6 +347,8 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
               ? SelectPaymentMethodTexts.not_save_card.a11yhint
               : SelectPaymentMethodTexts.save_card.a11yhint,
           )}
+          accessibilityRole="checkbox"
+          accessibilityState={{selected: save}}
         >
           <ThemeText style={styles.saveOptionTextPadding}>
             {t(SelectPaymentMethodTexts.save_payment_option_description.text)}
