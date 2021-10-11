@@ -302,6 +302,8 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
         onPress={select}
         accessibilityLabel={info.a11y}
         accessibilityHint={info.a11y}
+        accessibilityRole="radio"
+        accessibilityState={{selected: selected}}
       >
         <View style={styles.column}>
           <View style={styles.row}>
