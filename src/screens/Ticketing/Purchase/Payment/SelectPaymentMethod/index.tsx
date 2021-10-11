@@ -304,7 +304,10 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
       <TouchableOpacity
         style={[styles.paymentOption, styles.centerRow]}
         onPress={select}
+        accessibilityLabel={info.a11y}
         accessibilityHint={info.a11y}
+        accessibilityRole="radio"
+        accessibilityState={{selected: selected}}
       >
         <View style={styles.column}>
           <View style={styles.row}>
@@ -338,13 +341,31 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
             setSave(!save);
           }}
           style={styles.saveOptionSection}
+          accessibilityLabel={t(
+            save
+              ? SelectPaymentMethodTexts.not_save_card.a11yhint
+              : SelectPaymentMethodTexts.save_card.a11yhint,
+          )}
+          accessibilityHint={t(
+            save
+              ? SelectPaymentMethodTexts.not_save_card.a11yhint
+              : SelectPaymentMethodTexts.save_card.a11yhint,
+          )}
+          accessibilityRole="checkbox"
+          accessibilityState={{selected: save}}
         >
           <ThemeText style={styles.saveOptionTextPadding}>
             {t(SelectPaymentMethodTexts.save_payment_option_description.text)}
           </ThemeText>
           <View style={styles.saveButton}>
             <SavedCheckbox checked={save} />
-            <ThemeText>{t(SelectPaymentMethodTexts.save_card.text)}</ThemeText>
+            <ThemeText>
+              {t(
+                save
+                  ? SelectPaymentMethodTexts.not_save_card.text
+                  : SelectPaymentMethodTexts.save_card.text,
+              )}
+            </ThemeText>
           </View>
         </TouchableOpacity>
       ) : null}
