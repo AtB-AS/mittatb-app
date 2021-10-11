@@ -27,6 +27,9 @@ import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/Selec
 import {listRecurringPayments, PaymentType} from '@atb/tickets';
 import {PaymentMethod} from '../../types';
 import {useAuthState} from '@atb/auth';
+import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
+import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;
@@ -130,6 +133,19 @@ const SelectPaymentMethod: React.FC<Props> = ({
     return [...remoteOptions.reverse(), ...options];
   }
 
+  const isSelectedOption = (item: SavedPaymentOption) =>
+    JSON.stringify({
+      type: selectedOption?.paymentType,
+      id:
+        !!selectedOption && isRecurring(selectedOption)
+          ? selectedOption.recurringPaymentId
+          : 0,
+    }) ===
+    JSON.stringify({
+      type: item.paymentType,
+      id: item.savedType === 'recurring' ? item.recurringCard.id : 0,
+    });
+
   useEffect(() => {
     async function run() {
       let remoteOptions = await getOptions();
@@ -140,78 +156,60 @@ const SelectPaymentMethod: React.FC<Props> = ({
   }, [previousPaymentMethod]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.row}>
-        <View style={styles.heading}>
-          <ThemeText type="heading__title">
-            {t(SelectPaymentMethodTexts.header.text)}
-          </ThemeText>
-        </View>
-        <View style={styles.rowJustifyEnd}>
-          <TouchableOpacity
-            onPress={close}
-            accessibilityHint={t(
-              ScreenHeaderTexts.headerButton.cancel.a11yHint,
-            )}
-          >
-            <ThemeText>
-              {t(ScreenHeaderTexts.headerButton.cancel.text)}
-            </ThemeText>
-          </TouchableOpacity>
-        </View>
-      </View>
-      {loadingRemoteOption ? <ActivityIndicator /> : null}
-      <FlatList
-        style={{
-          maxHeight: height * (2 / 3),
+    <BottomSheetContainer>
+      <ScreenHeaderWithoutNavigation
+        title={t(SelectPaymentMethodTexts.header.text)}
+        leftButton={{
+          type: 'cancel',
+          onPress: close,
+          text: t(ScreenHeaderTexts.headerButton.cancel.text),
         }}
-        data={options}
-        keyExtractor={(item) =>
-          `${item.paymentType}_${
-            item.savedType === 'recurring' ? item.recurringCard.id : 0
-          }`
-        }
-        renderItem={({item}) => {
-          return (
-            <PaymentOptionView
-              key={item.paymentType}
-              option={item}
-              selected={
-                JSON.stringify({
-                  type: selectedOption?.paymentType,
-                  id:
-                    !!selectedOption && isRecurring(selectedOption)
-                      ? selectedOption.recurringPaymentId
-                      : 0,
-                }) ===
-                JSON.stringify({
-                  type: item.paymentType,
-                  id:
-                    item.savedType === 'recurring' ? item.recurringCard.id : 0,
-                })
-              }
-              onSelect={(val: PaymentMethod) => {
-                setSelectedOption(val);
-              }}
-            ></PaymentOptionView>
-          );
-        }}
-      ></FlatList>
-      <Button
-        style={styles.confirmButtonMargin}
-        color="primary_2"
-        text={t(SelectPaymentMethodTexts.confirm_button.text)}
-        accessibilityHint={t(SelectPaymentMethodTexts.confirm_button.a11yhint)}
-        onPress={() => {
-          if (selectedOption) {
-            onSelect(selectedOption);
+        color={'background_2'}
+        setFocusOnLoad={false}
+      />
+      <FullScreenFooter>
+        {loadingRemoteOption ? <ActivityIndicator /> : null}
+        <FlatList
+          style={{
+            maxHeight: height * (2 / 3),
+          }}
+          data={options}
+          keyExtractor={(item) =>
+            `${item.paymentType}_${
+              item.savedType === 'recurring' ? item.recurringCard.id : 0
+            }`
           }
-        }}
-        disabled={!selectedOption}
-        icon={ArrowRight}
-        iconPosition="right"
-      ></Button>
-    </SafeAreaView>
+          renderItem={({item}) => {
+            return (
+              <PaymentOptionView
+                key={item.paymentType}
+                option={item}
+                selected={isSelectedOption(item)}
+                onSelect={(val: PaymentMethod) => {
+                  setSelectedOption(val);
+                }}
+              ></PaymentOptionView>
+            );
+          }}
+        ></FlatList>
+        <Button
+          style={styles.confirmButtonMargin}
+          color="primary_2"
+          text={t(SelectPaymentMethodTexts.confirm_button.text)}
+          accessibilityHint={t(
+            SelectPaymentMethodTexts.confirm_button.a11yhint,
+          )}
+          onPress={() => {
+            if (selectedOption) {
+              onSelect(selectedOption);
+            }
+          }}
+          disabled={!selectedOption}
+          icon={ArrowRight}
+          iconPosition="right"
+        ></Button>
+      </FullScreenFooter>
+    </BottomSheetContainer>
   );
 };
 
