@@ -14,12 +14,14 @@ import {ActiveReservation, FareContract, PaymentStatus} from './types';
 import {getPayment} from './api';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import Bugsnag from '@bugsnag/react-native';
+import {CustomerProfile} from '.';
 
 type TicketReducerState = {
   fareContracts: FareContract[];
   activeReservations: ActiveReservation[];
   isRefreshingTickets: boolean;
   errorRefreshingTickets: boolean;
+  customerProfile: CustomerProfile;
 };
 
 type TicketReducerAction =
@@ -28,6 +30,10 @@ type TicketReducerAction =
   | {
       type: 'UPDATE_FARE_CONTRACT_TICKETS';
       fareContracts: FareContract[];
+    }
+  | {
+      type: 'UPDATE_CUSTOMER_PROFILE';
+      customerProfile: CustomerProfile;
     }
   | {type: 'ADD_RESERVATION'; reservation: ActiveReservation}
   | {
@@ -93,6 +99,12 @@ const ticketReducer: TicketReducer = (
         activeReservations: action.activeReservations,
       };
     }
+    case 'UPDATE_CUSTOMER_PROFILE': {
+      return {
+        ...prevState,
+        customerProfile: action.customerProfile,
+      };
+    }
   }
 };
 
@@ -101,6 +113,7 @@ type TicketState = {
   refreshTickets: () => void;
   fareContracts: FareContract[];
   findFareContractByOrderId: (id: string) => FareContract | undefined;
+  customerProfile: CustomerProfile;
 } & Pick<TicketReducerState, 'activeReservations' | 'isRefreshingTickets'>;
 
 const initialReducerState: TicketReducerState = {
@@ -108,6 +121,7 @@ const initialReducerState: TicketReducerState = {
   activeReservations: [],
   isRefreshingTickets: false,
   errorRefreshingTickets: false,
+  customerProfile: {},
 };
 
 const TicketContext = createContext<TicketState | undefined>(undefined);
@@ -151,6 +165,38 @@ const TicketContextProvider: React.FC = ({children}) => {
       return () => subscriber();
     }
   }, [user, abtCustomerId, enable_ticketing]);
+
+  // TODO: Temporary hack to get travelcard ID before we have tokens. Should be
+  // replaced when tokens are implemented.
+  useEffect(() => {
+    if (user && abtCustomerId && enable_ticketing) {
+      const subscriber = firestore()
+        .collection('customers')
+        .doc(abtCustomerId)
+        .onSnapshot(
+          (snapshot) => {
+            const customerProfile = snapshot.data() as CustomerProfile;
+
+            if (customerProfile) {
+              dispatch({type: 'UPDATE_CUSTOMER_PROFILE', customerProfile});
+            }
+
+            // Bugsnag.leaveBreadcrumb('snapshot_fetched', {
+            //   count: fareContracts.length,
+            // });
+          },
+          // (err) => {
+          //   Bugsnag.notify(err, function (event) {
+          //     event.addMetadata('ticket', {abtCustomerId});
+          //   });
+          //   dispatch({type: 'SET_ERROR_REFRESHING_FARE_CONTRACT_TICKETS'});
+          // },
+        );
+
+      // Stop listening for updates when no longer required
+      return () => subscriber();
+    }
+  }, [abtCustomerId, enable_ticketing]);
 
   const refreshTickets = () => {};
 
