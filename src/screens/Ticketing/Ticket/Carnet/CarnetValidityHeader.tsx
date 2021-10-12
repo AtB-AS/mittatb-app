@@ -11,23 +11,43 @@ import {fromUnixTime} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
 import ValidityIcon from '../ValidityIcon';
-import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
+import {
+  RelativeValidityStatus,
+  ValidityStatus,
+} from '@atb/screens/Ticketing/Ticket/utils';
 
 const ValidityHeader: React.FC<{
-  status: ValidityStatus;
   now: number;
-  validFrom: number;
-  validTo: number;
-}> = ({status, now, validFrom, validTo}) => {
+  fareContractStatus: ValidityStatus;
+  usedAccessStatus: RelativeValidityStatus;
+  usedAccessValidFrom: number;
+  usedAccessValidTo: number;
+  maximumNumberOfAccesses: number;
+  numberOfUsedAccesses: number;
+}> = ({
+  usedAccessStatus,
+  now,
+  usedAccessValidFrom,
+  usedAccessValidTo,
+  maximumNumberOfAccesses,
+  numberOfUsedAccesses,
+}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
 
   return (
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
-        <ValidityIcon status={status} />
+        <ValidityIcon status={usedAccessStatus} />
         <ThemeText style={styles.validityText} type="body__secondary">
-          {validityTimeText(status, now, validFrom, validTo, t, language)}
+          {validityTimeText(
+            usedAccessStatus,
+            now,
+            usedAccessValidFrom,
+            usedAccessValidTo,
+            t,
+            language,
+          )}
         </ThemeText>
       </View>
     </View>

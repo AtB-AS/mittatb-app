@@ -12,7 +12,6 @@ import {
   getRelativeValidity,
   getValidityStatus,
   RelativeValidityStatus,
-  ValidityStatus,
 } from '../utils';
 import {useTheme} from '@atb/theme';
 import TicketInfo from '../TicketInfo';
@@ -22,12 +21,16 @@ type Props = {
   fareContractState: FareContractState;
   travelRights: CarnetTicket[];
   now: number;
+  fareContractValidFrom: number;
+  fareContractValidTo: number;
 };
 
 const CarnetTicketInfo: React.FC<Props> = ({
   fareContractState,
   travelRights,
   now,
+  fareContractValidFrom,
+  fareContractValidTo,
 }) => {
   const {t} = useTranslation();
   const {theme} = useTheme();
@@ -38,30 +41,46 @@ const CarnetTicketInfo: React.FC<Props> = ({
   } = flattenCarnetTicketAccesses(travelRights);
 
   const [lastUsedAccess] = usedAccesses.slice(-1);
-  const validTo = lastUsedAccess?.endDateTime.toMillis() ?? 0;
-  const validFrom = lastUsedAccess?.startDateTime.toMillis();
-  const accessValidityStatus = getRelativeValidity(now, validFrom, validTo);
+  const usedAccessValidFrom = lastUsedAccess?.startDateTime.toMillis();
+  const usedAccessValidTo = lastUsedAccess?.endDateTime.toMillis();
+  const usedAccessValidityStatus = getRelativeValidity(
+    now,
+    usedAccessValidFrom,
+    usedAccessValidTo,
+  );
+  const fareContractValidityStatus = getValidityStatus(
+    now,
+    fareContractValidFrom,
+    fareContractValidTo,
+    fareContractState,
+  );
 
   return (
     <Sections.Section withBottomPadding>
       <Sections.GenericItem>
         <CarnetValidityHeader
-          status={accessValidityStatus}
+          fareContractStatus={fareContractValidityStatus}
+          usedAccessStatus={usedAccessValidityStatus}
           now={now}
-          validFrom={validFrom}
-          validTo={validTo}
+          usedAccessValidFrom={usedAccessValidFrom}
+          usedAccessValidTo={usedAccessValidTo}
+          maximumNumberOfAccesses={maximumNumberOfAccesses}
+          numberOfUsedAccesses={numberOfUsedAccesses}
         />
-        {isActiveValidity(accessValidityStatus) && (
+        {isActiveValidity(usedAccessValidityStatus) && (
           <ValidityLine
-            status={accessValidityStatus}
+            status={'unknown'}
             now={now}
-            validFrom={validFrom}
-            validTo={validTo}
+            validFrom={usedAccessValidFrom}
+            validTo={usedAccessValidTo}
           />
         )}
       </Sections.GenericItem>
       <Sections.GenericItem>
-        <TicketInfo travelRights={travelRights} status={accessValidityStatus} />
+        <TicketInfo
+          travelRights={travelRights}
+          status={usedAccessValidityStatus}
+        />
       </Sections.GenericItem>
       <Sections.GenericItem>
         <View
