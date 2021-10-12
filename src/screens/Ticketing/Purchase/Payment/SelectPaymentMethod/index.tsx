@@ -187,16 +187,15 @@ const SelectPaymentMethod: React.FC<Props> = ({
         renderItem={({item}) => {
           return (
             <PaymentOptionView
-              key={item.paymentType}
               option={item}
               selected={isSelectedOption(item)}
               onSelect={(val: PaymentMethod) => {
                 setSelectedOption(val);
               }}
-            ></PaymentOptionView>
+            />
           );
         }}
-      ></FlatList>
+      />
       <FullScreenFooter>
         <Button
           style={styles.confirmButton}
@@ -213,7 +212,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
           disabled={!selectedOption}
           icon={ArrowRight}
           iconPosition="right"
-        ></Button>
+        />
       </FullScreenFooter>
     </BottomSheetContainer>
   );
