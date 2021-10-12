@@ -424,7 +424,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.radius.regular,
     backgroundColor: theme.colors.background_0.backgroundColor,
   },
-  saveOptionSection: {paddingHorizontal: 24, paddingBottom: 24},
+  saveOptionSection: {
+    paddingHorizontal: theme.spacings.xLarge,
+    paddingBottom: theme.spacings.xLarge,
+  },
   container: {
     flex: 1,
     backgroundColor: theme.colors.background_2.backgroundColor,
