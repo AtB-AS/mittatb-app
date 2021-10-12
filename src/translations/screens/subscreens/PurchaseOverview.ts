@@ -5,6 +5,7 @@ const PurchaseOverviewTexts = {
     title: {
       single: _('Enkeltbillett', 'Single ticket'),
       period: _('Periodebillett', 'Period ticket'),
+      carnet: _('Klippekort', 'Carnet ticket'),
     },
   },
   errorMessageBox: {
