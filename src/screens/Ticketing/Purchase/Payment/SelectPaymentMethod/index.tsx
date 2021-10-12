@@ -169,33 +169,34 @@ const SelectPaymentMethod: React.FC<Props> = ({
         color={'background_2'}
         setFocusOnLoad={false}
       />
+      {loadingRemoteOption ? <ActivityIndicator /> : null}
+      <FlatList
+        style={{
+          maxHeight: height * (2 / 3),
+          ...styles.paymentOptions,
+        }}
+        data={options}
+        keyExtractor={(item) =>
+          `${item.paymentType}_${
+            item.savedType === 'recurring' ? item.recurringCard.id : 0
+          }`
+        }
+        renderItem={({item}) => {
+          return (
+            <PaymentOptionView
+              key={item.paymentType}
+              option={item}
+              selected={isSelectedOption(item)}
+              onSelect={(val: PaymentMethod) => {
+                setSelectedOption(val);
+              }}
+            ></PaymentOptionView>
+          );
+        }}
+      ></FlatList>
       <FullScreenFooter>
-        {loadingRemoteOption ? <ActivityIndicator /> : null}
-        <FlatList
-          style={{
-            maxHeight: height * (2 / 3),
-          }}
-          data={options}
-          keyExtractor={(item) =>
-            `${item.paymentType}_${
-              item.savedType === 'recurring' ? item.recurringCard.id : 0
-            }`
-          }
-          renderItem={({item}) => {
-            return (
-              <PaymentOptionView
-                key={item.paymentType}
-                option={item}
-                selected={isSelectedOption(item)}
-                onSelect={(val: PaymentMethod) => {
-                  setSelectedOption(val);
-                }}
-              ></PaymentOptionView>
-            );
-          }}
-        ></FlatList>
         <Button
-          style={styles.confirmButtonMargin}
+          style={styles.confirmButton}
           color="primary_2"
           text={t(SelectPaymentMethodTexts.confirm_button.text)}
           accessibilityHint={t(
@@ -427,6 +428,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.medium,
   },
   rowJustifyEnd: {flex: 1, flexDirection: 'row', justifyContent: 'flex-end'},
+  paymentOptions: {
+    paddingHorizontal: theme.spacings.medium,
+  },
   paymentOption: {
     flex: 1,
     flexDirection: 'column',
@@ -487,9 +491,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingTop: 18,
     paddingLeft: 36,
   },
-  confirmButtonMargin: {
+  confirmButton: {
     marginTop: theme.spacings.small,
-    marginBottom: theme.spacings.medium,
   },
   maskedPanPadding: {
     paddingLeft: theme.spacings.small,
