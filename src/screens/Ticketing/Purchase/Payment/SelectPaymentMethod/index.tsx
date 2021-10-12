@@ -135,18 +135,21 @@ const SelectPaymentMethod: React.FC<Props> = ({
     return [...remoteOptions.reverse(), ...defaultPaymentOptions];
   }
 
-  const isSelectedOption = (item: SavedPaymentOption) =>
-    JSON.stringify({
-      type: selectedOption?.paymentType,
-      id:
-        !!selectedOption && isRecurring(selectedOption)
-          ? selectedOption.recurringPaymentId
-          : 0,
-    }) ===
-    JSON.stringify({
-      type: item.paymentType,
-      id: item.savedType === 'recurring' ? item.recurringCard.id : 0,
-    });
+  const isSelectedOption = (item: SavedPaymentOption) => {
+    // False if types doesn't match
+    if (!(selectedOption?.paymentType === item.paymentType)) return false;
+
+    const itemIsReccurring = !!selectedOption && isRecurring(selectedOption);
+    const selectedIsRecurring = item.savedType === 'recurring';
+
+    // True if recurring ID matches
+    if (itemIsReccurring && selectedIsRecurring) {
+      return item.recurringCard.id === selectedOption.recurringPaymentId;
+    }
+
+    // True if both are not recurring, false otherwise
+    return !itemIsReccurring && !selectedIsRecurring;
+  };
 
   useEffect(() => {
     async function run() {
