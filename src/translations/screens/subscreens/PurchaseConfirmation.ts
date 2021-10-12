@@ -67,7 +67,7 @@ const PurchaseConfirmationTexts = {
     ),
   },
   choosePaymentOption: {
-    text: _('Velg betalingsmåte', 'Choose payment option'),
+    text: _('Endre betalingsmåte', 'Change payment option'),
     a11yHint: _(
       'Aktiver for å velge betalingsmåte',
       'Activate to choose payment option',

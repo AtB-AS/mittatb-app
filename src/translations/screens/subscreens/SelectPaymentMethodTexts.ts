@@ -2,7 +2,7 @@ import {translation as _} from '../../commons';
 
 const SelectPaymentMethodTexts = {
   header: {
-    text: _('Velg betalingsmåte', 'Select payment method'),
+    text: _('Velg betalingsmåte', 'Select payment option'),
   },
   confirm_button: {
     text: _('Til betaling', 'Confirm option'),
