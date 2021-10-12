@@ -80,6 +80,21 @@ function isRecurring(
   );
 }
 
+const defaultPaymentOptions: SavedPaymentOption[] = [
+  {
+    paymentType: PaymentType.Vipps,
+    savedType: 'normal',
+  },
+  {
+    paymentType: PaymentType.VISA,
+    savedType: 'normal',
+  },
+  {
+    paymentType: PaymentType.MasterCard,
+    savedType: 'normal',
+  },
+];
+
 const SelectPaymentMethod: React.FC<Props> = ({
   onSelect,
   previousPaymentMethod,
@@ -98,20 +113,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
   const [selectedOption, setSelectedOption] = useState<
     PaymentMethod | undefined
   >(getSelectedPaymentMethod(previousPaymentMethod));
-  const [options, setOptions] = useState<SavedPaymentOption[]>([
-    {
-      paymentType: PaymentType.Vipps,
-      savedType: 'normal',
-    },
-    {
-      paymentType: PaymentType.VISA,
-      savedType: 'normal',
-    },
-    {
-      paymentType: PaymentType.MasterCard,
-      savedType: 'normal',
-    },
-  ]);
+  const [options, setOptions] = useState(defaultPaymentOptions);
   const styles = useStyles();
 
   async function getOptions(): Promise<Array<SavedPaymentOption>> {
@@ -130,7 +132,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
         },
       };
     });
-    return [...remoteOptions.reverse(), ...options];
+    return [...remoteOptions.reverse(), ...defaultPaymentOptions];
   }
 
   const isSelectedOption = (item: SavedPaymentOption) =>
