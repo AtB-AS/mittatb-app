@@ -27,6 +27,9 @@ import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/Selec
 import {listRecurringPayments, PaymentType} from '@atb/tickets';
 import {PaymentMethod} from '../../types';
 import {useAuthState} from '@atb/auth';
+import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
+import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;
@@ -77,6 +80,21 @@ function isRecurring(
   );
 }
 
+const defaultPaymentOptions: SavedPaymentOption[] = [
+  {
+    paymentType: PaymentType.Vipps,
+    savedType: 'normal',
+  },
+  {
+    paymentType: PaymentType.VISA,
+    savedType: 'normal',
+  },
+  {
+    paymentType: PaymentType.MasterCard,
+    savedType: 'normal',
+  },
+];
+
 const SelectPaymentMethod: React.FC<Props> = ({
   onSelect,
   previousPaymentMethod,
@@ -95,20 +113,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
   const [selectedOption, setSelectedOption] = useState<
     PaymentMethod | undefined
   >(getSelectedPaymentMethod(previousPaymentMethod));
-  const [options, setOptions] = useState<SavedPaymentOption[]>([
-    {
-      paymentType: PaymentType.Vipps,
-      savedType: 'normal',
-    },
-    {
-      paymentType: PaymentType.VISA,
-      savedType: 'normal',
-    },
-    {
-      paymentType: PaymentType.MasterCard,
-      savedType: 'normal',
-    },
-  ]);
+  const [options, setOptions] = useState(defaultPaymentOptions);
   const styles = useStyles();
 
   async function getOptions(): Promise<Array<SavedPaymentOption>> {
@@ -127,8 +132,24 @@ const SelectPaymentMethod: React.FC<Props> = ({
         },
       };
     });
-    return [...remoteOptions.reverse(), ...options];
+    return [...remoteOptions.reverse(), ...defaultPaymentOptions];
   }
+
+  const isSelectedOption = (item: SavedPaymentOption) => {
+    // False if types doesn't match
+    if (!(selectedOption?.paymentType === item.paymentType)) return false;
+
+    const itemIsReccurring = !!selectedOption && isRecurring(selectedOption);
+    const selectedIsRecurring = item.savedType === 'recurring';
+
+    // True if recurring ID matches
+    if (itemIsReccurring && selectedIsRecurring) {
+      return item.recurringCard.id === selectedOption.recurringPaymentId;
+    }
+
+    // True if both are not recurring, false otherwise
+    return !itemIsReccurring && !selectedIsRecurring;
+  };
 
   useEffect(() => {
     async function run() {
@@ -140,30 +161,22 @@ const SelectPaymentMethod: React.FC<Props> = ({
   }, [previousPaymentMethod]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.row}>
-        <View style={styles.heading}>
-          <ThemeText type="heading__title">
-            {t(SelectPaymentMethodTexts.header.text)}
-          </ThemeText>
-        </View>
-        <View style={styles.rowJustifyEnd}>
-          <TouchableOpacity
-            onPress={close}
-            accessibilityHint={t(
-              ScreenHeaderTexts.headerButton.cancel.a11yHint,
-            )}
-          >
-            <ThemeText>
-              {t(ScreenHeaderTexts.headerButton.cancel.text)}
-            </ThemeText>
-          </TouchableOpacity>
-        </View>
-      </View>
+    <BottomSheetContainer>
+      <ScreenHeaderWithoutNavigation
+        title={t(SelectPaymentMethodTexts.header.text)}
+        leftButton={{
+          type: 'cancel',
+          onPress: close,
+          text: t(ScreenHeaderTexts.headerButton.cancel.text),
+        }}
+        color={'background_2'}
+        setFocusOnLoad={false}
+      />
       {loadingRemoteOption ? <ActivityIndicator /> : null}
       <FlatList
         style={{
           maxHeight: height * (2 / 3),
+          ...styles.paymentOptions,
         }}
         data={options}
         keyExtractor={(item) =>
@@ -176,20 +189,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
             <PaymentOptionView
               key={item.paymentType}
               option={item}
-              selected={
-                JSON.stringify({
-                  type: selectedOption?.paymentType,
-                  id:
-                    !!selectedOption && isRecurring(selectedOption)
-                      ? selectedOption.recurringPaymentId
-                      : 0,
-                }) ===
-                JSON.stringify({
-                  type: item.paymentType,
-                  id:
-                    item.savedType === 'recurring' ? item.recurringCard.id : 0,
-                })
-              }
+              selected={isSelectedOption(item)}
               onSelect={(val: PaymentMethod) => {
                 setSelectedOption(val);
               }}
@@ -197,21 +197,25 @@ const SelectPaymentMethod: React.FC<Props> = ({
           );
         }}
       ></FlatList>
-      <Button
-        style={styles.confirmButtonMargin}
-        color="primary_2"
-        text={t(SelectPaymentMethodTexts.confirm_button.text)}
-        accessibilityHint={t(SelectPaymentMethodTexts.confirm_button.a11yhint)}
-        onPress={() => {
-          if (selectedOption) {
-            onSelect(selectedOption);
-          }
-        }}
-        disabled={!selectedOption}
-        icon={ArrowRight}
-        iconPosition="right"
-      ></Button>
-    </SafeAreaView>
+      <FullScreenFooter>
+        <Button
+          style={styles.confirmButton}
+          color="primary_2"
+          text={t(SelectPaymentMethodTexts.confirm_button.text)}
+          accessibilityHint={t(
+            SelectPaymentMethodTexts.confirm_button.a11yhint,
+          )}
+          onPress={() => {
+            if (selectedOption) {
+              onSelect(selectedOption);
+            }
+          }}
+          disabled={!selectedOption}
+          icon={ArrowRight}
+          iconPosition="right"
+        ></Button>
+      </FullScreenFooter>
+    </BottomSheetContainer>
   );
 };
 
@@ -420,13 +424,19 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.radius.regular,
     backgroundColor: theme.colors.background_0.backgroundColor,
   },
-  saveOptionSection: {paddingHorizontal: 24, paddingBottom: 24},
+  saveOptionSection: {
+    paddingHorizontal: theme.spacings.xLarge,
+    paddingBottom: theme.spacings.xLarge,
+  },
   container: {
     flex: 1,
     backgroundColor: theme.colors.background_2.backgroundColor,
     paddingHorizontal: theme.spacings.medium,
   },
   rowJustifyEnd: {flex: 1, flexDirection: 'row', justifyContent: 'flex-end'},
+  paymentOptions: {
+    paddingHorizontal: theme.spacings.medium,
+  },
   paymentOption: {
     flex: 1,
     flexDirection: 'column',
@@ -487,9 +497,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingTop: 18,
     paddingLeft: 36,
   },
-  confirmButtonMargin: {
+  confirmButton: {
     marginTop: theme.spacings.small,
-    marginBottom: theme.spacings.medium,
   },
   maskedPanPadding: {
     paddingLeft: theme.spacings.small,
