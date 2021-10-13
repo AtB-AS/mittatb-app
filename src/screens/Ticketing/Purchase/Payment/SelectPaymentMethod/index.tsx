@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
-  FlatList,
+  ScrollView,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -91,6 +90,8 @@ const defaultPaymentOptions: SavedPaymentOption[] = [
   },
 ];
 
+const remotePaymentOptions: SavedPaymentOption[] = [];
+
 const SelectPaymentMethod: React.FC<Props> = ({
   onSelect,
   previousPaymentMethod,
@@ -98,23 +99,25 @@ const SelectPaymentMethod: React.FC<Props> = ({
 }) => {
   const {t} = useTranslation();
 
-  const [loadingRemoteOption, setLoadingRemoteOptions] = useState<boolean>(
-    true,
-  );
+  const [
+    loadingRecurringOptions,
+    setLoadingRecurringOptions,
+  ] = useState<boolean>(true);
 
   const {user} = useAuthState();
-
-  const {height} = useWindowDimensions();
+  const {theme} = useTheme();
 
   const [selectedOption, setSelectedOption] = useState<
     PaymentMethod | undefined
   >(getSelectedPaymentMethod(previousPaymentMethod));
-  const [options, setOptions] = useState(defaultPaymentOptions);
+  const [remoteOptions, setRemoteOptions] = useState(remotePaymentOptions);
   const styles = useStyles();
 
-  async function getOptions(): Promise<Array<SavedPaymentOption>> {
-    if (!user?.phoneNumber) return [...options];
-    const remoteOptions: Array<SavedPaymentOption> = (
+  async function getRecurringPaymentOptions(): Promise<
+    Array<SavedPaymentOption>
+  > {
+    if (!user || user.isAnonymous) return [];
+    const recurringOptions: Array<SavedPaymentOption> = (
       await listRecurringPayments()
     ).map((option) => {
       return {
@@ -128,7 +131,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
         },
       };
     });
-    return [...remoteOptions.reverse(), ...defaultPaymentOptions];
+    return [...recurringOptions.reverse()];
   }
 
   const isSelectedOption = (item: SavedPaymentOption) => {
@@ -149,15 +152,15 @@ const SelectPaymentMethod: React.FC<Props> = ({
 
   useEffect(() => {
     async function run() {
-      let remoteOptions = await getOptions();
-      setOptions(remoteOptions);
-      setLoadingRemoteOptions(false);
+      let remoteOptions = await getRecurringPaymentOptions();
+      setRemoteOptions(remoteOptions);
+      setLoadingRecurringOptions(false);
     }
     run();
   }, [previousPaymentMethod]);
 
   return (
-    <BottomSheetContainer>
+    <BottomSheetContainer fullHeight={true}>
       <ScreenHeaderWithoutNavigation
         title={t(SelectPaymentMethodTexts.header.text)}
         leftButton={{
@@ -168,30 +171,58 @@ const SelectPaymentMethod: React.FC<Props> = ({
         color={'background_2'}
         setFocusOnLoad={false}
       />
-      {loadingRemoteOption ? <ActivityIndicator /> : null}
-      <FlatList
-        style={{
-          maxHeight: height * (2 / 3),
-          ...styles.paymentOptions,
-        }}
-        data={options}
-        keyExtractor={(item) =>
-          `${item.paymentType}_${
-            item.savedType === 'recurring' ? item.recurringCard.id : 0
-          }`
-        }
-        renderItem={({item}) => {
+
+      <ScrollView style={styles.paymentOptions}>
+        {defaultPaymentOptions.map((option) => {
           return (
             <PaymentOptionView
-              option={item}
-              selected={isSelectedOption(item)}
+              key={option.paymentType}
+              option={option}
+              selected={isSelectedOption(option)}
               onSelect={(val: PaymentMethod) => {
                 setSelectedOption(val);
               }}
             />
           );
-        }}
-      />
+        })}
+
+        {loadingRecurringOptions && (
+          <>
+            <ActivityIndicator
+              color={theme.text.colors.primary}
+              style={styles.spinner}
+              animating={true}
+              size="large"
+            />
+          </>
+        )}
+
+        {remoteOptions.length > 0 && (
+          <View style={styles.listHeading}>
+            <ThemeText>
+              {t(SelectPaymentMethodTexts.saved_cards.text)}
+            </ThemeText>
+          </View>
+        )}
+
+        {remoteOptions.map((option) => {
+          return (
+            <PaymentOptionView
+              key={
+                option.savedType === 'recurring'
+                  ? option.recurringCard.id
+                  : option.paymentType
+              }
+              option={option}
+              selected={isSelectedOption(option)}
+              onSelect={(val: PaymentMethod) => {
+                setSelectedOption(val);
+              }}
+            />
+          );
+        })}
+      </ScrollView>
+
       <FullScreenFooter>
         <Button
           style={styles.confirmButton}
@@ -408,6 +439,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     paddingBottom: theme.spacings.xLarge,
+  },
+  listHeading: {
+    flex: 1,
+    alignItems: 'center',
+    paddingTop: theme.spacings.large,
+    paddingBottom: theme.spacings.small,
+  },
+  spinner: {
+    paddingTop: theme.spacings.medium,
   },
   row: {
     flex: 1,

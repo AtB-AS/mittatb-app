@@ -30,10 +30,7 @@ import {formatDecimalNumber} from '@atb/utils/numbers';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {SelectPaymentMethod} from '../Payment';
 import {SavedPaymentOption, usePreferences} from '@atb/preferences';
-import {useState} from 'react';
-import {useEffect} from 'react';
 import {CardPaymentMethod, PaymentMethod} from '../types';
-import PaymentIcon from '@atb/assets/svg/icons/ticketing/PaymentIcons';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -202,7 +199,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           }}
           close={close}
           previousPaymentMethod={previousPaymentMethod}
-        ></SelectPaymentMethod>
+        />
       );
     });
   }
@@ -378,7 +375,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                 )}
                 onPress={selectPaymentMethod}
                 viewContainerStyle={styles.paymentButton}
-              ></Button>
+              />
             )}
           </View>
         )}
