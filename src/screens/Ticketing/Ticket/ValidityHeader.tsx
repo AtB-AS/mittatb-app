@@ -77,6 +77,10 @@ function validityTimeText(
     }
     case 'reserving':
       return t(TicketTexts.validityHeader.reserving);
+    case 'uninspectable':
+      const secondsUntilValid = (validFrom - now) / 1000;
+      const durationText = toDurationText(secondsUntilValid);
+      return t(TicketTexts.validityHeader.uninspectable(durationText));
     case 'unknown':
       return t(TicketTexts.validityHeader.unknown);
   }

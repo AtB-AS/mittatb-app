@@ -160,6 +160,10 @@ const TicketInspectionSymbol = ({
               ? theme.colors.primary_1.backgroundColor
               : 'none',
         },
+        status === 'uninspectable' && {
+          ...styles.symbolContainerCircle,
+          borderColor: theme.status.warning.main.backgroundColor,
+        },
       ]}
       accessibilityElementsHidden={true}
     >
@@ -194,6 +198,17 @@ const getIconForStatus = (
       return <ThemeIcon svg={AddTicket} colorType="primary" size={'large'} />;
     case 'upcoming':
       return <ThemeIcon svg={Wait} colorType="primary" size={'large'} />;
+    case 'uninspectable':
+      return (
+        <ThemeText
+          type="body__tertiary"
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          Ikke bruk{'\n'}i kontroll
+        </ThemeText>
+      );
     case 'reserving':
     case 'unknown':
       return null;

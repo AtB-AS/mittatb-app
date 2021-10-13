@@ -34,7 +34,14 @@ const DetailsContent: React.FC<Props> = ({
   if (isPreactivatedTicket(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
     const validTo = firstTravelRight.endDateTime.toMillis();
-    const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
+    // TODO: get inspectable from ticketcontext
+    const validityStatus = getValidityStatus(
+      now,
+      validFrom,
+      validTo,
+      fc.state,
+      true,
+    );
 
     const orderIdText = t(TicketTexts.details.orderId(fc.orderId));
 

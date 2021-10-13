@@ -73,6 +73,7 @@ const TicketsScrollView: React.FC<Props> = ({
             message={t(TicketsTexts.scrollView.errorLoadingTicket(fc.orderId))}
           >
             <SimpleTicket
+              inspectable={!hasActiveTravelCard}
               fareContract={fc}
               now={now}
               onPressDetails={() =>

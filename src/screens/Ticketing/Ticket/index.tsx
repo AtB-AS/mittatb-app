@@ -13,6 +13,7 @@ type Props = {
   now: number;
   hideDetails?: boolean;
   onPressDetails?: () => void;
+  inspectable?: boolean;
 };
 
 const SimpleTicket: React.FC<Props> = ({
@@ -20,6 +21,7 @@ const SimpleTicket: React.FC<Props> = ({
   now,
   hideDetails,
   onPressDetails,
+  inspectable = true,
 }) => {
   const {t} = useTranslation();
 
@@ -28,7 +30,13 @@ const SimpleTicket: React.FC<Props> = ({
     const {startDateTime, endDateTime} = firstTravelRight;
     const validTo = endDateTime.toMillis();
     const validFrom = startDateTime.toMillis();
-    const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
+    const validityStatus = getValidityStatus(
+      now,
+      validFrom,
+      validTo,
+      fc.state,
+      inspectable,
+    );
     return (
       <Sections.Section withBottomPadding>
         <Sections.GenericItem>
