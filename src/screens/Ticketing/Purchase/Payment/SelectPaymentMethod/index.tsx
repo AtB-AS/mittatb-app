@@ -281,28 +281,45 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
     }
   }, [save]);
 
-  function getPaymentInfo(
-    type: PaymentType,
-  ): {brand: PaymentType; text: string; a11y: string} {
-    switch (type) {
-      case PaymentType.Vipps:
-        return {
-          brand: type,
-          text: t(PurchaseConfirmationTexts.paymentButtonVipps.text),
-          a11y: t(PurchaseConfirmationTexts.paymentButtonVipps.a11yHint),
-        };
-      case PaymentType.MasterCard:
-        return {
-          brand: type,
-          text: t(PurchaseConfirmationTexts.paymentButtonCardMC.text),
-          a11y: t(PurchaseConfirmationTexts.paymentButtonCardMC.a11yHint),
-        };
-      case PaymentType.VISA:
-        return {
-          brand: type,
-          text: t(PurchaseConfirmationTexts.paymentButtonCardVisa.text),
-          a11y: t(PurchaseConfirmationTexts.paymentButtonCardVisa.a11yHint),
-        };
+  function getPaymentTexts(
+    option: SavedPaymentOption,
+  ): {text: string; label: string; hint: string} {
+    let paymentTypeString =
+      option.paymentType === PaymentType.VISA
+        ? 'Visa'
+        : option.paymentType === PaymentType.MasterCard
+        ? 'MasterCard'
+        : option.paymentType === PaymentType.Vipps
+        ? 'Vipps'
+        : '';
+
+    if (option.savedType === 'normal') {
+      return {
+        text: paymentTypeString,
+        label: t(
+          PurchaseConfirmationTexts.paymentWithDefaultServices.a11yLabel(
+            paymentTypeString,
+          ),
+        ),
+        hint: t(PurchaseConfirmationTexts.paymentWithDefaultServices.a11Hint),
+      };
+    } else if (option.savedType === 'recurring') {
+      return {
+        text: paymentTypeString,
+        label: t(
+          PurchaseConfirmationTexts.paymentWithStoredCard.a11yLabel(
+            paymentTypeString,
+            option.recurringCard.masked_pan,
+          ),
+        ),
+        hint: t(PurchaseConfirmationTexts.paymentWithStoredCard.a11yHint),
+      };
+    } else {
+      return {
+        text: '',
+        label: '',
+        hint: '',
+      };
     }
   }
 
@@ -340,15 +357,15 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
     return `${month < 10 ? '0' + month : month}/${year.toString().slice(2, 4)}`;
   }
 
-  const paymentInfo = getPaymentInfo(option.paymentType);
+  const paymentTexts = getPaymentTexts(option);
 
   return (
     <View style={styles.card}>
       <TouchableOpacity
         style={[styles.paymentOption, styles.centerRow]}
         onPress={select}
-        accessibilityLabel={paymentInfo.a11y}
-        accessibilityHint={paymentInfo.a11y}
+        accessibilityLabel={paymentTexts.label}
+        accessibilityHint={paymentTexts.hint}
         accessibilityRole="radio"
         accessibilityState={{selected: selected}}
       >
@@ -356,14 +373,14 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
           <View style={styles.row}>
             <View style={styles.centerRow}>
               <RadioView checked={selected} />
-              <ThemeText>{paymentInfo.text}</ThemeText>
+              <ThemeText>{paymentTexts.text}</ThemeText>
               {option.savedType === 'recurring' ? (
                 <ThemeText style={styles.maskedPanPadding}>
                   **** {`${option.recurringCard.masked_pan}`}
                 </ThemeText>
               ) : null}
             </View>
-            <PaymentBrand icon={paymentInfo.brand} />
+            <PaymentBrand icon={option.paymentType} />
           </View>
           {option.savedType === 'recurring' &&
           option.recurringCard.expires_at ? (
