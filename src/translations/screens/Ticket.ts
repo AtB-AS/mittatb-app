@@ -18,7 +18,7 @@ const TicketTexts = {
     reserving: _(`Reserverer…`, `Reserving…`),
     unknown: _(`Ukjent`, `Unknown`),
     uninspectable: (duration: string) =>
-      _(`Utløper om ${duration}`, `Expires in ${duration}`),
+      _(`Utløper ${duration}`, `Expires ${duration}`),
     durationDelimiter: _(' og ', ' and '),
   },
   validityIcon: {

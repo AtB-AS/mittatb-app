@@ -21,13 +21,19 @@ import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import {AddTicket, InvalidTicket} from '@atb/assets/svg/icons/ticketing';
 import {screenReaderPause} from '@atb/components/accessible-text';
+import {Warning} from '@atb/assets/svg/situations';
 
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
   status: ValidityStatus | 'recent';
+  hasActiveTravelCard?: boolean;
 };
 
-const TicketInfo = ({travelRights, status}: TicketInfoProps) => {
+const TicketInfo = ({
+  travelRights,
+  status,
+  hasActiveTravelCard = false,
+}: TicketInfoProps) => {
   const {
     tariff_zones: tariffZones,
     preassigned_fare_products: preassignedFareProducts,
@@ -58,6 +64,7 @@ const TicketInfo = ({travelRights, status}: TicketInfoProps) => {
       toTariffZone={toTariffZone}
       userProfilesWithCount={userProfilesWithCount}
       status={status}
+      hasActiveTravelCard={hasActiveTravelCard}
     />
   );
 };
@@ -68,6 +75,7 @@ type TicketInfoViewProps = {
   toTariffZone?: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
   status: TicketInfoProps['status'];
+  hasActiveTravelCard: boolean;
 };
 
 export const TicketInfoView = (props: TicketInfoViewProps) => {
@@ -86,6 +94,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
     fromTariffZone,
     toTariffZone,
     userProfilesWithCount,
+    hasActiveTravelCard,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -133,6 +142,12 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
           {tariffZoneSummary}
         </ThemeText>
       )}
+      {hasActiveTravelCard && (
+        <View style={styles.tCardWarning}>
+          <ThemeIcon svg={Warning} style={styles.tCardWarningIcon}></ThemeIcon>
+          <ThemeText>T:kort er satt som reisebevis</ThemeText>
+        </View>
+      )}
     </View>
   );
 };
@@ -152,7 +167,7 @@ const TicketInspectionSymbol = ({
   return (
     <View
       style={[
-        styles.symbolContainer,
+        status !== 'uninspectable' && styles.symbolContainer,
         status === 'valid' && {
           ...styles.symbolContainerCircle,
           backgroundColor:
@@ -162,6 +177,7 @@ const TicketInspectionSymbol = ({
         },
         status === 'uninspectable' && {
           ...styles.symbolContainerCircle,
+          ...styles.textContainer,
           borderColor: theme.status.warning.main.backgroundColor,
         },
       ]}
@@ -261,12 +277,26 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   symbolContainerCircle: {
-    borderRadius: 36,
+    borderRadius: 1000,
     borderColor: theme.colors.primary_1.backgroundColor,
     borderWidth: 5,
   },
   symbolZones: {
     marginTop: theme.spacings.small,
+  },
+  textContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    aspectRatio: 1,
+    padding: theme.spacings.small,
+  },
+  tCardWarning: {
+    flexDirection: 'row',
+    paddingVertical: theme.spacings.small,
+  },
+  tCardWarningIcon: {
+    marginRight: theme.spacings.small,
   },
 }));
 
