@@ -33,6 +33,7 @@ import {SavedPaymentOption, usePreferences} from '@atb/preferences';
 import {useState} from 'react';
 import {useEffect} from 'react';
 import {CardPaymentMethod, PaymentMethod} from '../types';
+import PaymentIcon from '@atb/assets/svg/icons/ticketing/PaymentIcons';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -349,7 +350,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                       selectPaymentOption(previousMethod);
                     }
                   }}
-                ></Button>
+                />
                 <TouchableOpacity
                   style={styles.buttonTopSpacing}
                   disabled={!!error}

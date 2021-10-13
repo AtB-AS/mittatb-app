@@ -1,27 +1,22 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  View,
+  ActivityIndicator,
   FlatList,
   TouchableOpacity,
-  ActivityIndicator,
   useWindowDimensions,
+  View,
 } from 'react-native';
-import {Vipps} from '@atb/assets/svg/icons/ticketing';
 import {StyleSheet, useTheme} from '@atb/theme';
 import Button from '@atb/components/button';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {
   PurchaseConfirmationTexts,
   ScreenHeaderTexts,
   useTranslation,
 } from '@atb/translations';
-import {useState, useEffect} from 'react';
 import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import {SavedPaymentOption} from '@atb/preferences';
 import {Confirm} from '@atb/assets/svg/icons/actions';
 import {parseISO} from 'date-fns';
-import VisaLogo from '@atb/assets/svg/icons/ticketing/Visa';
-import MasterCardLogo from '@atb/assets/svg/icons/ticketing/MasterCard';
 import ThemeText from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {listRecurringPayments, PaymentType} from '@atb/tickets';
@@ -30,6 +25,7 @@ import {useAuthState} from '@atb/auth';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import PaymentBrand from '@atb/assets/svg/icons/ticketing/PaymentBrand';
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;
@@ -243,23 +239,23 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
 
   function getPaymentInfo(
     type: PaymentType,
-  ): {icon: React.ReactElement; text: string; a11y: string} {
+  ): {brand: PaymentType; text: string; a11y: string} {
     switch (type) {
       case PaymentType.Vipps:
         return {
-          icon: <Vipps />,
+          brand: type,
           text: t(PurchaseConfirmationTexts.paymentButtonVipps.text),
           a11y: t(PurchaseConfirmationTexts.paymentButtonVipps.a11yHint),
         };
       case PaymentType.MasterCard:
         return {
-          icon: <MasterCardLogo />,
+          brand: type,
           text: t(PurchaseConfirmationTexts.paymentButtonCardMC.text),
           a11y: t(PurchaseConfirmationTexts.paymentButtonCardMC.a11yHint),
         };
       case PaymentType.VISA:
         return {
-          icon: <VisaLogo />,
+          brand: type,
           text: t(PurchaseConfirmationTexts.paymentButtonCardVisa.text),
           a11y: t(PurchaseConfirmationTexts.paymentButtonCardVisa.a11yHint),
         };
@@ -300,15 +296,15 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
     return `${month < 10 ? '0' + month : month}/${year.toString().slice(2, 4)}`;
   }
 
-  const info = getPaymentInfo(option.paymentType);
+  const paymentInfo = getPaymentInfo(option.paymentType);
 
   return (
     <View style={styles.card}>
       <TouchableOpacity
         style={[styles.paymentOption, styles.centerRow]}
         onPress={select}
-        accessibilityLabel={info.a11y}
-        accessibilityHint={info.a11y}
+        accessibilityLabel={paymentInfo.a11y}
+        accessibilityHint={paymentInfo.a11y}
         accessibilityRole="radio"
         accessibilityState={{selected: selected}}
       >
@@ -316,14 +312,14 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
           <View style={styles.row}>
             <View style={styles.centerRow}>
               <RadioView checked={selected} />
-              <ThemeText>{info.text}</ThemeText>
+              <ThemeText>{paymentInfo.text}</ThemeText>
               {option.savedType === 'recurring' ? (
                 <ThemeText style={styles.maskedPanPadding}>
                   **** {`${option.recurringCard.masked_pan}`}
                 </ThemeText>
               ) : null}
             </View>
-            {info.icon}
+            <PaymentBrand icon={paymentInfo.brand} />
           </View>
           {option.savedType === 'recurring' &&
           option.recurringCard.expires_at ? (
