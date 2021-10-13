@@ -25,6 +25,8 @@ import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import PaymentBrand from '@atb/assets/svg/icons/ticketing/PaymentBrand';
+import hexToRgba from 'hex-to-rgba';
+import LinearGradient from 'react-native-linear-gradient';
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;
@@ -161,86 +163,97 @@ const SelectPaymentMethod: React.FC<Props> = ({
 
   return (
     <BottomSheetContainer fullHeight={true}>
-      <ScreenHeaderWithoutNavigation
-        title={t(SelectPaymentMethodTexts.header.text)}
-        leftButton={{
-          type: 'cancel',
-          onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.cancel.text),
-        }}
-        color={'background_2'}
-        setFocusOnLoad={false}
-      />
-
-      <ScrollView style={styles.paymentOptions}>
-        {defaultPaymentOptions.map((option) => {
-          return (
-            <PaymentOptionView
-              key={option.paymentType}
-              option={option}
-              selected={isSelectedOption(option)}
-              onSelect={(val: PaymentMethod) => {
-                setSelectedOption(val);
-              }}
-            />
-          );
-        })}
-
-        {loadingRecurringOptions && (
-          <>
-            <ActivityIndicator
-              color={theme.text.colors.primary}
-              style={styles.spinner}
-              animating={true}
-              size="large"
-            />
-          </>
-        )}
-
-        {remoteOptions.length > 0 && (
-          <View style={styles.listHeading}>
-            <ThemeText>
-              {t(SelectPaymentMethodTexts.saved_cards.text)}
-            </ThemeText>
-          </View>
-        )}
-
-        {remoteOptions.map((option) => {
-          return (
-            <PaymentOptionView
-              key={
-                option.savedType === 'recurring'
-                  ? option.recurringCard.id
-                  : option.paymentType
-              }
-              option={option}
-              selected={isSelectedOption(option)}
-              onSelect={(val: PaymentMethod) => {
-                setSelectedOption(val);
-              }}
-            />
-          );
-        })}
-      </ScrollView>
-
-      <FullScreenFooter>
-        <Button
-          style={styles.confirmButton}
-          color="primary_2"
-          text={t(SelectPaymentMethodTexts.confirm_button.text)}
-          accessibilityHint={t(
-            SelectPaymentMethodTexts.confirm_button.a11yhint,
-          )}
-          onPress={() => {
-            if (selectedOption) {
-              onSelect(selectedOption);
-            }
+      <View style={{flex: 1}}>
+        <ScreenHeaderWithoutNavigation
+          title={t(SelectPaymentMethodTexts.header.text)}
+          leftButton={{
+            type: 'cancel',
+            onPress: close,
+            text: t(ScreenHeaderTexts.headerButton.cancel.text),
           }}
-          disabled={!selectedOption}
-          icon={ArrowRight}
-          iconPosition="right"
+          color={'background_2'}
+          setFocusOnLoad={false}
         />
-      </FullScreenFooter>
+        <View style={{flexShrink: 100, flexGrow: 100}}>
+          <ScrollView style={styles.paymentOptions}>
+            {defaultPaymentOptions.map((option) => {
+              return (
+                <PaymentOptionView
+                  key={option.paymentType}
+                  option={option}
+                  selected={isSelectedOption(option)}
+                  onSelect={(val: PaymentMethod) => {
+                    setSelectedOption(val);
+                  }}
+                />
+              );
+            })}
+
+            {loadingRecurringOptions && (
+              <>
+                <ActivityIndicator
+                  color={theme.text.colors.primary}
+                  style={styles.spinner}
+                  animating={true}
+                  size="large"
+                />
+              </>
+            )}
+
+            {remoteOptions.length > 0 && (
+              <View style={styles.listHeading}>
+                <ThemeText>
+                  {t(SelectPaymentMethodTexts.saved_cards.text)}
+                </ThemeText>
+              </View>
+            )}
+
+            {remoteOptions.map((option) => {
+              return (
+                <PaymentOptionView
+                  key={
+                    option.savedType === 'recurring'
+                      ? option.recurringCard.id
+                      : option.paymentType
+                  }
+                  option={option}
+                  selected={isSelectedOption(option)}
+                  onSelect={(val: PaymentMethod) => {
+                    setSelectedOption(val);
+                  }}
+                />
+              );
+            })}
+          </ScrollView>
+
+          <LinearGradient
+            style={styles.gradient}
+            colors={[
+              hexToRgba(theme.colors.background_2.backgroundColor, 0),
+              hexToRgba(theme.colors.background_2.backgroundColor, 1),
+            ]}
+            pointerEvents={'none'}
+          />
+        </View>
+        <FullScreenFooter>
+          <Button
+            style={styles.confirmButton}
+            color="primary_2"
+            text={t(SelectPaymentMethodTexts.confirm_button.text)}
+            accessibilityHint={t(
+              SelectPaymentMethodTexts.confirm_button.a11yhint,
+            )}
+            onPress={() => {
+              if (selectedOption) {
+                onSelect(selectedOption);
+              }
+            }}
+            disabled={!selectedOption}
+            icon={ArrowRight}
+            iconPosition="right"
+          />
+        </FullScreenFooter>
+      </View>
     </BottomSheetContainer>
   );
 };
@@ -541,6 +554,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   saveOptionTextPadding: {
     paddingTop: theme.spacings.medium,
     opacity: 0.6,
+  },
+  gradient: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    height: 30,
   },
 }));
 
