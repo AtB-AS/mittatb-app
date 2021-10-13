@@ -75,7 +75,7 @@ type TicketInfoViewProps = {
   toTariffZone?: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
   status: TicketInfoProps['status'];
-  hasActiveTravelCard: boolean;
+  hasActiveTravelCard?: boolean;
 };
 
 export const TicketInfoView = (props: TicketInfoViewProps) => {
@@ -94,7 +94,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
     fromTariffZone,
     toTariffZone,
     userProfilesWithCount,
-    hasActiveTravelCard,
+    hasActiveTravelCard = false,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
