@@ -7,6 +7,7 @@ import createMobileTokenClient, {
 export type {Token} from '@entur/react-native-traveller';
 import {API_BASE_URL} from '@env';
 import {AxiosRequestConfig, Method} from 'axios';
+import {TokenStatus} from '@entur/react-native-traveller/lib/typescript/token/types';
 
 const client = createClient(undefined);
 
@@ -36,12 +37,8 @@ function mapRequest(request: ApiRequest): AxiosRequestConfig {
   };
 }
 
-export const {
-  initToken,
-  getToken,
-  deleteToken,
-  generateQrCode,
-} = createMobileTokenClient({
-  hosts: {pto: API_BASE_URL},
-  fetch: fetcher,
-});
+export const setupMobileTokenClient = (setStatus: (s: TokenStatus) => void) =>
+  createMobileTokenClient(setStatus, {
+    hosts: {pto: API_BASE_URL},
+    fetch: fetcher,
+  });

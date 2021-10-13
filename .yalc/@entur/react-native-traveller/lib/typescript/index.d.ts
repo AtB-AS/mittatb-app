@@ -1,11 +1,9 @@
 import { InitialConfig } from './config';
+import type { TokenStatus } from './token/types';
 export type { Token } from './native/types';
-export { isTokenValid } from './token';
 export { RequestError } from './fetcher';
 export type { Fetch, ApiResponse, ApiRequest } from './config';
-export default function createClient(initialConfig?: InitialConfig): {
-    initToken: () => Promise<import("./native/types").Token>;
-    getToken: () => Promise<import("./native/types").Token | undefined>;
-    deleteToken: () => Promise<void>;
+export default function createClient(setStatus: (status: TokenStatus) => void, initialConfig?: InitialConfig): {
+    restart: () => void;
     generateQrCode: () => Promise<string>;
 };

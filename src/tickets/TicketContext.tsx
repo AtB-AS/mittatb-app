@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useReducer,
 } from 'react';
 import useInterval from '../utils/use-interval';
@@ -14,15 +15,15 @@ import {ActiveReservation, FareContract, PaymentStatus} from './types';
 import {getPayment} from './api';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import Bugsnag from '@bugsnag/react-native';
-import {getToken, initToken, Token} from '@atb/mobile-token';
-import {Platform} from 'react-native';
+import {setupMobileTokenClient} from '@atb/mobile-token';
+import {TokenStatus} from '@entur/react-native-traveller/lib/typescript/token/types';
 
 type TicketReducerState = {
   fareContracts: FareContract[];
   activeReservations: ActiveReservation[];
   isRefreshingTickets: boolean;
   errorRefreshingTickets: boolean;
-  token?: Token;
+  tokenStatus?: TokenStatus;
 };
 
 type TicketReducerAction =
@@ -38,8 +39,8 @@ type TicketReducerAction =
       activeReservations: ActiveReservation[];
     }
   | {
-      type: 'SET_MOBILE_TOKEN';
-      token: Token;
+      type: 'SET_TOKEN_STATUS';
+      tokenStatus: TokenStatus;
     };
 
 type TicketReducer = (
@@ -52,10 +53,10 @@ const ticketReducer: TicketReducer = (
   action,
 ): TicketReducerState => {
   switch (action.type) {
-    case 'SET_MOBILE_TOKEN': {
+    case 'SET_TOKEN_STATUS': {
       return {
         ...prevState,
-        token: action.token,
+        tokenStatus: action.tokenStatus,
       };
     }
     case 'SET_IS_REFRESHING_FARE_CONTRACT_TICKETS': {
@@ -114,13 +115,15 @@ type TicketState = {
   refreshTickets: () => void;
   fareContracts: FareContract[];
   findFareContractByOrderId: (id: string) => FareContract | undefined;
+  generateQrCode: () => Promise<string>;
+  restartTokenClient: () => void;
 } & Pick<
   TicketReducerState,
-  'activeReservations' | 'isRefreshingTickets' | 'token'
+  'activeReservations' | 'isRefreshingTickets' | 'tokenStatus'
 >;
 
 const initialReducerState: TicketReducerState = {
-  token: undefined,
+  tokenStatus: undefined,
   fareContracts: [],
   activeReservations: [],
   isRefreshingTickets: false,
@@ -138,28 +141,12 @@ const TicketContextProvider: React.FC = ({children}) => {
   const {user, abtCustomerId} = useAuthState();
   const {enable_ticketing} = useRemoteConfig();
 
-  useEffect(() => {
-    async function ensureToken() {
-      let token: Token | undefined = undefined;
-      try {
-        token = await getToken();
-      } catch (err) {
-        console.warn(err);
-      }
-
-      try {
-        if (!token) {
-          token = await initToken();
-        }
-
-        dispatch({type: 'SET_MOBILE_TOKEN', token});
-      } catch (err) {
-        console.warn(err);
-      }
-    }
-
-    if (Platform.OS === 'ios' && user?.phoneNumber) ensureToken();
-  }, [dispatch, user?.phoneNumber]);
+  const {generateQrCode, restart: restartTokenClient} = useMemo(() => {
+    const setStatusCallback = (tokenStatus: TokenStatus) => {
+      dispatch({type: 'SET_TOKEN_STATUS', tokenStatus});
+    };
+    return setupMobileTokenClient(setStatusCallback);
+  }, []);
 
   useEffect(() => {
     if (user && abtCustomerId && enable_ticketing) {
@@ -260,6 +247,8 @@ const TicketContextProvider: React.FC = ({children}) => {
         addReservation,
         findFareContractByOrderId: (orderId) =>
           state.fareContracts.find((fc) => fc.orderId === orderId),
+        generateQrCode,
+        restartTokenClient,
       }}
     >
       {children}

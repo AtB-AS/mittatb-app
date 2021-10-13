@@ -14,7 +14,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		TCT1BPixv4nU/y5MWPCmwIvI/LM=
+		/R2VaAlnzMzUdeVbibRvqgfgOII=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<data>
@@ -26,7 +26,7 @@
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		s1vTK7Bn8V7iaLvglca8jWs+ju0=
+		ROGgRLSuPuTOQB+wriTP6+wSTXs=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftdoc</key>
 		<data>
@@ -38,7 +38,7 @@
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		s1vTK7Bn8V7iaLvglca8jWs+ju0=
+		ROGgRLSuPuTOQB+wriTP6+wSTXs=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
@@ -50,7 +50,7 @@
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		wKVU/OXI9FndzJS0mBjpOlSHpEU=
+		2ssc0+2GYe6YIVYsx3E7OFfYIjQ=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/x86_64.swiftdoc</key>
 		<data>
@@ -62,7 +62,7 @@
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		wKVU/OXI9FndzJS0mBjpOlSHpEU=
+		2ssc0+2GYe6YIVYsx3E7OFfYIjQ=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -103,7 +103,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			AzTDAZxRtX3N9iYP9Qz1jBpsSLtsWBSVRbMY3XIeUyE=
+			1Qn565WqqOLE70ygrMhdnjmmkR2blhmxGwytTz+4gnI=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftdoc</key>
@@ -124,7 +124,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			AzTDAZxRtX3N9iYP9Qz1jBpsSLtsWBSVRbMY3XIeUyE=
+			1Qn565WqqOLE70ygrMhdnjmmkR2blhmxGwytTz+4gnI=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
@@ -145,7 +145,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			hGRmy0WSaQSMGP59ekweqfiIT0PyVgeVPptjbRgxYhU=
+			kAp1HkHEkpn1y3FVRD75JlEzTkCiUpt1SdKLMWpKMyQ=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/x86_64.swiftdoc</key>
@@ -166,7 +166,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			hGRmy0WSaQSMGP59ekweqfiIT0PyVgeVPptjbRgxYhU=
+			kAp1HkHEkpn1y3FVRD75JlEzTkCiUpt1SdKLMWpKMyQ=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

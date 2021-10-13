@@ -1,5 +1,3 @@
-import type { Token } from '../native/types';
-import type { Fetch, Hosts } from '../config';
-export declare function isTokenValid({ tokenValidityStart, tokenValidityEnd, }: Token): boolean;
-export declare function createRenewToken(fetcher: Fetch, hosts: Hosts): (token: Token) => Promise<Token>;
-export declare function createInitToken(fetcher: Fetch, hosts: Hosts): () => Promise<Token>;
+import type { AbtTokensService } from './abt-tokens-service';
+import type { TokenStatus } from './types';
+export declare const startTokenStateMachine: (abtTokensService: AbtTokensService, setStatus: (s: TokenStatus) => void, lastStatus?: TokenStatus | undefined) => Promise<void>;

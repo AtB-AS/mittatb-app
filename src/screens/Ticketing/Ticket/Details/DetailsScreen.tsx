@@ -27,7 +27,7 @@ export default function DetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
-  const {findFareContractByOrderId, token: mobileToken} = useTicketState();
+  const {findFareContractByOrderId} = useTicketState();
   const fc = findFareContractByOrderId(route?.params?.orderId);
   const {t} = useTranslation();
 
@@ -48,7 +48,6 @@ export default function DetailsScreen({navigation, route}: Props) {
         {fc && (
           <DetailsContent
             fareContract={fc}
-            hasMobileToken={!!mobileToken}
             now={now}
             onReceiptNavigate={onReceiptNavigate}
           />

@@ -4,12 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = createClient;
-Object.defineProperty(exports, "isTokenValid", {
-  enumerable: true,
-  get: function () {
-    return _token.isTokenValid;
-  }
-});
 Object.defineProperty(exports, "RequestError", {
   enumerable: true,
   get: function () {
@@ -19,30 +13,48 @@ Object.defineProperty(exports, "RequestError", {
 
 var _config = require("./config");
 
-var _native = require("./native");
-
 var _token = require("./token");
 
 var _fetcher = require("./fetcher");
 
+var _abtTokensService = require("./token/abt-tokens-service");
+
+var _native = require("./native");
+
 var _types = require("./native/types");
 
-async function onStartup(fetcher, hosts) {
-  const token = await (0, _native.getToken)();
-
-  if (token && !(0, _token.isTokenValid)(token)) {
-    (0, _token.createRenewToken)(fetcher, hosts)(token);
-  }
-}
-
-function createClient(initialConfig) {
+function createClient(setStatus, initialConfig) {
   const config = (0, _config.getConfigFromInitialConfig)(initialConfig);
   const fetcher = (0, _fetcher.createFetcher)(config);
-  onStartup(fetcher, config.hosts);
+  const abtTokensService = (0, _abtTokensService.createAbtTokensService)(fetcher, config.hosts);
+  let lastSeenStatus;
+
+  const setStatusWrapper = status => {
+    lastSeenStatus = status;
+    setStatus(status);
+  };
+
+  const startStateMachine = () => {
+    (0, _token.startTokenStateMachine)(abtTokensService, setStatusWrapper, lastSeenStatus).catch(err => {
+      var _lastSeenStatus;
+
+      console.warn('Unexpected error', err);
+      setStatusWrapper({
+        state: ((_lastSeenStatus = lastSeenStatus) === null || _lastSeenStatus === void 0 ? void 0 : _lastSeenStatus.state) || 'Loading',
+        error: {
+          type: 'Unknown',
+          message: 'Unexpected error',
+          err
+        }
+      });
+    });
+  };
+
+  startStateMachine();
   return {
-    initToken: (0, _token.createInitToken)(fetcher, config.hosts),
-    getToken: _native.getToken,
-    deleteToken: _native.deleteToken,
+    restart: () => {
+      startStateMachine();
+    },
     generateQrCode: () => (0, _native.getSecureToken)([_types.PayloadAction.ticketInspection])
   };
 }

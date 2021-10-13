@@ -1,12 +1,4 @@
-import type {
-  Fetch,
-  Config,
-  ApiResponse,
-  ApiRequest,
-  ApiErrorBody,
-} from './config';
-import { getToken } from './native';
-import { createRenewToken } from './token';
+import type { ApiRequest, ApiResponse, Config, Fetch } from './config';
 
 export class RequestError extends Error {
   response: ApiResponse;
@@ -23,22 +15,6 @@ export class RequestError extends Error {
     this.name = 'RequestError';
     this.response = response;
   }
-}
-
-async function tokenNeedsRenewal<T>(
-  response: ApiResponse<T>
-): Promise<boolean> {
-  if (response.status !== 401) return false;
-  const contentType = response.headers['content-type'];
-  if (contentType !== 'application/json') return false;
-
-  if (isApiErrorBody(response.body)) {
-    const { errorCode } = await response.body;
-
-    return errorCode === 'TOKEN_EXPIRED';
-  }
-
-  return false;
 }
 
 function createInternalFetcher(config: Config): Fetch {
@@ -62,43 +38,18 @@ function createInternalFetcher(config: Config): Fetch {
 export function createFetcher(config: Config): Fetch {
   const fetcher = createInternalFetcher(config);
 
-  let renewTokenLock: Promise<void> | undefined;
-  const renewToken = createRenewToken(fetcher, config.hosts);
-
-  const handleTokenRenewal = () => {
-    const handle = async () => {
-      const token = await getToken();
-      if (!token) return;
-      await renewToken(token);
-    };
-
-    renewTokenLock = handle().finally(() => {
-      renewTokenLock = undefined;
-    });
-
-    return renewTokenLock;
-  };
-
   const handleRequest = async <T>(
     request: ApiRequest,
     allowRetry = true
   ): Promise<ApiResponse<T>> => {
-    if (renewTokenLock) {
-      await renewTokenLock;
-      return handleRequest(request, false);
-    }
-
     try {
       return await fetcher<T>(request);
     } catch (error) {
       if (error instanceof RequestError) {
-        const { response } = error;
-        if (allowRetry && (await tokenNeedsRenewal(response))) {
-          await handleTokenRenewal();
+        if (allowRetry) {
           return handleRequest(request, false);
         }
       }
-
       throw error;
     }
   };
@@ -108,8 +59,4 @@ export function createFetcher(config: Config): Fetch {
 
 function isOk(response: ApiResponse) {
   return response.status > 199 && response.status < 300;
-}
-
-function isApiErrorBody(body: any): body is ApiErrorBody {
-  return 'error_code' in body;
 }

@@ -1,7 +1,5 @@
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-import { getToken } from './native';
-import { createRenewToken } from './token';
 export class RequestError extends Error {
   constructor(response) {
     const message = `${response.status}`; //: ${response.statusText}`;
@@ -18,21 +16,6 @@ export class RequestError extends Error {
     this.response = response;
   }
 
-}
-
-async function tokenNeedsRenewal(response) {
-  if (response.status !== 401) return false;
-  const contentType = response.headers['content-type'];
-  if (contentType !== 'application/json') return false;
-
-  if (isApiErrorBody(response.body)) {
-    const {
-      errorCode
-    } = await response.body;
-    return errorCode === 'TOKEN_EXPIRED';
-  }
-
-  return false;
 }
 
 function createInternalFetcher(config) {
@@ -53,38 +36,13 @@ function createInternalFetcher(config) {
 
 export function createFetcher(config) {
   const fetcher = createInternalFetcher(config);
-  let renewTokenLock;
-  const renewToken = createRenewToken(fetcher, config.hosts);
-
-  const handleTokenRenewal = () => {
-    const handle = async () => {
-      const token = await getToken();
-      if (!token) return;
-      await renewToken(token);
-    };
-
-    renewTokenLock = handle().finally(() => {
-      renewTokenLock = undefined;
-    });
-    return renewTokenLock;
-  };
 
   const handleRequest = async (request, allowRetry = true) => {
-    if (renewTokenLock) {
-      await renewTokenLock;
-      return handleRequest(request, false);
-    }
-
     try {
       return await fetcher(request);
     } catch (error) {
       if (error instanceof RequestError) {
-        const {
-          response
-        } = error;
-
-        if (allowRetry && (await tokenNeedsRenewal(response))) {
-          await handleTokenRenewal();
+        if (allowRetry) {
           return handleRequest(request, false);
         }
       }
@@ -98,9 +56,5 @@ export function createFetcher(config) {
 
 function isOk(response) {
   return response.status > 199 && response.status < 300;
-}
-
-function isApiErrorBody(body) {
-  return 'error_code' in body;
 }
 //# sourceMappingURL=fetcher.js.map

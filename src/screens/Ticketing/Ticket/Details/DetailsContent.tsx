@@ -1,37 +1,34 @@
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {FareContract, isPreactivatedTicket} from '@atb/tickets';
-import {TicketsTexts, TicketTexts, useTranslation} from '@atb/translations';
+import {FareContract, isPreactivatedTicket, useTicketState} from '@atb/tickets';
+import {TicketTexts, useTranslation} from '@atb/translations';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import qrcode from 'qrcode';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import TicketInfo from '../TicketInfo';
 import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
 import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
-import {generateQrCode} from '@atb/mobile-token';
 import useInterval from '@atb/utils/use-interval';
 
 type Props = {
   fareContract: FareContract;
   now: number;
-  hasMobileToken: boolean;
   onReceiptNavigate: () => void;
 };
 
 const DetailsContent: React.FC<Props> = ({
   fareContract: fc,
-  hasMobileToken,
   now,
   onReceiptNavigate,
 }) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const qrCode = useQrCode(fc, hasMobileToken);
+  const qrCode = useQrCode(fc);
   const qrCodeSvg = useQrCodeSvg(qrCode);
 
   const firstTravelRight = fc.travelRights[0];
@@ -132,23 +129,42 @@ const useQrCodeSvg = (qrCode: string | undefined) => {
   return qrCodeSvg;
 };
 
-const useQrCode = (fc: FareContract, hasMobileToken: boolean) => {
+const useQrCode = (fc: FareContract) => {
+  const {tokenStatus, generateQrCode, restartTokenClient} = useTicketState();
   const [tokenQRCode, setTokenQRCode] = useState<string | undefined>(undefined);
+
+  const updateQrCode = useCallback(async () => {
+    if (tokenStatus?.state === 'Valid') {
+      const qr = await generateQrCode();
+      setTokenQRCode(qr);
+    } else {
+      setTokenQRCode(undefined);
+    }
+  }, [tokenStatus]);
+
+  useInterval(
+    () => {
+      restartTokenClient();
+    },
+    10000,
+    [restartTokenClient, tokenStatus?.error],
+    !tokenStatus?.error,
+  );
+
+  useEffect(() => {
+    updateQrCode();
+  }, []);
 
   // TODO: Update so this happens in TicketContext later. Just proof-of-concept
   useInterval(
     () => {
-      async function updateQrCode() {
-        const qr = await generateQrCode();
-        setTokenQRCode(qr);
-      }
-      if (hasMobileToken) updateQrCode();
+      updateQrCode();
     },
     10000,
-    [hasMobileToken],
+    [],
   );
 
-  return hasMobileToken ? tokenQRCode : fc.qrCode;
+  return tokenQRCode ?? fc.qrCode;
 };
 
 const useStyles = StyleSheet.createThemeHook(() => ({

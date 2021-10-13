@@ -5,7 +5,7 @@ import DeviceCheck
 @objc(EnturTraveller)
 class EnturTraveller: NSObject {
     let secureTokenService: SecureTokenService = SecureTokenService(deviceDetails: DeviceDetails.getPrefilledDeviceDetails())
-    
+
     @objc(generateAssertion:withNonce:withTokenId:withHash:withResolver:withRejecter:)
     func generateAssertion(keyId: String, nonce: String, tokenId: String, hash: Data, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         if #available(iOS 14.0, *), DCAppAttestService.shared.isSupported {
@@ -22,12 +22,12 @@ class EnturTraveller: NSObject {
             reject("GENERATE_ASSERTION_ERROR", "Assertion generation only works on real devices running iOS14+", nil)
         }
     }
-    
+
     @objc(attest:withNonce:withResolver:withRejecter:)
     func attest(tokenId: String, nonce: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         if #available(iOS 14.0, *), DCAppAttestService.shared.isSupported {
             let attestor = Attestator(tokenId: tokenId, nonce: nonce)
-            
+
             attestor.attest(deviceDetails: DeviceDetails.getPrefilledDeviceDetails(), completionHandler: { res in
                 switch res {
                     case .success(let attestationData):
@@ -38,7 +38,7 @@ class EnturTraveller: NSObject {
                             "signaturePublicKey" : attestationData.signaturePublicKey,
                             "encryptionPublicKey": attestationData.encryptionPublicKey,
                         ]
-                        
+
                         resolve(dict)
                     case .failure(let err):
                         reject("ATTESTATION_ERROR", err.localizedDescription, err)
@@ -48,12 +48,12 @@ class EnturTraveller: NSObject {
             reject("ATTESTATION_ERROR", "This attestation is only supported by iOS14+, try attestLegacy for devices running iOS older than iOS14", nil)
         }
     }
-    
+
     @objc(attestLegacy:withNonce:withServerPublicKey:withResolver:withRejecter:)
     func attestLegacy(tokenId: String, nonce: String, serverPublicKey: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         if #available(iOS 11.0, *), DCDevice.current.isSupported {
             let attestor = LegacyAttestator(tokenId: tokenId, nonce: nonce)
-            
+
             attestor.attest(serverPublicKey: serverPublicKey, deviceDetails: DeviceDetails.getPrefilledDeviceDetails(), completionHandler: { res in
                 switch res {
                     case .success(let attestation):
@@ -63,7 +63,7 @@ class EnturTraveller: NSObject {
                             "encryptionPublicKey": attestation.encryptionPublicKey,
                             "attestationEncryptionKey": attestation.attestationEncryptionKey
                         ]
-                        
+
                         resolve(dict)
                     case .failure(let err):
                         reject("ATTESTATION_ERROR", err.localizedDescription, err)
@@ -73,7 +73,7 @@ class EnturTraveller: NSObject {
             reject("ATTESTATION_ERROR", "Attestation is only supported by iOS 11+", nil)
         }
     }
-    
+
     @objc(getAttestationSupport:withRejecter:)
     func getAttestationSupport(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         if #available(iOS 11, *) {
@@ -99,15 +99,15 @@ class EnturTraveller: NSObject {
             reject("ATTESTATION_ERROR", "Device cannot be attested", nil)
         }
     }
-    
+
     @objc(addToken:withCertificate:withTokenValidityStart:withTokenValidityEnd:withResolver:withRejecter:)
     func addToken(tokenId: String, certificate: String, tokenValidityStart: NSNumber, tokenValidityEnd: NSNumber, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         let tokenStore = TokenStore()
-        
+
         let newToken = Token(tokenId: tokenId, validityStart: tokenValidityStart.doubleValue, validityEnd: tokenValidityEnd.doubleValue)
-        
+
         let success = tokenStore.saveActiveToken(token: newToken)
-        
+
         if success {
             newToken.storeCertificate(certificateBase64Encoded: certificate) { res in
                 switch res {
@@ -121,51 +121,51 @@ class EnturTraveller: NSObject {
             reject("ADD_TOKEN_ERROR", "Failed to save new token", nil)
         }
     }
-    
+
     @objc(getToken:withRejecter:)
     func getToken(resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         let tokenStore = TokenStore()
-        
+
         if let token = tokenStore.loadActiveToken() {
             let dict: NSDictionary = [
                 "tokenId": token.tokenId,
                 "tokenValidityStart" : token.validityStart,
                 "tokenValidityEnd": token.validityEnd,
             ]
-            
+
             resolve(dict)
         } else {
-            reject("GET_TOKEN_ERROR", "No token found", nil)
+            resolve(nil)
         }
     }
-    
+
     @objc(deleteToken:withRejecter:)
     func deleteToken(resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         let tokenStore = TokenStore()
-        
+
         tokenStore.deleteActiveToken()
-        
+
         resolve(nil)
     }
-    
+
     @objc(getSecureToken:withResolver:withRejecter:)
     func getSecureToken(actions: NSArray, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
-        
+
         var payloadActions: [PayloadAction] = []
-        
+
         do {
             payloadActions = try actions.toPayLoadActions()
         } catch (let error) {
             reject("SECURE_TOKEN_ERROR", error.localizedDescription, error)
             return
         }
-        
+
         let secureToken = secureTokenService.getSecureToken(actions: payloadActions)
-        
+
         switch (secureToken) {
         case .success(let token):
             resolve(token)
-            
+
         case .failure(let error):
             switch (error) {
             case .couldNotSerializeToken:

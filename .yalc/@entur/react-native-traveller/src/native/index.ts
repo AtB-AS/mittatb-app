@@ -6,7 +6,7 @@ import type {
   Token,
 } from './types';
 
-type EnturTravellerType = {
+export type EnturTravellerType = {
   attest(tokenId: string, nonce: string): Promise<AttestationData>;
   attestLegacy(
     tokenId: string,

@@ -10,8 +10,10 @@ export type InitializeTokenResponse = {
   nonceValidityEnd: number;
 };
 
+export type ListTokensResponse = { id: string }[];
+
 export type RenewTokenRequest = {
-  requireAttestation: boolean;
+  existingToken?: string;
 };
 
 export type RenewTokenResponse = {
@@ -34,6 +36,7 @@ export type ActivateTokenRequest = {
   /** base64 encoded token public key */
   signaturePublicKey?: string;
   encryptionPublicKey?: string;
+  existingToken?: string;
   attestation:
     | {
         attestationType: 'iOS_Device_Check';
@@ -69,3 +72,26 @@ export type ActivateTokenResponse = {
   tokenValidityStart: number;
   tokenValidityEnd: number;
 };
+
+const errorTypes = ['None', 'Unknown', 'Network'] as const;
+export type ErrorType = typeof errorTypes[number];
+
+export type TokenError = {
+  type: ErrorType;
+  message: string;
+  err: any;
+};
+
+export type TokenStatus = {
+  state: TokenState;
+  error?: TokenError;
+};
+
+const tokenStates = [
+  'Loading',
+  'Valid',
+  'Validating',
+  'Initiating',
+  'Renewing',
+] as const;
+export type TokenState = typeof tokenStates[number];
