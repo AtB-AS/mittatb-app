@@ -324,7 +324,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
           {option.savedType === 'recurring' &&
           option.recurringCard.expires_at ? (
             <View>
-              <ThemeText style={styles.masked}>
+              <ThemeText style={styles.expireDate}>
                 {getExpireDate(option.recurringCard.expires_at)}
               </ThemeText>
             </View>
@@ -487,9 +487,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     paddingTop: theme.spacings.small,
   },
-  masked: {
+  expireDate: {
     opacity: 0.6,
-    paddingTop: 18,
+    paddingTop: theme.spacings.small,
     paddingLeft: 36,
   },
   confirmButton: {
