@@ -44,7 +44,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
-  const {authenticationType, signOut, user} = useAuthState();
+  const {authenticationType, signOut, user, abtCustomerId} = useAuthState();
   const config = useLocalConfig();
 
   const {fareContracts} = useTicketState();
@@ -59,6 +59,13 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
   function copyInstallId() {
     if (config?.installId) setClipboard(config.installId);
+  }
+
+  function copyFirestoreLink() {
+    if (abtCustomerId)
+      setClipboard(
+        `https://console.firebase.google.com/u/1/project/atb-mobility-platform-staging/firestore/data/~2Fcustomers~2F${abtCustomerId}`,
+      );
   }
 
   return (
@@ -245,6 +252,11 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               onPress={() => {
                 appDispatch({type: 'RESTART_ONBOARDING'});
               }}
+            />
+            <Sections.LinkItem
+              text="Copy link to customer in Firestore (staging)"
+              icon="arrow-upleft"
+              onPress={() => copyFirestoreLink()}
             />
           </Sections.Section>
         )}
