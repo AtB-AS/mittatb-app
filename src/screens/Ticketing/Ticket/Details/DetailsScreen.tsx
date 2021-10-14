@@ -32,7 +32,7 @@ export default function DetailsScreen({navigation, route}: Props) {
   const fc = findFareContractByOrderId(route?.params?.orderId);
   const {t} = useTranslation();
 
-  const hasActiveTravelCard = !!customerProfile.travelcard;
+  const hasActiveTravelCard = !!customerProfile?.travelcard;
 
   const onReceiptNavigate = () =>
     fc &&

@@ -168,7 +168,7 @@ export const ActiveTickets: React.FC<Props> = () => {
         refreshTickets={refreshTickets}
         noTicketsLabel={t(TicketsTexts.activeTicketsTab.noTickets)}
         now={now}
-        travelCard={customerProfile.travelcard}
+        travelCard={customerProfile?.travelcard}
       />
     </View>
   );

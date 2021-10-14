@@ -21,7 +21,7 @@ type TicketReducerState = {
   activeReservations: ActiveReservation[];
   isRefreshingTickets: boolean;
   errorRefreshingTickets: boolean;
-  customerProfile: CustomerProfile;
+  customerProfile: CustomerProfile | undefined;
 };
 
 type TicketReducerAction =
@@ -113,15 +113,17 @@ type TicketState = {
   refreshTickets: () => void;
   fareContracts: FareContract[];
   findFareContractByOrderId: (id: string) => FareContract | undefined;
-  customerProfile: CustomerProfile;
-} & Pick<TicketReducerState, 'activeReservations' | 'isRefreshingTickets'>;
+} & Pick<
+  TicketReducerState,
+  'activeReservations' | 'isRefreshingTickets' | 'customerProfile'
+>;
 
 const initialReducerState: TicketReducerState = {
   fareContracts: [],
   activeReservations: [],
   isRefreshingTickets: false,
   errorRefreshingTickets: false,
-  customerProfile: {},
+  customerProfile: undefined,
 };
 
 const TicketContext = createContext<TicketState | undefined>(undefined);
