@@ -89,7 +89,7 @@ export function getConfig(): RemoteConfig {
     values['modes_we_sell_tickets_for']?.asString() ??
     defaultRemoteConfig.modes_we_sell_tickets_for;
   const preassigned_fare_products =
-    values['preassigned_fare_products']?.asString() ??
+    values['preassigned_fare_products_v2']?.asString() ??
     defaultRemoteConfig.preassigned_fare_products;
   const tariff_zones =
     values['tariff_zones']?.asString() ?? defaultRemoteConfig.tariff_zones;

@@ -19,6 +19,11 @@ const SelectPaymentMethodTexts = {
   },
   save_card: {
     text: _('Lagre kort', 'Save card'),
+    a11yhint: _('Aktiver for å lagre kort', 'Activate to save card'),
+  },
+  not_save_card: {
+    text: _('Lagre kort', 'Save card'),
+    a11yhint: _('Aktiver for ikke å lagre kort', 'Activate to not save card'),
   },
 };
 

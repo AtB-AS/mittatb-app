@@ -1,5 +1,5 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
@@ -10,18 +10,18 @@ import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ThemeColor} from '@atb/theme/colors';
 import {useNavigation} from '@react-navigation/native';
-import {TicketIllustration, Psst} from '@atb/assets/svg/illustrations';
 import {TouchableOpacity} from 'react-native';
-import {filterActiveFareContracts, useTicketState} from '@atb/tickets';
+import {useTicketState} from '@atb/tickets';
+import SimpleTicket from '@atb/screens/Ticketing/Ticket';
 
 const themeColor: ThemeColor = 'background_gray';
 
-export default function LoginOnboarding({
+export default function ActiveTicketPrompt({
   headerLeftButton,
   doAfterSubmit,
   headerRightButton,
 }: {
-  doAfterSubmit: (hasActiveFareContracts: boolean) => void;
+  doAfterSubmit: () => void;
   headerLeftButton?: LeftButtonProps;
   headerRightButton?: RightButtonProps;
 }) {
@@ -29,11 +29,11 @@ export default function LoginOnboarding({
   const navigation = useNavigation();
   const styles = useThemeStyles();
   const focusRef = useFocusOnLoad();
-
   const {fareContracts} = useTicketState();
-  const activeFareContracts = filterActiveFareContracts(fareContracts);
+  const [now, setNow] = useState<number>(Date.now());
+
   const onNext = async () => {
-    doAfterSubmit(activeFareContracts.length > 0);
+    doAfterSubmit();
   };
 
   return (
@@ -52,27 +52,35 @@ export default function LoginOnboarding({
             style={styles.title}
             color={themeColor}
           >
-            {t(LoginTexts.onboarding.title)}
+            {t(LoginTexts.activeTicketPrompt.title)}
           </ThemeText>
         </View>
         <View accessible={true}>
-          <ThemeText style={styles.description} color={themeColor}>
-            {t(LoginTexts.onboarding.description)}
+          <ThemeText
+            style={styles.description}
+            color={themeColor}
+            isMarkdown={true}
+          >
+            {t(LoginTexts.activeTicketPrompt.body)}
           </ThemeText>
         </View>
-        <TicketIllustration style={styles.illustation}></TicketIllustration>
-        <View style={styles.buttonView}>
-          <Button
-            color={'primary_2'}
-            onPress={onNext}
-            text={t(LoginTexts.onboarding.button)}
-            icon={ArrowRight}
-            iconPosition="right"
+        <View style={styles.ticket}>
+          <SimpleTicket
+            fareContract={fareContracts[0]}
+            now={now}
+            hideDetails={true}
           />
         </View>
+        <Button
+          color={'primary_2'}
+          onPress={navigation.goBack}
+          text={t(LoginTexts.activeTicketPrompt.laterButton)}
+          icon={ArrowRight}
+          iconPosition="right"
+        />
         <TouchableOpacity
           style={styles.laterButton}
-          onPress={navigation.goBack}
+          onPress={onNext}
           accessibilityRole="button"
         >
           <ThemeText
@@ -80,22 +88,9 @@ export default function LoginOnboarding({
             type="body__primary"
             color={themeColor}
           >
-            {t(LoginTexts.onboarding.laterButton)}
+            {t(LoginTexts.activeTicketPrompt.continueButton)}
           </ThemeText>
         </TouchableOpacity>
-        <View style={styles.carrotInfo}>
-          <Psst></Psst>
-          <ThemeText
-            style={styles.carrotTitle}
-            type="body__primary--bold"
-            color={themeColor}
-          >
-            {t(LoginTexts.onboarding.carrotTitle)}
-          </ThemeText>
-          <ThemeText type="body__primary" color={themeColor}>
-            {t(LoginTexts.onboarding.carrotBody)}
-          </ThemeText>
-        </View>
       </ScrollView>
     </View>
   );
@@ -120,8 +115,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   errorMessage: {
     marginBottom: theme.spacings.medium,
   },
-  buttonView: {
-    marginTop: theme.spacings.medium,
+  ticket: {
+    marginVertical: theme.spacings.large,
   },
   illustation: {
     alignSelf: 'center',

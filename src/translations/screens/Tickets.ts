@@ -9,10 +9,6 @@ const TicketsTexts = {
   buyTicketsTab: {
     label: _('Kjøp', 'Buy'),
     a11yLabel: _('Kjøp billetter', 'Buy tickets'),
-    loginReason: _(
-      'For å kjøpe periodebillett må du være logget inn.',
-      'To buy a period ticket you have to be signed in.',
-    ),
     button: {
       single: {
         text: _('Ny enkeltbillett', 'New single ticket'),

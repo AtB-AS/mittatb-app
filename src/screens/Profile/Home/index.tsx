@@ -19,6 +19,7 @@ import {ProfileStackParams} from '..';
 import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {useAppDispatch} from '@atb/AppContext';
+import {filterActiveFareContracts, useTicketState} from '@atb/tickets';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -45,6 +46,10 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   const {t} = useTranslation();
   const {authenticationType, signOut, user} = useAuthState();
   const config = useLocalConfig();
+
+  const {fareContracts} = useTicketState();
+  const activeFareContracts = filterActiveFareContracts(fareContracts);
+  const hasActiveFareContracts = activeFareContracts.length > 0;
 
   const {
     setClipboard,
@@ -76,7 +81,9 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 text={t(ProfileTexts.sections.account.linkItems.login.label)}
                 onPress={() =>
                   navigation.navigate('LoginInApp', {
-                    screen: 'PhoneInputInApp',
+                    screen: hasActiveFareContracts
+                      ? 'ActiveTicketPromptInApp'
+                      : 'PhoneInputInApp',
                     params: {
                       afterLogin: {routeName: 'ProfileHome'},
                     },
