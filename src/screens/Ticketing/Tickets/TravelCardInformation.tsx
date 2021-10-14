@@ -30,13 +30,13 @@ const TravelCardInformation: React.FC<Props> = ({travelCard}) => {
         {t(TicketsTexts.travelCardInformation.onInspection)}
       </ThemeText>
       <ActiveTicketCard cardId={travelCard.id?.toString()}></ActiveTicketCard>
-      <ThemeText
+      {/* <ThemeText
         type="body__tertiary"
         color="secondary"
         style={styles.centerText}
       >
         {t(TicketsTexts.travelCardInformation.changeInstructions)}
-      </ThemeText>
+      </ThemeText> */}
     </View>
   );
 };

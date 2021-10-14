@@ -103,6 +103,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   scrollView: {flex: 1, padding: theme.spacings.medium},
   noTicketsText: {
     textAlign: 'center',
+    marginBottom: theme.spacings.medium,
   },
   gradient: {
     backgroundColor: theme.colors.background_1.backgroundColor,
