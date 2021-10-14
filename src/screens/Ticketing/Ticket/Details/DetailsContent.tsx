@@ -2,7 +2,7 @@ import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {FareContract, isPreactivatedTicket} from '@atb/tickets';
-import {TicketsTexts, TicketTexts, useTranslation} from '@atb/translations';
+import {TicketTexts, useTranslation} from '@atb/translations';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import qrcode from 'qrcode';
@@ -19,12 +19,14 @@ type Props = {
   fareContract: FareContract;
   now: number;
   onReceiptNavigate: () => void;
+  hasActiveTravelCard?: boolean;
 };
 
 const DetailsContent: React.FC<Props> = ({
   fareContract: fc,
   now,
   onReceiptNavigate,
+  hasActiveTravelCard = false,
 }) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -34,7 +36,15 @@ const DetailsContent: React.FC<Props> = ({
   if (isPreactivatedTicket(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
     const validTo = firstTravelRight.endDateTime.toMillis();
-    const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
+    const isInspectable = !hasActiveTravelCard;
+
+    const validityStatus = getValidityStatus(
+      now,
+      validFrom,
+      validTo,
+      fc.state,
+      isInspectable,
+    );
 
     const orderIdText = t(TicketTexts.details.orderId(fc.orderId));
 
@@ -56,6 +66,7 @@ const DetailsContent: React.FC<Props> = ({
           <TicketInfo
             travelRights={fc.travelRights.filter(isPreactivatedTicket)}
             status={validityStatus}
+            hasActiveTravelCard={hasActiveTravelCard}
           />
         </Sections.GenericItem>
         <Sections.GenericItem>

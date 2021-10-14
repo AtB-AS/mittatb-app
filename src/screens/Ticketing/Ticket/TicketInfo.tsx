@@ -11,7 +11,7 @@ import {
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PreactivatedTicket} from '@atb/tickets';
-import {useTranslation} from '@atb/translations';
+import {TicketsTexts, useTranslation} from '@atb/translations';
 import React, {ReactElement} from 'react';
 import {View} from 'react-native';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
@@ -21,13 +21,19 @@ import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import {AddTicket, InvalidTicket} from '@atb/assets/svg/icons/ticketing';
 import {screenReaderPause} from '@atb/components/accessible-text';
+import {Warning} from '@atb/assets/svg/situations';
 
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
   status: ValidityStatus | 'recent';
+  hasActiveTravelCard?: boolean;
 };
 
-const TicketInfo = ({travelRights, status}: TicketInfoProps) => {
+const TicketInfo = ({
+  travelRights,
+  status,
+  hasActiveTravelCard = false,
+}: TicketInfoProps) => {
   const {
     tariff_zones: tariffZones,
     preassigned_fare_products: preassignedFareProducts,
@@ -58,6 +64,7 @@ const TicketInfo = ({travelRights, status}: TicketInfoProps) => {
       toTariffZone={toTariffZone}
       userProfilesWithCount={userProfilesWithCount}
       status={status}
+      hasActiveTravelCard={hasActiveTravelCard}
     />
   );
 };
@@ -68,6 +75,7 @@ type TicketInfoViewProps = {
   toTariffZone?: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
   status: TicketInfoProps['status'];
+  hasActiveTravelCard?: boolean;
 };
 
 export const TicketInfoView = (props: TicketInfoViewProps) => {
@@ -86,6 +94,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
     fromTariffZone,
     toTariffZone,
     userProfilesWithCount,
+    hasActiveTravelCard = false,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -133,6 +142,12 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
           {tariffZoneSummary}
         </ThemeText>
       )}
+      {hasActiveTravelCard && (
+        <View style={styles.tCardWarning}>
+          <ThemeIcon svg={Warning} style={styles.tCardWarningIcon}></ThemeIcon>
+          <ThemeText>{t(TicketsTexts.ticketInfo.tCardIsActive)}</ThemeText>
+        </View>
+      )}
     </View>
   );
 };
@@ -147,18 +162,23 @@ const TicketInspectionSymbol = ({
   const {theme} = useTheme();
   const {language} = useTranslation();
   if (!fromTariffZone || !toTariffZone) return null;
-  const icon = getIconForStatus(status);
+  const icon = IconForStatus(status);
   if (!icon) return null;
   return (
     <View
       style={[
-        styles.symbolContainer,
+        status !== 'uninspectable' && styles.symbolContainer,
         status === 'valid' && {
           ...styles.symbolContainerCircle,
           backgroundColor:
             preassignedFareProduct?.type === 'period'
               ? theme.colors.primary_1.backgroundColor
               : 'none',
+        },
+        status === 'uninspectable' && {
+          ...styles.symbolContainerCircle,
+          ...styles.textContainer,
+          borderColor: theme.status.warning.main.backgroundColor,
         },
       ]}
       accessibilityElementsHidden={true}
@@ -181,9 +201,11 @@ const TicketInspectionSymbol = ({
   );
 };
 
-const getIconForStatus = (
+const IconForStatus = (
   status: TicketInfoProps['status'],
 ): ReactElement | null => {
+  const {t} = useTranslation();
+
   switch (status) {
     case 'valid':
       return <ThemeIcon svg={BusSide} colorType="primary" size={'large'} />;
@@ -194,6 +216,17 @@ const getIconForStatus = (
       return <ThemeIcon svg={AddTicket} colorType="primary" size={'large'} />;
     case 'upcoming':
       return <ThemeIcon svg={Wait} colorType="primary" size={'large'} />;
+    case 'uninspectable':
+      return (
+        <ThemeText
+          type="body__tertiary"
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          {t(TicketsTexts.ticketInfo.noInspectionIcon)}
+        </ThemeText>
+      );
     case 'reserving':
     case 'unknown':
       return null;
@@ -246,12 +279,26 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   symbolContainerCircle: {
-    borderRadius: 36,
+    borderRadius: 1000,
     borderColor: theme.colors.primary_1.backgroundColor,
     borderWidth: 5,
   },
   symbolZones: {
     marginTop: theme.spacings.small,
+  },
+  textContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    aspectRatio: 1,
+    padding: theme.spacings.small,
+  },
+  tCardWarning: {
+    flexDirection: 'row',
+    paddingVertical: theme.spacings.small,
+  },
+  tCardWarningIcon: {
+    marginRight: theme.spacings.small,
   },
 }));
 
