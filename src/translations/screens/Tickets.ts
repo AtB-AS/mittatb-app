@@ -100,6 +100,25 @@ const TicketsTexts = {
         `Something went wrong when we tried to load ticket with order id ${orderId}`,
       ),
   },
+  ticketInfo: {
+    tCardIsActive: _(
+      'T:kort er satt som reisebevis',
+      'english "T:kort er satt som reisebevis"',
+    ),
+    noInspectionIcon: _('Ikke bruk\ni kontroll', 'Not for\ninspection'),
+  },
+  travelCardInformation: {
+    reisebevis: _('Reisebevis', 'english "Reisebevis"'),
+    onInspection: _(
+      'I billettkontroll må du vise t:kortet ditt:',
+      'In the event of an inspection, you need to show your t:card:',
+    ),
+    changeInstructions: _(
+      'Kan endres fra Mitt AtB',
+      'Can be changed in My AtB',
+    ),
+    tCard: _('t:kort', 't:card'),
+  },
   informational: {
     title: _('Prøv billettkjøp', 'Try buying tickets'),
     description: _(

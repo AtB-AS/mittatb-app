@@ -20,14 +20,14 @@ const TravelCardInformation: React.FC<Props> = ({travelCard}) => {
         type="heading__component"
         style={{...styles.centerText, ...styles.title}}
       >
-        Reisebevis
+        {t(TicketsTexts.travelCardInformation.reisebevis)}
       </ThemeText>
       <ThemeText
         type="body__primary"
         color="secondary"
         style={styles.centerText}
       >
-        I billettkontroll må du vise t:kortet ditt:
+        {t(TicketsTexts.travelCardInformation.onInspection)}
       </ThemeText>
       <ActiveTicketCard cardId={travelCard.id?.toString()}></ActiveTicketCard>
       <ThemeText
@@ -35,7 +35,7 @@ const TravelCardInformation: React.FC<Props> = ({travelCard}) => {
         color="secondary"
         style={styles.centerText}
       >
-        Kan endres fra Mitt AtB
+        {t(TicketsTexts.travelCardInformation.changeInstructions)}
       </ThemeText>
     </View>
   );
@@ -46,6 +46,8 @@ const ActiveTicketCard: React.FC<{cardId?: string}> = ({
 }) => {
   const formatedTravelCardId = cardId.substr(0, 2) + ' ' + cardId.substr(2);
   const styles = useStyles();
+
+  const {t} = useTranslation();
 
   return (
     <View style={styles.activeTicketCard}>
@@ -82,7 +84,7 @@ const ActiveTicketCard: React.FC<{cardId?: string}> = ({
           accessible={false}
         >
           {'\n'}
-          t:kort
+          {t(TicketsTexts.travelCardInformation.tCard)}
         </ThemeText>
       </View>
     </View>

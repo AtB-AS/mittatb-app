@@ -11,7 +11,7 @@ import {
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PreactivatedTicket} from '@atb/tickets';
-import {useTranslation} from '@atb/translations';
+import {TicketsTexts, useTranslation} from '@atb/translations';
 import React, {ReactElement} from 'react';
 import {View} from 'react-native';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
@@ -145,7 +145,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
       {hasActiveTravelCard && (
         <View style={styles.tCardWarning}>
           <ThemeIcon svg={Warning} style={styles.tCardWarningIcon}></ThemeIcon>
-          <ThemeText>T:kort er satt som reisebevis</ThemeText>
+          <ThemeText>{t(TicketsTexts.ticketInfo.tCardIsActive)}</ThemeText>
         </View>
       )}
     </View>
@@ -162,7 +162,7 @@ const TicketInspectionSymbol = ({
   const {theme} = useTheme();
   const {language} = useTranslation();
   if (!fromTariffZone || !toTariffZone) return null;
-  const icon = getIconForStatus(status);
+  const icon = IconForStatus(status);
   if (!icon) return null;
   return (
     <View
@@ -201,9 +201,11 @@ const TicketInspectionSymbol = ({
   );
 };
 
-const getIconForStatus = (
+const IconForStatus = (
   status: TicketInfoProps['status'],
 ): ReactElement | null => {
+  const {t} = useTranslation();
+
   switch (status) {
     case 'valid':
       return <ThemeIcon svg={BusSide} colorType="primary" size={'large'} />;
@@ -222,7 +224,7 @@ const getIconForStatus = (
             textAlign: 'center',
           }}
         >
-          Ikke bruk{'\n'}i kontroll
+          {t(TicketsTexts.ticketInfo.noInspectionIcon)}
         </ThemeText>
       );
     case 'reserving':
