@@ -33,7 +33,7 @@ type TicketReducerAction =
     }
   | {
       type: 'UPDATE_CUSTOMER_PROFILE';
-      customerProfile: CustomerProfile;
+      customerProfile: CustomerProfile | undefined;
     }
   | {type: 'ADD_RESERVATION'; reservation: ActiveReservation}
   | {
@@ -177,11 +177,9 @@ const TicketContextProvider: React.FC = ({children}) => {
         .doc(abtCustomerId)
         .onSnapshot(
           (snapshot) => {
-            const customerProfile = snapshot.data() as CustomerProfile;
+            const customerProfile = snapshot?.data() as CustomerProfile;
 
-            if (customerProfile) {
-              dispatch({type: 'UPDATE_CUSTOMER_PROFILE', customerProfile});
-            }
+            dispatch({type: 'UPDATE_CUSTOMER_PROFILE', customerProfile});
 
             // Bugsnag.leaveBreadcrumb('snapshot_fetched', {
             //   count: fareContracts.length,
