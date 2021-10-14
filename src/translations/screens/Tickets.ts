@@ -103,12 +103,12 @@ const TicketsTexts = {
   ticketInfo: {
     tCardIsActive: _(
       'T:kort er satt som reisebevis',
-      'english "T:kort er satt som reisebevis"',
+      'T:card is set as travel document',
     ),
     noInspectionIcon: _('Ikke bruk\ni kontroll', 'Not for\ninspection'),
   },
   travelCardInformation: {
-    reisebevis: _('Reisebevis', 'english "Reisebevis"'),
+    reisebevis: _('Reisebevis', 'Travel document'),
     onInspection: _(
       'I billettkontroll må du vise t:kortet ditt:',
       'In the event of an inspection, you need to show your t:card:',

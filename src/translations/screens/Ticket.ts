@@ -27,7 +27,7 @@ const TicketTexts = {
     expired: _(`Utløpt billett`, `Expired ticket`),
     refunded: _(`Refundert billett`, 'Refunded ticket'),
     upcoming: _(`Kommende billett`, `Upcoming ticket`),
-    uninspectable: _(`Ikke inpekterbar billett`, `Uninspectable ticket`),
+    uninspectable: _(`Ikke inspiserbar billett`, `Uninspectable ticket`),
     unknown: _(`Ukjent billett`, `Unknown ticket`),
   },
   details: {
