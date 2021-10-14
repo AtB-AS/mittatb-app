@@ -181,16 +181,15 @@ const TicketContextProvider: React.FC = ({children}) => {
 
             dispatch({type: 'UPDATE_CUSTOMER_PROFILE', customerProfile});
 
-            // Bugsnag.leaveBreadcrumb('snapshot_fetched', {
-            //   count: fareContracts.length,
-            // });
+            Bugsnag.leaveBreadcrumb('customer_profile_fetched', {
+              customerProfileId: customerProfile?.id,
+            });
           },
-          // (err) => {
-          //   Bugsnag.notify(err, function (event) {
-          //     event.addMetadata('ticket', {abtCustomerId});
-          //   });
-          //   dispatch({type: 'SET_ERROR_REFRESHING_FARE_CONTRACT_TICKETS'});
-          // },
+          (err) => {
+            Bugsnag.notify(err, function (event) {
+              event.addMetadata('customerProfile', {abtCustomerId});
+            });
+          },
         );
 
       // Stop listening for updates when no longer required
