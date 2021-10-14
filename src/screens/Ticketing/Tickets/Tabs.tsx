@@ -78,31 +78,37 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
     appContext.resetTicketing();
   };
 
+  const topMessage = (
+    <View style={{paddingBottom: theme.spacings.large}}>
+      <MessageBox>
+        <ThemeText type="body__primary" color="primary_1" isMarkdown={true}>
+          {t(TicketsTexts.buyTicketsTab.reactivateSplash.message)}
+        </ThemeText>
+
+        <TouchableOpacity
+          onPress={enableTicketingOverlay}
+          accessibilityLabel={t(
+            TicketsTexts.buyTicketsTab.reactivateSplash.linkA11yHint,
+          )}
+        >
+          <ThemeText type="body__primary--underline" color="primary_1">
+            {t(TicketsTexts.buyTicketsTab.reactivateSplash.linkText)}
+          </ThemeText>
+        </TouchableOpacity>
+      </MessageBox>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
-      <View style={{padding: theme.spacings.medium}}>
-        <MessageBox>
-          <ThemeText type="body__primary" color="primary_1" isMarkdown={true}>
-            {t(TicketsTexts.buyTicketsTab.reactivateSplash.message)}
-          </ThemeText>
-
-          <TouchableOpacity
-            onPress={enableTicketingOverlay}
-            accessibilityLabel={t(
-              TicketsTexts.buyTicketsTab.reactivateSplash.linkA11yHint,
-            )}
-          >
-            <ThemeText type="body__primary--underline" color="primary_1">
-              {t(TicketsTexts.buyTicketsTab.reactivateSplash.linkText)}
-            </ThemeText>
-          </TouchableOpacity>
-        </MessageBox>
-      </View>
-
       {enable_recent_tickets ? (
-        <RecentTicketsScrollView />
+        <RecentTicketsScrollView
+          topElement={topMessage}
+        ></RecentTicketsScrollView>
       ) : (
-        <View style={{flex: 1}} />
+        <View style={{flex: 1, padding: theme.spacings.medium}}>
+          {topMessage}
+        </View>
       )}
       {isSignedInAsAbtCustomer && (
         <View style={{padding: theme.spacings.medium}}>
