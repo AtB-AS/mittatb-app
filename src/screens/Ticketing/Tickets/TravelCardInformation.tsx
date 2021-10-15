@@ -136,7 +136,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignSelf: 'flex-end',
     marginTop: theme.spacings.small,
     backgroundColor: theme.colors.primary_2.color,
-    aspectRatio: 1,
     textAlign: 'center',
   },
 }));
