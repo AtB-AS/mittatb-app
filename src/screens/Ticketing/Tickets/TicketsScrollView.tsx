@@ -56,13 +56,13 @@ const TicketsScrollView: React.FC<Props> = ({
           />
         }
       >
-        {!fareContracts?.length && !reservations?.length && (
-          <ThemeText style={styles.noTicketsText}>{noTicketsLabel}</ThemeText>
-        )}
         {travelCard && hasActiveTravelCard && (
           <TravelCardInformation
             travelCard={travelCard}
           ></TravelCardInformation>
+        )}
+        {!fareContracts?.length && !reservations?.length && (
+          <ThemeText style={styles.noTicketsText}>{noTicketsLabel}</ThemeText>
         )}
         {reservations?.map((res) => (
           <TicketReservation key={res.reservation.order_id} reservation={res} />
