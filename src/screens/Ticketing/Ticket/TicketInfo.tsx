@@ -181,7 +181,7 @@ const TicketInspectionSymbol = ({
           borderColor: theme.status.warning.main.backgroundColor,
         },
       ]}
-      accessibilityElementsHidden={status === 'uninspectable' ? false : true}
+      accessibilityElementsHidden={status !== 'uninspectable'}
     >
       <>
         {status === 'valid' && (
