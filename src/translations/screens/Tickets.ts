@@ -118,6 +118,11 @@ const TicketsTexts = {
       'Can be changed in My AtB',
     ),
     tCard: _('t:kort', 't:card'),
+    illustrationa11yLabel: (travelCardId: string) =>
+      _(
+        `Illustrasjon av t kort med kortnummer som inneholder ${travelCardId}`,
+        `Illustration of t card with card number that contains ${travelCardId}`,
+      ),
   },
   informational: {
     title: _('Prøv billettkjøp', 'Try buying tickets'),
