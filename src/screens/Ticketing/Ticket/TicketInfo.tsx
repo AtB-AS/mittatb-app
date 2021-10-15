@@ -11,7 +11,7 @@ import {
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PreactivatedTicket} from '@atb/tickets';
-import {TicketsTexts, useTranslation} from '@atb/translations';
+import {TicketTexts, useTranslation} from '@atb/translations';
 import React, {ReactElement} from 'react';
 import {View} from 'react-native';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
@@ -145,7 +145,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
       {hasActiveTravelCard && (
         <View style={styles.tCardWarning}>
           <ThemeIcon svg={Warning} style={styles.tCardWarningIcon}></ThemeIcon>
-          <ThemeText>{t(TicketsTexts.ticketInfo.tCardIsActive)}</ThemeText>
+          <ThemeText>{t(TicketTexts.ticketInfo.tCardIsActive)}</ThemeText>
         </View>
       )}
     </View>
@@ -181,7 +181,7 @@ const TicketInspectionSymbol = ({
           borderColor: theme.status.warning.main.backgroundColor,
         },
       ]}
-      accessibilityElementsHidden={true}
+      accessibilityElementsHidden={status === 'uninspectable' ? false : true}
     >
       <>
         {status === 'valid' && (
@@ -223,8 +223,11 @@ const IconForStatus = (
           style={{
             textAlign: 'center',
           }}
+          accessibilityLabel={t(
+            TicketTexts.ticketInfo.noInspectionIconA11yLabel,
+          )}
         >
-          {t(TicketsTexts.ticketInfo.noInspectionIcon)}
+          {t(TicketTexts.ticketInfo.noInspectionIcon)}
         </ThemeText>
       );
     case 'reserving':

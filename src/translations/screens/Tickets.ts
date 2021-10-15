@@ -100,13 +100,6 @@ const TicketsTexts = {
         `Something went wrong when we tried to load ticket with order id ${orderId}`,
       ),
   },
-  ticketInfo: {
-    tCardIsActive: _(
-      'T:kort er satt som reisebevis',
-      'T:card is set as travel token',
-    ),
-    noInspectionIcon: _('Ikke bruk\ni kontroll', 'Not for\ninspection'),
-  },
   travelCardInformation: {
     reisebevis: _('Reisebevis', 'Travel token'),
     onInspection: _(

@@ -26,7 +26,15 @@ const ValidityHeader: React.FC<{
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
         <ValidityIcon status={status} />
-        <ThemeText style={styles.validityText} type="body__secondary">
+        <ThemeText
+          style={styles.validityText}
+          type="body__secondary"
+          accessibilityHint={
+            status === 'uninspectable'
+              ? t(TicketTexts.ticketInfo.noInspectionIconA11yLabel)
+              : undefined
+          }
+        >
           {validityTimeText(status, now, validFrom, validTo, t, language)}
         </ThemeText>
       </View>
