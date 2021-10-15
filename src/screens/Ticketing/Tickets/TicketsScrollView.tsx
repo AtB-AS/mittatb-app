@@ -41,9 +41,7 @@ const TicketsScrollView: React.FC<Props> = ({
   const navigation = useNavigation<RootNavigationProp>();
   const {t} = useTranslation();
 
-  const hasActiveTravelCard = travelCard
-    ? isFuture(travelCard?.expires.toDate())
-    : false;
+  const hasActiveTravelCard = !!travelCard?.id;
 
   return (
     <View style={styles.container}>
