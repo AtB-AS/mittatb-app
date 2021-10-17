@@ -55,6 +55,14 @@ const ValidityIconSvg = ({status}: {status: ValidityStatus}) => {
           accessibilityLabel={a11yLabel}
         />
       );
+    case 'uninspectable':
+      return (
+        <ThemeIcon
+          svg={ValidTicket}
+          colorType="secondary"
+          accessibilityLabel={a11yLabel}
+        />
+      );
     case 'upcoming':
       return (
         <ThemeIcon

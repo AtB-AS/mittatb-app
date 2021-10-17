@@ -11,6 +11,7 @@ type Props = {
   fareContractState: FareContractState;
   travelRights: PreactivatedTicket[];
   now: number;
+  isInspectable: boolean;
   hideDetails?: boolean;
   onPressDetails?: () => void;
 };
@@ -19,6 +20,7 @@ const PreactivatedTicketInfo: React.FC<Props> = ({
   fareContractState,
   travelRights,
   now,
+  isInspectable,
   hideDetails,
   onPressDetails,
 }) => {
@@ -33,6 +35,7 @@ const PreactivatedTicketInfo: React.FC<Props> = ({
     validFrom,
     validTo,
     fareContractState,
+    isInspectable,
   );
   return (
     <Sections.Section withBottomPadding>

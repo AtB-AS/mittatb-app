@@ -10,6 +10,7 @@ type Props = {
   now: number;
   hideDetails?: boolean;
   onPressDetails?: () => void;
+  hasActiveTravelCard?: boolean;
 };
 
 const SimpleTicket: React.FC<Props> = ({
@@ -17,8 +18,9 @@ const SimpleTicket: React.FC<Props> = ({
   now,
   hideDetails,
   onPressDetails,
+  hasActiveTravelCard = false,
 }) => {
-  const {t} = useTranslation();
+  const isInspectable = !hasActiveTravelCard;
 
   const firstTravelRight = fc.travelRights?.[0];
   if (isPreactivatedTicket(firstTravelRight)) {
@@ -27,6 +29,7 @@ const SimpleTicket: React.FC<Props> = ({
         fareContractState={fc.state}
         travelRights={fc.travelRights.filter(isPreactivatedTicket)}
         now={now}
+        isInspectable={isInspectable}
         hideDetails={hideDetails}
         onPressDetails={onPressDetails}
       />
@@ -37,6 +40,7 @@ const SimpleTicket: React.FC<Props> = ({
         fareContractState={fc.state}
         travelRights={fc.travelRights.filter(isCarnetTicket)}
         now={now}
+        isInspectable={isInspectable}
       />
     );
   } else {

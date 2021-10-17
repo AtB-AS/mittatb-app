@@ -162,3 +162,17 @@ export type VippsRedirectParams = {
 export type SendReceiptResponse = {
   reference: string;
 };
+
+export type CustomerProfile = {
+  email?: string;
+  firstName?: string;
+  id?: string;
+  surname?: string;
+  travelcard?: TravelCard;
+};
+
+export type TravelCard = {
+  expires: Timestamp;
+  id: number;
+  token_id?: string;
+};

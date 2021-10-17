@@ -18,6 +18,8 @@ const TicketTexts = {
     reserving: _(`Reserverer…`, `Reserving…`),
     unknown: _(`Ukjent`, `Unknown`),
     inactiveCarnet: _(`Ingen aktive klipp`, `No active ticket`),
+    uninspectable: (duration: string) =>
+      _(`Utløper ${duration}`, `Expires ${duration}`),
     durationDelimiter: _(' og ', ' and '),
   },
   validityIcon: {
@@ -26,6 +28,7 @@ const TicketTexts = {
     expired: _(`Utløpt billett`, `Expired ticket`),
     refunded: _(`Refundert billett`, 'Refunded ticket'),
     upcoming: _(`Kommende billett`, `Upcoming ticket`),
+    uninspectable: _(`Ikke inspiserbar billett`, `Uninspectable ticket`),
     unknown: _(`Ukjent billett`, `Unknown ticket`),
   },
   usedAccessValidityIcon: {

@@ -14,12 +14,14 @@ import {ActiveReservation, FareContract, PaymentStatus} from './types';
 import {getPayment} from './api';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import Bugsnag from '@bugsnag/react-native';
+import {CustomerProfile} from '.';
 
 type TicketReducerState = {
   fareContracts: FareContract[];
   activeReservations: ActiveReservation[];
   isRefreshingTickets: boolean;
   errorRefreshingTickets: boolean;
+  customerProfile: CustomerProfile | undefined;
 };
 
 type TicketReducerAction =
@@ -28,6 +30,10 @@ type TicketReducerAction =
   | {
       type: 'UPDATE_FARE_CONTRACT_TICKETS';
       fareContracts: FareContract[];
+    }
+  | {
+      type: 'UPDATE_CUSTOMER_PROFILE';
+      customerProfile: CustomerProfile | undefined;
     }
   | {type: 'ADD_RESERVATION'; reservation: ActiveReservation}
   | {
@@ -93,6 +99,12 @@ const ticketReducer: TicketReducer = (
         activeReservations: action.activeReservations,
       };
     }
+    case 'UPDATE_CUSTOMER_PROFILE': {
+      return {
+        ...prevState,
+        customerProfile: action.customerProfile,
+      };
+    }
   }
 };
 
@@ -101,13 +113,17 @@ type TicketState = {
   refreshTickets: () => void;
   fareContracts: FareContract[];
   findFareContractByOrderId: (id: string) => FareContract | undefined;
-} & Pick<TicketReducerState, 'activeReservations' | 'isRefreshingTickets'>;
+} & Pick<
+  TicketReducerState,
+  'activeReservations' | 'isRefreshingTickets' | 'customerProfile'
+>;
 
 const initialReducerState: TicketReducerState = {
   fareContracts: [],
   activeReservations: [],
   isRefreshingTickets: false,
   errorRefreshingTickets: false,
+  customerProfile: undefined,
 };
 
 const TicketContext = createContext<TicketState | undefined>(undefined);
@@ -151,6 +167,35 @@ const TicketContextProvider: React.FC = ({children}) => {
       return () => subscriber();
     }
   }, [user, abtCustomerId, enable_ticketing]);
+
+  // TODO: Temporary hack to get travelcard ID before we have tokens. Should be
+  // replaced when tokens are implemented.
+  useEffect(() => {
+    if (user && abtCustomerId && enable_ticketing) {
+      const subscriber = firestore()
+        .collection('customers')
+        .doc(abtCustomerId)
+        .onSnapshot(
+          (snapshot) => {
+            const customerProfile = snapshot?.data() as CustomerProfile;
+
+            dispatch({type: 'UPDATE_CUSTOMER_PROFILE', customerProfile});
+
+            Bugsnag.leaveBreadcrumb('customer_profile_fetched', {
+              customerProfileId: customerProfile?.id,
+            });
+          },
+          (err) => {
+            Bugsnag.notify(err, function (event) {
+              event.addMetadata('customerProfile', {abtCustomerId});
+            });
+          },
+        );
+
+      // Stop listening for updates when no longer required
+      return () => subscriber();
+    }
+  }, [abtCustomerId, enable_ticketing]);
 
   const refreshTickets = () => {};
 

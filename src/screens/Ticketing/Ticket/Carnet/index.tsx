@@ -22,12 +22,14 @@ type Props = {
   fareContractState: FareContractState;
   travelRights: CarnetTicket[];
   now: number;
+  isInspectable: boolean;
 };
 
 const CarnetTicketInfo: React.FC<Props> = ({
   fareContractState,
   travelRights,
   now,
+  isInspectable,
 }) => {
   const {
     usedAccesses,
@@ -49,6 +51,7 @@ const CarnetTicketInfo: React.FC<Props> = ({
     fareContractValidFrom,
     fareContractValidTo,
     fareContractState,
+    isInspectable,
   );
 
   return (

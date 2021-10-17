@@ -7,7 +7,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
-import {fromUnixTime} from 'date-fns';
+import {toDate} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
 import ValidityIcon from './ValidityIcon';
@@ -68,15 +68,15 @@ function validityTimeText(
         const durationText = toDurationText(secondsSinceExpired);
         return t(TicketTexts.validityHeader.recentlyExpired(durationText));
       } else {
-        const dateTime = formatToLongDateTime(
-          fromUnixTime(validTo / 1000),
-          language,
-        );
+        const dateTime = formatToLongDateTime(toDate(validTo), language);
         return t(TicketTexts.validityHeader.expired(dateTime));
       }
     }
     case 'reserving':
       return t(TicketTexts.validityHeader.reserving);
+    case 'uninspectable':
+      const dateText = formatToLongDateTime(toDate(validTo), language);
+      return t(TicketTexts.validityHeader.uninspectable(dateText));
     case 'unknown':
       return t(TicketTexts.validityHeader.unknown);
   }
