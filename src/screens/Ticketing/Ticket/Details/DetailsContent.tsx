@@ -13,7 +13,6 @@ import TicketInfo from '../TicketInfo';
 import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
 import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
-import {screenReaderPause} from '@atb/components/accessible-text';
 
 type Props = {
   fareContract: FareContract;

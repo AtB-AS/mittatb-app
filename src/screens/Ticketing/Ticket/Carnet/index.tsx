@@ -1,6 +1,7 @@
 import * as Sections from '@atb/components/sections';
 import {
   CarnetTicket,
+  CarnetTicketUsedAccess,
   FareContractState,
   flattenCarnetTicketAccesses,
 } from '@atb/tickets';
@@ -8,46 +9,41 @@ import {useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import ValidityLine from '../ValidityLine';
-import {
-  getRelativeValidity,
-  getValidityStatus,
-  RelativeValidityStatus,
-} from '../utils';
+import {getRelativeValidity, getValidityStatus} from '../utils';
 import {useTheme} from '@atb/theme';
 import TicketInfo from '../TicketInfo';
-import CarnetValidityHeader from './CarnetValidityHeader';
+import UsedAccessValidityHeader from './UsedAccessValidityHeader';
+import {UsedAccessStatus} from './types';
+import ValidityHeader from '../ValidityHeader';
+import ThemeText from '@atb/components/text';
+import CarnetFooter from './CarnetFooter';
 
 type Props = {
   fareContractState: FareContractState;
   travelRights: CarnetTicket[];
   now: number;
-  fareContractValidFrom: number;
-  fareContractValidTo: number;
 };
 
 const CarnetTicketInfo: React.FC<Props> = ({
   fareContractState,
   travelRights,
   now,
-  fareContractValidFrom,
-  fareContractValidTo,
 }) => {
-  const {t} = useTranslation();
-  const {theme} = useTheme();
   const {
     usedAccesses,
     maximumNumberOfAccesses,
     numberOfUsedAccesses,
   } = flattenCarnetTicketAccesses(travelRights);
 
-  const [lastUsedAccess] = usedAccesses.slice(-1);
-  const usedAccessValidFrom = lastUsedAccess?.startDateTime.toMillis();
-  const usedAccessValidTo = lastUsedAccess?.endDateTime.toMillis();
-  const usedAccessValidityStatus = getRelativeValidity(
-    now,
-    usedAccessValidFrom,
-    usedAccessValidTo,
-  );
+  const {
+    status: usedAccessValidityStatus,
+    validFrom: usedAccessValidFrom,
+    validTo: usedAccessValidTo,
+  } = useLastUsedAccess(now, usedAccesses);
+
+  const fareContractValidFrom = travelRights[0].startDateTime.toMillis();
+  const fareContractValidTo = travelRights[0].endDateTime.toMillis();
+
   const fareContractValidityStatus = getValidityStatus(
     now,
     fareContractValidFrom,
@@ -58,75 +54,85 @@ const CarnetTicketInfo: React.FC<Props> = ({
   return (
     <Sections.Section withBottomPadding>
       <Sections.GenericItem>
-        <CarnetValidityHeader
-          fareContractStatus={fareContractValidityStatus}
-          usedAccessStatus={usedAccessValidityStatus}
-          now={now}
-          usedAccessValidFrom={usedAccessValidFrom}
-          usedAccessValidTo={usedAccessValidTo}
-          maximumNumberOfAccesses={maximumNumberOfAccesses}
-          numberOfUsedAccesses={numberOfUsedAccesses}
-        />
-        {isActiveValidity(usedAccessValidityStatus) && (
-          <ValidityLine
-            status={'unknown'}
+        {fareContractValidityStatus !== 'valid' ? (
+          <ValidityHeader
             now={now}
+            status={fareContractValidityStatus}
+            validFrom={fareContractValidFrom}
+            validTo={fareContractValidTo}
+          />
+        ) : (
+          <UsedAccessValidityHeader
+            now={now}
+            status={usedAccessValidityStatus}
             validFrom={usedAccessValidFrom}
             validTo={usedAccessValidTo}
           />
         )}
-      </Sections.GenericItem>
-      <Sections.GenericItem>
+        {isActiveValidity(usedAccessValidityStatus) && (
+          <ValidityLine
+            status="valid"
+            now={now}
+            validFrom={usedAccessValidFrom ?? 0}
+            validTo={usedAccessValidTo ?? 0}
+          />
+        )}
         <TicketInfo
-          travelRights={travelRights}
-          status={usedAccessValidityStatus}
+          // Slice to only show 1 traveller
+          // makes no sense to show multiple for carnet travel rights
+          travelRights={travelRights.slice(0, 1)}
+          status={fareContractValidityStatus}
         />
       </Sections.GenericItem>
       <Sections.GenericItem>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-          }}
-        >
-          {Array(maximumNumberOfAccesses)
-            .fill(true)
-            .map((_, idx) => idx < numberOfUsedAccesses)
-            .reverse()
-            .map((isUnused, idx) => (
-              <View
-                key={idx}
-                style={{
-                  backgroundColor: theme.colors.primary_2.backgroundColor,
-                  borderRadius: 20,
-                  padding: 2,
-                  margin: 2,
-                }}
-              >
-                <View
-                  style={{
-                    backgroundColor: isUnused
-                      ? theme.colors.primary_2.color
-                      : 'transparent',
-                    borderRadius: 20,
-                    width: 14,
-                    height: 14,
-                  }}
-                />
-              </View>
-            ))}
-        </View>
+        <CarnetFooter
+          active={usedAccessValidityStatus === 'valid'}
+          maximumNumberOfAccesses={maximumNumberOfAccesses}
+          numberOfUsedAccesses={numberOfUsedAccesses}
+        />
       </Sections.GenericItem>
     </Sections.Section>
   );
 };
 
-function isActiveValidity(status: RelativeValidityStatus): boolean {
+type LastUsedAccessState = {
+  status: UsedAccessStatus;
+  validFrom: number | undefined;
+  validTo: number | undefined;
+};
+
+function useLastUsedAccess(
+  now: number,
+  usedAccesses: CarnetTicketUsedAccess[],
+): LastUsedAccessState {
+  const lastUsedAccess = usedAccesses.slice(-1).pop();
+
+  let status: UsedAccessStatus = 'inactive';
+  let validFrom: number | undefined = undefined;
+  let validTo: number | undefined = undefined;
+
+  if (lastUsedAccess) {
+    validFrom = lastUsedAccess.startDateTime.toMillis();
+    validTo = lastUsedAccess.endDateTime.toMillis();
+    status = getUsedAccessValidity(now, validFrom, validTo);
+  }
+
+  return {status, validFrom, validTo};
+}
+
+function getUsedAccessValidity(
+  now: number,
+  validFrom: number,
+  validTo: number,
+): UsedAccessStatus {
+  if (now > validTo) return 'inactive';
+  if (now < validFrom) return 'upcoming';
+  return 'valid';
+}
+
+function isActiveValidity(status: UsedAccessStatus): boolean {
   switch (status) {
     case 'valid':
-    case 'upcoming':
       return true;
     default:
       return false;

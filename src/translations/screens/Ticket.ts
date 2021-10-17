@@ -17,6 +17,7 @@ const TicketTexts = {
       _(`Blir gyldig om ${duration}`, `Becomes valid in ${duration}`),
     reserving: _(`Reserverer…`, `Reserving…`),
     unknown: _(`Ukjent`, `Unknown`),
+    inactiveCarnet: _(`Ingen aktive klipp`, `No active ticket`),
     durationDelimiter: _(' og ', ' and '),
   },
   validityIcon: {
@@ -26,6 +27,11 @@ const TicketTexts = {
     refunded: _(`Refundert billett`, 'Refunded ticket'),
     upcoming: _(`Kommende billett`, `Upcoming ticket`),
     unknown: _(`Ukjent billett`, `Unknown ticket`),
+  },
+  usedAccessValidityIcon: {
+    valid: _(`Gyldig billett`, `Valid ticket`),
+    upcoming: _(`Kommende klipp`, `Upcoming ticket`),
+    inactive: _(`Ingen aktive klipp`, `No active ticket`),
   },
   details: {
     header: {

@@ -25,7 +25,5 @@ export function getValidityStatus(
   state: FareContractState,
 ): ValidityStatus {
   if (state === FareContractState.Refunded) return 'refunded';
-  if (now > validTo) return 'expired';
-  if (now < validFrom) return 'upcoming';
-  return 'valid';
+  return getRelativeValidity(now, validFrom, validTo);
 }
