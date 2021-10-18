@@ -1,5 +1,9 @@
 import {flatten, sumBy} from 'lodash';
-import {CarnetTicketUsedAccess, PreactivatedTicket} from '.';
+import {
+  CarnetTicketUsedAccess,
+  PreactivatedSingleTicket,
+  PreactivatedTicket,
+} from '.';
 import {
   FareContract,
   FareContractState,
@@ -20,6 +24,12 @@ export function isPreactivatedTicket(
     travelRight?.type === 'PreActivatedSingleTicket' ||
     travelRight?.type === 'PreActivatedPeriodTicket'
   );
+}
+
+export function isSingleTicket(
+  travelRight: TravelRight | undefined,
+): travelRight is PreactivatedSingleTicket {
+  return travelRight?.type === 'PreActivatedSingleTicket';
 }
 
 function isOrWillBeActivatedFareContract(f: FareContract): boolean {

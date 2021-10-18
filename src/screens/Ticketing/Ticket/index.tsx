@@ -1,4 +1,9 @@
-import {FareContract, isCarnetTicket, isPreactivatedTicket} from '@atb/tickets';
+import {
+  FareContract,
+  isCarnetTicket,
+  isPreactivatedTicket,
+  isSingleTicket,
+} from '@atb/tickets';
 import {useTranslation} from '@atb/translations';
 import React from 'react';
 import PreactivatedTicketInfo from './PreactivatedTicketInfo';
@@ -20,9 +25,9 @@ const SimpleTicket: React.FC<Props> = ({
   onPressDetails,
   hasActiveTravelCard = false,
 }) => {
-  const isInspectable = !hasActiveTravelCard;
-
   const firstTravelRight = fc.travelRights?.[0];
+  const isInspectable =
+    !hasActiveTravelCard && isSingleTicket(firstTravelRight);
   if (isPreactivatedTicket(firstTravelRight)) {
     return (
       <PreactivatedTicketInfo

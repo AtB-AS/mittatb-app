@@ -35,7 +35,9 @@ const DetailsContent: React.FC<Props> = ({
   if (isPreactivatedTicket(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
     const validTo = firstTravelRight.endDateTime.toMillis();
-    const isInspectable = !hasActiveTravelCard;
+    const isInspectable =
+      !hasActiveTravelCard &&
+      firstTravelRight.type === 'PreActivatedSingleTicket';
 
     const validityStatus = getValidityStatus(
       now,
