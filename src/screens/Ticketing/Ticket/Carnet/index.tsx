@@ -57,7 +57,8 @@ const CarnetTicketInfo: React.FC<Props> = ({
   return (
     <Sections.Section withBottomPadding>
       <Sections.GenericItem>
-        {fareContractValidityStatus !== 'valid' ? (
+        {fareContractValidityStatus !== 'valid' &&
+        fareContractValidityStatus !== 'uninspectable' ? (
           <ValidityHeader
             now={now}
             status={fareContractValidityStatus}
