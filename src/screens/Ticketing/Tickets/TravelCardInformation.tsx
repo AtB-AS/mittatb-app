@@ -50,14 +50,16 @@ const ActiveTicketCard: React.FC<{cardId?: string}> = ({
   const {t} = useTranslation();
 
   return (
-    <View style={styles.activeTicketCard}>
-      <View
-        style={styles.cardNumber}
-        accessible={true}
-        accessibilityLabel={
-          'Card number ends with ' + formatedTravelCardId + 'X'
-        }
-      >
+    <View
+      style={styles.activeTicketCard}
+      accessible={true}
+      accessibilityLabel={t(
+        TicketsTexts.travelCardInformation.illustrationa11yLabel(
+          cardId.toString(),
+        ),
+      )}
+    >
+      <View style={styles.cardNumber} accessible={false}>
         <ThemeText
           type="body__tertiary"
           color="primary_1"
@@ -81,7 +83,6 @@ const ActiveTicketCard: React.FC<{cardId?: string}> = ({
           type="body__tertiary"
           color="primary_1"
           style={styles.tcardicon}
-          accessible={false}
         >
           {'\n'}
           {t(TicketsTexts.travelCardInformation.tCard)}
@@ -135,7 +136,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignSelf: 'flex-end',
     marginTop: theme.spacings.small,
     backgroundColor: theme.colors.primary_2.color,
-    aspectRatio: 1,
     textAlign: 'center',
   },
 }));

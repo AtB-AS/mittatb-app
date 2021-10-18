@@ -24,13 +24,16 @@ const SimpleTicket: React.FC<Props> = ({
   hasActiveTravelCard = false,
 }) => {
   const {t} = useTranslation();
-  const isInspectable = !hasActiveTravelCard;
 
   const firstTravelRight = fc.travelRights?.[0];
   if (isPreactivatedTicket(firstTravelRight)) {
     const {startDateTime, endDateTime} = firstTravelRight;
     const validTo = endDateTime.toMillis();
     const validFrom = startDateTime.toMillis();
+    const isInspectable =
+      !hasActiveTravelCard &&
+      firstTravelRight.type === 'PreActivatedSingleTicket';
+
     const validityStatus = getValidityStatus(
       now,
       validFrom,

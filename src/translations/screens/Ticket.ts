@@ -76,5 +76,13 @@ const TicketTexts = {
     orderId: (orderId: string) =>
       _(`Ordre-id: ${orderId}`, `Order ID: ${orderId}`),
   },
+  ticketInfo: {
+    tCardIsActive: _(
+      'T:kort er satt som reisebevis',
+      'T:card is set as travel token',
+    ),
+    noInspectionIcon: _('Ikke bruk\ni kontroll', 'Not for\ninspection'),
+    noInspectionIconA11yLabel: _('Ikke bruk i kontroll', 'Not for inspection'),
+  },
 };
 export default TicketTexts;

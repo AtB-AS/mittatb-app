@@ -8,7 +8,6 @@ import {ScrollView, View} from 'react-native';
 import {TicketModalNavigationProp, TicketModalStackParams} from '.';
 import DetailsContent from './DetailsContent';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import ThemeText from '@atb/components/text';
 
 export type TicketDetailsRouteParams = {
   orderId: string;
