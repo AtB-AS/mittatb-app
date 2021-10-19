@@ -23,6 +23,7 @@ type Props = {
   travelRights: CarnetTicket[];
   now: number;
   isInspectable: boolean;
+  hasActiveTravelCard: boolean;
 };
 
 const CarnetTicketInfo: React.FC<Props> = ({
@@ -30,6 +31,7 @@ const CarnetTicketInfo: React.FC<Props> = ({
   travelRights,
   now,
   isInspectable,
+  hasActiveTravelCard,
 }) => {
   const {
     usedAccesses,
@@ -88,6 +90,7 @@ const CarnetTicketInfo: React.FC<Props> = ({
           travelRights={travelRights.slice(0, 1)}
           status={fareContractValidityStatus}
           isInspectable={isInspectable}
+          hasActiveTravelCard={hasActiveTravelCard}
         />
       </Sections.GenericItem>
       <Sections.GenericItem>

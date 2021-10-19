@@ -47,6 +47,7 @@ const SimpleTicket: React.FC<Props> = ({
         travelRights={fc.travelRights.filter(isCarnetTicket)}
         now={now}
         isInspectable={isInspectable}
+        hasActiveTravelCard={hasActiveTravelCard}
       />
     );
   } else {

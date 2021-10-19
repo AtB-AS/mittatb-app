@@ -26,14 +26,14 @@ import {Warning} from '@atb/assets/svg/situations';
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
   status: ValidityStatus | 'recent';
-  hasActiveTravelCard?: boolean;
+  hasActiveTravelCard: boolean;
   isInspectable: boolean;
 };
 
 const TicketInfo = ({
   travelRights,
   status,
-  hasActiveTravelCard = false,
+  hasActiveTravelCard,
   isInspectable,
 }: TicketInfoProps) => {
   const {
@@ -98,7 +98,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
     fromTariffZone,
     toTariffZone,
     userProfilesWithCount,
-    hasActiveTravelCard = false,
+    hasActiveTravelCard,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
