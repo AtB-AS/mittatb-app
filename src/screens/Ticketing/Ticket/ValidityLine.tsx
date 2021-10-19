@@ -15,6 +15,7 @@ type Props =
       now: number;
       validFrom: number;
       validTo: number;
+      isInspectable: boolean;
     }
   | {status: Exclude<ValidityStatus, 'valid'>};
 
@@ -30,18 +31,14 @@ const ValidityLine = (props: Props): ReactElement => {
         />
       );
     case 'valid':
-      const {now, validFrom, validTo} = props;
+      const {now, validFrom, validTo, isInspectable} = props;
       const validityPercent = getValidityPercent(now, validFrom, validTo);
-      return (
+      return isInspectable ? (
         <LineWithVerticalBars
           backgroundColor={theme.colors.primary_1.backgroundColor}
           validityPercent={validityPercent}
         />
-      );
-    case 'upcoming':
-    case 'refunded':
-    case 'expired':
-      return (
+      ) : (
         <View style={styles.container}>
           <Dash
             style={{width: '100%'}}
@@ -52,7 +49,9 @@ const ValidityLine = (props: Props): ReactElement => {
           />
         </View>
       );
-    case 'uninspectable':
+    case 'upcoming':
+    case 'refunded':
+    case 'expired':
       return (
         <View style={styles.container}>
           <Dash

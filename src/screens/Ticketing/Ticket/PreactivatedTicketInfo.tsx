@@ -14,6 +14,7 @@ type Props = {
   isInspectable: boolean;
   hideDetails?: boolean;
   onPressDetails?: () => void;
+  hasActiveTravelCard: boolean;
 };
 
 const PreactivatedTicketInfo: React.FC<Props> = ({
@@ -23,6 +24,7 @@ const PreactivatedTicketInfo: React.FC<Props> = ({
   isInspectable,
   hideDetails,
   onPressDetails,
+  hasActiveTravelCard,
 }) => {
   const {t} = useTranslation();
 
@@ -35,30 +37,36 @@ const PreactivatedTicketInfo: React.FC<Props> = ({
     validFrom,
     validTo,
     fareContractState,
-    isInspectable,
   );
   return (
     <Sections.Section withBottomPadding>
       <Sections.GenericItem>
         <ValidityHeader
           status={validityStatus}
+          isInspectable={isInspectable}
           now={now}
           validFrom={validFrom}
           validTo={validTo}
         />
         <ValidityLine
           status={validityStatus}
+          isInspectable={isInspectable}
           now={now}
           validFrom={validFrom}
           validTo={validTo}
         />
 
-        <TicketInfo travelRights={travelRights} status={validityStatus} />
+        <TicketInfo
+          travelRights={travelRights}
+          status={validityStatus}
+          isInspectable={isInspectable}
+          hasActiveTravelCard={hasActiveTravelCard}
+        />
       </Sections.GenericItem>
       {!hideDetails && (
         <Sections.LinkItem
           text={t(
-            validityStatus === 'valid'
+            validityStatus === 'valid' && isInspectable
               ? TicketTexts.detailsLink.valid
               : TicketTexts.detailsLink.notValid,
           )}

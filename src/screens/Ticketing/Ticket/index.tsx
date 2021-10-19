@@ -37,6 +37,7 @@ const SimpleTicket: React.FC<Props> = ({
         isInspectable={isInspectable}
         hideDetails={hideDetails}
         onPressDetails={onPressDetails}
+        hasActiveTravelCard={hasActiveTravelCard}
       />
     );
   } else if (isCarnetTicket(firstTravelRight)) {

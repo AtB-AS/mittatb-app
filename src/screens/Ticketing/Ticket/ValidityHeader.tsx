@@ -18,19 +18,20 @@ const ValidityHeader: React.FC<{
   now: number;
   validFrom: number;
   validTo: number;
-}> = ({status, now, validFrom, validTo}) => {
+  isInspectable: boolean;
+}> = ({status, now, validFrom, validTo, isInspectable}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
 
   return (
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
-        <ValidityIcon status={status} />
+        <ValidityIcon status={status} isInspectable={isInspectable} />
         <ThemeText
           style={styles.validityText}
           type="body__secondary"
           accessibilityHint={
-            status === 'uninspectable'
+            !isInspectable
               ? t(TicketTexts.ticketInfo.noInspectionIconA11yLabel)
               : undefined
           }
@@ -82,9 +83,6 @@ function validityTimeText(
     }
     case 'reserving':
       return t(TicketTexts.validityHeader.reserving);
-    case 'uninspectable':
-      const dateText = formatToLongDateTime(toDate(validTo), language);
-      return t(TicketTexts.validityHeader.uninspectable(dateText));
     case 'unknown':
       return t(TicketTexts.validityHeader.unknown);
   }
