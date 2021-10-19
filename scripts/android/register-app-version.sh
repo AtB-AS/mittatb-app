@@ -66,6 +66,9 @@ if ! [[ -f ${APK_FILE_NAME} ]]; then
     exit 4
 fi
 
+# sha256sum not available by default on macOS
+brew install coreutils
+
 app_hash=$(sha256sum "${APK_FILE_NAME}" | cut -d ' ' -f 1)
 
 echo "Fetching access token"
