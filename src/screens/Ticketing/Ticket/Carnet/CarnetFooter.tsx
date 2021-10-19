@@ -52,7 +52,7 @@ const CarnetFooter: React.FC<Props> = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   dotContainer: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.colors.secondary_1.backgroundColor,
     borderRadius: 20,
     padding: 2,
     margin: 2,
@@ -63,7 +63,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     height: 14,
   },
   dot__unused: {
-    backgroundColor: theme.colors.primary_2.color,
+    backgroundColor: theme.colors.secondary_1.color,
   },
 }));
 
