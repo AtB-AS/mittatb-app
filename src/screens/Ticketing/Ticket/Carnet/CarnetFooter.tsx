@@ -1,8 +1,8 @@
 import React from 'react';
-import {useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import ThemeText from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
+import {TicketTexts, useTranslation} from '@atb/translations';
 
 type Props = {
   active: boolean;
@@ -18,6 +18,7 @@ const CarnetFooter: React.FC<Props> = ({
   numberOfUsedAccesses,
 }) => {
   const styles = useStyles();
+  const {t} = useTranslation();
 
   const accessesRemaining = maximumNumberOfAccesses - numberOfUsedAccesses;
 
@@ -36,11 +37,15 @@ const CarnetFooter: React.FC<Props> = ({
     <View
       style={{flexDirection: 'column', flex: 1}}
       accessible={true}
-      accessibilityLabel="klipp gjenstår"
+      accessibilityLabel={t(
+        TicketTexts.carnet.numberOfUsedAccessesRemaining(accessesRemaining),
+      )}
     >
       <View>
         <ThemeText type="body__secondary">
-          {accessesRemaining} klipp gjenstår
+          {t(
+            TicketTexts.carnet.numberOfUsedAccessesRemaining(accessesRemaining),
+          )}
         </ThemeText>
       </View>
       <View style={styles.container}>

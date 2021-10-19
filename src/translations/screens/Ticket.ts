@@ -47,6 +47,10 @@ const TicketTexts = {
       'QR code. Show this code in case of inspection. ',
     ),
   },
+  carnet: {
+    numberOfUsedAccessesRemaining: (count: number) =>
+      _(`${count} klipp gjenstår`, `${count} tickets left`),
+  },
   receipt: {
     header: {
       title: _('Send kvittering', 'Send receipt'),
