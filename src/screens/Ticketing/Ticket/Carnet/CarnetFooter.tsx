@@ -10,28 +10,47 @@ type Props = {
   numberOfUsedAccesses: number;
 };
 
+const CARNET_DIVIDER = 10;
+
 const CarnetFooter: React.FC<Props> = ({
   active,
   maximumNumberOfAccesses,
   numberOfUsedAccesses,
 }) => {
-  const {theme} = useTheme();
   const styles = useStyles();
-  const activeIndex = active
-    ? maximumNumberOfAccesses - numberOfUsedAccesses
-    : undefined;
+
+  const accessesRemaining = maximumNumberOfAccesses - numberOfUsedAccesses;
+
+  // If any active, the remaining count is the active index
+  const activeIndex = active ? accessesRemaining : undefined;
+
+  // Figure out how many unused travel rights there are left
+  // does not need to match actual number of travel rights
+  const carnetsLeftCount = Math.ceil(accessesRemaining / CARNET_DIVIDER);
+
+  // For the ones not displayed as "multi carnets"
+  // how many accesses are used in the travel right
+  const restUsed = numberOfUsedAccesses % (10 * carnetsLeftCount);
 
   return (
-    <View style={{flexDirection: 'column', flex: 1}}>
+    <View
+      style={{flexDirection: 'column', flex: 1}}
+      accessible={true}
+      accessibilityLabel="klipp gjenstår"
+    >
       <View>
         <ThemeText type="body__secondary">
-          {maximumNumberOfAccesses - numberOfUsedAccesses} klipp gjenstår
+          {accessesRemaining} klipp gjenstår
         </ThemeText>
       </View>
       <View style={styles.container}>
-        {Array(maximumNumberOfAccesses)
+        {carnetsLeftCount - 1 > 0 &&
+          Array(carnetsLeftCount - 1)
+            .fill(CARNET_DIVIDER)
+            .map((count) => <MultiCarnet count={count} />)}
+        {Array(10)
           .fill(true)
-          .map((_, idx) => idx < numberOfUsedAccesses)
+          .map((_, idx) => idx < restUsed)
           .reverse()
           .map((isUnused, idx) => (
             <View
@@ -53,12 +72,53 @@ const CarnetFooter: React.FC<Props> = ({
   );
 };
 
+function MultiCarnet({count}: {count: number}) {
+  const styles = useStyles();
+  return (
+    <View>
+      <View style={[styles.dot, {marginRight: 8}]}></View>
+      <View
+        style={[styles.dot, {opacity: 0.8, position: 'absolute', left: 8}]}
+      ></View>
+      <View style={styles.box}>
+        <View style={styles.triangle}></View>
+      </View>
+      <View style={styles.count}>
+        <ThemeText type="body__tertiary">{count}</ThemeText>
+      </View>
+    </View>
+  );
+}
+
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     justifyContent: 'space-between',
     flexDirection: 'row',
     marginTop: theme.spacings.medium,
+  },
+  triangle: {
+    width: 0,
+    height: 0,
+    backgroundColor: 'transparent',
+    borderStyle: 'solid',
+    borderLeftWidth: 3,
+    borderRightWidth: 3,
+    borderBottomWidth: 5,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: theme.colors.background_1.backgroundColor,
+  },
+  box: {
+    alignItems: 'center',
+    marginTop: theme.spacings.small,
+    flex: 1,
+  },
+  count: {
+    alignItems: 'center',
+    paddingVertical: theme.spacings.xSmall,
+    borderRadius: 3,
+    backgroundColor: theme.colors.background_1.backgroundColor,
   },
   dot: {
     backgroundColor: theme.colors.secondary_1.backgroundColor,
