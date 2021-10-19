@@ -39,7 +39,7 @@ type ProfileScreenProps = {
 };
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
-  const {enable_i18n, enable_login} = useRemoteConfig();
+  const {enable_i18n} = useRemoteConfig();
   const appDispatch = useAppDispatch();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
@@ -78,39 +78,37 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
       />
 
       <ScrollView contentContainerStyle={style.scrollView}>
-        {enable_login && (
-          <Sections.Section withPadding>
-            <Sections.HeaderItem
-              text={t(ProfileTexts.sections.account.heading)}
+        <Sections.Section withPadding>
+          <Sections.HeaderItem
+            text={t(ProfileTexts.sections.account.heading)}
+          />
+          {authenticationType !== 'phone' && (
+            <Sections.LinkItem
+              text={t(ProfileTexts.sections.account.linkItems.login.label)}
+              onPress={() =>
+                navigation.navigate('LoginInApp', {
+                  screen: hasActiveFareContracts
+                    ? 'ActiveTicketPromptInApp'
+                    : 'PhoneInputInApp',
+                  params: {
+                    afterLogin: {routeName: 'ProfileHome'},
+                  },
+                })
+              }
             />
-            {authenticationType !== 'phone' && (
-              <Sections.LinkItem
-                text={t(ProfileTexts.sections.account.linkItems.login.label)}
-                onPress={() =>
-                  navigation.navigate('LoginInApp', {
-                    screen: hasActiveFareContracts
-                      ? 'ActiveTicketPromptInApp'
-                      : 'PhoneInputInApp',
-                    params: {
-                      afterLogin: {routeName: 'ProfileHome'},
-                    },
-                  })
-                }
-              />
-            )}
-            {authenticationType === 'phone' && (
-              <Sections.GenericItem>
-                <ThemeText>{user?.phoneNumber}</ThemeText>
-              </Sections.GenericItem>
-            )}
-            {authenticationType === 'phone' && (
-              <Sections.LinkItem
-                text={t(ProfileTexts.sections.account.linkItems.logout.label)}
-                onPress={signOut}
-              />
-            )}
-          </Sections.Section>
-        )}
+          )}
+          {authenticationType === 'phone' && (
+            <Sections.GenericItem>
+              <ThemeText>{user?.phoneNumber}</ThemeText>
+            </Sections.GenericItem>
+          )}
+          {authenticationType === 'phone' && (
+            <Sections.LinkItem
+              text={t(ProfileTexts.sections.account.linkItems.logout.label)}
+              onPress={signOut}
+            />
+          )}
+        </Sections.Section>
 
         <Sections.Section withPadding>
           <Sections.HeaderItem

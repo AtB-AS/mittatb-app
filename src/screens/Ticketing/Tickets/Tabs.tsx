@@ -33,7 +33,6 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const {
     must_upgrade_ticketing,
     enable_recent_tickets,
-    enable_login,
     enable_period_tickets,
   } = useRemoteConfig();
   const {abtCustomerId, authenticationType} = useAuthState();
@@ -54,7 +53,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   };
 
   const onBuyPeriodTicket = () => {
-    if (authenticationType === 'phone' || !enable_login) {
+    if (authenticationType === 'phone') {
       navigation.navigate('TicketPurchase', {
         screen: 'PurchaseOverview',
         params: {
