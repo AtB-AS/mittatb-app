@@ -10,13 +10,14 @@ import React from 'react';
 import {View} from 'react-native';
 import ValidityLine from '../ValidityLine';
 import {getRelativeValidity, getValidityStatus} from '../utils';
-import {useTheme} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import TicketInfo from '../TicketInfo';
 import UsedAccessValidityHeader from './UsedAccessValidityHeader';
 import {UsedAccessStatus} from './types';
 import ValidityHeader from '../ValidityHeader';
 import ThemeText from '@atb/components/text';
 import CarnetFooter from './CarnetFooter';
+import Dash from 'react-native-dash';
 
 type Props = {
   fareContractState: FareContractState;
@@ -33,6 +34,8 @@ const CarnetTicketInfo: React.FC<Props> = ({
   isInspectable,
   hasActiveTravelCard,
 }) => {
+  const styles = useStyles();
+  const {theme} = useTheme();
   const {
     usedAccesses,
     maximumNumberOfAccesses,
@@ -75,15 +78,15 @@ const CarnetTicketInfo: React.FC<Props> = ({
             isInspectable={isInspectable}
           />
         )}
-        {isActiveValidity(usedAccessValidityStatus) && (
-          <ValidityLine
-            status="valid"
-            now={now}
-            validFrom={usedAccessValidFrom ?? 0}
-            validTo={usedAccessValidTo ?? 0}
-            isInspectable={isInspectable}
+        <View style={styles.container}>
+          <Dash
+            style={{width: '100%'}}
+            dashGap={0}
+            dashLength={1}
+            dashThickness={1}
+            dashColor={theme.colors.background_1.backgroundColor}
           />
-        )}
+        </View>
         <TicketInfo
           // Slice to only show 1 traveller
           // makes no sense to show multiple for carnet travel rights
@@ -139,13 +142,12 @@ function getUsedAccessValidity(
   return 'valid';
 }
 
-function isActiveValidity(status: UsedAccessStatus): boolean {
-  switch (status) {
-    case 'valid':
-      return true;
-    default:
-      return false;
-  }
-}
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    marginVertical: theme.spacings.medium,
+    marginHorizontal: -theme.spacings.medium,
+    flexDirection: 'row',
+  },
+}));
 
 export default CarnetTicketInfo;

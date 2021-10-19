@@ -4,7 +4,6 @@ import {
   isPreactivatedTicket,
   isSingleTicket,
 } from '@atb/tickets';
-import {useTranslation} from '@atb/translations';
 import React from 'react';
 import PreactivatedTicketInfo from './PreactivatedTicketInfo';
 import UnknownTicket from './UnknownTicket';
