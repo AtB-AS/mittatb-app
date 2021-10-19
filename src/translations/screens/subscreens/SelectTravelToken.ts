@@ -1,5 +1,5 @@
 import {translation as _} from '../../commons';
-const SelectTravelCardTexts = {
+const SelectTravelTokenTexts = {
   activeToken: {
     title: _('Aktivt reisebevis', 'Active travel token'),
     type: {
@@ -79,4 +79,4 @@ const SelectTravelCardTexts = {
     'Select your default category for future ticket purchases.',
   ),
 };
-export default SelectTravelCardTexts;
+export default SelectTravelTokenTexts;

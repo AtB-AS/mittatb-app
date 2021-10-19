@@ -13,7 +13,7 @@ import {RootStackParamList} from '@atb/navigation';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {ProfileStackParams} from '..';
-import SelectTravelCardTexts from '@atb/translations/screens/subscreens/SelectTravelCard';
+import SelectTravelTokenTexts from '@atb/translations/screens/subscreens/SelectTravelToken';
 
 export type TravelCardNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -74,17 +74,17 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
             color="primary_2"
             style={styles.activeTicketHeader}
           >
-            {t(SelectTravelCardTexts.activeToken.title)}
+            {t(SelectTravelTokenTexts.activeToken.title)}
           </ThemeText>
           <ThemeText
             type="heading__title"
             color="primary_2"
             style={styles.activeTicketType}
           >
-            {t(SelectTravelCardTexts.activeToken.type.tcard.title)}
+            {t(SelectTravelTokenTexts.activeToken.type.tcard.title)}
           </ThemeText>
           <ThemeText color="primary_2">
-            {t(SelectTravelCardTexts.activeToken.type.tcard.description)}
+            {t(SelectTravelTokenTexts.activeToken.type.tcard.description)}
           </ThemeText>
           <View style={styles.activeTicketCard}>
             <View
@@ -126,7 +126,7 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
           </View>
           <MessageBox type="info">
             <ThemeText type="body__primary" color="primary_1">
-              {t(SelectTravelCardTexts.activeToken.info)}
+              {t(SelectTravelTokenTexts.activeToken.info)}
             </ThemeText>
           </MessageBox>
         </View>
@@ -134,9 +134,9 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
         <Sections.Section withTopPadding>
           <Sections.LinkItem
             type="spacious"
-            text={t(SelectTravelCardTexts.changeTokenButton)}
+            text={t(SelectTravelTokenTexts.changeTokenButton)}
             onPress={() => {
-              navigation.navigate('SelectTravelCard');
+              navigation.navigate('SelectTravelToken');
             }}
             icon={<ThemeIcon svg={Edit}></ThemeIcon>}
           />
@@ -144,14 +144,14 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
 
         <Sections.Section withTopPadding withBottomPadding>
           <Sections.HeaderItem
-            text={t(SelectTravelCardTexts.faq.title)}
+            text={t(SelectTravelTokenTexts.faq.title)}
             type="spacious"
           />
           {visibleFaqs.map((item: boolean, n: number) => (
             <View key={n}>
               <Sections.LinkItem
                 type="spacious"
-                text={t(SelectTravelCardTexts.faqs[n].question)}
+                text={t(SelectTravelTokenTexts.faqs[n].question)}
                 onPress={() => {
                   visibleFaqs[n] = !item;
                   setVisibleFaqs([...visibleFaqs]);
@@ -161,7 +161,7 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
               {item ? (
                 <Sections.GenericItem type="spacious">
                   <ThemeText type="body__secondary">
-                    {t(SelectTravelCardTexts.faqs[n].answer)}
+                    {t(SelectTravelTokenTexts.faqs[n].answer)}
                   </ThemeText>
                 </Sections.GenericItem>
               ) : undefined}

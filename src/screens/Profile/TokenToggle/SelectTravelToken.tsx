@@ -19,18 +19,18 @@ import * as Sections from '@atb/components/sections';
 import RadioItem from '@atb/components/radio-icon/radio-item';
 import deviceInfoModule from 'react-native-device-info';
 
-export type SelectTravelCardNavigationProp = StackNavigationProp<
+export type SelectTravelTokenNavigationProp = StackNavigationProp<
   ProfileStackParams,
-  'SelectTravelCard'
+  'SelectTravelToken'
 >;
 
-type SelectTravelCardScreenNavigationProp = CompositeNavigationProp<
+type SelectTravelTokenScreenNavigationProp = CompositeNavigationProp<
   StackNavigationProp<RootStackParamList>,
-  SelectTravelCardNavigationProp
+  SelectTravelTokenNavigationProp
 >;
 
-type SelectTravelCardScreenProps = {
-  navigation: SelectTravelCardScreenNavigationProp;
+type SelectTravelTokenScreenProps = {
+  navigation: SelectTravelTokenScreenNavigationProp;
 };
 
 type itemType = {
@@ -40,9 +40,9 @@ type itemType = {
 
 const items: [itemType] = [{key: 1, text: 'test'}];
 
-export default function SelectTravelCard({
+export default function SelectTravelToken({
   navigation,
-}: SelectTravelCardScreenProps) {
+}: SelectTravelTokenScreenProps) {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const [checked, setChecked] = useState(false);
@@ -103,7 +103,7 @@ export default function SelectTravelCard({
             ]}
             onPress={() => setChecked(true)}
             accessibilityHint={
-              'Activate to select t:card as active travel card.'
+              'Activate to select t:card as active travel token.'
             }
             accessibilityRole={'radio'}
             accessibilityState={{selected: checked}}
@@ -142,7 +142,7 @@ export default function SelectTravelCard({
             ]}
             onPress={() => setChecked(false)}
             accessibilityHint={
-              'Activate to select mobile phone as active travel card.'
+              'Activate to select mobile phone as active travel token.'
             }
             accessibilityRole={'radio'}
             accessibilityState={{selected: !checked}}
