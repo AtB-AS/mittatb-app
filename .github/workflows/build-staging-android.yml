@@ -79,3 +79,12 @@ jobs:
         run: sh ./scripts/android/upload-sourcemaps.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
+      - name: Register app version
+        run: sh ./scripts/android/register-app-version.sh
+        env:
+          SIGNING_CERTIFICATE_DIGEST: ${{ secrets.ATB_ANDROID_CERT_DIGEST_STAGING}}
+          ENTUR_CLIENT_ID: ${{ secrets.ATB_ENTUR_CLIENT_ID_STAGING}}
+          ENTUR_CLIENT_SECRET: ${{ secrets.ATB_ENTUR_CLIENT_SECRET_STAGING}}
+          APP_ID: "app-staging"
+          APK_FILE_NAME: "app-staging.apk"
+          AUTHORITY: "ATB:Authority:2"
