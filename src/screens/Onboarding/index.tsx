@@ -26,7 +26,6 @@ export type OnboardingStackParams = {
 const Stack = createStackNavigator<OnboardingStackParams>();
 
 export default function Index() {
-  const {enable_login} = useRemoteConfig();
   return (
     <Stack.Navigator
       headerMode="none"

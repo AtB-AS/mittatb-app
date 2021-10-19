@@ -4,6 +4,7 @@
     "version": "ATB:Version:d918f8e3-eb23-4d62-9626-a5cbd02a1dee",
     "type": "single",
     "name": {"lang": "nob", "value": "Enkeltbillett buss/trikk"},
+    "distributionChannel": ["app"],
     "alternativeNames": [
       {"lang": "eng", "value": "Single ticket bus/tram"},
       {"lang": "nno", "value": "Enkeltbillett buss/trikk"}
@@ -24,6 +25,7 @@
     "version": "ATB:Version:4cc0e1af-6168-4ed7-81d5-37f48f96fb37",
     "type": "period",
     "name": {"lang": "nob", "value": "30-dagersbillett"},
+    "distributionChannel": ["app", "web"],
     "alternativeNames": [
       {"lang": "eng", "value": "Monthly pass"},
       {"lang": "nno", "value": "30-dagersbillett"}
@@ -45,6 +47,7 @@
     "version": "ATB:Version:dc5f13a8-61cb-42a3-a8c9-48299dde19cd",
     "type": "period",
     "name": {"lang": "nob", "value": "180-dagersbillett"},
+    "distributionChannel": ["app", "web"],
     "alternativeNames": [
       {"lang": "eng", "value": "180 days pass"},
       {"lang": "nno", "value": "180-dagersbillett"}

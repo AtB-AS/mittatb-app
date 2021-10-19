@@ -5,13 +5,16 @@ export type LanguageAndText = {
   value: string;
 };
 
-export type PreassignedFareProductType = 'single' | 'period';
+export type PreassignedFareProductType = 'single' | 'period' | 'carnet';
+
+export type DistributionChannel = 'web' | 'app';
 
 export type PreassignedFareProduct = {
   id: string;
   name: LanguageAndText;
   description?: LanguageAndText;
   alternativeNames: LanguageAndText[];
+  distributionChannel: DistributionChannel[];
   version: string;
   type: PreassignedFareProductType;
   limitations: {

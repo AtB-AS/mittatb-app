@@ -7,7 +7,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
-import {fromUnixTime} from 'date-fns';
+import {toDate} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
 import ValidityIcon from './ValidityIcon';
@@ -26,7 +26,15 @@ const ValidityHeader: React.FC<{
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
         <ValidityIcon status={status} />
-        <ThemeText style={styles.validityText} type="body__secondary">
+        <ThemeText
+          style={styles.validityText}
+          type="body__secondary"
+          accessibilityHint={
+            status === 'uninspectable'
+              ? t(TicketTexts.ticketInfo.noInspectionIconA11yLabel)
+              : undefined
+          }
+        >
           {validityTimeText(status, now, validFrom, validTo, t, language)}
         </ThemeText>
       </View>
@@ -68,15 +76,15 @@ function validityTimeText(
         const durationText = toDurationText(secondsSinceExpired);
         return t(TicketTexts.validityHeader.recentlyExpired(durationText));
       } else {
-        const dateTime = formatToLongDateTime(
-          fromUnixTime(validTo / 1000),
-          language,
-        );
+        const dateTime = formatToLongDateTime(toDate(validTo), language);
         return t(TicketTexts.validityHeader.expired(dateTime));
       }
     }
     case 'reserving':
       return t(TicketTexts.validityHeader.reserving);
+    case 'uninspectable':
+      const dateText = formatToLongDateTime(toDate(validTo), language);
+      return t(TicketTexts.validityHeader.uninspectable(dateText));
     case 'unknown':
       return t(TicketTexts.validityHeader.unknown);
   }

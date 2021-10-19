@@ -11,13 +11,17 @@ import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 type Props = {
   fareContract: FareContract;
   now: number;
-  onPressDetails: () => void;
+  hideDetails?: boolean;
+  onPressDetails?: () => void;
+  hasActiveTravelCard?: boolean;
 };
 
 const SimpleTicket: React.FC<Props> = ({
   fareContract: fc,
   now,
+  hideDetails,
   onPressDetails,
+  hasActiveTravelCard = false,
 }) => {
   const {t} = useTranslation();
 
@@ -26,7 +30,17 @@ const SimpleTicket: React.FC<Props> = ({
     const {startDateTime, endDateTime} = firstTravelRight;
     const validTo = endDateTime.toMillis();
     const validFrom = startDateTime.toMillis();
-    const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
+    const isInspectable =
+      !hasActiveTravelCard &&
+      firstTravelRight.type === 'PreActivatedSingleTicket';
+
+    const validityStatus = getValidityStatus(
+      now,
+      validFrom,
+      validTo,
+      fc.state,
+      isInspectable,
+    );
     return (
       <Sections.Section withBottomPadding>
         <Sections.GenericItem>
@@ -46,16 +60,19 @@ const SimpleTicket: React.FC<Props> = ({
           <TicketInfo
             travelRights={fc.travelRights.filter(isPreactivatedTicket)}
             status={validityStatus}
+            hasActiveTravelCard={hasActiveTravelCard}
           />
         </Sections.GenericItem>
-        <Sections.LinkItem
-          text={t(
-            validityStatus === 'valid'
-              ? TicketTexts.detailsLink.valid
-              : TicketTexts.detailsLink.notValid,
-          )}
-          onPress={onPressDetails}
-        />
+        {!hideDetails && (
+          <Sections.LinkItem
+            text={t(
+              validityStatus === 'valid' && isInspectable
+                ? TicketTexts.detailsLink.valid
+                : TicketTexts.detailsLink.notValid,
+            )}
+            onPress={onPressDetails}
+          />
+        )}
       </Sections.Section>
     );
   } else {

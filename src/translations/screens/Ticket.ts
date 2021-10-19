@@ -17,6 +17,8 @@ const TicketTexts = {
       _(`Blir gyldig om ${duration}`, `Becomes valid in ${duration}`),
     reserving: _(`Reserverer…`, `Reserving…`),
     unknown: _(`Ukjent`, `Unknown`),
+    uninspectable: (duration: string) =>
+      _(`Utløper ${duration}`, `Expires ${duration}`),
     durationDelimiter: _(' og ', ' and '),
   },
   validityIcon: {
@@ -25,6 +27,7 @@ const TicketTexts = {
     expired: _(`Utløpt billett`, `Expired ticket`),
     refunded: _(`Refundert billett`, 'Refunded ticket'),
     upcoming: _(`Kommende billett`, `Upcoming ticket`),
+    uninspectable: _(`Ikke inspiserbar billett`, `Uninspectable ticket`),
     unknown: _(`Ukjent billett`, `Unknown ticket`),
   },
   details: {
@@ -72,6 +75,14 @@ const TicketTexts = {
     message: _('Ukjent billett', 'Unknown ticket'),
     orderId: (orderId: string) =>
       _(`Ordre-id: ${orderId}`, `Order ID: ${orderId}`),
+  },
+  ticketInfo: {
+    tCardIsActive: _(
+      'T:kort er satt som reisebevis',
+      'T:card is set as travel token',
+    ),
+    noInspectionIcon: _('Ikke bruk\ni kontroll', 'Not for\ninspection'),
+    noInspectionIconA11yLabel: _('Ikke bruk i kontroll', 'Not for inspection'),
   },
 };
 export default TicketTexts;

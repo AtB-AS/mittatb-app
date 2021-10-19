@@ -52,6 +52,18 @@ const ValidityLine = (props: Props): ReactElement => {
           />
         </View>
       );
+    case 'uninspectable':
+      return (
+        <View style={styles.container}>
+          <Dash
+            style={{width: '100%'}}
+            dashGap={0}
+            dashLength={1}
+            dashThickness={1}
+            dashColor={theme.colors.background_1.backgroundColor}
+          />
+        </View>
+      );
     case 'unknown':
       return (
         <LineWithVerticalBars

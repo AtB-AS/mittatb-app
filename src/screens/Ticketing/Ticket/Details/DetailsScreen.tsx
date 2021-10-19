@@ -27,9 +27,11 @@ export default function DetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
-  const {findFareContractByOrderId} = useTicketState();
+  const {findFareContractByOrderId, customerProfile} = useTicketState();
   const fc = findFareContractByOrderId(route?.params?.orderId);
   const {t} = useTranslation();
+
+  const hasActiveTravelCard = !!customerProfile?.travelcard;
 
   const onReceiptNavigate = () =>
     fc &&
@@ -50,6 +52,7 @@ export default function DetailsScreen({navigation, route}: Props) {
             fareContract={fc}
             now={now}
             onReceiptNavigate={onReceiptNavigate}
+            hasActiveTravelCard={hasActiveTravelCard}
           />
         )}
       </ScrollView>
