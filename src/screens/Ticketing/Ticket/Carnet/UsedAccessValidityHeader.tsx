@@ -17,6 +17,7 @@ type Props = {
   status: UsedAccessStatus;
   validFrom: number | undefined;
   validTo: number | undefined;
+  isInspectable: boolean;
 };
 
 function UsedAccessValidityHeader(props: Props) {
@@ -26,8 +27,19 @@ function UsedAccessValidityHeader(props: Props) {
   return (
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
-        <UsedAccessValidityIcon status={props.status} />
-        <ThemeText style={styles.validityText} type="body__secondary">
+        <UsedAccessValidityIcon
+          status={props.status}
+          isInspectable={props.isInspectable}
+        />
+        <ThemeText
+          style={styles.validityText}
+          type="body__secondary"
+          accessibilityHint={
+            !props.isInspectable
+              ? t(TicketTexts.ticketInfo.noInspectionIconA11yLabel)
+              : undefined
+          }
+        >
           {getUsedAccessValidityText(props, t, language)}
         </ThemeText>
       </View>

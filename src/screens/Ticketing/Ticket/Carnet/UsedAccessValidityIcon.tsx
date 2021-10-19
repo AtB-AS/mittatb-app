@@ -8,34 +8,49 @@ import {TicketTexts, useTranslation} from '@atb/translations';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {UsedAccessStatus} from './types';
 
-const ValidityIcon: React.FC<{status: UsedAccessStatus}> = ({status}) => {
+type Props = {
+  status: UsedAccessStatus;
+  isInspectable: boolean;
+};
+
+const ValidityIcon: React.FC<Props> = (props) => {
   const {theme} = useTheme();
   return (
     <View style={{marginRight: theme.spacings.medium}}>
-      <ValidityIconSvg status={status} />
+      <ValidityIconSvg {...props} />
     </View>
   );
 };
 
-const ValidityIconSvg = ({status}: {status: UsedAccessStatus}) => {
+const ValidityIconSvg = ({status, isInspectable}: Props) => {
   const {t} = useTranslation();
   const a11yLabel =
     t(TicketTexts.usedAccessValidityIcon[status]) + screenReaderPause;
 
   switch (status) {
     case 'valid':
-      return (
-        <ThemeIcon
-          svg={ValidTicket}
-          colorType="disabled"
-          accessibilityLabel={a11yLabel}
-        />
-      );
+      if (isInspectable) {
+        return (
+          <ThemeIcon
+            svg={ValidTicket}
+            colorType="valid"
+            accessibilityLabel={a11yLabel}
+          />
+        );
+      } else {
+        return (
+          <ThemeIcon
+            svg={ValidTicket}
+            colorType="secondary"
+            accessibilityLabel={a11yLabel}
+          />
+        );
+      }
     case 'inactive':
       return (
         <ThemeIcon
           svg={InvalidTicket}
-          colorType="disabled"
+          colorType="secondary"
           accessibilityLabel={a11yLabel}
         />
       );
@@ -43,7 +58,7 @@ const ValidityIconSvg = ({status}: {status: UsedAccessStatus}) => {
       return (
         <ThemeIcon
           svg={Wait}
-          colorType="disabled"
+          colorType="primary"
           accessibilityLabel={a11yLabel}
         />
       );

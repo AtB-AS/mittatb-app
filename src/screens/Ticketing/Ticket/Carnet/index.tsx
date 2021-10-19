@@ -56,7 +56,7 @@ const CarnetTicketInfo: React.FC<Props> = ({
   return (
     <Sections.Section withBottomPadding>
       <Sections.GenericItem>
-        {fareContractValidityStatus !== 'valid' && isInspectable ? (
+        {fareContractValidityStatus !== 'valid' ? (
           <ValidityHeader
             now={now}
             status={fareContractValidityStatus}
@@ -70,6 +70,7 @@ const CarnetTicketInfo: React.FC<Props> = ({
             status={usedAccessValidityStatus}
             validFrom={usedAccessValidFrom}
             validTo={usedAccessValidTo}
+            isInspectable={isInspectable}
           />
         )}
         {isActiveValidity(usedAccessValidityStatus) && (
