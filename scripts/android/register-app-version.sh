@@ -85,11 +85,10 @@ if [ $login_status -ne 0 ]; then
     exit 5
 fi
 
-access_token=$(echo "$login" | grep "access_token" | sed 's/^.*access_token\":\s*\"\([-a-zA-Z0-9\._=]\+\).*$/\1/')
+access_token=$(echo $login | jq -j '.access_token')
 
 if ! [[ $access_token =~ ^ey[-a-zA-Z0-9\._=]+ ]]; then
   echo "Failed to find access token in response"
-  echo $login
   exit 6
 fi
 
