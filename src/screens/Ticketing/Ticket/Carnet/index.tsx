@@ -51,19 +51,18 @@ const CarnetTicketInfo: React.FC<Props> = ({
     fareContractValidFrom,
     fareContractValidTo,
     fareContractState,
-    isInspectable,
   );
 
   return (
     <Sections.Section withBottomPadding>
       <Sections.GenericItem>
-        {fareContractValidityStatus !== 'valid' &&
-        fareContractValidityStatus !== 'uninspectable' ? (
+        {fareContractValidityStatus !== 'valid' && isInspectable ? (
           <ValidityHeader
             now={now}
             status={fareContractValidityStatus}
             validFrom={fareContractValidFrom}
             validTo={fareContractValidTo}
+            isInspectable={isInspectable}
           />
         ) : (
           <UsedAccessValidityHeader
@@ -79,6 +78,7 @@ const CarnetTicketInfo: React.FC<Props> = ({
             now={now}
             validFrom={usedAccessValidFrom ?? 0}
             validTo={usedAccessValidTo ?? 0}
+            isInspectable={isInspectable}
           />
         )}
         <TicketInfo
@@ -86,6 +86,7 @@ const CarnetTicketInfo: React.FC<Props> = ({
           // makes no sense to show multiple for carnet travel rights
           travelRights={travelRights.slice(0, 1)}
           status={fareContractValidityStatus}
+          isInspectable={isInspectable}
         />
       </Sections.GenericItem>
       <Sections.GenericItem>

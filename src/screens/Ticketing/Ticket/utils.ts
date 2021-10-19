@@ -6,8 +6,7 @@ export type ValidityStatus =
   | RelativeValidityStatus
   | 'reserving'
   | 'unknown'
-  | 'refunded'
-  | 'uninspectable';
+  | 'refunded';
 
 export function getRelativeValidity(
   now: number,
@@ -25,9 +24,7 @@ export function getValidityStatus(
   validFrom: number,
   validTo: number,
   state: FareContractState,
-  inspectable: boolean,
 ): ValidityStatus {
   if (state === FareContractState.Refunded) return 'refunded';
-  if (!inspectable) return 'uninspectable';
   return getRelativeValidity(now, validFrom, validTo);
 }
