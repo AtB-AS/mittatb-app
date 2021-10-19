@@ -19,9 +19,9 @@ const CarnetFooter: React.FC<Props> = ({
   const styles = useStyles();
 
   return (
-    <View style={{flexDirection: 'column'}}>
+    <View style={{flexDirection: 'column', flex: 1}}>
       <View>
-        <ThemeText>
+        <ThemeText type="body__secondary">
           {maximumNumberOfAccesses - numberOfUsedAccesses} klipp gjenstår
         </ThemeText>
       </View>
@@ -31,6 +31,7 @@ const CarnetFooter: React.FC<Props> = ({
           justifyContent: 'space-between',
           flexDirection: 'row',
           flexWrap: 'wrap',
+          marginTop: 12,
         }}
       >
         {Array(maximumNumberOfAccesses)
