@@ -14,6 +14,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {ProfileStackParams} from '..';
 import SelectTravelTokenTexts from '@atb/translations/screens/subscreens/SelectTravelToken';
+import {ActiveTicketCard} from '@atb/screens/Ticketing/Tickets/TravelCardInformation';
 
 export type TravelCardNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -55,11 +56,6 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
     type: 'TOKEN_TYPE_TRAVELCARD',
   };
 
-  const formatedTravelCardId =
-    travelCard.keyValues.travelCardId.substr(0, 2) +
-    ' ' +
-    travelCard.keyValues.travelCardId.substr(2);
-
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -86,44 +82,10 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
           <ThemeText color="primary_2">
             {t(SelectTravelTokenTexts.activeToken.type.tcard.description)}
           </ThemeText>
-          <View style={styles.activeTicketCard}>
-            <View
-              style={styles.cardNumber}
-              accessible={true}
-              accessibilityLabel={
-                'Card number ends with ' + formatedTravelCardId + 'X'
-              }
-            >
-              <ThemeText
-                type="body__tertiary"
-                color="primary_1"
-                style={styles.transparentText}
-              >
-                XXXX XX
-              </ThemeText>
-              <ThemeText type="body__tertiary" color="primary_1">
-                {formatedTravelCardId}
-              </ThemeText>
-              <ThemeText
-                type="body__tertiary"
-                color="primary_1"
-                style={styles.transparentText}
-              >
-                X
-              </ThemeText>
-            </View>
-            <View>
-              <ThemeText
-                type="body__tertiary"
-                color="primary_1"
-                style={styles.tcardicon}
-                accessible={false}
-              >
-                {'\n'}
-                t:kort
-              </ThemeText>
-            </View>
-          </View>
+          <ActiveTicketCard
+            cardId={travelCard.keyValues.travelCardId}
+            color="primary_3"
+          ></ActiveTicketCard>
           <MessageBox type="info">
             <ThemeText type="body__primary" color="primary_1">
               {t(SelectTravelTokenTexts.activeToken.info)}
