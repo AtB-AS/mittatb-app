@@ -2,7 +2,7 @@ import {translation as _} from '../../commons';
 
 const SelectPaymentMethodTexts = {
   header: {
-    text: _('Velg betalingsmåte', 'Select payment method'),
+    text: _('Velg betalingsmåte', 'Select payment option'),
   },
   confirm_button: {
     text: _('Til betaling', 'Confirm option'),
@@ -24,6 +24,9 @@ const SelectPaymentMethodTexts = {
   not_save_card: {
     text: _('Lagre kort', 'Save card'),
     a11yhint: _('Aktiver for ikke å lagre kort', 'Activate to not save card'),
+  },
+  saved_cards: {
+    text: _('Lagrede kort', 'Stored cards'),
   },
 };
 
