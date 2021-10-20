@@ -31,7 +31,9 @@ const CarnetFooter: React.FC<Props> = ({
 
   // For the ones not displayed as "multi carnets"
   // how many accesses are used in the travel right
-  const restUsed = numberOfUsedAccesses % (10 * carnetsLeftCount);
+  const restUsed =
+    carnetsLeftCount > 0 ? numberOfUsedAccesses % (10 * carnetsLeftCount) : 10;
+  console.log(accessesRemaining, activeIndex, carnetsLeftCount, restUsed);
 
   return (
     <View
