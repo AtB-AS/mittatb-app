@@ -45,5 +45,9 @@ const PurchaseOverviewTexts = {
   totalPrice: (totalPrice: number) =>
     _(`Totalt: ${totalPrice} kr`, `Total: ${totalPrice} kr`),
   primaryButton: _('Gå til betaling', 'Go to payment'),
+  warning: _(
+    'Når du er ute og reiser må du ha med t:kortet som er registrert på din profil.',
+    'When traveling, you need to bring the t:card registered on your profile.',
+  ),
 };
 export default PurchaseOverviewTexts;
