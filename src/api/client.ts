@@ -87,7 +87,7 @@ async function requestIdTokenHandler(config: AxiosRequestConfig) {
     const user = auth().currentUser;
     const idToken = await user?.getIdToken(config.forceRefreshIdToken);
     config.headers = {
-      ...config.headers,
+      ...(config.headers || {}),
       Authorization: 'Bearer ' + idToken,
     };
   }
