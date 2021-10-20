@@ -38,6 +38,7 @@ import {screenReaderPause} from '@atb/components/accessible-text';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import TravellersSheet from '@atb/screens/Ticketing/Purchase/Travellers/TravellersSheet';
 import TravelDateSheet from '@atb/screens/Ticketing/Purchase/TravelDate/TravelDateSheet';
+import {useTicketState} from '@atb/tickets';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -53,6 +54,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 }) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
+  const {customerProfile} = useTicketState();
+
+  const hasTravelCard = !!customerProfile?.travelcard;
 
   const {
     tariff_zones: tariffZones,
@@ -237,6 +241,14 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         </Sections.Section>
       </View>
 
+      {hasTravelCard && (
+        <MessageBox
+          containerStyle={styles.warning}
+          message={t(PurchaseOverviewTexts.warning)}
+          type="warning"
+        />
+      )}
+
       <View style={styles.toPaymentButton}>
         <Button
           color="primary_2"
@@ -397,6 +409,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   selectionLinks: {margin: theme.spacings.medium},
   totalSection: {flex: 1, textAlign: 'center'},
   toPaymentButton: {marginHorizontal: theme.spacings.medium},
+  warning: {
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
+  },
 }));
 
 export default PurchaseOverview;
