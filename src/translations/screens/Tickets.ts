@@ -103,12 +103,12 @@ const TicketsTexts = {
   travelCardInformation: {
     reisebevis: _('Reisebevis', 'Travel token'),
     onInspection: _(
-      'I billettkontroll må du vise t:kortet ditt:',
-      'In the event of an inspection, you need to show your t:card:',
+      'I billettkontroll må du vise t:kortet ditt',
+      'In the event of an inspection, please present your t:card',
     ),
     changeInstructions: _(
-      'Kan endres fra Mitt AtB',
-      'Can be changed in My AtB',
+      'Kan endres fra "Mitt AtB"',
+      'Can be changed from "My AtB"',
     ),
     tCard: _('t:kort', 't:card'),
     illustrationa11yLabel: (travelCardId: string) =>

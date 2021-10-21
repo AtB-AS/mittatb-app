@@ -145,7 +145,9 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
       {hasActiveTravelCard && (
         <View style={styles.tCardWarning}>
           <ThemeIcon svg={Warning} style={styles.tCardWarningIcon}></ThemeIcon>
-          <ThemeText>{t(TicketTexts.ticketInfo.tCardIsActive)}</ThemeText>
+          <ThemeText isMarkdown={true}>
+            {t(TicketTexts.ticketInfo.tCardIsActive)}
+          </ThemeText>
         </View>
       )}
     </View>
