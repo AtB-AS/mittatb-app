@@ -76,9 +76,11 @@ function hasActiveOrUsableCarnetTicket(tickets: CarnetTicket[]): boolean {
   const [lastUsedAccess] = usedAccesses?.slice(-1);
   const validTo = lastUsedAccess?.endDateTime.toMillis() ?? 0;
   const now = Date.now();
+
   return (
-    firstTicket.endDateTime.toMillis() > now &&
-    (maximumNumberOfAccesses > numberOfUsedAccesses || now < validTo)
+    now < validTo ||
+    (firstTicket.endDateTime.toMillis() > now &&
+      maximumNumberOfAccesses > numberOfUsedAccesses)
   );
 }
 
