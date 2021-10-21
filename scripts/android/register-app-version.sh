@@ -113,7 +113,7 @@ json=$(cat <<EOJ
       "certificate_digests": [
         "${SIGNING_CERTIFICATE_DIGEST}"
       ],
-    }
+    },
     "active": true
   }
 }
