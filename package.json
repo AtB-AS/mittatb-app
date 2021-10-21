@@ -51,7 +51,7 @@
     "@types/lodash.sortby": "^4.7.6",
     "@types/mapbox__polyline": "^1.0.2",
     "@types/qrcode": "^1.4.1",
-    "axios": "^0.21.2",
+    "axios": "^0.23.0",
     "axios-better-stacktrace": "^2.1.1",
     "axios-retry": "^3.1.9",
     "date-fns": "^2.23.0",
