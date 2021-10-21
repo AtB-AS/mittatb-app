@@ -107,14 +107,14 @@ json=$(cat <<EOJ
       "ref": "${AUTHORITY}"
     },
     android: {
-      "apk_package_name": "no.mittatb",
+      "apk_package_name": "no.mittatb.staging",
       "application_version_id": "$app_version",
       "application_version_digest": "$app_hash",
       "certificate_digests": [
         "${SIGNING_CERTIFICATE_DIGEST}"
       ],
-      "active": true
     }
+    "active": true
   }
 }
 EOJ
