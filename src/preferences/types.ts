@@ -32,13 +32,14 @@ export type SavedRecurringPayment = {
   payment_type: number;
 };
 
-export type SavedPaymentOption =
-  | {
-      savedType: 'normal';
-      paymentType: PaymentType;
-    }
-  | {
-      savedType: 'recurring';
-      paymentType: PaymentType.VISA | PaymentType.MasterCard;
-      recurringCard: SavedRecurringPayment;
-    };
+export type DefaultPaymentOption = {
+  savedType: 'normal';
+  paymentType: PaymentType;
+};
+export type RecurringPaymentOption = {
+  savedType: 'recurring';
+  paymentType: PaymentType.VISA | PaymentType.MasterCard;
+  recurringCard: SavedRecurringPayment;
+};
+
+export type SavedPaymentOption = DefaultPaymentOption | RecurringPaymentOption;

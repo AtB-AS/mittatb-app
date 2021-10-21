@@ -7,6 +7,8 @@ export type CardPaymentMethod =
       recurringPaymentId: number;
     };
 
-export type PaymentMethod =
-  | {paymentType: PaymentType.Vipps}
-  | CardPaymentMethod;
+export type VippsPaymentMethod = {
+  paymentType: PaymentType.Vipps;
+};
+
+export type PaymentMethod = VippsPaymentMethod | CardPaymentMethod;

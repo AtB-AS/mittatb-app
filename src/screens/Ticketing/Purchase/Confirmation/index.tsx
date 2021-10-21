@@ -30,8 +30,6 @@ import {formatDecimalNumber} from '@atb/utils/numbers';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {SelectPaymentMethod} from '../Payment';
 import {SavedPaymentOption, usePreferences} from '@atb/preferences';
-import {useState} from 'react';
-import {useEffect} from 'react';
 import {CardPaymentMethod, PaymentMethod} from '../types';
 
 export type RouteParams = {
@@ -201,7 +199,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           }}
           close={close}
           previousPaymentMethod={previousPaymentMethod}
-        ></SelectPaymentMethod>
+        />
       );
     });
   }
@@ -349,7 +347,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                       selectPaymentOption(previousMethod);
                     }
                   }}
-                ></Button>
+                />
                 <TouchableOpacity
                   style={styles.buttonTopSpacing}
                   disabled={!!error}
@@ -377,7 +375,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                 )}
                 onPress={selectPaymentMethod}
                 viewContainerStyle={styles.paymentButton}
-              ></Button>
+              />
             )}
           </View>
         )}

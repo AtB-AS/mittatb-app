@@ -18,6 +18,8 @@ const TicketTexts = {
     reserving: _(`Reserverer…`, `Reserving…`),
     unknown: _(`Ukjent`, `Unknown`),
     inactiveCarnet: _(`Ingen aktive klipp`, `No active ticket`),
+    uninspectable: (duration: string) =>
+      _(`Utløper ${duration}`, `Expires ${duration}`),
     durationDelimiter: _(' og ', ' and '),
   },
   validityIcon: {
@@ -85,8 +87,8 @@ const TicketTexts = {
   },
   ticketInfo: {
     tCardIsActive: _(
-      't:kort er satt som reisebevis',
-      't:card is set as travel token',
+      'Du har valgt **t:kort** som gyldig reisebevis',
+      'You have specified **t:card** as valid travel token',
     ),
     noInspectionIcon: _('Ikke bruk\ni kontroll', 'Not for\ninspection'),
     noInspectionIconA11yLabel: _('Ikke bruk i kontroll', 'Not for inspection'),
