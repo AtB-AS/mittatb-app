@@ -53,7 +53,7 @@ const CarnetFooter: React.FC<Props> = ({
         {carnetsLeftCount - 1 > 0 &&
           Array(carnetsLeftCount - 1)
             .fill(CARNET_DIVIDER)
-            .map((count) => <MultiCarnet count={count} />)}
+            .map((count, idx) => <MultiCarnet key={idx} count={count} />)}
         {Array(CARNET_DIVIDER)
           .fill(true)
           .map((_, idx) => idx < restUsed)
