@@ -1,24 +1,30 @@
 import {FareContractState} from '@atb/tickets';
 
-export type ValidityStatus =
-  | 'reserving'
-  | 'valid'
-  | 'upcoming'
-  | 'unknown'
-  | 'refunded'
-  | 'expired'
-  | 'uninspectable';
+export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
-export const getValidityStatus = (
+export type ValidityStatus =
+  | RelativeValidityStatus
+  | 'reserving'
+  | 'unknown'
+  | 'refunded';
+
+export function getRelativeValidity(
+  now: number,
+  validFrom: number,
+  validTo: number,
+): RelativeValidityStatus {
+  if (now > validTo) return 'expired';
+  if (now < validFrom) return 'upcoming';
+
+  return 'valid';
+}
+
+export function getValidityStatus(
   now: number,
   validFrom: number,
   validTo: number,
   state: FareContractState,
-  inspectable: boolean,
-): ValidityStatus => {
+): ValidityStatus {
   if (state === FareContractState.Refunded) return 'refunded';
-  if (now > validTo) return 'expired';
-  if (now < validFrom) return 'upcoming';
-  if (!inspectable) return 'uninspectable';
-  return 'valid';
-};
+  return getRelativeValidity(now, validFrom, validTo);
+}

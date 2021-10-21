@@ -19,7 +19,10 @@ import {ProfileStackParams} from '..';
 import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {useAppDispatch} from '@atb/AppContext';
-import {filterActiveFareContracts, useTicketState} from '@atb/tickets';
+import {
+  filterActiveOrCanBeUsedFareContracts,
+  useTicketState,
+} from '@atb/tickets';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -48,7 +51,9 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   const config = useLocalConfig();
 
   const {fareContracts} = useTicketState();
-  const activeFareContracts = filterActiveFareContracts(fareContracts);
+  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
+    fareContracts,
+  );
   const hasActiveFareContracts = activeFareContracts.length > 0;
 
   const {

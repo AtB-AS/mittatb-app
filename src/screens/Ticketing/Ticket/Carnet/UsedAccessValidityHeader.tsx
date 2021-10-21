@@ -6,48 +6,49 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
-import {toDate} from 'date-fns';
+import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
-import ValidityIcon from './ValidityIcon';
-import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
+import {UsedAccessStatus} from './types';
+import UsedAccessValidityIcon from './UsedAccessValidityIcon';
 
-const ValidityHeader: React.FC<{
-  status: ValidityStatus;
+type Props = {
   now: number;
-  validFrom: number;
-  validTo: number;
+  status: UsedAccessStatus;
+  validFrom: number | undefined;
+  validTo: number | undefined;
   isInspectable: boolean;
-}> = ({status, now, validFrom, validTo, isInspectable}) => {
+};
+
+function UsedAccessValidityHeader(props: Props) {
   const styles = useStyles();
   const {t, language} = useTranslation();
 
   return (
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
-        <ValidityIcon status={status} isInspectable={isInspectable} />
+        <UsedAccessValidityIcon
+          status={props.status}
+          isInspectable={props.isInspectable}
+        />
         <ThemeText
           style={styles.validityText}
           type="body__secondary"
           accessibilityHint={
-            !isInspectable
+            !props.isInspectable
               ? t(TicketTexts.ticketInfo.noInspectionIconA11yLabel)
               : undefined
           }
         >
-          {validityTimeText(status, now, validFrom, validTo, t, language)}
+          {getUsedAccessValidityText(props, t, language)}
         </ThemeText>
       </View>
     </View>
   );
-};
+}
 
-function validityTimeText(
-  status: ValidityStatus,
-  now: number,
-  validFrom: number,
-  validTo: number,
+function getUsedAccessValidityText(
+  props: Props,
   t: TranslateFunction,
   language: Language,
 ): string {
@@ -58,33 +59,21 @@ function validityTimeText(
       serialComma: false,
     });
 
+  const {status, now} = props;
+
   switch (status) {
-    case 'refunded':
-      return t(TicketTexts.validityHeader.refunded);
-    case 'upcoming': {
-      const secondsUntilValid = (validFrom - now) / 1000;
-      const durationText = toDurationText(secondsUntilValid);
-      return t(TicketTexts.validityHeader.upcoming(durationText));
-    }
     case 'valid': {
-      const secondsUntilExpired = (validTo - now) / 1000;
+      const secondsUntilExpired = (props.validTo! - now) / 1000;
       const durationText = toDurationText(secondsUntilExpired);
       return t(TicketTexts.validityHeader.valid(durationText));
     }
-    case 'expired': {
-      const secondsSinceExpired = (now - validTo) / 1000;
-      if (secondsSinceExpired < 60 * 60) {
-        const durationText = toDurationText(secondsSinceExpired);
-        return t(TicketTexts.validityHeader.recentlyExpired(durationText));
-      } else {
-        const dateTime = formatToLongDateTime(toDate(validTo), language);
-        return t(TicketTexts.validityHeader.expired(dateTime));
-      }
+    case 'upcoming': {
+      const secondsUntilValid = (props.validFrom! - now) / 1000;
+      const durationText = toDurationText(secondsUntilValid);
+      return t(TicketTexts.validityHeader.upcoming(durationText));
     }
-    case 'reserving':
-      return t(TicketTexts.validityHeader.reserving);
-    case 'unknown':
-      return t(TicketTexts.validityHeader.unknown);
+    case 'inactive':
+      return t(TicketTexts.validityHeader.inactiveCarnet);
   }
 }
 
@@ -115,4 +104,4 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-export default ValidityHeader;
+export default UsedAccessValidityHeader;

@@ -17,6 +17,7 @@ const TicketTexts = {
       _(`Blir gyldig om ${duration}`, `Becomes valid in ${duration}`),
     reserving: _(`Reserverer…`, `Reserving…`),
     unknown: _(`Ukjent`, `Unknown`),
+    inactiveCarnet: _(`Ingen aktive klipp`, `No active ticket`),
     uninspectable: (duration: string) =>
       _(`Utløper ${duration}`, `Expires ${duration}`),
     durationDelimiter: _(' og ', ' and '),
@@ -27,8 +28,12 @@ const TicketTexts = {
     expired: _(`Utløpt billett`, `Expired ticket`),
     refunded: _(`Refundert billett`, 'Refunded ticket'),
     upcoming: _(`Kommende billett`, `Upcoming ticket`),
-    uninspectable: _(`Ikke inspiserbar billett`, `Uninspectable ticket`),
     unknown: _(`Ukjent billett`, `Unknown ticket`),
+  },
+  usedAccessValidityIcon: {
+    valid: _(`Gyldig billett`, `Valid ticket`),
+    upcoming: _(`Kommende klipp`, `Upcoming ticket`),
+    inactive: _(`Ingen aktive klipp`, `No active ticket`),
   },
   details: {
     header: {
@@ -43,6 +48,10 @@ const TicketTexts = {
       'QR kode. Vis frem denne koden ved billett kontroll',
       'QR code. Show this code in case of inspection. ',
     ),
+  },
+  carnet: {
+    numberOfUsedAccessesRemaining: (count: number) =>
+      _(`${count} klipp gjenstår`, `${count} tickets left`),
   },
   receipt: {
     header: {

@@ -4,8 +4,9 @@ import {RootStackParamList} from '@atb/navigation';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
-  filterActiveFareContracts,
+  filterActiveOrCanBeUsedFareContracts,
   filterExpiredFareContracts,
+  isValidRightNowFareContract,
   useTicketState,
 } from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
@@ -151,7 +152,16 @@ export const ActiveTickets: React.FC<Props> = () => {
     customerProfile,
   } = useTicketState();
 
-  const activeFareContracts = filterActiveFareContracts(fareContracts);
+  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
+    fareContracts,
+  ).sort(function (a, b): number {
+    const isA = isValidRightNowFareContract(a);
+    const isB = isValidRightNowFareContract(b);
+
+    if (isA === isB) return 0;
+    if (isA) return -1;
+    return 1;
+  });
 
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
