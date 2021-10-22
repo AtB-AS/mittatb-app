@@ -75,9 +75,11 @@ const initialReducerState: AuthReducerState = {
 
 type AuthenticationType = 'none' | 'anonymous' | 'phone';
 
-const getAuthenticationType = (state: AuthReducerState): AuthenticationType => {
-  if (state.user?.phoneNumber) return 'phone';
-  else if (state.user?.isAnonymous) return 'anonymous';
+const getAuthenticationType = (
+  user: FirebaseAuthTypes.User | null,
+): AuthenticationType => {
+  if (user?.phoneNumber) return 'phone';
+  else if (user?.isAnonymous) return 'anonymous';
   else return 'none';
 };
 
@@ -123,7 +125,12 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
 
   const onUserChanged = useCallback(
     async function (user: FirebaseAuthTypes.User | null) {
-      if (user) updateMetadata({'AtB-Firebase-Auth-Id': user.uid});
+      if (user) {
+        updateMetadata({
+          'AtB-Firebase-Auth-Id': user.uid,
+          'AtB-Auth-Type': getAuthenticationType(user),
+        });
+      }
       dispatch({type: 'SET_USER', user});
     },
     [dispatch],
@@ -186,7 +193,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
         signInWithPhoneNumber,
         confirmCode,
         signOut,
-        authenticationType: getAuthenticationType(state),
+        authenticationType: getAuthenticationType(state.user),
       }}
     >
       {children}
