@@ -23,6 +23,15 @@ const ValidityHeader: React.FC<{
   const styles = useStyles();
   const {t, language} = useTranslation();
 
+  const validityTime: string = validityTimeText(
+    status,
+    now,
+    validFrom,
+    validTo,
+    t,
+    language,
+  );
+
   return (
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
@@ -30,13 +39,14 @@ const ValidityHeader: React.FC<{
         <ThemeText
           style={styles.validityText}
           type="body__secondary"
+          accessibilityLabel={validityTime}
           accessibilityHint={
             !isInspectable
               ? t(TicketTexts.ticketInfo.noInspectionIconA11yLabel)
               : undefined
           }
         >
-          {validityTimeText(status, now, validFrom, validTo, t, language)}
+          {validityTime}
         </ThemeText>
       </View>
     </View>
