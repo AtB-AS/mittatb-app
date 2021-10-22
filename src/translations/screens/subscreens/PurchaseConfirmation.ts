@@ -1,9 +1,4 @@
 import {translation as _} from '../../commons';
-import {
-  DefaultPaymentOption,
-  RecurringPaymentOption,
-  SavedPaymentOption,
-} from '@atb/preferences';
 
 const PurchaseConfirmationTexts = {
   header: {

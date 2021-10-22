@@ -13,13 +13,12 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {ArrowRight} from '@atb/assets/svg/icons/navigation';
-import {SavedPaymentOption} from '@atb/preferences';
 import {Confirm} from '@atb/assets/svg/icons/actions';
 import {parseISO} from 'date-fns';
 import ThemeText from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {listRecurringPayments, PaymentType} from '@atb/tickets';
-import {PaymentMethod} from '../../types';
+import {PaymentMethod, SavedPaymentOption} from '../../types';
 import {useAuthState} from '@atb/auth';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';

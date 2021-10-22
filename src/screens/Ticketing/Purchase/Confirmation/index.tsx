@@ -29,8 +29,9 @@ import {formatToLongDateTime} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {SelectPaymentMethod} from '../Payment';
-import {SavedPaymentOption, usePreferences} from '@atb/preferences';
-import {CardPaymentMethod, PaymentMethod} from '../types';
+import {CardPaymentMethod, PaymentMethod, SavedPaymentOption} from '../types';
+import {useAuthState} from '@atb/auth';
+import {usePreviousPaymentMethod} from '../saved-payment-utils';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -80,9 +81,9 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   const {theme} = useTheme();
   const {t, language} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
-  const {
-    preferences: {previousPaymentMethod},
-  } = usePreferences();
+  const {user} = useAuthState();
+
+  const previousPaymentMethod = usePreviousPaymentMethod(user?.uid);
 
   const previousMethod = getPreviousPaymentMethod(previousPaymentMethod);
 
