@@ -28,6 +28,7 @@ type TicketInfoProps = {
   status: ValidityStatus | 'recent';
   hasActiveTravelCard: boolean;
   isInspectable: boolean;
+  omitUserProfileCount?: boolean;
 };
 
 const TicketInfo = ({
@@ -35,6 +36,7 @@ const TicketInfo = ({
   status,
   hasActiveTravelCard,
   isInspectable,
+  omitUserProfileCount,
 }: TicketInfoProps) => {
   const {
     tariff_zones: tariffZones,
@@ -68,6 +70,7 @@ const TicketInfo = ({
       status={status}
       hasActiveTravelCard={hasActiveTravelCard}
       isInspectable={isInspectable}
+      omitUserProfileCount={omitUserProfileCount}
     />
   );
 };
@@ -80,6 +83,7 @@ type TicketInfoViewProps = {
   status: TicketInfoProps['status'];
   hasActiveTravelCard?: boolean;
   isInspectable?: boolean;
+  omitUserProfileCount?: boolean;
 };
 
 export const TicketInfoView = (props: TicketInfoViewProps) => {
@@ -99,6 +103,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
     toTariffZone,
     userProfilesWithCount,
     hasActiveTravelCard,
+    omitUserProfileCount,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -113,7 +118,9 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
       : undefined;
 
   const userProfileCountAndName = (u: UserProfileWithCount) =>
-    `${u.count} ${getReferenceDataName(u, language)}`;
+    omitUserProfileCount
+      ? `${getReferenceDataName(u, language)}`
+      : `${u.count} ${getReferenceDataName(u, language)}`;
 
   return (
     <View style={styles.textsContainer} accessible={true}>
