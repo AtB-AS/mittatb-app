@@ -39,10 +39,11 @@ const ValidityHeader: React.FC<{
         <ThemeText
           style={styles.validityText}
           type="body__secondary"
-          accessibilityLabel={validityTime}
-          accessibilityHint={
+          accessibilityLabel={
             !isInspectable
-              ? t(TicketTexts.ticketInfo.noInspectionIconA11yLabel)
+              ? validityTime +
+                ', ' +
+                t(TicketTexts.ticketInfo.noInspectionIconA11yLabel)
               : undefined
           }
         >
