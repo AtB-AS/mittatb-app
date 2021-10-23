@@ -27,6 +27,7 @@ const storage = AsyncStorageFactory.create<StorageModel>(legacyStorage, {
     Bugsnag.leaveBreadcrumb('storage_action', {
       action: action.action,
       key: Array.isArray(action.key) ? action.key.join(',') : action.key,
+      value: __DEV__ ? action.value : undefined,
     }),
 });
 
