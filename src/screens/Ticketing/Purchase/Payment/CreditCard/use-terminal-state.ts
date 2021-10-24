@@ -217,7 +217,7 @@ export default function useTerminalState(
       }
     } else {
       if (user) {
-        savePreviousPaymentMethodByUser(user?.uid, {
+        savePreviousPaymentMethodByUser(user.uid, {
           savedType: 'normal',
           paymentType: paymentType,
         });
