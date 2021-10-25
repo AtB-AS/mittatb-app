@@ -1,25 +1,44 @@
-import loadingHandler from './state-handlers/LoadingHandler';
-import validatingHandler from './state-handlers/ValidatingHandler';
-import initiatingHandler from './state-handlers/InitiatingHandler';
-import renewingHandler from './state-handlers/RenewingHandler';
-export const startTokenStateMachine = async (abtTokensService, setStatus, lastStatus) => {
-  const shouldContinue = s => s.state !== 'Valid' && !s.error;
+import loadingHandler from './state-machine/handlers/LoadingHandler';
+import validatingHandler from './state-machine/handlers/ValidatingHandler';
+import initiateNewHandler from './state-machine/handlers/InitiateNewHandler';
+import initiateRenewHandler from './state-machine/handlers/InitiateRenewalHandler';
+import getTokenCertificateHandler from './state-machine/handlers/GetTokenCertificateHandler';
+import attestHandler from './state-machine/handlers/AttestHandler';
+import activateRenewalHandler from './state-machine/handlers/ActivateRenewalHandler';
+import addTokenHandler from './state-machine/handlers/AddTokenHandler';
+import activateNewHandler from './state-machine/handlers/ActivateNewHandler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+const STORAGE_KEY = '@mobiletokensdk-state';
+export const startTokenStateMachine = async (abtTokensService, setStatus) => {
+  const savedStateString = await AsyncStorage.getItem(STORAGE_KEY);
+  const savedState = savedStateString ? JSON.parse(savedStateString) : undefined;
+  let currentState = savedState || {
+    state: 'Loading'
+  };
 
-  let currentStatus = lastStatus;
+  try {
+    const shouldContinue = s => s.state !== 'Valid' && !s.error;
 
-  do {
-    currentStatus = await processStatus(abtTokensService, currentStatus);
-    setStatus(currentStatus);
-  } while (shouldContinue(currentStatus));
+    do {
+      const handler = getStateHandler(abtTokensService, currentState);
+      currentState = await handler(currentState);
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(currentState));
+      setStatus(currentState);
+    } while (shouldContinue(currentState));
+  } catch (err) {
+    console.warn('Unexpected error', err);
+    setStatus({ ...currentState,
+      error: {
+        type: 'Unknown',
+        message: 'Unexpected error',
+        err
+      }
+    });
+  }
 };
 
-const processStatus = async (abtTokensService, status) => {
-  switch (status === null || status === void 0 ? void 0 : status.state) {
-    case undefined:
-      return {
-        state: 'Loading'
-      };
-
+const getStateHandler = (abtTokensService, storedState) => {
+  switch (storedState.state) {
     case 'Valid':
     case 'Loading':
       return loadingHandler();
@@ -27,11 +46,27 @@ const processStatus = async (abtTokensService, status) => {
     case 'Validating':
       return validatingHandler(abtTokensService);
 
-    case 'Initiating':
-      return initiatingHandler(abtTokensService);
+    case 'InitiateNew':
+      return initiateNewHandler(abtTokensService);
 
-    case 'Renewing':
-      return renewingHandler(abtTokensService);
+    case 'InitiateRenewal':
+      return initiateRenewHandler(abtTokensService);
+
+    case 'GettingTokenCertificate':
+      return getTokenCertificateHandler(abtTokensService);
+
+    case 'AttestNew':
+    case 'AttestRenewal':
+      return attestHandler(abtTokensService);
+
+    case 'ActivateNew':
+      return activateNewHandler(abtTokensService);
+
+    case 'ActivateRenewal':
+      return activateRenewalHandler(abtTokensService);
+
+    case 'AddToken':
+      return addTokenHandler(abtTokensService);
   }
 };
 //# sourceMappingURL=index.js.map

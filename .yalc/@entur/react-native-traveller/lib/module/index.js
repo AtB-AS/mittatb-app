@@ -9,33 +9,18 @@ export default function createClient(setStatus, initialConfig) {
   const config = getConfigFromInitialConfig(initialConfig);
   const fetcher = createFetcher(config);
   const abtTokensService = createAbtTokensService(fetcher, config.hosts);
-  let lastSeenStatus;
 
-  const setStatusWrapper = status => {
-    lastSeenStatus = status;
-    setStatus(status);
-  };
-
-  const startStateMachine = () => {
-    startTokenStateMachine(abtTokensService, setStatusWrapper, lastSeenStatus).catch(err => {
-      var _lastSeenStatus;
-
-      console.warn('Unexpected error', err);
-      setStatusWrapper({
-        state: ((_lastSeenStatus = lastSeenStatus) === null || _lastSeenStatus === void 0 ? void 0 : _lastSeenStatus.state) || 'Loading',
-        error: {
-          type: 'Unknown',
-          message: 'Unexpected error',
-          err
-        }
-      });
+  const setStatusWrapper = storedState => {
+    setStatus({
+      state: storedState.state,
+      error: storedState.error
     });
   };
 
-  startStateMachine();
+  startTokenStateMachine(abtTokensService, setStatusWrapper);
   return {
     restart: () => {
-      startStateMachine();
+      startTokenStateMachine(abtTokensService, setStatusWrapper); // Todo: Not start if already running
     },
     generateQrCode: () => getSecureToken([PayloadAction.ticketInspection])
   };

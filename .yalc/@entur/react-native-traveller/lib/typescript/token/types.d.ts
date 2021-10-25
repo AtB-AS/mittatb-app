@@ -1,5 +1,8 @@
+import type { Token } from '@entur/react-native-traveller';
 export declare type InitializeTokenRequest = {
     requireAttestation: boolean;
+    deviceName: string;
+    keyValues?: Map<string, string>;
 };
 export declare type InitializeTokenResponse = {
     attestationEncryptionPublicKey: string;
@@ -11,9 +14,7 @@ export declare type InitializeTokenResponse = {
 export declare type ListTokensResponse = {
     id: string;
 }[];
-export declare type RenewTokenRequest = {
-    existingToken?: string;
-};
+export declare type GetTokenCertificateResponse = ActivateTokenResponse;
 export declare type RenewTokenResponse = {
     attestationEncryptionPublicKey: string;
     tokenId: string;
@@ -32,7 +33,6 @@ export declare type ActivateTokenRequest = {
     /** base64 encoded token public key */
     signaturePublicKey?: string;
     encryptionPublicKey?: string;
-    existingToken?: string;
     attestation: {
         attestationType: 'iOS_Device_Check';
         /** base64 encoded data from iOS DeviceCheck API */
@@ -63,17 +63,36 @@ export declare type ActivateTokenResponse = {
     tokenValidityStart: number;
     tokenValidityEnd: number;
 };
-declare const errorTypes: readonly ["None", "Unknown", "Network"];
+declare const errorTypes: readonly ["None", "Severe", "Unknown", "Network"];
 export declare type ErrorType = typeof errorTypes[number];
 export declare type TokenError = {
     type: ErrorType;
     message: string;
-    err: any;
+    err?: any;
 };
 export declare type TokenStatus = {
     state: TokenState;
     error?: TokenError;
 };
-declare const tokenStates: readonly ["Loading", "Valid", "Validating", "Initiating", "Renewing"];
+declare const tokenStates: readonly ["Loading", "Valid", "GettingTokenCertificate", "Validating", "InitiateNew", "InitiateRenewal", "AttestNew", "AttestRenewal", "ActivateNew", "ActivateRenewal", "AddToken"];
 export declare type TokenState = typeof tokenStates[number];
+export declare type StoredState = {
+    deviceId?: string;
+    error?: TokenError;
+} & ({
+    state: 'Loading' | 'InitiateNew' | 'InitiateRenewal' | 'Valid' | 'GettingTokenCertificate';
+} | {
+    state: 'Validating';
+    token: Token;
+} | {
+    state: 'AttestNew' | 'AttestRenewal';
+    initiatedData: InitializeTokenResponse;
+} | {
+    state: 'ActivateNew' | 'ActivateRenewal';
+    attestationData: ActivateTokenRequest;
+    tokenId: string;
+} | {
+    state: 'AddToken';
+    activatedData: ActivateTokenResponse;
+});
 export {};

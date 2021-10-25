@@ -2,20 +2,26 @@ import type { Fetch, Hosts } from '../config';
 import type {
   ActivateTokenRequest,
   ActivateTokenResponse,
+  GetTokenCertificateResponse,
   InitializeTokenRequest,
   InitializeTokenResponse,
   ListTokensResponse,
-  RenewTokenRequest,
   RenewTokenResponse,
 } from './types';
 
+const SIGNED_TOKEN_HEADER_KEY = 'X-Signed-Token';
+
 export type AbtTokensService = {
   listTokens: () => Promise<ListTokensResponse>;
+  getTokenCertificate: (
+    signedToken: string
+  ) => Promise<GetTokenCertificateResponse>;
   initToken: (req: InitializeTokenRequest) => Promise<InitializeTokenResponse>;
-  renewToken: (req: RenewTokenRequest) => Promise<RenewTokenResponse>;
+  renewToken: (signedToken: string) => Promise<RenewTokenResponse>;
   activateToken: (
     tokenId: string,
-    req: ActivateTokenRequest
+    req: ActivateTokenRequest,
+    signedToken?: string
   ) => Promise<ActivateTokenResponse>;
 };
 
@@ -32,6 +38,18 @@ export const createAbtTokensService = (
     return response.body;
   };
 
+  const getTokenCertificate = async (signedToken: string) => {
+    const url = `${hosts.pto}/tokens/certificate`;
+    const response = await fetcher<GetTokenCertificateResponse>({
+      url,
+      headers: {
+        [SIGNED_TOKEN_HEADER_KEY]: signedToken,
+      },
+      method: 'GET',
+    });
+    return response.body;
+  };
+
   const initToken = async (body: InitializeTokenRequest) => {
     const url = `${hosts.pto}/tokens`;
     const response = await fetcher<InitializeTokenResponse>({
@@ -42,20 +60,31 @@ export const createAbtTokensService = (
     return response.body;
   };
 
-  const renewToken = async (body: RenewTokenRequest) => {
+  const renewToken = async (signedToken: string) => {
     const url = `${hosts.pto}/tokens/renew`;
     const response = await fetcher<RenewTokenResponse>({
       url,
-      body,
+      headers: {
+        [SIGNED_TOKEN_HEADER_KEY]: signedToken,
+      },
       method: 'POST',
     });
     return response.body;
   };
 
-  const activateToken = async (tokenId: string, body: ActivateTokenRequest) => {
+  const activateToken = async (
+    tokenId: string,
+    body: ActivateTokenRequest,
+    signedToken?: string
+  ) => {
     const url = `${hosts.pto}/tokens/${tokenId}/activate`;
     const response = await fetcher<ActivateTokenResponse>({
       url,
+      headers: signedToken
+        ? {
+            [SIGNED_TOKEN_HEADER_KEY]: signedToken,
+          }
+        : {},
       body,
       method: 'POST',
     });
@@ -65,6 +94,7 @@ export const createAbtTokensService = (
 
   return {
     listTokens,
+    getTokenCertificate,
     initToken,
     renewToken,
     activateToken,

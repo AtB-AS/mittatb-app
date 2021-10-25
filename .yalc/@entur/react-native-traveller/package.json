@@ -54,6 +54,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "peerDependencies": {
+    "@react-native-async-storage/async-storage": "^1.15.9",
     "react": "*",
     "react-native": "*"
   },
@@ -61,6 +62,7 @@
     "preset": "react-native",
     "modulePathIgnorePatterns": [
       "<rootDir>/example/node_modules",
+      "<rootDir>/src/__tests__/helpers",
       "<rootDir>/lib/"
     ]
   },
@@ -125,5 +127,5 @@
       ]
     ]
   },
-  "yalcSig": "986a17d11ef8491aa5ea0af17168b9ea"
+  "yalcSig": "0f345a71a10b4573eeee2612b9a76418"
 }

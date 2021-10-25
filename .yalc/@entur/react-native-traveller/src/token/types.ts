@@ -1,5 +1,9 @@
+import type { Token } from '@entur/react-native-traveller';
+
 export type InitializeTokenRequest = {
   requireAttestation: boolean;
+  deviceName: string;
+  keyValues?: Map<string, string>;
 };
 
 export type InitializeTokenResponse = {
@@ -10,11 +14,13 @@ export type InitializeTokenResponse = {
   nonceValidityEnd: number;
 };
 
-export type ListTokensResponse = { id: string }[];
+export type ListTokensResponse = {
+  id: string;
+  // deviceName: string;
+  // deviceId: string;
+}[];
 
-export type RenewTokenRequest = {
-  existingToken?: string;
-};
+export type GetTokenCertificateResponse = ActivateTokenResponse;
 
 export type RenewTokenResponse = {
   attestationEncryptionPublicKey: string;
@@ -36,7 +42,6 @@ export type ActivateTokenRequest = {
   /** base64 encoded token public key */
   signaturePublicKey?: string;
   encryptionPublicKey?: string;
-  existingToken?: string;
   attestation:
     | {
         attestationType: 'iOS_Device_Check';
@@ -73,13 +78,13 @@ export type ActivateTokenResponse = {
   tokenValidityEnd: number;
 };
 
-const errorTypes = ['None', 'Unknown', 'Network'] as const;
+const errorTypes = ['None', 'Severe', 'Unknown', 'Network'] as const;
 export type ErrorType = typeof errorTypes[number];
 
 export type TokenError = {
   type: ErrorType;
   message: string;
-  err: any;
+  err?: any;
 };
 
 export type TokenStatus = {
@@ -90,8 +95,45 @@ export type TokenStatus = {
 const tokenStates = [
   'Loading',
   'Valid',
+  'GettingTokenCertificate',
   'Validating',
-  'Initiating',
-  'Renewing',
+  'InitiateNew',
+  'InitiateRenewal',
+  'AttestNew',
+  'AttestRenewal',
+  'ActivateNew',
+  'ActivateRenewal',
+  'AddToken',
 ] as const;
 export type TokenState = typeof tokenStates[number];
+
+export type StoredState = {
+  deviceId?: string;
+  error?: TokenError;
+} & (
+  | {
+      state:
+        | 'Loading'
+        | 'InitiateNew'
+        | 'InitiateRenewal'
+        | 'Valid'
+        | 'GettingTokenCertificate';
+    }
+  | {
+      state: 'Validating';
+      token: Token;
+    }
+  | {
+      state: 'AttestNew' | 'AttestRenewal';
+      initiatedData: InitializeTokenResponse;
+    }
+  | {
+      state: 'ActivateNew' | 'ActivateRenewal';
+      attestationData: ActivateTokenRequest;
+      tokenId: string;
+    }
+  | {
+      state: 'AddToken';
+      activatedData: ActivateTokenResponse;
+    }
+);
