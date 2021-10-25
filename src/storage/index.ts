@@ -13,6 +13,7 @@ export type StorageModel = {
   '@ATB_journey_search-history': string;
   '@ATB_ticket_informational_accepted': string;
   '@ATB_previous_build_number': string;
+  '@ATB_saved_payment_methods': string;
 };
 
 export type StorageModelTypes = keyof StorageModel;
@@ -26,6 +27,7 @@ const storage = AsyncStorageFactory.create<StorageModel>(legacyStorage, {
     Bugsnag.leaveBreadcrumb('storage_action', {
       action: action.action,
       key: Array.isArray(action.key) ? action.key.join(',') : action.key,
+      value: __DEV__ ? action.value : undefined,
     }),
 });
 
