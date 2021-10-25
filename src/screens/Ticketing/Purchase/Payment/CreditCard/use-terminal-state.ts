@@ -17,6 +17,7 @@ import {
 } from '@atb/tickets';
 import {usePreferences} from '@atb/preferences';
 import {useAuthState} from '@atb/auth';
+import {savePreviousPaymentMethodByUser} from '../../saved-payment-utils';
 
 const possibleResponseCodes = ['Cancel', 'OK'] as const;
 type NetsResponseCode = typeof possibleResponseCodes[number];
@@ -202,29 +203,25 @@ export default function useTerminalState(
           return item.id === reservation.recurring_payment_id!;
         });
         if (card) {
-          setPreference({
-            previousPaymentMethod: {
-              savedType: 'recurring',
-              paymentType: paymentType,
-              recurringCard: card,
-            },
+          savePreviousPaymentMethodByUser(user.uid, {
+            savedType: 'recurring',
+            paymentType: paymentType,
+            recurringCard: card,
           });
         } else {
-          setPreference({
-            previousPaymentMethod: {
-              savedType: 'normal',
-              paymentType: paymentType,
-            },
+          savePreviousPaymentMethodByUser(user.uid, {
+            savedType: 'normal',
+            paymentType: paymentType,
           });
         }
       }
     } else {
-      setPreference({
-        previousPaymentMethod: {
+      if (user) {
+        savePreviousPaymentMethodByUser(user.uid, {
           savedType: 'normal',
           paymentType: paymentType,
-        },
-      });
+        });
+      }
     }
     addReservation(reservation, offers);
   }

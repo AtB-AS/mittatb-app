@@ -19,12 +19,14 @@ type Props = {
   fareContract: FareContract;
   now: number;
   onReceiptNavigate: () => void;
+  hasActiveTravelCard?: boolean;
 };
 
 const DetailsContent: React.FC<Props> = ({
   fareContract: fc,
   now,
   onReceiptNavigate,
+  hasActiveTravelCard = false,
 }) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -35,6 +37,10 @@ const DetailsContent: React.FC<Props> = ({
   if (isPreactivatedTicket(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
     const validTo = firstTravelRight.endDateTime.toMillis();
+    const isInspectable =
+      !hasActiveTravelCard &&
+      firstTravelRight.type === 'PreActivatedSingleTicket';
+
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
 
     const orderIdText = t(TicketTexts.details.orderId(fc.orderId));
@@ -47,16 +53,20 @@ const DetailsContent: React.FC<Props> = ({
             now={now}
             validFrom={validFrom}
             validTo={validTo}
+            isInspectable={isInspectable}
           />
           <ValidityLine
             status={validityStatus}
             now={now}
             validFrom={validFrom}
             validTo={validTo}
+            isInspectable={isInspectable}
           />
           <TicketInfo
             travelRights={fc.travelRights.filter(isPreactivatedTicket)}
             status={validityStatus}
+            hasActiveTravelCard={hasActiveTravelCard}
+            isInspectable={isInspectable}
           />
         </Sections.GenericItem>
         <Sections.GenericItem>
@@ -81,7 +91,7 @@ const DetailsContent: React.FC<Props> = ({
           onPress={onReceiptNavigate}
           accessibility={{accessibilityRole: 'button'}}
         />
-        {validityStatus === 'valid' && qrCodeSvg && (
+        {validityStatus === 'valid' && isInspectable && qrCodeSvg && (
           <Sections.GenericItem>
             <View
               style={styles.qrCode}

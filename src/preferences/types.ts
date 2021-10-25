@@ -20,25 +20,6 @@ export type UserPreferences = {
   useSystemLanguage?: boolean;
   defaultUserTypeString?: string;
   departuresShowOnlyFavorites?: boolean;
-  previousPaymentMethod?: SavedPaymentOption;
 };
 
 export type PreferenceItem = keyof UserPreferences;
-
-export type SavedRecurringPayment = {
-  id: number;
-  expires_at: string;
-  masked_pan: string;
-  payment_type: number;
-};
-
-export type SavedPaymentOption =
-  | {
-      savedType: 'normal';
-      paymentType: PaymentType;
-    }
-  | {
-      savedType: 'recurring';
-      paymentType: PaymentType.VISA | PaymentType.MasterCard;
-      recurringCard: SavedRecurringPayment;
-    };

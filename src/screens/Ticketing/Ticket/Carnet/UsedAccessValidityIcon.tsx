@@ -3,36 +3,33 @@ import {screenReaderPause} from '@atb/components/accessible-text';
 import {useTheme} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
-import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import {Wait} from '@atb/assets/svg/icons/transportation';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
+import {UsedAccessStatus} from './types';
 
-const ValidityIcon: React.FC<{
-  status: ValidityStatus;
+type Props = {
+  status: UsedAccessStatus;
   isInspectable: boolean;
-}> = ({status, isInspectable}) => {
+};
+
+const ValidityIcon: React.FC<Props> = (props) => {
   const {theme} = useTheme();
   return (
     <View style={{marginRight: theme.spacings.medium}}>
-      <ValidityIconSvg status={status} isInspectable={isInspectable} />
+      <ValidityIconSvg {...props} />
     </View>
   );
 };
 
-const ValidityIconSvg = ({
-  status,
-  isInspectable,
-}: {
-  status: ValidityStatus;
-  isInspectable: boolean;
-}) => {
-  const {theme} = useTheme();
+const ValidityIconSvg = ({status, isInspectable}: Props) => {
   const {t} = useTranslation();
-  const a11yLabel = t(TicketTexts.validityIcon[status]) + screenReaderPause;
+  const a11yLabel =
+    t(TicketTexts.usedAccessValidityIcon[status]) + screenReaderPause;
+
   switch (status) {
     case 'valid':
-      if (isInspectable)
+      if (isInspectable) {
         return (
           <ThemeIcon
             svg={ValidTicket}
@@ -40,7 +37,7 @@ const ValidityIconSvg = ({
             accessibilityLabel={a11yLabel}
           />
         );
-      else
+      } else {
         return (
           <ThemeIcon
             svg={ValidTicket}
@@ -48,28 +45,12 @@ const ValidityIconSvg = ({
             accessibilityLabel={a11yLabel}
           />
         );
-    case 'reserving':
-      return (
-        <ThemeIcon
-          svg={ValidTicket}
-          colorType="info"
-          accessibilityLabel={a11yLabel}
-        />
-      );
-    case 'unknown':
-      return (
-        <ThemeIcon
-          svg={ValidTicket}
-          colorType="primary"
-          accessibilityLabel={a11yLabel}
-        />
-      );
-    case 'expired':
-    case 'refunded':
+      }
+    case 'inactive':
       return (
         <ThemeIcon
           svg={InvalidTicket}
-          colorType="error"
+          colorType="secondary"
           accessibilityLabel={a11yLabel}
         />
       );

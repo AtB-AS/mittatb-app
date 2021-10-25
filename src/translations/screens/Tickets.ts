@@ -100,6 +100,23 @@ const TicketsTexts = {
         `Something went wrong when we tried to load ticket with order id ${orderId}`,
       ),
   },
+  travelCardInformation: {
+    reisebevis: _('Reisebevis', 'Travel token'),
+    onInspection: _(
+      'I billettkontroll må du vise t:kortet ditt',
+      'In the event of an inspection, please present your t:card',
+    ),
+    changeInstructions: _(
+      'Kan endres fra "Mitt AtB"',
+      'Can be changed from "My AtB"',
+    ),
+    tCard: _('t:kort', 't:card'),
+    illustrationa11yLabel: (travelCardId: string) =>
+      _(
+        `Illustrasjon av t kort med kortnummer som inneholder ${travelCardId}`,
+        `Illustration of t card with card number that contains ${travelCardId}`,
+      ),
+  },
   informational: {
     title: _('Prøv billettkjøp', 'Try buying tickets'),
     description: _(

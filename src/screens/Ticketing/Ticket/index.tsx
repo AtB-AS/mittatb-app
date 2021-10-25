@@ -1,18 +1,20 @@
-import * as Sections from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
-import {FareContract, isPreactivatedTicket} from '@atb/tickets';
-import {TicketTexts, useTranslation} from '@atb/translations';
+import {
+  FareContract,
+  isCarnetTicket,
+  isPreactivatedTicket,
+  isSingleTicket,
+} from '@atb/tickets';
 import React from 'react';
-import TicketInfo from './TicketInfo';
-import ValidityHeader from './ValidityHeader';
-import ValidityLine from './ValidityLine';
-import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
+import PreactivatedTicketInfo from './PreactivatedTicketInfo';
+import UnknownTicket from './UnknownTicket';
+import Carnet from './Carnet';
 
 type Props = {
   fareContract: FareContract;
   now: number;
   hideDetails?: boolean;
   onPressDetails?: () => void;
+  hasActiveTravelCard?: boolean;
 };
 
 const SimpleTicket: React.FC<Props> = ({
@@ -20,69 +22,36 @@ const SimpleTicket: React.FC<Props> = ({
   now,
   hideDetails,
   onPressDetails,
+  hasActiveTravelCard = false,
 }) => {
-  const {t} = useTranslation();
-
   const firstTravelRight = fc.travelRights?.[0];
+  const isInspectable =
+    !hasActiveTravelCard && isSingleTicket(firstTravelRight);
   if (isPreactivatedTicket(firstTravelRight)) {
-    const {startDateTime, endDateTime} = firstTravelRight;
-    const validTo = endDateTime.toMillis();
-    const validFrom = startDateTime.toMillis();
-    const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
     return (
-      <Sections.Section withBottomPadding>
-        <Sections.GenericItem>
-          <ValidityHeader
-            status={validityStatus}
-            now={now}
-            validFrom={validFrom}
-            validTo={validTo}
-          />
-          <ValidityLine
-            status={validityStatus}
-            now={now}
-            validFrom={validFrom}
-            validTo={validTo}
-          />
-
-          <TicketInfo
-            travelRights={fc.travelRights.filter(isPreactivatedTicket)}
-            status={validityStatus}
-          />
-        </Sections.GenericItem>
-        {!hideDetails && (
-          <Sections.LinkItem
-            text={t(
-              validityStatus === 'valid'
-                ? TicketTexts.detailsLink.valid
-                : TicketTexts.detailsLink.notValid,
-            )}
-            onPress={onPressDetails}
-          />
-        )}
-      </Sections.Section>
+      <PreactivatedTicketInfo
+        fareContractState={fc.state}
+        travelRights={fc.travelRights.filter(isPreactivatedTicket)}
+        now={now}
+        isInspectable={isInspectable}
+        hideDetails={hideDetails}
+        onPressDetails={onPressDetails}
+        hasActiveTravelCard={hasActiveTravelCard}
+      />
+    );
+  } else if (isCarnetTicket(firstTravelRight)) {
+    return (
+      <Carnet
+        fareContractState={fc.state}
+        travelRights={fc.travelRights.filter(isCarnetTicket)}
+        now={now}
+        isInspectable={isInspectable}
+        hasActiveTravelCard={hasActiveTravelCard}
+      />
     );
   } else {
     return <UnknownTicket fc={fc} />;
   }
 };
-
-function UnknownTicket({fc}: {fc: FareContract}) {
-  const {t} = useTranslation();
-
-  return (
-    <Sections.Section withBottomPadding>
-      <Sections.GenericItem>
-        <ValidityLine status="unknown" />
-        <ThemeText>{t(TicketTexts.unknownTicket.message)}</ThemeText>
-      </Sections.GenericItem>
-      <Sections.GenericItem>
-        <ThemeText>
-          {t(TicketTexts.unknownTicket.orderId(fc.orderId))}
-        </ThemeText>
-      </Sections.GenericItem>
-    </Sections.Section>
-  );
-}
 
 export default SimpleTicket;

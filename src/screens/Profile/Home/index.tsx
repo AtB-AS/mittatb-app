@@ -19,7 +19,10 @@ import {ProfileStackParams} from '..';
 import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {useAppDispatch} from '@atb/AppContext';
-import {filterActiveFareContracts, useTicketState} from '@atb/tickets';
+import {
+  filterActiveOrCanBeUsedFareContracts,
+  useTicketState,
+} from '@atb/tickets';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -39,16 +42,18 @@ type ProfileScreenProps = {
 };
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
-  const {enable_i18n, enable_login} = useRemoteConfig();
+  const {enable_i18n} = useRemoteConfig();
   const appDispatch = useAppDispatch();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
-  const {authenticationType, signOut, user} = useAuthState();
+  const {authenticationType, signOut, user, abtCustomerId} = useAuthState();
   const config = useLocalConfig();
 
   const {fareContracts} = useTicketState();
-  const activeFareContracts = filterActiveFareContracts(fareContracts);
+  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
+    fareContracts,
+  );
   const hasActiveFareContracts = activeFareContracts.length > 0;
 
   const {
@@ -61,6 +66,13 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
     if (config?.installId) setClipboard(config.installId);
   }
 
+  function copyFirestoreLink() {
+    if (abtCustomerId)
+      setClipboard(
+        `https://console.firebase.google.com/u/1/project/atb-mobility-platform-staging/firestore/data/~2Fcustomers~2F${abtCustomerId}`,
+      );
+  }
+
   return (
     <View style={style.container}>
       <FullScreenHeader
@@ -71,39 +83,37 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
       />
 
       <ScrollView contentContainerStyle={style.scrollView}>
-        {enable_login && (
-          <Sections.Section withPadding>
-            <Sections.HeaderItem
-              text={t(ProfileTexts.sections.account.heading)}
+        <Sections.Section withPadding>
+          <Sections.HeaderItem
+            text={t(ProfileTexts.sections.account.heading)}
+          />
+          {authenticationType !== 'phone' && (
+            <Sections.LinkItem
+              text={t(ProfileTexts.sections.account.linkItems.login.label)}
+              onPress={() =>
+                navigation.navigate('LoginInApp', {
+                  screen: hasActiveFareContracts
+                    ? 'ActiveTicketPromptInApp'
+                    : 'PhoneInputInApp',
+                  params: {
+                    afterLogin: {routeName: 'ProfileHome'},
+                  },
+                })
+              }
             />
-            {authenticationType !== 'phone' && (
-              <Sections.LinkItem
-                text={t(ProfileTexts.sections.account.linkItems.login.label)}
-                onPress={() =>
-                  navigation.navigate('LoginInApp', {
-                    screen: hasActiveFareContracts
-                      ? 'ActiveTicketPromptInApp'
-                      : 'PhoneInputInApp',
-                    params: {
-                      afterLogin: {routeName: 'ProfileHome'},
-                    },
-                  })
-                }
-              />
-            )}
-            {authenticationType === 'phone' && (
-              <Sections.GenericItem>
-                <ThemeText>{user?.phoneNumber}</ThemeText>
-              </Sections.GenericItem>
-            )}
-            {authenticationType === 'phone' && (
-              <Sections.LinkItem
-                text={t(ProfileTexts.sections.account.linkItems.logout.label)}
-                onPress={signOut}
-              />
-            )}
-          </Sections.Section>
-        )}
+          )}
+          {authenticationType === 'phone' && (
+            <Sections.GenericItem>
+              <ThemeText>{user?.phoneNumber}</ThemeText>
+            </Sections.GenericItem>
+          )}
+          {authenticationType === 'phone' && (
+            <Sections.LinkItem
+              text={t(ProfileTexts.sections.account.linkItems.logout.label)}
+              onPress={signOut}
+            />
+          )}
+        </Sections.Section>
 
         <Sections.Section withPadding>
           <Sections.HeaderItem
@@ -245,6 +255,11 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               onPress={() => {
                 appDispatch({type: 'RESTART_ONBOARDING'});
               }}
+            />
+            <Sections.LinkItem
+              text="Copy link to customer in Firestore (staging)"
+              icon="arrow-upleft"
+              onPress={() => copyFirestoreLink()}
             />
           </Sections.Section>
         )}

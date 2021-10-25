@@ -7,7 +7,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
-import {fromUnixTime} from 'date-fns';
+import {toDate} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
 import ValidityIcon from './ValidityIcon';
@@ -18,16 +18,36 @@ const ValidityHeader: React.FC<{
   now: number;
   validFrom: number;
   validTo: number;
-}> = ({status, now, validFrom, validTo}) => {
+  isInspectable: boolean;
+}> = ({status, now, validFrom, validTo, isInspectable}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
+
+  const validityTime: string = validityTimeText(
+    status,
+    now,
+    validFrom,
+    validTo,
+    t,
+    language,
+  );
 
   return (
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
-        <ValidityIcon status={status} />
-        <ThemeText style={styles.validityText} type="body__secondary">
-          {validityTimeText(status, now, validFrom, validTo, t, language)}
+        <ValidityIcon status={status} isInspectable={isInspectable} />
+        <ThemeText
+          style={styles.validityText}
+          type="body__secondary"
+          accessibilityLabel={
+            !isInspectable
+              ? validityTime +
+                ', ' +
+                t(TicketTexts.ticketInfo.noInspectionIconA11yLabel)
+              : undefined
+          }
+        >
+          {validityTime}
         </ThemeText>
       </View>
     </View>
@@ -68,10 +88,7 @@ function validityTimeText(
         const durationText = toDurationText(secondsSinceExpired);
         return t(TicketTexts.validityHeader.recentlyExpired(durationText));
       } else {
-        const dateTime = formatToLongDateTime(
-          fromUnixTime(validTo / 1000),
-          language,
-        );
+        const dateTime = formatToLongDateTime(toDate(validTo), language);
         return t(TicketTexts.validityHeader.expired(dateTime));
       }
     }

@@ -47,23 +47,38 @@ const PurchaseConfirmationTexts = {
   },
   paymentButtonVipps: {
     text: _('Vipps', 'Vipps'),
-    a11yHint: _(
-      'Aktivér for å betale billett med Vipps',
-      'Activate to pay your ticket by Vipps service',
-    ),
+    a11yLabel: _('Betal med Vipps', 'Pay with Vipps'),
+    a11yHint: _('Aktivér for å betale med Vipps', 'Activate to pay with Vipps'),
   },
   paymentButtonCardVisa: {
     text: _('Visa', 'Visa'),
-    a11yHint: _(
-      'Aktivér for å betale billett med Visa',
-      'Activate to pay your ticket with Visa',
-    ),
+    a11yLabel: _('Betal med Visa', 'Pay with Visa'),
+    a11yHint: _('Aktivér for å betale med Visa', 'Activate to pay with Visa'),
   },
   paymentButtonCardMC: {
     text: _('MasterCard', 'MasterCard'),
+    a11yLabel: _('Betal med MasterCard', 'Pay with MasterCard'),
     a11yHint: _(
-      'Aktivér for å betale billett med MasterCard',
-      'Activate to pay your ticket with MasterCard',
+      'Aktivér for å betale med MasterCard',
+      'Activate to pay with MasterCard',
+    ),
+  },
+  paymentWithDefaultServices: {
+    a11yLabel: (brand: string) => _(`Betal med ${brand}`, `Pay with ${brand}`),
+    a11Hint: _(
+      'Aktivér for velge denne betalingsmåten',
+      'Activate to select this payment method',
+    ),
+  },
+  paymentWithStoredCard: {
+    a11yLabel: (brand: string, masked_pan: string) =>
+      _(
+        `Betal med ${brand} som slutter på ${masked_pan}`,
+        `Pay with ${brand} ending in ${masked_pan}`,
+      ),
+    a11yHint: _(
+      'Aktivér for å velge dette kortet',
+      'Activate to select this card',
     ),
   },
   choosePaymentOption: {
@@ -71,6 +86,13 @@ const PurchaseConfirmationTexts = {
     a11yHint: _(
       'Aktiver for å velge betalingsmåte',
       'Activate to choose payment option',
+    ),
+  },
+  changePaymentOption: {
+    text: _('Endre betalingsmåte', 'Change payment option'),
+    a11yHint: _(
+      'Aktiver for å endre betalingsmåte',
+      'Activate to change payment option',
     ),
   },
   payWithVipps: {
