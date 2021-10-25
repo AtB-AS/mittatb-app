@@ -88,12 +88,11 @@ const CarnetTicketInfo: React.FC<Props> = ({
           />
         </View>
         <TicketInfo
-          // Slice to only show 1 traveller
-          // makes no sense to show multiple for carnet travel rights
-          travelRights={travelRights.slice(0, 1)}
+          travelRights={travelRights}
           status={fareContractValidityStatus}
           isInspectable={isInspectable}
           hasActiveTravelCard={hasActiveTravelCard}
+          omitUserProfileCount={true}
         />
       </Sections.GenericItem>
       <Sections.GenericItem>
