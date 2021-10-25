@@ -87,10 +87,17 @@ const PurchaseConfirmationTexts = {
     ),
   },
   choosePaymentOption: {
-    text: _('Endre betalingsmåte', 'Change payment option'),
+    text: _('Velg betalingsmåte', 'Choose payment option'),
     a11yHint: _(
       'Aktiver for å velge betalingsmåte',
       'Activate to choose payment option',
+    ),
+  },
+  changePaymentOption: {
+    text: _('Endre betalingsmåte', 'Change payment option'),
+    a11yHint: _(
+      'Aktiver for å endre betalingsmåte',
+      'Activate to change payment option',
     ),
   },
   payWithVipps: {

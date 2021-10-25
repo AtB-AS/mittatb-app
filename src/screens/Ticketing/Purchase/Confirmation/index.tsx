@@ -355,12 +355,12 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                     selectPaymentMethod();
                   }}
                   accessibilityHint={t(
-                    PurchaseConfirmationTexts.choosePaymentOption.a11yHint,
+                    PurchaseConfirmationTexts.changePaymentOption.a11yHint,
                   )}
                 >
                   <View style={styles.flexRowCenter}>
                     <ThemeText type="body__primary--bold">
-                      {t(PurchaseConfirmationTexts.choosePaymentOption.text)}
+                      {t(PurchaseConfirmationTexts.changePaymentOption.text)}
                     </ThemeText>
                   </View>
                 </TouchableOpacity>
