@@ -23,6 +23,7 @@ type Props = {
 function UsedAccessValidityHeader(props: Props) {
   const styles = useStyles();
   const {t, language} = useTranslation();
+  const usedAccessValidityText = getUsedAccessValidityText(props, t, language);
 
   return (
     <View style={styles.validityHeader}>
@@ -34,13 +35,15 @@ function UsedAccessValidityHeader(props: Props) {
         <ThemeText
           style={styles.validityText}
           type="body__secondary"
-          accessibilityHint={
+          accessibilityLabel={
             !props.isInspectable
-              ? t(TicketTexts.ticketInfo.noInspectionIconA11yLabel)
+              ? usedAccessValidityText +
+                ', ' +
+                t(TicketTexts.ticketInfo.noInspectionIconA11yLabel)
               : undefined
           }
         >
-          {getUsedAccessValidityText(props, t, language)}
+          {usedAccessValidityText}
         </ThemeText>
       </View>
     </View>
