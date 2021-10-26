@@ -166,7 +166,7 @@ function mapEntry(key: string, value: any) {
     );
   } else {
     return (
-      <View key={key} style={{flexDirection: 'row'}}>
+      <View key={key} style={{flexDirection: 'row', flexWrap: 'wrap'}}>
         <ThemeText type="body__primary--bold">{key}: </ThemeText>
         {mapValue(value)}
       </View>
