@@ -8,6 +8,7 @@ import Language from './Language';
 import Enrollment from './Enrollment';
 import SelectStartScreen from './SelectStartScreen';
 import DesignSystem from './DesignSystem';
+import DebugInfo from './DebugInfo';
 import DefaultUserProfile from './DefaultUserProfile';
 import TicketingInformation from '@atb/screens/Profile/Information/TicketingInformation';
 import PaymentInformation from '@atb/screens/Profile/Information/PaymentInformation';
@@ -24,6 +25,7 @@ export type ProfileStackParams = {
   DefaultUserProfile: undefined;
   Enrollment: undefined;
   DesignSystem: undefined;
+  DebugInfo: undefined;
   TicketingInformation: undefined;
   PaymentInformation: undefined;
   TermsInformation: undefined;
@@ -50,6 +52,7 @@ export default function ProfileScreen() {
       <Stack.Screen name="DefaultUserProfile" component={DefaultUserProfile} />
       <Stack.Screen name="Enrollment" component={Enrollment} />
       <Stack.Screen name="DesignSystem" component={DesignSystem} />
+      <Stack.Screen name="DebugInfo" component={DebugInfo} />
       <Stack.Screen
         name="TicketingInformation"
         component={TicketingInformation}

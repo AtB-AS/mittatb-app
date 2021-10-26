@@ -20,7 +20,7 @@ export default function DesignSystem() {
     <View style={style.container}>
       <FullScreenHeader
         title="Design System"
-        leftButton={{type: 'home'}}
+        leftButton={{type: 'back'}}
         rightButton={{type: 'chat'}}
       />
 
