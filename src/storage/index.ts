@@ -38,7 +38,6 @@ const storage = {
   get: async (key: string) => {
     leaveBreadCrumb('read-single', key);
     const value = await AsyncStorage.getItem(key).catch(errorHandler);
-    console.log('THE VALUE', key, value);
     return value;
   },
   set: async (key: string, value: string) => {
