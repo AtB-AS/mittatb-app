@@ -37,16 +37,12 @@ export default function DebugInfo() {
     run();
   }, [user]);
 
-  const [storedValues, setStoredValues] = useState<any | undefined>(undefined);
+  const [storedValues, setStoredValues] = useState<
+    [string, string | null][] | null
+  >(null);
 
   useEffect(() => {
-    async function run() {
-      const keys = await storage.getKeys();
-      const values = await storage.getMultiple(keys);
-      setStoredValues(values);
-    }
-
-    run();
+    storage.getAll().then(setStoredValues);
   }, []);
 
   function copyFirestoreLink() {
@@ -108,9 +104,7 @@ export default function DebugInfo() {
           <Sections.HeaderItem text="Storage" />
           {storedValues && (
             <Sections.GenericItem>
-              {Object.entries(storedValues).map(([key, value]) =>
-                mapEntry(key, value),
-              )}
+              {storedValues.map(([key, value]) => mapEntry(key, value))}
             </Sections.GenericItem>
           )}
         </Sections.Section>
