@@ -32,6 +32,7 @@ import {SelectPaymentMethod} from '../Payment';
 import {CardPaymentMethod, PaymentMethod, SavedPaymentOption} from '../types';
 import {useAuthState} from '@atb/auth';
 import {usePreviousPaymentMethod} from '../saved-payment-utils';
+import MessageBoxTexts from '@atb/translations/components/MessageBox';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -222,7 +223,8 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               type="error"
               title={t(PurchaseConfirmationTexts.errorMessageBox.title)}
               message={t(PurchaseConfirmationTexts.errorMessageBox.message)}
-              retryFunction={refreshOffer}
+              onPress={refreshOffer}
+              onPressText={t(MessageBoxTexts.tryAgainButton)}
               containerStyle={styles.errorMessage}
             />
           )}

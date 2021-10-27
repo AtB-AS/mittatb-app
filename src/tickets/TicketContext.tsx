@@ -22,6 +22,7 @@ type TicketReducerState = {
   isRefreshingTickets: boolean;
   errorRefreshingTickets: boolean;
   customerProfile: CustomerProfile | undefined;
+  didPaymentFail: boolean;
 };
 
 type TicketReducerAction =
@@ -39,6 +40,10 @@ type TicketReducerAction =
   | {
       type: 'UPDATE_RESERVATIONS';
       activeReservations: ActiveReservation[];
+    }
+  | {
+      type: 'UPDATE_PAYMENT_FAILED';
+      didPaymentFail: boolean;
     };
 
 type TicketReducer = (
@@ -105,6 +110,12 @@ const ticketReducer: TicketReducer = (
         customerProfile: action.customerProfile,
       };
     }
+    case 'UPDATE_PAYMENT_FAILED': {
+      return {
+        ...prevState,
+        didPaymentFail: action.didPaymentFail,
+      };
+    }
   }
 };
 
@@ -112,6 +123,8 @@ type TicketState = {
   addReservation: (reservation: ActiveReservation) => void;
   refreshTickets: () => void;
   fareContracts: FareContract[];
+  didPaymentFail: boolean;
+  resetPaymentStatus: () => void;
   findFareContractByOrderId: (id: string) => FareContract | undefined;
 } & Pick<
   TicketReducerState,
@@ -124,6 +137,7 @@ const initialReducerState: TicketReducerState = {
   isRefreshingTickets: false,
   errorRefreshingTickets: false,
   customerProfile: undefined,
+  didPaymentFail: false,
 };
 
 const TicketContext = createContext<TicketState | undefined>(undefined);
@@ -238,6 +252,17 @@ const TicketContextProvider: React.FC = ({children}) => {
         }),
       );
 
+      if (
+        updatedReservations.some(
+          ({paymentStatus}) => paymentStatus === 'REJECT',
+        )
+      ) {
+        dispatch({
+          type: 'UPDATE_PAYMENT_FAILED',
+          didPaymentFail: true,
+        });
+      }
+
       dispatch({
         type: 'UPDATE_RESERVATIONS',
         activeReservations: updatedReservations.filter(
@@ -247,6 +272,13 @@ const TicketContextProvider: React.FC = ({children}) => {
     },
     [activeReservations, getPaymentStatus],
   );
+
+  const resetPaymentStatus = () => {
+    dispatch({
+      type: 'UPDATE_PAYMENT_FAILED',
+      didPaymentFail: false,
+    });
+  };
 
   useInterval(
     pollPaymentStatus,
@@ -263,6 +295,7 @@ const TicketContextProvider: React.FC = ({children}) => {
         activeReservations,
         refreshTickets,
         addReservation,
+        resetPaymentStatus,
         findFareContractByOrderId: (orderId) =>
           state.fareContracts.find((fc) => fc.orderId === orderId),
       }}

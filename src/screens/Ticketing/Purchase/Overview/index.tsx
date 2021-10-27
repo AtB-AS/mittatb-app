@@ -39,6 +39,7 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import TravellersSheet from '@atb/screens/Ticketing/Purchase/Travellers/TravellersSheet';
 import TravelDateSheet from '@atb/screens/Ticketing/Purchase/TravelDate/TravelDateSheet';
 import {useTicketState} from '@atb/tickets';
+import MessageBoxTexts from '@atb/translations/components/MessageBox';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -161,7 +162,8 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             type="error"
             title={t(PurchaseOverviewTexts.errorMessageBox.title)}
             message={t(PurchaseOverviewTexts.errorMessageBox.message)}
-            retryFunction={refreshOffer}
+            onPress={refreshOffer}
+            onPressText={t(MessageBoxTexts.tryAgainButton)}
             containerStyle={styles.errorMessage}
           />
         )}
