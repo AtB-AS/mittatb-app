@@ -252,6 +252,17 @@ const TicketContextProvider: React.FC = ({children}) => {
         }),
       );
 
+      if (
+        updatedReservations.some(
+          ({paymentStatus}) => paymentStatus === 'REJECT',
+        )
+      ) {
+        dispatch({
+          type: 'UPDATE_PAYMENT_FAILED',
+          didPaymentFail: true,
+        });
+      }
+
       dispatch({
         type: 'UPDATE_RESERVATIONS',
         activeReservations: updatedReservations.filter(
@@ -267,24 +278,6 @@ const TicketContextProvider: React.FC = ({children}) => {
       type: 'UPDATE_PAYMENT_FAILED',
       didPaymentFail: false,
     });
-  };
-
-  const isHandledPaymentStatus = (
-    status: PaymentStatus | undefined,
-  ): boolean => {
-    switch (status) {
-      case 'REJECT':
-        dispatch({
-          type: 'UPDATE_PAYMENT_FAILED',
-          didPaymentFail: true,
-        });
-        return true;
-      case 'CANCEL':
-      case 'CREDIT':
-        return true;
-      default:
-        return false;
-    }
   };
 
   useInterval(
@@ -311,6 +304,17 @@ const TicketContextProvider: React.FC = ({children}) => {
     </TicketContext.Provider>
   );
 };
+
+function isHandledPaymentStatus(status: PaymentStatus | undefined): boolean {
+  switch (status) {
+    case 'CANCEL':
+    case 'CREDIT':
+    case 'REJECT':
+      return true;
+    default:
+      return false;
+  }
+}
 
 export function useTicketState() {
   const context = useContext(TicketContext);
