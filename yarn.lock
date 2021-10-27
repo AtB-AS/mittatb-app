@@ -1649,22 +1649,17 @@
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
 
+"@react-native-async-storage/async-storage@^1.15.9":
+  version "1.15.9"
+  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.15.9.tgz#744ecd566f108e86b6b59e617c23fdb4b8d53358"
+  integrity sha512-LrVPfhKqodRiDWCgZp7J2X55JQqOhdQUxbl17RrktIGCZ0ud2XHdNoTIvyI1VccqHoF/CZK6v+G0IoX5NYZ1JA==
+  dependencies:
+    merge-options "^3.0.4"
+
 "@react-native-clipboard/clipboard@^1.8.4":
   version "1.8.4"
   resolved "https://registry.yarnpkg.com/@react-native-clipboard/clipboard/-/clipboard-1.8.4.tgz#4bc1fb00643688e489d8220cd635844ab5c066f9"
   integrity sha512-poFq3RvXzkbXcqoQNssbZ+aNbCRzBFAWkR9QL7u9xNMgsyWZtk7d16JQoaBo8D2E+kKi+/9JOiVQzA5w+9N67w==
-
-"@react-native-community/async-storage-backend-legacy@^2.0.0-rc.1":
-  version "2.0.0-rc.3"
-  resolved "https://registry.yarnpkg.com/@react-native-community/async-storage-backend-legacy/-/async-storage-backend-legacy-2.0.0-rc.3.tgz#4f905bcfa4168918b61835bcd80ab16c68e2f5a5"
-  integrity sha512-nWH8GDMxQ93Ayx1ZhQWZkH70yz8e2mGOeiF7xY7h1/GNxl0taWJrjaWRaHb9FNcC7xe42c33hIjJBRZe0cMlFQ==
-  dependencies:
-    "@react-native-community/async-storage" "^2.0.0-rc.3"
-
-"@react-native-community/async-storage@^2.0.0-rc.1", "@react-native-community/async-storage@^2.0.0-rc.3":
-  version "2.0.0-rc.3"
-  resolved "https://registry.yarnpkg.com/@react-native-community/async-storage/-/async-storage-2.0.0-rc.3.tgz#e2ad162ef5eff1a32005753a7c054d463307b38f"
-  integrity sha512-inAIetMy5HwKA9vZGKrVzXA+Uxr7EzKy/IG+DsWTISEqQMwl0b3JWufRZHk3Xj7MqMSn8PdBDM/mmk5tY15qLg==
 
 "@react-native-community/cli-debugger-ui@^4.13.1":
   version "4.13.1"
@@ -6955,6 +6950,13 @@ meow@^8.0.0:
     trim-newlines "^3.0.0"
     type-fest "^0.18.0"
     yargs-parser "^20.2.3"
+
+merge-options@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/merge-options/-/merge-options-3.0.4.tgz#84709c2aa2a4b24c1981f66c179fe5565cc6dbb7"
+  integrity sha512-2Sug1+knBjkaMsMgf1ctR1Ujx+Ayku4EdJN4Z+C2+JzoeF7A3OZ9KM2GY0CpQS51NR61LTurMJrRKPhSs3ZRTQ==
+  dependencies:
+    is-plain-obj "^2.1.0"
 
 merge-stream@^1.0.1:
   version "1.0.1"

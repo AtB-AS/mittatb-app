@@ -14,4 +14,5 @@ declare module '@env' {
   export const APP_ORG: AppOrgs;
   export const FOCUS_LATITUDE: number;
   export const FOCUS_LONGITUDE: number;
+  export const IS_QA_ENV: string | undefined;
 }
