@@ -103,6 +103,7 @@ const TicketsTexts = {
       'Betalingen mislyktes. Sjekk om du har tilstrekkelige midler på konto eller prøv et annet betalingsmiddel.',
       'Payment failed. Please check that you have sufficient funds on your account or try a different payment option.',
     ),
+    paymentErrorButton: _('Lukk', 'Close'),
   },
   travelCardInformation: {
     reisebevis: _('Reisebevis', 'Travel token'),

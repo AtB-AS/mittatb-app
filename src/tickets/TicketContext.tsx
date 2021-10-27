@@ -124,6 +124,7 @@ type TicketState = {
   refreshTickets: () => void;
   fareContracts: FareContract[];
   didPaymentFail: boolean;
+  resetPaymentStatus: () => void;
   findFareContractByOrderId: (id: string) => FareContract | undefined;
 } & Pick<
   TicketReducerState,
@@ -261,17 +262,25 @@ const TicketContextProvider: React.FC = ({children}) => {
     [activeReservations, getPaymentStatus],
   );
 
+  const resetPaymentStatus = () => {
+    dispatch({
+      type: 'UPDATE_PAYMENT_FAILED',
+      didPaymentFail: false,
+    });
+  };
+
   const isHandledPaymentStatus = (
     status: PaymentStatus | undefined,
   ): boolean => {
     switch (status) {
-      case 'CANCEL':
-      case 'CREDIT':
       case 'REJECT':
         dispatch({
           type: 'UPDATE_PAYMENT_FAILED',
           didPaymentFail: true,
         });
+        return true;
+      case 'CANCEL':
+      case 'CREDIT':
         return true;
       default:
         return false;
@@ -293,6 +302,7 @@ const TicketContextProvider: React.FC = ({children}) => {
         activeReservations,
         refreshTickets,
         addReservation,
+        resetPaymentStatus,
         findFareContractByOrderId: (orderId) =>
           state.fareContracts.find((fc) => fc.orderId === orderId),
       }}

@@ -2,7 +2,12 @@ import ThemeText from '@atb/components/text';
 import ErrorBoundary from '@atb/error-boundary';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {ActiveReservation, FareContract, TravelCard} from '@atb/tickets';
+import {
+  ActiveReservation,
+  FareContract,
+  TravelCard,
+  useTicketState,
+} from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {isFuture} from 'date-fns';
@@ -43,6 +48,7 @@ const TicketsScrollView: React.FC<Props> = ({
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProp>();
   const {t} = useTranslation();
+  const {resetPaymentStatus} = useTicketState();
 
   const hasActiveTravelCard = !!travelCard;
 
@@ -67,6 +73,8 @@ const TicketsScrollView: React.FC<Props> = ({
             containerStyle={styles.messageBox}
             type="error"
             message={t(TicketsTexts.scrollView.paymentError)}
+            onPress={resetPaymentStatus}
+            onPressText={t(TicketsTexts.scrollView.paymentErrorButton)}
           ></MessageBox>
         )}
         {!fareContracts?.length && !reservations?.length && (
