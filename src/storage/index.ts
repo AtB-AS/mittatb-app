@@ -25,7 +25,7 @@ const errorHandler = (error: any) => {
 const leaveBreadCrumb = (
   action: 'read-single' | 'save-single' | 'read-all',
   key?: string,
-  value?: string,
+  value?: string | null,
 ) => {
   Bugsnag.leaveBreadcrumb('storage_action', {
     action,
