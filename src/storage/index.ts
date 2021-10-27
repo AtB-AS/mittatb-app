@@ -1,5 +1,4 @@
-import LegacyStorage from '@react-native-community/async-storage-backend-legacy';
-import AsyncStorageFactory from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Bugsnag from '@bugsnag/react-native';
 
 export type StorageModel = {
@@ -18,17 +17,40 @@ export type StorageModel = {
 
 export type StorageModelTypes = keyof StorageModel;
 
-const legacyStorage = new LegacyStorage();
+const errorHandler = (error: any) => {
+  Bugsnag.notify(typeof error === 'string' ? new Error(error) : error);
+  return Promise.resolve(null);
+};
 
-const storage = AsyncStorageFactory.create<StorageModel>(legacyStorage, {
-  errorHandler: (error) =>
-    Bugsnag.notify(typeof error === 'string' ? new Error(error) : error),
-  logger: (action) =>
-    Bugsnag.leaveBreadcrumb('storage_action', {
-      action: action.action,
-      key: Array.isArray(action.key) ? action.key.join(',') : action.key,
-      value: __DEV__ ? action.value : undefined,
-    }),
-});
+const leaveBreadCrumb = (
+  action: 'read-single' | 'save-single' | 'read-all',
+  key?: string,
+  value?: string,
+) => {
+  Bugsnag.leaveBreadcrumb('storage_action', {
+    action,
+    key,
+    value: __DEV__ ? value : undefined,
+  });
+};
+
+const storage = {
+  get: async (key: string) => {
+    leaveBreadCrumb('read-single', key);
+    const value = await AsyncStorage.getItem(key).catch(errorHandler);
+    console.log('THE VALUE', key, value);
+    return value;
+  },
+  set: async (key: string, value: string) => {
+    leaveBreadCrumb('save-single', key, value);
+    return AsyncStorage.setItem(key, value).catch(errorHandler);
+  },
+  getAll: async () => {
+    leaveBreadCrumb('read-all');
+    return AsyncStorage.getAllKeys()
+      .then((keys) => AsyncStorage.multiGet(keys))
+      .catch(errorHandler);
+  },
+};
 
 export default storage;
