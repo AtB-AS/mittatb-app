@@ -150,6 +150,7 @@ export const ActiveTickets: React.FC<Props> = () => {
     isRefreshingTickets,
     refreshTickets,
     customerProfile,
+    didPaymentFail,
   } = useTicketState();
 
   const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
@@ -178,6 +179,7 @@ export const ActiveTickets: React.FC<Props> = () => {
         noTicketsLabel={t(TicketsTexts.activeTicketsTab.noTickets)}
         now={now}
         travelCard={customerProfile?.travelcard}
+        didPaymentFail={didPaymentFail}
       />
     </View>
   );

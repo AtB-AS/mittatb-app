@@ -14,6 +14,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import SimpleTicket from '../Ticket';
 import TicketReservation from './TicketReservation';
 import TravelCardInformation from './TravelCardInformation';
+import MessageBox from '@atb/components/message-box';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
@@ -25,6 +26,7 @@ type Props = {
   refreshTickets: () => void;
   now: number;
   travelCard?: TravelCard;
+  didPaymentFail?: boolean;
 };
 
 const TicketsScrollView: React.FC<Props> = ({
@@ -35,6 +37,7 @@ const TicketsScrollView: React.FC<Props> = ({
   refreshTickets,
   now,
   travelCard,
+  didPaymentFail = false,
 }) => {
   const {theme} = useTheme();
   const styles = useStyles();
@@ -58,6 +61,13 @@ const TicketsScrollView: React.FC<Props> = ({
           <TravelCardInformation
             travelCard={travelCard}
           ></TravelCardInformation>
+        )}
+        {didPaymentFail && (
+          <MessageBox
+            containerStyle={styles.messageBox}
+            type="error"
+            message={t(TicketsTexts.scrollView.paymentError)}
+          ></MessageBox>
         )}
         {!fareContracts?.length && !reservations?.length && (
           <ThemeText style={styles.noTicketsText}>{noTicketsLabel}</ThemeText>
@@ -105,6 +115,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   gradient: {
     backgroundColor: theme.colors.background_1.backgroundColor,
+  },
+  messageBox: {
+    marginBottom: theme.spacings.large,
   },
 }));
 

@@ -22,6 +22,7 @@ type TicketReducerState = {
   isRefreshingTickets: boolean;
   errorRefreshingTickets: boolean;
   customerProfile: CustomerProfile | undefined;
+  didPaymentFail: boolean;
 };
 
 type TicketReducerAction =
@@ -39,6 +40,10 @@ type TicketReducerAction =
   | {
       type: 'UPDATE_RESERVATIONS';
       activeReservations: ActiveReservation[];
+    }
+  | {
+      type: 'UPDATE_PAYMENT_FAILED';
+      didPaymentFail: boolean;
     };
 
 type TicketReducer = (
@@ -105,6 +110,12 @@ const ticketReducer: TicketReducer = (
         customerProfile: action.customerProfile,
       };
     }
+    case 'UPDATE_PAYMENT_FAILED': {
+      return {
+        ...prevState,
+        didPaymentFail: action.didPaymentFail,
+      };
+    }
   }
 };
 
@@ -112,6 +123,7 @@ type TicketState = {
   addReservation: (reservation: ActiveReservation) => void;
   refreshTickets: () => void;
   fareContracts: FareContract[];
+  didPaymentFail: boolean;
   findFareContractByOrderId: (id: string) => FareContract | undefined;
 } & Pick<
   TicketReducerState,
@@ -124,6 +136,7 @@ const initialReducerState: TicketReducerState = {
   isRefreshingTickets: false,
   errorRefreshingTickets: false,
   customerProfile: undefined,
+  didPaymentFail: false,
 };
 
 const TicketContext = createContext<TicketState | undefined>(undefined);
@@ -248,6 +261,23 @@ const TicketContextProvider: React.FC = ({children}) => {
     [activeReservations, getPaymentStatus],
   );
 
+  const isHandledPaymentStatus = (
+    status: PaymentStatus | undefined,
+  ): boolean => {
+    switch (status) {
+      case 'CANCEL':
+      case 'CREDIT':
+      case 'REJECT':
+        dispatch({
+          type: 'UPDATE_PAYMENT_FAILED',
+          didPaymentFail: true,
+        });
+        return true;
+      default:
+        return false;
+    }
+  };
+
   useInterval(
     pollPaymentStatus,
     500,
@@ -271,17 +301,6 @@ const TicketContextProvider: React.FC = ({children}) => {
     </TicketContext.Provider>
   );
 };
-
-function isHandledPaymentStatus(status: PaymentStatus | undefined): boolean {
-  switch (status) {
-    case 'CANCEL':
-    case 'CREDIT':
-    case 'REJECT':
-      return true;
-    default:
-      return false;
-  }
-}
 
 export function useTicketState() {
   const context = useContext(TicketContext);
