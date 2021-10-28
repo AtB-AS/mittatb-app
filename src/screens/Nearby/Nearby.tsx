@@ -284,6 +284,7 @@ const NearbyOverview: React.FC<Props> = ({
         isLoading={isLoading}
         isInitialScreen={isInitialScreen}
         error={error ? translateErrorType(error.type, t) : undefined}
+        searchDate={searchTime.date}
       />
     </SimpleDisappearingHeader>
   );
