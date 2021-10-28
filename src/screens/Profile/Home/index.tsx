@@ -115,6 +115,10 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             onPress={() => navigation.navigate('DefaultUserProfile')}
           />
           <Sections.LinkItem
+            text={'Mitt reisebevis'}
+            onPress={() => navigation.navigate('TravelCard')}
+          />
+          <Sections.LinkItem
             text={t(ProfileTexts.sections.settings.linkItems.appearance.label)}
             onPress={() => navigation.navigate('Appearance')}
           />
