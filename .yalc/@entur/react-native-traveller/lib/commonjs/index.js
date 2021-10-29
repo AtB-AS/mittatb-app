@@ -37,8 +37,8 @@ function createClient(setStatus, initialConfig) {
 
   (0, _token.startTokenStateMachine)(abtTokensService, setStatusWrapper);
   return {
-    restart: () => {
-      (0, _token.startTokenStateMachine)(abtTokensService, setStatusWrapper); // Todo: Not start if already running
+    retry: forceRestart => {
+      (0, _token.startTokenStateMachine)(abtTokensService, setStatusWrapper, forceRestart); // Todo: Not start if already running
     },
     generateQrCode: () => (0, _native.getSecureToken)([_types.PayloadAction.ticketInspection])
   };

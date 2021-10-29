@@ -16,13 +16,10 @@ const STORAGE_KEY = '@mobiletokensdk-state';
 
 export const startTokenStateMachine = async (
   abtTokensService: AbtTokensService,
-  setStatus: (s: StoredState) => void
+  setStatus: (s: StoredState) => void,
+  forceRestart: boolean = false
 ) => {
-  const savedStateString = await AsyncStorage.getItem(STORAGE_KEY);
-  const savedState = savedStateString
-    ? JSON.parse(savedStateString)
-    : undefined;
-  let currentState = savedState || { state: 'Loading' };
+  let currentState = await getInitialState(forceRestart);
   try {
     const shouldContinue = (s: TokenStatus) => s.state !== 'Valid' && !s.error;
     do {
@@ -38,6 +35,14 @@ export const startTokenStateMachine = async (
       error: { type: 'Unknown', message: 'Unexpected error', err },
     });
   }
+};
+
+const getInitialState = async (forceRestart: boolean): Promise<StoredState> => {
+  if (forceRestart) {
+    return { state: 'Loading' };
+  }
+  const savedStateString = await AsyncStorage.getItem(STORAGE_KEY);
+  return savedStateString ? JSON.parse(savedStateString) : { state: 'Loading' };
 };
 
 const getStateHandler = (

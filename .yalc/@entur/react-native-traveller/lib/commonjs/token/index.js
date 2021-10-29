@@ -29,12 +29,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const STORAGE_KEY = '@mobiletokensdk-state';
 
-const startTokenStateMachine = async (abtTokensService, setStatus) => {
-  const savedStateString = await _asyncStorage.default.getItem(STORAGE_KEY);
-  const savedState = savedStateString ? JSON.parse(savedStateString) : undefined;
-  let currentState = savedState || {
-    state: 'Loading'
-  };
+const startTokenStateMachine = async (abtTokensService, setStatus, forceRestart = false) => {
+  let currentState = await getInitialState(forceRestart);
 
   try {
     const shouldContinue = s => s.state !== 'Valid' && !s.error;
@@ -58,6 +54,19 @@ const startTokenStateMachine = async (abtTokensService, setStatus) => {
 };
 
 exports.startTokenStateMachine = startTokenStateMachine;
+
+const getInitialState = async forceRestart => {
+  if (forceRestart) {
+    return {
+      state: 'Loading'
+    };
+  }
+
+  const savedStateString = await _asyncStorage.default.getItem(STORAGE_KEY);
+  return savedStateString ? JSON.parse(savedStateString) : {
+    state: 'Loading'
+  };
+};
 
 const getStateHandler = (abtTokensService, storedState) => {
   switch (storedState.state) {

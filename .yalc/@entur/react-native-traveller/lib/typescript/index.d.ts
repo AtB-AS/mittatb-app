@@ -4,6 +4,6 @@ export type { Token } from './native/types';
 export { RequestError } from './fetcher';
 export type { Fetch, ApiResponse, ApiRequest } from './config';
 export default function createClient(setStatus: (status: TokenStatus) => void, initialConfig?: InitialConfig): {
-    restart: () => void;
+    retry: (forceRestart: boolean) => void;
     generateQrCode: () => Promise<string>;
 };

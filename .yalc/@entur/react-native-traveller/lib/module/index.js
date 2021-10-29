@@ -19,8 +19,8 @@ export default function createClient(setStatus, initialConfig) {
 
   startTokenStateMachine(abtTokensService, setStatusWrapper);
   return {
-    restart: () => {
-      startTokenStateMachine(abtTokensService, setStatusWrapper); // Todo: Not start if already running
+    retry: forceRestart => {
+      startTokenStateMachine(abtTokensService, setStatusWrapper, forceRestart); // Todo: Not start if already running
     },
     generateQrCode: () => getSecureToken([PayloadAction.ticketInspection])
   };

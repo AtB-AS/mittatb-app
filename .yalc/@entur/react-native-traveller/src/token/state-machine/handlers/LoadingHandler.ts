@@ -6,7 +6,7 @@ import type { Token } from '@entur/react-native-traveller';
 const secondsIn48Hours = 48 * 60 * 60;
 
 export default function loadingHandler(): StateHandler {
-  return stateHandlerFactory(['Loading'], async (_) => {
+  return stateHandlerFactory(['Loading', 'Valid'], async (_) => {
     const token = await getToken();
     if (!token) {
       return { state: 'InitiateNew' };

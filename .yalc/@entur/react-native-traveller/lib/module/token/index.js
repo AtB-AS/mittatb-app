@@ -9,12 +9,8 @@ import addTokenHandler from './state-machine/handlers/AddTokenHandler';
 import activateNewHandler from './state-machine/handlers/ActivateNewHandler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const STORAGE_KEY = '@mobiletokensdk-state';
-export const startTokenStateMachine = async (abtTokensService, setStatus) => {
-  const savedStateString = await AsyncStorage.getItem(STORAGE_KEY);
-  const savedState = savedStateString ? JSON.parse(savedStateString) : undefined;
-  let currentState = savedState || {
-    state: 'Loading'
-  };
+export const startTokenStateMachine = async (abtTokensService, setStatus, forceRestart = false) => {
+  let currentState = await getInitialState(forceRestart);
 
   try {
     const shouldContinue = s => s.state !== 'Valid' && !s.error;
@@ -35,6 +31,19 @@ export const startTokenStateMachine = async (abtTokensService, setStatus) => {
       }
     });
   }
+};
+
+const getInitialState = async forceRestart => {
+  if (forceRestart) {
+    return {
+      state: 'Loading'
+    };
+  }
+
+  const savedStateString = await AsyncStorage.getItem(STORAGE_KEY);
+  return savedStateString ? JSON.parse(savedStateString) : {
+    state: 'Loading'
+  };
 };
 
 const getStateHandler = (abtTokensService, storedState) => {

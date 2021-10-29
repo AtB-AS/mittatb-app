@@ -2,7 +2,7 @@ import { getToken } from '../../../native';
 import { stateHandlerFactory } from '../HandlerFactory';
 const secondsIn48Hours = 48 * 60 * 60;
 export default function loadingHandler() {
-  return stateHandlerFactory(['Loading'], async _ => {
+  return stateHandlerFactory(['Loading', 'Valid'], async _ => {
     const token = await getToken();
 
     if (!token) {
