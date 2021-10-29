@@ -140,8 +140,9 @@ const useQrCodeSvg = (qrCode: string | undefined) => {
 };
 
 const useQrCode = (fc: FareContract) => {
-  const {tokenStatus, generateQrCode, restartTokenClient} = useTicketState();
+  const {tokenStatus, generateQrCode, retryTokenClient} = useTicketState();
   const [tokenQRCode, setTokenQRCode] = useState<string | undefined>(undefined);
+  const [retryCount, setRetryCount] = useState(0);
 
   const updateQrCode = useCallback(async () => {
     if (tokenStatus?.state === 'Valid') {
@@ -154,11 +155,22 @@ const useQrCode = (fc: FareContract) => {
 
   useInterval(
     () => {
-      restartTokenClient();
+      setRetryCount(retryCount + 1);
+      retryTokenClient(false); // todo: better retry logic
     },
-    10000,
-    [restartTokenClient, tokenStatus?.error],
-    !tokenStatus?.error,
+    5000,
+    [retryTokenClient, tokenStatus?.error],
+    !tokenStatus?.error || retryCount >= 5,
+  );
+
+  useInterval(
+    () => {
+      setRetryCount(retryCount + 1);
+      retryTokenClient(true); // todo: better retry logic
+    },
+    30000,
+    [retryTokenClient, tokenStatus?.error],
+    !tokenStatus?.error || retryCount < 5,
   );
 
   useEffect(() => {

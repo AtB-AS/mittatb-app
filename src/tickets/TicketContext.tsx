@@ -128,10 +128,13 @@ type TicketState = {
   fareContracts: FareContract[];
   findFareContractByOrderId: (id: string) => FareContract | undefined;
   generateQrCode: () => Promise<string>;
-  restartTokenClient: () => void;
+  retryTokenClient: (forceRestart: boolean) => void;
 } & Pick<
   TicketReducerState,
-  'activeReservations' | 'isRefreshingTickets' | 'tokenStatus' | 'customerProfile'
+  | 'activeReservations'
+  | 'isRefreshingTickets'
+  | 'tokenStatus'
+  | 'customerProfile'
 >;
 
 const initialReducerState: TicketReducerState = {
@@ -154,7 +157,7 @@ const TicketContextProvider: React.FC = ({children}) => {
   const {user, abtCustomerId} = useAuthState();
   const {enable_ticketing} = useRemoteConfig();
 
-  const {generateQrCode, restart: restartTokenClient} = useMemo(() => {
+  const {generateQrCode, retry: retryTokenClient} = useMemo(() => {
     const setStatusCallback = (tokenStatus: TokenStatus) => {
       dispatch({type: 'SET_TOKEN_STATUS', tokenStatus});
     };
@@ -290,7 +293,7 @@ const TicketContextProvider: React.FC = ({children}) => {
         findFareContractByOrderId: (orderId) =>
           state.fareContracts.find((fc) => fc.orderId === orderId),
         generateQrCode,
-        restartTokenClient,
+        retryTokenClient,
       }}
     >
       {children}

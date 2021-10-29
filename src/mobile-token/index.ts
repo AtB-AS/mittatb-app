@@ -16,7 +16,7 @@ const fetcher: Fetch = async <T>(
 ): Promise<ApiResponse<T>> => {
   const axiosRequest = mapRequest(request);
 
-  const response = await client(axiosRequest);
+  const response = await client.request<T>(axiosRequest);
 
   return {
     body: response.data,
