@@ -20,6 +20,10 @@ import {
   AssignTravelTokenInApp,
   AssignTravelTokenInAppRouteParams,
 } from '@atb/login/in-app/AssignTravelTokenInApp';
+import {
+  AssignPhoneInApp,
+  AssignPhoneInAppRouteParams,
+} from './AssignPhoneInApp';
 
 export type LoginInAppStackParams = {
   LoginOnboardingInApp: LoginOnboardingInAppRouteParams;
@@ -27,6 +31,7 @@ export type LoginInAppStackParams = {
   PhoneInputInApp: PhoneInputInAppRouteParams;
   ConfirmCodeInApp: ConfirmCodeInAppRouteParams;
   AssignTravelTokenInApp: AssignTravelTokenInAppRouteParams;
+  AssignPhoneInApp: AssignPhoneInAppRouteParams;
 };
 
 const Stack = createStackNavigator<LoginInAppStackParams>();
@@ -51,6 +56,7 @@ export default function LoginInAppStack() {
         name="AssignTravelTokenInApp"
         component={AssignTravelTokenInApp}
       />
+      <Stack.Screen name="AssignPhoneInApp" component={AssignPhoneInApp} />
     </Stack.Navigator>
   );
 }

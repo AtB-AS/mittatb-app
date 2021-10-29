@@ -9,20 +9,16 @@ import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ThemeColor} from '@atb/theme/colors';
 import {useNavigation} from '@react-navigation/native';
 import {useTicketState} from '@atb/tickets';
-import {ActiveTicketCard} from '@atb/screens/Ticketing/Tickets/TravelCardInformation';
 import Button from '@atb/components/button';
 
 const themeColor: ThemeColor = 'background_gray';
 
-export default function AssignTravelToken({
+export default function AssignPhone({
   headerLeftButton,
   headerRightButton,
-  selectedDevice,
 }: {
-  doAfterSubmit: () => void;
   headerLeftButton?: LeftButtonProps;
   headerRightButton?: RightButtonProps;
-  selectedDevice?: number;
 }) {
   const {t} = useTranslation();
   const navigation = useNavigation();
@@ -31,20 +27,6 @@ export default function AssignTravelToken({
 
   const {customerProfile} = useTicketState();
   const hasTravelCard = !customerProfile?.travelcard;
-  const currentDevice = selectedDevice || 0;
-
-  const availableDevices = [
-    {
-      id: 0,
-      modelName: 'iPhone 13 Pro',
-      addedDate: '10. okt, kl. 09:10',
-    },
-    {
-      id: 1,
-      modelName: 'Samsung Galaxy S21',
-      addedDate: '10. okt, kl. 09:10',
-    },
-  ];
 
   return (
     <View style={styles.container}>
@@ -67,76 +49,16 @@ export default function AssignTravelToken({
               : 'Din mobil er satt som reisebevis'}
           </ThemeText>
         </View>
-        <View accessible={true}>
-          <ThemeText style={styles.description} color={themeColor}>
-            {hasTravelCard
-              ? 'Ta med deg t:kortet når du er ute på reise'
-              : 'Ta med deg mobilen når du er ute på reise'}
-          </ThemeText>
-        </View>
-        {hasTravelCard && customerProfile?.travelcard?.id && (
-          <View style={styles.tcardContainer}>
-            <ActiveTicketCard
-              cardId={customerProfile.travelcard.id.toString()}
-              color="background_3"
-              type="large"
-            ></ActiveTicketCard>
-          </View>
-        )}
-        {!hasTravelCard && (
-          <PhoneInfoBox
-            phoneName={availableDevices[currentDevice].modelName}
-            addedDate={availableDevices[currentDevice].addedDate}
-          ></PhoneInfoBox>
-        )}
         <Button
-          color={'primary_2'}
+          mode="secondary"
           style={styles.marginVertical}
-          onPress={() => {}}
-          text={'OK'}
-        />
-        {!hasTravelCard && availableDevices.length > 1 && (
-          <Button
-            mode="secondary"
-            style={styles.marginVertical}
-            color="primary_2"
-            onPress={() => {
-              navigation.navigate('AssignPhoneInApp');
-            }}
-            text={'Velg en annen mobil'}
-          />
-        )}
-        <ThemeText
-          style={styles.description}
           color="primary_2"
-          isMarkdown={true}
-        >
-          Les mer om reisebevis på
-          [atb.no/reisebevis](https://atb.no/reisebevis)
-        </ThemeText>
+          onPress={() => {
+            navigation.navigate('AssignTravelTokenInApp', {selectedDevice: 1});
+          }}
+          text={'Velg en annen mobil'}
+        />
       </ScrollView>
-    </View>
-  );
-}
-
-type PhoneInfoBoxProps = {
-  phoneName: string;
-  addedDate: string;
-};
-
-export function PhoneInfoBox(props: PhoneInfoBoxProps): JSX.Element {
-  const styles = useThemeStyles();
-
-  return (
-    <View style={styles.phoneInfoBox}>
-      <View style={styles.phoneLine}></View>
-      <View style={styles.phoneInfoBoxInner}>
-        <ThemeText type="heading__title" style={styles.phoneInfoBoxTitle}>
-          {props.phoneName}
-        </ThemeText>
-        <ThemeText style={styles.alignCenter}>Lagt til:</ThemeText>
-        <ThemeText style={styles.alignCenter}>{props.addedDate}</ThemeText>
-      </View>
     </View>
   );
 }
