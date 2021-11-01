@@ -15,6 +15,7 @@ import Button from '@atb/components/button';
 const themeColor: ThemeColor = 'background_gray';
 
 export default function AssignTravelToken({
+  doAfterSubmit,
   headerLeftButton,
   headerRightButton,
   selectedDeviceId,
@@ -93,7 +94,9 @@ export default function AssignTravelToken({
         <Button
           color={'primary_2'}
           style={styles.marginVertical}
-          onPress={() => {}}
+          onPress={() => {
+            doAfterSubmit();
+          }}
           text={'OK'}
         />
         {!hasTravelCard && availableDevices.length > 1 && (

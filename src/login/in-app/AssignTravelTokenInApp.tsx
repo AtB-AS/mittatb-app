@@ -28,7 +28,7 @@ export const AssignTravelTokenInApp = ({
 }: AssignTravelTokenInAppProps) => (
   <AssignTravelToken
     doAfterSubmit={() => {
-      afterLogin;
+      navigation.navigate(afterLogin.routeName as any, afterLogin.routeParams);
     }}
     headerLeftButton={{type: 'back'}}
     selectedDeviceId={selectedDeviceId}
