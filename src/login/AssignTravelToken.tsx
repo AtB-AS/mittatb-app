@@ -17,12 +17,12 @@ const themeColor: ThemeColor = 'background_gray';
 export default function AssignTravelToken({
   headerLeftButton,
   headerRightButton,
-  selectedDevice,
+  selectedDeviceId,
 }: {
   doAfterSubmit: () => void;
   headerLeftButton?: LeftButtonProps;
   headerRightButton?: RightButtonProps;
-  selectedDevice?: number;
+  selectedDeviceId: number;
 }) {
   const {t} = useTranslation();
   const navigation = useNavigation();
@@ -31,8 +31,6 @@ export default function AssignTravelToken({
 
   const {customerProfile} = useTicketState();
   const hasTravelCard = !customerProfile?.travelcard;
-  const currentDevice = selectedDevice || 0;
-
   const availableDevices = [
     {
       id: 0,
@@ -45,6 +43,9 @@ export default function AssignTravelToken({
       addedDate: '10. okt, kl. 09:10',
     },
   ];
+  const currentDevice = availableDevices.find(
+    (device) => device.id === (selectedDeviceId || 0),
+  );
 
   return (
     <View style={styles.container}>
@@ -67,7 +68,7 @@ export default function AssignTravelToken({
               : 'Din mobil er satt som reisebevis'}
           </ThemeText>
         </View>
-        <View accessible={true}>
+        <View>
           <ThemeText style={styles.description} color={themeColor}>
             {hasTravelCard
               ? 'Ta med deg t:kortet når du er ute på reise'
@@ -83,10 +84,10 @@ export default function AssignTravelToken({
             ></ActiveTicketCard>
           </View>
         )}
-        {!hasTravelCard && (
+        {!hasTravelCard && currentDevice && (
           <PhoneInfoBox
-            phoneName={availableDevices[currentDevice].modelName}
-            addedDate={availableDevices[currentDevice].addedDate}
+            phoneName={currentDevice?.modelName}
+            addedDate={currentDevice?.addedDate}
           ></PhoneInfoBox>
         )}
         <Button
@@ -101,7 +102,9 @@ export default function AssignTravelToken({
             style={styles.marginVertical}
             color="primary_2"
             onPress={() => {
-              navigation.navigate('AssignPhoneInApp');
+              navigation.navigate('AssignPhoneInApp', {
+                currentDeviceId: currentDevice?.id || 0,
+              });
             }}
             text={'Velg en annen mobil'}
           />

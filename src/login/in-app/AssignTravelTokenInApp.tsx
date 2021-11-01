@@ -7,7 +7,7 @@ import {AfterLoginParams} from '@atb/login/types';
 
 export type AssignTravelTokenInAppRouteParams = {
   afterLogin: AfterLoginParams;
-  selectedDevice: number;
+  selectedDeviceId: number;
 };
 
 type AssignTravelTokenInAppRouteProps = RouteProp<
@@ -23,7 +23,7 @@ export type AssignTravelTokenInAppProps = {
 export const AssignTravelTokenInApp = ({
   navigation,
   route: {
-    params: {afterLogin, selectedDevice},
+    params: {afterLogin, selectedDeviceId},
   },
 }: AssignTravelTokenInAppProps) => (
   <AssignTravelToken
@@ -31,6 +31,6 @@ export const AssignTravelTokenInApp = ({
       afterLogin;
     }}
     headerLeftButton={{type: 'back'}}
-    selectedDevice={selectedDevice}
+    selectedDeviceId={selectedDeviceId}
   />
 );

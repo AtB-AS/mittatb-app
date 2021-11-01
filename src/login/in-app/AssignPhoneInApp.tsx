@@ -7,6 +7,7 @@ import {AfterLoginParams} from '@atb/login/types';
 
 export type AssignPhoneInAppRouteParams = {
   afterLogin: AfterLoginParams;
+  currentDeviceId: number;
 };
 
 type AssignPhoneInAppRouteProps = RouteProp<
@@ -21,5 +22,12 @@ export type AssignPhoneInAppProps = {
 
 export const AssignPhoneInApp = ({
   navigation,
-  route,
-}: AssignPhoneInAppProps) => <AssignPhone headerLeftButton={{type: 'back'}} />;
+  route: {
+    params: {currentDeviceId},
+  },
+}: AssignPhoneInAppProps) => (
+  <AssignPhone
+    currentDeviceId={currentDeviceId}
+    headerLeftButton={{type: 'back'}}
+  />
+);

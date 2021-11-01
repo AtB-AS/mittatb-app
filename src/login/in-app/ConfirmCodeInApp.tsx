@@ -30,6 +30,7 @@ export const ConfirmCodeInApp = ({
       doAfterLogin={() =>
         navigation.navigate('AssignTravelTokenInApp', {
           afterLogin,
+          selectedDeviceId: 0,
         })
       }
     />
