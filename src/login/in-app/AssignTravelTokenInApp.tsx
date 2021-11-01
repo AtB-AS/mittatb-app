@@ -25,12 +25,19 @@ export const AssignTravelTokenInApp = ({
   route: {
     params: {afterLogin, selectedDeviceId},
   },
-}: AssignTravelTokenInAppProps) => (
-  <AssignTravelToken
-    doAfterSubmit={() => {
-      navigation.navigate(afterLogin.routeName as any, afterLogin.routeParams);
-    }}
-    headerLeftButton={{type: 'back'}}
-    selectedDeviceId={selectedDeviceId}
-  />
-);
+}: AssignTravelTokenInAppProps) => {
+  const doAfterSubmit = () => {
+    navigation.navigate(afterLogin.routeName as any, afterLogin.routeParams);
+  };
+
+  return (
+    <AssignTravelToken
+      doAfterSubmit={doAfterSubmit}
+      headerLeftButton={{
+        type: 'close',
+        onPress: doAfterSubmit,
+      }}
+      selectedDeviceId={selectedDeviceId}
+    />
+  );
+};
