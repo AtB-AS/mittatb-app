@@ -112,13 +112,14 @@ export default function AssignTravelToken({
             text={t(LoginTexts.assignTravelToken.selectOtherDevice)}
           />
         )}
-        <ThemeText
-          style={styles.description}
-          color="primary_2"
-          isMarkdown={true}
-        >
-          {t(LoginTexts.assignTravelToken.readMore)}
-        </ThemeText>
+        <View style={styles.description}>
+          <ThemeText color="primary_2">
+            {t(LoginTexts.assignTravelToken.readMore.text)}
+          </ThemeText>
+          <ThemeText color="primary_2" isMarkdown={true}>
+            {t(LoginTexts.assignTravelToken.readMore.url)}
+          </ThemeText>
+        </View>
       </ScrollView>
     </View>
   );
@@ -173,6 +174,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   description: {
     marginVertical: theme.spacings.large,
     textAlign: 'center',
+    flexDirection: 'row',
+    alignSelf: 'center',
   },
   tcardContainer: {
     marginTop: theme.spacings.xLarge,

@@ -108,10 +108,13 @@ const LoginTexts = {
     ),
     ok: _('OK', 'OK'),
     selectOtherDevice: _('Velg en annen mobil', 'Select another device'),
-    readMore: _(
-      'Les mer om reisebevis på [atb.no/reisebevis](https://atb.no/reisebevis)',
-      'Read more about travel token at [atb.no/reisebevis](https://atb.no/reisebevis)',
-    ),
+    readMore: {
+      text: _('Les mer om reisebevis på ', 'Read more about travel token at '),
+      url: _(
+        '[atb.no/reisebevis](https://atb.no/reisebevis)',
+        '[atb.no/reisebevis](https://atb.no/reisebevis)',
+      ),
+    },
     added: _('Lagt til:', 'Added:'),
   },
   assignPhone: {
