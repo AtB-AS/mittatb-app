@@ -22,6 +22,7 @@ export default function RadioItem({
   subText,
   onPress,
   accessibilityHint,
+  accessibilityLabel,
 }: CheckedProps) {
   const styles = useStyles();
 
@@ -32,6 +33,7 @@ export default function RadioItem({
       accessibilityHint={accessibilityHint}
       accessibilityRole="radio"
       accessibilityState={{selected: checked}}
+      accessibilityLabel={text + ': ' + subText}
     >
       <View style={styles.icon}>
         <RadioIcon checked={checked} color={color || 'secondary_2'}></RadioIcon>

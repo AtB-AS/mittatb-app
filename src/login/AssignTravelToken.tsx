@@ -1,6 +1,6 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import ThemeText from '@atb/components/text';
@@ -65,15 +65,15 @@ export default function AssignTravelToken({
             color={themeColor}
           >
             {hasTravelCard
-              ? 'Ditt t:kort er satt som reisebevis'
-              : 'Din mobil er satt som reisebevis'}
+              ? t(LoginTexts.assignTravelToken.tcardIsSet)
+              : t(LoginTexts.assignTravelToken.phoneIsSet)}
           </ThemeText>
         </View>
         <View>
           <ThemeText style={styles.description} color={themeColor}>
             {hasTravelCard
-              ? 'Ta med deg t:kortet når du er ute på reise'
-              : 'Ta med deg mobilen når du er ute på reise'}
+              ? t(LoginTexts.assignTravelToken.bringTcard)
+              : t(LoginTexts.assignTravelToken.bringPhone)}
           </ThemeText>
         </View>
         {hasTravelCard && customerProfile?.travelcard?.id && (
@@ -97,7 +97,7 @@ export default function AssignTravelToken({
           onPress={() => {
             doAfterSubmit();
           }}
-          text={'OK'}
+          text={t(LoginTexts.assignTravelToken.ok)}
         />
         {!hasTravelCard && availableDevices.length > 1 && (
           <Button
@@ -109,7 +109,7 @@ export default function AssignTravelToken({
                 currentDeviceId: currentDevice?.id || 0,
               });
             }}
-            text={'Velg en annen mobil'}
+            text={t(LoginTexts.assignTravelToken.selectOtherDevice)}
           />
         )}
         <ThemeText
@@ -117,8 +117,7 @@ export default function AssignTravelToken({
           color="primary_2"
           isMarkdown={true}
         >
-          Les mer om reisebevis på
-          [atb.no/reisebevis](https://atb.no/reisebevis)
+          {t(LoginTexts.assignTravelToken.readMore)}
         </ThemeText>
       </ScrollView>
     </View>
@@ -132,6 +131,7 @@ type PhoneInfoBoxProps = {
 
 export function PhoneInfoBox(props: PhoneInfoBoxProps): JSX.Element {
   const styles = useThemeStyles();
+  const {t} = useTranslation();
 
   return (
     <View style={styles.phoneInfoBox}>
@@ -140,8 +140,17 @@ export function PhoneInfoBox(props: PhoneInfoBoxProps): JSX.Element {
         <ThemeText type="heading__title" style={styles.phoneInfoBoxTitle}>
           {props.phoneName}
         </ThemeText>
-        <ThemeText style={styles.alignCenter}>Lagt til:</ThemeText>
-        <ThemeText style={styles.alignCenter}>{props.addedDate}</ThemeText>
+        <View
+          accessible={true}
+          accessibilityLabel={
+            t(LoginTexts.assignTravelToken.added) + ' ' + props.addedDate
+          }
+        >
+          <ThemeText style={styles.alignCenter}>
+            {t(LoginTexts.assignTravelToken.added)}
+          </ThemeText>
+          <ThemeText style={styles.alignCenter}>{props.addedDate}</ThemeText>
+        </View>
       </View>
     </View>
   );

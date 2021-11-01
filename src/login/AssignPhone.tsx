@@ -1,6 +1,6 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import ThemeText from '@atb/components/text';
@@ -61,28 +61,28 @@ export default function AssignPhone({
             style={[styles.alignCenter, styles.marginVertical]}
             color={themeColor}
           >
-            Velg ditt reisebevis
+            {t(LoginTexts.assignPhone.selectToken)}
           </ThemeText>
-          <View>
-            <ThemeText style={styles.description} color={themeColor}>
-              Vi fant flere tilgjengelige mobilenheter
-            </ThemeText>
-          </View>
+        </View>
+        <View>
+          <ThemeText style={styles.description} color={themeColor}>
+            {t(LoginTexts.assignPhone.weFoundSeveral)}
+          </ThemeText>
         </View>
         <View style={styles.deviceSelection}>
           <Sections.GenericItem>
-            <ThemeText type="body__tertiary">Velg enhet</ThemeText>
+            <ThemeText type="body__tertiary">
+              {t(LoginTexts.assignPhone.selectDevice)}
+            </ThemeText>
             {selectedDevice &&
               availableDevices.map((device) => (
                 <RadioItem
                   key={device.id}
                   checked={selectedDevice.id === device.id}
                   text={device.modelName}
-                  subText={'Lagt til ' + device.addedDate}
+                  subText={t(LoginTexts.assignPhone.added) + device.addedDate}
                   onPress={() => setSelectedDevice(device)}
-                  accessibilityHint={
-                    'Select to set this mobile phone as active travel card.'
-                  }
+                  accessibilityHint={t(LoginTexts.assignPhone.addedA11yHint)}
                 ></RadioItem>
               ))}
           </Sections.GenericItem>
@@ -96,7 +96,8 @@ export default function AssignPhone({
               selectedDeviceId: selectedDevice.id,
             });
           }}
-          text={'OK'}
+          text={t(LoginTexts.assignTravelToken.ok)}
+          accessibilityHint={t(LoginTexts.assignPhone.submitA11yHint)}
         />
       </ScrollView>
     </View>

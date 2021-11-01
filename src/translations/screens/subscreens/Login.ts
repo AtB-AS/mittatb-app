@@ -89,5 +89,47 @@ const LoginTexts = {
     mainButton: _('Godta og gå videre', 'Accept and continue'),
     wantToLoginButton: _('Jeg vil logge inn likevel', 'I want to sign in'),
   },
+  assignTravelToken: {
+    tcardIsSet: _(
+      'Ditt t:kort er satt som reisebevis',
+      'Your t:card is set as travel token',
+    ),
+    phoneIsSet: _(
+      'Din mobil er satt som reisebevis',
+      'Your phone is set as travel token',
+    ),
+    bringTcard: _(
+      'Ta med deg t:kortet når du er ute på reise',
+      'Bring your t:card when you are traveling',
+    ),
+    bringPhone: _(
+      'Ta med deg mobilen når du er ute på reise',
+      'Bring your phone when you are traveling',
+    ),
+    ok: _('OK', 'OK'),
+    selectOtherDevice: _('Velg en annen mobil', 'Select another device'),
+    readMore: _(
+      'Les mer om reisebevis på [atb.no/reisebevis](https://atb.no/reisebevis)',
+      'Read more about travel token at [atb.no/reisebevis](https://atb.no/reisebevis)',
+    ),
+    added: _('Lagt til:', 'Added:'),
+  },
+  assignPhone: {
+    selectToken: _('Velg ditt reisebevis', 'Select your travel token'),
+    weFoundSeveral: _(
+      'Vi fant flere tilgjengelige mobilenheter',
+      'We found several available devices',
+    ),
+    added: _('Lagt til ', 'Added '),
+    addedA11yHint: _(
+      'Aktiver for å sette som aktivt reisebevis.',
+      'Select to set this mobile phone as active travel card.',
+    ),
+    selectDevice: _('Velg enhet', 'Select device'),
+    submitA11yHint: _(
+      'Aktiver for å lagre valg av reisebevis',
+      'Select to apply travel token selection',
+    ),
+  },
 };
 export default LoginTexts;
