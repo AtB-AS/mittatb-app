@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import TripDetailsRoot, {DetailsStackParams} from '../TripDetails';
 import NearbyRoot, {NearbyScreenParams, NearbyScreenProp} from './Nearby';
+import DeparturesRoot from './Departures';
 
 export type NearbyStackParams = {
   NearbyRoot: NearbyScreenParams;
@@ -29,7 +30,7 @@ const NearbyScreen = ({route}: NearbyScreenRootProps) => {
       {newDepartures ? (
         <Stack.Screen
           name="NearbyRoot"
-          component={NearbyRoot}
+          component={DeparturesRoot}
           initialParams={route.params}
         />
       ) : (
