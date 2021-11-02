@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "@entur/react-native-traveller": {
-      "signature": "0660802e6f3873ae5f3fdff2a0a05b8a",
+      "signature": "4af2500701f522bb97e65d7ca38174b0",
       "file": true
     }
   }

@@ -27,27 +27,29 @@ const getActivateTokenRequestBody = (initialTokenId, nonce, serverPublicKey) => 
       return getActivateTokenRequestBodyIos11(initialTokenId, nonce, serverPublicKey);
     }
   } else {
-    return getActivateTokenRequestBodyAndroid(initialTokenId, nonce, serverPublicKey);
+    return getActivateTokenRequestBodyAndroid(initialTokenId, nonce);
   }
 };
 
 exports.getActivateTokenRequestBody = getActivateTokenRequestBody;
 
-const getActivateTokenRequestBodyAndroid = async (initialTokenId, nonce, serverPublicKey) => {
+const getActivateTokenRequestBodyAndroid = async (initialTokenId, nonce) => {
   const {
-    attestation,
+    attestationObject,
     signaturePublicKey,
-    encryptionPublicKey
-  } = await (0, _native.attestLegacy)(initialTokenId, nonce, serverPublicKey);
+    encryptionPublicKey,
+    signatureChain,
+    encryptionChain
+  } = await (0, _native.attest)(initialTokenId, nonce);
   return {
     signaturePublicKey,
     encryptionPublicKey,
     attestation: {
       attestationType: AttestationType.SafetyNet,
-      safetyNetJws: attestation,
-      signaturePublicKeyAttestation: ['noop'],
+      safetyNetJws: attestationObject,
+      signaturePublicKeyAttestation: signatureChain,
       // TODO: erstatt med faktiske verdier
-      encryptionPublicKeyAttestation: ['noop'] // TODO: erstatt med faktiske verdier
+      encryptionPublicKeyAttestation: encryptionChain // TODO: erstatt med faktiske verdier
 
     }
   };

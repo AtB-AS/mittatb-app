@@ -4,6 +4,8 @@ export declare type AttestationData = {
     deviceAttestationData: string;
     signaturePublicKey: string;
     encryptionPublicKey: string;
+    signatureChain: string[];
+    encryptionChain: string[];
 };
 export declare type LegacyAttestationData = {
     attestation: string;

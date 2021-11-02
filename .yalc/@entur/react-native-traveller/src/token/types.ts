@@ -97,6 +97,7 @@ const tokenStates = [
   'Valid',
   'GettingTokenCertificate',
   'Validating',
+  'DeleteLocal',
   'InitiateNew',
   'InitiateRenewal',
   'AttestNew',
@@ -115,6 +116,7 @@ export type StoredState = {
       state:
         | 'Loading'
         | 'InitiateNew'
+        | 'DeleteLocal'
         | 'InitiateRenewal'
         | 'Valid'
         | 'GettingTokenCertificate';

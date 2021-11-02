@@ -25,6 +25,8 @@ var _ActivateNewHandler = _interopRequireDefault(require("./state-machine/handle
 
 var _asyncStorage = _interopRequireDefault(require("@react-native-async-storage/async-storage"));
 
+var _DeleteLocalHandler = _interopRequireDefault(require("./state-machine/handlers/DeleteLocalHandler"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const STORAGE_KEY = '@mobiletokensdk-state';
@@ -76,6 +78,9 @@ const getStateHandler = (abtTokensService, storedState) => {
 
     case 'Validating':
       return (0, _ValidatingHandler.default)(abtTokensService);
+
+    case 'DeleteLocal':
+      return (0, _DeleteLocalHandler.default)();
 
     case 'InitiateNew':
       return (0, _InitiateNewHandler.default)(abtTokensService);

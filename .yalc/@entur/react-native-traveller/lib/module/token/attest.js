@@ -18,25 +18,27 @@ export const getActivateTokenRequestBody = (initialTokenId, nonce, serverPublicK
       return getActivateTokenRequestBodyIos11(initialTokenId, nonce, serverPublicKey);
     }
   } else {
-    return getActivateTokenRequestBodyAndroid(initialTokenId, nonce, serverPublicKey);
+    return getActivateTokenRequestBodyAndroid(initialTokenId, nonce);
   }
 };
 
-const getActivateTokenRequestBodyAndroid = async (initialTokenId, nonce, serverPublicKey) => {
+const getActivateTokenRequestBodyAndroid = async (initialTokenId, nonce) => {
   const {
-    attestation,
+    attestationObject,
     signaturePublicKey,
-    encryptionPublicKey
-  } = await attestLegacy(initialTokenId, nonce, serverPublicKey);
+    encryptionPublicKey,
+    signatureChain,
+    encryptionChain
+  } = await attest(initialTokenId, nonce);
   return {
     signaturePublicKey,
     encryptionPublicKey,
     attestation: {
       attestationType: AttestationType.SafetyNet,
-      safetyNetJws: attestation,
-      signaturePublicKeyAttestation: ['noop'],
+      safetyNetJws: attestationObject,
+      signaturePublicKeyAttestation: signatureChain,
       // TODO: erstatt med faktiske verdier
-      encryptionPublicKeyAttestation: ['noop'] // TODO: erstatt med faktiske verdier
+      encryptionPublicKeyAttestation: encryptionChain // TODO: erstatt med faktiske verdier
 
     }
   };

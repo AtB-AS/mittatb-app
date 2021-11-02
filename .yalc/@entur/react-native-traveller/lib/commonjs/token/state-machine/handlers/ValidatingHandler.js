@@ -12,7 +12,7 @@ function validatingHandler(abtTokensService) {
     const tokens = await abtTokensService.listTokens();
     const tokenFound = tokens.some(t => t.id === s.token.tokenId);
     return {
-      state: tokenFound ? 'Valid' : 'InitiateNew'
+      state: tokenFound ? 'Valid' : 'DeleteLocal'
     };
   });
 }

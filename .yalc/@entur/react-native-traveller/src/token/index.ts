@@ -11,6 +11,7 @@ import addTokenHandler from './state-machine/handlers/AddTokenHandler';
 import type { StateHandler } from './state-machine/HandlerFactory';
 import activateNewHandler from './state-machine/handlers/ActivateNewHandler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import deleteLocalHandler from "./state-machine/handlers/DeleteLocalHandler";
 
 const STORAGE_KEY = '@mobiletokensdk-state';
 
@@ -55,6 +56,8 @@ const getStateHandler = (
       return loadingHandler();
     case 'Validating':
       return validatingHandler(abtTokensService);
+    case 'DeleteLocal':
+      return deleteLocalHandler();
     case 'InitiateNew':
       return initiateNewHandler(abtTokensService);
     case 'InitiateRenewal':

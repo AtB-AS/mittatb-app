@@ -4,6 +4,8 @@ export type AttestationData = {
   deviceAttestationData: string;
   signaturePublicKey: string;
   encryptionPublicKey: string;
+  signatureChain: string[];
+  encryptionChain: string[];
 };
 
 export type LegacyAttestationData = {

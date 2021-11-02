@@ -6,9 +6,9 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.ViewManager
 
 
-class EnturTravellerPackage : ReactPackage {
+class EnturTravellerPackage(private val googleApiKey: String) : ReactPackage {
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
-        return listOf(EnturTravellerModule(reactContext))
+        return listOf(EnturTravellerModule(reactContext, googleApiKey))
     }
 
     override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {

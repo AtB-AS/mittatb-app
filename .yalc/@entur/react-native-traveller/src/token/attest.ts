@@ -28,33 +28,30 @@ export const getActivateTokenRequestBody = (
       );
     }
   } else {
-    return getActivateTokenRequestBodyAndroid(
-      initialTokenId,
-      nonce,
-      serverPublicKey
-    );
+    return getActivateTokenRequestBodyAndroid(initialTokenId, nonce);
   }
 };
 
 const getActivateTokenRequestBodyAndroid = async (
   initialTokenId: string,
-  nonce: string,
-  serverPublicKey: string
+  nonce: string
 ): Promise<ActivateTokenRequest> => {
   const {
-    attestation,
+    attestationObject,
     signaturePublicKey,
     encryptionPublicKey,
-  } = await attestLegacy(initialTokenId, nonce, serverPublicKey);
+    signatureChain,
+    encryptionChain,
+  } = await attest(initialTokenId, nonce);
 
   return {
     signaturePublicKey,
     encryptionPublicKey,
     attestation: {
       attestationType: AttestationType.SafetyNet,
-      safetyNetJws: attestation,
-      signaturePublicKeyAttestation: ['noop'], // TODO: erstatt med faktiske verdier
-      encryptionPublicKeyAttestation: ['noop'], // TODO: erstatt med faktiske verdier
+      safetyNetJws: attestationObject,
+      signaturePublicKeyAttestation: signatureChain, // TODO: erstatt med faktiske verdier
+      encryptionPublicKeyAttestation: encryptionChain, // TODO: erstatt med faktiske verdier
     },
   };
 };

@@ -17,7 +17,8 @@ export type EnturTravellerType = {
     tokenId: string,
     certificate: string,
     tokenValidityStart: number,
-    tokenValidityEnd: number
+    tokenValidityEnd: number,
+    nonce?: string
   ): Promise<void>;
   getToken(): Promise<Token | undefined>;
   deleteToken(): Promise<void>;
