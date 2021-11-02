@@ -4,7 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import TripDetailsRoot, {DetailsStackParams} from '../TripDetails';
 import NearbyRoot, {NearbyScreenParams, NearbyScreenProp} from './Nearby';
-import DeparturesRoot from './Departures';
+import DeparturesRoot from '../Departures/Departures';
 
 export type NearbyStackParams = {
   NearbyRoot: NearbyScreenParams;

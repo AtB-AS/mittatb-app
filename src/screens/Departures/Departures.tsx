@@ -31,10 +31,19 @@ import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
-import {NearbyStackParams} from '.';
+import {NearbyStackParams} from '../Nearby';
 import Loading from '../Loading';
-import DepartureTimeSheet from './DepartureTimeSheet';
-import {useDepartureData} from './state';
+import DepartureTimeSheet from '../Nearby/DepartureTimeSheet';
+import {useDepartureData} from '../Nearby/state';
+import {useNearestStopsData} from './state';
+import ThemeText from '@atb/components/text';
+import {StopPlace} from '@atb/sdk';
+import * as Sections from '@atb/components/sections';
+import {
+  locationDistanceInMetres,
+  primitiveLocationDistanceInMetres,
+} from '@atb/utils/location';
+import haversine from 'haversine-distance';
 
 const themeColor: ThemeColor = 'background_gray';
 
@@ -121,46 +130,14 @@ const DeparturesOverview: React.FC<Props> = ({
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
   const updatingLocation = !fromLocation && hasLocationPermission;
 
-  const {state, refresh, loadMore, setShowFavorites} = useDepartureData(
-    fromLocation,
-    searchTime?.option !== 'now' ? searchTime.date : undefined,
-  );
-  const {
-    data,
-    tick,
-    isLoading,
-    isFetchingMore,
-    error,
-    showOnlyFavorites,
-    queryInput,
-  } = state;
+  const {state, refresh} = useNearestStopsData(fromLocation);
 
-  const {
-    preferences: {departuresShowOnlyFavorites: pref__showOnlyFavorites},
-    setPreference,
-  } = usePreferences();
-
-  function toggleShowFavorites() {
-    const show = !showOnlyFavorites;
-    setShowFavorites(show);
-    setPreference({departuresShowOnlyFavorites: show});
-  }
-
-  useEffect(() => {
-    if (
-      pref__showOnlyFavorites != undefined &&
-      showOnlyFavorites != pref__showOnlyFavorites
-    ) {
-      setShowFavorites(pref__showOnlyFavorites);
-    }
-  }, [pref__showOnlyFavorites]);
+  const {data, isLoading, error} = state;
 
   const isInitialScreen = data == null && !isLoading && !error;
   const activateScroll = !isInitialScreen || !!error;
 
   const {t, language} = useTranslation();
-
-  const onScrollViewEndReached = () => data?.length && loadMore();
 
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {
@@ -237,7 +214,6 @@ const DeparturesOverview: React.FC<Props> = ({
           onNowPress={onNowPress}
           onLaterTimePress={onLaterTimePress}
           searchTime={searchTime}
-          timeOfLastSearch={queryInput.startTime}
           setLocation={(location: LocationWithMetadata) => {
             navigation.setParams({
               location,
@@ -262,34 +238,38 @@ const DeparturesOverview: React.FC<Props> = ({
           )}
         </AccessibleText>
       }
-      onEndReached={onScrollViewEndReached}
+      // onEndReached={onScrollViewEndReached}
       alertContext={'travel'}
       setFocusOnLoad={true}
     >
       <ScreenReaderAnnouncement message={loadAnnouncement} />
 
-      {data !== null && (
-        <View style={styles.container}>
-          <ActionItem
-            transparent
-            text={t(NearbyTexts.favorites.toggle)}
-            mode="toggle"
-            checked={showOnlyFavorites}
-            onPress={toggleShowFavorites}
-          />
-        </View>
-      )}
-
-      <DeparturesList
-        currentLocation={currentLocation}
-        showOnlyFavorites={showOnlyFavorites}
-        departures={data}
-        lastUpdated={tick}
-        isFetchingMore={isFetchingMore && !isLoading}
-        isLoading={isLoading}
-        isInitialScreen={isInitialScreen}
-        error={error ? translateErrorType(error.type, t) : undefined}
-      />
+      <View>
+        {data &&
+          data.map((stopPlace: StopPlace) => (
+            <Sections.Section>
+              <Sections.GenericClickableItem>
+                <ThemeText type="heading__component">
+                  {stopPlace.name}
+                </ThemeText>
+                <ThemeText>{stopPlace.description}</ThemeText>
+                {fromLocation &&
+                  stopPlace &&
+                  stopPlace.latitude &&
+                  stopPlace.longitude && (
+                    <ThemeText>
+                      {primitiveLocationDistanceInMetres(
+                        stopPlace.latitude,
+                        stopPlace.longitude,
+                        fromLocation?.coordinates.latitude,
+                        fromLocation?.coordinates.longitude,
+                      ) + ' m'}
+                    </ThemeText>
+                  )}
+              </Sections.GenericClickableItem>
+            </Sections.Section>
+          ))}
+      </View>
     </SimpleDisappearingHeader>
   );
 };
@@ -301,7 +281,6 @@ type HeaderProps = {
   setCurrentLocationOrRequest(): Promise<void>;
   onNowPress: () => void;
   onLaterTimePress: () => void;
-  timeOfLastSearch: string;
   searchTime: SearchTime;
   setLocation: (location: LocationWithMetadata) => void;
 };
