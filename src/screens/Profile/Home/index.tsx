@@ -22,6 +22,7 @@ import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketState,
 } from '@atb/tickets';
+import {usePreferences} from '@atb/preferences';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -63,6 +64,11 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   function copyInstallId() {
     if (config?.installId) setClipboard(config.installId);
   }
+
+  const {
+    setPreference,
+    preferences: {newDepartures},
+  } = usePreferences();
 
   return (
     <View style={style.container}>
@@ -109,6 +115,12 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         <Sections.Section withPadding>
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.settings.heading)}
+          />
+          <Sections.ActionItem
+            mode="toggle"
+            text={'Try the new Departure screen'}
+            checked={newDepartures}
+            onPress={(newDepartures) => setPreference({newDepartures})}
           />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.settings.linkItems.userProfile.label)}
