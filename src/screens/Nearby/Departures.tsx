@@ -7,6 +7,7 @@ import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement
 import {ActionItem, LocationInput, Section} from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
 import DeparturesList from '@atb/departure-list/DeparturesList';
+import FavoriteChips from '@atb/favorite-chips';
 import {Location, LocationWithMetadata} from '@atb/favorites/types';
 import {useReverseGeocoder} from '@atb/geocoder';
 import {
@@ -237,6 +238,11 @@ const DeparturesOverview: React.FC<Props> = ({
           onLaterTimePress={onLaterTimePress}
           searchTime={searchTime}
           timeOfLastSearch={queryInput.startTime}
+          setLocation={(location: LocationWithMetadata) => {
+            navigation.setParams({
+              location,
+            });
+          }}
         />
       }
       headerTitle={'New departures'}
@@ -297,6 +303,7 @@ type HeaderProps = {
   onLaterTimePress: () => void;
   timeOfLastSearch: string;
   searchTime: SearchTime;
+  setLocation: (location: LocationWithMetadata) => void;
 };
 
 const Header = React.memo(function Header({
@@ -304,8 +311,11 @@ const Header = React.memo(function Header({
   fromLocation,
   openLocationSearch,
   setCurrentLocationOrRequest,
+  setLocation,
 }: HeaderProps) {
   const {t} = useTranslation();
+
+  const styles = useNearbyStyles();
 
   return (
     <>
@@ -327,6 +337,13 @@ const Header = React.memo(function Header({
           }}
         />
       </Section>
+      <FavoriteChips
+        onSelectLocation={(location) => {
+          setLocation(location);
+        }}
+        chipTypes={['favorites', 'add-favorite']}
+        contentContainerStyle={styles.favoriteChips}
+      ></FavoriteChips>
     </>
   );
 });
@@ -353,6 +370,12 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
   dateInputButton: {
     color: theme.colors.primary_2.backgroundColor,
     padding: theme.spacings.small,
+  },
+  favoriteChips: {
+    // @TODO Find solution for not hardcoding this. e.g. do proper math
+    paddingRight: theme.spacings.medium / 2,
+    paddingLeft: theme.spacings.medium,
+    paddingBottom: theme.spacings.medium,
   },
 }));
 
