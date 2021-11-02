@@ -3,7 +3,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useReducer,
 } from 'react';
 import useInterval from '../utils/use-interval';
@@ -15,7 +14,6 @@ import {ActiveReservation, FareContract, PaymentStatus} from './types';
 import {getPayment} from './api';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import Bugsnag from '@bugsnag/react-native';
-import {setupMobileTokenClient} from '@atb/mobile-token';
 import {TokenStatus} from '@entur/react-native-traveller/lib/typescript/token/types';
 import {CustomerProfile} from '.';
 
@@ -127,8 +125,6 @@ type TicketState = {
   refreshTickets: () => void;
   fareContracts: FareContract[];
   findFareContractByOrderId: (id: string) => FareContract | undefined;
-  generateQrCode: () => Promise<string>;
-  retryTokenClient: (forceRestart: boolean) => void;
 } & Pick<
   TicketReducerState,
   | 'activeReservations'
@@ -156,13 +152,6 @@ const TicketContextProvider: React.FC = ({children}) => {
 
   const {user, abtCustomerId} = useAuthState();
   const {enable_ticketing} = useRemoteConfig();
-
-  const {generateQrCode, retry: retryTokenClient} = useMemo(() => {
-    const setStatusCallback = (tokenStatus: TokenStatus) => {
-      dispatch({type: 'SET_TOKEN_STATUS', tokenStatus});
-    };
-    return setupMobileTokenClient(setStatusCallback);
-  }, []);
 
   useEffect(() => {
     if (user && abtCustomerId && enable_ticketing) {
@@ -292,8 +281,6 @@ const TicketContextProvider: React.FC = ({children}) => {
         addReservation,
         findFareContractByOrderId: (orderId) =>
           state.fareContracts.find((fc) => fc.orderId === orderId),
-        generateQrCode,
-        retryTokenClient,
       }}
     >
       {children}
