@@ -7,6 +7,7 @@ export type StopsNearestQuery = CursoredQuery<{
   lat: number;
   lon: number;
   distance?: number;
+  includeUnusedQuays?: boolean;
 }>;
 
 export type StopPlaceMetadata = CursoredData<StopPlaceDetails[]>;

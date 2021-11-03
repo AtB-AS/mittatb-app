@@ -71,6 +71,7 @@ const reducer: ReducerWithSideEffects<
             const result = await getNearestStops({
               lat: action.location?.coordinates.latitude || 0,
               lon: action.location?.coordinates.longitude || 0,
+              includeUnusedQuays: false,
             });
             dispatch({
               type: 'UPDATE_STOP_PLACES',
