@@ -254,7 +254,13 @@ const DeparturesOverview: React.FC<Props> = ({
           sortStopPlaces(data, fromLocation?.coordinates).map(
             (stopPlace: StopPlaceDetails) => (
               <Sections.Section withPadding key={stopPlace.id}>
-                <Sections.GenericClickableItem>
+                <Sections.GenericClickableItem
+                  onPress={() => {
+                    navigation.navigate('StopPlaceScreen', {
+                      stopPlaceDetails: stopPlace,
+                    });
+                  }}
+                >
                   <View style={styles.stopPlaceContainer}>
                     <View style={styles.stopPlaceInfo}>
                       <ThemeText type="heading__component">

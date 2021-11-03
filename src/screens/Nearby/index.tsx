@@ -5,10 +5,14 @@ import React from 'react';
 import TripDetailsRoot, {DetailsStackParams} from '../TripDetails';
 import NearbyRoot, {NearbyScreenParams, NearbyScreenProp} from './Nearby';
 import DeparturesRoot from '../Departures/Departures';
+import StopPlaceScreen, {
+  StopPlaceScreenParams,
+} from '../Departures/StopPlaceScreen';
 
 export type NearbyStackParams = {
   NearbyRoot: NearbyScreenParams;
   TripDetails: NavigatorScreenParams<DetailsStackParams>;
+  StopPlaceScreen: StopPlaceScreenParams;
 };
 
 const Stack = createStackNavigator<NearbyStackParams>();
@@ -41,6 +45,7 @@ const NearbyScreen = ({route}: NearbyScreenRootProps) => {
         />
       )}
       <Stack.Screen name="TripDetails" component={TripDetailsRoot} />
+      <Stack.Screen name="StopPlaceScreen" component={StopPlaceScreen} />
     </Stack.Navigator>
   );
 };
