@@ -37,7 +37,7 @@ import DepartureTimeSheet from '../Nearby/DepartureTimeSheet';
 import {useDepartureData} from '../Nearby/state';
 import {useNearestStopsData} from './state';
 import ThemeText from '@atb/components/text';
-import {StopPlace} from '@atb/sdk';
+import {Coordinates, StopPlaceDetails, TransportMode} from '@atb/sdk';
 import * as Sections from '@atb/components/sections';
 import {
   locationDistanceInMetres,

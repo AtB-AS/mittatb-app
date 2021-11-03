@@ -10,12 +10,12 @@ import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useFavorites} from '@atb/favorites';
 import {Location} from '@atb/favorites/types';
 import {getNearestStops} from '@atb/api/departures/stops-nearest';
-import {StopPlace} from '@atb/sdk';
+import {StopPlaceDetails} from '@atb/sdk';
 
 type LoadType = 'initial' | 'more';
 
 export type DepartureDataState = {
-  data: StopPlace[] | null;
+  data: StopPlaceDetails[] | null;
   error?: {type: ErrorType; loadType: LoadType};
   locationId?: string;
   isLoading: boolean;
@@ -39,10 +39,10 @@ type DepartureDataActions =
       type: 'STOP_LOADER';
     }
   | {
-      type: 'UPDATE_DEPARTURES';
+      type: 'UPDATE_STOP_PLACES';
       locationId?: string;
       reset?: boolean;
-      result: StopPlace[];
+      result: StopPlaceDetails[];
     }
   | {
       type: 'SET_ERROR';
@@ -73,7 +73,7 @@ const reducer: ReducerWithSideEffects<
               lon: action.location?.coordinates.longitude || 0,
             });
             dispatch({
-              type: 'UPDATE_DEPARTURES',
+              type: 'UPDATE_STOP_PLACES',
               locationId: action.location?.id,
               result,
             });
@@ -98,7 +98,7 @@ const reducer: ReducerWithSideEffects<
       });
     }
 
-    case 'UPDATE_DEPARTURES': {
+    case 'UPDATE_STOP_PLACES': {
       return Update<DepartureDataState>({
         ...state,
         isLoading: false,
