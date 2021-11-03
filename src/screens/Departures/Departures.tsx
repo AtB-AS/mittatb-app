@@ -44,6 +44,10 @@ import {
   primitiveLocationDistanceInMetres,
 } from '@atb/utils/location';
 import haversine from 'haversine-distance';
+import {BusSide} from '@atb/assets/svg/icons/transportation';
+import TransportationIcon, {
+  getTransportModeSvg,
+} from '@atb/components/transportation-icon';
 
 const themeColor: ThemeColor = 'background_gray';
 
@@ -244,31 +248,49 @@ const DeparturesOverview: React.FC<Props> = ({
     >
       <ScreenReaderAnnouncement message={loadAnnouncement} />
 
-      <View>
+      <View style={styles.container}>
         {data &&
-          data.map((stopPlace: StopPlace) => (
-            <Sections.Section>
-              <Sections.GenericClickableItem>
-                <ThemeText type="heading__component">
-                  {stopPlace.name}
-                </ThemeText>
-                <ThemeText>{stopPlace.description}</ThemeText>
-                {fromLocation &&
-                  stopPlace &&
-                  stopPlace.latitude &&
-                  stopPlace.longitude && (
-                    <ThemeText>
-                      {primitiveLocationDistanceInMetres(
-                        stopPlace.latitude,
-                        stopPlace.longitude,
-                        fromLocation?.coordinates.latitude,
-                        fromLocation?.coordinates.longitude,
-                      ) + ' m'}
-                    </ThemeText>
-                  )}
-              </Sections.GenericClickableItem>
-            </Sections.Section>
-          ))}
+          fromLocation &&
+          sortStopPlaces(data, fromLocation?.coordinates).map(
+            (stopPlace: StopPlaceDetails) => (
+              <Sections.Section withPadding key={stopPlace.id}>
+                <Sections.GenericClickableItem>
+                  <View style={styles.stopPlaceContainer}>
+                    <View style={styles.stopPlaceInfo}>
+                      <ThemeText type="heading__component">
+                        {stopPlace.name}
+                      </ThemeText>
+                      <ThemeText>
+                        {stopPlace.description || 'Holdeplass'}
+                      </ThemeText>
+                      {stopPlace &&
+                        stopPlace.latitude &&
+                        stopPlace.longitude && (
+                          <ThemeText>
+                            {primitiveLocationDistanceInMetres(
+                              stopPlace.latitude,
+                              stopPlace.longitude,
+                              fromLocation?.coordinates.latitude,
+                              fromLocation?.coordinates.longitude,
+                            ) + ' m'}
+                          </ThemeText>
+                        )}
+                    </View>
+                    {getTransportModeSvg(stopPlace.transportMode) && (
+                      <ThemeIcon
+                        style={styles.stopPlaceIcon}
+                        size="large"
+                        svg={
+                          getTransportModeSvg(stopPlace.transportMode) ||
+                          BusSide
+                        }
+                      ></ThemeIcon>
+                    )}
+                  </View>
+                </Sections.GenericClickableItem>
+              </Sections.Section>
+            ),
+          )}
       </View>
     </SimpleDisappearingHeader>
   );
@@ -329,7 +351,6 @@ const Header = React.memo(function Header({
 const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingTop: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.medium,
   },
   paddedContainer: {
     marginHorizontal: theme.spacings.medium,
@@ -355,6 +376,19 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
     paddingRight: theme.spacings.medium / 2,
     paddingLeft: theme.spacings.medium,
     paddingBottom: theme.spacings.medium,
+  },
+  stopPlaceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    flexGrow: 1,
+  },
+  stopPlaceInfo: {
+    flexShrink: 1,
+  },
+  stopPlaceIcon: {
+    marginHorizontal: theme.spacings.medium,
   },
 }));
 
@@ -385,4 +419,29 @@ function getHeaderAlternativeTitle(
     default:
       return t(NearbyTexts.header.departureFuture(locationName, time));
   }
+}
+
+function sortStopPlaces(
+  data: StopPlaceDetails[],
+  pos: Coordinates,
+): StopPlaceDetails[] {
+  return data.sort((a, b) => {
+    if (a.latitude && a.longitude && b.latitude && b.longitude) {
+      return (
+        primitiveLocationDistanceInMetres(
+          pos.latitude,
+          pos.longitude,
+          a.latitude,
+          a.longitude,
+        ) -
+        primitiveLocationDistanceInMetres(
+          pos.latitude,
+          pos.longitude,
+          b.latitude,
+          b.longitude,
+        )
+      );
+    }
+    return -100000;
+  });
 }
