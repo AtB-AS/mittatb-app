@@ -26,7 +26,7 @@ import AppLanguageProvider from './translations/LanguageContext';
 import {BottomSheetProvider} from '@atb/components/bottom-sheet';
 import LocaleContextProvider from '@atb/LocaleProvider';
 import {setupConfig} from './setup';
-import {MobileTokenContextProvider} from "@atb/mobile-token";
+import {MobileTokenContextProvider} from '@atb/mobile-token';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
