@@ -27,7 +27,7 @@ export default async function search(
       searchDate,
       arriveBy,
     },
-    opts,
+    {...opts, baseURL: 'http://10.0.2.2:8080/'},
   );
 }
 
