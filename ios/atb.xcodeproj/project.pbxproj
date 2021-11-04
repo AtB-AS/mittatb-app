@@ -586,7 +586,7 @@
 				);
 				INFOPLIST_FILE = atb/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.12;
+				MARKETING_VERSION = 1.13;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -614,7 +614,7 @@
 				DEVELOPMENT_TEAM = "$(IOS_DEVELOPMENT_TEAM_ID)";
 				INFOPLIST_FILE = atb/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.12;
+				MARKETING_VERSION = 1.13;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
