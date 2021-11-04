@@ -125,14 +125,12 @@ const reducer: ReducerWithSideEffects<
 };
 
 /***
- * Use state for fetching departure groups and keeping data up to date with realtime
- * predictions.
+ * Use state for fetching StopPlaces in proximity to a location
  *
- * @param {Location} [location] - Location on which to fetch departures from. Can be venue or address
+ * @param {Location} [location] - Location to fetch nearby stopPlaces to
  */
 export function useNearestStopsData(location?: Location) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
-  const {favoriteDepartures} = useFavorites();
 
   const refresh = useCallback(
     () =>
@@ -140,7 +138,7 @@ export function useNearestStopsData(location?: Location) {
         type: 'LOAD_NEAREST_STOP_PLACES',
         location,
       }),
-    [location?.id, favoriteDepartures],
+    [location?.id],
   );
 
   useEffect(refresh, [location?.id]);

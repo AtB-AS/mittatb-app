@@ -61,6 +61,7 @@ export default function StopPlaceScreen({
         ></Button>
         {stopPlaceDetails.quays?.map((quay) => (
           <Button
+            key={quay.id}
             onPress={() => {}}
             text={
               quay.publicCode ? quay.name + ' ' + quay.publicCode : quay.name
@@ -71,15 +72,16 @@ export default function StopPlaceScreen({
         ))}
       </ScrollView>
       <ScrollView style={style.contentContainer}>
-        <Sections.Section withPadding withTopPadding>
-          <Sections.HeaderItem
-            text={stopPlaceDetails && stopPlaceDetails.name}
-          />
-
-          <Sections.GenericItem>
-            <MessageBox message="This is a message" />
-          </Sections.GenericItem>
-        </Sections.Section>
+        {stopPlaceDetails.quays?.map((quay) => (
+          <Sections.Section withPadding withTopPadding key={quay.id}>
+            <Sections.HeaderItem
+              text={
+                quay.publicCode ? quay.name + ' ' + quay.publicCode : quay.name
+              }
+            />
+            <Sections.ActionItem text={quay.description} />
+          </Sections.Section>
+        ))}
       </ScrollView>
     </View>
   );
@@ -100,16 +102,16 @@ function publicCodeCompare(a: string, b: string): number {
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     backgroundColor: theme.colors.background_1.backgroundColor,
+    flex: 1,
   },
   quayChipContainer: {
     backgroundColor: theme.colors.secondary_1.backgroundColor,
-    flexShrink: 1,
     paddingVertical: theme.spacings.medium,
+    flexShrink: 0,
+    flexGrow: 0,
   },
   quayChip: {
     marginRight: theme.spacings.medium,
   },
-  contentContainer: {
-    flexGrow: 1,
-  },
+  contentContainer: {},
 }));
