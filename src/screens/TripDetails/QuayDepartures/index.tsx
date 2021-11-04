@@ -53,6 +53,7 @@ const QuayDepartures: React.FC<RootProps> = ({route}) => {
             showOnlyFavorites={false}
             isLoading={isLoading}
             disableCollapsing={true}
+            searchDate={new Date().toISOString()}
           />
         </View>
       </ScrollView>
