@@ -82,7 +82,8 @@ platform :ios do
       owner_type: "organization",
       destinations: "*",
       file: "AtB.ipa",
-      notify_testers: true
+      notify_testers: true,
+      release_notes: "Mobile-token build!"
     )
   end
 
@@ -142,7 +143,8 @@ platform :android do
       owner_type: "organization",
       destinations: "*",
       file: "app-staging.apk",
-      notify_testers: true
+      notify_testers: true,
+      release_notes: "Mobile-token build!"
     )
   end
 
