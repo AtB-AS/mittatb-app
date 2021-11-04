@@ -1,8 +1,7 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
-import MessageBox from '@atb/components/message-box';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {StopPlaceDetails} from '@atb/sdk';
@@ -33,6 +32,14 @@ export default function StopPlaceScreen({
 }: LoginOnboardingProps) {
   const style = useProfileHomeStyle();
   const {theme} = useTheme();
+
+  useMemo(
+    () =>
+      stopPlaceDetails.quays?.sort((a, b) =>
+        publicCodeCompare(a.publicCode, b.publicCode),
+      ),
+    [stopPlaceDetails],
+  );
 
   return (
     <View style={style.container}>
@@ -76,6 +83,18 @@ export default function StopPlaceScreen({
       </ScrollView>
     </View>
   );
+}
+
+function publicCodeCompare(a: string, b: string): number {
+  // Show quays with no public code first
+  if (!a) return -1;
+  if (!b) return 1;
+  // If both public codes are numbers, compare as numbers (e.g. 2 < 10)
+  if (parseInt(a) && parseInt(b)) {
+    return parseInt(a) - parseInt(b);
+  }
+  // Otherwise compare as strings (e.g. K1 < K2)
+  return a.localeCompare(b);
 }
 
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
