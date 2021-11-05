@@ -1,8 +1,11 @@
 import { stateHandlerFactory } from '../HandlerFactory';
 import { deleteToken } from '../../../native';
-export default function deleteLocalHandler() {
+export default function deleteLocalHandler(getClientState) {
   return stateHandlerFactory(['DeleteLocal'], async _ => {
-    deleteToken();
+    const {
+      accountId
+    } = getClientState();
+    deleteToken(accountId);
     return {
       state: 'InitiateNew'
     };

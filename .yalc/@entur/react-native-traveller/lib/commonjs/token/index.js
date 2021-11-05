@@ -29,18 +29,24 @@ var _DeleteLocalHandler = _interopRequireDefault(require("./state-machine/handle
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const STORAGE_KEY = '@mobiletokensdk-state';
+const STORAGE_KEY_PREFIX = '@mobiletokensdk-state';
 
-const startTokenStateMachine = async (abtTokensService, setStatus, forceRestart = false) => {
-  let currentState = await getInitialState(forceRestart);
+const getStoreKey = accountId => `${STORAGE_KEY_PREFIX}#${accountId}`;
+
+const startTokenStateMachine = async (abtTokensService, setStatus, getClientState, forceRestart = false) => {
+  const {
+    accountId
+  } = getClientState();
+  const storeKey = getStoreKey(accountId);
+  let currentState = await getInitialState(forceRestart, storeKey);
 
   try {
     const shouldContinue = s => s.state !== 'Valid' && !s.error;
 
     do {
-      const handler = getStateHandler(abtTokensService, currentState);
+      const handler = getStateHandler(abtTokensService, currentState, getClientState);
       currentState = await handler(currentState);
-      await _asyncStorage.default.setItem(STORAGE_KEY, JSON.stringify(currentState));
+      await _asyncStorage.default.setItem(storeKey, JSON.stringify(currentState));
       setStatus(currentState);
     } while (shouldContinue(currentState));
   } catch (err) {
@@ -57,52 +63,52 @@ const startTokenStateMachine = async (abtTokensService, setStatus, forceRestart 
 
 exports.startTokenStateMachine = startTokenStateMachine;
 
-const getInitialState = async forceRestart => {
+const getInitialState = async (forceRestart, storeKey) => {
   if (forceRestart) {
     return {
       state: 'Loading'
     };
   }
 
-  const savedStateString = await _asyncStorage.default.getItem(STORAGE_KEY);
+  const savedStateString = await _asyncStorage.default.getItem(storeKey);
   return savedStateString ? JSON.parse(savedStateString) : {
     state: 'Loading'
   };
 };
 
-const getStateHandler = (abtTokensService, storedState) => {
+const getStateHandler = (abtTokensService, storedState, getClientState) => {
   switch (storedState.state) {
     case 'Valid':
     case 'Loading':
-      return (0, _LoadingHandler.default)();
+      return (0, _LoadingHandler.default)(getClientState);
 
     case 'Validating':
       return (0, _ValidatingHandler.default)(abtTokensService);
 
     case 'DeleteLocal':
-      return (0, _DeleteLocalHandler.default)();
+      return (0, _DeleteLocalHandler.default)(getClientState);
 
     case 'InitiateNew':
       return (0, _InitiateNewHandler.default)(abtTokensService);
 
     case 'InitiateRenewal':
-      return (0, _InitiateRenewalHandler.default)(abtTokensService);
+      return (0, _InitiateRenewalHandler.default)(abtTokensService, getClientState);
 
     case 'GettingTokenCertificate':
-      return (0, _GetTokenCertificateHandler.default)(abtTokensService);
+      return (0, _GetTokenCertificateHandler.default)(abtTokensService, getClientState);
 
     case 'AttestNew':
     case 'AttestRenewal':
-      return (0, _AttestHandler.default)(abtTokensService);
+      return (0, _AttestHandler.default)(abtTokensService, getClientState);
 
     case 'ActivateNew':
       return (0, _ActivateNewHandler.default)(abtTokensService);
 
     case 'ActivateRenewal':
-      return (0, _ActivateRenewalHandler.default)(abtTokensService);
+      return (0, _ActivateRenewalHandler.default)(abtTokensService, getClientState);
 
     case 'AddToken':
-      return (0, _AddTokenHandler.default)(abtTokensService);
+      return (0, _AddTokenHandler.default)(abtTokensService, getClientState);
   }
 };
 //# sourceMappingURL=index.js.map

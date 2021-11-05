@@ -10,8 +10,11 @@
   "files": [
     "src",
     "lib",
+    "react-native.config.js",
+    "android/libs",
     "android/src",
     "android/build.gradle",
+    "android/gradle.properties",
     "ios/EnturTraveller.xcodeproj/project.pbxproj",
     "ios/EnturTraveller-Bridging-Header.h",
     "ios/EnturTraveller.m",
@@ -127,5 +130,5 @@
       ]
     ]
   },
-  "yalcSig": "4af2500701f522bb97e65d7ca38174b0"
+  "yalcSig": "ee54a7c1a67b775fbc30badb93df04d8"
 }

@@ -1,2 +1,3 @@
 import type { StateHandler } from '../HandlerFactory';
-export default function deleteLocalHandler(): StateHandler;
+import type { ClientStateRetriever } from '../../..';
+export default function deleteLocalHandler(getClientState: ClientStateRetriever): StateHandler;

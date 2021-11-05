@@ -1,3 +1,6 @@
 rootProject.name = 'atb'
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app'
+include ':enturtraveller'
+project(':enturtraveller').projectDir = new File(rootProject.projectDir, '../.yalc/@entur/react-native-traveller/android')
+

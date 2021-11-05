@@ -1,2 +1,3 @@
 import type { StateHandler } from '../HandlerFactory';
-export default function loadingHandler(): StateHandler;
+import type { ClientStateRetriever } from '../../..';
+export default function loadingHandler(getClientState: ClientStateRetriever): StateHandler;

@@ -23,24 +23,54 @@ var _native = require("./native");
 
 var _types = require("./native/types");
 
-function createClient(setStatus, initialConfig) {
+function createClient(setStatus, initialState, initialConfig) {
   const config = (0, _config.getConfigFromInitialConfig)(initialConfig);
   const fetcher = (0, _fetcher.createFetcher)(config);
   const abtTokensService = (0, _abtTokensService.createAbtTokensService)(fetcher, config.hosts);
 
+  const toVisualState = storedState => {
+    if (storedState.error) {
+      return 'Error';
+    } else if (['Valid', 'Validating'].includes(storedState.state)) {
+      return 'Token';
+    } else {
+      return 'Loading';
+    }
+  };
+
   const setStatusWrapper = storedState => {
     setStatus({
       state: storedState.state,
-      error: storedState.error
+      error: storedState.error,
+      visualState: toVisualState(storedState)
     });
   };
 
-  (0, _token.startTokenStateMachine)(abtTokensService, setStatusWrapper);
+  let clientState = { ...initialState
+  };
+
+  function clientStateRetriever() {
+    return clientState;
+  }
+
+  (0, _token.startTokenStateMachine)(abtTokensService, setStatusWrapper, clientStateRetriever);
   return {
-    retry: forceRestart => {
-      (0, _token.startTokenStateMachine)(abtTokensService, setStatusWrapper, forceRestart); // Todo: Not start if already running
+    switch(accountId) {
+      clientState = { ...clientState,
+        accountId
+      };
+      (0, _token.startTokenStateMachine)(abtTokensService, setStatusWrapper, clientStateRetriever, false);
     },
-    generateQrCode: () => (0, _native.getSecureToken)([_types.PayloadAction.ticketInspection])
+
+    retry: forceRestart => {
+      (0, _token.startTokenStateMachine)(abtTokensService, setStatusWrapper, clientStateRetriever, forceRestart); // Todo: Not start if already running
+    },
+    generateQrCode: () => {
+      const {
+        accountId
+      } = clientState;
+      return (0, _native.getSecureToken)(accountId, [_types.PayloadAction.ticketInspection]);
+    }
   };
 }
 //# sourceMappingURL=index.js.map

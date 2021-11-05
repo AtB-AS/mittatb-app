@@ -90,6 +90,7 @@ export type TokenError = {
 export type TokenStatus = {
   state: TokenState;
   error?: TokenError;
+  visualState: VisualState;
 };
 
 const tokenStates = [
@@ -139,3 +140,5 @@ export type StoredState = {
       activatedData: ActivateTokenResponse;
     }
 );
+
+export type VisualState = 'Token' | 'Loading' | 'Error';

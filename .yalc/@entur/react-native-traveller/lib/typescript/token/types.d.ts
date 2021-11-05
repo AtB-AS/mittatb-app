@@ -73,6 +73,7 @@ export declare type TokenError = {
 export declare type TokenStatus = {
     state: TokenState;
     error?: TokenError;
+    visualState: VisualState;
 };
 declare const tokenStates: readonly ["Loading", "Valid", "GettingTokenCertificate", "Validating", "DeleteLocal", "InitiateNew", "InitiateRenewal", "AttestNew", "AttestRenewal", "ActivateNew", "ActivateRenewal", "AddToken"];
 export declare type TokenState = typeof tokenStates[number];
@@ -95,4 +96,5 @@ export declare type StoredState = {
     state: 'AddToken';
     activatedData: ActivateTokenResponse;
 });
+export declare type VisualState = 'Token' | 'Loading' | 'Error';
 export {};

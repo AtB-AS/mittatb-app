@@ -7,22 +7,28 @@ import type {
 } from './types';
 
 export type EnturTravellerType = {
-  attest(tokenId: string, nonce: string): Promise<AttestationData>;
+  attest(
+    accountId: string,
+    tokenId: string,
+    nonce: string
+  ): Promise<AttestationData>;
   attestLegacy(
+    accountId: string,
     tokenId: string,
     nonce: string,
     serverPublicKey: string
   ): Promise<LegacyAttestationData>;
   addToken(
+    accountId: string,
     tokenId: string,
     certificate: string,
     tokenValidityStart: number,
     tokenValidityEnd: number,
     nonce?: string
   ): Promise<void>;
-  getToken(): Promise<Token | undefined>;
-  deleteToken(): Promise<void>;
-  getSecureToken(actions: PayloadAction[]): Promise<string>;
+  getToken(accountId: string): Promise<Token | undefined>;
+  deleteToken(accountId: string): Promise<void>;
+  getSecureToken(accountId: string, actions: PayloadAction[]): Promise<string>;
 };
 
 export const {

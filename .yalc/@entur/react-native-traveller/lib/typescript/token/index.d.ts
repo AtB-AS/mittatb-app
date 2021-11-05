@@ -1,3 +1,4 @@
 import type { AbtTokensService } from './abt-tokens-service';
 import type { StoredState } from './types';
-export declare const startTokenStateMachine: (abtTokensService: AbtTokensService, setStatus: (s: StoredState) => void, forceRestart?: boolean) => Promise<void>;
+import type { ClientStateRetriever } from '..';
+export declare const startTokenStateMachine: (abtTokensService: AbtTokensService, setStatus: (s: StoredState) => void, getClientState: ClientStateRetriever, forceRestart?: boolean) => Promise<void>;

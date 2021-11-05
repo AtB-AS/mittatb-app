@@ -8,28 +8,28 @@ var AttestationType;
   AttestationType["iOS_Device_Attestation"] = "iOS_Device_Attestation";
 })(AttestationType || (AttestationType = {}));
 
-export const getActivateTokenRequestBody = (initialTokenId, nonce, serverPublicKey) => {
+export const getActivateTokenRequestBody = (accountId, initialTokenId, nonce, serverPublicKey) => {
   if (Platform.OS === 'ios') {
     const iosVersion = typeof Platform.Version === 'string' ? parseFloat(Platform.Version) : Platform.Version;
 
     if (iosVersion >= 14) {
-      return getActivateTokenRequestBodyIos14(initialTokenId, nonce);
+      return getActivateTokenRequestBodyIos14(accountId, initialTokenId, nonce);
     } else {
-      return getActivateTokenRequestBodyIos11(initialTokenId, nonce, serverPublicKey);
+      return getActivateTokenRequestBodyIos11(accountId, initialTokenId, nonce, serverPublicKey);
     }
   } else {
-    return getActivateTokenRequestBodyAndroid(initialTokenId, nonce);
+    return getActivateTokenRequestBodyAndroid(accountId, initialTokenId, nonce);
   }
 };
 
-const getActivateTokenRequestBodyAndroid = async (initialTokenId, nonce) => {
+const getActivateTokenRequestBodyAndroid = async (accountId, initialTokenId, nonce) => {
   const {
     attestationObject,
     signaturePublicKey,
     encryptionPublicKey,
     signatureChain,
     encryptionChain
-  } = await attest(initialTokenId, nonce);
+  } = await attest(accountId, initialTokenId, nonce);
   return {
     signaturePublicKey,
     encryptionPublicKey,
@@ -44,13 +44,13 @@ const getActivateTokenRequestBodyAndroid = async (initialTokenId, nonce) => {
   };
 };
 
-const getActivateTokenRequestBodyIos11 = async (initialTokenId, nonce, serverPublicKey) => {
+const getActivateTokenRequestBodyIos11 = async (accountId, initialTokenId, nonce, serverPublicKey) => {
   const {
     attestation,
     signaturePublicKey,
     encryptionPublicKey,
     attestationEncryptionKey
-  } = await attestLegacy(initialTokenId, nonce, serverPublicKey);
+  } = await attestLegacy(accountId, initialTokenId, nonce, serverPublicKey);
   return {
     signaturePublicKey,
     encryptionPublicKey,
@@ -62,14 +62,14 @@ const getActivateTokenRequestBodyIos11 = async (initialTokenId, nonce, serverPub
   };
 };
 
-const getActivateTokenRequestBodyIos14 = async (initialTokenId, nonce) => {
+const getActivateTokenRequestBodyIos14 = async (accountId, initialTokenId, nonce) => {
   const {
     attestationObject,
     keyId,
     deviceAttestationData,
     signaturePublicKey,
     encryptionPublicKey
-  } = await attest(initialTokenId, nonce);
+  } = await attest(accountId, initialTokenId, nonce);
   return {
     signaturePublicKey,
     encryptionPublicKey,

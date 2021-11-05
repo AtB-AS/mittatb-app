@@ -2,35 +2,42 @@
 
 @interface RCT_EXTERN_MODULE(EnturTraveller, NSObject)
 
-RCT_EXTERN_METHOD(attest:(nonnull NSString *)tokenId
+RCT_EXTERN_METHOD(attest:(nonnull NSString *)accountId
+                 withTokenId:(nonnull NSString *)tokenId
                  withNonce:(nonnull NSString *)nonce
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(attestLegacy:(nonnull NSString *)tokenId
+RCT_EXTERN_METHOD(attestLegacy:(nonnull NSString *)accountId
+                 withTokenId:(nonnull NSString *)tokenId
                  withNonce:(nonnull NSString *)nonce
                  withServerPublicKey:(nonnull NSString *)serverPublicKey
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(addToken:(nonnull NSString *)tokenId
+RCT_EXTERN_METHOD(addToken:(nonnull NSString *)accountId
+                 withTokenId:(nonnull NSString *)tokenId
                  withCertificate:(nonnull NSString *)certificate
                  withTokenValidityStart:(nonnull NSNumber *)tokenValidityStart
                  withTokenValidityEnd:(nonnull NSNumber *)tokenValidityEnd
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(getToken:(RCTPromiseResolveBlock)resolve
+RCT_EXTERN_METHOD(getToken:(nonnull NSString *)accountId
+                 withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(deleteToken:(RCTPromiseResolveBlock)resolve
+RCT_EXTERN_METHOD(deleteToken:(nonnull NSString *)accountId
+                 withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(getSecureToken:(nonnull NSArray *)actions
-                  withResolver:(RCTPromiseResolveBlock)resolve
+RCT_EXTERN_METHOD(getSecureToken:(nonnull NSString *)accountId
+                 withActions:(nonnull NSArray *)actions
+                 withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(generateAssertion:(nonnull NSString *)keyId
+RCT_EXTERN_METHOD(generateAssertion:(nonnull NSString *)accountId
+                 withKeyId(nonnull NSString *)keyId
                  withNonce:(nonnull NSString *)nonce
                  withTokenId:(nonnull NSString *)tokenId
                  withHash:(nonnull NSString *)hash

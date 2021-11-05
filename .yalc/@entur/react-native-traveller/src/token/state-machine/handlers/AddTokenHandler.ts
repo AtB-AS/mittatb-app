@@ -1,8 +1,12 @@
+import type { ClientStateRetriever } from '../../..';
 import { addToken } from '../../../native';
 import type { AbtTokensService } from '../../abt-tokens-service';
 import { StateHandler, stateHandlerFactory } from '../HandlerFactory';
 
-export default function addTokenHandler(_: AbtTokensService): StateHandler {
+export default function addTokenHandler(
+  _: AbtTokensService,
+  getClientState: ClientStateRetriever
+): StateHandler {
   return stateHandlerFactory(['AddToken'], async (s) => {
     const {
       certificate,
@@ -11,7 +15,14 @@ export default function addTokenHandler(_: AbtTokensService): StateHandler {
       tokenValidityStart,
     } = s.activatedData;
 
-    await addToken(tokenId, certificate, tokenValidityStart, tokenValidityEnd);
+    const { accountId } = getClientState();
+    await addToken(
+      accountId,
+      tokenId,
+      certificate,
+      tokenValidityStart,
+      tokenValidityEnd
+    );
     return { state: 'Valid' };
   });
 }

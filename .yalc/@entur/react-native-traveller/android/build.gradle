@@ -51,6 +51,8 @@ android {
 }
 
 repositories {
+  println("----HEYHEYE----")
+  println("${projectDir}/libs")
   maven {
     url "${projectDir}/libs"
   }
@@ -144,12 +146,12 @@ dependencies {
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-  implementation "no.entur.abt:abt-time-lib-android:1.0.28"
-  implementation("no.entur.abt:abt-traveller-token-lib-android:1.0.28") {
+  implementation "no.entur.abt:abt-time-lib-android:1.0.29"
+  implementation("no.entur.abt:abt-traveller-token-lib-android:1.0.29") {
     exclude group: "no.entur.abt", module: "abt-protobuf-lite-traveller"
   }
 
-  api("no.entur.abt:abt-protobuf-lite-traveller:2.253") {
+  api("no.entur.abt:abt-protobuf-lite-traveller:2.261") {
     changing = true
     exclude group: "com.google.api.grpc", module: "proto-google-common-protos"
     exclude group: "com.google.protobuf", module: "protobuf-java"
@@ -158,7 +160,7 @@ dependencies {
     exclude group: "io.envoyproxy.protoc-gen-validate", module: "pgv-java-stub"
   }
 
-  api("no.entur.abt:abt-protobuf-lite-common:2.253") {
+  api("no.entur.abt:abt-protobuf-lite-common:2.261") {
     exclude group: "io.envoyproxy.protoc-gen-validate", module: "pgv-java-stub"
     exclude group: "com.google.re2j", module: "commons-validator"
     exclude group: "commons-validator", module: "commons-validator"

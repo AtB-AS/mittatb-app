@@ -1,9 +1,12 @@
 import { getToken } from '../../../native';
 import { stateHandlerFactory } from '../HandlerFactory';
 const secondsIn48Hours = 48 * 60 * 60;
-export default function loadingHandler() {
+export default function loadingHandler(getClientState) {
   return stateHandlerFactory(['Loading', 'Valid'], async _ => {
-    const token = await getToken();
+    const {
+      accountId
+    } = getClientState();
+    const token = await getToken(accountId);
 
     if (!token) {
       return {

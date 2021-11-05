@@ -1,5 +1,5 @@
 import type { AbtTokensService } from './abt-tokens-service';
-import type { StoredState, TokenStatus } from './types';
+import type { StoredState } from './types';
 import loadingHandler from './state-machine/handlers/LoadingHandler';
 import validatingHandler from './state-machine/handlers/ValidatingHandler';
 import initiateNewHandler from './state-machine/handlers/InitiateNewHandler';
@@ -11,22 +11,31 @@ import addTokenHandler from './state-machine/handlers/AddTokenHandler';
 import type { StateHandler } from './state-machine/HandlerFactory';
 import activateNewHandler from './state-machine/handlers/ActivateNewHandler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import deleteLocalHandler from "./state-machine/handlers/DeleteLocalHandler";
+import deleteLocalHandler from './state-machine/handlers/DeleteLocalHandler';
+import type { ClientStateRetriever } from '..';
 
-const STORAGE_KEY = '@mobiletokensdk-state';
+const STORAGE_KEY_PREFIX = '@mobiletokensdk-state';
+const getStoreKey = (accountId: string) => `${STORAGE_KEY_PREFIX}#${accountId}`;
 
 export const startTokenStateMachine = async (
   abtTokensService: AbtTokensService,
   setStatus: (s: StoredState) => void,
+  getClientState: ClientStateRetriever,
   forceRestart: boolean = false
 ) => {
-  let currentState = await getInitialState(forceRestart);
+  const { accountId } = getClientState();
+  const storeKey = getStoreKey(accountId);
+  let currentState = await getInitialState(forceRestart, storeKey);
   try {
-    const shouldContinue = (s: TokenStatus) => s.state !== 'Valid' && !s.error;
+    const shouldContinue = (s: StoredState) => s.state !== 'Valid' && !s.error;
     do {
-      const handler = getStateHandler(abtTokensService, currentState);
+      const handler = getStateHandler(
+        abtTokensService,
+        currentState,
+        getClientState
+      );
       currentState = await handler(currentState);
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(currentState));
+      await AsyncStorage.setItem(storeKey, JSON.stringify(currentState));
       setStatus(currentState);
     } while (shouldContinue(currentState));
   } catch (err) {
@@ -38,40 +47,44 @@ export const startTokenStateMachine = async (
   }
 };
 
-const getInitialState = async (forceRestart: boolean): Promise<StoredState> => {
+const getInitialState = async (
+  forceRestart: boolean,
+  storeKey: string
+): Promise<StoredState> => {
   if (forceRestart) {
     return { state: 'Loading' };
   }
-  const savedStateString = await AsyncStorage.getItem(STORAGE_KEY);
+  const savedStateString = await AsyncStorage.getItem(storeKey);
   return savedStateString ? JSON.parse(savedStateString) : { state: 'Loading' };
 };
 
 const getStateHandler = (
   abtTokensService: AbtTokensService,
-  storedState: StoredState
+  storedState: StoredState,
+  getClientState: ClientStateRetriever
 ): StateHandler => {
   switch (storedState.state) {
     case 'Valid':
     case 'Loading':
-      return loadingHandler();
+      return loadingHandler(getClientState);
     case 'Validating':
       return validatingHandler(abtTokensService);
     case 'DeleteLocal':
-      return deleteLocalHandler();
+      return deleteLocalHandler(getClientState);
     case 'InitiateNew':
       return initiateNewHandler(abtTokensService);
     case 'InitiateRenewal':
-      return initiateRenewHandler(abtTokensService);
+      return initiateRenewHandler(abtTokensService, getClientState);
     case 'GettingTokenCertificate':
-      return getTokenCertificateHandler(abtTokensService);
+      return getTokenCertificateHandler(abtTokensService, getClientState);
     case 'AttestNew':
     case 'AttestRenewal':
-      return attestHandler(abtTokensService);
+      return attestHandler(abtTokensService, getClientState);
     case 'ActivateNew':
       return activateNewHandler(abtTokensService);
     case 'ActivateRenewal':
-      return activateRenewalHandler(abtTokensService);
+      return activateRenewalHandler(abtTokensService, getClientState);
     case 'AddToken':
-      return addTokenHandler(abtTokensService);
+      return addTokenHandler(abtTokensService, getClientState);
   }
 };

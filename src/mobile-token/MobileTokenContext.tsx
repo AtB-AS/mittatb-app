@@ -2,10 +2,12 @@ import React, {createContext, useContext, useMemo, useState} from 'react';
 import {setupMobileTokenClient} from '@atb/mobile-token/client';
 import {TokenStatus} from '@entur/react-native-traveller/lib/typescript/token/types';
 import useInterval from '@atb/utils/use-interval';
+import {useAuthState} from '@atb/auth';
 
 type MobileContextState = {
   generateQrCode: () => Promise<string>;
   tokenStatus?: TokenStatus;
+  switchAccount: (accountId: string) => void;
 };
 
 const MobileTokenContext = createContext<MobileContextState | undefined>(
@@ -14,10 +16,14 @@ const MobileTokenContext = createContext<MobileContextState | undefined>(
 
 const MobileTokenContextProvider: React.FC = ({children}) => {
   const [tokenStatus, setTokenStatus] = useState<TokenStatus>();
+  const {abtCustomerId} = useAuthState();
 
-  const {generateQrCode, retry} = useMemo(
-    () => setupMobileTokenClient(setTokenStatus),
-    [],
+  const client = useMemo(
+    () =>
+      abtCustomerId
+        ? setupMobileTokenClient(abtCustomerId, setTokenStatus)
+        : undefined,
+    [abtCustomerId],
   );
 
   const [retryCount, setRetryCount] = useState(0);
@@ -25,29 +31,34 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
   useInterval(
     () => {
       setRetryCount(retryCount + 1);
-      retry(false); // todo: better retry logic
+      client?.retry(false); // todo: better retry logic
     },
     5000,
-    [retry, tokenStatus?.error],
-    !tokenStatus?.error || retryCount >= 5,
+    [client?.retry, tokenStatus?.error],
+    !client || !tokenStatus?.error || retryCount >= 5,
   );
 
   useInterval(
     () => {
       setRetryCount(retryCount + 1);
-      retry(true); // todo: better retry logic
+      client?.retry(true); // todo: better retry logic
     },
     30000,
-    [retry, tokenStatus?.error],
-    !tokenStatus?.error || retryCount < 5,
+    [client?.retry, tokenStatus?.error],
+    !client || !tokenStatus?.error || retryCount < 5,
   );
 
   return (
     <MobileTokenContext.Provider
-      value={{
-        generateQrCode,
-        tokenStatus,
-      }}
+      value={
+        client
+          ? {
+              generateQrCode: client.generateQrCode,
+              switchAccount: client.switch,
+              tokenStatus,
+            }
+          : undefined
+      }
     >
       {children}
     </MobileTokenContext.Provider>

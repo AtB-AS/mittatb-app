@@ -8,18 +8,25 @@ import activateRenewalHandler from './state-machine/handlers/ActivateRenewalHand
 import addTokenHandler from './state-machine/handlers/AddTokenHandler';
 import activateNewHandler from './state-machine/handlers/ActivateNewHandler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import deleteLocalHandler from "./state-machine/handlers/DeleteLocalHandler";
-const STORAGE_KEY = '@mobiletokensdk-state';
-export const startTokenStateMachine = async (abtTokensService, setStatus, forceRestart = false) => {
-  let currentState = await getInitialState(forceRestart);
+import deleteLocalHandler from './state-machine/handlers/DeleteLocalHandler';
+const STORAGE_KEY_PREFIX = '@mobiletokensdk-state';
+
+const getStoreKey = accountId => `${STORAGE_KEY_PREFIX}#${accountId}`;
+
+export const startTokenStateMachine = async (abtTokensService, setStatus, getClientState, forceRestart = false) => {
+  const {
+    accountId
+  } = getClientState();
+  const storeKey = getStoreKey(accountId);
+  let currentState = await getInitialState(forceRestart, storeKey);
 
   try {
     const shouldContinue = s => s.state !== 'Valid' && !s.error;
 
     do {
-      const handler = getStateHandler(abtTokensService, currentState);
+      const handler = getStateHandler(abtTokensService, currentState, getClientState);
       currentState = await handler(currentState);
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(currentState));
+      await AsyncStorage.setItem(storeKey, JSON.stringify(currentState));
       setStatus(currentState);
     } while (shouldContinue(currentState));
   } catch (err) {
@@ -34,52 +41,52 @@ export const startTokenStateMachine = async (abtTokensService, setStatus, forceR
   }
 };
 
-const getInitialState = async forceRestart => {
+const getInitialState = async (forceRestart, storeKey) => {
   if (forceRestart) {
     return {
       state: 'Loading'
     };
   }
 
-  const savedStateString = await AsyncStorage.getItem(STORAGE_KEY);
+  const savedStateString = await AsyncStorage.getItem(storeKey);
   return savedStateString ? JSON.parse(savedStateString) : {
     state: 'Loading'
   };
 };
 
-const getStateHandler = (abtTokensService, storedState) => {
+const getStateHandler = (abtTokensService, storedState, getClientState) => {
   switch (storedState.state) {
     case 'Valid':
     case 'Loading':
-      return loadingHandler();
+      return loadingHandler(getClientState);
 
     case 'Validating':
       return validatingHandler(abtTokensService);
 
     case 'DeleteLocal':
-      return deleteLocalHandler();
+      return deleteLocalHandler(getClientState);
 
     case 'InitiateNew':
       return initiateNewHandler(abtTokensService);
 
     case 'InitiateRenewal':
-      return initiateRenewHandler(abtTokensService);
+      return initiateRenewHandler(abtTokensService, getClientState);
 
     case 'GettingTokenCertificate':
-      return getTokenCertificateHandler(abtTokensService);
+      return getTokenCertificateHandler(abtTokensService, getClientState);
 
     case 'AttestNew':
     case 'AttestRenewal':
-      return attestHandler(abtTokensService);
+      return attestHandler(abtTokensService, getClientState);
 
     case 'ActivateNew':
       return activateNewHandler(abtTokensService);
 
     case 'ActivateRenewal':
-      return activateRenewalHandler(abtTokensService);
+      return activateRenewalHandler(abtTokensService, getClientState);
 
     case 'AddToken':
-      return addTokenHandler(abtTokensService);
+      return addTokenHandler(abtTokensService, getClientState);
   }
 };
 //# sourceMappingURL=index.js.map

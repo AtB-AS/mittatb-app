@@ -9,6 +9,7 @@ import android.text.TextUtils;
 
 import com.bugsnag.android.Bugsnag;
 import com.bugsnag.android.Configuration;
+import com.enturtraveller.EnturTravellerPackage;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
@@ -34,7 +35,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
-          // packages.add(new MyReactNativePackage());
+          packages.add(new EnturTravellerPackage(getString(R.string.GoogleApiKey)));
           return packages;
         }
 

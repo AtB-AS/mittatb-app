@@ -6,10 +6,10 @@ import DeviceCheck
 class EnturTraveller: NSObject {
     let secureTokenService: SecureTokenService = SecureTokenService(deviceDetails: DeviceDetails.getPrefilledDeviceDetails())
 
-    @objc(generateAssertion:withNonce:withTokenId:withHash:withResolver:withRejecter:)
-    func generateAssertion(keyId: String, nonce: String, tokenId: String, hash: Data, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+    @objc(generateAssertion:withKeyId:withNonce:withTokenId:withHash:withResolver:withRejecter:)
+    func generateAssertion(accountId: String, keyId: String, nonce: String, tokenId: String, hash: Data, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         if #available(iOS 14.0, *), DCAppAttestService.shared.isSupported {
-            let attestor = Attestator(tokenId: tokenId, nonce: nonce)
+            let attestor = Attestator(tokenId: tokenId, nonce: nonce, accountId: accountId)
             attestor.generateAssertion(keyId: keyId, hash: hash) { res in
                 switch res {
                 case .success(let data):
@@ -23,10 +23,10 @@ class EnturTraveller: NSObject {
         }
     }
 
-    @objc(attest:withNonce:withResolver:withRejecter:)
-    func attest(tokenId: String, nonce: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+    @objc(attest:withTokenId:withNonce:withResolver:withRejecter:)
+    func attest(accountId: String, tokenId: String, nonce: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         if #available(iOS 14.0, *), DCAppAttestService.shared.isSupported {
-            let attestor = Attestator(tokenId: tokenId, nonce: nonce)
+            let attestor = Attestator(tokenId: tokenId, nonce: nonce, accountId: accountId)
 
             attestor.attest(deviceDetails: DeviceDetails.getPrefilledDeviceDetails(), completionHandler: { res in
                 switch res {
@@ -49,10 +49,10 @@ class EnturTraveller: NSObject {
         }
     }
 
-    @objc(attestLegacy:withNonce:withServerPublicKey:withResolver:withRejecter:)
-    func attestLegacy(tokenId: String, nonce: String, serverPublicKey: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+    @objc(attestLegacy:withTokenId:withNonce:withServerPublicKey:withResolver:withRejecter:)
+    func attestLegacy(accountId: String, tokenId: String, nonce: String, serverPublicKey: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         if #available(iOS 11.0, *), DCDevice.current.isSupported {
-            let attestor = LegacyAttestator(tokenId: tokenId, nonce: nonce)
+            let attestor = LegacyAttestator(accountId: accountId, tokenId: tokenId, nonce: nonce)
 
             attestor.attest(serverPublicKey: serverPublicKey, deviceDetails: DeviceDetails.getPrefilledDeviceDetails(), completionHandler: { res in
                 switch res {
@@ -99,14 +99,14 @@ class EnturTraveller: NSObject {
             reject("ATTESTATION_ERROR", "Device cannot be attested", nil)
         }
     }
-
-    @objc(addToken:withCertificate:withTokenValidityStart:withTokenValidityEnd:withResolver:withRejecter:)
-    func addToken(tokenId: String, certificate: String, tokenValidityStart: NSNumber, tokenValidityEnd: NSNumber, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+    
+    @objc(addToken:withTokenId:withCertificate:withTokenValidityStart:withTokenValidityEnd:withResolver:withRejecter:)
+    func addToken(accountId: String, tokenId: String, certificate: String, tokenValidityStart: NSNumber, tokenValidityEnd: NSNumber, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         let tokenStore = TokenStore()
 
-        let newToken = Token(tokenId: tokenId, validityStart: tokenValidityStart.doubleValue, validityEnd: tokenValidityEnd.doubleValue)
+        let newToken = Token(accountId: accountId, tokenId: tokenId, validityStart: tokenValidityStart.doubleValue, validityEnd: tokenValidityEnd.doubleValue)
 
-        let success = tokenStore.saveActiveToken(token: newToken)
+        let success = tokenStore.saveActiveToken(accountId, token: newToken)
 
         if success {
             newToken.storeCertificate(certificateBase64Encoded: certificate) { res in
@@ -122,11 +122,11 @@ class EnturTraveller: NSObject {
         }
     }
 
-    @objc(getToken:withRejecter:)
-    func getToken(resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+    @objc(getToken:withResolver:withRejecter:)
+    func getToken(accountId: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         let tokenStore = TokenStore()
 
-        if let token = tokenStore.loadActiveToken() {
+        if let token = tokenStore.loadActiveToken(accountId) {
             let dict: NSDictionary = [
                 "tokenId": token.tokenId,
                 "tokenValidityStart" : token.validityStart,
@@ -139,17 +139,17 @@ class EnturTraveller: NSObject {
         }
     }
 
-    @objc(deleteToken:withRejecter:)
-    func deleteToken(resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+    @objc(deleteToken:withResolver:withRejecter:)
+    func deleteToken(accountId: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         let tokenStore = TokenStore()
 
-        tokenStore.deleteActiveToken()
+        tokenStore.deleteActiveToken(accountId)
 
         resolve(nil)
     }
 
-    @objc(getSecureToken:withResolver:withRejecter:)
-    func getSecureToken(actions: NSArray, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+    @objc(getSecureToken:withActions:withResolver:withRejecter:)
+    func getSecureToken(accountId: String, actions: NSArray, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
 
         var payloadActions: [PayloadAction] = []
 
@@ -160,7 +160,7 @@ class EnturTraveller: NSObject {
             return
         }
 
-        let secureToken = secureTokenService.getSecureToken(actions: payloadActions)
+        let secureToken = secureTokenService.getSecureToken(accountId, actions: payloadActions)
 
         switch (secureToken) {
         case .success(let token):

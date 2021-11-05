@@ -2,9 +2,12 @@ import { getSecureToken } from '../../../native';
 import { PayloadAction } from '../../../native/types';
 import { verifyCorrectTokenId } from '../utils';
 import { stateHandlerFactory } from '../HandlerFactory';
-export default function activateRenewalHandler(abtTokensService) {
+export default function activateRenewalHandler(abtTokensService, getClientState) {
   return stateHandlerFactory(['ActivateRenewal'], async s => {
-    const signedToken = await getSecureToken([PayloadAction.addRemoveToken]);
+    const {
+      accountId
+    } = getClientState();
+    const signedToken = await getSecureToken(accountId, [PayloadAction.addRemoveToken]);
 
     try {
       const activateTokenResponse = await abtTokensService.activateToken(s.tokenId, s.attestationData, signedToken);

@@ -13,9 +13,12 @@ var _utils = require("../utils");
 
 var _HandlerFactory = require("../HandlerFactory");
 
-function activateRenewalHandler(abtTokensService) {
+function activateRenewalHandler(abtTokensService, getClientState) {
   return (0, _HandlerFactory.stateHandlerFactory)(['ActivateRenewal'], async s => {
-    const signedToken = await (0, _native.getSecureToken)([_types.PayloadAction.addRemoveToken]);
+    const {
+      accountId
+    } = getClientState();
+    const signedToken = await (0, _native.getSecureToken)(accountId, [_types.PayloadAction.addRemoveToken]);
 
     try {
       const activateTokenResponse = await abtTokensService.activateToken(s.tokenId, s.attestationData, signedToken);

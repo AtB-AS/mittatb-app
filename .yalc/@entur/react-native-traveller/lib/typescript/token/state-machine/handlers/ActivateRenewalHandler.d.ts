@@ -1,3 +1,4 @@
 import type { AbtTokensService } from '../../abt-tokens-service';
 import { StateHandler } from '../HandlerFactory';
-export default function activateRenewalHandler(abtTokensService: AbtTokensService): StateHandler;
+import type { ClientStateRetriever } from '../../..';
+export default function activateRenewalHandler(abtTokensService: AbtTokensService, getClientState: ClientStateRetriever): StateHandler;

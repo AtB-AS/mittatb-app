@@ -37,8 +37,15 @@ function mapRequest(request: ApiRequest): AxiosRequestConfig {
   };
 }
 
-export const setupMobileTokenClient = (setStatus: (s: TokenStatus) => void) =>
-  createMobileTokenClient(setStatus, {
-    hosts: {pto: API_BASE_URL},
-    fetch: fetcher,
-  });
+export const setupMobileTokenClient = (
+  accountId: string,
+  setStatus: (s: TokenStatus) => void,
+) =>
+  createMobileTokenClient(
+    setStatus,
+    {accountId},
+    {
+      hosts: {pto: API_BASE_URL},
+      fetch: fetcher,
+    },
+  );
