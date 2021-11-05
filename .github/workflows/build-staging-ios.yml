@@ -55,7 +55,7 @@ jobs:
         id: ipa-cache
         with:
           path: "AtB.ipa"
-          key: ${{ runner.os }}-ios-cache-${{ hashFiles('ios/**')-${{ hashFiles('.yalc/**') }}
+          key: ${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}
       - name: Run fastlane cert match
         run: fastlane ios get_cert
         env:
