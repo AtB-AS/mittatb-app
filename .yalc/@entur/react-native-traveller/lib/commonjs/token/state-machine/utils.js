@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.verifyCorrectTokenId = void 0;
+exports.getStoreKey = exports.verifyCorrectTokenId = void 0;
 
 const verifyCorrectTokenId = (initialTokenId, tokenId) => {
   if (tokenId !== initialTokenId) {
@@ -12,4 +12,9 @@ const verifyCorrectTokenId = (initialTokenId, tokenId) => {
 };
 
 exports.verifyCorrectTokenId = verifyCorrectTokenId;
+const STORAGE_KEY_PREFIX = '@mobiletokensdk-state';
+
+const getStoreKey = accountId => `${STORAGE_KEY_PREFIX}#${accountId}`;
+
+exports.getStoreKey = getStoreKey;
 //# sourceMappingURL=utils.js.map

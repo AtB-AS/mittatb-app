@@ -9,7 +9,7 @@ var _native = require("../../../native");
 
 var _HandlerFactory = require("../HandlerFactory");
 
-function addTokenHandler(_, getClientState) {
+function addTokenHandler(getClientState) {
   return (0, _HandlerFactory.stateHandlerFactory)(['AddToken'], async s => {
     const {
       certificate,

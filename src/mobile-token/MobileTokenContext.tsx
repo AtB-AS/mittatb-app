@@ -1,13 +1,19 @@
-import React, {createContext, useContext, useMemo, useState} from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {setupMobileTokenClient} from '@atb/mobile-token/client';
 import {TokenStatus} from '@entur/react-native-traveller/lib/typescript/token/types';
 import useInterval from '@atb/utils/use-interval';
 import {useAuthState} from '@atb/auth';
+import Bugsnag from '@bugsnag/react-native';
 
 type MobileContextState = {
   generateQrCode: () => Promise<string>;
   tokenStatus?: TokenStatus;
-  switchAccount: (accountId: string) => void;
 };
 
 const MobileTokenContext = createContext<MobileContextState | undefined>(
@@ -16,17 +22,24 @@ const MobileTokenContext = createContext<MobileContextState | undefined>(
 
 const MobileTokenContextProvider: React.FC = ({children}) => {
   const [tokenStatus, setTokenStatus] = useState<TokenStatus>();
-  const {abtCustomerId} = useAuthState();
+  const {abtCustomerId, userCreationFinished} = useAuthState();
 
-  const client = useMemo(
-    () =>
-      abtCustomerId
-        ? setupMobileTokenClient(abtCustomerId, setTokenStatus)
-        : undefined,
-    [abtCustomerId],
-  );
-
+  const [currentCustomerId, setCurrentCustomerId] = useState(abtCustomerId);
   const [retryCount, setRetryCount] = useState(0);
+
+  const setStatus = (status?: TokenStatus) => {
+    Bugsnag.leaveBreadcrumb('mobiletoken_status_change', status);
+    setTokenStatus(status);
+  };
+
+  const client = useMemo(() => setupMobileTokenClient(setStatus), []);
+
+  useEffect(() => {
+    if (abtCustomerId !== currentCustomerId && userCreationFinished) {
+      client.setAccount(abtCustomerId);
+      setCurrentCustomerId(abtCustomerId);
+    }
+  }, [userCreationFinished, client, abtCustomerId, abtCustomerId]);
 
   useInterval(
     () => {
@@ -41,6 +54,10 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
   useInterval(
     () => {
       setRetryCount(retryCount + 1);
+      Bugsnag.notify(tokenStatus!.error!.message, (event) => {
+        event.addMetadata('mobiletoken', {...tokenStatus!.error});
+        event.severity = 'error';
+      });
       client?.retry(true); // todo: better retry logic
     },
     30000,
@@ -50,15 +67,10 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
 
   return (
     <MobileTokenContext.Provider
-      value={
-        client
-          ? {
-              generateQrCode: client.generateQrCode,
-              switchAccount: client.switch,
-              tokenStatus,
-            }
-          : undefined
-      }
+      value={{
+        generateQrCode: client.generateQrCode,
+        tokenStatus,
+      }}
     >
       {children}
     </MobileTokenContext.Provider>

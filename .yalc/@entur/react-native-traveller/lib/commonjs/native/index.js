@@ -3,11 +3,12 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getSecureToken = exports.deleteToken = exports.getToken = exports.addToken = exports.attestLegacy = exports.attest = void 0;
+exports.getSecureToken = exports.deleteToken = exports.getToken = exports.addToken = exports.attestLegacy = exports.attest = exports.start = void 0;
 
 var _reactNative = require("react-native");
 
 const {
+  start,
   attest,
   attestLegacy,
   addToken,
@@ -21,4 +22,5 @@ exports.getToken = getToken;
 exports.addToken = addToken;
 exports.attestLegacy = attestLegacy;
 exports.attest = attest;
+exports.start = start;
 //# sourceMappingURL=index.js.map

@@ -2,6 +2,10 @@
 
 @interface RCT_EXTERN_MODULE(EnturTraveller, NSObject)
 
+RCT_EXTERN_METHOD(start:(nonnull NSString *)unsusedApiKey
+                 withResolver:(RCTPromiseResolveBlock)resolve
+                 withRejecter:(RCTPromiseRejectBlock)reject)
+
 RCT_EXTERN_METHOD(attest:(nonnull NSString *)accountId
                  withTokenId:(nonnull NSString *)tokenId
                  withNonce:(nonnull NSString *)nonce

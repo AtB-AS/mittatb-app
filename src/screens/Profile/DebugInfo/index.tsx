@@ -8,7 +8,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthState} from '@atb/auth';
 import {useAppDispatch} from '@atb/AppContext';
-import {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import storage from '@atb/storage';
 
 function setClipboard(content: string) {
@@ -73,6 +73,11 @@ export default function DebugInfo() {
             text="Copy link to customer in Firestore (staging)"
             icon="arrow-upleft"
             onPress={() => copyFirestoreLink()}
+          />
+
+          <Sections.LinkItem
+            text="Force refresh id token"
+            onPress={() => auth().currentUser?.getIdToken(true)}
           />
         </Sections.Section>
 

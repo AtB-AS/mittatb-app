@@ -7,6 +7,7 @@ import type {
 } from './types';
 
 export type EnturTravellerType = {
+  start(safetyNetApiKey?: string): Promise<AttestationData>;
   attest(
     accountId: string,
     tokenId: string,
@@ -32,6 +33,7 @@ export type EnturTravellerType = {
 };
 
 export const {
+  start,
   attest,
   attestLegacy,
   addToken,

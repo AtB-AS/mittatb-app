@@ -15,4 +15,5 @@ declare module '@env' {
   export const FOCUS_LATITUDE: number;
   export const FOCUS_LONGITUDE: number;
   export const IS_QA_ENV: string | undefined;
+  export const SAFETY_NET_API_KEY: string;
 }

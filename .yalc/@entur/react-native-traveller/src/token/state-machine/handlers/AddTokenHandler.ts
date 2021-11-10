@@ -1,11 +1,9 @@
-import type { ClientStateRetriever } from '../../..';
+import type { ClientState } from '../../..';
 import { addToken } from '../../../native';
-import type { AbtTokensService } from '../../abt-tokens-service';
 import { StateHandler, stateHandlerFactory } from '../HandlerFactory';
 
 export default function addTokenHandler(
-  _: AbtTokensService,
-  getClientState: ClientStateRetriever
+  getClientState: () => Required<ClientState>
 ): StateHandler {
   return stateHandlerFactory(['AddToken'], async (s) => {
     const {

@@ -9,7 +9,7 @@ var _attest = require("../../attest");
 
 var _HandlerFactory = require("../HandlerFactory");
 
-function attestHandler(_, getClientState) {
+function attestHandler(getClientState) {
   return (0, _HandlerFactory.stateHandlerFactory)(['AttestNew', 'AttestRenewal'], async s => {
     const {
       tokenId,

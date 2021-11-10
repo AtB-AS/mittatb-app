@@ -5,10 +5,14 @@ import { createAbtTokensService } from './token/abt-tokens-service';
 import { getSecureToken } from './native';
 import { PayloadAction } from './native/types';
 export { RequestError } from './fetcher';
-export default function createClient(setStatus, initialState, initialConfig) {
+export default function createClient(setStatus, initialConfig) {
+  const {
+    safetyNetApiKey
+  } = initialConfig;
   const config = getConfigFromInitialConfig(initialConfig);
   const fetcher = createFetcher(config);
   const abtTokensService = createAbtTokensService(fetcher, config.hosts);
+  let currentStatus;
 
   const toVisualState = storedState => {
     if (storedState.error) {
@@ -21,36 +25,64 @@ export default function createClient(setStatus, initialState, initialConfig) {
   };
 
   const setStatusWrapper = storedState => {
-    setStatus({
+    const status = storedState && {
       state: storedState.state,
       error: storedState.error,
       visualState: toVisualState(storedState)
-    });
+    };
+    currentStatus = status;
+    setStatus(status);
   };
 
-  let clientState = { ...initialState
-  };
+  let clientState = {};
 
   function clientStateRetriever() {
     return clientState;
   }
 
-  startTokenStateMachine(abtTokensService, setStatusWrapper, clientStateRetriever);
   return {
-    switch(accountId) {
+    setAccount(accountId) {
       clientState = { ...clientState,
         accountId
       };
-      startTokenStateMachine(abtTokensService, setStatusWrapper, clientStateRetriever, false);
+
+      if (clientState.accountId) {
+        startTokenStateMachine(abtTokensService, setStatusWrapper, clientStateRetriever, safetyNetApiKey, false);
+      }
     },
 
     retry: forceRestart => {
-      startTokenStateMachine(abtTokensService, setStatusWrapper, clientStateRetriever, forceRestart); // Todo: Not start if already running
-    },
-    generateQrCode: () => {
+      var _currentStatus;
+
       const {
         accountId
       } = clientState;
+
+      if (!accountId) {
+        throw new Error('Account id must be set');
+      }
+
+      if (((_currentStatus = currentStatus) === null || _currentStatus === void 0 ? void 0 : _currentStatus.visualState) === 'Loading') {
+        throw new Error('Can not retry while the sdk is already running');
+      }
+
+      startTokenStateMachine(abtTokensService, setStatusWrapper, clientStateRetriever, safetyNetApiKey, forceRestart); // Todo: Not start if already running
+    },
+    generateQrCode: () => {
+      var _currentStatus2;
+
+      const {
+        accountId
+      } = clientState;
+
+      if (!accountId) {
+        throw new Error('Account id must be set');
+      }
+
+      if (((_currentStatus2 = currentStatus) === null || _currentStatus2 === void 0 ? void 0 : _currentStatus2.visualState) !== 'Token') {
+        throw new Error('The current state does not allow retrieval of qr code');
+      }
+
       return getSecureToken(accountId, [PayloadAction.ticketInspection]);
     }
   };

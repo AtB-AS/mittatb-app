@@ -24,52 +24,58 @@ import java.util.*
 import java.util.concurrent.locks.ReentrantLock
 
 
-class EnturTravellerModule(reactContext: ReactApplicationContext, apiKey: String) : ReactContextBaseJavaModule(reactContext) {
-  private var tokenStore: TokenStore<String>
-  private var tokenKeyStore: TokenKeyStore<String> = DefaultTokenKeyStore.newBuilder<String>().build()
-  private var deviceAttestor: DeviceAttestator
-  private var deviceDetailsProvider: DeviceDetailsProvider
-  private var clock: TempoRealtimeClock
-  private var encoder: TokenEncoder
-  private var tokenPropertyStore: TokenPropertyStore
-  private var sharedPreferences: SharedPreferences
+class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+  private var tokenStore: TokenStore<String>? = null
+  private var tokenKeyStore: TokenKeyStore<String>? = null
+  private var deviceAttestor: DeviceAttestator? = null
+  private var deviceDetailsProvider: DeviceDetailsProvider? = null
+  private var clock: TempoRealtimeClock? = null
+  private var encoder: TokenEncoder? = null
+  private var tokenPropertyStore: TokenPropertyStore? = null
+  private var sharedPreferences: SharedPreferences? = null
+  private var started: Boolean = false
 
-  init {
-    var applicationContext: Context = reactApplicationContext.applicationContext
-    var application: Application = applicationContext as Application
-    deviceDetailsProvider = DefaultDeviceDetailsProvider
-      .newBuilder(application)
-      .withApplicationDeviceInfoElement(applicationContext.packageName, BuildConfig.VERSION_NAME, "${BuildConfig.VERSION_CODE}")
-      .withOsDeviceInfoElement()
-      .withNetworkDeviceStatus()
-      .withBluetoohDeviceStatus()
-      .withNfcDeviceStatus()
-      .build()
-    clock = TempoRealtimeClock.newBuilder(application).withSlackSntpTimeSource().build()
-    encoder = TokenEncoder(clock, deviceDetailsProvider)
-    deviceAttestor = DeviceAttestorBuilder.newBuilder()
-      .withApiKey(apiKey)
-      .withContext(applicationContext)
-      .withDeviceDetailsProvider(deviceDetailsProvider)
-      .withEmulator(false)
-      .withAttestationTimeout(1000000)
-      .build()
-    sharedPreferences = reactContext.getSharedPreferences(this.name, Context.MODE_PRIVATE)
-    tokenPropertyStore = DefaultTokenPropertyStore(sharedPreferences, ReentrantLock(), 5000)
-    tokenStore = TokenStore(tokenKeyStore, encoder, clock, null, tokenPropertyStore)
-  }
-  override fun getName(): String {
-      return "EnturTraveller"
-  }
+  @ReactMethod
+  fun start(googleApiKey: String, promise: Promise) {
+    if (!started) {
+      started = true
 
-  fun getTokenContext(accountId: String): TokenContext<String> {
-    return EnturTravellerTokenContext(accountId)
+      var applicationContext: Context = reactApplicationContext.applicationContext
+      var application: Application = applicationContext as Application
+      tokenKeyStore = DefaultTokenKeyStore.newBuilder<String>().build()
+      deviceDetailsProvider = DefaultDeviceDetailsProvider
+        .newBuilder(application)
+        .withApplicationDeviceInfoElement(applicationContext.packageName, BuildConfig.VERSION_NAME, "${BuildConfig.VERSION_CODE}")
+        .withOsDeviceInfoElement()
+        .withNetworkDeviceStatus()
+        .withBluetoohDeviceStatus()
+        .withNfcDeviceStatus()
+        .build()
+      clock = TempoRealtimeClock.newBuilder(application).withSlackSntpTimeSource().build()
+      encoder = TokenEncoder(clock, deviceDetailsProvider)
+      deviceAttestor = DeviceAttestorBuilder.newBuilder()
+        .withApiKey(googleApiKey)
+        .withContext(applicationContext)
+        .withDeviceDetailsProvider(deviceDetailsProvider)
+        .withEmulator(false)
+        .withAttestationTimeout(1000000)
+        .build()
+      sharedPreferences = applicationContext.getSharedPreferences(this.name, Context.MODE_PRIVATE)
+      tokenPropertyStore = DefaultTokenPropertyStore(sharedPreferences, ReentrantLock(), 5000)
+      tokenStore = TokenStore(tokenKeyStore, encoder, clock, null, tokenPropertyStore)
+
+    }
+    promise.resolve(null)
   }
 
   @ReactMethod
   fun getToken(accountId: String, promise: Promise) {
+    if (!started) {
+      promise.reject(Throwable("The start-function must be called before any other native method"))
+      return
+    }
     try {
-      val token = tokenStore.getToken(getTokenContext(accountId))
+      val token = tokenStore!!.getToken(getTokenContext(accountId))
 
       if (token is ActivatedToken<*>) {
         val map = WritableNativeMap()
@@ -89,13 +95,18 @@ class EnturTravellerModule(reactContext: ReactApplicationContext, apiKey: String
 
   @ReactMethod
   fun getSecureToken(accountId: String, actions: ReadableArray, promise: Promise) {
+    if (!started) {
+      promise.reject(Throwable("The start-function must be called before any other native method"))
+      return
+    }
+
     try {
       val tokenActions: MutableList<TokenAction> = mutableListOf<TokenAction>()
       val size = actions.size()
       for (i in 0 until size) {
         tokenActions.add(TokenAction.forNumber(actions.getInt(i)))
       }
-      val token = tokenStore.getToken(getTokenContext(accountId))
+      val token = tokenStore!!.getToken(getTokenContext(accountId))
       if (token != null) {
         val container = token.encodeAsSecureContainer(TokenEncodingRequest(Collections.emptyList(), tokenActions.toTypedArray()))
         if (container != null) {
@@ -116,16 +127,21 @@ class EnturTravellerModule(reactContext: ReactApplicationContext, apiKey: String
 
   @ReactMethod
   fun addToken(accountId: String, tokenId: String, certificate: String, tokenValidityStart: Double, tokenValidityEnd: Double, promise: Promise) {
+    if (!started) {
+      promise.reject(Throwable("The start-function must be called before any other native method"))
+      return
+    }
+
     try {
       var tokenContext = getTokenContext(accountId)
-      val signatureKey: PrivateKey = tokenKeyStore.getSignaturePrivateKey(tokenContext, tokenId)
-      val encryptionKey: PrivateKey = tokenKeyStore.getEncryptionPrivateKey(tokenContext, tokenId)
+      val signatureKey: PrivateKey = tokenKeyStore!!.getSignaturePrivateKey(tokenContext, tokenId)
+      val encryptionKey: PrivateKey = tokenKeyStore!!.getEncryptionPrivateKey(tokenContext, tokenId)
       val command: ByteArray = byteArrayOf()
-      val token = tokenStore.createPendingNewToken(tokenContext, tokenId, signatureKey, encryptionKey, encoder, command)
+      val token = tokenStore!!.createPendingNewToken(tokenContext, tokenId, signatureKey, encryptionKey, encoder, command)
       val certFactory = CertificateFactory.getInstance("X.509")
 
 
-      val activatedToken: ActivatedToken<String> = tokenStore.convertPendingTokenToActiveToken(token, Base64.decode(certificate, Base64.NO_WRAP), Instant.ofEpochMilli(tokenValidityStart.toLong()), Instant.ofEpochMilli(tokenValidityEnd.toLong()))
+      val activatedToken: ActivatedToken<String> = tokenStore!!.convertPendingTokenToActiveToken(token, Base64.decode(certificate, Base64.NO_WRAP), Instant.ofEpochMilli(tokenValidityStart.toLong()), Instant.ofEpochMilli(tokenValidityEnd.toLong()))
       Log.d("ActivatedToken", activatedToken.tokenId)
       promise.resolve(activatedToken != null)
     } catch (err: Error) {
@@ -135,8 +151,13 @@ class EnturTravellerModule(reactContext: ReactApplicationContext, apiKey: String
 
   @ReactMethod
   fun deleteToken(accountId: String, promise: Promise) {
+    if (!started) {
+      promise.reject(Throwable("The start-function must be called before any other native method"))
+      return
+    }
+
     try {
-      tokenStore.clearToken(getTokenContext(accountId))
+      tokenStore!!.clearToken(getTokenContext(accountId))
       promise.resolve(null)
     } catch (err: Error) {
       promise.reject("TOKEN ERROR", err.localizedMessage)
@@ -150,15 +171,20 @@ class EnturTravellerModule(reactContext: ReactApplicationContext, apiKey: String
 
   @ReactMethod
   fun attest(accountId: String, tokenId: String, nonce: String, promise: Promise) {
+    if (!started) {
+      promise.reject(Throwable("The start-function must be called before any other native method"))
+      return
+    }
+
     try {
-      if (!deviceAttestor.supportsAttestation()) {
+      if (!deviceAttestor!!.supportsAttestation()) {
         throw Throwable("Device does not support Attestation")
       }
       var tokenContext = getTokenContext(accountId)
       val base64Nonce = Base64.decode(nonce, Base64.DEFAULT)
-      val signatureChain: TokenTrustChain = tokenKeyStore.createSignatureKey(tokenContext, tokenId, base64Nonce)
-      val encryptionChain: TokenTrustChain = tokenKeyStore.createEncryptionKey(tokenContext, tokenId, base64Nonce)
-      val attestation: Attestation = deviceAttestor.attest(base64Nonce, signatureChain.publicEncoded, encryptionChain.publicEncoded)
+      val signatureChain: TokenTrustChain = tokenKeyStore!!.createSignatureKey(tokenContext, tokenId, base64Nonce)
+      val encryptionChain: TokenTrustChain = tokenKeyStore!!.createEncryptionKey(tokenContext, tokenId, base64Nonce)
+      val attestation: Attestation = deviceAttestor!!.attest(base64Nonce, signatureChain.publicEncoded, encryptionChain.publicEncoded)
       val obj = WritableNativeMap()
 
       val encodedSignatureChain = Arguments.createArray()
@@ -182,4 +208,11 @@ class EnturTravellerModule(reactContext: ReactApplicationContext, apiKey: String
     }
   }
 
+  override fun getName(): String {
+    return "EnturTraveller"
+  }
+
+  fun getTokenContext(accountId: String): TokenContext<String> {
+    return EnturTravellerTokenContext(accountId)
+  }
 }

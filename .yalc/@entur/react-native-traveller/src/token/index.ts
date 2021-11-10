@@ -12,58 +12,61 @@ import type { StateHandler } from './state-machine/HandlerFactory';
 import activateNewHandler from './state-machine/handlers/ActivateNewHandler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import deleteLocalHandler from './state-machine/handlers/DeleteLocalHandler';
-import type { ClientStateRetriever } from '..';
-
-const STORAGE_KEY_PREFIX = '@mobiletokensdk-state';
-const getStoreKey = (accountId: string) => `${STORAGE_KEY_PREFIX}#${accountId}`;
+import type { ClientState, ClientStateRetriever } from '..';
+import startingHandler from './state-machine/handlers/StartingHandler';
+import { getStoreKey } from './state-machine/utils';
 
 export const startTokenStateMachine = async (
   abtTokensService: AbtTokensService,
-  setStatus: (s: StoredState) => void,
+  setStatus: (s?: StoredState) => void,
   getClientState: ClientStateRetriever,
+  safetyNetApiKey: string,
   forceRestart: boolean = false
 ) => {
   const { accountId } = getClientState();
-  const storeKey = getStoreKey(accountId);
-  let currentState = await getInitialState(forceRestart, storeKey);
-  try {
-    const shouldContinue = (s: StoredState) => s.state !== 'Valid' && !s.error;
-    do {
-      const handler = getStateHandler(
-        abtTokensService,
-        currentState,
-        getClientState
-      );
-      currentState = await handler(currentState);
-      await AsyncStorage.setItem(storeKey, JSON.stringify(currentState));
-      setStatus(currentState);
-    } while (shouldContinue(currentState));
-  } catch (err) {
-    console.warn('Unexpected error', err);
-    setStatus({
-      ...currentState,
-      error: { type: 'Unknown', message: 'Unexpected error', err },
-    });
+
+  if (!accountId) {
+    setStatus(undefined);
+  } else {
+    const getClientStateRequired = getClientState as () => Required<ClientState>;
+    const storeKey = getStoreKey(accountId!);
+    let currentState: StoredState = { state: 'Starting' };
+    setStatus(currentState);
+    try {
+      while (shouldContinue(currentState)) {
+        const handler = getStateHandler(
+          abtTokensService,
+          currentState,
+          getClientStateRequired,
+          safetyNetApiKey,
+          forceRestart
+        );
+        currentState = await handler(currentState);
+        await AsyncStorage.setItem(storeKey, JSON.stringify(currentState));
+        setStatus(currentState);
+      }
+    } catch (err) {
+      console.warn('Unexpected error', err);
+      setStatus({
+        ...currentState,
+        error: { type: 'Unknown', message: 'Unexpected error', err },
+      });
+    }
   }
 };
 
-const getInitialState = async (
-  forceRestart: boolean,
-  storeKey: string
-): Promise<StoredState> => {
-  if (forceRestart) {
-    return { state: 'Loading' };
-  }
-  const savedStateString = await AsyncStorage.getItem(storeKey);
-  return savedStateString ? JSON.parse(savedStateString) : { state: 'Loading' };
-};
+const shouldContinue = (s: StoredState) => s.state !== 'Valid' && !s.error;
 
 const getStateHandler = (
   abtTokensService: AbtTokensService,
   storedState: StoredState,
-  getClientState: ClientStateRetriever
+  getClientState: () => Required<ClientState>,
+  safetyNetApiKey: string,
+  forceRestart: boolean
 ): StateHandler => {
   switch (storedState.state) {
+    case 'Starting':
+      return startingHandler(getClientState, safetyNetApiKey, forceRestart);
     case 'Valid':
     case 'Loading':
       return loadingHandler(getClientState);
@@ -79,12 +82,12 @@ const getStateHandler = (
       return getTokenCertificateHandler(abtTokensService, getClientState);
     case 'AttestNew':
     case 'AttestRenewal':
-      return attestHandler(abtTokensService, getClientState);
+      return attestHandler(getClientState);
     case 'ActivateNew':
       return activateNewHandler(abtTokensService);
     case 'ActivateRenewal':
       return activateRenewalHandler(abtTokensService, getClientState);
     case 'AddToken':
-      return addTokenHandler(abtTokensService, getClientState);
+      return addTokenHandler(getClientState);
   }
 };

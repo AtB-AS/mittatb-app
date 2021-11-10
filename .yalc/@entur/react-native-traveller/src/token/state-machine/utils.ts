@@ -8,3 +8,7 @@ export const verifyCorrectTokenId = (
     );
   }
 };
+
+const STORAGE_KEY_PREFIX = '@mobiletokensdk-state';
+export const getStoreKey = (accountId: string) =>
+  `${STORAGE_KEY_PREFIX}#${accountId}`;

@@ -29,4 +29,4 @@ export type Config = {
   fetch: Fetch;
 };
 
-export type InitialConfig = Partial<Config>;
+export type InitialConfig = Partial<Config> & { safetyNetApiKey: string };
