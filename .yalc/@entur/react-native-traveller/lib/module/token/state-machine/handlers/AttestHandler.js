@@ -1,6 +1,6 @@
 import { getActivateTokenRequestBody } from '../../attest';
 import { stateHandlerFactory } from '../HandlerFactory';
-export default function attestHandler(_, getClientState) {
+export default function attestHandler(getClientState) {
   return stateHandlerFactory(['AttestNew', 'AttestRenewal'], async s => {
     const {
       tokenId,

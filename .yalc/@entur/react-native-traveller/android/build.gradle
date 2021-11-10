@@ -51,8 +51,6 @@ android {
 }
 
 repositories {
-  println("----HEYHEYE----")
-  println("${projectDir}/libs")
   maven {
     url "${projectDir}/libs"
   }

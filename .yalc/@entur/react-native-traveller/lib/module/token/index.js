@@ -9,53 +9,50 @@ import addTokenHandler from './state-machine/handlers/AddTokenHandler';
 import activateNewHandler from './state-machine/handlers/ActivateNewHandler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import deleteLocalHandler from './state-machine/handlers/DeleteLocalHandler';
-const STORAGE_KEY_PREFIX = '@mobiletokensdk-state';
-
-const getStoreKey = accountId => `${STORAGE_KEY_PREFIX}#${accountId}`;
-
-export const startTokenStateMachine = async (abtTokensService, setStatus, getClientState, forceRestart = false) => {
+import startingHandler from './state-machine/handlers/StartingHandler';
+import { getStoreKey } from './state-machine/utils';
+export const startTokenStateMachine = async (abtTokensService, setStatus, getClientState, safetyNetApiKey, forceRestart = false) => {
   const {
     accountId
   } = getClientState();
-  const storeKey = getStoreKey(accountId);
-  let currentState = await getInitialState(forceRestart, storeKey);
 
-  try {
-    const shouldContinue = s => s.state !== 'Valid' && !s.error;
-
-    do {
-      const handler = getStateHandler(abtTokensService, currentState, getClientState);
-      currentState = await handler(currentState);
-      await AsyncStorage.setItem(storeKey, JSON.stringify(currentState));
-      setStatus(currentState);
-    } while (shouldContinue(currentState));
-  } catch (err) {
-    console.warn('Unexpected error', err);
-    setStatus({ ...currentState,
-      error: {
-        type: 'Unknown',
-        message: 'Unexpected error',
-        err
-      }
-    });
-  }
-};
-
-const getInitialState = async (forceRestart, storeKey) => {
-  if (forceRestart) {
-    return {
-      state: 'Loading'
+  if (!accountId) {
+    setStatus(undefined);
+  } else {
+    const getClientStateRequired = getClientState;
+    const storeKey = getStoreKey(accountId);
+    let currentState = {
+      state: 'Starting'
     };
-  }
+    setStatus(currentState);
 
-  const savedStateString = await AsyncStorage.getItem(storeKey);
-  return savedStateString ? JSON.parse(savedStateString) : {
-    state: 'Loading'
-  };
+    try {
+      while (shouldContinue(currentState)) {
+        const handler = getStateHandler(abtTokensService, currentState, getClientStateRequired, safetyNetApiKey, forceRestart);
+        currentState = await handler(currentState);
+        await AsyncStorage.setItem(storeKey, JSON.stringify(currentState));
+        setStatus(currentState);
+      }
+    } catch (err) {
+      console.warn('Unexpected error', err);
+      setStatus({ ...currentState,
+        error: {
+          type: 'Unknown',
+          message: 'Unexpected error',
+          err
+        }
+      });
+    }
+  }
 };
 
-const getStateHandler = (abtTokensService, storedState, getClientState) => {
+const shouldContinue = s => s.state !== 'Valid' && !s.error;
+
+const getStateHandler = (abtTokensService, storedState, getClientState, safetyNetApiKey, forceRestart) => {
   switch (storedState.state) {
+    case 'Starting':
+      return startingHandler(getClientState, safetyNetApiKey, forceRestart);
+
     case 'Valid':
     case 'Loading':
       return loadingHandler(getClientState);
@@ -77,7 +74,7 @@ const getStateHandler = (abtTokensService, storedState, getClientState) => {
 
     case 'AttestNew':
     case 'AttestRenewal':
-      return attestHandler(abtTokensService, getClientState);
+      return attestHandler(getClientState);
 
     case 'ActivateNew':
       return activateNewHandler(abtTokensService);
@@ -86,7 +83,7 @@ const getStateHandler = (abtTokensService, storedState, getClientState) => {
       return activateRenewalHandler(abtTokensService, getClientState);
 
     case 'AddToken':
-      return addTokenHandler(abtTokensService, getClientState);
+      return addTokenHandler(getClientState);
   }
 };
 //# sourceMappingURL=index.js.map

@@ -22,4 +22,6 @@ export declare type Config = {
     extraHeaders: Record<string, string>;
     fetch: Fetch;
 };
-export declare type InitialConfig = Partial<Config>;
+export declare type InitialConfig = Partial<Config> & {
+    safetyNetApiKey: string;
+};

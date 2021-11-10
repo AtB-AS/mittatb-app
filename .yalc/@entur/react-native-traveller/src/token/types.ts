@@ -94,6 +94,7 @@ export type TokenStatus = {
 };
 
 const tokenStates = [
+  'Starting',
   'Loading',
   'Valid',
   'GettingTokenCertificate',
@@ -115,6 +116,7 @@ export type StoredState = {
 } & (
   | {
       state:
+        | 'Starting'
         | 'Loading'
         | 'InitiateNew'
         | 'DeleteLocal'

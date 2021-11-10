@@ -1,6 +1,6 @@
 import { addToken } from '../../../native';
 import { stateHandlerFactory } from '../HandlerFactory';
-export default function addTokenHandler(_, getClientState) {
+export default function addTokenHandler(getClientState) {
   return stateHandlerFactory(['AddToken'], async s => {
     const {
       certificate,

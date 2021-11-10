@@ -4,11 +4,26 @@ import DeviceCheck
 
 @objc(EnturTraveller)
 class EnturTraveller: NSObject {
-    let secureTokenService: SecureTokenService = SecureTokenService(deviceDetails: DeviceDetails.getPrefilledDeviceDetails())
+    var secureTokenService: SecureTokenService? = nil;
+    var started: Bool = false;
+    
+    @objc(start:withResolver:withRejecter:)
+    func start(_: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+        if (!started) {
+            secureTokenService = SecureTokenService(deviceDetails: DeviceDetails.getPrefilledDeviceDetails())
+            started = true;
+        }
+        resolve(nil)
+    }
 
     @objc(generateAssertion:withKeyId:withNonce:withTokenId:withHash:withResolver:withRejecter:)
     func generateAssertion(accountId: String, keyId: String, nonce: String, tokenId: String, hash: Data, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         if #available(iOS 14.0, *), DCAppAttestService.shared.isSupported {
+            if (!started) {
+                reject("NOT_STARTED", "The start-function must be called before any other native method", nil)
+                return
+            }
+            
             let attestor = Attestator(tokenId: tokenId, nonce: nonce, accountId: accountId)
             attestor.generateAssertion(keyId: keyId, hash: hash) { res in
                 switch res {
@@ -26,6 +41,11 @@ class EnturTraveller: NSObject {
     @objc(attest:withTokenId:withNonce:withResolver:withRejecter:)
     func attest(accountId: String, tokenId: String, nonce: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         if #available(iOS 14.0, *), DCAppAttestService.shared.isSupported {
+            if (!started) {
+                reject("NOT_STARTED", "The start-function must be called before any other native method", nil)
+                return
+            }
+            
             let attestor = Attestator(tokenId: tokenId, nonce: nonce, accountId: accountId)
 
             attestor.attest(deviceDetails: DeviceDetails.getPrefilledDeviceDetails(), completionHandler: { res in
@@ -52,6 +72,11 @@ class EnturTraveller: NSObject {
     @objc(attestLegacy:withTokenId:withNonce:withServerPublicKey:withResolver:withRejecter:)
     func attestLegacy(accountId: String, tokenId: String, nonce: String, serverPublicKey: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         if #available(iOS 11.0, *), DCDevice.current.isSupported {
+            if (!started) {
+                reject("NOT_STARTED", "The start-function must be called before any other native method", nil)
+                return
+            }
+            
             let attestor = LegacyAttestator(accountId: accountId, tokenId: tokenId, nonce: nonce)
 
             attestor.attest(serverPublicKey: serverPublicKey, deviceDetails: DeviceDetails.getPrefilledDeviceDetails(), completionHandler: { res in
@@ -76,6 +101,11 @@ class EnturTraveller: NSObject {
 
     @objc(getAttestationSupport:withRejecter:)
     func getAttestationSupport(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+        if (!started) {
+            reject("NOT_STARTED", "The start-function must be called before any other native method", nil)
+            return
+        }
+        
         if #available(iOS 11, *) {
             let currentDevice = DCDevice.current
             if (currentDevice.isSupported) {
@@ -102,6 +132,11 @@ class EnturTraveller: NSObject {
     
     @objc(addToken:withTokenId:withCertificate:withTokenValidityStart:withTokenValidityEnd:withResolver:withRejecter:)
     func addToken(accountId: String, tokenId: String, certificate: String, tokenValidityStart: NSNumber, tokenValidityEnd: NSNumber, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+        if (!started) {
+            reject("NOT_STARTED", "The start-function must be called before any other native method", nil)
+            return
+        }
+        
         let tokenStore = TokenStore()
 
         let newToken = Token(accountId: accountId, tokenId: tokenId, validityStart: tokenValidityStart.doubleValue, validityEnd: tokenValidityEnd.doubleValue)
@@ -112,6 +147,7 @@ class EnturTraveller: NSObject {
             newToken.storeCertificate(certificateBase64Encoded: certificate) { res in
                 switch res {
                     case .success(_):
+                        let _ = tokenStore.deleteTokens(forAccountId: accountId)
                         resolve(success)
                     case .failure(let err):
                         reject("ERROR", err.localizedDescription, err as NSError)
@@ -124,6 +160,11 @@ class EnturTraveller: NSObject {
 
     @objc(getToken:withResolver:withRejecter:)
     func getToken(accountId: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+        if (!started) {
+            reject("NOT_STARTED", "The start-function must be called before any other native method", nil)
+            return
+        }
+        
         let tokenStore = TokenStore()
 
         if let token = tokenStore.loadActiveToken(accountId) {
@@ -141,16 +182,29 @@ class EnturTraveller: NSObject {
 
     @objc(deleteToken:withResolver:withRejecter:)
     func deleteToken(accountId: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+        if (!started) {
+            reject("NOT_STARTED", "The start-function must be called before any other native method", nil)
+            return
+        }
+        
         let tokenStore = TokenStore()
 
-        tokenStore.deleteActiveToken(accountId)
+        let _ = tokenStore.deleteTokens(forAccountId: accountId, evenActive: true)
 
         resolve(nil)
     }
 
     @objc(getSecureToken:withActions:withResolver:withRejecter:)
     func getSecureToken(accountId: String, actions: NSArray, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
-
+        if (!started) {
+            reject("NOT_STARTED", "The start-function must be called before any other native method", nil)
+            return
+        }
+        guard let secureTokenService = secureTokenService else {
+            reject("SECURE_TOKEN_ERROR", "SecureTokenService is not initatied, and cannot be nil", nil)
+            return
+        }
+        
         var payloadActions: [PayloadAction] = []
 
         do {
@@ -159,13 +213,10 @@ class EnturTraveller: NSObject {
             reject("SECURE_TOKEN_ERROR", error.localizedDescription, error)
             return
         }
-
         let secureToken = secureTokenService.getSecureToken(accountId, actions: payloadActions)
-
         switch (secureToken) {
         case .success(let token):
             resolve(token)
-
         case .failure(let error):
             switch (error) {
             case .couldNotSerializeToken:

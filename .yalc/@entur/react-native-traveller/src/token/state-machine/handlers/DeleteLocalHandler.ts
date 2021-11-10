@@ -1,10 +1,10 @@
 import type { StateHandler } from '../HandlerFactory';
 import { stateHandlerFactory } from '../HandlerFactory';
 import { deleteToken } from '../../../native';
-import type { ClientStateRetriever } from '../../..';
+import type { ClientState } from '../../..';
 
 export default function deleteLocalHandler(
-  getClientState: ClientStateRetriever
+  getClientState: () => Required<ClientState>
 ): StateHandler {
   return stateHandlerFactory(['DeleteLocal'], async (_) => {
     const { accountId } = getClientState();

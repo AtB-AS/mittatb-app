@@ -1,12 +1,10 @@
 import { getActivateTokenRequestBody } from '../../attest';
-import type { AbtTokensService } from '../../abt-tokens-service';
 import type { StateHandler } from '../HandlerFactory';
 import { stateHandlerFactory } from '../HandlerFactory';
-import type { ClientStateRetriever } from '../../..';
+import type { ClientState } from '../../..';
 
 export default function attestHandler(
-  _: AbtTokensService,
-  getClientState: ClientStateRetriever
+  getClientState: () => Required<ClientState>
 ): StateHandler {
   return stateHandlerFactory(['AttestNew', 'AttestRenewal'], async (s) => {
     const { tokenId, nonce, attestationEncryptionPublicKey } = s.initiatedData;

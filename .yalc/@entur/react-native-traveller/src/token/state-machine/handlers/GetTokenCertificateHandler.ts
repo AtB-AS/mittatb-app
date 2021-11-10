@@ -3,11 +3,11 @@ import type { AbtTokensService } from '../../abt-tokens-service';
 import { PayloadAction } from '../../../native/types';
 import type { StateHandler } from '../HandlerFactory';
 import { stateHandlerFactory } from '../HandlerFactory';
-import type { ClientStateRetriever } from '../../..';
+import type { ClientState } from '../../..';
 
 export default function getTokenCertificateHandler(
   abtTokensService: AbtTokensService,
-  getClientState: ClientStateRetriever
+  getClientState: () => Required<ClientState>
 ): StateHandler {
   return stateHandlerFactory(['GettingTokenCertificate'], async (_) => {
     const { accountId } = getClientState();

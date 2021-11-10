@@ -2,12 +2,12 @@ import { getToken } from '../../../native';
 import type { StateHandler } from '../HandlerFactory';
 import { stateHandlerFactory } from '../HandlerFactory';
 import type { Token } from '@entur/react-native-traveller';
-import type { ClientStateRetriever } from '../../..';
+import type { ClientState } from '../../../';
 
 const secondsIn48Hours = 48 * 60 * 60;
 
 export default function loadingHandler(
-  getClientState: ClientStateRetriever
+  getClientState: () => Required<ClientState>
 ): StateHandler {
   return stateHandlerFactory(['Loading', 'Valid'], async (_) => {
     const { accountId } = getClientState();

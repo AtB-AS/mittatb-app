@@ -8,6 +8,7 @@ export type {Token} from '@entur/react-native-traveller';
 import {API_BASE_URL} from '@env';
 import {AxiosRequestConfig, Method} from 'axios';
 import {TokenStatus} from '@entur/react-native-traveller/lib/typescript/token/types';
+import {SAFETY_NET_API_KEY} from '@env';
 
 const client = createClient(undefined);
 
@@ -37,15 +38,9 @@ function mapRequest(request: ApiRequest): AxiosRequestConfig {
   };
 }
 
-export const setupMobileTokenClient = (
-  accountId: string,
-  setStatus: (s: TokenStatus) => void,
-) =>
-  createMobileTokenClient(
-    setStatus,
-    {accountId},
-    {
-      hosts: {pto: API_BASE_URL},
-      fetch: fetcher,
-    },
-  );
+export const setupMobileTokenClient = (setStatus: (s?: TokenStatus) => void) =>
+  createMobileTokenClient(setStatus, {
+    hosts: {pto: API_BASE_URL},
+    fetch: fetcher,
+    safetyNetApiKey: SAFETY_NET_API_KEY,
+  });
