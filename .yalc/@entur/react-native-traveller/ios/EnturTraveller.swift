@@ -147,7 +147,7 @@ class EnturTraveller: NSObject {
             newToken.storeCertificate(certificateBase64Encoded: certificate) { res in
                 switch res {
                     case .success(_):
-                        tokenStore.deleteTokens(forAccountId: accountId, exceptTokenId: tokenId)
+                        let _ = tokenStore.deleteTokens(forAccountId: accountId)
                         resolve(success)
                     case .failure(let err):
                         reject("ERROR", err.localizedDescription, err as NSError)
@@ -189,7 +189,7 @@ class EnturTraveller: NSObject {
         
         let tokenStore = TokenStore()
 
-        tokenStore.deleteTokens(forAccountId: accountId)
+        let _ = tokenStore.deleteTokens(forAccountId: accountId, evenActive: true)
 
         resolve(nil)
     }

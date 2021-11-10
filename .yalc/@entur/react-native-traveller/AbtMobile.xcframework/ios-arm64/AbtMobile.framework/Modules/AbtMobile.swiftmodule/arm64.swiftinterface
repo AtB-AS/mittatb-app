@@ -239,9 +239,7 @@ extension AbtMobile.Key {
 }
 public struct TokenStore {
   public init()
-  public func deleteActiveToken(_ accountId: Swift.String)
-  public func deleteTokens(forAccountId accountId: Swift.String)
-  public func deleteTokens(forAccountId accountId: Swift.String, exceptTokenId tokenId: Swift.String)
+  public func deleteTokens(forAccountId accountId: Swift.String, evenActive: Swift.Bool = false) -> Swift.Bool
   public func loadActiveToken(_ accountId: Swift.String) -> AbtMobile.Token?
   public func saveActiveToken(_ accountId: Swift.String, token: AbtMobile.Token) -> Swift.Bool
 }
