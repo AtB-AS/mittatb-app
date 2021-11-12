@@ -8,20 +8,20 @@ import useReducerWithSideEffects, {
   Update,
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
-import {getDepartureGroups, getRealtimeDeparture} from '@atb/api/departures';
+import {getRealtimeDeparture} from '@atb/api/departures';
 import {
   DepartureGroupMetadata,
   DepartureGroupsQuery,
   getNextDepartureGroups,
 } from '@atb/api/departures/departure-group';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {useFavorites} from '@atb/favorites';
-import {Location, UserFavoriteDepartures} from '@atb/favorites/types';
+// import {useFavorites} from '@atb/favorites';
+// import {Location, UserFavoriteDepartures} from '@atb/favorites/types';
 import {DeparturesRealtimeData, StopPlaceDetails} from '@atb/sdk';
 import {differenceInMinutes} from 'date-fns';
 import useInterval from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '../../departure-list/utils';
-import {Quay} from '@entur/sdk';
+import {EstimatedCall, Quay} from '@entur/sdk';
 import {getStopPlaceDepartures} from '@atb/api/departures/stops-nearest';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
@@ -33,8 +33,8 @@ const HARD_REFRESH_LIMIT_IN_MINUTES = 10;
 type LoadType = 'initial' | 'more';
 
 export type DepartureDataState = {
-  data: DepartureGroupMetadata['data'] | null;
-  showOnlyFavorites: boolean;
+  data: EstimatedCall[] | null;
+  // showOnlyFavorites: boolean;
   tick?: Date;
   error?: {type: ErrorType; loadType: LoadType};
   locationId?: string;
@@ -51,7 +51,7 @@ const initialQueryInput: DepartureGroupsQuery = {
 };
 const initialState: DepartureDataState = {
   data: null,
-  showOnlyFavorites: false,
+  // showOnlyFavorites: false,
   error: undefined,
   locationId: undefined,
   isLoading: false,
@@ -70,19 +70,19 @@ type DepartureDataActions =
       type: 'LOAD_INITIAL_DEPARTURES';
       stopPlace: StopPlaceDetails;
       startTime?: string;
-      favoriteDepartures?: UserFavoriteDepartures;
+      // favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
       type: 'LOAD_MORE_DEPARTURES';
       stopPlace?: StopPlaceDetails;
-      favoriteDepartures?: UserFavoriteDepartures;
+      // favoriteDepartures?: UserFavoriteDepartures;
     }
-  | {
-      type: 'SET_SHOW_FAVORITES';
-      showOnlyFavorites: boolean;
-      location?: Location;
-      favoriteDepartures?: UserFavoriteDepartures;
-    }
+  // | {
+  //     type: 'SET_SHOW_FAVORITES';
+  //     showOnlyFavorites: boolean;
+  //     location?: Location;
+  //     favoriteDepartures?: UserFavoriteDepartures;
+  //   }
   | {
       type: 'LOAD_REALTIME_DATA';
     }
@@ -93,7 +93,7 @@ type DepartureDataActions =
       type: 'UPDATE_DEPARTURES';
       locationId?: string;
       reset?: boolean;
-      result: DepartureGroupMetadata;
+      result: EstimatedCall[];
     }
   | {
       type: 'SET_ERROR';
@@ -118,7 +118,7 @@ const reducer: ReducerWithSideEffects<
       if (!action.stopPlace) return NoUpdate();
 
       // Update input data with new date as this
-      // is a fresh fetch. We should fetch tha latest information.
+      // is a fresh fetch. We should fetch the latest information.
       const queryInput: DepartureGroupsQuery = {
         limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
         startTime: action.startTime ?? new Date().toISOString(),
@@ -135,7 +135,9 @@ const reducer: ReducerWithSideEffects<
         async (state, dispatch) => {
           try {
             // Fresh fetch, reset paging and use new query input with new startTime
-            const result = await getStopPlaceDepartures();
+            const result = await getStopPlaceDepartures({
+              id: action.stopPlace.id,
+            });
 
             // {
             //   stopPlace: action.stopPlace,
@@ -164,69 +166,69 @@ const reducer: ReducerWithSideEffects<
       );
     }
 
-    case 'LOAD_MORE_DEPARTURES': {
-      if (!action.stopPlace || !state.cursorInfo?.hasNextPage)
-        return NoUpdate();
-      if (state.isFetchingMore) return NoUpdate();
+    // case 'LOAD_MORE_DEPARTURES': {
+    //   if (!action.stopPlace || !state.cursorInfo?.hasNextPage)
+    //     return NoUpdate();
+    //   if (state.isFetchingMore) return NoUpdate();
 
-      return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
-        {...state, error: undefined, isFetchingMore: true},
-        async (state, dispatch) => {
-          try {
-            // Use previously stored queryInput with stored startTime
-            // to ensure that we get the same departures.
-            const result = await getNextDepartureGroups(
-              {
-                stopPlace: action.stopPlace,
-                favorites: state.showOnlyFavorites
-                  ? action.favoriteDepartures
-                  : undefined,
-              },
-              state.cursorInfo!,
-            );
+    //   return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
+    //     {...state, error: undefined, isFetchingMore: true},
+    //     async (state, dispatch) => {
+    //       try {
+    //         // Use previously stored queryInput with stored startTime
+    //         // to ensure that we get the same departures.
+    //         const result = await getNextDepartureGroups(
+    //           {
+    //             stopPlace: action.stopPlace,
+    //             // favorites: state.showOnlyFavorites
+    //             //   ? action.favoriteDepartures
+    //             //   : undefined,
+    //           },
+    //           state.cursorInfo!,
+    //         );
 
-            if (result) {
-              dispatch({
-                type: 'UPDATE_DEPARTURES',
-                locationId: action.stopPlace?.id,
-                result,
-              });
-            }
-          } catch (e) {
-            dispatch({
-              type: 'SET_ERROR',
-              loadType: 'more',
-              error: getAxiosErrorType(e),
-            });
-          } finally {
-            dispatch({type: 'STOP_LOADER'});
-          }
-        },
-      );
-    }
+    //         if (result) {
+    //           dispatch({
+    //             type: 'UPDATE_DEPARTURES',
+    //             locationId: action.stopPlace?.id,
+    //             result,
+    //           });
+    //         }
+    //       } catch (e) {
+    //         dispatch({
+    //           type: 'SET_ERROR',
+    //           loadType: 'more',
+    //           error: getAxiosErrorType(e),
+    //         });
+    //       } finally {
+    //         dispatch({type: 'STOP_LOADER'});
+    //       }
+    //     },
+    //   );
+    // }
 
-    case 'LOAD_REALTIME_DATA': {
-      if (!state.data?.length) return NoUpdate();
+    // case 'LOAD_REALTIME_DATA': {
+    //   if (!state.data?.length) return NoUpdate();
 
-      return SideEffect<DepartureDataState, DepartureDataActions>(
-        async (state2, dispatch) => {
-          // Use same query input with same startTime to ensure that
-          // we get the same result.
-          try {
-            const realtimeData = await getRealtimeDeparture(
-              state.data ?? [],
-              state.queryInput,
-            );
-            dispatch({
-              type: 'UPDATE_REALTIME',
-              realtimeData,
-            });
-          } catch (e) {
-            console.warn(e);
-          }
-        },
-      );
-    }
+    //   return SideEffect<DepartureDataState, DepartureDataActions>(
+    //     async (state2, dispatch) => {
+    //       // Use same query input with same startTime to ensure that
+    //       // we get the same result.
+    //       try {
+    //         const realtimeData = await getRealtimeDeparture(
+    //           state.data ?? [],
+    //           state.queryInput,
+    //         );
+    //         dispatch({
+    //           type: 'UPDATE_REALTIME',
+    //           realtimeData,
+    //         });
+    //       } catch (e) {
+    //         console.warn(e);
+    //       }
+    //     },
+    //   );
+    // }
 
     case 'STOP_LOADER': {
       return Update<DepartureDataState>({
@@ -269,26 +271,27 @@ const reducer: ReducerWithSideEffects<
         ...state,
         isLoading: false,
         locationId: action.locationId,
-        data: action.reset
-          ? action.result.data
-          : (state.data ?? []).concat(action.result.data),
-        cursorInfo: action.result.metadata,
+        // data: action.reset
+        //   ? action.result.data
+        //   : (state.data ?? []).concat(action.result.data),
+        data: action.result,
+        // cursorInfo: action.result.metadata,
         tick: new Date(),
         lastRefreshTime: new Date(),
       });
     }
 
-    case 'UPDATE_REALTIME': {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      return Update<DepartureDataState>({
-        ...state,
-        data: updateStopsWithRealtime(state.data ?? [], action.realtimeData),
+    // case 'UPDATE_REALTIME': {
+    //   LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    //   return Update<DepartureDataState>({
+    //     ...state,
+    //     data: updateStopsWithRealtime(state.data ?? [], action.realtimeData),
 
-        // We set lastUpdated here to count as a "tick" to
-        // know when to update components while still being performant.
-        tick: new Date(),
-      });
-    }
+    //     // We set lastUpdated here to count as a "tick" to
+    //     // know when to update components while still being performant.
+    //     tick: new Date(),
+    //   });
+    // }
 
     case 'SET_ERROR': {
       return Update<DepartureDataState>({
@@ -315,7 +318,7 @@ export function useDepartureData(
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const isFocused = useIsFocused();
-  const {favoriteDepartures} = useFavorites();
+  // const {favoriteDepartures} = useFavorites();
 
   const refresh = useCallback(
     () =>
@@ -325,13 +328,24 @@ export function useDepartureData(
         startTime,
         // favoriteDepartures,
       }),
-    [stopPlace?.id, favoriteDepartures, startTime],
+    [
+      stopPlace?.id,
+      // favoriteDepartures,
+      startTime,
+    ],
   );
 
   const loadMore = useCallback(
     () =>
-      dispatch({type: 'LOAD_MORE_DEPARTURES', stopPlace, favoriteDepartures}),
-    [stopPlace.id, favoriteDepartures],
+      dispatch({
+        type: 'LOAD_MORE_DEPARTURES',
+        stopPlace,
+        // favoriteDepartures
+      }),
+    [
+      stopPlace.id,
+      // favoriteDepartures,
+    ],
   );
 
   // const setShowFavorites = useCallback(
