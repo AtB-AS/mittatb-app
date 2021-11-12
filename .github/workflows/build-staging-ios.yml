@@ -50,11 +50,13 @@ jobs:
       - uses: webfactory/ssh-agent@v0.4.1
         with:
           ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
-      - name: Get potential cached ipa
+      - name: Get potential cached ipa & dsym
         uses: actions/cache@v2
         id: ipa-cache
         with:
-          path: "AtB.ipa"
+          path: |
+            AtB.ipa
+            AtB.app.dSYM.zip
           key: ${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}
       - name: Run fastlane cert match
         run: fastlane ios get_cert

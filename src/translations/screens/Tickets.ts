@@ -99,6 +99,11 @@ const TicketsTexts = {
         `Noe gikk feil når vi prøvde å laste inn billett med ordre-id ${orderId}`,
         `Something went wrong when we tried to load ticket with order id ${orderId}`,
       ),
+    paymentError: _(
+      'Betalingen mislyktes. Sjekk om du har tilstrekkelige midler på konto eller prøv et annet betalingsmiddel.',
+      'Payment failed. Please check that you have sufficient funds on your account or try a different payment option.',
+    ),
+    paymentErrorButton: _('Lukk', 'Close'),
   },
   travelCardInformation: {
     reisebevis: _('Reisebevis', 'Travel token'),

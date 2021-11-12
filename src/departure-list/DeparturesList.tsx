@@ -1,7 +1,6 @@
 import {StopPlaceGroup} from '@atb/api/departures/types';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {ActionItem} from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
 import {Location} from '@atb/favorites/types';
 import MessageBox from '@atb/components/message-box';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -22,6 +21,7 @@ type DeparturesListProps = {
   isInitialScreen: boolean;
   showOnlyFavorites: boolean;
   disableCollapsing?: boolean;
+  searchDate: string;
 };
 
 export default function DeparturesList({
@@ -34,6 +34,7 @@ export default function DeparturesList({
   currentLocation,
   showOnlyFavorites,
   disableCollapsing = false,
+  searchDate,
 }: DeparturesListProps) {
   const styles = useDeparturesListStyle();
   const {t} = useTranslation();
@@ -81,6 +82,7 @@ export default function DeparturesList({
               lastUpdated={lastUpdated}
               defaultExpanded={i === 0}
               disableCollapsing={disableCollapsing}
+              searchDate={searchDate}
             />
           ))}
           <FooterLoader isFetchingMore={isFetchingMore} />
@@ -125,6 +127,7 @@ type StopDeparturesProps = {
   lastUpdated?: Date;
   defaultExpanded?: boolean;
   disableCollapsing?: boolean;
+  searchDate: string;
 };
 const StopDepartures = React.memo(function StopDepartures({
   stopPlaceGroup,
@@ -132,6 +135,7 @@ const StopDepartures = React.memo(function StopDepartures({
   lastUpdated,
   defaultExpanded = false,
   disableCollapsing = false,
+  searchDate,
 }: StopDeparturesProps) {
   const {t} = useTranslation();
   const [expanded, setExpanded] = useState(
@@ -179,6 +183,7 @@ const StopDepartures = React.memo(function StopDepartures({
             quayGroup={quayGroup}
             currentLocation={currentLocation}
             lastUpdated={lastUpdated}
+            searchDate={searchDate}
           />
         ))}
     </View>
