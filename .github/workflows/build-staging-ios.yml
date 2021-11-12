@@ -93,12 +93,6 @@ jobs:
         run: sh ./scripts/ios/upload-dsyms.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
-      - name: Save dSYMs as artifact
-        if: steps.ipa-cache.outputs.cache-hit != 'true'
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-dsyms
-          path: AtB.app.dSYM.zip
       - name: Register app version
         run: sh ./scripts/ios/register-app-version.sh
         env:

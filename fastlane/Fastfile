@@ -82,6 +82,7 @@ platform :ios do
       owner_type: "organization",
       destinations: "*",
       file: "AtB.ipa",
+      dsym: "AtB.app.dSYM.zip",
       notify_testers: true
     )
   end
