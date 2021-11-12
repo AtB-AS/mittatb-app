@@ -10,6 +10,7 @@ import {useAuthState} from '@atb/auth';
 import {useAppDispatch} from '@atb/AppContext';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import storage from '@atb/storage';
+import {useMobileContextState} from '@atb/mobile-token/MobileTokenContext';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -23,6 +24,7 @@ export default function DebugInfo() {
   const [idToken, setIdToken] = useState<
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
+  const {tokenStatus} = useMobileContextState();
 
   useEffect(() => {
     async function run() {
@@ -112,6 +114,21 @@ export default function DebugInfo() {
               {storedValues.map(([key, value]) => mapEntry(key, value))}
             </Sections.GenericItem>
           )}
+        </Sections.Section>
+
+        <Sections.Section withPadding withTopPadding>
+          <Sections.HeaderItem text="Mobile token state" />
+          <Sections.GenericItem>
+            <View>
+              <ThemeText>{`Token state: ${tokenStatus?.state}`}</ThemeText>
+              <ThemeText>{`Visual state: ${tokenStatus?.visualState}`}</ThemeText>
+              <ThemeText>{`Error message: ${tokenStatus?.error?.message}`}</ThemeText>
+              <ThemeText>{`Error missing inet: ${tokenStatus?.error?.missingInetConnection}`}</ThemeText>
+              <ThemeText>{`Error object: ${JSON.stringify(
+                tokenStatus?.error?.err,
+              )}`}</ThemeText>
+            </View>
+          </Sections.GenericItem>
         </Sections.Section>
       </ScrollView>
     </View>

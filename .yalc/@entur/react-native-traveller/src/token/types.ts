@@ -82,7 +82,7 @@ const errorTypes = ['None', 'Severe', 'Unknown', 'Network'] as const;
 export type ErrorType = typeof errorTypes[number];
 
 export type TokenError = {
-  type: ErrorType;
+  missingNetConnection: boolean;
   message: string;
   err?: any;
 };
@@ -143,4 +143,8 @@ export type StoredState = {
     }
 );
 
-export type VisualState = 'Token' | 'Loading' | 'Error';
+export type VisualState =
+  | 'Token'
+  | 'Loading'
+  | 'Error'
+  | 'MissingNetConnection';

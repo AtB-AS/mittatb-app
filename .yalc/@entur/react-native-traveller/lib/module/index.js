@@ -15,7 +15,11 @@ export default function createClient(setStatus, initialConfig) {
   let currentStatus;
 
   const toVisualState = storedState => {
-    if (storedState.error) {
+    var _storedState$error;
+
+    if ((_storedState$error = storedState.error) !== null && _storedState$error !== void 0 && _storedState$error.missingNetConnection) {
+      return 'MissingNetConnection';
+    } else if (storedState.error) {
       return 'Error';
     } else if (['Valid', 'Validating'].includes(storedState.state)) {
       return 'Token';

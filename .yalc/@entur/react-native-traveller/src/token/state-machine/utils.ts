@@ -1,3 +1,5 @@
+import NetInfo from '@react-native-community/netinfo';
+
 export const verifyCorrectTokenId = (
   initialTokenId: string,
   tokenId: string
@@ -12,3 +14,8 @@ export const verifyCorrectTokenId = (
 const STORAGE_KEY_PREFIX = '@mobiletokensdk-state';
 export const getStoreKey = (accountId: string) =>
   `${STORAGE_KEY_PREFIX}#${accountId}`;
+
+export const missingNetConnection = () =>
+  NetInfo.fetch().then((state) => {
+    return !state.isConnected ?? true;
+  });

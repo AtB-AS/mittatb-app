@@ -66,7 +66,7 @@ export declare type ActivateTokenResponse = {
 declare const errorTypes: readonly ["None", "Severe", "Unknown", "Network"];
 export declare type ErrorType = typeof errorTypes[number];
 export declare type TokenError = {
-    type: ErrorType;
+    missingNetConnection: boolean;
     message: string;
     err?: any;
 };
@@ -96,5 +96,5 @@ export declare type StoredState = {
     state: 'AddToken';
     activatedData: ActivateTokenResponse;
 });
-export declare type VisualState = 'Token' | 'Loading' | 'Error';
+export declare type VisualState = 'Token' | 'Loading' | 'Error' | 'MissingNetConnection';
 export {};

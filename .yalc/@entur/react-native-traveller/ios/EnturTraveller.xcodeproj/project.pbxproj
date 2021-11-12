@@ -10,6 +10,7 @@
 		5E555C0D2413F4C50049A1A2 /* EnturTraveller.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* EnturTraveller.m */; };
 		F4FF95D7245B92E800C19C63 /* EnturTraveller.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FF95D6245B92E800C19C63 /* EnturTraveller.swift */; };
 		C5D6496371B7470CB55BEA22 /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8361E3CACCC040A18DAF8C2B /* libRNCAsyncStorage.a */; };
+		A707BBDBCE2C4EBCBA677914 /* libRNCNetInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619EBAC22BA74AAC8B0F0BBE /* libRNCNetInfo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +32,8 @@
 		F4FF95D6245B92E800C19C63 /* EnturTraveller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnturTraveller.swift; sourceTree = "<group>"; };
 		3F34586C95374DADAA3BBD7C /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; name = "RNCAsyncStorage.xcodeproj"; path = "../node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		8361E3CACCC040A18DAF8C2B /* libRNCAsyncStorage.a */ = {isa = PBXFileReference; name = "libRNCAsyncStorage.a"; path = "libRNCAsyncStorage.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		70F253137DF443D0B6DF3F06 /* RNCNetInfo.xcodeproj */ = {isa = PBXFileReference; name = "RNCNetInfo.xcodeproj"; path = "../node_modules/@react-native-community/netinfo/ios/RNCNetInfo.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		619EBAC22BA74AAC8B0F0BBE /* libRNCNetInfo.a */ = {isa = PBXFileReference; name = "libRNCNetInfo.a"; path = "libRNCNetInfo.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +42,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C5D6496371B7470CB55BEA22 /* libRNCAsyncStorage.a in Frameworks */,
+				A707BBDBCE2C4EBCBA677914 /* libRNCNetInfo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,6 +72,7 @@
 			isa = "PBXGroup";
 			children = (
 				3F34586C95374DADAA3BBD7C /* RNCAsyncStorage.xcodeproj */,
+				70F253137DF443D0B6DF3F06 /* RNCNetInfo.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -243,6 +248,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/EnturTraveller\"",
+					"\"$(SRCROOT)/EnturTraveller\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = EnturTraveller;
@@ -264,6 +270,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/EnturTraveller\"",
 					"\"$(SRCROOT)/EnturTraveller\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";

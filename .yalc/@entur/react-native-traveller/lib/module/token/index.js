@@ -37,7 +37,7 @@ export const startTokenStateMachine = async (abtTokensService, setStatus, getCli
       console.warn('Unexpected error', err);
       setStatus({ ...currentState,
         error: {
-          type: 'Unknown',
+          missingNetConnection: false,
           message: 'Unexpected error',
           err
         }

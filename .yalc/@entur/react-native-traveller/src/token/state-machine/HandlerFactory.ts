@@ -1,4 +1,5 @@
 import type { StoredState, TokenState } from '../types';
+import { missingNetConnection } from './utils';
 
 export type StateHandler = (storedState: StoredState) => Promise<StoredState>;
 
@@ -13,18 +14,18 @@ export function stateHandlerFactory<S extends TokenState>(
       return {
         ...storedState,
         error: {
-          type: 'Severe',
+          missingNetConnection: false,
           message: `Applying handler for ${forStates} when the actual state is ${storedState.state}`,
         },
       };
     }
 
     return handlerFunction(storedState as StoredState & { state: S }).catch(
-      (err) => {
+      async (err) => {
         return {
           ...storedState,
           error: {
-            type: 'Unknown',
+            missingNetConnection: await missingNetConnection(),
             message: `Error during handling of state ${storedState.state}`,
             err,
           },

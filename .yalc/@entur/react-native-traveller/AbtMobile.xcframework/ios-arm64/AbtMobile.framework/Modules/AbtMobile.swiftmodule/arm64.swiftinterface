@@ -270,6 +270,11 @@ extension Swift.String {
     get
   }
 }
+extension Swift.String : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
 public struct DeviceDetails {
   public let applicationVersion: Swift.String
   public let applicationId: Swift.String

@@ -635,6 +635,8 @@ PODS:
     - Mapbox-iOS-SDK (= 6.3.0)
     - React
     - React-Core
+  - react-native-netinfo (6.1.0):
+    - React-Core
   - react-native-safe-area-context (3.3.0):
     - React-Core
   - react-native-webview (11.13.0):
@@ -798,6 +800,7 @@ DEPENDENCIES:
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-intercom (from `../node_modules/react-native-intercom`)
   - "react-native-mapbox-gl (from `../node_modules/@react-native-mapbox-gl/maps`)"
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -920,6 +923,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-intercom"
   react-native-mapbox-gl:
     :path: "../node_modules/@react-native-mapbox-gl/maps"
+  react-native-netinfo:
+    :path: "../node_modules/@react-native-community/netinfo"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-webview:
@@ -1045,6 +1050,7 @@ SPEC CHECKSUMS:
   react-native-get-random-values: 237bffb1c7e05fb142092681531810a29ba53015
   react-native-intercom: c48e0e15877bf96ff4d461f7aa9b833d11188139
   react-native-mapbox-gl: bffacc7783a77b1e2d040018a8212ed344105e10
+  react-native-netinfo: 5a001e406317eaaf1e4846906650e107dadcaa72
   react-native-safe-area-context: 61c8c484a3a9e7d1fda19f7b1794b35bbfd2262a
   react-native-webview: 133a6a5149f963259646e710b4545c67ef35d7c9
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336

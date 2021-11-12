@@ -49,7 +49,11 @@ export const startTokenStateMachine = async (
       console.warn('Unexpected error', err);
       setStatus({
         ...currentState,
-        error: { type: 'Unknown', message: 'Unexpected error', err },
+        error: {
+          missingNetConnection: false,
+          message: 'Unexpected error',
+          err,
+        },
       });
     }
   }

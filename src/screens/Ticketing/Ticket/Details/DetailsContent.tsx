@@ -10,7 +10,7 @@ import TicketInfo from '../TicketInfo';
 import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
 import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
-import QrCodeSvg from '@atb/screens/Ticketing/Ticket/Details/QrCodeSvg';
+import QrCode from '@atb/screens/Ticketing/Ticket/Details/QrCode';
 
 type Props = {
   fareContract: FareContract;
@@ -85,10 +85,7 @@ const DetailsContent: React.FC<Props> = ({
           onPress={onReceiptNavigate}
           accessibility={{accessibilityRole: 'button'}}
         />
-        <QrCodeSvg
-          validityStatus={validityStatus}
-          isInspectable={isInspectable}
-        />
+        <QrCode validityStatus={validityStatus} isInspectable={isInspectable} />
       </Sections.Section>
     );
   } else {

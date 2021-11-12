@@ -260,7 +260,3 @@ private extension NSArray {
         return actions
     }
 }
-
-extension String: LocalizedError {
-    public var errorDescription: String? { return self }
-}
