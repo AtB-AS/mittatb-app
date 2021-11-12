@@ -2,10 +2,23 @@ import AbtMobile
 import DeviceCheck
 @_implementationOnly import Kronos
 
+public class EnturTravellerLogger {
+    private let callback: (Error) -> Void
+    
+    public init(cb: @escaping (Error) -> Void) {
+        self.callback = cb
+    }
+    
+    func notify(err: Error) {
+        callback(err)
+    }
+}
+
 @objc(EnturTraveller)
-class EnturTraveller: NSObject {
+public class EnturTraveller: NSObject {
     var secureTokenService: SecureTokenService? = nil;
     var started: Bool = false;
+    public static var logger: EnturTravellerLogger?;
     
     @objc(start:withResolver:withRejecter:)
     func start(_: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
@@ -30,6 +43,7 @@ class EnturTraveller: NSObject {
                 case .success(let data):
                     resolve(data)
                 case .failure(let error):
+                    EnturTraveller.logger?.notify(err: error)
                     reject("GENERATE_ASSERTION_ERROR", error.localizedDescription, error)
                 }
             }
@@ -61,6 +75,7 @@ class EnturTraveller: NSObject {
 
                         resolve(dict)
                     case .failure(let err):
+                        EnturTraveller.logger?.notify(err: err)
                         reject("ATTESTATION_ERROR", err.localizedDescription, err)
                 }
             })
@@ -91,6 +106,7 @@ class EnturTraveller: NSObject {
 
                         resolve(dict)
                     case .failure(let err):
+                        EnturTraveller.logger?.notify(err: err)
                         reject("ATTESTATION_ERROR", err.localizedDescription, err)
                 }
             })
@@ -150,6 +166,7 @@ class EnturTraveller: NSObject {
                         let _ = tokenStore.deleteTokens(forAccountId: accountId)
                         resolve(success)
                     case .failure(let err):
+                        EnturTraveller.logger?.notify(err: err)
                         reject("ERROR", err.localizedDescription, err as NSError)
                 }
             }
@@ -218,6 +235,8 @@ class EnturTraveller: NSObject {
         case .success(let token):
             resolve(token)
         case .failure(let error):
+            EnturTraveller.logger?.notify(err: error)
+
             switch (error) {
             case .couldNotSerializeToken:
                 reject("SECURE_TOKEN_ERROR", "Failed to serialize token", error)
