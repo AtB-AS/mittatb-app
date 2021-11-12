@@ -123,7 +123,7 @@ export default function DebugInfo() {
               <ThemeText>{`Token state: ${tokenStatus?.state}`}</ThemeText>
               <ThemeText>{`Visual state: ${tokenStatus?.visualState}`}</ThemeText>
               <ThemeText>{`Error message: ${tokenStatus?.error?.message}`}</ThemeText>
-              <ThemeText>{`Error missing inet: ${tokenStatus?.error?.missingInetConnection}`}</ThemeText>
+              <ThemeText>{`Error missing inet: ${tokenStatus?.error?.missingNetConnection}`}</ThemeText>
               <ThemeText>{`Error object: ${JSON.stringify(
                 tokenStatus?.error?.err,
               )}`}</ThemeText>
