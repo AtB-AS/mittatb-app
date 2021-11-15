@@ -1,7 +1,13 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import React, {useEffect, useMemo} from 'react';
+import {StyleSheet, useTheme} from '@atb/theme';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {StopPlaceDetails} from '@atb/sdk';
@@ -9,7 +15,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {NearbyStackParams} from '../Nearby';
 import {RouteProp} from '@react-navigation/native';
 import Button from '@atb/components/button';
-import {useDepartureData} from './DepartureState';
+import {DepartureDataState, useDepartureData} from './DepartureState';
 import ThemeText from '@atb/components/text';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
@@ -19,6 +25,8 @@ import {formatToClock} from '@atb/utils/date';
 import {EstimatedCall, Quay} from '@entur/sdk';
 import {TransportMode, TransportSubmode} from '@atb/sdk';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
+
+const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 5;
 
 export type StopPlaceScreenParams = {
   stopPlaceDetails: StopPlaceDetails;
@@ -47,6 +55,9 @@ export default function StopPlaceScreen({
   const {state, refresh, loadMore} = useDepartureData(
     stopPlaceDetails,
     selectedQuay,
+  );
+  const [expandedQuays, setExpandedQuays] = useState(
+    new Array<number>(stopPlaceDetails.quays?.length || 0).fill(5),
   );
 
   useEffect(() => {
@@ -101,7 +112,7 @@ export default function StopPlaceScreen({
         ))}
       </ScrollView>
       <ScrollView>
-        {stopPlaceDetails.quays?.map((quay) => {
+        {stopPlaceDetails.quays?.map((quay, index) => {
           if (selectedQuay && selectedQuay.id !== quay.id) return;
           return (
             <Sections.Section
@@ -115,34 +126,27 @@ export default function StopPlaceScreen({
                     ? quay.name + ' ' + quay.publicCode
                     : quay.name
                 }
+                type="inline"
               />
               {!!quay.description && (
                 <Sections.ActionItem text={quay.description} />
               )}
-              {state.data &&
-                state.data
-                  .filter(
-                    (departure) =>
-                      departure.quay && departure.quay?.id === quay.id,
-                  )
-                  .map((departure) => (
-                    <Sections.GenericItem key={departure.serviceJourney.id}>
-                      <EstimatedCallLine
-                        departure={departure}
-                      ></EstimatedCallLine>
-                    </Sections.GenericItem>
-                  ))}
-              {state.data &&
-                state.data.filter(
-                  (departure) =>
-                    departure.quay && departure.quay?.id === quay.id,
-                ).length === 0 && (
-                  <Sections.GenericItem>
-                    <ThemeText color="secondary" style={{width: '100%'}}>
-                      Ingen avganger i nærmeste fremtid
-                    </ThemeText>
+              {getDeparturesForQuay(state, quay)
+                .slice(0, selectedQuay ? -1 : expandedQuays[index])
+                .map((departure) => (
+                  <Sections.GenericItem key={departure.serviceJourney.id}>
+                    <EstimatedCallLine
+                      departure={departure}
+                    ></EstimatedCallLine>
                   </Sections.GenericItem>
-                )}
+                ))}
+              {getDeparturesForQuay(state, quay).length === 0 && (
+                <Sections.GenericItem>
+                  <ThemeText color="secondary" style={{width: '100%'}}>
+                    Ingen avganger i nærmeste fremtid
+                  </ThemeText>
+                </Sections.GenericItem>
+              )}
               {!state.data && (
                 <Sections.GenericItem>
                   <View style={{width: '100%'}}>
@@ -150,6 +154,20 @@ export default function StopPlaceScreen({
                   </View>
                 </Sections.GenericItem>
               )}
+              <Sections.LinkItem
+                icon="expand-more"
+                text="Vis flere avganger"
+                textType="body__primary--bold"
+                onPress={() => {
+                  expandQuay(
+                    quay,
+                    index,
+                    expandedQuays,
+                    setExpandedQuays,
+                    getDeparturesForQuay(state, quay).length,
+                  );
+                }}
+              ></Sections.LinkItem>
             </Sections.Section>
           );
         })}
@@ -161,6 +179,34 @@ export default function StopPlaceScreen({
 type EstimatedCallLineProps = {
   departure: EstimatedCall;
 };
+
+function getDeparturesForQuay(state: DepartureDataState, quay: Quay) {
+  if (!state.data) return [];
+  return state.data.filter(
+    (departure) => departure.quay && departure.quay?.id === quay.id,
+  );
+}
+
+function expandQuay(
+  quay: Quay,
+  index: number,
+  expandedQuays: number[],
+  setExpandedQuays: Dispatch<SetStateAction<number[]>>,
+  loadedDeparturesCount: number,
+) {
+  const targetCount =
+    expandedQuays[index] + DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW;
+
+  if (loadedDeparturesCount >= targetCount) {
+    setExpandedQuays(
+      expandedQuays.map((value, quayIndex) =>
+        quayIndex === index ? loadedDeparturesCount : value,
+      ),
+    );
+  } else {
+    // console.log('LOAD MORE DEPARTURES FOR QUAY ' + quay.id);
+  }
+}
 
 function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
   const {t, language} = useTranslation();
