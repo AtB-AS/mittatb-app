@@ -3,14 +3,12 @@ import type { AbtTokensService } from '../../abt-tokens-service';
 import { PayloadAction } from '../../../native/types';
 import { verifyCorrectTokenId } from '../utils';
 import { StateHandler, stateHandlerFactory } from '../HandlerFactory';
-import type { ClientState } from '../../..';
 
 export default function activateRenewalHandler(
   abtTokensService: AbtTokensService,
-  getClientState: () => Required<ClientState>
+  accountId: string
 ): StateHandler {
   return stateHandlerFactory(['ActivateRenewal'], async (s) => {
-    const { accountId } = getClientState();
     const signedToken = await getSecureToken(accountId, [
       PayloadAction.addRemoveToken,
     ]);

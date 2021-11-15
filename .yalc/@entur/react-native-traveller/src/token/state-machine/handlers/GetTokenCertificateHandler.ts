@@ -3,14 +3,12 @@ import type { AbtTokensService } from '../../abt-tokens-service';
 import { PayloadAction } from '../../../native/types';
 import type { StateHandler } from '../HandlerFactory';
 import { stateHandlerFactory } from '../HandlerFactory';
-import type { ClientState } from '../../..';
 
 export default function getTokenCertificateHandler(
   abtTokensService: AbtTokensService,
-  getClientState: () => Required<ClientState>
+  accountId: string
 ): StateHandler {
   return stateHandlerFactory(['GettingTokenCertificate'], async (_) => {
-    const { accountId } = getClientState();
     const signedToken = await getSecureToken(accountId, [
       PayloadAction.addRemoveToken,
     ]);

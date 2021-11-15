@@ -1,11 +1,8 @@
 import { getSecureToken } from '../../../native';
 import { PayloadAction } from '../../../native/types';
 import { stateHandlerFactory } from '../HandlerFactory';
-export default function getTokenCertificateHandler(abtTokensService, getClientState) {
+export default function getTokenCertificateHandler(abtTokensService, accountId) {
   return stateHandlerFactory(['GettingTokenCertificate'], async _ => {
-    const {
-      accountId
-    } = getClientState();
     const signedToken = await getSecureToken(accountId, [PayloadAction.addRemoveToken]);
     const tokenCertificateResponse = await abtTokensService.getTokenCertificate(signedToken);
     return {

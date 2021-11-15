@@ -12,23 +12,19 @@ import type { StateHandler } from './state-machine/HandlerFactory';
 import activateNewHandler from './state-machine/handlers/ActivateNewHandler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import deleteLocalHandler from './state-machine/handlers/DeleteLocalHandler';
-import type { ClientState, ClientStateRetriever } from '..';
 import startingHandler from './state-machine/handlers/StartingHandler';
 import { getStoreKey } from './state-machine/utils';
 
 export const startTokenStateMachine = async (
   abtTokensService: AbtTokensService,
   setStatus: (s?: StoredState) => void,
-  getClientState: ClientStateRetriever,
   safetyNetApiKey: string,
-  forceRestart: boolean = false
+  forceRestart: boolean = false,
+  accountId?: string
 ) => {
-  const { accountId } = getClientState();
-
   if (!accountId) {
     setStatus(undefined);
   } else {
-    const getClientStateRequired = getClientState as () => Required<ClientState>;
     const storeKey = getStoreKey(accountId!);
     let currentState: StoredState = { state: 'Starting' };
     setStatus(currentState);
@@ -37,7 +33,7 @@ export const startTokenStateMachine = async (
         const handler = getStateHandler(
           abtTokensService,
           currentState,
-          getClientStateRequired,
+          accountId,
           safetyNetApiKey,
           forceRestart
         );
@@ -64,34 +60,34 @@ const shouldContinue = (s: StoredState) => s.state !== 'Valid' && !s.error;
 const getStateHandler = (
   abtTokensService: AbtTokensService,
   storedState: StoredState,
-  getClientState: () => Required<ClientState>,
+  accountId: string,
   safetyNetApiKey: string,
   forceRestart: boolean
 ): StateHandler => {
   switch (storedState.state) {
     case 'Starting':
-      return startingHandler(getClientState, safetyNetApiKey, forceRestart);
+      return startingHandler(accountId, safetyNetApiKey, forceRestart);
     case 'Valid':
     case 'Loading':
-      return loadingHandler(getClientState);
+      return loadingHandler(accountId);
     case 'Validating':
       return validatingHandler(abtTokensService);
     case 'DeleteLocal':
-      return deleteLocalHandler(getClientState);
+      return deleteLocalHandler(accountId);
     case 'InitiateNew':
       return initiateNewHandler(abtTokensService);
     case 'InitiateRenewal':
-      return initiateRenewHandler(abtTokensService, getClientState);
+      return initiateRenewHandler(abtTokensService, accountId);
     case 'GettingTokenCertificate':
-      return getTokenCertificateHandler(abtTokensService, getClientState);
+      return getTokenCertificateHandler(abtTokensService, accountId);
     case 'AttestNew':
     case 'AttestRenewal':
-      return attestHandler(getClientState);
+      return attestHandler(accountId);
     case 'ActivateNew':
       return activateNewHandler(abtTokensService);
     case 'ActivateRenewal':
-      return activateRenewalHandler(abtTokensService, getClientState);
+      return activateRenewalHandler(abtTokensService, accountId);
     case 'AddToken':
-      return addTokenHandler(getClientState);
+      return addTokenHandler(accountId);
   }
 };

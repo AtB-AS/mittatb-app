@@ -10,12 +10,6 @@ export type { Token } from './native/types';
 export { RequestError } from './fetcher';
 export type { Fetch, ApiResponse, ApiRequest } from './config';
 
-export type ClientState = {
-  accountId?: string;
-};
-
-export type ClientStateRetriever = () => ClientState;
-
 export default function createClient(
   setStatus: (status?: TokenStatus) => void,
   initialConfig: InitialConfig
@@ -26,6 +20,7 @@ export default function createClient(
   const abtTokensService = createAbtTokensService(fetcher, config.hosts);
 
   let currentStatus: TokenStatus | undefined;
+  let currentAccountId: string | undefined;
 
   const toVisualState = (storedState: StoredState): VisualState => {
     if (storedState.error?.missingNetConnection) {
@@ -49,46 +44,36 @@ export default function createClient(
     setStatus(status);
   };
 
-  let clientState: ClientState = {};
-
-  function clientStateRetriever() {
-    return clientState;
-  }
-
   return {
     setAccount(accountId: string | undefined) {
-      clientState = { ...clientState, accountId };
-      if (clientState.accountId) {
-        startTokenStateMachine(
-          abtTokensService,
-          setStatusWrapper,
-          clientStateRetriever,
-          safetyNetApiKey,
-          false
-        );
-      }
+      currentAccountId = accountId;
+      startTokenStateMachine(
+        abtTokensService,
+        setStatusWrapper,
+        safetyNetApiKey,
+        false,
+        accountId
+      );
     },
     retry: (forceRestart: boolean) => {
-      const { accountId } = clientState;
-      if (!accountId) {
+      if (!currentAccountId) {
         throw new Error('Account id must be set');
       }
 
-      if (currentStatus?.visualState === 'Loading') {
+      if (!forceRestart && currentStatus?.visualState === 'Loading') {
         throw new Error('Can not retry while the sdk is already running');
       }
 
       startTokenStateMachine(
         abtTokensService,
         setStatusWrapper,
-        clientStateRetriever,
         safetyNetApiKey,
-        forceRestart
+        forceRestart,
+        currentAccountId
       ); // Todo: Not start if already running
     },
     generateQrCode: () => {
-      const { accountId } = clientState;
-      if (!accountId) {
+      if (!currentAccountId) {
         throw new Error('Account id must be set');
       }
 
@@ -98,7 +83,7 @@ export default function createClient(
         );
       }
 
-      return getSecureToken(accountId, [PayloadAction.ticketInspection]);
+      return getSecureToken(currentAccountId, [PayloadAction.ticketInspection]);
     },
   };
 }

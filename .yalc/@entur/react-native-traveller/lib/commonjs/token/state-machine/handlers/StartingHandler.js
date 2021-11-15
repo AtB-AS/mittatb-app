@@ -15,11 +15,8 @@ var _native = require("../../../native");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function startingHandler(getClientState, safetyNetApiKey, forceRestart) {
+function startingHandler(accountId, safetyNetApiKey, forceRestart) {
   return (0, _HandlerFactory.stateHandlerFactory)(['Starting'], async _ => {
-    const {
-      accountId
-    } = getClientState();
     const storeKey = (0, _utils.getStoreKey)(accountId);
     await (0, _native.start)(safetyNetApiKey);
 

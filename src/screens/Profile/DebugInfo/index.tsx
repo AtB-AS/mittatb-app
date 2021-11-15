@@ -24,7 +24,7 @@ export default function DebugInfo() {
   const [idToken, setIdToken] = useState<
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
-  const {tokenStatus} = useMobileContextState();
+  const {tokenStatus, forceRestart} = useMobileContextState();
 
   useEffect(() => {
     async function run() {
@@ -129,6 +129,7 @@ export default function DebugInfo() {
               )}`}</ThemeText>
             </View>
           </Sections.GenericItem>
+          <Sections.LinkItem text="Force restart" onPress={forceRestart} />
         </Sections.Section>
       </ScrollView>
     </View>

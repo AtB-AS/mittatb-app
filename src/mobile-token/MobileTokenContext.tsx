@@ -14,6 +14,7 @@ import Bugsnag from '@bugsnag/react-native';
 type MobileContextState = {
   generateQrCode: () => Promise<string>;
   tokenStatus?: TokenStatus;
+  forceRestart: () => void;
 };
 
 const MobileTokenContext = createContext<MobileContextState | undefined>(
@@ -70,6 +71,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
       value={{
         generateQrCode: client.generateQrCode,
         tokenStatus,
+        forceRestart: () => client.retry(true),
       }}
     >
       {children}

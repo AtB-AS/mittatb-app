@@ -1,14 +1,10 @@
 import { getActivateTokenRequestBody } from '../../attest';
 import type { StateHandler } from '../HandlerFactory';
 import { stateHandlerFactory } from '../HandlerFactory';
-import type { ClientState } from '../../..';
 
-export default function attestHandler(
-  getClientState: () => Required<ClientState>
-): StateHandler {
+export default function attestHandler(accountId: string): StateHandler {
   return stateHandlerFactory(['AttestNew', 'AttestRenewal'], async (s) => {
     const { tokenId, nonce, attestationEncryptionPublicKey } = s.initiatedData;
-    const { accountId } = getClientState();
     const activateTokenRequestBody = await getActivateTokenRequestBody(
       accountId,
       tokenId,

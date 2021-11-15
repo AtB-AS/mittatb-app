@@ -9,11 +9,8 @@ var _HandlerFactory = require("../HandlerFactory");
 
 var _native = require("../../../native");
 
-function deleteLocalHandler(getClientState) {
+function deleteLocalHandler(accountId) {
   return (0, _HandlerFactory.stateHandlerFactory)(['DeleteLocal'], async _ => {
-    const {
-      accountId
-    } = getClientState();
     (0, _native.deleteToken)(accountId);
     return {
       state: 'InitiateNew'

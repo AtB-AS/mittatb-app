@@ -11,11 +11,8 @@ var _HandlerFactory = require("../HandlerFactory");
 
 const secondsIn48Hours = 48 * 60 * 60;
 
-function loadingHandler(getClientState) {
+function loadingHandler(accountId) {
   return (0, _HandlerFactory.stateHandlerFactory)(['Loading', 'Valid'], async _ => {
-    const {
-      accountId
-    } = getClientState();
     const token = await (0, _native.getToken)(accountId);
 
     if (!token) {

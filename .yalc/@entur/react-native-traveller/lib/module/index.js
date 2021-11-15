@@ -13,6 +13,7 @@ export default function createClient(setStatus, initialConfig) {
   const fetcher = createFetcher(config);
   const abtTokensService = createAbtTokensService(fetcher, config.hosts);
   let currentStatus;
+  let currentAccountId;
 
   const toVisualState = storedState => {
     var _storedState$error;
@@ -38,48 +39,29 @@ export default function createClient(setStatus, initialConfig) {
     setStatus(status);
   };
 
-  let clientState = {};
-
-  function clientStateRetriever() {
-    return clientState;
-  }
-
   return {
     setAccount(accountId) {
-      clientState = { ...clientState,
-        accountId
-      };
-
-      if (clientState.accountId) {
-        startTokenStateMachine(abtTokensService, setStatusWrapper, clientStateRetriever, safetyNetApiKey, false);
-      }
+      currentAccountId = accountId;
+      startTokenStateMachine(abtTokensService, setStatusWrapper, safetyNetApiKey, false, accountId);
     },
 
     retry: forceRestart => {
       var _currentStatus;
 
-      const {
-        accountId
-      } = clientState;
-
-      if (!accountId) {
+      if (!currentAccountId) {
         throw new Error('Account id must be set');
       }
 
-      if (((_currentStatus = currentStatus) === null || _currentStatus === void 0 ? void 0 : _currentStatus.visualState) === 'Loading') {
+      if (!forceRestart && ((_currentStatus = currentStatus) === null || _currentStatus === void 0 ? void 0 : _currentStatus.visualState) === 'Loading') {
         throw new Error('Can not retry while the sdk is already running');
       }
 
-      startTokenStateMachine(abtTokensService, setStatusWrapper, clientStateRetriever, safetyNetApiKey, forceRestart); // Todo: Not start if already running
+      startTokenStateMachine(abtTokensService, setStatusWrapper, safetyNetApiKey, forceRestart, currentAccountId); // Todo: Not start if already running
     },
     generateQrCode: () => {
       var _currentStatus2;
 
-      const {
-        accountId
-      } = clientState;
-
-      if (!accountId) {
+      if (!currentAccountId) {
         throw new Error('Account id must be set');
       }
 
@@ -87,7 +69,7 @@ export default function createClient(setStatus, initialConfig) {
         throw new Error('The current state does not allow retrieval of qr code');
       }
 
-      return getSecureToken(accountId, [PayloadAction.ticketInspection]);
+      return getSecureToken(currentAccountId, [PayloadAction.ticketInspection]);
     }
   };
 }
