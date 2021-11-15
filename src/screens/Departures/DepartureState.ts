@@ -22,7 +22,10 @@ import {differenceInMinutes} from 'date-fns';
 import useInterval from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '../../departure-list/utils';
 import {EstimatedCall, Quay} from '@entur/sdk';
-import {getStopPlaceDepartures} from '@atb/api/departures/stops-nearest';
+import {
+  getQuayDepartures,
+  getStopPlaceDepartures,
+} from '@atb/api/departures/stops-nearest';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
@@ -69,6 +72,7 @@ type DepartureDataActions =
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
       stopPlace: StopPlaceDetails;
+      quay?: Quay;
       startTime?: string;
       // favoriteDepartures?: UserFavoriteDepartures;
     }
@@ -135,9 +139,13 @@ const reducer: ReducerWithSideEffects<
         async (state, dispatch) => {
           try {
             // Fresh fetch, reset paging and use new query input with new startTime
-            const result = await getStopPlaceDepartures({
-              id: action.stopPlace.id,
-            });
+            const result = action.quay
+              ? await getQuayDepartures({
+                  id: action.quay.id,
+                })
+              : await getStopPlaceDepartures({
+                  id: action.stopPlace.id,
+                });
 
             // {
             //   stopPlace: action.stopPlace,
@@ -149,7 +157,7 @@ const reducer: ReducerWithSideEffects<
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
-              locationId: action.stopPlace?.id,
+              locationId: action.quay ? action.quay.id : action.stopPlace?.id,
               result,
             });
           } catch (e) {
@@ -325,11 +333,13 @@ export function useDepartureData(
       dispatch({
         type: 'LOAD_INITIAL_DEPARTURES',
         stopPlace,
+        quay,
         startTime,
         // favoriteDepartures,
       }),
     [
       stopPlace?.id,
+      quay?.id,
       // favoriteDepartures,
       startTime,
     ],

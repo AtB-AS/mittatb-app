@@ -1,7 +1,7 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {StopPlaceDetails} from '@atb/sdk';
@@ -16,12 +16,13 @@ import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {BusSide} from '@atb/assets/svg/icons/transportation';
 import {dictionary, useTranslation} from '@atb/translations';
 import {formatToClock} from '@atb/utils/date';
-import {EstimatedCall} from '@entur/sdk';
+import {EstimatedCall, Quay} from '@entur/sdk';
 import {TransportMode, TransportSubmode} from '@atb/sdk';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 
 export type StopPlaceScreenParams = {
   stopPlaceDetails: StopPlaceDetails;
+  selectedQuay?: Quay;
 };
 
 type StopPlaceScreenRouteProps = RouteProp<
@@ -37,13 +38,20 @@ export type LoginOnboardingProps = {
 export default function StopPlaceScreen({
   navigation,
   route: {
-    params: {stopPlaceDetails},
+    params: {stopPlaceDetails, selectedQuay},
   },
 }: LoginOnboardingProps) {
   const styles = useStyles();
   const {theme} = useTheme();
   const {t, language} = useTranslation();
-  const {state, refresh, loadMore} = useDepartureData(stopPlaceDetails);
+  const {state, refresh, loadMore} = useDepartureData(
+    stopPlaceDetails,
+    selectedQuay,
+  );
+
+  useEffect(() => {
+    refresh();
+  }, [selectedQuay, stopPlaceDetails]);
 
   useMemo(
     () =>
@@ -66,69 +74,85 @@ export default function StopPlaceScreen({
       >
         <Button
           onPress={() => {
-            console.log('refresh');
-            console.log(state.data);
-            refresh();
+            navigation.navigate('StopPlaceScreen', {
+              stopPlaceDetails,
+              selectedQuay: undefined,
+            });
           }}
           text="Alle stopp"
-          color="secondary_3"
+          color={selectedQuay ? 'secondary_4' : 'secondary_3'}
           style={[styles.quayChip, {marginLeft: theme.spacings.medium}]}
         ></Button>
         {stopPlaceDetails.quays?.map((quay) => (
           <Button
             key={quay.id}
-            onPress={() => {}}
+            onPress={() => {
+              navigation.navigate('StopPlaceScreen', {
+                stopPlaceDetails,
+                selectedQuay: quay,
+              });
+            }}
             text={
               quay.publicCode ? quay.name + ' ' + quay.publicCode : quay.name
             }
-            color="secondary_4"
+            color={selectedQuay?.id === quay.id ? 'secondary_3' : 'secondary_4'}
             style={styles.quayChip}
           ></Button>
         ))}
       </ScrollView>
       <ScrollView>
-        {stopPlaceDetails.quays?.map((quay) => (
-          <Sections.Section withPadding withTopPadding key={quay.id.toString()}>
-            <Sections.HeaderItem
-              text={
-                quay.publicCode ? quay.name + ' ' + quay.publicCode : quay.name
-              }
-            />
-            {!!quay.description && (
-              <Sections.ActionItem text={quay.description} />
-            )}
-            {state.data &&
-              state.data
-                .filter(
+        {stopPlaceDetails.quays?.map((quay) => {
+          if (selectedQuay && selectedQuay.id !== quay.id) return;
+          return (
+            <Sections.Section
+              withPadding
+              withTopPadding
+              key={quay.id.toString()}
+            >
+              <Sections.HeaderItem
+                text={
+                  quay.publicCode
+                    ? quay.name + ' ' + quay.publicCode
+                    : quay.name
+                }
+              />
+              {!!quay.description && (
+                <Sections.ActionItem text={quay.description} />
+              )}
+              {state.data &&
+                state.data
+                  .filter(
+                    (departure) =>
+                      departure.quay && departure.quay?.id === quay.id,
+                  )
+                  .map((departure) => (
+                    <Sections.GenericItem key={departure.serviceJourney.id}>
+                      <EstimatedCallLine
+                        departure={departure}
+                      ></EstimatedCallLine>
+                    </Sections.GenericItem>
+                  ))}
+              {state.data &&
+                state.data.filter(
                   (departure) =>
                     departure.quay && departure.quay?.id === quay.id,
-                )
-                .map((departure) => (
-                  <Sections.GenericItem key={departure.serviceJourney.id}>
-                    <EstimatedCallLine
-                      departure={departure}
-                    ></EstimatedCallLine>
+                ).length === 0 && (
+                  <Sections.GenericItem>
+                    <ThemeText color="secondary" style={{width: '100%'}}>
+                      Ingen avganger i nærmeste fremtid
+                    </ThemeText>
                   </Sections.GenericItem>
-                ))}
-            {state.data &&
-              state.data.filter(
-                (departure) => departure.quay && departure.quay?.id === quay.id,
-              ).length === 0 && (
+                )}
+              {!state.data && (
                 <Sections.GenericItem>
-                  <ThemeText color="secondary" style={{width: '100%'}}>
-                    Ingen avganger i nærmeste fremtid
-                  </ThemeText>
+                  <View style={{width: '100%'}}>
+                    <ActivityIndicator></ActivityIndicator>
+                  </View>
                 </Sections.GenericItem>
               )}
-            {!state.data && (
-              <Sections.GenericItem>
-                <View style={{width: '100%'}}>
-                  <ActivityIndicator></ActivityIndicator>
-                </View>
-              </Sections.GenericItem>
-            )}
-          </Sections.Section>
-        ))}
+            </Sections.Section>
+          );
+        })}
       </ScrollView>
     </View>
   );
