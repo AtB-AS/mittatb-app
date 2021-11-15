@@ -7,6 +7,9 @@ on:
 jobs:
   build-ios:
     name: Build Android
+    strategy:
+      matrix:
+        org: [atb, nfk]
     timeout-minutes: 90
     runs-on: macos-latest
     steps:
@@ -16,7 +19,6 @@ jobs:
         run: |
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
           echo "APP_ENVIRONMENT=staging" >> $GITHUB_ENV
-          echo "APP_ORG=atb" >> $GITHUB_ENV
           echo "KEYSTORE_PATH=./keystore.jks" >> $GITHUB_ENV
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
@@ -38,7 +40,7 @@ jobs:
       - name: Bundle install, fastlane dependencies
         run: bundle install
       - name: Set environment
-        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT $APP_ORG
+        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT ${{matrix.org}}
       - name: Override native config files
         run: sh ./scripts/override-config-files.sh
       - name: Get potential cached APK
@@ -72,9 +74,17 @@ jobs:
           KEY_PASS: ${{ secrets.ATB_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.ATB_KEY_ALIAS }}
       - name: Distribute to AppCenter
+        if: matrix.org == 'AtB'
         run: fastlane android appcenter_staging
         env:
           APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
+      - name: Distribute to Firebase app distribution
+        if: matrix.org == 'NFK'
+        run: |
+          echo $GCP_CREDENTIALS | base64 --decode > google-services.json
+          fastlane android firebase_distribution_staging
+        env:
+          GCP_CREDENTIALS_PATH: google-services.json
       - name: Upload bundle and source maps
         run: sh ./scripts/android/upload-sourcemaps.sh
         env:
