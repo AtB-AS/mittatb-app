@@ -8,7 +8,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, RefreshControl, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {StopPlaceDetails} from '@atb/sdk';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -111,7 +111,11 @@ export default function StopPlaceScreen({
           ></Button>
         ))}
       </ScrollView>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
+        }
+      >
         {stopPlaceDetails.quays?.map((quay, index) => {
           if (selectedQuay && selectedQuay.id !== quay.id) return;
           return (
@@ -285,7 +289,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   quayChipContainer: {
-    backgroundColor: theme.colors.secondary_1.backgroundColor,
+    backgroundColor: theme.colors.background_gray.backgroundColor,
     paddingVertical: theme.spacings.medium,
     flexShrink: 0,
     flexGrow: 0,
