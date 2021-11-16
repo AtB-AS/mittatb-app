@@ -10,11 +10,12 @@ import {TokenStatus} from '@entur/react-native-traveller/lib/typescript/token/ty
 import useInterval from '@atb/utils/use-interval';
 import {useAuthState} from '@atb/auth';
 import Bugsnag from '@bugsnag/react-native';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 type MobileContextState = {
-  generateQrCode: () => Promise<string>;
+  generateQrCode?: () => Promise<string>;
   tokenStatus?: TokenStatus;
-  forceRestart: () => void;
+  forceRestart?: () => void;
 };
 
 const MobileTokenContext = createContext<MobileContextState | undefined>(
@@ -22,6 +23,7 @@ const MobileTokenContext = createContext<MobileContextState | undefined>(
 );
 
 const MobileTokenContextProvider: React.FC = ({children}) => {
+  const {enable_period_tickets} = useRemoteConfig();
   const [tokenStatus, setTokenStatus] = useState<TokenStatus>();
   const {abtCustomerId, userCreationFinished} = useAuthState();
 
@@ -33,10 +35,14 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
     setTokenStatus(status);
   };
 
-  const client = useMemo(() => setupMobileTokenClient(setStatus), []);
+  const client = useMemo(
+    () =>
+      enable_period_tickets ? setupMobileTokenClient(setStatus) : undefined,
+    [enable_period_tickets],
+  );
 
   useEffect(() => {
-    if (abtCustomerId !== currentCustomerId && userCreationFinished) {
+    if (client && abtCustomerId !== currentCustomerId && userCreationFinished) {
       client.setAccount(abtCustomerId);
       setCurrentCustomerId(abtCustomerId);
     }
@@ -69,9 +75,9 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
   return (
     <MobileTokenContext.Provider
       value={{
-        generateQrCode: client.generateQrCode,
+        generateQrCode: client?.generateQrCode,
         tokenStatus,
-        forceRestart: () => client.retry(true),
+        forceRestart: () => client?.retry(true),
       }}
     >
       {children}
