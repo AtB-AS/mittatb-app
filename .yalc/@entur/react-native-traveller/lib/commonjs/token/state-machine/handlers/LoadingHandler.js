@@ -11,18 +11,21 @@ var _HandlerFactory = require("../HandlerFactory");
 
 const secondsIn48Hours = 48 * 60 * 60;
 
-function loadingHandler(accountId) {
-  return (0, _HandlerFactory.stateHandlerFactory)(['Loading', 'Valid'], async _ => {
-    const token = await (0, _native.getToken)(accountId);
+function loadingHandler() {
+  return (0, _HandlerFactory.stateHandlerFactory)(['Loading', 'Valid'], async s => {
+    const token = await (0, _native.getToken)(s.accountId);
 
     if (!token) {
       return {
+        accountId: s.accountId,
         state: 'InitiateNew'
       };
     } else {
       return tokenNeedsRenewal(token) ? {
+        accountId: s.accountId,
         state: 'InitiateRenewal'
       } : {
+        accountId: s.accountId,
         state: 'Validating',
         token
       };

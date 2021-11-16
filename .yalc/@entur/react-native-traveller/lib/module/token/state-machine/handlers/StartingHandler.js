@@ -2,13 +2,14 @@ import { stateHandlerFactory } from '../HandlerFactory';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getStoreKey } from '../utils';
 import { start as startNative } from '../../../native';
-export default function startingHandler(accountId, safetyNetApiKey, forceRestart) {
-  return stateHandlerFactory(['Starting'], async _ => {
-    const storeKey = getStoreKey(accountId);
+export default function startingHandler(safetyNetApiKey, forceRestart) {
+  return stateHandlerFactory(['Starting'], async s => {
+    const storeKey = getStoreKey(s.accountId);
     await startNative(safetyNetApiKey);
 
     if (forceRestart) {
       return {
+        accountId: s.accountId,
         state: 'Loading'
       };
     }
@@ -17,6 +18,7 @@ export default function startingHandler(accountId, safetyNetApiKey, forceRestart
 
     if (!savedStateString) {
       return {
+        accountId: s.accountId,
         state: 'Loading'
       };
     }
@@ -25,6 +27,7 @@ export default function startingHandler(accountId, safetyNetApiKey, forceRestart
 
     if (savedState.state === 'Valid') {
       return {
+        accountId: s.accountId,
         state: 'Loading'
       };
     }

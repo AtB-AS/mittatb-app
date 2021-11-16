@@ -5,16 +5,19 @@ import type { StateHandler } from '../HandlerFactory';
 import { stateHandlerFactory } from '../HandlerFactory';
 
 export default function getTokenCertificateHandler(
-  abtTokensService: AbtTokensService,
-  accountId: string
+  abtTokensService: AbtTokensService
 ): StateHandler {
-  return stateHandlerFactory(['GettingTokenCertificate'], async (_) => {
-    const signedToken = await getSecureToken(accountId, [
+  return stateHandlerFactory(['GettingTokenCertificate'], async (s) => {
+    const signedToken = await getSecureToken(s.accountId, [
       PayloadAction.addRemoveToken,
     ]);
     const tokenCertificateResponse = await abtTokensService.getTokenCertificate(
       signedToken
     );
-    return { state: 'AddToken', activatedData: tokenCertificateResponse };
+    return {
+      accountId: s.accountId,
+      state: 'AddToken',
+      activatedData: tokenCertificateResponse,
+    };
   });
 }

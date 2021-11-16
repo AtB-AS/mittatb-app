@@ -13,6 +13,7 @@ export default function activateNewHandler(
 
     verifyCorrectTokenId(s.tokenId, activateTokenResponse.tokenId);
     return {
+      accountId: s.accountId,
       state: 'AddToken',
       activatedData: activateTokenResponse,
     };

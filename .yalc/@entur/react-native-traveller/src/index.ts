@@ -35,6 +35,12 @@ export default function createClient(
   };
 
   const setStatusWrapper = (storedState?: StoredState) => {
+    // Do not give status callbacks for other accounts ids than the one
+    // currently set
+    if (storedState?.accountId && storedState.accountId !== currentAccountId) {
+      return;
+    }
+
     const status = storedState && {
       state: storedState.state,
       error: storedState.error,
@@ -46,14 +52,16 @@ export default function createClient(
 
   return {
     setAccount(accountId: string | undefined) {
-      currentAccountId = accountId;
-      startTokenStateMachine(
-        abtTokensService,
-        setStatusWrapper,
-        safetyNetApiKey,
-        false,
-        accountId
-      );
+      if (currentAccountId !== accountId) {
+        currentAccountId = accountId;
+        startTokenStateMachine(
+          abtTokensService,
+          setStatusWrapper,
+          safetyNetApiKey,
+          false,
+          accountId
+        );
+      }
     },
     retry: (forceRestart: boolean) => {
       if (!currentAccountId) {
@@ -70,7 +78,7 @@ export default function createClient(
         safetyNetApiKey,
         forceRestart,
         currentAccountId
-      ); // Todo: Not start if already running
+      );
     },
     generateQrCode: () => {
       if (!currentAccountId) {

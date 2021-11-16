@@ -111,7 +111,7 @@ const tokenStates = [
 export type TokenState = typeof tokenStates[number];
 
 export type StoredState = {
-  deviceId?: string;
+  accountId: string;
   error?: TokenError;
 } & (
   | {

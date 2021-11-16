@@ -14,6 +14,7 @@ function activateNewHandler(abtTokensService) {
     const activateTokenResponse = await abtTokensService.activateToken(s.tokenId, s.attestationData);
     (0, _utils.verifyCorrectTokenId)(s.tokenId, activateTokenResponse.tokenId);
     return {
+      accountId: s.accountId,
       state: 'AddToken',
       activatedData: activateTokenResponse
     };

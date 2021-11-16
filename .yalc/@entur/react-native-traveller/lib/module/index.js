@@ -30,6 +30,12 @@ export default function createClient(setStatus, initialConfig) {
   };
 
   const setStatusWrapper = storedState => {
+    // Do not give status callbacks for other accounts ids than the one
+    // currently set
+    if (storedState !== null && storedState !== void 0 && storedState.accountId && storedState.accountId !== currentAccountId) {
+      return;
+    }
+
     const status = storedState && {
       state: storedState.state,
       error: storedState.error,
@@ -41,8 +47,10 @@ export default function createClient(setStatus, initialConfig) {
 
   return {
     setAccount(accountId) {
-      currentAccountId = accountId;
-      startTokenStateMachine(abtTokensService, setStatusWrapper, safetyNetApiKey, false, accountId);
+      if (currentAccountId !== accountId) {
+        currentAccountId = accountId;
+        startTokenStateMachine(abtTokensService, setStatusWrapper, safetyNetApiKey, false, accountId);
+      }
     },
 
     retry: forceRestart => {
@@ -56,7 +64,7 @@ export default function createClient(setStatus, initialConfig) {
         throw new Error('Can not retry while the sdk is already running');
       }
 
-      startTokenStateMachine(abtTokensService, setStatusWrapper, safetyNetApiKey, forceRestart, currentAccountId); // Todo: Not start if already running
+      startTokenStateMachine(abtTokensService, setStatusWrapper, safetyNetApiKey, forceRestart, currentAccountId);
     },
     generateQrCode: () => {
       var _currentStatus2;

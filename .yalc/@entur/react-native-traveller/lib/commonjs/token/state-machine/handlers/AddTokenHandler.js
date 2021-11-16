@@ -9,7 +9,7 @@ var _native = require("../../../native");
 
 var _HandlerFactory = require("../HandlerFactory");
 
-function addTokenHandler(accountId) {
+function addTokenHandler() {
   return (0, _HandlerFactory.stateHandlerFactory)(['AddToken'], async s => {
     const {
       certificate,
@@ -17,8 +17,9 @@ function addTokenHandler(accountId) {
       tokenValidityEnd,
       tokenValidityStart
     } = s.activatedData;
-    await (0, _native.addToken)(accountId, tokenId, certificate, tokenValidityStart, tokenValidityEnd);
+    await (0, _native.addToken)(s.accountId, tokenId, certificate, tokenValidityStart, tokenValidityEnd);
     return {
+      accountId: s.accountId,
       state: 'Valid'
     };
   });

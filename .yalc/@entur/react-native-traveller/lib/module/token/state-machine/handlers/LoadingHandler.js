@@ -1,18 +1,21 @@
 import { getToken } from '../../../native';
 import { stateHandlerFactory } from '../HandlerFactory';
 const secondsIn48Hours = 48 * 60 * 60;
-export default function loadingHandler(accountId) {
-  return stateHandlerFactory(['Loading', 'Valid'], async _ => {
-    const token = await getToken(accountId);
+export default function loadingHandler() {
+  return stateHandlerFactory(['Loading', 'Valid'], async s => {
+    const token = await getToken(s.accountId);
 
     if (!token) {
       return {
+        accountId: s.accountId,
         state: 'InitiateNew'
       };
     } else {
       return tokenNeedsRenewal(token) ? {
+        accountId: s.accountId,
         state: 'InitiateRenewal'
       } : {
+        accountId: s.accountId,
         state: 'Validating',
         token
       };

@@ -15,13 +15,14 @@ const requireAttestation = _reactNative.Platform.select({
 });
 
 function initiateNewHandler(abtTokensService) {
-  return (0, _HandlerFactory.stateHandlerFactory)(['InitiateNew'], async _ => {
+  return (0, _HandlerFactory.stateHandlerFactory)(['InitiateNew'], async s => {
     const initTokenResponse = await abtTokensService.initToken({
       requireAttestation,
       deviceName: 'tempDeviceName' // todo: How to get?
 
     });
     return {
+      accountId: s.accountId,
       state: 'AttestNew',
       initiatedData: initTokenResponse
     };

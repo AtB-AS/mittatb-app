@@ -29,8 +29,10 @@ export const createAbtTokensService = (
   fetcher: Fetch,
   hosts: Hosts
 ): AbtTokensService => {
+  const hostUrl = hosts.pto.replace(/\/$/, '');
+
   const listTokens = async () => {
-    const url = `${hosts.pto}/tokens`;
+    const url = `${hostUrl}/tokens`;
     const response = await fetcher<ListTokensResponse>({
       url,
       method: 'GET',
@@ -39,7 +41,7 @@ export const createAbtTokensService = (
   };
 
   const getTokenCertificate = async (signedToken: string) => {
-    const url = `${hosts.pto}/tokens/certificate`;
+    const url = `${hostUrl}/tokens/certificate`;
     const response = await fetcher<GetTokenCertificateResponse>({
       url,
       headers: {
@@ -51,7 +53,7 @@ export const createAbtTokensService = (
   };
 
   const initToken = async (body: InitializeTokenRequest) => {
-    const url = `${hosts.pto}/tokens`;
+    const url = `${hostUrl}/tokens`;
     const response = await fetcher<InitializeTokenResponse>({
       url,
       body,
@@ -61,7 +63,7 @@ export const createAbtTokensService = (
   };
 
   const renewToken = async (signedToken: string) => {
-    const url = `${hosts.pto}/tokens/renew`;
+    const url = `${hostUrl}/tokens/renew`;
     const response = await fetcher<RenewTokenResponse>({
       url,
       headers: {
@@ -77,7 +79,7 @@ export const createAbtTokensService = (
     body: ActivateTokenRequest,
     signedToken?: string
   ) => {
-    const url = `${hosts.pto}/tokens/${tokenId}/activate`;
+    const url = `${hostUrl}/tokens/${tokenId}/activate`;
     const response = await fetcher<ActivateTokenResponse>({
       url,
       headers: signedToken

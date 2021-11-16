@@ -129,7 +129,9 @@ export default function DebugInfo() {
               )}`}</ThemeText>
             </View>
           </Sections.GenericItem>
-          <Sections.LinkItem text="Force restart" onPress={forceRestart} />
+          {tokenStatus && (
+            <Sections.LinkItem text="Force restart" onPress={forceRestart} />
+          )}
         </Sections.Section>
       </ScrollView>
     </View>

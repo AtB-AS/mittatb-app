@@ -9,15 +9,16 @@ var _attest = require("../../attest");
 
 var _HandlerFactory = require("../HandlerFactory");
 
-function attestHandler(accountId) {
+function attestHandler() {
   return (0, _HandlerFactory.stateHandlerFactory)(['AttestNew', 'AttestRenewal'], async s => {
     const {
       tokenId,
       nonce,
       attestationEncryptionPublicKey
     } = s.initiatedData;
-    const activateTokenRequestBody = await (0, _attest.getActivateTokenRequestBody)(accountId, tokenId, nonce, attestationEncryptionPublicKey);
+    const activateTokenRequestBody = await (0, _attest.getActivateTokenRequestBody)(s.accountId, tokenId, nonce, attestationEncryptionPublicKey);
     return {
+      accountId: s.accountId,
       state: s.state === 'AttestNew' ? 'ActivateNew' : 'ActivateRenewal',
       tokenId: tokenId,
       attestationData: activateTokenRequestBody

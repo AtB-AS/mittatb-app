@@ -5,15 +5,25 @@ import type { Token } from '@entur/react-native-traveller';
 
 const secondsIn48Hours = 48 * 60 * 60;
 
-export default function loadingHandler(accountId: string): StateHandler {
-  return stateHandlerFactory(['Loading', 'Valid'], async (_) => {
-    const token = await getToken(accountId);
+export default function loadingHandler(): StateHandler {
+  return stateHandlerFactory(['Loading', 'Valid'], async (s) => {
+    const token = await getToken(s.accountId);
     if (!token) {
-      return { state: 'InitiateNew' };
+      return {
+        accountId: s.accountId,
+        state: 'InitiateNew',
+      };
     } else {
       return tokenNeedsRenewal(token)
-        ? { state: 'InitiateRenewal' }
-        : { state: 'Validating', token };
+        ? {
+            accountId: s.accountId,
+            state: 'InitiateRenewal',
+          }
+        : {
+            accountId: s.accountId,
+            state: 'Validating',
+            token,
+          };
     }
   });
 }

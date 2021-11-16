@@ -1,6 +1,6 @@
 import { addToken } from '../../../native';
 import { stateHandlerFactory } from '../HandlerFactory';
-export default function addTokenHandler(accountId) {
+export default function addTokenHandler() {
   return stateHandlerFactory(['AddToken'], async s => {
     const {
       certificate,
@@ -8,8 +8,9 @@ export default function addTokenHandler(accountId) {
       tokenValidityEnd,
       tokenValidityStart
     } = s.activatedData;
-    await addToken(accountId, tokenId, certificate, tokenValidityStart, tokenValidityEnd);
+    await addToken(s.accountId, tokenId, certificate, tokenValidityStart, tokenValidityEnd);
     return {
+      accountId: s.accountId,
       state: 'Valid'
     };
   });

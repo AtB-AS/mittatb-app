@@ -15,13 +15,14 @@ var _native = require("../../../native");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function startingHandler(accountId, safetyNetApiKey, forceRestart) {
-  return (0, _HandlerFactory.stateHandlerFactory)(['Starting'], async _ => {
-    const storeKey = (0, _utils.getStoreKey)(accountId);
+function startingHandler(safetyNetApiKey, forceRestart) {
+  return (0, _HandlerFactory.stateHandlerFactory)(['Starting'], async s => {
+    const storeKey = (0, _utils.getStoreKey)(s.accountId);
     await (0, _native.start)(safetyNetApiKey);
 
     if (forceRestart) {
       return {
+        accountId: s.accountId,
         state: 'Loading'
       };
     }
@@ -30,6 +31,7 @@ function startingHandler(accountId, safetyNetApiKey, forceRestart) {
 
     if (!savedStateString) {
       return {
+        accountId: s.accountId,
         state: 'Loading'
       };
     }
@@ -38,6 +40,7 @@ function startingHandler(accountId, safetyNetApiKey, forceRestart) {
 
     if (savedState.state === 'Valid') {
       return {
+        accountId: s.accountId,
         state: 'Loading'
       };
     }

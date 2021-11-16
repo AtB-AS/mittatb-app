@@ -5,14 +5,17 @@ import type { StateHandler } from '../HandlerFactory';
 import { stateHandlerFactory } from '../HandlerFactory';
 
 export default function initiateRenewalHandler(
-  abtTokensService: AbtTokensService,
-  accountId: string
+  abtTokensService: AbtTokensService
 ): StateHandler {
-  return stateHandlerFactory(['InitiateRenewal'], async () => {
-    const signedToken = await getSecureToken(accountId, [
+  return stateHandlerFactory(['InitiateRenewal'], async (s) => {
+    const signedToken = await getSecureToken(s.accountId, [
       PayloadAction.addRemoveToken,
     ]);
     const renewTokenResponse = await abtTokensService.renewToken(signedToken);
-    return { state: 'AttestRenewal', initiatedData: renewTokenResponse };
+    return {
+      accountId: s.accountId,
+      state: 'AttestRenewal',
+      initiatedData: renewTokenResponse,
+    };
   });
 }

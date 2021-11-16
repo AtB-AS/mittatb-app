@@ -39,13 +39,14 @@ const startTokenStateMachine = async (abtTokensService, setStatus, safetyNetApiK
   } else {
     const storeKey = (0, _utils.getStoreKey)(accountId);
     let currentState = {
+      accountId,
       state: 'Starting'
     };
     setStatus(currentState);
 
     try {
       while (shouldContinue(currentState)) {
-        const handler = getStateHandler(abtTokensService, currentState, accountId, safetyNetApiKey, forceRestart);
+        const handler = getStateHandler(abtTokensService, currentState, safetyNetApiKey, forceRestart);
         currentState = await handler(currentState);
         await _asyncStorage.default.setItem(storeKey, JSON.stringify(currentState));
         setStatus(currentState);
@@ -67,42 +68,42 @@ exports.startTokenStateMachine = startTokenStateMachine;
 
 const shouldContinue = s => s.state !== 'Valid' && !s.error;
 
-const getStateHandler = (abtTokensService, storedState, accountId, safetyNetApiKey, forceRestart) => {
+const getStateHandler = (abtTokensService, storedState, safetyNetApiKey, forceRestart) => {
   switch (storedState.state) {
     case 'Starting':
-      return (0, _StartingHandler.default)(accountId, safetyNetApiKey, forceRestart);
+      return (0, _StartingHandler.default)(safetyNetApiKey, forceRestart);
 
     case 'Valid':
     case 'Loading':
-      return (0, _LoadingHandler.default)(accountId);
+      return (0, _LoadingHandler.default)();
 
     case 'Validating':
       return (0, _ValidatingHandler.default)(abtTokensService);
 
     case 'DeleteLocal':
-      return (0, _DeleteLocalHandler.default)(accountId);
+      return (0, _DeleteLocalHandler.default)();
 
     case 'InitiateNew':
       return (0, _InitiateNewHandler.default)(abtTokensService);
 
     case 'InitiateRenewal':
-      return (0, _InitiateRenewalHandler.default)(abtTokensService, accountId);
+      return (0, _InitiateRenewalHandler.default)(abtTokensService);
 
     case 'GettingTokenCertificate':
-      return (0, _GetTokenCertificateHandler.default)(abtTokensService, accountId);
+      return (0, _GetTokenCertificateHandler.default)(abtTokensService);
 
     case 'AttestNew':
     case 'AttestRenewal':
-      return (0, _AttestHandler.default)(accountId);
+      return (0, _AttestHandler.default)();
 
     case 'ActivateNew':
       return (0, _ActivateNewHandler.default)(abtTokensService);
 
     case 'ActivateRenewal':
-      return (0, _ActivateRenewalHandler.default)(abtTokensService, accountId);
+      return (0, _ActivateRenewalHandler.default)(abtTokensService);
 
     case 'AddToken':
-      return (0, _AddTokenHandler.default)(accountId);
+      return (0, _AddTokenHandler.default)();
   }
 };
 //# sourceMappingURL=index.js.map

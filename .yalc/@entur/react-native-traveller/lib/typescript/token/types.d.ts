@@ -78,7 +78,7 @@ export declare type TokenStatus = {
 declare const tokenStates: readonly ["Starting", "Loading", "Valid", "GettingTokenCertificate", "Validating", "DeleteLocal", "InitiateNew", "InitiateRenewal", "AttestNew", "AttestRenewal", "ActivateNew", "ActivateRenewal", "AddToken"];
 export declare type TokenState = typeof tokenStates[number];
 export declare type StoredState = {
-    deviceId?: string;
+    accountId: string;
     error?: TokenError;
 } & ({
     state: 'Starting' | 'Loading' | 'InitiateNew' | 'DeleteLocal' | 'InitiateRenewal' | 'Valid' | 'GettingTokenCertificate';

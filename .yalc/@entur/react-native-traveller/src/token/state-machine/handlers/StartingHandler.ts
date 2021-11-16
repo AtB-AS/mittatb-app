@@ -5,28 +5,36 @@ import { getStoreKey } from '../utils';
 import { start as startNative } from '../../../native';
 
 export default function startingHandler(
-  accountId: string,
   safetyNetApiKey: string,
   forceRestart: boolean
 ): StateHandler {
-  return stateHandlerFactory(['Starting'], async (_) => {
-    const storeKey = getStoreKey(accountId);
+  return stateHandlerFactory(['Starting'], async (s) => {
+    const storeKey = getStoreKey(s.accountId);
     await startNative(safetyNetApiKey);
 
     if (forceRestart) {
-      return { state: 'Loading' };
+      return {
+        accountId: s.accountId,
+        state: 'Loading',
+      };
     }
 
     const savedStateString = await AsyncStorage.getItem(storeKey);
 
     if (!savedStateString) {
-      return { state: 'Loading' };
+      return {
+        accountId: s.accountId,
+        state: 'Loading',
+      };
     }
 
     const savedState = JSON.parse(savedStateString);
 
     if (savedState.state === 'Valid') {
-      return { state: 'Loading' };
+      return {
+        accountId: s.accountId,
+        state: 'Loading',
+      };
     }
 
     return savedState;
