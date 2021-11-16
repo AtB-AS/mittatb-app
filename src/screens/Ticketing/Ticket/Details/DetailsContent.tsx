@@ -11,6 +11,8 @@ import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
 import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import QrCode from '@atb/screens/Ticketing/Ticket/Details/QrCode';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import PaperQrCode from '@atb/screens/Ticketing/Ticket/Details/PaperQrCode';
 
 type Props = {
   fareContract: FareContract;
@@ -26,6 +28,7 @@ const DetailsContent: React.FC<Props> = ({
   hasActiveTravelCard = false,
 }) => {
   const {t, language} = useTranslation();
+  const {enable_period_tickets} = useRemoteConfig();
 
   const firstTravelRight = fc.travelRights[0];
   if (isPreactivatedTicket(firstTravelRight)) {
@@ -85,7 +88,18 @@ const DetailsContent: React.FC<Props> = ({
           onPress={onReceiptNavigate}
           accessibility={{accessibilityRole: 'button'}}
         />
-        <QrCode validityStatus={validityStatus} isInspectable={isInspectable} />
+        {enable_period_tickets ? (
+          <QrCode
+            validityStatus={validityStatus}
+            isInspectable={isInspectable}
+          />
+        ) : (
+          <PaperQrCode
+            validityStatus={validityStatus}
+            isInspectable={isInspectable}
+            fc={fc}
+          />
+        )}
       </Sections.Section>
     );
   } else {

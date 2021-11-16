@@ -1,5 +1,4 @@
 import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
-import {TokenStatus} from '@entur/react-native-traveller/lib/typescript/token/types';
 import * as Sections from '@atb/components/sections';
 import {ActivityIndicator, View} from 'react-native';
 import {TicketTexts, useTranslation} from '@atb/translations';
@@ -9,7 +8,6 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {useMobileContextState} from '@atb/mobile-token/MobileTokenContext';
 import qrcode from 'qrcode';
 import useInterval from '@atb/utils/use-interval';
-import ThemeText from '@atb/components/text';
 import MessageBox from '@atb/components/message-box';
 
 type Props = {
@@ -18,14 +16,15 @@ type Props = {
 };
 
 export default function QrCode({validityStatus, isInspectable}: Props) {
-  const {tokenStatus} = useMobileContextState();
+  const {tokenStatus, generateQrCode} = useMobileContextState();
 
   if (validityStatus !== 'valid') return null;
   if (!isInspectable) return null;
+  if (!generateQrCode) return null;
 
   switch (tokenStatus?.visualState) {
     case 'Token':
-      return <QrCodeSvg />;
+      return <QrCodeSvg generateQrCode={generateQrCode} />;
     case 'Error':
       return <QrCodeError />;
     case 'MissingNetConnection':
@@ -36,10 +35,13 @@ export default function QrCode({validityStatus, isInspectable}: Props) {
   }
 }
 
-const QrCodeSvg = () => {
+const QrCodeSvg = ({
+  generateQrCode,
+}: {
+  generateQrCode: () => Promise<string>;
+}) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {generateQrCode} = useMobileContextState();
   const qrCode = useQrCode(generateQrCode);
   const [qrCodeSvg, setQrCodeSvg] = useState<string>();
 
