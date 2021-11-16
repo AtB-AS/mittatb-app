@@ -3,6 +3,7 @@ package com.enturtraveller
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.util.Base64
 import android.util.Log
 import com.facebook.react.bridge.*
@@ -43,9 +44,18 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
       var applicationContext: Context = reactApplicationContext.applicationContext
       var application: Application = applicationContext as Application
       tokenKeyStore = DefaultTokenKeyStore.newBuilder<String>().build()
+
+      val pInfo = application.packageManager.getPackageInfo(application.packageName, 0)
+      val versionCode: Long =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+          pInfo.longVersionCode
+        } else {
+          pInfo.versionCode.toLong()
+        }
+
       deviceDetailsProvider = DefaultDeviceDetailsProvider
         .newBuilder(application)
-        .withApplicationDeviceInfoElement(applicationContext.packageName, BuildConfig.VERSION_NAME, "${BuildConfig.VERSION_CODE}")
+        .withApplicationDeviceInfoElement(applicationContext.packageName, pInfo.versionName, "$versionCode")
         .withOsDeviceInfoElement()
         .withNetworkDeviceStatus()
         .withBluetoohDeviceStatus()
