@@ -50,11 +50,11 @@ jobs:
         with:
           path: "app-staging.apk"
           key: ${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
-      - name: Get Android keystore
-        run: sh ./scripts/android/create-keystore-file.sh
+      - name: Decode keystore
+        run: |
+          echo $KEYSTORE | base64 -di > android/app/keystore.jks
         env:
-          GPG_KEYSTORE_FILE: ${{ secrets.GPG_KEYSTORE_FILE }}
-          GPG_KEYSTORE_PASS: ${{ secrets.GPG_KEYSTORE_PASS }}
+          KEYSTORE: ${{ secrets.KEYSTORE }}
       - name: Generate native assets
         if: steps.apk-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn generate-native-assets
@@ -63,8 +63,8 @@ jobs:
         run: fastlane android build
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
-          KEY_PASS: ${{ secrets.KEY_PASS }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
+          KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
       - name: Replace apk bundle
         if: steps.apk-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/android/replace-bundle.sh
@@ -72,8 +72,8 @@ jobs:
           APK_FILE_NAME: app-staging.apk
           KEYSTORE_FILE: keystore.jks
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
-          KEY_PASS: ${{ secrets.KEY_PASS }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
+          KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
       - name: Distribute to AppCenter
         if: matrix.org == 'atb'
         run: fastlane android appcenter_staging
@@ -82,7 +82,7 @@ jobs:
       - name: Distribute to Firebase app distribution
         if: matrix.org == 'nfk'
         run: |
-          echo $GCP_CREDENTIALS | base64 --decode > google-services.json
+          echo ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}} | base64 --decode > google-services.json
           fastlane android firebase_distribution_staging
         env:
           GCP_CREDENTIALS_PATH: google-services.json
