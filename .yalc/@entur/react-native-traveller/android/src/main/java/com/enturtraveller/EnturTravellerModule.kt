@@ -53,9 +53,12 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
           pInfo.versionCode.toLong()
         }
 
+      val concattedVersion = "${pInfo.versionName}-${versionCode}"
+      val libraryVersion = "1.0"
+
       deviceDetailsProvider = DefaultDeviceDetailsProvider
         .newBuilder(application)
-        .withApplicationDeviceInfoElement(applicationContext.packageName, pInfo.versionName, "$versionCode")
+        .withApplicationDeviceInfoElement(applicationContext.packageName, concattedVersion, libraryVersion)
         .withOsDeviceInfoElement()
         .withNetworkDeviceStatus()
         .withBluetoohDeviceStatus()
