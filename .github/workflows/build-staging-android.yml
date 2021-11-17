@@ -41,7 +41,7 @@ jobs:
       - name: Bundle install, fastlane dependencies
         run: bundle install
       - name: Set environment
-        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT ${{matrix.org}}
+        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT ${{ matrix.org }}
       - name: Override native config files
         run: sh ./scripts/override-config-files.sh
       - name: Get potential cached APK
@@ -86,6 +86,7 @@ jobs:
           fastlane android firebase_distribution_staging
         env:
           GCP_CREDENTIALS_PATH: google-services.json
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
       - name: Upload bundle and source maps
         if: matrix.org == 'atb'
         run: sh ./scripts/android/upload-sourcemaps.sh
