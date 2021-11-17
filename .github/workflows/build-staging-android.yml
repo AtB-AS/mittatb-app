@@ -10,6 +10,7 @@ jobs:
     strategy:
       matrix:
         org: [atb, nfk]
+    environment: ${{ matrix.org }}
     timeout-minutes: 90
     runs-on: macos-latest
     steps:
@@ -61,31 +62,32 @@ jobs:
         if: steps.apk-cache.outputs.cache-hit != 'true'
         run: fastlane android build
         env:
-          KEYSTORE_PASS: ${{ secrets.ATB_KEYSTORE_PASS }}
-          KEY_PASS: ${{ secrets.ATB_KEY_PASS }}
-          KEY_ALIAS: ${{ secrets.ATB_KEY_ALIAS }}
+          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
+          KEY_PASS: ${{ secrets.KEY_PASS }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
       - name: Replace apk bundle
         if: steps.apk-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/android/replace-bundle.sh
         env:
           APK_FILE_NAME: app-staging.apk
           KEYSTORE_FILE: keystore.jks
-          KEYSTORE_PASS: ${{ secrets.ATB_KEYSTORE_PASS }}
-          KEY_PASS: ${{ secrets.ATB_KEY_PASS }}
-          KEY_ALIAS: ${{ secrets.ATB_KEY_ALIAS }}
+          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
+          KEY_PASS: ${{ secrets.KEY_PASS }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
       - name: Distribute to AppCenter
-        if: matrix.org == 'AtB'
+        if: matrix.org == 'atb'
         run: fastlane android appcenter_staging
         env:
           APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
       - name: Distribute to Firebase app distribution
-        if: matrix.org == 'NFK'
+        if: matrix.org == 'nfk'
         run: |
           echo $GCP_CREDENTIALS | base64 --decode > google-services.json
           fastlane android firebase_distribution_staging
         env:
           GCP_CREDENTIALS_PATH: google-services.json
       - name: Upload bundle and source maps
+        if: matrix.org == 'atb'
         run: sh ./scripts/android/upload-sourcemaps.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
