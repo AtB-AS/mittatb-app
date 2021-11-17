@@ -149,6 +149,9 @@ dependencies {
   implementation "no.entur.abt:abt-time-lib-android:1.0.29"
   implementation("no.entur.abt:abt-traveller-token-lib-android:1.0.29") {
     exclude group: "no.entur.abt", module: "abt-protobuf-lite-traveller"
+    exclude group: "io.grpc", module: "grpc-okhttp"
+    exclude group: "io.grpc", module: "grpc-protobuf-lite"
+    exclude group: "io.grpc", module: "grpc-stub"
   }
 
   api("no.entur.abt:abt-protobuf-lite-traveller:2.261") {
