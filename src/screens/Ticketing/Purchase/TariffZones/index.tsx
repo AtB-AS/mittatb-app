@@ -36,6 +36,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TicketingStackParams} from '../';
 import TariffZoneResults from '@atb/screens/Ticketing/Purchase/TariffZones/search/TariffZoneResults';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
+import hexToRgba from 'hex-to-rgba';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
@@ -428,9 +429,9 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
                     // Mapbox Expression syntax
                     'case',
                     ['==', selectedZones.from.id, ['id']],
-                    theme.status.valid.main.backgroundColor,
+                    hexToRgba(theme.status.valid.main.backgroundColor, 0.6),
                     ['==', selectedZones.to.id, ['id']],
-                    theme.status.info.main.backgroundColor,
+                    hexToRgba(theme.status.info.main.backgroundColor, 0.6),
                     'transparent',
                   ],
                 }}
@@ -439,7 +440,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
                 id="tariffZonesLine"
                 style={{
                   lineWidth: 1,
-                  lineColor: theme.border.primary,
+                  lineColor: '#666666',
                 }}
               />
             </MapboxGL.ShapeSource>
@@ -455,7 +456,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
                     textSize: 20,
                     textField: f.properties!.name,
                     textHaloColor: 'white',
-                    textHaloWidth: 10,
+                    textHaloWidth: 2,
                   }}
                 />
               </MapboxGL.ShapeSource>
