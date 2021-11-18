@@ -14,6 +14,7 @@ import {ActiveReservation, FareContract, PaymentStatus} from './types';
 import {getPayment} from './api';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import Bugsnag from '@bugsnag/react-native';
+import {TokenStatus} from '@entur/react-native-traveller/lib/typescript/token/types';
 import {CustomerProfile} from '.';
 
 type TicketReducerState = {
@@ -21,6 +22,7 @@ type TicketReducerState = {
   activeReservations: ActiveReservation[];
   isRefreshingTickets: boolean;
   errorRefreshingTickets: boolean;
+  tokenStatus?: TokenStatus;
   customerProfile: CustomerProfile | undefined;
   didPaymentFail: boolean;
 };
@@ -42,6 +44,10 @@ type TicketReducerAction =
       activeReservations: ActiveReservation[];
     }
   | {
+      type: 'SET_TOKEN_STATUS';
+      tokenStatus: TokenStatus;
+    }
+  | {
       type: 'UPDATE_PAYMENT_FAILED';
       didPaymentFail: boolean;
     };
@@ -56,6 +62,12 @@ const ticketReducer: TicketReducer = (
   action,
 ): TicketReducerState => {
   switch (action.type) {
+    case 'SET_TOKEN_STATUS': {
+      return {
+        ...prevState,
+        tokenStatus: action.tokenStatus,
+      };
+    }
     case 'SET_IS_REFRESHING_FARE_CONTRACT_TICKETS': {
       return {
         ...prevState,
@@ -128,10 +140,14 @@ type TicketState = {
   findFareContractByOrderId: (id: string) => FareContract | undefined;
 } & Pick<
   TicketReducerState,
-  'activeReservations' | 'isRefreshingTickets' | 'customerProfile'
+  | 'activeReservations'
+  | 'isRefreshingTickets'
+  | 'tokenStatus'
+  | 'customerProfile'
 >;
 
 const initialReducerState: TicketReducerState = {
+  tokenStatus: undefined,
   fareContracts: [],
   activeReservations: [],
   isRefreshingTickets: false,

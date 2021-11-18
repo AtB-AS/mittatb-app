@@ -31,7 +31,7 @@ jobs:
         id: modules-cache
         with:
           path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.yalc/**') }}
       - name: Install node_modules
         if: steps.modules-cache.outputs.cache-hit != 'true'
         run: yarn install
@@ -46,7 +46,7 @@ jobs:
         id: apk-cache
         with:
           path: "app-staging.apk"
-          key: ${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          key: ${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.yalc/**') }}
       - name: Get Android keystore
         run: sh ./scripts/android/create-keystore-file.sh
         env:

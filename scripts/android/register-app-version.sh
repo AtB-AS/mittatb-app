@@ -69,7 +69,8 @@ fi
 # sha256sum not available by default on macOS
 brew install coreutils
 
-app_hash=$(sha256sum "${APK_FILE_NAME}" | cut -d ' ' -f 1)
+# need to convert hex dump from sha256sum to binary (with xxd) and then base64 encode it
+app_hash=$(sha256sum "${APK_FILE_NAME}" | cut -d ' ' -f 1 | xxd -r -p | base64)
 
 echo "Fetching access token"
 # App login for register call

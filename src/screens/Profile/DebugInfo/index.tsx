@@ -8,8 +8,9 @@ import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthState} from '@atb/auth';
 import {useAppDispatch} from '@atb/AppContext';
-import {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import storage from '@atb/storage';
+import {useMobileContextState} from '@atb/mobile-token/MobileTokenContext';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -23,6 +24,7 @@ export default function DebugInfo() {
   const [idToken, setIdToken] = useState<
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
+  const {tokenStatus, forceRestart} = useMobileContextState();
 
   useEffect(() => {
     async function run() {
@@ -74,6 +76,11 @@ export default function DebugInfo() {
             icon="arrow-upleft"
             onPress={() => copyFirestoreLink()}
           />
+
+          <Sections.LinkItem
+            text="Force refresh id token"
+            onPress={() => auth().currentUser?.getIdToken(true)}
+          />
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
@@ -108,6 +115,26 @@ export default function DebugInfo() {
             </Sections.GenericItem>
           )}
         </Sections.Section>
+
+        {forceRestart && (
+          <Sections.Section withPadding withTopPadding>
+            <Sections.HeaderItem text="Mobile token state" />
+            <Sections.GenericItem>
+              <View>
+                <ThemeText>{`Token state: ${tokenStatus?.state}`}</ThemeText>
+                <ThemeText>{`Visual state: ${tokenStatus?.visualState}`}</ThemeText>
+                <ThemeText>{`Error message: ${tokenStatus?.error?.message}`}</ThemeText>
+                <ThemeText>{`Error missing inet: ${tokenStatus?.error?.missingNetConnection}`}</ThemeText>
+                <ThemeText>{`Error object: ${JSON.stringify(
+                  tokenStatus?.error?.err,
+                )}`}</ThemeText>
+              </View>
+            </Sections.GenericItem>
+            {tokenStatus && (
+              <Sections.LinkItem text="Force restart" onPress={forceRestart} />
+            )}
+          </Sections.Section>
+        )}
       </ScrollView>
     </View>
   );
