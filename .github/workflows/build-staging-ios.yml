@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - master
-      - cbrevik/mobile-token-sdk-integration
 
 jobs:
   build-ios:
