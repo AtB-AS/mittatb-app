@@ -205,6 +205,22 @@ const DeparturesOverview: React.FC<Props> = ({
     }
   }, [updatingLocation, isLoading]);
 
+  useEffect(() => {
+    if (searchedFromLocation?.layer === 'venue') {
+      const loadedStopPlace = data?.find(
+        (stopPlace) =>
+          stopPlace.id === searchedFromLocation.id ||
+          stopPlace.quays?.find(
+            (quay) => quay.stopPlace.id === searchedFromLocation?.id,
+          ),
+      );
+      if (loadedStopPlace)
+        navigation.navigate('StopPlaceScreen', {
+          stopPlaceDetails: loadedStopPlace,
+        });
+    }
+  }, [searchedFromLocation, data]);
+
   return (
     <SimpleDisappearingHeader
       onRefresh={refresh}
