@@ -1,4 +1,5 @@
 import {Platform, StatusBarProps, TextStyle} from 'react-native';
+import {APP_ORG} from '@env';
 
 import {
   ContrastColor,
@@ -17,7 +18,9 @@ import {
 export type {Statuses, Mode, TextColor, ContrastColor, RadiusSizes, TextNames};
 export {textNames};
 
-const mainThemes = createThemesFor(ThemeVariant.AtB);
+const mainThemes = createThemesFor(
+  APP_ORG == 'atb' ? ThemeVariant.AtB : ThemeVariant.Nfk,
+);
 
 // Override semibold with bold to avoid Android Roboto bold bug.
 // See ttps://github.com/facebook/react-native/issues/25696
