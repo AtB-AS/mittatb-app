@@ -15,6 +15,7 @@ import {useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
+import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 
 export type TransportationIconProps = {
   mode?: LegMode | TransportMode;
@@ -42,7 +43,9 @@ const TransportationIcon: React.FC<TransportationIconProps> = ({
 
 export default TransportationIcon;
 
-export function getTransportModeSvg(mode?: LegMode | TransportMode) {
+export function getTransportModeSvg(
+  mode?: LegMode | TransportMode | Types.TransportMode,
+) {
   switch (mode) {
     case 'bus':
     case 'coach':

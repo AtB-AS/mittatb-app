@@ -1,10 +1,11 @@
 import colors from '../theme/colors';
 import {LegMode, TransportMode, TransportSubmode} from '../sdk';
 import {useTheme} from '@atb/theme';
+import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 
 export function useTransportationColor(
-  mode?: LegMode | TransportMode,
-  subMode?: TransportSubmode,
+  mode?: LegMode | TransportMode | Types.TransportMode,
+  subMode?: TransportSubmode | Types.TransportSubmode,
 ): string {
   const {theme} = useTheme();
   switch (mode) {
