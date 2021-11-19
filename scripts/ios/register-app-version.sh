@@ -3,7 +3,6 @@
 # This script will register a specific iOS application version with Entur's
 # MobileApplicationRegistryService API.
 
-# Read a property safely from config file, instead of sourcing the file
 
 # Check for config and secrets from env vars
 if [[
