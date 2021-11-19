@@ -25,6 +25,7 @@ import {formatToClock} from '@atb/utils/date';
 import {EstimatedCall, Quay} from '@entur/sdk';
 import {TransportMode, TransportSubmode} from '@atb/sdk';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 5;
 
@@ -58,6 +59,10 @@ export default function StopPlaceScreen({
   );
   const [expandedQuays, setExpandedQuays] = useState(
     new Array<number>(stopPlaceDetails.quays?.length || 0).fill(5),
+  );
+
+  const [hiddenQuays, setHiddenQuays] = useState(
+    new Array<boolean>(stopPlaceDetails.quays?.length || 0).fill(false),
   );
 
   useEffect(() => {
@@ -124,33 +129,66 @@ export default function StopPlaceScreen({
               withTopPadding
               key={quay.id.toString()}
             >
-              <Sections.HeaderItem
-                text={
-                  quay.publicCode
-                    ? quay.name + ' ' + quay.publicCode
-                    : quay.name
-                }
+              <Sections.GenericClickableItem
                 type="inline"
-              />
-              {!!quay.description && (
-                <Sections.ActionItem text={quay.description} />
-              )}
-              {getDeparturesForQuay(state, quay)
-                .slice(0, selectedQuay ? -1 : expandedQuays[index])
-                .map((departure) => (
-                  <Sections.GenericItem key={departure.serviceJourney.id}>
-                    <EstimatedCallLine
-                      departure={departure}
-                    ></EstimatedCallLine>
+                onPress={() => {
+                  setHiddenQuays(
+                    hiddenQuays.map((value, quayIndex) =>
+                      quayIndex === index ? !value : value,
+                    ),
+                  );
+                }}
+              >
+                <View style={styles.stopPlaceHeader}>
+                  <View style={styles.stopPlaceHeaderText}>
+                    <ThemeText
+                      type="body__secondary--bold"
+                      color="secondary"
+                      style={styles.rightMargin}
+                    >
+                      {quay.publicCode
+                        ? quay.name + ' ' + quay.publicCode
+                        : quay.name}
+                    </ThemeText>
+                    {!!quay.description && (
+                      <ThemeText
+                        style={[
+                          styles.stopPlaceDescription,
+                          styles.rightMargin,
+                        ]}
+                        type="body__secondary"
+                        color="secondary"
+                      >
+                        {quay.description}
+                      </ThemeText>
+                    )}
+                  </View>
+                  <ThemeIcon
+                    svg={hiddenQuays[index] ? Expand : ExpandLess}
+                  ></ThemeIcon>
+                </View>
+              </Sections.GenericClickableItem>
+              {!hiddenQuays[index] &&
+                getDeparturesForQuay(state, quay)
+                  .slice(
+                    0,
+                    selectedQuay ? state.data?.length : expandedQuays[index],
+                  )
+                  .map((departure) => (
+                    <Sections.GenericItem key={departure.serviceJourney.id}>
+                      <EstimatedCallLine
+                        departure={departure}
+                      ></EstimatedCallLine>
+                    </Sections.GenericItem>
+                  ))}
+              {getDeparturesForQuay(state, quay).length === 0 &&
+                !hiddenQuays[index] && (
+                  <Sections.GenericItem>
+                    <ThemeText color="secondary" style={{width: '100%'}}>
+                      Ingen avganger i nærmeste fremtid
+                    </ThemeText>
                   </Sections.GenericItem>
-                ))}
-              {getDeparturesForQuay(state, quay).length === 0 && (
-                <Sections.GenericItem>
-                  <ThemeText color="secondary" style={{width: '100%'}}>
-                    Ingen avganger i nærmeste fremtid
-                  </ThemeText>
-                </Sections.GenericItem>
-              )}
+                )}
               {!state.data && (
                 <Sections.GenericItem>
                   <View style={{width: '100%'}}>
@@ -158,20 +196,22 @@ export default function StopPlaceScreen({
                   </View>
                 </Sections.GenericItem>
               )}
-              <Sections.LinkItem
-                icon="expand-more"
-                text="Vis flere avganger"
-                textType="body__primary--bold"
-                onPress={() => {
-                  expandQuay(
-                    quay,
-                    index,
-                    expandedQuays,
-                    setExpandedQuays,
-                    getDeparturesForQuay(state, quay).length,
-                  );
-                }}
-              ></Sections.LinkItem>
+              {!selectedQuay && !hiddenQuays[index] && (
+                <Sections.LinkItem
+                  icon="expand-more"
+                  text="Vis flere avganger"
+                  textType="body__primary--bold"
+                  onPress={() => {
+                    expandQuay(
+                      quay,
+                      index,
+                      expandedQuays,
+                      setExpandedQuays,
+                      getDeparturesForQuay(state, quay).length,
+                    );
+                  }}
+                ></Sections.LinkItem>
+              )}
             </Sections.Section>
           );
         })}
@@ -199,16 +239,17 @@ function expandQuay(
   loadedDeparturesCount: number,
 ) {
   const targetCount =
-    expandedQuays[index] + DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW;
+    expandedQuays[index] + DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW * 2;
 
-  if (loadedDeparturesCount >= targetCount) {
-    setExpandedQuays(
-      expandedQuays.map((value, quayIndex) =>
-        quayIndex === index ? loadedDeparturesCount : value,
-      ),
-    );
+  setExpandedQuays(
+    expandedQuays.map((value, quayIndex) =>
+      quayIndex === index ? targetCount : value,
+    ),
+  );
+
+  if (targetCount > loadedDeparturesCount) {
   } else {
-    // console.log('LOAD MORE DEPARTURES FOR QUAY ' + quay.id);
+    console.log('LOAD MORE DEPARTURES FOR QUAY ' + quay.id);
   }
 }
 
@@ -320,5 +361,25 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   lineChipText: {
     color: theme.colors.primary_2.color,
     textAlign: 'right',
+  },
+  stopPlaceHeader: {
+    flexDirection: 'row',
+    maxWidth: '100%',
+    alignItems: 'center',
+    // flexWrap: 'wrap',
+    // marginRight: 10,
+  },
+  stopPlaceHeaderText: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    flexShrink: 1,
+  },
+  stopPlaceDescription: {
+    // flexShrink: 1,
+    // flexWrap: 'wrap',
+    // maxWidth: '90%',
+  },
+  rightMargin: {
+    marginRight: theme.spacings.medium,
   },
 }));
