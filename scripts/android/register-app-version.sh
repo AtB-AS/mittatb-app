@@ -18,11 +18,11 @@ if [[
 ]]; then
   echo "Argument error!"
   echo "Expected environment variables:
-  - SIGNING_CERTIFICATE_DIGEST
   - ENTUR_CLIENT_ID
   - ENTUR_CLIENT_SECRET
   - APP_ENVIRONMENT
   - AUTHORITY
+  - ANDROID_APPLICATION_ID
   - ANDROID_SIGNING_CERTIFICATE_FINGERPRINT
   - APP_VERSION
   - BUILD_ID
@@ -90,7 +90,7 @@ json=$(cat <<EOJ
       "ref": "${AUTHORITY}"
     },
     android: {
-      "apk_package_name": "$application_id",
+      "apk_package_name": "$ANDROID_APPLICATION_ID",
       "application_version_id": "$concat_app_version",
       "certificate_digests": [
         "$certificate_digest"
