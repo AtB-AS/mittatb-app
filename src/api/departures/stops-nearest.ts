@@ -3,7 +3,8 @@ import {CursoredData, CursoredQuery, StopPlaceDetails} from '@atb/sdk';
 import {stringifyWithDate} from '@atb/utils/querystring';
 import client from '../client';
 import {FavoriteDeparture} from '@atb/favorites/types';
-import {EstimatedCall} from '@entur/sdk';
+import {StopPlaceQuayDepartures, EstimatedCall} from '../types/departures';
+import {stringifyUrl} from 'query-string';
 
 export type StopsNearestQuery = CursoredQuery<{
   lat: number;
@@ -21,7 +22,10 @@ export type StopPlaceDeparturesPayload = {
 };
 
 export type StopPlaceDeparturesQuery = CursoredQuery<{
+  filterByInUse?: boolean;
   id: string;
+  numberOfDepartures?: number;
+  startTime?: string;
 }>;
 
 export type QuayDeparturesQuery = CursoredQuery<{
@@ -31,7 +35,7 @@ export type QuayDeparturesQuery = CursoredQuery<{
 export type StopPlaceMetadata = CursoredData<StopPlaceDetails[]>;
 
 const BASE_URL = 'bff/v1/stops/nearest';
-const BASE_URL_V2 = 'bff/v1';
+const BASE_URL_V2 = 'bff/v2/departures';
 
 export async function getNearestStops(
   query: StopsNearestQuery,
@@ -45,10 +49,9 @@ export async function getNearestStops(
 export async function getStopPlaceDepartures(
   query: StopPlaceDeparturesQuery,
   opts?: AxiosRequestConfig,
-): Promise<EstimatedCall[]> {
-  // TODO: Depreciated endpoint
-  const url = `${BASE_URL_V2}/stop/${query.id}/departures`;
-  return requestDepartures(url, opts);
+): Promise<StopPlaceQuayDepartures> {
+  const url = `${BASE_URL_V2}/stop-departures`;
+  return requestStopPlaceDepartures(stringifyUrl({url, query}), opts);
 }
 
 export async function getQuayDepartures(
@@ -72,5 +75,13 @@ async function requestDepartures(
   opts?: AxiosRequestConfig,
 ): Promise<EstimatedCall[]> {
   const response = await client.get<EstimatedCall[]>(url, opts);
+  return response.data;
+}
+
+async function requestStopPlaceDepartures(
+  url: string,
+  opts?: AxiosRequestConfig,
+): Promise<StopPlaceQuayDepartures> {
+  const response = await client.get<StopPlaceQuayDepartures>(url, opts);
   return response.data;
 }

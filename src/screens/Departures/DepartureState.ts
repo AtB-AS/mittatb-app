@@ -21,11 +21,12 @@ import {DeparturesRealtimeData, StopPlaceDetails} from '@atb/sdk';
 import {differenceInMinutes} from 'date-fns';
 import useInterval from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '../../departure-list/utils';
-import {EstimatedCall, Quay} from '@entur/sdk';
+import {Quay} from '@entur/sdk';
 import {
   getQuayDepartures,
   getStopPlaceDepartures,
 } from '@atb/api/departures/stops-nearest';
+import * as DepartureTypes from '@atb/api/types/departures';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
@@ -36,7 +37,7 @@ const HARD_REFRESH_LIMIT_IN_MINUTES = 10;
 type LoadType = 'initial' | 'more';
 
 export type DepartureDataState = {
-  data: EstimatedCall[] | null;
+  data: DepartureTypes.EstimatedCall[] | null;
   // showOnlyFavorites: boolean;
   tick?: Date;
   error?: {type: ErrorType; loadType: LoadType};
@@ -97,7 +98,7 @@ type DepartureDataActions =
       type: 'UPDATE_DEPARTURES';
       locationId?: string;
       reset?: boolean;
-      result: EstimatedCall[];
+      result: DepartureTypes.EstimatedCall[];
     }
   | {
       type: 'SET_ERROR';
@@ -139,26 +140,28 @@ const reducer: ReducerWithSideEffects<
         async (state, dispatch) => {
           try {
             // Fresh fetch, reset paging and use new query input with new startTime
-            const result = action.quay
-              ? await getQuayDepartures({
-                  id: action.quay.id,
-                })
-              : await getStopPlaceDepartures({
-                  id: action.stopPlace.id,
-                });
+            const result = await getStopPlaceDepartures({
+              id: action.stopPlace.id,
+            });
 
-            // {
-            //   stopPlace: action.stopPlace,
-            //   // favorites: state.showOnlyFavorites
-            //   //   ? action.favoriteDepartures
-            //   //   : undefined,
-            // },
-            // queryInput,
+            const estimatedCalls: DepartureTypes.EstimatedCall[] = [];
+            result.stopPlace?.quays?.forEach((quay: DepartureTypes.Quay) =>
+              quay.estimatedCalls.forEach(
+                (estimatedCall: DepartureTypes.EstimatedCall) =>
+                  estimatedCalls.push(estimatedCall),
+              ),
+            );
+
+            // TODO: Refactor?
+            // const estimatedCalls: EstimatedCall[] = result.stopPlace?.quays
+            //   ?.map((quay: Types.Quay) => quay.estimatedCalls)
+            //   .flat();
+
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
               locationId: action.quay ? action.quay.id : action.stopPlace?.id,
-              result,
+              result: estimatedCalls,
             });
           } catch (e) {
             dispatch({

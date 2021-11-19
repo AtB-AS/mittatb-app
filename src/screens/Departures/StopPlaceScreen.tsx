@@ -22,10 +22,11 @@ import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {BusSide} from '@atb/assets/svg/icons/transportation';
 import {dictionary, useTranslation} from '@atb/translations';
 import {formatToClock} from '@atb/utils/date';
-import {EstimatedCall, Quay} from '@entur/sdk';
-import {TransportMode, TransportSubmode} from '@atb/sdk';
+import {Quay} from '@entur/sdk';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
+import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
+import {EstimatedCall} from '@atb/api/types/departures';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 5;
 
@@ -169,19 +170,19 @@ export default function StopPlaceScreen({
                 </View>
               </Sections.GenericClickableItem>
               {!hiddenQuays[index] &&
-                getDeparturesForQuay(state, quay)
+                getDeparturesForQuay(state.data, quay)
                   .slice(
                     0,
                     selectedQuay ? state.data?.length : expandedQuays[index],
                   )
                   .map((departure) => (
-                    <Sections.GenericItem key={departure.serviceJourney.id}>
+                    <Sections.GenericItem key={departure.serviceJourney?.id}>
                       <EstimatedCallLine
                         departure={departure}
                       ></EstimatedCallLine>
                     </Sections.GenericItem>
                   ))}
-              {getDeparturesForQuay(state, quay).length === 0 &&
+              {getDeparturesForQuay(state.data, quay).length === 0 &&
                 !hiddenQuays[index] && (
                   <Sections.GenericItem>
                     <ThemeText color="secondary" style={{width: '100%'}}>
@@ -207,7 +208,7 @@ export default function StopPlaceScreen({
                       index,
                       expandedQuays,
                       setExpandedQuays,
-                      getDeparturesForQuay(state, quay).length,
+                      getDeparturesForQuay(state.data, quay).length,
                     );
                   }}
                 ></Sections.LinkItem>
@@ -224,10 +225,13 @@ type EstimatedCallLineProps = {
   departure: EstimatedCall;
 };
 
-function getDeparturesForQuay(state: DepartureDataState, quay: Quay) {
-  if (!state.data) return [];
-  return state.data.filter(
-    (departure) => departure.quay && departure.quay?.id === quay.id,
+function getDeparturesForQuay(
+  departures: EstimatedCall[] | null,
+  quay: Quay,
+): EstimatedCall[] {
+  if (!departures) return [];
+  return departures.filter(
+    (departure) => departure && departure.quay?.id === quay.id,
   );
 }
 
@@ -257,18 +261,18 @@ function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
   const {t, language} = useTranslation();
   const styles = useStyles();
 
-  const journeyPattern = departure.serviceJourney.journeyPattern;
-  if (!journeyPattern) return <></>;
+  const line = departure.serviceJourney?.line;
+  if (!line) return <></>;
 
   return (
     <View style={styles.estimatedCallLine}>
       <LineChip
-        publicCode={journeyPattern.line.publicCode}
-        transportMode={journeyPattern.line.transportMode}
-        transportSubmode={journeyPattern.line.transportSubmode}
+        publicCode={line.publicCode}
+        transportMode={line.transportMode}
+        transportSubmode={line?.transportSubmode}
       ></LineChip>
       <ThemeText style={styles.lineName}>
-        {departure.destinationDisplay.frontText}
+        {departure.destinationDisplay?.frontText}
       </ThemeText>
       <ThemeText type="body__primary--bold">
         {departure.realtime && t(dictionary.missingRealTimePrefix)}
@@ -280,8 +284,8 @@ function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
 
 type LineChipProps = {
   publicCode?: string;
-  transportMode?: TransportMode;
-  transportSubmode?: TransportSubmode;
+  transportMode?: Types.TransportMode;
+  transportSubmode?: Types.TransportSubmode;
 };
 
 function LineChip({
