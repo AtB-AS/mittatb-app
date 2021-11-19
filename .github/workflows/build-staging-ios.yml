@@ -17,8 +17,6 @@ jobs:
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
           echo "APP_ENVIRONMENT=staging" >> $GITHUB_ENV
           echo "APP_ORG=atb" >> $GITHUB_ENV
-          echo "BUNDLE_IDENTIFIER=no.mittatb.staging" >> $GITHUB_ENV
-          echo "APPLE_TEAM_ID=CSV447Q97L" >> $GITHUB_ENV
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
         env:
@@ -44,6 +42,8 @@ jobs:
         run: bundle install
       - name: Set environment
         run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT $APP_ORG
+      - name: Export workflow env variables based on environment
+        run: sh ./scripts/export-workflow-parameters.sh
       - name: Override native config files
         run: sh ./scripts/override-config-files.sh
       - uses: webfactory/ssh-agent@v0.4.1
@@ -70,7 +70,7 @@ jobs:
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: fastlane ios build
         env:
-          PROVISIONING_PROFILE: "match AdHoc no.mittatb.staging"
+          PROVISIONING_PROFILE: $IOS_PROVISIONING_PROFILE_SPECIFIER
           EXPORT_METHOD: "ad-hoc"
       - name: Replace ipa bundle
         if: steps.ipa-cache.outputs.cache-hit == 'true'
@@ -100,6 +100,3 @@ jobs:
         env:
           ENTUR_CLIENT_ID: ${{ secrets.ATB_ENTUR_CLIENT_ID_STAGING}}
           ENTUR_CLIENT_SECRET: ${{ secrets.ATB_ENTUR_CLIENT_SECRET_STAGING}}
-          AUTHORITY: "ATB:Authority:2"
-
-

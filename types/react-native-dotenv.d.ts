@@ -10,7 +10,7 @@ declare module '@env' {
   export const PRIVACY_POLICY_URL: string;
   export const MAPBOX_API_TOKEN: string;
   export const MAPBOX_STOP_PLACES_STYLE_URL: string;
-  export const AUTHORITY_ID: string;
+  export const AUTHORITY: string;
   export const APP_ORG: AppOrgs;
   export const FOCUS_LATITUDE: number;
   export const FOCUS_LONGITUDE: number;

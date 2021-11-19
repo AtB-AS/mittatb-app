@@ -1,7 +1,7 @@
 import {LegMode, TransportSubmode, TripPattern} from '@atb/sdk';
-import {AUTHORITY_ID} from '@env';
+import {AUTHORITY} from '@env';
 
-const currentAppAuthorityId = AUTHORITY_ID ?? 'ATB:Authority:2';
+const currentAppAuthorityId = AUTHORITY ?? 'ATB:Authority:2';
 
 export function hasLegsWeCantSellTicketsFor(
   tripPattern: TripPattern,
