@@ -153,10 +153,7 @@ export default function StopPlaceScreen({
                     </ThemeText>
                     {!!quay.description && (
                       <ThemeText
-                        style={[
-                          styles.stopPlaceDescription,
-                          styles.rightMargin,
-                        ]}
+                        style={styles.rightMargin}
                         type="body__secondary"
                         color="secondary"
                       >
@@ -302,16 +299,18 @@ function LineChip({
 
   return (
     <View style={[styles.lineChip, {backgroundColor: transportColor}]}>
-      {svg && (
-        <ThemeIcon
-          colorType="primary_2"
-          style={styles.lineChipIcon}
-          svg={svg || BusSide}
-        ></ThemeIcon>
-      )}
-      <ThemeText style={styles.lineChipText} type="body__primary--bold">
-        {publicCode}
-      </ThemeText>
+      <View style={styles.chipContent}>
+        {svg && (
+          <ThemeIcon
+            colorType="primary_2"
+            style={styles.lineChipIcon}
+            svg={svg || BusSide}
+          ></ThemeIcon>
+        )}
+        <ThemeText style={styles.lineChipText} type="body__primary--bold">
+          {publicCode}
+        </ThemeText>
+      </View>
     </View>
   );
 }
@@ -349,15 +348,18 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   lineName: {
     flexGrow: 1,
     flexShrink: 1,
+    marginRight: theme.spacings.medium,
   },
   lineChip: {
-    flexDirection: 'row',
+    minWidth: 70,
     padding: theme.spacings.small,
     borderRadius: theme.border.radius.regular,
     marginRight: theme.spacings.medium,
-    flexGrow: 0,
-    flexShrink: 0,
-    minWidth: 70,
+  },
+  chipContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    // justifyContent: 'center',
   },
   lineChipIcon: {
     marginRight: theme.spacings.small,
@@ -370,18 +372,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     maxWidth: '100%',
     alignItems: 'center',
-    // flexWrap: 'wrap',
-    // marginRight: 10,
   },
   stopPlaceHeaderText: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     flexShrink: 1,
-  },
-  stopPlaceDescription: {
-    // flexShrink: 1,
-    // flexWrap: 'wrap',
-    // maxWidth: '90%',
   },
   rightMargin: {
     marginRight: theme.spacings.medium,
