@@ -1,9 +1,21 @@
 import {translation as _} from '../../commons';
 const LoginTexts = {
+  activeTicketPrompt: {
+    title: _(
+      'Vent litt, du har en gyldig billett',
+      'Wait a sec – you have a valid ticket',
+    ),
+    body: _(
+      'Billetten kan **ikke** overføres til din profil og vil slettes ved innlogging. Dersom du trenger billetten, vent til den er utløpt **før** du logger inn.',
+      'This ticket can **not** be transferred to your profile, and will be deleted upon login. If you need the ticket, wait until it has expired **before** logging in.',
+    ),
+    laterButton: _('Logg inn senere', 'Log in later'),
+    continueButton: _('Jeg vil logge inn likevel', 'I want to log in anyway'),
+  },
   onboarding: {
     title: _(
       'Nå kan du kjøpe periodebilletter!',
-      'Seasonal tickets – available now!',
+      'Period tickets – available now!',
     ),
     description: _(
       'Når du logger inn kan du kjøpe periodebilletter på 7, 30 eller 180 dagers varighet.',
@@ -13,7 +25,7 @@ const LoginTexts = {
     laterButton: _('Jeg vil logge inn senere', 'I want to log in later'),
     carrotTitle: _('Det er lurt å logge inn', 'Smart travellers log in...'),
     carrotBody: _(
-      'Da kan du også lagre betalingskort og etter hvert andre smarte reiseting slik at du enkelt finner dem igjen – selv ved bytte av mobil.',
+      'Da kan du også lagre betalingskort og etterhvert andre smarte reiseting slik at du enkelt finner dem igjen – selv ved bytte av mobil.',
       '...to store payment cards for later use. Soon, login will store personal preferences to your profile so that you can carry them with you when swapping phones.',
     ),
   },
@@ -28,7 +40,7 @@ const LoginTexts = {
       label: _('+47', '+47'),
       placeholder: _('Skriv inn ditt telefonnummer', 'Type your mobile number'),
     },
-    mainButton: _('Send engangskode', 'Send new one-time code'),
+    mainButton: _('Send engangskode', 'Send one-time code'),
     errors: {
       invalid_phone: _(
         'Er du sikker på at telefonnummeret er korrekt?',
@@ -52,7 +64,7 @@ const LoginTexts = {
       placeholder: _('Skriv inn engangskoden', 'Enter your one-time code'),
     },
     mainButton: _('Logg inn', 'Log in'),
-    resendButton: _('Send engangskode på nytt', 'Request one-time code'),
+    resendButton: _('Send engangskode på nytt', 'Request new one-time code'),
     errors: {
       invalid_phone: _(
         'Er du sikker på at telefonnummeret er korrekt?',

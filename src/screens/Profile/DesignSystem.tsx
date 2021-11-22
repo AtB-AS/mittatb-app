@@ -20,7 +20,7 @@ export default function DesignSystem() {
     <View style={style.container}>
       <FullScreenHeader
         title="Design System"
-        leftButton={{type: 'home'}}
+        leftButton={{type: 'back'}}
         rightButton={{type: 'chat'}}
       />
 
@@ -72,7 +72,7 @@ export default function DesignSystem() {
               message="This is an error with retry link"
               title="Title"
               type="error"
-              retryFunction={presser}
+              onPress={presser}
             />
           </Sections.GenericItem>
         </Sections.Section>

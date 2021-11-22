@@ -29,10 +29,10 @@ import {formatToLongDateTime} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {SelectPaymentMethod} from '../Payment';
-import {SavedPaymentOption, usePreferences} from '@atb/preferences';
-import {useState} from 'react';
-import {useEffect} from 'react';
-import {CardPaymentMethod, PaymentMethod} from '../types';
+import {CardPaymentMethod, PaymentMethod, SavedPaymentOption} from '../types';
+import {useAuthState} from '@atb/auth';
+import {usePreviousPaymentMethod} from '../saved-payment-utils';
+import MessageBoxTexts from '@atb/translations/components/MessageBox';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -82,9 +82,9 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   const {theme} = useTheme();
   const {t, language} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
-  const {
-    preferences: {previousPaymentMethod},
-  } = usePreferences();
+  const {user} = useAuthState();
+
+  const previousPaymentMethod = usePreviousPaymentMethod(user?.uid);
 
   const previousMethod = getPreviousPaymentMethod(previousPaymentMethod);
 
@@ -199,8 +199,9 @@ const Confirmation: React.FC<ConfirmationProps> = ({
             selectPaymentOption(option);
             close();
           }}
+          close={close}
           previousPaymentMethod={previousPaymentMethod}
-        ></SelectPaymentMethod>
+        />
       );
     });
   }
@@ -222,7 +223,8 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               type="error"
               title={t(PurchaseConfirmationTexts.errorMessageBox.title)}
               message={t(PurchaseConfirmationTexts.errorMessageBox.message)}
-              retryFunction={refreshOffer}
+              onPress={refreshOffer}
+              onPressText={t(MessageBoxTexts.tryAgainButton)}
               containerStyle={styles.errorMessage}
             />
           )}
@@ -348,7 +350,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                       selectPaymentOption(previousMethod);
                     }
                   }}
-                ></Button>
+                />
                 <TouchableOpacity
                   style={styles.buttonTopSpacing}
                   disabled={!!error}
@@ -356,12 +358,12 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                     selectPaymentMethod();
                   }}
                   accessibilityHint={t(
-                    PurchaseConfirmationTexts.choosePaymentOption.a11yHint,
+                    PurchaseConfirmationTexts.changePaymentOption.a11yHint,
                   )}
                 >
                   <View style={styles.flexRowCenter}>
                     <ThemeText type="body__primary--bold">
-                      {t(PurchaseConfirmationTexts.choosePaymentOption.text)}
+                      {t(PurchaseConfirmationTexts.changePaymentOption.text)}
                     </ThemeText>
                   </View>
                 </TouchableOpacity>
@@ -376,7 +378,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                 )}
                 onPress={selectPaymentMethod}
                 viewContainerStyle={styles.paymentButton}
-              ></Button>
+              />
             )}
           </View>
         )}

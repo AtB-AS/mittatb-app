@@ -19,7 +19,11 @@ type NavigationProp = CompositeNavigationProp<
   StackNavigationProp<RootStackParamList>
 >;
 
-const RecentTicketsScrollView = () => {
+type RecentTicketsProps = {
+  topElement?: JSX.Element;
+};
+
+const RecentTicketsScrollView = ({topElement}: RecentTicketsProps) => {
   const {theme} = useTheme();
   const styles = useStyles();
   const navigation = useNavigation<NavigationProp>();
@@ -48,6 +52,7 @@ const RecentTicketsScrollView = () => {
           />
         }
       >
+        {topElement}
         {!recentTickets?.length && loading && (
           <ThemeText style={styles.noTicketsText}>
             {t(TicketsTexts.recentTickets.loading)}

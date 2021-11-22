@@ -1,7 +1,7 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
-import React, {useState} from 'react';
+import React from 'react';
 import {ScrollView, View} from 'react-native';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
@@ -12,17 +12,19 @@ import {ThemeColor} from '@atb/theme/colors';
 import {useNavigation} from '@react-navigation/native';
 import {TicketIllustration, Psst} from '@atb/assets/svg/illustrations';
 import {TouchableOpacity} from 'react-native';
+import {
+  filterActiveOrCanBeUsedFareContracts,
+  useTicketState,
+} from '@atb/tickets';
 
 const themeColor: ThemeColor = 'background_gray';
 
 export default function LoginOnboarding({
-  loginReason,
   headerLeftButton,
   doAfterSubmit,
   headerRightButton,
 }: {
-  loginReason?: string;
-  doAfterSubmit: () => void;
+  doAfterSubmit: (hasActiveFareContracts: boolean) => void;
   headerLeftButton?: LeftButtonProps;
   headerRightButton?: RightButtonProps;
 }) {
@@ -31,8 +33,12 @@ export default function LoginOnboarding({
   const styles = useThemeStyles();
   const focusRef = useFocusOnLoad();
 
+  const {fareContracts} = useTicketState();
+  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
+    fareContracts,
+  );
   const onNext = async () => {
-    doAfterSubmit();
+    doAfterSubmit(activeFareContracts.length > 0);
   };
 
   return (
@@ -111,9 +117,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   title: {
     textAlign: 'center',
     marginVertical: theme.spacings.medium,
-  },
-  loginReason: {
-    marginTop: theme.spacings.medium,
   },
   description: {
     marginVertical: theme.spacings.medium,

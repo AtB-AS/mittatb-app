@@ -12,7 +12,7 @@ useTheme(): {
 
   // Settings in preferences.
   storedColorScheme: Mode;
-  overrideColorScheme: boolean;
+  overrideSystemAppearance: boolean;
 
   // Will update stored preferences (persistant storage)
   updateThemePreference(theme: 'light' | 'dark'): void;

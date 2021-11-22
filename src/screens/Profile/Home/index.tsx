@@ -8,7 +8,7 @@ import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import useLocalConfig from '@atb/utils/use-local-config';
-import {PRIVACY_POLICY_URL} from '@env';
+import {PRIVACY_POLICY_URL, IS_QA_ENV} from '@env';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
@@ -18,7 +18,10 @@ import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileStackParams} from '..';
 import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
-import {useAppDispatch} from '@atb/AppContext';
+import {
+  filterActiveOrCanBeUsedFareContracts,
+  useTicketState,
+} from '@atb/tickets';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -38,13 +41,18 @@ type ProfileScreenProps = {
 };
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
-  const {enable_i18n, enable_login} = useRemoteConfig();
-  const appDispatch = useAppDispatch();
+  const {enable_i18n} = useRemoteConfig();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
   const {authenticationType, signOut, user} = useAuthState();
   const config = useLocalConfig();
+
+  const {fareContracts} = useTicketState();
+  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
+    fareContracts,
+  );
+  const hasActiveFareContracts = activeFareContracts.length > 0;
 
   const {
     setClipboard,
@@ -66,37 +74,37 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
       />
 
       <ScrollView contentContainerStyle={style.scrollView}>
-        {enable_login && (
-          <Sections.Section withPadding>
-            <Sections.HeaderItem
-              text={t(ProfileTexts.sections.account.heading)}
+        <Sections.Section withPadding>
+          <Sections.HeaderItem
+            text={t(ProfileTexts.sections.account.heading)}
+          />
+          {authenticationType !== 'phone' && (
+            <Sections.LinkItem
+              text={t(ProfileTexts.sections.account.linkItems.login.label)}
+              onPress={() =>
+                navigation.navigate('LoginInApp', {
+                  screen: hasActiveFareContracts
+                    ? 'ActiveTicketPromptInApp'
+                    : 'PhoneInputInApp',
+                  params: {
+                    afterLogin: {routeName: 'ProfileHome'},
+                  },
+                })
+              }
             />
-            {authenticationType !== 'phone' && (
-              <Sections.LinkItem
-                text={t(ProfileTexts.sections.account.linkItems.login.label)}
-                onPress={() =>
-                  navigation.navigate('LoginInApp', {
-                    screen: 'PhoneInputInApp',
-                    params: {
-                      afterLogin: {routeName: 'ProfileHome'},
-                    },
-                  })
-                }
-              />
-            )}
-            {authenticationType === 'phone' && (
-              <Sections.GenericItem>
-                <ThemeText>{user?.phoneNumber}</ThemeText>
-              </Sections.GenericItem>
-            )}
-            {authenticationType === 'phone' && (
-              <Sections.LinkItem
-                text={t(ProfileTexts.sections.account.linkItems.logout.label)}
-                onPress={signOut}
-              />
-            )}
-          </Sections.Section>
-        )}
+          )}
+          {authenticationType === 'phone' && (
+            <Sections.GenericItem>
+              <ThemeText>{user?.phoneNumber}</ThemeText>
+            </Sections.GenericItem>
+          )}
+          {authenticationType === 'phone' && (
+            <Sections.LinkItem
+              text={t(ProfileTexts.sections.account.linkItems.logout.label)}
+              onPress={signOut}
+            />
+          )}
+        </Sections.Section>
 
         <Sections.Section withPadding>
           <Sections.HeaderItem
@@ -226,7 +234,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           />
         </Sections.Section>
 
-        {__DEV__ && (
+        {(!!JSON.parse(IS_QA_ENV || 'false') || __DEV__) && (
           <Sections.Section withPadding>
             <Sections.HeaderItem text="Developer menu" />
             <Sections.LinkItem
@@ -234,10 +242,8 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               onPress={() => navigation.navigate('DesignSystem')}
             />
             <Sections.LinkItem
-              text="Restart onboarding"
-              onPress={() => {
-                appDispatch({type: 'RESTART_ONBOARDING'});
-              }}
+              text="Debug"
+              onPress={() => navigation.navigate('DebugInfo')}
             />
           </Sections.Section>
         )}

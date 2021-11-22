@@ -7,7 +7,7 @@ jobs:
   build-android:
     name: Build Android
     timeout-minutes: 90
-    runs-on: macos-latest
+    runs-on: macos-11
     steps:
       - name: Checkout project
         uses: actions/checkout@v1
@@ -36,6 +36,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set environment
         run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT $APP_ORG
+      - name: Export workflow env variables based on environment
+        run: sh ./scripts/export-workflow-parameters.sh
       - name: Override native config files
         run: sh ./scripts/override-config-files.sh
       - name: Get Android keystore
@@ -61,3 +63,8 @@ jobs:
         run: sh ./scripts/android/upload-sourcemaps.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
+      - name: Register app version
+        run: sh ./scripts/android/register-app-version.sh
+        env:
+          ENTUR_CLIENT_ID: ${{ secrets.ATB_ENTUR_CLIENT_ID_PRODUCTION}}
+          ENTUR_CLIENT_SECRET: ${{ secrets.ATB_ENTUR_CLIENT_SECRET_PRODUCTION}}

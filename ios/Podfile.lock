@@ -224,7 +224,13 @@ PODS:
   - BVLinearGradient (2.5.6):
     - React
   - CocoaAsyncSocket (7.6.5)
+  - CryptoSwift (1.4.0)
   - DoubleConversion (1.1.6)
+  - entur-react-native-traveller (1.0.0):
+    - CryptoSwift
+    - Kronos
+    - React-Core
+    - SwiftProtobuf
   - FBLazyVector (0.63.4)
   - FBReactNativeSpec (0.63.4):
     - Folly (= 2020.01.13.00)
@@ -432,6 +438,7 @@ PODS:
   - gRPC-Core/Interface (1.28.2)
   - GTMSessionFetcher/Core (1.5.0)
   - Intercom (8.0.0)
+  - Kronos (4.2.1)
   - leveldb-library (1.22.1)
   - libevent (2.1.12)
   - Mapbox-iOS-SDK (6.3.0):
@@ -628,6 +635,8 @@ PODS:
     - Mapbox-iOS-SDK (= 6.3.0)
     - React
     - React-Core
+  - react-native-netinfo (6.1.0):
+    - React-Core
   - react-native-safe-area-context (3.3.0):
     - React-Core
   - react-native-webview (11.13.0):
@@ -694,8 +703,8 @@ PODS:
     - React-jsi (= 0.63.4)
   - RNBootSplash (3.2.4):
     - React-Core
-  - RNCAsyncStorage (2.0.0):
-    - React
+  - RNCAsyncStorage (1.15.9):
+    - React-Core
   - RNCClipboard (1.8.4):
     - React-Core
   - RNCMaskedView (0.1.11):
@@ -740,6 +749,7 @@ PODS:
     - React-RCTImage
   - RNSVG (12.1.1):
     - React
+  - SwiftProtobuf (1.17.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -748,6 +758,7 @@ DEPENDENCIES:
   - "BugsnagReactNative (from `../node_modules/@bugsnag/react-native`)"
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+  - "entur-react-native-traveller (from `../node_modules/@entur/react-native-traveller`)"
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Flipper (= 0.87.0)
@@ -789,6 +800,7 @@ DEPENDENCIES:
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-intercom (from `../node_modules/react-native-intercom`)
   - "react-native-mapbox-gl (from `../node_modules/@react-native-mapbox-gl/maps`)"
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -802,7 +814,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
-  - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage-backend-legacy`)"
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
@@ -827,6 +839,7 @@ SPEC REPOS:
     - boost-for-react-native
     - BoringSSL-GRPC
     - CocoaAsyncSocket
+    - CryptoSwift
     - Firebase
     - FirebaseABTesting
     - FirebaseAnalytics
@@ -852,6 +865,7 @@ SPEC REPOS:
     - gRPC-Core
     - GTMSessionFetcher
     - Intercom
+    - Kronos
     - leveldb-library
     - libevent
     - Mapbox-iOS-SDK
@@ -859,6 +873,7 @@ SPEC REPOS:
     - nanopb
     - OpenSSL-Universal
     - PromisesObjC
+    - SwiftProtobuf
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -868,6 +883,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-linear-gradient"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
+  entur-react-native-traveller:
+    :path: "../node_modules/@entur/react-native-traveller"
   FBLazyVector:
     :path: "../node_modules/react-native/Libraries/FBLazyVector"
   FBReactNativeSpec:
@@ -906,6 +923,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-intercom"
   react-native-mapbox-gl:
     :path: "../node_modules/@react-native-mapbox-gl/maps"
+  react-native-netinfo:
+    :path: "../node_modules/@react-native-community/netinfo"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-webview:
@@ -933,7 +952,7 @@ EXTERNAL SOURCES:
   RNBootSplash:
     :path: "../node_modules/react-native-bootsplash"
   RNCAsyncStorage:
-    :path: "../node_modules/@react-native-community/async-storage-backend-legacy"
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCClipboard:
     :path: "../node_modules/@react-native-clipboard/clipboard"
   RNCMaskedView:
@@ -976,7 +995,9 @@ SPEC CHECKSUMS:
   BugsnagReactNative: 2e6375ce8a5789af2d1e3f2b6b8d5f679c1b2242
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
+  CryptoSwift: 7cc902df1784de3b389a387756c7d710f197730c
   DoubleConversion: cde416483dac037923206447da6e1454df403714
+  entur-react-native-traveller: d4156cacd6b76f8395ae3ab743d7439762d1e369
   FBLazyVector: 3bb422f41b18121b71783a905c10e58606f7dc3e
   FBReactNativeSpec: f2c97f2529dd79c083355182cc158c9f98f4bd6e
   Firebase: 78e8dd2e39d653de6270432ad84fe8b59f7bf4e8
@@ -1006,6 +1027,7 @@ SPEC CHECKSUMS:
   gRPC-Core: 4afa11bfbedf7cdecd04de535a9e046893404ed5
   GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
   Intercom: 5d8058e3476ab6b0350dea165338164364eb1acb
+  Kronos: 0ca73a1c00dc9a49a0bab4a6ed42f282562a7058
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   Mapbox-iOS-SDK: 6a67397df2bcafe5d2851604192aa8de6f8d6c89
@@ -1028,6 +1050,7 @@ SPEC CHECKSUMS:
   react-native-get-random-values: 237bffb1c7e05fb142092681531810a29ba53015
   react-native-intercom: c48e0e15877bf96ff4d461f7aa9b833d11188139
   react-native-mapbox-gl: bffacc7783a77b1e2d040018a8212ed344105e10
+  react-native-netinfo: 5a001e406317eaaf1e4846906650e107dadcaa72
   react-native-safe-area-context: 61c8c484a3a9e7d1fda19f7b1794b35bbfd2262a
   react-native-webview: 133a6a5149f963259646e710b4545c67ef35d7c9
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
@@ -1041,7 +1064,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
   RNBootSplash: 4844706cbb56a3270556c9b94e59dedadccd47e4
-  RNCAsyncStorage: b5de28ebf07f83fc83fe718cb17793c5cfe55181
+  RNCAsyncStorage: 26f25150da507524a7815f2ada06ca0967f65633
   RNCClipboard: ddd4d291537f1667209c9c405aaa4307297e252e
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNDateTimePicker: 7658208086d86d09e1627b5c34ba0cf237c60140
@@ -1058,9 +1081,10 @@ SPEC CHECKSUMS:
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNScreens: eb0dfb2d6b21d2d7f980ad46b14eb306d2f1062e
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
+  SwiftProtobuf: 9c85136c6ba74b0a1b84279dbf0f6db8efb714e0
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: e235871a541757c52b859c68b6349c61f933a0f6
+PODFILE CHECKSUM: 62be2074973c43d2f6968cd4764cb697811532db
 
 COCOAPODS: 1.10.1

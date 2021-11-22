@@ -14,12 +14,17 @@ import {ActiveReservation, FareContract, PaymentStatus} from './types';
 import {getPayment} from './api';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import Bugsnag from '@bugsnag/react-native';
+import {TokenStatus} from '@entur/react-native-traveller/lib/typescript/token/types';
+import {CustomerProfile} from '.';
 
 type TicketReducerState = {
   fareContracts: FareContract[];
   activeReservations: ActiveReservation[];
   isRefreshingTickets: boolean;
   errorRefreshingTickets: boolean;
+  tokenStatus?: TokenStatus;
+  customerProfile: CustomerProfile | undefined;
+  didPaymentFail: boolean;
 };
 
 type TicketReducerAction =
@@ -29,10 +34,22 @@ type TicketReducerAction =
       type: 'UPDATE_FARE_CONTRACT_TICKETS';
       fareContracts: FareContract[];
     }
+  | {
+      type: 'UPDATE_CUSTOMER_PROFILE';
+      customerProfile: CustomerProfile | undefined;
+    }
   | {type: 'ADD_RESERVATION'; reservation: ActiveReservation}
   | {
       type: 'UPDATE_RESERVATIONS';
       activeReservations: ActiveReservation[];
+    }
+  | {
+      type: 'SET_TOKEN_STATUS';
+      tokenStatus: TokenStatus;
+    }
+  | {
+      type: 'UPDATE_PAYMENT_FAILED';
+      didPaymentFail: boolean;
     };
 
 type TicketReducer = (
@@ -45,6 +62,12 @@ const ticketReducer: TicketReducer = (
   action,
 ): TicketReducerState => {
   switch (action.type) {
+    case 'SET_TOKEN_STATUS': {
+      return {
+        ...prevState,
+        tokenStatus: action.tokenStatus,
+      };
+    }
     case 'SET_IS_REFRESHING_FARE_CONTRACT_TICKETS': {
       return {
         ...prevState,
@@ -93,6 +116,18 @@ const ticketReducer: TicketReducer = (
         activeReservations: action.activeReservations,
       };
     }
+    case 'UPDATE_CUSTOMER_PROFILE': {
+      return {
+        ...prevState,
+        customerProfile: action.customerProfile,
+      };
+    }
+    case 'UPDATE_PAYMENT_FAILED': {
+      return {
+        ...prevState,
+        didPaymentFail: action.didPaymentFail,
+      };
+    }
   }
 };
 
@@ -100,14 +135,25 @@ type TicketState = {
   addReservation: (reservation: ActiveReservation) => void;
   refreshTickets: () => void;
   fareContracts: FareContract[];
+  didPaymentFail: boolean;
+  resetPaymentStatus: () => void;
   findFareContractByOrderId: (id: string) => FareContract | undefined;
-} & Pick<TicketReducerState, 'activeReservations' | 'isRefreshingTickets'>;
+} & Pick<
+  TicketReducerState,
+  | 'activeReservations'
+  | 'isRefreshingTickets'
+  | 'tokenStatus'
+  | 'customerProfile'
+>;
 
 const initialReducerState: TicketReducerState = {
+  tokenStatus: undefined,
   fareContracts: [],
   activeReservations: [],
   isRefreshingTickets: false,
   errorRefreshingTickets: false,
+  customerProfile: undefined,
+  didPaymentFail: false,
 };
 
 const TicketContext = createContext<TicketState | undefined>(undefined);
@@ -152,6 +198,35 @@ const TicketContextProvider: React.FC = ({children}) => {
     }
   }, [user, abtCustomerId, enable_ticketing]);
 
+  // TODO: Temporary hack to get travelcard ID before we have tokens. Should be
+  // replaced when tokens are implemented.
+  useEffect(() => {
+    if (user && abtCustomerId && enable_ticketing) {
+      const subscriber = firestore()
+        .collection('customers')
+        .doc(abtCustomerId)
+        .onSnapshot(
+          (snapshot) => {
+            const customerProfile = snapshot?.data() as CustomerProfile;
+
+            dispatch({type: 'UPDATE_CUSTOMER_PROFILE', customerProfile});
+
+            Bugsnag.leaveBreadcrumb('customer_profile_fetched', {
+              customerProfileId: customerProfile?.id,
+            });
+          },
+          (err) => {
+            Bugsnag.notify(err, function (event) {
+              event.addMetadata('customerProfile', {abtCustomerId});
+            });
+          },
+        );
+
+      // Stop listening for updates when no longer required
+      return () => subscriber();
+    }
+  }, [abtCustomerId, enable_ticketing]);
+
   const refreshTickets = () => {};
 
   const addReservation = useCallback(
@@ -193,6 +268,17 @@ const TicketContextProvider: React.FC = ({children}) => {
         }),
       );
 
+      if (
+        updatedReservations.some(
+          ({paymentStatus}) => paymentStatus === 'REJECT',
+        )
+      ) {
+        dispatch({
+          type: 'UPDATE_PAYMENT_FAILED',
+          didPaymentFail: true,
+        });
+      }
+
       dispatch({
         type: 'UPDATE_RESERVATIONS',
         activeReservations: updatedReservations.filter(
@@ -202,6 +288,13 @@ const TicketContextProvider: React.FC = ({children}) => {
     },
     [activeReservations, getPaymentStatus],
   );
+
+  const resetPaymentStatus = () => {
+    dispatch({
+      type: 'UPDATE_PAYMENT_FAILED',
+      didPaymentFail: false,
+    });
+  };
 
   useInterval(
     pollPaymentStatus,
@@ -218,6 +311,7 @@ const TicketContextProvider: React.FC = ({children}) => {
         activeReservations,
         refreshTickets,
         addReservation,
+        resetPaymentStatus,
         findFareContractByOrderId: (orderId) =>
           state.fareContracts.find((fc) => fc.orderId === orderId),
       }}

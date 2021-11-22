@@ -19,16 +19,15 @@ import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ThemeColor} from '@atb/theme/colors';
+import phone from 'phone';
 
 const themeColor: ThemeColor = 'background_gray';
 
 export default function PhoneInput({
-  loginReason,
   doAfterLogin,
   headerLeftButton,
   headerRightButton,
 }: {
-  loginReason?: string;
   doAfterLogin: (phoneNumber: string) => void;
   headerLeftButton?: LeftButtonProps;
   headerRightButton?: RightButtonProps;
@@ -38,14 +37,24 @@ export default function PhoneInput({
   const styles = useThemeStyles();
   const {signInWithPhoneNumber} = useAuthState();
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [prefix, setPrefix] = useState('47');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<PhoneSignInErrorCode>();
   const navigation = useNavigation();
   const focusRef = useFocusOnLoad();
 
-  // Remove whitespaces from phone number
-  const setCleanPhoneNumber = (number: string) =>
-    setPhoneNumber(number.replace(/\s+/g, ''));
+  const phoneValidationParams = {
+    strictDetection: true,
+    validateMobilePrefix: false,
+  };
+
+  const isValidPhoneNumber = (number: string) => {
+    const validationResult = phone(
+      '+' + prefix + number,
+      phoneValidationParams,
+    );
+    return validationResult.isValid;
+  };
 
   React.useEffect(
     () =>
@@ -57,10 +66,19 @@ export default function PhoneInput({
 
   const onNext = async () => {
     setIsSubmitting(true);
-    const errorCode = await signInWithPhoneNumber(phoneNumber);
+    const phoneValidation = phone(
+      '+' + prefix + phoneNumber,
+      phoneValidationParams,
+    );
+    if (!phoneValidation.phoneNumber) {
+      setIsSubmitting(false);
+      setError('invalid_phone');
+      return;
+    }
+    const errorCode = await signInWithPhoneNumber(phoneValidation.phoneNumber);
     if (!errorCode) {
       setError(undefined);
-      doAfterLogin(phoneNumber);
+      doAfterLogin(phoneValidation.phoneNumber);
     } else {
       setIsSubmitting(false);
       setError(errorCode);
@@ -92,23 +110,17 @@ export default function PhoneInput({
             </ThemeText>
           </View>
           <View accessible={true}>
-            {loginReason && (
-              <ThemeText style={styles.loginReason} color={themeColor}>
-                {loginReason}
-              </ThemeText>
-            )}
             <ThemeText style={styles.description} color={themeColor}>
               {t(LoginTexts.phoneInput.description)}
             </ThemeText>
           </View>
           <Sections.Section>
-            <Sections.GenericItem>
-              <ThemeText>{t(LoginTexts.phoneInput.input.heading)}</ThemeText>
-            </Sections.GenericItem>
-            <Sections.TextInput
-              label={t(LoginTexts.phoneInput.input.label)}
+            <Sections.PhoneInput
+              label={t(LoginTexts.phoneInput.input.heading)}
               value={phoneNumber}
-              onChangeText={setCleanPhoneNumber}
+              onChangeText={setPhoneNumber}
+              prefix={prefix}
+              onChangePrefix={setPrefix}
               showClear={true}
               keyboardType="number-pad"
               placeholder={t(LoginTexts.phoneInput.input.placeholder)}
@@ -138,7 +150,7 @@ export default function PhoneInput({
                 color={'primary_2'}
                 onPress={onNext}
                 text={t(LoginTexts.phoneInput.mainButton)}
-                disabled={phoneNumber.length !== 8}
+                disabled={!isValidPhoneNumber(phoneNumber)}
                 icon={ArrowRight}
                 iconPosition="right"
               />
@@ -165,10 +177,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   title: {
     textAlign: 'center',
     marginVertical: theme.spacings.medium,
-  },
-  loginReason: {
-    marginTop: theme.spacings.medium,
-    textAlign: 'center',
   },
   description: {
     marginVertical: theme.spacings.large,

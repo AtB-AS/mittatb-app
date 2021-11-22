@@ -4,8 +4,9 @@ import {RootStackParamList} from '@atb/navigation';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
-  filterActiveFareContracts,
+  filterActiveOrCanBeUsedFareContracts,
   filterExpiredFareContracts,
+  isValidRightNowFareContract,
   useTicketState,
 } from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
@@ -33,7 +34,6 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const {
     must_upgrade_ticketing,
     enable_recent_tickets,
-    enable_login,
     enable_period_tickets,
   } = useRemoteConfig();
   const {abtCustomerId, authenticationType} = useAuthState();
@@ -54,7 +54,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   };
 
   const onBuyPeriodTicket = () => {
-    if (authenticationType === 'phone' || !enable_login) {
+    if (authenticationType === 'phone') {
       navigation.navigate('TicketPurchase', {
         screen: 'PurchaseOverview',
         params: {
@@ -63,9 +63,8 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
       });
     } else {
       navigation.navigate('LoginInApp', {
-        screen: 'LoginOnboarding',
+        screen: 'LoginOnboardingInApp',
         params: {
-          loginReason: t(TicketsTexts.buyTicketsTab.loginReason),
           afterLogin: {
             routeName: 'TicketPurchase',
             routeParams: {selectableProductType: 'period'},
@@ -79,31 +78,37 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
     appContext.resetTicketing();
   };
 
+  const topMessage = (
+    <View style={{paddingBottom: theme.spacings.large}}>
+      <MessageBox>
+        <ThemeText type="body__primary" color="primary_1" isMarkdown={true}>
+          {t(TicketsTexts.buyTicketsTab.reactivateSplash.message)}
+        </ThemeText>
+
+        <TouchableOpacity
+          onPress={enableTicketingOverlay}
+          accessibilityLabel={t(
+            TicketsTexts.buyTicketsTab.reactivateSplash.linkA11yHint,
+          )}
+        >
+          <ThemeText type="body__primary--underline" color="primary_1">
+            {t(TicketsTexts.buyTicketsTab.reactivateSplash.linkText)}
+          </ThemeText>
+        </TouchableOpacity>
+      </MessageBox>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
-      <View style={{padding: theme.spacings.medium}}>
-        <MessageBox>
-          <ThemeText type="body__primary" color="primary_1" isMarkdown={true}>
-            {t(TicketsTexts.buyTicketsTab.reactivateSplash.message)}
-          </ThemeText>
-
-          <TouchableOpacity
-            onPress={enableTicketingOverlay}
-            accessibilityLabel={t(
-              TicketsTexts.buyTicketsTab.reactivateSplash.linkA11yHint,
-            )}
-          >
-            <ThemeText type="body__primary--underline" color="primary_1">
-              {t(TicketsTexts.buyTicketsTab.reactivateSplash.linkText)}
-            </ThemeText>
-          </TouchableOpacity>
-        </MessageBox>
-      </View>
-
       {enable_recent_tickets ? (
-        <RecentTicketsScrollView />
+        <RecentTicketsScrollView
+          topElement={topMessage}
+        ></RecentTicketsScrollView>
       ) : (
-        <View style={{flex: 1}} />
+        <View style={{flex: 1, padding: theme.spacings.medium}}>
+          {topMessage}
+        </View>
       )}
       {isSignedInAsAbtCustomer && (
         <View style={{padding: theme.spacings.medium}}>
@@ -144,9 +149,20 @@ export const ActiveTickets: React.FC<Props> = () => {
     fareContracts,
     isRefreshingTickets,
     refreshTickets,
+    customerProfile,
+    didPaymentFail,
   } = useTicketState();
 
-  const activeFareContracts = filterActiveFareContracts(fareContracts);
+  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
+    fareContracts,
+  ).sort(function (a, b): number {
+    const isA = isValidRightNowFareContract(a);
+    const isB = isValidRightNowFareContract(b);
+
+    if (isA === isB) return 0;
+    if (isA) return -1;
+    return 1;
+  });
 
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
@@ -162,6 +178,8 @@ export const ActiveTickets: React.FC<Props> = () => {
         refreshTickets={refreshTickets}
         noTicketsLabel={t(TicketsTexts.activeTicketsTab.noTickets)}
         now={now}
+        travelCard={customerProfile?.travelcard}
+        didPaymentFail={didPaymentFail}
       />
     </View>
   );

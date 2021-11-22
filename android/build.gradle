@@ -3,7 +3,7 @@
 buildscript {
     ext {
         buildToolsVersion = "29.0.2"
-        minSdkVersion = 21
+        minSdkVersion = 23
         compileSdkVersion = 29
         targetSdkVersion = 29
     }
@@ -23,6 +23,9 @@ buildscript {
 allprojects {
     repositories {
         mavenLocal()
+        maven {
+            url "$rootDir/../.yalc/@entur/react-native-traveller/android/libs"
+        }
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url("$rootDir/../node_modules/react-native/android")

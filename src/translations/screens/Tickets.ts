@@ -9,10 +9,6 @@ const TicketsTexts = {
   buyTicketsTab: {
     label: _('Kjøp', 'Buy'),
     a11yLabel: _('Kjøp billetter', 'Buy tickets'),
-    loginReason: _(
-      'For å kjøpe periodebillett må du være logget inn.',
-      'To buy a period ticket you have to be signed in.',
-    ),
     button: {
       single: {
         text: _('Ny enkeltbillett', 'New single ticket'),
@@ -93,7 +89,7 @@ const TicketsTexts = {
     paymentStage: {
       processing: (type: string) =>
         _(`Betales med ${type}`, `Payment using ${type}`),
-      approved: (type: string) => _(`Betalt med ${type}`, `Payed with ${type}`),
+      approved: (type: string) => _(`Betalt med ${type}`, `Paid with ${type}`),
     },
     goToVipps: _('Gå til Vipps for betaling', 'Go to Vipps for payment'),
   },
@@ -102,6 +98,28 @@ const TicketsTexts = {
       _(
         `Noe gikk feil når vi prøvde å laste inn billett med ordre-id ${orderId}`,
         `Something went wrong when we tried to load ticket with order id ${orderId}`,
+      ),
+    paymentError: _(
+      'Betalingen mislyktes. Sjekk om du har tilstrekkelige midler på konto eller prøv et annet betalingsmiddel.',
+      'Payment failed. Please check that you have sufficient funds on your account or try a different payment option.',
+    ),
+    paymentErrorButton: _('Lukk', 'Close'),
+  },
+  travelCardInformation: {
+    reisebevis: _('Reisebevis', 'Travel token'),
+    onInspection: _(
+      'I billettkontroll må du vise t:kortet ditt',
+      'In the event of an inspection, please present your t:card',
+    ),
+    changeInstructions: _(
+      'Kan endres fra "Mitt AtB"',
+      'Can be changed from "My AtB"',
+    ),
+    tCard: _('t:kort', 't:card'),
+    illustrationa11yLabel: (travelCardId: string) =>
+      _(
+        `Illustrasjon av t kort med kortnummer som inneholder ${travelCardId}`,
+        `Illustration of t card with card number that contains ${travelCardId}`,
       ),
   },
   informational: {

@@ -5,12 +5,10 @@ import {StyleSheet} from '@atb/theme';
 export default function AnimatedBottomSheet({
   animatedOffset,
   children,
-  height,
   onLayout,
 }: {
   animatedOffset: Animated.Value;
   children: ReactNode;
-  height: number;
   onLayout: (ev: LayoutChangeEvent) => void;
 }) {
   const styles = useStyles();
@@ -19,9 +17,9 @@ export default function AnimatedBottomSheet({
     () =>
       animatedOffset.interpolate({
         inputRange: [0, 1],
-        outputRange: [height || windowHeight, 0],
+        outputRange: [windowHeight, 0],
       }),
-    [animatedOffset, height],
+    [animatedOffset, windowHeight],
   );
   return (
     <Animated.View
@@ -32,6 +30,7 @@ export default function AnimatedBottomSheet({
             translateY,
           },
         ],
+        maxHeight: windowHeight,
       }}
       onLayout={onLayout}
     >

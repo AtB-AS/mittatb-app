@@ -14,12 +14,14 @@ import {useTranslation} from '@atb/translations';
 
 type WithMessage = {
   message: string;
-  retryFunction?: () => void;
+  onPress?: () => void;
+  onPressText?: string;
   children?: never;
 };
 type WithChildren = {
   message?: never;
-  retryFunction?: never;
+  onPress?: never;
+  onPressText?: string;
   children: React.ReactNode;
 };
 export type MessageType = Statuses;
@@ -39,7 +41,8 @@ const MessageBox: React.FC<MessageBoxProps> = ({
   children,
   title,
   withMargin = false,
-  retryFunction,
+  onPress,
+  onPressText = 'OK',
 }) => {
   const {theme} = useTheme();
   const styles = useBoxStyle();
@@ -56,13 +59,13 @@ const MessageBox: React.FC<MessageBoxProps> = ({
       <ThemeText style={{...styles.text, color: textColor}}>
         {message}
       </ThemeText>
-      {retryFunction && (
+      {onPress && (
         <ThemeText
           style={[styles.retryText, {color: textColor}]}
           type="body__primary--underline"
-          onPress={retryFunction}
+          onPress={onPress}
         >
-          {t(MessageBoxTexts.tryAgainButton)}
+          {onPressText}
         </ThemeText>
       )}
     </>

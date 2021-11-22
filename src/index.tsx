@@ -13,9 +13,6 @@ import SearchHistoryContextProvider from './search-history';
 import {TicketContextProvider} from './tickets';
 import RemoteConfigContextProvider from './RemoteConfigContext';
 import {AuthContextProvider} from './auth';
-import {loadLocalConfig} from './local-config';
-import Bugsnag from '@bugsnag/react-native';
-import {setInstallId as setApiInstallId} from './api/client';
 import ErrorBoundary from './error-boundary';
 import {PreferencesContextProvider} from './preferences';
 import configureAndStartBugsnag from './diagnostics/bugsnagConfig';
@@ -27,16 +24,11 @@ import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import AppLanguageProvider from './translations/LanguageContext';
 import {BottomSheetProvider} from '@atb/components/bottom-sheet';
-import {AccessibilityInfo} from 'react-native';
 import LocaleContextProvider from '@atb/LocaleProvider';
+import {setupConfig} from './setup';
+import {MobileTokenContextProvider} from '@atb/mobile-token';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
-
-async function setupConfig() {
-  const {installId} = await loadLocalConfig();
-  Bugsnag.setUser(installId);
-  setApiInstallId(installId);
-}
 
 trackAppState();
 
@@ -66,15 +58,17 @@ const App = () => {
                       <SearchHistoryContextProvider>
                         <GeolocationContextProvider>
                           <RemoteConfigContextProvider>
-                            <TicketContextProvider>
-                              <AppLanguageProvider>
-                                <AlertsContextProvider>
-                                  <BottomSheetProvider>
-                                    <NavigationRoot />
-                                  </BottomSheetProvider>
-                                </AlertsContextProvider>
-                              </AppLanguageProvider>
-                            </TicketContextProvider>
+                            <MobileTokenContextProvider>
+                              <TicketContextProvider>
+                                <AppLanguageProvider>
+                                  <AlertsContextProvider>
+                                    <BottomSheetProvider>
+                                      <NavigationRoot />
+                                    </BottomSheetProvider>
+                                  </AlertsContextProvider>
+                                </AppLanguageProvider>
+                              </TicketContextProvider>
+                            </MobileTokenContextProvider>
                           </RemoteConfigContextProvider>
                         </GeolocationContextProvider>
                       </SearchHistoryContextProvider>
