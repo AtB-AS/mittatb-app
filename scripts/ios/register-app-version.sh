@@ -33,8 +33,8 @@ case $APP_ENVIRONMENT in
     abt_url="https://core-abt-abt.staging.entur.io"
     ;;
   store)
-    token_url="https://partner-abt.entur.org/oauth/token"
-    abt_url="https://core-abt-abt.staging.entur.io"
+    token_url="https://partner.entur.org/oauth/token"
+    abt_url="https://core-abt.entur.io"
     ;;
   *)
     echo "Unrecognized environment '$1'"
