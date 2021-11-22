@@ -1,3 +1,4 @@
+import {TokenState} from '@entur/react-native-traveller/lib/typescript/token/types';
 import {flatten, sumBy} from 'lodash';
 import {
   CarnetTicketUsedAccess,
@@ -30,6 +31,18 @@ export function isSingleTicket(
   travelRight: TravelRight | undefined,
 ): travelRight is PreactivatedSingleTicket {
   return travelRight?.type === 'PreActivatedSingleTicket';
+}
+
+export function isInspectable(
+  travelRight: TravelRight,
+  hasActiveTravelCard: boolean,
+  tokenState: TokenState | undefined,
+) {
+  if (!tokenState) return false;
+  return (
+    !hasActiveTravelCard &&
+    (isSingleTicket(travelRight) || tokenState === 'Valid')
+  );
 }
 
 function isOrWillBeActivatedFareContract(f: FareContract): boolean {
