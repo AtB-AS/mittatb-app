@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@atb-as/theme@^5.0.0-alpha.0":
-  version "5.0.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-5.0.0-alpha.0.tgz#ff831c2847ccddc96e706910f8a4cd4418a08eb4"
-  integrity sha512-8AGCTgvHzK8FRArV/QcezNBKZu5f7ghKt3xQ8zG7X4oJk7/P8khQ+U/m2l9tobhz5tCKV50ihS3RYaVnoZEibQ==
+"@atb-as/theme@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-5.0.0.tgz#326ee3163d6511ca99a35a0c0e347d7ce2d7f4fe"
+  integrity sha512-dhRYSSFW3zgGB426h7ko5VBqswo9kODOUVcLPY17alyxrCU/c9R/3FfCliIZdGtuiNkM5EDpmrnLIvPoTnNIag==
   dependencies:
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^1.0.7"
