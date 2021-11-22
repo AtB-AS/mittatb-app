@@ -5,7 +5,7 @@ on:
       - master
 
 jobs:
-  build-ios:
+  build-android:
     name: Build Android
     strategy:
       matrix:
@@ -51,8 +51,7 @@ jobs:
           path: "app-staging.apk"
           key: ${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: Decode keystore
-        run: |
-          echo $KEYSTORE | base64 -di > android/app/keystore.jks
+        run: sh ./scripts/android/create-keystore-file.sh
         env:
           KEYSTORE: ${{ secrets.KEYSTORE }}
       - name: Generate native assets
