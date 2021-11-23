@@ -62,8 +62,9 @@ import NewsBanner from './NewsBanner';
 import Results from './Results';
 import {SearchStateType} from './types';
 import {ThemeColor} from '@atb/theme/colors';
-import {simpleSearch} from '@atb/api/trips_v2';
+import {tripsSearch, TripsSearchQuery} from '@atb/api/trips_v2';
 import {TripMetadata, TripPattern, TripsQuery} from '@atb/api/types/trips';
+import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 
 const themeColor: ThemeColor = 'background_gray';
 
@@ -633,12 +634,10 @@ function useTripsQuery(
 
   const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
   const [tripMetadata, setTripMetadata] = useState<TripMetadata | null>(null);
-  //const [tripsQuery, setTripsQuery] = useState<TripsQuery | null>(null);
   const [errorType, setErrorType] = useState<ErrorType>();
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
   const {addJourneySearchEntry} = useSearchHistory();
 
-  //const clearPatterns = () => setTripPatterns(null);
   const clearTrips = () => {
     setTripPatterns(null);
     setTripMetadata(null);
@@ -672,27 +671,22 @@ function useTripsQuery(
           await addJourneySearchEntry([fromLocation, toLocation]);
         } catch (e) {}
 
-        const tripsQuery = await simpleSearch(
-          fromLocation,
-          toLocation,
-          searchDate,
-          arriveBy,
-          {
-            cancelToken: source.token,
-          },
-        );
+        const query: TripsQueryVariables = {
+          from: fromLocation,
+          to: toLocation,
+        };
+
+        const tripsQuery = await tripsSearch(query, {
+          cancelToken: source.token,
+        });
         console.log('------------- simple search done');
         console.log(tripsQuery);
         console.log(tripsQuery.trip);
         source.token.throwIfRequested();
         setTimeOfSearch(searchDate);
-        //const tripPatterns = tripsQuery.trip?.tripPatterns;
         if (tripsQuery) {
           const tripPatterns = tripsQuery.trip?.tripPatterns ?? null;
           const tripMetadata = tripsQuery.trip?.metadata ?? null;
-          //if (tripsQuery?.trip?.tripPatterns) {
-          //if (Array.isArray(tripsQuery?.trip?.tripPatterns)) {
-          //setTripsQuery(tripsQuery);
           setTripPatterns(tripPatterns);
           setTripMetadata(tripMetadata);
 
