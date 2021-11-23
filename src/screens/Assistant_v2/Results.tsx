@@ -9,8 +9,9 @@ import {AssistantTexts, useTranslation} from '@atb/translations';
 import {isSeveralDays} from '@atb/utils/date';
 import React, {Fragment, useEffect, useMemo, useState} from 'react';
 import {Text, View} from 'react-native';
+
+import ResultItem from '@atb/screens/Assistant_v2/ResultItem';
 import {TripPattern} from '@atb/api/types/trips';
-import {TripPatternSummary} from '@atb/screens/Assistant_v2/TripPatternSummary';
 
 type Props = {
   tripPatterns: TripPattern[] | null;
@@ -117,7 +118,7 @@ const Results: React.FC<Props> = ({
             previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
             allSameDay={allSameDay}
           />
-          <TripPatternSummary tripPattern={tripPattern} />
+          <ResultItem tripPattern={tripPattern} onDetailsPressed={() => {}} />
         </Fragment>
       ))}
     </View>
