@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/AbtMobile-Swift.h</key>
 		<data>
-		EJgedUFoo2iwA3eC06gAAnecsDg=
+		K1U6UzCKkMDVJhA+wnsmvzWq9lM=
 		</data>
 		<key>Headers/AbtMobile.h</key>
 		<data>
@@ -14,31 +14,31 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		kLlZZzdsXcRMYNdt21rozYb637A=
+		4OHvIHRs2tsTqoGj3QN1u+yM7MU=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
-		bGIsc8N9xUnZHB3JGCZo47ZB4uU=
+		hQ0Gn+Lzecsk2cyze6gwkon0KtE=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<data>
-		NHIMElJT6HyGuvVT8MZjPwiY/hI=
+		SZrBeYQE7/v0OJIk76OIirpkznE=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		KwdyARabc8i9TBra/+1tQb0PyeY=
+		VzEZISufRhcjpG/PUXxUe7X1VXk=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftdoc</key>
 		<data>
-		bGIsc8N9xUnZHB3JGCZo47ZB4uU=
+		hQ0Gn+Lzecsk2cyze6gwkon0KtE=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftinterface</key>
 		<data>
-		NHIMElJT6HyGuvVT8MZjPwiY/hI=
+		SZrBeYQE7/v0OJIk76OIirpkznE=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		KwdyARabc8i9TBra/+1tQb0PyeY=
+		VzEZISufRhcjpG/PUXxUe7X1VXk=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -51,7 +51,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			4V1tcihA4HOVApJ2QOlldovlbYAUQIQtr2Je4r3QuKI=
+			jwoukTU46OitWX2u5O4hIKQhKzsnWAWfvG3SEpxjghM=
 			</data>
 		</dict>
 		<key>Headers/AbtMobile.h</key>
@@ -65,42 +65,42 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			GNPcgnzL4fWJuflS1y1D2KrJSTjKhkcKEFLsgnw9474=
+			Jf1plqi2yTtxF73/93Aq0V0r4rK32K2V2mBV+nmGnas=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Tc1kBtrBTAjcFYc3q6fMZNGSsur1xyqCRqNRD8dp10g=
+			VFJkhUC1BiVc0tnmbTd7l+sZ1NcVtb629IURGLkfhZk=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			T2RVrZTkPn5alBiyV46Rfv0h2b1aKPeftsOyhwQzOmo=
+			Q2RyKVLYrAuNRxxuP159pUmPBS3ug/+xUoWk9R3Sawo=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			GNPcgnzL4fWJuflS1y1D2KrJSTjKhkcKEFLsgnw9474=
+			Jf1plqi2yTtxF73/93Aq0V0r4rK32K2V2mBV+nmGnas=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Tc1kBtrBTAjcFYc3q6fMZNGSsur1xyqCRqNRD8dp10g=
+			VFJkhUC1BiVc0tnmbTd7l+sZ1NcVtb629IURGLkfhZk=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			T2RVrZTkPn5alBiyV46Rfv0h2b1aKPeftsOyhwQzOmo=
+			Q2RyKVLYrAuNRxxuP159pUmPBS3ug/+xUoWk9R3Sawo=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

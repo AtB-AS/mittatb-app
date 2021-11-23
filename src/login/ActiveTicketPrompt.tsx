@@ -17,7 +17,7 @@ import {
 } from '@atb/tickets';
 import SimpleTicket from '@atb/screens/Ticketing/Ticket';
 
-const themeColor: ThemeColor = 'background_gray';
+const themeColor: ThemeColor = 'background_accent';
 
 export default function ActiveTicketPrompt({
   headerLeftButton,
