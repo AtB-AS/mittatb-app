@@ -57,11 +57,11 @@ export default function createClient(setStatus, initialConfig) {
       var _currentStatus;
 
       if (!currentAccountId) {
-        throw new Error('Account id must be set');
+        return;
       }
 
       if (!forceRestart && ((_currentStatus = currentStatus) === null || _currentStatus === void 0 ? void 0 : _currentStatus.visualState) === 'Loading') {
-        throw new Error('Can not retry while the sdk is already running');
+        return;
       }
 
       startTokenStateMachine(abtTokensService, setStatusWrapper, safetyNetApiKey, forceRestart, currentAccountId);
@@ -69,12 +69,8 @@ export default function createClient(setStatus, initialConfig) {
     generateQrCode: () => {
       var _currentStatus2;
 
-      if (!currentAccountId) {
-        throw new Error('Account id must be set');
-      }
-
-      if (((_currentStatus2 = currentStatus) === null || _currentStatus2 === void 0 ? void 0 : _currentStatus2.visualState) !== 'Token') {
-        throw new Error('The current state does not allow retrieval of qr code');
+      if (!currentAccountId || ((_currentStatus2 = currentStatus) === null || _currentStatus2 === void 0 ? void 0 : _currentStatus2.visualState) !== 'Token') {
+        return Promise.resolve(undefined);
       }
 
       return getSecureToken(currentAccountId, [PayloadAction.ticketInspection]);

@@ -13,7 +13,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 type MobileContextState = {
-  generateQrCode?: () => Promise<string>;
+  generateQrCode?: () => Promise<string | undefined>;
   tokenStatus?: TokenStatus;
   forceRestart?: () => void;
 };
