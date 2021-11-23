@@ -997,7 +997,7 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   CryptoSwift: 7cc902df1784de3b389a387756c7d710f197730c
   DoubleConversion: cde416483dac037923206447da6e1454df403714
-  entur-react-native-traveller: d4156cacd6b76f8395ae3ab743d7439762d1e369
+  entur-react-native-traveller: 11066097b5afb938b49360a7b9d118c185baa34d
   FBLazyVector: 3bb422f41b18121b71783a905c10e58606f7dc3e
   FBReactNativeSpec: f2c97f2529dd79c083355182cc158c9f98f4bd6e
   Firebase: 78e8dd2e39d653de6270432ad84fe8b59f7bf4e8
@@ -1030,7 +1030,7 @@ SPEC CHECKSUMS:
   Kronos: 0ca73a1c00dc9a49a0bab4a6ed42f282562a7058
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  Mapbox-iOS-SDK: 6a67397df2bcafe5d2851604192aa8de6f8d6c89
+  Mapbox-iOS-SDK: 2563ed87ead6ec08f1c2090873977b8a7be335a8
   MapboxMobileEvents: 36ff53b135aac486eed94b61f813c7967a0c2c6f
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b

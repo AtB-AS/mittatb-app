@@ -178,11 +178,26 @@ export const isWithin24Hours = (
   });
 };
 
+export const isWithinSameDate = (
+  dateLeft: Date | string,
+  dateRight: Date | string,
+) => {
+  const leftParsed = parseIfNeeded(dateLeft);
+  const rightParsed = parseIfNeeded(dateRight);
+  return isSameDay(leftParsed, rightParsed);
+};
+
 export function formatToShortSimpleDate(
   date: Date | string,
   language: Language,
 ) {
   return format(parseIfNeeded(date), 'do MMM', {
+    locale: languageToLocale(language),
+  });
+}
+
+export function formatToWeekday(date: Date | string, language: Language) {
+  return format(parseIfNeeded(date), 'EEE', {
     locale: languageToLocale(language),
   });
 }
