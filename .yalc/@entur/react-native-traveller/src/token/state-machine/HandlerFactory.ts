@@ -20,17 +20,22 @@ export function stateHandlerFactory<S extends TokenState>(
       };
     }
 
-    return handlerFunction(storedState as StoredState & { state: S }).catch(
-      async (err) => {
-        return {
-          ...storedState,
-          error: {
-            missingNetConnection: await missingNetConnection(),
-            message: `Error during handling of state ${storedState.state}`,
-            err,
-          },
-        };
-      }
-    );
+    try {
+      return await handlerFunction(storedState as StoredState & { state: S });
+    } catch (err) {
+      let missingNet = false;
+      try {
+        missingNet = await missingNetConnection();
+      } catch {}
+
+      return {
+        ...storedState,
+        error: {
+          missingNetConnection: missingNet,
+          message: `Error during handling of state ${storedState.state}`,
+          err,
+        },
+      };
+    }
   };
 }
