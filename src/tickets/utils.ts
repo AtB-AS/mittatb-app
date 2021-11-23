@@ -1,4 +1,4 @@
-import {TokenState} from '@entur/react-native-traveller/lib/typescript/token/types';
+import {VisualState} from '@entur/react-native-traveller/lib/typescript/token/types';
 import {flatten, sumBy} from 'lodash';
 import {
   CarnetTicketUsedAccess,
@@ -36,12 +36,11 @@ export function isSingleTicket(
 export function isInspectable(
   travelRight: TravelRight,
   hasActiveTravelCard: boolean,
-  tokenState: TokenState | undefined,
+  visualState: VisualState | undefined,
 ) {
-  if (!tokenState) return false;
   return (
     !hasActiveTravelCard &&
-    (isSingleTicket(travelRight) || tokenState === 'Valid')
+    (isSingleTicket(travelRight) || visualState === 'Token')
   );
 }
 

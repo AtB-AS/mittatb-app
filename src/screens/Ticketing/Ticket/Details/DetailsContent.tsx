@@ -39,7 +39,7 @@ const DetailsContent: React.FC<Props> = ({
     const inspectable = isInspectable(
       firstTravelRight,
       hasActiveTravelCard,
-      tokenStatus?.state,
+      tokenStatus?.visualState,
     );
 
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);

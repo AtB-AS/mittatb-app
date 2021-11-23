@@ -31,7 +31,7 @@ const SimpleTicket: React.FC<Props> = ({
   const inspectable = isInspectable(
     firstTravelRight,
     hasActiveTravelCard,
-    tokenStatus?.state,
+    tokenStatus?.visualState,
   );
 
   if (isPreactivatedTicket(firstTravelRight)) {
