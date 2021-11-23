@@ -264,7 +264,6 @@ const formatTimeText = (
   language: Language,
   t: TFunc<typeof Language>,
 ) => {
-  console.log(departure.time);
   let text = formatToClockOrRelativeMinutes(
     departure.time,
     language,
