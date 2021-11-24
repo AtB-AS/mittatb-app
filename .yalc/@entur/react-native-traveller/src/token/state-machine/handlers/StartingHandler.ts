@@ -30,13 +30,9 @@ export default function startingHandler(
 
     const savedState = JSON.parse(savedStateString);
 
-    if (savedState.state === 'Valid') {
-      return {
-        accountId: s.accountId,
-        state: 'Loading',
-      };
-    }
-
-    return savedState;
+    return {
+      ...savedState,
+      error: undefined,
+    };
   });
 }
