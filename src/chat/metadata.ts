@@ -14,6 +14,9 @@ type Metadata = {
   'AtB-Platform-OS': PlatformOSType;
   'AtB-OS-Font-Scale': number;
   'AtB-Screen-Size': string;
+  'AtB-Mobile-Token-State': string;
+  'AtB-Mobile-Token-VisualState': string;
+  'AtB-Mobile-Token-Error': string;
 };
 
 export async function updateMetadata(metadata: Partial<Metadata>) {
