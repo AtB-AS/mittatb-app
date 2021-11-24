@@ -24,7 +24,7 @@ export default function DebugInfo() {
   const [idToken, setIdToken] = useState<
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
-  const {tokenStatus, forceRestart} = useMobileContextState();
+  const {tokenStatus, retry} = useMobileContextState();
 
   useEffect(() => {
     async function run() {
@@ -116,7 +116,7 @@ export default function DebugInfo() {
           )}
         </Sections.Section>
 
-        {forceRestart && (
+        {retry && (
           <Sections.Section withPadding withTopPadding>
             <Sections.HeaderItem text="Mobile token state" />
             <Sections.GenericItem>
@@ -131,7 +131,13 @@ export default function DebugInfo() {
               </View>
             </Sections.GenericItem>
             {tokenStatus && (
-              <Sections.LinkItem text="Force restart" onPress={forceRestart} />
+              <>
+                <Sections.LinkItem text="Retry" onPress={() => retry(false)} />
+                <Sections.LinkItem
+                  text="Force restart"
+                  onPress={() => retry(true)}
+                />
+              </>
             )}
           </Sections.Section>
         )}
