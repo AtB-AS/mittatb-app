@@ -65,6 +65,7 @@ import {ThemeColor} from '@atb/theme/colors';
 import {tripsSearch, TripsSearchQuery} from '@atb/api/trips_v2';
 import {TripMetadata, TripPattern, TripsQuery} from '@atb/api/types/trips';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
+import {CancelTokenSource} from 'axios';
 
 const themeColor: ThemeColor = 'background_gray';
 
@@ -125,6 +126,7 @@ const Assistant: React.FC<Props> = ({
   const styles = useStyles();
   const {theme} = useTheme();
   const {from, to} = useLocations(currentLocation);
+  const [page, setPage] = useState<number>(1);
   const {language, t} = useTranslation();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
 
@@ -220,7 +222,7 @@ const Assistant: React.FC<Props> = ({
     clearTrips,
     searchState,
     error,
-  ] = useTripsQuery(from, to, searchTime);
+  ] = useTripsQuery(from, to, searchTime, page);
 
   const isSearching = searchState === 'searching';
   const openLocationSearch = (
@@ -451,6 +453,12 @@ const Assistant: React.FC<Props> = ({
         onDetailsPressed={onPressed}
         errorType={error}
       />
+      <View style={styles.loadMoreButton}>
+        <Button
+          onPress={() => setPage(page + 1)}
+          text={'Hent flere avganger'}
+        />
+      </View>
     </DisappearingHeader>
   );
 };
@@ -486,6 +494,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   fadeChild: {
     marginVertical: theme.spacings.medium,
+  },
+  loadMoreButton: {
+    paddingHorizontal: theme.spacings.xLarge,
+    paddingVertical: theme.spacings.medium,
   },
 }));
 
@@ -619,6 +631,7 @@ function useTripsQuery(
   fromLocation: Location | undefined,
   toLocation: Location | undefined,
   searchTime: SearchTime | undefined,
+  page: number,
 ): [
   TripPattern[] | null,
   TripMetadata | null,
@@ -632,16 +645,96 @@ function useTripsQuery(
     new Date().toISOString(),
   );
 
-  const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
+  const [tripPatterns, setTripPatterns] = useState<TripPattern[]>([]);
   const [tripMetadata, setTripMetadata] = useState<TripMetadata | null>(null);
   const [errorType, setErrorType] = useState<ErrorType>();
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
   const {addJourneySearchEntry} = useSearchHistory();
 
   const clearTrips = () => {
-    setTripPatterns(null);
+    setTripPatterns([]);
     setTripMetadata(null);
   };
+
+  useEffect(() => {
+    const cancelTokenSource = CancelToken.source();
+
+    async function loadNextPage() {
+      if (
+        !fromLocation ||
+        !toLocation ||
+        !tripMetadata ||
+        !tripMetadata.nextDateTime
+      ) {
+        setSearchState('idle');
+        return;
+      }
+      setSearchState('searching');
+      try {
+        const results = await newSearch(
+          fromLocation,
+          toLocation,
+          {option: 'departure', date: tripMetadata.nextDateTime},
+          cancelTokenSource,
+        );
+
+        setTripPatterns(tripPatterns.concat(results.trip?.tripPatterns ?? []));
+        setTripMetadata(results.trip?.metadata);
+        if (tripPatterns.length == 0) {
+          setSearchState('search-empty-result');
+        }
+        setSearchState('search-success');
+      } catch (e) {
+        if (!isCancel(e)) {
+          setErrorType(getAxiosErrorType(e));
+          console.warn(e);
+          setTripPatterns([]);
+          setTripMetadata(null);
+          setSearchState('search-empty-result');
+        }
+      }
+    }
+    loadNextPage();
+  }, [page]);
+
+  const refresh = useCallback(() => {
+    const cancelTokenSource = CancelToken.source();
+
+    async function doRefresh() {
+      if (!fromLocation || !toLocation) {
+        setSearchState('idle');
+        return;
+      }
+      try {
+        const results = await newSearch(
+          fromLocation,
+          toLocation,
+          searchTime ?? {option: 'now', date: new Date().toISOString()},
+          cancelTokenSource,
+        );
+
+        setTripPatterns(results.trip?.tripPatterns ?? []);
+        setTripMetadata(results.trip?.metadata);
+        if (tripPatterns.length == 0) {
+          setSearchState('search-empty-result');
+        }
+      } catch (e) {
+        if (!isCancel(e)) {
+          setErrorType(getAxiosErrorType(e));
+          console.warn(e);
+          setTripPatterns([]);
+          setTripMetadata(null);
+          setSearchState('search-empty-result');
+        }
+      }
+    }
+    doRefresh();
+    return () => {
+      if (!fromLocation || !toLocation) return;
+      cancelTokenSource.cancel('New search to replace previous search');
+    };
+  }, [fromLocation, toLocation, searchTime]);
+
   const reload = useCallback(() => {
     const source = CancelToken.source();
 
@@ -679,13 +772,11 @@ function useTripsQuery(
         const tripsQuery = await tripsSearch(query, {
           cancelToken: source.token,
         });
-        console.log('------------- simple search done');
-        console.log(tripsQuery);
-        console.log(tripsQuery.trip);
+
         source.token.throwIfRequested();
         setTimeOfSearch(searchDate);
         if (tripsQuery) {
-          const tripPatterns = tripsQuery.trip?.tripPatterns ?? null;
+          const tripPatterns = tripsQuery.trip?.tripPatterns ?? [];
           const tripMetadata = tripsQuery.trip?.metadata ?? null;
           setTripPatterns(tripPatterns);
           setTripMetadata(tripMetadata);
@@ -700,7 +791,7 @@ function useTripsQuery(
         if (!isCancel(e)) {
           setErrorType(getAxiosErrorType(e));
           console.warn(e);
-          setTripPatterns(null);
+          setTripPatterns([]);
           setTripMetadata(null);
           setSearchState('search-empty-result');
         }
@@ -720,11 +811,44 @@ function useTripsQuery(
     tripPatterns,
     tripMetadata,
     timeOfSearch,
-    reload,
+    refresh,
     clearTrips,
     searchState,
     errorType,
   ];
+}
+
+async function newSearch(
+  fromLocation: Location,
+  toLocation: Location,
+  searchTime: SearchTime,
+  cancelToken: CancelTokenSource,
+) {
+  //const source = CancelToken.source();
+  console.log('searchtime: ' + searchTime);
+  //const arriveBy = searchTime?.option === 'arrival';
+
+  const searchDate =
+    searchTime?.option !== 'now' ? searchTime.date : new Date().toISOString();
+
+  log('searching', {
+    fromLocation: translateLocation(fromLocation),
+    toLocation: translateLocation(toLocation),
+    searchDate: searchDate,
+  });
+
+  const query: TripsQueryVariables = {
+    from: fromLocation,
+    to: toLocation,
+    when: searchDate,
+  };
+
+  const tripsQuery = await tripsSearch(query, {
+    cancelToken: cancelToken.token,
+  });
+
+  console.log(tripsQuery.trip?.metadata);
+  return tripsQuery;
 }
 
 function useDoOnceWhen(fn: () => void, condition: boolean) {
