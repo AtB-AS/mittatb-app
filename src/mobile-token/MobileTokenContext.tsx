@@ -15,7 +15,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 type MobileContextState = {
   generateQrCode?: () => Promise<string | undefined>;
   tokenStatus?: TokenStatus;
-  forceRestart?: () => void;
+  retry?: (forceRestart: boolean) => void;
 };
 
 const MobileTokenContext = createContext<MobileContextState | undefined>(
@@ -77,7 +77,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
       value={{
         generateQrCode: client?.generateQrCode,
         tokenStatus,
-        forceRestart: () => client?.retry(true),
+        retry: client?.retry,
       }}
     >
       {children}
