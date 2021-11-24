@@ -4,7 +4,7 @@ on:
     types: [published]
 
 jobs:
-  build-ios:
+  build-android:
     name: Build Android
     timeout-minutes: 90
     runs-on: macos-11
