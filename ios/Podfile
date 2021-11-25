@@ -7,7 +7,6 @@ ENV['REACT_NATIVE_MAPBOX_GL_USE_FRAMEWORKS'] = '1'
 $ReactNativeMapboxGLIOSVersion = '6.3.0'
 
 target 'atb' do
-  # Pods for atb
   config = use_native_modules!
 
   use_react_native!(
@@ -22,16 +21,21 @@ target 'atb' do
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
 
   target 'atbTests' do
-    inherit! :search_paths
+    inherit! :complete
     # Pods for testing
   end
 
   # Enables Flipper.
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
-  # you should disable these next few lines.
+  # you should disable the next line.
   use_flipper!()
 
+  post_install do |installer|
+    react_native_post_install(installer)
+    #__apply_Xcode_12_5_M1_post_install_workaround(installer)
+  end
+  
   pre_install do |installer|
     fix_mapbox_events(installer)
   end
@@ -46,4 +50,3 @@ target 'atb' do
     end
   end
 end
-
