@@ -16,7 +16,7 @@ jobs:
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
           echo "APP_ENVIRONMENT=store" >> $GITHUB_ENV
           echo "APP_ORG=atb" >> $GITHUB_ENV
-          echo "KEYSTORE_PATH=./keystore.jks" >> $GITHUB_ENV
+          echo "KEYSTORE_PATH=./android/app/keystore.jks" >> $GITHUB_ENV
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
         env:
