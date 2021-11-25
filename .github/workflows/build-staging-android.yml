@@ -72,7 +72,6 @@ jobs:
         if: steps.apk-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/android/replace-bundle.sh
         env:
-          KEYSTORE_FILE: keystore.jks
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
