@@ -6,6 +6,7 @@ on:
 jobs:
   build-android:
     name: Build Android
+    environment: atb
     timeout-minutes: 90
     runs-on: macos-11
     steps:
@@ -43,16 +44,15 @@ jobs:
       - name: Get Android keystore
         run: sh ./scripts/android/create-keystore-file.sh
         env:
-          GPG_KEYSTORE_FILE: ${{ secrets.GPG_KEYSTORE_FILE }}
-          GPG_KEYSTORE_PASS: ${{ secrets.GPG_KEYSTORE_PASS }}
+          KEYSTORE: ${{ secrets.KEYSTORE }}
       - name: Generate native assets
         run: brew install imagemagick && yarn generate-native-assets
       - name: Run fastlane build
         run: fastlane android build
         env:
-          KEYSTORE_PASS: ${{ secrets.ATB_KEYSTORE_PASS }}
-          KEY_PASS: ${{ secrets.ATB_KEY_PASS }}
-          KEY_ALIAS: ${{ secrets.ATB_KEY_ALIAS }}
+          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
+          KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
+          KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
       - name: Distribute to Google Alpha
         run: fastlane android appcenter_alpha
         env:
