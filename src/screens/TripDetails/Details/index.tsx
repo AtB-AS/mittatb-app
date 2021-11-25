@@ -20,7 +20,7 @@ import Trip from '../components/Trip';
 import CompactMap from '../Map/CompactMap';
 import {ThemeColor} from '@atb/theme/colors';
 
-const themeColor: ThemeColor = 'background_gray';
+const themeColor: ThemeColor = 'background_accent';
 
 export type DetailsRouteParams = {
   tripPatternId?: string;

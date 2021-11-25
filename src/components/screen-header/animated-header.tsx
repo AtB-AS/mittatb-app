@@ -19,7 +19,7 @@ type ScreenHeaderProps = ViewProps & {
   setFocusOnLoad?: boolean;
 };
 
-const themeColor: ThemeColor = 'background_gray';
+const themeColor: ThemeColor = 'background_accent';
 
 const BASE_HEADER_HEIGHT = 20;
 

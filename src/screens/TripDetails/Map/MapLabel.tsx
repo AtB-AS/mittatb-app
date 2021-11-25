@@ -1,13 +1,14 @@
 import React from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Point} from 'geojson';
-import colors from '@atb/theme/colors';
+import {useTheme} from '@atb/theme';
 
 const MapLabel: React.FC<{
   text: string;
   point: Point;
   id: string;
 }> = ({text, point, id}) => {
+  const {theme} = useTheme();
   const shape: GeoJSON.Feature = {
     type: 'Feature',
     geometry: point,
@@ -19,8 +20,8 @@ const MapLabel: React.FC<{
         <MapboxGL.SymbolLayer
           id={id + '-label'}
           style={{
-            textColor: colors.text.light,
-            textHaloColor: colors.primary.gray_500,
+            textColor: theme.colors.background_accent.color,
+            textHaloColor: theme.colors.background_accent.backgroundColor,
             textHaloWidth: 2,
             textField: text,
           }}

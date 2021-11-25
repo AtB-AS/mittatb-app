@@ -65,11 +65,11 @@ export default function createClient(
     },
     retry: (forceRestart: boolean) => {
       if (!currentAccountId) {
-        throw new Error('Account id must be set');
+        return;
       }
 
       if (!forceRestart && currentStatus?.visualState === 'Loading') {
-        throw new Error('Can not retry while the sdk is already running');
+        return;
       }
 
       startTokenStateMachine(
@@ -80,15 +80,9 @@ export default function createClient(
         currentAccountId
       );
     },
-    generateQrCode: () => {
-      if (!currentAccountId) {
-        throw new Error('Account id must be set');
-      }
-
-      if (currentStatus?.visualState !== 'Token') {
-        throw new Error(
-          'The current state does not allow retrieval of qr code'
-        );
+    generateQrCode: (): Promise<string | undefined> => {
+      if (!currentAccountId || currentStatus?.visualState !== 'Token') {
+        return Promise.resolve(undefined);
       }
 
       return getSecureToken(currentAccountId, [PayloadAction.ticketInspection]);

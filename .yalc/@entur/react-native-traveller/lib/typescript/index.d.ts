@@ -6,5 +6,5 @@ export type { Fetch, ApiResponse, ApiRequest } from './config';
 export default function createClient(setStatus: (status?: TokenStatus) => void, initialConfig: InitialConfig): {
     setAccount(accountId: string | undefined): void;
     retry: (forceRestart: boolean) => void;
-    generateQrCode: () => Promise<string>;
+    generateQrCode: () => Promise<string | undefined>;
 };

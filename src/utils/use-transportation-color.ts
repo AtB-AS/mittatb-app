@@ -1,4 +1,3 @@
-import colors from '../theme/colors';
 import {LegMode, TransportMode, TransportSubmode} from '../sdk';
 import {useTheme} from '@atb/theme';
 
