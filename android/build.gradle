@@ -40,6 +40,8 @@ allprojects {
         google()
         maven { url 'https://www.jitpack.io' }
 
+        def netRcFile = new File('../.netrc').exists() ? new File('../.netrc') : new File('.netrc')
+
         maven {
             url 'https://api.mapbox.com/downloads/v2/releases/maven'
             authentication {
@@ -50,7 +52,7 @@ allprojects {
                 // This should always be `mapbox` (not your username).
                 username = 'mapbox'
                 // Using same Mapbox token in .netrc file which is used for iOS Mapbox downloads
-                password = (new File('../.netrc').text =~ /password (.+)/)[0][1]
+                password = (netRcFile.text =~ /password (.+)/)[0][1]
             }
         }
     }
