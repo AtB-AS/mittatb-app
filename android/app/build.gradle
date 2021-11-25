@@ -126,6 +126,11 @@ def jscFlavor = 'org.webkit:android-jsc:+'
  */
 def enableHermes = project.ext.react.get("enableHermes", false);
 
+/**
+ * Architectures to build native code for in debug.
+ */
+def nativeArchitectures = project.getProperties().get("reactNativeDebugArchitectures")
+
 def envFile = file('../../.env')
 if (envFile.exists()) {
     envFile.eachLine { line ->
@@ -198,6 +203,11 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            if (nativeArchitectures) {
+                ndk {
+                    abiFilters nativeArchitectures.split(',')
+                }
+            }
         }
         store {
             initWith buildTypes.release
@@ -264,7 +274,8 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
-    implementation 'io.intercom.android:intercom-sdk-base:6.+'
+    implementation 'io.intercom.android:intercom-sdk-base:9.+'
+    implementation 'io.intercom.android:intercom-sdk:9.+'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group: 'com.facebook.fbjni'
