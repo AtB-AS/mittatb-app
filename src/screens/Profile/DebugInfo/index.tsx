@@ -127,6 +127,7 @@ export default function DebugInfo() {
                 <ThemeText>{`Error missing inet: ${tokenStatus?.error?.missingNetConnection}`}</ThemeText>
                 <ThemeText>{`Error object: ${JSON.stringify(
                   tokenStatus?.error?.err,
+                  Object.getOwnPropertyNames(tokenStatus?.error?.err),
                 )}`}</ThemeText>
               </View>
             </Sections.GenericItem>

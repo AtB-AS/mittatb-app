@@ -2,7 +2,12 @@ import { getConfigFromInitialConfig, InitialConfig } from './config';
 import { startTokenStateMachine } from './token';
 import { createFetcher } from './fetcher';
 import { createAbtTokensService } from './token/abt-tokens-service';
-import type { StoredState, TokenStatus, VisualState } from './token/types';
+import type {
+  StoredState,
+  TokenError,
+  TokenStatus,
+  VisualState,
+} from './token/types';
 import { getSecureToken } from './native';
 import { PayloadAction } from './native/types';
 
@@ -43,7 +48,7 @@ export default function createClient(
 
     const status = storedState && {
       state: storedState.state,
-      error: storedState.error,
+      error: sanitizeError(storedState.error),
       visualState: toVisualState(storedState),
     };
     currentStatus = status;
@@ -89,3 +94,19 @@ export default function createClient(
     },
   };
 }
+
+const sanitizeError = (error?: TokenError) => {
+  if (!error) return undefined;
+
+  const newErr = new Error(
+    typeof error.err === 'string' ? error.err : error.err?.message
+  );
+
+  newErr.name = error.err?.name;
+  newErr.stack = error.err?.stack;
+
+  return {
+    ...error,
+    err: newErr,
+  };
+};

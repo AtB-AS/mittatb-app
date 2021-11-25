@@ -56,7 +56,7 @@ function createClient(setStatus, initialConfig) {
 
     const status = storedState && {
       state: storedState.state,
-      error: storedState.error,
+      error: sanitizeError(storedState.error),
       visualState: toVisualState(storedState)
     };
     currentStatus = status;
@@ -95,4 +95,16 @@ function createClient(setStatus, initialConfig) {
     }
   };
 }
+
+const sanitizeError = error => {
+  var _error$err, _error$err2, _error$err3;
+
+  if (!error) return undefined;
+  const newErr = new Error(typeof error.err === 'string' ? error.err : (_error$err = error.err) === null || _error$err === void 0 ? void 0 : _error$err.message);
+  newErr.name = (_error$err2 = error.err) === null || _error$err2 === void 0 ? void 0 : _error$err2.name;
+  newErr.stack = (_error$err3 = error.err) === null || _error$err3 === void 0 ? void 0 : _error$err3.stack;
+  return { ...error,
+    err: newErr
+  };
+};
 //# sourceMappingURL=index.js.map
