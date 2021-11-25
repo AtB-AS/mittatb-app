@@ -26,7 +26,7 @@ allprojects {
         mavenCentral()
         mavenLocal()
         maven {
-            url "$rootDir/../.yalc/@entur/react-native-traveller/android/libs"
+            url "$rootDir/../node_modules/@entur/react-native-traveller/android/libs"
         }
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
