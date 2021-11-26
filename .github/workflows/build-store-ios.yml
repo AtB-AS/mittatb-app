@@ -79,4 +79,4 @@ jobs:
         run: sh ./scripts/ios/register-app-version.sh
         env:
           ENTUR_CLIENT_ID: ${{ secrets.ATB_ENTUR_CLIENT_ID_PRODUCTION}}
-          ENTUR_CLIENT_SECRET: ${{ secrets.ATB_ENTUR_CLIENT_PRODUCTION}}
+          ENTUR_CLIENT_SECRET: ${{ secrets.ATB_ENTUR_CLIENT_SECRET_PRODUCTION}}
