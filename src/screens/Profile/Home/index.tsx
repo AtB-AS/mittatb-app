@@ -116,12 +116,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.settings.heading)}
           />
-          <Sections.ActionItem
-            mode="toggle"
-            text={'Try the new Departure screen'}
-            checked={newDepartures}
-            onPress={(newDepartures) => setPreference({newDepartures})}
-          />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.settings.linkItems.userProfile.label)}
             onPress={() => navigation.navigate('DefaultUserProfile')}
@@ -249,6 +243,12 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         {(!!JSON.parse(IS_QA_ENV || 'false') || __DEV__) && (
           <Sections.Section withPadding>
             <Sections.HeaderItem text="Developer menu" />
+            <Sections.ActionItem
+              mode="toggle"
+              text={'Enable new departure screen'}
+              checked={newDepartures}
+              onPress={(newDepartures) => setPreference({newDepartures})}
+            />
             <Sections.LinkItem
               text="Design system"
               onPress={() => navigation.navigate('DesignSystem')}
