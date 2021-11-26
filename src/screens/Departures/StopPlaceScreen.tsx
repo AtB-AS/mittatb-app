@@ -21,7 +21,7 @@ import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {BusSide} from '@atb/assets/svg/icons/transportation';
 import {dictionary, useTranslation} from '@atb/translations';
-import {formatToClock} from '@atb/utils/date';
+import {formatToClock, formatToClockOrRelativeMinutes} from '@atb/utils/date';
 import {Quay} from '@entur/sdk';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
@@ -259,22 +259,30 @@ function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
   const styles = useStyles();
 
   const line = departure.serviceJourney?.line;
-  if (!line) return <></>;
+
+  // const clock = formatToClock(departure.expectedDepartureTime, language);
+  const time = formatToClockOrRelativeMinutes(
+    departure.expectedDepartureTime,
+    language,
+    t(dictionary.date.units.now),
+  );
+  const timeWithRealtimePrefix = departure.realtime
+    ? time
+    : t(dictionary.missingRealTimePrefix) + time;
 
   return (
     <View style={styles.estimatedCallLine}>
-      <LineChip
-        publicCode={line.publicCode}
-        transportMode={line.transportMode}
-        transportSubmode={line?.transportSubmode}
-      ></LineChip>
+      {line && (
+        <LineChip
+          publicCode={line.publicCode}
+          transportMode={line.transportMode}
+          transportSubmode={line?.transportSubmode}
+        ></LineChip>
+      )}
       <ThemeText style={styles.lineName}>
         {departure.destinationDisplay?.frontText}
       </ThemeText>
-      <ThemeText type="body__primary--bold">
-        {departure.realtime && t(dictionary.missingRealTimePrefix)}
-        {formatToClock(departure.expectedDepartureTime, language)}
-      </ThemeText>
+      <ThemeText type="body__primary--bold">{timeWithRealtimePrefix}</ThemeText>
     </View>
   );
 }

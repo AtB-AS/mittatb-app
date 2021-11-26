@@ -8,7 +8,7 @@ import useReducerWithSideEffects, {
   Update,
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
-import {getRealtimeDeparture} from '@atb/api/departures';
+import {getRealtimeDepartureV2} from '@atb/api/departures';
 import {
   DepartureGroupMetadata,
   DepartureGroupsQuery,
@@ -20,7 +20,7 @@ import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {DeparturesRealtimeData, StopPlaceDetails} from '@atb/sdk';
 import {differenceInMinutes} from 'date-fns';
 import useInterval from '@atb/utils/use-interval';
-import {updateStopsWithRealtime} from '../../departure-list/utils';
+import {updateDeparturesWithRealtimeV2} from '../../departure-list/utils';
 import {Quay} from '@entur/sdk';
 import {
   getQuayDepartures,
@@ -90,6 +90,7 @@ type DepartureDataActions =
   //   }
   | {
       type: 'LOAD_REALTIME_DATA';
+      stopPlace?: StopPlaceDetails;
     }
   | {
       type: 'STOP_LOADER';
@@ -218,28 +219,28 @@ const reducer: ReducerWithSideEffects<
     //   );
     // }
 
-    // case 'LOAD_REALTIME_DATA': {
-    //   if (!state.data?.length) return NoUpdate();
+    case 'LOAD_REALTIME_DATA': {
+      if (!state.data?.length) return NoUpdate();
 
-    //   return SideEffect<DepartureDataState, DepartureDataActions>(
-    //     async (state2, dispatch) => {
-    //       // Use same query input with same startTime to ensure that
-    //       // we get the same result.
-    //       try {
-    //         const realtimeData = await getRealtimeDeparture(
-    //           state.data ?? [],
-    //           state.queryInput,
-    //         );
-    //         dispatch({
-    //           type: 'UPDATE_REALTIME',
-    //           realtimeData,
-    //         });
-    //       } catch (e) {
-    //         console.warn(e);
-    //       }
-    //     },
-    //   );
-    // }
+      return SideEffect<DepartureDataState, DepartureDataActions>(
+        async (state2, dispatch) => {
+          // Use same query input with same startTime to ensure that
+          // we get the same result.
+          try {
+            const realtimeData = await getRealtimeDepartureV2(
+              action.stopPlace,
+              state.queryInput,
+            );
+            dispatch({
+              type: 'UPDATE_REALTIME',
+              realtimeData,
+            });
+          } catch (e) {
+            console.warn(e);
+          }
+        },
+      );
+    }
 
     case 'STOP_LOADER': {
       return Update<DepartureDataState>({
@@ -292,17 +293,17 @@ const reducer: ReducerWithSideEffects<
       });
     }
 
-    // case 'UPDATE_REALTIME': {
-    //   LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    //   return Update<DepartureDataState>({
-    //     ...state,
-    //     data: updateStopsWithRealtime(state.data ?? [], action.realtimeData),
+    case 'UPDATE_REALTIME': {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      return Update<DepartureDataState>({
+        ...state,
+        data: updateDeparturesWithRealtimeV2(state.data, action.realtimeData),
 
-    //     // We set lastUpdated here to count as a "tick" to
-    //     // know when to update components while still being performant.
-    //     tick: new Date(),
-    //   });
-    // }
+        // We set lastUpdated here to count as a "tick" to
+        // know when to update components while still being performant.
+        tick: new Date(),
+      });
+    }
 
     case 'SET_ERROR': {
       return Update<DepartureDataState>({
@@ -324,7 +325,7 @@ export function useDepartureData(
   stopPlace: StopPlaceDetails,
   quay?: Quay,
   startTime?: string,
-  updateFrequencyInSeconds: number = 30,
+  updateFrequencyInSeconds: number = 10,
   tickRateInSeconds: number = 10,
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
@@ -384,7 +385,7 @@ export function useDepartureData(
     }
   }, [state.tick, state.lastRefreshTime]);
   useInterval(
-    () => dispatch({type: 'LOAD_REALTIME_DATA'}),
+    () => dispatch({type: 'LOAD_REALTIME_DATA', stopPlace: stopPlace}),
     updateFrequencyInSeconds * 1000,
     [stopPlace.id],
     !isFocused,
