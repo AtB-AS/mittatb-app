@@ -288,7 +288,7 @@ const addDatePrefixIfNecessary = (
   if (isWithinSameDate(searchDate, departureDate)) {
     return timeText;
   } else {
-    return formatToWeekday(departureDate, Language.Norwegian) + ' ' + timeText;
+    return `${formatToWeekday(departureDate, Language.Norwegian)}. ${timeText}`;
   }
 };
 

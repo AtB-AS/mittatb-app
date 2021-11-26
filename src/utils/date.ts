@@ -197,7 +197,7 @@ export function formatToShortSimpleDate(
 }
 
 export function formatToWeekday(date: Date | string, language: Language) {
-  return format(parseIfNeeded(date), 'EEE', {
+  return format(parseIfNeeded(date), 'EEEEEE', {
     locale: languageToLocale(language),
   });
 }
