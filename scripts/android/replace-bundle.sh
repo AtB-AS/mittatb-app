@@ -5,7 +5,7 @@
 
 if [[ 
   -z "${APK_FILE_NAME}" || 
-  -z "${KEYSTORE_FILE}" || 
+  -z "${KEYSTORE_PATH}" || 
   -z "${KEYSTORE_PASS}" ||
   -z "${KEY_PASS}" ||
   -z "${KEY_ALIAS}" ||
@@ -15,7 +15,7 @@ if [[
     echo "Expected six env variables: 
   - BUILD_ID
   - APK_FILE_NAME
-  - KEYSTORE_FILE
+  - KEYSTORE_PATH
   - KEYSTORE_PASS
   - KEY_PASS
   - KEY_ALIAS"
@@ -46,7 +46,7 @@ else
     apktool b decompiled-apk -o temp-$APK_FILE_NAME
 
     echo "Re-sign APK"
-    jarsigner -keystore $KEYSTORE_FILE -storepass "$KEYSTORE_PASS" -keypass "$KEY_PASS" -verbose -sigalg MD5withRSA -digestalg SHA1 -signedjar temp-$APK_FILE_NAME temp-$APK_FILE_NAME $KEY_ALIAS
+    jarsigner -keystore $KEYSTORE_PATH -storepass "$KEYSTORE_PASS" -keypass "$KEY_PASS" -verbose -sigalg MD5withRSA -digestalg SHA1 -signedjar temp-$APK_FILE_NAME temp-$APK_FILE_NAME $KEY_ALIAS
 
     echo "The APK must be aligned to 4 byte boundaries to work on Android"
     ~/Library/Android/sdk/build-tools/29.0.2/zipalign -f 4 temp-$APK_FILE_NAME $APK_FILE_NAME

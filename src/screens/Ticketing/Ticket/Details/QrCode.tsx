@@ -38,7 +38,7 @@ export default function QrCode({validityStatus, isInspectable}: Props) {
 const QrCodeSvg = ({
   generateQrCode,
 }: {
-  generateQrCode: () => Promise<string>;
+  generateQrCode: () => Promise<string | undefined>;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -68,7 +68,7 @@ const QrCodeSvg = ({
   );
 };
 
-const useQrCode = (generateQrCode: () => Promise<string>) => {
+const useQrCode = (generateQrCode: () => Promise<string | undefined>) => {
   const [tokenQRCode, setTokenQRCode] = useState<string | undefined>(undefined);
 
   const updateQrCode = useCallback(

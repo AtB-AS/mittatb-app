@@ -18,15 +18,23 @@ function stateHandlerFactory(forStates, handlerFunction) {
       };
     }
 
-    return handlerFunction(storedState).catch(async err => {
+    try {
+      return await handlerFunction(storedState);
+    } catch (err) {
+      let missingNet = false;
+
+      try {
+        missingNet = await (0, _utils.missingNetConnection)();
+      } catch {}
+
       return { ...storedState,
         error: {
-          missingNetConnection: await (0, _utils.missingNetConnection)(),
+          missingNetConnection: missingNet,
           message: `Error during handling of state ${storedState.state}`,
           err
         }
       };
-    });
+    }
   };
 }
 //# sourceMappingURL=HandlerFactory.js.map

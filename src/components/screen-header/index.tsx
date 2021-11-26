@@ -50,7 +50,7 @@ export type ScreenHeaderProps = {
 };
 
 const ScreenHeader: React.FC<ScreenHeaderProps> = (props) => {
-  const themeColor = props.color ?? 'background_gray';
+  const themeColor = props.color ?? 'background_accent';
 
   const leftIcon = props.leftButton ? (
     <HeaderButton color={themeColor} {...props.leftButton} />
@@ -79,7 +79,7 @@ type ScreenHeaderWithoutNavigationProps = ScreenHeaderProps & {
 export const ScreenHeaderWithoutNavigation = (
   props: ScreenHeaderWithoutNavigationProps,
 ) => {
-  const themeColor = props.color ?? 'background_gray';
+  const themeColor = props.color ?? 'background_accent';
   const leftIcon = props.leftButton ? (
     <HeaderButtonWithoutNavigation color={themeColor} {...props.leftButton} />
   ) : (
@@ -111,7 +111,7 @@ const BaseHeader = ({
 }: BaseHeaderProps) => {
   const css = useHeaderStyle();
   const {theme} = useTheme();
-  const themeColor = color ?? 'background_gray';
+  const themeColor = color ?? 'background_accent';
   const focusRef = useFocusOnLoad(setFocusOnLoad);
 
   const {buttonsHeight, buttonsTopOffset, setLayoutFor} = useHeaderLayouts();

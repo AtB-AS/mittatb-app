@@ -38,7 +38,7 @@ export default function createClient(setStatus, initialConfig) {
 
     const status = storedState && {
       state: storedState.state,
-      error: storedState.error,
+      error: sanitizeError(storedState.error),
       visualState: toVisualState(storedState)
     };
     currentStatus = status;
@@ -57,11 +57,11 @@ export default function createClient(setStatus, initialConfig) {
       var _currentStatus;
 
       if (!currentAccountId) {
-        throw new Error('Account id must be set');
+        return;
       }
 
       if (!forceRestart && ((_currentStatus = currentStatus) === null || _currentStatus === void 0 ? void 0 : _currentStatus.visualState) === 'Loading') {
-        throw new Error('Can not retry while the sdk is already running');
+        return;
       }
 
       startTokenStateMachine(abtTokensService, setStatusWrapper, safetyNetApiKey, forceRestart, currentAccountId);
@@ -69,16 +69,24 @@ export default function createClient(setStatus, initialConfig) {
     generateQrCode: () => {
       var _currentStatus2;
 
-      if (!currentAccountId) {
-        throw new Error('Account id must be set');
-      }
-
-      if (((_currentStatus2 = currentStatus) === null || _currentStatus2 === void 0 ? void 0 : _currentStatus2.visualState) !== 'Token') {
-        throw new Error('The current state does not allow retrieval of qr code');
+      if (!currentAccountId || ((_currentStatus2 = currentStatus) === null || _currentStatus2 === void 0 ? void 0 : _currentStatus2.visualState) !== 'Token') {
+        return Promise.resolve(undefined);
       }
 
       return getSecureToken(currentAccountId, [PayloadAction.ticketInspection]);
     }
   };
 }
+
+const sanitizeError = error => {
+  var _error$err, _error$err2, _error$err3;
+
+  if (!error) return undefined;
+  const newErr = new Error(typeof error.err === 'string' ? error.err : (_error$err = error.err) === null || _error$err === void 0 ? void 0 : _error$err.message);
+  newErr.name = (_error$err2 = error.err) === null || _error$err2 === void 0 ? void 0 : _error$err2.name;
+  newErr.stack = (_error$err3 = error.err) === null || _error$err3 === void 0 ? void 0 : _error$err3.stack;
+  return { ...error,
+    err: newErr
+  };
+};
 //# sourceMappingURL=index.js.map
