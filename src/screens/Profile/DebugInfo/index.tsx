@@ -125,10 +125,14 @@ export default function DebugInfo() {
                 <ThemeText>{`Visual state: ${tokenStatus?.visualState}`}</ThemeText>
                 <ThemeText>{`Error message: ${tokenStatus?.error?.message}`}</ThemeText>
                 <ThemeText>{`Error missing inet: ${tokenStatus?.error?.missingNetConnection}`}</ThemeText>
-                <ThemeText>{`Error object: ${JSON.stringify(
-                  tokenStatus?.error?.err,
-                  Object.getOwnPropertyNames(tokenStatus?.error?.err),
-                )}`}</ThemeText>
+                <ThemeText>{`Error object: ${
+                  tokenStatus?.error?.err
+                    ? JSON.stringify(
+                        tokenStatus?.error?.err,
+                        Object.getOwnPropertyNames(tokenStatus?.error?.err),
+                      )
+                    : undefined
+                }`}</ThemeText>
               </View>
             </Sections.GenericItem>
             {tokenStatus && (
