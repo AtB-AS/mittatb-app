@@ -30,10 +30,10 @@ import {
 import {
   formatToClock,
   formatToClockOrRelativeMinutes,
-  formatToShortSimpleDate,
+  formatToWeekday,
   isInThePast,
   isRelativeButNotNow,
-  isWithin24Hours,
+  isWithinSameDate,
 } from '@atb/utils/date';
 import insets from '@atb/utils/insets';
 import {TFunc} from '@leile/lobo-t';
@@ -242,7 +242,6 @@ function DepartureTimeItem({
   if (!isValidDeparture(departure)) {
     return null;
   }
-
   return (
     <Button
       key={departure.serviceJourneyId}
@@ -285,14 +284,10 @@ const addDatePrefixIfNecessary = (
   departureDate: string,
   searchDate: string,
 ) => {
-  if (isWithin24Hours(searchDate, departureDate)) {
+  if (isWithinSameDate(searchDate, departureDate)) {
     return timeText;
   } else {
-    return (
-      formatToShortSimpleDate(departureDate, Language.Norwegian) +
-      ' ' +
-      timeText
-    );
+    return `${formatToWeekday(departureDate, Language.Norwegian)}. ${timeText}`;
   }
 };
 
