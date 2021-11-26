@@ -3,21 +3,15 @@
 # This script will register a specific iOS application version with Entur's
 # MobileApplicationRegistryService API.
 
-# Read a property safely from config file, instead of sourcing the file
-envprop() {
-  grep -e "^${1}=" ./.env | cut -d'=' -f2 | head -n 1;
-}
-
-app_version="$(envprop APP_VERSION)"
 
 # Check for config and secrets from env vars
 if [[
     -z "${ENTUR_CLIENT_ID}"
     || -z "${ENTUR_CLIENT_SECRET}"
     || -z "${APP_ENVIRONMENT}"
-    || -z "${BUNDLE_IDENTIFIER}"
-    || -z "${APPLE_TEAM_ID}"
-    || -z "${app_version}"
+    || -z "${IOS_BUNDLE_IDENTIFIER}"
+    || -z "${IOS_DEVELOPMENT_TEAM_ID}"
+    || -z "${APP_VERSION}"
     || -z "${AUTHORITY}"
    ]]; then
     echo "Argument error!"
@@ -25,8 +19,8 @@ if [[
   - ENTUR_CLIENT_ID
   - ENTUR_CLIENT_SECRET
   - APP_ENVIRONMENT
-  - BUNDLE_IDENTIFIER
-  - APPLE_TEAM_ID
+  - IOS_BUNDLE_IDENTIFIER
+  - IOS_DEVELOPMENT_TEAM_ID
   - APP_VERSION
   - AUTHORITY"
     exit 2
@@ -39,8 +33,8 @@ case $APP_ENVIRONMENT in
     abt_url="https://core-abt-abt.staging.entur.io"
     ;;
   store)
-    token_url="https://partner-abt.entur.org/oauth/token"
-    abt_url="https://core-abt-abt.staging.entur.io"
+    token_url="https://partner.entur.org/oauth/token"
+    abt_url="https://core-abt.entur.io"
     ;;
   *)
     echo "Unrecognized environment '$1'"
@@ -84,9 +78,9 @@ json=$(cat <<EOJ
       "ref": "$AUTHORITY"
     },
     "ios": {
-      "team_identifier": "$APPLE_TEAM_ID",
-      "bundle_id": "$BUNDLE_IDENTIFIER",
-      "application_version_id": "$app_version"
+      "team_identifiers": ["$IOS_DEVELOPMENT_TEAM_ID"],
+      "bundle_id": "$IOS_BUNDLE_IDENTIFIER",
+      "application_version_id": "$APP_VERSION"
     },
     "active": true
   }
@@ -95,7 +89,7 @@ EOJ
 )
 
 # Register app
-echo "Registering $BUNDLE_IDENTIFIER version $app_version, command_id $request_id"
+echo "Registering $IOS_BUNDLE_IDENTIFIER version $APP_VERSION, command_id $request_id"
 register=$(curl -v --silent \
   --header "Content-Type: application/json" \
   --header "Authorization: Bearer $access_token" \

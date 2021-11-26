@@ -1,18 +1,19 @@
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
-import {FareContract, isPreactivatedTicket} from '@atb/tickets';
+import {FareContract, isInspectable, isPreactivatedTicket} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
-import qrcode from 'qrcode';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {View} from 'react-native';
-import {SvgXml} from 'react-native-svg';
 import TicketInfo from '../TicketInfo';
 import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
 import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
+import QrCode from '@atb/screens/Ticketing/Ticket/Details/QrCode';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import PaperQrCode from '@atb/screens/Ticketing/Ticket/Details/PaperQrCode';
+import {useMobileContextState} from '@atb/mobile-token/MobileTokenContext';
 
 type Props = {
   fareContract: FareContract;
@@ -28,16 +29,18 @@ const DetailsContent: React.FC<Props> = ({
   hasActiveTravelCard = false,
 }) => {
   const {t, language} = useTranslation();
-  const styles = useStyles();
-  const qrCodeSvg = useQrCode(fc);
+  const {enable_period_tickets} = useRemoteConfig();
+  const {tokenStatus} = useMobileContextState();
 
   const firstTravelRight = fc.travelRights[0];
   if (isPreactivatedTicket(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
     const validTo = firstTravelRight.endDateTime.toMillis();
-    const isInspectable =
-      !hasActiveTravelCard &&
-      firstTravelRight.type === 'PreActivatedSingleTicket';
+    const inspectable = isInspectable(
+      firstTravelRight,
+      hasActiveTravelCard,
+      tokenStatus?.visualState,
+    );
 
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
 
@@ -51,20 +54,20 @@ const DetailsContent: React.FC<Props> = ({
             now={now}
             validFrom={validFrom}
             validTo={validTo}
-            isInspectable={isInspectable}
+            isInspectable={inspectable}
           />
           <ValidityLine
             status={validityStatus}
             now={now}
             validFrom={validFrom}
             validTo={validTo}
-            isInspectable={isInspectable}
+            isInspectable={inspectable}
           />
           <TicketInfo
             travelRights={fc.travelRights.filter(isPreactivatedTicket)}
             status={validityStatus}
             hasActiveTravelCard={hasActiveTravelCard}
-            isInspectable={isInspectable}
+            isInspectable={inspectable}
           />
         </Sections.GenericItem>
         <Sections.GenericItem>
@@ -89,16 +92,14 @@ const DetailsContent: React.FC<Props> = ({
           onPress={onReceiptNavigate}
           accessibility={{accessibilityRole: 'button'}}
         />
-        {validityStatus === 'valid' && isInspectable && qrCodeSvg && (
-          <Sections.GenericItem>
-            <View
-              style={styles.qrCode}
-              accessible={true}
-              accessibilityLabel={t(TicketTexts.details.qrCodeA11yLabel)}
-            >
-              <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
-            </View>
-          </Sections.GenericItem>
+        {enable_period_tickets ? (
+          <QrCode validityStatus={validityStatus} isInspectable={inspectable} />
+        ) : (
+          <PaperQrCode
+            validityStatus={validityStatus}
+            isInspectable={inspectable}
+            fc={fc}
+          />
         )}
       </Sections.Section>
     );
@@ -120,28 +121,5 @@ function UnknownTicketDetails({fc}: {fc: FareContract}) {
     </Sections.Section>
   );
 }
-
-const useQrCode = (fc: FareContract) => {
-  const [qrCodeSvg, setQrCodeSvg] = useState<string | undefined>();
-
-  useEffect(() => {
-    (async function () {
-      if (!fc?.qrCode) return;
-      const svg = await qrcode.toString(fc.qrCode, {
-        type: 'svg',
-      });
-
-      setQrCodeSvg(svg);
-    })();
-  }, [fc]);
-  return qrCodeSvg;
-};
-
-const useStyles = StyleSheet.createThemeHook(() => ({
-  qrCode: {
-    width: '100%',
-    aspectRatio: 1,
-  },
-}));
 
 export default DetailsContent;

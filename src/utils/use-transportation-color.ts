@@ -1,4 +1,3 @@
-import colors from '../theme/colors';
 import {LegMode, TransportMode, TransportSubmode} from '../sdk';
 import {useTheme} from '@atb/theme';
 import {Mode as Mode_v2} from '@atb/api/journey_planner_v2_types';

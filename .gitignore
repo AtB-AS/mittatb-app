@@ -31,6 +31,8 @@ local.properties
 env.properties
 *.iml
 ic_launcher*
+*.hprof
+.project
 
 # node.js
 #
