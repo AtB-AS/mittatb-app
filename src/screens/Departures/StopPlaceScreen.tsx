@@ -324,9 +324,9 @@ function LineChip({
 }
 
 function publicCodeCompare(a: string, b: string): number {
-  // Show quays with no public code first
-  if (!a) return -1;
-  if (!b) return 1;
+  // Show quays with no public code last
+  if (!a) return 1;
+  if (!b) return -1;
   // If both public codes are numbers, compare as numbers (e.g. 2 < 10)
   if (parseInt(a) && parseInt(b)) {
     return parseInt(a) - parseInt(b);
