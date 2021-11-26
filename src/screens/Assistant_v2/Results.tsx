@@ -118,7 +118,12 @@ const Results: React.FC<Props> = ({
             previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
             allSameDay={allSameDay}
           />
-          <ResultItem tripPattern={tripPattern} onDetailsPressed={() => {}} />
+          <ResultItem
+            tripPattern={tripPattern}
+            onDetailsPressed={() => {
+              onDetailsPressed(tripPattern.id, tripPatterns, i);
+            }}
+          />
         </Fragment>
       ))}
     </View>

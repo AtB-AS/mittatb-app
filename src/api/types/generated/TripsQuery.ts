@@ -1,5 +1,4 @@
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
-
 export type TripsQueryVariables = Types.Exact<{
   from: Types.Location;
   to: Types.Location;
@@ -58,6 +57,7 @@ export type TripsQuery = {
                 name: string;
               }>;
             };
+            serviceJourney?: Types.Maybe<{id: string}>;
           }>
         >;
       }>
