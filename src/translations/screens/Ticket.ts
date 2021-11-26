@@ -48,6 +48,24 @@ const TicketTexts = {
       'QR kode. Vis frem denne koden ved billett kontroll',
       'QR code. Show this code in case of inspection. ',
     ),
+    qrCodeCountdown: (secondsLeft: number) =>
+      _(
+        `QR-kode oppdateres om ${secondsLeft} sek.`,
+        `QR-code will update in ${secondsLeft} sec.`,
+      ),
+    qrCodeErrors: {
+      generic: {
+        title: _('En feil har oppstått', 'An error has ocurred'),
+        text: _('Får ikke generert QR-kode.', 'Cannot generate a QR-code.'),
+      },
+      missingNetwork: {
+        title: _('Mangler nettilgang', 'Missing network access'),
+        text: _(
+          'Får ikke hentet QR-kode uten tilgang på nett. Sjekk om du har skrudd på mobildata.',
+          `Cannot generate a QR-code without network access. Check if you've enabled mobile data`,
+        ),
+      },
+    },
   },
   carnet: {
     numberOfUsedAccessesRemaining: (count: number) =>
