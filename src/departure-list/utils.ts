@@ -109,7 +109,9 @@ export function updateDeparturesWithRealtimeV2(
   if (!realtime) return estimatedCalls;
 
   return estimatedCalls
-    .filter((departure) => isValidDepartureV2(departure.expectedDepartureTime))
+    .filter((departure) =>
+      isValidDepartureTime(departure.expectedDepartureTime),
+    )
     .map((departure) => {
       const serviceJourneyId = departure.serviceJourney?.id;
       const quayId = departure.quay?.id;
@@ -150,6 +152,6 @@ export function isValidDeparture(departure: DepartureTime) {
   return !isNumberOfMinutesInThePast(departure.time, HIDE_AFTER_NUM_MINUTES);
 }
 
-export function isValidDepartureV2(time: string) {
+export function isValidDepartureTime(time: string) {
   return !isNumberOfMinutesInThePast(time, HIDE_AFTER_NUM_MINUTES);
 }

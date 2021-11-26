@@ -11,7 +11,6 @@ import {flatMap} from '@atb/utils/array';
 import client from '../client';
 import {DepartureGroupsQuery} from './departure-group';
 import {StopPlaceGroup} from './types';
-import * as DepartureTypes from '@atb/api/types/departures';
 
 export type DeparturesInputQuery = {
   numberOfDepartures: number; // Number of departures to fetch per quay.

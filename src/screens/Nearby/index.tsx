@@ -1,9 +1,9 @@
-import {usePreferences} from '@atb/preferences';
 import {NavigatorScreenParams} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import TripDetailsRoot, {DetailsStackParams} from '../TripDetails';
 import NearbyRoot, {NearbyScreenParams, NearbyScreenProp} from './Nearby';
+import {usePreferences} from '@atb/preferences';
 import DeparturesRoot from '../Departures/Departures';
 import StopPlaceScreen, {
   StopPlaceScreenParams,

@@ -247,11 +247,6 @@ function expandQuay(
       quayIndex === index ? targetCount : value,
     ),
   );
-
-  if (targetCount > loadedDeparturesCount) {
-  } else {
-    console.log('LOAD MORE DEPARTURES FOR QUAY ' + quay.id);
-  }
 }
 
 function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
@@ -367,7 +362,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   chipContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    // justifyContent: 'center',
   },
   lineChipIcon: {
     marginRight: theme.spacings.small,

@@ -4,9 +4,8 @@ import AccessibleText from '@atb/components/accessible-text';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
-import {ActionItem, LocationInput, Section} from '@atb/components/sections';
+import {LocationInput, Section} from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
-import DeparturesList from '@atb/departure-list/DeparturesList';
 import FavoriteChips from '@atb/favorite-chips';
 import {Location, LocationWithMetadata} from '@atb/favorites/types';
 import {useReverseGeocoder} from '@atb/geocoder';
@@ -16,7 +15,6 @@ import {
 } from '@atb/GeolocationContext';
 import {useOnlySingleLocation} from '@atb/location-search';
 import {RootStackParamList} from '@atb/navigation';
-import {usePreferences} from '@atb/preferences';
 import {StyleSheet} from '@atb/theme';
 import {ThemeColor} from '@atb/theme/colors';
 import {
@@ -34,20 +32,13 @@ import {View} from 'react-native';
 import {NearbyStackParams} from '../Nearby';
 import Loading from '../Loading';
 import DepartureTimeSheet from '../Nearby/DepartureTimeSheet';
-import {useDepartureData} from '../Nearby/state';
 import {useNearestStopsData} from './state';
 import ThemeText from '@atb/components/text';
-import {Coordinates, StopPlaceDetails, TransportMode} from '@atb/sdk';
+import {Coordinates, StopPlaceDetails} from '@atb/sdk';
 import * as Sections from '@atb/components/sections';
-import {
-  locationDistanceInMetres,
-  primitiveLocationDistanceInMetres,
-} from '@atb/utils/location';
-import haversine from 'haversine-distance';
 import {BusSide} from '@atb/assets/svg/icons/transportation';
-import TransportationIcon, {
-  getTransportModeSvg,
-} from '@atb/components/transportation-icon';
+import {getTransportModeSvg} from '@atb/components/transportation-icon';
+import {primitiveLocationDistanceInMetres} from '@atb/utils/location';
 
 const themeColor: ThemeColor = 'background_gray';
 

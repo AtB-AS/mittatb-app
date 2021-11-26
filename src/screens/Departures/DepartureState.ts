@@ -12,7 +12,6 @@ import {getRealtimeDepartureV2} from '@atb/api/departures';
 import {
   DepartureGroupMetadata,
   DepartureGroupsQuery,
-  getNextDepartureGroups,
 } from '@atb/api/departures/departure-group';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 // import {useFavorites} from '@atb/favorites';
