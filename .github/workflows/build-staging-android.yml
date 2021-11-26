@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - master
-      - cbrevik/upgrade-react-native-0.66.3
+      - cbrevik/debug-android-build
 
 jobs:
   build-android:
@@ -52,7 +52,7 @@ jobs:
         uses: actions/cache@v2
         id: apk-cache
         with:
-          path: ${{ $APK_FILE_NAME }}
+          path: ${{ "$APK_FILE_NAME" }}
           key: ${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.yalc/**') }}
       - name: Decode Android keystore
         run: sh ./scripts/android/create-keystore-file.sh
