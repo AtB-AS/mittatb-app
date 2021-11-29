@@ -58,6 +58,16 @@ export type TripsQuery = {
               }>;
             };
             serviceJourney?: Types.Maybe<{id: string}>;
+            interchangeTo?: Types.Maybe<{
+              ToServiceJourney?: Types.Maybe<{id: string}>;
+            }>;
+            pointsOnLink?: Types.Maybe<{
+              points?: Types.Maybe<string>;
+              length?: Types.Maybe<number>;
+            }>;
+            intermediateEstimatedCalls: Array<
+              Types.Maybe<{quay?: Types.Maybe<{name: string; id: string}>}>
+            >;
           }>
         >;
       }>
