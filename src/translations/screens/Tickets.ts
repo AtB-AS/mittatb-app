@@ -43,7 +43,7 @@ const TicketsTexts = {
     noTickets: _('Du har ingen aktive billetter', 'No valid tickets right now'),
     noTicketsExpiredHelpText: _(
       'Du har ingen aktive billetter. Utløpte billetter finner du under Mitt AtB-fanen.',
-      'No valid tickets right now. You can find expired tickets under the My AtB tab.',
+      'You have no valid tickets right now. Expired tickets can be found under the My AtB tab.',
     ),
   },
   expiredTicketsTab: {
