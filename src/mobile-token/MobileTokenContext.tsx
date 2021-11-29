@@ -67,8 +67,9 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
   useInterval(
     () => {
       setRetryCount(retryCount + 1);
-      Bugsnag.notify(tokenStatus!.error!.message, (event) => {
-        event.addMetadata('mobiletoken', {...tokenStatus!.error});
+      const {err, ...otherErrorData} = tokenStatus!.error!;
+      Bugsnag.notify(err || otherErrorData.message, (event) => {
+        event.addMetadata('mobiletoken', otherErrorData);
         event.severity = 'error';
       });
       client?.retry(true); // todo: better retry logic
