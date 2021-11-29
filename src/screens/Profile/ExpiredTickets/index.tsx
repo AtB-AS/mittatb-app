@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View} from 'react-native';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
@@ -8,10 +8,10 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ExpiredTicketsTexts from '@atb/translations/screens/subscreens/ExpiredTickets';
 
 export const ExpiredTickets: React.FC = () => {
-  const {fareContracts, isRefreshingTickets, refreshTickets} = useTicketState();
+  const {fareContracts, isRefreshingTickets} = useTicketState();
 
+  const [now, setNow] = useState<number>(Date.now());
   const expiredFareContracts = filterExpiredFareContracts(fareContracts);
-  const now = Date.now();
 
   const styles = useStyles();
   const {t} = useTranslation();
@@ -24,7 +24,7 @@ export const ExpiredTickets: React.FC = () => {
       <TicketsScrollView
         fareContracts={expiredFareContracts}
         isRefreshingTickets={isRefreshingTickets}
-        refreshTickets={refreshTickets}
+        refreshTickets={() => setNow(Date.now())}
         noTicketsLabel={t(TicketsTexts.expiredTicketsTab.noTickets)}
         now={now}
       />
