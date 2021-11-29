@@ -41,6 +41,10 @@ const TicketsTexts = {
     label: _('Aktive', 'Valid'),
     a11yLabel: _('Aktive billetter', 'Active tickets'),
     noTickets: _('Du har ingen aktive billetter', 'No valid tickets right now'),
+    noTicketsExpiredHelpText: _(
+      'Du har ingen aktive billetter. Utløpte billetter finner du under Mitt AtB-fanen.',
+      'No valid tickets right now. You can find expired tickets under the My AtB tab.',
+    ),
   },
   expiredTicketsTab: {
     label: _('Utløpte', 'Expired'),
