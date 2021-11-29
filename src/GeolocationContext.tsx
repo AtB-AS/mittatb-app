@@ -8,9 +8,11 @@ import Geolocation, {
 } from 'react-native-geolocation-service';
 import {
   check,
+  checkMultiple,
   PERMISSIONS,
   PermissionStatus,
   request,
+  requestMultiple,
 } from 'react-native-permissions';
 import {updateMetadata as updateChatUserMetadata} from './chat/metadata';
 import {useAppStateStatus} from './utils/use-app-state-status';
@@ -191,7 +193,24 @@ export async function checkGeolocationPermission(): Promise<PermissionStatus> {
   if (Platform.OS === 'ios') {
     return await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
   } else {
-    return await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+    let statuses = await checkMultiple([
+      PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+      PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
+    ]);
+    if (
+      statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] !== 'denied' ||
+      statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] !== 'unavailable'
+    ) {
+      return statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
+    }
+    if (
+      statuses[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION] === 'denied' ||
+      statuses[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION] === 'unavailable'
+    ) {
+      return statuses[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION];
+    } else {
+      return statuses[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION];
+    }
   }
 }
 
@@ -208,6 +227,10 @@ async function requestGeolocationPermission(): Promise<PermissionStatus> {
   if (Platform.OS === 'ios') {
     return await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE, rationale);
   } else {
-    return await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION, rationale);
+    await requestMultiple([
+      PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+      PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
+    ]);
+    return await checkGeolocationPermission();
   }
 }
