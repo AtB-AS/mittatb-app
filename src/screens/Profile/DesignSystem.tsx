@@ -210,6 +210,88 @@ export default function DesignSystem() {
             })}
           </Sections.GenericItem>
         </Sections.Section>
+
+        <View style={style.buttons}>
+          <ButtonGroup>
+            <Button
+              text="background_0"
+              onPress={presser}
+              color="background_0"
+            />
+            <Button
+              text="background_1"
+              onPress={presser}
+              color="background_1"
+            />
+            <Button
+              text="background_2"
+              onPress={presser}
+              color="background_2"
+            />
+            <Button
+              text="background_3"
+              onPress={presser}
+              color="background_3"
+            />
+
+            <Button
+              text="background_accent"
+              onPress={presser}
+              color="background_accent"
+            />
+
+            <Button text="primary_1" onPress={presser} color="primary_1" />
+            <Button text="primary_2" onPress={presser} color="primary_2" />
+            <Button text="primary_3" onPress={presser} color="primary_3" />
+
+            <Button
+              text="primary_destructive"
+              onPress={presser}
+              color="primary_destructive"
+            />
+
+            <Button text="secondary_1" onPress={presser} color="secondary_1" />
+            <Button text="secondary_2" onPress={presser} color="secondary_2" />
+            <Button text="secondary_3" onPress={presser} color="secondary_3" />
+            <Button text="secondary_4" onPress={presser} color="secondary_4" />
+
+            <Button
+              text="transport_airport"
+              onPress={presser}
+              color="transport_airport"
+            />
+            <Button
+              text="transport_boat"
+              onPress={presser}
+              color="transport_boat"
+            />
+            <Button
+              text="transport_city"
+              onPress={presser}
+              color="transport_city"
+            />
+            <Button
+              text="transport_other"
+              onPress={presser}
+              color="transport_other"
+            />
+            <Button
+              text="transport_plane"
+              onPress={presser}
+              color="transport_plane"
+            />
+            <Button
+              text="transport_region"
+              onPress={presser}
+              color="transport_region"
+            />
+            <Button
+              text="transport_train"
+              onPress={presser}
+              color="transport_train"
+            />
+          </ButtonGroup>
+        </View>
       </ScrollView>
     </View>
   );
