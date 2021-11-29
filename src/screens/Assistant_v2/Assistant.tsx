@@ -1,4 +1,4 @@
-import {CancelToken, isCancel, searchTrip} from '@atb/api';
+import {CancelToken, isCancel} from '@atb/api';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {Swap} from '@atb/assets/svg/icons/actions';
 import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
@@ -49,7 +49,7 @@ import {
 } from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {AssistantParams} from '.';
 import Loading from '../Loading';
 import FadeBetween from './FadeBetween';
@@ -62,12 +62,14 @@ import NewsBanner from './NewsBanner';
 import Results from './Results';
 import {SearchStateType} from './types';
 import {ThemeColor} from '@atb/theme/colors';
-import {tripsSearch, TripsSearchQuery} from '@atb/api/trips_v2';
-import {TripMetadata, TripPattern, TripsQuery} from '@atb/api/types/trips';
+import {tripsSearch} from '@atb/api/trips_v2';
+import {TripMetadata, TripPattern} from '@atb/api/types/trips';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 import {CancelTokenSource} from 'axios';
+import {TouchableItem} from 'react-native-tab-view';
+import * as navIcons from '@atb/assets/svg/icons/navigation';
 
-const themeColor: ThemeColor = 'background_gray';
+const themeColor: ThemeColor = 'background_accent';
 
 type AssistantRouteName = 'AssistantRoot';
 const AssistantRouteNameStatic: AssistantRouteName = 'AssistantRoot';
@@ -384,11 +386,17 @@ const Assistant: React.FC<Props> = ({
 
   const onPressed = useCallback(
     (tripPatternId, tripPatterns, startIndex) =>
+      /* TODO re activate navigation to details
       navigation.navigate('TripDetails', {
         tripPatternId,
         tripPatterns,
         startIndex,
-      }),
+      })
+      */
+      {
+        return null;
+      },
+
     [navigation, from, to],
   );
 
@@ -453,12 +461,28 @@ const Assistant: React.FC<Props> = ({
         onDetailsPressed={onPressed}
         errorType={error}
       />
-      <View style={styles.loadMoreButton}>
-        <Button
-          onPress={() => setPage(page + 1)}
-          text={'Hent flere avganger'}
-        />
-      </View>
+      {(tripPatterns?.length ?? 0) > 0 && (
+        <View style={styles.loadMoreButton}>
+          <TouchableOpacity
+            onPress={() => setPage(page + 1)}
+            disabled={searchState === 'searching'}
+          >
+            {searchState === 'searching' && (
+              <ThemeText>{t(AssistantTexts.results.fetchingMore)}</ThemeText>
+            )}
+            {searchState !== 'searching' && (
+              <ThemeText>
+                {t(AssistantTexts.results.fetchMore)}{' '}
+                <ThemeIcon
+                  svg={navIcons.Expand}
+                  size={'normal'}
+                  translateY={5}
+                />
+              </ThemeText>
+            )}
+          </TouchableOpacity>
+        </View>
+      )}
     </DisappearingHeader>
   );
 };
@@ -496,8 +520,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacings.medium,
   },
   loadMoreButton: {
-    paddingHorizontal: theme.spacings.xLarge,
     paddingVertical: theme.spacings.medium,
+    alignItems: 'center',
   },
 }));
 
@@ -715,6 +739,7 @@ function useTripsQuery(
 
         setTripPatterns(results.trip?.tripPatterns ?? []);
         setTripMetadata(results.trip?.metadata);
+        setSearchState('search-success');
         if (tripPatterns.length == 0) {
           setSearchState('search-empty-result');
         }
@@ -728,6 +753,9 @@ function useTripsQuery(
         }
       }
     }
+    setSearchState('searching');
+    setTripPatterns([]);
+    setTripMetadata(null);
     doRefresh();
     return () => {
       if (!fromLocation || !toLocation) return;
@@ -735,77 +763,7 @@ function useTripsQuery(
     };
   }, [fromLocation, toLocation, searchTime]);
 
-  const reload = useCallback(() => {
-    const source = CancelToken.source();
-
-    async function search() {
-      if (!fromLocation || !toLocation) {
-        setSearchState('idle');
-        return;
-      }
-
-      setSearchState('searching');
-      setErrorType(undefined);
-      try {
-        const arriveBy = searchTime?.option === 'arrival';
-        const searchDate =
-          searchTime && searchTime?.option !== 'now'
-            ? searchTime.date
-            : new Date().toISOString();
-
-        log('searching', {
-          fromLocation: translateLocation(fromLocation),
-          toLocation: translateLocation(toLocation),
-          searchDate: searchDate,
-        });
-
-        try {
-          // Fire and forget add journey search entry
-          await addJourneySearchEntry([fromLocation, toLocation]);
-        } catch (e) {}
-
-        const query: TripsQueryVariables = {
-          from: fromLocation,
-          to: toLocation,
-        };
-
-        const tripsQuery = await tripsSearch(query, {
-          cancelToken: source.token,
-        });
-
-        source.token.throwIfRequested();
-        setTimeOfSearch(searchDate);
-        if (tripsQuery) {
-          const tripPatterns = tripsQuery.trip?.tripPatterns ?? [];
-          const tripMetadata = tripsQuery.trip?.metadata ?? null;
-          setTripPatterns(tripPatterns);
-          setTripMetadata(tripMetadata);
-
-          setSearchState(
-            tripPatterns?.length ?? 0 >= 1
-              ? 'search-success'
-              : 'search-empty-result',
-          );
-        }
-      } catch (e) {
-        if (!isCancel(e)) {
-          setErrorType(getAxiosErrorType(e));
-          console.warn(e);
-          setTripPatterns([]);
-          setTripMetadata(null);
-          setSearchState('search-empty-result');
-        }
-      }
-    }
-
-    search();
-    return () => {
-      if (!fromLocation || !toLocation) return;
-      source.cancel('New search to replace previous search');
-    };
-  }, [fromLocation, toLocation, searchTime]);
-
-  useEffect(reload, [reload]);
+  useEffect(refresh, [refresh]);
 
   return [
     tripPatterns,
