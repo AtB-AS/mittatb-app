@@ -7,7 +7,8 @@ import {
 import ThemeText from '@atb/components/text';
 import {LocationWithMetadata} from '@atb/favorites/types';
 import {usePreferenceItems} from '@atb/preferences';
-import Assistant from '@atb/screens/Assistant_v2/';
+import * as Assistant_v2 from '@atb/screens/Assistant_v2/';
+import Assistant from '@atb/screens/Assistant/';
 import NearbyScreen, {NearbyStackParams} from '@atb/screens/Nearby';
 import ProfileScreen, {ProfileStackParams} from '@atb/screens/Profile';
 import TicketingScreen from '@atb/screens/Ticketing';
@@ -43,7 +44,7 @@ const Tab = createBottomTabNavigator<TabNavigatorParams>();
 const NavigationRoot = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const {startScreen} = usePreferenceItems();
+  const {startScreen, useExperimentalTripSearch} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
   return (
@@ -61,7 +62,7 @@ const NavigationRoot = () => {
     >
       <Tab.Screen
         name="Assistant"
-        component={Assistant}
+        component={useExperimentalTripSearch ? Assistant_v2.default : Assistant}
         options={tabSettings(
           t(dictionary.navigation.assistant),
           t(dictionary.navigation.assistant),
