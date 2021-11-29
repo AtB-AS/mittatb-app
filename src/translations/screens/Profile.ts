@@ -15,6 +15,9 @@ const ProfileTexts = {
         logout: {
           label: _('Logg ut', 'Sign out'),
         },
+        expiredTickets: {
+          label: _('Utløpte billetter', 'Expired tickets'),
+        },
       },
     },
     settings: {

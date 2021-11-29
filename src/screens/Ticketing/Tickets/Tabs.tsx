@@ -164,6 +164,8 @@ export const ActiveTickets: React.FC<Props> = () => {
     return 1;
   });
 
+  const hasAnyFareContractsOnAccount = fareContracts.length > 0;
+
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
 
@@ -176,33 +178,14 @@ export const ActiveTickets: React.FC<Props> = () => {
         fareContracts={activeFareContracts}
         isRefreshingTickets={isRefreshingTickets}
         refreshTickets={refreshTickets}
-        noTicketsLabel={t(TicketsTexts.activeTicketsTab.noTickets)}
+        noTicketsLabel={t(
+          hasAnyFareContractsOnAccount
+            ? TicketsTexts.activeTicketsTab.noTicketsExpiredHelpText
+            : TicketsTexts.activeTicketsTab.noTickets,
+        )}
         now={now}
         travelCard={customerProfile?.travelcard}
         didPaymentFail={didPaymentFail}
-      />
-    </View>
-  );
-};
-
-export const ExpiredTickets: React.FC<Props> = () => {
-  const {fareContracts, isRefreshingTickets, refreshTickets} = useTicketState();
-
-  const expiredFareContracts = filterExpiredFareContracts(fareContracts);
-
-  const [now, setNow] = useState<number>(Date.now());
-  useInterval(() => setNow(Date.now()), 2500);
-
-  const styles = useStyles();
-  const {t} = useTranslation();
-  return (
-    <View style={styles.container}>
-      <TicketsScrollView
-        fareContracts={expiredFareContracts}
-        isRefreshingTickets={isRefreshingTickets}
-        refreshTickets={refreshTickets}
-        noTicketsLabel={t(TicketsTexts.expiredTicketsTab.noTickets)}
-        now={now}
       />
     </View>
   );
