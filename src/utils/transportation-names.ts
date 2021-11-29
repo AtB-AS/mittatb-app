@@ -1,6 +1,6 @@
 import {EstimatedCall, Leg, Quay, LegMode, TransportMode} from '../sdk';
 import {TranslatedString, dictionary} from '../translations';
-import {Mode} from '@atb/api/journey_planner_v2_types';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 export function getLineName(leg: Leg) {
   return leg.line
