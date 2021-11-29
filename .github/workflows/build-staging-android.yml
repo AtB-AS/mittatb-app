@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - master
-      - cbrevik/debug-android-build
 
 jobs:
   build-android:
