@@ -81,7 +81,11 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const topMessage = (
     <View style={{paddingBottom: theme.spacings.large}}>
       <MessageBox>
-        <ThemeText type="body__primary" color="primary_1" isMarkdown={true}>
+        <ThemeText
+          type="body__primary"
+          style={{color: theme.status.info.main.color}}
+          isMarkdown={true}
+        >
           {t(TicketsTexts.buyTicketsTab.reactivateSplash.message)}
         </ThemeText>
 
@@ -91,7 +95,10 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
             TicketsTexts.buyTicketsTab.reactivateSplash.linkA11yHint,
           )}
         >
-          <ThemeText type="body__primary--underline" color="primary_1">
+          <ThemeText
+            type="body__primary--underline"
+            style={{color: theme.status.info.main.color}}
+          >
             {t(TicketsTexts.buyTicketsTab.reactivateSplash.linkText)}
           </ThemeText>
         </TouchableOpacity>
