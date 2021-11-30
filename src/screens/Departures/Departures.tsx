@@ -40,7 +40,7 @@ import {BusSide} from '@atb/assets/svg/icons/transportation';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import {primitiveLocationDistanceInMetres} from '@atb/utils/location';
 
-const themeColor: ThemeColor = 'background_gray';
+const themeColor: ThemeColor = 'background_accent';
 
 const DateOptions = ['now', 'departure'] as const;
 type DateOptionType = typeof DateOptions[number];

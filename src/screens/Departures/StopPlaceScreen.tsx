@@ -336,7 +336,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   quayChipContainer: {
-    backgroundColor: theme.colors.background_gray.backgroundColor,
+    backgroundColor: theme.colors.background_accent.backgroundColor,
     paddingVertical: theme.spacings.medium,
     flexShrink: 0,
     flexGrow: 0,
