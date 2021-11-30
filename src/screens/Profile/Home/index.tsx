@@ -110,6 +110,12 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               onPress={signOut}
             />
           )}
+          <Sections.LinkItem
+            text={t(
+              ProfileTexts.sections.account.linkItems.expiredTickets.label,
+            )}
+            onPress={() => navigation.navigate('ExpiredTickets')}
+          />
         </Sections.Section>
 
         <Sections.Section withPadding>

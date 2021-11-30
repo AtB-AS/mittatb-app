@@ -41,7 +41,7 @@ function shouldRetry(error: AxiosError): boolean {
   );
 }
 
-export function createClient(baseUrl: string) {
+export function createClient(baseUrl: string | undefined) {
   const client = axios.create({
     baseURL: baseUrl,
   });

@@ -1,4 +1,5 @@
 import {
+  addHours,
   differenceInCalendarDays,
   differenceInMinutes,
   differenceInSeconds,
@@ -7,6 +8,7 @@ import {
   getMinutes,
   isPast,
   isSameDay,
+  isWithinInterval,
   Locale,
   parse,
   parseISO,
@@ -160,6 +162,42 @@ export {isSameDay};
 
 export function formatToSimpleDate(date: Date | string, language: Language) {
   return format(parseIfNeeded(date), 'do MMMM', {
+    locale: languageToLocale(language),
+  });
+}
+
+export const isWithin24Hours = (
+  dateLeft: Date | string,
+  dateRight: Date | string,
+) => {
+  const leftParsed = parseIfNeeded(dateLeft);
+  const rightParsed = parseIfNeeded(dateRight);
+  return isWithinInterval(rightParsed, {
+    start: leftParsed,
+    end: addHours(leftParsed, 24),
+  });
+};
+
+export const isWithinSameDate = (
+  dateLeft: Date | string,
+  dateRight: Date | string,
+) => {
+  const leftParsed = parseIfNeeded(dateLeft);
+  const rightParsed = parseIfNeeded(dateRight);
+  return isSameDay(leftParsed, rightParsed);
+};
+
+export function formatToShortSimpleDate(
+  date: Date | string,
+  language: Language,
+) {
+  return format(parseIfNeeded(date), 'do MMM', {
+    locale: languageToLocale(language),
+  });
+}
+
+export function formatToWeekday(date: Date | string, language: Language) {
+  return format(parseIfNeeded(date), 'EEEEEE', {
     locale: languageToLocale(language),
   });
 }

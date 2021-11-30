@@ -4,6 +4,7 @@ import Appearance from './Appearance';
 import FavoriteDepartures from './FavoriteDepartures';
 import FavoriteList from './FavoriteList';
 import ProfileHome from './Home';
+import {ExpiredTickets} from './ExpiredTickets';
 import Language from './Language';
 import Enrollment from './Enrollment';
 import SelectStartScreen from './SelectStartScreen';
@@ -17,6 +18,7 @@ import TicketInspectionInformation from '@atb/screens/Profile/Information/Ticket
 
 export type ProfileStackParams = {
   ProfileHome: undefined;
+  ExpiredTickets: undefined;
   FavoriteList: undefined;
   FavoriteDepartures: undefined;
   SelectStartScreen: undefined;
@@ -44,6 +46,7 @@ export default function ProfileScreen() {
       }}
     >
       <Stack.Screen name="ProfileHome" component={ProfileHome} />
+      <Stack.Screen name="ExpiredTickets" component={ExpiredTickets} />
       <Stack.Screen name="FavoriteList" component={FavoriteList} />
       <Stack.Screen name="FavoriteDepartures" component={FavoriteDepartures} />
       <Stack.Screen name="SelectStartScreen" component={SelectStartScreen} />

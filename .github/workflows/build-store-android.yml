@@ -4,8 +4,9 @@ on:
     types: [published]
 
 jobs:
-  build-ios:
+  build-android:
     name: Build Android
+    environment: atb
     timeout-minutes: 90
     runs-on: macos-11
     steps:
@@ -16,7 +17,7 @@ jobs:
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
           echo "APP_ENVIRONMENT=store" >> $GITHUB_ENV
           echo "APP_ORG=atb" >> $GITHUB_ENV
-          echo "KEYSTORE_PATH=./keystore.jks" >> $GITHUB_ENV
+          echo "KEYSTORE_PATH=./android/app/keystore.jks" >> $GITHUB_ENV
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
         env:
@@ -36,21 +37,22 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set environment
         run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT $APP_ORG
+      - name: Export workflow env variables based on environment
+        run: sh ./scripts/export-workflow-parameters.sh
       - name: Override native config files
         run: sh ./scripts/override-config-files.sh
       - name: Get Android keystore
         run: sh ./scripts/android/create-keystore-file.sh
         env:
-          GPG_KEYSTORE_FILE: ${{ secrets.GPG_KEYSTORE_FILE }}
-          GPG_KEYSTORE_PASS: ${{ secrets.GPG_KEYSTORE_PASS }}
+          KEYSTORE: ${{ secrets.KEYSTORE }}
       - name: Generate native assets
         run: brew install imagemagick && yarn generate-native-assets
       - name: Run fastlane build
         run: fastlane android build
         env:
-          KEYSTORE_PASS: ${{ secrets.ATB_KEYSTORE_PASS }}
-          KEY_PASS: ${{ secrets.ATB_KEY_PASS }}
-          KEY_ALIAS: ${{ secrets.ATB_KEY_ALIAS }}
+          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
+          KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
+          KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
       - name: Distribute to Google Alpha
         run: fastlane android appcenter_alpha
         env:
@@ -61,3 +63,8 @@ jobs:
         run: sh ./scripts/android/upload-sourcemaps.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
+      - name: Register app version
+        run: sh ./scripts/android/register-app-version.sh
+        env:
+          ENTUR_CLIENT_ID: ${{ secrets.ATB_ENTUR_CLIENT_ID_PRODUCTION}}
+          ENTUR_CLIENT_SECRET: ${{ secrets.ATB_ENTUR_CLIENT_SECRET_PRODUCTION}}

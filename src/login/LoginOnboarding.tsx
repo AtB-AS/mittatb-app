@@ -17,7 +17,7 @@ import {
   useTicketState,
 } from '@atb/tickets';
 
-const themeColor: ThemeColor = 'background_gray';
+const themeColor: ThemeColor = 'background_accent';
 
 export default function LoginOnboarding({
   headerLeftButton,

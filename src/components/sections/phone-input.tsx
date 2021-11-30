@@ -23,6 +23,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {countryPhoneData} from 'phone';
 import * as Sections from '@atb/components/sections';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {loginPhoneInputId} from '@atb/test-ids';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -171,6 +172,7 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
               onFocus={onFocusEvent}
               onBlur={onBlurEvent}
               maxFontSizeMultiplier={MAX_FONT_SCALE}
+              testID={loginPhoneInputId}
               {...props}
             />
             {showClear ? (

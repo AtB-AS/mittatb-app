@@ -3,7 +3,6 @@ import {Animated, Dimensions, Easing, View} from 'react-native';
 import Dash from 'react-native-dash';
 import {StyleSheet, useTheme} from '@atb/theme';
 import LinearGradient from 'react-native-linear-gradient';
-import colors from '@atb/theme/colors';
 import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
@@ -166,35 +165,38 @@ const VerticalLine = ({
 }: {
   offset: Animated.Value;
   index: number;
-}) => (
-  <AnimatedLinearGradient
-    style={[
-      useStyles().verticalLine,
-      {
-        left: index * SPACE_BETWEEN_VERTICAL_LINES - 10,
-        transform: [
-          {
-            translateX: offset.interpolate({
-              inputRange: [0, 1],
-              outputRange: [SPACE_BETWEEN_VERTICAL_LINES, 0],
-            }),
-          },
-        ],
-      },
-    ]}
-    useAngle={true}
-    angle={120}
-    locations={[0.25, 0.25, 0.75, 0.75]}
-    colors={[
-      'transparent',
-      colors.primary.gray_500,
-      colors.primary.gray_500,
-      'transparent',
-    ]}
-    pointerEvents={'none'}
-  />
-);
+}) => {
+  const {theme} = useTheme();
 
+  return (
+    <AnimatedLinearGradient
+      style={[
+        useStyles().verticalLine,
+        {
+          left: index * SPACE_BETWEEN_VERTICAL_LINES - 10,
+          transform: [
+            {
+              translateX: offset.interpolate({
+                inputRange: [0, 1],
+                outputRange: [SPACE_BETWEEN_VERTICAL_LINES, 0],
+              }),
+            },
+          ],
+        },
+      ]}
+      useAngle={true}
+      angle={120}
+      locations={[0.25, 0.25, 0.75, 0.75]}
+      colors={[
+        'transparent',
+        theme.colors.background_accent.backgroundColor,
+        theme.colors.background_accent.backgroundColor,
+        'transparent',
+      ]}
+      pointerEvents={'none'}
+    />
+  );
+};
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     marginVertical: theme.spacings.medium,

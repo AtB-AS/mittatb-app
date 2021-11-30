@@ -21,8 +21,9 @@ import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/icons/navigation';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ThemeColor} from '@atb/theme/colors';
+import {loginConfirmCodeInputId} from '@atb/test-ids';
 
-const themeColor: ThemeColor = 'background_gray';
+const themeColor: ThemeColor = 'background_accent';
 
 export default function ConfirmCode({
   phoneNumber,
@@ -115,6 +116,7 @@ export default function ConfirmCode({
               inlineLabel={false}
               value={code}
               autoFocus={true}
+              testID={loginConfirmCodeInputId}
             />
           </Sections.Section>
           <View style={styles.buttonView}>

@@ -21,7 +21,6 @@ import ThemeIcon from '@atb/components/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
 import {useFavorites} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
-import colors from '@atb/theme/colors';
 import {
   dictionary,
   Language,
@@ -31,8 +30,10 @@ import {
 import {
   formatToClock,
   formatToClockOrRelativeMinutes,
+  formatToWeekday,
   isInThePast,
   isRelativeButNotNow,
+  isWithinSameDate,
 } from '@atb/utils/date';
 import insets from '@atb/utils/insets';
 import {TFunc} from '@leile/lobo-t';
@@ -57,12 +58,14 @@ export type LineItemProps = SectionItem<{
   stop: StopPlaceInfo;
   quay: QuayInfo;
   accessibility?: AccessibilityProps;
+  searchDate: string;
 }>;
 export default function LineItem({
   group,
   stop,
   quay,
   accessibility,
+  searchDate,
   ...props
 }: LineItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
@@ -111,6 +114,7 @@ export default function LineItem({
           accessibilityLabel={getAccessibilityTextFirstDeparture(
             title,
             nextValids,
+            searchDate,
             t,
             language,
           )}
@@ -140,6 +144,7 @@ export default function LineItem({
             departure={departure}
             key={departure.serviceJourneyId + departure.aimedTime}
             onPress={() => onPress(i)}
+            searchDate={searchDate}
           />
         ))}
       </ScrollView>
@@ -149,6 +154,7 @@ export default function LineItem({
 
 function labelForTime(
   time: string,
+  searchDate: string,
   t: TFunc<typeof Language>,
   language: Language,
 ) {
@@ -157,22 +163,25 @@ function labelForTime(
     language,
     t(dictionary.date.units.now),
   );
-  const isRelative = isRelativeButNotNow(time);
 
-  return isRelative
-    ? t(NearbyTexts.results.relativeTime(resultTime))
-    : resultTime;
+  if (isRelativeButNotNow(time)) {
+    return t(NearbyTexts.results.relativeTime(resultTime));
+  }
+
+  return addDatePrefixIfNecessary(resultTime, time, searchDate);
 }
 
 function getAccessibilityTextFirstDeparture(
   title: string,
   nextValids: DepartureTime[],
+  searchDate: string,
   t: TFunc<typeof Language>,
   language: Language,
 ) {
   const [firstResult, secondResult, ...rest] = nextValids;
   const firstResultScreenReaderTimeText = labelForTime(
-    firstResult?.time,
+    firstResult.time,
+    searchDate,
     t,
     language,
   );
@@ -202,10 +211,10 @@ function getAccessibilityTextFirstDeparture(
           [secondResult, ...rest]
             .map((i) =>
               i.realtime
-                ? formatToClock(i.time, language)
+                ? labelForTime(i.time, searchDate, t, language)
                 : t(
                     NearbyTexts.results.departure.nextAccessibilityNotRealtime(
-                      formatToClock(i.time, language),
+                      labelForTime(i.time, searchDate, t, language),
                     ),
                   ),
             )
@@ -220,32 +229,26 @@ function getAccessibilityTextFirstDeparture(
 type DepartureTimeItemProps = {
   departure: DepartureTime;
   onPress(departure: DepartureTime): void;
+  searchDate: string;
 };
-function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
+function DepartureTimeItem({
+  departure,
+  onPress,
+  searchDate,
+}: DepartureTimeItemProps) {
   const styles = useItemStyles();
   const {t, language} = useTranslation();
-  const time = formatToClockOrRelativeMinutes(
-    departure.time,
-    language,
-    t(dictionary.date.units.now),
-  );
-  const isValid = isValidDeparture(departure);
 
-  if (!isValid) {
+  if (!isValidDeparture(departure)) {
     return null;
   }
-
-  const timeWithRealtimePrefix = departure.realtime
-    ? time
-    : t(dictionary.missingRealTimePrefix) + time;
-
   return (
     <Button
       key={departure.serviceJourneyId}
       type="compact"
       color="secondary_4"
       onPress={() => onPress(departure)}
-      text={timeWithRealtimePrefix}
+      text={formatTimeText(departure, searchDate, language, t)}
       style={styles.departure}
       textStyle={styles.departureText}
       icon={hasSituations(departure) ? Warning : undefined}
@@ -253,6 +256,41 @@ function DepartureTimeItem({departure, onPress}: DepartureTimeItemProps) {
     />
   );
 }
+
+const formatTimeText = (
+  departure: DepartureTime,
+  searchDate: string,
+  language: Language,
+  t: TFunc<typeof Language>,
+) => {
+  let text = formatToClockOrRelativeMinutes(
+    departure.time,
+    language,
+    t(dictionary.date.units.now),
+  );
+  text = addRealtimePrefixIfNecessary(text, departure.realtime, t);
+  text = addDatePrefixIfNecessary(text, departure.time, searchDate);
+  return text;
+};
+
+const addRealtimePrefixIfNecessary = (
+  timeText: string,
+  isRealtime: boolean = false,
+  t: TFunc<typeof Language>,
+) => (isRealtime ? timeText : t(dictionary.missingRealTimePrefix) + timeText);
+
+const addDatePrefixIfNecessary = (
+  timeText: string,
+  departureDate: string,
+  searchDate: string,
+) => {
+  if (isWithinSameDate(searchDate, departureDate)) {
+    return timeText;
+  } else {
+    return `${formatToWeekday(departureDate, Language.Norwegian)}. ${timeText}`;
+  }
+};
+
 function hasSituations(departure: DepartureTime) {
   return departure.situations.length > 0;
 }
@@ -268,8 +306,7 @@ const useItemStyles = StyleSheet.createThemeHook((theme, themeName) => ({
     paddingLeft: theme.spacings.medium,
   },
   departure: {
-    backgroundColor:
-      themeName === 'light' ? colors.primary.gray_50 : colors.primary.gray_950,
+    backgroundColor: theme.content.subtle_primary.backgroundColor,
     borderWidth: 0,
     marginRight: theme.spacings.small,
   },
