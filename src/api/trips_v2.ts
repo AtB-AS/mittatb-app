@@ -33,7 +33,6 @@ export async function tripsSearch(
 
   const response = await client.post<TripsQuery>(url, cleanQuery, {
     ...opts,
-    baseURL: 'http://10.0.2.2:8080/',
   });
   return response.data;
 }
