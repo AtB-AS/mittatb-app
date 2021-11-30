@@ -47,9 +47,8 @@ jobs:
         run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT ${{ matrix.org }}
       - name: Export workflow env variables based on environment
         run: sh ./scripts/export-workflow-parameters.sh
-
-      ##    - name: Override native config files
-      ##      run: sh ./scripts/override-config-files.sh
+      - name: Override native config files
+        run: sh ./scripts/override-config-files.sh
       - uses: webfactory/ssh-agent@v0.4.1
         with:
           ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}

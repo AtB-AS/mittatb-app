@@ -8,9 +8,24 @@ end
 platform :ios do
   desc 'Update ad hoc devices'
   lane :update_devices do
-    register_devices(devices_file: "./ios/devices.txt")
+    ensure_env_vars(
+      env_vars: ['IOS_DEVICES_FILE']
+    )
+    register_devices(devices_file: ENV['IOS_DEVICES_FILE'])
     match(type: "adhoc", force_for_new_devices: true)
   end
+
+  desc "Generate new certificates"
+  lane :generate_new_certificates do
+    ensure_env_vars(
+      env_vars: ['FASTLANE_TEAM_ID', 'MATCH_APP_IDENTIFIER', 'MATCH_GIT_URL', 'MATCH_USERNAME', 'MATCH_TYPE']
+    )
+    match(
+      readonly: false,
+    )
+  end
+
+
 
   desc 'Match certificates'
   lane :get_cert do
