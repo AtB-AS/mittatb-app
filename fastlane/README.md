@@ -55,6 +55,11 @@ Upload the build to AppCenter for distribution to TestFlight
 fastlane android build
 ```
 Upload the build to AppCenter
+### android firebase_distribution_staging
+```
+fastlane android firebase_distribution_staging
+```
+
 ### android appcenter_staging
 ```
 fastlane android appcenter_staging

@@ -136,7 +136,7 @@ platform :android do
       project_dir: 'android/',
       print_command: false, #don't print my passwords please
       properties: {
-        "android.injected.signing.store.file" => ENV["KEYSTORE_PATH"],
+        "android.injected.signing.store.file" => File.expand_path(ENV["KEYSTORE_PATH"], Dir.pwd + "/../"),
         "android.injected.signing.store.password" => ENV["KEYSTORE_PASS"],
         "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
         "android.injected.signing.key.password" => ENV["KEY_PASS"],
@@ -147,9 +147,21 @@ platform :android do
     sh("cp", "../android/app/build/generated/sourcemaps/react/#{build_type}/index.android.bundle.map", "../bundle")
   end
 
+  lane :firebase_distribution_staging do
+    ensure_env_vars(
+      env_vars: ['FIREBASE_APP_ID','GCP_CREDENTIALS_PATH','APK_FILE_NAME']
+    )
+    firebase_app_distribution(
+      app:ENV['FIREBASE_APP_ID'],
+      service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
+      android_artifact_type:'APK',
+      android_artifact_path:ENV['APK_FILE_NAME']
+    )
+  end
+
   lane :appcenter_staging do
     ensure_env_vars(
-      env_vars: ['APPCENTER_API_KEY']
+      env_vars: ['APPCENTER_API_KEY','APK_FILE_NAME']
     )
     appcenter_upload(
       api_token: ENV["APPCENTER_API_KEY"],
@@ -157,7 +169,7 @@ platform :android do
       app_name: "MittAtb",
       owner_type: "organization",
       destinations: "*",
-      file: "app-staging.apk",
+      file: ENV['APK_FILE_NAME'],
       notify_testers: true
     )
   end

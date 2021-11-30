@@ -66,7 +66,7 @@ type Props = {
 };
 
 const SCROLL_OFFSET_HEADER_ANIMATION = 80;
-const themeColor: ThemeColor = 'background_gray';
+const themeColor: ThemeColor = 'background_accent';
 
 type Scrollable = {
   scrollTo(opts: {y: number}): void;
@@ -232,7 +232,10 @@ const DisappearingHeader: React.FC<Props> = ({
                     'transparent',
                     'transparent',
                     'transparent',
-                    hexToRgba(theme.colors.background_gray.backgroundColor, 1),
+                    hexToRgba(
+                      theme.colors.background_accent.backgroundColor,
+                      1,
+                    ),
                   ]}
                 />
                 <ScrollView style={styles.highlightComponent}>

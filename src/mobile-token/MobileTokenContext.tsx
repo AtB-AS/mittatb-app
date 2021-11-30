@@ -11,11 +11,12 @@ import useInterval from '@atb/utils/use-interval';
 import {useAuthState} from '@atb/auth';
 import Bugsnag from '@bugsnag/react-native';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {updateMetadata} from '@atb/chat/metadata';
 
 type MobileContextState = {
-  generateQrCode?: () => Promise<string>;
+  generateQrCode?: () => Promise<string | undefined>;
   tokenStatus?: TokenStatus;
-  forceRestart?: () => void;
+  retry?: (forceRestart: boolean) => void;
 };
 
 const MobileTokenContext = createContext<MobileContextState | undefined>(
@@ -32,6 +33,11 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
 
   const setStatus = (status?: TokenStatus) => {
     Bugsnag.leaveBreadcrumb('mobiletoken_status_change', status);
+    updateMetadata({
+      'AtB-Mobile-Token-State': status?.state,
+      'AtB-Mobile-Token-VisualState': status?.visualState,
+      'AtB-Mobile-Token-Error': status?.error?.message,
+    });
     setTokenStatus(status);
   };
 
@@ -61,8 +67,9 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
   useInterval(
     () => {
       setRetryCount(retryCount + 1);
-      Bugsnag.notify(tokenStatus!.error!.message, (event) => {
-        event.addMetadata('mobiletoken', {...tokenStatus!.error});
+      const {err, ...otherErrorData} = tokenStatus!.error!;
+      Bugsnag.notify(err || otherErrorData.message, (event) => {
+        event.addMetadata('mobiletoken', otherErrorData);
         event.severity = 'error';
       });
       client?.retry(true); // todo: better retry logic
@@ -77,7 +84,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
       value={{
         generateQrCode: client?.generateQrCode,
         tokenStatus,
-        forceRestart: () => client?.retry(true),
+        retry: client?.retry,
       }}
     >
       {children}

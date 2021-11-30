@@ -2,7 +2,12 @@ import { getConfigFromInitialConfig, InitialConfig } from './config';
 import { startTokenStateMachine } from './token';
 import { createFetcher } from './fetcher';
 import { createAbtTokensService } from './token/abt-tokens-service';
-import type { StoredState, TokenStatus, VisualState } from './token/types';
+import type {
+  StoredState,
+  TokenError,
+  TokenStatus,
+  VisualState,
+} from './token/types';
 import { getSecureToken } from './native';
 import { PayloadAction } from './native/types';
 
@@ -43,7 +48,7 @@ export default function createClient(
 
     const status = storedState && {
       state: storedState.state,
-      error: storedState.error,
+      error: sanitizeError(storedState.error),
       visualState: toVisualState(storedState),
     };
     currentStatus = status;
@@ -65,11 +70,11 @@ export default function createClient(
     },
     retry: (forceRestart: boolean) => {
       if (!currentAccountId) {
-        throw new Error('Account id must be set');
+        return;
       }
 
       if (!forceRestart && currentStatus?.visualState === 'Loading') {
-        throw new Error('Can not retry while the sdk is already running');
+        return;
       }
 
       startTokenStateMachine(
@@ -80,18 +85,28 @@ export default function createClient(
         currentAccountId
       );
     },
-    generateQrCode: () => {
-      if (!currentAccountId) {
-        throw new Error('Account id must be set');
-      }
-
-      if (currentStatus?.visualState !== 'Token') {
-        throw new Error(
-          'The current state does not allow retrieval of qr code'
-        );
+    generateQrCode: (): Promise<string | undefined> => {
+      if (!currentAccountId || currentStatus?.visualState !== 'Token') {
+        return Promise.resolve(undefined);
       }
 
       return getSecureToken(currentAccountId, [PayloadAction.ticketInspection]);
     },
   };
 }
+
+const sanitizeError = (error?: TokenError) => {
+  if (!error) return undefined;
+
+  const newErr = new Error(
+    typeof error.err === 'string' ? error.err : error.err?.message
+  );
+
+  newErr.name = error.err?.name;
+  newErr.stack = error.err?.stack;
+
+  return {
+    ...error,
+    err: newErr,
+  };
+};

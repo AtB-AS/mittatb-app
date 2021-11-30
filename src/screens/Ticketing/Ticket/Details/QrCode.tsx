@@ -9,6 +9,7 @@ import {useMobileContextState} from '@atb/mobile-token/MobileTokenContext';
 import qrcode from 'qrcode';
 import useInterval from '@atb/utils/use-interval';
 import MessageBox from '@atb/components/message-box';
+import ThemeText from '@atb/components/text';
 
 type Props = {
   validityStatus: ValidityStatus;
@@ -35,21 +36,36 @@ export default function QrCode({validityStatus, isInspectable}: Props) {
   }
 }
 
+const UPDATE_INTERVAL = 10000;
+
 const QrCodeSvg = ({
   generateQrCode,
 }: {
-  generateQrCode: () => Promise<string>;
+  generateQrCode: () => Promise<string | undefined>;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const qrCode = useQrCode(generateQrCode);
+  const qrCode = useQrCode(generateQrCode, UPDATE_INTERVAL);
   const [qrCodeSvg, setQrCodeSvg] = useState<string>();
+  const [countdown, setCountdown] = useState<number>(UPDATE_INTERVAL / 1000);
 
   useEffect(() => {
     if (qrCode) {
       qrcode.toString(qrCode, {type: 'svg'}).then(setQrCodeSvg);
+      setCountdown(UPDATE_INTERVAL / 1000);
     }
   }, [qrCode, setQrCodeSvg]);
+
+  useInterval(
+    () => {
+      if (countdown > 0) {
+        setCountdown(countdown - 1);
+      }
+    },
+    1000,
+    [],
+    countdown === 0,
+  );
 
   if (!qrCodeSvg) {
     return <QrCodeError />;
@@ -57,18 +73,26 @@ const QrCodeSvg = ({
 
   return (
     <Sections.GenericItem>
-      <View
-        style={styles.qrCode}
-        accessible={true}
-        accessibilityLabel={t(TicketTexts.details.qrCodeA11yLabel)}
-      >
-        <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
+      <View style={{alignItems: 'center'}}>
+        <View
+          style={styles.qrCode}
+          accessible={true}
+          accessibilityLabel={t(TicketTexts.details.qrCodeA11yLabel)}
+        >
+          <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
+        </View>
+        <ThemeText>
+          {t(TicketTexts.details.qrCodeCountdown(countdown))}
+        </ThemeText>
       </View>
     </Sections.GenericItem>
   );
 };
 
-const useQrCode = (generateQrCode: () => Promise<string>) => {
+const useQrCode = (
+  generateQrCode: () => Promise<string | undefined>,
+  interval: number,
+) => {
   const [tokenQRCode, setTokenQRCode] = useState<string | undefined>(undefined);
 
   const updateQrCode = useCallback(
@@ -85,23 +109,26 @@ const useQrCode = (generateQrCode: () => Promise<string>) => {
     () => {
       updateQrCode();
     },
-    10000,
+    interval,
     [],
   );
 
   return tokenQRCode;
 };
 
-const QrCodeError = () => (
-  <Sections.GenericItem>
-    <MessageBox
-      type={'warning'}
-      title="En feil har oppstått"
-      message={'Får ikke generert QR-kode.'}
-    />
-  </Sections.GenericItem>
-);
+const QrCodeError = () => {
+  const {t} = useTranslation();
 
+  return (
+    <Sections.GenericItem>
+      <MessageBox
+        type={'warning'}
+        title={t(TicketTexts.details.qrCodeErrors.generic.title)}
+        message={t(TicketTexts.details.qrCodeErrors.generic.text)}
+      />
+    </Sections.GenericItem>
+  );
+};
 const QrCodeLoading = () => {
   const {theme} = useTheme();
   return (
@@ -113,21 +140,24 @@ const QrCodeLoading = () => {
   );
 };
 
-const QrCodeMissingNetwork = () => (
-  <Sections.GenericItem>
-    <MessageBox
-      type={'warning'}
-      title="Mangler nettilgang"
-      message={
-        'Får ikke hentet QR-kode uten tilgang på nett. Sjekk om du har skrudd på mobildata.'
-      }
-    />
-  </Sections.GenericItem>
-);
+const QrCodeMissingNetwork = () => {
+  const {t} = useTranslation();
 
-const useStyles = StyleSheet.createThemeHook(() => ({
+  return (
+    <Sections.GenericItem>
+      <MessageBox
+        type={'warning'}
+        title={t(TicketTexts.details.qrCodeErrors.missingNetwork.title)}
+        message={t(TicketTexts.details.qrCodeErrors.missingNetwork.text)}
+      />
+    </Sections.GenericItem>
+  );
+};
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   qrCode: {
     width: '100%',
     aspectRatio: 1,
+    marginBottom: theme.spacings.medium,
   },
 }));

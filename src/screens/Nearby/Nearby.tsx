@@ -36,7 +36,7 @@ import Loading from '../Loading';
 import DepartureTimeSheet from './DepartureTimeSheet';
 import {useDepartureData} from './state';
 
-const themeColor: ThemeColor = 'background_gray';
+const themeColor: ThemeColor = 'background_accent';
 
 const DateOptions = ['now', 'departure'] as const;
 type DateOptionType = typeof DateOptions[number];

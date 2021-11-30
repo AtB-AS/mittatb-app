@@ -59,7 +59,7 @@ jobs:
           path: |
             AtB.ipa
             AtB.app.dSYM.zip
-          key: ${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}
+          key: ${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}
       - name: Run fastlane cert match
         run: fastlane ios get_cert
         env:

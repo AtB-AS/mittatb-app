@@ -21,7 +21,6 @@ import ThemeIcon from '@atb/components/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
 import {useFavorites} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
-import colors from '@atb/theme/colors';
 import {
   dictionary,
   Language,
@@ -31,10 +30,10 @@ import {
 import {
   formatToClock,
   formatToClockOrRelativeMinutes,
-  formatToShortSimpleDate,
+  formatToWeekday,
   isInThePast,
   isRelativeButNotNow,
-  isWithin24Hours,
+  isWithinSameDate,
 } from '@atb/utils/date';
 import insets from '@atb/utils/insets';
 import {TFunc} from '@leile/lobo-t';
@@ -243,7 +242,6 @@ function DepartureTimeItem({
   if (!isValidDeparture(departure)) {
     return null;
   }
-
   return (
     <Button
       key={departure.serviceJourneyId}
@@ -286,14 +284,10 @@ const addDatePrefixIfNecessary = (
   departureDate: string,
   searchDate: string,
 ) => {
-  if (isWithin24Hours(searchDate, departureDate)) {
+  if (isWithinSameDate(searchDate, departureDate)) {
     return timeText;
   } else {
-    return (
-      formatToShortSimpleDate(departureDate, Language.Norwegian) +
-      ' ' +
-      timeText
-    );
+    return `${formatToWeekday(departureDate, Language.Norwegian)}. ${timeText}`;
   }
 };
 
@@ -312,8 +306,7 @@ const useItemStyles = StyleSheet.createThemeHook((theme, themeName) => ({
     paddingLeft: theme.spacings.medium,
   },
   departure: {
-    backgroundColor:
-      themeName === 'light' ? colors.primary.gray_50 : colors.primary.gray_950,
+    backgroundColor: theme.content.subtle_primary.backgroundColor,
     borderWidth: 0,
     marginRight: theme.spacings.small,
   },
