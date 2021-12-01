@@ -39,6 +39,8 @@ import {EstimatedCall} from '@atb/api/types/departures';
 import {Date as DateIcon} from '@atb/assets/svg/icons/time';
 import {SearchTime} from './Departures';
 import {addDays, isToday, parseISO} from 'date-fns';
+import DepartureTimeSheet from '../Nearby/DepartureTimeSheet';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 5;
 
@@ -260,6 +262,18 @@ function DateNavigationSection({
   const styles = useStyles();
   const {t, language} = useTranslation();
 
+  const {open: openBottomSheet} = useBottomSheet();
+  const onLaterTimePress = () => {
+    openBottomSheet((close, focusRef) => (
+      <DepartureTimeSheet
+        ref={focusRef}
+        close={close}
+        initialTime={searchTime}
+        setSearchTime={setSearchTime}
+      ></DepartureTimeSheet>
+    ));
+  };
+
   return (
     <View style={styles.dateNavigator}>
       <Button
@@ -273,12 +287,7 @@ function DateNavigationSection({
         disabled={isToday(parseISO(searchTime.date))}
       ></Button>
       <Button
-        onPress={() => {
-          setSearchTime({
-            option: 'now',
-            date: new Date().toISOString(),
-          });
-        }}
+        onPress={onLaterTimePress}
         text={
           searchTime.option === 'now'
             ? 'I dag'
@@ -307,7 +316,7 @@ function DateNavigationSection({
 function changeDay(searchTime: SearchTime, days: number): SearchTime {
   const date = addDays(parseISO(searchTime.date).setHours(0, 0), days);
   return {
-    option: 'departure',
+    option: isToday(date) ? 'now' : 'departure',
     date: isToday(date) ? new Date().toISOString() : date.toISOString(),
   };
 }
