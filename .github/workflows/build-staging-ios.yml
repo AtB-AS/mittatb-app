@@ -90,7 +90,7 @@ jobs:
           fastlane ios firebase_distribution_staging
         env:
           GCP_CREDENTIALS_PATH: google-services.json
-          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          FIREBASE_APP_ID_IOS: ${{ secrets.FIREBASE_APP_ID_IOS }}
 
       - name: Distribute to AppCenter
         if: matrix.org == 'atb'

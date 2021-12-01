@@ -22,6 +22,11 @@ platform :ios do
     )
     match(
       readonly: false,
+      app_identifier:ENV['MATCH_APP_IDENTIFIER'],
+      team_id:ENV['FASTLANE_TEAM_ID'],
+      git_url:ENV['MATCH_GIT_URL'],
+      username:ENV['MATCH_USERNAME'],
+      type:ENV['MATCH_TYPE']
     )
   end
 
@@ -88,7 +93,7 @@ platform :ios do
   desc 'Upload the build to Firebase App Distribution'
   lane :firebase_distribution_staging do
     ensure_env_vars(
-      env_vars: ['FIREBASE_APP_ID_IOS','GCP_CREDENTIALS_PATH','APK_FILE_NAME']
+      env_vars: ['FIREBASE_APP_ID_IOS','GCP_CREDENTIALS_PATH']
     )
     firebase_app_distribution(
       app:ENV['FIREBASE_APP_ID_IOS'],
