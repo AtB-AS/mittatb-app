@@ -85,6 +85,18 @@ platform :ios do
     )
   end
 
+  desc 'Upload the build to Firebase App Distribution'
+  lane :firebase_distribution_staging do
+    ensure_env_vars(
+      env_vars: ['FIREBASE_APP_ID_IOS','GCP_CREDENTIALS_PATH','APK_FILE_NAME']
+    )
+    firebase_app_distribution(
+      app:ENV['FIREBASE_APP_ID_IOS'],
+      service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
+      groups:"NFK"
+    )
+  end
+
   desc 'Upload the build to AppCenter'
   lane :appcenter_staging do
     ensure_env_vars(
