@@ -21,12 +21,24 @@ import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {BusSide} from '@atb/assets/svg/icons/transportation';
 import {dictionary, useTranslation} from '@atb/translations';
-import {formatToClock, formatToClockOrRelativeMinutes} from '@atb/utils/date';
+import {
+  formatToClock,
+  formatToClockOrRelativeMinutes,
+  formatToShortDateTimeWithoutYear,
+} from '@atb/utils/date';
 import {Quay} from '@entur/sdk';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
-import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Expand,
+  ExpandLess,
+} from '@atb/assets/svg/icons/navigation';
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 import {EstimatedCall} from '@atb/api/types/departures';
+import {Date as DateIcon} from '@atb/assets/svg/icons/time';
+import {SearchTime} from './Departures';
+import {addDays, isToday, parseISO} from 'date-fns';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 5;
 
@@ -54,14 +66,18 @@ export default function StopPlaceScreen({
   const styles = useStyles();
   const {theme} = useTheme();
   const {t, language} = useTranslation();
+  const [searchTime, setSearchTime] = useState<SearchTime>({
+    option: 'now',
+    date: new Date().toISOString(),
+  });
   const {state, refresh, loadMore} = useDepartureData(
     stopPlaceDetails,
     selectedQuay,
+    searchTime?.option !== 'now' ? searchTime.date : undefined,
   );
   const [expandedQuays, setExpandedQuays] = useState(
     new Array<number>(stopPlaceDetails.quays?.length || 0).fill(5),
   );
-
   const [hiddenQuays, setHiddenQuays] = useState(
     new Array<boolean>(stopPlaceDetails.quays?.length || 0).fill(false),
   );
@@ -122,14 +138,14 @@ export default function StopPlaceScreen({
           <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
         }
       >
+        <DateNavigationSection
+          searchTime={searchTime}
+          setSearchTime={setSearchTime}
+        ></DateNavigationSection>
         {stopPlaceDetails.quays?.map((quay, index) => {
           if (selectedQuay && selectedQuay.id !== quay.id) return;
           return (
-            <Sections.Section
-              withPadding
-              withTopPadding
-              key={quay.id.toString()}
-            >
+            <Sections.Section withPadding key={quay.id.toString()}>
               <Sections.GenericClickableItem
                 type="inline"
                 onPress={() => {
@@ -230,6 +246,70 @@ function getDeparturesForQuay(
   return departures.filter(
     (departure) => departure && departure.quay?.id === quay.id,
   );
+}
+
+type DateNavigationSectionProps = {
+  searchTime: SearchTime;
+  setSearchTime: Dispatch<SetStateAction<SearchTime>>;
+};
+
+function DateNavigationSection({
+  searchTime,
+  setSearchTime,
+}: DateNavigationSectionProps): JSX.Element {
+  const styles = useStyles();
+  const {t, language} = useTranslation();
+
+  return (
+    <View style={styles.dateNavigator}>
+      <Button
+        onPress={() => {
+          setSearchTime(changeDay(searchTime, -1));
+        }}
+        text="Forrige dag"
+        type="inline"
+        mode="tertiary"
+        icon={ArrowLeft}
+        disabled={isToday(parseISO(searchTime.date))}
+      ></Button>
+      <Button
+        onPress={() => {
+          setSearchTime({
+            option: 'now',
+            date: new Date().toISOString(),
+          });
+        }}
+        text={
+          searchTime.option === 'now'
+            ? 'I dag'
+            : formatToShortDateTimeWithoutYear(searchTime.date, language)
+        }
+        type="compact"
+        mode="tertiary"
+        iconPosition="right"
+        icon={DateIcon}
+      ></Button>
+      <Button
+        onPress={() => {
+          setSearchTime(changeDay(searchTime, 1));
+        }}
+        text="Neste dag"
+        type="compact"
+        iconPosition="right"
+        mode="tertiary"
+        icon={ArrowRight}
+        disabled={false}
+      ></Button>
+    </View>
+  );
+}
+
+function changeDay(searchTime: SearchTime, days: number): SearchTime {
+  const date = addDays(parseISO(searchTime.date).setHours(0, 0), days);
+  return {
+    option: 'departure',
+    date: isToday(date) ? new Date().toISOString() : date.toISOString(),
+  };
 }
 
 function expandQuay(
@@ -382,5 +462,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   rightMargin: {
     marginRight: theme.spacings.medium,
+  },
+  dateNavigator: {
+    flexDirection: 'row',
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: theme.spacings.medium,
   },
 }));
