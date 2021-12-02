@@ -48,4 +48,7 @@ RCT_EXTERN_METHOD(generateAssertion:(nonnull NSString *)accountId
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(getAttestationSupport:(RCTPromiseResolveBlock)resolve
+                 withRejecter:(RCTPromiseRejectBlock)reject)
+
 @end

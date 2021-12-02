@@ -1,6 +1,7 @@
 import { NativeModules } from 'react-native';
 import type {
   AttestationData,
+  AttestationSupport,
   LegacyAttestationData,
   PayloadAction,
   Token,
@@ -8,6 +9,7 @@ import type {
 
 export type EnturTravellerType = {
   start(safetyNetApiKey?: string): Promise<AttestationData>;
+  getAttestationSupport(): Promise<AttestationSupport>;
   attest(
     accountId: string,
     tokenId: string,
@@ -40,4 +42,5 @@ export const {
   getToken,
   deleteToken,
   getSecureToken,
+  getAttestationSupport,
 }: EnturTravellerType = NativeModules.EnturTraveller;

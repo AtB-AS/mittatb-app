@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getSecureToken = exports.deleteToken = exports.getToken = exports.addToken = exports.attestLegacy = exports.attest = exports.start = void 0;
+exports.getAttestationSupport = exports.getSecureToken = exports.deleteToken = exports.getToken = exports.addToken = exports.attestLegacy = exports.attest = exports.start = void 0;
 
 var _reactNative = require("react-native");
 
@@ -14,8 +14,10 @@ const {
   addToken,
   getToken,
   deleteToken,
-  getSecureToken
+  getSecureToken,
+  getAttestationSupport
 } = _reactNative.NativeModules.EnturTraveller;
+exports.getAttestationSupport = getAttestationSupport;
 exports.getSecureToken = getSecureToken;
 exports.deleteToken = deleteToken;
 exports.getToken = getToken;

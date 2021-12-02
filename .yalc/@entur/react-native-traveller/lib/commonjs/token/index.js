@@ -29,6 +29,8 @@ var _DeleteLocalHandler = _interopRequireDefault(require("./state-machine/handle
 
 var _StartingHandler = _interopRequireDefault(require("./state-machine/handlers/StartingHandler"));
 
+var _NotSupportedHandler = _interopRequireDefault(require("./state-machine/handlers/NotSupportedHandler"));
+
 var _utils = require("./state-machine/utils");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -66,7 +68,7 @@ const startTokenStateMachine = async (abtTokensService, setStatus, safetyNetApiK
 
 exports.startTokenStateMachine = startTokenStateMachine;
 
-const shouldContinue = s => s.state !== 'Valid' && !s.error;
+const shouldContinue = s => s.state !== 'Valid' && s.state !== 'NotSupported' && !s.error;
 
 const getStateHandler = (abtTokensService, storedState, safetyNetApiKey, forceRestart) => {
   switch (storedState.state) {
@@ -104,6 +106,9 @@ const getStateHandler = (abtTokensService, storedState, safetyNetApiKey, forceRe
 
     case 'AddToken':
       return (0, _AddTokenHandler.default)();
+
+    case 'NotSupported':
+      return (0, _NotSupportedHandler.default)();
   }
 };
 //# sourceMappingURL=index.js.map

@@ -7,6 +7,8 @@ import android.os.Build
 import android.util.Base64
 import android.util.Log
 import com.facebook.react.bridge.*
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import no.entur.abt.android.time.TempoRealtimeClock
 import no.entur.abt.android.token.*
 import no.entur.abt.android.token.attestation.DeviceAttestator
@@ -87,6 +89,12 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
       promise.reject(Throwable("The start-function must be called before any other native method"))
       return
     }
+
+    if (accountId.isEmpty()) {
+      promise.reject(Throwable("accountId cannot be empty"))
+      return
+    }
+
     try {
       val token = tokenStore!!.getToken(getTokenContext(accountId))
 
@@ -110,6 +118,16 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
   fun getSecureToken(accountId: String, actions: ReadableArray, promise: Promise) {
     if (!started) {
       promise.reject(Throwable("The start-function must be called before any other native method"))
+      return
+    }
+
+    if (accountId.isEmpty()) {
+      promise.reject(Throwable("accountId cannot be empty"))
+      return
+    }
+
+    if (actions.size() <= 0) {
+      promise.reject(Throwable("actions cannot be empty"))
       return
     }
 
@@ -145,6 +163,30 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
       return
     }
 
+    if (accountId.isEmpty()) {
+      promise.reject(Throwable("accountId cannot be empty"))
+      return
+    }
+
+    if (tokenId.isEmpty()) {
+      promise.reject(Throwable("tokenId cannot be empty"))
+      return
+    }
+    if (certificate.isEmpty()) {
+      promise.reject(Throwable("certificate cannot be empty"))
+      return
+    }
+
+    if (tokenValidityStart > 0) {
+      promise.reject(Throwable("tokenValidityStart must be greater then 0"))
+      return
+    }
+
+    if (tokenValidityEnd > 0) {
+      promise.reject(Throwable("tokenValidityEnd must be greater then 0"))
+      return
+    }
+
     try {
       var tokenContext = getTokenContext(accountId)
       val signatureKey: PrivateKey = tokenKeyStore!!.getSignaturePrivateKey(tokenContext, tokenId)
@@ -169,6 +211,11 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
       return
     }
 
+    if (accountId.isEmpty()) {
+      promise.reject(Throwable("accountId cannot be empty"))
+      return
+    }
+
     try {
       tokenStore!!.clearToken(getTokenContext(accountId))
       promise.resolve(null)
@@ -186,6 +233,21 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
   fun attest(accountId: String, tokenId: String, nonce: String, promise: Promise) {
     if (!started) {
       promise.reject(Throwable("The start-function must be called before any other native method"))
+      return
+    }
+
+    if (accountId.isEmpty()) {
+      promise.reject(Throwable("accountId cannot be empty"))
+      return
+    }
+
+    if (tokenId.isEmpty()) {
+      promise.reject(Throwable("tokenId cannot be empty"))
+      return
+    }
+
+    if (nonce.isEmpty()) {
+      promise.reject(Throwable("nonce cannot be empty"))
       return
     }
 
@@ -221,11 +283,52 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
     }
   }
 
+  @ReactMethod
+  fun getAttestationSupport(promise: Promise) {
+    try {
+      val obj = WritableNativeMap()
+      if (isEmulator()) {
+        obj.putString("result", "NOT_SUPPORTED")
+        promise.resolve(obj)
+      } else {
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(reactApplicationContext.applicationContext, 13000000) == ConnectionResult.SUCCESS) {
+          obj.putString("result", "SUPPORTED")
+          obj.putString("attestationType", "SafetyNet")
+          promise.resolve(obj)
+        } else {
+          obj.putString("result", "NOT_SUPPORTED")
+          promise.resolve(obj)
+        }
+      }
+    } catch (err: Error) {
+      promise.reject("GET_ATTESTATION_SUPPORT_FAILED", err)
+    }
+  }
+
   override fun getName(): String {
     return "EnturTraveller"
   }
 
   fun getTokenContext(accountId: String): TokenContext<String> {
     return EnturTravellerTokenContext(accountId)
+  }
+
+  private fun isEmulator(): Boolean {
+    return (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")
+      || Build.FINGERPRINT.startsWith("generic")
+      || Build.FINGERPRINT.startsWith("unknown")
+      || Build.HARDWARE.contains("goldfish")
+      || Build.HARDWARE.contains("ranchu")
+      || Build.MODEL.contains("google_sdk")
+      || Build.MODEL.contains("Emulator")
+      || Build.MODEL.contains("Android SDK built for x86")
+      || Build.MANUFACTURER.contains("Genymotion")
+      || Build.PRODUCT.contains("sdk_google")
+      || Build.PRODUCT.contains("google_sdk")
+      || Build.PRODUCT.contains("sdk")
+      || Build.PRODUCT.contains("sdk_x86")
+      || Build.PRODUCT.contains("vbox86p")
+      || Build.PRODUCT.contains("emulator")
+      || Build.PRODUCT.contains("simulator"))
   }
 }
