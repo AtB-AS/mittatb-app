@@ -19,6 +19,10 @@ import {
   TransportSubmode,
   ValidityPeriod,
 } from '@entur/sdk';
+import {
+  Mode,
+  PointsOnLink as PointsOnLink_v2,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 
 export * from '@entur/sdk';
 
@@ -216,10 +220,10 @@ export type CursorInput = {
 export type CursoredQuery<T> = CursorInput & T;
 
 export type MapLeg = {
-  mode?: LegMode;
+  mode?: LegMode | Mode;
   faded?: boolean;
   transportSubmode?: TransportSubmode;
-  pointsOnLink: PointsOnLink;
+  pointsOnLink: PointsOnLink | PointsOnLink_v2;
 };
 
 export type ServiceJourneyMapInfoData = {

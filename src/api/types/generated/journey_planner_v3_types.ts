@@ -193,7 +193,7 @@ export type EstimatedCall = {
   notices: Array<Maybe<Notice>>;
   /** Get all relevant situations for this EstimatedCall. */
   situations: Array<Maybe<PtSituationElement>>;
-  /** Booking arrangements for flexible service. NOT IMPLEMENTED */
+  /** Booking arrangements for this EstimatedCall. */
   bookingArrangements?: Maybe<BookingArrangement>;
 };
 
@@ -266,12 +266,16 @@ export type Interchange = {
   priority?: Maybe<InterchangePriority>;
   /** Maximum time after scheduled departure time the connecting transport is guarantied to wait for the delayed trip. [NOT RESPECTED DURING ROUTING, JUST PASSED THROUGH] */
   maximumWaitTime?: Maybe<Scalars['Int']>;
-  /** @deprecated This is the same as using the `FromServiceJourney { line }` field. */
+  /** @deprecated This is the same as using the `fromServiceJourney { line }` field. */
   FromLine?: Maybe<Line>;
-  /** @deprecated This is the same as using the `ToServiceJourney { line }` field. */
+  /** @deprecated This is the same as using the `toServiceJourney { line }` field. */
   ToLine?: Maybe<Line>;
+  /** @deprecated Use fromServiceJourney instead */
   FromServiceJourney?: Maybe<ServiceJourney>;
+  /** @deprecated Use toServiceJourney instead */
   ToServiceJourney?: Maybe<ServiceJourney>;
+  fromServiceJourney?: Maybe<ServiceJourney>;
+  toServiceJourney?: Maybe<ServiceJourney>;
 };
 
 export enum InterchangePriority {
@@ -294,8 +298,6 @@ export enum InterchangeWeighting {
 
 /** Parameters for the OTP Itinerary Filter Chain. These parameters SHOULD be configured on the server side and should not be used by the client. They are made available here to be able to experiment and tune the server. */
 export type ItineraryFilters = {
-  /** Add an additional cost for short transfers on long transit itineraries. See javaDoc on `AddMinSafeTransferCostFilter` details. */
-  minSafeTransferTimeFactor?: Maybe<Scalars['Float']>;
   /** Set a relative limit for all transit itineraries. The limit is calculated based on the best transit itinerary generalized-cost. Itineraries without transit legs are excluded from this filter. Example: f(x) = 3600 + 2.0 x. If the lowest cost returned is 10 000, then the limit is set to: 3 600 + 2 * 10 000 = 26 600. Then all itineraries with at least one transit leg and a cost above 26 600 is removed from the result. Default: 3600.0 + 2.5 x */
   transitGeneralizedCostLimit?: Maybe<Scalars['DoubleFunction']>;
   /** Pick ONE itinerary from each group after putting itineraries that is 85% similar together. */
@@ -412,7 +414,10 @@ export type Line = {
   situations: Array<Maybe<PtSituationElement>>;
   /** Type of flexible line, or null if line is not flexible. */
   flexibleLineType?: Maybe<Scalars['String']>;
-  /** Booking arrangements for flexible line. */
+  /**
+   * Booking arrangements for flexible line.
+   * @deprecated BookingArrangements are defined per stop, and can be found under `passingTimes` or `estimatedCalls`
+   */
   bookingArrangements?: Maybe<BookingArrangement>;
 };
 
@@ -448,6 +453,7 @@ export enum Mode {
   Transit = 'transit',
   Foot = 'foot',
   Car = 'car',
+  Scooter = 'scooter',
 }
 
 /** Input format for specifying which modes will be allowed for this search. If this element is not present, it will default to accessMode/egressMode/directMode of foot and all transport modes will be allowed. */
@@ -741,6 +747,7 @@ export type QueryTypeTripArgs = {
   transitGeneralizedCostLimit?: Maybe<Scalars['DoubleFunction']>;
   debugItineraryFilter?: Maybe<Scalars['Boolean']>;
   itineraryFilters?: Maybe<ItineraryFilters>;
+  extraSearchCoachReluctance?: Maybe<Scalars['Float']>;
 };
 
 export type QueryTypeStopPlaceArgs = {
@@ -1033,8 +1040,8 @@ export type RoutingParameters = {
   includedPlannedCancellations?: Maybe<Scalars['Boolean']>;
   /** If true, the remaining weight heuristic is disabled. */
   disableRemainingWeightHeuristic?: Maybe<Scalars['Boolean']>;
+  /** @deprecated Rental is specified by modes */
   allowBikeRental?: Maybe<Scalars['Boolean']>;
-  bikeParkAndRide?: Maybe<Scalars['Boolean']>;
   parkAndRide?: Maybe<Scalars['Boolean']>;
   kissAndRide?: Maybe<Scalars['Boolean']>;
   debugItineraryFilter?: Maybe<Scalars['Boolean']>;
@@ -1100,7 +1107,10 @@ export type ServiceJourney = {
   notices: Array<Maybe<Notice>>;
   /** Get all situations active for the service journey. */
   situations: Array<Maybe<PtSituationElement>>;
-  /** Booking arrangements for flexible services. */
+  /**
+   * Booking arrangements for flexible services.
+   * @deprecated BookingArrangements are defined per stop, and can be found under `passingTimes` or `estimatedCalls`
+   */
   bookingArrangements?: Maybe<BookingArrangement>;
   transportMode?: Maybe<TransportMode>;
   transportSubmode?: Maybe<TransportSubmode>;
@@ -1181,12 +1191,16 @@ export enum StreetMode {
   BikePark = 'bike_park',
   /** Walk to a bike rental point, bike to a bike rental drop-off point, and walk the rest of the way. This can include bike rental at fixed locations or free-floating services. */
   BikeRental = 'bike_rental',
+  /** Walk to a scooter rental point, ride a scooter to a scooter rental drop-off point, and walk the rest of the way. This can include scooter rental at fixed locations or free-floating services. */
+  ScooterRental = 'scooter_rental',
   /** Car only. Direct mode only. */
   Car = 'car',
   /** Start in the car, drive to a parking area, and walk the rest of the way. Direct mode and access mode only. */
   CarPark = 'car_park',
   /** Walk to a pickup point along the road, drive to a drop-off point along the road, and walk the rest of the way. This can include various taxi-services or kiss & ride. */
   CarPickup = 'car_pickup',
+  /** Walk to a car rental point, drive to a car rental drop-off point and walk the rest of the way. This can include car rental at fixed locations or free-floating services. */
+  CarRental = 'car_rental',
   /** Walk to an eligible pickup area for flexible transportation, ride to an eligible drop-off area and then walk the rest of the way. */
   Flexible = 'flexible',
 }
@@ -1227,7 +1241,7 @@ export type TimetabledPassingTime = {
   serviceJourney?: Maybe<ServiceJourney>;
   destinationDisplay?: Maybe<DestinationDisplay>;
   notices: Array<Maybe<Notice>>;
-  /** Booking arrangements for flexible service. NOT IMPLEMENTED */
+  /** Booking arrangements for this passing time. */
   bookingArrangements?: Maybe<BookingArrangement>;
 };
 
@@ -1241,6 +1255,8 @@ export enum TransportMode {
   Rail = 'rail',
   Metro = 'metro',
   Tram = 'tram',
+  Trolleybus = 'trolleybus',
+  Monorail = 'monorail',
   Coach = 'coach',
   Unknown = 'unknown',
 }
@@ -1250,13 +1266,13 @@ export type TransportModeSlack = {
   /** The slack used for all given modes. */
   slack: Scalars['Int'];
   /** List of modes for witch the given slack apply. */
-  modes: Array<Mode>;
+  modes: Array<TransportMode>;
 };
 
 /** Used to specify board and alight slack for a given modes. */
 export type TransportModeSlackType = {
   slack: Scalars['Int'];
-  modes: Array<Mode>;
+  modes: Array<TransportMode>;
 };
 
 export type TransportModes = {
@@ -1306,11 +1322,6 @@ export type Trip = {
 
 /** List of legs constituting a suggested sequence of rides and links for a specific trip. */
 export type TripPattern = {
-  /**
-   * GOTCHA id is not supplied nor supported by entur, and is maintained by this project
-   * We use id to attempt to track tripPatterns over time
-   */
-  id?: string;
   /**
    * Time that the trip departs.
    * @deprecated Replaced with expectedStartTime

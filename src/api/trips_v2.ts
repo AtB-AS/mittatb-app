@@ -1,16 +1,7 @@
-import {TripPattern} from '@atb/sdk';
 import client from './client';
-import {Location} from '@atb/favorites/types';
 import {AxiosRequestConfig} from 'axios';
-import {TripsQuery} from '@atb/api/types/trips';
+import {TripsQuery, TripsQueryWithJourneyIds} from '@atb/api/types/trips';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
-
-export type TripsSearchQuery = {
-  from: Location;
-  to: Location;
-  searchDate?: string;
-  arriveBy?: boolean;
-};
 
 export async function tripsSearch(
   query: TripsQueryVariables,
@@ -31,8 +22,38 @@ export async function tripsSearch(
     when: query.when,
   };
 
+  /*
   const response = await client.post<TripsQuery>(url, cleanQuery, {
     ...opts,
+    baseURL: 'http://10.0.2.2:8080/',
   });
+  return response.data;
+   */
+  const data = await post<TripsQuery>(url, cleanQuery, opts);
+  return data;
+}
+
+export async function singleTripSearch(
+  queryString: string,
+  opts?: AxiosRequestConfig,
+): Promise<TripsQuery> {
+  const url = '/bff/v2/singleTrip';
+  const query = {
+    compressedQuery: queryString,
+  };
+  const data = await post<TripsQuery>(url, query, opts);
+  return data;
+}
+
+async function post<T>(
+  url: string,
+  query: any,
+  opts?: AxiosRequestConfig<any>,
+) {
+  const response = await client.post<T>(url, query, {
+    ...opts,
+    baseURL: 'http://10.0.2.2:8080',
+  });
+
   return response.data;
 }

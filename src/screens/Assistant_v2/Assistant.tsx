@@ -66,7 +66,6 @@ import {tripsSearch} from '@atb/api/trips_v2';
 import {TripMetadata, TripPattern} from '@atb/api/types/trips';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 import {CancelTokenSource} from 'axios';
-import {TouchableItem} from 'react-native-tab-view';
 import * as navIcons from '@atb/assets/svg/icons/navigation';
 
 const themeColor: ThemeColor = 'background_accent';
@@ -386,17 +385,11 @@ const Assistant: React.FC<Props> = ({
 
   const onPressed = useCallback(
     (tripPatternId, tripPatterns, startIndex) =>
-      /* TODO re activate navigation to details
-      navigation.navigate('TripDetails', {
+      navigation.navigate('TripDetails_v2', {
         tripPatternId,
         tripPatterns,
         startIndex,
-      })
-      */
-      {
-        return null;
-      },
-
+      }),
     [navigation, from, to],
   );
 
@@ -695,7 +688,7 @@ function useTripsQuery(
       }
       setSearchState('searching');
       try {
-        const results = await newSearch(
+        const results = await doSearch(
           fromLocation,
           toLocation,
           {option: 'departure', date: tripMetadata.nextDateTime},
@@ -730,7 +723,7 @@ function useTripsQuery(
         return;
       }
       try {
-        const results = await newSearch(
+        const results = await doSearch(
           fromLocation,
           toLocation,
           searchTime ?? {option: 'now', date: new Date().toISOString()},
@@ -776,7 +769,7 @@ function useTripsQuery(
   ];
 }
 
-async function newSearch(
+async function doSearch(
   fromLocation: Location,
   toLocation: Location,
   searchTime: SearchTime,

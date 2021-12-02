@@ -27,6 +27,7 @@ export type TripsQuery = {
             expectedEndTime?: Types.Maybe<any>;
             expectedStartTime?: Types.Maybe<any>;
             realtime?: Types.Maybe<boolean>;
+            transportSubmode?: Types.Maybe<Types.TransportSubmode>;
             line?: Types.Maybe<{
               id: string;
               publicCode?: Types.Maybe<string>;
@@ -52,9 +53,34 @@ export type TripsQuery = {
             >;
             fromPlace: {
               name?: Types.Maybe<string>;
+              longitude: number;
+              latitude: number;
               quay?: Types.Maybe<{
                 publicCode?: Types.Maybe<string>;
                 name: string;
+                longitude?: Types.Maybe<number>;
+                latitude?: Types.Maybe<number>;
+                stopPlace?: Types.Maybe<{
+                  longitude?: Types.Maybe<number>;
+                  latitude?: Types.Maybe<number>;
+                  name: string;
+                }>;
+              }>;
+            };
+            toPlace: {
+              name?: Types.Maybe<string>;
+              longitude: number;
+              latitude: number;
+              quay?: Types.Maybe<{
+                publicCode?: Types.Maybe<string>;
+                name: string;
+                longitude?: Types.Maybe<number>;
+                latitude?: Types.Maybe<number>;
+                stopPlace?: Types.Maybe<{
+                  longitude?: Types.Maybe<number>;
+                  latitude?: Types.Maybe<number>;
+                  name: string;
+                }>;
               }>;
             };
             serviceJourney?: Types.Maybe<{id: string}>;
@@ -68,6 +94,7 @@ export type TripsQuery = {
             intermediateEstimatedCalls: Array<
               Types.Maybe<{quay?: Types.Maybe<{name: string; id: string}>}>
             >;
+            authority?: Types.Maybe<{id: string}>;
           }>
         >;
       }>
