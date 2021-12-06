@@ -189,7 +189,7 @@ export const isWithinSameDate = (
   dateLeft: Date | string,
   dateRight: Date | string,
 ) => {
-  let leftParsed = parseIfNeeded(dateLeft);
+  const leftParsed = parseIfNeeded(dateLeft);
   const rightParsed = parseIfNeeded(dateRight);
   return isSameDay(leftParsed, rightParsed);
 };
