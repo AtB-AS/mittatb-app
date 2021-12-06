@@ -3,9 +3,9 @@
 
 
 "@atb-as/theme@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-5.0.0.tgz#326ee3163d6511ca99a35a0c0e347d7ce2d7f4fe"
-  integrity sha512-dhRYSSFW3zgGB426h7ko5VBqswo9kODOUVcLPY17alyxrCU/c9R/3FfCliIZdGtuiNkM5EDpmrnLIvPoTnNIag==
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-5.0.1.tgz#68c623916c70b8b9d2587825b8f1f1a419c33d46"
+  integrity sha512-71FeCJROW75/9UEBV7yzHi0dN4Bfw7zs1OnSfrPH0QyjDPk27WvDm7u9vIqnC3rIp75a87kfOhTmUg7JO5puMg==
   dependencies:
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^1.0.7"
@@ -9924,9 +9924,9 @@ truncate-utf8-bytes@^1.0.0:
     utf8-byte-length "^1.0.1"
 
 ts-deepmerge@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/ts-deepmerge/-/ts-deepmerge-1.0.7.tgz#8931501f750b3fb4d1e564d6753063fa3ed05298"
-  integrity sha512-zJInx1VKRn9S20n80P8/G19Xrov4xtcNFEUH0GwPfIUr24U/bNiw+I1X2RmQsnL2n0KT/7HQ6L5fbDuE7by/zw==
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/ts-deepmerge/-/ts-deepmerge-1.1.0.tgz#4236ae102199affe2e77690dcf198a420160eef2"
+  integrity sha512-VvwaV/6RyYMwT9d8dClmfHIsG2PCdm6WY430QKOIbPRR50Y/1Q2ilp4i2XEZeHFcNqfaYnAQzpyUC6XA0AqqBg==
 
 ts-object-utils@0.0.5:
   version "0.0.5"
