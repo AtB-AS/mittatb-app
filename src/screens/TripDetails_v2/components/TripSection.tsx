@@ -38,7 +38,8 @@ import WaitSection, {WaitDetails} from './WaitSection';
 import {DetailsModalNavigationProp} from '@atb/screens/TripDetails';
 import {searchByStopPlace} from '@atb/geocoder/search-for-location';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import {Leg, Quay} from '@atb/api/types/trips';
+import {Leg, Place, Quay} from '@atb/api/types/trips';
+import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -46,7 +47,8 @@ type TripSectionProps = {
   isFirst?: boolean;
   step?: number;
   interchangeDetails?: InterchangeDetails;
-} & Leg;
+  leg: Leg;
+};
 
 export type InterchangeDetails = {
   publicCode: string;
@@ -59,7 +61,7 @@ const TripSection: React.FC<TripSectionProps> = ({
   wait,
   step,
   interchangeDetails,
-  ...leg
+  leg,
 }) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
@@ -136,17 +138,6 @@ const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
 
-        {leg.notices &&
-          leg.notices.map((notice, index) => {
-            return (
-              <TripRow
-                key={'notice-' + index}
-                rowLabel={<ThemeIcon svg={Info} />}
-              >
-                <TinyMessageBox type="info" message={notice.text} />
-              </TripRow>
-            );
-          })}
         {leg.intermediateEstimatedCalls.length > 0 && (
           <IntermediateInfo {...leg} />
         )}
@@ -178,11 +169,16 @@ const TripSection: React.FC<TripSectionProps> = ({
             <TinyMessageBox
               type="info"
               message={t(
-                TripDetailsTexts.messages.interchange(
-                  leg.line.publicCode,
-                  interchangeDetails.publicCode,
-                  interchangeDetails.fromPlace,
-                ),
+                leg.line.publicCode
+                  ? TripDetailsTexts.messages.interchange(
+                      leg.line.publicCode,
+                      interchangeDetails.publicCode,
+                      interchangeDetails.fromPlace,
+                    )
+                  : TripDetailsTexts.messages.interchangeWithUnknownFromPublicCode(
+                      interchangeDetails.publicCode,
+                      interchangeDetails.fromPlace,
+                    ),
               )}
             />
           </TripRow>
@@ -209,26 +205,27 @@ const TripSection: React.FC<TripSectionProps> = ({
     });
   }
 };
-const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
+const IntermediateInfo = (leg: Leg) => {
   const {t, language} = useTranslation();
-
   const navigation = useNavigation<DetailScreenNavigationProp>();
-  const navigateToDetails = () =>
-    navigation.navigate('DepartureDetails', {
-      items: [
-        {
-          serviceJourneyId: leg.serviceJourney.id,
-          date: leg.expectedStartTime,
-          fromQuayId: leg.fromPlace.quay?.id,
-          toQuayId: leg.toPlace.quay?.id,
-        },
-      ],
-    });
 
   const numberOfIntermediateCalls = leg.intermediateEstimatedCalls.length;
+
+  const navigateToDeparture = (leg: Leg) => {
+    if (leg.serviceJourney?.id) {
+      const departureData: ServiceJourneyDeparture = {
+        serviceJourneyId: leg.serviceJourney.id,
+        date: leg.expectedStartTime,
+        fromQuayId: leg.fromPlace.quay?.id,
+        toQuayId: leg.toPlace.quay?.id,
+      };
+    }
+    return null;
+  };
+
   return (
     <TripRow
-      onPress={navigateToDetails}
+      onPress={() => navigateToDeparture(leg)}
       accessibilityLabel={
         t(
           TripDetailsTexts.trip.leg.intermediateStops.a11yLabel(
@@ -252,7 +249,7 @@ const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
     </TripRow>
   );
 };
-const WalkSection: React.FC<TripSectionProps> = (leg) => {
+const WalkSection = (leg: Leg) => {
   const {t, language} = useTranslation();
   const isWalkTimeOfSignificance = significantWalkTime(leg.duration);
   if (!isWalkTimeOfSignificance) {

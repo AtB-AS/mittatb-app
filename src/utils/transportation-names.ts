@@ -1,6 +1,7 @@
 import {EstimatedCall, Leg, Quay, LegMode, TransportMode} from '../sdk';
 import {TranslatedString, dictionary} from '../translations';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {Quay as Quay_v3} from '@atb/api/types/trips';
 
 export function getLineName(leg: Leg) {
   return leg.line
@@ -50,7 +51,7 @@ export function getTranslatedModeName(
   }
 }
 
-export function getQuayName(quay?: Quay): string | undefined {
+export function getQuayName(quay?: Quay | Quay_v3): string | undefined {
   if (!quay) return;
   if (!quay.publicCode) return quay.name;
   return `${quay.name} ${quay.publicCode}`;

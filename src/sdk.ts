@@ -23,6 +23,7 @@ import {
   Mode,
   PointsOnLink as PointsOnLink_v2,
 } from '@atb/api/types/generated/journey_planner_v3_types';
+import {Feature, LineString} from 'geojson';
 
 export * from '@entur/sdk';
 
@@ -220,14 +221,14 @@ export type CursorInput = {
 export type CursoredQuery<T> = CursorInput & T;
 
 export type MapLeg = {
-  mode?: LegMode | Mode;
+  mode?: LegMode;
   faded?: boolean;
   transportSubmode?: TransportSubmode;
   pointsOnLink: PointsOnLink | PointsOnLink_v2;
 };
 
-export type ServiceJourneyMapInfoData = {
-  mapLegs: MapLeg[];
-  start?: Coordinates;
-  stop?: Coordinates;
-};
+export interface MapLine extends Feature<LineString> {
+  travelType?: LegMode;
+  subMode?: TransportSubmode;
+  faded?: boolean;
+}

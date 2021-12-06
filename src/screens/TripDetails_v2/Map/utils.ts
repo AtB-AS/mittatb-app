@@ -3,7 +3,6 @@ import {Feature, LineString, Point, Position} from 'geojson';
 import {flatMap} from '@atb/utils/array';
 
 import {
-  Leg,
   Mode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
@@ -45,22 +44,17 @@ export function getMapBounds(features: MapLine[]) {
   };
 }
 
-export function legsToMapLines(legs: Leg[]): MapLine[] {
-  return createMapLines(legs);
-}
-
 export function createMapLines(legs: MapLeg[]): MapLine[] {
   return legs
     .filter((leg) => leg.pointsOnLink?.points?.trim()?.length) // only include legs with line geometry
     .map((leg) => {
-      // @ts-ignore
-      const line = polyline.toGeoJSON(leg.pointsOnLink.points);
+      const line = polyline.toGeoJSON(leg.pointsOnLink.points!);
       return {
         type: 'Feature',
         properties: {},
         faded: leg.faded,
-        travelType: leg.mode,
-        subMode: leg.transportSubmode,
+        travelType: (leg.mode as unknown) as Mode,
+        subMode: (leg.transportSubmode as unknown) as TransportSubmode,
         geometry: line,
       };
     });

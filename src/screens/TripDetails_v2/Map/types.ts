@@ -5,21 +5,22 @@ import {
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {LegMode} from '@entur/sdk';
-
-export type MapLeg = {
-  mode?: Mode;
-  faded?: boolean;
-  transportSubmode?: TransportSubmode;
-  pointsOnLink?: PointsOnLink;
-};
+import {Feature, LineString} from 'geojson';
 
 export interface Coordinates {
   latitude: number;
   longitude: number;
 }
 
-export type ServiceJourneyMapInfoData = {
-  mapLegs: MapLeg[];
-  start?: Coordinates;
-  stop?: Coordinates;
+export type MapLeg = {
+  mode?: LegMode;
+  faded?: boolean;
+  transportSubmode?: TransportSubmode;
+  pointsOnLink: PointsOnLink | PointsOnLink_v2;
 };
+
+export interface MapLine extends Feature<LineString> {
+  travelType?: Mode;
+  subMode?: TransportSubmode;
+  faded?: boolean;
+}
