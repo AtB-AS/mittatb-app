@@ -18,7 +18,6 @@ import {
 import {formatToClock, secondsToDuration} from '@atb/utils/date';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {
-  getLineName,
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
@@ -26,7 +25,11 @@ import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {View} from 'react-native';
 import {DetailScreenNavigationProp} from '../Details';
-import {significantWaitTime, significantWalkTime} from '../Details/utils';
+import {
+  getLineName,
+  significantWaitTime,
+  significantWalkTime,
+} from '../Details/utils';
 import {getTimeRepresentationType, TimeValues} from '../utils';
 import Time from './Time';
 import TripLegDecoration from './TripLegDecoration';
