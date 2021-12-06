@@ -52,6 +52,7 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {StoredType} from '@atb/favorites/storage';
 import {FavoriteDeparture} from '@atb/favorites/types';
 import FavoriteDialogSheet from '@atb/departure-list/section-items/FavoriteDialogSheet';
+import {parseISO} from 'date-fns';
 
 export type LineItemProps = SectionItem<{
   group: DepartureGroup;
@@ -158,6 +159,9 @@ function labelForTime(
   t: TFunc<typeof Language>,
   language: Language,
 ) {
+  if (isInThePast(parseISO(time))) {
+    searchDate = new Date().toISOString();
+  }
   const resultTime = formatToClockOrRelativeMinutes(
     time,
     language,
