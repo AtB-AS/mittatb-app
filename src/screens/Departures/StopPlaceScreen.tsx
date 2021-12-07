@@ -26,6 +26,7 @@ import {Quay} from '@entur/sdk';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
+import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 import {EstimatedCall} from '@atb/api/types/departures';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 5;
@@ -294,9 +295,9 @@ function LineChip({
   transportSubmode,
 }: LineChipProps): JSX.Element {
   const styles = useStyles();
-  const svg = getTransportModeSvg(transportMode);
+  const svg = getTransportModeSvg(transportMode as Mode_v2 | undefined);
   const transportColor = useTransportationColor(
-    transportMode,
+    transportMode as Mode_v2 | undefined,
     transportSubmode,
   );
 

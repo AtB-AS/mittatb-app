@@ -63,17 +63,12 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
   const {
     setPreference,
-    preferences: {useExperimentalTripSearch},
+    preferences: {useExperimentalTripSearch, newDepartures},
   } = usePreferences();
 
   function copyInstallId() {
     if (config?.installId) setClipboard(config.installId);
   }
-
-  const {
-    setPreference,
-    preferences: {newDepartures},
-  } = usePreferences();
 
   return (
     <View style={style.container}>
