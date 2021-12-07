@@ -7,7 +7,7 @@ import {
 import ThemeText from '@atb/components/text';
 import {LocationWithMetadata} from '@atb/favorites/types';
 import {usePreferenceItems} from '@atb/preferences';
-import * as Assistant_v2 from '@atb/screens/Assistant_v2/';
+import Assistant_v2 from '@atb/screens/Assistant_v2/';
 import Assistant from '@atb/screens/Assistant/';
 import NearbyScreen, {NearbyStackParams} from '@atb/screens/Nearby';
 import ProfileScreen, {ProfileStackParams} from '@atb/screens/Profile';
@@ -24,7 +24,6 @@ import {NavigatorScreenParams, ParamListBase} from '@react-navigation/native';
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import useFontScale from '@atb/utils/use-font-scale';
 
 type SubNavigator<T extends ParamListBase> = {
   [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
@@ -62,7 +61,7 @@ const NavigationRoot = () => {
     >
       <Tab.Screen
         name="Assistant"
-        component={useExperimentalTripSearch ? Assistant_v2.default : Assistant}
+        component={useExperimentalTripSearch ? Assistant_v2 : Assistant}
         options={tabSettings(
           t(dictionary.navigation.assistant),
           t(dictionary.navigation.assistant),
