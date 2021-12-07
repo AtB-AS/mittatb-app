@@ -802,7 +802,6 @@ async function newSearch(
     cancelToken: cancelToken.token,
   });
 
-  console.log(tripsQuery.trip?.metadata);
   return tripsQuery;
 }
 
