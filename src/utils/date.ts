@@ -178,11 +178,23 @@ export const isWithin24Hours = (
   });
 };
 
+const dateInPast = (date: Date) => {
+  let now = new Date();
+  now.setHours(0, 0, 0, 0);
+  date.setHours(0, 0, 0, 0);
+  return date <= now;
+};
+
 export const isWithinSameDate = (
   dateLeft: Date | string,
   dateRight: Date | string,
+  includePresent?: boolean,
 ) => {
-  const leftParsed = parseIfNeeded(dateLeft);
+  let leftParsed = parseIfNeeded(dateLeft);
+  if (!includePresent && dateInPast(leftParsed)) {
+    leftParsed = new Date();
+  }
+
   const rightParsed = parseIfNeeded(dateRight);
   return isSameDay(leftParsed, rightParsed);
 };
