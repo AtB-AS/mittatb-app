@@ -816,7 +816,7 @@ function useDoOnceWhen(fn: () => void, condition: boolean) {
 }
 
 function log(message: string, metadata?: {[key: string]: string}) {
-  Bugsnag.leaveBreadcrumb(message, {component: 'Assistant', ...metadata});
+  Bugsnag.leaveBreadcrumb(message, {component: 'Assistant_v2', ...metadata});
 }
 
 function translateLocation(location: Location | undefined): string {
