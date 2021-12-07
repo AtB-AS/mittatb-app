@@ -27,7 +27,7 @@ export default async function search(
       searchDate,
       arriveBy,
     },
-    opts,
+    {...opts},
   );
 }
 
