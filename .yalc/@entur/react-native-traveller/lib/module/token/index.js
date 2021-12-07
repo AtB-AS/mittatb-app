@@ -10,6 +10,7 @@ import activateNewHandler from './state-machine/handlers/ActivateNewHandler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import deleteLocalHandler from './state-machine/handlers/DeleteLocalHandler';
 import startingHandler from './state-machine/handlers/StartingHandler';
+import notSupportedHandler from './state-machine/handlers/NotSupportedHandler';
 import { getStoreKey } from './state-machine/utils';
 export const startTokenStateMachine = async (abtTokensService, setStatus, safetyNetApiKey, forceRestart = false, accountId) => {
   if (!accountId) {
@@ -42,7 +43,7 @@ export const startTokenStateMachine = async (abtTokensService, setStatus, safety
   }
 };
 
-const shouldContinue = s => s.state !== 'Valid' && !s.error;
+const shouldContinue = s => s.state !== 'Valid' && s.state !== 'NotSupported' && !s.error;
 
 const getStateHandler = (abtTokensService, storedState, safetyNetApiKey, forceRestart) => {
   switch (storedState.state) {
@@ -80,6 +81,9 @@ const getStateHandler = (abtTokensService, storedState, safetyNetApiKey, forceRe
 
     case 'AddToken':
       return addTokenHandler();
+
+    case 'NotSupported':
+      return notSupportedHandler();
   }
 };
 //# sourceMappingURL=index.js.map

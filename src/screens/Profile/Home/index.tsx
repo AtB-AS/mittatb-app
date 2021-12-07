@@ -61,6 +61,11 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
     FadeContainer: ClipboardFadeContainer,
   } = useCopyWithOpacityFade(1500);
 
+  const {
+    setPreference,
+    preferences: {useExperimentalTripSearch},
+  } = usePreferences();
+
   function copyInstallId() {
     if (config?.installId) setClipboard(config.installId);
   }
@@ -254,6 +259,14 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               text={'Enable new departure screen'}
               checked={newDepartures}
               onPress={(newDepartures) => setPreference({newDepartures})}
+            />
+            <Sections.ActionItem
+              mode="toggle"
+              text={'Enable experimental trips search'}
+              checked={useExperimentalTripSearch}
+              onPress={(useExperimentalTripSearch) =>
+                setPreference({useExperimentalTripSearch})
+              }
             />
             <Sections.LinkItem
               text="Design system"
