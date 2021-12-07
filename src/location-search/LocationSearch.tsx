@@ -208,7 +208,7 @@ export function LocationSearchContent({
             onClear={() => setText('')}
             placeholder={placeholder}
             autoCorrect={false}
-            autoCompleteType="off"
+            autoComplete="off"
             autoFocus={!a11yContext.isScreenReaderEnabled}
           />
         </View>
