@@ -1,10 +1,9 @@
 import {
   Mode,
-  PointsOnLink as PointsOnLink_v2,
   PointsOnLink,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {LegMode} from '@entur/sdk';
+
 import {Feature, LineString} from 'geojson';
 
 export interface Coordinates {
@@ -13,10 +12,10 @@ export interface Coordinates {
 }
 
 export type MapLeg = {
-  mode?: LegMode;
+  mode?: Mode;
   faded?: boolean;
   transportSubmode?: TransportSubmode;
-  pointsOnLink: PointsOnLink | PointsOnLink_v2;
+  pointsOnLink?: PointsOnLink;
 };
 
 export interface MapLine extends Feature<LineString> {

@@ -48,7 +48,7 @@ export function createMapLines(legs: MapLeg[]): MapLine[] {
   return legs
     .filter((leg) => leg.pointsOnLink?.points?.trim()?.length) // only include legs with line geometry
     .map((leg) => {
-      const line = polyline.toGeoJSON(leg.pointsOnLink.points!);
+      const line = polyline.toGeoJSON(leg.pointsOnLink!.points!);
       return {
         type: 'Feature',
         properties: {},
@@ -59,6 +59,7 @@ export function createMapLines(legs: MapLeg[]): MapLine[] {
       };
     });
 }
+
 export function pointOf(coords: Coordinates): Point;
 export function pointOf(coordinates: Position): Point;
 export function pointOf(placing: Coordinates | Position): Point;

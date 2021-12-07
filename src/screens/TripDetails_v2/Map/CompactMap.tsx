@@ -14,11 +14,6 @@ import {View} from 'react-native';
 import MapLabel from './MapLabel';
 import MapRoute from './MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
-import {LegMode, PointsOnLink, TransportSubmode} from '@entur/sdk';
-import {
-  Mode,
-  PointsOnLink as PointsOnLink_v2,
-} from '@atb/api/types/generated/journey_planner_v3_types';
 import {Coordinates, MapLeg} from '@atb/screens/TripDetails_v2/Map/types';
 
 export type MapProps = {
