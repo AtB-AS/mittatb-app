@@ -782,7 +782,6 @@ async function newSearch(
   searchTime: SearchTime,
   cancelToken: CancelTokenSource,
 ) {
-
   const searchDate =
     searchTime?.option !== 'now' ? searchTime.date : new Date().toISOString();
 
