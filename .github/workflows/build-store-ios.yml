@@ -6,6 +6,10 @@ on:
 jobs:
   build-ios:
     name: Build iOS
+    strategy:
+      matrix:
+        org: [atb, nfk]
+    environment: ${{ matrix.org }}
     timeout-minutes: 90
     runs-on: macos-11
     steps:
@@ -29,7 +33,7 @@ jobs:
       - name: Setup Xcode version
         uses: maxim-lobanov/setup-xcode@v1.3.0
         with:
-          xcode-version: '13.0'
+          xcode-version: "13.0"
       - name: Bundle Install
         run: bundle install
       - name: Get Github-release data
@@ -38,7 +42,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set environment
-        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT $APP_ORG
+        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT ${{ matrix.org }}
       - name: Export workflow env variables based on environment
         run: sh ./scripts/export-workflow-parameters.sh
       - name: Override native config files
@@ -59,23 +63,28 @@ jobs:
         env:
           PROVISIONING_PROFILE: $IOS_PROVISIONING_PROFILE_SPECIFIER
           EXPORT_METHOD: "app-store"
-      - name: Distribute to TestFlight
+      - name: Distribute to TestFlight via appcenter
+        if: matrix.org == 'atb'
         run: fastlane ios appcenter_testflight
         env:
           APPCENTER_API_KEY: ${{ secrets.APPCENTER_IOS_API_KEY }}
           RELEASE_NOTES: ${{ steps.get_release.outputs.body }}
           RELEASE_URL: ${{ steps.get_release.outputs.html_url }}
       - name: Create bundle and source maps
+        if: matrix.org == 'atb'
         run: sh ./scripts/ios/create-sourcemaps.sh
       - name: Upload bundle and source maps
+        if: matrix.org == 'atb'
         run: sh ./scripts/ios/upload-sourcemaps.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
       - name: Upload dSYMs
+        if: matrix.org == 'atb'
         run: sh ./scripts/ios/upload-dsyms.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
       - name: Register app version
+        if: matrix.org == 'atb'
         run: sh ./scripts/ios/register-app-version.sh
         env:
           ENTUR_CLIENT_ID: ${{ secrets.ATB_ENTUR_CLIENT_ID_PRODUCTION}}
