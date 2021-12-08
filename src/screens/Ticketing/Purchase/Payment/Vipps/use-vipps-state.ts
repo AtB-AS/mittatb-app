@@ -101,6 +101,7 @@ export default function useVippsState(
           opts: {
             retry: true,
           },
+          scaExemption: false,
         });
         dispatch({type: 'OFFER_RESERVED', reservation: response});
         if (user) {
