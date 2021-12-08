@@ -27,3 +27,17 @@ export function locationsAreEqual(l1: Location, l2: Location) {
 export function locationDistanceInMetres(l1: Location, l2: Location) {
   return haversine(l1.coordinates, l2.coordinates);
 }
+
+export function primitiveLocationDistanceInMetres(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number,
+) {
+  return Math.round(
+    haversine(
+      {latitude: lat1, longitude: lon1},
+      {latitude: lat2, longitude: lon2},
+    ),
+  );
+}

@@ -5,6 +5,7 @@ import {
   QuayGroup,
   StopPlaceGroup,
 } from '@atb/api/departures/types';
+import * as DepartureTypes from '@atb/api/types/departures';
 import {DepartureRealtimeData, DeparturesRealtimeData} from '@atb/sdk';
 import {isNumberOfMinutesInThePast} from '@atb/utils/date';
 
@@ -99,6 +100,37 @@ function updateDeparturesWithRealtime(
     };
   });
 }
+
+export function updateDeparturesWithRealtimeV2(
+  estimatedCalls: DepartureTypes.EstimatedCall[] | null,
+  realtime?: DeparturesRealtimeData,
+): DepartureTypes.EstimatedCall[] | null {
+  if (!estimatedCalls) return null;
+  if (!realtime) return estimatedCalls;
+
+  return estimatedCalls
+    .filter((departure) =>
+      isValidDepartureTime(departure.expectedDepartureTime),
+    )
+    .map((departure) => {
+      const serviceJourneyId = departure.serviceJourney?.id;
+      const quayId = departure.quay?.id;
+      if (!serviceJourneyId || !quayId) return departure;
+
+      const quayRealtime = realtime[quayId];
+      if (!quayRealtime) return departure;
+
+      const departureRealtime = quayRealtime.departures[serviceJourneyId];
+      if (!departureRealtime) return departure;
+
+      return {
+        ...departure,
+        expectedDepartureTime: departureRealtime.timeData.expectedDepartureTime,
+        realtime: departureRealtime.timeData.realtime,
+      };
+    });
+}
+
 export function hasNoQuaysWithDepartures(departures: StopPlaceGroup[] | null) {
   return (
     departures !== null &&
@@ -118,4 +150,8 @@ export function hasNoDeparturesOnGroup(group: DepartureGroup) {
 
 export function isValidDeparture(departure: DepartureTime) {
   return !isNumberOfMinutesInThePast(departure.time, HIDE_AFTER_NUM_MINUTES);
+}
+
+export function isValidDepartureTime(time: string) {
+  return !isNumberOfMinutesInThePast(time, HIDE_AFTER_NUM_MINUTES);
 }

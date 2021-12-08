@@ -44,7 +44,7 @@ const TransportationIcon: React.FC<TransportationIconProps> = ({
 
 export default TransportationIcon;
 
-function getTransportModeSvg(mode?: LegMode | TransportMode | Mode_v2) {
+export function getTransportModeSvg(mode?: LegMode | TransportMode | Mode_v2) {
   switch (mode) {
     case 'bus':
     case 'coach':
