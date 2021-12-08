@@ -21,6 +21,7 @@ import {DeparturesRealtimeData} from '@atb/sdk';
 import {differenceInMinutes} from 'date-fns';
 import useInterval from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '../../departure-list/utils';
+import {DateOptionType} from './types';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
@@ -313,6 +314,7 @@ const reducer: ReducerWithSideEffects<
  */
 export function useDepartureData(
   location?: Location,
+  dateOption?: DateOptionType,
   startTime?: string,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
@@ -326,7 +328,7 @@ export function useDepartureData(
       dispatch({
         type: 'LOAD_INITIAL_DEPARTURES',
         location,
-        startTime,
+        startTime: dateOption === 'now' ? new Date().toISOString() : startTime,
         favoriteDepartures,
       }),
     [location?.id, favoriteDepartures, startTime],

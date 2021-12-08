@@ -14,9 +14,9 @@ import {DateInputItem, Section, TimeInputItem} from '@atb/components/sections';
 import {NavigationProp} from '@react-navigation/native';
 import {NearbyStackParams} from '.';
 import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
-import {SearchTime} from '@atb/screens/Nearby/Nearby';
 import {Confirm} from '@atb/assets/svg/icons/actions';
 import useKeyboardHeight from '@atb/utils/use-keyboard-height';
+import {SearchTime} from './types';
 
 type Props = {
   close: () => void;

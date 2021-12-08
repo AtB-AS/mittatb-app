@@ -35,15 +35,9 @@ import {NearbyStackParams} from '.';
 import Loading from '../Loading';
 import DepartureTimeSheet from './DepartureTimeSheet';
 import {useDepartureData} from './state';
+import {SearchTime} from './types';
 
 const themeColor: ThemeColor = 'background_accent';
-
-const DateOptions = ['now', 'departure'] as const;
-type DateOptionType = typeof DateOptions[number];
-export type SearchTime = {
-  option: DateOptionType;
-  date: string;
-};
 
 type NearbyRouteName = 'NearbyRoot';
 const NearbyRouteNameStatic: NearbyRouteName = 'NearbyRoot';
@@ -123,7 +117,8 @@ const NearbyOverview: React.FC<Props> = ({
 
   const {state, refresh, loadMore, setShowFavorites} = useDepartureData(
     fromLocation,
-    searchTime?.option !== 'now' ? searchTime.date : undefined,
+    searchTime?.option,
+    searchTime.date,
   );
   const {
     data,
