@@ -37,14 +37,20 @@ type TerminalReducerState = {
   loadingState?: LoadingState;
   reservation?: TicketReservation;
   paymentResponseCode?: NetsResponseCode;
+  isSoftDecline?: boolean;
   error?: {context: ErrorContext; type: ErrorType};
 };
 
 type TerminalReducerAction =
   | {type: 'RESTART_TERMINAL'}
+  | {type: 'TRIGGER_BANK_ID_VERIFICATION'}
   | {type: 'OFFER_RESERVED'; reservation: TicketReservation}
   | {type: 'TERMINAL_LOADED'}
-  | {type: 'SET_NETS_RESPONSE_CODE'; responseCode: NetsResponseCode}
+  | {type: 'SET_SOFT_DECLINE'; isSoftDecline: boolean}
+  | {
+      type: 'SET_NETS_RESPONSE_CODE';
+      responseCode: NetsResponseCode;
+    }
   | {type: 'SET_ERROR'; errorType: ErrorType; errorContext: ErrorContext};
 
 type TerminalReducer = (
@@ -56,6 +62,18 @@ const terminalReducer: TerminalReducer = (prevState, action) => {
   switch (action.type) {
     case 'RESTART_TERMINAL': {
       return initialState;
+    }
+    case 'TRIGGER_BANK_ID_VERIFICATION': {
+      return {
+        ...prevState,
+        loadingState: undefined,
+        paymentResponseCode: undefined,
+        isSoftDecline: undefined,
+        reservation: {
+          ...prevState.reservation!,
+          url: prevState.reservation!.url + ' ', // hack to make the webview reload the terminal url for bankid verification
+        },
+      };
     }
     case 'OFFER_RESERVED': {
       return {
@@ -85,6 +103,12 @@ const terminalReducer: TerminalReducer = (prevState, action) => {
         error: {context: action.errorContext, type: action.errorType},
       };
     }
+    case 'SET_SOFT_DECLINE': {
+      return {
+        ...prevState,
+        isSoftDecline: action.isSoftDecline,
+      };
+    }
   }
 };
 
@@ -102,15 +126,14 @@ export default function useTerminalState(
     reservation: TicketReservation,
     offers: ReserveOffer[],
   ) => void,
+  scaExemption: boolean,
 ) {
   const [
-    {paymentResponseCode, reservation, loadingState, error},
+    {paymentResponseCode, isSoftDecline, reservation, loadingState, error},
     dispatch,
   ] = useReducer(terminalReducer, initialState);
 
-  const {setPreference} = usePreferences();
   const {user} = useAuthState();
-  const [useSCAExemption, setUseSCAExemption] = useState(true);
 
   const handleAxiosError = useCallback(
     function (err: AxiosError | unknown, errorContext: ErrorContext) {
@@ -138,7 +161,7 @@ export default function useTerminalState(
               opts: {
                 retry: true,
               },
-              scaExemption: useSCAExemption,
+              scaExemption,
             })
           : await reserveOffers({
               offers,
@@ -147,7 +170,7 @@ export default function useTerminalState(
               opts: {
                 retry: true,
               },
-              scaExemption: useSCAExemption,
+              scaExemption,
             });
         dispatch({type: 'OFFER_RESERVED', reservation: response});
       } catch (err) {
@@ -164,41 +187,46 @@ export default function useTerminalState(
 
   const loadingRef = useRef<boolean>(true);
 
-  const onWebViewError = ({nativeEvent}: WebViewHttpErrorEvent) => {
-    console.log('WebView error');
-    loadingRef.current = false;
-  };
+  function handleInitialLoadingError(
+    event: WebViewNavigationEvent | WebViewErrorEvent,
+  ) {
+    if (isWebViewError(event.nativeEvent)) {
+      dispatch({
+        type: 'SET_ERROR',
+        errorType: 'unknown',
+        errorContext: 'terminal-loading',
+      });
+    } else {
+      dispatch({type: 'TERMINAL_LOADED'});
+    }
+  }
 
-  const onWebViewLoadEnd = ({
-    nativeEvent,
-  }: WebViewNavigationEvent | WebViewErrorEvent) => {
-    const {url} = nativeEvent;
+  function handlePaymentCallback(
+    event: WebViewNavigationEvent | WebViewErrorEvent,
+  ) {
+    const params = parseURL(event.nativeEvent.url);
+    const responseCode = params['responseCode'];
+    if (isNetsResponseCode(responseCode))
+      dispatch({type: 'SET_NETS_RESPONSE_CODE', responseCode});
+  }
+
+  const onWebViewLoadEnd = (
+    event: WebViewNavigationEvent | WebViewErrorEvent,
+  ) => {
+    const {url} = event.nativeEvent;
     // load events might be called several times
     // for each type of resource, html, assets, etc
     // so we have a "loading guard" here
     if (loadingRef.current && !url.includes('/ticket/v2/payments/')) {
-      console.log('WebView load end', url);
       loadingRef.current = false;
-      if (isWebViewError(nativeEvent)) {
-        dispatch({
-          type: 'SET_ERROR',
-          errorType: 'unknown',
-          errorContext: 'terminal-loading',
-        });
-      } else {
-        dispatch({type: 'TERMINAL_LOADED'});
-      }
+      handleInitialLoadingError(event);
       // "payment redirect guard" here
     } else if (
       !paymentRedirectCompleteRef.current &&
       url.includes('/ticket/v2/payments/')
     ) {
       paymentRedirectCompleteRef.current = true;
-      const params = parseURL(url);
-      const responseCode = params['responseCode'];
-      if (isNetsResponseCode(responseCode))
-        dispatch({type: 'SET_NETS_RESPONSE_CODE', responseCode});
-      else console.warn('No response code');
+      handlePaymentCallback(event);
     }
   };
 
@@ -239,18 +267,38 @@ export default function useTerminalState(
     switch (paymentResponseCode) {
       case 'OK':
         if (!reservation) return;
-        reservationOk(reservation);
+
+        if (!scaExemption) {
+          reservationOk(reservation);
+        }
+
+        if (isSoftDecline === undefined) return;
+
+        if (!isSoftDecline) {
+          reservationOk(reservation);
+        } else {
+          triggerBankIdVerification();
+        }
+
         break;
       case 'Cancel':
         cancelTerminal();
         break;
     }
-  }, [paymentResponseCode]);
+  }, [paymentResponseCode, isSoftDecline]);
+
+  function triggerBankIdVerification() {
+    dispatch({type: 'TRIGGER_BANK_ID_VERIFICATION'});
+  }
 
   function restartTerminal() {
     loadingRef.current = true;
     paymentRedirectCompleteRef.current = false;
     dispatch({type: 'RESTART_TERMINAL'});
+  }
+
+  function setIsSoftDecline(isSoftDecline: boolean) {
+    dispatch({type: 'SET_SOFT_DECLINE', isSoftDecline});
   }
 
   return {
@@ -259,7 +307,7 @@ export default function useTerminalState(
     onWebViewLoadEnd,
     error,
     restartTerminal,
-    onWebViewError,
+    setIsSoftDecline,
   };
 }
 

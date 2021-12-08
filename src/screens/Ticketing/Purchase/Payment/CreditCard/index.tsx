@@ -13,7 +13,7 @@ import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs'
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import WebView from 'react-native-webview';
+import WebView, {WebViewProps} from 'react-native-webview';
 import {TicketingStackParams} from '../..';
 import {
   ActiveTicketsScreenName,
@@ -73,13 +73,15 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const saveRecurringCard =
     'save' in paymentMethod ? paymentMethod.save : false;
 
+  const scaExemption = true;
+
   const {
     loadingState,
     terminalUrl,
     onWebViewLoadEnd,
     error,
     restartTerminal,
-    onWebViewError,
+    setIsSoftDecline,
   } = useTerminalState(
     offers,
     paymentType,
@@ -87,7 +89,29 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     saveRecurringCard,
     cancelTerminal,
     dismissAndAddReservation,
+    scaExemption,
   );
+
+  type SoftDeclineMessage = {
+    softDecline: boolean;
+  };
+
+  let scaProps: Partial<WebViewProps> = {};
+
+  if (scaExemption) {
+    const INJECTED_JAVASCRIPT = `(function() {
+    window.ReactNativeWebView.postMessage(JSON.stringify({ softDecline: window.document.documentElement.innerHTML.indexOf('SoftDecline') !== -1 }));
+})();`;
+    scaProps = {
+      injectedJavaScript: INJECTED_JAVASCRIPT,
+      onMessage: (ev) => {
+        if (ev.nativeEvent.data) {
+          const data = JSON.parse(ev.nativeEvent.data) as SoftDeclineMessage;
+          setIsSoftDecline(data.softDecline);
+        }
+      },
+    };
+  }
 
   return (
     <View style={styles.container}>
@@ -109,8 +133,8 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
             source={{
               uri: terminalUrl,
             }}
-            onHttpError={onWebViewError}
             onLoadEnd={onWebViewLoadEnd}
+            {...scaProps}
           />
         )}
       </View>
@@ -154,6 +178,8 @@ const translateLoadingMessage = (
       return t(PaymentCreditCardTexts.stateMessages.reserving);
     case 'loading-terminal':
       return t(PaymentCreditCardTexts.stateMessages.loading);
+    case 'processing-payment':
+      return t(PaymentCreditCardTexts.stateMessages.processing);
     case 'processing-payment':
       return t(PaymentCreditCardTexts.stateMessages.processing);
   }
