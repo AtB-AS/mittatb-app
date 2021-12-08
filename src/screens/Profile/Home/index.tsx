@@ -63,7 +63,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
   const {
     setPreference,
-    preferences: {useExperimentalTripSearch, newDepartures},
+    preferences: {useExperimentalTripSearch, newDepartures, scaExemption},
   } = usePreferences();
 
   function copyInstallId() {
@@ -264,6 +264,12 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               onPress={(useExperimentalTripSearch) =>
                 setPreference({useExperimentalTripSearch})
               }
+            />
+            <Sections.ActionItem
+              mode="toggle"
+              text="Toggle SCA Exemption"
+              checked={scaExemption}
+              onPress={(newVal) => setPreference({scaExemption: newVal})}
             />
             <Sections.LinkItem
               text="Design system"

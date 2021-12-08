@@ -25,6 +25,7 @@ import useTerminalState, {
   LoadingState,
 } from './use-terminal-state';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {usePreferences} from '@atb/preferences';
 
 type NavigationProp = CompositeNavigationProp<
   MaterialTopTabNavigationProp<TicketTabsNavigatorParams>,
@@ -73,7 +74,9 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const saveRecurringCard =
     'save' in paymentMethod ? paymentMethod.save : false;
 
-  const scaExemption = true;
+  const {
+    preferences: {scaExemption},
+  } = usePreferences();
 
   const {
     loadingState,
@@ -89,7 +92,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     saveRecurringCard,
     cancelTerminal,
     dismissAndAddReservation,
-    scaExemption,
+    scaExemption ?? false,
   );
 
   type SoftDeclineMessage = {

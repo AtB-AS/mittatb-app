@@ -22,6 +22,7 @@ export type UserPreferences = {
   departuresShowOnlyFavorites?: boolean;
   newDepartures?: boolean;
   useExperimentalTripSearch?: boolean;
+  scaExemption?: boolean;
 };
 
 export type PreferenceItem = keyof UserPreferences;
