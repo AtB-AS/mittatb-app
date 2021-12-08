@@ -1,10 +1,11 @@
 import {AxiosError} from 'axios';
-import {useCallback, useEffect, useReducer, useRef} from 'react';
+import {useCallback, useEffect, useReducer, useRef, useState} from 'react';
 import {
   WebViewError,
   WebViewErrorEvent,
   WebViewNavigation,
   WebViewNavigationEvent,
+  WebViewHttpErrorEvent,
 } from 'react-native-webview/lib/WebViewTypes';
 import {parse as parseURL} from 'search-params';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
@@ -109,6 +110,7 @@ export default function useTerminalState(
 
   const {setPreference} = usePreferences();
   const {user} = useAuthState();
+  const [useSCAExemption, setUseSCAExemption] = useState(true);
 
   const handleAxiosError = useCallback(
     function (err: AxiosError | unknown, errorContext: ErrorContext) {
@@ -136,6 +138,7 @@ export default function useTerminalState(
               opts: {
                 retry: true,
               },
+              scaExemption: useSCAExemption,
             })
           : await reserveOffers({
               offers,
@@ -144,6 +147,7 @@ export default function useTerminalState(
               opts: {
                 retry: true,
               },
+              scaExemption: useSCAExemption,
             });
         dispatch({type: 'OFFER_RESERVED', reservation: response});
       } catch (err) {
@@ -160,15 +164,20 @@ export default function useTerminalState(
 
   const loadingRef = useRef<boolean>(true);
 
+  const onWebViewError = ({nativeEvent}: WebViewHttpErrorEvent) => {
+    console.log('WebView error');
+    loadingRef.current = false;
+  };
+
   const onWebViewLoadEnd = ({
     nativeEvent,
   }: WebViewNavigationEvent | WebViewErrorEvent) => {
     const {url} = nativeEvent;
-
     // load events might be called several times
     // for each type of resource, html, assets, etc
     // so we have a "loading guard" here
     if (loadingRef.current && !url.includes('/ticket/v2/payments/')) {
+      console.log('WebView load end', url);
       loadingRef.current = false;
       if (isWebViewError(nativeEvent)) {
         dispatch({
@@ -250,6 +259,7 @@ export default function useTerminalState(
     onWebViewLoadEnd,
     error,
     restartTerminal,
+    onWebViewError,
   };
 }
 

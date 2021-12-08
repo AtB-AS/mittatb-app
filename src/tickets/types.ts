@@ -145,6 +145,15 @@ export type ReserveOffer = {
   count: number;
 };
 
+export type ReserveOfferRequestBody = {
+  payment_redirect_url: string | undefined;
+  offers: ReserveOffer[];
+  payment_type: PaymentType;
+  store_payment: boolean | undefined;
+  recurring_payment_id: number | undefined;
+  sca_exemption: boolean;
+};
+
 export type TicketReservation = {
   order_id: string;
   payment_id: number;
