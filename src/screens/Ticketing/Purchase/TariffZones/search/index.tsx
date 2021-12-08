@@ -153,7 +153,7 @@ const Index: React.FC<Props> = ({
             onClear={() => setText('')}
             placeholder={t(TariffZoneSearchTexts.searchField.placeholder)}
             autoCorrect={false}
-            autoCompleteType="off"
+            autoComplete="off"
           />
         </View>
       </View>
