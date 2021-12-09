@@ -287,13 +287,18 @@ export default function useTerminalState(
     }
   }, [paymentResponseCode, isSoftDecline]);
 
+  function resetOnLoadGuards() {
+    loadingRef.current = true;
+    paymentRedirectCompleteRef.current = false;
+  }
+
   function triggerBankIdVerification() {
+    resetOnLoadGuards();
     dispatch({type: 'TRIGGER_BANK_ID_VERIFICATION'});
   }
 
   function restartTerminal() {
-    loadingRef.current = true;
-    paymentRedirectCompleteRef.current = false;
+    resetOnLoadGuards();
     dispatch({type: 'RESTART_TERMINAL'});
   }
 
