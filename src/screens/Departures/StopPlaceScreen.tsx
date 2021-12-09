@@ -22,9 +22,8 @@ import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {BusSide} from '@atb/assets/svg/icons/transportation';
 import {dictionary, useTranslation} from '@atb/translations';
 import {
-  formatToClock,
   formatToClockOrRelativeMinutes,
-  formatToShortDateTimeWithoutYear,
+  formatToTwoLineDateTime,
 } from '@atb/utils/date';
 import {Quay} from '@entur/sdk';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
@@ -261,6 +260,7 @@ function DateNavigationSection({
   setSearchTime,
 }: DateNavigationSectionProps): JSX.Element {
   const styles = useStyles();
+  const {theme} = useTheme();
   const {t, language} = useTranslation();
 
   const {open: openBottomSheet} = useBottomSheet();
@@ -286,18 +286,25 @@ function DateNavigationSection({
         mode="tertiary"
         icon={ArrowLeft}
         disabled={isToday(parseISO(searchTime.date))}
+        textStyle={{
+          marginLeft: theme.spacings.xSmall,
+        }}
       ></Button>
       <Button
         onPress={onLaterTimePress}
         text={
           searchTime.option === 'now'
             ? 'I dag'
-            : formatToShortDateTimeWithoutYear(searchTime.date, language)
+            : formatToTwoLineDateTime(searchTime.date, language)
         }
         type="compact"
         mode="tertiary"
         iconPosition="right"
         icon={DateIcon}
+        textStyle={{
+          textAlign: 'center',
+          marginRight: theme.spacings.xSmall,
+        }}
       ></Button>
       <Button
         onPress={() => {
@@ -309,6 +316,9 @@ function DateNavigationSection({
         mode="tertiary"
         icon={ArrowRight}
         disabled={false}
+        textStyle={{
+          marginRight: theme.spacings.xSmall,
+        }}
       ></Button>
     </View>
   );

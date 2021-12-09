@@ -153,6 +153,23 @@ export function formatToShortDateTimeWithoutYear(
   return format(parsed, 'dd. MMM HH:mm', {locale: languageToLocale(language)});
 }
 
+export function formatToTwoLineDateTime(
+  isoDate: string | Date,
+  language: Language,
+) {
+  const parsed = parseIfNeeded(isoDate);
+  if (isSameDay(parsed, new Date())) {
+    return formatToClock(parsed, language);
+  }
+  return (
+    format(parsed, 'dd. MMM', {
+      locale: languageToLocale(language),
+    }) +
+    '\n' +
+    formatToClock(parsed, language)
+  );
+}
+
 export function fullDateTime(isoDate: string | Date, language: Language) {
   const parsed = parseIfNeeded(isoDate);
   return format(parsed, 'PPp', {locale: languageToLocale(language)});
