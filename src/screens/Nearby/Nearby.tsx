@@ -103,11 +103,6 @@ const NearbyOverview: React.FC<Props> = ({
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
   const styles = useNearbyStyles();
 
-  const [searchTime, setSearchTime] = useState<SearchTime>({
-    option: 'now',
-    date: new Date().toISOString(),
-  });
-
   const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
     [currentLocation],
@@ -115,11 +110,14 @@ const NearbyOverview: React.FC<Props> = ({
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
   const updatingLocation = !fromLocation && hasLocationPermission;
 
-  const {state, refresh, loadMore, setShowFavorites} = useDepartureData(
-    fromLocation,
-    searchTime?.option,
-    searchTime.date,
-  );
+  const {
+    state,
+    refresh,
+    loadMore,
+    setShowFavorites,
+    setSearchTime,
+  } = useDepartureData(fromLocation);
+
   const {
     data,
     tick,
@@ -128,6 +126,7 @@ const NearbyOverview: React.FC<Props> = ({
     error,
     showOnlyFavorites,
     queryInput,
+    searchTime,
   } = state;
 
   const {
