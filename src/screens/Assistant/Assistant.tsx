@@ -148,7 +148,7 @@ const Assistant: React.FC<Props> = ({
     () => {
       if (searchTime.option === 'now') {
         const now = new Date();
-        const diff = differenceInMinutes(parseISO(searchTime.date), now);
+        const diff = differenceInMinutes(now, parseISO(searchTime.date));
 
         // Update "now" date if it has been more than 60 minutes
         // since last time now has been updated
