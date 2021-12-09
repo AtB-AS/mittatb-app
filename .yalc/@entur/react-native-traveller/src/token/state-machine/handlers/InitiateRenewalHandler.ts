@@ -8,12 +8,13 @@ export default function initiateRenewalHandler(
   abtTokensService: AbtTokensService
 ): StateHandler {
   return stateHandlerFactory(['InitiateRenewal'], async (s) => {
-    const signedToken = await getSecureToken(s.accountId, [
+    const signedToken = await getSecureToken(s.accountId, s.tokenId, true, [
       PayloadAction.addRemoveToken,
     ]);
     const renewTokenResponse = await abtTokensService.renewToken(signedToken);
     return {
       accountId: s.accountId,
+      oldTokenId: s.tokenId,
       state: 'AttestRenewal',
       initiatedData: renewTokenResponse,
     };

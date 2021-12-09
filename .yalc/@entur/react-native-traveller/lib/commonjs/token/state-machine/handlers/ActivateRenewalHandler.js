@@ -15,7 +15,7 @@ var _HandlerFactory = require("../HandlerFactory");
 
 function activateRenewalHandler(abtTokensService) {
   return (0, _HandlerFactory.stateHandlerFactory)(['ActivateRenewal'], async s => {
-    const signedToken = await (0, _native.getSecureToken)(s.accountId, [_types.PayloadAction.addRemoveToken]);
+    const signedToken = await (0, _native.getSecureToken)(s.accountId, s.oldTokenId, true, [_types.PayloadAction.addRemoveToken]);
 
     try {
       const activateTokenResponse = await abtTokensService.activateToken(s.tokenId, s.attestationData, signedToken);
@@ -32,6 +32,7 @@ function activateRenewalHandler(abtTokensService) {
         // The token has already been renewed. May happen if retrying after timeout.
         return {
           accountId: s.accountId,
+          tokenId: s.tokenId,
           state: 'GettingTokenCertificate'
         };
       }

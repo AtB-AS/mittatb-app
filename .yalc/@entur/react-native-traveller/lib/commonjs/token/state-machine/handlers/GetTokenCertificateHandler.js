@@ -13,7 +13,7 @@ var _HandlerFactory = require("../HandlerFactory");
 
 function getTokenCertificateHandler(abtTokensService) {
   return (0, _HandlerFactory.stateHandlerFactory)(['GettingTokenCertificate'], async s => {
-    const signedToken = await (0, _native.getSecureToken)(s.accountId, [_types.PayloadAction.addRemoveToken]);
+    const signedToken = await (0, _native.getSecureToken)(s.accountId, s.tokenId, false, [_types.PayloadAction.addRemoveToken]);
     const tokenCertificateResponse = await abtTokensService.getTokenCertificate(signedToken);
     return {
       accountId: s.accountId,

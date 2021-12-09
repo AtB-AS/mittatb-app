@@ -23,6 +23,7 @@ function loadingHandler() {
     } else {
       return tokenNeedsRenewal(token) ? {
         accountId: s.accountId,
+        tokenId: token.tokenId,
         state: 'InitiateRenewal'
       } : {
         accountId: s.accountId,

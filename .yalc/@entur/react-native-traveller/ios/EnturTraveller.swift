@@ -1,5 +1,6 @@
 import AbtMobile
 import DeviceCheck
+import UIKit
 @_implementationOnly import Kronos
 
 public class EnturTravellerLogger {
@@ -27,6 +28,19 @@ public class EnturTraveller: NSObject {
             started = true;
         }
         resolve(nil)
+    }
+    
+    @objc(getDeviceName:withRejecter:)
+    func getDeviceName(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        do {
+            let name = UIDevice.current.name
+            guard name != nil || name != "" else {
+                throw "Could not retrieve device name because it's nil or empty"
+            }
+            resolve(name)
+        } catch let err {
+            reject("Could not get devicename", err.localizedDescription, nil)
+        }
     }
 
     @objc(generateAssertion:withKeyId:withNonce:withTokenId:withHash:withResolver:withRejecter:)
@@ -315,8 +329,8 @@ public class EnturTraveller: NSObject {
         resolve(nil)
     }
 
-    @objc(getSecureToken:withActions:withResolver:withRejecter:)
-    func getSecureToken(accountId: String, actions: NSArray, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+    @objc(getSecureToken:withTokenId:withIncludeCertificate:withActions:withResolver:withRejecter:)
+    func getSecureToken(accountId: String, tokenId: String, includeCertificate: Bool, actions: NSArray, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         if (!started) {
             reject("NOT_STARTED", "The start-function must be called before any other native method", nil)
             return
@@ -345,7 +359,7 @@ public class EnturTraveller: NSObject {
             reject("SECURE_TOKEN_ERROR", error.localizedDescription, error)
             return
         }
-        let secureToken = secureTokenService.getSecureToken(accountId, actions: payloadActions)
+        let secureToken = secureTokenService.getSecureToken(accountId, tokenId: tokenId, actions: payloadActions, includeCertificate: includeCertificate)
         switch (secureToken) {
         case .success(let token):
             resolve(token)

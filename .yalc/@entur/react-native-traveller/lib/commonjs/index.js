@@ -40,8 +40,10 @@ function createClient(setStatus, initialConfig) {
       return 'MissingNetConnection';
     } else if (storedState.error) {
       return 'Error';
-    } else if (['Valid', 'Validating'].includes(storedState.state)) {
+    } else if (storedState.state === 'Validating') {
       return 'Token';
+    } else if (storedState.state === 'Valid') {
+      return storedState.isInspectable ? 'Token' : 'NotInspectable';
     } else {
       return 'Loading';
     }
@@ -84,14 +86,20 @@ function createClient(setStatus, initialConfig) {
 
       (0, _token.startTokenStateMachine)(abtTokensService, setStatusWrapper, safetyNetApiKey, forceRestart, currentAccountId);
     },
-    generateQrCode: () => {
+    generateQrCode: async () => {
       var _currentStatus2;
 
       if (!currentAccountId || ((_currentStatus2 = currentStatus) === null || _currentStatus2 === void 0 ? void 0 : _currentStatus2.visualState) !== 'Token') {
         return Promise.resolve(undefined);
       }
 
-      return (0, _native.getSecureToken)(currentAccountId, [_types.PayloadAction.ticketInspection]);
+      const token = await (0, _native.getToken)(currentAccountId);
+
+      if (!token) {
+        return Promise.reject(new Error('Token not found'));
+      }
+
+      return (0, _native.getSecureToken)(currentAccountId, token.tokenId, true, [_types.PayloadAction.ticketInspection]);
     }
   };
 }

@@ -3,7 +3,9 @@ import type { Token } from '@entur/react-native-traveller';
 export type InitializeTokenRequest = {
   requireAttestation: boolean;
   deviceName: string;
-  keyValues?: Map<string, string>;
+  keyValues?: {
+    [key: string]: string;
+  };
 };
 
 export type InitializeTokenResponse = {
@@ -14,10 +16,42 @@ export type InitializeTokenResponse = {
   nonceValidityEnd: number;
 };
 
+export type TokenLifecycleState =
+  | 'TOKEN_LIFECYCLE_STATE_UNSPECIFIED'
+  | 'TOKEN_LIFECYCLE_STATE_NOT_ACTIVATED'
+  | 'TOKEN_LIFECYCLE_STATE_ACTIVATED'
+  | 'TOKEN_LIFECYCLE_STATE_CANCELLED'
+  | 'TOKEN_LIFECYCLE_STATE_REMOVED';
+
+export type TokenType =
+  | 'TOKEN_TYPE_UNSPECIFIED'
+  | 'TOKEN_TYPE_QR_SMARTPHONE'
+  | 'TOKEN_TYPE_QR_PAPER'
+  | 'TOKEN_TYPE_TRAVELCARD'
+  | 'TOKEN_TYPE_REFERENCE_CODE'
+  | 'TOKEN_TYPE_PLAIN_UNSIGNED'
+  | 'TOKEN_TYPE_EXTERNAL';
+
+export type TokenAction =
+  | 'TOKEN_ACTION_UNSPECIFIED'
+  | 'TOKEN_ACTION_TICKET_TRANSFER'
+  | 'TOKEN_ACTION_ADD_REMOVE_TOKEN'
+  | 'TOKEN_ACTION_IDENTIFICATION'
+  | 'TOKEN_ACTION_TICKET_INSPECTION'
+  | 'TOKEN_ACTION_GET_FARECONTRACTS'
+  | 'TOKEN_ACTION_TRAVELCARD'
+  | 'TOKEN_ACTION_CONSUME_ACCESS_RIGHTS';
+
 export type ListTokensResponse = {
   id: string;
-  // deviceName: string;
-  // deviceId: string;
+  expires: number;
+  state: TokenLifecycleState;
+  type: TokenType;
+  allowedActions: TokenAction[];
+  deviceName: string;
+  keyValues?: {
+    [key: string]: string;
+  };
 }[];
 
 export type GetTokenCertificateResponse = ActivateTokenResponse;
@@ -121,23 +155,36 @@ export type StoredState = {
         | 'Loading'
         | 'InitiateNew'
         | 'DeleteLocal'
-        | 'InitiateRenewal'
-        | 'NotSupported'
-        | 'Valid'
-        | 'GettingTokenCertificate';
+        | 'NotSupported';
     }
+  | {
+      state: 'GettingTokenCertificate' | 'InitiateRenewal';
+      tokenId: string;
+    }
+  | { state: 'Valid'; isInspectable: boolean }
   | {
       state: 'Validating';
       token: Token;
     }
   | {
-      state: 'AttestNew' | 'AttestRenewal';
+      state: 'AttestNew';
       initiatedData: InitializeTokenResponse;
     }
   | {
-      state: 'ActivateNew' | 'ActivateRenewal';
+      state: 'AttestRenewal';
+      initiatedData: InitializeTokenResponse;
+      oldTokenId: string;
+    }
+  | {
+      state: 'ActivateNew';
       attestationData: ActivateTokenRequest;
       tokenId: string;
+    }
+  | {
+      state: 'ActivateRenewal';
+      attestationData: ActivateTokenRequest;
+      tokenId: string;
+      oldTokenId: string;
     }
   | {
       state: 'AddToken';
@@ -147,6 +194,7 @@ export type StoredState = {
 
 export type VisualState =
   | 'Token'
+  | 'NotInspectable'
   | 'Loading'
   | 'Error'
   | 'MissingNetConnection';

@@ -22,11 +22,11 @@
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<data>
-		DWKjz8wbm7f/a3N3DQZkD8gdVh8=
+		c4jeZgMrxJu/brQklVGzCoTCX+Y=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		UJoyR7ToQ9Ib+6kx4XfVicyaZXM=
+		8sOKFzn7qpL7z+wPKByR544ItQI=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftdoc</key>
 		<data>
@@ -34,11 +34,11 @@
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftinterface</key>
 		<data>
-		DWKjz8wbm7f/a3N3DQZkD8gdVh8=
+		c4jeZgMrxJu/brQklVGzCoTCX+Y=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		UJoyR7ToQ9Ib+6kx4XfVicyaZXM=
+		8sOKFzn7qpL7z+wPKByR544ItQI=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -72,14 +72,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			1q4nDtIy64UR7ObNnYImAYLMbEkKfM6Wqm4lkt4SxzM=
+			WjAr9oB1TgD+MCWUmRziaOLDOQqzk+CzHUjXspPf6aA=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			6doqQndPa8WyMhkw4ho0XPrl5jCSiGhjwJDMlwnpHP4=
+			1f2W8xpfBG+3qQr/aP0/egyRlXOmZx38cK8O4ZYUrww=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftdoc</key>
@@ -93,14 +93,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			1q4nDtIy64UR7ObNnYImAYLMbEkKfM6Wqm4lkt4SxzM=
+			WjAr9oB1TgD+MCWUmRziaOLDOQqzk+CzHUjXspPf6aA=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			6doqQndPa8WyMhkw4ho0XPrl5jCSiGhjwJDMlwnpHP4=
+			1f2W8xpfBG+3qQr/aP0/egyRlXOmZx38cK8O4ZYUrww=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

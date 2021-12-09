@@ -8,7 +8,7 @@ import type {
   TokenStatus,
   VisualState,
 } from './token/types';
-import { getSecureToken } from './native';
+import { getSecureToken, getToken } from './native';
 import { PayloadAction } from './native/types';
 
 export type { Token } from './native/types';
@@ -32,8 +32,10 @@ export default function createClient(
       return 'MissingNetConnection';
     } else if (storedState.error) {
       return 'Error';
-    } else if (['Valid', 'Validating'].includes(storedState.state)) {
+    } else if (storedState.state === 'Validating') {
       return 'Token';
+    } else if (storedState.state === 'Valid') {
+      return storedState.isInspectable ? 'Token' : 'NotInspectable';
     } else {
       return 'Loading';
     }
@@ -85,12 +87,20 @@ export default function createClient(
         currentAccountId
       );
     },
-    generateQrCode: (): Promise<string | undefined> => {
+    generateQrCode: async (): Promise<string | undefined> => {
       if (!currentAccountId || currentStatus?.visualState !== 'Token') {
         return Promise.resolve(undefined);
       }
 
-      return getSecureToken(currentAccountId, [PayloadAction.ticketInspection]);
+      const token = await getToken(currentAccountId);
+
+      if (!token) {
+        return Promise.reject(new Error('Token not found'));
+      }
+
+      return getSecureToken(currentAccountId, token.tokenId, true, [
+        PayloadAction.ticketInspection,
+      ]);
     },
   };
 }

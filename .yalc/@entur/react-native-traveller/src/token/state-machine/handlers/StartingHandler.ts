@@ -3,6 +3,7 @@ import { stateHandlerFactory } from '../HandlerFactory';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getStoreKey } from '../utils';
 import { getAttestationSupport, start as startNative } from '../../../native';
+import type { StoredState } from 'src/token/types';
 
 export default function startingHandler(
   safetyNetApiKey: string,
@@ -33,7 +34,14 @@ export default function startingHandler(
       };
     }
 
-    const savedState = JSON.parse(savedStateString);
+    const savedState: StoredState = JSON.parse(savedStateString);
+
+    if (savedState.state === 'Valid') {
+      return {
+        accountId: s.accountId,
+        state: 'Loading',
+      };
+    }
 
     return {
       ...savedState,
