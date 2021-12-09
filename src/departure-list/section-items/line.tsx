@@ -300,6 +300,7 @@ const useItemStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   },
   lineHeader: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   scrollContainer: {
     marginBottom: theme.spacings.medium,

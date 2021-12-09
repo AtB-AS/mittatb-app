@@ -28,11 +28,17 @@ const TransportationIcon: React.FC<TransportationIconProps> = ({
   subMode,
 }) => {
   const {t} = useTranslation();
-  const color = useTransportationColor(mode, subMode);
+  const color = useTransportationColor(mode, subMode, 'color');
+  const backgroundColor = useTransportationColor(
+    mode,
+    subMode,
+    'backgroundColor',
+  );
   const svg = getTransportModeSvg(mode);
+  const styles = useStyles();
 
   return svg ? (
-    <View>
+    <View style={[styles.transportationIcon, {backgroundColor}]}>
       <ThemeIcon
         svg={svg}
         fill={color}
@@ -63,3 +69,10 @@ export function getTransportModeSvg(mode?: LegMode | TransportMode | Mode_v2) {
       return null;
   }
 }
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  transportationIcon: {
+    padding: 3,
+    borderRadius: theme.border.radius.small,
+  },
+}));

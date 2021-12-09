@@ -12,6 +12,8 @@ import {textNames, TextNames, ThemeColor} from '@atb/theme/colors';
 import React from 'react';
 import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {LegMode, TransportSubmode} from '@atb/sdk';
+import TransportationIcon from '@atb/components/transportation-icon';
 
 export default function DesignSystem() {
   const style = useProfileHomeStyle();
@@ -48,6 +50,15 @@ export default function DesignSystem() {
 
               <ThemeIcon svg={BlankTicket} colorType="error" />
               <ThemeIcon svg={BlankTicket} colorType="disabled" size="small" />
+            </View>
+            <View style={style.icons}>
+              <TransportationIcon
+                mode={LegMode.BUS}
+                subMode={TransportSubmode.LOCAL_BUS}
+              />
+              {Object.values(LegMode).map((mode) => (
+                <TransportationIcon mode={mode} />
+              ))}
             </View>
           </Sections.GenericItem>
         </Sections.Section>
