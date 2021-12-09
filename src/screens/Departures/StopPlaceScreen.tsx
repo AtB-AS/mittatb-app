@@ -20,10 +20,11 @@ import ThemeText from '@atb/components/text';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {BusSide} from '@atb/assets/svg/icons/transportation';
-import {dictionary, useTranslation} from '@atb/translations';
+import {dictionary, Language, useTranslation} from '@atb/translations';
 import {
+  formatToClock,
   formatToClockOrRelativeMinutes,
-  formatToTwoLineDateTime,
+  formatToShortDate,
 } from '@atb/utils/date';
 import {Quay} from '@entur/sdk';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
@@ -37,7 +38,7 @@ import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {Date as DateIcon} from '@atb/assets/svg/icons/time';
 import {SearchTime} from './Departures';
-import {addDays, isToday, parseISO} from 'date-fns';
+import {addDays, isSameDay, isToday, parseISO} from 'date-fns';
 import DepartureTimeSheet from '../Nearby/DepartureTimeSheet';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
@@ -428,6 +429,16 @@ function publicCodeCompare(a: string, b: string): number {
   }
   // Otherwise compare as strings (e.g. K1 < K2)
   return a.localeCompare(b);
+}
+
+function formatToTwoLineDateTime(isoDate: string, language: Language) {
+  const parsed = parseISO(isoDate);
+  if (isSameDay(parsed, new Date())) {
+    return formatToClock(parsed, language);
+  }
+  return (
+    formatToShortDate(parsed, language) + '\n' + formatToClock(parsed, language)
+  );
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
