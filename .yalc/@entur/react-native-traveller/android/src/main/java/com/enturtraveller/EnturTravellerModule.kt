@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
+import android.provider.Settings
 import android.util.Base64
 import android.util.Log
 import com.facebook.react.bridge.*
@@ -84,6 +85,27 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
   }
 
   @ReactMethod
+  fun getDeviceName(promise: Promise) {
+    try {
+      var deviceName = Settings.Secure.getString(reactApplicationContext.contentResolver, "bluetooth_name")
+      if (deviceName != null) {
+        promise.resolve(deviceName)
+      }
+      if (Build.VERSION.SDK_INT >= 25) {
+        deviceName = Settings.Global.getString(reactApplicationContext.contentResolver, Settings.Global.DEVICE_NAME)
+        if (deviceName != null) {
+          promise.resolve(deviceName)
+        }
+      }
+      if (deviceName == null) {
+        throw Exception("Device name not found")
+      }
+    } catch (err: Error) {
+      promise.reject("GET DEVICE NAME ERROR", err.localizedMessage)
+    }
+  }
+
+  @ReactMethod
   fun getToken(accountId: String, promise: Promise) {
     if (!started) {
       promise.reject(Throwable("The start-function must be called before any other native method"))
@@ -115,7 +137,7 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
   }
 
   @ReactMethod
-  fun getSecureToken(accountId: String, actions: ReadableArray, promise: Promise) {
+  fun getSecureToken(accountId: String, tokenId: String, includeCertificate: Boolean, actions: ReadableArray, promise: Promise) {
     if (!started) {
       promise.reject(Throwable("The start-function must be called before any other native method"))
       return
@@ -137,18 +159,24 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
       for (i in 0 until size) {
         tokenActions.add(TokenAction.forNumber(actions.getInt(i)))
       }
-      val token = tokenStore!!.getToken(getTokenContext(accountId))
-      if (token != null) {
-        val container = token.encodeAsSecureContainer(TokenEncodingRequest(Collections.emptyList(), tokenActions.toTypedArray()))
-        if (container != null) {
-          val encoded = Base64.encodeToString(container.toByteArray(), Base64.NO_WRAP)
-          Log.d("ENCODED", encoded)
-          promise.resolve(encoded)
-        } else {
-          throw Throwable("Container is null")
-        }
+
+      var tokenContext = getTokenContext(accountId)
+
+      var token = tokenStore!!.getToken(tokenContext)
+
+      if (token == null || token.tokenId != tokenId) {
+        val signatureKey: PrivateKey = tokenKeyStore!!.getSignaturePrivateKey(tokenContext, tokenId)
+        val encryptionKey: PrivateKey = tokenKeyStore!!.getEncryptionPrivateKey(tokenContext, tokenId)
+        token = NonActivatedToken(tokenId, signatureKey, encryptionKey, this.encoder, tokenContext.incrementStrainNumber(), tokenContext)
+      }
+
+      val container = token.encodeAsSecureContainer(TokenEncodingRequest(Collections.emptyList(), tokenActions.toTypedArray(), includeCertificate))
+      if (container != null) {
+        val encoded = Base64.encodeToString(container.toByteArray(), Base64.NO_WRAP)
+        Log.d("ENCODED", encoded)
+        promise.resolve(encoded)
       } else {
-        throw Throwable("Token is null")
+        throw Throwable("Container is null")
       }
     } catch (err: Error) {
       Log.d("GET_SECURE_TOKEN_ERROR", err.localizedMessage)

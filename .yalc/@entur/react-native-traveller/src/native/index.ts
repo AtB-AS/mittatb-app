@@ -31,7 +31,13 @@ export type EnturTravellerType = {
   ): Promise<void>;
   getToken(accountId: string): Promise<Token | undefined>;
   deleteToken(accountId: string): Promise<void>;
-  getSecureToken(accountId: string, actions: PayloadAction[]): Promise<string>;
+  getSecureToken(
+    accountId: string,
+    tokenId: string,
+    includeCertificate: boolean,
+    actions: PayloadAction[]
+  ): Promise<string>;
+  getDeviceName(): Promise<string>;
 };
 
 export const {
@@ -42,5 +48,6 @@ export const {
   getToken,
   deleteToken,
   getSecureToken,
+  getDeviceName,
   getAttestationSupport,
 }: EnturTravellerType = NativeModules.EnturTraveller;

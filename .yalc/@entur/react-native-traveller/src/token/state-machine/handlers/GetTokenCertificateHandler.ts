@@ -8,7 +8,7 @@ export default function getTokenCertificateHandler(
   abtTokensService: AbtTokensService
 ): StateHandler {
   return stateHandlerFactory(['GettingTokenCertificate'], async (s) => {
-    const signedToken = await getSecureToken(s.accountId, [
+    const signedToken = await getSecureToken(s.accountId, s.tokenId, false, [
       PayloadAction.addRemoveToken,
     ]);
     const tokenCertificateResponse = await abtTokensService.getTokenCertificate(

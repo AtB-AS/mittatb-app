@@ -48,6 +48,14 @@ function startingHandler(safetyNetApiKey, forceRestart) {
     }
 
     const savedState = JSON.parse(savedStateString);
+
+    if (savedState.state === 'Valid') {
+      return {
+        accountId: s.accountId,
+        state: 'Loading'
+      };
+    }
+
     return { ...savedState,
       error: undefined
     };

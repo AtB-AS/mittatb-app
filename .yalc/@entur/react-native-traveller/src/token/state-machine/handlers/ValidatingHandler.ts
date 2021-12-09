@@ -8,10 +8,22 @@ export default function validatingHandler(
 ): StateHandler {
   return stateHandlerFactory(['Validating'], async (s) => {
     const tokens: ListTokensResponse = await abtTokensService.listTokens();
-    const tokenFound = tokens.some((t) => t.id === s.token.tokenId);
+    const token = tokens.find((t) => t.id === s.token.tokenId);
+    if (!token) {
+      return {
+        accountId: s.accountId,
+        state: 'DeleteLocal',
+      };
+    }
+
+    const isInspectable = token.allowedActions.some(
+      (a) => a === 'TOKEN_ACTION_TICKET_INSPECTION'
+    );
+
     return {
       accountId: s.accountId,
-      state: tokenFound ? 'Valid' : 'DeleteLocal',
+      state: 'Valid',
+      isInspectable,
     };
   });
 }

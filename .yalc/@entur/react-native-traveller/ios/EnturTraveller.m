@@ -35,7 +35,12 @@ RCT_EXTERN_METHOD(deleteToken:(nonnull NSString *)accountId
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(getDeviceName:(RCTPromiseResolveBlock)resolve
+                 withRejecter:(RCTPromiseRejectBlock)reject)
+
 RCT_EXTERN_METHOD(getSecureToken:(nonnull NSString *)accountId
+                 withTokenId:(nonnull NSString *)tokenId
+                 withIncludeCertificate:(nonnull BOOL *)includeCertificate
                  withActions:(nonnull NSArray *)actions
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
