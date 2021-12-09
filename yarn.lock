@@ -3,9 +3,9 @@
 
 
 "@atb-as/theme@^5.0.0":
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-5.0.2.tgz#c6b16d5f423aa33c651dc27b9261b658f54bf151"
-  integrity sha512-aS4qegpp8XbT1ro/qbQ9AjOk7AlW3m3taiD+YYk3YeSVlNBM2L1HnUoMfcNvuog98Xg5X+giBUWXYbLSpl1qbQ==
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-5.0.3.tgz#1c3a69217dcc4a938fad1685e8d82f272f4770eb"
+  integrity sha512-SrLH5zlQgSw37N4zC4h4hk1UKHZRloJLa2CQYu/xM60wYCfGk8nN36kAZwSKJjSVruDFWYtkHf5i6HzDjxYMOA==
   dependencies:
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^1.0.7"
