@@ -137,6 +137,7 @@ const reducer: ReducerWithSideEffects<
           error: undefined,
           isFetchingMore: true,
           searchTime: {option, date: startTime},
+          lastRefreshTime: new Date(),
           queryInput,
         },
         async (state, dispatch) => {
@@ -295,7 +296,6 @@ const reducer: ReducerWithSideEffects<
           : (state.data ?? []).concat(action.result.data),
         cursorInfo: action.result.metadata,
         tick: new Date(),
-        lastRefreshTime: new Date(),
       });
     }
 
