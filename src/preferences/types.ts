@@ -21,6 +21,7 @@ export type UserPreferences = {
   defaultUserTypeString?: string;
   departuresShowOnlyFavorites?: boolean;
   newDepartures?: boolean;
+  useExperimentalTripSearch?: boolean;
 };
 
 export type PreferenceItem = keyof UserPreferences;

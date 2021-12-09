@@ -50,7 +50,7 @@ import {
 } from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {View} from 'react-native';
+import {BackHandler, View} from 'react-native';
 import {AssistantParams} from '.';
 import Loading from '../Loading';
 import FadeBetween from './FadeBetween';
@@ -318,7 +318,7 @@ const Assistant: React.FC<Props> = ({
                 language,
               )}
               accessibilityHint={t(AssistantTexts.dateInput.a11yHint)}
-              color="secondary_3"
+              color="primary_2"
               onPress={onSearchTimePress}
             />
           </View>
@@ -407,6 +407,21 @@ const Assistant: React.FC<Props> = ({
         break;
     }
   }, [searchState]);
+
+  // Reset view on back press instead of exiting app
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        if (screenHasFocus && from && to) {
+          resetView();
+          return true; // prevent default action
+        }
+        return false;
+      },
+    );
+    return () => backHandler.remove();
+  });
 
   return (
     <DisappearingHeader

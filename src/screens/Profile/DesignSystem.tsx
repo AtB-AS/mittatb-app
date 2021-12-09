@@ -21,7 +21,9 @@ export default function DesignSystem() {
     <Button
       key={themeName}
       text={themeName}
-      onPress={presser}
+      onPress={() =>
+        Alert.alert(theme.colors[themeName as ThemeColor].backgroundColor)
+      }
       color={themeName as ThemeColor}
     />
   ));

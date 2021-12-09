@@ -41,6 +41,7 @@ import {SearchTime} from './Departures';
 import {addDays, isToday, parseISO} from 'date-fns';
 import DepartureTimeSheet from '../Nearby/DepartureTimeSheet';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 5;
 
@@ -383,9 +384,9 @@ function LineChip({
   transportSubmode,
 }: LineChipProps): JSX.Element {
   const styles = useStyles();
-  const svg = getTransportModeSvg(transportMode);
+  const svg = getTransportModeSvg(transportMode as Mode_v2 | undefined);
   const transportColor = useTransportationColor(
-    transportMode,
+    transportMode as Mode_v2 | undefined,
     transportSubmode,
   );
 

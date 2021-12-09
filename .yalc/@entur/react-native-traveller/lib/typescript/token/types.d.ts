@@ -75,13 +75,13 @@ export declare type TokenStatus = {
     error?: TokenError;
     visualState: VisualState;
 };
-declare const tokenStates: readonly ["Starting", "Loading", "Valid", "GettingTokenCertificate", "Validating", "DeleteLocal", "InitiateNew", "InitiateRenewal", "AttestNew", "AttestRenewal", "ActivateNew", "ActivateRenewal", "AddToken"];
+declare const tokenStates: readonly ["Starting", "NotSupported", "Loading", "Valid", "GettingTokenCertificate", "Validating", "DeleteLocal", "InitiateNew", "InitiateRenewal", "AttestNew", "AttestRenewal", "ActivateNew", "ActivateRenewal", "AddToken"];
 export declare type TokenState = typeof tokenStates[number];
 export declare type StoredState = {
     accountId: string;
     error?: TokenError;
 } & ({
-    state: 'Starting' | 'Loading' | 'InitiateNew' | 'DeleteLocal' | 'InitiateRenewal' | 'Valid' | 'GettingTokenCertificate';
+    state: 'Starting' | 'Loading' | 'InitiateNew' | 'DeleteLocal' | 'InitiateRenewal' | 'NotSupported' | 'Valid' | 'GettingTokenCertificate';
 } | {
     state: 'Validating';
     token: Token;
