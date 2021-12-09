@@ -183,8 +183,6 @@ const translateLoadingMessage = (
       return t(PaymentCreditCardTexts.stateMessages.loading);
     case 'processing-payment':
       return t(PaymentCreditCardTexts.stateMessages.processing);
-    case 'processing-payment':
-      return t(PaymentCreditCardTexts.stateMessages.processing);
   }
 };
 
