@@ -40,6 +40,7 @@ export function isInspectable(
 ) {
   return (
     !hasActiveTravelCard &&
+    visualState !== 'NotInspectable' &&
     (isSingleTicket(travelRight) || visualState === 'Token')
   );
 }
