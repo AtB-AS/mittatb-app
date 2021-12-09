@@ -142,6 +142,7 @@ const reducer: ReducerWithSideEffects<
             // Fresh fetch, reset paging and use new query input with new startTime
             const result = await getStopPlaceDepartures({
               id: action.stopPlace.id,
+              startTime: queryInput.startTime,
             });
 
             const estimatedCalls: DepartureTypes.EstimatedCall[] = [];
