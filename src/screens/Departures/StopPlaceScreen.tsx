@@ -400,18 +400,26 @@ function LineChip({
     transportMode as Mode_v2 | undefined,
     transportSubmode,
   );
+  const transportTextColor = useTransportationColor(
+    transportMode as Mode_v2 | undefined,
+    transportSubmode,
+    'color',
+  );
 
   return (
     <View style={[styles.lineChip, {backgroundColor: transportColor}]}>
       <View style={styles.chipContent}>
         {svg && (
           <ThemeIcon
-            colorType="primary_2"
+            fill={transportTextColor}
             style={styles.lineChipIcon}
             svg={svg || BusSide}
           ></ThemeIcon>
         )}
-        <ThemeText style={styles.lineChipText} type="body__primary--bold">
+        <ThemeText
+          style={[styles.lineChipText, {color: transportTextColor}]}
+          type="body__primary--bold"
+        >
           {publicCode}
         </ThemeText>
       </View>
