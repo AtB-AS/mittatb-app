@@ -205,13 +205,13 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
       return
     }
 
-    if (tokenValidityStart > 0) {
-      promise.reject(Throwable("tokenValidityStart must be greater then 0"))
+    if (tokenValidityStart <= 0) {
+      promise.reject(Throwable("tokenValidityStart must be greater than 0"))
       return
     }
 
-    if (tokenValidityEnd > 0) {
-      promise.reject(Throwable("tokenValidityEnd must be greater then 0"))
+    if (tokenValidityEnd <= 0) {
+      promise.reject(Throwable("tokenValidityEnd must be greater than 0"))
       return
     }
 
