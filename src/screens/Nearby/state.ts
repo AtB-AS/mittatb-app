@@ -21,6 +21,7 @@ import {DeparturesRealtimeData} from '@atb/sdk';
 import {differenceInMinutes} from 'date-fns';
 import useInterval from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '../../departure-list/utils';
+import {SearchTime} from './types';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
@@ -41,13 +42,13 @@ export type DepartureDataState = {
   queryInput: DepartureGroupsQuery;
   cursorInfo: DepartureGroupMetadata['metadata'] | undefined;
   lastRefreshTime: Date;
+  searchTime: SearchTime;
 };
 
-const initialQueryInput: DepartureGroupsQuery = {
-  limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
-  startTime: new Date().toISOString(),
-};
-const initialState: DepartureDataState = {
+const initialState: Omit<
+  DepartureDataState,
+  'searchTime' | 'queryInput' | 'lastRefreshTime'
+> = {
   data: null,
   showOnlyFavorites: false,
   error: undefined,
@@ -55,9 +56,6 @@ const initialState: DepartureDataState = {
   isLoading: false,
   isFetchingMore: false,
   cursorInfo: undefined,
-  queryInput: initialQueryInput,
-  lastRefreshTime: new Date(),
-
   // Store date as update tick to know when to rerender
   // and re-sort objects.
   tick: undefined,
@@ -65,9 +63,14 @@ const initialState: DepartureDataState = {
 
 type DepartureDataActions =
   | {
+      type: 'SET_SEARCH_TIME';
+      searchTime: SearchTime;
+      location?: Location;
+      favoriteDepartures?: UserFavoriteDepartures;
+    }
+  | {
       type: 'LOAD_INITIAL_DEPARTURES';
       location?: Location;
-      startTime?: string;
       favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
@@ -116,10 +119,15 @@ const reducer: ReducerWithSideEffects<
       if (!action.location) return NoUpdate();
 
       // Update input data with new date as this
-      // is a fresh fetch. We should fetch tha latest information.
+      // is a fresh fetch. We should fetch the latest information.
+
+      const {option, date} = state.searchTime;
+
+      const startTime = option === 'now' ? new Date().toISOString() : date;
+
       const queryInput: DepartureGroupsQuery = {
         limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
-        startTime: action.startTime ?? new Date().toISOString(),
+        startTime,
       };
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
@@ -128,6 +136,8 @@ const reducer: ReducerWithSideEffects<
           isLoading: true,
           error: undefined,
           isFetchingMore: true,
+          searchTime: {option, date: startTime},
+          lastRefreshTime: new Date(),
           queryInput,
         },
         async (state, dispatch) => {
@@ -254,7 +264,22 @@ const reducer: ReducerWithSideEffects<
             type: 'LOAD_INITIAL_DEPARTURES',
             location: action.location,
             favoriteDepartures: action.favoriteDepartures,
-            startTime: state.queryInput?.startTime,
+          });
+        },
+      );
+    }
+
+    case 'SET_SEARCH_TIME': {
+      return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
+        {
+          ...state,
+          searchTime: action.searchTime,
+        },
+        async (_, dispatch) => {
+          dispatch({
+            type: 'LOAD_INITIAL_DEPARTURES',
+            location: action.location,
+            favoriteDepartures: action.favoriteDepartures,
           });
         },
       );
@@ -271,7 +296,6 @@ const reducer: ReducerWithSideEffects<
           : (state.data ?? []).concat(action.result.data),
         cursorInfo: action.result.metadata,
         tick: new Date(),
-        lastRefreshTime: new Date(),
       });
     }
 
@@ -313,23 +337,40 @@ const reducer: ReducerWithSideEffects<
  */
 export function useDepartureData(
   location?: Location,
-  startTime?: string,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
 ) {
-  const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
+  const [state, dispatch] = useReducerWithSideEffects(reducer, {
+    ...initialState,
+    searchTime: {option: 'now', date: new Date().toISOString()},
+    queryInput: {
+      limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
+      startTime: new Date().toISOString(),
+    },
+    lastRefreshTime: new Date(),
+  });
   const isFocused = useIsFocused();
   const {favoriteDepartures} = useFavorites();
+
+  const setSearchTime = useCallback(
+    (searchTime: SearchTime) =>
+      dispatch({
+        type: 'SET_SEARCH_TIME',
+        searchTime,
+        location,
+        favoriteDepartures,
+      }),
+    [location?.id, favoriteDepartures],
+  );
 
   const refresh = useCallback(
     () =>
       dispatch({
         type: 'LOAD_INITIAL_DEPARTURES',
         location,
-        startTime,
         favoriteDepartures,
       }),
-    [location?.id, favoriteDepartures, startTime],
+    [location?.id, favoriteDepartures],
   );
 
   const loadMore = useCallback(
@@ -349,7 +390,7 @@ export function useDepartureData(
     [location?.id, favoriteDepartures],
   );
 
-  useEffect(refresh, [location?.id, startTime]);
+  useEffect(refresh, [location?.id]);
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -377,6 +418,7 @@ export function useDepartureData(
     state,
     refresh,
     loadMore,
+    setSearchTime,
     setShowFavorites,
   };
 }
