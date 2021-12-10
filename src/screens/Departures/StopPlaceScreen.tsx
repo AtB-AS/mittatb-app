@@ -42,6 +42,7 @@ import {addDays, isSameDay, isToday, parseISO} from 'date-fns';
 import DepartureTimeSheet from '../Nearby/DepartureTimeSheet';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
+import useFontScale from '@atb/utils/use-font-scale';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 5;
 
@@ -395,26 +396,38 @@ function LineChip({
   transportSubmode,
 }: LineChipProps): JSX.Element {
   const styles = useStyles();
+  const fontScale = useFontScale();
+  const {theme} = useTheme();
   const svg = getTransportModeSvg(transportMode as Mode_v2 | undefined);
   const transportColor = useTransportationColor(
     transportMode as Mode_v2 | undefined,
     transportSubmode,
   );
-
+  const transportTextColor = useTransportationColor(
+    transportMode as Mode_v2 | undefined,
+    transportSubmode,
+    'color',
+  );
   return (
     <View style={[styles.lineChip, {backgroundColor: transportColor}]}>
-      <View style={styles.chipContent}>
-        {svg && (
-          <ThemeIcon
-            colorType="primary_2"
-            style={styles.lineChipIcon}
-            svg={svg || BusSide}
-          ></ThemeIcon>
-        )}
-        <ThemeText style={styles.lineChipText} type="body__primary--bold">
+      {svg && (
+        <ThemeIcon
+          fill={transportTextColor}
+          style={{marginRight: publicCode ? theme.spacings.small : 0}}
+          svg={svg}
+        ></ThemeIcon>
+      )}
+      {publicCode && (
+        <ThemeText
+          style={[
+            styles.lineChipText,
+            {color: transportTextColor, minWidth: fontScale * 20},
+          ]}
+          type="body__primary--bold"
+        >
           {publicCode}
         </ThemeText>
-      </View>
+      )}
     </View>
   );
 }
@@ -465,21 +478,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginRight: theme.spacings.medium,
   },
   lineChip: {
-    minWidth: 70,
     padding: theme.spacings.small,
     borderRadius: theme.border.radius.regular,
     marginRight: theme.spacings.medium,
-  },
-  chipContent: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  lineChipIcon: {
-    marginRight: theme.spacings.small,
   },
   lineChipText: {
     color: theme.colors.primary_2.color,
-    textAlign: 'right',
+    textAlign: 'center',
   },
   stopPlaceHeader: {
     flexDirection: 'row',
