@@ -2,7 +2,6 @@ import React from 'react';
 import {
   AccessibilityProps,
   GestureResponderEvent,
-  StyleSheet,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -14,6 +13,7 @@ import {screenReaderPause} from '../accessible-text';
 import ThemeText from '@atb/components/text';
 import TransportationIcon from '@atb/components/transportation-icon';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
+import {StyleSheet, Theme} from '@atb/theme';
 
 type BaseProps = {
   favorite: StoredFavoriteDeparture;
@@ -58,13 +58,14 @@ function withOnPress(a: any): a is WithOnPress {
 
 function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
-  const style = useSectionStyle();
+  const sectonStyle = useSectionStyle();
+  const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
 
   return (
-    <View style={[style.spaceBetween, topContainer, favoriteStyle.flexStart]}>
-      <View style={favoriteStyle.favorite__icon}>
+    <View style={[sectonStyle.spaceBetween, topContainer, styles.flexStart]}>
+      <View style={styles.favorite__icon}>
         <TransportationIcon
           mode={favorite.lineTransportationMode}
           subMode={favorite.lineTransportationSubMode}
@@ -86,7 +87,7 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
   );
 }
 
-const favoriteStyle = StyleSheet.create({
+const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   flexStart: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -94,4 +95,4 @@ const favoriteStyle = StyleSheet.create({
   favorite__icon: {
     marginRight: 12,
   },
-});
+}));
