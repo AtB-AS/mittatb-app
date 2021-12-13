@@ -93,6 +93,6 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     justifyContent: 'center',
   },
   favorite__icon: {
-    marginRight: 12,
+    marginRight: theme.spacings.medium,
   },
 }));
