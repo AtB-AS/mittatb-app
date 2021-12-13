@@ -117,7 +117,7 @@ export default function StopPlaceScreen({
             });
           }}
           text="Alle stopp"
-          color={selectedQuay ? 'secondary_4' : 'secondary_3'}
+          color={selectedQuay ? 'secondary_2' : 'secondary_3'}
           style={[styles.quayChip, {marginLeft: theme.spacings.medium}]}
         ></Button>
         {stopPlaceDetails.quays?.map((quay) => (
@@ -132,7 +132,7 @@ export default function StopPlaceScreen({
             text={
               quay.publicCode ? quay.name + ' ' + quay.publicCode : quay.name
             }
-            color={selectedQuay?.id === quay.id ? 'secondary_3' : 'secondary_4'}
+            color={selectedQuay?.id === quay.id ? 'secondary_3' : 'secondary_2'}
             style={styles.quayChip}
           ></Button>
         ))}
