@@ -88,9 +88,10 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
 
 const favoriteStyle = StyleSheet.create({
   flexStart: {
-    alignItems: 'flex-start',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   favorite__icon: {
-    minWidth: 30,
+    marginRight: 12,
   },
 });
