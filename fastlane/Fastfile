@@ -72,11 +72,10 @@ platform :ios do
 
   desc 'Upload app to testflight'
   lane :testflight_prod do
-    ensure_env_vars(
-      env_vars: ['APPCENTER_API_KEY']
-    )
+    ensure_env_vars('APPCONNECT_API_KEY_PATH'),
     pilot(
-      api_key_path:'/Users/morten.lundenes/Documents/KundeProsjekter/Entur/app-store-connect-api-key/AuthKey_65Z6HDTLY6.json'
+      api_key_path:ENV['APPCONNECT_API_KEY_PATH'],
+      skip_waiting_for_build_processing:true
     )
   end
 
