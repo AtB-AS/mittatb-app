@@ -216,17 +216,18 @@ export default function StopPlaceScreen({
               )}
               {!selectedQuay && !hiddenQuays[index] && (
                 <Sections.LinkItem
-                  icon="expand-more"
-                  text="Vis flere avganger"
+                  icon="arrow-right"
+                  text={
+                    quay.publicCode
+                      ? quay.name + ' ' + quay.publicCode
+                      : quay.name
+                  }
                   textType="body__primary--bold"
                   onPress={() => {
-                    expandQuay(
-                      quay,
-                      index,
-                      expandedQuays,
-                      setExpandedQuays,
-                      getDeparturesForQuay(state.data, quay).length,
-                    );
+                    navigation.navigate('StopPlaceScreen', {
+                      stopPlaceDetails,
+                      selectedQuay: quay,
+                    });
                   }}
                 ></Sections.LinkItem>
               )}
