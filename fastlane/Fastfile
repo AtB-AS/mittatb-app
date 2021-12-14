@@ -18,10 +18,15 @@ platform :ios do
   desc "Generate new certificates"
   lane :generate_new_certificates do
     ensure_env_vars(
-      env_vars: ['FASTLANE_TEAM_ID', 'MATCH_APP_IDENTIFIER', 'MATCH_GIT_URL', 'MATCH_USERNAME', 'MATCH_TYPE']
+      env_vars: ['IOS_DEVELOPMENT_TEAM_ID', 'IOS_BUNDLE_IDENTIFIER', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_USERNAME', 'FASTLANE_MATCH_TYPE']
     )
     match(
       readonly: false,
+      team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
+      app_identifier:ENV['IOS_BUNDLE_IDENTIFIER'],
+      git_url:ENV['FASTLANE_MATCH_GIT_URL'],
+      username:ENV['FASTLANE_MATCH_USERNAME'],
+      type:ENV['FASTLANE_MATCH_TYPE']
     )
   end
 
