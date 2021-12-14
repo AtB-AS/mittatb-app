@@ -72,10 +72,12 @@ platform :ios do
 
   desc 'Upload app to testflight'
   lane :testflight_prod do
-    ensure_env_vars('APPCONNECT_API_KEY_PATH'),
+    ensure_env_vars(
+      env_vars: ['APPCONNECT_API_KEY_PATH']
+    )
     pilot(
       api_key_path:ENV['APPCONNECT_API_KEY_PATH'],
-      skip_waiting_for_build_processing:true
+      skip_waiting_for_build_processing:true,
     )
   end
 

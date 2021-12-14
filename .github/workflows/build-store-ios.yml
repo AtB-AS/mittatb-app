@@ -70,6 +70,13 @@ jobs:
           APPCENTER_API_KEY: ${{ secrets.APPCENTER_IOS_API_KEY }}
           RELEASE_NOTES: ${{ steps.get_release.outputs.body }}
           RELEASE_URL: ${{ steps.get_release.outputs.html_url }}
+      - name: Distribute to TestFlight
+        if: matrix.org == 'nfk'
+        run: |
+          echo ${{ secrets.APP_STORE_CONNECT_API_KEY}} | base64 --decode > app-store-connect-api-key.json
+          fastlane ios testflight_prod
+        env:
+          APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
       - name: Create bundle and source maps
         if: matrix.org == 'atb'
         run: sh ./scripts/ios/create-sourcemaps.sh
