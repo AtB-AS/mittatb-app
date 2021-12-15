@@ -1,4 +1,4 @@
-import * as Types from './generated/StopPlaceQuayDeparturesQuery';
+import * as Types from './generated/StopQuayDeparturesQuery';
 
 export type StopPlaceQuayDepartures = Types.StopPlaceQuayDeparturesQuery;
 
