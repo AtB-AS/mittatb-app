@@ -49,5 +49,5 @@ else
     jarsigner -keystore $KEYSTORE_PATH -storepass "$KEYSTORE_PASS" -keypass "$KEY_PASS" -verbose -sigalg MD5withRSA -digestalg SHA1 -signedjar temp-$APK_FILE_NAME temp-$APK_FILE_NAME $KEY_ALIAS
 
     echo "The APK must be aligned to 4 byte boundaries to work on Android"
-    ~/Library/Android/sdk/build-tools/29.0.2/zipalign -f 4 temp-$APK_FILE_NAME $APK_FILE_NAME
+    ~/Library/Android/sdk/build-tools/29.0.2/zipalign -p -f 4 temp-$APK_FILE_NAME $APK_FILE_NAME
 fi
