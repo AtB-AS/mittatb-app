@@ -9,6 +9,8 @@ var _reactNative = require("react-native");
 
 var _HandlerFactory = require("../HandlerFactory");
 
+var _native = require("../../../native");
+
 const requireAttestation = _reactNative.Platform.select({
   default: true,
   ios: false
@@ -16,10 +18,15 @@ const requireAttestation = _reactNative.Platform.select({
 
 function initiateNewHandler(abtTokensService) {
   return (0, _HandlerFactory.stateHandlerFactory)(['InitiateNew'], async s => {
+    let deviceName = 'unknown';
+
+    try {
+      deviceName = await (0, _native.getDeviceName)();
+    } catch {}
+
     const initTokenResponse = await abtTokensService.initToken({
       requireAttestation,
-      deviceName: 'tempDeviceName' // todo: How to get?
-
+      deviceName
     });
     return {
       accountId: s.accountId,

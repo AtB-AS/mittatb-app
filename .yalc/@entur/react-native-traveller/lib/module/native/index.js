@@ -6,6 +6,8 @@ export const {
   addToken,
   getToken,
   deleteToken,
-  getSecureToken
+  getSecureToken,
+  getDeviceName,
+  getAttestationSupport
 } = NativeModules.EnturTraveller;
 //# sourceMappingURL=index.js.map

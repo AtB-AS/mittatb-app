@@ -2,7 +2,7 @@ import { getConfigFromInitialConfig } from './config';
 import { startTokenStateMachine } from './token';
 import { createFetcher } from './fetcher';
 import { createAbtTokensService } from './token/abt-tokens-service';
-import { getSecureToken } from './native';
+import { getSecureToken, getToken } from './native';
 import { PayloadAction } from './native/types';
 export { RequestError } from './fetcher';
 export default function createClient(setStatus, initialConfig) {
@@ -22,8 +22,10 @@ export default function createClient(setStatus, initialConfig) {
       return 'MissingNetConnection';
     } else if (storedState.error) {
       return 'Error';
-    } else if (['Valid', 'Validating'].includes(storedState.state)) {
+    } else if (storedState.state === 'Validating') {
       return 'Token';
+    } else if (storedState.state === 'Valid') {
+      return storedState.isInspectable ? 'Token' : 'NotInspectable';
     } else {
       return 'Loading';
     }
@@ -66,14 +68,20 @@ export default function createClient(setStatus, initialConfig) {
 
       startTokenStateMachine(abtTokensService, setStatusWrapper, safetyNetApiKey, forceRestart, currentAccountId);
     },
-    generateQrCode: () => {
+    generateQrCode: async () => {
       var _currentStatus2;
 
       if (!currentAccountId || ((_currentStatus2 = currentStatus) === null || _currentStatus2 === void 0 ? void 0 : _currentStatus2.visualState) !== 'Token') {
         return Promise.resolve(undefined);
       }
 
-      return getSecureToken(currentAccountId, [PayloadAction.ticketInspection]);
+      const token = await getToken(currentAccountId);
+
+      if (!token) {
+        return Promise.reject(new Error('Token not found'));
+      }
+
+      return getSecureToken(currentAccountId, token.tokenId, true, [PayloadAction.ticketInspection]);
     }
   };
 }

@@ -20,6 +20,7 @@ export default function addTokenHandler(): StateHandler {
     return {
       accountId: s.accountId,
       state: 'Valid',
+      isInspectable: true,
     };
   });
 }

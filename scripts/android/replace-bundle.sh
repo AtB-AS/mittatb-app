@@ -40,7 +40,7 @@ else
     cp bundle/index.android.bundle decompiled-apk/assets/
 
     echo "Set version code to build id: $BUILD_ID"
-    yq write decompiled-apk/apktool.yml versionInfo.versionCode $BUILD_ID
+    yq e ".versionInfo.versionCode = env(BUILD_ID)" -i decompiled-apk/apktool.yml
 
     echo "Re-compile Android APK"
     apktool b decompiled-apk -o temp-$APK_FILE_NAME

@@ -1,6 +1,7 @@
 import { NativeModules } from 'react-native';
 import type {
   AttestationData,
+  AttestationSupport,
   LegacyAttestationData,
   PayloadAction,
   Token,
@@ -8,6 +9,7 @@ import type {
 
 export type EnturTravellerType = {
   start(safetyNetApiKey?: string): Promise<AttestationData>;
+  getAttestationSupport(): Promise<AttestationSupport>;
   attest(
     accountId: string,
     tokenId: string,
@@ -29,7 +31,13 @@ export type EnturTravellerType = {
   ): Promise<void>;
   getToken(accountId: string): Promise<Token | undefined>;
   deleteToken(accountId: string): Promise<void>;
-  getSecureToken(accountId: string, actions: PayloadAction[]): Promise<string>;
+  getSecureToken(
+    accountId: string,
+    tokenId: string,
+    includeCertificate: boolean,
+    actions: PayloadAction[]
+  ): Promise<string>;
+  getDeviceName(): Promise<string>;
 };
 
 export const {
@@ -40,4 +48,6 @@ export const {
   getToken,
   deleteToken,
   getSecureToken,
+  getDeviceName,
+  getAttestationSupport,
 }: EnturTravellerType = NativeModules.EnturTraveller;

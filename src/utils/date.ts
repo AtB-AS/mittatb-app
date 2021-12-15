@@ -160,6 +160,12 @@ export function fullDateTime(isoDate: string | Date, language: Language) {
 
 export {isSameDay};
 
+export function formatToShortDate(date: Date | string, language: Language) {
+  return format(parseIfNeeded(date), 'dd. MMM', {
+    locale: languageToLocale(language),
+  });
+}
+
 export function formatToSimpleDate(date: Date | string, language: Language) {
   return format(parseIfNeeded(date), 'do MMMM', {
     locale: languageToLocale(language),

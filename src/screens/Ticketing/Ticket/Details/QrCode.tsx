@@ -28,6 +28,8 @@ export default function QrCode({validityStatus, isInspectable}: Props) {
       return <QrCodeSvg generateQrCode={generateQrCode} />;
     case 'Error':
       return <QrCodeError />;
+    case 'NotInspectable':
+      return <QrCodeDeviceNotInspectable />;
     case 'MissingNetConnection':
       return <QrCodeMissingNetwork />;
     case 'Loading':
@@ -115,7 +117,6 @@ const useQrCode = (
 
   return tokenQRCode;
 };
-
 const QrCodeError = () => {
   const {t} = useTranslation();
 
@@ -125,6 +126,19 @@ const QrCodeError = () => {
         type={'warning'}
         title={t(TicketTexts.details.qrCodeErrors.generic.title)}
         message={t(TicketTexts.details.qrCodeErrors.generic.text)}
+      />
+    </Sections.GenericItem>
+  );
+};
+const QrCodeDeviceNotInspectable = () => {
+  const {t} = useTranslation();
+
+  return (
+    <Sections.GenericItem>
+      <MessageBox
+        type={'warning'}
+        title={t(TicketTexts.details.qrCodeErrors.notInspectable.title)}
+        message={t(TicketTexts.details.qrCodeErrors.notInspectable.text)}
       />
     </Sections.GenericItem>
   );

@@ -22,6 +22,7 @@ import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketState,
 } from '@atb/tickets';
+import {usePreferences} from '@atb/preferences';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -59,6 +60,11 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
     isAnimating: fadeIsAnimating,
     FadeContainer: ClipboardFadeContainer,
   } = useCopyWithOpacityFade(1500);
+
+  const {
+    setPreference,
+    preferences: {useExperimentalTripSearch, newDepartures},
+  } = usePreferences();
 
   function copyInstallId() {
     if (config?.installId) setClipboard(config.installId);
@@ -243,6 +249,20 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         {(!!JSON.parse(IS_QA_ENV || 'false') || __DEV__) && (
           <Sections.Section withPadding>
             <Sections.HeaderItem text="Developer menu" />
+            <Sections.ActionItem
+              mode="toggle"
+              text={'Enable new departure screen'}
+              checked={newDepartures}
+              onPress={(newDepartures) => setPreference({newDepartures})}
+            />
+            <Sections.ActionItem
+              mode="toggle"
+              text={'Enable experimental trips search'}
+              checked={useExperimentalTripSearch}
+              onPress={(useExperimentalTripSearch) =>
+                setPreference({useExperimentalTripSearch})
+              }
+            />
             <Sections.LinkItem
               text="Design system"
               onPress={() => navigation.navigate('DesignSystem')}
