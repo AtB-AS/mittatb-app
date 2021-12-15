@@ -65,27 +65,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     user_profiles: userProfiles,
   } = useRemoteConfig();
 
-  const [selectedUserProfiles, setSelectedUserProfiles] = useState<
-    UserProfile[]
-  >();
-
-  const selectableProducts = preassignedFareProducts
-    .filter((p) => {
-      const limitedTo = Object.values(p.limitations);
-      let limitedToIds: string[] = [];
-      limitedTo.forEach((arr) => {
-        limitedToIds = [...limitedToIds, ...arr];
-      });
-      const selectedUserProfileIds =
-        selectedUserProfiles?.map((p) => p.id) || [];
-      if (selectedUserProfileIds.length === 0) {
-        return true;
-      }
-      return limitedToIds.some((value) => {
-        return selectedUserProfileIds.includes(value);
-      });
-    })
-    .filter((p) => p.type === params.selectableProductType);
+  const selectableProducts = preassignedFareProducts.filter(
+    (p) => p.type === params.selectableProductType,
+  );
 
   const [preassignedFareProduct, setPreassignedFareProduct] = useState(
     selectableProducts[0],
@@ -101,18 +83,26 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     defaultUserProfilesWithCount,
   );
 
-  useEffect(() => {
-    const selected: UserProfile[] = userProfilesWithCount.filter(
-      (p) => p.count > 0,
-    );
-    setSelectedUserProfiles(selected);
-  }, [userProfilesWithCount]);
+  const [selectableUserProfiles, setSelectableUserProfiles] = useState(
+    defaultUserProfilesWithCount,
+  );
 
   useEffect(() => {
-    if (!selectableProducts.some((p) => p.id === preassignedFareProduct.id)) {
-      setPreassignedFareProduct(selectableProducts[0]);
+    const options = defaultUserProfilesWithCount.filter((p) => {
+      const profileIds = preassignedFareProduct.limitations.userProfileRefs;
+      return profileIds.includes(p.id);
+    });
+    const optionIds = options.map((p) => p.id);
+    const selectedUserProfiles = userProfilesWithCount
+      .filter((p) => p.count > 0)
+      .map((p) => p.id);
+
+    if (!selectedUserProfiles.every((p) => optionIds.includes(p))) {
+      setUserProfilesWithCount(defaultUserProfilesWithCount);
+    } else {
+      setSelectableUserProfiles(options);
     }
-  }, [selectedUserProfiles]);
+  }, [preassignedFareProduct, userProfilesWithCount]);
 
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
   const {
@@ -146,7 +136,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         close={close}
         save={setPreassignedFareProduct}
         preassignedFareProduct={preassignedFareProduct}
-        selectableFareProducts={selectableProducts}
         ref={focusRef}
       />
     ));
@@ -158,7 +147,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         close={close}
         save={setUserProfilesWithCount}
         preassignedFareProduct={preassignedFareProduct}
-        userProfilesWithCount={userProfilesWithCount}
+        userProfilesWithCount={selectableUserProfiles}
         ref={focusRef}
       />
     ));

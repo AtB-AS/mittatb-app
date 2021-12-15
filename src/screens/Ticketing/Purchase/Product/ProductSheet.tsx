@@ -10,19 +10,19 @@ import {
 } from '@atb/translations';
 import Button from '@atb/components/button';
 import {getReferenceDataName} from '@atb/reference-data/utils';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 
 type Props = {
   preassignedFareProduct: PreassignedFareProduct;
-  selectableFareProducts: PreassignedFareProduct[];
   close: () => void;
   save: (preassignedFareProduct: PreassignedFareProduct) => void;
 };
 
 const ProductSheet = forwardRef<ScrollView, Props>(
-  ({preassignedFareProduct, selectableFareProducts, close, save}, focusRef) => {
+  ({preassignedFareProduct, close, save}, focusRef) => {
     const styles = useStyles();
     const {t, language} = useTranslation();
 
@@ -30,7 +30,11 @@ const ProductSheet = forwardRef<ScrollView, Props>(
       preassignedFareProduct,
     );
 
-    const selectableProducts = selectableFareProducts.filter(
+    const {
+      preassigned_fare_products: preassignedFareProducts,
+    } = useRemoteConfig();
+
+    const selectableProducts = preassignedFareProducts.filter(
       (p) => p.type === selectedProduct.type,
     );
 
