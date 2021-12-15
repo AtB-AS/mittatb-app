@@ -65,9 +65,27 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     user_profiles: userProfiles,
   } = useRemoteConfig();
 
-  const selectableProducts = preassignedFareProducts.filter(
-    (p) => p.type === params.selectableProductType,
-  );
+  const [selectedUserProfiles, setSelectedUserProfiles] = useState<
+    UserProfile[]
+  >();
+
+  const selectableProducts = preassignedFareProducts
+    .filter((p) => {
+      const limitedTo = Object.values(p.limitations);
+      let limitedToIds: string[] = [];
+      limitedTo.forEach((arr) => {
+        limitedToIds = [...limitedToIds, ...arr];
+      });
+      const selectedUserProfileIds =
+        selectedUserProfiles?.map((p) => p.id) || [];
+      if (selectedUserProfileIds.length === 0) {
+        return true;
+      }
+      return limitedToIds.some((value) => {
+        return selectedUserProfileIds.includes(value);
+      });
+    })
+    .filter((p) => p.type === params.selectableProductType);
 
   const [preassignedFareProduct, setPreassignedFareProduct] = useState(
     selectableProducts[0],
@@ -82,6 +100,19 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const [userProfilesWithCount, setUserProfilesWithCount] = useState(
     defaultUserProfilesWithCount,
   );
+
+  useEffect(() => {
+    const selected: UserProfile[] = userProfilesWithCount.filter(
+      (p) => p.count > 0,
+    );
+    setSelectedUserProfiles(selected);
+  }, [userProfilesWithCount]);
+
+  useEffect(() => {
+    if (!selectableProducts.some((p) => p.id === preassignedFareProduct.id)) {
+      setPreassignedFareProduct(selectableProducts[0]);
+    }
+  }, [selectedUserProfiles]);
 
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
   const {
@@ -115,6 +146,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         close={close}
         save={setPreassignedFareProduct}
         preassignedFareProduct={preassignedFareProduct}
+        selectableFareProducts={selectableProducts}
         ref={focusRef}
       />
     ));
