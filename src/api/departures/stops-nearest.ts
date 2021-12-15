@@ -3,8 +3,9 @@ import {CursoredData, CursoredQuery, StopPlaceDetails} from '@atb/sdk';
 import {stringifyWithDate} from '@atb/utils/querystring';
 import client from '../client';
 import {FavoriteDeparture} from '@atb/favorites/types';
-import {StopPlaceQuayDepartures, EstimatedCall} from '../types/departures';
+import {StopPlaceQuayDepartures} from '../types/departures';
 import {stringifyUrl} from 'query-string';
+import {QuayDeparturesQuery} from '../types/generated/QuayDeparturesQuery';
 
 export type StopsNearestQuery = CursoredQuery<{
   lat: number;
@@ -21,16 +22,19 @@ export type StopPlaceDeparturesPayload = {
   favorites?: FavoriteDeparture[];
 };
 
-export type StopPlaceDeparturesQuery = CursoredQuery<{
+export type StopPlaceDeparturesQuery = {
   filterByInUse?: boolean;
   id: string;
   numberOfDepartures?: number;
   startTime?: string;
-}>;
+};
 
-export type QuayDeparturesQuery = CursoredQuery<{
+export type QuayDeparturesVariables = {
   id: string;
-}>;
+  numberOfDepartures?: number;
+  startTime?: string;
+  timeRange?: number;
+};
 
 export type StopPlaceMetadata = CursoredData<StopPlaceDetails[]>;
 
@@ -55,11 +59,12 @@ export async function getStopPlaceDepartures(
 }
 
 export async function getQuayDepartures(
-  query: QuayDeparturesQuery,
+  query: QuayDeparturesVariables,
   opts?: AxiosRequestConfig,
-): Promise<EstimatedCall[]> {
-  const url = `${BASE_URL_V2}/quay/${query.id}/departures`;
-  return requestDepartures(url, opts);
+): Promise<QuayDeparturesQuery> {
+  const queryString = stringifyWithDate(query);
+  const url = `${BASE_URL_V2}/quay-departures?${queryString}`;
+  return requestQuayDepartures(url, opts);
 }
 
 async function request(
@@ -70,11 +75,11 @@ async function request(
   return response.data;
 }
 
-async function requestDepartures(
+async function requestQuayDepartures(
   url: string,
   opts?: AxiosRequestConfig,
-): Promise<EstimatedCall[]> {
-  const response = await client.get<EstimatedCall[]>(url, opts);
+): Promise<QuayDeparturesQuery> {
+  const response = await client.get<QuayDeparturesQuery>(url, opts);
   return response.data;
 }
 

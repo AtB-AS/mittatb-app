@@ -17,7 +17,12 @@ import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 // import {useFavorites} from '@atb/favorites';
 // import {Location, UserFavoriteDepartures} from '@atb/favorites/types';
 import {DeparturesRealtimeData, StopPlaceDetails} from '@atb/sdk';
-import {differenceInMinutes} from 'date-fns';
+import {
+  addDays,
+  differenceInMinutes,
+  differenceInSeconds,
+  parseISO,
+} from 'date-fns';
 import useInterval from '@atb/utils/use-interval';
 import {updateDeparturesWithRealtimeV2} from '../../departure-list/utils';
 import {Quay} from '@entur/sdk';
@@ -26,12 +31,14 @@ import {
   getStopPlaceDepartures,
 } from '@atb/api/departures/stops-nearest';
 import * as DepartureTypes from '@atb/api/types/departures';
+import {flatMap} from 'lodash';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
 // Used to re-trigger full refresh after N minutes.
 // To repopulate the view when we get fewer departures.
 const HARD_REFRESH_LIMIT_IN_MINUTES = 10;
+const MIN_TIME_RANGE = 3 * 60 * 60; // Three hours
 
 type LoadType = 'initial' | 'more';
 
@@ -140,29 +147,34 @@ const reducer: ReducerWithSideEffects<
         async (state, dispatch) => {
           try {
             // Fresh fetch, reset paging and use new query input with new startTime
-            const result = await getStopPlaceDepartures({
-              id: action.stopPlace.id,
-              startTime: queryInput.startTime,
-            });
-
-            const estimatedCalls: DepartureTypes.EstimatedCall[] = [];
-            result.stopPlace?.quays?.forEach((quay: DepartureTypes.Quay) =>
-              quay.estimatedCalls.forEach(
-                (estimatedCall: DepartureTypes.EstimatedCall) =>
-                  estimatedCalls.push(estimatedCall),
-              ),
+            const timeUntilMidnight = differenceInSeconds(
+              addDays(parseISO(queryInput.startTime), 1).setHours(0, 0, 0),
+              parseISO(queryInput.startTime),
             );
+            const timeRange = Math.max(timeUntilMidnight, MIN_TIME_RANGE);
 
-            // TODO: Refactor?
-            // const estimatedCalls: EstimatedCall[] = result.stopPlace?.quays
-            //   ?.map((quay: Types.Quay) => quay.estimatedCalls)
-            //   .flat();
+            const result = action.quay
+              ? await getQuayDepartures({
+                  id: action.quay.id,
+                  startTime: queryInput.startTime,
+                  numberOfDepartures: 1000,
+                  timeRange: Math.round(timeRange),
+                }).then((quayDepartures) => quayDepartures.quay?.estimatedCalls)
+              : await getStopPlaceDepartures({
+                  id: action.stopPlace.id,
+                  startTime: queryInput.startTime,
+                }).then((stopDepartures) =>
+                  flatMap(
+                    stopDepartures.stopPlace?.quays,
+                    (quay) => quay.estimatedCalls,
+                  ),
+                );
 
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
               locationId: action.quay ? action.quay.id : action.stopPlace?.id,
-              result: estimatedCalls,
+              result: result as DepartureTypes.EstimatedCall[],
             });
           } catch (e) {
             dispatch({
