@@ -49,9 +49,7 @@ jobs:
       - name: Run fastlane cert match
         run: fastlane ios get_cert
         env:
-          FASTLANE_MATCH_URL: ${{ secrets.FASTLANE_MATCH_URL }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_TYPE: "appstore"
+          FASTLANE_MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       - name: Generate native assets
         run: brew install imagemagick && yarn generate-native-assets
       - name: Run fastlane build
