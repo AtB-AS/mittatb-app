@@ -8,40 +8,58 @@ end
 platform :ios do
   desc 'Update ad hoc devices'
   lane :update_devices do
-    register_devices(devices_file: "./ios/devices.txt")
+    ensure_env_vars(
+      env_vars: ['IOS_DEVICES_FILE']
+    )
+    register_devices(devices_file: ENV['IOS_DEVICES_FILE'])
     match(type: "adhoc", force_for_new_devices: true)
+  end
+
+  desc "Generate new certificates"
+  lane :generate_new_certificates do
+    ensure_env_vars(
+      env_vars: ['IOS_DEVELOPMENT_TEAM_ID', 'IOS_BUNDLE_IDENTIFIER', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_USERNAME', 'FASTLANE_MATCH_TYPE']
+    )
+    match(
+      readonly: false,
+      team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
+      app_identifier:ENV['IOS_BUNDLE_IDENTIFIER'],
+      git_url:ENV['FASTLANE_MATCH_GIT_URL'],
+      type:ENV['FASTLANE_MATCH_TYPE'],
+      username:ENV['FASTLANE_MATCH_USERNAME']
+    )
   end
 
   desc 'Match certificates'
   lane :get_cert do
     ensure_env_vars(
-      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_URL', 'MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
+      env_vars: ['FASTLANE_MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
     )
     if is_ci
       create_keychain(
         name: "CI",
-        password: ENV["MATCH_PASSWORD"],
+        password: ENV["FASTLANE_MATCH_PASSWORD"],
         default_keychain: true,
         unlock: true,
         timeout: 3600,
         lock_when_sleeps: false
       )
       match(
-        type: ENV["MATCH_TYPE"],
+        type: ENV["FASTLANE_MATCH_TYPE"],
         app_identifier: ENV['IOS_BUNDLE_IDENTIFIER'],
         storage_mode: 'git',
-        git_url: ENV['FASTLANE_MATCH_URL'],
+        git_url: ENV['FASTLANE_MATCH_GIT_URL'],
         readonly: true,
         keychain_name: "CI",
-        keychain_password: ENV["MATCH_PASSWORD"],
+        keychain_password: ENV["FASTLANE_MATCH_PASSWORD"],
         team_id: ENV['IOS_DEVELOPMENT_TEAM_ID']
       )
     else
       match(
-        type: ENV["MATCH_TYPE"],
+        type: ENV["FASTLANE_MATCH_TYPE"],
         app_identifier: ENV['IOS_BUNDLE_IDENTIFIER'],
         storage_mode: 'git',
-        git_url: ENV['FASTLANE_MATCH_URL'],
+        git_url: ENV['FASTLANE_MATCH_GIT_URL'],
         team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
         readonly: true
       )
@@ -67,6 +85,18 @@ platform :ios do
       configuration: 'Release',
       export_method: ENV['EXPORT_METHOD'],
       workspace: './ios/atb.xcworkspace'
+    )
+  end
+
+  desc 'Upload the build to Firebase App Distribution'
+  lane :firebase_distribution_staging do
+    ensure_env_vars(
+      env_vars: ['FIREBASE_APP_ID_IOS','GCP_CREDENTIALS_PATH']
+    )
+    firebase_app_distribution(
+      app:ENV['FIREBASE_APP_ID_IOS'],
+      service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
+      groups:"NFK"
     )
   end
 

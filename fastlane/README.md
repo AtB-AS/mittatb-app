@@ -21,6 +21,11 @@ or alternatively using `brew install fastlane`
 fastlane ios update_devices
 ```
 Update ad hoc devices
+### ios generate_new_certificates
+```
+fastlane ios generate_new_certificates
+```
+Generate new certificates
 ### ios get_cert
 ```
 fastlane ios get_cert
