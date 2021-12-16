@@ -31,6 +31,11 @@ Match certificates
 fastlane ios build
 ```
 Build the iOS application.
+### ios testflight_prod
+```
+fastlane ios testflight_prod
+```
+Upload app to testflight
 ### ios appcenter_staging
 ```
 fastlane ios appcenter_staging
