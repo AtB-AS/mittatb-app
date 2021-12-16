@@ -33,12 +33,12 @@ platform :ios do
   desc 'Match certificates'
   lane :get_cert do
     ensure_env_vars(
-      env_vars: ['FASTLANE_MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
+      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
     )
     if is_ci
       create_keychain(
         name: "CI",
-        password: ENV["FASTLANE_MATCH_PASSWORD"],
+        password: ENV["MATCH_PASSWORD"],
         default_keychain: true,
         unlock: true,
         timeout: 3600,
@@ -51,7 +51,7 @@ platform :ios do
         git_url: ENV['FASTLANE_MATCH_GIT_URL'],
         readonly: true,
         keychain_name: "CI",
-        keychain_password: ENV["FASTLANE_MATCH_PASSWORD"],
+        keychain_password: ENV["MATCH_PASSWORD"],
         team_id: ENV['IOS_DEVELOPMENT_TEAM_ID']
       )
     else
