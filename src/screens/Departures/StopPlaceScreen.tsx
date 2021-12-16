@@ -8,18 +8,23 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import {ActivityIndicator, RefreshControl, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {
+  ActivityIndicator,
+  RefreshControl,
+  SectionList,
+  SectionListData,
+  View,
+} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
 import {StopPlaceDetails} from '@atb/sdk';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {NearbyStackParams} from '../Nearby';
 import {RouteProp} from '@react-navigation/native';
 import Button from '@atb/components/button';
-import {DepartureDataState, useDepartureData} from './DepartureState';
+import {useDepartureData} from './DepartureState';
 import ThemeText from '@atb/components/text';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import {BusSide} from '@atb/assets/svg/icons/transportation';
 import {dictionary, Language, useTranslation} from '@atb/translations';
 import {
   formatToClock,
@@ -43,8 +48,7 @@ import DepartureTimeSheet from '../Nearby/DepartureTimeSheet';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 import useFontScale from '@atb/utils/use-font-scale';
-
-const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 5;
+import Dash from 'react-native-dash';
 
 export type StopPlaceScreenParams = {
   stopPlaceDetails: StopPlaceDetails;
@@ -56,7 +60,11 @@ type StopPlaceScreenRouteProps = RouteProp<
   'StopPlaceScreen'
 >;
 
-export type LoginOnboardingProps = {
+type quayChipData = {
+  item: Quay;
+};
+
+export type StopPlaceScreenProps = {
   navigation: StackNavigationProp<NearbyStackParams>;
   route: StopPlaceScreenRouteProps;
 };
@@ -66,7 +74,7 @@ export default function StopPlaceScreen({
   route: {
     params: {stopPlaceDetails, selectedQuay},
   },
-}: LoginOnboardingProps) {
+}: StopPlaceScreenProps) {
   const styles = useStyles();
   const {theme} = useTheme();
   const {t, language} = useTranslation();
@@ -74,18 +82,11 @@ export default function StopPlaceScreen({
     option: 'now',
     date: new Date().toISOString(),
   });
-  const {state, refresh, loadMore} = useDepartureData(
+  const {state, refresh} = useDepartureData(
     stopPlaceDetails,
     selectedQuay,
     searchTime?.option !== 'now' ? searchTime.date : undefined,
   );
-  const [expandedQuays, setExpandedQuays] = useState(
-    new Array<number>(stopPlaceDetails.quays?.length || 0).fill(5),
-  );
-  const [hiddenQuays, setHiddenQuays] = useState(
-    new Array<boolean>(stopPlaceDetails.quays?.length || 0).fill(false),
-  );
-
   useEffect(() => {
     refresh();
   }, [selectedQuay, stopPlaceDetails]);
@@ -98,143 +99,87 @@ export default function StopPlaceScreen({
     [stopPlaceDetails],
   );
 
+  const DATA: SectionListData<Quay>[] | undefined = stopPlaceDetails.quays
+    ? [{data: stopPlaceDetails.quays}]
+    : undefined;
+
   return (
     <View style={styles.container}>
       <FullScreenHeader
         title={stopPlaceDetails.name}
         leftButton={{type: 'back'}}
       />
-      <ScrollView
-        style={styles.quayChipContainer}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-      >
-        <Button
-          onPress={() => {
-            navigation.navigate('StopPlaceScreen', {
-              stopPlaceDetails,
-              selectedQuay: undefined,
-            });
-          }}
-          text="Alle stopp"
-          color={selectedQuay ? 'secondary_2' : 'secondary_3'}
-          style={[styles.quayChip, {marginLeft: theme.spacings.medium}]}
-        ></Button>
-        {stopPlaceDetails.quays?.map((quay) => (
-          <Button
-            key={quay.id}
-            onPress={() => {
-              navigation.navigate('StopPlaceScreen', {
-                stopPlaceDetails,
-                selectedQuay: quay,
-              });
-            }}
-            text={
-              quay.publicCode ? quay.name + ' ' + quay.publicCode : quay.name
-            }
-            color={selectedQuay?.id === quay.id ? 'secondary_3' : 'secondary_2'}
-            style={styles.quayChip}
-          ></Button>
-        ))}
-      </ScrollView>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
-        }
-      >
-        <DateNavigationSection
-          searchTime={searchTime}
-          setSearchTime={setSearchTime}
-        ></DateNavigationSection>
-        {stopPlaceDetails.quays?.map((quay, index) => {
-          if (selectedQuay && selectedQuay.id !== quay.id) return;
-          return (
-            <Sections.Section withPadding key={quay.id.toString()}>
-              <Sections.GenericClickableItem
-                type="inline"
-                onPress={() => {
-                  setHiddenQuays(
-                    hiddenQuays.map((value, quayIndex) =>
-                      quayIndex === index ? !value : value,
-                    ),
-                  );
-                }}
-              >
-                <View style={styles.stopPlaceHeader}>
-                  <View style={styles.stopPlaceHeaderText}>
-                    <ThemeText
-                      type="body__secondary--bold"
-                      color="secondary"
-                      style={styles.rightMargin}
-                    >
-                      {quay.publicCode
-                        ? quay.name + ' ' + quay.publicCode
-                        : quay.name}
-                    </ThemeText>
-                    {!!quay.description && (
-                      <ThemeText
-                        style={styles.rightMargin}
-                        type="body__secondary"
-                        color="secondary"
-                      >
-                        {quay.description}
-                      </ThemeText>
-                    )}
-                  </View>
-                  <ThemeIcon
-                    svg={hiddenQuays[index] ? Expand : ExpandLess}
-                  ></ThemeIcon>
-                </View>
-              </Sections.GenericClickableItem>
-              {!hiddenQuays[index] &&
-                getDeparturesForQuay(state.data, quay)
-                  .slice(
-                    0,
-                    selectedQuay ? state.data?.length : expandedQuays[index],
-                  )
-                  .map((departure) => (
-                    <Sections.GenericItem key={departure.serviceJourney?.id}>
-                      <EstimatedCallLine
-                        departure={departure}
-                      ></EstimatedCallLine>
-                    </Sections.GenericItem>
-                  ))}
-              {getDeparturesForQuay(state.data, quay).length === 0 &&
-                !hiddenQuays[index] && (
-                  <Sections.GenericItem>
-                    <ThemeText color="secondary" style={{width: '100%'}}>
-                      Ingen avganger i nærmeste fremtid
-                    </ThemeText>
-                  </Sections.GenericItem>
-                )}
-              {!state.data && (
-                <Sections.GenericItem>
-                  <View style={{width: '100%'}}>
-                    <ActivityIndicator></ActivityIndicator>
-                  </View>
-                </Sections.GenericItem>
-              )}
-              {!selectedQuay && !hiddenQuays[index] && (
-                <Sections.LinkItem
-                  icon="arrow-right"
-                  text={
-                    quay.publicCode
-                      ? quay.name + ' ' + quay.publicCode
-                      : quay.name
-                  }
-                  textType="body__primary--bold"
-                  onPress={() => {
-                    navigation.navigate('StopPlaceScreen', {
-                      stopPlaceDetails,
-                      selectedQuay: quay,
-                    });
-                  }}
-                ></Sections.LinkItem>
-              )}
-            </Sections.Section>
-          );
-        })}
-      </ScrollView>
+      {DATA && (
+        <FlatList
+          data={stopPlaceDetails.quays}
+          style={styles.quayChipContainer}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item) => item.id + '2'}
+          ListHeaderComponent={
+            <Button
+              onPress={() => {
+                navigation.navigate('StopPlaceScreen', {
+                  stopPlaceDetails,
+                  selectedQuay: undefined,
+                });
+              }}
+              text="Alle stopp"
+              color={selectedQuay ? 'secondary_2' : 'secondary_3'}
+              style={[styles.quayChip, {marginLeft: theme.spacings.medium}]}
+            ></Button>
+          }
+          renderItem={({item}: quayChipData) => (
+            <Button
+              onPress={() => {
+                navigation.navigate('StopPlaceScreen', {
+                  stopPlaceDetails,
+                  selectedQuay: item,
+                });
+              }}
+              text={
+                item.publicCode ? item.name + ' ' + item.publicCode : item.name
+              }
+              color={
+                selectedQuay?.id === item.id ? 'secondary_3' : 'secondary_2'
+              }
+              style={styles.quayChip}
+            ></Button>
+          )}
+        />
+      )}
+      {DATA && (
+        <SectionList
+          stickySectionHeadersEnabled={true}
+          stickyHeaderIndices={[0]}
+          ListHeaderComponent={
+            <View>
+              <DateNavigationSection
+                searchTime={searchTime}
+                setSearchTime={setSearchTime}
+              ></DateNavigationSection>
+            </View>
+          }
+          refreshControl={
+            <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
+          }
+          sections={DATA}
+          keyExtractor={(item) => item.id}
+          renderItem={({item}) => (
+            <QuaySection
+              quay={item}
+              selectedQuayId={selectedQuay?.id}
+              data={state.data}
+              navigateToQuay={(quay) => {
+                navigation.navigate('StopPlaceScreen', {
+                  stopPlaceDetails,
+                  selectedQuay: quay,
+                });
+              }}
+            />
+          )}
+        />
+      )}
     </View>
   );
 }
@@ -327,29 +272,112 @@ function DateNavigationSection({
   );
 }
 
+function SeparatorLine(): JSX.Element {
+  const {theme} = useTheme();
+  return (
+    <Dash
+      style={{width: '100%'}}
+      dashGap={0}
+      dashLength={1}
+      dashThickness={1}
+      dashColor={theme.colors.background_1.backgroundColor}
+    />
+  );
+}
+
+type QuaySectionProps = {
+  quay: Quay;
+  selectedQuayId: String | undefined;
+  data: EstimatedCall[] | null;
+  navigateToQuay: (arg0: Quay) => void;
+};
+
+function QuaySection({
+  quay,
+  selectedQuayId,
+  data,
+  navigateToQuay,
+}: QuaySectionProps): JSX.Element {
+  const [isHidden, setIsHidden] = useState(false);
+  const styles = useStyles();
+  const {theme} = useTheme();
+  const isSelected = selectedQuayId === quay.id;
+
+  if (selectedQuayId && !isSelected) return <></>;
+
+  return (
+    <View>
+      <Sections.Section withPadding>
+        <Sections.GenericClickableItem
+          type="inline"
+          onPress={() => {
+            setIsHidden(!isHidden);
+          }}
+        >
+          <View style={styles.stopPlaceHeader}>
+            <View style={styles.stopPlaceHeaderText}>
+              <ThemeText
+                type="body__secondary--bold"
+                color="secondary"
+                style={styles.rightMargin}
+              >
+                {quay.publicCode
+                  ? quay.name + ' ' + quay.publicCode
+                  : quay.name}
+              </ThemeText>
+              {!!quay.description && (
+                <ThemeText
+                  style={styles.rightMargin}
+                  type="body__secondary"
+                  color="secondary"
+                >
+                  {quay.description}
+                </ThemeText>
+              )}
+            </View>
+            <ThemeIcon svg={isHidden ? Expand : ExpandLess}></ThemeIcon>
+          </View>
+        </Sections.GenericClickableItem>
+        {!isHidden && (
+          <FlatList
+            ItemSeparatorComponent={SeparatorLine}
+            data={getDeparturesForQuay(data, quay)}
+            renderItem={({item}) => (
+              <Sections.GenericItem>
+                <EstimatedCallLine departure={item}></EstimatedCallLine>
+              </Sections.GenericItem>
+            )}
+            keyExtractor={(item) => item.serviceJourney?.id || ''}
+          />
+        )}
+        {!data && (
+          <Sections.GenericItem>
+            <View style={{width: '100%'}}>
+              <ActivityIndicator></ActivityIndicator>
+            </View>
+          </Sections.GenericItem>
+        )}
+        {!isSelected && !isHidden && (
+          <Sections.LinkItem
+            icon="arrow-right"
+            text={
+              quay.publicCode ? quay.name + ' ' + quay.publicCode : quay.name
+            }
+            textType="body__primary--bold"
+            onPress={() => navigateToQuay(quay)}
+          ></Sections.LinkItem>
+        )}
+      </Sections.Section>
+    </View>
+  );
+}
+
 function changeDay(searchTime: SearchTime, days: number): SearchTime {
   const date = addDays(parseISO(searchTime.date).setHours(0, 0), days);
   return {
     option: isToday(date) ? 'now' : 'departure',
     date: isToday(date) ? new Date().toISOString() : date.toISOString(),
   };
-}
-
-function expandQuay(
-  quay: Quay,
-  index: number,
-  expandedQuays: number[],
-  setExpandedQuays: Dispatch<SetStateAction<number[]>>,
-  loadedDeparturesCount: number,
-) {
-  const targetCount =
-    expandedQuays[index] + DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW * 2;
-
-  setExpandedQuays(
-    expandedQuays.map((value, quayIndex) =>
-      quayIndex === index ? targetCount : value,
-    ),
-  );
 }
 
 function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {

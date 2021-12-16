@@ -163,6 +163,7 @@ const reducer: ReducerWithSideEffects<
               : await getStopPlaceDepartures({
                   id: action.stopPlace.id,
                   startTime: queryInput.startTime,
+                  numberOfDepartures: 5,
                 }).then((stopDepartures) =>
                   flatMap(
                     stopDepartures.stopPlace?.quays,
