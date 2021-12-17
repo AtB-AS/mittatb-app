@@ -4,6 +4,7 @@ import Dash from 'react-native-dash';
 import {StyleSheet, useTheme} from '@atb/theme';
 import LinearGradient from 'react-native-linear-gradient';
 import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
+import SectionSeparator from '@atb/components/sections/section-separator';
 
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
@@ -39,13 +40,7 @@ const ValidityLine = (props: Props): ReactElement => {
         />
       ) : (
         <View style={styles.container}>
-          <Dash
-            style={{width: '100%'}}
-            dashGap={0}
-            dashLength={1}
-            dashThickness={1}
-            dashColor={theme.colors.background_1.backgroundColor}
-          />
+          <SectionSeparator />
         </View>
       );
     case 'upcoming':
@@ -53,13 +48,7 @@ const ValidityLine = (props: Props): ReactElement => {
     case 'expired':
       return (
         <View style={styles.container}>
-          <Dash
-            style={{width: '100%'}}
-            dashGap={0}
-            dashLength={1}
-            dashThickness={1}
-            dashColor={theme.colors.background_1.backgroundColor}
-          />
+          <SectionSeparator />
         </View>
       );
     case 'unknown':
