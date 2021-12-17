@@ -140,6 +140,15 @@ export default function DepartureDetails({navigation, route}: Props) {
             </View>
           )}
 
+          {!isLoading &&
+            Object.values(callGroups).every((item) => item.length === 0) && (
+              <MessageBox
+                type="error"
+                title={t(DepartureDetailsTexts.errorMessageBox.title)}
+                message={t(DepartureDetailsTexts.errorMessageBox.pleaseWait)}
+              />
+            )}
+
           {!canSellTicketsForDeparture && (
             <MessageBox
               containerStyle={styles.ticketMessage}
@@ -147,7 +156,6 @@ export default function DepartureDetails({navigation, route}: Props) {
               message={t(DepartureDetailsTexts.messages.ticketsWeDontSell)}
             />
           )}
-
           <View style={styles.allGroups}>
             {mapGroup(callGroups, (name, group) => (
               <CallGroup

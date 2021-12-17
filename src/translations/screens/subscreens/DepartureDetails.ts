@@ -16,5 +16,9 @@ const DepartureDetailsTexts = {
     ),
     noAlighting: _('Ingen avstigning', 'No disembarking'),
   },
+  errorMessageBox: {
+    title: _('Det oppstod en feil', 'An error occurred'),
+    pleaseWait: _('Vennligst vent', 'Please wait'),
+  },
 };
 export default DepartureDetailsTexts;
