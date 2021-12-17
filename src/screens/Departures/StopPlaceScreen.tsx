@@ -115,7 +115,7 @@ export default function StopPlaceScreen({
           style={styles.quayChipContainer}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          keyExtractor={(item) => item.id + '2'}
+          keyExtractor={(item) => item.id}
           ListHeaderComponent={
             <Button
               onPress={() => {
@@ -275,12 +275,12 @@ function DateNavigationSection({
 function SeparatorLine(): JSX.Element {
   const {theme} = useTheme();
   return (
-    <Dash
-      style={{width: '100%'}}
-      dashGap={0}
-      dashLength={1}
-      dashThickness={1}
-      dashColor={theme.colors.background_1.backgroundColor}
+    <View
+      style={{
+        height: 1,
+        width: '100%',
+        backgroundColor: theme.colors.background_1.backgroundColor,
+      }}
     />
   );
 }
