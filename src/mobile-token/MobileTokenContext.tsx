@@ -12,6 +12,7 @@ import {useAuthState} from '@atb/auth';
 import Bugsnag from '@bugsnag/react-native';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {updateMetadata} from '@atb/chat/metadata';
+import {PayloadAction} from '@entur/react-native-traveller';
 
 type MobileContextState = {
   generateQrCode?: () => Promise<string | undefined>;
@@ -82,7 +83,8 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
   return (
     <MobileTokenContext.Provider
       value={{
-        generateQrCode: client?.generateQrCode,
+        generateQrCode: async () =>
+          client?.getSecureToken([PayloadAction.ticketInspection]),
         tokenStatus,
         retry: client?.retry,
       }}
