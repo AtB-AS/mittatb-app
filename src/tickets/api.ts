@@ -1,6 +1,6 @@
 import {AxiosRequestConfig} from 'axios';
 import {ReserveOfferRequestBody} from '.';
-import {client} from '../api';
+import {createClient} from '../api/client';
 import {
   Offer,
   PaymentResponse,
@@ -11,6 +11,12 @@ import {
   SendReceiptResponse,
   TicketReservation,
 } from './types';
+
+const client = createClient('http://localhost:8080');
+client.defaults.headers = {
+  'X-Endpoint-API-UserInfo':
+    'eyJhYnRfaWQiOiJBVEI6Q3VzdG9tZXJBY2NvdW50OjduSjlQTHpCTjJQcGxhYlgzdUJCczV6cmtubDIiLCJjdXN0b21lcl9udW1iZXIiOjM1Nzc2NzIsInByb3ZpZGVyX2lkIjoiYW5vbnltb3VzIiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2F0Yi1tb2JpbGl0eS1wbGF0Zm9ybS1zdGFnaW5nIiwiYXVkIjoiYXRiLW1vYmlsaXR5LXBsYXRmb3JtLXN0YWdpbmciLCJhdXRoX3RpbWUiOjE2Mzg0NDMzODYsInVzZXJfaWQiOiI3bko5UEx6Qk4yUHBsYWJYM3VCQnM1enJrbmwyIiwic3ViIjoiN25KOVBMekJOMlBwbGFiWDN1QkJzNXpya25sMiIsImlhdCI6MTYzOTcyODU4NiwiZXhwIjoxNjM5NzMyMTg2LCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7fSwic2lnbl9pbl9wcm92aWRlciI6ImFub255bW91cyJ9fQ',
+};
 
 export async function listRecentFareContracts(): Promise<RecentFareContract[]> {
   const url = 'ticket/v2/ticket/recent';
