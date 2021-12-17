@@ -48,7 +48,6 @@ import DepartureTimeSheet from '../Nearby/DepartureTimeSheet';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 import useFontScale from '@atb/utils/use-font-scale';
-import Dash from 'react-native-dash';
 
 export type StopPlaceScreenParams = {
   stopPlaceDetails: StopPlaceDetails;
@@ -302,6 +301,7 @@ function QuaySection({
   const styles = useStyles();
   const {theme} = useTheme();
   const isSelected = selectedQuayId === quay.id;
+  const departures = getDeparturesForQuay(data, quay);
 
   if (selectedQuayId && !isSelected) return <></>;
 
@@ -341,13 +341,30 @@ function QuaySection({
         {!isHidden && (
           <FlatList
             ItemSeparatorComponent={SeparatorLine}
-            data={getDeparturesForQuay(data, quay)}
-            renderItem={({item}) => (
-              <Sections.GenericItem>
+            data={departures}
+            renderItem={({item, index}) => (
+              <Sections.GenericItem
+                radius={
+                  selectedQuayId && index === departures.length - 1
+                    ? 'bottom'
+                    : undefined
+                }
+              >
                 <EstimatedCallLine departure={item}></EstimatedCallLine>
               </Sections.GenericItem>
             )}
             keyExtractor={(item) => item.serviceJourney?.id || ''}
+            ListEmptyComponent={
+              <>
+                {data && (
+                  <Sections.GenericItem radius={selectedQuayId && 'bottom'}>
+                    <ThemeText color="secondary">
+                      Ingen avganger i nærmeste fremtid
+                    </ThemeText>
+                  </Sections.GenericItem>
+                )}
+              </>
+            }
           />
         )}
         {!data && (
@@ -386,7 +403,6 @@ function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
 
   const line = departure.serviceJourney?.line;
 
-  // const clock = formatToClock(departure.expectedDepartureTime, language);
   const time = formatToClockOrRelativeMinutes(
     departure.expectedDepartureTime,
     language,
