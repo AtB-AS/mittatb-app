@@ -33,7 +33,7 @@ platform :ios do
   desc 'Match certificates'
   lane :get_cert do
     ensure_env_vars(
-      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
+      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_SSH_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
     )
     if is_ci
       create_keychain(
@@ -48,7 +48,7 @@ platform :ios do
         type: ENV["FASTLANE_MATCH_TYPE"],
         app_identifier: ENV['IOS_BUNDLE_IDENTIFIER'],
         storage_mode: 'git',
-        git_url: ENV['FASTLANE_MATCH_GIT_URL'],
+        git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
         readonly: true,
         keychain_name: "CI",
         keychain_password: ENV["MATCH_PASSWORD"],
@@ -59,7 +59,7 @@ platform :ios do
         type: ENV["FASTLANE_MATCH_TYPE"],
         app_identifier: ENV['IOS_BUNDLE_IDENTIFIER'],
         storage_mode: 'git',
-        git_url: ENV['FASTLANE_MATCH_GIT_URL'],
+        git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
         team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
         readonly: true
       )
