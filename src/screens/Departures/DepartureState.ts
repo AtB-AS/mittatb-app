@@ -97,6 +97,7 @@ type DepartureDataActions =
   | {
       type: 'LOAD_REALTIME_DATA';
       stopPlace?: StopPlaceDetails;
+      quay?: Quay;
     }
   | {
       type: 'STOP_LOADER';
@@ -132,7 +133,9 @@ const reducer: ReducerWithSideEffects<
       // Update input data with new date as this
       // is a fresh fetch. We should fetch the latest information.
       const queryInput: DepartureGroupsQuery = {
-        limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
+        limitPerLine: action.quay
+          ? 1000
+          : DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
         startTime: action.startTime ?? new Date().toISOString(),
       };
 
@@ -240,8 +243,12 @@ const reducer: ReducerWithSideEffects<
           // Use same query input with same startTime to ensure that
           // we get the same result.
           try {
+            const quayIds = action.quay
+              ? [action.quay.id]
+              : action.stopPlace?.quays?.map((q) => q.id);
+
             const realtimeData = await getRealtimeDepartureV2(
-              action.stopPlace,
+              quayIds,
               state.queryInput,
             );
             dispatch({
@@ -398,7 +405,8 @@ export function useDepartureData(
     }
   }, [state.tick, state.lastRefreshTime]);
   useInterval(
-    () => dispatch({type: 'LOAD_REALTIME_DATA', stopPlace: stopPlace}),
+    () =>
+      dispatch({type: 'LOAD_REALTIME_DATA', stopPlace: stopPlace, quay: quay}),
     updateFrequencyInSeconds * 1000,
     [stopPlace.id],
     !isFocused,

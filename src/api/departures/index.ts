@@ -50,13 +50,11 @@ export async function getRealtimeDeparture(
 }
 
 export async function getRealtimeDepartureV2(
-  stop: StopPlaceDetails | undefined,
+  quayIds: String[] | undefined,
   query: DepartureGroupsQuery,
   opts?: AxiosRequestConfig,
 ): Promise<DeparturesRealtimeData> {
-  if (!stop || !stop.quays) return {};
-
-  const quayIds: string[] = stop.quays.map((q) => q.id);
+  if (!quayIds || quayIds.length === 0) return {};
   const startTime = query.startTime;
 
   const params = build({
