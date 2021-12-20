@@ -9,10 +9,18 @@ platform :ios do
   desc 'Update ad hoc devices'
   lane :update_devices do
     ensure_env_vars(
-      env_vars: ['IOS_DEVICES_FILE']
+      env_vars: ['IOS_DEVICES_FILE','IOS_DEVELOPMENT_TEAM_ID', 'IOS_BUNDLE_IDENTIFIER', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_USERNAME', 'FASTLANE_MATCH_TYPE']
     )
-    register_devices(devices_file: ENV['IOS_DEVICES_FILE'])
-    match(type: "adhoc", force_for_new_devices: true)
+    register_devices(
+      devices_file: ENV['IOS_DEVICES_FILE'],
+      username:ENV['FASTLANE_MATCH_USERNAME']
+    )
+    match(
+      type: "adhoc", force_for_new_devices: true,
+      team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
+      app_identifier:ENV['IOS_BUNDLE_IDENTIFIER'],
+      git_url:ENV['FASTLANE_MATCH_GIT_URL'],
+      username:ENV['FASTLANE_MATCH_USERNAME'])
   end
 
   desc "Generate new certificates"

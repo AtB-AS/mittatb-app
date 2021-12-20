@@ -36,6 +36,11 @@ Match certificates
 fastlane ios build
 ```
 Build the iOS application.
+### ios firebase_distribution_staging
+```
+fastlane ios firebase_distribution_staging
+```
+Upload the build to Firebase App Distribution
 ### ios testflight_prod
 ```
 fastlane ios testflight_prod
