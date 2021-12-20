@@ -39,6 +39,11 @@ import * as Sections from '@atb/components/sections';
 import {BusSide} from '@atb/assets/svg/icons/transportation';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import {primitiveLocationDistanceInMetres} from '@atb/utils/location';
+import {StopPlacePosition} from '@atb/api/types/departures';
+import {
+  Mode,
+  TransportModes,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 
 const themeColor: ThemeColor = 'background_accent';
 
@@ -198,16 +203,16 @@ const DeparturesOverview: React.FC<Props> = ({
 
   useEffect(() => {
     if (searchedFromLocation?.layer === 'venue') {
-      const loadedStopPlace = data?.find(
-        (stopPlace) =>
-          stopPlace.id === searchedFromLocation.id ||
-          stopPlace.quays?.find(
-            (quay) => quay.stopPlace.id === searchedFromLocation?.id,
+      const loadedStopPlace = data?.nearest?.edges?.find(
+        (edge) =>
+          edge.node?.place?.id === searchedFromLocation.id ||
+          edge.node?.place?.quays?.find(
+            (quay) => quay.stopPlace?.id === searchedFromLocation?.id,
           ),
       );
-      if (loadedStopPlace)
+      if (loadedStopPlace && data)
         navigation.navigate('StopPlaceScreen', {
-          stopPlaceDetails: loadedStopPlace,
+          stopPlacePosition: loadedStopPlace,
         });
     }
   }, [searchedFromLocation, data]);
@@ -258,52 +263,49 @@ const DeparturesOverview: React.FC<Props> = ({
       <View style={styles.container}>
         {data &&
           fromLocation &&
-          sortStopPlaces(data, fromLocation?.coordinates).map(
-            (stopPlace: StopPlaceDetails) => (
-              <Sections.Section withPadding key={stopPlace.id}>
+          data.nearest?.edges
+            ?.sort((edgeA, edgeB) => {
+              if (!edgeA.node?.distance) return 1;
+              if (!edgeB.node?.distance) return -1;
+              return edgeA.node?.distance > edgeB.node?.distance ? 1 : -1;
+            })
+            // Remove all StopPlaces without Quays
+            .filter(
+              (stopPlace: StopPlacePosition) =>
+                stopPlace.node?.place?.quays?.length,
+            )
+            .map((stopPlace: StopPlacePosition) => (
+              <Sections.Section withPadding key={stopPlace.node?.place?.id}>
                 <Sections.GenericClickableItem
                   onPress={() => {
                     navigation.navigate('StopPlaceScreen', {
-                      stopPlaceDetails: stopPlace,
+                      stopPlacePosition: stopPlace,
                     });
                   }}
                 >
                   <View style={styles.stopPlaceContainer}>
                     <View style={styles.stopPlaceInfo}>
                       <ThemeText type="heading__component">
-                        {stopPlace.name}
+                        {stopPlace.node?.place?.name}
                       </ThemeText>
                       <ThemeText>
-                        {stopPlace.description || 'Holdeplass'}
+                        {stopPlace.node?.place?.description || 'Holdeplass'}
                       </ThemeText>
-                      {stopPlace &&
-                        stopPlace.latitude &&
-                        stopPlace.longitude && (
-                          <ThemeText>
-                            {primitiveLocationDistanceInMetres(
-                              stopPlace.latitude,
-                              stopPlace.longitude,
-                              fromLocation?.coordinates.latitude,
-                              fromLocation?.coordinates.longitude,
-                            ) + ' m'}
-                          </ThemeText>
-                        )}
+                      <ThemeText>
+                        {stopPlace.node?.distance?.toFixed(0) + ' m'}
+                      </ThemeText>
                     </View>
-                    {getTransportModeSvg(stopPlace.transportMode) && (
+                    {stopPlace.node?.place?.transportMode?.map((mode) => (
                       <ThemeIcon
                         style={styles.stopPlaceIcon}
                         size="large"
-                        svg={
-                          getTransportModeSvg(stopPlace.transportMode) ||
-                          BusSide
-                        }
+                        svg={getTransportModeSvg(mode) || BusSide}
                       ></ThemeIcon>
-                    )}
+                    ))}
                   </View>
                 </Sections.GenericClickableItem>
               </Sections.Section>
-            ),
-          )}
+            ))}
       </View>
     </SimpleDisappearingHeader>
   );
@@ -399,6 +401,7 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
   },
   stopPlaceInfo: {
     flexShrink: 1,
+    flexGrow: 1,
   },
   stopPlaceIcon: {
     marginHorizontal: theme.spacings.medium,
@@ -432,29 +435,4 @@ function getHeaderAlternativeTitle(
     default:
       return t(NearbyTexts.header.departureFuture(locationName, time));
   }
-}
-
-function sortStopPlaces(
-  data: StopPlaceDetails[],
-  pos: Coordinates,
-): StopPlaceDetails[] {
-  return data.sort((a, b) => {
-    if (a.latitude && a.longitude && b.latitude && b.longitude) {
-      return (
-        primitiveLocationDistanceInMetres(
-          pos.latitude,
-          pos.longitude,
-          a.latitude,
-          a.longitude,
-        ) -
-        primitiveLocationDistanceInMetres(
-          pos.latitude,
-          pos.longitude,
-          b.latitude,
-          b.longitude,
-        )
-      );
-    }
-    return -100000;
-  });
 }

@@ -16,7 +16,7 @@ import {
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 // import {useFavorites} from '@atb/favorites';
 // import {Location, UserFavoriteDepartures} from '@atb/favorites/types';
-import {DeparturesRealtimeData, StopPlaceDetails} from '@atb/sdk';
+import {DeparturesRealtimeData} from '@atb/sdk';
 import {
   addDays,
   differenceInMinutes,
@@ -25,7 +25,6 @@ import {
 } from 'date-fns';
 import useInterval from '@atb/utils/use-interval';
 import {updateDeparturesWithRealtimeV2} from '../../departure-list/utils';
-import {Quay} from '@entur/sdk';
 import {
   getQuayDepartures,
   getStopPlaceDepartures,
@@ -78,14 +77,14 @@ const initialState: DepartureDataState = {
 type DepartureDataActions =
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
-      stopPlace: StopPlaceDetails;
-      quay?: Quay;
+      stopPlacePosition: DepartureTypes.StopPlacePosition;
+      quay?: DepartureTypes.Quay;
       startTime?: string;
       // favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
       type: 'LOAD_MORE_DEPARTURES';
-      stopPlace?: StopPlaceDetails;
+      stopPlacePosition?: DepartureTypes.StopPlacePosition;
       // favoriteDepartures?: UserFavoriteDepartures;
     }
   // | {
@@ -96,8 +95,8 @@ type DepartureDataActions =
   //   }
   | {
       type: 'LOAD_REALTIME_DATA';
-      stopPlace?: StopPlaceDetails;
-      quay?: Quay;
+      stopPlacePosition?: DepartureTypes.StopPlacePosition;
+      quay?: DepartureTypes.Quay;
     }
   | {
       type: 'STOP_LOADER';
@@ -128,7 +127,8 @@ const reducer: ReducerWithSideEffects<
 > = (state, action) => {
   switch (action.type) {
     case 'LOAD_INITIAL_DEPARTURES': {
-      if (!action.stopPlace) return NoUpdate();
+      const stopPlace = action.stopPlacePosition.node?.place;
+      if (!stopPlace) return NoUpdate();
 
       // Update input data with new date as this
       // is a fresh fetch. We should fetch the latest information.
@@ -150,6 +150,7 @@ const reducer: ReducerWithSideEffects<
         async (state, dispatch) => {
           try {
             // Fresh fetch, reset paging and use new query input with new startTime
+            if (!stopPlace) return;
             const timeUntilMidnight = differenceInSeconds(
               addDays(parseISO(queryInput.startTime), 1).setHours(0, 0, 0),
               parseISO(queryInput.startTime),
@@ -164,7 +165,7 @@ const reducer: ReducerWithSideEffects<
                   timeRange: Math.round(timeRange),
                 }).then((quayDepartures) => quayDepartures.quay?.estimatedCalls)
               : await getStopPlaceDepartures({
-                  id: action.stopPlace.id,
+                  id: stopPlace.id,
                   startTime: queryInput.startTime,
                   numberOfDepartures: 5,
                 }).then((stopDepartures) =>
@@ -177,13 +178,13 @@ const reducer: ReducerWithSideEffects<
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
-              locationId: action.quay ? action.quay.id : action.stopPlace?.id,
+              locationId: action.quay ? action.quay.id : stopPlace.id,
               result: result as DepartureTypes.EstimatedCall[],
             });
           } catch (e) {
             dispatch({
               type: 'SET_ERROR',
-              reset: action.stopPlace?.id !== state.locationId,
+              reset: stopPlace.id !== state.locationId,
               loadType: 'initial',
               error: getAxiosErrorType(e),
             });
@@ -237,6 +238,7 @@ const reducer: ReducerWithSideEffects<
 
     case 'LOAD_REALTIME_DATA': {
       if (!state.data?.length) return NoUpdate();
+      const stopPlace = action.stopPlacePosition?.node?.place;
 
       return SideEffect<DepartureDataState, DepartureDataActions>(
         async (state2, dispatch) => {
@@ -245,7 +247,7 @@ const reducer: ReducerWithSideEffects<
           try {
             const quayIds = action.quay
               ? [action.quay.id]
-              : action.stopPlace?.quays?.map((q) => q.id);
+              : stopPlace?.quays?.map((q) => q.id);
 
             const realtimeData = await getRealtimeDepartureV2(
               quayIds,
@@ -342,8 +344,8 @@ const reducer: ReducerWithSideEffects<
 };
 
 export function useDepartureData(
-  stopPlace: StopPlaceDetails,
-  quay?: Quay,
+  stopPlacePosition: DepartureTypes.StopPlacePosition,
+  quay?: DepartureTypes.Quay,
   startTime?: string,
   updateFrequencyInSeconds: number = 10,
   tickRateInSeconds: number = 10,
@@ -351,12 +353,13 @@ export function useDepartureData(
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const isFocused = useIsFocused();
   // const {favoriteDepartures} = useFavorites();
+  const stopPlace = stopPlacePosition.node?.place;
 
   const refresh = useCallback(
     () =>
       dispatch({
         type: 'LOAD_INITIAL_DEPARTURES',
-        stopPlace,
+        stopPlacePosition,
         quay,
         startTime,
         // favoriteDepartures,
@@ -366,19 +369,6 @@ export function useDepartureData(
       quay?.id,
       // favoriteDepartures,
       startTime,
-    ],
-  );
-
-  const loadMore = useCallback(
-    () =>
-      dispatch({
-        type: 'LOAD_MORE_DEPARTURES',
-        stopPlace,
-        // favoriteDepartures
-      }),
-    [
-      stopPlace.id,
-      // favoriteDepartures,
     ],
   );
 
@@ -393,7 +383,7 @@ export function useDepartureData(
   //   [stopPlace.id, favoriteDepartures],
   // );
 
-  useEffect(refresh, [stopPlace.id, startTime]);
+  useEffect(refresh, [stopPlace?.id, startTime]);
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -405,10 +395,9 @@ export function useDepartureData(
     }
   }, [state.tick, state.lastRefreshTime]);
   useInterval(
-    () =>
-      dispatch({type: 'LOAD_REALTIME_DATA', stopPlace: stopPlace, quay: quay}),
+    () => dispatch({type: 'LOAD_REALTIME_DATA', stopPlacePosition, quay: quay}),
     updateFrequencyInSeconds * 1000,
-    [stopPlace.id],
+    [stopPlace?.id],
     !isFocused,
   );
   useInterval(
@@ -421,7 +410,6 @@ export function useDepartureData(
   return {
     state,
     refresh,
-    loadMore,
     // setShowFavorites,
   };
 }

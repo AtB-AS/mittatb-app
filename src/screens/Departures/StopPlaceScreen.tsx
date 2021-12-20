@@ -16,7 +16,6 @@ import {
   View,
 } from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
-import {StopPlaceDetails} from '@atb/sdk';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {NearbyStackParams} from '../Nearby';
 import {RouteProp} from '@react-navigation/native';
@@ -31,7 +30,6 @@ import {
   formatToClockOrRelativeMinutes,
   formatToShortDate,
 } from '@atb/utils/date';
-import {Quay} from '@entur/sdk';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {
   ArrowLeft,
@@ -40,7 +38,11 @@ import {
   ExpandLess,
 } from '@atb/assets/svg/icons/navigation';
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
-import {EstimatedCall} from '@atb/api/types/departures';
+import {
+  EstimatedCall,
+  Quay,
+  StopPlacePosition,
+} from '@atb/api/types/departures';
 import {Date as DateIcon} from '@atb/assets/svg/icons/time';
 import {SearchTime} from './Departures';
 import {addDays, isSameDay, isToday, parseISO} from 'date-fns';
@@ -50,7 +52,7 @@ import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types
 import useFontScale from '@atb/utils/use-font-scale';
 
 export type StopPlaceScreenParams = {
-  stopPlaceDetails: StopPlaceDetails;
+  stopPlacePosition: StopPlacePosition;
   selectedQuay?: Quay;
 };
 
@@ -71,7 +73,7 @@ export type StopPlaceScreenProps = {
 export default function StopPlaceScreen({
   navigation,
   route: {
-    params: {stopPlaceDetails, selectedQuay},
+    params: {stopPlacePosition, selectedQuay},
   },
 }: StopPlaceScreenProps) {
   const styles = useStyles();
@@ -81,36 +83,34 @@ export default function StopPlaceScreen({
     option: 'now',
     date: new Date().toISOString(),
   });
+  const stopPlace = stopPlacePosition.node?.place;
   const {state, refresh} = useDepartureData(
-    stopPlaceDetails,
+    stopPlacePosition,
     selectedQuay,
     searchTime?.option !== 'now' ? searchTime.date : undefined,
   );
   useEffect(() => {
     refresh();
-  }, [selectedQuay, stopPlaceDetails]);
+  }, [selectedQuay, stopPlace]);
 
   useMemo(
     () =>
-      stopPlaceDetails.quays?.sort((a, b) =>
+      stopPlace?.quays?.sort((a, b) =>
         publicCodeCompare(a.publicCode, b.publicCode),
       ),
-    [stopPlaceDetails],
+    [stopPlace],
   );
 
-  const DATA: SectionListData<Quay>[] | undefined = stopPlaceDetails.quays
-    ? [{data: stopPlaceDetails.quays}]
+  const DATA: SectionListData<Quay>[] | undefined = stopPlace?.quays
+    ? [{data: stopPlace.quays}]
     : undefined;
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader
-        title={stopPlaceDetails.name}
-        leftButton={{type: 'back'}}
-      />
+      <FullScreenHeader title={stopPlace?.name} leftButton={{type: 'back'}} />
       {DATA && (
         <FlatList
-          data={stopPlaceDetails.quays}
+          data={stopPlace?.quays}
           style={styles.quayChipContainer}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
@@ -119,7 +119,7 @@ export default function StopPlaceScreen({
             <Button
               onPress={() => {
                 navigation.navigate('StopPlaceScreen', {
-                  stopPlaceDetails,
+                  stopPlacePosition,
                   selectedQuay: undefined,
                 });
               }}
@@ -132,7 +132,7 @@ export default function StopPlaceScreen({
             <Button
               onPress={() => {
                 navigation.navigate('StopPlaceScreen', {
-                  stopPlaceDetails,
+                  stopPlacePosition,
                   selectedQuay: item,
                 });
               }}
@@ -171,7 +171,7 @@ export default function StopPlaceScreen({
               data={state.data}
               navigateToQuay={(quay) => {
                 navigation.navigate('StopPlaceScreen', {
-                  stopPlaceDetails,
+                  stopPlacePosition,
                   selectedQuay: quay,
                 });
               }}
@@ -477,7 +477,7 @@ function LineChip({
   );
 }
 
-function publicCodeCompare(a: string, b: string): number {
+function publicCodeCompare(a?: string, b?: string): number {
   // Show quays with no public code last
   if (!a) return 1;
   if (!b) return -1;
