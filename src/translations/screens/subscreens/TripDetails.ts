@@ -1,3 +1,4 @@
+import orgSpecificTranslations from '@atb/translations/utils';
 import {translation as _} from '../../commons';
 const TripDetailsTexts = {
   header: {
@@ -137,4 +138,13 @@ const TripDetailsTexts = {
       ),
   },
 };
-export default TripDetailsTexts;
+export default orgSpecificTranslations(TripDetailsTexts, {
+  nfk: {
+    messages: {
+      ticketsWeDontSell: _(
+        'Reisen krever billett som ikke er tilgjengelig i denne appen, eller som må kjøpes fra et annet selskap enn Reis Nordland.',
+        'This journey requires a ticket that is not available from this app, or must be purchased from a provider other than Reis Nordland.',
+      ),
+    },
+  },
+});

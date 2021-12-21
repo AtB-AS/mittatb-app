@@ -1,3 +1,4 @@
+import orgSpecificTranslations from '@atb/translations/utils';
 import {translation as _} from '../commons';
 
 const bulletPoint = '\u2022';
@@ -153,4 +154,7 @@ const TicketsTexts = {
   },
 };
 
-export default TicketsTexts;
+//TODO
+export default orgSpecificTranslations(TicketsTexts, {
+  nfk: {},
+});
