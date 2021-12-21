@@ -26,6 +26,9 @@ else
     echo "Copying $APP_ENVIRONMENT .env file to fastlane"
     cp $ENV_FOLDER/.env fastlane/.env.default
 
+    echo "Copying $APP_ENVIRONMENT ios devices text file to ios"
+    cp $ORG_FOLDER/ios-devices.txt ios/ios-devices.txt
+
     echo "Copying $APP_ENVIRONMENT icons to icons folder"
     cp -a $ENV_FOLDER/icons/. icons/
 
