@@ -151,7 +151,6 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
     (async function () {
       if (state.user) {
         const idToken = await state.user.getIdTokenResult();
-        console.log(idToken);
         const abtCustomerId = idToken.claims['sub'];
         dispatch({type: 'SET_ABT_CUSTOMER_ID', abtCustomerId});
       }

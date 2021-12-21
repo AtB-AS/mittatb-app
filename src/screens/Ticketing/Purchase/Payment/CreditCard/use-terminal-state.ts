@@ -5,7 +5,6 @@ import {
   WebViewErrorEvent,
   WebViewNavigation,
   WebViewNavigationEvent,
-  WebViewHttpErrorEvent,
 } from 'react-native-webview/lib/WebViewTypes';
 import {parse as parseURL} from 'search-params';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
@@ -37,20 +36,14 @@ type TerminalReducerState = {
   loadingState?: LoadingState;
   reservation?: TicketReservation;
   paymentResponseCode?: NetsResponseCode;
-  isSoftDecline?: boolean;
   error?: {context: ErrorContext; type: ErrorType};
 };
 
 type TerminalReducerAction =
   | {type: 'RESTART_TERMINAL'}
-  | {type: 'TRIGGER_BANK_ID_VERIFICATION'}
   | {type: 'OFFER_RESERVED'; reservation: TicketReservation}
   | {type: 'TERMINAL_LOADED'}
-  | {type: 'SET_SOFT_DECLINE'; isSoftDecline: boolean}
-  | {
-      type: 'SET_NETS_RESPONSE_CODE';
-      responseCode: NetsResponseCode;
-    }
+  | {type: 'SET_NETS_RESPONSE_CODE'; responseCode: NetsResponseCode}
   | {type: 'SET_ERROR'; errorType: ErrorType; errorContext: ErrorContext};
 
 type TerminalReducer = (
@@ -62,18 +55,6 @@ const terminalReducer: TerminalReducer = (prevState, action) => {
   switch (action.type) {
     case 'RESTART_TERMINAL': {
       return initialState;
-    }
-    case 'TRIGGER_BANK_ID_VERIFICATION': {
-      return {
-        ...prevState,
-        loadingState: undefined,
-        paymentResponseCode: undefined,
-        isSoftDecline: undefined,
-        reservation: {
-          ...prevState.reservation!,
-          url: prevState.reservation!.url + ' ', // hack to make the webview reload the terminal url for bankid verification
-        },
-      };
     }
     case 'OFFER_RESERVED': {
       return {
@@ -101,12 +82,6 @@ const terminalReducer: TerminalReducer = (prevState, action) => {
         ...prevState,
         loadingState: undefined,
         error: {context: action.errorContext, type: action.errorType},
-      };
-    }
-    case 'SET_SOFT_DECLINE': {
-      return {
-        ...prevState,
-        isSoftDecline: action.isSoftDecline,
       };
     }
   }
@@ -214,6 +189,7 @@ export default function useTerminalState(
     event: WebViewNavigationEvent | WebViewErrorEvent,
   ) => {
     const {url} = event.nativeEvent;
+    console.log('url', url);
     // load events might be called several times
     // for each type of resource, html, assets, etc
     // so we have a "loading guard" here
@@ -269,41 +245,25 @@ export default function useTerminalState(
         if (!reservation) return;
 
         if (!scaExemption) {
-          reservationOk(reservation);
-        }
-
-        if (isSoftDecline === undefined) return;
-
-        if (!isSoftDecline) {
+          console.log('uum');
           reservationOk(reservation);
         } else {
-          triggerBankIdVerification();
         }
-
         break;
       case 'Cancel':
         cancelTerminal();
         break;
     }
-  }, [paymentResponseCode, isSoftDecline]);
+  }, [paymentResponseCode]);
 
   function resetOnLoadGuards() {
     loadingRef.current = true;
     paymentRedirectCompleteRef.current = false;
   }
 
-  function triggerBankIdVerification() {
-    resetOnLoadGuards();
-    dispatch({type: 'TRIGGER_BANK_ID_VERIFICATION'});
-  }
-
   function restartTerminal() {
     resetOnLoadGuards();
     dispatch({type: 'RESTART_TERMINAL'});
-  }
-
-  function setIsSoftDecline(isSoftDecline: boolean) {
-    dispatch({type: 'SET_SOFT_DECLINE', isSoftDecline});
   }
 
   return {
@@ -312,7 +272,6 @@ export default function useTerminalState(
     onWebViewLoadEnd,
     error,
     restartTerminal,
-    setIsSoftDecline,
   };
 }
 

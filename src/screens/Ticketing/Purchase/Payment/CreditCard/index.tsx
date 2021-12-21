@@ -84,7 +84,6 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     onWebViewLoadEnd,
     error,
     restartTerminal,
-    setIsSoftDecline,
   } = useTerminalState(
     offers,
     paymentType,
@@ -94,27 +93,6 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     dismissAndAddReservation,
     scaExemption ?? false,
   );
-
-  type SoftDeclineMessage = {
-    softDecline: boolean;
-  };
-
-  let scaProps: Partial<WebViewProps> = {};
-
-  if (scaExemption) {
-    const INJECTED_JAVASCRIPT = `(function() {
-    window.ReactNativeWebView.postMessage(JSON.stringify({ softDecline: window.document.documentElement.innerHTML.indexOf('SoftDecline') !== -1 }));
-})();`;
-    scaProps = {
-      injectedJavaScript: INJECTED_JAVASCRIPT,
-      onMessage: (ev) => {
-        if (ev.nativeEvent.data) {
-          const data = JSON.parse(ev.nativeEvent.data) as SoftDeclineMessage;
-          setIsSoftDecline(data.softDecline);
-        }
-      },
-    };
-  }
 
   return (
     <View style={styles.container}>
@@ -137,7 +115,6 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
               uri: terminalUrl,
             }}
             onLoadEnd={onWebViewLoadEnd}
-            {...scaProps}
           />
         )}
       </View>
