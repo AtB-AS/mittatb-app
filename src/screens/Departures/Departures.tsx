@@ -34,16 +34,11 @@ import Loading from '../Loading';
 import DepartureTimeSheet from '../Nearby/DepartureTimeSheet';
 import {useNearestStopsData} from './state';
 import ThemeText from '@atb/components/text';
-import {Coordinates, StopPlaceDetails} from '@atb/sdk';
 import * as Sections from '@atb/components/sections';
 import {BusSide} from '@atb/assets/svg/icons/transportation';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
-import {primitiveLocationDistanceInMetres} from '@atb/utils/location';
 import {StopPlacePosition} from '@atb/api/types/departures';
-import {
-  Mode,
-  TransportModes,
-} from '@atb/api/types/generated/journey_planner_v3_types';
+import {NearestStopPlacesQuery} from '@atb/api/types/generated/NearestStopPlacesQuery';
 
 const themeColor: ThemeColor = 'background_accent';
 
@@ -112,17 +107,17 @@ const DeparturesOverview: React.FC<Props> = ({
   hasLocationPermission,
   navigation,
 }) => {
-  const searchedFromLocation = useOnlySingleLocation<NearbyScreenProp>(
-    'location',
-  );
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
   const styles = useNearbyStyles();
+  const {t, language} = useTranslation();
 
   const [searchTime, setSearchTime] = useState<SearchTime>({
     option: 'now',
     date: new Date().toISOString(),
   });
-
+  const searchedFromLocation = useOnlySingleLocation<NearbyScreenProp>(
+    'location',
+  );
   const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
     [currentLocation],
@@ -133,11 +128,8 @@ const DeparturesOverview: React.FC<Props> = ({
   const {state, refresh} = useNearestStopsData(fromLocation);
 
   const {data, isLoading, error} = state;
-
   const isInitialScreen = data == null && !isLoading && !error;
   const activateScroll = !isInitialScreen || !!error;
-
-  const {t, language} = useTranslation();
 
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {
@@ -254,58 +246,44 @@ const DeparturesOverview: React.FC<Props> = ({
           )}
         </AccessibleText>
       }
-      // onEndReached={onScrollViewEndReached}
       alertContext={'travel'}
       setFocusOnLoad={true}
     >
       <ScreenReaderAnnouncement message={loadAnnouncement} />
 
       <View style={styles.container}>
-        {data &&
-          fromLocation &&
-          data.nearest?.edges
-            ?.sort((edgeA, edgeB) => {
-              if (!edgeA.node?.distance) return 1;
-              if (!edgeB.node?.distance) return -1;
-              return edgeA.node?.distance > edgeB.node?.distance ? 1 : -1;
-            })
-            // Remove all StopPlaces without Quays
-            .filter(
-              (stopPlace: StopPlacePosition) =>
-                stopPlace.node?.place?.quays?.length,
-            )
-            .map((stopPlace: StopPlacePosition) => (
-              <Sections.Section withPadding key={stopPlace.node?.place?.id}>
-                <Sections.GenericClickableItem
-                  onPress={() => {
-                    navigation.navigate('StopPlaceScreen', {
-                      stopPlacePosition: stopPlace,
-                    });
-                  }}
-                >
-                  <View style={styles.stopPlaceContainer}>
-                    <View style={styles.stopPlaceInfo}>
-                      <ThemeText type="heading__component">
-                        {stopPlace.node?.place?.name}
-                      </ThemeText>
-                      <ThemeText>
-                        {stopPlace.node?.place?.description || 'Holdeplass'}
-                      </ThemeText>
-                      <ThemeText>
-                        {stopPlace.node?.distance?.toFixed(0) + ' m'}
-                      </ThemeText>
-                    </View>
-                    {stopPlace.node?.place?.transportMode?.map((mode) => (
-                      <ThemeIcon
-                        style={styles.stopPlaceIcon}
-                        size="large"
-                        svg={getTransportModeSvg(mode) || BusSide}
-                      ></ThemeIcon>
-                    ))}
-                  </View>
-                </Sections.GenericClickableItem>
-              </Sections.Section>
-            ))}
+        {sortAndFilterStopPlaces(data).map((stopPlace: StopPlacePosition) => (
+          <Sections.Section withPadding key={stopPlace.node?.place?.id}>
+            <Sections.GenericClickableItem
+              onPress={() => {
+                navigation.navigate('StopPlaceScreen', {
+                  stopPlacePosition: stopPlace,
+                });
+              }}
+            >
+              <View style={styles.stopPlaceContainer}>
+                <View style={styles.stopPlaceInfo}>
+                  <ThemeText type="heading__component">
+                    {stopPlace.node?.place?.name}
+                  </ThemeText>
+                  <ThemeText>
+                    {stopPlace.node?.place?.description || 'Holdeplass'}
+                  </ThemeText>
+                  <ThemeText>
+                    {stopPlace.node?.distance?.toFixed(0) + ' m'}
+                  </ThemeText>
+                </View>
+                {stopPlace.node?.place?.transportMode?.map((mode) => (
+                  <ThemeIcon
+                    style={styles.stopPlaceIcon}
+                    size="large"
+                    svg={getTransportModeSvg(mode) || BusSide}
+                  ></ThemeIcon>
+                ))}
+              </View>
+            </Sections.GenericClickableItem>
+          </Sections.Section>
+        ))}
       </View>
     </SimpleDisappearingHeader>
   );
@@ -363,6 +341,57 @@ const Header = React.memo(function Header({
     </>
   );
 });
+
+function translateErrorType(
+  errorType: ErrorType,
+  t: TranslateFunction,
+): string {
+  switch (errorType) {
+    case 'network-error':
+    case 'timeout':
+      return t(NearbyTexts.messages.networkError);
+    default:
+      return t(NearbyTexts.messages.defaultFetchError);
+  }
+}
+
+function getHeaderAlternativeTitle(
+  locationName: string,
+  searchTime: SearchTime,
+  t: TFunc<typeof Language>,
+  language: Language,
+) {
+  const time = formatToShortDateTimeWithoutYear(searchTime.date, language);
+
+  switch (searchTime.option) {
+    case 'now':
+      return locationName;
+    default:
+      return t(NearbyTexts.header.departureFuture(locationName, time));
+  }
+}
+
+function sortAndFilterStopPlaces(
+  data: NearestStopPlacesQuery | null,
+): StopPlacePosition[] {
+  const edges = data?.nearest?.edges;
+  if (!edges) return [];
+
+  // Sort StopPlaces on distance from search location
+  const sortedEdges = edges?.sort((edgeA, edgeB) => {
+    if (!edgeA.node?.distance) return 1;
+    if (!edgeB.node?.distance) return -1;
+    return edgeA.node?.distance > edgeB.node?.distance ? 1 : -1;
+  });
+
+  // Remove all StopPlaces without Quays
+  const filteredEdges = sortedEdges.filter(
+    (stopPlace: StopPlacePosition) => stopPlace.node?.place?.quays?.length,
+  );
+
+  return filteredEdges;
+}
+
 const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingTop: theme.spacings.medium,
@@ -407,32 +436,3 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacings.medium,
   },
 }));
-
-function translateErrorType(
-  errorType: ErrorType,
-  t: TranslateFunction,
-): string {
-  switch (errorType) {
-    case 'network-error':
-    case 'timeout':
-      return t(NearbyTexts.messages.networkError);
-    default:
-      return t(NearbyTexts.messages.defaultFetchError);
-  }
-}
-
-function getHeaderAlternativeTitle(
-  locationName: string,
-  searchTime: SearchTime,
-  t: TFunc<typeof Language>,
-  language: Language,
-) {
-  const time = formatToShortDateTimeWithoutYear(searchTime.date, language);
-
-  switch (searchTime.option) {
-    case 'now':
-      return locationName;
-    default:
-      return t(NearbyTexts.header.departureFuture(locationName, time));
-  }
-}

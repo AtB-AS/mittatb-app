@@ -89,6 +89,10 @@ export default function StopPlaceScreen({
     selectedQuay,
     searchTime?.option !== 'now' ? searchTime.date : undefined,
   );
+  const quayListData: SectionListData<Quay>[] | undefined = stopPlace?.quays
+    ? [{data: stopPlace.quays}]
+    : undefined;
+
   useEffect(() => {
     refresh();
   }, [selectedQuay, stopPlace]);
@@ -101,53 +105,45 @@ export default function StopPlaceScreen({
     [stopPlace],
   );
 
-  const DATA: SectionListData<Quay>[] | undefined = stopPlace?.quays
-    ? [{data: stopPlace.quays}]
-    : undefined;
-
   return (
     <View style={styles.container}>
       <FullScreenHeader title={stopPlace?.name} leftButton={{type: 'back'}} />
-      {DATA && (
-        <FlatList
-          data={stopPlace?.quays}
-          style={styles.quayChipContainer}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item) => item.id}
-          ListHeaderComponent={
-            <Button
-              onPress={() => {
-                navigation.navigate('StopPlaceScreen', {
-                  stopPlacePosition,
-                  selectedQuay: undefined,
-                });
-              }}
-              text="Alle stopp"
-              color={selectedQuay ? 'secondary_2' : 'secondary_3'}
-              style={[styles.quayChip, {marginLeft: theme.spacings.medium}]}
-            ></Button>
-          }
-          renderItem={({item}: quayChipData) => (
-            <Button
-              onPress={() => {
-                navigation.navigate('StopPlaceScreen', {
-                  stopPlacePosition,
-                  selectedQuay: item,
-                });
-              }}
-              text={
-                item.publicCode ? item.name + ' ' + item.publicCode : item.name
-              }
-              color={
-                selectedQuay?.id === item.id ? 'secondary_3' : 'secondary_2'
-              }
-              style={styles.quayChip}
-            ></Button>
-          )}
-        />
-      )}
-      {DATA && (
+      <FlatList
+        data={stopPlace?.quays}
+        style={styles.quayChipContainer}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={
+          <Button
+            onPress={() => {
+              navigation.navigate('StopPlaceScreen', {
+                stopPlacePosition,
+                selectedQuay: undefined,
+              });
+            }}
+            text="Alle stopp"
+            color={selectedQuay ? 'secondary_2' : 'secondary_3'}
+            style={[styles.quayChip, {marginLeft: theme.spacings.medium}]}
+          ></Button>
+        }
+        renderItem={({item}: quayChipData) => (
+          <Button
+            onPress={() => {
+              navigation.navigate('StopPlaceScreen', {
+                stopPlacePosition,
+                selectedQuay: item,
+              });
+            }}
+            text={
+              item.publicCode ? item.name + ' ' + item.publicCode : item.name
+            }
+            color={selectedQuay?.id === item.id ? 'secondary_3' : 'secondary_2'}
+            style={styles.quayChip}
+          ></Button>
+        )}
+      />
+      {quayListData && (
         <SectionList
           stickySectionHeadersEnabled={true}
           stickyHeaderIndices={[0]}
@@ -162,7 +158,7 @@ export default function StopPlaceScreen({
           refreshControl={
             <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
           }
-          sections={DATA}
+          sections={quayListData}
           keyExtractor={(item) => item.id}
           renderItem={({item}) => (
             <QuaySection

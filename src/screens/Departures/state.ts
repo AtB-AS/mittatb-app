@@ -7,7 +7,6 @@ import useReducerWithSideEffects, {
 } from 'use-reducer-with-side-effects';
 import {DepartureGroupMetadata} from '@atb/api/departures/departure-group';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {useFavorites} from '@atb/favorites';
 import {Location} from '@atb/favorites/types';
 import {getNearestStops} from '@atb/api/departures/stops-nearest';
 import {NearestStopPlacesQuery} from '@atb/api/types/generated/NearestStopPlacesQuery';
@@ -58,7 +57,6 @@ const reducer: ReducerWithSideEffects<
   switch (action.type) {
     case 'LOAD_NEAREST_STOP_PLACES': {
       if (!action.location) return NoUpdate();
-
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
         {
           ...state,
@@ -68,7 +66,6 @@ const reducer: ReducerWithSideEffects<
         async (state, dispatch) => {
           if (!action.location) return;
           try {
-            // Fresh fetch, reset paging and use new query input with new startTime
             const result = await getNearestStops({
               latitude: action.location.coordinates.latitude,
               longitude: action.location.coordinates.longitude,
