@@ -27,7 +27,8 @@ export default function TicketingInformation() {
         </ThemeText>
 
         <PriceTable />
-        <ThemeText>{t(InformationTexts.ticketing.texts.part3Text)}</ThemeText>
+        <ThemeText>{t(InformationTexts.ticketing.texts.part3Text_1)}</ThemeText>
+        <ThemeText>{t(InformationTexts.ticketing.texts.part3Text_2)}</ThemeText>
         <ThemeText style={styles.paragraphHeading} type="heading__paragraph">
           {t(InformationTexts.ticketing.texts.part4Heading)}
         </ThemeText>
