@@ -9,11 +9,15 @@ import type {
   VisualState,
 } from './token/types';
 import { getSecureToken, getToken } from './native';
-import { PayloadAction } from './native/types';
+import type { PayloadAction } from './native/types';
 
 export type { Token } from './native/types';
 export { RequestError } from './fetcher';
 export type { Fetch, ApiResponse, ApiRequest } from './config';
+export { PayloadAction } from './native/types';
+
+const INITIAL_RETRY_INTERVAL = 5000;
+const MAXIMUM_RETRY_INTERVAL = 1000 * 60 * 60; // 1 hour
 
 export default function createClient(
   setStatus: (status?: TokenStatus) => void,
@@ -40,6 +44,34 @@ export default function createClient(
       return 'Loading';
     }
   };
+  let currentRetryInterval = INITIAL_RETRY_INTERVAL;
+  let scheduledRetry: NodeJS.Timeout | undefined;
+
+  const scheduleRetry = () => {
+    scheduledRetry = setTimeout(
+      () =>
+        startTokenStateMachine(
+          abtTokensService,
+          setStatusWrapper,
+          safetyNetApiKey,
+          false,
+          currentAccountId
+        ),
+      currentRetryInterval
+    );
+    // Exponential backoff for timeout interval capped to maximum of one hour
+    currentRetryInterval = Math.min(
+      currentRetryInterval * 2,
+      MAXIMUM_RETRY_INTERVAL
+    );
+  };
+
+  const unscheduleRetry = () => {
+    if (scheduledRetry) {
+      clearTimeout(scheduledRetry);
+    }
+    currentRetryInterval = INITIAL_RETRY_INTERVAL;
+  };
 
   const setStatusWrapper = (storedState?: StoredState) => {
     // Do not give status callbacks for other accounts ids than the one
@@ -55,12 +87,19 @@ export default function createClient(
     };
     currentStatus = status;
     setStatus(status);
+
+    if (status?.error) {
+      scheduleRetry();
+    } else if (storedState?.state === 'Valid') {
+      unscheduleRetry();
+    }
   };
 
   return {
     setAccount(accountId: string | undefined) {
       if (currentAccountId !== accountId) {
         currentAccountId = accountId;
+        unscheduleRetry();
         startTokenStateMachine(
           abtTokensService,
           setStatusWrapper,
@@ -79,6 +118,7 @@ export default function createClient(
         return;
       }
 
+      unscheduleRetry();
       startTokenStateMachine(
         abtTokensService,
         setStatusWrapper,
@@ -87,7 +127,25 @@ export default function createClient(
         currentAccountId
       );
     },
-    generateQrCode: async (): Promise<string | undefined> => {
+
+    /**
+     * Get a secure token for the current active token on the current account.
+     *
+     * If no account set, or if the current token visual state is not 'Token',
+     * undefined will be returned.
+     *
+     * You must specify the actions the secure token should be used for. For
+     * example creating a qr code for inspection needs the 'ticketInspection'
+     * action, and to retrieve fare contracts the 'getFarecontracts' is
+     * necessary.
+     *
+     * @param action the action the created token may be used for
+     * @return {Promise} a Promise for getting the secure token for the given
+     * action
+     */
+    getSecureToken: async (
+      actions: PayloadAction[]
+    ): Promise<string | undefined> => {
       if (!currentAccountId || currentStatus?.visualState !== 'Token') {
         return Promise.resolve(undefined);
       }
@@ -98,9 +156,7 @@ export default function createClient(
         return Promise.reject(new Error('Token not found'));
       }
 
-      return getSecureToken(currentAccountId, token.tokenId, true, [
-        PayloadAction.ticketInspection,
-      ]);
+      return getSecureToken(currentAccountId, token.tokenId, true, actions);
     },
   };
 }
