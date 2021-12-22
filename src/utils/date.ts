@@ -202,8 +202,12 @@ export function formatToShortSimpleDate(
   });
 }
 
-export function formatToWeekday(date: Date | string, language: Language) {
-  return format(parseIfNeeded(date), 'EEEEEE', {
+export function formatToWeekday(
+  date: Date | string,
+  language: Language,
+  dateFormat?: string,
+) {
+  return format(parseIfNeeded(date), dateFormat ? dateFormat : 'EEEEEE', {
     locale: languageToLocale(language),
   });
 }
