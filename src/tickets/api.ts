@@ -100,9 +100,7 @@ export async function reserveOffers({
   const url = 'ticket/v2/reserve';
   let body: ReserveOfferRequestBody = {
     payment_redirect_url:
-      paymentType == PaymentType.Vipps
-        ? 'atb://vipps?transaction_id={transaction_id}&payment_id={payment_id}'
-        : undefined,
+      'atb://ticketing?transaction_id={transaction_id}&payment_id={payment_id}',
     offers,
     payment_type: paymentType,
     store_payment:

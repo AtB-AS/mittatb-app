@@ -53,19 +53,6 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const {paymentMethod} = route.params;
   const {paymentType} = paymentMethod;
 
-  const {addReservation} = useTicketState();
-  const dismissAndAddReservation = (
-    reservation: TicketReservation,
-    reservationOffers: ReserveOffer[],
-  ) => {
-    addReservation({
-      reservation,
-      offers: reservationOffers,
-      paymentType,
-    });
-    navigation.navigate(ActiveTicketsScreenName);
-  };
-
   const recurringPaymentId =
     'recurringPaymentId' in paymentMethod
       ? paymentMethod.recurringPaymentId
@@ -90,7 +77,6 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     recurringPaymentId,
     saveRecurringCard,
     cancelTerminal,
-    dismissAndAddReservation,
     scaExemption ?? false,
   );
 

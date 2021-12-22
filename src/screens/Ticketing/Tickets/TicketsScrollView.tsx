@@ -3,7 +3,7 @@ import ErrorBoundary from '@atb/error-boundary';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
-  ActiveReservation,
+  Reservation,
   FareContract,
   TravelCard,
   useTicketState,
@@ -24,7 +24,7 @@ import MessageBox from '@atb/components/message-box';
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
 type Props = {
-  reservations?: ActiveReservation[];
+  reservations?: Reservation[];
   fareContracts?: FareContract[];
   noTicketsLabel: string;
   isRefreshingTickets: boolean;

@@ -66,10 +66,7 @@ const initialState: VippsReducerState = {
 
 export default function useVippsState(
   offers: ReserveOffer[],
-  activatePolling: (
-    reservation: TicketReservation,
-    offers: ReserveOffer[],
-  ) => void,
+  dismiss: () => void,
 ) {
   const [{state, error, reservation}, dispatch] = useReducer(
     vippsReducer,
@@ -143,7 +140,7 @@ export default function useVippsState(
 
   useEffect(() => {
     if (state === 'offer-reserved' && reservation) {
-      activatePolling(reservation, offers);
+      dismiss();
       openVipps();
     }
   }, [state, openVipps]);

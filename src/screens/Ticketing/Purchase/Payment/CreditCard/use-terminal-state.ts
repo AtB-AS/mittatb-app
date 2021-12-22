@@ -97,14 +97,10 @@ export default function useTerminalState(
   recurringPaymentId: number | undefined,
   saveRecurringCard: boolean,
   cancelTerminal: () => void,
-  addReservation: (
-    reservation: TicketReservation,
-    offers: ReserveOffer[],
-  ) => void,
   scaExemption: boolean,
 ) {
   const [
-    {paymentResponseCode, isSoftDecline, reservation, loadingState, error},
+    {paymentResponseCode, reservation, loadingState, error},
     dispatch,
   ] = useReducer(terminalReducer, initialState);
 
@@ -189,7 +185,6 @@ export default function useTerminalState(
     event: WebViewNavigationEvent | WebViewErrorEvent,
   ) => {
     const {url} = event.nativeEvent;
-    console.log('url', url);
     // load events might be called several times
     // for each type of resource, html, assets, etc
     // so we have a "loading guard" here
@@ -208,12 +203,12 @@ export default function useTerminalState(
 
   const paymentRedirectCompleteRef = useRef<boolean>(false);
 
-  async function reservationOk(reservation: TicketReservation) {
-    if (reservation.recurring_payment_id) {
+  async function savePaymentMethod(recurringPaymentId?: number) {
+    if (recurringPaymentId) {
       if (user?.phoneNumber) {
         let allRecurringPaymentOptions = await listRecurringPayments();
         const card = allRecurringPaymentOptions.find((item) => {
-          return item.id === reservation.recurring_payment_id!;
+          return item.id === recurringPaymentId;
         });
         if (card) {
           savePreviousPaymentMethodByUser(user.uid, {
@@ -236,19 +231,13 @@ export default function useTerminalState(
         });
       }
     }
-    addReservation(reservation, offers);
   }
 
   useEffect(() => {
     switch (paymentResponseCode) {
       case 'OK':
         if (!reservation) return;
-
-        if (!scaExemption) {
-          console.log('uum');
-          reservationOk(reservation);
-        } else {
-        }
+        savePaymentMethod(reservation.recurring_payment_id);
         break;
       case 'Cancel':
         cancelTerminal();

@@ -77,11 +77,13 @@ export enum FareContractState {
   Refunded = 4,
 }
 
-export type ActiveReservation = {
-  reservation: TicketReservation;
-  offers: ReserveOffer[];
+export type Reservation = {
+  orderId: string;
+  paymentId: number;
+  transactionId: number;
   paymentType: PaymentType;
   paymentStatus?: PaymentStatus;
+  url: string;
 };
 
 export enum PaymentType {
