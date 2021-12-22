@@ -50,7 +50,7 @@ export async function getRealtimeDeparture(
 }
 
 export async function getRealtimeDepartureV2(
-  quayIds: String[] | undefined,
+  quayIds: string[] | undefined,
   query: DepartureGroupsQuery,
   opts?: AxiosRequestConfig,
 ): Promise<DeparturesRealtimeData> {
