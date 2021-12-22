@@ -131,6 +131,10 @@ const DeparturesOverview: React.FC<Props> = ({
   const isInitialScreen = data == null && !isLoading && !error;
   const activateScroll = !isInitialScreen || !!error;
 
+  const orderedStopPlaces = useMemo(() => sortAndFilterStopPlaces(data), [
+    data,
+  ]);
+
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {
       label: t(NearbyTexts.search.label),
@@ -252,7 +256,7 @@ const DeparturesOverview: React.FC<Props> = ({
       <ScreenReaderAnnouncement message={loadAnnouncement} />
 
       <View style={styles.container}>
-        {sortAndFilterStopPlaces(data).map((stopPlace: StopPlacePosition) => (
+        {orderedStopPlaces.map((stopPlace: StopPlacePosition) => (
           <Sections.Section withPadding key={stopPlace.node?.place?.id}>
             <Sections.GenericClickableItem
               onPress={() => {
