@@ -7,15 +7,14 @@ import useReducerWithSideEffects, {
 } from 'use-reducer-with-side-effects';
 import {DepartureGroupMetadata} from '@atb/api/departures/departure-group';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {useFavorites} from '@atb/favorites';
 import {Location} from '@atb/favorites/types';
 import {getNearestStops} from '@atb/api/departures/stops-nearest';
-import {StopPlaceDetails} from '@atb/sdk';
+import {NearestStopPlacesQuery} from '@atb/api/types/generated/NearestStopPlacesQuery';
 
 type LoadType = 'initial' | 'more';
 
 export type DepartureDataState = {
-  data: StopPlaceDetails[] | null;
+  data: NearestStopPlacesQuery | null;
   error?: {type: ErrorType; loadType: LoadType};
   locationId?: string;
   isLoading: boolean;
@@ -42,7 +41,7 @@ type DepartureDataActions =
       type: 'UPDATE_STOP_PLACES';
       locationId?: string;
       reset?: boolean;
-      result: StopPlaceDetails[];
+      result: NearestStopPlacesQuery;
     }
   | {
       type: 'SET_ERROR';
@@ -58,7 +57,6 @@ const reducer: ReducerWithSideEffects<
   switch (action.type) {
     case 'LOAD_NEAREST_STOP_PLACES': {
       if (!action.location) return NoUpdate();
-
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
         {
           ...state,
@@ -66,12 +64,13 @@ const reducer: ReducerWithSideEffects<
           error: undefined,
         },
         async (state, dispatch) => {
+          if (!action.location) return;
           try {
-            // Fresh fetch, reset paging and use new query input with new startTime
             const result = await getNearestStops({
-              lat: action.location?.coordinates.latitude || 0,
-              lon: action.location?.coordinates.longitude || 0,
-              includeUnusedQuays: false,
+              latitude: action.location.coordinates.latitude,
+              longitude: action.location.coordinates.longitude,
+              count: 30,
+              distance: 1000,
             });
             dispatch({
               type: 'UPDATE_STOP_PLACES',
