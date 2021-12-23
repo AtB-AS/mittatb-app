@@ -100,9 +100,10 @@ EOJ
 
 echo "Registering app"
 # Register app
-echo "Registering mitt-atb version $concat_app_version, command_id $request_id"
+echo "Registering mitt-atb version $concat_app_version, command_id / x-correlation-id: $request_id"
 register=$(curl -v --header "Content-Type: application/json" \
   --header "Authorization: Bearer $access_token" \
+  --header "X-Correlation-Id: $request_id" \
   --user-agent "mittatb-app build script" \
   --data "$json"\
   ${abt_url}/no.entur.abt.core.mobileapplication.v1.MobileApplicationRegistryService/AddOrUpdateMobileApplication)
