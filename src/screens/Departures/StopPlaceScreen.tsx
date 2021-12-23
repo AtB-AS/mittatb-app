@@ -50,6 +50,7 @@ import DepartureTimeSheet from '../Nearby/DepartureTimeSheet';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 import useFontScale from '@atb/utils/use-font-scale';
+import DeparturesTexts from '@atb/translations/screens/Departures';
 
 export type StopPlaceScreenParams = {
   stopPlacePosition: StopPlacePosition;
@@ -122,7 +123,7 @@ export default function StopPlaceScreen({
                 selectedQuay: undefined,
               });
             }}
-            text="Alle stopp"
+            text={t(DeparturesTexts.quayChips.allStops)}
             color={selectedQuay ? 'secondary_2' : 'secondary_3'}
             style={[styles.quayChip, {marginLeft: theme.spacings.medium}]}
           ></Button>
@@ -224,7 +225,7 @@ function DateNavigationSection({
         onPress={() => {
           setSearchTime(changeDay(searchTime, -1));
         }}
-        text="Forrige dag"
+        text={t(DeparturesTexts.stopPlaceScreen.dateNavigation.prevDay)}
         type="inline"
         mode="tertiary"
         icon={ArrowLeft}
@@ -237,7 +238,7 @@ function DateNavigationSection({
         onPress={onLaterTimePress}
         text={
           searchTime.option === 'now'
-            ? 'I dag'
+            ? t(DeparturesTexts.stopPlaceScreen.dateNavigation.today)
             : formatToTwoLineDateTime(searchTime.date, language)
         }
         type="compact"
@@ -253,7 +254,7 @@ function DateNavigationSection({
         onPress={() => {
           setSearchTime(changeDay(searchTime, 1));
         }}
-        text="Neste dag"
+        text={t(DeparturesTexts.stopPlaceScreen.dateNavigation.nextDay)}
         type="compact"
         iconPosition="right"
         mode="tertiary"
@@ -298,6 +299,7 @@ function QuaySection({
   const {theme} = useTheme();
   const isSelected = selectedQuayId === quay.id;
   const departures = getDeparturesForQuay(data, quay);
+  const {t} = useTranslation();
 
   if (selectedQuayId && !isSelected) return <></>;
 
@@ -355,7 +357,7 @@ function QuaySection({
                 {data && (
                   <Sections.GenericItem radius={selectedQuayId && 'bottom'}>
                     <ThemeText color="secondary">
-                      Ingen avganger i nærmeste fremtid
+                      {t(DeparturesTexts.stopPlaceScreen.noDepartures)}
                     </ThemeText>
                   </Sections.GenericItem>
                 )}
