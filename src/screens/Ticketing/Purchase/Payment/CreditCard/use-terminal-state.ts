@@ -43,6 +43,7 @@ type TerminalReducerAction =
   | {type: 'RESTART_TERMINAL'}
   | {type: 'OFFER_RESERVED'; reservation: TicketReservation}
   | {type: 'TERMINAL_LOADED'}
+  | {type: 'VERIFYING_BANK_ID'}
   | {type: 'SET_NETS_RESPONSE_CODE'; responseCode: NetsResponseCode}
   | {type: 'SET_ERROR'; errorType: ErrorType; errorContext: ErrorContext};
 
@@ -75,6 +76,12 @@ const terminalReducer: TerminalReducer = (prevState, action) => {
         ...prevState,
         loadingState: 'processing-payment',
         paymentResponseCode: action.responseCode,
+      };
+    }
+    case 'VERIFYING_BANK_ID': {
+      return {
+        ...prevState,
+        loadingState: 'processing-payment',
       };
     }
     case 'SET_ERROR': {
@@ -156,7 +163,9 @@ export default function useTerminalState(
     if (loadingState === 'reserving-offer') reserveOffer();
   }, [reserveOffer, loadingState]);
 
-  const loadingRef = useRef<boolean>(true);
+  const initialLoadRef = useRef<boolean>(true);
+  const redirectToPaymentCaptureRef = useRef<boolean>(false);
+  const verifyingBankIdRef = useRef<boolean>(false);
 
   function handleInitialLoadingError(
     event: WebViewNavigationEvent | WebViewErrorEvent,
@@ -181,6 +190,10 @@ export default function useTerminalState(
       dispatch({type: 'SET_NETS_RESPONSE_CODE', responseCode});
   }
 
+  function handleVerifyingBankId() {
+    dispatch({type: 'VERIFYING_BANK_ID'});
+  }
+
   const onWebViewLoadEnd = (
     event: WebViewNavigationEvent | WebViewErrorEvent,
   ) => {
@@ -188,20 +201,26 @@ export default function useTerminalState(
     // load events might be called several times
     // for each type of resource, html, assets, etc
     // so we have a "loading guard" here
-    if (loadingRef.current && !url.includes('/ticket/v2/payments/')) {
-      loadingRef.current = false;
+    if (initialLoadRef.current) {
+      initialLoadRef.current = true;
       handleInitialLoadingError(event);
-      // "payment redirect guard" here
+    } else if (!redirectToPaymentCaptureRef.current) {
+      if (url.includes('/ticket/v2/payments/')) {
+        redirectToPaymentCaptureRef.current = true;
+        handlePaymentCallback(event);
+      }
+    } else if (url === reservation?.url) {
+      // we have already redirected to payment callback
+      // which redirected back to terminal-URL because
+      // of SoftDecline
+      verifyingBankIdRef.current = true;
     } else if (
-      !paymentRedirectCompleteRef.current &&
+      verifyingBankIdRef.current &&
       url.includes('/ticket/v2/payments/')
     ) {
-      paymentRedirectCompleteRef.current = true;
-      handlePaymentCallback(event);
+      handleVerifyingBankId();
     }
   };
-
-  const paymentRedirectCompleteRef = useRef<boolean>(false);
 
   async function savePaymentMethod(recurringPaymentId?: number) {
     if (recurringPaymentId) {
@@ -246,8 +265,8 @@ export default function useTerminalState(
   }, [paymentResponseCode]);
 
   function resetOnLoadGuards() {
-    loadingRef.current = true;
-    paymentRedirectCompleteRef.current = false;
+    initialLoadRef.current = true;
+    redirectToPaymentCaptureRef.current = false;
   }
 
   function restartTerminal() {

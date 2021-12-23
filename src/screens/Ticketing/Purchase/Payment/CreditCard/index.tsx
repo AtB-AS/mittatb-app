@@ -13,7 +13,7 @@ import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs'
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import WebView, {WebViewProps} from 'react-native-webview';
+import WebView from 'react-native-webview';
 import {TicketingStackParams} from '../..';
 import {
   ActiveTicketsScreenName,
@@ -26,6 +26,11 @@ import useTerminalState, {
 } from './use-terminal-state';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {usePreferences} from '@atb/preferences';
+import Bugsnag from '@bugsnag/react-native';
+import {
+  WebViewErrorEvent,
+  WebViewNavigationEvent,
+} from 'react-native-webview/lib/WebViewTypes';
 
 type NavigationProp = CompositeNavigationProp<
   MaterialTopTabNavigationProp<TicketTabsNavigatorParams>,
@@ -65,6 +70,14 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     preferences: {scaExemption},
   } = usePreferences();
 
+  function onWebViewLoadStart(
+    event: WebViewNavigationEvent | WebViewErrorEvent,
+  ) {
+    Bugsnag.leaveBreadcrumb('terminal_navigation', {
+      url: event?.nativeEvent?.url,
+    });
+  }
+
   const {
     loadingState,
     terminalUrl,
@@ -100,6 +113,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
             source={{
               uri: terminalUrl,
             }}
+            onLoadStart={onWebViewLoadStart}
             onLoadEnd={onWebViewLoadEnd}
           />
         )}
