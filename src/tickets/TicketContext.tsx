@@ -142,7 +142,13 @@ const TicketContextProvider: React.FC = ({children}) => {
         },
         reservations: {
           onSnapshot: (reservations) =>
-            dispatch({type: 'UPDATE_RESERVATIONS', reservations}),
+            dispatch({
+              type: 'UPDATE_RESERVATIONS',
+              reservations: reservations.filter(
+                (r) =>
+                  !isHandledPaymentStatus(r.paymentStatus) && !!r.paymentStatus,
+              ),
+            }),
           onError: (err) => console.error(err),
         },
         // TODO: Temporary hack to get travelcard ID before we have tokens. Should be
