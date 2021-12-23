@@ -39,6 +39,7 @@ import {BusSide} from '@atb/assets/svg/icons/transportation';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import {StopPlacePosition} from '@atb/api/types/departures';
 import {NearestStopPlacesQuery} from '@atb/api/types/generated/NearestStopPlacesQuery';
+import DeparturesTexts from '@atb/translations/screens/Departures';
 
 const themeColor: ThemeColor = 'background_accent';
 
@@ -233,7 +234,7 @@ const DeparturesOverview: React.FC<Props> = ({
           }}
         />
       }
-      headerTitle={'New departures'}
+      headerTitle={t(DeparturesTexts.header.title)}
       useScroll={activateScroll}
       leftButton={{type: 'home', color: themeColor}}
       alternativeTitleComponent={
@@ -271,7 +272,8 @@ const DeparturesOverview: React.FC<Props> = ({
                     {stopPlace.node?.place?.name}
                   </ThemeText>
                   <ThemeText>
-                    {stopPlace.node?.place?.description || 'Holdeplass'}
+                    {stopPlace.node?.place?.description ||
+                      t(DeparturesTexts.stopPlaceList.stopPlace)}
                   </ThemeText>
                   <ThemeText>
                     {stopPlace.node?.distance?.toFixed(0) + ' m'}
