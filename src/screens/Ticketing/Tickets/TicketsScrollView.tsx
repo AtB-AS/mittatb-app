@@ -81,7 +81,7 @@ const TicketsScrollView: React.FC<Props> = ({
           <ThemeText style={styles.noTicketsText}>{noTicketsLabel}</ThemeText>
         )}
         {reservations?.map((res) => (
-          <TicketReservation key={res.reservation.order_id} reservation={res} />
+          <TicketReservation key={res.orderId} reservation={res} />
         ))}
         {fareContracts?.map((fc) => (
           <ErrorBoundary

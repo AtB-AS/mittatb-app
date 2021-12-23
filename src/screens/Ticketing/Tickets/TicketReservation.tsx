@@ -51,11 +51,7 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
         <VerifyingValidityLine />
         <View style={styles.ticketInfoContainer}>
           <ThemeText style={styles.orderText}>
-            {t(
-              TicketsTexts.reservation.orderId(
-                reservation.reservation.order_id,
-              ),
-            )}
+            {t(TicketsTexts.reservation.orderId(reservation.orderId))}
           </ThemeText>
           <ThemeText style={styles.orderText}>
             {reservation.paymentStatus !== 'CAPTURE'
@@ -65,7 +61,7 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
           {reservation.paymentType === PaymentType.Vipps &&
             reservation.paymentStatus !== 'CAPTURE' && (
               <Button
-                onPress={() => openVippsUrl(reservation.reservation.url)}
+                onPress={() => openVippsUrl(reservation.url)}
                 text={t(TicketsTexts.reservation.goToVipps)}
                 mode="tertiary"
               />

@@ -45,10 +45,8 @@ export default function setupFirestoreListener(
     .collection('customers')
     .doc(abtCustomerId)
     .collection('reservations')
-    .orderBy('created', 'desc')
     .onSnapshot(
       (snapshot) => {
-        console.log(JSON.stringify(snapshot.empty));
         const reservations = (snapshot as FirebaseFirestoreTypes.QuerySnapshot<Reservation>).docs.map<Reservation>(
           (d) => d.data(),
         );

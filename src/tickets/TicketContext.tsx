@@ -143,14 +143,14 @@ const TicketContextProvider: React.FC = ({children}) => {
         reservations: {
           onSnapshot: (reservations) =>
             dispatch({type: 'UPDATE_RESERVATIONS', reservations}),
-          onError: () => {},
+          onError: (err) => console.error(err),
         },
         // TODO: Temporary hack to get travelcard ID before we have tokens. Should be
         // replaced when tokens are implemented.
         customer: {
           onSnapshot: (customerProfile) =>
             dispatch({type: 'UPDATE_CUSTOMER_PROFILE', customerProfile}),
-          onError: () => {},
+          onError: (err) => console.error(err),
         },
       });
 
