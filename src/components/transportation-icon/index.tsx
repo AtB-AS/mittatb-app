@@ -14,15 +14,18 @@ import {useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
+import {
+  Mode as Mode_v2,
+  TransportMode as TransportMode_v2,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 import {TransportSubmode as TransportSubMode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 
 export type AnyMode = LegMode | Mode_v2 | TransportMode | TransportMode_v2;
 export type AnySubMode = TransportSubmode | TransportSubMode_v2;
 
 export type TransportationIconProps = {
-  mode?: LegMode | TransportMode | Mode_v2;
-  subMode?: TransportSubmode | TransportSubMode_v2;
+  mode?: AnyMode;
+  subMode?: AnySubMode;
 };
 
 const TransportationIcon: React.FC<TransportationIconProps> = ({
@@ -52,7 +55,7 @@ const TransportationIcon: React.FC<TransportationIconProps> = ({
 
 export default TransportationIcon;
 
-function getTransportModeSvg(mode?: LegMode | TransportMode | Mode_v2) {
+export function getTransportModeSvg(mode?: AnyMode) {
   switch (mode) {
     case 'bus':
     case 'coach':

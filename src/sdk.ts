@@ -232,3 +232,9 @@ export interface MapLine extends Feature<LineString> {
   subMode?: TransportSubmode;
   faded?: boolean;
 }
+
+export type ServiceJourneyMapInfoData = {
+  mapLegs: MapLeg[];
+  start?: Coordinates;
+  stop?: Coordinates;
+};
