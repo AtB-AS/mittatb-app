@@ -2,7 +2,7 @@
   {
     "id": "ATB:UserProfile:8ee842e3",
     "name": {"lang": "nob", "value": "Voksen"},
-    "version": "ATB:Version:9c641c1b-32de-4ad0-b4b0-dd9469881911",
+    "version": "ATB:Version:fb202edf-c18a-453d-bb3c-be3fa9eb1564",
     "description": {"lang": "nob", "value": "Fra 20 til og med 66 år."},
     "alternativeNames": [
       {"lang": "eng", "value": "Adult"},
@@ -33,7 +33,7 @@
   {
     "id": "ATB:UserProfile:d3e4ec09",
     "name": {"lang": "nob", "value": "Barn"},
-    "version": "ATB:Version:bffcd027-5caf-4e92-9b33-cbf9327c9fd4",
+    "version": "ATB:Version:29d51ff6-970e-408a-b942-b131ff6fcea2",
     "description": {
       "lang": "nob",
       "value": "Fra 6 til og med 19 år. Kjøp barnebillett om du skal ha med sykkel."
