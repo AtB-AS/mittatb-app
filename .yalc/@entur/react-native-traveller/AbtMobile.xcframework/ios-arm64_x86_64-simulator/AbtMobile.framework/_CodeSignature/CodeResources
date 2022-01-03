@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/AbtMobile-Swift.h</key>
 		<data>
-		fExcL3UMMK4bG51xd9u+Yyr5U3k=
+		uwunSmdLMDWj3qz30+/QRfTwqAg=
 		</data>
 		<key>Headers/AbtMobile.h</key>
 		<data>
@@ -14,55 +14,55 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		/R2VaAlnzMzUdeVbibRvqgfgOII=
+		Xn5O6fSPg5+76ehNoZ/ajgJZRGc=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		iYr/yxGQpo63vlHruCDGVb3D1nI=
+		bwvUtRVXxA4ggX3zTPexRcjUMAs=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		DMXmv8Xm0jSU2JvmtklCAPLE5ok=
+		Mm/Ny0PM0wFS5l45mAJdAsKn8dM=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		UKlAHD3L2yeI4znn7k5G0m/XrlQ=
+		1YuLcKw1hrhyMyfQAQv+u7qH9fU=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftdoc</key>
 		<data>
-		iYr/yxGQpo63vlHruCDGVb3D1nI=
+		bwvUtRVXxA4ggX3zTPexRcjUMAs=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftinterface</key>
 		<data>
-		DMXmv8Xm0jSU2JvmtklCAPLE5ok=
+		Mm/Ny0PM0wFS5l45mAJdAsKn8dM=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		UKlAHD3L2yeI4znn7k5G0m/XrlQ=
+		1YuLcKw1hrhyMyfQAQv+u7qH9fU=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		rVkw3DnKOXMxUoiMe/HNcS6RWOs=
+		fkSp/q9WgxXtO1tcR8mvhOfnryQ=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		kOQofrjwuWDFElnZYOZT8Rhcn+4=
+		AKL9ks8kV3AnPUihSFz9c9IKcLI=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		R65LHvN6mp/GgzScqtGj04Q+A4E=
+		/fqeRtQXo6FOW4512Xc6M4rdFGI=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/x86_64.swiftdoc</key>
 		<data>
-		rVkw3DnKOXMxUoiMe/HNcS6RWOs=
+		fkSp/q9WgxXtO1tcR8mvhOfnryQ=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/x86_64.swiftinterface</key>
 		<data>
-		kOQofrjwuWDFElnZYOZT8Rhcn+4=
+		AKL9ks8kV3AnPUihSFz9c9IKcLI=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		R65LHvN6mp/GgzScqtGj04Q+A4E=
+		/fqeRtQXo6FOW4512Xc6M4rdFGI=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -75,7 +75,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			TZNTBailzgZETKu71jFhV+1Phq557n9WJvvBOoFRiic=
+			EGQjzWan/KHzrfUXG0LaTLsXSFqcfXrFauAwcgJ4JbM=
 			</data>
 		</dict>
 		<key>Headers/AbtMobile.h</key>
@@ -89,84 +89,84 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			WlzjlLnVZV2dfOeaxQpcpD3FfgCXQoe0fp0qlOVY6CU=
+			hvKX398VRBjxFt6aVyjxU2442qn7jnmNWPgSgRH+HEI=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			kGsNnJNz1HWaW2aieERAo570BHfrgo/n1CLUm7M9PsI=
+			+Ywip6DAQdBfF38LMqAn5Xc83OFZV6Oy/nKX4sstlQw=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			+UuPy8YiO9NXOc/u2te+NsHYg490FlzvMfMtp/qCd0I=
+			c5ilzQOT7/BF6uwKVm6FnWr3ma6Pj/yE6Q6mut7rDU8=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			WlzjlLnVZV2dfOeaxQpcpD3FfgCXQoe0fp0qlOVY6CU=
+			hvKX398VRBjxFt6aVyjxU2442qn7jnmNWPgSgRH+HEI=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			kGsNnJNz1HWaW2aieERAo570BHfrgo/n1CLUm7M9PsI=
+			+Ywip6DAQdBfF38LMqAn5Xc83OFZV6Oy/nKX4sstlQw=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			+UuPy8YiO9NXOc/u2te+NsHYg490FlzvMfMtp/qCd0I=
+			c5ilzQOT7/BF6uwKVm6FnWr3ma6Pj/yE6Q6mut7rDU8=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			qJn+rn6JKU9lbsZzQktNsPr58JoX5lRLldxpsTr6sKA=
+			/5fFlohAWzSun07NZkEBPC9di9E4vTyYzdLCtLp8kPs=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			nBYl0CfYpjU2QhVFstdZnNvZrNAH8Z3yGx9Iq0Fl+Og=
+			nRYrmEQUXcC4n2je0za19p6JkwvO2zr3qsd4wPW2z2A=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			+pixxi8C8zjMhGfp+siq4OkxFwU6fcPdaiLZs2qEWDw=
+			RYMR6d+c5wSVt3GlXg2i2A/LGN7dKDyaHW8mTWZ33qg=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/x86_64.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			qJn+rn6JKU9lbsZzQktNsPr58JoX5lRLldxpsTr6sKA=
+			/5fFlohAWzSun07NZkEBPC9di9E4vTyYzdLCtLp8kPs=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/x86_64.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			nBYl0CfYpjU2QhVFstdZnNvZrNAH8Z3yGx9Iq0Fl+Og=
+			nRYrmEQUXcC4n2je0za19p6JkwvO2zr3qsd4wPW2z2A=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/x86_64.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			+pixxi8C8zjMhGfp+siq4OkxFwU6fcPdaiLZs2qEWDw=
+			RYMR6d+c5wSVt3GlXg2i2A/LGN7dKDyaHW8mTWZ33qg=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

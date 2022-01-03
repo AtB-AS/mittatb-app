@@ -1,9 +1,20 @@
 import { stateHandlerFactory } from '../HandlerFactory';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getStoreKey } from '../utils';
-import { start as startNative } from '../../../native';
+import { getAttestationSupport, start as startNative } from '../../../native';
 export default function startingHandler(safetyNetApiKey, forceRestart) {
   return stateHandlerFactory(['Starting'], async s => {
+    const {
+      result
+    } = await getAttestationSupport();
+
+    if (result !== 'SUPPORTED') {
+      return {
+        accountId: s.accountId,
+        state: 'NotSupported'
+      };
+    }
+
     const storeKey = getStoreKey(s.accountId);
     await startNative(safetyNetApiKey);
 
@@ -24,6 +35,14 @@ export default function startingHandler(safetyNetApiKey, forceRestart) {
     }
 
     const savedState = JSON.parse(savedStateString);
+
+    if (savedState.state === 'Valid') {
+      return {
+        accountId: s.accountId,
+        state: 'Loading'
+      };
+    }
+
     return { ...savedState,
       error: undefined
     };

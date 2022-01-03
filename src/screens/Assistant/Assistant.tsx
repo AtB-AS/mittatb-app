@@ -50,7 +50,7 @@ import {
 } from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {View} from 'react-native';
+import {BackHandler, View} from 'react-native';
 import {AssistantParams} from '.';
 import Loading from '../Loading';
 import FadeBetween from './FadeBetween';
@@ -59,11 +59,16 @@ import NewsBanner from './NewsBanner';
 import Results from './Results';
 import {SearchStateType} from './types';
 import {ThemeColor} from '@atb/theme/colors';
+import useInterval from '@atb/utils/use-interval';
+import {differenceInMinutes, parseISO} from 'date-fns';
 
 const themeColor: ThemeColor = 'background_accent';
 
 type AssistantRouteName = 'AssistantRoot';
 const AssistantRouteNameStatic: AssistantRouteName = 'AssistantRoot';
+
+// Used to re-trigger refresh of search time if set to 'now' after 60 minutes.
+const REFRESH_NOW_SEARCH_TIME_LIMIT_IN_MINUTES = 60;
 
 export type AssistantScreenNavigationProp = CompositeNavigationProp<
   StackNavigationProp<AssistantParams>,
@@ -136,6 +141,28 @@ const Assistant: React.FC<Props> = ({
     option: 'now',
     date: new Date().toISOString(),
   });
+
+  const screenHasFocus = useIsFocused();
+
+  useInterval(
+    () => {
+      if (searchTime.option === 'now') {
+        const now = new Date();
+        const diff = differenceInMinutes(now, parseISO(searchTime.date));
+
+        // Update "now" date if it has been more than 60 minutes
+        // since last time now has been updated
+        if (diff >= REFRESH_NOW_SEARCH_TIME_LIMIT_IN_MINUTES) {
+          navigation.setParams({
+            searchTime: {option: 'now', date: now.toISOString()},
+          });
+        }
+      }
+    },
+    1000,
+    [searchTime.option, searchTime.date],
+    !screenHasFocus || searchTime.option !== 'now',
+  );
 
   function swap() {
     log('swap', {
@@ -318,7 +345,7 @@ const Assistant: React.FC<Props> = ({
                 language,
               )}
               accessibilityHint={t(AssistantTexts.dateInput.a11yHint)}
-              color="secondary_3"
+              color="primary_2"
               onPress={onSearchTimePress}
             />
           </View>
@@ -388,8 +415,6 @@ const Assistant: React.FC<Props> = ({
     string | undefined
   >();
 
-  const screenHasFocus = useIsFocused();
-
   useEffect(() => {
     if (!screenHasFocus) return;
     switch (searchState) {
@@ -407,6 +432,21 @@ const Assistant: React.FC<Props> = ({
         break;
     }
   }, [searchState]);
+
+  // Reset view on back press instead of exiting app
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        if (screenHasFocus && from && to) {
+          resetView();
+          return true; // prevent default action
+        }
+        return false;
+      },
+    );
+    return () => backHandler.remove();
+  });
 
   return (
     <DisappearingHeader

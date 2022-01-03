@@ -8,9 +8,20 @@ export default function attestHandler() {
       attestationEncryptionPublicKey
     } = s.initiatedData;
     const activateTokenRequestBody = await getActivateTokenRequestBody(s.accountId, tokenId, nonce, attestationEncryptionPublicKey);
+
+    if (s.state !== 'AttestNew') {
+      return {
+        accountId: s.accountId,
+        state: 'ActivateRenewal',
+        oldTokenId: s.oldTokenId,
+        tokenId: tokenId,
+        attestationData: activateTokenRequestBody
+      };
+    }
+
     return {
       accountId: s.accountId,
-      state: s.state === 'AttestNew' ? 'ActivateNew' : 'ActivateRenewal',
+      state: 'ActivateNew',
       tokenId: tokenId,
       attestationData: activateTokenRequestBody
     };

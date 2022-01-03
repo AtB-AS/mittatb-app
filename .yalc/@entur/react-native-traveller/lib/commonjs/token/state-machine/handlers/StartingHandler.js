@@ -17,6 +17,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function startingHandler(safetyNetApiKey, forceRestart) {
   return (0, _HandlerFactory.stateHandlerFactory)(['Starting'], async s => {
+    const {
+      result
+    } = await (0, _native.getAttestationSupport)();
+
+    if (result !== 'SUPPORTED') {
+      return {
+        accountId: s.accountId,
+        state: 'NotSupported'
+      };
+    }
+
     const storeKey = (0, _utils.getStoreKey)(s.accountId);
     await (0, _native.start)(safetyNetApiKey);
 
@@ -37,6 +48,14 @@ function startingHandler(safetyNetApiKey, forceRestart) {
     }
 
     const savedState = JSON.parse(savedStateString);
+
+    if (savedState.state === 'Valid') {
+      return {
+        accountId: s.accountId,
+        state: 'Loading'
+      };
+    }
+
     return { ...savedState,
       error: undefined
     };

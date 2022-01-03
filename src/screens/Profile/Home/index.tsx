@@ -63,7 +63,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
   const {
     setPreference,
-    preferences: {useExperimentalTripSearch},
+    preferences: {useExperimentalTripSearch, newDepartures},
   } = usePreferences();
 
   function copyInstallId() {
@@ -110,6 +110,12 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               onPress={signOut}
             />
           )}
+          <Sections.LinkItem
+            text={t(
+              ProfileTexts.sections.account.linkItems.expiredTickets.label,
+            )}
+            onPress={() => navigation.navigate('ExpiredTickets')}
+          />
         </Sections.Section>
 
         <Sections.Section withPadding>
@@ -243,6 +249,12 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         {(!!JSON.parse(IS_QA_ENV || 'false') || __DEV__) && (
           <Sections.Section withPadding>
             <Sections.HeaderItem text="Developer menu" />
+            <Sections.ActionItem
+              mode="toggle"
+              text={'Enable new departure screen'}
+              checked={newDepartures}
+              onPress={(newDepartures) => setPreference({newDepartures})}
+            />
             <Sections.ActionItem
               mode="toggle"
               text={'Enable experimental trips search'}

@@ -1,5 +1,6 @@
 import AbtMobile
 import DeviceCheck
+import UIKit
 @_implementationOnly import Kronos
 
 public class EnturTravellerLogger {
@@ -28,12 +29,50 @@ public class EnturTraveller: NSObject {
         }
         resolve(nil)
     }
+    
+    @objc(getDeviceName:withRejecter:)
+    func getDeviceName(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        do {
+            let name = UIDevice.current.name
+            guard name != nil || name != "" else {
+                throw "Could not retrieve device name because it's nil or empty"
+            }
+            resolve(name)
+        } catch let err {
+            reject("Could not get devicename", err.localizedDescription, nil)
+        }
+    }
 
     @objc(generateAssertion:withKeyId:withNonce:withTokenId:withHash:withResolver:withRejecter:)
     func generateAssertion(accountId: String, keyId: String, nonce: String, tokenId: String, hash: Data, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         if #available(iOS 14.0, *), DCAppAttestService.shared.isSupported {
             if (!started) {
                 reject("NOT_STARTED", "The start-function must be called before any other native method", nil)
+                return
+            }
+            
+            guard !accountId.isEmpty else {
+                reject("GENERATE_ASSERTION_ERROR", "accoundId is empty", nil)
+                return
+            }
+            
+            guard !keyId.isEmpty else {
+                reject("GENERATE_ASSERTION_ERROR", "keyId is empty", nil)
+                return
+            }
+            
+            guard !nonce.isEmpty else {
+                reject("GENERATE_ASSERTION_ERROR", "nonce is empty", nil)
+                return
+            }
+            
+            guard !tokenId.isEmpty else {
+                reject("GENERATE_ASSERTION_ERROR", "tokenId is empty", nil)
+                return
+            }
+            
+            guard !hash.isEmpty else {
+                reject("GENERATE_ASSERTION_ERROR", "hash is empty", nil)
                 return
             }
             
@@ -57,6 +96,21 @@ public class EnturTraveller: NSObject {
         if #available(iOS 14.0, *), DCAppAttestService.shared.isSupported {
             if (!started) {
                 reject("NOT_STARTED", "The start-function must be called before any other native method", nil)
+                return
+            }
+            
+            guard !accountId.isEmpty else {
+                reject("ATTEST", "accoundId is empty", nil)
+                return
+            }
+            
+            guard !nonce.isEmpty else {
+                reject("ATTEST", "nonce is empty", nil)
+                return
+            }
+            
+            guard !tokenId.isEmpty else {
+                reject("ATTEST", "tokenId is empty", nil)
                 return
             }
             
@@ -86,6 +140,27 @@ public class EnturTraveller: NSObject {
 
     @objc(attestLegacy:withTokenId:withNonce:withServerPublicKey:withResolver:withRejecter:)
     func attestLegacy(accountId: String, tokenId: String, nonce: String, serverPublicKey: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+        
+        guard !accountId.isEmpty else {
+            reject("ATTEST_LEGACY", "accoundId is empty", nil)
+            return
+        }
+        
+        guard !nonce.isEmpty else {
+            reject("ATTEST_LEGACY", "nonce is empty", nil)
+            return
+        }
+        
+        guard !tokenId.isEmpty else {
+            reject("ATTEST_LEGACY", "tokenId is empty", nil)
+            return
+        }
+        
+        guard !serverPublicKey.isEmpty else {
+            reject("ATTEST_LEGACY", "tokenId is empty", nil)
+            return
+        }
+        
         if #available(iOS 11.0, *), DCDevice.current.isSupported {
             if (!started) {
                 reject("NOT_STARTED", "The start-function must be called before any other native method", nil)
@@ -117,11 +192,13 @@ public class EnturTraveller: NSObject {
 
     @objc(getAttestationSupport:withRejecter:)
     func getAttestationSupport(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
-        if (!started) {
-            reject("NOT_STARTED", "The start-function must be called before any other native method", nil)
-            return
-        }
+#if targetEnvironment(simulator)
+        resolve([
+            "result": "NOT_SUPPORTED",
+        ])
         
+        return
+#else
         if #available(iOS 11, *) {
             let currentDevice = DCDevice.current
             if (currentDevice.isSupported) {
@@ -129,27 +206,58 @@ public class EnturTraveller: NSObject {
                     let shared = DCAppAttestService.shared
                     if shared.isSupported {
                         resolve([
-                            "result": "SUCCESS",
-                            "attestation_type": "DCAppAttestService",
-                            "iOS_support": "14+"
+                            "result": "SUPPORTED",
+                            "attestationType": "iOS_Device_Attestation",
                         ])
+                        
+                        return
                     }
                 }  else {
                     resolve([
-                        "result": "SUCCESS",
-                        "attestation_type": "DCDevice",
-                        "iOS_support": "11+"
+                        "result": "SUPPORTED",
+                        "attestationType": "iOS_Device_Check",
                     ])
+                    
+                    return
                 }
             }
-            reject("ATTESTATION_ERROR", "Device cannot be attested", nil)
         }
+        
+        resolve([
+            "result": "NOT_SUPPORTED",
+        ])
+#endif
     }
     
     @objc(addToken:withTokenId:withCertificate:withTokenValidityStart:withTokenValidityEnd:withResolver:withRejecter:)
     func addToken(accountId: String, tokenId: String, certificate: String, tokenValidityStart: NSNumber, tokenValidityEnd: NSNumber, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         if (!started) {
             reject("NOT_STARTED", "The start-function must be called before any other native method", nil)
+            return
+        }
+        
+        guard !accountId.isEmpty else {
+            reject("ADD_TOKEN", "accoundId is empty", nil)
+            return
+        }
+        
+        guard !certificate.isEmpty else {
+            reject("ADD_TOKEN", "nonce is empty", nil)
+            return
+        }
+        
+        guard !tokenId.isEmpty else {
+            reject("ADD_TOKEN", "tokenId is empty", nil)
+            return
+        }
+        
+        guard Int(truncating: tokenValidityStart) > 0 else {
+            reject("ADD_TOKEN", "nonce is empty", nil)
+            return
+        }
+        
+        guard Int(truncating: tokenValidityEnd) > 0 else {
+            reject("ADD_TOKEN", "tokenId is empty", nil)
             return
         }
         
@@ -182,6 +290,11 @@ public class EnturTraveller: NSObject {
             return
         }
         
+        guard !accountId.isEmpty else {
+            reject("GET_TOKEN", "accoundId is empty", nil)
+            return
+        }
+        
         let tokenStore = TokenStore()
 
         if let token = tokenStore.loadActiveToken(accountId) {
@@ -204,6 +317,11 @@ public class EnturTraveller: NSObject {
             return
         }
         
+        guard !accountId.isEmpty else {
+            reject("DELETE_TOKEN", "accoundId is empty", nil)
+            return
+        }
+        
         let tokenStore = TokenStore()
 
         let _ = tokenStore.deleteTokens(forAccountId: accountId, evenActive: true)
@@ -211,12 +329,23 @@ public class EnturTraveller: NSObject {
         resolve(nil)
     }
 
-    @objc(getSecureToken:withActions:withResolver:withRejecter:)
-    func getSecureToken(accountId: String, actions: NSArray, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+    @objc(getSecureToken:withTokenId:withIncludeCertificate:withActions:withResolver:withRejecter:)
+    func getSecureToken(accountId: String, tokenId: String, includeCertificate: Bool, actions: NSArray, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         if (!started) {
             reject("NOT_STARTED", "The start-function must be called before any other native method", nil)
             return
         }
+        
+        guard !accountId.isEmpty else {
+            reject("GET_SECURE_TOKEN", "accoundId is empty", nil)
+            return
+        }
+        
+        guard actions.count > 0 else {
+            reject("GET_SECURE_TOKEN", "accoundId is empty", nil)
+            return
+        }
+        
         guard let secureTokenService = secureTokenService else {
             reject("SECURE_TOKEN_ERROR", "SecureTokenService is not initatied, and cannot be nil", nil)
             return
@@ -230,7 +359,7 @@ public class EnturTraveller: NSObject {
             reject("SECURE_TOKEN_ERROR", error.localizedDescription, error)
             return
         }
-        let secureToken = secureTokenService.getSecureToken(accountId, actions: payloadActions)
+        let secureToken = secureTokenService.getSecureToken(accountId, tokenId: tokenId, actions: payloadActions, includeCertificate: includeCertificate)
         switch (secureToken) {
         case .success(let token):
             resolve(token)

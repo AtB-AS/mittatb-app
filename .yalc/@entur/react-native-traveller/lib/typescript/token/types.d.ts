@@ -2,7 +2,9 @@ import type { Token } from '@entur/react-native-traveller';
 export declare type InitializeTokenRequest = {
     requireAttestation: boolean;
     deviceName: string;
-    keyValues?: Map<string, string>;
+    keyValues?: {
+        [key: string]: string;
+    };
 };
 export declare type InitializeTokenResponse = {
     attestationEncryptionPublicKey: string;
@@ -11,8 +13,19 @@ export declare type InitializeTokenResponse = {
     nonce: string;
     nonceValidityEnd: number;
 };
+export declare type TokenLifecycleState = 'TOKEN_LIFECYCLE_STATE_UNSPECIFIED' | 'TOKEN_LIFECYCLE_STATE_NOT_ACTIVATED' | 'TOKEN_LIFECYCLE_STATE_ACTIVATED' | 'TOKEN_LIFECYCLE_STATE_CANCELLED' | 'TOKEN_LIFECYCLE_STATE_REMOVED';
+export declare type TokenType = 'TOKEN_TYPE_UNSPECIFIED' | 'TOKEN_TYPE_QR_SMARTPHONE' | 'TOKEN_TYPE_QR_PAPER' | 'TOKEN_TYPE_TRAVELCARD' | 'TOKEN_TYPE_REFERENCE_CODE' | 'TOKEN_TYPE_PLAIN_UNSIGNED' | 'TOKEN_TYPE_EXTERNAL';
+export declare type TokenAction = 'TOKEN_ACTION_UNSPECIFIED' | 'TOKEN_ACTION_TICKET_TRANSFER' | 'TOKEN_ACTION_ADD_REMOVE_TOKEN' | 'TOKEN_ACTION_IDENTIFICATION' | 'TOKEN_ACTION_TICKET_INSPECTION' | 'TOKEN_ACTION_GET_FARECONTRACTS' | 'TOKEN_ACTION_TRAVELCARD' | 'TOKEN_ACTION_CONSUME_ACCESS_RIGHTS';
 export declare type ListTokensResponse = {
     id: string;
+    expires: number;
+    state: TokenLifecycleState;
+    type: TokenType;
+    allowedActions: TokenAction[];
+    deviceName: string;
+    keyValues?: {
+        [key: string]: string;
+    };
 }[];
 export declare type GetTokenCertificateResponse = ActivateTokenResponse;
 export declare type RenewTokenResponse = {
@@ -75,26 +88,41 @@ export declare type TokenStatus = {
     error?: TokenError;
     visualState: VisualState;
 };
-declare const tokenStates: readonly ["Starting", "Loading", "Valid", "GettingTokenCertificate", "Validating", "DeleteLocal", "InitiateNew", "InitiateRenewal", "AttestNew", "AttestRenewal", "ActivateNew", "ActivateRenewal", "AddToken"];
+declare const tokenStates: readonly ["Starting", "NotSupported", "Loading", "Valid", "GettingTokenCertificate", "Validating", "DeleteLocal", "InitiateNew", "InitiateRenewal", "AttestNew", "AttestRenewal", "ActivateNew", "ActivateRenewal", "AddToken"];
 export declare type TokenState = typeof tokenStates[number];
 export declare type StoredState = {
     accountId: string;
     error?: TokenError;
 } & ({
-    state: 'Starting' | 'Loading' | 'InitiateNew' | 'DeleteLocal' | 'InitiateRenewal' | 'Valid' | 'GettingTokenCertificate';
+    state: 'Starting' | 'Loading' | 'InitiateNew' | 'DeleteLocal' | 'NotSupported';
+} | {
+    state: 'GettingTokenCertificate' | 'InitiateRenewal';
+    tokenId: string;
+} | {
+    state: 'Valid';
+    isInspectable: boolean;
 } | {
     state: 'Validating';
     token: Token;
 } | {
-    state: 'AttestNew' | 'AttestRenewal';
+    state: 'AttestNew';
     initiatedData: InitializeTokenResponse;
 } | {
-    state: 'ActivateNew' | 'ActivateRenewal';
+    state: 'AttestRenewal';
+    initiatedData: InitializeTokenResponse;
+    oldTokenId: string;
+} | {
+    state: 'ActivateNew';
     attestationData: ActivateTokenRequest;
     tokenId: string;
+} | {
+    state: 'ActivateRenewal';
+    attestationData: ActivateTokenRequest;
+    tokenId: string;
+    oldTokenId: string;
 } | {
     state: 'AddToken';
     activatedData: ActivateTokenResponse;
 });
-export declare type VisualState = 'Token' | 'Loading' | 'Error' | 'MissingNetConnection';
+export declare type VisualState = 'Token' | 'NotInspectable' | 'Loading' | 'Error' | 'MissingNetConnection';
 export {};

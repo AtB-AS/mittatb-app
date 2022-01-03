@@ -21,6 +21,11 @@ or alternatively using `brew install fastlane`
 fastlane ios update_devices
 ```
 Update ad hoc devices
+### ios generate_new_certificates
+```
+fastlane ios generate_new_certificates
+```
+Generate new certificates
 ### ios get_cert
 ```
 fastlane ios get_cert
@@ -31,6 +36,16 @@ Match certificates
 fastlane ios build
 ```
 Build the iOS application.
+### ios firebase_distribution_staging
+```
+fastlane ios firebase_distribution_staging
+```
+Upload the build to Firebase App Distribution
+### ios testflight_prod
+```
+fastlane ios testflight_prod
+```
+Upload app to testflight
 ### ios appcenter_staging
 ```
 fastlane ios appcenter_staging

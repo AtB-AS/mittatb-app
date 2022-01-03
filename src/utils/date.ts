@@ -160,6 +160,12 @@ export function fullDateTime(isoDate: string | Date, language: Language) {
 
 export {isSameDay};
 
+export function formatToShortDate(date: Date | string, language: Language) {
+  return format(parseIfNeeded(date), 'dd. MMM', {
+    locale: languageToLocale(language),
+  });
+}
+
 export function formatToSimpleDate(date: Date | string, language: Language) {
   return format(parseIfNeeded(date), 'do MMMM', {
     locale: languageToLocale(language),
@@ -196,8 +202,12 @@ export function formatToShortSimpleDate(
   });
 }
 
-export function formatToWeekday(date: Date | string, language: Language) {
-  return format(parseIfNeeded(date), 'EEEEEE', {
+export function formatToWeekday(
+  date: Date | string,
+  language: Language,
+  dateFormat?: string,
+) {
+  return format(parseIfNeeded(date), dateFormat ? dateFormat : 'EEEEEE', {
     locale: languageToLocale(language),
   });
 }

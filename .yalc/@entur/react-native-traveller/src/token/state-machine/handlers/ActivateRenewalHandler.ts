@@ -8,7 +8,7 @@ export default function activateRenewalHandler(
   abtTokensService: AbtTokensService
 ): StateHandler {
   return stateHandlerFactory(['ActivateRenewal'], async (s) => {
-    const signedToken = await getSecureToken(s.accountId, [
+    const signedToken = await getSecureToken(s.accountId, s.oldTokenId, true, [
       PayloadAction.addRemoveToken,
     ]);
 
@@ -30,6 +30,7 @@ export default function activateRenewalHandler(
         // The token has already been renewed. May happen if retrying after timeout.
         return {
           accountId: s.accountId,
+          tokenId: s.tokenId,
           state: 'GettingTokenCertificate',
         };
       }

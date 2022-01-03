@@ -157,6 +157,7 @@ function labelForTime(
   searchDate: string,
   t: TFunc<typeof Language>,
   language: Language,
+  accessibility?: boolean,
 ) {
   const resultTime = formatToClockOrRelativeMinutes(
     time,
@@ -168,7 +169,12 @@ function labelForTime(
     return t(NearbyTexts.results.relativeTime(resultTime));
   }
 
-  return addDatePrefixIfNecessary(resultTime, time, searchDate);
+  return addDatePrefixIfNecessary(
+    resultTime,
+    time,
+    searchDate,
+    accessibility ? 'EEEE' : undefined,
+  );
 }
 
 function getAccessibilityTextFirstDeparture(
@@ -211,10 +217,10 @@ function getAccessibilityTextFirstDeparture(
           [secondResult, ...rest]
             .map((i) =>
               i.realtime
-                ? labelForTime(i.time, searchDate, t, language)
+                ? labelForTime(i.time, searchDate, t, language, true)
                 : t(
                     NearbyTexts.results.departure.nextAccessibilityNotRealtime(
-                      labelForTime(i.time, searchDate, t, language),
+                      labelForTime(i.time, searchDate, t, language, true),
                     ),
                   ),
             )
@@ -283,11 +289,16 @@ const addDatePrefixIfNecessary = (
   timeText: string,
   departureDate: string,
   searchDate: string,
+  dateFormat?: string,
 ) => {
   if (isWithinSameDate(searchDate, departureDate)) {
     return timeText;
   } else {
-    return `${formatToWeekday(departureDate, Language.Norwegian)}. ${timeText}`;
+    return `${formatToWeekday(
+      departureDate,
+      Language.Norwegian,
+      dateFormat ? dateFormat : undefined,
+    )}. ${timeText}`;
   }
 };
 
@@ -300,6 +311,7 @@ const useItemStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   },
   lineHeader: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   scrollContainer: {
     marginBottom: theme.spacings.medium,

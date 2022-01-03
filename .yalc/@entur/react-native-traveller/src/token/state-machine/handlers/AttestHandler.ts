@@ -12,9 +12,19 @@ export default function attestHandler(): StateHandler {
       attestationEncryptionPublicKey
     );
 
+    if (s.state !== 'AttestNew') {
+      return {
+        accountId: s.accountId,
+        state: 'ActivateRenewal',
+        oldTokenId: s.oldTokenId,
+        tokenId: tokenId,
+        attestationData: activateTokenRequestBody,
+      };
+    }
+
     return {
       accountId: s.accountId,
-      state: s.state === 'AttestNew' ? 'ActivateNew' : 'ActivateRenewal',
+      state: 'ActivateNew',
       tokenId: tokenId,
       attestationData: activateTokenRequestBody,
     };

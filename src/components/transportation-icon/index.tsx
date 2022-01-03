@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleProp, ViewStyle, AccessibilityProps} from 'react-native';
+import {View} from 'react-native';
 import {
   BusSide,
   TramSide,
@@ -10,13 +10,15 @@ import {
 } from '@atb/assets/svg/icons/transportation';
 import {LegMode, TransportSubmode, TransportMode} from '@atb/sdk';
 import {StyleSheet} from '@atb/theme';
-import {SvgProps} from 'react-native-svg';
 import {useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 import {TransportSubmode as TransportSubMode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
+
+export type AnyMode = LegMode | Mode_v2 | TransportMode | TransportMode_v2;
+export type AnySubMode = TransportSubmode | TransportSubMode_v2;
 
 export type TransportationIconProps = {
   mode?: LegMode | TransportMode | Mode_v2;
@@ -28,11 +30,17 @@ const TransportationIcon: React.FC<TransportationIconProps> = ({
   subMode,
 }) => {
   const {t} = useTranslation();
-  const color = useTransportationColor(mode, subMode);
+  const color = useTransportationColor(mode, subMode, 'color');
+  const backgroundColor = useTransportationColor(
+    mode,
+    subMode,
+    'backgroundColor',
+  );
   const svg = getTransportModeSvg(mode);
+  const styles = useStyles();
 
   return svg ? (
-    <View>
+    <View style={[styles.transportationIcon, {backgroundColor}]}>
       <ThemeIcon
         svg={svg}
         fill={color}
@@ -63,3 +71,10 @@ function getTransportModeSvg(mode?: LegMode | TransportMode | Mode_v2) {
       return null;
   }
 }
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  transportationIcon: {
+    padding: 3,
+    borderRadius: theme.border.radius.small,
+  },
+}));

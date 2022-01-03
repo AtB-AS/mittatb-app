@@ -142,7 +142,7 @@ GEM
       xcodeproj (>= 1.13.0, < 2.0.0)
       xcpretty (~> 0.3.0)
       xcpretty-travis-formatter (>= 0.0.3)
-    fastlane-plugin-appcenter (1.11.0)
+    fastlane-plugin-appcenter (1.11.1)
     fastlane-plugin-firebase_app_distribution (0.3.1)
     ffi (1.15.1)
     fourflusher (2.3.1)
@@ -266,6 +266,7 @@ PLATFORMS
 
 DEPENDENCIES
   cocoapods (= 1.10.1)
+  dotenv
   fastlane
   fastlane-plugin-appcenter
   fastlane-plugin-firebase_app_distribution

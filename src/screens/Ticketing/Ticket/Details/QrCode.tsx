@@ -17,7 +17,7 @@ type Props = {
 };
 
 export default function QrCode({validityStatus, isInspectable}: Props) {
-  const {tokenStatus, generateQrCode} = useMobileContextState();
+  const {tokenStatus, generateQrCode, retry} = useMobileContextState();
 
   if (validityStatus !== 'valid') return null;
   if (!isInspectable) return null;
@@ -27,7 +27,9 @@ export default function QrCode({validityStatus, isInspectable}: Props) {
     case 'Token':
       return <QrCodeSvg generateQrCode={generateQrCode} />;
     case 'Error':
-      return <QrCodeError />;
+      return <QrCodeError retry={retry} />;
+    case 'NotInspectable':
+      return <QrCodeDeviceNotInspectable />;
     case 'MissingNetConnection':
       return <QrCodeMissingNetwork />;
     case 'Loading':
@@ -115,16 +117,30 @@ const useQrCode = (
 
   return tokenQRCode;
 };
+const QrCodeError = ({retry}: {retry?: (forceRestart: boolean) => void}) => {
+  const {t} = useTranslation();
 
-const QrCodeError = () => {
+  return (
+    <Sections.GenericItem>
+      <MessageBox
+        type={'error'}
+        title={t(TicketTexts.details.qrCodeErrors.generic.title)}
+        message={t(TicketTexts.details.qrCodeErrors.generic.text)}
+        onPress={retry && (() => retry(true))}
+        onPressText={retry && t(TicketTexts.details.qrCodeErrors.generic.retry)}
+      />
+    </Sections.GenericItem>
+  );
+};
+const QrCodeDeviceNotInspectable = () => {
   const {t} = useTranslation();
 
   return (
     <Sections.GenericItem>
       <MessageBox
         type={'warning'}
-        title={t(TicketTexts.details.qrCodeErrors.generic.title)}
-        message={t(TicketTexts.details.qrCodeErrors.generic.text)}
+        title={t(TicketTexts.details.qrCodeErrors.notInspectable.title)}
+        message={t(TicketTexts.details.qrCodeErrors.notInspectable.text)}
       />
     </Sections.GenericItem>
   );

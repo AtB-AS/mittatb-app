@@ -8,18 +8,16 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import React from 'react';
 import {View} from 'react-native';
 import TabBar from './TabBar';
-import {ActiveTickets, BuyTickets, ExpiredTickets} from './Tabs';
+import {ActiveTickets, BuyTickets} from './Tabs';
 import TicketInformationalOverlay from '@atb/screens/Ticketing/Tickets/TicketInformationalOverlay';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export const BuyTicketsScreenName = 'BuyTickets';
 export const ActiveTicketsScreenName = 'ActiveTickets';
-export const ExpiredTicketsScreenName = 'ExpiredTickets';
 
 export type TicketTabsNavigatorParams = {
   [BuyTicketsScreenName]: undefined;
   [ActiveTicketsScreenName]: undefined;
-  [ExpiredTicketsScreenName]: undefined;
 };
 
 const Tab = createMaterialTopTabNavigator<TicketTabsNavigatorParams>();
@@ -63,16 +61,6 @@ export default function TicketTabs() {
             tabBarLabel: t(TicketsTexts.activeTicketsTab.label),
             tabBarAccessibilityLabel: t(
               TicketsTexts.activeTicketsTab.a11yLabel,
-            ),
-          }}
-        />
-        <Tab.Screen
-          name={ExpiredTicketsScreenName}
-          component={ExpiredTickets}
-          options={{
-            tabBarLabel: t(TicketsTexts.expiredTicketsTab.label),
-            tabBarAccessibilityLabel: t(
-              TicketsTexts.expiredTicketsTab.a11yLabel,
             ),
           }}
         />

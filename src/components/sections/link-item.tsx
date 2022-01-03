@@ -12,6 +12,7 @@ import NavigationIcon, {
 } from '@atb/components/theme-icon/navigation-icon';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 import {StyleSheet} from '@atb/theme';
+import {TextNames} from '@atb/theme/colors';
 
 export type LinkItemProps = SectionItem<{
   text: string;
@@ -20,6 +21,7 @@ export type LinkItemProps = SectionItem<{
   icon?: NavigationIconTypes | JSX.Element;
   disabled?: boolean;
   accessibility?: AccessibilityProps;
+  textType?: TextNames;
 }>;
 export default function LinkItem({
   text,
@@ -28,6 +30,7 @@ export default function LinkItem({
   icon,
   accessibility,
   disabled,
+  textType,
   ...props
 }: LinkItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
@@ -50,7 +53,9 @@ export default function LinkItem({
       {...accessibilityWithOverrides}
     >
       <View style={[style.spaceBetween, disabledStyle]}>
-        <ThemeText style={contentContainer}>{text}</ThemeText>
+        <ThemeText style={contentContainer} type={textType}>
+          {text}
+        </ThemeText>
         {iconEl}
       </View>
       {subtitle && (

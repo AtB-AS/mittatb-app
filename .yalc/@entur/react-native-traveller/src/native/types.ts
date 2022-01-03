@@ -1,3 +1,13 @@
+export type AttestationSupport =
+  | {
+      result: 'SUPPORTED';
+      attestationType:
+        | 'iOS_Device_Attestation'
+        | 'iOS_Device_Check'
+        | 'SafetyNet';
+    }
+  | { result: 'NOT_SUPPORTED' };
+
 export type AttestationData = {
   attestationObject: string;
   keyId: string;
