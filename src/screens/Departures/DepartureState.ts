@@ -39,16 +39,13 @@ const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 const HARD_REFRESH_LIMIT_IN_MINUTES = 10;
 const MIN_TIME_RANGE = 3 * 60 * 60; // Three hours
 
-type LoadType = 'initial' | 'more';
-
 export type DepartureDataState = {
   data: DepartureTypes.EstimatedCall[] | null;
   // showOnlyFavorites: boolean;
   tick?: Date;
-  error?: {type: ErrorType; loadType: LoadType};
+  error?: {type: ErrorType};
   locationId?: string;
   isLoading: boolean;
-  isFetchingMore: boolean;
   queryInput: DepartureGroupsQuery;
   cursorInfo: DepartureGroupMetadata['metadata'] | undefined;
   lastRefreshTime: Date;
@@ -64,7 +61,6 @@ const initialState: DepartureDataState = {
   error: undefined,
   locationId: undefined,
   isLoading: false,
-  isFetchingMore: false,
   cursorInfo: undefined,
   queryInput: initialQueryInput,
   lastRefreshTime: new Date(),
@@ -80,11 +76,6 @@ type DepartureDataActions =
       stopPlacePosition: DepartureTypes.StopPlacePosition;
       quay?: DepartureTypes.Quay;
       startTime?: string;
-      // favoriteDepartures?: UserFavoriteDepartures;
-    }
-  | {
-      type: 'LOAD_MORE_DEPARTURES';
-      stopPlacePosition?: DepartureTypes.StopPlacePosition;
       // favoriteDepartures?: UserFavoriteDepartures;
     }
   // | {
@@ -109,7 +100,6 @@ type DepartureDataActions =
     }
   | {
       type: 'SET_ERROR';
-      loadType: LoadType;
       error: ErrorType;
       reset?: boolean;
     }
@@ -144,7 +134,6 @@ const reducer: ReducerWithSideEffects<
           ...state,
           isLoading: true,
           error: undefined,
-          isFetchingMore: true,
           queryInput,
         },
         async (state, dispatch) => {
@@ -166,7 +155,6 @@ const reducer: ReducerWithSideEffects<
             dispatch({
               type: 'SET_ERROR',
               reset: stopPlace.id !== state.locationId,
-              loadType: 'initial',
               error: getAxiosErrorType(e),
             });
           } finally {
@@ -175,47 +163,6 @@ const reducer: ReducerWithSideEffects<
         },
       );
     }
-
-    // case 'LOAD_MORE_DEPARTURES': {
-    //   if (!action.stopPlace || !state.cursorInfo?.hasNextPage)
-    //     return NoUpdate();
-    //   if (state.isFetchingMore) return NoUpdate();
-
-    //   return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
-    //     {...state, error: undefined, isFetchingMore: true},
-    //     async (state, dispatch) => {
-    //       try {
-    //         // Use previously stored queryInput with stored startTime
-    //         // to ensure that we get the same departures.
-    //         const result = await getNextDepartureGroups(
-    //           {
-    //             stopPlace: action.stopPlace,
-    //             // favorites: state.showOnlyFavorites
-    //             //   ? action.favoriteDepartures
-    //             //   : undefined,
-    //           },
-    //           state.cursorInfo!,
-    //         );
-
-    //         if (result) {
-    //           dispatch({
-    //             type: 'UPDATE_DEPARTURES',
-    //             locationId: action.stopPlace?.id,
-    //             result,
-    //           });
-    //         }
-    //       } catch (e) {
-    //         dispatch({
-    //           type: 'SET_ERROR',
-    //           loadType: 'more',
-    //           error: getAxiosErrorType(e),
-    //         });
-    //       } finally {
-    //         dispatch({type: 'STOP_LOADER'});
-    //       }
-    //     },
-    //   );
-    // }
 
     case 'LOAD_REALTIME_DATA': {
       if (!state.data?.length) return NoUpdate();
@@ -249,7 +196,6 @@ const reducer: ReducerWithSideEffects<
       return Update<DepartureDataState>({
         ...state,
         isLoading: false,
-        isFetchingMore: false,
       });
     }
 
@@ -313,7 +259,6 @@ const reducer: ReducerWithSideEffects<
         ...state,
         error: {
           type: action.error,
-          loadType: action.loadType,
         },
         data: action.reset ? null : state.data,
       });
