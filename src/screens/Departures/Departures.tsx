@@ -257,6 +257,16 @@ const DeparturesOverview: React.FC<Props> = ({
       <ScreenReaderAnnouncement message={loadAnnouncement} />
 
       <View style={styles.container}>
+        <ThemeText
+          style={styles.listDescription}
+          type="body__secondary"
+          color="secondary"
+        >
+          {fromLocation?.resultType === 'geolocation'
+            ? t(DeparturesTexts.stopPlaceList.listDescription.geoLoc)
+            : t(DeparturesTexts.stopPlaceList.listDescription.address) +
+              fromLocation?.name}
+        </ThemeText>
         {orderedStopPlaces.map((stopPlace: StopPlacePosition) => (
           <Sections.Section withPadding key={stopPlace.node?.place?.id}>
             <Sections.GenericClickableItem
@@ -400,7 +410,7 @@ function sortAndFilterStopPlaces(
 
 const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    paddingTop: theme.spacings.medium,
+    paddingVertical: theme.spacings.medium,
   },
   paddedContainer: {
     marginHorizontal: theme.spacings.medium,
@@ -426,6 +436,10 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
     paddingRight: theme.spacings.medium / 2,
     paddingLeft: theme.spacings.medium,
     paddingBottom: theme.spacings.medium,
+  },
+  listDescription: {
+    paddingVertical: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium * 2,
   },
   stopPlaceContainer: {
     flexDirection: 'row',

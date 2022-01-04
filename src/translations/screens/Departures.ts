@@ -6,6 +6,10 @@ const DeparturesTexts = {
   },
   stopPlaceList: {
     stopPlace: _('Holdeplass', 'Stop'),
+    listDescription: {
+      geoLoc: _('I nærheten', 'Nearby'),
+      address: _(`Holdeplasser nær `, `Stops near `),
+    },
   },
   quayChips: {
     allStops: _('Alle stopp', 'All stops'),
