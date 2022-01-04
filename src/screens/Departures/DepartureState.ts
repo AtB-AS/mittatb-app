@@ -32,7 +32,7 @@ import {
 import * as DepartureTypes from '@atb/api/types/departures';
 import {flatMap} from 'lodash';
 
-const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
+const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 
 // Used to re-trigger full refresh after N minutes.
 // To repopulate the view when we get fewer departures.
@@ -55,7 +55,7 @@ export type DepartureDataState = {
 };
 
 const initialQueryInput: DepartureGroupsQuery = {
-  limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
+  limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
   startTime: new Date().toISOString(),
 };
 const initialState: DepartureDataState = {
@@ -135,7 +135,7 @@ const reducer: ReducerWithSideEffects<
       const queryInput: DepartureGroupsQuery = {
         limitPerLine: action.quay
           ? 1000
-          : DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
+          : DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
         startTime: action.startTime ?? new Date().toISOString(),
       };
 
@@ -149,37 +149,18 @@ const reducer: ReducerWithSideEffects<
         },
         async (state, dispatch) => {
           try {
-            // Fresh fetch, reset paging and use new query input with new startTime
             if (!stopPlace) return;
-            const timeUntilMidnight = differenceInSeconds(
-              addDays(parseISO(queryInput.startTime), 1).setHours(0, 0, 0),
-              parseISO(queryInput.startTime),
+            const result = await fetchEstimatedCalls(
+              queryInput,
+              action.stopPlacePosition,
+              action.quay,
             );
-            const timeRange = Math.max(timeUntilMidnight, MIN_TIME_RANGE);
-
-            const result = action.quay
-              ? await getQuayDepartures({
-                  id: action.quay.id,
-                  startTime: queryInput.startTime,
-                  numberOfDepartures: 1000,
-                  timeRange: Math.round(timeRange),
-                }).then((quayDepartures) => quayDepartures.quay?.estimatedCalls)
-              : await getStopPlaceDepartures({
-                  id: stopPlace.id,
-                  startTime: queryInput.startTime,
-                  numberOfDepartures: 5,
-                }).then((stopDepartures) =>
-                  flatMap(
-                    stopDepartures.stopPlace?.quays,
-                    (quay) => quay.estimatedCalls,
-                  ),
-                );
 
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
               locationId: action.quay ? action.quay.id : stopPlace.id,
-              result: result as DepartureTypes.EstimatedCall[],
+              result: result,
             });
           } catch (e) {
             dispatch({
@@ -412,4 +393,43 @@ export function useDepartureData(
     refresh,
     // setShowFavorites,
   };
+}
+
+async function fetchEstimatedCalls(
+  queryInput: DepartureGroupsQuery,
+  stopPlace: DepartureTypes.StopPlacePosition,
+  quay?: DepartureTypes.Quay,
+): Promise<DepartureTypes.EstimatedCall[]> {
+  if (!stopPlace.node?.place) return [];
+  let estimatedCalls: DepartureTypes.EstimatedCall[] = [];
+
+  if (quay) {
+    // Get seconds until midnight, but a minimum of 3 hours
+    const timeUntilMidnight = differenceInSeconds(
+      addDays(parseISO(queryInput.startTime), 1).setHours(0, 0, 0),
+      parseISO(queryInput.startTime),
+    );
+    const timeRange = Math.round(Math.max(timeUntilMidnight, MIN_TIME_RANGE));
+
+    const result = await getQuayDepartures({
+      id: quay.id,
+      startTime: queryInput.startTime,
+      numberOfDepartures: queryInput.limitPerLine,
+      timeRange: timeRange,
+    });
+    estimatedCalls = result.quay
+      ?.estimatedCalls as DepartureTypes.EstimatedCall[];
+  } else {
+    const result = await getStopPlaceDepartures({
+      id: stopPlace.node.place.id,
+      startTime: queryInput.startTime,
+      numberOfDepartures: queryInput.limitPerLine,
+    });
+
+    estimatedCalls = flatMap(
+      result.stopPlace?.quays,
+      (quay) => quay.estimatedCalls,
+    ) as DepartureTypes.EstimatedCall[];
+  }
+  return estimatedCalls;
 }
