@@ -1,5 +1,6 @@
-import {EstimatedCall, Leg, Quay, LegMode, TransportMode} from '../sdk';
+import {EstimatedCall, Leg, Quay} from '../sdk';
 import {TranslatedString, dictionary} from '../translations';
+import {AnyMode} from '@atb/components/transportation-icon';
 
 export function getLineName(leg: Leg) {
   return leg.line
@@ -26,9 +27,7 @@ export function getLineNameFromEstimatedCall(
   }
   return {publicCode, name};
 }
-export function getTranslatedModeName(
-  mode?: LegMode | TransportMode,
-): TranslatedString {
+export function getTranslatedModeName(mode?: AnyMode): TranslatedString {
   const legModeNames = dictionary.travel.legModes;
   switch (mode) {
     case 'bus':

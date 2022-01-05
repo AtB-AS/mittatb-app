@@ -18,6 +18,7 @@ import ValidityHeader from '../ValidityHeader';
 import ThemeText from '@atb/components/text';
 import CarnetFooter from './CarnetFooter';
 import Dash from 'react-native-dash';
+import SectionSeparator from '@atb/components/sections/section-separator';
 
 type Props = {
   fareContractState: FareContractState;
@@ -79,13 +80,7 @@ const CarnetTicketInfo: React.FC<Props> = ({
           />
         )}
         <View style={styles.container}>
-          <Dash
-            style={{width: '100%'}}
-            dashGap={0}
-            dashLength={1}
-            dashThickness={1}
-            dashColor={theme.colors.background_1.backgroundColor}
-          />
+          <SectionSeparator />
         </View>
         <TicketInfo
           travelRights={travelRights}

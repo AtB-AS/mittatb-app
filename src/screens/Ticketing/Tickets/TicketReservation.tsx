@@ -5,6 +5,7 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ActiveReservation, PaymentType} from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
+import Bugsnag from '@bugsnag/react-native';
 import React from 'react';
 import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
 import ValidityLine from '../Ticket/ValidityLine';
@@ -19,8 +20,10 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
   const {t} = useTranslation();
 
   async function openVippsUrl(vippsUrl: string) {
-    if (await Linking.canOpenURL(vippsUrl)) {
+    try {
       await Linking.openURL(vippsUrl);
+    } catch (err: any) {
+      Bugsnag.notify(err);
     }
   }
 

@@ -36,12 +36,11 @@ export const useBottomNavigationStyles = () => {
 export const useNavigateToStartScreen = () => {
   const navigation = useNavigation();
   const {startScreen} = usePreferenceItems();
-  const startRoute = settingToRouteName(startScreen);
 
   return useCallback(() => {
     analytics().logEvent('click_logo');
-    navigation.navigate(startRoute);
-  }, [navigation]);
+    navigation.navigate(settingToRouteName(startScreen));
+  }, [navigation, startScreen]);
 };
 export function settingToRouteName(
   setting?: Preference_ScreenAlternatives,

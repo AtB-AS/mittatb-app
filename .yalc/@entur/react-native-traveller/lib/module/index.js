@@ -2,9 +2,12 @@ import { getConfigFromInitialConfig } from './config';
 import { startTokenStateMachine } from './token';
 import { createFetcher } from './fetcher';
 import { createAbtTokensService } from './token/abt-tokens-service';
-import { getSecureToken } from './native';
-import { PayloadAction } from './native/types';
+import { getSecureToken, getToken } from './native';
 export { RequestError } from './fetcher';
+export { PayloadAction } from './native/types';
+const INITIAL_RETRY_INTERVAL = 5000;
+const MAXIMUM_RETRY_INTERVAL = 1000 * 60 * 60; // 1 hour
+
 export default function createClient(setStatus, initialConfig) {
   const {
     safetyNetApiKey
@@ -22,11 +25,30 @@ export default function createClient(setStatus, initialConfig) {
       return 'MissingNetConnection';
     } else if (storedState.error) {
       return 'Error';
-    } else if (['Valid', 'Validating'].includes(storedState.state)) {
+    } else if (storedState.state === 'Validating') {
       return 'Token';
+    } else if (storedState.state === 'Valid') {
+      return storedState.isInspectable ? 'Token' : 'NotInspectable';
     } else {
       return 'Loading';
     }
+  };
+
+  let currentRetryInterval = INITIAL_RETRY_INTERVAL;
+  let scheduledRetry;
+
+  const scheduleRetry = () => {
+    scheduledRetry = setTimeout(() => startTokenStateMachine(abtTokensService, setStatusWrapper, safetyNetApiKey, false, currentAccountId), currentRetryInterval); // Exponential backoff for timeout interval capped to maximum of one hour
+
+    currentRetryInterval = Math.min(currentRetryInterval * 2, MAXIMUM_RETRY_INTERVAL);
+  };
+
+  const unscheduleRetry = () => {
+    if (scheduledRetry) {
+      clearTimeout(scheduledRetry);
+    }
+
+    currentRetryInterval = INITIAL_RETRY_INTERVAL;
   };
 
   const setStatusWrapper = storedState => {
@@ -38,17 +60,24 @@ export default function createClient(setStatus, initialConfig) {
 
     const status = storedState && {
       state: storedState.state,
-      error: storedState.error,
+      error: sanitizeError(storedState.error),
       visualState: toVisualState(storedState)
     };
     currentStatus = status;
     setStatus(status);
+
+    if (status !== null && status !== void 0 && status.error) {
+      scheduleRetry();
+    } else if ((storedState === null || storedState === void 0 ? void 0 : storedState.state) === 'Valid') {
+      unscheduleRetry();
+    }
   };
 
   return {
     setAccount(accountId) {
       if (currentAccountId !== accountId) {
         currentAccountId = accountId;
+        unscheduleRetry();
         startTokenStateMachine(abtTokensService, setStatusWrapper, safetyNetApiKey, false, accountId);
       }
     },
@@ -64,17 +93,52 @@ export default function createClient(setStatus, initialConfig) {
         return;
       }
 
+      unscheduleRetry();
       startTokenStateMachine(abtTokensService, setStatusWrapper, safetyNetApiKey, forceRestart, currentAccountId);
     },
-    generateQrCode: () => {
+
+    /**
+     * Get a secure token for the current active token on the current account.
+     *
+     * If no account set, or if the current token visual state is not 'Token',
+     * undefined will be returned.
+     *
+     * You must specify the actions the secure token should be used for. For
+     * example creating a qr code for inspection needs the 'ticketInspection'
+     * action, and to retrieve fare contracts the 'getFarecontracts' is
+     * necessary.
+     *
+     * @param action the action the created token may be used for
+     * @return {Promise} a Promise for getting the secure token for the given
+     * action
+     */
+    getSecureToken: async (actions) => {
       var _currentStatus2;
 
       if (!currentAccountId || ((_currentStatus2 = currentStatus) === null || _currentStatus2 === void 0 ? void 0 : _currentStatus2.visualState) !== 'Token') {
         return Promise.resolve(undefined);
       }
 
-      return getSecureToken(currentAccountId, [PayloadAction.ticketInspection]);
+      const token = await getToken(currentAccountId);
+
+      if (!token) {
+        return Promise.reject(new Error('Token not found'));
+      }
+
+      return getSecureToken(currentAccountId, token.tokenId, true, actions);
     }
   };
 }
+
+const sanitizeError = error => {
+  var _error$err, _error$err2, _error$err3;
+
+  if (!error) return undefined;
+  const newErr = new Error(typeof error.err === 'string' ? error.err : (_error$err = error.err) === null || _error$err === void 0 ? void 0 : _error$err.message);
+  newErr.name = (_error$err2 = error.err) === null || _error$err2 === void 0 ? void 0 : _error$err2.name;
+  newErr.stack = (_error$err3 = error.err) === null || _error$err3 === void 0 ? void 0 : _error$err3.stack;
+  return { ...error,
+    err: newErr
+  };
+};
 //# sourceMappingURL=index.js.map

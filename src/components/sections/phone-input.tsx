@@ -21,8 +21,9 @@ import composeRefs from '@seznam/compose-react-refs';
 import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
 import {ScrollView} from 'react-native-gesture-handler';
 import {countryPhoneData} from 'phone';
-import * as Sections from '@atb/components/sections';
+import {Section, GenericClickableItem} from '@atb/components/sections';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {loginPhoneInputId} from '@atb/test-ids';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -171,6 +172,7 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
               onFocus={onFocusEvent}
               onBlur={onBlurEvent}
               maxFontSizeMultiplier={MAX_FONT_SCALE}
+              testID={loginPhoneInputId}
               {...props}
             />
             {showClear ? (
@@ -190,9 +192,9 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
         </View>
         {isSelectingPrefix && (
           <ScrollView style={styles.prefixList} ref={prefixListRef}>
-            <Sections.Section>
+            <Section>
               {prefixes.map((country) => (
-                <Sections.GenericClickableItem
+                <GenericClickableItem
                   key={country.country_code + country.country_name}
                   onPress={() => onSelectPrefix(country.country_code)}
                 >
@@ -204,9 +206,9 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
                       {country.country_name}
                     </ThemeText>
                   </View>
-                </Sections.GenericClickableItem>
+                </GenericClickableItem>
               ))}
-            </Sections.Section>
+            </Section>
           </ScrollView>
         )}
       </View>

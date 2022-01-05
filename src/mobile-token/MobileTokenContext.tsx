@@ -7,11 +7,11 @@ import React, {
 } from 'react';
 import {setupMobileTokenClient} from '@atb/mobile-token/client';
 import {TokenStatus} from '@entur/react-native-traveller/lib/typescript/token/types';
-import useInterval from '@atb/utils/use-interval';
 import {useAuthState} from '@atb/auth';
 import Bugsnag from '@bugsnag/react-native';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {updateMetadata} from '@atb/chat/metadata';
+import {PayloadAction} from '@entur/react-native-traveller';
 
 type MobileContextState = {
   generateQrCode?: () => Promise<string | undefined>;
@@ -29,7 +29,6 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
   const {abtCustomerId, userCreationFinished} = useAuthState();
 
   const [currentCustomerId, setCurrentCustomerId] = useState(abtCustomerId);
-  const [retryCount, setRetryCount] = useState(0);
 
   const setStatus = (status?: TokenStatus) => {
     Bugsnag.leaveBreadcrumb('mobiletoken_status_change', status);
@@ -54,34 +53,11 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
     }
   }, [userCreationFinished, client, abtCustomerId, abtCustomerId]);
 
-  useInterval(
-    () => {
-      setRetryCount(retryCount + 1);
-      client?.retry(false); // todo: better retry logic
-    },
-    5000,
-    [client?.retry, tokenStatus?.error],
-    !client || !tokenStatus?.error || retryCount >= 5,
-  );
-
-  useInterval(
-    () => {
-      setRetryCount(retryCount + 1);
-      Bugsnag.notify(tokenStatus!.error!.message, (event) => {
-        event.addMetadata('mobiletoken', {...tokenStatus!.error});
-        event.severity = 'error';
-      });
-      client?.retry(true); // todo: better retry logic
-    },
-    30000,
-    [client?.retry, tokenStatus?.error],
-    !client || !tokenStatus?.error || retryCount < 5,
-  );
-
   return (
     <MobileTokenContext.Provider
       value={{
-        generateQrCode: client?.generateQrCode,
+        generateQrCode: async () =>
+          client?.getSecureToken([PayloadAction.ticketInspection]),
         tokenStatus,
         retry: client?.retry,
       }}

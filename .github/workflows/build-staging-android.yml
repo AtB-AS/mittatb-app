@@ -20,7 +20,7 @@ jobs:
         run: |
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
           echo "APP_ENVIRONMENT=staging" >> $GITHUB_ENV
-          echo "KEYSTORE_PATH=./keystore.jks" >> $GITHUB_ENV
+          echo "KEYSTORE_PATH=./android/app/keystore.jks" >> $GITHUB_ENV
           echo "APK_FILE_NAME=app-staging.apk" >> $GITHUB_ENV
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
@@ -51,8 +51,8 @@ jobs:
         uses: actions/cache@v2
         id: apk-cache
         with:
-          path: $APK_FILE_NAME
-          key: ${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.yalc/**') }}
+          path: app-staging.apk
+          key: ${{ matrix.org }}-${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.yalc/**') }}
       - name: Decode Android keystore
         run: sh ./scripts/android/create-keystore-file.sh
         env:
@@ -71,7 +71,6 @@ jobs:
         if: steps.apk-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/android/replace-bundle.sh
         env:
-          KEYSTORE_FILE: keystore.jks
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
@@ -94,6 +93,7 @@ jobs:
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
       - name: Register app version
+        if: matrix.org == 'atb'
         run: sh ./scripts/android/register-app-version.sh
         env:
           ENTUR_CLIENT_ID: ${{ secrets.ATB_ENTUR_CLIENT_ID_STAGING}}

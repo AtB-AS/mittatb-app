@@ -126,10 +126,10 @@ export default function useVippsState(
       if (!reservation) return;
       const {url} = reservation;
 
-      if (await Linking.canOpenURL(url)) {
+      try {
         dispatch({type: 'VIPPS_APP_OPENED'});
-        Linking.openURL(url);
-      } else {
+        await Linking.openURL(url);
+      } catch (err) {
         dispatch({
           type: 'SET_ERROR',
           errorContext: 'open-vipps-url',

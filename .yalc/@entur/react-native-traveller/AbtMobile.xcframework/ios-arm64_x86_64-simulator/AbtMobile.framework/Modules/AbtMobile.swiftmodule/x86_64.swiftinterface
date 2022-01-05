@@ -1,6 +1,6 @@
 // swift-interface-format-version: 1.0
 // swift-compiler-version: Apple Swift version 5.5.1 (swiftlang-1300.0.31.4 clang-1300.0.29.6)
-// swift-module-flags: -target x86_64-apple-ios14.5-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name AbtMobile
+// swift-module-flags: -target x86_64-apple-ios12.2-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name AbtMobile
 import AVFoundation
 @_exported import AbtMobile
 import CoreBluetooth
@@ -315,7 +315,7 @@ public class PrivateKey : AbtMobile.Key {
 public class SecureTokenService {
   public init(deviceDetails: AbtMobile.DeviceDetails)
   @objc deinit
-  public func getSecureToken(_ accountId: Swift.String, actions: [AbtMobile.PayloadAction]) -> Swift.Result<Swift.String, AbtMobile.QRCodeServiceError>
+  public func getSecureToken(_ accountId: Swift.String, tokenId: Swift.String, actions: [AbtMobile.PayloadAction], includeCertificate: Swift.Bool = false) -> Swift.Result<Swift.String, AbtMobile.QRCodeServiceError>
 }
 public enum QRCodeServiceError : Swift.Error {
   case noActiveToken

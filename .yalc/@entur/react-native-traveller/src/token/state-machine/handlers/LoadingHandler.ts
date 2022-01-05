@@ -17,6 +17,7 @@ export default function loadingHandler(): StateHandler {
       return tokenNeedsRenewal(token)
         ? {
             accountId: s.accountId,
+            tokenId: token.tokenId,
             state: 'InitiateRenewal',
           }
         : {

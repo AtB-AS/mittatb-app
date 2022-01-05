@@ -31,6 +31,8 @@ local.properties
 env.properties
 *.iml
 ic_launcher*
+*.hprof
+.project
 
 # node.js
 #
@@ -83,6 +85,7 @@ android/app/src/main/res/values/colors.xml
 assets/bootsplash_logo*.png
 ios/atb/BootSplash.storyboard
 ios/atb/Images.xcassets/BootSplashLogo.imageset/bootsplash_logo*.png
+/ios/ios-devices.txt
 
 #Service files
 android/app/google-services.json

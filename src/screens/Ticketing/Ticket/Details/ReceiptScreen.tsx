@@ -91,7 +91,7 @@ export default function ReceiptScreen({navigation, route}: Props) {
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
-            autoCompleteType="email"
+            autoComplete="email"
             autoCorrect={false}
             autoFocus={!a11yContext.isScreenReaderEnabled}
           />
