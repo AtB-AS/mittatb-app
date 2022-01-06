@@ -49,7 +49,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   const {authenticationType, signOut, user} = useAuthState();
   const config = useLocalConfig();
 
-  const {fareContracts} = useTicketState();
+  const {fareContracts, customerProfile} = useTicketState();
   const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
     fareContracts,
   );
@@ -246,7 +246,9 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           />
         </Sections.Section>
 
-        {(!!JSON.parse(IS_QA_ENV || 'false') || __DEV__) && (
+        {(!!JSON.parse(IS_QA_ENV || 'false') ||
+          __DEV__ ||
+          customerProfile?.debug) && (
           <Sections.Section withPadding>
             <Sections.HeaderItem text="Developer menu" />
             <Sections.ActionItem
