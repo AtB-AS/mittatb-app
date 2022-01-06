@@ -35,6 +35,7 @@ import {
   View,
   ViewStyle,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Leg, TripPattern} from '@atb/api/types/trips';
@@ -154,8 +155,14 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                 );
               return (
                 <View style={styles.legOutput} key={leg.aimedStartTime}>
-                  {legOutput}
-                  <ThemeIcon svg={ChevronRight} size={'small'} />
+                  {leg.mode === 'foot' ? (
+                    <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
+                  ) : (
+                    <>
+                      <TransportationLeg leg={leg} />
+                      <ThemeIcon svg={ChevronRight} size={'small'} />
+                    </>
+                  )}
                 </View>
               );
             })}
@@ -249,60 +256,47 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-const MINIMUM_WAIT_IN_SECONDS = 30;
-
 const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
+  const MINIMUM_WAIT_IN_SECONDS = 30;
   const styles = useLegStyles();
   const showWaitTime = Boolean(nextLeg);
   const {t, language} = useTranslation();
   const waitTimeInSeconds = !nextLeg
     ? 0
     : secondsBetween(leg.expectedEndTime, nextLeg?.expectedStartTime);
-  const isWalkTimeOfSignificance = leg.duration > MINIMUM_WAIT_IN_SECONDS;
-  const isWaitTimeOfSignificance =
-    showWaitTime && waitTimeInSeconds > MINIMUM_WAIT_IN_SECONDS;
+  const waitDuration = secondsToDuration(waitTimeInSeconds, language);
+  const walkDuration = secondsToDuration(leg.duration ?? 0, language);
 
-  if (!isWalkTimeOfSignificance && !isWaitTimeOfSignificance) {
+  const mustWalk = leg.duration > MINIMUM_WAIT_IN_SECONDS;
+  const mustWait = showWaitTime && waitTimeInSeconds > MINIMUM_WAIT_IN_SECONDS;
+
+  if (!mustWait && !mustWalk) {
     return null;
   }
 
-  if (!isWalkTimeOfSignificance && isWaitTimeOfSignificance) {
-    return (
-      <View style={styles.legContainer}>
-        <WaitRow time={waitTimeInSeconds} />
-      </View>
-    );
-  }
-
-  const walkTime = secondsToDuration(leg.duration ?? 0, language);
-  const text = !isWaitTimeOfSignificance
-    ? t(AssistantTexts.results.resultItem.footLeg.walkLabel(walkTime))
-    : t(
-        AssistantTexts.results.resultItem.footLeg.walkandWaitLabel(
-          walkTime,
-          secondsToDuration(waitTimeInSeconds, language),
-        ),
-      );
+  const a11yText =
+    mustWalk && mustWait
+      ? t(
+          AssistantTexts.results.resultItem.footLeg.walkandWaitLabel(
+            walkDuration,
+            waitDuration,
+          ),
+        )
+      : mustWait
+      ? t(AssistantTexts.results.resultItem.footLeg.waitLabel(waitDuration))
+      : t(AssistantTexts.results.resultItem.footLeg.walkLabel(walkDuration));
 
   return (
-    <View style={styles.legContainer} accessibilityLabel={text}>
-      <ThemeIcon svg={WalkingPerson} opacity={0.6} />
+    <View style={styles.legContainer} accessibilityLabel={a11yText}>
+      {!mustWalk ? (
+        <ThemeIcon svg={Duration} opacity={0.6} />
+      ) : (
+        <ThemeIcon svg={WalkingPerson} opacity={0.6} />
+      )}
+      <ThemeIcon svg={ChevronRight} size={'small'} />
     </View>
   );
 };
-
-function WaitRow({time}: {time: number}) {
-  const styles = useLegStyles();
-  const {t, language} = useTranslation();
-  const waitTime = `${secondsToMinutesShort(time, language)}`;
-  return (
-    <View
-      accessibilityLabel={t(AssistantTexts.results.resultItem.waitRow.label)}
-    >
-      <ThemeIcon svg={Duration} opacity={0.6} />
-    </View>
-  );
-}
 
 const useLegStyles = StyleSheet.createThemeHook((theme) => ({
   legContainer: {
@@ -350,13 +344,9 @@ const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
 };
 
 function LineDisplayName({leg, style}: {leg: Leg; style?: ViewStyle}) {
-  const name =
-    leg.fromEstimatedCall?.destinationDisplay?.frontText ?? leg.line?.name;
-  return (
-    <ThemeText style={style}>
-      {leg.line?.publicCode} {name}
-    </ThemeText>
-  );
+  // const name =
+  //  leg.fromEstimatedCall?.destinationDisplay?.frontText ?? leg.line?.name;
+  return <ThemeText style={style}>{leg.line?.publicCode}</ThemeText>;
 }
 
 const tripSummary = (

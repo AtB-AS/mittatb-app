@@ -211,7 +211,7 @@ const IntermediateInfo = (leg: Leg) => {
 
   const numberOfIntermediateCalls = leg.intermediateEstimatedCalls.length;
 
-  const navigateToDeparture = (leg: Leg) => {
+  const navigateToDeparture = () => {
     if (leg.serviceJourney?.id) {
       const departureData: ServiceJourneyDeparture = {
         serviceJourneyId: leg.serviceJourney.id,
@@ -219,13 +219,14 @@ const IntermediateInfo = (leg: Leg) => {
         fromQuayId: leg.fromPlace.quay?.id,
         toQuayId: leg.toPlace.quay?.id,
       };
+      navigation.navigate('DepartureDetails', {items: [departureData]});
     }
     return null;
   };
 
   return (
     <TripRow
-      onPress={() => navigateToDeparture(leg)}
+      onPress={navigateToDeparture}
       accessibilityLabel={
         t(
           TripDetailsTexts.trip.leg.intermediateStops.a11yLabel(
