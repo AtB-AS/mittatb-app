@@ -11,6 +11,7 @@ import {
   EstimatedCall,
   Quay,
   Situation,
+  ServiceJourneyMapInfoData,
   TransportMode,
   TransportSubmode,
 } from '@atb/sdk';
@@ -93,6 +94,8 @@ export default function DepartureDetails({navigation, route}: Props) {
         leftButton={{type: 'back'}}
         title={title ?? t(DepartureDetailsTexts.header.notFound)}
       />
+      <ContentWithDisappearingHeader header={null}>
+        {/*
       <ContentWithDisappearingHeader
         header={
           mapData && (
@@ -110,8 +113,8 @@ export default function DepartureDetails({navigation, route}: Props) {
             />
           )
         }
-        //
-      >
+        */}
+
         <View style={styles.scrollView__content}>
           <PaginatedDetailsHeader
             page={activeItemIndexState + 1}

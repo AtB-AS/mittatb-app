@@ -1,9 +1,8 @@
 import {formatISO} from 'date-fns';
-import {EstimatedCall} from '../sdk';
+import {EstimatedCall, ServiceJourneyMapInfoData} from '../sdk';
 import client from './client';
 import qs from 'query-string';
 import {stringifyUrl} from './utils';
-import {ServiceJourneyMapInfoData} from '@atb/screens/TripDetails_v2/Map/types';
 
 type ServiceJourneDepartures = {
   value: EstimatedCall[];

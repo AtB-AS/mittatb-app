@@ -1,4 +1,5 @@
 import {EstimatedCall, Leg, Quay} from '../sdk';
+import {Quay as Quay_v3} from '../api/types/trips';
 import {TranslatedString, dictionary} from '../translations';
 import {AnyMode} from '@atb/components/transportation-icon';
 
