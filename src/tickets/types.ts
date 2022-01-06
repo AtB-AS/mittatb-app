@@ -169,6 +169,7 @@ export type CustomerProfile = {
   id?: string;
   surname?: string;
   travelcard?: TravelCard;
+  debug?: boolean;
 };
 
 export type TravelCard = {
