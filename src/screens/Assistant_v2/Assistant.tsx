@@ -464,14 +464,10 @@ const Assistant: React.FC<Props> = ({
               <ThemeText>{t(AssistantTexts.results.fetchingMore)}</ThemeText>
             )}
             {searchState !== 'searching' && (
-              <ThemeText>
-                {t(AssistantTexts.results.fetchMore)}{' '}
-                <ThemeIcon
-                  svg={navIcons.Expand}
-                  size={'normal'}
-                  translateY={5}
-                />
-              </ThemeText>
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                <ThemeText>{t(AssistantTexts.results.fetchMore)} </ThemeText>
+                <ThemeIcon svg={navIcons.Expand} size={'normal'} style={{}} />
+              </View>
             )}
           </TouchableOpacity>
         </View>
@@ -514,6 +510,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   loadMoreButton: {
     paddingVertical: theme.spacings.medium,
+    marginBottom: 50,
     alignItems: 'center',
   },
 }));
