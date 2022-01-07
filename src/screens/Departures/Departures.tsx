@@ -29,7 +29,6 @@ import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
-import {NearbyStackParams} from '../Nearby';
 import Loading from '../Loading';
 import DepartureTimeSheet from '../Nearby/DepartureTimeSheet';
 import {useNearestStopsData} from './state';
@@ -40,6 +39,7 @@ import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import {StopPlacePosition} from '@atb/api/types/departures';
 import {NearestStopPlacesQuery} from '@atb/api/types/generated/NearestStopPlacesQuery';
 import DeparturesTexts from '@atb/translations/screens/Departures';
+import {DeparturesStackParams} from '.';
 
 const themeColor: ThemeColor = 'background_accent';
 
@@ -50,23 +50,26 @@ export type SearchTime = {
   date: string;
 };
 
-type NearbyRouteName = 'NearbyRoot';
-const NearbyRouteNameStatic: NearbyRouteName = 'NearbyRoot';
+type DeparturesRouteName = 'DeparturesRoot';
+const NearbyRouteNameStatic: DeparturesRouteName = 'DeparturesRoot';
 
-export type NearbyScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<NearbyStackParams>,
+export type DepartureScreenNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<DeparturesStackParams>,
   StackNavigationProp<RootStackParamList>
 >;
 
-export type NearbyScreenParams = {
+export type DeparturesScreenParams = {
   location: LocationWithMetadata;
 };
 
-export type NearbyScreenProp = RouteProp<NearbyStackParams, NearbyRouteName>;
+export type DeparturesScreenProp = RouteProp<
+  DeparturesStackParams,
+  DeparturesRouteName
+>;
 
 type RootProps = {
-  navigation: NearbyScreenNavigationProp;
-  route: NearbyScreenProp;
+  navigation: DepartureScreenNavigationProp;
+  route: DeparturesScreenProp;
 };
 
 export default function NearbyScreen({navigation}: RootProps) {
@@ -116,7 +119,7 @@ const DeparturesOverview: React.FC<Props> = ({
     option: 'now',
     date: new Date().toISOString(),
   });
-  const searchedFromLocation = useOnlySingleLocation<NearbyScreenProp>(
+  const searchedFromLocation = useOnlySingleLocation<DeparturesScreenProp>(
     'location',
   );
   const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
