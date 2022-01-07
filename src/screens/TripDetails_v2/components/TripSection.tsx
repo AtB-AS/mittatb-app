@@ -1,4 +1,4 @@
-import {Info, Warning} from '@atb/assets/svg/situations';
+import {Warning} from '@atb/assets/svg/situations';
 import {Interchange} from '@atb/assets/svg/icons/actions';
 import AccessibleText, {
   screenReaderPause,
@@ -10,7 +10,6 @@ import SituationMessages from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
 import {
   Language,
-  TranslatedString,
   TranslateFunction,
   TripDetailsTexts,
   useTranslation,

@@ -1,8 +1,6 @@
-//import {getSingleTripPattern} from '@atb/api/trips';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
 import PaginatedDetailsHeader from '@atb/components/pagination';
 import Header from '@atb/components/screen-header';
-//import {TripPattern} from '@atb/sdk';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import usePollableResource from '@atb/utils/use-pollable-resource';

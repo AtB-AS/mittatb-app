@@ -9,7 +9,6 @@ import DepartureDetails, {
   DepartureDetailsRouteParams,
 } from './DepartureDetails';
 import {CompositeNavigationProp} from '@react-navigation/native';
-import {RootStackParamList} from '@atb/navigation';
 import {MapDetailRouteParams, TravelDetailsMap} from './Map';
 import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
 import QuayDepartures, {

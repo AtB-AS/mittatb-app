@@ -1,5 +1,5 @@
 import {Wait} from '@atb/assets/svg/icons/transportation';
-import {Info, Warning} from '@atb/assets/svg/situations';
+import {Info} from '@atb/assets/svg/situations';
 import ThemeText from '@atb/components/text';
 import {TinyMessageBox} from '@atb/components/message-box';
 import {StyleSheet} from '@atb/theme';

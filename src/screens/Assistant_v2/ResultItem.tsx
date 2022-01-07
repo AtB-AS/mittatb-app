@@ -24,7 +24,6 @@ import {
   secondsBetween,
   secondsToDuration,
   secondsToDurationShort,
-  secondsToMinutesShort,
 } from '@atb/utils/date';
 import insets from '@atb/utils/insets';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
@@ -35,15 +34,10 @@ import {
   View,
   ViewStyle,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Leg, TripPattern} from '@atb/api/types/trips';
-import {
-  Mode,
-  TransportMode,
-  TransportModes,
-} from '@atb/api/types/generated/journey_planner_v3_types';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
