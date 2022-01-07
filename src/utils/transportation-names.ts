@@ -1,5 +1,5 @@
 import {EstimatedCall, Leg, Quay} from '../sdk';
-import {Quay as Quay_v3} from '../api/types/trips';
+import {Quay as Quay_v2} from '../api/types/trips';
 import {TranslatedString, dictionary} from '../translations';
 import {AnyMode} from '@atb/components/transportation-icon';
 
@@ -49,7 +49,7 @@ export function getTranslatedModeName(mode?: AnyMode): TranslatedString {
   }
 }
 
-export function getQuayName(quay?: Quay | Quay_v3): string | undefined {
+export function getQuayName(quay?: Quay | Quay_v2): string | undefined {
   if (!quay) return;
   if (!quay.publicCode) return quay.name;
   return `${quay.name} ${quay.publicCode}`;
