@@ -78,6 +78,7 @@ export enum FareContractState {
 }
 
 export type Reservation = {
+  created: Timestamp;
   orderId: string;
   paymentId: number;
   transactionId: number;

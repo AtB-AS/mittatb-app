@@ -146,7 +146,7 @@ const TicketContextProvider: React.FC = ({children}) => {
               type: 'UPDATE_RESERVATIONS',
               reservations: reservations.filter(
                 (r) =>
-                  !isHandledPaymentStatus(r.paymentStatus) && !!r.paymentStatus,
+                  !!r.paymentStatus && !isHandledPaymentStatus(r.paymentStatus),
               ),
             }),
           onError: (err) => console.error(err),
