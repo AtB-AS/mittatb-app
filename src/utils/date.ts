@@ -275,7 +275,7 @@ function getShortHumanizer(
         w: () => 'w',
         d: () => 'd',
         h: () => 'h',
-        m: () => 'm',
+        m: () => 'min',
         s: () => 's',
         ms: () => 'ms',
       },
