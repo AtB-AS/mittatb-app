@@ -19,7 +19,3 @@ export type TripsQueryWithJourneyIds = {
   journeyIds: string[];
 };
 
-function test(trip: TripPattern) {
-  console.log(trip.expectedStartTime);
-  console.log(trip.id);
-}
