@@ -791,7 +791,6 @@ async function doSearch(
     cancelToken: cancelToken.token,
   });
 
-  console.log(tripsQuery.trip?.metadata);
   return tripsQuery;
 }
 
