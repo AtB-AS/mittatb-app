@@ -772,10 +772,6 @@ async function doSearch(
   searchTime: SearchTime,
   cancelToken: CancelTokenSource,
 ) {
-  //const source = CancelToken.source();
-  console.log('searchtime: ' + searchTime);
-  //const arriveBy = searchTime?.option === 'arrival';
-
   const searchDate =
     searchTime?.option !== 'now' ? searchTime.date : new Date().toISOString();
 
