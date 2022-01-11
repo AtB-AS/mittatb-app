@@ -19,10 +19,8 @@ export default function GenericClickableItem({
   const style = useSectionStyle();
 
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={topContainer} {...accessibility}>
-        {children}
-      </View>
+    <TouchableOpacity onPress={onPress} {...accessibility}>
+      <View style={topContainer}>{children}</View>
     </TouchableOpacity>
   );
 }

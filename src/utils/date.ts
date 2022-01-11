@@ -172,6 +172,15 @@ export function formatToSimpleDate(date: Date | string, language: Language) {
   });
 }
 
+export function formatToSimpleDateTime(
+  date: Date | string,
+  language: Language,
+) {
+  return format(parseIfNeeded(date), 'do MMMM HH:mm', {
+    locale: languageToLocale(language),
+  });
+}
+
 export const isWithin24Hours = (
   dateLeft: Date | string,
   dateRight: Date | string,

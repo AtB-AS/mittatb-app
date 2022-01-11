@@ -29,6 +29,7 @@ import {
   formatToClock,
   formatToClockOrRelativeMinutes,
   formatToShortDate,
+  formatToSimpleDateTime,
 } from '@atb/utils/date';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {
@@ -206,6 +207,16 @@ function DateNavigationSection({
   const styles = useStyles();
   const {theme} = useTheme();
   const {t, language} = useTranslation();
+  const canNavigateToPreviousDay = isToday(parseISO(searchTime.date));
+
+  const searchTimeText =
+    searchTime.option === 'now'
+      ? t(DeparturesTexts.dateNavigation.today)
+      : formatToTwoLineDateTime(searchTime.date, language);
+  const a11ySearchTimeText =
+    searchTime.option === 'now'
+      ? t(DeparturesTexts.dateNavigation.today)
+      : formatToSimpleDateTime(searchTime.date, language);
 
   const {open: openBottomSheet} = useBottomSheet();
   const onLaterTimePress = () => {
@@ -225,22 +236,27 @@ function DateNavigationSection({
         onPress={() => {
           setSearchTime(changeDay(searchTime, -1));
         }}
-        text={t(DeparturesTexts.stopPlaceScreen.dateNavigation.prevDay)}
+        text={t(DeparturesTexts.dateNavigation.prevDay)}
         type="inline"
         mode="tertiary"
         icon={ArrowLeft}
-        disabled={isToday(parseISO(searchTime.date))}
+        disabled={canNavigateToPreviousDay}
+        accessibilityHint={
+          canNavigateToPreviousDay
+            ? t(DeparturesTexts.dateNavigation.a11yDisabled)
+            : undefined
+        }
         textStyle={{
           marginLeft: theme.spacings.xSmall,
         }}
       ></Button>
       <Button
         onPress={onLaterTimePress}
-        text={
-          searchTime.option === 'now'
-            ? t(DeparturesTexts.stopPlaceScreen.dateNavigation.today)
-            : formatToTwoLineDateTime(searchTime.date, language)
-        }
+        text={searchTimeText}
+        accessibilityLabel={t(
+          DeparturesTexts.dateNavigation.a11ySelectedLabel(a11ySearchTimeText),
+        )}
+        accessibilityHint={t(DeparturesTexts.dateNavigation.a11yChangeDateHint)}
         type="compact"
         mode="tertiary"
         iconPosition="right"
@@ -254,12 +270,11 @@ function DateNavigationSection({
         onPress={() => {
           setSearchTime(changeDay(searchTime, 1));
         }}
-        text={t(DeparturesTexts.stopPlaceScreen.dateNavigation.nextDay)}
+        text={t(DeparturesTexts.dateNavigation.nextDay)}
         type="compact"
         iconPosition="right"
         mode="tertiary"
         icon={ArrowRight}
-        disabled={false}
         textStyle={{
           marginRight: theme.spacings.xSmall,
         }}
@@ -311,6 +326,11 @@ function QuaySection({
           onPress={() => {
             setIsHidden(!isHidden);
           }}
+          accessibility={{
+            accessibilityHint: isHidden
+              ? t(DeparturesTexts.quaySection.a11yExpand)
+              : t(DeparturesTexts.quaySection.a11yMinimize),
+          }}
         >
           <View style={styles.stopPlaceHeader}>
             <View style={styles.stopPlaceHeaderText}>
@@ -357,7 +377,7 @@ function QuaySection({
                 {data && (
                   <Sections.GenericItem radius={selectedQuayId && 'bottom'}>
                     <ThemeText color="secondary">
-                      {t(DeparturesTexts.stopPlaceScreen.noDepartures)}
+                      {t(DeparturesTexts.noDepartures)}
                     </ThemeText>
                   </Sections.GenericItem>
                 )}
@@ -380,6 +400,9 @@ function QuaySection({
             }
             textType="body__primary--bold"
             onPress={() => navigateToQuay(quay)}
+            accessibility={{
+              accessibilityHint: t(DeparturesTexts.quaySection.a11yToQuayHint),
+            }}
           ></Sections.LinkItem>
         )}
       </Sections.Section>
@@ -409,9 +432,22 @@ function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
   const timeWithRealtimePrefix = departure.realtime
     ? time
     : t(dictionary.missingRealTimePrefix) + time;
+  const accessibleTime = departure.realtime
+    ? time
+    : t(dictionary.a11yMissingRealTimePrefix) + time;
 
   return (
-    <View style={styles.estimatedCallLine}>
+    <View
+      style={styles.estimatedCallLine}
+      accessible={true}
+      accessibilityLabel={t(
+        DeparturesTexts.a11yEstimatedCallLine(
+          accessibleTime,
+          line?.publicCode,
+          departure.destinationDisplay?.frontText,
+        ),
+      )}
+    >
       {line && (
         <LineChip
           publicCode={line.publicCode}
