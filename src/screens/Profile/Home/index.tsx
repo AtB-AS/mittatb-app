@@ -145,26 +145,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             onPress={() => navigation.navigate('Enrollment')}
           />
         </Sections.Section>
-        <Sections.Section withPadding>
-          <Sections.GenericItem>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <ThemeText type="heading__component">
-                {t(ProfileTexts.sections.newFeatures.heading)}
-              </ThemeText>
-              <View style={style.betaLabel}>
-                <ThemeText color="primary_2" style={style.betaLabelText}>
-                  BETA
-                </ThemeText>
-              </View>
-            </View>
-          </Sections.GenericItem>
-          <Sections.ActionItem
-            mode="toggle"
-            text={t(ProfileTexts.sections.newFeatures.departures)}
-            checked={newDepartures}
-            onPress={(newDepartures) => setPreference({newDepartures})}
-          />
-        </Sections.Section>
 
         <Sections.Section withPadding>
           <Sections.HeaderItem
@@ -271,7 +251,13 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             <Sections.HeaderItem text="Developer menu" />
             <Sections.ActionItem
               mode="toggle"
-              text={t(ProfileTexts.sections.newFeatures.assistant)}
+              text={'Enable new departure screen'}
+              checked={newDepartures}
+              onPress={(newDepartures) => setPreference({newDepartures})}
+            />
+            <Sections.ActionItem
+              mode="toggle"
+              text={'Enable experimental trips search'}
               checked={useExperimentalTripSearch}
               onPress={(useExperimentalTripSearch) =>
                 setPreference({useExperimentalTripSearch})
@@ -327,16 +313,5 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   debugInfoContainer: {
     alignItems: 'center',
     marginVertical: theme.spacings.medium,
-  },
-  betaLabel: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
-    marginHorizontal: theme.spacings.small,
-    paddingHorizontal: theme.spacings.small,
-    paddingVertical: theme.spacings.small,
-    borderRadius: theme.border.radius.regular,
-  },
-  betaLabelText: {
-    fontSize: 8,
-    lineHeight: 9,
   },
 }));
