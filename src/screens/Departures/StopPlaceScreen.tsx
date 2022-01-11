@@ -326,11 +326,11 @@ function QuaySection({
           onPress={() => {
             setIsHidden(!isHidden);
           }}
-          accessibility={{
-            accessibilityHint: isHidden
+          accessibilityHint={
+            isHidden
               ? t(DeparturesTexts.quaySection.a11yExpand)
-              : t(DeparturesTexts.quaySection.a11yMinimize),
-          }}
+              : t(DeparturesTexts.quaySection.a11yMinimize)
+          }
         >
           <View style={styles.stopPlaceHeader}>
             <View style={styles.stopPlaceHeaderText}>
