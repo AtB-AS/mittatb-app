@@ -102,7 +102,7 @@ type Props = {
   currentLocation?: Location;
   hasLocationPermission: boolean;
   requestGeoPermission: RequestPermissionFn;
-  navigation: NearbyScreenNavigationProp;
+  navigation: DepartureScreenNavigationProp;
 };
 
 const DeparturesOverview: React.FC<Props> = ({
