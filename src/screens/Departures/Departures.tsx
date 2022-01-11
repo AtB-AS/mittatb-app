@@ -185,6 +185,22 @@ const DeparturesOverview: React.FC<Props> = ({
     }
   }
 
+  const getListDescription = () => {
+    if (!fromLocation || !fromLocation.name) return;
+    switch (fromLocation?.resultType) {
+      case 'geolocation':
+        return t(DeparturesTexts.stopPlaceList.listDescription.geoLoc);
+      case 'favorite':
+      case 'search':
+        return (
+          t(DeparturesTexts.stopPlaceList.listDescription.address) +
+          fromLocation?.name
+        );
+      case undefined:
+        return;
+    }
+  };
+
   useEffect(() => {
     if (updatingLocation)
       setLoadAnnouncement(t(NearbyTexts.stateAnnouncements.updatingLocation));
@@ -249,10 +265,7 @@ const DeparturesOverview: React.FC<Props> = ({
           type="body__secondary"
           color="secondary"
         >
-          {fromLocation?.resultType === 'geolocation'
-            ? t(DeparturesTexts.stopPlaceList.listDescription.geoLoc)
-            : t(DeparturesTexts.stopPlaceList.listDescription.address) +
-              fromLocation?.name}
+          {getListDescription()}
         </ThemeText>
         {orderedStopPlaces.map((stopPlace: StopPlacePosition) => (
           <Sections.Section withPadding key={stopPlace.node?.place?.id}>
