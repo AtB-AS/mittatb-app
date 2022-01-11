@@ -338,8 +338,6 @@ const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
 };
 
 function LineDisplayName({leg, style}: {leg: Leg; style?: ViewStyle}) {
-  // const name =
-  //  leg.fromEstimatedCall?.destinationDisplay?.frontText ?? leg.line?.name;
   return <ThemeText style={style}>{leg.line?.publicCode}</ThemeText>;
 }
 
