@@ -281,11 +281,14 @@ const DeparturesOverview: React.FC<Props> = ({
                   <ThemeText type="heading__component">
                     {stopPlace.node?.place?.name}
                   </ThemeText>
-                  <ThemeText>
+                  <ThemeText
+                    type="body__secondary"
+                    style={styles.stopDescription}
+                  >
                     {stopPlace.node?.place?.description ||
                       t(DeparturesTexts.stopPlaceList.stopPlace)}
                   </ThemeText>
-                  <ThemeText>
+                  <ThemeText type="body__secondary" color="secondary">
                     {stopPlace.node?.distance?.toFixed(0) + ' m'}
                   </ThemeText>
                 </View>
@@ -452,7 +455,10 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
     flexShrink: 1,
     flexGrow: 1,
   },
+  stopDescription: {
+    marginVertical: theme.spacings.xSmall,
+  },
   stopPlaceIcon: {
-    marginHorizontal: theme.spacings.medium,
+    marginLeft: theme.spacings.medium,
   },
 }));
