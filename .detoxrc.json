@@ -2,11 +2,6 @@
   "testRunner": "jest",
   "runnerConfig": "e2e/config.json",
   "apps": {
-    "ios": {
-      "type": "ios.app",
-      "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/AtB.app",
-      "build": "export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/atb.xcworkspace -configuration Debug -scheme atb -sdk iphonesimulator -derivedDataPath ios/build"
-    },
     "android": {
       "type": "android.apk",
       "binaryPath": "SPECIFY_PATH_TO_YOUR_APP_BINARY"
@@ -27,9 +22,13 @@
     }
   },
   "configurations": {
-    "ios": {
+    "ios.debug": {
       "device": "simulator",
-      "app": "ios"
+      "app": {
+        "type": "ios.app",
+        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/AtB.app",
+        "build": "export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/atb.xcworkspace -configuration Debug -scheme atb -sdk iphonesimulator -derivedDataPath ios/build"
+      }
     },
     "android": {
       "device": "emulator",
