@@ -17,7 +17,6 @@ import {
 } from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {NearbyStackParams} from '../Nearby';
 import {RouteProp} from '@react-navigation/native';
 import Button from '@atb/components/button';
 import {useDepartureData} from './DepartureState';
@@ -52,6 +51,7 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 import useFontScale from '@atb/utils/use-font-scale';
 import DeparturesTexts from '@atb/translations/screens/Departures';
+import {DeparturesStackParams} from '.';
 
 export type StopPlaceScreenParams = {
   stopPlacePosition: StopPlacePosition;
@@ -59,7 +59,7 @@ export type StopPlaceScreenParams = {
 };
 
 type StopPlaceScreenRouteProps = RouteProp<
-  NearbyStackParams,
+  DeparturesStackParams,
   'StopPlaceScreen'
 >;
 
@@ -68,7 +68,7 @@ type quayChipData = {
 };
 
 export type StopPlaceScreenProps = {
-  navigation: StackNavigationProp<NearbyStackParams>;
+  navigation: StackNavigationProp<DeparturesStackParams>;
   route: StopPlaceScreenRouteProps;
 };
 

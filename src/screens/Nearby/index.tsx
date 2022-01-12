@@ -3,14 +3,10 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import TripDetailsRoot, {DetailsStackParams} from '../TripDetails';
 import NearbyRoot, {NearbyScreenParams, NearbyScreenProp} from './Nearby';
-import StopPlaceScreen, {
-  StopPlaceScreenParams,
-} from '../Departures/StopPlaceScreen';
 
 export type NearbyStackParams = {
   NearbyRoot: NearbyScreenParams;
   TripDetails: NavigatorScreenParams<DetailsStackParams>;
-  StopPlaceScreen: StopPlaceScreenParams;
 };
 
 const Stack = createStackNavigator<NearbyStackParams>();
@@ -31,7 +27,6 @@ const NearbyScreen = ({route}: NearbyScreenRootProps) => {
         initialParams={route.params}
       />
       <Stack.Screen name="TripDetails" component={TripDetailsRoot} />
-      <Stack.Screen name="StopPlaceScreen" component={StopPlaceScreen} />
     </Stack.Navigator>
   );
 };
