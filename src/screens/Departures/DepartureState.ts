@@ -32,30 +32,27 @@ import {
 import * as DepartureTypes from '@atb/api/types/departures';
 import {flatMap} from 'lodash';
 
-const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
+const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 
 // Used to re-trigger full refresh after N minutes.
 // To repopulate the view when we get fewer departures.
 const HARD_REFRESH_LIMIT_IN_MINUTES = 10;
 const MIN_TIME_RANGE = 3 * 60 * 60; // Three hours
 
-type LoadType = 'initial' | 'more';
-
 export type DepartureDataState = {
   data: DepartureTypes.EstimatedCall[] | null;
   // showOnlyFavorites: boolean;
   tick?: Date;
-  error?: {type: ErrorType; loadType: LoadType};
+  error?: {type: ErrorType};
   locationId?: string;
   isLoading: boolean;
-  isFetchingMore: boolean;
   queryInput: DepartureGroupsQuery;
   cursorInfo: DepartureGroupMetadata['metadata'] | undefined;
   lastRefreshTime: Date;
 };
 
 const initialQueryInput: DepartureGroupsQuery = {
-  limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
+  limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
   startTime: new Date().toISOString(),
 };
 const initialState: DepartureDataState = {
@@ -64,7 +61,6 @@ const initialState: DepartureDataState = {
   error: undefined,
   locationId: undefined,
   isLoading: false,
-  isFetchingMore: false,
   cursorInfo: undefined,
   queryInput: initialQueryInput,
   lastRefreshTime: new Date(),
@@ -80,11 +76,6 @@ type DepartureDataActions =
       stopPlacePosition: DepartureTypes.StopPlacePosition;
       quay?: DepartureTypes.Quay;
       startTime?: string;
-      // favoriteDepartures?: UserFavoriteDepartures;
-    }
-  | {
-      type: 'LOAD_MORE_DEPARTURES';
-      stopPlacePosition?: DepartureTypes.StopPlacePosition;
       // favoriteDepartures?: UserFavoriteDepartures;
     }
   // | {
@@ -109,7 +100,6 @@ type DepartureDataActions =
     }
   | {
       type: 'SET_ERROR';
-      loadType: LoadType;
       error: ErrorType;
       reset?: boolean;
     }
@@ -135,7 +125,7 @@ const reducer: ReducerWithSideEffects<
       const queryInput: DepartureGroupsQuery = {
         limitPerLine: action.quay
           ? 1000
-          : DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
+          : DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
         startTime: action.startTime ?? new Date().toISOString(),
       };
 
@@ -144,48 +134,27 @@ const reducer: ReducerWithSideEffects<
           ...state,
           isLoading: true,
           error: undefined,
-          isFetchingMore: true,
           queryInput,
         },
         async (state, dispatch) => {
           try {
-            // Fresh fetch, reset paging and use new query input with new startTime
             if (!stopPlace) return;
-            const timeUntilMidnight = differenceInSeconds(
-              addDays(parseISO(queryInput.startTime), 1).setHours(0, 0, 0),
-              parseISO(queryInput.startTime),
+            const result = await fetchEstimatedCalls(
+              queryInput,
+              action.stopPlacePosition,
+              action.quay,
             );
-            const timeRange = Math.max(timeUntilMidnight, MIN_TIME_RANGE);
-
-            const result = action.quay
-              ? await getQuayDepartures({
-                  id: action.quay.id,
-                  startTime: queryInput.startTime,
-                  numberOfDepartures: 1000,
-                  timeRange: Math.round(timeRange),
-                }).then((quayDepartures) => quayDepartures.quay?.estimatedCalls)
-              : await getStopPlaceDepartures({
-                  id: stopPlace.id,
-                  startTime: queryInput.startTime,
-                  numberOfDepartures: 5,
-                }).then((stopDepartures) =>
-                  flatMap(
-                    stopDepartures.stopPlace?.quays,
-                    (quay) => quay.estimatedCalls,
-                  ),
-                );
 
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
               locationId: action.quay ? action.quay.id : stopPlace.id,
-              result: result as DepartureTypes.EstimatedCall[],
+              result: result,
             });
           } catch (e) {
             dispatch({
               type: 'SET_ERROR',
               reset: stopPlace.id !== state.locationId,
-              loadType: 'initial',
               error: getAxiosErrorType(e),
             });
           } finally {
@@ -194,47 +163,6 @@ const reducer: ReducerWithSideEffects<
         },
       );
     }
-
-    // case 'LOAD_MORE_DEPARTURES': {
-    //   if (!action.stopPlace || !state.cursorInfo?.hasNextPage)
-    //     return NoUpdate();
-    //   if (state.isFetchingMore) return NoUpdate();
-
-    //   return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
-    //     {...state, error: undefined, isFetchingMore: true},
-    //     async (state, dispatch) => {
-    //       try {
-    //         // Use previously stored queryInput with stored startTime
-    //         // to ensure that we get the same departures.
-    //         const result = await getNextDepartureGroups(
-    //           {
-    //             stopPlace: action.stopPlace,
-    //             // favorites: state.showOnlyFavorites
-    //             //   ? action.favoriteDepartures
-    //             //   : undefined,
-    //           },
-    //           state.cursorInfo!,
-    //         );
-
-    //         if (result) {
-    //           dispatch({
-    //             type: 'UPDATE_DEPARTURES',
-    //             locationId: action.stopPlace?.id,
-    //             result,
-    //           });
-    //         }
-    //       } catch (e) {
-    //         dispatch({
-    //           type: 'SET_ERROR',
-    //           loadType: 'more',
-    //           error: getAxiosErrorType(e),
-    //         });
-    //       } finally {
-    //         dispatch({type: 'STOP_LOADER'});
-    //       }
-    //     },
-    //   );
-    // }
 
     case 'LOAD_REALTIME_DATA': {
       if (!state.data?.length) return NoUpdate();
@@ -268,7 +196,6 @@ const reducer: ReducerWithSideEffects<
       return Update<DepartureDataState>({
         ...state,
         isLoading: false,
-        isFetchingMore: false,
       });
     }
 
@@ -332,7 +259,6 @@ const reducer: ReducerWithSideEffects<
         ...state,
         error: {
           type: action.error,
-          loadType: action.loadType,
         },
         data: action.reset ? null : state.data,
       });
@@ -412,4 +338,43 @@ export function useDepartureData(
     refresh,
     // setShowFavorites,
   };
+}
+
+async function fetchEstimatedCalls(
+  queryInput: DepartureGroupsQuery,
+  stopPlace: DepartureTypes.StopPlacePosition,
+  quay?: DepartureTypes.Quay,
+): Promise<DepartureTypes.EstimatedCall[]> {
+  if (!stopPlace.node?.place) return [];
+  let estimatedCalls: DepartureTypes.EstimatedCall[] = [];
+
+  if (quay) {
+    // Get seconds until midnight, but a minimum of 3 hours
+    const timeUntilMidnight = differenceInSeconds(
+      addDays(parseISO(queryInput.startTime), 1).setHours(0, 0, 0),
+      parseISO(queryInput.startTime),
+    );
+    const timeRange = Math.round(Math.max(timeUntilMidnight, MIN_TIME_RANGE));
+
+    const result = await getQuayDepartures({
+      id: quay.id,
+      startTime: queryInput.startTime,
+      numberOfDepartures: queryInput.limitPerLine,
+      timeRange: timeRange,
+    });
+    estimatedCalls = result.quay
+      ?.estimatedCalls as DepartureTypes.EstimatedCall[];
+  } else {
+    const result = await getStopPlaceDepartures({
+      id: stopPlace.node.place.id,
+      startTime: queryInput.startTime,
+      numberOfDepartures: queryInput.limitPerLine,
+    });
+
+    estimatedCalls = flatMap(
+      result.stopPlace?.quays,
+      (quay) => quay.estimatedCalls,
+    ) as DepartureTypes.EstimatedCall[];
+  }
+  return estimatedCalls;
 }

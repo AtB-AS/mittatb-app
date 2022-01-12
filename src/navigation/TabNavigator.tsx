@@ -24,6 +24,7 @@ import {NavigatorScreenParams, ParamListBase} from '@react-navigation/native';
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
+import DeparturesScreen from '@atb/screens/Departures';
 
 type SubNavigator<T extends ParamListBase> = {
   [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
@@ -43,7 +44,11 @@ const Tab = createBottomTabNavigator<TabNavigatorParams>();
 const NavigationRoot = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const {startScreen, useExperimentalTripSearch} = usePreferenceItems();
+  const {
+    startScreen,
+    useExperimentalTripSearch,
+    newDepartures,
+  } = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
   return (
@@ -71,7 +76,7 @@ const NavigationRoot = () => {
       />
       <Tab.Screen
         name="Nearest"
-        component={NearbyScreen}
+        component={newDepartures ? DeparturesScreen : NearbyScreen}
         options={tabSettings(
           t(dictionary.navigation.nearby),
           t(dictionary.navigation.nearby),
