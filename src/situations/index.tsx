@@ -7,7 +7,7 @@ import {Situation as Situation_from_Trips} from '@atb/api/types/trips';
 import {useTheme} from '@atb/theme';
 
 export type SituationMessageProps = {
-  situations: Situation_v1[];
+  situations: Situation_v1[] | Situation_from_Trips[];
   mode?: 'no-icon' | 'icon';
   containerStyle?: MessageBoxProps['containerStyle'];
 };
@@ -71,7 +71,9 @@ export function getSituationDiff(
   return notInParent;
 }
 
-export function getUniqueSituations(situations: Situation_v1[] = []) {
+export function getUniqueSituations(
+  situations: Situation_v1[] | Situation_from_Trips[] = [],
+) {
   let uniqueSituations: {[id: string]: string} = {};
   for (let situation of situations) {
     if (

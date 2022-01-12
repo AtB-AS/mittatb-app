@@ -137,6 +137,7 @@ const AssistantTexts = {
             `Walk ${walkTime}. Wait ${waitTime}`,
           ),
         walkLabel: (time: string) => _(`Gå ${time}`, `Walk ${time}`),
+        waitLabel: (time: string) => _(`Vent ${time}`, `Wait ${time}`),
       },
       destination: {
         a11yLabel: _('Destinasjon', 'Destination'),

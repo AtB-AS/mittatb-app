@@ -1,18 +1,15 @@
 import polyline from '@mapbox/polyline';
 import {Feature, LineString, Point, Position} from 'geojson';
-
-import {
-  Coordinates,
-  Leg,
-  LegMode,
-  MapLeg,
-  Place,
-  TransportSubmode,
-} from '@atb/sdk';
 import {flatMap} from '@atb/utils/array';
 
+import {
+  Mode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
+import {Coordinates, MapLeg} from '@atb/screens/TripDetails_v2/Map/types';
+
 export interface MapLine extends Feature<LineString> {
-  travelType?: LegMode;
+  travelType?: Mode;
   subMode?: TransportSubmode;
   faded?: boolean;
 }
@@ -47,26 +44,22 @@ export function getMapBounds(features: MapLine[]) {
   };
 }
 
-export function legsToMapLines(legs: Leg[]): MapLine[] {
-  return createMapLines(legs);
-}
-
 export function createMapLines(legs: MapLeg[]): MapLine[] {
   return legs
-    .filter((leg) => leg.pointsOnLink.points?.trim()?.length) // only include legs with line geometry
+    .filter((leg) => leg.pointsOnLink?.points?.trim()?.length) // only include legs with line geometry
     .map((leg) => {
-      // @ts-ignore
-      const line = polyline.toGeoJSON(leg.pointsOnLink.points);
+      const line = polyline.toGeoJSON(leg.pointsOnLink!.points!);
       return {
         type: 'Feature',
         properties: {},
         faded: leg.faded,
-        travelType: leg.mode,
-        subMode: leg.transportSubmode,
+        travelType: (leg.mode as unknown) as Mode,
+        subMode: (leg.transportSubmode as unknown) as TransportSubmode,
         geometry: line,
       };
     });
 }
+
 export function pointOf(coords: Coordinates): Point;
 export function pointOf(coordinates: Position): Point;
 export function pointOf(placing: Coordinates | Position): Point;
