@@ -18,4 +18,3 @@ export type TripsQueryWithJourneyIds = {
   query: TripsQueryVariables;
   journeyIds: string[];
 };
-
