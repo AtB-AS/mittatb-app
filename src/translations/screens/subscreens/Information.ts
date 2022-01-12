@@ -62,8 +62,8 @@ const SelectStartScreenTexts = {
         row4Value4: _('80', '80'),
       },
       part3Text_1: _(
-        'For å ha med sykkel kan du kjøpe barnebillett.',
-        "To bring a bicycle, you can buy a child's ticket.",
+        'For å reise med sykkel kjøper du en barnebillett.',
+        'To bring a bike, buy a child ticket.',
       ),
       part3Text_2: _(
         'Ved avinstallering av appen vil også billettene fjernes. Vi advarer derfor mot avinstallering når du har kjøpt billetter. Da vil du ikke kunne framvise gyldig billett.',
