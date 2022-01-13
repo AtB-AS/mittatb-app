@@ -58,6 +58,6 @@ jobs:
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
   run-e2e-tests:
-    uses: ./.github/workflows/shared/test-e2e.yml@cbrevik/detox-support
+    uses: ./.github/workflows/test-e2e.yml@cbrevik/detox-support
     with: 
       e2econfig: ios.release
