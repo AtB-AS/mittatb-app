@@ -64,7 +64,8 @@ const Details: React.FC<Props> = (props) => {
     const initialPatternForPage = tripPatterns[currentIndex];
     if (initialPatternForPage) {
       setTripPattern(
-        updatedTripPattern?.id === initialPatternForPage.id
+        updatedTripPattern?.compressedQuery ===
+          initialPatternForPage.compressedQuery
           ? updatedTripPattern
           : initialPatternForPage,
       );
@@ -148,7 +149,7 @@ function useTripPattern(
     async function reload() {
       //return await getSingleTripPattern(id ?? initialTripPattern?.id ?? '');
       const tripQuery = await singleTripSearch(
-        id ?? initialTripPattern?.id ?? '',
+        id ?? initialTripPattern?.compressedQuery ?? '',
       );
       return tripQuery.trip?.tripPatterns[0];
     },
