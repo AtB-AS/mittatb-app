@@ -10,7 +10,7 @@ jobs:
     name: Build iOS
     strategy:
       matrix:
-        org: [atb, nfk]
+        org: [atb]
     environment: ${{ matrix.org }}
     timeout-minutes: 90
     runs-on: macos-11
@@ -57,5 +57,7 @@ jobs:
         run: fastlane ios get_cert
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-      - name: Run tests
-        uses: ./.github/workflows/shared/test-e2e.yml
+  run-e2e-tests:
+    uses: ./.github/workflows/shared/test-e2e.yml@cbrevik/detox-support
+    with: 
+      e2econfig: ios.release
