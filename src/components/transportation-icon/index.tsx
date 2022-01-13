@@ -47,7 +47,7 @@ const TransportationIcon: React.FC<TransportationIconProps> = ({
   const styles = useStyles();
 
   const lineNumberElement = lineNumber ? (
-    <ThemeText>{lineNumber}</ThemeText>
+    <ThemeText type="body__primary--bold">{lineNumber}</ThemeText>
   ) : null;
 
   return svg ? (
@@ -97,6 +97,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   lineNumber: {
     marginHorizontal: theme.spacings.xSmall,
-    fontWeight: textTypeStyles['body__primary--bold'].fontWeight,
   },
 }));
