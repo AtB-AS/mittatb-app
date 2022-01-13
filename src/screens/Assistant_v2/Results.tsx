@@ -19,11 +19,7 @@ type Props = {
   isEmptyResult: boolean;
   isSearching: boolean;
   resultReasons: String[];
-  onDetailsPressed(
-    tripPatternId?: string,
-    tripPatterns?: TripPattern[],
-    index?: number,
-  ): void;
+  onDetailsPressed(tripPatterns?: TripPattern[], index?: number): void;
   errorType?: ErrorType;
 };
 
@@ -112,7 +108,7 @@ const Results: React.FC<Props> = ({
   return (
     <View style={styles.container}>
       {tripPatterns?.map((tripPattern, i) => (
-        <Fragment key={String(tripPattern.id + i ?? i)}>
+        <Fragment key={i}>
           <OptionalNextDayLabel
             departureTime={tripPattern.expectedStartTime}
             previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
@@ -121,7 +117,7 @@ const Results: React.FC<Props> = ({
           <ResultItem
             tripPattern={tripPattern}
             onDetailsPressed={() => {
-              onDetailsPressed(tripPattern.id, tripPatterns, i);
+              onDetailsPressed(tripPatterns, i);
             }}
           />
         </Fragment>

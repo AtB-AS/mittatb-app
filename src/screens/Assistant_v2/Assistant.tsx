@@ -384,9 +384,8 @@ const Assistant: React.FC<Props> = ({
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
 
   const onPressed = useCallback(
-    (tripPatternId, tripPatterns, startIndex) =>
+    (tripPatterns, startIndex) =>
       navigation.navigate('TripDetails_v2', {
-        tripPatternId,
         tripPatterns,
         startIndex,
       }),

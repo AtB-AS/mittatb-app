@@ -27,9 +27,12 @@ export async function tripsSearch(
 }
 
 export async function singleTripSearch(
-  queryString: string,
+  queryString: string | null,
   opts?: AxiosRequestConfig,
-): Promise<TripsQuery> {
+): Promise<TripsQuery | null> {
+  if (!queryString) {
+    return null;
+  }
   const url = '/bff/v2/singleTrip';
   const query = {
     compressedQuery: queryString,
