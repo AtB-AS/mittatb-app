@@ -153,7 +153,7 @@ const Index: React.FC<Props> = ({
             onClear={() => setText('')}
             placeholder={t(TariffZoneSearchTexts.searchField.placeholder)}
             autoCorrect={false}
-            autoCompleteType="off"
+            autoComplete="off"
           />
         </View>
       </View>
@@ -212,7 +212,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   header: {
-    backgroundColor: theme.colors.background_gray.backgroundColor,
+    backgroundColor: theme.colors.background_accent.backgroundColor,
   },
   favouriteChips: {
     marginLeft: theme.spacings.medium,

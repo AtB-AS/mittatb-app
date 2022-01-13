@@ -26,13 +26,17 @@ import {Warning} from '@atb/assets/svg/situations';
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
   status: ValidityStatus | 'recent';
-  hasActiveTravelCard?: boolean;
+  hasActiveTravelCard: boolean;
+  isInspectable: boolean;
+  omitUserProfileCount?: boolean;
 };
 
 const TicketInfo = ({
   travelRights,
   status,
-  hasActiveTravelCard = false,
+  hasActiveTravelCard,
+  isInspectable,
+  omitUserProfileCount,
 }: TicketInfoProps) => {
   const {
     tariff_zones: tariffZones,
@@ -65,6 +69,8 @@ const TicketInfo = ({
       userProfilesWithCount={userProfilesWithCount}
       status={status}
       hasActiveTravelCard={hasActiveTravelCard}
+      isInspectable={isInspectable}
+      omitUserProfileCount={omitUserProfileCount}
     />
   );
 };
@@ -76,6 +82,8 @@ type TicketInfoViewProps = {
   userProfilesWithCount: UserProfileWithCount[];
   status: TicketInfoProps['status'];
   hasActiveTravelCard?: boolean;
+  isInspectable?: boolean;
+  omitUserProfileCount?: boolean;
 };
 
 export const TicketInfoView = (props: TicketInfoViewProps) => {
@@ -94,7 +102,8 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
     fromTariffZone,
     toTariffZone,
     userProfilesWithCount,
-    hasActiveTravelCard = false,
+    hasActiveTravelCard,
+    omitUserProfileCount,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -109,7 +118,9 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
       : undefined;
 
   const userProfileCountAndName = (u: UserProfileWithCount) =>
-    `${u.count} ${getReferenceDataName(u, language)}`;
+    omitUserProfileCount
+      ? `${getReferenceDataName(u, language)}`
+      : `${u.count} ${getReferenceDataName(u, language)}`;
 
   return (
     <View style={styles.textsContainer} accessible={true}>
@@ -145,7 +156,9 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
       {hasActiveTravelCard && (
         <View style={styles.tCardWarning}>
           <ThemeIcon svg={Warning} style={styles.tCardWarningIcon}></ThemeIcon>
-          <ThemeText>{t(TicketTexts.ticketInfo.tCardIsActive)}</ThemeText>
+          <ThemeText isMarkdown={true}>
+            {t(TicketTexts.ticketInfo.tCardIsActive)}
+          </ThemeText>
         </View>
       )}
     </View>
@@ -157,34 +170,37 @@ const TicketInspectionSymbol = ({
   toTariffZone,
   preassignedFareProduct,
   status,
+  isInspectable = true,
 }: TicketInfoViewProps) => {
   const styles = useStyles();
   const {theme} = useTheme();
   const {language} = useTranslation();
   if (!fromTariffZone || !toTariffZone) return null;
-  const icon = IconForStatus(status);
+  const icon = IconForStatus(status, isInspectable);
   if (!icon) return null;
+  const showAsInspectable = isInspectable || status !== 'valid';
+  const isValid = status === 'valid';
   return (
     <View
       style={[
-        status !== 'uninspectable' && styles.symbolContainer,
-        status === 'valid' && {
+        showAsInspectable && styles.symbolContainer,
+        isValid && {
           ...styles.symbolContainerCircle,
           backgroundColor:
-            preassignedFareProduct?.type === 'period'
+            preassignedFareProduct?.type === 'period' && isInspectable
               ? theme.colors.primary_1.backgroundColor
               : 'none',
         },
-        status === 'uninspectable' && {
-          ...styles.symbolContainerCircle,
-          ...styles.textContainer,
-          borderColor: theme.status.warning.main.backgroundColor,
-        },
+        isValid &&
+          !isInspectable && {
+            ...styles.textContainer,
+            borderColor: theme.status.warning.main.backgroundColor,
+          },
       ]}
-      accessibilityElementsHidden={status !== 'uninspectable'}
+      accessibilityElementsHidden={isInspectable}
     >
       <>
-        {status === 'valid' && (
+        {status === 'valid' && isInspectable && (
           <ThemeText
             type="body__primary--bold"
             allowFontScaling={false}
@@ -203,12 +219,27 @@ const TicketInspectionSymbol = ({
 
 const IconForStatus = (
   status: TicketInfoProps['status'],
+  isInspectable: boolean,
 ): ReactElement | null => {
   const {t} = useTranslation();
-
   switch (status) {
     case 'valid':
-      return <ThemeIcon svg={BusSide} colorType="primary" size={'large'} />;
+      if (isInspectable)
+        return <ThemeIcon svg={BusSide} colorType="primary" size={'large'} />;
+      else
+        return (
+          <ThemeText
+            type="body__tertiary"
+            style={{
+              textAlign: 'center',
+            }}
+            accessibilityLabel={t(
+              TicketTexts.ticketInfo.noInspectionIconA11yLabel,
+            )}
+          >
+            {t(TicketTexts.ticketInfo.noInspectionIcon)}
+          </ThemeText>
+        );
     case 'expired':
     case 'refunded':
       return <ThemeIcon svg={InvalidTicket} colorType="error" size={'large'} />;
@@ -216,20 +247,6 @@ const IconForStatus = (
       return <ThemeIcon svg={AddTicket} colorType="primary" size={'large'} />;
     case 'upcoming':
       return <ThemeIcon svg={Wait} colorType="primary" size={'large'} />;
-    case 'uninspectable':
-      return (
-        <ThemeText
-          type="body__tertiary"
-          style={{
-            textAlign: 'center',
-          }}
-          accessibilityLabel={t(
-            TicketTexts.ticketInfo.noInspectionIconA11yLabel,
-          )}
-        >
-          {t(TicketTexts.ticketInfo.noInspectionIcon)}
-        </ThemeText>
-      );
     case 'reserving':
     case 'unknown':
       return null;

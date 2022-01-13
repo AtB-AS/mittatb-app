@@ -17,6 +17,7 @@ const TicketTexts = {
       _(`Blir gyldig om ${duration}`, `Becomes valid in ${duration}`),
     reserving: _(`Reserverer…`, `Reserving…`),
     unknown: _(`Ukjent`, `Unknown`),
+    inactiveCarnet: _(`Ingen aktive klipp`, `No active ticket`),
     uninspectable: (duration: string) =>
       _(`Utløper ${duration}`, `Expires ${duration}`),
     durationDelimiter: _(' og ', ' and '),
@@ -27,8 +28,12 @@ const TicketTexts = {
     expired: _(`Utløpt billett`, `Expired ticket`),
     refunded: _(`Refundert billett`, 'Refunded ticket'),
     upcoming: _(`Kommende billett`, `Upcoming ticket`),
-    uninspectable: _(`Ikke inspiserbar billett`, `Uninspectable ticket`),
     unknown: _(`Ukjent billett`, `Unknown ticket`),
+  },
+  usedAccessValidityIcon: {
+    valid: _(`Gyldig billett`, `Valid ticket`),
+    upcoming: _(`Kommende klipp`, `Upcoming ticket`),
+    inactive: _(`Ingen aktive klipp`, `No active ticket`),
   },
   details: {
     header: {
@@ -43,6 +48,39 @@ const TicketTexts = {
       'QR kode. Vis frem denne koden ved billett kontroll',
       'QR code. Show this code in case of inspection. ',
     ),
+    qrCodeCountdown: (secondsLeft: number) =>
+      _(
+        `QR-kode oppdateres om ${secondsLeft} sek.`,
+        `QR-code will update in ${secondsLeft} sec.`,
+      ),
+    qrCodeErrors: {
+      notInspectable: {
+        title: _(
+          'Ikke tillatt å generere QR-kode',
+          'Not allowed to generate QR-code',
+        ),
+        text: _(
+          'Kan ikke generere en QR-kode siden denne telefonen ikke er satt som aktivt reisebevis.',
+          'Cannot generate a QR-code because this device is not set as the active travel token.',
+        ),
+      },
+      generic: {
+        title: _('En feil har oppstått', 'An error has ocurred'),
+        text: _('Får ikke generert QR-kode.', 'Cannot generate a QR-code.'),
+        retry: _('Prøv på nytt.', 'Try again.'),
+      },
+      missingNetwork: {
+        title: _('Mangler nettilgang', 'Missing network access'),
+        text: _(
+          'Får ikke hentet QR-kode uten tilgang på nett. Sjekk om du har skrudd på mobildata.',
+          `Cannot generate a QR-code without network access. Check if you've enabled mobile data`,
+        ),
+      },
+    },
+  },
+  carnet: {
+    numberOfUsedAccessesRemaining: (count: number) =>
+      _(`${count} klipp gjenstår`, `${count} tickets left`),
   },
   receipt: {
     header: {
@@ -78,8 +116,8 @@ const TicketTexts = {
   },
   ticketInfo: {
     tCardIsActive: _(
-      'T:kort er satt som reisebevis',
-      'T:card is set as travel token',
+      'Du har valgt **t:kort** som gyldig reisebevis',
+      'You have specified **t:card** as valid travel token',
     ),
     noInspectionIcon: _('Ikke bruk\ni kontroll', 'Not for\ninspection'),
     noInspectionIconA11yLabel: _('Ikke bruk i kontroll', 'Not for inspection'),

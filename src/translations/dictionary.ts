@@ -14,6 +14,7 @@ const dictionary = {
     profile_a11y: _('Mitt ATB', 'My ATB'),
   },
   missingRealTimePrefix: _('ca. ', 'ca. '),
+  a11yMissingRealTimePrefix: _('cirka ', 'circa '),
   travel: {
     legModes: {
       bus: _('Buss', 'Bus'),

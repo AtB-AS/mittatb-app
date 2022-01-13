@@ -7,6 +7,7 @@ import {
 import ThemeText from '@atb/components/text';
 import {LocationWithMetadata} from '@atb/favorites/types';
 import {usePreferenceItems} from '@atb/preferences';
+import Assistant_v2 from '@atb/screens/Assistant_v2/';
 import Assistant from '@atb/screens/Assistant/';
 import NearbyScreen, {NearbyStackParams} from '@atb/screens/Nearby';
 import ProfileScreen, {ProfileStackParams} from '@atb/screens/Profile';
@@ -23,7 +24,7 @@ import {NavigatorScreenParams, ParamListBase} from '@react-navigation/native';
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import useFontScale from '@atb/utils/use-font-scale';
+import DeparturesScreen from '@atb/screens/Departures';
 
 type SubNavigator<T extends ParamListBase> = {
   [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
@@ -43,7 +44,11 @@ const Tab = createBottomTabNavigator<TabNavigatorParams>();
 const NavigationRoot = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const {startScreen} = usePreferenceItems();
+  const {
+    startScreen,
+    useExperimentalTripSearch,
+    newDepartures,
+  } = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
   return (
@@ -61,7 +66,7 @@ const NavigationRoot = () => {
     >
       <Tab.Screen
         name="Assistant"
-        component={Assistant}
+        component={useExperimentalTripSearch ? Assistant_v2 : Assistant}
         options={tabSettings(
           t(dictionary.navigation.assistant),
           t(dictionary.navigation.assistant),
@@ -71,7 +76,7 @@ const NavigationRoot = () => {
       />
       <Tab.Screen
         name="Nearest"
-        component={NearbyScreen}
+        component={newDepartures ? DeparturesScreen : NearbyScreen}
         options={tabSettings(
           t(dictionary.navigation.nearby),
           t(dictionary.navigation.nearby),

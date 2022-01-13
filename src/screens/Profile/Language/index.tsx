@@ -36,7 +36,12 @@ export default function Language() {
             mode="toggle"
             text={t(LanguageSettingsTexts.usePhoneSettings)}
             checked={useSystemLanguage}
-            onPress={(checked) => setPreference({useSystemLanguage: checked})}
+            onPress={(checked) => {
+              setPreference({
+                useSystemLanguage: checked,
+                language: language || DEFAULT_LANGUAGE,
+              });
+            }}
           />
         </Section>
         {!useSystemLanguage && (

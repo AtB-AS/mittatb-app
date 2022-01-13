@@ -5,6 +5,7 @@ import {
   DeparturesMetadata,
   DeparturesRealtimeData,
   PaginationInput,
+  StopPlaceDetails,
 } from '@atb/sdk';
 import {flatMap} from '@atb/utils/array';
 import client from '../client';
@@ -44,6 +45,25 @@ export async function getRealtimeDeparture(
   });
 
   let url = `bff/v1/departures-realtime?${params}`;
+  const response = await client.get<DeparturesRealtimeData>(url, opts);
+  return response.data;
+}
+
+export async function getRealtimeDepartureV2(
+  quayIds: string[] | undefined,
+  query: DepartureGroupsQuery,
+  opts?: AxiosRequestConfig,
+): Promise<DeparturesRealtimeData> {
+  if (!quayIds || quayIds.length === 0) return {};
+  const startTime = query.startTime;
+
+  const params = build({
+    quayIds,
+    startTime,
+    limit: query.limitPerLine,
+  });
+
+  let url = `bff/v2/departures/realtime?${params}`;
   const response = await client.get<DeparturesRealtimeData>(url, opts);
   return response.data;
 }

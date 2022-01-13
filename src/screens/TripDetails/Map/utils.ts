@@ -1,5 +1,6 @@
 import polyline from '@mapbox/polyline';
 import {Feature, LineString, Point, Position} from 'geojson';
+
 import {
   Coordinates,
   Leg,
@@ -54,6 +55,7 @@ export function createMapLines(legs: MapLeg[]): MapLine[] {
   return legs
     .filter((leg) => leg.pointsOnLink.points?.trim()?.length) // only include legs with line geometry
     .map((leg) => {
+      // @ts-ignore
       const line = polyline.toGeoJSON(leg.pointsOnLink.points);
       return {
         type: 'Feature',

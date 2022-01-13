@@ -24,6 +24,7 @@ type AuthReducerState = {
   confirmationHandler: FirebaseAuthTypes.ConfirmationResult | undefined;
   abtCustomerId: string | undefined;
   user: FirebaseAuthTypes.User | null;
+  userCreationFinished: boolean;
 };
 
 type AuthReducerAction =
@@ -35,7 +36,8 @@ type AuthReducerAction =
       type: 'SET_USER';
       user: FirebaseAuthTypes.User | null;
     }
-  | {type: 'SET_ABT_CUSTOMER_ID'; abtCustomerId: string | undefined};
+  | {type: 'SET_ABT_CUSTOMER_ID'; abtCustomerId: string | undefined}
+  | {type: 'SET_USER_CREATION_FINISHED'};
 
 type AuthReducer = (
   prevState: AuthReducerState,
@@ -55,12 +57,19 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
         ...prevState,
         isAuthConnectionInitialized: true,
         user: action.user,
+        userCreationFinished: false,
       };
     }
     case 'SET_ABT_CUSTOMER_ID': {
       return {
         ...prevState,
         abtCustomerId: action.abtCustomerId,
+      };
+    }
+    case 'SET_USER_CREATION_FINISHED': {
+      return {
+        ...prevState,
+        userCreationFinished: true,
       };
     }
   }
@@ -71,13 +80,16 @@ const initialReducerState: AuthReducerState = {
   confirmationHandler: undefined,
   abtCustomerId: undefined,
   user: null,
+  userCreationFinished: false,
 };
 
 type AuthenticationType = 'none' | 'anonymous' | 'phone';
 
-const getAuthenticationType = (state: AuthReducerState): AuthenticationType => {
-  if (state.user?.phoneNumber) return 'phone';
-  else if (state.user?.isAnonymous) return 'anonymous';
+const getAuthenticationType = (
+  user: FirebaseAuthTypes.User | null,
+): AuthenticationType => {
+  if (user?.phoneNumber) return 'phone';
+  else if (user?.isAnonymous) return 'anonymous';
   else return 'none';
 };
 
@@ -123,7 +135,12 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
 
   const onUserChanged = useCallback(
     async function (user: FirebaseAuthTypes.User | null) {
-      if (user) updateMetadata({'AtB-Firebase-Auth-Id': user.uid});
+      if (user) {
+        updateMetadata({
+          'AtB-Firebase-Auth-Id': user.uid,
+          'AtB-Auth-Type': getAuthenticationType(user),
+        });
+      }
       dispatch({type: 'SET_USER', user});
     },
     [dispatch],
@@ -138,6 +155,33 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
         dispatch({type: 'SET_ABT_CUSTOMER_ID', abtCustomerId});
       }
     })();
+  }, [state.user?.uid]);
+
+  /*
+   * Check whether the user creation is finished. After the first login the user
+   * is created immediately at Firebase, but created asynchronously at Entur.
+   * When receiving the user created callback from Entur then additional custom
+   * claims get added to the user's id token. This method force refreshes the id
+   * token and checks whether these custom claims has been set.
+   *
+   * Will retry up to 10 times with an interval of 1 second.
+   */
+  useEffect(() => {
+    let retryCount = 0;
+    const checkCustomClaims = async () => {
+      const token = await state.user?.getIdTokenResult(true);
+      const hasCustomClaims = !!token?.claims['abt_id'];
+      if (hasCustomClaims) {
+        dispatch({type: 'SET_USER_CREATION_FINISHED'});
+      } else {
+        if (retryCount < 10) {
+          retryCount++;
+          setTimeout(() => checkCustomClaims(), 1000);
+        }
+      }
+    };
+
+    checkCustomClaims();
   }, [state.user?.uid]);
 
   // Subscribe to user changes. Will fire a onChangeEvent immediately on subscription.
@@ -186,7 +230,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
         signInWithPhoneNumber,
         confirmCode,
         signOut,
-        authenticationType: getAuthenticationType(state),
+        authenticationType: getAuthenticationType(state.user),
       }}
     >
       {children}

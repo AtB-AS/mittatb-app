@@ -2,11 +2,12 @@ import React, {ComponentProps} from 'react';
 import {Warning} from '../assets/svg/situations';
 import ThemeText from '../components/text';
 import MessageBox, {MessageBoxProps} from '../components/message-box';
-import {Situation} from '../sdk';
+import {Situation as Situation_v1} from '../sdk';
+import {Situation as Situation_from_Trips} from '@atb/api/types/trips';
 import {useTheme} from '@atb/theme';
 
 export type SituationMessageProps = {
-  situations: Situation[];
+  situations: Situation_v1[] | Situation_from_Trips[];
   mode?: 'no-icon' | 'icon';
   containerStyle?: MessageBoxProps['containerStyle'];
 };
@@ -34,7 +35,7 @@ export default function SituationMessages({
 }
 
 export type SituationWarningProps = {
-  situations: Situation[];
+  situations: Situation_v1[] | Situation_from_Trips[];
   style?: ComponentProps<typeof Warning>['style'];
   accessibilityLabel?: string;
 };
@@ -51,11 +52,16 @@ export function SituationWarningIcon({
   return <Warning accessibilityLabel={accessibilityLabel} style={style} />;
 }
 
-export function hasSituations(situations: Situation[]) {
+export function hasSituations(
+  situations: Situation_v1[] | Situation_from_Trips[],
+) {
   return situations?.some((s) => s.description.length) ?? false;
 }
 
-export function getSituationDiff(situations: Situation[], parent: Situation[]) {
+export function getSituationDiff(
+  situations: Situation_v1[],
+  parent: Situation_v1[],
+) {
   const notInParent =
     situations?.filter((situation) => {
       return parent.every(
@@ -65,7 +71,9 @@ export function getSituationDiff(situations: Situation[], parent: Situation[]) {
   return notInParent;
 }
 
-export function getUniqueSituations(situations: Situation[] = []) {
+export function getUniqueSituations(
+  situations: Situation_v1[] | Situation_from_Trips[] = [],
+) {
   let uniqueSituations: {[id: string]: string} = {};
   for (let situation of situations) {
     if (
@@ -81,7 +89,7 @@ export function getUniqueSituations(situations: Situation[] = []) {
   return uniqueSituations;
 }
 
-export function situationMessages(situations: Situation[]) {
+export function situationMessages(situations: Situation_v1[]) {
   const unique = Object.values(getUniqueSituations(situations));
   return unique.join('. ');
 }

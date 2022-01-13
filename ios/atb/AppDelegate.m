@@ -7,7 +7,7 @@
 
 
 #import <Bugsnag/Bugsnag.h>
-
+#import <AtB-Swift.h>
 #import <Firebase.h>
 @import Intercom;
 
@@ -53,6 +53,10 @@ static void InitializeFlipper(UIApplication *application) {
     if (bugsnagReleaseStage != nil)
       config.releaseStage = bugsnagReleaseStage;
     [Bugsnag startWithConfiguration:config];
+    
+    [[RegisterLogger alloc] registerWithCb:^(NSError * err) {
+      [Bugsnag notifyError:err];
+    }];
   }
 
   if ([FIRApp defaultApp] == nil) {

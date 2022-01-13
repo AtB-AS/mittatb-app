@@ -41,6 +41,10 @@ const TicketsTexts = {
     label: _('Aktive', 'Valid'),
     a11yLabel: _('Aktive billetter', 'Active tickets'),
     noTickets: _('Du har ingen aktive billetter', 'No valid tickets right now'),
+    noTicketsExpiredHelpText: _(
+      'Du har ingen aktive billetter. Utløpte billetter finner du under Mitt AtB-fanen.',
+      'You have no valid tickets right now. Expired tickets can be found under the My AtB tab.',
+    ),
   },
   expiredTicketsTab: {
     label: _('Utløpte', 'Expired'),
@@ -99,16 +103,21 @@ const TicketsTexts = {
         `Noe gikk feil når vi prøvde å laste inn billett med ordre-id ${orderId}`,
         `Something went wrong when we tried to load ticket with order id ${orderId}`,
       ),
+    paymentError: _(
+      'Betalingen mislyktes. Sjekk om du har tilstrekkelige midler på konto eller prøv et annet betalingsmiddel.',
+      'Payment failed. Please check that you have sufficient funds on your account or try a different payment option.',
+    ),
+    paymentErrorButton: _('Lukk', 'Close'),
   },
   travelCardInformation: {
     reisebevis: _('Reisebevis', 'Travel token'),
     onInspection: _(
-      'I billettkontroll må du vise t:kortet ditt:',
-      'In the event of an inspection, you need to show your t:card:',
+      'I billettkontroll må du vise t:kortet ditt',
+      'In the event of an inspection, please present your t:card',
     ),
     changeInstructions: _(
-      'Kan endres fra Mitt AtB',
-      'Can be changed in My AtB',
+      'Kan endres fra "Mitt AtB"',
+      'Can be changed from "My AtB"',
     ),
     tCard: _('t:kort', 't:card'),
     illustrationa11yLabel: (travelCardId: string) =>

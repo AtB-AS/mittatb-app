@@ -41,7 +41,7 @@ function shouldRetry(error: AxiosError): boolean {
   );
 }
 
-export function createClient(baseUrl: string) {
+export function createClient(baseUrl: string | undefined) {
   const client = axios.create({
     baseURL: baseUrl,
   });
@@ -66,9 +66,19 @@ export const CancelToken = axios.CancelToken;
 export const isCancel = axios.isCancel;
 
 function requestHandler(config: AxiosRequestConfig): AxiosRequestConfig {
-  config.headers[InstallIdHeaderName] = installIdHeaderValue;
+  if (!config.headers) {
+    config.headers = {};
+  }
   config.headers[RequestIdHeaderName] = uuid();
-  config.headers[FirebaseAuthIdHeaderName] = auth().currentUser?.uid;
+
+  if (installIdHeaderValue) {
+    config.headers[InstallIdHeaderName] = installIdHeaderValue;
+  }
+
+  const authId = auth().currentUser?.uid;
+  if (authId) {
+    config.headers[FirebaseAuthIdHeaderName] = authId;
+  }
   return config;
 }
 
@@ -76,7 +86,10 @@ async function requestIdTokenHandler(config: AxiosRequestConfig) {
   if (config.authWithIdToken) {
     const user = auth().currentUser;
     const idToken = await user?.getIdToken(config.forceRefreshIdToken);
-    config.headers['Authorization'] = 'Bearer ' + idToken;
+    config.headers = {
+      ...(config.headers || {}),
+      Authorization: 'Bearer ' + idToken,
+    };
   }
   return config;
 }

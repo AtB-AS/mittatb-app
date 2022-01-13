@@ -38,6 +38,8 @@ import {screenReaderPause} from '@atb/components/accessible-text';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import TravellersSheet from '@atb/screens/Ticketing/Purchase/Travellers/TravellersSheet';
 import TravelDateSheet from '@atb/screens/Ticketing/Purchase/TravelDate/TravelDateSheet';
+import {useTicketState} from '@atb/tickets';
+import MessageBoxTexts from '@atb/translations/components/MessageBox';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -53,6 +55,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 }) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
+  const {customerProfile} = useTicketState();
+
+  const hasTravelCard = !!customerProfile?.travelcard;
 
   const {
     tariff_zones: tariffZones,
@@ -157,7 +162,8 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             type="error"
             title={t(PurchaseOverviewTexts.errorMessageBox.title)}
             message={t(PurchaseOverviewTexts.errorMessageBox.message)}
-            retryFunction={refreshOffer}
+            onPress={refreshOffer}
+            onPressText={t(MessageBoxTexts.tryAgainButton)}
             containerStyle={styles.errorMessage}
           />
         )}
@@ -236,6 +242,14 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           </Sections.GenericItem>
         </Sections.Section>
       </View>
+
+      {hasTravelCard && (
+        <MessageBox
+          containerStyle={styles.warning}
+          message={t(PurchaseOverviewTexts.warning)}
+          type="warning"
+        />
+      )}
 
       <View style={styles.toPaymentButton}>
         <Button
@@ -397,6 +411,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   selectionLinks: {margin: theme.spacings.medium},
   totalSection: {flex: 1, textAlign: 'center'},
   toPaymentButton: {marginHorizontal: theme.spacings.medium},
+  warning: {
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
+  },
 }));
 
 export default PurchaseOverview;

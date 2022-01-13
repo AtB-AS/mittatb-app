@@ -208,7 +208,7 @@ export function LocationSearchContent({
             onClear={() => setText('')}
             placeholder={placeholder}
             autoCorrect={false}
-            autoCompleteType="off"
+            autoComplete="off"
             autoFocus={!a11yContext.isScreenReaderEnabled}
           />
         </View>
@@ -292,7 +292,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   header: {
-    backgroundColor: theme.colors.background_gray.backgroundColor,
+    backgroundColor: theme.colors.background_accent.backgroundColor,
   },
   withMargin: {
     margin: theme.spacings.medium,

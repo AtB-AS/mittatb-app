@@ -35,15 +35,9 @@ import {NearbyStackParams} from '.';
 import Loading from '../Loading';
 import DepartureTimeSheet from './DepartureTimeSheet';
 import {useDepartureData} from './state';
+import {SearchTime} from './types';
 
-const themeColor: ThemeColor = 'background_gray';
-
-const DateOptions = ['now', 'departure'] as const;
-type DateOptionType = typeof DateOptions[number];
-export type SearchTime = {
-  option: DateOptionType;
-  date: string;
-};
+const themeColor: ThemeColor = 'background_accent';
 
 type NearbyRouteName = 'NearbyRoot';
 const NearbyRouteNameStatic: NearbyRouteName = 'NearbyRoot';
@@ -109,11 +103,6 @@ const NearbyOverview: React.FC<Props> = ({
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
   const styles = useNearbyStyles();
 
-  const [searchTime, setSearchTime] = useState<SearchTime>({
-    option: 'now',
-    date: new Date().toISOString(),
-  });
-
   const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
     [currentLocation],
@@ -121,10 +110,14 @@ const NearbyOverview: React.FC<Props> = ({
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
   const updatingLocation = !fromLocation && hasLocationPermission;
 
-  const {state, refresh, loadMore, setShowFavorites} = useDepartureData(
-    fromLocation,
-    searchTime?.option !== 'now' ? searchTime.date : undefined,
-  );
+  const {
+    state,
+    refresh,
+    loadMore,
+    setShowFavorites,
+    setSearchTime,
+  } = useDepartureData(fromLocation);
+
   const {
     data,
     tick,
@@ -133,6 +126,7 @@ const NearbyOverview: React.FC<Props> = ({
     error,
     showOnlyFavorites,
     queryInput,
+    searchTime,
   } = state;
 
   const {
@@ -284,6 +278,7 @@ const NearbyOverview: React.FC<Props> = ({
         isLoading={isLoading}
         isInitialScreen={isInitialScreen}
         error={error ? translateErrorType(error.type, t) : undefined}
+        searchDate={searchTime.date}
       />
     </SimpleDisappearingHeader>
   );

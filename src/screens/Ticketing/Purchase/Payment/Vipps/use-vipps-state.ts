@@ -1,4 +1,5 @@
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
+import {useAuthState} from '@atb/auth';
 import {usePreferences} from '@atb/preferences';
 import {
   PaymentType,
@@ -9,6 +10,7 @@ import {
 import {AxiosError} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
 import {Linking} from 'react-native';
+import {savePreviousPaymentMethodByUser} from '../../saved-payment-utils';
 
 export type State = 'reserving-offer' | 'offer-reserved' | 'opened-vipps-app';
 
@@ -73,7 +75,7 @@ export default function useVippsState(
     vippsReducer,
     initialState,
   );
-  const {setPreference} = usePreferences();
+  const {user} = useAuthState();
 
   const handleAxiosError = useCallback(
     function (err: AxiosError | unknown, errorContext: ErrorContext) {
@@ -101,12 +103,12 @@ export default function useVippsState(
           },
         });
         dispatch({type: 'OFFER_RESERVED', reservation: response});
-        setPreference({
-          previousPaymentMethod: {
+        if (user) {
+          savePreviousPaymentMethodByUser(user.uid, {
             savedType: 'normal',
             paymentType: PaymentType.Vipps,
-          },
-        });
+          });
+        }
       } catch (err) {
         console.warn(err);
         handleAxiosError(err, 'reserve-offer');
@@ -124,10 +126,10 @@ export default function useVippsState(
       if (!reservation) return;
       const {url} = reservation;
 
-      if (await Linking.canOpenURL(url)) {
+      try {
         dispatch({type: 'VIPPS_APP_OPENED'});
-        Linking.openURL(url);
-      } else {
+        await Linking.openURL(url);
+      } catch (err) {
         dispatch({
           type: 'SET_ERROR',
           errorContext: 'open-vipps-url',

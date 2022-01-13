@@ -8,7 +8,7 @@ import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import useLocalConfig from '@atb/utils/use-local-config';
-import {PRIVACY_POLICY_URL} from '@env';
+import {PRIVACY_POLICY_URL, IS_QA_ENV} from '@env';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
@@ -18,8 +18,11 @@ import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileStackParams} from '..';
 import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
-import {useAppDispatch} from '@atb/AppContext';
-import {filterActiveFareContracts, useTicketState} from '@atb/tickets';
+import {
+  filterActiveOrCanBeUsedFareContracts,
+  useTicketState,
+} from '@atb/tickets';
+import {usePreferences} from '@atb/preferences';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -40,15 +43,16 @@ type ProfileScreenProps = {
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
   const {enable_i18n} = useRemoteConfig();
-  const appDispatch = useAppDispatch();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
-  const {authenticationType, signOut, user, abtCustomerId} = useAuthState();
+  const {authenticationType, signOut, user} = useAuthState();
   const config = useLocalConfig();
 
-  const {fareContracts} = useTicketState();
-  const activeFareContracts = filterActiveFareContracts(fareContracts);
+  const {fareContracts, customerProfile} = useTicketState();
+  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
+    fareContracts,
+  );
   const hasActiveFareContracts = activeFareContracts.length > 0;
 
   const {
@@ -57,15 +61,13 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
     FadeContainer: ClipboardFadeContainer,
   } = useCopyWithOpacityFade(1500);
 
+  const {
+    setPreference,
+    preferences: {useExperimentalTripSearch, newDepartures},
+  } = usePreferences();
+
   function copyInstallId() {
     if (config?.installId) setClipboard(config.installId);
-  }
-
-  function copyFirestoreLink() {
-    if (abtCustomerId)
-      setClipboard(
-        `https://console.firebase.google.com/u/1/project/atb-mobility-platform-staging/firestore/data/~2Fcustomers~2F${abtCustomerId}`,
-      );
   }
 
   return (
@@ -108,6 +110,12 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               onPress={signOut}
             />
           )}
+          <Sections.LinkItem
+            text={t(
+              ProfileTexts.sections.account.linkItems.expiredTickets.label,
+            )}
+            onPress={() => navigation.navigate('ExpiredTickets')}
+          />
         </Sections.Section>
 
         <Sections.Section withPadding>
@@ -242,23 +250,32 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           />
         </Sections.Section>
 
-        {__DEV__ && (
+        {(!!JSON.parse(IS_QA_ENV || 'false') ||
+          __DEV__ ||
+          customerProfile?.debug) && (
           <Sections.Section withPadding>
             <Sections.HeaderItem text="Developer menu" />
+            <Sections.ActionItem
+              mode="toggle"
+              text={'Enable new departure screen'}
+              checked={newDepartures}
+              onPress={(newDepartures) => setPreference({newDepartures})}
+            />
+            <Sections.ActionItem
+              mode="toggle"
+              text={'Enable experimental trips search'}
+              checked={useExperimentalTripSearch}
+              onPress={(useExperimentalTripSearch) =>
+                setPreference({useExperimentalTripSearch})
+              }
+            />
             <Sections.LinkItem
               text="Design system"
               onPress={() => navigation.navigate('DesignSystem')}
             />
             <Sections.LinkItem
-              text="Restart onboarding"
-              onPress={() => {
-                appDispatch({type: 'RESTART_ONBOARDING'});
-              }}
-            />
-            <Sections.LinkItem
-              text="Copy link to customer in Firestore (staging)"
-              icon="arrow-upleft"
-              onPress={() => copyFirestoreLink()}
+              text="Debug"
+              onPress={() => navigation.navigate('DebugInfo')}
             />
           </Sections.Section>
         )}

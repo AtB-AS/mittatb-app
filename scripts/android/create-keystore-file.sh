@@ -1,16 +1,14 @@
 #!/bin/bash
 
 if [[
-    -z "${GPG_KEYSTORE_FILE}"
-    || -z "${GPG_KEYSTORE_PASS}"
+    -z "${KEYSTORE}" ||
+    -z "${KEYSTORE_PATH}"
    ]]; then
     echo "Argument error!"
-    echo "Expected two env variables: 
-  - GPG_KEYSTORE_FILE
-  - GPG_KEYSTORE_PASS"
+    echo "Expected env variable:
+  - KEYSTORE
+  - KEYSTORE_PATH"
     exit 1
-else 
-    echo "$GPG_KEYSTORE_FILE" > atb.keystore.asc
-    gpg -d --passphrase "$GPG_KEYSTORE_PASS" --batch atb.keystore.asc > keystore.jks
-    cp keystore.jks android/app/keystore.jks
+else
+    echo $KEYSTORE | base64 -d > $KEYSTORE_PATH
 fi

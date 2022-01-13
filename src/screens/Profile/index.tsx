@@ -6,10 +6,12 @@ import SelectTravelToken from './TokenToggle/SelectTravelToken';
 import FavoriteDepartures from './FavoriteDepartures';
 import FavoriteList from './FavoriteList';
 import ProfileHome from './Home';
+import {ExpiredTickets} from './ExpiredTickets';
 import Language from './Language';
 import Enrollment from './Enrollment';
 import SelectStartScreen from './SelectStartScreen';
 import DesignSystem from './DesignSystem';
+import DebugInfo from './DebugInfo';
 import DefaultUserProfile from './DefaultUserProfile';
 import TicketingInformation from '@atb/screens/Profile/Information/TicketingInformation';
 import PaymentInformation from '@atb/screens/Profile/Information/PaymentInformation';
@@ -18,6 +20,7 @@ import TicketInspectionInformation from '@atb/screens/Profile/Information/Ticket
 
 export type ProfileStackParams = {
   ProfileHome: undefined;
+  ExpiredTickets: undefined;
   FavoriteList: undefined;
   FavoriteDepartures: undefined;
   SelectStartScreen: undefined;
@@ -28,6 +31,7 @@ export type ProfileStackParams = {
   DefaultUserProfile: undefined;
   Enrollment: undefined;
   DesignSystem: undefined;
+  DebugInfo: undefined;
   TicketingInformation: undefined;
   PaymentInformation: undefined;
   TermsInformation: undefined;
@@ -46,6 +50,7 @@ export default function ProfileScreen() {
       }}
     >
       <Stack.Screen name="ProfileHome" component={ProfileHome} />
+      <Stack.Screen name="ExpiredTickets" component={ExpiredTickets} />
       <Stack.Screen name="FavoriteList" component={FavoriteList} />
       <Stack.Screen name="FavoriteDepartures" component={FavoriteDepartures} />
       <Stack.Screen name="SelectStartScreen" component={SelectStartScreen} />
@@ -56,6 +61,7 @@ export default function ProfileScreen() {
       <Stack.Screen name="DefaultUserProfile" component={DefaultUserProfile} />
       <Stack.Screen name="Enrollment" component={Enrollment} />
       <Stack.Screen name="DesignSystem" component={DesignSystem} />
+      <Stack.Screen name="DebugInfo" component={DebugInfo} />
       <Stack.Screen
         name="TicketingInformation"
         component={TicketingInformation}

@@ -1,7 +1,7 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
-import React, {useState} from 'react';
+import React from 'react';
 import {ScrollView, View} from 'react-native';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
@@ -11,10 +11,13 @@ import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ThemeColor} from '@atb/theme/colors';
 import {useNavigation} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native';
-import {useTicketState} from '@atb/tickets';
+import {
+  filterActiveOrCanBeUsedFareContracts,
+  useTicketState,
+} from '@atb/tickets';
 import SimpleTicket from '@atb/screens/Ticketing/Ticket';
 
-const themeColor: ThemeColor = 'background_gray';
+const themeColor: ThemeColor = 'background_accent';
 
 export default function ActiveTicketPrompt({
   headerLeftButton,
@@ -30,7 +33,11 @@ export default function ActiveTicketPrompt({
   const styles = useThemeStyles();
   const focusRef = useFocusOnLoad();
   const {fareContracts} = useTicketState();
-  const [now, setNow] = useState<number>(Date.now());
+  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
+    fareContracts,
+  );
+  const firstActiveFc = activeFareContracts[0];
+  const now = Date.now();
 
   const onNext = async () => {
     doAfterSubmit();
@@ -65,11 +72,13 @@ export default function ActiveTicketPrompt({
           </ThemeText>
         </View>
         <View style={styles.ticket}>
-          <SimpleTicket
-            fareContract={fareContracts[0]}
-            now={now}
-            hideDetails={true}
-          />
+          {firstActiveFc && (
+            <SimpleTicket
+              fareContract={firstActiveFc}
+              now={now}
+              hideDetails={true}
+            />
+          )}
         </View>
         <Button
           color={'primary_2'}

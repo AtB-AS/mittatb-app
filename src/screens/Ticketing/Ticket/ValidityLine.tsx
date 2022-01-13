@@ -3,8 +3,8 @@ import {Animated, Dimensions, Easing, View} from 'react-native';
 import Dash from 'react-native-dash';
 import {StyleSheet, useTheme} from '@atb/theme';
 import LinearGradient from 'react-native-linear-gradient';
-import colors from '@atb/theme/colors';
 import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
+import SectionSeparator from '@atb/components/sections/section-separator';
 
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
@@ -15,6 +15,7 @@ type Props =
       now: number;
       validFrom: number;
       validTo: number;
+      isInspectable: boolean;
     }
   | {status: Exclude<ValidityStatus, 'valid'>};
 
@@ -30,38 +31,24 @@ const ValidityLine = (props: Props): ReactElement => {
         />
       );
     case 'valid':
-      const {now, validFrom, validTo} = props;
+      const {now, validFrom, validTo, isInspectable} = props;
       const validityPercent = getValidityPercent(now, validFrom, validTo);
-      return (
+      return isInspectable ? (
         <LineWithVerticalBars
           backgroundColor={theme.colors.primary_1.backgroundColor}
           validityPercent={validityPercent}
         />
+      ) : (
+        <View style={styles.container}>
+          <SectionSeparator />
+        </View>
       );
     case 'upcoming':
     case 'refunded':
     case 'expired':
       return (
         <View style={styles.container}>
-          <Dash
-            style={{width: '100%'}}
-            dashGap={0}
-            dashLength={1}
-            dashThickness={1}
-            dashColor={theme.colors.background_1.backgroundColor}
-          />
-        </View>
-      );
-    case 'uninspectable':
-      return (
-        <View style={styles.container}>
-          <Dash
-            style={{width: '100%'}}
-            dashGap={0}
-            dashLength={1}
-            dashThickness={1}
-            dashColor={theme.colors.background_1.backgroundColor}
-          />
+          <SectionSeparator />
         </View>
       );
     case 'unknown':
@@ -76,13 +63,15 @@ const ValidityLine = (props: Props): ReactElement => {
 const LineWithVerticalBars = ({
   backgroundColor,
   validityPercent = 100,
+  animate = true,
 }: {
   backgroundColor: string;
   validityPercent?: number;
+  animate?: boolean;
 }) => {
   const styles = useStyles();
   const {theme} = useTheme();
-  const animatedVerticalLineOffset = useAnimatedVerticalLineOffset();
+  const animatedVerticalLineOffset = useAnimatedVerticalLineOffset(animate);
   const numberOfVerticalLines = getNumberOfVerticalLines();
   return (
     <View style={styles.container}>
@@ -116,9 +105,10 @@ const LineWithVerticalBars = ({
  * pixel offset value in the vertical line component.
  * @returns the current animated offset value
  */
-const useAnimatedVerticalLineOffset = () => {
+const useAnimatedVerticalLineOffset = (animate: boolean | undefined = true) => {
   const animatedOffset = useRef(new Animated.Value(0)).current;
   useEffect(() => {
+    if (!animate) return;
     return Animated.loop(
       Animated.timing(animatedOffset, {
         toValue: 1,
@@ -127,7 +117,7 @@ const useAnimatedVerticalLineOffset = () => {
         easing: Easing.linear,
       }),
     ).start();
-  }, []);
+  }, [animate]);
   return animatedOffset;
 };
 
@@ -164,35 +154,38 @@ const VerticalLine = ({
 }: {
   offset: Animated.Value;
   index: number;
-}) => (
-  <AnimatedLinearGradient
-    style={[
-      useStyles().verticalLine,
-      {
-        left: index * SPACE_BETWEEN_VERTICAL_LINES - 10,
-        transform: [
-          {
-            translateX: offset.interpolate({
-              inputRange: [0, 1],
-              outputRange: [SPACE_BETWEEN_VERTICAL_LINES, 0],
-            }),
-          },
-        ],
-      },
-    ]}
-    useAngle={true}
-    angle={120}
-    locations={[0.25, 0.25, 0.75, 0.75]}
-    colors={[
-      'transparent',
-      colors.primary.gray_500,
-      colors.primary.gray_500,
-      'transparent',
-    ]}
-    pointerEvents={'none'}
-  />
-);
+}) => {
+  const {theme} = useTheme();
 
+  return (
+    <AnimatedLinearGradient
+      style={[
+        useStyles().verticalLine,
+        {
+          left: index * SPACE_BETWEEN_VERTICAL_LINES - 10,
+          transform: [
+            {
+              translateX: offset.interpolate({
+                inputRange: [0, 1],
+                outputRange: [SPACE_BETWEEN_VERTICAL_LINES, 0],
+              }),
+            },
+          ],
+        },
+      ]}
+      useAngle={true}
+      angle={120}
+      locations={[0.25, 0.25, 0.75, 0.75]}
+      colors={[
+        'transparent',
+        theme.colors.background_accent.backgroundColor,
+        theme.colors.background_accent.backgroundColor,
+        'transparent',
+      ]}
+      pointerEvents={'none'}
+    />
+  );
+};
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     marginVertical: theme.spacings.medium,

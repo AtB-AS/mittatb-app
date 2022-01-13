@@ -1,4 +1,5 @@
 import {
+  addHours,
   differenceInCalendarDays,
   differenceInMinutes,
   differenceInSeconds,
@@ -7,6 +8,7 @@ import {
   getMinutes,
   isPast,
   isSameDay,
+  isWithinInterval,
   Locale,
   parse,
   parseISO,
@@ -158,8 +160,63 @@ export function fullDateTime(isoDate: string | Date, language: Language) {
 
 export {isSameDay};
 
+export function formatToShortDate(date: Date | string, language: Language) {
+  return format(parseIfNeeded(date), 'dd. MMM', {
+    locale: languageToLocale(language),
+  });
+}
+
 export function formatToSimpleDate(date: Date | string, language: Language) {
   return format(parseIfNeeded(date), 'do MMMM', {
+    locale: languageToLocale(language),
+  });
+}
+
+export function formatToSimpleDateTime(
+  date: Date | string,
+  language: Language,
+) {
+  return format(parseIfNeeded(date), 'do MMMM HH:mm', {
+    locale: languageToLocale(language),
+  });
+}
+
+export const isWithin24Hours = (
+  dateLeft: Date | string,
+  dateRight: Date | string,
+) => {
+  const leftParsed = parseIfNeeded(dateLeft);
+  const rightParsed = parseIfNeeded(dateRight);
+  return isWithinInterval(rightParsed, {
+    start: leftParsed,
+    end: addHours(leftParsed, 24),
+  });
+};
+
+export const isWithinSameDate = (
+  dateLeft: Date | string,
+  dateRight: Date | string,
+) => {
+  const leftParsed = parseIfNeeded(dateLeft);
+  const rightParsed = parseIfNeeded(dateRight);
+  return isSameDay(leftParsed, rightParsed);
+};
+
+export function formatToShortSimpleDate(
+  date: Date | string,
+  language: Language,
+) {
+  return format(parseIfNeeded(date), 'do MMM', {
+    locale: languageToLocale(language),
+  });
+}
+
+export function formatToWeekday(
+  date: Date | string,
+  language: Language,
+  dateFormat?: string,
+) {
+  return format(parseIfNeeded(date), dateFormat ? dateFormat : 'EEEEEE', {
     locale: languageToLocale(language),
   });
 }
@@ -227,7 +284,7 @@ function getShortHumanizer(
         w: () => 'w',
         d: () => 'd',
         h: () => 'h',
-        m: () => 'm',
+        m: () => 'min',
         s: () => 's',
         ms: () => 'ms',
       },

@@ -8,14 +8,40 @@ end
 platform :ios do
   desc 'Update ad hoc devices'
   lane :update_devices do
-    register_devices(devices_file: "./ios/devices.txt")
-    match(type: "adhoc", force_for_new_devices: true)
+    ensure_env_vars(
+      env_vars: ['IOS_DEVICES_FILE','IOS_DEVELOPMENT_TEAM_ID', 'IOS_BUNDLE_IDENTIFIER', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_USERNAME', 'FASTLANE_MATCH_TYPE']
+    )
+    register_devices(
+      devices_file: ENV['IOS_DEVICES_FILE'],
+      username:ENV['FASTLANE_MATCH_USERNAME']
+    )
+    match(
+      type: "adhoc", force_for_new_devices: true,
+      team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
+      app_identifier:ENV['IOS_BUNDLE_IDENTIFIER'],
+      git_url:ENV['FASTLANE_MATCH_GIT_URL'],
+      username:ENV['FASTLANE_MATCH_USERNAME'])
+  end
+
+  desc "Generate new certificates"
+  lane :generate_new_certificates do
+    ensure_env_vars(
+      env_vars: ['IOS_DEVELOPMENT_TEAM_ID', 'IOS_BUNDLE_IDENTIFIER', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_USERNAME', 'FASTLANE_MATCH_TYPE']
+    )
+    match(
+      readonly: false,
+      team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
+      app_identifier:ENV['IOS_BUNDLE_IDENTIFIER'],
+      git_url:ENV['FASTLANE_MATCH_GIT_URL'],
+      type:ENV['FASTLANE_MATCH_TYPE'],
+      username:ENV['FASTLANE_MATCH_USERNAME']
+    )
   end
 
   desc 'Match certificates'
   lane :get_cert do
     ensure_env_vars(
-      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_URL', 'MATCH_TYPE', 'BUNDLE_IDENTIFIER', 'APPLE_TEAM_ID']
+      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_SSH_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
     )
     if is_ci
       create_keychain(
@@ -27,22 +53,22 @@ platform :ios do
         lock_when_sleeps: false
       )
       match(
-        type: ENV["MATCH_TYPE"],
-        app_identifier: ENV['BUNDLE_IDENTIFIER'],
+        type: ENV["FASTLANE_MATCH_TYPE"],
+        app_identifier: ENV['IOS_BUNDLE_IDENTIFIER'],
         storage_mode: 'git',
-        git_url: ENV['FASTLANE_MATCH_URL'],
+        git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
         readonly: true,
         keychain_name: "CI",
         keychain_password: ENV["MATCH_PASSWORD"],
-        team_id: ENV['APPLE_TEAM_ID']
+        team_id: ENV['IOS_DEVELOPMENT_TEAM_ID']
       )
     else
       match(
-        type: ENV["MATCH_TYPE"],
-        app_identifier: ENV['BUNDLE_IDENTIFIER'],
+        type: ENV["FASTLANE_MATCH_TYPE"],
+        app_identifier: ENV['IOS_BUNDLE_IDENTIFIER'],
         storage_mode: 'git',
-        git_url: ENV['FASTLANE_MATCH_URL'],
-        team_id: ENV['APPLE_TEAM_ID'],
+        git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
+        team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
         readonly: true
       )
     end
@@ -70,6 +96,30 @@ platform :ios do
     )
   end
 
+  desc 'Upload the build to Firebase App Distribution'
+  lane :firebase_distribution_staging do
+    ensure_env_vars(
+      env_vars: ['FIREBASE_APP_ID_IOS','GCP_CREDENTIALS_PATH']
+    )
+    firebase_app_distribution(
+      app:ENV['FIREBASE_APP_ID_IOS'],
+      service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
+      groups:"NFK"
+    )
+  end
+
+  desc 'Upload app to testflight'
+  lane :testflight_prod do
+    ensure_env_vars(
+      env_vars: ['APPCONNECT_API_KEY_PATH']
+    )
+    pilot(
+      api_key_path:ENV['APPCONNECT_API_KEY_PATH'],
+      skip_waiting_for_build_processing:true,
+    )
+  end
+
+
   desc 'Upload the build to AppCenter'
   lane :appcenter_staging do
     ensure_env_vars(
@@ -82,6 +132,7 @@ platform :ios do
       owner_type: "organization",
       destinations: "*",
       file: "AtB.ipa",
+      dsym: "AtB.app.dSYM.zip",
       notify_testers: true
     )
   end
@@ -120,7 +171,7 @@ platform :android do
       project_dir: 'android/',
       print_command: false, #don't print my passwords please
       properties: {
-        "android.injected.signing.store.file" => ENV["KEYSTORE_PATH"],
+        "android.injected.signing.store.file" => File.expand_path(ENV["KEYSTORE_PATH"], Dir.pwd + "/../"),
         "android.injected.signing.store.password" => ENV["KEYSTORE_PASS"],
         "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
         "android.injected.signing.key.password" => ENV["KEY_PASS"],
@@ -131,9 +182,21 @@ platform :android do
     sh("cp", "../android/app/build/generated/sourcemaps/react/#{build_type}/index.android.bundle.map", "../bundle")
   end
 
+  lane :firebase_distribution_staging do
+    ensure_env_vars(
+      env_vars: ['FIREBASE_APP_ID','GCP_CREDENTIALS_PATH','APK_FILE_NAME']
+    )
+    firebase_app_distribution(
+      app:ENV['FIREBASE_APP_ID'],
+      service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
+      android_artifact_type:'APK',
+      android_artifact_path:ENV['APK_FILE_NAME']
+    )
+  end
+
   lane :appcenter_staging do
     ensure_env_vars(
-      env_vars: ['APPCENTER_API_KEY']
+      env_vars: ['APPCENTER_API_KEY','APK_FILE_NAME']
     )
     appcenter_upload(
       api_token: ENV["APPCENTER_API_KEY"],
@@ -141,7 +204,7 @@ platform :android do
       app_name: "MittAtb",
       owner_type: "organization",
       destinations: "*",
-      file: "app-staging.apk",
+      file: ENV['APK_FILE_NAME'],
       notify_testers: true
     )
   end

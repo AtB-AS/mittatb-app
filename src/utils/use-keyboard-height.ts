@@ -13,11 +13,17 @@ export default function useKeyboardHeight() {
   }
 
   useEffect(() => {
-    Keyboard.addListener('keyboardWillShow', onKeyboardWillShow);
-    Keyboard.addListener('keyboardWillHide', onKeyboardWillHide);
+    const showListener = Keyboard.addListener(
+      'keyboardWillShow',
+      onKeyboardWillShow,
+    );
+    const hideListener = Keyboard.addListener(
+      'keyboardWillHide',
+      onKeyboardWillHide,
+    );
     return () => {
-      Keyboard.removeListener('keyboardWillShow', onKeyboardWillShow);
-      Keyboard.removeListener('keyboardWillHide', onKeyboardWillHide);
+      showListener.remove();
+      hideListener.remove();
     };
   }, []);
 

@@ -1,22 +1,23 @@
 import {StyleSheet} from '@atb/theme';
-import {filterActiveFareContracts, useTicketState} from '@atb/tickets';
+import {
+  filterActiveOrCanBeUsedFareContracts,
+  useTicketState,
+} from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import React from 'react';
 import {View} from 'react-native';
 import TabBar from './TabBar';
-import {ActiveTickets, BuyTickets, ExpiredTickets} from './Tabs';
+import {ActiveTickets, BuyTickets} from './Tabs';
 import TicketInformationalOverlay from '@atb/screens/Ticketing/Tickets/TicketInformationalOverlay';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export const BuyTicketsScreenName = 'BuyTickets';
 export const ActiveTicketsScreenName = 'ActiveTickets';
-export const ExpiredTicketsScreenName = 'ExpiredTickets';
 
 export type TicketTabsNavigatorParams = {
   [BuyTicketsScreenName]: undefined;
   [ActiveTicketsScreenName]: undefined;
-  [ExpiredTicketsScreenName]: undefined;
 };
 
 const Tab = createMaterialTopTabNavigator<TicketTabsNavigatorParams>();
@@ -26,7 +27,9 @@ export default function TicketTabs() {
   const {t} = useTranslation();
 
   const {fareContracts} = useTicketState();
-  const activeFareContracts = filterActiveFareContracts(fareContracts);
+  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
+    fareContracts,
+  );
   const initialRoute = activeFareContracts.length
     ? ActiveTicketsScreenName
     : BuyTicketsScreenName;
@@ -61,16 +64,6 @@ export default function TicketTabs() {
             ),
           }}
         />
-        <Tab.Screen
-          name={ExpiredTicketsScreenName}
-          component={ExpiredTickets}
-          options={{
-            tabBarLabel: t(TicketsTexts.expiredTicketsTab.label),
-            tabBarAccessibilityLabel: t(
-              TicketsTexts.expiredTicketsTab.a11yLabel,
-            ),
-          }}
-        />
       </Tab.Navigator>
 
       <TicketInformationalOverlay />
@@ -81,6 +74,6 @@ export default function TicketTabs() {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_gray.backgroundColor,
+    backgroundColor: theme.colors.background_accent.backgroundColor,
   },
 }));

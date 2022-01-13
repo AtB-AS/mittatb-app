@@ -20,6 +20,7 @@ type QuaySectionProps = {
   currentLocation?: Location;
   lastUpdated?: Date;
   hidden?: Date;
+  searchDate: string;
 };
 
 const QuaySection = React.memo(function QuaySection({
@@ -27,6 +28,7 @@ const QuaySection = React.memo(function QuaySection({
   stop,
   currentLocation,
   lastUpdated,
+  searchDate,
 }: QuaySectionProps) {
   const [limit, setLimit] = useState(LIMIT_SIZE);
   const {t} = useTranslation();
@@ -62,6 +64,7 @@ const QuaySection = React.memo(function QuaySection({
             stop={stop}
             quay={quayGroup.quay}
             key={group.lineInfo?.lineId + String(group.lineInfo?.lineName)}
+            searchDate={searchDate}
           />
         ))}
         {hasMoreItems && (
