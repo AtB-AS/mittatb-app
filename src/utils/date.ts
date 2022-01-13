@@ -19,7 +19,7 @@ import nb from 'date-fns/locale/nb';
 import humanizeDuration from 'humanize-duration';
 import {DEFAULT_LANGUAGE, Language} from '../translations';
 
-const shortHumanizer = humanizeDuration.humanizer({});
+const humanizer = humanizeDuration.humanizer({});
 
 function parseIfNeeded(a: string | Date): Date {
   return a instanceof Date ? a : parseISO(a);
@@ -329,7 +329,7 @@ function getShortHumanizer(
     ...options,
   };
 
-  return shortHumanizer(ms, opts);
+  return humanizer(ms, opts);
 }
 
 function getHumanizer(
@@ -338,9 +338,9 @@ function getHumanizer(
   options?: humanizeDuration.Options,
 ) {
   const opts = {
-    language: language === Language.Norwegian ? 'shortNo' : 'shortEn',
+    language: language === Language.Norwegian ? 'no' : 'en',
     languages: {
-      shortNo: {
+      no: {
         y: () => 'år',
         mo: () => 'måneder',
         w: () => 'uker',
@@ -350,7 +350,7 @@ function getHumanizer(
         s: () => 'sekunder',
         ms: () => 'millisekunder',
       },
-      shortEn: {
+      en: {
         y: () => 'years',
         mo: () => 'months',
         w: () => 'weeks',
@@ -365,5 +365,5 @@ function getHumanizer(
     ...options,
   };
 
-  return shortHumanizer(ms, opts);
+  return humanizer(ms, opts);
 }
