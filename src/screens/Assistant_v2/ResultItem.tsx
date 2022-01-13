@@ -141,12 +141,6 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
             {...screenReaderHidden}
           >
             {tripPattern.legs.map(function (leg, i) {
-              const legOutput =
-                leg.mode === 'foot' ? (
-                  <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
-                ) : (
-                  <TransportationLeg leg={leg} />
-                );
               return (
                 <View style={styles.legOutput} key={leg.aimedStartTime}>
                   {leg.mode === 'foot' ? (
