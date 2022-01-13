@@ -684,18 +684,37 @@ function useTripsQuery(
       }
       setSearchState('searching');
       try {
-        const results = await doSearch(
-          fromLocation,
-          toLocation,
-          {option: 'departure', date: tripMetadata.nextDateTime},
-          cancelTokenSource,
-        );
+        let numberOfLoadedResults = 0;
+        let numberOfConcurrentSearches = 0;
+        let searchTime = tripMetadata.nextDateTime;
+        let localTripPatterns = tripPatterns;
+        let localMetadata = tripMetadata;
+        while (numberOfLoadedResults < 10 && numberOfConcurrentSearches < 5) {
+          numberOfConcurrentSearches++;
+          log('searching..', {nextDate: searchTime});
+          const results = await doSearch(
+            fromLocation,
+            toLocation,
+            {option: 'departure', date: searchTime},
+            cancelTokenSource,
+          );
 
-        setTripPatterns(tripPatterns.concat(results.trip?.tripPatterns ?? []));
-        setTripMetadata(results.trip?.metadata);
+          localTripPatterns = localTripPatterns.concat(
+            results.trip?.tripPatterns ?? [],
+          );
+          localMetadata = results.trip?.metadata ?? localMetadata;
+
+          setTripPatterns(localTripPatterns);
+          setTripMetadata(localMetadata);
+          searchTime = localMetadata.nextDateTime;
+          numberOfLoadedResults += results.trip?.tripPatterns.length ?? 0;
+          log('loaded results ' + numberOfLoadedResults);
+          log('number of searches ' + numberOfConcurrentSearches);
+        }
         if (tripPatterns.length == 0) {
           setSearchState('search-empty-result');
         }
+
         setSearchState('search-success');
       } catch (e) {
         if (!isCancel(e)) {
