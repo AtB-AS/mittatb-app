@@ -147,7 +147,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         </Sections.Section>
         <Sections.Section withPadding>
           <Sections.GenericItem>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View style={style.betaSectionHeader}>
               <ThemeText type="heading__component">
                 {t(ProfileTexts.sections.newFeatures.heading)}
               </ThemeText>
@@ -327,6 +327,10 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   debugInfoContainer: {
     alignItems: 'center',
     marginVertical: theme.spacings.medium,
+  },
+  betaSectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   betaLabel: {
     backgroundColor: theme.colors.primary_2.backgroundColor,
