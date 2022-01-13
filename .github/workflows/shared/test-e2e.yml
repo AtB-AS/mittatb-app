@@ -1,0 +1,24 @@
+name: E2E test workflow
+
+on:
+  workflow_call:
+    inputs:
+      e2econfig:
+        required: true
+        type: string
+
+jobs:
+  run_tests:
+    name: Pass input and secrets to my-action
+    runs-on: macos-latest
+    steps:
+      - name: Install Detox CLI
+        run: npm install -g detox-cli
+      - name: Install Applesimutils
+        run: | 
+          brew tap wix/brew
+          brew install applesimutils
+      - name: Build Detox-version of app
+        run: detox build --configuration ${{ inputs.e2econfig }}
+      - name: Run tests
+        run: detox test --configuration ${{ inputs.e2econfig }}
