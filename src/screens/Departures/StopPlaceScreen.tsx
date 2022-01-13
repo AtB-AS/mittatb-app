@@ -429,12 +429,19 @@ function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
     language,
     t(dictionary.date.units.now),
   );
+  const a11yTime = formatToClockOrRelativeMinutes(
+    departure.expectedDepartureTime,
+    language,
+    t(dictionary.date.units.now),
+    9,
+    true,
+  );
   const timeWithRealtimePrefix = departure.realtime
     ? time
     : t(dictionary.missingRealTimePrefix) + time;
-  const accessibleTime = departure.realtime
-    ? time
-    : t(dictionary.a11yMissingRealTimePrefix) + time;
+  const a11yTimeWithRealtimePrefix = departure.realtime
+    ? a11yTime
+    : t(dictionary.a11yMissingRealTimePrefix) + a11yTime;
 
   return (
     <View
@@ -442,7 +449,7 @@ function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
       accessible={true}
       accessibilityLabel={t(
         DeparturesTexts.a11yEstimatedCallLine(
-          accessibleTime,
+          a11yTimeWithRealtimePrefix,
           line?.publicCode,
           departure.destinationDisplay?.frontText,
         ),
