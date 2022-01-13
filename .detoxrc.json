@@ -30,6 +30,14 @@
         "build": "export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/atb.xcworkspace -configuration Debug -scheme atb -sdk iphonesimulator -derivedDataPath ios/build"
       }
     },
+    "ios.release": {
+      "device": "simulator",
+      "app": {
+        "type": "ios.app",
+        "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/AtB.app",
+        "build": "export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/atb.xcworkspace -configuration Release -scheme atb -sdk iphonesimulator -derivedDataPath ios/build"
+      }
+    },
     "android": {
       "device": "emulator",
       "app": "android"
