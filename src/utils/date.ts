@@ -45,6 +45,13 @@ export function secondsToMinutesShort(
   });
 }
 
+export function secondsToMinutes(seconds: number, language: Language): string {
+  return getHumanizer(seconds * 1000, language, {
+    units: ['m'],
+    round: true,
+  });
+}
+
 export function secondsToDuration(
   seconds: number,
   language: Language,
@@ -84,6 +91,7 @@ export function formatToClockOrRelativeMinutes(
   language: Language,
   now: string,
   minuteThreshold: number = 9,
+  accessible: boolean = false,
 ) {
   const parsed = parseIfNeeded(isoDate);
   const diff = secondsBetween(new Date(), parsed);
@@ -96,7 +104,9 @@ export function formatToClockOrRelativeMinutes(
     return now;
   }
 
-  return secondsToMinutesShort(diff, language);
+  return accessible
+    ? secondsToMinutes(diff, language)
+    : secondsToMinutesShort(diff, language);
 }
 export function isRelativeButNotNow(
   isoDate: string | Date,
@@ -287,6 +297,42 @@ function getShortHumanizer(
         m: () => 'min',
         s: () => 's',
         ms: () => 'ms',
+      },
+    },
+
+    ...options,
+  };
+
+  return shortHumanizer(ms, opts);
+}
+
+function getHumanizer(
+  ms: number,
+  language: Language,
+  options?: humanizeDuration.Options,
+) {
+  const opts = {
+    language: language === Language.Norwegian ? 'shortNo' : 'shortEn',
+    languages: {
+      shortNo: {
+        y: () => 'år',
+        mo: () => 'måneder',
+        w: () => 'uker',
+        d: () => 'dager',
+        h: () => 'timer',
+        m: () => 'minutter',
+        s: () => 'sekunder',
+        ms: () => 'millisekunder',
+      },
+      shortEn: {
+        y: () => 'years',
+        mo: () => 'months',
+        w: () => 'weeks',
+        d: () => 'days',
+        h: () => 'hours',
+        m: () => 'minutes',
+        s: () => 'seconds',
+        ms: () => 'milliseconds',
       },
     },
 
