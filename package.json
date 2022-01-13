@@ -99,8 +99,10 @@
     "@babel/core": "^7.12.13",
     "@babel/runtime": "^7.12.13",
     "@svgr/cli": "^5.5.0",
+    "@types/detox": "^18.1.0",
     "@types/geojson": "^7946.0.8",
     "@types/humanize-duration": "^3.25.1",
+    "@types/jasmine": "^3.10.3",
     "@types/jest": "^26.0.24",
     "@types/lodash.groupby": "^4.6.6",
     "@types/lodash.mapvalues": "^4.6.6",
@@ -131,17 +133,7 @@
     "prettier": "2.2.1",
     "react-native-dotenv": "^2.5.1",
     "react-test-renderer": "17.0.2",
+    "ts-jest": "^27.1.2",
     "typescript": "^4.4.2"
-  },
-  "jest": {
-    "preset": "react-native",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
   }
 }
