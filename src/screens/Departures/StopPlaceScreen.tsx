@@ -26,6 +26,7 @@ import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {dictionary, Language, useTranslation} from '@atb/translations';
 import {
   formatToClock,
+  formatToClockOrLongRelativeMinutes,
   formatToClockOrRelativeMinutes,
   formatToShortDate,
   formatToSimpleDateTime,
@@ -429,12 +430,11 @@ function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
     language,
     t(dictionary.date.units.now),
   );
-  const a11yTime = formatToClockOrRelativeMinutes(
+  const a11yTime = formatToClockOrLongRelativeMinutes(
     departure.expectedDepartureTime,
     language,
     t(dictionary.date.units.now),
     9,
-    true,
   );
   const timeWithRealtimePrefix = departure.realtime
     ? time

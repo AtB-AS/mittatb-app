@@ -81,7 +81,8 @@ export function formatToClock(isoDate: string | Date, language: Language) {
 }
 
 /**
- * Either show clock or relative time (X minute) if below threshold specified by second argument.
+ * Either show clock or relative time (X min) if below threshold specified by
+ * second argument.
  *
  * @param isoDate date to format as clock or relative time
  * @param minuteLimit threshold in minutes for when to show relative time
@@ -91,7 +92,6 @@ export function formatToClockOrRelativeMinutes(
   language: Language,
   now: string,
   minuteThreshold: number = 9,
-  accessible: boolean = false,
 ) {
   const parsed = parseIfNeeded(isoDate);
   const diff = secondsBetween(new Date(), parsed);
@@ -104,10 +104,36 @@ export function formatToClockOrRelativeMinutes(
     return now;
   }
 
-  return accessible
-    ? secondsToMinutes(diff, language)
-    : secondsToMinutesShort(diff, language);
+  return secondsToMinutesShort(diff, language);
 }
+
+/**
+ * Either show clock or long relative time (X minutes) if below threshold
+ * specified by second argument.
+ *
+ * @param isoDate date to format as clock or relative time
+ * @param minuteLimit threshold in minutes for when to show relative time
+ */
+export function formatToClockOrLongRelativeMinutes(
+  isoDate: string | Date,
+  language: Language,
+  now: string,
+  minuteThreshold: number = 9,
+) {
+  const parsed = parseIfNeeded(isoDate);
+  const diff = secondsBetween(new Date(), parsed);
+
+  if (diff / 60 >= minuteThreshold) {
+    return formatLocaleTime(parsed, language);
+  }
+
+  if (diff / 60 <= 1) {
+    return now;
+  }
+
+  return secondsToMinutes(diff, language);
+}
+
 export function isRelativeButNotNow(
   isoDate: string | Date,
   minuteThreshold: number = 9,
