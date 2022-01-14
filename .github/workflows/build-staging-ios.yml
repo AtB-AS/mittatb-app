@@ -7,6 +7,7 @@ on:
 
 jobs:
   build-ios:
+    if: ${{ "nanana" == "batman" }}
     name: Build iOS
     strategy:
       matrix:

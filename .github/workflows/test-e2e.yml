@@ -24,6 +24,8 @@ jobs:
           app-environment: 'staging'
           app-org: 'atb'
           git-crypt-key: ${{ secrets.git-crypt-key }}
+      - name: Install Pods
+        run: cd ios && pod install && cd ..
       - name: Install Detox CLI
         run: npm install -g detox-cli
       - name: Install Applesimutils
