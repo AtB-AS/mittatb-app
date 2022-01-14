@@ -1,6 +1,6 @@
 import {device, by, element, expect} from 'detox';
 
-describe('Example', () => {
+describe('Onboarding', () => {
   beforeAll(async () => {
     await device.launchApp({
       permissions: {
