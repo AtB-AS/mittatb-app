@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 90
     runs-on: macos-11
     steps:
-      - id: Setup build dependencies, environment and assets
+      - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
           use-build-cache: 'true'
