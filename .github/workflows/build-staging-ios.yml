@@ -18,7 +18,7 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v1
       - name: Setup build dependencies, environment and assets
-        uses: ./.github/actions/ios-build-setup
+        uses: ./.github/actions/ios-build-setup.yml
         with:
           use-build-cache: 'true'
           app-environment: 'staging'
