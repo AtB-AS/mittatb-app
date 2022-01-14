@@ -9,9 +9,16 @@ on:
 
 jobs:
   run_tests:
-    name: Pass input and secrets to my-action
-    runs-on: macos-latest
+    name: E2E test
+    runs-on: macos-11
     steps:
+      - id: Setup build dependencies, environment and assets
+        uses: ./.github/actions/ios-build-setup
+        with:
+          use-build-cache: 'true'
+          app-environment: 'staging'
+          app-org: 'atb'
+          git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Install Detox CLI
         run: npm install -g detox-cli
       - name: Install Applesimutils

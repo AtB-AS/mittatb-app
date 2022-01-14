@@ -10,53 +10,83 @@ jobs:
     name: Build iOS
     strategy:
       matrix:
-        org: [atb]
+        org: [atb, nfk]
     environment: ${{ matrix.org }}
     timeout-minutes: 90
     runs-on: macos-11
     steps:
-      - name: Checkout project
-        uses: actions/checkout@v1
-      - name: Set global env vars
-        run: |
-          echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
-          echo "APP_ENVIRONMENT=staging" >> $GITHUB_ENV
-      - name: Decrypt env files
-        run: sh ./scripts/git-crypt-unlock.sh
-        env:
-          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
-      - name: install node v12
-        uses: actions/setup-node@v1
+      - id: Setup build dependencies, environment and assets
+        uses: ./.github/actions/ios-build-setup
         with:
-          node-version: 12
-      - name: Get potential cached node_modules
-        uses: actions/cache@v2
-        id: modules-cache
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.yalc/**') }}
-      - name: Install node_modules
-        if: steps.modules-cache.outputs.cache-hit != 'true'
-        run: yarn install
-      - name: Setup Xcode version
-        uses: maxim-lobanov/setup-xcode@v1.3.0
-        with:
-          xcode-version: "13.0"
-      - name: Bundle Install
-        run: bundle install
-      - name: Set environment
-        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT ${{ matrix.org }}
-      - name: Export workflow env variables based on environment
-        run: sh ./scripts/export-workflow-parameters.sh
-      - name: Override native config files
-        run: sh ./scripts/override-config-files.sh
+          use-build-cache: 'true'
+          app-environment: 'staging'
+          app-org: ${{ matrix.org }}
+          git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
       - uses: webfactory/ssh-agent@v0.4.1
         with:
           ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
+      - name: Get potential cached ipa & dsym
+        uses: actions/cache@v2
+        id: ipa-cache
+        with:
+          path: |
+            AtB.ipa
+            AtB.app.dSYM.zip
+          key: ${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}
       - name: Run fastlane cert match
         run: fastlane ios get_cert
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+      - name: Generate native assets
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
+        run: brew install imagemagick && yarn generate-native-assets
+      - name: Run fastlane build
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
+        run: fastlane ios build
+        env:
+          PROVISIONING_PROFILE: $IOS_PROVISIONING_PROFILE_SPECIFIER
+          EXPORT_METHOD: "ad-hoc"
+      - name: Replace ipa bundle
+        if: steps.ipa-cache.outputs.cache-hit == 'true'
+        run: sh ./scripts/ios/replace-bundle.sh
+        env:
+          IPA_FILE_NAME: "AtB.ipa"
+          APP_NAME: "AtB.app"
+          CODE_SIGN_IDENTITY: ${{ secrets.IOS_CODE_SIGN_IDENTITY }}
+
+      - name: Distribute to Firebase app distribution
+        if: matrix.org == 'nfk'
+        run: |
+          echo ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}} | base64 --decode > google-services.json
+          fastlane ios firebase_distribution_staging
+        env:
+          GCP_CREDENTIALS_PATH: google-services.json
+          FIREBASE_APP_ID_IOS: ${{ secrets.FIREBASE_APP_ID_IOS }}
+
+      - name: Distribute to AppCenter
+        if: matrix.org == 'atb'
+        run: fastlane ios appcenter_staging
+        env:
+          APPCENTER_API_KEY: ${{ secrets.APPCENTER_IOS_API_KEY }}
+      - name: Create bundle and source maps
+        if: steps.ipa-cache.outputs.cache-hit != 'true' && matrix.org == 'atb'
+        run: sh ./scripts/ios/create-sourcemaps.sh
+      - name: Upload bundle and source maps
+        if: matrix.org == 'atb'
+        run: sh ./scripts/ios/upload-sourcemaps.sh
+        env:
+          BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
+      - name: Upload dSYMs
+        if: steps.ipa-cache.outputs.cache-hit != 'true' && matrix.org == 'atb'
+        run: sh ./scripts/ios/upload-dsyms.sh
+        env:
+          BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
+      - name: Register app version
+        if: matrix.org == 'atb'
+        run: sh ./scripts/ios/register-app-version.sh
+        env:
+          ENTUR_CLIENT_ID: ${{ secrets.ATB_ENTUR_CLIENT_ID_STAGING}}
+          ENTUR_CLIENT_SECRET: ${{ secrets.ATB_ENTUR_CLIENT_SECRET_STAGING}}
   run-e2e-tests:
     uses: AtB-AS/mittatb-app/.github/workflows/test-e2e.yml@cbrevik/detox-support
     with: 
