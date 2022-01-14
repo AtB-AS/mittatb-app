@@ -4,6 +4,7 @@ inputs:
   use-build-cache: 
     description: "Wether to use the build cache for artifacts and dependencies (will speed up subsequent builds if no native changes have happened)"
     default: 'false'
+    required: true
   app-environment:
     description: "Which app-environment to build for, staging or store"
     required: true
@@ -18,10 +19,12 @@ runs:
   using: "composite"
   steps:
       - name: Set global env vars
+        shell: bash
         run: |
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
           echo "APP_ENVIRONMENT=${{ inputs.app-environment }}" >> $GITHUB_ENV
       - name: Decrypt env files
+        shell: bash
         run: sh ./scripts/git-crypt-unlock.sh
         env:
           GIT_CRYPT_KEY: ${{ inputs.git-crypt-key }}
@@ -37,6 +40,7 @@ runs:
           path: "**/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.yalc/**') }}
       - name: Install node_modules
+        shell: bash
         if: ${{ inputs.use-build-cache }} != 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         run: yarn install
       - name: Setup Xcode version
@@ -44,10 +48,14 @@ runs:
         with:
           xcode-version: "13.0"
       - name: Bundle Install
+        shell: bash
         run: bundle install
       - name: Set environment
+        shell: bash
         run: sh ./scripts/override-environment.sh ${{ inputs.app-environment }} ${{ inputs.app-org }}
       - name: Export workflow env variables based on environment
+        shell: bash
         run: sh ./scripts/export-workflow-parameters.sh
       - name: Override native config files
+        shell: bash
         run: sh ./scripts/override-config-files.sh
