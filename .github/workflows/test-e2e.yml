@@ -6,6 +6,9 @@ on:
       e2econfig:
         required: true
         type: string
+    secrets:
+      git-crypt-key:
+        required: true
 
 jobs:
   run_tests:
@@ -20,7 +23,7 @@ jobs:
           use-build-cache: 'true'
           app-environment: 'staging'
           app-org: 'atb'
-          git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+          git-crypt-key: ${{ secrets.git-crypt-key }}
       - name: Install Detox CLI
         run: npm install -g detox-cli
       - name: Install Applesimutils
