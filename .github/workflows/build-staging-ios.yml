@@ -93,4 +93,5 @@ jobs:
     uses: AtB-AS/mittatb-app/.github/workflows/test-e2e.yml@cbrevik/detox-support
     with: 
       e2econfig: ios.release
+    secrets:
       git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
