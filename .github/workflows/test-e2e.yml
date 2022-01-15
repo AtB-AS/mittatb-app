@@ -24,7 +24,7 @@ jobs:
           app-environment: 'staging'
           app-org: 'atb'
           git-crypt-key: ${{ secrets.git-crypt-key }}
-      - name: Get potential cached node_modules
+      - name: Get potentially cached Pods
         uses: actions/cache@v2
         id: pods-cache
         with:
