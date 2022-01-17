@@ -23,6 +23,7 @@ const dictionary = {
       water: _('Båt', 'Boat'),
       air: _('Fly', 'Plain'),
       foot: _('Gange', 'Walk'),
+      metro: _('T-bane', 'Metro'),
       unknown: _('Ukjent transportmiddel', 'Unknown transport'),
     },
     quay: {

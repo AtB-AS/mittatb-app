@@ -7,6 +7,7 @@ import {
   PlaneSide,
   FerrySide,
   WalkingPerson,
+  Subway,
 } from '@atb/assets/svg/icons/transportation';
 import {LegMode, TransportSubmode, TransportMode} from '@atb/sdk';
 import {StyleSheet} from '@atb/theme';
@@ -70,6 +71,8 @@ export function getTransportModeSvg(mode?: AnyMode) {
       return FerrySide;
     case 'foot':
       return WalkingPerson;
+    case 'metro':
+      return Subway;
     default:
       return null;
   }
