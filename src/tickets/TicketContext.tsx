@@ -193,6 +193,7 @@ function isHandledPaymentStatus(status: PaymentStatus | undefined): boolean {
     case 'CANCEL':
     case 'CREDIT':
     case 'REJECT':
+    case 'CAPTURE':
       return true;
     default:
       return false;
