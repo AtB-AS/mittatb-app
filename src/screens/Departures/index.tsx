@@ -7,10 +7,14 @@ import DeparturesRoot, {
 import StopPlaceScreen, {
   StopPlaceScreenParams,
 } from '../Departures/StopPlaceScreen';
+import DepartureDetails, {
+  DepartureDetailsRouteParams,
+} from '../TripDetails/DepartureDetails';
 
 export type DeparturesStackParams = {
   DeparturesRoot: DeparturesScreenParams;
   StopPlaceScreen: StopPlaceScreenParams;
+  DepartureDetails: DepartureDetailsRouteParams;
 };
 
 const Stack = createStackNavigator<DeparturesStackParams>();
@@ -31,6 +35,7 @@ const DeparturesScreen = ({route}: DeparturesScreenRootProps) => {
         initialParams={route.params}
       />
       <Stack.Screen name="StopPlaceScreen" component={StopPlaceScreen} />
+      <Stack.Screen name="DepartureDetails" component={DepartureDetails} />
     </Stack.Navigator>
   );
 };

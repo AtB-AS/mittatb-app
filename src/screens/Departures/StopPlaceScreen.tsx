@@ -13,6 +13,7 @@ import {
   RefreshControl,
   SectionList,
   SectionListData,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
@@ -52,6 +53,7 @@ import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types
 import useFontScale from '@atb/utils/use-font-scale';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {DeparturesStackParams} from '.';
+import {DepartureDetailsRouteParams} from '../TripDetails/DepartureDetails';
 
 export type StopPlaceScreenParams = {
   stopPlacePosition: StopPlacePosition;
@@ -167,6 +169,7 @@ export default function StopPlaceScreen({
               quay={item}
               selectedQuayId={selectedQuay?.id}
               data={state.data}
+              navigation={navigation}
               navigateToQuay={(quay) => {
                 navigation.navigate('StopPlaceScreen', {
                   stopPlacePosition,
@@ -183,6 +186,7 @@ export default function StopPlaceScreen({
 
 type EstimatedCallLineProps = {
   departure: EstimatedCall;
+  navigation: StackNavigationProp<DeparturesStackParams>;
 };
 
 function getDeparturesForQuay(
@@ -301,6 +305,7 @@ type QuaySectionProps = {
   selectedQuayId: String | undefined;
   data: EstimatedCall[] | null;
   navigateToQuay: (arg0: Quay) => void;
+  navigation: StackNavigationProp<DeparturesStackParams>;
 };
 
 function QuaySection({
@@ -308,6 +313,7 @@ function QuaySection({
   selectedQuayId,
   data,
   navigateToQuay,
+  navigation,
 }: QuaySectionProps): JSX.Element {
   const [isHidden, setIsHidden] = useState(false);
   const styles = useStyles();
@@ -368,7 +374,10 @@ function QuaySection({
                     : undefined
                 }
               >
-                <EstimatedCallLine departure={item}></EstimatedCallLine>
+                <EstimatedCallLine
+                  departure={item}
+                  navigation={navigation}
+                ></EstimatedCallLine>
               </Sections.GenericItem>
             )}
             keyExtractor={(item) => item.serviceJourney?.id || ''}
@@ -418,7 +427,10 @@ function changeDay(searchTime: SearchTime, days: number): SearchTime {
   };
 }
 
-function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
+function EstimatedCallLine({
+  departure,
+  navigation,
+}: EstimatedCallLineProps): JSX.Element {
   const {t, language} = useTranslation();
   const styles = useStyles();
 
@@ -436,8 +448,22 @@ function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
     ? time
     : t(dictionary.a11yMissingRealTimePrefix) + time;
 
+  const navigateToDetails = () => {
+    if (!departure.serviceJourney) return;
+    navigation.navigate('DepartureDetails', {
+      items: [
+        {
+          serviceJourneyId: departure.serviceJourney.id,
+          date: departure.expectedDepartureTime,
+          fromQuayId: departure.quay?.id,
+        },
+      ],
+    });
+  };
+
   return (
-    <View
+    <TouchableOpacity
+      onPress={navigateToDetails}
       style={styles.estimatedCallLine}
       accessible={true}
       accessibilityLabel={t(
@@ -459,7 +485,7 @@ function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
         {departure.destinationDisplay?.frontText}
       </ThemeText>
       <ThemeText type="body__primary--bold">{timeWithRealtimePrefix}</ThemeText>
-    </View>
+    </TouchableOpacity>
   );
 }
 
