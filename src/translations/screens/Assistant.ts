@@ -117,6 +117,12 @@ const AssistantTexts = {
           `Trip suggestion ${resultPosition} of ${totalResultCount}`,
         ),
     },
+    dayHeader: {
+      today: () => _('I dag', 'Today'),
+      tomorrow: (date: string) => _(`I morgen - ${date}`, `Tomorrow - ${date}`),
+      dayAfterTomorrow: (date: string) =>
+        _(`I overmorgen - ${date}`, `Day after tomorrow - ${date}`),
+    },
     resultItem: {
       header: {
         time: (startTime: string, endTime: string) =>

@@ -55,13 +55,17 @@ const SelectStartScreenTexts = {
         row3Value2: _('40', '40'),
         row3Value3: _('60', '60'),
         row3Value4: _('80', '80'),
-        row4Label: _('Ungdom / Student', 'Youth / Student'),
+        row4Label: _('Student', 'Student'),
         row4Value1: _('40', '40'),
         row4Value2: _('80', '80'),
         row4Value3: _('80', '80'),
         row4Value4: _('80', '80'),
       },
-      part3Text: _(
+      part3Text_1: _(
+        'For å reise med sykkel kjøper du en barnebillett.',
+        'To bring a bike, buy a child ticket.',
+      ),
+      part3Text_2: _(
         'Ved avinstallering av appen vil også billettene fjernes. Vi advarer derfor mot avinstallering når du har kjøpt billetter. Da vil du ikke kunne framvise gyldig billett.',
         'If you uninstall the app, the tickets will be removed. We recommend that you do not uninstall once you have purchased tickets. If you uninstall, you will not be able to present a valid ticket.',
       ),

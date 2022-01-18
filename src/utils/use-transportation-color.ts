@@ -22,6 +22,8 @@ export function useTransportationColor(
       return theme.colors.transport_boat[colorType];
     case 'air':
       return theme.colors.transport_plane[colorType];
+    case 'metro':
+      return theme.colors.transport_train[colorType];
     default:
       return theme.colors.transport_other[colorType];
   }

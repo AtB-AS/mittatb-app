@@ -277,9 +277,9 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   return (
     <View style={styles.legContainer} accessibilityLabel={a11yText}>
       {!mustWalk ? (
-        <ThemeIcon svg={Duration} opacity={0.6} />
+        <ThemeIcon svg={Duration} />
       ) : (
-        <ThemeIcon svg={WalkingPerson} opacity={0.6} />
+        <ThemeIcon svg={WalkingPerson} />
       )}
       <ThemeIcon svg={ChevronRight} size={'small'} />
     </View>
@@ -288,6 +288,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 
 const useLegStyles = StyleSheet.createThemeHook((theme) => ({
   legContainer: {
+    marginHorizontal: theme.spacings.xSmall,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -295,24 +296,19 @@ const useLegStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     flexDirection: 'row',
   },
-  transportationIcon: {
-    marginRight: theme.spacings.xSmall,
-  },
 }));
 
 const TransportationLeg = ({leg}: {leg: Leg}) => {
   const styles = useLegStyles();
   return (
     <View style={styles.legContainer}>
-      <View style={[styles.iconContainer, styles.transportationIcon]}>
+      <View style={styles.iconContainer}>
         <TransportationIcon
           mode={leg.mode}
           subMode={leg.line?.transportSubmode}
+          lineNumber={leg.line?.publicCode}
         />
       </View>
-      <ThemeText type="body__primary--bold">
-        <LineDisplayName leg={leg} />
-      </ThemeText>
     </View>
   );
 };
@@ -325,15 +321,11 @@ const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
   return (
     <View style={styles.legContainer}>
       <View style={styles.iconContainer}>
-        <ThemeIcon svg={DestinationFlag} opacity={0.6} />
+        <ThemeIcon svg={DestinationFlag} />
       </View>
     </View>
   );
 };
-
-function LineDisplayName({leg, style}: {leg: Leg; style?: ViewStyle}) {
-  return <ThemeText style={style}>{leg.line?.publicCode}</ThemeText>;
-}
 
 const tripSummary = (
   tripPattern: TripPattern,

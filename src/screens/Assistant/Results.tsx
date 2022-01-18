@@ -1,5 +1,5 @@
 import {ErrorType} from '@atb/api/utils';
-import OptionalNextDayLabel from '@atb/components/optional-day-header';
+import DayLabel from '@atb/components/day-label';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import ThemeText from '@atb/components/text';
 import MessageBox from '@atb/components/message-box';
@@ -111,7 +111,7 @@ const Results: React.FC<Props> = ({
     <View style={styles.container}>
       {tripPatterns?.map((item, i) => (
         <Fragment key={String(item.id ?? i)}>
-          <OptionalNextDayLabel
+          <DayLabel
             departureTime={item.startTime}
             previousDepartureTime={tripPatterns[i - 1]?.startTime}
             allSameDay={allSameDay}
