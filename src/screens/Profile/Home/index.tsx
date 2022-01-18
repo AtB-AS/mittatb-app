@@ -49,7 +49,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   const {authenticationType, signOut, user} = useAuthState();
   const config = useLocalConfig();
 
-  const {fareContracts} = useTicketState();
+  const {fareContracts, customerProfile} = useTicketState();
   const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
     fareContracts,
   );
@@ -143,6 +143,34 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           <Sections.LinkItem
             text={t(ProfileTexts.sections.settings.linkItems.enrollment.label)}
             onPress={() => navigation.navigate('Enrollment')}
+          />
+        </Sections.Section>
+        <Sections.Section withPadding>
+          <Sections.GenericItem>
+            <View style={style.betaSectionHeader}>
+              <ThemeText type="heading__component">
+                {t(ProfileTexts.sections.newFeatures.heading)}
+              </ThemeText>
+              <View style={style.betaLabel}>
+                <ThemeText color="primary_2" style={style.betaLabelText}>
+                  BETA
+                </ThemeText>
+              </View>
+            </View>
+          </Sections.GenericItem>
+          <Sections.ActionItem
+            mode="toggle"
+            text={t(ProfileTexts.sections.newFeatures.assistant)}
+            checked={useExperimentalTripSearch}
+            onPress={(useExperimentalTripSearch) =>
+              setPreference({useExperimentalTripSearch})
+            }
+          />
+          <Sections.ActionItem
+            mode="toggle"
+            text={t(ProfileTexts.sections.newFeatures.departures)}
+            checked={newDepartures}
+            onPress={(newDepartures) => setPreference({newDepartures})}
           />
         </Sections.Section>
 
@@ -246,23 +274,11 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           />
         </Sections.Section>
 
-        {(!!JSON.parse(IS_QA_ENV || 'false') || __DEV__) && (
+        {(!!JSON.parse(IS_QA_ENV || 'false') ||
+          __DEV__ ||
+          customerProfile?.debug) && (
           <Sections.Section withPadding>
             <Sections.HeaderItem text="Developer menu" />
-            <Sections.ActionItem
-              mode="toggle"
-              text={'Enable new departure screen'}
-              checked={newDepartures}
-              onPress={(newDepartures) => setPreference({newDepartures})}
-            />
-            <Sections.ActionItem
-              mode="toggle"
-              text={'Enable experimental trips search'}
-              checked={useExperimentalTripSearch}
-              onPress={(useExperimentalTripSearch) =>
-                setPreference({useExperimentalTripSearch})
-              }
-            />
             <Sections.LinkItem
               text="Design system"
               onPress={() => navigation.navigate('DesignSystem')}
@@ -313,5 +329,20 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   debugInfoContainer: {
     alignItems: 'center',
     marginVertical: theme.spacings.medium,
+  },
+  betaSectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  betaLabel: {
+    backgroundColor: theme.colors.primary_2.backgroundColor,
+    marginHorizontal: theme.spacings.small,
+    paddingHorizontal: theme.spacings.small,
+    paddingVertical: theme.spacings.small,
+    borderRadius: theme.border.radius.regular,
+  },
+  betaLabelText: {
+    fontSize: 8,
+    lineHeight: 9,
   },
 }));

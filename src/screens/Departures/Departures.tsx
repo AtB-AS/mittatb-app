@@ -29,16 +29,17 @@ import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
-import {NearbyStackParams} from '../Nearby';
 import Loading from '../Loading';
 import DepartureTimeSheet from '../Nearby/DepartureTimeSheet';
 import {useNearestStopsData} from './state';
 import ThemeText from '@atb/components/text';
-import {Coordinates, StopPlaceDetails} from '@atb/sdk';
 import * as Sections from '@atb/components/sections';
 import {BusSide} from '@atb/assets/svg/icons/transportation';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
-import {primitiveLocationDistanceInMetres} from '@atb/utils/location';
+import {StopPlacePosition} from '@atb/api/types/departures';
+import {NearestStopPlacesQuery} from '@atb/api/types/generated/NearestStopPlacesQuery';
+import DeparturesTexts from '@atb/translations/screens/Departures';
+import {DeparturesStackParams} from '.';
 
 const themeColor: ThemeColor = 'background_accent';
 
@@ -49,23 +50,26 @@ export type SearchTime = {
   date: string;
 };
 
-type NearbyRouteName = 'NearbyRoot';
-const NearbyRouteNameStatic: NearbyRouteName = 'NearbyRoot';
+type DeparturesRouteName = 'DeparturesRoot';
+const NearbyRouteNameStatic: DeparturesRouteName = 'DeparturesRoot';
 
-export type NearbyScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<NearbyStackParams>,
+export type DepartureScreenNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<DeparturesStackParams>,
   StackNavigationProp<RootStackParamList>
 >;
 
-export type NearbyScreenParams = {
+export type DeparturesScreenParams = {
   location: LocationWithMetadata;
 };
 
-export type NearbyScreenProp = RouteProp<NearbyStackParams, NearbyRouteName>;
+export type DeparturesScreenProp = RouteProp<
+  DeparturesStackParams,
+  DeparturesRouteName
+>;
 
 type RootProps = {
-  navigation: NearbyScreenNavigationProp;
-  route: NearbyScreenProp;
+  navigation: DepartureScreenNavigationProp;
+  route: DeparturesScreenProp;
 };
 
 export default function NearbyScreen({navigation}: RootProps) {
@@ -98,7 +102,7 @@ type Props = {
   currentLocation?: Location;
   hasLocationPermission: boolean;
   requestGeoPermission: RequestPermissionFn;
-  navigation: NearbyScreenNavigationProp;
+  navigation: DepartureScreenNavigationProp;
 };
 
 const DeparturesOverview: React.FC<Props> = ({
@@ -107,17 +111,17 @@ const DeparturesOverview: React.FC<Props> = ({
   hasLocationPermission,
   navigation,
 }) => {
-  const searchedFromLocation = useOnlySingleLocation<NearbyScreenProp>(
-    'location',
-  );
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
   const styles = useNearbyStyles();
+  const {t, language} = useTranslation();
 
   const [searchTime, setSearchTime] = useState<SearchTime>({
     option: 'now',
     date: new Date().toISOString(),
   });
-
+  const searchedFromLocation = useOnlySingleLocation<DeparturesScreenProp>(
+    'location',
+  );
   const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
     [currentLocation],
@@ -128,11 +132,12 @@ const DeparturesOverview: React.FC<Props> = ({
   const {state, refresh} = useNearestStopsData(fromLocation);
 
   const {data, isLoading, error} = state;
-
   const isInitialScreen = data == null && !isLoading && !error;
   const activateScroll = !isInitialScreen || !!error;
 
-  const {t, language} = useTranslation();
+  const orderedStopPlaces = useMemo(() => sortAndFilterStopPlaces(data), [
+    data,
+  ]);
 
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {
@@ -180,6 +185,22 @@ const DeparturesOverview: React.FC<Props> = ({
     }
   }
 
+  const getListDescription = () => {
+    if (!fromLocation || !fromLocation.name) return;
+    switch (fromLocation?.resultType) {
+      case 'geolocation':
+        return t(DeparturesTexts.stopPlaceList.listDescription.geoLoc);
+      case 'favorite':
+      case 'search':
+        return (
+          t(DeparturesTexts.stopPlaceList.listDescription.address) +
+          fromLocation?.name
+        );
+      case undefined:
+        return;
+    }
+  };
+
   useEffect(() => {
     if (updatingLocation)
       setLoadAnnouncement(t(NearbyTexts.stateAnnouncements.updatingLocation));
@@ -195,22 +216,6 @@ const DeparturesOverview: React.FC<Props> = ({
       );
     }
   }, [updatingLocation, isLoading]);
-
-  useEffect(() => {
-    if (searchedFromLocation?.layer === 'venue') {
-      const loadedStopPlace = data?.find(
-        (stopPlace) =>
-          stopPlace.id === searchedFromLocation.id ||
-          stopPlace.quays?.find(
-            (quay) => quay.stopPlace.id === searchedFromLocation?.id,
-          ),
-      );
-      if (loadedStopPlace)
-        navigation.navigate('StopPlaceScreen', {
-          stopPlaceDetails: loadedStopPlace,
-        });
-    }
-  }, [searchedFromLocation, data]);
 
   return (
     <SimpleDisappearingHeader
@@ -232,7 +237,7 @@ const DeparturesOverview: React.FC<Props> = ({
           }}
         />
       }
-      headerTitle={'New departures'}
+      headerTitle={t(DeparturesTexts.header.title)}
       useScroll={activateScroll}
       leftButton={{type: 'home', color: themeColor}}
       alternativeTitleComponent={
@@ -249,61 +254,55 @@ const DeparturesOverview: React.FC<Props> = ({
           )}
         </AccessibleText>
       }
-      // onEndReached={onScrollViewEndReached}
       alertContext={'travel'}
       setFocusOnLoad={true}
     >
       <ScreenReaderAnnouncement message={loadAnnouncement} />
 
       <View style={styles.container}>
-        {data &&
-          fromLocation &&
-          sortStopPlaces(data, fromLocation?.coordinates).map(
-            (stopPlace: StopPlaceDetails) => (
-              <Sections.Section withPadding key={stopPlace.id}>
-                <Sections.GenericClickableItem
-                  onPress={() => {
-                    navigation.navigate('StopPlaceScreen', {
-                      stopPlaceDetails: stopPlace,
-                    });
-                  }}
-                >
-                  <View style={styles.stopPlaceContainer}>
-                    <View style={styles.stopPlaceInfo}>
-                      <ThemeText type="heading__component">
-                        {stopPlace.name}
-                      </ThemeText>
-                      <ThemeText>
-                        {stopPlace.description || 'Holdeplass'}
-                      </ThemeText>
-                      {stopPlace &&
-                        stopPlace.latitude &&
-                        stopPlace.longitude && (
-                          <ThemeText>
-                            {primitiveLocationDistanceInMetres(
-                              stopPlace.latitude,
-                              stopPlace.longitude,
-                              fromLocation?.coordinates.latitude,
-                              fromLocation?.coordinates.longitude,
-                            ) + ' m'}
-                          </ThemeText>
-                        )}
-                    </View>
-                    {getTransportModeSvg(stopPlace.transportMode) && (
-                      <ThemeIcon
-                        style={styles.stopPlaceIcon}
-                        size="large"
-                        svg={
-                          getTransportModeSvg(stopPlace.transportMode) ||
-                          BusSide
-                        }
-                      ></ThemeIcon>
-                    )}
-                  </View>
-                </Sections.GenericClickableItem>
-              </Sections.Section>
-            ),
-          )}
+        <ThemeText
+          style={styles.listDescription}
+          type="body__secondary"
+          color="secondary"
+        >
+          {getListDescription()}
+        </ThemeText>
+        {orderedStopPlaces.map((stopPlace: StopPlacePosition) => (
+          <Sections.Section withPadding key={stopPlace.node?.place?.id}>
+            <Sections.GenericClickableItem
+              onPress={() => {
+                navigation.navigate('StopPlaceScreen', {
+                  stopPlacePosition: stopPlace,
+                });
+              }}
+            >
+              <View style={styles.stopPlaceContainer}>
+                <View style={styles.stopPlaceInfo}>
+                  <ThemeText type="heading__component">
+                    {stopPlace.node?.place?.name}
+                  </ThemeText>
+                  <ThemeText
+                    type="body__secondary"
+                    style={styles.stopDescription}
+                  >
+                    {stopPlace.node?.place?.description ||
+                      t(DeparturesTexts.stopPlaceList.stopPlace)}
+                  </ThemeText>
+                  <ThemeText type="body__secondary" color="secondary">
+                    {stopPlace.node?.distance?.toFixed(0) + ' m'}
+                  </ThemeText>
+                </View>
+                {stopPlace.node?.place?.transportMode?.map((mode) => (
+                  <ThemeIcon
+                    style={styles.stopPlaceIcon}
+                    size="large"
+                    svg={getTransportModeSvg(mode) || BusSide}
+                  ></ThemeIcon>
+                ))}
+              </View>
+            </Sections.GenericClickableItem>
+          </Sections.Section>
+        ))}
       </View>
     </SimpleDisappearingHeader>
   );
@@ -361,49 +360,6 @@ const Header = React.memo(function Header({
     </>
   );
 });
-const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    paddingTop: theme.spacings.medium,
-  },
-  paddedContainer: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
-    flexDirection: 'row',
-    flex: 1,
-    alignContent: 'space-between',
-    borderStyle: 'solid',
-    borderColor: theme.colors.primary_2.backgroundColor,
-    borderWidth: 2,
-    padding: 2,
-    borderRadius: 12,
-  },
-  dateInputButtonContainer: {
-    width: '50%',
-  },
-  dateInputButton: {
-    color: theme.colors.primary_2.backgroundColor,
-    padding: theme.spacings.small,
-  },
-  favoriteChips: {
-    // @TODO Find solution for not hardcoding this. e.g. do proper math
-    paddingRight: theme.spacings.medium / 2,
-    paddingLeft: theme.spacings.medium,
-    paddingBottom: theme.spacings.medium,
-  },
-  stopPlaceContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    flexGrow: 1,
-  },
-  stopPlaceInfo: {
-    flexShrink: 1,
-  },
-  stopPlaceIcon: {
-    marginHorizontal: theme.spacings.medium,
-  },
-}));
 
 function translateErrorType(
   errorType: ErrorType,
@@ -434,27 +390,75 @@ function getHeaderAlternativeTitle(
   }
 }
 
-function sortStopPlaces(
-  data: StopPlaceDetails[],
-  pos: Coordinates,
-): StopPlaceDetails[] {
-  return data.sort((a, b) => {
-    if (a.latitude && a.longitude && b.latitude && b.longitude) {
-      return (
-        primitiveLocationDistanceInMetres(
-          pos.latitude,
-          pos.longitude,
-          a.latitude,
-          a.longitude,
-        ) -
-        primitiveLocationDistanceInMetres(
-          pos.latitude,
-          pos.longitude,
-          b.latitude,
-          b.longitude,
-        )
-      );
-    }
-    return -100000;
+function sortAndFilterStopPlaces(
+  data: NearestStopPlacesQuery | null,
+): StopPlacePosition[] {
+  const edges = data?.nearest?.edges;
+  if (!edges) return [];
+
+  // Sort StopPlaces on distance from search location
+  const sortedEdges = edges?.sort((edgeA, edgeB) => {
+    if (!edgeA.node?.distance) return 1;
+    if (!edgeB.node?.distance) return -1;
+    return edgeA.node?.distance > edgeB.node?.distance ? 1 : -1;
   });
+
+  // Remove all StopPlaces without Quays
+  const filteredEdges = sortedEdges.filter(
+    (stopPlace: StopPlacePosition) => stopPlace.node?.place?.quays?.length,
+  );
+
+  return filteredEdges;
 }
+
+const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    paddingVertical: theme.spacings.medium,
+  },
+  paddedContainer: {
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
+    flexDirection: 'row',
+    flex: 1,
+    alignContent: 'space-between',
+    borderStyle: 'solid',
+    borderColor: theme.colors.primary_2.backgroundColor,
+    borderWidth: 2,
+    padding: 2,
+    borderRadius: 12,
+  },
+  dateInputButtonContainer: {
+    width: '50%',
+  },
+  dateInputButton: {
+    color: theme.colors.primary_2.backgroundColor,
+    padding: theme.spacings.small,
+  },
+  favoriteChips: {
+    // @TODO Find solution for not hardcoding this. e.g. do proper math
+    paddingRight: theme.spacings.medium / 2,
+    paddingLeft: theme.spacings.medium,
+    paddingBottom: theme.spacings.medium,
+  },
+  listDescription: {
+    paddingVertical: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium * 2,
+  },
+  stopPlaceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    flexGrow: 1,
+  },
+  stopPlaceInfo: {
+    flexShrink: 1,
+    flexGrow: 1,
+  },
+  stopDescription: {
+    marginVertical: theme.spacings.xSmall,
+  },
+  stopPlaceIcon: {
+    marginLeft: theme.spacings.medium,
+  },
+}));

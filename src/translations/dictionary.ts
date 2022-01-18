@@ -15,6 +15,7 @@ const dictionary = {
     profile_a11y: _('Mitt ATB', 'My ATB'),
   },
   missingRealTimePrefix: _('ca. ', 'ca. '),
+  a11yMissingRealTimePrefix: _('cirka ', 'circa '),
   travel: {
     legModes: {
       bus: _('Buss', 'Bus'),
@@ -23,6 +24,7 @@ const dictionary = {
       water: _('Båt', 'Boat'),
       air: _('Fly', 'Plain'),
       foot: _('Gange', 'Walk'),
+      metro: _('T-bane', 'Metro'),
       unknown: _('Ukjent transportmiddel', 'Unknown transport'),
     },
     quay: {

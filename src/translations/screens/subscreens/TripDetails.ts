@@ -136,6 +136,14 @@ const TripDetailsTexts = {
         `Korrespondanse mellom ${fromPublicCode} og ${toPublicCode} på ${location}.`,
         `Correspondance between ${fromPublicCode} and ${toPublicCode} on ${location}.`,
       ),
+    interchangeWithUnknownFromPublicCode: (
+      toPublicCode: string,
+      location: string,
+    ) =>
+      _(
+        `Korrespondanse med ${toPublicCode} på ${location}.`,
+        `Correspondance with ${toPublicCode} on ${location}.`,
+      ),
   },
 };
 export default orgSpecificTranslations(TripDetailsTexts, {

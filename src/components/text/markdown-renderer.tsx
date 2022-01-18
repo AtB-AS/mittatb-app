@@ -2,6 +2,7 @@ import React from 'react';
 import {lexer, Token} from 'marked';
 import {Linking, Text} from 'react-native';
 import {textTypeStyles} from '@atb/theme/colors';
+import Bugsnag from '@bugsnag/react-native';
 
 export default function render(markdown: string): React.ReactElement[] {
   const tree = lexer(markdown);
@@ -43,8 +44,10 @@ function renderToken(token: Token, index: number): React.ReactElement {
     case 'link':
       const url = token.href;
       async function openLink() {
-        if (await Linking.canOpenURL(url)) {
+        try {
           await Linking.openURL(url);
+        } catch (err: any) {
+          Bugsnag.notify(err);
         }
       }
       return (

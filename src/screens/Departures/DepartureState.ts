@@ -16,40 +16,43 @@ import {
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 // import {useFavorites} from '@atb/favorites';
 // import {Location, UserFavoriteDepartures} from '@atb/favorites/types';
-import {DeparturesRealtimeData, StopPlaceDetails} from '@atb/sdk';
-import {differenceInMinutes} from 'date-fns';
+import {DeparturesRealtimeData} from '@atb/sdk';
+import {
+  addDays,
+  differenceInMinutes,
+  differenceInSeconds,
+  parseISO,
+} from 'date-fns';
 import useInterval from '@atb/utils/use-interval';
 import {updateDeparturesWithRealtimeV2} from '../../departure-list/utils';
-import {Quay} from '@entur/sdk';
 import {
   getQuayDepartures,
   getStopPlaceDepartures,
 } from '@atb/api/departures/stops-nearest';
 import * as DepartureTypes from '@atb/api/types/departures';
+import {flatMap} from 'lodash';
 
-const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
+const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 
 // Used to re-trigger full refresh after N minutes.
 // To repopulate the view when we get fewer departures.
 const HARD_REFRESH_LIMIT_IN_MINUTES = 10;
-
-type LoadType = 'initial' | 'more';
+const MIN_TIME_RANGE = 3 * 60 * 60; // Three hours
 
 export type DepartureDataState = {
   data: DepartureTypes.EstimatedCall[] | null;
   // showOnlyFavorites: boolean;
   tick?: Date;
-  error?: {type: ErrorType; loadType: LoadType};
+  error?: {type: ErrorType};
   locationId?: string;
   isLoading: boolean;
-  isFetchingMore: boolean;
   queryInput: DepartureGroupsQuery;
   cursorInfo: DepartureGroupMetadata['metadata'] | undefined;
   lastRefreshTime: Date;
 };
 
 const initialQueryInput: DepartureGroupsQuery = {
-  limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
+  limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
   startTime: new Date().toISOString(),
 };
 const initialState: DepartureDataState = {
@@ -58,7 +61,6 @@ const initialState: DepartureDataState = {
   error: undefined,
   locationId: undefined,
   isLoading: false,
-  isFetchingMore: false,
   cursorInfo: undefined,
   queryInput: initialQueryInput,
   lastRefreshTime: new Date(),
@@ -71,14 +73,9 @@ const initialState: DepartureDataState = {
 type DepartureDataActions =
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
-      stopPlace: StopPlaceDetails;
-      quay?: Quay;
+      stopPlacePosition: DepartureTypes.StopPlacePosition;
+      quay?: DepartureTypes.Quay;
       startTime?: string;
-      // favoriteDepartures?: UserFavoriteDepartures;
-    }
-  | {
-      type: 'LOAD_MORE_DEPARTURES';
-      stopPlace?: StopPlaceDetails;
       // favoriteDepartures?: UserFavoriteDepartures;
     }
   // | {
@@ -89,7 +86,8 @@ type DepartureDataActions =
   //   }
   | {
       type: 'LOAD_REALTIME_DATA';
-      stopPlace?: StopPlaceDetails;
+      stopPlacePosition?: DepartureTypes.StopPlacePosition;
+      quay?: DepartureTypes.Quay;
     }
   | {
       type: 'STOP_LOADER';
@@ -102,7 +100,6 @@ type DepartureDataActions =
     }
   | {
       type: 'SET_ERROR';
-      loadType: LoadType;
       error: ErrorType;
       reset?: boolean;
     }
@@ -120,12 +117,15 @@ const reducer: ReducerWithSideEffects<
 > = (state, action) => {
   switch (action.type) {
     case 'LOAD_INITIAL_DEPARTURES': {
-      if (!action.stopPlace) return NoUpdate();
+      const stopPlace = action.stopPlacePosition.node?.place;
+      if (!stopPlace) return NoUpdate();
 
       // Update input data with new date as this
       // is a fresh fetch. We should fetch the latest information.
       const queryInput: DepartureGroupsQuery = {
-        limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
+        limitPerLine: action.quay
+          ? 1000
+          : DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
         startTime: action.startTime ?? new Date().toISOString(),
       };
 
@@ -134,41 +134,27 @@ const reducer: ReducerWithSideEffects<
           ...state,
           isLoading: true,
           error: undefined,
-          isFetchingMore: true,
           queryInput,
         },
         async (state, dispatch) => {
           try {
-            // Fresh fetch, reset paging and use new query input with new startTime
-            const result = await getStopPlaceDepartures({
-              id: action.stopPlace.id,
-              startTime: queryInput.startTime,
-            });
-
-            const estimatedCalls: DepartureTypes.EstimatedCall[] = [];
-            result.stopPlace?.quays?.forEach((quay: DepartureTypes.Quay) =>
-              quay.estimatedCalls.forEach(
-                (estimatedCall: DepartureTypes.EstimatedCall) =>
-                  estimatedCalls.push(estimatedCall),
-              ),
+            if (!stopPlace) return;
+            const result = await fetchEstimatedCalls(
+              queryInput,
+              action.stopPlacePosition,
+              action.quay,
             );
-
-            // TODO: Refactor?
-            // const estimatedCalls: EstimatedCall[] = result.stopPlace?.quays
-            //   ?.map((quay: Types.Quay) => quay.estimatedCalls)
-            //   .flat();
 
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
-              locationId: action.quay ? action.quay.id : action.stopPlace?.id,
-              result: estimatedCalls,
+              locationId: action.quay ? action.quay.id : stopPlace.id,
+              result: result,
             });
           } catch (e) {
             dispatch({
               type: 'SET_ERROR',
-              reset: action.stopPlace?.id !== state.locationId,
-              loadType: 'initial',
+              reset: stopPlace.id !== state.locationId,
               error: getAxiosErrorType(e),
             });
           } finally {
@@ -178,57 +164,21 @@ const reducer: ReducerWithSideEffects<
       );
     }
 
-    // case 'LOAD_MORE_DEPARTURES': {
-    //   if (!action.stopPlace || !state.cursorInfo?.hasNextPage)
-    //     return NoUpdate();
-    //   if (state.isFetchingMore) return NoUpdate();
-
-    //   return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
-    //     {...state, error: undefined, isFetchingMore: true},
-    //     async (state, dispatch) => {
-    //       try {
-    //         // Use previously stored queryInput with stored startTime
-    //         // to ensure that we get the same departures.
-    //         const result = await getNextDepartureGroups(
-    //           {
-    //             stopPlace: action.stopPlace,
-    //             // favorites: state.showOnlyFavorites
-    //             //   ? action.favoriteDepartures
-    //             //   : undefined,
-    //           },
-    //           state.cursorInfo!,
-    //         );
-
-    //         if (result) {
-    //           dispatch({
-    //             type: 'UPDATE_DEPARTURES',
-    //             locationId: action.stopPlace?.id,
-    //             result,
-    //           });
-    //         }
-    //       } catch (e) {
-    //         dispatch({
-    //           type: 'SET_ERROR',
-    //           loadType: 'more',
-    //           error: getAxiosErrorType(e),
-    //         });
-    //       } finally {
-    //         dispatch({type: 'STOP_LOADER'});
-    //       }
-    //     },
-    //   );
-    // }
-
     case 'LOAD_REALTIME_DATA': {
       if (!state.data?.length) return NoUpdate();
+      const stopPlace = action.stopPlacePosition?.node?.place;
 
       return SideEffect<DepartureDataState, DepartureDataActions>(
         async (state2, dispatch) => {
           // Use same query input with same startTime to ensure that
           // we get the same result.
           try {
+            const quayIds = action.quay
+              ? [action.quay.id]
+              : stopPlace?.quays?.map((q) => q.id);
+
             const realtimeData = await getRealtimeDepartureV2(
-              action.stopPlace,
+              quayIds,
               state.queryInput,
             );
             dispatch({
@@ -246,7 +196,6 @@ const reducer: ReducerWithSideEffects<
       return Update<DepartureDataState>({
         ...state,
         isLoading: false,
-        isFetchingMore: false,
       });
     }
 
@@ -310,7 +259,6 @@ const reducer: ReducerWithSideEffects<
         ...state,
         error: {
           type: action.error,
-          loadType: action.loadType,
         },
         data: action.reset ? null : state.data,
       });
@@ -322,8 +270,8 @@ const reducer: ReducerWithSideEffects<
 };
 
 export function useDepartureData(
-  stopPlace: StopPlaceDetails,
-  quay?: Quay,
+  stopPlacePosition: DepartureTypes.StopPlacePosition,
+  quay?: DepartureTypes.Quay,
   startTime?: string,
   updateFrequencyInSeconds: number = 10,
   tickRateInSeconds: number = 10,
@@ -331,12 +279,13 @@ export function useDepartureData(
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const isFocused = useIsFocused();
   // const {favoriteDepartures} = useFavorites();
+  const stopPlace = stopPlacePosition.node?.place;
 
   const refresh = useCallback(
     () =>
       dispatch({
         type: 'LOAD_INITIAL_DEPARTURES',
-        stopPlace,
+        stopPlacePosition,
         quay,
         startTime,
         // favoriteDepartures,
@@ -346,19 +295,6 @@ export function useDepartureData(
       quay?.id,
       // favoriteDepartures,
       startTime,
-    ],
-  );
-
-  const loadMore = useCallback(
-    () =>
-      dispatch({
-        type: 'LOAD_MORE_DEPARTURES',
-        stopPlace,
-        // favoriteDepartures
-      }),
-    [
-      stopPlace.id,
-      // favoriteDepartures,
     ],
   );
 
@@ -373,7 +309,7 @@ export function useDepartureData(
   //   [stopPlace.id, favoriteDepartures],
   // );
 
-  useEffect(refresh, [stopPlace.id, startTime]);
+  useEffect(refresh, [stopPlace?.id, startTime]);
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -385,9 +321,9 @@ export function useDepartureData(
     }
   }, [state.tick, state.lastRefreshTime]);
   useInterval(
-    () => dispatch({type: 'LOAD_REALTIME_DATA', stopPlace: stopPlace}),
+    () => dispatch({type: 'LOAD_REALTIME_DATA', stopPlacePosition, quay: quay}),
     updateFrequencyInSeconds * 1000,
-    [stopPlace.id],
+    [stopPlace?.id],
     !isFocused,
   );
   useInterval(
@@ -400,7 +336,45 @@ export function useDepartureData(
   return {
     state,
     refresh,
-    loadMore,
     // setShowFavorites,
   };
+}
+
+async function fetchEstimatedCalls(
+  queryInput: DepartureGroupsQuery,
+  stopPlace: DepartureTypes.StopPlacePosition,
+  quay?: DepartureTypes.Quay,
+): Promise<DepartureTypes.EstimatedCall[]> {
+  if (!stopPlace.node?.place) return [];
+  let estimatedCalls: DepartureTypes.EstimatedCall[] = [];
+
+  if (quay) {
+    // Get seconds until midnight, but a minimum of 3 hours
+    const timeUntilMidnight = differenceInSeconds(
+      addDays(parseISO(queryInput.startTime), 1).setHours(0, 0, 0),
+      parseISO(queryInput.startTime),
+    );
+    const timeRange = Math.round(Math.max(timeUntilMidnight, MIN_TIME_RANGE));
+
+    const result = await getQuayDepartures({
+      id: quay.id,
+      startTime: queryInput.startTime,
+      numberOfDepartures: queryInput.limitPerLine,
+      timeRange: timeRange,
+    });
+    estimatedCalls = result.quay
+      ?.estimatedCalls as DepartureTypes.EstimatedCall[];
+  } else {
+    const result = await getStopPlaceDepartures({
+      id: stopPlace.node.place.id,
+      startTime: queryInput.startTime,
+      numberOfDepartures: queryInput.limitPerLine,
+    });
+
+    estimatedCalls = flatMap(
+      result.stopPlace?.quays,
+      (quay) => quay.estimatedCalls,
+    ) as DepartureTypes.EstimatedCall[];
+  }
+  return estimatedCalls;
 }

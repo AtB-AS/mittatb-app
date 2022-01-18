@@ -17,7 +17,7 @@ type Props = {
 };
 
 export default function QrCode({validityStatus, isInspectable}: Props) {
-  const {tokenStatus, generateQrCode} = useMobileContextState();
+  const {tokenStatus, generateQrCode, retry} = useMobileContextState();
 
   if (validityStatus !== 'valid') return null;
   if (!isInspectable) return null;
@@ -27,7 +27,7 @@ export default function QrCode({validityStatus, isInspectable}: Props) {
     case 'Token':
       return <QrCodeSvg generateQrCode={generateQrCode} />;
     case 'Error':
-      return <QrCodeError />;
+      return <QrCodeError retry={retry} />;
     case 'NotInspectable':
       return <QrCodeDeviceNotInspectable />;
     case 'MissingNetConnection':
@@ -47,7 +47,8 @@ const QrCodeSvg = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const qrCode = useQrCode(generateQrCode, UPDATE_INTERVAL);
+  const [qrCodeError, setQrCodeError] = useState(false);
+  const qrCode = useQrCode(generateQrCode, setQrCodeError, UPDATE_INTERVAL);
   const [qrCodeSvg, setQrCodeSvg] = useState<string>();
   const [countdown, setCountdown] = useState<number>(UPDATE_INTERVAL / 1000);
 
@@ -69,8 +70,10 @@ const QrCodeSvg = ({
     countdown === 0,
   );
 
-  if (!qrCodeSvg) {
+  if (qrCodeError) {
     return <QrCodeError />;
+  } else if (!qrCodeSvg) {
+    return <QrCodeLoading />;
   }
 
   return (
@@ -93,12 +96,21 @@ const QrCodeSvg = ({
 
 const useQrCode = (
   generateQrCode: () => Promise<string | undefined>,
+  setQrCodeError: (isError: boolean) => void,
   interval: number,
 ) => {
   const [tokenQRCode, setTokenQRCode] = useState<string | undefined>(undefined);
 
   const updateQrCode = useCallback(
-    () => generateQrCode().then(setTokenQRCode),
+    () =>
+      generateQrCode().then((qr) => {
+        if (!qr) {
+          setQrCodeError(true);
+        } else {
+          setQrCodeError(false);
+          setTokenQRCode(qr);
+        }
+      }),
     [generateQrCode, setTokenQRCode],
   );
 
@@ -106,7 +118,6 @@ const useQrCode = (
     updateQrCode();
   }, []);
 
-  // TODO: Maybe update so this happens in TicketContext later? Just proof-of-concept
   useInterval(
     () => {
       updateQrCode();
@@ -117,15 +128,17 @@ const useQrCode = (
 
   return tokenQRCode;
 };
-const QrCodeError = () => {
+const QrCodeError = ({retry}: {retry?: (forceRestart: boolean) => void}) => {
   const {t} = useTranslation();
 
   return (
     <Sections.GenericItem>
       <MessageBox
-        type={'warning'}
+        type={'error'}
         title={t(TicketTexts.details.qrCodeErrors.generic.title)}
         message={t(TicketTexts.details.qrCodeErrors.generic.text)}
+        onPress={retry && (() => retry(true))}
+        onPressText={retry && t(TicketTexts.details.qrCodeErrors.generic.retry)}
       />
     </Sections.GenericItem>
   );

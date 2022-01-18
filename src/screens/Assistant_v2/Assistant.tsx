@@ -49,7 +49,7 @@ import {
 } from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {BackHandler, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {AssistantParams} from '.';
 import Loading from '../Loading';
 import FadeBetween from './FadeBetween';
@@ -66,7 +66,6 @@ import {tripsSearch} from '@atb/api/trips_v2';
 import {TripMetadata, TripPattern} from '@atb/api/types/trips';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 import {CancelTokenSource} from 'axios';
-import {TouchableItem} from 'react-native-tab-view';
 import * as navIcons from '@atb/assets/svg/icons/navigation';
 
 const themeColor: ThemeColor = 'background_accent';
@@ -330,7 +329,7 @@ const Assistant: React.FC<Props> = ({
                 language,
               )}
               accessibilityHint={t(AssistantTexts.dateInput.a11yHint)}
-              color="primary_2"
+              color="secondary_3"
               onPress={onSearchTimePress}
             />
           </View>
@@ -386,17 +385,11 @@ const Assistant: React.FC<Props> = ({
 
   const onPressed = useCallback(
     (tripPatternId, tripPatterns, startIndex) =>
-      /* TODO re activate navigation to details
-      navigation.navigate('TripDetails', {
+      navigation.navigate('TripDetails_v2', {
         tripPatternId,
         tripPatterns,
         startIndex,
-      })
-      */
-      {
-        return null;
-      },
-
+      }),
     [navigation, from, to],
   );
 
@@ -425,21 +418,6 @@ const Assistant: React.FC<Props> = ({
         break;
     }
   }, [searchState]);
-
-  // Reset view on back press instead of exiting app
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-        if (screenHasFocus && from && to) {
-          resetView();
-          return true; // prevent default action
-        }
-        return false;
-      },
-    );
-    return () => backHandler.remove();
-  });
 
   return (
     <DisappearingHeader
@@ -486,14 +464,10 @@ const Assistant: React.FC<Props> = ({
               <ThemeText>{t(AssistantTexts.results.fetchingMore)}</ThemeText>
             )}
             {searchState !== 'searching' && (
-              <ThemeText>
-                {t(AssistantTexts.results.fetchMore)}{' '}
-                <ThemeIcon
-                  svg={navIcons.Expand}
-                  size={'normal'}
-                  translateY={5}
-                />
-              </ThemeText>
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                <ThemeText>{t(AssistantTexts.results.fetchMore)} </ThemeText>
+                <ThemeIcon svg={navIcons.Expand} size={'normal'} style={{}} />
+              </View>
             )}
           </TouchableOpacity>
         </View>
@@ -536,6 +510,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   loadMoreButton: {
     paddingVertical: theme.spacings.medium,
+    marginBottom: 50,
     alignItems: 'center',
   },
 }));
@@ -710,7 +685,7 @@ function useTripsQuery(
       }
       setSearchState('searching');
       try {
-        const results = await newSearch(
+        const results = await doSearch(
           fromLocation,
           toLocation,
           {option: 'departure', date: tripMetadata.nextDateTime},
@@ -745,7 +720,7 @@ function useTripsQuery(
         return;
       }
       try {
-        const results = await newSearch(
+        const results = await doSearch(
           fromLocation,
           toLocation,
           searchTime ?? {option: 'now', date: new Date().toISOString()},
@@ -791,7 +766,7 @@ function useTripsQuery(
   ];
 }
 
-async function newSearch(
+async function doSearch(
   fromLocation: Location,
   toLocation: Location,
   searchTime: SearchTime,
@@ -830,7 +805,7 @@ function useDoOnceWhen(fn: () => void, condition: boolean) {
 }
 
 function log(message: string, metadata?: {[key: string]: string}) {
-  Bugsnag.leaveBreadcrumb(message, {component: 'Assistant_v2', ...metadata});
+  Bugsnag.leaveBreadcrumb(message, {component: 'Assistant', ...metadata});
 }
 
 function translateLocation(location: Location | undefined): string {

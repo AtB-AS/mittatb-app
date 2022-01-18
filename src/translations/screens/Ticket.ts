@@ -67,6 +67,7 @@ const TicketTexts = {
       generic: {
         title: _('En feil har oppstått', 'An error has ocurred'),
         text: _('Får ikke generert QR-kode.', 'Cannot generate a QR-code.'),
+        retry: _('Prøv på nytt.', 'Try again.'),
       },
       missingNetwork: {
         title: _('Mangler nettilgang', 'Missing network access'),

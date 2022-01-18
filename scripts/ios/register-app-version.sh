@@ -89,10 +89,11 @@ EOJ
 )
 
 # Register app
-echo "Registering $IOS_BUNDLE_IDENTIFIER version $APP_VERSION, command_id $request_id"
+echo "Registering $IOS_BUNDLE_IDENTIFIER version $APP_VERSION, command_id / x-correlation-id: $request_id"
 register=$(curl -v --silent \
   --header "Content-Type: application/json" \
   --header "Authorization: Bearer $access_token" \
+  --header "X-Correlation-Id: $request_id" \
   --user-agent "mittatb-app build script" \
   --data "$json"\
   ${abt_url}/no.entur.abt.core.mobileapplication.v1.MobileApplicationRegistryService/AddOrUpdateMobileApplication)
