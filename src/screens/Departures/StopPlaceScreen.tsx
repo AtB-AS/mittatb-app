@@ -121,10 +121,7 @@ export default function StopPlaceScreen({
         ListHeaderComponent={
           <Button
             onPress={() => {
-              navigation.navigate('StopPlaceScreen', {
-                stopPlacePosition,
-                selectedQuay: undefined,
-              });
+              navigation.setParams({selectedQuay: undefined});
             }}
             text={t(DeparturesTexts.quayChips.allStops)}
             color={selectedQuay ? 'secondary_2' : 'secondary_3'}
@@ -134,10 +131,7 @@ export default function StopPlaceScreen({
         renderItem={({item}: quayChipData) => (
           <Button
             onPress={() => {
-              navigation.navigate('StopPlaceScreen', {
-                stopPlacePosition,
-                selectedQuay: item,
-              });
+              navigation.setParams({selectedQuay: item});
             }}
             text={
               item.publicCode ? item.name + ' ' + item.publicCode : item.name
@@ -171,10 +165,7 @@ export default function StopPlaceScreen({
               data={state.data}
               navigation={navigation}
               navigateToQuay={(quay) => {
-                navigation.navigate('StopPlaceScreen', {
-                  stopPlacePosition,
-                  selectedQuay: quay,
-                });
+                navigation.setParams({selectedQuay: quay});
               }}
             />
           )}
