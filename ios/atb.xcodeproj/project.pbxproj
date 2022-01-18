@@ -600,7 +600,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "$(IOS_DEVELOPMENT_TEAM_ID)";
 				ENABLE_BITCODE = NO;
-				EXCLUDED_ARCHS = "";
 				INFOPLIST_FILE = atb/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -632,7 +631,6 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "$(IOS_DEVELOPMENT_TEAM_ID)";
-				EXCLUDED_ARCHS = "";
 				INFOPLIST_FILE = atb/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
