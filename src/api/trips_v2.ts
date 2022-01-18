@@ -1,7 +1,8 @@
 import client from './client';
 import {AxiosRequestConfig} from 'axios';
-import {TripPattern, TripsQuery} from '@atb/api/types/trips';
+import {TripsQuery} from '@atb/api/types/trips';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
+import Bugsnag, {Breadcrumb} from '@bugsnag/react-native';
 
 export async function tripsSearch(
   query: TripsQueryVariables,
@@ -22,27 +23,13 @@ export async function tripsSearch(
     when: query.when,
   };
 
-  let data = await post<TripsQuery>(url, cleanQuery, opts);
+  const results = await post<TripsQuery>(url, cleanQuery, opts);
 
-  if (data.trip?.tripPatterns) {
-    data.trip.tripPatterns = data.trip?.tripPatterns.map((tripPattern) => {
-      (tripPattern as TripPattern).id = generateIdFromTripPattern(tripPattern);
-      return tripPattern;
-    });
-  }
+  Bugsnag.leaveBreadcrumb('results', {
+    patterns: results.trip?.tripPatterns ?? 'none',
+  });
 
-  return data;
-}
-
-function generateIdFromTripPattern(tripPattern: TripPattern) {
-  const id =
-    tripPattern.compressedQuery +
-    tripPattern.legs
-      .map((leg) => {
-        return leg.toPlace.longitude.toString() + leg.toPlace.latitude;
-      })
-      .join('-');
-  return id;
+  return results;
 }
 
 export async function singleTripSearch(
@@ -56,8 +43,7 @@ export async function singleTripSearch(
   const query = {
     compressedQuery: queryString,
   };
-  const data = await post<TripsQuery>(url, query, opts);
-  return data;
+  return await post<TripsQuery>(url, query, opts);
 }
 
 async function post<T>(
@@ -67,7 +53,7 @@ async function post<T>(
 ) {
   const response = await client.post<T>(url, query, {
     ...opts,
-    // baseURL: 'http://10.0.2.2:8080', // uncomment for local BFF
+    baseURL: 'http://10.0.2.2:8080', // uncomment for local BFF
   });
 
   return response.data;
