@@ -60,8 +60,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   privacy_policy_url: PRIVACY_POLICY_URL,
 };
 
-export async function getConfig(): Promise<RemoteConfig> {
-  await remoteConfig().fetch(0);
+export function getConfig(): RemoteConfig {
   const values = remoteConfig().getAll();
   const enable_network_logging = !!(
     values['enable_network_logging']?.asBoolean() ?? true
