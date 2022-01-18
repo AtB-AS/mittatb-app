@@ -1,5 +1,5 @@
 import {StyleSheet} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+import {AssistantTexts, useTranslation} from '@atb/translations';
 import {daysBetween, formatToSimpleDate, isSameDay} from '@atb/utils/date';
 import {parseISO} from 'date-fns';
 import React from 'react';
@@ -10,10 +10,9 @@ type OptionalNextDayLabelProps = {
   previousDepartureTime?: string;
   allSameDay: boolean;
 };
-export default function OptionalNextDayLabel({
+export default function DayLabel({
   departureTime,
   previousDepartureTime,
-  allSameDay,
 }: OptionalNextDayLabelProps) {
   const style = useDayTextStyle();
   const isFirst = !previousDepartureTime;
@@ -21,41 +20,39 @@ export default function OptionalNextDayLabel({
   const prevDate = !previousDepartureTime
     ? new Date()
     : parseISO(previousDepartureTime);
-  const {language} = useTranslation();
 
-  if ((isFirst && !allSameDay) || !isSameDay(prevDate, departureDate)) {
-    return (
-      <ThemeText type="body__secondary" style={style.title}>
-        {getHumanizedDepartureDatePrefixed(
-          departureDate,
-          formatToSimpleDate(departureDate, language),
-        )}
-      </ThemeText>
+  const {t, language} = useTranslation();
+
+  const dateString = formatToSimpleDate(departureDate, language);
+  const numberOfDays = daysBetween(new Date(), departureDate);
+
+  let dateLabel = dateString;
+
+  if (numberOfDays === 0) {
+    dateLabel = t(AssistantTexts.results.dayHeader.today());
+  }
+  if (numberOfDays == 1) {
+    dateLabel = t(AssistantTexts.results.dayHeader.tomorrow(dateString));
+  }
+  if (numberOfDays == 2) {
+    dateLabel = t(
+      AssistantTexts.results.dayHeader.dayAfterTomorrow(dateString),
     );
   }
 
+  if (isFirst || !isSameDay(prevDate, departureDate)) {
+    return (
+      <ThemeText type="body__secondary" style={style.title}>
+        {dateLabel}
+      </ThemeText>
+    );
+  }
   return null;
 }
 const useDayTextStyle = StyleSheet.createThemeHook((theme) => ({
   title: {
     paddingHorizontal: theme.spacings.medium,
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacings.xLarge,
     color: theme.text.colors.secondary,
   },
 }));
-function getHumanizedDepartureDatePrefixed(
-  departureDate: Date,
-  suffix: string,
-) {
-  const days = daysBetween(new Date(), departureDate);
-  if (days === 0) {
-    return 'I dag';
-  }
-  if (days == 1) {
-    return `I morgen - ${suffix}`;
-  }
-  if (days == 2) {
-    return `I overmorgen - ${suffix}`;
-  }
-  return suffix;
-}
