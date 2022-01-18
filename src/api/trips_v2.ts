@@ -1,6 +1,6 @@
 import client from './client';
 import {AxiosRequestConfig} from 'axios';
-import {TripsQuery, TripsQueryWithJourneyIds} from '@atb/api/types/trips';
+import {TripPattern, TripsQuery} from '@atb/api/types/trips';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 
 export async function tripsSearch(
@@ -22,8 +22,27 @@ export async function tripsSearch(
     when: query.when,
   };
 
-  const data = await post<TripsQuery>(url, cleanQuery, opts);
+  let data = await post<TripsQuery>(url, cleanQuery, opts);
+
+  if (data.trip?.tripPatterns) {
+    data.trip.tripPatterns = data.trip?.tripPatterns.map((tripPattern) => {
+      (tripPattern as TripPattern).id = generateIdFromTripPattern(tripPattern);
+      return tripPattern;
+    });
+  }
+
   return data;
+}
+
+function generateIdFromTripPattern(tripPattern: TripPattern) {
+  const id =
+    tripPattern.compressedQuery +
+    tripPattern.legs
+      .map((leg) => {
+        return leg.toPlace.longitude.toString() + leg.toPlace.latitude;
+      })
+      .join('-');
+  return id;
 }
 
 export async function singleTripSearch(

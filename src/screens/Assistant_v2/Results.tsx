@@ -108,7 +108,7 @@ const Results: React.FC<Props> = ({
   return (
     <View style={styles.container}>
       {tripPatterns?.map((tripPattern, i) => (
-        <Fragment key={i}>
+        <Fragment key={tripPattern.id}>
           <OptionalNextDayLabel
             departureTime={tripPattern.expectedStartTime}
             previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}

@@ -5,6 +5,7 @@ export type TripsQuery = Types.TripsQuery;
 export type Trip = Types.TripsQuery['trip'];
 export type TripPattern = Required<Types.TripsQuery>['trip']['tripPatterns'][0] & {
   compressedQuery?: any;
+  id?: string;
 };
 export type TripMetadata = Required<Types.TripsQuery>['trip']['metadata'];
 export type Leg = Required<Types.TripsQuery>['trip']['tripPatterns'][0]['legs'][0];
