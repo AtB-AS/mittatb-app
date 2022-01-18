@@ -1,7 +1,8 @@
 import client from './client';
 import {AxiosRequestConfig} from 'axios';
-import {TripsQuery, TripsQueryWithJourneyIds} from '@atb/api/types/trips';
+import {TripsQuery} from '@atb/api/types/trips';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
+import Bugsnag, {Breadcrumb} from '@bugsnag/react-native';
 
 export async function tripsSearch(
   query: TripsQueryVariables,
@@ -22,20 +23,27 @@ export async function tripsSearch(
     when: query.when,
   };
 
-  const data = await post<TripsQuery>(url, cleanQuery, opts);
-  return data;
+  const results = await post<TripsQuery>(url, cleanQuery, opts);
+
+  Bugsnag.leaveBreadcrumb('results', {
+    patterns: results.trip?.tripPatterns ?? 'none',
+  });
+
+  return results;
 }
 
 export async function singleTripSearch(
-  queryString: string,
+  queryString: string | null,
   opts?: AxiosRequestConfig,
-): Promise<TripsQuery> {
+): Promise<TripsQuery | null> {
+  if (!queryString) {
+    return null;
+  }
   const url = '/bff/v2/singleTrip';
   const query = {
     compressedQuery: queryString,
   };
-  const data = await post<TripsQuery>(url, query, opts);
-  return data;
+  return await post<TripsQuery>(url, query, opts);
 }
 
 async function post<T>(
@@ -45,7 +53,7 @@ async function post<T>(
 ) {
   const response = await client.post<T>(url, query, {
     ...opts,
-    // baseURL: 'http://10.0.2.2:8080', // uncomment for local BFF
+    baseURL: 'http://10.0.2.2:8080', // uncomment for local BFF
   });
 
   return response.data;
