@@ -10,11 +10,17 @@ import StopPlaceScreen, {
 import DepartureDetails, {
   DepartureDetailsRouteParams,
 } from '../TripDetails/DepartureDetails';
+import QuayDepartures, {
+  QuayDeparturesRouteParams,
+} from '../TripDetails/QuayDepartures';
+import TripDetailsRoot, {DetailsStackParams} from '../TripDetails';
 
 export type DeparturesStackParams = {
   DeparturesRoot: DeparturesScreenParams;
   StopPlaceScreen: StopPlaceScreenParams;
   DepartureDetails: DepartureDetailsRouteParams;
+  QuayDepartures: QuayDeparturesRouteParams;
+  TripDetails: DetailsStackParams;
 };
 
 const Stack = createStackNavigator<DeparturesStackParams>();
@@ -36,6 +42,8 @@ const DeparturesScreen = ({route}: DeparturesScreenRootProps) => {
       />
       <Stack.Screen name="StopPlaceScreen" component={StopPlaceScreen} />
       <Stack.Screen name="DepartureDetails" component={DepartureDetails} />
+      <Stack.Screen name="QuayDepartures" component={QuayDepartures} />
+      <Stack.Screen name="TripDetails" component={TripDetailsRoot} />
     </Stack.Navigator>
   );
 };
