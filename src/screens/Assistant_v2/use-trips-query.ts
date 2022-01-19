@@ -12,7 +12,7 @@ import {CancelTokenSource} from 'axios';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 import {tripsSearch} from '@atb/api/trips_v2';
 import Bugsnag from '@bugsnag/react-native';
-import {useSearchHistory} from "@atb/search-history";
+import {useSearchHistory} from '@atb/search-history';
 
 export default function useTripsQuery(
   fromLocation?: Location,
