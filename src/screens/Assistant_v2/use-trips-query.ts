@@ -6,7 +6,7 @@ import {
 import {TripPattern} from '@atb/api/types/trips';
 import {SearchStateType} from '@atb/screens/Assistant_v2/types';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {CancelToken, isCancel} from '@atb/api';
 import {CancelTokenSource} from 'axios';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
@@ -37,10 +37,7 @@ export default function useTripsQuery(
   const [pageCursor, setPageCursor] = useState<string>();
   const [errorType, setErrorType] = useState<ErrorType>();
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
-  const [
-    cancelTokenSource,
-    setCancelTokenSource,
-  ] = useState<CancelTokenSource>();
+  const cancelTokenRef = useRef<CancelTokenSource>();
 
   const clearTrips = useCallback(() => {
     setTripPatterns([]);
@@ -48,8 +45,8 @@ export default function useTripsQuery(
 
   const search = useCallback(
     (cursor?: string, existingTrips?: TripPattern[]) => {
-      const currentCancelTokenSource = CancelToken.source();
-      setCancelTokenSource(currentCancelTokenSource);
+      cancelTokenRef.current?.cancel('New search starting');
+      const cancelTokenSource = CancelToken.source();
       let allTripPatterns = existingTrips ?? [];
       if (!cursor) setTripPatterns([]);
 
@@ -70,7 +67,7 @@ export default function useTripsQuery(
                 fromLocation,
                 toLocation,
                 searchInput,
-                currentCancelTokenSource,
+                cancelTokenSource,
               );
 
               tripsFoundCount += results.trip.tripPatterns.length;
@@ -102,10 +99,9 @@ export default function useTripsQuery(
         }
       })();
 
+      cancelTokenRef.current = cancelTokenSource;
       return () => {
-        currentCancelTokenSource.cancel(
-          'New search to replace previous search',
-        );
+        cancelTokenSource.cancel('Unmounting use trips hook');
       };
     },
     [fromLocation, toLocation, searchTime],
@@ -114,12 +110,8 @@ export default function useTripsQuery(
   useEffect(() => search(), [search]);
 
   const refresh = useCallback(() => {
-    if (cancelTokenSource) {
-      cancelTokenSource?.cancel('Trip search cancelled');
-    }
-    clearTrips();
     return search();
-  }, [cancelTokenSource, clearTrips, search]);
+  }, [clearTrips, search]);
 
   const loadMore = useCallback(() => {
     return search(pageCursor, tripPatterns);
