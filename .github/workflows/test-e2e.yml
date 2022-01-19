@@ -24,6 +24,8 @@ jobs:
           app-environment: 'staging'
           app-org: 'atb'
           git-crypt-key: ${{ secrets.git-crypt-key }}
+      - name: Generate native assets
+        run: brew install imagemagick && yarn generate-native-assets
       - name: Get potentially cached Pods
         uses: actions/cache@v2
         id: pods-cache
