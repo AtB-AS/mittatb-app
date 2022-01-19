@@ -25,10 +25,7 @@ export async function tripsSearch(
     cursor: query.cursor,
   };
 
-  const results = await post<TripsQuery>(url, cleanQuery, {
-    ...opts,
-    baseURL: 'http://Grans-MacBook-Pro-2.local:8080',
-  });
+  const results = await post<TripsQuery>(url, cleanQuery, opts);
 
   Bugsnag.leaveBreadcrumb('results', {
     patterns: results.trip?.tripPatterns ?? 'none',
