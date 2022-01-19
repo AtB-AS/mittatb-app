@@ -9,13 +9,11 @@ export type QuayDeparturesQuery = {
     estimatedCalls: Array<{
       expectedDepartureTime?: Types.Maybe<any>;
       realtime?: Types.Maybe<boolean>;
-      quay?: Types.Maybe<{id: string; stopPlace?: Types.Maybe<{id: string}>}>;
+      quay?: Types.Maybe<{id: string}>;
       destinationDisplay?: Types.Maybe<{frontText?: Types.Maybe<string>}>;
       serviceJourney?: Types.Maybe<{
         id: string;
-        privateCode?: Types.Maybe<string>;
         line: {
-          name?: Types.Maybe<string>;
           id: string;
           description?: Types.Maybe<string>;
           publicCode?: Types.Maybe<string>;

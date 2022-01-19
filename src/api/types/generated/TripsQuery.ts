@@ -2,6 +2,7 @@ import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 export type TripsQueryVariables = Types.Exact<{
   from: Types.Location;
   to: Types.Location;
+  arriveBy: Types.Scalars['Boolean'];
   when?: Types.Maybe<Types.Scalars['DateTime']>;
   cursor?: Types.Maybe<Types.Scalars['String']>;
 }>;
