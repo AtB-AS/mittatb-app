@@ -63,9 +63,12 @@ export default function useTripsQuery(
                 setTimeOfSearch(searchInput.searchTime.date);
               }
 
+              const arriveBy = searchTime.option === 'arrival';
+
               const results = await doSearch(
                 fromLocation,
                 toLocation,
+                arriveBy,
                 searchInput,
                 cancelTokenSource,
               );
@@ -100,6 +103,7 @@ export default function useTripsQuery(
       })();
 
       cancelTokenRef.current = cancelTokenSource;
+      setErrorType(undefined);
       return () => {
         cancelTokenSource.cancel('Unmounting use trips hook');
       };
@@ -143,10 +147,11 @@ type SearchInput = TimeSearch | CursorSearch;
 async function doSearch(
   fromLocation: Location,
   toLocation: Location,
+  arriveBy: boolean,
   {searchTime, cursor}: SearchInput,
   cancelToken: CancelTokenSource,
 ) {
-  const searchDate = searchTime
+  const when = searchTime
     ? searchTime.option !== 'now'
       ? searchTime.date
       : new Date().toISOString()
@@ -156,12 +161,14 @@ async function doSearch(
     from: fromLocation,
     to: toLocation,
     cursor,
-    when: searchDate,
+    when,
+    arriveBy,
   };
 
   Bugsnag.leaveBreadcrumb('searching', {
     fromLocation: stringifyLocation(fromLocation),
     toLocation: stringifyLocation(toLocation),
+    arriveBy: query.arriveBy,
     when: query.when || '',
     cursor: query.cursor || '',
   });

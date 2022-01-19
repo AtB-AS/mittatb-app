@@ -2,7 +2,7 @@ import client from './client';
 import {AxiosRequestConfig} from 'axios';
 import {TripsQuery} from '@atb/api/types/trips';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
-import Bugsnag, {Breadcrumb} from '@bugsnag/react-native';
+import Bugsnag from '@bugsnag/react-native';
 
 export async function tripsSearch(
   query: TripsQueryVariables,
@@ -21,6 +21,7 @@ export async function tripsSearch(
       place: query.from.place,
     },
     when: query.when,
+    arriveBy: query.arriveBy,
     cursor: query.cursor,
   };
 

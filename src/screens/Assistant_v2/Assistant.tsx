@@ -440,30 +440,32 @@ const Assistant: React.FC<Props> = ({
         onDetailsPressed={onPressed}
         errorType={error}
       />
-      <TouchableOpacity
-        onPress={loadMore}
-        disabled={searchState === 'searching'}
-        style={styles.loadMoreButton}
-      >
-        {searchState === 'searching' ? (
-          <>
-            <ActivityIndicator
-              color={theme.text.colors.secondary}
-              style={{
-                marginRight: theme.spacings.medium,
-              }}
-            />
-            <ThemeText color="secondary">
-              {t(AssistantTexts.results.fetchingMore)}
-            </ThemeText>
-          </>
-        ) : (
-          <>
-            <ThemeText>{t(AssistantTexts.results.fetchMore)} </ThemeText>
-            <ThemeIcon svg={navIcons.Expand} size={'normal'} />
-          </>
-        )}
-      </TouchableOpacity>
+      {!error && (
+        <TouchableOpacity
+          onPress={loadMore}
+          disabled={searchState === 'searching'}
+          style={styles.loadMoreButton}
+        >
+          {searchState === 'searching' ? (
+            <>
+              <ActivityIndicator
+                color={theme.text.colors.secondary}
+                style={{
+                  marginRight: theme.spacings.medium,
+                }}
+              />
+              <ThemeText color="secondary">
+                {t(AssistantTexts.results.fetchingMore)}
+              </ThemeText>
+            </>
+          ) : (
+            <>
+              <ThemeText>{t(AssistantTexts.results.fetchMore)} </ThemeText>
+              <ThemeIcon svg={navIcons.Expand} size={'normal'} />
+            </>
+          )}
+        </TouchableOpacity>
+      )}
     </DisappearingHeader>
   );
 };
