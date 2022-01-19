@@ -1,30 +1,39 @@
 import {useTheme} from '@atb/theme';
 import {AnyMode, AnySubMode} from '@atb/components/transportation-icon';
+import {ThemeColor} from '@atb/theme/colors';
 
 export function useTransportationColor(
   mode?: AnyMode,
   subMode?: AnySubMode,
   colorType: 'color' | 'backgroundColor' = 'backgroundColor',
 ): string {
+  const themeColor = useThemeColorForTransportMode(mode, subMode);
   const {theme} = useTheme();
+  return theme.colors[themeColor][colorType];
+}
+
+export const useThemeColorForTransportMode = (
+  mode?: AnyMode,
+  subMode?: AnySubMode,
+): ThemeColor => {
   switch (mode) {
     case 'bus':
     case 'coach':
       if (subMode === 'localBus') {
-        return theme.colors.transport_city[colorType];
+        return 'transport_city';
       }
-      return theme.colors.transport_region[colorType];
+      return 'transport_region';
     case 'rail':
-      return theme.colors.transport_train[colorType];
+      return 'transport_train';
     case 'tram':
-      return theme.colors.transport_city[colorType];
+      return 'transport_city';
     case 'water':
-      return theme.colors.transport_boat[colorType];
+      return 'transport_boat';
     case 'air':
-      return theme.colors.transport_plane[colorType];
+      return 'transport_plane';
     case 'metro':
-      return theme.colors.transport_train[colorType];
+      return 'transport_train';
     default:
-      return theme.colors.transport_other[colorType];
+      return 'transport_other';
   }
-}
+};
