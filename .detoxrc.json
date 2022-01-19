@@ -35,7 +35,7 @@
       "app": {
         "type": "ios.app",
         "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/AtB.app",
-        "build": "export CODE_SIGNING_REQUIRED=NO && export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/atb.xcworkspace -UseNewBuildSystem=YES -configuration Release -scheme atb -sdk iphonesimulator -derivedDataPath ios/build"
+        "build": "export CODE_SIGNING_REQUIRED=NO && export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/atb.xcworkspace -UseNewBuildSystem=YES -configuration Release -scheme atb -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,OS=15.0,name=iPhone 13'"
       }
     },
     "android": {
