@@ -14,9 +14,12 @@ import {tripsSearch} from '@atb/api/trips_v2';
 import Bugsnag from '@bugsnag/react-native';
 
 export default function useTripsQuery(
-  fromLocation: Location | undefined,
-  toLocation: Location | undefined,
-  searchTime: SearchTime | undefined,
+  fromLocation?: Location,
+  toLocation?: Location,
+  searchTime: SearchTime = {
+    option: 'now',
+    date: new Date().toISOString(),
+  },
 ): {
   tripPatterns: TripPattern[];
   timeOfLastSearch: DateString;
@@ -48,6 +51,8 @@ export default function useTripsQuery(
       const currentCancelTokenSource = CancelToken.source();
       setCancelTokenSource(currentCancelTokenSource);
       let allTripPatterns = existingTrips ?? [];
+      if (!cursor) setTripPatterns([]);
+
       (async function () {
         if (fromLocation && toLocation) {
           try {
@@ -55,14 +60,7 @@ export default function useTripsQuery(
             let performedSearchesCount = 0;
             let tripsFoundCount = 0;
             while (tripsFoundCount < 10 && performedSearchesCount < 5) {
-              const searchInput = cursor
-                ? {cursor}
-                : {
-                    searchTime: searchTime ?? {
-                      option: 'now',
-                      date: new Date().toISOString(),
-                    },
-                  };
+              const searchInput = cursor ? {cursor} : {searchTime};
 
               if (searchInput.searchTime?.date) {
                 setTimeOfSearch(searchInput.searchTime.date);
@@ -81,7 +79,10 @@ export default function useTripsQuery(
               );
               setTripPatterns(allTripPatterns);
               performedSearchesCount++;
-              cursor = results.trip.nextPageCursor;
+              cursor =
+                searchTime.option === 'arrival'
+                  ? results.trip.previousPageCursor
+                  : results.trip.nextPageCursor;
             }
             setPageCursor(cursor);
             setSearchState(
