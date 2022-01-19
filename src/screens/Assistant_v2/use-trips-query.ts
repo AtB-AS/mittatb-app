@@ -12,6 +12,7 @@ import {CancelTokenSource} from 'axios';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 import {tripsSearch} from '@atb/api/trips_v2';
 import Bugsnag from '@bugsnag/react-native';
+import {useSearchHistory} from "@atb/search-history";
 
 export default function useTripsQuery(
   fromLocation?: Location,
@@ -38,6 +39,7 @@ export default function useTripsQuery(
   const [errorType, setErrorType] = useState<ErrorType>();
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
   const cancelTokenRef = useRef<CancelTokenSource>();
+  const {addJourneySearchEntry} = useSearchHistory();
 
   const clearTrips = useCallback(() => {
     setTripPatterns([]);
@@ -62,6 +64,11 @@ export default function useTripsQuery(
               if (searchInput.searchTime?.date) {
                 setTimeOfSearch(searchInput.searchTime.date);
               }
+
+              try {
+                // Fire and forget add journey search entry
+                await addJourneySearchEntry([fromLocation, toLocation]);
+              } catch (e) {}
 
               const arriveBy = searchTime.option === 'arrival';
 
