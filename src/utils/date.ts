@@ -19,7 +19,7 @@ import nb from 'date-fns/locale/nb';
 import humanizeDuration from 'humanize-duration';
 import {DEFAULT_LANGUAGE, Language} from '../translations';
 
-const shortHumanizer = humanizeDuration.humanizer({});
+const humanizer = humanizeDuration.humanizer({});
 
 function parseIfNeeded(a: string | Date): Date {
   return a instanceof Date ? a : parseISO(a);
@@ -40,6 +40,13 @@ export function secondsToMinutesShort(
   language: Language,
 ): string {
   return getShortHumanizer(seconds * 1000, language, {
+    units: ['m'],
+    round: true,
+  });
+}
+
+export function secondsToMinutes(seconds: number, language: Language): string {
+  return getHumanizer(seconds * 1000, language, {
     units: ['m'],
     round: true,
   });
@@ -74,7 +81,8 @@ export function formatToClock(isoDate: string | Date, language: Language) {
 }
 
 /**
- * Either show clock or relative time (X minute) if below threshold specified by second argument.
+ * Either show clock or relative time (X min) if below threshold specified by
+ * second argument.
  *
  * @param isoDate date to format as clock or relative time
  * @param minuteLimit threshold in minutes for when to show relative time
@@ -98,6 +106,34 @@ export function formatToClockOrRelativeMinutes(
 
   return secondsToMinutesShort(diff, language);
 }
+
+/**
+ * Either show clock or long relative time (X minutes) if below threshold
+ * specified by second argument.
+ *
+ * @param isoDate date to format as clock or relative time
+ * @param minuteLimit threshold in minutes for when to show relative time
+ */
+export function formatToClockOrLongRelativeMinutes(
+  isoDate: string | Date,
+  language: Language,
+  now: string,
+  minuteThreshold: number = 9,
+) {
+  const parsed = parseIfNeeded(isoDate);
+  const diff = secondsBetween(new Date(), parsed);
+
+  if (diff / 60 >= minuteThreshold) {
+    return formatLocaleTime(parsed, language);
+  }
+
+  if (diff / 60 <= 1) {
+    return now;
+  }
+
+  return secondsToMinutes(diff, language);
+}
+
 export function isRelativeButNotNow(
   isoDate: string | Date,
   minuteThreshold: number = 9,
@@ -293,5 +329,41 @@ function getShortHumanizer(
     ...options,
   };
 
-  return shortHumanizer(ms, opts);
+  return humanizer(ms, opts);
+}
+
+function getHumanizer(
+  ms: number,
+  language: Language,
+  options?: humanizeDuration.Options,
+) {
+  const opts = {
+    language: language === Language.Norwegian ? 'no' : 'en',
+    languages: {
+      no: {
+        y: () => 'år',
+        mo: () => 'måneder',
+        w: () => 'uker',
+        d: () => 'dager',
+        h: () => 'timer',
+        m: () => 'minutter',
+        s: () => 'sekunder',
+        ms: () => 'millisekunder',
+      },
+      en: {
+        y: () => 'years',
+        mo: () => 'months',
+        w: () => 'weeks',
+        d: () => 'days',
+        h: () => 'hours',
+        m: () => 'minutes',
+        s: () => 'seconds',
+        ms: () => 'milliseconds',
+      },
+    },
+
+    ...options,
+  };
+
+  return humanizer(ms, opts);
 }
