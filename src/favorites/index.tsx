@@ -1,5 +1,5 @@
 import React from 'react';
-import {MapPointPin} from '../assets/svg/icons/places';
+import {MapPointPin} from '../assets/svg/mono-icons/places';
 import ThemeText from '../components/text';
 import ThemeIcon from '../components/theme-icon';
 import {FavoriteDeparture, UserFavoriteDepartures} from './types';

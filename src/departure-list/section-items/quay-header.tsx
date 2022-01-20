@@ -2,7 +2,7 @@ import {TFunc} from '@leile/lobo-t';
 import React from 'react';
 import {View} from 'react-native';
 import {QuayInfo} from '@atb/api/departures/types';
-import {WalkingPerson} from '@atb/assets/svg/icons/transportation';
+import {WalkingPerson} from '@atb/assets/svg/mono-icons/transportation';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {
   SectionItem,

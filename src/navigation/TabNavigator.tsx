@@ -3,7 +3,7 @@ import {
   Nearby,
   Profile,
   Tickets,
-} from '@atb/assets/svg/icons/tab-bar';
+} from '@atb/assets/svg/mono-icons/tab-bar';
 import ThemeText from '@atb/components/text';
 import {LocationWithMetadata} from '@atb/favorites/types';
 import {usePreferenceItems} from '@atb/preferences';

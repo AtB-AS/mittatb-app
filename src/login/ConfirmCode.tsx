@@ -18,7 +18,7 @@ import {
 } from '@atb/auth/AuthContext';
 import MessageBox from '@atb/components/message-box';
 import ThemeText from '@atb/components/text';
-import {ArrowRight} from '@atb/assets/svg/icons/navigation';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ThemeColor} from '@atb/theme/colors';
 import {loginConfirmCodeInputId} from '@atb/test-ids';
@@ -35,11 +35,8 @@ export default function ConfirmCode({
   const {t} = useTranslation();
   const {theme} = useTheme();
   const styles = useThemeStyles();
-  const {
-    authenticationType,
-    confirmCode,
-    signInWithPhoneNumber,
-  } = useAuthState();
+  const {authenticationType, confirmCode, signInWithPhoneNumber} =
+    useAuthState();
   const [code, setCode] = useState('');
   const [error, setError] = useState<
     ConfirmationErrorCode | PhoneSignInErrorCode

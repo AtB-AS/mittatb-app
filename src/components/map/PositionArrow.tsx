@@ -1,4 +1,4 @@
-import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
+import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
 import {StyleSheet} from '@atb/theme';
 import insets from '@atb/utils/insets';
 import React from 'react';
