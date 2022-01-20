@@ -100,7 +100,7 @@
     "@atb-as/generate-assets": "^1.2.0",
     "@babel/core": "^7.12.13",
     "@babel/runtime": "^7.12.13",
-    "@svgr/cli": "^6.1.2",
+    "@svgr/cli": "^6.2.0",
     "@types/geojson": "^7946.0.8",
     "@types/humanize-duration": "^3.25.1",
     "@types/jest": "^26.0.24",
