@@ -26,12 +26,12 @@ jobs:
           git-crypt-key: ${{ secrets.git-crypt-key }}
       - name: Generate native assets
         run: brew install imagemagick && yarn generate-native-assets
-      - name: Get potentially cached Pods
-        uses: actions/cache@v2
-        id: pods-cache
-        with:
-          path: "ios/Pods"
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+      # - name: Get potentially cached Pods
+      #   uses: actions/cache@v2
+      #   id: pods-cache
+      #   with:
+      #     path: "ios/Pods"
+      #     key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
       - name: Install Pods
         if: steps.pods-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane ios pods
