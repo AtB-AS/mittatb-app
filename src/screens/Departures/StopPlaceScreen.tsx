@@ -13,6 +13,7 @@ import {
   RefreshControl,
   SectionList,
   SectionListData,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
@@ -53,6 +54,7 @@ import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types
 import useFontScale from '@atb/utils/use-font-scale';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {DeparturesStackParams} from '.';
+import {DepartureDetailsRouteParams} from '../TripDetails/DepartureDetails';
 
 export type StopPlaceScreenParams = {
   stopPlacePosition: StopPlacePosition;
@@ -108,6 +110,23 @@ export default function StopPlaceScreen({
     [stopPlace],
   );
 
+  const navigateToDetails = (
+    serviceJourneyId?: string,
+    date?: string,
+    fromQuayId?: string,
+  ) => {
+    if (!serviceJourneyId || !date) return;
+    navigation.navigate('DepartureDetails', {
+      items: [
+        {
+          serviceJourneyId,
+          date,
+          fromQuayId,
+        },
+      ],
+    });
+  };
+
   return (
     <View style={styles.container}>
       <FullScreenHeader title={stopPlace?.name} leftButton={{type: 'back'}} />
@@ -120,10 +139,7 @@ export default function StopPlaceScreen({
         ListHeaderComponent={
           <Button
             onPress={() => {
-              navigation.navigate('StopPlaceScreen', {
-                stopPlacePosition,
-                selectedQuay: undefined,
-              });
+              navigation.setParams({selectedQuay: undefined});
             }}
             text={t(DeparturesTexts.quayChips.allStops)}
             color={selectedQuay ? 'secondary_2' : 'secondary_3'}
@@ -133,10 +149,7 @@ export default function StopPlaceScreen({
         renderItem={({item}: quayChipData) => (
           <Button
             onPress={() => {
-              navigation.navigate('StopPlaceScreen', {
-                stopPlacePosition,
-                selectedQuay: item,
-              });
+              navigation.setParams({selectedQuay: item});
             }}
             text={
               item.publicCode ? item.name + ' ' + item.publicCode : item.name
@@ -168,11 +181,9 @@ export default function StopPlaceScreen({
               quay={item}
               selectedQuayId={selectedQuay?.id}
               data={state.data}
+              navigateToDetails={navigateToDetails}
               navigateToQuay={(quay) => {
-                navigation.navigate('StopPlaceScreen', {
-                  stopPlacePosition,
-                  selectedQuay: quay,
-                });
+                navigation.setParams({selectedQuay: quay});
               }}
             />
           )}
@@ -181,10 +192,6 @@ export default function StopPlaceScreen({
     </View>
   );
 }
-
-type EstimatedCallLineProps = {
-  departure: EstimatedCall;
-};
 
 function getDeparturesForQuay(
   departures: EstimatedCall[] | null,
@@ -302,6 +309,11 @@ type QuaySectionProps = {
   selectedQuayId: String | undefined;
   data: EstimatedCall[] | null;
   navigateToQuay: (arg0: Quay) => void;
+  navigateToDetails: (
+    serviceJourneyId?: string,
+    date?: string,
+    fromQuayId?: string,
+  ) => void;
 };
 
 function QuaySection({
@@ -309,6 +321,7 @@ function QuaySection({
   selectedQuayId,
   data,
   navigateToQuay,
+  navigateToDetails,
 }: QuaySectionProps): JSX.Element {
   const [isHidden, setIsHidden] = useState(false);
   const styles = useStyles();
@@ -369,7 +382,10 @@ function QuaySection({
                     : undefined
                 }
               >
-                <EstimatedCallLine departure={item}></EstimatedCallLine>
+                <EstimatedCallLine
+                  departure={item}
+                  navigateToDetails={navigateToDetails}
+                ></EstimatedCallLine>
               </Sections.GenericItem>
             )}
             keyExtractor={(item) => item.serviceJourney?.id || ''}
@@ -419,7 +435,19 @@ function changeDay(searchTime: SearchTime, days: number): SearchTime {
   };
 }
 
-function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
+type EstimatedCallLineProps = {
+  departure: EstimatedCall;
+  navigateToDetails: (
+    serviceJourneyId?: string,
+    date?: string,
+    fromQuayId?: string,
+  ) => void;
+};
+
+function EstimatedCallLine({
+  departure,
+  navigateToDetails,
+}: EstimatedCallLineProps): JSX.Element {
   const {t, language} = useTranslation();
   const styles = useStyles();
 
@@ -444,7 +472,14 @@ function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
     : t(dictionary.a11yMissingRealTimePrefix) + a11yTime;
 
   return (
-    <View
+    <TouchableOpacity
+      onPress={() =>
+        navigateToDetails(
+          departure.serviceJourney?.id,
+          departure.expectedDepartureTime,
+          departure.quay?.id,
+        )
+      }
       style={styles.estimatedCallLine}
       accessible={true}
       accessibilityLabel={t(
@@ -466,7 +501,7 @@ function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
         {departure.destinationDisplay?.frontText}
       </ThemeText>
       <ThemeText type="body__primary--bold">{timeWithRealtimePrefix}</ThemeText>
-    </View>
+    </TouchableOpacity>
   );
 }
 
