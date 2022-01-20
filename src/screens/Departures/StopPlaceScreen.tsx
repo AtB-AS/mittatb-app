@@ -24,7 +24,7 @@ import {
   formatToClockOrRelativeMinutes,
 } from '@atb/utils/date';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
-import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
+import {Expand, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 import {
   EstimatedCall,

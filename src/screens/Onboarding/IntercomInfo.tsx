@@ -9,8 +9,8 @@ import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
 import Illustration from '@atb/screens/Onboarding/components/Illustration';
-import {Onboarding2} from '@atb/assets/svg/illustrations';
-import {Confirm} from '@atb/assets/svg/icons/actions';
+import {Onboarding2} from '@atb/assets/svg/color/illustrations';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeColor} from '@atb/theme/colors';
 
 const themeColor: ThemeColor = 'primary_2';

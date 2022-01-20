@@ -1,6 +1,6 @@
-import {Delete, Edit} from '@atb/assets/svg/icons/actions';
-import {Check} from '@atb/assets/svg/icons/status';
-import {BlankTicket} from '@atb/assets/svg/icons/ticketing';
+import {Delete, Edit} from '@atb/assets/svg/mono-icons/actions';
+import {Check} from '@atb/assets/svg/mono-icons/status';
+import {BlankTicket} from '@atb/assets/svg/mono-icons/ticketing';
 import Button, {ButtonGroup} from '@atb/components/button';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';

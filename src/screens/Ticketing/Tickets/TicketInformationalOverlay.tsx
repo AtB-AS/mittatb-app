@@ -5,7 +5,7 @@ import Button from '@atb/components/button';
 import {ScrollView, View} from 'react-native';
 import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {Confirm} from '@atb/assets/svg/icons/actions';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeColor} from '@atb/theme/colors';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 
