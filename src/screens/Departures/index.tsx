@@ -1,4 +1,4 @@
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
 import DeparturesRoot, {
   DeparturesScreenParams,
@@ -14,6 +14,7 @@ import QuayDepartures, {
   QuayDeparturesRouteParams,
 } from '../TripDetails/QuayDepartures';
 import TripDetailsRoot, {DetailsStackParams} from '../TripDetails';
+import TravelDetailsMap, {MapDetailRouteParams} from '../TripDetails/Map';
 
 export type DeparturesStackParams = {
   DeparturesRoot: DeparturesScreenParams;
@@ -21,6 +22,7 @@ export type DeparturesStackParams = {
   DepartureDetails: DepartureDetailsRouteParams;
   QuayDepartures: QuayDeparturesRouteParams;
   TripDetails: DetailsStackParams;
+  DetailsMap: MapDetailRouteParams;
 };
 
 const Stack = createStackNavigator<DeparturesStackParams>();
@@ -44,6 +46,13 @@ const DeparturesScreen = ({route}: DeparturesScreenRootProps) => {
       <Stack.Screen name="DepartureDetails" component={DepartureDetails} />
       <Stack.Screen name="QuayDepartures" component={QuayDepartures} />
       <Stack.Screen name="TripDetails" component={TripDetailsRoot} />
+      <Stack.Screen
+        name="DetailsMap"
+        component={TravelDetailsMap}
+        options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
+      />
     </Stack.Navigator>
   );
 };
