@@ -2,6 +2,7 @@ import Bugsnag from '@bugsnag/react-native';
 import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
+import {addHours} from 'date-fns';
 import {CustomerProfile, FareContract, Reservation} from './types';
 
 type SnapshotListener<T> = {
@@ -45,6 +46,7 @@ export default function setupFirestoreListener(
     .collection('customers')
     .doc(abtCustomerId)
     .collection('reservations')
+    .where('created', '>', addHours(Date.now(), -1))
     .onSnapshot(
       (snapshot) => {
         const reservations = (snapshot as FirebaseFirestoreTypes.QuerySnapshot<Reservation>).docs.map<Reservation>(
