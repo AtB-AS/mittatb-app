@@ -72,11 +72,8 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
 
   alertContext,
 }) => {
-  const {
-    contentHeight,
-    onScreenHeaderLayout,
-    onHeaderContentLayout,
-  } = useCalculateHeaderContentHeight();
+  const {contentHeight, onScreenHeaderLayout, onHeaderContentLayout} =
+    useCalculateHeaderContentHeight();
   const contentHeightRef = React.useRef(contentHeight);
   const scrollableContentRef = React.useRef<ScrollView>(null);
   useScrollToTop(
