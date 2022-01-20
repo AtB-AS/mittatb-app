@@ -2,6 +2,7 @@ import React, {createContext, useContext, useEffect, useReducer} from 'react';
 import {useAuthState} from '../auth';
 import {Reservation, FareContract, PaymentStatus} from './types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {differenceInMinutes} from 'date-fns';
 import {TokenStatus} from '@entur/react-native-traveller/lib/typescript/token/types';
 import {CustomerProfile} from '.';
 import setupFirestoreListener from './firestore';
@@ -75,16 +76,27 @@ const ticketReducer: TicketReducer = (
       };
     }
     case 'UPDATE_FARE_CONTRACT_TICKETS': {
+      const currentFareContractOrderIds = action.fareContracts.map(
+        (fc) => fc.orderId,
+      );
       return {
         ...prevState,
         fareContracts: action.fareContracts,
+        reservations: prevState.reservations.filter(
+          (r) => !currentFareContractOrderIds.includes(r.orderId),
+        ),
         isRefreshingTickets: false,
       };
     }
     case 'UPDATE_RESERVATIONS': {
+      const currentFareContractOrderIds = prevState.fareContracts.map(
+        (fc) => fc.orderId,
+      );
       return {
         ...prevState,
-        reservations: action.reservations,
+        reservations: action.reservations.filter(
+          (r) => !currentFareContractOrderIds.includes(r.orderId),
+        ),
       };
     }
     case 'UPDATE_CUSTOMER_PROFILE': {
@@ -146,7 +158,9 @@ const TicketContextProvider: React.FC = ({children}) => {
               type: 'UPDATE_RESERVATIONS',
               reservations: reservations.filter(
                 (r) =>
-                  !!r.paymentStatus && !isHandledPaymentStatus(r.paymentStatus),
+                  !!r.paymentStatus &&
+                  !isAbortedPaymentStatus(r.paymentStatus) &&
+                  !isOlderThanAnHour(r.created.toDate()),
               ),
             }),
           onError: (err) => console.error(err),
@@ -188,16 +202,14 @@ const TicketContextProvider: React.FC = ({children}) => {
   );
 };
 
-function isHandledPaymentStatus(status: PaymentStatus | undefined): boolean {
-  switch (status) {
-    case 'CANCEL':
-    case 'CREDIT':
-    case 'REJECT':
-    case 'CAPTURE':
-      return true;
-    default:
-      return false;
-  }
+function isOlderThanAnHour(date: Date): boolean {
+  return differenceInMinutes(new Date(), date) > 60;
+}
+
+const abortedPaymentStatus: PaymentStatus[] = ['CANCEL', 'CREDIT', 'REJECT'];
+
+function isAbortedPaymentStatus(status: PaymentStatus): boolean {
+  return abortedPaymentStatus.includes(status);
 }
 
 export function useTicketState() {
