@@ -42,6 +42,6 @@ jobs:
           brew tap wix/brew
           brew install applesimutils
       - name: Build Detox-version of app
-        run: detox build --configuration ${{ inputs.e2econfig }}
+        run: detox clean-framework-cache && detox build-framework-cache && detox build --configuration ${{ inputs.e2econfig }}
       - name: Run tests
         run: detox test --configuration ${{ inputs.e2econfig }}
