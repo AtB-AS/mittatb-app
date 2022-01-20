@@ -1,4 +1,4 @@
-import {ShinyTicketBanner} from '@atb/assets/svg/illustrations';
+import {ShinyTicketBanner} from '@atb/assets/svg/color/illustrations';
 import MessageBox from '@atb/components/message-box';
 import {StyleSheet} from '@atb/theme';
 import {UpgradeSplashTexts, useTranslation} from '@atb/translations';

@@ -1,9 +1,9 @@
-import {InvalidTicket, ValidTicket} from '@atb/assets/svg/icons/ticketing';
+import {InvalidTicket, ValidTicket} from '@atb/assets/svg/mono-icons/ticketing';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {useTheme} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
-import {Wait} from '@atb/assets/svg/icons/transportation';
+import {Wait} from '@atb/assets/svg/mono-icons/transportation';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {UsedAccessStatus} from './types';

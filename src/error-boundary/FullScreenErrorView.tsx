@@ -1,4 +1,4 @@
-import {CrashParachute} from '@atb/assets/svg/illustrations';
+import {CrashParachute} from '@atb/assets/svg/color/illustrations';
 import Button from '@atb/components/button';
 import ScreenHeader from '@atb/components/screen-header';
 import ThemeText from '@atb/components/text';

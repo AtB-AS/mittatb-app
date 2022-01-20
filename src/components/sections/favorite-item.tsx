@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Edit} from '@atb/assets/svg/icons/actions';
+import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {FavoriteIcon} from '@atb/favorites';
 import {StoredLocationFavorite} from '@atb/favorites/types';
 import {StyleSheet} from '@atb/theme';

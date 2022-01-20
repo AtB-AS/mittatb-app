@@ -3,7 +3,7 @@ import {View, TouchableOpacity} from 'react-native';
 import {StyleSheet} from '../theme';
 import LocationIcon from '../components/location-icon';
 import insets from '../utils/insets';
-import {ArrowUpLeft} from '../assets/svg/icons/navigation';
+import {ArrowUpLeft} from '../assets/svg/mono-icons/navigation';
 import {LocationSearchResult} from './types';
 import {FavoriteIcon} from '../favorites';
 import ThemeText from '../components/text';

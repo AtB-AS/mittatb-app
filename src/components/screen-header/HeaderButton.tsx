@@ -8,7 +8,7 @@ import {AccessibilityProps, TouchableOpacity} from 'react-native';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {ThemeColor} from '@atb/theme/colors';
-import BlackMonoLogo from '@atb/assets/design-assets/icons/Logo';
+import BlackMonoLogo from '@atb/assets/svg/mono-icons/logo/Logo';
 
 export type ButtonModes =
   | 'back'

@@ -1,5 +1,5 @@
 import {ErrorType} from '@atb/api/utils';
-import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
+import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
 import AccessibleText from '@atb/components/accessible-text';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
@@ -34,7 +34,7 @@ import DepartureTimeSheet from '../Nearby/DepartureTimeSheet';
 import {useNearestStopsData} from './state';
 import ThemeText from '@atb/components/text';
 import * as Sections from '@atb/components/sections';
-import {BusSide} from '@atb/assets/svg/icons/transportation';
+import {BusSide} from '@atb/assets/svg/mono-icons/transportation';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import {StopPlacePosition} from '@atb/api/types/departures';
 import {NearestStopPlacesQuery} from '@atb/api/types/generated/NearestStopPlacesQuery';
@@ -73,12 +73,8 @@ type RootProps = {
 };
 
 export default function NearbyScreen({navigation}: RootProps) {
-  const {
-    status,
-    location,
-    locationEnabled,
-    requestPermission,
-  } = useGeolocationState();
+  const {status, location, locationEnabled, requestPermission} =
+    useGeolocationState();
 
   const {closestLocation: currentLocation} = useReverseGeocoder(
     location?.coords ?? null,
@@ -119,9 +115,8 @@ const DeparturesOverview: React.FC<Props> = ({
     option: 'now',
     date: new Date().toISOString(),
   });
-  const searchedFromLocation = useOnlySingleLocation<DeparturesScreenProp>(
-    'location',
-  );
+  const searchedFromLocation =
+    useOnlySingleLocation<DeparturesScreenProp>('location');
   const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
     [currentLocation],
@@ -135,9 +130,10 @@ const DeparturesOverview: React.FC<Props> = ({
   const isInitialScreen = data == null && !isLoading && !error;
   const activateScroll = !isInitialScreen || !!error;
 
-  const orderedStopPlaces = useMemo(() => sortAndFilterStopPlaces(data), [
-    data,
-  ]);
+  const orderedStopPlaces = useMemo(
+    () => sortAndFilterStopPlaces(data),
+    [data],
+  );
 
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {

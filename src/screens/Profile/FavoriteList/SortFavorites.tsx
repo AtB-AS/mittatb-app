@@ -1,4 +1,4 @@
-import {Confirm} from '@atb/assets/svg/icons/actions';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import Button from '@atb/components/button';
 import {useFavorites} from '@atb/favorites';
 import MessageBox from '@atb/components/message-box';
@@ -10,7 +10,6 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
 import {ProfileStackParams} from '..';
 import SortableList from './SortableList';
-import useFontScale from '@atb/utils/use-font-scale';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {View} from 'react-native';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';

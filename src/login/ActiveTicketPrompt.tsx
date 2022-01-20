@@ -5,7 +5,7 @@ import React from 'react';
 import {ScrollView, View} from 'react-native';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
-import {ArrowRight} from '@atb/assets/svg/icons/navigation';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ThemeColor} from '@atb/theme/colors';
@@ -33,9 +33,8 @@ export default function ActiveTicketPrompt({
   const styles = useThemeStyles();
   const focusRef = useFocusOnLoad();
   const {fareContracts} = useTicketState();
-  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
-    fareContracts,
-  );
+  const activeFareContracts =
+    filterActiveOrCanBeUsedFareContracts(fareContracts);
   const firstActiveFc = activeFareContracts[0];
   const now = Date.now();
 

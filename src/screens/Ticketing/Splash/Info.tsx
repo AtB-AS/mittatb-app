@@ -1,4 +1,4 @@
-import {ShinyTicketBanner} from '@atb/assets/svg/illustrations';
+import {ShinyTicketBanner} from '@atb/assets/svg/color/illustrations';
 import Button from '@atb/components/button';
 import Header from '@atb/components/screen-header';
 import ThemeText from '@atb/components/text';

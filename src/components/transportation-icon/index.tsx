@@ -8,7 +8,7 @@ import {
   FerrySide,
   WalkingPerson,
   Subway,
-} from '@atb/assets/svg/icons/transportation';
+} from '@atb/assets/svg/mono-icons/transportation';
 import {LegMode, TransportSubmode, TransportMode} from '@atb/sdk';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
