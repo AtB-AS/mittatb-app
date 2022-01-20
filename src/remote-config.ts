@@ -1,4 +1,6 @@
 import remoteConfig from '@react-native-firebase/remote-config';
+import {PRIVACY_POLICY_URL} from '@env';
+
 import {
   defaultPreassignedFareProducts,
   defaultTariffZones,
@@ -24,6 +26,7 @@ export type RemoteConfig = {
   tariff_zones: string;
   user_profiles: string;
   customer_service_url: string;
+  privacy_policy_url: string;
 };
 
 export const defaultModesWeSellTicketsFor: string[] = [
@@ -54,6 +57,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   tariff_zones: JSON.stringify(defaultTariffZones),
   user_profiles: JSON.stringify(defaultUserProfiles),
   customer_service_url: 'https://www.atb.no/kontakt/',
+  privacy_policy_url: PRIVACY_POLICY_URL,
 };
 
 export function getConfig(): RemoteConfig {
@@ -95,6 +99,10 @@ export function getConfig(): RemoteConfig {
     values['customer_service_url']?.asString() ??
     defaultRemoteConfig.customer_service_url;
 
+  const privacy_policy_url =
+    values['privacy_policy_url']?.asString() ??
+    defaultRemoteConfig.privacy_policy_url;
+
   return {
     modes_we_sell_tickets_for,
     enable_network_logging,
@@ -114,6 +122,7 @@ export function getConfig(): RemoteConfig {
     tariff_zones,
     user_profiles,
     customer_service_url,
+    privacy_policy_url,
   };
 }
 
