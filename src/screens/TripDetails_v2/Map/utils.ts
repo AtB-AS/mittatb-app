@@ -53,8 +53,8 @@ export function createMapLines(legs: MapLeg[]): MapLine[] {
         type: 'Feature',
         properties: {},
         faded: leg.faded,
-        travelType: (leg.mode as unknown) as Mode,
-        subMode: (leg.transportSubmode as unknown) as TransportSubmode,
+        travelType: leg.mode as unknown as Mode,
+        subMode: leg.transportSubmode as unknown as TransportSubmode,
         geometry: line,
       };
     });

@@ -44,14 +44,14 @@ export const getReferenceDataName = <
   T extends {
     name: LanguageAndText;
     alternativeNames?: LanguageAndText[];
-  }
+  },
 >(
   {name, alternativeNames}: T,
   language: Language,
 ) => getReferenceDataText([name, ...(alternativeNames || [])], language);
 
 export const findReferenceDataById = <
-  T extends UserProfile | PreassignedFareProduct | TariffZone
+  T extends UserProfile | PreassignedFareProduct | TariffZone,
 >(
   elements: T[],
   id: string,

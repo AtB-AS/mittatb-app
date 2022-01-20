@@ -102,10 +102,8 @@ export default function useTerminalState(
     offers: ReserveOffer[],
   ) => void,
 ) {
-  const [
-    {paymentResponseCode, reservation, loadingState, error},
-    dispatch,
-  ] = useReducer(terminalReducer, initialState);
+  const [{paymentResponseCode, reservation, loadingState, error}, dispatch] =
+    useReducer(terminalReducer, initialState);
 
   const {setPreference} = usePreferences();
   const {user} = useAuthState();

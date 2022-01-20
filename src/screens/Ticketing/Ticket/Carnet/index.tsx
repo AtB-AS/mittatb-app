@@ -37,11 +37,8 @@ const CarnetTicketInfo: React.FC<Props> = ({
 }) => {
   const styles = useStyles();
   const {theme} = useTheme();
-  const {
-    usedAccesses,
-    maximumNumberOfAccesses,
-    numberOfUsedAccesses,
-  } = flattenCarnetTicketAccesses(travelRights);
+  const {usedAccesses, maximumNumberOfAccesses, numberOfUsedAccesses} =
+    flattenCarnetTicketAccesses(travelRights);
 
   const {
     status: usedAccessValidityStatus,
