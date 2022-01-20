@@ -455,7 +455,9 @@ const Assistant: React.FC<Props> = ({
                 }}
               />
               <ThemeText color="secondary">
-                {t(AssistantTexts.results.fetchingMore)}
+                {tripPatterns.length
+                  ? t(AssistantTexts.results.fetchingMore)
+                  : t(AssistantTexts.searchState.searching)}
               </ThemeText>
             </>
           ) : (

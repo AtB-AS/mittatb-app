@@ -13,6 +13,7 @@ import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 import {tripsSearch} from '@atb/api/trips_v2';
 import Bugsnag from '@bugsnag/react-native';
 import {useSearchHistory} from '@atb/search-history';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 export default function useTripsQuery(
   fromLocation?: Location,
@@ -41,6 +42,12 @@ export default function useTripsQuery(
   const cancelTokenRef = useRef<CancelTokenSource>();
   const {addJourneySearchEntry} = useSearchHistory();
 
+  const {
+    tripsSearch_max_number_of_chained_searches: config_max_performed_searches,
+    tripsSearch_target_number_of_initial_hits: config_target_inital_hits,
+    tripsSearch_target_number_of_page_hits: config_target_page_hits,
+  } = useRemoteConfig();
+
   const clearTrips = useCallback(() => {
     setTripPatterns([]);
   }, [setTripPatterns]);
@@ -52,13 +59,20 @@ export default function useTripsQuery(
       let allTripPatterns = existingTrips ?? [];
       if (!cursor) setTripPatterns([]);
 
+      const targetNumberOfHits = cursor
+        ? config_target_page_hits
+        : config_target_inital_hits;
+
       (async function () {
         if (fromLocation && toLocation) {
           try {
             setSearchState('searching');
             let performedSearchesCount = 0;
             let tripsFoundCount = 0;
-            while (tripsFoundCount < 10 && performedSearchesCount < 5) {
+            while (
+              tripsFoundCount < targetNumberOfHits &&
+              performedSearchesCount < config_max_performed_searches
+            ) {
               const searchInput = cursor ? {cursor} : {searchTime};
 
               if (searchInput.searchTime?.date) {
@@ -80,11 +94,11 @@ export default function useTripsQuery(
                 cancelTokenSource,
               );
 
-              tripsFoundCount += results.trip.tripPatterns.length;
               allTripPatterns = allTripPatterns.concat(
                 results.trip.tripPatterns,
               );
               setTripPatterns(allTripPatterns);
+              tripsFoundCount += results.trip.tripPatterns.length;
               performedSearchesCount++;
               cursor =
                 searchTime.option === 'arrival'
