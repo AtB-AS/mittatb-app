@@ -40,11 +40,10 @@ const QuaySection = React.memo(function QuaySection({
 
   const hasMoreItems = quayGroup.group.length > limit;
 
-  const sorted = useMemo(() => sortAndLimit(quayGroup, limit), [
-    quayGroup,
-    limit,
-    lastUpdated,
-  ]);
+  const sorted = useMemo(
+    () => sortAndLimit(quayGroup, limit),
+    [quayGroup, limit, lastUpdated],
+  );
 
   if (!sorted) {
     return null;

@@ -73,20 +73,15 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const saveRecurringCard =
     'save' in paymentMethod ? paymentMethod.save : false;
 
-  const {
-    loadingState,
-    terminalUrl,
-    onWebViewLoadEnd,
-    error,
-    restartTerminal,
-  } = useTerminalState(
-    offers,
-    paymentType,
-    recurringPaymentId,
-    saveRecurringCard,
-    cancelTerminal,
-    dismissAndAddReservation,
-  );
+  const {loadingState, terminalUrl, onWebViewLoadEnd, error, restartTerminal} =
+    useTerminalState(
+      offers,
+      paymentType,
+      recurringPaymentId,
+      saveRecurringCard,
+      cancelTerminal,
+      dismissAndAddReservation,
+    );
 
   return (
     <View style={styles.container}>

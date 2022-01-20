@@ -44,11 +44,8 @@ const Tab = createBottomTabNavigator<TabNavigatorParams>();
 const NavigationRoot = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const {
-    startScreen,
-    useExperimentalTripSearch,
-    newDepartures,
-  } = usePreferenceItems();
+  const {startScreen, useExperimentalTripSearch, newDepartures} =
+    usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
   return (
