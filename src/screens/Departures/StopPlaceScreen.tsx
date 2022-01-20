@@ -109,6 +109,23 @@ export default function StopPlaceScreen({
     [stopPlace],
   );
 
+  const navigateToDetails = (
+    serviceJourneyId?: string,
+    date?: string,
+    fromQuayId?: string,
+  ) => {
+    if (!serviceJourneyId || !date) return;
+    navigation.navigate('DepartureDetails', {
+      items: [
+        {
+          serviceJourneyId,
+          date,
+          fromQuayId,
+        },
+      ],
+    });
+  };
+
   return (
     <View style={styles.container}>
       <FullScreenHeader title={stopPlace?.name} leftButton={{type: 'back'}} />
@@ -163,7 +180,7 @@ export default function StopPlaceScreen({
               quay={item}
               selectedQuayId={selectedQuay?.id}
               data={state.data}
-              navigation={navigation}
+              navigateToDetails={navigateToDetails}
               navigateToQuay={(quay) => {
                 navigation.setParams({selectedQuay: quay});
               }}
@@ -174,11 +191,6 @@ export default function StopPlaceScreen({
     </View>
   );
 }
-
-type EstimatedCallLineProps = {
-  departure: EstimatedCall;
-  navigation: StackNavigationProp<DeparturesStackParams>;
-};
 
 function getDeparturesForQuay(
   departures: EstimatedCall[] | null,
@@ -296,7 +308,11 @@ type QuaySectionProps = {
   selectedQuayId: String | undefined;
   data: EstimatedCall[] | null;
   navigateToQuay: (arg0: Quay) => void;
-  navigation: StackNavigationProp<DeparturesStackParams>;
+  navigateToDetails: (
+    serviceJourneyId?: string,
+    date?: string,
+    fromQuayId?: string,
+  ) => void;
 };
 
 function QuaySection({
@@ -304,7 +320,7 @@ function QuaySection({
   selectedQuayId,
   data,
   navigateToQuay,
-  navigation,
+  navigateToDetails,
 }: QuaySectionProps): JSX.Element {
   const [isHidden, setIsHidden] = useState(false);
   const styles = useStyles();
@@ -367,7 +383,7 @@ function QuaySection({
               >
                 <EstimatedCallLine
                   departure={item}
-                  navigation={navigation}
+                  navigateToDetails={navigateToDetails}
                 ></EstimatedCallLine>
               </Sections.GenericItem>
             )}
@@ -418,9 +434,18 @@ function changeDay(searchTime: SearchTime, days: number): SearchTime {
   };
 }
 
+type EstimatedCallLineProps = {
+  departure: EstimatedCall;
+  navigateToDetails: (
+    serviceJourneyId?: string,
+    date?: string,
+    fromQuayId?: string,
+  ) => void;
+};
+
 function EstimatedCallLine({
   departure,
-  navigation,
+  navigateToDetails,
 }: EstimatedCallLineProps): JSX.Element {
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -439,22 +464,15 @@ function EstimatedCallLine({
     ? time
     : t(dictionary.a11yMissingRealTimePrefix) + time;
 
-  const navigateToDetails = () => {
-    if (!departure.serviceJourney) return;
-    navigation.navigate('DepartureDetails', {
-      items: [
-        {
-          serviceJourneyId: departure.serviceJourney.id,
-          date: departure.expectedDepartureTime,
-          fromQuayId: departure.quay?.id,
-        },
-      ],
-    });
-  };
-
   return (
     <TouchableOpacity
-      onPress={navigateToDetails}
+      onPress={() =>
+        navigateToDetails(
+          departure.serviceJourney?.id,
+          departure.expectedDepartureTime,
+          departure.quay?.id,
+        )
+      }
       style={styles.estimatedCallLine}
       accessible={true}
       accessibilityLabel={t(
