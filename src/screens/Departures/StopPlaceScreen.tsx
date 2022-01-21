@@ -274,10 +274,10 @@ function QuaySection({
                     : undefined
                 }
               >
-                <EstimatedCallLine
+                <EstimatedCallItem
                   departure={item}
                   navigateToDetails={navigateToDetails}
-                ></EstimatedCallLine>
+                ></EstimatedCallItem>
               </Sections.GenericItem>
             )}
             keyExtractor={(item) => item.serviceJourney?.id || ''}
@@ -319,7 +319,7 @@ function QuaySection({
   );
 }
 
-type EstimatedCallLineProps = {
+type EstimatedCallItemProps = {
   departure: EstimatedCall;
   navigateToDetails: (
     serviceJourneyId?: string,
@@ -328,10 +328,10 @@ type EstimatedCallLineProps = {
   ) => void;
 };
 
-function EstimatedCallLine({
+function EstimatedCallItem({
   departure,
   navigateToDetails,
-}: EstimatedCallLineProps): JSX.Element {
+}: EstimatedCallItemProps): JSX.Element {
   const {t, language} = useTranslation();
   const styles = useStyles();
 
@@ -364,10 +364,10 @@ function EstimatedCallLine({
           departure.quay?.id,
         )
       }
-      style={styles.estimatedCallLine}
+      style={styles.estimatedCallItem}
       accessible={true}
       accessibilityLabel={t(
-        DeparturesTexts.a11yEstimatedCallLine(
+        DeparturesTexts.a11yEstimatedCallItem(
           a11yTimeWithRealtimePrefix,
           line?.publicCode,
           departure.destinationDisplay?.frontText,
@@ -463,7 +463,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   quayChip: {
     marginRight: theme.spacings.medium,
   },
-  estimatedCallLine: {
+  estimatedCallItem: {
     flexDirection: 'row',
     alignItems: 'center',
   },
