@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {RefreshControl, SectionList, SectionListData} from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
 import {Quay} from '@atb/api/types/departures';
 import {SearchTime} from './NearbyPlaces';
-import {DeparturesStackParams} from '.';
 import DateNavigation from './components/DateNavigator';
-import {QuaySection} from './PlaceScreen';
+import QuaySection from './components/QuaySection';
 import {useQuayData} from './state/QuayState';
 
 export type QuayViewParams = {

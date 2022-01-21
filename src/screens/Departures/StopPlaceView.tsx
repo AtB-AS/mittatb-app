@@ -4,7 +4,7 @@ import {useStopPlaceData} from './state/StopPlaceState';
 import {Quay, StopPlacePosition} from '@atb/api/types/departures';
 import {SearchTime} from './NearbyPlaces';
 import DateNavigation from './components/DateNavigator';
-import {QuaySection} from './PlaceScreen';
+import QuaySection from './components/QuaySection';
 
 type StopPlaceViewProps = {
   stopPlacePosition: StopPlacePosition;

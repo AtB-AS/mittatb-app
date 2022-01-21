@@ -1,24 +1,15 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import * as Sections from '@atb/components/sections';
 import {StyleSheet, useTheme} from '@atb/theme';
-import React, {useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
+import React from 'react';
 import {FlatList} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
 import Button from '@atb/components/button';
-import ThemeText from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {useTranslation} from '@atb/translations';
-import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
-import {
-  EstimatedCall,
-  Quay,
-  StopPlacePosition,
-} from '@atb/api/types/departures';
+import {Quay, StopPlacePosition} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {DeparturesStackParams} from '.';
-import EstimatedCallItem from './components/EstimatedCallItem';
 import QuayView from './QuayView';
 import StopPlaceView from './StopPlaceView';
 
@@ -106,158 +97,14 @@ export default function PlaceScreen({
           quay={selectedQuay}
           navigateToDetails={navigateToDetails}
           navigateToQuay={navigateToQuay}
-        ></QuayView>
+        />
       ) : (
         <StopPlaceView
           stopPlacePosition={stopPlacePosition}
           navigateToDetails={navigateToDetails}
           navigateToQuay={navigateToQuay}
-        ></StopPlaceView>
+        />
       )}
-    </View>
-  );
-}
-
-function getDeparturesForQuay(
-  departures: EstimatedCall[] | null,
-  quay: Quay,
-): EstimatedCall[] {
-  if (!departures) return [];
-  return departures.filter(
-    (departure) => departure && departure.quay?.id === quay.id,
-  );
-}
-
-function SeparatorLine(): JSX.Element {
-  const {theme} = useTheme();
-  return (
-    <View
-      style={{
-        height: 1,
-        width: '100%',
-        backgroundColor: theme.colors.background_1.backgroundColor,
-      }}
-    />
-  );
-}
-
-type QuaySectionProps = {
-  quay: Quay;
-  isSelected: boolean;
-  data: EstimatedCall[] | null;
-  navigateToQuay: (arg0: Quay) => void;
-  navigateToDetails: (
-    serviceJourneyId?: string,
-    date?: string,
-    fromQuayId?: string,
-  ) => void;
-};
-
-export function QuaySection({
-  quay,
-  isSelected,
-  data,
-  navigateToQuay,
-  navigateToDetails,
-}: QuaySectionProps): JSX.Element {
-  const [isHidden, setIsHidden] = useState(false);
-  const styles = useStyles();
-  const departures = getDeparturesForQuay(data, quay);
-  const {t} = useTranslation();
-
-  return (
-    <View>
-      <Sections.Section withPadding>
-        <Sections.GenericClickableItem
-          type="inline"
-          onPress={() => {
-            setIsHidden(!isHidden);
-          }}
-          accessibilityHint={
-            isHidden
-              ? t(DeparturesTexts.quaySection.a11yExpand)
-              : t(DeparturesTexts.quaySection.a11yMinimize)
-          }
-        >
-          <View style={styles.stopPlaceHeader}>
-            <View style={styles.stopPlaceHeaderText}>
-              <ThemeText
-                type="body__secondary--bold"
-                color="secondary"
-                style={styles.rightMargin}
-              >
-                {quay.publicCode
-                  ? quay.name + ' ' + quay.publicCode
-                  : quay.name}
-              </ThemeText>
-              {!!quay.description && (
-                <ThemeText
-                  style={styles.rightMargin}
-                  type="body__secondary"
-                  color="secondary"
-                >
-                  {quay.description}
-                </ThemeText>
-              )}
-            </View>
-            <ThemeIcon svg={isHidden ? Expand : ExpandLess}></ThemeIcon>
-          </View>
-        </Sections.GenericClickableItem>
-        {!isHidden && (
-          <FlatList
-            ItemSeparatorComponent={SeparatorLine}
-            data={departures}
-            renderItem={({item, index}) => (
-              <Sections.GenericItem
-                radius={
-                  isSelected && index === departures.length - 1
-                    ? 'bottom'
-                    : undefined
-                }
-              >
-                <EstimatedCallItem
-                  departure={item}
-                  navigateToDetails={navigateToDetails}
-                ></EstimatedCallItem>
-              </Sections.GenericItem>
-            )}
-            keyExtractor={(item) => item.serviceJourney?.id || ''}
-            ListEmptyComponent={
-              <>
-                {data && (
-                  <Sections.GenericItem
-                    radius={isSelected ? 'bottom' : undefined}
-                  >
-                    <ThemeText color="secondary">
-                      {t(DeparturesTexts.noDepartures)}
-                    </ThemeText>
-                  </Sections.GenericItem>
-                )}
-              </>
-            }
-          />
-        )}
-        {!data && (
-          <Sections.GenericItem>
-            <View style={{width: '100%'}}>
-              <ActivityIndicator></ActivityIndicator>
-            </View>
-          </Sections.GenericItem>
-        )}
-        {!isSelected && !isHidden && (
-          <Sections.LinkItem
-            icon="arrow-right"
-            text={
-              quay.publicCode ? quay.name + ' ' + quay.publicCode : quay.name
-            }
-            textType="body__primary--bold"
-            onPress={() => navigateToQuay(quay)}
-            accessibility={{
-              accessibilityHint: t(DeparturesTexts.quaySection.a11yToQuayHint),
-            }}
-          ></Sections.LinkItem>
-        )}
-      </Sections.Section>
     </View>
   );
 }
@@ -274,19 +121,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 0,
   },
   quayChip: {
-    marginRight: theme.spacings.medium,
-  },
-  stopPlaceHeader: {
-    flexDirection: 'row',
-    maxWidth: '100%',
-    alignItems: 'center',
-  },
-  stopPlaceHeaderText: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    flexShrink: 1,
-  },
-  rightMargin: {
     marginRight: theme.spacings.medium,
   },
 }));
