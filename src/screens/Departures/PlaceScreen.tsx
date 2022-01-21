@@ -20,33 +20,30 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import {DeparturesStackParams} from '.';
 import EstimatedCallItem from './components/EstimatedCallItem';
 import QuayScreen from './QuayScreen';
-import StopScreen from './StopPlaceScreen';
+import StopPlaceScreen from './StopPlaceScreen';
 
-export type StopPlaceScreenParams = {
+export type PlaceScreenParams = {
   stopPlacePosition: StopPlacePosition;
   selectedQuay?: Quay;
 };
 
-type StopPlaceScreenRouteProps = RouteProp<
-  DeparturesStackParams,
-  'StopPlaceScreen'
->;
+type PlaceScreenRouteProps = RouteProp<DeparturesStackParams, 'PlaceScreen'>;
 
 type quayChipData = {
   item: Quay;
 };
 
-export type StopPlaceScreenProps = {
+export type PlaceScreenProps = {
   navigation: StackNavigationProp<DeparturesStackParams>;
-  route: StopPlaceScreenRouteProps;
+  route: PlaceScreenRouteProps;
 };
 
-export default function StopPlaceScreen({
+export default function PlaceScreen({
   navigation,
   route: {
     params: {stopPlacePosition, selectedQuay},
   },
-}: StopPlaceScreenProps) {
+}: PlaceScreenProps) {
   const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
@@ -111,11 +108,11 @@ export default function StopPlaceScreen({
           navigateToQuay={navigateToQuay}
         ></QuayScreen>
       ) : (
-        <StopScreen
+        <StopPlaceScreen
           stopPlacePosition={stopPlacePosition}
           navigateToDetails={navigateToDetails}
           navigateToQuay={navigateToQuay}
-        ></StopScreen>
+        ></StopPlaceScreen>
       )}
     </View>
   );

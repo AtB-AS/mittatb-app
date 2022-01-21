@@ -271,7 +271,7 @@ const DeparturesOverview: React.FC<Props> = ({
           <Sections.Section withPadding key={stopPlace.node?.place?.id}>
             <Sections.GenericClickableItem
               onPress={() => {
-                navigation.navigate('StopPlaceScreen', {
+                navigation.navigate('PlaceScreen', {
                   stopPlacePosition: stopPlace,
                 });
               }}

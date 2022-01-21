@@ -4,7 +4,7 @@ import DeparturesRoot, {
   DeparturesScreenParams,
   DeparturesScreenProp,
 } from './Departures';
-import StopPlaceScreen, {StopPlaceScreenParams} from './PlaceScreen';
+import PlaceScreen, {PlaceScreenParams} from './PlaceScreen';
 import DepartureDetails, {
   DepartureDetailsRouteParams,
 } from '../TripDetails/DepartureDetails';
@@ -16,7 +16,7 @@ import TravelDetailsMap, {MapDetailRouteParams} from '../TripDetails/Map';
 
 export type DeparturesStackParams = {
   DeparturesRoot: DeparturesScreenParams;
-  StopPlaceScreen: StopPlaceScreenParams;
+  PlaceScreen: PlaceScreenParams;
   DepartureDetails: DepartureDetailsRouteParams;
   QuayDepartures: QuayDeparturesRouteParams;
   TripDetails: DetailsStackParams;
@@ -40,7 +40,7 @@ const DeparturesScreen = ({route}: DeparturesScreenRootProps) => {
         component={DeparturesRoot}
         initialParams={route.params}
       />
-      <Stack.Screen name="StopPlaceScreen" component={StopPlaceScreen} />
+      <Stack.Screen name="PlaceScreen" component={PlaceScreen} />
       <Stack.Screen name="DepartureDetails" component={DepartureDetails} />
       <Stack.Screen name="QuayDepartures" component={QuayDepartures} />
       <Stack.Screen name="TripDetails" component={TripDetailsRoot} />

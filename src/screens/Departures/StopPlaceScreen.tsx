@@ -5,14 +5,9 @@ import {Quay, StopPlacePosition} from '@atb/api/types/departures';
 import {SearchTime} from './Departures';
 import DateNavigation from './components/DateNavigator';
 import {QuaySection} from './PlaceScreen';
-import * as DepartureTypes from '@atb/api/types/departures';
-
-export type StopPlaceScreenParams = {
-  stopPlacePosition: StopPlacePosition;
-};
 
 type StopPlaceScreenProps = {
-  stopPlacePosition: DepartureTypes.StopPlacePosition;
+  stopPlacePosition: StopPlacePosition;
   navigateToQuay: (quay: Quay) => void;
   navigateToDetails: (
     serviceJourneyId?: string,
