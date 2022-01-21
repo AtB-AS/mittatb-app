@@ -8,7 +8,7 @@ import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import useLocalConfig from '@atb/utils/use-local-config';
-import {PRIVACY_POLICY_URL, IS_QA_ENV} from '@env';
+import {IS_QA_ENV} from '@env';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
@@ -42,7 +42,7 @@ type ProfileScreenProps = {
 };
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
-  const {enable_i18n} = useRemoteConfig();
+  const {enable_i18n, privacy_policy_url} = useRemoteConfig();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
@@ -209,9 +209,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 ProfileTexts.sections.privacy.linkItems.privacy.a11yHint,
               ),
             }}
-            onPress={() =>
-              Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
-            }
+            onPress={() => Linking.openURL(privacy_policy_url)}
           />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.privacy.linkItems.clearHistory.label)}
