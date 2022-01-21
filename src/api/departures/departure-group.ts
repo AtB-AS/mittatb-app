@@ -2,7 +2,7 @@ import {AxiosRequestConfig} from 'axios';
 import {FavoriteDeparture} from '@atb/favorites/types';
 import {CursoredData, CursoredQuery} from '@atb/sdk';
 import {stringifyWithDate} from '@atb/utils/querystring';
-import client from '../client';
+import {bffClient} from '../client';
 import {StopPlaceGroup} from './types';
 
 export type DepartureGroupsPayload = {
@@ -56,7 +56,7 @@ async function request(
   payload: DepartureGroupsPayload,
   opts?: AxiosRequestConfig,
 ): Promise<DepartureGroupMetadata> {
-  const response = await client.post<DepartureGroupMetadata>(
+  const response = await bffClient.post<DepartureGroupMetadata>(
     url,
     payload,
     opts,

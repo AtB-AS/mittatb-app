@@ -1,6 +1,6 @@
 import {formatISO} from 'date-fns';
 import {EstimatedCall, ServiceJourneyMapInfoData} from '../sdk';
-import client from './client';
+import {bffClient} from './client';
 import qs from 'query-string';
 import {stringifyUrl} from './utils';
 
@@ -16,7 +16,7 @@ export async function getDepartures(
   if (date) {
     url = url + `?date=${formatISO(date, {representation: 'date'})}`;
   }
-  const response = await client.get<ServiceJourneDepartures>(url);
+  const response = await bffClient.get<ServiceJourneDepartures>(url);
   return response.data?.value ?? [];
 }
 
@@ -33,7 +33,7 @@ export async function getServiceJourneyMapLegs(
     },
     {skipNull: true},
   );
-  const response = await client.get<ServiceJourneyMapInfoData>(
+  const response = await bffClient.get<ServiceJourneyMapInfoData>(
     stringifyUrl(url, query),
   );
   return (

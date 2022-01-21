@@ -1,4 +1,4 @@
-import client from './client';
+import {bffClient} from './client';
 import {AxiosRequestConfig} from 'axios';
 import {TripsQuery} from '@atb/api/types/trips';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
@@ -51,7 +51,7 @@ async function post<T>(
   query: any,
   opts?: AxiosRequestConfig<any>,
 ) {
-  const response = await client.post<T>(url, query, {
+  const response = await bffClient.post<T>(url, query, {
     ...opts,
   });
 

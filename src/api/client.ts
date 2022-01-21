@@ -1,6 +1,6 @@
 import axios, {AxiosError, AxiosRequestConfig} from 'axios';
 import {v4 as uuid} from 'uuid';
-import {API_BASE_URL} from '@env';
+import {API_BASE_URL, BFF_URL} from '@env';
 import {getAxiosErrorMetadata, getAxiosErrorType} from './utils';
 import Bugsnag from '@bugsnag/react-native';
 import {
@@ -14,6 +14,8 @@ import {getBooleanConfigValue} from '../remote-config';
 import auth from '@react-native-firebase/auth';
 
 export default createClient(API_BASE_URL);
+
+export const bffClient = createClient(BFF_URL ?? API_BASE_URL);
 
 const RETRY_COUNT = 3;
 

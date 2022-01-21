@@ -1,5 +1,5 @@
 import qs from 'query-string';
-import client from './client';
+import {bffClient} from './client';
 import {stringifyUrl} from './utils';
 
 type EnrollmentResponse =
@@ -14,7 +14,7 @@ export async function enrollIntoBetaGroups(inviteKey: string) {
     inviteKey,
   });
 
-  return await client.post<EnrollmentResponse>(
+  return await bffClient.post<EnrollmentResponse>(
     stringifyUrl(url, query),
     undefined,
     {

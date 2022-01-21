@@ -1,7 +1,7 @@
 import {AxiosRequestConfig} from 'axios';
 import {CursoredData, CursoredQuery, StopPlaceDetails} from '@atb/sdk';
 import {stringifyWithDate} from '@atb/utils/querystring';
-import client from '../client';
+import {bffClient} from '../client';
 import {FavoriteDeparture} from '@atb/favorites/types';
 import {StopPlaceQuayDepartures} from '../types/departures';
 import {stringifyUrl} from 'query-string';
@@ -72,7 +72,7 @@ async function request(
   url: string,
   opts?: AxiosRequestConfig,
 ): Promise<NearestStopPlacesQuery> {
-  const response = await client.get<NearestStopPlacesQuery>(url, opts);
+  const response = await bffClient.get<NearestStopPlacesQuery>(url, opts);
   return response.data;
 }
 
@@ -80,7 +80,7 @@ async function requestQuayDepartures(
   url: string,
   opts?: AxiosRequestConfig,
 ): Promise<QuayDeparturesQuery> {
-  const response = await client.get<QuayDeparturesQuery>(url, opts);
+  const response = await bffClient.get<QuayDeparturesQuery>(url, opts);
   return response.data;
 }
 
@@ -88,6 +88,6 @@ async function requestStopPlaceDepartures(
   url: string,
   opts?: AxiosRequestConfig,
 ): Promise<StopPlaceQuayDepartures> {
-  const response = await client.get<StopPlaceQuayDepartures>(url, opts);
+  const response = await bffClient.get<StopPlaceQuayDepartures>(url, opts);
   return response.data;
 }

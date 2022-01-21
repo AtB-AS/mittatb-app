@@ -8,7 +8,7 @@ import {
   StopPlaceDetails,
 } from '@atb/sdk';
 import {flatMap} from '@atb/utils/array';
-import client from '../client';
+import {bffClient} from '../client';
 import {DepartureGroupsQuery} from './departure-group';
 import {StopPlaceGroup} from './types';
 
@@ -26,7 +26,11 @@ export async function getDepartures(
   const {numberOfDepartures, pageOffset = 0, pageSize = 2} = query;
   const startTime = query.startTime;
   let url = `bff/v1/departures-from-location-paging?limit=${numberOfDepartures}&pageSize=${pageSize}&pageOffset=${pageOffset}&startTime=${startTime}`;
-  const response = await client.post<DeparturesMetadata>(url, location, opts);
+  const response = await bffClient.post<DeparturesMetadata>(
+    url,
+    location,
+    opts,
+  );
   return response.data;
 }
 
@@ -45,7 +49,7 @@ export async function getRealtimeDeparture(
   });
 
   let url = `bff/v1/departures-realtime?${params}`;
-  const response = await client.get<DeparturesRealtimeData>(url, opts);
+  const response = await bffClient.get<DeparturesRealtimeData>(url, opts);
   return response.data;
 }
 
@@ -64,7 +68,7 @@ export async function getRealtimeDepartureV2(
   });
 
   let url = `bff/v2/departures/realtime?${params}`;
-  const response = await client.get<DeparturesRealtimeData>(url, opts);
+  const response = await bffClient.get<DeparturesRealtimeData>(url, opts);
   return response.data;
 }
 

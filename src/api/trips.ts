@@ -1,5 +1,5 @@
 import {TripPattern} from '@atb/sdk';
-import client from './client';
+import {bffClient} from './client';
 import {Location} from '@atb/favorites/types';
 import {AxiosRequestConfig} from 'axios';
 
@@ -11,7 +11,7 @@ export default async function search(
   opts?: AxiosRequestConfig,
 ) {
   const url = 'bff/v1/journey/trip';
-  return await client.post<TripPattern[]>(
+  return await bffClient.post<TripPattern[]>(
     url,
     {
       from: {
@@ -36,7 +36,7 @@ export async function getSingleTripPattern(
   opts?: AxiosRequestConfig,
 ) {
   const url = `bff/v1/journey/single-trip?id=${tripPatternId}`;
-  const result = await client.get<TripPattern>(url, {
+  const result = await bffClient.get<TripPattern>(url, {
     ...opts,
     skipErrorLogging: (error) => error.response?.status === 410,
   });

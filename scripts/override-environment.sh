@@ -1,4 +1,4 @@
-if [ "$#" -ne 2 ]
+if [ "$#" -lt 2 ]
 then
     echo "Argument error!"
     echo "First argument should be the environment name."
@@ -11,7 +11,8 @@ then
     echo "Available app variant names:
 -atb
 -nfk"
-
+    echo "Third argument is optional an can be used to set BFF host to localhost."
+    echo "For android this would normally be 'http://10.0.2.2:8080' since the emulator redirects this to you dev localhost"
     echo "Example:
 ./override-environment.sh store atb"
     exit 1
@@ -45,4 +46,8 @@ else
 
     echo "Copying boot splash image to assets/"
     cp $ORG_FOLDER/bootsplash_logo_original.png assets/
+    if [ ! -z "$3" ]
+    then
+      echo "\nBFF_URL=$3" >> .env
+    fi
 fi

@@ -1,6 +1,6 @@
 import {FOCUS_LATITUDE, FOCUS_LONGITUDE} from '@env';
 import {Feature, Coordinates} from '../sdk';
-import client from './client';
+import {bffClient} from './client';
 import qs from 'query-string';
 import {stringifyUrl} from './utils';
 import {AxiosRequestConfig} from 'axios';
@@ -28,7 +28,7 @@ export async function autocomplete(
     {skipNull: true},
   );
 
-  return await client.get<Feature[]>(stringifyUrl(url, query), config);
+  return await bffClient.get<Feature[]>(stringifyUrl(url, query), config);
 }
 
 export async function getFeatureFromVenue(
@@ -51,7 +51,7 @@ export async function getFeatureFromVenue(
     {skipNull: true},
   );
 
-  return await client.get<Feature[]>(stringifyUrl(url, query), config);
+  return await bffClient.get<Feature[]>(stringifyUrl(url, query), config);
 }
 
 export async function reverse(
@@ -64,5 +64,5 @@ export async function reverse(
     lon: coordinates?.longitude,
   });
 
-  return await client.get<Feature[]>(stringifyUrl(url, query), config);
+  return await bffClient.get<Feature[]>(stringifyUrl(url, query), config);
 }
