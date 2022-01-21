@@ -2,17 +2,17 @@ import React, {useEffect, useState} from 'react';
 import {RefreshControl, SectionList, SectionListData} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Quay} from '@atb/api/types/departures';
-import {SearchTime} from './Departures';
+import {SearchTime} from './NearbyPlaces';
 import {DeparturesStackParams} from '.';
 import DateNavigation from './components/DateNavigator';
 import {QuaySection} from './PlaceScreen';
-import {useQuayData} from './QuayState';
+import {useQuayData} from './state/QuayState';
 
-export type QuayScreenParams = {
+export type QuayViewParams = {
   quay: Quay;
 };
 
-export type QuayScreenProps = {
+export type QuayViewProps = {
   quay: Quay;
   navigateToDetails: (
     serviceJourneyId?: string,
@@ -22,11 +22,11 @@ export type QuayScreenProps = {
   navigateToQuay: (quay: Quay) => void;
 };
 
-export default function QuayScreen({
+export default function QuayView({
   quay,
   navigateToDetails,
   navigateToQuay,
-}: QuayScreenProps) {
+}: QuayViewProps) {
   const [searchTime, setSearchTime] = useState<SearchTime>({
     option: 'now',
     date: new Date().toISOString(),

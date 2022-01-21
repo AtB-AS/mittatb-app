@@ -1,12 +1,12 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
-import {useStopPlaceData} from './StopPlaceState';
+import {useStopPlaceData} from './state/StopPlaceState';
 import {Quay, StopPlacePosition} from '@atb/api/types/departures';
-import {SearchTime} from './Departures';
+import {SearchTime} from './NearbyPlaces';
 import DateNavigation from './components/DateNavigator';
 import {QuaySection} from './PlaceScreen';
 
-type StopPlaceScreenProps = {
+type StopPlaceViewProps = {
   stopPlacePosition: StopPlacePosition;
   navigateToQuay: (quay: Quay) => void;
   navigateToDetails: (
@@ -16,11 +16,11 @@ type StopPlaceScreenProps = {
   ) => void;
 };
 
-export default function StopScreen({
+export default function StopPlaceView({
   stopPlacePosition,
   navigateToQuay,
   navigateToDetails,
-}: StopPlaceScreenProps) {
+}: StopPlaceViewProps) {
   const [searchTime, setSearchTime] = useState<SearchTime>({
     option: 'now',
     date: new Date().toISOString(),

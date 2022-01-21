@@ -1,9 +1,9 @@
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
 import DeparturesRoot, {
-  DeparturesScreenParams,
-  DeparturesScreenProp,
-} from './Departures';
+  NearbyPlacesParams,
+  DeparturesProps,
+} from './NearbyPlaces';
 import PlaceScreen, {PlaceScreenParams} from './PlaceScreen';
 import DepartureDetails, {
   DepartureDetailsRouteParams,
@@ -15,7 +15,7 @@ import TripDetailsRoot, {DetailsStackParams} from '../TripDetails';
 import TravelDetailsMap, {MapDetailRouteParams} from '../TripDetails/Map';
 
 export type DeparturesStackParams = {
-  DeparturesRoot: DeparturesScreenParams;
+  DeparturesRoot: NearbyPlacesParams;
   PlaceScreen: PlaceScreenParams;
   DepartureDetails: DepartureDetailsRouteParams;
   QuayDepartures: QuayDeparturesRouteParams;
@@ -25,11 +25,11 @@ export type DeparturesStackParams = {
 
 const Stack = createStackNavigator<DeparturesStackParams>();
 
-type DeparturesScreenRootProps = {
-  route: DeparturesScreenProp;
+type DeparturesRootProps = {
+  route: DeparturesProps;
 };
 
-const DeparturesScreen = ({route}: DeparturesScreenRootProps) => {
+const DeparturesScreen = ({route}: DeparturesRootProps) => {
   return (
     <Stack.Navigator
       initialRouteName="DeparturesRoot"

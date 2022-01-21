@@ -1,7 +1,4 @@
-import {ErrorType} from '@atb/api/utils';
 import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
-import AccessibleText from '@atb/components/accessible-text';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
 import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {LocationInput, Section} from '@atb/components/sections';
@@ -16,22 +13,13 @@ import {
 import {useOnlySingleLocation} from '@atb/location-search';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet} from '@atb/theme';
-import {ThemeColor} from '@atb/theme/colors';
-import {
-  Language,
-  NearbyTexts,
-  TranslateFunction,
-  useTranslation,
-} from '@atb/translations';
-import {formatToShortDateTimeWithoutYear} from '@atb/utils/date';
-import {TFunc} from '@leile/lobo-t';
+import {NearbyTexts, useTranslation} from '@atb/translations';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import Loading from '../Loading';
-import DepartureTimeSheet from '../Nearby/DepartureTimeSheet';
-import {useNearestStopsData} from './state';
+import {useNearestStopsData} from './state/NearbyPlacesState';
 import ThemeText from '@atb/components/text';
 import * as Sections from '@atb/components/sections';
 import {BusSide} from '@atb/assets/svg/icons/transportation';
@@ -40,8 +28,6 @@ import {StopPlacePosition} from '@atb/api/types/departures';
 import {NearestStopPlacesQuery} from '@atb/api/types/generated/NearestStopPlacesQuery';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {DeparturesStackParams} from '.';
-
-const themeColor: ThemeColor = 'background_accent';
 
 const DateOptions = ['now', 'departure'] as const;
 type DateOptionType = typeof DateOptions[number];
@@ -58,21 +44,21 @@ export type DepartureScreenNavigationProp = CompositeNavigationProp<
   StackNavigationProp<RootStackParamList>
 >;
 
-export type DeparturesScreenParams = {
+export type NearbyPlacesParams = {
   location: LocationWithMetadata;
 };
 
-export type DeparturesScreenProp = RouteProp<
+export type DeparturesProps = RouteProp<
   DeparturesStackParams,
   DeparturesRouteName
 >;
 
 type RootProps = {
   navigation: DepartureScreenNavigationProp;
-  route: DeparturesScreenProp;
+  route: DeparturesProps;
 };
 
-export default function NearbyScreen({navigation}: RootProps) {
+export default function NearbyPlacesScreen({navigation}: RootProps) {
   const {
     status,
     location,
@@ -112,14 +98,10 @@ const DeparturesOverview: React.FC<Props> = ({
   navigation,
 }) => {
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
-  const styles = useNearbyStyles();
-  const {t, language} = useTranslation();
+  const styles = useStyles();
+  const {t} = useTranslation();
 
-  const [searchTime, setSearchTime] = useState<SearchTime>({
-    option: 'now',
-    date: new Date().toISOString(),
-  });
-  const searchedFromLocation = useOnlySingleLocation<DeparturesScreenProp>(
+  const searchedFromLocation = useOnlySingleLocation<DeparturesProps>(
     'location',
   );
   const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
@@ -145,24 +127,6 @@ const DeparturesOverview: React.FC<Props> = ({
       callerRouteName: NearbyRouteNameStatic,
       callerRouteParam: 'location',
       initialLocation: fromLocation,
-    });
-
-  const {open: openBottomSheet} = useBottomSheet();
-  const onLaterTimePress = () => {
-    openBottomSheet((close, focusRef) => (
-      <DepartureTimeSheet
-        ref={focusRef}
-        close={close}
-        initialTime={searchTime}
-        setSearchTime={setSearchTime}
-      ></DepartureTimeSheet>
-    ));
-  };
-
-  const onNowPress = () =>
-    setSearchTime({
-      option: 'now',
-      date: new Date().toISOString(),
     });
 
   function setCurrentLocationAsFrom() {
@@ -227,9 +191,6 @@ const DeparturesOverview: React.FC<Props> = ({
           updatingLocation={updatingLocation}
           openLocationSearch={openLocationSearch}
           setCurrentLocationOrRequest={setCurrentLocationOrRequest}
-          onNowPress={onNowPress}
-          onLaterTimePress={onLaterTimePress}
-          searchTime={searchTime}
           setLocation={(location: LocationWithMetadata) => {
             navigation.setParams({
               location,
@@ -239,21 +200,7 @@ const DeparturesOverview: React.FC<Props> = ({
       }
       headerTitle={t(DeparturesTexts.header.title)}
       useScroll={activateScroll}
-      leftButton={{type: 'home', color: themeColor}}
-      alternativeTitleComponent={
-        <AccessibleText
-          prefix={t(NearbyTexts.header.altTitle.a11yPrefix)}
-          type={'body__primary--bold'}
-          color={themeColor}
-        >
-          {getHeaderAlternativeTitle(
-            fromLocation?.name ?? '',
-            searchTime,
-            t,
-            language,
-          )}
-        </AccessibleText>
-      }
+      leftButton={{type: 'home', color: 'background_accent'}}
       alertContext={'travel'}
       setFocusOnLoad={true}
     >
@@ -313,9 +260,6 @@ type HeaderProps = {
   fromLocation?: LocationWithMetadata;
   openLocationSearch: () => void;
   setCurrentLocationOrRequest(): Promise<void>;
-  onNowPress: () => void;
-  onLaterTimePress: () => void;
-  searchTime: SearchTime;
   setLocation: (location: LocationWithMetadata) => void;
 };
 
@@ -327,8 +271,7 @@ const Header = React.memo(function Header({
   setLocation,
 }: HeaderProps) {
   const {t} = useTranslation();
-
-  const styles = useNearbyStyles();
+  const styles = useStyles();
 
   return (
     <>
@@ -361,35 +304,6 @@ const Header = React.memo(function Header({
   );
 });
 
-function translateErrorType(
-  errorType: ErrorType,
-  t: TranslateFunction,
-): string {
-  switch (errorType) {
-    case 'network-error':
-    case 'timeout':
-      return t(NearbyTexts.messages.networkError);
-    default:
-      return t(NearbyTexts.messages.defaultFetchError);
-  }
-}
-
-function getHeaderAlternativeTitle(
-  locationName: string,
-  searchTime: SearchTime,
-  t: TFunc<typeof Language>,
-  language: Language,
-) {
-  const time = formatToShortDateTimeWithoutYear(searchTime.date, language);
-
-  switch (searchTime.option) {
-    case 'now':
-      return locationName;
-    default:
-      return t(NearbyTexts.header.departureFuture(locationName, time));
-  }
-}
-
 function sortAndFilterStopPlaces(
   data: NearestStopPlacesQuery | null,
 ): StopPlacePosition[] {
@@ -411,28 +325,9 @@ function sortAndFilterStopPlaces(
   return filteredEdges;
 }
 
-const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingVertical: theme.spacings.medium,
-  },
-  paddedContainer: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
-    flexDirection: 'row',
-    flex: 1,
-    alignContent: 'space-between',
-    borderStyle: 'solid',
-    borderColor: theme.colors.primary_2.backgroundColor,
-    borderWidth: 2,
-    padding: 2,
-    borderRadius: 12,
-  },
-  dateInputButtonContainer: {
-    width: '50%',
-  },
-  dateInputButton: {
-    color: theme.colors.primary_2.backgroundColor,
-    padding: theme.spacings.small,
   },
   favoriteChips: {
     // @TODO Find solution for not hardcoding this. e.g. do proper math

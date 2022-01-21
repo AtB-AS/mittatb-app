@@ -15,17 +15,12 @@ import {
 } from '@atb/api/departures/departure-group';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {DeparturesRealtimeData} from '@atb/sdk';
-import {
-  addDays,
-  differenceInMinutes,
-  differenceInSeconds,
-  parseISO,
-} from 'date-fns';
+import {differenceInMinutes} from 'date-fns';
 import useInterval from '@atb/utils/use-interval';
-import {updateDeparturesWithRealtimeV2} from '../../departure-list/utils';
+import {updateDeparturesWithRealtimeV2} from '../../../departure-list/utils';
 import {getStopPlaceDepartures} from '@atb/api/departures/stops-nearest';
-import * as DepartureTypes from '@atb/api/types/departures';
 import {flatMap} from 'lodash';
+import {EstimatedCall, StopPlacePosition} from '@atb/api/types/departures';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 
@@ -35,7 +30,7 @@ const HARD_REFRESH_LIMIT_IN_MINUTES = 10;
 const MIN_TIME_RANGE = 3 * 60 * 60; // Three hours
 
 export type DepartureDataState = {
-  data: DepartureTypes.EstimatedCall[] | null;
+  data: EstimatedCall[] | null;
   tick?: Date;
   error?: {type: ErrorType};
   locationId?: string;
@@ -66,12 +61,12 @@ const initialState: DepartureDataState = {
 type DepartureDataActions =
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
-      stopPlacePosition: DepartureTypes.StopPlacePosition;
+      stopPlacePosition: StopPlacePosition;
       startTime?: string;
     }
   | {
       type: 'LOAD_REALTIME_DATA';
-      stopPlacePosition?: DepartureTypes.StopPlacePosition;
+      stopPlacePosition?: StopPlacePosition;
     }
   | {
       type: 'STOP_LOADER';
@@ -80,7 +75,7 @@ type DepartureDataActions =
       type: 'UPDATE_DEPARTURES';
       locationId?: string;
       reset?: boolean;
-      result: DepartureTypes.EstimatedCall[];
+      result: EstimatedCall[];
     }
   | {
       type: 'SET_ERROR';
@@ -228,7 +223,7 @@ const reducer: ReducerWithSideEffects<
 };
 
 export function useStopPlaceData(
-  stopPlacePosition: DepartureTypes.StopPlacePosition,
+  stopPlacePosition: StopPlacePosition,
   startTime?: string,
   updateFrequencyInSeconds: number = 10,
   tickRateInSeconds: number = 10,
@@ -279,8 +274,8 @@ export function useStopPlaceData(
 
 async function fetchEstimatedCalls(
   queryInput: DepartureGroupsQuery,
-  stopPlace: DepartureTypes.StopPlacePosition,
-): Promise<DepartureTypes.EstimatedCall[]> {
+  stopPlace: StopPlacePosition,
+): Promise<EstimatedCall[]> {
   if (!stopPlace.node?.place) return [];
 
   const result = await getStopPlaceDepartures({
@@ -292,5 +287,5 @@ async function fetchEstimatedCalls(
   return flatMap(
     result.stopPlace?.quays,
     (quay) => quay.estimatedCalls,
-  ) as DepartureTypes.EstimatedCall[];
+  ) as EstimatedCall[];
 }

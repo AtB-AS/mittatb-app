@@ -19,7 +19,7 @@ import {
   parseISO,
 } from 'date-fns';
 import useInterval from '@atb/utils/use-interval';
-import {updateDeparturesWithRealtimeV2} from '../../departure-list/utils';
+import {updateDeparturesWithRealtimeV2} from '../../../departure-list/utils';
 import {getQuayDepartures} from '@atb/api/departures/stops-nearest';
 import * as DepartureTypes from '@atb/api/types/departures';
 

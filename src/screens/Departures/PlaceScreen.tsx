@@ -1,7 +1,7 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
 import {StyleSheet, useTheme} from '@atb/theme';
-import React, {useMemo, useState} from 'react';
+import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -19,8 +19,8 @@ import {
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {DeparturesStackParams} from '.';
 import EstimatedCallItem from './components/EstimatedCallItem';
-import QuayScreen from './QuayScreen';
-import StopPlaceScreen from './StopPlaceScreen';
+import QuayView from './QuayView';
+import StopPlaceView from './StopPlaceView';
 
 export type PlaceScreenParams = {
   stopPlacePosition: StopPlacePosition;
@@ -102,17 +102,17 @@ export default function PlaceScreen({
         )}
       />
       {selectedQuay ? (
-        <QuayScreen
+        <QuayView
           quay={selectedQuay}
           navigateToDetails={navigateToDetails}
           navigateToQuay={navigateToQuay}
-        ></QuayScreen>
+        ></QuayView>
       ) : (
-        <StopPlaceScreen
+        <StopPlaceView
           stopPlacePosition={stopPlacePosition}
           navigateToDetails={navigateToDetails}
           navigateToQuay={navigateToQuay}
-        ></StopPlaceScreen>
+        ></StopPlaceView>
       )}
     </View>
   );
