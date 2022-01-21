@@ -333,7 +333,7 @@ function QuaySection({
   if (selectedQuayId && !isSelected) return <></>;
 
   return (
-    <View>
+    <View style={styles.quaySection}>
       <Sections.Section withPadding>
         <Sections.GenericClickableItem
           type="inline"
@@ -579,6 +579,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.colors.background_1.backgroundColor,
     flex: 1,
+  },
+  quaySection: {
+    marginBottom: theme.spacings.medium,
   },
   quayChipContainer: {
     backgroundColor: theme.colors.background_accent.backgroundColor,
