@@ -17,5 +17,6 @@ module.exports = {
     'removeRasterImages',
     'removeStyleElement',
     'sortAttrs',
+    'removeXMLNS',
   ],
 };
