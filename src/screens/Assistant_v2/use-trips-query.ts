@@ -136,7 +136,7 @@ export default function useTripsQuery(
 
   const refresh = useCallback(() => {
     return search();
-  }, [clearTrips, search]);
+  }, [search]);
 
   const loadMore = useCallback(() => {
     return search(pageCursor, tripPatterns);
