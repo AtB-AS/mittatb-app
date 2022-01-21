@@ -1,13 +1,7 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
 import {StyleSheet, useTheme} from '@atb/theme';
-import React, {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
   RefreshControl,
@@ -24,37 +18,25 @@ import {useDepartureData} from './DepartureState';
 import ThemeText from '@atb/components/text';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import {dictionary, Language, useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {
-  formatToClock,
   formatToClockOrLongRelativeMinutes,
   formatToClockOrRelativeMinutes,
-  formatToShortDate,
-  formatToSimpleDateTime,
 } from '@atb/utils/date';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
-import {
-  ArrowLeft,
-  ArrowRight,
-  Expand,
-  ExpandLess,
-} from '@atb/assets/svg/icons/navigation';
+import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 import {
   EstimatedCall,
   Quay,
   StopPlacePosition,
 } from '@atb/api/types/departures';
-import {Date as DateIcon} from '@atb/assets/svg/icons/time';
 import {SearchTime} from './Departures';
-import {addDays, isSameDay, isToday, parseISO} from 'date-fns';
-import DepartureTimeSheet from '../Nearby/DepartureTimeSheet';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 import useFontScale from '@atb/utils/use-font-scale';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {DeparturesStackParams} from '.';
-import {DepartureDetailsRouteParams} from '../TripDetails/DepartureDetails';
+import DateNavigation from './components/DateNavigator';
 
 export type StopPlaceScreenParams = {
   stopPlacePosition: StopPlacePosition;
@@ -83,7 +65,7 @@ export default function StopPlaceScreen({
 }: StopPlaceScreenProps) {
   const styles = useStyles();
   const {theme} = useTheme();
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const [searchTime, setSearchTime] = useState<SearchTime>({
     option: 'now',
     date: new Date().toISOString(),
@@ -164,12 +146,10 @@ export default function StopPlaceScreen({
           stickySectionHeadersEnabled={true}
           stickyHeaderIndices={[0]}
           ListHeaderComponent={
-            <View>
-              <DateNavigationSection
-                searchTime={searchTime}
-                setSearchTime={setSearchTime}
-              ></DateNavigationSection>
-            </View>
+            <DateNavigation
+              searchTime={searchTime}
+              setSearchTime={setSearchTime}
+            ></DateNavigation>
           }
           refreshControl={
             <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
@@ -200,94 +180,6 @@ function getDeparturesForQuay(
   if (!departures) return [];
   return departures.filter(
     (departure) => departure && departure.quay?.id === quay.id,
-  );
-}
-
-type DateNavigationSectionProps = {
-  searchTime: SearchTime;
-  setSearchTime: Dispatch<SetStateAction<SearchTime>>;
-};
-
-function DateNavigationSection({
-  searchTime,
-  setSearchTime,
-}: DateNavigationSectionProps): JSX.Element {
-  const styles = useStyles();
-  const {theme} = useTheme();
-  const {t, language} = useTranslation();
-  const canNavigateToPreviousDay = isToday(parseISO(searchTime.date));
-
-  const searchTimeText =
-    searchTime.option === 'now'
-      ? t(DeparturesTexts.dateNavigation.today)
-      : formatToTwoLineDateTime(searchTime.date, language);
-  const a11ySearchTimeText =
-    searchTime.option === 'now'
-      ? t(DeparturesTexts.dateNavigation.today)
-      : formatToSimpleDateTime(searchTime.date, language);
-
-  const {open: openBottomSheet} = useBottomSheet();
-  const onLaterTimePress = () => {
-    openBottomSheet((close, focusRef) => (
-      <DepartureTimeSheet
-        ref={focusRef}
-        close={close}
-        initialTime={searchTime}
-        setSearchTime={setSearchTime}
-      ></DepartureTimeSheet>
-    ));
-  };
-
-  return (
-    <View style={styles.dateNavigator}>
-      <Button
-        onPress={() => {
-          setSearchTime(changeDay(searchTime, -1));
-        }}
-        text={t(DeparturesTexts.dateNavigation.prevDay)}
-        type="inline"
-        mode="tertiary"
-        icon={ArrowLeft}
-        disabled={canNavigateToPreviousDay}
-        accessibilityHint={
-          canNavigateToPreviousDay
-            ? t(DeparturesTexts.dateNavigation.a11yDisabled)
-            : undefined
-        }
-        textStyle={{
-          marginLeft: theme.spacings.xSmall,
-        }}
-      ></Button>
-      <Button
-        onPress={onLaterTimePress}
-        text={searchTimeText}
-        accessibilityLabel={t(
-          DeparturesTexts.dateNavigation.a11ySelectedLabel(a11ySearchTimeText),
-        )}
-        accessibilityHint={t(DeparturesTexts.dateNavigation.a11yChangeDateHint)}
-        type="compact"
-        mode="tertiary"
-        iconPosition="right"
-        icon={DateIcon}
-        textStyle={{
-          textAlign: 'center',
-          marginRight: theme.spacings.xSmall,
-        }}
-      ></Button>
-      <Button
-        onPress={() => {
-          setSearchTime(changeDay(searchTime, 1));
-        }}
-        text={t(DeparturesTexts.dateNavigation.nextDay)}
-        type="compact"
-        iconPosition="right"
-        mode="tertiary"
-        icon={ArrowRight}
-        textStyle={{
-          marginRight: theme.spacings.xSmall,
-        }}
-      ></Button>
-    </View>
   );
 }
 
@@ -427,14 +319,6 @@ function QuaySection({
   );
 }
 
-function changeDay(searchTime: SearchTime, days: number): SearchTime {
-  const date = addDays(parseISO(searchTime.date).setHours(0, 0), days);
-  return {
-    option: isToday(date) ? 'now' : 'departure',
-    date: isToday(date) ? new Date().toISOString() : date.toISOString(),
-  };
-}
-
 type EstimatedCallLineProps = {
   departure: EstimatedCall;
   navigateToDetails: (
@@ -565,16 +449,6 @@ function publicCodeCompare(a?: string, b?: string): number {
   return a.localeCompare(b);
 }
 
-function formatToTwoLineDateTime(isoDate: string, language: Language) {
-  const parsed = parseISO(isoDate);
-  if (isSameDay(parsed, new Date())) {
-    return formatToClock(parsed, language);
-  }
-  return (
-    formatToShortDate(parsed, language) + '\n' + formatToClock(parsed, language)
-  );
-}
-
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.colors.background_1.backgroundColor,
@@ -620,12 +494,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   rightMargin: {
     marginRight: theme.spacings.medium,
-  },
-  dateNavigator: {
-    flexDirection: 'row',
-    flexGrow: 1,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginVertical: theme.spacings.medium,
   },
 }));
