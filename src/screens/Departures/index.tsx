@@ -4,9 +4,7 @@ import DeparturesRoot, {
   DeparturesScreenParams,
   DeparturesScreenProp,
 } from './Departures';
-import StopPlaceScreen, {
-  StopPlaceScreenParams,
-} from '../Departures/StopPlaceScreen';
+import StopPlaceScreen, {StopPlaceScreenParams} from './PlaceScreen';
 import DepartureDetails, {
   DepartureDetailsRouteParams,
 } from '../TripDetails/DepartureDetails';
