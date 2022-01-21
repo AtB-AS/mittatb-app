@@ -21,13 +21,11 @@ import {View} from 'react-native';
 import Loading from '../Loading';
 import {useNearestStopsData} from './state/NearbyPlacesState';
 import ThemeText from '@atb/components/text';
-import * as Sections from '@atb/components/sections';
-import {BusSide} from '@atb/assets/svg/icons/transportation';
-import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import {StopPlacePosition} from '@atb/api/types/departures';
 import {NearestStopPlacesQuery} from '@atb/api/types/generated/NearestStopPlacesQuery';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {DeparturesStackParams} from '.';
+import StopPlaceItem from './components/StopPlaceItem';
 
 const DateOptions = ['now', 'departure'] as const;
 type DateOptionType = typeof DateOptions[number];
@@ -75,7 +73,7 @@ export default function NearbyPlacesScreen({navigation}: RootProps) {
   }
 
   return (
-    <DeparturesOverview
+    <PlacesOverview
       requestGeoPermission={requestPermission}
       hasLocationPermission={locationEnabled && status === 'granted'}
       currentLocation={currentLocation}
@@ -84,14 +82,14 @@ export default function NearbyPlacesScreen({navigation}: RootProps) {
   );
 }
 
-type Props = {
+type PlacesOverviewProps = {
   currentLocation?: Location;
   hasLocationPermission: boolean;
   requestGeoPermission: RequestPermissionFn;
   navigation: DepartureScreenNavigationProp;
 };
 
-const DeparturesOverview: React.FC<Props> = ({
+const PlacesOverview: React.FC<PlacesOverviewProps> = ({
   requestGeoPermission,
   currentLocation,
   hasLocationPermission,
@@ -165,6 +163,12 @@ const DeparturesOverview: React.FC<Props> = ({
     }
   };
 
+  const navigateToPlace = (stopPlace: StopPlacePosition) => {
+    navigation.navigate('PlaceScreen', {
+      stopPlacePosition: stopPlace,
+    });
+  };
+
   useEffect(() => {
     if (updatingLocation)
       setLoadAnnouncement(t(NearbyTexts.stateAnnouncements.updatingLocation));
@@ -215,40 +219,7 @@ const DeparturesOverview: React.FC<Props> = ({
           {getListDescription()}
         </ThemeText>
         {orderedStopPlaces.map((stopPlace: StopPlacePosition) => (
-          <Sections.Section withPadding key={stopPlace.node?.place?.id}>
-            <Sections.GenericClickableItem
-              onPress={() => {
-                navigation.navigate('PlaceScreen', {
-                  stopPlacePosition: stopPlace,
-                });
-              }}
-            >
-              <View style={styles.stopPlaceContainer}>
-                <View style={styles.stopPlaceInfo}>
-                  <ThemeText type="heading__component">
-                    {stopPlace.node?.place?.name}
-                  </ThemeText>
-                  <ThemeText
-                    type="body__secondary"
-                    style={styles.stopDescription}
-                  >
-                    {stopPlace.node?.place?.description ||
-                      t(DeparturesTexts.stopPlaceList.stopPlace)}
-                  </ThemeText>
-                  <ThemeText type="body__secondary" color="secondary">
-                    {stopPlace.node?.distance?.toFixed(0) + ' m'}
-                  </ThemeText>
-                </View>
-                {stopPlace.node?.place?.transportMode?.map((mode) => (
-                  <ThemeIcon
-                    style={styles.stopPlaceIcon}
-                    size="large"
-                    svg={getTransportModeSvg(mode) || BusSide}
-                  ></ThemeIcon>
-                ))}
-              </View>
-            </Sections.GenericClickableItem>
-          </Sections.Section>
+          <StopPlaceItem stopPlace={stopPlace} onPress={navigateToPlace} />
         ))}
       </View>
     </SimpleDisappearingHeader>
@@ -338,22 +309,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   listDescription: {
     paddingVertical: theme.spacings.medium,
     paddingHorizontal: theme.spacings.medium * 2,
-  },
-  stopPlaceContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    flexGrow: 1,
-  },
-  stopPlaceInfo: {
-    flexShrink: 1,
-    flexGrow: 1,
-  },
-  stopDescription: {
-    marginVertical: theme.spacings.xSmall,
-  },
-  stopPlaceIcon: {
-    marginLeft: theme.spacings.medium,
   },
 }));
