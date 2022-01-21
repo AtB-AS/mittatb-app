@@ -7,6 +7,7 @@ import {
   formatToClock,
   formatToShortDate,
   formatToSimpleDateTime,
+  isInThePast,
 } from '@atb/utils/date';
 import {ArrowLeft, ArrowRight} from '@atb/assets/svg/icons/navigation';
 import {Date as DateIcon} from '@atb/assets/svg/icons/time';
@@ -39,6 +40,17 @@ export default function DateNavigation({
       ? t(DeparturesTexts.dateNavigation.today)
       : formatToSimpleDateTime(searchTime.date, language);
 
+  const onSetSearchTime = (time: SearchTime) => {
+    if (isInThePast(time.date)) {
+      setSearchTime({
+        date: new Date().toISOString(),
+        option: 'now',
+      });
+      return;
+    }
+    setSearchTime(time);
+  };
+
   const {open: openBottomSheet} = useBottomSheet();
   const onLaterTimePress = () => {
     openBottomSheet((close, focusRef) => (
@@ -46,7 +58,7 @@ export default function DateNavigation({
         ref={focusRef}
         close={close}
         initialTime={searchTime}
-        setSearchTime={setSearchTime}
+        setSearchTime={onSetSearchTime}
       ></DepartureTimeSheet>
     ));
   };
