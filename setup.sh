@@ -11,8 +11,8 @@ then
     echo "Available app variant names:
 -atb
 -nfk"
-    echo "Third argument is optional an can be used to set BFF host to localhost."
-    echo "For android this would normally be 'http://10.0.2.2:8080' since the emulator redirects this to you dev localhost"
+    echo "Third argument is optional an can be used to override BFF host."
+    echo "For android this would normally be 'http://10.0.2.2:8080' for local development."
     echo "Example:
 ./setup.sh dev atb "
     exit 1
