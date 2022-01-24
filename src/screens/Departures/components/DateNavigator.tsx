@@ -29,7 +29,7 @@ export default function DateNavigation({
   const styles = useStyles();
   const {theme} = useTheme();
   const {t, language} = useTranslation();
-  const canNavigateToPreviousDay = isToday(parseISO(searchTime.date));
+  const disablePreviousDayNavigation = isToday(parseISO(searchTime.date));
 
   const searchTimeText =
     searchTime.option === 'now'
@@ -73,9 +73,9 @@ export default function DateNavigation({
         type="inline"
         mode="tertiary"
         icon={ArrowLeft}
-        disabled={canNavigateToPreviousDay}
+        disabled={disablePreviousDayNavigation}
         accessibilityHint={
-          canNavigateToPreviousDay
+          disablePreviousDayNavigation
             ? t(DeparturesTexts.dateNavigation.a11yDisabled)
             : undefined
         }
