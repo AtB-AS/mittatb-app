@@ -9,6 +9,9 @@ on:
 jobs:
   tsc:
     name: tsc
+    strategy:
+      matrix:
+        org: [atb, nfk]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -22,5 +25,7 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.yalc/**') }}
       - name: yarn install
         run: yarn install
+      - name: Install assets
+        run: sh ./scripts/generate-assets.sh ${{ matrix.org }}
       - name: tsc
         uses: icrawl/action-tsc@v1
