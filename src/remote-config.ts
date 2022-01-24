@@ -60,9 +60,9 @@ export const defaultRemoteConfig: RemoteConfig = {
   tariff_zones: JSON.stringify(defaultTariffZones),
   user_profiles: JSON.stringify(defaultUserProfiles),
   customer_service_url: 'https://www.atb.no/kontakt/',
-  tripsSearch_target_number_of_initial_hits: 3,
-  tripsSearch_target_number_of_page_hits: 10,
-  tripsSearch_max_number_of_chained_searches: 5,
+  tripsSearch_target_number_of_initial_hits: 8,
+  tripsSearch_target_number_of_page_hits: 8,
+  tripsSearch_max_number_of_chained_searches: 20,
   privacy_policy_url: PRIVACY_POLICY_URL,
 };
 
