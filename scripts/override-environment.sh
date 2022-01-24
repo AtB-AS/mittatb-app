@@ -46,7 +46,6 @@ else
     echo "Copying boot splash image to assets/"
     cp $ORG_FOLDER/bootsplash_logo_original.png assets/
 
-    echo "Installing generated assets from design system (SVGs only)"
-    npx generate-assets all $APP_ORG -o assets/design-assets -g "**.svg" -im
-    yarn generate-svgs
+    sh ./scripts/generate-assets.sh $APP_ORG
+
 fi
