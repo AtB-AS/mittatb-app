@@ -36,8 +36,8 @@ export default orgSpecificTranslations(OnboardingTexts, {
       titleA11yLabel: _('Velkommen til Reis appen', 'Welcome to the Reis app'),
       description: {
         part1: _(
-          'Her kan du planlegge reiser og sjekke avgangstider i hele Nordland. Du kan også prøve kjøp av enkeltbilletter med Vipps. Flere tjenester og billettyper kommer!',
-          'Plan trips and check departure times throughout Nordland. You may also purchase single tickets with Vipps. More features and ticket products are coming soon!',
+          'Her kan du planlegge reiser og sjekke avgangstider i hele Nordland. Flere tjenester og billettyper kommer!',
+          'Plan trips and check departure times throughout Nordland. More features and ticket products are coming soon!',
         ),
         part3: _(
           'Du vil også kunne administrere billetter og eventuelle reisekort på den nye nettbutikken med samme konto.',

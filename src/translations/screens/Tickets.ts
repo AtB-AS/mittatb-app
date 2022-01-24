@@ -154,7 +154,4 @@ const TicketsTexts = {
   },
 };
 
-//TODO
-export default orgSpecificTranslations(TicketsTexts, {
-  nfk: {},
-});
+export default TicketsTexts;
