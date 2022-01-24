@@ -26,6 +26,9 @@ export type RemoteConfig = {
   tariff_zones: string;
   user_profiles: string;
   customer_service_url: string;
+  tripsSearch_target_number_of_initial_hits: number;
+  tripsSearch_target_number_of_page_hits: number;
+  tripsSearch_max_number_of_chained_searches: number;
   privacy_policy_url: string;
 };
 
@@ -57,6 +60,9 @@ export const defaultRemoteConfig: RemoteConfig = {
   tariff_zones: JSON.stringify(defaultTariffZones),
   user_profiles: JSON.stringify(defaultUserProfiles),
   customer_service_url: 'https://www.atb.no/kontakt/',
+  tripsSearch_target_number_of_initial_hits: 3,
+  tripsSearch_target_number_of_page_hits: 10,
+  tripsSearch_max_number_of_chained_searches: 5,
   privacy_policy_url: PRIVACY_POLICY_URL,
 };
 
@@ -98,6 +104,15 @@ export function getConfig(): RemoteConfig {
   const customer_service_url =
     values['customer_service_url']?.asString() ??
     defaultRemoteConfig.customer_service_url;
+  const tripsSearch_target_number_of_initial_hits =
+    values['tripsSearch_target_number_of_initial_hits']?.asNumber() ??
+    defaultRemoteConfig.tripsSearch_target_number_of_initial_hits;
+  const tripsSearch_target_number_of_page_hits =
+    values['tripsSearch_target_number_of_page_hits']?.asNumber() ??
+    defaultRemoteConfig.tripsSearch_target_number_of_page_hits;
+  const tripsSearch_max_number_of_chained_searches =
+    values['tripsSearch_max_number_of_chained_searches']?.asNumber() ??
+    defaultRemoteConfig.tripsSearch_max_number_of_chained_searches;
 
   const privacy_policy_url =
     values['privacy_policy_url']?.asString() ??
@@ -122,6 +137,9 @@ export function getConfig(): RemoteConfig {
     tariff_zones,
     user_profiles,
     customer_service_url,
+    tripsSearch_target_number_of_initial_hits,
+    tripsSearch_target_number_of_page_hits,
+    tripsSearch_max_number_of_chained_searches,
     privacy_policy_url,
   };
 }
