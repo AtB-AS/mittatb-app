@@ -96,7 +96,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@atb-as/generate-assets": "^1.2.0",
+    "@atb-as/generate-assets": "^2.0.2",
     "@babel/core": "^7.12.13",
     "@babel/runtime": "^7.12.13",
     "@svgr/cli": "^6.2.0",
