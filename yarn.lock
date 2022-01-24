@@ -2,12 +2,15 @@
 # yarn lockfile v1
 
 
-"@atb-as/generate-assets@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-1.2.0.tgz#5af04274d042074570ddc7b5ed847b30cf58aabc"
-  integrity sha512-jTxvQJZve5yCeHYUAexbljZ30bptAPQjIj2+y4BsYX+X1bi/X2uQtJTlVG0o8V4u0cxGWq5wqY+PpR83n2Nh3w==
+"@atb-as/generate-assets@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-2.0.2.tgz#933ea136666cbb3dd1d3333511f3962b47d49f53"
+  integrity sha512-wManpf6VdYAG9SDvLzYZul1bcZdP8gOu+eUQjgLCilC9QohKXdwLHZowUHVXyygTFmx4mc6+/mqEoILJOBI5mQ==
   dependencies:
+    commander "^8.3.0"
+    fast-glob "^3.2.7"
     micromatch "^4.0.4"
+    stream-editor "^1.11.0"
 
 "@atb-as/theme@^5.0.0":
   version "5.0.3"
@@ -3949,7 +3952,7 @@ commander@^7.2.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-7.2.0.tgz#a36cb57d0b501ce108e4d20559a150a391d97ab7"
   integrity sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==
 
-commander@^8.2.0:
+commander@^8.2.0, commander@^8.3.0:
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-8.3.0.tgz#4837ea1b2da67b9c616a67afbb0fafee567bca66"
   integrity sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==
@@ -5126,6 +5129,17 @@ fast-glob@^3.1.1:
     merge2 "^1.3.0"
     micromatch "^4.0.2"
     picomatch "^2.2.1"
+
+fast-glob@^3.2.7:
+  version "3.2.11"
+  resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.2.11.tgz#a1172ad95ceb8a16e20caa5c5e56480e5129c1d9"
+  integrity sha512-xrO3+1bxSo3ZVHAnqzyuewYT6aMFHRAd4Kcs92MAonjwQZLsK9d0SF1IyQ3k5PoirxTW0Oe/RqFgMQ6TcNE5Ew==
+  dependencies:
+    "@nodelib/fs.stat" "^2.0.2"
+    "@nodelib/fs.walk" "^1.2.3"
+    glob-parent "^5.1.2"
+    merge2 "^1.3.0"
+    micromatch "^4.0.4"
 
 fast-json-stable-stringify@^2.0.0:
   version "2.1.0"
@@ -9741,6 +9755,11 @@ stream-buffers@~2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/stream-buffers/-/stream-buffers-2.2.0.tgz#91d5f5130d1cef96dcfa7f726945188741d09ee4"
   integrity sha1-kdX1Ew0c75bc+n9yaUUYh0HQnuQ=
+
+stream-editor@^1.11.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/stream-editor/-/stream-editor-1.11.0.tgz#07c6e2894f2b92fe156f5c197d948f0fbecbd75f"
+  integrity sha512-c6crVqWTzQKXDYHkU7b13nqo2bHkT1xpF7E1NcBD9UyOXgDvi4tFKBQ3ChFqYinig0o7c9pAiUs7PEPCvCxt1A==
 
 strict-uri-encode@^2.0.0:
   version "2.0.0"
