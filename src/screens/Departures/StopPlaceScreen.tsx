@@ -225,97 +225,91 @@ function QuaySection({
   if (selectedQuayId && !isSelected) return <></>;
 
   return (
-    <View>
-      <Sections.Section withPadding>
-        <Sections.GenericClickableItem
-          type="inline"
-          onPress={() => {
-            setIsHidden(!isHidden);
-          }}
-          accessibilityHint={
-            isHidden
-              ? t(DeparturesTexts.quaySection.a11yExpand)
-              : t(DeparturesTexts.quaySection.a11yMinimize)
-          }
-        >
-          <View style={styles.stopPlaceHeader}>
-            <View style={styles.stopPlaceHeaderText}>
+    <Sections.Section withPadding withBottomPadding>
+      <Sections.GenericClickableItem
+        type="inline"
+        onPress={() => {
+          setIsHidden(!isHidden);
+        }}
+        accessibilityHint={
+          isHidden
+            ? t(DeparturesTexts.quaySection.a11yExpand)
+            : t(DeparturesTexts.quaySection.a11yMinimize)
+        }
+      >
+        <View style={styles.stopPlaceHeader}>
+          <View style={styles.stopPlaceHeaderText}>
+            <ThemeText
+              type="body__secondary--bold"
+              color="secondary"
+              style={styles.rightMargin}
+            >
+              {quay.publicCode ? quay.name + ' ' + quay.publicCode : quay.name}
+            </ThemeText>
+            {!!quay.description && (
               <ThemeText
-                type="body__secondary--bold"
-                color="secondary"
                 style={styles.rightMargin}
+                type="body__secondary"
+                color="secondary"
               >
-                {quay.publicCode
-                  ? quay.name + ' ' + quay.publicCode
-                  : quay.name}
+                {quay.description}
               </ThemeText>
-              {!!quay.description && (
-                <ThemeText
-                  style={styles.rightMargin}
-                  type="body__secondary"
-                  color="secondary"
-                >
-                  {quay.description}
-                </ThemeText>
-              )}
-            </View>
-            <ThemeIcon svg={isHidden ? Expand : ExpandLess}></ThemeIcon>
-          </View>
-        </Sections.GenericClickableItem>
-        {!isHidden && (
-          <FlatList
-            ItemSeparatorComponent={SeparatorLine}
-            data={departures}
-            renderItem={({item, index}) => (
-              <Sections.GenericItem
-                radius={
-                  selectedQuayId && index === departures.length - 1
-                    ? 'bottom'
-                    : undefined
-                }
-              >
-                <EstimatedCallLine
-                  departure={item}
-                  navigateToDetails={navigateToDetails}
-                ></EstimatedCallLine>
-              </Sections.GenericItem>
             )}
-            keyExtractor={(item) => item.serviceJourney?.id || ''}
-            ListEmptyComponent={
-              <>
-                {data && (
-                  <Sections.GenericItem radius={selectedQuayId && 'bottom'}>
-                    <ThemeText color="secondary">
-                      {t(DeparturesTexts.noDepartures)}
-                    </ThemeText>
-                  </Sections.GenericItem>
-                )}
-              </>
-            }
-          />
-        )}
-        {!data && (
-          <Sections.GenericItem>
-            <View style={{width: '100%'}}>
-              <ActivityIndicator></ActivityIndicator>
-            </View>
-          </Sections.GenericItem>
-        )}
-        {!isSelected && !isHidden && (
-          <Sections.LinkItem
-            icon="arrow-right"
-            text={
-              quay.publicCode ? quay.name + ' ' + quay.publicCode : quay.name
-            }
-            textType="body__primary--bold"
-            onPress={() => navigateToQuay(quay)}
-            accessibility={{
-              accessibilityHint: t(DeparturesTexts.quaySection.a11yToQuayHint),
-            }}
-          ></Sections.LinkItem>
-        )}
-      </Sections.Section>
-    </View>
+          </View>
+          <ThemeIcon svg={isHidden ? Expand : ExpandLess}></ThemeIcon>
+        </View>
+      </Sections.GenericClickableItem>
+      {!isHidden && (
+        <FlatList
+          ItemSeparatorComponent={SeparatorLine}
+          data={departures}
+          renderItem={({item, index}) => (
+            <Sections.GenericItem
+              radius={
+                selectedQuayId && index === departures.length - 1
+                  ? 'bottom'
+                  : undefined
+              }
+            >
+              <EstimatedCallLine
+                departure={item}
+                navigateToDetails={navigateToDetails}
+              ></EstimatedCallLine>
+            </Sections.GenericItem>
+          )}
+          keyExtractor={(item) => item.serviceJourney?.id || ''}
+          ListEmptyComponent={
+            <>
+              {data && (
+                <Sections.GenericItem radius={selectedQuayId && 'bottom'}>
+                  <ThemeText color="secondary">
+                    {t(DeparturesTexts.noDepartures)}
+                  </ThemeText>
+                </Sections.GenericItem>
+              )}
+            </>
+          }
+        />
+      )}
+      {!data && (
+        <Sections.GenericItem>
+          <View style={{width: '100%'}}>
+            <ActivityIndicator></ActivityIndicator>
+          </View>
+        </Sections.GenericItem>
+      )}
+      {!isSelected && !isHidden && (
+        <Sections.LinkItem
+          icon="arrow-right"
+          text={quay.publicCode ? quay.name + ' ' + quay.publicCode : quay.name}
+          textType="body__primary--bold"
+          onPress={() => navigateToQuay(quay)}
+          accessibility={{
+            accessibilityHint: t(DeparturesTexts.quaySection.a11yToQuayHint),
+          }}
+        ></Sections.LinkItem>
+      )}
+    </Sections.Section>
   );
 }
 
