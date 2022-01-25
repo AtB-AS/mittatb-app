@@ -1,5 +1,5 @@
-import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
-import {Info, Warning} from '@atb/assets/svg/situations';
+import {Expand, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
+import {Info, Warning} from '@atb/assets/svg/color/situations';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
 import MessageBox, {TinyMessageBox} from '@atb/components/message-box';
 import PaginatedDetailsHeader from '@atb/components/pagination';
