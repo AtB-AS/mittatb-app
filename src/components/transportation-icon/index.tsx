@@ -10,10 +10,10 @@ import {
   Subway,
 } from '@atb/assets/svg/icons/transportation';
 import {LegMode, TransportSubmode, TransportMode} from '@atb/sdk';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {
   Mode as Mode_v2,
@@ -37,17 +37,16 @@ const TransportationIcon: React.FC<TransportationIconProps> = ({
   lineNumber,
 }) => {
   const {t} = useTranslation();
-  const color = useTransportationColor(mode, subMode, 'color');
-  const backgroundColor = useTransportationColor(
-    mode,
-    subMode,
-    'backgroundColor',
-  );
+  const {theme} = useTheme();
+  const themeColor = useThemeColorForTransportMode(mode, subMode);
+  const backgroundColor = theme.colors[themeColor].backgroundColor;
   const svg = getTransportModeSvg(mode);
   const styles = useStyles();
 
   const lineNumberElement = lineNumber ? (
-    <ThemeText type="body__primary--bold">{lineNumber}</ThemeText>
+    <ThemeText type="body__primary--bold" color={themeColor}>
+      {lineNumber}
+    </ThemeText>
   ) : null;
 
   return svg ? (
@@ -55,7 +54,7 @@ const TransportationIcon: React.FC<TransportationIconProps> = ({
       <ThemeIcon
         style={styles.lineNumber}
         svg={svg}
-        fill={color}
+        colorType={themeColor}
         accessibilityLabel={t(getTranslatedModeName(mode))}
       />
       {lineNumberElement}

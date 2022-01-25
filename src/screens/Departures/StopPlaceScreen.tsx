@@ -1,18 +1,13 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
 import {StyleSheet, useTheme} from '@atb/theme';
-import React, {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
   RefreshControl,
   SectionList,
   SectionListData,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
@@ -23,35 +18,25 @@ import {useDepartureData} from './DepartureState';
 import ThemeText from '@atb/components/text';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import {dictionary, Language, useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {
-  formatToClock,
+  formatToClockOrLongRelativeMinutes,
   formatToClockOrRelativeMinutes,
-  formatToShortDate,
-  formatToSimpleDateTime,
 } from '@atb/utils/date';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
-import {
-  ArrowLeft,
-  ArrowRight,
-  Expand,
-  ExpandLess,
-} from '@atb/assets/svg/icons/navigation';
+import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 import {
   EstimatedCall,
   Quay,
   StopPlacePosition,
 } from '@atb/api/types/departures';
-import {Date as DateIcon} from '@atb/assets/svg/icons/time';
 import {SearchTime} from './Departures';
-import {addDays, isSameDay, isToday, parseISO} from 'date-fns';
-import DepartureTimeSheet from '../Nearby/DepartureTimeSheet';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 import useFontScale from '@atb/utils/use-font-scale';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {DeparturesStackParams} from '.';
+import DateNavigation from './components/DateNavigator';
 
 export type StopPlaceScreenParams = {
   stopPlacePosition: StopPlacePosition;
@@ -80,7 +65,7 @@ export default function StopPlaceScreen({
 }: StopPlaceScreenProps) {
   const styles = useStyles();
   const {theme} = useTheme();
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const [searchTime, setSearchTime] = useState<SearchTime>({
     option: 'now',
     date: new Date().toISOString(),
@@ -107,6 +92,23 @@ export default function StopPlaceScreen({
     [stopPlace],
   );
 
+  const navigateToDetails = (
+    serviceJourneyId?: string,
+    date?: string,
+    fromQuayId?: string,
+  ) => {
+    if (!serviceJourneyId || !date) return;
+    navigation.navigate('DepartureDetails', {
+      items: [
+        {
+          serviceJourneyId,
+          date,
+          fromQuayId,
+        },
+      ],
+    });
+  };
+
   return (
     <View style={styles.container}>
       <FullScreenHeader title={stopPlace?.name} leftButton={{type: 'back'}} />
@@ -119,10 +121,7 @@ export default function StopPlaceScreen({
         ListHeaderComponent={
           <Button
             onPress={() => {
-              navigation.navigate('StopPlaceScreen', {
-                stopPlacePosition,
-                selectedQuay: undefined,
-              });
+              navigation.setParams({selectedQuay: undefined});
             }}
             text={t(DeparturesTexts.quayChips.allStops)}
             color={selectedQuay ? 'secondary_2' : 'secondary_3'}
@@ -132,10 +131,7 @@ export default function StopPlaceScreen({
         renderItem={({item}: quayChipData) => (
           <Button
             onPress={() => {
-              navigation.navigate('StopPlaceScreen', {
-                stopPlacePosition,
-                selectedQuay: item,
-              });
+              navigation.setParams({selectedQuay: item});
             }}
             text={
               item.publicCode ? item.name + ' ' + item.publicCode : item.name
@@ -150,12 +146,10 @@ export default function StopPlaceScreen({
           stickySectionHeadersEnabled={true}
           stickyHeaderIndices={[0]}
           ListHeaderComponent={
-            <View>
-              <DateNavigationSection
-                searchTime={searchTime}
-                setSearchTime={setSearchTime}
-              ></DateNavigationSection>
-            </View>
+            <DateNavigation
+              searchTime={searchTime}
+              setSearchTime={setSearchTime}
+            ></DateNavigation>
           }
           refreshControl={
             <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
@@ -167,11 +161,9 @@ export default function StopPlaceScreen({
               quay={item}
               selectedQuayId={selectedQuay?.id}
               data={state.data}
+              navigateToDetails={navigateToDetails}
               navigateToQuay={(quay) => {
-                navigation.navigate('StopPlaceScreen', {
-                  stopPlacePosition,
-                  selectedQuay: quay,
-                });
+                navigation.setParams({selectedQuay: quay});
               }}
             />
           )}
@@ -181,10 +173,6 @@ export default function StopPlaceScreen({
   );
 }
 
-type EstimatedCallLineProps = {
-  departure: EstimatedCall;
-};
-
 function getDeparturesForQuay(
   departures: EstimatedCall[] | null,
   quay: Quay,
@@ -192,94 +180,6 @@ function getDeparturesForQuay(
   if (!departures) return [];
   return departures.filter(
     (departure) => departure && departure.quay?.id === quay.id,
-  );
-}
-
-type DateNavigationSectionProps = {
-  searchTime: SearchTime;
-  setSearchTime: Dispatch<SetStateAction<SearchTime>>;
-};
-
-function DateNavigationSection({
-  searchTime,
-  setSearchTime,
-}: DateNavigationSectionProps): JSX.Element {
-  const styles = useStyles();
-  const {theme} = useTheme();
-  const {t, language} = useTranslation();
-  const canNavigateToPreviousDay = isToday(parseISO(searchTime.date));
-
-  const searchTimeText =
-    searchTime.option === 'now'
-      ? t(DeparturesTexts.dateNavigation.today)
-      : formatToTwoLineDateTime(searchTime.date, language);
-  const a11ySearchTimeText =
-    searchTime.option === 'now'
-      ? t(DeparturesTexts.dateNavigation.today)
-      : formatToSimpleDateTime(searchTime.date, language);
-
-  const {open: openBottomSheet} = useBottomSheet();
-  const onLaterTimePress = () => {
-    openBottomSheet((close, focusRef) => (
-      <DepartureTimeSheet
-        ref={focusRef}
-        close={close}
-        initialTime={searchTime}
-        setSearchTime={setSearchTime}
-      ></DepartureTimeSheet>
-    ));
-  };
-
-  return (
-    <View style={styles.dateNavigator}>
-      <Button
-        onPress={() => {
-          setSearchTime(changeDay(searchTime, -1));
-        }}
-        text={t(DeparturesTexts.dateNavigation.prevDay)}
-        type="inline"
-        mode="tertiary"
-        icon={ArrowLeft}
-        disabled={canNavigateToPreviousDay}
-        accessibilityHint={
-          canNavigateToPreviousDay
-            ? t(DeparturesTexts.dateNavigation.a11yDisabled)
-            : undefined
-        }
-        textStyle={{
-          marginLeft: theme.spacings.xSmall,
-        }}
-      ></Button>
-      <Button
-        onPress={onLaterTimePress}
-        text={searchTimeText}
-        accessibilityLabel={t(
-          DeparturesTexts.dateNavigation.a11ySelectedLabel(a11ySearchTimeText),
-        )}
-        accessibilityHint={t(DeparturesTexts.dateNavigation.a11yChangeDateHint)}
-        type="compact"
-        mode="tertiary"
-        iconPosition="right"
-        icon={DateIcon}
-        textStyle={{
-          textAlign: 'center',
-          marginRight: theme.spacings.xSmall,
-        }}
-      ></Button>
-      <Button
-        onPress={() => {
-          setSearchTime(changeDay(searchTime, 1));
-        }}
-        text={t(DeparturesTexts.dateNavigation.nextDay)}
-        type="compact"
-        iconPosition="right"
-        mode="tertiary"
-        icon={ArrowRight}
-        textStyle={{
-          marginRight: theme.spacings.xSmall,
-        }}
-      ></Button>
-    </View>
   );
 }
 
@@ -301,6 +201,11 @@ type QuaySectionProps = {
   selectedQuayId: String | undefined;
   data: EstimatedCall[] | null;
   navigateToQuay: (arg0: Quay) => void;
+  navigateToDetails: (
+    serviceJourneyId?: string,
+    date?: string,
+    fromQuayId?: string,
+  ) => void;
 };
 
 function QuaySection({
@@ -308,6 +213,7 @@ function QuaySection({
   selectedQuayId,
   data,
   navigateToQuay,
+  navigateToDetails,
 }: QuaySectionProps): JSX.Element {
   const [isHidden, setIsHidden] = useState(false);
   const styles = useStyles();
@@ -319,106 +225,107 @@ function QuaySection({
   if (selectedQuayId && !isSelected) return <></>;
 
   return (
-    <View>
-      <Sections.Section withPadding>
-        <Sections.GenericClickableItem
-          type="inline"
-          onPress={() => {
-            setIsHidden(!isHidden);
-          }}
-          accessibilityHint={
-            isHidden
-              ? t(DeparturesTexts.quaySection.a11yExpand)
-              : t(DeparturesTexts.quaySection.a11yMinimize)
-          }
-        >
-          <View style={styles.stopPlaceHeader}>
-            <View style={styles.stopPlaceHeaderText}>
+    <Sections.Section withPadding withBottomPadding>
+      <Sections.GenericClickableItem
+        type="inline"
+        onPress={() => {
+          setIsHidden(!isHidden);
+        }}
+        accessibilityHint={
+          isHidden
+            ? t(DeparturesTexts.quaySection.a11yExpand)
+            : t(DeparturesTexts.quaySection.a11yMinimize)
+        }
+      >
+        <View style={styles.stopPlaceHeader}>
+          <View style={styles.stopPlaceHeaderText}>
+            <ThemeText
+              type="body__secondary--bold"
+              color="secondary"
+              style={styles.rightMargin}
+            >
+              {quay.publicCode ? quay.name + ' ' + quay.publicCode : quay.name}
+            </ThemeText>
+            {!!quay.description && (
               <ThemeText
-                type="body__secondary--bold"
-                color="secondary"
                 style={styles.rightMargin}
+                type="body__secondary"
+                color="secondary"
               >
-                {quay.publicCode
-                  ? quay.name + ' ' + quay.publicCode
-                  : quay.name}
+                {quay.description}
               </ThemeText>
-              {!!quay.description && (
-                <ThemeText
-                  style={styles.rightMargin}
-                  type="body__secondary"
-                  color="secondary"
-                >
-                  {quay.description}
-                </ThemeText>
-              )}
-            </View>
-            <ThemeIcon svg={isHidden ? Expand : ExpandLess}></ThemeIcon>
-          </View>
-        </Sections.GenericClickableItem>
-        {!isHidden && (
-          <FlatList
-            ItemSeparatorComponent={SeparatorLine}
-            data={departures}
-            renderItem={({item, index}) => (
-              <Sections.GenericItem
-                radius={
-                  selectedQuayId && index === departures.length - 1
-                    ? 'bottom'
-                    : undefined
-                }
-              >
-                <EstimatedCallLine departure={item}></EstimatedCallLine>
-              </Sections.GenericItem>
             )}
-            keyExtractor={(item) => item.serviceJourney?.id || ''}
-            ListEmptyComponent={
-              <>
-                {data && (
-                  <Sections.GenericItem radius={selectedQuayId && 'bottom'}>
-                    <ThemeText color="secondary">
-                      {t(DeparturesTexts.noDepartures)}
-                    </ThemeText>
-                  </Sections.GenericItem>
-                )}
-              </>
-            }
-          />
-        )}
-        {!data && (
-          <Sections.GenericItem>
-            <View style={{width: '100%'}}>
-              <ActivityIndicator></ActivityIndicator>
-            </View>
-          </Sections.GenericItem>
-        )}
-        {!isSelected && !isHidden && (
-          <Sections.LinkItem
-            icon="arrow-right"
-            text={
-              quay.publicCode ? quay.name + ' ' + quay.publicCode : quay.name
-            }
-            textType="body__primary--bold"
-            onPress={() => navigateToQuay(quay)}
-            accessibility={{
-              accessibilityHint: t(DeparturesTexts.quaySection.a11yToQuayHint),
-            }}
-          ></Sections.LinkItem>
-        )}
-      </Sections.Section>
-    </View>
+          </View>
+          <ThemeIcon svg={isHidden ? Expand : ExpandLess}></ThemeIcon>
+        </View>
+      </Sections.GenericClickableItem>
+      {!isHidden && (
+        <FlatList
+          ItemSeparatorComponent={SeparatorLine}
+          data={departures}
+          renderItem={({item, index}) => (
+            <Sections.GenericItem
+              radius={
+                selectedQuayId && index === departures.length - 1
+                  ? 'bottom'
+                  : undefined
+              }
+            >
+              <EstimatedCallLine
+                departure={item}
+                navigateToDetails={navigateToDetails}
+              ></EstimatedCallLine>
+            </Sections.GenericItem>
+          )}
+          keyExtractor={(item) => item.serviceJourney?.id || ''}
+          ListEmptyComponent={
+            <>
+              {data && (
+                <Sections.GenericItem radius={selectedQuayId && 'bottom'}>
+                  <ThemeText color="secondary">
+                    {t(DeparturesTexts.noDepartures)}
+                  </ThemeText>
+                </Sections.GenericItem>
+              )}
+            </>
+          }
+        />
+      )}
+      {!data && (
+        <Sections.GenericItem>
+          <View style={{width: '100%'}}>
+            <ActivityIndicator></ActivityIndicator>
+          </View>
+        </Sections.GenericItem>
+      )}
+      {!isSelected && !isHidden && (
+        <Sections.LinkItem
+          icon="arrow-right"
+          text={quay.publicCode ? quay.name + ' ' + quay.publicCode : quay.name}
+          textType="body__primary--bold"
+          onPress={() => navigateToQuay(quay)}
+          accessibility={{
+            accessibilityHint: t(DeparturesTexts.quaySection.a11yToQuayHint),
+          }}
+        ></Sections.LinkItem>
+      )}
+    </Sections.Section>
   );
 }
 
-function changeDay(searchTime: SearchTime, days: number): SearchTime {
-  const date = addDays(parseISO(searchTime.date).setHours(0, 0), days);
-  return {
-    option: isToday(date) ? 'now' : 'departure',
-    date: isToday(date) ? new Date().toISOString() : date.toISOString(),
-  };
-}
+type EstimatedCallLineProps = {
+  departure: EstimatedCall;
+  navigateToDetails: (
+    serviceJourneyId?: string,
+    date?: string,
+    fromQuayId?: string,
+  ) => void;
+};
 
-function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
+function EstimatedCallLine({
+  departure,
+  navigateToDetails,
+}: EstimatedCallLineProps): JSX.Element {
   const {t, language} = useTranslation();
   const styles = useStyles();
 
@@ -429,20 +336,33 @@ function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
     language,
     t(dictionary.date.units.now),
   );
+  const a11yTime = formatToClockOrLongRelativeMinutes(
+    departure.expectedDepartureTime,
+    language,
+    t(dictionary.date.units.now),
+    9,
+  );
   const timeWithRealtimePrefix = departure.realtime
     ? time
     : t(dictionary.missingRealTimePrefix) + time;
-  const accessibleTime = departure.realtime
-    ? time
-    : t(dictionary.a11yMissingRealTimePrefix) + time;
+  const a11yTimeWithRealtimePrefix = departure.realtime
+    ? a11yTime
+    : t(dictionary.a11yMissingRealTimePrefix) + a11yTime;
 
   return (
-    <View
+    <TouchableOpacity
+      onPress={() =>
+        navigateToDetails(
+          departure.serviceJourney?.id,
+          departure.expectedDepartureTime,
+          departure.quay?.id,
+        )
+      }
       style={styles.estimatedCallLine}
       accessible={true}
       accessibilityLabel={t(
         DeparturesTexts.a11yEstimatedCallLine(
-          accessibleTime,
+          a11yTimeWithRealtimePrefix,
           line?.publicCode,
           departure.destinationDisplay?.frontText,
         ),
@@ -459,7 +379,7 @@ function EstimatedCallLine({departure}: EstimatedCallLineProps): JSX.Element {
         {departure.destinationDisplay?.frontText}
       </ThemeText>
       <ThemeText type="body__primary--bold">{timeWithRealtimePrefix}</ThemeText>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -523,16 +443,6 @@ function publicCodeCompare(a?: string, b?: string): number {
   return a.localeCompare(b);
 }
 
-function formatToTwoLineDateTime(isoDate: string, language: Language) {
-  const parsed = parseISO(isoDate);
-  if (isSameDay(parsed, new Date())) {
-    return formatToClock(parsed, language);
-  }
-  return (
-    formatToShortDate(parsed, language) + '\n' + formatToClock(parsed, language)
-  );
-}
-
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.colors.background_1.backgroundColor,
@@ -578,12 +488,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   rightMargin: {
     marginRight: theme.spacings.medium,
-  },
-  dateNavigator: {
-    flexDirection: 'row',
-    flexGrow: 1,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginVertical: theme.spacings.medium,
   },
 }));

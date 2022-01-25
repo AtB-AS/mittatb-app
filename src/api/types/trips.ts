@@ -4,7 +4,7 @@ import {TripsQueryVariables} from './generated/TripsQuery';
 export type TripsQuery = Types.TripsQuery;
 export type Trip = Types.TripsQuery['trip'];
 export type TripPattern = Required<Types.TripsQuery>['trip']['tripPatterns'][0] & {
-  id?: any;
+  compressedQuery?: any;
 };
 export type TripMetadata = Required<Types.TripsQuery>['trip']['metadata'];
 export type Leg = Required<Types.TripsQuery>['trip']['tripPatterns'][0]['legs'][0];

@@ -19,11 +19,7 @@ type Props = {
   isEmptyResult: boolean;
   isSearching: boolean;
   resultReasons: String[];
-  onDetailsPressed(
-    tripPatternId?: string,
-    tripPatterns?: TripPattern[],
-    index?: number,
-  ): void;
+  onDetailsPressed(tripPatterns?: TripPattern[], index?: number): void;
   errorType?: ErrorType;
 };
 
@@ -112,7 +108,7 @@ const Results: React.FC<Props> = ({
   return (
     <View style={styles.container}>
       {tripPatterns?.map((tripPattern, i) => (
-        <Fragment key={String(tripPattern.id + i ?? i)}>
+        <Fragment key={generateKeyFromTripPattern(tripPattern)}>
           <DayLabel
             departureTime={tripPattern.expectedStartTime}
             previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
@@ -121,7 +117,7 @@ const Results: React.FC<Props> = ({
           <ResultItem
             tripPattern={tripPattern}
             onDetailsPressed={() => {
-              onDetailsPressed(tripPattern.id, tripPatterns, i);
+              onDetailsPressed(tripPatterns, i);
             }}
           />
         </Fragment>
@@ -129,6 +125,17 @@ const Results: React.FC<Props> = ({
     </View>
   );
 };
+
+function generateKeyFromTripPattern(tripPattern: TripPattern) {
+  const id =
+    tripPattern.compressedQuery +
+    tripPattern.legs
+      .map((leg) => {
+        return leg.toPlace.longitude.toString() + leg.toPlace.latitude;
+      })
+      .join('-');
+  return id;
+}
 
 export default Results;
 

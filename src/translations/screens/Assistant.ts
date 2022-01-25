@@ -81,7 +81,7 @@ const AssistantTexts = {
   },
   results: {
     fetchMore: _('Last inn flere reiseforslag', 'Load more results'),
-    fetchingMore: _('Henter flere reiseforslag...', 'Loading more results...'),
+    fetchingMore: _('Søker etter flere reiseforslag', 'Loading more results'),
     unableToFetchMore: _(
       'Finner ikke flere reiseforslag. Forsøk å endre dato og søketidspunkt',
       'Unable to load more results. Please try a different date and time.',
