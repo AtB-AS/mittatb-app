@@ -14,9 +14,8 @@ import SectionSeparator from '@atb/components/sections/section-separator';
 
 type QuaySectionProps = {
   quay: Quay;
-  isSelected: boolean;
   data: EstimatedCall[] | null;
-  navigateToQuay: (arg0: Quay) => void;
+  navigateToQuay?: (arg0: Quay) => void;
   navigateToDetails: (
     serviceJourneyId?: string,
     date?: string,
@@ -26,7 +25,6 @@ type QuaySectionProps = {
 
 export default function QuaySection({
   quay,
-  isSelected,
   data,
   navigateToQuay,
   navigateToDetails,
@@ -81,7 +79,7 @@ export default function QuaySection({
             renderItem={({item, index}) => (
               <Sections.GenericItem
                 radius={
-                  isSelected && index === departures.length - 1
+                  !navigateToQuay && index === departures.length - 1
                     ? 'bottom'
                     : undefined
                 }
@@ -97,7 +95,7 @@ export default function QuaySection({
               <>
                 {data && (
                   <Sections.GenericItem
-                    radius={isSelected ? 'bottom' : undefined}
+                    radius={navigateToQuay ? 'bottom' : undefined}
                   >
                     <ThemeText color="secondary">
                       {t(DeparturesTexts.noDepartures)}
@@ -115,7 +113,7 @@ export default function QuaySection({
             </View>
           </Sections.GenericItem>
         )}
-        {!isSelected && !isHidden && (
+        {navigateToQuay && !isHidden && (
           <Sections.LinkItem
             icon="arrow-right"
             text={

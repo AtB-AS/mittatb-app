@@ -66,7 +66,6 @@ export default function StopPlaceView({
           renderItem={({item}) => (
             <QuaySection
               quay={item}
-              isSelected={false}
               data={state.data}
               navigateToDetails={navigateToDetails}
               navigateToQuay={navigateToQuay}

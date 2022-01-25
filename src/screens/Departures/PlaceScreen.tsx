@@ -93,11 +93,7 @@ export default function PlaceScreen({
         )}
       />
       {selectedQuay ? (
-        <QuayView
-          quay={selectedQuay}
-          navigateToDetails={navigateToDetails}
-          navigateToQuay={navigateToQuay}
-        />
+        <QuayView quay={selectedQuay} navigateToDetails={navigateToDetails} />
       ) : (
         <StopPlaceView
           stopPlacePosition={stopPlacePosition}

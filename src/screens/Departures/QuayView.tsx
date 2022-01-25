@@ -17,14 +17,9 @@ export type QuayViewProps = {
     date?: string,
     fromQuayId?: string,
   ) => void;
-  navigateToQuay: (quay: Quay) => void;
 };
 
-export default function QuayView({
-  quay,
-  navigateToDetails,
-  navigateToQuay,
-}: QuayViewProps) {
+export default function QuayView({quay, navigateToDetails}: QuayViewProps) {
   const [searchTime, setSearchTime] = useState<SearchTime>({
     option: 'now',
     date: new Date().toISOString(),
@@ -58,10 +53,8 @@ export default function QuayView({
       renderItem={({item}) => (
         <QuaySection
           quay={item}
-          isSelected={true}
           data={state.data}
           navigateToDetails={navigateToDetails}
-          navigateToQuay={navigateToQuay}
         />
       )}
     />
