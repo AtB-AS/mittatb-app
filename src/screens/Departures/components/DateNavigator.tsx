@@ -9,8 +9,8 @@ import {
   formatToSimpleDateTime,
   isInThePast,
 } from '@atb/utils/date';
-import {ArrowLeft, ArrowRight} from '@atb/assets/svg/icons/navigation';
-import {Date as DateIcon} from '@atb/assets/svg/icons/time';
+import {ArrowLeft, ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {Date as DateIcon} from '@atb/assets/svg/mono-icons/time';
 import {SearchTime} from '../Departures';
 import {addDays, isSameDay, isToday, parseISO} from 'date-fns';
 import DepartureTimeSheet from '../../Nearby/DepartureTimeSheet';
