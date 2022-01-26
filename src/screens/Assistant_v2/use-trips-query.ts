@@ -69,6 +69,12 @@ export default function useTripsQuery(
             setSearchState('searching');
             let performedSearchesCount = 0;
             let tripsFoundCount = 0;
+
+            try {
+              // Fire and forget add journey search entry
+              await addJourneySearchEntry([fromLocation, toLocation]);
+            } catch (e) {}
+
             while (
               tripsFoundCount < targetNumberOfHits &&
               performedSearchesCount < config_max_performed_searches
@@ -78,11 +84,6 @@ export default function useTripsQuery(
               if (searchInput.searchTime?.date) {
                 setTimeOfSearch(searchInput.searchTime.date);
               }
-
-              try {
-                // Fire and forget add journey search entry
-                await addJourneySearchEntry([fromLocation, toLocation]);
-              } catch (e) {}
 
               const arriveBy = searchTime.option === 'arrival';
 
