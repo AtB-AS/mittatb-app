@@ -7,14 +7,14 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
 import Button from '@atb/components/button';
 import {useTranslation} from '@atb/translations';
-import {Quay, StopPlacePosition} from '@atb/api/types/departures';
+import {Place, Quay} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {DeparturesStackParams} from '.';
 import QuayView from './QuayView';
 import StopPlaceView from './StopPlaceView';
 
 export type PlaceScreenParams = {
-  stopPlacePosition: StopPlacePosition;
+  place: Place;
   selectedQuay?: Quay;
 };
 
@@ -32,13 +32,12 @@ export type PlaceScreenProps = {
 export default function PlaceScreen({
   navigation,
   route: {
-    params: {stopPlacePosition, selectedQuay},
+    params: {place, selectedQuay},
   },
 }: PlaceScreenProps) {
   const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const stopPlace = stopPlacePosition.node?.place;
 
   const navigateToDetails = (
     serviceJourneyId?: string,
@@ -62,9 +61,9 @@ export default function PlaceScreen({
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader title={stopPlace?.name} leftButton={{type: 'back'}} />
+      <FullScreenHeader title={place.name} leftButton={{type: 'back'}} />
       <FlatList
-        data={stopPlace?.quays}
+        data={place.quays}
         style={styles.quayChipContainer}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
@@ -96,7 +95,7 @@ export default function PlaceScreen({
         <QuayView quay={selectedQuay} navigateToDetails={navigateToDetails} />
       ) : (
         <StopPlaceView
-          stopPlacePosition={stopPlacePosition}
+          stopPlace={place}
           navigateToDetails={navigateToDetails}
           navigateToQuay={navigateToQuay}
         />

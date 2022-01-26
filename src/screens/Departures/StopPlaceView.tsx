@@ -1,13 +1,13 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import {useStopPlaceData} from './state/StopPlaceState';
-import {Quay, StopPlacePosition} from '@atb/api/types/departures';
+import {Place, Quay, StopPlacePosition} from '@atb/api/types/departures';
 import {SearchTime} from './NearbyPlaces';
 import DateNavigation from './components/DateNavigator';
 import QuaySection from './components/QuaySection';
 
 type StopPlaceViewProps = {
-  stopPlacePosition: StopPlacePosition;
+  stopPlace: Place;
   navigateToQuay: (quay: Quay) => void;
   navigateToDetails: (
     serviceJourneyId?: string,
@@ -17,7 +17,7 @@ type StopPlaceViewProps = {
 };
 
 export default function StopPlaceView({
-  stopPlacePosition,
+  stopPlace,
   navigateToQuay,
   navigateToDetails,
 }: StopPlaceViewProps) {
@@ -25,12 +25,11 @@ export default function StopPlaceView({
     option: 'now',
     date: new Date().toISOString(),
   });
-  const stopPlace = stopPlacePosition.node?.place;
   const {state, refresh} = useStopPlaceData(
-    stopPlacePosition,
+    stopPlace,
     searchTime?.option !== 'now' ? searchTime.date : undefined,
   );
-  const quayListData: SectionListData<Quay>[] | undefined = stopPlace?.quays
+  const quayListData: SectionListData<Quay>[] | undefined = stopPlace.quays
     ? [{data: stopPlace.quays}]
     : undefined;
 
@@ -40,7 +39,7 @@ export default function StopPlaceView({
 
   useMemo(
     () =>
-      stopPlace?.quays?.sort((a, b) =>
+      stopPlace.quays?.sort((a, b) =>
         publicCodeCompare(a.publicCode, b.publicCode),
       ),
     [stopPlace],

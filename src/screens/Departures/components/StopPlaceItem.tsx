@@ -6,39 +6,39 @@ import ThemeText from '@atb/components/text';
 import * as Sections from '@atb/components/sections';
 import {BusSide} from '@atb/assets/svg/icons/transportation';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
-import {StopPlacePosition} from '@atb/api/types/departures';
+import {Place, StopPlacePosition} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {StyleSheet} from '@atb/theme';
 
 type StopPlaceItemProps = {
-  stopPlace: StopPlacePosition;
-  onPress: (stopPlace: StopPlacePosition) => void;
+  stopPlacePosition: StopPlacePosition;
+  onPress: (place: Place) => void;
 };
 
 export default function StopPlaceItem({
-  stopPlace,
+  stopPlacePosition,
   onPress,
 }: StopPlaceItemProps): JSX.Element {
   const styles = useStyles();
   const {t} = useTranslation();
 
+  const place = stopPlacePosition.node?.place;
+  if (!place) return <></>;
+
   return (
-    <Sections.Section withPadding key={stopPlace.node?.place?.id}>
-      <Sections.GenericClickableItem onPress={() => onPress(stopPlace)}>
+    <Sections.Section withPadding key={place.id}>
+      <Sections.GenericClickableItem onPress={() => onPress(place)}>
         <View style={styles.stopPlaceContainer}>
           <View style={styles.stopPlaceInfo}>
-            <ThemeText type="heading__component">
-              {stopPlace.node?.place?.name}
-            </ThemeText>
+            <ThemeText type="heading__component">{place.name}</ThemeText>
             <ThemeText type="body__secondary" style={styles.stopDescription}>
-              {stopPlace.node?.place?.description ||
-                t(DeparturesTexts.stopPlaceList.stopPlace)}
+              {place.description || t(DeparturesTexts.stopPlaceList.stopPlace)}
             </ThemeText>
             <ThemeText type="body__secondary" color="secondary">
-              {stopPlace.node?.distance?.toFixed(0) + ' m'}
+              {stopPlacePosition.node?.distance?.toFixed(0) + ' m'}
             </ThemeText>
           </View>
-          {stopPlace.node?.place?.transportMode?.map((mode) => (
+          {place.transportMode?.map((mode) => (
             <ThemeIcon
               style={styles.stopPlaceIcon}
               size="large"

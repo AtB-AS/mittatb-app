@@ -20,7 +20,7 @@ import useInterval from '@atb/utils/use-interval';
 import {updateDeparturesWithRealtimeV2} from '../../../departure-list/utils';
 import {getStopPlaceDepartures} from '@atb/api/departures/stops-nearest';
 import {flatMap} from 'lodash';
-import {EstimatedCall, StopPlacePosition} from '@atb/api/types/departures';
+import {EstimatedCall, Place} from '@atb/api/types/departures';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 
@@ -61,12 +61,12 @@ const initialState: DepartureDataState = {
 type DepartureDataActions =
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
-      stopPlacePosition: StopPlacePosition;
+      stopPlace: Place;
       startTime?: string;
     }
   | {
       type: 'LOAD_REALTIME_DATA';
-      stopPlacePosition?: StopPlacePosition;
+      stopPlace?: Place;
     }
   | {
       type: 'STOP_LOADER';
@@ -96,9 +96,6 @@ const reducer: ReducerWithSideEffects<
 > = (state, action) => {
   switch (action.type) {
     case 'LOAD_INITIAL_DEPARTURES': {
-      const stopPlace = action.stopPlacePosition.node?.place;
-      if (!stopPlace) return NoUpdate();
-
       // Update input data with new date as this
       // is a fresh fetch. We should fetch the latest information.
       const queryInput: DepartureGroupsQuery = {
@@ -115,22 +112,22 @@ const reducer: ReducerWithSideEffects<
         },
         async (state, dispatch) => {
           try {
-            if (!stopPlace) return;
+            if (!action.stopPlace) return;
             const result = await fetchEstimatedCalls(
               queryInput,
-              action.stopPlacePosition,
+              action.stopPlace,
             );
 
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
-              locationId: stopPlace.id,
+              locationId: action.stopPlace.id,
               result: result,
             });
           } catch (e) {
             dispatch({
               type: 'SET_ERROR',
-              reset: stopPlace.id !== state.locationId,
+              reset: action.stopPlace.id !== state.locationId,
               error: getAxiosErrorType(e),
             });
           } finally {
@@ -142,14 +139,12 @@ const reducer: ReducerWithSideEffects<
 
     case 'LOAD_REALTIME_DATA': {
       if (!state.data?.length) return NoUpdate();
-      const stopPlace = action.stopPlacePosition?.node?.place;
-
       return SideEffect<DepartureDataState, DepartureDataActions>(
         async (_, dispatch) => {
           // Use same query input with same startTime to ensure that
           // we get the same result.
           try {
-            const quayIds = stopPlace?.quays?.map((q) => q.id);
+            const quayIds = action.stopPlace?.quays?.map((q) => q.id);
 
             const realtimeData = await getRealtimeDepartureV2(
               quayIds,
@@ -223,20 +218,19 @@ const reducer: ReducerWithSideEffects<
 };
 
 export function useStopPlaceData(
-  stopPlacePosition: StopPlacePosition,
+  stopPlace: Place,
   startTime?: string,
   updateFrequencyInSeconds: number = 10,
   tickRateInSeconds: number = 10,
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const isFocused = useIsFocused();
-  const stopPlace = stopPlacePosition.node?.place;
 
   const refresh = useCallback(
     () =>
       dispatch({
         type: 'LOAD_INITIAL_DEPARTURES',
-        stopPlacePosition,
+        stopPlace,
         startTime,
       }),
     [stopPlace?.id, startTime],
@@ -254,7 +248,7 @@ export function useStopPlaceData(
     }
   }, [state.tick, state.lastRefreshTime]);
   useInterval(
-    () => dispatch({type: 'LOAD_REALTIME_DATA', stopPlacePosition}),
+    () => dispatch({type: 'LOAD_REALTIME_DATA', stopPlace}),
     updateFrequencyInSeconds * 1000,
     [stopPlace?.id],
     !isFocused,
@@ -274,12 +268,10 @@ export function useStopPlaceData(
 
 async function fetchEstimatedCalls(
   queryInput: DepartureGroupsQuery,
-  stopPlace: StopPlacePosition,
+  stopPlace: Place,
 ): Promise<EstimatedCall[]> {
-  if (!stopPlace.node?.place) return [];
-
   const result = await getStopPlaceDepartures({
-    id: stopPlace.node.place.id,
+    id: stopPlace.id,
     startTime: queryInput.startTime,
     numberOfDepartures: queryInput.limitPerLine,
   });

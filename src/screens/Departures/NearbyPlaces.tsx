@@ -21,7 +21,7 @@ import {View} from 'react-native';
 import Loading from '../Loading';
 import {useNearestStopsData} from './state/NearbyPlacesState';
 import ThemeText from '@atb/components/text';
-import {StopPlacePosition} from '@atb/api/types/departures';
+import {Place, StopPlacePosition} from '@atb/api/types/departures';
 import {NearestStopPlacesQuery} from '@atb/api/types/generated/NearestStopPlacesQuery';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {DeparturesStackParams} from '.';
@@ -163,9 +163,9 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
     }
   };
 
-  const navigateToPlace = (stopPlace: StopPlacePosition) => {
+  const navigateToPlace = (place: Place) => {
     navigation.navigate('PlaceScreen', {
-      stopPlacePosition: stopPlace,
+      place,
     });
   };
 
@@ -218,8 +218,11 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
         >
           {getListDescription()}
         </ThemeText>
-        {orderedStopPlaces.map((stopPlace: StopPlacePosition) => (
-          <StopPlaceItem stopPlace={stopPlace} onPress={navigateToPlace} />
+        {orderedStopPlaces.map((stopPlacePosition: StopPlacePosition) => (
+          <StopPlaceItem
+            stopPlacePosition={stopPlacePosition}
+            onPress={navigateToPlace}
+          />
         ))}
       </View>
     </SimpleDisappearingHeader>
@@ -290,7 +293,7 @@ function sortAndFilterStopPlaces(
 
   // Remove all StopPlaces without Quays
   const filteredEdges = sortedEdges.filter(
-    (stopPlace: StopPlacePosition) => stopPlace.node?.place?.quays?.length,
+    (place: StopPlacePosition) => place.node?.place?.quays?.length,
   );
 
   return filteredEdges;
