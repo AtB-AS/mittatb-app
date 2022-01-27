@@ -93,7 +93,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   transportationIcon: {
     display: 'flex',
     flexDirection: 'row',
-    padding: theme.spacings.xSmall,
+    paddingVertical: theme.spacings.xSmall,
+    paddingHorizontal: theme.spacings.small,
     borderRadius: theme.border.radius.regular,
     marginHorizontal: theme.spacings.xSmall,
   },
