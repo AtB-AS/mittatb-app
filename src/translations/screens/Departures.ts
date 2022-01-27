@@ -13,6 +13,14 @@ const DeparturesTexts = {
   },
   quayChips: {
     allStops: _('Alle stopp', 'All stops'),
+    a11yHint: _(
+      'Aktiver for å vise avganger fra plattform ',
+      'Activate to show departures from platform ',
+    ),
+    a11yAllStopsHint: _(
+      'Aktiver for å vise avganger fra alle plattformer',
+      'Activate to show departures from all platforms',
+    ),
   },
   dateNavigation: {
     prevDay: _('Forrige dag', 'Previous day'),
