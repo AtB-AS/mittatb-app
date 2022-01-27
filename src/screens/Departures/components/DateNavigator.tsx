@@ -6,7 +6,7 @@ import {Language, useTranslation} from '@atb/translations';
 import {
   formatToClock,
   formatToShortDate,
-  formatToSimpleDateTime,
+  formatToVerboseDateTime,
   isInThePast,
 } from '@atb/utils/date';
 import {ArrowLeft, ArrowRight} from '@atb/assets/svg/icons/navigation';
@@ -38,7 +38,7 @@ export default function DateNavigation({
   const a11ySearchTimeText =
     searchTime.option === 'now'
       ? t(DeparturesTexts.dateNavigation.today)
-      : formatToSimpleDateTime(searchTime.date, language);
+      : formatToVerboseDateTime(searchTime.date, language);
 
   const onSetSearchTime = (time: SearchTime) => {
     if (isInThePast(time.date)) {
