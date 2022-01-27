@@ -63,6 +63,11 @@ export default function useTripsQuery(
         ? config_target_page_hits
         : config_target_inital_hits;
 
+      const sanitizedSearchTime =
+        searchTime.option === 'now'
+          ? {...searchTime, date: new Date().toISOString()}
+          : searchTime;
+
       (async function () {
         if (fromLocation && toLocation) {
           try {
@@ -79,7 +84,9 @@ export default function useTripsQuery(
               tripsFoundCount < targetNumberOfHits &&
               performedSearchesCount < config_max_performed_searches
             ) {
-              const searchInput = cursor ? {cursor} : {searchTime};
+              const searchInput: SearchInput = cursor
+                ? {cursor}
+                : {searchTime: sanitizedSearchTime};
 
               if (searchInput.searchTime?.date) {
                 setTimeOfSearch(searchInput.searchTime.date);
@@ -173,17 +180,11 @@ async function doSearch(
   {searchTime, cursor}: SearchInput,
   cancelToken: CancelTokenSource,
 ) {
-  const when = searchTime
-    ? searchTime.option !== 'now'
-      ? searchTime.date
-      : new Date().toISOString()
-    : undefined;
-
   const query: TripsQueryVariables = {
     from: fromLocation,
     to: toLocation,
     cursor,
-    when,
+    when: searchTime?.date,
     arriveBy,
   };
 
