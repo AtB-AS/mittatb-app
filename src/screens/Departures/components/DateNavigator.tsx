@@ -35,10 +35,22 @@ export default function DateNavigation({
     searchTime.option === 'now'
       ? t(DeparturesTexts.dateNavigation.today)
       : formatToTwoLineDateTime(searchTime.date, language);
-  const a11ySearchTimeText =
-    searchTime.option === 'now'
-      ? t(DeparturesTexts.dateNavigation.today)
-      : formatToVerboseDateTime(searchTime.date, language);
+
+  const getA11ySearchTimeText = () => {
+    const parsed = parseISO(searchTime.date);
+
+    if (searchTime.option === 'now')
+      return t(DeparturesTexts.dateNavigation.today);
+
+    if (isSameDay(parsed, new Date()))
+      return (
+        t(DeparturesTexts.dateNavigation.today) +
+        ', ' +
+        formatToClock(parsed, language)
+      );
+
+    return formatToVerboseDateTime(parsed, language);
+  };
 
   const onSetSearchTime = (time: SearchTime) => {
     if (isInThePast(time.date)) {
@@ -87,7 +99,9 @@ export default function DateNavigation({
         onPress={onLaterTimePress}
         text={searchTimeText}
         accessibilityLabel={t(
-          DeparturesTexts.dateNavigation.a11ySelectedLabel(a11ySearchTimeText),
+          DeparturesTexts.dateNavigation.a11ySelectedLabel(
+            getA11ySearchTimeText(),
+          ),
         )}
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yChangeDateHint)}
         type="compact"
