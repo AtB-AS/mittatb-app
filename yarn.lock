@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@atb-as/generate-assets@^2.0.4":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-2.0.4.tgz#112e760a72de0b82dcbdabda237dbe1a2a4ed591"
-  integrity sha512-rE2N6LrgnV5XCQltlL0aO/+NHBJ9xcdK6sa7apUAdluBWbzmcfIqLwpIqzH9f7eO+WEB1Yb9Sk/RQZAGrW96bg==
+"@atb-as/generate-assets@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-2.1.1.tgz#011945a956eef3aaff23e67f71884cb4735dcb8c"
+  integrity sha512-xoc10FaeDlcTn8r2tZZJDMnx/P0YdSAwpY/9rmqiLrrXyXULCSkzzpY4PXHGuVJU1OKHmIvEOb1m0o0IvH2XBQ==
   dependencies:
     commander "^8.3.0"
     fast-glob "^3.2.7"
