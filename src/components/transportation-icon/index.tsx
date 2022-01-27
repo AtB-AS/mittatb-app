@@ -44,7 +44,11 @@ const TransportationIcon: React.FC<TransportationIconProps> = ({
   const styles = useStyles();
 
   const lineNumberElement = lineNumber ? (
-    <ThemeText type="body__primary--bold" color={themeColor}>
+    <ThemeText
+      type="body__primary--bold"
+      color={themeColor}
+      style={styles.lineNumberText}
+    >
       {lineNumber}
     </ThemeText>
   ) : null;
@@ -52,7 +56,6 @@ const TransportationIcon: React.FC<TransportationIconProps> = ({
   return svg ? (
     <View style={[styles.transportationIcon, {backgroundColor}]}>
       <ThemeIcon
-        style={styles.lineNumber}
         svg={svg}
         colorType={themeColor}
         accessibilityLabel={t(getTranslatedModeName(mode))}
@@ -90,13 +93,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   transportationIcon: {
     display: 'flex',
     flexDirection: 'row',
-    paddingVertical: theme.spacings.xSmall,
-    paddingRight: theme.spacings.small,
-    paddingLeft: theme.spacings.xSmall,
+    padding: theme.spacings.xSmall,
     borderRadius: theme.border.radius.regular,
     marginHorizontal: theme.spacings.xSmall,
   },
-  lineNumber: {
-    marginHorizontal: theme.spacings.xSmall,
+  lineNumberText: {
+    marginLeft: theme.spacings.xSmall,
   },
 }));
