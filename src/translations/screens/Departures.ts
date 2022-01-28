@@ -25,6 +25,14 @@ const DeparturesTexts = {
   dateNavigation: {
     prevDay: _('Forrige dag', 'Previous day'),
     nextDay: _('Neste dag', 'Next day'),
+    a11yNextDayHint: _(
+      'Aktiver for å gå til neste dag',
+      'Activate to go to next day',
+    ),
+    a11yPreviousDayHint: _(
+      'Aktiver for å gå til forrige dag',
+      'Activate to go to previous day',
+    ),
     today: _('I dag', 'Today'),
     a11yDisabled: _('Deaktivert', 'Disabled'),
     a11yChangeDateHint: _(

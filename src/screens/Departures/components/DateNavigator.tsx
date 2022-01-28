@@ -90,7 +90,7 @@ export default function DateNavigation({
         accessibilityHint={
           disablePreviousDayNavigation
             ? t(DeparturesTexts.dateNavigation.a11yDisabled)
-            : undefined
+            : t(DeparturesTexts.dateNavigation.a11yPreviousDayHint)
         }
         textStyle={{
           marginLeft: theme.spacings.xSmall,
@@ -126,6 +126,7 @@ export default function DateNavigation({
         textStyle={{
           marginRight: theme.spacings.xSmall,
         }}
+        accessibilityHint={t(DeparturesTexts.dateNavigation.a11yNextDayHint)}
       ></Button>
     </View>
   );
