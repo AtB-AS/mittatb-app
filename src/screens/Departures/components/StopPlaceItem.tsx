@@ -27,7 +27,12 @@ export default function StopPlaceItem({
 
   return (
     <Sections.Section withPadding>
-      <Sections.GenericClickableItem onPress={() => onPress(place)}>
+      <Sections.GenericClickableItem
+        onPress={() => onPress(place)}
+        accessibilityHint={t(
+          DeparturesTexts.stopPlaceList.a11yStopPlaceItemHint,
+        )}
+      >
         <View style={styles.stopPlaceContainer}>
           <View style={styles.stopPlaceInfo}>
             <ThemeText type="heading__component">{place.name}</ThemeText>
