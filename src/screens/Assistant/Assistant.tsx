@@ -475,6 +475,46 @@ const Assistant: React.FC<Props> = ({
       alertContext="travel"
     >
       <ScreenReaderAnnouncement message={searchStateMessage} />
+      <Feedback
+        questions={[
+          {
+            questionType: QuestionTypes.GoodOrBad,
+            questionText: 'Hva syntes du om reiseforslaget?',
+            alternatives: [
+              {
+                alternativeText: 'Good',
+                checked: false,
+              },
+              {
+                alternativeText: 'Bad',
+                checked: false,
+              },
+            ],
+          },
+          {
+            questionType: QuestionTypes.TextAlternatives,
+            questionText: 'Hvorfor syns du visningen er dårlig?',
+            alternatives: [
+              {
+                alternativeText: 'Jeg savner favorittene mine',
+                checked: false,
+              },
+              {
+                alternativeText: 'Jeg foretrekker den gamle visningen',
+                checked: false,
+              },
+              {
+                alternativeText: 'Den er uoversiktlig',
+                checked: false,
+              },
+              {
+                alternativeText: 'Annet',
+                checked: false,
+              },
+            ],
+          },
+        ]}
+      />
       <Results
         tripPatterns={tripPatterns}
         isSearching={isSearching}
@@ -483,15 +523,6 @@ const Assistant: React.FC<Props> = ({
         resultReasons={noResultReasons}
         onDetailsPressed={onPressed}
         errorType={error}
-      />
-      <Feedback
-        questions={[
-          {
-            questionType: QuestionTypes.GoodOrBad,
-            questionText: 'Hva syntes du om reiseforslaget?',
-            alternatives: ['Good', 'Bad'],
-          },
-        ]}
       />
     </DisappearingHeader>
   );
