@@ -80,6 +80,7 @@ export default function EstimatedCallItem({
       style={styles.estimatedCallItem}
       accessible={true}
       accessibilityLabel={getA11yLineHint()}
+      accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
     >
       {line && (
         <LineChip

@@ -55,5 +55,9 @@ const DeparturesTexts = {
     ),
   },
   line: _('Linje', 'Line'),
+  a11yEstimatedCallItemHint: _(
+    'Aktiver for å se detaljer',
+    'Activate to view details',
+  ),
 };
 export default DeparturesTexts;
