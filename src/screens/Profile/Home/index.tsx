@@ -160,14 +160,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           </Sections.GenericItem>
           <Sections.ActionItem
             mode="toggle"
-            text={t(ProfileTexts.sections.newFeatures.assistant)}
-            checked={useExperimentalTripSearch}
-            onPress={(useExperimentalTripSearch) =>
-              setPreference({useExperimentalTripSearch})
-            }
-          />
-          <Sections.ActionItem
-            mode="toggle"
             text={t(ProfileTexts.sections.newFeatures.departures)}
             checked={newDepartures}
             onPress={(newDepartures) => setPreference({newDepartures})}
@@ -277,6 +269,14 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           customerProfile?.debug) && (
           <Sections.Section withPadding>
             <Sections.HeaderItem text="Developer menu" />
+            <Sections.ActionItem
+              mode="toggle"
+              text={t(ProfileTexts.sections.newFeatures.assistant)}
+              checked={useExperimentalTripSearch}
+              onPress={(useExperimentalTripSearch) =>
+                setPreference({useExperimentalTripSearch})
+              }
+            />
             <Sections.LinkItem
               text="Design system"
               onPress={() => navigation.navigate('DesignSystem')}
