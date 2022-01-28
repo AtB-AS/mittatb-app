@@ -478,21 +478,6 @@ const Assistant: React.FC<Props> = ({
       <Feedback
         questions={[
           {
-            questionType: QuestionTypes.GoodOrBad,
-            questionText: 'Hva syntes du om reiseforslaget?',
-            alternatives: [
-              {
-                alternativeText: 'Good',
-                checked: false,
-              },
-              {
-                alternativeText: 'Bad',
-                checked: false,
-              },
-            ],
-          },
-          {
-            questionType: QuestionTypes.TextAlternatives,
             questionText: 'Hvorfor syns du visningen er dårlig?',
             alternatives: [
               {
