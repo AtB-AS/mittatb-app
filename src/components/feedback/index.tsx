@@ -9,30 +9,58 @@ type Props = {
   questions: Array<Question>;
 };
 
-export enum QuestionTypes {
-  GoodOrBad = 'GOODORBAD',
-  TextAlternatives = 'TEXTALTERNATIVES',
-}
-
 export type Alternative = {
   alternativeText: string;
   checked: boolean;
 };
 
 export type Question = {
-  questionType: QuestionTypes;
   questionText: string;
-  alternatives: Array<Alternative>;
+  alternatives?: Array<Alternative>;
 };
 
-const submitFeedback = () => {
-  console.log('feedback submitted');
-};
+const SuccessComponent = () => (
+  <ThemeText>Takk for din tilbakemelding!</ThemeText>
+);
+
+export enum Opinions {
+  Good = 'GOOD',
+  Bad = 'BAD',
+  NotClickedYet = 'NOTCLICKEDYET',
+}
+
+interface GoodOrBadProps {
+  setSelectedOpinion: (e: Opinions) => void;
+}
+
+const GoodOrBadQuestion = ({setSelectedOpinion}: GoodOrBadProps) => (
+  <>
+    <ThemeText>Hva syntes du om reiseforslaget?</ThemeText>
+
+    <ActionItem
+      text={'Bra'}
+      onPress={() => setSelectedOpinion(Opinions.Good)}
+      mode="check"
+      type="compact"
+    />
+
+    <ActionItem
+      text={'Dårlig'}
+      onPress={() => setSelectedOpinion(Opinions.Bad)}
+      mode="check"
+      type="compact"
+    />
+  </>
+);
 
 export const Feedback = ({questions}: Props) => {
   const styles = useThemeStyles();
   const {theme} = useTheme();
 
+  const [submitted, setSubmitted] = useState(false);
+  const [selectedOpinion, setSelectedOpinion] = useState(
+    Opinions.NotClickedYet,
+  );
   const [receivedFeedback, setReceivedFeedback] = useState({
     addedQuestions: [
       {
@@ -43,29 +71,39 @@ export const Feedback = ({questions}: Props) => {
   });
 
   const handleAnswerPress = (clickedAnswer: string) => {
+    // Her må det skje noe med alternativene som er valgt
     console.log(clickedAnswer);
   };
 
-  console.log(questions[0].alternatives);
+  const submitFeedback = () => {
+    console.log('feedback submitted');
+  };
 
   return (
     <View style={styles.container}>
-      {questions.map((question: Question) => (
-        <>
-          <ThemeText>{question.questionText}</ThemeText>
+      {submitted ? (
+        <SuccessComponent />
+      ) : (
+        <GoodOrBadQuestion setSelectedOpinion={setSelectedOpinion} />
+      )}
 
-          <Section withTopPadding withBottomPadding>
-            {question.alternatives.map((alternative) => (
-              <ActionItem
-                text={alternative.alternativeText}
-                onPress={() => handleAnswerPress(alternative.alternativeText)}
-                mode="check"
-                type="compact"
-              />
-            ))}
-          </Section>
-        </>
-      ))}
+      {selectedOpinion === Opinions.Bad &&
+        questions.map((question: Question) => (
+          <>
+            <ThemeText>{question.questionText}</ThemeText>
+
+            <Section withTopPadding withBottomPadding>
+              {question.alternatives?.map((alternative) => (
+                <ActionItem
+                  text={alternative.alternativeText}
+                  onPress={() => handleAnswerPress(alternative.alternativeText)}
+                  mode="check"
+                  type="compact"
+                />
+              ))}
+            </Section>
+          </>
+        ))}
 
       <Button
         text="Send tilbakemelding"
