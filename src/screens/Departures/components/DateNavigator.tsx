@@ -71,6 +71,7 @@ export default function DateNavigation({
         close={close}
         initialTime={searchTime}
         setSearchTime={onSetSearchTime}
+        allowTimeInPast={false}
       ></DepartureTimeSheet>
     ));
   };

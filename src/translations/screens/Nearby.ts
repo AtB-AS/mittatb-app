@@ -66,6 +66,10 @@ const NearbyTexts = {
     ),
     confirm: _('Bekreft', 'Confirm'),
     header: _('Velg dato og tid', 'Select date and time'),
+    a11yInPastHint: _(
+      'Valgt tidspunkt er i fortiden. Nåtid vil bli brukt i stedet.',
+      'Selected time is in the past. Current time will be used instead.',
+    ),
   },
   messages: {
     networkError: _(
