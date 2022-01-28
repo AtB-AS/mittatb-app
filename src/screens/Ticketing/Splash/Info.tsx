@@ -36,10 +36,10 @@ export default function SplashInfo({navigation}: Props) {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.contentContainer}>
           <View style={styles.textContent}>
-            <ThemeText style={[styles.text, styles.bold]}>
+            <ThemeText color="primary_2" style={[styles.text, styles.bold]}>
               {t(TicketSplashTexts.splash.title)}
             </ThemeText>
-            <ThemeText style={styles.text}>
+            <ThemeText color="primary_2" style={styles.text}>
               {t(TicketSplashTexts.splash.paragraph1)}
             </ThemeText>
           </View>
