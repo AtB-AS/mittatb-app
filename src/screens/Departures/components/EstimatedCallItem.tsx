@@ -7,6 +7,7 @@ import {dictionary, useTranslation} from '@atb/translations';
 import {
   formatToClockOrLongRelativeMinutes,
   formatToClockOrRelativeMinutes,
+  formatToSimpleDate,
 } from '@atb/utils/date';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
@@ -15,6 +16,7 @@ import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types
 import useFontScale from '@atb/utils/use-font-scale';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {StyleSheet, useTheme} from '@atb/theme';
+import {isToday, parseISO} from 'date-fns';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
@@ -39,18 +41,32 @@ export default function EstimatedCallItem({
     language,
     t(dictionary.date.units.now),
   );
-  const a11yTime = formatToClockOrLongRelativeMinutes(
-    departure.expectedDepartureTime,
-    language,
-    t(dictionary.date.units.now),
-    9,
-  );
   const timeWithRealtimePrefix = departure.realtime
     ? time
     : t(dictionary.missingRealTimePrefix) + time;
-  const a11yTimeWithRealtimePrefix = departure.realtime
-    ? a11yTime
-    : t(dictionary.a11yMissingRealTimePrefix) + a11yTime;
+
+  const getA11yLineHint = () => {
+    const parsedDepartureTime = parseISO(departure.expectedDepartureTime);
+    const a11yClock = formatToClockOrLongRelativeMinutes(
+      departure.expectedDepartureTime,
+      language,
+      t(dictionary.date.units.now),
+      9,
+    );
+    const a11yTimeWithRealtimePrefix = departure.realtime
+      ? a11yClock
+      : t(dictionary.a11yMissingRealTimePrefix) + a11yClock;
+    const a11yDate = !isToday(parsedDepartureTime)
+      ? formatToSimpleDate(parsedDepartureTime, language) + ','
+      : '';
+
+    const a11yLineInfo = `${t(DeparturesTexts.line)} ${line?.publicCode}, ${
+      departure.destinationDisplay?.frontText
+    }`;
+    const a11yDateInfo = `${a11yDate} ${a11yTimeWithRealtimePrefix}`;
+
+    return `${a11yLineInfo}. ${a11yDateInfo}`;
+  };
 
   return (
     <TouchableOpacity
@@ -63,13 +79,7 @@ export default function EstimatedCallItem({
       }
       style={styles.estimatedCallItem}
       accessible={true}
-      accessibilityLabel={t(
-        DeparturesTexts.a11yEstimatedCallItem(
-          a11yTimeWithRealtimePrefix,
-          line?.publicCode,
-          departure.destinationDisplay?.frontText,
-        ),
-      )}
+      accessibilityLabel={getA11yLineHint()}
     >
       {line && (
         <LineChip

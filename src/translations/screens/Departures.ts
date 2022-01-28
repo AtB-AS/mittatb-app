@@ -54,14 +54,6 @@ const DeparturesTexts = {
       'Activate to show more departures',
     ),
   },
-  a11yEstimatedCallItem: (
-    time: string,
-    publicCode?: string,
-    frontText?: string,
-  ) =>
-    _(
-      `Linje ${publicCode}, ${frontText}. ${time}`,
-      `Line ${publicCode}, ${frontText}. ${time}`,
-    ),
+  line: _('Linje', 'Line'),
 };
 export default DeparturesTexts;
