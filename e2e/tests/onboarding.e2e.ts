@@ -1,12 +1,14 @@
 import {device, by, element, expect} from 'detox';
+import setLocation from '../utils';
 
 describe('Onboarding', () => {
   beforeAll(async () => {
     await device.launchApp({
       permissions: {
-        location: 'always',
+        location: 'inuse',
       },
     });
+    await setLocation(62.4305, 9.3951);
   });
 
   // beforeEach(async () => {
