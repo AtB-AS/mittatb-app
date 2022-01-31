@@ -41,21 +41,27 @@ const GoodOrBadQuestion = ({
   <>
     <ThemeText>Hva syntes du om reiseforslaget?</ThemeText>
 
-    <ActionItem
-      text={'Bra'}
-      onPress={() => setSelectedOpinion(Opinions.Good)}
-      mode="check"
-      checked={checkedItem === Opinions.Good}
-      type="compact"
-    />
+    <Section withTopPadding withBottomPadding>
+      <Section withPadding>
+        <ActionItem
+          text={'Bra'}
+          onPress={() => setSelectedOpinion(Opinions.Good)}
+          mode="check"
+          checked={checkedItem === Opinions.Good}
+          type="compact"
+        />
+      </Section>
 
-    <ActionItem
-      text={'Dårlig'}
-      onPress={() => setSelectedOpinion(Opinions.Bad)}
-      mode="check"
-      checked={checkedItem === Opinions.Bad}
-      type="compact"
-    />
+      <Section withPadding>
+        <ActionItem
+          text={'Dårlig'}
+          onPress={() => setSelectedOpinion(Opinions.Bad)}
+          mode="check"
+          checked={checkedItem === Opinions.Bad}
+          type="compact"
+        />
+      </Section>
+    </Section>
   </>
 );
 
@@ -103,23 +109,29 @@ export const Feedback = ({questions}: Props) => {
 
             <Section withTopPadding withBottomPadding>
               {question.alternatives?.map((alternative) => (
-                <ActionItem
-                  text={alternative.alternativeText}
-                  onPress={() => handleAnswerPress(alternative.alternativeText)}
-                  mode="check"
-                  type="compact"
-                />
+                <Section withPadding>
+                  <ActionItem
+                    text={alternative.alternativeText}
+                    onPress={() =>
+                      handleAnswerPress(alternative.alternativeText)
+                    }
+                    mode="check"
+                    type="compact"
+                  />
+                </Section>
               ))}
             </Section>
           </>
         ))}
 
-      <Button
-        text="Send tilbakemelding"
-        onPress={submitFeedback}
-        mode="primary"
-        color="secondary_1"
-      />
+      <Section withBottomPadding>
+        <Button
+          text="Send tilbakemelding"
+          onPress={submitFeedback}
+          mode="primary"
+          color="secondary_1"
+        />
+      </Section>
     </View>
   );
 };
