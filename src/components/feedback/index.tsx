@@ -31,9 +31,13 @@ export enum Opinions {
 
 interface GoodOrBadProps {
   setSelectedOpinion: (e: Opinions) => void;
+  checkedItem: Opinions;
 }
 
-const GoodOrBadQuestion = ({setSelectedOpinion}: GoodOrBadProps) => (
+const GoodOrBadQuestion = ({
+  setSelectedOpinion,
+  checkedItem,
+}: GoodOrBadProps) => (
   <>
     <ThemeText>Hva syntes du om reiseforslaget?</ThemeText>
 
@@ -41,6 +45,7 @@ const GoodOrBadQuestion = ({setSelectedOpinion}: GoodOrBadProps) => (
       text={'Bra'}
       onPress={() => setSelectedOpinion(Opinions.Good)}
       mode="check"
+      checked={checkedItem === Opinions.Good}
       type="compact"
     />
 
@@ -48,6 +53,7 @@ const GoodOrBadQuestion = ({setSelectedOpinion}: GoodOrBadProps) => (
       text={'Dårlig'}
       onPress={() => setSelectedOpinion(Opinions.Bad)}
       mode="check"
+      checked={checkedItem === Opinions.Bad}
       type="compact"
     />
   </>
@@ -84,7 +90,10 @@ export const Feedback = ({questions}: Props) => {
       {submitted ? (
         <SuccessComponent />
       ) : (
-        <GoodOrBadQuestion setSelectedOpinion={setSelectedOpinion} />
+        <GoodOrBadQuestion
+          setSelectedOpinion={setSelectedOpinion}
+          checkedItem={selectedOpinion}
+        />
       )}
 
       {selectedOpinion === Opinions.Bad &&
