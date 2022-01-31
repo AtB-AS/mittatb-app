@@ -7,7 +7,7 @@ import Button from '@atb/components/button';
 import DisappearingHeader from '@atb/components/disappearing-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {LocationInput, Section} from '@atb/components/sections';
-import Feedback, {QuestionTypes} from '@atb/components/feedback';
+import Feedback from '@atb/components/feedback';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import FavoriteChips from '@atb/favorite-chips';
