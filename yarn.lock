@@ -2822,6 +2822,13 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+"@types/child-process-promise@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@types/child-process-promise/-/child-process-promise-2.2.2.tgz#ac7d640a6289f7caa6102d92d83a0123a07a4937"
+  integrity sha512-4eGTIhKW0jb9DlS81Fgo/UyZ12DMhDhz3Ec8tdHW53l4ubteynNIuy7Z1HNnyHn1jTzXa/o9iX0WoAdiSoDs+Q==
+  dependencies:
+    "@types/node" "*"
+
 "@types/detox@^18.1.0":
   version "18.1.0"
   resolved "https://registry.yarnpkg.com/@types/detox/-/detox-18.1.0.tgz#5d204f08c8db3a03827f9146b043fc2421327753"
@@ -3927,7 +3934,7 @@ char-regex@^1.0.2:
   resolved "https://registry.yarnpkg.com/char-regex/-/char-regex-1.0.2.tgz#d744358226217f981ed58f479b1d6bcc29545dcf"
   integrity sha512-kWWXztvZ5SBQV+eRgKFeh8q5sLuZY2+8WUIzlxWVTg+oGwY14qylx1KbKzHd8P6ZYkAg0xyIDU9JMHhyJMZ1jw==
 
-child-process-promise@^2.2.0:
+child-process-promise@^2.2.0, child-process-promise@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/child-process-promise/-/child-process-promise-2.2.1.tgz#4730a11ef610fad450b8f223c79d31d7bdad8074"
   integrity sha1-RzChHvYQ+tRQuPIjx50x172tgHQ=
