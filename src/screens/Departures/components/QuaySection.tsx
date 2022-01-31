@@ -77,18 +77,23 @@ export default function QuaySection({
             ItemSeparatorComponent={SectionSeparator}
             data={departures}
             renderItem={({item, index}) => (
-              <Sections.GenericItem
+              <Sections.GenericClickableItem
                 radius={
                   !navigateToQuay && index === departures.length - 1
                     ? 'bottom'
                     : undefined
                 }
+                onPress={() =>
+                  navigateToDetails(
+                    item.serviceJourney?.id,
+                    item.expectedDepartureTime,
+                    item.quay?.id,
+                  )
+                }
+                accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
               >
-                <EstimatedCallItem
-                  departure={item}
-                  navigateToDetails={navigateToDetails}
-                ></EstimatedCallItem>
-              </Sections.GenericItem>
+                <EstimatedCallItem departure={item}></EstimatedCallItem>
+              </Sections.GenericClickableItem>
             )}
             keyExtractor={(item) => item.serviceJourney?.id || ''}
             ListEmptyComponent={

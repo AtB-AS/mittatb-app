@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
@@ -20,16 +20,10 @@ import {isToday, parseISO} from 'date-fns';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
-  navigateToDetails: (
-    serviceJourneyId?: string,
-    date?: string,
-    fromQuayId?: string,
-  ) => void;
 };
 
 export default function EstimatedCallItem({
   departure,
-  navigateToDetails,
 }: EstimatedCallItemProps): JSX.Element {
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -45,7 +39,7 @@ export default function EstimatedCallItem({
     ? time
     : t(dictionary.missingRealTimePrefix) + time;
 
-  const getA11yLineHint = () => {
+  const getA11yLineLabel = () => {
     const parsedDepartureTime = parseISO(departure.expectedDepartureTime);
     const a11yClock = formatToClockOrLongRelativeMinutes(
       departure.expectedDepartureTime,
@@ -69,18 +63,10 @@ export default function EstimatedCallItem({
   };
 
   return (
-    <TouchableOpacity
-      onPress={() =>
-        navigateToDetails(
-          departure.serviceJourney?.id,
-          departure.expectedDepartureTime,
-          departure.quay?.id,
-        )
-      }
+    <View
       style={styles.estimatedCallItem}
       accessible={true}
-      accessibilityLabel={getA11yLineHint()}
-      accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
+      accessibilityLabel={getA11yLineLabel()}
     >
       {line && (
         <LineChip
@@ -93,7 +79,7 @@ export default function EstimatedCallItem({
         {departure.destinationDisplay?.frontText}
       </ThemeText>
       <ThemeText type="body__primary--bold">{timeWithRealtimePrefix}</ThemeText>
-    </TouchableOpacity>
+    </View>
   );
 }
 
