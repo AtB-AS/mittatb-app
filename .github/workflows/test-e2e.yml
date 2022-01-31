@@ -24,16 +24,18 @@ jobs:
           app-environment: 'staging'
           app-org: 'atb'
           git-crypt-key: ${{ secrets.git-crypt-key }}
+      - name: Get potentially cached app
+        uses: actions/cache@v2
+        id: detox-app-cache
+        with:
+          path: |
+            ios/build/Build/Products/Release-iphonesimulator/AtB.app
+          key: detox-app-cache-${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}
       - name: Generate native assets
+        if: steps.detox-app-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn generate-native-assets
-      # - name: Get potentially cached Pods
-      #   uses: actions/cache@v2
-      #   id: pods-cache
-      #   with:
-      #     path: "ios/Pods"
-      #     key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
       - name: Install Pods
-        if: steps.pods-cache.outputs.cache-hit != 'true'
+        if: steps.detox-app-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane ios pods
       - name: Install Detox CLI
         run: npm install -g detox-cli
@@ -42,6 +44,10 @@ jobs:
           brew tap wix/brew
           brew install applesimutils
       - name: Build Detox-version of app
+        if: steps.detox-app-cache.outputs.cache-hit != 'true'
         run: detox clean-framework-cache && detox build-framework-cache && detox build --configuration ${{ inputs.e2econfig }}
+      - name: Replace bundle in app cache
+        if: steps.detox-app-cache.outputs.cache-hit == 'true'
+        run: npx react-native bundle --platform ios --dev false --reset-cache --entry-file index.js --bundle-output main.jsbundle && mv main.jsbundle ios/build/Build/Products/Release-iphonesimulator/AtB.app/
       - name: Run tests
         run: detox test --configuration ${{ inputs.e2econfig }}
