@@ -482,19 +482,15 @@ const Assistant: React.FC<Props> = ({
             alternatives: [
               {
                 alternativeText: 'Jeg savner favorittene mine',
-                checked: false,
               },
               {
                 alternativeText: 'Jeg foretrekker den gamle visningen',
-                checked: false,
               },
               {
                 alternativeText: 'Den er uoversiktlig',
-                checked: false,
               },
               {
                 alternativeText: 'Annet',
-                checked: false,
               },
             ],
           },

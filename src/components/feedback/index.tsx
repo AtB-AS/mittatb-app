@@ -11,7 +11,6 @@ type Props = {
 
 export type Alternative = {
   alternativeText: string;
-  checked: boolean;
 };
 
 export type Question = {
@@ -65,6 +64,45 @@ const GoodOrBadQuestion = ({
   </>
 );
 
+interface RenderQuestionProps {
+  selectedOpinion: Opinions;
+  questions: Array<Question>;
+  handleAnswerPress: (answer: string) => void;
+}
+
+export const RenderQuestions = ({
+  selectedOpinion,
+  questions,
+  handleAnswerPress,
+}: RenderQuestionProps) => {
+  return (
+    <>
+      {selectedOpinion === Opinions.Bad &&
+        questions.map((question: Question) => (
+          <>
+            <ThemeText>{question.questionText}</ThemeText>
+
+            <Section withTopPadding withBottomPadding>
+              {question.alternatives?.map((alternative) => (
+                <Section withPadding>
+                  <ActionItem
+                    text={alternative.alternativeText}
+                    onPress={() =>
+                      handleAnswerPress(alternative.alternativeText)
+                    }
+                    mode="check"
+                    checked={false}
+                    type="compact"
+                  />
+                </Section>
+              ))}
+            </Section>
+          </>
+        ))}
+    </>
+  );
+};
+
 export const Feedback = ({questions}: Props) => {
   const styles = useThemeStyles();
   const {theme} = useTheme();
@@ -88,7 +126,7 @@ export const Feedback = ({questions}: Props) => {
   };
 
   const submitFeedback = () => {
-    console.log('feedback submitted');
+    setSubmitted(true);
   };
 
   return (
@@ -102,27 +140,11 @@ export const Feedback = ({questions}: Props) => {
         />
       )}
 
-      {selectedOpinion === Opinions.Bad &&
-        questions.map((question: Question) => (
-          <>
-            <ThemeText>{question.questionText}</ThemeText>
-
-            <Section withTopPadding withBottomPadding>
-              {question.alternatives?.map((alternative) => (
-                <Section withPadding>
-                  <ActionItem
-                    text={alternative.alternativeText}
-                    onPress={() =>
-                      handleAnswerPress(alternative.alternativeText)
-                    }
-                    mode="check"
-                    type="compact"
-                  />
-                </Section>
-              ))}
-            </Section>
-          </>
-        ))}
+      <RenderQuestions
+        selectedOpinion={selectedOpinion}
+        handleAnswerPress={handleAnswerPress}
+        questions={questions}
+      />
 
       <Section withBottomPadding>
         <Button
