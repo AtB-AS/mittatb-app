@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v1
+      - name: Pre-boot simulator
+        run: sh e2e/boot.sh
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
