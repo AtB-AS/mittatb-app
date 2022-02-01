@@ -7,6 +7,10 @@ describe('Onboarding', () => {
       permissions: {
         location: 'inuse',
       },
+      languageAndLocale: {
+        language: 'en',
+        locale: 'US',
+      },
     });
     await setLocation(62.4305, 9.3951);
   });
