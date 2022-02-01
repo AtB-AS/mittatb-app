@@ -43,9 +43,11 @@ jobs:
         run: | 
           brew tap wix/brew
           brew install applesimutils
+      - name: Build Detox framework
+        run: detox clean-framework-cache && detox build-framework-cache
       - name: Build Detox-version of app
         if: steps.detox-app-cache.outputs.cache-hit != 'true'
-        run: detox clean-framework-cache && detox build-framework-cache && detox build --configuration ${{ inputs.e2econfig }}
+        run: detox build --configuration ${{ inputs.e2econfig }}
       - name: Replace bundle in app cache
         if: steps.detox-app-cache.outputs.cache-hit == 'true'
         run: npx react-native bundle --platform ios --dev false --reset-cache --entry-file index.js --bundle-output main.jsbundle && mv main.jsbundle build/detox/ios/Build/Products/Release-iphonesimulator/AtB.app/
