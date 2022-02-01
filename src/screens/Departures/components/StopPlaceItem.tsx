@@ -25,10 +25,15 @@ export default function StopPlaceItem({
   const place = stopPlacePosition.node?.place;
   if (!place) return <></>;
 
+  const description =
+    place.description || t(DeparturesTexts.stopPlaceList.stopPlace);
+  const distance = stopPlacePosition.node?.distance?.toFixed(0);
+
   return (
     <Sections.Section withPadding>
       <Sections.GenericClickableItem
         onPress={() => onPress(place)}
+        accessibilityLabel={`${place.name}, ${description}, ${distance}m`}
         accessibilityHint={t(
           DeparturesTexts.stopPlaceList.a11yStopPlaceItemHint,
         )}
@@ -37,10 +42,10 @@ export default function StopPlaceItem({
           <View style={styles.stopPlaceInfo}>
             <ThemeText type="heading__component">{place.name}</ThemeText>
             <ThemeText type="body__secondary" style={styles.stopDescription}>
-              {place.description || t(DeparturesTexts.stopPlaceList.stopPlace)}
+              {description}
             </ThemeText>
             <ThemeText type="body__secondary" color="secondary">
-              {stopPlacePosition.node?.distance?.toFixed(0) + ' m'}
+              {distance + ' m'}
             </ThemeText>
           </View>
           {place.transportMode?.map((mode) => (
