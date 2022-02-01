@@ -134,26 +134,28 @@ export const Feedback = ({questions}: Props) => {
       {submitted ? (
         <SuccessComponent />
       ) : (
-        <GoodOrBadQuestion
-          setSelectedOpinion={setSelectedOpinion}
-          checkedItem={selectedOpinion}
-        />
+        <>
+          <GoodOrBadQuestion
+            setSelectedOpinion={setSelectedOpinion}
+            checkedItem={selectedOpinion}
+          />
+
+          <RenderQuestions
+            selectedOpinion={selectedOpinion}
+            handleAnswerPress={handleAnswerPress}
+            questions={questions}
+          />
+
+          <Section withBottomPadding>
+            <Button
+              text="Send tilbakemelding"
+              onPress={submitFeedback}
+              mode="primary"
+              color="secondary_1"
+            />
+          </Section>
+        </>
       )}
-
-      <RenderQuestions
-        selectedOpinion={selectedOpinion}
-        handleAnswerPress={handleAnswerPress}
-        questions={questions}
-      />
-
-      <Section withBottomPadding>
-        <Button
-          text="Send tilbakemelding"
-          onPress={submitFeedback}
-          mode="primary"
-          color="secondary_1"
-        />
-      </Section>
     </View>
   );
 };
