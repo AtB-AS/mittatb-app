@@ -54,4 +54,4 @@ jobs:
         if: steps.detox-app-cache.outputs.cache-hit == 'true'
         run: npx react-native bundle --platform ios --dev false --reset-cache --entry-file index.js --bundle-output main.jsbundle && mv main.jsbundle build/detox/ios/Build/Products/Release-iphonesimulator/AtB.app/
       - name: Run tests
-        run: detox test --configuration ${{ inputs.e2econfig }}
+        run: detox test --configuration ${{ inputs.e2econfig }} --loglevel trace
