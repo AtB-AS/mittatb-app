@@ -26,16 +26,16 @@
       "device": "simulator",
       "app": {
         "type": "ios.app",
-        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/AtB.app",
-        "build": "export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/atb.xcworkspace -configuration Debug -scheme atb -destination 'generic/platform=iOS Simulator' -derivedDataPath ios/build"
+        "binaryPath": "build/detox/ios/Build/Products/Debug-iphonesimulator/AtB.app",
+        "build": "export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/atb.xcworkspace -configuration Debug -scheme atb -destination 'generic/platform=iOS Simulator' -derivedDataPath build/detox/ios"
       }
     },
     "ios.release": {
       "device": "simulator",
       "app": {
         "type": "ios.app",
-        "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/AtB.app",
-        "build": "export CODE_SIGNING_REQUIRED=NO && export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/atb.xcworkspace -UseNewBuildSystem=YES -configuration Release -scheme atb -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,OS=15.0,name=iPhone 13'"
+        "binaryPath": "build/detox/ios/Build/Products/Release-iphonesimulator/AtB.app",
+        "build": "export CODE_SIGNING_REQUIRED=NO && export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/atb.xcworkspace -UseNewBuildSystem=YES -configuration Release -scheme atb -sdk iphonesimulator -derivedDataPath build/detox/ios -destination 'platform=iOS Simulator,OS=15.0,name=iPhone 13'"
       }
     },
     "android": {
