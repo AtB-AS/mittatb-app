@@ -1,26 +1,36 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Section, ActionItem} from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import Button from '../button';
+import {TripPattern} from '@entur/sdk';
 
-type Props = {
+type FeedbackProps = {
   questions: Array<Question>;
+  tripPatterns: TripPattern[];
+  departures?: string;
 };
 
 export type Alternative = {
+  alternativeId: number;
   alternativeText: string;
 };
 
 export type Question = {
   questionText: string;
+  questionId: number;
   alternatives?: Array<Alternative>;
 };
 
-const SuccessComponent = () => (
-  <ThemeText>Takk for din tilbakemelding!</ThemeText>
-);
+const SubmittedComponent = () => {
+  const styles = useFeedbackStyles();
+  return (
+    <ThemeText style={styles.centerText}>
+      Takk for din tilbakemelding!
+    </ThemeText>
+  );
+};
 
 export enum Opinions {
   Good = 'GOOD',
@@ -36,33 +46,39 @@ interface GoodOrBadProps {
 const GoodOrBadQuestion = ({
   setSelectedOpinion,
   checkedItem,
-}: GoodOrBadProps) => (
-  <>
-    <ThemeText>Hva syntes du om reiseforslaget?</ThemeText>
+}: GoodOrBadProps) => {
+  const styles = useFeedbackStyles();
 
-    <Section withTopPadding withBottomPadding>
-      <Section withPadding>
-        <ActionItem
-          text={'Bra'}
-          onPress={() => setSelectedOpinion(Opinions.Good)}
-          mode="check"
-          checked={checkedItem === Opinions.Good}
-          type="compact"
-        />
-      </Section>
+  return (
+    <>
+      <ThemeText style={styles.centerText}>
+        Hva syntes du om reiseforslaget?
+      </ThemeText>
 
-      <Section withPadding>
-        <ActionItem
-          text={'Dårlig'}
-          onPress={() => setSelectedOpinion(Opinions.Bad)}
-          mode="check"
-          checked={checkedItem === Opinions.Bad}
-          type="compact"
-        />
+      <Section style={styles.feedbackRow} withTopPadding withBottomPadding>
+        <Section withPadding>
+          <ActionItem
+            text={'Bra'}
+            onPress={() => setSelectedOpinion(Opinions.Good)}
+            mode="check"
+            checked={checkedItem === Opinions.Good}
+            type="compact"
+          />
+        </Section>
+
+        <Section withPadding>
+          <ActionItem
+            text={'Dårlig'}
+            onPress={() => setSelectedOpinion(Opinions.Bad)}
+            mode="check"
+            checked={checkedItem === Opinions.Bad}
+            type="compact"
+          />
+        </Section>
       </Section>
-    </Section>
-  </>
-);
+    </>
+  );
+};
 
 interface RenderQuestionProps {
   selectedOpinion: Opinions;
@@ -103,8 +119,12 @@ export const RenderQuestions = ({
   );
 };
 
-export const Feedback = ({questions}: Props) => {
-  const styles = useThemeStyles();
+export const Feedback = ({
+  questions,
+  tripPatterns,
+  departures,
+}: FeedbackProps) => {
+  const styles = useFeedbackStyles();
   const {theme} = useTheme();
 
   const [submitted, setSubmitted] = useState(false);
@@ -126,46 +146,60 @@ export const Feedback = ({questions}: Props) => {
   };
 
   const submitFeedback = () => {
+    console.log('Submitting AssistantFeedback');
     setSubmitted(true);
   };
 
-  return (
-    <View style={styles.container}>
-      {submitted ? (
-        <SuccessComponent />
-      ) : (
-        <>
-          <GoodOrBadQuestion
-            setSelectedOpinion={setSelectedOpinion}
-            checkedItem={selectedOpinion}
-          />
+  useEffect(() => {
+    setSelectedOpinion(Opinions.NotClickedYet);
+    setSubmitted(false);
+  }, [departures, tripPatterns]);
 
-          <RenderQuestions
-            selectedOpinion={selectedOpinion}
-            handleAnswerPress={handleAnswerPress}
-            questions={questions}
-          />
+  if (submitted) return <SubmittedComponent />;
 
-          <Section withBottomPadding>
-            <Button
-              text="Send tilbakemelding"
-              onPress={submitFeedback}
-              mode="primary"
-              color="secondary_1"
-            />
-          </Section>
-        </>
-      )}
-    </View>
-  );
+  if (departures || tripPatterns)
+    return (
+      <View style={styles.container}>
+        <GoodOrBadQuestion
+          setSelectedOpinion={setSelectedOpinion}
+          checkedItem={selectedOpinion}
+        />
+
+        <RenderQuestions
+          selectedOpinion={selectedOpinion}
+          handleAnswerPress={handleAnswerPress}
+          questions={questions}
+        />
+
+        <Section withBottomPadding>
+          <Button
+            text="Send tilbakemelding"
+            onPress={submitFeedback}
+            mode="primary"
+            color="secondary_1"
+          />
+        </Section>
+      </View>
+    );
+
+  return null;
 };
 
-const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
+const useFeedbackStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacings.medium,
     paddingBottom: theme.spacings.medium,
   },
   infoBoxText: theme.typography.body__primary,
+  centerText: {
+    textAlign: 'center',
+  },
+  feedbackRow: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingVertical: theme.spacings.small,
+  },
 }));
 
 export default Feedback;
