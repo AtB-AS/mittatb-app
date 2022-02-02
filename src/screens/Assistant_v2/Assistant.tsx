@@ -56,6 +56,7 @@ import Results from './Results';
 import {ThemeColor} from '@atb/theme/colors';
 import * as navIcons from '@atb/assets/svg/icons/navigation';
 import useTripsQuery from '@atb/screens/Assistant_v2/use-trips-query';
+import Feedback from '@atb/components/feedback';
 
 const themeColor: ThemeColor = 'background_accent';
 
@@ -431,6 +432,34 @@ const Assistant: React.FC<Props> = ({
       alertContext="travel"
     >
       <ScreenReaderAnnouncement message={searchStateMessage} />
+
+      <Feedback
+        tripPatterns={tripPatterns}
+        questions={[
+          {
+            questionId: 0,
+            questionText: 'Hvorfor syns du visningen er dårlig?',
+            alternatives: [
+              {
+                alternativeId: 0,
+                alternativeText: 'Jeg savner favorittene mine',
+              },
+              {
+                alternativeId: 1,
+                alternativeText: 'Jeg foretrekker den gamle visningen',
+              },
+              {
+                alternativeId: 2,
+                alternativeText: 'Den er uoversiktlig',
+              },
+              {
+                alternativeId: 3,
+                alternativeText: 'Annet',
+              },
+            ],
+          },
+        ]}
+      />
       <Results
         tripPatterns={tripPatterns}
         isSearching={isSearching}
