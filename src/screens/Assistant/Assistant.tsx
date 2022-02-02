@@ -7,6 +7,7 @@ import Button from '@atb/components/button';
 import DisappearingHeader from '@atb/components/disappearing-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {LocationInput, Section} from '@atb/components/sections';
+import Feedback from '@atb/components/feedback';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import FavoriteChips from '@atb/favorite-chips';
@@ -474,6 +475,33 @@ const Assistant: React.FC<Props> = ({
       alertContext="travel"
     >
       <ScreenReaderAnnouncement message={searchStateMessage} />
+      <Feedback
+        tripPatterns={tripPatterns}
+        questions={[
+          {
+            questionId: 0,
+            questionText: 'Hvorfor syns du visningen er dårlig?',
+            alternatives: [
+              {
+                alternativeId: 0,
+                alternativeText: 'Jeg savner favorittene mine',
+              },
+              {
+                alternativeId: 1,
+                alternativeText: 'Jeg foretrekker den gamle visningen',
+              },
+              {
+                alternativeId: 2,
+                alternativeText: 'Den er uoversiktlig',
+              },
+              {
+                alternativeId: 3,
+                alternativeText: 'Annet',
+              },
+            ],
+          },
+        ]}
+      />
       <Results
         tripPatterns={tripPatterns}
         isSearching={isSearching}
