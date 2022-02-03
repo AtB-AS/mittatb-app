@@ -19,6 +19,9 @@ const ProfileTexts = {
           label: _('Utløpte billetter', 'Expired tickets'),
         },
       },
+      infoItems: {
+        customerNumber: _('Kundenummer', 'Customer number'),
+      },
     },
     newFeatures: {
       heading: _('Ny funksjonalitet', 'New features'),

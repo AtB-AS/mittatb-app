@@ -46,7 +46,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
-  const {authenticationType, signOut, user} = useAuthState();
+  const {authenticationType, signOut, user, customerNumber} = useAuthState();
   const config = useLocalConfig();
 
   const {fareContracts, customerProfile} = useTicketState();
@@ -109,6 +109,16 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               text={t(ProfileTexts.sections.account.linkItems.logout.label)}
               onPress={signOut}
             />
+          )}
+          {customerNumber && (
+            <Sections.GenericItem>
+              <ThemeText style={style.customerNumberHeading}>
+                {t(ProfileTexts.sections.account.infoItems.customerNumber)}
+              </ThemeText>
+              <ThemeText type="body__secondary" color="secondary">
+                {customerNumber}
+              </ThemeText>
+            </Sections.GenericItem>
           )}
           <Sections.LinkItem
             text={t(
@@ -320,6 +330,9 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     backgroundColor: theme.colors.background_1.backgroundColor,
     flex: 1,
+  },
+  customerNumberHeading: {
+    marginBottom: theme.spacings.xSmall,
   },
   scrollView: {
     paddingVertical: theme.spacings.medium,
