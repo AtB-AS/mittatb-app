@@ -83,7 +83,7 @@ const GoodOrBadQuestion = ({
 interface RenderQuestionProps {
   selectedOpinion: Opinions;
   questions: Array<Question>;
-  handleAnswerPress: (answer: string) => void;
+  handleAnswerPress: (o: {questionId: number; answerId: number}) => void;
 }
 
 export const RenderQuestions = ({
@@ -104,7 +104,10 @@ export const RenderQuestions = ({
                   <ActionItem
                     text={alternative.alternativeText}
                     onPress={() =>
-                      handleAnswerPress(alternative.alternativeText)
+                      handleAnswerPress({
+                        questionId: question.questionId,
+                        answerId: alternative.alternativeId,
+                      })
                     }
                     mode="check"
                     checked={false}
@@ -131,18 +134,31 @@ export const Feedback = ({
   const [selectedOpinion, setSelectedOpinion] = useState(
     Opinions.NotClickedYet,
   );
-  const [receivedFeedback, setReceivedFeedback] = useState({
-    addedQuestions: [
-      {
-        questionText: '',
-        answers: [''],
-      },
-    ],
-  });
+  const [receivedFeedback, setReceivedFeedback] = useState([
+    {questionNumber: 0, selectedAlternatives: [1, 2]},
+  ]);
 
-  const handleAnswerPress = (clickedAnswer: string) => {
+  type handleAnswerPressProps = {
+    questionId: number;
+    answerId: number;
+  };
+
+  const handleAnswerPress = ({
+    questionId,
+    answerId,
+  }: handleAnswerPressProps) => {
     // Her må det skje noe med alternativene som er valgt
-    console.log(clickedAnswer);
+    console.log(
+      `Alternative ${answerId} registered for question ${questionId}`,
+    );
+    const newState = receivedFeedback;
+    const questionInQuestion = newState.find(
+      (question) => question.questionNumber === questionId,
+    );
+    console.log(questionInQuestion);
+    questionInQuestion?.selectedAlternatives.push(answerId);
+    console.log('Setting new state', newState);
+    setReceivedFeedback(newState);
   };
 
   const submitFeedback = () => {
