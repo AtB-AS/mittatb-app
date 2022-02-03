@@ -1,4 +1,4 @@
-/*import entur_react_native_traveller
+import entur_react_native_traveller
 
 @objc(RegisterLogger)
 class RegisterLogger: NSObject {
@@ -7,4 +7,3 @@ class RegisterLogger: NSObject {
     EnturTraveller.logger = EnturTravellerLogger(cb: cb);
   }
 }
-*/

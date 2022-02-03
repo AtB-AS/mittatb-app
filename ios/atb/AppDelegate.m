@@ -54,9 +54,9 @@ static void InitializeFlipper(UIApplication *application) {
       config.releaseStage = bugsnagReleaseStage;
     [Bugsnag startWithConfiguration:config];
     
-    /*[[RegisterLogger alloc] registerWithCb:^(NSError * err) {
+    [[RegisterLogger alloc] registerWithCb:^(NSError * err) {
       [Bugsnag notifyError:err];
-    }];*/
+    }];
   }
 
   if ([FIRApp defaultApp] == nil) {
