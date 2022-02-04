@@ -98,13 +98,13 @@ const AssistantTexts = {
     },
     info: {
       emptyResult: _(
-        'Vi fant dessverre ingen reiseruter som passer til ditt søk.',
+        'Vi fant dessverre ingen reiseruter som passer til ditt søk. ',
         'We could not find any travel routes matching your search criteria.',
       ),
       reasonsTitle: _('Mulige årsaker: ', 'Possible causes:'),
       genericHint: _(
-        'Prøv å justere på sted eller tidspunkt',
-        'Try adjusting your time or location input',
+        'Prøv å justere på sted eller tidspunkt.',
+        'Try adjusting your time or location input.',
       ),
     },
     resultList: {
