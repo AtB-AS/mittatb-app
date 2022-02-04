@@ -40,6 +40,7 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {canSellTicketsForSubMode} from '@atb/operator-config';
 import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
+import Bugsnag from '@bugsnag/react-native';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -68,6 +69,8 @@ export default function DepartureDetails({navigation, route}: Props) {
     items[activeItemIndexState];
   const hasMultipleItems = items.length > 1;
 
+  Bugsnag.leaveBreadcrumb('active Item', {activeItem});
+
   const styles = useStopsStyle();
   const {t} = useTranslation();
 
@@ -77,6 +80,8 @@ export default function DepartureDetails({navigation, route}: Props) {
     isLoading,
   ] = useDepartureData(activeItem, 30, !isFocused);
   const mapData = useMapData(activeItem);
+
+  Bugsnag.leaveBreadcrumb('callGroup', {callGroups});
 
   const canSellTicketsForDeparture = canSellTicketsForSubMode(
     subMode,

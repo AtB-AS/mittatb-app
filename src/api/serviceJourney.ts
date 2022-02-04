@@ -3,6 +3,7 @@ import {EstimatedCall, ServiceJourneyMapInfoData} from '../sdk';
 import client from './client';
 import qs from 'query-string';
 import {stringifyUrl} from './utils';
+import {AxiosRequestConfig} from 'axios';
 
 type ServiceJourneDepartures = {
   value: EstimatedCall[];
@@ -11,12 +12,19 @@ type ServiceJourneDepartures = {
 export async function getDepartures(
   id: string,
   date?: Date,
+  opts?: AxiosRequestConfig,
 ): Promise<EstimatedCall[]> {
   let url = `bff/v1/servicejourney/${encodeURIComponent(id)}/departures`;
   if (date) {
     url = url + `?date=${formatISO(date, {representation: 'date'})}`;
   }
-  const response = await client.get<ServiceJourneDepartures>(url);
+  const response = await client.get<ServiceJourneDepartures>(url, {
+    ...opts,
+    baseURL: 'http://10.0.2.2:8080',
+  });
+
+  console.log(JSON.stringify(response));
+
   return response.data?.value ?? [];
 }
 
