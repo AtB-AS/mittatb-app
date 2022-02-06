@@ -4,23 +4,23 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {Section, ActionItem} from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import Button from '../button';
-import {TripPattern} from '@entur/sdk';
+import {TripPattern} from '@atb/api/types/trips';
 
 type FeedbackProps = {
-  questions: Array<Question>;
-  tripPatterns: TripPattern[];
+  tripPatterns?: TripPattern[];
   departures?: string;
 };
 
 export type Alternative = {
   alternativeId: number;
   alternativeText: string;
+  checked: boolean;
 };
 
 export type Question = {
   questionText: string;
   questionId: number;
-  alternatives?: Array<Alternative>;
+  alternatives: Array<Alternative>;
 };
 
 const SubmittedComponent = () => {
@@ -110,7 +110,7 @@ export const RenderQuestions = ({
                       })
                     }
                     mode="check"
-                    checked={false}
+                    checked={alternative.checked}
                     type="compact"
                   />
                 </Section>
@@ -122,11 +122,7 @@ export const RenderQuestions = ({
   );
 };
 
-export const Feedback = ({
-  questions,
-  tripPatterns,
-  departures,
-}: FeedbackProps) => {
+export const Feedback = ({tripPatterns, departures}: FeedbackProps) => {
   const styles = useFeedbackStyles();
   const {theme} = useTheme();
 
@@ -134,8 +130,19 @@ export const Feedback = ({
   const [selectedOpinion, setSelectedOpinion] = useState(
     Opinions.NotClickedYet,
   );
-  const [receivedFeedback, setReceivedFeedback] = useState([
-    {questionNumber: 0, selectedAlternatives: [1, 2]},
+  const [questions, setQuestions] = useState<Array<Question>>([
+    {
+      questionText: 'Hva er greia med flymat?',
+      questionId: 0,
+      alternatives: [
+        {alternativeId: 0, alternativeText: 'Vet ikke', checked: false},
+        {
+          alternativeId: 1,
+          alternativeText: 'Vet absolutt ikke',
+          checked: false,
+        },
+      ],
+    },
   ]);
 
   type handleAnswerPressProps = {
@@ -151,14 +158,24 @@ export const Feedback = ({
     console.log(
       `Alternative ${answerId} registered for question ${questionId}`,
     );
-    const newState = receivedFeedback;
+    const newState = questions;
     const questionInQuestion = newState.find(
-      (question) => question.questionNumber === questionId,
+      (question) => question.questionId === questionId,
     );
-    console.log(questionInQuestion);
-    questionInQuestion?.selectedAlternatives.push(answerId);
+    console.log('Found question: ', questionInQuestion);
+
+    if (questionInQuestion) {
+      const alternativeInQuestion = questionInQuestion.alternatives.find(
+        (alternative) => alternative.alternativeId === answerId,
+      );
+      console.log('Alternative: ', alternativeInQuestion);
+      if (alternativeInQuestion) {
+        alternativeInQuestion.checked = !alternativeInQuestion.checked;
+      }
+    }
+
     console.log('Setting new state', newState);
-    setReceivedFeedback(newState);
+    setQuestions(newState);
   };
 
   const submitFeedback = () => {

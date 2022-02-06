@@ -433,33 +433,7 @@ const Assistant: React.FC<Props> = ({
     >
       <ScreenReaderAnnouncement message={searchStateMessage} />
 
-      <Feedback
-        tripPatterns={tripPatterns}
-        questions={[
-          {
-            questionId: 0,
-            questionText: 'Hvorfor syns du visningen er dårlig?',
-            alternatives: [
-              {
-                alternativeId: 0,
-                alternativeText: 'Jeg savner favorittene mine',
-              },
-              {
-                alternativeId: 1,
-                alternativeText: 'Jeg foretrekker den gamle visningen',
-              },
-              {
-                alternativeId: 2,
-                alternativeText: 'Den er uoversiktlig',
-              },
-              {
-                alternativeId: 3,
-                alternativeText: 'Annet',
-              },
-            ],
-          },
-        ]}
-      />
+      <Feedback tripPatterns={tripPatterns} />
       <Results
         tripPatterns={tripPatterns}
         isSearching={isSearching}
