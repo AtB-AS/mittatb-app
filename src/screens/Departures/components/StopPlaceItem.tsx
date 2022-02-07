@@ -26,7 +26,7 @@ export default function StopPlaceItem({
   if (!place) return <></>;
 
   return (
-    <Sections.Section withPadding key={place.id}>
+    <Sections.Section withPadding>
       <Sections.GenericClickableItem onPress={() => onPress(place)}>
         <View style={styles.stopPlaceContainer}>
           <View style={styles.stopPlaceInfo}>
@@ -40,6 +40,7 @@ export default function StopPlaceItem({
           </View>
           {place.transportMode?.map((mode) => (
             <ThemeIcon
+              key={mode}
               style={styles.stopPlaceIcon}
               size="large"
               svg={getTransportModeSvg(mode) || BusSide}

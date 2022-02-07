@@ -220,6 +220,7 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
         </ThemeText>
         {orderedStopPlaces.map((stopPlacePosition: StopPlacePosition) => (
           <StopPlaceItem
+            key={stopPlacePosition.node?.place?.id}
             stopPlacePosition={stopPlacePosition}
             onPress={navigateToPlace}
           />
