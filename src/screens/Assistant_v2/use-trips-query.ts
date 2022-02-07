@@ -11,7 +11,7 @@ import {CancelToken, isCancel} from '@atb/api';
 import {CancelTokenSource} from 'axios';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 import {tripsSearch} from '@atb/api/trips_v2';
-import Bugsnag from '@bugsnag/react-native';
+import Bugsnag, {Breadcrumb} from '@bugsnag/react-native';
 import {useSearchHistory} from '@atb/search-history';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
@@ -30,6 +30,7 @@ export default function useTripsQuery(
   clear: () => void;
   searchState: SearchStateType;
   error?: ErrorType;
+  moreResultsAvailable: boolean;
 } {
   const [timeOfSearch, setTimeOfSearch] = useState<string>(
     new Date().toISOString(),
@@ -41,6 +42,9 @@ export default function useTripsQuery(
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
   const cancelTokenRef = useRef<CancelTokenSource>();
   const {addJourneySearchEntry} = useSearchHistory();
+  const [moreResultsAvailable, setMoreResultsAvailable] = useState<boolean>(
+    true,
+  );
 
   const {
     tripsSearch_max_number_of_chained_searches: config_max_performed_searches,
@@ -82,7 +86,8 @@ export default function useTripsQuery(
 
             while (
               tripsFoundCount < targetNumberOfHits &&
-              performedSearchesCount < config_max_performed_searches
+              performedSearchesCount < config_max_performed_searches &&
+              moreResultsAvailable
             ) {
               const searchInput: SearchInput = cursor
                 ? {cursor}
@@ -108,12 +113,17 @@ export default function useTripsQuery(
               setTripPatterns(allTripPatterns);
               tripsFoundCount += results.trip.tripPatterns.length;
               performedSearchesCount++;
+
+              Bugsnag.leaveBreadcrumb('results', {results});
+
               cursor =
                 searchTime.option === 'arrival'
                   ? results.trip.previousPageCursor
                   : results.trip.nextPageCursor;
             }
             setPageCursor(cursor);
+            setMoreResultsAvailable(!!cursor);
+
             setSearchState(
               allTripPatterns.length === 0
                 ? 'search-empty-result'
@@ -158,6 +168,7 @@ export default function useTripsQuery(
     clear: clearTrips,
     searchState: searchState,
     error: errorType,
+    moreResultsAvailable,
   };
 }
 
