@@ -21,9 +21,6 @@ export async function getDepartures(
   const response = await client.get<ServiceJourneDepartures>(url, {
     ...opts,
   });
-
-  console.log(JSON.stringify(response));
-
   return response.data?.value ?? [];
 }
 
