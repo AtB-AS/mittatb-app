@@ -9,7 +9,6 @@ import {
 } from '@atb/sdk';
 import usePollableResource from '@atb/utils/use-pollable-resource';
 import {ServiceJourneyDeparture} from './types';
-import Bugsnag from '@bugsnag/react-native';
 
 export type DepartureData = {
   callGroups: CallListGroup;
@@ -36,9 +35,6 @@ export default function useDepartureData(
         activeItem.serviceJourneyId,
         new Date(activeItem.serviceDate),
       );
-
-      Bugsnag.leaveBreadcrumb('departures', {deps});
-
       const callGroups = groupAllCallsByQuaysInLeg(
         deps,
         activeItem.fromQuayId,
