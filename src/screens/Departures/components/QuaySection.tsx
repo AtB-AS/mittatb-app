@@ -90,7 +90,12 @@ export default function QuaySection({
                 ></EstimatedCallItem>
               </Sections.GenericItem>
             )}
-            keyExtractor={(item) => item.serviceJourney?.id || ''}
+            keyExtractor={(item: EstimatedCall) =>
+              // ServiceJourney ID is not a unique key if a ServiceJourney
+              // passes by the same stop several times, (e.g. Ringen in Oslo)
+              // which is why it is used in combination with aimedDepartureTime.
+              item.serviceJourney?.id + item.aimedDepartureTime
+            }
             ListEmptyComponent={
               <>
                 {data && (
