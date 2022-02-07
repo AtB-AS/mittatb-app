@@ -34,7 +34,7 @@ export default function useDepartureData(
     async function getServiceJourneyDepartures(): Promise<DepartureData> {
       const deps = await getDepartures(
         activeItem.serviceJourneyId,
-        parseISO(activeItem.date),
+        new Date(activeItem.serviceDate),
       );
 
       Bugsnag.leaveBreadcrumb('departures', {deps});
