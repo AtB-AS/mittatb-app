@@ -154,28 +154,25 @@ export const Feedback = ({tripPatterns, departures}: FeedbackProps) => {
     questionId,
     answerId,
   }: handleAnswerPressProps) => {
-    // Her må det skje noe med alternativene som er valgt
     console.log(
       `Alternative ${answerId} registered for question ${questionId}`,
     );
-    const newState = questions;
-    const questionInQuestion = newState.find(
+
+    const copiedState = questions.slice();
+    const questionInQuestion = copiedState.find(
       (question) => question.questionId === questionId,
     );
-    console.log('Found question: ', questionInQuestion);
 
     if (questionInQuestion) {
       const alternativeInQuestion = questionInQuestion.alternatives.find(
         (alternative) => alternative.alternativeId === answerId,
       );
-      console.log('Alternative: ', alternativeInQuestion);
       if (alternativeInQuestion) {
         alternativeInQuestion.checked = !alternativeInQuestion.checked;
       }
     }
 
-    console.log('Setting new state', newState);
-    setQuestions(newState);
+    setQuestions(copiedState);
   };
 
   const submitFeedback = () => {
