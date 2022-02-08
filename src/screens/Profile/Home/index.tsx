@@ -106,12 +106,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               <ThemeText>{user?.phoneNumber}</ThemeText>
             </Sections.GenericItem>
           )}
-          {authenticationType === 'phone' && (
-            <Sections.LinkItem
-              text={t(ProfileTexts.sections.account.linkItems.logout.label)}
-              onPress={signOut}
-            />
-          )}
           {customerNumber && (
             <Sections.GenericItem>
               <ThemeText style={style.customerNumberHeading}>
@@ -121,6 +115,12 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 {customerNumber}
               </ThemeText>
             </Sections.GenericItem>
+          )}
+          {authenticationType === 'phone' && (
+            <Sections.LinkItem
+              text={t(ProfileTexts.sections.account.linkItems.logout.label)}
+              onPress={signOut}
+            />
           )}
           <Sections.LinkItem
             text={t(
