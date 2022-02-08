@@ -19,11 +19,11 @@ import CompactMap from '../Map/CompactMap';
 import {ThemeColor} from '@atb/theme/colors';
 import {singleTripSearch} from '@atb/api/trips_v2';
 import {TripPattern} from '@atb/api/types/trips';
+import Bugsnag from '@bugsnag/react-native';
 
 const themeColor: ThemeColor = 'background_accent';
 
 export type DetailsRouteParams = {
-  tripPatternId?: string;
   tripPatterns?: TripPattern[];
   startIndex?: number;
 };
@@ -38,7 +38,7 @@ type Props = {
 };
 const Details: React.FC<Props> = (props) => {
   const {
-    params: {tripPatternId, tripPatterns: initialTripPatterns, startIndex},
+    params: {tripPatterns: initialTripPatterns, startIndex},
   } = props.route;
   const {theme} = useTheme();
   const {t} = useTranslation();
@@ -52,7 +52,6 @@ const Details: React.FC<Props> = (props) => {
   );
   const [updatedTripPattern, , loading, error] = useTripPattern(
     currentIndex,
-    tripPatternId,
     initialTripPatterns ? initialTripPatterns[currentIndex] : undefined,
     !isFocused,
   );
@@ -64,7 +63,8 @@ const Details: React.FC<Props> = (props) => {
     const initialPatternForPage = tripPatterns[currentIndex];
     if (initialPatternForPage) {
       setTripPattern(
-        updatedTripPattern?.id === initialPatternForPage.id
+        updatedTripPattern?.compressedQuery ===
+          initialPatternForPage.compressedQuery
           ? updatedTripPattern
           : initialPatternForPage,
       );
@@ -140,17 +140,15 @@ const Details: React.FC<Props> = (props) => {
 
 function useTripPattern(
   currentIndex: number,
-  id?: string,
-  initialTripPattern?: TripPattern,
+  tripPattern?: TripPattern,
   disabled?: boolean,
 ) {
   const fetchTripPattern = useCallback(
     async function reload() {
-      //return await getSingleTripPattern(id ?? initialTripPattern?.id ?? '');
       const tripQuery = await singleTripSearch(
-        id ?? initialTripPattern?.id ?? '',
+        tripPattern?.compressedQuery ?? null,
       );
-      return tripQuery.trip?.tripPatterns[0];
+      return tripQuery?.trip?.tripPatterns[0] ?? undefined;
     },
     [currentIndex],
   );
@@ -158,7 +156,7 @@ function useTripPattern(
   return usePollableResource<TripPattern | undefined, AxiosError>(
     fetchTripPattern,
     {
-      initialValue: initialTripPattern,
+      initialValue: tripPattern,
       pollingTimeInSeconds: 30,
       filterError: (err) => !Axios.isCancel(err),
       disabled,

@@ -1,25 +1,35 @@
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
 import DeparturesRoot, {
-  DeparturesScreenParams,
-  DeparturesScreenProp,
-} from './Departures';
-import StopPlaceScreen, {
-  StopPlaceScreenParams,
-} from '../Departures/StopPlaceScreen';
+  NearbyPlacesParams,
+  DeparturesProps,
+} from './NearbyPlaces';
+import PlaceScreen, {PlaceScreenParams} from './PlaceScreen';
+import DepartureDetails, {
+  DepartureDetailsRouteParams,
+} from '../TripDetails/DepartureDetails';
+import QuayDepartures, {
+  QuayDeparturesRouteParams,
+} from '../TripDetails/QuayDepartures';
+import TripDetailsRoot, {DetailsStackParams} from '../TripDetails';
+import TravelDetailsMap, {MapDetailRouteParams} from '../TripDetails/Map';
 
 export type DeparturesStackParams = {
-  DeparturesRoot: DeparturesScreenParams;
-  StopPlaceScreen: StopPlaceScreenParams;
+  DeparturesRoot: NearbyPlacesParams;
+  PlaceScreen: PlaceScreenParams;
+  DepartureDetails: DepartureDetailsRouteParams;
+  QuayDepartures: QuayDeparturesRouteParams;
+  TripDetails: DetailsStackParams;
+  DetailsMap: MapDetailRouteParams;
 };
 
 const Stack = createStackNavigator<DeparturesStackParams>();
 
-type DeparturesScreenRootProps = {
-  route: DeparturesScreenProp;
+type DeparturesRootProps = {
+  route: DeparturesProps;
 };
 
-const DeparturesScreen = ({route}: DeparturesScreenRootProps) => {
+const DeparturesScreen = ({route}: DeparturesRootProps) => {
   return (
     <Stack.Navigator
       initialRouteName="DeparturesRoot"
@@ -30,7 +40,17 @@ const DeparturesScreen = ({route}: DeparturesScreenRootProps) => {
         component={DeparturesRoot}
         initialParams={route.params}
       />
-      <Stack.Screen name="StopPlaceScreen" component={StopPlaceScreen} />
+      <Stack.Screen name="PlaceScreen" component={PlaceScreen} />
+      <Stack.Screen name="DepartureDetails" component={DepartureDetails} />
+      <Stack.Screen name="QuayDepartures" component={QuayDepartures} />
+      <Stack.Screen name="TripDetails" component={TripDetailsRoot} />
+      <Stack.Screen
+        name="DetailsMap"
+        component={TravelDetailsMap}
+        options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
+      />
     </Stack.Navigator>
   );
 };

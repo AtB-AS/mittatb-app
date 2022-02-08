@@ -8,7 +8,7 @@ import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import useLocalConfig from '@atb/utils/use-local-config';
-import {PRIVACY_POLICY_URL, IS_QA_ENV} from '@env';
+import {IS_QA_ENV} from '@env';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
@@ -23,6 +23,9 @@ import {
   useTicketState,
 } from '@atb/tickets';
 import {usePreferences} from '@atb/preferences';
+import analytics from '@react-native-firebase/analytics';
+import {updateMetadata} from '@atb/chat/metadata';
+import parsePhoneNumber from 'libphonenumber-js';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -42,11 +45,11 @@ type ProfileScreenProps = {
 };
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
-  const {enable_i18n} = useRemoteConfig();
+  const {enable_i18n, privacy_policy_url} = useRemoteConfig();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
-  const {authenticationType, signOut, user} = useAuthState();
+  const {authenticationType, signOut, user, customerNumber} = useAuthState();
   const config = useLocalConfig();
 
   const {fareContracts, customerProfile} = useTicketState();
@@ -70,6 +73,8 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
     if (config?.installId) setClipboard(config.installId);
   }
 
+  const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
+
   return (
     <View style={style.container}>
       <FullScreenHeader
@@ -84,6 +89,26 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.account.heading)}
           />
+          {authenticationType === 'phone' && (
+            <Sections.GenericItem>
+              <ThemeText style={style.customerNumberHeading}>
+                {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
+              </ThemeText>
+              <ThemeText type="body__secondary" color="secondary">
+                {phoneNumber?.formatInternational()}
+              </ThemeText>
+            </Sections.GenericItem>
+          )}
+          {customerNumber && (
+            <Sections.GenericItem>
+              <ThemeText style={style.customerNumberHeading}>
+                {t(ProfileTexts.sections.account.infoItems.customerNumber)}
+              </ThemeText>
+              <ThemeText type="body__secondary" color="secondary">
+                {customerNumber}
+              </ThemeText>
+            </Sections.GenericItem>
+          )}
           {authenticationType !== 'phone' && (
             <Sections.LinkItem
               text={t(ProfileTexts.sections.account.linkItems.login.label)}
@@ -98,11 +123,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 })
               }
             />
-          )}
-          {authenticationType === 'phone' && (
-            <Sections.GenericItem>
-              <ThemeText>{user?.phoneNumber}</ThemeText>
-            </Sections.GenericItem>
           )}
           {authenticationType === 'phone' && (
             <Sections.LinkItem
@@ -145,6 +165,34 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             onPress={() => navigation.navigate('Enrollment')}
           />
         </Sections.Section>
+        <Sections.Section withPadding>
+          <Sections.GenericItem>
+            <View style={style.betaSectionHeader}>
+              <ThemeText type="heading__component">
+                {t(ProfileTexts.sections.newFeatures.heading)}
+              </ThemeText>
+              <View style={style.betaLabel}>
+                <ThemeText color="primary_2" style={style.betaLabelText}>
+                  BETA
+                </ThemeText>
+              </View>
+            </View>
+          </Sections.GenericItem>
+          <Sections.ActionItem
+            mode="toggle"
+            text={t(ProfileTexts.sections.newFeatures.departures)}
+            checked={newDepartures}
+            onPress={(newDepartures) => {
+              analytics().logEvent('toggle_beta_departures', {
+                toggle: newDepartures ? 'enable' : 'disable',
+              });
+              updateMetadata({
+                'AtB-Beta-Departures': newDepartures ? 'enabled' : 'disabled',
+              });
+              setPreference({newDepartures});
+            }}
+          />
+        </Sections.Section>
 
         <Sections.Section withPadding>
           <Sections.HeaderItem
@@ -181,9 +229,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 ProfileTexts.sections.privacy.linkItems.privacy.a11yHint,
               ),
             }}
-            onPress={() =>
-              Linking.openURL(PRIVACY_POLICY_URL ?? 'https://www.atb.no')
-            }
+            onPress={() => Linking.openURL(privacy_policy_url)}
           />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.privacy.linkItems.clearHistory.label)}
@@ -253,17 +299,19 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             <Sections.HeaderItem text="Developer menu" />
             <Sections.ActionItem
               mode="toggle"
-              text={'Enable new departure screen'}
-              checked={newDepartures}
-              onPress={(newDepartures) => setPreference({newDepartures})}
-            />
-            <Sections.ActionItem
-              mode="toggle"
-              text={'Enable experimental trips search'}
+              text={t(ProfileTexts.sections.newFeatures.assistant)}
               checked={useExperimentalTripSearch}
-              onPress={(useExperimentalTripSearch) =>
-                setPreference({useExperimentalTripSearch})
-              }
+              onPress={(useExperimentalTripSearch) => {
+                analytics().logEvent('toggle_beta_tripsearch', {
+                  toggle: useExperimentalTripSearch ? 'enable' : 'disable',
+                });
+                updateMetadata({
+                  'AtB-Beta-TripSearch': useExperimentalTripSearch
+                    ? 'enabled'
+                    : 'disabled',
+                });
+                setPreference({useExperimentalTripSearch});
+              }}
             />
             <Sections.ActionItem
               mode="toggle"
@@ -315,11 +363,29 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     backgroundColor: theme.colors.background_1.backgroundColor,
     flex: 1,
   },
+  customerNumberHeading: {
+    marginBottom: theme.spacings.xSmall,
+  },
   scrollView: {
     paddingVertical: theme.spacings.medium,
   },
   debugInfoContainer: {
     alignItems: 'center',
     marginVertical: theme.spacings.medium,
+  },
+  betaSectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  betaLabel: {
+    backgroundColor: theme.colors.primary_2.backgroundColor,
+    marginHorizontal: theme.spacings.small,
+    paddingHorizontal: theme.spacings.small,
+    paddingVertical: theme.spacings.small,
+    borderRadius: theme.border.radius.regular,
+  },
+  betaLabelText: {
+    fontSize: 8,
+    lineHeight: 9,
   },
 }));
