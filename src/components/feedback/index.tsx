@@ -5,23 +5,36 @@ import {Section, ActionItem} from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import Button from '../button';
 import {TripPattern} from '@atb/api/types/trips';
+import {useTranslation} from '@atb/translations';
 
 export type Alternative = {
   alternativeId: number;
-  alternativeText: string;
+  alternativeText: {
+    norwegian: string;
+    english: string;
+  };
   checked: boolean;
 };
 
 export type Question = {
-  questionText: string;
+  questionText: {
+    norwegian: string;
+    english: string;
+  };
   questionId: number;
   alternatives: Array<Alternative>;
 };
 
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
+  const {language} = useTranslation();
+
   return (
-    <ThemeText style={styles.centerText}>Takk for tilbakemeldingen!</ThemeText>
+    <ThemeText style={styles.centerText}>
+      {language === 'nb'
+        ? 'Takk for tilbakemeldingen!'
+        : 'Thanks for the feedback!'}
+    </ThemeText>
   );
 };
 
@@ -41,17 +54,20 @@ const GoodOrBadQuestion = ({
   checkedItem,
 }: GoodOrBadProps) => {
   const styles = useFeedbackStyles();
+  const {language} = useTranslation();
 
   return (
     <>
       <ThemeText style={styles.centerText}>
-        Hva syntes du om reiseforslaget?
+        {language === 'nb'
+          ? 'Hva syntes du om reiseforslaget?'
+          : 'What do you think of this trip plan?'}
       </ThemeText>
 
       <Section style={styles.feedbackRow} withTopPadding withBottomPadding>
         <Section withPadding>
           <ActionItem
-            text={'Bra'}
+            text={language === 'nb' ? 'Bra' : 'Good'}
             onPress={() => setSelectedOpinion(Opinions.Good)}
             mode="check"
             checked={checkedItem === Opinions.Good}
@@ -59,9 +75,9 @@ const GoodOrBadQuestion = ({
           />
         </Section>
 
-        <Section withPadding style={styles.goodBadBox}>
+        <Section withPadding>
           <ActionItem
-            text={'Dårlig'}
+            text={language === 'nb' ? 'Dårlig' : 'Bad'}
             onPress={() => setSelectedOpinion(Opinions.Bad)}
             mode="check"
             checked={checkedItem === Opinions.Bad}
@@ -84,18 +100,27 @@ export const RenderQuestions = ({
   questions,
   handleAnswerPress,
 }: RenderQuestionProps) => {
+  const {language} = useTranslation();
   return (
     <>
       {selectedOpinion === Opinions.Bad &&
         questions.map((question: Question) => (
           <>
-            <ThemeText>{question.questionText}</ThemeText>
+            <ThemeText>
+              {language === 'nb'
+                ? question.questionText.norwegian
+                : question.questionText.english}
+            </ThemeText>
 
             <Section withTopPadding withBottomPadding>
               {question.alternatives.map((alternative) => (
                 <Section withPadding>
                   <ActionItem
-                    text={alternative.alternativeText}
+                    text={
+                      language === 'nb'
+                        ? alternative.alternativeText.norwegian
+                        : alternative.alternativeText.english
+                    }
                     onPress={() =>
                       handleAnswerPress({
                         questionId: question.questionId,
@@ -122,6 +147,7 @@ type FeedbackProps = {
 
 export const Feedback = ({tripPatterns, departures}: FeedbackProps) => {
   const styles = useFeedbackStyles();
+  const {language} = useTranslation();
   const {theme} = useTheme();
 
   const [submitted, setSubmitted] = useState(false);
@@ -130,13 +156,23 @@ export const Feedback = ({tripPatterns, departures}: FeedbackProps) => {
   );
   const [questions, setQuestions] = useState<Array<Question>>([
     {
-      questionText: 'Hva er greia med flymat?',
+      questionText: {
+        norwegian: 'Hva er greia med flymat?',
+        english: 'Whats the thing with airfood?',
+      },
       questionId: 0,
       alternatives: [
-        {alternativeId: 0, alternativeText: 'Vet ikke', checked: false},
+        {
+          alternativeId: 0,
+          alternativeText: {norwegian: 'Vet ikke', english: 'No idea'},
+          checked: false,
+        },
         {
           alternativeId: 1,
-          alternativeText: 'Vet absolutt ikke',
+          alternativeText: {
+            norwegian: 'Vet absolutt ikke',
+            english: 'Absolutely no idea',
+          },
           checked: false,
         },
       ],
@@ -197,11 +233,12 @@ export const Feedback = ({tripPatterns, departures}: FeedbackProps) => {
           selectedOpinion={selectedOpinion}
           handleAnswerPress={handleAnswerPress}
           questions={questions}
+          language={language}
         />
 
         <Section withBottomPadding>
           <Button
-            text="Send tilbakemelding"
+            text={language === 'nb' ? 'Send tilbakemelding' : 'Submit feedback'}
             onPress={submitFeedback}
             mode="primary"
             color="secondary_1"
