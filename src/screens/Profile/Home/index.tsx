@@ -25,6 +25,7 @@ import {
 import {usePreferences} from '@atb/preferences';
 import analytics from '@react-native-firebase/analytics';
 import {updateMetadata} from '@atb/chat/metadata';
+import parsePhoneNumber from 'libphonenumber-js';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -72,6 +73,8 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
     if (config?.installId) setClipboard(config.installId);
   }
 
+  const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
+
   return (
     <View style={style.container}>
       <FullScreenHeader
@@ -86,6 +89,26 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.account.heading)}
           />
+          {authenticationType === 'phone' && (
+            <Sections.GenericItem>
+              <ThemeText style={style.customerNumberHeading}>
+                {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
+              </ThemeText>
+              <ThemeText type="body__secondary" color="secondary">
+                {phoneNumber?.formatInternational()}
+              </ThemeText>
+            </Sections.GenericItem>
+          )}
+          {customerNumber && (
+            <Sections.GenericItem>
+              <ThemeText style={style.customerNumberHeading}>
+                {t(ProfileTexts.sections.account.infoItems.customerNumber)}
+              </ThemeText>
+              <ThemeText type="body__secondary" color="secondary">
+                {customerNumber}
+              </ThemeText>
+            </Sections.GenericItem>
+          )}
           {authenticationType !== 'phone' && (
             <Sections.LinkItem
               text={t(ProfileTexts.sections.account.linkItems.login.label)}
@@ -100,21 +123,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 })
               }
             />
-          )}
-          {authenticationType === 'phone' && (
-            <Sections.GenericItem>
-              <ThemeText>{user?.phoneNumber}</ThemeText>
-            </Sections.GenericItem>
-          )}
-          {customerNumber && (
-            <Sections.GenericItem>
-              <ThemeText style={style.customerNumberHeading}>
-                {t(ProfileTexts.sections.account.infoItems.customerNumber)}
-              </ThemeText>
-              <ThemeText type="body__secondary" color="secondary">
-                {customerNumber}
-              </ThemeText>
-            </Sections.GenericItem>
           )}
           {authenticationType === 'phone' && (
             <Sections.LinkItem
