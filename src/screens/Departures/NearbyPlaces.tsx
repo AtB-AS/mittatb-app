@@ -19,7 +19,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import Loading from '../Loading';
-import {useNearestStopsData} from './state/NearbyPlacesState';
+import {useNearestStopsData} from './state/nearby-places-state';
 import ThemeText from '@atb/components/text';
 import {Place, StopPlacePosition} from '@atb/api/types/departures';
 import {NearestStopPlacesQuery} from '@atb/api/types/generated/NearestStopPlacesQuery';

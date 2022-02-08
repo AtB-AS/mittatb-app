@@ -4,7 +4,7 @@ import {Quay} from '@atb/api/types/departures';
 import {SearchTime} from './NearbyPlaces';
 import DateNavigation from './components/DateNavigator';
 import QuaySection from './components/QuaySection';
-import {useQuayData} from './state/QuayState';
+import {useQuayData} from './state/quay-state';
 
 export type QuayViewParams = {
   quay: Quay;

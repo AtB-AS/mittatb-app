@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
-import {useStopPlaceData} from './state/StopPlaceState';
+import {useStopPlaceData} from './state/stop-place-state';
 import {Place, Quay, StopPlacePosition} from '@atb/api/types/departures';
 import {SearchTime} from './NearbyPlaces';
 import DateNavigation from './components/DateNavigator';
