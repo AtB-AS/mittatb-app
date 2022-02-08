@@ -206,7 +206,7 @@ platform :android do
       app_name: "MittAtb",
       owner_type: "organization",
       destinations: "*",
-      file: ENV['APK_FILE_NAME'],
+      file: "app-store.apk",
       release_notes: 'OBS OBS PROD-BYGG SCA EXEMPTION!!',
       notify_testers: true
     )
