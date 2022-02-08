@@ -198,7 +198,7 @@ platform :android do
 
   lane :appcenter_staging do
     ensure_env_vars(
-      env_vars: ['APPCENTER_API_KEY','APK_FILE_NAME']
+      env_vars: ['APPCENTER_API_KEY']
     )
     appcenter_upload(
       api_token: ENV["APPCENTER_API_KEY"],
