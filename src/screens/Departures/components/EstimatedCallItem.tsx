@@ -75,7 +75,7 @@ export default function EstimatedCallItem({
         <LineChip
           publicCode={line.publicCode}
           transportMode={line.transportMode}
-          transportSubmode={line?.transportSubmode}
+          transportSubmode={line.transportSubmode}
         ></LineChip>
       )}
       <ThemeText style={styles.lineName}>
