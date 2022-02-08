@@ -24,6 +24,7 @@ import {
 } from '@atb/tickets';
 import {usePreferences} from '@atb/preferences';
 import analytics from '@react-native-firebase/analytics';
+import {updateMetadata} from '@atb/chat/metadata';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -177,6 +178,9 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               analytics().logEvent('toggle_beta_departures', {
                 toggle: newDepartures ? 'enable' : 'disable',
               });
+              updateMetadata({
+                'AtB-Beta-Departures': newDepartures ? 'enabled' : 'disabled',
+              });
               setPreference({newDepartures});
             }}
           />
@@ -292,6 +296,11 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               onPress={(useExperimentalTripSearch) => {
                 analytics().logEvent('toggle_beta_tripsearch', {
                   toggle: useExperimentalTripSearch ? 'enable' : 'disable',
+                });
+                updateMetadata({
+                  'AtB-Beta-TripSearch': useExperimentalTripSearch
+                    ? 'enabled'
+                    : 'disabled',
                 });
                 setPreference({useExperimentalTripSearch});
               }}
