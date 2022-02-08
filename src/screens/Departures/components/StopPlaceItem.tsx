@@ -33,7 +33,9 @@ export default function StopPlaceItem({
     <Sections.Section withPadding>
       <Sections.GenericClickableItem
         onPress={() => onPress(place)}
-        accessibilityLabel={`${place.name}, ${description}, ${distance}m`}
+        accessibilityLabel={`${place.name}, ${description}, ${
+          distance ? distance + 'm' : ''
+        }`}
         accessibilityHint={t(
           DeparturesTexts.stopPlaceList.a11yStopPlaceItemHint,
         )}
@@ -44,9 +46,11 @@ export default function StopPlaceItem({
             <ThemeText type="body__secondary" style={styles.stopDescription}>
               {description}
             </ThemeText>
-            <ThemeText type="body__secondary" color="secondary">
-              {distance + ' m'}
-            </ThemeText>
+            {distance && (
+              <ThemeText type="body__secondary" color="secondary">
+                {distance + ' m'}
+              </ThemeText>
+            )}
           </View>
           {place.transportMode?.map((mode) => (
             <ThemeIcon

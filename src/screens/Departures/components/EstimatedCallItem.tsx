@@ -40,26 +40,32 @@ export default function EstimatedCallItem({
     : t(dictionary.missingRealTimePrefix) + time;
 
   const getA11yLineLabel = () => {
-    const parsedDepartureTime = parseISO(departure.expectedDepartureTime);
-    const a11yClock = formatToClockOrLongRelativeMinutes(
-      departure.expectedDepartureTime,
-      language,
-      t(dictionary.date.units.now),
-      9,
-    );
-    const a11yTimeWithRealtimePrefix = departure.realtime
-      ? a11yClock
-      : t(dictionary.a11yMissingRealTimePrefix) + a11yClock;
-    const a11yDate = !isToday(parsedDepartureTime)
-      ? formatToSimpleDate(parsedDepartureTime, language) + ','
+    const a11yLine = line?.publicCode
+      ? `${t(DeparturesTexts.line)} ${line?.publicCode},`
+      : '';
+    const a11yFrontText = departure.destinationDisplay?.frontText
+      ? `${departure.destinationDisplay?.frontText}.`
       : '';
 
-    const a11yLineInfo = `${t(DeparturesTexts.line)} ${line?.publicCode}, ${
-      departure.destinationDisplay?.frontText
-    }`;
-    const a11yDateInfo = `${a11yDate} ${a11yTimeWithRealtimePrefix}`;
+    let a11yDateInfo = '';
+    if (departure.expectedDepartureTime) {
+      const a11yClock = formatToClockOrLongRelativeMinutes(
+        departure.expectedDepartureTime,
+        language,
+        t(dictionary.date.units.now),
+        9,
+      );
+      const a11yTimeWithRealtimePrefix = departure.realtime
+        ? a11yClock
+        : t(dictionary.a11yMissingRealTimePrefix) + a11yClock;
+      const parsedDepartureTime = parseISO(departure.expectedDepartureTime);
+      const a11yDate = !isToday(parsedDepartureTime)
+        ? formatToSimpleDate(parsedDepartureTime, language) + ','
+        : '';
+      a11yDateInfo = `${a11yDate} ${a11yTimeWithRealtimePrefix}`;
+    }
 
-    return `${a11yLineInfo}. ${a11yDateInfo}`;
+    return `${a11yLine} ${a11yFrontText} ${a11yDateInfo}`;
   };
 
   return (
