@@ -38,7 +38,7 @@ const DeparturesTexts = {
       'Activate to show more departures',
     ),
   },
-  a11yEstimatedCallLine: (
+  a11yEstimatedCallItem: (
     time: string,
     publicCode?: string,
     frontText?: string,
