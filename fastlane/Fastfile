@@ -133,6 +133,7 @@ platform :ios do
       destinations: "*",
       file: "AtB.ipa",
       dsym: "AtB.app.dSYM.zip",
+      release_notes: 'OBS OBS PROD-BYGG SCA EXEMPTION!!',
       notify_testers: true
     )
   end
@@ -206,6 +207,7 @@ platform :android do
       owner_type: "organization",
       destinations: "*",
       file: ENV['APK_FILE_NAME'],
+      release_notes: 'OBS OBS PROD-BYGG SCA EXEMPTION!!',
       notify_testers: true
     )
   end
