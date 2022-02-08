@@ -41,7 +41,7 @@ export default orgSpecificTranslations(OnboardingTexts, {
         ),
         part3: _(
           'Du vil også kunne administrere billetter og eventuelle reisekort på den nye nettbutikken med samme konto.',
-          'You will also be able to manage your tickets and travelling card on the webshop with the same account',
+          'You will also be able to manage your tickets and travelcards on the webshop with the same account',
         ),
       },
     },

@@ -9,9 +9,5 @@ export default function orgSpecificTranslations<T>(
   translationTexts: T,
   overrides: Partial<{[org in AppOrgs]: Overrides<T>}>,
 ) {
-  if (APP_ORG === AppOrgs.nfk) {
-    return merge(translationTexts, overrides.nfk);
-  } else {
-    return merge(translationTexts, overrides.atb);
-  }
+  return merge(translationTexts, overrides[APP_ORG]);
 }

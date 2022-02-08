@@ -6,7 +6,7 @@ declare module '@env' {
   export const MAPBOX_API_TOKEN: string;
   export const MAPBOX_STOP_PLACES_STYLE_URL: string;
   export const AUTHORITY: string;
-  export const APP_ORG: string;
+  export const APP_ORG: import('./app-orgs').AppOrgs;
   export const FOCUS_LATITUDE: number;
   export const FOCUS_LONGITUDE: number;
   export const IS_QA_ENV: string | undefined;
