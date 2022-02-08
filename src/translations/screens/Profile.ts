@@ -21,6 +21,7 @@ const ProfileTexts = {
       },
       infoItems: {
         customerNumber: _('Kundenummer', 'Customer number'),
+        phoneNumber: _('Telefonnummer', 'Phone number'),
       },
     },
     newFeatures: {
