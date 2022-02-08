@@ -6,11 +6,6 @@ import ThemeText from '@atb/components/text';
 import Button from '../button';
 import {TripPattern} from '@atb/api/types/trips';
 
-type FeedbackProps = {
-  tripPatterns?: TripPattern[];
-  departures?: string;
-};
-
 export type Alternative = {
   alternativeId: number;
   alternativeText: string;
@@ -26,9 +21,7 @@ export type Question = {
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
   return (
-    <ThemeText style={styles.centerText}>
-      Takk for din tilbakemelding!
-    </ThemeText>
+    <ThemeText style={styles.centerText}>Takk for tilbakemeldingen!</ThemeText>
   );
 };
 
@@ -66,7 +59,7 @@ const GoodOrBadQuestion = ({
           />
         </Section>
 
-        <Section withPadding>
+        <Section withPadding style={styles.goodBadBox}>
           <ActionItem
             text={'Dårlig'}
             onPress={() => setSelectedOpinion(Opinions.Bad)}
@@ -99,7 +92,7 @@ export const RenderQuestions = ({
             <ThemeText>{question.questionText}</ThemeText>
 
             <Section withTopPadding withBottomPadding>
-              {question.alternatives?.map((alternative) => (
+              {question.alternatives.map((alternative) => (
                 <Section withPadding>
                   <ActionItem
                     text={alternative.alternativeText}
@@ -120,6 +113,11 @@ export const RenderQuestions = ({
         ))}
     </>
   );
+};
+
+type FeedbackProps = {
+  tripPatterns?: TripPattern[];
+  departures?: string;
 };
 
 export const Feedback = ({tripPatterns, departures}: FeedbackProps) => {
