@@ -1,4 +1,4 @@
-name: Build store Android project
+name: Build SCA Android
 on:
   push:
     branches:
@@ -31,11 +31,6 @@ jobs:
         run: yarn install
       - name: Bundle install, fastlane dependencies
         run: bundle install
-      - name: Get Github-release data
-        id: get_release
-        uses: bruceadams/get-release@v1.2.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set environment
         run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT $APP_ORG
       - name: Export workflow env variables based on environment

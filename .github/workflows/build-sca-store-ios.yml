@@ -1,4 +1,4 @@
-name: Build store iOS project
+name: Build SCA iOS
 on:
   push:
     branches:
@@ -37,11 +37,6 @@ jobs:
           xcode-version: "13.0"
       - name: Bundle Install
         run: bundle install
-      - name: Get Github-release data
-        id: get_release
-        uses: bruceadams/get-release@v1.2.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set environment
         run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT ${{ matrix.org }}
       - name: Export workflow env variables based on environment
