@@ -13,7 +13,8 @@ export type QuayViewParams = {
 export type QuayViewProps = {
   quay: Quay;
   navigateToDetails: (
-    serviceJourneyId?: string,
+    serviceJourneyId: string,
+    serviceDate: string,
     date?: string,
     fromQuayId?: string,
   ) => void;

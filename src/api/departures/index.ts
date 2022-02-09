@@ -26,7 +26,10 @@ export async function getDepartures(
   const {numberOfDepartures, pageOffset = 0, pageSize = 2} = query;
   const startTime = query.startTime;
   let url = `bff/v1/departures-from-location-paging?limit=${numberOfDepartures}&pageSize=${pageSize}&pageOffset=${pageOffset}&startTime=${startTime}`;
-  const response = await client.post<DeparturesMetadata>(url, location, opts);
+  const response = await client.post<DeparturesMetadata>(url, location, {
+    ...opts,
+    baseURL: 'http://10.0.2.2:8080',
+  });
   return response.data;
 }
 
@@ -45,7 +48,10 @@ export async function getRealtimeDeparture(
   });
 
   let url = `bff/v1/departures-realtime?${params}`;
-  const response = await client.get<DeparturesRealtimeData>(url, opts);
+  const response = await client.get<DeparturesRealtimeData>(url, {
+    ...opts,
+    baseURL: 'http://10.0.2.2:8080',
+  });
   return response.data;
 }
 
@@ -64,7 +70,10 @@ export async function getRealtimeDepartureV2(
   });
 
   let url = `bff/v2/departures/realtime?${params}`;
-  const response = await client.get<DeparturesRealtimeData>(url, opts);
+  const response = await client.get<DeparturesRealtimeData>(url, {
+    ...opts,
+    baseURL: 'http://10.0.2.2:8080',
+  });
   return response.data;
 }
 

@@ -19,7 +19,8 @@ import {StyleSheet, useTheme} from '@atb/theme';
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
   navigateToDetails: (
-    serviceJourneyId?: string,
+    serviceJourneyId: string,
+    serviceDate: string,
     date?: string,
     fromQuayId?: string,
   ) => void;
@@ -54,13 +55,15 @@ export default function EstimatedCallItem({
 
   return (
     <TouchableOpacity
-      onPress={() =>
-        navigateToDetails(
-          departure.serviceJourney?.id,
-          departure.expectedDepartureTime,
-          departure.quay?.id,
-        )
-      }
+      onPress={() => {
+        if (departure.serviceJourney)
+          navigateToDetails(
+            departure.serviceJourney.id,
+            departure.date,
+            departure.expectedDepartureTime,
+            departure.quay?.id,
+          );
+      }}
       style={styles.estimatedCallItem}
       accessible={true}
       accessibilityLabel={t(

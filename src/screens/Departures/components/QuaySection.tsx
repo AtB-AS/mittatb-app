@@ -17,7 +17,8 @@ type QuaySectionProps = {
   data: EstimatedCall[] | null;
   navigateToQuay?: (arg0: Quay) => void;
   navigateToDetails: (
-    serviceJourneyId?: string,
+    serviceJourneyId: string,
+    serviceDate: string,
     date?: string,
     fromQuayId?: string,
   ) => void;

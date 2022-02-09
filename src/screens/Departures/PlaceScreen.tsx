@@ -40,7 +40,8 @@ export default function PlaceScreen({
   const {t} = useTranslation();
 
   const navigateToDetails = (
-    serviceJourneyId?: string,
+    serviceJourneyId: string,
+    serviceDate: string,
     date?: string,
     fromQuayId?: string,
   ) => {
@@ -49,6 +50,7 @@ export default function PlaceScreen({
       items: [
         {
           serviceJourneyId,
+          serviceDate,
           date,
           fromQuayId,
         },
