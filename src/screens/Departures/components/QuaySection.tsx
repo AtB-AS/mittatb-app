@@ -100,7 +100,7 @@ export default function QuaySection({
               <>
                 {data && (
                   <Sections.GenericItem
-                    radius={navigateToQuay ? 'bottom' : undefined}
+                    radius={!navigateToQuay ? 'bottom' : undefined}
                   >
                     <ThemeText color="secondary">
                       {t(DeparturesTexts.noDepartures)}
