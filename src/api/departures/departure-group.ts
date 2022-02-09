@@ -56,8 +56,10 @@ async function request(
   payload: DepartureGroupsPayload,
   opts?: AxiosRequestConfig,
 ): Promise<DepartureGroupMetadata> {
-  const response = await client.post<DepartureGroupMetadata>(url, payload, {
-    ...opts,
-  });
+  const response = await client.post<DepartureGroupMetadata>(
+    url,
+    payload,
+    opts,
+  );
   return response.data;
 }

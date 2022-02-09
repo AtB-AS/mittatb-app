@@ -48,7 +48,7 @@ export async function getNearestStops(
 ): Promise<NearestStopPlacesQuery> {
   const queryString = stringifyWithDate(query);
   const url = `${BASE_URL}/stops-nearest?${queryString}`;
-  return request(url, {...opts});
+  return request(url, opts);
 }
 
 export async function getStopPlaceDepartures(
@@ -56,9 +56,7 @@ export async function getStopPlaceDepartures(
   opts?: AxiosRequestConfig,
 ): Promise<StopPlaceQuayDepartures> {
   const url = `${BASE_URL}/stop-departures`;
-  return requestStopPlaceDepartures(stringifyUrl({url, query}), {
-    ...opts,
-  });
+  return requestStopPlaceDepartures(stringifyUrl({url, query}), opts);
 }
 
 export async function getQuayDepartures(
@@ -67,16 +65,14 @@ export async function getQuayDepartures(
 ): Promise<QuayDeparturesQuery> {
   const queryString = stringifyWithDate(query);
   const url = `${BASE_URL}/quay-departures?${queryString}`;
-  return requestQuayDepartures(url, {...opts});
+  return requestQuayDepartures(url, opts);
 }
 
 async function request(
   url: string,
   opts?: AxiosRequestConfig,
 ): Promise<NearestStopPlacesQuery> {
-  const response = await client.get<NearestStopPlacesQuery>(url, {
-    ...opts,
-  });
+  const response = await client.get<NearestStopPlacesQuery>(url, opts);
   return response.data;
 }
 
@@ -84,9 +80,7 @@ async function requestQuayDepartures(
   url: string,
   opts?: AxiosRequestConfig,
 ): Promise<QuayDeparturesQuery> {
-  const response = await client.get<QuayDeparturesQuery>(url, {
-    ...opts,
-  });
+  const response = await client.get<QuayDeparturesQuery>(url, opts);
   return response.data;
 }
 
@@ -94,8 +88,6 @@ async function requestStopPlaceDepartures(
   url: string,
   opts?: AxiosRequestConfig,
 ): Promise<StopPlaceQuayDepartures> {
-  const response = await client.get<StopPlaceQuayDepartures>(url, {
-    ...opts,
-  });
+  const response = await client.get<StopPlaceQuayDepartures>(url, opts);
   return response.data;
 }
