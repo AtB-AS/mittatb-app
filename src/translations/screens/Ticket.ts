@@ -126,7 +126,6 @@ const TicketTexts = {
 };
 
 export default orgSpecificTranslations(TicketTexts, {
-  atb: {},
   nfk: {
     ticketInfo: {
       travelcardIsActive: _(

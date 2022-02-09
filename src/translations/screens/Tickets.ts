@@ -155,7 +155,6 @@ const TicketsTexts = {
 };
 
 export default orgSpecificTranslations(TicketsTexts, {
-  atb: {},
   nfk: {
     travelCardInformation: {
       illustrationa11yLabel: (travelCardId: string) =>

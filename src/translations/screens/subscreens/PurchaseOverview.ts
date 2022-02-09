@@ -52,7 +52,6 @@ const PurchaseOverviewTexts = {
   ),
 };
 export default orgSpecificTranslations(PurchaseOverviewTexts, {
-  atb: {},
   nfk: {
     warning: _(
       'Når du er ute og reiser må du ha med reisekortet som er registrert på din profil.',
