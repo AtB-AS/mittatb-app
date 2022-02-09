@@ -6,6 +6,9 @@ import ThemeText from '@atb/components/text';
 import Button from '../button';
 import {TripPattern} from '@atb/api/types/trips';
 import {useTranslation} from '@atb/translations';
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
 
 export type Alternative = {
   alternativeId: number;
@@ -101,6 +104,11 @@ export const RenderQuestions = ({
   handleAnswerPress,
 }: RenderQuestionProps) => {
   const {language} = useTranslation();
+
+  console.log('attempting to render questions: ', questions);
+
+  if (!questions) return null;
+
   return (
     <>
       {selectedOpinion === Opinions.Bad &&
@@ -154,30 +162,29 @@ export const Feedback = ({tripPatterns, departures}: FeedbackProps) => {
   const [selectedOpinion, setSelectedOpinion] = useState(
     Opinions.NotClickedYet,
   );
-  const [questions, setQuestions] = useState<Array<Question>>([
-    {
-      questionText: {
-        norwegian: 'Hva er greia med flymat?',
-        english: 'Whats the thing with airfood?',
-      },
-      questionId: 0,
-      alternatives: [
-        {
-          alternativeId: 0,
-          alternativeText: {norwegian: 'Vet ikke', english: 'No idea'},
-          checked: false,
-        },
-        {
-          alternativeId: 1,
-          alternativeText: {
-            norwegian: 'Vet absolutt ikke',
-            english: 'Absolutely no idea',
+  const [questions, setQuestions] = useState<Array<Question>>();
+
+  useEffect(
+    () =>
+      firestore()
+        .collection('configuration')
+        .doc('feedbackQuestions')
+        .onSnapshot(
+          (snapshot) => {
+            const fetchedQuestions = (snapshot as FirebaseFirestoreTypes.QueryDocumentSnapshot<any>).get(
+              'assistant',
+            );
+            console.log('fetchedQuestions:', fetchedQuestions);
+
+            const jsonQuestions = JSON.parse(fetchedQuestions);
+            setQuestions(jsonQuestions);
           },
-          checked: false,
-        },
-      ],
-    },
-  ]);
+          (err) => {
+            console.warn(err);
+          },
+        ),
+    [],
+  );
 
   type handleAnswerPressProps = {
     questionId: number;
@@ -233,7 +240,6 @@ export const Feedback = ({tripPatterns, departures}: FeedbackProps) => {
           selectedOpinion={selectedOpinion}
           handleAnswerPress={handleAnswerPress}
           questions={questions}
-          language={language}
         />
 
         <Section withBottomPadding>
