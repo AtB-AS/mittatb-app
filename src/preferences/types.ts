@@ -11,6 +11,13 @@ export type Preference_ScreenAlternatives = typeof preference_screenAlternatives
 
 export type Preference_Language = typeof appLanguages[number];
 
+export type TripSearchPreferences = {
+  transferPenalty?: number;
+  waitReluctance?: number;
+  walkReluctance?: number;
+  walkSpeed?: number;
+};
+
 export type UserPreferences = {
   startScreen?: Preference_ScreenAlternatives;
   colorScheme?: ColorSchemeName;
@@ -22,6 +29,7 @@ export type UserPreferences = {
   departuresShowOnlyFavorites?: boolean;
   newDepartures?: boolean;
   useExperimentalTripSearch?: boolean;
+  tripSearchPreferences?: TripSearchPreferences;
 };
 
 export type PreferenceItem = keyof UserPreferences;
