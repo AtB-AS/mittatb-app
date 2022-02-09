@@ -58,7 +58,6 @@ async function request(
 ): Promise<DepartureGroupMetadata> {
   const response = await client.post<DepartureGroupMetadata>(url, payload, {
     ...opts,
-    baseURL: 'http://10.0.2.2:8080',
   });
   return response.data;
 }

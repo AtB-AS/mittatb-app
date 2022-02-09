@@ -48,7 +48,7 @@ export async function getNearestStops(
 ): Promise<NearestStopPlacesQuery> {
   const queryString = stringifyWithDate(query);
   const url = `${BASE_URL}/stops-nearest?${queryString}`;
-  return request(url, {...opts, baseURL: 'http://10.0.2.2:8080'});
+  return request(url, {...opts});
 }
 
 export async function getStopPlaceDepartures(
@@ -58,7 +58,6 @@ export async function getStopPlaceDepartures(
   const url = `${BASE_URL}/stop-departures`;
   return requestStopPlaceDepartures(stringifyUrl({url, query}), {
     ...opts,
-    baseURL: 'http://10.0.2.2:8080',
   });
 }
 
@@ -68,7 +67,7 @@ export async function getQuayDepartures(
 ): Promise<QuayDeparturesQuery> {
   const queryString = stringifyWithDate(query);
   const url = `${BASE_URL}/quay-departures?${queryString}`;
-  return requestQuayDepartures(url, {...opts, baseURL: 'http://10.0.2.2:8080'});
+  return requestQuayDepartures(url, {...opts});
 }
 
 async function request(
@@ -77,7 +76,6 @@ async function request(
 ): Promise<NearestStopPlacesQuery> {
   const response = await client.get<NearestStopPlacesQuery>(url, {
     ...opts,
-    baseURL: 'http://10.0.2.2:8080',
   });
   return response.data;
 }
@@ -88,7 +86,6 @@ async function requestQuayDepartures(
 ): Promise<QuayDeparturesQuery> {
   const response = await client.get<QuayDeparturesQuery>(url, {
     ...opts,
-    baseURL: 'http://10.0.2.2:8080',
   });
   return response.data;
 }
@@ -99,7 +96,6 @@ async function requestStopPlaceDepartures(
 ): Promise<StopPlaceQuayDepartures> {
   const response = await client.get<StopPlaceQuayDepartures>(url, {
     ...opts,
-    baseURL: 'http://10.0.2.2:8080',
   });
   return response.data;
 }
