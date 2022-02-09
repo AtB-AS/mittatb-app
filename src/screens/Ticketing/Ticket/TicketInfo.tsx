@@ -157,7 +157,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
         <View style={styles.tCardWarning}>
           <ThemeIcon svg={Warning} style={styles.tCardWarningIcon}></ThemeIcon>
           <ThemeText isMarkdown={true}>
-            {t(TicketTexts.ticketInfo.tCardIsActive)}
+            {t(TicketTexts.ticketInfo.travelcardIsActive)}
           </ThemeText>
         </View>
       )}
