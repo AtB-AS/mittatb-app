@@ -67,7 +67,7 @@ const GoodOrBadQuestion = ({
           : 'What do you think of this trip plan?'}
       </ThemeText>
 
-      <Section style={styles.feedbackRow} withTopPadding withBottomPadding>
+      <View style={styles.feedbackRow}>
         <Section withPadding>
           <ActionItem
             text={language === 'nb' ? 'Bra' : 'Good'}
@@ -87,7 +87,7 @@ const GoodOrBadQuestion = ({
             type="compact"
           />
         </Section>
-      </Section>
+      </View>
     </>
   );
 };
@@ -106,8 +106,6 @@ export const RenderQuestions = ({
   const {language} = useTranslation();
 
   console.log('attempting to render questions: ', questions);
-
-  if (!questions) return null;
 
   return (
     <>
@@ -171,12 +169,12 @@ export const Feedback = ({tripPatterns, departures}: FeedbackProps) => {
         .doc('feedbackQuestions')
         .onSnapshot(
           (snapshot) => {
-            const fetchedQuestions = (snapshot as FirebaseFirestoreTypes.QueryDocumentSnapshot<any>).get(
-              'assistant',
-            );
+            const fetchedQuestions = (snapshot as FirebaseFirestoreTypes.QueryDocumentSnapshot<{
+              assistant: Array<Question>;
+            }>).get('assistant');
             console.log('fetchedQuestions:', fetchedQuestions);
 
-            const jsonQuestions = JSON.parse(fetchedQuestions);
+            const jsonQuestions = JSON.parse(String(fetchedQuestions));
             setQuestions(jsonQuestions);
           },
           (err) => {
@@ -199,8 +197,8 @@ export const Feedback = ({tripPatterns, departures}: FeedbackProps) => {
       `Alternative ${answerId} registered for question ${questionId}`,
     );
 
-    const copiedState = questions.slice();
-    const questionInQuestion = copiedState.find(
+    const copiedState = questions?.slice();
+    const questionInQuestion = copiedState?.find(
       (question) => question.questionId === questionId,
     );
 
@@ -236,11 +234,13 @@ export const Feedback = ({tripPatterns, departures}: FeedbackProps) => {
           checkedItem={selectedOpinion}
         />
 
-        <RenderQuestions
-          selectedOpinion={selectedOpinion}
-          handleAnswerPress={handleAnswerPress}
-          questions={questions}
-        />
+        {questions && (
+          <RenderQuestions
+            selectedOpinion={selectedOpinion}
+            handleAnswerPress={handleAnswerPress}
+            questions={questions}
+          />
+        )}
 
         <Section withBottomPadding>
           <Button
