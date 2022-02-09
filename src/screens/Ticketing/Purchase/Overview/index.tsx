@@ -1,4 +1,4 @@
-import {Edit} from '@atb/assets/svg/icons/actions';
+import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import Button from '@atb/components/button';
 import * as Sections from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
@@ -30,7 +30,7 @@ import useOfferState from './use-offer-state';
 import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
 import {formatToLongDateTime} from '@atb/utils/date';
 import ThemeText from '@atb/components/text';
-import {ArrowRight} from '@atb/assets/svg/icons/navigation';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import ProductSheet from '@atb/screens/Ticketing/Purchase/Product/ProductSheet';
 import {usePreferences} from '@atb/preferences';
@@ -105,10 +105,8 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   }, [preassignedFareProduct, userProfilesWithCount]);
 
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
-  const {
-    fromTariffZone = defaultTariffZone,
-    toTariffZone = defaultTariffZone,
-  } = params;
+  const {fromTariffZone = defaultTariffZone, toTariffZone = defaultTariffZone} =
+    params;
 
   const [travelDate, setTravelDate] = useState<string | undefined>();
 

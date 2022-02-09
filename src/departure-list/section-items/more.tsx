@@ -1,4 +1,4 @@
-import {Expand} from '@atb/assets/svg/icons/navigation';
+import {Expand} from '@atb/assets/svg/mono-icons/navigation';
 import {
   SectionItem,
   useSectionItem,

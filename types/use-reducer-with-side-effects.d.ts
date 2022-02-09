@@ -16,9 +16,7 @@ declare module 'use-reducer-with-side-effects' {
   export declare type CancelFunc<S> = (state: S) => void;
   export declare type NoUpdateSymbol = typeof NO_UPDATE_SYMBOL;
   export declare const NO_UPDATE_SYMBOL: unique symbol;
-  export declare const Update: <S>(
-    state: S,
-  ) => {
+  export declare const Update: <S>(state: S) => {
     state: S;
   };
   export declare const NoUpdate: () => typeof NO_UPDATE_SYMBOL;

@@ -5,7 +5,7 @@ import {
   Error as ErrorIcon,
   Info,
   Warning,
-} from '../../assets/svg/icons/status';
+} from '../../assets/svg/mono-icons/status';
 import {StyleSheet, useTheme, Statuses} from '@atb/theme';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';

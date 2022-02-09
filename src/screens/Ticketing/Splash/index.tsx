@@ -9,7 +9,8 @@ export type TicketSplashStackParams = {
   SplashInfo: undefined;
 };
 
-export type TicketSplashNavigationProp = StackNavigationProp<TicketSplashStackParams>;
+export type TicketSplashNavigationProp =
+  StackNavigationProp<TicketSplashStackParams>;
 
 const Stack = createStackNavigator<TicketSplashStackParams>();
 
