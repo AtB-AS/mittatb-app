@@ -16,7 +16,9 @@ export async function getDepartures(
   if (date) {
     url = url + `?date=${formatISO(date, {representation: 'date'})}`;
   }
-  const response = await client.get<ServiceJourneyDepartures>(url);
+  const response = await client.get<ServiceJourneyDepartures>(url, {
+    baseURL: 'http://10.0.2.2:8080',
+  });
   return response.data?.value ?? [];
 }
 

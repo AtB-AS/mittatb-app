@@ -52,6 +52,7 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {StoredType} from '@atb/favorites/storage';
 import {FavoriteDeparture} from '@atb/favorites/types';
 import FavoriteDialogSheet from '@atb/departure-list/section-items/FavoriteDialogSheet';
+import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
 
 export type LineItemProps = SectionItem<{
   group: DepartureGroup;
@@ -80,10 +81,11 @@ export default function LineItem({
 
   const title = `${group.lineInfo?.lineNumber} ${group.lineInfo?.lineName}`;
 
-  const items = group.departures.map((dep) => ({
+  const items = group.departures.map<ServiceJourneyDeparture>((dep) => ({
     serviceJourneyId: dep.serviceJourneyId!,
     date: dep.time,
     fromQuayId: group.lineInfo?.quayId,
+    serviceDate: dep.serviceDate,
   }));
 
   const onPress = (activeItemIndex: number) => {

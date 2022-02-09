@@ -72,7 +72,10 @@ async function request(
   url: string,
   opts?: AxiosRequestConfig,
 ): Promise<NearestStopPlacesQuery> {
-  const response = await client.get<NearestStopPlacesQuery>(url, opts);
+  const response = await client.get<NearestStopPlacesQuery>(url, {
+    ...opts,
+    baseURL: 'http://10.0.2.2:8080',
+  });
   return response.data;
 }
 
@@ -80,7 +83,10 @@ async function requestQuayDepartures(
   url: string,
   opts?: AxiosRequestConfig,
 ): Promise<QuayDeparturesQuery> {
-  const response = await client.get<QuayDeparturesQuery>(url, opts);
+  const response = await client.get<QuayDeparturesQuery>(url, {
+    ...opts,
+    baseURL: 'http://10.0.2.2:8080',
+  });
   return response.data;
 }
 
@@ -88,6 +94,9 @@ async function requestStopPlaceDepartures(
   url: string,
   opts?: AxiosRequestConfig,
 ): Promise<StopPlaceQuayDepartures> {
-  const response = await client.get<StopPlaceQuayDepartures>(url, opts);
+  const response = await client.get<StopPlaceQuayDepartures>(url, {
+    ...opts,
+    baseURL: 'http://10.0.2.2:8080',
+  });
   return response.data;
 }

@@ -216,6 +216,7 @@ const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
         {
           serviceJourneyId: leg.serviceJourney.id,
           date: leg.expectedStartTime,
+          serviceDate: leg.intermediateEstimatedCalls[0].date,
           fromQuayId: leg.fromPlace.quay?.id,
           toQuayId: leg.toPlace.quay?.id,
         },
