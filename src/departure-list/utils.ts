@@ -128,6 +128,11 @@ export function updateDeparturesWithRealtimeV2(
         expectedDepartureTime: departureRealtime.timeData.expectedDepartureTime,
         realtime: departureRealtime.timeData.realtime,
       };
+    })
+    .sort((a, b) => {
+      // Sort departures based on expectedDepartureTime, for cases where a
+      // realtime update shows that a departure has passed another.
+      return a.expectedDepartureTime < b.expectedDepartureTime ? 0 : 1;
     });
 }
 
