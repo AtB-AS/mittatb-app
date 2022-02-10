@@ -1,7 +1,7 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
+import React, {useEffect, useMemo} from 'react';
+import {RefreshControl, SectionList, SectionListData} from 'react-native';
 import {useStopPlaceData} from './state/stop-place-state';
-import {Place, Quay, StopPlacePosition} from '@atb/api/types/departures';
+import {Place, Quay} from '@atb/api/types/departures';
 import {SearchTime} from './NearbyPlaces';
 import DateNavigation from './components/DateNavigator';
 import QuaySection from './components/QuaySection';
@@ -14,17 +14,17 @@ type StopPlaceViewProps = {
     date?: string,
     fromQuayId?: string,
   ) => void;
+  searchTime: SearchTime;
+  setSearchTime: (searchTime: SearchTime) => void;
 };
 
 export default function StopPlaceView({
   stopPlace,
   navigateToQuay,
   navigateToDetails,
+  searchTime,
+  setSearchTime,
 }: StopPlaceViewProps) {
-  const [searchTime, setSearchTime] = useState<SearchTime>({
-    option: 'now',
-    date: new Date().toISOString(),
-  });
   const {state, refresh} = useStopPlaceData(
     stopPlace,
     searchTime?.option !== 'now' ? searchTime.date : undefined,

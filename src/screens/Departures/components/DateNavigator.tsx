@@ -19,7 +19,7 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 
 type DateNavigationProps = {
   searchTime: SearchTime;
-  setSearchTime: Dispatch<SetStateAction<SearchTime>>;
+  setSearchTime: (searchTime: SearchTime) => void;
 };
 
 export default function DateNavigation({
