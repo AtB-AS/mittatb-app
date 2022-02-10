@@ -40,8 +40,6 @@ export default function QuayView({
 
   return (
     <SectionList
-      stickySectionHeadersEnabled={true}
-      stickyHeaderIndices={[0]}
       ListHeaderComponent={
         <DateNavigation
           searchTime={searchTime}

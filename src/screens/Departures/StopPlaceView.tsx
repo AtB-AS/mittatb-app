@@ -49,8 +49,6 @@ export default function StopPlaceView({
     <>
       {quayListData && (
         <SectionList
-          stickySectionHeadersEnabled={true}
-          stickyHeaderIndices={[0]}
           ListHeaderComponent={
             <DateNavigation
               searchTime={searchTime}
