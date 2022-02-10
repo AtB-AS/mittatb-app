@@ -159,10 +159,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               onPress={() => navigation.navigate('Language')}
             />
           )}
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.settings.linkItems.enrollment.label)}
-            onPress={() => navigation.navigate('Enrollment')}
-          />
         </Sections.Section>
         <Sections.Section withPadding>
           <Sections.GenericItem>
@@ -190,6 +186,10 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               });
               setPreference({newDepartures});
             }}
+          />
+          <Sections.LinkItem
+            text={t(ProfileTexts.sections.settings.linkItems.enrollment.label)}
+            onPress={() => navigation.navigate('Enrollment')}
           />
         </Sections.Section>
 
