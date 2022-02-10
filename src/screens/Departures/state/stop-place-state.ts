@@ -221,7 +221,7 @@ const reducer: ReducerWithSideEffects<
 export function useStopPlaceData(
   stopPlace: Place,
   startTime?: string,
-  updateFrequencyInSeconds: number = 10,
+  updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
