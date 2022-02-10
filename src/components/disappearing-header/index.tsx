@@ -223,7 +223,7 @@ const DisappearingHeader: React.FC<Props> = ({
             ]}
           >
             <ImageBackground
-              source={require('../../../assets/assistant_background.jpeg')}
+              source={require('../../../assets/design-assets/colors/images/photo-background.jpg')}
               style={styles.backgroundImage}
             >
               <View style={{flex: 1}}>
