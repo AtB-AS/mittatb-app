@@ -13,7 +13,11 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {DateInputItem, Section, TimeInputItem} from '@atb/components/sections';
 import {NavigationProp} from '@react-navigation/native';
 import {NearbyStackParams} from '.';
-import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
+import {
+  dateWithReplacedTime,
+  formatLocaleTime,
+  isInThePast,
+} from '@atb/utils/date';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import useKeyboardHeight from '@atb/utils/use-keyboard-height';
 import {SearchTime} from './types';
@@ -22,6 +26,7 @@ type Props = {
   close: () => void;
   initialTime: SearchTime;
   setSearchTime: (time: SearchTime) => void;
+  allowTimeInPast?: boolean;
 };
 
 export type DateTimePickerParams = {
@@ -33,7 +38,7 @@ export type DateTimePickerParams = {
 export type DateTimeNavigationProp = NavigationProp<NearbyStackParams>;
 
 const DepartureTimeSheet = forwardRef<ScrollView, Props>(
-  ({close, initialTime, setSearchTime}, focusRef) => {
+  ({close, initialTime, setSearchTime, allowTimeInPast = true}, focusRef) => {
     const styles = useStyles();
     const {t, language} = useTranslation();
 
@@ -42,13 +47,18 @@ const DepartureTimeSheet = forwardRef<ScrollView, Props>(
       formatLocaleTime(initialTime.date, language),
     );
 
-    const OnSelect = () => {
+    const onSelect = () => {
       const calculatedTime = dateWithReplacedTime(date, time).toISOString();
-      setSearchTime({option: 'departure', date: calculatedTime});
+      if (isInThePast(calculatedTime) && !allowTimeInPast) {
+        setSearchTime({option: 'now', date: new Date().toISOString()});
+      } else {
+        setSearchTime({option: 'departure', date: calculatedTime});
+      }
       close();
     };
 
     const keyboardHeight = useKeyboardHeight();
+    const selectedTimeIsInPast = isInThePast(dateWithReplacedTime(date, time));
 
     return (
       <BottomSheetContainer>
@@ -74,10 +84,11 @@ const DepartureTimeSheet = forwardRef<ScrollView, Props>(
           </Section>
 
           <Button
-            onPress={OnSelect}
+            onPress={onSelect}
             color="primary_2"
             text={t(NearbyTexts.dateInput.confirm)}
             icon={Confirm}
+            accessibilityHint={t(NearbyTexts.dateInput.a11yInPastHint)}
             iconPosition="right"
           />
         </ScrollView>

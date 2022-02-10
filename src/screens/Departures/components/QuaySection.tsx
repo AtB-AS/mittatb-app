@@ -23,6 +23,11 @@ type QuaySectionProps = {
   ) => void;
 };
 
+type EstimatedCallRenderItem = {
+  item: EstimatedCall;
+  index: number;
+};
+
 export default function QuaySection({
   quay,
   data,
@@ -76,19 +81,24 @@ export default function QuaySection({
           <FlatList
             ItemSeparatorComponent={SectionSeparator}
             data={departures}
-            renderItem={({item, index}) => (
-              <Sections.GenericItem
+            renderItem={({item, index}: EstimatedCallRenderItem) => (
+              <Sections.GenericClickableItem
                 radius={
                   !navigateToQuay && index === departures.length - 1
                     ? 'bottom'
                     : undefined
                 }
+                onPress={() =>
+                  navigateToDetails(
+                    item.serviceJourney?.id,
+                    item.expectedDepartureTime,
+                    item.quay?.id,
+                  )
+                }
+                accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
               >
-                <EstimatedCallItem
-                  departure={item}
-                  navigateToDetails={navigateToDetails}
-                ></EstimatedCallItem>
-              </Sections.GenericItem>
+                <EstimatedCallItem departure={item}></EstimatedCallItem>
+              </Sections.GenericClickableItem>
             )}
             keyExtractor={(item: EstimatedCall) =>
               // ServiceJourney ID is not a unique key if a ServiceJourney

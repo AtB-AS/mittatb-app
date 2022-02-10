@@ -162,6 +162,7 @@ const NearbyOverview: React.FC<Props> = ({
         close={close}
         initialTime={searchTime}
         setSearchTime={setSearchTime}
+        allowTimeInPast={false}
       ></DepartureTimeSheet>
     ));
   };
