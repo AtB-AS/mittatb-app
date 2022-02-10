@@ -61,7 +61,7 @@ const LocationSearchRoot = ({route}: LocationSearchRootProps) => {
 export default LocationSearchRoot;
 
 export function useLocationSearchValue<
-  T extends RouteProp<any, any> & {params: ParamListBase}
+  T extends RouteProp<any, any> & {params: ParamListBase},
 >(
   callerRouteParam: keyof T['params'],
   defaultLocation?: Location,
@@ -87,7 +87,7 @@ export function useLocationSearchValue<
 }
 
 export function useOnlySingleLocation<
-  T extends RouteProp<any, any> & {params: ParamListBase}
+  T extends RouteProp<any, any> & {params: ParamListBase},
 >(
   callerRouteParam: keyof T['params'],
   defaultLocation?: Location,

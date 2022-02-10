@@ -53,9 +53,8 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   const config = useLocalConfig();
 
   const {fareContracts, customerProfile} = useTicketState();
-  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
-    fareContracts,
-  );
+  const activeFareContracts =
+    filterActiveOrCanBeUsedFareContracts(fareContracts);
   const hasActiveFareContracts = activeFareContracts.length > 0;
 
   const {

@@ -1,5 +1,5 @@
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
-import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
+import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
 import Button from '@atb/components/button';
 import {
   MapCameraConfig,
@@ -306,11 +306,12 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
         // Necessary hack (https://github.com/react-native-mapbox-gl/maps/issues/1085)
         point = point.map((p) => p * PixelRatio.get());
       }
-      const featuresAtPoint = await mapViewRef.current.queryRenderedFeaturesAtPoint(
-        point,
-        ['all', true],
-        ['tariffZonesFill'],
-      );
+      const featuresAtPoint =
+        await mapViewRef.current.queryRenderedFeaturesAtPoint(
+          point,
+          ['all', true],
+          ['tariffZonesFill'],
+        );
       const featureId = featuresAtPoint?.features?.[0]?.id;
       if (featureId) {
         updateSelectedZones(featureId as string, 'geolocation');

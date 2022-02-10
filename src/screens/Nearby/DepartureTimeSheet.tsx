@@ -18,7 +18,7 @@ import {
   formatLocaleTime,
   isInThePast,
 } from '@atb/utils/date';
-import {Confirm} from '@atb/assets/svg/icons/actions';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import useKeyboardHeight from '@atb/utils/use-keyboard-height';
 import {SearchTime} from './types';
 

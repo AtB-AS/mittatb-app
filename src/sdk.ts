@@ -27,7 +27,7 @@ import {Feature, LineString} from 'geojson';
 
 export * from '@entur/sdk';
 
-// @TODO This should come from Common lib
+// @TODO This should come from Common lib.
 
 export interface Place {
   latitude: number;

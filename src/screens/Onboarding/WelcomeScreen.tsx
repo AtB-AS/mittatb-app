@@ -5,12 +5,12 @@ import React from 'react';
 import {ScrollView, View} from 'react-native';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
-import {ArrowRight} from '@atb/assets/svg/icons/navigation';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {OnboardingStackParams} from '@atb/screens/Onboarding/index';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {Onboarding1} from '@atb/assets/svg/illustrations';
+import {Onboarding1} from '@atb/assets/svg/color/illustrations';
 import Illustration from '@atb/screens/Onboarding/components/Illustration';
 import {ThemeColor} from '@atb/theme/colors';
 

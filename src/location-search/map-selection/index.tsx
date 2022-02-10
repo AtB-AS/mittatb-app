@@ -62,9 +62,11 @@ const MapSelection: React.FC<Props> = ({
     ],
   );
 
-  const {closestLocation: location, isSearching, error} = useReverseGeocoder(
-    centeredCoordinates,
-  );
+  const {
+    closestLocation: location,
+    isSearching,
+    error,
+  } = useReverseGeocoder(centeredCoordinates);
 
   const {location: geolocation} = useGeolocationState();
 

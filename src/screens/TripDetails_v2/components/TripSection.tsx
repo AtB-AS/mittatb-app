@@ -1,5 +1,5 @@
-import {Warning} from '@atb/assets/svg/situations';
-import {Interchange} from '@atb/assets/svg/icons/actions';
+import {Warning} from '@atb/assets/svg/color/situations';
+import {Interchange} from '@atb/assets/svg/mono-icons/actions';
 import AccessibleText, {
   screenReaderPause,
 } from '@atb/components/accessible-text';
