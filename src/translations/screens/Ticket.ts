@@ -1,4 +1,5 @@
 import {translation as _} from '../commons';
+import orgSpecificTranslations from '../utils';
 
 const TicketTexts = {
   detailsLink: {
@@ -115,7 +116,7 @@ const TicketTexts = {
       _(`Ordre-id: ${orderId}`, `Order ID: ${orderId}`),
   },
   ticketInfo: {
-    tCardIsActive: _(
+    travelcardIsActive: _(
       'Du har valgt **t:kort** som gyldig reisebevis',
       'You have specified **t:card** as valid travel token',
     ),
@@ -123,4 +124,14 @@ const TicketTexts = {
     noInspectionIconA11yLabel: _('Ikke bruk i kontroll', 'Not for inspection'),
   },
 };
-export default TicketTexts;
+
+export default orgSpecificTranslations(TicketTexts, {
+  nfk: {
+    ticketInfo: {
+      travelcardIsActive: _(
+        'Du har valgt **reisekort** som gyldig reisebevis',
+        'You have specified **travelcard** as valid travel token',
+      ),
+    },
+  },
+});

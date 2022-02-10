@@ -24,15 +24,15 @@ jobs:
         run: sh ./scripts/git-crypt-unlock.sh
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
-      - name: install node v12
+      - name: install node v16
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 16
       - name: Get potential cached node_modules
         uses: actions/cache@v2
         id: modules-cache
         with:
-          path: "**/node_modules"
+          path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.yalc/**') }}
       - name: Install node_modules
         if: steps.modules-cache.outputs.cache-hit != 'true'
@@ -40,7 +40,7 @@ jobs:
       - name: Setup Xcode version
         uses: maxim-lobanov/setup-xcode@v1.3.0
         with:
-          xcode-version: "13.0"
+          xcode-version: '13.0'
       - name: Bundle Install
         run: bundle install
       - name: Set environment
@@ -72,13 +72,13 @@ jobs:
         run: fastlane ios build
         env:
           PROVISIONING_PROFILE: $IOS_PROVISIONING_PROFILE_SPECIFIER
-          EXPORT_METHOD: "ad-hoc"
+          EXPORT_METHOD: 'ad-hoc'
       - name: Replace ipa bundle
         if: steps.ipa-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/ios/replace-bundle.sh
         env:
-          IPA_FILE_NAME: "AtB.ipa"
-          APP_NAME: "AtB.app"
+          IPA_FILE_NAME: 'AtB.ipa'
+          APP_NAME: 'AtB.app'
           CODE_SIGN_IDENTITY: ${{ secrets.IOS_CODE_SIGN_IDENTITY }}
 
       - name: Distribute to Firebase app distribution

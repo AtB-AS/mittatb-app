@@ -21,6 +21,7 @@ import {updateDeparturesWithRealtimeV2} from '../../../departure-list/utils';
 import {getStopPlaceDepartures} from '@atb/api/departures/stops-nearest';
 import {flatMap} from 'lodash';
 import {EstimatedCall, Place} from '@atb/api/types/departures';
+import {getSecondsUntilMidnightOrMinimum} from './quay-state';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 
@@ -270,10 +271,16 @@ async function fetchEstimatedCalls(
   queryInput: DepartureGroupsQuery,
   stopPlace: Place,
 ): Promise<EstimatedCall[]> {
+  const timeRange = getSecondsUntilMidnightOrMinimum(
+    queryInput.startTime,
+    MIN_TIME_RANGE,
+  );
+
   const result = await getStopPlaceDepartures({
     id: stopPlace.id,
     startTime: queryInput.startTime,
     numberOfDepartures: queryInput.limitPerLine,
+    timeRange: timeRange,
   });
 
   return flatMap(

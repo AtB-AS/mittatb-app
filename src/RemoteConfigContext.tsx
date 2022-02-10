@@ -53,10 +53,8 @@ function isUserInfo(a: any): a is UserInfoErrorFromFirebase {
 
 const RemoteConfigContextProvider: React.FC = ({children}) => {
   const [config, setConfig] = useState<RemoteConfig>(defaultRemoteConfig);
-  const {
-    isLoading: isLoadingAppState,
-    newBuildSincePreviousLaunch,
-  } = useAppState();
+  const {isLoading: isLoadingAppState, newBuildSincePreviousLaunch} =
+    useAppState();
 
   async function fetchConfig() {
     try {

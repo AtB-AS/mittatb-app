@@ -30,10 +30,8 @@ const FavoritesContext = createContext<FavoriteContextState | undefined>(
 
 const FavoritesContextProvider: React.FC = ({children}) => {
   const [favorites, setFavoritesState] = useState<UserFavorites>([]);
-  const [
-    favoriteDepartures,
-    setFavoriteDeparturesState,
-  ] = useState<UserFavoriteDepartures>([]);
+  const [favoriteDepartures, setFavoriteDeparturesState] =
+    useState<UserFavoriteDepartures>([]);
   async function populateFavorites() {
     const [favorites, favoriteDepartures] = await Promise.all([
       places.getFavorites(),

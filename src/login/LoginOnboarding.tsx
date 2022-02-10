@@ -5,12 +5,12 @@ import React from 'react';
 import {ScrollView, View} from 'react-native';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
-import {ArrowRight} from '@atb/assets/svg/icons/navigation';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ThemeColor} from '@atb/theme/colors';
 import {useNavigation} from '@react-navigation/native';
-import {TicketIllustration, Psst} from '@atb/assets/svg/illustrations';
+import {TicketIllustration, Psst} from '@atb/assets/svg/color/illustrations';
 import {TouchableOpacity} from 'react-native';
 import {
   filterActiveOrCanBeUsedFareContracts,
@@ -34,9 +34,8 @@ export default function LoginOnboarding({
   const focusRef = useFocusOnLoad();
 
   const {fareContracts} = useTicketState();
-  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
-    fareContracts,
-  );
+  const activeFareContracts =
+    filterActiveOrCanBeUsedFareContracts(fareContracts);
   const onNext = async () => {
     doAfterSubmit(activeFareContracts.length > 0);
   };

@@ -1,4 +1,4 @@
-import SvgBanner from '@atb/assets/svg/icons/other/Banner';
+import SvgBanner from '@atb/assets/svg/mono-icons/other/Banner';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import throttle from '@atb/utils/throttle';
@@ -118,8 +118,9 @@ const DisappearingHeader: React.FC<Props> = ({
   const [scrollYValue, setScrollY] = useState<number>(0);
   const styles = useThemeStyles();
   const {theme} = useTheme();
-  const scrollYRef = useRef(new Animated.Value(IS_IOS ? -contentOffset : 0))
-    .current;
+  const scrollYRef = useRef(
+    new Animated.Value(IS_IOS ? -contentOffset : 0),
+  ).current;
 
   const fullscreenOffsetRef = useRef(
     new Animated.Value(isFullHeight ? 0 : contentOffset),
@@ -379,10 +380,8 @@ function useCalculateHeaderContentHeight(isAnimating: boolean) {
   // Using safeAreaFrame for height instead of dimensions as
   // dimensions are problamatic on Android: https://github.com/facebook/react-native/issues/23693
   const {height: actualHeight} = useSafeAreaFrame();
-  const {
-    onLayout: onScreenHeaderLayout,
-    height: screenHeaderHeight,
-  } = useLayout();
+  const {onLayout: onScreenHeaderLayout, height: screenHeaderHeight} =
+    useLayout();
   const {onLayout: onHeaderContentLayout, height: contentHeight} = useLayout();
   const {top} = useSafeAreaInsets();
 

@@ -1,3 +1,4 @@
+import orgSpecificTranslations from '@atb/translations/utils';
 import {translation as _} from '../../commons';
 const ContactSheetTexts = {
   header: {
@@ -28,4 +29,10 @@ const ContactSheetTexts = {
     ),
   },
 };
-export default ContactSheetTexts;
+export default orgSpecificTranslations(ContactSheetTexts, {
+  nfk: {
+    header: {
+      title: _('Kontakt Reis Nordland', 'Contact Reis Nordland'),
+    },
+  },
+});

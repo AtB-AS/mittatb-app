@@ -7,7 +7,8 @@ export const preference_screenAlternatives = [
   'ticketing',
 ] as const;
 
-export type Preference_ScreenAlternatives = typeof preference_screenAlternatives[number];
+export type Preference_ScreenAlternatives =
+  typeof preference_screenAlternatives[number];
 
 export type Preference_Language = typeof appLanguages[number];
 

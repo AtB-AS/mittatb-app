@@ -1,4 +1,4 @@
-import {Add, Remove} from '@atb/assets/svg/icons/actions';
+import {Add, Remove} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations/';
 import React from 'react';
