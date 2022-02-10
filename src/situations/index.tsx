@@ -1,5 +1,5 @@
 import React, {ComponentProps} from 'react';
-import {Warning} from '../assets/svg/situations';
+import {Warning} from '../assets/svg/color/situations';
 import ThemeText from '../components/text';
 import MessageBox, {MessageBoxProps} from '../components/message-box';
 import {Situation as Situation_v1} from '../sdk';

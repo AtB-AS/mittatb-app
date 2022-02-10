@@ -1,7 +1,5 @@
-import {CancelToken, isCancel} from '@atb/api';
-import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {Swap} from '@atb/assets/svg/icons/actions';
-import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
+import {Swap} from '@atb/assets/svg/mono-icons/actions';
+import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import Button from '@atb/components/button';
 import DisappearingHeader from '@atb/components/disappearing-header';
@@ -24,7 +22,6 @@ import {
 import {useLocationSearchValue} from '@atb/location-search';
 import {SelectableLocationData} from '@atb/location-search/types';
 import {RootStackParamList} from '@atb/navigation';
-import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   AssistantTexts,
@@ -35,8 +32,8 @@ import {
 import {formatToLongDateTime, isInThePast} from '@atb/utils/date';
 import {
   locationDistanceInMetres as distanceInMetres,
-  locationsAreEqual,
   LOCATIONS_REALLY_CLOSE_THRESHOLD,
+  locationsAreEqual,
 } from '@atb/utils/location';
 import {useLayout} from '@atb/utils/use-layout';
 import Bugsnag from '@bugsnag/react-native';
@@ -49,24 +46,16 @@ import {
 } from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {AssistantParams} from '.';
 import Loading from '../Loading';
 import FadeBetween from './FadeBetween';
-import {
-  DateString,
-  SearchTime,
-  useSearchTimeValue,
-} from './journey-date-picker';
+import {SearchTime, useSearchTimeValue} from './journey-date-picker';
 import NewsBanner from './NewsBanner';
 import Results from './Results';
-import {SearchStateType} from './types';
 import {ThemeColor} from '@atb/theme/colors';
-import {tripsSearch} from '@atb/api/trips_v2';
-import {TripMetadata, TripPattern} from '@atb/api/types/trips';
-import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
-import {CancelTokenSource} from 'axios';
-import * as navIcons from '@atb/assets/svg/icons/navigation';
+import * as navIcons from '@atb/assets/svg/mono-icons/navigation';
+import useTripsQuery from '@atb/screens/Assistant_v2/use-trips-query';
 
 const themeColor: ThemeColor = 'background_accent';
 
@@ -127,7 +116,6 @@ const Assistant: React.FC<Props> = ({
   const styles = useStyles();
   const {theme} = useTheme();
   const {from, to} = useLocations(currentLocation);
-  const [page, setPage] = useState<number>(1);
   const {language, t} = useTranslation();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
 
@@ -215,15 +203,15 @@ const Assistant: React.FC<Props> = ({
     });
   }
 
-  const [
+  const {
     tripPatterns,
-    tripMetadata,
     timeOfLastSearch,
-    reload,
-    clearTrips,
+    refresh,
+    loadMore,
+    clear,
     searchState,
     error,
-  ] = useTripsQuery(from, to, searchTime, page);
+  } = useTripsQuery(from, to, searchTime);
 
   const isSearching = searchState === 'searching';
   const openLocationSearch = (
@@ -243,7 +231,7 @@ const Assistant: React.FC<Props> = ({
 
   const showEmptyScreen = !tripPatterns && !isSearching && !error;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
-  const useScroll = (!showEmptyScreen && !isEmptyResult) || !!error;
+  const useScroll = !showEmptyScreen || !!error;
   const isHeaderFullHeight = !from || !to;
 
   const renderHeader = useCallback(
@@ -384,9 +372,8 @@ const Assistant: React.FC<Props> = ({
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
 
   const onPressed = useCallback(
-    (tripPatternId, tripPatterns, startIndex) =>
+    (tripPatterns, startIndex) =>
       navigation.navigate('TripDetails_v2', {
-        tripPatternId,
         tripPatterns,
         startIndex,
       }),
@@ -423,8 +410,7 @@ const Assistant: React.FC<Props> = ({
     <DisappearingHeader
       renderHeader={renderHeader}
       highlightComponent={newsBanner}
-      onRefresh={reload}
-      isRefreshing={isSearching}
+      onRefresh={refresh}
       useScroll={useScroll}
       headerTitle={t(AssistantTexts.header.title)}
       headerMargin={24}
@@ -439,7 +425,7 @@ const Assistant: React.FC<Props> = ({
       }}
       onFullscreenTransitionEnd={(fullHeight) => {
         if (fullHeight) {
-          clearTrips();
+          clear();
         }
       }}
       alertContext="travel"
@@ -454,23 +440,33 @@ const Assistant: React.FC<Props> = ({
         onDetailsPressed={onPressed}
         errorType={error}
       />
-      {(tripPatterns?.length ?? 0) > 0 && (
-        <View style={styles.loadMoreButton}>
-          <TouchableOpacity
-            onPress={() => setPage(page + 1)}
-            disabled={searchState === 'searching'}
-          >
-            {searchState === 'searching' && (
-              <ThemeText>{t(AssistantTexts.results.fetchingMore)}</ThemeText>
-            )}
-            {searchState !== 'searching' && (
-              <View style={{flex: 1, flexDirection: 'row'}}>
-                <ThemeText>{t(AssistantTexts.results.fetchMore)} </ThemeText>
-                <ThemeIcon svg={navIcons.Expand} size={'normal'} style={{}} />
-              </View>
-            )}
-          </TouchableOpacity>
-        </View>
+      {!error && (
+        <TouchableOpacity
+          onPress={loadMore}
+          disabled={searchState === 'searching'}
+          style={styles.loadMoreButton}
+        >
+          {searchState === 'searching' ? (
+            <>
+              <ActivityIndicator
+                color={theme.text.colors.secondary}
+                style={{
+                  marginRight: theme.spacings.medium,
+                }}
+              />
+              <ThemeText color="secondary">
+                {tripPatterns.length
+                  ? t(AssistantTexts.results.fetchingMore)
+                  : t(AssistantTexts.searchState.searching)}
+              </ThemeText>
+            </>
+          ) : (
+            <>
+              <ThemeText>{t(AssistantTexts.results.fetchMore)} </ThemeText>
+              <ThemeIcon svg={navIcons.Expand} size={'normal'} />
+            </>
+          )}
+        </TouchableOpacity>
       )}
     </DisappearingHeader>
   );
@@ -510,8 +506,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   loadMoreButton: {
     paddingVertical: theme.spacings.medium,
-    marginBottom: 50,
-    alignItems: 'center',
+    marginBottom: theme.spacings.xLarge,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 }));
 
@@ -563,12 +561,10 @@ function useLocations(
     ],
   );
 
-  const searchedFromLocation = useLocationSearchValue<AssistantRouteProp>(
-    'fromLocation',
-  );
-  const searchedToLocation = useLocationSearchValue<AssistantRouteProp>(
-    'toLocation',
-  );
+  const searchedFromLocation =
+    useLocationSearchValue<AssistantRouteProp>('fromLocation');
+  const searchedToLocation =
+    useLocationSearchValue<AssistantRouteProp>('toLocation');
 
   return useUpdatedLocation(
     searchedFromLocation,
@@ -640,159 +636,6 @@ function useUpdatedLocation(
 }
 
 export default AssistantRoot;
-
-function useTripsQuery(
-  fromLocation: Location | undefined,
-  toLocation: Location | undefined,
-  searchTime: SearchTime | undefined,
-  page: number,
-): [
-  TripPattern[] | null,
-  TripMetadata | null,
-  DateString,
-  () => {},
-  () => void,
-  SearchStateType,
-  ErrorType?,
-] {
-  const [timeOfSearch, setTimeOfSearch] = useState<string>(
-    new Date().toISOString(),
-  );
-
-  const [tripPatterns, setTripPatterns] = useState<TripPattern[]>([]);
-  const [tripMetadata, setTripMetadata] = useState<TripMetadata | null>(null);
-  const [errorType, setErrorType] = useState<ErrorType>();
-  const [searchState, setSearchState] = useState<SearchStateType>('idle');
-  const {addJourneySearchEntry} = useSearchHistory();
-
-  const clearTrips = () => {
-    setTripPatterns([]);
-    setTripMetadata(null);
-  };
-
-  useEffect(() => {
-    const cancelTokenSource = CancelToken.source();
-
-    async function loadNextPage() {
-      if (
-        !fromLocation ||
-        !toLocation ||
-        !tripMetadata ||
-        !tripMetadata.nextDateTime
-      ) {
-        setSearchState('idle');
-        return;
-      }
-      setSearchState('searching');
-      try {
-        const results = await doSearch(
-          fromLocation,
-          toLocation,
-          {option: 'departure', date: tripMetadata.nextDateTime},
-          cancelTokenSource,
-        );
-
-        setTripPatterns(tripPatterns.concat(results.trip?.tripPatterns ?? []));
-        setTripMetadata(results.trip?.metadata);
-        if (tripPatterns.length == 0) {
-          setSearchState('search-empty-result');
-        }
-        setSearchState('search-success');
-      } catch (e) {
-        if (!isCancel(e)) {
-          setErrorType(getAxiosErrorType(e));
-          console.warn(e);
-          setTripPatterns([]);
-          setTripMetadata(null);
-          setSearchState('search-empty-result');
-        }
-      }
-    }
-    loadNextPage();
-  }, [page]);
-
-  const refresh = useCallback(() => {
-    const cancelTokenSource = CancelToken.source();
-
-    async function doRefresh() {
-      if (!fromLocation || !toLocation) {
-        setSearchState('idle');
-        return;
-      }
-      try {
-        const results = await doSearch(
-          fromLocation,
-          toLocation,
-          searchTime ?? {option: 'now', date: new Date().toISOString()},
-          cancelTokenSource,
-        );
-
-        setTripPatterns(results.trip?.tripPatterns ?? []);
-        setTripMetadata(results.trip?.metadata);
-        setSearchState('search-success');
-        if (tripPatterns.length == 0) {
-          setSearchState('search-empty-result');
-        }
-      } catch (e) {
-        if (!isCancel(e)) {
-          setErrorType(getAxiosErrorType(e));
-          console.warn(e);
-          setTripPatterns([]);
-          setTripMetadata(null);
-          setSearchState('search-empty-result');
-        }
-      }
-    }
-    setSearchState('searching');
-    setTripPatterns([]);
-    setTripMetadata(null);
-    doRefresh();
-    return () => {
-      if (!fromLocation || !toLocation) return;
-      cancelTokenSource.cancel('New search to replace previous search');
-    };
-  }, [fromLocation, toLocation, searchTime]);
-
-  useEffect(refresh, [refresh]);
-
-  return [
-    tripPatterns,
-    tripMetadata,
-    timeOfSearch,
-    refresh,
-    clearTrips,
-    searchState,
-    errorType,
-  ];
-}
-
-async function doSearch(
-  fromLocation: Location,
-  toLocation: Location,
-  searchTime: SearchTime,
-  cancelToken: CancelTokenSource,
-) {
-  const searchDate =
-    searchTime?.option !== 'now' ? searchTime.date : new Date().toISOString();
-
-  log('searching', {
-    fromLocation: translateLocation(fromLocation),
-    toLocation: translateLocation(toLocation),
-    searchDate: searchDate,
-  });
-
-  const query: TripsQueryVariables = {
-    from: fromLocation,
-    to: toLocation,
-    when: searchDate,
-  };
-
-  const tripsQuery = await tripsSearch(query, {
-    cancelToken: cancelToken.token,
-  });
-
-  return tripsQuery;
-}
 
 function useDoOnceWhen(fn: () => void, condition: boolean) {
   const firstTimeRef = useRef(true);

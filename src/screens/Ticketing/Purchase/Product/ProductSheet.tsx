@@ -1,7 +1,5 @@
 import React, {forwardRef, useState} from 'react';
-import Header, {
-  ScreenHeaderWithoutNavigation,
-} from '@atb/components/screen-header';
+import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import * as Sections from '@atb/components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -28,9 +26,8 @@ const ProductSheet = forwardRef<ScrollView, Props>(
     const styles = useStyles();
     const {t, language} = useTranslation();
 
-    const {
-      preassigned_fare_products: preassignedFareProducts,
-    } = useRemoteConfig();
+    const {preassigned_fare_products: preassignedFareProducts} =
+      useRemoteConfig();
 
     const [selectedProduct, setSelectedProduct] = useState(
       preassignedFareProduct,

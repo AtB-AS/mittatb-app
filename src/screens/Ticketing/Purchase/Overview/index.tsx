@@ -1,4 +1,4 @@
-import {Edit} from '@atb/assets/svg/icons/actions';
+import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import Button from '@atb/components/button';
 import * as Sections from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
@@ -30,7 +30,7 @@ import useOfferState from './use-offer-state';
 import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
 import {formatToLongDateTime} from '@atb/utils/date';
 import ThemeText from '@atb/components/text';
-import {ArrowRight} from '@atb/assets/svg/icons/navigation';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import ProductSheet from '@atb/screens/Ticketing/Purchase/Product/ProductSheet';
 import {usePreferences} from '@atb/preferences';
@@ -83,11 +83,30 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     defaultUserProfilesWithCount,
   );
 
+  const [selectableUserProfiles, setSelectableUserProfiles] = useState(
+    defaultUserProfilesWithCount,
+  );
+
+  useEffect(() => {
+    const options = defaultUserProfilesWithCount.filter((p) => {
+      const profileIds = preassignedFareProduct.limitations.userProfileRefs;
+      return profileIds.includes(p.id);
+    });
+    const optionIds = options.map((p) => p.id);
+    const selectedUserProfiles = userProfilesWithCount
+      .filter((p) => p.count > 0)
+      .map((p) => p.id);
+
+    if (!selectedUserProfiles.every((p) => optionIds.includes(p))) {
+      setUserProfilesWithCount(defaultUserProfilesWithCount);
+    } else {
+      setSelectableUserProfiles(options);
+    }
+  }, [preassignedFareProduct, userProfilesWithCount]);
+
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
-  const {
-    fromTariffZone = defaultTariffZone,
-    toTariffZone = defaultTariffZone,
-  } = params;
+  const {fromTariffZone = defaultTariffZone, toTariffZone = defaultTariffZone} =
+    params;
 
   const [travelDate, setTravelDate] = useState<string | undefined>();
 
@@ -126,7 +145,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         close={close}
         save={setUserProfilesWithCount}
         preassignedFareProduct={preassignedFareProduct}
-        userProfilesWithCount={userProfilesWithCount}
+        userProfilesWithCount={selectableUserProfiles}
         ref={focusRef}
       />
     ));

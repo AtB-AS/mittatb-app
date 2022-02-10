@@ -195,11 +195,11 @@ type HeaderLayouts = {
  */
 const useHeaderLayouts = () => {
   const [headerLayouts, setHeaderLayouts] = useState<HeaderLayouts>({});
-  const setLayoutFor = (element: keyof HeaderLayouts) => ({
-    nativeEvent: {layout},
-  }: LayoutChangeEvent) => {
-    setHeaderLayouts((prev) => ({...prev, [element]: layout}));
-  };
+  const setLayoutFor =
+    (element: keyof HeaderLayouts) =>
+    ({nativeEvent: {layout}}: LayoutChangeEvent) => {
+      setHeaderLayouts((prev) => ({...prev, [element]: layout}));
+    };
 
   const buttonsOnOwnLine = useMemo(() => {
     const {container, title, leftButton, rightButton} = headerLayouts;

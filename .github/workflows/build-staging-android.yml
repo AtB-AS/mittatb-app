@@ -26,15 +26,15 @@ jobs:
         run: sh ./scripts/git-crypt-unlock.sh
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
-      - name: install node v12
+      - name: install node v16
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 16
       - name: Get potential cached node_modules
         uses: actions/cache@v2
         id: modules-cache
         with:
-          path: "**/node_modules"
+          path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.yalc/**') }}
       - name: Install node_modules
         if: steps.modules-cache.outputs.cache-hit != 'true'
@@ -93,8 +93,7 @@ jobs:
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
       - name: Register app version
-        if: matrix.org == 'atb'
         run: sh ./scripts/android/register-app-version.sh
         env:
-          ENTUR_CLIENT_ID: ${{ secrets.ATB_ENTUR_CLIENT_ID_STAGING}}
-          ENTUR_CLIENT_SECRET: ${{ secrets.ATB_ENTUR_CLIENT_SECRET_STAGING}}
+          ENTUR_CLIENT_ID: ${{ secrets.ABT_ENTUR_CLIENT_ID_STAGING}}
+          ENTUR_CLIENT_SECRET: ${{ secrets.ABT_ENTUR_CLIENT_SECRET_STAGING}}

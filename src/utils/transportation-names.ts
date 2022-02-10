@@ -11,9 +11,10 @@ export function getLineName(leg: Leg) {
     : '';
 }
 
-export function getLineNameFromEstimatedCall(
-  call: EstimatedCall,
-): {publicCode?: string; name?: string} {
+export function getLineNameFromEstimatedCall(call: EstimatedCall): {
+  publicCode?: string;
+  name?: string;
+} {
   const name =
     call.destinationDisplay?.frontText ??
     call.serviceJourney.journeyPattern?.line.name;
@@ -44,6 +45,8 @@ export function getTranslatedModeName(mode?: AnyMode): TranslatedString {
       return legModeNames.air;
     case 'foot':
       return legModeNames.foot;
+    case 'metro':
+      return legModeNames.metro;
     default:
       return legModeNames.unknown;
   }

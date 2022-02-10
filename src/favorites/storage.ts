@@ -14,9 +14,9 @@ class FavoriteStore<T = LocationFavorite | FavoriteDeparture> {
 
   async getFavorites(): Promise<StoredType<T>[]> {
     const userLocations = await storage.get(this.key);
-    let data = (userLocations
-      ? JSON.parse(userLocations)
-      : []) as StoredType<T>[];
+    let data = (
+      userLocations ? JSON.parse(userLocations) : []
+    ) as StoredType<T>[];
     return data;
   }
 

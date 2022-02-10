@@ -60,7 +60,10 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
 
   const onSelect = () => {
     const calculatedTime: SearchTime = {
-      date: dateWithReplacedTime(dateString, timeString).toISOString(),
+      date:
+        option === 'now'
+          ? new Date().toISOString()
+          : dateWithReplacedTime(dateString, timeString).toISOString(),
       option,
     };
     navigation.navigate(callerRouteName as any, {
@@ -134,7 +137,7 @@ const getDateOptionText = (
 export default JourneyDatePicker;
 
 export function useSearchTimeValue<
-  T extends RouteProp<any, any> & {params: ParamListBase}
+  T extends RouteProp<any, any> & {params: ParamListBase},
 >(callerRouteParam: keyof T['params'], initialValue: SearchTime): SearchTime {
   const route = useRoute<T>();
   const firstTimeRef = useRef(true);

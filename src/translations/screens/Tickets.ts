@@ -1,3 +1,4 @@
+import orgSpecificTranslations from '@atb/translations/utils';
 import {translation as _} from '../commons';
 
 const bulletPoint = '\u2022';
@@ -119,7 +120,7 @@ const TicketsTexts = {
       'Kan endres fra "Mitt AtB"',
       'Can be changed from "My AtB"',
     ),
-    tCard: _('t:kort', 't:card'),
+    cardType: _('t:kort', 't:card'),
     illustrationa11yLabel: (travelCardId: string) =>
       _(
         `Illustrasjon av t kort med kortnummer som inneholder ${travelCardId}`,
@@ -153,4 +154,19 @@ const TicketsTexts = {
   },
 };
 
-export default TicketsTexts;
+export default orgSpecificTranslations(TicketsTexts, {
+  nfk: {
+    travelCardInformation: {
+      illustrationa11yLabel: (travelCardId: string) =>
+        _(
+          `Illustrasjon av reisekort med kortnummer som inneholder ${travelCardId}`,
+          `Illustration of travelcard with card number that contains ${travelCardId}`,
+        ),
+      cardType: _('reisekort', 'travelcard'),
+      onInspection: _(
+        'I billettkontroll må du vise reisekortet ditt',
+        'In the event of an inspection, please present your travelcard',
+      ),
+    },
+  },
+});

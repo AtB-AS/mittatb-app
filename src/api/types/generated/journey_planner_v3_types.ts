@@ -1,9 +1,11 @@
 export type Maybe<T> = T;
 export type Exact<T extends {[key: string]: unknown}> = {[K in keyof T]: T[K]};
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
-  {[SubKey in K]?: Maybe<T[SubKey]>};
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
-  {[SubKey in K]: Maybe<T[SubKey]>};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -634,7 +636,7 @@ export type Quay = PlaceInterface & {
   /** List of journey patterns servicing this quay */
   journeyPatterns: Array<Maybe<JourneyPattern>>;
   /** List of visits to this quay as part of vehicle journeys. */
-  estimatedCalls: Array<Maybe<EstimatedCall>>;
+  estimatedCalls: Array<EstimatedCall>;
   /** Get all situations active for the quay. */
   situations: Array<Maybe<PtSituationElement>>;
   tariffZones: Array<Maybe<TariffZone>>;
@@ -662,7 +664,7 @@ export type QuayAtDistance = {
 
 export type QueryType = {
   /** Input type for executing a travel search for a trip between two locations. Returns trip patterns describing suggested alternatives for the trip. */
-  trip?: Maybe<Trip>;
+  trip: Trip;
   /** Get a single stopPlace based on its id) */
   stopPlace?: Maybe<StopPlace>;
   /** Get all stopPlaces */
@@ -718,6 +720,7 @@ export type QueryType = {
 export type QueryTypeTripArgs = {
   dateTime?: Maybe<Scalars['DateTime']>;
   searchWindow?: Maybe<Scalars['Int']>;
+  pageCursor?: Maybe<Scalars['String']>;
   timetableView?: Maybe<Scalars['Boolean']>;
   from: Location;
   to: Location;
@@ -1083,6 +1086,8 @@ export type ServiceJourney = {
   id: Scalars['ID'];
   line: Line;
   activeDates: Array<Maybe<Scalars['Date']>>;
+  transportMode?: Maybe<TransportMode>;
+  transportSubmode?: Maybe<TransportSubmode>;
   /** Publicly announced code for service journey, differentiating it from other service journeys for the same line. */
   publicCode?: Maybe<Scalars['String']>;
   /** For internal use by operators. */
@@ -1112,8 +1117,6 @@ export type ServiceJourney = {
    * @deprecated BookingArrangements are defined per stop, and can be found under `passingTimes` or `estimatedCalls`
    */
   bookingArrangements?: Maybe<BookingArrangement>;
-  transportMode?: Maybe<TransportMode>;
-  transportSubmode?: Maybe<TransportSubmode>;
 };
 
 /** A planned vehicle journey with passengers. */
@@ -1152,17 +1155,14 @@ export type StopPlace = PlaceInterface & {
   tariffZones: Array<Maybe<TariffZone>>;
   /** The transport modes of quays under this stop place. */
   transportMode?: Maybe<Array<Maybe<TransportMode>>>;
-  /**
-   * The transport submode serviced by this stop place. NOT IMPLEMENTED
-   * @deprecated Submodes not implemented
-   */
-  transportSubmode?: Maybe<TransportSubmode>;
+  /** The transport submode serviced by this stop place. */
+  transportSubmode?: Maybe<Array<Maybe<TransportSubmode>>>;
   /** Returns all quays that are children of this stop place */
   quays?: Maybe<Array<Maybe<Quay>>>;
   /** Returns parent stop for this stop */
   parent?: Maybe<StopPlace>;
   /** List of visits to this stop place as part of vehicle journeys. */
-  estimatedCalls: Array<Maybe<EstimatedCall>>;
+  estimatedCalls: Array<EstimatedCall>;
 };
 
 /** Named place where public transport may be accessed. May be a building complex (e.g. a station) or an on-street location. */
@@ -1199,8 +1199,6 @@ export enum StreetMode {
   CarPark = 'car_park',
   /** Walk to a pickup point along the road, drive to a drop-off point along the road, and walk the rest of the way. This can include various taxi-services or kiss & ride. */
   CarPickup = 'car_pickup',
-  /** Walk to a car rental point, drive to a car rental drop-off point and walk the rest of the way. This can include car rental at fixed locations or free-floating services. */
-  CarRental = 'car_rental',
   /** Walk to an eligible pickup area for flexible transportation, ride to an eligible drop-off area and then walk the rest of the way. */
   Flexible = 'flexible',
 }
@@ -1282,6 +1280,121 @@ export type TransportModes = {
   transportSubModes?: Maybe<Array<Maybe<TransportSubmode>>>;
 };
 
+export enum TransportSubmode {
+  Unknown = 'unknown',
+  Undefined = 'undefined',
+  InternationalFlight = 'internationalFlight',
+  DomesticFlight = 'domesticFlight',
+  IntercontinentalFlight = 'intercontinentalFlight',
+  DomesticScheduledFlight = 'domesticScheduledFlight',
+  ShuttleFlight = 'shuttleFlight',
+  IntercontinentalCharterFlight = 'intercontinentalCharterFlight',
+  InternationalCharterFlight = 'internationalCharterFlight',
+  RoundTripCharterFlight = 'roundTripCharterFlight',
+  SightseeingFlight = 'sightseeingFlight',
+  HelicopterService = 'helicopterService',
+  DomesticCharterFlight = 'domesticCharterFlight',
+  SchengenAreaFlight = 'SchengenAreaFlight',
+  AirshipService = 'airshipService',
+  ShortHaulInternationalFlight = 'shortHaulInternationalFlight',
+  CanalBarge = 'canalBarge',
+  LocalBus = 'localBus',
+  RegionalBus = 'regionalBus',
+  ExpressBus = 'expressBus',
+  NightBus = 'nightBus',
+  PostBus = 'postBus',
+  SpecialNeedsBus = 'specialNeedsBus',
+  MobilityBus = 'mobilityBus',
+  MobilityBusForRegisteredDisabled = 'mobilityBusForRegisteredDisabled',
+  SightseeingBus = 'sightseeingBus',
+  ShuttleBus = 'shuttleBus',
+  HighFrequencyBus = 'highFrequencyBus',
+  DedicatedLaneBus = 'dedicatedLaneBus',
+  SchoolBus = 'schoolBus',
+  SchoolAndPublicServiceBus = 'schoolAndPublicServiceBus',
+  RailReplacementBus = 'railReplacementBus',
+  DemandAndResponseBus = 'demandAndResponseBus',
+  AirportLinkBus = 'airportLinkBus',
+  InternationalCoach = 'internationalCoach',
+  NationalCoach = 'nationalCoach',
+  ShuttleCoach = 'shuttleCoach',
+  RegionalCoach = 'regionalCoach',
+  SpecialCoach = 'specialCoach',
+  SchoolCoach = 'schoolCoach',
+  SightseeingCoach = 'sightseeingCoach',
+  TouristCoach = 'touristCoach',
+  CommuterCoach = 'commuterCoach',
+  Funicular = 'funicular',
+  StreetCableCar = 'streetCableCar',
+  AllFunicularServices = 'allFunicularServices',
+  UndefinedFunicular = 'undefinedFunicular',
+  Metro = 'metro',
+  Tube = 'tube',
+  UrbanRailway = 'urbanRailway',
+  CityTram = 'cityTram',
+  LocalTram = 'localTram',
+  RegionalTram = 'regionalTram',
+  SightseeingTram = 'sightseeingTram',
+  ShuttleTram = 'shuttleTram',
+  TrainTram = 'trainTram',
+  Telecabin = 'telecabin',
+  CableCar = 'cableCar',
+  Lift = 'lift',
+  ChairLift = 'chairLift',
+  DragLift = 'dragLift',
+  TelecabinLink = 'telecabinLink',
+  Local = 'local',
+  HighSpeedRail = 'highSpeedRail',
+  SuburbanRailway = 'suburbanRailway',
+  RegionalRail = 'regionalRail',
+  InterregionalRail = 'interregionalRail',
+  LongDistance = 'longDistance',
+  International = 'international',
+  SleeperRailService = 'sleeperRailService',
+  NightRail = 'nightRail',
+  CarTransportRailService = 'carTransportRailService',
+  TouristRailway = 'touristRailway',
+  AirportLinkRail = 'airportLinkRail',
+  RailShuttle = 'railShuttle',
+  ReplacementRailService = 'replacementRailService',
+  SpecialTrain = 'specialTrain',
+  CrossCountryRail = 'crossCountryRail',
+  RackAndPinionRailway = 'rackAndPinionRailway',
+  InternationalCarFerry = 'internationalCarFerry',
+  NationalCarFerry = 'nationalCarFerry',
+  RegionalCarFerry = 'regionalCarFerry',
+  LocalCarFerry = 'localCarFerry',
+  InternationalPassengerFerry = 'internationalPassengerFerry',
+  NationalPassengerFerry = 'nationalPassengerFerry',
+  RegionalPassengerFerry = 'regionalPassengerFerry',
+  LocalPassengerFerry = 'localPassengerFerry',
+  PostBoat = 'postBoat',
+  TrainFerry = 'trainFerry',
+  RoadFerryLink = 'roadFerryLink',
+  AirportBoatLink = 'airportBoatLink',
+  HighSpeedVehicleService = 'highSpeedVehicleService',
+  HighSpeedPassengerService = 'highSpeedPassengerService',
+  SightseeingService = 'sightseeingService',
+  SchoolBoat = 'schoolBoat',
+  CableFerry = 'cableFerry',
+  RiverBus = 'riverBus',
+  ScheduledFerry = 'scheduledFerry',
+  ShuttleFerryService = 'shuttleFerryService',
+  CommunalTaxi = 'communalTaxi',
+  CharterTaxi = 'charterTaxi',
+  WaterTaxi = 'waterTaxi',
+  RailTaxi = 'railTaxi',
+  BikeTaxi = 'bikeTaxi',
+  BlackCab = 'blackCab',
+  MiniCab = 'miniCab',
+  AllTaxiServices = 'allTaxiServices',
+  HireCar = 'hireCar',
+  HireVan = 'hireVan',
+  HireMotorbike = 'hireMotorbike',
+  HireCycle = 'hireCycle',
+  AllHireVehicles = 'allHireVehicles',
+}
+
 /** How much the factors safety, slope and distance are weighted relative to each other when routing bicycle legs. In total all three values need to add up to 1. */
 export type TriangleFactors = {
   /** How important is bicycle safety expressed as a fraction of 1. */
@@ -1296,14 +1409,17 @@ export type TriangleFactors = {
 export type Trip = {
   /** The time and date of travel */
   dateTime?: Maybe<Scalars['DateTime']>;
-  /** The trip request metadata. */
+  /**
+   * The trip request metadata.
+   * @deprecated Use pageCursor instead
+   */
   metadata?: Maybe<TripSearchData>;
   /** The origin */
   fromPlace: Place;
   /** The destination */
   toPlace: Place;
   /** A list of possible trip patterns */
-  tripPatterns: Array<Maybe<TripPattern>>;
+  tripPatterns: Array<TripPattern>;
   /**
    * A list of possible error messages as enum
    * @deprecated Use routingErrors instead
@@ -1315,9 +1431,19 @@ export type Trip = {
    */
   messageStrings: Array<Maybe<Scalars['String']>>;
   /** A list of routing errors, and fields which caused them */
-  routingErrors: Array<Maybe<RoutingError>>;
+  routingErrors: Array<RoutingError>;
   /** Information about the timings for the trip generation */
   debugOutput: DebugOutput;
+  /**
+   * Use the cursor to get the previous page of results. Use this cursor for the pageCursor parameter in the trip query in order to get the previous page.
+   * The previous page is a set of itineraries departing BEFORE the first itinerary in this result.
+   */
+  previousPageCursor?: Maybe<Scalars['String']>;
+  /**
+   * Use the cursor to get the next page of results. Use this cursor for the pageCursor parameter in the trip query in order to get the next page.
+   * The next page is a set of itineraries departing AFTER the last itinerary in this result.
+   */
+  nextPageCursor?: Maybe<Scalars['String']>;
 };
 
 /** List of legs constituting a suggested sequence of rides and links for a specific trip. */
@@ -1366,11 +1492,20 @@ export type TripPattern = {
 
 /** Trips search metadata. */
 export type TripSearchData = {
-  /** The search-window used in the current trip request. Use the value in the next request and set the request 'dateTime' to 'nextDateTime' or 'prevDateTime' to get the previous/next "window" of results. No duplicate trips should be returned, unless a trip is delayed and new realtime-data is available.Unit: minutes. */
+  /**
+   * The search-window used in the current trip request. Use the value in the next request and set the request 'dateTime' to 'nextDateTime' or 'prevDateTime' to get the previous/next "window" of results. No duplicate trips should be returned, unless a trip is delayed and new realtime-data is available.Unit: minutes.
+   * @deprecated Use pageCursor instead
+   */
   searchWindowUsed: Scalars['Int'];
-  /** This is the suggested search time for the "next page" or time window. Insert it together with the 'searchWindowUsed' in the request to get a new set of trips following in the time-window AFTER the current search. */
+  /**
+   * This is the suggested search time for the "next page" or time window. Insert it together with the 'searchWindowUsed' in the request to get a new set of trips following in the time-window AFTER the current search.
+   * @deprecated Use pageCursor instead
+   */
   nextDateTime?: Maybe<Scalars['DateTime']>;
-  /** This is the suggested search time for the "previous page" or time-window. Insert it together with the 'searchWindowUsed' in the request to get a new set of trips preceding in the time-window BEFORE the current search. */
+  /**
+   * This is the suggested search time for the "previous page" or time-window. Insert it together with the 'searchWindowUsed' in the request to get a new set of trips preceding in the time-window BEFORE the current search.
+   * @deprecated Use pageCursor instead
+   */
   prevDateTime?: Maybe<Scalars['DateTime']>;
 };
 
@@ -1439,66 +1574,3 @@ export type QuayAtDistanceEdge = {
   /** cursor marks a unique position or index into the connection */
   cursor: Scalars['String'];
 };
-
-export enum TransportSubmode {
-  /** A bus route specifically aimed at transporting passengers to and from airports. Usually with special board/alight-rules on the intermediary stops. (TransportMode: BUS) */
-  AirportLinkBus = 'airportLinkBus',
-  /** Airport express trains. (TransportMode: RAIL) */
-  AirportLinkRail = 'airportLinkRail',
-  /** An aeroplane service to a domestic destination. (TransportMode: AIRPLANE) */
-  DomesticFlight = 'domesticFlight',
-  /** A regional bus serving fewer stops than its regionalBus counterpart (express departure). Not to be confused with coach services. (TransportMode: BUS) */
-  ExpressBus = 'expressBus',
-  /** A helicopter service. (TransportMode: AIRPLANE) */
-  HelicopterService = 'helicopterService',
-  /** A high speed boat service which does not carry cars. The ship type is usually a catamaran. (TransportMode: FERRY) */
-  HighSpeedPassengerService = 'highSpeedPassengerService',
-  /** A high speed boat service with car carrying capacity. The ship type is usually a catamaran. (TransportMode: FERRY) */
-  HighSpeedVehicleService = 'highSpeedVehicleService',
-  /** Diesel-trains which are not local- or intercity trains. (TransportMode: RAIL) */
-  International = 'international',
-  /** Car-carrying cruise ships between countries. (TransportMode: FERRY) */
-  InternationalCarFerry = 'internationalCarFerry',
-  /** A long-distance coach service which crosses an international border. (TransportMode: COACH) */
-  InternationalCoach = 'internationalCoach',
-  /** An aeroplane service to an international destination. (TransportMode: AIRPLANE) */
-  InternationalFlight = 'internationalFlight',
-  /** Ships to international destinations which do not carry cars. (TransportMode: FERRY) */
-  InternationalPassengerFerry = 'internationalPassengerFerry',
-  /** Trains which cross an international border. (TransportMode: RAIL) */
-  InterregionalRail = 'interregionalRail',
-  /** Local train services for commuters and suburban transport. (TransportMode: RAIL) */
-  Local = 'local',
-  /** Any short range bus routes, city buses, or open school lines which are not distinctly marked with the school bus mode. (TransportMode: BUS) */
-  LocalBus = 'localBus',
-  /** Car-carrying ships between, or as part of road networks. Does not include high speed services. (TransportMode: FERRY) */
-  LocalCarFerry = 'localCarFerry',
-  /** Boat services which are not: international, car carrying, or high-speed services. (TransportMode: FERRY) */
-  LocalPassengerFerry = 'localPassengerFerry',
-  /** Intercity trains. (TransportMode: RAIL) */
-  LongDistance = 'longDistance',
-  /** A long-distance car-carrying ship which does not cross and international border. (TransportMode: FERRY) */
-  NationalCarFerry = 'nationalCarFerry',
-  /** A long-distance coach service which does not cross an international border. (TransportMode: COACH) */
-  NationalCoach = 'nationalCoach',
-  /** A local bus operating exclusively and specifically at night (usually midnight-5:00). (TransportMode: BUS) */
-  NightBus = 'nightBus',
-  /** Train services with a particular focus on overnight journeys with sleeping compartments. (TransportMode: RAIL) */
-  NightRail = 'nightRail',
-  /** A temporary bus service replacing a temporarily disabled rail line. (TransportMode: BUS) */
-  RailReplacementBus = 'railReplacementBus',
-  /** Any medium range buses which are not localBus, express bus, airport link bus, or a coach. (TransportMode: BUS) */
-  RegionalBus = 'regionalBus',
-  /** Electrical trains which are not local- or intercity trains. (TransportMode: RAIL) */
-  RegionalRail = 'regionalRail',
-  /** A local bus specifically transporting students from their homes to their schools, but which may be used by the general public. (TransportMode: BUS) */
-  SchoolBus = 'schoolBus',
-  /** A local bus which acts only as a feeder route to other transports. Usually connecting to coaches, trains or airports. (TransportMode: BUS) */
-  ShuttleBus = 'shuttleBus',
-  /** A bus focusing primarily on the experience (tourism) of the journey instead of efficiency and speed. (TransportMode: BUS) */
-  SightseeingBus = 'sightseeingBus',
-  /** A boat service focusing primarily on the experience (tourism) of the journey instead of efficiency and speed. Usually older ships. (TransportMode: FERRY) */
-  SightseeingService = 'sightseeingService',
-  /** A train focusing primarily on the experience (tourism) of the journey instead of efficiency and speed. Usually outdated train models, sometimes on different gauge rails. (TransportMode: RAIL) */
-  TouristRailway = 'touristRailway',
-}
