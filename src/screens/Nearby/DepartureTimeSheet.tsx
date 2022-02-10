@@ -88,11 +88,7 @@ const DepartureTimeSheet = forwardRef<ScrollView, Props>(
             color="primary_2"
             text={t(NearbyTexts.dateInput.confirm)}
             icon={Confirm}
-            accessibilityHint={
-              !allowTimeInPast && selectedTimeIsInPast
-                ? t(NearbyTexts.dateInput.a11yInPastHint)
-                : undefined
-            }
+            accessibilityHint={t(NearbyTexts.dateInput.a11yInPastHint)}
             iconPosition="right"
           />
         </ScrollView>
