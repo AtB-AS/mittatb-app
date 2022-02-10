@@ -27,6 +27,7 @@ import {BottomSheetProvider} from '@atb/components/bottom-sheet';
 import LocaleContextProvider from '@atb/LocaleProvider';
 import {setupConfig} from './setup';
 import {MobileTokenContextProvider} from '@atb/mobile-token';
+import FeedbackQuestionsProvider from './components/feedback/FeedbackContext';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
@@ -63,7 +64,9 @@ const App = () => {
                                 <AppLanguageProvider>
                                   <AlertsContextProvider>
                                     <BottomSheetProvider>
-                                      <NavigationRoot />
+                                      <FeedbackQuestionsProvider>
+                                        <NavigationRoot />
+                                      </FeedbackQuestionsProvider>
                                     </BottomSheetProvider>
                                   </AlertsContextProvider>
                                 </AppLanguageProvider>

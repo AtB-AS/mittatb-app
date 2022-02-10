@@ -6,27 +6,11 @@ import ThemeText from '@atb/components/text';
 import Button from '../button';
 import {TripPattern} from '@atb/api/types/trips';
 import {useTranslation} from '@atb/translations';
-import firestore, {
-  FirebaseFirestoreTypes,
-} from '@react-native-firebase/firestore';
-
-export type Alternative = {
-  alternativeId: number;
-  alternativeText: {
-    norwegian: string;
-    english: string;
-  };
-  checked: boolean;
-};
-
-export type Question = {
-  questionText: {
-    norwegian: string;
-    english: string;
-  };
-  questionId: number;
-  alternatives: Array<Alternative>;
-};
+import {
+  FeedbackQuestionsContext,
+  Question,
+  useFeedbackQuestionsState,
+} from './FeedbackContext';
 
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
@@ -149,12 +133,18 @@ export const RenderQuestions = ({
 type FeedbackProps = {
   tripPatterns?: TripPattern[];
   departures?: string;
+  feedbackQuestionsContext?: FeedbackQuestionsContext;
 };
 
-export const Feedback = ({tripPatterns, departures}: FeedbackProps) => {
+export const Feedback = ({
+  tripPatterns,
+  departures,
+  feedbackQuestionsContext,
+}: FeedbackProps) => {
   const styles = useFeedbackStyles();
   const {language} = useTranslation();
   const {theme} = useTheme();
+  const {findQuestions} = useFeedbackQuestionsState();
 
   const [submitted, setSubmitted] = useState(false);
   const [selectedOpinion, setSelectedOpinion] = useState(
@@ -162,27 +152,12 @@ export const Feedback = ({tripPatterns, departures}: FeedbackProps) => {
   );
   const [questions, setQuestions] = useState<Array<Question>>();
 
-  useEffect(
-    () =>
-      firestore()
-        .collection('configuration')
-        .doc('feedbackQuestions')
-        .onSnapshot(
-          (snapshot) => {
-            const fetchedQuestions = (snapshot as FirebaseFirestoreTypes.QueryDocumentSnapshot<{
-              assistant: Array<Question>;
-            }>).get('assistant');
-            console.log('fetchedQuestions:', fetchedQuestions);
-
-            const jsonQuestions = JSON.parse(String(fetchedQuestions));
-            setQuestions(jsonQuestions);
-          },
-          (err) => {
-            console.warn(err);
-          },
-        ),
-    [],
-  );
+  useEffect(() => {
+    const fetchedQuestions = feedbackQuestionsContext
+      ? findQuestions(feedbackQuestionsContext)
+      : undefined;
+    setQuestions(fetchedQuestions);
+  }, []);
 
   type handleAnswerPressProps = {
     questionId: number;

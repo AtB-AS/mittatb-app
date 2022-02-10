@@ -433,7 +433,10 @@ const Assistant: React.FC<Props> = ({
     >
       <ScreenReaderAnnouncement message={searchStateMessage} />
 
-      <Feedback tripPatterns={tripPatterns} />
+      <Feedback
+        tripPatterns={tripPatterns}
+        feedbackQuestionsContext={'assistant'}
+      />
       <Results
         tripPatterns={tripPatterns}
         isSearching={isSearching}
@@ -564,12 +567,10 @@ function useLocations(
     ],
   );
 
-  const searchedFromLocation = useLocationSearchValue<AssistantRouteProp>(
-    'fromLocation',
-  );
-  const searchedToLocation = useLocationSearchValue<AssistantRouteProp>(
-    'toLocation',
-  );
+  const searchedFromLocation =
+    useLocationSearchValue<AssistantRouteProp>('fromLocation');
+  const searchedToLocation =
+    useLocationSearchValue<AssistantRouteProp>('toLocation');
 
   return useUpdatedLocation(
     searchedFromLocation,
