@@ -26,11 +26,10 @@ export default function useTripsQuery(
   tripPatterns: TripPattern[];
   timeOfLastSearch: DateString;
   refresh: () => {};
-  loadMore: () => {};
+  loadMore: (() => {}) | undefined;
   clear: () => void;
   searchState: SearchStateType;
   error?: ErrorType;
-  moreResultsAvailable: boolean;
 } {
   const [timeOfSearch, setTimeOfSearch] = useState<string>(
     new Date().toISOString(),
@@ -42,8 +41,6 @@ export default function useTripsQuery(
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
   const cancelTokenRef = useRef<CancelTokenSource>();
   const {addJourneySearchEntry} = useSearchHistory();
-  const [moreResultsAvailable, setMoreResultsAvailable] =
-    useState<boolean>(true);
 
   const {
     tripsSearch_max_number_of_chained_searches: config_max_performed_searches,
@@ -57,8 +54,6 @@ export default function useTripsQuery(
 
   const search = useCallback(
     (cursor?: string, existingTrips?: TripPattern[]) => {
-      let localMoreResultsAvailable = true;
-      setMoreResultsAvailable(true);
       cancelTokenRef.current?.cancel('New search starting');
       const cancelTokenSource = CancelToken.source();
       let allTripPatterns = existingTrips ?? [];
@@ -85,10 +80,11 @@ export default function useTripsQuery(
               await addJourneySearchEntry([fromLocation, toLocation]);
             } catch (e) {}
 
+            let nextPageAvailable = true;
             while (
               tripsFoundCount < targetNumberOfHits &&
               performedSearchesCount < config_max_performed_searches &&
-              localMoreResultsAvailable
+              nextPageAvailable
             ) {
               const searchInput: SearchInput = cursor
                 ? {cursor}
@@ -111,6 +107,7 @@ export default function useTripsQuery(
               allTripPatterns = allTripPatterns.concat(
                 results.trip.tripPatterns,
               );
+
               setTripPatterns(allTripPatterns);
               tripsFoundCount += results.trip.tripPatterns.length;
               performedSearchesCount++;
@@ -119,11 +116,10 @@ export default function useTripsQuery(
                 searchTime.option === 'arrival'
                   ? results.trip.previousPageCursor
                   : results.trip.nextPageCursor;
+              nextPageAvailable = !!cursor;
             }
-            setPageCursor(cursor);
-            localMoreResultsAvailable = !!cursor;
-            setMoreResultsAvailable(localMoreResultsAvailable);
 
+            setPageCursor(cursor);
             setSearchState(
               allTripPatterns.length === 0
                 ? 'search-empty-result'
@@ -153,7 +149,6 @@ export default function useTripsQuery(
   useEffect(() => search(), [search]);
 
   const refresh = useCallback(() => {
-    setMoreResultsAvailable(true);
     return search();
   }, [search]);
 
@@ -165,11 +160,10 @@ export default function useTripsQuery(
     tripPatterns,
     timeOfLastSearch: timeOfSearch,
     refresh,
-    loadMore,
+    loadMore: !!pageCursor ? loadMore : undefined,
     clear: clearTrips,
     searchState: searchState,
     error: errorType,
-    moreResultsAvailable,
   };
 }
 

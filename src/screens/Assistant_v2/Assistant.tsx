@@ -211,7 +211,6 @@ const Assistant: React.FC<Props> = ({
     clear,
     searchState,
     error,
-    moreResultsAvailable,
   } = useTripsQuery(from, to, searchTime);
 
   const isSearching = searchState === 'searching';
@@ -441,7 +440,7 @@ const Assistant: React.FC<Props> = ({
         onDetailsPressed={onPressed}
         errorType={error}
       />
-      {!error && moreResultsAvailable && (
+      {!error && (
         <TouchableOpacity
           onPress={loadMore}
           disabled={searchState === 'searching'}
@@ -463,8 +462,12 @@ const Assistant: React.FC<Props> = ({
             </>
           ) : (
             <>
-              <ThemeText>{t(AssistantTexts.results.fetchMore)} </ThemeText>
-              <ThemeIcon svg={navIcons.Expand} size={'normal'} />
+              {loadMore ? (
+                <>
+                  <ThemeText>{t(AssistantTexts.results.fetchMore)} </ThemeText>
+                  <ThemeIcon svg={navIcons.Expand} size={'normal'} />
+                </>
+              ) : null}
             </>
           )}
         </TouchableOpacity>
