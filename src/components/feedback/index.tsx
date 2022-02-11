@@ -7,6 +7,7 @@ import Button from '../button';
 import {TripPattern} from '@atb/api/types/trips';
 import {useTranslation} from '@atb/translations';
 import {
+  Category,
   FeedbackQuestionsContext,
   Question,
   useFeedbackQuestionsState,
@@ -150,7 +151,7 @@ export const Feedback = ({
   const [selectedOpinion, setSelectedOpinion] = useState(
     Opinions.NotClickedYet,
   );
-  const [questions, setQuestions] = useState<Array<Question>>();
+  const [questions, setQuestions] = useState<Array<Category>>();
 
   useEffect(() => {
     const fetchedQuestions = feedbackQuestionsContext

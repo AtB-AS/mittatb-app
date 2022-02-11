@@ -11,6 +11,11 @@ import firestore, {
 
 export type FeedbackQuestionsContext = 'departures' | 'assistant';
 
+export type Category = {
+  questionsCategory: string;
+  questionArray: Array<Question>;
+};
+
 export type Question = {
   questionText: {
     norwegian: string;
@@ -45,7 +50,7 @@ const FeedbackQuestionsContext = createContext<FeedbackQuestionsContextState>(
 );
 
 const FeedbackQuestionsProvider: React.FC = ({children}) => {
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<Array<Category> | undefined>();
   const [error, setError] = useState(false);
 
   useEffect(
@@ -55,15 +60,24 @@ const FeedbackQuestionsProvider: React.FC = ({children}) => {
         .doc('feedbackQuestions')
         .onSnapshot(
           (snapshot) => {
-            const fetchedQuestions = (
-              snapshot as FirebaseFirestoreTypes.QueryDocumentSnapshot<{
-                assistant: Array<Question>;
-              }>
-            ).get('assistant');
+            const fetchedQuestions = (snapshot as FirebaseFirestoreTypes.QueryDocumentSnapshot<{
+              assistant: Array<Question>;
+              departures: Array<Question>;
+            }>).data();
 
-            const jsonQuestions = JSON.parse(String(fetchedQuestions));
-            console.log('fetchedQuestions:', jsonQuestions);
-            setQuestions(jsonQuestions);
+            const newQuestions = [
+              {
+                questionsCategory: 'assistant',
+                questionArray: JSON.parse(String(fetchedQuestions.assistant)),
+              },
+              {
+                questionsCategory: 'departures',
+                questionArray: JSON.parse(String(fetchedQuestions.departures)),
+              },
+            ];
+
+            console.log('newQuestions:', newQuestions);
+            setQuestions(newQuestions);
           },
           (err) => {
             console.warn(err);
@@ -75,8 +89,14 @@ const FeedbackQuestionsProvider: React.FC = ({children}) => {
 
   const findQuestions = useCallback(
     (context: FeedbackQuestionsContext) => {
-      return questions;
-      // return questions.filter((a) => a.context === context);
+      if (questions) {
+        const possibleCategory = questions.filter(
+          (category) => category.questionsCategory === context,
+        );
+        console.log('Somethingsomething', possibleCategory);
+        return possibleCategory[0].questionArray;
+      }
+      return undefined;
     },
     [questions],
   );
