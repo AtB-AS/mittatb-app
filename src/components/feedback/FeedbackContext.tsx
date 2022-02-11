@@ -50,7 +50,7 @@ const FeedbackQuestionsContext = createContext<FeedbackQuestionsContextState>(
 );
 
 const FeedbackQuestionsProvider: React.FC = ({children}) => {
-  const [questions, setQuestions] = useState<Array<Category> | undefined>();
+  const [categories, setCategories] = useState<Array<Category> | undefined>();
   const [error, setError] = useState(false);
 
   useEffect(
@@ -76,8 +76,7 @@ const FeedbackQuestionsProvider: React.FC = ({children}) => {
               },
             ];
 
-            console.log('newQuestions:', newQuestions);
-            setQuestions(newQuestions);
+            setCategories(newQuestions);
           },
           (err) => {
             console.warn(err);
@@ -88,17 +87,13 @@ const FeedbackQuestionsProvider: React.FC = ({children}) => {
   );
 
   const findQuestions = useCallback(
-    (context: FeedbackQuestionsContext) => {
-      if (questions) {
-        const possibleCategory = questions.filter(
-          (category) => category.questionsCategory === context,
-        );
-        console.log('Somethingsomething', possibleCategory);
-        return possibleCategory[0].questionArray;
-      }
-      return undefined;
-    },
-    [questions],
+    (context: FeedbackQuestionsContext) =>
+      categories
+        ? categories.filter(
+            (category) => category.questionsCategory === context,
+          )[0].questionArray
+        : undefined,
+    [categories],
   );
 
   return (

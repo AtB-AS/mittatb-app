@@ -151,7 +151,7 @@ export const Feedback = ({
   const [selectedOpinion, setSelectedOpinion] = useState(
     Opinions.NotClickedYet,
   );
-  const [questions, setQuestions] = useState<Array<Category>>();
+  const [questions, setQuestions] = useState<Array<Question>>();
 
   useEffect(() => {
     const fetchedQuestions = feedbackQuestionsContext
