@@ -567,10 +567,12 @@ function useLocations(
     ],
   );
 
-  const searchedFromLocation =
-    useLocationSearchValue<AssistantRouteProp>('fromLocation');
-  const searchedToLocation =
-    useLocationSearchValue<AssistantRouteProp>('toLocation');
+  const searchedFromLocation = useLocationSearchValue<AssistantRouteProp>(
+    'fromLocation',
+  );
+  const searchedToLocation = useLocationSearchValue<AssistantRouteProp>(
+    'toLocation',
+  );
 
   return useUpdatedLocation(
     searchedFromLocation,
