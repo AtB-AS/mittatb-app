@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {SectionListData, View} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Section, ActionItem} from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import Button from '../button';
 import {TripPattern} from '@atb/api/types/trips';
+import {Quay} from '@atb/api/types/departures';
 import {useTranslation} from '@atb/translations';
 import {
   Category,
@@ -33,6 +34,7 @@ export enum Opinions {
 }
 
 interface GoodOrBadProps {
+  feedbackQuestionsContext: FeedbackQuestionsContext | undefined;
   setSelectedOpinion: (e: Opinions) => void;
   checkedItem: Opinions;
 }
@@ -40,6 +42,7 @@ interface GoodOrBadProps {
 const GoodOrBadQuestion = ({
   setSelectedOpinion,
   checkedItem,
+  feedbackQuestionsContext,
 }: GoodOrBadProps) => {
   const styles = useFeedbackStyles();
   const {language} = useTranslation();
@@ -47,9 +50,14 @@ const GoodOrBadQuestion = ({
   return (
     <>
       <ThemeText style={styles.centerText}>
-        {language === 'nb'
-          ? 'Hva syntes du om reiseforslaget?'
-          : 'What do you think of this trip plan?'}
+        {feedbackQuestionsContext === 'departures' &&
+          (language === 'nb'
+            ? 'Hva syntes du om avgangsvisningen?'
+            : 'What do you think of the departure screen?')}
+        {feedbackQuestionsContext === 'assistant' &&
+          (language === 'nb'
+            ? 'Hva syntes du om reiseforslaget?'
+            : 'What do you think of this trip plan?')}
       </ThemeText>
 
       <View style={styles.feedbackRow}>
@@ -133,13 +141,13 @@ export const RenderQuestions = ({
 
 type FeedbackProps = {
   tripPatterns?: TripPattern[];
-  departures?: string;
+  quayListData?: SectionListData<Quay>[];
   feedbackQuestionsContext?: FeedbackQuestionsContext;
 };
 
 export const Feedback = ({
   tripPatterns,
-  departures,
+  quayListData,
   feedbackQuestionsContext,
 }: FeedbackProps) => {
   const styles = useFeedbackStyles();
@@ -198,14 +206,15 @@ export const Feedback = ({
   useEffect(() => {
     setSelectedOpinion(Opinions.NotClickedYet);
     setSubmitted(false);
-  }, [departures, tripPatterns]);
+  }, [quayListData, tripPatterns]);
 
   if (submitted) return <SubmittedComponent />;
 
-  if (departures || tripPatterns)
+  if (quayListData || tripPatterns)
     return (
       <View style={styles.container}>
         <GoodOrBadQuestion
+          feedbackQuestionsContext={feedbackQuestionsContext}
           setSelectedOpinion={setSelectedOpinion}
           checkedItem={selectedOpinion}
         />

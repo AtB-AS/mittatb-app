@@ -37,6 +37,7 @@ import useFontScale from '@atb/utils/use-font-scale';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {DeparturesStackParams} from '.';
 import DateNavigation from './components/DateNavigator';
+import Feedback from '@atb/components/feedback';
 
 export type StopPlaceScreenParams = {
   stopPlacePosition: StopPlacePosition;
@@ -142,32 +143,41 @@ export default function StopPlaceScreen({
         )}
       />
       {quayListData && (
-        <SectionList
-          stickySectionHeadersEnabled={true}
-          stickyHeaderIndices={[0]}
-          ListHeaderComponent={
-            <DateNavigation
-              searchTime={searchTime}
-              setSearchTime={setSearchTime}
-            ></DateNavigation>
-          }
-          refreshControl={
-            <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
-          }
-          sections={quayListData}
-          keyExtractor={(item) => item.id}
-          renderItem={({item}) => (
-            <QuaySection
-              quay={item}
-              selectedQuayId={selectedQuay?.id}
-              data={state.data}
-              navigateToDetails={navigateToDetails}
-              navigateToQuay={(quay) => {
-                navigation.setParams({selectedQuay: quay});
-              }}
-            />
-          )}
-        />
+        <>
+          <Feedback
+            quayListData={quayListData}
+            feedbackQuestionsContext="departures"
+          />
+          <SectionList
+            stickySectionHeadersEnabled={true}
+            stickyHeaderIndices={[0]}
+            ListHeaderComponent={
+              <DateNavigation
+                searchTime={searchTime}
+                setSearchTime={setSearchTime}
+              ></DateNavigation>
+            }
+            refreshControl={
+              <RefreshControl
+                refreshing={state.isLoading}
+                onRefresh={refresh}
+              />
+            }
+            sections={quayListData}
+            keyExtractor={(item) => item.id}
+            renderItem={({item}) => (
+              <QuaySection
+                quay={item}
+                selectedQuayId={selectedQuay?.id}
+                data={state.data}
+                navigateToDetails={navigateToDetails}
+                navigateToQuay={(quay) => {
+                  navigation.setParams({selectedQuay: quay});
+                }}
+              />
+            )}
+          />
+        </>
       )}
     </View>
   );
