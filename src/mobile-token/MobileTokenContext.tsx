@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -12,14 +13,20 @@ import Bugsnag from '@bugsnag/react-native';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {updateMetadata} from '@atb/chat/metadata';
 import {PayloadAction} from '@entur/react-native-traveller';
+import {TravelToken} from '@atb/mobile-token/types';
+import useInterval from '@atb/utils/use-interval';
+import {StoredToken} from '../../.yalc/@entur/react-native-traveller';
 
-type MobileContextState = {
+type MobileTokenContextState = {
   generateQrCode?: () => Promise<string | undefined>;
   tokenStatus?: TokenStatus;
   retry?: (forceRestart: boolean) => void;
+  travelTokens?: TravelToken[];
+  toggleTravelToken?: (tokenId: string) => Promise<boolean>;
+  updateTravelTokens: () => void;
 };
 
-const MobileTokenContext = createContext<MobileContextState | undefined>(
+const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
   undefined,
 );
 
@@ -28,7 +35,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
   const [tokenStatus, setTokenStatus] = useState<TokenStatus>();
   const {abtCustomerId, userCreationFinished} = useAuthState();
 
-  const [currentCustomerId, setCurrentCustomerId] = useState(abtCustomerId);
+  const [travelTokens, setTravelTokens] = useState<TravelToken[]>();
 
   const setStatus = (status?: TokenStatus) => {
     Bugsnag.leaveBreadcrumb('mobiletoken_status_change', status);
@@ -46,12 +53,63 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
     [enable_period_tickets],
   );
 
+  const updateTravelTokens = useCallback(() => {
+    if (!client) return;
+
+    client
+      .listTokens()
+      .then((storedTokens) => storedTokens?.map(mapToken))
+      .then(setTravelTokens);
+  }, [client]);
+
+  const toggleTravelToken = useCallback(
+    async (tokenId: string) => {
+      if (!client) return false;
+
+      try {
+        const storedTokens = await client.toggleToken(tokenId);
+        const mappedTokens = storedTokens.map(mapToken);
+        setTravelTokens(mappedTokens);
+        return true;
+      } catch (err: any) {
+        Bugsnag.notify(err);
+        return false;
+      }
+    },
+    [client],
+  );
+
   useEffect(() => {
-    if (client && abtCustomerId !== currentCustomerId && userCreationFinished) {
-      client.setAccount(abtCustomerId);
-      setCurrentCustomerId(abtCustomerId);
+    if (tokenStatus?.state === 'Valid') {
+      updateTravelTokens();
     }
-  }, [userCreationFinished, client, abtCustomerId, abtCustomerId]);
+  }, [tokenStatus, updateTravelTokens]);
+
+  useEffect(() => {
+    if (client && abtCustomerId && userCreationFinished) {
+      Bugsnag.leaveBreadcrumb('mobiletoken_set_account', {
+        accountId: abtCustomerId,
+      });
+      client.setAccount(abtCustomerId);
+      updateTravelTokens();
+    }
+  }, [userCreationFinished, client, abtCustomerId]);
+
+  // Try again every minute if travel tokens undefined
+  useInterval(
+    updateTravelTokens,
+    1000 * 60 * 15,
+    [updateTravelTokens],
+    travelTokens !== undefined,
+  );
+
+  // Refresh travel tokens every 15 minutes
+  useInterval(
+    updateTravelTokens,
+    1000 * 60 * 15,
+    [updateTravelTokens],
+    travelTokens === undefined,
+  );
 
   return (
     <MobileTokenContext.Provider
@@ -60,6 +118,9 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
           client?.getSecureToken([PayloadAction.ticketInspection]),
         tokenStatus,
         retry: client?.retry,
+        travelTokens,
+        toggleTravelToken,
+        updateTravelTokens,
       }}
     >
       {children}
@@ -67,14 +128,23 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
   );
 };
 
-export function useMobileContextState() {
+export function useMobileTokenContextState() {
   const context = useContext(MobileTokenContext);
   if (context === undefined) {
     throw new Error(
-      'useMobileContextState must be used within a MobileTokenContextProvider',
+      'useMobileTokenContextState must be used within a MobileTokenContextProvider',
     );
   }
   return context;
 }
 
 export default MobileTokenContextProvider;
+
+const mapToken = (st: StoredToken): TravelToken => ({
+  id: st.id,
+  name: st.deviceName,
+  inspectable: st.allowedActions.includes('TOKEN_ACTION_TICKET_INSPECTION'),
+  activated: st.state === 'TOKEN_LIFECYCLE_STATE_ACTIVATED',
+  type: st.type === 'TOKEN_TYPE_TRAVELCARD' ? 'travelCard' : 'mobile',
+  travelCardId: st.keyValues?.['travelCardId'],
+});

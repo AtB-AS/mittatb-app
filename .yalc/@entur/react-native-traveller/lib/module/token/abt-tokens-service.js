@@ -58,12 +58,23 @@ export const createAbtTokensService = (fetcher, hosts) => {
     return response.body;
   };
 
+  const toggleToken = async (tokenId, body) => {
+    const url = `${hostUrl}/tokens/${tokenId}/toggle`;
+    const response = await fetcher({
+      url,
+      method: 'POST',
+      body
+    });
+    return response.body;
+  };
+
   return {
     listTokens,
     getTokenCertificate,
     initToken,
     renewToken,
-    activateToken
+    activateToken,
+    toggleToken
   };
 };
 //# sourceMappingURL=abt-tokens-service.js.map

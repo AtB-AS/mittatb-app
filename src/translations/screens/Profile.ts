@@ -36,6 +36,10 @@ const ProfileTexts = {
         userProfile: {
           label: _('Standard reisende', 'Default traveller'),
         },
+        travelToken: {
+          label: _('Mitt reisebevis', 'My travel token'),
+          flag: _('Ny', 'New'),
+        },
         appearance: {
           label: _('Utseende', 'Appearance'),
         },

@@ -33,6 +33,8 @@ var _NotSupportedHandler = _interopRequireDefault(require("./state-machine/handl
 
 var _utils = require("./state-machine/utils");
 
+var _VerifyInspectionActionHandler = _interopRequireDefault(require("./state-machine/handlers/VerifyInspectionActionHandler"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const startTokenStateMachine = async (abtTokensService, setStatus, safetyNetApiKey, forceRestart = false, accountId) => {
@@ -106,6 +108,9 @@ const getStateHandler = (abtTokensService, storedState, safetyNetApiKey, forceRe
 
     case 'AddToken':
       return (0, _AddTokenHandler.default)();
+
+    case 'VerifyInspectionAction':
+      return (0, _VerifyInspectionActionHandler.default)(abtTokensService);
 
     case 'NotSupported':
       return (0, _NotSupportedHandler.default)();

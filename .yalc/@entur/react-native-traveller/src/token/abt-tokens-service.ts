@@ -7,11 +7,17 @@ import type {
   InitializeTokenResponse,
   ListTokensResponse,
   RenewTokenResponse,
+  ToggleTokenRequest,
+  ToggleTokenResponse,
 } from './types';
 
 const SIGNED_TOKEN_HEADER_KEY = 'X-Signed-Token';
 
 export type AbtTokensService = {
+  toggleToken: (
+    tokenId: string,
+    req: ToggleTokenRequest
+  ) => Promise<ToggleTokenResponse>;
   listTokens: () => Promise<ListTokensResponse>;
   getTokenCertificate: (
     signedToken: string
@@ -94,11 +100,22 @@ export const createAbtTokensService = (
     return response.body;
   };
 
+  const toggleToken = async (tokenId: string, body: ToggleTokenRequest) => {
+    const url = `${hostUrl}/tokens/${tokenId}/toggle`;
+    const response = await fetcher<ToggleTokenResponse>({
+      url,
+      method: 'POST',
+      body,
+    });
+    return response.body;
+  };
+
   return {
     listTokens,
     getTokenCertificate,
     initToken,
     renewToken,
     activateToken,
+    toggleToken,
   };
 };

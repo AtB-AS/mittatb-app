@@ -1,6 +1,7 @@
 import type { Fetch, Hosts } from '../config';
-import type { ActivateTokenRequest, ActivateTokenResponse, GetTokenCertificateResponse, InitializeTokenRequest, InitializeTokenResponse, ListTokensResponse, RenewTokenResponse } from './types';
+import type { ActivateTokenRequest, ActivateTokenResponse, GetTokenCertificateResponse, InitializeTokenRequest, InitializeTokenResponse, ListTokensResponse, RenewTokenResponse, ToggleTokenRequest, ToggleTokenResponse } from './types';
 export declare type AbtTokensService = {
+    toggleToken: (tokenId: string, req: ToggleTokenRequest) => Promise<ToggleTokenResponse>;
     listTokens: () => Promise<ListTokensResponse>;
     getTokenCertificate: (signedToken: string) => Promise<GetTokenCertificateResponse>;
     initToken: (req: InitializeTokenRequest) => Promise<InitializeTokenResponse>;

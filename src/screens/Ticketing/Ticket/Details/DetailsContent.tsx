@@ -13,7 +13,7 @@ import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import QrCode from '@atb/screens/Ticketing/Ticket/Details/QrCode';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import PaperQrCode from '@atb/screens/Ticketing/Ticket/Details/PaperQrCode';
-import {useMobileContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 
 type Props = {
   fareContract: FareContract;
@@ -30,7 +30,7 @@ const DetailsContent: React.FC<Props> = ({
 }) => {
   const {t, language} = useTranslation();
   const {enable_period_tickets} = useRemoteConfig();
-  const {tokenStatus} = useMobileContextState();
+  const {tokenStatus} = useMobileTokenContextState();
 
   const firstTravelRight = fc.travelRights[0];
   if (isPreactivatedTicket(firstTravelRight)) {

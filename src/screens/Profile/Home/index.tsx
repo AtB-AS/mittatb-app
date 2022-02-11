@@ -45,7 +45,11 @@ type ProfileScreenProps = {
 };
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
-  const {enable_i18n, privacy_policy_url} = useRemoteConfig();
+  const {
+    enable_i18n,
+    privacy_policy_url,
+    enable_period_tickets,
+  } = useRemoteConfig();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
@@ -53,8 +57,9 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   const config = useLocalConfig();
 
   const {fareContracts, customerProfile} = useTicketState();
-  const activeFareContracts =
-    filterActiveOrCanBeUsedFareContracts(fareContracts);
+  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
+    fareContracts,
+  );
   const hasActiveFareContracts = activeFareContracts.length > 0;
 
   const {
@@ -145,10 +150,17 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             text={t(ProfileTexts.sections.settings.linkItems.userProfile.label)}
             onPress={() => navigation.navigate('DefaultUserProfile')}
           />
-          <Sections.LinkItem
-            text={'Mitt reisebevis'}
-            onPress={() => navigation.navigate('TravelCard')}
-          />
+          {authenticationType === 'phone' && enable_period_tickets && (
+            <Sections.LinkItem
+              text={t(
+                ProfileTexts.sections.settings.linkItems.travelToken.label,
+              )}
+              flag={t(
+                ProfileTexts.sections.settings.linkItems.travelToken.flag,
+              )}
+              onPress={() => navigation.navigate('TravelToken')}
+            />
+          )}
           <Sections.LinkItem
             text={t(ProfileTexts.sections.settings.linkItems.appearance.label)}
             onPress={() => navigation.navigate('Appearance')}

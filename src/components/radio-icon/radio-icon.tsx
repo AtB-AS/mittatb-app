@@ -19,7 +19,7 @@ export default function RadioIcon({checked, color = 'primary'}: CheckedProps) {
   return (
     <View style={[styles.radio, {borderColor: colorValue}]}>
       {checked ? (
-        <View style={[styles.radioInnner, {backgroundColor: colorValue}]} />
+        <View style={[styles.radioInner, {backgroundColor: colorValue}]} />
       ) : null}
     </View>
   );
@@ -34,9 +34,9 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  radioInnner: {
-    height: theme.spacings.large - 8,
-    width: theme.spacings.large - 8,
+  radioInner: {
+    height: theme.spacings.medium,
+    width: theme.spacings.medium,
     borderRadius: theme.spacings.large,
   },
 }));

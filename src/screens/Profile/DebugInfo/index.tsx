@@ -10,7 +10,7 @@ import {useAuthState} from '@atb/auth';
 import {useAppDispatch} from '@atb/AppContext';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import storage from '@atb/storage';
-import {useMobileContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -24,7 +24,7 @@ export default function DebugInfo() {
   const [idToken, setIdToken] = useState<
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
-  const {tokenStatus, retry} = useMobileContextState();
+  const {tokenStatus, retry} = useMobileTokenContextState();
 
   useEffect(() => {
     async function run() {
@@ -135,7 +135,7 @@ export default function DebugInfo() {
                 }`}</ThemeText>
               </View>
             </Sections.GenericItem>
-            {tokenStatus && (
+            {retry && (
               <>
                 <Sections.LinkItem text="Retry" onPress={() => retry(false)} />
                 <Sections.LinkItem

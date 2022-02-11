@@ -42,7 +42,7 @@ export type TokenAction =
   | 'TOKEN_ACTION_TRAVELCARD'
   | 'TOKEN_ACTION_CONSUME_ACCESS_RIGHTS';
 
-export type ListTokensResponse = {
+export type StoredToken = {
   id: string;
   expires: number;
   state: TokenLifecycleState;
@@ -52,7 +52,9 @@ export type ListTokensResponse = {
   keyValues?: {
     [key: string]: string;
   };
-}[];
+};
+
+export type ListTokensResponse = StoredToken[];
 
 export type GetTokenCertificateResponse = ActivateTokenResponse;
 
@@ -112,6 +114,14 @@ export type ActivateTokenResponse = {
   tokenValidityEnd: number;
 };
 
+export type ToggleTokenRequest = {
+  overrideExisting: boolean;
+};
+
+export type ToggleTokenResponse = {
+  tokens: StoredToken[];
+};
+
 const errorTypes = ['None', 'Severe', 'Unknown', 'Network'] as const;
 export type ErrorType = typeof errorTypes[number];
 
@@ -142,6 +152,7 @@ const tokenStates = [
   'ActivateNew',
   'ActivateRenewal',
   'AddToken',
+  'VerifyInspectionAction',
 ] as const;
 export type TokenState = typeof tokenStates[number];
 
@@ -158,7 +169,10 @@ export type StoredState = {
         | 'NotSupported';
     }
   | {
-      state: 'GettingTokenCertificate' | 'InitiateRenewal';
+      state:
+        | 'GettingTokenCertificate'
+        | 'InitiateRenewal'
+        | 'VerifyInspectionAction';
       tokenId: string;
     }
   | { state: 'Valid'; isInspectable: boolean }
