@@ -133,10 +133,13 @@ export default function DateNavigation({
 }
 
 function changeDay(searchTime: SearchTime, days: number): SearchTime {
-  const date = addDays(parseISO(searchTime.date).setHours(0, 0), days);
+  const date =
+    searchTime.option === 'now'
+      ? addDays(parseISO(searchTime.date).setHours(0, 0), days)
+      : addDays(parseISO(searchTime.date), days);
   return {
-    option: isToday(date) ? 'now' : 'departure',
-    date: isToday(date) ? new Date().toISOString() : date.toISOString(),
+    option: isInThePast(date) ? 'now' : 'departure',
+    date: isInThePast(date) ? new Date().toISOString() : date.toISOString(),
   };
 }
 
