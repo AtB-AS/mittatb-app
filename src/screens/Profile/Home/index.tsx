@@ -45,11 +45,8 @@ type ProfileScreenProps = {
 };
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
-  const {
-    enable_i18n,
-    privacy_policy_url,
-    enable_period_tickets,
-  } = useRemoteConfig();
+  const {enable_i18n, privacy_policy_url, enable_period_tickets} =
+    useRemoteConfig();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
@@ -57,9 +54,8 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   const config = useLocalConfig();
 
   const {fareContracts, customerProfile} = useTicketState();
-  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
-    fareContracts,
-  );
+  const activeFareContracts =
+    filterActiveOrCanBeUsedFareContracts(fareContracts);
   const hasActiveFareContracts = activeFareContracts.length > 0;
 
   const {
