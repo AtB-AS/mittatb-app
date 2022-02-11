@@ -53,7 +53,9 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     [navigation],
   );
 
-  const cancelTerminal = () => navigation.pop();
+  const navigateBackFromTerminal = () => {
+    navigation.pop();
+  };
 
   const {paymentMethod} = route.params;
   const {paymentType} = paymentMethod;
@@ -84,12 +86,13 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     onWebViewLoadEnd,
     error,
     restartTerminal,
+    cancelPayment,
   } = useTerminalState(
     offers,
     paymentType,
     recurringPaymentId,
     saveRecurringCard,
-    cancelTerminal,
+    navigateBackFromTerminal,
     scaExemption ?? false,
   );
 
@@ -99,7 +102,10 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
         title={t(PaymentCreditCardTexts.header.title)}
         leftButton={{
           type: 'cancel',
-          onPress: () => cancelTerminal(),
+          onPress: async () => {
+            await cancelPayment();
+            navigateBackFromTerminal();
+          },
         }}
       />
       <View
@@ -140,7 +146,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
           )}
           <Button
             color="secondary_1"
-            onPress={() => cancelTerminal()}
+            onPress={() => navigateBackFromTerminal()}
             text={t(PaymentCreditCardTexts.buttons.goBack)}
           />
         </View>

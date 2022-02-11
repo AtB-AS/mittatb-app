@@ -9,6 +9,7 @@ import {
 import {parse as parseURL} from 'search-params';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {
+  cancelPayment,
   listRecurringPayments,
   PaymentType,
   ReserveOffer,
@@ -274,12 +275,19 @@ export default function useTerminalState(
     dispatch({type: 'RESTART_TERMINAL'});
   }
 
+  async function cancel() {
+    if (reservation) {
+      await cancelPayment(reservation.payment_id, reservation.transaction_id);
+    }
+  }
+
   return {
     terminalUrl: reservation?.url,
     loadingState,
     onWebViewLoadEnd,
     error,
     restartTerminal,
+    cancelPayment: cancel,
   };
 }
 
