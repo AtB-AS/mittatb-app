@@ -8,11 +8,11 @@ import {TripPattern} from '@atb/api/types/trips';
 import {Quay} from '@atb/api/types/departures';
 import {useTranslation} from '@atb/translations';
 import {
-  Category,
   FeedbackQuestionsContext,
   Question,
   useFeedbackQuestionsState,
 } from './FeedbackContext';
+import GoodOrBadButton from './GoodOrBadButton';
 
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
@@ -33,17 +33,17 @@ export enum Opinions {
   NotClickedYet = 'NOTCLICKEDYET',
 }
 
-interface GoodOrBadProps {
+interface GoodOrBadQuestionProps {
   feedbackQuestionsContext: FeedbackQuestionsContext | undefined;
   setSelectedOpinion: (e: Opinions) => void;
-  checkedItem: Opinions;
+  selectedOpinion: Opinions;
 }
 
 const GoodOrBadQuestion = ({
   setSelectedOpinion,
-  checkedItem,
+  selectedOpinion,
   feedbackQuestionsContext,
-}: GoodOrBadProps) => {
+}: GoodOrBadQuestionProps) => {
   const styles = useFeedbackStyles();
   const {language} = useTranslation();
 
@@ -62,22 +62,18 @@ const GoodOrBadQuestion = ({
 
       <View style={styles.feedbackRow}>
         <Section withPadding>
-          <ActionItem
-            text={language === 'nb' ? 'Bra' : 'Good'}
-            onPress={() => setSelectedOpinion(Opinions.Good)}
-            mode="check"
-            checked={checkedItem === Opinions.Good}
-            type="compact"
+          <GoodOrBadButton
+            opinion={Opinions.Good}
+            checked={selectedOpinion === Opinions.Good}
+            setSelectedOpinion={setSelectedOpinion}
           />
         </Section>
 
         <Section withPadding>
-          <ActionItem
-            text={language === 'nb' ? 'Dårlig' : 'Bad'}
-            onPress={() => setSelectedOpinion(Opinions.Bad)}
-            mode="check"
-            checked={checkedItem === Opinions.Bad}
-            type="compact"
+          <GoodOrBadButton
+            opinion={Opinions.Bad}
+            checked={selectedOpinion === Opinions.Bad}
+            setSelectedOpinion={setSelectedOpinion}
           />
         </Section>
       </View>
@@ -216,7 +212,7 @@ export const Feedback = ({
         <GoodOrBadQuestion
           feedbackQuestionsContext={feedbackQuestionsContext}
           setSelectedOpinion={setSelectedOpinion}
-          checkedItem={selectedOpinion}
+          selectedOpinion={selectedOpinion}
         />
 
         {questions && (
