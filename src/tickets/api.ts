@@ -129,6 +129,6 @@ export async function cancelPayment(
       payment_id,
       transaction_id,
     } as CancelPaymentRequest,
-    {authWithIdToken: true},
+    {authWithIdToken: true, retry: true},
   );
 }

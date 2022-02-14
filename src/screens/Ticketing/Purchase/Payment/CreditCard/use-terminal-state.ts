@@ -19,6 +19,7 @@ import {
 import {usePreferences} from '@atb/preferences';
 import {useAuthState} from '@atb/auth';
 import {savePreviousPaymentMethodByUser} from '../../saved-payment-utils';
+import Bugsnag from '@bugsnag/react-native';
 
 const possibleResponseCodes = ['Cancel', 'OK'] as const;
 type NetsResponseCode = typeof possibleResponseCodes[number];
@@ -277,7 +278,11 @@ export default function useTerminalState(
 
   async function cancel() {
     if (reservation) {
-      await cancelPayment(reservation.payment_id, reservation.transaction_id);
+      try {
+        await cancelPayment(reservation.payment_id, reservation.transaction_id);
+      } catch (err: any) {
+        Bugsnag.notify(err);
+      }
     }
   }
 
