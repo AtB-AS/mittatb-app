@@ -1,6 +1,6 @@
 import {AxiosRequestConfig} from 'axios';
 import {CancelPaymentRequest, ReserveOfferRequestBody} from '.';
-import {createClient} from '../api/client';
+import {client} from '../api';
 import {
   Offer,
   PaymentResponse,
@@ -12,11 +12,6 @@ import {
   TicketReservation,
 } from './types';
 
-const client = createClient('http://localhost:8080');
-client.defaults.headers = {
-  'X-Endpoint-API-UserInfo':
-    'ewogICJhYnRfaWQiOiAiQVRCOkN1c3RvbWVyQWNjb3VudDpDZWtMTVVKMnFWU0VxS3RDdWFCdGVXUFpzV0QyIiwKICAiY3VzdG9tZXJfbnVtYmVyIjogMzU3MzU2MQp9Cg==',
-};
 export async function listRecentFareContracts(): Promise<RecentFareContract[]> {
   const url = 'ticket/v2/ticket/recent';
   const response = await client.get<RecentFareContract[]>(url, {
@@ -126,8 +121,12 @@ export async function cancelPayment(
   transaction_id: number,
 ): Promise<void> {
   const url = 'ticket/v1/cancel';
-  await client.put<void>(url, {
-    payment_id,
-    transaction_id,
-  } as CancelPaymentRequest);
+  await client.put<void>(
+    url,
+    {
+      payment_id,
+      transaction_id,
+    } as CancelPaymentRequest,
+    {authWithIdToken: true},
+  );
 }
