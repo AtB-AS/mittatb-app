@@ -106,7 +106,6 @@ export default function useTerminalState(
   recurringPaymentId: number | undefined,
   saveRecurringCard: boolean,
   cancelTerminal: () => void,
-  scaExemption: boolean,
 ) {
   const [{paymentResponseCode, reservation, loadingState, error}, dispatch] =
     useReducer(terminalReducer, initialState);
@@ -139,7 +138,7 @@ export default function useTerminalState(
               opts: {
                 retry: true,
               },
-              scaExemption,
+              scaExemption: true,
             })
           : await reserveOffers({
               offers,
@@ -148,7 +147,7 @@ export default function useTerminalState(
               opts: {
                 retry: true,
               },
-              scaExemption,
+              scaExemption: true,
             });
         dispatch({type: 'OFFER_RESERVED', reservation: response});
       } catch (err) {

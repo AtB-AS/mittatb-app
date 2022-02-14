@@ -3,7 +3,6 @@ import Button from '@atb/components/button';
 import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {StyleSheet} from '@atb/theme';
-import {ReserveOffer, TicketReservation, useTicketState} from '@atb/tickets';
 import {
   PaymentCreditCardTexts,
   TranslateFunction,
@@ -15,17 +14,13 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import WebView from 'react-native-webview';
 import {TicketingStackParams} from '../..';
-import {
-  ActiveTicketsScreenName,
-  TicketTabsNavigatorParams,
-} from '../../../Tickets';
+import {TicketTabsNavigatorParams} from '../../../Tickets';
 import Processing from '../Processing';
 import useTerminalState, {
   ErrorContext,
   LoadingState,
 } from './use-terminal-state';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {usePreferences} from '@atb/preferences';
 import Bugsnag from '@bugsnag/react-native';
 import {
   WebViewErrorEvent,
@@ -68,10 +63,6 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const saveRecurringCard =
     'save' in paymentMethod ? paymentMethod.save : false;
 
-  const {
-    preferences: {scaExemption},
-  } = usePreferences();
-
   function onWebViewLoadStart(
     event: WebViewNavigationEvent | WebViewErrorEvent,
   ) {
@@ -93,7 +84,6 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     recurringPaymentId,
     saveRecurringCard,
     navigateBackFromTerminal,
-    scaExemption ?? false,
   );
 
   return (
