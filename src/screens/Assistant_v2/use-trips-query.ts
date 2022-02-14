@@ -26,7 +26,7 @@ export default function useTripsQuery(
   tripPatterns: TripPattern[];
   timeOfLastSearch: DateString;
   refresh: () => {};
-  loadMore: () => {};
+  loadMore: (() => {}) | undefined;
   clear: () => void;
   searchState: SearchStateType;
   error?: ErrorType;
@@ -80,9 +80,11 @@ export default function useTripsQuery(
               await addJourneySearchEntry([fromLocation, toLocation]);
             } catch (e) {}
 
+            let nextPageAvailable = true;
             while (
               tripsFoundCount < targetNumberOfHits &&
-              performedSearchesCount < config_max_performed_searches
+              performedSearchesCount < config_max_performed_searches &&
+              nextPageAvailable
             ) {
               const searchInput: SearchInput = cursor
                 ? {cursor}
@@ -105,14 +107,18 @@ export default function useTripsQuery(
               allTripPatterns = allTripPatterns.concat(
                 results.trip.tripPatterns,
               );
+
               setTripPatterns(allTripPatterns);
               tripsFoundCount += results.trip.tripPatterns.length;
               performedSearchesCount++;
+
               cursor =
                 searchTime.option === 'arrival'
                   ? results.trip.previousPageCursor
                   : results.trip.nextPageCursor;
+              nextPageAvailable = !!cursor;
             }
+
             setPageCursor(cursor);
             setSearchState(
               allTripPatterns.length === 0
@@ -154,7 +160,7 @@ export default function useTripsQuery(
     tripPatterns,
     timeOfLastSearch: timeOfSearch,
     refresh,
-    loadMore,
+    loadMore: !!pageCursor ? loadMore : undefined,
     clear: clearTrips,
     searchState: searchState,
     error: errorType,

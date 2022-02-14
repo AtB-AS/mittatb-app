@@ -85,7 +85,7 @@ const ActiveTicketCard: React.FC<{cardId?: string}> = ({
           style={styles.tcardicon}
         >
           {'\n'}
-          {t(TicketsTexts.travelCardInformation.tCard)}
+          {t(TicketsTexts.travelCardInformation.cardType)}
         </ThemeText>
       </View>
     </View>

@@ -16,7 +16,7 @@ import * as React from 'react';
 
 export type DismissableStackNavigationProp<
   ParamList extends ParamListBase,
-  RouteName extends keyof ParamList = string
+  RouteName extends keyof ParamList = string,
 > = {dismiss(params?: object): void} & StackNavigationProp<
   ParamList,
   RouteName

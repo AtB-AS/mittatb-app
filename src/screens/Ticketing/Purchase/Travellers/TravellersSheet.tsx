@@ -1,4 +1,4 @@
-import SvgProfile from '@atb/assets/svg/icons/tab-bar/Profile';
+import SvgProfile from '@atb/assets/svg/mono-icons/tab-bar/Profile';
 import Button from '@atb/components/button';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';

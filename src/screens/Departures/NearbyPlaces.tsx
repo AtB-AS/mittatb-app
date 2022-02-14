@@ -1,4 +1,4 @@
-import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
+import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
 import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {LocationInput, Section} from '@atb/components/sections';
@@ -57,12 +57,8 @@ type RootProps = {
 };
 
 export default function NearbyPlacesScreen({navigation}: RootProps) {
-  const {
-    status,
-    location,
-    locationEnabled,
-    requestPermission,
-  } = useGeolocationState();
+  const {status, location, locationEnabled, requestPermission} =
+    useGeolocationState();
 
   const {closestLocation: currentLocation} = useReverseGeocoder(
     location?.coords ?? null,
@@ -99,9 +95,8 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const searchedFromLocation = useOnlySingleLocation<DeparturesProps>(
-    'location',
-  );
+  const searchedFromLocation =
+    useOnlySingleLocation<DeparturesProps>('location');
   const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
     [currentLocation],
@@ -115,9 +110,10 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
   const isInitialScreen = data == null && !isLoading && !error;
   const activateScroll = !isInitialScreen || !!error;
 
-  const orderedStopPlaces = useMemo(() => sortAndFilterStopPlaces(data), [
-    data,
-  ]);
+  const orderedStopPlaces = useMemo(
+    () => sortAndFilterStopPlaces(data),
+    [data],
+  );
 
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {

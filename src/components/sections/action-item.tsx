@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Confirm} from '@atb/assets/svg/icons/actions';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, Theme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import ThemeText from '@atb/components/text';

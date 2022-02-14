@@ -12,8 +12,8 @@ import {
   ScreenHeaderTexts,
   useTranslation,
 } from '@atb/translations';
-import {ArrowRight} from '@atb/assets/svg/icons/navigation';
-import {Confirm} from '@atb/assets/svg/icons/actions';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {parseISO} from 'date-fns';
 import ThemeText from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
@@ -23,9 +23,9 @@ import {useAuthState} from '@atb/auth';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
-import PaymentBrand from '@atb/assets/svg/icons/ticketing/PaymentBrand';
 import hexToRgba from 'hex-to-rgba';
 import LinearGradient from 'react-native-linear-gradient';
+import PaymentBrand from '../PaymentBrand';
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;
@@ -63,9 +63,7 @@ function getSelectedPaymentMethod(
   }
 }
 
-function isRecurring(
-  option: PaymentMethod,
-): option is {
+function isRecurring(option: PaymentMethod): option is {
   paymentType: PaymentType.VISA | PaymentType.MasterCard;
   recurringPaymentId: number;
 } {
@@ -100,10 +98,8 @@ const SelectPaymentMethod: React.FC<Props> = ({
 }) => {
   const {t} = useTranslation();
 
-  const [
-    loadingRecurringOptions,
-    setLoadingRecurringOptions,
-  ] = useState<boolean>(true);
+  const [loadingRecurringOptions, setLoadingRecurringOptions] =
+    useState<boolean>(true);
 
   const {user} = useAuthState();
   const {theme} = useTheme();
@@ -280,9 +276,11 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
     }
   }, [save]);
 
-  function getPaymentTexts(
-    option: SavedPaymentOption,
-  ): {text: string; label: string; hint: string} {
+  function getPaymentTexts(option: SavedPaymentOption): {
+    text: string;
+    label: string;
+    hint: string;
+  } {
     let paymentTypeString =
       option.paymentType === PaymentType.VISA
         ? 'Visa'

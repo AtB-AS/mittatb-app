@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Close} from '@atb/assets/svg/icons/actions';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, useTheme} from '@atb/theme';
 import insets from '@atb/utils/insets';
 import ThemeText, {MAX_FONT_SCALE} from '@atb/components/text';

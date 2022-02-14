@@ -45,4 +45,7 @@ else
 
     echo "Copying boot splash image to assets/"
     cp $ORG_FOLDER/bootsplash_logo_original.png assets/
+
+    sh ./scripts/generate-assets.sh $APP_ORG
+
 fi

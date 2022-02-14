@@ -108,10 +108,8 @@ export default function useTerminalState(
   cancelTerminal: () => void,
   scaExemption: boolean,
 ) {
-  const [
-    {paymentResponseCode, reservation, loadingState, error},
-    dispatch,
-  ] = useReducer(terminalReducer, initialState);
+  const [{paymentResponseCode, reservation, loadingState, error}, dispatch] =
+    useReducer(terminalReducer, initialState);
 
   const {user} = useAuthState();
 

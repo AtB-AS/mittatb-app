@@ -1,4 +1,4 @@
-import {BlankTicket} from '@atb/assets/svg/icons/ticketing';
+import {BlankTicket} from '@atb/assets/svg/mono-icons/ticketing';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';

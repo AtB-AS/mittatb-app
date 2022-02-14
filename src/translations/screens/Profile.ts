@@ -1,4 +1,5 @@
 import {translation as _} from '../commons';
+import orgSpecificTranslations from '../utils';
 
 const ProfileTexts = {
   header: {
@@ -45,7 +46,7 @@ const ProfileTexts = {
           label: _('Språk', 'Language'),
         },
         enrollment: {
-          label: _('Ny funksjonalitet', 'New features'),
+          label: _('Invitasjonskode', 'Invitation code'),
         },
       },
     },
@@ -122,4 +123,11 @@ const ProfileTexts = {
     ),
   },
 };
-export default ProfileTexts;
+export default orgSpecificTranslations(ProfileTexts, {
+  nfk: {
+    header: {
+      title: _('Mitt Reis', 'My Reis'),
+      title_a11y: _('Mitt Reis', 'My Reis'),
+    },
+  },
+});

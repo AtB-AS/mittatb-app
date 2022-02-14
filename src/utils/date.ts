@@ -208,13 +208,20 @@ export function formatToSimpleDate(date: Date | string, language: Language) {
   });
 }
 
-export function formatToSimpleDateTime(
+export function formatToVerboseDateTime(
   date: Date | string,
   language: Language,
 ) {
-  return format(parseIfNeeded(date), 'do MMMM HH:mm', {
+  const at = language === Language.Norwegian ? 'klokken' : 'at';
+
+  const dateString = format(parseIfNeeded(date), 'do MMMM', {
     locale: languageToLocale(language),
   });
+  const timeString = format(parseIfNeeded(date), 'HH:mm', {
+    locale: languageToLocale(language),
+  });
+
+  return `${dateString} ${at} ${timeString}`;
 }
 
 export const isWithin24Hours = (

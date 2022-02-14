@@ -76,6 +76,7 @@ export default function PlaceScreen({
             text={t(DeparturesTexts.quayChips.allStops)}
             color={selectedQuay ? 'secondary_2' : 'secondary_3'}
             style={[styles.quayChip, {marginLeft: theme.spacings.medium}]}
+            accessibilityHint={t(DeparturesTexts.quayChips.a11yAllStopsHint)}
           ></Button>
         }
         renderItem={({item}: quayChipData) => (
@@ -83,11 +84,12 @@ export default function PlaceScreen({
             onPress={() => {
               navigation.setParams({selectedQuay: item});
             }}
-            text={
-              item.publicCode ? item.name + ' ' + item.publicCode : item.name
-            }
+            text={getQuayName(item)}
             color={selectedQuay?.id === item.id ? 'secondary_3' : 'secondary_2'}
             style={styles.quayChip}
+            accessibilityHint={
+              t(DeparturesTexts.quayChips.a11yHint) + getQuayName(item)
+            }
           ></Button>
         )}
       />
@@ -102,6 +104,10 @@ export default function PlaceScreen({
       )}
     </View>
   );
+}
+
+function getQuayName(quay: Quay): string {
+  return quay.publicCode ? quay.name + ' ' + quay.publicCode : quay.name;
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

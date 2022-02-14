@@ -216,7 +216,7 @@ const reducer: ReducerWithSideEffects<
 export function useQuayData(
   quay: DepartureTypes.Quay,
   startTime?: string,
-  updateFrequencyInSeconds: number = 10,
+  updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
@@ -262,16 +262,26 @@ export function useQuayData(
   };
 }
 
+// Get seconds until midnight, but a minimum of `minSeconds`
+export function getSecondsUntilMidnightOrMinimum(
+  isoTime: string,
+  minimumSeconds: number = 0,
+): number {
+  const timeUntilMidnight = differenceInSeconds(
+    addDays(parseISO(isoTime), 1).setHours(0, 0, 0),
+    parseISO(isoTime),
+  );
+  return Math.round(Math.max(timeUntilMidnight, minimumSeconds));
+}
+
 async function fetchEstimatedCalls(
   queryInput: DepartureGroupsQuery,
   quay: DepartureTypes.Quay,
 ): Promise<DepartureTypes.EstimatedCall[]> {
-  // Get seconds until midnight, but a minimum of 3 hours
-  const timeUntilMidnight = differenceInSeconds(
-    addDays(parseISO(queryInput.startTime), 1).setHours(0, 0, 0),
-    parseISO(queryInput.startTime),
+  const timeRange = getSecondsUntilMidnightOrMinimum(
+    queryInput.startTime,
+    MIN_TIME_RANGE,
   );
-  const timeRange = Math.round(Math.max(timeUntilMidnight, MIN_TIME_RANGE));
 
   const result = await getQuayDepartures({
     id: quay.id,

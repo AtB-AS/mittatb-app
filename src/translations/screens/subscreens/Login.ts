@@ -1,3 +1,4 @@
+import orgSpecificTranslations from '@atb/translations/utils';
 import {translation as _} from '../../commons';
 const LoginTexts = {
   activeTicketPrompt: {
@@ -90,4 +91,13 @@ const LoginTexts = {
     wantToLoginButton: _('Jeg vil logge inn likevel', 'I want to sign in'),
   },
 };
-export default LoginTexts;
+export default orgSpecificTranslations(LoginTexts, {
+  nfk: {
+    skipLoginWarning: {
+      description: _(
+        'Hvis du bytter eller mister telefonen vil vi ikke kunne finne fram billettene dine igjen.\n\nDu kan også logge inn senere under "Mitt Reis"',
+        'If you switch or lose your phone your tickets will be lost.\n\nYou can also sign in at a later time under "My Reis"',
+      ),
+    },
+  },
+});
