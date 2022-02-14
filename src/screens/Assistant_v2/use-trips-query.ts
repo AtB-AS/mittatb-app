@@ -14,6 +14,7 @@ import {tripsSearch} from '@atb/api/trips_v2';
 import Bugsnag from '@bugsnag/react-native';
 import {useSearchHistory} from '@atb/search-history';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {TripSearchPreferences, usePreferences} from '@atb/preferences';
 
 export default function useTripsQuery(
   fromLocation?: Location,
@@ -41,6 +42,9 @@ export default function useTripsQuery(
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
   const cancelTokenRef = useRef<CancelTokenSource>();
   const {addJourneySearchEntry} = useSearchHistory();
+  const {
+    preferences: {tripSearchPreferences},
+  } = usePreferences();
 
   const {
     tripsSearch_max_number_of_chained_searches: config_max_performed_searches,
@@ -102,6 +106,7 @@ export default function useTripsQuery(
                 arriveBy,
                 searchInput,
                 cancelTokenSource,
+                tripSearchPreferences,
               );
 
               allTripPatterns = allTripPatterns.concat(
@@ -185,6 +190,7 @@ async function doSearch(
   arriveBy: boolean,
   {searchTime, cursor}: SearchInput,
   cancelToken: CancelTokenSource,
+  tripSearchPreferences?: TripSearchPreferences,
 ) {
   const query: TripsQueryVariables = {
     from: fromLocation,
@@ -192,6 +198,10 @@ async function doSearch(
     cursor,
     when: searchTime?.date,
     arriveBy,
+    transferPenalty: tripSearchPreferences?.transferPenalty,
+    waitReluctance: tripSearchPreferences?.waitReluctance,
+    walkReluctance: tripSearchPreferences?.walkReluctance,
+    walkSpeed: tripSearchPreferences?.walkSpeed,
   };
 
   Bugsnag.leaveBreadcrumb('searching', {
@@ -200,6 +210,10 @@ async function doSearch(
     arriveBy: query.arriveBy,
     when: query.when || '',
     cursor: query.cursor || '',
+    transferPenalty: query.transferPenalty || '',
+    waitReluctance: query.waitReluctance || '',
+    walkReluctance: query.walkReluctance || '',
+    walkSpeed: query.walkSpeed || '',
   });
 
   return tripsSearch(query, {

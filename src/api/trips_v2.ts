@@ -23,6 +23,10 @@ export async function tripsSearch(
     when: query.when,
     arriveBy: query.arriveBy,
     cursor: query.cursor,
+    transferPenalty: query.transferPenalty,
+    waitReluctance: query.waitReluctance,
+    walkReluctance: query.walkReluctance,
+    walkSpeed: query.walkSpeed,
   };
 
   const results = await post<TripsQuery>(url, cleanQuery, opts);
