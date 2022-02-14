@@ -42,15 +42,16 @@ static void InitializeFlipper(UIApplication *application) {
   NSDictionary *intercomDict = [[NSDictionary alloc] initWithContentsOfFile:intercomPath];
   NSString* intercomApiKey = [intercomDict objectForKey:@"IntercomApiKey"];
   NSString* intercomAppId = [intercomDict objectForKey:@"IntercomAppId"];
-  if (intercomApiKey != nil && intercomAppId != nil) {
+  
+  if ([intercomApiKey length] != 0 && [intercomAppId length] != 0) {
     [Intercom setApiKey:intercomApiKey forAppId:intercomAppId];
   }
 
   NSString* bugsnagApiKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"BugsnagAPIKey"];
-  if (bugsnagApiKey != nil) {
+  if ([bugsnagApiKey length] != 0) {
     BugsnagConfiguration *config = [[BugsnagConfiguration alloc] initWithApiKey:bugsnagApiKey];
     NSString* bugsnagReleaseStage = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"BugsnagReleaseStage"];
-    if (bugsnagReleaseStage != nil)
+    if ([bugsnagReleaseStage length] != 0)
       config.releaseStage = bugsnagReleaseStage;
     [Bugsnag startWithConfiguration:config];
     
