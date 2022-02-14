@@ -6,7 +6,7 @@
 if [[
     -z "${IPA_FILE_NAME}"
     || -z "${APP_NAME}"
-    || -z "${CODE_SIGN_IDENTITY}"
+    || -z "${IOS_CODE_SIGN_IDENTITY}"
     || -z "${BUILD_ID}"
    ]]; then
     echo "Argument error!"
@@ -14,7 +14,7 @@ if [[
   - BUILD_ID
   - IPA_FILE_NAME
   - APP_NAME
-  - CODE_SIGN_IDENTITY"
+  - IOS_CODE_SIGN_IDENTITY"
     exit 1
 else 
     mkdir -p bundle
@@ -38,7 +38,7 @@ else
     codesign -d --entitlements :- "Payload/$APP_NAME" > entitlements.plist
 
     echo "Re-sign new Payload"
-    codesign -f -s "$CODE_SIGN_IDENTITY" --entitlements entitlements.plist Payload/$APP_NAME/
+    codesign -f -s "$IOS_CODE_SIGN_IDENTITY" --entitlements entitlements.plist Payload/$APP_NAME/
 
     echo "Generate new ipa"
     zip -qr $IPA_FILE_NAME Payload/
