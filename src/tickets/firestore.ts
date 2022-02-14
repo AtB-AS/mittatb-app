@@ -25,9 +25,9 @@ export default function setupFirestoreListener(
     .orderBy('created', 'desc')
     .onSnapshot(
       (snapshot) => {
-        const fareContracts = (snapshot as FirebaseFirestoreTypes.QuerySnapshot<FareContract>).docs.map<FareContract>(
-          (d) => d.data(),
-        );
+        const fareContracts = (
+          snapshot as FirebaseFirestoreTypes.QuerySnapshot<FareContract>
+        ).docs.map<FareContract>((d) => d.data());
         listeners.fareContracts.onSnapshot(fareContracts);
 
         Bugsnag.leaveBreadcrumb('farecontract_snapshot', {
@@ -49,9 +49,9 @@ export default function setupFirestoreListener(
     .where('created', '>', addHours(Date.now(), -1))
     .onSnapshot(
       (snapshot) => {
-        const reservations = (snapshot as FirebaseFirestoreTypes.QuerySnapshot<Reservation>).docs.map<Reservation>(
-          (d) => d.data(),
-        );
+        const reservations = (
+          snapshot as FirebaseFirestoreTypes.QuerySnapshot<Reservation>
+        ).docs.map<Reservation>((d) => d.data());
         listeners.reservations.onSnapshot(reservations);
 
         Bugsnag.leaveBreadcrumb('reservations_snapshot', {
