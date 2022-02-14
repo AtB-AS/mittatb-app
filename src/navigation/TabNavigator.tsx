@@ -3,7 +3,7 @@ import {
   Nearby,
   Profile,
   Tickets,
-} from '@atb/assets/svg/icons/tab-bar';
+} from '@atb/assets/svg/mono-icons/tab-bar';
 import ThemeText from '@atb/components/text';
 import {LocationWithMetadata} from '@atb/favorites/types';
 import {usePreferenceItems} from '@atb/preferences';
@@ -44,11 +44,8 @@ const Tab = createBottomTabNavigator<TabNavigatorParams>();
 const NavigationRoot = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const {
-    startScreen,
-    useExperimentalTripSearch,
-    newDepartures,
-  } = usePreferenceItems();
+  const {startScreen, useExperimentalTripSearch, newDepartures} =
+    usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
   return (

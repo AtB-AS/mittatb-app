@@ -4,7 +4,7 @@ import ThemeText from '@atb/components/text';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 import insets from '@atb/utils/insets';
 import ThemeIcon from '@atb/components/theme-icon';
-import {Add, Remove} from '@atb/assets/svg/icons/actions';
+import {Add, Remove} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 

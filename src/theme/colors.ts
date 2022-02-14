@@ -19,7 +19,7 @@ export type {Statuses, Mode, TextColor, ContrastColor, RadiusSizes, TextNames};
 export {textNames};
 
 const mainThemes = createThemesFor(
-  APP_ORG == 'atb' ? ThemeVariant.AtB : ThemeVariant.Nfk,
+  APP_ORG == 'nfk' ? ThemeVariant.Nfk : ThemeVariant.AtB,
 );
 
 // Override semibold with bold to avoid Android Roboto bold bug.

@@ -41,9 +41,9 @@ const AlertsContextProvider: React.FC = ({children}) => {
         .where('active', '==', true)
         .onSnapshot(
           (snapshot) => {
-            const alerts = (snapshot as FirebaseFirestoreTypes.QuerySnapshot<Alert>).docs.map<Alert>(
-              (d) => d.data(),
-            );
+            const alerts = (
+              snapshot as FirebaseFirestoreTypes.QuerySnapshot<Alert>
+            ).docs.map<Alert>((d) => d.data());
             setAlerts(alerts);
             setError(false);
           },
