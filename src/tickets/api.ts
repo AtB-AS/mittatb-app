@@ -1,6 +1,6 @@
 import {AxiosRequestConfig} from 'axios';
 import {CancelPaymentRequest, ReserveOfferRequestBody} from '.';
-import {client} from '../api';
+import {createClient} from '../api/client';
 import {
   Offer,
   PaymentResponse,
@@ -11,6 +11,8 @@ import {
   SendReceiptResponse,
   TicketReservation,
 } from './types';
+
+const client = createClient('https://api-next.prod.mittatb.no');
 
 export async function listRecentFareContracts(): Promise<RecentFareContract[]> {
   const url = 'ticket/v2/ticket/recent';
