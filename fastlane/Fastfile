@@ -133,7 +133,6 @@ platform :ios do
       destinations: "*",
       file: "AtB.ipa",
       dsym: "AtB.app.dSYM.zip",
-      release_notes: 'OBS OBS PROD-BYGG SCA EXEMPTION!!',
       notify_testers: true
     )
   end
@@ -198,7 +197,7 @@ platform :android do
 
   lane :appcenter_staging do
     ensure_env_vars(
-      env_vars: ['APPCENTER_API_KEY']
+      env_vars: ['APPCENTER_API_KEY','APK_FILE_NAME']
     )
     appcenter_upload(
       api_token: ENV["APPCENTER_API_KEY"],
@@ -206,8 +205,7 @@ platform :android do
       app_name: "MittAtb",
       owner_type: "organization",
       destinations: "*",
-      file: "app-store.apk",
-      release_notes: 'OBS OBS PROD-BYGG SCA EXEMPTION!!',
+      file: ENV['APK_FILE_NAME'],
       notify_testers: true
     )
   end
