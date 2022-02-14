@@ -434,6 +434,8 @@ const Assistant: React.FC<Props> = ({
       <ScreenReaderAnnouncement message={searchStateMessage} />
 
       <Feedback
+        isSearching={isSearching}
+        isEmptyResult={isEmptyResult}
         tripPatterns={tripPatterns}
         feedbackQuestionsContext={'assistant'}
       />

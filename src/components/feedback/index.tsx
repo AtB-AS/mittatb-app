@@ -19,7 +19,7 @@ const SubmittedComponent = () => {
   const {language} = useTranslation();
 
   return (
-    <ThemeText style={styles.centerText}>
+    <ThemeText type="body__primary--bold">
       {language === 'nb'
         ? 'Takk for tilbakemeldingen!'
         : 'Thanks for the feedback!'}
@@ -49,7 +49,7 @@ const GoodOrBadQuestion = ({
 
   return (
     <>
-      <ThemeText style={styles.centerText}>
+      <ThemeText type="heading__component" style={styles.centerText}>
         {feedbackQuestionsContext === 'departures' &&
           (language === 'nb'
             ? 'Hva syntes du om avgangsvisningen?'
@@ -101,7 +101,7 @@ export const RenderQuestions = ({
       {selectedOpinion === Opinions.Bad &&
         questions.map((question: Question) => (
           <>
-            <ThemeText>
+            <ThemeText type="body__primary--bold">
               {language === 'nb'
                 ? question.questionText.norwegian
                 : question.questionText.english}
@@ -138,6 +138,8 @@ export const RenderQuestions = ({
 type FeedbackProps = {
   tripPatterns?: TripPattern[];
   quayListData?: SectionListData<Quay>[];
+  isSearching?: boolean;
+  isEmptyResult?: boolean;
   feedbackQuestionsContext?: FeedbackQuestionsContext;
 };
 
@@ -145,6 +147,8 @@ export const Feedback = ({
   tripPatterns,
   quayListData,
   feedbackQuestionsContext,
+  isSearching,
+  isEmptyResult,
 }: FeedbackProps) => {
   const styles = useFeedbackStyles();
   const {language} = useTranslation();
@@ -205,6 +209,8 @@ export const Feedback = ({
   }, [quayListData, tripPatterns]);
 
   if (submitted) return <SubmittedComponent />;
+
+  if (!questions || isSearching || isEmptyResult) return null;
 
   if (quayListData || tripPatterns)
     return (
