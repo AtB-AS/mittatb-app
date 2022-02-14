@@ -120,7 +120,7 @@ export default function DebugInfo() {
                 },
               });
             }}
-          ></LabeledSlider>
+          />
           <LabeledSlider
             max={5}
             label="waitReluctance"
@@ -134,7 +134,7 @@ export default function DebugInfo() {
                 },
               });
             }}
-          ></LabeledSlider>
+          />
           <LabeledSlider
             max={5}
             label="walkReluctance"
@@ -148,7 +148,7 @@ export default function DebugInfo() {
                 },
               });
             }}
-          ></LabeledSlider>
+          />
           <LabeledSlider
             max={5}
             label="walkSpeed"
@@ -162,7 +162,7 @@ export default function DebugInfo() {
                 },
               });
             }}
-          ></LabeledSlider>
+          />
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
@@ -327,8 +327,8 @@ function LabeledSlider({
         maximumValue={max}
         step={step}
         value={pref}
-        onValueChange={(n) => setPref(n)}
-        onSlidingComplete={(n) => onSetValue(n)}
+        onValueChange={setPref}
+        onSlidingComplete={onSetValue}
       />
     </Sections.GenericItem>
   );
