@@ -11,9 +11,10 @@ export function getLineName(leg: Leg) {
     : '';
 }
 
-export function getLineNameFromEstimatedCall(
-  call: EstimatedCall,
-): {publicCode?: string; name?: string} {
+export function getLineNameFromEstimatedCall(call: EstimatedCall): {
+  publicCode?: string;
+  name?: string;
+} {
   const name =
     call.destinationDisplay?.frontText ??
     call.serviceJourney.journeyPattern?.line.name;

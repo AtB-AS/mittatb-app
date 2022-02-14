@@ -1,4 +1,4 @@
-import {ShinyTicketBanner} from '@atb/assets/svg/illustrations';
+import {TicketingSplash} from '@atb/assets/svg/color/illustrations';
 import Button from '@atb/components/button';
 import Header from '@atb/components/screen-header';
 import ThemeText from '@atb/components/text';
@@ -28,18 +28,18 @@ export default function SplashInfo({navigation}: Props) {
         color="primary_2"
       />
       <View style={styles.bannerContainer}>
-        <ShinyTicketBanner
+        <TicketingSplash
           width={windowWidth}
           height={windowWidth / 2}
-        ></ShinyTicketBanner>
+        ></TicketingSplash>
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.contentContainer}>
           <View style={styles.textContent}>
-            <ThemeText style={[styles.text, styles.bold]}>
+            <ThemeText color="primary_2" style={[styles.text, styles.bold]}>
               {t(TicketSplashTexts.splash.title)}
             </ThemeText>
-            <ThemeText style={styles.text}>
+            <ThemeText color="primary_2" style={styles.text}>
               {t(TicketSplashTexts.splash.paragraph1)}
             </ThemeText>
           </View>

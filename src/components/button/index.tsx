@@ -85,8 +85,9 @@ const Button: React.FC<ButtonProps> = ({
   const themeColor = color ?? modeData.themeColor;
   const css = useButtonStyle();
   const {theme} = useTheme();
-  const fadeAnim = useRef(new Animated.Value(disabled ? DISABLED_OPACITY : 1))
-    .current;
+  const fadeAnim = useRef(
+    new Animated.Value(disabled ? DISABLED_OPACITY : 1),
+  ).current;
 
   React.useEffect(() => {
     Animated.timing(fadeAnim, {

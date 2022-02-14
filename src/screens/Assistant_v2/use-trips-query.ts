@@ -14,6 +14,7 @@ import {tripsSearch} from '@atb/api/trips_v2';
 import Bugsnag from '@bugsnag/react-native';
 import {useSearchHistory} from '@atb/search-history';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {TripSearchPreferences, usePreferences} from '@atb/preferences';
 
 export default function useTripsQuery(
   fromLocation?: Location,
@@ -26,7 +27,7 @@ export default function useTripsQuery(
   tripPatterns: TripPattern[];
   timeOfLastSearch: DateString;
   refresh: () => {};
-  loadMore: () => {};
+  loadMore: (() => {}) | undefined;
   clear: () => void;
   searchState: SearchStateType;
   error?: ErrorType;
@@ -41,6 +42,9 @@ export default function useTripsQuery(
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
   const cancelTokenRef = useRef<CancelTokenSource>();
   const {addJourneySearchEntry} = useSearchHistory();
+  const {
+    preferences: {tripSearchPreferences},
+  } = usePreferences();
 
   const {
     tripsSearch_max_number_of_chained_searches: config_max_performed_searches,
@@ -63,26 +67,36 @@ export default function useTripsQuery(
         ? config_target_page_hits
         : config_target_inital_hits;
 
+      const sanitizedSearchTime =
+        searchTime.option === 'now'
+          ? {...searchTime, date: new Date().toISOString()}
+          : searchTime;
+
       (async function () {
         if (fromLocation && toLocation) {
           try {
             setSearchState('searching');
             let performedSearchesCount = 0;
             let tripsFoundCount = 0;
+
+            try {
+              // Fire and forget add journey search entry
+              await addJourneySearchEntry([fromLocation, toLocation]);
+            } catch (e) {}
+
+            let nextPageAvailable = true;
             while (
               tripsFoundCount < targetNumberOfHits &&
-              performedSearchesCount < config_max_performed_searches
+              performedSearchesCount < config_max_performed_searches &&
+              nextPageAvailable
             ) {
-              const searchInput = cursor ? {cursor} : {searchTime};
+              const searchInput: SearchInput = cursor
+                ? {cursor}
+                : {searchTime: sanitizedSearchTime};
 
               if (searchInput.searchTime?.date) {
                 setTimeOfSearch(searchInput.searchTime.date);
               }
-
-              try {
-                // Fire and forget add journey search entry
-                await addJourneySearchEntry([fromLocation, toLocation]);
-              } catch (e) {}
 
               const arriveBy = searchTime.option === 'arrival';
 
@@ -92,19 +106,24 @@ export default function useTripsQuery(
                 arriveBy,
                 searchInput,
                 cancelTokenSource,
+                tripSearchPreferences,
               );
 
               allTripPatterns = allTripPatterns.concat(
                 results.trip.tripPatterns,
               );
+
               setTripPatterns(allTripPatterns);
               tripsFoundCount += results.trip.tripPatterns.length;
               performedSearchesCount++;
+
               cursor =
                 searchTime.option === 'arrival'
                   ? results.trip.previousPageCursor
                   : results.trip.nextPageCursor;
+              nextPageAvailable = !!cursor;
             }
+
             setPageCursor(cursor);
             setSearchState(
               allTripPatterns.length === 0
@@ -146,7 +165,7 @@ export default function useTripsQuery(
     tripPatterns,
     timeOfLastSearch: timeOfSearch,
     refresh,
-    loadMore,
+    loadMore: !!pageCursor ? loadMore : undefined,
     clear: clearTrips,
     searchState: searchState,
     error: errorType,
@@ -171,19 +190,18 @@ async function doSearch(
   arriveBy: boolean,
   {searchTime, cursor}: SearchInput,
   cancelToken: CancelTokenSource,
+  tripSearchPreferences?: TripSearchPreferences,
 ) {
-  const when = searchTime
-    ? searchTime.option !== 'now'
-      ? searchTime.date
-      : new Date().toISOString()
-    : undefined;
-
   const query: TripsQueryVariables = {
     from: fromLocation,
     to: toLocation,
     cursor,
-    when,
+    when: searchTime?.date,
     arriveBy,
+    transferPenalty: tripSearchPreferences?.transferPenalty,
+    waitReluctance: tripSearchPreferences?.waitReluctance,
+    walkReluctance: tripSearchPreferences?.walkReluctance,
+    walkSpeed: tripSearchPreferences?.walkSpeed,
   };
 
   Bugsnag.leaveBreadcrumb('searching', {
@@ -192,6 +210,10 @@ async function doSearch(
     arriveBy: query.arriveBy,
     when: query.when || '',
     cursor: query.cursor || '',
+    transferPenalty: query.transferPenalty || '',
+    waitReluctance: query.waitReluctance || '',
+    walkReluctance: query.walkReluctance || '',
+    walkSpeed: query.walkSpeed || '',
   });
 
   return tripsSearch(query, {

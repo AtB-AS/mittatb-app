@@ -61,45 +61,48 @@ const mapToUserProfilesWithCountAndOffer = (
     }))
     .filter((u): u is UserProfileWithCountAndOffer => u.offer != null);
 
-const getOfferReducer = (
-  userProfilesWithCounts: UserProfileWithCount[],
-): OfferReducer => (prevState, action): OfferState => {
-  switch (action.type) {
-    case 'SEARCHING_OFFER':
-      return {
-        ...prevState,
-        isSearchingOffer: true,
-      };
-    case 'CLEAR_OFFER':
-      return {
-        ...prevState,
-        offerSearchTime: undefined,
-        isSearchingOffer: false,
-        totalPrice: 0,
-        error: undefined,
-        userProfilesWithCountAndOffer: [],
-      };
-    case 'SET_OFFER':
-      return {
-        ...prevState,
-        offerSearchTime: Date.now(),
-        isSearchingOffer: false,
-        totalPrice: calculateTotalPrice(userProfilesWithCounts, action.offers),
-        userProfilesWithCountAndOffer: mapToUserProfilesWithCountAndOffer(
-          userProfilesWithCounts,
-          action.offers,
-        ),
-        error: undefined,
-      };
-    case 'SET_ERROR': {
-      return {
-        ...prevState,
-        error: action.error,
-        isSearchingOffer: false,
-      };
+const getOfferReducer =
+  (userProfilesWithCounts: UserProfileWithCount[]): OfferReducer =>
+  (prevState, action): OfferState => {
+    switch (action.type) {
+      case 'SEARCHING_OFFER':
+        return {
+          ...prevState,
+          isSearchingOffer: true,
+        };
+      case 'CLEAR_OFFER':
+        return {
+          ...prevState,
+          offerSearchTime: undefined,
+          isSearchingOffer: false,
+          totalPrice: 0,
+          error: undefined,
+          userProfilesWithCountAndOffer: [],
+        };
+      case 'SET_OFFER':
+        return {
+          ...prevState,
+          offerSearchTime: Date.now(),
+          isSearchingOffer: false,
+          totalPrice: calculateTotalPrice(
+            userProfilesWithCounts,
+            action.offers,
+          ),
+          userProfilesWithCountAndOffer: mapToUserProfilesWithCountAndOffer(
+            userProfilesWithCounts,
+            action.offers,
+          ),
+          error: undefined,
+        };
+      case 'SET_ERROR': {
+        return {
+          ...prevState,
+          error: action.error,
+          isSearchingOffer: false,
+        };
+      }
     }
-  }
-};
+  };
 
 const initialState: OfferState = {
   isSearchingOffer: false,

@@ -1,4 +1,4 @@
-import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
+import {Expand, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {
   SectionItem,

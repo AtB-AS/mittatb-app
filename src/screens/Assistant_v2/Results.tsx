@@ -67,7 +67,11 @@ const Results: React.FC<Props> = ({
     return (
       <View style={styles.container}>
         <ScreenReaderAnnouncement message={errorMessage} />
-        <MessageBox type="warning" message={errorMessage} />
+        <MessageBox
+          type="warning"
+          message={errorMessage}
+          containerStyle={styles.messageBoxContainer}
+        />
       </View>
     );
   }
@@ -77,7 +81,7 @@ const Results: React.FC<Props> = ({
     const pluralResultReasons = hasResultReasons && resultReasons.length > 1;
     return (
       <View style={styles.container}>
-        <MessageBox>
+        <MessageBox containerStyle={styles.messageBoxContainer}>
           <ThemeText
             style={{...styles.infoBoxText, color: theme.status.info.main.color}}
           >
@@ -145,4 +149,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingBottom: theme.spacings.medium,
   },
   infoBoxText: theme.typography.body__primary,
+  messageBoxContainer: {
+    marginTop: theme.spacings.medium,
+  },
 }));

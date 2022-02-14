@@ -23,6 +23,9 @@ import {
   useTicketState,
 } from '@atb/tickets';
 import {usePreferences} from '@atb/preferences';
+import analytics from '@react-native-firebase/analytics';
+import {updateMetadata} from '@atb/chat/metadata';
+import parsePhoneNumber from 'libphonenumber-js';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -42,17 +45,16 @@ type ProfileScreenProps = {
 };
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
-  const {enable_i18n, privacy_policy_url} = useRemoteConfig();
+  const {enable_i18n, privacy_policy_url, enable_ticketing} = useRemoteConfig();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
-  const {authenticationType, signOut, user} = useAuthState();
+  const {authenticationType, signOut, user, customerNumber} = useAuthState();
   const config = useLocalConfig();
 
   const {fareContracts, customerProfile} = useTicketState();
-  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
-    fareContracts,
-  );
+  const activeFareContracts =
+    filterActiveOrCanBeUsedFareContracts(fareContracts);
   const hasActiveFareContracts = activeFareContracts.length > 0;
 
   const {
@@ -70,6 +72,8 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
     if (config?.installId) setClipboard(config.installId);
   }
 
+  const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
+
   return (
     <View style={style.container}>
       <FullScreenHeader
@@ -84,6 +88,26 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.account.heading)}
           />
+          {authenticationType === 'phone' && (
+            <Sections.GenericItem>
+              <ThemeText style={style.customerNumberHeading}>
+                {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
+              </ThemeText>
+              <ThemeText type="body__secondary" color="secondary">
+                {phoneNumber?.formatInternational()}
+              </ThemeText>
+            </Sections.GenericItem>
+          )}
+          {customerNumber && (
+            <Sections.GenericItem>
+              <ThemeText style={style.customerNumberHeading}>
+                {t(ProfileTexts.sections.account.infoItems.customerNumber)}
+              </ThemeText>
+              <ThemeText type="body__secondary" color="secondary">
+                {customerNumber}
+              </ThemeText>
+            </Sections.GenericItem>
+          )}
           {authenticationType !== 'phone' && (
             <Sections.LinkItem
               text={t(ProfileTexts.sections.account.linkItems.login.label)}
@@ -98,11 +122,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 })
               }
             />
-          )}
-          {authenticationType === 'phone' && (
-            <Sections.GenericItem>
-              <ThemeText>{user?.phoneNumber}</ThemeText>
-            </Sections.GenericItem>
           )}
           {authenticationType === 'phone' && (
             <Sections.LinkItem
@@ -140,10 +159,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               onPress={() => navigation.navigate('Language')}
             />
           )}
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.settings.linkItems.enrollment.label)}
-            onPress={() => navigation.navigate('Enrollment')}
-          />
         </Sections.Section>
         <Sections.Section withPadding>
           <Sections.GenericItem>
@@ -160,17 +175,21 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           </Sections.GenericItem>
           <Sections.ActionItem
             mode="toggle"
-            text={t(ProfileTexts.sections.newFeatures.assistant)}
-            checked={useExperimentalTripSearch}
-            onPress={(useExperimentalTripSearch) =>
-              setPreference({useExperimentalTripSearch})
-            }
-          />
-          <Sections.ActionItem
-            mode="toggle"
             text={t(ProfileTexts.sections.newFeatures.departures)}
             checked={newDepartures}
-            onPress={(newDepartures) => setPreference({newDepartures})}
+            onPress={(newDepartures) => {
+              analytics().logEvent('toggle_beta_departures', {
+                toggle: newDepartures ? 'enable' : 'disable',
+              });
+              updateMetadata({
+                'AtB-Beta-Departures': newDepartures ? 'enabled' : 'disabled',
+              });
+              setPreference({newDepartures});
+            }}
+          />
+          <Sections.LinkItem
+            text={t(ProfileTexts.sections.settings.linkItems.enrollment.label)}
+            onPress={() => navigation.navigate('Enrollment')}
           />
         </Sections.Section>
 
@@ -246,37 +265,57 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           />
         </Sections.Section>
 
-        <Sections.Section withPadding>
-          <Sections.HeaderItem
-            text={t(ProfileTexts.sections.information.heading)}
-          />
-          <Sections.LinkItem
-            text={t(
-              ProfileTexts.sections.information.linkItems.ticketing.label,
-            )}
-            onPress={() => navigation.navigate('TicketingInformation')}
-          />
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.information.linkItems.payment.label)}
-            onPress={() => navigation.navigate('PaymentInformation')}
-          />
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.information.linkItems.terms.label)}
-            onPress={() => navigation.navigate('TermsInformation')}
-          />
-          <Sections.LinkItem
-            text={t(
-              ProfileTexts.sections.information.linkItems.inspection.label,
-            )}
-            onPress={() => navigation.navigate('TicketInspectionInformation')}
-          />
-        </Sections.Section>
+        {enable_ticketing && (
+          <Sections.Section withPadding>
+            <Sections.HeaderItem
+              text={t(ProfileTexts.sections.information.heading)}
+            />
+            <Sections.LinkItem
+              text={t(
+                ProfileTexts.sections.information.linkItems.ticketing.label,
+              )}
+              onPress={() => navigation.navigate('TicketingInformation')}
+            />
+            <Sections.LinkItem
+              text={t(
+                ProfileTexts.sections.information.linkItems.payment.label,
+              )}
+              onPress={() => navigation.navigate('PaymentInformation')}
+            />
+            <Sections.LinkItem
+              text={t(ProfileTexts.sections.information.linkItems.terms.label)}
+              onPress={() => navigation.navigate('TermsInformation')}
+            />
+            <Sections.LinkItem
+              text={t(
+                ProfileTexts.sections.information.linkItems.inspection.label,
+              )}
+              onPress={() => navigation.navigate('TicketInspectionInformation')}
+            />
+          </Sections.Section>
+        )}
 
         {(!!JSON.parse(IS_QA_ENV || 'false') ||
           __DEV__ ||
           customerProfile?.debug) && (
           <Sections.Section withPadding>
             <Sections.HeaderItem text="Developer menu" />
+            <Sections.ActionItem
+              mode="toggle"
+              text={t(ProfileTexts.sections.newFeatures.assistant)}
+              checked={useExperimentalTripSearch}
+              onPress={(useExperimentalTripSearch) => {
+                analytics().logEvent('toggle_beta_tripsearch', {
+                  toggle: useExperimentalTripSearch ? 'enable' : 'disable',
+                });
+                updateMetadata({
+                  'AtB-Beta-TripSearch': useExperimentalTripSearch
+                    ? 'enabled'
+                    : 'disabled',
+                });
+                setPreference({useExperimentalTripSearch});
+              }}
+            />
             <Sections.LinkItem
               text="Design system"
               onPress={() => navigation.navigate('DesignSystem')}
@@ -320,6 +359,9 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     backgroundColor: theme.colors.background_1.backgroundColor,
     flex: 1,
+  },
+  customerNumberHeading: {
+    marginBottom: theme.spacings.xSmall,
   },
   scrollView: {
     paddingVertical: theme.spacings.medium,

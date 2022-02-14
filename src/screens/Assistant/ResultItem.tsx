@@ -1,6 +1,9 @@
-import {ArrowRight, ChevronRight} from '@atb/assets/svg/icons/navigation';
-import {DestinationFlag} from '@atb/assets/svg/icons/places';
-import {Duration, WalkingPerson} from '@atb/assets/svg/icons/transportation';
+import {ArrowRight, ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
+import {DestinationFlag} from '@atb/assets/svg/mono-icons/places';
+import {
+  Duration,
+  WalkingPerson,
+} from '@atb/assets/svg/mono-icons/transportation';
 import AccessibleText, {
   screenReaderPause,
 } from '@atb/components/accessible-text';

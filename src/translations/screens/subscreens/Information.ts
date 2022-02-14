@@ -1,3 +1,4 @@
+import orgSpecificTranslations from '@atb/translations/utils';
 import {translation as _} from '../../commons';
 
 const bulletPoint = '\u2022';
@@ -43,23 +44,23 @@ const SelectStartScreenTexts = {
         row1Value3: _('3', '3'),
         row1Value4: _('4', '4'),
         row2Label: _('Voksen', 'Adult'),
-        row2Value1: _('40', '40'),
-        row2Value2: _('80', '80'),
-        row2Value3: _('120', '120'),
-        row2Value4: _('160', '160'),
+        row2Value1: _('42', '42'),
+        row2Value2: _('84', '84'),
+        row2Value3: _('126', '126'),
+        row2Value4: _('168', '168'),
         row3Label: _(
           'Barn / Honnør / Militær / Sykkel',
           'Child / Senior / Military / Bicycle',
         ),
-        row3Value1: _('20', '20'),
-        row3Value2: _('40', '40'),
-        row3Value3: _('60', '60'),
-        row3Value4: _('80', '80'),
+        row3Value1: _('21', '21'),
+        row3Value2: _('42', '42'),
+        row3Value3: _('63', '63'),
+        row3Value4: _('84', '84'),
         row4Label: _('Student', 'Student'),
-        row4Value1: _('40', '40'),
-        row4Value2: _('80', '80'),
-        row4Value3: _('80', '80'),
-        row4Value4: _('80', '80'),
+        row4Value1: _('42', '42'),
+        row4Value2: _('84', '84'),
+        row4Value3: _('84', '84'),
+        row4Value4: _('84', '84'),
       },
       part3Text_1: _(
         'For å reise med sykkel kjøper du en barnebillett.',
@@ -184,4 +185,16 @@ const SelectStartScreenTexts = {
     },
   },
 };
-export default SelectStartScreenTexts;
+
+export default orgSpecificTranslations(SelectStartScreenTexts, {
+  nfk: {
+    payment: {
+      texts: {
+        part1Text: _(
+          'Alle transaksjoner utført med Vipps blir behandlet av Vipps. Har du valgt Vipps som standard betalingsmåte, vil Vipps-appen åpne seg når du skal betale. Du blir så bedt om å logge på Vipps på vanlig måte. Appen Reis vil be om tilgang til Vipps, dette må du svare ja på. Vipps vil benytte din valgte betalingsmetode, konto eller kort valgt i Vipps appen. Informasjon om din konto, dine kort eller andre personopplysninger blir ikke lagret i appen Reis eller hos Reis Nordland.',
+          'All transactions performed with Vipps are processed by Vipps. If you have selected Vipps as your default payment method, the Vipps app will open when you pay. You are then asked to sign in to Vipps in the usual way. The Reis app will request access to Vipps, which you must answer yes to. Vipps will use your chosen payment method, account or card selected in the Vipps app. Information about your account, your cards or other personal information is not stored in the Reis app or at Reis Nordland.',
+        ),
+      },
+    },
+  },
+});

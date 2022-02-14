@@ -141,10 +141,10 @@ const StopDepartures = React.memo(function StopDepartures({
   const [expanded, setExpanded] = useState(
     defaultExpanded || disableCollapsing,
   );
-  useEffect(() => setExpanded(defaultExpanded || disableCollapsing), [
-    defaultExpanded,
-    disableCollapsing,
-  ]);
+  useEffect(
+    () => setExpanded(defaultExpanded || disableCollapsing),
+    [defaultExpanded, disableCollapsing],
+  );
 
   if (!stopPlaceGroup.quays.length) {
     return null;

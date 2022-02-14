@@ -55,7 +55,6 @@ jobs:
         env:
           IPA_FILE_NAME: "AtB.ipa"
           APP_NAME: "AtB.app"
-          CODE_SIGN_IDENTITY: ${{ secrets.IOS_CODE_SIGN_IDENTITY }}
 
       - name: Distribute to Firebase app distribution
         if: matrix.org == 'nfk'

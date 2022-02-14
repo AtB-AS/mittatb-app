@@ -1,5 +1,5 @@
-import {Swap} from '@atb/assets/svg/icons/actions';
-import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
+import {Swap} from '@atb/assets/svg/mono-icons/actions';
+import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import Button from '@atb/components/button';
 import DisappearingHeader from '@atb/components/disappearing-header';
@@ -54,7 +54,7 @@ import {SearchTime, useSearchTimeValue} from './journey-date-picker';
 import NewsBanner from './NewsBanner';
 import Results from './Results';
 import {ThemeColor} from '@atb/theme/colors';
-import * as navIcons from '@atb/assets/svg/icons/navigation';
+import * as navIcons from '@atb/assets/svg/mono-icons/navigation';
 import useTripsQuery from '@atb/screens/Assistant_v2/use-trips-query';
 
 const themeColor: ThemeColor = 'background_accent';
@@ -231,7 +231,7 @@ const Assistant: React.FC<Props> = ({
 
   const showEmptyScreen = !tripPatterns && !isSearching && !error;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
-  const useScroll = (!showEmptyScreen && !isEmptyResult) || !!error;
+  const useScroll = !showEmptyScreen || !!error;
   const isHeaderFullHeight = !from || !to;
 
   const renderHeader = useCallback(
@@ -462,8 +462,12 @@ const Assistant: React.FC<Props> = ({
             </>
           ) : (
             <>
-              <ThemeText>{t(AssistantTexts.results.fetchMore)} </ThemeText>
-              <ThemeIcon svg={navIcons.Expand} size={'normal'} />
+              {loadMore ? (
+                <>
+                  <ThemeText>{t(AssistantTexts.results.fetchMore)} </ThemeText>
+                  <ThemeIcon svg={navIcons.Expand} size={'normal'} />
+                </>
+              ) : null}
             </>
           )}
         </TouchableOpacity>
@@ -561,12 +565,10 @@ function useLocations(
     ],
   );
 
-  const searchedFromLocation = useLocationSearchValue<AssistantRouteProp>(
-    'fromLocation',
-  );
-  const searchedToLocation = useLocationSearchValue<AssistantRouteProp>(
-    'toLocation',
-  );
+  const searchedFromLocation =
+    useLocationSearchValue<AssistantRouteProp>('fromLocation');
+  const searchedToLocation =
+    useLocationSearchValue<AssistantRouteProp>('toLocation');
 
   return useUpdatedLocation(
     searchedFromLocation,

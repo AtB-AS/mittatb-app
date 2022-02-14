@@ -17,9 +17,9 @@ export function significantWaitTime(seconds: number) {
 }
 
 export function getLineName(leg: Leg) {
-  return leg.line
-    ? leg.line.publicCode +
-        ' ' +
-        leg.fromEstimatedCall?.destinationDisplay?.frontText ?? leg.line.name
-    : '';
+  const name =
+    leg.fromEstimatedCall?.destinationDisplay?.frontText ??
+    leg.line?.name ??
+    '';
+  return leg.line?.publicCode ? `${leg.line.publicCode} ${name}` : name;
 }

@@ -10,7 +10,7 @@ import {
   ExpandLess,
   UnfoldLess,
   UnfoldMore,
-} from '@atb/assets/svg/icons/navigation';
+} from '@atb/assets/svg/mono-icons/navigation';
 
 const navigationTypes = [
   'arrow-left',

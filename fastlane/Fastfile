@@ -195,7 +195,8 @@ platform :android do
       app:ENV['FIREBASE_APP_ID'],
       service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
       android_artifact_type:'APK',
-      android_artifact_path:ENV['APK_FILE_NAME']
+      android_artifact_path:ENV['APK_FILE_NAME'],
+      groups:"NFK"
     )
   end
 

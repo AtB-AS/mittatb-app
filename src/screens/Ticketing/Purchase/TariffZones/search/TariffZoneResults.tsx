@@ -1,4 +1,7 @@
-import {CurrentLocationArrow, MapPointPin} from '@atb/assets/svg/icons/places';
+import {
+  CurrentLocationArrow,
+  MapPointPin,
+} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';

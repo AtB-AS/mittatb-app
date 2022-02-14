@@ -1,5 +1,5 @@
-import {Warning} from '@atb/assets/svg/situations';
-import {Interchange} from '@atb/assets/svg/icons/actions';
+import {Warning} from '@atb/assets/svg/color/situations';
+import {Interchange} from '@atb/assets/svg/mono-icons/actions';
 import AccessibleText, {
   screenReaderPause,
 } from '@atb/components/accessible-text';
@@ -158,7 +158,7 @@ const TripSection: React.FC<TripSectionProps> = ({
         )}
       </View>
       {leg.interchangeTo?.guaranteed && interchangeDetails && leg.line && (
-        <View style={style.interchangeMessage}>
+        <View>
           <TripLegDecoration
             color={iconColor}
             hasStart={false}
@@ -341,9 +341,6 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   legLineName: {
     fontWeight: 'bold',
-  },
-  interchangeMessage: {
-    marginBottom: -theme.spacings.large,
   },
 }));
 export default TripSection;

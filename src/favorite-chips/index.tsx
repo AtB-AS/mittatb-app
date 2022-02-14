@@ -3,8 +3,11 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {Add} from '../assets/svg/icons/actions';
-import {CurrentLocationArrow, MapPointPin} from '../assets/svg/icons/places';
+import {Add} from '../assets/svg/mono-icons/actions';
+import {
+  CurrentLocationArrow,
+  MapPointPin,
+} from '../assets/svg/mono-icons/places';
 import {screenReaderPause} from '../components/accessible-text';
 import Button, {ButtonProps} from '../components/button';
 import {FavoriteIcon} from '../favorites';
@@ -31,7 +34,8 @@ type Props = {
 
 export type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
 
-type ProfileNearbyScreenNavigationProp = StackNavigationProp<RootStackParamList>;
+type ProfileNearbyScreenNavigationProp =
+  StackNavigationProp<RootStackParamList>;
 const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
   containerStyle,
