@@ -1,11 +1,11 @@
 import {InformationTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import pa from './termsInformation.json';
+import termsInfo from '../../../reference-data/termsInformation.json';
 import Info, {InformationElement} from './Information';
 
 export default function TermsInformation() {
   const {t, language} = useTranslation();
-  const data = pa[language];
+  const data = termsInfo[language];
   return (
     <Info
       informations={data as InformationElement[]}

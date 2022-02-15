@@ -1,6 +1,6 @@
 import {InformationTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import ticketInspectionInfo from './ticketInspectionInformation.json';
+import ticketInspectionInfo from '../../../reference-data/ticketInspectionInformation.json';
 import Info, {InformationElement} from './Information';
 export default function TicketInspectionInformation() {
   const {t, language} = useTranslation();
