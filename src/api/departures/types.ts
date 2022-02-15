@@ -19,6 +19,7 @@ export type DepartureTime = {
   predictionInaccurate?: boolean;
   situations: Situation[];
   serviceJourneyId?: string;
+  serviceDate: string;
 };
 
 export type DepartureGroup = {

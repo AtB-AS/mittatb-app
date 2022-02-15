@@ -17,7 +17,8 @@ type QuaySectionProps = {
   data: EstimatedCall[] | null;
   navigateToQuay?: (arg0: Quay) => void;
   navigateToDetails: (
-    serviceJourneyId?: string,
+    serviceJourneyId: string,
+    serviceDate: string,
     date?: string,
     fromQuayId?: string,
   ) => void;
@@ -81,23 +82,25 @@ export default function QuaySection({
           <FlatList
             ItemSeparatorComponent={SectionSeparator}
             data={departures}
-            renderItem={({item, index}: EstimatedCallRenderItem) => (
+            renderItem={({item: departure, index}: EstimatedCallRenderItem) => (
               <Sections.GenericClickableItem
                 radius={
                   !navigateToQuay && index === departures.length - 1
                     ? 'bottom'
                     : undefined
                 }
-                onPress={() =>
-                  navigateToDetails(
-                    item.serviceJourney?.id,
-                    item.expectedDepartureTime,
-                    item.quay?.id,
-                  )
-                }
+                onPress={() => {
+                  if (departure?.serviceJourney)
+                    navigateToDetails(
+                      departure.serviceJourney?.id,
+                      departure.date,
+                      departure.expectedDepartureTime,
+                      departure.quay?.id,
+                    );
+                }}
                 accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
               >
-                <EstimatedCallItem departure={item}></EstimatedCallItem>
+                <EstimatedCallItem departure={departure} />
               </Sections.GenericClickableItem>
             )}
             keyExtractor={(item: EstimatedCall) =>
