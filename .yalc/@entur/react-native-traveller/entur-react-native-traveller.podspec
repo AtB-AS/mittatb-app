@@ -13,7 +13,6 @@ Pod::Spec.new do |s|
   s.platforms    = { :ios => "12.2" }
   s.source       = { :git => "https://github.com/entur/.git", :tag => "#{s.version}" }
 
-  s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
   s.source_files = "ios/**/*.{h,m,mm,swift}"
   s.dependency "React-Core"
   useVendoredFramework = !$DontUseVendoredAbtMobile

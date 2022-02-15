@@ -7,34 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A707BBDBCE2C4EBCBA677914 /* libRNCNetInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619EBAC22BA74AAC8B0F0BBE /* libRNCNetInfo.a */; };
-		C5D6496371B7470CB55BEA22 /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8361E3CACCC040A18DAF8C2B /* libRNCAsyncStorage.a */; };
+		5E555C0D2413F4C50049A1A2 /* EnturTraveller.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* EnturTraveller.m */; };
 		F4FF95D7245B92E800C19C63 /* EnturTraveller.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FF95D6245B92E800C19C63 /* EnturTraveller.swift */; };
+		C5D6496371B7470CB55BEA22 /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8361E3CACCC040A18DAF8C2B /* libRNCAsyncStorage.a */; };
+		A707BBDBCE2C4EBCBA677914 /* libRNCNetInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619EBAC22BA74AAC8B0F0BBE /* libRNCNetInfo.a */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		0F415F3227969D260039FA85 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3F34586C95374DADAA3BBD7C /* RNCAsyncStorage.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RNCAsyncStorage;
-		};
-		0F415F3627969D260039FA85 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 70F253137DF443D0B6DF3F06 /* RNCNetInfo.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RNCNetInfo;
-		};
-		0F415F3827969D260039FA85 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 70F253137DF443D0B6DF3F06 /* RNCNetInfo.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = B5027B1B2237B30F00F1AABA;
-			remoteInfo = "RNCNetInfo-tvOS";
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		58B511D91A9E6C8500147676 /* CopyFiles */ = {
@@ -50,13 +27,13 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libEnturTraveller.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libEnturTraveller.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		3F34586C95374DADAA3BBD7C /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCAsyncStorage.xcodeproj; path = "../node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; };
-		619EBAC22BA74AAC8B0F0BBE /* libRNCNetInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNCNetInfo.a; sourceTree = "<group>"; };
-		70F253137DF443D0B6DF3F06 /* RNCNetInfo.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCNetInfo.xcodeproj; path = "../node_modules/@react-native-community/netinfo/ios/RNCNetInfo.xcodeproj"; sourceTree = "<group>"; };
-		8361E3CACCC040A18DAF8C2B /* libRNCAsyncStorage.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNCAsyncStorage.a; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* EnturTraveller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnturTraveller.m; sourceTree = "<group>"; };
 		F4FF95D5245B92E700C19C63 /* EnturTraveller-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EnturTraveller-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4FF95D6245B92E800C19C63 /* EnturTraveller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnturTraveller.swift; sourceTree = "<group>"; };
+		3F34586C95374DADAA3BBD7C /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; name = "RNCAsyncStorage.xcodeproj"; path = "../node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		8361E3CACCC040A18DAF8C2B /* libRNCAsyncStorage.a */ = {isa = PBXFileReference; name = "libRNCAsyncStorage.a"; path = "libRNCAsyncStorage.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		70F253137DF443D0B6DF3F06 /* RNCNetInfo.xcodeproj */ = {isa = PBXFileReference; name = "RNCNetInfo.xcodeproj"; path = "../node_modules/@react-native-community/netinfo/ios/RNCNetInfo.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		619EBAC22BA74AAC8B0F0BBE /* libRNCNetInfo.a */ = {isa = PBXFileReference; name = "libRNCNetInfo.a"; path = "libRNCNetInfo.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,47 +49,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0F415F2C27969D200039FA85 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				8361E3CACCC040A18DAF8C2B /* libRNCAsyncStorage.a */,
-				619EBAC22BA74AAC8B0F0BBE /* libRNCNetInfo.a */,
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
-		0F415F2D27969D260039FA85 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				0F415F3327969D260039FA85 /* libRNCAsyncStorage.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		0F415F2F27969D260039FA85 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				0F415F3727969D260039FA85 /* libRNCNetInfo.a */,
-				0F415F3927969D260039FA85 /* libRNCNetInfo-tvOS.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		134814211AA4EA7D00B7C361 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				134814201AA4EA6300B7C361 /* libEnturTraveller.a */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		19555E4C52F7430C8243A2A4 /* Libraries */ = {
-			isa = PBXGroup;
-			children = (
-				3F34586C95374DADAA3BBD7C /* RNCAsyncStorage.xcodeproj */,
-				70F253137DF443D0B6DF3F06 /* RNCNetInfo.xcodeproj */,
-			);
-			name = Libraries;
 			sourceTree = "<group>";
 		};
 		58B511D21A9E6C8500147676 = {
@@ -123,9 +65,18 @@
 				F4FF95D5245B92E700C19C63 /* EnturTraveller-Bridging-Header.h */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				19555E4C52F7430C8243A2A4 /* Libraries */,
-				0F415F2C27969D200039FA85 /* Recovered References */,
 			);
 			sourceTree = "<group>";
+		};
+		19555E4C52F7430C8243A2A4 /* Libraries */ = {
+			isa = "PBXGroup";
+			children = (
+				3F34586C95374DADAA3BBD7C /* RNCAsyncStorage.xcodeproj */,
+				70F253137DF443D0B6DF3F06 /* RNCNetInfo.xcodeproj */,
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -172,16 +123,6 @@
 			mainGroup = 58B511D21A9E6C8500147676;
 			productRefGroup = 58B511D21A9E6C8500147676;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 0F415F2D27969D260039FA85 /* Products */;
-					ProjectRef = 3F34586C95374DADAA3BBD7C /* RNCAsyncStorage.xcodeproj */;
-				},
-				{
-					ProductGroup = 0F415F2F27969D260039FA85 /* Products */;
-					ProjectRef = 70F253137DF443D0B6DF3F06 /* RNCNetInfo.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				58B511DA1A9E6C8500147676 /* EnturTraveller */,
@@ -189,36 +130,13 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXReferenceProxy section */
-		0F415F3327969D260039FA85 /* libRNCAsyncStorage.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNCAsyncStorage.a;
-			remoteRef = 0F415F3227969D260039FA85 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		0F415F3727969D260039FA85 /* libRNCNetInfo.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNCNetInfo.a;
-			remoteRef = 0F415F3627969D260039FA85 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		0F415F3927969D260039FA85 /* libRNCNetInfo-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libRNCNetInfo-tvOS.a";
-			remoteRef = 0F415F3827969D260039FA85 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
-
 /* Begin PBXSourcesBuildPhase section */
 		58B511D71A9E6C8500147676 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				F4FF95D7245B92E800C19C63 /* EnturTraveller.swift in Sources */,
+				B3E7B58A1CC2AC0600A0062D /* EnturTraveller.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,7 +186,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -311,7 +229,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

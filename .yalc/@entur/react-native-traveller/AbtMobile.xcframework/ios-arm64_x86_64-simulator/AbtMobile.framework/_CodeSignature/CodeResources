@@ -26,7 +26,7 @@
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		eSQ7TVusIcX/xx3GdQ/K808J/+c=
+		1YuLcKw1hrhyMyfQAQv+u7qH9fU=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftdoc</key>
 		<data>
@@ -38,7 +38,7 @@
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		eSQ7TVusIcX/xx3GdQ/K808J/+c=
+		1YuLcKw1hrhyMyfQAQv+u7qH9fU=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
@@ -50,7 +50,7 @@
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		7Pr/9Ro2l6+WN9yb6cVcFNabcw8=
+		/fqeRtQXo6FOW4512Xc6M4rdFGI=
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/x86_64.swiftdoc</key>
 		<data>
@@ -62,7 +62,7 @@
 		</data>
 		<key>Modules/AbtMobile.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		7Pr/9Ro2l6+WN9yb6cVcFNabcw8=
+		/fqeRtQXo6FOW4512Xc6M4rdFGI=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -103,7 +103,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			SxkYaPONrgrVySWxFSzpnhPkwtBnnU0mZYqLxpv9KLs=
+			c5ilzQOT7/BF6uwKVm6FnWr3ma6Pj/yE6Q6mut7rDU8=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/arm64.swiftdoc</key>
@@ -124,7 +124,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			SxkYaPONrgrVySWxFSzpnhPkwtBnnU0mZYqLxpv9KLs=
+			c5ilzQOT7/BF6uwKVm6FnWr3ma6Pj/yE6Q6mut7rDU8=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
@@ -145,7 +145,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			oiyOEId78JC6uQEG89eFALRtx/p6l7COPE38H+8zGOA=
+			RYMR6d+c5wSVt3GlXg2i2A/LGN7dKDyaHW8mTWZ33qg=
 			</data>
 		</dict>
 		<key>Modules/AbtMobile.swiftmodule/x86_64.swiftdoc</key>
@@ -166,7 +166,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			oiyOEId78JC6uQEG89eFALRtx/p6l7COPE38H+8zGOA=
+			RYMR6d+c5wSVt3GlXg2i2A/LGN7dKDyaHW8mTWZ33qg=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
