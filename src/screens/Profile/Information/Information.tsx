@@ -53,7 +53,7 @@ export type InformationElement =
   | InformationHeading
   | InformationBulletPoint;
 
-const Info: React.FC<InformationProps> = ({
+const Information: React.FC<InformationProps> = ({
   children,
   title,
   informations,
@@ -61,20 +61,23 @@ const Info: React.FC<InformationProps> = ({
 }) => {
   const styles = useStyles();
 
-  const informationElements = informations.map((item) => {
+  const informationElements = informations.map((item, index) => {
     switch (item.type) {
       case 'heading':
-        return <Header text={item.text}></Header>;
+        return <Header text={item.text} key={index}></Header>;
       case 'text':
-        return <ThemeText>{item.text}</ThemeText>;
+        return <ThemeText key={index}>{item.text}</ThemeText>;
       case 'bullet-point':
         return (
-          <ThemeText style={styles.bullet}>{`\u2022 ${item.text}`}</ThemeText>
+          <ThemeText
+            style={styles.bullet}
+            key={index}
+          >{`\u2022 ${item.text}`}</ThemeText>
         );
       case 'link':
-        return <Link link={item}></Link>;
+        return <Link link={item} key={index}></Link>;
       case 'table':
-        return <Table item={item}></Table>;
+        return <Table item={item} key={index}></Table>;
     }
   });
   return (
@@ -101,7 +104,7 @@ const Table = ({item}: {item: Table}) => {
   const numberOfRows = item.data.length;
   const table = item.data.map((row, index) => {
     const isLastRow = index === numberOfRows - 1;
-    return <Row isLastRow={isLastRow} row={row}></Row>;
+    return <Row isLastRow={isLastRow} row={row} key={index}></Row>;
   });
   return <View style={styles.tableContainer}>{table}</View>;
 };
@@ -115,6 +118,7 @@ const Row = ({row, isLastRow}: {row: TableElement[]; isLastRow: boolean}) => {
       case 'tableHeading':
         return (
           <Cell
+            key={index}
             size="large"
             text={rowItem.text}
             last={isLastRowElement}
@@ -124,6 +128,7 @@ const Row = ({row, isLastRow}: {row: TableElement[]; isLastRow: boolean}) => {
       case 'tableData':
         return (
           <Cell
+            key={index}
             text={rowItem.text}
             last={isLastRowElement}
             bottom={isLastRow}
@@ -204,4 +209,4 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   },
 }));
 
-export default Info;
+export default Information;

@@ -1,7 +1,7 @@
 import {InformationTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import ticketingInfo from '../../../reference-data/ticketingInformation.json';
-import Info, {InformationElement} from './Information';
+import Information, {InformationElement} from './Information';
 
 export default function TicketingInformation() {
   const {t, language} = useTranslation();
@@ -9,9 +9,9 @@ export default function TicketingInformation() {
   const data = ticketingInfo[language];
 
   return (
-    <Info
+    <Information
       informations={data as InformationElement[]}
       title={t(InformationTexts.ticketing.title)}
-    ></Info>
+    ></Information>
   );
 }
