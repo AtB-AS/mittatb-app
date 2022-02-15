@@ -1,7 +1,7 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
-import React from 'react';
+import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
@@ -11,6 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useTicketState} from '@atb/tickets';
 import {ActiveTicketCard} from '@atb/screens/Ticketing/Tickets/TravelCardInformation';
 import Button from '@atb/components/button';
+import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 
 const themeColor: ThemeColor = 'background_accent';
 
@@ -30,8 +31,25 @@ export default function TravelTokenOnboarding({
   const styles = useThemeStyles();
   const focusRef = useFocusOnLoad();
 
+  const [page, setPage] = useState(0);
+
   const {customerProfile} = useTicketState();
   const hasTravelCard = !customerProfile?.travelcard;
+
+  const getPageContent = (page: number) => {
+    switch (page) {
+      case 0:
+        return <Info1 />;
+      case 1:
+        return hasTravelCard ? (
+          <TCardInfoBox travelCardId="1231232" />
+        ) : (
+          <PhoneInfoBox phoneName="phonename" />
+        );
+      default:
+        return <View />;
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -43,62 +61,83 @@ export default function TravelTokenOnboarding({
       />
 
       <ScrollView centerContent={true} contentContainerStyle={styles.mainView}>
-        <View accessible={true} accessibilityRole="header" ref={focusRef}>
-          <ThemeText
-            type={'body__primary--jumbo--bold'}
-            style={[styles.alignCenter, styles.marginVertical]}
-            color={themeColor}
-          >
-            {hasTravelCard
-              ? t(LoginTexts.assignTravelToken.tcardIsSet)
-              : t(LoginTexts.assignTravelToken.phoneIsSet)}
-          </ThemeText>
-        </View>
-        <View>
-          <ThemeText style={styles.description} color={themeColor}>
-            {hasTravelCard
-              ? t(LoginTexts.assignTravelToken.bringTcard)
-              : t(LoginTexts.assignTravelToken.bringPhone)}
-          </ThemeText>
-        </View>
-        {hasTravelCard && customerProfile?.travelcard?.id && (
-          <View style={styles.tcardContainer}>
-            <ActiveTicketCard
-              cardId={customerProfile.travelcard.id.toString()}
-              color="background_3"
-              type="large"
-            ></ActiveTicketCard>
-          </View>
-        )}
-        {!hasTravelCard && (
-          <PhoneInfoBox phoneName={'{Olas iPhone 15}'}></PhoneInfoBox>
-        )}
+        {getPageContent(page)}
+      </ScrollView>
+
+      <FullScreenFooter>
         <Button
           color={'primary_2'}
           style={styles.marginVertical}
           onPress={() => {
-            doAfterSubmit();
+            setPage(page + 1);
           }}
-          text={t(LoginTexts.assignTravelToken.ok)}
+          text="Neste"
         />
-      </ScrollView>
+      </FullScreenFooter>
     </View>
   );
 }
 
-type PhoneInfoBoxProps = {
-  phoneName: string;
-};
+function Info1(): JSX.Element {
+  return <ThemeText>Hva er et reisebevis?</ThemeText>;
+}
 
-export function PhoneInfoBox(props: PhoneInfoBoxProps): JSX.Element {
+function PhoneInfoBox({phoneName}: {phoneName: string}): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
   return (
-    <View style={styles.phoneInfoBox}>
-      <View style={styles.phoneLine}></View>
-      <View style={styles.phoneInfoBoxInner}>
-        <ThemeText type="heading__title">{props.phoneName}</ThemeText>
+    <View>
+      <View accessible={true} accessibilityRole="header">
+        <ThemeText
+          type={'body__primary--jumbo--bold'}
+          style={[styles.alignCenter, styles.marginVertical]}
+          color={themeColor}
+        >
+          {t(LoginTexts.assignTravelToken.phoneIsSet)}
+        </ThemeText>
+      </View>
+      <View>
+        <ThemeText style={styles.description} color={themeColor}>
+          {t(LoginTexts.assignTravelToken.bringPhone)}
+        </ThemeText>
+      </View>
+      <View style={styles.phoneInfoBox}>
+        <View style={styles.phoneLine}></View>
+        <View style={styles.phoneInfoBoxInner}>
+          <ThemeText type="heading__title">{phoneName}</ThemeText>
+        </View>
+      </View>
+    </View>
+  );
+}
+
+function TCardInfoBox({travelCardId}: {travelCardId: string}): JSX.Element {
+  const styles = useThemeStyles();
+  const {t} = useTranslation();
+
+  return (
+    <View>
+      <View accessible={true} accessibilityRole="header">
+        <ThemeText
+          type={'body__primary--jumbo--bold'}
+          style={[styles.alignCenter, styles.marginVertical]}
+          color={themeColor}
+        >
+          {t(LoginTexts.assignTravelToken.tcardIsSet)}
+        </ThemeText>
+      </View>
+      <View>
+        <ThemeText style={styles.description} color={themeColor}>
+          {t(LoginTexts.assignTravelToken.bringTcard)}
+        </ThemeText>
+      </View>
+      <View style={styles.tcardContainer}>
+        <ActiveTicketCard
+          cardId={travelCardId}
+          color="background_3"
+          type="large"
+        ></ActiveTicketCard>
       </View>
     </View>
   );

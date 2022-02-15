@@ -127,7 +127,7 @@ export function ActiveTicketCard(props: ActiveTicketCardProps): JSX.Element {
           style={[styles.tcardicon, styling.iconStyle]}
         >
           {'\n'}
-          {t(TicketsTexts.travelCardInformation.tCard)}
+          {t(TicketsTexts.travelCardInformation.cardType)}
         </ThemeText>
       </View>
     </View>
