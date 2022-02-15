@@ -49,6 +49,7 @@ runs:
           xcode-version: "13.1"
       - name: Get bundle cache
         uses: actions/cache@v2
+        if: ${{ inputs.use-build-cache }} == 'true'
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
