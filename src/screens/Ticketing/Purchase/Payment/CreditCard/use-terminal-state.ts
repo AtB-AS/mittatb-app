@@ -201,7 +201,7 @@ export default function useTerminalState(
     // for each type of resource, html, assets, etc
     // so we have a "loading guard" here
     if (initialLoadRef.current) {
-      initialLoadRef.current = true;
+      initialLoadRef.current = false;
       handleInitialLoadingError(event);
     } else if (!redirectToPaymentCaptureRef.current) {
       if (url.includes('/ticket/v2/payments/')) {
@@ -266,6 +266,7 @@ export default function useTerminalState(
   function resetOnLoadGuards() {
     initialLoadRef.current = true;
     redirectToPaymentCaptureRef.current = false;
+    verifyingBankIdRef.current = true;
   }
 
   function restartTerminal() {
