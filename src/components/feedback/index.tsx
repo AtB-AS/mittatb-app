@@ -199,12 +199,41 @@ export const Feedback = ({
     setQuestions(copiedState);
   };
 
-  const submitFeedback = () => {
+  const submitFeedbackWithAlternatives = () => {
     console.log('Submitting AssistantFeedback');
+    if (questions) {
+      const submitArray = questions.map((question) => ({
+        questionId: question.questionId,
+        checkedAlternatives: Array<number>(),
+      }));
+      submitArray.forEach((question) => {
+        const questionInQuestion = questions.find(
+          (questionToCompare) =>
+            questionToCompare.questionId === question.questionId,
+        );
+        questionInQuestion?.alternatives.forEach((alternative) => {
+          if (alternative.checked)
+            question.checkedAlternatives.push(alternative.alternativeId);
+        });
+      });
+      console.log('SubmitArray = ', submitArray);
+    } else {
+      console.warn('no feedback to be submitted, questions:', questions);
+    }
+
     setSubmitted(true);
   };
 
+  const uncheckAllAlternatives = () => {
+    questions?.forEach((question) => {
+      question.alternatives.forEach(
+        (alternative) => (alternative.checked = false),
+      );
+    });
+  };
+
   useEffect(() => {
+    uncheckAllAlternatives();
     setSelectedOpinion(Opinions.NotClickedYet);
     setSubmitted(false);
   }, [quayListData, tripPatterns]);
@@ -237,7 +266,7 @@ export const Feedback = ({
         <Section withBottomPadding>
           <Button
             text={language === 'nb' ? 'Send tilbakemelding' : 'Submit feedback'}
-            onPress={submitFeedback}
+            onPress={submitFeedbackWithAlternatives}
             mode="primary"
             color="secondary_1"
           />
