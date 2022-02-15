@@ -90,7 +90,7 @@ const LoginTexts = {
     mainButton: _('Godta og gå videre', 'Accept and continue'),
     wantToLoginButton: _('Jeg vil logge inn likevel', 'I want to sign in'),
   },
-  assignTravelToken: {
+  assignMobileToken: {
     tcardIsSet: _(
       'Ditt t:kort er satt som reisebevis',
       'Your t:card is set as travel token',

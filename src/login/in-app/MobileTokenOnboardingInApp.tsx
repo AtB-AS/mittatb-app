@@ -1,37 +1,37 @@
 import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
-import TravelTokenOnboarding from '@atb/login/TravelTokenOnboarding';
+import MobileTokenOnboarding from '@atb/login/MobileTokenOnboarding';
 import {RouteProp} from '@react-navigation/native';
 import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
 import {AfterLoginParams} from '@atb/login/types';
 
-export type TravelTokenOnboardingInAppRouteParams = {
+export type MobileTokenOnboardingInAppRouteParams = {
   afterLogin: AfterLoginParams;
   selectedDeviceId: number;
 };
 
-type TravelTokenOnboardingInAppRouteProps = RouteProp<
+type MobileTokenOnboardingInAppRouteProps = RouteProp<
   LoginInAppStackParams,
-  'TravelTokenOnboardingInApp'
+  'MobileTokenOnboardingInApp'
 >;
 
-export type TravelTokenOnboardingInAppProps = {
+export type MobileTokenOnboardingInAppProps = {
   navigation: StackNavigationProp<LoginInAppStackParams>;
-  route: TravelTokenOnboardingInAppRouteProps;
+  route: MobileTokenOnboardingInAppRouteProps;
 };
 
-export const TravelTokenOnboardingInApp = ({
+export const MobileTokenOnboardingInApp = ({
   navigation,
   route: {
     params: {afterLogin, selectedDeviceId},
   },
-}: TravelTokenOnboardingInAppProps) => {
+}: MobileTokenOnboardingInAppProps) => {
   const doAfterSubmit = () => {
     navigation.navigate(afterLogin.routeName as any, afterLogin.routeParams);
   };
 
   return (
-    <TravelTokenOnboarding
+    <MobileTokenOnboarding
       doAfterSubmit={doAfterSubmit}
       headerLeftButton={{
         type: 'close',

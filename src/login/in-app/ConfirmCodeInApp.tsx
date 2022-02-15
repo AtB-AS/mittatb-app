@@ -28,7 +28,7 @@ export const ConfirmCodeInApp = ({
     <ConfirmCode
       phoneNumber={phoneNumber}
       doAfterLogin={() =>
-        navigation.navigate('TravelTokenOnboardingInApp', {
+        navigation.navigate('MobileTokenOnboardingInApp', {
           afterLogin,
           selectedDeviceId: 0,
         })

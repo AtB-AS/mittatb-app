@@ -15,7 +15,7 @@ import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 
 const themeColor: ThemeColor = 'background_accent';
 
-export default function TravelTokenOnboarding({
+export default function MobileTokenOnboarding({
   doAfterSubmit,
   headerLeftButton,
   headerRightButton,
@@ -94,12 +94,12 @@ function PhoneInfoBox({phoneName}: {phoneName: string}): JSX.Element {
           style={[styles.alignCenter, styles.marginVertical]}
           color={themeColor}
         >
-          {t(LoginTexts.assignTravelToken.phoneIsSet)}
+          {t(LoginTexts.assignMobileToken.phoneIsSet)}
         </ThemeText>
       </View>
       <View>
         <ThemeText style={styles.description} color={themeColor}>
-          {t(LoginTexts.assignTravelToken.bringPhone)}
+          {t(LoginTexts.assignMobileToken.bringPhone)}
         </ThemeText>
       </View>
       <View style={styles.phoneInfoBox}>
@@ -124,12 +124,12 @@ function TCardInfoBox({travelCardId}: {travelCardId: string}): JSX.Element {
           style={[styles.alignCenter, styles.marginVertical]}
           color={themeColor}
         >
-          {t(LoginTexts.assignTravelToken.tcardIsSet)}
+          {t(LoginTexts.assignMobileToken.tcardIsSet)}
         </ThemeText>
       </View>
       <View>
         <ThemeText style={styles.description} color={themeColor}>
-          {t(LoginTexts.assignTravelToken.bringTcard)}
+          {t(LoginTexts.assignMobileToken.bringTcard)}
         </ThemeText>
       </View>
       <View style={styles.tcardContainer}>
