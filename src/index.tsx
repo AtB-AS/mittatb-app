@@ -27,13 +27,10 @@ import {BottomSheetProvider} from '@atb/components/bottom-sheet';
 import LocaleContextProvider from '@atb/LocaleProvider';
 import {setupConfig} from './setup';
 import {MobileTokenContextProvider} from '@atb/mobile-token';
-import {LogBox} from 'react-native';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
 trackAppState();
-
-LogBox.ignoreAllLogs();
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
