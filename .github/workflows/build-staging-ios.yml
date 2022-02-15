@@ -3,11 +3,9 @@ on:
   push:
     branches:
       - master
-      - cbrevik/detox-support
 
 jobs:
   build-ios:
-    if: 'false'
     name: Build iOS
     strategy:
       matrix:
@@ -53,8 +51,8 @@ jobs:
         if: steps.ipa-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/ios/replace-bundle.sh
         env:
-          IPA_FILE_NAME: "AtB.ipa"
-          APP_NAME: "AtB.app"
+          IPA_FILE_NAME: 'AtB.ipa'
+          APP_NAME: 'AtB.app'
 
       - name: Distribute to Firebase app distribution
         if: matrix.org == 'nfk'
