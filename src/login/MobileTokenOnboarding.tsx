@@ -12,6 +12,7 @@ import {useTicketState} from '@atb/tickets';
 import {ActiveTicketCard} from '@atb/screens/Ticketing/Tickets/TravelCardInformation';
 import Button from '@atb/components/button';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {useMobileContextState} from '@atb/mobile-token/MobileTokenContext';
 
 const themeColor: ThemeColor = 'background_accent';
 
@@ -35,24 +36,34 @@ export default function MobileTokenOnboarding({
 
   const {customerProfile} = useTicketState();
   const hasTravelCard = !customerProfile?.travelcard;
+  const {tokenStatus} = useMobileContextState();
 
   const getPageContent = (page: number) => {
     switch (page) {
       case 0:
         return <Info1 />;
       case 1:
-        return hasTravelCard ? (
-          <TCardInfoBox travelCardId="1231232" />
-        ) : (
-          <PhoneInfoBox phoneName="phonename" />
-        );
+        return <Info2 />;
+      case 2:
+        return <Info3 />;
+      case 3:
+        if (tokenStatus?.visualState === 'Token') {
+          return hasTravelCard ? (
+            <TCardInfoBox travelCardId="1231232" />
+          ) : (
+            <PhoneInfoBox phoneName="phonename" />
+          );
+        }
+        return <NoToken />;
+      case 4:
+        return <ChangeTokenInfo />;
       default:
         return <View />;
     }
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} ref={focusRef}>
       <FullScreenHeader
         leftButton={headerLeftButton}
         rightButton={headerRightButton}
@@ -61,25 +72,111 @@ export default function MobileTokenOnboarding({
       />
 
       <ScrollView centerContent={true} contentContainerStyle={styles.mainView}>
+        <View ref={focusRef}>
+          <ThemeText>test</ThemeText>
+        </View>
         {getPageContent(page)}
       </ScrollView>
 
       <FullScreenFooter>
         <Button
-          color={'primary_2'}
-          style={styles.marginVertical}
-          onPress={() => {
-            setPage(page + 1);
-          }}
-          text="Neste"
-        />
+          onPress={() => setPage(page - 1)}
+          text="tilbake"
+          mode="tertiary"
+        ></Button>
+        {page !== 4 ? (
+          <Button
+            color={'primary_2'}
+            style={styles.marginVertical}
+            onPress={() => {
+              setPage(page + 1);
+            }}
+            text="Neste"
+          />
+        ) : (
+          <>
+            <Button
+              color={'primary_2'}
+              style={styles.marginVertical}
+              onPress={() => {
+                setPage(page + 1);
+              }}
+              text="OK"
+            />
+            <Button
+              onPress={() => {}}
+              text="Endre reisebevis"
+              mode="secondary"
+              color="secondary_1"
+            ></Button>
+          </>
+        )}
       </FullScreenFooter>
     </View>
   );
 }
 
 function Info1(): JSX.Element {
-  return <ThemeText>Hva er et reisebevis?</ThemeText>;
+  const styles = useThemeStyles();
+  const {t} = useTranslation();
+
+  return (
+    <>
+      <ThemeText
+        type={'body__primary--jumbo--bold'}
+        style={[styles.alignCenter, styles.marginVertical]}
+        color={themeColor}
+      >
+        Hva er et reisebevis?
+      </ThemeText>
+      <ThemeText style={styles.description} color={themeColor}>
+        Et reisebevis kan være et t:kort eller en spesifikk mobiltelefon. Det er
+        du bruker for å kunne fremvise gyldig billett.
+      </ThemeText>
+    </>
+  );
+}
+
+function Info2(): JSX.Element {
+  const styles = useThemeStyles();
+  const {t} = useTranslation();
+
+  return (
+    <>
+      <ThemeText
+        type={'body__primary--jumbo--bold'}
+        style={[styles.alignCenter, styles.marginVertical]}
+        color={themeColor}
+      >
+        Mer fleksibel reisehverdag
+      </ThemeText>
+      <ThemeText style={styles.description} color={themeColor}>
+        Valg av reisebevis gir deg fleksibilitet til å velge det som passer deg.
+        Bare husk å alltid ha med deg ditt valgte reisebevis.
+      </ThemeText>
+    </>
+  );
+}
+
+function Info3(): JSX.Element {
+  const styles = useThemeStyles();
+  const {t} = useTranslation();
+
+  return (
+    <>
+      <ThemeText
+        type={'body__primary--jumbo--bold'}
+        style={[styles.alignCenter, styles.marginVertical]}
+        color={themeColor}
+      >
+        Hva med billettene mine?
+      </ThemeText>
+      <ThemeText style={styles.description} color={themeColor}>
+        Billettene dine er tilknyttet din profil, så om du mister eller bytter
+        reisebevis vil du fortsatt ha tilgang på billettene dine.
+      </ThemeText>
+    </>
+  );
 }
 
 function PhoneInfoBox({phoneName}: {phoneName: string}): JSX.Element {
@@ -138,6 +235,57 @@ function TCardInfoBox({travelCardId}: {travelCardId: string}): JSX.Element {
           color="background_3"
           type="large"
         ></ActiveTicketCard>
+      </View>
+    </View>
+  );
+}
+
+function NoToken(): JSX.Element {
+  const styles = useThemeStyles();
+  const {t} = useTranslation();
+
+  return (
+    <View>
+      <View accessible={true} accessibilityRole="header">
+        <ThemeText
+          type={'body__primary--jumbo--bold'}
+          style={[styles.alignCenter, styles.marginVertical]}
+          color={themeColor}
+        >
+          Det ser ut som det tar litt tid..
+        </ThemeText>
+      </View>
+      <View>
+        <ThemeText style={styles.description} color={themeColor}>
+          Vi forsøker å opprette et reisebevis til deg, men det ser ut som det
+          tar litt tid. Du kan sjekke om du har nettilgang og hvis ikke så vil
+          appen forsøke å opprette det neste gang du får tilgang.
+        </ThemeText>
+      </View>
+    </View>
+  );
+}
+
+function ChangeTokenInfo(): JSX.Element {
+  const styles = useThemeStyles();
+  const {t} = useTranslation();
+
+  return (
+    <View>
+      <View accessible={true} accessibilityRole="header">
+        <ThemeText
+          type={'body__primary--jumbo--bold'}
+          style={[styles.alignCenter, styles.marginVertical]}
+          color={themeColor}
+        >
+          Endre reisebevis
+        </ThemeText>
+      </View>
+      <View>
+        <ThemeText style={styles.description} color={themeColor}>
+          Du kan enkelt bytte reisebevis fra Mitt AtB i appen eller i
+          nettbutikken. Du kan ha ett aktivt reisebevis til enhver tid.
+        </ThemeText>
       </View>
     </View>
   );
