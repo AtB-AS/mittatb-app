@@ -2,7 +2,7 @@
 
 ## Authentication flow
 
-The customer must authenticate via Firebase Authentication, from the app, in order to initiate a purchase via Account Based Ticketing. The same login credentials can be used from both web and app, so if a user already exists, then the same data is accessible from all platforms.
+The customer must authenticate via Firebase Authentication, from the app, in order to initiate a purchase via Account Based Ticketing (ABT). The same login credentials can be used from both web and app, so if a user already exists, then the same data is accessible from all platforms.
 
 ### New user
 
