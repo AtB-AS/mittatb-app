@@ -108,32 +108,6 @@ const LoginTexts = {
       'Bring your phone when you are traveling',
     ),
     ok: _('OK', 'OK'),
-    selectOtherDevice: _('Velg en annen mobil', 'Select another device'),
-    readMore: {
-      text: _('Les mer om reisebevis på ', 'Read more about travel token at '),
-      url: _(
-        '[atb.no/reisebevis](https://atb.no/reisebevis)',
-        '[atb.no/reisebevis](https://atb.no/reisebevis)',
-      ),
-    },
-    added: _('Lagt til:', 'Added:'),
-  },
-  assignPhone: {
-    selectToken: _('Velg ditt reisebevis', 'Select your travel token'),
-    weFoundSeveral: _(
-      'Vi fant flere tilgjengelige mobilenheter',
-      'We found several available devices',
-    ),
-    added: _('Lagt til ', 'Added '),
-    addedA11yHint: _(
-      'Aktiver for å sette som aktivt reisebevis.',
-      'Select to set this mobile phone as active travel card.',
-    ),
-    selectDevice: _('Velg enhet', 'Select device'),
-    submitA11yHint: _(
-      'Aktiver for å lagre valg av reisebevis',
-      'Select to apply travel token selection',
-    ),
   },
 };
 export default orgSpecificTranslations(LoginTexts, {
