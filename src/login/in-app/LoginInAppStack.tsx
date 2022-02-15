@@ -17,16 +17,16 @@ import {
   ActiveTicketPromptInAppRouteParams,
 } from '@atb/login/in-app/ActiveTicketPrompt';
 import {
-  AssignTravelTokenInApp,
-  AssignTravelTokenInAppRouteParams,
-} from '@atb/login/in-app/AssignTravelTokenInApp';
+  TravelTokenOnboardingInApp,
+  TravelTokenOnboardingInAppRouteParams,
+} from '@atb/login/in-app/TravelTokenOnboardingInApp';
 
 export type LoginInAppStackParams = {
   LoginOnboardingInApp: LoginOnboardingInAppRouteParams;
   ActiveTicketPromptInApp: ActiveTicketPromptInAppRouteParams;
   PhoneInputInApp: PhoneInputInAppRouteParams;
   ConfirmCodeInApp: ConfirmCodeInAppRouteParams;
-  AssignTravelTokenInApp: AssignTravelTokenInAppRouteParams;
+  TravelTokenOnboardingInApp: TravelTokenOnboardingInAppRouteParams;
 };
 
 const Stack = createStackNavigator<LoginInAppStackParams>();
@@ -48,8 +48,8 @@ export default function LoginInAppStack() {
       <Stack.Screen name="PhoneInputInApp" component={PhoneInputInApp} />
       <Stack.Screen name="ConfirmCodeInApp" component={ConfirmCodeInApp} />
       <Stack.Screen
-        name="AssignTravelTokenInApp"
-        component={AssignTravelTokenInApp}
+        name="TravelTokenOnboardingInApp"
+        component={TravelTokenOnboardingInApp}
       />
     </Stack.Navigator>
   );

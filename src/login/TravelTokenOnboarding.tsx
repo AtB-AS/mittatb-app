@@ -14,7 +14,7 @@ import Button from '@atb/components/button';
 
 const themeColor: ThemeColor = 'background_accent';
 
-export default function AssignTravelToken({
+export default function TravelTokenOnboarding({
   doAfterSubmit,
   headerLeftButton,
   headerRightButton,
