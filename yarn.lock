@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@atb-as/generate-assets@^2.4.3":
-  version "2.4.3"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-2.4.3.tgz#b8f3a2dec4d7cd14742e70c7a2733862a745c97a"
-  integrity sha512-1KM1eC9jCz+fDtCYC98nXzERMjc+zc3gxgTJ7zYpp5HD5Q0fnzT9n8QRB7mhg4vXPfad/2AS5TOY0Rmno9Km6g==
+"@atb-as/generate-assets@^2.4.4":
+  version "2.4.4"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-2.4.4.tgz#4f3ef89b1f6c7ee97cc298d184c08850b7a19624"
+  integrity sha512-WWvs2UrubTX7YDgx845+Nz+jGQ8jRYPBZBtHXeatPDAqJ63UNhDt3OvowtT9dKPBVDv4LYSSvWf0f1jCAdqy0w==
   dependencies:
     commander "^8.3.0"
     fast-glob "^3.2.7"
@@ -2280,6 +2280,11 @@
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-6.1.0.tgz#a7dd574bc5b20ecad1e6ae6494abffa2e0a4949e"
   integrity sha512-SrO+EJYR1FhGqCoKSkvddIKB0waySXapW4inW2IQgpjBYCdCTJyKFLlvZHTVg/3N0vodR4WBGdKraECl9aVS5Q==
+
+"@react-native-community/slider@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-4.2.0.tgz#47fa146b2f2c92e45c35c154b1df8a66e71b8048"
+  integrity sha512-7LUDk63cbkDgmTqHBWn0pXzwF/VY9I3wDTnLWNehgQu7GlluHDn02qHgINxS9dRoG96JOqLFxRxnCEKkg5zcmQ==
 
 "@react-native-firebase/analytics@10.1.0":
   version "10.1.0"
