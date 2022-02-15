@@ -140,7 +140,7 @@ type FeedbackProps = {
   quayListData?: SectionListData<Quay>[];
   isSearching?: boolean;
   isEmptyResult?: boolean;
-  feedbackQuestionsContext?: FeedbackQuestionsContext;
+  feedbackQuestionsContext: FeedbackQuestionsContext;
 };
 
 export const Feedback = ({
@@ -153,7 +153,7 @@ export const Feedback = ({
   const styles = useFeedbackStyles();
   const {language} = useTranslation();
   const {theme} = useTheme();
-  const {findQuestions} = useFeedbackQuestionsState();
+  const {getCategories} = useFeedbackQuestionsState();
 
   const [submitted, setSubmitted] = useState(false);
   const [selectedOpinion, setSelectedOpinion] = useState(
@@ -162,11 +162,12 @@ export const Feedback = ({
   const [questions, setQuestions] = useState<Array<Question>>();
 
   useEffect(() => {
-    const fetchedQuestions = feedbackQuestionsContext
-      ? findQuestions(feedbackQuestionsContext)
-      : undefined;
-    setQuestions(fetchedQuestions);
-  }, []);
+    const fetchedQuestions = getCategories(feedbackQuestionsContext)?.find(
+      (category) => category.questionsCategory === feedbackQuestionsContext,
+    );
+
+    setQuestions(fetchedQuestions?.questionArray);
+  }, [getCategories, feedbackQuestionsContext]);
 
   type handleAnswerPressProps = {
     questionId: number;
@@ -208,9 +209,13 @@ export const Feedback = ({
     setSubmitted(false);
   }, [quayListData, tripPatterns]);
 
+  console.log(
+    `Submitted ${submitted}, isSearching ${isSearching}, isEmptyResult ${isEmptyResult}, questions: ${questions}`,
+  );
+
   if (submitted) return <SubmittedComponent />;
 
-  if (!questions || isSearching || isEmptyResult) return null;
+  if (!questions || isEmptyResult) return null;
 
   if (quayListData || tripPatterns)
     return (

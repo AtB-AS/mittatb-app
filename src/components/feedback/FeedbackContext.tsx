@@ -36,13 +36,13 @@ export type Alternative = {
 };
 
 export type FeedbackQuestionsContextState = {
-  findQuestions: (
+  getCategories: (
     context: FeedbackQuestionsContext,
-  ) => Array<Question> | undefined;
+  ) => Array<Category> | undefined;
 };
 
 const defaultFeedbackQuestionsState = {
-  findQuestions: () => undefined,
+  getCategories: () => undefined,
 };
 
 const FeedbackQuestionsContext = createContext<FeedbackQuestionsContextState>(
@@ -50,7 +50,7 @@ const FeedbackQuestionsContext = createContext<FeedbackQuestionsContextState>(
 );
 
 const FeedbackQuestionsProvider: React.FC = ({children}) => {
-  const [categories, setCategories] = useState<Array<Category> | undefined>();
+  const [categories, setCategories] = useState<Array<Category>>();
   const [error, setError] = useState(false);
 
   useEffect(
@@ -76,6 +76,7 @@ const FeedbackQuestionsProvider: React.FC = ({children}) => {
               },
             ];
 
+            console.log('Setting newQuestions:', newQuestions);
             setCategories(newQuestions);
           },
           (err) => {
@@ -86,20 +87,15 @@ const FeedbackQuestionsProvider: React.FC = ({children}) => {
     [],
   );
 
-  const findQuestions = useCallback(
-    (context: FeedbackQuestionsContext) =>
-      categories
-        ? categories.filter(
-            (category) => category.questionsCategory === context,
-          )[0].questionArray
-        : undefined,
+  const getCategories = useCallback(
+    (context: FeedbackQuestionsContext) => categories,
     [categories],
   );
 
   return (
     <FeedbackQuestionsContext.Provider
       value={{
-        findQuestions,
+        getCategories,
       }}
     >
       {children}
