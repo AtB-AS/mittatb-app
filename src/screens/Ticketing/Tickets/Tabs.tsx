@@ -150,7 +150,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
 
 export const ActiveTickets: React.FC<Props> = () => {
   const {
-    activeReservations,
+    reservations,
     fareContracts,
     isRefreshingTickets,
     refreshTickets,
@@ -179,7 +179,7 @@ export const ActiveTickets: React.FC<Props> = () => {
   return (
     <View style={styles.container}>
       <TicketsScrollView
-        reservations={activeReservations}
+        reservations={reservations}
         fareContracts={activeFareContracts}
         isRefreshingTickets={isRefreshingTickets}
         refreshTickets={refreshTickets}

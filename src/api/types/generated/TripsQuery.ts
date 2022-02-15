@@ -79,9 +79,12 @@ export type TripsQuery = {
           };
         };
         serviceJourney?: {id: string};
-        interchangeTo?: {guaranteed?: boolean; ToServiceJourney?: {id: string}};
+        interchangeTo?: {guaranteed?: boolean; toServiceJourney?: {id: string}};
         pointsOnLink?: {points?: string; length?: number};
-        intermediateEstimatedCalls: Array<{quay?: {name: string; id: string}}>;
+        intermediateEstimatedCalls: Array<{
+          date?: any;
+          quay?: {name: string; id: string};
+        }>;
         authority?: {id: string};
       }>;
     }>;

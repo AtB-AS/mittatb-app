@@ -10,7 +10,8 @@ type StopPlaceViewProps = {
   stopPlace: Place;
   navigateToQuay: (quay: Quay) => void;
   navigateToDetails: (
-    serviceJourneyId?: string,
+    serviceJourneyId: string,
+    serviceDate: string,
     date?: string,
     fromQuayId?: string,
   ) => void;

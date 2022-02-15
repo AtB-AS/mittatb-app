@@ -6,6 +6,7 @@ export type StopPlaceQuayDeparturesQuery = {
     quays?: Array<{
       id: string;
       estimatedCalls: Array<{
+        date?: any;
         expectedDepartureTime?: any;
         aimedDepartureTime?: any;
         realtime?: boolean;

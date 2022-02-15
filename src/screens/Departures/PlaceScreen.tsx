@@ -45,7 +45,8 @@ export default function PlaceScreen({
   });
 
   const navigateToDetails = (
-    serviceJourneyId?: string,
+    serviceJourneyId: string,
+    serviceDate: string,
     date?: string,
     fromQuayId?: string,
   ) => {
@@ -54,6 +55,7 @@ export default function PlaceScreen({
       items: [
         {
           serviceJourneyId,
+          serviceDate,
           date,
           fromQuayId,
         },
