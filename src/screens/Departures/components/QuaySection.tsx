@@ -89,13 +89,15 @@ export default function QuaySection({
                     ? 'bottom'
                     : undefined
                 }
-                onPress={() =>
-                  navigateToDetails(
-                    item.serviceJourney?.id,
-                    item.expectedDepartureTime,
-                    item.quay?.id,
-                  )
-                }
+                onPress={() => {
+                  if (item?.serviceJourney)
+                    navigateToDetails(
+                      item.serviceJourney?.id,
+                      item.date,
+                      item.expectedDepartureTime,
+                      item.quay?.id,
+                    );
+                }}
                 accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
               >
                 <EstimatedCallItem departure={item}></EstimatedCallItem>
