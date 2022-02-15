@@ -7,9 +7,9 @@ import {Linking, ScrollView, TouchableOpacity, View} from 'react-native';
 
 type Table = {
   type: 'table';
-  data: TableElements[][];
+  data: TableElement[][];
 };
-type TableElements = TableData | TableHeading;
+type TableElement = TableData | TableHeading;
 
 type TableData = {
   type: 'tableData';
@@ -101,10 +101,18 @@ const Table = ({item}: {item: Table}) => {
   const numberOfRows = item.data.length;
   const table = item.data.map((row, index) => {
     const isLastRow = index === numberOfRows - 1;
-    const columnsInRow = row.length;
-    const rowItems = row.map((rowItem, index) => {
-      const isLastRowElement = index === columnsInRow - 1;
-      if (rowItem.type === 'tableHeading') {
+    return <Row isLastRow={isLastRow} row={row}></Row>;
+  });
+  return <View style={styles.tableContainer}>{table}</View>;
+};
+
+const Row = ({row, isLastRow}: {row: TableElement[]; isLastRow: boolean}) => {
+  const styles = useStyles();
+  const columnsInRow = row.length;
+  const rowItems = row.map((rowItem, index) => {
+    const isLastRowElement = index === columnsInRow - 1;
+    switch (rowItem.type) {
+      case 'tableHeading':
         return (
           <Cell
             size="large"
@@ -113,8 +121,7 @@ const Table = ({item}: {item: Table}) => {
             bottom={isLastRow}
           />
         );
-      }
-      if (rowItem.type === 'tableData') {
+      case 'tableData':
         return (
           <Cell
             text={rowItem.text}
@@ -122,11 +129,9 @@ const Table = ({item}: {item: Table}) => {
             bottom={isLastRow}
           />
         );
-      }
-    });
-    return <View style={styles.tableRow}>{rowItems}</View>;
+    }
   });
-  return <View style={styles.tableContainer}>{table}</View>;
+  return <View style={styles.tableRow}>{rowItems}</View>;
 };
 
 const Link = ({link}: {link: InformationLink}) => {
@@ -169,6 +174,7 @@ const Cell = ({
     </View>
   );
 };
+
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     backgroundColor: theme.colors.background_1.backgroundColor,
