@@ -7,5 +7,6 @@ svgProps:
   fill: 'black'
 svgoConfig:
   plugins:
-    - removeAttrs:
+    - name: removeAttrs
+      params:
         attrs: '.*:(fill|stroke):(black|#000)'

@@ -1,4 +1,5 @@
 import {translation as _} from '../commons';
+import orgSpecificTranslations from '../utils';
 
 const ScreenHeaderTexts = {
   headerButton: {
@@ -30,4 +31,12 @@ const ScreenHeaderTexts = {
   },
 };
 
-export default ScreenHeaderTexts;
+export default orgSpecificTranslations(ScreenHeaderTexts, {
+  nfk: {
+    headerButton: {
+      chat: {
+        a11yHint: _('Kontakt Reis Nordland', 'Contact Reis Nordland'),
+      },
+    },
+  },
+});

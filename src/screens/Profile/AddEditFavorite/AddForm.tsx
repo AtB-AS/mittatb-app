@@ -1,6 +1,6 @@
-import SvgConfirm from '@atb/assets/svg/icons/actions/Confirm';
-import SvgDelete from '@atb/assets/svg/icons/actions/Delete';
-import {MapPointPin} from '@atb/assets/svg/icons/places';
+import SvgConfirm from '@atb/assets/svg/mono-icons/actions/Confirm';
+import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
+import {MapPointPin} from '@atb/assets/svg/mono-icons/places';
 import Button, {ButtonGroup} from '@atb/components/button';
 import MessageBox from '@atb/components/message-box';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';

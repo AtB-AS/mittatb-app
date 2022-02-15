@@ -1,7 +1,7 @@
 import {CancelToken, isCancel, searchTrip} from '@atb/api';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {Swap} from '@atb/assets/svg/icons/actions';
-import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
+import {Swap} from '@atb/assets/svg/mono-icons/actions';
+import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import Button from '@atb/components/button';
 import DisappearingHeader from '@atb/components/disappearing-header';
@@ -569,12 +569,10 @@ function useLocations(
     ],
   );
 
-  const searchedFromLocation = useLocationSearchValue<AssistantRouteProp>(
-    'fromLocation',
-  );
-  const searchedToLocation = useLocationSearchValue<AssistantRouteProp>(
-    'toLocation',
-  );
+  const searchedFromLocation =
+    useLocationSearchValue<AssistantRouteProp>('fromLocation');
+  const searchedToLocation =
+    useLocationSearchValue<AssistantRouteProp>('toLocation');
 
   return useUpdatedLocation(
     searchedFromLocation,

@@ -6,7 +6,7 @@ import {EnrollmentTexts, useTranslation} from '@atb/translations';
 import MessageBox, {MessageType} from '@atb/components/message-box';
 import useEnroll from './use-enroll';
 import TextInput from '@atb/components/sections/text-input';
-import {Confirm} from '@atb/assets/svg/icons/actions';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export default function Splash() {

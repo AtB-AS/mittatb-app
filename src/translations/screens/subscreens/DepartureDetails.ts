@@ -1,3 +1,4 @@
+import orgSpecificTranslations from '@atb/translations/utils';
 import {translation as _} from '../../commons';
 const DepartureDetailsTexts = {
   header: {
@@ -17,4 +18,13 @@ const DepartureDetailsTexts = {
     noAlighting: _('Ingen avstigning', 'No disembarking'),
   },
 };
-export default DepartureDetailsTexts;
+export default orgSpecificTranslations(DepartureDetailsTexts, {
+  nfk: {
+    messages: {
+      ticketsWeDontSell: _(
+        'Reisen inneholder reisetilbud som krever billett fra andre selskap enn Reis Nordland',
+        'This journey requires tickets from providers other than Reis Nordland',
+      ),
+    },
+  },
+});

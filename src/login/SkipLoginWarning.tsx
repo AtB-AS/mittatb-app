@@ -5,7 +5,7 @@ import React from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
-import {ArrowRight} from '@atb/assets/svg/icons/navigation';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {StackNavigationProp} from '@react-navigation/stack';

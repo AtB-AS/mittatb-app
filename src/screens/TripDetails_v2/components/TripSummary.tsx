@@ -1,5 +1,8 @@
 import {TripPattern} from '@atb/api/types/trips';
-import {Duration, WalkingPerson} from '@atb/assets/svg/icons/transportation';
+import {
+  Duration,
+  WalkingPerson,
+} from '@atb/assets/svg/mono-icons/transportation';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 

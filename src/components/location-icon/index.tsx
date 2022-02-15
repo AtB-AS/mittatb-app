@@ -1,11 +1,11 @@
-import {MapPointPin} from '@atb/assets/svg/icons/places';
+import {MapPointPin} from '@atb/assets/svg/mono-icons/places';
 import {
   BusSide,
   FerrySide,
   PlaneSide,
   TrainSide,
   TramSide,
-} from '@atb/assets/svg/icons/transportation';
+} from '@atb/assets/svg/mono-icons/transportation';
 import {Location} from '@atb/favorites/types';
 import {FeatureCategory} from '@atb/sdk';
 import React from 'react';

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {RefreshControl, SectionList, SectionListData} from 'react-native';
 import {Quay} from '@atb/api/types/departures';
 import {SearchTime} from './NearbyPlaces';
@@ -18,13 +18,16 @@ export type QuayViewProps = {
     date?: string,
     fromQuayId?: string,
   ) => void;
+  searchTime: SearchTime;
+  setSearchTime: (searchTime: SearchTime) => void;
 };
 
-export default function QuayView({quay, navigateToDetails}: QuayViewProps) {
-  const [searchTime, setSearchTime] = useState<SearchTime>({
-    option: 'now',
-    date: new Date().toISOString(),
-  });
+export default function QuayView({
+  quay,
+  navigateToDetails,
+  searchTime,
+  setSearchTime,
+}: QuayViewProps) {
   const {state, refresh} = useQuayData(
     quay,
     searchTime?.option !== 'now' ? searchTime.date : undefined,
@@ -38,8 +41,6 @@ export default function QuayView({quay, navigateToDetails}: QuayViewProps) {
 
   return (
     <SectionList
-      stickySectionHeadersEnabled={true}
-      stickyHeaderIndices={[0]}
       ListHeaderComponent={
         <DateNavigation
           searchTime={searchTime}

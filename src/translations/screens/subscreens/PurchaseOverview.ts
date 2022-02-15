@@ -1,4 +1,5 @@
 import {translation as _} from '../../commons';
+import orgSpecificTranslations from '@atb/translations/utils';
 
 const PurchaseOverviewTexts = {
   header: {
@@ -50,4 +51,11 @@ const PurchaseOverviewTexts = {
     'When traveling, you need to bring the t:card registered on your profile.',
   ),
 };
-export default PurchaseOverviewTexts;
+export default orgSpecificTranslations(PurchaseOverviewTexts, {
+  nfk: {
+    warning: _(
+      'Når du er ute og reiser må du ha med reisekortet som er registrert på din profil.',
+      'When traveling, you need to bring the travelcard registered on your profile.',
+    ),
+  },
+});

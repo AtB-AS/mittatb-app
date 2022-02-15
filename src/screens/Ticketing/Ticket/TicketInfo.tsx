@@ -16,12 +16,12 @@ import React, {ReactElement} from 'react';
 import {View} from 'react-native';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
 import {tariffZonesSummary} from '@atb/screens/Ticketing/Purchase/TariffZones';
-import {BusSide, Wait} from '@atb/assets/svg/icons/transportation';
+import {BusSide, Wait} from '@atb/assets/svg/mono-icons/transportation';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
-import {AddTicket, InvalidTicket} from '@atb/assets/svg/icons/ticketing';
+import {AddTicket, InvalidTicket} from '@atb/assets/svg/mono-icons/ticketing';
 import {screenReaderPause} from '@atb/components/accessible-text';
-import {Warning} from '@atb/assets/svg/situations';
+import {Warning} from '@atb/assets/svg/color/situations';
 
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
@@ -157,7 +157,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
         <View style={styles.tCardWarning}>
           <ThemeIcon svg={Warning} style={styles.tCardWarningIcon}></ThemeIcon>
           <ThemeText isMarkdown={true}>
-            {t(TicketTexts.ticketInfo.tCardIsActive)}
+            {t(TicketTexts.ticketInfo.travelcardIsActive)}
           </ThemeText>
         </View>
       )}

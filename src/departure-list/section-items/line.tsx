@@ -5,10 +5,10 @@ import {
   QuayInfo,
   StopPlaceInfo,
 } from '@atb/api/departures/types';
-import SvgFavorite from '@atb/assets/svg/icons/places/Favorite';
-import SvgFavoriteFill from '@atb/assets/svg/icons/places/FavoriteFill';
-import SvgFavoriteSemi from '@atb/assets/svg/icons/places/FavoriteSemi';
-import Warning from '@atb/assets/svg/situations/Warning';
+import SvgFavorite from '@atb/assets/svg/mono-icons/places/Favorite';
+import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
+import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
+import Warning from '@atb/assets/svg/color/situations/Warning';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import Button from '@atb/components/button';
 import {
@@ -338,11 +338,8 @@ type FavoriteStarProps = {
   quay: QuayInfo;
 };
 function ToggleFavoriteDepartureButton({line, stop, quay}: FavoriteStarProps) {
-  const {
-    getFavoriteDeparture,
-    addFavoriteDeparture,
-    removeFavoriteDeparture,
-  } = useFavorites();
+  const {getFavoriteDeparture, addFavoriteDeparture, removeFavoriteDeparture} =
+    useFavorites();
   const {t} = useTranslation();
   const styles = useItemStyles();
   const closeRef = useRef(null);

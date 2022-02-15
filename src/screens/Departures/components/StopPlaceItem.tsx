@@ -4,7 +4,7 @@ import React from 'react';
 import {View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import * as Sections from '@atb/components/sections';
-import {BusSide} from '@atb/assets/svg/icons/transportation';
+import {BusSide} from '@atb/assets/svg/mono-icons/transportation';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import {Place, StopPlacePosition} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
@@ -25,18 +25,32 @@ export default function StopPlaceItem({
   const place = stopPlacePosition.node?.place;
   if (!place) return <></>;
 
+  const description =
+    place.description || t(DeparturesTexts.stopPlaceList.stopPlace);
+  const distance = stopPlacePosition.node?.distance?.toFixed(0);
+
   return (
     <Sections.Section withPadding>
-      <Sections.GenericClickableItem onPress={() => onPress(place)}>
+      <Sections.GenericClickableItem
+        onPress={() => onPress(place)}
+        accessibilityLabel={`${place.name}, ${description}, ${
+          distance ? distance + 'm' : ''
+        }`}
+        accessibilityHint={t(
+          DeparturesTexts.stopPlaceList.a11yStopPlaceItemHint,
+        )}
+      >
         <View style={styles.stopPlaceContainer}>
           <View style={styles.stopPlaceInfo}>
             <ThemeText type="heading__component">{place.name}</ThemeText>
             <ThemeText type="body__secondary" style={styles.stopDescription}>
-              {place.description || t(DeparturesTexts.stopPlaceList.stopPlace)}
+              {description}
             </ThemeText>
-            <ThemeText type="body__secondary" color="secondary">
-              {stopPlacePosition.node?.distance?.toFixed(0) + ' m'}
-            </ThemeText>
+            {distance && (
+              <ThemeText type="body__secondary" color="secondary">
+                {distance + ' m'}
+              </ThemeText>
+            )}
           </View>
           {place.transportMode?.map((mode) => (
             <ThemeIcon

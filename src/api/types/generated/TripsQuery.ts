@@ -5,6 +5,10 @@ export type TripsQueryVariables = Types.Exact<{
   arriveBy: Types.Scalars['Boolean'];
   when?: Types.Maybe<Types.Scalars['DateTime']>;
   cursor?: Types.Maybe<Types.Scalars['String']>;
+  transferPenalty?: Types.Maybe<Types.Scalars['Int']>;
+  waitReluctance?: Types.Maybe<Types.Scalars['Float']>;
+  walkReluctance?: Types.Maybe<Types.Scalars['Float']>;
+  walkSpeed?: Types.Maybe<Types.Scalars['Float']>;
 }>;
 
 export type TripsQuery = {

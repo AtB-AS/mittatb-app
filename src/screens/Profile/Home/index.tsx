@@ -45,7 +45,7 @@ type ProfileScreenProps = {
 };
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
-  const {enable_i18n, privacy_policy_url} = useRemoteConfig();
+  const {enable_i18n, privacy_policy_url, enable_ticketing} = useRemoteConfig();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
@@ -53,9 +53,8 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   const config = useLocalConfig();
 
   const {fareContracts, customerProfile} = useTicketState();
-  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
-    fareContracts,
-  );
+  const activeFareContracts =
+    filterActiveOrCanBeUsedFareContracts(fareContracts);
   const hasActiveFareContracts = activeFareContracts.length > 0;
 
   const {
@@ -160,10 +159,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               onPress={() => navigation.navigate('Language')}
             />
           )}
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.settings.linkItems.enrollment.label)}
-            onPress={() => navigation.navigate('Enrollment')}
-          />
         </Sections.Section>
         <Sections.Section withPadding>
           <Sections.GenericItem>
@@ -191,6 +186,10 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               });
               setPreference({newDepartures});
             }}
+          />
+          <Sections.LinkItem
+            text={t(ProfileTexts.sections.settings.linkItems.enrollment.label)}
+            onPress={() => navigation.navigate('Enrollment')}
           />
         </Sections.Section>
 
@@ -266,31 +265,35 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           />
         </Sections.Section>
 
-        <Sections.Section withPadding>
-          <Sections.HeaderItem
-            text={t(ProfileTexts.sections.information.heading)}
-          />
-          <Sections.LinkItem
-            text={t(
-              ProfileTexts.sections.information.linkItems.ticketing.label,
-            )}
-            onPress={() => navigation.navigate('TicketingInformation')}
-          />
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.information.linkItems.payment.label)}
-            onPress={() => navigation.navigate('PaymentInformation')}
-          />
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.information.linkItems.terms.label)}
-            onPress={() => navigation.navigate('TermsInformation')}
-          />
-          <Sections.LinkItem
-            text={t(
-              ProfileTexts.sections.information.linkItems.inspection.label,
-            )}
-            onPress={() => navigation.navigate('TicketInspectionInformation')}
-          />
-        </Sections.Section>
+        {enable_ticketing && (
+          <Sections.Section withPadding>
+            <Sections.HeaderItem
+              text={t(ProfileTexts.sections.information.heading)}
+            />
+            <Sections.LinkItem
+              text={t(
+                ProfileTexts.sections.information.linkItems.ticketing.label,
+              )}
+              onPress={() => navigation.navigate('TicketingInformation')}
+            />
+            <Sections.LinkItem
+              text={t(
+                ProfileTexts.sections.information.linkItems.payment.label,
+              )}
+              onPress={() => navigation.navigate('PaymentInformation')}
+            />
+            <Sections.LinkItem
+              text={t(ProfileTexts.sections.information.linkItems.terms.label)}
+              onPress={() => navigation.navigate('TermsInformation')}
+            />
+            <Sections.LinkItem
+              text={t(
+                ProfileTexts.sections.information.linkItems.inspection.label,
+              )}
+              onPress={() => navigation.navigate('TicketInspectionInformation')}
+            />
+          </Sections.Section>
+        )}
 
         {(!!JSON.parse(IS_QA_ENV || 'false') ||
           __DEV__ ||
