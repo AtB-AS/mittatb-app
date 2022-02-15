@@ -266,7 +266,7 @@ export default function useTerminalState(
   function resetOnLoadGuards() {
     initialLoadRef.current = true;
     redirectToPaymentCaptureRef.current = false;
-    verifyingBankIdRef.current = true;
+    verifyingBankIdRef.current = false;
   }
 
   function restartTerminal() {
