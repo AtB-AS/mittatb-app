@@ -9,15 +9,15 @@ type Table = {
   type: 'table';
   data: TableElements[][];
 };
-type TableElements = TableData | TableHeader;
+type TableElements = TableData | TableHeading;
 
 type TableData = {
   type: 'tableData';
   text: string;
 };
 
-type TableHeader = {
-  type: 'tableHeader';
+type TableHeading = {
+  type: 'tableHeading';
   text: string;
 };
 
@@ -46,7 +46,7 @@ type InformationProps = {
   title: string;
 };
 
-type InformationElement =
+export type InformationElement =
   | Table
   | InformationText
   | InformationLink
@@ -74,6 +74,7 @@ const Info: React.FC<InformationProps> = ({
       case 'link':
         return <Link link={item}></Link>;
       case 'table':
+        return <Table item={item}></Table>;
     }
   });
   return (
@@ -103,7 +104,7 @@ const Table = ({item}: {item: Table}) => {
     const columnsInRow = row.length;
     const rowItems = row.map((rowItem, index) => {
       const isLastRowElement = index === columnsInRow - 1;
-      if (rowItem.type === 'tableHeader') {
+      if (rowItem.type === 'tableHeading') {
         return (
           <Cell
             size="large"
