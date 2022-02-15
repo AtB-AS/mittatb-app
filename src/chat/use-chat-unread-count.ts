@@ -11,6 +11,11 @@ export default function useChatUnreadCount() {
   }, []);
 
   useEffect(() => {
+    if (!enable_intercom) {
+      setCount(0);
+      return;
+    }
+
     let mounted = true;
     async function getInitialUnreadCount() {
       const initialCount = await Intercom.getUnreadConversationCount();
@@ -28,10 +33,7 @@ export default function useChatUnreadCount() {
         callback,
       );
     };
-  }, []);
+  }, [enable_intercom]);
 
-  if (!enable_intercom) {
-    return 0;
-  }
   return count;
 }
