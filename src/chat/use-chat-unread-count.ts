@@ -1,14 +1,21 @@
 import Intercom from 'react-native-intercom';
 import {useEffect, useState, useCallback} from 'react';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 export default function useChatUnreadCount() {
   const [count, setCount] = useState(0);
+  const {enable_intercom} = useRemoteConfig();
 
   const callback = useCallback(({count}: {count: number}) => {
     setCount(count);
   }, []);
 
   useEffect(() => {
+    if (!enable_intercom) {
+      setCount(0);
+      return;
+    }
+
     let mounted = true;
     async function getInitialUnreadCount() {
       const initialCount = await Intercom.getUnreadConversationCount();
@@ -26,7 +33,7 @@ export default function useChatUnreadCount() {
         callback,
       );
     };
-  }, []);
+  }, [enable_intercom]);
 
   return count;
 }
