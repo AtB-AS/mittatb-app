@@ -12,9 +12,10 @@ import {Text, View} from 'react-native';
 
 import ResultItem from '@atb/screens/Assistant_v2/ResultItem';
 import {TripPattern} from '@atb/api/types/trips';
+import {TripPatternWithKey} from '@atb/screens/Assistant_v2/types';
 
 type Props = {
-  tripPatterns: TripPattern[] | null;
+  tripPatterns: TripPatternWithKey[];
   showEmptyScreen: boolean;
   isEmptyResult: boolean;
   isSearching: boolean;
@@ -56,13 +57,14 @@ const Results: React.FC<Props> = ({
   }, [errorType]);
 
   const allSameDay = useMemo(
-    () => isSeveralDays((tripPatterns ?? []).map((i) => i.expectedStartTime)),
+    () => isSeveralDays(tripPatterns.map((i) => i.expectedStartTime)),
     [tripPatterns],
   );
 
   if (showEmptyScreen) {
     return null;
   }
+
   if (errorType) {
     return (
       <View style={styles.container}>
@@ -112,7 +114,7 @@ const Results: React.FC<Props> = ({
   return (
     <View style={styles.container}>
       {tripPatterns?.map((tripPattern, i) => (
-        <Fragment key={generateKeyFromTripPattern(tripPattern)}>
+        <Fragment key={tripPattern.key}>
           <DayLabel
             departureTime={tripPattern.expectedStartTime}
             previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
@@ -129,17 +131,6 @@ const Results: React.FC<Props> = ({
     </View>
   );
 };
-
-function generateKeyFromTripPattern(tripPattern: TripPattern) {
-  const id =
-    tripPattern.compressedQuery +
-    tripPattern.legs
-      .map((leg) => {
-        return leg.toPlace.longitude.toString() + leg.toPlace.latitude;
-      })
-      .join('-');
-  return id;
-}
 
 export default Results;
 
