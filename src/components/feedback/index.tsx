@@ -215,7 +215,7 @@ export const Feedback = ({
 
   if (submitted) return <SubmittedComponent />;
 
-  if (!questions || isEmptyResult) return null;
+  if (!questions || isSearching || isEmptyResult) return null;
 
   if (quayListData || tripPatterns)
     return (
