@@ -19,7 +19,7 @@ const SubmittedComponent = () => {
   const {language} = useTranslation();
 
   return (
-    <ThemeText type="body__primary--bold">
+    <ThemeText type="body__primary--bold" style={styles.centerText}>
       {language === 'nb'
         ? 'Takk for tilbakemeldingen!'
         : 'Thanks for the feedback!'}
