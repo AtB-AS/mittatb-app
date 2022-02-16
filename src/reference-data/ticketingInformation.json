@@ -1,7 +1,7 @@
 {
     "nb": [
         {
-            "text": "I dag kan du kjøpe enkeltbillett til buss og trikk, men på sikt vil du finne alle billetter i appen. Billettene gjelder kun på kollektivtransport som er en del av det offentlige kollektivtilbudet i Trøndelag fylke.\n",
+            "text": "I dag kan du kjøpe enkeltbillett til buss og trikk, men på sikt vil du finne alle billetter i appen.\n",
             "type": "text"
         },
         {
@@ -157,11 +157,11 @@
     ],
     "en": [
         {
-            "text": "Today you can purchase single tickets for bus and tram, and eventually you will find all tickets in the app.",
+            "text": "Today you can purchase single tickets for bus and tram, and eventually you will find all tickets in the app.\n",
             "type": "text"
         },
         {
-            "text": "\nThe tickets only applies to public transport that is part of the public transport system in Trøndelag county.\n",
+            "text": "The tickets only applies to public transport that is part of the public transport system in Trøndelag county.",
             "type": "text"
         },
         {
