@@ -2,6 +2,7 @@
 
 # copy file mapbox api download token
 cat .netrc >> ~/.netrc
+chmod 600 ~/.netrc
 
 echo "Installing pre-build dependencies"
 brew install findutils xmlstarlet # for git-crypt
