@@ -252,7 +252,7 @@ function decorateTripPatternWithKey(
   return tripPatterns.map((tp) => {
     return {
       ...tp,
-      key: generateKeyFromTripPattern(tp)
+      key: generateKeyFromTripPattern(tp),
     };
   });
 }
