@@ -250,8 +250,10 @@ function decorateTripPatternWithKey(
   tripPatterns: TripPattern[],
 ): TripPatternWithKey[] {
   return tripPatterns.map((tp) => {
-    (tp as TripPatternWithKey).key = generateKeyFromTripPattern(tp);
-    return tp as TripPatternWithKey;
+    return {
+      ...tp,
+      key: generateKeyFromTripPattern(tp)
+    };
   });
 }
 
