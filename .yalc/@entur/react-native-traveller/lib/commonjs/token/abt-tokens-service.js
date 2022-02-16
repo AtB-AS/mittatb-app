@@ -65,12 +65,36 @@ const createAbtTokensService = (fetcher, hosts) => {
     return response.body;
   };
 
+  const toggleToken = async (tokenId, body) => {
+    const url = `${hostUrl}/tokens/${tokenId}/toggle`;
+    const response = await fetcher({
+      url,
+      method: 'POST',
+      body
+    });
+    return response.body;
+  };
+
+  const validateToken = async (tokenId, signedToken) => {
+    const url = `${hostUrl}/tokens/${tokenId}/validate`;
+    const response = await fetcher({
+      url,
+      headers: {
+        [SIGNED_TOKEN_HEADER_KEY]: signedToken
+      },
+      method: 'GET'
+    });
+    return response.body;
+  };
+
   return {
     listTokens,
     getTokenCertificate,
     initToken,
     renewToken,
-    activateToken
+    activateToken,
+    toggleToken,
+    validateToken
   };
 };
 

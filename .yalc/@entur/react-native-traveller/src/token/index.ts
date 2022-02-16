@@ -15,6 +15,7 @@ import deleteLocalHandler from './state-machine/handlers/DeleteLocalHandler';
 import startingHandler from './state-machine/handlers/StartingHandler';
 import notSupportedHandler from './state-machine/handlers/NotSupportedHandler';
 import { getStoreKey } from './state-machine/utils';
+import verifyInspectionActionHandler from './state-machine/handlers/VerifyInspectionActionHandler';
 
 export const startTokenStateMachine = async (
   abtTokensService: AbtTokensService,
@@ -89,6 +90,8 @@ const getStateHandler = (
       return activateRenewalHandler(abtTokensService);
     case 'AddToken':
       return addTokenHandler();
+    case 'VerifyInspectionAction':
+      return verifyInspectionActionHandler(abtTokensService);
     case 'NotSupported':
       return notSupportedHandler();
   }

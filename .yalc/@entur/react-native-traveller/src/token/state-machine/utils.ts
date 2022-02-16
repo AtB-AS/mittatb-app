@@ -1,4 +1,5 @@
 import NetInfo from '@react-native-community/netinfo';
+import type { StoredToken } from '@entur/react-native-traveller';
 
 export const verifyCorrectTokenId = (
   initialTokenId: string,
@@ -19,3 +20,8 @@ export const missingNetConnection = () =>
   NetInfo.fetch().then((state) => {
     return !state.isConnected ?? true;
   });
+
+export const isTokenInspectable = (tokens: StoredToken[], tokenId: string) =>
+  tokens
+    .find((t) => t.id === tokenId)
+    ?.allowedActions.includes('TOKEN_ACTION_TICKET_INSPECTION') || false;
