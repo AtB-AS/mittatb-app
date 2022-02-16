@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {SectionListData, View} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {Section, ActionItem} from '@atb/components/sections';
+import {Section} from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import Button from '../button';
 import {TripPattern} from '@atb/api/types/trips';
@@ -13,6 +13,7 @@ import {
   useFeedbackQuestionsState,
 } from './FeedbackContext';
 import GoodOrBadButton from './GoodOrBadButton';
+import RenderQuestions from './RenderQuestions';
 
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
@@ -77,60 +78,6 @@ const GoodOrBadQuestion = ({
           />
         </Section>
       </View>
-    </>
-  );
-};
-
-interface RenderQuestionProps {
-  selectedOpinion: Opinions;
-  questions: Array<Question>;
-  handleAnswerPress: (o: {questionId: number; answerId: number}) => void;
-}
-
-export const RenderQuestions = ({
-  selectedOpinion,
-  questions,
-  handleAnswerPress,
-}: RenderQuestionProps) => {
-  const {language} = useTranslation();
-
-  console.log('attempting to render questions: ', questions);
-
-  return (
-    <>
-      {selectedOpinion === Opinions.Bad &&
-        questions.map((question: Question) => (
-          <>
-            <ThemeText type="body__primary--bold">
-              {language === 'nb'
-                ? question.questionText.norwegian
-                : question.questionText.english}
-            </ThemeText>
-
-            <Section withTopPadding withBottomPadding>
-              {question.alternatives.map((alternative) => (
-                <Section withPadding>
-                  <ActionItem
-                    text={
-                      language === 'nb'
-                        ? alternative.alternativeText.norwegian
-                        : alternative.alternativeText.english
-                    }
-                    onPress={() =>
-                      handleAnswerPress({
-                        questionId: question.questionId,
-                        answerId: alternative.alternativeId,
-                      })
-                    }
-                    mode="check"
-                    checked={alternative.checked}
-                    type="compact"
-                  />
-                </Section>
-              ))}
-            </Section>
-          </>
-        ))}
     </>
   );
 };
