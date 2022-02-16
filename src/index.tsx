@@ -58,8 +58,8 @@ const App = () => {
                       <SearchHistoryContextProvider>
                         <GeolocationContextProvider>
                           <RemoteConfigContextProvider>
-                            <MobileTokenContextProvider>
-                              <TicketContextProvider>
+                            <TicketContextProvider>
+                              <MobileTokenContextProvider>
                                 <AppLanguageProvider>
                                   <AlertsContextProvider>
                                     <BottomSheetProvider>
@@ -67,8 +67,8 @@ const App = () => {
                                     </BottomSheetProvider>
                                   </AlertsContextProvider>
                                 </AppLanguageProvider>
-                              </TicketContextProvider>
-                            </MobileTokenContextProvider>
+                              </MobileTokenContextProvider>
+                            </TicketContextProvider>
                           </RemoteConfigContextProvider>
                         </GeolocationContextProvider>
                       </SearchHistoryContextProvider>

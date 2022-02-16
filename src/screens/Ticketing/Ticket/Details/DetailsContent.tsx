@@ -11,9 +11,11 @@ import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
 import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import QrCode from '@atb/screens/Ticketing/Ticket/Details/QrCode';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import PaperQrCode from '@atb/screens/Ticketing/Ticket/Details/PaperQrCode';
-import {useMobileContextState} from '@atb/mobile-token/MobileTokenContext';
+import {
+  useHasEnabledMobileToken,
+  useMobileContextState,
+} from '@atb/mobile-token/MobileTokenContext';
 
 type Props = {
   fareContract: FareContract;
@@ -29,7 +31,7 @@ const DetailsContent: React.FC<Props> = ({
   hasActiveTravelCard = false,
 }) => {
   const {t, language} = useTranslation();
-  const {enable_period_tickets} = useRemoteConfig();
+  const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {tokenStatus} = useMobileContextState();
 
   const firstTravelRight = fc.travelRights[0];
@@ -92,7 +94,7 @@ const DetailsContent: React.FC<Props> = ({
           onPress={onReceiptNavigate}
           accessibility={{accessibilityRole: 'button'}}
         />
-        {enable_period_tickets ? (
+        {hasEnabledMobileToken ? (
           <QrCode validityStatus={validityStatus} isInspectable={inspectable} />
         ) : (
           <PaperQrCode

@@ -9,9 +9,10 @@ import {setupMobileTokenClient} from '@atb/mobile-token/client';
 import {TokenStatus} from '@entur/react-native-traveller/lib/typescript/token/types';
 import {useAuthState} from '@atb/auth';
 import Bugsnag from '@bugsnag/react-native';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {updateMetadata} from '@atb/chat/metadata';
 import {PayloadAction} from '@entur/react-native-traveller';
+import {useTicketState} from '@atb/tickets';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 type MobileContextState = {
   generateQrCode?: () => Promise<string | undefined>;
@@ -24,10 +25,8 @@ const MobileTokenContext = createContext<MobileContextState | undefined>(
 );
 
 const MobileTokenContextProvider: React.FC = ({children}) => {
-  const {enable_period_tickets} = useRemoteConfig();
   const [tokenStatus, setTokenStatus] = useState<TokenStatus>();
   const {abtCustomerId, userCreationFinished} = useAuthState();
-
   const [currentCustomerId, setCurrentCustomerId] = useState(abtCustomerId);
 
   const setStatus = (status?: TokenStatus) => {
@@ -40,10 +39,12 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
     setTokenStatus(status);
   };
 
+  const hasEnabledMobileToken = useHasEnabledMobileToken();
+
   const client = useMemo(
     () =>
-      enable_period_tickets ? setupMobileTokenClient(setStatus) : undefined,
-    [enable_period_tickets],
+      hasEnabledMobileToken ? setupMobileTokenClient(setStatus) : undefined,
+    [hasEnabledMobileToken],
   );
 
   useEffect(() => {
@@ -66,6 +67,13 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
     </MobileTokenContext.Provider>
   );
 };
+
+export function useHasEnabledMobileToken() {
+  const {customerProfile} = useTicketState();
+  const {enable_period_tickets} = useRemoteConfig();
+
+  return customerProfile?.enableMobileToken || enable_period_tickets;
+}
 
 export function useMobileContextState() {
   const context = useContext(MobileTokenContext);
