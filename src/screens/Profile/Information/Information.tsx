@@ -5,7 +5,7 @@ import StyleSheet from '@atb/theme/StyleSheet';
 import React from 'react';
 import {Linking, ScrollView, TouchableOpacity, View} from 'react-native';
 
-type Table = {
+type InformationTable = {
   type: 'table';
   data: TableElement[][];
 };
@@ -47,7 +47,7 @@ type InformationProps = {
 };
 
 export type InformationElement =
-  | Table
+  | InformationTable
   | InformationText
   | InformationLink
   | InformationHeading
@@ -77,7 +77,7 @@ const Information: React.FC<InformationProps> = ({
       case 'link':
         return <Link link={item} key={index}></Link>;
       case 'table':
-        return <Table item={item} key={index}></Table>;
+        return <Table table={item} key={index}></Table>;
     }
   });
   return (
@@ -99,14 +99,14 @@ const Header = ({text}: {text: string}) => {
   );
 };
 
-const Table = ({item}: {item: Table}) => {
+const Table = ({table}: {table: InformationTable}) => {
   const styles = useStyles();
-  const numberOfRows = item.data.length;
-  const table = item.data.map((row, index) => {
+  const numberOfRows = table.data.length;
+  const tableRows = table.data.map((row, index) => {
     const isLastRow = index === numberOfRows - 1;
     return <Row isLastRow={isLastRow} row={row} key={index}></Row>;
   });
-  return <View style={styles.tableContainer}>{table}</View>;
+  return <View style={styles.tableContainer}>{tableRows}</View>;
 };
 
 const Row = ({row, isLastRow}: {row: TableElement[]; isLastRow: boolean}) => {
@@ -192,9 +192,6 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     marginVertical: theme.spacings.medium,
   },
   bullet: {
-    marginTop: theme.spacings.medium,
-  },
-  paragraphSpace: {
     marginTop: theme.spacings.medium,
   },
   link: {
