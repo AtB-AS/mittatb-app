@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {SectionListData, View} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Section} from '@atb/components/sections';
@@ -8,12 +8,12 @@ import {TripPattern} from '@atb/api/types/trips';
 import {Quay} from '@atb/api/types/departures';
 import {useTranslation} from '@atb/translations';
 import {
-  FeedbackQuestionsContext,
-  Question,
-  useFeedbackQuestionsState,
+  FeedbackQuestionsMode,
+  QuestionType,
+  useFeedbackQuestion,
 } from './FeedbackContext';
 import GoodOrBadButton from './GoodOrBadButton';
-import RenderQuestions from './RenderQuestions';
+import Question from './RenderQuestions';
 
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
@@ -35,7 +35,7 @@ export enum Opinions {
 }
 
 interface GoodOrBadQuestionProps {
-  feedbackQuestionsContext: FeedbackQuestionsContext | undefined;
+  mode: FeedbackQuestionsMode;
   setSelectedOpinion: (e: Opinions) => void;
   selectedOpinion: Opinions;
 }
@@ -43,22 +43,20 @@ interface GoodOrBadQuestionProps {
 const GoodOrBadQuestion = ({
   setSelectedOpinion,
   selectedOpinion,
-  feedbackQuestionsContext,
+  mode,
 }: GoodOrBadQuestionProps) => {
   const styles = useFeedbackStyles();
   const {language} = useTranslation();
+  const category = useFeedbackQuestion(mode);
+
+  if (!category) {
+    return null;
+  }
 
   return (
     <>
       <ThemeText type="heading__component" style={styles.centerText}>
-        {feedbackQuestionsContext === 'departures' &&
-          (language === 'nb'
-            ? 'Hva syntes du om avgangsvisningen?'
-            : 'What do you think of the departure screen?')}
-        {feedbackQuestionsContext === 'assistant' &&
-          (language === 'nb'
-            ? 'Hva syntes du om reiseforslaget?'
-            : 'What do you think of this trip plan?')}
+        {category.introText[language]}
       </ThemeText>
 
       <View style={styles.feedbackRow}>
@@ -87,128 +85,97 @@ type FeedbackProps = {
   quayListData?: SectionListData<Quay>[];
   isSearching?: boolean;
   isEmptyResult?: boolean;
-  feedbackQuestionsContext: FeedbackQuestionsContext;
+  mode: FeedbackQuestionsMode;
 };
 
 export const Feedback = ({
   tripPatterns,
   quayListData,
-  feedbackQuestionsContext,
+  mode,
   isSearching,
   isEmptyResult,
 }: FeedbackProps) => {
   const styles = useFeedbackStyles();
   const {language} = useTranslation();
   const {theme} = useTheme();
-  const {getCategories} = useFeedbackQuestionsState();
+  const category = useFeedbackQuestion(mode);
+
+  // @TODO Change model to only have one question.
+  const questions = category?.questions ?? [];
+  const question = questions[0];
 
   const [submitted, setSubmitted] = useState(false);
   const [selectedOpinion, setSelectedOpinion] = useState(
     Opinions.NotClickedYet,
   );
-  const [questions, setQuestions] = useState<Array<Question>>();
+  const [selectedAlternativeIds, setSelectedAlternativeIds] = useState<
+    number[]
+  >([]);
 
-  useEffect(() => {
-    const fetchedQuestions = getCategories(feedbackQuestionsContext)?.find(
-      (category) => category.questionsCategory === feedbackQuestionsContext,
-    );
-
-    setQuestions(fetchedQuestions?.questionArray);
-  }, [getCategories, feedbackQuestionsContext]);
-
-  type handleAnswerPressProps = {
-    questionId: number;
-    answerId: number;
-  };
-
-  const handleAnswerPress = ({
-    questionId,
-    answerId,
-  }: handleAnswerPressProps) => {
-    console.log(
-      `Alternative ${answerId} registered for question ${questionId}`,
-    );
-
-    const copiedState = questions?.slice();
-    const questionInQuestion = copiedState?.find(
-      (question) => question.questionId === questionId,
-    );
-
-    if (questionInQuestion) {
-      const alternativeInQuestion = questionInQuestion.alternatives.find(
-        (alternative) => alternative.alternativeId === answerId,
-      );
-      if (alternativeInQuestion) {
-        alternativeInQuestion.checked = !alternativeInQuestion.checked;
+  const toggleSelectedAlternativeId = useCallback(
+    (alternativeId: number) => {
+      if (selectedAlternativeIds.includes(alternativeId)) {
+        setSelectedAlternativeIds(
+          selectedAlternativeIds.filter((id) => id !== alternativeId),
+        );
+      } else {
+        setSelectedAlternativeIds([...selectedAlternativeIds, alternativeId]);
       }
-    }
-
-    setQuestions(copiedState);
-  };
+    },
+    [selectedAlternativeIds],
+  );
 
   const submitFeedbackWithAlternatives = () => {
     console.log('Submitting AssistantFeedback');
-    if (questions) {
-      const submitArray = questions.map((question) => ({
-        questionId: question.questionId,
-        checkedAlternatives: Array<number>(),
-      }));
-      submitArray.forEach((question) => {
-        const questionInQuestion = questions.find(
-          (questionToCompare) =>
-            questionToCompare.questionId === question.questionId,
-        );
-        questionInQuestion?.alternatives.forEach((alternative) => {
-          if (alternative.checked)
-            question.checkedAlternatives.push(alternative.alternativeId);
-        });
-      });
-      console.log('SubmitArray = ', submitArray);
-    } else {
-      console.warn('no feedback to be submitted, questions:', questions);
-    }
+
+    const selectedAnswers = selectedAlternativeIds.map((altId) =>
+      question.alternatives.find((alt) => alt.alternativeId === altId),
+    );
+
+    // Send to server
+    const dataToServer = {
+      selectedOpinion,
+      mode,
+      question,
+      selectedAnswers,
+    };
+
+    console.log('Submitted to server:', dataToServer);
 
     setSubmitted(true);
   };
 
-  const uncheckAllAlternatives = () => {
-    questions?.forEach((question) => {
-      question.alternatives.forEach(
-        (alternative) => (alternative.checked = false),
-      );
-    });
-  };
-
   useEffect(() => {
-    uncheckAllAlternatives();
+    setSelectedAlternativeIds([]);
     setSelectedOpinion(Opinions.NotClickedYet);
     setSubmitted(false);
   }, [quayListData, tripPatterns]);
 
   console.log(
-    `Submitted ${submitted}, isSearching ${isSearching}, isEmptyResult ${isEmptyResult}, questions: ${questions}`,
+    `Submitted ${submitted}, isSearching ${isSearching}, isEmptyResult ${isEmptyResult}, question: ${question}`,
   );
 
+  if (!category) return null;
   if (submitted) return <SubmittedComponent />;
-
-  if (!questions || isSearching || isEmptyResult) return null;
+  if (!question || isSearching || isEmptyResult) return null;
 
   if (quayListData || tripPatterns)
     return (
       <View style={styles.container}>
         <GoodOrBadQuestion
-          feedbackQuestionsContext={feedbackQuestionsContext}
+          mode={mode}
           setSelectedOpinion={setSelectedOpinion}
           selectedOpinion={selectedOpinion}
         />
 
-        {questions && (
-          <RenderQuestions
-            selectedOpinion={selectedOpinion}
-            handleAnswerPress={handleAnswerPress}
-            questions={questions}
-          />
-        )}
+        <Question
+          selectedOpinion={selectedOpinion}
+          selectedAlternativeIds={selectedAlternativeIds}
+          handleAnswerPress={({alternativeId}) =>
+            toggleSelectedAlternativeId(alternativeId)
+          }
+          question={question}
+        />
 
         <Section withBottomPadding>
           <Button

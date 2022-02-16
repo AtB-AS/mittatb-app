@@ -9,40 +9,41 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 
-export type FeedbackQuestionsContext = 'departures' | 'assistant';
+export type FeedbackQuestionsMode = 'departures' | 'assistant';
 
 export type Category = {
-  questionsCategory: string;
-  questionArray: Array<Question>;
+  mode: FeedbackQuestionsMode;
+  introText: LanguageString;
+  questions: QuestionType[];
 };
 
-export type Question = {
-  questionText: {
-    norwegian: string;
-    english: string;
-  };
+export type QuestionCategories = Partial<
+  Record<FeedbackQuestionsMode, Category>
+>;
+
+type LanguageString = {
+  nb: string;
+  en: string;
+};
+
+export type QuestionType = {
+  questionText: LanguageString;
   questionId: number;
-  alternatives: Array<Alternative>;
-  context: FeedbackQuestionsContext;
+  alternatives: AlternativeType[];
+  mode: FeedbackQuestionsMode;
 };
 
-export type Alternative = {
+export type AlternativeType = {
   alternativeId: number;
-  alternativeText: {
-    norwegian: string;
-    english: string;
-  };
-  checked: boolean;
+  alternativeText: LanguageString;
 };
 
 export type FeedbackQuestionsContextState = {
-  getCategories: (
-    context: FeedbackQuestionsContext,
-  ) => Array<Category> | undefined;
+  categories: QuestionCategories;
 };
 
 const defaultFeedbackQuestionsState = {
-  getCategories: () => undefined,
+  categories: {},
 };
 
 const FeedbackQuestionsContext = createContext<FeedbackQuestionsContextState>(
@@ -50,7 +51,7 @@ const FeedbackQuestionsContext = createContext<FeedbackQuestionsContextState>(
 );
 
 const FeedbackQuestionsProvider: React.FC = ({children}) => {
-  const [categories, setCategories] = useState<Array<Category>>();
+  const [categories, setCategories] = useState<QuestionCategories>({});
   const [error, setError] = useState(false);
 
   useEffect(
@@ -60,21 +61,17 @@ const FeedbackQuestionsProvider: React.FC = ({children}) => {
         .doc('feedbackQuestions')
         .onSnapshot(
           (snapshot) => {
-            const fetchedQuestions = (snapshot as FirebaseFirestoreTypes.QueryDocumentSnapshot<{
-              assistant: Array<Question>;
-              departures: Array<Question>;
-            }>).data();
+            const fetchedQuestions = snapshot.data() as Record<
+              FeedbackQuestionsMode,
+              string
+            >;
 
-            const newQuestions = [
-              {
-                questionsCategory: 'assistant',
-                questionArray: JSON.parse(String(fetchedQuestions.assistant)),
-              },
-              {
-                questionsCategory: 'departures',
-                questionArray: JSON.parse(String(fetchedQuestions.departures)),
-              },
-            ];
+            let newQuestions: QuestionCategories = {};
+            for (let [mode, questions] of Object.entries(fetchedQuestions)) {
+              newQuestions[mode as FeedbackQuestionsMode] = JSON.parse(
+                questions,
+              ) as Category;
+            }
 
             console.log('Setting newQuestions:', newQuestions);
             setCategories(newQuestions);
@@ -87,17 +84,8 @@ const FeedbackQuestionsProvider: React.FC = ({children}) => {
     [],
   );
 
-  const getCategories = useCallback(
-    (context: FeedbackQuestionsContext) => categories,
-    [categories],
-  );
-
   return (
-    <FeedbackQuestionsContext.Provider
-      value={{
-        getCategories,
-      }}
-    >
+    <FeedbackQuestionsContext.Provider value={{categories}}>
       {children}
     </FeedbackQuestionsContext.Provider>
   );
@@ -111,6 +99,11 @@ export function useFeedbackQuestionsState() {
     );
   }
   return context;
+}
+
+export function useFeedbackQuestion(mode: FeedbackQuestionsMode) {
+  const {categories} = useFeedbackQuestionsState();
+  return categories[mode];
 }
 
 export default FeedbackQuestionsProvider;

@@ -129,8 +129,10 @@ const useButtonStyle = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderRadius: theme.border.radius.regular,
+    // borderColor: theme.colors.background_accent,
   },
   selectedButton: {
+    // backgroundColor: theme.colors.background_0,
     borderWidth: 1,
   },
 }));
