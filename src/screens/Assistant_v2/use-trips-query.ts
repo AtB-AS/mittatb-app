@@ -116,12 +116,12 @@ export default function useTripsQuery(
                 results.trip.tripPatterns,
               );
 
+              const countBeforeConcat = allTripPatterns.length;
               allTripPatterns = allTripPatterns.concat(tripPatternsWithKeys);
-              const filteredTripPatterns =
-                filterDuplicateTripPatterns(allTripPatterns);
-              setTripPatterns(filteredTripPatterns);
+              allTripPatterns = filterDuplicateTripPatterns(allTripPatterns);
 
-              tripsFoundCount += tripPatternsWithKeys.length;
+              setTripPatterns(allTripPatterns);
+              tripsFoundCount += allTripPatterns.length - countBeforeConcat;
               performedSearchesCount++;
 
               cursor =
