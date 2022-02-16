@@ -42,7 +42,7 @@ export default function QuaySection({
 
   return (
     <View>
-      <Sections.Section withPadding>
+      <Sections.Section withPadding withBottomPadding>
         <Sections.GenericClickableItem
           type="inline"
           onPress={() => {
