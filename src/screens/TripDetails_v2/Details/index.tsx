@@ -19,7 +19,6 @@ import CompactMap from '../Map/CompactMap';
 import {ThemeColor} from '@atb/theme/colors';
 import {singleTripSearch} from '@atb/api/trips_v2';
 import {TripPattern} from '@atb/api/types/trips';
-import Bugsnag from '@bugsnag/react-native';
 
 const themeColor: ThemeColor = 'background_accent';
 
