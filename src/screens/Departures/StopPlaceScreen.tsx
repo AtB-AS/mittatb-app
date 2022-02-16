@@ -144,10 +144,7 @@ export default function StopPlaceScreen({
       />
       {quayListData && (
         <>
-          <Feedback
-            quayListData={quayListData}
-            feedbackQuestionsContext="departures"
-          />
+          <Feedback quayListData={quayListData} mode="departures" />
           <SectionList
             stickySectionHeadersEnabled={true}
             stickyHeaderIndices={[0]}

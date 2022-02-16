@@ -7,13 +7,9 @@ import Button from '../button';
 import {TripPattern} from '@atb/api/types/trips';
 import {Quay} from '@atb/api/types/departures';
 import {useTranslation} from '@atb/translations';
-import {
-  FeedbackQuestionsMode,
-  QuestionType,
-  useFeedbackQuestion,
-} from './FeedbackContext';
+import {FeedbackQuestionsMode, useFeedbackQuestion} from './FeedbackContext';
 import GoodOrBadButton from './GoodOrBadButton';
-import Question from './RenderQuestions';
+import {RenderQuestion} from './RenderQuestions';
 
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
@@ -52,6 +48,13 @@ const GoodOrBadQuestion = ({
   if (!category) {
     return null;
   }
+
+  console.log(
+    'category??',
+    category,
+    'category.introText??',
+    category.introText,
+  );
 
   return (
     <>
@@ -101,8 +104,7 @@ export const Feedback = ({
   const category = useFeedbackQuestion(mode);
 
   // @TODO Change model to only have one question.
-  const questions = category?.questions ?? [];
-  const question = questions[0];
+  console.log('category is', category);
 
   const [submitted, setSubmitted] = useState(false);
   const [selectedOpinion, setSelectedOpinion] = useState(
@@ -129,14 +131,16 @@ export const Feedback = ({
     console.log('Submitting AssistantFeedback');
 
     const selectedAnswers = selectedAlternativeIds.map((altId) =>
-      question.alternatives.find((alt) => alt.alternativeId === altId),
+      category?.question?.alternatives.find(
+        (alt) => alt.alternativeId === altId,
+      ),
     );
 
     // Send to server
     const dataToServer = {
       selectedOpinion,
       mode,
-      question,
+      category,
       selectedAnswers,
     };
 
@@ -152,12 +156,13 @@ export const Feedback = ({
   }, [quayListData, tripPatterns]);
 
   console.log(
-    `Submitted ${submitted}, isSearching ${isSearching}, isEmptyResult ${isEmptyResult}, question: ${question}`,
+    `Submitted ${submitted}, isSearching ${isSearching}, isEmptyResult ${isEmptyResult}, question: ${category}`,
   );
 
-  if (!category) return null;
+  if (!category || isSearching || isEmptyResult) return null;
   if (submitted) return <SubmittedComponent />;
-  if (!question || isSearching || isEmptyResult) return null;
+
+  console.log('question in index', category);
 
   if (quayListData || tripPatterns)
     return (
@@ -168,13 +173,13 @@ export const Feedback = ({
           selectedOpinion={selectedOpinion}
         />
 
-        <Question
+        <RenderQuestion
           selectedOpinion={selectedOpinion}
           selectedAlternativeIds={selectedAlternativeIds}
           handleAnswerPress={({alternativeId}) =>
             toggleSelectedAlternativeId(alternativeId)
           }
-          question={question}
+          question={category.question}
         />
 
         <Section withBottomPadding>

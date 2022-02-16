@@ -1,6 +1,6 @@
 import React from 'react';
 import {Opinions} from '.';
-import {Question, Alternative} from './FeedbackContext';
+import {QuestionType, AlternativeType, CategoryType} from './FeedbackContext';
 import {useTranslation} from '@atb/translations';
 import ThemeText from '@atb/components/text';
 import {Section, ActionItem} from '@atb/components/sections';
@@ -9,11 +9,11 @@ import {View} from 'react-native';
 export interface RenderQuestionProps {
   selectedOpinion: Opinions;
   selectedAlternativeIds: number[];
-  question: Question;
+  question: QuestionType;
   handleAnswerPress: (o: {questionId: number; alternativeId: number}) => void;
 }
 
-export const RenderQuestions = ({
+export const RenderQuestion = ({
   selectedOpinion,
   selectedAlternativeIds,
   question,
@@ -21,11 +21,16 @@ export const RenderQuestions = ({
 }: RenderQuestionProps) => {
   const {language} = useTranslation();
 
+  console.log('question in RenderQuestion', question);
+
   if (!question) {
     return null;
   }
 
-  if (selectedOpinion === Opinions.Good) {
+  if (
+    selectedOpinion === Opinions.Good ||
+    selectedOpinion === Opinions.NotClickedYet
+  ) {
     return null;
   }
 
@@ -56,7 +61,7 @@ export const RenderQuestions = ({
 
 type AlternativeItemProps = {
   selectedAlternativeIds: number[];
-  alternative: Alternative;
+  alternative: AlternativeType;
   handleAnswerPress: (alternativeId: number) => void;
 };
 function AlternativeItem({
@@ -78,5 +83,3 @@ function AlternativeItem({
     </Section>
   );
 }
-
-export default RenderQuestions;

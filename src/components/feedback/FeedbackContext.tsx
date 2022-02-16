@@ -11,14 +11,14 @@ import firestore, {
 
 export type FeedbackQuestionsMode = 'departures' | 'assistant';
 
-export type Category = {
+export type CategoryType = {
   mode: FeedbackQuestionsMode;
   introText: LanguageString;
-  questions: QuestionType[];
+  question: QuestionType;
 };
 
 export type QuestionCategories = Partial<
-  Record<FeedbackQuestionsMode, Category>
+  Record<FeedbackQuestionsMode, CategoryType>
 >;
 
 type LanguageString = {
@@ -70,7 +70,7 @@ const FeedbackQuestionsProvider: React.FC = ({children}) => {
             for (let [mode, questions] of Object.entries(fetchedQuestions)) {
               newQuestions[mode as FeedbackQuestionsMode] = JSON.parse(
                 questions,
-              ) as Category;
+              ) as CategoryType;
             }
 
             console.log('Setting newQuestions:', newQuestions);
@@ -103,6 +103,9 @@ export function useFeedbackQuestionsState() {
 
 export function useFeedbackQuestion(mode: FeedbackQuestionsMode) {
   const {categories} = useFeedbackQuestionsState();
+  console.log(
+    `Returning introtext ${categories[mode]?.introText} from context`,
+  );
   return categories[mode];
 }
 

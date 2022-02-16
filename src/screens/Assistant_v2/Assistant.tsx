@@ -437,7 +437,7 @@ const Assistant: React.FC<Props> = ({
         isSearching={isSearching}
         isEmptyResult={isEmptyResult}
         tripPatterns={tripPatterns}
-        feedbackQuestionsContext={'assistant'}
+        mode={'assistant'}
       />
       <Results
         tripPatterns={tripPatterns}
