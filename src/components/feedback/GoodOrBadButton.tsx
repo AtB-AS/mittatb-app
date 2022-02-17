@@ -38,43 +38,8 @@ export const GoodOrBadButton = ({
           {opinion === Opinions.Bad && (language === 'nb' ? 'Dårlig' : 'Bad')}
         </ThemeText>
 
-        {opinion === Opinions.Good && (
-          <Svg width={24} height={24} fill="none" {...props}>
-            <Path
-              d="M12.75 22c5.523 0 10-4.477 10-10s-4.477-10-10-10-10 4.477-10 10 4.477 10 10 10Z"
-              stroke="white"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <Path
-              d="M8.75 14s1.5 2 4 2 4-2 4-2M9.75 9h.01M15.75 9h.01"
-              stroke="white"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </Svg>
-        )}
-
-        {opinion === Opinions.Bad && (
-          <Svg width={24} height={24} fill="none" {...props}>
-            <Path
-              d="M12.25 22c5.523 0 10-4.477 10-10s-4.477-10-10-10-10 4.477-10 10 4.477 10 10 10Z"
-              stroke="white"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <Path
-              d="M16.25 16s-1.5-2-4-2-4 2-4 2M9.25 9h.01M15.25 9h.01"
-              stroke="white"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </Svg>
-        )}
+        {opinion === Opinions.Good && <ThemeText>🙌</ThemeText>}
+        {opinion === Opinions.Bad && <ThemeText>👎</ThemeText>}
       </View>
     </TouchableOpacity>
   );
