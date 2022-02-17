@@ -1,14 +1,8 @@
-name: E2E test workflow
-
+name: E2E tests on iOS
 on:
-  workflow_call:
-    inputs:
-      e2econfig:
-        required: true
-        type: string
-    secrets:
-      git-crypt-key:
-        required: true
+  push:
+    branches:
+      - master
 
 jobs:
   run_tests:
@@ -25,7 +19,7 @@ jobs:
           use-build-cache: 'true'
           app-environment: 'staging'
           app-org: 'atb'
-          git-crypt-key: ${{ secrets.git-crypt-key }}
+          git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Get potentially cached app
         uses: actions/cache@v2
         id: detox-app-cache
@@ -49,9 +43,9 @@ jobs:
         run: detox clean-framework-cache && detox build-framework-cache
       - name: Build Detox-version of app
         if: steps.detox-app-cache.outputs.cache-hit != 'true'
-        run: detox build --configuration ${{ inputs.e2econfig }}
+        run: detox build --configuration ios.release
       - name: Replace bundle in app cache
         if: steps.detox-app-cache.outputs.cache-hit == 'true'
         run: npx react-native bundle --platform ios --dev false --reset-cache --entry-file index.js --bundle-output main.jsbundle && mv main.jsbundle build/detox/ios/Build/Products/Release-iphonesimulator/AtB.app/
       - name: Run tests
-        run: detox test --configuration ${{ inputs.e2econfig }} --loglevel trace
+        run: detox test --configuration ios.release --loglevel trace --retries 3

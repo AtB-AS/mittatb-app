@@ -86,9 +86,3 @@ jobs:
         env:
           ENTUR_CLIENT_ID: ${{ secrets.ABT_ENTUR_CLIENT_ID_STAGING}}
           ENTUR_CLIENT_SECRET: ${{ secrets.ABT_ENTUR_CLIENT_SECRET_STAGING}}
-  run-e2e-tests:
-    uses: ./.github/workflows/test-e2e.yml
-    with: 
-      e2econfig: ios.release
-    secrets:
-      git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
