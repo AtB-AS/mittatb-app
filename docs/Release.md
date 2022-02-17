@@ -11,7 +11,7 @@ Skip the first step of bumping the project files if the release is a new release
 There are some project files where the version number must be bumped. This is a candidate for later automation, bus as of now it is a manual process.
 
 Bump the version number in these files:
-  - All .env-filer
+  - All .env-files
   - package.json
   - ios/atb.xcodeproj/project.pbxproj
   - ios/atbTests/Info.plist
