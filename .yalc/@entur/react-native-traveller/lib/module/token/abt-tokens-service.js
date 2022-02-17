@@ -24,7 +24,7 @@ export const createAbtTokensService = (fetcher, hosts) => {
   };
 
   const initToken = async body => {
-    const url = `${hostUrl}/tokens`;
+    const url = `${hostUrl}/tokens/v2`;
     const response = await fetcher({
       url,
       body,
