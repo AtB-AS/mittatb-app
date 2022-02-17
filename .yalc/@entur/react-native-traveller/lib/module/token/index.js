@@ -12,6 +12,7 @@ import deleteLocalHandler from './state-machine/handlers/DeleteLocalHandler';
 import startingHandler from './state-machine/handlers/StartingHandler';
 import notSupportedHandler from './state-machine/handlers/NotSupportedHandler';
 import { getStoreKey } from './state-machine/utils';
+import verifyInspectionActionHandler from './state-machine/handlers/VerifyInspectionActionHandler';
 export const startTokenStateMachine = async (abtTokensService, setStatus, safetyNetApiKey, forceRestart = false, accountId) => {
   if (!accountId) {
     setStatus(undefined);
@@ -81,6 +82,9 @@ const getStateHandler = (abtTokensService, storedState, safetyNetApiKey, forceRe
 
     case 'AddToken':
       return addTokenHandler();
+
+    case 'VerifyInspectionAction':
+      return verifyInspectionActionHandler(abtTokensService);
 
     case 'NotSupported':
       return notSupportedHandler();
