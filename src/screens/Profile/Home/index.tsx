@@ -187,6 +187,22 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               setPreference({newDepartures});
             }}
           />
+          <Sections.ActionItem
+            mode="toggle"
+            text={t(ProfileTexts.sections.newFeatures.assistant)}
+            checked={useExperimentalTripSearch}
+            onPress={(useExperimentalTripSearch) => {
+              analytics().logEvent('toggle_beta_tripsearch', {
+                toggle: useExperimentalTripSearch ? 'enable' : 'disable',
+              });
+              updateMetadata({
+                'AtB-Beta-TripSearch': useExperimentalTripSearch
+                  ? 'enabled'
+                  : 'disabled',
+              });
+              setPreference({useExperimentalTripSearch});
+            }}
+          />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.settings.linkItems.enrollment.label)}
             onPress={() => navigation.navigate('Enrollment')}
@@ -300,22 +316,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           customerProfile?.debug) && (
           <Sections.Section withPadding>
             <Sections.HeaderItem text="Developer menu" />
-            <Sections.ActionItem
-              mode="toggle"
-              text={t(ProfileTexts.sections.newFeatures.assistant)}
-              checked={useExperimentalTripSearch}
-              onPress={(useExperimentalTripSearch) => {
-                analytics().logEvent('toggle_beta_tripsearch', {
-                  toggle: useExperimentalTripSearch ? 'enable' : 'disable',
-                });
-                updateMetadata({
-                  'AtB-Beta-TripSearch': useExperimentalTripSearch
-                    ? 'enabled'
-                    : 'disabled',
-                });
-                setPreference({useExperimentalTripSearch});
-              }}
-            />
             <Sections.LinkItem
               text="Design system"
               onPress={() => navigation.navigate('DesignSystem')}
