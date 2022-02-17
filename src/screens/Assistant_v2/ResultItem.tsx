@@ -9,7 +9,9 @@ import AccessibleText, {
 } from '@atb/components/accessible-text';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
-import TransportationIcon from '@atb/components/transportation-icon';
+import TransportationIcon, {
+  CollapsedLegs,
+} from '@atb/components/transportation-icon';
 
 import {SituationWarningIcon} from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
@@ -124,6 +126,21 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 
   if (!tripPattern?.legs?.length) return null;
 
+  // naive test for width of expanded legs
+  const legSplit =
+    tripPattern.legs
+      .slice(0, 4)
+      .map((leg) => leg.line?.publicCode ?? '')
+      .join('').length > 5
+      ? 3
+      : 4;
+
+  const expandedLegs = tripPattern.legs.slice(0, legSplit);
+  const collapsedLegs = tripPattern.legs.slice(
+    legSplit,
+    tripPattern.legs.length,
+  );
+
   return (
     <TouchableOpacity
       accessibilityLabel={tripSummary(tripPattern, t, language)}
@@ -135,30 +152,25 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     >
       <View style={styles.result} {...props} accessible={false}>
         <ResultItemHeader tripPattern={tripPattern} />
-        <View style={styles.scrollContainer}>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            hitSlop={insets.symmetric(12, 20)}
-            contentContainerStyle={styles.detailsContainer}
-            {...screenReaderHidden}
-          >
-            {tripPattern.legs.map(function (leg, i) {
-              return (
-                <View style={styles.legOutput} key={leg.aimedStartTime}>
-                  {leg.mode === 'foot' ? (
-                    <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
-                  ) : (
-                    <>
-                      <TransportationLeg leg={leg} />
-                      <ThemeIcon svg={ChevronRight} size={'small'} />
-                    </>
-                  )}
-                </View>
-              );
-            })}
+        <View style={styles.detailsContainer} {...screenReaderHidden}>
+          {expandedLegs.map(function (leg, i) {
+            return (
+              <View style={styles.legOutput} key={leg.aimedStartTime}>
+                {leg.mode === 'foot' ? (
+                  <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
+                ) : (
+                  <>
+                    <TransportationLeg leg={leg} />
+                    <ThemeIcon svg={ChevronRight} size={'small'} />
+                  </>
+                )}
+              </View>
+            );
+          })}
+          <View style={styles.legOutput}>
+            <CollapsedLegs legs={collapsedLegs} />
             <DestinationLeg tripPattern={tripPattern} />
-          </ScrollView>
+          </View>
         </View>
         <ResultItemFooter legs={tripPattern.legs} />
       </View>
@@ -201,12 +213,17 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.colors.background_0.backgroundColor,
     borderRadius: theme.border.radius.regular,
     marginTop: theme.spacings.medium,
+    overflow: 'hidden',
   },
   scrollContainer: {
     padding: theme.spacings.medium,
   },
   detailsContainer: {
+    flex: 1,
     flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    padding: theme.spacings.medium,
   },
   resultHeader: {
     flexDirection: 'row',
@@ -219,7 +236,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 3,
   },
   legOutput: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
   },
