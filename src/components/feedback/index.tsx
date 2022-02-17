@@ -49,13 +49,6 @@ const GoodOrBadQuestion = ({
     return null;
   }
 
-  console.log(
-    'category??',
-    category,
-    'category.introText??',
-    category.introText,
-  );
-
   return (
     <>
       <ThemeText type="heading__component" style={styles.centerText}>
@@ -104,7 +97,6 @@ export const Feedback = ({
   const category = useFeedbackQuestion(mode);
 
   // @TODO Change model to only have one question.
-  console.log('category is', category);
 
   const [submitted, setSubmitted] = useState(false);
   const [selectedOpinion, setSelectedOpinion] = useState(
@@ -128,8 +120,6 @@ export const Feedback = ({
   );
 
   const submitFeedbackWithAlternatives = () => {
-    console.log('Submitting AssistantFeedback');
-
     const selectedAnswers = selectedAlternativeIds.map((altId) =>
       category?.question?.alternatives.find(
         (alt) => alt.alternativeId === altId,
@@ -155,14 +145,8 @@ export const Feedback = ({
     setSubmitted(false);
   }, [quayListData, tripPatterns]);
 
-  console.log(
-    `Submitted ${submitted}, isSearching ${isSearching}, isEmptyResult ${isEmptyResult}, question: ${category}`,
-  );
-
   if (!category || isSearching || isEmptyResult) return null;
   if (submitted) return <SubmittedComponent />;
-
-  console.log('question in index', category);
 
   if (quayListData || tripPatterns)
     return (

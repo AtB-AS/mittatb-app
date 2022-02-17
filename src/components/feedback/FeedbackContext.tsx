@@ -73,7 +73,6 @@ const FeedbackQuestionsProvider: React.FC = ({children}) => {
               ) as CategoryType;
             }
 
-            console.log('Setting newQuestions:', newQuestions);
             setCategories(newQuestions);
           },
           (err) => {
@@ -103,9 +102,6 @@ export function useFeedbackQuestionsState() {
 
 export function useFeedbackQuestion(mode: FeedbackQuestionsMode) {
   const {categories} = useFeedbackQuestionsState();
-  console.log(
-    `Returning introtext ${categories[mode]?.introText} from context`,
-  );
   return categories[mode];
 }
 

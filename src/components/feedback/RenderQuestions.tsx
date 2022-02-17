@@ -21,8 +21,6 @@ export const RenderQuestion = ({
 }: RenderQuestionProps) => {
   const {language} = useTranslation();
 
-  console.log('question in RenderQuestion', question);
-
   if (!question) {
     return null;
   }
