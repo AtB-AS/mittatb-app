@@ -152,7 +152,8 @@ const AssistantTexts = {
         label: _('Vent', 'Wait'),
       },
       footer: {
-        fromLabel: (place: string, time: string) =>
+        fromPlace: (place: string) => _(`Fra ${place}`, `From ${place}`),
+        fromPlaceWithTime: (place: string, time: string) =>
           _(`Fra ${place} ${time}`, `From ${place} ${time}`),
         detailsLabel: _('Detaljer', 'Details'),
         detailsHint: _(

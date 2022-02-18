@@ -213,13 +213,16 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
 
   return (
     <View style={styles.resultFooter}>
-      <ThemeText type={'body__secondary'}>
-        {t(
-          AssistantTexts.results.resultItem.footer.fromLabel(
-            quayName,
-            timePrefix + formatToClock(quayStartTime, language),
-          ),
-        )}
+      <ThemeText
+        type={'body__secondary'}
+        style={{flexShrink: 1}}
+        numberOfLines={1}
+      >
+        {t(AssistantTexts.results.resultItem.footer.fromPlace(quayName))}
+      </ThemeText>
+
+      <ThemeText>
+        {timePrefix + formatToClock(quayStartTime, language)}
       </ThemeText>
 
       <View style={styles.detailsTextWrapper}>
