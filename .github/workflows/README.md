@@ -53,6 +53,6 @@ This key must be added to a JSON-file with the following format (this is an exam
 
 The `key_id`, and `issues_id` is available in the `Users and Access -> Keys -> App Store Connect API`-tab on App Store Connect.
 
-The `key` is a `.p8`-file which you have to download when generating the key.
+The `key` is a `.p8`-file which you have to download when generating the key. You will need to manually add `\n` instead of line breaks in the key. Also remove all whitespaces.
 
 This JSON-file must be base64-encoded and added as a `APP_STORE_CONNECT_API_KEY`-secret on Github Actions for the given organization/environment.
