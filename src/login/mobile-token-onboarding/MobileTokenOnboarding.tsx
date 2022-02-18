@@ -12,6 +12,8 @@ import {ActiveTicketCard} from '@atb/screens/Ticketing/Tickets/TravelCardInforma
 import Button from '@atb/components/button';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {useMobileContextState} from '@atb/mobile-token/MobileTokenContext';
+import {MaterialTopTabBarProps} from '@react-navigation/material-top-tabs';
+import _ from 'lodash';
 
 const themeColor: ThemeColor = 'background_accent';
 
@@ -105,7 +107,7 @@ export function Info1(): JSX.Element {
   const {t} = useTranslation();
 
   return (
-    <>
+    <View style={styles.container}>
       <ThemeText
         type={'body__primary--jumbo--bold'}
         style={[styles.alignCenter, styles.marginVertical]}
@@ -117,7 +119,7 @@ export function Info1(): JSX.Element {
         Et reisebevis kan være et t:kort eller en spesifikk mobiltelefon. Det er
         du bruker for å kunne fremvise gyldig billett.
       </ThemeText>
-    </>
+    </View>
   );
 }
 
@@ -126,7 +128,7 @@ export function Info2(): JSX.Element {
   const {t} = useTranslation();
 
   return (
-    <>
+    <View style={styles.container}>
       <ThemeText
         type={'body__primary--jumbo--bold'}
         style={[styles.alignCenter, styles.marginVertical]}
@@ -138,11 +140,11 @@ export function Info2(): JSX.Element {
         Valg av reisebevis gir deg fleksibilitet til å velge det som passer deg.
         Bare husk å alltid ha med deg ditt valgte reisebevis.
       </ThemeText>
-    </>
+    </View>
   );
 }
 
-function Info3(): JSX.Element {
+export function Info3(): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
@@ -163,7 +165,7 @@ function Info3(): JSX.Element {
   );
 }
 
-function PhoneInfoBox({phoneName}: {phoneName: string}): JSX.Element {
+export function PhoneInfoBox({phoneName}: {phoneName: string}): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
@@ -275,6 +277,23 @@ function ChangeTokenInfo(): JSX.Element {
   );
 }
 
+export function PageIndicator(props: MaterialTopTabBarProps) {
+  const styles = useThemeStyles();
+  const count = props.state.routes.length;
+  const index = props.state.index;
+
+  return (
+    <View style={styles.pageIndicator}>
+      {_.times(count, (i) => (
+        <View
+          key={i}
+          style={[styles.pageDot, index === i && styles.activeDot]}
+        ></View>
+      ))}
+    </View>
+  );
+}
+
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.colors[themeColor].backgroundColor,
@@ -323,5 +342,20 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.radius.regular,
     padding: theme.spacings.large,
     alignSelf: 'center',
+  },
+  pageIndicator: {
+    marginVertical: theme.spacings.xLarge,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  pageDot: {
+    height: theme.spacings.medium,
+    width: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium / 2,
+    borderRadius: theme.border.radius.regular,
+    backgroundColor: theme.colors.secondary_2.backgroundColor,
+  },
+  activeDot: {
+    backgroundColor: theme.colors.primary_2.backgroundColor,
   },
 }));
