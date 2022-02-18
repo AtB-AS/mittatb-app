@@ -6,7 +6,7 @@ import ThemeText from '@atb/components/text';
 import Button from '../button';
 import {TripPattern} from '@atb/api/types/trips';
 import {Quay} from '@atb/api/types/departures';
-import {useTranslation} from '@atb/translations';
+import {useTranslation, FeedbackTexts} from '@atb/translations';
 import {FeedbackQuestionsMode, useFeedbackQuestion} from './FeedbackContext';
 import GoodOrBadButton from './GoodOrBadButton';
 import {RenderQuestion} from './RenderQuestions';
@@ -14,13 +14,11 @@ import firestore from '@react-native-firebase/firestore';
 
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
-  const {language} = useTranslation();
+  const {language, t} = useTranslation();
 
   return (
     <ThemeText type="body__primary--bold" style={styles.centerText}>
-      {language === 'nb'
-        ? 'Takk for tilbakemeldingen!'
-        : 'Thanks for the feedback!'}
+      {t(FeedbackTexts.submittedText.thanks)}
     </ThemeText>
   );
 };
@@ -91,7 +89,7 @@ export const Feedback = ({
   isEmptyResult,
 }: FeedbackProps) => {
   const styles = useFeedbackStyles();
-  const {language} = useTranslation();
+  const {language, t} = useTranslation();
   const {theme} = useTheme();
   const category = useFeedbackQuestion(mode);
 
@@ -169,9 +167,7 @@ export const Feedback = ({
         {selectedOpinion !== Opinions.NotClickedYet && (
           <Section withBottomPadding>
             <Button
-              text={
-                language === 'nb' ? 'Send tilbakemelding' : 'Submit feedback'
-              }
+              text={t(FeedbackTexts.submitText.submitFeedback)}
               onPress={submitFeedbackWithAlternatives}
               mode="primary"
               color="background_accent"

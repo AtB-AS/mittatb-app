@@ -4,8 +4,7 @@ import {View, TouchableOpacity} from 'react-native';
 import ThemeText from '../text';
 import {Opinions} from '.';
 import {useSectionItem} from '../sections/section-utils';
-import {useTranslation} from '@atb/translations';
-import Svg, {Path} from 'react-native-svg';
+import {useTranslation, FeedbackTexts} from '@atb/translations';
 import hexToRgba from 'hex-to-rgba';
 
 export type GoodOrBadButtonProps = {
@@ -23,7 +22,7 @@ export const GoodOrBadButton = ({
   const styles = useButtonStyle();
   const {theme} = useTheme();
   const {topContainer} = useSectionItem(props);
-  const {language} = useTranslation();
+  const {language, t} = useTranslation();
 
   return (
     <View style={styles.outerGoodOrBad}>
@@ -36,8 +35,8 @@ export const GoodOrBadButton = ({
           }
         >
           <ThemeText type={checked ? 'body__primary--bold' : 'body__primary'}>
-            {opinion === Opinions.Good && (language === 'nb' ? 'Bra' : 'Good')}
-            {opinion === Opinions.Bad && (language === 'nb' ? 'Dårlig' : 'Bad')}
+            {opinion === Opinions.Good && t(FeedbackTexts.goodOrBadTexts.good)}
+            {opinion === Opinions.Bad && t(FeedbackTexts.goodOrBadTexts.bad)}
           </ThemeText>
 
           <View style={styles.emoji}></View>
