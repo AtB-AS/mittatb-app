@@ -39,10 +39,10 @@ export const GoodOrBadButton = ({
             {opinion === Opinions.Bad && t(FeedbackTexts.goodOrBadTexts.bad)}
           </ThemeText>
 
-          <View style={styles.emoji}></View>
-
-          {opinion === Opinions.Good && <ThemeText>🙌</ThemeText>}
-          {opinion === Opinions.Bad && <ThemeText>👎</ThemeText>}
+          <View style={styles.emoji}>
+            {opinion === Opinions.Good && <ThemeText>🙌</ThemeText>}
+            {opinion === Opinions.Bad && <ThemeText>👎</ThemeText>}
+          </View>
         </View>
       </TouchableOpacity>
     </View>
