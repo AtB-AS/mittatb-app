@@ -41,15 +41,7 @@ jobs:
         uses: bruceadams/get-release@v1.2.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Distribute to TestFlight via appcenter
-        if: matrix.org == 'atb'
-        run: fastlane ios appcenter_testflight
-        env:
-          APPCENTER_API_KEY: ${{ secrets.APPCENTER_IOS_API_KEY }}
-          RELEASE_NOTES: ${{ steps.get_release.outputs.body }}
-          RELEASE_URL: ${{ steps.get_release.outputs.html_url }}
       - name: Distribute to TestFlight
-        if: matrix.org == 'nfk'
         run: |
           echo ${{ secrets.APP_STORE_CONNECT_API_KEY}} | base64 --decode > app-store-connect-api-key.json
           fastlane ios testflight_prod
