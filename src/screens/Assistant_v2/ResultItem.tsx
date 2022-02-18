@@ -32,7 +32,7 @@ import {
 } from '@atb/utils/date';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   AccessibilityProps,
   View,
@@ -123,37 +123,38 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 }) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
-  const [parentWidth, setParentWidth] = useState(0);
+  const [collapsableParentWidth, setCollapsableParentWidth] = useState(0);
+  const [collapsableWidth, setCollapsableWidth] = useState(0);
+
   const [numberOfExpandedLegs, setNumberOfExpandedLegs] = useState(
-    tripPattern?.legs?.length,
+    tripPattern.legs.length,
   );
-  const animValue = useRef(new Animated.Value(0)).current;
+  const fadeInValue = useRef(new Animated.Value(0)).current;
 
-  if (!tripPattern?.legs?.length) return null;
+  // Dynamically collapse legs to fit horizontally
+  useEffect(() => {
+    if (collapsableParentWidth && collapsableWidth) {
+      if (collapsableWidth >= collapsableParentWidth) {
+        setNumberOfExpandedLegs(numberOfExpandedLegs - 1);
+      } else {
+        fadeIn.start();
+      }
+    }
+  }, [collapsableParentWidth, collapsableWidth]);
 
-  const fadeIn = Animated.timing(animValue, {
+  const fadeIn = Animated.timing(fadeInValue, {
     toValue: 1,
     duration: 250,
     useNativeDriver: true,
   });
+
+  if (!tripPattern?.legs?.length) return null;
 
   const expandedLegs = tripPattern.legs.slice(0, numberOfExpandedLegs);
   const collapsedLegs = tripPattern.legs.slice(
     numberOfExpandedLegs,
     tripPattern.legs.length,
   );
-
-  const setCollapseParentWidth = (e: LayoutChangeEvent) => {
-    setParentWidth(e.nativeEvent.layout.width);
-  };
-
-  const collapsableContentChanged = (width: number) => {
-    if (width >= parentWidth) {
-      setNumberOfExpandedLegs(numberOfExpandedLegs - 1);
-    } else {
-      fadeIn.start();
-    }
-  };
 
   return (
     <TouchableOpacity
@@ -165,10 +166,10 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       accessible={true}
     >
       <Animated.View
-        style={[styles.result, {opacity: animValue}]}
+        style={[styles.result, {opacity: fadeInValue}]}
         {...props}
         accessible={false}
-        onLayout={(e) => setCollapseParentWidth(e)}
+        onLayout={(e) => setCollapsableParentWidth(e.nativeEvent.layout.width)}
       >
         <ResultItemHeader tripPattern={tripPattern} />
         <ScrollView
@@ -176,7 +177,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.detailsContainer}
           {...screenReaderHidden}
-          onContentSizeChange={(width) => collapsableContentChanged(width)}
+          onContentSizeChange={(width) => setCollapsableWidth(width)}
         >
           {expandedLegs.map(function (leg, i) {
             return (
@@ -321,7 +322,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       ) : (
         <ThemeIcon svg={WalkingPerson} />
       )}
-      <ThemeIcon svg={ChevronRight} size={'small'} />
+      {nextLeg && <ThemeIcon svg={ChevronRight} size={'small'} />}
     </View>
   );
 };
