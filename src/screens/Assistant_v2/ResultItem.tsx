@@ -169,7 +169,6 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
           })}
           <View style={styles.legOutput}>
             <CollapsedLegs legs={collapsedLegs} />
-            <DestinationLeg tripPattern={tripPattern} />
           </View>
         </View>
         <ResultItemFooter legs={tripPattern.legs} />

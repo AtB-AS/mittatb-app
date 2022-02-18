@@ -108,7 +108,6 @@ export const CollapsedLegs = ({legs}: {legs: any[]}) => {
           +{legs.length}
         </ThemeText>
       </View>
-      <ThemeIcon svg={ChevronRight} size={'small'} />
     </>
   );
 };
