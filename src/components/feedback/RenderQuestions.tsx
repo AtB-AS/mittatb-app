@@ -42,21 +42,19 @@ export const RenderQuestion = ({
         {question.questionText[language]}
       </ThemeText>
 
-      <Section withTopPadding withBottomPadding>
-        {question.alternatives.map((alternative) => (
-          <AlternativeItem
-            key={alternative.alternativeId}
-            selectedAlternativeIds={selectedAlternativeIds}
-            alternative={alternative}
-            handleAnswerPress={(alternativeId: number) =>
-              handleAnswerPress({
-                questionId: question.questionId,
-                alternativeId,
-              })
-            }
-          />
-        ))}
-      </Section>
+      {question.alternatives.map((alternative) => (
+        <AlternativeItem
+          key={alternative.alternativeId}
+          selectedAlternativeIds={selectedAlternativeIds}
+          alternative={alternative}
+          handleAnswerPress={(alternativeId: number) =>
+            handleAnswerPress({
+              questionId: question.questionId,
+              alternativeId,
+            })
+          }
+        />
+      ))}
     </View>
   );
 };
@@ -78,36 +76,33 @@ function AlternativeItem({
   const checked = selectedAlternativeIds.includes(alternative.alternativeId);
 
   return (
-    <Section>
-      <TouchableOpacity
-        onPress={() => handleAnswerPress(alternative.alternativeId)}
+    <TouchableOpacity
+      onPress={() => handleAnswerPress(alternative.alternativeId)}
+    >
+      <View
+        style={
+          checked
+            ? [topContainer, styles.alternativeBox, styles.checked]
+            : [topContainer, styles.alternativeBox]
+        }
       >
-        <View
-          style={
-            checked
-              ? [topContainer, styles.alternativeBox, styles.checked]
-              : [topContainer, styles.alternativeBox]
-          }
-        >
-          <ThemeText type="body__primary">
-            {alternative.alternativeText[language]}
-          </ThemeText>
-        </View>
-      </TouchableOpacity>
-    </Section>
+        <ThemeText type="body__primary">
+          {alternative.alternativeText[language]}
+        </ThemeText>
+      </View>
+    </TouchableOpacity>
   );
 }
 
 const useAlternativeStyle = StyleSheet.createThemeHook((theme) => ({
   alternativeBox: {
-    display: 'flex',
+    alignSelf: 'flex-start',
     justifyContent: 'center',
     padding: theme.spacings.medium,
     marginBottom: theme.spacings.small,
-    paddingTop: theme.spacings.medium,
-    paddingBottom: theme.spacings.medium,
+    paddingVertical: theme.spacings.medium,
     backgroundColor: theme.colors.background_0.backgroundColor,
-    borderWidth: 2,
+    borderWidth: theme.border.width.medium,
     borderRadius: theme.border.radius.regular,
     borderColor: theme.colors.background_0.backgroundColor,
   },

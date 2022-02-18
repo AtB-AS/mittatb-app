@@ -26,34 +26,43 @@ export const GoodOrBadButton = ({
   const {language} = useTranslation();
 
   return (
-    <TouchableOpacity onPress={() => setSelectedOpinion(opinion)}>
-      <View
-        style={
-          checked
-            ? [topContainer, styles.button, styles.selectedButton]
-            : [topContainer, styles.button]
-        }
-      >
-        <ThemeText type={checked ? 'body__primary--bold' : 'body__primary'}>
-          {opinion === Opinions.Good && (language === 'nb' ? 'Bra' : 'Good')}
-          {opinion === Opinions.Bad && (language === 'nb' ? 'Dårlig' : 'Bad')}
-        </ThemeText>
+    <View style={styles.outerGoodOrBad}>
+      <TouchableOpacity onPress={() => setSelectedOpinion(opinion)}>
+        <View
+          style={
+            checked
+              ? [topContainer, styles.button, styles.selectedButton]
+              : [topContainer, styles.button]
+          }
+        >
+          <ThemeText type={checked ? 'body__primary--bold' : 'body__primary'}>
+            {opinion === Opinions.Good && (language === 'nb' ? 'Bra' : 'Good')}
+            {opinion === Opinions.Bad && (language === 'nb' ? 'Dårlig' : 'Bad')}
+          </ThemeText>
 
-        {opinion === Opinions.Good && <ThemeText>🙌</ThemeText>}
-        {opinion === Opinions.Bad && <ThemeText>👎</ThemeText>}
-      </View>
-    </TouchableOpacity>
+          <View style={styles.emoji}></View>
+
+          {opinion === Opinions.Good && <ThemeText>🙌</ThemeText>}
+          {opinion === Opinions.Bad && <ThemeText>👎</ThemeText>}
+        </View>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const useButtonStyle = StyleSheet.createThemeHook((theme) => ({
+  outerGoodOrBad: {
+    flex: 1,
+  },
+  emoji: {
+    marginTop: theme.spacings.xLarge,
+  },
   button: {
-    width: 170,
-    height: 120,
-    display: 'flex',
+    flex: 1,
+    padding: theme.spacings.xLarge,
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    borderWidth: 2,
+    borderWidth: theme.border.width.medium,
     borderRadius: theme.border.radius.regular,
     borderColor: theme.colors.background_0.backgroundColor,
   },

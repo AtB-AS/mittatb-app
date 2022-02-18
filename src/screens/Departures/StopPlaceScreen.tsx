@@ -80,6 +80,7 @@ export default function StopPlaceScreen({
   const quayListData: SectionListData<Quay>[] | undefined = stopPlace?.quays
     ? [{data: stopPlace.quays}]
     : undefined;
+  const [feedbackAdded, setFeedbackAdded] = useState<boolean>(false);
 
   useEffect(() => {
     refresh();
@@ -144,7 +145,6 @@ export default function StopPlaceScreen({
       />
       {quayListData && (
         <>
-          <Feedback quayListData={quayListData} mode="departures" />
           <SectionList
             stickySectionHeadersEnabled={true}
             stickyHeaderIndices={[0]}
@@ -161,18 +161,32 @@ export default function StopPlaceScreen({
               />
             }
             sections={quayListData}
+            // sections={quayListData.map((quay, i) => [quay, i])}
             keyExtractor={(item) => item.id}
-            renderItem={({item}) => (
-              <QuaySection
-                quay={item}
-                selectedQuayId={selectedQuay?.id}
-                data={state.data}
-                navigateToDetails={navigateToDetails}
-                navigateToQuay={(quay) => {
-                  navigation.setParams({selectedQuay: quay});
-                }}
-              />
-            )}
+            renderItem={({item, index}) => {
+              const renderedItem = (
+                <QuaySection
+                  quay={item}
+                  selectedQuayId={selectedQuay?.id}
+                  data={state.data}
+                  navigateToDetails={navigateToDetails}
+                  navigateToQuay={(quay) => {
+                    navigation.setParams({selectedQuay: quay});
+                  }}
+                />
+              );
+
+              if (index === 0) {
+                return (
+                  <>
+                    {renderedItem}
+                    <Feedback quayListData={quayListData} mode="departures" />
+                  </>
+                );
+              } else {
+                return renderedItem;
+              }
+            }}
           />
         </>
       )}

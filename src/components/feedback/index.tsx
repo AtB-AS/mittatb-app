@@ -10,6 +10,7 @@ import {useTranslation} from '@atb/translations';
 import {FeedbackQuestionsMode, useFeedbackQuestion} from './FeedbackContext';
 import GoodOrBadButton from './GoodOrBadButton';
 import {RenderQuestion} from './RenderQuestions';
+import firestore from '@react-native-firebase/firestore';
 
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
@@ -56,21 +57,19 @@ const GoodOrBadQuestion = ({
       </ThemeText>
 
       <View style={styles.feedbackRow}>
-        <Section withPadding>
-          <GoodOrBadButton
-            opinion={Opinions.Good}
-            checked={selectedOpinion === Opinions.Good}
-            setSelectedOpinion={setSelectedOpinion}
-          />
-        </Section>
+        <GoodOrBadButton
+          opinion={Opinions.Good}
+          checked={selectedOpinion === Opinions.Good}
+          setSelectedOpinion={setSelectedOpinion}
+        />
 
-        <Section withPadding>
-          <GoodOrBadButton
-            opinion={Opinions.Bad}
-            checked={selectedOpinion === Opinions.Bad}
-            setSelectedOpinion={setSelectedOpinion}
-          />
-        </Section>
+        <View style={styles.spacing} />
+
+        <GoodOrBadButton
+          opinion={Opinions.Bad}
+          checked={selectedOpinion === Opinions.Bad}
+          setSelectedOpinion={setSelectedOpinion}
+        />
       </View>
     </>
   );
@@ -119,7 +118,7 @@ export const Feedback = ({
     [selectedAlternativeIds],
   );
 
-  const submitFeedbackWithAlternatives = () => {
+  const submitFeedbackWithAlternatives = async () => {
     const selectedAnswers = selectedAlternativeIds.map((altId) =>
       category?.question?.alternatives.find(
         (alt) => alt.alternativeId === altId,
@@ -135,6 +134,7 @@ export const Feedback = ({
     };
 
     console.log('Submitted to server:', dataToServer);
+    await firestore().collection('feedback').add(dataToServer);
 
     setSubmitted(true);
   };
@@ -182,7 +182,7 @@ export const Feedback = ({
 
 const useFeedbackStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    paddingHorizontal: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.xLarge,
     paddingBottom: theme.spacings.medium,
   },
   infoBoxText: theme.typography.body__primary,
@@ -194,6 +194,10 @@ const useFeedbackStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'center',
     paddingVertical: theme.spacings.small,
+    gap: theme.spacings.small,
+  },
+  spacing: {
+    width: theme.spacings.medium,
   },
 }));
 
