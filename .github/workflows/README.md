@@ -56,3 +56,6 @@ The `key_id`, and `issues_id` is available in the `Users and Access -> Keys -> A
 The `key` is a `.p8`-file which you have to download when generating the key. You will need to manually add `\n` instead of line breaks in the key. Also remove all whitespaces.
 
 This JSON-file must be base64-encoded and added as a `APP_STORE_CONNECT_API_KEY`-secret on Github Actions for the given organization/environment.
+
+The command for base64-encoding (note the `-A` to output the string in a single line):
+`openssl base64 -e -A -in app-store-connect-api-key.json`
