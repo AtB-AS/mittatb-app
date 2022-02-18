@@ -30,15 +30,15 @@ import {
   secondsToDuration,
   secondsToDurationShort,
 } from '@atb/utils/date';
-import insets from '@atb/utils/insets';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import {
   AccessibilityProps,
   View,
-  ViewStyle,
   TouchableOpacity,
+  LayoutChangeEvent,
+  Animated,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Leg, TripPattern} from '@atb/api/types/trips';
@@ -123,23 +123,37 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 }) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
+  const [parentWidth, setParentWidth] = useState(0);
+  const [numberOfExpandedLegs, setNumberOfExpandedLegs] = useState(
+    tripPattern?.legs?.length,
+  );
+  const animValue = useRef(new Animated.Value(0)).current;
 
   if (!tripPattern?.legs?.length) return null;
 
-  // naive test for width of expanded legs
-  const legSplit =
-    tripPattern.legs
-      .slice(0, 4)
-      .map((leg) => leg.line?.publicCode ?? '')
-      .join('').length > 5
-      ? 3
-      : 4;
+  const fadeIn = Animated.timing(animValue, {
+    toValue: 1,
+    duration: 250,
+    useNativeDriver: true,
+  });
 
-  const expandedLegs = tripPattern.legs.slice(0, legSplit);
+  const expandedLegs = tripPattern.legs.slice(0, numberOfExpandedLegs);
   const collapsedLegs = tripPattern.legs.slice(
-    legSplit,
+    numberOfExpandedLegs,
     tripPattern.legs.length,
   );
+
+  const setCollapseParentWidth = (e: LayoutChangeEvent) => {
+    setParentWidth(e.nativeEvent.layout.width);
+  };
+
+  const collapsableContentChanged = (width: number) => {
+    if (width >= parentWidth) {
+      setNumberOfExpandedLegs(numberOfExpandedLegs - 1);
+    } else {
+      fadeIn.start();
+    }
+  };
 
   return (
     <TouchableOpacity
@@ -150,9 +164,20 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       onPress={onDetailsPressed}
       accessible={true}
     >
-      <View style={styles.result} {...props} accessible={false}>
+      <Animated.View
+        style={[styles.result, {opacity: animValue}]}
+        {...props}
+        accessible={false}
+        onLayout={(e) => setCollapseParentWidth(e)}
+      >
         <ResultItemHeader tripPattern={tripPattern} />
-        <View style={styles.detailsContainer} {...screenReaderHidden}>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.detailsContainer}
+          {...screenReaderHidden}
+          onContentSizeChange={(width) => collapsableContentChanged(width)}
+        >
           {expandedLegs.map(function (leg, i) {
             return (
               <View style={styles.legOutput} key={leg.aimedStartTime}>
@@ -170,9 +195,9 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
           <View style={styles.legOutput}>
             <CollapsedLegs legs={collapsedLegs} />
           </View>
-        </View>
+        </ScrollView>
         <ResultItemFooter legs={tripPattern.legs} />
-      </View>
+      </Animated.View>
     </TouchableOpacity>
   );
 };
@@ -212,16 +237,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.colors.background_0.backgroundColor,
     borderRadius: theme.border.radius.regular,
     marginTop: theme.spacings.medium,
-    overflow: 'hidden',
   },
-  scrollContainer: {
-    padding: theme.spacings.medium,
-  },
+
   detailsContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
     padding: theme.spacings.medium,
   },
   resultHeader: {
@@ -249,6 +267,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   detailsTextWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingLeft: theme.spacings.medium,
   },
   detailsIcon: {
     marginLeft: theme.spacings.xSmall,
@@ -357,7 +376,7 @@ const tripSummary = (
     ${
       firstLeg
         ? t(
-            AssistantTexts.results.resultItem.footer.fromLabel(
+            AssistantTexts.results.resultItem.footer.fromPlaceWithTime(
               firstLeg.fromPlace?.name ?? '',
               formatToClock(firstLeg.expectedStartTime, language),
             ),
