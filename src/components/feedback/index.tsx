@@ -144,7 +144,7 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
     setSelectedAlternativeIds([]);
     setSelectedOpinion(Opinions.NotClickedYet);
     setSubmitted(false);
-  }, [quayListData, tripPattern]);
+  }, [tripPattern]);
 
   if (!category) return null;
   if (submitted) return <SubmittedComponent />;
