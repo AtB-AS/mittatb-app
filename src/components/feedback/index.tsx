@@ -166,14 +166,18 @@ export const Feedback = ({
           question={category.question}
         />
 
-        <Section withBottomPadding>
-          <Button
-            text={language === 'nb' ? 'Send tilbakemelding' : 'Submit feedback'}
-            onPress={submitFeedbackWithAlternatives}
-            mode="primary"
-            color="background_accent"
-          />
-        </Section>
+        {selectedOpinion !== Opinions.NotClickedYet && (
+          <Section withBottomPadding>
+            <Button
+              text={
+                language === 'nb' ? 'Send tilbakemelding' : 'Submit feedback'
+              }
+              onPress={submitFeedbackWithAlternatives}
+              mode="primary"
+              color="background_accent"
+            />
+          </Section>
+        )}
       </View>
     );
 
