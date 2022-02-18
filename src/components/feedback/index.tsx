@@ -17,12 +17,15 @@ const SubmittedComponent = () => {
   const {language, t} = useTranslation();
 
   return (
-    <ThemeText
-      type="body__primary--bold"
-      style={[styles.questionText, styles.centerText]}
-    >
-      {t(FeedbackTexts.submittedText.thanks)}
-    </ThemeText>
+    <View style={[styles.container, styles.submittedView]}>
+      <ThemeText
+        type="body__primary--bold"
+        style={[styles.questionText, styles.centerText]}
+      >
+        {t(FeedbackTexts.submittedText.thanks)}
+      </ThemeText>
+      <ThemeText>🎉</ThemeText>
+    </View>
   );
 };
 
@@ -182,8 +185,11 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
 
 const useFeedbackStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
+    backgroundColor: theme.colors.background_1.backgroundColor,
+    borderRadius: theme.border.radius.regular,
     paddingHorizontal: theme.spacings.xLarge,
-    paddingBottom: theme.spacings.medium,
+    paddingBottom: theme.spacings.xLarge,
+    marginVertical: theme.spacings.medium,
   },
   infoBoxText: theme.typography.body__primary,
   centerText: {
@@ -204,7 +210,11 @@ const useFeedbackStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.large,
   },
   submitButtonView: {
-    marginVertical: theme.spacings.large,
+    marginTop: theme.spacings.medium,
+  },
+  submittedView: {
+    flex: 1,
+    alignItems: 'center',
   },
 }));
 
