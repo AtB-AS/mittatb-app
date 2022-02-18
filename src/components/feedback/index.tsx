@@ -171,7 +171,7 @@ export const Feedback = ({
             text={language === 'nb' ? 'Send tilbakemelding' : 'Submit feedback'}
             onPress={submitFeedbackWithAlternatives}
             mode="primary"
-            color="secondary_1"
+            color="background_accent"
           />
         </Section>
       </View>

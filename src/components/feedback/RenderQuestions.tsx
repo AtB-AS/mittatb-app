@@ -3,8 +3,11 @@ import {Opinions} from '.';
 import {QuestionType, AlternativeType, CategoryType} from './FeedbackContext';
 import {useTranslation} from '@atb/translations';
 import ThemeText from '@atb/components/text';
-import {Section, ActionItem} from '@atb/components/sections';
+import {Section} from '@atb/components/sections';
 import {View} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {StyleSheet} from '@atb/theme';
+import {useSectionItem} from '../sections/section-utils';
 
 export interface RenderQuestionProps {
   selectedOpinion: Opinions;
@@ -66,18 +69,49 @@ function AlternativeItem({
   selectedAlternativeIds,
   alternative,
   handleAnswerPress,
+  ...props
 }: AlternativeItemProps) {
   const {language} = useTranslation();
+  const styles = useAlternativeStyle();
+  const {topContainer} = useSectionItem({...props});
+  const checked = selectedAlternativeIds.includes(alternative.alternativeId);
 
   return (
-    <Section withPadding>
-      <ActionItem
-        text={alternative.alternativeText[language]}
+    <Section>
+      <TouchableOpacity
         onPress={() => handleAnswerPress(alternative.alternativeId)}
-        mode="check"
-        checked={selectedAlternativeIds.includes(alternative.alternativeId)}
-        type="compact"
-      />
+      >
+        <View
+          style={
+            checked
+              ? [topContainer, styles.alternativeBox, styles.checked]
+              : [topContainer, styles.alternativeBox]
+          }
+        >
+          <ThemeText type="body__primary">
+            {alternative.alternativeText[language]}
+          </ThemeText>
+        </View>
+      </TouchableOpacity>
     </Section>
   );
 }
+
+const useAlternativeStyle = StyleSheet.createThemeHook((theme) => ({
+  alternativeBox: {
+    display: 'flex',
+    justifyContent: 'center',
+    padding: theme.spacings.medium,
+    marginBottom: theme.spacings.small,
+    paddingTop: theme.spacings.medium,
+    paddingBottom: theme.spacings.medium,
+    backgroundColor: theme.colors.background_0.backgroundColor,
+    borderWidth: 2,
+    borderRadius: theme.border.radius.regular,
+    borderColor: theme.colors.background_0.backgroundColor,
+  },
+  checked: {
+    backgroundColor: theme.colors.primary_3.backgroundColor,
+    borderColor: theme.colors.primary_2.backgroundColor,
+  },
+}));

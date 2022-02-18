@@ -48,16 +48,17 @@ export const GoodOrBadButton = ({
 const useButtonStyle = StyleSheet.createThemeHook((theme) => ({
   button: {
     width: 170,
-    height: 100,
+    height: 120,
     display: 'flex',
     justifyContent: 'space-evenly',
     alignItems: 'center',
+    borderWidth: 2,
     borderRadius: theme.border.radius.regular,
-    // borderColor: theme.colors.background_accent,
+    borderColor: theme.colors.background_0.backgroundColor,
   },
   selectedButton: {
-    // backgroundColor: theme.colors.background_0,
-    borderWidth: 1,
+    backgroundColor: theme.colors.primary_3.backgroundColor,
+    borderColor: theme.colors.primary_2.backgroundColor,
   },
 }));
 
