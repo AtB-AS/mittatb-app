@@ -8,6 +8,7 @@ import {View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {StyleSheet} from '@atb/theme';
 import {useSectionItem} from '../sections/section-utils';
+import hexToRgba from 'hex-to-rgba';
 
 export interface RenderQuestionProps {
   selectedOpinion: Opinions;
@@ -111,7 +112,7 @@ const useAlternativeStyle = StyleSheet.createThemeHook((theme) => ({
     borderColor: theme.colors.background_0.backgroundColor,
   },
   checked: {
-    backgroundColor: theme.colors.primary_3.backgroundColor,
+    backgroundColor: hexToRgba(theme.colors.primary_1.backgroundColor, 0.2),
     borderColor: theme.colors.primary_2.backgroundColor,
   },
 }));

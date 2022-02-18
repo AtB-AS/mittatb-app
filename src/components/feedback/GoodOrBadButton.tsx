@@ -6,6 +6,7 @@ import {Opinions} from '.';
 import {useSectionItem} from '../sections/section-utils';
 import {useTranslation} from '@atb/translations';
 import Svg, {Path} from 'react-native-svg';
+import hexToRgba from 'hex-to-rgba';
 
 export type GoodOrBadButtonProps = {
   opinion: Opinions;
@@ -57,7 +58,7 @@ const useButtonStyle = StyleSheet.createThemeHook((theme) => ({
     borderColor: theme.colors.background_0.backgroundColor,
   },
   selectedButton: {
-    backgroundColor: theme.colors.primary_3.backgroundColor,
+    backgroundColor: hexToRgba(theme.colors.primary_1.backgroundColor, 0.2),
     borderColor: theme.colors.primary_2.backgroundColor,
   },
 }));
