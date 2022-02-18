@@ -31,6 +31,7 @@ import transitionSpec from './transitionSpec';
 import LoginInAppStack, {
   LoginInAppStackParams,
 } from '@atb/login/in-app/LoginInAppStack';
+import MobileTokenOnboardingStack from '@atb/login/mobile-token-onboarding/MobileTokenOnboardingStack';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -42,6 +43,7 @@ export type RootStackParamList = {
   LoginInApp: NavigatorScreenParams<LoginInAppStackParams>;
   TicketPurchase: NavigatorScreenParams<TicketingStackParams>;
   TicketModal: NavigatorScreenParams<TicketModalStackParams>;
+  MobileTokenOnboardingStack: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -153,6 +155,10 @@ const NavigationRoot = () => {
                       close: transitionSpec,
                     },
                   }}
+                />
+                <Stack.Screen
+                  name="MobileTokenOnboardingStack"
+                  component={MobileTokenOnboardingStack}
                 />
               </>
             )}

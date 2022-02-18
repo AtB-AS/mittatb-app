@@ -4,7 +4,6 @@ import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import ThemeText from '@atb/components/text';
-import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ThemeColor} from '@atb/theme/colors';
 import {useNavigation} from '@react-navigation/native';
@@ -16,17 +15,7 @@ import {useMobileContextState} from '@atb/mobile-token/MobileTokenContext';
 
 const themeColor: ThemeColor = 'background_accent';
 
-export default function MobileTokenOnboarding({
-  doAfterSubmit,
-  headerLeftButton,
-  headerRightButton,
-  selectedDeviceId,
-}: {
-  doAfterSubmit: () => void;
-  headerLeftButton?: LeftButtonProps;
-  headerRightButton?: RightButtonProps;
-  selectedDeviceId: number;
-}) {
+export default function MobileTokenOnboarding() {
   const {t} = useTranslation();
   const navigation = useNavigation();
   const styles = useThemeStyles();
@@ -64,12 +53,7 @@ export default function MobileTokenOnboarding({
 
   return (
     <View style={styles.container} ref={focusRef}>
-      <FullScreenHeader
-        leftButton={headerLeftButton}
-        rightButton={headerRightButton}
-        setFocusOnLoad={false}
-        color={themeColor}
-      />
+      <FullScreenHeader setFocusOnLoad={false} color={themeColor} />
 
       <ScrollView centerContent={true} contentContainerStyle={styles.mainView}>
         <View ref={focusRef}>
@@ -116,7 +100,7 @@ export default function MobileTokenOnboarding({
   );
 }
 
-function Info1(): JSX.Element {
+export function Info1(): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
@@ -137,7 +121,7 @@ function Info1(): JSX.Element {
   );
 }
 
-function Info2(): JSX.Element {
+export function Info2(): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
 

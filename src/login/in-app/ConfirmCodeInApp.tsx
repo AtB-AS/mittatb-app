@@ -4,6 +4,7 @@ import ConfirmCode from '@atb/login/ConfirmCode';
 import {RouteProp} from '@react-navigation/native';
 import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
 import {AfterLoginParams} from '@atb/login/types';
+import {RootStackParamList} from '@atb/navigation';
 
 export type ConfirmCodeInAppRouteParams = {
   phoneNumber: string;
@@ -21,18 +22,18 @@ export const ConfirmCodeInApp = ({
     params: {afterLogin, phoneNumber},
   },
 }: {
-  navigation: StackNavigationProp<LoginInAppStackParams>;
+  navigation: StackNavigationProp<RootStackParamList>;
   route: ConfirmCodeInAppRouteProps;
 }) => {
   return (
     <ConfirmCode
       phoneNumber={phoneNumber}
-      doAfterLogin={() =>
-        navigation.navigate('MobileTokenOnboardingInApp', {
-          afterLogin,
-          selectedDeviceId: 0,
-        })
-      }
+      doAfterLogin={() => {
+        navigation.navigate(
+          afterLogin.routeName as any,
+          afterLogin.routeParams,
+        );
+      }}
     />
   );
 };
