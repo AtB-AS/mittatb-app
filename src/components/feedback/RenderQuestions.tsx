@@ -3,9 +3,8 @@ import {Opinions} from '.';
 import {QuestionType, AlternativeType, CategoryType} from './FeedbackContext';
 import {useTranslation} from '@atb/translations';
 import ThemeText from '@atb/components/text';
-import {Section} from '@atb/components/sections';
 import {View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useSectionItem} from '../sections/section-utils';
 import hexToRgba from 'hex-to-rgba';
@@ -24,6 +23,7 @@ export const RenderQuestion = ({
   handleAnswerPress,
 }: RenderQuestionProps) => {
   const {language} = useTranslation();
+  const styles = useAlternativeStyle();
 
   if (!question) {
     return null;
@@ -38,9 +38,11 @@ export const RenderQuestion = ({
 
   return (
     <View>
-      <ThemeText type="body__primary--bold">
-        {question.questionText[language]}
-      </ThemeText>
+      <View style={styles.questionTitleView}>
+        <ThemeText type="body__primary--bold">
+          {question.questionText[language]}
+        </ThemeText>
+      </View>
 
       {question.alternatives.map((alternative) => (
         <AlternativeItem
@@ -109,5 +111,9 @@ const useAlternativeStyle = StyleSheet.createThemeHook((theme) => ({
   checked: {
     backgroundColor: hexToRgba(theme.colors.primary_1.backgroundColor, 0.2),
     borderColor: theme.colors.primary_2.backgroundColor,
+  },
+  questionTitleView: {
+    marginTop: theme.spacings.xLarge,
+    marginBottom: theme.spacings.xLarge,
   },
 }));

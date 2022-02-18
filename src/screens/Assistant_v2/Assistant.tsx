@@ -56,7 +56,6 @@ import Results from './Results';
 import {ThemeColor} from '@atb/theme/colors';
 import * as navIcons from '@atb/assets/svg/icons/navigation';
 import useTripsQuery from '@atb/screens/Assistant_v2/use-trips-query';
-import Feedback from '@atb/components/feedback';
 
 const themeColor: ThemeColor = 'background_accent';
 
@@ -432,13 +431,6 @@ const Assistant: React.FC<Props> = ({
       alertContext="travel"
     >
       <ScreenReaderAnnouncement message={searchStateMessage} />
-
-      <Feedback
-        isSearching={isSearching}
-        isEmptyResult={isEmptyResult}
-        tripPatterns={tripPatterns}
-        mode={'assistant'}
-      />
       <Results
         tripPatterns={tripPatterns}
         isSearching={isSearching}

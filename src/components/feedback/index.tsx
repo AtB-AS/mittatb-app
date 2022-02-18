@@ -17,7 +17,10 @@ const SubmittedComponent = () => {
   const {language, t} = useTranslation();
 
   return (
-    <ThemeText type="body__primary--bold" style={styles.centerText}>
+    <ThemeText
+      type="body__primary--bold"
+      style={[styles.questionText, styles.centerText]}
+    >
       {t(FeedbackTexts.submittedText.thanks)}
     </ThemeText>
   );
@@ -50,7 +53,10 @@ const GoodOrBadQuestion = ({
 
   return (
     <>
-      <ThemeText type="heading__component" style={styles.centerText}>
+      <ThemeText
+        type="heading__component"
+        style={[styles.questionText, styles.centerText]}
+      >
         {category.introText[language]}
       </ThemeText>
 
@@ -74,20 +80,14 @@ const GoodOrBadQuestion = ({
 };
 
 type FeedbackProps = {
-  tripPatterns?: TripPattern[];
+  tripPattern: TripPattern;
   quayListData?: SectionListData<Quay>[];
   isSearching?: boolean;
   isEmptyResult?: boolean;
   mode: FeedbackQuestionsMode;
 };
 
-export const Feedback = ({
-  tripPatterns,
-  quayListData,
-  mode,
-  isSearching,
-  isEmptyResult,
-}: FeedbackProps) => {
+export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
   const styles = useFeedbackStyles();
   const {language, t} = useTranslation();
   const {theme} = useTheme();
@@ -141,12 +141,12 @@ export const Feedback = ({
     setSelectedAlternativeIds([]);
     setSelectedOpinion(Opinions.NotClickedYet);
     setSubmitted(false);
-  }, [quayListData, tripPatterns]);
+  }, [quayListData, tripPattern]);
 
-  if (!category || isSearching || isEmptyResult) return null;
+  if (!category) return null;
   if (submitted) return <SubmittedComponent />;
 
-  if (quayListData || tripPatterns)
+  if (quayListData || tripPattern)
     return (
       <View style={styles.container}>
         <GoodOrBadQuestion
@@ -165,14 +165,14 @@ export const Feedback = ({
         />
 
         {selectedOpinion !== Opinions.NotClickedYet && (
-          <Section withBottomPadding>
+          <View style={styles.submitButtonView}>
             <Button
               text={t(FeedbackTexts.submitText.submitFeedback)}
               onPress={submitFeedbackWithAlternatives}
               mode="primary"
               color="background_accent"
             />
-          </Section>
+          </View>
         )}
       </View>
     );
@@ -198,6 +198,13 @@ const useFeedbackStyles = StyleSheet.createThemeHook((theme) => ({
   },
   spacing: {
     width: theme.spacings.medium,
+  },
+  questionText: {
+    marginTop: theme.spacings.xLarge,
+    marginBottom: theme.spacings.large,
+  },
+  submitButtonView: {
+    marginVertical: theme.spacings.large,
   },
 }));
 
