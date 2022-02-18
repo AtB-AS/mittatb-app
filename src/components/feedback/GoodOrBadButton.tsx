@@ -26,7 +26,11 @@ export const GoodOrBadButton = ({
 
   return (
     <View style={styles.outerGoodOrBad}>
-      <TouchableOpacity onPress={() => setSelectedOpinion(opinion)}>
+      <TouchableOpacity
+        onPress={() =>
+          setSelectedOpinion(checked ? Opinions.NotClickedYet : opinion)
+        }
+      >
         <View
           style={
             checked
