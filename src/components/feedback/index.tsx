@@ -80,11 +80,11 @@ const GoodOrBadQuestion = ({
 };
 
 type FeedbackProps = {
-  tripPattern: TripPattern;
+  mode: FeedbackQuestionsMode;
+  tripPattern?: TripPattern;
   quayListData?: SectionListData<Quay>[];
   isSearching?: boolean;
   isEmptyResult?: boolean;
-  mode: FeedbackQuestionsMode;
 };
 
 export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
