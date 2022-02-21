@@ -139,6 +139,7 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
   };
 
   useEffect(() => {
+    // New Trip pattern, reset state.
     setSelectedAlternativeIds([]);
     setSelectedOpinion(Opinions.NotClickedYet);
     setSubmitted(false);
@@ -198,7 +199,6 @@ const useFeedbackStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'center',
     paddingVertical: theme.spacings.small,
-    gap: theme.spacings.small,
   },
   spacing: {
     width: theme.spacings.medium,
