@@ -80,6 +80,8 @@ function AlternativeItem({
   return (
     <TouchableOpacity
       onPress={() => handleAnswerPress(alternative.alternativeId)}
+      accessibilityRole="checkbox"
+      accessibilityState={{checked}}
     >
       <View
         style={

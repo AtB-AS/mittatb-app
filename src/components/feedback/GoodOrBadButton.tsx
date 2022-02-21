@@ -30,6 +30,8 @@ export const GoodOrBadButton = ({
         onPress={() =>
           setSelectedOpinion(checked ? Opinions.NotClickedYet : opinion)
         }
+        accessibilityRole="radio"
+        accessibilityState={{selected: checked}}
       >
         <View
           style={

@@ -63,14 +63,14 @@ const GoodOrBadQuestion = ({
         {category.introText[language]}
       </ThemeText>
 
-      <View style={styles.feedbackRow}>
+      <View style={styles.feedbackRow} accessibilityRole="radiogroup">
         <GoodOrBadButton
           opinion={Opinions.Good}
           checked={selectedOpinion === Opinions.Good}
           setSelectedOpinion={setSelectedOpinion}
         />
 
-        <View style={styles.spacing} />
+        <View style={styles.spacing} accessibilityRole="none" />
 
         <GoodOrBadButton
           opinion={Opinions.Bad}
