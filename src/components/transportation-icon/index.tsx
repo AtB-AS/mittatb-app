@@ -97,17 +97,15 @@ export const CollapsedLegs = ({legs}: {legs: any[]}) => {
   if (!legs.length) return null;
 
   return (
-    <>
-      <View style={[styles.transportationIcon, {backgroundColor}]}>
-        <ThemeText
-          color={'transport_other'}
-          style={styles.lineNumberText}
-          type="body__primary--bold"
-        >
-          +{legs.length}
-        </ThemeText>
-      </View>
-    </>
+    <View style={[styles.transportationIcon, {backgroundColor}]}>
+      <ThemeText
+        color={'transport_other'}
+        style={styles.lineNumberText}
+        type="body__primary--bold"
+      >
+        +{legs.length}
+      </ThemeText>
+    </View>
   );
 };
 
