@@ -8,6 +8,7 @@ import React, {
 import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
+import Bugsnag from '@bugsnag/react-native';
 
 export type FeedbackQuestionsMode = 'departures' | 'assistant';
 
@@ -52,10 +53,9 @@ const FeedbackQuestionsContext = createContext<FeedbackQuestionsContextState>(
 
 const FeedbackQuestionsProvider: React.FC = ({children}) => {
   const [categories, setCategories] = useState<QuestionCategories>({});
-  const [error, setError] = useState(false);
 
-  useEffect(
-    () =>
+  useEffect(() => {
+    try {
       firestore()
         .collection('configuration')
         .doc('feedbackQuestions')
@@ -72,16 +72,16 @@ const FeedbackQuestionsProvider: React.FC = ({children}) => {
                 questions,
               ) as CategoryType;
             }
-
             setCategories(newQuestions);
           },
           (err) => {
-            console.warn(err);
-            setError(true);
+            Bugsnag.notify(err);
           },
-        ),
-    [],
-  );
+        );
+    } catch (error: any) {
+      Bugsnag.notify(error);
+    }
+  }, []);
 
   return (
     <FeedbackQuestionsContext.Provider value={{categories}}>

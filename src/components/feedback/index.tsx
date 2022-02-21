@@ -10,6 +10,7 @@ import {FeedbackQuestionsMode, useFeedbackQuestion} from './FeedbackContext';
 import GoodOrBadButton from './GoodOrBadButton';
 import {RenderQuestion} from './RenderQuestions';
 import firestore from '@react-native-firebase/firestore';
+import Bugsnag from '@bugsnag/react-native';
 
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
@@ -131,8 +132,8 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
       };
 
       await firestore().collection('feedback').add(dataToServer);
-    } catch (err) {
-      console.error('Submitting feedback failed, error:', err);
+    } catch (err: any) {
+      Bugsnag.notify(err);
     } finally {
       setSubmitted(true);
     }
