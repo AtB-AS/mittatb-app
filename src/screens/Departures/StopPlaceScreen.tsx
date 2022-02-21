@@ -156,7 +156,6 @@ export default function StopPlaceScreen({
             <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
           }
           sections={quayListData}
-          // sections={quayListData.map((quay, i) => [quay, i])}
           keyExtractor={(item) => item.id}
           renderItem={({item, index}) => {
             const renderedItem = (

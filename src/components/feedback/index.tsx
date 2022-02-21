@@ -120,24 +120,26 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
   );
 
   const submitFeedbackWithAlternatives = async () => {
-    const selectedAnswers = selectedAlternativeIds.map((altId) =>
-      category?.question?.alternatives.find(
-        (alt) => alt.alternativeId === altId,
-      ),
-    );
+    try {
+      const selectedAnswers = selectedAlternativeIds.map((altId) =>
+        category?.question?.alternatives.find(
+          (alt) => alt.alternativeId === altId,
+        ),
+      );
 
-    // Send to server
-    const dataToServer = {
-      selectedOpinion,
-      mode,
-      category,
-      selectedAnswers,
-    };
+      const dataToServer = {
+        selectedOpinion,
+        mode,
+        category,
+        selectedAnswers,
+      };
 
-    console.log('Submitted to server:', dataToServer);
-    await firestore().collection('feedback').add(dataToServer);
-
-    setSubmitted(true);
+      await firestore().collection('feedback').add(dataToServer);
+    } catch (err) {
+      console.error('Submitting feedback failed, error:', err);
+    } finally {
+      setSubmitted(true);
+    }
   };
 
   useEffect(() => {
