@@ -242,7 +242,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.radius.regular,
     marginTop: theme.spacings.medium,
   },
-
   detailsContainer: {
     padding: theme.spacings.medium,
   },
@@ -322,7 +321,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       ) : (
         <ThemeIcon svg={WalkingPerson} />
       )}
-      {nextLeg && <ThemeIcon svg={ChevronRight} size={'small'} />}
+      {nextLeg && <ThemeIcon svg={ChevronRight} size="small" />}
     </View>
   );
 };
