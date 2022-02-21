@@ -80,7 +80,6 @@ export default function StopPlaceScreen({
   const quayListData: SectionListData<Quay>[] | undefined = stopPlace?.quays
     ? [{data: stopPlace.quays}]
     : undefined;
-  const [feedbackAdded, setFeedbackAdded] = useState<boolean>(false);
 
   useEffect(() => {
     refresh();
@@ -144,51 +143,46 @@ export default function StopPlaceScreen({
         )}
       />
       {quayListData && (
-        <>
-          <SectionList
-            stickySectionHeadersEnabled={true}
-            stickyHeaderIndices={[0]}
-            ListHeaderComponent={
-              <DateNavigation
-                searchTime={searchTime}
-                setSearchTime={setSearchTime}
-              ></DateNavigation>
-            }
-            refreshControl={
-              <RefreshControl
-                refreshing={state.isLoading}
-                onRefresh={refresh}
+        <SectionList
+          stickySectionHeadersEnabled={true}
+          stickyHeaderIndices={[0]}
+          ListHeaderComponent={
+            <DateNavigation
+              searchTime={searchTime}
+              setSearchTime={setSearchTime}
+            ></DateNavigation>
+          }
+          refreshControl={
+            <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
+          }
+          sections={quayListData}
+          // sections={quayListData.map((quay, i) => [quay, i])}
+          keyExtractor={(item) => item.id}
+          renderItem={({item, index}) => {
+            const renderedItem = (
+              <QuaySection
+                quay={item}
+                selectedQuayId={selectedQuay?.id}
+                data={state.data}
+                navigateToDetails={navigateToDetails}
+                navigateToQuay={(quay) => {
+                  navigation.setParams({selectedQuay: quay});
+                }}
               />
-            }
-            sections={quayListData}
-            // sections={quayListData.map((quay, i) => [quay, i])}
-            keyExtractor={(item) => item.id}
-            renderItem={({item, index}) => {
-              const renderedItem = (
-                <QuaySection
-                  quay={item}
-                  selectedQuayId={selectedQuay?.id}
-                  data={state.data}
-                  navigateToDetails={navigateToDetails}
-                  navigateToQuay={(quay) => {
-                    navigation.setParams({selectedQuay: quay});
-                  }}
-                />
-              );
+            );
 
-              if (index === 0) {
-                return (
-                  <>
-                    {renderedItem}
-                    <Feedback quayListData={quayListData} mode="departures" />
-                  </>
-                );
-              } else {
-                return renderedItem;
-              }
-            }}
-          />
-        </>
+            if (index === 0) {
+              return (
+                <>
+                  {renderedItem}
+                  <Feedback quayListData={quayListData} mode="departures" />
+                </>
+              );
+            } else {
+              return renderedItem;
+            }
+          }}
+        />
       )}
     </View>
   );
