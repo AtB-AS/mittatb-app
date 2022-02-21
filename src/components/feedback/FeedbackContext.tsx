@@ -55,32 +55,32 @@ const FeedbackQuestionsProvider: React.FC = ({children}) => {
   const [categories, setCategories] = useState<QuestionCategories>({});
 
   useEffect(() => {
-    try {
-      firestore()
-        .collection('configuration')
-        .doc('feedbackQuestions')
-        .onSnapshot(
-          (snapshot) => {
-            const fetchedQuestions = snapshot.data() as Record<
-              FeedbackQuestionsMode,
-              string
-            >;
+    firestore()
+      .collection('configuration')
+      .doc('feedbackQuestions')
+      .onSnapshot(
+        (snapshot) => {
+          const fetchedQuestions = snapshot.data() as Record<
+            FeedbackQuestionsMode,
+            string
+          >;
 
-            let newQuestions: QuestionCategories = {};
+          let newQuestions: QuestionCategories = {};
+          try {
             for (let [mode, questions] of Object.entries(fetchedQuestions)) {
               newQuestions[mode as FeedbackQuestionsMode] = JSON.parse(
                 questions,
               ) as CategoryType;
             }
             setCategories(newQuestions);
-          },
-          (err) => {
-            Bugsnag.notify(err);
-          },
-        );
-    } catch (error: any) {
-      Bugsnag.notify(error);
-    }
+          } catch (error: any) {
+            Bugsnag.notify(error);
+          }
+        },
+        (err) => {
+          Bugsnag.notify(err);
+        },
+      );
   }, []);
 
   return (
