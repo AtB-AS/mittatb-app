@@ -95,9 +95,6 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
   const {language, t} = useTranslation();
   const {theme} = useTheme();
   const category = useFeedbackQuestion(mode);
-
-  // @TODO Change model to only have one question.
-
   const [submitted, setSubmitted] = useState(false);
   const [selectedOpinion, setSelectedOpinion] = useState(
     Opinions.NotClickedYet,
