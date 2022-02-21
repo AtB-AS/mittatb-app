@@ -37,7 +37,6 @@ import useFontScale from '@atb/utils/use-font-scale';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {DeparturesStackParams} from '.';
 import DateNavigation from './components/DateNavigator';
-import Feedback from '@atb/components/feedback';
 
 export type StopPlaceScreenParams = {
   stopPlacePosition: StopPlacePosition;
@@ -157,30 +156,17 @@ export default function StopPlaceScreen({
           }
           sections={quayListData}
           keyExtractor={(item) => item.id}
-          renderItem={({item, index}) => {
-            const renderedItem = (
-              <QuaySection
-                quay={item}
-                selectedQuayId={selectedQuay?.id}
-                data={state.data}
-                navigateToDetails={navigateToDetails}
-                navigateToQuay={(quay) => {
-                  navigation.setParams({selectedQuay: quay});
-                }}
-              />
-            );
-
-            if (index === 0) {
-              return (
-                <>
-                  {renderedItem}
-                  <Feedback quayListData={quayListData} mode="departures" />
-                </>
-              );
-            } else {
-              return renderedItem;
-            }
-          }}
+          renderItem={({item}) => (
+            <QuaySection
+              quay={item}
+              selectedQuayId={selectedQuay?.id}
+              data={state.data}
+              navigateToDetails={navigateToDetails}
+              navigateToQuay={(quay) => {
+                navigation.setParams({selectedQuay: quay});
+              }}
+            />
+          )}
         />
       )}
     </View>
