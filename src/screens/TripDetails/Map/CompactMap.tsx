@@ -1,4 +1,4 @@
-import {MapIcon} from '@atb/assets/svg/map';
+import {MapIcon} from '@atb/assets/svg/color/map';
 import Button from '@atb/components/button';
 import {MapCameraConfig, MapViewConfig} from '@atb/components/map';
 import {Coordinates, MapLeg} from '@atb/sdk';

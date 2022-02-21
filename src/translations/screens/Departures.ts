@@ -10,13 +10,33 @@ const DeparturesTexts = {
       geoLoc: _('I nærheten', 'Nearby'),
       address: _(`Holdeplasser nær `, `Stops near `),
     },
+    a11yStopPlaceItemHint: _(
+      'Aktiver for å se avganger',
+      'Activate to view departures',
+    ),
   },
   quayChips: {
     allStops: _('Alle stopp', 'All stops'),
+    a11yHint: _(
+      'Aktiver for å vise avganger fra plattform ',
+      'Activate to show departures from platform ',
+    ),
+    a11yAllStopsHint: _(
+      'Aktiver for å vise avganger fra alle plattformer',
+      'Activate to show departures from all platforms',
+    ),
   },
   dateNavigation: {
     prevDay: _('Forrige dag', 'Previous day'),
     nextDay: _('Neste dag', 'Next day'),
+    a11yNextDayHint: _(
+      'Aktiver for å gå til neste dag',
+      'Activate to go to next day',
+    ),
+    a11yPreviousDayHint: _(
+      'Aktiver for å gå til forrige dag',
+      'Activate to go to previous day',
+    ),
     today: _('I dag', 'Today'),
     a11yDisabled: _('Deaktivert', 'Disabled'),
     a11yChangeDateHint: _(
@@ -38,14 +58,10 @@ const DeparturesTexts = {
       'Activate to show more departures',
     ),
   },
-  a11yEstimatedCallLine: (
-    time: string,
-    publicCode?: string,
-    frontText?: string,
-  ) =>
-    _(
-      `Linje ${publicCode}, ${frontText}. ${time}`,
-      `Line ${publicCode}, ${frontText}. ${time}`,
-    ),
+  line: _('Linje', 'Line'),
+  a11yEstimatedCallItemHint: _(
+    'Aktiver for å se detaljer',
+    'Activate to view details',
+  ),
 };
 export default DeparturesTexts;

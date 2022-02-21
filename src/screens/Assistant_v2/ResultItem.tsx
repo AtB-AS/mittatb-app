@@ -1,12 +1,17 @@
-import {ArrowRight, ChevronRight} from '@atb/assets/svg/icons/navigation';
-import {DestinationFlag} from '@atb/assets/svg/icons/places';
-import {Duration, WalkingPerson} from '@atb/assets/svg/icons/transportation';
+import {ArrowRight, ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
+import {DestinationFlag} from '@atb/assets/svg/mono-icons/places';
+import {
+  Duration,
+  WalkingPerson,
+} from '@atb/assets/svg/mono-icons/transportation';
 import AccessibleText, {
   screenReaderPause,
 } from '@atb/components/accessible-text';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
-import TransportationIcon from '@atb/components/transportation-icon';
+import TransportationIcon, {
+  CollapsedLegs,
+} from '@atb/components/transportation-icon';
 
 import {SituationWarningIcon} from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
@@ -25,15 +30,15 @@ import {
   secondsToDuration,
   secondsToDurationShort,
 } from '@atb/utils/date';
-import insets from '@atb/utils/insets';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   AccessibilityProps,
   View,
-  ViewStyle,
   TouchableOpacity,
+  LayoutChangeEvent,
+  Animated,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Leg, TripPattern} from '@atb/api/types/trips';
@@ -118,8 +123,38 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 }) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
+  const [collapsableParentWidth, setCollapsableParentWidth] = useState(0);
+  const [collapsableWidth, setCollapsableWidth] = useState(0);
+
+  const [numberOfExpandedLegs, setNumberOfExpandedLegs] = useState(
+    tripPattern.legs.length,
+  );
+  const fadeInValue = useRef(new Animated.Value(0)).current;
+
+  // Dynamically collapse legs to fit horizontally
+  useEffect(() => {
+    if (collapsableParentWidth && collapsableWidth) {
+      if (collapsableWidth >= collapsableParentWidth) {
+        setNumberOfExpandedLegs(numberOfExpandedLegs - 1);
+      } else {
+        fadeIn.start();
+      }
+    }
+  }, [collapsableParentWidth, collapsableWidth]);
+
+  const fadeIn = Animated.timing(fadeInValue, {
+    toValue: 1,
+    duration: 250,
+    useNativeDriver: true,
+  });
 
   if (!tripPattern?.legs?.length) return null;
+
+  const expandedLegs = tripPattern.legs.slice(0, numberOfExpandedLegs);
+  const collapsedLegs = tripPattern.legs.slice(
+    numberOfExpandedLegs,
+    tripPattern.legs.length,
+  );
 
   return (
     <TouchableOpacity
@@ -130,35 +165,40 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       onPress={onDetailsPressed}
       accessible={true}
     >
-      <View style={styles.result} {...props} accessible={false}>
+      <Animated.View
+        style={[styles.result, {opacity: fadeInValue}]}
+        {...props}
+        accessible={false}
+        onLayout={(e) => setCollapsableParentWidth(e.nativeEvent.layout.width)}
+      >
         <ResultItemHeader tripPattern={tripPattern} />
-        <View style={styles.scrollContainer}>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            hitSlop={insets.symmetric(12, 20)}
-            contentContainerStyle={styles.detailsContainer}
-            {...screenReaderHidden}
-          >
-            {tripPattern.legs.map(function (leg, i) {
-              return (
-                <View style={styles.legOutput} key={leg.aimedStartTime}>
-                  {leg.mode === 'foot' ? (
-                    <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
-                  ) : (
-                    <>
-                      <TransportationLeg leg={leg} />
-                      <ThemeIcon svg={ChevronRight} size={'small'} />
-                    </>
-                  )}
-                </View>
-              );
-            })}
-            <DestinationLeg tripPattern={tripPattern} />
-          </ScrollView>
-        </View>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.detailsContainer}
+          {...screenReaderHidden}
+          onContentSizeChange={(width) => setCollapsableWidth(width)}
+        >
+          {expandedLegs.map(function (leg, i) {
+            return (
+              <View style={styles.legOutput} key={leg.aimedStartTime}>
+                {leg.mode === 'foot' ? (
+                  <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
+                ) : (
+                  <>
+                    <TransportationLeg leg={leg} />
+                    <ThemeIcon svg={ChevronRight} size={'small'} />
+                  </>
+                )}
+              </View>
+            );
+          })}
+          <View style={styles.legOutput}>
+            <CollapsedLegs legs={collapsedLegs} />
+          </View>
+        </ScrollView>
         <ResultItemFooter legs={tripPattern.legs} />
-      </View>
+      </Animated.View>
     </TouchableOpacity>
   );
 };
@@ -174,13 +214,16 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
 
   return (
     <View style={styles.resultFooter}>
-      <ThemeText type={'body__secondary'}>
-        {t(
-          AssistantTexts.results.resultItem.footer.fromLabel(
-            quayName,
-            timePrefix + formatToClock(quayStartTime, language),
-          ),
-        )}
+      <ThemeText
+        type={'body__secondary'}
+        style={{flexShrink: 1}}
+        numberOfLines={1}
+      >
+        {t(AssistantTexts.results.resultItem.footer.fromPlace(quayName))}
+      </ThemeText>
+
+      <ThemeText>
+        {timePrefix + formatToClock(quayStartTime, language)}
       </ThemeText>
 
       <View style={styles.detailsTextWrapper}>
@@ -199,11 +242,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.radius.regular,
     marginTop: theme.spacings.medium,
   },
-  scrollContainer: {
-    padding: theme.spacings.medium,
-  },
   detailsContainer: {
-    flexDirection: 'row',
+    padding: theme.spacings.medium,
   },
   resultHeader: {
     flexDirection: 'row',
@@ -216,7 +256,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 3,
   },
   legOutput: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -231,6 +270,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   detailsTextWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingLeft: theme.spacings.medium,
   },
   detailsIcon: {
     marginLeft: theme.spacings.xSmall,
@@ -281,7 +321,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       ) : (
         <ThemeIcon svg={WalkingPerson} />
       )}
-      <ThemeIcon svg={ChevronRight} size={'small'} />
+      {nextLeg && <ThemeIcon svg={ChevronRight} size="small" />}
     </View>
   );
 };
@@ -339,7 +379,7 @@ const tripSummary = (
     ${
       firstLeg
         ? t(
-            AssistantTexts.results.resultItem.footer.fromLabel(
+            AssistantTexts.results.resultItem.footer.fromPlaceWithTime(
               firstLeg.fromPlace?.name ?? '',
               formatToClock(firstLeg.expectedStartTime, language),
             ),

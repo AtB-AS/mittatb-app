@@ -14,12 +14,8 @@ const themeColor: ThemeColor = 'background_accent';
 
 const NewsBanner: React.FC<{} & AccessibilityProps> = ({...props}) => {
   const style = useStyle();
-  const {
-    news_enabled,
-    news_text,
-    news_link_url,
-    news_link_text,
-  } = useRemoteConfig();
+  const {news_enabled, news_text, news_link_url, news_link_text} =
+    useRemoteConfig();
 
   if (!news_enabled) {
     return null;

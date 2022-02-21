@@ -3,7 +3,7 @@ import {
   SelectionPinMove,
   SelectionPinShadow,
   SelectionPinUnknown,
-} from '@atb/assets/svg/map';
+} from '@atb/assets/svg/color/map';
 import React, {useEffect, useRef} from 'react';
 import {Animated, View} from 'react-native';
 

@@ -11,4 +11,9 @@ export const missingNetConnection = () => NetInfo.fetch().then(state => {
 
   return (_state$isConnected = !state.isConnected) !== null && _state$isConnected !== void 0 ? _state$isConnected : true;
 });
+export const isTokenInspectable = (tokens, tokenId) => {
+  var _tokens$find;
+
+  return ((_tokens$find = tokens.find(t => t.id === tokenId)) === null || _tokens$find === void 0 ? void 0 : _tokens$find.allowedActions.includes('TOKEN_ACTION_TICKET_INSPECTION')) || false;
+};
 //# sourceMappingURL=utils.js.map

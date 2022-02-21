@@ -4,7 +4,7 @@ import client from './client';
 import qs from 'query-string';
 import {stringifyUrl} from './utils';
 
-type ServiceJourneDepartures = {
+type ServiceJourneyDepartures = {
   value: EstimatedCall[];
 };
 
@@ -16,7 +16,7 @@ export async function getDepartures(
   if (date) {
     url = url + `?date=${formatISO(date, {representation: 'date'})}`;
   }
-  const response = await client.get<ServiceJourneDepartures>(url);
+  const response = await client.get<ServiceJourneyDepartures>(url);
   return response.data?.value ?? [];
 }
 

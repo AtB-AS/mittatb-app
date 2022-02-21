@@ -1,5 +1,5 @@
 import remoteConfig from '@react-native-firebase/remote-config';
-import {PRIVACY_POLICY_URL} from '@env';
+import {PRIVACY_POLICY_URL, ENABLE_TICKETING} from '@env';
 
 import {
   defaultPreassignedFareProducts,
@@ -44,7 +44,7 @@ export const defaultModesWeSellTicketsFor: string[] = [
 export const defaultRemoteConfig: RemoteConfig = {
   modes_we_sell_tickets_for: JSON.stringify(defaultModesWeSellTicketsFor),
   enable_network_logging: true,
-  enable_ticketing: false,
+  enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
   enable_intercom: true,
   enable_i18n: false,
   enable_creditcard: false,

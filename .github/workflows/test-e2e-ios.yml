@@ -1,0 +1,58 @@
+name: E2E tests on iOS
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  run_tests:
+    name: E2E test
+    runs-on: macos-11
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v1
+      - name: Pre-boot simulator
+        run: sh e2e/boot.sh
+      - name: Setup build dependencies, environment and assets
+        uses: ./.github/actions/ios-build-setup
+        with:
+          use-build-cache: 'true'
+          app-environment: 'staging'
+          app-org: 'atb'
+          git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+      - name: Get potentially cached app
+        uses: actions/cache@v2
+        id: detox-app-cache
+        with:
+          path: |
+            build/detox/ios/Build/Products/Release-iphonesimulator/AtB.app
+          key: detox-app-cache-${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}
+      - name: Generate native assets
+        if: steps.detox-app-cache.outputs.cache-hit != 'true'
+        run: brew install imagemagick && yarn generate-native-assets
+      - name: Install Pods
+        if: steps.detox-app-cache.outputs.cache-hit != 'true'
+        run: bundle exec fastlane ios pods
+      - name: Install Detox CLI
+        run: npm install -g detox-cli
+      - name: Install Applesimutils
+        run: | 
+          brew tap wix/brew
+          brew install applesimutils
+      - name: Build Detox framework
+        run: detox clean-framework-cache && detox build-framework-cache
+      - name: Build Detox-version of app
+        if: steps.detox-app-cache.outputs.cache-hit != 'true'
+        run: detox build --configuration ios.release
+      - name: Replace bundle in app cache
+        if: steps.detox-app-cache.outputs.cache-hit == 'true'
+        run: npx react-native bundle --platform ios --dev false --reset-cache --entry-file index.js --bundle-output main.jsbundle && mv main.jsbundle build/detox/ios/Build/Products/Release-iphonesimulator/AtB.app/
+      - name: Run tests
+        run: detox test --configuration ios.release --loglevel trace --retries 2 --take-screenshots failing
+      - name: Upload test artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: e2e-artifacts
+          path: artifacts
+          retention-days: 5

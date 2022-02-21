@@ -1,9 +1,9 @@
-import {BlankTicket} from '@atb/assets/svg/icons/ticketing';
+import {BlankTicket} from '@atb/assets/svg/mono-icons/ticketing';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {ActiveReservation, PaymentType} from '@atb/tickets';
+import {Reservation, PaymentType} from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
 import React from 'react';
@@ -11,7 +11,7 @@ import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
 import ValidityLine from '../Ticket/ValidityLine';
 
 type Props = {
-  reservation: ActiveReservation;
+  reservation: Reservation;
 };
 
 const TicketReservation: React.FC<Props> = ({reservation}) => {
@@ -51,11 +51,7 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
         <VerifyingValidityLine />
         <View style={styles.ticketInfoContainer}>
           <ThemeText style={styles.orderText}>
-            {t(
-              TicketsTexts.reservation.orderId(
-                reservation.reservation.order_id,
-              ),
-            )}
+            {t(TicketsTexts.reservation.orderId(reservation.orderId))}
           </ThemeText>
           <ThemeText style={styles.orderText}>
             {reservation.paymentStatus !== 'CAPTURE'
@@ -65,7 +61,7 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
           {reservation.paymentType === PaymentType.Vipps &&
             reservation.paymentStatus !== 'CAPTURE' && (
               <Button
-                onPress={() => openVippsUrl(reservation.reservation.url)}
+                onPress={() => openVippsUrl(reservation.url)}
                 text={t(TicketsTexts.reservation.goToVipps)}
                 mode="tertiary"
               />

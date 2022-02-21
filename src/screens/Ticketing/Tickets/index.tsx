@@ -27,9 +27,8 @@ export default function TicketTabs() {
   const {t} = useTranslation();
 
   const {fareContracts} = useTicketState();
-  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
-    fareContracts,
-  );
+  const activeFareContracts =
+    filterActiveOrCanBeUsedFareContracts(fareContracts);
   const initialRoute = activeFareContracts.length
     ? ActiveTicketsScreenName
     : BuyTicketsScreenName;

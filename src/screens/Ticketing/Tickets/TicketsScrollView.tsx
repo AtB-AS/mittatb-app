@@ -3,7 +3,7 @@ import ErrorBoundary from '@atb/error-boundary';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
-  ActiveReservation,
+  Reservation,
   FareContract,
   TravelCard,
   useTicketState,
@@ -24,7 +24,7 @@ import MessageBox from '@atb/components/message-box';
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
 type Props = {
-  reservations?: ActiveReservation[];
+  reservations?: Reservation[];
   fareContracts?: FareContract[];
   noTicketsLabel: string;
   isRefreshingTickets: boolean;
@@ -81,7 +81,7 @@ const TicketsScrollView: React.FC<Props> = ({
           <ThemeText style={styles.noTicketsText}>{noTicketsLabel}</ThemeText>
         )}
         {reservations?.map((res) => (
-          <TicketReservation key={res.reservation.order_id} reservation={res} />
+          <TicketReservation key={res.orderId} reservation={res} />
         ))}
         {fareContracts?.map((fc) => (
           <ErrorBoundary

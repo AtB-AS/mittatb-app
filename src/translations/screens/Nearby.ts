@@ -66,6 +66,10 @@ const NearbyTexts = {
     ),
     confirm: _('Bekreft', 'Confirm'),
     header: _('Velg dato og tid', 'Select date and time'),
+    a11yInPastHint: _(
+      'Aktivér for å bekrefte tidsvalg.',
+      'Activate to confirm time and date.',
+    ),
   },
   messages: {
     networkError: _(

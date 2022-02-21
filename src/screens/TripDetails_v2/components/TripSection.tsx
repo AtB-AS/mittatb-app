@@ -1,5 +1,5 @@
-import {Warning} from '@atb/assets/svg/situations';
-import {Interchange} from '@atb/assets/svg/icons/actions';
+import {Warning} from '@atb/assets/svg/color/situations';
+import {Interchange} from '@atb/assets/svg/mono-icons/actions';
 import AccessibleText, {
   screenReaderPause,
 } from '@atb/components/accessible-text';
@@ -38,7 +38,7 @@ import {DetailsModalNavigationProp} from '@atb/screens/TripDetails';
 import {searchByStopPlace} from '@atb/geocoder/search-for-location';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {Leg, Place, Quay} from '@atb/api/types/trips';
-import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
+import {ServiceJourneyDeparture} from '@atb/screens/TripDetails_v2/DepartureDetails/types';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -215,6 +215,7 @@ const IntermediateInfo = (leg: Leg) => {
       const departureData: ServiceJourneyDeparture = {
         serviceJourneyId: leg.serviceJourney.id,
         date: leg.expectedStartTime,
+        serviceDate: leg.intermediateEstimatedCalls[0].date,
         fromQuayId: leg.fromPlace.quay?.id,
         toQuayId: leg.toPlace.quay?.id,
       };

@@ -1,5 +1,5 @@
-import {Info, Warning} from '@atb/assets/svg/situations';
-import {Interchange} from '@atb/assets/svg/icons/actions';
+import {Info, Warning} from '@atb/assets/svg/color/situations';
+import {Interchange} from '@atb/assets/svg/mono-icons/actions';
 import AccessibleText, {
   screenReaderPause,
 } from '@atb/components/accessible-text';
@@ -216,6 +216,7 @@ const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
         {
           serviceJourneyId: leg.serviceJourney.id,
           date: leg.expectedStartTime,
+          serviceDate: leg.intermediateEstimatedCalls[0].date,
           fromQuayId: leg.fromPlace.quay?.id,
           toQuayId: leg.toPlace.quay?.id,
         },

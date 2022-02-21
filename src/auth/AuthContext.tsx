@@ -23,6 +23,7 @@ type AuthReducerState = {
   isAuthConnectionInitialized: boolean;
   confirmationHandler: FirebaseAuthTypes.ConfirmationResult | undefined;
   abtCustomerId: string | undefined;
+  customerNumber: number | undefined;
   user: FirebaseAuthTypes.User | null;
   userCreationFinished: boolean;
 };
@@ -37,7 +38,7 @@ type AuthReducerAction =
       user: FirebaseAuthTypes.User | null;
     }
   | {type: 'SET_ABT_CUSTOMER_ID'; abtCustomerId: string | undefined}
-  | {type: 'SET_USER_CREATION_FINISHED'};
+  | {type: 'SET_USER_CREATION_FINISHED'; customer_number: number};
 
 type AuthReducer = (
   prevState: AuthReducerState,
@@ -70,6 +71,7 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
       return {
         ...prevState,
         userCreationFinished: true,
+        customerNumber: action.customer_number,
       };
     }
   }
@@ -79,6 +81,7 @@ const initialReducerState: AuthReducerState = {
   isAuthConnectionInitialized: false,
   confirmationHandler: undefined,
   abtCustomerId: undefined,
+  customerNumber: undefined,
   user: null,
   userCreationFinished: false,
 };
@@ -99,6 +102,7 @@ export type PhoneSignInErrorCode = 'invalid_phone' | 'unknown_error';
 type AuthContextState = {
   signInWithPhoneNumber: (
     number: string,
+    forceResend?: boolean,
   ) => Promise<PhoneSignInErrorCode | undefined>;
   signOut: () => Promise<void>;
   confirmCode: (code: string) => Promise<ConfirmationErrorCode | undefined>;
@@ -170,9 +174,11 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
     let retryCount = 0;
     const checkCustomClaims = async () => {
       const token = await state.user?.getIdTokenResult(true);
-      const hasCustomClaims = !!token?.claims['abt_id'];
+      const abt_id = token?.claims['abt_id'];
+      const customer_number = token?.claims['customer_number'];
+      const hasCustomClaims = !!abt_id && !!customer_number;
       if (hasCustomClaims) {
-        dispatch({type: 'SET_USER_CREATION_FINISHED'});
+        dispatch({type: 'SET_USER_CREATION_FINISHED', customer_number});
       } else {
         if (retryCount < 10) {
           retryCount++;
@@ -191,10 +197,14 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
   }, [onUserChanged]);
 
   const signInWithPhoneNumber = useCallback(
-    async function signInWithPhoneNumber(phoneNumberWithPrefix: string) {
+    async function signInWithPhoneNumber(
+      phoneNumberWithPrefix: string,
+      forceResend: boolean = false,
+    ) {
       try {
         const confirmationHandler = await auth().signInWithPhoneNumber(
           phoneNumberWithPrefix,
+          forceResend,
         );
         dispatch({type: 'SIGN_IN_INITIATED', confirmationHandler});
       } catch (error) {

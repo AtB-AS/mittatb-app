@@ -1,4 +1,4 @@
-import {ArrowLeft, ArrowRight} from '@atb/assets/svg/icons/navigation';
+import {ArrowLeft, ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {StyleSheet} from '@atb/theme';
 import {PaginationTexts, useTranslation} from '@atb/translations';
 import {fullDateTime} from '@atb/utils/date';

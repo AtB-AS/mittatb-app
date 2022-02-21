@@ -1,8 +1,3 @@
-enum AppOrgs {
-  nfk = 'nfk',
-  atb = 'atb',
-}
-
 declare module '@env' {
   export const API_BASE_URL: string;
   export const APP_VERSION: string;
@@ -11,9 +6,10 @@ declare module '@env' {
   export const MAPBOX_API_TOKEN: string;
   export const MAPBOX_STOP_PLACES_STYLE_URL: string;
   export const AUTHORITY: string;
-  export const APP_ORG: AppOrgs;
+  export const APP_ORG: import('./app-orgs').AppOrgs;
   export const FOCUS_LATITUDE: number;
   export const FOCUS_LONGITUDE: number;
   export const IS_QA_ENV: string | undefined;
   export const SAFETY_NET_API_KEY: string;
+  export const ENABLE_TICKETING: string | undefined;
 }

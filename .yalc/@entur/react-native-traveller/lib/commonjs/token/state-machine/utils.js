@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.missingNetConnection = exports.getStoreKey = exports.verifyCorrectTokenId = void 0;
+exports.isTokenInspectable = exports.missingNetConnection = exports.getStoreKey = exports.verifyCorrectTokenId = void 0;
 
 var _netinfo = _interopRequireDefault(require("@react-native-community/netinfo"));
 
@@ -29,4 +29,12 @@ const missingNetConnection = () => _netinfo.default.fetch().then(state => {
 });
 
 exports.missingNetConnection = missingNetConnection;
+
+const isTokenInspectable = (tokens, tokenId) => {
+  var _tokens$find;
+
+  return ((_tokens$find = tokens.find(t => t.id === tokenId)) === null || _tokens$find === void 0 ? void 0 : _tokens$find.allowedActions.includes('TOKEN_ACTION_TICKET_INSPECTION')) || false;
+};
+
+exports.isTokenInspectable = isTokenInspectable;
 //# sourceMappingURL=utils.js.map

@@ -8,7 +8,7 @@ import {
   FerrySide,
   WalkingPerson,
   Subway,
-} from '@atb/assets/svg/icons/transportation';
+} from '@atb/assets/svg/mono-icons/transportation';
 import {LegMode, TransportSubmode, TransportMode} from '@atb/sdk';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
@@ -88,6 +88,26 @@ export function getTransportModeSvg(mode?: AnyMode) {
       return null;
   }
 }
+
+export const CollapsedLegs = ({legs}: {legs: any[]}) => {
+  const styles = useStyles();
+  const {theme} = useTheme();
+  const backgroundColor = theme.colors.transport_other.backgroundColor;
+
+  if (!legs.length) return null;
+
+  return (
+    <View style={[styles.transportationIcon, {backgroundColor}]}>
+      <ThemeText
+        color={'transport_other'}
+        style={styles.lineNumberText}
+        type="body__primary--bold"
+      >
+        +{legs.length}
+      </ThemeText>
+    </View>
+  );
+};
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   transportationIcon: {

@@ -63,7 +63,7 @@ const Trip: React.FC<TripProps> = ({tripPattern, error}) => {
                 step={index + 1}
                 interchangeDetails={getInterchangeDetails(
                   tripPattern,
-                  leg.interchangeTo?.ToServiceJourney?.id,
+                  leg.interchangeTo?.toServiceJourney?.id,
                 )}
                 leg={leg}
               />

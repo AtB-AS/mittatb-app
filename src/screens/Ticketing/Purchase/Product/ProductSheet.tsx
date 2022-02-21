@@ -26,9 +26,8 @@ const ProductSheet = forwardRef<ScrollView, Props>(
     const styles = useStyles();
     const {t, language} = useTranslation();
 
-    const {
-      preassigned_fare_products: preassignedFareProducts,
-    } = useRemoteConfig();
+    const {preassigned_fare_products: preassignedFareProducts} =
+      useRemoteConfig();
 
     const [selectedProduct, setSelectedProduct] = useState(
       preassignedFareProduct,
