@@ -1,7 +1,6 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import {SectionListData, View} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {Section} from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import Button from '../button';
 import {TripPattern} from '@atb/api/types/trips';
@@ -14,7 +13,7 @@ import firestore from '@react-native-firebase/firestore';
 
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
-  const {language, t} = useTranslation();
+  const {t} = useTranslation();
 
   return (
     <View style={[styles.container, styles.submittedView]}>
@@ -92,7 +91,7 @@ type FeedbackProps = {
 
 export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
   const styles = useFeedbackStyles();
-  const {language, t} = useTranslation();
+  const {t} = useTranslation();
   const {theme} = useTheme();
   const category = useFeedbackQuestion(mode);
   const [submitted, setSubmitted] = useState(false);

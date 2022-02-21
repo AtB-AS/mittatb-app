@@ -22,7 +22,7 @@ export const GoodOrBadButton = ({
   const styles = useButtonStyle();
   const {theme} = useTheme();
   const {topContainer} = useSectionItem(props);
-  const {language, t} = useTranslation();
+  const {t} = useTranslation();
 
   return (
     <View style={styles.outerGoodOrBad}>
