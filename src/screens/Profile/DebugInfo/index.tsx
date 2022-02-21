@@ -13,6 +13,7 @@ import storage from '@atb/storage';
 import {useMobileContextState} from '@atb/mobile-token/MobileTokenContext';
 import Slider from '@react-native-community/slider';
 import {TripSearchPreferences, usePreferences} from '@atb/preferences';
+import {useNavigation} from '@react-navigation/native';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -27,6 +28,7 @@ export default function DebugInfo() {
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
   const {tokenStatus, retry} = useMobileContextState();
+  const navigation = useNavigation();
 
   useEffect(() => {
     async function run() {
@@ -83,6 +85,10 @@ export default function DebugInfo() {
             onPress={() => {
               appDispatch({type: 'RESTART_ONBOARDING'});
             }}
+          />
+          <Sections.LinkItem
+            text="Restart mobile token onboarding"
+            onPress={() => navigation.navigate('MobileTokenOnboardingStack')}
           />
 
           <Sections.LinkItem
