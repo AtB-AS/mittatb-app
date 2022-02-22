@@ -62,26 +62,18 @@ export default function StopPlaceView({
           }
           sections={quayListData}
           keyExtractor={(item) => item.id}
-          renderItem={({item, index}) => {
-            const renderedItem = (
+          renderItem={({item, index}) => (
+            <>
               <QuaySection
                 quay={item}
                 data={state.data}
                 navigateToDetails={navigateToDetails}
                 navigateToQuay={navigateToQuay}
               />
-            );
-            if (index === 0) {
-              return (
-                <>
-                  {renderedItem}
-                  <Feedback mode="departures" quayListData={quayListData} />
-                </>
-              );
-            } else {
-              return renderedItem;
-            }
-          }}
+              {index === 0 && (
+                <Feedback mode="departures" quayListData={quayListData} />
+              )}
+            </>
         />
       )}
     </>

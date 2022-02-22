@@ -1,6 +1,6 @@
 import {translation as _} from '../commons';
 
-const GoodOrBadTexts = {
+const FeedbackTexts = {
   goodOrBadTexts: {
     good: _('Bra', 'Good'),
     bad: _('Dårlig', 'Bad'),
@@ -13,4 +13,4 @@ const GoodOrBadTexts = {
   },
 };
 
-export default GoodOrBadTexts;
+export default FeedbackTexts;
