@@ -74,6 +74,7 @@ export default function StopPlaceView({
                 <Feedback mode="departures" quayListData={quayListData} />
               )}
             </>
+          )}
         />
       )}
     </>
