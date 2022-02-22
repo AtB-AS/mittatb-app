@@ -17,6 +17,7 @@ export default function validatingHandler(abtTokensService) {
         };
 
       case 'NotFound':
+      case 'NeedsReplacement':
         return {
           accountId: s.accountId,
           state: 'DeleteLocal'

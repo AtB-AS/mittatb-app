@@ -123,7 +123,7 @@ export type ToggleTokenResponse = {
 };
 
 export type ValidateTokenResponse = {
-  state: 'Valid' | 'NotFound' | 'NeedsRenewal';
+  state: 'Valid' | 'NotFound' | 'NeedsRenewal' | 'NeedsReplacement';
 };
 
 const errorTypes = ['None', 'Severe', 'Unknown', 'Network'] as const;

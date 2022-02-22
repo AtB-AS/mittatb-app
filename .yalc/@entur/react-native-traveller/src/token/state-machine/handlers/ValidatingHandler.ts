@@ -30,6 +30,7 @@ export default function validatingHandler(
           isInspectable: isTokenInspectable(tokens, s.token.tokenId),
         };
       case 'NotFound':
+      case 'NeedsReplacement':
         return {
           accountId: s.accountId,
           state: 'DeleteLocal',
