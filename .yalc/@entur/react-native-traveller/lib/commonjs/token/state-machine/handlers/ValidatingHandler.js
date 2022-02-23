@@ -7,24 +7,39 @@ exports.default = validatingHandler;
 
 var _HandlerFactory = require("../HandlerFactory");
 
+var _native = require("../../../native");
+
+var _types = require("../../../native/types");
+
+var _utils = require("../utils");
+
 function validatingHandler(abtTokensService) {
   return (0, _HandlerFactory.stateHandlerFactory)(['Validating'], async s => {
-    const tokens = await abtTokensService.listTokens();
-    const token = tokens.find(t => t.id === s.token.tokenId);
+    const signedToken = await (0, _native.getSecureToken)(s.accountId, s.token.tokenId, true, [_types.PayloadAction.getFarecontracts]);
+    const validationResponse = await abtTokensService.validateToken(s.token.tokenId, signedToken);
 
-    if (!token) {
-      return {
-        accountId: s.accountId,
-        state: 'DeleteLocal'
-      };
+    switch (validationResponse.state) {
+      case 'Valid':
+        const tokens = await abtTokensService.listTokens();
+        return {
+          accountId: s.accountId,
+          state: 'Valid',
+          isInspectable: (0, _utils.isTokenInspectable)(tokens, s.token.tokenId)
+        };
+
+      case 'NotFound':
+        return {
+          accountId: s.accountId,
+          state: 'DeleteLocal'
+        };
+
+      case 'NeedsRenewal':
+        return {
+          accountId: s.accountId,
+          tokenId: s.token.tokenId,
+          state: 'InitiateRenewal'
+        };
     }
-
-    const isInspectable = token.allowedActions.some(a => a === 'TOKEN_ACTION_TICKET_INSPECTION');
-    return {
-      accountId: s.accountId,
-      state: 'Valid',
-      isInspectable
-    };
   });
 }
 //# sourceMappingURL=ValidatingHandler.js.map

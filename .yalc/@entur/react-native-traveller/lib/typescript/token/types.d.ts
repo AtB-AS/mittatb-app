@@ -16,7 +16,7 @@ export declare type InitializeTokenResponse = {
 export declare type TokenLifecycleState = 'TOKEN_LIFECYCLE_STATE_UNSPECIFIED' | 'TOKEN_LIFECYCLE_STATE_NOT_ACTIVATED' | 'TOKEN_LIFECYCLE_STATE_ACTIVATED' | 'TOKEN_LIFECYCLE_STATE_CANCELLED' | 'TOKEN_LIFECYCLE_STATE_REMOVED';
 export declare type TokenType = 'TOKEN_TYPE_UNSPECIFIED' | 'TOKEN_TYPE_QR_SMARTPHONE' | 'TOKEN_TYPE_QR_PAPER' | 'TOKEN_TYPE_TRAVELCARD' | 'TOKEN_TYPE_REFERENCE_CODE' | 'TOKEN_TYPE_PLAIN_UNSIGNED' | 'TOKEN_TYPE_EXTERNAL';
 export declare type TokenAction = 'TOKEN_ACTION_UNSPECIFIED' | 'TOKEN_ACTION_TICKET_TRANSFER' | 'TOKEN_ACTION_ADD_REMOVE_TOKEN' | 'TOKEN_ACTION_IDENTIFICATION' | 'TOKEN_ACTION_TICKET_INSPECTION' | 'TOKEN_ACTION_GET_FARECONTRACTS' | 'TOKEN_ACTION_TRAVELCARD' | 'TOKEN_ACTION_CONSUME_ACCESS_RIGHTS';
-export declare type ListTokensResponse = {
+export declare type StoredToken = {
     id: string;
     expires: number;
     state: TokenLifecycleState;
@@ -26,7 +26,8 @@ export declare type ListTokensResponse = {
     keyValues?: {
         [key: string]: string;
     };
-}[];
+};
+export declare type ListTokensResponse = StoredToken[];
 export declare type GetTokenCertificateResponse = ActivateTokenResponse;
 export declare type RenewTokenResponse = {
     attestationEncryptionPublicKey: string;
@@ -76,6 +77,15 @@ export declare type ActivateTokenResponse = {
     tokenValidityStart: number;
     tokenValidityEnd: number;
 };
+export declare type ToggleTokenRequest = {
+    overrideExisting: boolean;
+};
+export declare type ToggleTokenResponse = {
+    tokens: StoredToken[];
+};
+export declare type ValidateTokenResponse = {
+    state: 'Valid' | 'NotFound' | 'NeedsRenewal';
+};
 declare const errorTypes: readonly ["None", "Severe", "Unknown", "Network"];
 export declare type ErrorType = typeof errorTypes[number];
 export declare type TokenError = {
@@ -88,7 +98,7 @@ export declare type TokenStatus = {
     error?: TokenError;
     visualState: VisualState;
 };
-declare const tokenStates: readonly ["Starting", "NotSupported", "Loading", "Valid", "GettingTokenCertificate", "Validating", "DeleteLocal", "InitiateNew", "InitiateRenewal", "AttestNew", "AttestRenewal", "ActivateNew", "ActivateRenewal", "AddToken"];
+declare const tokenStates: readonly ["Starting", "NotSupported", "Loading", "Valid", "GettingTokenCertificate", "Validating", "DeleteLocal", "InitiateNew", "InitiateRenewal", "AttestNew", "AttestRenewal", "ActivateNew", "ActivateRenewal", "AddToken", "VerifyInspectionAction"];
 export declare type TokenState = typeof tokenStates[number];
 export declare type StoredState = {
     accountId: string;
@@ -96,7 +106,7 @@ export declare type StoredState = {
 } & ({
     state: 'Starting' | 'Loading' | 'InitiateNew' | 'DeleteLocal' | 'NotSupported';
 } | {
-    state: 'GettingTokenCertificate' | 'InitiateRenewal';
+    state: 'GettingTokenCertificate' | 'InitiateRenewal' | 'VerifyInspectionAction';
     tokenId: string;
 } | {
     state: 'Valid';

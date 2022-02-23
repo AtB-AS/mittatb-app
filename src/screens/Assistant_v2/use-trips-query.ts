@@ -4,7 +4,10 @@ import {
   SearchTime,
 } from '@atb/screens/Assistant_v2/journey-date-picker';
 import {TripPattern} from '@atb/api/types/trips';
-import {SearchStateType} from '@atb/screens/Assistant_v2/types';
+import {
+  SearchStateType,
+  TripPatternWithKey,
+} from '@atb/screens/Assistant_v2/types';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {CancelToken, isCancel} from '@atb/api';
@@ -24,7 +27,7 @@ export default function useTripsQuery(
     date: new Date().toISOString(),
   },
 ): {
-  tripPatterns: TripPattern[];
+  tripPatterns: TripPatternWithKey[];
   timeOfLastSearch: DateString;
   refresh: () => {};
   loadMore: (() => {}) | undefined;
@@ -36,7 +39,7 @@ export default function useTripsQuery(
     new Date().toISOString(),
   );
 
-  const [tripPatterns, setTripPatterns] = useState<TripPattern[]>([]);
+  const [tripPatterns, setTripPatterns] = useState<TripPatternWithKey[]>([]);
   const [pageCursor, setPageCursor] = useState<string>();
   const [errorType, setErrorType] = useState<ErrorType>();
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
@@ -57,7 +60,7 @@ export default function useTripsQuery(
   }, [setTripPatterns]);
 
   const search = useCallback(
-    (cursor?: string, existingTrips?: TripPattern[]) => {
+    (cursor?: string, existingTrips?: TripPatternWithKey[]) => {
       cancelTokenRef.current?.cancel('New search starting');
       const cancelTokenSource = CancelToken.source();
       let allTripPatterns = existingTrips ?? [];
@@ -109,12 +112,16 @@ export default function useTripsQuery(
                 tripSearchPreferences,
               );
 
-              allTripPatterns = allTripPatterns.concat(
+              const tripPatternsWithKeys = decorateTripPatternWithKey(
                 results.trip.tripPatterns,
               );
 
+              const countBeforeConcat = allTripPatterns.length;
+              allTripPatterns = allTripPatterns.concat(tripPatternsWithKeys);
+              allTripPatterns = filterDuplicateTripPatterns(allTripPatterns);
+
               setTripPatterns(allTripPatterns);
-              tripsFoundCount += results.trip.tripPatterns.length;
+              tripsFoundCount += allTripPatterns.length - countBeforeConcat;
               performedSearchesCount++;
 
               cursor =
@@ -225,3 +232,47 @@ const stringifyLocation = (location: Location | undefined) => {
   if (!location) return 'Undefined location';
   return `${location.id}--${location.name}--${location.locality}`;
 };
+
+function generateKeyFromTripPattern(tripPattern: TripPattern) {
+  const firstServiceLeg = tripPattern.legs.find((leg) => leg.serviceJourney);
+  const key =
+    (firstServiceLeg?.aimedStartTime ?? '') +
+    tripPattern.legs
+      .map((leg) => {
+        return leg.toPlace.longitude.toString() + leg.toPlace.latitude;
+      })
+      .join('-');
+
+  return key;
+}
+
+function decorateTripPatternWithKey(
+  tripPatterns: TripPattern[],
+): TripPatternWithKey[] {
+  return tripPatterns.map((tp) => {
+    return {
+      ...tp,
+      key: generateKeyFromTripPattern(tp),
+    };
+  });
+}
+
+function filterDuplicateTripPatterns(
+  tripPatterns: TripPatternWithKey[],
+): TripPatternWithKey[] {
+  let existing = new Map<string, TripPatternWithKey>();
+  return tripPatterns.filter((tp) => {
+    if (existing.has(tp.key)) {
+      Bugsnag.leaveBreadcrumb(
+        'Removed duplicate tripPattern from search results',
+        {
+          original: existing.get(tp.key),
+          duplicate: tp,
+        },
+      );
+      return false;
+    }
+    existing.set(tp.key, tp);
+    return true;
+  });
+}

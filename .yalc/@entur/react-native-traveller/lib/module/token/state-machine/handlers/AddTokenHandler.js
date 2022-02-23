@@ -11,8 +11,8 @@ export default function addTokenHandler() {
     await addToken(s.accountId, tokenId, certificate, tokenValidityStart, tokenValidityEnd);
     return {
       accountId: s.accountId,
-      state: 'Valid',
-      isInspectable: true
+      state: 'VerifyInspectionAction',
+      tokenId
     };
   });
 }

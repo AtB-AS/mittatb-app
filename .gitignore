@@ -91,6 +91,7 @@ ios/atb/Images.xcassets/BootSplashLogo.imageset/bootsplash_logo*.png
 android/app/google-services.json
 ios/atb/GoogleService-Info.plist
 
+vendor/bundle
 
 # Design system
 assets/design-assets

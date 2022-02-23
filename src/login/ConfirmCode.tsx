@@ -59,7 +59,7 @@ export default function ConfirmCode({
     setIsLoading(true);
     setError(undefined);
     setCode('');
-    const errorCode = await signInWithPhoneNumber(phoneNumber);
+    const errorCode = await signInWithPhoneNumber(phoneNumber, true);
     setIsLoading(false);
     if (errorCode) {
       setError(errorCode);

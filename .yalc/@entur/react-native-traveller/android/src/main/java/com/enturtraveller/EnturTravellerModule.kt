@@ -27,7 +27,6 @@ import java.time.Instant
 import java.util.*
 import java.util.concurrent.locks.ReentrantLock
 
-
 class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
   private var tokenStore: TokenStore<String>? = null
   private var tokenKeyStore: TokenKeyStore<String>? = null
@@ -39,47 +38,60 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
   private var sharedPreferences: SharedPreferences? = null
   private var started: Boolean = false
 
+  object EnturTravellerLogger {
+    var callback: ((err: Error) -> Void)? = null
+
+    fun notify(err: Error) {
+      callback?.let { it(err) }
+    }
+  }
+
   @ReactMethod
   fun start(googleApiKey: String, promise: Promise) {
     if (!started) {
-      started = true
+      try {
+        started = true
 
-      var applicationContext: Context = reactApplicationContext.applicationContext
-      var application: Application = applicationContext as Application
-      tokenKeyStore = DefaultTokenKeyStore.newBuilder<String>().build()
+        var applicationContext: Context = reactApplicationContext.applicationContext
+        var application: Application = applicationContext as Application
+        tokenKeyStore = DefaultTokenKeyStore.newBuilder<String>().build()
 
-      val pInfo = application.packageManager.getPackageInfo(application.packageName, 0)
-      val versionCode: Long =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-          pInfo.longVersionCode
-        } else {
-          pInfo.versionCode.toLong()
-        }
+        val pInfo = application.packageManager.getPackageInfo(application.packageName, 0)
+        val versionCode: Long =
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            pInfo.longVersionCode
+          } else {
+            pInfo.versionCode.toLong()
+          }
 
-      val concattedVersion = "${pInfo.versionName}-${versionCode}"
-      val libraryVersion = "1.0"
+        val concattedVersion = "${pInfo.versionName}-${versionCode}"
+        val libraryVersion = "1.0"
 
-      deviceDetailsProvider = DefaultDeviceDetailsProvider
-        .newBuilder(application)
-        .withApplicationDeviceInfoElement(applicationContext.packageName, concattedVersion, libraryVersion)
-        .withOsDeviceInfoElement()
-        .withNetworkDeviceStatus()
-        .withBluetoohDeviceStatus()
-        .withNfcDeviceStatus()
-        .build()
-      clock = TempoRealtimeClock.newBuilder(application).withSlackSntpTimeSource().build()
-      encoder = TokenEncoder(clock, deviceDetailsProvider)
-      deviceAttestor = DeviceAttestorBuilder.newBuilder()
-        .withApiKey(googleApiKey)
-        .withContext(applicationContext)
-        .withDeviceDetailsProvider(deviceDetailsProvider)
-        .withEmulator(false)
-        .withAttestationTimeout(1000000)
-        .build()
-      sharedPreferences = applicationContext.getSharedPreferences(this.name, Context.MODE_PRIVATE)
-      tokenPropertyStore = DefaultTokenPropertyStore(sharedPreferences, ReentrantLock(), 5000)
-      tokenStore = TokenStore(tokenKeyStore, encoder, clock, null, tokenPropertyStore)
-
+        deviceDetailsProvider = DefaultDeviceDetailsProvider
+          .newBuilder(application)
+          .withApplicationDeviceInfoElement(applicationContext.packageName, concattedVersion, libraryVersion)
+          .withOsDeviceInfoElement()
+          .withNetworkDeviceStatus()
+          .withBluetoohDeviceStatus()
+          .withNfcDeviceStatus()
+          .build()
+        clock = TempoRealtimeClock.newBuilder(application).withSlackSntpTimeSource().build()
+        encoder = TokenEncoder(clock, deviceDetailsProvider)
+        deviceAttestor = DeviceAttestorBuilder.newBuilder()
+          .withApiKey(googleApiKey)
+          .withContext(applicationContext)
+          .withDeviceDetailsProvider(deviceDetailsProvider)
+          .withEmulator(false)
+          .withAttestationTimeout(1000000)
+          .build()
+        sharedPreferences = applicationContext.getSharedPreferences(this.name, Context.MODE_PRIVATE)
+        tokenPropertyStore = DefaultTokenPropertyStore(sharedPreferences, ReentrantLock(), 5000)
+        tokenStore = TokenStore(tokenKeyStore, encoder, clock, null, tokenPropertyStore)
+      } catch (err: Error) {
+        EnturTravellerLogger.notify(err)
+        promise.reject("START_ERROR", err.localizedMessage)
+        return
+      }
     }
     promise.resolve(null)
   }
@@ -101,6 +113,7 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
         throw Exception("Device name not found")
       }
     } catch (err: Error) {
+      EnturTravellerLogger.notify(err)
       promise.reject("GET DEVICE NAME ERROR", err.localizedMessage)
     }
   }
@@ -131,7 +144,7 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
         promise.resolve(null)
       }
     } catch (err: Error) {
-      print("inside catch")
+      EnturTravellerLogger.notify(err)
       promise.reject("TOKEN ERROR", err.localizedMessage)
     }
   }
@@ -179,7 +192,7 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
         throw Throwable("Container is null")
       }
     } catch (err: Error) {
-      Log.d("GET_SECURE_TOKEN_ERROR", err.localizedMessage)
+      EnturTravellerLogger.notify(err)
       promise.reject("GET_SECURE_TOKEN_ERROR", err)
     }
   }
@@ -228,6 +241,7 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
       Log.d("ActivatedToken", activatedToken.tokenId)
       promise.resolve(activatedToken != null)
     } catch (err: Error) {
+      EnturTravellerLogger.notify(err)
       promise.reject("ADD_TOKEN_ERROR", err.localizedMessage)
     }
   }
@@ -248,6 +262,7 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
       tokenStore!!.clearToken(getTokenContext(accountId))
       promise.resolve(null)
     } catch (err: Error) {
+      EnturTravellerLogger.notify(err)
       promise.reject("TOKEN ERROR", err.localizedMessage)
     }
   }
@@ -305,8 +320,7 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
       obj.putString("attestationObject", attestation.androidSafetynet.jwsResult)
       promise.resolve(obj)
     } catch (err: Error) {
-      Log.d("ATTESTATION_ERROR","Error with attest")
-      Log.d("ATTESTATION_ERROR", err.localizedMessage)
+      EnturTravellerLogger.notify(err)
       promise.reject("ATTESTATION_ERROR", err)
     }
   }
@@ -329,6 +343,7 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
         }
       }
     } catch (err: Error) {
+      EnturTravellerLogger.notify(err)
       promise.reject("GET_ATTESTATION_SUPPORT_FAILED", err)
     }
   }

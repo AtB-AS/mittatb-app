@@ -96,6 +96,11 @@ platform :ios do
     )
   end
 
+  desc 'Install pods.'
+  lane :pods do
+    cocoapods(podfile: './ios/Podfile')
+  end
+
   desc 'Upload the build to Firebase App Distribution'
   lane :firebase_distribution_staging do
     ensure_env_vars(
