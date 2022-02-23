@@ -90,25 +90,6 @@ const LoginTexts = {
     mainButton: _('Godta og gå videre', 'Accept and continue'),
     wantToLoginButton: _('Jeg vil logge inn likevel', 'I want to sign in'),
   },
-  assignMobileToken: {
-    tcardIsSet: _(
-      'Ditt t:kort er satt som reisebevis',
-      'Your t:card is set as travel token',
-    ),
-    phoneIsSet: _(
-      'Din mobil er satt som reisebevis',
-      'Your phone is set as travel token',
-    ),
-    bringTcard: _(
-      'Ta med deg t:kortet når du er ute på reise',
-      'Bring your t:card when you are traveling',
-    ),
-    bringPhone: _(
-      'Ta med deg mobilen når du er ute på reise',
-      'Bring your phone when you are traveling',
-    ),
-    ok: _('OK', 'OK'),
-  },
 };
 export default orgSpecificTranslations(LoginTexts, {
   nfk: {
