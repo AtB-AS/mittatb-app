@@ -6,11 +6,13 @@ import {View} from 'react-native';
 import TicketInformationalOverlay from '@atb/screens/Ticketing/Tickets/TicketInformationalOverlay';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {
-  ChangeTokenInfo,
   Info1,
   Info2,
   Info3,
+  NoToken,
   PageIndicator,
+  PhoneInfoBox,
+  TCardInfoBox,
 } from './MobileTokenOnboarding';
 import {ThemeColor} from '@atb/theme/colors';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
@@ -22,6 +24,9 @@ export type TicketTabsNavigatorParams = {
   Info2: undefined;
   Info3: undefined;
   ChangeTokenInfo: undefined;
+  TCardInfoBox: undefined;
+  PhoneInfoBox: undefined;
+  NoToken: undefined;
 };
 
 const Tab = createMaterialTopTabNavigator<TicketTabsNavigatorParams>();
@@ -47,7 +52,9 @@ export default function MobileTokenOnboardingStack() {
         <Tab.Screen name="Info1" component={Info1} />
         <Tab.Screen name="Info2" component={Info2} />
         <Tab.Screen name="Info3" component={Info3} />
-        <Tab.Screen name="ChangeTokenInfo" component={ChangeTokenInfo} />
+        <Tab.Screen name="TCardInfoBox" component={TCardInfoBox} />
+        <Tab.Screen name="PhoneInfoBox" component={PhoneInfoBox} />
+        <Tab.Screen name="NoToken" component={NoToken} />
       </Tab.Navigator>
 
       <TicketInformationalOverlay />

@@ -1,5 +1,5 @@
 import {StyleSheet} from '@atb/theme';
-import {LoginTexts, useTranslation} from '@atb/translations';
+import {MobileTokenOnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import ThemeText from '@atb/components/text';
@@ -9,6 +9,7 @@ import {ActiveTicketCard} from '@atb/screens/Ticketing/Tickets/TravelCardInforma
 import Button from '@atb/components/button';
 import {MaterialTopTabBarProps} from '@react-navigation/material-top-tabs';
 import _ from 'lodash';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const themeColor: ThemeColor = 'background_accent';
 
@@ -19,26 +20,25 @@ export function Info1(): JSX.Element {
 
   return (
     <View style={styles.container}>
-      <View style={{flex: 1, justifyContent: 'center'}}>
+      <ScrollView centerContent={true}>
         <ThemeText
-          type={'body__primary--jumbo--bold'}
+          type="body__primary--jumbo--bold"
           style={[styles.alignCenter, styles.marginVertical]}
           color={themeColor}
         >
-          Hva er et reisebevis?
+          {t(MobileTokenOnboardingTexts.info1.heading)}
         </ThemeText>
         <ThemeText style={styles.description} color={themeColor}>
-          Et reisebevis kan være et t:kort eller en spesifikk mobiltelefon. Det
-          er du bruker for å kunne fremvise gyldig billett.
+          {t(MobileTokenOnboardingTexts.info1.description)}
         </ThemeText>
-      </View>
+      </ScrollView>
       <Button
-        color={'primary_2'}
+        color="primary_2"
         style={styles.marginVertical}
         onPress={() => {
           navigation.navigate('Info2');
         }}
-        text="Neste"
+        text={t(MobileTokenOnboardingTexts.next)}
       />
     </View>
   );
@@ -51,26 +51,25 @@ export function Info2(): JSX.Element {
 
   return (
     <View style={styles.container}>
-      <View style={styles.pageContainer}>
+      <ScrollView centerContent={true}>
         <ThemeText
-          type={'body__primary--jumbo--bold'}
+          type="body__primary--jumbo--bold"
           style={[styles.alignCenter, styles.marginVertical]}
           color={themeColor}
         >
-          Mer fleksibel reisehverdag
+          {t(MobileTokenOnboardingTexts.info2.heading)}
         </ThemeText>
         <ThemeText style={styles.description} color={themeColor}>
-          Valg av reisebevis gir deg fleksibilitet til å velge det som passer
-          deg. Bare husk å alltid ha med deg ditt valgte reisebevis.
+          {t(MobileTokenOnboardingTexts.info2.description)}
         </ThemeText>
-      </View>
+      </ScrollView>
       <Button
-        color={'primary_2'}
+        color="primary_2"
         style={styles.marginVertical}
         onPress={() => {
           navigation.navigate('Info3');
         }}
-        text="Neste"
+        text={t(MobileTokenOnboardingTexts.next)}
       />
     </View>
   );
@@ -83,26 +82,27 @@ export function Info3(): JSX.Element {
 
   return (
     <View style={styles.container}>
-      <View style={styles.pageContainer}>
+      <ScrollView centerContent={true}>
         <ThemeText
-          type={'body__primary--jumbo--bold'}
+          type="body__primary--jumbo--bold"
           style={[styles.alignCenter, styles.marginVertical]}
           color={themeColor}
         >
-          Hva med billettene mine?
+          {t(MobileTokenOnboardingTexts.info3.heading)}
         </ThemeText>
-        <ThemeText style={styles.description} color={themeColor}>
-          Billettene dine er tilknyttet din profil, så om du mister eller bytter
-          reisebevis vil du fortsatt ha tilgang på billettene dine.
+        <ThemeText
+          style={styles.description}
+          color={themeColor}
+          isMarkdown={true}
+        >
+          {t(MobileTokenOnboardingTexts.info3.description)}
         </ThemeText>
-      </View>
+      </ScrollView>
       <Button
-        color={'primary_2'}
+        color="primary_2"
         style={styles.marginVertical}
-        onPress={() => {
-          navigation.navigate('ChangeTokenInfo');
-        }}
-        text="Neste"
+        onPress={() => {}}
+        text={t(MobileTokenOnboardingTexts.next)}
       />
     </View>
   );
@@ -113,119 +113,118 @@ export function PhoneInfoBox({phoneName}: {phoneName: string}): JSX.Element {
   const {t} = useTranslation();
 
   return (
-    <View>
-      <View accessible={true} accessibilityRole="header">
+    <View style={styles.container}>
+      <ScrollView centerContent={true}>
         <ThemeText
-          type={'body__primary--jumbo--bold'}
+          type="body__primary--jumbo"
           style={[styles.alignCenter, styles.marginVertical]}
           color={themeColor}
+          isMarkdown={true}
         >
-          {t(LoginTexts.assignMobileToken.phoneIsSet)}
+          {t(MobileTokenOnboardingTexts.phone.heading)}
         </ThemeText>
-      </View>
-      <View>
-        <ThemeText style={styles.description} color={themeColor}>
-          {t(LoginTexts.assignMobileToken.bringPhone)}
-        </ThemeText>
-      </View>
-      <View style={styles.phoneInfoBox}>
-        <View style={styles.phoneLine}></View>
-        <View style={styles.phoneInfoBoxInner}>
-          <ThemeText type="heading__title">{phoneName}</ThemeText>
+        <View style={styles.phoneInfoBox}>
+          <View style={styles.phoneLine}></View>
+          <View style={styles.phoneInfoBoxInner}>
+            <ThemeText type="heading__title">{phoneName}</ThemeText>
+          </View>
         </View>
-      </View>
-    </View>
-  );
-}
-
-function TCardInfoBox({travelCardId}: {travelCardId: string}): JSX.Element {
-  const styles = useThemeStyles();
-  const {t} = useTranslation();
-
-  return (
-    <View>
-      <View accessible={true} accessibilityRole="header">
-        <ThemeText
-          type={'body__primary--jumbo--bold'}
-          style={[styles.alignCenter, styles.marginVertical]}
-          color={themeColor}
-        >
-          {t(LoginTexts.assignMobileToken.tcardIsSet)}
-        </ThemeText>
-      </View>
+        <View>
+          <ThemeText style={styles.description} color={themeColor}>
+            {t(MobileTokenOnboardingTexts.phone.description)}
+          </ThemeText>
+        </View>
+      </ScrollView>
       <View>
-        <ThemeText style={styles.description} color={themeColor}>
-          {t(LoginTexts.assignMobileToken.bringTcard)}
-        </ThemeText>
-      </View>
-      <View style={styles.tcardContainer}>
-        <ActiveTicketCard
-          cardId={travelCardId}
-          color="background_3"
-          type="large"
-        ></ActiveTicketCard>
-      </View>
-    </View>
-  );
-}
-
-function NoToken(): JSX.Element {
-  const styles = useThemeStyles();
-  const {t} = useTranslation();
-
-  return (
-    <View>
-      <View accessible={true} accessibilityRole="header">
-        <ThemeText
-          type={'body__primary--jumbo--bold'}
-          style={[styles.alignCenter, styles.marginVertical]}
-          color={themeColor}
-        >
-          Det ser ut som det tar litt tid..
-        </ThemeText>
-      </View>
-      <View>
-        <ThemeText style={styles.description} color={themeColor}>
-          Vi forsøker å opprette et reisebevis til deg, men det ser ut som det
-          tar litt tid. Du kan sjekke om du har nettilgang og hvis ikke så vil
-          appen forsøke å opprette det neste gang du får tilgang.
-        </ThemeText>
+        <Button
+          color="primary_2"
+          style={styles.marginVertical}
+          onPress={() => {}}
+          text={t(MobileTokenOnboardingTexts.ok)}
+        />
+        <Button
+          onPress={() => {}}
+          style={styles.marginVertical}
+          text={t(MobileTokenOnboardingTexts.phone.button)}
+          mode="secondary"
+          color="secondary_3"
+        ></Button>
       </View>
     </View>
   );
 }
 
-export function ChangeTokenInfo(): JSX.Element {
+export function TCardInfoBox({
+  travelCardId,
+}: {
+  travelCardId: string;
+}): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
-  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <View style={styles.pageContainer}>
+      <ScrollView centerContent={true}>
         <ThemeText
-          type={'body__primary--jumbo--bold'}
+          type="body__primary--jumbo--bold"
+          style={[styles.alignCenter, styles.marginVertical]}
+          color={themeColor}
+          isMarkdown={true}
+        >
+          {t(MobileTokenOnboardingTexts.tCard.heading)}
+        </ThemeText>
+        <View style={styles.tcardContainer}>
+          <ActiveTicketCard
+            cardId={travelCardId}
+            color="background_3"
+            type="large"
+          ></ActiveTicketCard>
+        </View>
+        <ThemeText style={styles.description} color={themeColor}>
+          {t(MobileTokenOnboardingTexts.tCard.description)}
+        </ThemeText>
+      </ScrollView>
+      <View>
+        <Button
+          color="primary_2"
+          style={styles.marginVertical}
+          onPress={() => {}}
+          text={t(MobileTokenOnboardingTexts.ok)}
+        />
+        <Button
+          onPress={() => {}}
+          style={styles.marginVertical}
+          text={t(MobileTokenOnboardingTexts.tCard.button)}
+          mode="secondary"
+          color="secondary_3"
+        ></Button>
+      </View>
+    </View>
+  );
+}
+
+export function NoToken(): JSX.Element {
+  const styles = useThemeStyles();
+  const {t} = useTranslation();
+
+  return (
+    <View style={styles.container}>
+      <ScrollView centerContent={true}>
+        <ThemeText
+          type="body__primary--jumbo--bold"
           style={[styles.alignCenter, styles.marginVertical]}
           color={themeColor}
         >
-          Endre reisebevis
+          {t(MobileTokenOnboardingTexts.error.heading)}
         </ThemeText>
         <ThemeText style={styles.description} color={themeColor}>
-          Du kan enkelt bytte reisebevis fra Mitt AtB i appen eller i
-          nettbutikken. Du kan ha ett aktivt reisebevis til enhver tid.
+          {t(MobileTokenOnboardingTexts.error.description)}
         </ThemeText>
-      </View>
-      <Button
-        color={'primary_2'}
-        style={styles.marginVertical}
-        onPress={() => {}}
-        text="OK"
-      />
+      </ScrollView>
       <Button
         onPress={() => {}}
-        text="Endre reisebevis"
-        mode="secondary"
-        color="secondary_1"
+        text={t(MobileTokenOnboardingTexts.ok)}
+        color="primary_2"
       ></Button>
     </View>
   );
@@ -252,23 +251,17 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.colors[themeColor].backgroundColor,
     flex: 1,
-    paddingHorizontal: theme.spacings.medium,
-  },
-  pageContainer: {
-    flex: 1,
-    justifyContent: 'center',
+    paddingHorizontal: theme.spacings.xLarge,
   },
   alignCenter: {
     textAlign: 'center',
   },
   marginVertical: {
-    marginBottom: theme.spacings.medium,
+    marginTop: theme.spacings.medium,
   },
   description: {
     marginVertical: theme.spacings.large,
     textAlign: 'center',
-    flexDirection: 'row',
-    alignSelf: 'center',
   },
   tcardContainer: {
     marginTop: theme.spacings.xLarge,
@@ -309,7 +302,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium / 2,
     borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.colors.secondary_2.backgroundColor,
+    backgroundColor: theme.colors.secondary_3.color,
   },
   activeDot: {
     backgroundColor: theme.colors.primary_2.backgroundColor,
