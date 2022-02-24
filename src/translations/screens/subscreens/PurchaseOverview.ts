@@ -50,6 +50,10 @@ const PurchaseOverviewTexts = {
     'Når du er ute og reiser må du ha med t:kortet som er registrert på din profil.',
     'When traveling, you need to bring the t:card registered on your profile.',
   ),
+  samarbeidsbillettenInfo: _(
+    'Visste du at enkeltbilletter i sone A også kan brukes på tog i sone A?',
+    'Single tickets in zone A can also be used for trips by train in zone A.',
+  ),
 };
 export default orgSpecificTranslations(PurchaseOverviewTexts, {
   nfk: {

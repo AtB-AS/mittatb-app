@@ -270,6 +270,16 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         />
       )}
 
+      {preassignedFareProduct.type === 'single' &&
+        fromTariffZone.id === 'ATB:TariffZone:1' &&
+        toTariffZone.id === 'ATB:TariffZone:1' && (
+          <MessageBox
+            containerStyle={styles.warning}
+            message={t(PurchaseOverviewTexts.samarbeidsbillettenInfo)}
+            type="info"
+          />
+        )}
+
       <View style={styles.toPaymentButton}>
         <Button
           color="primary_2"
