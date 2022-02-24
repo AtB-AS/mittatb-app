@@ -1,5 +1,9 @@
 import {StyleSheet} from '@atb/theme';
-import {isPreactivatedTicket, useTicketState} from '@atb/tickets';
+import {
+  isPreactivatedTicket,
+  isSingleTicket,
+  useTicketState,
+} from '@atb/tickets';
 import {
   PurchaseOverviewTexts,
   TicketTexts,
@@ -46,6 +50,13 @@ export default function DetailsScreen({navigation, route}: Props) {
       orderVersion: fc.version,
     });
 
+  const shouldShowValidTrainTicketNotice =
+    isSingleTicket(firstTravelRight) &&
+    isPreactivatedTicket(firstTravelRight) &&
+    firstTravelRight.tariffZoneRefs.every(
+      (val: string) => val === 'ATB:TariffZone:1',
+    );
+
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -62,16 +73,12 @@ export default function DetailsScreen({navigation, route}: Props) {
           />
         )}
 
-        {firstTravelRight?.type === 'PreActivatedSingleTicket' &&
-          isPreactivatedTicket(firstTravelRight) &&
-          firstTravelRight.tariffZoneRefs.every(
-            (val: string) => val === 'ATB:TariffZone:1',
-          ) && (
-            <MessageBox
-              message={t(PurchaseOverviewTexts.samarbeidsbillettenInfo)}
-              type="info"
-            />
-          )}
+        {shouldShowValidTrainTicketNotice && (
+          <MessageBox
+            message={t(PurchaseOverviewTexts.samarbeidsbillettenInfo)}
+            type="info"
+          />
+        )}
       </ScrollView>
     </View>
   );
