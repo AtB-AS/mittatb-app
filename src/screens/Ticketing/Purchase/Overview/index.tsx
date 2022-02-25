@@ -118,6 +118,11 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     travelDate,
   );
 
+  const shouldShowValidTrainTicketNotice =
+    preassignedFareProduct.type === 'single' &&
+    fromTariffZone.id === 'ATB:TariffZone:1' &&
+    toTariffZone.id === 'ATB:TariffZone:1';
+
   useEffect(() => {
     if (params?.refreshOffer) {
       refreshOffer();
@@ -267,6 +272,14 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           containerStyle={styles.warning}
           message={t(PurchaseOverviewTexts.warning)}
           type="warning"
+        />
+      )}
+
+      {shouldShowValidTrainTicketNotice && (
+        <MessageBox
+          containerStyle={styles.warning}
+          message={t(PurchaseOverviewTexts.samarbeidsbillettenInfo)}
+          type="info"
         />
       )}
 
