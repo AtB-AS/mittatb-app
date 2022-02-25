@@ -61,6 +61,7 @@ import {SearchStateType} from './types';
 import {ThemeColor} from '@atb/theme/colors';
 import useInterval from '@atb/utils/use-interval';
 import {differenceInMinutes, parseISO} from 'date-fns';
+import Prompt from './Prompt';
 
 const themeColor: ThemeColor = 'background_accent';
 
@@ -266,7 +267,10 @@ const Assistant: React.FC<Props> = ({
     (_) => (
       <View>
         <View style={styles.paddedContainer}>
+          <Prompt variant="fullWidth" />
           <Section>
+            <Prompt variant="halfWidth" />
+
             <LocationInput
               accessibilityLabel={
                 t(AssistantTexts.location.departurePicker.a11yLabel) +
