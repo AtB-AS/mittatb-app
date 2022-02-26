@@ -18,11 +18,11 @@ const InfoPrompt = ({variant}: InfoPromptType) => {
 
   const isBulletPointsForVariant = !!InfoPromptTexts[variant].body.bulletPoints;
 
-  const bulletPointList = InfoPromptTexts[variant].body.bulletPoints.map(
-    (bulletpoint) => (
-      <ThemeText style={styles.bulletPoints}>{t(bulletpoint)}</ThemeText>
-    ),
-  );
+  const PossibleBulletPointList = isBulletPointsForVariant
+    ? InfoPromptTexts[variant].body.bulletPoints.map((bulletpoint) => (
+        <ThemeText style={styles.bulletPoints}>{t(bulletpoint)}</ThemeText>
+      ))
+    : null;
 
   return (
     <View style={styles.container}>
@@ -30,8 +30,7 @@ const InfoPrompt = ({variant}: InfoPromptType) => {
         {t(InfoPromptTexts[variant].title)}
       </ThemeText>
 
-      {isBulletPointsForVariant && bulletPointList}
-
+      {PossibleBulletPointList}
       <ThemeText style={styles.marginTop}>
         {t(InfoPromptTexts[variant].body.text)}
       </ThemeText>
