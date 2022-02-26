@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {FlatList, View} from 'react-native';
+import {View} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
 import {useTranslation, InfoPromptTexts} from '@atb/translations';
 import Button from '@atb/components/button';
