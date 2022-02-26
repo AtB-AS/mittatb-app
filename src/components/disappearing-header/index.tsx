@@ -32,6 +32,7 @@ import AlertBox from '@atb/alerts/AlertBox';
 import {ThemeColor} from '@atb/theme/colors';
 import LinearGradient from 'react-native-linear-gradient';
 import hexToRgba from 'hex-to-rgba';
+import Prompt from '@atb/components/Prompt';
 
 type Props = {
   renderHeader(
@@ -242,6 +243,10 @@ const DisappearingHeader: React.FC<Props> = ({
                 <ScrollView style={styles.highlightComponent}>
                   {highlightComponent}
                 </ScrollView>
+
+                <View style={styles.featurePrompt}>
+                  <Prompt />
+                </View>
               </View>
 
               <View
@@ -373,6 +378,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.colors[themeColor].backgroundColor,
     paddingBottom: 0,
     flexGrow: 1,
+  },
+  featurePrompt: {
+    marginBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacings.medium,
   },
 }));
 
