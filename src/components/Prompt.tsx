@@ -21,7 +21,7 @@ const Prompt = ({}: PromptType) => {
 
   return (
     <View style={styles.container}>
-      <ThemeText type="heading__title" style={styles.marginBottom}>
+      <ThemeText type="heading__title" style={styles.title}>
         Nytt reisesøk!
       </ThemeText>
 
@@ -32,7 +32,6 @@ const Prompt = ({}: PromptType) => {
       <View style={styles.buttonRow}>
         <Button
           type="inline"
-          style={styles.buttons}
           text="Skru på!"
           onPress={() => {
             analytics().logEvent('toggle_beta_tripsearch', {
@@ -60,19 +59,20 @@ const usePromptStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     borderRadius: theme.border.radius.regular,
     backgroundColor: theme.colors.background_1.backgroundColor,
     marginBottom: theme.spacings.xLarge,
-    padding: theme.spacings.medium,
-    width: '70%',
+    padding: theme.spacings.xLarge,
+    width: '65%',
+  },
+  title: {
+    marginBottom: theme.spacings.medium,
   },
   buttonRow: {
+    marginTop: theme.spacings.xLarge,
     alignSelf: 'flex-start',
     flexDirection: 'row',
   },
   noThanks: {
     justifyContent: 'center',
-    marginLeft: theme.spacings.medium,
-  },
-  marginBottom: {
-    marginBottom: theme.spacings.medium,
+    marginLeft: theme.spacings.large,
   },
 }));
 
