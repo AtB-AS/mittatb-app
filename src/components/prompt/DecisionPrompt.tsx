@@ -1,38 +1,40 @@
+import React, {useState} from 'react';
+import {TouchableOpacity, View} from 'react-native';
+import analytics from '@react-native-firebase/analytics';
+import {StyleSheet, Theme} from '@atb/theme';
+import {useTranslation, DecisionPromptTexts} from '@atb/translations';
+import {usePreferences} from '@atb/preferences';
+import {updateMetadata} from '@atb/chat/metadata';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
-import {usePreferences} from '@atb/preferences';
-import React, {useState} from 'react';
-import analytics from '@react-native-firebase/analytics';
-import {TouchableOpacity, View} from 'react-native';
-import {updateMetadata} from '@atb/chat/metadata';
-import {StyleSheet, Theme} from '@atb/theme';
 
-type PromptType = {};
+type DecisionPromptType = {
+  variant: 'assistantv2';
+};
 
-const Prompt = ({}: PromptType) => {
+const DecisionPrompt = ({variant}: DecisionPromptType) => {
   const [hidden, setHidden] = useState<boolean>(false);
   const {
     setPreference,
     preferences: {useExperimentalTripSearch},
   } = usePreferences();
   const styles = usePromptStyle();
+  const {t} = useTranslation();
 
   if (hidden) return null;
 
   return (
     <View style={styles.container}>
       <ThemeText type="heading__title" style={styles.title}>
-        Nytt reisesøk!
+        {t(DecisionPromptTexts[variant].title)}
       </ThemeText>
 
-      <ThemeText style={styles.marginBottom}>
-        Har du lyst til å prøve en ny versjon av reisesøket?
-      </ThemeText>
+      <ThemeText>{t(DecisionPromptTexts[variant].body)}</ThemeText>
 
       <View style={styles.buttonRow}>
         <Button
           type="inline"
-          text="Skru på!"
+          text={t(DecisionPromptTexts[variant].buttons.yes)}
           onPress={() => {
             analytics().logEvent('toggle_beta_tripsearch', {
               toggle: 'enable',
@@ -47,7 +49,7 @@ const Prompt = ({}: PromptType) => {
           onPress={() => setHidden(true)}
           style={styles.noThanks}
         >
-          <ThemeText>Nei takk</ThemeText>
+          <ThemeText>{t(DecisionPromptTexts.assistantv2.buttons.no)}</ThemeText>
         </TouchableOpacity>
       </View>
     </View>
@@ -76,4 +78,4 @@ const usePromptStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
 }));
 
-export default Prompt;
+export default DecisionPrompt;

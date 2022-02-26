@@ -27,12 +27,12 @@ import {
   AnimatedScreenHeader,
   LeftButtonProps,
 } from '@atb/components/screen-header';
+import {DecisionPrompt, InfoPrompt} from '@atb/components/prompt';
 import {AlertContext} from '@atb/alerts/AlertsContext';
 import AlertBox from '@atb/alerts/AlertBox';
 import {ThemeColor} from '@atb/theme/colors';
 import LinearGradient from 'react-native-linear-gradient';
 import hexToRgba from 'hex-to-rgba';
-import Prompt from '@atb/components/Prompt';
 
 type Props = {
   renderHeader(
@@ -245,7 +245,8 @@ const DisappearingHeader: React.FC<Props> = ({
                 </ScrollView>
 
                 <View style={styles.featurePrompt}>
-                  <Prompt />
+                  <InfoPrompt variant="assistantv2" />
+                  <DecisionPrompt variant="assistantv2" />
                 </View>
               </View>
 
