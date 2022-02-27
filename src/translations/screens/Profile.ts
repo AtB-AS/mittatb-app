@@ -37,7 +37,10 @@ const ProfileTexts = {
           label: _('Standard reisende', 'Default traveller'),
         },
         travelToken: {
-          label: _('Mitt reisebevis', 'My travel token'),
+          label: _(
+            'Bruk billett på mobil / t:kort',
+            'Use ticket on mobile / t:card',
+          ),
           flag: _('Ny', 'New'),
         },
         appearance: {

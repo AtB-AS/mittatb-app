@@ -18,6 +18,7 @@ function getTokenCertificateHandler(abtTokensService) {
     return {
       accountId: s.accountId,
       state: 'AddToken',
+      tokenId: s.tokenId,
       activatedData: tokenCertificateResponse
     };
   });

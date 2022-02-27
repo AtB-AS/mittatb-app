@@ -15,6 +15,7 @@ export default function activateNewHandler(
     return {
       accountId: s.accountId,
       state: 'AddToken',
+      tokenId: s.tokenId,
       activatedData: activateTokenResponse,
     };
   });

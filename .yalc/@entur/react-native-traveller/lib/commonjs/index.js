@@ -49,10 +49,8 @@ function createClient(setStatus, initialConfig) {
       return 'MissingNetConnection';
     } else if (storedState.error) {
       return 'Error';
-    } else if (storedState.state === 'Validating') {
+    } else if (storedState.state === 'Validating' || storedState.state === 'Valid') {
       return 'Token';
-    } else if (storedState.state === 'Valid') {
-      return storedState.isInspectable ? 'Token' : 'NotInspectable';
     } else {
       return 'Loading';
     }
@@ -83,6 +81,7 @@ function createClient(setStatus, initialConfig) {
     }
 
     const status = storedState && {
+      tokenId: 'tokenId' in storedState ? storedState.tokenId : undefined,
       state: storedState.state,
       error: sanitizeError(storedState.error),
       visualState: toVisualState(storedState)

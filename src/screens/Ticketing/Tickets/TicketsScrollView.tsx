@@ -10,7 +10,6 @@ import {
 } from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {isFuture} from 'date-fns';
 import hexToRgba from 'hex-to-rgba';
 import React from 'react';
 import {RefreshControl, View} from 'react-native';
@@ -20,6 +19,9 @@ import SimpleTicket from '../Ticket';
 import TicketReservation from './TicketReservation';
 import TravelCardInformation from './TravelCardInformation';
 import MessageBox from '@atb/components/message-box';
+import TravelTokenBox from '@atb/travel-token-box/';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useHasEnabledMobileToken} from "@atb/mobile-token/MobileTokenContext";
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
@@ -49,6 +51,7 @@ const TicketsScrollView: React.FC<Props> = ({
   const navigation = useNavigation<RootNavigationProp>();
   const {t} = useTranslation();
   const {resetPaymentStatus} = useTicketState();
+  const hasEnabledMobileToken = useHasEnabledMobileToken();
 
   const hasActiveTravelCard = !!travelCard;
 
@@ -63,11 +66,11 @@ const TicketsScrollView: React.FC<Props> = ({
           />
         }
       >
-        {travelCard && hasActiveTravelCard && (
-          <TravelCardInformation
-            travelCard={travelCard}
-          ></TravelCardInformation>
-        )}
+        {hasEnabledMobileToken ? (
+          <TravelTokenBox showIfThisDevice={false} showHowToChangeHint={true} />
+        ) : hasActiveTravelCard ? (
+          <TravelCardInformation travelCard={travelCard} />
+        ) : null}
         {didPaymentFail && (
           <MessageBox
             containerStyle={styles.messageBox}
@@ -75,7 +78,7 @@ const TicketsScrollView: React.FC<Props> = ({
             message={t(TicketsTexts.scrollView.paymentError)}
             onPress={resetPaymentStatus}
             onPressText={t(TicketsTexts.scrollView.paymentErrorButton)}
-          ></MessageBox>
+          />
         )}
         {!fareContracts?.length && !reservations?.length && (
           <ThemeText style={styles.noTicketsText}>{noTicketsLabel}</ThemeText>

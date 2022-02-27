@@ -12,10 +12,10 @@ import {RootStackParamList} from '@atb/navigation';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {ProfileStackParams} from '..';
-import {ActiveTicketCard} from '@atb/screens/Ticketing/Tickets/TravelCardInformation';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import TravelTokenBox from '@atb/travel-token-box';
 import MessageBox from '@atb/components/message-box';
-import {TraveltokenPhone} from '@atb/assets/svg/color/illustrations';
+import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
 
 export type TravelCardNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -42,7 +42,8 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
         leftButton={{type: 'back'}}
       />
       <ScrollView style={styles.scrollView}>
-        <ActiveTokenBox />
+        <PotentialErrorMessages />
+        <TravelTokenBox showIfThisDevice={true} />
         <ChangeTokenButton
           onPress={() => navigation.navigate('SelectTravelToken')}
         />
@@ -52,10 +53,10 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
   );
 }
 
-const ActiveTokenBox = () => {
-  const styles = useStyles();
-  const {t} = useTranslation();
+const PotentialErrorMessages = () => {
   const {travelTokens, updateTravelTokens} = useMobileTokenContextState();
+  const {t} = useTranslation();
+  const styles = useStyles();
 
   if (!travelTokens) {
     return (
@@ -79,7 +80,7 @@ const ActiveTokenBox = () => {
     );
   }
 
-  const inspectableToken = travelTokens.find((t) => t.inspectable);
+  const inspectableToken = travelTokens?.find((t) => t.inspectable);
 
   if (!inspectableToken) {
     return (
@@ -94,65 +95,7 @@ const ActiveTokenBox = () => {
     );
   }
 
-  const title =
-    inspectableToken.type === 'travelCard'
-      ? t(TravelTokenTexts.travelToken.activeToken.type.tcard.title)
-      : inspectableToken.name;
-
-  const description =
-    inspectableToken.type === 'travelCard'
-      ? t(TravelTokenTexts.travelToken.activeToken.type.tcard.description)
-      : t(TravelTokenTexts.travelToken.activeToken.type.mobile.description);
-
-  const a11yLabel =
-    inspectableToken.type === 'travelCard'
-      ? t(TravelTokenTexts.travelToken.activeToken.type.tcard.a11yLabel)
-      : t(
-          TravelTokenTexts.travelToken.activeToken.type.mobile.a11yLabel(
-            inspectableToken.name,
-          ),
-        );
-
-  return (
-    <View
-      style={styles.activeTokenBox}
-      accessible={true}
-      accessibilityLabel={a11yLabel}
-    >
-      <ThemeText
-        type="body__secondary"
-        color="primary_2"
-        style={styles.activeTokenBoxHeader}
-      >
-        {t(TravelTokenTexts.travelToken.activeToken.title)}
-      </ThemeText>
-      <ThemeText
-        type="heading__title"
-        color="primary_2"
-        style={styles.activeTokenBoxType}
-      >
-        {title}
-      </ThemeText>
-      <View style={{display: 'flex', flexDirection: 'row'}}>
-        {inspectableToken.type === 'travelCard' ? (
-          <ActiveTicketCard
-            cardId={inspectableToken.travelCardId || ''}
-            color="primary_3"
-          />
-        ) : (
-          <View style={{alignItems: 'center'}}>
-            <TraveltokenPhone />
-          </View>
-        )}
-        <ThemeText
-          color="primary_2"
-          style={{marginLeft: 12, marginTop: 36, flex: 1}}
-        >
-          {description}
-        </ThemeText>
-      </View>
-    </View>
-  );
+  return null;
 };
 
 const ChangeTokenButton = ({onPress}: {onPress: () => void}) => {
@@ -204,18 +147,6 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   errorMessage: {
     marginBottom: theme.spacings.medium,
-  },
-  activeTokenBox: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
-    padding: theme.spacings.xLarge,
-    borderRadius: theme.border.radius.regular,
-    marginBottom: theme.spacings.medium,
-  },
-  activeTokenBoxHeader: {
-    marginBottom: theme.spacings.medium,
-  },
-  activeTokenBoxType: {
-    marginBottom: theme.spacings.large,
   },
   changeTokenButton: {
     marginBottom: theme.spacings.medium,

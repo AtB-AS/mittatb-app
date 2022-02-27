@@ -26,7 +26,6 @@ import {Warning} from '@atb/assets/svg/color/situations';
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
   status: ValidityStatus | 'recent';
-  hasActiveTravelCard: boolean;
   isInspectable: boolean;
   omitUserProfileCount?: boolean;
 };
@@ -34,7 +33,6 @@ type TicketInfoProps = {
 const TicketInfo = ({
   travelRights,
   status,
-  hasActiveTravelCard,
   isInspectable,
   omitUserProfileCount,
 }: TicketInfoProps) => {
@@ -68,7 +66,6 @@ const TicketInfo = ({
       toTariffZone={toTariffZone}
       userProfilesWithCount={userProfilesWithCount}
       status={status}
-      hasActiveTravelCard={hasActiveTravelCard}
       isInspectable={isInspectable}
       omitUserProfileCount={omitUserProfileCount}
     />
@@ -81,7 +78,6 @@ type TicketInfoViewProps = {
   toTariffZone?: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
   status: TicketInfoProps['status'];
-  hasActiveTravelCard?: boolean;
   isInspectable?: boolean;
   omitUserProfileCount?: boolean;
 };
@@ -102,7 +98,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
     fromTariffZone,
     toTariffZone,
     userProfilesWithCount,
-    hasActiveTravelCard,
+    isInspectable,
     omitUserProfileCount,
   } = props;
   const {t, language} = useTranslation();
@@ -153,11 +149,11 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
           {tariffZoneSummary}
         </ThemeText>
       )}
-      {hasActiveTravelCard && (
-        <View style={styles.tCardWarning}>
-          <ThemeIcon svg={Warning} style={styles.tCardWarningIcon}></ThemeIcon>
+      {isInspectable === false && (
+        <View style={styles.notInspectableWarning}>
+          <ThemeIcon svg={Warning} style={styles.notInspectableWarningIcon} />
           <ThemeText isMarkdown={true}>
-            {t(TicketTexts.ticketInfo.travelcardIsActive)}
+            {t(TicketTexts.ticketInfo.notInspectableWarning)}
           </ThemeText>
         </View>
       )}
@@ -313,11 +309,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     aspectRatio: 1,
     padding: theme.spacings.small,
   },
-  tCardWarning: {
+  notInspectableWarning: {
     flexDirection: 'row',
     paddingVertical: theme.spacings.small,
   },
-  tCardWarningIcon: {
+  notInspectableWarningIcon: {
     marginRight: theme.spacings.small,
   },
 }));

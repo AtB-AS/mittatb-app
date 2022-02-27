@@ -11,23 +11,21 @@ var _native = require("../../../native");
 
 var _types = require("../../../native/types");
 
-var _utils = require("../utils");
-
 function validatingHandler(abtTokensService) {
   return (0, _HandlerFactory.stateHandlerFactory)(['Validating'], async s => {
-    const signedToken = await (0, _native.getSecureToken)(s.accountId, s.token.tokenId, true, [_types.PayloadAction.getFarecontracts]);
-    const validationResponse = await abtTokensService.validateToken(s.token.tokenId, signedToken);
+    const signedToken = await (0, _native.getSecureToken)(s.accountId, s.tokenId, true, [_types.PayloadAction.getFarecontracts]);
+    const validationResponse = await abtTokensService.validateToken(s.tokenId, signedToken);
 
     switch (validationResponse.state) {
       case 'Valid':
-        const tokens = await abtTokensService.listTokens();
         return {
           accountId: s.accountId,
           state: 'Valid',
-          isInspectable: (0, _utils.isTokenInspectable)(tokens, s.token.tokenId)
+          tokenId: s.tokenId
         };
 
       case 'NotFound':
+      case 'NeedsReplacement':
         return {
           accountId: s.accountId,
           state: 'DeleteLocal'
@@ -36,7 +34,7 @@ function validatingHandler(abtTokensService) {
       case 'NeedsRenewal':
         return {
           accountId: s.accountId,
-          tokenId: s.token.tokenId,
+          tokenId: s.tokenId,
           state: 'InitiateRenewal'
         };
     }

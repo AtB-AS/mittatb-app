@@ -4,6 +4,7 @@ import {Reservation, FareContract, PaymentStatus} from './types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {differenceInMinutes} from 'date-fns';
 import {TokenStatus} from '@entur/react-native-traveller/lib/typescript/token/types';
+import Bugsnag from '@bugsnag/react-native';
 import {CustomerProfile} from '.';
 import setupFirestoreListener from './firestore';
 
@@ -12,7 +13,6 @@ type TicketReducerState = {
   reservations: Reservation[];
   isRefreshingTickets: boolean;
   errorRefreshingTickets: boolean;
-  tokenStatus?: TokenStatus;
   customerProfile: CustomerProfile | undefined;
   didPaymentFail: boolean;
 };
@@ -29,16 +29,8 @@ type TicketReducerAction =
       reservations: Reservation[];
     }
   | {
-      type: 'UPDATE_FARE_CONTRACT_TICKETS';
-      fareContracts: FareContract[];
-    }
-  | {
       type: 'UPDATE_CUSTOMER_PROFILE';
       customerProfile: CustomerProfile | undefined;
-    }
-  | {
-      type: 'SET_TOKEN_STATUS';
-      tokenStatus: TokenStatus;
     }
   | {
       type: 'UPDATE_PAYMENT_FAILED';
@@ -55,12 +47,6 @@ const ticketReducer: TicketReducer = (
   action,
 ): TicketReducerState => {
   switch (action.type) {
-    case 'SET_TOKEN_STATUS': {
-      return {
-        ...prevState,
-        tokenStatus: action.tokenStatus,
-      };
-    }
     case 'SET_IS_REFRESHING_FARE_CONTRACT_TICKETS': {
       return {
         ...prevState,
@@ -122,11 +108,10 @@ type TicketState = {
   findFareContractByOrderId: (id: string) => FareContract | undefined;
 } & Pick<
   TicketReducerState,
-  'reservations' | 'isRefreshingTickets' | 'tokenStatus' | 'customerProfile'
+  'reservations' | 'isRefreshingTickets' | 'customerProfile'
 >;
 
 const initialReducerState: TicketReducerState = {
-  tokenStatus: undefined,
   fareContracts: [],
   reservations: [],
   isRefreshingTickets: false,

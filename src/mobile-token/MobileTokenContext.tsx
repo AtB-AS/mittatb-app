@@ -35,7 +35,8 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
   const [tokenStatus, setTokenStatus] = useState<TokenStatus>();
   const {abtCustomerId, userCreationFinished} = useAuthState();
 
-  const [travelTokens, setTravelTokens] = useState<TravelToken[]>();
+  const [rawTokens, setRawTokens] = useState<StoredToken[]>();
+  const [mappedTravelTokens, setMappedTravelTokens] = useState<TravelToken[]>();
   const [currentCustomerId, setCurrentCustomerId] = useState(abtCustomerId);
 
   const setStatus = (status?: TokenStatus) => {
@@ -59,10 +60,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
   const updateTravelTokens = useCallback(() => {
     if (!client) return;
 
-    client
-      .listTokens()
-      .then((storedTokens) => storedTokens?.map(mapToken))
-      .then(setTravelTokens);
+    client.listTokens().then(setRawTokens);
   }, [client]);
 
   const toggleTravelToken = useCallback(
@@ -71,8 +69,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
 
       try {
         const storedTokens = await client.toggleToken(tokenId);
-        const mappedTokens = storedTokens.map(mapToken);
-        setTravelTokens(mappedTokens);
+        setRawTokens(storedTokens);
         return true;
       } catch (err: any) {
         Bugsnag.notify(err);
@@ -81,6 +78,13 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
     },
     [client],
   );
+
+  useEffect(() => {
+    const mappedTokens = rawTokens?.map((t) =>
+      mapToken(t, tokenStatus?.tokenId),
+    );
+    setMappedTravelTokens(mappedTokens);
+  }, [rawTokens, tokenStatus]);
 
   useEffect(() => {
     if (tokenStatus?.state === 'Valid') {
@@ -103,7 +107,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
     updateTravelTokens,
     1000 * 60 * 15,
     [updateTravelTokens],
-    travelTokens !== undefined,
+    rawTokens !== undefined,
   );
 
   // Refresh travel tokens every 15 minutes
@@ -111,7 +115,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
     updateTravelTokens,
     1000 * 60 * 15,
     [updateTravelTokens],
-    travelTokens === undefined,
+    rawTokens === undefined,
   );
 
   return (
@@ -121,7 +125,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
           client?.getSecureToken([PayloadAction.ticketInspection]),
         tokenStatus,
         retry: client?.retry,
-        travelTokens,
+        travelTokens: mappedTravelTokens,
         toggleTravelToken,
         updateTravelTokens,
       }}
@@ -150,11 +154,15 @@ export function useMobileTokenContextState() {
 
 export default MobileTokenContextProvider;
 
-const mapToken = (st: StoredToken): TravelToken => ({
+const mapToken = (
+  st: StoredToken,
+  thisDeviceTokenId?: string,
+): TravelToken => ({
   id: st.id,
   name: st.deviceName,
   inspectable: st.allowedActions.includes('TOKEN_ACTION_TICKET_INSPECTION'),
   activated: st.state === 'TOKEN_LIFECYCLE_STATE_ACTIVATED',
   type: st.type === 'TOKEN_TYPE_TRAVELCARD' ? 'travelCard' : 'mobile',
   travelCardId: st.keyValues?.['travelCardId'],
+  isThisDevice: st.id === thisDeviceTokenId,
 });

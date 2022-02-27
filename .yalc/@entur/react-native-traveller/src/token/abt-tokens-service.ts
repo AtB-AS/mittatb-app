@@ -116,7 +116,7 @@ export const createAbtTokensService = (
   };
 
   const validateToken = async (tokenId: string, signedToken: string) => {
-    const url = `${hostUrl}/tokens/${tokenId}/validate`;
+    const url = `${hostUrl}/tokens/v2/${tokenId}/validate`;
     const response = await fetcher<ValidateTokenResponse>({
       url,
       headers: {

@@ -13,28 +13,31 @@ import ThemeText from '@atb/components/text';
 
 type Props = {
   validityStatus: ValidityStatus;
-  isInspectable: boolean;
 };
 
-export default function QrCode({validityStatus, isInspectable}: Props) {
-  const {tokenStatus, generateQrCode, retry} = useMobileTokenContextState();
+export default function QrCode({validityStatus}: Props) {
+  const {tokenStatus, travelTokens, generateQrCode, retry} =
+    useMobileTokenContextState();
 
   if (validityStatus !== 'valid') return null;
-  if (!isInspectable) return null;
   if (!generateQrCode) return null;
 
-  switch (tokenStatus?.visualState) {
-    case 'Token':
-      return <QrCodeSvg generateQrCode={generateQrCode} />;
-    case 'Error':
-      return <QrCodeError retry={retry} />;
-    case 'NotInspectable':
-      return <QrCodeDeviceNotInspectable />;
-    case 'MissingNetConnection':
-      return <QrCodeMissingNetwork />;
-    case 'Loading':
-    case undefined:
-      return <QrCodeLoading />;
+  if (!travelTokens) {
+    return <QrCodeLoading />;
+  }
+
+  const inspectableToken = travelTokens.find((t) => t.inspectable);
+
+  if (inspectableToken?.isThisDevice) {
+    return <QrCodeSvg generateQrCode={generateQrCode} />;
+  } else if (inspectableToken) {
+    return <QrCodeDeviceNotInspectable />;
+  } else if (tokenStatus?.visualState === 'MissingNetConnection') {
+    return <QrCodeMissingNetwork />;
+  } else if (tokenStatus?.visualState === 'Error') {
+    return <QrCodeError retry={retry} />;
+  } else {
+    return <QrCodeLoading />;
   }
 }
 

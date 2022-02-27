@@ -14,8 +14,8 @@ import MessageBox from '@atb/components/message-box';
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import RadioBox from '@atb/components/radio-icon/radio-box';
 import {
-  TraveltokenPhone,
-  TraveltokenTravelcard,
+  TravelTokenCard,
+  TravelTokenPhone,
 } from '@atb/assets/svg/color/illustrations';
 
 type RouteName = 'SelectTravelToken';
@@ -78,7 +78,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
             a11yHint={t(TravelTokenTexts.toggleToken.radioBox.tCard.a11yHint)}
             disabled={false}
             selected={selectedType === 'travelCard'}
-            icon={<TraveltokenTravelcard />}
+            icon={<TravelTokenCard />}
             type="spacious"
             onPress={() => {
               animateNextChange();
@@ -96,7 +96,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
             a11yHint={t(TravelTokenTexts.toggleToken.radioBox.phone.a11yHint)}
             disabled={false}
             selected={selectedType === 'mobile'}
-            icon={<TraveltokenPhone />}
+            icon={<TravelTokenPhone />}
             type="spacious"
             onPress={() => {
               if (selectedToken?.type !== 'mobile') {
@@ -130,8 +130,16 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
           <Sections.Section type="spacious" style={styles.selectDeviceSection}>
             <Sections.RadioSection<TravelToken>
               items={activatedMobileTokens}
-              keyExtractor={(t) => t.id}
-              itemToText={(t) => t.name}
+              keyExtractor={(tt) => tt.id}
+              itemToText={(tt) =>
+                tt.name +
+                (tt.isThisDevice
+                  ? t(
+                      TravelTokenTexts.toggleToken.radioBox.phone.selection
+                        .thisDeviceSuffix,
+                    )
+                  : '')
+              }
               selected={selectedToken}
               onSelect={setSelectedToken}
               headerText={t(
