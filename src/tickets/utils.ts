@@ -38,8 +38,8 @@ export function isInspectable(
   hasActiveTravelCard: boolean,
   mobileTokenEnabled: boolean,
   inspectableTravelToken?: TravelToken,
-) {
-  if (mobileTokenEnabled) return inspectableTravelToken?.isThisDevice;
+): boolean {
+  if (mobileTokenEnabled) return inspectableTravelToken?.isThisDevice ?? false;
   else return !hasActiveTravelCard && isSingleTicket(travelRight);
 }
 
@@ -78,11 +78,8 @@ export function isValidRightNowFareContract(f: FareContract): boolean {
 
 function hasActiveOrUsableCarnetTicket(tickets: CarnetTicket[]): boolean {
   const [firstTicket] = tickets;
-  const {
-    usedAccesses,
-    maximumNumberOfAccesses,
-    numberOfUsedAccesses,
-  } = flattenCarnetTicketAccesses(tickets);
+  const {usedAccesses, maximumNumberOfAccesses, numberOfUsedAccesses} =
+    flattenCarnetTicketAccesses(tickets);
 
   const [lastUsedAccess] = usedAccesses?.slice(-1);
   const validTo = lastUsedAccess?.endDateTime.toMillis() ?? 0;

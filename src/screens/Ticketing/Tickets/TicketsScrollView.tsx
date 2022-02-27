@@ -20,8 +20,7 @@ import TicketReservation from './TicketReservation';
 import TravelCardInformation from './TravelCardInformation';
 import MessageBox from '@atb/components/message-box';
 import TravelTokenBox from '@atb/travel-token-box/';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useHasEnabledMobileToken} from "@atb/mobile-token/MobileTokenContext";
+import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
