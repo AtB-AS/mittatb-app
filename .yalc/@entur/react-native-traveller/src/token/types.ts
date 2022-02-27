@@ -122,6 +122,10 @@ export type ToggleTokenResponse = {
   tokens: StoredToken[];
 };
 
+export type ValidateTokenResponse = {
+  state: 'Valid' | 'NotFound' | 'NeedsRenewal';
+};
+
 const errorTypes = ['None', 'Severe', 'Unknown', 'Network'] as const;
 export type ErrorType = typeof errorTypes[number];
 

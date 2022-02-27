@@ -45,7 +45,7 @@ type ProfileScreenProps = {
 };
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
-  const {enable_i18n, privacy_policy_url, enable_period_tickets} =
+  const {enable_i18n, privacy_policy_url, enable_period_tickets, enable_ticketing} =
     useRemoteConfig();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
@@ -171,10 +171,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               onPress={() => navigation.navigate('Language')}
             />
           )}
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.settings.linkItems.enrollment.label)}
-            onPress={() => navigation.navigate('Enrollment')}
-          />
         </Sections.Section>
         <Sections.Section withPadding>
           <Sections.GenericItem>
@@ -202,6 +198,26 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               });
               setPreference({newDepartures});
             }}
+          />
+          <Sections.ActionItem
+            mode="toggle"
+            text={t(ProfileTexts.sections.newFeatures.assistant)}
+            checked={useExperimentalTripSearch}
+            onPress={(useExperimentalTripSearch) => {
+              analytics().logEvent('toggle_beta_tripsearch', {
+                toggle: useExperimentalTripSearch ? 'enable' : 'disable',
+              });
+              updateMetadata({
+                'AtB-Beta-TripSearch': useExperimentalTripSearch
+                  ? 'enabled'
+                  : 'disabled',
+              });
+              setPreference({useExperimentalTripSearch});
+            }}
+          />
+          <Sections.LinkItem
+            text={t(ProfileTexts.sections.settings.linkItems.enrollment.label)}
+            onPress={() => navigation.navigate('Enrollment')}
           />
         </Sections.Section>
 
@@ -277,53 +293,41 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           />
         </Sections.Section>
 
-        <Sections.Section withPadding>
-          <Sections.HeaderItem
-            text={t(ProfileTexts.sections.information.heading)}
-          />
-          <Sections.LinkItem
-            text={t(
-              ProfileTexts.sections.information.linkItems.ticketing.label,
-            )}
-            onPress={() => navigation.navigate('TicketingInformation')}
-          />
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.information.linkItems.payment.label)}
-            onPress={() => navigation.navigate('PaymentInformation')}
-          />
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.information.linkItems.terms.label)}
-            onPress={() => navigation.navigate('TermsInformation')}
-          />
-          <Sections.LinkItem
-            text={t(
-              ProfileTexts.sections.information.linkItems.inspection.label,
-            )}
-            onPress={() => navigation.navigate('TicketInspectionInformation')}
-          />
-        </Sections.Section>
+        {enable_ticketing && (
+          <Sections.Section withPadding>
+            <Sections.HeaderItem
+              text={t(ProfileTexts.sections.information.heading)}
+            />
+            <Sections.LinkItem
+              text={t(
+                ProfileTexts.sections.information.linkItems.ticketing.label,
+              )}
+              onPress={() => navigation.navigate('TicketingInformation')}
+            />
+            <Sections.LinkItem
+              text={t(
+                ProfileTexts.sections.information.linkItems.payment.label,
+              )}
+              onPress={() => navigation.navigate('PaymentInformation')}
+            />
+            <Sections.LinkItem
+              text={t(ProfileTexts.sections.information.linkItems.terms.label)}
+              onPress={() => navigation.navigate('TermsInformation')}
+            />
+            <Sections.LinkItem
+              text={t(
+                ProfileTexts.sections.information.linkItems.inspection.label,
+              )}
+              onPress={() => navigation.navigate('TicketInspectionInformation')}
+            />
+          </Sections.Section>
+        )}
 
         {(!!JSON.parse(IS_QA_ENV || 'false') ||
           __DEV__ ||
           customerProfile?.debug) && (
           <Sections.Section withPadding>
             <Sections.HeaderItem text="Developer menu" />
-            <Sections.ActionItem
-              mode="toggle"
-              text={t(ProfileTexts.sections.newFeatures.assistant)}
-              checked={useExperimentalTripSearch}
-              onPress={(useExperimentalTripSearch) => {
-                analytics().logEvent('toggle_beta_tripsearch', {
-                  toggle: useExperimentalTripSearch ? 'enable' : 'disable',
-                });
-                updateMetadata({
-                  'AtB-Beta-TripSearch': useExperimentalTripSearch
-                    ? 'enabled'
-                    : 'disabled',
-                });
-                setPreference({useExperimentalTripSearch});
-              }}
-            />
             <Sections.LinkItem
               text="Design system"
               onPress={() => navigation.navigate('DesignSystem')}

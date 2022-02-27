@@ -83,6 +83,9 @@ export declare type ToggleTokenRequest = {
 export declare type ToggleTokenResponse = {
     tokens: StoredToken[];
 };
+export declare type ValidateTokenResponse = {
+    state: 'Valid' | 'NotFound' | 'NeedsRenewal';
+};
 declare const errorTypes: readonly ["None", "Severe", "Unknown", "Network"];
 export declare type ErrorType = typeof errorTypes[number];
 export declare type TokenError = {

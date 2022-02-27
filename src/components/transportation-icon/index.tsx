@@ -89,6 +89,26 @@ export function getTransportModeSvg(mode?: AnyMode) {
   }
 }
 
+export const CollapsedLegs = ({legs}: {legs: any[]}) => {
+  const styles = useStyles();
+  const {theme} = useTheme();
+  const backgroundColor = theme.colors.transport_other.backgroundColor;
+
+  if (!legs.length) return null;
+
+  return (
+    <View style={[styles.transportationIcon, {backgroundColor}]}>
+      <ThemeText
+        color={'transport_other'}
+        style={styles.lineNumberText}
+        type="body__primary--bold"
+      >
+        +{legs.length}
+      </ThemeText>
+    </View>
+  );
+};
+
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   transportationIcon: {
     display: 'flex',

@@ -6,7 +6,7 @@ import {Language, useTranslation} from '@atb/translations';
 import {
   formatToClock,
   formatToShortDate,
-  formatToSimpleDateTime,
+  formatToVerboseDateTime,
   isInThePast,
 } from '@atb/utils/date';
 import {ArrowLeft, ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -19,7 +19,7 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 
 type DateNavigationProps = {
   searchTime: SearchTime;
-  setSearchTime: Dispatch<SetStateAction<SearchTime>>;
+  setSearchTime: (searchTime: SearchTime) => void;
 };
 
 export default function DateNavigation({
@@ -35,10 +35,22 @@ export default function DateNavigation({
     searchTime.option === 'now'
       ? t(DeparturesTexts.dateNavigation.today)
       : formatToTwoLineDateTime(searchTime.date, language);
-  const a11ySearchTimeText =
-    searchTime.option === 'now'
-      ? t(DeparturesTexts.dateNavigation.today)
-      : formatToSimpleDateTime(searchTime.date, language);
+
+  const getA11ySearchTimeText = () => {
+    const parsed = parseISO(searchTime.date);
+
+    if (searchTime.option === 'now')
+      return t(DeparturesTexts.dateNavigation.today);
+
+    if (isSameDay(parsed, new Date()))
+      return (
+        t(DeparturesTexts.dateNavigation.today) +
+        ', ' +
+        formatToClock(parsed, language)
+      );
+
+    return formatToVerboseDateTime(parsed, language);
+  };
 
   const onSetSearchTime = (time: SearchTime) => {
     if (isInThePast(time.date)) {
@@ -59,6 +71,7 @@ export default function DateNavigation({
         close={close}
         initialTime={searchTime}
         setSearchTime={onSetSearchTime}
+        allowTimeInPast={false}
       ></DepartureTimeSheet>
     ));
   };
@@ -77,7 +90,7 @@ export default function DateNavigation({
         accessibilityHint={
           disablePreviousDayNavigation
             ? t(DeparturesTexts.dateNavigation.a11yDisabled)
-            : undefined
+            : t(DeparturesTexts.dateNavigation.a11yPreviousDayHint)
         }
         textStyle={{
           marginLeft: theme.spacings.xSmall,
@@ -87,7 +100,9 @@ export default function DateNavigation({
         onPress={onLaterTimePress}
         text={searchTimeText}
         accessibilityLabel={t(
-          DeparturesTexts.dateNavigation.a11ySelectedLabel(a11ySearchTimeText),
+          DeparturesTexts.dateNavigation.a11ySelectedLabel(
+            getA11ySearchTimeText(),
+          ),
         )}
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yChangeDateHint)}
         type="compact"
@@ -111,16 +126,20 @@ export default function DateNavigation({
         textStyle={{
           marginRight: theme.spacings.xSmall,
         }}
+        accessibilityHint={t(DeparturesTexts.dateNavigation.a11yNextDayHint)}
       ></Button>
     </View>
   );
 }
 
 function changeDay(searchTime: SearchTime, days: number): SearchTime {
-  const date = addDays(parseISO(searchTime.date).setHours(0, 0), days);
+  const date =
+    searchTime.option === 'now'
+      ? addDays(parseISO(searchTime.date).setHours(0, 0), days)
+      : addDays(parseISO(searchTime.date), days);
   return {
-    option: isToday(date) ? 'now' : 'departure',
-    date: isToday(date) ? new Date().toISOString() : date.toISOString(),
+    option: isInThePast(date) ? 'now' : 'departure',
+    date: isInThePast(date) ? new Date().toISOString() : date.toISOString(),
   };
 }
 

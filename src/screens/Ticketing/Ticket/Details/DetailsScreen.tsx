@@ -1,6 +1,14 @@
 import {StyleSheet} from '@atb/theme';
-import {useTicketState} from '@atb/tickets';
-import {TicketTexts, useTranslation} from '@atb/translations';
+import {
+  isPreactivatedTicket,
+  isSingleTicket,
+  useTicketState,
+} from '@atb/tickets';
+import {
+  PurchaseOverviewTexts,
+  TicketTexts,
+  useTranslation,
+} from '@atb/translations';
 import useInterval from '@atb/utils/use-interval';
 import {RouteProp} from '@react-navigation/native';
 import React, {useState} from 'react';
@@ -8,6 +16,7 @@ import {ScrollView, View} from 'react-native';
 import {TicketModalNavigationProp, TicketModalStackParams} from '.';
 import DetailsContent from './DetailsContent';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import MessageBox from '@atb/components/message-box';
 
 export type TicketDetailsRouteParams = {
   orderId: string;
@@ -29,6 +38,7 @@ export default function DetailsScreen({navigation, route}: Props) {
   useInterval(() => setNow(Date.now()), 2500);
   const {findFareContractByOrderId, customerProfile} = useTicketState();
   const fc = findFareContractByOrderId(route?.params?.orderId);
+  const firstTravelRight = fc?.travelRights[0];
   const {t} = useTranslation();
 
   const hasActiveTravelCard = !!customerProfile?.travelcard;
@@ -39,6 +49,13 @@ export default function DetailsScreen({navigation, route}: Props) {
       orderId: fc.orderId,
       orderVersion: fc.version,
     });
+
+  const shouldShowValidTrainTicketNotice =
+    isSingleTicket(firstTravelRight) &&
+    isPreactivatedTicket(firstTravelRight) &&
+    firstTravelRight.tariffZoneRefs.every(
+      (val: string) => val === 'ATB:TariffZone:1',
+    );
 
   return (
     <View style={styles.container}>
@@ -53,6 +70,13 @@ export default function DetailsScreen({navigation, route}: Props) {
             now={now}
             onReceiptNavigate={onReceiptNavigate}
             hasActiveTravelCard={hasActiveTravelCard}
+          />
+        )}
+
+        {shouldShowValidTrainTicketNotice && (
+          <MessageBox
+            message={t(PurchaseOverviewTexts.samarbeidsbillettenInfo)}
+            type="info"
           />
         )}
       </ScrollView>

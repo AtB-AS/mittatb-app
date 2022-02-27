@@ -48,23 +48,11 @@ export default function VippsPayment({
 
   const cancelVipps = () => navigation.pop();
 
-  const {addReservation} = useTicketState();
-  const dismissAndActivatePolling = (
-    reservation: TicketReservation,
-    reservationOffers: ReserveOffer[],
-  ) => {
-    addReservation({
-      reservation,
-      offers: reservationOffers,
-      paymentType: PaymentType.Vipps,
-    });
+  const dismiss = () => {
     navigation.navigate(ActiveTicketsScreenName);
   };
 
-  const {state, error, openVipps} = useVippsState(
-    offers,
-    dismissAndActivatePolling,
-  );
+  const {state, error, openVipps} = useVippsState(offers, dismiss);
 
   return (
     <View style={styles.container}>

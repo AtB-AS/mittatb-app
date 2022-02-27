@@ -50,7 +50,7 @@ const ProfileTexts = {
           label: _('Språk', 'Language'),
         },
         enrollment: {
-          label: _('Ny funksjonalitet', 'New features'),
+          label: _('Invitasjonskode', 'Invitation code'),
         },
       },
     },

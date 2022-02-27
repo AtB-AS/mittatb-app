@@ -5,7 +5,6 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   filterActiveOrCanBeUsedFareContracts,
-  filterExpiredFareContracts,
   isValidRightNowFareContract,
   useTicketState,
 } from '@atb/tickets';
@@ -21,6 +20,7 @@ import {AddTicket} from '@atb/assets/svg/mono-icons/ticketing';
 import ThemeText from '@atb/components/text';
 import MessageBox from '@atb/components/message-box';
 import {useAppState} from '@atb/AppContext';
+import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 
 export type TicketingScreenNavigationProp =
   StackNavigationProp<RootStackParamList>;
@@ -32,8 +32,8 @@ type Props = {
 export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
-  const {must_upgrade_ticketing, enable_recent_tickets, enable_period_tickets} =
-    useRemoteConfig();
+  const {must_upgrade_ticketing, enable_recent_tickets} = useRemoteConfig();
+  const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {abtCustomerId, authenticationType} = useAuthState();
   const {t} = useTranslation();
   const appContext = useAppState();
@@ -128,7 +128,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
             icon={AddTicket}
             iconPosition={'right'}
           />
-          {enable_period_tickets && (
+          {hasEnabledMobileToken && (
             <Button
               mode="primary"
               color="primary_2"
@@ -150,7 +150,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
 
 export const ActiveTickets: React.FC<Props> = () => {
   const {
-    activeReservations,
+    reservations,
     fareContracts,
     isRefreshingTickets,
     refreshTickets,
@@ -179,7 +179,7 @@ export const ActiveTickets: React.FC<Props> = () => {
   return (
     <View style={styles.container}>
       <TicketsScrollView
-        reservations={activeReservations}
+        reservations={reservations}
         fareContracts={activeFareContracts}
         isRefreshingTickets={isRefreshingTickets}
         refreshTickets={refreshTickets}

@@ -7,6 +7,7 @@ export type QuayDeparturesQuery = {
     publicCode?: string;
     name: string;
     estimatedCalls: Array<{
+      date?: any;
       expectedDepartureTime?: any;
       aimedDepartureTime?: any;
       realtime?: boolean;

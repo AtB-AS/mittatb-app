@@ -53,7 +53,18 @@ const NavigationRoot = () => {
   const ref = useRef<NavigationContainerRef>(null);
   const {getInitialState} = useLinking(ref, {
     prefixes: ['atb://'],
-    config: {screens: {Profile: 'profile', Ticketing: 'vipps'}},
+    config: {
+      screens: {
+        TabNavigator: {
+          screens: {
+            Profile: 'profile',
+            Ticketing: {
+              screens: {ActiveTickets: 'ticketing'},
+            },
+          },
+        },
+      },
+    },
   });
 
   useEffect(() => {

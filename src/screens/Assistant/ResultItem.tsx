@@ -178,7 +178,7 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
     <View style={styles.resultFooter}>
       <ThemeText type={'body__secondary'}>
         {t(
-          AssistantTexts.results.resultItem.footer.fromLabel(
+          AssistantTexts.results.resultItem.footer.fromPlaceWithTime(
             quayName,
             timePrefix + formatToClock(quayStartTime, language),
           ),
@@ -370,7 +370,7 @@ const tripSummary = (
     ${
       firstLeg
         ? t(
-            AssistantTexts.results.resultItem.footer.fromLabel(
+            AssistantTexts.results.resultItem.footer.fromPlaceWithTime(
               firstLeg.fromPlace.name ?? '',
               formatToClock(firstLeg.expectedStartTime, language),
             ),

@@ -10,9 +10,10 @@ import {setupMobileTokenClient} from '@atb/mobile-token/client';
 import {TokenStatus} from '@entur/react-native-traveller/lib/typescript/token/types';
 import {useAuthState} from '@atb/auth';
 import Bugsnag from '@bugsnag/react-native';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {updateMetadata} from '@atb/chat/metadata';
 import {PayloadAction} from '@entur/react-native-traveller';
+import {useTicketState} from '@atb/tickets';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {TravelToken} from '@atb/mobile-token/types';
 import useInterval from '@atb/utils/use-interval';
 import {StoredToken} from '../../.yalc/@entur/react-native-traveller';
@@ -31,11 +32,11 @@ const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
 );
 
 const MobileTokenContextProvider: React.FC = ({children}) => {
-  const {enable_period_tickets} = useRemoteConfig();
   const [tokenStatus, setTokenStatus] = useState<TokenStatus>();
   const {abtCustomerId, userCreationFinished} = useAuthState();
 
   const [travelTokens, setTravelTokens] = useState<TravelToken[]>();
+  const [currentCustomerId, setCurrentCustomerId] = useState(abtCustomerId);
 
   const setStatus = (status?: TokenStatus) => {
     Bugsnag.leaveBreadcrumb('mobiletoken_status_change', status);
@@ -47,10 +48,12 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
     setTokenStatus(status);
   };
 
+  const hasEnabledMobileToken = useHasEnabledMobileToken();
+
   const client = useMemo(
     () =>
-      enable_period_tickets ? setupMobileTokenClient(setStatus) : undefined,
-    [enable_period_tickets],
+      hasEnabledMobileToken ? setupMobileTokenClient(setStatus) : undefined,
+    [hasEnabledMobileToken],
   );
 
   const updateTravelTokens = useCallback(() => {
@@ -127,6 +130,13 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
     </MobileTokenContext.Provider>
   );
 };
+
+export function useHasEnabledMobileToken() {
+  const {customerProfile} = useTicketState();
+  const {enable_period_tickets} = useRemoteConfig();
+
+  return customerProfile?.enableMobileToken || enable_period_tickets;
+}
 
 export function useMobileTokenContextState() {
   const context = useContext(MobileTokenContext);

@@ -17,10 +17,16 @@ type QuaySectionProps = {
   data: EstimatedCall[] | null;
   navigateToQuay?: (arg0: Quay) => void;
   navigateToDetails: (
-    serviceJourneyId?: string,
+    serviceJourneyId: string,
+    serviceDate: string,
     date?: string,
     fromQuayId?: string,
   ) => void;
+};
+
+type EstimatedCallRenderItem = {
+  item: EstimatedCall;
+  index: number;
 };
 
 export default function QuaySection({
@@ -36,7 +42,7 @@ export default function QuaySection({
 
   return (
     <View>
-      <Sections.Section withPadding>
+      <Sections.Section withPadding withBottomPadding>
         <Sections.GenericClickableItem
           type="inline"
           onPress={() => {
@@ -76,19 +82,26 @@ export default function QuaySection({
           <FlatList
             ItemSeparatorComponent={SectionSeparator}
             data={departures}
-            renderItem={({item, index}) => (
-              <Sections.GenericItem
+            renderItem={({item: departure, index}: EstimatedCallRenderItem) => (
+              <Sections.GenericClickableItem
                 radius={
                   !navigateToQuay && index === departures.length - 1
                     ? 'bottom'
                     : undefined
                 }
+                onPress={() => {
+                  if (departure?.serviceJourney)
+                    navigateToDetails(
+                      departure.serviceJourney?.id,
+                      departure.date,
+                      departure.expectedDepartureTime,
+                      departure.quay?.id,
+                    );
+                }}
+                accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
               >
-                <EstimatedCallItem
-                  departure={item}
-                  navigateToDetails={navigateToDetails}
-                ></EstimatedCallItem>
-              </Sections.GenericItem>
+                <EstimatedCallItem departure={departure} />
+              </Sections.GenericClickableItem>
             )}
             keyExtractor={(item: EstimatedCall) =>
               // ServiceJourney ID is not a unique key if a ServiceJourney

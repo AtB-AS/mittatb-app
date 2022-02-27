@@ -462,8 +462,12 @@ const Assistant: React.FC<Props> = ({
             </>
           ) : (
             <>
-              <ThemeText>{t(AssistantTexts.results.fetchMore)} </ThemeText>
-              <ThemeIcon svg={navIcons.Expand} size={'normal'} />
+              {loadMore ? (
+                <>
+                  <ThemeText>{t(AssistantTexts.results.fetchMore)} </ThemeText>
+                  <ThemeIcon svg={navIcons.Expand} size={'normal'} />
+                </>
+              ) : null}
             </>
           )}
         </TouchableOpacity>

@@ -102,6 +102,7 @@ export type PhoneSignInErrorCode = 'invalid_phone' | 'unknown_error';
 type AuthContextState = {
   signInWithPhoneNumber: (
     number: string,
+    forceResend?: boolean,
   ) => Promise<PhoneSignInErrorCode | undefined>;
   signOut: () => Promise<void>;
   confirmCode: (code: string) => Promise<ConfirmationErrorCode | undefined>;
@@ -196,10 +197,14 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
   }, [onUserChanged]);
 
   const signInWithPhoneNumber = useCallback(
-    async function signInWithPhoneNumber(phoneNumberWithPrefix: string) {
+    async function signInWithPhoneNumber(
+      phoneNumberWithPrefix: string,
+      forceResend: boolean = false,
+    ) {
       try {
         const confirmationHandler = await auth().signInWithPhoneNumber(
           phoneNumberWithPrefix,
+          forceResend,
         );
         dispatch({type: 'SIGN_IN_INITIATED', confirmationHandler});
       } catch (error) {

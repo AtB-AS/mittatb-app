@@ -9,6 +9,7 @@ import type {
   RenewTokenResponse,
   ToggleTokenRequest,
   ToggleTokenResponse,
+  ValidateTokenResponse,
 } from './types';
 
 const SIGNED_TOKEN_HEADER_KEY = 'X-Signed-Token';
@@ -29,6 +30,10 @@ export type AbtTokensService = {
     req: ActivateTokenRequest,
     signedToken?: string
   ) => Promise<ActivateTokenResponse>;
+  validateToken: (
+    tokenId: string,
+    signedToken: string
+  ) => Promise<ValidateTokenResponse>;
 };
 
 export const createAbtTokensService = (
@@ -59,7 +64,7 @@ export const createAbtTokensService = (
   };
 
   const initToken = async (body: InitializeTokenRequest) => {
-    const url = `${hostUrl}/tokens`;
+    const url = `${hostUrl}/tokens/v2`;
     const response = await fetcher<InitializeTokenResponse>({
       url,
       body,
@@ -110,6 +115,18 @@ export const createAbtTokensService = (
     return response.body;
   };
 
+  const validateToken = async (tokenId: string, signedToken: string) => {
+    const url = `${hostUrl}/tokens/${tokenId}/validate`;
+    const response = await fetcher<ValidateTokenResponse>({
+      url,
+      headers: {
+        [SIGNED_TOKEN_HEADER_KEY]: signedToken,
+      },
+      method: 'GET',
+    });
+    return response.body;
+  };
+
   return {
     listTokens,
     getTokenCertificate,
@@ -117,5 +134,6 @@ export const createAbtTokensService = (
     renewToken,
     activateToken,
     toggleToken,
+    validateToken,
   };
 };

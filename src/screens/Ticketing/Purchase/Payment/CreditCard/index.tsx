@@ -3,7 +3,6 @@ import Button from '@atb/components/button';
 import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {StyleSheet} from '@atb/theme';
-import {ReserveOffer, TicketReservation, useTicketState} from '@atb/tickets';
 import {
   PaymentCreditCardTexts,
   TranslateFunction,
@@ -15,16 +14,18 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import WebView from 'react-native-webview';
 import {TicketingStackParams} from '../..';
-import {
-  ActiveTicketsScreenName,
-  TicketTabsNavigatorParams,
-} from '../../../Tickets';
+import {TicketTabsNavigatorParams} from '../../../Tickets';
 import Processing from '../Processing';
 import useTerminalState, {
   ErrorContext,
   LoadingState,
 } from './use-terminal-state';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import Bugsnag from '@bugsnag/react-native';
+import {
+  WebViewErrorEvent,
+  WebViewNavigationEvent,
+} from 'react-native-webview/lib/WebViewTypes';
 
 type NavigationProp = CompositeNavigationProp<
   MaterialTopTabNavigationProp<TicketTabsNavigatorParams>,
@@ -47,23 +48,12 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     [navigation],
   );
 
-  const cancelTerminal = () => navigation.pop();
+  const navigateBackFromTerminal = () => {
+    navigation.pop();
+  };
 
   const {paymentMethod} = route.params;
   const {paymentType} = paymentMethod;
-
-  const {addReservation} = useTicketState();
-  const dismissAndAddReservation = (
-    reservation: TicketReservation,
-    reservationOffers: ReserveOffer[],
-  ) => {
-    addReservation({
-      reservation,
-      offers: reservationOffers,
-      paymentType,
-    });
-    navigation.navigate(ActiveTicketsScreenName);
-  };
 
   const recurringPaymentId =
     'recurringPaymentId' in paymentMethod
@@ -73,15 +63,28 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const saveRecurringCard =
     'save' in paymentMethod ? paymentMethod.save : false;
 
-  const {loadingState, terminalUrl, onWebViewLoadEnd, error, restartTerminal} =
-    useTerminalState(
-      offers,
-      paymentType,
-      recurringPaymentId,
-      saveRecurringCard,
-      cancelTerminal,
-      dismissAndAddReservation,
-    );
+  function onWebViewLoadStart(
+    event: WebViewNavigationEvent | WebViewErrorEvent,
+  ) {
+    Bugsnag.leaveBreadcrumb('terminal_navigation', {
+      url: event?.nativeEvent?.url,
+    });
+  }
+
+  const {
+    loadingState,
+    terminalUrl,
+    onWebViewLoadEnd,
+    error,
+    restartTerminal,
+    cancelPayment,
+  } = useTerminalState(
+    offers,
+    paymentType,
+    recurringPaymentId,
+    saveRecurringCard,
+    navigateBackFromTerminal,
+  );
 
   return (
     <View style={styles.container}>
@@ -89,7 +92,10 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
         title={t(PaymentCreditCardTexts.header.title)}
         leftButton={{
           type: 'cancel',
-          onPress: () => cancelTerminal(),
+          onPress: async () => {
+            await cancelPayment();
+            navigateBackFromTerminal();
+          },
         }}
       />
       <View
@@ -103,6 +109,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
             source={{
               uri: terminalUrl,
             }}
+            onLoadStart={onWebViewLoadStart}
             onLoadEnd={onWebViewLoadEnd}
           />
         )}
@@ -129,7 +136,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
           )}
           <Button
             color="secondary_1"
-            onPress={() => cancelTerminal()}
+            onPress={() => navigateBackFromTerminal()}
             text={t(PaymentCreditCardTexts.buttons.goBack)}
           />
         </View>

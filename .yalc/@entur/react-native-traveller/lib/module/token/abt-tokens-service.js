@@ -24,7 +24,7 @@ export const createAbtTokensService = (fetcher, hosts) => {
   };
 
   const initToken = async body => {
-    const url = `${hostUrl}/tokens`;
+    const url = `${hostUrl}/tokens/v2`;
     const response = await fetcher({
       url,
       body,
@@ -68,13 +68,26 @@ export const createAbtTokensService = (fetcher, hosts) => {
     return response.body;
   };
 
+  const validateToken = async (tokenId, signedToken) => {
+    const url = `${hostUrl}/tokens/${tokenId}/validate`;
+    const response = await fetcher({
+      url,
+      headers: {
+        [SIGNED_TOKEN_HEADER_KEY]: signedToken
+      },
+      method: 'GET'
+    });
+    return response.body;
+  };
+
   return {
     listTokens,
     getTokenCertificate,
     initToken,
     renewToken,
     activateToken,
-    toggleToken
+    toggleToken,
+    validateToken
   };
 };
 //# sourceMappingURL=abt-tokens-service.js.map
