@@ -26,6 +26,7 @@ import {usePreferences} from '@atb/preferences';
 import analytics from '@react-native-firebase/analytics';
 import {updateMetadata} from '@atb/chat/metadata';
 import parsePhoneNumber from 'libphonenumber-js';
+import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -46,6 +47,7 @@ type ProfileScreenProps = {
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
   const {enable_i18n, privacy_policy_url, enable_ticketing} = useRemoteConfig();
+  const hasEnabledMobileToken = useHasEnabledMobileToken();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
@@ -145,6 +147,17 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             text={t(ProfileTexts.sections.settings.linkItems.userProfile.label)}
             onPress={() => navigation.navigate('DefaultUserProfile')}
           />
+          {authenticationType === 'phone' && hasEnabledMobileToken && (
+            <Sections.LinkItem
+              text={t(
+                ProfileTexts.sections.settings.linkItems.travelToken.label,
+              )}
+              flag={t(
+                ProfileTexts.sections.settings.linkItems.travelToken.flag,
+              )}
+              onPress={() => navigation.navigate('TravelToken')}
+            />
+          )}
           <Sections.LinkItem
             text={t(ProfileTexts.sections.settings.linkItems.appearance.label)}
             onPress={() => navigation.navigate('Appearance')}

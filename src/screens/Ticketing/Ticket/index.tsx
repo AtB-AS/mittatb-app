@@ -8,7 +8,7 @@ import React from 'react';
 import PreactivatedTicketInfo from './PreactivatedTicketInfo';
 import UnknownTicket from './UnknownTicket';
 import Carnet from './Carnet';
-import {useMobileContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 
 type Props = {
   fareContract: FareContract;
@@ -26,7 +26,7 @@ const SimpleTicket: React.FC<Props> = ({
   hasActiveTravelCard = false,
 }) => {
   const firstTravelRight = fc.travelRights?.[0];
-  const {tokenStatus} = useMobileContextState();
+  const {tokenStatus} = useMobileTokenContextState();
 
   const inspectable = isInspectable(
     firstTravelRight,

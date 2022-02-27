@@ -11,10 +11,11 @@ import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
 import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import QrCode from '@atb/screens/Ticketing/Ticket/Details/QrCode';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import PaperQrCode from '@atb/screens/Ticketing/Ticket/Details/PaperQrCode';
 import {
   useHasEnabledMobileToken,
-  useMobileContextState,
+  useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
 
 type Props = {
@@ -31,8 +32,8 @@ const DetailsContent: React.FC<Props> = ({
   hasActiveTravelCard = false,
 }) => {
   const {t, language} = useTranslation();
+  const {tokenStatus} = useMobileTokenContextState();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
-  const {tokenStatus} = useMobileContextState();
 
   const firstTravelRight = fc.travelRights[0];
   if (isPreactivatedTicket(firstTravelRight)) {
