@@ -11,6 +11,7 @@ import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
 import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import QrCode from '@atb/screens/Ticketing/Ticket/Details/QrCode';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import PaperQrCode from '@atb/screens/Ticketing/Ticket/Details/PaperQrCode';
 import {
   useHasEnabledMobileToken,
@@ -31,7 +32,6 @@ const DetailsContent: React.FC<Props> = ({
   hasActiveTravelCard = false,
 }) => {
   const {t, language} = useTranslation();
-  const {enable_period_tickets} = useRemoteConfig();
   const {tokenStatus} = useMobileTokenContextState();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
 
