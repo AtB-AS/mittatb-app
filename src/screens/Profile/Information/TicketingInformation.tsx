@@ -1,6 +1,7 @@
 import {InformationTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import ticketingInfo from '../../../reference-data/ticketingInformation.json';
+import ticketingInfo from '../../../assets/information-data/ticketingInformation.json';
+
 import Information, {InformationElement} from './Information';
 
 export default function TicketingInformation() {

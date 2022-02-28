@@ -1,6 +1,6 @@
 import {InformationTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import paymentInfo from '../../../reference-data/paymentInformation.json';
+import paymentInfo from '../../../assets/information-data/paymentInformation.json';
 import Information, {InformationElement} from './Information';
 export default function PaymentInformation() {
   const {t, language} = useTranslation();
