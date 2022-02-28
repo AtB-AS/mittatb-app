@@ -1,4 +1,3 @@
-import type { Token } from '@entur/react-native-traveller';
 export declare type InitializeTokenRequest = {
     requireAttestation: boolean;
     deviceName: string;
@@ -84,7 +83,7 @@ export declare type ToggleTokenResponse = {
     tokens: StoredToken[];
 };
 export declare type ValidateTokenResponse = {
-    state: 'Valid' | 'NotFound' | 'NeedsRenewal';
+    state: 'Valid' | 'NotFound' | 'NeedsRenewal' | 'NeedsReplacement';
 };
 declare const errorTypes: readonly ["None", "Severe", "Unknown", "Network"];
 export declare type ErrorType = typeof errorTypes[number];
@@ -94,6 +93,7 @@ export declare type TokenError = {
     err?: any;
 };
 export declare type TokenStatus = {
+    tokenId?: string;
     state: TokenState;
     error?: TokenError;
     visualState: VisualState;
@@ -110,10 +110,10 @@ export declare type StoredState = {
     tokenId: string;
 } | {
     state: 'Valid';
-    isInspectable: boolean;
+    tokenId: string;
 } | {
     state: 'Validating';
-    token: Token;
+    tokenId: string;
 } | {
     state: 'AttestNew';
     initiatedData: InitializeTokenResponse;
@@ -132,6 +132,7 @@ export declare type StoredState = {
     oldTokenId: string;
 } | {
     state: 'AddToken';
+    tokenId: string;
     activatedData: ActivateTokenResponse;
 });
 export declare type VisualState = 'Token' | 'NotInspectable' | 'Loading' | 'Error' | 'MissingNetConnection';

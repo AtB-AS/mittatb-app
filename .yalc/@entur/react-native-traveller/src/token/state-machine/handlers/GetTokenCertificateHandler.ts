@@ -17,6 +17,7 @@ export default function getTokenCertificateHandler(
     return {
       accountId: s.accountId,
       state: 'AddToken',
+      tokenId: s.tokenId,
       activatedData: tokenCertificateResponse,
     };
   });

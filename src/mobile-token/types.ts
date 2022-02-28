@@ -7,4 +7,5 @@ export type TravelToken = {
   activated: boolean;
   type: TravelTokenType;
   travelCardId?: string;
+  isThisDevice: boolean;
 };

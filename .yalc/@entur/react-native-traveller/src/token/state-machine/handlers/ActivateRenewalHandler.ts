@@ -23,6 +23,7 @@ export default function activateRenewalHandler(
       return {
         accountId: s.accountId,
         state: 'AddToken',
+        tokenId: s.tokenId,
         activatedData: activateTokenResponse,
       };
     } catch (err: any) {

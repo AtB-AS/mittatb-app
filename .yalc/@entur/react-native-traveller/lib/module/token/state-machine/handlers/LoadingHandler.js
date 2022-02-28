@@ -18,7 +18,7 @@ export default function loadingHandler() {
       } : {
         accountId: s.accountId,
         state: 'Validating',
-        token
+        tokenId: token.tokenId
       };
     }
   });

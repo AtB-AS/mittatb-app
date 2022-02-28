@@ -23,7 +23,7 @@ export default function loadingHandler(): StateHandler {
         : {
             accountId: s.accountId,
             state: 'Validating',
-            token,
+            tokenId: token.tokenId,
           };
     }
   });

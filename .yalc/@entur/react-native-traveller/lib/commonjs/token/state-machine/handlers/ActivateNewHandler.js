@@ -16,6 +16,7 @@ function activateNewHandler(abtTokensService) {
     return {
       accountId: s.accountId,
       state: 'AddToken',
+      tokenId: s.tokenId,
       activatedData: activateTokenResponse
     };
   });

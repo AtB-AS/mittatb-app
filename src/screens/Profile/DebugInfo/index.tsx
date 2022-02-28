@@ -204,6 +204,7 @@ export default function DebugInfo() {
             <Sections.GenericItem>
               <View>
                 <ThemeText>{`Token state: ${tokenStatus?.state}`}</ThemeText>
+                <ThemeText>{`Token id: ${tokenStatus?.tokenId}`}</ThemeText>
                 <ThemeText>{`Visual state: ${tokenStatus?.visualState}`}</ThemeText>
                 <ThemeText>{`Error message: ${tokenStatus?.error?.message}`}</ThemeText>
                 <ThemeText>{`Error missing inet: ${tokenStatus?.error?.missingNetConnection}`}</ThemeText>

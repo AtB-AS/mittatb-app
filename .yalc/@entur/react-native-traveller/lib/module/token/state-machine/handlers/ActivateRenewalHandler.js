@@ -12,6 +12,7 @@ export default function activateRenewalHandler(abtTokensService) {
       return {
         accountId: s.accountId,
         state: 'AddToken',
+        tokenId: s.tokenId,
         activatedData: activateTokenResponse
       };
     } catch (err) {
