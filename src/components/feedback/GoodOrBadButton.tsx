@@ -72,7 +72,7 @@ const useButtonStyle = StyleSheet.createThemeHook((theme) => ({
     borderColor: theme.colors.background_0.backgroundColor,
   },
   selectedButton: {
-    backgroundColor: hexToRgba(theme.colors.primary_1.backgroundColor, 0.2),
+    backgroundColor: hexToRgba(theme.colors.primary_2.backgroundColor, 0.2),
     borderColor: theme.colors.primary_2.backgroundColor,
   },
 }));
