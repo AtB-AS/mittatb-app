@@ -5,6 +5,7 @@ import {Place, Quay} from '@atb/api/types/departures';
 import {SearchTime} from './NearbyPlaces';
 import DateNavigation from './components/DateNavigator';
 import QuaySection from './components/QuaySection';
+import Feedback from '@atb/components/feedback';
 
 type StopPlaceViewProps = {
   stopPlace: Place;
@@ -61,13 +62,18 @@ export default function StopPlaceView({
           }
           sections={quayListData}
           keyExtractor={(item) => item.id}
-          renderItem={({item}) => (
-            <QuaySection
-              quay={item}
-              data={state.data}
-              navigateToDetails={navigateToDetails}
-              navigateToQuay={navigateToQuay}
-            />
+          renderItem={({item, index}) => (
+            <>
+              <QuaySection
+                quay={item}
+                data={state.data}
+                navigateToDetails={navigateToDetails}
+                navigateToQuay={navigateToQuay}
+              />
+              {index === 0 && (
+                <Feedback mode="departures" quayListData={quayListData} />
+              )}
+            </>
           )}
         />
       )}

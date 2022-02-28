@@ -11,6 +11,7 @@ import {WaitDetails} from './WaitSection';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
 import {Leg, TripPattern} from '@atb/api/types/trips';
+import Feedback from '@atb/components/feedback';
 
 type TripProps = {
   tripPattern: TripPattern;
@@ -70,6 +71,7 @@ const Trip: React.FC<TripProps> = ({tripPattern, error}) => {
           })}
       </View>
       <Summary {...tripPattern} />
+      <Feedback tripPattern={tripPattern} mode="assistant" />
     </>
   );
 };
