@@ -5,7 +5,7 @@ import {TicketTexts, useTranslation} from '@atb/translations';
 import {SvgXml} from 'react-native-svg';
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {useMobileContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import qrcode from 'qrcode';
 import useInterval from '@atb/utils/use-interval';
 import MessageBox from '@atb/components/message-box';
@@ -17,7 +17,7 @@ type Props = {
 };
 
 export default function QrCode({validityStatus, isInspectable}: Props) {
-  const {tokenStatus, generateQrCode, retry} = useMobileContextState();
+  const {tokenStatus, generateQrCode, retry} = useMobileTokenContextState();
 
   if (validityStatus !== 'valid') return null;
   if (!isInspectable) return null;

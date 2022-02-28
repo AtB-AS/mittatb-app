@@ -9,6 +9,7 @@ export type SectionProps = PropsWithChildren<{
   withTopPadding?: boolean;
   withBottomPadding?: boolean;
   type?: ContainerSizingType;
+  style?: ViewStyle;
 }> &
   AccessibilityProps;
 
@@ -19,19 +20,21 @@ export default function SectionGroup({
   withTopPadding = false,
   withBottomPadding = false,
   type = 'block',
+  style,
   ...props
 }: SectionProps) {
-  const style = useInputGroupStyle();
+  const styles = useStyles();
   const validChildren: boolean[] =
     React.Children.map(children, React.isValidElement) ?? [];
   const firstIndex = validChildren.indexOf(true);
   const lastIndex = validChildren.lastIndexOf(true);
 
   const containerStyle: Array<ViewStyle | undefined> = [
-    withPadding ? style.container__padded : undefined,
-    withFullPadding ? style.container__fullPadded : undefined,
-    withTopPadding ? style.container__topPadded : undefined,
-    withBottomPadding ? style.container__bottomPadded : undefined,
+    style,
+    withPadding ? styles.container__padded : undefined,
+    withFullPadding ? styles.container__fullPadded : undefined,
+    withTopPadding ? styles.container__topPadded : undefined,
+    withBottomPadding ? styles.container__bottomPadded : undefined,
   ];
 
   return (
@@ -50,7 +53,7 @@ export default function SectionGroup({
         return (
           <>
             {React.cloneElement(child, additionalProps)}
-            {index !== lastIndex && <View style={style.separator} />}
+            {index !== lastIndex && <View style={styles.separator} />}
           </>
         );
       })}
@@ -74,7 +77,7 @@ function toRadius(index: number, lastIndex: number, firstIndex: number) {
   return undefined;
 }
 
-const useInputGroupStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   separator: {
     flexGrow: 1,
     height: 1,
