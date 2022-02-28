@@ -8,7 +8,6 @@ import React from 'react';
 import PreactivatedTicketInfo from './PreactivatedTicketInfo';
 import UnknownTicket from './UnknownTicket';
 import Carnet from './Carnet';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
