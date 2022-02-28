@@ -4,7 +4,6 @@ import {Reservation, FareContract, PaymentStatus} from './types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {differenceInMinutes} from 'date-fns';
 import {TokenStatus} from '@entur/react-native-traveller/lib/typescript/token/types';
-import Bugsnag from '@bugsnag/react-native';
 import {CustomerProfile} from '.';
 import setupFirestoreListener from './firestore';
 
