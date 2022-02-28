@@ -11,6 +11,7 @@ import GoodOrBadButton from './GoodOrBadButton';
 import {RenderQuestion} from './RenderQuestions';
 import firestore from '@react-native-firebase/firestore';
 import Bugsnag from '@bugsnag/react-native';
+import {APP_ORG, APP_VERSION} from '@env';
 
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
@@ -124,7 +125,14 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
         ),
       );
 
+      const appVersion = APP_VERSION;
+      const organization = APP_ORG;
+      const submitTime = Date.now();
+
       const dataToServer = {
+        submitTime,
+        appVersion,
+        organization,
         selectedOpinion,
         mode,
         category,
