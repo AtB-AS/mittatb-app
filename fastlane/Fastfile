@@ -201,17 +201,15 @@ platform :android do
   end
 
 
-  lane :playstore do
+  lane :playstore_internal do
     ensure_env_vars(
-      env_vars: ['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH','APK_FILE_NAME','APK_PATH'],
-      json_key:ENV['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH']
-      apk:ENV['APK_PATH']
+      env_vars: ['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH','APK_FILE_NAME']
     )
-    sh('echo $GOOGLE_PLAY_SERVICE_ACCOUNT | base64 -d > google-play-service-account.json')
 
     upload_to_play_store(
       track: "internal",
-      json_key:"google-play-service-account.json"
+      json_key:ENV['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH'],
+      apk: ENV['APK_FILE_NAME']
   end
 
   lane :appcenter_staging do
