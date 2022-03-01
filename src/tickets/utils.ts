@@ -33,6 +33,12 @@ export function isSingleTicket(
   return travelRight?.type === 'PreActivatedSingleTicket';
 }
 
+export function isPeriodTicket(
+  travelRight: TravelRight | undefined,
+): travelRight is PreactivatedSingleTicket {
+  return travelRight?.type === 'PreActivatedPeriodTicket';
+}
+
 export function isInspectable(
   travelRight: TravelRight,
   hasActiveTravelCard: boolean,

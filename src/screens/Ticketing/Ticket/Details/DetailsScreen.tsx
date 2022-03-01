@@ -1,5 +1,6 @@
 import {StyleSheet} from '@atb/theme';
 import {
+  isPeriodTicket,
   isPreactivatedTicket,
   isSingleTicket,
   useTicketState,
@@ -51,7 +52,7 @@ export default function DetailsScreen({navigation, route}: Props) {
     });
 
   const shouldShowValidTrainTicketNotice =
-    isSingleTicket(firstTravelRight) &&
+    (isSingleTicket(firstTravelRight) || isPeriodTicket(firstTravelRight)) &&
     isPreactivatedTicket(firstTravelRight) &&
     firstTravelRight.tariffZoneRefs.every(
       (val: string) => val === 'ATB:TariffZone:1',
@@ -75,7 +76,11 @@ export default function DetailsScreen({navigation, route}: Props) {
 
         {shouldShowValidTrainTicketNotice && (
           <MessageBox
-            message={t(PurchaseOverviewTexts.samarbeidsbillettenInfo)}
+            message={
+              isSingleTicket(firstTravelRight)
+                ? t(PurchaseOverviewTexts.samarbeidsbillettenInfo.single)
+                : t(PurchaseOverviewTexts.samarbeidsbillettenInfo.period)
+            }
             type="info"
           />
         )}
