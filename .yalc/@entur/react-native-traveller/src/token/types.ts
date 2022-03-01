@@ -1,5 +1,3 @@
-import type { Token } from '@entur/react-native-traveller';
-
 export type InitializeTokenRequest = {
   requireAttestation: boolean;
   deviceName: string;
@@ -42,7 +40,7 @@ export type TokenAction =
   | 'TOKEN_ACTION_TRAVELCARD'
   | 'TOKEN_ACTION_CONSUME_ACCESS_RIGHTS';
 
-export type ListTokensResponse = {
+export type StoredToken = {
   id: string;
   expires: number;
   state: TokenLifecycleState;
@@ -52,7 +50,9 @@ export type ListTokensResponse = {
   keyValues?: {
     [key: string]: string;
   };
-}[];
+};
+
+export type ListTokensResponse = StoredToken[];
 
 export type GetTokenCertificateResponse = ActivateTokenResponse;
 
@@ -112,6 +112,18 @@ export type ActivateTokenResponse = {
   tokenValidityEnd: number;
 };
 
+export type ToggleTokenRequest = {
+  overrideExisting: boolean;
+};
+
+export type ToggleTokenResponse = {
+  tokens: StoredToken[];
+};
+
+export type ValidateTokenResponse = {
+  state: 'Valid' | 'NotFound' | 'NeedsRenewal' | 'NeedsReplacement';
+};
+
 const errorTypes = ['None', 'Severe', 'Unknown', 'Network'] as const;
 export type ErrorType = typeof errorTypes[number];
 
@@ -122,6 +134,7 @@ export type TokenError = {
 };
 
 export type TokenStatus = {
+  tokenId?: string;
   state: TokenState;
   error?: TokenError;
   visualState: VisualState;
@@ -142,6 +155,7 @@ const tokenStates = [
   'ActivateNew',
   'ActivateRenewal',
   'AddToken',
+  'VerifyInspectionAction',
 ] as const;
 export type TokenState = typeof tokenStates[number];
 
@@ -158,13 +172,19 @@ export type StoredState = {
         | 'NotSupported';
     }
   | {
-      state: 'GettingTokenCertificate' | 'InitiateRenewal';
+      state:
+        | 'GettingTokenCertificate'
+        | 'InitiateRenewal'
+        | 'VerifyInspectionAction';
       tokenId: string;
     }
-  | { state: 'Valid'; isInspectable: boolean }
+  | {
+      state: 'Valid';
+      tokenId: string;
+    }
   | {
       state: 'Validating';
-      token: Token;
+      tokenId: string;
     }
   | {
       state: 'AttestNew';
@@ -188,6 +208,7 @@ export type StoredState = {
     }
   | {
       state: 'AddToken';
+      tokenId: string;
       activatedData: ActivateTokenResponse;
     }
 );

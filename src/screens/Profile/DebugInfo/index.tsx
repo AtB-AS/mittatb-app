@@ -10,7 +10,9 @@ import {useAuthState} from '@atb/auth';
 import {useAppDispatch} from '@atb/AppContext';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import storage from '@atb/storage';
-import {useMobileContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import Slider from '@react-native-community/slider';
+import {TripSearchPreferences, usePreferences} from '@atb/preferences';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -24,7 +26,7 @@ export default function DebugInfo() {
   const [idToken, setIdToken] = useState<
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
-  const {tokenStatus, retry} = useMobileContextState();
+  const {tokenStatus, retry} = useMobileTokenContextState();
 
   useEffect(() => {
     async function run() {
@@ -54,6 +56,18 @@ export default function DebugInfo() {
       );
   }
 
+  const {
+    setPreference,
+    preferences: {tripSearchPreferences},
+  } = usePreferences();
+
+  const tripSearchDefaults = {
+    transferPenalty: 10,
+    waitReluctance: 1.5,
+    walkReluctance: 1.5,
+    walkSpeed: 1.3,
+  };
+
   return (
     <View style={style.container}>
       <FullScreenHeader
@@ -80,6 +94,74 @@ export default function DebugInfo() {
           <Sections.LinkItem
             text="Force refresh id token"
             onPress={() => auth().currentUser?.getIdToken(true)}
+          />
+        </Sections.Section>
+
+        <Sections.Section withPadding withTopPadding>
+          <Sections.GenericItem>
+            <ThemeText type="heading__component">
+              Trip search parameters
+            </ThemeText>
+            <ThemeText type="body__secondary" color="secondary">
+              Press labels to reset to default
+            </ThemeText>
+          </Sections.GenericItem>
+          <LabeledSlider
+            max={50}
+            label="transferPenalty"
+            defaultValue={tripSearchDefaults.transferPenalty}
+            initialValue={tripSearchPreferences?.transferPenalty}
+            step={1}
+            onSetValue={(n: number) => {
+              setPreference({
+                tripSearchPreferences: {
+                  ...tripSearchPreferences,
+                  transferPenalty: n,
+                },
+              });
+            }}
+          />
+          <LabeledSlider
+            max={5}
+            label="waitReluctance"
+            defaultValue={tripSearchDefaults.waitReluctance}
+            initialValue={tripSearchPreferences?.waitReluctance}
+            onSetValue={(n: number) => {
+              setPreference({
+                tripSearchPreferences: {
+                  ...tripSearchPreferences,
+                  waitReluctance: n,
+                },
+              });
+            }}
+          />
+          <LabeledSlider
+            max={5}
+            label="walkReluctance"
+            defaultValue={tripSearchDefaults.walkReluctance}
+            initialValue={tripSearchPreferences?.walkReluctance}
+            onSetValue={(n: number) => {
+              setPreference({
+                tripSearchPreferences: {
+                  ...tripSearchPreferences,
+                  walkReluctance: n,
+                },
+              });
+            }}
+          />
+          <LabeledSlider
+            max={5}
+            label="walkSpeed"
+            defaultValue={tripSearchDefaults.walkSpeed}
+            initialValue={tripSearchPreferences?.walkSpeed}
+            onSetValue={(n: number) => {
+              setPreference({
+                tripSearchPreferences: {
+                  ...tripSearchPreferences,
+                  walkSpeed: n,
+                },
+              });
+            }}
           />
         </Sections.Section>
 
@@ -122,6 +204,7 @@ export default function DebugInfo() {
             <Sections.GenericItem>
               <View>
                 <ThemeText>{`Token state: ${tokenStatus?.state}`}</ThemeText>
+                <ThemeText>{`Token id: ${tokenStatus?.tokenId}`}</ThemeText>
                 <ThemeText>{`Visual state: ${tokenStatus?.visualState}`}</ThemeText>
                 <ThemeText>{`Error message: ${tokenStatus?.error?.message}`}</ThemeText>
                 <ThemeText>{`Error missing inet: ${tokenStatus?.error?.missingNetConnection}`}</ThemeText>
@@ -135,7 +218,7 @@ export default function DebugInfo() {
                 }`}</ThemeText>
               </View>
             </Sections.GenericItem>
-            {tokenStatus && (
+            {retry && (
               <>
                 <Sections.LinkItem text="Retry" onPress={() => retry(false)} />
                 <Sections.LinkItem
@@ -204,6 +287,52 @@ function mapEntry(key: string, value: any) {
       </View>
     );
   }
+}
+
+function LabeledSlider({
+  label,
+  min = 0,
+  max,
+  step = 0.1,
+  defaultValue,
+  initialValue,
+  onSetValue,
+}: {
+  label: string;
+  min?: number;
+  max: number;
+  step?: number;
+  defaultValue?: number;
+  initialValue?: number;
+  onSetValue: (n: number) => void;
+}): JSX.Element {
+  const [pref, setPref] = useState(initialValue || defaultValue);
+
+  return (
+    <Sections.GenericItem>
+      <ThemeText
+        onPress={
+          defaultValue
+            ? () => {
+                onSetValue(defaultValue);
+                setPref(defaultValue);
+              }
+            : undefined
+        }
+      >
+        {label}: {pref?.toFixed(1)}
+      </ThemeText>
+      <Slider
+        style={{width: '100%'}}
+        minimumValue={min}
+        maximumValue={max}
+        step={step}
+        value={pref}
+        onValueChange={setPref}
+        onSlidingComplete={onSetValue}
+      />
+    </Sections.GenericItem>
+  );
 }
 
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({

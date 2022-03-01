@@ -1,4 +1,5 @@
 import {AxiosRequestConfig} from 'axios';
+import {CancelPaymentRequest, ReserveOfferRequestBody} from '.';
 import {client} from '../api';
 import {
   Offer,
@@ -39,6 +40,7 @@ type ReserveOfferParams = {
   offers: ReserveOffer[];
   paymentType: PaymentType;
   opts?: AxiosRequestConfig;
+  scaExemption: boolean;
 };
 
 export type ReserveOfferWithSavePaymentParams = ReserveOfferParams & {
@@ -84,22 +86,22 @@ export async function reserveOffers({
   offers,
   paymentType,
   opts,
+  scaExemption,
   ...rest
 }:
   | ReserveOfferWithSavePaymentParams
   | ReserveOfferWithRecurringParams): Promise<TicketReservation> {
   const url = 'ticket/v2/reserve';
-  let body: object = {
+  let body: ReserveOfferRequestBody = {
     payment_redirect_url:
-      paymentType == PaymentType.Vipps
-        ? 'atb://vipps?transaction_id={transaction_id}&payment_id={payment_id}'
-        : undefined,
+      'atb://ticketing?transaction_id={transaction_id}&payment_id={payment_id}',
     offers,
     payment_type: paymentType,
     store_payment:
       'savePaymentMethod' in rest ? rest.savePaymentMethod : undefined,
     recurring_payment_id:
       'recurringPaymentId' in rest ? rest.recurringPaymentId : undefined,
+    sca_exemption: scaExemption,
   };
   const response = await client.post<TicketReservation>(url, body, {
     ...opts,
@@ -112,4 +114,19 @@ export async function getPayment(paymentId: number): Promise<PaymentResponse> {
   const url = 'ticket/v1/payments/' + paymentId;
   const response = await client.get<PaymentResponse>(url);
   return response.data;
+}
+
+export async function cancelPayment(
+  payment_id: number,
+  transaction_id: number,
+): Promise<void> {
+  const url = 'ticket/v1/cancel';
+  await client.put<void>(
+    url,
+    {
+      payment_id,
+      transaction_id,
+    } as CancelPaymentRequest,
+    {authWithIdToken: true, retry: true},
+  );
 }

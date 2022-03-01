@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Close} from '@atb/assets/svg/icons/actions';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, useTheme} from '@atb/theme';
 import insets from '@atb/utils/insets';
 import ThemeText, {MAX_FONT_SCALE} from '@atb/components/text';
@@ -18,7 +18,7 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {SectionItem, useSectionItem} from './section-utils';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import composeRefs from '@seznam/compose-react-refs';
-import {Expand, ExpandLess} from '@atb/assets/svg/icons/navigation';
+import {Expand, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
 import {ScrollView} from 'react-native-gesture-handler';
 import {countryPhoneData} from 'phone';
 import {Section, GenericClickableItem} from '@atb/components/sections';

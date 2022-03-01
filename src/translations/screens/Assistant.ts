@@ -81,7 +81,7 @@ const AssistantTexts = {
   },
   results: {
     fetchMore: _('Last inn flere reiseforslag', 'Load more results'),
-    fetchingMore: _('Henter flere reiseforslag...', 'Loading more results...'),
+    fetchingMore: _('Søker etter flere reiseforslag', 'Loading more results'),
     unableToFetchMore: _(
       'Finner ikke flere reiseforslag. Forsøk å endre dato og søketidspunkt',
       'Unable to load more results. Please try a different date and time.',
@@ -98,13 +98,13 @@ const AssistantTexts = {
     },
     info: {
       emptyResult: _(
-        'Vi fant dessverre ingen reiseruter som passer til ditt søk.',
+        'Vi fant dessverre ingen reiseruter som passer til ditt søk. ',
         'We could not find any travel routes matching your search criteria.',
       ),
       reasonsTitle: _('Mulige årsaker: ', 'Possible causes:'),
       genericHint: _(
-        'Prøv å justere på sted eller tidspunkt',
-        'Try adjusting your time or location input',
+        'Prøv å justere på sted eller tidspunkt.',
+        'Try adjusting your time or location input.',
       ),
     },
     resultList: {
@@ -116,6 +116,12 @@ const AssistantTexts = {
           `Reiseforslag ${resultPosition} av ${totalResultCount}`,
           `Trip suggestion ${resultPosition} of ${totalResultCount}`,
         ),
+    },
+    dayHeader: {
+      today: () => _('I dag', 'Today'),
+      tomorrow: (date: string) => _(`I morgen - ${date}`, `Tomorrow - ${date}`),
+      dayAfterTomorrow: (date: string) =>
+        _(`I overmorgen - ${date}`, `Day after tomorrow - ${date}`),
     },
     resultItem: {
       header: {
@@ -137,6 +143,7 @@ const AssistantTexts = {
             `Walk ${walkTime}. Wait ${waitTime}`,
           ),
         walkLabel: (time: string) => _(`Gå ${time}`, `Walk ${time}`),
+        waitLabel: (time: string) => _(`Vent ${time}`, `Wait ${time}`),
       },
       destination: {
         a11yLabel: _('Destinasjon', 'Destination'),
@@ -145,7 +152,8 @@ const AssistantTexts = {
         label: _('Vent', 'Wait'),
       },
       footer: {
-        fromLabel: (place: string, time: string) =>
+        fromPlace: (place: string) => _(`Fra ${place}`, `From ${place}`),
+        fromPlaceWithTime: (place: string, time: string) =>
           _(`Fra ${place} ${time}`, `From ${place} ${time}`),
         detailsLabel: _('Detaljer', 'Details'),
         detailsHint: _(

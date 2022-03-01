@@ -1,4 +1,4 @@
-import {MasterCard, Vipps, Visa} from '@atb/assets/svg/icons/ticketing';
+import {MasterCard, Vipps, Visa} from '@atb/assets/svg/mono-icons/ticketing';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
 import {LeftButtonProps} from '@atb/components/screen-header';
@@ -88,10 +88,8 @@ const Confirmation: React.FC<ConfirmationProps> = ({
 
   const previousMethod = getPreviousPaymentMethod(previousPaymentMethod);
 
-  const {
-    enable_creditcard: enableCreditCard,
-    vat_percent: vatPercent,
-  } = useRemoteConfig();
+  const {enable_creditcard: enableCreditCard, vat_percent: vatPercent} =
+    useRemoteConfig();
 
   const {
     fromTariffZone,

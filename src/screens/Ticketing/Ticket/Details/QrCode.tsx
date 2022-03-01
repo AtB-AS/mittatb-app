@@ -5,7 +5,7 @@ import {TicketTexts, useTranslation} from '@atb/translations';
 import {SvgXml} from 'react-native-svg';
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {useMobileContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import qrcode from 'qrcode';
 import useInterval from '@atb/utils/use-interval';
 import MessageBox from '@atb/components/message-box';
@@ -13,28 +13,31 @@ import ThemeText from '@atb/components/text';
 
 type Props = {
   validityStatus: ValidityStatus;
-  isInspectable: boolean;
 };
 
-export default function QrCode({validityStatus, isInspectable}: Props) {
-  const {tokenStatus, generateQrCode, retry} = useMobileContextState();
+export default function QrCode({validityStatus}: Props) {
+  const {tokenStatus, travelTokens, generateQrCode, retry} =
+    useMobileTokenContextState();
 
   if (validityStatus !== 'valid') return null;
-  if (!isInspectable) return null;
   if (!generateQrCode) return null;
 
-  switch (tokenStatus?.visualState) {
-    case 'Token':
-      return <QrCodeSvg generateQrCode={generateQrCode} />;
-    case 'Error':
-      return <QrCodeError retry={retry} />;
-    case 'NotInspectable':
-      return <QrCodeDeviceNotInspectable />;
-    case 'MissingNetConnection':
-      return <QrCodeMissingNetwork />;
-    case 'Loading':
-    case undefined:
-      return <QrCodeLoading />;
+  if (!travelTokens) {
+    return <QrCodeLoading />;
+  }
+
+  const inspectableToken = travelTokens.find((t) => t.inspectable);
+
+  if (inspectableToken?.isThisDevice) {
+    return <QrCodeSvg generateQrCode={generateQrCode} />;
+  } else if (inspectableToken) {
+    return <QrCodeDeviceNotInspectable />;
+  } else if (tokenStatus?.visualState === 'MissingNetConnection') {
+    return <QrCodeMissingNetwork />;
+  } else if (tokenStatus?.visualState === 'Error') {
+    return <QrCodeError retry={retry} />;
+  } else {
+    return <QrCodeLoading />;
   }
 }
 
@@ -47,7 +50,8 @@ const QrCodeSvg = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const qrCode = useQrCode(generateQrCode, UPDATE_INTERVAL);
+  const [qrCodeError, setQrCodeError] = useState(false);
+  const qrCode = useQrCode(generateQrCode, setQrCodeError, UPDATE_INTERVAL);
   const [qrCodeSvg, setQrCodeSvg] = useState<string>();
   const [countdown, setCountdown] = useState<number>(UPDATE_INTERVAL / 1000);
 
@@ -69,8 +73,10 @@ const QrCodeSvg = ({
     countdown === 0,
   );
 
-  if (!qrCodeSvg) {
+  if (qrCodeError) {
     return <QrCodeError />;
+  } else if (!qrCodeSvg) {
+    return <QrCodeLoading />;
   }
 
   return (
@@ -93,12 +99,21 @@ const QrCodeSvg = ({
 
 const useQrCode = (
   generateQrCode: () => Promise<string | undefined>,
+  setQrCodeError: (isError: boolean) => void,
   interval: number,
 ) => {
   const [tokenQRCode, setTokenQRCode] = useState<string | undefined>(undefined);
 
   const updateQrCode = useCallback(
-    () => generateQrCode().then(setTokenQRCode),
+    () =>
+      generateQrCode().then((qr) => {
+        if (!qr) {
+          setQrCodeError(true);
+        } else {
+          setQrCodeError(false);
+          setTokenQRCode(qr);
+        }
+      }),
     [generateQrCode, setTokenQRCode],
   );
 
@@ -106,7 +121,6 @@ const useQrCode = (
     updateQrCode();
   }, []);
 
-  // TODO: Maybe update so this happens in TicketContext later? Just proof-of-concept
   useInterval(
     () => {
       updateQrCode();

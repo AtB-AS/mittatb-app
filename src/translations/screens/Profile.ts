@@ -1,4 +1,5 @@
 import {translation as _} from '../commons';
+import orgSpecificTranslations from '../utils';
 
 const ProfileTexts = {
   header: {
@@ -19,12 +20,28 @@ const ProfileTexts = {
           label: _('Utløpte billetter', 'Expired tickets'),
         },
       },
+      infoItems: {
+        customerNumber: _('Kundenummer', 'Customer number'),
+        phoneNumber: _('Telefonnummer', 'Phone number'),
+      },
+    },
+    newFeatures: {
+      heading: _('Ny funksjonalitet', 'New features'),
+      departures: _('Prøv ny avganger-visning', 'Try the new departure view'),
+      assistant: _('Prøv ny reisesøkmotor', 'Try the new travel search engine'),
     },
     settings: {
       heading: _('Innstillinger', 'Settings'),
       linkItems: {
         userProfile: {
           label: _('Standard reisende', 'Default traveller'),
+        },
+        travelToken: {
+          label: _(
+            'Bruk billett på mobil / t:kort',
+            'Use ticket on mobile / t:card',
+          ),
+          flag: _('Ny', 'New'),
         },
         appearance: {
           label: _('Utseende', 'Appearance'),
@@ -36,7 +53,7 @@ const ProfileTexts = {
           label: _('Språk', 'Language'),
         },
         enrollment: {
-          label: _('Ny funksjonalitet', 'New features'),
+          label: _('Invitasjonskode', 'Invitation code'),
         },
       },
     },
@@ -113,4 +130,11 @@ const ProfileTexts = {
     ),
   },
 };
-export default ProfileTexts;
+export default orgSpecificTranslations(ProfileTexts, {
+  nfk: {
+    header: {
+      title: _('Mitt Reis', 'My Reis'),
+      title_a11y: _('Mitt Reis', 'My Reis'),
+    },
+  },
+});

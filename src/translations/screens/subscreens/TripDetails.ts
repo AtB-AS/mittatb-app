@@ -1,3 +1,4 @@
+import orgSpecificTranslations from '@atb/translations/utils';
 import {translation as _} from '../../commons';
 const TripDetailsTexts = {
   header: {
@@ -135,6 +136,23 @@ const TripDetailsTexts = {
         `Korrespondanse mellom ${fromPublicCode} og ${toPublicCode} på ${location}.`,
         `Correspondance between ${fromPublicCode} and ${toPublicCode} on ${location}.`,
       ),
+    interchangeWithUnknownFromPublicCode: (
+      toPublicCode: string,
+      location: string,
+    ) =>
+      _(
+        `Korrespondanse med ${toPublicCode} på ${location}.`,
+        `Correspondance with ${toPublicCode} on ${location}.`,
+      ),
   },
 };
-export default TripDetailsTexts;
+export default orgSpecificTranslations(TripDetailsTexts, {
+  nfk: {
+    messages: {
+      ticketsWeDontSell: _(
+        'Reisen krever billett som ikke er tilgjengelig i denne appen, eller som må kjøpes fra et annet selskap enn Reis Nordland.',
+        'This journey requires a ticket that is not available from this app, or must be purchased from a provider other than Reis Nordland.',
+      ),
+    },
+  },
+});

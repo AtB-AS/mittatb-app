@@ -133,7 +133,7 @@ const getDateOptionText = (
 export default JourneyDatePicker;
 
 export function useSearchTimeValue<
-  T extends RouteProp<any, any> & {params: ParamListBase}
+  T extends RouteProp<any, any> & {params: ParamListBase},
 >(callerRouteParam: keyof T['params'], initialValue: SearchTime): SearchTime {
   const route = useRoute<T>();
   const firstTimeRef = useRef(true);

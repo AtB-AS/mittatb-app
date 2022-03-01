@@ -1,5 +1,6 @@
 import ThemeText from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
+import {isThemeColor, ThemeColor} from '@atb/theme/colors';
 import {TravelCard} from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -29,7 +30,10 @@ const TravelCardInformation: React.FC<Props> = ({travelCard}) => {
       >
         {t(TicketsTexts.travelCardInformation.onInspection)}
       </ThemeText>
-      <ActiveTicketCard cardId={travelCard.id?.toString()}></ActiveTicketCard>
+      <ActiveTicketCard
+        cardId={travelCard.id?.toString()}
+        color="primary_3"
+      ></ActiveTicketCard>
       {/* <ThemeText
         type="body__tertiary"
         color="secondary"
@@ -41,17 +45,25 @@ const TravelCardInformation: React.FC<Props> = ({travelCard}) => {
   );
 };
 
-const ActiveTicketCard: React.FC<{cardId?: string}> = ({
-  cardId = '00 0000000',
-}) => {
+type ActiveTicketCardProps = {
+  cardId: string;
+  color: ThemeColor;
+};
+
+export function ActiveTicketCard(props: ActiveTicketCardProps): JSX.Element {
+  const {cardId = '000000000', color = 'primary_3'} = props;
   const formatedTravelCardId = cardId.substr(0, 2) + ' ' + cardId.substr(2);
   const styles = useStyles();
+  const {theme} = useTheme();
 
   const {t} = useTranslation();
 
   return (
     <View
-      style={styles.activeTicketCard}
+      style={[
+        styles.activeTicketCard,
+        {backgroundColor: theme.colors[color].backgroundColor},
+      ]}
       accessible={true}
       accessibilityLabel={t(
         TicketsTexts.travelCardInformation.illustrationa11yLabel(
@@ -62,17 +74,17 @@ const ActiveTicketCard: React.FC<{cardId?: string}> = ({
       <View style={styles.cardNumber} accessible={false}>
         <ThemeText
           type="body__tertiary"
-          color="primary_1"
+          color={color}
           style={styles.transparentText}
         >
           XXXX XX
         </ThemeText>
-        <ThemeText type="body__tertiary" color="primary_1">
+        <ThemeText type="body__tertiary" color={color}>
           {formatedTravelCardId}
         </ThemeText>
         <ThemeText
           type="body__tertiary"
-          color="primary_1"
+          color={color}
           style={styles.transparentText}
         >
           X
@@ -85,12 +97,12 @@ const ActiveTicketCard: React.FC<{cardId?: string}> = ({
           style={styles.tcardicon}
         >
           {'\n'}
-          {t(TicketsTexts.travelCardInformation.tCard)}
+          {t(TicketsTexts.travelCardInformation.cardType)}
         </ThemeText>
       </View>
     </View>
   );
-};
+}
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
@@ -118,8 +130,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     opacity: 0.2,
   },
   activeTicketCard: {
-    // backgroundColor: theme.colors.background_3.backgroundColor,
-    backgroundColor: theme.colors.primary_3.backgroundColor,
     padding: theme.spacings.large,
     borderRadius: theme.border.radius.regular,
     marginTop: theme.spacings.large,

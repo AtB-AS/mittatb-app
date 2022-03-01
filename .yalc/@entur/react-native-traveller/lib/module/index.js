@@ -25,10 +25,8 @@ export default function createClient(setStatus, initialConfig) {
       return 'MissingNetConnection';
     } else if (storedState.error) {
       return 'Error';
-    } else if (storedState.state === 'Validating') {
+    } else if (storedState.state === 'Validating' || storedState.state === 'Valid') {
       return 'Token';
-    } else if (storedState.state === 'Valid') {
-      return storedState.isInspectable ? 'Token' : 'NotInspectable';
     } else {
       return 'Loading';
     }
@@ -59,6 +57,7 @@ export default function createClient(setStatus, initialConfig) {
     }
 
     const status = storedState && {
+      tokenId: 'tokenId' in storedState ? storedState.tokenId : undefined,
       state: storedState.state,
       error: sanitizeError(storedState.error),
       visualState: toVisualState(storedState)
@@ -96,6 +95,25 @@ export default function createClient(setStatus, initialConfig) {
       unscheduleRetry();
       startTokenStateMachine(abtTokensService, setStatusWrapper, safetyNetApiKey, forceRestart, currentAccountId);
     },
+    toggleToken: async tokenId => {
+      if (!currentAccountId) {
+        return Promise.reject(new Error('Only able to toggle valid tokens on active account'));
+      }
+
+      const {
+        tokens
+      } = await abtTokensService.toggleToken(tokenId, {
+        overrideExisting: true
+      });
+      return tokens;
+    },
+    listTokens: async () => {
+      if (!currentAccountId) {
+        return Promise.reject(new Error('No active account'));
+      }
+
+      return await abtTokensService.listTokens();
+    },
 
     /**
      * Get a secure token for the current active token on the current account.
@@ -108,7 +126,7 @@ export default function createClient(setStatus, initialConfig) {
      * action, and to retrieve fare contracts the 'getFarecontracts' is
      * necessary.
      *
-     * @param action the action the created token may be used for
+     * @param actions the actions the created token may be used for
      * @return {Promise} a Promise for getting the secure token for the given
      * action
      */

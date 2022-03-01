@@ -9,8 +9,8 @@ if [[
     exit 1
 else 
     echo "Installing pre-build dependencies"
-    brew install openssl git-crypt 
-    # git-crypt + openssl for decryption
+    brew install git-crypt 
+    # git-crypt for decryption
 
     echo "Decoding git-crypt key"
     echo $GIT_CRYPT_KEY | openssl base64 -d -A -out mittatb.key

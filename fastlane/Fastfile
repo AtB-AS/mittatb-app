@@ -96,6 +96,11 @@ platform :ios do
     )
   end
 
+  desc 'Install pods.'
+  lane :pods do
+    cocoapods(podfile: './ios/Podfile')
+  end
+
   desc 'Upload the build to Firebase App Distribution'
   lane :firebase_distribution_staging do
     ensure_env_vars(
@@ -190,7 +195,8 @@ platform :android do
       app:ENV['FIREBASE_APP_ID'],
       service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
       android_artifact_type:'APK',
-      android_artifact_path:ENV['APK_FILE_NAME']
+      android_artifact_path:ENV['APK_FILE_NAME'],
+      groups:"NFK"
     )
   end
 

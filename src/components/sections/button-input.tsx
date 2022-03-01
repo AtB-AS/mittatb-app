@@ -75,6 +75,7 @@ export default function ButtonInput({
   const valueEl =
     isStringText(value) || !value ? (
       <ThemeText
+        numberOfLines={1}
         type={value && highlighted ? 'body__primary--bold' : 'body__primary'}
         style={!value && styles.faded}
       >

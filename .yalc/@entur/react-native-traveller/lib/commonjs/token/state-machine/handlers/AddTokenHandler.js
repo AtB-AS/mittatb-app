@@ -20,8 +20,8 @@ function addTokenHandler() {
     await (0, _native.addToken)(s.accountId, tokenId, certificate, tokenValidityStart, tokenValidityEnd);
     return {
       accountId: s.accountId,
-      state: 'Valid',
-      isInspectable: true
+      state: 'VerifyInspectionAction',
+      tokenId
     };
   });
 }

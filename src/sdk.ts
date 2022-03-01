@@ -19,10 +19,15 @@ import {
   TransportSubmode,
   ValidityPeriod,
 } from '@entur/sdk';
+import {
+  Mode,
+  PointsOnLink as PointsOnLink_v2,
+} from '@atb/api/types/generated/journey_planner_v3_types';
+import {Feature, LineString} from 'geojson';
 
 export * from '@entur/sdk';
 
-// @TODO This should come from Common lib
+// @TODO This should come from Common lib.
 
 export interface Place {
   latitude: number;
@@ -219,8 +224,14 @@ export type MapLeg = {
   mode?: LegMode;
   faded?: boolean;
   transportSubmode?: TransportSubmode;
-  pointsOnLink: PointsOnLink;
+  pointsOnLink: PointsOnLink | PointsOnLink_v2;
 };
+
+export interface MapLine extends Feature<LineString> {
+  travelType?: LegMode;
+  subMode?: TransportSubmode;
+  faded?: boolean;
+}
 
 export type ServiceJourneyMapInfoData = {
   mapLegs: MapLeg[];

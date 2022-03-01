@@ -1,270 +1,142 @@
-// Code by Ben Awad
-// from https://github.com/benawad/drag-n-drop-flatlist/blob/master/SortableList.tsx
-import * as React from 'react';
-import {Dimensions, LayoutChangeEvent, ViewStyle} from 'react-native';
-import {State} from 'react-native-gesture-handler';
-import Animated from 'react-native-reanimated';
-import {DataProvider, LayoutProvider, RecyclerListView} from 'recyclerlistview';
+import {Expand, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
+import {screenReaderPause} from '@atb/components/accessible-text';
+import {
+  SectionItem,
+  useSectionItem,
+  useSectionStyle,
+} from '@atb/components/sections/section-utils';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import {FavoriteIcon} from '@atb/favorites';
+import {LocationFavorite, UserFavorites} from '@atb/favorites/types';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import insets from '@atb/utils/insets';
+import React, {useCallback} from 'react';
+import {FlatList, TouchableOpacity, View} from 'react-native';
 import {immutableMove} from './sort-utils';
 
-// @TODO
-// Rewrite implementation to be modern components
-// and handle state better.
+type SortableListFallbackProps = {
+  data: UserFavorites;
+  onSort: (newData: UserFavorites) => void;
+};
 
-const {cond, eq, add, call, Value, event, or} = Animated;
+export default function SortableList({
+  data,
+  onSort,
+}: SortableListFallbackProps) {
+  const styles = useListStyle();
+  const length = data.length;
 
-interface Props<T> {
-  rowHeight: number;
-  data: T[];
-  containerStyle?: ViewStyle;
-  indexToKey: (index: number) => string;
-  renderRow: (
-    data: T,
-    index: number,
-    state: 'normal' | 'dragging' | 'placeholder',
-    dragEvent: any,
-  ) => JSX.Element | null;
-  onSort: (newData: T[]) => void;
+  const resort = useCallback(
+    (change: Changeset) => {
+      const from = change.index;
+      const to = change.index + (change.direction == 'down' ? 1 : -1);
+      const newData = immutableMove(data, from, to);
+      onSort(newData);
+    },
+    [data],
+  );
+
+  return (
+    <FlatList
+      data={data}
+      contentContainerStyle={styles.container}
+      renderItem={(obj) => <Item {...obj} onPress={resort} length={length} />}
+      keyExtractor={(item) => item.name + item.id}
+    />
+  );
+}
+const useListStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+  container: {
+    margin: theme.spacings.medium,
+  },
+  item: {
+    marginBottom: theme.spacings.medium,
+  },
+  moveIcon: {
+    paddingHorizontal: theme.spacings.small,
+  },
+}));
+
+const name = (item: LocationFavorite) => item.name ?? item.location.label;
+
+type ItemProps = SectionItem<{
+  item: LocationFavorite;
+  index: number;
+  length: number;
+  onPress(ops: Changeset): void;
+}>;
+function Item(props: ItemProps) {
+  const {contentContainer, topContainer} = useSectionItem({
+    radius: 'top-bottom',
+  });
+  const {item} = props;
+  const sectionStyles = useSectionStyle();
+  const styles = useListStyle();
+
+  return (
+    <View style={[styles.item, sectionStyles.spaceBetween, topContainer]}>
+      <View importantForAccessibility={'no-hide-descendants'}>
+        <FavoriteIcon favorite={item} />
+      </View>
+      <ThemeText type="body__primary" style={contentContainer}>
+        {name(item)}
+      </ThemeText>
+      <MoveIcon direction="up" {...props} />
+      <MoveIcon direction="down" {...props} />
+    </View>
+  );
 }
 
-interface RState {
-  dataProvider: DataProvider;
-  dragging: boolean;
-  draggingIdx: number;
-  rowHeight: number;
-}
+type Changeset = {
+  item: LocationFavorite;
+  index: number;
+  length: number;
+  direction: 'down' | 'up';
+};
 
-export class SortableList<T> extends React.PureComponent<Props<T>, RState> {
-  list = React.createRef<RecyclerListView<any, any>>();
-  _layoutProvider!: LayoutProvider;
-  rowCenterY!: Animated.Node<number>;
-  absoluteY = new Value(0);
-  gestureState = new Value(-1);
-  onGestureEvent: any;
-  halfRowHeightValue!: Animated.Value<number>;
-  currIdx = -1;
-  scrollOffset = 0;
-  flatlistHeight = 0;
-  topOffset = 0;
-  scrolling = false;
+type MoveIconProps = Changeset & {
+  onPress(ops: Changeset): void;
+};
 
-  constructor(props: Props<T>) {
-    super(props);
+function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
+  const isDown = direction === 'down';
+  const Icon = isDown ? Expand : ExpandLess;
+  const diretion = isDown ? 'ned' : 'opp';
+  const label = `Flytt  ${name(item)} ${diretion} ${screenReaderPause}`;
+  const hint = `Aktivér for å flytte favoritten  ${name(
+    item,
+  )} ${diretion} ${screenReaderPause}`;
+  const styles = useListStyle();
+  const {theme} = useTheme();
 
-    this.onGestureEvent = event([
-      {
-        nativeEvent: {
-          absoluteY: this.absoluteY,
-          state: this.gestureState,
-        },
-      },
-    ]);
-
-    this.setRowHeight(props.rowHeight, false);
-
-    const dataProvider = new DataProvider((r1, r2) => {
-      return r1 !== r2;
-    }, props.indexToKey);
-
-    this.state = {
-      dataProvider: dataProvider.cloneWithRows(props.data),
-      dragging: false,
-      draggingIdx: -1,
-      rowHeight: props.rowHeight,
-    };
-  }
-
-  setRowHeight(rowHeight: number, saveState: boolean) {
-    this.halfRowHeightValue = new Value(-rowHeight / 2);
-    this.rowCenterY = add(this.absoluteY, this.halfRowHeightValue);
-    const {width} = Dimensions.get('window');
-
-    this._layoutProvider = new LayoutProvider(
-      (index) => {
-        return 1;
-      },
-      (type, dim) => {
-        dim.width = width;
-        dim.height = rowHeight;
-      },
-    );
-    if (saveState) {
-      this.setState({
-        rowHeight,
-      });
-    }
-  }
-
-  componentDidUpdate(prevProps: Props<T>) {
-    if (prevProps.data !== this.props.data) {
-      this.setState({
-        dataProvider: this.state.dataProvider.cloneWithRows(this.props.data),
-      });
-    }
-
-    if (prevProps.rowHeight !== this.props.rowHeight) {
-      this.setRowHeight(this.props.rowHeight, true);
-    }
-  }
-
-  handleScroll = (_a: unknown, _b: unknown, offsetY: number) => {
-    this.scrollOffset = offsetY;
-  };
-
-  handleLayout = (e: LayoutChangeEvent) => {
-    this.flatlistHeight = e.nativeEvent.layout.height;
-    this.topOffset = e.nativeEvent.layout.y;
-  };
-
-  yToIndex = (y: number) =>
-    Math.min(
-      this.state.dataProvider.getSize() - 1,
-      Math.max(
-        0,
-        Math.floor(
-          (y + this.scrollOffset - this.topOffset) / this.props.rowHeight,
-        ),
-      ),
-    );
-
-  reset = () => {
-    this.setState({
-      dragging: false,
-      draggingIdx: -1,
-    });
-    this.scrolling = false;
-    this.currIdx = -1;
-    const newData = this.state.dataProvider.getAllData();
-    this.props.onSort(newData);
-  };
-
-  start = ([y]: readonly 0[]) => {
-    this.currIdx = this.yToIndex(y);
-    this.setState({dragging: true, draggingIdx: this.currIdx});
-  };
-
-  updateOrder = (y: number) => {
-    const newIdx = this.yToIndex(y);
-    if (this.currIdx !== newIdx) {
-      this.setState({
-        dataProvider: this.state.dataProvider.cloneWithRows(
-          immutableMove(
-            this.state.dataProvider.getAllData(),
-            this.currIdx,
-            newIdx,
-          ),
-        ),
-        draggingIdx: newIdx,
-      });
-      this.currIdx = newIdx;
-    }
-  };
-
-  moveList = (amount: number) => {
-    if (!this.scrolling) {
-      return;
-    }
-
-    this.list.current?.scrollToOffset(
-      this.scrollOffset + amount,
-      this.scrollOffset + amount,
-      false,
-    );
-
-    requestAnimationFrame(() => {
-      this.moveList(amount);
-    });
-  };
-
-  move = ([y]: readonly 0[]) => {
-    if (y + 100 > this.flatlistHeight) {
-      if (!this.scrolling) {
-        this.scrolling = true;
-        this.moveList(20);
-      }
-    } else if (y < 100) {
-      if (!this.scrolling) {
-        this.scrolling = true;
-        this.moveList(-20);
-      }
-    } else {
-      this.scrolling = false;
-    }
-    this.updateOrder(y);
-  };
-
-  _rowRenderer = (type: any, data: T, index: number) => {
-    return this.props.renderRow(
-      data,
-      index,
-      this.state.draggingIdx === index ? 'placeholder' : 'normal',
-      this.onGestureEvent,
-    );
-  };
-
-  render() {
-    const {dragging, dataProvider, draggingIdx} = this.state;
-
+  if (index === 0 && !isDown) {
     return (
-      <>
-        <Animated.Code>
-          {() =>
-            cond(
-              eq(this.gestureState, State.BEGAN),
-              call([this.absoluteY], this.start),
-            )
-          }
-        </Animated.Code>
-        <Animated.Code>
-          {() =>
-            cond(
-              or(
-                eq(this.gestureState, State.END),
-                eq(this.gestureState, State.CANCELLED),
-                eq(this.gestureState, State.FAILED),
-                eq(this.gestureState, State.UNDETERMINED),
-              ),
-              call([], this.reset),
-            )
-          }
-        </Animated.Code>
-        <Animated.Code>
-          {() =>
-            cond(
-              eq(this.gestureState, State.ACTIVE),
-              call([this.absoluteY], this.move),
-            )
-          }
-        </Animated.Code>
-        {dragging ? (
-          <Animated.View
-            style={{
-              top: this.rowCenterY,
-              position: 'absolute',
-              width: '100%',
-              zIndex: 99,
-              elevation: 99,
-            }}
-          >
-            {this.props.renderRow(
-              dataProvider.getDataForIndex(draggingIdx),
-              draggingIdx,
-              'dragging',
-              null,
-            )}
-          </Animated.View>
-        ) : null}
-        <RecyclerListView
-          ref={this.list}
-          style={{flex: 1, ...this.props.containerStyle}}
-          onScroll={this.handleScroll}
-          onLayout={this.handleLayout}
-          layoutProvider={this._layoutProvider}
-          dataProvider={dataProvider}
-          rowRenderer={this._rowRenderer}
-          extendedState={{dragging: true}}
-        />
-      </>
+      <View style={styles.moveIcon}>
+        <ThemeIcon svg={Icon} colorType={'disabled'} />
+      </View>
     );
   }
+
+  if (index === length - 1 && isDown) {
+    return (
+      <View style={styles.moveIcon}>
+        <ThemeIcon svg={Icon} colorType={'disabled'} />
+      </View>
+    );
+  }
+
+  return (
+    <TouchableOpacity
+      onPress={() => onPress({item, direction, index, length})}
+      accessibilityRole="button"
+      accessible
+      accessibilityLabel={label}
+      accessibilityHint={hint}
+      style={styles.moveIcon}
+      hitSlop={insets.symmetric(theme.spacings.small, theme.spacings.xSmall)}
+    >
+      <ThemeIcon svg={Icon} />
+    </TouchableOpacity>
+  );
 }

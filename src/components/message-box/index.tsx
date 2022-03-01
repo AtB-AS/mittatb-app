@@ -5,7 +5,7 @@ import {
   Error as ErrorIcon,
   Info,
   Warning,
-} from '../../assets/svg/icons/status';
+} from '../../assets/svg/mono-icons/status';
 import {StyleSheet, useTheme, Statuses} from '@atb/theme';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
@@ -16,12 +16,14 @@ type WithMessage = {
   message: string;
   onPress?: () => void;
   onPressText?: string;
+  isMarkdown?: boolean;
   children?: never;
 };
 type WithChildren = {
   message?: never;
   onPress?: never;
   onPressText?: string;
+  isMarkdown?: never;
   children: React.ReactNode;
 };
 export type MessageType = Statuses;
@@ -41,8 +43,9 @@ const MessageBox: React.FC<MessageBoxProps> = ({
   children,
   title,
   withMargin = false,
+  isMarkdown = false,
   onPress,
-  onPressText = 'OK',
+  onPressText,
 }) => {
   const {theme} = useTheme();
   const styles = useBoxStyle();
@@ -56,7 +59,10 @@ const MessageBox: React.FC<MessageBoxProps> = ({
     );
   const child = message ? (
     <>
-      <ThemeText style={{...styles.text, color: textColor}}>
+      <ThemeText
+        style={{...styles.text, color: textColor}}
+        isMarkdown={isMarkdown}
+      >
         {message}
       </ThemeText>
       {onPress && (
@@ -65,7 +71,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({
           type="body__primary--underline"
           onPress={onPress}
         >
-          {onPressText}
+          {onPressText ?? t(MessageBoxTexts.tryAgainButton)}
         </ThemeText>
       )}
     </>

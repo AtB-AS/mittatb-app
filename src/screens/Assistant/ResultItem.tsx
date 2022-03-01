@@ -1,6 +1,9 @@
-import {ArrowRight, ChevronRight} from '@atb/assets/svg/icons/navigation';
-import {DestinationFlag} from '@atb/assets/svg/icons/places';
-import {Duration, WalkingPerson} from '@atb/assets/svg/icons/transportation';
+import {ArrowRight, ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
+import {DestinationFlag} from '@atb/assets/svg/mono-icons/places';
+import {
+  Duration,
+  WalkingPerson,
+} from '@atb/assets/svg/mono-icons/transportation';
 import AccessibleText, {
   screenReaderPause,
 } from '@atb/components/accessible-text';
@@ -175,7 +178,7 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
     <View style={styles.resultFooter}>
       <ThemeText type={'body__secondary'}>
         {t(
-          AssistantTexts.results.resultItem.footer.fromLabel(
+          AssistantTexts.results.resultItem.footer.fromPlaceWithTime(
             quayName,
             timePrefix + formatToClock(quayStartTime, language),
           ),
@@ -367,7 +370,7 @@ const tripSummary = (
     ${
       firstLeg
         ? t(
-            AssistantTexts.results.resultItem.footer.fromLabel(
+            AssistantTexts.results.resultItem.footer.fromPlaceWithTime(
               firstLeg.fromPlace.name ?? '',
               formatToClock(firstLeg.expectedStartTime, language),
             ),

@@ -7,11 +7,18 @@ import type {
   InitializeTokenResponse,
   ListTokensResponse,
   RenewTokenResponse,
+  ToggleTokenRequest,
+  ToggleTokenResponse,
+  ValidateTokenResponse,
 } from './types';
 
 const SIGNED_TOKEN_HEADER_KEY = 'X-Signed-Token';
 
 export type AbtTokensService = {
+  toggleToken: (
+    tokenId: string,
+    req: ToggleTokenRequest
+  ) => Promise<ToggleTokenResponse>;
   listTokens: () => Promise<ListTokensResponse>;
   getTokenCertificate: (
     signedToken: string
@@ -23,6 +30,10 @@ export type AbtTokensService = {
     req: ActivateTokenRequest,
     signedToken?: string
   ) => Promise<ActivateTokenResponse>;
+  validateToken: (
+    tokenId: string,
+    signedToken: string
+  ) => Promise<ValidateTokenResponse>;
 };
 
 export const createAbtTokensService = (
@@ -53,7 +64,7 @@ export const createAbtTokensService = (
   };
 
   const initToken = async (body: InitializeTokenRequest) => {
-    const url = `${hostUrl}/tokens`;
+    const url = `${hostUrl}/tokens/v2`;
     const response = await fetcher<InitializeTokenResponse>({
       url,
       body,
@@ -94,11 +105,35 @@ export const createAbtTokensService = (
     return response.body;
   };
 
+  const toggleToken = async (tokenId: string, body: ToggleTokenRequest) => {
+    const url = `${hostUrl}/tokens/${tokenId}/toggle`;
+    const response = await fetcher<ToggleTokenResponse>({
+      url,
+      method: 'POST',
+      body,
+    });
+    return response.body;
+  };
+
+  const validateToken = async (tokenId: string, signedToken: string) => {
+    const url = `${hostUrl}/tokens/v2/${tokenId}/validate`;
+    const response = await fetcher<ValidateTokenResponse>({
+      url,
+      headers: {
+        [SIGNED_TOKEN_HEADER_KEY]: signedToken,
+      },
+      method: 'GET',
+    });
+    return response.body;
+  };
+
   return {
     listTokens,
     getTokenCertificate,
     initToken,
     renewToken,
     activateToken,
+    toggleToken,
+    validateToken,
   };
 };

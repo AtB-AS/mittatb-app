@@ -25,10 +25,10 @@ jobs:
         run: sh ./scripts/git-crypt-unlock.sh
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
-      - name: install node v12
+      - name: install node v16
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 16
       - name: Install node_modules
         run: yarn install
       - name: Bundle install, fastlane dependencies

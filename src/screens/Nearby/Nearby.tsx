@@ -1,5 +1,5 @@
 import {ErrorType} from '@atb/api/utils';
-import {CurrentLocationArrow} from '@atb/assets/svg/icons/places';
+import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
 import AccessibleText from '@atb/components/accessible-text';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
@@ -59,12 +59,8 @@ type RootProps = {
 };
 
 export default function NearbyScreen({navigation}: RootProps) {
-  const {
-    status,
-    location,
-    locationEnabled,
-    requestPermission,
-  } = useGeolocationState();
+  const {status, location, locationEnabled, requestPermission} =
+    useGeolocationState();
 
   const {closestLocation: currentLocation} = useReverseGeocoder(
     location?.coords ?? null,
@@ -97,9 +93,8 @@ const NearbyOverview: React.FC<Props> = ({
   hasLocationPermission,
   navigation,
 }) => {
-  const searchedFromLocation = useOnlySingleLocation<NearbyScreenProp>(
-    'location',
-  );
+  const searchedFromLocation =
+    useOnlySingleLocation<NearbyScreenProp>('location');
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
   const styles = useNearbyStyles();
 
@@ -110,13 +105,8 @@ const NearbyOverview: React.FC<Props> = ({
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
   const updatingLocation = !fromLocation && hasLocationPermission;
 
-  const {
-    state,
-    refresh,
-    loadMore,
-    setShowFavorites,
-    setSearchTime,
-  } = useDepartureData(fromLocation);
+  const {state, refresh, loadMore, setShowFavorites, setSearchTime} =
+    useDepartureData(fromLocation);
 
   const {
     data,
@@ -172,6 +162,7 @@ const NearbyOverview: React.FC<Props> = ({
         close={close}
         initialTime={searchTime}
         setSearchTime={setSearchTime}
+        allowTimeInPast={false}
       ></DepartureTimeSheet>
     ));
   };

@@ -1,16 +1,8 @@
-import {TripPattern} from '@atb/sdk';
 import client from './client';
-import {Location} from '@atb/favorites/types';
 import {AxiosRequestConfig} from 'axios';
 import {TripsQuery} from '@atb/api/types/trips';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
-
-export type TripsSearchQuery = {
-  from: Location;
-  to: Location;
-  searchDate?: string;
-  arriveBy?: boolean;
-};
+import Bugsnag from '@bugsnag/react-native';
 
 export async function tripsSearch(
   query: TripsQueryVariables,
@@ -29,10 +21,45 @@ export async function tripsSearch(
       place: query.from.place,
     },
     when: query.when,
+    arriveBy: query.arriveBy,
+    cursor: query.cursor,
+    transferPenalty: query.transferPenalty,
+    waitReluctance: query.waitReluctance,
+    walkReluctance: query.walkReluctance,
+    walkSpeed: query.walkSpeed,
   };
 
-  const response = await client.post<TripsQuery>(url, cleanQuery, {
+  const results = await post<TripsQuery>(url, cleanQuery, opts);
+
+  Bugsnag.leaveBreadcrumb('results', {
+    patterns: results.trip?.tripPatterns ?? 'none',
+  });
+
+  return results;
+}
+
+export async function singleTripSearch(
+  queryString: string | null,
+  opts?: AxiosRequestConfig,
+): Promise<TripsQuery | null> {
+  if (!queryString) {
+    return null;
+  }
+  const url = '/bff/v2/singleTrip';
+  const query = {
+    compressedQuery: queryString,
+  };
+  return await post<TripsQuery>(url, query, opts);
+}
+
+async function post<T>(
+  url: string,
+  query: any,
+  opts?: AxiosRequestConfig<any>,
+) {
+  const response = await client.post<T>(url, query, {
     ...opts,
   });
+
   return response.data;
 }

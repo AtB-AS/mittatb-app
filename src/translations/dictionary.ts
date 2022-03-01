@@ -1,5 +1,6 @@
 import {Platform} from 'react-native';
 import {translation as _} from './commons';
+import orgSpecificTranslations from './utils';
 
 const softhyphen = Platform.OS === 'ios' ? '\u00AD' : '\u200B';
 
@@ -14,6 +15,7 @@ const dictionary = {
     profile_a11y: _('Mitt ATB', 'My ATB'),
   },
   missingRealTimePrefix: _('ca. ', 'ca. '),
+  a11yMissingRealTimePrefix: _('cirka ', 'circa '),
   travel: {
     legModes: {
       bus: _('Buss', 'Bus'),
@@ -22,6 +24,7 @@ const dictionary = {
       water: _('Båt', 'Boat'),
       air: _('Fly', 'Plain'),
       foot: _('Gange', 'Walk'),
+      metro: _('T-bane', 'Metro'),
       unknown: _('Ukjent transportmiddel', 'Unknown transport'),
     },
     quay: {
@@ -56,4 +59,12 @@ const dictionary = {
     m: _('m', 'm'),
   },
 };
-export default dictionary;
+
+export default orgSpecificTranslations(dictionary, {
+  nfk: {
+    navigation: {
+      profile: _('Mitt Reis', 'My Reis'),
+      profile_a11y: _('Mitt Reis', 'My Reis'),
+    },
+  },
+});

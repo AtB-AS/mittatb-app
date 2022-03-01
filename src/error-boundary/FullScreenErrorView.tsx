@@ -1,4 +1,4 @@
-import {CrashParachute} from '@atb/assets/svg/illustrations';
+import {Crash} from '@atb/assets/svg/color/illustrations';
 import Button from '@atb/components/button';
 import ScreenHeader from '@atb/components/screen-header';
 import ThemeText from '@atb/components/text';
@@ -26,7 +26,7 @@ export default function FullScreenErrorView({
     <SafeAreaView style={styles.safearea}>
       <ScreenHeader title="" />
       <View style={styles.svgContainer}>
-        <CrashParachute width="100%" height="100%" />
+        <Crash width="100%" height="100%" />
       </View>
       <View style={styles.container}>
         <View>

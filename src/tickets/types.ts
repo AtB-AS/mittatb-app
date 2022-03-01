@@ -77,11 +77,14 @@ export enum FareContractState {
   Refunded = 4,
 }
 
-export type ActiveReservation = {
-  reservation: TicketReservation;
-  offers: ReserveOffer[];
+export type Reservation = {
+  created: Timestamp;
+  orderId: string;
+  paymentId: number;
+  transactionId: number;
   paymentType: PaymentType;
   paymentStatus?: PaymentStatus;
+  url: string;
 };
 
 export enum PaymentType {
@@ -111,6 +114,11 @@ export type PaymentResponse = {
   order_id: string;
   payment_type: string;
   status: PaymentStatus;
+};
+
+export type CancelPaymentRequest = {
+  payment_id: number;
+  transaction_id: number;
 };
 
 export type OfferPrice = {
@@ -145,6 +153,15 @@ export type ReserveOffer = {
   count: number;
 };
 
+export type ReserveOfferRequestBody = {
+  payment_redirect_url: string | undefined;
+  offers: ReserveOffer[];
+  payment_type: PaymentType;
+  store_payment: boolean | undefined;
+  recurring_payment_id: number | undefined;
+  sca_exemption: boolean;
+};
+
 export type TicketReservation = {
   order_id: string;
   payment_id: number;
@@ -169,6 +186,8 @@ export type CustomerProfile = {
   id?: string;
   surname?: string;
   travelcard?: TravelCard;
+  debug?: boolean;
+  enableMobileToken?: boolean;
 };
 
 export type TravelCard = {

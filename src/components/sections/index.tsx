@@ -10,6 +10,7 @@ export {default as GenericItem} from './generic-item';
 export {default as GenericClickableItem} from './generic-clickable-item';
 export {default as FavoriteItem} from './favorite-item';
 export {default as FavoriteDepartureItem} from './favorite-departure-item';
+export {default as ExpandableItem} from './expandable-item';
 
 // Inputs
 export {default as TimeInputItem} from './time-input';

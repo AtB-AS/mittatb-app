@@ -9,6 +9,7 @@ import android.text.TextUtils;
 
 import com.bugsnag.android.Bugsnag;
 import com.bugsnag.android.Configuration;
+import com.enturtraveller.EnturTravellerModule;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
@@ -70,6 +71,10 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
               config.setReleaseStage(bugsnagReleaseStage);
           }
           Bugsnag.start(this, config);
+          EnturTravellerModule.EnturTravellerLogger.INSTANCE.setCallback(err -> {
+              Bugsnag.notify(err);
+              return null;
+          });
       }
     } catch (Exception e) {
       e.printStackTrace();
