@@ -18,6 +18,7 @@ import {TicketModalNavigationProp, TicketModalStackParams} from '.';
 import DetailsContent from './DetailsContent';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import MessageBox from '@atb/components/message-box';
+import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 
 export type TicketDetailsRouteParams = {
   orderId: string;
@@ -84,6 +85,9 @@ export default function DetailsScreen({navigation, route}: Props) {
             type="info"
           />
         )}
+        <FullScreenFooter>
+          <></>
+        </FullScreenFooter>
       </ScrollView>
     </View>
   );
