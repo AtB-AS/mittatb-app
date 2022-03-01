@@ -65,6 +65,7 @@ jobs:
           RELEASE_NOTES: ${{ steps.get_release.outputs.body }}
           RELEASE_URL: ${{ steps.get_release.outputs.html_url }}
       - name: Distrubute to Google Play Internal Testing
+        if: matrix.org == 'nfk'
         run: |
           echo ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT}} | base64 --decode > google-play-service-account.json
           fastlane android playstore_internal
