@@ -65,7 +65,7 @@ export default function DetailsScreen({navigation, route}: Props) {
         leftButton={{type: 'close'}}
         title={t(TicketTexts.details.header.title)}
       />
-      <ScrollView style={styles.content}>
+      <ScrollView contentContainerStyle={styles.content}>
         {fc && (
           <DetailsContent
             fareContract={fc}
@@ -85,9 +85,6 @@ export default function DetailsScreen({navigation, route}: Props) {
             type="info"
           />
         )}
-        <FullScreenFooter>
-          <></>
-        </FullScreenFooter>
       </ScrollView>
     </View>
   );
@@ -100,5 +97,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   content: {
     padding: theme.spacings.medium,
+    paddingBottom: theme.spacings.xLarge,
   },
 }));
