@@ -80,5 +80,5 @@ jobs:
         if: matrix.org == 'atb'
         run: sh ./scripts/android/register-app-version.sh
         env:
-          ENTUR_CLIENT_ID: ${{ secrets.ENTUR_CLIENT_ID_PRODUCTION}}
-          ENTUR_CLIENT_SECRET: ${{ secrets.ENTUR_CLIENT_SECRET_PRODUCTION}}
+          ENTUR_CLIENT_ID: ${{ secrets.ABT_ENTUR_CLIENT_ID_PRODUCTION}}
+          ENTUR_CLIENT_SECRET: ${{ secrets.ABT_ENTUR_CLIENT_SECRET_PRODUCTION}}
