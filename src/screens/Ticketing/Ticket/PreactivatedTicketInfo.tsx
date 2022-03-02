@@ -14,7 +14,6 @@ type Props = {
   isInspectable: boolean;
   hideDetails?: boolean;
   onPressDetails?: () => void;
-  hasActiveTravelCard: boolean;
 };
 
 const PreactivatedTicketInfo: React.FC<Props> = ({
@@ -24,7 +23,6 @@ const PreactivatedTicketInfo: React.FC<Props> = ({
   isInspectable,
   hideDetails,
   onPressDetails,
-  hasActiveTravelCard,
 }) => {
   const {t} = useTranslation();
 
@@ -60,7 +58,6 @@ const PreactivatedTicketInfo: React.FC<Props> = ({
           travelRights={travelRights}
           status={validityStatus}
           isInspectable={isInspectable}
-          hasActiveTravelCard={hasActiveTravelCard}
         />
       </Sections.GenericItem>
       {!hideDetails && (

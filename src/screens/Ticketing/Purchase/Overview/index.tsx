@@ -38,8 +38,8 @@ import {screenReaderPause} from '@atb/components/accessible-text';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import TravellersSheet from '@atb/screens/Ticketing/Purchase/Travellers/TravellersSheet';
 import TravelDateSheet from '@atb/screens/Ticketing/Purchase/TravelDate/TravelDateSheet';
-import {useTicketState} from '@atb/tickets';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -55,9 +55,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 }) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const {customerProfile} = useTicketState();
+  const {travelTokens} = useMobileTokenContextState();
 
-  const hasTravelCard = !!customerProfile?.travelcard;
+  const hasTravelCard = travelTokens?.some((t) => t.type === 'travelCard');
 
   const {
     tariff_zones: tariffZones,

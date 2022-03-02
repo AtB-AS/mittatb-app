@@ -1,4 +1,3 @@
-import {VisualState} from '@entur/react-native-traveller/lib/typescript/token/types';
 import {flatten, sumBy} from 'lodash';
 import {
   CarnetTicketUsedAccess,
@@ -11,6 +10,7 @@ import {
   CarnetTicket,
   TravelRight,
 } from './types';
+import {TravelToken} from '@atb/mobile-token/types';
 
 export function isCarnetTicket(
   travelRight: TravelRight | undefined,
@@ -36,13 +36,11 @@ export function isSingleTicket(
 export function isInspectable(
   travelRight: TravelRight,
   hasActiveTravelCard: boolean,
-  visualState: VisualState | undefined,
-) {
-  return (
-    !hasActiveTravelCard &&
-    visualState !== 'NotInspectable' &&
-    (isSingleTicket(travelRight) || visualState === 'Token')
-  );
+  mobileTokenEnabled: boolean,
+  inspectableTravelToken?: TravelToken,
+): boolean {
+  if (mobileTokenEnabled) return inspectableTravelToken?.isThisDevice ?? false;
+  else return !hasActiveTravelCard && isSingleTicket(travelRight);
 }
 
 function isOrWillBeActivatedFareContract(f: FareContract): boolean {

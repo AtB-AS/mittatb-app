@@ -107,9 +107,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   return (
     <View style={styles.container}>
       {enable_recent_tickets ? (
-        <RecentTicketsScrollView
-          topElement={topMessage}
-        ></RecentTicketsScrollView>
+        <RecentTicketsScrollView topElement={topMessage} />
       ) : (
         <View style={{flex: 1, padding: theme.spacings.medium}}>
           {topMessage}
@@ -154,10 +152,8 @@ export const ActiveTickets: React.FC<Props> = () => {
     fareContracts,
     isRefreshingTickets,
     refreshTickets,
-    customerProfile,
     didPaymentFail,
   } = useTicketState();
-
   const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
     fareContracts,
   ).sort(function (a, b): number {
@@ -189,7 +185,6 @@ export const ActiveTickets: React.FC<Props> = () => {
             : TicketsTexts.activeTicketsTab.noTickets,
         )}
         now={now}
-        travelCard={customerProfile?.travelcard}
         didPaymentFail={didPaymentFail}
       />
     </View>
