@@ -19,10 +19,10 @@ const TicketsTexts = {
         ),
       },
       period: {
-        text: _('Ny periodebillett', 'New period ticket'),
+        text: _('Ny periodebillett', 'New periodic ticket'),
         a11yHint: _(
           'Aktivér for å kjøpe ny periodebillett',
-          'Activate to buy a new period ticket',
+          'Activate to buy a new periodic ticket',
         ),
       },
     },

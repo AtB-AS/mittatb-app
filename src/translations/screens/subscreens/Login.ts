@@ -16,7 +16,7 @@ const LoginTexts = {
   onboarding: {
     title: _(
       'Nå kan du kjøpe periodebilletter!',
-      'Period tickets – available now!',
+      'Periodic tickets – available now!',
     ),
     description: _(
       'Når du logger inn kan du kjøpe periodebilletter på 7, 30 eller 180 dagers varighet.',
