@@ -13,9 +13,6 @@ There are some project files where the version number must be bumped. This is a 
 Bump the version number in these files:
   - All .env-files
   - package.json
-  - ios/atb.xcodeproj/project.pbxproj
-  - ios/atbTests/Info.plist
-  - scripts/ios/upload-sourcemaps.sh
 
 Do this in a commit with message "chore: Bump to version x.xx". 
     
