@@ -5,7 +5,7 @@ const PurchaseOverviewTexts = {
   header: {
     title: {
       single: _('Enkeltbillett', 'Single ticket'),
-      period: _('Periodebillett', 'Period ticket'),
+      period: _('Periodebillett', 'Periodic ticket'),
       carnet: _('Klippekort', 'Carnet ticket'),
     },
   },
@@ -57,7 +57,7 @@ const PurchaseOverviewTexts = {
     ),
     period: _(
       'Periodebilletter i sone A kan også brukes på tog i sone A.',
-      'Period tickets in zone A can also be used on train in zone A.',
+      'Periodic tickets in zone A can also be used on train in zone A.',
     ),
   },
 };
