@@ -40,7 +40,7 @@ export default function JourneyHistory({
         {journeyHistory
           .slice(0, DEFAULT_HISTORY_LIMIT)
           .map(mapToVisibleSearchResult)
-          .map((searchResult) => (
+          .map((searchResult, idx) => (
             <TouchableOpacity
               accessible={true}
               key={searchResult.key}
@@ -57,6 +57,7 @@ export default function JourneyHistory({
               )}
               accessibilityRole="button"
               onPress={() => onSelect(searchResult.selectable)}
+              testID={'journeyHistoryItem' + idx}
             >
               <GenericItem transparent>
                 <ThemeText type="body__primary--bold">

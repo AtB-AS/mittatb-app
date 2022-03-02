@@ -300,6 +300,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           }}
           icon={ArrowRight}
           iconPosition="right"
+          testID="goToPaymentButton"
         />
       </View>
     </View>

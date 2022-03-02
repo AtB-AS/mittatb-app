@@ -15,9 +15,15 @@ type Props = {
   title?: string;
   locations: LocationSearchResult[];
   onSelect: (location: LocationSearchResult) => void;
+  testIDItemPrefix: string;
 };
 
-const LocationResults: React.FC<Props> = ({title, locations, onSelect}) => {
+const LocationResults: React.FC<Props> = ({
+  title,
+  locations,
+  onSelect,
+  testIDItemPrefix,
+}) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
   return (
@@ -28,7 +34,7 @@ const LocationResults: React.FC<Props> = ({title, locations, onSelect}) => {
         </View>
       )}
       <View>
-        {locations.map(mapToVisibleSearchResult).map((searchResult) => (
+        {locations.map(mapToVisibleSearchResult).map((searchResult, idx) => (
           <View style={styles.rowContainer} key={searchResult.key}>
             <View style={styles.locationButtonContainer}>
               <TouchableOpacity
@@ -43,6 +49,7 @@ const LocationResults: React.FC<Props> = ({title, locations, onSelect}) => {
                 hitSlop={insets.symmetric(8, 1)}
                 onPress={() => onSelect(searchResult.selectable)}
                 style={styles.locationButton}
+                testID={testIDItemPrefix + idx}
               >
                 <View style={{flexDirection: 'column'}}>
                   {searchResult.emoji ? (

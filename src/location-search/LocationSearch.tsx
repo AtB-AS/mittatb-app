@@ -210,6 +210,7 @@ export function LocationSearchContent({
             autoCorrect={false}
             autoComplete="off"
             autoFocus={!a11yContext.isScreenReaderEnabled}
+            testID="locationSearchInput"
           />
         </View>
 
@@ -248,6 +249,7 @@ export function LocationSearchContent({
               title={t(LocationSearchTexts.results.previousResults.heading)}
               locations={previousLocations}
               onSelect={onSearchSelect}
+              testIDItemPrefix="previousResultItem"
             />
           )}
           {hasResults && (
@@ -255,6 +257,7 @@ export function LocationSearchContent({
               title={t(LocationSearchTexts.results.searchResults.heading)}
               locations={filteredLocations}
               onSelect={onSearchSelect}
+              testIDItemPrefix="locationSearchItem"
             />
           )}
         </ScrollView>

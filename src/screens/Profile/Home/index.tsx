@@ -85,7 +85,10 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         rightButton={{type: 'chat'}}
       />
 
-      <ScrollView contentContainerStyle={style.scrollView}>
+      <ScrollView
+        contentContainerStyle={style.scrollView}
+        testID="profileHomeScrollView"
+      >
         <Sections.Section withPadding>
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.account.heading)}
@@ -123,12 +126,14 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                   },
                 })
               }
+              testID="loginButton"
             />
           )}
           {authenticationType === 'phone' && (
             <Sections.LinkItem
               text={t(ProfileTexts.sections.account.linkItems.logout.label)}
               onPress={signOut}
+              testID="logoutButton"
             />
           )}
           <Sections.LinkItem
@@ -136,6 +141,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               ProfileTexts.sections.account.linkItems.expiredTickets.label,
             )}
             onPress={() => navigation.navigate('ExpiredTickets')}
+            testID="expiredTicketsButton"
           />
         </Sections.Section>
 
@@ -146,6 +152,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           <Sections.LinkItem
             text={t(ProfileTexts.sections.settings.linkItems.userProfile.label)}
             onPress={() => navigation.navigate('DefaultUserProfile')}
+            testID="defaultTravellerButton"
           />
           {authenticationType === 'phone' && hasEnabledMobileToken && (
             <Sections.LinkItem
@@ -156,20 +163,24 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 ProfileTexts.sections.settings.linkItems.travelToken.flag,
               )}
               onPress={() => navigation.navigate('TravelToken')}
+              testID="travelTokenButton"
             />
           )}
           <Sections.LinkItem
             text={t(ProfileTexts.sections.settings.linkItems.appearance.label)}
             onPress={() => navigation.navigate('Appearance')}
+            testID="appearanceButton"
           />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.settings.linkItems.startScreen.label)}
             onPress={() => navigation.navigate('SelectStartScreen')}
+            testID="startScreenButton"
           />
           {enable_i18n && (
             <Sections.LinkItem
               text={t(ProfileTexts.sections.settings.linkItems.language.label)}
               onPress={() => navigation.navigate('Language')}
+              testID="languageButton"
             />
           )}
         </Sections.Section>
@@ -190,6 +201,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             mode="toggle"
             text={t(ProfileTexts.sections.newFeatures.departures)}
             checked={newDepartures}
+            testID="newDeparturesToggle"
             onPress={(newDepartures) => {
               analytics().logEvent('toggle_beta_departures', {
                 toggle: newDepartures ? 'enable' : 'disable',
@@ -204,6 +216,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             mode="toggle"
             text={t(ProfileTexts.sections.newFeatures.assistant)}
             checked={useExperimentalTripSearch}
+            testID="newAssistantToggle"
             onPress={(useExperimentalTripSearch) => {
               analytics().logEvent('toggle_beta_tripsearch', {
                 toggle: useExperimentalTripSearch ? 'enable' : 'disable',
@@ -219,6 +232,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           <Sections.LinkItem
             text={t(ProfileTexts.sections.settings.linkItems.enrollment.label)}
             onPress={() => navigation.navigate('Enrollment')}
+            testID="invitationCodeButton"
           />
         </Sections.Section>
 
@@ -233,6 +247,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 ProfileTexts.sections.favorites.linkItems.places.a11yHint,
               ),
             }}
+            testID="favoriteLocationsButton"
             onPress={() => navigation.navigate('FavoriteList')}
           />
           <Sections.LinkItem
@@ -242,6 +257,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 ProfileTexts.sections.favorites.linkItems.departures.a11yHint,
               ),
             }}
+            testID="favoriteDeparturesButton"
             onPress={() => navigation.navigate('FavoriteDepartures')}
           />
         </Sections.Section>
@@ -257,6 +273,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 ProfileTexts.sections.privacy.linkItems.privacy.a11yHint,
               ),
             }}
+            testID="privacyButton"
             onPress={() => Linking.openURL(privacy_policy_url)}
           />
           <Sections.LinkItem
@@ -266,6 +283,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 ProfileTexts.sections.privacy.linkItems.clearHistory.a11yHint,
               ),
             }}
+            testID="clearHistoryButton"
             onPress={() =>
               Alert.alert(
                 t(ProfileTexts.sections.privacy.linkItems.clearHistory.confirm),
@@ -303,22 +321,26 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               text={t(
                 ProfileTexts.sections.information.linkItems.ticketing.label,
               )}
+              testID="ticketingInfoButton"
               onPress={() => navigation.navigate('TicketingInformation')}
             />
             <Sections.LinkItem
               text={t(
                 ProfileTexts.sections.information.linkItems.payment.label,
               )}
+              testID="paymentInfoButton"
               onPress={() => navigation.navigate('PaymentInformation')}
             />
             <Sections.LinkItem
               text={t(ProfileTexts.sections.information.linkItems.terms.label)}
+              testID="termsInfoButton"
               onPress={() => navigation.navigate('TermsInformation')}
             />
             <Sections.LinkItem
               text={t(
                 ProfileTexts.sections.information.linkItems.inspection.label,
               )}
+              testID="inspectionInfoButton"
               onPress={() => navigation.navigate('TicketInspectionInformation')}
             />
           </Sections.Section>
@@ -331,10 +353,12 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             <Sections.HeaderItem text="Developer menu" />
             <Sections.LinkItem
               text="Design system"
+              testID="designSystemButton"
               onPress={() => navigation.navigate('DesignSystem')}
             />
             <Sections.LinkItem
               text="Debug"
+              testID="debugButton"
               onPress={() => navigation.navigate('DebugInfo')}
             />
           </Sections.Section>

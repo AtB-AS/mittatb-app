@@ -87,6 +87,7 @@ const WelcomeScreen = ({
             text={t(OnboardingTexts.welcome.mainButton)}
             icon={ArrowRight}
             iconPosition="right"
+            testID="nextButton"
           />
         </FullScreenFooter>
       </View>

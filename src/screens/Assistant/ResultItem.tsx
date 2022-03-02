@@ -44,6 +44,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 type ResultItemProps = {
   tripPattern: TripPattern;
   onDetailsPressed(): void;
+  testID?: string;
 };
 
 function legWithQuay(leg: Leg) {
@@ -114,6 +115,7 @@ const ResultItemHeader: React.FC<{
 const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   tripPattern,
   onDetailsPressed,
+  testID,
   ...props
 }) => {
   const styles = useThemeStyles();
@@ -129,6 +131,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       )}
       onPress={onDetailsPressed}
       accessible={true}
+      testID={testID}
     >
       <View style={styles.result} {...props} accessible={false}>
         <ResultItemHeader tripPattern={tripPattern} />

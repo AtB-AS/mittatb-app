@@ -376,6 +376,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                 )}
                 onPress={selectPaymentMethod}
                 viewContainerStyle={styles.paymentButton}
+                testID="choosePaymentOptionButton"
               />
             )}
           </View>

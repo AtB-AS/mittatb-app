@@ -108,7 +108,7 @@ const Results: React.FC<Props> = ({
   }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="assistantScrollView">
       {tripPatterns?.map((item, i) => (
         <Fragment key={String(item.id ?? i)}>
           <DayLabel
@@ -119,6 +119,7 @@ const Results: React.FC<Props> = ({
           <ResultItem
             tripPattern={item}
             onDetailsPressed={() => onDetailsPressed(item.id, tripPatterns, i)}
+            testID={'assistantSearchResult' + i}
           />
         </Fragment>
       ))}

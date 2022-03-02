@@ -290,6 +290,7 @@ const Assistant: React.FC<Props> = ({
                     : t(AssistantTexts.location.locationButton.a11yLabel.use),
                 accessibilityRole: 'button',
               }}
+              testID="searchFromButton"
             />
 
             <LocationInput
@@ -308,6 +309,7 @@ const Assistant: React.FC<Props> = ({
                   screenReaderPause,
                 accessibilityRole: 'button',
               }}
+              testID="searchToButton"
             />
           </Section>
         </View>

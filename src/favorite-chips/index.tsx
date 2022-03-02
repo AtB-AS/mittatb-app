@@ -65,6 +65,7 @@ const FavoriteChips: React.FC<Props> = ({
               accessibilityHint={chipActionHint ?? ''}
               icon={CurrentLocationArrow}
               onPress={onCurrentLocation}
+              testID="currentLocationChip"
             />
           )}
           {activeType('map') && !disableMap && (
@@ -75,6 +76,7 @@ const FavoriteChips: React.FC<Props> = ({
               onPress={onMapSelection}
               color={themeColor}
               mode="secondary"
+              testID="mapLocationChip"
             />
           )}
         </View>
@@ -107,6 +109,7 @@ const FavoriteChips: React.FC<Props> = ({
                   ? {marginRight: 0}
                   : undefined
               }
+              testID={'favoriteChip' + i}
             />
           ))}
         {activeType('add-favorite') && (
@@ -120,6 +123,7 @@ const FavoriteChips: React.FC<Props> = ({
               navigation.navigate('AddEditFavorite', {screen: 'SearchLocation'})
             }
             style={{marginRight: 0}}
+            testID={'addFavoriteButton'}
           />
         )}
       </ScrollView>

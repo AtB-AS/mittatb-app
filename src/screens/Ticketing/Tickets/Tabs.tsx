@@ -125,6 +125,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
             onPress={onBuySingleTicket}
             icon={AddTicket}
             iconPosition={'right'}
+            testID="singleTicketBuyButton"
           />
           {hasEnabledMobileToken && (
             <Button
@@ -138,6 +139,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
               viewContainerStyle={styles.buyPeriodTicketButton}
               icon={AddTicket}
               iconPosition={'right'}
+              testID="periodTicketBuyButton"
             />
           )}
         </View>
