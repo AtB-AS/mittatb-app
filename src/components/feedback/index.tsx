@@ -14,6 +14,9 @@ import Bugsnag from '@bugsnag/react-native';
 import {APP_ORG, APP_VERSION} from '@env';
 import storage from '@atb/storage';
 
+const RENDERS_BEFORE_FEEDBACK_PROMPT_ON_DEPARTURES = 3;
+const TIMES_TO_ASK_FOR_FEEDBACK_ON_DEPARTURES = 99;
+
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
   const {t} = useTranslation();
@@ -230,16 +233,15 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
   const statsForCurrentVersion = displayStats.find(
     (entry) => entry.version === APP_VERSION,
   );
+
   if (!statsForCurrentVersion) return null;
   if (statsForCurrentVersion.answered) return null;
-
-  const rendersBeforeFeedbackPrompt = 3;
-  const numberOfTimesToAskForFeedback = 3;
-
   if (
-    statsForCurrentVersion.count < rendersBeforeFeedbackPrompt ||
+    statsForCurrentVersion.count <
+      RENDERS_BEFORE_FEEDBACK_PROMPT_ON_DEPARTURES ||
     statsForCurrentVersion.count >=
-      rendersBeforeFeedbackPrompt + numberOfTimesToAskForFeedback
+      RENDERS_BEFORE_FEEDBACK_PROMPT_ON_DEPARTURES +
+        TIMES_TO_ASK_FOR_FEEDBACK_ON_DEPARTURES
   ) {
     return null;
   }
