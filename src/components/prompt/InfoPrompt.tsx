@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {FlatList, View} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
 import {useTranslation, InfoPromptTexts} from '@atb/translations';
 import Button from '@atb/components/button';
@@ -18,11 +18,14 @@ const InfoPrompt = ({variant}: InfoPromptType) => {
 
   const isBulletPointsForVariant = !!InfoPromptTexts[variant].body.bulletPoints;
 
-  const PossibleBulletPointList = isBulletPointsForVariant
-    ? InfoPromptTexts[variant].body.bulletPoints.map((bulletpoint) => (
-        <ThemeText style={styles.bulletPoints}>{t(bulletpoint)}</ThemeText>
-      ))
-    : null;
+  const PossibleBulletPointList = isBulletPointsForVariant ? (
+    <FlatList
+      data={InfoPromptTexts[variant].body.bulletPoints}
+      renderItem={({item}) => (
+        <ThemeText style={styles.bulletPoints}>{t(item)}</ThemeText>
+      )}
+    />
+  ) : null;
 
   return (
     <View style={styles.container}>
