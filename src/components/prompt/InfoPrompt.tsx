@@ -27,6 +27,7 @@ const InfoPrompt = ({variant}: InfoPromptType) => {
           <ThemeText style={styles.bulletPoints}>{t(item)}</ThemeText>
         </View>
       )}
+      scrollEnabled={false}
     />
   ) : null;
 
