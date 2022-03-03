@@ -30,6 +30,7 @@ export type UserPreferences = {
   departuresShowOnlyFavorites?: boolean;
   newDepartures?: boolean;
   useExperimentalTripSearch?: boolean;
+  showTestIds?: boolean;
   tripSearchPreferences?: TripSearchPreferences;
 };
 

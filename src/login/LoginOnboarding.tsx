@@ -72,12 +72,14 @@ export default function LoginOnboarding({
             text={t(LoginTexts.onboarding.button)}
             icon={ArrowRight}
             iconPosition="right"
+            testID="loginButton"
           />
         </View>
         <TouchableOpacity
           style={styles.laterButton}
           onPress={navigation.goBack}
           accessibilityRole="button"
+          testID="loginLaterButton"
         >
           <ThemeText
             style={styles.laterButtonText}

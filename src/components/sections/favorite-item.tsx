@@ -39,6 +39,7 @@ export default function FavoriteItem(props: FavoriteItemProps) {
       accessibilityLabel={a11yLabel + screenReaderPause}
       accessibilityRole="button"
       onPress={(e) => props.onPress(props.favorite, e)}
+      testID={props.testID}
       {...props.accessibility}
     >
       <FavoriteItemContent {...props} />

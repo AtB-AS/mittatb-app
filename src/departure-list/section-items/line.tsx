@@ -67,6 +67,7 @@ export default function LineItem({
   quay,
   accessibility,
   searchDate,
+  testID,
   ...props
 }: LineItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
@@ -102,7 +103,7 @@ export default function LineItem({
   const nextValids = group.departures.filter(isValidDeparture);
 
   return (
-    <View style={[topContainer, {padding: 0}]}>
+    <View style={[topContainer, {padding: 0}]} testID={testID}>
       <View style={[topContainer, sectionStyle.spaceBetween]}>
         <TouchableOpacity
           style={[styles.lineHeader, contentContainer]}
@@ -147,6 +148,7 @@ export default function LineItem({
             key={departure.serviceJourneyId + departure.aimedTime}
             onPress={() => onPress(i)}
             searchDate={searchDate}
+            testID={'depTime' + i}
           />
         ))}
       </ScrollView>
@@ -238,11 +240,13 @@ type DepartureTimeItemProps = {
   departure: DepartureTime;
   onPress(departure: DepartureTime): void;
   searchDate: string;
+  testID?: string;
 };
 function DepartureTimeItem({
   departure,
   onPress,
   searchDate,
+  testID,
 }: DepartureTimeItemProps) {
   const styles = useItemStyles();
   const {t, language} = useTranslation();
@@ -261,6 +265,7 @@ function DepartureTimeItem({
       textStyle={styles.departureText}
       icon={hasSituations(departure) ? Warning : undefined}
       iconPosition="right"
+      testID={testID}
     />
   );
 }

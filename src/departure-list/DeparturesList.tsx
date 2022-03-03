@@ -83,6 +83,7 @@ export default function DeparturesList({
               defaultExpanded={i === 0}
               disableCollapsing={disableCollapsing}
               searchDate={searchDate}
+              testID={'stopDeparture' + i}
             />
           ))}
           <FooterLoader isFetchingMore={isFetchingMore} />
@@ -128,6 +129,7 @@ type StopDeparturesProps = {
   defaultExpanded?: boolean;
   disableCollapsing?: boolean;
   searchDate: string;
+  testID?: string;
 };
 const StopDepartures = React.memo(function StopDepartures({
   stopPlaceGroup,
@@ -136,6 +138,7 @@ const StopDepartures = React.memo(function StopDepartures({
   defaultExpanded = false,
   disableCollapsing = false,
   searchDate,
+  testID,
 }: StopDeparturesProps) {
   const {t} = useTranslation();
   const [expanded, setExpanded] = useState(
@@ -154,7 +157,7 @@ const StopDepartures = React.memo(function StopDepartures({
   }
 
   return (
-    <View accessibilityState={{expanded}}>
+    <View accessibilityState={{expanded}} testID={testID}>
       {!disableCollapsing && (
         <ActionItem
           transparent
@@ -176,7 +179,7 @@ const StopDepartures = React.memo(function StopDepartures({
       )}
 
       {expanded &&
-        stopPlaceGroup.quays.map((quayGroup) => (
+        stopPlaceGroup.quays.map((quayGroup, i) => (
           <QuaySection
             key={quayGroup.quay.id}
             stop={stopPlaceGroup.stopPlace}
@@ -184,6 +187,7 @@ const StopDepartures = React.memo(function StopDepartures({
             currentLocation={currentLocation}
             lastUpdated={lastUpdated}
             searchDate={searchDate}
+            testID={'quaySection' + i}
           />
         ))}
     </View>

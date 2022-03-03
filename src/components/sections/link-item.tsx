@@ -34,6 +34,7 @@ export default function LinkItem({
   accessibility,
   disabled,
   textType,
+  testID,
   ...props
 }: LinkItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
@@ -53,6 +54,7 @@ export default function LinkItem({
       disabled={disabled}
       accessibilityState={{disabled}}
       style={topContainer}
+      testID={testID}
       {...accessibilityWithOverrides}
     >
       <View style={[style.spaceBetween, disabledStyle]}>

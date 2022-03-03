@@ -53,12 +53,12 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = (props) => {
   const themeColor = props.color ?? 'background_accent';
 
   const leftIcon = props.leftButton ? (
-    <HeaderButton color={themeColor} {...props.leftButton} />
+    <HeaderButton color={themeColor} {...props.leftButton} testID="lhb" />
   ) : (
     <View />
   );
   const rightIcon = props.rightButton ? (
-    <HeaderButton color={themeColor} {...props.rightButton} />
+    <HeaderButton color={themeColor} {...props.rightButton} testID="rhb" />
   ) : (
     <View />
   );

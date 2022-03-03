@@ -32,7 +32,7 @@ export default function MultipleTravellersSelection({
 
   return (
     <Sections.Section>
-      {userProfilesWithCount.map((u) => (
+      {userProfilesWithCount.map((u, i) => (
         <Sections.CounterInput
           key={u.userTypeString}
           text={getReferenceDataName(u, language)}
@@ -40,6 +40,7 @@ export default function MultipleTravellersSelection({
           addCount={() => addTraveller(u.userTypeString)}
           removeCount={() => removeTraveller(u.userTypeString)}
           type="spacious"
+          testID={'counterInput' + i}
         />
       ))}
     </Sections.Section>

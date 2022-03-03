@@ -185,7 +185,7 @@ const TicketInspectionSymbol = ({
           backgroundColor:
             preassignedFareProduct?.type === 'period' && isInspectable
               ? theme.colors.primary_1.backgroundColor
-              : 'none',
+              : undefined,
         },
         isValid &&
           !isInspectable && {

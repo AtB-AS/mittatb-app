@@ -88,8 +88,16 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
 
         {option !== 'now' && (
           <Section withBottomPadding>
-            <DateInputItem value={dateString} onChange={setDate} />
-            <TimeInputItem value={timeString} onChange={setTime} />
+            <DateInputItem
+              value={dateString}
+              onChange={setDate}
+              testID="dateInput"
+            />
+            <TimeInputItem
+              value={timeString}
+              onChange={setTime}
+              testID="timeInput"
+            />
           </Section>
         )}
 
@@ -97,6 +105,7 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
           onPress={onSelect}
           color="primary_2"
           text={t(JourneyDatePickerTexts.searchButton.text)}
+          testID="searchButton"
         ></Button>
       </ScrollView>
     </View>

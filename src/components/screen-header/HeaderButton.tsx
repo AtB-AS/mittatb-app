@@ -23,6 +23,7 @@ export type HeaderButtonProps = {
   onPress?: () => void;
   color?: ThemeColor;
   text?: string;
+  testID?: string;
 } & AccessibilityProps;
 
 export type IconButton = Omit<HeaderButtonProps, 'type'> & {
@@ -42,6 +43,7 @@ export type HeaderButtonWithoutNavigationProps = {
   text: string;
   onPress: () => void;
   color?: ThemeColor;
+  testID?: string;
 } & AccessibilityProps;
 
 export const HeaderButtonWithoutNavigation = ({
@@ -79,7 +81,7 @@ const useIconButton = (
 ): IconButton | undefined => {
   const navigation = useNavigation();
   const navigateHome = useNavigateToStartScreen();
-  const chatIcon = useChatIcon(buttonProps.color);
+  const chatIcon = useChatIcon(buttonProps.color, buttonProps.testID);
   const {t} = useTranslation();
   switch (buttonProps.type) {
     case 'back':

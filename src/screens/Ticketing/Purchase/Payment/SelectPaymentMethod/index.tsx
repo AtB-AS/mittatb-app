@@ -171,7 +171,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
         />
         <View style={{flexShrink: 100, flexGrow: 100}}>
           <ScrollView style={styles.paymentOptions}>
-            {defaultPaymentOptions.map((option) => {
+            {defaultPaymentOptions.map((option, index) => {
               return (
                 <PaymentOptionView
                   key={option.paymentType}
@@ -180,6 +180,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
                   onSelect={(val: PaymentMethod) => {
                     setSelectedOption(val);
                   }}
+                  index={index}
                 />
               );
             })}
@@ -203,7 +204,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
               </View>
             )}
 
-            {remoteOptions.map((option) => {
+            {remoteOptions.map((option, index) => {
               return (
                 <PaymentOptionView
                   key={
@@ -216,6 +217,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
                   onSelect={(val: PaymentMethod) => {
                     setSelectedOption(val);
                   }}
+                  index={index}
                 />
               );
             })}
@@ -246,6 +248,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
             disabled={!selectedOption}
             icon={ArrowRight}
             iconPosition="right"
+            testID="confirmButton"
           />
         </FullScreenFooter>
       </View>
@@ -257,14 +260,15 @@ type PaymentOptionsProps = {
   option: SavedPaymentOption;
   selected: boolean;
   onSelect: (value: PaymentMethod) => void;
+  index: number;
 };
 
 const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
   option,
   selected,
   onSelect,
+  index,
 }) => {
-  const {theme} = useTheme();
   const [save, setSave] = useState<boolean>(false);
   const {t} = useTranslation();
   const styles = useStyles();
@@ -281,31 +285,24 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
     label: string;
     hint: string;
   } {
-    let paymentTypeString =
-      option.paymentType === PaymentType.VISA
-        ? 'Visa'
-        : option.paymentType === PaymentType.MasterCard
-        ? 'MasterCard'
-        : option.paymentType === PaymentType.Vipps
-        ? 'Vipps'
-        : '';
+    let paymentTypeName = getPaymentTypeName(option.paymentType);
 
     if (option.savedType === 'normal') {
       return {
-        text: paymentTypeString,
+        text: paymentTypeName,
         label: t(
           PurchaseConfirmationTexts.paymentWithDefaultServices.a11yLabel(
-            paymentTypeString,
+            paymentTypeName,
           ),
         ),
         hint: t(PurchaseConfirmationTexts.paymentWithDefaultServices.a11Hint),
       };
     } else if (option.savedType === 'recurring') {
       return {
-        text: paymentTypeString,
+        text: paymentTypeName,
         label: t(
           PurchaseConfirmationTexts.paymentWithStoredCard.a11yLabel(
-            paymentTypeString,
+            paymentTypeName,
             option.recurringCard.masked_pan,
           ),
         ),
@@ -317,6 +314,14 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
         label: '',
         hint: '',
       };
+    }
+  }
+
+  function getPaymentTestId(option: SavedPaymentOption, index: number) {
+    if (option.savedType === 'normal') {
+      return getPaymentTypeName(option.paymentType) + 'Button';
+    } else {
+      return 'recurringPayment' + index;
     }
   }
 
@@ -365,6 +370,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
         accessibilityHint={paymentTexts.hint}
         accessibilityRole="radio"
         accessibilityState={{selected: selected}}
+        testID={getPaymentTestId(option, index)}
       >
         <View style={styles.column}>
           <View style={styles.row}>
@@ -429,6 +435,19 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
     </View>
   );
 };
+
+function getPaymentTypeName(paymentType: PaymentType) {
+  switch (paymentType) {
+    case PaymentType.VISA:
+      return 'Visa';
+    case PaymentType.MasterCard:
+      return 'MasterCard';
+    case PaymentType.Vipps:
+      return 'Vipps';
+    default:
+      return '';
+  }
+}
 
 type CheckedProps = {
   checked: boolean;

@@ -14,6 +14,7 @@ type Props = {
   isInspectable: boolean;
   hideDetails?: boolean;
   onPressDetails?: () => void;
+  testID?: string;
 };
 
 const PreactivatedTicketInfo: React.FC<Props> = ({
@@ -23,6 +24,7 @@ const PreactivatedTicketInfo: React.FC<Props> = ({
   isInspectable,
   hideDetails,
   onPressDetails,
+  testID,
 }) => {
   const {t} = useTranslation();
 
@@ -37,7 +39,7 @@ const PreactivatedTicketInfo: React.FC<Props> = ({
     fareContractState,
   );
   return (
-    <Sections.Section withBottomPadding>
+    <Sections.Section withBottomPadding testID={testID}>
       <Sections.GenericItem>
         <ValidityHeader
           status={validityStatus}
@@ -68,6 +70,7 @@ const PreactivatedTicketInfo: React.FC<Props> = ({
               : TicketTexts.detailsLink.notValid,
           )}
           onPress={onPressDetails}
+          testID="showDetailsButton"
         />
       )}
     </Sections.Section>
