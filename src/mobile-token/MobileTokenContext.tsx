@@ -125,7 +125,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
           client?.getSecureToken([PayloadAction.ticketInspection]),
         tokenStatus,
         retry: client?.retry,
-        travelTokens: undefined,
+        travelTokens: mappedTravelTokens,
         toggleTravelToken,
         updateTravelTokens,
       }}
