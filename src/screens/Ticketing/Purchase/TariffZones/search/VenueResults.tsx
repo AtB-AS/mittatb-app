@@ -31,7 +31,7 @@ const VenueResults: React.FC<Props> = ({locationsAndTariffZones, onSelect}) => {
         </ThemeText>
       </View>
       <View>
-        {locationsAndTariffZones.map(({location, tariffZone}) => (
+        {locationsAndTariffZones.map(({location, tariffZone}, index) => (
           <View style={styles.rowContainer} key={location.id}>
             <View style={styles.tariffZoneButtonContainer}>
               <TouchableOpacity
@@ -51,6 +51,7 @@ const VenueResults: React.FC<Props> = ({locationsAndTariffZones, onSelect}) => {
                 hitSlop={insets.symmetric(8, 1)}
                 onPress={() => onSelect(location)}
                 style={styles.tariffZoneButton}
+                testID={'venueResult' + index}
               >
                 <View style={{flexDirection: 'column'}}>
                   <LocationIcon

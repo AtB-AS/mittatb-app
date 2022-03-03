@@ -353,6 +353,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
               ) : undefined
             }
             highlighted={selectedZones.selectNext === 'from'}
+            testID="searchFromButton"
           />
           <ButtonInput
             label={t(TariffZonesTexts.location.destinationPicker.label)}
@@ -377,6 +378,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
               ) : undefined
             }
             highlighted={selectedZones.selectNext === 'to'}
+            testID="searchToButton"
           />
         </Section>
       </View>
@@ -398,6 +400,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
               color="primary_2"
               text={t(TariffZonesTexts.saveButton.text)}
               accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
+              testID="saveZonesButton"
             />
           </View>
         </>
@@ -483,6 +486,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
                 color="primary_2"
                 text={t(TariffZonesTexts.saveButton.text)}
                 accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
+                testID="saveZonesButton"
               />
             </View>
           </View>

@@ -19,6 +19,7 @@ export default function CounterInput({
   count,
   addCount,
   removeCount,
+  testID,
   ...props
 }: CounterInputProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
@@ -28,7 +29,7 @@ export default function CounterInput({
   const {theme} = useTheme();
   const removeButtonDisabled = count === 0;
   return (
-    <View style={[topContainer, counterStyles.countContainer]}>
+    <View style={[topContainer, counterStyles.countContainer]} testID={testID}>
       <View style={[style.spaceBetween, contentContainer]}>
         <ThemeText accessibilityLabel={`${count} ${text}`}>{text}</ThemeText>
       </View>
@@ -53,6 +54,7 @@ export default function CounterInput({
           accessibilityState={{disabled: removeButtonDisabled}}
           hitSlop={insets.all(theme.spacings.medium)}
           style={counterStyles.removeCount}
+          testID={testID + '_rem'}
         >
           <ThemeIcon
             svg={Remove}
@@ -81,6 +83,7 @@ export default function CounterInput({
           )}
           hitSlop={insets.all(8)}
           style={counterStyles.addCount}
+          testID={testID + '_add'}
         >
           <ThemeIcon svg={Add} />
         </TouchableOpacity>

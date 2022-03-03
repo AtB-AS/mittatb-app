@@ -170,10 +170,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
           setFocusOnLoad={false}
         />
         <View style={{flexShrink: 100, flexGrow: 100}}>
-          <ScrollView
-            style={styles.paymentOptions}
-            testID="paymentOptionsScrollView"
-          >
+          <ScrollView style={styles.paymentOptions}>
             {defaultPaymentOptions.map((option, index) => {
               return (
                 <PaymentOptionView
