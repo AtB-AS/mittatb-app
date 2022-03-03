@@ -113,7 +113,6 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
   const [displayStats, setDisplayStats] = useState<versionStats[]>([]);
 
   const getDisplayStatsFromStorage = async () => {
-    let count = null;
     const resetArray = [
       {
         answered: false,
@@ -121,6 +120,8 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
         version: APP_VERSION,
       },
     ];
+
+    let count = null;
 
     try {
       count = await storage.get('@ATB_feedback_display_stats');
@@ -144,7 +145,11 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
         newStats = resetArray;
       }
       setDisplayStats(newStats);
-      storage.set('@ATB_feedback_display_stats', JSON.stringify(newStats));
+      try {
+        storage.set('@ATB_feedback_display_stats', JSON.stringify(newStats));
+      } catch (err: any) {
+        Bugsnag.notify(err);
+      }
     }
   };
 
@@ -173,7 +178,11 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
     if (statsForCurrentVersion) {
       statsForCurrentVersion.answered = true;
     }
-    storage.set('@ATB_feedback_display_stats', JSON.stringify(newObject));
+    try {
+      storage.set('@ATB_feedback_display_stats', JSON.stringify(newObject));
+    } catch (err: any) {
+      Bugsnag.notify(err);
+    }
   };
 
   const submitFeedbackWithAlternatives = async () => {
