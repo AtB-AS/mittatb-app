@@ -214,18 +214,19 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
 
   return (
     <View style={styles.resultFooter}>
-      <ThemeText
-        type={'body__secondary'}
-        style={{flexShrink: 1}}
-        numberOfLines={1}
-      >
-        {t(AssistantTexts.results.resultItem.footer.fromPlace(quayName))}
-      </ThemeText>
-
-      <ThemeText>
-        {timePrefix + formatToClock(quayStartTime, language)}
-      </ThemeText>
-
+      <View style={styles.resultFooterText}>
+        <ThemeText
+          type={'body__secondary'}
+          style={styles.resultFooterText}
+          numberOfLines={1}
+        >
+          {t(AssistantTexts.results.resultItem.footer.fromPlace(quayName)) +
+            ' '}
+        </ThemeText>
+        <ThemeText type="body__secondary">
+          {timePrefix + formatToClock(quayStartTime, language)}
+        </ThemeText>
+      </View>
       <View style={styles.detailsTextWrapper}>
         <ThemeText type="body__secondary">
           {t(AssistantTexts.results.resultItem.footer.detailsLabel)}
@@ -266,6 +267,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.medium,
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  resultFooterText: {
+    flexShrink: 1,
+    flexDirection: 'row',
   },
   detailsTextWrapper: {
     flexDirection: 'row',
