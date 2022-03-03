@@ -1,6 +1,5 @@
 import {StyleSheet} from '@atb/theme';
 import {
-  isPeriodTicket,
   isPreactivatedTicket,
   isSingleTicket,
   useTicketState,
@@ -18,7 +17,7 @@ import {TicketModalNavigationProp, TicketModalStackParams} from '.';
 import DetailsContent from './DetailsContent';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import MessageBox from '@atb/components/message-box';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {getValidityStatus} from '../utils';
 
 export type TicketDetailsRouteParams = {
   orderId: string;
@@ -53,8 +52,14 @@ export default function DetailsScreen({navigation, route}: Props) {
     });
 
   const shouldShowValidTrainTicketNotice =
-    (isSingleTicket(firstTravelRight) || isPeriodTicket(firstTravelRight)) &&
+    fc &&
     isPreactivatedTicket(firstTravelRight) &&
+    getValidityStatus(
+      now,
+      firstTravelRight.startDateTime.toMillis(),
+      firstTravelRight.endDateTime.toMillis(),
+      fc.state,
+    ) === 'valid' &&
     firstTravelRight.tariffZoneRefs.every(
       (val: string) => val === 'ATB:TariffZone:1',
     );
