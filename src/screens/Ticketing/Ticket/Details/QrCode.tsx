@@ -86,6 +86,7 @@ const QrCodeSvg = ({
           style={styles.qrCode}
           accessible={true}
           accessibilityLabel={t(TicketTexts.details.qrCodeA11yLabel)}
+          testID="mobileTokenQRCode"
         >
           <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
         </View>

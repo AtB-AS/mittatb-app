@@ -94,6 +94,7 @@ const DetailsContent: React.FC<Props> = ({
           text={t(TicketTexts.details.askForReceipt)}
           onPress={onReceiptNavigate}
           accessibility={{accessibilityRole: 'button'}}
+          testID="receiptButton"
         />
         {hasEnabledMobileToken ? (
           <QrCode validityStatus={validityStatus} />

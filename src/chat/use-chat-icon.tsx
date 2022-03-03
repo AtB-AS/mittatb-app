@@ -12,6 +12,7 @@ import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 
 export default function useChatIcon(
   color?: ThemeColor,
+  testID?: string,
 ): IconButton | undefined {
   const unreadCount = useChatUnreadCount();
   const styles = useStyles();
@@ -26,7 +27,7 @@ export default function useChatIcon(
 
   return {
     icon: (
-      <View style={styles.chatContainer}>
+      <View style={styles.chatContainer} testID={testID}>
         {unreadCount ? (
           <ThemeIcon colorType={color} svg={ChatUnread} />
         ) : (

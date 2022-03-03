@@ -31,6 +31,7 @@ import transitionSpec from './transitionSpec';
 import LoginInAppStack, {
   LoginInAppStackParams,
 } from '@atb/login/in-app/LoginInAppStack';
+import useTestIds from './use-test-ids';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -49,6 +50,8 @@ const Stack = createStackNavigator<RootStackParamList>();
 const NavigationRoot = () => {
   const {isLoading, onboarded} = useAppState();
   const {theme} = useTheme();
+
+  useTestIds();
 
   const ref = useRef<NavigationContainerRef>(null);
   const {getInitialState} = useLinking(ref, {

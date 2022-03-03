@@ -51,6 +51,7 @@ export default function TicketTabs() {
           options={{
             tabBarLabel: t(TicketsTexts.buyTicketsTab.label),
             tabBarAccessibilityLabel: t(TicketsTexts.buyTicketsTab.a11yLabel),
+            tabBarTestID: 'buyTicketsTab',
           }}
         />
         <Tab.Screen
@@ -61,6 +62,7 @@ export default function TicketTabs() {
             tabBarAccessibilityLabel: t(
               TicketsTexts.activeTicketsTab.a11yLabel,
             ),
+            tabBarTestID: 'validTicketsTab',
           }}
         />
       </Tab.Navigator>

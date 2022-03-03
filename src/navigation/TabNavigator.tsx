@@ -69,6 +69,7 @@ const NavigationRoot = () => {
           t(dictionary.navigation.assistant),
           AssistantIcon,
           lineHeight,
+          'assistantTab',
         )}
       />
       <Tab.Screen
@@ -79,6 +80,7 @@ const NavigationRoot = () => {
           t(dictionary.navigation.nearby),
           Nearby,
           lineHeight,
+          'departuresTab',
         )}
       />
       <Tab.Screen
@@ -89,6 +91,7 @@ const NavigationRoot = () => {
           t(dictionary.navigation.ticketing),
           Tickets,
           lineHeight,
+          'ticketsTab',
         )}
       />
       <Tab.Screen
@@ -99,6 +102,7 @@ const NavigationRoot = () => {
           t(dictionary.navigation.profile_a11y),
           Profile,
           lineHeight,
+          'profileTab',
         )}
       />
     </Tab.Navigator>
@@ -118,6 +122,7 @@ type TabSettings = {
     color: string;
     size: number;
   }): JSX.Element;
+  testID?: string;
 };
 
 function tabSettings(
@@ -125,6 +130,7 @@ function tabSettings(
   tabBarA11yLabel: string,
   Icon: (svg: SvgProps) => JSX.Element,
   lineHeight: number,
+  testID: string,
 ): TabSettings {
   return {
     tabBarLabel: ({color}) => (
@@ -132,6 +138,7 @@ function tabSettings(
         type="body__secondary"
         style={{color, textAlign: 'center', lineHeight}}
         accessibilityLabel={tabBarA11yLabel}
+        testID={testID}
       >
         {tabBarLabel}
       </ThemeText>

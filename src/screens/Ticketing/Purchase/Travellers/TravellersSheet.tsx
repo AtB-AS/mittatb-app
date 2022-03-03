@@ -45,6 +45,7 @@ const TravellersSheet = forwardRef<ScrollView, Props>(
             type: 'cancel',
             onPress: close,
             text: t(ScreenHeaderTexts.headerButton.cancel.text),
+            testID: 'cancelButton',
           }}
           color={'background_2'}
           setFocusOnLoad={false}
@@ -99,6 +100,7 @@ const TravellersSheet = forwardRef<ScrollView, Props>(
               save(userCountState.userProfilesWithCount);
               close();
             }}
+            testID="saveTravellersButton"
           />
         </FullScreenFooter>
       </BottomSheetContainer>

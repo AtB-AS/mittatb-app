@@ -142,11 +142,13 @@ export default function ConfirmCode({
                   icon={ArrowRight}
                   iconPosition="right"
                   style={styles.submitButton}
+                  testID="submitButton"
                 />
                 <TouchableOpacity
                   style={styles.resendButton}
                   onPress={onResendCode}
                   accessibilityRole="button"
+                  testID="resendCodeButton"
                 >
                   <ThemeText
                     style={styles.resendButtonText}

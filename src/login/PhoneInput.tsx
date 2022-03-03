@@ -153,6 +153,7 @@ export default function PhoneInput({
                 disabled={!isValidPhoneNumber(phoneNumber)}
                 icon={ArrowRight}
                 iconPosition="right"
+                testID="sendCodeButton"
               />
             )}
           </View>

@@ -204,6 +204,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
                 screenReaderPause,
               accessibilityHint: t(PurchaseOverviewTexts.product.a11yHint),
             }}
+            testID="selectProductButton"
           />
           <Sections.LinkItem
             text={createTravellersText(
@@ -226,6 +227,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
                 ) + screenReaderPause,
               accessibilityHint: t(PurchaseOverviewTexts.travellers.a11yHint),
             }}
+            testID="selectTravellersButton"
           />
           <Sections.LinkItem
             text={createTravelDateText(t, language, travelDate)}
@@ -238,6 +240,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
                 screenReaderPause,
               accessibilityHint: t(PurchaseOverviewTexts.travelDate.a11yHint),
             }}
+            testID="selectStartTimeButton"
           />
           <Sections.LinkItem
             text={tariffZonesSummary(fromTariffZone, toTariffZone, language, t)}
@@ -254,12 +257,17 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
                 screenReaderPause,
               accessibilityHint: t(PurchaseOverviewTexts.tariffZones.a11yHint),
             }}
+            testID="selectZonesButton"
           />
           <Sections.GenericItem>
             {isSearchingOffer ? (
               <ActivityIndicator style={styles.totalSection} />
             ) : (
-              <ThemeText style={styles.totalSection} type="body__primary--bold">
+              <ThemeText
+                style={styles.totalSection}
+                type="body__primary--bold"
+                testID="offerTotalPriceText"
+              >
                 {t(PurchaseOverviewTexts.totalPrice(totalPrice))}
               </ThemeText>
             )}
@@ -300,6 +308,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           }}
           icon={ArrowRight}
           iconPosition="right"
+          testID="goToPaymentButton"
         />
       </View>
     </View>

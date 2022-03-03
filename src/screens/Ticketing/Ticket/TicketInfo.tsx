@@ -100,6 +100,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
     userProfilesWithCount,
     isInspectable,
     omitUserProfileCount,
+    status,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -149,14 +150,16 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
           {tariffZoneSummary}
         </ThemeText>
       )}
-      {isInspectable === false && (
-        <View style={styles.notInspectableWarning}>
-          <ThemeIcon svg={Warning} style={styles.notInspectableWarningIcon} />
-          <ThemeText isMarkdown={true}>
-            {t(TicketTexts.ticketInfo.notInspectableWarning)}
-          </ThemeText>
-        </View>
-      )}
+      {isInspectable === false &&
+        status !== 'expired' &&
+        status !== 'refunded' && (
+          <View style={styles.notInspectableWarning}>
+            <ThemeIcon svg={Warning} style={styles.notInspectableWarningIcon} />
+            <ThemeText isMarkdown={true}>
+              {t(TicketTexts.ticketInfo.notInspectableWarning)}
+            </ThemeText>
+          </View>
+        )}
     </View>
   );
 };
@@ -185,7 +188,7 @@ const TicketInspectionSymbol = ({
           backgroundColor:
             preassignedFareProduct?.type === 'period' && isInspectable
               ? theme.colors.primary_1.backgroundColor
-              : 'none',
+              : undefined,
         },
         isValid &&
           !isInspectable && {

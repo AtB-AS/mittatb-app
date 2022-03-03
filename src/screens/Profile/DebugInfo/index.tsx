@@ -58,7 +58,7 @@ export default function DebugInfo() {
 
   const {
     setPreference,
-    preferences: {tripSearchPreferences},
+    preferences: {tripSearchPreferences, showTestIds},
   } = usePreferences();
 
   const tripSearchDefaults = {
@@ -78,6 +78,14 @@ export default function DebugInfo() {
 
       <ScrollView>
         <Sections.Section withPadding withTopPadding>
+          <Sections.ActionItem
+            mode="toggle"
+            text="Toggle test-ID"
+            checked={showTestIds}
+            onPress={(showTestIds) => {
+              setPreference({showTestIds});
+            }}
+          />
           <Sections.LinkItem
             text="Restart onboarding"
             onPress={() => {
