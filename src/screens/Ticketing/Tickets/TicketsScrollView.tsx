@@ -33,7 +33,7 @@ type Props = {
   now: number;
   travelCard?: TravelCard;
   didPaymentFail?: boolean;
-  showMobileTokenInfo?: boolean;
+  showTokenInfo?: boolean;
 };
 
 const TicketsScrollView: React.FC<Props> = ({
@@ -45,7 +45,7 @@ const TicketsScrollView: React.FC<Props> = ({
   now,
   travelCard,
   didPaymentFail = false,
-  showMobileTokenInfo,
+  showTokenInfo,
 }) => {
   const {theme} = useTheme();
   const styles = useStyles();
@@ -67,11 +67,15 @@ const TicketsScrollView: React.FC<Props> = ({
           />
         }
       >
-        {hasEnabledMobileToken && showMobileTokenInfo ? (
-          <TravelTokenBox showIfThisDevice={false} showHowToChangeHint={true} />
-        ) : hasActiveTravelCard ? (
-          <TravelCardInformation travelCard={travelCard} />
-        ) : null}
+        {showTokenInfo &&
+          (hasEnabledMobileToken ? (
+            <TravelTokenBox
+              showIfThisDevice={false}
+              showHowToChangeHint={true}
+            />
+          ) : hasActiveTravelCard ? (
+            <TravelCardInformation travelCard={travelCard} />
+          ) : null)}
         {didPaymentFail && (
           <MessageBox
             containerStyle={styles.messageBox}
