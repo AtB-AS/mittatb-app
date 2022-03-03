@@ -43,7 +43,7 @@ describe('Onboarding', () => {
     await element(by.id('locationSearchItem0')).tap();
 
     await element(
-      by.type('RCTScrollView').withDescendant(by.id('assistantScrollView')),
+      by.type('RCTScrollView').withDescendant(by.id('assistantContentView')),
     ).scrollTo('bottom');
   });
 });

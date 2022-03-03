@@ -26,7 +26,7 @@ export const setTestIdPrototypes = () => {
     overrideRenderWithToolTip(TouchableWithoutFeedback, fragmentWrapper),
     overrideRenderWithToolTip(View, viewWrapper),
     overrideRenderWithToolTip(ScrollView, viewWrapper),
-    overrideRenderWithToolTip(Switch, viewWrapper),
+    overrideRenderWithToolTip(Switch, fragmentWrapper),
     overrideRenderWithToolTip(TextInput, fragmentWrapper),
     overrideRenderWithToolTip(Text, fragmentWrapper),
   );

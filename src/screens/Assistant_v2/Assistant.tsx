@@ -424,6 +424,7 @@ const Assistant: React.FC<Props> = ({
         color: themeColor,
         onPress: resetView,
         accessibilityLabel: t(AssistantTexts.header.accessibility.logo),
+        testID: 'lhb',
       }}
       onFullscreenTransitionEnd={(fullHeight) => {
         if (fullHeight) {

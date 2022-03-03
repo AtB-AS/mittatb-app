@@ -349,6 +349,7 @@ const Assistant: React.FC<Props> = ({
               accessibilityHint={t(AssistantTexts.dateInput.a11yHint)}
               color="primary_2"
               onPress={onSearchTimePress}
+              testID="datePickerButton"
             />
           </View>
         </FadeBetween>
@@ -467,6 +468,7 @@ const Assistant: React.FC<Props> = ({
         color: themeColor,
         onPress: resetView,
         accessibilityLabel: t(AssistantTexts.header.accessibility.logo),
+        testID: 'lhb',
       }}
       onFullscreenTransitionEnd={(fullHeight) => {
         if (fullHeight) {
