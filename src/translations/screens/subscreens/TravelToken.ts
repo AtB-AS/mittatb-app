@@ -38,20 +38,30 @@ const SelectTravelTokenTexts = {
       },
     ],
     errorMessages: {
+      tokensNotLoadedTitle: _(
+        'Klarer ikke hente informasjon om mobil / t:kort',
+        '', // TODO
+      ),
       tokensNotLoaded: _(
-        'Vi får ikke hentet ut informasjon om enten t:kortet eller mobilen din. Sjekk at du har tilgang på nett der du er.',
+        'Billetter må brukes på enten et t:kort eller en mobil, men akkurat nå klarer vi ikke finne ut hvor den er i bruk. Sjekk at du har tilgang på nett der du er.',
+        '', // TODO
+      ),
+      emptyTokensTitle: _(
+        'Vi finner ingen t:kort eller mobiler tilknyttet profilen din',
         '', // TODO
       ),
       emptyTokens: _(
-        'Vi finner ingen t:kort eller mobiler tilknyttet profilen din. Sjekk at du har tilgang på nett.' +
-          '\n\n' +
-          'Hvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.' +
+        'Sjekk at du har tilgang på nett. Hvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.' +
           '\n\n' +
           'Om problemet vedvarer kan du ta kontakt med AtB kundesenter.',
         '', // TODO
       ),
+      noInspectableTokenTitle: _(
+        'Velg hvor du vil bruke billettene dine',
+        '', // TODO
+      ),
       noInspectableToken: _(
-        'Du har ikke valgt å bruke billett på enten t:kort eller mobil. Gå til *Bytt mellom mobil / t:kort* for å velge.',
+        'Billetter må brukes på enten et t:kort eller en mobil, og det ser ikke ut som du har valgt en av dem. Gå til Min profil > Bytt mellom mobil / t:kort for å velge.',
         '', // TODO
       ),
     },

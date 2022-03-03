@@ -22,6 +22,7 @@ import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import {AddTicket, InvalidTicket} from '@atb/assets/svg/mono-icons/ticketing';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {Warning} from '@atb/assets/svg/color/situations';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
@@ -104,6 +105,8 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
+  const {travelTokens} = useMobileTokenContextState();
+  const inspectableToken = travelTokens?.find((t) => t.inspectable);
 
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)
@@ -312,7 +315,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     aspectRatio: 1,
     padding: theme.spacings.small,
   },
-  notInspectableWarning: {
+  tokenInfo: {
     flexDirection: 'row',
     paddingVertical: theme.spacings.small,
   },

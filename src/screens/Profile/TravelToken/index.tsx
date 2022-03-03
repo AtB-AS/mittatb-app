@@ -13,7 +13,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {ProfileStackParams} from '..';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
-import TravelTokenBox from '@atb/travel-token-box';
+import TravelTokenInfo from '@atb/travel-token-box';
 import MessageBox from '@atb/components/message-box';
 import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
 
@@ -42,8 +42,7 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
         leftButton={{type: 'back'}}
       />
       <ScrollView style={styles.scrollView}>
-        <PotentialErrorMessages />
-        <TravelTokenBox showIfThisDevice={true} />
+        <TravelTokenInfo showIfThisDevice={true} />
         <ChangeTokenButton
           onPress={() => navigation.navigate('SelectTravelToken')}
         />
@@ -52,51 +51,6 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
     </View>
   );
 }
-
-const PotentialErrorMessages = () => {
-  const {travelTokens, updateTravelTokens} = useMobileTokenContextState();
-  const {t} = useTranslation();
-  const styles = useStyles();
-
-  if (!travelTokens) {
-    return (
-      <MessageBox
-        type={'warning'}
-        message={t(TravelTokenTexts.travelToken.errorMessages.tokensNotLoaded)}
-        containerStyle={styles.errorMessage}
-        onPress={updateTravelTokens}
-      />
-    );
-  }
-
-  if (!travelTokens.length) {
-    return (
-      <MessageBox
-        type={'warning'}
-        message={t(TravelTokenTexts.travelToken.errorMessages.emptyTokens)}
-        containerStyle={styles.errorMessage}
-        isMarkdown={true}
-      />
-    );
-  }
-
-  const inspectableToken = travelTokens?.find((t) => t.inspectable);
-
-  if (!inspectableToken) {
-    return (
-      <MessageBox
-        type={'warning'}
-        message={t(
-          TravelTokenTexts.travelToken.errorMessages.noInspectableToken,
-        )}
-        containerStyle={styles.errorMessage}
-        isMarkdown={true}
-      />
-    );
-  }
-
-  return null;
-};
 
 const ChangeTokenButton = ({onPress}: {onPress: () => void}) => {
   const {t} = useTranslation();

@@ -19,7 +19,7 @@ import SimpleTicket from '../Ticket';
 import TicketReservation from './TicketReservation';
 import TravelCardInformation from './TravelCardInformation';
 import MessageBox from '@atb/components/message-box';
-import TravelTokenBox from '@atb/travel-token-box';
+import TravelTokenInfo from '@atb/travel-token-box';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
@@ -66,7 +66,10 @@ const TicketsScrollView: React.FC<Props> = ({
         }
       >
         {hasEnabledMobileToken ? (
-          <TravelTokenBox showIfThisDevice={false} showHowToChangeHint={true} />
+          <TravelTokenInfo
+            showIfThisDevice={false}
+            showHowToChangeHint={true}
+          />
         ) : hasActiveTravelCard ? (
           <TravelCardInformation travelCard={travelCard} />
         ) : null}
