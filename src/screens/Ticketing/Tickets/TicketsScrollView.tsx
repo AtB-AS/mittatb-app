@@ -85,7 +85,7 @@ const TicketsScrollView: React.FC<Props> = ({
         {reservations?.map((res) => (
           <TicketReservation key={res.orderId} reservation={res} />
         ))}
-        {fareContracts?.map((fc) => (
+        {fareContracts?.map((fc, index) => (
           <ErrorBoundary
             key={fc.orderId}
             message={t(TicketsTexts.scrollView.errorLoadingTicket(fc.orderId))}
@@ -100,6 +100,7 @@ const TicketsScrollView: React.FC<Props> = ({
                   params: {orderId: fc.orderId},
                 })
               }
+              testID={'ticket' + index}
             />
           </ErrorBoundary>
         ))}

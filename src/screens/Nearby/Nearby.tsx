@@ -256,6 +256,7 @@ const NearbyOverview: React.FC<Props> = ({
             mode="toggle"
             checked={showOnlyFavorites}
             onPress={toggleShowFavorites}
+            testID="showOnlyFavoritesButton"
           />
         </View>
       )}
