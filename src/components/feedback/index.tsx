@@ -244,7 +244,7 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
     return null;
   }
 
-  if (quayListData || tripPattern) {
+  if (quayListData || tripPattern)
     return (
       <View style={styles.container}>
         <GoodOrBadQuestion
@@ -274,7 +274,6 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
         )}
       </View>
     );
-  }
 
   return null;
 };
