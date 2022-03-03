@@ -48,6 +48,7 @@ const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
                 hitSlop={insets.symmetric(8, 1)}
                 onPress={() => onSelect(tariffZone)}
                 style={styles.tariffZoneButton}
+                testID={'tariffZone' + tariffZone.name.value + 'Button'}
               >
                 <View style={{flexDirection: 'column'}}>
                   <ThemeIcon svg={MapPointPin} width={20} />

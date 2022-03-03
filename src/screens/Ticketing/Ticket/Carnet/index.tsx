@@ -25,6 +25,7 @@ type Props = {
   travelRights: CarnetTicket[];
   now: number;
   isInspectable: boolean;
+  testID?: string;
 };
 
 const CarnetTicketInfo: React.FC<Props> = ({
@@ -32,6 +33,7 @@ const CarnetTicketInfo: React.FC<Props> = ({
   travelRights,
   now,
   isInspectable,
+  testID,
 }) => {
   const styles = useStyles();
   const {theme} = useTheme();
@@ -55,7 +57,7 @@ const CarnetTicketInfo: React.FC<Props> = ({
   );
 
   return (
-    <Sections.Section withBottomPadding>
+    <Sections.Section withBottomPadding testID={testID}>
       <Sections.GenericItem>
         {fareContractValidityStatus !== 'valid' ? (
           <ValidityHeader

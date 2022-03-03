@@ -188,6 +188,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
                 initialLocation: location,
               })
             }
+            testID="locationSearchButton"
           />
         </Sections.Section>
 
@@ -200,6 +201,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
             autoCapitalize="sentences"
             accessibilityHint={t(AddEditFavoriteTexts.fields.name.a11yHint)}
             placeholder={t(AddEditFavoriteTexts.fields.name.placeholder)}
+            testID="nameInput"
           />
         </Sections.Section>
 
@@ -218,6 +220,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
                 <ThemeText type="body__primary">{emoji}</ThemeText>
               )
             }
+            testID="iconButton"
           />
         </Sections.Section>
       </ScrollView>
@@ -231,6 +234,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
               icon={SvgDelete}
               iconPosition="right"
               text={t(AddEditFavoriteTexts.delete.label)}
+              testID="deleteButton"
             />
           )}
           <Button
@@ -239,6 +243,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
             icon={SvgConfirm}
             iconPosition="right"
             text={t(AddEditFavoriteTexts.save.label)}
+            testID="saveButton"
           />
         </ButtonGroup>
       </FullScreenFooter>

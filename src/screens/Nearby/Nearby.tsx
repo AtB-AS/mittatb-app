@@ -227,7 +227,7 @@ const NearbyOverview: React.FC<Props> = ({
       }
       headerTitle={t(NearbyTexts.header.title)}
       useScroll={activateScroll}
-      leftButton={{type: 'home', color: themeColor}}
+      leftButton={{type: 'home', color: themeColor, testID: 'lhb'}}
       alternativeTitleComponent={
         <AccessibleText
           prefix={t(NearbyTexts.header.altTitle.a11yPrefix)}
@@ -256,6 +256,7 @@ const NearbyOverview: React.FC<Props> = ({
             mode="toggle"
             checked={showOnlyFavorites}
             onPress={toggleShowFavorites}
+            testID="showOnlyFavoritesButton"
           />
         </View>
       )}
@@ -316,6 +317,7 @@ const Header = React.memo(function Header({
             ),
             accessibilityRole: 'button',
           }}
+          testID="searchFromButton"
         />
       </Section>
       <View style={styles.paddedContainer} key="dateInput">
@@ -328,6 +330,7 @@ const Header = React.memo(function Header({
           onPress={onNowPress}
           viewContainerStyle={styles.dateInputButtonContainer}
           style={styles.dateInputButton}
+          testID="searchTimeNowButton"
         />
         <Button
           mode={searchTime.option == 'now' ? 'tertiary' : 'primary'}
@@ -342,6 +345,7 @@ const Header = React.memo(function Header({
           onPress={onLaterTimePress}
           viewContainerStyle={styles.dateInputButtonContainer}
           style={styles.dateInputButton}
+          testID="searchTimeLaterButton"
         />
       </View>
     </>

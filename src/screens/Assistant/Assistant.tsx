@@ -290,6 +290,7 @@ const Assistant: React.FC<Props> = ({
                     : t(AssistantTexts.location.locationButton.a11yLabel.use),
                 accessibilityRole: 'button',
               }}
+              testID="searchFromButton"
             />
 
             <LocationInput
@@ -308,6 +309,7 @@ const Assistant: React.FC<Props> = ({
                   screenReaderPause,
                 accessibilityRole: 'button',
               }}
+              testID="searchToButton"
             />
           </Section>
         </View>
@@ -347,6 +349,7 @@ const Assistant: React.FC<Props> = ({
               accessibilityHint={t(AssistantTexts.dateInput.a11yHint)}
               color="primary_2"
               onPress={onSearchTimePress}
+              testID="datePickerButton"
             />
           </View>
         </FadeBetween>
@@ -465,6 +468,7 @@ const Assistant: React.FC<Props> = ({
         color: themeColor,
         onPress: resetView,
         accessibilityLabel: t(AssistantTexts.header.accessibility.logo),
+        testID: 'lhb',
       }}
       onFullscreenTransitionEnd={(fullHeight) => {
         if (fullHeight) {

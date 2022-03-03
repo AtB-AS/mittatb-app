@@ -45,6 +45,7 @@ const ProductSheet = forwardRef<ScrollView, Props>(
             type: 'cancel',
             onPress: close,
             text: t(ScreenHeaderTexts.headerButton.cancel.text),
+            testID: 'cancelButton',
           }}
           color={'background_2'}
           setFocusOnLoad={false}
@@ -70,6 +71,7 @@ const ProductSheet = forwardRef<ScrollView, Props>(
               save(selectedProduct);
               close();
             }}
+            testID="saveTicketTypeButton"
           />
         </FullScreenFooter>
       </BottomSheetContainer>

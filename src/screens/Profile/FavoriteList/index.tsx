@@ -59,7 +59,7 @@ export default function FavoriteList({navigation}: ProfileScreenProps) {
         )}
 
         <Sections.Section withTopPadding withPadding>
-          {items.map((favorite) => (
+          {items.map((favorite, i) => (
             <Sections.FavoriteItem
               key={favorite.name + favorite.location.id}
               favorite={favorite}
@@ -67,6 +67,7 @@ export default function FavoriteList({navigation}: ProfileScreenProps) {
                 accessibilityHint: t(FavoriteListTexts.favoriteItem.a11yHint),
               }}
               onPress={navigateToEdit}
+              testID={'favorite' + i}
             />
           ))}
         </Sections.Section>
@@ -77,12 +78,14 @@ export default function FavoriteList({navigation}: ProfileScreenProps) {
               text={t(FavoriteListTexts.buttons.changeOrder)}
               onPress={onSortClick}
               icon={<ThemeIcon svg={SvgReorder} />}
+              testID="changeOrderButton"
             />
           )}
           <Sections.LinkItem
             text={t(FavoriteListTexts.buttons.addFavorite)}
             onPress={onAddButtonClick}
             icon={<ThemeIcon svg={Add} />}
+            testID="addFavoriteButton"
           />
         </Sections.Section>
       </ScrollView>
