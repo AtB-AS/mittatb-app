@@ -22,7 +22,10 @@ const InfoPrompt = ({variant}: InfoPromptType) => {
     <FlatList
       data={InfoPromptTexts[variant].body.bulletPoints}
       renderItem={({item}) => (
-        <ThemeText style={styles.bulletPoints}>{t(item)}</ThemeText>
+        <View style={styles.listItemContainer}>
+          <ThemeText>{'\u2022'}</ThemeText>
+          <ThemeText style={styles.bulletPoints}>{t(item)}</ThemeText>
+        </View>
       )}
     />
   ) : null;
@@ -56,9 +59,14 @@ const usePromptStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     marginBottom: theme.spacings.xLarge,
     padding: theme.spacings.xLarge,
   },
+  listItemContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginLeft: theme.spacings.small,
+    marginBottom: theme.spacings.small,
+  },
   bulletPoints: {
-    paddingLeft: theme.spacings.large,
-    marginBottom: theme.spacings.xSmall,
+    paddingLeft: theme.spacings.small,
   },
   marginTop: {
     marginTop: theme.spacings.medium,
