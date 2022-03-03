@@ -119,7 +119,8 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   );
 
   const shouldShowValidTrainTicketNotice =
-    preassignedFareProduct.type === 'single' &&
+    (preassignedFareProduct.type === 'single' ||
+      preassignedFareProduct.type === 'period') &&
     fromTariffZone.id === 'ATB:TariffZone:1' &&
     toTariffZone.id === 'ATB:TariffZone:1';
 
@@ -286,7 +287,11 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
       {shouldShowValidTrainTicketNotice && (
         <MessageBox
           containerStyle={styles.warning}
-          message={t(PurchaseOverviewTexts.samarbeidsbillettenInfo)}
+          message={
+            preassignedFareProduct.type === 'single'
+              ? t(PurchaseOverviewTexts.samarbeidsbillettenInfo.single)
+              : t(PurchaseOverviewTexts.samarbeidsbillettenInfo.period)
+          }
           type="info"
         />
       )}
