@@ -186,6 +186,7 @@ export const ActiveTickets: React.FC<Props> = () => {
         )}
         now={now}
         didPaymentFail={didPaymentFail}
+        showMobileTokenInfo={true}
       />
     </View>
   );
