@@ -11,7 +11,10 @@ import GoodOrBadButton from './GoodOrBadButton';
 import {RenderQuestion} from './RenderQuestions';
 import firestore from '@react-native-firebase/firestore';
 import Bugsnag from '@bugsnag/react-native';
-import {APP_ORG, APP_VERSION} from '@env';
+import {APP_ORG} from '@env';
+import storage from '@atb/storage';
+
+const APP_VERSION = '1.17';
 
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
@@ -91,6 +94,12 @@ type FeedbackProps = {
   isEmptyResult?: boolean;
 };
 
+type versionStats = {
+  answered: boolean;
+  count: number;
+  version: string;
+};
+
 export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
   const styles = useFeedbackStyles();
   const {t} = useTranslation();
@@ -103,6 +112,35 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
   const [selectedAlternativeIds, setSelectedAlternativeIds] = useState<
     number[]
   >([]);
+  const [displayStats, setDisplayStats] = useState<versionStats[]>([]);
+
+  const getDisplayStatsFromStorage = async () => {
+    const count = await storage.get('@ATB_feedback_display_stats');
+    if (typeof count === 'string') {
+      const newStats = JSON.parse(count);
+      const statsForCurrentVersion = newStats.find(
+        (entry: versionStats) => entry.version === APP_VERSION,
+      );
+
+      if (statsForCurrentVersion) statsForCurrentVersion.count++;
+      setDisplayStats(newStats);
+      storage.set('@ATB_feedback_display_stats', JSON.stringify(newStats));
+    } else {
+      const newStats = [
+        {
+          version: APP_VERSION,
+          answered: false,
+          count: 0,
+        },
+      ];
+      setDisplayStats(newStats);
+      storage.set('@ATB_feedback_display_stats', JSON.stringify(newStats));
+    }
+  };
+
+  useEffect(() => {
+    getDisplayStatsFromStorage();
+  }, []);
 
   const toggleSelectedAlternativeId = useCallback(
     (alternativeId: number) => {
@@ -116,6 +154,17 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
     },
     [selectedAlternativeIds],
   );
+
+  const setFeedbackAnswered = () => {
+    const newObject = [...displayStats];
+    const statsForCurrentVersion = newObject.find(
+      (entry) => entry.version === APP_VERSION,
+    );
+    if (statsForCurrentVersion) {
+      statsForCurrentVersion.answered = true;
+    }
+    storage.set('@ATB_feedback_display_stats', JSON.stringify(newObject));
+  };
 
   const submitFeedbackWithAlternatives = async () => {
     try {
@@ -144,6 +193,7 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
       Bugsnag.notify(err);
     } finally {
       setSubmitted(true);
+      setFeedbackAnswered();
     }
   };
 
@@ -155,9 +205,25 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
   }, [tripPattern]);
 
   if (!category) return null;
+
+  if (!displayStats || displayStats.length < 1) return null;
+
+  console.log('currentstats', displayStats);
+
+  const statsForCurrentVersion = displayStats.find(
+    (entry) => entry.version === APP_VERSION,
+  );
+
+  if (!statsForCurrentVersion) return null;
+  if (statsForCurrentVersion.answered) return null;
+  // Do not show Feedback if departures haven't been used or if user has been prompted three times already
+  if (statsForCurrentVersion.count < 3 && statsForCurrentVersion.count > 7) {
+    return null;
+  }
+
   if (submitted) return <SubmittedComponent />;
 
-  if (quayListData || tripPattern)
+  if (quayListData || tripPattern) {
     return (
       <View style={styles.container}>
         <GoodOrBadQuestion
@@ -187,6 +253,7 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
         )}
       </View>
     );
+  }
 
   return null;
 };
