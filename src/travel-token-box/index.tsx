@@ -92,16 +92,16 @@ const TravelCardTitle = ({
           >
             {t(TravelTokenBoxTexts.tcard.title)}
           </ThemeText>
-          <ThemeText type="heading__title" color="primary_2">
+          <ThemeText color="primary_2" style={styles.transparent}>
             {' XXXX XX'}
           </ThemeText>
           <ThemeText type="heading__title" color="primary_2">
-            {inspectableToken.travelCardId?.substr(0, 2) +
+            {inspectableToken.travelCardId?.substring(0, 2) +
               ' ' +
-              inspectableToken.travelCardId?.substr(2)}
+              inspectableToken.travelCardId?.substring(2)}
           </ThemeText>
-          <ThemeText type="heading__title" color="primary_2">
-            {' X'}
+          <ThemeText color="primary_2" style={styles.transparent}>
+            {'X'}
           </ThemeText>
         </View>
       );
@@ -137,5 +137,8 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   howToChange: {
     marginTop: theme.spacings.xLarge,
+  },
+  transparent: {
+    opacity: 0.6,
   },
 }));
