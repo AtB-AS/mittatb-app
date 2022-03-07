@@ -14,7 +14,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {APP_ORG, APP_VERSION} from '@env';
 import storage from '@atb/storage';
 
-const WHITELIST_ARRAY = [2, 4, 8, 24, 48, 96, 254];
+const WHITELIST_ARRAY = [2, 8, 24, 96, 255];
 
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
@@ -236,11 +236,20 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
   );
 
   if (!statsForCurrentVersion) return null;
-  if (statsForCurrentVersion.answered) return null;
 
   if (displayCountType === 'whitelist') {
-    if (!WHITELIST_ARRAY.includes(statsForCurrentVersion.count + 1))
+    if (!WHITELIST_ARRAY.includes(statsForCurrentVersion.count + 1)) {
       return null;
+    }
+    if (
+      statsForCurrentVersion.answered &&
+      statsForCurrentVersion.count !== WHITELIST_ARRAY[2]
+    )
+      return null;
+  }
+
+  if (displayCountType === 'always') {
+    if (statsForCurrentVersion.answered) return null;
   }
 
   if (quayListData || tripPattern)
