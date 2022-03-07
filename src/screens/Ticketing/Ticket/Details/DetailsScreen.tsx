@@ -17,6 +17,7 @@ import {TicketModalNavigationProp, TicketModalStackParams} from '.';
 import DetailsContent from './DetailsContent';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import MessageBox from '@atb/components/message-box';
+import {getValidityStatus} from '../utils';
 
 export type TicketDetailsRouteParams = {
   orderId: string;
@@ -51,8 +52,14 @@ export default function DetailsScreen({navigation, route}: Props) {
     });
 
   const shouldShowValidTrainTicketNotice =
-    isSingleTicket(firstTravelRight) &&
+    fc &&
     isPreactivatedTicket(firstTravelRight) &&
+    getValidityStatus(
+      now,
+      firstTravelRight.startDateTime.toMillis(),
+      firstTravelRight.endDateTime.toMillis(),
+      fc.state,
+    ) === 'valid' &&
     firstTravelRight.tariffZoneRefs.every(
       (val: string) => val === 'ATB:TariffZone:1',
     );
@@ -63,7 +70,7 @@ export default function DetailsScreen({navigation, route}: Props) {
         leftButton={{type: 'close'}}
         title={t(TicketTexts.details.header.title)}
       />
-      <ScrollView style={styles.content}>
+      <ScrollView contentContainerStyle={styles.content}>
         {fc && (
           <DetailsContent
             fareContract={fc}
@@ -75,7 +82,11 @@ export default function DetailsScreen({navigation, route}: Props) {
 
         {shouldShowValidTrainTicketNotice && (
           <MessageBox
-            message={t(PurchaseOverviewTexts.samarbeidsbillettenInfo)}
+            message={
+              isSingleTicket(firstTravelRight)
+                ? t(PurchaseOverviewTexts.samarbeidsbillettenInfo.single)
+                : t(PurchaseOverviewTexts.samarbeidsbillettenInfo.period)
+            }
             type="info"
           />
         )}
@@ -91,5 +102,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   content: {
     padding: theme.spacings.medium,
+    paddingBottom: theme.spacings.xLarge,
   },
 }));
