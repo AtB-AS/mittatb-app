@@ -1,0 +1,314 @@
+{
+    "nb": [
+        {
+            "text": "I dag kan du kjøpe enkeltbillett til buss og trikk, men på sikt vil du finne alle billetter i appen.\n",
+            "type": "text"
+        },
+        {
+            "text": "Billettene gjelder kun på kollektivtransport som er en del av det offentlige kollektivtilbudet i Trøndelag fylke.",
+            "type": "text"
+        },
+        {
+            "text": "Billetten må kjøpes før du går om bord.",
+            "type": "heading"
+        },
+        {
+            "text": "Du trenger ikke å vise frem billetten på grønne bybusser og trikk i Trondheimsområdet. På regionbuss og båt må du vise billetten til sjåfør eller billettør.\n",
+            "type": "text"
+        },
+        {
+            "text": "Billetten er gyldig for påstigning helt til den utløper, altså så lenge nedtellingen varer og i sonen(e) du har kjøpt billett for.\n",
+            "type": "text"
+        },
+        {
+            "text": "Reiser i én sone: 1 time og 30 minutter",
+            "type": "text"
+        },
+        {
+            "text": "Reiser i to soner: 2 timer og 30 minutter",
+            "type": "text"
+        },
+        {
+            "text": "Reiser i tre soner: 3 timer og 30 minutter",
+            "type": "text"
+        },
+        {
+            "text": "Reiser i fire soner: 4 timer og 30 minutter\n",
+            "type": "text"
+        },
+        {
+            "text": "Ta kontakt med sjåføren om du har behov for en overgangsbillett.",
+            "type": "text"
+        },
+        {
+            "text": "Priser for enkeltbillett buss og trikk",
+            "type": "heading"
+        },
+        {
+            "type": "table",
+            "data": [
+                [
+                    {
+                        "type": "tableHeading",
+                        "text": "Antall soner du reiser i"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "1"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "2"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "3"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "4"
+                    }
+                ],
+                [
+                    {
+                        "type": "tableHeading",
+                        "text": "Voksen"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "42"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "84"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "126"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "168"
+                    }
+                ],
+                [
+                    {
+                        "type": "tableHeading",
+                        "text": "Barn / Honnør / Militær / Sykkel"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "21"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "42"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "63"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "84"
+                    }
+                ],
+                [
+                    {
+                        "type": "tableHeading",
+                        "text": "Student"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "42"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "84"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "84"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "84"
+                    }
+                ]
+            ]
+        },
+        {
+            "text": "For å reise med sykkel kjøper du en barnebillett.",
+            "type": "text"
+        },
+        {
+            "text": "\nVed avinstallering av appen vil også billettene fjernes. Vi advarer derfor mot avinstallering når du har kjøpt billetter. Da vil du ikke kunne framvise gyldig billett.",
+            "type": "text"
+        },
+        {
+            "text": "Billettrefusjon",
+            "type": "heading"
+        },
+        {
+            "text": "Se betingelser for refusjon",
+            "type": "link",
+            "link": "https://www.atb.no/billettrefusjon/"
+        }
+    ],
+    "en": [
+        {
+            "text": "Today you can purchase single tickets for bus and tram, and eventually you will find all tickets in the app.\n",
+            "type": "text"
+        },
+        {
+            "text": "The tickets only applies to public transport that is part of the public transport system in Trøndelag county.",
+            "type": "text"
+        },
+        {
+            "text": "The ticket must be purchased before boarding.",
+            "type": "heading"
+        },
+        {
+            "text": "You do not need to show the ticket on green city buses and tram in the Trondheim area. Outside the Trondheim area, you must show the ticket to the driver or crew.\n",
+            "type": "text"
+        },
+        {
+            "text": "The ticket is valid for boarding until it expires, that is, as long as the countdown lasts and in the zone(s) you have purchased the ticket for.\n",
+            "type": "text"
+        },
+        {
+            "text": "Travel in one zone: 1 hour and 30 minutes",
+            "type": "text"
+        },
+        {
+            "text": "Travel in two zones: 2 hours and 30 minutes",
+            "type": "text"
+        },
+        {
+            "text": "Travel in three zones: 3 hours and 30 minutes",
+            "type": "text"
+        },
+        {
+            "text": "Travel in four zones: 4 hours and 30 minutes\n",
+            "type": "text"
+        },
+        {
+            "text": "Please contact the driver if you need a transfer ticket.",
+            "type": "text"
+        },
+        {
+            "text": "Prices for single ticket bus and tram",
+            "type": "heading"
+        },
+        {
+            "type": "table",
+            "data": [
+                [
+                    {
+                        "type": "tableHeading",
+                        "text": "Number of zones traveled in"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "1"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "2"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "3"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "4"
+                    }
+                ],
+                [
+                    {
+                        "type": "tableHeading",
+                        "text": "Adult"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "42"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "84"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "126"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "168"
+                    }
+                ],
+                [
+                    {
+                        "type": "tableHeading",
+                        "text": "Child / Senior / Military / Bicycle"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "21"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "42"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "63"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "84"
+                    }
+                ],
+                [
+                    {
+                        "type": "tableHeading",
+                        "text": "Student"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "42"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "84"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "84"
+                    },
+                    {
+                        "type": "tableData",
+                        "text": "84"
+                    }
+                ]
+            ]
+        },
+        {
+            "text": "To bring a bike, buy a child ticket.",
+            "type": "text"
+        },
+        {
+            "text": "\nIf you uninstall the app, the tickets will be removed. We recommend that you do not uninstall once you have purchased tickets. If you uninstall, you will not be able to present a valid ticket.",
+            "type": "text"
+        },
+        {
+            "text": "Ticket refund",
+            "type": "heading"
+        },
+        {
+            "text": "See terms for ticket refund",
+            "type": "link",
+            "link": "https://www.atb.no/en/ticket-refund/"
+        }
+    ]
+}
