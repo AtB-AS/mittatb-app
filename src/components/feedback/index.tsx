@@ -14,7 +14,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {APP_ORG, APP_VERSION} from '@env';
 import storage from '@atb/storage';
 
-const WHITELIST_ARRAY = [2, 8, 24, 96, 255];
+const WHITELIST_ARRAY = [2, 8, 24, 48, 255];
 
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
@@ -200,6 +200,9 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
       const appVersion = APP_VERSION;
       const organization = APP_ORG;
       const submitTime = Date.now();
+      const numberOfPrompts = statsForCurrentVersion
+        ? statsForCurrentVersion.count + 1
+        : -1;
 
       const dataToServer = {
         submitTime,
@@ -209,6 +212,7 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
         mode,
         category,
         selectedAnswers,
+        numberOfPrompts,
       };
 
       await firestore().collection('feedback').add(dataToServer);
