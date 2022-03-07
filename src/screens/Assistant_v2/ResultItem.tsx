@@ -216,8 +216,8 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
     <View style={styles.resultFooter}>
       <View style={styles.resultFooterText}>
         <ThemeText
-          type={'body__secondary'}
-          style={styles.resultFooterText}
+          type="body__secondary"
+          style={styles.fromPlaceText}
           numberOfLines={1}
         >
           {t(AssistantTexts.results.resultItem.footer.fromPlace(quayName)) +
@@ -271,6 +271,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   resultFooterText: {
     flexShrink: 1,
     flexDirection: 'row',
+  },
+  fromPlaceText: {
+    flexShrink: 1,
   },
   detailsTextWrapper: {
     flexDirection: 'row',
