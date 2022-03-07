@@ -153,7 +153,7 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
   },
   title: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacings.small,
   },
 }));
 
