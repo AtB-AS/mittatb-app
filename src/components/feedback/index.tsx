@@ -14,8 +14,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {APP_ORG, APP_VERSION} from '@env';
 import storage from '@atb/storage';
 
-const RENDERS_BEFORE_FEEDBACK_PROMPT_ON_DEPARTURES = 3;
-const TIMES_TO_ASK_FOR_FEEDBACK_ON_DEPARTURES = 99;
+const WHITELIST_ARRAY = [2, 4, 8, 24, 48, 96, 254];
 
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
@@ -114,6 +113,8 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
     number[]
   >([]);
   const [displayStats, setDisplayStats] = useState<versionStats[]>([]);
+
+  const displayCountType = mode === 'departures' ? 'whitelist' : 'always';
 
   const getDisplayStatsFromStorage = async () => {
     const resetArray = [
@@ -236,14 +237,10 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
 
   if (!statsForCurrentVersion) return null;
   if (statsForCurrentVersion.answered) return null;
-  if (
-    statsForCurrentVersion.count <
-      RENDERS_BEFORE_FEEDBACK_PROMPT_ON_DEPARTURES ||
-    statsForCurrentVersion.count >=
-      RENDERS_BEFORE_FEEDBACK_PROMPT_ON_DEPARTURES +
-        TIMES_TO_ASK_FOR_FEEDBACK_ON_DEPARTURES
-  ) {
-    return null;
+
+  if (displayCountType === 'whitelist') {
+    if (!WHITELIST_ARRAY.includes(statsForCurrentVersion.count + 1))
+      return null;
   }
 
   if (quayListData || tripPattern)
