@@ -12,7 +12,7 @@ import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
 import MessageBox from '@atb/components/message-box';
 
-export default function TravelTokenInfo({
+export default function TravelTokenBox({
   showIfThisDevice,
   showHowToChangeHint,
 }: {

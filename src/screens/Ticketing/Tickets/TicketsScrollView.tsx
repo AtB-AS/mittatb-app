@@ -19,7 +19,7 @@ import SimpleTicket from '../Ticket';
 import TicketReservation from './TicketReservation';
 import TravelCardInformation from './TravelCardInformation';
 import MessageBox from '@atb/components/message-box';
-import TravelTokenInfo from '@atb/travel-token-box';
+import TravelTokenBox from '@atb/travel-token-box';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
