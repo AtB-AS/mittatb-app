@@ -71,7 +71,7 @@ export function getConfig(): RemoteConfig {
   const enable_network_logging = !!(
     values['enable_network_logging']?.asBoolean() ?? true
   );
-  const enable_ticketing = !!(values['enable_ticketing']?.asBoolean() ?? false);
+  const enable_ticketing = true;
   const enable_intercom = !!(values['enable_intercom']?.asBoolean() ?? true);
   const enable_i18n = !!(values['enable_i18n']?.asBoolean() ?? false);
   const enable_creditcard =
