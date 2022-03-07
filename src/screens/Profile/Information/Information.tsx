@@ -9,7 +9,6 @@ type InformationTable = {
   type: 'table';
   data: TableElement[][];
 };
-type TableElement = TableData | TableHeading;
 
 type TableData = {
   type: 'tableData';
@@ -20,6 +19,8 @@ type TableHeading = {
   type: 'tableHeading';
   text: string;
 };
+
+type TableElement = TableData | TableHeading;
 
 type InformationText = {
   type: 'text';
@@ -41,17 +42,17 @@ type InformationBulletPoint = {
   text: string;
 };
 
-type InformationProps = {
-  informations: InformationElement[];
-  title: string;
-};
-
 export type InformationElement =
   | InformationTable
   | InformationText
   | InformationLink
   | InformationHeading
   | InformationBulletPoint;
+
+type InformationProps = {
+  informations: InformationElement[];
+  title: string;
+};
 
 const Information: React.FC<InformationProps> = ({
   children,
