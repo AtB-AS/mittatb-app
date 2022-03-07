@@ -153,16 +153,6 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
           {tariffZoneSummary}
         </ThemeText>
       )}
-      {isInspectable === false &&
-        status !== 'expired' &&
-        status !== 'refunded' && (
-          <View style={styles.notInspectableWarning}>
-            <ThemeIcon svg={Warning} style={styles.notInspectableWarningIcon} />
-            <ThemeText isMarkdown={true}>
-              {t(TicketTexts.ticketInfo.notInspectableWarning)}
-            </ThemeText>
-          </View>
-        )}
     </View>
   );
 };
