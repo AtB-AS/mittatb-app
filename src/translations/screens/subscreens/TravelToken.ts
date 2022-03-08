@@ -38,21 +38,31 @@ const SelectTravelTokenTexts = {
       },
     ],
     errorMessages: {
+      tokensNotLoadedTitle: _(
+        'Klarer ikke hente informasjon om mobil / t:kort',
+        'TODO', // TODO
+      ),
       tokensNotLoaded: _(
-        'Vi får ikke hentet ut informasjon om enten t:kortet eller mobilen din. Sjekk at du har tilgang på nett der du er.',
-        '', // TODO
+        'Billetter må brukes på enten et t:kort eller en mobil, men akkurat nå klarer vi ikke finne ut hvor den er i bruk. Sjekk at du har tilgang på nett der du er.',
+        'TODO', // TODO
+      ),
+      emptyTokensTitle: _(
+        'Vi finner ingen t:kort eller mobiler tilknyttet profilen din',
+        'TODO', // TODO
       ),
       emptyTokens: _(
-        'Vi finner ingen t:kort eller mobiler tilknyttet profilen din. Sjekk at du har tilgang på nett.' +
-          '\n\n' +
-          'Hvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.' +
+        'Sjekk at du har tilgang på nett. Hvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.' +
           '\n\n' +
           'Om problemet vedvarer kan du ta kontakt med AtB kundesenter.',
-        '', // TODO
+        'TODO', // TODO
+      ),
+      noInspectableTokenTitle: _(
+        'Velg hvor du vil bruke billettene dine',
+        'TODO', // TODO
       ),
       noInspectableToken: _(
-        'Du har ikke valgt å bruke billett på enten t:kort eller mobil. Gå til *Bytt mellom mobil / t:kort* for å velge.',
-        '', // TODO
+        'Billetter må brukes på enten et t:kort eller en mobil, og det ser ikke ut som du har valgt en av dem. Gå til Min profil > Bytt mellom mobil / t:kort for å velge.',
+        'TODO', // TODO
       ),
     },
   },
@@ -63,11 +73,11 @@ const SelectTravelTokenTexts = {
         title: _('T:kort', 'T:card'),
         description: _(
           'Les av t:kortet ditt på holdeplass eller ombord. Kortet leses av ved kontroll.',
-          '', // TODO
+          'TODO', // TODO
         ),
         a11yLabel: _(
           'T:kort. Les av t-kortet ditt på holdeplass eller om bord. Kortet leses av ved kontroll.',
-          '', // TODO
+          'TODO', // TODO
         ),
         a11yHint: _('Aktivér for å velge t:kort.', 'Activate to select t:card'),
       },
@@ -75,15 +85,15 @@ const SelectTravelTokenTexts = {
         title: _('Mobil', 'Phone'),
         description: _(
           'Gå ombord med mobilen. Mobilen vises frem ved kontroll.',
-          '', // TODO
+          'TODO', // TODO
         ),
         a11yLabel: _(
           'Mobil. Gå ombord med mobilen. Mobilen vises frem ved kontroll.',
-          'Phone. ', // TODO
+          'TODO', // TODO
         ),
         a11yHint: _(
           'Aktivér for å velge mobil.',
-          '', // TODO
+          'TODO', // TODO
         ),
         selection: {
           heading: _('Velg enhet', 'Select device'), // TODO

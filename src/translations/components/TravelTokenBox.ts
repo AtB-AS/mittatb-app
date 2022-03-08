@@ -15,7 +15,7 @@ const TravelTokenBoxTexts = {
   mobile: {
     description: _(
       'Ta med deg mobilen når du er ute og reiser.',
-      'Bring your mobile phone when you are travelling.',
+      'Remember to bring your phone while travelling.',
     ),
     a11yLabel: (deviceName: string) =>
       _(
@@ -25,7 +25,7 @@ const TravelTokenBoxTexts = {
   },
   howToChange: _(
     'Du kan bytte hvor du bruker billetten din fra Min profil',
-    '', // TODO
+    'TODO', // TODO
   ),
 };
 
