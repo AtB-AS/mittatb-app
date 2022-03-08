@@ -5,7 +5,7 @@ import {textTypeStyles} from '@atb/theme/colors';
 import Bugsnag from '@bugsnag/react-native';
 
 export default function render(markdown: string): React.ReactElement[] {
-  const tree = lexer(markdown);
+  const tree = lexer(markdown, {smartypants: true});
   return tree.map(renderToken);
 }
 

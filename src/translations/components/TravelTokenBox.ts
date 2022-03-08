@@ -25,7 +25,7 @@ const TravelTokenBoxTexts = {
   },
   howToChange: _(
     'Du kan bytte hvor du bruker billetten din fra Min profil',
-    '', // TODO
+    'TODO', // TODO
   ),
 };
 
