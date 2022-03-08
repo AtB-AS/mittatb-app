@@ -91,7 +91,10 @@ const MessageBox: React.FC<MessageBoxProps> = ({
       </View>
       <View style={styles.content}>
         {title && (
-          <ThemeText style={{...styles.title, color: textColor}}>
+          <ThemeText
+            type="body__primary--bold"
+            style={{...styles.title, color: textColor}}
+          >
             {title}
           </ThemeText>
         )}
@@ -150,8 +153,7 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
   },
   title: {
-    fontSize: 16,
-    fontWeight: '600',
+    marginBottom: theme.spacings.small,
   },
 }));
 
