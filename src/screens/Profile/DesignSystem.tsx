@@ -98,6 +98,14 @@ export default function DesignSystem() {
               onPress={presser}
             />
           </Sections.GenericItem>
+
+          <Sections.GenericItem>
+            <MessageBox
+              isMarkdown={true}
+              title="Markdown"
+              message={`This is a message with markdown,\nSupporting **bold** and *italics*\nand special characters like ', " + æøå`}
+            />
+          </Sections.GenericItem>
         </Sections.Section>
 
         <MessageBox
