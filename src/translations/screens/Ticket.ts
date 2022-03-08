@@ -54,14 +54,16 @@ const TicketTexts = {
         `QR-code will update in ${secondsLeft} sec.`,
       ),
     qrCodeErrors: {
-      notInspectable: {
-        title: _(
-          'Ikke tillatt å generere QR-kode',
-          'Not allowed to generate QR-code',
-        ),
-        text: _(
-          'Kan ikke generere en QR-kode siden denne telefonen ikke er satt som aktivt reisebevis.',
-          'Cannot generate a QR-code because this device is not set as the active travel token.',
+      notInspectableDevice: {
+        title: _('QR-kode', 'QR code'),
+        wrongDevice: (deviceName: string) =>
+          _(
+            `Du bruker billetter på din mobil, "${deviceName}". Husk å ta den med deg når du reiser.\nDu kan alltid bytte til t:kort eller en annen mobil ved å gå til **Min profil**.`,
+            `Seems like you\'re using your ticket on your phone, "${deviceName}". Remember to bring it with you while traveling.\nYou can always switch to a t:card or a different phone by heading over to **My profile**.`,
+          ),
+        tCard: _(
+          'Du bruker billetten på ditt t:kort. Husk å ta det med deg når du reiser.\nDu kan alltid bytte til en mobil ved å gå til **Min profil**.',
+          `Seems like you\'re using your ticket on your t:card. Remember to bring it with you while traveling.\nYou can always switch to your phone by heading over to **My profile**.`,
         ),
       },
       generic: {

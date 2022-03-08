@@ -21,7 +21,6 @@ import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import {AddTicket, InvalidTicket} from '@atb/assets/svg/mono-icons/ticketing';
 import {screenReaderPause} from '@atb/components/accessible-text';
-import {Warning} from '@atb/assets/svg/color/situations';
 
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
@@ -98,9 +97,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
     fromTariffZone,
     toTariffZone,
     userProfilesWithCount,
-    isInspectable,
     omitUserProfileCount,
-    status,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -150,16 +147,6 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
           {tariffZoneSummary}
         </ThemeText>
       )}
-      {isInspectable === false &&
-        status !== 'expired' &&
-        status !== 'refunded' && (
-          <View style={styles.notInspectableWarning}>
-            <ThemeIcon svg={Warning} style={styles.notInspectableWarningIcon} />
-            <ThemeText isMarkdown={true}>
-              {t(TicketTexts.ticketInfo.notInspectableWarning)}
-            </ThemeText>
-          </View>
-        )}
     </View>
   );
 };
@@ -311,10 +298,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
     aspectRatio: 1,
     padding: theme.spacings.small,
-  },
-  notInspectableWarning: {
-    flexDirection: 'row',
-    paddingVertical: theme.spacings.small,
   },
   notInspectableWarningIcon: {
     marginRight: theme.spacings.small,
