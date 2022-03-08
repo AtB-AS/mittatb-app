@@ -14,8 +14,6 @@ import Bugsnag from '@bugsnag/react-native';
 import {APP_ORG, APP_VERSION} from '@env';
 import storage from '@atb/storage';
 
-const WHITELIST_ARRAY = [2, 8, 24, 48, 255];
-
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
   const {t} = useTranslation();
@@ -92,6 +90,9 @@ type FeedbackProps = {
   quayListData?: SectionListData<Quay>[];
   isSearching?: boolean;
   isEmptyResult?: boolean;
+  /** The allowList array may be provided to decide when the Feedback component should be visible.
+   * Example: [2, 5] will make the component render only the second and the fifth time it is called.  */
+  allowList?: number[];
 };
 
 type versionStats = {
@@ -100,7 +101,12 @@ type versionStats = {
   version: string;
 };
 
-export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
+export const Feedback = ({
+  mode,
+  tripPattern,
+  quayListData,
+  allowList,
+}: FeedbackProps) => {
   const styles = useFeedbackStyles();
   const {t} = useTranslation();
   const {theme} = useTheme();
@@ -113,8 +119,6 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
     number[]
   >([]);
   const [displayStats, setDisplayStats] = useState<versionStats[]>([]);
-
-  const displayCountType = mode === 'departures' ? 'whitelist' : 'always';
 
   const getDisplayStatsFromStorage = async () => {
     const resetArray = [
@@ -240,20 +244,12 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
   );
 
   if (!statsForCurrentVersion) return null;
+  if (statsForCurrentVersion.answered) return null;
 
-  if (displayCountType === 'whitelist') {
-    if (!WHITELIST_ARRAY.includes(statsForCurrentVersion.count + 1)) {
+  if (allowList) {
+    if (!allowList.includes(statsForCurrentVersion.count + 1)) {
       return null;
     }
-    if (
-      statsForCurrentVersion.answered &&
-      statsForCurrentVersion.count !== WHITELIST_ARRAY[2]
-    )
-      return null;
-  }
-
-  if (displayCountType === 'always') {
-    if (statsForCurrentVersion.answered) return null;
   }
 
   if (quayListData || tripPattern)

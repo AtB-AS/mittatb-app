@@ -71,7 +71,11 @@ export default function StopPlaceView({
                 navigateToQuay={navigateToQuay}
               />
               {index === 0 && (
-                <Feedback mode="departures" quayListData={quayListData} />
+                <Feedback
+                  mode="departures"
+                  quayListData={quayListData}
+                  allowList={[2, 8, 24, 96, 255]}
+                />
               )}
             </>
           )}
