@@ -96,12 +96,16 @@ type FeedbackProps = {
   /** The allowList array may be provided to decide when the Feedback component should be visible.
    * Example: [2, 5] will make the component render only the second and the fifth time it is called.  */
   allowList?: number[];
+  /** If the onlyOneFeedbackForEachAppVersion prop is given, users that have provided feedback will no
+   * longer be prompted to give feedback in this viewContext, until a new appVersion is installed.  */
+  onlyOneFeedbackForEachAppVersionInThisViewContext?: boolean;
 };
 
 type VersionStats = {
   answered: boolean;
   count: number;
   version: string;
+  viewContext: FeedbackQuestionsViewContext;
 };
 
 export const Feedback = ({
@@ -109,6 +113,7 @@ export const Feedback = ({
   tripPattern,
   quayListData,
   allowList,
+  onlyOneFeedbackForEachAppVersionInThisViewContext,
 }: FeedbackProps) => {
   const styles = useFeedbackStyles();
   const {t} = useTranslation();
@@ -124,31 +129,42 @@ export const Feedback = ({
   const [displayStats, setDisplayStats] = useState<VersionStats[]>([]);
 
   const incrementCounterAndSetDisplayStats = async () => {
-    const defaultArray = [
-      {
-        answered: false,
-        count: 0,
-        version: APP_VERSION,
-      },
-    ];
+    const defaultDisplayStatObject = {
+      answered: false,
+      count: 0,
+      version: APP_VERSION,
+      viewContext: viewContext,
+    };
 
-    let displayStatsJSON = null;
+    let displayStatsJSON: VersionStats[] = [];
     let fetchedDisplayStats = await storage.get('@ATB_feedback_display_stats');
 
     if (fetchedDisplayStats === null) {
-      displayStatsJSON = defaultArray;
+      displayStatsJSON.push(defaultDisplayStatObject);
     } else {
       displayStatsJSON = JSON.parse(fetchedDisplayStats);
     }
 
-    const statsForCurrentVersion = displayStatsJSON.find(
-      (entry: VersionStats) => entry.version === APP_VERSION,
+    const statsForCurrentVersionAndViewContext = displayStatsJSON.find(
+      (entry: VersionStats) =>
+        entry.version === APP_VERSION && entry.viewContext === viewContext,
     );
 
-    if (statsForCurrentVersion) {
-      statsForCurrentVersion.count++;
+    if (statsForCurrentVersionAndViewContext) {
+      statsForCurrentVersionAndViewContext.count++;
     } else {
-      displayStatsJSON = defaultArray;
+      const isDisplayStatsForCurrentAppVersionsButOtherViewContexts =
+        displayStatsJSON.find(
+          (entry: VersionStats) => entry.version === APP_VERSION,
+        );
+
+      if (isDisplayStatsForCurrentAppVersionsButOtherViewContexts) {
+        displayStatsJSON.push(defaultDisplayStatObject);
+      }
+      // If the app has been updated, this line makes sure to delete displayStats for previous and no longer relevant versions
+      else {
+        displayStatsJSON = [defaultDisplayStatObject];
+      }
     }
 
     setDisplayStats(displayStatsJSON);
@@ -177,17 +193,15 @@ export const Feedback = ({
 
   const setFeedbackAnswered = () => {
     const newObject = [...displayStats];
-    const statsForCurrentVersion = newObject.find(
-      (entry) => entry.version === APP_VERSION,
+    const statsForCurrentVersionAndViewContext = newObject.find(
+      (entry) =>
+        entry.version === APP_VERSION && entry.viewContext === viewContext,
     );
-    if (statsForCurrentVersion) {
-      statsForCurrentVersion.answered = true;
+    if (statsForCurrentVersionAndViewContext) {
+      statsForCurrentVersionAndViewContext.answered = true;
     }
-    try {
-      storage.set('@ATB_feedback_display_stats', JSON.stringify(newObject));
-    } catch (err: any) {
-      Bugsnag.notify(err);
-    }
+
+    storage.set('@ATB_feedback_display_stats', JSON.stringify(newObject));
   };
 
   const submitFeedbackWithAlternatives = async () => {
@@ -221,7 +235,9 @@ export const Feedback = ({
       Bugsnag.notify(err);
     } finally {
       setSubmitted(true);
-      setFeedbackAnswered();
+      if (onlyOneFeedbackForEachAppVersionInThisViewContext) {
+        setFeedbackAnswered();
+      }
     }
   };
 

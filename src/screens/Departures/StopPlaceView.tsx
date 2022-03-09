@@ -75,6 +75,7 @@ export default function StopPlaceView({
                   viewContext="departures"
                   quayListData={quayListData}
                   allowList={[2, 8, 24, 96, 255]}
+                  onlyOneFeedbackForEachAppVersionInThisViewContext
                 />
               )}
             </>
