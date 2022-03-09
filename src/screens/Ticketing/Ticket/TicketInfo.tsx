@@ -10,7 +10,7 @@ import {
 } from '@atb/reference-data/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {PreactivatedTicket} from '@atb/tickets';
+import {PreactivatedTicket, useTicketState} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import React, {ReactElement} from 'react';
 import {View} from 'react-native';
@@ -121,11 +121,13 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
       : `${u.count} ${getReferenceDataName(u, language)}`;
 
   const tokensEnabled = useHasEnabledMobileToken();
+  const {customerProfile} = useTicketState();
+  const hasTravelCard = !!customerProfile?.travelcard;
 
   // show warning to use inspectable t:card for travellers still not on tokens, for tickets that are valid
   const showTravelCardActiveWarning =
     !tokensEnabled &&
-    !isInspectable &&
+    hasTravelCard &&
     status !== 'expired' &&
     status !== 'refunded';
 
