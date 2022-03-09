@@ -5,10 +5,16 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = notSupportedHandler;
 
+var _logger = require("../../../logger");
+
 var _HandlerFactory = require("../HandlerFactory");
 
 function notSupportedHandler() {
   return (0, _HandlerFactory.stateHandlerFactory)(['NotSupported'], async s => {
+    _logger.logger.info('not_supported', undefined, {
+      accountId: s.accountId
+    });
+
     return s;
   });
 }

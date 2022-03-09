@@ -133,5 +133,9 @@
       ]
     ]
   },
-  "yalcSig": "1c9b087d7b95d8951c735be6916730be"
+  "dependencies": {
+    "base-64": "^1.0.0",
+    "utf8": "^3.0.0"
+  },
+  "yalcSig": "5ae2d35076ede66cdb92a99630759118"
 }

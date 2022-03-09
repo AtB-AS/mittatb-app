@@ -11,13 +11,25 @@ var _types = require("../../../native/types");
 
 var _HandlerFactory = require("../HandlerFactory");
 
+var _logger = require("../../../logger");
+
 function initiateRenewalHandler(abtTokensService) {
   return (0, _HandlerFactory.stateHandlerFactory)(['InitiateRenewal'], async s => {
-    const signedToken = await (0, _native.getSecureToken)(s.accountId, s.tokenId, true, [_types.PayloadAction.addRemoveToken]);
+    const {
+      accountId,
+      tokenId
+    } = s;
+
+    _logger.logger.info('init_renewal', undefined, {
+      accountId,
+      tokenId
+    });
+
+    const signedToken = await (0, _native.getSecureToken)(accountId, tokenId, true, [_types.PayloadAction.addRemoveToken]);
     const renewTokenResponse = await abtTokensService.renewToken(signedToken);
     return {
-      accountId: s.accountId,
-      oldTokenId: s.tokenId,
+      accountId,
+      oldTokenId: tokenId,
       state: 'AttestRenewal',
       initiatedData: renewTokenResponse
     };

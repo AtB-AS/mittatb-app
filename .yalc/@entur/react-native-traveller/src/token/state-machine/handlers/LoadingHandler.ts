@@ -2,26 +2,34 @@ import { getToken } from '../../../native';
 import type { StateHandler } from '../HandlerFactory';
 import { stateHandlerFactory } from '../HandlerFactory';
 import type { Token } from '@entur/react-native-traveller';
+import { logger } from '../../../logger';
 
 const secondsIn48Hours = 48 * 60 * 60;
 
 export default function loadingHandler(): StateHandler {
   return stateHandlerFactory(['Loading', 'Valid'], async (s) => {
-    const token = await getToken(s.accountId);
+    const { accountId, state } = s;
+    logger.info('loading', undefined, { accountId, state });
+
+    const token = await getToken(accountId);
     if (!token) {
+      logger.info('no_token_found', undefined);
+
       return {
-        accountId: s.accountId,
+        accountId,
         state: 'InitiateNew',
       };
     } else {
+      logger.info('token_found', undefined, { tokenId: token.tokenId });
+
       return tokenNeedsRenewal(token)
         ? {
-            accountId: s.accountId,
+            accountId,
             tokenId: token.tokenId,
             state: 'InitiateRenewal',
           }
         : {
-            accountId: s.accountId,
+            accountId,
             state: 'Validating',
             tokenId: token.tokenId,
           };

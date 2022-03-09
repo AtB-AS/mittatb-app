@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 import type { StateHandler } from '../HandlerFactory';
 import { stateHandlerFactory } from '../HandlerFactory';
 import { getDeviceName } from '../../../native';
+import { logger } from '../../../logger';
 
 const requireAttestation = Platform.select({
   default: true,
@@ -18,13 +19,17 @@ export default function initiateNewHandler(
       deviceName = await getDeviceName();
     } catch {}
 
+    const { accountId } = s;
+
+    logger.info('initiate_new', undefined, { deviceName, accountId });
+
     const initTokenResponse = await abtTokensService.initToken({
       requireAttestation,
       deviceName,
     });
 
     return {
-      accountId: s.accountId,
+      accountId: accountId,
       state: 'AttestNew',
       initiatedData: initTokenResponse,
     };
