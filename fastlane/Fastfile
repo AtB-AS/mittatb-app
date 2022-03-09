@@ -210,6 +210,7 @@ platform :android do
       track: "internal",
       json_key:ENV['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH'],
       apk: ENV['APK_FILE_NAME']
+    )
   end
 
   lane :appcenter_staging do
