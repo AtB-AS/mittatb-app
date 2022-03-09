@@ -117,9 +117,9 @@ const TicketTexts = {
       _(`Ordre-id: ${orderId}`, `Order ID: ${orderId}`),
   },
   ticketInfo: {
-    notInspectableWarning: _(
-      'Du kan ikke få inspisert billetten på denne enheten',
-      'You may not inspect this ticket on this device',
+    travelcardIsActive: _(
+      'Du har valgt **t:kort** som gyldig reisebevis',
+      'You have specified **t:card** as valid travel token',
     ),
     noInspectionIcon: _('Ikke bruk\ni kontroll', 'Not for\ninspection'),
     noInspectionIconA11yLabel: _('Ikke bruk i kontroll', 'Not for inspection'),
