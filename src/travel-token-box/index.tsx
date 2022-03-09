@@ -8,7 +8,7 @@ import {
 import React from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
 import {TravelToken} from '@atb/mobile-token/types';
-import {TravelTokenTexts, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
 import MessageBox from '@atb/components/message-box';
 
@@ -125,10 +125,8 @@ const ErrorMessages = () => {
     return (
       <MessageBox
         type={'warning'}
-        title={t(
-          TravelTokenTexts.travelToken.errorMessages.tokensNotLoadedTitle,
-        )}
-        message={t(TravelTokenTexts.travelToken.errorMessages.tokensNotLoaded)}
+        title={t(TravelTokenBoxTexts.errorMessages.tokensNotLoadedTitle)}
+        message={t(TravelTokenBoxTexts.errorMessages.tokensNotLoaded)}
         containerStyle={styles.errorMessage}
         onPress={updateTravelTokens}
       />
@@ -139,8 +137,8 @@ const ErrorMessages = () => {
     return (
       <MessageBox
         type={'warning'}
-        title={t(TravelTokenTexts.travelToken.errorMessages.emptyTokensTitle)}
-        message={t(TravelTokenTexts.travelToken.errorMessages.emptyTokens)}
+        title={t(TravelTokenBoxTexts.errorMessages.emptyTokensTitle)}
+        message={t(TravelTokenBoxTexts.errorMessages.emptyTokens)}
         containerStyle={styles.errorMessage}
       />
     );
@@ -152,12 +150,8 @@ const ErrorMessages = () => {
     return (
       <MessageBox
         type={'warning'}
-        title={t(
-          TravelTokenTexts.travelToken.errorMessages.noInspectableTokenTitle,
-        )}
-        message={t(
-          TravelTokenTexts.travelToken.errorMessages.noInspectableToken,
-        )}
+        title={t(TravelTokenBoxTexts.errorMessages.noInspectableTokenTitle)}
+        message={t(TravelTokenBoxTexts.errorMessages.noInspectableToken)}
         containerStyle={styles.errorMessage}
       />
     );
