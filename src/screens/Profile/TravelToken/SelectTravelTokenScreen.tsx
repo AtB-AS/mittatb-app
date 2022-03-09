@@ -132,7 +132,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
               items={activatedMobileTokens}
               keyExtractor={(tt) => tt.id}
               itemToText={(tt) =>
-                tt.name +
+                (tt.name || t(TravelTokenTexts.toggleToken.unknownDevice)) +
                 (tt.isThisDevice
                   ? t(
                       TravelTokenTexts.toggleToken.radioBox.phone.selection
