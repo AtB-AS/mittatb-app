@@ -14,10 +14,8 @@ import GoodOrBadButton from './GoodOrBadButton';
 import {RenderQuestion} from './RenderQuestions';
 import firestore from '@react-native-firebase/firestore';
 import Bugsnag from '@bugsnag/react-native';
-import {APP_ORG} from '@env';
+import {APP_ORG, APP_VERSION} from '@env';
 import storage from '@atb/storage';
-
-const APP_VERSION = 'fewfew';
 
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();

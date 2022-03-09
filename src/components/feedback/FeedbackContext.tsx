@@ -1,13 +1,5 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import firestore, {
-  FirebaseFirestoreTypes,
-} from '@react-native-firebase/firestore';
+import React, {createContext, useContext, useEffect, useState} from 'react';
+import firestore from '@react-native-firebase/firestore';
 import Bugsnag from '@bugsnag/react-native';
 
 export type FeedbackQuestionsViewContext = 'departures' | 'assistant';
