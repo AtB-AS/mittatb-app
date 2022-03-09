@@ -10,16 +10,16 @@ import firestore, {
 } from '@react-native-firebase/firestore';
 import Bugsnag from '@bugsnag/react-native';
 
-export type FeedbackQuestionsMode = 'departures' | 'assistant';
+export type FeedbackQuestionsViewContext = 'departures' | 'assistant';
 
 export type CategoryType = {
-  mode: FeedbackQuestionsMode;
+  viewContext: FeedbackQuestionsViewContext;
   introText: LanguageString;
   question: QuestionType;
 };
 
 export type QuestionCategories = Partial<
-  Record<FeedbackQuestionsMode, CategoryType>
+  Record<FeedbackQuestionsViewContext, CategoryType>
 >;
 
 type LanguageString = {
@@ -31,7 +31,7 @@ export type QuestionType = {
   questionText: LanguageString;
   questionId: number;
   alternatives: AlternativeType[];
-  mode: FeedbackQuestionsMode;
+  viewContext: FeedbackQuestionsViewContext;
 };
 
 export type AlternativeType = {
@@ -61,16 +61,17 @@ const FeedbackQuestionsProvider: React.FC = ({children}) => {
       .onSnapshot(
         (snapshot) => {
           const fetchedQuestions = snapshot.data() as Record<
-            FeedbackQuestionsMode,
+            FeedbackQuestionsViewContext,
             string
           >;
 
           let newQuestions: QuestionCategories = {};
           try {
-            for (let [mode, questions] of Object.entries(fetchedQuestions)) {
-              newQuestions[mode as FeedbackQuestionsMode] = JSON.parse(
-                questions,
-              ) as CategoryType;
+            for (let [viewContext, questions] of Object.entries(
+              fetchedQuestions,
+            )) {
+              newQuestions[viewContext as FeedbackQuestionsViewContext] =
+                JSON.parse(questions) as CategoryType;
             }
             setCategories(newQuestions);
           } catch (error: any) {
@@ -100,9 +101,9 @@ export function useFeedbackQuestionsState() {
   return context;
 }
 
-export function useFeedbackQuestion(mode: FeedbackQuestionsMode) {
+export function useFeedbackQuestion(viewContext: FeedbackQuestionsViewContext) {
   const {categories} = useFeedbackQuestionsState();
-  return categories[mode];
+  return categories[viewContext];
 }
 
 export default FeedbackQuestionsProvider;

@@ -6,13 +6,18 @@ import Button from '../button';
 import {TripPattern} from '@atb/api/types/trips';
 import {Quay} from '@atb/api/types/departures';
 import {useTranslation, FeedbackTexts} from '@atb/translations';
-import {FeedbackQuestionsMode, useFeedbackQuestion} from './FeedbackContext';
+import {
+  FeedbackQuestionsViewContext,
+  useFeedbackQuestion,
+} from './FeedbackContext';
 import GoodOrBadButton from './GoodOrBadButton';
 import {RenderQuestion} from './RenderQuestions';
 import firestore from '@react-native-firebase/firestore';
 import Bugsnag from '@bugsnag/react-native';
-import {APP_ORG, APP_VERSION} from '@env';
+import {APP_ORG} from '@env';
 import storage from '@atb/storage';
+
+const APP_VERSION = 'fewfew';
 
 const SubmittedComponent = () => {
   const styles = useFeedbackStyles();
@@ -38,7 +43,7 @@ export enum Opinions {
 }
 
 interface GoodOrBadQuestionProps {
-  mode: FeedbackQuestionsMode;
+  viewContext: FeedbackQuestionsViewContext;
   setSelectedOpinion: (e: Opinions) => void;
   selectedOpinion: Opinions;
 }
@@ -46,11 +51,11 @@ interface GoodOrBadQuestionProps {
 const GoodOrBadQuestion = ({
   setSelectedOpinion,
   selectedOpinion,
-  mode,
+  viewContext,
 }: GoodOrBadQuestionProps) => {
   const styles = useFeedbackStyles();
   const {language} = useTranslation();
-  const category = useFeedbackQuestion(mode);
+  const category = useFeedbackQuestion(viewContext);
 
   if (!category) {
     return null;
@@ -85,7 +90,7 @@ const GoodOrBadQuestion = ({
 };
 
 type FeedbackProps = {
-  mode: FeedbackQuestionsMode;
+  viewContext: FeedbackQuestionsViewContext;
   tripPattern?: TripPattern;
   quayListData?: SectionListData<Quay>[];
   isSearching?: boolean;
@@ -95,14 +100,14 @@ type FeedbackProps = {
   allowList?: number[];
 };
 
-type versionStats = {
+type VersionStats = {
   answered: boolean;
   count: number;
   version: string;
 };
 
 export const Feedback = ({
-  mode,
+  viewContext,
   tripPattern,
   quayListData,
   allowList,
@@ -110,7 +115,7 @@ export const Feedback = ({
   const styles = useFeedbackStyles();
   const {t} = useTranslation();
   const {theme} = useTheme();
-  const category = useFeedbackQuestion(mode);
+  const category = useFeedbackQuestion(viewContext);
   const [submitted, setSubmitted] = useState(false);
   const [selectedOpinion, setSelectedOpinion] = useState(
     Opinions.NotClickedYet,
@@ -118,7 +123,7 @@ export const Feedback = ({
   const [selectedAlternativeIds, setSelectedAlternativeIds] = useState<
     number[]
   >([]);
-  const [displayStats, setDisplayStats] = useState<versionStats[]>([]);
+  const [displayStats, setDisplayStats] = useState<VersionStats[]>([]);
 
   const incrementCounterAndSetDisplayStats = async () => {
     const defaultArray = [
@@ -139,7 +144,7 @@ export const Feedback = ({
     }
 
     const statsForCurrentVersion = displayStatsJSON.find(
-      (entry: versionStats) => entry.version === APP_VERSION,
+      (entry: VersionStats) => entry.version === APP_VERSION,
     );
 
     if (statsForCurrentVersion) {
@@ -198,7 +203,7 @@ export const Feedback = ({
       const appVersion = APP_VERSION;
       const organization = APP_ORG;
       const submitTime = Date.now();
-      const numberOfPrompts = statsForCurrentVersion
+      const displayCount = statsForCurrentVersion
         ? statsForCurrentVersion.count + 1
         : -1;
 
@@ -207,10 +212,10 @@ export const Feedback = ({
         appVersion,
         organization,
         selectedOpinion,
-        mode,
+        viewContext,
         category,
         selectedAnswers,
-        numberOfPrompts,
+        displayCount,
       };
 
       await firestore().collection('feedback').add(dataToServer);
@@ -250,7 +255,7 @@ export const Feedback = ({
     return (
       <View style={styles.container}>
         <GoodOrBadQuestion
-          mode={mode}
+          viewContext={viewContext}
           setSelectedOpinion={setSelectedOpinion}
           selectedOpinion={selectedOpinion}
         />

@@ -72,7 +72,7 @@ export default function StopPlaceView({
               />
               {index === 0 && (
                 <Feedback
-                  mode="departures"
+                  viewContext="departures"
                   quayListData={quayListData}
                   allowList={[2, 8, 24, 96, 255]}
                 />
