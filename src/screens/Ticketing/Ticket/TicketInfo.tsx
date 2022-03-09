@@ -124,7 +124,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
 
   // show warning to use inspectable t:card for travellers still not on tokens, for tickets that are valid
   const showTravelCardActiveWarning =
-    tokensEnabled &&
+    !tokensEnabled &&
     !isInspectable &&
     status !== 'expired' &&
     status !== 'refunded';
