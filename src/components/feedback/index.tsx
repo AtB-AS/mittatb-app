@@ -120,8 +120,8 @@ export const Feedback = ({
   >([]);
   const [displayStats, setDisplayStats] = useState<versionStats[]>([]);
 
-  const getDisplayStatsFromStorage = async () => {
-    const resetArray = [
+  const incrementCounterAndSetDisplayStats = async () => {
+    const defaultArray = [
       {
         answered: false,
         count: 0,
@@ -129,40 +129,34 @@ export const Feedback = ({
       },
     ];
 
-    let count = null;
+    let displayStatsJSON = null;
+    let fetchedDisplayStats = await storage.get('@ATB_feedback_display_stats');
 
-    try {
-      count = await storage.get('@ATB_feedback_display_stats');
-    } catch {
-      count = [];
-    } finally {
-      let newStats = null;
-
-      if (typeof count === 'string') {
-        newStats = JSON.parse(count);
-        const statsForCurrentVersion = newStats.find(
-          (entry: versionStats) => entry.version === APP_VERSION,
-        );
-
-        if (statsForCurrentVersion) {
-          statsForCurrentVersion.count++;
-        } else {
-          newStats = resetArray;
-        }
-      } else {
-        newStats = resetArray;
-      }
-      setDisplayStats(newStats);
-      try {
-        storage.set('@ATB_feedback_display_stats', JSON.stringify(newStats));
-      } catch (err: any) {
-        Bugsnag.notify(err);
-      }
+    if (fetchedDisplayStats === null) {
+      displayStatsJSON = defaultArray;
+    } else {
+      displayStatsJSON = JSON.parse(fetchedDisplayStats);
     }
+
+    const statsForCurrentVersion = displayStatsJSON.find(
+      (entry: versionStats) => entry.version === APP_VERSION,
+    );
+
+    if (statsForCurrentVersion) {
+      statsForCurrentVersion.count++;
+    } else {
+      displayStatsJSON = defaultArray;
+    }
+
+    setDisplayStats(displayStatsJSON);
+    storage.set(
+      '@ATB_feedback_display_stats',
+      JSON.stringify(displayStatsJSON),
+    );
   };
 
   useEffect(() => {
-    getDisplayStatsFromStorage();
+    incrementCounterAndSetDisplayStats();
   }, []);
 
   const toggleSelectedAlternativeId = useCallback(
