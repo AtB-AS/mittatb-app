@@ -8,27 +8,11 @@ import {Quay} from '@atb/api/types/departures';
 import {useTranslation, FeedbackTexts} from '@atb/translations';
 import {FeedbackQuestionsMode, useFeedbackQuestion} from './FeedbackContext';
 import GoodOrBadButton from './GoodOrBadButton';
+import SubmittedComponent from './SubmittedComponent';
 import {RenderQuestion} from './RenderQuestions';
 import firestore from '@react-native-firebase/firestore';
 import Bugsnag from '@bugsnag/react-native';
 import {APP_ORG, APP_VERSION} from '@env';
-
-const SubmittedComponent = () => {
-  const styles = useFeedbackStyles();
-  const {t} = useTranslation();
-
-  return (
-    <View style={[styles.container, styles.submittedView]}>
-      <ThemeText
-        type="body__primary--bold"
-        style={[styles.questionText, styles.centerText]}
-      >
-        {t(FeedbackTexts.submittedText.thanks)}
-      </ThemeText>
-      <ThemeText>🎉</ThemeText>
-    </View>
-  );
-};
 
 export enum Opinions {
   Good = 'GOOD',
