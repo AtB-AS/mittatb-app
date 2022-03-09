@@ -3,8 +3,8 @@ import orgSpecificTranslations from '../utils';
 
 const ProfileTexts = {
   header: {
-    title: _('Mitt AtB', 'My AtB'),
-    title_a11y: _('Mitt ATB', 'My ATB'),
+    title: _('Min profil', 'My profile'),
+    title_a11y: _('Min profil', 'My profile'),
   },
   sections: {
     account: {
