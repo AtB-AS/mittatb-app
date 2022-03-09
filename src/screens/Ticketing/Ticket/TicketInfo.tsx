@@ -10,7 +10,7 @@ import {
 } from '@atb/reference-data/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {PreactivatedTicket} from '@atb/tickets';
+import {PreactivatedTicket, useTicketState} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import React, {ReactElement} from 'react';
 import {View} from 'react-native';
@@ -22,6 +22,7 @@ import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import {AddTicket, InvalidTicket} from '@atb/assets/svg/mono-icons/ticketing';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {Warning} from '@atb/assets/svg/color/situations';
+import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
@@ -119,6 +120,17 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
       ? `${getReferenceDataName(u, language)}`
       : `${u.count} ${getReferenceDataName(u, language)}`;
 
+  const tokensEnabled = useHasEnabledMobileToken();
+  const {customerProfile} = useTicketState();
+  const hasTravelCard = !!customerProfile?.travelcard;
+
+  // show warning to use inspectable t:card for travellers still not on tokens, for tickets that are valid
+  const showTravelCardActiveWarning =
+    !tokensEnabled &&
+    hasTravelCard &&
+    status !== 'expired' &&
+    status !== 'refunded';
+
   return (
     <View style={styles.textsContainer} accessible={true}>
       <View>
@@ -150,16 +162,14 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
           {tariffZoneSummary}
         </ThemeText>
       )}
-      {isInspectable === false &&
-        status !== 'expired' &&
-        status !== 'refunded' && (
-          <View style={styles.notInspectableWarning}>
-            <ThemeIcon svg={Warning} style={styles.notInspectableWarningIcon} />
-            <ThemeText isMarkdown={true}>
-              {t(TicketTexts.ticketInfo.notInspectableWarning)}
-            </ThemeText>
-          </View>
-        )}
+      {showTravelCardActiveWarning && (
+        <View style={styles.notInspectableWarning}>
+          <ThemeIcon svg={Warning} style={styles.notInspectableWarningIcon} />
+          <ThemeText isMarkdown={true}>
+            {t(TicketTexts.ticketInfo.travelcardIsActive)}
+          </ThemeText>
+        </View>
+      )}
     </View>
   );
 };
