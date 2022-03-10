@@ -1,22 +1,41 @@
 import React from 'react';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
+import Button from '../button';
 import ThemeText from '@atb/components/text';
 import {useTranslation, FeedbackTexts} from '@atb/translations';
+import Intercom from 'react-native-intercom';
+import {Chat} from '@atb/assets/svg/mono-icons/actions';
 
 const SubmittedComponent = () => {
   const styles = useSubmittedComponentStyles();
   const {t} = useTranslation();
 
+  const handleButtonClick = () => {
+    console.log('clickity');
+    Intercom.displayMessenger;
+  };
+
   return (
-    <View style={[styles.container, styles.submittedView]}>
+    <View style={[styles.container]}>
       <ThemeText
         type="body__primary--bold"
         style={[styles.questionText, styles.centerText]}
       >
         {t(FeedbackTexts.submittedText.thanks)}
       </ThemeText>
-      <ThemeText>🎉</ThemeText>
+      <ThemeText style={styles.centerText}>
+        {t(FeedbackTexts.additionalFeedback.text)}
+      </ThemeText>
+      <View style={styles.button}>
+        <Button
+          onPress={handleButtonClick}
+          text={t(FeedbackTexts.additionalFeedback.button)}
+          mode="primary"
+          icon={Chat}
+          iconPosition="right"
+        />
+      </View>
     </View>
   );
 };
@@ -29,16 +48,15 @@ const useSubmittedComponentStyles = StyleSheet.createThemeHook((theme) => ({
     paddingBottom: theme.spacings.xLarge,
     marginVertical: theme.spacings.medium,
   },
-  submittedView: {
-    flex: 1,
-    alignItems: 'center',
-  },
   centerText: {
     textAlign: 'center',
   },
   questionText: {
     marginTop: theme.spacings.xLarge,
     marginBottom: theme.spacings.large,
+  },
+  button: {
+    marginTop: theme.spacings.large,
   },
 }));
 
