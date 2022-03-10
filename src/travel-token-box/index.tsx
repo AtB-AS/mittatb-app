@@ -35,8 +35,12 @@ export default function TravelTokenBox({
   const a11yLabel =
     (inspectableToken.type === 'travelCard'
       ? t(TravelTokenBoxTexts.tcard.a11yLabel)
-      : t(TravelTokenBoxTexts.mobile.a11yLabel(inspectableToken.name))) +
-    (showHowToChangeHint ? t(TravelTokenBoxTexts.howToChange) : '');
+      : t(
+          TravelTokenBoxTexts.mobile.a11yLabel(
+            inspectableToken.name ||
+              t(TravelTokenBoxTexts.mobile.unknownDevice),
+          ),
+        )) + (showHowToChangeHint ? t(TravelTokenBoxTexts.howToChange) : '');
 
   const description =
     inspectableToken.type === 'travelCard'

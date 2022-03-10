@@ -159,7 +159,11 @@ const QrCodeDeviceNotInspectable = ({
       ? t(TicketTexts.details.qrCodeErrors.notInspectableDevice.tCard)
       : t(
           TicketTexts.details.qrCodeErrors.notInspectableDevice.wrongDevice(
-            inspectableToken.name,
+            inspectableToken.name ||
+              t(
+                TicketTexts.details.qrCodeErrors.notInspectableDevice
+                  .unknownDevice,
+              ),
           ),
         );
   return (
