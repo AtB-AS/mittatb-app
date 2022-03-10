@@ -11,6 +11,8 @@ var _HandlerFactory = require("../HandlerFactory");
 
 var _native = require("../../../native");
 
+var _logger = require("../../../logger");
+
 const requireAttestation = _reactNative.Platform.select({
   default: true,
   ios: false
@@ -24,12 +26,21 @@ function initiateNewHandler(abtTokensService) {
       deviceName = await (0, _native.getDeviceName)();
     } catch {}
 
+    const {
+      accountId
+    } = s;
+
+    _logger.logger.info('initiate_new', undefined, {
+      deviceName,
+      accountId
+    });
+
     const initTokenResponse = await abtTokensService.initToken({
       requireAttestation,
       deviceName
     });
     return {
-      accountId: s.accountId,
+      accountId: accountId,
       state: 'AttestNew',
       initiatedData: initTokenResponse
     };

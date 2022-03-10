@@ -5,6 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = verifyInspectionActionHandler;
 
+var _logger = require("../../../logger");
+
 var _HandlerFactory = require("../HandlerFactory");
 
 function verifyInspectionActionHandler(abtTokensService) {
@@ -12,6 +14,11 @@ function verifyInspectionActionHandler(abtTokensService) {
     accountId,
     tokenId
   }) => {
+    _logger.logger.info('verify_inspection_action', undefined, {
+      accountId,
+      tokenId
+    });
+
     await abtTokensService.toggleToken(tokenId, {
       overrideExisting: false
     });

@@ -1,24 +1,30 @@
+import { logger } from '../../../logger';
 import { addToken } from '../../../native';
 import { StateHandler, stateHandlerFactory } from '../HandlerFactory';
 
 export default function addTokenHandler(): StateHandler {
   return stateHandlerFactory(['AddToken'], async (s) => {
     const {
-      certificate,
-      tokenId,
-      tokenValidityEnd,
-      tokenValidityStart,
-    } = s.activatedData;
+      activatedData: {
+        certificate,
+        tokenId,
+        tokenValidityEnd,
+        tokenValidityStart,
+      },
+      accountId,
+    } = s;
+
+    logger.info('add_token', undefined, { accountId, tokenId });
 
     await addToken(
-      s.accountId,
+      accountId,
       tokenId,
       certificate,
       tokenValidityStart,
       tokenValidityEnd
     );
     return {
-      accountId: s.accountId,
+      accountId,
       state: 'VerifyInspectionAction',
       tokenId,
     };

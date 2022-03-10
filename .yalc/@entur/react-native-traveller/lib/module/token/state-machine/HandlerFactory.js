@@ -1,3 +1,4 @@
+import { logger } from '../../logger';
 import { missingNetConnection } from './utils';
 export function stateHandlerFactory(forStates, handlerFunction) {
   return async storedState => {
@@ -13,6 +14,7 @@ export function stateHandlerFactory(forStates, handlerFunction) {
     try {
       return await handlerFunction(storedState);
     } catch (err) {
+      logger.error(undefined, err, undefined);
       let missingNet = false;
 
       try {

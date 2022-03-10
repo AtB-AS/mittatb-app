@@ -13,15 +13,29 @@ var _utils = require("../utils");
 
 var _HandlerFactory = require("../HandlerFactory");
 
+var _logger = require("../../../logger");
+
 function activateRenewalHandler(abtTokensService) {
   return (0, _HandlerFactory.stateHandlerFactory)(['ActivateRenewal'], async s => {
-    const signedToken = await (0, _native.getSecureToken)(s.accountId, s.oldTokenId, true, [_types.PayloadAction.addRemoveToken]);
+    const {
+      accountId,
+      oldTokenId,
+      tokenId
+    } = s;
+
+    _logger.logger.info('activate_renewal', undefined, {
+      accountId,
+      oldTokenId,
+      tokenId
+    });
+
+    const signedToken = await (0, _native.getSecureToken)(accountId, oldTokenId, true, [_types.PayloadAction.addRemoveToken]);
 
     try {
-      const activateTokenResponse = await abtTokensService.activateToken(s.tokenId, s.attestationData, signedToken);
-      (0, _utils.verifyCorrectTokenId)(s.tokenId, activateTokenResponse.tokenId);
+      const activateTokenResponse = await abtTokensService.activateToken(tokenId, s.attestationData, signedToken);
+      (0, _utils.verifyCorrectTokenId)(tokenId, activateTokenResponse.tokenId);
       return {
-        accountId: s.accountId,
+        accountId: accountId,
         state: 'AddToken',
         tokenId: s.tokenId,
         activatedData: activateTokenResponse
@@ -32,8 +46,8 @@ function activateRenewalHandler(abtTokensService) {
       if ((err === null || err === void 0 ? void 0 : (_err$response = err.response) === null || _err$response === void 0 ? void 0 : _err$response.status) === 409) {
         // The token has already been renewed. May happen if retrying after timeout.
         return {
-          accountId: s.accountId,
-          tokenId: s.tokenId,
+          accountId: accountId,
+          tokenId: tokenId,
           state: 'GettingTokenCertificate'
         };
       }
