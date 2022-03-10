@@ -133,7 +133,6 @@ export default orgSpecificTranslations(ProfileTexts, {
   nfk: {
     header: {
       title: _('Mitt Reis', 'My Reis'),
-      title_a11y: _('Mitt Reis', 'My Reis'),
     },
   },
 });
