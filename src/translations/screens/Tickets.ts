@@ -43,8 +43,8 @@ const TicketsTexts = {
     a11yLabel: _('Aktive billetter', 'Active tickets'),
     noTickets: _('Du har ingen aktive billetter', 'No valid tickets right now'),
     noTicketsExpiredHelpText: _(
-      'Du har ingen aktive billetter. Utløpte billetter finner du under Mitt AtB-fanen.',
-      'You have no valid tickets right now. Expired tickets can be found under the My AtB tab.',
+      'Du har ingen aktive billetter. Utløpte billetter finner du under Min profil-fanen.',
+      'You have no valid tickets right now. Expired tickets can be found under the My profile tab.',
     ),
   },
   expiredTicketsTab: {
@@ -117,8 +117,8 @@ const TicketsTexts = {
       'In the event of an inspection, please present your t:card',
     ),
     changeInstructions: _(
-      'Kan endres fra "Mitt AtB"',
-      'Can be changed from "My AtB"',
+      'Kan endres fra "Min profil"',
+      'Can be changed from "My profile"',
     ),
     cardType: _('t:kort', 't:card'),
     illustrationa11yLabel: (travelCardId: string) =>
