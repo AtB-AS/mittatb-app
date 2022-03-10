@@ -83,7 +83,7 @@ const SelectTravelTokenTexts = {
       'Vi forsøker å klargjøre din mobil til å kunne bruke billettene på den, men det ser ut som det tar litt tid. Du kan sjekke om du har nettilgang og hvis ikke så vil appen forsøke på nytt neste gang du får tilgang.', // TODO
       'We are trying to make your mobile phone ready to be used for the tickets, but it seems it is taking some time. Check that your device is connected to the Internet and if not the phone will try again when the Internet connection is back.',
     ),
-    unknownDevice: _('Enhet uten navn', 'Unnamed device'),
+    unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   },
 };
 export default SelectTravelTokenTexts;

@@ -22,7 +22,7 @@ const TravelTokenBoxTexts = {
         `Du bruker nå mobilen ${deviceName}. Ta med deg mobilen når du er ute og reiser.`,
         `You are now using the mobile phone ${deviceName}. Bring your phone when you are travelling`,
       ),
-    unknownDevice: _('Enhet uten navn', 'Unnamed device'),
+    unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   },
   howToChange: _(
     'Du kan bytte hvor du bruker billetten din fra Min profil',

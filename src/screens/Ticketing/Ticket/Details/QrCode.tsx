@@ -162,7 +162,7 @@ const QrCodeDeviceNotInspectable = ({
             inspectableToken.name ||
               t(
                 TicketTexts.details.qrCodeErrors.notInspectableDevice
-                  .unknownDevice,
+                  .unnamedDevice,
               ),
           ),
         );

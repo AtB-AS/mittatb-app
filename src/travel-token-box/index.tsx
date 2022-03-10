@@ -38,7 +38,7 @@ export default function TravelTokenBox({
       : t(
           TravelTokenBoxTexts.mobile.a11yLabel(
             inspectableToken.name ||
-              t(TravelTokenBoxTexts.mobile.unknownDevice),
+              t(TravelTokenBoxTexts.mobile.unnamedDevice),
           ),
         )) + (showHowToChangeHint ? t(TravelTokenBoxTexts.howToChange) : '');
 
@@ -114,7 +114,7 @@ const TravelDeviceTitle = ({
     case 'mobile':
       return (
         <ThemeText type="heading__title" color="primary_2" style={styles.title}>
-          {inspectableToken.name || t(TravelTokenBoxTexts.mobile.unknownDevice)}
+          {inspectableToken.name || t(TravelTokenBoxTexts.mobile.unnamedDevice)}
         </ThemeText>
       );
   }
