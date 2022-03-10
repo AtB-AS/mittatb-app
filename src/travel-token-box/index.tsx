@@ -8,7 +8,7 @@ import {
 import React from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
 import {TravelToken} from '@atb/mobile-token/types';
-import {useTranslation, TravelTokenTexts} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
 import MessageBox from '@atb/components/message-box';
 
@@ -110,8 +110,7 @@ const TravelDeviceTitle = ({
     case 'mobile':
       return (
         <ThemeText type="heading__title" color="primary_2" style={styles.title}>
-          {inspectableToken.name ||
-            t(TravelTokenTexts.toggleToken.unknownDevice)}
+          {inspectableToken.name || t(TravelTokenBoxTexts.mobile.unknownDevice)}
         </ThemeText>
       );
   }
