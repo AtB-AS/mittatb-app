@@ -23,6 +23,7 @@ import {AddTicket, InvalidTicket} from '@atb/assets/svg/mono-icons/ticketing';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {Warning} from '@atb/assets/svg/color/situations';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import {ThemeColor} from '@atb/theme/colors';
 
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
@@ -185,7 +186,11 @@ const TicketInspectionSymbol = ({
   const {theme} = useTheme();
   const {language} = useTranslation();
   if (!fromTariffZone || !toTariffZone) return null;
-  const icon = IconForStatus(status, isInspectable);
+  const themeColor: ThemeColor | undefined =
+    preassignedFareProduct?.type === 'period' && isInspectable
+      ? 'primary_1'
+      : undefined;
+  const icon = IconForStatus(status, isInspectable, themeColor);
   if (!icon) return null;
   const showAsInspectable = isInspectable || status !== 'valid';
   const isValid = status === 'valid';
@@ -195,10 +200,9 @@ const TicketInspectionSymbol = ({
         showAsInspectable && styles.symbolContainer,
         isValid && {
           ...styles.symbolContainerCircle,
-          backgroundColor:
-            preassignedFareProduct?.type === 'period' && isInspectable
-              ? theme.colors.primary_1.backgroundColor
-              : undefined,
+          backgroundColor: themeColor
+            ? theme.colors[themeColor].backgroundColor
+            : undefined,
         },
         isValid &&
           !isInspectable && {
@@ -214,6 +218,7 @@ const TicketInspectionSymbol = ({
             type="body__primary--bold"
             allowFontScaling={false}
             style={styles.symbolZones}
+            color={themeColor}
           >
             {getReferenceDataName(fromTariffZone, language)}
             {fromTariffZone.id !== toTariffZone.id &&
@@ -229,12 +234,15 @@ const TicketInspectionSymbol = ({
 const IconForStatus = (
   status: TicketInfoProps['status'],
   isInspectable: boolean,
+  themeColor?: ThemeColor,
 ): ReactElement | null => {
   const {t} = useTranslation();
   switch (status) {
     case 'valid':
       if (isInspectable)
-        return <ThemeIcon svg={BusSide} colorType="primary" size={'large'} />;
+        return (
+          <ThemeIcon svg={BusSide} colorType={themeColor} size={'large'} />
+        );
       else
         return (
           <ThemeText
