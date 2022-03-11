@@ -8,6 +8,7 @@ jobs:
   build-android:
     name: Build Android
     strategy:
+      fail-fast: false
       matrix:
         org: [atb, nfk]
     environment: ${{ matrix.org }}
