@@ -41,7 +41,7 @@ const SubmittedComponent = ({
   };
 
   return (
-    <View style={[styles.container]}>
+    <View style={styles.container}>
       <ThemeText
         type="body__primary--bold"
         style={[styles.questionText, styles.centerText]}
