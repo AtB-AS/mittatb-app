@@ -58,17 +58,17 @@ const SelectTravelTokenTexts = {
     ],
   },
   toggleToken: {
-    title: _('Bytt mellom mobil / t:kort', 'Switch between mobile / t:card'), // TODO
+    title: _('Bytt mellom mobil / t:kort', 'Switch between mobile / t:card'),
     radioBox: {
       tCard: {
         title: _('T:kort', 'T:card'),
         description: _(
           'Les av t:kortet ditt på holdeplass eller ombord. Kortet leses av ved kontroll.',
-          'TODO', // TODO
+          'Scan your t:card at the stop place or on board. The card will be scanned for ticket inspection',
         ),
         a11yLabel: _(
           'T:kort. Les av t-kortet ditt på holdeplass eller om bord. Kortet leses av ved kontroll.',
-          'TODO', // TODO
+          't:card. Scan the t:card at the stop place or on board. The card will be scanned for ticket inspection',
         ),
         a11yHint: _('Aktivér for å velge t:kort.', 'Activate to select t:card'),
       },
@@ -76,26 +76,23 @@ const SelectTravelTokenTexts = {
         title: _('Mobil', 'Phone'),
         description: _(
           'Gå ombord med mobilen. Mobilen vises frem ved kontroll.',
-          'TODO', // TODO
+          'Board with your phone. Present the phone for ticket inspection.',
         ),
         a11yLabel: _(
           'Mobil. Gå ombord med mobilen. Mobilen vises frem ved kontroll.',
-          'TODO', // TODO
+          'Board with your phone. Present the phone for ticket inspection.',
         ),
-        a11yHint: _(
-          'Aktivér for å velge mobil.',
-          'TODO', // TODO
-        ),
+        a11yHint: _('Aktivér for å velge mobil.', 'Activate to select phone'),
         selection: {
-          heading: _('Velg enhet', 'Select device'), // TODO
+          heading: _('Velg enhet', 'Select device'),
           thisDeviceSuffix: _(' (denne enheten)', ' (this device)'),
         },
       },
     },
-    saveButton: _('Lagre valg', 'Confirm selection'), // TODO
-    errorMessage: _('Noe gikk galt', 'Something went wrong'), // TODO
+    saveButton: _('Lagre valg', 'Confirm selection'),
+    errorMessage: _('Noe gikk galt', 'Something went wrong'),
     noTravelCard: _(
-      'Du har ikke et t:kort registrert. Hvis du ønsker å bruke t:kort kan du legge til dette på din profil i [nettbutikken](https://nettbutikk.atb.no).', // TODO
+      'Du har ikke et t:kort registrert. Hvis du ønsker å bruke t:kort kan du legge til dette på din profil i [nettbutikken](https://nettbutikk.atb.no).',
       'You have no t:card registered, If you wish to use t:card as travel token you may add this to your profile in the [webshop](https://nettbutikk.atb.no).',
     ),
     noMobileToken: _(
