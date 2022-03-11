@@ -1,8 +1,8 @@
-import {by, element, expect} from "detox";
+import {by, element, expect} from 'detox';
 
 // Step through the onboarding
-export async function skipOnboarding(){
-    await element(by.text('Next')).tap();
-    await element(by.text('Start using the app')).tap();
-    await expect(element(by.text('Travel assistant'))).toBeVisible();
+export async function skipOnboarding() {
+  await element(by.id('nextButton')).tap();
+  await element(by.id('nextButton')).tap();
+  await expect(element(by.text('Travel assistant'))).toBeVisible();
 }
