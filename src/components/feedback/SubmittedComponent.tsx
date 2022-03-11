@@ -6,14 +6,38 @@ import ThemeText from '@atb/components/text';
 import {useTranslation, FeedbackTexts} from '@atb/translations';
 import Intercom from 'react-native-intercom';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
+import {FeedbackQuestionsMode} from './FeedbackContext';
+import {Opinions} from '.';
 
-const SubmittedComponent = () => {
+type SubmittedComponentProps = {
+  viewContext: FeedbackQuestionsMode;
+  opinion: Opinions;
+  selectedTextAlternatives: (string | undefined)[];
+  firebaseId?: string;
+};
+
+const SubmittedComponent = ({
+  viewContext,
+  opinion,
+  selectedTextAlternatives,
+  firebaseId,
+}: SubmittedComponentProps) => {
   const styles = useSubmittedComponentStyles();
   const {t} = useTranslation();
 
   const handleButtonClick = () => {
-    console.log('clickity');
-    Intercom.displayMessenger;
+    const alternativeArrayConvertedToString =
+      selectedTextAlternatives[0] === undefined
+        ? null
+        : selectedTextAlternatives.join(', ');
+    Intercom.logEvent('feedback-given', {
+      viewContext: `Bruker har gitt feedback på ${viewContext}.`,
+      mainImpression: `Hovedinntrykket var ${opinion}.`,
+      selectedAlternatives:
+        alternativeArrayConvertedToString || 'Ingen alternativer valgt.',
+      firebaseId,
+    });
+    Intercom.displayMessageComposer();
   };
 
   return (

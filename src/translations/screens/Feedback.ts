@@ -17,6 +17,10 @@ const FeedbackTexts = {
       'Additional thoughts? Please tell us!',
     ),
     button: _('Snakk med app-teamet', 'Chat with the app team'),
+    prefill: _(
+      'Hei! Jeg ble sendt til chatten her etter å ha gitt tilbakemelding på',
+      'Hi! I was transferred to the chat after giving feedback on',
+    ),
   },
 };
 
