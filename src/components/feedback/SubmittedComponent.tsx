@@ -55,8 +55,8 @@ const SubmittedComponent = ({
         <Button
           onPress={handleButtonClick}
           text={t(FeedbackTexts.additionalFeedback.button)}
-          mode="primary"
           icon={Chat}
+          color="primary_2"
           iconPosition="right"
         />
       </View>
