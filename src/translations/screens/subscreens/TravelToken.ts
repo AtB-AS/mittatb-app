@@ -16,24 +16,43 @@ const SelectTravelTokenTexts = {
     },
     faqs: [
       {
-        question: _('Hva om jeg mister mobilen eller t:kortet?', ''), // TODO
+        question: _(
+          'Hva skjer om jeg mister mobilen eller t:kortet?',
+          'What happens if I lose my mobile or t:card?',
+        ),
         answer: _(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', // TODO
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', // TODO
+          'Du kan enkelt velge å bruke billetten din på et annet t:kort eller mobil. Det gjør du på **Min profil**.',
+          'You can easily head over to **My profile** to switch and use your ticket on another t:card or mobile.',
         ),
       },
       {
-        question: _('Kan jeg reise med t:kort og mobil samtidig?', ''), // TODO
+        question: _(
+          'Kan jeg bruke billetten på både t:kort og mobil samtidig?',
+          'Can I use the ticket on both t:card and mobile at the same time?',
+        ),
         answer: _(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', // TODO
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', // TODO
+          'Nei. Billetten kan bare brukes på en dings om gangen, og billetten kan ikke deles med andre.',
+          'No. You can only use the ticket on one gadget at a time and the ticket can not be shared with others.',
         ),
       },
       {
-        question: _('Kan jeg reise uten mobil eller t:kort?', ''), // TODO
+        question: _(
+          'Kan jeg reise uten t:kort eller mobil?',
+          'Can I travel without my t:card or phone?',
+        ),
         answer: _(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', // TODO
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', // TODO
+          'Nei. Du mpå alltid ha med deg den dingsen du har valgt å bruke billetten på.',
+          'No. You must always bring the gadget you gave chosen to use your ticket on.',
+        ),
+      },
+      {
+        question: _(
+          `Har du flere spørsmål om billettkjøp?`,
+          `Do you have any other questions about ticket purchases?`,
+        ),
+        answer: _(
+          `Se flere måter å kontakte oss på atb.no/kontakt`,
+          `See how to contact us at atb.no/en/contact`,
         ),
       },
     ],

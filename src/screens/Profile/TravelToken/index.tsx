@@ -84,7 +84,7 @@ const FaqSection = () => {
           key={index}
           text={t(question)}
           showIconText={false}
-          expandContent={<ThemeText>{t(answer)}</ThemeText>}
+          expandContent={<ThemeText isMarkdown={true}>{t(answer)}</ThemeText>}
         />
       ))}
     </Sections.Section>
