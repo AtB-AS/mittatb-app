@@ -8,6 +8,7 @@ jobs:
   build-ios:
     name: Build iOS
     strategy:
+      fail-fast: false
       matrix:
         org: [atb, nfk]
     environment: ${{ matrix.org }}
