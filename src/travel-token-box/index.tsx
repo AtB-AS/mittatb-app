@@ -71,6 +71,7 @@ export default function TravelTokenBox({
           style={styles.howToChange}
           color="primary_2"
           type={'body__tertiary'}
+          isMarkdown={true}
         >
           {t(TravelTokenBoxTexts.howToChange)}
         </ThemeText>
