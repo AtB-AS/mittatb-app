@@ -25,35 +25,35 @@ const TravelTokenBoxTexts = {
     unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   },
   howToChange: _(
-    'Du kan bytte hvor du bruker billetten din fra Min profil',
-    'TODO', // TODO
+    'Du kan bytte hvor du bruker billetten din fra **Min profil**.',
+    'Head over to **My profile** if you want to switch, and use the ticket on a t:card or a different phone instead.',
   ),
   errorMessages: {
     tokensNotLoadedTitle: _(
-      'Klarer ikke hente informasjon om mobil / t:kort',
-      'TODO', // TODO
+      'Klarer ikke hente informasjon om mobil / t:kort.',
+      'Unable to get information about your phones or t:card.',
     ),
     tokensNotLoaded: _(
       'Billetter må brukes på enten et t:kort eller en mobil, men akkurat nå klarer vi ikke finne ut hvor den er i bruk. Sjekk at du har tilgang på nett der du er.',
-      'TODO', // TODO
+      `Tickets must be used on either a t:card or a phone, but right now we are unable to determine where your tickets are used. Make sure you're online.`,
     ),
     emptyTokensTitle: _(
-      'Vi finner ingen t:kort eller mobiler tilknyttet profilen din',
-      'TODO', // TODO
+      'Vi finner ingen t:kort eller mobiler tilknyttet profilen din.',
+      `We can't find any phones or t:card on your account.`,
     ),
     emptyTokens: _(
       'Sjekk at du har tilgang på nett. Hvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.' +
         '\n\n' +
         'Om problemet vedvarer kan du ta kontakt med AtB kundesenter.',
-      'TODO', // TODO
+      `Make sure you're online. We'll keep trying but if the problem persists, please get in touch with AtB customer service. `,
     ),
     noInspectableTokenTitle: _(
       'Velg hvor du vil bruke billettene dine',
-      'TODO', // TODO
+      'Choose where your tickets are used',
     ),
     noInspectableToken: _(
       'Billetter må brukes på enten et t:kort eller en mobil, og det ser ikke ut som du har valgt en av dem. Gå til Min profil > Bytt mellom mobil / t:kort for å velge.',
-      'TODO', // TODO
+      'Tickets must be used on either a t:card or a phone, but it seems none are chosen. Go to settings in **My profile** and make a choice.',
     ),
   },
 };
