@@ -20,7 +20,7 @@ const TravelTokenBoxTexts = {
     a11yLabel: (deviceName: string) =>
       _(
         `Du bruker nå mobilen ${deviceName}. Ta med deg mobilen når du er ute og reiser.`,
-        `You are now using the mobile phone ${deviceName}. Bring your phone when you are travelling`,
+        `You are now using the phone ${deviceName}. Bring your phone when you are travelling`,
       ),
     unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   },

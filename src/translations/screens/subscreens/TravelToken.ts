@@ -4,12 +4,12 @@ const SelectTravelTokenTexts = {
     header: {
       title: _(
         'Bruk billett på mobil / t:kort',
-        'Use ticket on mobile / t:card',
+        'Use ticket on phone / t:card',
       ),
     },
     changeTokenButton: _(
       'Bytt mellom mobil / t:kort',
-      'Switch between mobile / t:card',
+      'Switch between phone / t:card',
     ),
     faq: {
       title: _('Ofte stilte spørsmål', 'Frequently asked questions'),
@@ -18,17 +18,17 @@ const SelectTravelTokenTexts = {
       {
         question: _(
           'Hva skjer om jeg mister mobilen eller t:kortet?',
-          'What happens if I lose my mobile or t:card?',
+          'What happens if I lose my phone or t:card?',
         ),
         answer: _(
           'Du kan enkelt velge å bruke billetten din på et annet t:kort eller mobil. Det gjør du på **Min profil**.',
-          'You can easily head over to **My profile** to switch and use your ticket on another t:card or mobile.',
+          'You can easily head over to **My profile** to switch and use your ticket on another t:card or phone.',
         ),
       },
       {
         question: _(
           'Kan jeg bruke billetten på både t:kort og mobil samtidig?',
-          'Can I use the ticket on both t:card and mobile at the same time?',
+          'Can I use the ticket on both t:card and phone at the same time?',
         ),
         answer: _(
           'Nei. Billetten kan bare brukes på en dings om gangen, og billetten kan ikke deles med andre.',
@@ -58,7 +58,7 @@ const SelectTravelTokenTexts = {
     ],
   },
   toggleToken: {
-    title: _('Bytt mellom mobil / t:kort', 'Switch between mobile / t:card'),
+    title: _('Bytt mellom mobil / t:kort', 'Switch between phone / t:card'),
     radioBox: {
       tCard: {
         title: _('T:kort', 'T:card'),
@@ -97,7 +97,7 @@ const SelectTravelTokenTexts = {
     ),
     noMobileToken: _(
       'Vi forsøker å klargjøre din mobil til å kunne bruke billettene på den, men det ser ut som det tar litt tid. Du kan sjekke om du har nettilgang og hvis ikke så vil appen forsøke på nytt neste gang du får tilgang.',
-      'We are trying to make your mobile phone ready to be used for the tickets, but it seems it is taking some time. Check that your device is connected to the Internet and if not the phone will try again when the Internet connection is back.',
+      'We are trying to make your phone ready to be used for the tickets, but it seems it is taking some time. Check that your device is connected to the Internet and if not the phone will try again when the Internet connection is back.',
     ),
     unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   },
