@@ -65,7 +65,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const hasProfileTravelCard = !!customerProfile?.travelcard;
 
   const showProfileTravelcardWarning = !tokensEnabled && hasProfileTravelCard;
-  const showInspectableTokenWarning =
+  const showNotInspectableTokenWarning =
     tokensEnabled && !inspectableToken?.isThisDevice;
 
   const {
@@ -293,11 +293,11 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         />
       )}
 
-      {showInspectableTokenWarning && (
+      {showNotInspectableTokenWarning && (
         <MessageBox
           isMarkdown={true}
           containerStyle={styles.warning}
-          message={t(PurchaseOverviewTexts.warning)}
+          message={t(PurchaseOverviewTexts.notInspectableTokenDeviceWarning)}
           type="warning"
         />
       )}

@@ -65,6 +65,7 @@ const PurchaseOverviewTexts = {
     `You can't travel with this phone. Go to **My profile** to switch where your tickets are used.`,
   ),
 };
+
 export default orgSpecificTranslations(PurchaseOverviewTexts, {
   nfk: {
     warning: _(
