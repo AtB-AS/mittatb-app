@@ -114,7 +114,10 @@ export default function DepartureDetails({navigation, route}: Props) {
         }
         //
       >
-        <View style={styles.scrollView__content} testID="departureDetailsContentView">
+        <View
+          style={styles.scrollView__content}
+          testID="departureDetailsContentView"
+        >
           <PaginatedDetailsHeader
             page={activeItemIndexState + 1}
             totalPages={items.length}

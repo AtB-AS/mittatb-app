@@ -128,7 +128,9 @@ export default function LineItem({
               subMode={group.lineInfo?.transportSubmode}
             />
           </View>
-          <ThemeText style={{flex: 1}} testID={testID + 'Title'}>{title}</ThemeText>
+          <ThemeText style={{flex: 1}} testID={testID + 'Title'}>
+            {title}
+          </ThemeText>
         </TouchableOpacity>
         <ToggleFavoriteDepartureButton
           line={group.lineInfo}
