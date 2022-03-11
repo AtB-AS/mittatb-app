@@ -20,10 +20,10 @@ import {
   editFavouriteLocation,
   expectNumberOfFavourites,
   toggleLanguage,
-} from '../utils/myatb';
+} from '../utils/myprofile';
 import setLocation from '../utils';
 
-describe('My AtB', () => {
+describe('My profile', () => {
   beforeAll(async () => {
     await device.launchApp({
       permissions: {
@@ -46,8 +46,8 @@ describe('My AtB', () => {
     await scroll('profileHomeScrollView', 'top');
   });
 
-  // Validates all the option in 'My AtB'
-  it('should show correct options in My AtB', async () => {
+  // Validates all the option in 'My profile'
+  it('should show correct options in My profile', async () => {
     // Scrolls to the bottom first in order to ensure that all sub menus are visible when scrolling up to a menu
     await scroll('profileHomeScrollView', 'bottom');
 

@@ -13,7 +13,7 @@ import {
   scrollContentToId,
 } from '../utils/interactionHelpers';
 import {skipOnboarding} from '../utils/onboarding';
-import {toggleTravelSearchV2} from '../utils/myatb';
+import {toggleTravelSearchV2} from '../utils/myprofile';
 import setLocation from '../utils';
 import {numberOfTravelSuggestions, travelSearch} from '../utils/travelsearch';
 
