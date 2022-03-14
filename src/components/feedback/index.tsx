@@ -228,6 +228,8 @@ export const Feedback = ({
         category,
         selectedAnswers,
         displayCount,
+        ...(tripPattern && {tripPattern: tripPattern}),
+        ...(quayListData && {quayListData: quayListData}),
       };
 
       await firestore().collection('feedback').add(dataToServer);
@@ -256,9 +258,6 @@ export const Feedback = ({
     (entry: VersionStats) =>
       entry.version === APP_VERSION && entry.viewContext === viewContext,
   );
-
-  console.log(displayStats);
-  console.log('current stats', statsForCurrentVersionAndViewContext);
 
   if (!statsForCurrentVersionAndViewContext) return null;
   if (statsForCurrentVersionAndViewContext.answered) return null;
