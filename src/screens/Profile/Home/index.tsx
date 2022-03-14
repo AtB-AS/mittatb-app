@@ -67,7 +67,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
   const {
     setPreference,
-    preferences: {useExperimentalTripSearch, newDepartures},
+    preferences: {newDepartures},
   } = usePreferences();
 
   function copyInstallId() {
@@ -209,23 +209,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 'AtB-Beta-Departures': newDepartures ? 'enabled' : 'disabled',
               });
               setPreference({newDepartures});
-            }}
-          />
-          <Sections.ActionItem
-            mode="toggle"
-            text={t(ProfileTexts.sections.newFeatures.assistant)}
-            checked={useExperimentalTripSearch}
-            testID="newAssistantToggle"
-            onPress={(useExperimentalTripSearch) => {
-              analytics().logEvent('toggle_beta_tripsearch', {
-                toggle: useExperimentalTripSearch ? 'enable' : 'disable',
-              });
-              updateMetadata({
-                'AtB-Beta-TripSearch': useExperimentalTripSearch
-                  ? 'enabled'
-                  : 'disabled',
-              });
-              setPreference({useExperimentalTripSearch});
             }}
           />
           <Sections.LinkItem
