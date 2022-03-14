@@ -18,9 +18,8 @@ echo "Uploading iOS source maps"
         --api-key=$BUGSNAG_API_KEY \
         --app-version=$APP_VERSION \
         --app-bundle-version=$BUILD_ID \
-        --dev=false \
         --platform=ios \
-        --source-map=@bundle/main.jsbundle.map \
-        --bundle=@bundle/main.jsbundle
+        --source-map=bundle/main.jsbundle.map \
+        --bundle=bundle/main.jsbundle
         --project-root=`pwd`
 fi
