@@ -27,9 +27,7 @@ const SubmittedComponent = ({
 
   const handleButtonClick = () => {
     const alternativeArrayConvertedToString =
-      selectedTextAlternatives[0] === undefined
-        ? null
-        : selectedTextAlternatives.join(', ');
+      selectedTextAlternatives.join(', ');
     Intercom.logEvent('feedback-given', {
       viewContext: `Bruker har gitt feedback på ${viewContext}.`,
       mainImpression: `Hovedinntrykket var ${opinion}.`,
