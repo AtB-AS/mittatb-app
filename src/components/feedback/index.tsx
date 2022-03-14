@@ -215,8 +215,8 @@ export const Feedback = ({
       const appVersion = APP_VERSION;
       const organization = APP_ORG;
       const submitTime = Date.now();
-      const displayCount = statsForCurrentVersion
-        ? statsForCurrentVersion.count + 1
+      const displayCount = statsForCurrentVersionAndViewContext
+        ? statsForCurrentVersionAndViewContext.count + 1
         : -1;
 
       const dataToServer = {
@@ -252,15 +252,19 @@ export const Feedback = ({
   if (!category) return null;
 
   if (!displayStats || displayStats.length < 1) return null;
-  const statsForCurrentVersion = displayStats.find(
-    (entry) => entry.version === APP_VERSION,
+  const statsForCurrentVersionAndViewContext = displayStats.find(
+    (entry: VersionStats) =>
+      entry.version === APP_VERSION && entry.viewContext === viewContext,
   );
 
-  if (!statsForCurrentVersion) return null;
-  if (statsForCurrentVersion.answered) return null;
+  console.log(displayStats);
+  console.log('current stats', statsForCurrentVersionAndViewContext);
+
+  if (!statsForCurrentVersionAndViewContext) return null;
+  if (statsForCurrentVersionAndViewContext.answered) return null;
 
   if (allowList) {
-    if (!allowList.includes(statsForCurrentVersion.count + 1)) {
+    if (!allowList.includes(statsForCurrentVersionAndViewContext.count + 1)) {
       return null;
     }
   }
