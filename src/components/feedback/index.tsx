@@ -89,10 +89,9 @@ const GoodOrBadQuestion = ({
 
 type FeedbackProps = {
   viewContext: FeedbackQuestionsViewContext;
-  tripPattern?: TripPattern;
-  quayListData?: SectionListData<Quay>[];
-  isSearching?: boolean;
-  isEmptyResult?: boolean;
+  /** Metadata will be uploaded to Firestore and can be used to examine bugs and issues raised by users.
+   *  Should include a tripPattern if used with assistant, or a quayDataList if used with departures. */
+  metadata: TripPattern | SectionListData<Quay>[];
   /** The allowList array may be provided to decide when the Feedback component should be visible.
    * Example: [2, 5] will make the component render only the second and the fifth time it is called.  */
   allowList?: number[];
@@ -110,8 +109,7 @@ type VersionStats = {
 
 export const Feedback = ({
   viewContext,
-  tripPattern,
-  quayListData,
+  metadata,
   allowList,
   onlyOneFeedbackForEachAppVersionInThisViewContext,
 }: FeedbackProps) => {
@@ -228,8 +226,7 @@ export const Feedback = ({
         category,
         selectedAnswers,
         displayCount,
-        ...(tripPattern && {tripPattern: tripPattern}),
-        ...(quayListData && {quayListData: quayListData}),
+        metadata,
       };
 
       await firestore().collection('feedback').add(dataToServer);
@@ -245,10 +242,12 @@ export const Feedback = ({
 
   useEffect(() => {
     // New Trip pattern, reset state.
-    setSelectedAlternativeIds([]);
-    setSelectedOpinion(Opinions.NotClickedYet);
-    setSubmitted(false);
-  }, [tripPattern]);
+    if (viewContext === 'assistant') {
+      setSelectedAlternativeIds([]);
+      setSelectedOpinion(Opinions.NotClickedYet);
+      setSubmitted(false);
+    }
+  }, [metadata]);
 
   if (submitted) return <SubmittedComponent />;
   if (!category) return null;
@@ -268,7 +267,8 @@ export const Feedback = ({
     }
   }
 
-  if (quayListData || tripPattern)
+  // Ensures that we do not ask for feedback before data is presented to user
+  if (metadata)
     return (
       <View style={styles.container}>
         <GoodOrBadQuestion
