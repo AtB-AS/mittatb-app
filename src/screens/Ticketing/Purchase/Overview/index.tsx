@@ -39,7 +39,11 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import TravellersSheet from '@atb/screens/Ticketing/Purchase/Travellers/TravellersSheet';
 import TravelDateSheet from '@atb/screens/Ticketing/Purchase/TravelDate/TravelDateSheet';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {
+  useHasEnabledMobileToken,
+  useMobileTokenContextState,
+} from '@atb/mobile-token/MobileTokenContext';
+import {useTicketState} from '@atb/tickets';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -55,9 +59,14 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 }) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const {travelTokens} = useMobileTokenContextState();
+  const {inspectableToken} = useMobileTokenContextState();
+  const tokensEnabled = useHasEnabledMobileToken();
+  const {customerProfile} = useTicketState();
+  const hasProfileTravelCard = !!customerProfile?.travelcard;
 
-  const hasTravelCard = travelTokens?.some((t) => t.type === 'travelCard');
+  const showProfileTravelcardWarning = !tokensEnabled && hasProfileTravelCard;
+  const showNotInspectableTokenWarning =
+    tokensEnabled && !inspectableToken?.isThisDevice;
 
   const {
     tariff_zones: tariffZones,
@@ -276,10 +285,19 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         </Sections.Section>
       </View>
 
-      {hasTravelCard && (
+      {showProfileTravelcardWarning && (
         <MessageBox
           containerStyle={styles.warning}
           message={t(PurchaseOverviewTexts.warning)}
+          type="warning"
+        />
+      )}
+
+      {showNotInspectableTokenWarning && (
+        <MessageBox
+          isMarkdown={true}
+          containerStyle={styles.warning}
+          message={t(PurchaseOverviewTexts.notInspectableTokenDeviceWarning)}
           type="warning"
         />
       )}

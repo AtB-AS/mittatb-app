@@ -25,6 +25,7 @@ type MobileTokenContextState = {
   travelTokens?: TravelToken[];
   toggleTravelToken?: (tokenId: string) => Promise<boolean>;
   updateTravelTokens: () => void;
+  inspectableToken: TravelToken | undefined;
 };
 
 const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
@@ -38,6 +39,9 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
   const [rawTokens, setRawTokens] = useState<StoredToken[]>();
   const [mappedTravelTokens, setMappedTravelTokens] = useState<TravelToken[]>();
   const [currentCustomerId, setCurrentCustomerId] = useState(abtCustomerId);
+  const [inspectableToken, setInspectableToken] = useState<
+    TravelToken | undefined
+  >(undefined);
 
   const setStatus = (status?: TokenStatus) => {
     Bugsnag.leaveBreadcrumb('mobiletoken_status_change', status);
@@ -102,6 +106,13 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
     }
   }, [userCreationFinished, client, abtCustomerId]);
 
+  useEffect(() => {
+    const inspectableToken = mappedTravelTokens?.find(
+      (token) => token.inspectable,
+    );
+    setInspectableToken(inspectableToken);
+  }, [mappedTravelTokens]);
+
   // Try again every minute if travel tokens undefined
   useInterval(
     updateTravelTokens,
@@ -128,6 +139,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
         travelTokens: mappedTravelTokens,
         toggleTravelToken,
         updateTravelTokens,
+        inspectableToken,
       }}
     >
       {children}

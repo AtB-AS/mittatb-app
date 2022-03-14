@@ -60,7 +60,12 @@ const PurchaseOverviewTexts = {
       'Periodic tickets in zone A can also be used on train in zone A.',
     ),
   },
+  notInspectableTokenDeviceWarning: _(
+    'Du kan ikke reise med denne mobilen. Du kan bytte hvor du bruker billetten din fra **Min profil**.',
+    `You can't travel with this phone. Go to **My profile** to switch where your tickets are used.`,
+  ),
 };
+
 export default orgSpecificTranslations(PurchaseOverviewTexts, {
   nfk: {
     warning: _(
