@@ -95,6 +95,11 @@ export default function DebugInfo() {
             text="Force refresh id token"
             onPress={() => auth().currentUser?.getIdToken(true)}
           />
+
+          <Sections.LinkItem
+            text="Reset feedback displayStats"
+            onPress={() => storage.set('@ATB_feedback_display_stats', '')}
+          />
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
