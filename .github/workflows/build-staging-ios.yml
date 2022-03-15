@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - rosvik/build-fix-upload-souce-maps
 
 jobs:
   build-ios:
