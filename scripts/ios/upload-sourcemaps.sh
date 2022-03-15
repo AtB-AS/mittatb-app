@@ -6,13 +6,13 @@ if [[
     || -z "${APP_VERSION}"
    ]]; then
     echo "Argument error!"
-    echo "Expected three env variables: 
+    echo "Expected three env variables:
   - BUGSNAG_API_KEY
   - APP_VERSION
   - BUILD_ID"
 
     exit 1
-else 
+else
 echo "Uploading iOS source maps"
     npx bugsnag-source-maps upload-react-native \
         --api-key=$BUGSNAG_API_KEY \
@@ -21,5 +21,4 @@ echo "Uploading iOS source maps"
         --platform=ios \
         --source-map=bundle/main.jsbundle.map \
         --bundle=bundle/main.jsbundle
-        --project-root=`pwd`
 fi
