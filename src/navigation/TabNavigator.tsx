@@ -7,7 +7,7 @@ import {
 import ThemeText from '@atb/components/text';
 import {LocationWithMetadata} from '@atb/favorites/types';
 import {usePreferenceItems} from '@atb/preferences';
-import Assistant_v2 from '@atb/screens/Assistant_v2/';
+import Assistant from '@atb/screens/Assistant';
 import NearbyScreen, {NearbyStackParams} from '@atb/screens/Nearby';
 import ProfileScreen, {ProfileStackParams} from '@atb/screens/Profile';
 import TicketingScreen from '@atb/screens/Ticketing';
@@ -61,7 +61,7 @@ const NavigationRoot = () => {
     >
       <Tab.Screen
         name="Assistant"
-        component={Assistant_v2}
+        component={Assistant}
         options={tabSettings(
           t(dictionary.navigation.assistant),
           t(dictionary.navigation.assistant),

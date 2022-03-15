@@ -55,7 +55,7 @@ import NewsBanner from './NewsBanner';
 import Results from './Results';
 import {ThemeColor} from '@atb/theme/colors';
 import * as navIcons from '@atb/assets/svg/mono-icons/navigation';
-import useTripsQuery from '@atb/screens/Assistant_v2/use-trips-query';
+import useTripsQuery from '@atb/screens/Assistant/use-trips-query';
 
 const themeColor: ThemeColor = 'background_accent';
 

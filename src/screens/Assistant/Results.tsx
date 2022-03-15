@@ -10,9 +10,9 @@ import {isSeveralDays} from '@atb/utils/date';
 import React, {Fragment, useEffect, useMemo, useState} from 'react';
 import {Text, View} from 'react-native';
 
-import ResultItem from '@atb/screens/Assistant_v2/ResultItem';
+import ResultItem from '@atb/screens/Assistant/ResultItem';
 import {TripPattern} from '@atb/api/types/trips';
-import {TripPatternWithKey} from '@atb/screens/Assistant_v2/types';
+import {TripPatternWithKey} from '@atb/screens/Assistant/types';
 
 type Props = {
   tripPatterns: TripPatternWithKey[];
