@@ -45,7 +45,7 @@ const TravelTokenBoxTexts = {
       'Sjekk at du har tilgang på nett. Hvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.' +
         '\n\n' +
         'Om problemet vedvarer kan du ta kontakt med AtB kundesenter.',
-      `Make sure you're online. We'll keep trying but if the problem persists, please get in touch with AtB customer service. `,
+      `Make sure you're online. We'll keep trying but if the problem persists, please get in touch with AtB service center. `,
     ),
     noInspectableTokenTitle: _(
       'Velg hvor du vil bruke billettene dine',

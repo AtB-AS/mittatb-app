@@ -63,23 +63,23 @@ const SelectTravelTokenTexts = {
       tCard: {
         title: _('T:kort', 'T:card'),
         description: _(
-          'Les av t:kortet ditt på holdeplass eller ombord. Kortet leses av ved kontroll.',
-          'Scan your t:card at the stop place or on board. The card will be scanned for ticket inspection',
+          'Les av t:kortet ditt på holdeplass eller om bord. Kortet leses av ved kontroll.',
+          'Validate your t:card at the bus stop or on board. The card will be scanned in a ticket inspection.',
         ),
         a11yLabel: _(
           'T:kort. Les av t-kortet ditt på holdeplass eller om bord. Kortet leses av ved kontroll.',
-          't:card. Scan the t:card at the stop place or on board. The card will be scanned for ticket inspection',
+          't:card. Validate your t:card at the bus stop or on board. The card will be scanned in a ticket inspection.',
         ),
         a11yHint: _('Aktivér for å velge t:kort.', 'Activate to select t:card'),
       },
       phone: {
         title: _('Mobil', 'Phone'),
         description: _(
-          'Gå ombord med mobilen. Mobilen vises frem ved kontroll.',
+          'Gå om bord med mobilen. Mobilen vises frem ved kontroll.',
           'Board with your phone. Present the phone for ticket inspection.',
         ),
         a11yLabel: _(
-          'Mobil. Gå ombord med mobilen. Mobilen vises frem ved kontroll.',
+          'Mobil. Gå om bord med mobilen. Mobilen vises frem ved kontroll.',
           'Board with your phone. Present the phone for ticket inspection.',
         ),
         a11yHint: _('Aktivér for å velge mobil.', 'Activate to select phone'),
@@ -97,7 +97,7 @@ const SelectTravelTokenTexts = {
     ),
     noMobileToken: _(
       'Vi forsøker å klargjøre din mobil til å kunne bruke billettene på den, men det ser ut som det tar litt tid. Du kan sjekke om du har nettilgang og hvis ikke så vil appen forsøke på nytt neste gang du får tilgang.',
-      'We are trying to make your phone ready to be used for the tickets, but it seems it is taking some time. Check that your device is connected to the Internet and if not the phone will try again when the Internet connection is back.',
+      `We're trying to get your phone ready for ticket usage, but it seems like it's taking some time. Check that your device is connected to the internet, if not we'll try again once the internet connection is restored.`,
     ),
     unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   },

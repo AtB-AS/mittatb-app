@@ -39,7 +39,10 @@ const LoginTexts = {
     input: {
       heading: _('Mobilnummer', 'phone number'),
       label: _('+47', '+47'),
-      placeholder: _('Skriv inn ditt telefonnummer', 'Type your phone number'),
+      placeholder: _(
+        'Skriv inn ditt telefonnummer',
+        'Type in your phone number',
+      ),
     },
     mainButton: _('Send engangskode', 'Send one-time code'),
     errors: {
