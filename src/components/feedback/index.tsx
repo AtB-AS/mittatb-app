@@ -1,10 +1,8 @@
 import React, {useEffect, useState, useCallback} from 'react';
-import {SectionListData, View} from 'react-native';
+import {View} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import ThemeText from '@atb/components/text';
 import Button from '../button';
-import {TripPattern} from '@atb/api/types/trips';
-import {Quay} from '@atb/api/types/departures';
 import {useTranslation, FeedbackTexts} from '@atb/translations';
 import {
   FeedbackQuestionsViewContext,
@@ -90,8 +88,8 @@ const GoodOrBadQuestion = ({
 type FeedbackProps = {
   viewContext: FeedbackQuestionsViewContext;
   /** Metadata will be uploaded to Firestore and can be used to examine bugs and issues raised by users.
-   *  Should include a tripPattern if used with assistant, or a quayDataList if used with departures. */
-  metadata: TripPattern | SectionListData<Quay>[];
+   *  An example could be a tripPattern if used with assistant / travel search. */
+  metadata: any;
   /** The allowList array may be provided to decide when the Feedback component should be visible.
    * Example: [2, 5] will make the component render only the second and the fifth time it is called.  */
   allowList?: number[];
