@@ -173,13 +173,9 @@ const scrollTo = async (
   scrollToRef: Detox.NativeElement,
   direction: Detox.Direction,
 ) => {
-  //const scrollDenominator = 6
-  //const displaySize = await device.getDisplaySize()
-  //.scroll(displaySize.height / scrollDenominator, "down")
   await waitFor(scrollToRef)
     .toBeVisible()
     .whileElement(scrollViewRef)
-    //.whileElement(by.id(scrollViewId))
     .scroll(400, direction);
 };
 
