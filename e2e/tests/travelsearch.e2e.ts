@@ -36,7 +36,6 @@ describe('Travel Search', () => {
     await device.reloadReactNative();
   });
 
-  //jest.retryTimes(2)
   it('should do a simple search - version 1', async () => {
     const departure = 'Udduvoll bru vest';
     const arrival = 'Anders Buens gate';
