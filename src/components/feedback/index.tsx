@@ -250,7 +250,7 @@ export const Feedback = ({
 
     return (
       <SubmittedComponent
-        viewContext={mode}
+        viewContext={viewContext}
         opinion={selectedOpinion}
         selectedTextAlternatives={selectedTextAlternatives}
         firebaseId={firebaseId}
