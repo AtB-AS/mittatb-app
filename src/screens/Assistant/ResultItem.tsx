@@ -26,6 +26,7 @@ import {screenReaderHidden} from '@atb/utils/accessibility';
 import {flatMap} from '@atb/utils/array';
 import {
   formatToClock,
+  isInThePast,
   secondsBetween,
   secondsToDuration,
   secondsToDurationShort,
@@ -79,13 +80,14 @@ const ResultItemHeader: React.FC<{
   const durationText = secondsToDurationShort(tripPattern.duration, language);
   const startTime = tripPattern.legs[0].expectedStartTime;
   const endTime = tripPattern.legs[tripPattern.legs.length - 1].expectedEndTime;
+  const isInPast = isInThePast(startTime);
 
   return (
     <View style={styles.resultHeader}>
       <ThemeText
         type="body__secondary"
         color="secondary"
-        style={styles.resultHeaderLabel}
+        style={[styles.resultHeaderLabel, isInPast && styles.lineThrough]}
         accessibilityLabel={t(
           AssistantTexts.results.resultItem.header.time(
             formatToClock(tripPattern.expectedStartTime, language),
@@ -157,6 +159,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     numberOfExpandedLegs,
     tripPattern.legs.length,
   );
+  const isInPast = isInThePast(tripPattern.legs[0].expectedStartTime);
 
   return (
     <TouchableOpacity
@@ -169,7 +172,11 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       testID={testID}
     >
       <Animated.View
-        style={[styles.result, {opacity: fadeInValue}]}
+        style={[
+          styles.result,
+          isInPast && styles.resultInPast,
+          {opacity: fadeInValue},
+        ]}
         {...props}
         accessible={false}
         onLayout={(e) => setCollapsableParentWidth(e.nativeEvent.layout.width)}
@@ -246,6 +253,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.radius.regular,
     marginTop: theme.spacings.medium,
   },
+  resultInPast: {
+    backgroundColor: theme.colors.background_2.backgroundColor,
+  },
   detailsContainer: {
     padding: theme.spacings.medium,
   },
@@ -258,6 +268,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   resultHeaderLabel: {
     flex: 3,
+  },
+  lineThrough: {
+    textDecorationLine: 'line-through',
   },
   legOutput: {
     flexDirection: 'row',
