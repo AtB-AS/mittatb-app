@@ -53,7 +53,7 @@ jobs:
         id: apk-cache
         with:
           path: app-staging.apk
-          key: ${{ matrix.org }}-${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.yalc/**')-${{ hashFiles('.env') }}
+          key: ${{ matrix.org }}-${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.yalc/**') }}-${{ hashFiles('.env') }}
       - name: Decode Android keystore
         run: sh ./scripts/android/create-keystore-file.sh
         env:
