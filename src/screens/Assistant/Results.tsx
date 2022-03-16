@@ -3,25 +3,24 @@ import DayLabel from '@atb/components/day-label';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import ThemeText from '@atb/components/text';
 import MessageBox from '@atb/components/message-box';
-import {TripPattern} from '@atb/sdk';
+
 import {StyleSheet, useTheme} from '@atb/theme';
 import {AssistantTexts, useTranslation} from '@atb/translations';
 import {isSeveralDays} from '@atb/utils/date';
 import React, {Fragment, useEffect, useMemo, useState} from 'react';
 import {Text, View} from 'react-native';
-import ResultItem from './ResultItem';
+
+import ResultItem from '@atb/screens/Assistant/ResultItem';
+import {TripPattern} from '@atb/api/types/trips';
+import {TripPatternWithKey} from '@atb/screens/Assistant/types';
 
 type Props = {
-  tripPatterns: TripPattern[] | null;
+  tripPatterns: TripPatternWithKey[];
   showEmptyScreen: boolean;
   isEmptyResult: boolean;
   isSearching: boolean;
   resultReasons: String[];
-  onDetailsPressed(
-    tripPatternId?: string,
-    tripPatterns?: TripPattern[],
-    index?: number,
-  ): void;
+  onDetailsPressed(tripPatterns?: TripPattern[], index?: number): void;
   errorType?: ErrorType;
 };
 
@@ -58,18 +57,23 @@ const Results: React.FC<Props> = ({
   }, [errorType]);
 
   const allSameDay = useMemo(
-    () => isSeveralDays((tripPatterns ?? []).map((i) => i.startTime)),
+    () => isSeveralDays(tripPatterns.map((i) => i.expectedStartTime)),
     [tripPatterns],
   );
 
   if (showEmptyScreen) {
     return null;
   }
+
   if (errorType) {
     return (
       <View style={styles.container}>
         <ScreenReaderAnnouncement message={errorMessage} />
-        <MessageBox type="warning" message={errorMessage} />
+        <MessageBox
+          type="warning"
+          message={errorMessage}
+          containerStyle={styles.messageBoxContainer}
+        />
       </View>
     );
   }
@@ -79,7 +83,7 @@ const Results: React.FC<Props> = ({
     const pluralResultReasons = hasResultReasons && resultReasons.length > 1;
     return (
       <View style={styles.container}>
-        <MessageBox>
+        <MessageBox containerStyle={styles.messageBoxContainer}>
           <ThemeText
             style={{...styles.infoBoxText, color: theme.status.info.main.color}}
           >
@@ -109,16 +113,18 @@ const Results: React.FC<Props> = ({
 
   return (
     <View style={styles.container} testID="assistantContentView">
-      {tripPatterns?.map((item, i) => (
-        <Fragment key={String(item.id ?? i)}>
+      {tripPatterns?.map((tripPattern, i) => (
+        <Fragment key={tripPattern.key}>
           <DayLabel
-            departureTime={item.startTime}
-            previousDepartureTime={tripPatterns[i - 1]?.startTime}
+            departureTime={tripPattern.expectedStartTime}
+            previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
             allSameDay={allSameDay}
           />
           <ResultItem
-            tripPattern={item}
-            onDetailsPressed={() => onDetailsPressed(item.id, tripPatterns, i)}
+            tripPattern={tripPattern}
+            onDetailsPressed={() => {
+              onDetailsPressed(tripPatterns, i);
+            }}
             testID={'assistantSearchResult' + i}
           />
         </Fragment>
@@ -135,4 +141,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingBottom: theme.spacings.medium,
   },
   infoBoxText: theme.typography.body__primary,
+  messageBoxContainer: {
+    marginTop: theme.spacings.medium,
+  },
 }));
