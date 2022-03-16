@@ -27,6 +27,7 @@ export type QuayHeaderItemProps = SectionItem<{
 export default function QuayHeaderItem({
   quay,
   distance,
+  testID,
   ...props
 }: QuayHeaderItemProps) {
   const styles = useItemStyles();
@@ -64,7 +65,7 @@ export default function QuayHeaderItem({
         accessibilityLabel={`${accessibilityLabel} ${label} ${screenReaderPause}`}
         accessibilityRole="header"
       >
-        <ThemeText>{title}</ThemeText>
+        <ThemeText testID={testID + 'Title'}>{title}</ThemeText>
         <Distance distance={humanized} />
       </View>
 
