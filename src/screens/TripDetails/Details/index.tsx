@@ -120,7 +120,7 @@ const Details: React.FC<Props> = (props) => {
           />
         )}
         {tripPattern && (
-          <View style={styles.paddedContainer}>
+          <View style={styles.paddedContainer} testID="tripDetailsContentView">
             {tripPatterns.length > 1 && (
               <PaginatedDetailsHeader
                 page={currentIndex + 1}

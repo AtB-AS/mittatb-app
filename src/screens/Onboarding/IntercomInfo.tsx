@@ -47,6 +47,7 @@ export default function IntercomInfo() {
             text={t(OnboardingTexts.intercom.mainButton)}
             icon={Confirm}
             iconPosition="right"
+            testID="nextButton"
           />
         </FullScreenFooter>
       </View>

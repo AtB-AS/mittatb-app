@@ -35,6 +35,8 @@ var _utils = require("./state-machine/utils");
 
 var _VerifyInspectionActionHandler = _interopRequireDefault(require("./state-machine/handlers/VerifyInspectionActionHandler"));
 
+var _logger = require("../logger");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const startTokenStateMachine = async (abtTokensService, setStatus, safetyNetApiKey, forceRestart = false, accountId) => {
@@ -56,6 +58,8 @@ const startTokenStateMachine = async (abtTokensService, setStatus, safetyNetApiK
         setStatus(currentState);
       }
     } catch (err) {
+      _logger.logger.error(undefined, err, undefined);
+
       console.warn('Unexpected error', err);
       setStatus({ ...currentState,
         error: {

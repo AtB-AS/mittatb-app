@@ -1,5 +1,3 @@
-import {CancelToken, isCancel, searchTrip} from '@atb/api';
-import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/accessible-text';
@@ -24,8 +22,6 @@ import {
 import {useLocationSearchValue} from '@atb/location-search';
 import {SelectableLocationData} from '@atb/location-search/types';
 import {RootStackParamList} from '@atb/navigation';
-import {TripPattern} from '@atb/sdk';
-import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   AssistantTexts,
@@ -36,8 +32,8 @@ import {
 import {formatToLongDateTime, isInThePast} from '@atb/utils/date';
 import {
   locationDistanceInMetres as distanceInMetres,
-  locationsAreEqual,
   LOCATIONS_REALLY_CLOSE_THRESHOLD,
+  locationsAreEqual,
 } from '@atb/utils/location';
 import {useLayout} from '@atb/utils/use-layout';
 import Bugsnag from '@bugsnag/react-native';
@@ -50,25 +46,21 @@ import {
 } from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {BackHandler, View} from 'react-native';
+import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {AssistantParams} from '.';
 import Loading from '../Loading';
 import FadeBetween from './FadeBetween';
 import {SearchTime, useSearchTimeValue} from './journey-date-picker';
 import NewsBanner from './NewsBanner';
 import Results from './Results';
-import {SearchStateType} from './types';
 import {ThemeColor} from '@atb/theme/colors';
-import useInterval from '@atb/utils/use-interval';
-import {differenceInMinutes, parseISO} from 'date-fns';
+import * as navIcons from '@atb/assets/svg/mono-icons/navigation';
+import useTripsQuery from '@atb/screens/Assistant/use-trips-query';
 
 const themeColor: ThemeColor = 'background_accent';
 
 type AssistantRouteName = 'AssistantRoot';
 const AssistantRouteNameStatic: AssistantRouteName = 'AssistantRoot';
-
-// Used to re-trigger refresh of search time if set to 'now' after 60 minutes.
-const REFRESH_NOW_SEARCH_TIME_LIMIT_IN_MINUTES = 60;
 
 export type AssistantScreenNavigationProp = CompositeNavigationProp<
   StackNavigationProp<AssistantParams>,
@@ -142,28 +134,6 @@ const Assistant: React.FC<Props> = ({
     date: new Date().toISOString(),
   });
 
-  const screenHasFocus = useIsFocused();
-
-  useInterval(
-    () => {
-      if (searchTime.option === 'now') {
-        const now = new Date();
-        const diff = differenceInMinutes(now, parseISO(searchTime.date));
-
-        // Update "now" date if it has been more than 60 minutes
-        // since last time now has been updated
-        if (diff >= REFRESH_NOW_SEARCH_TIME_LIMIT_IN_MINUTES) {
-          navigation.setParams({
-            searchTime: {option: 'now', date: now.toISOString()},
-          });
-        }
-      }
-    },
-    1000,
-    [searchTime.option, searchTime.date],
-    !screenHasFocus || searchTime.option !== 'now',
-  );
-
   function swap() {
     log('swap', {
       newFrom: translateLocation(to),
@@ -233,14 +203,16 @@ const Assistant: React.FC<Props> = ({
     });
   }
 
-  const [
+  const {
     tripPatterns,
     timeOfLastSearch,
-    reload,
-    clearPatterns,
+    refresh,
+    loadMore,
+    clear,
     searchState,
     error,
-  ] = useTripPatterns(from, to, searchTime);
+  } = useTripsQuery(from, to, searchTime);
+
   const isSearching = searchState === 'searching';
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
@@ -259,7 +231,7 @@ const Assistant: React.FC<Props> = ({
 
   const showEmptyScreen = !tripPatterns && !isSearching && !error;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
-  const useScroll = (!showEmptyScreen && !isEmptyResult) || !!error;
+  const useScroll = !showEmptyScreen || !!error;
   const isHeaderFullHeight = !from || !to;
 
   const renderHeader = useCallback(
@@ -290,6 +262,7 @@ const Assistant: React.FC<Props> = ({
                     : t(AssistantTexts.location.locationButton.a11yLabel.use),
                 accessibilityRole: 'button',
               }}
+              testID="searchFromButton"
             />
 
             <LocationInput
@@ -308,6 +281,7 @@ const Assistant: React.FC<Props> = ({
                   screenReaderPause,
                 accessibilityRole: 'button',
               }}
+              testID="searchToButton"
             />
           </Section>
         </View>
@@ -345,7 +319,7 @@ const Assistant: React.FC<Props> = ({
                 language,
               )}
               accessibilityHint={t(AssistantTexts.dateInput.a11yHint)}
-              color="primary_2"
+              color="secondary_3"
               onPress={onSearchTimePress}
             />
           </View>
@@ -400,9 +374,8 @@ const Assistant: React.FC<Props> = ({
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
 
   const onPressed = useCallback(
-    (tripPatternId, tripPatterns, startIndex) =>
-      navigation.navigate('TripDetails', {
-        tripPatternId,
+    (tripPatterns, startIndex) =>
+      navigation.navigate('TripDetails_v2', {
         tripPatterns,
         startIndex,
       }),
@@ -414,6 +387,8 @@ const Assistant: React.FC<Props> = ({
   const [searchStateMessage, setSearchStateMessage] = useState<
     string | undefined
   >();
+
+  const screenHasFocus = useIsFocused();
 
   useEffect(() => {
     if (!screenHasFocus) return;
@@ -433,27 +408,11 @@ const Assistant: React.FC<Props> = ({
     }
   }, [searchState]);
 
-  // Reset view on back press instead of exiting app
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-        if (screenHasFocus && from && to) {
-          resetView();
-          return true; // prevent default action
-        }
-        return false;
-      },
-    );
-    return () => backHandler.remove();
-  });
-
   return (
     <DisappearingHeader
       renderHeader={renderHeader}
       highlightComponent={newsBanner}
-      onRefresh={reload}
-      isRefreshing={isSearching}
+      onRefresh={refresh}
       useScroll={useScroll}
       headerTitle={t(AssistantTexts.header.title)}
       headerMargin={24}
@@ -465,10 +424,11 @@ const Assistant: React.FC<Props> = ({
         color: themeColor,
         onPress: resetView,
         accessibilityLabel: t(AssistantTexts.header.accessibility.logo),
+        testID: 'lhb',
       }}
       onFullscreenTransitionEnd={(fullHeight) => {
         if (fullHeight) {
-          clearPatterns();
+          clear();
         }
       }}
       alertContext="travel"
@@ -483,6 +443,38 @@ const Assistant: React.FC<Props> = ({
         onDetailsPressed={onPressed}
         errorType={error}
       />
+      {!error && (
+        <TouchableOpacity
+          onPress={loadMore}
+          disabled={searchState === 'searching'}
+          style={styles.loadMoreButton}
+        >
+          {searchState === 'searching' ? (
+            <>
+              <ActivityIndicator
+                color={theme.text.colors.secondary}
+                style={{
+                  marginRight: theme.spacings.medium,
+                }}
+              />
+              <ThemeText color="secondary">
+                {tripPatterns.length
+                  ? t(AssistantTexts.results.fetchingMore)
+                  : t(AssistantTexts.searchState.searching)}
+              </ThemeText>
+            </>
+          ) : (
+            <>
+              {loadMore ? (
+                <>
+                  <ThemeText>{t(AssistantTexts.results.fetchMore)} </ThemeText>
+                  <ThemeIcon svg={navIcons.Expand} size={'normal'} />
+                </>
+              ) : null}
+            </>
+          )}
+        </TouchableOpacity>
+      )}
     </DisappearingHeader>
   );
 };
@@ -518,6 +510,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   fadeChild: {
     marginVertical: theme.spacings.medium,
+  },
+  loadMoreButton: {
+    paddingVertical: theme.spacings.medium,
+    marginBottom: theme.spacings.xLarge,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 }));
 
@@ -644,104 +643,6 @@ function useUpdatedLocation(
 }
 
 export default AssistantRoot;
-
-function useTripPatterns(
-  fromLocation: Location | undefined,
-  toLocation: Location | undefined,
-  searchTime: SearchTime | undefined,
-): [
-  TripPattern[] | null,
-  string,
-  () => {},
-  () => void,
-  SearchStateType,
-  ErrorType?,
-] {
-  const [timeOfSearch, setTimeOfSearch] = useState<string>(
-    new Date().toISOString(),
-  );
-  const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
-  const [errorType, setErrorType] = useState<ErrorType>();
-  const [searchState, setSearchState] = useState<SearchStateType>('idle');
-  const {addJourneySearchEntry} = useSearchHistory();
-
-  const clearPatterns = () => setTripPatterns(null);
-  const reload = useCallback(() => {
-    const source = CancelToken.source();
-
-    async function search() {
-      if (!fromLocation || !toLocation) {
-        setSearchState('idle');
-        return;
-      }
-
-      setSearchState('searching');
-      setErrorType(undefined);
-      try {
-        const arriveBy = searchTime?.option === 'arrival';
-        const searchDate =
-          searchTime && searchTime?.option !== 'now'
-            ? searchTime.date
-            : new Date().toISOString();
-
-        log('searching', {
-          fromLocation: translateLocation(fromLocation),
-          toLocation: translateLocation(toLocation),
-          searchDate: searchDate,
-        });
-
-        try {
-          // Fire and forget add journey search entry
-          await addJourneySearchEntry([fromLocation, toLocation]);
-        } catch (e) {}
-
-        const response = await searchTrip(
-          fromLocation,
-          toLocation,
-          searchDate,
-          arriveBy,
-          {
-            cancelToken: source.token,
-          },
-        );
-        source.token.throwIfRequested();
-        setTimeOfSearch(searchDate);
-        if (Array.isArray(response.data)) {
-          setTripPatterns(response.data);
-          setSearchState(
-            response.data.length >= 1
-              ? 'search-success'
-              : 'search-empty-result',
-          );
-        }
-      } catch (e) {
-        if (!isCancel(e)) {
-          setErrorType(getAxiosErrorType(e));
-          console.warn(e);
-          setTripPatterns(null);
-          setSearchState('search-empty-result');
-        }
-      }
-    }
-
-    search();
-    return () => {
-      if (!fromLocation || !toLocation) return;
-      source.cancel('New search to replace previous search');
-    };
-  }, [fromLocation, toLocation, searchTime]);
-
-  useEffect(reload, [reload]);
-
-  return [
-    tripPatterns,
-    timeOfSearch,
-    reload,
-    clearPatterns,
-    searchState,
-    errorType,
-  ];
-}
 
 function useDoOnceWhen(fn: () => void, condition: boolean) {
   const firstTimeRef = useRef(true);

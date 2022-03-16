@@ -202,7 +202,7 @@ const DisappearingHeader: React.FC<Props> = ({
         <View onLayout={onScreenHeaderLayout}>
           <AnimatedScreenHeader
             title={headerTitle}
-            rightButton={{type: 'chat', color: themeColor}}
+            rightButton={{type: 'chat', color: themeColor, testID: 'rhb'}}
             alternativeTitleComponent={alternativeTitleComponent}
             showAlternativeTitle={showAlterntativeTitle && !isAnimating}
             scrollRef={scrollYRef}

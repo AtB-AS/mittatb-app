@@ -10,6 +10,7 @@ import {StyleSheet, Theme} from '@atb/theme';
 import {TravelToken} from '@atb/mobile-token/types';
 import {useTranslation} from '@atb/translations';
 import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
+import MessageBox from '@atb/components/message-box';
 
 export default function TravelTokenBox({
   showIfThisDevice,
@@ -21,20 +22,25 @@ export default function TravelTokenBox({
   const styles = useStyles();
   const {t} = useTranslation();
   const {travelTokens} = useMobileTokenContextState();
-  const inspectableToken = travelTokens?.find((t) => t.inspectable);
 
-  if (
-    !inspectableToken ||
-    (inspectableToken.isThisDevice && !showIfThisDevice)
-  ) {
+  const errorMessages = ErrorMessages();
+  if (errorMessages) return <ErrorMessages />;
+
+  let inspectableToken = travelTokens?.find((t) => t.inspectable)!; // Bang! non-inspectable tokens are handled by ErrorMessages
+
+  if (inspectableToken.isThisDevice && !showIfThisDevice) {
     return null;
   }
 
   const a11yLabel =
     (inspectableToken.type === 'travelCard'
       ? t(TravelTokenBoxTexts.tcard.a11yLabel)
-      : t(TravelTokenBoxTexts.mobile.a11yLabel(inspectableToken.name))) +
-    (showHowToChangeHint ? t(TravelTokenBoxTexts.howToChange) : '');
+      : t(
+          TravelTokenBoxTexts.mobile.a11yLabel(
+            inspectableToken.name ||
+              t(TravelTokenBoxTexts.mobile.unnamedDevice),
+          ),
+        )) + (showHowToChangeHint ? t(TravelTokenBoxTexts.howToChange) : '');
 
   const description =
     inspectableToken.type === 'travelCard'
@@ -47,7 +53,7 @@ export default function TravelTokenBox({
       accessible={true}
       accessibilityLabel={a11yLabel}
     >
-      <TravelCardTitle inspectableToken={inspectableToken} />
+      <TravelDeviceTitle inspectableToken={inspectableToken} />
       <View style={{display: 'flex', flexDirection: 'row'}}>
         <View style={{alignItems: 'center'}}>
           {inspectableToken.type === 'travelCard' ? (
@@ -65,6 +71,7 @@ export default function TravelTokenBox({
           style={styles.howToChange}
           color="primary_2"
           type={'body__tertiary'}
+          isMarkdown={true}
         >
           {t(TravelTokenBoxTexts.howToChange)}
         </ThemeText>
@@ -73,7 +80,7 @@ export default function TravelTokenBox({
   );
 }
 
-const TravelCardTitle = ({
+const TravelDeviceTitle = ({
   inspectableToken,
 }: {
   inspectableToken: TravelToken;
@@ -92,26 +99,70 @@ const TravelCardTitle = ({
           >
             {t(TravelTokenBoxTexts.tcard.title)}
           </ThemeText>
-          <ThemeText type="heading__title" color="primary_2">
+          <ThemeText color="primary_2" style={styles.transparent}>
             {' XXXX XX'}
           </ThemeText>
           <ThemeText type="heading__title" color="primary_2">
-            {inspectableToken.travelCardId?.substr(0, 2) +
+            {inspectableToken.travelCardId?.substring(0, 2) +
               ' ' +
-              inspectableToken.travelCardId?.substr(2)}
+              inspectableToken.travelCardId?.substring(2)}
           </ThemeText>
-          <ThemeText type="heading__title" color="primary_2">
-            {' X'}
+          <ThemeText color="primary_2" style={styles.transparent}>
+            {'X'}
           </ThemeText>
         </View>
       );
     case 'mobile':
       return (
         <ThemeText type="heading__title" color="primary_2" style={styles.title}>
-          {inspectableToken.name}
+          {inspectableToken.name || t(TravelTokenBoxTexts.mobile.unnamedDevice)}
         </ThemeText>
       );
   }
+};
+
+const ErrorMessages = () => {
+  const {travelTokens, updateTravelTokens} = useMobileTokenContextState();
+  const {t} = useTranslation();
+  const styles = useStyles();
+
+  if (!travelTokens) {
+    return (
+      <MessageBox
+        type={'warning'}
+        title={t(TravelTokenBoxTexts.errorMessages.tokensNotLoadedTitle)}
+        message={t(TravelTokenBoxTexts.errorMessages.tokensNotLoaded)}
+        containerStyle={styles.errorMessage}
+        onPress={updateTravelTokens}
+      />
+    );
+  }
+
+  if (!travelTokens.length) {
+    return (
+      <MessageBox
+        type={'warning'}
+        title={t(TravelTokenBoxTexts.errorMessages.emptyTokensTitle)}
+        message={t(TravelTokenBoxTexts.errorMessages.emptyTokens)}
+        containerStyle={styles.errorMessage}
+      />
+    );
+  }
+
+  const inspectableToken = travelTokens?.find((t) => t.inspectable);
+
+  if (!inspectableToken) {
+    return (
+      <MessageBox
+        type={'warning'}
+        title={t(TravelTokenBoxTexts.errorMessages.noInspectableTokenTitle)}
+        message={t(TravelTokenBoxTexts.errorMessages.noInspectableToken)}
+        containerStyle={styles.errorMessage}
+      />
+    );
+  }
+
+  return null;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
@@ -137,5 +188,8 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   howToChange: {
     marginTop: theme.spacings.xLarge,
+  },
+  transparent: {
+    opacity: 0.6,
   },
 }));

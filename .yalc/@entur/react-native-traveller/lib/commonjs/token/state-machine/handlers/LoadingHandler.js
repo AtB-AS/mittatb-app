@@ -9,24 +9,42 @@ var _native = require("../../../native");
 
 var _HandlerFactory = require("../HandlerFactory");
 
+var _logger = require("../../../logger");
+
 const secondsIn48Hours = 48 * 60 * 60;
 
 function loadingHandler() {
   return (0, _HandlerFactory.stateHandlerFactory)(['Loading', 'Valid'], async s => {
-    const token = await (0, _native.getToken)(s.accountId);
+    const {
+      accountId,
+      state
+    } = s;
+
+    _logger.logger.info('loading', undefined, {
+      accountId,
+      state
+    });
+
+    const token = await (0, _native.getToken)(accountId);
 
     if (!token) {
+      _logger.logger.info('no_token_found', undefined);
+
       return {
-        accountId: s.accountId,
+        accountId,
         state: 'InitiateNew'
       };
     } else {
+      _logger.logger.info('token_found', undefined, {
+        tokenId: token.tokenId
+      });
+
       return tokenNeedsRenewal(token) ? {
-        accountId: s.accountId,
+        accountId,
         tokenId: token.tokenId,
         state: 'InitiateRenewal'
       } : {
-        accountId: s.accountId,
+        accountId,
         state: 'Validating',
         tokenId: token.tokenId
       };

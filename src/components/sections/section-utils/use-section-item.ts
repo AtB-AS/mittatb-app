@@ -10,6 +10,7 @@ export type SectionItemProps = {
   type?: ContainerSizingType;
   radius?: RadiusMode;
   radiusSize?: RadiusSizes;
+  testID?: string;
 };
 export type SectionItem<T> = T & SectionItemProps;
 

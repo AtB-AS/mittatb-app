@@ -111,6 +111,7 @@ const TripSection: React.FC<TripSectionProps> = ({
           <WalkSection {...leg} />
         ) : (
           <TripRow
+            testID="legOnTrip"
             accessibilityLabel={t(
               TripDetailsTexts.trip.leg.transport.a11ylabel(
                 t(getTranslatedModeName(leg.mode)),
@@ -226,6 +227,7 @@ const IntermediateInfo: React.FC<TripSectionProps> = (leg) => {
   const numberOfIntermediateCalls = leg.intermediateEstimatedCalls.length;
   return (
     <TripRow
+      testID="intermediateStops"
       onPress={navigateToDetails}
       accessibilityLabel={
         t(

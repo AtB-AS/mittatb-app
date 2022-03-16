@@ -9,28 +9,12 @@ import {
   useFeedbackQuestion,
 } from './FeedbackContext';
 import GoodOrBadButton from './GoodOrBadButton';
+import SubmittedComponent from './SubmittedComponent';
 import {RenderQuestion} from './RenderQuestions';
 import firestore from '@react-native-firebase/firestore';
 import Bugsnag from '@bugsnag/react-native';
 import {APP_ORG, APP_VERSION} from '@env';
 import storage from '@atb/storage';
-
-const SubmittedComponent = () => {
-  const styles = useFeedbackStyles();
-  const {t} = useTranslation();
-
-  return (
-    <View style={[styles.container, styles.submittedView]}>
-      <ThemeText
-        type="body__primary--bold"
-        style={[styles.questionText, styles.centerText]}
-      >
-        {t(FeedbackTexts.submittedText.thanks)}
-      </ThemeText>
-      <ThemeText>🎉</ThemeText>
-    </View>
-  );
-};
 
 export enum Opinions {
   Good = 'GOOD',
@@ -127,6 +111,7 @@ export const Feedback = ({
     number[]
   >([]);
   const [displayStats, setDisplayStats] = useState<VersionStats[]>([]);
+  const [firebaseId, setFirebaseId] = useState<string>();
 
   const incrementCounterAndSetDisplayStats = async () => {
     const defaultDisplayStatObject = {
@@ -231,7 +216,10 @@ export const Feedback = ({
         metadata,
       };
 
-      await firestore().collection('feedback').add(dataToServer);
+      const submittedFeedbackDoc = await firestore()
+        .collection('feedback')
+        .add(dataToServer);
+      setFirebaseId(submittedFeedbackDoc.id);
     } catch (err: any) {
       Bugsnag.notify(err);
     } finally {
@@ -251,8 +239,24 @@ export const Feedback = ({
     }
   }, [metadata]);
 
-  if (submitted) return <SubmittedComponent />;
   if (!category) return null;
+  if (submitted) {
+    const selectedTextAlternatives = selectedAlternativeIds.map(
+      (altId) =>
+        category?.question?.alternatives.find(
+          (alt) => alt.alternativeId === altId,
+        )?.alternativeText.nb,
+    );
+
+    return (
+      <SubmittedComponent
+        viewContext={mode}
+        opinion={selectedOpinion}
+        selectedTextAlternatives={selectedTextAlternatives}
+        firebaseId={firebaseId}
+      />
+    );
+  }
 
   if (!displayStats || displayStats.length < 1) return null;
   const statsForCurrentVersionAndViewContext = displayStats.find(

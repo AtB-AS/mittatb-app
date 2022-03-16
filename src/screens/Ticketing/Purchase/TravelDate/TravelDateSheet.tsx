@@ -59,6 +59,7 @@ const TravelDate = forwardRef<ScrollView, Props>(
             type: 'cancel',
             onPress: close,
             text: t(ScreenHeaderTexts.headerButton.cancel.text),
+            testID: 'cancelButton',
           }}
           color="background_2"
           setFocusOnLoad={false}
@@ -91,6 +92,7 @@ const TravelDate = forwardRef<ScrollView, Props>(
             color="primary_2"
             text={t(TravelDateTexts.primaryButton)}
             style={styles.saveButton}
+            testID="confirmTimeButton"
           />
         </FullScreenFooter>
       </BottomSheetContainer>

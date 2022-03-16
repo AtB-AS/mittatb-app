@@ -5,7 +5,7 @@ const PurchaseOverviewTexts = {
   header: {
     title: {
       single: _('Enkeltbillett', 'Single ticket'),
-      period: _('Periodebillett', 'Period ticket'),
+      period: _('Periodebillett', 'Periodic ticket'),
       carnet: _('Klippekort', 'Carnet ticket'),
     },
   },
@@ -50,11 +50,22 @@ const PurchaseOverviewTexts = {
     'Når du er ute og reiser må du ha med t:kortet som er registrert på din profil.',
     'When traveling, you need to bring the t:card registered on your profile.',
   ),
-  samarbeidsbillettenInfo: _(
-    'Visste du at enkeltbilletter i sone A også kan brukes på tog i sone A?',
-    'Single tickets in zone A can also be used for trips by train in zone A.',
+  samarbeidsbillettenInfo: {
+    single: _(
+      'Enkeltbilletter i sone A kan også brukes på tog i sone A.',
+      'Single tickets in zone A can also be used on train in zone A.',
+    ),
+    period: _(
+      'Periodebilletter i sone A kan også brukes på tog i sone A.',
+      'Periodic tickets in zone A can also be used on train in zone A.',
+    ),
+  },
+  notInspectableTokenDeviceWarning: _(
+    'Du kan ikke reise med denne mobilen. Du kan bytte hvor du bruker billetten din fra **Min profil**.',
+    `You can't travel with this phone. Go to **My profile** to switch where your tickets are used.`,
   ),
 };
+
 export default orgSpecificTranslations(PurchaseOverviewTexts, {
   nfk: {
     warning: _(

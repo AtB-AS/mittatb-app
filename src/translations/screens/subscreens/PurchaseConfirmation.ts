@@ -4,7 +4,7 @@ const PurchaseConfirmationTexts = {
   header: {
     title: {
       single: _('Enkeltbillett', 'Single ticket'),
-      period: _('Periodebillett', 'Period ticket'),
+      period: _('Periodebillett', 'Periodic ticket'),
       carnet: _('Klippekort', 'Carnet ticket'),
     },
   },

@@ -3,6 +3,7 @@ import { startTokenStateMachine } from './token';
 import { createFetcher } from './fetcher';
 import { createAbtTokensService } from './token/abt-tokens-service';
 import type {
+  ActivateTokenRequest,
   StoredState,
   StoredToken,
   TokenError,
@@ -11,6 +12,8 @@ import type {
 } from './token/types';
 import { getSecureToken, getToken } from './native';
 import type { PayloadAction } from './native/types';
+import { getActivateTokenRequestBody } from './token/attest';
+import { setupLogger, logger } from './logger';
 
 export type { StoredToken } from './token/types';
 export type { Token } from './native/types';
@@ -26,12 +29,37 @@ export default function createClient(
   initialConfig: InitialConfig
 ) {
   const { safetyNetApiKey } = initialConfig;
-  const config = getConfigFromInitialConfig(initialConfig);
-  const fetcher = createFetcher(config);
-  const abtTokensService = createAbtTokensService(fetcher, config.hosts);
-
   let currentStatus: TokenStatus | undefined;
   let currentAccountId: string | undefined;
+  setupLogger({
+    infoLogger: initialConfig.infoLogger,
+    errorLogger: initialConfig.errorLogger,
+  });
+
+  async function reattest(
+    tokenId: string,
+    nonce: string,
+    attestationEncryptionPublicKey: string
+  ): Promise<ActivateTokenRequest> {
+    if (!currentAccountId) {
+      const error = new Error(
+        `Tried to reattest ${tokenId}, but no account id set.`
+      );
+      logger.error(undefined, error, undefined);
+      throw error;
+    }
+
+    return getActivateTokenRequestBody(
+      currentAccountId,
+      tokenId,
+      nonce,
+      attestationEncryptionPublicKey
+    );
+  }
+
+  const config = getConfigFromInitialConfig(initialConfig);
+  const fetcher = createFetcher(config, reattest);
+  const abtTokensService = createAbtTokensService(fetcher, config.hosts);
 
   const toVisualState = (storedState: StoredState): VisualState => {
     if (storedState.error?.missingNetConnection) {
@@ -133,9 +161,11 @@ export default function createClient(
     },
     toggleToken: async (tokenId: string): Promise<StoredToken[]> => {
       if (!currentAccountId) {
-        return Promise.reject(
-          new Error('Only able to toggle valid tokens on active account')
+        const error = new Error(
+          'Only able to toggle valid tokens on active account'
         );
+        logger.error(undefined, error, undefined);
+        return Promise.reject(error);
       }
 
       const { tokens } = await abtTokensService.toggleToken(tokenId, {
@@ -146,7 +176,9 @@ export default function createClient(
     },
     listTokens: async (): Promise<StoredToken[] | undefined> => {
       if (!currentAccountId) {
-        return Promise.reject(new Error('No active account'));
+        const error = new Error('No active account');
+        logger.error(undefined, error, undefined);
+        return Promise.reject(error);
       }
 
       return await abtTokensService.listTokens();
@@ -177,7 +209,11 @@ export default function createClient(
       const token = await getToken(currentAccountId);
 
       if (!token) {
-        return Promise.reject(new Error('Token not found'));
+        const error = new Error(
+          `Token not found for account '${currentAccountId}'`
+        );
+        logger.error(undefined, error, undefined);
+        return Promise.reject(error);
       }
 
       return getSecureToken(currentAccountId, token.tokenId, true, actions);

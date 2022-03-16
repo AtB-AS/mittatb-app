@@ -33,6 +33,7 @@ type Props = {
   now: number;
   travelCard?: TravelCard;
   didPaymentFail?: boolean;
+  showTokenInfo?: boolean;
 };
 
 const TicketsScrollView: React.FC<Props> = ({
@@ -44,6 +45,7 @@ const TicketsScrollView: React.FC<Props> = ({
   now,
   travelCard,
   didPaymentFail = false,
+  showTokenInfo,
 }) => {
   const {theme} = useTheme();
   const styles = useStyles();
@@ -65,11 +67,15 @@ const TicketsScrollView: React.FC<Props> = ({
           />
         }
       >
-        {hasEnabledMobileToken ? (
-          <TravelTokenBox showIfThisDevice={false} showHowToChangeHint={true} />
-        ) : hasActiveTravelCard ? (
-          <TravelCardInformation travelCard={travelCard} />
-        ) : null}
+        {showTokenInfo &&
+          (hasEnabledMobileToken ? (
+            <TravelTokenBox
+              showIfThisDevice={false}
+              showHowToChangeHint={true}
+            />
+          ) : hasActiveTravelCard ? (
+            <TravelCardInformation travelCard={travelCard} />
+          ) : null)}
         {didPaymentFail && (
           <MessageBox
             containerStyle={styles.messageBox}
@@ -85,7 +91,7 @@ const TicketsScrollView: React.FC<Props> = ({
         {reservations?.map((res) => (
           <TicketReservation key={res.orderId} reservation={res} />
         ))}
-        {fareContracts?.map((fc) => (
+        {fareContracts?.map((fc, index) => (
           <ErrorBoundary
             key={fc.orderId}
             message={t(TicketsTexts.scrollView.errorLoadingTicket(fc.orderId))}
@@ -100,6 +106,7 @@ const TicketsScrollView: React.FC<Props> = ({
                   params: {orderId: fc.orderId},
                 })
               }
+              testID={'ticket' + index}
             />
           </ErrorBoundary>
         ))}

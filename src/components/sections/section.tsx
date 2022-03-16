@@ -10,6 +10,7 @@ export type SectionProps = PropsWithChildren<{
   withBottomPadding?: boolean;
   type?: ContainerSizingType;
   style?: ViewStyle;
+  testID?: string;
 }> &
   AccessibilityProps;
 

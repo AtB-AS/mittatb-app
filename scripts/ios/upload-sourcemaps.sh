@@ -3,22 +3,22 @@
 if [[
     -z "${BUGSNAG_API_KEY}"
     || -z "${BUILD_ID}"
+    || -z "${APP_VERSION}"
    ]]; then
     echo "Argument error!"
-    echo "Expected two env variables: 
+    echo "Expected three env variables:
   - BUGSNAG_API_KEY
+  - APP_VERSION
   - BUILD_ID"
 
     exit 1
-else 
+else
 echo "Uploading iOS source maps"
-    curl --http1.1 https://upload.bugsnag.com/react-native-source-map \
-        -F apiKey=$BUGSNAG_API_KEY \
-        -F appVersion=1.16 \
-        -F appBundleVersion=$BUILD_ID \
-        -F dev=false \
-        -F platform=ios \
-        -F sourceMap=@bundle/main.jsbundle.map \
-        -F bundle=@bundle/main.jsbundle \
-        -F projectRoot=`pwd`
+    npx bugsnag-source-maps upload-react-native \
+        --api-key=$BUGSNAG_API_KEY \
+        --app-version=$APP_VERSION \
+        --app-bundle-version=$BUILD_ID \
+        --platform=ios \
+        --source-map=bundle/main.jsbundle.map \
+        --bundle=bundle/main.jsbundle
 fi

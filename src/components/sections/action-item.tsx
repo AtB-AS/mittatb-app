@@ -29,6 +29,7 @@ export default function ActionItem({
   mode = 'check',
   checked = false,
   accessibility,
+  testID,
   ...props
 }: ActionItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
@@ -41,6 +42,7 @@ export default function ActionItem({
           value={checked}
           onValueChange={(value) => onPress?.(value)}
           accessibilityLabel={text}
+          testID={testID}
           {...accessibility}
         />
       </InternalLabeledItem>
@@ -54,6 +56,7 @@ export default function ActionItem({
     <TouchableOpacity
       onPress={() => onPress?.(!checked)}
       style={[style.spaceBetween, topContainer]}
+      testID={testID}
       accessibilityRole={role}
       accessibilityState={{
         [stateName]: checked,

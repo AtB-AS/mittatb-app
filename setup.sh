@@ -16,6 +16,7 @@ then
 ./setup.sh dev atb"
     exit 1
 else
+    sh ./scripts/clean-assets.sh
     sh ./scripts/override-environment.sh $1 $2
     sh ./scripts/generate-native-assets.sh
 fi

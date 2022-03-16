@@ -41,7 +41,14 @@ export default function SortableList({
     <FlatList
       data={data}
       contentContainerStyle={styles.container}
-      renderItem={(obj) => <Item {...obj} onPress={resort} length={length} />}
+      renderItem={(obj) => (
+        <Item
+          {...obj}
+          onPress={resort}
+          length={length}
+          testID={'favoriteItem' + obj.index}
+        />
+      )}
       keyExtractor={(item) => item.name + item.id}
     />
   );
@@ -75,7 +82,10 @@ function Item(props: ItemProps) {
   const styles = useListStyle();
 
   return (
-    <View style={[styles.item, sectionStyles.spaceBetween, topContainer]}>
+    <View
+      style={[styles.item, sectionStyles.spaceBetween, topContainer]}
+      testID={props.testID}
+    >
       <View importantForAccessibility={'no-hide-descendants'}>
         <FavoriteIcon favorite={item} />
       </View>
@@ -135,6 +145,7 @@ function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
       accessibilityHint={hint}
       style={styles.moveIcon}
       hitSlop={insets.symmetric(theme.spacings.small, theme.spacings.xSmall)}
+      testID={direction}
     >
       <ThemeIcon svg={Icon} />
     </TouchableOpacity>

@@ -19,6 +19,7 @@ type Props = {
   hideDetails?: boolean;
   onPressDetails?: () => void;
   hasActiveTravelCard?: boolean;
+  testID?: string;
 };
 
 const SimpleTicket: React.FC<Props> = ({
@@ -26,6 +27,7 @@ const SimpleTicket: React.FC<Props> = ({
   now,
   hideDetails,
   onPressDetails,
+  testID,
   hasActiveTravelCard = false,
 }) => {
   const firstTravelRight = fc.travelRights?.[0];
@@ -48,6 +50,7 @@ const SimpleTicket: React.FC<Props> = ({
         isInspectable={inspectable}
         hideDetails={hideDetails}
         onPressDetails={onPressDetails}
+        testID={testID}
       />
     );
   } else if (isCarnetTicket(firstTravelRight)) {
@@ -57,6 +60,7 @@ const SimpleTicket: React.FC<Props> = ({
         travelRights={fc.travelRights.filter(isCarnetTicket)}
         now={now}
         isInspectable={inspectable}
+        testID={testID}
       />
     );
   } else {

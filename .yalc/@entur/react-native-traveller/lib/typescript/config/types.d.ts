@@ -1,3 +1,4 @@
+import type { LogCallback } from '../logger';
 export declare type Hosts = {
     pto: string;
 };
@@ -21,6 +22,8 @@ export declare type Config = {
     hosts: Hosts;
     extraHeaders: Record<string, string>;
     fetch: Fetch;
+    infoLogger?: LogCallback;
+    errorLogger?: LogCallback;
 };
 export declare type InitialConfig = Partial<Config> & {
     safetyNetApiKey: string;

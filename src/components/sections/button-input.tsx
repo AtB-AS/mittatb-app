@@ -24,6 +24,7 @@ export type ButtonInputProps = SectionItem<{
   highlighted?: boolean;
   icon?: NavigationIconTypes | JSX.Element;
   containerStyle?: ViewStyle;
+  testID?: string;
 }> &
   AccessibilityProps;
 

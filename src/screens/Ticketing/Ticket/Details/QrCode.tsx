@@ -10,6 +10,7 @@ import qrcode from 'qrcode';
 import useInterval from '@atb/utils/use-interval';
 import MessageBox from '@atb/components/message-box';
 import ThemeText from '@atb/components/text';
+import {TravelToken} from '@atb/mobile-token/types';
 
 type Props = {
   validityStatus: ValidityStatus;
@@ -31,7 +32,7 @@ export default function QrCode({validityStatus}: Props) {
   if (inspectableToken?.isThisDevice) {
     return <QrCodeSvg generateQrCode={generateQrCode} />;
   } else if (inspectableToken) {
-    return <QrCodeDeviceNotInspectable />;
+    return <QrCodeDeviceNotInspectable inspectableToken={inspectableToken} />;
   } else if (tokenStatus?.visualState === 'MissingNetConnection') {
     return <QrCodeMissingNetwork />;
   } else if (tokenStatus?.visualState === 'Error') {
@@ -86,6 +87,7 @@ const QrCodeSvg = ({
           style={styles.qrCode}
           accessible={true}
           accessibilityLabel={t(TicketTexts.details.qrCodeA11yLabel)}
+          testID="mobileTokenQRCode"
         >
           <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
         </View>
@@ -146,15 +148,31 @@ const QrCodeError = ({retry}: {retry?: (forceRestart: boolean) => void}) => {
     </Sections.GenericItem>
   );
 };
-const QrCodeDeviceNotInspectable = () => {
+const QrCodeDeviceNotInspectable = ({
+  inspectableToken,
+}: {
+  inspectableToken: TravelToken;
+}) => {
   const {t} = useTranslation();
-
+  const message =
+    inspectableToken.type === 'travelCard'
+      ? t(TicketTexts.details.qrCodeErrors.notInspectableDevice.tCard)
+      : t(
+          TicketTexts.details.qrCodeErrors.notInspectableDevice.wrongDevice(
+            inspectableToken.name ||
+              t(
+                TicketTexts.details.qrCodeErrors.notInspectableDevice
+                  .unnamedDevice,
+              ),
+          ),
+        );
   return (
     <Sections.GenericItem>
       <MessageBox
         type={'warning'}
-        title={t(TicketTexts.details.qrCodeErrors.notInspectable.title)}
-        message={t(TicketTexts.details.qrCodeErrors.notInspectable.text)}
+        title={t(TicketTexts.details.qrCodeErrors.notInspectableDevice.title)}
+        message={message}
+        isMarkdown={true}
       />
     </Sections.GenericItem>
   );

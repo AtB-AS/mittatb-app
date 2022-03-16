@@ -52,7 +52,6 @@ const TicketsTabBar: React.FC<MaterialTopTabBarProps> = ({
             accessibilityRole="button"
             accessibilityState={isFocused ? {selected: true} : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}
-            testID={options.tabBarTestID}
             onPress={onPress}
             onLongPress={onLongPress}
             style={[
@@ -65,6 +64,7 @@ const TicketsTabBar: React.FC<MaterialTopTabBarProps> = ({
             <ThemeText
               type={isFocused ? 'body__primary--bold' : 'body__primary'}
               color={tabColor}
+              testID={options.tabBarTestID}
             >
               {label}
             </ThemeText>

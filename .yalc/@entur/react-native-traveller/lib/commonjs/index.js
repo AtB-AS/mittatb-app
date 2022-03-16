@@ -27,6 +27,10 @@ var _abtTokensService = require("./token/abt-tokens-service");
 
 var _native = require("./native");
 
+var _attest = require("./token/attest");
+
+var _logger = require("./logger");
+
 var _types = require("./native/types");
 
 const INITIAL_RETRY_INTERVAL = 5000;
@@ -36,11 +40,28 @@ function createClient(setStatus, initialConfig) {
   const {
     safetyNetApiKey
   } = initialConfig;
-  const config = (0, _config.getConfigFromInitialConfig)(initialConfig);
-  const fetcher = (0, _fetcher.createFetcher)(config);
-  const abtTokensService = (0, _abtTokensService.createAbtTokensService)(fetcher, config.hosts);
   let currentStatus;
   let currentAccountId;
+  (0, _logger.setupLogger)({
+    infoLogger: initialConfig.infoLogger,
+    errorLogger: initialConfig.errorLogger
+  });
+
+  async function reattest(tokenId, nonce, attestationEncryptionPublicKey) {
+    if (!currentAccountId) {
+      const error = new Error(`Tried to reattest ${tokenId}, but no account id set.`);
+
+      _logger.logger.error(undefined, error, undefined);
+
+      throw error;
+    }
+
+    return (0, _attest.getActivateTokenRequestBody)(currentAccountId, tokenId, nonce, attestationEncryptionPublicKey);
+  }
+
+  const config = (0, _config.getConfigFromInitialConfig)(initialConfig);
+  const fetcher = (0, _fetcher.createFetcher)(config, reattest);
+  const abtTokensService = (0, _abtTokensService.createAbtTokensService)(fetcher, config.hosts);
 
   const toVisualState = storedState => {
     var _storedState$error;
@@ -121,7 +142,11 @@ function createClient(setStatus, initialConfig) {
     },
     toggleToken: async tokenId => {
       if (!currentAccountId) {
-        return Promise.reject(new Error('Only able to toggle valid tokens on active account'));
+        const error = new Error('Only able to toggle valid tokens on active account');
+
+        _logger.logger.error(undefined, error, undefined);
+
+        return Promise.reject(error);
       }
 
       const {
@@ -133,7 +158,11 @@ function createClient(setStatus, initialConfig) {
     },
     listTokens: async () => {
       if (!currentAccountId) {
-        return Promise.reject(new Error('No active account'));
+        const error = new Error('No active account');
+
+        _logger.logger.error(undefined, error, undefined);
+
+        return Promise.reject(error);
       }
 
       return await abtTokensService.listTokens();
@@ -164,7 +193,11 @@ function createClient(setStatus, initialConfig) {
       const token = await (0, _native.getToken)(currentAccountId);
 
       if (!token) {
-        return Promise.reject(new Error('Token not found'));
+        const error = new Error(`Token not found for account '${currentAccountId}'`);
+
+        _logger.logger.error(undefined, error, undefined);
+
+        return Promise.reject(error);
       }
 
       return (0, _native.getSecureToken)(currentAccountId, token.tokenId, true, actions);
