@@ -111,7 +111,7 @@ const SelectStartScreenTexts = {
       ),
       part1Bullet3: _(
         `${bulletPoint} at mobiletelefonen fungerer normalt, skjermen er leselig og har nok batterikapasitet så lenge reisen varer slik at gyldig billett kan fremvises. Dersom du ikke kan fremvise billett, vil det anses som å reise uten gyldig billett.`,
-        `${bulletPoint} ensure the mobile phone works properly, the screen is readable and the battery has enough power to present a valid ticket during the whole trip. If you cannot provide a valid ticket upon inspection, you will be considered as travelling without a ticket.`,
+        `${bulletPoint} make sure the phone works properly, the screen is readable and the battery has enough power to present a valid ticket during the whole trip. If you cannot provide a valid ticket upon inspection, you will be considered as travelling without a ticket.`,
       ),
       part2Heading: _(
         'Det vil komme flere betalingsmåter',

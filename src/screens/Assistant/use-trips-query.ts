@@ -2,12 +2,12 @@ import {Location} from '@atb/favorites/types';
 import {
   DateString,
   SearchTime,
-} from '@atb/screens/Assistant_v2/journey-date-picker';
+} from '@atb/screens/Assistant/journey-date-picker';
 import {TripPattern} from '@atb/api/types/trips';
 import {
   SearchStateType,
   TripPatternWithKey,
-} from '@atb/screens/Assistant_v2/types';
+} from '@atb/screens/Assistant/types';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {CancelToken, isCancel} from '@atb/api';

@@ -34,12 +34,15 @@ const LoginTexts = {
     title: _('Logg inn', 'Log in'),
     description: _(
       'Logg inn med engangskode sendt til din mobil',
-      'Log in with a one-time code sent to your mobile',
+      'Log in with a one-time code sent to your phone',
     ),
     input: {
-      heading: _('Mobilnummer', 'Mobile number'),
+      heading: _('Mobilnummer', 'phone number'),
       label: _('+47', '+47'),
-      placeholder: _('Skriv inn ditt telefonnummer', 'Type your mobile number'),
+      placeholder: _(
+        'Skriv inn ditt telefonnummer',
+        'Type in your phone number',
+      ),
     },
     mainButton: _('Send engangskode', 'Send one-time code'),
     errors: {
