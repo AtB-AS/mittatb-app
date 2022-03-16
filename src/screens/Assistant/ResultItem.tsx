@@ -87,7 +87,10 @@ const ResultItemHeader: React.FC<{
       <ThemeText
         type="body__secondary"
         color="secondary"
-        style={[styles.resultHeaderLabel, isInPast && styles.lineThrough]}
+        style={[
+          styles.resultHeaderLabel,
+          isInPast && styles.resultHeaderLabelInPast,
+        ]}
         accessibilityLabel={t(
           AssistantTexts.results.resultItem.header.time(
             formatToClock(tripPattern.expectedStartTime, language),
@@ -269,7 +272,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   resultHeaderLabel: {
     flex: 3,
   },
-  lineThrough: {
+  resultHeaderLabelInPast: {
     textDecorationLine: 'line-through',
   },
   legOutput: {
