@@ -47,6 +47,7 @@ import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 type ResultItemProps = {
   tripPattern: TripPattern;
   onDetailsPressed(): void;
+  testID?: string;
 };
 
 function legWithQuay(leg: Leg) {
@@ -119,6 +120,7 @@ const ResultItemHeader: React.FC<{
 const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   tripPattern,
   onDetailsPressed,
+  testID,
   ...props
 }) => {
   const styles = useThemeStyles();
@@ -164,6 +166,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       )}
       onPress={onDetailsPressed}
       accessible={true}
+      testID={testID}
     >
       <Animated.View
         style={[styles.result, {opacity: fadeInValue}]}
@@ -383,7 +386,7 @@ const tripSummary = (
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
   const firstLeg = nonFootLegs[0];
 
-  return ` 
+  return `
     ${
       firstLeg
         ? t(
@@ -394,7 +397,7 @@ const tripSummary = (
           )
         : ''
     }
-   
+
     ${nonFootLegs
       ?.map((l) => {
         return `${t(getTranslatedModeName(l.mode))} ${
@@ -406,13 +409,13 @@ const tripSummary = (
               )
             : ''
         }
-        
+
         ${l.fromEstimatedCall?.destinationDisplay?.frontText ?? l.line?.name}
-        
+
         `;
       })
-      .join(', ')} 
-      
+      .join(', ')}
+
       ${
         !nonFootLegs.length
           ? t(
@@ -435,7 +438,7 @@ const tripSummary = (
               ),
             )
       }
-      
+
       ${t(
         AssistantTexts.results.resultItem.journeySummary.totalWalkDistance(
           (tripPattern.walkDistance ?? 0).toFixed(),
