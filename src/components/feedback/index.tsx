@@ -8,27 +8,11 @@ import {Quay} from '@atb/api/types/departures';
 import {useTranslation, FeedbackTexts} from '@atb/translations';
 import {FeedbackQuestionsMode, useFeedbackQuestion} from './FeedbackContext';
 import GoodOrBadButton from './GoodOrBadButton';
+import SubmittedComponent from './SubmittedComponent';
 import {RenderQuestion} from './RenderQuestions';
 import firestore from '@react-native-firebase/firestore';
 import Bugsnag from '@bugsnag/react-native';
 import {APP_ORG, APP_VERSION} from '@env';
-
-const SubmittedComponent = () => {
-  const styles = useFeedbackStyles();
-  const {t} = useTranslation();
-
-  return (
-    <View style={[styles.container, styles.submittedView]}>
-      <ThemeText
-        type="body__primary--bold"
-        style={[styles.questionText, styles.centerText]}
-      >
-        {t(FeedbackTexts.submittedText.thanks)}
-      </ThemeText>
-      <ThemeText>🎉</ThemeText>
-    </View>
-  );
-};
 
 export enum Opinions {
   Good = 'GOOD',
@@ -103,6 +87,7 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
   const [selectedAlternativeIds, setSelectedAlternativeIds] = useState<
     number[]
   >([]);
+  const [firebaseId, setFirebaseId] = useState<string>();
 
   const toggleSelectedAlternativeId = useCallback(
     (alternativeId: number) => {
@@ -139,7 +124,10 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
         selectedAnswers,
       };
 
-      await firestore().collection('feedback').add(dataToServer);
+      const submittedFeedbackDoc = await firestore()
+        .collection('feedback')
+        .add(dataToServer);
+      setFirebaseId(submittedFeedbackDoc.id);
     } catch (err: any) {
       Bugsnag.notify(err);
     } finally {
@@ -155,7 +143,23 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
   }, [tripPattern]);
 
   if (!category) return null;
-  if (submitted) return <SubmittedComponent />;
+  if (submitted) {
+    const selectedTextAlternatives = selectedAlternativeIds.map(
+      (altId) =>
+        category?.question?.alternatives.find(
+          (alt) => alt.alternativeId === altId,
+        )?.alternativeText.nb,
+    );
+
+    return (
+      <SubmittedComponent
+        viewContext={mode}
+        opinion={selectedOpinion}
+        selectedTextAlternatives={selectedTextAlternatives}
+        firebaseId={firebaseId}
+      />
+    );
+  }
 
   if (quayListData || tripPattern)
     return (

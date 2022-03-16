@@ -9,7 +9,14 @@ const FeedbackTexts = {
     submitFeedback: _('Send tilbakemelding', 'Submit feedback'),
   },
   submittedText: {
-    thanks: _('Takk for tilbakemeldingen!', 'Thanks for the feedback!'),
+    thanks: _('Takk for tilbakemeldingen! 🎉', 'Thanks for the feedback! 🎉'),
+  },
+  additionalFeedback: {
+    text: _(
+      'Mer på hjertet? Vi hører gjerne fra deg!',
+      'Additional thoughts? Please tell us!',
+    ),
+    button: _('Snakk med app-teamet', 'Chat with the app team'),
   },
 };
 
