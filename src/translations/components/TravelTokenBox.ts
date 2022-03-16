@@ -26,7 +26,7 @@ const TravelTokenBoxTexts = {
   },
   howToChange: _(
     'Du kan bytte hvor du bruker billetten din fra **Min profil**.',
-    'Head over to **My profile** if you want to switch, and use the ticket on a t:card or a different phone instead.',
+    'Switch where you are using your ticket at **My profile** ',
   ),
   errorMessages: {
     tokensNotLoadedTitle: _(
