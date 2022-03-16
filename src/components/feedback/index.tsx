@@ -96,6 +96,9 @@ type FeedbackProps = {
   /** If the onlyOneFeedbackForEachAppVersion prop is given, users that have provided feedback will no
    * longer be prompted to give feedback in this viewContext, until a new appVersion is installed.  */
   onlyOneFeedbackForEachAppVersionInThisViewContext?: boolean;
+  /** If the avoidResetOnMetadataUpdate flag is given, interactions with the feedback component will
+   * not be reset when metadata changes. Typically relevant when metadata is refreshed periodically. */
+  avoidResetOnMetadataUpdate?: boolean;
 };
 
 type VersionStats = {
@@ -109,6 +112,7 @@ export const Feedback = ({
   viewContext,
   metadata,
   allowList,
+  avoidResetOnMetadataUpdate,
   onlyOneFeedbackForEachAppVersionInThisViewContext,
 }: FeedbackProps) => {
   const styles = useFeedbackStyles();
@@ -239,8 +243,8 @@ export const Feedback = ({
   };
 
   useEffect(() => {
-    // New Trip pattern, reset state.
-    if (viewContext === 'assistant') {
+    // Reset state whenever metadata changes, unless the data is periodically refreshed
+    if (!avoidResetOnMetadataUpdate) {
       setSelectedAlternativeIds([]);
       setSelectedOpinion(Opinions.NotClickedYet);
       setSubmitted(false);

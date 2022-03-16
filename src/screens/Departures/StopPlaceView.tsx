@@ -76,6 +76,7 @@ export default function StopPlaceView({
                   metadata={quayListData}
                   allowList={[2, 8, 24, 96, 255]}
                   onlyOneFeedbackForEachAppVersionInThisViewContext
+                  avoidResetOnMetadataUpdate
                 />
               )}
             </>
