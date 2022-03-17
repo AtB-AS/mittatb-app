@@ -31,29 +31,29 @@ const TravelTokenBoxTexts = {
   errorMessages: {
     tokensNotLoadedTitle: _(
       'Klarer ikke hente informasjon om mobil / t:kort.',
-      'Unable to get information about your phones or t:card.',
+      'Unable to retrieve information about your phone / t:card.',
     ),
     tokensNotLoaded: _(
       'Billetter må brukes på enten et t:kort eller en mobil, men akkurat nå klarer vi ikke finne ut hvor den er i bruk. Sjekk at du har tilgang på nett der du er.',
-      `Tickets must be used on either a t:card or a phone, but right now we are unable to determine where your tickets are used. Make sure you're online.`,
+      `Tickets must be used on either a t:card or phone, but right now we are unable to find where the ticket is in use. Check that you have internet access.`,
     ),
     emptyTokensTitle: _(
       'Vi finner ingen t:kort eller mobiler tilknyttet profilen din.',
-      `We can't find any phones or t:card on your account.`,
+      `We can not find any t:cards or phones associated with your profile.`,
     ),
     emptyTokens: _(
       'Sjekk at du har tilgang på nett. Hvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.' +
         '\n\n' +
         'Om problemet vedvarer kan du ta kontakt med AtB kundesenter.',
-      `Make sure you're online. We'll keep trying but if the problem persists, please get in touch with AtB service center. `,
+      `Check that you have internet access. If you are not online, the app will try again once you are connected. If the problem persists, please contact AtB service center`,
     ),
     noInspectableTokenTitle: _(
       'Velg hvor du vil bruke billettene dine',
       'Choose where your tickets are used',
     ),
     noInspectableToken: _(
-      'Billetter må brukes på enten et t:kort eller en mobil, og det ser ikke ut som du har valgt en av dem. Gå til Min profil > Bytt mellom mobil / t:kort for å velge.',
-      'Tickets must be used on either a t:card or a phone, but it seems none are chosen. Go to settings in **My profile** and make a choice.',
+      'Billetter må brukes på enten et t:kort eller en mobil, og det ser ikke ut som du har valgt en av dem.\n\nGå til **Min profil, Bytt mellom mobil / t:kort** for å velge.',
+      `Tickets must be used on either a t:card or a phone, and it looks like you haven't chosen one. Go to **My profile, switch between phone / t:card** to select`,
     ),
   },
 };
