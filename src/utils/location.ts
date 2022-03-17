@@ -41,3 +41,11 @@ export function primitiveLocationDistanceInMetres(
     ),
   );
 }
+
+export function validateTripLocations(from?: Location, to?: Location): boolean {
+  if (!from || !to) return false;
+  if (locationsAreEqual(from, to)) return false;
+  if (locationDistanceInMetres(from, to) < LOCATIONS_REALLY_CLOSE_THRESHOLD)
+    return false;
+  return true;
+}

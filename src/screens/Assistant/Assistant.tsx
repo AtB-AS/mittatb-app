@@ -34,6 +34,7 @@ import {
   locationDistanceInMetres as distanceInMetres,
   LOCATIONS_REALLY_CLOSE_THRESHOLD,
   locationsAreEqual,
+  validateTripLocations,
 } from '@atb/utils/location';
 import {useLayout} from '@atb/utils/use-layout';
 import Bugsnag from '@bugsnag/react-native';
@@ -372,6 +373,7 @@ const Assistant: React.FC<Props> = ({
     </View>
   );
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
+  const isValidLocations = validateTripLocations(from, to);
 
   const onPressed = useCallback(
     (tripPatterns, startIndex) =>
@@ -443,7 +445,7 @@ const Assistant: React.FC<Props> = ({
         onDetailsPressed={onPressed}
         errorType={error}
       />
-      {!error && (
+      {!error && isValidLocations && (
         <TouchableOpacity
           onPress={loadMore}
           disabled={searchState === 'searching'}
