@@ -18,7 +18,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {useSearchHistory} from '@atb/search-history';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {TripSearchPreferences, usePreferences} from '@atb/preferences';
-import {validateTripLocations} from '@atb/utils/location';
+import {isValidTripLocations} from '@atb/utils/location';
 
 export default function useTripsQuery(
   fromLocation?: Location,
@@ -83,7 +83,7 @@ export default function useTripsQuery(
             let performedSearchesCount = 0;
             let tripsFoundCount = 0;
 
-            if (!validateTripLocations(fromLocation, toLocation)) {
+            if (!isValidTripLocations(fromLocation, toLocation)) {
               setSearchState('search-empty-result');
               return;
             }
