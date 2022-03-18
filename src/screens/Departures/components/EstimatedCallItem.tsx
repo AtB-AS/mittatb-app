@@ -87,7 +87,9 @@ export default function EstimatedCallItem({
       <ThemeText style={styles.lineName} testID={testID + 'Name'}>
         {departure.destinationDisplay?.frontText}
       </ThemeText>
-      <ThemeText type="body__primary--bold" testID={testID + 'Time'}>{timeWithRealtimePrefix}</ThemeText>
+      <ThemeText type="body__primary--bold" testID={testID + 'Time'}>
+        {timeWithRealtimePrefix}
+      </ThemeText>
     </View>
   );
 }

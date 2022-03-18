@@ -44,7 +44,9 @@ export default function StopPlaceItem({
       >
         <View style={styles.stopPlaceContainer} testID={testID}>
           <View style={styles.stopPlaceInfo}>
-            <ThemeText type="heading__component" testID={testID + 'Name'}>{place.name}</ThemeText>
+            <ThemeText type="heading__component" testID={testID + 'Name'}>
+              {place.name}
+            </ThemeText>
             <ThemeText type="body__secondary" style={styles.stopDescription}>
               {description}
             </ThemeText>

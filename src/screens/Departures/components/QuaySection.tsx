@@ -105,7 +105,10 @@ export default function QuaySection({
                 }}
                 accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
               >
-                <EstimatedCallItem departure={departure} testID={'departureItem' + index}/>
+                <EstimatedCallItem
+                  departure={departure}
+                  testID={'departureItem' + index}
+                />
               </Sections.GenericClickableItem>
             )}
             keyExtractor={(item: EstimatedCall) =>

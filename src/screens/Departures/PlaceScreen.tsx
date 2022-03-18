@@ -98,7 +98,7 @@ export default function PlaceScreen({
             accessibilityHint={
               t(DeparturesTexts.quayChips.a11yHint) + getQuayName(item)
             }
-            testID={"quaySelectionButton"}
+            testID={'quaySelectionButton'}
           ></Button>
         )}
       />

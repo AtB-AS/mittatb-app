@@ -219,7 +219,9 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
             key={stopPlacePosition.node?.place?.id}
             stopPlacePosition={stopPlacePosition}
             onPress={navigateToPlace}
-            testID={'stopPlaceItem' + orderedStopPlaces.indexOf(stopPlacePosition)}
+            testID={
+              'stopPlaceItem' + orderedStopPlaces.indexOf(stopPlacePosition)
+            }
           />
         ))}
       </View>
