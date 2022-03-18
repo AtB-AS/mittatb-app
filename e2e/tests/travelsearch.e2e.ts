@@ -1,17 +1,19 @@
 import {device} from 'detox';
 import {goToTab, goBack} from '../utils/commonHelpers';
 import {
-  expectToBeVisibleById,
-  expectToBeVisibleByText,
   tapById,
   tapByText,
-  expectTextById,
-  expectElementToContainText,
   scrollContentToText,
   scrollContent,
-  expectTextToBeVisible,
   scrollContentToId,
 } from '../utils/interactionHelpers';
+import {
+  expectToBeVisibleById,
+  expectToBeVisibleByText,
+  expectTextById,
+  expectElementToContainText,
+  expectToBeVisibleByPartOfText,
+} from '../utils/expectHelpers';
 import {skipOnboarding} from '../utils/onboarding';
 import {toggleTravelSearchV2} from '../utils/myprofile';
 import setLocation from '../utils';
@@ -65,7 +67,7 @@ describe('Travel Search', () => {
 
     // Scroll to bottom and expect 'Trip time'
     await scrollContent('tripDetailsContentView', 'bottom');
-    await expectTextToBeVisible('Trip time');
+    await expectToBeVisibleByPartOfText('Trip time');
 
     // Show intermediate stops - and expect a specific intermediate stop
     await scrollContentToId(
@@ -128,7 +130,7 @@ describe('Travel Search', () => {
 
     // Scroll to bottom and expect 'Trip time'
     await scrollContent('tripDetailsContentView', 'bottom');
-    await expectTextToBeVisible('Trip time');
+    await expectToBeVisibleByPartOfText('Trip time');
 
     // Show intermediate stops - and expect a specific intermediate stop
     await scrollContentToId(

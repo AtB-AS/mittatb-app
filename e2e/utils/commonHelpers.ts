@@ -1,16 +1,17 @@
 import {by, element} from 'detox';
-import {replaceTextById, tapById} from "./interactionHelpers";
+import {tapById} from './interactionHelpers';
+import {replaceTextById} from './expectHelpers';
 
 // Go to the given tab
 export async function goToTab(
   tab?: 'assistant' | 'departures' | 'tickets' | 'profile',
 ) {
   const tabId = tab + 'Tab';
-  await tapById(tabId)
+  await tapById(tabId);
 }
 
 export const goBack = async () => {
-  await tapById('lhb')
+  await tapById('lhb');
 };
 
 // Find element display text name based on type 'RCTTextView' and search term. element(by...) does not support RegExp.
@@ -33,5 +34,5 @@ export const setInputById = async (id: string, text: string) => {
 };
 
 export const chooseSearchResult = async (id: string) => {
-  await tapById(id)
+  await tapById(id);
 };
