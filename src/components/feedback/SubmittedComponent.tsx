@@ -6,11 +6,11 @@ import ThemeText from '@atb/components/text';
 import {useTranslation, FeedbackTexts} from '@atb/translations';
 import Intercom from 'react-native-intercom';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
-import {FeedbackQuestionsMode} from './FeedbackContext';
+import {FeedbackQuestionsViewContext} from './FeedbackContext';
 import {Opinions} from '.';
 
 type SubmittedComponentProps = {
-  viewContext: FeedbackQuestionsMode;
+  viewContext: FeedbackQuestionsViewContext;
   opinion: Opinions;
   selectedTextAlternatives: (string | undefined)[];
   firebaseId?: string;

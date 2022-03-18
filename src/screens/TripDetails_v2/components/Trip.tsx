@@ -71,7 +71,7 @@ const Trip: React.FC<TripProps> = ({tripPattern, error}) => {
           })}
       </View>
       <Summary {...tripPattern} />
-      <Feedback tripPattern={tripPattern} mode="assistant" />
+      <Feedback metadata={tripPattern} viewContext="assistant" />
     </>
   );
 };
