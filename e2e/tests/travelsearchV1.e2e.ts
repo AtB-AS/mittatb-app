@@ -33,10 +33,6 @@ describe('Travel Search v1', () => {
     await skipOnboarding();
   });
 
-  beforeEach(async () => {
-    await device.reloadReactNative();
-  });
-
   it('should do a simple search', async () => {
     const departure = 'Udduvoll bru vest';
     const arrival = 'Anders Buens gate';

@@ -34,9 +34,12 @@ describe('Travel Search v2', () => {
     await skipOnboarding();
   });
 
+  // Activate when more test cases are implemented
+  /*
   beforeEach(async () => {
     await device.reloadReactNative();
   });
+   */
 
   it('should do a simple search', async () => {
     const departure = 'Udduvoll bru vest';
