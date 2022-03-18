@@ -55,6 +55,7 @@ export default function LocationInput({
         )
       }
       onIconPress={updatingLocation ? undefined : onIconPress}
+      testID="searchFromButton"
       {...props}
     />
   );

@@ -175,6 +175,7 @@ const StopDepartures = React.memo(function StopDepartures({
               ],
             ),
           }}
+          testID={testID + 'HideAction'}
         />
       )}
 

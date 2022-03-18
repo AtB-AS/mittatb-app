@@ -15,6 +15,7 @@ import SectionSeparator from '@atb/components/sections/section-separator';
 type QuaySectionProps = {
   quay: Quay;
   data: EstimatedCall[] | null;
+  testID?: 'quaySection' | string;
   navigateToQuay?: (arg0: Quay) => void;
   navigateToDetails: (
     serviceJourneyId: string,
@@ -32,6 +33,7 @@ type EstimatedCallRenderItem = {
 export default function QuaySection({
   quay,
   data,
+  testID,
   navigateToQuay,
   navigateToDetails,
 }: QuaySectionProps): JSX.Element {
@@ -41,7 +43,7 @@ export default function QuaySection({
   const {t} = useTranslation();
 
   return (
-    <View>
+    <View testID={testID}>
       <Sections.Section withPadding withBottomPadding>
         <Sections.GenericClickableItem
           type="inline"
@@ -54,12 +56,13 @@ export default function QuaySection({
               : t(DeparturesTexts.quaySection.a11yMinimize)
           }
         >
-          <View style={styles.stopPlaceHeader}>
+          <View style={styles.stopPlaceHeader} testID={testID + 'HideAction'}>
             <View style={styles.stopPlaceHeaderText}>
               <ThemeText
                 type="body__secondary--bold"
                 color="secondary"
                 style={styles.rightMargin}
+                testID={testID + 'Name'}
               >
                 {quay.publicCode
                   ? quay.name + ' ' + quay.publicCode
@@ -70,6 +73,7 @@ export default function QuaySection({
                   style={styles.rightMargin}
                   type="body__secondary"
                   color="secondary"
+                  testID={testID + 'Description'}
                 >
                   {quay.description}
                 </ThemeText>
@@ -89,6 +93,7 @@ export default function QuaySection({
                     ? 'bottom'
                     : undefined
                 }
+                testID={'departureItem' + index}
                 onPress={() => {
                   if (departure?.serviceJourney)
                     navigateToDetails(
@@ -100,7 +105,7 @@ export default function QuaySection({
                 }}
                 accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
               >
-                <EstimatedCallItem departure={departure} />
+                <EstimatedCallItem departure={departure} testID={'departureItem' + index}/>
               </Sections.GenericClickableItem>
             )}
             keyExtractor={(item: EstimatedCall) =>
@@ -142,6 +147,7 @@ export default function QuaySection({
             accessibility={{
               accessibilityHint: t(DeparturesTexts.quaySection.a11yToQuayHint),
             }}
+            testID={testID + 'More'}
           ></Sections.LinkItem>
         )}
       </Sections.Section>

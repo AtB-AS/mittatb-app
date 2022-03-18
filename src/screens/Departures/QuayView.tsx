@@ -20,6 +20,7 @@ export type QuayViewProps = {
   ) => void;
   searchTime: SearchTime;
   setSearchTime: (searchTime: SearchTime) => void;
+  testID?: string;
 };
 
 export default function QuayView({
@@ -27,6 +28,7 @@ export default function QuayView({
   navigateToDetails,
   searchTime,
   setSearchTime,
+  testID,
 }: QuayViewProps) {
   const {state, refresh} = useQuayData(
     quay,
@@ -51,12 +53,14 @@ export default function QuayView({
         <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
       }
       sections={quayListData}
+      testID={testID}
       keyExtractor={(item) => item.id}
       renderItem={({item}) => (
         <QuaySection
           quay={item}
           data={state.data}
           navigateToDetails={navigateToDetails}
+          testID={'quaySection'}
         />
       )}
     />
