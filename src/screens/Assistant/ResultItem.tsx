@@ -23,7 +23,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {screenReaderHidden} from '@atb/utils/accessibility';
-import {flatMap} from '@atb/utils/array';
+import {flatMap, interpose} from '@atb/utils/array';
 import {
   formatToClock,
   isInThePast,
@@ -192,20 +192,20 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
           {...screenReaderHidden}
           onContentSizeChange={(width) => setCollapsableWidth(width)}
         >
-          {expandedLegs.map(function (leg, i) {
-            return (
-              <View style={styles.legOutput} key={leg.aimedStartTime}>
-                {leg.mode === 'foot' ? (
-                  <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
-                ) : (
-                  <>
+          <View style={styles.legOutput}>
+            {interpose(
+              expandedLegs.map((leg, i) => (
+                <View key={leg.aimedStartTime}>
+                  {leg.mode === 'foot' ? (
+                    <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
+                  ) : (
                     <TransportationLeg leg={leg} />
-                    <ThemeIcon svg={ChevronRight} size={'small'} />
-                  </>
-                )}
-              </View>
-            );
-          })}
+                  )}
+                </View>
+              )),
+              <ThemeIcon svg={ChevronRight} size="small" />,
+            )}
+          </View>
           <View style={styles.legOutput}>
             <CollapsedLegs legs={collapsedLegs} />
           </View>
@@ -348,7 +348,6 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       ) : (
         <ThemeIcon svg={WalkingPerson} />
       )}
-      {nextLeg && <ThemeIcon svg={ChevronRight} size="small" />}
     </View>
   );
 };
