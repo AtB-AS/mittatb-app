@@ -49,8 +49,6 @@ type Props = {
   alternativeTitleComponent?: React.ReactNode;
   showAlterntativeTitle?: Boolean;
 
-  headerMargin?: number;
-
   leftButton?: LeftButtonProps;
 
   onEndReached?(e: NativeScrollEvent): void;
@@ -92,12 +90,12 @@ const DisappearingHeader: React.FC<Props> = ({
 
   onEndReached,
   onEndReachedThreshold = 10,
-  headerMargin = 12,
 
   onFullscreenTransitionEnd,
   alertContext,
 }) => {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [fullheightTransitioned, setTransitioned] = useState(isFullHeight);
   const {
     boxHeight,
     contentHeight,
@@ -105,8 +103,6 @@ const DisappearingHeader: React.FC<Props> = ({
     onScreenHeaderLayout,
     onHeaderContentLayout,
   } = useCalculateHeaderContentHeight(isAnimating);
-  const [fullheightTransitioned, setTransitioned] = useState(isFullHeight);
-  const {width: windowWidth} = useWindowDimensions();
   const scrollableContentRef = React.useRef<ScrollView>(null);
   useScrollToTop(
     React.useRef<Scrollable>({
@@ -115,7 +111,6 @@ const DisappearingHeader: React.FC<Props> = ({
     }),
   );
 
-  const [scrollYValue, setScrollY] = useState<number>(0);
   const styles = useThemeStyles();
   const {theme} = useTheme();
   const scrollYRef = useRef(
@@ -188,8 +183,6 @@ const DisappearingHeader: React.FC<Props> = ({
 
   const onScrolling = useCallback(
     (e: NativeScrollEvent) => {
-      const scrollPos = e.contentOffset.y;
-      setScrollY(scrollPos);
       endReachListener(e);
     },
     [endReachListener],
@@ -282,20 +275,19 @@ const DisappearingHeader: React.FC<Props> = ({
               contentContainerStyle={[
                 {paddingTop: !IS_IOS ? contentHeight : 0},
               ]}
+              automaticallyAdjustContentInsets={false}
               contentInset={{
-                top: contentHeight + headerMargin,
+                top: contentHeight,
               }}
               contentOffset={{
-                y: -contentHeight - headerMargin,
+                y: -contentHeight,
                 x: 0,
               }}
             >
               {children}
             </Animated.ScrollView>
           ) : (
-            <View style={{flex: 1, paddingTop: contentHeight + headerMargin}}>
-              {children}
-            </View>
+            <View style={{flex: 1, paddingTop: contentHeight}}>{children}</View>
           )}
         </View>
       </View>

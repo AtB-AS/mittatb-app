@@ -417,7 +417,6 @@ const Assistant: React.FC<Props> = ({
       onRefresh={refresh}
       useScroll={useScroll}
       headerTitle={t(AssistantTexts.header.title)}
-      headerMargin={24}
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
       showAlterntativeTitle={Boolean(from && to)}

@@ -34,8 +34,6 @@ type Props = {
   headerTitle: React.ReactNode;
   alternativeTitleComponent?: React.ReactNode;
 
-  headerMargin?: number;
-
   leftButton: LeftButtonProps;
 
   onEndReached?(e: NativeScrollEvent): void;
