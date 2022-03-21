@@ -38,7 +38,6 @@ export default function TicketTabs() {
       <FullScreenHeader
         title={t(TicketsTexts.header.title)}
         rightButton={{type: 'chat'}}
-        leftButton={{type: 'home'}}
         alertContext="ticketing"
       />
       <Tab.Navigator

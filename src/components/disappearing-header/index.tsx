@@ -1,37 +1,32 @@
-import SvgBanner from '@atb/assets/svg/mono-icons/other/Banner';
+import AlertBox from '@atb/alerts/AlertBox';
+import {AlertContext} from '@atb/alerts/AlertsContext';
+import {AnimatedScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet, useTheme} from '@atb/theme';
+import {ThemeColor} from '@atb/theme/colors';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import throttle from '@atb/utils/throttle';
 import useConditionalMemo from '@atb/utils/use-conditional-memo';
 import {useLayout} from '@atb/utils/use-layout';
 import {useScrollToTop} from '@react-navigation/native';
+import hexToRgba from 'hex-to-rgba';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Animated,
   Easing,
-  Image,
   ImageBackground,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Platform,
   RefreshControl,
   ScrollView,
-  useWindowDimensions,
   View,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import {
   useSafeAreaFrame,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import {
-  AnimatedScreenHeader,
-  LeftButtonProps,
-} from '@atb/components/screen-header';
-import {AlertContext} from '@atb/alerts/AlertsContext';
-import AlertBox from '@atb/alerts/AlertBox';
-import {ThemeColor} from '@atb/theme/colors';
-import LinearGradient from 'react-native-linear-gradient';
-import hexToRgba from 'hex-to-rgba';
+import useServiceDisruptionModal from './use-service-disruption';
 
 type Props = {
   renderHeader(
@@ -49,8 +44,6 @@ type Props = {
   alternativeTitleComponent?: React.ReactNode;
   showAlterntativeTitle?: Boolean;
 
-  leftButton?: LeftButtonProps;
-
   onEndReached?(e: NativeScrollEvent): void;
   onEndReachedThreshold?: number;
 
@@ -63,7 +56,6 @@ type Props = {
   alertContext?: AlertContext;
 };
 
-const SCROLL_OFFSET_HEADER_ANIMATION = 80;
 const themeColor: ThemeColor = 'background_accent';
 
 type Scrollable = {
@@ -81,8 +73,6 @@ const DisappearingHeader: React.FC<Props> = ({
   onRefresh,
 
   isFullHeight = false,
-
-  leftButton,
 
   headerTitle,
   alternativeTitleComponent,
@@ -120,6 +110,8 @@ const DisappearingHeader: React.FC<Props> = ({
   const fullscreenOffsetRef = useRef(
     new Animated.Value(isFullHeight ? 0 : contentOffset),
   ).current;
+
+  const {leftButton} = useServiceDisruptionModal(themeColor);
 
   useEffect(
     function () {

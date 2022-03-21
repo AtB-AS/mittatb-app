@@ -9,10 +9,10 @@
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.0"
 
-"@atb-as/generate-assets@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-3.0.1.tgz#8ff9b33258675adfb5fdb74531b1a6b9a33bc274"
-  integrity sha512-oR0DJrJi1weT/yneZMgL79PYha226qzeABRlthl7rA7HqQoB29qNd0Y0QIUxJog4x3C2zXTGM03+gFBPdJQrHw==
+"@atb-as/generate-assets@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-3.1.0.tgz#94900345e60c4d983b8f021fbe34c7298aa6c116"
+  integrity sha512-/V6ZLba/F0cwZZA65IwKaJHtSD2ZdL8zX4OyVDACuOqaKrAwXL0cIv+Rtk8idM/0lH3bmyRa2j0NksmUv8OQxw==
   dependencies:
     "@atb-as/theme" "^5.0.3"
     commander "^8.3.0"
@@ -1576,6 +1576,9 @@
 
 "@entur/react-native-traveller@file:.yalc/@entur/react-native-traveller":
   version "1.0.0"
+  dependencies:
+    base-64 "^1.0.0"
+    utf8 "^3.0.0"
 
 "@entur/sdk@^3.4.0":
   version "3.4.0"
@@ -3764,6 +3767,11 @@ balanced-match@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
+
+base-64@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/base-64/-/base-64-1.0.0.tgz#09d0f2084e32a3fd08c2475b973788eee6ae8f4a"
+  integrity sha512-kwDPIFCGx0NZHog36dj+tHiwP4QMzsZ3AgMViUBKI0+V5n4U0ufTCUMhnQ04diaRI8EX/QcPfql7zlhZ7j4zgg==
 
 base64-js@^1.1.2, base64-js@^1.2.3, base64-js@^1.3.1, base64-js@^1.5.1:
   version "1.5.1"
@@ -11151,6 +11159,11 @@ utf8-byte-length@^1.0.1:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/utf8-byte-length/-/utf8-byte-length-1.0.4.tgz#f45f150c4c66eee968186505ab93fcbb8ad6bf61"
   integrity sha1-9F8VDExm7uloGGUFq5P8u4rWv2E=
+
+utf8@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/utf8/-/utf8-3.0.0.tgz#f052eed1364d696e769ef058b183df88c87f69d1"
+  integrity sha512-E8VjFIQ/TyQgp+TZfS6l8yp/xWppSAHzidGiRrqe4bK4XP9pTRyKFgGJpO3SN7zdX4DeomTrwaseCHovfpFcqQ==
 
 utif@^2.0.1:
   version "2.0.1"

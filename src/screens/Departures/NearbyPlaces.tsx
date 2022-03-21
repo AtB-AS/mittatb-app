@@ -200,7 +200,6 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
       }
       headerTitle={t(DeparturesTexts.header.title)}
       useScroll={activateScroll}
-      leftButton={{type: 'home', color: 'background_accent', testID: 'lhb'}}
       alertContext={'travel'}
       setFocusOnLoad={true}
     >
