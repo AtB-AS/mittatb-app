@@ -48,4 +48,7 @@ else
 
     sh ./scripts/generate-assets.sh $APP_ORG
 
+    echo "Copying information json files to src/assets/information-data"
+    cp -r $ORG_FOLDER/information-data src/assets/
+
 fi
