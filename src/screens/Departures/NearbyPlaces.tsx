@@ -200,13 +200,13 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
       }
       headerTitle={t(DeparturesTexts.header.title)}
       useScroll={activateScroll}
-      leftButton={{type: 'home', color: 'background_accent'}}
+      leftButton={{type: 'home', color: 'background_accent', testID: 'lhb'}}
       alertContext={'travel'}
       setFocusOnLoad={true}
     >
       <ScreenReaderAnnouncement message={loadAnnouncement} />
 
-      <View style={styles.container}>
+      <View style={styles.container} testID="nearbyStopsContainerView">
         <ThemeText
           style={styles.listDescription}
           type="body__secondary"
@@ -219,6 +219,9 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
             key={stopPlacePosition.node?.place?.id}
             stopPlacePosition={stopPlacePosition}
             onPress={navigateToPlace}
+            testID={
+              'stopPlaceItem' + orderedStopPlaces.indexOf(stopPlacePosition)
+            }
           />
         ))}
       </View>
