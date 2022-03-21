@@ -4,6 +4,10 @@ const FeedbackTexts = {
   goodOrBadTexts: {
     good: _('Bra', 'Good'),
     bad: _('Dårlig', 'Bad'),
+    doNotShowAgain: _(
+      'Ikke vis dette spørsmålet igjen',
+      'Do not show this question again',
+    ),
   },
   submitText: {
     submitFeedback: _('Send tilbakemelding', 'Submit feedback'),

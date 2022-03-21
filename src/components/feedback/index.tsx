@@ -75,11 +75,12 @@ type FeedbackProps = {
    *  An example could be a tripPattern if used with assistant / travel search. */
   metadata: any;
   /** The allowList array may be provided to decide when the Feedback component should be visible.
-   * Example: [2, 5] will make the component render only the second and the fifth time it is called.  */
+   * Example: [2, 5] will make the component render only the second and the fifth time it is called. */
   allowList?: number[];
-  /** If the onlyOneFeedbackForEachAppVersion prop is given, users that have provided feedback will no
-   * longer be prompted to give feedback in this viewContext, until a new appVersion is installed.  */
-  onlyOneFeedbackForEachAppVersionInThisViewContext?: boolean;
+  /** If the onlyOneFeedbackForEachSurveyVersionInThisViewContext prop is given, users that have provided
+   * feedback will no longer be prompted to give feedback in this viewContext, until a new surveyVersion
+   * is available. */
+  onlyOneFeedbackForEachSurveyVersionInThisViewContext?: boolean;
   /** If the avoidResetOnMetadataUpdate flag is given, interactions with the feedback component will
    * not be reset when metadata changes. Typically relevant when metadata is refreshed periodically. */
   avoidResetOnMetadataUpdate?: boolean;
@@ -88,7 +89,8 @@ type FeedbackProps = {
 type VersionStats = {
   answered: boolean;
   count: number;
-  version: string;
+  surveyVersion: number;
+  doNotShowAgain: boolean;
   viewContext: FeedbackQuestionsViewContext;
 };
 
@@ -97,7 +99,7 @@ export const Feedback = ({
   metadata,
   allowList,
   avoidResetOnMetadataUpdate,
-  onlyOneFeedbackForEachAppVersionInThisViewContext,
+  onlyOneFeedbackForEachSurveyVersionInThisViewContext,
 }: FeedbackProps) => {
   const styles = useFeedbackStyles();
   const {t} = useTranslation();
@@ -113,55 +115,82 @@ export const Feedback = ({
   const [displayStats, setDisplayStats] = useState<VersionStats[]>([]);
   const [firebaseId, setFirebaseId] = useState<string>();
 
-  const incrementCounterAndSetDisplayStats = async () => {
-    const defaultDisplayStatObject = {
-      answered: false,
-      count: 0,
-      version: APP_VERSION,
-      viewContext: viewContext,
-    };
-
-    let displayStatsJSON: VersionStats[] = [];
-    let fetchedDisplayStats = await storage.get('@ATB_feedback_display_stats');
-
-    if (fetchedDisplayStats === null) {
-      displayStatsJSON.push(defaultDisplayStatObject);
-    } else {
-      displayStatsJSON = JSON.parse(fetchedDisplayStats);
-    }
-
-    const statsForCurrentVersionAndViewContext = displayStatsJSON.find(
-      (entry: VersionStats) =>
-        entry.version === APP_VERSION && entry.viewContext === viewContext,
-    );
-
-    if (statsForCurrentVersionAndViewContext) {
-      statsForCurrentVersionAndViewContext.count++;
-    } else {
-      const isDisplayStatsForCurrentAppVersionsButOtherViewContexts =
-        displayStatsJSON.find(
-          (entry: VersionStats) => entry.version === APP_VERSION,
-        );
-
-      if (isDisplayStatsForCurrentAppVersionsButOtherViewContexts) {
-        displayStatsJSON.push(defaultDisplayStatObject);
-      }
-      // If the app has been updated, this line makes sure to delete displayStats for previous and no longer relevant versions
-      else {
-        displayStatsJSON = [defaultDisplayStatObject];
-      }
-    }
-
-    setDisplayStats(displayStatsJSON);
-    storage.set(
-      '@ATB_feedback_display_stats',
-      JSON.stringify(displayStatsJSON),
-    );
-  };
-
   useEffect(() => {
     incrementCounterAndSetDisplayStats();
   }, []);
+
+  useEffect(() => {
+    // Reset state whenever metadata changes, unless the data is periodically refreshed
+    if (!avoidResetOnMetadataUpdate) {
+      setSelectedAlternativeIds([]);
+      setSelectedOpinion(Opinions.NotClickedYet);
+      setSubmitted(false);
+    }
+  }, [metadata]);
+
+  if (!category) return null;
+
+  const incrementCounterAndSetDisplayStats = async () => {
+    if (category) {
+      const defaultDisplayStatObject = {
+        answered: false,
+        doNotShowAgain: false,
+        count: 0,
+        surveyVersion: category.surveyVersion,
+        viewContext: viewContext,
+      };
+
+      let displayStatsJSON: VersionStats[] = [];
+      let fetchedDisplayStats = await storage.get(
+        '@ATB_feedback_display_stats',
+      );
+
+      if (fetchedDisplayStats === null) {
+        displayStatsJSON.push(defaultDisplayStatObject);
+      } else {
+        displayStatsJSON = JSON.parse(fetchedDisplayStats);
+      }
+
+      const statsForCurrentSurveyVersionAndViewContext = displayStatsJSON.find(
+        (entry: VersionStats) =>
+          entry.surveyVersion === category.surveyVersion &&
+          entry.viewContext === viewContext,
+      );
+
+      if (statsForCurrentSurveyVersionAndViewContext) {
+        statsForCurrentSurveyVersionAndViewContext.count++;
+      } else {
+        const removeOldSurveyVersionStats = () => {
+          const arrayWithoutThisViewContext = displayStatsJSON.filter(
+            (statObject) => statObject.viewContext !== viewContext,
+          );
+
+          const numberOfSurveyVersionsToKeep = 3;
+          const arrayWithReasonablyNewElementsFromThisViewContext =
+            displayStatsJSON.filter(
+              (statObject) =>
+                statObject.surveyVersion >
+                category.surveyVersion - numberOfSurveyVersionsToKeep,
+            );
+
+          arrayWithReasonablyNewElementsFromThisViewContext.forEach(
+            (displayStatObject) =>
+              arrayWithoutThisViewContext.push(displayStatObject),
+          );
+
+          displayStatsJSON = arrayWithoutThisViewContext;
+        };
+
+        removeOldSurveyVersionStats();
+        displayStatsJSON.push(defaultDisplayStatObject);
+      }
+      setDisplayStats(displayStatsJSON);
+      storage.set(
+        '@ATB_feedback_display_stats',
+        JSON.stringify(displayStatsJSON),
+      );
+    }
+  };
 
   const toggleSelectedAlternativeId = useCallback(
     (alternativeId: number) => {
@@ -177,16 +206,18 @@ export const Feedback = ({
   );
 
   const setFeedbackAnswered = () => {
-    const newObject = [...displayStats];
-    const statsForCurrentVersionAndViewContext = newObject.find(
-      (entry) =>
-        entry.version === APP_VERSION && entry.viewContext === viewContext,
-    );
-    if (statsForCurrentVersionAndViewContext) {
-      statsForCurrentVersionAndViewContext.answered = true;
+    if (category) {
+      const newObject = [...displayStats];
+      const statsForCurrentSurveyVersionAndViewContext = newObject.find(
+        (entry) =>
+          entry.surveyVersion === category.surveyVersion &&
+          entry.viewContext === viewContext,
+      );
+      if (statsForCurrentSurveyVersionAndViewContext) {
+        statsForCurrentSurveyVersionAndViewContext.answered = true;
+        storage.set('@ATB_feedback_display_stats', JSON.stringify(newObject));
+      }
     }
-
-    storage.set('@ATB_feedback_display_stats', JSON.stringify(newObject));
   };
 
   const submitFeedbackWithAlternatives = async () => {
@@ -200,8 +231,8 @@ export const Feedback = ({
       const appVersion = APP_VERSION;
       const organization = APP_ORG;
       const submitTime = Date.now();
-      const displayCount = statsForCurrentVersionAndViewContext
-        ? statsForCurrentVersionAndViewContext.count + 1
+      const displayCount = statsForCurrentSurveyVersionAndViewContext?.count
+        ? statsForCurrentSurveyVersionAndViewContext.count + 1
         : -1;
 
       const dataToServer = {
@@ -224,22 +255,24 @@ export const Feedback = ({
       Bugsnag.notify(err);
     } finally {
       setSubmitted(true);
-      if (onlyOneFeedbackForEachAppVersionInThisViewContext) {
+      if (onlyOneFeedbackForEachSurveyVersionInThisViewContext) {
         setFeedbackAnswered();
       }
     }
   };
 
-  useEffect(() => {
-    // Reset state whenever metadata changes, unless the data is periodically refreshed
-    if (!avoidResetOnMetadataUpdate) {
-      setSelectedAlternativeIds([]);
-      setSelectedOpinion(Opinions.NotClickedYet);
-      setSubmitted(false);
+  const setDoNotShowAgain = () => {
+    const newArray = [...displayStats];
+    const currentVersionStats = newArray.find(
+      (versionStat) => versionStat.surveyVersion === category?.surveyVersion,
+    );
+    if (currentVersionStats) {
+      currentVersionStats.doNotShowAgain = true;
+      storage.set('@ATB_feedback_display_stats', JSON.stringify(newArray));
+      setDisplayStats(newArray);
     }
-  }, [metadata]);
+  };
 
-  if (!category) return null;
   if (submitted) {
     const selectedTextAlternatives = selectedAlternativeIds.map(
       (altId) =>
@@ -259,16 +292,20 @@ export const Feedback = ({
   }
 
   if (!displayStats || displayStats.length < 1) return null;
-  const statsForCurrentVersionAndViewContext = displayStats.find(
+  const statsForCurrentSurveyVersionAndViewContext = displayStats.find(
     (entry: VersionStats) =>
-      entry.version === APP_VERSION && entry.viewContext === viewContext,
+      entry.surveyVersion === category.surveyVersion &&
+      entry.viewContext === viewContext,
   );
 
-  if (!statsForCurrentVersionAndViewContext) return null;
-  if (statsForCurrentVersionAndViewContext.answered) return null;
+  if (!statsForCurrentSurveyVersionAndViewContext) return null;
+  if (statsForCurrentSurveyVersionAndViewContext.answered) return null;
+  if (statsForCurrentSurveyVersionAndViewContext.doNotShowAgain) return null;
 
   if (allowList) {
-    if (!allowList.includes(statsForCurrentVersionAndViewContext.count + 1)) {
+    if (
+      !allowList.includes(statsForCurrentSurveyVersionAndViewContext.count + 1)
+    ) {
       return null;
     }
   }
@@ -300,6 +337,17 @@ export const Feedback = ({
               mode="primary"
               color="background_accent"
             />
+          </View>
+        )}
+        {selectedOpinion === Opinions.NotClickedYet && category.dismissable && (
+          <View style={styles.submitButtonView}>
+            <ThemeText
+              style={styles.centerText}
+              type="body__tertiary"
+              onPress={setDoNotShowAgain}
+            >
+              {t(FeedbackTexts.goodOrBadTexts.doNotShowAgain)}
+            </ThemeText>
           </View>
         )}
       </View>

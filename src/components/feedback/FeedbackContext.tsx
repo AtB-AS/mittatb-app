@@ -6,6 +6,11 @@ export type FeedbackQuestionsViewContext = 'departures' | 'assistant';
 
 export type CategoryType = {
   viewContext: FeedbackQuestionsViewContext;
+  alwaysShow: boolean;
+  dismissable: boolean;
+  surveyVersion: number;
+  gracePeriodDisplayCount: number;
+  repromptDisplayCount: number;
   introText: LanguageString;
   question: QuestionType;
 };
