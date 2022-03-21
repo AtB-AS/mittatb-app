@@ -95,6 +95,7 @@ export default function DateNavigation({
         textStyle={{
           marginLeft: theme.spacings.xSmall,
         }}
+        testID="previousDayButton"
       ></Button>
       <Button
         onPress={onLaterTimePress}
@@ -113,6 +114,7 @@ export default function DateNavigation({
           textAlign: 'center',
           marginRight: theme.spacings.xSmall,
         }}
+        testID="setDateButton"
       ></Button>
       <Button
         onPress={() => {
@@ -127,6 +129,7 @@ export default function DateNavigation({
           marginRight: theme.spacings.xSmall,
         }}
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yNextDayHint)}
+        testID="nextDayButton"
       ></Button>
     </View>
   );

@@ -13,11 +13,13 @@ import {StyleSheet} from '@atb/theme';
 type StopPlaceItemProps = {
   stopPlacePosition: StopPlacePosition;
   onPress: (place: Place) => void;
+  testID: string;
 };
 
 export default function StopPlaceItem({
   stopPlacePosition,
   onPress,
+  testID,
 }: StopPlaceItemProps): JSX.Element {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -40,9 +42,11 @@ export default function StopPlaceItem({
           DeparturesTexts.stopPlaceList.a11yStopPlaceItemHint,
         )}
       >
-        <View style={styles.stopPlaceContainer}>
+        <View style={styles.stopPlaceContainer} testID={testID}>
           <View style={styles.stopPlaceInfo}>
-            <ThemeText type="heading__component">{place.name}</ThemeText>
+            <ThemeText type="heading__component" testID={testID + 'Name'}>
+              {place.name}
+            </ThemeText>
             <ThemeText type="body__secondary" style={styles.stopDescription}>
               {description}
             </ThemeText>

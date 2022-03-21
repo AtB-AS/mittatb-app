@@ -1,10 +1,7 @@
 import {device} from 'detox';
 import setLocation from '../utils';
-import {
-  expectToBeVisibleByText,
-  scrollContent,
-  tapById,
-} from '../utils/interactionHelpers';
+import {tapById} from '../utils/interactionHelpers';
+import {expectToBeVisibleByText} from '../utils/expectHelpers';
 
 describe('Onboarding', () => {
   beforeAll(async () => {
@@ -19,10 +16,6 @@ describe('Onboarding', () => {
     });
     await setLocation(62.4305, 9.3951);
   });
-
-  // beforeEach(async () => {
-  //   await device.reloadReactNative();
-  // });
 
   it('should have welcome screen', async () => {
     await expectToBeVisibleByText('Welcome to the AtB app');

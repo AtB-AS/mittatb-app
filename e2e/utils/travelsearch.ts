@@ -1,8 +1,9 @@
 import {by, element} from 'detox';
-import {expectToBeVisibleByText, tapById} from './interactionHelpers';
+import {tapById} from './interactionHelpers';
+import {expectToBeVisibleByText} from './expectHelpers';
 import {chooseSearchResult, setInputById} from './commonHelpers';
 
-// Do a travel search (NOTE: use departure and arrival with only one bus station in the suggestions)
+// Do a travel search
 export async function travelSearch(departure: string, arrival: string) {
   await tapById('searchFromButton');
   await setInputById('locationSearchInput', departure);
