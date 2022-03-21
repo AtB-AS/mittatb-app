@@ -39,7 +39,11 @@ import useDepartureData, {CallListGroup} from './use-departure-data';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {canSellTicketsForSubMode} from '@atb/operator-config';
-import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
+import {
+  getServiceJourneyMapLegs,
+  getServiceJourneyMapLegsV2,
+} from '@atb/api/serviceJourney';
+import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -95,8 +99,7 @@ export default function DepartureDetails({navigation, route}: Props) {
         leftButton={{type: 'back'}}
         title={title ?? t(DepartureDetailsTexts.header.notFound)}
       />
-      <ContentWithDisappearingHeader header={null}>
-        {/*
+
       <ContentWithDisappearingHeader
         header={
           mapData && (
@@ -114,8 +117,7 @@ export default function DepartureDetails({navigation, route}: Props) {
             />
           )
         }
-        */}
-
+      >
         <View
           style={styles.scrollView__content}
           testID="departureDetailsContentView"
@@ -428,7 +430,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
 }));
 
 function useMapData(activeItem: ServiceJourneyDeparture) {
-  const [mapData, setMapData] = useState<ServiceJourneyMapInfoData>();
+  const [mapData, setMapData] = useState<ServiceJourneyMapInfoData_v3>();
   useEffect(() => {
     const getData = async () => {
       if (!activeItem) {
@@ -436,7 +438,7 @@ function useMapData(activeItem: ServiceJourneyDeparture) {
       }
 
       try {
-        const result = await getServiceJourneyMapLegs(
+        const result = await getServiceJourneyMapLegsV2(
           activeItem.serviceJourneyId,
           activeItem.fromQuayId,
           activeItem.toQuayId,
