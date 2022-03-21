@@ -98,7 +98,7 @@ export default function PlaceScreen({
             accessibilityHint={
               t(DeparturesTexts.quayChips.a11yHint) + getQuayName(item)
             }
-            testID={'quaySelectionButton'}
+            testID="quaySelectionButton"
           ></Button>
         )}
       />
@@ -108,7 +108,7 @@ export default function PlaceScreen({
           navigateToDetails={navigateToDetails}
           searchTime={searchTime}
           setSearchTime={setSearchTime}
-          testID={'departuresContentView'}
+          testID="departuresContentView"
         />
       ) : (
         <StopPlaceView
@@ -117,7 +117,7 @@ export default function PlaceScreen({
           navigateToQuay={navigateToQuay}
           searchTime={searchTime}
           setSearchTime={setSearchTime}
-          testID={'departuresContentView'}
+          testID="departuresContentView"
         />
       )}
     </View>
