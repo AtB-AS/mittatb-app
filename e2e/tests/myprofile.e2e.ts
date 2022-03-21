@@ -1,18 +1,20 @@
 import {device} from 'detox';
 import {goToTab, goBack} from '../utils/commonHelpers';
 import {
-  expectNotToExistsByText,
+  tapById,
+  tapByText,
   scrollToId,
   scrollToText,
   scroll,
+} from '../utils/interactionHelpers';
+import {
   expectToBeVisibleById,
   expectToBeVisibleByText,
-  tapById,
-  tapByText,
   expectElementToContainText,
+  expectNotToExistsByText,
   expectElementToContainId,
   expectElementNotToContainId,
-} from '../utils/interactionHelpers';
+} from '../utils/expectHelpers';
 import {skipOnboarding} from '../utils/onboarding';
 import {
   addFavouriteLocation,
@@ -41,7 +43,6 @@ describe('My profile', () => {
   });
 
   beforeEach(async () => {
-    //await device.reloadReactNative();
     await goToTab('profile');
     await scroll('profileHomeScrollView', 'top');
   });

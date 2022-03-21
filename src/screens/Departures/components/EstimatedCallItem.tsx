@@ -20,10 +20,12 @@ import {isToday, parseISO} from 'date-fns';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
+  testID: string;
 };
 
 export default function EstimatedCallItem({
   departure,
+  testID,
 }: EstimatedCallItemProps): JSX.Element {
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -79,12 +81,15 @@ export default function EstimatedCallItem({
           publicCode={line.publicCode}
           transportMode={line.transportMode}
           transportSubmode={line.transportSubmode}
+          testID={testID}
         ></LineChip>
       )}
-      <ThemeText style={styles.lineName}>
+      <ThemeText style={styles.lineName} testID={testID + 'Name'}>
         {departure.destinationDisplay?.frontText}
       </ThemeText>
-      <ThemeText type="body__primary--bold">{timeWithRealtimePrefix}</ThemeText>
+      <ThemeText type="body__primary--bold" testID={testID + 'Time'}>
+        {timeWithRealtimePrefix}
+      </ThemeText>
     </View>
   );
 }
@@ -93,12 +98,14 @@ type LineChipProps = {
   publicCode?: string;
   transportMode?: Types.TransportMode;
   transportSubmode?: Types.TransportSubmode;
+  testID?: string;
 };
 
 function LineChip({
   publicCode,
   transportMode,
   transportSubmode,
+  testID,
 }: LineChipProps): JSX.Element {
   const styles = useStyles();
   const fontScale = useFontScale();
@@ -128,6 +135,7 @@ function LineChip({
             styles.lineChipText,
             {color: transportTextColor, minWidth: fontScale * 20},
           ]}
+          testID={testID + 'PublicCode'}
           type="body__primary--bold"
         >
           {publicCode}
