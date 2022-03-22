@@ -97,6 +97,7 @@ const ResultItemHeader: React.FC<{
             formatToClock(tripPattern.expectedEndTime, language),
           ),
         )}
+        testID="resultStartAndEndTime"
       >
         {formatToClock(startTime, language)} –{' '}
         {formatToClock(endTime, language)}
@@ -105,6 +106,7 @@ const ResultItemHeader: React.FC<{
         <AccessibleText
           type="body__secondary"
           color="secondary"
+          testID="resultDuration"
           prefix={t(AssistantTexts.results.resultItem.header.totalDuration)}
         >
           {durationText}
@@ -232,11 +234,12 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
           type="body__secondary"
           style={styles.fromPlaceText}
           numberOfLines={1}
+          testID="resultDeparturePlace"
         >
           {t(AssistantTexts.results.resultItem.footer.fromPlace(quayName)) +
             ' '}
         </ThemeText>
-        <ThemeText type="body__secondary">
+        <ThemeText type="body__secondary" testID="resultDepartureTime">
           {timePrefix + formatToClock(quayStartTime, language)}
         </ThemeText>
       </View>
@@ -342,7 +345,11 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       : t(AssistantTexts.results.resultItem.footLeg.walkLabel(walkDuration));
 
   return (
-    <View style={styles.legContainer} accessibilityLabel={a11yText}>
+    <View
+      style={styles.legContainer}
+      accessibilityLabel={a11yText}
+      testID="fLeg"
+    >
       {!mustWalk ? (
         <ThemeIcon svg={Duration} />
       ) : (
@@ -368,7 +375,7 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
   const styles = useLegStyles();
   return (
     <View style={styles.legContainer}>
-      <View style={styles.iconContainer}>
+      <View style={styles.iconContainer} testID="trLeg">
         <TransportationIcon
           mode={leg.mode}
           subMode={leg.line?.transportSubmode}
