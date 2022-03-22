@@ -345,7 +345,11 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       : t(AssistantTexts.results.resultItem.footLeg.walkLabel(walkDuration));
 
   return (
-    <View style={styles.legContainer} accessibilityLabel={a11yText} testID="fLeg">
+    <View
+      style={styles.legContainer}
+      accessibilityLabel={a11yText}
+      testID="fLeg"
+    >
       {!mustWalk ? (
         <ThemeIcon svg={Duration} />
       ) : (
