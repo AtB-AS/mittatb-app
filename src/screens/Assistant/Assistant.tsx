@@ -135,6 +135,28 @@ const Assistant: React.FC<Props> = ({
     date: new Date().toISOString(),
   });
 
+  function resetView() {
+    analytics().logEvent('click_logo_reset');
+    log('reset');
+    setCurrentLocationOrRequest();
+
+    navigation.setParams({
+      toLocation: undefined,
+    });
+  }
+
+  useEffect(() => {
+    const unsubscribe = navigation
+      .dangerouslyGetParent()
+      // Typescript doesn't know that tabLongPress exist in the parent
+      // and types aren't properly exposed to compensate for that.
+      ?.addListener('tabLongPress' as any, () => {
+        resetView();
+      });
+
+    return unsubscribe;
+  }, [navigation]);
+
   function swap() {
     log('swap', {
       newFrom: translateLocation(to),
@@ -192,16 +214,6 @@ const Assistant: React.FC<Props> = ({
         setCurrentLocationAsFrom();
       }
     }
-  }
-
-  function resetView() {
-    analytics().logEvent('click_logo_reset');
-    log('reset');
-    setCurrentLocationOrRequest();
-
-    navigation.setParams({
-      toLocation: undefined,
-    });
   }
 
   const {
