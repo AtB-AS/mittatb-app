@@ -10,7 +10,7 @@ const ServiceDisruptionsTexts = {
   ),
   button: {
     text: _(
-      'atb.no/driftsavvik (åpnes i nettleser)      ',
+      'atb.no/driftsavvik (åpnes i nettleser)',
       'atb.no/driftsavvik (opens in browser)',
     ),
   },
