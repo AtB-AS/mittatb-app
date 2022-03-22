@@ -78,7 +78,7 @@ const TripSection: React.FC<TripSectionProps> = ({
 
   const sectionOutput = (
     <>
-      <View style={style.tripSection}>
+      <View style={style.tripSection} testID="legContainer">
         {step && leg.mode && (
           <AccessibleText
             style={style.a11yHelper}
@@ -106,16 +106,19 @@ const TripSection: React.FC<TripSectionProps> = ({
               t,
             )}
             rowLabel={<Time {...startTimes} />}
+            testID="fromPlace"
             onPress={() => handleQuayPress(leg.fromPlace.quay)}
           >
-            <ThemeText>{getPlaceName(leg.fromPlace)}</ThemeText>
+            <ThemeText testID="fromPlaceName">
+              {getPlaceName(leg.fromPlace)}
+            </ThemeText>
           </TripRow>
         )}
         {isWalkSection ? (
           <WalkSection {...leg} />
         ) : (
           <TripRow
-            testID="legOnTrip"
+            testID="transportationLeg"
             accessibilityLabel={t(
               TripDetailsTexts.trip.leg.transport.a11ylabel(
                 t(getTranslatedModeName(leg.mode)),
@@ -153,8 +156,11 @@ const TripSection: React.FC<TripSectionProps> = ({
             )}
             rowLabel={<Time {...endTimes} />}
             onPress={() => handleQuayPress(leg.toPlace.quay)}
+            testID="toPlace"
           >
-            <ThemeText>{getPlaceName(leg.toPlace)}</ThemeText>
+            <ThemeText testID="toPlaceName">
+              {getPlaceName(leg.toPlace)}
+            </ThemeText>
           </TripRow>
         )}
       </View>
@@ -266,6 +272,7 @@ const WalkSection = (leg: Leg) => {
           subMode={leg.line?.transportSubmode}
         />
       }
+      testID="footLeg"
     >
       <ThemeText type="body__secondary" color="secondary">
         {t(
