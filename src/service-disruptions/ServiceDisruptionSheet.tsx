@@ -9,7 +9,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import React, {forwardRef} from 'react';
-import {Linking} from 'react-native';
+import {Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import ThemeText from '../components/text';
 
@@ -18,8 +18,8 @@ type Props = {
   serviceDisruptionUrl: string;
 };
 
-const ServiceDisruptionSheet = forwardRef<ScrollView, Props>(
-  ({close, serviceDisruptionUrl}) => {
+const ServiceDisruptionSheet = forwardRef<View, Props>(
+  ({close, serviceDisruptionUrl}, focusRef) => {
     const {t} = useTranslation();
 
     return (
@@ -37,7 +37,9 @@ const ServiceDisruptionSheet = forwardRef<ScrollView, Props>(
         />
 
         <Sections.Section withFullPadding>
-          <ThemeText>{t(ServiceDisruptionsTexts.body)}</ThemeText>
+          <View ref={focusRef}>
+            <ThemeText>{t(ServiceDisruptionsTexts.body)}</ThemeText>
+          </View>
         </Sections.Section>
 
         <FullScreenFooter>

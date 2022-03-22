@@ -4,7 +4,6 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import ServiceDisruptionSheet from './ServiceDisruptionSheet';
 import {LeftButtonProps} from '@atb/components/screen-header';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useTheme} from '@atb/theme';
 
 export default function useServiceDisruptionModal(): {
   leftButton?: LeftButtonProps;
@@ -25,6 +24,8 @@ export default function useServiceDisruptionModal(): {
 
   const leftButton: LeftButtonProps = {
     type: 'status-disruption',
+    // This should always be in header and thus primary_2
+    // hardcoded from before, but we should at some point see how to better handle it.
     color: 'primary_2',
     onPress: openServiceDistruptionSheet,
     accessibilityLabel: '',
