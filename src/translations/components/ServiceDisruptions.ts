@@ -6,7 +6,7 @@ const ServiceDisruptionsTexts = {
   },
   body: _(
     'Oversikt over endringer, forsinkelser og avvik finner du på atb.no:',
-    'Get an overview of changes, delays and service disruptions at atb.no (Norwegian only):      ',
+    'Get an overview of changes, delays and service disruptions at atb.no (Norwegian only):',
   ),
   button: {
     text: _(
