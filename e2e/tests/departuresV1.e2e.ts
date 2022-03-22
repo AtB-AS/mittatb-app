@@ -117,8 +117,6 @@ describe('Departures v1', () => {
     await goBack();
     await goBack();
     await expectToBeVisibleByText('Departures');
-    await goBack();
-    await expectToBeVisibleByText('Travel assistant');
   });
 
   xit('departure times should be sorted', async () => {
