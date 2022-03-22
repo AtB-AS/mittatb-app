@@ -152,6 +152,7 @@ const Assistant: React.FC<Props> = ({
       // Typescript doesn't know that tabLongPress exist in the parent
       // and types aren't properly exposed to compensate for that.
       ?.addListener('tabLongPress' as any, () => {
+        if (!navigation.isFocused()) return;
         resetView();
       });
 
