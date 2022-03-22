@@ -4,14 +4,14 @@ import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import {
-  DisappearingHeaderTexts,
+  ServiceDisruptionsTexts,
   ScreenHeaderTexts,
   useTranslation,
 } from '@atb/translations';
 import React, {forwardRef} from 'react';
 import {Linking} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import ThemeText from '../text';
+import ThemeText from '../components/text';
 
 type Props = {
   close: () => void;
@@ -25,7 +25,7 @@ const ServiceDisruptionSheet = forwardRef<ScrollView, Props>(
     return (
       <BottomSheetContainer>
         <ScreenHeaderWithoutNavigation
-          title={t(DisappearingHeaderTexts.serviceDisruptions.header.title)}
+          title={t(ServiceDisruptionsTexts.header.title)}
           leftButton={{
             type: 'cancel',
             onPress: close,
@@ -37,20 +37,18 @@ const ServiceDisruptionSheet = forwardRef<ScrollView, Props>(
         />
 
         <Sections.Section withFullPadding>
-          <ThemeText>
-            {t(DisappearingHeaderTexts.serviceDisruptions.body)}
-          </ThemeText>
+          <ThemeText>{t(ServiceDisruptionsTexts.body)}</ThemeText>
         </Sections.Section>
 
         <FullScreenFooter>
           <Button
             color="primary_2"
-            text={t(DisappearingHeaderTexts.serviceDisruptions.button.text)}
+            text={t(ServiceDisruptionsTexts.button.text)}
             onPress={() => {
               Linking.openURL(serviceDisruptionUrl);
               close();
             }}
-            testID="saveTicketTypeButton"
+            testID="navigateToServiceDisruptions"
           />
         </FullScreenFooter>
       </BottomSheetContainer>

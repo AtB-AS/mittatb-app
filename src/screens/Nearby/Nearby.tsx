@@ -17,6 +17,7 @@ import {
 import {useOnlySingleLocation} from '@atb/location-search';
 import {RootStackParamList} from '@atb/navigation';
 import {usePreferences} from '@atb/preferences';
+import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 import {StyleSheet} from '@atb/theme';
 import {ThemeColor} from '@atb/theme/colors';
 import {
@@ -192,6 +193,7 @@ const NearbyOverview: React.FC<Props> = ({
       }
     }
   }
+  const {leftButton} = useServiceDisruptionSheet();
 
   useEffect(() => {
     if (updatingLocation)
@@ -213,6 +215,7 @@ const NearbyOverview: React.FC<Props> = ({
     <SimpleDisappearingHeader
       onRefresh={refresh}
       isRefreshing={isLoading}
+      leftButton={leftButton}
       header={
         <Header
           fromLocation={fromLocation}

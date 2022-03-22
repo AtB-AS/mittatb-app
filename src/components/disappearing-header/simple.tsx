@@ -20,7 +20,6 @@ import {
 import {AlertContext} from '@atb/alerts/AlertsContext';
 import AlertBox from '@atb/alerts/AlertBox';
 import {ThemeColor} from '@atb/theme/colors';
-import useServiceDisruptionModal from './use-service-disruption';
 
 const themeColor: ThemeColor = 'background_accent';
 
@@ -34,6 +33,8 @@ type Props = {
   useScroll?: boolean;
   headerTitle: React.ReactNode;
   alternativeTitleComponent?: React.ReactNode;
+
+  leftButton?: LeftButtonProps;
 
   onEndReached?(e: NativeScrollEvent): void;
   onEndReachedThreshold?: number;
@@ -60,6 +61,8 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
   headerTitle,
   alternativeTitleComponent,
 
+  leftButton,
+
   onEndReached,
   onEndReachedThreshold = 10,
 
@@ -77,8 +80,6 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
         scrollableContentRef.current?.scrollTo({y: -contentHeightRef.current}),
     }),
   );
-
-  const {leftButton} = useServiceDisruptionModal(themeColor);
 
   useEffect(() => {
     contentHeightRef.current = contentHeight;

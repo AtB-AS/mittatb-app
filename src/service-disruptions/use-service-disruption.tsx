@@ -4,8 +4,9 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import ServiceDisruptionSheet from './ServiceDisruptionSheet';
 import {LeftButtonProps} from '@atb/components/screen-header';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useTheme} from '@atb/theme';
 
-export default function useServiceDisruptionModal(color: ThemeColor): {
+export default function useServiceDisruptionModal(): {
   leftButton?: LeftButtonProps;
 } {
   const {open: openBottomSheet} = useBottomSheet();
@@ -24,7 +25,7 @@ export default function useServiceDisruptionModal(color: ThemeColor): {
 
   const leftButton: LeftButtonProps = {
     type: 'status-disruption',
-    color,
+    color: 'primary_2',
     onPress: openServiceDistruptionSheet,
     accessibilityLabel: '',
     testID: 'lhb',

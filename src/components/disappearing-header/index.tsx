@@ -1,6 +1,9 @@
 import AlertBox from '@atb/alerts/AlertBox';
 import {AlertContext} from '@atb/alerts/AlertsContext';
-import {AnimatedScreenHeader} from '@atb/components/screen-header';
+import {
+  AnimatedScreenHeader,
+  LeftButtonProps,
+} from '@atb/components/screen-header';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemeColor} from '@atb/theme/colors';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
@@ -26,7 +29,6 @@ import {
   useSafeAreaFrame,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import useServiceDisruptionModal from './use-service-disruption';
 
 type Props = {
   renderHeader(
@@ -38,6 +40,8 @@ type Props = {
   headerHeight?: number;
   isRefreshing?: boolean;
   isFullHeight?: boolean;
+
+  leftButton?: LeftButtonProps;
 
   useScroll?: boolean;
   headerTitle: React.ReactNode;
@@ -73,6 +77,8 @@ const DisappearingHeader: React.FC<Props> = ({
   onRefresh,
 
   isFullHeight = false,
+
+  leftButton,
 
   headerTitle,
   alternativeTitleComponent,
@@ -110,8 +116,6 @@ const DisappearingHeader: React.FC<Props> = ({
   const fullscreenOffsetRef = useRef(
     new Animated.Value(isFullHeight ? 0 : contentOffset),
   ).current;
-
-  const {leftButton} = useServiceDisruptionModal(themeColor);
 
   useEffect(
     function () {

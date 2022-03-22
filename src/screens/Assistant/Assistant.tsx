@@ -57,6 +57,7 @@ import Results from './Results';
 import {ThemeColor} from '@atb/theme/colors';
 import * as navIcons from '@atb/assets/svg/mono-icons/navigation';
 import useTripsQuery from '@atb/screens/Assistant/use-trips-query';
+import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 
 const themeColor: ThemeColor = 'background_accent';
 
@@ -404,6 +405,8 @@ const Assistant: React.FC<Props> = ({
 
   const screenHasFocus = useIsFocused();
 
+  const {leftButton} = useServiceDisruptionSheet();
+
   useEffect(() => {
     if (!screenHasFocus) return;
     switch (searchState) {
@@ -432,6 +435,7 @@ const Assistant: React.FC<Props> = ({
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
       showAlterntativeTitle={Boolean(from && to)}
+      leftButton={leftButton}
       onFullscreenTransitionEnd={(fullHeight) => {
         if (fullHeight) {
           clear();
