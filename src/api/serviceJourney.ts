@@ -21,7 +21,7 @@ export async function getDepartures(
   return response.data?.value ?? [];
 }
 
-export async function getServiceJourneyMapLegs(
+export async function getServiceJourneyMapLegs( // TODO remove
   id: string,
   fromQuayId?: string,
   toQuayId?: string,
@@ -44,7 +44,7 @@ export async function getServiceJourneyMapLegs(
   );
 }
 
-export async function getServiceJourneyMapLegsV2(
+export async function getServiceJourneyMapLegsV2( // TODO rename
   id: string,
   fromQuayId?: string,
   toQuayId?: string,
@@ -59,7 +59,11 @@ export async function getServiceJourneyMapLegsV2(
   );
   const response = await client.get<ServiceJourneyMapInfoData_v3>(
     stringifyUrl(url, query),
+    {baseURL: 'http://10.0.2.2:8080'}, // TODO remove baseurl override
   );
+
+  console.log('--> response', response);
+
   return (
     response.data ?? {
       mapLegs: [],

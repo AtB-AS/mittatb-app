@@ -52,7 +52,7 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {StoredType} from '@atb/favorites/storage';
 import {FavoriteDeparture} from '@atb/favorites/types';
 import FavoriteDialogSheet from '@atb/departure-list/section-items/FavoriteDialogSheet';
-import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
+import {ServiceJourneyDeparture} from '@atb/screens/TripDetails_v2/DepartureDetails/types';
 
 export type LineItemProps = SectionItem<{
   group: DepartureGroup;

@@ -7,7 +7,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import DeparturesList from '@atb/departure-list/DeparturesList';
 import {useDepartureData} from '@atb/screens/Nearby/state';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
-import {DetailsStackParams} from '@atb/screens/TripDetails';
+import {DetailsStackParams} from '@atb/screens/TripDetails_old';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export type QuayDeaparturesNavigationProps = NavigationProp<DetailsStackParams>;

@@ -1,10 +1,8 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {LocationWithMetadata} from '@atb/favorites/types';
-import {DetailsRouteParams} from '../TripDetails/Details';
-import {DetailsRouteParams as DetailsRouteParams_v2} from '../TripDetails_v2/Details';
-import TripDetailsRoot from '../TripDetails';
-import {TripDetailsRoot as TripDetailsRoot_v2} from '../TripDetails_v2';
+import {DetailsRouteParams} from '../TripDetails_v2/Details';
+import {TripDetailsRoot} from '../TripDetails_v2';
 import AssistantRoot from './Assistant';
 import JourneyDatePicker, {
   DateTimePickerParams,
@@ -18,7 +16,6 @@ export type AssistantParams = {
     searchTime: SearchTime;
   };
   TripDetails: DetailsRouteParams;
-  TripDetails_v2: DetailsRouteParams_v2;
   DateTimePicker: DateTimePickerParams;
 };
 
@@ -37,13 +34,6 @@ const Assistant = () => {
       <Stack.Screen
         name="TripDetails"
         component={TripDetailsRoot}
-        options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}
-      ></Stack.Screen>
-      <Stack.Screen
-        name="TripDetails_v2"
-        component={TripDetailsRoot_v2}
         options={{
           ...TransitionPresets.SlideFromRightIOS,
         }}

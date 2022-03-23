@@ -377,7 +377,7 @@ const Assistant: React.FC<Props> = ({
 
   const onPressed = useCallback(
     (tripPatterns, startIndex) =>
-      navigation.navigate('TripDetails_v2', {
+      navigation.navigate('TripDetails', {
         tripPatterns,
         startIndex,
       }),

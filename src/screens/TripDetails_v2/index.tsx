@@ -13,7 +13,7 @@ import {MapDetailRouteParams, TravelDetailsMap} from './Map';
 import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
 import QuayDepartures, {
   QuayDeparturesRouteParams,
-} from '@atb/screens/TripDetails/QuayDepartures';
+} from '@atb/screens/TripDetails_v2/QuayDepartures';
 
 export type DetailsStackParams = {
   Details: DetailsRouteParams;

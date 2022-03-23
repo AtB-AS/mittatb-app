@@ -33,7 +33,7 @@ import Time from './Time';
 import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
 import WaitSection, {WaitDetails} from './WaitSection';
-import {DetailsModalNavigationProp} from '@atb/screens/TripDetails';
+import {DetailsModalNavigationProp} from '@atb/screens/TripDetails_old';
 import {searchByStopPlace} from '@atb/geocoder/search-for-location';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 

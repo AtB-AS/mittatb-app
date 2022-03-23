@@ -39,10 +39,7 @@ import useDepartureData, {CallListGroup} from './use-departure-data';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {canSellTicketsForSubMode} from '@atb/operator-config';
-import {
-  getServiceJourneyMapLegs,
-  getServiceJourneyMapLegsV2,
-} from '@atb/api/serviceJourney';
+import {getServiceJourneyMapLegsV2} from '@atb/api/serviceJourney';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 
 export type DepartureDetailsRouteParams = {
