@@ -36,7 +36,6 @@ export async function getServiceJourneyMapLegs(
   );
   const response = await client.get<ServiceJourneyMapInfoData_v3>(
     stringifyUrl(url, query),
-    {baseURL: 'http://10.0.2.2:8080'}, // TODO remove baseurl override
   );
   return (
     response.data ?? {
