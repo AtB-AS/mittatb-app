@@ -34,11 +34,11 @@ import Time from './Time';
 import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
 import WaitSection, {WaitDetails} from './WaitSection';
-import {DetailsModalNavigationProp} from '@atb/screens/TripDetails_v2';
+import {DetailsModalNavigationProp} from '@atb/screens/TripDetails';
 import {searchByStopPlace} from '@atb/geocoder/search-for-location';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {Leg, Place, Quay} from '@atb/api/types/trips';
-import {ServiceJourneyDeparture} from '@atb/screens/TripDetails_v2/DepartureDetails/types';
+import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
 
 type TripSectionProps = {
   isLast?: boolean;

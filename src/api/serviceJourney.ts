@@ -21,30 +21,7 @@ export async function getDepartures(
   return response.data?.value ?? [];
 }
 
-export async function getServiceJourneyMapLegs( // TODO remove
-  id: string,
-  fromQuayId?: string,
-  toQuayId?: string,
-): Promise<ServiceJourneyMapInfoData> {
-  const url = `bff/v1/servicejourney/${encodeURIComponent(id)}/polyline`;
-  const query = qs.stringify(
-    {
-      fromQuayId,
-      toQuayId,
-    },
-    {skipNull: true},
-  );
-  const response = await client.get<ServiceJourneyMapInfoData>(
-    stringifyUrl(url, query),
-  );
-  return (
-    response.data ?? {
-      mapLegs: [],
-    }
-  );
-}
-
-export async function getServiceJourneyMapLegsV2( // TODO rename
+export async function getServiceJourneyMapLegs(
   id: string,
   fromQuayId?: string,
   toQuayId?: string,
@@ -61,9 +38,6 @@ export async function getServiceJourneyMapLegsV2( // TODO rename
     stringifyUrl(url, query),
     {baseURL: 'http://10.0.2.2:8080'}, // TODO remove baseurl override
   );
-
-  console.log('--> response', response);
-
   return (
     response.data ?? {
       mapLegs: [],

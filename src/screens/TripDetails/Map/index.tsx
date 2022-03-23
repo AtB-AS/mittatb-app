@@ -19,7 +19,7 @@ import {DetailScreenNavigationProp} from '../Details';
 import MapLabel from './MapLabel';
 import MapRoute from './MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
-import {Coordinates, MapLeg} from '@atb/screens/TripDetails_v2/Map/types';
+import {Coordinates, MapLeg} from '@atb/screens/TripDetails/Map/types';
 
 export type MapDetailRouteParams = {
   legs: MapLeg[];

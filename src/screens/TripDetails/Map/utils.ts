@@ -6,7 +6,7 @@ import {
   Mode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {Coordinates, MapLeg} from '@atb/screens/TripDetails_v2/Map/types';
+import {Coordinates, MapLeg} from '@atb/screens/TripDetails/Map/types';
 
 export interface MapLine extends Feature<LineString> {
   travelType?: Mode;

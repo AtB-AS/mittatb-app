@@ -38,7 +38,7 @@ import useDepartureData, {CallListGroup} from './use-departure-data';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {canSellTicketsForSubMode} from '@atb/operator-config';
-import {getServiceJourneyMapLegsV2} from '@atb/api/serviceJourney';
+import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 
 export type DepartureDetailsRouteParams = {
@@ -434,7 +434,7 @@ function useMapData(activeItem: ServiceJourneyDeparture) {
       }
 
       try {
-        const result = await getServiceJourneyMapLegsV2(
+        const result = await getServiceJourneyMapLegs(
           activeItem.serviceJourneyId,
           activeItem.fromQuayId,
           activeItem.toQuayId,

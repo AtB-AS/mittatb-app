@@ -7,12 +7,12 @@ import DeparturesRoot, {
 import PlaceScreen, {PlaceScreenParams} from './PlaceScreen';
 import DepartureDetails, {
   DepartureDetailsRouteParams,
-} from '../TripDetails_v2/DepartureDetails';
+} from '../TripDetails/DepartureDetails';
 import QuayDepartures, {
   QuayDeparturesRouteParams,
-} from '../TripDetails_v2/QuayDepartures';
-import TripDetailsRoot, {DetailsStackParams} from '../TripDetails_v2';
-import TravelDetailsMap, {MapDetailRouteParams} from '../TripDetails_v2/Map';
+} from '../TripDetails/QuayDepartures';
+import TripDetailsRoot, {DetailsStackParams} from '../TripDetails';
+import TravelDetailsMap, {MapDetailRouteParams} from '../TripDetails/Map';
 
 export type DeparturesStackParams = {
   DeparturesRoot: NearbyPlacesParams;

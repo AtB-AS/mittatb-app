@@ -1,8 +1,8 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {LocationWithMetadata} from '@atb/favorites/types';
-import {DetailsRouteParams} from '../TripDetails_v2/Details';
-import {TripDetailsRoot} from '../TripDetails_v2';
+import {DetailsRouteParams} from '../TripDetails/Details';
+import {TripDetailsRoot} from '../TripDetails';
 import AssistantRoot from './Assistant';
 import JourneyDatePicker, {
   DateTimePickerParams,

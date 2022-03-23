@@ -5,7 +5,7 @@ import {StyleSheet} from '@atb/theme';
 import DeparturesList from '@atb/departure-list/DeparturesList';
 import {useDepartureData} from '@atb/screens/Nearby/state';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
-import {DetailsStackParams} from '@atb/screens/TripDetails_v2';
+import {DetailsStackParams} from '@atb/screens/TripDetails';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export type QuayDeaparturesNavigationProps = NavigationProp<DetailsStackParams>;
