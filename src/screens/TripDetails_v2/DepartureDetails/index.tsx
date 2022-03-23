@@ -11,7 +11,6 @@ import {
   EstimatedCall,
   Quay,
   Situation,
-  ServiceJourneyMapInfoData,
   TransportMode,
   TransportSubmode,
 } from '@atb/sdk';
