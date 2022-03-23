@@ -444,6 +444,7 @@ const Assistant: React.FC<Props> = ({
         resultReasons={noResultReasons}
         onDetailsPressed={onPressed}
         errorType={error}
+        searchTime={searchTime}
       />
       {!error && isValidLocations && (
         <TouchableOpacity

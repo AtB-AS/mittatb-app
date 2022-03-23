@@ -13,6 +13,7 @@ import {Text, View} from 'react-native';
 import ResultItem from '@atb/screens/Assistant/ResultItem';
 import {TripPattern} from '@atb/api/types/trips';
 import {TripPatternWithKey} from '@atb/screens/Assistant/types';
+import {SearchTime} from './journey-date-picker';
 
 type Props = {
   tripPatterns: TripPatternWithKey[];
@@ -22,6 +23,7 @@ type Props = {
   resultReasons: String[];
   onDetailsPressed(tripPatterns?: TripPattern[], index?: number): void;
   errorType?: ErrorType;
+  searchTime?: SearchTime;
 };
 
 export type ResultTabParams = {
@@ -35,6 +37,7 @@ const Results: React.FC<Props> = ({
   resultReasons,
   onDetailsPressed,
   errorType,
+  searchTime,
 }) => {
   const styles = useThemeStyles();
   const {theme} = useTheme();
@@ -125,6 +128,7 @@ const Results: React.FC<Props> = ({
             onDetailsPressed={() => {
               onDetailsPressed(tripPatterns, i);
             }}
+            searchTime={searchTime}
             testID={'assistantSearchResult' + i}
           />
         </Fragment>
