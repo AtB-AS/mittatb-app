@@ -102,6 +102,7 @@ export const CollapsedLegs = ({legs}: {legs: any[]}) => {
         color={'transport_other'}
         style={styles.lineNumberText}
         type="body__primary--bold"
+        testID="collapsedLegs"
       >
         +{legs.length}
       </ThemeText>

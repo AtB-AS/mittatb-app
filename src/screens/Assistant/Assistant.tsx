@@ -322,6 +322,7 @@ const Assistant: React.FC<Props> = ({
               accessibilityHint={t(AssistantTexts.dateInput.a11yHint)}
               color="secondary_3"
               onPress={onSearchTimePress}
+              testID="assistantDateTimePicker"
             />
           </View>
         </FadeBetween>
@@ -449,6 +450,7 @@ const Assistant: React.FC<Props> = ({
           onPress={loadMore}
           disabled={searchState === 'searching'}
           style={styles.loadMoreButton}
+          testID="loadMoreButton"
         >
           {searchState === 'searching' ? (
             <>
@@ -458,7 +460,7 @@ const Assistant: React.FC<Props> = ({
                   marginRight: theme.spacings.medium,
                 }}
               />
-              <ThemeText color="secondary">
+              <ThemeText color="secondary" testID="searchingForResults">
                 {tripPatterns.length
                   ? t(AssistantTexts.results.fetchingMore)
                   : t(AssistantTexts.searchState.searching)}
@@ -468,7 +470,9 @@ const Assistant: React.FC<Props> = ({
             <>
               {loadMore ? (
                 <>
-                  <ThemeText>{t(AssistantTexts.results.fetchMore)} </ThemeText>
+                  <ThemeText testID="resultsLoaded">
+                    {t(AssistantTexts.results.fetchMore)}{' '}
+                  </ThemeText>
                   <ThemeIcon svg={navIcons.Expand} size={'normal'} />
                 </>
               ) : null}
