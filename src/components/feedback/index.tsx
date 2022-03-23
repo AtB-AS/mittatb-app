@@ -74,20 +74,14 @@ type FeedbackProps = {
   /** Metadata will be uploaded to Firestore and can be used to examine bugs and issues raised by users.
    *  An example could be a tripPattern if used with assistant / travel search. */
   metadata: any;
-  /** The allowList array may be provided to decide when the Feedback component should be visible.
-   * Example: [2, 5] will make the component render only the second and the fifth time it is called. */
-  allowList?: number[];
-  /** If the onlyOneFeedbackForEachSurveyVersionInThisViewContext prop is given, users that have provided
-   * feedback will no longer be prompted to give feedback in this viewContext, until a new surveyVersion
-   * is available. */
-  onlyOneFeedbackForEachSurveyVersionInThisViewContext?: boolean;
   /** If the avoidResetOnMetadataUpdate flag is given, interactions with the feedback component will
    * not be reset when metadata changes. Typically relevant when metadata is refreshed periodically. */
   avoidResetOnMetadataUpdate?: boolean;
 };
 
 type VersionStats = {
-  answered: boolean;
+  // answered is a number so that we know at which render the user answered
+  answered: number | null;
   count: number;
   surveyVersion: number;
   doNotShowAgain: boolean;
@@ -97,9 +91,7 @@ type VersionStats = {
 export const Feedback = ({
   viewContext,
   metadata,
-  allowList,
   avoidResetOnMetadataUpdate,
-  onlyOneFeedbackForEachSurveyVersionInThisViewContext,
 }: FeedbackProps) => {
   const styles = useFeedbackStyles();
   const {t} = useTranslation();
@@ -128,12 +120,25 @@ export const Feedback = ({
     }
   }, [metadata]);
 
+  const toggleSelectedAlternativeId = useCallback(
+    (alternativeId: number) => {
+      if (selectedAlternativeIds.includes(alternativeId)) {
+        setSelectedAlternativeIds(
+          selectedAlternativeIds.filter((id) => id !== alternativeId),
+        );
+      } else {
+        setSelectedAlternativeIds([...selectedAlternativeIds, alternativeId]);
+      }
+    },
+    [selectedAlternativeIds],
+  );
+
   if (!category) return null;
 
   const incrementCounterAndSetDisplayStats = async () => {
     if (category) {
       const defaultDisplayStatObject = {
-        answered: false,
+        answered: null,
         doNotShowAgain: false,
         count: 0,
         surveyVersion: category.surveyVersion,
@@ -192,29 +197,21 @@ export const Feedback = ({
     }
   };
 
-  const toggleSelectedAlternativeId = useCallback(
-    (alternativeId: number) => {
-      if (selectedAlternativeIds.includes(alternativeId)) {
-        setSelectedAlternativeIds(
-          selectedAlternativeIds.filter((id) => id !== alternativeId),
-        );
-      } else {
-        setSelectedAlternativeIds([...selectedAlternativeIds, alternativeId]);
-      }
-    },
-    [selectedAlternativeIds],
-  );
-
   const setFeedbackAnswered = () => {
-    if (category) {
-      const newObject = [...displayStats];
-      const statsForCurrentSurveyVersionAndViewContext = newObject.find(
-        (entry) =>
-          entry.surveyVersion === category.surveyVersion &&
-          entry.viewContext === viewContext,
-      );
-      if (statsForCurrentSurveyVersionAndViewContext) {
-        statsForCurrentSurveyVersionAndViewContext.answered = true;
+    const newObject = [...displayStats];
+    const statsForCurrentSurveyVersionAndViewContext = newObject.find(
+      (entry) =>
+        entry.surveyVersion === category.surveyVersion &&
+        entry.viewContext === viewContext,
+    );
+    if (statsForCurrentSurveyVersionAndViewContext) {
+      const surveyVersionAlreadyAnsweredOnce =
+        statsForCurrentSurveyVersionAndViewContext.count ===
+        category.repromptDisplayCount +
+          (statsForCurrentSurveyVersionAndViewContext.answered || 9000);
+      if (!surveyVersionAlreadyAnsweredOnce) {
+        statsForCurrentSurveyVersionAndViewContext.answered =
+          statsForCurrentSurveyVersionAndViewContext.count;
         storage.set('@ATB_feedback_display_stats', JSON.stringify(newObject));
       }
     }
@@ -223,7 +220,7 @@ export const Feedback = ({
   const submitFeedbackWithAlternatives = async () => {
     try {
       const selectedAnswers = selectedAlternativeIds.map((altId) =>
-        category?.question?.alternatives.find(
+        category.question?.alternatives.find(
           (alt) => alt.alternativeId === altId,
         ),
       );
@@ -255,7 +252,7 @@ export const Feedback = ({
       Bugsnag.notify(err);
     } finally {
       setSubmitted(true);
-      if (onlyOneFeedbackForEachSurveyVersionInThisViewContext) {
+      if (!category.alwaysShow) {
         setFeedbackAnswered();
       }
     }
@@ -264,7 +261,7 @@ export const Feedback = ({
   const setDoNotShowAgain = () => {
     const newArray = [...displayStats];
     const currentVersionStats = newArray.find(
-      (versionStat) => versionStat.surveyVersion === category?.surveyVersion,
+      (versionStat) => versionStat.surveyVersion === category.surveyVersion,
     );
     if (currentVersionStats) {
       currentVersionStats.doNotShowAgain = true;
@@ -276,7 +273,7 @@ export const Feedback = ({
   if (submitted) {
     const selectedTextAlternatives = selectedAlternativeIds.map(
       (altId) =>
-        category?.question?.alternatives.find(
+        category.question?.alternatives.find(
           (alt) => alt.alternativeId === altId,
         )?.alternativeText.nb,
     );
@@ -299,13 +296,31 @@ export const Feedback = ({
   );
 
   if (!statsForCurrentSurveyVersionAndViewContext) return null;
-  if (statsForCurrentSurveyVersionAndViewContext.answered) return null;
   if (statsForCurrentSurveyVersionAndViewContext.doNotShowAgain) return null;
 
-  if (allowList) {
+  if (category.gracePeriodDisplayCount) {
     if (
-      !allowList.includes(statsForCurrentSurveyVersionAndViewContext.count + 1)
-    ) {
+      statsForCurrentSurveyVersionAndViewContext.count - 1 <
+      category.gracePeriodDisplayCount
+    )
+      return null;
+  }
+
+  if (category.repromptDisplayCount) {
+    if (statsForCurrentSurveyVersionAndViewContext.answered) {
+      const notReadyForReprompt =
+        statsForCurrentSurveyVersionAndViewContext.count -
+          statsForCurrentSurveyVersionAndViewContext.answered !==
+        category.repromptDisplayCount + 1;
+      if (notReadyForReprompt) {
+        return null;
+      } else {
+        console.log('reprompting!!!!');
+      }
+    }
+  }
+  if (!category.repromptDisplayCount) {
+    if (statsForCurrentSurveyVersionAndViewContext.answered) {
       return null;
     }
   }
