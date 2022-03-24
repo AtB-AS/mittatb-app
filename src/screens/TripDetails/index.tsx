@@ -9,7 +9,6 @@ import DepartureDetails, {
   DepartureDetailsRouteParams,
 } from './DepartureDetails';
 import {CompositeNavigationProp} from '@react-navigation/native';
-import {RootStackParamList} from '@atb/navigation';
 import {MapDetailRouteParams, TravelDetailsMap} from './Map';
 import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
 import QuayDepartures, {
@@ -36,7 +35,7 @@ type TripDetailsRootProps = {
   route: DetailScreenRouteProp;
 };
 
-const TripDetailsRoot = ({route}: TripDetailsRootProps) => {
+export const TripDetailsRoot = ({route}: TripDetailsRootProps) => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen

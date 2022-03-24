@@ -1,10 +1,11 @@
+import {TripPattern} from '@atb/api/types/trips';
 import {
   Duration,
   WalkingPerson,
 } from '@atb/assets/svg/mono-icons/transportation';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
-import {TripPattern} from '@atb/sdk';
+
 import {StyleSheet} from '@atb/theme';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {secondsToDuration} from '@atb/utils/date';
@@ -15,7 +16,7 @@ const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
   const styles = useStyle();
   const {t, language} = useTranslation();
   const time = secondsToDuration(duration, language);
-  const readableDistance = walkDistance.toFixed();
+  const readableDistance = walkDistance?.toFixed() ?? '0';
   return (
     <View style={styles.summary}>
       <View style={styles.summaryDetail}>
