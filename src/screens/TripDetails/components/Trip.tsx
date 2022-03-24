@@ -1,7 +1,6 @@
 import {AxiosError} from 'axios';
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
-import {Leg, TripPattern, LegMode} from '@atb/sdk';
 import {StyleSheet} from '@atb/theme';
 import {secondsBetween} from '@atb/utils/date';
 import {timeIsShort} from '../Details/utils';
@@ -11,6 +10,8 @@ import Summary from './TripSummary';
 import {WaitDetails} from './WaitSection';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
+import {Leg, TripPattern} from '@atb/api/types/trips';
+import Feedback from '@atb/components/feedback';
 
 type TripProps = {
   tripPattern: TripPattern;
@@ -62,14 +63,15 @@ const Trip: React.FC<TripProps> = ({tripPattern, error}) => {
                 step={index + 1}
                 interchangeDetails={getInterchangeDetails(
                   tripPattern,
-                  leg.interchangeTo?.ToServiceJourney?.id,
+                  leg.interchangeTo?.toServiceJourney?.id,
                 )}
-                {...leg}
+                leg={leg}
               />
             );
           })}
       </View>
       <Summary {...tripPattern} />
+      <Feedback metadata={tripPattern} viewContext="assistant" />
     </>
   );
 };
@@ -119,15 +121,16 @@ function getInterchangeDetails(
 ): InterchangeDetails | undefined {
   if (!id) return undefined;
   const interchangeLeg = tripPattern.legs.find(
-    (leg) => leg.line && leg.serviceJourney.id === id,
+    (leg) => leg.line && leg.serviceJourney?.id === id,
   );
 
-  if (!interchangeLeg || !interchangeLeg.line) return undefined;
-
-  return {
-    publicCode: interchangeLeg.line.publicCode,
-    fromPlace: getPlaceName(interchangeLeg.fromPlace),
-  };
+  if (interchangeLeg?.line?.publicCode) {
+    return {
+      publicCode: interchangeLeg.line.publicCode,
+      fromPlace: getPlaceName(interchangeLeg.fromPlace),
+    };
+  }
+  return undefined;
 }
 
 export default Trip;

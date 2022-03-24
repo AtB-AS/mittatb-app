@@ -25,29 +25,6 @@ export async function getServiceJourneyMapLegs(
   id: string,
   fromQuayId?: string,
   toQuayId?: string,
-): Promise<ServiceJourneyMapInfoData> {
-  const url = `bff/v1/servicejourney/${encodeURIComponent(id)}/polyline`;
-  const query = qs.stringify(
-    {
-      fromQuayId,
-      toQuayId,
-    },
-    {skipNull: true},
-  );
-  const response = await client.get<ServiceJourneyMapInfoData>(
-    stringifyUrl(url, query),
-  );
-  return (
-    response.data ?? {
-      mapLegs: [],
-    }
-  );
-}
-
-export async function getServiceJourneyMapLegsV2(
-  id: string,
-  fromQuayId?: string,
-  toQuayId?: string,
 ): Promise<ServiceJourneyMapInfoData_v3> {
   const url = `bff/v2/servicejourney/${encodeURIComponent(id)}/polyline`;
   const query = qs.stringify(

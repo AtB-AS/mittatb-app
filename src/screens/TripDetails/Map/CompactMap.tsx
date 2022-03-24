@@ -1,7 +1,7 @@
 import {MapIcon} from '@atb/assets/svg/color/map';
 import Button from '@atb/components/button';
 import {MapCameraConfig, MapViewConfig} from '@atb/components/map';
-import {Coordinates, MapLeg} from '@atb/sdk';
+
 import {StyleSheet, useTheme} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import insets from '@atb/utils/insets';
@@ -14,6 +14,7 @@ import {View} from 'react-native';
 import MapLabel from './MapLabel';
 import MapRoute from './MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
+import {Coordinates, MapLeg} from '@atb/screens/TripDetails/Map/types';
 
 export type MapProps = {
   mapLegs: MapLeg[];

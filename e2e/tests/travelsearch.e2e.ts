@@ -40,6 +40,7 @@ describe('Travel Search', () => {
   });
    */
 
+  // A happy day path through a travel search and details
   it('should do a simple search', async () => {
     const departure = 'Udduvoll bru vest';
     const arrival = 'Anders Buens gate';

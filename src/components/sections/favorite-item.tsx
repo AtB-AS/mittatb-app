@@ -17,6 +17,7 @@ import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 type BaseProps = {
   favorite: StoredLocationFavorite;
   icon?: JSX.Element;
+  testID?: string;
 };
 type WithOnPress = BaseProps & {
   onPress(favorite: StoredLocationFavorite, event: GestureResponderEvent): void;
@@ -51,7 +52,7 @@ function withOnPress(a: any): a is WithOnPress {
   return 'onPress' in a;
 }
 
-function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
+function FavoriteItemContent({favorite, icon, testID, ...props}: BaseProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
   const style = useSectionStyle();
 
@@ -61,7 +62,9 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
         <FavoriteIcon favorite={favorite} />
       </View>
       <View style={contentContainer}>
-        <ThemeText>{favorite.name ?? favorite.location.name}</ThemeText>
+        <ThemeText testID={testID + 'Name'}>
+          {favorite.name ?? favorite.location.name}
+        </ThemeText>
       </View>
       {icon ?? <ThemeIcon svg={Edit} />}
     </View>

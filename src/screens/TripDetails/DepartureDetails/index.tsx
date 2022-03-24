@@ -1,4 +1,3 @@
-import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
 import {Expand, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
 import {Info, Warning} from '@atb/assets/svg/color/situations';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
@@ -11,7 +10,6 @@ import {searchByStopPlace} from '@atb/geocoder/search-for-location';
 import {
   EstimatedCall,
   Quay,
-  ServiceJourneyMapInfoData,
   Situation,
   TransportMode,
   TransportSubmode,
@@ -40,6 +38,8 @@ import useDepartureData, {CallListGroup} from './use-departure-data';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {canSellTicketsForSubMode} from '@atb/operator-config';
+import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
+import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -95,6 +95,7 @@ export default function DepartureDetails({navigation, route}: Props) {
         leftButton={{type: 'back'}}
         title={title ?? t(DepartureDetailsTexts.header.notFound)}
       />
+
       <ContentWithDisappearingHeader
         header={
           mapData && (
@@ -112,7 +113,6 @@ export default function DepartureDetails({navigation, route}: Props) {
             />
           )
         }
-        //
       >
         <View
           style={styles.scrollView__content}
@@ -426,7 +426,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
 }));
 
 function useMapData(activeItem: ServiceJourneyDeparture) {
-  const [mapData, setMapData] = useState<ServiceJourneyMapInfoData>();
+  const [mapData, setMapData] = useState<ServiceJourneyMapInfoData_v3>();
   useEffect(() => {
     const getData = async () => {
       if (!activeItem) {
