@@ -49,8 +49,8 @@ import {SearchTime} from './journey-date-picker';
 type ResultItemProps = {
   tripPattern: TripPattern;
   onDetailsPressed(): void;
+  searchTime: SearchTime;
   testID?: string;
-  searchTime?: SearchTime;
 };
 
 function legWithQuay(leg: Leg) {

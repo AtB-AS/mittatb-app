@@ -23,7 +23,7 @@ type Props = {
   resultReasons: String[];
   onDetailsPressed(tripPatterns?: TripPattern[], index?: number): void;
   errorType?: ErrorType;
-  searchTime?: SearchTime;
+  searchTime: SearchTime;
 };
 
 export type ResultTabParams = {
