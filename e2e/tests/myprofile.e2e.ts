@@ -84,8 +84,6 @@ describe('My profile', () => {
     await expectToBeVisibleByText('New features');
     await expectToBeVisibleById('newDeparturesToggle');
     await expectToBeVisibleByText('Try the new departure view');
-    await expectToBeVisibleById('newAssistantToggle');
-    await expectToBeVisibleByText('Try the new travel search engine');
     await expectToBeVisibleById('invitationCodeButton');
     await expectToBeVisibleByText('Invitation code');
 
