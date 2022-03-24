@@ -44,10 +44,12 @@ import {
 import {ScrollView} from 'react-native-gesture-handler';
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {SearchTime} from './journey-date-picker';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
   onDetailsPressed(): void;
+  searchTime: SearchTime;
   testID?: string;
 };
 
@@ -74,13 +76,13 @@ function getFirstQuayName(legs: Leg[]) {
 }
 const ResultItemHeader: React.FC<{
   tripPattern: TripPattern;
-}> = ({tripPattern}) => {
+  strikethrough: boolean;
+}> = ({tripPattern, strikethrough}) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const durationText = secondsToDurationShort(tripPattern.duration, language);
   const startTime = tripPattern.legs[0].expectedStartTime;
   const endTime = tripPattern.legs[tripPattern.legs.length - 1].expectedEndTime;
-  const isInPast = isInThePast(startTime);
 
   return (
     <View style={styles.resultHeader}>
@@ -89,7 +91,7 @@ const ResultItemHeader: React.FC<{
         color="secondary"
         style={[
           styles.resultHeaderLabel,
-          isInPast && styles.resultHeaderLabelInPast,
+          strikethrough && styles.strikethrough,
         ]}
         accessibilityLabel={t(
           AssistantTexts.results.resultItem.header.time(
@@ -128,6 +130,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   tripPattern,
   onDetailsPressed,
   testID,
+  searchTime,
   ...props
 }) => {
   const styles = useThemeStyles();
@@ -164,7 +167,10 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     numberOfExpandedLegs,
     tripPattern.legs.length,
   );
-  const isInPast = isInThePast(tripPattern.legs[0].expectedStartTime);
+
+  const isInPast =
+    isInThePast(tripPattern.legs[0].expectedStartTime) &&
+    searchTime?.option !== 'now';
 
   return (
     <TouchableOpacity
@@ -186,7 +192,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         accessible={false}
         onLayout={(e) => setCollapsableParentWidth(e.nativeEvent.layout.width)}
       >
-        <ResultItemHeader tripPattern={tripPattern} />
+        <ResultItemHeader tripPattern={tripPattern} strikethrough={isInPast} />
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
@@ -275,7 +281,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   resultHeaderLabel: {
     flex: 3,
   },
-  resultHeaderLabelInPast: {
+  strikethrough: {
     textDecorationLine: 'line-through',
   },
   legOutput: {
