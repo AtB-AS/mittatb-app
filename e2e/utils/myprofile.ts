@@ -27,26 +27,6 @@ export const toggleLanguage = async (useMyPhoneSettings: boolean) => {
   }
 };
 
-// Toggle travel search v2 on/off
-export const toggleTravelSearchV2 = async (enableV2: boolean) => {
-  await scrollToId('profileHomeScrollView', 'newAssistantToggle', 'down');
-
-  const toggle = await element(by.id('newAssistantToggle'))
-    .getAttributes()
-    .then((elem) => {
-      return !('elements' in elem) ? elem.value : undefined;
-    });
-
-  // Enable OTP 2 if not enabled
-  if (toggle == 0 && enableV2) {
-    await tapById('newAssistantToggle');
-  }
-  // Disable OTP 2 if not disabled
-  if (toggle == 1 && !enableV2) {
-    await tapById('newAssistantToggle');
-  }
-};
-
 // Toggle departures v2 on/off
 export const toggleDeparturesV2 = async (enableV2: boolean) => {
   await scrollToId('profileHomeScrollView', 'newDeparturesToggle', 'down');

@@ -1,5 +1,5 @@
 import {device} from 'detox';
-import {goToTab, goBack} from '../utils/commonHelpers';
+import {goBack} from '../utils/commonHelpers';
 import {
   tapById,
   tapByText,
@@ -15,11 +15,10 @@ import {
   expectToBeVisibleByPartOfText,
 } from '../utils/expectHelpers';
 import {skipOnboarding} from '../utils/onboarding';
-import {toggleTravelSearchV2} from '../utils/myprofile';
 import setLocation from '../utils';
 import {numberOfTravelSuggestions, travelSearch} from '../utils/travelsearch';
 
-describe('Travel Search v2', () => {
+describe('Travel Search', () => {
   beforeAll(async () => {
     await device.launchApp({
       permissions: {
@@ -41,17 +40,11 @@ describe('Travel Search v2', () => {
   });
    */
 
+  // A happy day path through a travel search and details
   it('should do a simple search', async () => {
     const departure = 'Udduvoll bru vest';
     const arrival = 'Anders Buens gate';
     const intermediateStop = 'Sandmoen E6';
-
-    // Enable v2
-    await goToTab('profile');
-    await toggleTravelSearchV2(true);
-
-    // Go to travel search
-    await goToTab('assistant');
 
     // Do a travel search
     await travelSearch(departure, arrival);
@@ -100,7 +93,5 @@ describe('Travel Search v2', () => {
     await goBack();
     await goBack();
     await expectToBeVisibleByText('Trip details');
-    await goBack();
-    await expectToBeVisibleByText('Travel assistant');
   });
 });

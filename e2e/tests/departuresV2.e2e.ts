@@ -134,8 +134,6 @@ describe('Departures v2', () => {
     await expectToBeVisibleByText(departureStop);
     await goBack();
     await expectToBeVisibleByText('Departures');
-    await goBack();
-    await expectToBeVisibleByText('Travel assistant');
   });
 
   xit('should show departures depending on given time', async () => {
