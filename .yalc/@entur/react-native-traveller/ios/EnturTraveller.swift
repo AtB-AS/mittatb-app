@@ -138,7 +138,7 @@ public class EnturTraveller: NSObject {
         }
     }
 
-    @objc(attest:withTokenId:withNonce:withResolver:withRejecter:)
+    @objc(reattest:withTokenId:withNonce:withResolver:withRejecter:)
     func reattest(accountId: String, tokenId: String, nonce: String, resolve:@escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
         reject("ATTESTATION_ERROR", "Reattestation is not yet implemented for iOS", nil)
     }
