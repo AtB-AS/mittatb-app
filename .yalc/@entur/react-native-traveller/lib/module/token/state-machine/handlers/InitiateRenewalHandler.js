@@ -6,9 +6,11 @@ export default function initiateRenewalHandler(abtTokensService) {
   return stateHandlerFactory(['InitiateRenewal'], async s => {
     const {
       accountId,
-      tokenId
+      tokenId,
+      state
     } = s;
-    logger.info('init_renewal', undefined, {
+    logger.info('mobiletoken_status_change', undefined, {
+      state,
       accountId,
       tokenId
     });

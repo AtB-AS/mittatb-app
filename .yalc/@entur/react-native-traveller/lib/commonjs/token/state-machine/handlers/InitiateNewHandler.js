@@ -27,10 +27,12 @@ function initiateNewHandler(abtTokensService) {
     } catch {}
 
     const {
-      accountId
+      accountId,
+      state
     } = s;
 
-    _logger.logger.info('initiate_new', undefined, {
+    _logger.logger.info('mobiletoken_status_change', undefined, {
+      state,
       deviceName,
       accountId
     });

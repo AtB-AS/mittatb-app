@@ -15,12 +15,14 @@ function activateNewHandler(abtTokensService) {
   return (0, _HandlerFactory.stateHandlerFactory)(['ActivateNew'], async s => {
     const {
       tokenId,
-      accountId
+      accountId,
+      state
     } = s;
 
-    _logger.logger.info('activate_new', undefined, {
+    _logger.logger.info('mobiletoken_status_change', undefined, {
       tokenId,
-      accountId
+      accountId,
+      state
     });
 
     const activateTokenResponse = await abtTokensService.activateToken(tokenId, s.attestationData);

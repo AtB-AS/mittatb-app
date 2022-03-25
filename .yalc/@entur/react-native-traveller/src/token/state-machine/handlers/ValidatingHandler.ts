@@ -9,8 +9,12 @@ export default function validatingHandler(
   abtTokensService: AbtTokensService
 ): StateHandler {
   return stateHandlerFactory(['Validating'], async (s) => {
-    const { accountId, tokenId } = s;
-    logger.info('validating', undefined, { accountId, tokenId });
+    const { accountId, tokenId, state } = s;
+    logger.info('mobiletoken_status_change', undefined, {
+      accountId,
+      tokenId,
+      state,
+    });
     const signedToken = await getSecureToken(accountId, tokenId, true, [
       PayloadAction.getFarecontracts,
     ]);
@@ -19,7 +23,7 @@ export default function validatingHandler(
       signedToken
     );
 
-    logger.info('validation_state', undefined, { validationState });
+    logger.info('mobiletoken_validation_state', undefined, { validationState });
 
     switch (validationState) {
       case 'Valid':

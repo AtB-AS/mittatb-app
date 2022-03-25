@@ -6,14 +6,16 @@ import { logger } from '../../../logger';
 export default function startingHandler(safetyNetApiKey, forceRestart) {
   return stateHandlerFactory(['Starting'], async s => {
     const {
-      accountId
+      accountId,
+      state
     } = s;
     const {
       result
     } = await getAttestationSupport();
-    logger.info('starting', undefined, {
+    logger.info('mobiletoken_status_change', undefined, {
       accountId,
-      attestationSupport: result
+      attestationSupport: result,
+      state
     });
 
     if (result !== 'SUPPORTED') {
@@ -27,7 +29,7 @@ export default function startingHandler(safetyNetApiKey, forceRestart) {
     await startNative(safetyNetApiKey);
 
     if (forceRestart) {
-      logger.info('force_restart', undefined, {
+      logger.info('mobiletoken_forced_restart', undefined, {
         accountId
       });
       return {
@@ -39,7 +41,9 @@ export default function startingHandler(safetyNetApiKey, forceRestart) {
     const savedStateString = await AsyncStorage.getItem(storeKey);
 
     if (!savedStateString) {
-      logger.info('no_saved_state', undefined);
+      logger.info('mobiletoken_no_existing_state', undefined, {
+        accountId
+      });
       return {
         accountId,
         state: 'Loading'
@@ -47,7 +51,7 @@ export default function startingHandler(safetyNetApiKey, forceRestart) {
     }
 
     const savedState = JSON.parse(savedStateString);
-    logger.info('saved_state', undefined, {
+    logger.info('mobiletoken_loaded_state', undefined, {
       state: savedState.state,
       accountId: savedState.accountId
     });

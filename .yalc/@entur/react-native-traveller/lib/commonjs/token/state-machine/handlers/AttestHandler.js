@@ -23,7 +23,7 @@ function attestHandler() {
       state
     } = s;
 
-    _logger.logger.info('attest', undefined, {
+    _logger.logger.info('mobiletoken_status_change', undefined, {
       accountId,
       tokenId,
       state

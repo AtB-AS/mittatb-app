@@ -12,11 +12,13 @@ var _HandlerFactory = require("../HandlerFactory");
 function verifyInspectionActionHandler(abtTokensService) {
   return (0, _HandlerFactory.stateHandlerFactory)(['VerifyInspectionAction'], async ({
     accountId,
-    tokenId
+    tokenId,
+    state
   }) => {
-    _logger.logger.info('verify_inspection_action', undefined, {
+    _logger.logger.info('mobiletoken_status_change', undefined, {
       accountId,
-      tokenId
+      tokenId,
+      state
     });
 
     await abtTokensService.toggleToken(tokenId, {

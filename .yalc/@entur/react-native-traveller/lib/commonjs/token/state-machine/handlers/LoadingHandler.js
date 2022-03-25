@@ -20,25 +20,19 @@ function loadingHandler() {
       state
     } = s;
 
-    _logger.logger.info('loading', undefined, {
-      accountId,
-      state
+    _logger.logger.info('mobiletoken_status_change', undefined, {
+      state,
+      accountId
     });
 
     const token = await (0, _native.getToken)(accountId);
 
     if (!token) {
-      _logger.logger.info('no_token_found', undefined);
-
       return {
         accountId,
         state: 'InitiateNew'
       };
     } else {
-      _logger.logger.info('token_found', undefined, {
-        tokenId: token.tokenId
-      });
-
       return tokenNeedsRenewal(token) ? {
         accountId,
         tokenId: token.tokenId,

@@ -11,7 +11,11 @@ export default function attestHandler(): StateHandler {
       state,
     } = s;
 
-    logger.info('attest', undefined, { accountId, tokenId, state });
+    logger.info('mobiletoken_status_change', undefined, {
+      accountId,
+      tokenId,
+      state,
+    });
 
     const activateTokenRequestBody = await getActivateTokenRequestBody(
       accountId,

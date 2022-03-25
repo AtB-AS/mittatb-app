@@ -9,6 +9,7 @@ import {API_BASE_URL} from '@env';
 import {AxiosRequestConfig, Method} from 'axios';
 import {TokenStatus} from '@entur/react-native-traveller/lib/typescript/token/types';
 import {SAFETY_NET_API_KEY} from '@env';
+import Bugsnag, {Event} from '@bugsnag/react-native';
 
 const client = createClient(undefined);
 
@@ -43,4 +44,15 @@ export const setupMobileTokenClient = (setStatus: (s?: TokenStatus) => void) =>
     hosts: {pto: API_BASE_URL},
     fetch: fetcher,
     safetyNetApiKey: SAFETY_NET_API_KEY,
+    infoLogger: (context?, _?, metadata?) => {
+      Bugsnag.leaveBreadcrumb(context ?? 'mobile-token-breadcrumb', metadata);
+    },
+    errorLogger: (_?, error?, metadata?) => {
+      const onError = metadata
+        ? (event: Event) => {
+            event.addMetadata('metadata', metadata);
+          }
+        : undefined;
+      if (error) Bugsnag.notify(error, onError);
+    },
   });

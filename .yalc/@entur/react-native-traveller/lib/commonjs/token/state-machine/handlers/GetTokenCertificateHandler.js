@@ -17,10 +17,12 @@ function getTokenCertificateHandler(abtTokensService) {
   return (0, _HandlerFactory.stateHandlerFactory)(['GettingTokenCertificate'], async s => {
     const {
       accountId,
-      tokenId
+      tokenId,
+      state
     } = s;
 
-    _logger.logger.info('get_token_cert', undefined, {
+    _logger.logger.info('mobiletoken_status_change', undefined, {
+      state,
       accountId,
       tokenId
     });
