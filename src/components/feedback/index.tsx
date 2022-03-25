@@ -359,17 +359,19 @@ export const Feedback = ({
             />
           </View>
         )}
-        {selectedOpinion === Opinions.NotClickedYet && category.dismissable && (
-          <View style={styles.submitButtonView}>
-            <ThemeText
-              style={styles.centerText}
-              type="body__tertiary"
-              onPress={setDoNotShowAgain}
-            >
-              {t(FeedbackTexts.goodOrBadTexts.doNotShowAgain)}
-            </ThemeText>
-          </View>
-        )}
+        {selectedOpinion === Opinions.NotClickedYet &&
+          category.alwaysShow === false &&
+          category.dismissable && (
+            <View style={styles.submitButtonView}>
+              <ThemeText
+                style={styles.centerText}
+                type="body__tertiary"
+                onPress={setDoNotShowAgain}
+              >
+                {t(FeedbackTexts.goodOrBadTexts.doNotShowAgain)}
+              </ThemeText>
+            </View>
+          )}
       </View>
     );
 
