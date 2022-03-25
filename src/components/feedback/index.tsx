@@ -231,6 +231,10 @@ export const Feedback = ({
       const displayCount = statsForCurrentSurveyVersionAndViewContext?.count
         ? statsForCurrentSurveyVersionAndViewContext.count + 1
         : -1;
+      const isReprompt =
+        statsForCurrentSurveyVersionAndViewContext?.count ===
+        (statsForCurrentSurveyVersionAndViewContext?.answered || 9000) +
+          (category.repromptDisplayCount + 1);
 
       const dataToServer = {
         submitTime,
@@ -240,6 +244,7 @@ export const Feedback = ({
         viewContext,
         category,
         selectedAnswers,
+        isReprompt,
         displayCount,
         metadata,
       };
