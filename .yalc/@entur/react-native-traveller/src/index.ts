@@ -3,7 +3,7 @@ import { startTokenStateMachine } from './token';
 import { createFetcher } from './fetcher';
 import { createAbtTokensService } from './token/abt-tokens-service';
 import type {
-  ActivateTokenRequest,
+  Attestation,
   StoredState,
   StoredToken,
   TokenError,
@@ -12,8 +12,8 @@ import type {
 } from './token/types';
 import { getSecureToken, getToken } from './native';
 import type { PayloadAction } from './native/types';
-import { getActivateTokenRequestBody } from './token/attest';
 import { setupLogger, logger } from './logger';
+import { getReattestation } from './token/attest';
 
 export type { StoredToken } from './token/types';
 export type { Token } from './native/types';
@@ -38,9 +38,8 @@ export default function createClient(
 
   async function reattest(
     tokenId: string,
-    nonce: string,
-    attestationEncryptionPublicKey: string
-  ): Promise<ActivateTokenRequest> {
+    nonce: string
+  ): Promise<Attestation> {
     if (!currentAccountId) {
       const error = new Error(
         `Tried to reattest ${tokenId}, but no account id set.`
@@ -49,12 +48,7 @@ export default function createClient(
       throw error;
     }
 
-    return getActivateTokenRequestBody(
-      currentAccountId,
-      tokenId,
-      nonce,
-      attestationEncryptionPublicKey
-    );
+    return getReattestation(currentAccountId, tokenId, nonce);
   }
 
   const config = getConfigFromInitialConfig(initialConfig);

@@ -27,9 +27,9 @@ var _abtTokensService = require("./token/abt-tokens-service");
 
 var _native = require("./native");
 
-var _attest = require("./token/attest");
-
 var _logger = require("./logger");
+
+var _attest = require("./token/attest");
 
 var _types = require("./native/types");
 
@@ -47,7 +47,7 @@ function createClient(setStatus, initialConfig) {
     errorLogger: initialConfig.errorLogger
   });
 
-  async function reattest(tokenId, nonce, attestationEncryptionPublicKey) {
+  async function reattest(tokenId, nonce) {
     if (!currentAccountId) {
       const error = new Error(`Tried to reattest ${tokenId}, but no account id set.`);
 
@@ -56,7 +56,7 @@ function createClient(setStatus, initialConfig) {
       throw error;
     }
 
-    return (0, _attest.getActivateTokenRequestBody)(currentAccountId, tokenId, nonce, attestationEncryptionPublicKey);
+    return (0, _attest.getReattestation)(currentAccountId, tokenId, nonce);
   }
 
   const config = (0, _config.getConfigFromInitialConfig)(initialConfig);

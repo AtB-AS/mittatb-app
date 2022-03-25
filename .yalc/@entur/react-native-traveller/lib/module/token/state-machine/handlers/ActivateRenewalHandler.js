@@ -8,12 +8,14 @@ export default function activateRenewalHandler(abtTokensService) {
     const {
       accountId,
       oldTokenId,
-      tokenId
+      tokenId,
+      state
     } = s;
-    logger.info('activate_renewal', undefined, {
+    logger.info('mobiletoken_status_change', undefined, {
       accountId,
       oldTokenId,
-      tokenId
+      tokenId,
+      state
     });
     const signedToken = await getSecureToken(accountId, oldTokenId, true, [PayloadAction.addRemoveToken]);
 

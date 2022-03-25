@@ -15,9 +15,11 @@ export default function initiateNewHandler(abtTokensService) {
     } catch {}
 
     const {
-      accountId
+      accountId,
+      state
     } = s;
-    logger.info('initiate_new', undefined, {
+    logger.info('mobiletoken_status_change', undefined, {
+      state,
       deviceName,
       accountId
     });

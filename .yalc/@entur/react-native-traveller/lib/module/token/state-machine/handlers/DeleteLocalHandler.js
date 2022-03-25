@@ -4,10 +4,12 @@ import { logger } from '../../../logger';
 export default function deleteLocalHandler() {
   return stateHandlerFactory(['DeleteLocal'], async s => {
     const {
-      accountId
+      accountId,
+      state
     } = s;
-    logger.info('delete', undefined, {
-      accountId
+    logger.info('mobiletoken_status_change', undefined, {
+      accountId,
+      state
     });
     deleteToken(accountId);
     return {

@@ -9,19 +9,18 @@ const secondsIn48Hours = 48 * 60 * 60;
 export default function loadingHandler(): StateHandler {
   return stateHandlerFactory(['Loading', 'Valid'], async (s) => {
     const { accountId, state } = s;
-    logger.info('loading', undefined, { accountId, state });
+    logger.info('mobiletoken_status_change', undefined, {
+      state,
+      accountId,
+    });
 
     const token = await getToken(accountId);
     if (!token) {
-      logger.info('no_token_found', undefined);
-
       return {
         accountId,
         state: 'InitiateNew',
       };
     } else {
-      logger.info('token_found', undefined, { tokenId: token.tokenId });
-
       return tokenNeedsRenewal(token)
         ? {
             accountId,
