@@ -311,21 +311,18 @@ export const Feedback = ({
       return null;
   }
 
-  if (category.repromptDisplayCount) {
-    if (statsForCurrentSurveyVersionAndViewContext.answered) {
-      const notReadyForReprompt =
-        statsForCurrentSurveyVersionAndViewContext.count -
-          statsForCurrentSurveyVersionAndViewContext.answered !==
-        category.repromptDisplayCount + 1;
-      if (notReadyForReprompt) {
-        return null;
-      } else {
-        console.log('reprompting!!!!');
+  if (!category.alwaysShow) {
+    if (category.repromptDisplayCount) {
+      if (statsForCurrentSurveyVersionAndViewContext.answered) {
+        const notReadyForReprompt =
+          statsForCurrentSurveyVersionAndViewContext.count -
+            statsForCurrentSurveyVersionAndViewContext.answered !==
+          category.repromptDisplayCount + 1;
+        if (notReadyForReprompt) {
+          return null;
+        }
       }
-    }
-  }
-  if (!category.repromptDisplayCount) {
-    if (statsForCurrentSurveyVersionAndViewContext.answered) {
+    } else if (statsForCurrentSurveyVersionAndViewContext.answered) {
       return null;
     }
   }
