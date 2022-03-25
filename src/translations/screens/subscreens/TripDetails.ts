@@ -119,6 +119,10 @@ const TripDetailsTexts = {
       'Reisen krever billett som ikke er tilgjengelig i denne appen, eller som må kjøpes fra et annet selskap enn AtB.',
       'This journey requires a ticket that is not available from this app, or must be purchased from a provider other than AtB.',
     ),
+    collabTicketInfo: _(
+      `Med enkelt- og periodebillett for sone A fra AtB kan du reise med tog i sonen.`,
+      `With a single or periodic ticket for zone A from AtB, you can travel by train in the zone.`,
+    ),
     errorNetwork: _(
       'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil.',
       `Are you online? We're unable to conduct a search since your device seems to be offline or the connection is unstable`,
