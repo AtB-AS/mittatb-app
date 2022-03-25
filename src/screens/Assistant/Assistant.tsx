@@ -436,7 +436,7 @@ const Assistant: React.FC<Props> = ({
       renderHeader={renderHeader}
       highlightComponent={newsBanner}
       onRefresh={refresh}
-      isRefreshing={searchState === 'searching'}
+      isRefreshing={searchState === 'searching' && !tripPatterns.length}
       useScroll={useScroll}
       headerTitle={t(AssistantTexts.header.title)}
       isFullHeight={isHeaderFullHeight}
