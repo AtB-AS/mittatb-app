@@ -40,6 +40,8 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {canSellTicketsForSubMode} from '@atb/operator-config';
 import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
+import {TripPattern} from '@atb/api/types/trips';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -83,6 +85,8 @@ export default function DepartureDetails({navigation, route}: Props) {
     subMode,
     modes_we_sell_tickets_for,
   );
+
+  const someLegsAreByTrain = mode === TransportMode.RAIL;
 
   const onPaginactionPress = (newPage: number) => {
     animateNextChange();
@@ -148,7 +152,12 @@ export default function DepartureDetails({navigation, route}: Props) {
             <MessageBox
               containerStyle={styles.ticketMessage}
               type="warning"
-              message={t(DepartureDetailsTexts.messages.ticketsWeDontSell)}
+              message={
+                t(DepartureDetailsTexts.messages.ticketsWeDontSell) +
+                (someLegsAreByTrain
+                  ? `\n\n` + t(DepartureDetailsTexts.messages.collabTicketInfo)
+                  : ``)
+              }
             />
           )}
 

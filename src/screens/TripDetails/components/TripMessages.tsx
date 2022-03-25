@@ -52,7 +52,7 @@ const TripMessages: React.FC<TripMessagesProps> = ({
           message={
             t(TripDetailsTexts.messages.ticketsWeDontSell) +
             (canUseCollabTicket
-              ? `\n\n` + t(TripDetailsTexts.messages.collabTicketInfo)
+              ? t(TripDetailsTexts.messages.collabTicketInfo)
               : ``)
           }
         />
@@ -83,8 +83,7 @@ function translatedError(error: AxiosError, t: TranslateFunction): string {
 export default TripMessages;
 
 function someLegsAreByTrain(tripPattern: TripPattern): boolean {
-  const byTrain = tripPattern.legs.some((leg) => leg.mode === Mode.Rail);
-  return byTrain;
+  return tripPattern.legs.some((leg) => leg.mode === Mode.Rail);
 }
 
 function hasShortWaitTime(legs: Leg[]) {
