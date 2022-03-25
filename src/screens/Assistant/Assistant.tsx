@@ -436,6 +436,7 @@ const Assistant: React.FC<Props> = ({
       renderHeader={renderHeader}
       highlightComponent={newsBanner}
       onRefresh={refresh}
+      isRefreshing={searchState === 'searching'}
       useScroll={useScroll}
       headerTitle={t(AssistantTexts.header.title)}
       isFullHeight={isHeaderFullHeight}
@@ -474,19 +475,29 @@ const Assistant: React.FC<Props> = ({
           testID="loadMoreButton"
         >
           {searchState === 'searching' ? (
-            <>
-              <ActivityIndicator
-                color={theme.text.colors.secondary}
-                style={{
-                  marginRight: theme.spacings.medium,
-                }}
-              />
-              <ThemeText color="secondary" testID="searchingForResults">
-                {tripPatterns.length
-                  ? t(AssistantTexts.results.fetchingMore)
-                  : t(AssistantTexts.searchState.searching)}
-              </ThemeText>
-            </>
+            <View style={styles.loadingIndicator}>
+              {tripPatterns.length ? (
+                <>
+                  <ActivityIndicator
+                    color={theme.text.colors.secondary}
+                    style={{
+                      marginRight: theme.spacings.medium,
+                    }}
+                  />
+                  <ThemeText color="secondary" testID="searchingForResults">
+                    {t(AssistantTexts.results.fetchingMore)}
+                  </ThemeText>
+                </>
+              ) : (
+                <ThemeText
+                  color="secondary"
+                  style={styles.loadingText}
+                  testID="searchingForResults"
+                >
+                  {t(AssistantTexts.searchState.searching)}
+                </ThemeText>
+              )}
+            </View>
           ) : (
             <>
               {loadMore ? (
@@ -536,6 +547,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   fadeChild: {
     marginVertical: theme.spacings.medium,
+  },
+  loadingIndicator: {
+    marginTop: theme.spacings.xLarge,
+    flexDirection: 'row',
+  },
+  loadingText: {
+    marginTop: theme.spacings.xLarge * 2,
   },
   loadMoreButton: {
     paddingVertical: theme.spacings.medium,

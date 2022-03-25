@@ -54,7 +54,7 @@ const AssistantTexts = {
     },
   },
   searchState: {
-    searching: _('Laster søkeresultater', 'Loading search results'),
+    searching: _('Laster søkeresultater...', 'Loading search results...'),
     searchSuccess: _(
       'Søkeresultater er lastet inn',
       'Search results are loaded',
