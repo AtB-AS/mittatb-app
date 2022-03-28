@@ -11,7 +11,7 @@ const dictionary = {
     assistant: _(`Reise${softhyphen}søk`, 'Assistant'),
     assistant_a11y: _(
       `Aktiver for reisesøk. Aktiver to ganger for å nullstille søket.`,
-      'Activate for search assistant, press twice to reset search.',
+      'Activate for search assistant. Activate twice to reset search.',
     ),
     nearby: _(`Av${softhyphen}ganger`, 'Departures'),
     ticketing: _('Billetter', 'Tickets'),
