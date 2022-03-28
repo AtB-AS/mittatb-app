@@ -13,6 +13,10 @@ const ServiceDisruptionsTexts = {
       'atb.no/driftsavvik (åpnes i nettleser)',
       'atb.no/driftsavvik (opens in browser)',
     ),
+    a11yHint: _(
+      'Naviger til oversikt over driftsavvik i et nettleservindu',
+      'Navigate to an overview of service disruptions in a browser window',
+    ),
   },
 };
 export default ServiceDisruptionsTexts;

@@ -37,7 +37,7 @@ const ServiceDisruptionSheet = forwardRef<View, Props>(
         />
 
         <Sections.Section withFullPadding>
-          <View ref={focusRef}>
+          <View ref={focusRef} accessible>
             <ThemeText>{t(ServiceDisruptionsTexts.body)}</ThemeText>
           </View>
         </Sections.Section>
@@ -46,6 +46,7 @@ const ServiceDisruptionSheet = forwardRef<View, Props>(
           <Button
             color="primary_2"
             text={t(ServiceDisruptionsTexts.button.text)}
+            accessibilityHint={t(ServiceDisruptionsTexts.button.a11yHint)}
             onPress={() => {
               Linking.openURL(serviceDisruptionUrl);
               close();
