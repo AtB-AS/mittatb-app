@@ -62,7 +62,7 @@ describe('Short wait time evaluator', () => {
     expect(isShortWait).toBe(false);
   });
   it('catches a short wait with more legs', () => {
-    const isShortWait = hasShortWaitTime([Leg1, Leg2, Leg3, Leg4]);
+    const isShortWait = hasShortWaitTime([Leg1, Leg2, Leg4]);
     expect(isShortWait).toBe(true);
   });
   it('passes on only one leg', () => {
