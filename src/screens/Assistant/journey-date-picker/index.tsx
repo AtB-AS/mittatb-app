@@ -38,10 +38,11 @@ type JourneyDatePickerProps = {
 };
 const DateOptions = ['now', 'departure', 'arrival'] as const;
 type DateOptionType = typeof DateOptions[number];
+export type DateString = string;
 
 export type SearchTime = {
   option: DateOptionType;
-  date: string;
+  date: DateString;
 };
 const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
   navigation,
@@ -59,7 +60,10 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
 
   const onSelect = () => {
     const calculatedTime: SearchTime = {
-      date: dateWithReplacedTime(dateString, timeString).toISOString(),
+      date:
+        option === 'now'
+          ? new Date().toISOString()
+          : dateWithReplacedTime(dateString, timeString).toISOString(),
       option,
     };
     navigation.navigate(callerRouteName as any, {
@@ -87,17 +91,9 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
         />
 
         {option !== 'now' && (
-          <Section withBottomPadding>
-            <DateInputItem
-              value={dateString}
-              onChange={setDate}
-              testID="dateInput"
-            />
-            <TimeInputItem
-              value={timeString}
-              onChange={setTime}
-              testID="timeInput"
-            />
+          <Section withBottomPadding testID="dateTimePickerSection">
+            <DateInputItem value={dateString} onChange={setDate} />
+            <TimeInputItem value={timeString} onChange={setTime} />
           </Section>
         )}
 

@@ -1,34 +1,20 @@
 import React, {useEffect, useState, useCallback} from 'react';
-import {SectionListData, View} from 'react-native';
+import {View} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import ThemeText from '@atb/components/text';
 import Button from '../button';
-import {TripPattern} from '@atb/api/types/trips';
-import {Quay} from '@atb/api/types/departures';
 import {useTranslation, FeedbackTexts} from '@atb/translations';
-import {FeedbackQuestionsMode, useFeedbackQuestion} from './FeedbackContext';
+import {
+  FeedbackQuestionsViewContext,
+  useFeedbackQuestion,
+} from './FeedbackContext';
 import GoodOrBadButton from './GoodOrBadButton';
+import SubmittedComponent from './SubmittedComponent';
 import {RenderQuestion} from './RenderQuestions';
 import firestore from '@react-native-firebase/firestore';
 import Bugsnag from '@bugsnag/react-native';
 import {APP_ORG, APP_VERSION} from '@env';
-
-const SubmittedComponent = () => {
-  const styles = useFeedbackStyles();
-  const {t} = useTranslation();
-
-  return (
-    <View style={[styles.container, styles.submittedView]}>
-      <ThemeText
-        type="body__primary--bold"
-        style={[styles.questionText, styles.centerText]}
-      >
-        {t(FeedbackTexts.submittedText.thanks)}
-      </ThemeText>
-      <ThemeText>🎉</ThemeText>
-    </View>
-  );
-};
+import storage from '@atb/storage';
 
 export enum Opinions {
   Good = 'GOOD',
@@ -37,7 +23,7 @@ export enum Opinions {
 }
 
 interface GoodOrBadQuestionProps {
-  mode: FeedbackQuestionsMode;
+  viewContext: FeedbackQuestionsViewContext;
   setSelectedOpinion: (e: Opinions) => void;
   selectedOpinion: Opinions;
 }
@@ -45,11 +31,11 @@ interface GoodOrBadQuestionProps {
 const GoodOrBadQuestion = ({
   setSelectedOpinion,
   selectedOpinion,
-  mode,
+  viewContext,
 }: GoodOrBadQuestionProps) => {
   const styles = useFeedbackStyles();
   const {language} = useTranslation();
-  const category = useFeedbackQuestion(mode);
+  const category = useFeedbackQuestion(viewContext);
 
   if (!category) {
     return null;
@@ -84,18 +70,39 @@ const GoodOrBadQuestion = ({
 };
 
 type FeedbackProps = {
-  mode: FeedbackQuestionsMode;
-  tripPattern?: TripPattern;
-  quayListData?: SectionListData<Quay>[];
-  isSearching?: boolean;
-  isEmptyResult?: boolean;
+  viewContext: FeedbackQuestionsViewContext;
+  /** Metadata will be uploaded to Firestore and can be used to examine bugs and issues raised by users.
+   *  An example could be a tripPattern if used with assistant / travel search. */
+  metadata: any;
+  /** The allowList array may be provided to decide when the Feedback component should be visible.
+   * Example: [2, 5] will make the component render only the second and the fifth time it is called.  */
+  allowList?: number[];
+  /** If the onlyOneFeedbackForEachAppVersion prop is given, users that have provided feedback will no
+   * longer be prompted to give feedback in this viewContext, until a new appVersion is installed.  */
+  onlyOneFeedbackForEachAppVersionInThisViewContext?: boolean;
+  /** If the avoidResetOnMetadataUpdate flag is given, interactions with the feedback component will
+   * not be reset when metadata changes. Typically relevant when metadata is refreshed periodically. */
+  avoidResetOnMetadataUpdate?: boolean;
 };
 
-export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
+type VersionStats = {
+  answered: boolean;
+  count: number;
+  version: string;
+  viewContext: FeedbackQuestionsViewContext;
+};
+
+export const Feedback = ({
+  viewContext,
+  metadata,
+  allowList,
+  avoidResetOnMetadataUpdate,
+  onlyOneFeedbackForEachAppVersionInThisViewContext,
+}: FeedbackProps) => {
   const styles = useFeedbackStyles();
   const {t} = useTranslation();
   const {theme} = useTheme();
-  const category = useFeedbackQuestion(mode);
+  const category = useFeedbackQuestion(viewContext);
   const [submitted, setSubmitted] = useState(false);
   const [selectedOpinion, setSelectedOpinion] = useState(
     Opinions.NotClickedYet,
@@ -103,6 +110,58 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
   const [selectedAlternativeIds, setSelectedAlternativeIds] = useState<
     number[]
   >([]);
+  const [displayStats, setDisplayStats] = useState<VersionStats[]>([]);
+  const [firebaseId, setFirebaseId] = useState<string>();
+
+  const incrementCounterAndSetDisplayStats = async () => {
+    const defaultDisplayStatObject = {
+      answered: false,
+      count: 0,
+      version: APP_VERSION,
+      viewContext: viewContext,
+    };
+
+    let displayStatsJSON: VersionStats[] = [];
+    let fetchedDisplayStats = await storage.get('@ATB_feedback_display_stats');
+
+    if (fetchedDisplayStats === null) {
+      displayStatsJSON.push(defaultDisplayStatObject);
+    } else {
+      displayStatsJSON = JSON.parse(fetchedDisplayStats);
+    }
+
+    const statsForCurrentVersionAndViewContext = displayStatsJSON.find(
+      (entry: VersionStats) =>
+        entry.version === APP_VERSION && entry.viewContext === viewContext,
+    );
+
+    if (statsForCurrentVersionAndViewContext) {
+      statsForCurrentVersionAndViewContext.count++;
+    } else {
+      const isDisplayStatsForCurrentAppVersionsButOtherViewContexts =
+        displayStatsJSON.find(
+          (entry: VersionStats) => entry.version === APP_VERSION,
+        );
+
+      if (isDisplayStatsForCurrentAppVersionsButOtherViewContexts) {
+        displayStatsJSON.push(defaultDisplayStatObject);
+      }
+      // If the app has been updated, this line makes sure to delete displayStats for previous and no longer relevant versions
+      else {
+        displayStatsJSON = [defaultDisplayStatObject];
+      }
+    }
+
+    setDisplayStats(displayStatsJSON);
+    storage.set(
+      '@ATB_feedback_display_stats',
+      JSON.stringify(displayStatsJSON),
+    );
+  };
+
+  useEffect(() => {
+    incrementCounterAndSetDisplayStats();
+  }, []);
 
   const toggleSelectedAlternativeId = useCallback(
     (alternativeId: number) => {
@@ -117,6 +176,19 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
     [selectedAlternativeIds],
   );
 
+  const setFeedbackAnswered = () => {
+    const newObject = [...displayStats];
+    const statsForCurrentVersionAndViewContext = newObject.find(
+      (entry) =>
+        entry.version === APP_VERSION && entry.viewContext === viewContext,
+    );
+    if (statsForCurrentVersionAndViewContext) {
+      statsForCurrentVersionAndViewContext.answered = true;
+    }
+
+    storage.set('@ATB_feedback_display_stats', JSON.stringify(newObject));
+  };
+
   const submitFeedbackWithAlternatives = async () => {
     try {
       const selectedAnswers = selectedAlternativeIds.map((altId) =>
@@ -128,40 +200,85 @@ export const Feedback = ({mode, tripPattern, quayListData}: FeedbackProps) => {
       const appVersion = APP_VERSION;
       const organization = APP_ORG;
       const submitTime = Date.now();
+      const displayCount = statsForCurrentVersionAndViewContext
+        ? statsForCurrentVersionAndViewContext.count + 1
+        : -1;
 
       const dataToServer = {
         submitTime,
         appVersion,
         organization,
         selectedOpinion,
-        mode,
+        viewContext,
         category,
         selectedAnswers,
+        displayCount,
+        metadata,
       };
 
-      await firestore().collection('feedback').add(dataToServer);
+      const submittedFeedbackDoc = await firestore()
+        .collection('feedback')
+        .add(dataToServer);
+      setFirebaseId(submittedFeedbackDoc.id);
     } catch (err: any) {
       Bugsnag.notify(err);
     } finally {
       setSubmitted(true);
+      if (onlyOneFeedbackForEachAppVersionInThisViewContext) {
+        setFeedbackAnswered();
+      }
     }
   };
 
   useEffect(() => {
-    // New Trip pattern, reset state.
-    setSelectedAlternativeIds([]);
-    setSelectedOpinion(Opinions.NotClickedYet);
-    setSubmitted(false);
-  }, [tripPattern]);
+    // Reset state whenever metadata changes, unless the data is periodically refreshed
+    if (!avoidResetOnMetadataUpdate) {
+      setSelectedAlternativeIds([]);
+      setSelectedOpinion(Opinions.NotClickedYet);
+      setSubmitted(false);
+    }
+  }, [metadata]);
 
   if (!category) return null;
-  if (submitted) return <SubmittedComponent />;
+  if (submitted) {
+    const selectedTextAlternatives = selectedAlternativeIds.map(
+      (altId) =>
+        category?.question?.alternatives.find(
+          (alt) => alt.alternativeId === altId,
+        )?.alternativeText.nb,
+    );
 
-  if (quayListData || tripPattern)
+    return (
+      <SubmittedComponent
+        viewContext={viewContext}
+        opinion={selectedOpinion}
+        selectedTextAlternatives={selectedTextAlternatives}
+        firebaseId={firebaseId}
+      />
+    );
+  }
+
+  if (!displayStats || displayStats.length < 1) return null;
+  const statsForCurrentVersionAndViewContext = displayStats.find(
+    (entry: VersionStats) =>
+      entry.version === APP_VERSION && entry.viewContext === viewContext,
+  );
+
+  if (!statsForCurrentVersionAndViewContext) return null;
+  if (statsForCurrentVersionAndViewContext.answered) return null;
+
+  if (allowList) {
+    if (!allowList.includes(statsForCurrentVersionAndViewContext.count + 1)) {
+      return null;
+    }
+  }
+
+  // Ensures that we do not ask for feedback before data is presented to user
+  if (metadata)
     return (
       <View style={styles.container}>
         <GoodOrBadQuestion
-          mode={mode}
+          viewContext={viewContext}
           setSelectedOpinion={setSelectedOpinion}
           selectedOpinion={selectedOpinion}
         />

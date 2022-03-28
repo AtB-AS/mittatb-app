@@ -13,6 +13,7 @@ export type StorageModel = {
   '@ATB_ticket_informational_accepted': string;
   '@ATB_previous_build_number': string;
   '@ATB_saved_payment_methods': string;
+  '@ATB_feedback_display_stats': string;
 };
 
 export type StorageModelTypes = keyof StorageModel;

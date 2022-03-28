@@ -1,9 +1,7 @@
 import React from 'react';
 import {View, RefreshControl, ScrollView} from 'react-native';
 import {LocationWithMetadata} from '@atb/favorites/types';
-import ScreenHeader from '@atb/components/screen-header';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {StyleSheet} from '@atb/theme';
 import DeparturesList from '@atb/departure-list/DeparturesList';
 import {useDepartureData} from '@atb/screens/Nearby/state';
 import {NavigationProp, RouteProp} from '@react-navigation/native';

@@ -2,12 +2,12 @@ import {Location} from '@atb/favorites/types';
 import {
   DateString,
   SearchTime,
-} from '@atb/screens/Assistant_v2/journey-date-picker';
+} from '@atb/screens/Assistant/journey-date-picker';
 import {TripPattern} from '@atb/api/types/trips';
 import {
   SearchStateType,
   TripPatternWithKey,
-} from '@atb/screens/Assistant_v2/types';
+} from '@atb/screens/Assistant/types';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {CancelToken, isCancel} from '@atb/api';
@@ -18,6 +18,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {useSearchHistory} from '@atb/search-history';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {TripSearchPreferences, usePreferences} from '@atb/preferences';
+import {isValidTripLocations} from '@atb/utils/location';
 
 export default function useTripsQuery(
   fromLocation?: Location,
@@ -81,6 +82,11 @@ export default function useTripsQuery(
             setSearchState('searching');
             let performedSearchesCount = 0;
             let tripsFoundCount = 0;
+
+            if (!isValidTripLocations(fromLocation, toLocation)) {
+              setSearchState('search-empty-result');
+              return;
+            }
 
             try {
               // Fire and forget add journey search entry
@@ -199,9 +205,18 @@ async function doSearch(
   cancelToken: CancelTokenSource,
   tripSearchPreferences?: TripSearchPreferences,
 ) {
+  const from = {
+    ...fromLocation,
+    place: fromLocation.layer === 'venue' ? fromLocation.id : undefined,
+  };
+  const to = {
+    ...toLocation,
+    place: toLocation.layer === 'venue' ? toLocation.id : undefined,
+  };
+
   const query: TripsQueryVariables = {
-    from: fromLocation,
-    to: toLocation,
+    from,
+    to,
     cursor,
     when: searchTime?.date,
     arriveBy,
