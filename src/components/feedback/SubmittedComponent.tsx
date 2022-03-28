@@ -6,6 +6,7 @@ import ThemeText from '@atb/components/text';
 import {useTranslation, FeedbackTexts} from '@atb/translations';
 import Intercom from 'react-native-intercom';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
+import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {FeedbackQuestionsViewContext} from './FeedbackContext';
 import {Opinions} from '.';
 
@@ -24,6 +25,7 @@ const SubmittedComponent = ({
 }: SubmittedComponentProps) => {
   const styles = useSubmittedComponentStyles();
   const {t} = useTranslation();
+  const focusRef = useFocusOnLoad();
 
   const handleButtonClick = () => {
     const alternativeArrayConvertedToString =
@@ -39,7 +41,7 @@ const SubmittedComponent = ({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} ref={focusRef}>
       <ThemeText
         type="body__primary--bold"
         style={[styles.questionText, styles.centerText]}
