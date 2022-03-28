@@ -136,6 +136,33 @@ const Assistant: React.FC<Props> = ({
     date: new Date().toISOString(),
   });
 
+  const setCurrentLocationAsFrom = useCallback(
+    function setCurrentLocationAsFrom() {
+      log('set_current_location_as_from');
+      navigation.setParams({
+        fromLocation: currentLocation && {
+          ...currentLocation,
+          resultType: 'geolocation',
+        },
+        toLocation: to,
+      });
+    },
+    [navigation, currentLocation, to],
+  );
+
+  const setCurrentLocationOrRequest = useCallback(
+    async function setCurrentLocationOrRequest() {
+      if (currentLocation) {
+        setCurrentLocationAsFrom();
+      } else {
+        const status = await requestGeoPermission();
+        if (status === 'granted') {
+          setCurrentLocationAsFrom();
+        }
+      }
+    },
+    [currentLocation, setCurrentLocationAsFrom, requestGeoPermission],
+  );
   const resetView = useCallback(() => {
     analytics().logEvent('click_logo_reset');
     log('reset');
@@ -144,7 +171,7 @@ const Assistant: React.FC<Props> = ({
     navigation.setParams({
       toLocation: undefined,
     });
-  }, [navigation]);
+  }, [navigation, setCurrentLocationOrRequest]);
 
   function swap() {
     log('swap', {
@@ -168,17 +195,6 @@ const Assistant: React.FC<Props> = ({
     }
   }
 
-  function setCurrentLocationAsFrom() {
-    log('set_current_location_as_from');
-    navigation.setParams({
-      fromLocation: currentLocation && {
-        ...currentLocation,
-        resultType: 'geolocation',
-      },
-      toLocation: to,
-    });
-  }
-
   function setCurrentLocationAsFromIfEmpty() {
     if (from) {
       return;
@@ -192,17 +208,6 @@ const Assistant: React.FC<Props> = ({
       callerRouteParam: 'searchTime',
       searchTime,
     });
-  }
-
-  async function setCurrentLocationOrRequest() {
-    if (currentLocation) {
-      setCurrentLocationAsFrom();
-    } else {
-      const status = await requestGeoPermission();
-      if (status === 'granted') {
-        setCurrentLocationAsFrom();
-      }
-    }
   }
 
   const {
