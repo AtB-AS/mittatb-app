@@ -3,7 +3,7 @@ import type {
   AttestationData,
   AttestationSupport,
   LegacyAttestationData,
-  PayloadAction,
+  PayloadAction, ReattestationData,
   Token,
 } from './types';
 
@@ -21,6 +21,11 @@ export type EnturTravellerType = {
     nonce: string,
     serverPublicKey: string
   ): Promise<LegacyAttestationData>;
+  reattest(
+    accountId: string,
+    tokenId: string,
+    nonce: string
+  ): Promise<ReattestationData>;
   addToken(
     accountId: string,
     tokenId: string,
@@ -44,6 +49,7 @@ export const {
   start,
   attest,
   attestLegacy,
+  reattest,
   addToken,
   getToken,
   deleteToken,

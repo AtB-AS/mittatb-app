@@ -13,7 +13,7 @@ export declare type InitializeTokenResponse = {
     nonceValidityEnd: number;
 };
 export declare type TokenLifecycleState = 'TOKEN_LIFECYCLE_STATE_UNSPECIFIED' | 'TOKEN_LIFECYCLE_STATE_NOT_ACTIVATED' | 'TOKEN_LIFECYCLE_STATE_ACTIVATED' | 'TOKEN_LIFECYCLE_STATE_CANCELLED' | 'TOKEN_LIFECYCLE_STATE_REMOVED';
-export declare type TokenType = 'TOKEN_TYPE_UNSPECIFIED' | 'TOKEN_TYPE_QR_SMARTPHONE' | 'TOKEN_TYPE_QR_PAPER' | 'TOKEN_TYPE_TRAVELCARD' | 'TOKEN_TYPE_REFERENCE_CODE' | 'TOKEN_TYPE_PLAIN_UNSIGNED' | 'TOKEN_TYPE_EXTERNAL';
+export declare type TokenType = 'TOKEN_TYPE_UNSPECIFIED' | 'TOKEN_TYPE_MOBILE' | 'TOKEN_TYPE_STATIC_BARCODE' | 'TOKEN_TYPE_TRAVELCARD' | 'TOKEN_TYPE_REFERENCE_CODE' | 'TOKEN_TYPE_PLAIN_UNSIGNED' | 'TOKEN_TYPE_EXTERNAL';
 export declare type TokenAction = 'TOKEN_ACTION_UNSPECIFIED' | 'TOKEN_ACTION_TICKET_TRANSFER' | 'TOKEN_ACTION_ADD_REMOVE_TOKEN' | 'TOKEN_ACTION_IDENTIFICATION' | 'TOKEN_ACTION_TICKET_INSPECTION' | 'TOKEN_ACTION_GET_FARECONTRACTS' | 'TOKEN_ACTION_TRAVELCARD' | 'TOKEN_ACTION_CONSUME_ACCESS_RIGHTS';
 export declare type StoredToken = {
     id: string;
@@ -42,33 +42,37 @@ export declare type AttestationIOSDeviceCheck = {
     /** base64 encoded RSA encrypted AES key, for attestation type 'iOS_Device_Check'. Encrypted with the attestationEncryptionPublicKey from InitializeTokenResponse. */
     attestationEncryptionEncryptedKey: string;
 };
+export declare type AndroidSafetyNetAttestation = {
+    attestationType: 'SafetyNet';
+    /** SafetyNet JWS from client */
+    safetyNetJws: string;
+    /** base64 encoded attestations for public key, for attestation type 'SafetyNet'. */
+    signaturePublicKeyAttestation: string[];
+    /** base64 encoded attestations for encryption public key, for attestation type 'SafetyNet'. */
+    encryptionPublicKeyAttestation: string[];
+};
+export declare type IosDeviceCheckAttestation = {
+    attestationType: 'iOS_Device_Check';
+    /** base64 encoded data from iOS DeviceCheck API */
+    encryptedIosDeviceCheckData: string;
+    /** base64 encoded RSA encrypted AES key, for attestation type 'iOS_Device_Check'. Encrypted with the attestationEncryptionPublicKey from InitializeTokenResponse. */
+    attestationEncryptionEncryptedKey: string;
+};
+export declare type IosDeviceAttestAttestation = {
+    attestationType: 'iOS_Device_Attestation';
+    /** base64 encoded object from API, should be created with serialized DeviceAttestationData as a challeng */
+    attestationObject: string;
+    /** base64 encoded key id, from generated iOS app attest data. */
+    keyId: string;
+    /** base64 encoded serialized DeviceAttestationData protobuf */
+    deviceAttestationData: string;
+};
+export declare type Attestation = AndroidSafetyNetAttestation | IosDeviceCheckAttestation | IosDeviceAttestAttestation;
 export declare type ActivateTokenRequest = {
     /** base64 encoded token public key */
     signaturePublicKey?: string;
     encryptionPublicKey?: string;
-    attestation: {
-        attestationType: 'iOS_Device_Check';
-        /** base64 encoded data from iOS DeviceCheck API */
-        encryptedIosDeviceCheckData: string;
-        /** base64 encoded RSA encrypted AES key, for attestation type 'iOS_Device_Check'. Encrypted with the attestationEncryptionPublicKey from InitializeTokenResponse. */
-        attestationEncryptionEncryptedKey: string;
-    } | {
-        attestationType: 'SafetyNet';
-        /** SafetyNet JWS from client */
-        safetyNetJws: string;
-        /** base64 encoded attestations for public key, for attestation type 'SafetyNet'. */
-        signaturePublicKeyAttestation: string[];
-        /** base64 encoded attestations for encryption public key, for attestation type 'SafetyNet'. */
-        encryptionPublicKeyAttestation: string[];
-    } | {
-        attestationType: 'iOS_Device_Attestation';
-        /** base64 encoded object from API, should be created with serialized DeviceAttestationData as a challeng */
-        attestationObject: string;
-        /** base64 encoded key id, from generated iOS app attest data. */
-        keyId: string;
-        /** base64 encoded serialized DeviceAttestationData protobuf */
-        deviceAttestationData: string;
-    };
+    attestation: Attestation;
 };
 export declare type ActivateTokenResponse = {
     certificate: string;

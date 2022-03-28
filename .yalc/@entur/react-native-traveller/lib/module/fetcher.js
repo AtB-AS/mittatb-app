@@ -20,18 +20,6 @@ export class RequestError extends Error {
   }
 
 }
-export class ReattestationError extends Error {
-  constructor(data) {
-    const name = 'ReattestationError';
-    super(name);
-
-    _defineProperty(this, "reattestationData", void 0);
-
-    this.name = name;
-    this.reattestationData = data;
-  }
-
-}
 
 function createInternalFetcher(config) {
   return async request => {
@@ -40,12 +28,6 @@ function createInternalFetcher(config) {
         ...(request === null || request === void 0 ? void 0 : request.headers)
       }
     });
-
-    if (isErrorResponse(response)) {
-      if (response.body.code === 'REATTESTATION_REQUIRED') {
-        throw new ReattestationError(response.body.metadata);
-      }
-    }
 
     if (!isOk(response)) {
       throw new RequestError(response);
@@ -62,15 +44,21 @@ export function createFetcher(config, reattest) {
     try {
       return await fetcher(request);
     } catch (error) {
-      if (error instanceof ReattestationError) {
+      var _error$response;
+
+      const errorResponseData = error === null || error === void 0 ? void 0 : (_error$response = error.response) === null || _error$response === void 0 ? void 0 : _error$response.data;
+
+      if (isReattestationError(errorResponseData)) {
         var _request$headers;
 
         const {
-          tokenId,
-          nonce,
-          attestationEncryptionPublicKey
-        } = error.reattestationData;
-        const reattestBody = await reattest(tokenId, nonce, attestationEncryptionPublicKey);
+          token_id,
+          nonce
+        } = errorResponseData.metadata;
+        logger.info('mobiletoken_reattestation_required', undefined, {
+          tokenId: token_id
+        });
+        const reattestBody = await reattest(token_id, nonce);
         const jsonBody = JSON.stringify(reattestBody);
         const utf8value = utf8.encode(jsonBody);
         const headerValue = base64.encode(utf8value);
@@ -99,7 +87,7 @@ function isOk(response) {
   return response.status > 199 && response.status < 300;
 }
 
-function isErrorResponse(response) {
-  return 'code' in response.body;
-}
+const isReattestationError = data => {
+  return (data === null || data === void 0 ? void 0 : data.code) === 'REATTESTATION_REQUIRED';
+};
 //# sourceMappingURL=fetcher.js.map

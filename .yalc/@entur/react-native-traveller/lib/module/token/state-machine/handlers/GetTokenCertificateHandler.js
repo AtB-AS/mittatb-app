@@ -6,9 +6,11 @@ export default function getTokenCertificateHandler(abtTokensService) {
   return stateHandlerFactory(['GettingTokenCertificate'], async s => {
     const {
       accountId,
-      tokenId
+      tokenId,
+      state
     } = s;
-    logger.info('get_token_cert', undefined, {
+    logger.info('mobiletoken_status_change', undefined, {
+      state,
       accountId,
       tokenId
     });

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getActivateTokenRequestBody = void 0;
+exports.getReattestation = exports.getActivateTokenRequestBody = void 0;
 
 var _reactNative = require("react-native");
 
@@ -92,4 +92,18 @@ const getActivateTokenRequestBodyIos14 = async (accountId, initialTokenId, nonce
     }
   };
 };
+
+const getReattestation = async (accountId, tokenId, nonce) => {
+  const {
+    attestationObject
+  } = await (0, _native.reattest)(accountId, tokenId, nonce);
+  return {
+    attestationType: 'SafetyNet',
+    safetyNetJws: attestationObject,
+    signaturePublicKeyAttestation: [],
+    encryptionPublicKeyAttestation: []
+  };
+};
+
+exports.getReattestation = getReattestation;
 //# sourceMappingURL=attest.js.map

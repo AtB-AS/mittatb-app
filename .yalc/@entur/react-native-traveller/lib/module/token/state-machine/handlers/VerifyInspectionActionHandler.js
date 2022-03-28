@@ -3,11 +3,13 @@ import { stateHandlerFactory } from '../HandlerFactory';
 export default function verifyInspectionActionHandler(abtTokensService) {
   return stateHandlerFactory(['VerifyInspectionAction'], async ({
     accountId,
-    tokenId
+    tokenId,
+    state
   }) => {
-    logger.info('verify_inspection_action', undefined, {
+    logger.info('mobiletoken_status_change', undefined, {
       accountId,
-      tokenId
+      tokenId,
+      state
     });
     await abtTokensService.toggleToken(tokenId, {
       overrideExisting: false

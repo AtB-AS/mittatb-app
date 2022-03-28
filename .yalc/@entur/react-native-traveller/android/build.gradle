@@ -56,6 +56,9 @@ repositories {
   maven {
     url "${projectDir}/libs"
   }
+  maven {
+    url 'https://jitpack.io'
+  }
   mavenLocal()
 
   mavenCentral()
@@ -132,7 +135,7 @@ def kotlin_version = getExtOrDefault('kotlinVersion')
 def grpcVersion = "1.36.0"
 def tempoVersion = "1.2.0-alpha01"
 def googlePlayServicesLocationVersion = '18.0.0'
-def androidPlayServicesSafetynetVersion = '17.0.1'
+def androidPlayServicesSafetynetVersion = '18.0.1'
 
 dependencies {
   // noinspection GradleDynamicVersion
@@ -146,15 +149,15 @@ dependencies {
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-  implementation "no.entur.abt:abt-time-lib-android:1.0.29"
-  implementation("no.entur.abt:abt-traveller-token-lib-android:1.0.29") {
+  implementation "no.entur.abt:abt-time-lib-android:1.0.39"
+  implementation("no.entur.abt:abt-traveller-token-lib-android:1.0.39") {
     exclude group: "no.entur.abt", module: "abt-protobuf-lite-traveller"
     exclude group: "io.grpc", module: "grpc-okhttp"
     exclude group: "io.grpc", module: "grpc-protobuf-lite"
     exclude group: "io.grpc", module: "grpc-stub"
   }
 
-  api("no.entur.abt:abt-protobuf-lite-traveller:2.261") {
+  api("no.entur.abt:abt-protobuf-lite-traveller:2.334") {
     changing = true
     exclude group: "com.google.api.grpc", module: "proto-google-common-protos"
     exclude group: "com.google.protobuf", module: "protobuf-java"
@@ -163,7 +166,7 @@ dependencies {
     exclude group: "io.envoyproxy.protoc-gen-validate", module: "pgv-java-stub"
   }
 
-  api("no.entur.abt:abt-protobuf-lite-common:2.261") {
+  api("no.entur.abt:abt-protobuf-lite-common:2.334") {
     exclude group: "io.envoyproxy.protoc-gen-validate", module: "pgv-java-stub"
     exclude group: "com.google.re2j", module: "commons-validator"
     exclude group: "commons-validator", module: "commons-validator"

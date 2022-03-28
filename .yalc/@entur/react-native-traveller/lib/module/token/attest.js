@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import { attest, attestLegacy } from '../native';
+import { attest, attestLegacy, reattest } from '../native';
 var AttestationType;
 
 (function (AttestationType) {
@@ -79,6 +79,18 @@ const getActivateTokenRequestBodyIos14 = async (accountId, initialTokenId, nonce
       keyId: keyId,
       deviceAttestationData: deviceAttestationData
     }
+  };
+};
+
+export const getReattestation = async (accountId, tokenId, nonce) => {
+  const {
+    attestationObject
+  } = await reattest(accountId, tokenId, nonce);
+  return {
+    attestationType: 'SafetyNet',
+    safetyNetJws: attestationObject,
+    signaturePublicKeyAttestation: [],
+    encryptionPublicKeyAttestation: []
   };
 };
 //# sourceMappingURL=attest.js.map

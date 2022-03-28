@@ -11,8 +11,14 @@ var _HandlerFactory = require("../HandlerFactory");
 
 function notSupportedHandler() {
   return (0, _HandlerFactory.stateHandlerFactory)(['NotSupported'], async s => {
-    _logger.logger.info('not_supported', undefined, {
-      accountId: s.accountId
+    const {
+      accountId,
+      state
+    } = s;
+
+    _logger.logger.info('mobiletoken_status_change', undefined, {
+      accountId,
+      state
     });
 
     return s;

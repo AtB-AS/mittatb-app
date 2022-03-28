@@ -21,11 +21,14 @@ import no.entur.abt.android.token.keystore.TokenKeyStore
 import no.entur.abt.android.token.keystore.TokenTrustChain
 import no.entur.abt.core.exchange.grpc.traveller.v1.Attestation
 import uk.org.netex.www.netex.TokenAction
+import java.security.KeyPair
 import java.security.PrivateKey
+import java.security.cert.Certificate
 import java.security.cert.CertificateFactory
 import java.time.Instant
 import java.util.*
 import java.util.concurrent.locks.ReentrantLock
+
 
 class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
   private var tokenStore: TokenStore<String>? = null
@@ -180,7 +183,14 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
       if (token == null || token.tokenId != tokenId) {
         val signatureKey: PrivateKey = tokenKeyStore!!.getSignaturePrivateKey(tokenContext, tokenId)
         val encryptionKey: PrivateKey = tokenKeyStore!!.getEncryptionPrivateKey(tokenContext, tokenId)
-        token = NonActivatedToken(tokenId, signatureKey, encryptionKey, this.encoder, tokenContext.incrementStrainNumber(), tokenContext)
+
+        val signatureCertificate: Certificate = tokenKeyStore!!.getSignatureCertificate(tokenContext, tokenId)
+        val encryptionCertificate: Certificate = tokenKeyStore!!.getEncryptionCertificate(tokenContext, tokenId)
+
+        val signatureKeyPair = KeyPair(signatureCertificate.publicKey, signatureKey)
+        val encryptionKeyPair = KeyPair(encryptionCertificate.publicKey, encryptionKey)
+
+        token = NonActivatedToken(tokenId, signatureKeyPair, encryptionKeyPair, this.encoder, tokenContext.incrementStrainNumber(), tokenContext)
       }
 
       val container = token.encodeAsSecureContainer(TokenEncodingRequest(Collections.emptyList(), tokenActions.toTypedArray(), includeCertificate))
@@ -232,8 +242,15 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
       var tokenContext = getTokenContext(accountId)
       val signatureKey: PrivateKey = tokenKeyStore!!.getSignaturePrivateKey(tokenContext, tokenId)
       val encryptionKey: PrivateKey = tokenKeyStore!!.getEncryptionPrivateKey(tokenContext, tokenId)
+
+      val signatureCertificate: Certificate = tokenKeyStore!!.getSignatureCertificate(tokenContext, tokenId)
+      val encryptionCertificate: Certificate = tokenKeyStore!!.getEncryptionCertificate(tokenContext, tokenId)
+
+      val signatureKeyPair = KeyPair(signatureCertificate.publicKey, signatureKey)
+      val encryptionKeyPair = KeyPair(encryptionCertificate.publicKey, encryptionKey)
+
       val command: ByteArray = byteArrayOf()
-      val token = tokenStore!!.createPendingNewToken(tokenContext, tokenId, signatureKey, encryptionKey, encoder, command)
+      val token = tokenStore!!.createPendingNewToken(tokenContext, tokenId, signatureKeyPair, encryptionKeyPair, command)
       val certFactory = CertificateFactory.getInstance("X.509")
 
 
@@ -306,10 +323,10 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
       val obj = WritableNativeMap()
 
       val encodedSignatureChain = Arguments.createArray()
-      signatureChain.certificateChain.forEach { encodedSignatureChain.pushString(Base64.encodeToString(it, Base64.NO_WRAP)) }
+      signatureChain.certificateChain.iterator().forEach { encodedSignatureChain.pushString(Base64.encodeToString(it, Base64.NO_WRAP)) }
 
       val encodedEncryptionChain = Arguments.createArray()
-      encryptionChain.certificateChain.forEach { encodedEncryptionChain.pushString(Base64.encodeToString(it, Base64.NO_WRAP)) }
+      encryptionChain.certificateChain.iterator().forEach { encodedEncryptionChain.pushString(Base64.encodeToString(it, Base64.NO_WRAP)) }
 
       obj.putString("signaturePublicKey", Base64.encodeToString(signatureChain.keyPair.public.encoded, Base64.NO_WRAP))
       obj.putString("encryptionPublicKey", Base64.encodeToString(encryptionChain.keyPair.public.encoded, Base64.NO_WRAP))
@@ -322,6 +339,55 @@ class EnturTravellerModule(reactContext: ReactApplicationContext) : ReactContext
     } catch (err: Error) {
       EnturTravellerLogger.notify(err)
       promise.reject("ATTESTATION_ERROR", err)
+    }
+  }
+
+  @ReactMethod
+  fun reattest(accountId: String, tokenId: String, nonce: String, promise: Promise) {
+    if (!started) {
+      promise.reject(Throwable("The start-function must be called before any other native method"))
+      return
+    }
+
+    if (accountId.isEmpty()) {
+      promise.reject(Throwable("accountId cannot be empty"))
+      return
+    }
+
+    if (tokenId.isEmpty()) {
+      promise.reject(Throwable("tokenId cannot be empty"))
+      return
+    }
+
+    if (nonce.isEmpty()) {
+      promise.reject(Throwable("nonce cannot be empty"))
+      return
+    }
+
+    try {
+      if (!deviceAttestor!!.supportsAttestation()) {
+        throw Throwable("Device does not support Attestation")
+      }
+      var tokenContext = getTokenContext(accountId)
+      val base64Nonce = Base64.decode(nonce, Base64.DEFAULT)
+      val token = tokenStore!!.getToken(tokenContext)
+
+      if (token is ActivatedToken<*>) {
+        val attestation: Attestation = deviceAttestor!!.attest(
+          base64Nonce,
+          token.signaturePublicKey.encoded,
+          token.encryptPublicKey.encoded)
+
+        val obj = WritableNativeMap()
+        obj.putString("attestationObject", attestation.androidSafetynet.jwsResult)
+        promise.resolve(obj)
+      } else {
+        Log.d("REATTESTATION_ERROR", "No activated token available: $token")
+        promise.reject("ATTESTATION_ERROR", "No activated token available: $token")
+      }
+    } catch (err: Error) {
+      EnturTravellerLogger.notify(err)
+      promise.reject("REATTESTATION_ERROR", err)
     }
   }
 

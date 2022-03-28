@@ -5,11 +5,13 @@ export default function activateNewHandler(abtTokensService) {
   return stateHandlerFactory(['ActivateNew'], async s => {
     const {
       tokenId,
-      accountId
+      accountId,
+      state
     } = s;
-    logger.info('activate_new', undefined, {
+    logger.info('mobiletoken_status_change', undefined, {
       tokenId,
-      accountId
+      accountId,
+      state
     });
     const activateTokenResponse = await abtTokensService.activateToken(tokenId, s.attestationData);
     verifyCorrectTokenId(tokenId, activateTokenResponse.tokenId);

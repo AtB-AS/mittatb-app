@@ -13,6 +13,9 @@ export declare type AttestationData = {
     signatureChain: string[];
     encryptionChain: string[];
 };
+export declare type ReattestationData = {
+    attestationObject: string;
+};
 export declare type LegacyAttestationData = {
     attestation: string;
     attestationEncryptionKey: string;

@@ -9,8 +9,12 @@ export default function initiateRenewalHandler(
   abtTokensService: AbtTokensService
 ): StateHandler {
   return stateHandlerFactory(['InitiateRenewal'], async (s) => {
-    const { accountId, tokenId } = s;
-    logger.info('init_renewal', undefined, { accountId, tokenId });
+    const { accountId, tokenId, state } = s;
+    logger.info('mobiletoken_status_change', undefined, {
+      state,
+      accountId,
+      tokenId,
+    });
 
     const signedToken = await getSecureToken(accountId, tokenId, true, [
       PayloadAction.addRemoveToken,

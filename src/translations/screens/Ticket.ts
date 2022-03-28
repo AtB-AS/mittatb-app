@@ -43,7 +43,7 @@ const TicketTexts = {
       _(`Ordre-id: ${orderId}`, `Order ID: ${orderId}`),
     purchaseTime: (dateTime: string) =>
       _(`Kjøpt ${dateTime}`, `Purchased ${dateTime}`),
-    askForReceipt: _('Be om kvittering', 'Request receipt'),
+    askForReceipt: _('Be om kvittering', 'Send receipt'),
     qrCodeA11yLabel: _(
       'QR kode. Vis frem denne koden ved billett kontroll',
       'QR code. Show this code in case of inspection. ',

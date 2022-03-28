@@ -20,12 +20,14 @@ function addTokenHandler() {
         tokenValidityEnd,
         tokenValidityStart
       },
-      accountId
+      accountId,
+      state
     } = s;
 
-    _logger.logger.info('add_token', undefined, {
+    _logger.logger.info('mobiletoken_status_change', undefined, {
       accountId,
-      tokenId
+      tokenId,
+      state
     });
 
     await (0, _native.addToken)(accountId, tokenId, certificate, tokenValidityStart, tokenValidityEnd);

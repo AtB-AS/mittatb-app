@@ -4,7 +4,11 @@ import { stateHandlerFactory } from '../HandlerFactory';
 
 export default function notSupportedHandler(): StateHandler {
   return stateHandlerFactory(['NotSupported'], async (s) => {
-    logger.info('not_supported', undefined, { accountId: s.accountId });
+    const { accountId, state } = s;
+    logger.info('mobiletoken_status_change', undefined, {
+      accountId,
+      state,
+    });
     return s;
   });
 }
