@@ -6,9 +6,13 @@ import {hasShortWaitTime} from '../src/screens/TripDetails/components/utils';
 
 describe('IterateWithNext', () => {
   it('iterates correctly', () => {
+    const empty_array = [] as number[];
     const array_with_one = [1];
     const array_with_even = [1, 2, 3, 4];
     const array_with_odd = [1, 2, 3];
+
+    const iterateWithNone = iterateWithNext(empty_array);
+    expect(iterateWithNone).toEqual([]);
 
     const iterateWithOne = iterateWithNext(array_with_one);
     expect(iterateWithOne).toEqual([]);
@@ -62,6 +66,10 @@ describe('Short wait time evaluator', () => {
     expect(isShortWait).toBe(true);
   });
   it('passes on only one leg', () => {
+    const isShortWait = hasShortWaitTime([Leg1]);
+    expect(isShortWait).toBe(false);
+  });
+  it('passes with empty array', () => {
     const isShortWait = hasShortWaitTime([Leg1]);
     expect(isShortWait).toBe(false);
   });
