@@ -400,7 +400,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
 }));
 
 function isScrolledToTop(scrollPosition: number, contentHeightOffset: number) {
-  return scrollPosition <= -contentHeightOffset + SCROLLED_TOP_THRESHOLD;
+  const offset = Platform.OS === 'ios' ? -contentHeightOffset : 0;
+  return scrollPosition <= offset + SCROLLED_TOP_THRESHOLD;
 }
 
 function useCalculateHeaderContentHeight(isAnimating: boolean) {
