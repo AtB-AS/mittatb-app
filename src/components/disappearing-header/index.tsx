@@ -10,7 +10,7 @@ import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import throttle from '@atb/utils/throttle';
 import useConditionalMemo from '@atb/utils/use-conditional-memo';
 import {useLayout} from '@atb/utils/use-layout';
-import {useScrollToTop} from '@react-navigation/native';
+import {NavigationProp, useScrollToTop} from '@react-navigation/native';
 import hexToRgba from 'hex-to-rgba';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
@@ -43,6 +43,11 @@ type Props = {
 
   leftButton?: LeftButtonProps;
 
+  tabPressBehaviour?: {
+    navigation: NavigationProp<any>;
+    onTabPressOnTopScroll: () => void;
+  };
+
   useScroll?: boolean;
   headerTitle: React.ReactNode;
   alternativeTitleComponent?: React.ReactNode;
@@ -59,6 +64,8 @@ type Props = {
    */
   alertContext?: AlertContext;
 };
+
+const SCROLLED_TOP_THRESHOLD = 30;
 
 const themeColor: ThemeColor = 'background_accent';
 
@@ -80,6 +87,8 @@ const DisappearingHeader: React.FC<Props> = ({
 
   leftButton,
 
+  tabPressBehaviour,
+
   headerTitle,
   alternativeTitleComponent,
   showAlterntativeTitle,
@@ -100,6 +109,8 @@ const DisappearingHeader: React.FC<Props> = ({
     onHeaderContentLayout,
   } = useCalculateHeaderContentHeight(isAnimating);
   const scrollableContentRef = React.useRef<ScrollView>(null);
+  const scrollYValue = useRef(0);
+
   useScrollToTop(
     React.useRef<Scrollable>({
       scrollTo: () =>
@@ -179,10 +190,34 @@ const DisappearingHeader: React.FC<Props> = ({
 
   const onScrolling = useCallback(
     (e: NativeScrollEvent) => {
+      const scrollPos = e.contentOffset.y;
+      scrollYValue.current = scrollPos;
       endReachListener(e);
     },
-    [endReachListener],
+    [endReachListener, scrollYValue],
   );
+
+  useEffect(() => {
+    if (!tabPressBehaviour) return;
+    const {navigation, onTabPressOnTopScroll} = tabPressBehaviour;
+
+    const unsubscribe = navigation
+      .dangerouslyGetParent()
+      // Typescript doesn't know that tabLongPress exist in the parent
+      // and types aren't properly exposed to compensate for that.
+      ?.addListener('tabPress' as any, () => {
+        if (!navigation.isFocused()) return;
+        if (!isScrolledToTop(scrollYValue.current, contentHeight)) return;
+        onTabPressOnTopScroll();
+      });
+
+    return unsubscribe;
+  }, [
+    tabPressBehaviour?.navigation,
+    tabPressBehaviour?.onTabPressOnTopScroll,
+    scrollYValue,
+    contentHeight,
+  ]);
 
   return (
     <>
@@ -363,6 +398,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
 }));
+
+function isScrolledToTop(scrollPosition: number, contentHeightOffset: number) {
+  return scrollPosition <= -contentHeightOffset + SCROLLED_TOP_THRESHOLD;
+}
 
 function useCalculateHeaderContentHeight(isAnimating: boolean) {
   // Using safeAreaFrame for height instead of dimensions as

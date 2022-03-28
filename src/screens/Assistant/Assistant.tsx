@@ -136,7 +136,7 @@ const Assistant: React.FC<Props> = ({
     date: new Date().toISOString(),
   });
 
-  function resetView() {
+  const resetView = useCallback(() => {
     analytics().logEvent('click_logo_reset');
     log('reset');
     setCurrentLocationOrRequest();
@@ -144,19 +144,6 @@ const Assistant: React.FC<Props> = ({
     navigation.setParams({
       toLocation: undefined,
     });
-  }
-
-  useEffect(() => {
-    const unsubscribe = navigation
-      .dangerouslyGetParent()
-      // Typescript doesn't know that tabLongPress exist in the parent
-      // and types aren't properly exposed to compensate for that.
-      ?.addListener('tabLongPress' as any, () => {
-        if (!navigation.isFocused()) return;
-        resetView();
-      });
-
-    return unsubscribe;
   }, [navigation]);
 
   function swap() {
@@ -438,6 +425,7 @@ const Assistant: React.FC<Props> = ({
       alternativeTitleComponent={altHeaderComp}
       showAlterntativeTitle={Boolean(from && to)}
       leftButton={leftButton}
+      tabPressBehaviour={{navigation, onTabPressOnTopScroll: resetView}}
       onFullscreenTransitionEnd={(fullHeight) => {
         if (fullHeight) {
           clear();
