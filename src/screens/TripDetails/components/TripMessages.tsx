@@ -8,14 +8,12 @@ import {
 } from '@atb/translations';
 import {AxiosError} from 'axios';
 import React from 'react';
-import {Alert, ViewStyle} from 'react-native';
+import {ViewStyle} from 'react-native';
 import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
-import {Leg, TripPattern} from '@atb/api/types/trips';
+import {TripPattern} from '@atb/api/types/trips';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
-import {secondsBetween} from '@atb/utils/date';
-import {timeIsShort} from '@atb/screens/TripDetails/Details/utils';
-import {iterateWithNext} from '@atb/utils/array';
+import {hasShortWaitTime} from '@atb/screens/TripDetails/components/utils';
 
 type TripMessagesProps = {
   tripPattern: TripPattern;
@@ -84,16 +82,4 @@ export default TripMessages;
 
 function someLegsAreByTrain(tripPattern: TripPattern): boolean {
   return tripPattern.legs.some((leg) => leg.mode === Mode.Rail);
-}
-
-function hasShortWaitTime(legs: Leg[]) {
-  return iterateWithNext(legs)
-    .map((pair) => {
-      return secondsBetween(
-        pair.current.expectedEndTime,
-        pair.next.expectedStartTime,
-      );
-    })
-    .filter((waitTime) => waitTime > 0)
-    .some((waitTime) => timeIsShort(waitTime));
 }

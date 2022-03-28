@@ -1,6 +1,10 @@
 import {iterateWithNext} from '../src/utils/array';
+import {addMinutes} from 'date-fns';
+import {Leg} from '@atb/api/types/trips';
+import {TIME_LIMIT_IN_MINUTES} from '../src/screens/TripDetails/Details/utils';
+import {hasShortWaitTime} from '../src/screens/TripDetails/components/utils';
 
-describe('IterateWIthNext', () => {
+describe('IterateWithNext', () => {
   it('iterates correctly', () => {
     const array_with_one = [1];
     const array_with_even = [1, 2, 3, 4];
@@ -24,8 +28,41 @@ describe('IterateWIthNext', () => {
   });
 });
 
-describe('suite', () => {
-  it('should do X', () => {
-    expect(true).toBe(true);
+describe('Short wait time evaluator', () => {
+  const nowDate = Date.now();
+  const Leg1: Leg = {
+    expectedStartTime: nowDate,
+    expectedEndTime: addMinutes(nowDate, 5),
+  } as Leg;
+
+  const Leg2: Leg = {
+    expectedStartTime: addMinutes(nowDate, 5 + TIME_LIMIT_IN_MINUTES - 1),
+    expectedEndTime: addMinutes(nowDate, 10),
+  } as Leg;
+
+  const Leg3: Leg = {
+    expectedStartTime: addMinutes(nowDate, 5 + TIME_LIMIT_IN_MINUTES + 1),
+    expectedEndTime: addMinutes(nowDate, 10),
+  } as Leg;
+
+  const Leg4: Leg = {
+    expectedStartTime: addMinutes(nowDate, 15),
+    expectedEndTime: addMinutes(nowDate, 20),
+  } as Leg;
+  it('catches a short wait', () => {
+    const isShortWait = hasShortWaitTime([Leg1, Leg2]);
+    expect(isShortWait).toBe(true);
+  });
+  it('passes on a long wait', () => {
+    const isShortWait = hasShortWaitTime([Leg1, Leg3]);
+    expect(isShortWait).toBe(false);
+  });
+  it('catches a short wait with more legs', () => {
+    const isShortWait = hasShortWaitTime([Leg1, Leg2, Leg3, Leg4]);
+    expect(isShortWait).toBe(true);
+  });
+  it('passes on only one leg', () => {
+    const isShortWait = hasShortWaitTime([Leg1]);
+    expect(isShortWait).toBe(false);
   });
 });

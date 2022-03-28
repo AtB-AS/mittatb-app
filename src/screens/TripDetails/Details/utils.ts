@@ -2,7 +2,7 @@
 
 import {Leg} from '@atb/api/types/trips';
 
-const TIME_LIMIT_IN_MINUTES = 3;
+export const TIME_LIMIT_IN_MINUTES = 3;
 const MIN_SIGNIFICANT_WALK_IN_SECONDS = 30;
 const MIN_SIGNIFICANT_WAIT_IN_SECONDS = 30;
 
