@@ -9,6 +9,10 @@ const dictionary = {
   toPlace: _('Destinasjon', 'Destination'),
   navigation: {
     assistant: _(`Reise${softhyphen}søk`, 'Assistant'),
+    assistant_a11y: _(
+      `Aktiver for reisesøk, trykk to ganger for å nullstille søket.`,
+      'Activate for search assistant, press twice to reset search.',
+    ),
     nearby: _(`Av${softhyphen}ganger`, 'Departures'),
     ticketing: _('Billetter', 'Tickets'),
     profile: _('Min profil', 'My profile'),
