@@ -8,15 +8,15 @@ import {AccessibilityProps, TouchableOpacity} from 'react-native';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {ThemeColor} from '@atb/theme/colors';
-import BlackMonoLogo from '@atb/assets/svg/mono-icons/logo/Logo';
+import ServiceDisruption from '@atb/assets/svg/mono-icons/status/ServiceDisruption';
 
 export type ButtonModes =
   | 'back'
   | 'cancel'
   | 'close'
-  | 'home'
   | 'chat'
   | 'skip'
+  | 'status-disruption'
   | 'custom';
 export type HeaderButtonProps = {
   type: ButtonModes;
@@ -104,11 +104,11 @@ const useIconButton = (
         ...accessibilityProps,
       };
     }
-    case 'home': {
+    case 'status-disruption': {
       const {type, color, onPress, ...accessibilityProps} = buttonProps;
       return {
-        icon: <ThemeIcon colorType={color} svg={BlackMonoLogo} />,
-        onPress: onPress || navigateHome,
+        icon: <ThemeIcon colorType={color} svg={ServiceDisruption} />,
+        onPress: onPress,
         accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
         ...accessibilityProps,
       };

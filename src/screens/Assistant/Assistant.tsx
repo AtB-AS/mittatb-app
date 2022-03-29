@@ -62,6 +62,7 @@ import Results from './Results';
 import {ThemeColor} from '@atb/theme/colors';
 import * as navIcons from '@atb/assets/svg/mono-icons/navigation';
 import useTripsQuery from '@atb/screens/Assistant/use-trips-query';
+import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 
 const themeColor: ThemeColor = 'background_accent';
 
@@ -140,6 +141,43 @@ const Assistant: React.FC<Props> = ({
     date: new Date().toISOString(),
   });
 
+  const setCurrentLocationAsFrom = useCallback(
+    function setCurrentLocationAsFrom() {
+      log('set_current_location_as_from');
+      navigation.setParams({
+        fromLocation: currentLocation && {
+          ...currentLocation,
+          resultType: 'geolocation',
+        },
+        toLocation: to,
+      });
+    },
+    [navigation, currentLocation, to],
+  );
+
+  const setCurrentLocationOrRequest = useCallback(
+    async function setCurrentLocationOrRequest() {
+      if (currentLocation) {
+        setCurrentLocationAsFrom();
+      } else {
+        const status = await requestGeoPermission();
+        if (status === 'granted') {
+          setCurrentLocationAsFrom();
+        }
+      }
+    },
+    [currentLocation, setCurrentLocationAsFrom, requestGeoPermission],
+  );
+  const resetView = useCallback(() => {
+    analytics().logEvent('click_logo_reset');
+    log('reset');
+    setCurrentLocationOrRequest();
+
+    navigation.setParams({
+      toLocation: undefined,
+    });
+  }, [navigation, setCurrentLocationOrRequest]);
+
   function swap() {
     log('swap', {
       newFrom: translateLocation(to),
@@ -162,17 +200,6 @@ const Assistant: React.FC<Props> = ({
     }
   }
 
-  function setCurrentLocationAsFrom() {
-    log('set_current_location_as_from');
-    navigation.setParams({
-      fromLocation: currentLocation && {
-        ...currentLocation,
-        resultType: 'geolocation',
-      },
-      toLocation: to,
-    });
-  }
-
   function setCurrentLocationAsFromIfEmpty() {
     if (from) {
       return;
@@ -185,27 +212,6 @@ const Assistant: React.FC<Props> = ({
       callerRouteName: 'AssistantRoot',
       callerRouteParam: 'searchTime',
       searchTime,
-    });
-  }
-
-  async function setCurrentLocationOrRequest() {
-    if (currentLocation) {
-      setCurrentLocationAsFrom();
-    } else {
-      const status = await requestGeoPermission();
-      if (status === 'granted') {
-        setCurrentLocationAsFrom();
-      }
-    }
-  }
-
-  function resetView() {
-    analytics().logEvent('click_logo_reset');
-    log('reset');
-    setCurrentLocationOrRequest();
-
-    navigation.setParams({
-      toLocation: undefined,
     });
   }
 
@@ -398,6 +404,8 @@ const Assistant: React.FC<Props> = ({
 
   const screenHasFocus = useIsFocused();
 
+  const {leftButton} = useServiceDisruptionSheet();
+
   useEffect(() => {
     if (!screenHasFocus) return;
     switch (searchState) {
@@ -436,18 +444,14 @@ const Assistant: React.FC<Props> = ({
       renderHeader={renderHeader}
       highlightComponent={newsBanner}
       onRefresh={refresh}
+      isRefreshing={searchState === 'searching' && !tripPatterns.length}
       useScroll={useScroll}
       headerTitle={t(AssistantTexts.header.title)}
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
       showAlterntativeTitle={Boolean(from && to)}
-      leftButton={{
-        type: 'home',
-        color: themeColor,
-        onPress: resetView,
-        accessibilityLabel: t(AssistantTexts.header.accessibility.logo),
-        testID: 'lhb',
-      }}
+      leftButton={leftButton}
+      tabPressBehaviour={{navigation, onTabPressOnTopScroll: resetView}}
       onFullscreenTransitionEnd={(fullHeight) => {
         if (fullHeight) {
           clear();
@@ -456,16 +460,18 @@ const Assistant: React.FC<Props> = ({
       alertContext="travel"
     >
       <ScreenReaderAnnouncement message={searchStateMessage} />
-      <Results
-        tripPatterns={tripPatterns}
-        isSearching={isSearching}
-        showEmptyScreen={showEmptyScreen}
-        isEmptyResult={isEmptyResult}
-        resultReasons={noResultReasons}
-        onDetailsPressed={onPressed}
-        errorType={error}
-        searchTime={searchTime}
-      />
+      {isValidLocations && (
+        <Results
+          tripPatterns={tripPatterns}
+          isSearching={isSearching}
+          showEmptyScreen={showEmptyScreen}
+          isEmptyResult={isEmptyResult}
+          resultReasons={noResultReasons}
+          onDetailsPressed={onPressed}
+          errorType={error}
+          searchTime={searchTime}
+        />
+      )}
       {!error && isValidLocations && (
         <TouchableOpacity
           onPress={loadMore}
@@ -474,19 +480,29 @@ const Assistant: React.FC<Props> = ({
           testID="loadMoreButton"
         >
           {searchState === 'searching' ? (
-            <>
-              <ActivityIndicator
-                color={theme.text.colors.secondary}
-                style={{
-                  marginRight: theme.spacings.medium,
-                }}
-              />
-              <ThemeText color="secondary" testID="searchingForResults">
-                {tripPatterns.length
-                  ? t(AssistantTexts.results.fetchingMore)
-                  : t(AssistantTexts.searchState.searching)}
-              </ThemeText>
-            </>
+            <View style={styles.loadingIndicator}>
+              {tripPatterns.length ? (
+                <>
+                  <ActivityIndicator
+                    color={theme.text.colors.secondary}
+                    style={{
+                      marginRight: theme.spacings.medium,
+                    }}
+                  />
+                  <ThemeText color="secondary" testID="searchingForResults">
+                    {t(AssistantTexts.results.fetchingMore)}
+                  </ThemeText>
+                </>
+              ) : (
+                <ThemeText
+                  color="secondary"
+                  style={styles.loadingText}
+                  testID="searchingForResults"
+                >
+                  {t(AssistantTexts.searchState.searching)}
+                </ThemeText>
+              )}
+            </View>
           ) : (
             <>
               {loadMore ? (
@@ -536,6 +552,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   fadeChild: {
     marginVertical: theme.spacings.medium,
+  },
+  loadingIndicator: {
+    marginTop: theme.spacings.xLarge,
+    flexDirection: 'row',
+  },
+  loadingText: {
+    marginTop: theme.spacings.xLarge * 2,
   },
   loadMoreButton: {
     paddingVertical: theme.spacings.medium,

@@ -64,7 +64,7 @@ const NavigationRoot = () => {
         component={Assistant}
         options={tabSettings(
           t(dictionary.navigation.assistant),
-          t(dictionary.navigation.assistant),
+          t(dictionary.navigation.assistant_a11y),
           AssistantIcon,
           lineHeight,
           'assistantTab',

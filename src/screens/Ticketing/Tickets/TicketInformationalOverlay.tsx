@@ -30,7 +30,6 @@ export default function TicketInformationalOverlay() {
       <FullScreenHeader
         title={t(TicketsTexts.header.title)}
         rightButton={{type: 'chat'}}
-        leftButton={{type: 'home'}}
       />
       <ScrollView style={styles.scrollView}>
         <ThemeText color={themeColor} type="body__primary--jumbo--bold">

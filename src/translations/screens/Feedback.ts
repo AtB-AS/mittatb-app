@@ -16,7 +16,8 @@ const FeedbackTexts = {
       'Mer på hjertet? Vi hører gjerne fra deg!',
       'Additional thoughts? Please tell us!',
     ),
-    button: _('Snakk med app-teamet', 'Chat with the app team'),
+    intercomButton: _('Snakk med app-teamet', 'Chat with the app team'),
+    contactsheetButton: _('Kontakt kundeservice', 'Contact customer support'),
   },
 };
 

@@ -189,9 +189,10 @@ const TripSection: React.FC<TripSectionProps> = ({
   return (
     <>
       {sectionOutput}
-      {wait?.waitAfter && significantWaitTime(wait.waitSeconds) && (
-        <WaitSection {...wait} />
-      )}
+      {wait?.mustWaitForNextLeg &&
+        significantWaitTime(wait.waitTimeInSeconds) && (
+          <WaitSection {...wait} />
+        )}
     </>
   );
 

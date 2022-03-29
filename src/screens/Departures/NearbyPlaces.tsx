@@ -26,6 +26,7 @@ import {NearestStopPlacesQuery} from '@atb/api/types/generated/NearestStopPlaces
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {DeparturesStackParams} from '.';
 import StopPlaceItem from './components/StopPlaceItem';
+import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 
 const DateOptions = ['now', 'departure'] as const;
 type DateOptionType = typeof DateOptions[number];
@@ -164,6 +165,7 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
       place,
     });
   };
+  const {leftButton} = useServiceDisruptionSheet();
 
   useEffect(() => {
     if (updatingLocation)
@@ -185,6 +187,7 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
     <SimpleDisappearingHeader
       onRefresh={refresh}
       isRefreshing={isLoading}
+      leftButton={leftButton}
       header={
         <Header
           fromLocation={fromLocation}
@@ -200,7 +203,6 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
       }
       headerTitle={t(DeparturesTexts.header.title)}
       useScroll={activateScroll}
-      leftButton={{type: 'home', color: 'background_accent', testID: 'lhb'}}
       alertContext={'travel'}
       setFocusOnLoad={true}
     >
