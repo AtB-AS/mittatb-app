@@ -460,16 +460,18 @@ const Assistant: React.FC<Props> = ({
       alertContext="travel"
     >
       <ScreenReaderAnnouncement message={searchStateMessage} />
-      <Results
-        tripPatterns={tripPatterns}
-        isSearching={isSearching}
-        showEmptyScreen={showEmptyScreen}
-        isEmptyResult={isEmptyResult}
-        resultReasons={noResultReasons}
-        onDetailsPressed={onPressed}
-        errorType={error}
-        searchTime={searchTime}
-      />
+      {isValidLocations && (
+        <Results
+          tripPatterns={tripPatterns}
+          isSearching={isSearching}
+          showEmptyScreen={showEmptyScreen}
+          isEmptyResult={isEmptyResult}
+          resultReasons={noResultReasons}
+          onDetailsPressed={onPressed}
+          errorType={error}
+          searchTime={searchTime}
+        />
+      )}
       {!error && isValidLocations && (
         <TouchableOpacity
           onPress={loadMore}
