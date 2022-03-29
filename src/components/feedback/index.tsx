@@ -1,9 +1,9 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View} from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import ThemeText from '@atb/components/text';
 import Button from '../button';
-import {useTranslation, FeedbackTexts} from '@atb/translations';
+import {FeedbackTexts, useTranslation} from '@atb/translations';
 import {
   FeedbackQuestionsViewContext,
   useFeedbackQuestion,
@@ -43,10 +43,7 @@ const GoodOrBadQuestion = ({
 
   return (
     <>
-      <ThemeText
-        type="heading__component"
-        style={[styles.questionText, styles.centerText]}
-      >
+      <ThemeText type="heading__component" style={styles.questionText}>
         {category.introText[language]}
       </ThemeText>
 
@@ -81,8 +78,8 @@ type FeedbackProps = {
 
 type VersionStats = {
   // answered is a number so that we know at which render the user answered
-  answered: number | null;
-  count: number;
+  answeredAtDisplayCount?: number;
+  displayCount: number;
   surveyVersion: number;
   doNotShowAgain: boolean;
   viewContext: FeedbackQuestionsViewContext;
@@ -95,8 +92,7 @@ export const Feedback = ({
 }: FeedbackProps) => {
   const styles = useFeedbackStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
-  const category = useFeedbackQuestion(viewContext);
+  const feedbackConfig = useFeedbackQuestion(viewContext);
   const [submitted, setSubmitted] = useState(false);
   const [selectedOpinion, setSelectedOpinion] = useState(
     Opinions.NotClickedYet,
@@ -104,7 +100,7 @@ export const Feedback = ({
   const [selectedAlternativeIds, setSelectedAlternativeIds] = useState<
     number[]
   >([]);
-  const [displayStats, setDisplayStats] = useState<VersionStats[]>([]);
+  const [versionStatsList, setVersionStatsList] = useState<VersionStats[]>([]);
   const [firebaseId, setFirebaseId] = useState<string>();
 
   useEffect(() => {
@@ -133,94 +129,85 @@ export const Feedback = ({
     [selectedAlternativeIds],
   );
 
-  if (!category) return null;
+  if (!feedbackConfig) return null;
 
   const incrementCounterAndSetDisplayStats = async () => {
-    if (category) {
-      const defaultDisplayStatObject = {
-        answered: null,
+    if (feedbackConfig) {
+      const defaultDisplayStatObject: VersionStats = {
+        answeredAtDisplayCount: undefined,
         doNotShowAgain: false,
-        count: 0,
-        surveyVersion: category.surveyVersion,
+        displayCount: 1,
+        surveyVersion: feedbackConfig.surveyVersion,
         viewContext: viewContext,
       };
 
-      let displayStatsJSON: VersionStats[] = [];
-      let fetchedDisplayStats = await storage.get(
+      let versionStatsList: VersionStats[] = [];
+      let fetchedVersionsStatsJson = await storage.get(
         '@ATB_feedback_display_stats',
       );
-
-      if (fetchedDisplayStats === null) {
-        displayStatsJSON.push(defaultDisplayStatObject);
-      } else {
-        displayStatsJSON = JSON.parse(fetchedDisplayStats);
+      if (fetchedVersionsStatsJson) {
+        versionStatsList = JSON.parse(fetchedVersionsStatsJson);
       }
+      versionStatsList = filterOutOldSurveyVersionStats(versionStatsList);
 
-      const statsForCurrentSurveyVersionAndViewContext = displayStatsJSON.find(
-        (entry: VersionStats) =>
-          entry.surveyVersion === category.surveyVersion &&
-          entry.viewContext === viewContext,
-      );
+      const statsForCurrentSurveyVersionAndViewContext =
+        findCurrentVersionStats(versionStatsList);
 
       if (statsForCurrentSurveyVersionAndViewContext) {
-        statsForCurrentSurveyVersionAndViewContext.count++;
+        statsForCurrentSurveyVersionAndViewContext.displayCount++;
       } else {
-        const removeOldSurveyVersionStats = () => {
-          const arrayWithoutThisViewContext = displayStatsJSON.filter(
-            (statObject) => statObject.viewContext !== viewContext,
-          );
-
-          const numberOfSurveyVersionsToKeep = 3;
-          const arrayWithReasonablyNewElementsFromThisViewContext =
-            displayStatsJSON.filter(
-              (statObject) =>
-                statObject.surveyVersion >
-                category.surveyVersion - numberOfSurveyVersionsToKeep,
-            );
-
-          arrayWithReasonablyNewElementsFromThisViewContext.forEach(
-            (displayStatObject) =>
-              arrayWithoutThisViewContext.push(displayStatObject),
-          );
-
-          displayStatsJSON = arrayWithoutThisViewContext;
-        };
-
-        removeOldSurveyVersionStats();
-        displayStatsJSON.push(defaultDisplayStatObject);
+        versionStatsList.push(defaultDisplayStatObject);
       }
-      setDisplayStats(displayStatsJSON);
+
+      setVersionStatsList(versionStatsList);
       storage.set(
         '@ATB_feedback_display_stats',
-        JSON.stringify(displayStatsJSON),
+        JSON.stringify(versionStatsList),
       );
     }
+  };
+
+  const filterOutOldSurveyVersionStats = (versionStatsList: VersionStats[]) => {
+    const numberOfSurveyVersionsToKeep = 3;
+    return versionStatsList.filter((vs) => {
+      const isSameViewContext = vs.viewContext === feedbackConfig.viewContext;
+      const isSurveyVersionOutdated =
+        vs.surveyVersion <
+        feedbackConfig.surveyVersion - numberOfSurveyVersionsToKeep;
+
+      return !(isSameViewContext && isSurveyVersionOutdated);
+    });
   };
 
   const setFeedbackAnswered = () => {
-    const newObject = [...displayStats];
-    const statsForCurrentSurveyVersionAndViewContext = newObject.find(
-      (entry) =>
-        entry.surveyVersion === category.surveyVersion &&
-        entry.viewContext === viewContext,
-    );
-    if (statsForCurrentSurveyVersionAndViewContext) {
-      const surveyVersionAlreadyAnsweredOnce =
-        statsForCurrentSurveyVersionAndViewContext.count ===
-        category.repromptDisplayCount +
-          (statsForCurrentSurveyVersionAndViewContext.answered || 9000);
-      if (!surveyVersionAlreadyAnsweredOnce) {
-        statsForCurrentSurveyVersionAndViewContext.answered =
-          statsForCurrentSurveyVersionAndViewContext.count;
-        storage.set('@ATB_feedback_display_stats', JSON.stringify(newObject));
+    const currentVersionStats = findCurrentVersionStats(versionStatsList);
+
+    if (currentVersionStats) {
+      if (currentVersionStats.answeredAtDisplayCount) {
+        currentVersionStats.doNotShowAgain = true;
       }
+      currentVersionStats.answeredAtDisplayCount =
+        currentVersionStats.displayCount;
+      storage.set(
+        '@ATB_feedback_display_stats',
+        JSON.stringify(versionStatsList),
+      );
     }
   };
 
+  const findCurrentVersionStats = (list: VersionStats[]) =>
+    list.find(
+      (entry: VersionStats) =>
+        entry.surveyVersion === feedbackConfig.surveyVersion &&
+        entry.viewContext === viewContext,
+    );
+
   const submitFeedbackWithAlternatives = async () => {
+    if (!currentVersionStats) return;
+
     try {
       const selectedAnswers = selectedAlternativeIds.map((altId) =>
-        category.question?.alternatives.find(
+        feedbackConfig.question?.alternatives.find(
           (alt) => alt.alternativeId === altId,
         ),
       );
@@ -228,13 +215,8 @@ export const Feedback = ({
       const appVersion = APP_VERSION;
       const organization = APP_ORG;
       const submitTime = Date.now();
-      const displayCount = statsForCurrentSurveyVersionAndViewContext?.count
-        ? statsForCurrentSurveyVersionAndViewContext.count + 1
-        : -1;
-      const isReprompt =
-        statsForCurrentSurveyVersionAndViewContext?.count ===
-        (statsForCurrentSurveyVersionAndViewContext?.answered || 9000) +
-          (category.repromptDisplayCount + 1);
+      const displayCount = currentVersionStats.displayCount;
+      const isReprompt = currentVersionStats?.answeredAtDisplayCount;
 
       const dataToServer = {
         submitTime,
@@ -242,7 +224,7 @@ export const Feedback = ({
         organization,
         selectedOpinion,
         viewContext,
-        category,
+        category: feedbackConfig,
         selectedAnswers,
         isReprompt,
         displayCount,
@@ -257,28 +239,28 @@ export const Feedback = ({
       Bugsnag.notify(err);
     } finally {
       setSubmitted(true);
-      if (!category.alwaysShow) {
+      if (!feedbackConfig.alwaysShow) {
         setFeedbackAnswered();
       }
     }
   };
 
   const setDoNotShowAgain = () => {
-    const newArray = [...displayStats];
-    const currentVersionStats = newArray.find(
-      (versionStat) => versionStat.surveyVersion === category.surveyVersion,
-    );
+    const currentVersionStats = findCurrentVersionStats(versionStatsList);
     if (currentVersionStats) {
       currentVersionStats.doNotShowAgain = true;
-      storage.set('@ATB_feedback_display_stats', JSON.stringify(newArray));
-      setDisplayStats(newArray);
+      storage.set(
+        '@ATB_feedback_display_stats',
+        JSON.stringify(versionStatsList),
+      );
+      setVersionStatsList(versionStatsList);
     }
   };
 
   if (submitted) {
     const selectedTextAlternatives = selectedAlternativeIds.map(
       (altId) =>
-        category.question?.alternatives.find(
+        feedbackConfig.question?.alternatives.find(
           (alt) => alt.alternativeId === altId,
         )?.alternativeText.nb,
     );
@@ -289,40 +271,35 @@ export const Feedback = ({
         opinion={selectedOpinion}
         selectedTextAlternatives={selectedTextAlternatives}
         firebaseId={firebaseId}
+        style={styles.submittedComponent}
       />
     );
   }
 
-  if (!displayStats || displayStats.length < 1) return null;
-  const statsForCurrentSurveyVersionAndViewContext = displayStats.find(
-    (entry: VersionStats) =>
-      entry.surveyVersion === category.surveyVersion &&
-      entry.viewContext === viewContext,
-  );
+  const currentVersionStats = findCurrentVersionStats(versionStatsList);
 
-  if (!statsForCurrentSurveyVersionAndViewContext) return null;
-  if (statsForCurrentSurveyVersionAndViewContext.doNotShowAgain) return null;
+  if (!currentVersionStats) return null;
+  if (currentVersionStats.doNotShowAgain) return null;
 
-  if (category.gracePeriodDisplayCount) {
-    if (
-      statsForCurrentSurveyVersionAndViewContext.count - 1 <
-      category.gracePeriodDisplayCount
-    )
-      return null;
+  if (
+    feedbackConfig.gracePeriodDisplayCount &&
+    feedbackConfig.gracePeriodDisplayCount > currentVersionStats.displayCount
+  ) {
+    return null;
   }
 
-  if (!category.alwaysShow) {
-    if (category.repromptDisplayCount) {
-      if (statsForCurrentSurveyVersionAndViewContext.answered) {
-        const notReadyForReprompt =
-          statsForCurrentSurveyVersionAndViewContext.count -
-            statsForCurrentSurveyVersionAndViewContext.answered !==
-          category.repromptDisplayCount + 1;
-        if (notReadyForReprompt) {
+  if (!feedbackConfig.alwaysShow) {
+    if (feedbackConfig.repromptDisplayCount) {
+      if (currentVersionStats.answeredAtDisplayCount) {
+        const shouldReprompt =
+          currentVersionStats.displayCount -
+            currentVersionStats.answeredAtDisplayCount >=
+          feedbackConfig.repromptDisplayCount;
+        if (shouldReprompt) {
           return null;
         }
       }
-    } else if (statsForCurrentSurveyVersionAndViewContext.answered) {
+    } else if (currentVersionStats.answeredAtDisplayCount) {
       return null;
     }
   }
@@ -343,7 +320,7 @@ export const Feedback = ({
           handleAnswerPress={({alternativeId}) =>
             toggleSelectedAlternativeId(alternativeId)
           }
-          question={category.question}
+          question={feedbackConfig.question}
         />
 
         {selectedOpinion !== Opinions.NotClickedYet && (
@@ -357,17 +334,13 @@ export const Feedback = ({
           </View>
         )}
         {selectedOpinion === Opinions.NotClickedYet &&
-          category.alwaysShow === false &&
-          category.dismissable && (
-            <View style={styles.submitButtonView}>
-              <ThemeText
-                style={styles.centerText}
-                type="body__tertiary"
-                onPress={setDoNotShowAgain}
-              >
-                {t(FeedbackTexts.goodOrBadTexts.doNotShowAgain)}
-              </ThemeText>
-            </View>
+          feedbackConfig.dismissable && (
+            <Button
+              style={styles.submitButtonView}
+              onPress={setDoNotShowAgain}
+              text={t(FeedbackTexts.goodOrBadTexts.doNotShowAgain)}
+              mode={'tertiary'}
+            />
           )}
       </View>
     );
@@ -379,9 +352,7 @@ const useFeedbackStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.colors.background_1.backgroundColor,
     borderRadius: theme.border.radius.regular,
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingBottom: theme.spacings.xLarge,
-    marginVertical: theme.spacings.medium,
+    padding: theme.spacings.xLarge,
   },
   infoBoxText: theme.typography.body__primary,
   centerText: {
@@ -391,14 +362,13 @@ const useFeedbackStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    paddingVertical: theme.spacings.small,
   },
   spacing: {
     width: theme.spacings.medium,
   },
   questionText: {
-    marginTop: theme.spacings.xLarge,
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacings.xLarge,
+    textAlign: 'center',
   },
   submitButtonView: {
     marginTop: theme.spacings.medium,
@@ -406,6 +376,10 @@ const useFeedbackStyles = StyleSheet.createThemeHook((theme) => ({
   submittedView: {
     flex: 1,
     alignItems: 'center',
+  },
+  submittedComponent: {
+    marginBottom: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium,
   },
 }));
 

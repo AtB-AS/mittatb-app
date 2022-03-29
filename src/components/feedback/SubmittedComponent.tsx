@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import Button from '../button';
 import ThemeText from '@atb/components/text';
@@ -14,6 +14,7 @@ type SubmittedComponentProps = {
   opinion: Opinions;
   selectedTextAlternatives: (string | undefined)[];
   firebaseId?: string;
+  style?: StyleProp<ViewStyle>;
 };
 
 const SubmittedComponent = ({
@@ -21,6 +22,7 @@ const SubmittedComponent = ({
   opinion,
   selectedTextAlternatives,
   firebaseId,
+  style,
 }: SubmittedComponentProps) => {
   const styles = useSubmittedComponentStyles();
   const {t} = useTranslation();
@@ -39,11 +41,8 @@ const SubmittedComponent = ({
   };
 
   return (
-    <View style={styles.container}>
-      <ThemeText
-        type="body__primary--bold"
-        style={[styles.questionText, styles.centerText]}
-      >
+    <View style={[styles.container, style]}>
+      <ThemeText type="body__primary--bold" style={styles.questionText}>
         {t(FeedbackTexts.submittedText.thanks)}
       </ThemeText>
       <ThemeText style={styles.centerText}>
@@ -66,15 +65,13 @@ const useSubmittedComponentStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.colors.background_1.backgroundColor,
     borderRadius: theme.border.radius.regular,
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingBottom: theme.spacings.xLarge,
-    marginVertical: theme.spacings.medium,
+    padding: theme.spacings.xLarge,
   },
   centerText: {
     textAlign: 'center',
   },
   questionText: {
-    marginTop: theme.spacings.xLarge,
+    textAlign: 'center',
     marginBottom: theme.spacings.large,
   },
   button: {
