@@ -14,15 +14,15 @@ import TripRow from './TripRow';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 
 export type WaitDetails = {
-  waitAfter: boolean;
-  waitSeconds: number;
+  mustWaitForNextLeg: boolean;
+  waitTimeInSeconds: number;
 };
 
 const WaitSection: React.FC<WaitDetails> = (wait) => {
   const style = useSectionStyles();
   const {t, language} = useTranslation();
-  const waitTime = secondsToDuration(wait.waitSeconds, language);
-  const shortWait = timeIsShort(wait.waitSeconds);
+  const waitTime = secondsToDuration(wait.waitTimeInSeconds, language);
+  const shortWait = timeIsShort(wait.waitTimeInSeconds);
   const iconColor = useTransportationColor();
 
   return (
