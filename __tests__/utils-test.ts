@@ -70,7 +70,7 @@ describe('Short wait time evaluator', () => {
     expect(isShortWait).toBe(false);
   });
   it('passes with empty array', () => {
-    const isShortWait = hasShortWaitTime([Leg1]);
+    const isShortWait = hasShortWaitTime([]);
     expect(isShortWait).toBe(false);
   });
 });
