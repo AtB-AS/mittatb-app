@@ -1,11 +1,12 @@
 import React from 'react';
-import {View} from 'react-native';
+import {Linking, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import Button from '../button';
 import ThemeText from '@atb/components/text';
 import {useTranslation, FeedbackTexts} from '@atb/translations';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import Intercom from 'react-native-intercom';
-import {Chat} from '@atb/assets/svg/mono-icons/actions';
+import {Chat, Support} from '@atb/assets/svg/mono-icons/actions';
 import {FeedbackQuestionsViewContext} from './FeedbackContext';
 import {Opinions} from '.';
 
@@ -24,18 +25,23 @@ const SubmittedComponent = ({
 }: SubmittedComponentProps) => {
   const styles = useSubmittedComponentStyles();
   const {t} = useTranslation();
+  const {customer_service_url, enable_intercom} = useRemoteConfig();
 
   const handleButtonClick = () => {
-    const alternativeArrayConvertedToString =
-      selectedTextAlternatives.join(', ');
-    Intercom.logEvent('feedback-given', {
-      viewContext: `Bruker har gitt feedback på ${viewContext}.`,
-      mainImpression: `Hovedinntrykket var ${opinion}.`,
-      selectedAlternatives:
-        alternativeArrayConvertedToString || 'Ingen alternativer valgt.',
-      firebaseId,
-    });
-    Intercom.displayMessageComposer();
+    if (enable_intercom) {
+      const alternativeArrayConvertedToString =
+        selectedTextAlternatives.join(', ');
+      Intercom.logEvent('feedback-given', {
+        viewContext: `Bruker har gitt feedback på ${viewContext}.`,
+        mainImpression: `Hovedinntrykket var ${opinion}.`,
+        selectedAlternatives:
+          alternativeArrayConvertedToString || 'Ingen alternativer valgt.',
+        firebaseId,
+      });
+      Intercom.displayMessageComposer();
+    } else {
+      Linking.openURL(customer_service_url);
+    }
   };
 
   return (
@@ -50,13 +56,23 @@ const SubmittedComponent = ({
         {t(FeedbackTexts.additionalFeedback.text)}
       </ThemeText>
       <View style={styles.button}>
-        <Button
-          onPress={handleButtonClick}
-          text={t(FeedbackTexts.additionalFeedback.button)}
-          icon={Chat}
-          color="primary_2"
-          iconPosition="right"
-        />
+        {enable_intercom ? (
+          <Button
+            onPress={handleButtonClick}
+            text={t(FeedbackTexts.additionalFeedback.intercomButton)}
+            icon={Chat}
+            color="primary_2"
+            iconPosition="right"
+          />
+        ) : (
+          <Button
+            onPress={handleButtonClick}
+            text={t(FeedbackTexts.additionalFeedback.contactsheetButton)}
+            icon={Support}
+            color="primary_2"
+            iconPosition="right"
+          />
+        )}
       </View>
     </View>
   );
