@@ -30,6 +30,7 @@ export default function TimeInputItem(props: TimeInputItemProps) {
           onChange={(_, date) => {
             onChange(dateToTimeString(date, locale.language));
           }}
+          testID="timeInput"
         />
       </View>
     </InternalLabeledItem>
