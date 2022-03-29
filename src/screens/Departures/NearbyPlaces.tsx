@@ -195,8 +195,8 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
           openLocationSearch={openLocationSearch}
           setCurrentLocationOrRequest={setCurrentLocationOrRequest}
           setLocation={(location: LocationWithMetadata) => {
-            navigation.setParams({
-              location,
+            navigation.navigate('PlaceScreen', {
+              place: location as Place,
             });
           }}
         />
