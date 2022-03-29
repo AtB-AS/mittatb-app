@@ -124,6 +124,7 @@ const AssistantTexts = {
         _(`I overmorgen - ${date}`, `Day after tomorrow - ${date}`),
     },
     resultItem: {
+      passedTrip: _('Passert reise, ', 'Passed trip, '),
       header: {
         time: (startTime: string, endTime: string) =>
           _(
