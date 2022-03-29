@@ -131,8 +131,8 @@ export const getLineTitleV2 = async (quayId: string, itemId: string) => {
       .withAncestor(by.id(itemId).withAncestor(by.id(quayId))),
   )
     .getAttributes()
-    .then((e) => (!('elements' in e) ? e.text : 'NA: then1'))
-    .catch((error) => 'NA: error1 ' + error.toString());
+    .then((e) => (!('elements' in e) ? e.text : 'NA'))
+    .catch((error) => 'Error ' + error.toString());
 
   let title = await element(
     by
@@ -140,8 +140,8 @@ export const getLineTitleV2 = async (quayId: string, itemId: string) => {
       .withAncestor(by.id(itemId).withAncestor(by.id(quayId))),
   )
     .getAttributes()
-    .then((e) => (!('elements' in e) ? e.text : 'NA: then2'))
-    .catch((error) => 'NA: error2 ' + error.toString());
+    .then((e) => (!('elements' in e) ? e.text : 'NA'))
+    .catch((error) => 'Error ' + error.toString());
 
   return title !== undefined || publicCode !== undefined
     ? `${publicCode} ${title}`

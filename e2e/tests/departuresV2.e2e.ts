@@ -9,7 +9,7 @@ import {
 import {
   expectToBeVisibleByText,
   expectTextById,
-  expectElementToContainText,
+  expectElementIdToHaveText,
   expectToBeEnabled,
   expectNotToBeEnabled,
 } from '../utils/expectHelpers';
@@ -70,8 +70,8 @@ describe('Departures v2', () => {
     await chooseBusStop('stopPlaceItem0', departureStop);
 
     // Platform buttons
-    await expectElementToContainText('quaySelectionButton', departureQuay0);
-    await expectElementToContainText('quaySelectionButton', departureQuay1);
+    await expectElementIdToHaveText('quaySelectionButton', departureQuay0);
+    await expectElementIdToHaveText('quaySelectionButton', departureQuay1);
 
     await expectToBeEnabled('allStopsSelectionButton');
     await expectNotToBeEnabled('quaySelectionButton', 0);

@@ -55,7 +55,7 @@ export const expectTextById = async (id: string, text: string) => {
     await expect(element(by.id(id))).toHaveText(text);
 };
 
-export const expectElementToContainText = async (
+export const expectElementIdToHaveText = async (
     parentId: string,
     childText: string,
 ) => {
@@ -64,7 +64,22 @@ export const expectElementToContainText = async (
     ).toExist();
 };
 
-export const expectElementToContainId = async (
+// Expect that a given element has a text attribute that contains param: text
+export async function expectElementToContainText(text: string, elementRef: Detox.NativeElement, index:number = 0) {
+    let isIncluded = await elementRef
+      .getAttributes()
+      .then((e) => {
+          return !('elements' in e)
+            ? e.text?.includes(text)
+            : e.elements[index].text?.includes(text)
+      })
+      .catch((e) => false)
+    if (isIncluded === undefined){isIncluded = false}
+
+    expectBoolean(isIncluded, true)
+}
+
+export const expectElementIdToContainId = async (
     parentId: string,
     childId: string,
 ) => {
@@ -73,7 +88,7 @@ export const expectElementToContainId = async (
     ).toExist();
 };
 
-export const expectElementNotToContainId = async (
+export const expectElementIdNotToContainId = async (
     parentId: string,
     childId: string,
 ) => {
@@ -94,6 +109,10 @@ const expectNotToExists = async (elementRef: Detox.NativeElement) => {
 
 export const expectToExistsById = async (id: string) => {
     await expectExists(element(by.id(id)));
+};
+
+export const expectToExistsByIdHierarchy = async (elementMatcher: Detox.NativeMatcher) => {
+    await expectExists(element(elementMatcher));
 };
 
 export const expectNotToExistsById = async (id: string) => {
