@@ -287,7 +287,7 @@ const DisappearingHeader: React.FC<Props> = ({
                   refreshing={isRefreshing}
                   onRefresh={onRefresh}
                   progressViewOffset={contentHeight}
-                  tintColor={theme.colors[themeColor].color}
+                  tintColor={theme.text.colors.secondary}
                 />
               }
               onScroll={Animated.event(
