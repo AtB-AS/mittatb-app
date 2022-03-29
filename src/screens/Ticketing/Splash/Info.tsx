@@ -24,7 +24,6 @@ export default function SplashInfo({navigation}: Props) {
       <Header
         title={t(TicketSplashTexts.header.title)}
         rightButton={{type: 'chat'}}
-        leftButton={{type: 'home'}}
         color="primary_2"
       />
       <View style={styles.bannerContainer}>
