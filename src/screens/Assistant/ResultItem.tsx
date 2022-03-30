@@ -174,7 +174,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 
   return (
     <TouchableOpacity
-      accessibilityLabel={tripSummary(tripPattern, t, language)}
+      accessibilityLabel={tripSummary(tripPattern, t, language, isInPast)}
       accessibilityHint={t(
         AssistantTexts.results.resultItem.footer.detailsHint,
       )}
@@ -410,11 +410,14 @@ const tripSummary = (
   tripPattern: TripPattern,
   t: TranslateFunction,
   language: Language,
+  isInPast: boolean,
 ) => {
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
   const firstLeg = nonFootLegs[0];
 
   return `
+    ${isInPast ? t(AssistantTexts.results.resultItem.passedTrip) : ''}
+
     ${
       firstLeg
         ? t(
