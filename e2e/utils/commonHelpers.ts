@@ -1,4 +1,4 @@
-import { by, element, expect } from "detox";
+import {by, element, expect} from 'detox';
 import {tapById} from './interactionHelpers';
 import {replaceTextById} from './expectHelpers';
 
@@ -39,8 +39,8 @@ export const chooseSearchResult = async (id: string) => {
 
 // Set the time. Use format 'HH:mm'
 export const setTimeInDateTimePicker = async (time: string) => {
-  await element(by.id('timeInput')).setDatePickerDate(time, "HH:mm");
-}
+  await element(by.id('timeInput')).setDatePickerDate(time, 'HH:mm');
+};
 
 // Get the number of an id with increasing id-number, e.g. 'item0, ..., itemN'
 export const getNumberOfIncreasedIds = async (id: string) => {
@@ -70,7 +70,9 @@ export const getNumberOfIds = async (id: string) => {
 };
 
 // Get the number of an id in a hierarchy
-export const getNumberOfHierarchyIds = async (elementMatcher: Detox.NativeMatcher) => {
+export const getNumberOfHierarchyIds = async (
+  elementMatcher: Detox.NativeMatcher,
+) => {
   return await element(elementMatcher)
     .getAttributes()
     .then((e) => (!('elements' in e) ? 1 : e.elements.length))
@@ -80,8 +82,21 @@ export const getNumberOfHierarchyIds = async (elementMatcher: Detox.NativeMatche
 // true: id or idHierarchy exists
 // false: id or idHierarchy does not exists
 export const idExists = async (elementMatcher: Detox.NativeMatcher) => {
-  return await expect(element(elementMatcher)).toExist()
-    .then(e => true)
-    .catch(e => false)
-}
+  return await expect(element(elementMatcher))
+    .toExist()
+    .then((e) => true)
+    .catch((e) => false);
+};
 
+// Get current time
+export const getCurrentTime = () => {
+  function addZero(i: number) {
+    return i < 10 ? '0' + i.toString() : i.toString();
+  }
+
+  let date = new Date();
+  let hr = addZero(date.getHours());
+  let min = addZero(date.getMinutes());
+
+  return `${hr}:${min}`;
+};

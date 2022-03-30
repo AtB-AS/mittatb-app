@@ -234,7 +234,7 @@ export const getDepartureTimes = async (noTravelSuggestions: number) => {
       .then((e) => (!('elements' in e) ? e.text?.split(' ') : ['00:00']))
       .catch((e) => ['00:00']);
 
-    let depTime: string = arrDepTime !== undefined ? arrDepTime[arrDepTime.length - 1] : '00:00'
+    let depTime: string = arrDepTime !== undefined ? arrDepTime[0] : '00:00'
 
     depTimeList.push(depTime)
   }
@@ -253,9 +253,9 @@ export const getArrivalTimes = async (noTravelSuggestions: number) => {
       .then((e) => (!('elements' in e) ? e.text?.split(' ') : ['00:00']))
       .catch((e) => ['00:00']);
 
-    let depTime: string = arrDepTime !== undefined ? arrDepTime[0] : '00:00'
+    let arrTime: string = arrDepTime !== undefined ? arrDepTime[arrDepTime.length - 1] : '00:00'
 
-    arrTimeList.push(depTime)
+    arrTimeList.push(arrTime)
   }
 
   return arrTimeList
