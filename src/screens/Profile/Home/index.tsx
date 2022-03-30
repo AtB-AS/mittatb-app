@@ -80,7 +80,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
     <View style={style.container}>
       <FullScreenHeader
         title={t(ProfileTexts.header.title)}
-        leftButton={{type: 'home'}}
         rightButton={{type: 'chat'}}
       />
 

@@ -15,10 +15,10 @@ const ScreenHeaderTexts = {
       text: _('Lukk', 'Close'),
       a11yHint: _('Aktivér for å lukke', 'Activate to close'),
     },
-    home: {
+    'status-disruption': {
       a11yHint: _(
-        'Aktivér for å gå til startskjerm',
-        'Ativate to go to start screen',
+        'Aktivér for å gå til driftsavvik',
+        'Ativate to go to service disruptions',
       ),
     },
     skip: {
