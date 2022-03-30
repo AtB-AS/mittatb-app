@@ -15,11 +15,11 @@ const defaulConfigurationContextState: ConfigurationContextState = {
   preassignedFareproducts: [],
 };
 
-const ConfigurationContext = createContext<ConfigurationContextState>(
+const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
   defaulConfigurationContextState,
 );
 
-export const ConfigurationContextProvider: React.FC = ({children}) => {
+export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const hello = '';
   const [preassignedFareproducts, setPreassignedFareproducts] = useState<
     PreassignedFareProduct[]
@@ -53,14 +53,14 @@ export const ConfigurationContextProvider: React.FC = ({children}) => {
   );
 
   return (
-    <ConfigurationContext.Provider value={memoizedState}>
+    <FirestoreConfigurationContext.Provider value={memoizedState}>
       {children}
-    </ConfigurationContext.Provider>
+    </FirestoreConfigurationContext.Provider>
   );
 };
 
-export function useConfigurationContext() {
-  const context = useContext(ConfigurationContext);
+export function useFirestoreConfiguration() {
+  const context = useContext(FirestoreConfigurationContext);
   if (context === undefined) {
     throw new Error(
       'useConfigurationContext must be used within an useConfigurationContextProvider',
