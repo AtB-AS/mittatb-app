@@ -22,6 +22,7 @@ jobs:
           echo "APP_ENVIRONMENT=store" >> $GITHUB_ENV
           echo "KEYSTORE_PATH=./android/app/keystore.jks" >> $GITHUB_ENV
           echo "APK_FILE_NAME=app-store.apk" >> $GITHUB_ENV
+          echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
         env:
