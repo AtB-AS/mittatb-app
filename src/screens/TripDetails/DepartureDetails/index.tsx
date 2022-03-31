@@ -242,7 +242,6 @@ function CallGroup({
             subMode={subMode}
             parentSituations={parentSituations}
             collapseButton={i === 0 ? collapseButton : null}
-            testID={'tripItem' + i.toString()}
           />
         );
       })}
@@ -260,7 +259,6 @@ type TripItemProps = {
   collapseButton: JSX.Element | null;
   isStart: boolean;
   isEnd: boolean;
-  testID?: string;
 };
 function TripItem({
   isStartPlace,
@@ -272,7 +270,6 @@ function TripItem({
   collapseButton,
   isStart,
   isEnd,
-  testID,
 }: TripItemProps) {
   const navigation = useNavigation<DetailsModalNavigationProp>();
   const {t} = useTranslation();
@@ -285,7 +282,7 @@ function TripItem({
   const showSituations = type !== 'passed' && call.situations.length > 0;
 
   return (
-    <View style={[styles.place, isStart && styles.startPlace]} testID={testID}>
+    <View style={[styles.place, isStart && styles.startPlace]}>
       <TripLegDecoration
         hasStart={isStart}
         hasCenter={isBetween}
@@ -305,9 +302,7 @@ function TripItem({
         onPress={() => handleQuayPress(call.quay)}
         testID={'legType_' + type}
       >
-        <ThemeText testID={testID + 'Name'}>
-          {getQuayName(call.quay)}{' '}
-        </ThemeText>
+        <ThemeText testID="quayName">{getQuayName(call.quay)} </ThemeText>
       </TripRow>
       {showSituations && (
         <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
