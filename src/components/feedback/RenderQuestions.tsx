@@ -1,6 +1,6 @@
 import React from 'react';
 import {Opinions} from '.';
-import {QuestionType, AlternativeType, FeedbackConfiguration} from './FeedbackContext';
+import {QuestionType, AlternativeType} from './FeedbackContext';
 import {useTranslation} from '@atb/translations';
 import ThemeText from '@atb/components/text';
 import {View} from 'react-native';

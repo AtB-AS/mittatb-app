@@ -10,7 +10,7 @@ export type FeedbackConfiguration = {
   dismissable: boolean;
   surveyVersion: number;
   gracePeriodDisplayCount: number;
-  repromptDisplayCount  : number;
+  repromptDisplayCount: number;
   introText: LanguageString;
   question: QuestionType;
 };
