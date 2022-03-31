@@ -8,8 +8,8 @@ import {
 } from '../utils/interactionHelpers';
 import {
   expectToBeVisibleByText,
-  expectTextById,
-  expectElementIdToHaveText,
+  expectIdToHaveText,
+  expectIdToHaveChildText,
   expectToBeEnabled,
   expectNotToBeEnabled,
 } from '../utils/expectHelpers';
@@ -70,8 +70,8 @@ describe('Departures v2', () => {
     await chooseBusStop('stopPlaceItem0', departureStop);
 
     // Platform buttons
-    await expectElementIdToHaveText('quaySelectionButton', departureQuay0);
-    await expectElementIdToHaveText('quaySelectionButton', departureQuay1);
+    await expectIdToHaveChildText('quaySelectionButton', departureQuay0);
+    await expectIdToHaveChildText('quaySelectionButton', departureQuay1);
 
     await expectToBeEnabled('allStopsSelectionButton');
     await expectNotToBeEnabled('quaySelectionButton', 0);
@@ -79,8 +79,11 @@ describe('Departures v2', () => {
 
     // ** Quay 0 **
 
-    await expectTextById('quaySection0Name', departureQuay0);
-    await expectTextById('quaySection0Description', departureQuay0Description);
+    await expectIdToHaveText('quaySection0Name', departureQuay0);
+    await expectIdToHaveText(
+      'quaySection0Description',
+      departureQuay0Description,
+    );
 
     // Hide and expand departures
     let noDepTimesQuay0Expanded = await numberOfDepartures('quaySection0');
@@ -97,8 +100,11 @@ describe('Departures v2', () => {
 
     await scrollToId('departuresContentView', 'quaySection1', 'down');
 
-    await expectTextById('quaySection1Name', departureQuay1);
-    await expectTextById('quaySection1Description', departureQuay1Description);
+    await expectIdToHaveText('quaySection1Name', departureQuay1);
+    await expectIdToHaveText(
+      'quaySection1Description',
+      departureQuay1Description,
+    );
 
     // Hide and expand departures
     let noDepTimesQuay1Expanded = await numberOfDepartures('quaySection1');
@@ -126,7 +132,7 @@ describe('Departures v2', () => {
 
     // Choose a stop place on the line
     await tapByText(nextDepartureStop + ' ');
-    await expectTextById('quaySection0Title', nextDepartureStop);
+    await expectIdToHaveText('quaySection0Title', nextDepartureStop);
 
     // Go back
     await goBack();

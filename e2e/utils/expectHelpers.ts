@@ -49,16 +49,16 @@ export async function expectToBeVisibleByPartOfText(searchTerm: string) {
 
 // ** CONTAINS TEXT / ID / LABEL **
 
-export const replaceTextById = async (id: string, text: string) => {
-  await element(by.id(id)).replaceText(text);
-};
-
-export const expectTextById = async (id: string, text: string) => {
+export const expectIdToHaveText = async (id: string, text: string) => {
   await expectExists(element(by.id(id)));
   await expect(element(by.id(id))).toHaveText(text);
 };
 
-export const expectElementIdToHaveText = async (
+export const expectIdToHaveLabel = async (id: string, label: string) => {
+  await expect(element(by.id(id).and(by.label(label)))).toExist();
+};
+
+export const expectIdToHaveChildText = async (
   parentId: string,
   childText: string,
 ) => {
@@ -67,12 +67,8 @@ export const expectElementIdToHaveText = async (
   ).toExist();
 };
 
-export const expectElementIdToHaveLabel = async (id: string, label: string) => {
-  await expect(element(by.id(id).and(by.label(label)))).toExist();
-};
-
 // Expect that a given element has a text attribute that contains param: text
-export async function expectElementToContainText(
+export async function expectElementToIncludeText(
   text: string,
   elementRef: Detox.NativeElement,
   index: number = 0,
@@ -92,7 +88,7 @@ export async function expectElementToContainText(
   expectBoolean(isIncluded, true);
 }
 
-export const expectElementIdToContainId = async (
+export const expectIdToHaveChildId = async (
   parentId: string,
   childId: string,
 ) => {
@@ -101,7 +97,7 @@ export const expectElementIdToContainId = async (
   ).toExist();
 };
 
-export const expectElementIdNotToContainId = async (
+export const expectIdNotToHaveChildId = async (
   parentId: string,
   childId: string,
 ) => {

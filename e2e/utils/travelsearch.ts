@@ -1,16 +1,17 @@
-import {by, element} from 'detox';
+import {by, element, expect} from 'detox';
 import {tapById} from './interactionHelpers';
 import {
-  expectElementToContainText,
+  expectElementToIncludeText,
   expectToBeVisibleByText,
   expectToExistsByIdHierarchy,
 } from './expectHelpers';
 import {
-  chooseSearchResult, getNumberOfHierarchyIds,
+  chooseSearchResult,
+  getNumberOfHierarchyIds,
   getNumberOfIncreasedIds,
   idExists,
-  setInputById
-} from "./commonHelpers";
+  setInputById,
+} from './commonHelpers';
 
 // Do a travel search
 export async function travelSearch(departure: string, arrival: string) {
@@ -91,7 +92,7 @@ export const expectStartLocationInTravelDetails = async (location: string) => {
       .id('fromPlaceName')
       .withAncestor(by.id('fromPlace').withAncestor(by.id('legContainer0'))),
   );
-  await expectElementToContainText(location, elem);
+  await expectElementToIncludeText(location, elem);
 };
 
 // Check that the start location has the given text
@@ -104,7 +105,7 @@ export const expectEndLocationInTravelDetails = async (location: string) => {
         by.id('toPlace').withAncestor(by.id('legContainer' + lastLegIndex)),
       ),
   );
-  await expectElementToContainText(location, elem);
+  await expectElementToIncludeText(location, elem);
 };
 
 // Check that the start and end times of the trip is correct in the travel suggestion details
@@ -176,7 +177,7 @@ export const expectCorrectTransportationDeparture = async (
         by.id('fromPlace').withAncestor(by.id('legContainer' + firstTrLeg)),
       ),
   );
-  await expectElementToContainText(depLocation, elem);
+  await expectElementToIncludeText(depLocation, elem);
 
   // Check departure time
   let hasExpTime = await timeIdExists(firstTrLeg, 'fromPlace', 'expTime');
@@ -203,62 +204,105 @@ export const expectCorrectTransportationDeparture = async (
 
 // Returns the number of legs of a travel suggestion
 export const getNumberOfLegs = async (resultId: string, legId: string) => {
-  return await getNumberOfHierarchyIds(by.id(legId).withAncestor(by.id(resultId)))
+  return await getNumberOfHierarchyIds(
+    by.id(legId).withAncestor(by.id(resultId)),
+  );
 };
 
 // Returns number of collapsed legs - if exists
 export const getNumberOfCollapsedLegs = async (resultId: string) => {
-  const hasCollapsed = await idExists(by.id('collapsedLegs').withAncestor(by.id(resultId)))
+  const hasCollapsed = await idExists(
+    by.id('collapsedLegs').withAncestor(by.id(resultId)),
+  );
 
-  if (hasCollapsed){
-    const noCollapsed = await element(by.id('collapsedLegs').withAncestor(by.id(resultId)))
+  if (hasCollapsed) {
+    const noCollapsed = await element(
+      by.id('collapsedLegs').withAncestor(by.id(resultId)),
+    )
       .getAttributes()
       .then((e) => (!('elements' in e) ? e.text?.replace('+', '') : '0'))
       .catch((e) => '0');
 
-    return noCollapsed === undefined ? 0 : Number.parseInt(noCollapsed)
-  }
-  else {
-    return 0
+    return noCollapsed === undefined ? 0 : Number.parseInt(noCollapsed);
+  } else {
+    return 0;
   }
 };
 
 // Returns a list of all departure times
 export const getDepartureTimes = async (noTravelSuggestions: number) => {
-  let depTimeList: string[] = []
+  let depTimeList: string[] = [];
 
   // Loop through all travel suggestions
   for (let i = 0; i < noTravelSuggestions; i++) {
-    let arrDepTime = await element(by.id('resultStartAndEndTime').withAncestor(by.id('assistantSearchResult' + i)))
+    let arrDepTime = await element(
+      by
+        .id('resultStartAndEndTime')
+        .withAncestor(by.id('assistantSearchResult' + i)),
+    )
       .getAttributes()
       .then((e) => (!('elements' in e) ? e.text?.split(' ') : ['00:00']))
       .catch((e) => ['00:00']);
 
-    let depTime: string = arrDepTime !== undefined ? arrDepTime[0] : '00:00'
+    let depTime: string = arrDepTime !== undefined ? arrDepTime[0] : '00:00';
 
-    depTimeList.push(depTime)
+    depTimeList.push(depTime);
   }
 
-  return depTimeList
+  return depTimeList;
 };
 
 // Returns a list of all arrival times
 export const getArrivalTimes = async (noTravelSuggestions: number) => {
-  let arrTimeList: string[] = []
+  let arrTimeList: string[] = [];
 
   // Loop through all travel suggestions
   for (let i = 0; i < noTravelSuggestions; i++) {
-    let arrDepTime = await element(by.id('resultStartAndEndTime').withAncestor(by.id('assistantSearchResult' + i)))
+    let arrDepTime = await element(
+      by
+        .id('resultStartAndEndTime')
+        .withAncestor(by.id('assistantSearchResult' + i)),
+    )
       .getAttributes()
       .then((e) => (!('elements' in e) ? e.text?.split(' ') : ['00:00']))
       .catch((e) => ['00:00']);
 
-    let arrTime: string = arrDepTime !== undefined ? arrDepTime[arrDepTime.length - 1] : '00:00'
+    let arrTime: string =
+      arrDepTime !== undefined ? arrDepTime[arrDepTime.length - 1] : '00:00';
 
-    arrTimeList.push(arrTime)
+    arrTimeList.push(arrTime);
   }
 
-  return arrTimeList
+  return arrTimeList;
+};
+
+// Verify correct leg types (passed | trip | after) on the line details
+export const verifyLegTypeOnQuays = async (
+  departure: string,
+  arrival: string,
+  noQuays: number,
+) => {
+  let legType = 'passed';
+
+  // Walk through all quays
+  for (let i = 0; i < noQuays; i++) {
+    let quayName = await element(by.id('quayName'))
+      .getAttributes()
+      .then((e) => ('elements' in e ? e.elements[i].text : 'NA'))
+      .catch((e) => 'NA');
+    quayName = quayName === undefined ? 'NA' : quayName;
+
+    // Change legType on departure quay
+    legType = quayName.trim() === departure ? 'trip' : legType;
+
+    // Verify
+    await expect(
+      element(by.text(quayName).withAncestor(by.id('legType_' + legType))),
+    ).toExist();
+
+    // Change legType after arrival quay
+    legType = quayName.trim() === arrival ? 'after' : legType;
+  }
 };
 
 // Helper method

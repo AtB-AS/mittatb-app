@@ -1,6 +1,5 @@
 import {by, element, expect} from 'detox';
 import {tapById} from './interactionHelpers';
-import {replaceTextById} from './expectHelpers';
 
 // Go to the given tab
 export async function goToTab(
@@ -30,7 +29,12 @@ export async function findTextViewElementDisplayText(searchTerm: string) {
 
 export const setInputById = async (id: string, text: string) => {
   await tapById(id);
-  await replaceTextById(id, text);
+  await element(by.id(id)).replaceText(text);
+};
+
+export const clearInputById = async (id: string) => {
+  await tapById(id);
+  await element(by.id(id)).clearText();
 };
 
 export const chooseSearchResult = async (id: string) => {

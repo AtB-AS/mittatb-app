@@ -1,6 +1,6 @@
 import {by, element, expect} from 'detox';
 import {tapById} from './interactionHelpers';
-import {expectTextById, expectToBeVisibleByText} from './expectHelpers';
+import {expectIdToHaveText, expectToBeVisibleByText} from './expectHelpers';
 import {chooseSearchResult, setInputById} from './commonHelpers';
 
 // Do a departure search
@@ -14,7 +14,7 @@ export const departureSearch = async (departure: string) => {
 
 // v2: Choose bus stop
 export const chooseBusStop = async (itemId: string, departureStop: string) => {
-  await expectTextById(itemId + 'Name', departureStop);
+  await expectIdToHaveText(itemId + 'Name', departureStop);
   await tapById(itemId);
   await expectToBeVisibleByText(departureStop);
 };

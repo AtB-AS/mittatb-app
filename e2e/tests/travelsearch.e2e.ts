@@ -1,8 +1,8 @@
-import {by, device, element, expect} from 'detox';
+import {device} from 'detox';
 import {
   chooseSearchResult,
+  clearInputById,
   getCurrentTime,
-  getNumberOfHierarchyIds,
   getNumberOfIds,
   goBack,
   goToTab,
@@ -21,15 +21,14 @@ import {
 import {
   expectToBeVisibleById,
   expectToBeVisibleByText,
-  expectTextById,
-  expectElementIdToHaveText,
+  expectIdToHaveText,
+  expectIdToHaveChildText,
   expectToBeVisibleByPartOfText,
   expectToExistsById,
   expectNotToExistsById,
-  expectElementToContainText,
-  expectElementIdToContainId,
-  expectElementIdToHaveLabel,
   expectToExistsByLabel,
+  expectNotToExistsByText,
+  expectNotToBeVisibleById,
 } from '../utils/expectHelpers';
 import {skipOnboarding} from '../utils/onboarding';
 import setLocation from '../utils';
@@ -47,6 +46,7 @@ import {
   getNumberOfCollapsedLegs,
   getArrivalTimes,
   getDepartureTimes,
+  verifyLegTypeOnQuays,
 } from '../utils/travelsearch';
 import {
   expectBoolean,
@@ -73,15 +73,12 @@ describe('Travel Search', () => {
     await skipOnboarding();
   });
 
-  // Activate when more test cases are implemented
-  /*
   beforeEach(async () => {
     await device.reloadReactNative();
   });
-   */
 
   // A happy day path through a travel search and details
-  xit('should do a simple search', async () => {
+  it('should do a simple search', async () => {
     const departure = 'Udduvoll bru vest';
     const arrival = 'Anders Buens gate';
     const intermediateStop = 'Sandmoen E6';
@@ -95,7 +92,7 @@ describe('Travel Search', () => {
     // Get travel details of first travel
     let paging = `1 of ${travelSuggestions}`;
     await expectToBeVisibleById('assistantSearchResult0');
-    await expectElementIdToHaveText('assistantSearchResult0', 'Details');
+    await expectIdToHaveChildText('assistantSearchResult0', 'Details');
     await tapById('assistantSearchResult0');
 
     await expectToBeVisibleByText('Trip details');
@@ -127,7 +124,7 @@ describe('Travel Search', () => {
     );
     await tapByText(intermediateStop + ' ');
     await expectToBeVisibleByText(intermediateStop);
-    await expectTextById('quaySection0Title', intermediateStop);
+    await expectIdToHaveText('quaySection0Title', intermediateStop);
 
     // Go back
     await goBack();
@@ -136,7 +133,7 @@ describe('Travel Search', () => {
   });
 
   // Check that information on the suggestions are the same as in the details
-  xit('travel suggestions should be reflected in the details', async () => {
+  it('travel suggestions should be reflected in the details', async () => {
     const departure = 'Prinsens gate';
     const arrival = 'Melhus skysstasjon';
 
@@ -173,7 +170,7 @@ describe('Travel Search', () => {
   });
 
   // Check that the details have correct departure and arrival according to the search parameters
-  xit('travel details should have correct departure and arrival', async () => {
+  it('travel details should have correct departure and arrival', async () => {
     const departure = 'Prinsens gate';
     const arrival = 'Melhus skysstasjon';
 
@@ -187,7 +184,7 @@ describe('Travel Search', () => {
     // Get travel details of first travel
     await tapById('assistantSearchResult0');
 
-    await expectTextById('tripPagination', paging);
+    await expectIdToHaveText('tripPagination', paging);
     await expectStartLocationInTravelDetails(departure);
     await expectEndLocationInTravelDetails(arrival);
 
@@ -196,14 +193,14 @@ describe('Travel Search', () => {
       await tapById('nextTripButton');
       paging = `${i} of ${travelSuggestions}`;
 
-      await expectTextById('tripPagination', paging);
+      await expectIdToHaveText('tripPagination', paging);
       await expectStartLocationInTravelDetails(departure);
       await expectEndLocationInTravelDetails(arrival);
     }
   });
 
   // Check that the number of legs is correct on the suggestions
-  xit('should show correct number of legs', async () => {
+  it('should show correct number of legs', async () => {
     const departure = 'Snåsa skole';
     const arrival = 'Fillan kai';
 
@@ -249,7 +246,7 @@ describe('Travel Search', () => {
   });
 
   // Test the pagination where a user asks for more suggestions
-  xit('should load more travel suggestions', async () => {
+  it('should load more travel suggestions', async () => {
     const departure = 'Prinsens gate';
     const arrival = 'Nidarosdomen';
 
@@ -259,7 +256,7 @@ describe('Travel Search', () => {
     // Verify loading ids (Note: 'searchingForResults' cannot be found since Detox are waiting on an 'idle' state)
     await waitToExistById('resultsLoaded', 10000);
     await expectNotToExistsById('searchingForResults');
-    await expectElementIdToHaveText('loadMoreButton', 'Load more results ');
+    await expectIdToHaveChildText('loadMoreButton', 'Load more results ');
 
     let travelSuggestions = await numberOfTravelSuggestions();
 
@@ -277,7 +274,7 @@ describe('Travel Search', () => {
   });
 
   // Arrival time is the basis for sorting among the travel suggestions
-  xit('travel suggestions should be sorted according to arrival time as default', async () => {
+  it('travel suggestions should be sorted according to arrival time as default', async () => {
     const departure = 'Prinsens gate';
     const arrival = 'Melhus skysstasjon';
 
@@ -295,7 +292,7 @@ describe('Travel Search', () => {
   });
 
   // Choosing "Now", "Departure after" or "Arrival before" should be reflected in the suggestions
-  xit('should be able to change time criteria for departure', async () => {
+  it('should be able to change time criteria for departure', async () => {
     const departure = 'Prinsens gate';
     const arrival = 'Melhus skysstasjon';
     const reqDepTime = '10:00';
@@ -356,8 +353,30 @@ describe('Travel Search', () => {
     }
   });
 
+  // Check that earlier and later quays on a line is rendered correctly, when travelling only a part of the line
+  it('should show the journey as part of a complete line', async () => {
+    // Line 82 has 1 previous quay, 1 intermediate quay and 1 later quay
+    const departure = 'Høyeggen skole';
+    const arrivalSearch = 'Uglevegen, Melhus';
+    const arrival = 'Uglevegen';
+
+    // Do a travel search and get details of the line
+    await travelSearch(departure, arrivalSearch);
+    await tapById('assistantSearchResult1');
+    await scrollContentToId(
+      'tripDetailsContentView',
+      'intermediateStops',
+      'down',
+    );
+    await tapById('intermediateStops');
+
+    // Verify correct leg types (passed | trip | after)
+    let noQuays = await getNumberOfIds('quayName');
+    await verifyLegTypeOnQuays(departure, arrival, noQuays);
+  });
+
   // Test the use of favourites in a travel search
-  xit('should be able to use favourites in the travel search', async () => {
+  it('should be able to use favourites in the travel search', async () => {
     const fav1 = 'Prinsens gate';
     const favName1 = 'PG';
     const fav2 = 'Melhus skysstasjon';
@@ -386,9 +405,8 @@ describe('Travel Search', () => {
     await expectStartLocationInTravelDetails(fav1);
     await expectEndLocationInTravelDetails(fav2);
 
-    //TODO Change to use Assistant-button -> sjekk inn og hent inn master
     await goBack();
-    await goBack();
+    await tapById('assistantTab');
 
     await expectToExistsById('favoriteChip0');
     await expectToExistsById('favoriteChip1');
@@ -407,5 +425,134 @@ describe('Travel Search', () => {
     await goToTab('assistant');
     await expectToExistsById('favoriteChip0');
     await expectNotToExistsById('favoriteChip1');
+  });
+
+  // Check that recent journeys are listed and able to choose
+  it('should list recent journeys', async () => {
+    const departure1 = 'Prinsens gate';
+    const departure2 = 'Nidarosdomen';
+    const arrival1 = 'Melhus skysstasjon';
+    const arrival2 = 'Melhus sentrum';
+
+    // Search #1
+    await travelSearch(departure1, arrival1);
+
+    // Search #2
+    await tapById('searchToButton');
+    await setInputById('locationSearchInput', arrival2);
+    await chooseSearchResult('locationSearchItem0');
+
+    // Search #3
+    await tapById('searchFromButton');
+    await setInputById('locationSearchInput', departure2);
+    await chooseSearchResult('locationSearchItem0');
+
+    // Verify recent journeys with given departure
+    await tapById('searchFromButton');
+    await expectIdToHaveChildText(
+      'journeyHistoryItem0',
+      `${departure2} - ${arrival2}`,
+    );
+
+    // Verify recent journeys with any departure
+    await clearInputById('locationSearchInput');
+    await expectIdToHaveChildText(
+      'journeyHistoryItem0',
+      `${departure2} - ${arrival2}`,
+    );
+    await expectIdToHaveChildText(
+      'journeyHistoryItem1',
+      `${departure1} - ${arrival2}`,
+    );
+    await expectIdToHaveChildText(
+      'journeyHistoryItem2',
+      `${departure1} - ${arrival1}`,
+    );
+  });
+
+  // Check that recent locations are listed and able to choose
+  it('should list recent locations', async () => {
+    const departure1 = 'Prinsens gate';
+    const departure2 = 'Studentersamfundet';
+    const arrival1 = 'Melhus skysstasjon';
+    const arrival2 = 'Melhus sentrum';
+
+    // Search #1
+    await travelSearch(departure1, arrival1);
+
+    // Search #2
+    await travelSearch(departure2, arrival2);
+
+    // Verify no recent locations with given departure
+    await tapById('searchFromButton');
+    await expectNotToExistsById('previousResultItem0');
+
+    // Verify recent journeys with any departure
+    await clearInputById('locationSearchInput');
+    await expectIdToHaveText('previousResultItem0Name', arrival2);
+    await expectIdToHaveText('previousResultItem1Name', departure2);
+    await expectIdToHaveText('previousResultItem2Name', arrival1);
+    await expectIdToHaveText('previousResultItem3Name', departure1);
+  });
+
+  // Tapping should reset the travel search
+  it('should be able to reset the travel search', async () => {
+    const departure = 'Prinsens gate';
+    const arrival = 'Melhus skysstasjon';
+
+    // Do a travel search
+    await travelSearch(departure, arrival);
+
+    // Last journey index
+    let lastJourneyIndex = (await numberOfTravelSuggestions()) - 1;
+
+    await scrollContentToId(
+      'assistantContentView',
+      'assistantSearchResult' + lastJourneyIndex,
+      'down',
+    );
+    await tapById('assistantSearchResult' + lastJourneyIndex);
+
+    await expectNotToExistsByText('Travel assistant');
+    await expectToBeVisibleByText('Trip details');
+
+    // Verify 'back' by tapping the assistant tab
+    await tapById('assistantTab');
+
+    await expectNotToExistsByText('Trip details');
+    await expectToBeVisibleByText('Travel assistant');
+    await expectToBeVisibleById('assistantSearchResult' + lastJourneyIndex);
+    await expectNotToBeVisibleById('assistantSearchResult0');
+
+    // Verify 'scrollUp' by tapping the assistant tab
+    await tapById('assistantTab');
+
+    await expectToBeVisibleByText('Travel assistant');
+    await expectToBeVisibleById('assistantSearchResult0');
+    await expectNotToBeVisibleById('assistantSearchResult' + lastJourneyIndex);
+
+    // Verify 'reset' by tapping the assistant tab
+    await tapById('assistantTab');
+
+    await expectToBeVisibleByText('Travel assistant');
+    await expectNotToExistsById('assistantContentView');
+  });
+
+  // The service disruption button should lead to a link
+  it('should show where to find service disruptions', async () => {
+    const serviceDisruptionText = 'atb.no/driftsavvik (opens in browser)';
+
+    // Open information
+    await tapById('serviceDisruptionButton');
+
+    // Verify
+    await expectToBeVisibleByText('Service disruptions');
+    await expectIdToHaveChildText(
+      'navigateToServiceDisruptions',
+      serviceDisruptionText,
+    );
+
+    await tapById('cancelButton');
+    await expectNotToExistsByText('Service disruptions');
   });
 });
