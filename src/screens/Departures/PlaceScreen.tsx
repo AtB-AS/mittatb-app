@@ -45,13 +45,13 @@ export default function PlaceScreen({
     date: new Date().toISOString(),
   });
 
-  const hasQuays = place.quays === undefined;
+  const {state} = useStopsDetailsData([place.id]);
 
-  let {state} = useStopsDetailsData(hasQuays ? [place.id] : undefined);
-
-  if (state.data) {
+  if (state.data && place.quays === undefined) {
     place = state.data.stopPlaces[0];
   }
+
+  const isMissingQuays = place.quays === undefined;
 
   const navigateToDetails = (
     serviceJourneyId: string,
@@ -81,12 +81,12 @@ export default function PlaceScreen({
       <FlatList
         data={place.quays}
         style={styles.quayChipContainer}
-        horizontal={hasQuays}
+        horizontal={!isMissingQuays}
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={
           <>
-            {!hasQuays ? (
+            {isMissingQuays ? (
               <ActivityIndicator size="large"></ActivityIndicator>
             ) : (
               <Button
