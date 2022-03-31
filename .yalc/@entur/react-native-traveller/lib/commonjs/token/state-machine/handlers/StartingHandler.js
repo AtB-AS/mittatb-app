@@ -20,15 +20,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function startingHandler(safetyNetApiKey, forceRestart) {
   return (0, _HandlerFactory.stateHandlerFactory)(['Starting'], async s => {
     const {
-      accountId
+      accountId,
+      state
     } = s;
     const {
       result
     } = await (0, _native.getAttestationSupport)();
 
-    _logger.logger.info('starting', undefined, {
+    _logger.logger.info('mobiletoken_status_change', undefined, {
       accountId,
-      attestationSupport: result
+      attestationSupport: result,
+      state
     });
 
     if (result !== 'SUPPORTED') {
@@ -42,7 +44,7 @@ function startingHandler(safetyNetApiKey, forceRestart) {
     await (0, _native.start)(safetyNetApiKey);
 
     if (forceRestart) {
-      _logger.logger.info('force_restart', undefined, {
+      _logger.logger.info('mobiletoken_forced_restart', undefined, {
         accountId
       });
 
@@ -55,7 +57,9 @@ function startingHandler(safetyNetApiKey, forceRestart) {
     const savedStateString = await _asyncStorage.default.getItem(storeKey);
 
     if (!savedStateString) {
-      _logger.logger.info('no_saved_state', undefined);
+      _logger.logger.info('mobiletoken_no_existing_state', undefined, {
+        accountId
+      });
 
       return {
         accountId,
@@ -65,7 +69,7 @@ function startingHandler(safetyNetApiKey, forceRestart) {
 
     const savedState = JSON.parse(savedStateString);
 
-    _logger.logger.info('saved_state', undefined, {
+    _logger.logger.info('mobiletoken_loaded_state', undefined, {
       state: savedState.state,
       accountId: savedState.accountId
     });

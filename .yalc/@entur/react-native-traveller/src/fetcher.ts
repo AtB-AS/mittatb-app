@@ -1,5 +1,5 @@
 import type { ApiRequest, ApiResponse, Config, Fetch } from './config';
-import type { ActivateTokenRequest } from './token/types';
+import type { Attestation } from './token/types';
 import base64 from 'base-64';
 import utf8 from 'utf8';
 import { logger } from './logger';
@@ -28,23 +28,10 @@ type ErrorResponse = {
 };
 
 type ReattestationData = {
-  errorReason: 'REATTESTATION_REQUIRED';
-  tokenId: string;
+  token_id: string;
   nonce: string;
-  attestationEncryptionPublicKey: string;
+  attestation_encryption_public_key: string;
 };
-
-export class ReattestationError extends Error {
-  reattestationData: ReattestationData;
-
-  constructor(data: ReattestationData) {
-    const name = 'ReattestationError';
-    super(name);
-
-    this.name = name;
-    this.reattestationData = data;
-  }
-}
 
 function createInternalFetcher(config: Config): Fetch {
   return async <T>(request: ApiRequest) => {
@@ -56,14 +43,6 @@ function createInternalFetcher(config: Config): Fetch {
       },
     });
 
-    if (isErrorResponse(response)) {
-      if (response.body.code === 'REATTESTATION_REQUIRED') {
-        throw new ReattestationError(
-          response.body.metadata as ReattestationData
-        );
-      }
-    }
-
     if (!isOk(response)) {
       throw new RequestError(response);
     }
@@ -74,9 +53,8 @@ function createInternalFetcher(config: Config): Fetch {
 
 type ReattestFunction = (
   tokenId: string,
-  nonce: string,
-  attestationEncryptionPublicKey: string
-) => Promise<ActivateTokenRequest>;
+  nonce: string
+) => Promise<Attestation>;
 
 export function createFetcher(
   config: Config,
@@ -91,17 +69,16 @@ export function createFetcher(
     try {
       return await fetcher<T>(request);
     } catch (error: any) {
-      if (error instanceof ReattestationError) {
+      const errorResponseData = error?.response?.data;
+      if (isReattestationError(errorResponseData)) {
         const {
-          tokenId,
+          token_id,
           nonce,
-          attestationEncryptionPublicKey,
-        } = error.reattestationData;
-        const reattestBody = await reattest(
-          tokenId,
-          nonce,
-          attestationEncryptionPublicKey
-        );
+        }: ReattestationData = errorResponseData.metadata;
+        logger.info('mobiletoken_reattestation_required', undefined, {
+          tokenId: token_id,
+        });
+        const reattestBody = await reattest(token_id, nonce);
 
         const jsonBody = JSON.stringify(reattestBody);
         const utf8value = utf8.encode(jsonBody);
@@ -110,7 +87,6 @@ export function createFetcher(
         const headers: Record<string, string> = request.headers ?? {};
 
         headers['X-Attestation-Data'] = headerValue;
-
         request.headers = headers;
 
         return handleRequest(request, true);
@@ -134,8 +110,6 @@ function isOk(response: ApiResponse) {
   return response.status > 199 && response.status < 300;
 }
 
-function isErrorResponse(
-  response: ApiResponse
-): response is ApiResponse<ErrorResponse> {
-  return 'code' in response.body;
-}
+const isReattestationError = (data: any): data is ErrorResponse => {
+  return data?.code === 'REATTESTATION_REQUIRED';
+};

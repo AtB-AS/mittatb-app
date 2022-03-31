@@ -12,7 +12,7 @@ export default function attestHandler() {
       accountId,
       state
     } = s;
-    logger.info('attest', undefined, {
+    logger.info('mobiletoken_status_change', undefined, {
       accountId,
       tokenId,
       state

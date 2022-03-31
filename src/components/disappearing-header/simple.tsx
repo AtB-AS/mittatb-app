@@ -34,9 +34,7 @@ type Props = {
   headerTitle: React.ReactNode;
   alternativeTitleComponent?: React.ReactNode;
 
-  headerMargin?: number;
-
-  leftButton: LeftButtonProps;
+  leftButton?: LeftButtonProps;
 
   onEndReached?(e: NativeScrollEvent): void;
   onEndReachedThreshold?: number;
@@ -60,10 +58,10 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
   isRefreshing = false,
   onRefresh,
 
-  leftButton,
-
   headerTitle,
   alternativeTitleComponent,
+
+  leftButton,
 
   onEndReached,
   onEndReachedThreshold = 10,

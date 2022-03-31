@@ -47,7 +47,12 @@ import {
 } from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  TouchableOpacity,
+  View,
+  BackHandler,
+} from 'react-native';
 import {AssistantParams} from '.';
 import Loading from '../Loading';
 import FadeBetween from './FadeBetween';
@@ -57,6 +62,7 @@ import Results from './Results';
 import {ThemeColor} from '@atb/theme/colors';
 import * as navIcons from '@atb/assets/svg/mono-icons/navigation';
 import useTripsQuery from '@atb/screens/Assistant/use-trips-query';
+import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 
 const themeColor: ThemeColor = 'background_accent';
 
@@ -135,6 +141,43 @@ const Assistant: React.FC<Props> = ({
     date: new Date().toISOString(),
   });
 
+  const setCurrentLocationAsFrom = useCallback(
+    function setCurrentLocationAsFrom() {
+      log('set_current_location_as_from');
+      navigation.setParams({
+        fromLocation: currentLocation && {
+          ...currentLocation,
+          resultType: 'geolocation',
+        },
+        toLocation: to,
+      });
+    },
+    [navigation, currentLocation, to],
+  );
+
+  const setCurrentLocationOrRequest = useCallback(
+    async function setCurrentLocationOrRequest() {
+      if (currentLocation) {
+        setCurrentLocationAsFrom();
+      } else {
+        const status = await requestGeoPermission();
+        if (status === 'granted') {
+          setCurrentLocationAsFrom();
+        }
+      }
+    },
+    [currentLocation, setCurrentLocationAsFrom, requestGeoPermission],
+  );
+  const resetView = useCallback(() => {
+    analytics().logEvent('click_logo_reset');
+    log('reset');
+    setCurrentLocationOrRequest();
+
+    navigation.setParams({
+      toLocation: undefined,
+    });
+  }, [navigation, setCurrentLocationOrRequest]);
+
   function swap() {
     log('swap', {
       newFrom: translateLocation(to),
@@ -157,17 +200,6 @@ const Assistant: React.FC<Props> = ({
     }
   }
 
-  function setCurrentLocationAsFrom() {
-    log('set_current_location_as_from');
-    navigation.setParams({
-      fromLocation: currentLocation && {
-        ...currentLocation,
-        resultType: 'geolocation',
-      },
-      toLocation: to,
-    });
-  }
-
   function setCurrentLocationAsFromIfEmpty() {
     if (from) {
       return;
@@ -180,27 +212,6 @@ const Assistant: React.FC<Props> = ({
       callerRouteName: 'AssistantRoot',
       callerRouteParam: 'searchTime',
       searchTime,
-    });
-  }
-
-  async function setCurrentLocationOrRequest() {
-    if (currentLocation) {
-      setCurrentLocationAsFrom();
-    } else {
-      const status = await requestGeoPermission();
-      if (status === 'granted') {
-        setCurrentLocationAsFrom();
-      }
-    }
-  }
-
-  function resetView() {
-    analytics().logEvent('click_logo_reset');
-    log('reset');
-    setCurrentLocationOrRequest();
-
-    navigation.setParams({
-      toLocation: undefined,
     });
   }
 
@@ -322,6 +333,7 @@ const Assistant: React.FC<Props> = ({
               accessibilityHint={t(AssistantTexts.dateInput.a11yHint)}
               color="secondary_3"
               onPress={onSearchTimePress}
+              testID="assistantDateTimePicker"
             />
           </View>
         </FadeBetween>
@@ -377,7 +389,7 @@ const Assistant: React.FC<Props> = ({
 
   const onPressed = useCallback(
     (tripPatterns, startIndex) =>
-      navigation.navigate('TripDetails_v2', {
+      navigation.navigate('TripDetails', {
         tripPatterns,
         startIndex,
       }),
@@ -391,6 +403,8 @@ const Assistant: React.FC<Props> = ({
   >();
 
   const screenHasFocus = useIsFocused();
+
+  const {leftButton} = useServiceDisruptionSheet();
 
   useEffect(() => {
     if (!screenHasFocus) return;
@@ -410,24 +424,34 @@ const Assistant: React.FC<Props> = ({
     }
   }, [searchState]);
 
+  // Reset view on back press instead of exiting app
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        if (screenHasFocus && from && to) {
+          resetView();
+          return true; // prevent default action
+        }
+        return false;
+      },
+    );
+    return () => backHandler.remove();
+  });
+
   return (
     <DisappearingHeader
       renderHeader={renderHeader}
       highlightComponent={newsBanner}
       onRefresh={refresh}
+      isRefreshing={searchState === 'searching' && !tripPatterns.length}
       useScroll={useScroll}
       headerTitle={t(AssistantTexts.header.title)}
-      headerMargin={24}
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
       showAlterntativeTitle={Boolean(from && to)}
-      leftButton={{
-        type: 'home',
-        color: themeColor,
-        onPress: resetView,
-        accessibilityLabel: t(AssistantTexts.header.accessibility.logo),
-        testID: 'lhb',
-      }}
+      leftButton={leftButton}
+      tabPressBehaviour={{navigation, onTabPressOnTopScroll: resetView}}
       onFullscreenTransitionEnd={(fullHeight) => {
         if (fullHeight) {
           clear();
@@ -436,40 +460,56 @@ const Assistant: React.FC<Props> = ({
       alertContext="travel"
     >
       <ScreenReaderAnnouncement message={searchStateMessage} />
-      <Results
-        tripPatterns={tripPatterns}
-        isSearching={isSearching}
-        showEmptyScreen={showEmptyScreen}
-        isEmptyResult={isEmptyResult}
-        resultReasons={noResultReasons}
-        onDetailsPressed={onPressed}
-        errorType={error}
-      />
+      {isValidLocations && (
+        <Results
+          tripPatterns={tripPatterns}
+          isSearching={isSearching}
+          showEmptyScreen={showEmptyScreen}
+          isEmptyResult={isEmptyResult}
+          resultReasons={noResultReasons}
+          onDetailsPressed={onPressed}
+          errorType={error}
+          searchTime={searchTime}
+        />
+      )}
       {!error && isValidLocations && (
         <TouchableOpacity
           onPress={loadMore}
           disabled={searchState === 'searching'}
           style={styles.loadMoreButton}
+          testID="loadMoreButton"
         >
           {searchState === 'searching' ? (
-            <>
-              <ActivityIndicator
-                color={theme.text.colors.secondary}
-                style={{
-                  marginRight: theme.spacings.medium,
-                }}
-              />
-              <ThemeText color="secondary">
-                {tripPatterns.length
-                  ? t(AssistantTexts.results.fetchingMore)
-                  : t(AssistantTexts.searchState.searching)}
-              </ThemeText>
-            </>
+            <View style={styles.loadingIndicator}>
+              {tripPatterns.length ? (
+                <>
+                  <ActivityIndicator
+                    color={theme.text.colors.secondary}
+                    style={{
+                      marginRight: theme.spacings.medium,
+                    }}
+                  />
+                  <ThemeText color="secondary" testID="searchingForResults">
+                    {t(AssistantTexts.results.fetchingMore)}
+                  </ThemeText>
+                </>
+              ) : (
+                <ThemeText
+                  color="secondary"
+                  style={styles.loadingText}
+                  testID="searchingForResults"
+                >
+                  {t(AssistantTexts.searchState.searching)}
+                </ThemeText>
+              )}
+            </View>
           ) : (
             <>
               {loadMore ? (
                 <>
-                  <ThemeText>{t(AssistantTexts.results.fetchMore)} </ThemeText>
+                  <ThemeText testID="resultsLoaded">
+                    {t(AssistantTexts.results.fetchMore)}{' '}
+                  </ThemeText>
                   <ThemeIcon svg={navIcons.Expand} size={'normal'} />
                 </>
               ) : null}
@@ -512,6 +552,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   fadeChild: {
     marginVertical: theme.spacings.medium,
+  },
+  loadingIndicator: {
+    marginTop: theme.spacings.xLarge,
+    flexDirection: 'row',
+  },
+  loadingText: {
+    marginTop: theme.spacings.xLarge * 2,
   },
   loadMoreButton: {
     paddingVertical: theme.spacings.medium,

@@ -12,6 +12,12 @@ RCT_EXTERN_METHOD(attest:(nonnull NSString *)accountId
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(reattest:(nonnull NSString *)accountId
+                 withTokenId:(nonnull NSString *)tokenId
+                 withNonce:(nonnull NSString *)nonce
+                 withResolver:(RCTPromiseResolveBlock)resolve
+                 withRejecter:(RCTPromiseRejectBlock)reject)
+
 RCT_EXTERN_METHOD(attestLegacy:(nonnull NSString *)accountId
                  withTokenId:(nonnull NSString *)tokenId
                  withNonce:(nonnull NSString *)nonce

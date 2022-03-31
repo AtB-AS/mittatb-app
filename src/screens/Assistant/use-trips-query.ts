@@ -205,9 +205,18 @@ async function doSearch(
   cancelToken: CancelTokenSource,
   tripSearchPreferences?: TripSearchPreferences,
 ) {
+  const from = {
+    ...fromLocation,
+    place: fromLocation.layer === 'venue' ? fromLocation.id : undefined,
+  };
+  const to = {
+    ...toLocation,
+    place: toLocation.layer === 'venue' ? toLocation.id : undefined,
+  };
+
   const query: TripsQueryVariables = {
-    from: fromLocation,
-    to: toLocation,
+    from,
+    to,
     cursor,
     when: searchTime?.date,
     arriveBy,

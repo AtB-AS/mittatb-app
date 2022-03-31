@@ -9,12 +9,13 @@ export default function activateRenewalHandler(
   abtTokensService: AbtTokensService
 ): StateHandler {
   return stateHandlerFactory(['ActivateRenewal'], async (s) => {
-    const { accountId, oldTokenId, tokenId } = s;
+    const { accountId, oldTokenId, tokenId, state } = s;
 
-    logger.info('activate_renewal', undefined, {
+    logger.info('mobiletoken_status_change', undefined, {
       accountId,
       oldTokenId,
       tokenId,
+      state,
     });
 
     const signedToken = await getSecureToken(accountId, oldTokenId, true, [

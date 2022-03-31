@@ -44,7 +44,6 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
   >(undefined);
 
   const setStatus = (status?: TokenStatus) => {
-    Bugsnag.leaveBreadcrumb('mobiletoken_status_change', status);
     updateMetadata({
       'AtB-Mobile-Token-State': status?.state,
       'AtB-Mobile-Token-VisualState': status?.visualState,

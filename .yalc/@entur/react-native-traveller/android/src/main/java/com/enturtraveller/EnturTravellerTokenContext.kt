@@ -42,6 +42,8 @@ class EnturTravellerTokenContext<T>(private val id: String) : TokenContext<T> {
     return null
   }
 
+  override fun setTokenRenewer(renewer: TokenRenewer<T>) {}
+
   override fun getLock(): Lock {
     return lock
   }

@@ -30,6 +30,7 @@ export type RemoteConfig = {
   tripsSearch_target_number_of_page_hits: number;
   tripsSearch_max_number_of_chained_searches: number;
   privacy_policy_url: string;
+  service_disruption_url: string;
 };
 
 export const defaultModesWeSellTicketsFor: string[] = [
@@ -64,6 +65,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   tripsSearch_target_number_of_page_hits: 8,
   tripsSearch_max_number_of_chained_searches: 5,
   privacy_policy_url: PRIVACY_POLICY_URL,
+  service_disruption_url: '',
 };
 
 export function getConfig(): RemoteConfig {
@@ -118,6 +120,10 @@ export function getConfig(): RemoteConfig {
     values['privacy_policy_url']?.asString() ??
     defaultRemoteConfig.privacy_policy_url;
 
+  const service_disruption_url =
+    values['service_disruption_url']?.asString() ??
+    defaultRemoteConfig.service_disruption_url;
+
   return {
     modes_we_sell_tickets_for,
     enable_network_logging,
@@ -141,6 +147,7 @@ export function getConfig(): RemoteConfig {
     tripsSearch_target_number_of_page_hits,
     tripsSearch_max_number_of_chained_searches,
     privacy_policy_url,
+    service_disruption_url,
   };
 }
 

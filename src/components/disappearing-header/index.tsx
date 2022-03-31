@@ -1,37 +1,34 @@
-import SvgBanner from '@atb/assets/svg/mono-icons/other/Banner';
+import AlertBox from '@atb/alerts/AlertBox';
+import {AlertContext} from '@atb/alerts/AlertsContext';
+import {
+  AnimatedScreenHeader,
+  LeftButtonProps,
+} from '@atb/components/screen-header';
 import {StyleSheet, useTheme} from '@atb/theme';
+import {ThemeColor} from '@atb/theme/colors';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import throttle from '@atb/utils/throttle';
 import useConditionalMemo from '@atb/utils/use-conditional-memo';
 import {useLayout} from '@atb/utils/use-layout';
-import {useScrollToTop} from '@react-navigation/native';
+import {NavigationProp, useScrollToTop} from '@react-navigation/native';
+import hexToRgba from 'hex-to-rgba';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Animated,
   Easing,
-  Image,
   ImageBackground,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Platform,
   RefreshControl,
   ScrollView,
-  useWindowDimensions,
   View,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import {
   useSafeAreaFrame,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import {
-  AnimatedScreenHeader,
-  LeftButtonProps,
-} from '@atb/components/screen-header';
-import {AlertContext} from '@atb/alerts/AlertsContext';
-import AlertBox from '@atb/alerts/AlertBox';
-import {ThemeColor} from '@atb/theme/colors';
-import LinearGradient from 'react-native-linear-gradient';
-import hexToRgba from 'hex-to-rgba';
 
 type Props = {
   renderHeader(
@@ -44,14 +41,17 @@ type Props = {
   isRefreshing?: boolean;
   isFullHeight?: boolean;
 
+  leftButton?: LeftButtonProps;
+
+  tabPressBehaviour?: {
+    navigation: NavigationProp<any>;
+    onTabPressOnTopScroll: () => void;
+  };
+
   useScroll?: boolean;
   headerTitle: React.ReactNode;
   alternativeTitleComponent?: React.ReactNode;
   showAlterntativeTitle?: Boolean;
-
-  headerMargin?: number;
-
-  leftButton?: LeftButtonProps;
 
   onEndReached?(e: NativeScrollEvent): void;
   onEndReachedThreshold?: number;
@@ -65,7 +65,8 @@ type Props = {
   alertContext?: AlertContext;
 };
 
-const SCROLL_OFFSET_HEADER_ANIMATION = 80;
+const SCROLLED_TOP_THRESHOLD = 30;
+
 const themeColor: ThemeColor = 'background_accent';
 
 type Scrollable = {
@@ -86,18 +87,20 @@ const DisappearingHeader: React.FC<Props> = ({
 
   leftButton,
 
+  tabPressBehaviour,
+
   headerTitle,
   alternativeTitleComponent,
   showAlterntativeTitle,
 
   onEndReached,
   onEndReachedThreshold = 10,
-  headerMargin = 12,
 
   onFullscreenTransitionEnd,
   alertContext,
 }) => {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [fullheightTransitioned, setTransitioned] = useState(isFullHeight);
   const {
     boxHeight,
     contentHeight,
@@ -105,9 +108,9 @@ const DisappearingHeader: React.FC<Props> = ({
     onScreenHeaderLayout,
     onHeaderContentLayout,
   } = useCalculateHeaderContentHeight(isAnimating);
-  const [fullheightTransitioned, setTransitioned] = useState(isFullHeight);
-  const {width: windowWidth} = useWindowDimensions();
   const scrollableContentRef = React.useRef<ScrollView>(null);
+  const scrollYValue = useRef(0);
+
   useScrollToTop(
     React.useRef<Scrollable>({
       scrollTo: () =>
@@ -115,7 +118,6 @@ const DisappearingHeader: React.FC<Props> = ({
     }),
   );
 
-  const [scrollYValue, setScrollY] = useState<number>(0);
   const styles = useThemeStyles();
   const {theme} = useTheme();
   const scrollYRef = useRef(
@@ -189,11 +191,33 @@ const DisappearingHeader: React.FC<Props> = ({
   const onScrolling = useCallback(
     (e: NativeScrollEvent) => {
       const scrollPos = e.contentOffset.y;
-      setScrollY(scrollPos);
+      scrollYValue.current = scrollPos;
       endReachListener(e);
     },
-    [endReachListener],
+    [endReachListener, scrollYValue],
   );
+
+  useEffect(() => {
+    if (!tabPressBehaviour) return;
+    const {navigation, onTabPressOnTopScroll} = tabPressBehaviour;
+
+    const unsubscribe = navigation
+      .dangerouslyGetParent()
+      // Typescript doesn't know that tabLongPress exist in the parent
+      // and types aren't properly exposed to compensate for that.
+      ?.addListener('tabPress' as any, () => {
+        if (!navigation.isFocused()) return;
+        if (!isScrolledToTop(scrollYValue.current, contentHeight)) return;
+        onTabPressOnTopScroll();
+      });
+
+    return unsubscribe;
+  }, [
+    tabPressBehaviour?.navigation,
+    tabPressBehaviour?.onTabPressOnTopScroll,
+    scrollYValue,
+    contentHeight,
+  ]);
 
   return (
     <>
@@ -263,7 +287,7 @@ const DisappearingHeader: React.FC<Props> = ({
                   refreshing={isRefreshing}
                   onRefresh={onRefresh}
                   progressViewOffset={contentHeight}
-                  tintColor={theme.colors[themeColor].color}
+                  tintColor={theme.text.colors.secondary}
                 />
               }
               onScroll={Animated.event(
@@ -282,20 +306,19 @@ const DisappearingHeader: React.FC<Props> = ({
               contentContainerStyle={[
                 {paddingTop: !IS_IOS ? contentHeight : 0},
               ]}
+              automaticallyAdjustContentInsets={false}
               contentInset={{
-                top: contentHeight + headerMargin,
+                top: contentHeight,
               }}
               contentOffset={{
-                y: -contentHeight - headerMargin,
+                y: -contentHeight,
                 x: 0,
               }}
             >
               {children}
             </Animated.ScrollView>
           ) : (
-            <View style={{flex: 1, paddingTop: contentHeight + headerMargin}}>
-              {children}
-            </View>
+            <View style={{flex: 1, paddingTop: contentHeight}}>{children}</View>
           )}
         </View>
       </View>
@@ -375,6 +398,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
 }));
+
+function isScrolledToTop(scrollPosition: number, contentHeightOffset: number) {
+  const offset = Platform.OS === 'ios' ? -contentHeightOffset : 0;
+  return scrollPosition <= offset + SCROLLED_TOP_THRESHOLD;
+}
 
 function useCalculateHeaderContentHeight(isAnimating: boolean) {
   // Using safeAreaFrame for height instead of dimensions as

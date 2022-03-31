@@ -1,18 +1,20 @@
 import {device} from 'detox';
 import {goToTab, goBack} from '../utils/commonHelpers';
 import {
-  expectNotToExistsByText,
+  tapById,
+  tapByText,
   scrollToId,
   scrollToText,
   scroll,
+} from '../utils/interactionHelpers';
+import {
   expectToBeVisibleById,
   expectToBeVisibleByText,
-  tapById,
-  tapByText,
   expectElementToContainText,
+  expectNotToExistsByText,
   expectElementToContainId,
   expectElementNotToContainId,
-} from '../utils/interactionHelpers';
+} from '../utils/expectHelpers';
 import {skipOnboarding} from '../utils/onboarding';
 import {
   addFavouriteLocation,
@@ -41,7 +43,6 @@ describe('My profile', () => {
   });
 
   beforeEach(async () => {
-    //await device.reloadReactNative();
     await goToTab('profile');
     await scroll('profileHomeScrollView', 'top');
   });
@@ -83,8 +84,6 @@ describe('My profile', () => {
     await expectToBeVisibleByText('New features');
     await expectToBeVisibleById('newDeparturesToggle');
     await expectToBeVisibleByText('Try the new departure view');
-    await expectToBeVisibleById('newAssistantToggle');
-    await expectToBeVisibleByText('Try the new travel search engine');
     await expectToBeVisibleById('invitationCodeButton');
     await expectToBeVisibleByText('Invitation code');
 

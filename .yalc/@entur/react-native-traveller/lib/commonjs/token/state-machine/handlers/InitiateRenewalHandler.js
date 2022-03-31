@@ -17,10 +17,12 @@ function initiateRenewalHandler(abtTokensService) {
   return (0, _HandlerFactory.stateHandlerFactory)(['InitiateRenewal'], async s => {
     const {
       accountId,
-      tokenId
+      tokenId,
+      state
     } = s;
 
-    _logger.logger.info('init_renewal', undefined, {
+    _logger.logger.info('mobiletoken_status_change', undefined, {
+      state,
       accountId,
       tokenId
     });

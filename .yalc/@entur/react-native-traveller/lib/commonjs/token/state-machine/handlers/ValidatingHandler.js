@@ -17,12 +17,14 @@ function validatingHandler(abtTokensService) {
   return (0, _HandlerFactory.stateHandlerFactory)(['Validating'], async s => {
     const {
       accountId,
-      tokenId
+      tokenId,
+      state
     } = s;
 
-    _logger.logger.info('validating', undefined, {
+    _logger.logger.info('mobiletoken_status_change', undefined, {
       accountId,
-      tokenId
+      tokenId,
+      state
     });
 
     const signedToken = await (0, _native.getSecureToken)(accountId, tokenId, true, [_types.PayloadAction.getFarecontracts]);
@@ -30,7 +32,7 @@ function validatingHandler(abtTokensService) {
       state: validationState
     } = await abtTokensService.validateToken(tokenId, signedToken);
 
-    _logger.logger.info('validation_state', undefined, {
+    _logger.logger.info('mobiletoken_validation_state', undefined, {
       validationState
     });
 

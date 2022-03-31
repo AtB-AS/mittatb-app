@@ -54,7 +54,7 @@ const AssistantTexts = {
     },
   },
   searchState: {
-    searching: _('Laster søkeresultater', 'Loading search results'),
+    searching: _('Laster søkeresultater…', 'Loading search results…'),
     searchSuccess: _(
       'Søkeresultater er lastet inn',
       'Search results are loaded',
@@ -124,6 +124,7 @@ const AssistantTexts = {
         _(`I overmorgen - ${date}`, `Day after tomorrow - ${date}`),
     },
     resultItem: {
+      passedTrip: _('Passert reise, ', 'Passed trip, '),
       header: {
         time: (startTime: string, endTime: string) =>
           _(

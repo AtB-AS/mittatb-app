@@ -23,7 +23,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {screenReaderHidden} from '@atb/utils/accessibility';
-import {flatMap} from '@atb/utils/array';
+import {flatMap, interpose} from '@atb/utils/array';
 import {
   formatToClock,
   isInThePast,
@@ -44,10 +44,12 @@ import {
 import {ScrollView} from 'react-native-gesture-handler';
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {SearchTime} from './journey-date-picker';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
   onDetailsPressed(): void;
+  searchTime: SearchTime;
   testID?: string;
 };
 
@@ -74,13 +76,13 @@ function getFirstQuayName(legs: Leg[]) {
 }
 const ResultItemHeader: React.FC<{
   tripPattern: TripPattern;
-}> = ({tripPattern}) => {
+  strikethrough: boolean;
+}> = ({tripPattern, strikethrough}) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const durationText = secondsToDurationShort(tripPattern.duration, language);
   const startTime = tripPattern.legs[0].expectedStartTime;
   const endTime = tripPattern.legs[tripPattern.legs.length - 1].expectedEndTime;
-  const isInPast = isInThePast(startTime);
 
   return (
     <View style={styles.resultHeader}>
@@ -89,7 +91,7 @@ const ResultItemHeader: React.FC<{
         color="secondary"
         style={[
           styles.resultHeaderLabel,
-          isInPast && styles.resultHeaderLabelInPast,
+          strikethrough && styles.strikethrough,
         ]}
         accessibilityLabel={t(
           AssistantTexts.results.resultItem.header.time(
@@ -97,6 +99,7 @@ const ResultItemHeader: React.FC<{
             formatToClock(tripPattern.expectedEndTime, language),
           ),
         )}
+        testID="resultStartAndEndTime"
       >
         {formatToClock(startTime, language)} –{' '}
         {formatToClock(endTime, language)}
@@ -105,6 +108,7 @@ const ResultItemHeader: React.FC<{
         <AccessibleText
           type="body__secondary"
           color="secondary"
+          testID="resultDuration"
           prefix={t(AssistantTexts.results.resultItem.header.totalDuration)}
         >
           {durationText}
@@ -126,6 +130,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   tripPattern,
   onDetailsPressed,
   testID,
+  searchTime,
   ...props
 }) => {
   const styles = useThemeStyles();
@@ -162,11 +167,14 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     numberOfExpandedLegs,
     tripPattern.legs.length,
   );
-  const isInPast = isInThePast(tripPattern.legs[0].expectedStartTime);
+
+  const isInPast =
+    isInThePast(tripPattern.legs[0].expectedStartTime) &&
+    searchTime?.option !== 'now';
 
   return (
     <TouchableOpacity
-      accessibilityLabel={tripSummary(tripPattern, t, language)}
+      accessibilityLabel={tripSummary(tripPattern, t, language, isInPast)}
       accessibilityHint={t(
         AssistantTexts.results.resultItem.footer.detailsHint,
       )}
@@ -184,7 +192,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         accessible={false}
         onLayout={(e) => setCollapsableParentWidth(e.nativeEvent.layout.width)}
       >
-        <ResultItemHeader tripPattern={tripPattern} />
+        <ResultItemHeader tripPattern={tripPattern} strikethrough={isInPast} />
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
@@ -192,20 +200,20 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
           {...screenReaderHidden}
           onContentSizeChange={(width) => setCollapsableWidth(width)}
         >
-          {expandedLegs.map(function (leg, i) {
-            return (
-              <View style={styles.legOutput} key={leg.aimedStartTime}>
-                {leg.mode === 'foot' ? (
-                  <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
-                ) : (
-                  <>
+          <View style={styles.legOutput}>
+            {interpose(
+              expandedLegs.map((leg, i) => (
+                <View key={leg.aimedStartTime}>
+                  {leg.mode === 'foot' ? (
+                    <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
+                  ) : (
                     <TransportationLeg leg={leg} />
-                    <ThemeIcon svg={ChevronRight} size={'small'} />
-                  </>
-                )}
-              </View>
-            );
-          })}
+                  )}
+                </View>
+              )),
+              <ThemeIcon svg={ChevronRight} size="small" />,
+            )}
+          </View>
           <View style={styles.legOutput}>
             <CollapsedLegs legs={collapsedLegs} />
           </View>
@@ -232,11 +240,12 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
           type="body__secondary"
           style={styles.fromPlaceText}
           numberOfLines={1}
+          testID="resultDeparturePlace"
         >
           {t(AssistantTexts.results.resultItem.footer.fromPlace(quayName)) +
             ' '}
         </ThemeText>
-        <ThemeText type="body__secondary">
+        <ThemeText type="body__secondary" testID="resultDepartureTime">
           {timePrefix + formatToClock(quayStartTime, language)}
         </ThemeText>
       </View>
@@ -272,7 +281,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   resultHeaderLabel: {
     flex: 3,
   },
-  resultHeaderLabelInPast: {
+  strikethrough: {
     textDecorationLine: 'line-through',
   },
   legOutput: {
@@ -342,13 +351,16 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       : t(AssistantTexts.results.resultItem.footLeg.walkLabel(walkDuration));
 
   return (
-    <View style={styles.legContainer} accessibilityLabel={a11yText}>
+    <View
+      style={styles.legContainer}
+      accessibilityLabel={a11yText}
+      testID="fLeg"
+    >
       {!mustWalk ? (
         <ThemeIcon svg={Duration} />
       ) : (
         <ThemeIcon svg={WalkingPerson} />
       )}
-      {nextLeg && <ThemeIcon svg={ChevronRight} size="small" />}
     </View>
   );
 };
@@ -369,7 +381,7 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
   const styles = useLegStyles();
   return (
     <View style={styles.legContainer}>
-      <View style={styles.iconContainer}>
+      <View style={styles.iconContainer} testID="trLeg">
         <TransportationIcon
           mode={leg.mode}
           subMode={leg.line?.transportSubmode}
@@ -398,11 +410,14 @@ const tripSummary = (
   tripPattern: TripPattern,
   t: TranslateFunction,
   language: Language,
+  isInPast: boolean,
 ) => {
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
   const firstLeg = nonFootLegs[0];
 
   return `
+    ${isInPast ? t(AssistantTexts.results.resultItem.passedTrip) : ''}
+
     ${
       firstLeg
         ? t(

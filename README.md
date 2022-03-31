@@ -42,8 +42,15 @@ For external contributors, we need to fix [#35](https://github.com/AtB-AS/mittat
 
 #### Starting projects
 
-1. iOS Simulator: `yarn ios`
-1. Android Emulator: `yarn android`
+1. iOS: `yarn ios`
+   
+You may select which simulator/device the application will be deployed on in xcode.
+
+1. Android: `yarn android`
+
+You may select which device/emulator to use from Android Studio. You may also use Android Debug Bridge (adb).
+
+When deploying on device you should check that the device is listed as `device` with `adb devices`. You may also need to use the command `adb -s <device-id> reverse tcp:8081 tcp:8081` to reverse the port needed for metro. 
 
 ### External design system and assets
 

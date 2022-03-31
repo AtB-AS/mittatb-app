@@ -41,8 +41,8 @@ const SelectTravelTokenTexts = {
           'Can I travel without my t:card or phone?',
         ),
         answer: _(
-          'Nei. Du mpå alltid ha med deg den dingsen du har valgt å bruke billetten på.',
-          'No. You must always bring the gadget you gave chosen to use your ticket on.',
+          'Nei. Du må alltid ha med deg den dingsen du har valgt å bruke billetten på.',
+          'No. You must always bring the gadget you have chosen to use your ticket on.',
         ),
       },
       {

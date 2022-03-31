@@ -7,8 +7,8 @@ export default function activateNewHandler(
   abtTokensService: AbtTokensService
 ): StateHandler {
   return stateHandlerFactory(['ActivateNew'], async (s) => {
-    const { tokenId, accountId } = s;
-    logger.info('activate_new', undefined, { tokenId, accountId });
+    const { tokenId, accountId, state } = s;
+    logger.info('mobiletoken_status_change', undefined, { tokenId, accountId, state });
 
     const activateTokenResponse = await abtTokensService.activateToken(
       tokenId,

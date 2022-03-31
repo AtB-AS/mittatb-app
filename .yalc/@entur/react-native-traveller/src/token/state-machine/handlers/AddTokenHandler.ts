@@ -12,9 +12,14 @@ export default function addTokenHandler(): StateHandler {
         tokenValidityStart,
       },
       accountId,
+      state,
     } = s;
 
-    logger.info('add_token', undefined, { accountId, tokenId });
+    logger.info('mobiletoken_status_change', undefined, {
+      accountId,
+      tokenId,
+      state,
+    });
 
     await addToken(
       accountId,

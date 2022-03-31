@@ -19,9 +19,13 @@ export default function initiateNewHandler(
       deviceName = await getDeviceName();
     } catch {}
 
-    const { accountId } = s;
+    const { accountId, state } = s;
 
-    logger.info('initiate_new', undefined, { deviceName, accountId });
+    logger.info('mobiletoken_status_change', undefined, {
+      state,
+      deviceName,
+      accountId,
+    });
 
     const initTokenResponse = await abtTokensService.initToken({
       requireAttestation,

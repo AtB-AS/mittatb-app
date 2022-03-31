@@ -9,8 +9,12 @@ export default function getTokenCertificateHandler(
   abtTokensService: AbtTokensService
 ): StateHandler {
   return stateHandlerFactory(['GettingTokenCertificate'], async (s) => {
-    const { accountId, tokenId } = s;
-    logger.info('get_token_cert', undefined, { accountId, tokenId });
+    const { accountId, tokenId, state } = s;
+    logger.info('mobiletoken_status_change', undefined, {
+      state,
+      accountId,
+      tokenId,
+    });
 
     const signedToken = await getSecureToken(accountId, tokenId, false, [
       PayloadAction.addRemoveToken,

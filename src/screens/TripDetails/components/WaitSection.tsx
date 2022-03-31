@@ -1,5 +1,5 @@
 import {Wait} from '@atb/assets/svg/mono-icons/transportation';
-import {Info, Warning} from '@atb/assets/svg/color/situations';
+import {Info} from '@atb/assets/svg/color/situations';
 import ThemeText from '@atb/components/text';
 import {TinyMessageBox} from '@atb/components/message-box';
 import {StyleSheet} from '@atb/theme';
@@ -14,15 +14,15 @@ import TripRow from './TripRow';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 
 export type WaitDetails = {
-  waitAfter: boolean;
-  waitSeconds: number;
+  mustWaitForNextLeg: boolean;
+  waitTimeInSeconds: number;
 };
 
 const WaitSection: React.FC<WaitDetails> = (wait) => {
   const style = useSectionStyles();
   const {t, language} = useTranslation();
-  const waitTime = secondsToDuration(wait.waitSeconds, language);
-  const shortWait = timeIsShort(wait.waitSeconds);
+  const waitTime = secondsToDuration(wait.waitTimeInSeconds, language);
+  const shortWait = timeIsShort(wait.waitTimeInSeconds);
   const iconColor = useTransportationColor();
 
   return (

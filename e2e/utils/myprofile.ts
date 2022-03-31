@@ -1,10 +1,6 @@
 import {by, element, expect} from 'detox';
-import {
-  expectToBeVisibleByText,
-  scrollToId,
-  tapById,
-  tapByText,
-} from './interactionHelpers';
+import {scrollToId, tapById, tapByText} from './interactionHelpers';
+import {expectToBeVisibleByText} from './expectHelpers';
 import {chooseSearchResult, setInputById} from './commonHelpers';
 
 // Toggle language
@@ -31,11 +27,11 @@ export const toggleLanguage = async (useMyPhoneSettings: boolean) => {
   }
 };
 
-// Toggle travel search v2 on/off
-export const toggleTravelSearchV2 = async (enableV2: boolean) => {
-  await scrollToId('profileHomeScrollView', 'newAssistantToggle', 'down');
+// Toggle departures v2 on/off
+export const toggleDeparturesV2 = async (enableV2: boolean) => {
+  await scrollToId('profileHomeScrollView', 'newDeparturesToggle', 'down');
 
-  const toggle = await element(by.id('newAssistantToggle'))
+  const toggle = await element(by.id('newDeparturesToggle'))
     .getAttributes()
     .then((elem) => {
       return !('elements' in elem) ? elem.value : undefined;
@@ -43,11 +39,11 @@ export const toggleTravelSearchV2 = async (enableV2: boolean) => {
 
   // Enable OTP 2 if not enabled
   if (toggle == 0 && enableV2) {
-    await tapById('newAssistantToggle');
+    await tapById('newDeparturesToggle');
   }
   // Disable OTP 2 if not disabled
   if (toggle == 1 && !enableV2) {
-    await tapById('newAssistantToggle');
+    await tapById('newDeparturesToggle');
   }
 };
 

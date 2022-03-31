@@ -3,6 +3,7 @@ import {EstimatedCall, ServiceJourneyMapInfoData} from '../sdk';
 import client from './client';
 import qs from 'query-string';
 import {stringifyUrl} from './utils';
+import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 
 type ServiceJourneyDepartures = {
   value: EstimatedCall[];
@@ -24,8 +25,8 @@ export async function getServiceJourneyMapLegs(
   id: string,
   fromQuayId?: string,
   toQuayId?: string,
-): Promise<ServiceJourneyMapInfoData> {
-  const url = `bff/v1/servicejourney/${encodeURIComponent(id)}/polyline`;
+): Promise<ServiceJourneyMapInfoData_v3> {
+  const url = `bff/v2/servicejourney/${encodeURIComponent(id)}/polyline`;
   const query = qs.stringify(
     {
       fromQuayId,
@@ -33,7 +34,7 @@ export async function getServiceJourneyMapLegs(
     },
     {skipNull: true},
   );
-  const response = await client.get<ServiceJourneyMapInfoData>(
+  const response = await client.get<ServiceJourneyMapInfoData_v3>(
     stringifyUrl(url, query),
   );
   return (

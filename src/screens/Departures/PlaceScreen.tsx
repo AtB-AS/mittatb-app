@@ -84,6 +84,7 @@ export default function PlaceScreen({
             color={selectedQuay ? 'secondary_2' : 'secondary_3'}
             style={[styles.quayChip, {marginLeft: theme.spacings.medium}]}
             accessibilityHint={t(DeparturesTexts.quayChips.a11yAllStopsHint)}
+            testID="allStopsSelectionButton"
           ></Button>
         }
         renderItem={({item}: quayChipData) => (
@@ -97,6 +98,7 @@ export default function PlaceScreen({
             accessibilityHint={
               t(DeparturesTexts.quayChips.a11yHint) + getQuayName(item)
             }
+            testID="quaySelectionButton"
           ></Button>
         )}
       />
@@ -106,6 +108,7 @@ export default function PlaceScreen({
           navigateToDetails={navigateToDetails}
           searchTime={searchTime}
           setSearchTime={setSearchTime}
+          testID="departuresContentView"
         />
       ) : (
         <StopPlaceView
@@ -114,6 +117,7 @@ export default function PlaceScreen({
           navigateToQuay={navigateToQuay}
           searchTime={searchTime}
           setSearchTime={setSearchTime}
+          testID="departuresContentView"
         />
       )}
     </View>

@@ -155,6 +155,7 @@ const ErrorMessages = () => {
     return (
       <MessageBox
         type={'warning'}
+        isMarkdown={true}
         title={t(TravelTokenBoxTexts.errorMessages.noInspectableTokenTitle)}
         message={t(TravelTokenBoxTexts.errorMessages.noInspectableToken)}
         containerStyle={styles.errorMessage}
