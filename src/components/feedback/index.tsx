@@ -304,11 +304,9 @@ export const Feedback = ({
       if (currentVersionStats.answeredAtDisplayCount) {
         const shouldReprompt =
           currentVersionStats.displayCount -
-            currentVersionStats.answeredAtDisplayCount >=
+            currentVersionStats.answeredAtDisplayCount >
           feedbackConfig.repromptDisplayCount;
-        if (shouldReprompt) {
-          return null;
-        }
+        if (!shouldReprompt) return null;
       }
     } else if (currentVersionStats.answeredAtDisplayCount) {
       return null;
