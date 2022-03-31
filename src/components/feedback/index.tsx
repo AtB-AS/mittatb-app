@@ -248,10 +248,21 @@ export const Feedback = ({
   const setDoNotShowAgain = () => {
     const currentVersionStats = findCurrentVersionStats(versionStatsList);
     if (currentVersionStats) {
-      currentVersionStats.doNotShowAgain = true;
+      const currentVersionStatsCopy = {...currentVersionStats};
+      currentVersionStatsCopy.doNotShowAgain = true;
+      const versionStatsListCopy = [...versionStatsList].filter(
+        (versionStat) =>
+          !(
+            versionStat.surveyVersion === feedbackConfig.surveyVersion &&
+            versionStat.viewContext === feedbackConfig.viewContext
+          ),
+      );
+      versionStatsListCopy.push(currentVersionStatsCopy);
+
+      setVersionStatsList(versionStatsListCopy);
       storage.set(
         '@ATB_feedback_display_stats',
-        JSON.stringify(versionStatsList),
+        JSON.stringify(versionStatsListCopy),
       );
       setVersionStatsList(versionStatsList);
     }
