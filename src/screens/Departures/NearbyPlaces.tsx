@@ -124,6 +124,14 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
       initialLocation: fromLocation,
     });
 
+  useEffect(() => {
+    if (fromLocation?.layer === 'venue') {
+      navigation.navigate('PlaceScreen', {
+        place: fromLocation,
+      });
+    }
+  }, [fromLocation?.id]);
+
   function setCurrentLocationAsFrom() {
     navigation.setParams({
       location: currentLocation && {
@@ -195,9 +203,13 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
           openLocationSearch={openLocationSearch}
           setCurrentLocationOrRequest={setCurrentLocationOrRequest}
           setLocation={(location: LocationWithMetadata) => {
-            navigation.navigate('PlaceScreen', {
-              place: location as Place,
-            });
+            location.layer === 'venue'
+              ? navigation.navigate('PlaceScreen', {
+                  place: location as Place,
+                })
+              : navigation.setParams({
+                  location,
+                });
           }}
         />
       }
