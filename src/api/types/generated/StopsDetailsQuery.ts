@@ -6,6 +6,8 @@ export type StopsDetailsQuery = {
     transportMode?: Array<Types.TransportMode>;
     description?: string;
     id: string;
+    latitude?: number;
+    longitude?: number;
     quays?: Array<{
       id: string;
       description?: string;
