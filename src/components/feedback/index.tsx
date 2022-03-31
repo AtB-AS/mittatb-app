@@ -264,7 +264,6 @@ export const Feedback = ({
         '@ATB_feedback_display_stats',
         JSON.stringify(versionStatsListCopy),
       );
-      setVersionStatsList(versionStatsList);
     }
   };
 
@@ -294,7 +293,8 @@ export const Feedback = ({
 
   if (
     feedbackConfig.gracePeriodDisplayCount &&
-    feedbackConfig.gracePeriodDisplayCount > currentVersionStats.displayCount
+    feedbackConfig.gracePeriodDisplayCount + 1 >
+      currentVersionStats.displayCount
   ) {
     return null;
   }
