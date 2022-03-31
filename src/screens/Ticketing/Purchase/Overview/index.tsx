@@ -44,6 +44,8 @@ import {
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
 import {useTicketState} from '@atb/tickets';
+import Bugsnag from '@bugsnag/react-native';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -74,8 +76,19 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     user_profiles: userProfiles,
   } = useRemoteConfig();
 
-  const selectableProducts = preassignedFareProducts.filter(
+  Bugsnag.leaveBreadcrumb('## fareproducts from RC', preassignedFareProducts);
+
+  const {preassignedFareproducts: fs_fareprods} = useFirestoreConfiguration();
+  Bugsnag.leaveBreadcrumb('FareProducts from Firestore', fs_fareprods);
+
+  /*const selectableProducts = preassignedFareProducts.filter(
     (p) => p.type === params.selectableProductType,
+  );
+
+   */
+
+  const selectableProducts = fs_fareprods.filter(
+    (product) => product.type === params.selectableProductType,
   );
 
   const [preassignedFareProduct, setPreassignedFareProduct] = useState(
