@@ -34,9 +34,11 @@ We love feedback and suggestions. The AtB app and service is continously improve
 
 1. Install dependencies:
    1. React Native: `yarn`
-   1. iOS specific: `cd ios/` and `pod install`
-1. Decrypt sensitive files `git-crypt unlock <path/to/key>` (Key given to internal members)
-1. From root folder run: `yarn setup dev <organization>` where organization is either `atb` or `nfk`, to set root .env for local development and generate all icons and launch screens for iOS and Android
+   2. Install Ruby dependencies `bundle install`
+   3. iOS specific: `cd ios/` and `pod install`
+      > If there is an issue related to Mapbox please refer to the `Common errors section` below.
+2. Decrypt sensitive files `git-crypt unlock <path/to/key>` (Key given to internal members)
+3. From root folder run: `yarn setup dev <organization>` where organization is either `atb` or `nfk`, to set root .env for local development and generate all icons and launch screens for iOS and Android
 
 For external contributors, we need to fix [#35](https://github.com/AtB-AS/mittatb-app/issues/35) before they are able to run the app.
 
