@@ -75,17 +75,17 @@ function AlternativeItem({
   const {language} = useTranslation();
   const styles = useAlternativeStyle();
   const {topContainer} = useSectionItem({...props});
-  const checked = selectedAlternativeIds.includes(alternative.alternativeId);
+  const isChecked = selectedAlternativeIds.includes(alternative.alternativeId);
 
   return (
     <TouchableOpacity
       onPress={() => handleAnswerPress(alternative.alternativeId)}
       accessibilityRole="checkbox"
-      accessibilityState={{checked}}
+      accessibilityState={{checked: isChecked}}
     >
       <View
         style={
-          checked
+          isChecked
             ? [topContainer, styles.alternativeBox, styles.checked]
             : [topContainer, styles.alternativeBox]
         }
