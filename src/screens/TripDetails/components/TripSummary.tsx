@@ -31,6 +31,7 @@ const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
           accessibilityLabel={t(
             TripDetailsTexts.trip.summary.travelTime.a11yLabel(time),
           )}
+          testID="travelTime"
         >
           {t(TripDetailsTexts.trip.summary.travelTime.label(time))}
         </ThemeText>
@@ -49,6 +50,7 @@ const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
               readableDistance,
             ),
           )}
+          testID="walkDistance"
         >
           {t(
             TripDetailsTexts.trip.summary.walkDistance.label(readableDistance),

@@ -17,7 +17,10 @@ const Time: React.FC<TimeValues> = (timeValues) => {
     case 'significant-difference': {
       return (
         <View style={{flexDirection: 'column', alignItems: 'flex-end'}}>
-          <AccessibleText prefix={t(dictionary.travel.time.expectedPrefix)}>
+          <AccessibleText
+            prefix={t(dictionary.travel.time.expectedPrefix)}
+            testID="expTime"
+          >
             {expected}
           </AccessibleText>
           <AccessibleText
@@ -25,6 +28,7 @@ const Time: React.FC<TimeValues> = (timeValues) => {
             color="secondary"
             prefix={t(dictionary.travel.time.aimedPrefix)}
             style={{textDecorationLine: 'line-through'}}
+            testID="aimTime"
           >
             {scheduled}
           </AccessibleText>
@@ -33,14 +37,14 @@ const Time: React.FC<TimeValues> = (timeValues) => {
     }
     case 'no-realtime': {
       return (
-        <ThemeText>
+        <ThemeText testID="schCaTime">
           <ThemeText>{t(dictionary.missingRealTimePrefix)}</ThemeText>
           {scheduled}
         </ThemeText>
       );
     }
     default: {
-      return <ThemeText>{scheduled}</ThemeText>;
+      return <ThemeText testID="schTime">{scheduled}</ThemeText>;
     }
   }
 };

@@ -96,3 +96,12 @@ export const scrollContentToId = async (
     direction,
   );
 };
+
+// ** WAIT **
+
+// Wait for element to exists
+export const waitToExistById = async (id: string, timeout: number) => {
+  await waitFor(element(by.id(id)))
+    .toExist()
+    .withTimeout(timeout)
+};
