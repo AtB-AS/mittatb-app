@@ -15,6 +15,7 @@ import {
 } from '@atb/tickets';
 import {useEffect, useMemo, useReducer} from 'react';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 export type RecentTicket = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -92,14 +93,14 @@ const mapUsers = (
 
 const mapRecentFareContractToRecentTicket = (
   recentFareContract: RecentFareContract,
+  preassignedFareproducts: PreassignedFareProduct[],
   {
     tariff_zones: tariffZones,
     user_profiles: userProfiles,
-    preassigned_fare_products: preassignedFareProducts,
   }: RemoteConfigContextState,
 ): RecentTicket | null => {
   const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts,
+    preassignedFareproducts,
     recentFareContract.products[0],
   );
 
@@ -176,13 +177,15 @@ const containsTicket = (
  */
 const mapToLastThreeUniqueTickets = (
   recentFareContracts: RecentFareContract[],
+  preassignedFareproducts: PreassignedFareProduct[],
   remoteConfigState: RemoteConfigContextState,
 ): RecentTicket[] => {
   return recentFareContracts
     .sort((fc1, fc2) => fc2.created_at.localeCompare(fc1.created_at))
-    .reduce<RecentTicket[]>((mappedTickets, fc) => {
+    .reduce<RecentTicket[]>((mappedTickets, recentFarecontract) => {
       const maybeTicket = mapRecentFareContractToRecentTicket(
-        fc,
+        recentFarecontract,
+        preassignedFareproducts,
         remoteConfigState,
       );
       return maybeTicket ? mappedTickets.concat(maybeTicket) : mappedTickets;
@@ -199,6 +202,7 @@ export default function useRecentTickets() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const remoteConfigState = useRemoteConfig();
   const {fareContracts} = useTicketState();
+  const {preassignedFareproducts} = useFirestoreConfiguration();
 
   const fetchRecentFareContracts = async () => {
     dispatch({type: 'FETCH'});
@@ -221,7 +225,11 @@ export default function useRecentTickets() {
 
   const recentTickets = useMemo(
     () =>
-      mapToLastThreeUniqueTickets(state.recentFareContracts, remoteConfigState),
+      mapToLastThreeUniqueTickets(
+        state.recentFareContracts,
+        preassignedFareproducts,
+        remoteConfigState,
+      ),
     [state.recentFareContracts, remoteConfigState],
   );
 

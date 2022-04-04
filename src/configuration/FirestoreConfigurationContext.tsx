@@ -5,29 +5,24 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import firestore, {
-  FirebaseFirestoreTypes,
-} from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import Bugsnag from '@bugsnag/react-native';
 import {defaultPreassignedFareProducts} from '@atb/reference-data/defaults';
 
 type ConfigurationContextState = {
-  hello: string;
   preassignedFareproducts: PreassignedFareProduct[];
 };
 
-const defaulConfigurationContextState: ConfigurationContextState = {
-  hello: 'world',
+const defaultConfigurationContextState: ConfigurationContextState = {
   preassignedFareproducts: [],
 };
 
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
-  defaulConfigurationContextState,
+  defaultConfigurationContextState,
 );
 
 export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
-  const hello = '';
   const [preassignedFareproducts, setPreassignedFareproducts] = useState<
     PreassignedFareProduct[]
   >([]);
@@ -48,15 +43,10 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
             : defaultPreassignedFareProducts;
 
           setPreassignedFareproducts(preassignedFareproducts);
-
-          Bugsnag.leaveBreadcrumb('>> Firestore fareproducts', {
-            type: typeof preassignedFareproductsFromFirestore,
-            preassignedFareproductsFromFirestore,
-          });
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
-            `!!! Firebase Error when fetching PreassignedFareproducts from Firestore`,
+            `Firebase Error when fetching PreassignedFareproducts from Firestore`,
             error,
           );
         },
@@ -65,10 +55,9 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
 
   const memoizedState = useMemo(
     () => ({
-      hello,
       preassignedFareproducts,
     }),
-    [hello, preassignedFareproducts],
+    [preassignedFareproducts],
   );
 
   return (

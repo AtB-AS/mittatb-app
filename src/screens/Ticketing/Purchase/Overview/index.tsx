@@ -70,13 +70,10 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const showNotInspectableTokenWarning =
     tokensEnabled && !inspectableToken?.isThisDevice;
 
-  const {
-    tariff_zones: tariffZones,
-    preassigned_fare_products: preassignedFareProducts,
-    user_profiles: userProfiles,
-  } = useRemoteConfig();
+  const {tariff_zones: tariffZones, user_profiles: userProfiles} =
+    useRemoteConfig();
 
-  Bugsnag.leaveBreadcrumb('## fareproducts from RC', preassignedFareProducts);
+  const {preassignedFareproducts} = useFirestoreConfiguration();
 
   const {preassignedFareproducts: fs_fareprods} = useFirestoreConfiguration();
   Bugsnag.leaveBreadcrumb('FareProducts from Firestore', fs_fareprods);

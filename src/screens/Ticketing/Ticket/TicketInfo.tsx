@@ -24,6 +24,7 @@ import {screenReaderPause} from '@atb/components/accessible-text';
 import {Warning} from '@atb/assets/svg/color/situations';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 import {ThemeColor} from '@atb/theme/colors';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
@@ -38,11 +39,10 @@ const TicketInfo = ({
   isInspectable,
   omitUserProfileCount,
 }: TicketInfoProps) => {
-  const {
-    tariff_zones: tariffZones,
-    preassigned_fare_products: preassignedFareProducts,
-    user_profiles: userProfiles,
-  } = useRemoteConfig();
+  const {tariff_zones: tariffZones, user_profiles: userProfiles} =
+    useRemoteConfig();
+
+  const {preassignedFareproducts} = useFirestoreConfiguration();
 
   const firstTravelRight = travelRights[0];
   const {fareProductRef: productRef, tariffZoneRefs} = firstTravelRight;
@@ -50,7 +50,7 @@ const TicketInfo = ({
   const [lastZone] = tariffZoneRefs.slice(-1);
 
   const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts,
+    preassignedFareproducts,
     productRef,
   );
   const fromTariffZone = findReferenceDataById(tariffZones, firstZone);

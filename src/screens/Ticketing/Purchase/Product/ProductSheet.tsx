@@ -14,6 +14,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 type Props = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -26,14 +27,13 @@ const ProductSheet = forwardRef<ScrollView, Props>(
     const styles = useStyles();
     const {t, language} = useTranslation();
 
-    const {preassigned_fare_products: preassignedFareProducts} =
-      useRemoteConfig();
+    const {preassignedFareproducts} = useFirestoreConfiguration();
 
     const [selectedProduct, setSelectedProduct] = useState(
       preassignedFareProduct,
     );
 
-    const selectableProducts = preassignedFareProducts.filter(
+    const selectableProducts = preassignedFareproducts.filter(
       (p) => p.type === selectedProduct.type,
     );
 

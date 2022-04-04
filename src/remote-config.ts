@@ -2,7 +2,6 @@ import remoteConfig from '@react-native-firebase/remote-config';
 import {PRIVACY_POLICY_URL, ENABLE_TICKETING} from '@env';
 
 import {
-  defaultPreassignedFareProducts,
   defaultTariffZones,
   defaultUserProfiles,
 } from './reference-data/defaults';
@@ -22,7 +21,6 @@ export type RemoteConfig = {
   news_link_text: string;
   news_link_url: string;
   vat_percent: number;
-  preassigned_fare_products: string;
   tariff_zones: string;
   user_profiles: string;
   customer_service_url: string;
@@ -57,7 +55,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   news_link_text: 'Les mer',
   news_link_url: '',
   vat_percent: 6,
-  preassigned_fare_products: JSON.stringify(defaultPreassignedFareProducts),
   tariff_zones: JSON.stringify(defaultTariffZones),
   user_profiles: JSON.stringify(defaultUserProfiles),
   customer_service_url: 'https://www.atb.no/kontakt/',
@@ -96,9 +93,6 @@ export function getConfig(): RemoteConfig {
   const modes_we_sell_tickets_for =
     values['modes_we_sell_tickets_for']?.asString() ??
     defaultRemoteConfig.modes_we_sell_tickets_for;
-  const preassigned_fare_products =
-    values['preassigned_fare_products_v2']?.asString() ??
-    defaultRemoteConfig.preassigned_fare_products;
   const tariff_zones =
     values['tariff_zones']?.asString() ?? defaultRemoteConfig.tariff_zones;
   const user_profiles =
@@ -139,7 +133,6 @@ export function getConfig(): RemoteConfig {
     news_link_url,
     news_link_text,
     vat_percent,
-    preassigned_fare_products,
     tariff_zones,
     user_profiles,
     customer_service_url,
