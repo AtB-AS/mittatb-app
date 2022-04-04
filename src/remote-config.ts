@@ -26,7 +26,7 @@ export type RemoteConfig = {
   tariff_zones: string;
   user_profiles: string;
   customer_service_url: string;
-  customer_feedback_url: string | null;
+  customer_feedback_url: string;
   tripsSearch_target_number_of_initial_hits: number;
   tripsSearch_target_number_of_page_hits: number;
   tripsSearch_max_number_of_chained_searches: number;
@@ -62,7 +62,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   tariff_zones: JSON.stringify(defaultTariffZones),
   user_profiles: JSON.stringify(defaultUserProfiles),
   customer_service_url: 'https://www.atb.no/kontakt/',
-  customer_feedback_url: null,
+  customer_feedback_url: '',
   tripsSearch_target_number_of_initial_hits: 8,
   tripsSearch_target_number_of_page_hits: 8,
   tripsSearch_max_number_of_chained_searches: 5,

@@ -45,7 +45,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
       </View>
 
       <FullScreenFooter>
-        <Contact
+        <ContactItem
           title={t(ContactSheetTexts.customer_service.title)}
           body={t(ContactSheetTexts.customer_service.body)}
           buttonText={t(ContactSheetTexts.customer_service.button)}
@@ -61,7 +61,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
         />
 
         {customer_feedback_url ? (
-          <Contact
+          <ContactItem
             title={t(ContactSheetTexts.customer_feedback.title)}
             body={t(ContactSheetTexts.customer_feedback.body)}
             buttonText={t(ContactSheetTexts.customer_feedback.button)}
@@ -74,7 +74,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
         ) : undefined}
 
         {enable_intercom ? (
-          <Contact
+          <ContactItem
             screenReaderHidden={screenReaderHidden}
             title={t(ContactSheetTexts.customer_feedback.title)}
             body={t(ContactSheetTexts.customer_feedback.body)}
@@ -111,7 +111,7 @@ type ContactProps = {
   screenReaderHidden?: AccessibilityProps;
 };
 
-const Contact: React.FC<ContactProps> = ({
+const ContactItem: React.FC<ContactProps> = ({
   onPress,
   icon,
   title,
