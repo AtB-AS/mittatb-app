@@ -47,16 +47,21 @@ const SubmittedComponent = ({
   };
 
   return (
-    <View style={styles.container} ref={focusRef}>
-      <ThemeText
-        type="body__primary--bold"
-        style={[styles.questionText, styles.centerText]}
-      >
-        {t(FeedbackTexts.submittedText.thanks)}
-      </ThemeText>
-      <ThemeText style={styles.centerText}>
-        {t(FeedbackTexts.additionalFeedback.text)}
-      </ThemeText>
+    <View style={styles.container}>
+      <View accessible={true} accessibilityRole="header" ref={focusRef}>
+        <ThemeText
+          type="body__primary--bold"
+          style={[styles.questionText, styles.centerText]}
+        >
+          {t(FeedbackTexts.submittedText.thanks)}
+        </ThemeText>
+      </View>
+      <View accessible={true}>
+        <ThemeText style={styles.centerText}>
+          {t(FeedbackTexts.additionalFeedback.text)}
+        </ThemeText>
+      </View>
+
       <View style={styles.button}>
         {enable_intercom ? (
           <Button
