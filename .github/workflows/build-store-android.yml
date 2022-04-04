@@ -73,6 +73,7 @@ jobs:
           fastlane android playstore_internal
         env:
           GOOGLE_PLAY_SERVICE_ACCOUNT_PATH: google-play-service-account.json
+          ANDROID_PACKAGE_NAME: ${{ env.ANDROID_APPLICATION_ID }}
       - name: Upload bundle and source maps
         if: matrix.org == 'atb'
         run: sh ./scripts/android/upload-sourcemaps.sh
