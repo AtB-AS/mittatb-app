@@ -29,6 +29,9 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
   const {customer_service_url, enable_intercom, customer_feedback_url} =
     useRemoteConfig();
 
+  const showIntercomFeedback = enable_intercom && !customer_feedback_url;
+  const showWebsiteFeedback = !!customer_feedback_url;
+
   return (
     <BottomSheetContainer>
       <View>
@@ -43,7 +46,6 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
           setFocusOnLoad={false}
         />
       </View>
-
       <FullScreenFooter>
         <ContactItem
           title={t(ContactSheetTexts.customer_service.title)}
@@ -60,7 +62,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
           }}
         />
 
-        {customer_feedback_url ? (
+        {showWebsiteFeedback ? (
           <ContactItem
             title={t(ContactSheetTexts.customer_feedback.title)}
             body={t(ContactSheetTexts.customer_feedback.body)}
@@ -73,7 +75,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
           />
         ) : undefined}
 
-        {enable_intercom ? (
+        {showIntercomFeedback ? (
           <ContactItem
             screenReaderHidden={screenReaderHidden}
             title={t(ContactSheetTexts.customer_feedback.title)}
