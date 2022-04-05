@@ -230,7 +230,7 @@ export default function useRecentTickets() {
         preassignedFareproducts,
         remoteConfigState,
       ),
-    [state.recentFareContracts, remoteConfigState],
+    [state.recentFareContracts, preassignedFareproducts, remoteConfigState],
   );
 
   return {
