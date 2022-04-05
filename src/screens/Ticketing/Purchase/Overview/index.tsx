@@ -75,16 +75,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
   const {preassignedFareproducts} = useFirestoreConfiguration();
 
-  const {preassignedFareproducts: fs_fareprods} = useFirestoreConfiguration();
-  Bugsnag.leaveBreadcrumb('FareProducts from Firestore', fs_fareprods);
-
-  /*const selectableProducts = preassignedFareProducts.filter(
-    (p) => p.type === params.selectableProductType,
-  );
-
-   */
-
-  const selectableProducts = fs_fareprods.filter(
+  const selectableProducts = preassignedFareproducts.filter(
     (product) => product.type === params.selectableProductType,
   );
 
