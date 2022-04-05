@@ -23,9 +23,9 @@ const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
 );
 
 export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
-  const [preassignedFareproducts, setPreassignedFareproducts] = useState<
-    PreassignedFareProduct[]
-  >([]);
+  const [preassignedFareproducts, setPreassignedFareproducts] = useState(
+    defaultPreassignedFareProducts,
+  );
 
   useEffect(() => {
     firestore()
@@ -36,17 +36,23 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
             .find((doc) => doc.id == 'referenceData')
             ?.get<string>('preassignedFareProducts_v2');
 
-          const preassignedFareproducts = preassignedFareproductsFromFirestore
-            ? (JSON.parse(
+          try {
+            if (preassignedFareproductsFromFirestore) {
+              const preassignedFareproducts = JSON.parse(
                 preassignedFareproductsFromFirestore,
-              ) as PreassignedFareProduct[])
-            : defaultPreassignedFareProducts;
-
-          setPreassignedFareproducts(preassignedFareproducts);
+              ) as PreassignedFareProduct[];
+              setPreassignedFareproducts(preassignedFareproducts);
+            }
+          } catch (error) {
+            Bugsnag.leaveBreadcrumb(
+              'Error parsing preassignedFareproducts from FireStore',
+              {preassignedFareproductsFromFirestore},
+            );
+          }
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
-            `Firebase Error when fetching PreassignedFareproducts from Firestore`,
+            `Firebase Error when fetching Configuration from Firestore`,
             error,
           );
         },
