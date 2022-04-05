@@ -125,7 +125,7 @@ const ContactItem: React.FC<ContactProps> = ({
 
   return (
     <View {...screenReaderHidden}>
-      <View style={styles.descriptionSection} ref={focusRef}>
+      <View style={styles.descriptionSection} ref={focusRef} accessible>
         <ThemeText type="body__secondary" color="secondary">
           {title}
         </ThemeText>
