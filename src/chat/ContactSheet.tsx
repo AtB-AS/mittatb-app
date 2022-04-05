@@ -29,8 +29,8 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
   const {customer_service_url, enable_intercom, customer_feedback_url} =
     useRemoteConfig();
 
-  const showIntercomFeedback = enable_intercom && !customer_feedback_url;
   const showWebsiteFeedback = !!customer_feedback_url;
+  const showIntercomFeedback = enable_intercom && !showWebsiteFeedback;
 
   return (
     <BottomSheetContainer>
