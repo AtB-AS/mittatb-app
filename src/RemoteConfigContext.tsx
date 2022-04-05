@@ -7,19 +7,12 @@ import {
   defaultModesWeSellTicketsFor,
 } from './remote-config';
 import Bugsnag from '@bugsnag/react-native';
-import {TariffZone, UserProfile} from './reference-data/types';
-import {
-  defaultPreassignedFareProducts,
-  defaultTariffZones,
-  defaultUserProfiles,
-} from './reference-data/defaults';
+
 import {useAppState} from './AppContext';
 
 export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;
   modes_we_sell_tickets_for: string[];
-  tariff_zones: TariffZone[];
-  user_profiles: UserProfile[];
 };
 
 const RemoteConfigContext = createContext<RemoteConfigContextState | undefined>(
@@ -112,8 +105,6 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
           config.modes_we_sell_tickets_for,
           defaultModesWeSellTicketsFor,
         ),
-        tariff_zones: parseJson(config.tariff_zones, defaultTariffZones),
-        user_profiles: parseJson(config.user_profiles, defaultUserProfiles),
         refresh,
       }}
     >

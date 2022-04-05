@@ -5,17 +5,31 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import firestore from '@react-native-firebase/firestore';
-import {PreassignedFareProduct} from '@atb/reference-data/types';
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
+import {
+  PreassignedFareProduct,
+  TariffZone,
+  UserProfile,
+} from '@atb/reference-data/types';
 import Bugsnag from '@bugsnag/react-native';
-import {defaultPreassignedFareProducts} from '@atb/reference-data/defaults';
+import {
+  defaultPreassignedFareProducts,
+  defaultTariffZones,
+  defaultUserProfiles,
+} from '@atb/reference-data/defaults';
 
 type ConfigurationContextState = {
   preassignedFareproducts: PreassignedFareProduct[];
+  tariffZones: TariffZone[];
+  userProfiles: UserProfile[];
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
   preassignedFareproducts: [],
+  tariffZones: [],
+  userProfiles: [],
 };
 
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
@@ -26,28 +40,28 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [preassignedFareproducts, setPreassignedFareproducts] = useState(
     defaultPreassignedFareProducts,
   );
+  const [tariffZones, setTariffZones] = useState(defaultTariffZones);
+  const [userProfiles, setUserProfiles] = useState(defaultUserProfiles);
 
   useEffect(() => {
     firestore()
       .collection('configuration')
       .onSnapshot(
         (snapshot) => {
-          const preassignedFareproductsFromFirestore = snapshot.docs
-            .find((doc) => doc.id == 'referenceData')
-            ?.get<string>('preassignedFareProducts_v2');
+          const preassignedFareproducts =
+            getPreassignedFarecontractsFromSnapshot(snapshot);
+          if (preassignedFareproducts) {
+            setPreassignedFareproducts(preassignedFareproducts);
+          }
 
-          try {
-            if (preassignedFareproductsFromFirestore) {
-              const preassignedFareproducts = JSON.parse(
-                preassignedFareproductsFromFirestore,
-              ) as PreassignedFareProduct[];
-              setPreassignedFareproducts(preassignedFareproducts);
-            }
-          } catch (error) {
-            Bugsnag.leaveBreadcrumb(
-              'Error parsing preassignedFareproducts from FireStore',
-              {preassignedFareproductsFromFirestore},
-            );
+          const tariffZones = getTariffZonesFromSnapshot(snapshot);
+          if (tariffZones) {
+            setTariffZones(tariffZones);
+          }
+
+          const userProfiles = getUserProfilesFromSnapshot(snapshot);
+          if (userProfiles) {
+            setUserProfiles(userProfiles);
           }
         },
         (error) => {
@@ -59,12 +73,13 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       );
   }, []);
 
-  const memoizedState = useMemo(
-    () => ({
+  const memoizedState = useMemo(() => {
+    return {
       preassignedFareproducts,
-    }),
-    [preassignedFareproducts],
-  );
+      tariffZones,
+      userProfiles,
+    };
+  }, [preassignedFareproducts, tariffZones, userProfiles]);
 
   return (
     <FirestoreConfigurationContext.Provider value={memoizedState}>
@@ -81,4 +96,66 @@ export function useFirestoreConfiguration() {
     );
   }
   return context;
+}
+
+function getPreassignedFarecontractsFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): PreassignedFareProduct[] | null {
+  const preassignedFareproductsFromFirestore = snapshot.docs
+    .find((doc) => doc.id == 'referenceData')
+    ?.get<string>('preassignedFareProducts_v2');
+
+  try {
+    if (preassignedFareproductsFromFirestore) {
+      return JSON.parse(
+        preassignedFareproductsFromFirestore,
+      ) as PreassignedFareProduct[];
+    }
+  } catch (error) {
+    Bugsnag.leaveBreadcrumb(
+      'Error parsing preassignedFareproducts from FireStore',
+      {preassignedFareproductsFromFirestore},
+    );
+  }
+  return null;
+}
+
+function getTariffZonesFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): TariffZone[] | null {
+  const tariffZonesFromFirestore = snapshot.docs
+    .find((doc) => doc.id == 'referenceData')
+    ?.get<string>('tariffZones');
+
+  try {
+    if (tariffZonesFromFirestore) {
+      return JSON.parse(tariffZonesFromFirestore) as TariffZone[];
+    }
+  } catch (error) {
+    Bugsnag.leaveBreadcrumb(
+      'Error parsing preassignedFareproducts from FireStore',
+      {tariffZonesFromFirestore},
+    );
+  }
+  return null;
+}
+
+function getUserProfilesFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): UserProfile[] | null {
+  const userProfilesFromFirestore = snapshot.docs
+    .find((doc) => doc.id == 'referenceData')
+    ?.get<string>('userProfiles');
+
+  try {
+    if (userProfilesFromFirestore) {
+      return JSON.parse(userProfilesFromFirestore) as UserProfile[];
+    }
+  } catch (error) {
+    Bugsnag.leaveBreadcrumb(
+      'Error parsing preassignedFareproducts from FireStore',
+      {userProfilesFromFirestore},
+    );
+  }
+  return null;
 }

@@ -1,11 +1,6 @@
 import remoteConfig from '@react-native-firebase/remote-config';
 import {PRIVACY_POLICY_URL, ENABLE_TICKETING} from '@env';
 
-import {
-  defaultTariffZones,
-  defaultUserProfiles,
-} from './reference-data/defaults';
-
 export type RemoteConfig = {
   modes_we_sell_tickets_for: string;
   enable_network_logging: boolean;
@@ -21,8 +16,6 @@ export type RemoteConfig = {
   news_link_text: string;
   news_link_url: string;
   vat_percent: number;
-  tariff_zones: string;
-  user_profiles: string;
   customer_service_url: string;
   tripsSearch_target_number_of_initial_hits: number;
   tripsSearch_target_number_of_page_hits: number;
@@ -55,8 +48,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   news_link_text: 'Les mer',
   news_link_url: '',
   vat_percent: 6,
-  tariff_zones: JSON.stringify(defaultTariffZones),
-  user_profiles: JSON.stringify(defaultUserProfiles),
   customer_service_url: 'https://www.atb.no/kontakt/',
   tripsSearch_target_number_of_initial_hits: 8,
   tripsSearch_target_number_of_page_hits: 8,
@@ -93,10 +84,6 @@ export function getConfig(): RemoteConfig {
   const modes_we_sell_tickets_for =
     values['modes_we_sell_tickets_for']?.asString() ??
     defaultRemoteConfig.modes_we_sell_tickets_for;
-  const tariff_zones =
-    values['tariff_zones']?.asString() ?? defaultRemoteConfig.tariff_zones;
-  const user_profiles =
-    values['user_profiles']?.asString() ?? defaultRemoteConfig.user_profiles;
   const customer_service_url =
     values['customer_service_url']?.asString() ??
     defaultRemoteConfig.customer_service_url;
@@ -133,8 +120,6 @@ export function getConfig(): RemoteConfig {
     news_link_url,
     news_link_text,
     vat_percent,
-    tariff_zones,
-    user_profiles,
     customer_service_url,
     tripsSearch_target_number_of_initial_hits,
     tripsSearch_target_number_of_page_hits,

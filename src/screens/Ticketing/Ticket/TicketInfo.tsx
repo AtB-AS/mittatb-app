@@ -8,7 +8,6 @@ import {
   findReferenceDataById,
   getReferenceDataName,
 } from '@atb/reference-data/utils';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PreactivatedTicket, useTicketState} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
@@ -39,10 +38,8 @@ const TicketInfo = ({
   isInspectable,
   omitUserProfileCount,
 }: TicketInfoProps) => {
-  const {tariff_zones: tariffZones, user_profiles: userProfiles} =
-    useRemoteConfig();
-
-  const {preassignedFareproducts} = useFirestoreConfiguration();
+  const {tariffZones, userProfiles, preassignedFareproducts} =
+    useFirestoreConfiguration();
 
   const firstTravelRight = travelRights[0];
   const {fareProductRef: productRef, tariffZoneRefs} = firstTravelRight;

@@ -5,10 +5,6 @@ import {
 } from '@atb/reference-data/types';
 import {findReferenceDataById} from '@atb/reference-data/utils';
 import {
-  RemoteConfigContextState,
-  useRemoteConfig,
-} from '@atb/RemoteConfigContext';
-import {
   listRecentFareContracts,
   RecentFareContract,
   useTicketState,
@@ -94,10 +90,8 @@ const mapUsers = (
 const mapRecentFareContractToRecentTicket = (
   recentFareContract: RecentFareContract,
   preassignedFareproducts: PreassignedFareProduct[],
-  {
-    tariff_zones: tariffZones,
-    user_profiles: userProfiles,
-  }: RemoteConfigContextState,
+  tariffZones: TariffZone[],
+  userProfiles: UserProfile[],
 ): RecentTicket | null => {
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareproducts,
@@ -178,7 +172,8 @@ const containsTicket = (
 const mapToLastThreeUniqueTickets = (
   recentFareContracts: RecentFareContract[],
   preassignedFareproducts: PreassignedFareProduct[],
-  remoteConfigState: RemoteConfigContextState,
+  tariffZones: TariffZone[],
+  userProfiles: UserProfile[],
 ): RecentTicket[] => {
   return recentFareContracts
     .sort((fc1, fc2) => fc2.created_at.localeCompare(fc1.created_at))
@@ -186,7 +181,8 @@ const mapToLastThreeUniqueTickets = (
       const maybeTicket = mapRecentFareContractToRecentTicket(
         recentFarecontract,
         preassignedFareproducts,
-        remoteConfigState,
+        tariffZones,
+        userProfiles,
       );
       return maybeTicket ? mappedTickets.concat(maybeTicket) : mappedTickets;
     }, [])
@@ -200,9 +196,9 @@ const mapToLastThreeUniqueTickets = (
 
 export default function useRecentTickets() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const remoteConfigState = useRemoteConfig();
   const {fareContracts} = useTicketState();
-  const {preassignedFareproducts} = useFirestoreConfiguration();
+  const {preassignedFareproducts, tariffZones, userProfiles} =
+    useFirestoreConfiguration();
 
   const fetchRecentFareContracts = async () => {
     dispatch({type: 'FETCH'});
@@ -228,9 +224,15 @@ export default function useRecentTickets() {
       mapToLastThreeUniqueTickets(
         state.recentFareContracts,
         preassignedFareproducts,
-        remoteConfigState,
+        tariffZones,
+        userProfiles,
       ),
-    [state.recentFareContracts, preassignedFareproducts, remoteConfigState],
+    [
+      state.recentFareContracts,
+      preassignedFareproducts,
+      tariffZones,
+      userProfiles,
+    ],
   );
 
   return {

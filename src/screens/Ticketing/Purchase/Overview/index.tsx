@@ -18,7 +18,6 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
@@ -70,8 +69,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const showNotInspectableTokenWarning =
     tokensEnabled && !inspectableToken?.isThisDevice;
 
-  const {tariff_zones: tariffZones, user_profiles: userProfiles} =
-    useRemoteConfig();
+  const {tariffZones, userProfiles} = useFirestoreConfiguration();
 
   const {preassignedFareproducts} = useFirestoreConfiguration();
 
