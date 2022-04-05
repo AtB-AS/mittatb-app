@@ -3,18 +3,28 @@
     "id": "ATB:PreassignedFareProduct:8808c360",
     "version": "ATB:Version:d918f8e3-eb23-4d62-9626-a5cbd02a1dee",
     "type": "single",
-    "name": {"lang": "nob", "value": "Enkeltbillett buss/trikk"},
-    "distributionChannel": ["app"],
+    "distributionChannel": [
+      "app"
+    ],
+    "name": {
+      "lang": "nob",
+      "value": "Enkeltbillett buss/trikk"
+    },
     "alternativeNames": [
-      {"lang": "eng", "value": "Single ticket bus/tram"},
-      {"lang": "nno", "value": "Enkeltbillett buss/trikk"}
+      {
+        "lang": "eng",
+        "value": "Single ticket bus/tram"
+      },
+      {
+        "lang": "nno",
+        "value": "Enkeltbillett buss/trikk"
+      }
     ],
     "limitations": {
       "userProfileRefs": [
         "ATB:UserProfile:2832569f",
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:416d8b61",
-        "ATB:UserProfile:fe550eb7",
         "ATB:UserProfile:d3e4ec09",
         "ATB:UserProfile:1ae560ba"
       ]
@@ -22,43 +32,122 @@
   },
   {
     "id": "ATB:PreassignedFareProduct:925469fb",
-    "version": "ATB:Version:4cc0e1af-6168-4ed7-81d5-37f48f96fb37",
+    "version": "ATB:Version:12b94a4d-b347-41c9-a6c6-35bc3386d4f4",
     "type": "period",
-    "name": {"lang": "nob", "value": "30-dagersbillett"},
-    "distributionChannel": ["app", "web"],
+    "distributionChannel": [
+      "app",
+      "web"
+    ],
+    "name": {
+      "lang": "nob",
+      "value": "30-dagersbillett"
+    },
     "alternativeNames": [
-      {"lang": "eng", "value": "Monthly pass"},
-      {"lang": "nno", "value": "30-dagersbillett"}
+      {
+        "lang": "eng",
+        "value": "Monthly pass"
+      },
+      {
+        "lang": "nno",
+        "value": "30-dagersbillett"
+      }
     ],
     "limitations": {
       "userProfileRefs": [
-        "ATB:UserProfile:d3e4ec09",
-        "ATB:UserProfile:2832569f",
-        "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:1ae560ba",
-        "ATB:UserProfile:2832569f",
         "ATB:UserProfile:d3e4ec09",
-        "ATB:UserProfile:1ae560ba"
+        "ATB:UserProfile:8ee842e3",
+        "ATB:UserProfile:2832569f"
       ]
     }
   },
   {
     "id": "ATB:PreassignedFareProduct:f87316e6",
-    "version": "ATB:Version:dc5f13a8-61cb-42a3-a8c9-48299dde19cd",
+    "version": "ATB:Version:62736d83-3854-4c71-b9f2-d2d9b52997ab",
     "type": "period",
-    "name": {"lang": "nob", "value": "180-dagersbillett"},
-    "distributionChannel": ["app", "web"],
+    "name": {
+      "lang": "nob",
+      "value": "180-dagersbillett"
+    },
+    "distributionChannel": [
+      "app",
+      "web"
+    ],
     "alternativeNames": [
-      {"lang": "eng", "value": "180 days pass"},
-      {"lang": "nno", "value": "180-dagersbillett"}
+      {
+        "lang": "eng",
+        "value": "180 days pass"
+      },
+      {
+        "lang": "nno",
+        "value": "180-dagersbillett"
+      }
+    ],
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:1ae560ba",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:8ee842e3",
+        "ATB:UserProfile:2832569f"
+      ]
+    }
+  },
+  {
+    "id": "ATB:PreassignedFareProduct:6dd9beab",
+    "version": "ATB:Version:c7e5a0d8-78e8-46e9-a019-07348b8328db",
+    "type": "period",
+    "distributionChannel": [
+      "app",
+      "web"
+    ],
+    "name": {
+      "lang": "nob",
+      "value": "7-dagersbillett"
+    },
+    "alternativeNames": [
+      {
+        "lang": "nno",
+        "value": "7-dagersbillett"
+      },
+      {
+        "lang": "eng",
+        "value": "Weekly pass"
+      }
     ],
     "limitations": {
       "userProfileRefs": [
         "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:8ee842e3",
+        "ATB:UserProfile:2832569f"
+      ]
+    }
+  },
+  {
+    "id": "ATB:AmountOfPriceUnitProduct:KlippekortBuss",
+    "version": "ATB:Version:AOPUP-KlippekortBuss-1",
+    "type": "carnet",
+    "distributionChannel": [
+      "web"
+    ],
+    "name": {
+      "lang": "nob",
+      "value": "10 billetter"
+    },
+    "alternativeNames": [
+      {
+        "lang": "nno",
+        "value": "10 billetter"
+      },
+      {
+        "lang": "eng",
+        "value": "10 tickets"
+      }
+    ],
+    "limitations": {
+      "userProfileRefs": [
         "ATB:UserProfile:2832569f",
         "ATB:UserProfile:8ee842e3",
-        "ATB:UserProfile:1ae560ba",
-        "ATB:UserProfile:2832569f",
+        "ATB:UserProfile:416d8b61",
         "ATB:UserProfile:d3e4ec09",
         "ATB:UserProfile:1ae560ba"
       ]
