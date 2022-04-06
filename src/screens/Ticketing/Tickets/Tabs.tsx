@@ -13,14 +13,13 @@ import useInterval from '@atb/utils/use-interval';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import RecentTicketsScrollView from './RecentTickets/RecentTicketsScrollView';
 import TicketsScrollView from './TicketsScrollView';
 import UpgradeSplash from './UpgradeSplash';
 import {AddTicket} from '@atb/assets/svg/mono-icons/ticketing';
-import ThemeText from '@atb/components/text';
-import MessageBox from '@atb/components/message-box';
 import {useAppState} from '@atb/AppContext';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import {RecentTickets} from '@atb/screens/Ticketing/Tickets/RecentTickets/RecentTickets';
+import {AvailableTickets} from '@atb/screens/Ticketing/Tickets/AvailableTickets/AvailableTickets';
 
 export type TicketingScreenNavigationProp =
   StackNavigationProp<RootStackParamList>;
@@ -30,17 +29,11 @@ type Props = {
 };
 
 export const BuyTickets: React.FC<Props> = ({navigation}) => {
-  const styles = useStyles();
-  const {theme} = useTheme();
-  const {must_upgrade_ticketing, enable_recent_tickets} = useRemoteConfig();
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
-  const {abtCustomerId, authenticationType} = useAuthState();
-  const {t} = useTranslation();
+  const {must_upgrade_ticketing} = useRemoteConfig();
+  const {authenticationType} = useAuthState();
   const appContext = useAppState();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
-
-  const isSignedInAsAbtCustomer = !!abtCustomerId;
 
   const onBuySingleTicket = () => {
     navigation.navigate('TicketPurchase', {
@@ -72,44 +65,14 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
     }
   };
 
-  const enableTicketingOverlay = () => {
-    appContext.resetTicketing();
-  };
-
   return (
-    <View style={styles.container}>
-      {isSignedInAsAbtCustomer && (
-        <View style={{padding: theme.spacings.medium}}>
-          <Button
-            mode="primary"
-            color="primary_2"
-            text={t(TicketsTexts.buyTicketsTab.button.single.text)}
-            accessibilityHint={t(
-              TicketsTexts.buyTicketsTab.button.single.a11yHint,
-            )}
-            onPress={onBuySingleTicket}
-            icon={AddTicket}
-            iconPosition={'right'}
-            testID="singleTicketBuyButton"
-          />
-          {hasEnabledMobileToken && (
-            <Button
-              mode="primary"
-              color="primary_2"
-              text={t(TicketsTexts.buyTicketsTab.button.period.text)}
-              accessibilityHint={t(
-                TicketsTexts.buyTicketsTab.button.period.a11yHint,
-              )}
-              onPress={onBuyPeriodTicket}
-              viewContainerStyle={styles.buyPeriodTicketButton}
-              icon={AddTicket}
-              iconPosition={'right'}
-              testID="periodTicketBuyButton"
-            />
-          )}
-        </View>
-      )}
-    </View>
+    <>
+      <RecentTickets />
+      <AvailableTickets
+        onBuySingleTicket={onBuySingleTicket}
+        onBuyPeriodTicket={onBuyPeriodTicket}
+      />
+    </>
   );
 };
 
