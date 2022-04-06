@@ -1,12 +1,6 @@
 import remoteConfig from '@react-native-firebase/remote-config';
 import {PRIVACY_POLICY_URL, ENABLE_TICKETING} from '@env';
 
-import {
-  defaultPreassignedFareProducts,
-  defaultTariffZones,
-  defaultUserProfiles,
-} from './reference-data/defaults';
-
 export type RemoteConfig = {
   modes_we_sell_tickets_for: string;
   enable_network_logging: boolean;
@@ -22,9 +16,6 @@ export type RemoteConfig = {
   news_link_text: string;
   news_link_url: string;
   vat_percent: number;
-  preassigned_fare_products: string;
-  tariff_zones: string;
-  user_profiles: string;
   customer_service_url: string;
   customer_feedback_url: string;
   tripsSearch_target_number_of_initial_hits: number;
@@ -58,9 +49,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   news_link_text: 'Les mer',
   news_link_url: '',
   vat_percent: 6,
-  preassigned_fare_products: JSON.stringify(defaultPreassignedFareProducts),
-  tariff_zones: JSON.stringify(defaultTariffZones),
-  user_profiles: JSON.stringify(defaultUserProfiles),
   customer_service_url: 'https://www.atb.no/kontakt/',
   customer_feedback_url: '',
   tripsSearch_target_number_of_initial_hits: 8,
@@ -98,13 +86,6 @@ export function getConfig(): RemoteConfig {
   const modes_we_sell_tickets_for =
     values['modes_we_sell_tickets_for']?.asString() ??
     defaultRemoteConfig.modes_we_sell_tickets_for;
-  const preassigned_fare_products =
-    values['preassigned_fare_products_v2']?.asString() ??
-    defaultRemoteConfig.preassigned_fare_products;
-  const tariff_zones =
-    values['tariff_zones']?.asString() ?? defaultRemoteConfig.tariff_zones;
-  const user_profiles =
-    values['user_profiles']?.asString() ?? defaultRemoteConfig.user_profiles;
   const customer_service_url =
     values['customer_service_url']?.asString() ??
     defaultRemoteConfig.customer_service_url;
@@ -144,9 +125,6 @@ export function getConfig(): RemoteConfig {
     news_link_url,
     news_link_text,
     vat_percent,
-    preassigned_fare_products,
-    tariff_zones,
-    user_profiles,
     customer_service_url,
     customer_feedback_url,
     tripsSearch_target_number_of_initial_hits,

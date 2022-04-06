@@ -5,11 +5,11 @@ import {UserProfileSettingsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {UserProfile} from '@atb/reference-data/types';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import ThemeText from '@atb/components/text';
 import {View} from 'react-native';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 export default function DefaultUserProfile() {
   const {
@@ -20,10 +20,12 @@ export default function DefaultUserProfile() {
   const styles = useStyles();
   const {t, language} = useTranslation();
 
-  const {user_profiles: userProfiles} = useRemoteConfig();
+  const {userProfiles} = useFirestoreConfiguration();
+
   const selectedProfile =
-    userProfiles.find((u) => u.userTypeString === defaultUserTypeString) ??
-    userProfiles[0];
+    userProfiles.find(
+      (userProfile) => userProfile.userTypeString === defaultUserTypeString,
+    ) ?? userProfiles[0];
 
   return (
     <View style={styles.container}>

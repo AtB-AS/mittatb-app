@@ -7,7 +7,6 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {TariffZone} from '@atb/reference-data/types';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet} from '@atb/theme';
 import {
   TariffZoneSearchTexts,
@@ -27,6 +26,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {TicketingStackParams} from '../..';
 import TariffZoneResults from './TariffZoneResults';
 import VenueResults, {LocationAndTariffZone} from './VenueResults';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 type TariffZonesSearchName = 'TariffZones';
 
@@ -64,10 +64,12 @@ const Index: React.FC<Props> = ({
   const debouncedText = useDebounce(text, 200);
   const {t} = useTranslation();
 
-  const {tariff_zones: tariffZones} = useRemoteConfig();
+  const {tariffZones} = useFirestoreConfiguration();
 
   const getMatchingTariffZone = (location: Location) =>
-    tariffZones.find((tf) => location.tariff_zones?.includes(tf.id));
+    tariffZones.find((tariffZone) =>
+      location.tariff_zones?.includes(tariffZone.id),
+    );
 
   const onSelectZone = (tariffZone: TariffZone) => {
     navigation.navigate(callerRouteName as any, {

@@ -18,7 +18,6 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
@@ -44,6 +43,8 @@ import {
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
 import {useTicketState} from '@atb/tickets';
+import Bugsnag from '@bugsnag/react-native';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 export type OverviewProps = {
   navigation: DismissableStackNavigationProp<
@@ -68,14 +69,12 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const showNotInspectableTokenWarning =
     tokensEnabled && !inspectableToken?.isThisDevice;
 
-  const {
-    tariff_zones: tariffZones,
-    preassigned_fare_products: preassignedFareProducts,
-    user_profiles: userProfiles,
-  } = useRemoteConfig();
+  const {tariffZones, userProfiles} = useFirestoreConfiguration();
 
-  const selectableProducts = preassignedFareProducts.filter(
-    (p) => p.type === params.selectableProductType,
+  const {preassignedFareproducts} = useFirestoreConfiguration();
+
+  const selectableProducts = preassignedFareproducts.filter(
+    (product) => product.type === params.selectableProductType,
   );
 
   const [preassignedFareProduct, setPreassignedFareProduct] = useState(
