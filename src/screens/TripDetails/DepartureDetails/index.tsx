@@ -300,8 +300,9 @@ function TripItem({
         alignChildren={isStart ? 'flex-start' : isEnd ? 'flex-end' : 'center'}
         style={[styles.row, isBetween && styles.middleRow]}
         onPress={() => handleQuayPress(call.quay)}
+        testID={'legType_' + type}
       >
-        <ThemeText>{getQuayName(call.quay)} </ThemeText>
+        <ThemeText testID="quayName">{getQuayName(call.quay)} </ThemeText>
       </TripRow>
       {showSituations && (
         <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
