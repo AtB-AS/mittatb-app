@@ -1,7 +1,12 @@
 import {by, element, expect} from 'detox';
-import {scrollToId, tapById, tapByText} from './interactionHelpers';
+import {
+  scroll,
+  scrollToId,
+  tapById,
+  tapByText,
+} from './interactionHelpers';
 import {expectToBeVisibleByText} from './expectHelpers';
-import {chooseSearchResult, setInputById} from './commonHelpers';
+import {chooseSearchResult, goToTab, setInputById} from './commonHelpers';
 
 // Toggle language
 export const toggleLanguage = async (useMyPhoneSettings: boolean) => {
@@ -100,4 +105,14 @@ export const expectNumberOfFavourites = async (numFav: number) => {
     let favId = 'favorite' + numFav;
     await expect(element(by.id(favId))).not.toExist();
   }
+};
+
+// Removes the search history
+export const removeSearchHistory = async () => {
+  await scroll('profileHomeScrollView', 'top');
+  await scrollToId('profileHomeScrollView', 'clearHistoryButton', 'down');
+  await tapById('clearHistoryButton');
+  await element(
+    by.type('_UIAlertControllerActionView').and(by.label('Clear history')),
+  ).tap();
 };

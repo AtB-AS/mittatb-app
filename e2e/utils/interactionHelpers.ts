@@ -46,19 +46,26 @@ export const scrollTo = async (
   scrollViewRef: Detox.NativeMatcher,
   scrollToRef: Detox.NativeElement,
   direction: Detox.Direction,
+  pixels: number = 400,
 ) => {
   await waitFor(scrollToRef)
     .toBeVisible()
     .whileElement(scrollViewRef)
-    .scroll(400, direction);
+    .scroll(pixels, direction);
 };
 
 export const scrollToId = async (
   scrollViewId: string,
   scrollToId: string,
   direction: 'left' | 'right' | 'up' | 'down',
+  pixels: number = 400,
 ) => {
-  await scrollTo(by.id(scrollViewId), element(by.id(scrollToId)), direction);
+  await scrollTo(
+    by.id(scrollViewId),
+    element(by.id(scrollToId)),
+    direction,
+    pixels,
+  );
 };
 
 export const scrollToText = async (
@@ -103,5 +110,5 @@ export const scrollContentToId = async (
 export const waitToExistById = async (id: string, timeout: number) => {
   await waitFor(element(by.id(id)))
     .toExist()
-    .withTimeout(timeout)
+    .withTimeout(timeout);
 };

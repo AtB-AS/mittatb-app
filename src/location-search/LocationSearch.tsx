@@ -237,6 +237,7 @@ export function LocationSearchContent({
           contentContainerStyle={styles.contentBlock}
           keyboardShouldPersistTaps="handled"
           onScrollBeginDrag={() => Keyboard.dismiss()}
+          testID="historyAndResultsScrollView"
         >
           {includeJourneyHistory && (
             <JourneyHistory
