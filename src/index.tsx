@@ -28,6 +28,7 @@ import LocaleContextProvider from '@atb/LocaleProvider';
 import {setupConfig} from './setup';
 import {MobileTokenContextProvider} from '@atb/mobile-token';
 import FeedbackQuestionsProvider from './components/feedback/FeedbackContext';
+import {FirestoreConfigurationContextProvider} from '@atb/configuration/FirestoreConfigurationContext';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
@@ -59,19 +60,21 @@ const App = () => {
                       <SearchHistoryContextProvider>
                         <GeolocationContextProvider>
                           <RemoteConfigContextProvider>
-                            <TicketContextProvider>
-                              <MobileTokenContextProvider>
-                                <AppLanguageProvider>
-                                  <AlertsContextProvider>
-                                    <BottomSheetProvider>
-                                      <FeedbackQuestionsProvider>
-                                        <NavigationRoot />
-                                      </FeedbackQuestionsProvider>
-                                    </BottomSheetProvider>
-                                  </AlertsContextProvider>
-                                </AppLanguageProvider>
-                              </MobileTokenContextProvider>
-                            </TicketContextProvider>
+                            <FirestoreConfigurationContextProvider>
+                              <TicketContextProvider>
+                                <MobileTokenContextProvider>
+                                  <AppLanguageProvider>
+                                    <AlertsContextProvider>
+                                      <BottomSheetProvider>
+                                        <FeedbackQuestionsProvider>
+                                          <NavigationRoot />
+                                        </FeedbackQuestionsProvider>
+                                      </BottomSheetProvider>
+                                    </AlertsContextProvider>
+                                  </AppLanguageProvider>
+                                </MobileTokenContextProvider>
+                              </TicketContextProvider>
+                            </FirestoreConfigurationContextProvider>
                           </RemoteConfigContextProvider>
                         </GeolocationContextProvider>
                       </SearchHistoryContextProvider>
