@@ -18,6 +18,7 @@ import {
   defaultUserProfiles,
 } from './reference-data/defaults';
 import {useAppState} from './AppContext';
+import {FeedbackConfiguration} from './components/feedback/FeedbackContext';
 
 export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;
@@ -25,6 +26,7 @@ export type RemoteConfigContextState = RemoteConfig & {
   preassigned_fare_products: PreassignedFareProduct[];
   tariff_zones: TariffZone[];
   user_profiles: UserProfile[];
+  feedback_questions: FeedbackConfiguration[];
 };
 
 const RemoteConfigContext = createContext<RemoteConfigContextState | undefined>(
@@ -123,6 +125,7 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
         ),
         tariff_zones: parseJson(config.tariff_zones, defaultTariffZones),
         user_profiles: parseJson(config.user_profiles, defaultUserProfiles),
+        feedback_questions: parseJson(config.feedback_questions, []),
         refresh,
       }}
     >

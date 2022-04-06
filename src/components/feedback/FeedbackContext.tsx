@@ -1,6 +1,5 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
-import firestore from '@react-native-firebase/firestore';
-import Bugsnag from '@bugsnag/react-native';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 export type FeedbackQuestionsViewContext = 'departures' | 'assistant';
 
@@ -14,10 +13,6 @@ export type FeedbackConfiguration = {
   introText: LanguageString;
   question: QuestionType;
 };
-
-export type QuestionCategories = Partial<
-  Record<FeedbackQuestionsViewContext, FeedbackConfiguration>
->;
 
 type LanguageString = {
   nb: string;
@@ -36,59 +31,24 @@ export type AlternativeType = {
   alternativeText: LanguageString;
 };
 
-export type FeedbackQuestionsContextState = {
-  categories: QuestionCategories;
-};
-
-const defaultFeedbackQuestionsState = {
-  categories: {},
-};
-
-const FeedbackQuestionsContext = createContext<FeedbackQuestionsContextState>(
-  defaultFeedbackQuestionsState,
-);
+const FeedbackQuestionsContext = createContext<FeedbackConfiguration[]>([]);
 
 const FeedbackQuestionsProvider: React.FC = ({children}) => {
-  const [categories, setCategories] = useState<QuestionCategories>({});
+  const [categories, setCategories] = useState<FeedbackConfiguration[]>([]);
+  const {feedback_questions} = useRemoteConfig();
 
   useEffect(() => {
-    firestore()
-      .collection('configuration')
-      .doc('feedbackQuestions')
-      .onSnapshot(
-        (snapshot) => {
-          const fetchedQuestions = snapshot.data() as Record<
-            FeedbackQuestionsViewContext,
-            string
-          >;
-
-          let newQuestions: QuestionCategories = {};
-          try {
-            for (let [viewContext, questions] of Object.entries(
-              fetchedQuestions,
-            )) {
-              newQuestions[viewContext as FeedbackQuestionsViewContext] =
-                JSON.parse(questions) as FeedbackConfiguration;
-            }
-            setCategories(newQuestions);
-          } catch (error: any) {
-            Bugsnag.notify(error);
-          }
-        },
-        (err) => {
-          Bugsnag.notify(err);
-        },
-      );
-  }, []);
+    setCategories(feedback_questions ? feedback_questions : []);
+  }, [feedback_questions]);
 
   return (
-    <FeedbackQuestionsContext.Provider value={{categories}}>
+    <FeedbackQuestionsContext.Provider value={categories}>
       {children}
     </FeedbackQuestionsContext.Provider>
   );
 };
 
-export function useFeedbackQuestionsState() {
+function useFeedbackQuestionsState() {
   const context = useContext(FeedbackQuestionsContext);
   if (context === undefined) {
     throw new Error(
@@ -99,8 +59,8 @@ export function useFeedbackQuestionsState() {
 }
 
 export function useFeedbackQuestion(viewContext: FeedbackQuestionsViewContext) {
-  const {categories} = useFeedbackQuestionsState();
-  return categories[viewContext];
+  const allCategories = useFeedbackQuestionsState();
+  return allCategories.find((category) => category.viewContext === viewContext);
 }
 
 export default FeedbackQuestionsProvider;
