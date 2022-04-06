@@ -13,7 +13,7 @@ import useInterval from '@atb/utils/use-interval';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import RecentTicketsScrollView from './RecentTicketsScrollView';
+import RecentTicketsScrollView from './RecentTickets/RecentTicketsScrollView';
 import TicketsScrollView from './TicketsScrollView';
 import UpgradeSplash from './UpgradeSplash';
 import {AddTicket} from '@atb/assets/svg/mono-icons/ticketing';
@@ -76,43 +76,8 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
     appContext.resetTicketing();
   };
 
-  const topMessage = (
-    <View style={{paddingBottom: theme.spacings.large}}>
-      <MessageBox>
-        <ThemeText
-          type="body__primary"
-          style={{color: theme.status.info.main.color}}
-          isMarkdown={true}
-        >
-          {t(TicketsTexts.buyTicketsTab.reactivateSplash.message)}
-        </ThemeText>
-
-        <TouchableOpacity
-          onPress={enableTicketingOverlay}
-          accessibilityLabel={t(
-            TicketsTexts.buyTicketsTab.reactivateSplash.linkA11yHint,
-          )}
-        >
-          <ThemeText
-            type="body__primary--underline"
-            style={{color: theme.status.info.main.color}}
-          >
-            {t(TicketsTexts.buyTicketsTab.reactivateSplash.linkText)}
-          </ThemeText>
-        </TouchableOpacity>
-      </MessageBox>
-    </View>
-  );
-
   return (
     <View style={styles.container}>
-      {enable_recent_tickets ? (
-        <RecentTicketsScrollView topElement={topMessage} />
-      ) : (
-        <View style={{flex: 1, padding: theme.spacings.medium}}>
-          {topMessage}
-        </View>
-      )}
       {isSignedInAsAbtCustomer && (
         <View style={{padding: theme.spacings.medium}}>
           <Button

@@ -10,9 +10,9 @@ import React from 'react';
 import {RefreshControl, TouchableOpacity, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
-import {TicketingStackParams} from '../Purchase';
-import {TicketInfoView} from '../Ticket/TicketInfo';
-import useRecentTickets, {RecentTicket} from './use-recent-tickets';
+import {TicketingStackParams} from '../../Purchase';
+import {TicketInfoView} from '../../Ticket/TicketInfo';
+import useRecentTickets, {RecentTicket} from '../use-recent-tickets';
 
 type NavigationProp = CompositeNavigationProp<
   StackNavigationProp<TicketingStackParams>,
